@@ -2,35 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A865BC145
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 04:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3025BC14C
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 04:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiISCOI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 18 Sep 2022 22:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S229561AbiISCQx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 18 Sep 2022 22:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiISCOH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Sep 2022 22:14:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76E13D3F;
-        Sun, 18 Sep 2022 19:14:05 -0700 (PDT)
+        with ESMTP id S229483AbiISCQv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Sep 2022 22:16:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37EFD13D32;
+        Sun, 18 Sep 2022 19:16:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F18A061172;
-        Mon, 19 Sep 2022 02:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B13EC433B5;
-        Mon, 19 Sep 2022 02:14:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B235FB80FEA;
+        Mon, 19 Sep 2022 02:16:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A31FC433D6;
+        Mon, 19 Sep 2022 02:16:42 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        linux-acpi@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2] LoongArch: Refactor cache probe and flush methods
-Date:   Mon, 19 Sep 2022 10:13:05 +0800
-Message-Id: <20220919021305.2869400-1-chenhuacai@loongson.cn>
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V4] LoongArch: Add ACPI-based generic laptop driver
+Date:   Mon, 19 Sep 2022 10:15:40 +0800
+Message-Id: <20220919021540.2873061-1-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,760 +49,726 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Current cache probe and flush methods have some drawbacks:
-1, Assume there are 3 cache levels and only 3 levels;
-2, Assume L1 = I + D, L2 = V, L3 = S, V is exclusive, S is inclusive.
+From: Jianmin Lv <lvjianmin@loongson.cn>
 
-However, the fact is I + D, I + D + V, I + D + S and I + D + V + S are
-all valid. So, refactor the cache probe and flush methods to adapt more
-types of cache hierarchy.
+This add ACPI-based generic laptop driver for Loongson-3. Some of the
+codes are derived from drivers/platform/x86/thinkpad_acpi.c.
 
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
-V2: Fix build errors and warnings reported by kernel test robot.
+V2: Fix problems pointed out by Arnd.
+V3: Use platform driver instead of acpi driver.
+V4: 1, Fix problems pointed out by Hans de Goede.
+    2, Fix build errors and warnings reported by kernel test robot.
 
- arch/loongarch/include/asm/cacheflush.h   |  87 +++++----
- arch/loongarch/include/asm/cacheops.h     |  36 ++--
- arch/loongarch/include/asm/cpu-features.h |   5 -
- arch/loongarch/include/asm/cpu-info.h     |  21 ++-
- arch/loongarch/include/asm/loongarch.h    |  33 +---
- arch/loongarch/include/asm/setup.h        |   2 +
- arch/loongarch/kernel/cacheinfo.c         |  98 +++-------
- arch/loongarch/kernel/traps.c             |   3 -
- arch/loongarch/mm/cache.c                 | 211 ++++++++++++----------
- arch/loongarch/pci/pci.c                  |   7 +-
- 10 files changed, 236 insertions(+), 267 deletions(-)
+ drivers/platform/Kconfig                     |   2 +
+ drivers/platform/Makefile                    |   1 +
+ drivers/platform/loongarch/Kconfig           |  31 +
+ drivers/platform/loongarch/Makefile          |   1 +
+ drivers/platform/loongarch/loongson-laptop.c | 622 +++++++++++++++++++
+ 5 files changed, 657 insertions(+)
+ create mode 100644 drivers/platform/loongarch/Kconfig
+ create mode 100644 drivers/platform/loongarch/Makefile
+ create mode 100644 drivers/platform/loongarch/loongson-laptop.c
 
-diff --git a/arch/loongarch/include/asm/cacheflush.h b/arch/loongarch/include/asm/cacheflush.h
-index 670900141b7c..0681788eb474 100644
---- a/arch/loongarch/include/asm/cacheflush.h
-+++ b/arch/loongarch/include/asm/cacheflush.h
-@@ -6,10 +6,33 @@
- #define _ASM_CACHEFLUSH_H
+diff --git a/drivers/platform/Kconfig b/drivers/platform/Kconfig
+index b437847b6237..dbd327712205 100644
+--- a/drivers/platform/Kconfig
++++ b/drivers/platform/Kconfig
+@@ -3,6 +3,8 @@ if MIPS
+ source "drivers/platform/mips/Kconfig"
+ endif
  
- #include <linux/mm.h>
--#include <asm/cpu-features.h>
-+#include <asm/cpu-info.h>
- #include <asm/cacheops.h>
- 
--extern void local_flush_icache_range(unsigned long start, unsigned long end);
-+static inline bool cache_present(struct cache_desc *cdesc)
-+{
-+	return cdesc->flags & CACHE_PRESENT;
-+}
++source "drivers/platform/loongarch/Kconfig"
 +
-+static inline bool cache_private(struct cache_desc *cdesc)
-+{
-+	return cdesc->flags & CACHE_PRIVATE;
-+}
+ source "drivers/platform/goldfish/Kconfig"
+ 
+ source "drivers/platform/chrome/Kconfig"
+diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
+index 4de08ef4ec9d..41640172975a 100644
+--- a/drivers/platform/Makefile
++++ b/drivers/platform/Makefile
+@@ -4,6 +4,7 @@
+ #
+ 
+ obj-$(CONFIG_X86)		+= x86/
++obj-$(CONFIG_LOONGARCH)		+= loongarch/
+ obj-$(CONFIG_MELLANOX_PLATFORM)	+= mellanox/
+ obj-$(CONFIG_MIPS)		+= mips/
+ obj-$(CONFIG_OLPC_EC)		+= olpc/
+diff --git a/drivers/platform/loongarch/Kconfig b/drivers/platform/loongarch/Kconfig
+new file mode 100644
+index 000000000000..5633e4d73991
+--- /dev/null
++++ b/drivers/platform/loongarch/Kconfig
+@@ -0,0 +1,31 @@
++#
++# LoongArch Platform Specific Drivers
++#
 +
-+static inline bool cache_inclusive(struct cache_desc *cdesc)
-+{
-+	return cdesc->flags & CACHE_INCLUSIVE;
-+}
++menuconfig LOONGARCH_PLATFORM_DEVICES
++	bool "LoongArch Platform Specific Device Drivers"
++	default y
++	depends on LOONGARCH
++	help
++	  Say Y here to get to see options for device drivers of various
++	  LoongArch platforms, including vendor-specific laptop/desktop
++	  extension and hardware monitor drivers. This option itself does
++	  not add any kernel code.
 +
-+static inline unsigned int cpu_last_level_cache_line_size(void)
-+{
-+	int cache_present = boot_cpu_data.cache_leaves_present;
++	  If you say N, all options in this submenu will be skipped and disabled.
 +
-+	return boot_cpu_data.cache_leaves[cache_present - 1].linesz;
-+}
++if LOONGARCH_PLATFORM_DEVICES
 +
-+asmlinkage void __flush_cache_all(void);
-+void local_flush_icache_range(unsigned long start, unsigned long end);
- 
- #define flush_icache_range	local_flush_icache_range
- #define flush_icache_user_range	local_flush_icache_range
-@@ -35,44 +58,30 @@ extern void local_flush_icache_range(unsigned long start, unsigned long end);
- 	:								\
- 	: "i" (op), "ZC" (*(unsigned char *)(addr)))
- 
--static inline void flush_icache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Invalidate_I, addr);
--}
--
--static inline void flush_dcache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Writeback_Inv_D, addr);
--}
--
--static inline void flush_vcache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Writeback_Inv_V, addr);
--}
--
--static inline void flush_scache_line_indexed(unsigned long addr)
--{
--	cache_op(Index_Writeback_Inv_S, addr);
--}
--
--static inline void flush_icache_line(unsigned long addr)
--{
--	cache_op(Hit_Invalidate_I, addr);
--}
--
--static inline void flush_dcache_line(unsigned long addr)
--{
--	cache_op(Hit_Writeback_Inv_D, addr);
--}
--
--static inline void flush_vcache_line(unsigned long addr)
--{
--	cache_op(Hit_Writeback_Inv_V, addr);
--}
--
--static inline void flush_scache_line(unsigned long addr)
-+static inline void flush_cache_line(int leaf, unsigned long addr)
- {
--	cache_op(Hit_Writeback_Inv_S, addr);
-+	switch (leaf) {
-+	case Cache_LEAF0:
-+		cache_op(Index_Writeback_Inv_LEAF0, addr);
-+		break;
-+	case Cache_LEAF1:
-+		cache_op(Index_Writeback_Inv_LEAF1, addr);
-+		break;
-+	case Cache_LEAF2:
-+		cache_op(Index_Writeback_Inv_LEAF2, addr);
-+		break;
-+	case Cache_LEAF3:
-+		cache_op(Index_Writeback_Inv_LEAF3, addr);
-+		break;
-+	case Cache_LEAF4:
-+		cache_op(Index_Writeback_Inv_LEAF4, addr);
-+		break;
-+	case Cache_LEAF5:
-+		cache_op(Index_Writeback_Inv_LEAF5, addr);
-+		break;
-+	default:
-+		break;
-+	}
- }
- 
- #include <asm-generic/cacheflush.h>
-diff --git a/arch/loongarch/include/asm/cacheops.h b/arch/loongarch/include/asm/cacheops.h
-index dc280efecebd..0f4a86f8e2be 100644
---- a/arch/loongarch/include/asm/cacheops.h
-+++ b/arch/loongarch/include/asm/cacheops.h
-@@ -8,16 +8,18 @@
- #define __ASM_CACHEOPS_H
- 
- /*
-- * Most cache ops are split into a 2 bit field identifying the cache, and a 3
-+ * Most cache ops are split into a 3 bit field identifying the cache, and a 2
-  * bit field identifying the cache operation.
-  */
--#define CacheOp_Cache			0x03
--#define CacheOp_Op			0x1c
-+#define CacheOp_Cache			0x07
-+#define CacheOp_Op			0x18
- 
--#define Cache_I				0x00
--#define Cache_D				0x01
--#define Cache_V				0x02
--#define Cache_S				0x03
-+#define Cache_LEAF0			0x00
-+#define Cache_LEAF1			0x01
-+#define Cache_LEAF2			0x02
-+#define Cache_LEAF3			0x03
-+#define Cache_LEAF4			0x04
-+#define Cache_LEAF5			0x05
- 
- #define Index_Invalidate		0x08
- #define Index_Writeback_Inv		0x08
-@@ -25,13 +27,17 @@
- #define Hit_Writeback_Inv		0x10
- #define CacheOp_User_Defined		0x18
- 
--#define Index_Invalidate_I		(Cache_I | Index_Invalidate)
--#define Index_Writeback_Inv_D		(Cache_D | Index_Writeback_Inv)
--#define Index_Writeback_Inv_V		(Cache_V | Index_Writeback_Inv)
--#define Index_Writeback_Inv_S		(Cache_S | Index_Writeback_Inv)
--#define Hit_Invalidate_I		(Cache_I | Hit_Invalidate)
--#define Hit_Writeback_Inv_D		(Cache_D | Hit_Writeback_Inv)
--#define Hit_Writeback_Inv_V		(Cache_V | Hit_Writeback_Inv)
--#define Hit_Writeback_Inv_S		(Cache_S | Hit_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF0	(Cache_LEAF0 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF1	(Cache_LEAF1 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF2	(Cache_LEAF2 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF3	(Cache_LEAF3 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF4	(Cache_LEAF4 | Index_Writeback_Inv)
-+#define Index_Writeback_Inv_LEAF5	(Cache_LEAF5 | Index_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF0		(Cache_LEAF0 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF1		(Cache_LEAF1 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF2		(Cache_LEAF2 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF3		(Cache_LEAF3 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF4		(Cache_LEAF4 | Hit_Writeback_Inv)
-+#define Hit_Writeback_Inv_LEAF5		(Cache_LEAF5 | Hit_Writeback_Inv)
- 
- #endif	/* __ASM_CACHEOPS_H */
-diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
-index a8d87c40a0eb..b07974218393 100644
---- a/arch/loongarch/include/asm/cpu-features.h
-+++ b/arch/loongarch/include/asm/cpu-features.h
-@@ -19,11 +19,6 @@
- #define cpu_has_loongarch32		(cpu_data[0].isa_level & LOONGARCH_CPU_ISA_32BIT)
- #define cpu_has_loongarch64		(cpu_data[0].isa_level & LOONGARCH_CPU_ISA_64BIT)
- 
--#define cpu_icache_line_size()		cpu_data[0].icache.linesz
--#define cpu_dcache_line_size()		cpu_data[0].dcache.linesz
--#define cpu_vcache_line_size()		cpu_data[0].vcache.linesz
--#define cpu_scache_line_size()		cpu_data[0].scache.linesz
--
- #ifdef CONFIG_32BIT
- # define cpu_has_64bits			(cpu_data[0].isa_level & LOONGARCH_CPU_ISA_64BIT)
- # define cpu_vabits			31
-diff --git a/arch/loongarch/include/asm/cpu-info.h b/arch/loongarch/include/asm/cpu-info.h
-index b6c4f96079df..cd73a6f57fe3 100644
---- a/arch/loongarch/include/asm/cpu-info.h
-+++ b/arch/loongarch/include/asm/cpu-info.h
-@@ -10,18 +10,28 @@
- 
- #include <asm/loongarch.h>
- 
-+/* cache_desc->flags */
-+enum {
-+	CACHE_PRESENT	= (1 << 0),
-+	CACHE_PRIVATE	= (1 << 1),	/* core private cache */
-+	CACHE_INCLUSIVE	= (1 << 2),	/* include the inner level caches */
++config LOONGSON_LAPTOP
++	tristate "Generic Loongson-3 Laptop Driver"
++	depends on ACPI
++	depends on BACKLIGHT_CLASS_DEVICE
++	depends on INPUT
++	depends on MACH_LOONGSON64
++	select ACPI_VIDEO
++	select INPUT_SPARSEKMAP
++	default y
++	help
++	  ACPI-based Loongson-3 family laptops generic driver.
++
++endif # LOONGARCH_PLATFORM_DEVICES
+diff --git a/drivers/platform/loongarch/Makefile b/drivers/platform/loongarch/Makefile
+new file mode 100644
+index 000000000000..f43ab03db1a2
+--- /dev/null
++++ b/drivers/platform/loongarch/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_LOONGSON_LAPTOP) += loongson-laptop.o
+diff --git a/drivers/platform/loongarch/loongson-laptop.c b/drivers/platform/loongarch/loongson-laptop.c
+new file mode 100644
+index 000000000000..5a994f179de9
+--- /dev/null
++++ b/drivers/platform/loongarch/loongson-laptop.c
+@@ -0,0 +1,622 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ *  Generic Loongson processor based LAPTOP/ALL-IN-ONE driver
++ *
++ *  Jianmin Lv <lvjianmin@loongson.cn>
++ *  Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2022 Loongson Technology Corporation Limited
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/acpi.h>
++#include <linux/backlight.h>
++#include <linux/device.h>
++#include <linux/input.h>
++#include <linux/input/sparse-keymap.h>
++#include <linux/platform_device.h>
++#include <linux/string.h>
++#include <linux/types.h>
++#include <acpi/video.h>
++
++/* 1. Driver-wide structs and misc. variables */
++
++/* ACPI HIDs */
++#define LOONGSON_ACPI_EC_HID	"PNP0C09"
++#define LOONGSON_ACPI_HKEY_HID	"LOON0000"
++
++#define ACPI_LAPTOP_NAME "loongson-laptop"
++#define ACPI_LAPTOP_ACPI_EVENT_PREFIX "loongson"
++
++#define MAX_ACPI_ARGS			3
++#define GENERIC_HOTKEY_MAP_MAX		64
++
++#define GENERIC_EVENT_TYPE_OFF		12
++#define GENERIC_EVENT_TYPE_MASK		0xF000
++#define GENERIC_EVENT_CODE_MASK		0x0FFF
++
++struct generic_sub_driver {
++	u32 type;
++	char *name;
++	acpi_handle *handle;
++	struct acpi_device *device;
++	struct platform_driver *driver;
++	int (*init)(struct generic_sub_driver *sub_driver);
++	void (*notify)(struct generic_sub_driver *sub_driver, u32 event);
++	u8 acpi_notify_installed;
 +};
 +
- /*
-  * Descriptor for a cache
-  */
- struct cache_desc {
--	unsigned int waysize;	/* Bytes per way */
-+	unsigned char type;
-+	unsigned char level;
- 	unsigned short sets;	/* Number of lines per set */
- 	unsigned char ways;	/* Number of ways */
- 	unsigned char linesz;	/* Size of line in bytes */
--	unsigned char waybit;	/* Bits to select in a cache set */
- 	unsigned char flags;	/* Flags describing cache properties */
- };
- 
-+#define CACHE_LEVEL_MAX		3
-+#define CACHE_LEAVES_MAX	6
++static u32 input_device_registered;
++static struct input_dev *generic_inputdev;
 +
- struct cpuinfo_loongarch {
- 	u64			asid_cache;
- 	unsigned long		asid_mask;
-@@ -40,11 +50,8 @@ struct cpuinfo_loongarch {
- 	int			tlbsizemtlb;
- 	int			tlbsizestlbsets;
- 	int			tlbsizestlbways;
--	struct cache_desc	icache; /* Primary I-cache */
--	struct cache_desc	dcache; /* Primary D or combined I/D cache */
--	struct cache_desc	vcache; /* Victim cache, between pcache and scache */
--	struct cache_desc	scache; /* Secondary cache */
--	struct cache_desc	tcache; /* Tertiary/split secondary cache */
-+	int			cache_leaves_present; /* number of cache_leaves[] elements */
-+	struct cache_desc	cache_leaves[CACHE_LEAVES_MAX];
- 	int			core;   /* physical core number in package */
- 	int			package;/* physical package number */
- 	int			vabits; /* Virtual Address size in bits */
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index 3ba4f7e87cd2..7f8d57a61c8b 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -187,36 +187,15 @@ static inline u32 read_cpucfg(u32 reg)
- #define  CPUCFG16_L3_DINCL		BIT(16)
- 
- #define LOONGARCH_CPUCFG17		0x11
--#define  CPUCFG17_L1I_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG17_L1I_SETS_M		GENMASK(23, 16)
--#define  CPUCFG17_L1I_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG17_L1I_WAYS		0
--#define  CPUCFG17_L1I_SETS		16
--#define  CPUCFG17_L1I_SIZE		24
--
- #define LOONGARCH_CPUCFG18		0x12
--#define  CPUCFG18_L1D_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG18_L1D_SETS_M		GENMASK(23, 16)
--#define  CPUCFG18_L1D_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG18_L1D_WAYS		0
--#define  CPUCFG18_L1D_SETS		16
--#define  CPUCFG18_L1D_SIZE		24
--
- #define LOONGARCH_CPUCFG19		0x13
--#define  CPUCFG19_L2_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG19_L2_SETS_M		GENMASK(23, 16)
--#define  CPUCFG19_L2_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG19_L2_WAYS		0
--#define  CPUCFG19_L2_SETS		16
--#define  CPUCFG19_L2_SIZE		24
--
- #define LOONGARCH_CPUCFG20		0x14
--#define  CPUCFG20_L3_WAYS_M		GENMASK(15, 0)
--#define  CPUCFG20_L3_SETS_M		GENMASK(23, 16)
--#define  CPUCFG20_L3_SIZE_M		GENMASK(30, 24)
--#define  CPUCFG20_L3_WAYS		0
--#define  CPUCFG20_L3_SETS		16
--#define  CPUCFG20_L3_SIZE		24
-+#define  CPUCFG_CACHE_WAYS_M		GENMASK(15, 0)
-+#define  CPUCFG_CACHE_SETS_M		GENMASK(23, 16)
-+#define  CPUCFG_CACHE_LSIZE_M		GENMASK(30, 24)
-+#define  CPUCFG_CACHE_WAYS	 	0
-+#define  CPUCFG_CACHE_SETS		16
-+#define  CPUCFG_CACHE_LSIZE		24
- 
- #define LOONGARCH_CPUCFG48		0x30
- #define  CPUCFG48_MCSR_LCK		BIT(0)
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-index 6d7d2a3e23dd..ca373f8e3c4d 100644
---- a/arch/loongarch/include/asm/setup.h
-+++ b/arch/loongarch/include/asm/setup.h
-@@ -13,7 +13,9 @@
- 
- extern unsigned long eentry;
- extern unsigned long tlbrentry;
-+extern void tlb_init(int cpu);
- extern void cpu_cache_init(void);
-+extern void cache_error_setup(void);
- extern void per_cpu_trap_init(int cpu);
- extern void set_handler(unsigned long offset, void *addr, unsigned long len);
- extern void set_merr_handler(unsigned long offset, void *addr, unsigned long len);
-diff --git a/arch/loongarch/kernel/cacheinfo.c b/arch/loongarch/kernel/cacheinfo.c
-index 4662b06269f4..c7988f757281 100644
---- a/arch/loongarch/kernel/cacheinfo.c
-+++ b/arch/loongarch/kernel/cacheinfo.c
-@@ -5,73 +5,34 @@
-  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-  */
- #include <linux/cacheinfo.h>
-+#include <linux/topology.h>
- #include <asm/bootinfo.h>
- #include <asm/cpu-info.h>
- 
--/* Populates leaf and increments to next leaf */
--#define populate_cache(cache, leaf, c_level, c_type)		\
--do {								\
--	leaf->type = c_type;					\
--	leaf->level = c_level;					\
--	leaf->coherency_line_size = c->cache.linesz;		\
--	leaf->number_of_sets = c->cache.sets;			\
--	leaf->ways_of_associativity = c->cache.ways;		\
--	leaf->size = c->cache.linesz * c->cache.sets *		\
--		c->cache.ways;					\
--	if (leaf->level > 2)					\
--		leaf->size *= nodes_per_package;		\
--	leaf++;							\
--} while (0)
--
- int init_cache_level(unsigned int cpu)
- {
--	struct cpuinfo_loongarch *c = &current_cpu_data;
-+	int cache_present = current_cpu_data.cache_leaves_present;
- 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
--	int levels = 0, leaves = 0;
--
--	/*
--	 * If Dcache is not set, we assume the cache structures
--	 * are not properly initialized.
--	 */
--	if (c->dcache.waysize)
--		levels += 1;
--	else
--		return -ENOENT;
--
--
--	leaves += (c->icache.waysize) ? 2 : 1;
--
--	if (c->vcache.waysize) {
--		levels++;
--		leaves++;
--	}
- 
--	if (c->scache.waysize) {
--		levels++;
--		leaves++;
--	}
-+	this_cpu_ci->num_levels =
-+		current_cpu_data.cache_leaves[cache_present - 1].level;
-+	this_cpu_ci->num_leaves = cache_present;
- 
--	if (c->tcache.waysize) {
--		levels++;
--		leaves++;
--	}
--
--	this_cpu_ci->num_levels = levels;
--	this_cpu_ci->num_leaves = leaves;
- 	return 0;
- }
- 
- static inline bool cache_leaves_are_shared(struct cacheinfo *this_leaf,
- 					   struct cacheinfo *sib_leaf)
- {
--	return !((this_leaf->level == 1) || (this_leaf->level == 2));
-+	return (!(*(unsigned char *)(this_leaf->priv) & CACHE_PRIVATE)
-+		&& !(*(unsigned char *)(sib_leaf->priv) & CACHE_PRIVATE));
- }
- 
- static void cache_cpumap_setup(unsigned int cpu)
- {
--	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
--	struct cacheinfo *this_leaf, *sib_leaf;
- 	unsigned int index;
-+	struct cacheinfo *this_leaf, *sib_leaf;
-+	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 
- 	for (index = 0; index < this_cpu_ci->num_leaves; index++) {
- 		unsigned int i;
-@@ -85,8 +46,10 @@ static void cache_cpumap_setup(unsigned int cpu)
- 		for_each_online_cpu(i) {
- 			struct cpu_cacheinfo *sib_cpu_ci = get_cpu_cacheinfo(i);
- 
--			if (i == cpu || !sib_cpu_ci->info_list)
--				continue;/* skip if itself or no cacheinfo */
-+			if (i == cpu || !sib_cpu_ci->info_list ||
-+				(cpu_to_node(i) != cpu_to_node(cpu)))
-+				continue;
++static acpi_handle hotkey_handle;
++static struct key_entry hotkey_keycode_map[GENERIC_HOTKEY_MAP_MAX];
 +
- 			sib_leaf = sib_cpu_ci->info_list + index;
- 			if (cache_leaves_are_shared(this_leaf, sib_leaf)) {
- 				cpumask_set_cpu(cpu, &sib_leaf->shared_cpu_map);
-@@ -98,31 +61,24 @@ static void cache_cpumap_setup(unsigned int cpu)
- 
- int populate_cache_leaves(unsigned int cpu)
- {
--	int level = 1, nodes_per_package = 1;
--	struct cpuinfo_loongarch *c = &current_cpu_data;
-+	int i, cache_present = current_cpu_data.cache_leaves_present;
- 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 	struct cacheinfo *this_leaf = this_cpu_ci->info_list;
--
--	if (loongson_sysconf.nr_nodes > 1)
--		nodes_per_package = loongson_sysconf.cores_per_package
--					/ loongson_sysconf.cores_per_node;
--
--	if (c->icache.waysize) {
--		populate_cache(dcache, this_leaf, level, CACHE_TYPE_DATA);
--		populate_cache(icache, this_leaf, level++, CACHE_TYPE_INST);
--	} else {
--		populate_cache(dcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
-+	struct cache_desc *cd, *cdesc = current_cpu_data.cache_leaves;
++static int loongson_laptop_backlight_update(struct backlight_device *bd);
 +
-+	for (i = 0; i < cache_present; i++) {
-+		cd = cdesc + i;
++/* 2. ACPI Helpers and device model */
 +
-+		this_leaf->type = cd->type;
-+		this_leaf->level = cd->level;
-+		this_leaf->coherency_line_size = cd->linesz;
-+		this_leaf->number_of_sets = cd->sets;
-+		this_leaf->ways_of_associativity = cd->ways;
-+		this_leaf->size = cd->linesz * cd->sets * cd->ways;
-+		this_leaf->priv = &cd->flags;
-+		this_leaf++;
- 	}
- 
--	if (c->vcache.waysize)
--		populate_cache(vcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
--
--	if (c->scache.waysize)
--		populate_cache(scache, this_leaf, level++, CACHE_TYPE_UNIFIED);
--
--	if (c->tcache.waysize)
--		populate_cache(tcache, this_leaf, level++, CACHE_TYPE_UNIFIED);
--
- 	cache_cpumap_setup(cpu);
- 	this_cpu_ci->cpu_map_populated = true;
- 
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index aa1c95aaf595..950af620e7d0 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -631,9 +631,6 @@ asmlinkage void noinstr do_vint(struct pt_regs *regs, unsigned long sp)
- 	irqentry_exit(regs, state);
- }
- 
--extern void tlb_init(int cpu);
--extern void cache_error_setup(void);
--
- unsigned long eentry;
- unsigned long tlbrentry;
- 
-diff --git a/arch/loongarch/mm/cache.c b/arch/loongarch/mm/cache.c
-index e8c68dcf6ab2..72685a48eaf0 100644
---- a/arch/loongarch/mm/cache.c
-+++ b/arch/loongarch/mm/cache.c
-@@ -6,8 +6,8 @@
-  * Copyright (C) 1994 - 2003, 06, 07 by Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 2007 MIPS Technologies, Inc.
-  */
-+#include <linux/cacheinfo.h>
- #include <linux/export.h>
--#include <linux/fcntl.h>
- #include <linux/fs.h>
- #include <linux/highmem.h>
- #include <linux/kernel.h>
-@@ -16,14 +16,21 @@
- #include <linux/sched.h>
- #include <linux/syscalls.h>
- 
-+#include <asm/bootinfo.h>
- #include <asm/cacheflush.h>
- #include <asm/cpu.h>
- #include <asm/cpu-features.h>
--#include <asm/dma.h>
- #include <asm/loongarch.h>
-+#include <asm/numa.h>
- #include <asm/processor.h>
- #include <asm/setup.h>
- 
-+void cache_error_setup(void)
++static int acpi_evalf(acpi_handle handle, int *res, char *method, char *fmt, ...)
 +{
-+	extern char __weak except_vec_cex;
-+	set_merr_handler(0x0, &except_vec_cex, 0x80);
++	char res_type;
++	char *fmt0 = fmt;
++	va_list ap;
++	int success, quiet;
++	acpi_status status;
++	struct acpi_object_list params;
++	struct acpi_buffer result, *resultp;
++	union acpi_object in_objs[MAX_ACPI_ARGS], out_obj;
++
++	if (!*fmt) {
++		pr_err("acpi_evalf() called with empty format\n");
++		return 0;
++	}
++
++	if (*fmt == 'q') {
++		quiet = 1;
++		fmt++;
++	} else
++		quiet = 0;
++
++	res_type = *(fmt++);
++
++	params.count = 0;
++	params.pointer = &in_objs[0];
++
++	va_start(ap, fmt);
++	while (*fmt) {
++		char c = *(fmt++);
++		switch (c) {
++		case 'd':	/* int */
++			in_objs[params.count].integer.value = va_arg(ap, int);
++			in_objs[params.count++].type = ACPI_TYPE_INTEGER;
++			break;
++			/* add more types as needed */
++		default:
++			pr_err("acpi_evalf() called with invalid format character '%c'\n", c);
++			va_end(ap);
++			return 0;
++		}
++	}
++	va_end(ap);
++
++	if (res_type != 'v') {
++		result.length = sizeof(out_obj);
++		result.pointer = &out_obj;
++		resultp = &result;
++	} else
++		resultp = NULL;
++
++	status = acpi_evaluate_object(handle, method, &params, resultp);
++
++	switch (res_type) {
++	case 'd':		/* int */
++		success = (status == AE_OK && out_obj.type == ACPI_TYPE_INTEGER);
++		if (success && res)
++			*res = out_obj.integer.value;
++		break;
++	case 'v':		/* void */
++		success = status == AE_OK;
++		break;
++		/* add more types as needed */
++	default:
++		pr_err("acpi_evalf() called with invalid format character '%c'\n", res_type);
++		return 0;
++	}
++
++	if (!success && !quiet)
++		pr_err("acpi_evalf(%s, %s, ...) failed: %s\n",
++		       method, fmt0, acpi_format_exception(status));
++
++	return success;
 +}
 +
- /*
-  * LoongArch maintains ICache/DCache coherency by hardware,
-  * we just need "ibar" to avoid instruction hazard here.
-@@ -34,109 +41,121 @@ void local_flush_icache_range(unsigned long start, unsigned long end)
- }
- EXPORT_SYMBOL(local_flush_icache_range);
- 
--void cache_error_setup(void)
--{
--	extern char __weak except_vec_cex;
--	set_merr_handler(0x0, &except_vec_cex, 0x80);
--}
--
--static unsigned long icache_size __read_mostly;
--static unsigned long dcache_size __read_mostly;
--static unsigned long vcache_size __read_mostly;
--static unsigned long scache_size __read_mostly;
--
--static char *way_string[] = { NULL, "direct mapped", "2-way",
--	"3-way", "4-way", "5-way", "6-way", "7-way", "8-way",
--	"9-way", "10-way", "11-way", "12-way",
--	"13-way", "14-way", "15-way", "16-way",
--};
--
--static void probe_pcache(void)
-+static void flush_cache_leaf(unsigned int leaf)
- {
--	struct cpuinfo_loongarch *c = &current_cpu_data;
--	unsigned int lsize, sets, ways;
--	unsigned int config;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG17);
--	lsize = 1 << ((config & CPUCFG17_L1I_SIZE_M) >> CPUCFG17_L1I_SIZE);
--	sets  = 1 << ((config & CPUCFG17_L1I_SETS_M) >> CPUCFG17_L1I_SETS);
--	ways  = ((config & CPUCFG17_L1I_WAYS_M) >> CPUCFG17_L1I_WAYS) + 1;
--
--	c->icache.linesz = lsize;
--	c->icache.sets = sets;
--	c->icache.ways = ways;
--	icache_size = sets * ways * lsize;
--	c->icache.waysize = icache_size / c->icache.ways;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG18);
--	lsize = 1 << ((config & CPUCFG18_L1D_SIZE_M) >> CPUCFG18_L1D_SIZE);
--	sets  = 1 << ((config & CPUCFG18_L1D_SETS_M) >> CPUCFG18_L1D_SETS);
--	ways  = ((config & CPUCFG18_L1D_WAYS_M) >> CPUCFG18_L1D_WAYS) + 1;
--
--	c->dcache.linesz = lsize;
--	c->dcache.sets = sets;
--	c->dcache.ways = ways;
--	dcache_size = sets * ways * lsize;
--	c->dcache.waysize = dcache_size / c->dcache.ways;
--
--	c->options |= LOONGARCH_CPU_PREFETCH;
--
--	pr_info("Primary instruction cache %ldkB, %s, %s, linesize %d bytes.\n",
--		icache_size >> 10, way_string[c->icache.ways], "VIPT", c->icache.linesz);
--
--	pr_info("Primary data cache %ldkB, %s, %s, %s, linesize %d bytes\n",
--		dcache_size >> 10, way_string[c->dcache.ways], "VIPT", "no aliases", c->dcache.linesz);
-+	int i, j, nr_nodes;
-+	uint64_t addr = CSR_DMW0_BASE;
-+	struct cache_desc *cdesc = current_cpu_data.cache_leaves + leaf;
++static int hotkey_status_get(int *status)
++{
++	if (!acpi_evalf(hotkey_handle, status, "GSWS", "d"))
++		return -EIO;
 +
-+	nr_nodes = cache_private(cdesc) ? 1 : loongson_sysconf.nr_nodes;
++	return 0;
++}
 +
-+	do {
-+		for (i = 0; i < cdesc->sets; i++) {
-+			for (j = 0; j < cdesc->ways; j++) {
-+				flush_cache_line(leaf, addr);
-+				addr++;
-+			}
++static void dispatch_acpi_notify(acpi_handle handle, u32 event, void *data)
++{
++	struct generic_sub_driver *sub_driver = data;
 +
-+			addr -= cdesc->ways;
-+			addr += cdesc->linesz;
-+		}
-+		addr += (1ULL << NODE_ADDRSPACE_SHIFT);
-+	} while (--nr_nodes > 0);
- }
- 
--static void probe_vcache(void)
-+asmlinkage __visible void __flush_cache_all(void)
- {
--	struct cpuinfo_loongarch *c = &current_cpu_data;
--	unsigned int lsize, sets, ways;
--	unsigned int config;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG19);
--	lsize = 1 << ((config & CPUCFG19_L2_SIZE_M) >> CPUCFG19_L2_SIZE);
--	sets  = 1 << ((config & CPUCFG19_L2_SETS_M) >> CPUCFG19_L2_SETS);
--	ways  = ((config & CPUCFG19_L2_WAYS_M) >> CPUCFG19_L2_WAYS) + 1;
--
--	c->vcache.linesz = lsize;
--	c->vcache.sets = sets;
--	c->vcache.ways = ways;
--	vcache_size = lsize * sets * ways;
--	c->vcache.waysize = vcache_size / c->vcache.ways;
--
--	pr_info("Unified victim cache %ldkB %s, linesize %d bytes.\n",
--		vcache_size >> 10, way_string[c->vcache.ways], c->vcache.linesz);
-+	int leaf;
-+	struct cache_desc *cdesc = current_cpu_data.cache_leaves;
-+	unsigned int cache_present = current_cpu_data.cache_leaves_present;
-+
-+	leaf = cache_present - 1;
-+	if (cache_inclusive(cdesc + leaf)) {
-+		flush_cache_leaf(leaf);
++	if (!sub_driver || !sub_driver->notify)
 +		return;
++	sub_driver->notify(sub_driver, event);
++}
++
++static int __init setup_acpi_notify(struct generic_sub_driver *sub_driver)
++{
++	acpi_status status;
++
++	if (!*sub_driver->handle)
++		return 0;
++
++	sub_driver->device = acpi_fetch_acpi_dev(*sub_driver->handle);
++	if (!sub_driver->device) {
++		pr_err("acpi_fetch_acpi_dev(%s) failed\n", sub_driver->name);
++		return -ENODEV;
 +	}
 +
-+	for (leaf = 0; leaf < cache_present; leaf++)
-+		flush_cache_leaf(leaf);
- }
- 
--static void probe_scache(void)
--{
--	struct cpuinfo_loongarch *c = &current_cpu_data;
--	unsigned int lsize, sets, ways;
--	unsigned int config;
--
--	config = read_cpucfg(LOONGARCH_CPUCFG20);
--	lsize = 1 << ((config & CPUCFG20_L3_SIZE_M) >> CPUCFG20_L3_SIZE);
--	sets  = 1 << ((config & CPUCFG20_L3_SETS_M) >> CPUCFG20_L3_SETS);
--	ways  = ((config & CPUCFG20_L3_WAYS_M) >> CPUCFG20_L3_WAYS) + 1;
--
--	c->scache.linesz = lsize;
--	c->scache.sets = sets;
--	c->scache.ways = ways;
--	/* 4 cores. scaches are shared */
--	scache_size = lsize * sets * ways;
--	c->scache.waysize = scache_size / c->scache.ways;
--
--	pr_info("Unified secondary cache %ldkB %s, linesize %d bytes.\n",
--		scache_size >> 10, way_string[c->scache.ways], c->scache.linesz);
--}
-+#define L1IUPRE		(1 << 0)
-+#define L1IUUNIFY	(1 << 1)
-+#define L1DPRE		(1 << 2)
++	sub_driver->device->driver_data = sub_driver;
++	sprintf(acpi_device_class(sub_driver->device), "%s/%s",
++		ACPI_LAPTOP_ACPI_EVENT_PREFIX, sub_driver->name);
 +
-+#define LXIUPRE		(1 << 0)
-+#define LXIUUNIFY	(1 << 1)
-+#define LXIUPRIV	(1 << 2)
-+#define LXIUINCL	(1 << 3)
-+#define LXDPRE		(1 << 4)
-+#define LXDPRIV		(1 << 5)
-+#define LXDINCL		(1 << 6)
++	status = acpi_install_notify_handler(*sub_driver->handle,
++			sub_driver->type, dispatch_acpi_notify, sub_driver);
++	if (ACPI_FAILURE(status)) {
++		if (status == AE_ALREADY_EXISTS) {
++			pr_notice("Another device driver is already "
++				  "handling %s events\n", sub_driver->name);
++		} else {
++			pr_err("acpi_install_notify_handler(%s) failed: %s\n",
++			       sub_driver->name, acpi_format_exception(status));
++		}
++		return -ENODEV;
++	}
++	sub_driver->acpi_notify_installed = 1;
 +
-+#define populate_cache_properties(cfg0, cdesc, level, leaf)				\
-+do {											\
-+	unsigned int cfg1;								\
-+											\
-+	cfg1 = read_cpucfg(LOONGARCH_CPUCFG17 + leaf);					\
-+	if (level == 1)	{								\
-+		cdesc->flags |= CACHE_PRIVATE;						\
-+	} else {									\
-+		if (cfg0 & LXIUPRIV)							\
-+			cdesc->flags |= CACHE_PRIVATE;					\
-+		if (cfg0 & LXIUINCL)							\
-+			cdesc->flags |= CACHE_INCLUSIVE;				\
-+	}										\
-+	cdesc->level = level;								\
-+	cdesc->flags |= CACHE_PRESENT;							\
-+	cdesc->ways = ((cfg1 & CPUCFG_CACHE_WAYS_M) >> CPUCFG_CACHE_WAYS) + 1;		\
-+	cdesc->sets = 1 << ((cfg1 & CPUCFG_CACHE_SETS_M) >> CPUCFG_CACHE_SETS);		\
-+	cdesc->linesz = 1 << ((cfg1 & CPUCFG_CACHE_LSIZE_M) >> CPUCFG_CACHE_LSIZE);	\
-+	cdesc++; leaf++;								\
-+} while (0)
- 
- void cpu_cache_init(void)
- {
--	probe_pcache();
--	probe_vcache();
--	probe_scache();
--
-+	unsigned int leaf = 0, level = 1;
-+	unsigned int config = read_cpucfg(LOONGARCH_CPUCFG16);
-+	struct cache_desc *cdesc = current_cpu_data.cache_leaves;
++	return 0;
++}
 +
-+	if (config & L1IUPRE) {
-+		if (config & L1IUUNIFY)
-+			cdesc->type = CACHE_TYPE_UNIFIED;
++static int loongson_hotkey_suspend(struct device *dev)
++{
++	return 0;
++}
++
++static int loongson_hotkey_resume(struct device *dev)
++{
++	int status = 0;
++	struct key_entry ke;
++	struct backlight_device *bd;
++
++	/*
++	 * Only if the firmware supports SW_LID event model, we can handle the
++	 * event. This is for the consideration of development board without EC.
++	 */
++	if (test_bit(SW_LID, generic_inputdev->swbit)) {
++		if (hotkey_status_get(&status) < 0)
++			return -EIO;
++		/*
++		 * The input device sw element records the last lid status.
++		 * When the system is awakened by other wake-up sources,
++		 * the lid event will also be reported. The judgment of
++		 * adding SW_LID bit which in sw element can avoid this
++		 * case.
++		 *
++		 * Input system will drop lid event when current lid event
++		 * value and last lid status in the same. So laptop driver
++		 * doesn't report repeated events.
++		 *
++		 * Lid status is generally 0, but hardware exception is
++		 * considered. So add lid status confirmation.
++		 */
++		if (test_bit(SW_LID, generic_inputdev->sw) && !(status & (1 << SW_LID))) {
++			ke.type = KE_SW;
++			ke.sw.value = (u8)status;
++			ke.sw.code = SW_LID;
++			sparse_keymap_report_entry(generic_inputdev, &ke, 1, true);
++		}
++	}
++
++	bd = backlight_device_get_by_type(BACKLIGHT_PLATFORM);
++	if (bd) {
++		loongson_laptop_backlight_update(bd) ?
++		pr_warn("Loongson_backlight: resume brightness failed") :
++		pr_info("Loongson_backlight: resume brightness %d\n", bd->props.brightness);
++	}
++
++	return 0;
++}
++
++static DEFINE_SIMPLE_DEV_PM_OPS(loongson_hotkey_pm,
++		loongson_hotkey_suspend, loongson_hotkey_resume);
++
++static int loongson_hotkey_probe(struct platform_device *pdev)
++{
++	hotkey_handle = ACPI_HANDLE(&pdev->dev);
++
++	if (!hotkey_handle)
++		return -ENODEV;
++
++	return 0;
++}
++
++static const struct acpi_device_id loongson_device_ids[] = {
++	{LOONGSON_ACPI_HKEY_HID, 0},
++	{"", 0},
++};
++MODULE_DEVICE_TABLE(acpi, loongson_device_ids);
++
++static struct platform_driver loongson_hotkey_driver = {
++	.probe		= loongson_hotkey_probe,
++	.driver		= {
++		.name	= "loongson-hotkey",
++		.owner	= THIS_MODULE,
++		.pm	= pm_ptr(&loongson_hotkey_pm),
++		.acpi_match_table = loongson_device_ids,
++	},
++};
++
++static int hotkey_map(void)
++{
++	u32 index;
++	acpi_status status;
++	struct acpi_buffer buf;
++	union acpi_object *pack;
++
++	buf.length = ACPI_ALLOCATE_BUFFER;
++	status = acpi_evaluate_object_typed(hotkey_handle, "KMAP", NULL, &buf, ACPI_TYPE_PACKAGE);
++	if (status != AE_OK) {
++		pr_err("ACPI exception: %s\n", acpi_format_exception(status));
++		return -1;
++	}
++	pack = buf.pointer;
++	for (index = 0; index < pack->package.count; index++) {
++		union acpi_object *element, *sub_pack;
++
++		sub_pack = &pack->package.elements[index];
++
++		element = &sub_pack->package.elements[0];
++		hotkey_keycode_map[index].type = element->integer.value;
++		element = &sub_pack->package.elements[1];
++		hotkey_keycode_map[index].code = element->integer.value;
++		element = &sub_pack->package.elements[2];
++		hotkey_keycode_map[index].keycode = element->integer.value;
++	}
++
++	return 0;
++}
++
++static int hotkey_backlight_set(bool enable)
++{
++	if (!acpi_evalf(hotkey_handle, NULL, "VCBL", "vd", enable ? 1 : 0))
++		return -EIO;
++
++	return 0;
++}
++
++static int ec_get_brightness(void)
++{
++	int status = 0;
++
++	if (!hotkey_handle)
++		return -ENXIO;
++
++	if (!acpi_evalf(hotkey_handle, &status, "ECBG", "d"))
++		return -EIO;
++
++	if (status < 0)
++		return status;
++
++	return status;
++}
++
++static int ec_set_brightness(int level)
++{
++
++	int ret = 0;
++
++	if (!hotkey_handle)
++		return -ENXIO;
++
++	if (!acpi_evalf(hotkey_handle, NULL, "ECBS", "vd", level))
++		ret = -EIO;
++
++	return ret;
++}
++
++static int ec_backlight_level(u8 level)
++{
++	int status = 0;
++
++	if (!hotkey_handle)
++		return -ENXIO;
++
++	if (!acpi_evalf(hotkey_handle, &status, "ECLL", "d"))
++		return -EIO;
++
++	if ((status < 0) || (level > status))
++		return status;
++
++	if (!acpi_evalf(hotkey_handle, &status, "ECSL", "d"))
++		return -EIO;
++
++	if ((status < 0) || (level < status))
++		return status;
++
++	return level;
++}
++
++static int loongson_laptop_backlight_update(struct backlight_device *bd)
++{
++	int lvl = ec_backlight_level(bd->props.brightness);
++
++	if (lvl < 0)
++		return -EIO;
++	if (ec_set_brightness(lvl))
++		return -EIO;
++
++	return 0;
++}
++
++static int loongson_laptop_get_brightness(struct backlight_device *bd)
++{
++	u8 level;
++
++	level = ec_get_brightness();
++	if (level < 0)
++		return -EIO;
++
++	return level;
++}
++
++static const struct backlight_ops backlight_laptop_ops = {
++	.update_status = loongson_laptop_backlight_update,
++	.get_brightness = loongson_laptop_get_brightness,
++};
++
++static int laptop_backlight_register(void)
++{
++	int status = 0;
++	struct backlight_properties props;
++
++	memset(&props, 0, sizeof(props));
++
++	if (!acpi_evalf(hotkey_handle, &status, "ECLL", "d"))
++		return -EIO;
++
++	props.brightness = 1;
++	props.max_brightness = status;
++	props.type = BACKLIGHT_PLATFORM;
++
++	backlight_device_register("loongson_laptop",
++				NULL, NULL, &backlight_laptop_ops, &props);
++
++	return 0;
++}
++
++int loongson_laptop_turn_on_backlight(void)
++{
++	int status;
++	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
++	struct acpi_object_list args = { 1, &arg0 };
++
++	arg0.integer.value = 1;
++	status = acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
++	if (ACPI_FAILURE(status)) {
++		pr_info("Loongson lvds error: 0x%x\n", status);
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++int loongson_laptop_turn_off_backlight(void)
++{
++	int status;
++	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
++	struct acpi_object_list args = { 1, &arg0 };
++
++	arg0.integer.value = 0;
++	status = acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
++	if (ACPI_FAILURE(status)) {
++		pr_info("Loongson lvds error: 0x%x\n", status);
++		return -ENODEV;
++	}
++
++	return 0;
++}
++
++static int __init event_init(struct generic_sub_driver *sub_driver)
++{
++	int ret;
++
++	ret = hotkey_map();
++	if (ret < 0) {
++		pr_err("Failed to parse keymap from DSDT\n");
++		return ret;
++	}
++
++	ret = sparse_keymap_setup(generic_inputdev, hotkey_keycode_map, NULL);
++	if (ret < 0) {
++		pr_err("Failed to setup input device keymap\n");
++		input_free_device(generic_inputdev);
++
++		return ret;
++	}
++
++	/*
++	 * This hotkey driver handle backlight event when
++	 * acpi_video_get_backlight_type() gets acpi_backlight_vendor
++	 */
++	if (acpi_video_get_backlight_type() == acpi_backlight_vendor)
++		hotkey_backlight_set(true);
++	else
++		hotkey_backlight_set(false);
++
++	pr_info("ACPI: enabling firmware HKEY event interface...\n");
++
++	return ret;
++}
++
++static void event_notify(struct generic_sub_driver *sub_driver, u32 event)
++{
++	int type, scan_code;
++	struct key_entry *ke = NULL;
++
++	scan_code = event & GENERIC_EVENT_CODE_MASK;
++	type = (event & GENERIC_EVENT_TYPE_MASK) >> GENERIC_EVENT_TYPE_OFF;
++	ke = sparse_keymap_entry_from_scancode(generic_inputdev, scan_code);
++	if (ke) {
++		if (type == KE_SW) {
++			int status = 0;
++
++			if (hotkey_status_get(&status) < 0)
++				return;
++
++			ke->sw.value = !!(status & (1 << ke->sw.code));
++		}
++		sparse_keymap_report_entry(generic_inputdev, ke, 1, true);
++	}
++}
++
++/* 3. Infrastructure */
++
++static void generic_subdriver_exit(struct generic_sub_driver *sub_driver);
++
++static int __init generic_subdriver_init(struct generic_sub_driver *sub_driver)
++{
++	int ret;
++
++	BUG_ON(!sub_driver);
++
++	if (!sub_driver || !sub_driver->driver)
++		return -EINVAL;
++
++	ret = platform_driver_register(sub_driver->driver);
++	if (ret)
++		return -EINVAL;
++
++	if (sub_driver->init)
++		sub_driver->init(sub_driver);
++
++	if (sub_driver->notify) {
++		ret = setup_acpi_notify(sub_driver);
++		if (ret == -ENODEV) {
++			ret = 0;
++			goto err_out;
++		}
++		if (ret < 0)
++			goto err_out;
++	}
++
++	return 0;
++
++err_out:
++	generic_subdriver_exit(sub_driver);
++	return (ret < 0) ? ret : 0;
++}
++
++static void generic_subdriver_exit(struct generic_sub_driver *sub_driver)
++{
++
++	if (sub_driver->acpi_notify_installed) {
++		acpi_remove_notify_handler(*sub_driver->handle,
++					   sub_driver->type, dispatch_acpi_notify);
++		sub_driver->acpi_notify_installed = 0;
++	}
++}
++
++static struct generic_sub_driver generic_sub_drivers[] __refdata = {
++	{
++		.name = "hotkey",
++		.init = event_init,
++		.notify = event_notify,
++		.handle = &hotkey_handle,
++		.type = ACPI_DEVICE_NOTIFY,
++		.driver = &loongson_hotkey_driver,
++	},
++};
++
++static int __init generic_acpi_laptop_init(void)
++{
++	bool ec_found;
++	int i, ret, status;
++
++	if (acpi_disabled)
++		return -ENODEV;
++
++	/* The EC device is required */
++	ec_found = acpi_dev_found(LOONGSON_ACPI_EC_HID);
++	if (!ec_found)
++		return -ENODEV;
++
++	/* Enable SCI for EC */
++	acpi_write_bit_register(ACPI_BITREG_SCI_ENABLE, 1);
++
++	generic_inputdev = input_allocate_device();
++	if (!generic_inputdev) {
++		pr_err("Unable to allocate input device\n");
++		return -ENOMEM;
++	}
++
++	/* Prepare input device, but don't register */
++	generic_inputdev->name =
++		"Loongson Generic Laptop/All-in-One Extra Buttons";
++	generic_inputdev->phys = ACPI_LAPTOP_NAME "/input0";
++	generic_inputdev->id.bustype = BUS_HOST;
++	generic_inputdev->dev.parent = NULL;
++
++	/* Init subdrivers */
++	for (i = 0; i < ARRAY_SIZE(generic_sub_drivers); i++) {
++		ret = generic_subdriver_init(&generic_sub_drivers[i]);
++		if (ret < 0) {
++			input_free_device(generic_inputdev);
++			return ret;
++		}
++	}
++
++	ret = input_register_device(generic_inputdev);
++	if (ret < 0) {
++		input_free_device(generic_inputdev);
++		pr_err("Unable to register input device\n");
++		return ret;
++	}
++
++	input_device_registered = 1;
++
++	if (acpi_evalf(hotkey_handle, &status, "ECBG", "d")) {
++		pr_info("Loongson Laptop used, init brightness is 0x%x\n", status);
++		ret = laptop_backlight_register();
++		if (ret < 0)
++			pr_err("Loongson Laptop: laptop-backlight device register failed\n");
++	}
++
++	return 0;
++}
++
++static void __exit generic_acpi_laptop_exit(void)
++{
++	if (generic_inputdev) {
++		if (input_device_registered)
++			input_unregister_device(generic_inputdev);
 +		else
-+			cdesc->type = CACHE_TYPE_INST;
-+		populate_cache_properties(config, cdesc, level, leaf);
++			input_free_device(generic_inputdev);
 +	}
++}
 +
-+	if (config & L1DPRE) {
-+		cdesc->type = CACHE_TYPE_DATA;
-+		populate_cache_properties(config, cdesc, level, leaf);
-+	}
++module_init(generic_acpi_laptop_init);
++module_exit(generic_acpi_laptop_exit);
 +
-+	config = config >> 3;
-+	for (level = 2; level <= CACHE_LEVEL_MAX; level++) {
-+		if (!config)
-+			break;
-+
-+		if (config & LXIUPRE) {
-+			if (config & LXIUUNIFY)
-+				cdesc->type = CACHE_TYPE_UNIFIED;
-+			else
-+				cdesc->type = CACHE_TYPE_INST;
-+			populate_cache_properties(config, cdesc, level, leaf);
-+		}
-+
-+		if (config & LXDPRE) {
-+			cdesc->type = CACHE_TYPE_DATA;
-+			populate_cache_properties(config, cdesc, level, leaf);
-+		}
-+
-+		config = config >> 7;
-+	}
-+
-+	BUG_ON(leaf > CACHE_LEAVES_MAX);
-+
-+	current_cpu_data.cache_leaves_present = leaf;
-+	current_cpu_data.options |= LOONGARCH_CPU_PREFETCH;
- 	shm_align_mask = PAGE_SIZE - 1;
- }
- 
-diff --git a/arch/loongarch/pci/pci.c b/arch/loongarch/pci/pci.c
-index e9b7c34d9b6d..2726639150bc 100644
---- a/arch/loongarch/pci/pci.c
-+++ b/arch/loongarch/pci/pci.c
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/pci.h>
- #include <linux/vgaarb.h>
-+#include <asm/cacheflush.h>
- #include <asm/loongson.h>
- 
- #define PCI_DEVICE_ID_LOONGSON_HOST     0x7a00
-@@ -45,12 +46,10 @@ static int __init pcibios_init(void)
- 	unsigned int lsize;
- 
- 	/*
--	 * Set PCI cacheline size to that of the highest level in the
-+	 * Set PCI cacheline size to that of the last level in the
- 	 * cache hierarchy.
- 	 */
--	lsize = cpu_dcache_line_size();
--	lsize = cpu_vcache_line_size() ? : lsize;
--	lsize = cpu_scache_line_size() ? : lsize;
-+	lsize = cpu_last_level_cache_line_size();
- 
- 	BUG_ON(!lsize);
- 
++MODULE_AUTHOR("Jianmin Lv <lvjianmin@loongson.cn>");
++MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
++MODULE_DESCRIPTION("Loongson Laptop/All-in-One ACPI Driver");
++MODULE_LICENSE("GPL");
 -- 
 2.31.1
 
