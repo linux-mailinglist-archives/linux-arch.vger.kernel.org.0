@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA005BC866
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 12:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35525BC85B
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 12:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbiISKVj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 06:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S231655AbiISKVd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 06:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiISKRr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 06:17:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CFA22BD3;
-        Mon, 19 Sep 2022 03:17:42 -0700 (PDT)
+        with ESMTP id S230237AbiISKSD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 06:18:03 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A52423BD2;
+        Mon, 19 Sep 2022 03:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=lz2MUgDITA4yYb0U+PMz5bsqmEWyVbYbLXt1grP5wdc=; b=Ar3SSe6jGzhlo51swtos76SPi5
-        KuXiRdUWOAjPO/7yHktzfu7OKsDupFAe1VyTEvf67R959dkaj3lnutywtrGNQ0FzD/kNFsrr509Ol
-        zCeztFFINukgQV77MStFwTBM6NB5gODfSAMQV0ab4J8PYg50wlMVVWpd1kiGu7U8DRaIp+zHcs+RC
-        PjkRcfkfDYWB0AK6OHFlYRr5i/D8rJ2O9Fn8FR5c9e91JSkQQbvYD04el9uJ6G/zT187YlaZEV6+6
-        ydgW5aWT5A6QsIVhzK5tAMASoG08AhjIZeNftBw/Sz9H57WdXd5ra4ngtoCCTH6Mr/DQhofJt1LqB
-        c7+wxSkw==;
+        bh=G+s8KeYPo3DKU8KAsFzI9EuTHpElgTPxlXfQAuxRCYE=; b=EFx7B8LZTc83Pl4WaazbOvooxh
+        m5ZH43lt/bUlEN9jEiueLap+B4d87w5iLtoW12OfYwc57bGORzfANspx7UladbBmGSWc1xIqbuqIn
+        FOYYsmRFy+hGwvwvJke8Fb32oGMOnwwKJRBjXTd62rAreByaRoia5cby7KftFCJ5X/Ml7ELcrwj5J
+        eiKKDdHS7VBR9PkXXj1rPKGhThK0lQvF5JDGcSZD67Indcxu2z2DcH6Nt3bnOKQDsnf0QQZKS0PCq
+        ltrSo2MfjxxanO8+19FzwsNyRAZqAIM7DEPtfJ6dxj7PDwKMiZ9L9kurxNJZpN7RIUHFgemSiXBCp
+        JnN7XVag==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaDq9-004bCP-O1; Mon, 19 Sep 2022 10:17:25 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaDq7-00E2Bn-BA; Mon, 19 Sep 2022 10:17:24 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 800BA302F6B;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 86F61302F6F;
         Mon, 19 Sep 2022 12:16:25 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 96B742BA49032; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
-Message-ID: <20220919101522.975285117@infradead.org>
+        id 9D3F72BA49047; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
+Message-ID: <20220919101523.043382530@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 19 Sep 2022 12:00:18 +0200
+Date:   Mon, 19 Sep 2022 12:00:19 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -99,7 +99,7 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: [PATCH v2 39/44] cpuidle,clk: Remove trace_.*_rcuidle()
+Subject: [PATCH v2 40/44] ubsan: Fix objtool UACCESS warns
 References: <20220919095939.761690562@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,44 +112,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-OMAP was the one and only user.
+clang-14 allyesconfig gives:
+
+vmlinux.o: warning: objtool: emulator_cmpxchg_emulated+0x705: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+vmlinux.o: warning: objtool: paging64_update_accessed_dirty_bits+0x39e: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+vmlinux.o: warning: objtool: paging32_update_accessed_dirty_bits+0x390: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+vmlinux.o: warning: objtool: ept_update_accessed_dirty_bits+0x43f: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+
+Add the required eflags save/restore and whitelist the thing.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- drivers/clk/clk.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ lib/ubsan.c           |    5 ++++-
+ tools/objtool/check.c |    1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -978,12 +978,12 @@ static void clk_core_disable(struct clk_
- 	if (--core->enable_count > 0)
- 		return;
+--- a/lib/ubsan.c
++++ b/lib/ubsan.c
+@@ -340,9 +340,10 @@ void __ubsan_handle_load_invalid_value(v
+ {
+ 	struct invalid_value_data *data = _data;
+ 	char val_str[VALUE_LENGTH];
++	unsigned long ua_flags = user_access_save();
  
--	trace_clk_disable_rcuidle(core);
-+	trace_clk_disable(core);
+ 	if (suppress_report(&data->location))
+-		return;
++		goto out;
  
- 	if (core->ops->disable)
- 		core->ops->disable(core->hw);
+ 	ubsan_prologue(&data->location, "invalid-load");
  
--	trace_clk_disable_complete_rcuidle(core);
-+	trace_clk_disable_complete(core);
+@@ -352,6 +353,8 @@ void __ubsan_handle_load_invalid_value(v
+ 		val_str, data->type->type_name);
  
- 	clk_core_disable(core->parent);
+ 	ubsan_epilogue();
++out:
++	user_access_restore(ua_flags);
  }
-@@ -1037,12 +1037,12 @@ static int clk_core_enable(struct clk_co
- 		if (ret)
- 			return ret;
+ EXPORT_SYMBOL(__ubsan_handle_load_invalid_value);
  
--		trace_clk_enable_rcuidle(core);
-+		trace_clk_enable(core);
- 
- 		if (core->ops->enable)
- 			ret = core->ops->enable(core->hw);
- 
--		trace_clk_enable_complete_rcuidle(core);
-+		trace_clk_enable_complete(core);
- 
- 		if (ret) {
- 			clk_core_disable(core->parent);
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1068,6 +1068,7 @@ static const char *uaccess_safe_builtin[
+ 	"__ubsan_handle_type_mismatch",
+ 	"__ubsan_handle_type_mismatch_v1",
+ 	"__ubsan_handle_shift_out_of_bounds",
++	"__ubsan_handle_load_invalid_value",
+ 	/* misc */
+ 	"csum_partial_copy_generic",
+ 	"copy_mc_fragile",
 
 
