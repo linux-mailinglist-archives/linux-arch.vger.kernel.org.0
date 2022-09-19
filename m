@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6A45BC884
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 12:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D361B5BC88F
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 12:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiISKV4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 06:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
+        id S231742AbiISKV7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 06:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiISKTL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 06:19:11 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EAA24097;
-        Mon, 19 Sep 2022 03:17:56 -0700 (PDT)
+        with ESMTP id S230457AbiISKR4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 06:17:56 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30F522BEB;
+        Mon, 19 Sep 2022 03:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=5J6w0/E9GHUuxcPhak3+lKL/wLFktsWBVlnujWsvOEE=; b=IUIV3q/y05GYgX/riR/5rz0qSo
-        j8kU8Zk/nD+ElC7Ra4aVmmq5Z9eHKOfIH8z8v6lsOhKvjekaxM5IIGRG2h/bbF8u7GLqj//DCedX3
-        SFsIUlbTh1N6XE6d3u/nNJg30eYwUT6JjY+csk8MOZ8jioXz22t9IWVMk7+obN7sQ7zSUO+XfGRxX
-        76rsMOiRu0rBEGSHyg4k6gnAHGpzmDWAyfipPTST4B22/bSwZpdhWTWUjzBX+i8BObwssJymk61N/
-        t457tLLsKgDCe8mYgffP5q8nP24PJfS2QJhSJV3+Qedawe+Dig5v98OM7OuFBeAJUaK3jYz4oJ1Ew
-        tSobGOqw==;
+        bh=qeP5TW9pPwNmun+WKlC/DjHHSTDp0gQF0cfrlfUPbu0=; b=GUjNE5F0Y2PTZQyBjYcZZQyfIY
+        o10NohuUOmP0Se3tuwt+mZXT1hGRNK5CGZStjItvyMGkJrGiclWBhtSkJb0QLL0eaPJ8M9M25L5S3
+        h8RuPus74/eSIerE4a1LP/Lqij4WU3nZxoMfY3eqapRQTeR49iDMFDMMZwZKd+WpEnH2S8i8pu2aR
+        LQ0/Ju4u3Q7GytTGjg74VG0Rmm7JMkh5rxZo5vhHGU43eY4281Nvjq9JFzRqioj1iIiLdgpt599dA
+        lic7Z9caX4wSpoMwY+baJQksUBkbg5+ASXDjzrmhQlGn4NSzA5AZxQaFGoM87rxjLSi8dh5ZwC3J6
+        +/tHjSyQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaDq5-00E2B2-Ln; Mon, 19 Sep 2022 10:17:22 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaDq8-004bA4-CU; Mon, 19 Sep 2022 10:17:24 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4A436302F42;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4E3E7302F46;
         Mon, 19 Sep 2022 12:16:25 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 646262BAC75A6; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
-Message-ID: <20220919101522.291054325@infradead.org>
+        id 690642BAC75A9; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
+Message-ID: <20220919101522.358582588@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 19 Sep 2022 12:00:08 +0200
+Date:   Mon, 19 Sep 2022 12:00:09 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -99,72 +99,152 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: [PATCH v2 29/44] cpuidle,tdx: Make tdx noinstr clean
+Subject: [PATCH v2 30/44] cpuidle,xenpv: Make more PARAVIRT_XXL noinstr clean
 References: <20220919095939.761690562@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-vmlinux.o: warning: objtool: __halt+0x2c: call to hcall_func.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: __halt+0x3f: call to __tdx_hypercall() leaves .noinstr.text section
-vmlinux.o: warning: objtool: __tdx_hypercall+0x66: call to __tdx_hypercall_failed() leaves .noinstr.text section
+vmlinux.o: warning: objtool: acpi_idle_enter_s2idle+0xde: call to wbinvd() leaves .noinstr.text section
+vmlinux.o: warning: objtool: default_idle+0x4: call to arch_safe_halt() leaves .noinstr.text section
+vmlinux.o: warning: objtool: xen_safe_halt+0xa: call to HYPERVISOR_sched_op.constprop.0() leaves .noinstr.text section
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Srivatsa S. Bhat (VMware) <srivatsa@csail.mit.edu>
 ---
- arch/x86/boot/compressed/vmlinux.lds.S |    1 +
- arch/x86/coco/tdx/tdcall.S             |    2 ++
- arch/x86/coco/tdx/tdx.c                |    5 +++--
- 3 files changed, 6 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/paravirt.h      |    6 ++++--
+ arch/x86/include/asm/special_insns.h |    4 ++--
+ arch/x86/include/asm/xen/hypercall.h |    2 +-
+ arch/x86/kernel/paravirt.c           |   14 ++++++++++++--
+ arch/x86/xen/enlighten_pv.c          |    2 +-
+ arch/x86/xen/irq.c                   |    2 +-
+ 6 files changed, 21 insertions(+), 9 deletions(-)
 
---- a/arch/x86/boot/compressed/vmlinux.lds.S
-+++ b/arch/x86/boot/compressed/vmlinux.lds.S
-@@ -34,6 +34,7 @@ SECTIONS
- 		_text = .; 	/* Text */
- 		*(.text)
- 		*(.text.*)
-+		*(.noinstr.text)
- 		_etext = . ;
- 	}
- 	.rodata : {
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -31,6 +31,8 @@
- 					  TDX_R12 | TDX_R13 | \
- 					  TDX_R14 | TDX_R15 )
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -168,7 +168,7 @@ static inline void __write_cr4(unsigned
+ 	PVOP_VCALL1(cpu.write_cr4, x);
+ }
  
-+.section .noinstr.text, "ax"
+-static inline void arch_safe_halt(void)
++static __always_inline void arch_safe_halt(void)
+ {
+ 	PVOP_VCALL0(irq.safe_halt);
+ }
+@@ -178,7 +178,9 @@ static inline void halt(void)
+ 	PVOP_VCALL0(irq.halt);
+ }
+ 
+-static inline void wbinvd(void)
++extern noinstr void pv_native_wbinvd(void);
 +
- /*
-  * __tdx_module_call()  - Used by TDX guests to request services from
-  * the TDX module (does not include VMM services) using TDCALL instruction.
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -53,8 +53,9 @@ static inline u64 _tdx_hypercall(u64 fn,
++static __always_inline void wbinvd(void)
+ {
+ 	PVOP_ALT_VCALL0(cpu.wbinvd, "wbinvd", ALT_NOT(X86_FEATURE_XENPV));
+ }
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -115,7 +115,7 @@ static inline void wrpkru(u32 pkru)
+ }
+ #endif
+ 
+-static inline void native_wbinvd(void)
++static __always_inline void native_wbinvd(void)
+ {
+ 	asm volatile("wbinvd": : :"memory");
+ }
+@@ -179,7 +179,7 @@ static inline void __write_cr4(unsigned
+ 	native_write_cr4(x);
  }
  
- /* Called from __tdx_hypercall() for unrecoverable failure */
--void __tdx_hypercall_failed(void)
-+noinstr void __tdx_hypercall_failed(void)
+-static inline void wbinvd(void)
++static __always_inline void wbinvd(void)
  {
-+	instrumentation_begin();
- 	panic("TDVMCALL failed. TDX module bug?");
+ 	native_wbinvd();
+ }
+--- a/arch/x86/include/asm/xen/hypercall.h
++++ b/arch/x86/include/asm/xen/hypercall.h
+@@ -382,7 +382,7 @@ MULTI_stack_switch(struct multicall_entr
+ }
+ #endif
+ 
+-static inline int
++static __always_inline int
+ HYPERVISOR_sched_op(int cmd, void *arg)
+ {
+ 	return _hypercall2(int, sched_op, cmd, arg);
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -233,6 +233,11 @@ static noinstr void pv_native_set_debugr
+ 	native_set_debugreg(regno, val);
  }
  
-@@ -64,7 +65,7 @@ void __tdx_hypercall_failed(void)
-  * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
-  * guest sides of these calls.
-  */
--static u64 hcall_func(u64 exit_reason)
-+static __always_inline u64 hcall_func(u64 exit_reason)
++noinstr void pv_native_wbinvd(void)
++{
++	native_wbinvd();
++}
++
+ static noinstr void pv_native_irq_enable(void)
  {
- 	return exit_reason;
+ 	native_irq_enable();
+@@ -242,6 +247,11 @@ static noinstr void pv_native_irq_disabl
+ {
+ 	native_irq_disable();
  }
++
++static noinstr void pv_native_safe_halt(void)
++{
++	native_safe_halt();
++}
+ #endif
+ 
+ enum paravirt_lazy_mode paravirt_get_lazy_mode(void)
+@@ -273,7 +283,7 @@ struct paravirt_patch_template pv_ops =
+ 	.cpu.read_cr0		= native_read_cr0,
+ 	.cpu.write_cr0		= native_write_cr0,
+ 	.cpu.write_cr4		= native_write_cr4,
+-	.cpu.wbinvd		= native_wbinvd,
++	.cpu.wbinvd		= pv_native_wbinvd,
+ 	.cpu.read_msr		= native_read_msr,
+ 	.cpu.write_msr		= native_write_msr,
+ 	.cpu.read_msr_safe	= native_read_msr_safe,
+@@ -307,7 +317,7 @@ struct paravirt_patch_template pv_ops =
+ 	.irq.save_fl		= __PV_IS_CALLEE_SAVE(native_save_fl),
+ 	.irq.irq_disable	= __PV_IS_CALLEE_SAVE(pv_native_irq_disable),
+ 	.irq.irq_enable		= __PV_IS_CALLEE_SAVE(pv_native_irq_enable),
+-	.irq.safe_halt		= native_safe_halt,
++	.irq.safe_halt		= pv_native_safe_halt,
+ 	.irq.halt		= native_halt,
+ #endif /* CONFIG_PARAVIRT_XXL */
+ 
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -1019,7 +1019,7 @@ static const typeof(pv_ops) xen_cpu_ops
+ 
+ 		.write_cr4 = xen_write_cr4,
+ 
+-		.wbinvd = native_wbinvd,
++		.wbinvd = pv_native_wbinvd,
+ 
+ 		.read_msr = xen_read_msr,
+ 		.write_msr = xen_write_msr,
+--- a/arch/x86/xen/irq.c
++++ b/arch/x86/xen/irq.c
+@@ -24,7 +24,7 @@ noinstr void xen_force_evtchn_callback(v
+ 	(void)HYPERVISOR_xen_version(0, NULL);
+ }
+ 
+-static void xen_safe_halt(void)
++static noinstr void xen_safe_halt(void)
+ {
+ 	/* Blocking includes an implicit local_irq_enable(). */
+ 	if (HYPERVISOR_sched_op(SCHEDOP_block, NULL) != 0)
 
 
