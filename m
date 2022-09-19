@@ -2,66 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57DC75BD42F
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 19:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB265BD531
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 21:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiISRyT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 13:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S229681AbiIST00 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 15:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiISRyJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 13:54:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D582741D1F;
-        Mon, 19 Sep 2022 10:54:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7135861374;
-        Mon, 19 Sep 2022 17:54:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D90C433B5;
-        Mon, 19 Sep 2022 17:54:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663610046;
-        bh=DvqH3q9Hr6/f/KVvc2EIOZwfO4WOQSZ2uFVd/i3sVIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RiM4TJBYjwNtLa3BGc3b5nz+cARE0VfszK+QMOLU7mU5ZOCKKRLumi8MwjSWboFxz
-         aUR4m4kkt3Mke56WHFBrNId/v48N16/7C+ZzGMSx6SZqruLk8ys7bgoty65XUXwB/0
-         pszSPdR1tlwbr5OMLdR1Gb5sb+S7GGKi2JLmOTClbUtZLtL2J2K6WHaGHJTABa5bLC
-         rbuJZVkEbfg78opUAhsTctJF4QtnDk3K8YgOJ1JDj88TX6GJZnAuCcnc3OhsWiI+vm
-         SkbAMsz7551d4Wfosg/TTr79AoO2whrM+ObrLYispjDJYIVUCVugLxHannI3r8ENAR
-         PvoIJL65GRTkw==
-Date:   Mon, 19 Sep 2022 18:54:01 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Omar Sandoval <osandov@osandov.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Borislav Petkov <bp@suse.de>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
-Message-ID: <YyisuQk74ux7sC3z@sirena.org.uk>
-References: <20200428132105.170886-1-hjl.tools@gmail.com>
- <20200428132105.170886-2-hjl.tools@gmail.com>
- <YyTRM3/9Mm+b+M8N@relinquished.localdomain>
- <e15de60c-8133-3d93-eb1c-c6b1b5389887@csgroup.eu>
- <YyimOW229By98Dn7@relinquished.localdomain>
- <Yyin1FUU7enibeD8@sirena.org.uk>
- <YyiplGhX65Hrkkjw@relinquished.localdomain>
+        with ESMTP id S229559AbiIST0Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 15:26:25 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5120B45F77
+        for <linux-arch@vger.kernel.org>; Mon, 19 Sep 2022 12:26:24 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id f23so145840plr.6
+        for <linux-arch@vger.kernel.org>; Mon, 19 Sep 2022 12:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=RmR4iKksLM46UToapAYzrq41XElOopC0q9ix9wCyuKs=;
+        b=PVp6YfOyhZha6HJBZg4yMtXtA6aL/+bfSb1OxdA/ZExOmbVQM2yfYZsTWjQ6063o+g
+         O/WXQa7b/F65Rx7p9dmtXDkLgZhqolfdom4zM4hw974cbNh9+jBHQds5pbZU4LQk7WHZ
+         1voIXAXh0NcOJOcUipffT2wyw4qSXZ8I5NPMg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=RmR4iKksLM46UToapAYzrq41XElOopC0q9ix9wCyuKs=;
+        b=rkYtjwnBHk/o4/niW8AdPW4TpNZGceloccQkhoIGvv+AJWh8UidhAzVuSrsMnIspdj
+         juIlxhUo2bGn8kctNcKfvfW051zRPVcvDScWXc0vW9PLN6fnRqMp5MFjaDAPYxihMHy7
+         FtHnrD6NFe8jggHUn26yxf316IyBjsX1HylLbdFl9lynrJCbJvtUcKy4xOrqUwJjzoJV
+         n8ZTVpEwbzIu3grrwN9lE4AdfD8uZrd9V70SB5e4QQlQ3TDwQmSX+eq34soMmzmoyS04
+         K09EMMgyZTupKnC5kOVE+weCIK8o1DOZEU40y4Kdm0nj7QnDYsZi+iz/Ti23WnLYJsB4
+         1pwQ==
+X-Gm-Message-State: ACrzQf2RMFjdtXqsX4xzYMw9f2LK0BT5lLlZWCfYeOPw2E7Y6FHYwNTF
+        RvmYpSMXF0gB0I44HmxjdkkhBA==
+X-Google-Smtp-Source: AMsMyM7jddefl5071rxvDEg9p60KFOEMQVhTHRe5BfeqSqt5aIP+GxxXxhHHyIaoiGWYhH5Gh+7ztw==
+X-Received: by 2002:a17:90a:ab91:b0:202:a520:56c9 with SMTP id n17-20020a17090aab9100b00202a52056c9mr33416244pjq.1.1663615583818;
+        Mon, 19 Sep 2022 12:26:23 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170902e55100b001752cb111e0sm21243619plf.69.2022.09.19.12.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Sep 2022 12:26:23 -0700 (PDT)
+Date:   Mon, 19 Sep 2022 12:26:22 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 0/3] x86/dumpstack: Inline copy_from_user_nmi()
+Message-ID: <202209191225.B3A759134@keescook>
+References: <20220916135953.1320601-1-keescook@chromium.org>
+ <20220916125723.b4c189d09bcd8fd211a73c32@linux-foundation.org>
+ <YyiAz4gs4TvTqrvI@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EqpzY94vBNwCHWF8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YyiplGhX65Hrkkjw@relinquished.localdomain>
-X-Cookie: One FISHWICH coming up!!
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <YyiAz4gs4TvTqrvI@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,39 +73,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Sep 19, 2022 at 04:46:39PM +0200, Peter Zijlstra wrote:
+> On Fri, Sep 16, 2022 at 12:57:23PM -0700, Andrew Morton wrote:
+> > Why is this so complicated.
+> > 
+> > There's virtually zero value in running all those debug checks from within
+> > copy_from_user_nmi().
+> > 
+> > --- a/arch/x86/lib/usercopy.c~a
+> > +++ a/arch/x86/lib/usercopy.c
+> > @@ -44,7 +44,7 @@ copy_from_user_nmi(void *to, const void
+> >  	 * called from other contexts.
+> >  	 */
+> >  	pagefault_disable();
+> > -	ret = __copy_from_user_inatomic(to, from, n);
+> > +	ret = raw_copy_from_user(to, from, n);
+> >  	pagefault_enable();
+> >  
+> >  	return ret;
+> 
+> I'm with Andrew here; this looks a *LOT* saner than all the other stuff.
 
---EqpzY94vBNwCHWF8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yeah, I'd agree -- it's a special case of a special case. I'll send a
+new patch.
 
-On Mon, Sep 19, 2022 at 10:40:36AM -0700, Omar Sandoval wrote:
-> On Mon, Sep 19, 2022 at 06:33:40PM +0100, Mark Brown wrote:
+Thanks!
 
-> > I don't understand the question, what file are you talking about
-> > here?  arch/arm64/include/asm/assembler.h is itself a file and I
-> > couldn't find anything nearby in your mail talking about a file...
-
-> Oops, that was a typo, I meant to say "I'm not sure what
-> arch/arm64/include/asm/assembler.h is doing with this *note*". To be
-> more explicit: does ARM64 need .note.gnu.property/NT_GNU_PROPERTY_TYPE_0
-> in vmlinux?
-
-It needs it in at least the vDSO which gets built into vmlinux.
-AFAIR we don't use it in normal kernel code.
-
---EqpzY94vBNwCHWF8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMorLgACgkQJNaLcl1U
-h9AeAgf+I7vqneefeeQjYjLayNpW3jVr/pFAMKL+V3w+IQjePpTxH3p5lo7JLQYT
-FR275uZQdE1cistY2WtHAYQxxJw0jT4VHO5Jte2Ajb6vWv3ouJQWmv1ZVBCqxS2Q
-05+Z9v3toO2yg7nPlqme8NAX52VEXzjDtijaRaU7PY5NsxYXluHjkxq5yuaqoMMF
-m3dgZdAvRKewtLt/rB6PFqO0v3nkns6aPZ7S/LLCR4IFkpULco7vxmEXqV3oD4ac
-arjQLAGqXfn3sbfSy2rQj8/feG7bKWQlaMRZE9fEkfYL25/bx7F2ipfCH2b/9tbF
-9kDEpdrUjKqorXGvblX5Ae+pjiXubw==
-=fNrU
------END PGP SIGNATURE-----
-
---EqpzY94vBNwCHWF8--
+-- 
+Kees Cook
