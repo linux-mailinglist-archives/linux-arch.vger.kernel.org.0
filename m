@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF8F5BCFCD
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 17:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7205BCFF2
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 17:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiISPBr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 11:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S229535AbiISPDf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 11:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiISPBm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 11:01:42 -0400
+        with ESMTP id S229588AbiISPD2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 11:03:28 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5BA3337A;
-        Mon, 19 Sep 2022 08:01:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8287033A0B;
+        Mon, 19 Sep 2022 08:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GQT9ZKmQZViLafATQeaZBpdND2gP4uRG0ahM2YMYtd8=; b=g/io43RigyyT41y2dFYusHC91i
-        FN11xGh8i9tSF+EoWlo1zpG/7kAtBGSI2HmZByL4Oe8pG3bEgJ+0ROI7nYO0NOnc1TY5oprLEKNsP
-        0s07QhQQGBqOQpI9GMDgINY/2CjS57svuapajwEVoK2R5yc4GAMJp+DMGuZKJlfslCqnDHrafRUiw
-        jORg8zwhWlWojJALVxpQjQFiL2JzpT9CaEaqFUVxHoyqBPjNzU9yff7QlldALoQgVvDBY1b6Bykv7
-        bVtAcUpYMDOJ65BerD+Uz9pEW8t4LuzSWPRPEzSY89wpLArsaujZiDHsp5Um+PEFfzZR6oEfgqVwd
-        v4kzfEww==;
+        bh=8W4ANpZZg81bkZotlJvZ4fg4qiAvSnY5PZyc1BTsWP4=; b=U5nJ9bmbrG96XYoLlWJMVIlBU2
+        Pac30dBaWX60m+XV25ZBrYpXHzco5Q4NvTRE6aqkUuxUPn4JqSO1GodAj6psxS/Sp6GkOCStGlY4M
+        8BPQdAM8NMp6pZmjrzXDYhoVN0Nr9gBqgJ5fq4StVhTIHRcrv28THIsVzKd1rTfCOQ3w8HGN1n0Uw
+        lG/m8FHJAXyE1D7Z149RX3YBrqwoqT0JLs3qsqzAdv6yyW8A86Z0atiWKYeezmVR2nk0iC8HoYA62
+        F2nkXj4OJNNIj6lZA++w5ieVdxb6fkUT9Y7e4iDEgPe3TS4PMshOdvmBCNLaFz4JSqJjIGbHECwb8
+        O+RP33Rg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaIGj-00E6aY-5b; Mon, 19 Sep 2022 15:01:09 +0000
+        id 1oaIIa-00E6gl-VJ; Mon, 19 Sep 2022 15:03:05 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C24A33001F3;
-        Mon, 19 Sep 2022 17:01:08 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8CAF03005DD;
+        Mon, 19 Sep 2022 17:03:04 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A79C82BA49026; Mon, 19 Sep 2022 17:01:08 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 17:01:08 +0200
+        id 5DBEE2BAC7A31; Mon, 19 Sep 2022 17:03:04 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 17:03:04 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Frederic Weisbecker <frederic@kernel.org>
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -98,7 +98,7 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
 Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
-Message-ID: <YyiENIiiw0lx4z3l@hirez.programming.kicks-ass.net>
+Message-ID: <YyiEqDSJVOZrQYg8@hirez.programming.kicks-ass.net>
 References: <20220919095939.761690562@infradead.org>
  <20220919101520.869531945@infradead.org>
  <20220919144941.GA62211@lothringen>
@@ -108,7 +108,7 @@ Content-Disposition: inline
 In-Reply-To: <20220919144941.GA62211@lothringen>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -148,4 +148,5 @@ On Mon, Sep 19, 2022 at 04:49:41PM +0200, Frederic Weisbecker wrote:
 > 
 > There is a second one below that also uses imx6sx_enter_wait.
 
-Duh, thanks!
+Oh, above you mean; but only @index==2 gets us into the whole PM crud.
+@index==1 is fine afaict.
