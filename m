@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58F25BE0F3
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 10:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D915BE104
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 11:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiITI5d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Sep 2022 04:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
+        id S231519AbiITJAM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Sep 2022 05:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiITI5c (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 04:57:32 -0400
+        with ESMTP id S230481AbiITI7n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 04:59:43 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DC758DCA;
-        Tue, 20 Sep 2022 01:57:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E1F6C110;
+        Tue, 20 Sep 2022 01:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/nDDP1N0D4CAKFG1jjZ0nUCcb4Cwi+2XeLNzAB5a/3A=; b=dwq7k7OLBAweuvxZAbsIyybjmJ
-        LWKFQLhJfLLYjlWcLF1VzOmm/u3DYXUkxiGZB432qxzVGoPDa+HDV664vlFYQOwNVOgwYKQh00P/y
-        2Moq5lHOrC15n7bUB20DWWFsx8XV1J1DNLnxbuCGUFWdx8geNgMfV6XhqReLWifLY+YeFodx27IXq
-        /IrJ0mO09Di3qhEI4cp6g7HRbgntsbzEH8ickJuRs6Usu7AqtrURdlQsKWIMoNKkSXupoPQSsqje7
-        UezmEjo7U4Z1A3DxPyeQLWaZEGErf50B+83wnXPcrPsl85uPvrl+T4DjBM0ejacsZ7Zz8oufPZrwY
-        XBBt0mUA==;
+        bh=W0WuIu+jUoS9XLKKaCH8kQp1fmQssrlCtEm/el88ozE=; b=W1sdVyg7vy3ch8nf9fwJC+rQAA
+        Ok63hswk+DsuwDPoYMow5lpuRTg0zwye/uMJ7IZxhvsE8DqEb8IUKGXI2vHvDWYEw8tlYqo51FALc
+        ZTsNnqkaLalFrpr8JHNXkX85QpdDDffKTM0jzzzHE890y80CZ3xf0MvTgC+6pcPEhwcVqBLuCt/ue
+        ACjH+0VY11uC++wbmWA9jKjDB2w8MUoGQUsqPG4vg1hfyWfx8tLeEnKKR2aXVj5eexUqmJaWJ4XzM
+        WZxvwFxPbkcoskk60vuUbFCgljrJO8fWOc/ThBigj91DsKdqZZKbYEKqQyg1nhkHvBtgcqywSN/+g
+        730JiXIw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaZ3v-00EIvL-QZ; Tue, 20 Sep 2022 08:57:04 +0000
+        id 1oaZ5n-00EIzl-O7; Tue, 20 Sep 2022 08:58:59 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BC92330035F;
-        Tue, 20 Sep 2022 10:57:00 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5131A3006B9;
+        Tue, 20 Sep 2022 10:58:59 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 892F82BAC7A92; Tue, 20 Sep 2022 10:57:00 +0200 (CEST)
-Date:   Tue, 20 Sep 2022 10:57:00 +0200
+        id 211C72BAC7A93; Tue, 20 Sep 2022 10:58:59 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 10:58:59 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Frederic Weisbecker <frederic@kernel.org>
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -96,17 +96,16 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2 03/44] cpuidle/poll: Ensure IRQ state is invariant
-Message-ID: <YymAXPkZkyFIEjXM@hirez.programming.kicks-ass.net>
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
+Message-ID: <YymA0yJybIWLco/v@hirez.programming.kicks-ass.net>
 References: <20220919095939.761690562@infradead.org>
- <20220919101520.534233547@infradead.org>
- <20220919131927.GA58444@lothringen>
+ <20220919101520.869531945@infradead.org>
+ <20220919142123.GE58444@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919131927.GA58444@lothringen>
+In-Reply-To: <20220919142123.GE58444@lothringen>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -116,27 +115,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 03:19:27PM +0200, Frederic Weisbecker wrote:
-> On Mon, Sep 19, 2022 at 11:59:42AM +0200, Peter Zijlstra wrote:
-> > cpuidle_state::enter() methods should be IRQ invariant
+On Mon, Sep 19, 2022 at 04:21:23PM +0200, Frederic Weisbecker wrote:
+> On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
+> > Doing RCU-idle outside the driver, only to then temporarily enable it
+> > again, at least twice, before going idle is daft.
 > 
-> Got a bit confused with the invariant thing since the first chunck I
-> see in this patch is a conversion to an non-traceable local_irq_enable().
-> 
-> Maybe just add a short mention about that and why?
+> Hmm, what ends up calling RCU_IDLE() here? Also what about
+> cpu_do_idle()?
 
-Changelog now reads:
+I've ammended patches 5-12 with a comment like:
 
----
-Subject: cpuidle/poll: Ensure IRQ state is invariant
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Tue May 31 15:43:32 CEST 2022
+Notably both cpu_pm_enter() and cpu_cluster_pm_enter() implicity
+re-enable RCU.
 
-cpuidle_state::enter() methods should be IRQ invariant.
-
-Additionally make sure to use raw_local_irq_*() methods since this
-cpuidle callback will be called with RCU already disabled.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+(each noting the specific sites for the relevant patch).
