@@ -2,67 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997975BDDFA
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 09:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620965BDDFD
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 09:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiITHQn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Sep 2022 03:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S229657AbiITHSL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Sep 2022 03:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiITHQ0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 03:16:26 -0400
+        with ESMTP id S229549AbiITHSK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 03:18:10 -0400
 Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032AE356D1;
-        Tue, 20 Sep 2022 00:15:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC5555A7;
+        Tue, 20 Sep 2022 00:18:09 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id DFCE42B06063;
-        Tue, 20 Sep 2022 03:15:39 -0400 (EDT)
+        by mailnew.west.internal (Postfix) with ESMTP id 8FB5B2B05FC0;
+        Tue, 20 Sep 2022 03:18:07 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 20 Sep 2022 03:15:41 -0400
+  by compute3.internal (MEProxy); Tue, 20 Sep 2022 03:18:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663658139; x=1663661739; bh=41Je5rgJig
-        gwYk1/1K8oAn+kRFxX2sdezVwPUGJRJnk=; b=U2i1/sSYv/UI8p9X1QbnDZ5S6J
-        HxSDqnHHIz31mY/p2+icdxlly380iPZJDokDJJ9EHPlFKjdoMk+EiNA5H9K2akiD
-        TThS8i9Mr5MY9eDEpz4a4XHr5UXa5TMi39/H0gW9O+VVRtRP9SR6+WvKHL7lDaM9
-        1S0AHcaTwf6ZW7v5jhr6VZbCZJe/2ojRluhDMLfT4FT/bbEe51xGjJSdZBd1HWum
-        vgTmOGlW8lmJZ7prjEJ0HTx4vQJZT/e6JdShH//b2v+yW469VxaPG0xpt1wiEOAC
-        Uc4Fr4bv0EFXjW1C8yuiiFRG+mmT1XeBwV5U3TY/lUzFzYdnRsiN7m3HQQjw==
+        :subject:to:to; s=fm1; t=1663658287; x=1663661887; bh=LvNsqUSk6C
+        VCiNNoqcWQ4F99wUt4fhfxMlYywrwPN6k=; b=TVdtYthFfEARf+agjGfErq4CvH
+        Z6FnpfSgA86pGm7O3Nt3OK2hqHCQs5nLA/n7OxxlgFa2CBQ53CulfjXa9TW6nGEC
+        kQF0ny96tpYS9a8svyRyvMjRQrMXGMH5fjDWaWv3QwX7ctCECQ7wQE+GMWrX8gsF
+        tpjyccoWR7vpIT7yTqTRRlrqCTg448qeWWLjHOLquZriUcjU/qvMjV2udRAuf4GB
+        jutfDkTNmVgEJNAQA4RIdnWJrDtB1UKJ2ADb5eTmECh6HGGsTEmhqqkc+u+kp/Y6
+        pv72xW/SIriFcRZ4w/on0GFbqP6Biw+RzqEHRAW8SYRgbp5GrchDfXgDED+g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
         :feedback-id:from:from:in-reply-to:in-reply-to:message-id
         :mime-version:references:reply-to:sender:subject:subject:to:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663658139; x=1663661739; bh=41Je5rgJiggwYk1/1K8oAn+kRFxX
-        2sdezVwPUGJRJnk=; b=uSnRviBhBLxRCoWwApAskqVomu+4EqJ2O++CBuhbcTw4
-        uSQMx4lDvg4SlZH9p4XZ6Kng4KiI27p58dFO/Y5J9NtTx3lQwu84XfHnY39M00h9
-        Uloxh549qTjn8+mKitItF97nc3TgC3Rk0n8SZXGUjylTJ5BFLBnj+qjFYkCP26z1
-        D2gZG6qZvYt9Z2D2QGrqDhkXCNgtZyzGe+Zae8bCgwdp72hSqmZE2FX/pNDBPNq2
-        eVrYqPdL65ksEnHtAwV9ikM3Mcn9yyGgX/I2Ut2dOLy/Y80HVR152OyXlpJmJLXg
-        sXGQ5m1b3LwJvD4n+jmLEJn0JW3158Qp6Qy/m4xu/g==
-X-ME-Sender: <xms:mWgpYxxRt5aJq0pZMb2sGWHML8N3fbN319M7Vo7Hnc4ZlxGrIyvQZA>
-    <xme:mWgpYxTNsjRxLxq_21OzR44wNm8lc-zEu8soGUzVVvyiYajumXXrw9IltutH0jyfk
-    nWgzeS6eM1H3t4nGOI>
+        fm2; t=1663658287; x=1663661887; bh=LvNsqUSk6CVCiNNoqcWQ4F99wUt4
+        fhfxMlYywrwPN6k=; b=oOGiChK6G8Xoo6Lfj9nP4p1xdk3EMUm7DXOrH6kktuDl
+        4l1UIDFy4iONbvI3/er6A5iGWw1QCHPxLvHQs/mKwbW63ul457G1Qzdsxi4vaMer
+        hHModBqasatxyxQWnLoYIpTZ4ZZxeb9iiDn41Wi146u8rWnw+751VB8/ZM5Fdomj
+        FD+alOr0WsUlshaNsfCGmLvZCX9Q3me+O35bKGshGa+tTHS1Oa5V7a8oOrrxeWF3
+        mN+ZdwK9IEoDTUQ+r4fuUSd5tV+LCEzYD5tMUJrVACSy0EAJdEayYcqvNUXaL/FT
+        6YxQvSNrGyaPmkmjbRf4SaL+KR8egYDXzed/0ZbxfA==
+X-ME-Sender: <xms:LmkpYwuB0UAoGNFSv1ucS0G1jy8b4eSr6wI_6m1wccPSlAdeV31nZg>
+    <xme:LmkpY9fvPZv9wRdzLdVXkdd1te9DmTw7rcJiUfnprBWWhJ-o10sJg4hCWSfFL-nPa
+    lNOPb4Z3v6-qekA4xo>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvkedguddvtdcutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
     rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeethefgudekueejkeeludeiteefudejtdevleeiffetfffgffejheeltedt
-    ieffveenucffohhmrghinhepvghnthhrhidrshgsnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mWgpY7WhMXLy-QcIDiZgiW4p7JxP3YN9iGBNmfclRQHvMEFDO1fd4Q>
-    <xmx:mWgpYzjkKYS4t3VWh7ZVKyVk6htqzr2gklPDP8WQxfciBH4rmoSlXQ>
-    <xmx:mWgpYzBAxBhS94bvfNnMK-Zs19y87aOZqGv9Sjjr3u9K7pYgSxepCQ>
-    <xmx:m2gpY75Brr7xYTdPBRO7xLzDLZRqYa222svXfWE0jXSQn1dZf_Igz47R5p-F0YUp>
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:LmkpY7ygbkJaktw45WbT9SL2DxCR1ZzUpz7gtblg_eDR4mANmfGWfw>
+    <xmx:LmkpYzPEtieCJGcAhgyW6oRWo9hcUxO_ADF4nB86WJJT-TGNYEPxMA>
+    <xmx:LmkpYw8gX3IexwBknny5tso8GC8RBY6hn7sRQzH8u75dBzwPH60DpA>
+    <xmx:L2kpYz1MiAkGixFYUIVdrL1tQTooNaO5qAj9CQcrz5Avm9Ay58Deb2kjUKFtEjTU>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B0767B60086; Tue, 20 Sep 2022 03:15:37 -0400 (EDT)
+        id 49279B60086; Tue, 20 Sep 2022 03:18:06 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
 Mime-Version: 1.0
-Message-Id: <542a9b2e-016a-4e09-9edb-c268bfae885f@www.fastmail.com>
+Message-Id: <7a2379cf-c1cf-46af-9172-334d2b9b88d5@www.fastmail.com>
 In-Reply-To: <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
 References: <20220908022506.1275799-1-guoren@kernel.org>
  <20220908022506.1275799-9-guoren@kernel.org>
@@ -71,7 +71,7 @@ References: <20220908022506.1275799-1-guoren@kernel.org>
  <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
  <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
  <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
-Date:   Tue, 20 Sep 2022 09:15:12 +0200
+Date:   Tue, 20 Sep 2022 09:17:45 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     guoren <guoren@kernel.org>
 Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
@@ -104,51 +104,27 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Sep 20, 2022, at 2:46 AM, Guo Ren wrote:
 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index dfe600f3526c..8def456f328c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -442,6 +442,16 @@ config IRQ_STACKS
+>           Add independent irq & softirq stacks for percpu to prevent
+> kernel stack
+>           overflows. We may save some memory footprint by disabling IRQ_STACKS.
 >
-> How about this one: (only THREAD_SIZE, no THREAD_ORDER&SHIFT.)
->
-> -
->  /* thread information allocation */
-> -#ifdef CONFIG_64BIT
-> -#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
-> -#else
-> -#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
-> -#endif
-> -#define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
-> +#define THREAD_SIZE            CONFIG_THREAD_SIZE
+> +config THREAD_SIZE
+> +       int "Kernel stack size (in bytes)" if EXPERT
+> +       range 4096 65536
+> +       default 8192 if 32BIT && !KASAN
+> +       default 32768 if 64BIT && KASAN
+> +       default 16384
+> +       help
+> +         Specify the Pages of thread stack size (from 4KB to 64KB), which also
+> +         affects irq stack size, which is equal to thread stack size.
 
+I still think this should be guarded in a way that prevents
+setting the stack to smaller than default values unless VMAP_STACK
+is set as well.
 
-So far looks fine.
-
->
->  /*
->   * By aligning VMAP'd stacks to 2 * THREAD_SIZE, we can detect overflow by
-> - * checking sp & (1 << THREAD_SHIFT), which we can do cheaply in the entry
-> - * assembly.
-> + * checking sp & THREAD_SIZE, which we can do cheaply in the entry assembly.
->   */
->  #ifdef CONFIG_VMAP_STACK
->  #define THREAD_ALIGN            (2 * THREAD_SIZE)
-> @@ -36,7 +24,6 @@
->  #define THREAD_ALIGN            THREAD_SIZE
->  #endif
-
-The THREAD_ALIGN does not, this only works for power-of-two numbers of
-THREAD_SIZE, 
-
-> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> index 426529b84db0..1e35fb3bdae5 100644
-> --- a/arch/riscv/kernel/entry.S
-> +++ b/arch/riscv/kernel/entry.S
-> @@ -29,8 +29,8 @@ _restore_kernel_tpsp:
->
->  #ifdef CONFIG_VMAP_STACK
->         addi sp, sp, -(PT_SIZE_ON_STACK)
-> -       srli sp, sp, THREAD_SHIFT
-> -       andi sp, sp, 0x1
-> +       srli sp, sp, PAGE_SHIFT
-> +       andi sp, sp, (THREAD_SIZE >> PAGE_SHIFT)
-
-I think this needs to use THREAD_ALIGN, not THREAD_SIZE.
-
-      Arnd
+    Arnd
