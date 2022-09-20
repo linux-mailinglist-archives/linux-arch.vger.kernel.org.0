@@ -2,129 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620965BDDFD
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 09:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F00A5BDE0C
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 09:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbiITHSL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Sep 2022 03:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46706 "EHLO
+        id S229913AbiITHXg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Sep 2022 03:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiITHSK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 03:18:10 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC5555A7;
-        Tue, 20 Sep 2022 00:18:09 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 8FB5B2B05FC0;
-        Tue, 20 Sep 2022 03:18:07 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 20 Sep 2022 03:18:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1663658287; x=1663661887; bh=LvNsqUSk6C
-        VCiNNoqcWQ4F99wUt4fhfxMlYywrwPN6k=; b=TVdtYthFfEARf+agjGfErq4CvH
-        Z6FnpfSgA86pGm7O3Nt3OK2hqHCQs5nLA/n7OxxlgFa2CBQ53CulfjXa9TW6nGEC
-        kQF0ny96tpYS9a8svyRyvMjRQrMXGMH5fjDWaWv3QwX7ctCECQ7wQE+GMWrX8gsF
-        tpjyccoWR7vpIT7yTqTRRlrqCTg448qeWWLjHOLquZriUcjU/qvMjV2udRAuf4GB
-        jutfDkTNmVgEJNAQA4RIdnWJrDtB1UKJ2ADb5eTmECh6HGGsTEmhqqkc+u+kp/Y6
-        pv72xW/SIriFcRZ4w/on0GFbqP6Biw+RzqEHRAW8SYRgbp5GrchDfXgDED+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1663658287; x=1663661887; bh=LvNsqUSk6CVCiNNoqcWQ4F99wUt4
-        fhfxMlYywrwPN6k=; b=oOGiChK6G8Xoo6Lfj9nP4p1xdk3EMUm7DXOrH6kktuDl
-        4l1UIDFy4iONbvI3/er6A5iGWw1QCHPxLvHQs/mKwbW63ul457G1Qzdsxi4vaMer
-        hHModBqasatxyxQWnLoYIpTZ4ZZxeb9iiDn41Wi146u8rWnw+751VB8/ZM5Fdomj
-        FD+alOr0WsUlshaNsfCGmLvZCX9Q3me+O35bKGshGa+tTHS1Oa5V7a8oOrrxeWF3
-        mN+ZdwK9IEoDTUQ+r4fuUSd5tV+LCEzYD5tMUJrVACSy0EAJdEayYcqvNUXaL/FT
-        6YxQvSNrGyaPmkmjbRf4SaL+KR8egYDXzed/0ZbxfA==
-X-ME-Sender: <xms:LmkpYwuB0UAoGNFSv1ucS0G1jy8b4eSr6wI_6m1wccPSlAdeV31nZg>
-    <xme:LmkpY9fvPZv9wRdzLdVXkdd1te9DmTw7rcJiUfnprBWWhJ-o10sJg4hCWSfFL-nPa
-    lNOPb4Z3v6-qekA4xo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedvkedguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:LmkpY7ygbkJaktw45WbT9SL2DxCR1ZzUpz7gtblg_eDR4mANmfGWfw>
-    <xmx:LmkpYzPEtieCJGcAhgyW6oRWo9hcUxO_ADF4nB86WJJT-TGNYEPxMA>
-    <xmx:LmkpYw8gX3IexwBknny5tso8GC8RBY6hn7sRQzH8u75dBzwPH60DpA>
-    <xmx:L2kpYz1MiAkGixFYUIVdrL1tQTooNaO5qAj9CQcrz5Avm9Ay58Deb2kjUKFtEjTU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 49279B60086; Tue, 20 Sep 2022 03:18:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
-Mime-Version: 1.0
-Message-Id: <7a2379cf-c1cf-46af-9172-334d2b9b88d5@www.fastmail.com>
-In-Reply-To: <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
-References: <20220908022506.1275799-1-guoren@kernel.org>
- <20220908022506.1275799-9-guoren@kernel.org>
- <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com>
- <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
- <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
- <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
- <CAJF2gTRVH6pVqBn+n+wbccBcMWraRP3m4CbXz4g_y+=nPEU=Yw@mail.gmail.com>
-Date:   Tue, 20 Sep 2022 09:17:45 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     guoren <guoren@kernel.org>
-Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        "Jisheng Zhang" <jszhang@kernel.org>, lazyparser@gmail.com,
-        falcon@tinylab.org, "Huacai Chen" <chenhuacai@kernel.org>,
-        "Anup Patel" <apatel@ventanamicro.com>,
-        "Atish Patra" <atishp@atishpatra.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
+        with ESMTP id S229553AbiITHXf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 03:23:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA165501A0;
+        Tue, 20 Sep 2022 00:23:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IKJaeDScRrK+JIC8Gbrvn6nNvLhPVYznUfIuOJ7G4Ds=; b=jhPn6HiiENFLg2SFmJ30AuSqoC
+        n0UXjZX8nUjjPdJyhdMc3l6m4xaDuHk2DNFEEJBge5OsdKEDKncMdSqmzUhr63k0lWu0hqsOGgkED
+        ItaA2kVSLRXIqMPBgNi60QXOnUkIWgXYDQDCRopZO3MX0wNNG8N2zfzAqVV+KrvlbkPGruxgRAOgH
+        rvyr6aWBhnZhv7BbcxKvZa8Cwb/G6lb/9b6hsbO3oDm4uhEINaQgRhsr8Lhos76pNowo9NwzsBwHo
+        kAaPYLs3ryTqyBUEYz8Gdu/JdYKNf12aWamFnyRf/8IiNLJsmGxa0RpdoYbVI8ld2gW+0cXYXrQlz
+        JaNsv+hA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaXaq-005LcW-AU; Tue, 20 Sep 2022 07:22:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C7061300074;
+        Tue, 20 Sep 2022 09:22:50 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9C25E2BAC8466; Tue, 20 Sep 2022 09:22:50 +0200 (CEST)
+Date:   Tue, 20 Sep 2022 09:22:50 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Guo Ren" <guoren@linux.alibaba.com>,
-        "Andreas Schwab" <schwab@suse.de>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V5 07/11] riscv: convert to generic entry
+Message-ID: <YylqSsL6bdhIOMte@hirez.programming.kicks-ass.net>
+References: <20220918155246.1203293-1-guoren@kernel.org>
+ <20220918155246.1203293-8-guoren@kernel.org>
+ <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net>
+ <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 20, 2022, at 2:46 AM, Guo Ren wrote:
+On Tue, Sep 20, 2022 at 02:36:33PM +0800, Guo Ren wrote:
+> On Mon, Sep 19, 2022 at 9:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Sun, Sep 18, 2022 at 11:52:42AM -0400, guoren@kernel.org wrote:
+> >
+> > > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
+> > >
+> > >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
+> > >  {
+> > > +     irqentry_state_t state = irqentry_enter(regs);
+> > >       if (!handle_misaligned_load(regs))
+> > >               return;
+> > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> > >                     "Oops - load address misaligned");
+> > > +     irqentry_exit(regs, state);
+> > >  }
+> > >
+> > >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
+> > >  {
+> > > +     irqentry_state_t state = irqentry_enter(regs);
+> > >       if (!handle_misaligned_store(regs))
+> > >               return;
+> > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> > >                     "Oops - store (or AMO) address misaligned");
+> > > +     irqentry_exit(regs, state);
+> > >  }
+> > >  #endif
+> > >  DO_ERROR_INFO(do_trap_store_fault,
+> > > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
+> > >
+> > >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
+> > >  {
+> > > +     irqentry_state_t state = irqentry_enter(regs);
+> > > +
+> > >  #ifdef CONFIG_KPROBES
+> > >       if (kprobe_single_step_handler(regs))
+> > >               return;
+> >
+> > FWIW; on x86 I've classified many of the 'from-kernel' traps as
+> > NMI-like, since those traps can happen from any context, including with
+> > IRQs disabled.
+> The do_trap_break is for ebreak instruction, not NMI. RISC-V NMI has
+> separate CSR. ref:
+> 
+> This proposal adds support for resumable non-maskable interrupts
+> (RNMIs) to RISC-V. The extension adds four new CSRs (`mnepc`,
+> `mncause`, `mnstatus`, and `mnscratch`) to hold the interrupted state,
+> and a new instruction to resume from the RNMI handler.
 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index dfe600f3526c..8def456f328c 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -442,6 +442,16 @@ config IRQ_STACKS
->           Add independent irq & softirq stacks for percpu to prevent
-> kernel stack
->           overflows. We may save some memory footprint by disabling IRQ_STACKS.
->
-> +config THREAD_SIZE
-> +       int "Kernel stack size (in bytes)" if EXPERT
-> +       range 4096 65536
-> +       default 8192 if 32BIT && !KASAN
-> +       default 32768 if 64BIT && KASAN
-> +       default 16384
-> +       help
-> +         Specify the Pages of thread stack size (from 4KB to 64KB), which also
-> +         affects irq stack size, which is equal to thread stack size.
+Yes, but that's not what I'm saying. I'm saying I've classified
+'from-kernel' traps as NMI-like.
 
-I still think this should be guarded in a way that prevents
-setting the stack to smaller than default values unless VMAP_STACK
-is set as well.
+Consider:
 
-    Arnd
+	raw_spin_lock_irq(&foo);
+	...
+	<trap>
+
+Then you want the trap to behave as if it were an NMI; that is abide by
+the rules of NMI (strictly wait-free code).
+
+So yes, they are not NMI, but they nest just like it, so we want the
+handlers to abide by the same rules.
+
+Does that make sense?
+
+> >
+> > The basic shape of the trap handlers looks a little like:
+> >
+> >         if (user_mode(regs)) {
+> If nmi comes from user_mode, why we using
+> irqenrty_enter/exit_from/to_user_mode instead of
+> irqentry_nmi_enter/exit?
+
+s/nmi/trap/ because the 'from-user' trap never nests inside kernel code.
+
+Additionally, many 'from-user' traps want to do 'silly' things like send
+signals, which is something that requires scheduling.
+
+They're fundamentally different from 'from-kernel' traps, which per the
+above, nest most dangerously.
+
+> >                 irqenrty_enter_from_user_mode(regs);
+> >                 do_user_trap();
+> >                 irqentry_exit_to_user_mode(regs);
+> >         } else {
+> >                 irqentry_state_t state = irqentry_nmi_enter(regs);
+> >                 do_kernel_trap();
+> >                 irqentry_nmi_exit(regs, state);
+> >         }
+> >
+> > Not saying you have to match Risc-V in this patch-set, just something to
+> > consider.
+> I think the shape of the riscv NMI handler looks a little like this:
+> 
+> asmlinkage __visible __trap_section void do_trap_nmi(struct pt_regs *regs)
+> {
+>                  irqentry_state_t state = irqentry_nmi_enter(regs);
+>                  do_nmi_trap();
+>                  irqentry_nmi_exit(regs, state);
+> }
+
+That is correct for the NMI handler; but here I'm specifically talking
+about traps, like the unalign trap, break trap etc. Those that can
+happen *anywhere* in kernel code and nest most unfortunate.
