@@ -2,98 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B585BDA6E
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 04:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474165BDA94
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 05:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiITCti (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 22:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S229676AbiITDDx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 23:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiITCtd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 22:49:33 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0E9B85
-        for <linux-arch@vger.kernel.org>; Mon, 19 Sep 2022 19:49:27 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id w10so159891pll.11
-        for <linux-arch@vger.kernel.org>; Mon, 19 Sep 2022 19:49:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=rI0IpfDVb05suW6mssP/QFC86Iigix9NLenW3JQ6Phs=;
-        b=lnIljFKp1ED3j5wPYTN7mdVUfk7FiKkjAkcUsYSYUMCZpdQ5U8vkDdIo4K0hiw1RH3
-         +GFslTzjK43l0+rnV0YItKzr73eqf7dBzWl3BzQNkwS39xy9TTbRZE0df01R7//5oEJr
-         gCiIxE6Vh5vvSGpkucOrRiDvI3G32scMCweV8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=rI0IpfDVb05suW6mssP/QFC86Iigix9NLenW3JQ6Phs=;
-        b=Iz4llRKR4k44Cmr2KX9io9kzi8Lu5BxZtwCKnJb3UJDZx2WwyXvjuVMbD+q5MPb4fy
-         f8I1K/ddmMmMKJDYLLZ9xZv7rrZZAcDvjnHFdxneKpFeYET7MAzj7DBSNvvMWj3rQsPf
-         b41JHcnLyLbk+ply5uiuXRJSt4nL95SJ4cMFLp59AeGPdyOpoK08AsvEmoSE6lOIkOWb
-         FPBfSaVAc6b38ZABNzSth9dGlNcRxRPYpKBm3n+FFDQw+cyqBu7fCL/Owp4XTImZ0O6V
-         fSjXdmZ7v1B0Giah0qU/CqVrIl8qtBA1EGbpTlwwpnWtApJg/7m56Cbi5Xg38UMZfJRH
-         Kx4w==
-X-Gm-Message-State: ACrzQf0ubvVrbgFf8lZdpgRsU2+jEplUDKUcmq5t801Ex0iNolMy0Wji
-        F29pimF2z6tmvoPNVeqou/HKJQ==
-X-Google-Smtp-Source: AMsMyM7S+Aze7xjQjfeMxV1IycjxiN9uStAZCOz26LYAWGHUeF519ICUTt9w2zkpb7un7hJ/v+di5Q==
-X-Received: by 2002:a17:902:8e84:b0:178:57e4:805b with SMTP id bg4-20020a1709028e8400b0017857e4805bmr2741327plb.144.1663642166279;
-        Mon, 19 Sep 2022 19:49:26 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:5744:3726:1f8b:92ad])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170903024600b00178a9b193cfsm119779plh.140.2022.09.19.19.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 19:49:25 -0700 (PDT)
-Date:   Tue, 20 Sep 2022 11:49:14 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux@armlinux.org.uk, linux-imx@nxp.com, tglx@linutronix.de,
-        mingo@redhat.com, x86@kernel.org, rostedt@goodmis.org,
-        pmladek@suse.com, senozhatsky@chromium.org,
-        john.ogness@linutronix.de,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 25/44] printk: Remove trace_.*_rcuidle() usage
-Message-ID: <YykqKm5j5q9DEKk7@google.com>
-References: <20220919095939.761690562@infradead.org>
- <20220919101522.021681292@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919101522.021681292@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229801AbiITDDn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 23:03:43 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 607CA5852C;
+        Mon, 19 Sep 2022 20:03:42 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 24BBC1E80D1C;
+        Tue, 20 Sep 2022 11:00:35 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FpVUwppaUQEi; Tue, 20 Sep 2022 11:00:32 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 233AA1E80D17;
+        Tue, 20 Sep 2022 11:00:32 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de
+Cc:     linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] asm-generic: Remove the parameters of the generate_guest_id function and modify the return type and modify the function name
+Date:   Tue, 20 Sep 2022 11:03:35 +0800
+Message-Id: <20220920030335.69132-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On (22/09/19 12:00), Peter Zijlstra wrote:
-> The problem, per commit fc98c3c8c9dc ("printk: use rcuidle console
-> tracepoint"), was printk usage from the cpuidle path where RCU was
-> already disabled.
-> 
-> Per the patches earlier in this series, this is no longer the case.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> Acked-by: Petr Mladek <pmladek@suse.com>
+The generate_guest_id function is more suitable for use after the
+following modifications.
+1. Modify the type of the guest_id variable to u64, which is compatible
+with the caller.
+2. Remove all parameters from the function, and write the parameter
+(LINUX_VERSION_CODE) passed in by the actual call into the function
+implementation.
+3. Rename the function to make it clearly a Hyper-V related function,
+and modify it to hv_generate_guest_id.
 
-Acked-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ arch/arm64/hyperv/mshyperv.c   |  2 +-
+ arch/x86/hyperv/hv_init.c      |  2 +-
+ include/asm-generic/mshyperv.h | 12 +++++-------
+ 3 files changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+index bbbe351e9045..3863fd226e0e 100644
+--- a/arch/arm64/hyperv/mshyperv.c
++++ b/arch/arm64/hyperv/mshyperv.c
+@@ -38,7 +38,7 @@ static int __init hyperv_init(void)
+ 		return 0;
+ 
+ 	/* Setup the guest ID */
+-	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
++	guest_id = hv_generate_guest_id();
+ 	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
+ 
+ 	/* Get the features and hints from Hyper-V */
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 3de6d8b53367..93770791b858 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -426,7 +426,7 @@ void __init hyperv_init(void)
+ 	 * 1. Register the guest ID
+ 	 * 2. Enable the hypercall and register the hypercall page
+ 	 */
+-	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
++	guest_id = hv_generate_guest_id();
+ 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
+ 
+ 	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index c05d2ce9b6cd..78e7dc9e9587 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -25,6 +25,7 @@
+ #include <linux/nmi.h>
+ #include <asm/ptrace.h>
+ #include <asm/hyperv-tlfs.h>
++#include <linux/version.h>
+ 
+ struct ms_hyperv_info {
+ 	u32 features;
+@@ -105,15 +106,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
+ }
+ 
+ /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+-static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
+-				       __u64 d_info2)
++static inline  u64 generate_guest_id(void)
+ {
+-	__u64 guest_id = 0;
++	u64 guest_id;
+ 
+-	guest_id = (((__u64)HV_LINUX_VENDOR_ID) << 48);
+-	guest_id |= (d_info1 << 48);
+-	guest_id |= (kernel_version << 16);
+-	guest_id |= d_info2;
++	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
++	guest_id |= (((u64)LINUX_VERSION_CODE) << 16);
+ 
+ 	return guest_id;
+ }
+-- 
+2.18.2
+
