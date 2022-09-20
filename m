@@ -2,149 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566805BDD6E
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 08:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D5E5BDDB0
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 08:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiITGiV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Sep 2022 02:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
+        id S229847AbiITG4m convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 20 Sep 2022 02:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiITGhu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 02:37:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147815F130;
-        Mon, 19 Sep 2022 23:36:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7ADCB81CF0;
-        Tue, 20 Sep 2022 06:36:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB2AC43147;
-        Tue, 20 Sep 2022 06:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663655806;
-        bh=UasumqK8JDy4QUm3XOKDPKXpUz8MeHWEZlWpEge7SHk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IeT0Ow0e2gryqHF+YZVhz5RDYHB+9l7X0sWxU4OdZ7kVADENteCdIKKy8BgnyDs+g
-         aX98x7IBRoo21LQ3YvCERTFpt2YhZxQRGozW1cMEJTcr3n7deMKW9gvXgNFaU0LBNK
-         VBDFyN+SMs91kM2qpUgFawzOBTibAgIHgio83adRp67LXn+tEB/6HhwWaTne0YsUn+
-         SvyNHbYDkZyJr+Xmg0kZ+/H4SNO+/dzpCIPgpOyLWcJmTbJGuzUvKUiUJNGp+yMODB
-         4PI/UDtE1UvhtdaoPSIYRk0lpzXhlKwwFHZWBSI06BC7EVePaPZsiJt0bCzZsBBMXu
-         Oo/s0hwlUESoQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-127d10b4f19so2826009fac.9;
-        Mon, 19 Sep 2022 23:36:46 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2nNfH1HpJgQE5HhSBknADMgwP7GCEP7vx4seBqcK8Mape9Are5
-        bJyYOvFWASfrkn3Tyo5OF6v1VMVwrtMCEV4VRYM=
-X-Google-Smtp-Source: AMsMyM6uHFgQjuLTZDoq4Wi16bBED+ipq/0qPmivsB6oIlMREURn4RpqQ/Co7zUtuew7caXA1KRyrH6dB1OH9wPOjsU=
-X-Received: by 2002:a05:6870:a78e:b0:12b:542b:e5b2 with SMTP id
- x14-20020a056870a78e00b0012b542be5b2mr1178610oao.112.1663655805409; Mon, 19
- Sep 2022 23:36:45 -0700 (PDT)
+        with ESMTP id S229561AbiITG4k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Sep 2022 02:56:40 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296C75EDC2;
+        Mon, 19 Sep 2022 23:56:39 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id a20so1080946qtw.10;
+        Mon, 19 Sep 2022 23:56:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=jnB/DbrbGanbxVwCjd/Ml8VBjC8cTxJXPqA4S/aHfpE=;
+        b=n3FlpmJHbWKDiWPnCuS9WndvYCjqD2D5AqnbX8XU/2CwawPRfS5/8hslhrwDcS3cUu
+         NehdqU/7ee7V95hHdT7ghw14f33EVoH+SmdkJFrUJp0SRGj/OvLbUx76p4haTfAXZmpR
+         TYKkpkzjclzhme3417BCXtOYX5XlOgs9W2YhowpauyqV3eFLz2BykuYH3Vt3fEcJ1wk1
+         sSIc9uyUM1BDR6nBXUWtH2eZqqjxRwn05AS4+P2ilbbqpAgM7Iw3WAtr7eH0+ibiy+N6
+         w5fFzxiiTdz4Cjmjf9H+T4FQtSVkYKanEyOR1Ym9t4bfQNl+vHKM5mLw6RI3G+DkIo8B
+         7i/g==
+X-Gm-Message-State: ACrzQf2muwLwbbJwhAwUjIlpYMmuzI70PVnR+56V/gFAZhTuBmQMdIqK
+        ljpvwjQ4d3mPrymOwNf0hTdYtBUP6d+U4g==
+X-Google-Smtp-Source: AMsMyM5FqYt8OOxPbMGEsrFS7bqntT3+t0AdnjIRq9M3N8yEHYbDFwLyw3zmUNgv9ogpcN6sZV14qg==
+X-Received: by 2002:a05:622a:1189:b0:35b:b923:3667 with SMTP id m9-20020a05622a118900b0035bb9233667mr17971066qtk.165.1663656998011;
+        Mon, 19 Sep 2022 23:56:38 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id fx9-20020a05622a4ac900b003434e47515csm426025qtb.7.2022.09.19.23.56.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Sep 2022 23:56:37 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id c9so2038880ybf.5;
+        Mon, 19 Sep 2022 23:56:37 -0700 (PDT)
+X-Received: by 2002:a25:3746:0:b0:6b1:4a12:b2d5 with SMTP id
+ e67-20020a253746000000b006b14a12b2d5mr15187723yba.89.1663656997347; Mon, 19
+ Sep 2022 23:56:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-8-guoren@kernel.org>
- <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 20 Sep 2022 14:36:33 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
-Message-ID: <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
-Subject: Re: [PATCH V5 07/11] riscv: convert to generic entry
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
+References: <20220906061313.1445810-1-masahiroy@kernel.org>
+ <20220906061313.1445810-8-masahiroy@kernel.org> <20220919225053.GA769506@roeck-us.net>
+In-Reply-To: <20220919225053.GA769506@roeck-us.net>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Sep 2022 08:56:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUxrXgJ7HHgk1vSyg6_S8TN3RvEW=QNgH9U0UueM41N-Q@mail.gmail.com>
+Message-ID: <CAMuHMdUxrXgJ7HHgk1vSyg6_S8TN3RvEW=QNgH9U0UueM41N-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] kbuild: use obj-y instead extra-y for objects
+ placed at the head
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 9:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Sun, Sep 18, 2022 at 11:52:42AM -0400, guoren@kernel.org wrote:
->
-> > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
+Hi Günter,
+
+On Tue, Sep 20, 2022 at 12:59 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> On Tue, Sep 06, 2022 at 03:13:12PM +0900, Masahiro Yamada wrote:
+> > The objects placed at the head of vmlinux need special treatments:
 > >
-> >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> >       if (!handle_misaligned_load(regs))
-> >               return;
-> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> >                     "Oops - load address misaligned");
-> > +     irqentry_exit(regs, state);
-> >  }
+> >  - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
+> >    them before other archives in the linker command line.
 > >
-> >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> >       if (!handle_misaligned_store(regs))
-> >               return;
-> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> >                     "Oops - store (or AMO) address misaligned");
-> > +     irqentry_exit(regs, state);
-> >  }
-> >  #endif
-> >  DO_ERROR_INFO(do_trap_store_fault,
-> > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
+> >  - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
+> >    obj-y to avoid them going into built-in.a.
 > >
-> >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> >  #ifdef CONFIG_KPROBES
-> >       if (kprobe_single_step_handler(regs))
-> >               return;
->
-> FWIW; on x86 I've classified many of the 'from-kernel' traps as
-> NMI-like, since those traps can happen from any context, including with
-> IRQs disabled.
-The do_trap_break is for ebreak instruction, not NMI. RISC-V NMI has
-separate CSR. ref:
+> > This commit gets rid of the latter.
+> >
+> > Create vmlinux.a to collect all the objects that are unconditionally
+> > linked to vmlinux. The objects listed in head-y are moved to the head
+> > of vmlinux.a by using 'ar m'.
+> >
+> > With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
+> > for builtin objects.
+> >
+> > There is no *.o that is directly linked to vmlinux. Drop unneeded code
+> > in scripts/clang-tools/gen_compile_commands.py.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-This proposal adds support for resumable non-maskable interrupts
-(RNMIs) to RISC-V. The extension adds four new CSRs (`mnepc`,
-`mncause`, `mnstatus`, and `mnscratch`) to hold the interrupted state,
-and a new instruction to resume from the RNMI handler.
+Where does this R-b come from? It was not present in Yamada-san's
+posting. Added by b4?
 
->
-> The basic shape of the trap handlers looks a little like:
->
->         if (user_mode(regs)) {
-If nmi comes from user_mode, why we using
-irqenrty_enter/exit_from/to_user_mode instead of
-irqentry_nmi_enter/exit?
+> The following build failure is seen when building m68k:defconfig in
+> next-20220919.
 
->                 irqenrty_enter_from_user_mode(regs);
->                 do_user_trap();
->                 irqentry_exit_to_user_mode(regs);
->         } else {
->                 irqentry_state_t state = irqentry_nmi_enter(regs);
->                 do_kernel_trap();
->                 irqentry_nmi_exit(regs, state);
->         }
->
-> Not saying you have to match Risc-V in this patch-set, just something to
-> consider.
-I think the shape of the riscv NMI handler looks a little like this:
+[...]
 
-asmlinkage __visible __trap_section void do_trap_nmi(struct pt_regs *regs)
-{
-                 irqentry_state_t state = irqentry_nmi_enter(regs);
-                 do_nmi_trap();
-                 irqentry_nmi_exit(regs, state);
-}
+> # first bad commit: [6676e2cdd7c339dc40331faccbaac1112d2c1d78] kbuild: use obj-y instead extra-y for objects placed at the head
 
--- 
-Best Regards
- Guo Ren
+I did provide my R-b on Yamada-san's fix for this issue, which was
+sent later in this thread.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
