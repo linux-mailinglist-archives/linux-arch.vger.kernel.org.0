@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474165BDA94
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 05:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D845BDAD7
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Sep 2022 05:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiITDDx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 23:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
+        id S229888AbiITD2q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 23:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiITDDn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 23:03:43 -0400
+        with ESMTP id S229758AbiITD2p (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 23:28:45 -0400
 Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 607CA5852C;
-        Mon, 19 Sep 2022 20:03:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 632FD5722B;
+        Mon, 19 Sep 2022 20:28:43 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 24BBC1E80D1C;
-        Tue, 20 Sep 2022 11:00:35 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTP id 8AD8F1E80D93;
+        Tue, 20 Sep 2022 11:25:36 +0800 (CST)
 X-Virus-Scanned: amavisd-new at test.com
 Received: from mail.nfschina.com ([127.0.0.1])
         by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FpVUwppaUQEi; Tue, 20 Sep 2022 11:00:32 +0800 (CST)
+        with ESMTP id 8GV4jroQ6ZFG; Tue, 20 Sep 2022 11:25:33 +0800 (CST)
 Received: from localhost.localdomain (unknown [219.141.250.2])
         (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 233AA1E80D17;
-        Tue, 20 Sep 2022 11:00:32 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTPA id 8FCB31E80D23;
+        Tue, 20 Sep 2022 11:25:33 +0800 (CST)
 From:   Li kunyu <kunyu@nfschina.com>
 To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
@@ -34,9 +34,9 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
 Cc:     linux-hyperv@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] asm-generic: Remove the parameters of the generate_guest_id function and modify the return type and modify the function name
-Date:   Tue, 20 Sep 2022 11:03:35 +0800
-Message-Id: <20220920030335.69132-1-kunyu@nfschina.com>
+Subject: [PATCH v2] asm-generic: Remove the parameters of the generate_guest_id function and modify the return type and modify the function name
+Date:   Tue, 20 Sep 2022 11:28:37 +0800
+Message-Id: <20220920032837.69469-1-kunyu@nfschina.com>
 X-Mailer: git-send-email 2.18.2
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -55,6 +55,9 @@ with the caller.
 implementation.
 3. Rename the function to make it clearly a Hyper-V related function,
 and modify it to hv_generate_guest_id.
+
+v2:
+  Fix generate_guest_id to hv_generate_guest_id.
 
 Signed-off-by: Li kunyu <kunyu@nfschina.com>
 ---
@@ -90,7 +93,7 @@ index 3de6d8b53367..93770791b858 100644
  
  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
 diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index c05d2ce9b6cd..78e7dc9e9587 100644
+index c05d2ce9b6cd..7f4a23cee56f 100644
 --- a/include/asm-generic/mshyperv.h
 +++ b/include/asm-generic/mshyperv.h
 @@ -25,6 +25,7 @@
@@ -107,7 +110,7 @@ index c05d2ce9b6cd..78e7dc9e9587 100644
  /* Generate the guest OS identifier as described in the Hyper-V TLFS */
 -static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
 -				       __u64 d_info2)
-+static inline  u64 generate_guest_id(void)
++static inline  u64 hv_generate_guest_id(void)
  {
 -	__u64 guest_id = 0;
 +	u64 guest_id;
