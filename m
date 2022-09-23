@@ -2,99 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19685E78EE
-	for <lists+linux-arch@lfdr.de>; Fri, 23 Sep 2022 13:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490895E7948
+	for <lists+linux-arch@lfdr.de>; Fri, 23 Sep 2022 13:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiIWLAr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 23 Sep 2022 07:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46208 "EHLO
+        id S231851AbiIWLT5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 23 Sep 2022 07:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiIWLAq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Sep 2022 07:00:46 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEA1AF0E9;
-        Fri, 23 Sep 2022 04:00:43 -0700 (PDT)
-Received: from p508fdb48.dip0.t-ipconnect.de ([80.143.219.72] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1obgQ5-00067T-Qn; Fri, 23 Sep 2022 13:00:33 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
-        palmer@rivosinc.com, liaochang1@huawei.com, jszhang@kernel.org,
-        arnd@arndb.de, guoren@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH V4 3/3] arch: crash: Remove duplicate declaration in smp.h
-Date:   Fri, 23 Sep 2022 13:00:32 +0200
-Message-ID: <5594014.Sb9uPGUboI@phil>
-In-Reply-To: <20220921033134.3133319-4-guoren@kernel.org>
-References: <20220921033134.3133319-1-guoren@kernel.org> <20220921033134.3133319-4-guoren@kernel.org>
+        with ESMTP id S231749AbiIWLT4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 23 Sep 2022 07:19:56 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 240CE3C150;
+        Fri, 23 Sep 2022 04:19:54 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id AAD011E80D94;
+        Fri, 23 Sep 2022 19:16:17 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Sx5Fz_JcXolB; Fri, 23 Sep 2022 19:16:15 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id E1A5A1E80D74;
+        Fri, 23 Sep 2022 19:16:14 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     wei.liu@kernel.org
+Cc:     arnd@arndb.de, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, decui@microsoft.com,
+        haiyangz@microsoft.com, hpa@zytor.com, kunyu@nfschina.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        sthemmin@microsoft.com, tglx@linutronix.de, will@kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH v2] asm-generic: Remove the parameters of the generate_guest_id function and modify the return type and modify the function name
+Date:   Fri, 23 Sep 2022 19:19:38 +0800
+Message-Id: <20220923111939.2584-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <Yy2KVM08HMiv46d6@liuwe-devbox-debian-v2>
+References: <Yy2KVM08HMiv46d6@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Am Mittwoch, 21. September 2022, 05:31:34 CEST schrieb guoren@kernel.org:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Remove crash_smp_send_stop declarations in arm64, x86 asm/smp.h which
-> has been done in include/linux/smp.h.
 
-nit: the commit message could reference the commit that brought in the
-generic declarations, which was
-	6f1f942cd5fb ("smp: kernel/panic.c - silence warnings")
-
-other than that
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  arch/arm64/include/asm/smp.h | 1 -
->  arch/x86/include/asm/crash.h | 1 -
->  2 files changed, 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/smp.h b/arch/arm64/include/asm/smp.h
-> index fc55f5a57a06..a108ac93fd8f 100644
-> --- a/arch/arm64/include/asm/smp.h
-> +++ b/arch/arm64/include/asm/smp.h
-> @@ -141,7 +141,6 @@ static inline void cpu_panic_kernel(void)
->   */
->  bool cpus_are_stuck_in_kernel(void);
->  
-> -extern void crash_smp_send_stop(void);
->  extern bool smp_crash_stop_failed(void);
->  extern void panic_smp_self_stop(void);
->  
-> diff --git a/arch/x86/include/asm/crash.h b/arch/x86/include/asm/crash.h
-> index 8b6bd63530dc..6a9be4907c82 100644
-> --- a/arch/x86/include/asm/crash.h
-> +++ b/arch/x86/include/asm/crash.h
-> @@ -7,6 +7,5 @@ struct kimage;
->  int crash_load_segments(struct kimage *image);
->  int crash_setup_memmap_entries(struct kimage *image,
->  		struct boot_params *params);
-> -void crash_smp_send_stop(void);
->  
->  #endif /* _ASM_X86_CRASH_H */
-> 
-
-
-
+Thank you very much, I re-edited the content and released it according to v3.
 
