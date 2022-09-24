@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406375E8F85
-	for <lists+linux-arch@lfdr.de>; Sat, 24 Sep 2022 21:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3850A5E8FA8
+	for <lists+linux-arch@lfdr.de>; Sat, 24 Sep 2022 22:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233889AbiIXTh7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 24 Sep 2022 15:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S233935AbiIXU2I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 24 Sep 2022 16:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiIXTh6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 24 Sep 2022 15:37:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C63241996;
-        Sat, 24 Sep 2022 12:37:54 -0700 (PDT)
+        with ESMTP id S233934AbiIXU2G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 24 Sep 2022 16:28:06 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA714F69F;
+        Sat, 24 Sep 2022 13:28:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664048274; x=1695584274;
+  t=1664051283; x=1695587283;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1wvu/SPRIQifci0VWQDkqV4TDcjBvSM1tZLnItNarew=;
-  b=YXHvKuxXrVViwWEuxkd+gWB5cRQ/5QKwKSfA5BiMucc0A6Yvc43m4eEl
-   beTleZQtNBWb5euA0/+SRXBUgZyM7kdkp4Hj70p7VEVxx4BmQ3dFn/TOR
-   iLt5TuAIwMy/EEb0aligPfxOEjN46qmd8DDU0L6xmYBfuFADlChUK8Qmm
-   l48oipUpsch7NMR5QFWXRp1XYTvT7O2z9XJJ5gHT1dNzpOW7sE1KKejUc
-   5er/hnLFiGJDcgPd2xgixQ2WvodioPhqqOve5rcQZuE9jZpzfmUPw1p/6
-   YlCg6SZ5zHh3iBEIvwa7YAC2ktdWT/PMpgfys7SWskvJNkZvA3ISuOUXJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="387094944"
+  bh=MsNc0otky/QWdcqTQ7hPEoLn32upJmnCY0yVln+euaA=;
+  b=Ff4NJGiyk8ArEQWe8qipoUqB893xMaYcxCBzRYN1YJtxvsXo0zk3FtXx
+   ZZ9JIbfH1Azsh53EO0tB2PU9Xnf7W/ilQjz3SPlpDlGpWYa9QlN3g2tDQ
+   XoJiGacLpSEAy+o3KPZ0uJVp3r3AiG5utGdQ1CyW+0XNj+3eOu2gi+LQ/
+   W+1iA1x/CTQaawO9mTkV6Iwk0AwtfRskxgFhQOPKk/eFjWHGeq9wQHRAR
+   ADZW6C+dgZ5q9CeqK+V7yogOrVtcSf8qrZmcO3H2ThnS+Tyi5CvDDOnO8
+   MQrY4ETTi7/GLQbT8EVcEPpNq4vyfiNnesyXhq+cpDPu2Zkhnqek26+Cc
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10480"; a="281172156"
 X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
-   d="scan'208";a="387094944"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 12:37:54 -0700
+   d="scan'208";a="281172156"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2022 13:28:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,342,1654585200"; 
-   d="scan'208";a="949402875"
+   d="scan'208";a="689104346"
 Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Sep 2022 12:37:51 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 24 Sep 2022 13:28:01 -0700
 Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1ocAyF-0006vA-18;
-        Sat, 24 Sep 2022 19:37:51 +0000
-Date:   Sun, 25 Sep 2022 03:37:32 +0800
+        id 1ocBkm-0006ym-1i;
+        Sat, 24 Sep 2022 20:28:00 +0000
+Date:   Sun, 25 Sep 2022 04:27:00 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         linux-kbuild@vger.kernel.org
@@ -51,10 +51,10 @@ Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>
 Subject: Re: [PATCH v3 2/7] kbuild: list sub-directories in ./Kbuild
-Message-ID: <202209250320.7lryJC7l-lkp@intel.com>
+Message-ID: <202209250350.jJ8vDPnH-lkp@intel.com>
 References: <20220924181915.3251186-3-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="rURKcl08fXOJSMkN"
+Content-Type: multipart/mixed; boundary="3TZIUaoKCmwJweab"
 Content-Disposition: inline
 In-Reply-To: <20220924181915.3251186-3-masahiroy@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,7 +68,7 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
---rURKcl08fXOJSMkN
+--3TZIUaoKCmwJweab
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -84,7 +84,7 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/kbuild-various-cleanups/20220925-022150
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-config: um-i386_defconfig
+config: um-x86_64_defconfig
 compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
 reproduce (this is a W=1 build):
         # https://github.com/intel-lab-lkp/linux/commit/d721cc5614aaa17b2965db04e9319d4ef5f7eaf7
@@ -93,14 +93,14 @@ reproduce (this is a W=1 build):
         git checkout d721cc5614aaa17b2965db04e9319d4ef5f7eaf7
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> /usr/bin/ld: warning: ./arch/x86/um/checksum_32.o: missing .note.GNU-stack section implies executable stack
+>> /usr/bin/ld: warning: ./arch/x86/um/vdso/vdso.o: missing .note.GNU-stack section implies executable stack
    /usr/bin/ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
    /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1 has a LOAD segment with RWX permissions
    /usr/bin/ld: warning: .tmp_vmlinux.kallsyms1.o: missing .note.GNU-stack section implies executable stack
@@ -114,7 +114,7 @@ All warnings (new ones prefixed by >>):
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---rURKcl08fXOJSMkN
+--3TZIUaoKCmwJweab
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
@@ -220,6 +220,7 @@ CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
 #
 # end of Scheduler features
 
+CONFIG_CC_HAS_INT128=y
 CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
 CONFIG_GCC12_NO_ARRAY_BOUNDS=y
 CONFIG_CGROUPS=y
@@ -306,54 +307,29 @@ CONFIG_ARCH_HAS_CACHE_LINE_SIZE=y
 #
 # Host processor type and features
 #
-# CONFIG_M486SX is not set
-# CONFIG_M486 is not set
-# CONFIG_M586 is not set
-# CONFIG_M586TSC is not set
-# CONFIG_M586MMX is not set
-CONFIG_M686=y
-# CONFIG_MPENTIUMII is not set
-# CONFIG_MPENTIUMIII is not set
-# CONFIG_MPENTIUMM is not set
-# CONFIG_MPENTIUM4 is not set
-# CONFIG_MK6 is not set
-# CONFIG_MK7 is not set
 # CONFIG_MK8 is not set
-# CONFIG_MCRUSOE is not set
-# CONFIG_MEFFICEON is not set
-# CONFIG_MWINCHIPC6 is not set
-# CONFIG_MWINCHIP3D is not set
-# CONFIG_MELAN is not set
-# CONFIG_MGEODEGX1 is not set
-# CONFIG_MGEODE_LX is not set
-# CONFIG_MCYRIXIII is not set
-# CONFIG_MVIAC3_2 is not set
-# CONFIG_MVIAC7 is not set
+# CONFIG_MPSC is not set
 # CONFIG_MCORE2 is not set
 # CONFIG_MATOM is not set
-# CONFIG_X86_GENERIC is not set
-CONFIG_X86_INTERNODE_CACHE_SHIFT=5
-CONFIG_X86_L1_CACHE_SHIFT=5
-CONFIG_X86_USE_PPRO_CHECKSUM=y
+CONFIG_GENERIC_CPU=y
+CONFIG_X86_INTERNODE_CACHE_SHIFT=6
+CONFIG_X86_L1_CACHE_SHIFT=6
 CONFIG_X86_TSC=y
 CONFIG_X86_CMPXCHG64=y
 CONFIG_X86_CMOV=y
-CONFIG_X86_MINIMUM_CPU_FAMILY=6
+CONFIG_X86_MINIMUM_CPU_FAMILY=64
 CONFIG_IA32_FEAT_CTL=y
 CONFIG_CPU_SUP_INTEL=y
 CONFIG_CPU_SUP_AMD=y
 CONFIG_CPU_SUP_HYGON=y
 CONFIG_CPU_SUP_CENTAUR=y
-CONFIG_CPU_SUP_TRANSMETA_32=y
 CONFIG_CPU_SUP_ZHAOXIN=y
-CONFIG_CPU_SUP_VORTEX_32=y
 # end of Host processor type and features
 
 CONFIG_UML_X86=y
-CONFIG_X86_32=y
+CONFIG_64BIT=y
+CONFIG_X86_64=y
 CONFIG_3_LEVEL_PGTABLES=y
-CONFIG_ARCH_HAS_SC_SIGNALS=y
-CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA=y
 CONFIG_GENERIC_HWEIGHT=y
 # CONFIG_STATIC_LINK is not set
 CONFIG_LD_SCRIPT_DYN=y
@@ -361,7 +337,7 @@ CONFIG_LD_SCRIPT_DYN_RPATH=y
 CONFIG_HOSTFS=y
 CONFIG_MCONSOLE=y
 CONFIG_MAGIC_SYSRQ=y
-CONFIG_KERNEL_STACK_ORDER=1
+CONFIG_KERNEL_STACK_ORDER=2
 # CONFIG_MMAPPER is not set
 CONFIG_PGTABLE_LEVELS=3
 # CONFIG_UML_TIME_TRAVEL_SUPPORT is not set
@@ -419,23 +395,20 @@ CONFIG_PM=y
 # General architecture-dependent options
 #
 CONFIG_CRASH_CORE=y
+CONFIG_HAVE_64BIT_ALIGNED_ACCESS=y
 CONFIG_TRACE_IRQFLAGS_SUPPORT=y
-CONFIG_ARCH_32BIT_OFF_T=y
 CONFIG_HAVE_ASM_MODVERSIONS=y
-CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
 CONFIG_HAVE_ARCH_SECCOMP=y
 CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
 CONFIG_SECCOMP=y
 CONFIG_SECCOMP_FILTER=y
 # CONFIG_SECCOMP_CACHE_DEBUG is not set
 CONFIG_LTO_NONE=y
-CONFIG_MODULES_USE_ELF_REL=y
+CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
+CONFIG_MODULES_USE_ELF_RELA=y
 CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
 CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
-CONFIG_CLONE_BACKWARDS=y
-CONFIG_OLD_SIGSUSPEND3=y
-CONFIG_OLD_SIGACTION=y
-CONFIG_COMPAT_32BIT_TIME=y
+# CONFIG_COMPAT_32BIT_TIME is not set
 CONFIG_ARCH_NO_PREEMPT=y
 CONFIG_ARCH_EPHEMERAL_INODES=y
 CONFIG_HAVE_ARCH_VMAP_STACK=y
@@ -512,7 +485,6 @@ CONFIG_FREEZER=y
 # Executable file formats
 #
 CONFIG_BINFMT_ELF=y
-CONFIG_ARCH_BINFMT_ELF_EXTRA_PHDRS=y
 CONFIG_ELFCORE=y
 CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS=y
 CONFIG_BINFMT_SCRIPT=y
@@ -542,6 +514,7 @@ CONFIG_FLATMEM=y
 CONFIG_SPLIT_PTLOCK_CPUS=4
 # CONFIG_COMPACTION is not set
 # CONFIG_PAGE_REPORTING is not set
+CONFIG_PHYS_ADDR_T_64BIT=y
 # CONFIG_KSM is not set
 CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
 CONFIG_NEED_PER_CPU_KM=y
@@ -974,7 +947,6 @@ CONFIG_LDISC_AUTOLOAD=y
 # CONFIG_VIRTIO_CONSOLE is not set
 CONFIG_HW_RANDOM=y
 CONFIG_UML_RANDOM=y
-# CONFIG_NSC_GPIO is not set
 CONFIG_DEVMEM=y
 CONFIG_RANDOM_TRUST_CPU=y
 CONFIG_RANDOM_TRUST_BOOTLOADER=y
@@ -1354,6 +1326,7 @@ CONFIG_SYSFS=y
 CONFIG_TMPFS=y
 # CONFIG_TMPFS_POSIX_ACL is not set
 # CONFIG_TMPFS_XATTR is not set
+# CONFIG_TMPFS_INODE64 is not set
 CONFIG_MEMFD_CREATE=y
 # CONFIG_CONFIGFS_FS is not set
 # end of Pseudo filesystems
@@ -1580,7 +1553,7 @@ CONFIG_CRYPTO_CRC32C=y
 # CONFIG_CRYPTO_SERPENT is not set
 # CONFIG_CRYPTO_SM4_GENERIC is not set
 # CONFIG_CRYPTO_TWOFISH is not set
-# CONFIG_CRYPTO_TWOFISH_586 is not set
+# CONFIG_CRYPTO_TWOFISH_X86_64 is not set
 
 #
 # Compression
@@ -1626,7 +1599,7 @@ CONFIG_GENERIC_NET_UTILS=y
 CONFIG_CRYPTO_LIB_BLAKE2S_GENERIC=y
 # CONFIG_CRYPTO_LIB_CHACHA is not set
 # CONFIG_CRYPTO_LIB_CURVE25519 is not set
-CONFIG_CRYPTO_LIB_POLY1305_RSIZE=1
+CONFIG_CRYPTO_LIB_POLY1305_RSIZE=11
 # CONFIG_CRYPTO_LIB_POLY1305 is not set
 # CONFIG_CRYPTO_LIB_CHACHA20POLY1305 is not set
 CONFIG_CRYPTO_LIB_SHA1=y
@@ -1652,6 +1625,7 @@ CONFIG_CRC32_SLICEBY8=y
 # CONFIG_RANDOM32_SELFTEST is not set
 # CONFIG_XZ_DEC is not set
 CONFIG_NO_DMA=y
+CONFIG_ARCH_DMA_ADDR_T_64BIT=y
 # CONFIG_DMA_API_DEBUG is not set
 CONFIG_DQL=y
 CONFIG_NLATTR=y
@@ -1689,7 +1663,7 @@ CONFIG_DEBUG_INFO_NONE=y
 # CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
 # CONFIG_DEBUG_INFO_DWARF4 is not set
 # CONFIG_DEBUG_INFO_DWARF5 is not set
-CONFIG_FRAME_WARN=1024
+CONFIG_FRAME_WARN=2048
 # CONFIG_STRIP_ASM_SYMS is not set
 # CONFIG_READABLE_ASM is not set
 CONFIG_DEBUG_SECTION_MISMATCH=y
@@ -1732,8 +1706,11 @@ CONFIG_HAVE_DEBUG_KMEMLEAK=y
 # CONFIG_SCHED_STACK_END_CHECK is not set
 # CONFIG_DEBUG_VM is not set
 CONFIG_DEBUG_MEMORY_INIT=y
+CONFIG_HAVE_ARCH_KASAN=y
+CONFIG_HAVE_ARCH_KASAN_VMALLOC=y
 CONFIG_CC_HAS_KASAN_GENERIC=y
 CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
+# CONFIG_KASAN is not set
 # end of Memory Debugging
 
 # CONFIG_DEBUG_SHIRQ is not set
@@ -1775,6 +1752,7 @@ CONFIG_LOCK_DEBUGGING_SUPPORT=y
 # CONFIG_LOCK_TORTURE_TEST is not set
 # CONFIG_WW_MUTEX_SELFTEST is not set
 # CONFIG_SCF_TORTURE_TEST is not set
+# CONFIG_CSD_LOCK_WAIT_DEBUG is not set
 # end of Lock Debugging (spinlocks, mutexes, etc...)
 
 # CONFIG_DEBUG_IRQFLAGS is not set
@@ -1880,4 +1858,4 @@ CONFIG_RUNTIME_TESTING_MENU=y
 # end of Kernel Testing and Coverage
 # end of Kernel hacking
 
---rURKcl08fXOJSMkN--
+--3TZIUaoKCmwJweab--
