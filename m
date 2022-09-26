@@ -2,148 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BCA5E97C9
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 03:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D10B5E999B
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 08:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbiIZBtX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 25 Sep 2022 21:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S233679AbiIZGg3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Sep 2022 02:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiIZBtW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 25 Sep 2022 21:49:22 -0400
-Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B4472AE02;
-        Sun, 25 Sep 2022 18:49:20 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id B9B7D1E80D3D;
-        Mon, 26 Sep 2022 09:45:14 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vbs55Yj4xvMW; Mon, 26 Sep 2022 09:45:11 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 6268F1E80D10;
-        Mon, 26 Sep 2022 09:45:11 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
-        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        arnd@arndb.de
-Cc:     x86@kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH v4] hyperv: simplify and rename generate_guest_id
-Date:   Mon, 26 Sep 2022 09:48:50 +0800
-Message-Id: <20220926014850.3202-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S233673AbiIZGgC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 02:36:02 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2EEDF9B;
+        Sun, 25 Sep 2022 23:35:37 -0700 (PDT)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 28Q6Z98M023619;
+        Mon, 26 Sep 2022 15:35:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 28Q6Z98M023619
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1664174109;
+        bh=44eH+aJRD4kb7a/sBAIoIbN4tM4QpzduS3Oc5jWF0cA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JA7wjsoa5emabzSMfT9gMz5fvTDe0D99rsbZXbGl8bKQk9PcUZ/mIJK6WsO/82Tqt
+         QSx4OpRQ54n2OMNxR3tESeh2fTmT7dsMpLrwUu7mJ61LqpWPPNGl6GKu6log47wGg2
+         FYBnLu24GKIn8JzGeq5imYNBxcpI/QtF4ttwiPndSSR7GLWc6NRd+WW26Iidr/JUse
+         Zi+afw6flpJYObJLRhk3JWUrldDHICDY1rTOBY3dXQ+Pqiy/NCw/LItuHpa30T1fS6
+         NNwRccsJcY2d4N/6iW9SBfKPp/KeVUFeWgzT/31SW1LuqPddxSoPbOIafTALt3DbUo
+         aA/ESRY+jTMHw==
+X-Nifty-SrcIP: [209.85.160.50]
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-12803ac8113so8000776fac.8;
+        Sun, 25 Sep 2022 23:35:09 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2qqI+2kzi8o4Mm3+37vhO8l/cVQnRorcM6o2i3o1u1Axk3H4R2
+        zRc5lnbO9wZM/PVUuD5WgbyXc70J+KNtLAFnb4U=
+X-Google-Smtp-Source: AMsMyM5nsiQbYnKEjk6ON7K9Xsbl+NsHX9f/ZF2hI0K78moxWk9I+PrSV5t6gvkzbkJFQPLytPxVWwWTY+4HwBT3krQ=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr11223766oab.287.1664174108461; Sun, 25
+ Sep 2022 23:35:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220926012609.3976305-1-masahiroy@kernel.org>
+In-Reply-To: <20220926012609.3976305-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 26 Sep 2022 15:34:32 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASkcs8gdi-pRf5EYs6PDOgTK-HLoWCsqiWTDUX-kS-bcg@mail.gmail.com>
+Message-ID: <CAK7LNASkcs8gdi-pRf5EYs6PDOgTK-HLoWCsqiWTDUX-kS-bcg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: suppress warnings for single builds of
+ vmlinux.lds, *.a, etc.
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The generate_guest_id function is more suitable for use after the
-following modifications.
-1. Modify the type of the guest_id variable to u64, which is compatible
-with the caller.
-2. Remove all parameters from the function, and write the parameter
-(LINUX_VERSION_CODE) passed in by the actual call into the function
-implementation.
-3. Rename the function to make it clearly a Hyper-V related function,
-and modify it to hv_generate_guest_id.
+On Mon, Sep 26, 2022 at 10:27 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> vmlinux-deps is unneeded because the dependency can directly list
+> $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)
+>
+> Do not cancel the rule; building an individual vmlinux.lds, built-in.a,
+> or lib.a is working now, but the warning "overriding recipe for target"
+> is shown.
+>
+> Without this patch:
+>
+>   $ make arch/x86/kernel/vmlinux.lds
+>   Makefile:1798: warning: overriding recipe for target 'arch/x86/kernel/vmlinux.lds'
+>   Makefile:1162: warning: ignoring old recipe for target 'arch/x86/kernel/vmlinux.lds'
+>     [ snip ]
+>     LDS     arch/x86/kernel/vmlinux.lds
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
 
---------
- v2: Fix generate_guest_id to hv_generate_guest_id.
- v3: Fix [PATCH v2] asm-generic: Remove the ... to [PATCH v3] hyperv: simp
-     lify ... and remove extra spaces 
- v4: Remove #include <linux/version.h> in the calling file, and add #inclu
-     de <linux/version.h> in the function implementation file
----
- arch/arm64/hyperv/mshyperv.c   |  3 +--
- arch/x86/hyperv/hv_init.c      |  3 +--
- include/asm-generic/mshyperv.h | 12 +++++-------
- 3 files changed, 7 insertions(+), 11 deletions(-)
+I take this back.
 
-diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-index bbbe351e9045..637186f4df1f 100644
---- a/arch/arm64/hyperv/mshyperv.c
-+++ b/arch/arm64/hyperv/mshyperv.c
-@@ -13,7 +13,6 @@
- #include <linux/acpi.h>
- #include <linux/export.h>
- #include <linux/errno.h>
--#include <linux/version.h>
- #include <linux/cpuhotplug.h>
- #include <asm/mshyperv.h>
- 
-@@ -38,7 +37,7 @@ static int __init hyperv_init(void)
- 		return 0;
- 
- 	/* Setup the guest ID */
--	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
-+	guest_id = hv_generate_guest_id();
- 	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
- 
- 	/* Get the features and hints from Hyper-V */
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 3de6d8b53367..04d32cd3e838 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -19,7 +19,6 @@
- #include <asm/mshyperv.h>
- #include <asm/idtentry.h>
- #include <linux/kexec.h>
--#include <linux/version.h>
- #include <linux/vmalloc.h>
- #include <linux/mm.h>
- #include <linux/hyperv.h>
-@@ -426,7 +425,7 @@ void __init hyperv_init(void)
- 	 * 1. Register the guest ID
- 	 * 2. Enable the hypercall and register the hypercall page
- 	 */
--	guest_id = generate_guest_id(0, LINUX_VERSION_CODE, 0);
-+	guest_id = hv_generate_guest_id();
- 	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
- 
- 	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index c05d2ce9b6cd..9155575b7e34 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -25,6 +25,7 @@
- #include <linux/nmi.h>
- #include <asm/ptrace.h>
- #include <asm/hyperv-tlfs.h>
-+#include <linux/version.h>
- 
- struct ms_hyperv_info {
- 	u32 features;
-@@ -105,15 +106,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16 rep_count, u16 varhead_size,
- }
- 
- /* Generate the guest OS identifier as described in the Hyper-V TLFS */
--static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_version,
--				       __u64 d_info2)
-+static inline u64 hv_generate_guest_id(void)
- {
--	__u64 guest_id = 0;
-+	u64 guest_id;
- 
--	guest_id = (((__u64)HV_LINUX_VENDOR_ID) << 48);
--	guest_id |= (d_info1 << 48);
--	guest_id |= (kernel_version << 16);
--	guest_id |= d_info2;
-+	guest_id = (((u64)HV_LINUX_VENDOR_ID) << 48);
-+	guest_id |= (((u64)LINUX_VERSION_CODE) << 16);
- 
- 	return guest_id;
- }
+
+After testing this, I noticed vmlinux was not correctly rebuilt.
+
+
+
+
+
+>
+>  Makefile | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 244c07f1cc70..3e6974b4ebf2 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1118,7 +1118,8 @@ endif
+>  export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
+>  export KBUILD_LDS          := arch/$(SRCARCH)/kernel/vmlinux.lds
+>
+> -vmlinux-deps := $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)
+> +# The actual objects are generated when descending.
+> +$(sort $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)): .
+>
+>  # Recurse until adjust_autoksyms.sh is satisfied
+>  PHONY += autoksyms_recursive
+> @@ -1157,10 +1158,6 @@ vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
+>
+>  targets := vmlinux
+>
+> -# The actual objects are generated when descending,
+> -# make sure no implicit rule kicks in
+> -$(sort $(vmlinux-deps)): . ;
+> -
+>  filechk_kernel.release = \
+>         echo "$(KERNELVERSION)$$($(CONFIG_SHELL) $(srctree)/scripts/setlocalversion $(srctree))"
+>
+> --
+> 2.34.1
+>
+
+
 -- 
-2.18.2
-
+Best Regards
+Masahiro Yamada
