@@ -2,128 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEED95E9B61
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 10:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A095E9C6A
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 10:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234287AbiIZIAe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Sep 2022 04:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S234072AbiIZIso (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Sep 2022 04:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiIZH7n (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 03:59:43 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F1114091;
-        Mon, 26 Sep 2022 00:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1664179022;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=2aIymE8raxhclQFqdfiAunlbp0ivgK4VjNPOxvkHMk4=;
-    b=a+4Qk+xEsdXr8d9TH27PtKoKWFIXUwlw95X/NLGKUCOnj3uciZem1gugMB+0aEndC/
-    5TCXYFBVGumqpsXuKSEa3+ORa2+MNKaaQZU95+KogezrdpHWOR0EFF2pAg9BXgppMxk9
-    CKC+juyEWP0+s1CfYQvxeshL2IQSAmsdxboCdrxFaArNPgdB2MC0lkuiU6EJ7fDVv1De
-    bEvUD8CFrH/y2YxvoQT0si+bLIiEFJsHOgep05CFnixRXY6VTiM1p0IBNlPBeK1yvtqt
-    tqI+Bfz6xwSkgNuFybDuH57N+0mNmD6j4ARQr1u8bo/irtEbrzaJkFvYYGDub/xlZ/v2
-    0MEQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QLpd5ylWvMDX2j/OiDv7LX1ITFkr8sRtLhQJY8wcRJ+GvY"
-X-RZG-CLASS-ID: mo00
-Received: from sender
-    by smtp.strato.de (RZmta 48.1.1 AUTH)
-    with ESMTPSA id 5c8007y8Q7v0Agb
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 26 Sep 2022 09:57:00 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 09:56:49 +0200
-From:   Olaf Hering <olaf@aepfle.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Li kunyu <kunyu@nfschina.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3] hyperv: simplify and rename generate_guest_id
-Message-ID: <20220926095649.1f963340.olaf@aepfle.de>
-In-Reply-To: <BYAPR21MB1688890F578A59F69DEB55C1D7509@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20220923114259.2945-1-kunyu@nfschina.com>
-        <20220923230917.1506b24c.olaf@aepfle.de>
-        <BYAPR21MB1688890F578A59F69DEB55C1D7509@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Mailer: Claws Mail 20220819T065813.516423bc hat ein Softwareproblem, kann man nichts machen.
+        with ESMTP id S234579AbiIZIs3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 04:48:29 -0400
+Received: from fx301.security-mail.net (smtpout30.security-mail.net [85.31.212.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92003C8DB
+        for <linux-arch@vger.kernel.org>; Mon, 26 Sep 2022 01:48:27 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by fx301.security-mail.net (Postfix) with ESMTP id E08FF24BD118
+        for <linux-arch@vger.kernel.org>; Mon, 26 Sep 2022 10:48:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1664182106;
+        bh=NhdN4X2rJAjNwMFvV5i0ZCxVGsFvSLAwOMfe3tyVvP4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=ErNVj95STC4oGgOAoazE+hTr+BLTG0JXk1QkBx8XM53S8IOYrkTaT8NfjXSuac/ZG
+         C/y47mzxjC7piGtroqQbq5Y+Q+u4NskJTHuBGsOgYGFAIY5wNEqDG1P5Y0KV/SGiP9
+         81Fwm78HLYNvuewWuuODkFs1Z5JVFdKsHFoPog7E=
+Received: from fx301 (localhost [127.0.0.1]) by fx301.security-mail.net
+ (Postfix) with ESMTP id 8CDF024BD119; Mon, 26 Sep 2022 10:48:25 +0200 (CEST)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx301.security-mail.net (Postfix) with ESMTPS id D95C624BD11B; Mon, 26 Sep
+ 2022 10:48:24 +0200 (CEST)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id B4DBE27E042B; Mon, 26 Sep 2022
+ 10:48:24 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id 9B33027E0430; Mon, 26 Sep 2022 10:48:24 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ ElWjOXGInmPY; Mon, 26 Sep 2022 10:48:24 +0200 (CEST)
+Received: from [192.168.37.161] (unknown [192.168.37.161]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 830AE27E042B; Mon, 26 Sep 2022
+ 10:48:24 +0200 (CEST)
+X-Virus-Scanned: E-securemail, by Secumail
+Secumail-id: <8417.63316758.d8444.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 9B33027E0430
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1664182104;
+ bh=+oh7OesxMW2QIgyF4sMQoAESyP9oZENY6yeIPTgQmRM=;
+ h=Message-ID:Date:MIME-Version:To:From;
+ b=R/AWeJLr7/Whjf8JKEa241CYkIYIbscdP8OEDWItPXZhXuMu4DBhoJP2fUy36vamI
+ sOjmdZVxKhVtuzkiGCOcYDK5LR1KUGhu+LZUg1qUFVdrEh+zB/9pP3KMx+UQG+jPgT
+ MU0nDNinl9eu7YH9ODuoCt3FFJyPWpibFdfB1htU=
+Message-ID: <197eb354-2fc8-1712-3c83-34be9391efa8@kalray.eu>
+Date:   Mon, 26 Sep 2022 10:48:24 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LnhPDSg==ZfryNf0WVxkG4t";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 1/1] Fix __kcrctab+* sections alignment
+Content-Language: en-us
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+References: <20220817161438.32039-2-ysionneau@kalray.eu>
+ <31ce5305-a76b-13d7-ea55-afca82c46cf2@kalray.eu>
+ <CAMj1kXF8mZ_pK38T=dCU6Rewqq23pPM5HwnZHyx1cGgo0F7Mew@mail.gmail.com>
+ <fbf47f7c-7d42-4510-6dd4-92f46ec70819@kalray.eu>
+ <CAMj1kXHeSemLqAhbBLMGkK4G1225NZbaQvnR3wAWYfJr4AReaw@mail.gmail.com>
+ <CAMuHMdUJZBPuD1=3SMg4G1-UoBr5Evd8mBfhxxuAaoh=K6Rm+w@mail.gmail.com>
+ <CAMj1kXF6TchD4g0qO1OeEwt8QYU_TZEriE=1yaCxXrNGBYjmCA@mail.gmail.com>
+ <CAK7LNAQ0wiBZB7XDZVodXWtP5m_H-e_xQ78z_eJ82W3pFrKWfQ@mail.gmail.com>
+From:   Yann Sionneau <ysionneau@kalray.eu>
+In-Reply-To: <CAK7LNAQ0wiBZB7XDZVodXWtP5m_H-e_xQ78z_eJ82W3pFrKWfQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/LnhPDSg==ZfryNf0WVxkG4t
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Sat, 24 Sep 2022 05:31:34 +0000 "Michael Kelley (LINUX)" <mikelley@microsof=
-t.com>:
+On 8/28/22 16:05, Masahiro Yamada wrote:
+> On Fri, Aug 26, 2022 at 7:17 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>> On Thu, 25 Aug 2022 at 20:01, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>> Hi Ard,
+>>>
+>>> On Thu, Aug 25, 2022 at 2:56 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>>>> On Thu, 25 Aug 2022 at 14:21, Yann Sionneau <ysionneau@kalray.eu> wrote:
+>>>>> Well, I am not completely sure about that. See my cover letter, previous
+>>>>> mechanism for symbol CRC was actually enforcing the section alignment to
+>>>>> 4 bytes boundary as well.
+>>> Yes, because else it may become 2-byte aligned on m68k.
+>>>
+>>>>> Also, I'm not sure it is forbidden for an architecture/compiler
+>>>>> implementation to actually enforce a stronger alignment on u32, which in
+>>>>> theory would not break anything.
+>>>>>
+>>>> u32 is a Linux type, and Linux expects natural alignment (and padding).
+>>> Is it? You probably mean its alignment should not be larger than
+>>> 4 bytes? Less has been working since basically forever.
+>>>
+>> You are quite right. of course. And indeed, the issue here is padding
+>> not alignment.
+>>
+> I do not know if __align(4) should be used to avoid the padding issue.
+>
+>
+>
+> Do you think it is a good idea to use an inline assembler,
+> as prior to 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b ?
+>
+>
+> This patch:
+>
+> diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
+> index c2b1d4fd5987..fb90f326b1b5 100644
+> --- a/include/linux/export-internal.h
+> +++ b/include/linux/export-internal.h
+> @@ -12,6 +12,9 @@
+>
+>   /* __used is needed to keep __crc_* for LTO */
+>   #define SYMBOL_CRC(sym, crc, sec)   \
+> -       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
+> +       asm(".section \"___kcrctab" sec "+" #sym "\",\"a\""     "\n" \
+> +           "__crc_" #sym ":"                                   "\n" \
+> +           ".long " #crc                                       "\n" \
+> +           ".previous"                                         "\n")
+>
+>   #endif /* __LINUX_EXPORT_INTERNAL_H__ */
 
-> From: Olaf Hering <olaf@aepfle.de> Sent: Friday, September 23, 2022 2:09 =
-PM
+Ping on this topic, should we "fix our toolchain"?
 
-> > A very long time ago I removed most usage of version.h AFAIR,
-> Could you elaborate?
+Or should Linux code be modified to add either __align(4) or use the 
+inline assembler? (I've tried your inline asm patch and it seems to fix 
+the issue I'm having).
 
-It is the cost of 'make LOCALVERSION=3Dx' vs. 'make LOCALVERSION=3Dy'.
+Or both?
 
-Too many drivers will be recompiled for no good reason as of today.
-I claim no consumer below drivers/ and sound/ has a valid usecase for versi=
-on.h.
-But, someone else has to take the energy and argue them out of the tree.
+Thanks,
 
-With the proposed change every consumer of asm-generic/mshyperv.h will be d=
-irty,
-see 'touch include/asm-generic/mshyperv.h' for the impact. Therefore I think
-only the two existing c files should include this header, in case the provi=
-ded
-information has a true value for the consumer.
+Yann
 
 
-Olaf
 
---Sig_/LnhPDSg==ZfryNf0WVxkG4t
-Content-Type: application/pgp-signature
-Content-Description: Digitale Signatur von OpenPGP
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEE97o7Um30LT3B+5b/86SN7mm1DoAFAmMxW0EACgkQ86SN7mm1
-DoDG+A/+NdczrJbTrLhHY24iKyo+iEXnHP0XFl+2Wz0JDdS9TYhOp4qk8vIf7Gop
-7V3TtYytLyl8v0jdoFjmLhDTijp4l8TbY5AvSZ9C19xGnFb4wDqnGlK9A+7lAfnG
-Db3SMwatykAgj6aTVP9Ckrrg5pp7DwuUYHVYsjyB4DqM89ApeXmZvE0RwNcX24sz
-VYmtrtRDNT/spTwAVRH15sHt6gQV+p6OgplLURbop8vbpJl2aZNpIIboJTLa5X8p
-KN3rYHJ6AUnrIJRki/ffhBH2dxIc4iAzt5zTXNJLQ6yVcIMJD2bNMxzN2FNZIC5v
-/V1Bb9jftZzram3UtJ1qvFpGhPRVcfHnm1HPV9bSHRECa7TwGiDZWEZ6Js7ab03G
-ZRIU+cqrmyiFY6LjkHfxRReupYUJMU5Ykfon/j7eeZalW88QgPAtzjDAaaErcfGQ
-3yG9O2kl0idCguwSHZ97DDnfpRt87oICsgjOhwvEkPhTLpg5HOAcFjbCL3bKkauh
-lb1Q4lk3qcTjlwAXdJEvGrePJYL3jjhfBeQAjvCYSqBIZAnn/I/5Vdk5R/MOJGRU
-sDCVZQGMV7KsHurnBkGV+jgpoF7Mlced2d7h/4tZ+B/fL6TQ7cGEmRWly2pLQ9q7
-JCFWuiKkyijJxhek0s7Duzor29fTuKavonHEVPAEUeSRiU66GYQ=
-=rHAw
------END PGP SIGNATURE-----
-
---Sig_/LnhPDSg==ZfryNf0WVxkG4t--
