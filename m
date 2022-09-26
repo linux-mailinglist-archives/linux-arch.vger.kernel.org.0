@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3754D5EB267
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 22:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F2A5EB27B
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 22:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbiIZUkz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Sep 2022 16:40:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S231239AbiIZUm2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Sep 2022 16:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiIZUkc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 16:40:32 -0400
-Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BC07C755;
-        Mon, 26 Sep 2022 13:40:15 -0700 (PDT)
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-05.nifty.com with ESMTP id 28QKbjxE029749;
-        Tue, 27 Sep 2022 05:37:45 +0900
+        with ESMTP id S230517AbiIZUmS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 16:42:18 -0400
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBF3ABD4A;
+        Mon, 26 Sep 2022 13:42:06 -0700 (PDT)
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-02.nifty.com with ESMTP id 28QKblcg003725;
+        Tue, 27 Sep 2022 05:37:47 +0900
 Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 28QKaWu4018737;
-        Tue, 27 Sep 2022 05:36:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28QKaWu4018737
+        by conuserg-10.nifty.com with ESMTP id 28QKaWu5018737;
+        Tue, 27 Sep 2022 05:36:39 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 28QKaWu5018737
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664224598;
-        bh=OfuGM282m19iNX0i9PBWYpUdIc6yc2RZLrtabmbI8uk=;
+        s=dec2015msa; t=1664224599;
+        bh=pj6Bhh62wjJj180r/iVpfwJ9jYP/0YH+qO8nbtvL0F4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A48lnOjslGssnRTkBNZAS/jOg1yyoExtR8J6J98kYhDc/3Hxt3agsC0V2RpL8EOKE
-         nK0g02ZftZq4njEU1acRjmpXyUTYzrofbyDc9eOj+A6Br5clcX+idZJhoFei2Gw/TF
-         AG/tEzLm61kJSuxUgI9HZrftvcy7m473r7LGgO6phczEG5yV1wRvf70J3rlOIDRCES
-         j5R47wRdK7tT7seyr/qX7qM38GymLrZw7ChG8rkexHsBnYNjGDUx7AqJtAVMmyIp6h
-         3qAXbSklItGOecxTqfKF+jGLR6EkOTT5OWBUQdRIeoN8tq7dASssxcbRDLIg1lzZb7
-         J7eE7tbZtZ9ow==
+        b=BCUzrt/fwqCoSL8FG+jV1kx/mVFMpWkKEC2viT5kZTVOD6PAV1I15YPYypC6R3FGM
+         sve3sF+F8hMIsThRuPKct3CGE6JTvz2yRIjsGC78E/+Sgjqa0SDRK37MQHsU4JTZji
+         pwg6sKCLcav29sbWnbnkMV1Ifh5DN/5ZGcxhwE1cvBvkPfRHw5IHoYsNrvj9jTIV7K
+         kqSL0aFzJ9fdA5msHs6shjCLUXi6YTD43rsT3tk3TciX+WJRnutQyRWoeSxDuNNYAt
+         iUII3+92LGNrDHXaa17VEaALlLDD78+6MgUAqCaJSgJyppW5HXys5kSkGtwXuMUAm+
+         C1Y0Xh4nFg4Rw==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -38,11 +38,11 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ard Biesheuvel <ardb@kernel.org>,
         Nicolas Pitre <npitre@baylibre.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>
-Subject: [PATCH v2 4/7] modpost: use null string instead of NULL pointer for default namespace
-Date:   Tue, 27 Sep 2022 05:36:22 +0900
-Message-Id: <20220926203625.1117261-5-masahiroy@kernel.org>
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2 5/7] modpost: squash report_sec_mismatch() and remove enum mismatch
+Date:   Tue, 27 Sep 2022 05:36:23 +0900
+Message-Id: <20220926203625.1117261-6-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220926203625.1117261-1-masahiroy@kernel.org>
 References: <20220926203625.1117261-1-masahiroy@kernel.org>
@@ -57,89 +57,169 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The default namespace is the null string, "".
+Now report_sec_mismatch() prints the same warning message for all
+possible cases. (fatal() is just a sanity check for unreachable code.)
 
-When set, the null string "" is converted to NULL:
+Squash it into default_mismatch_handler().
 
-  s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
-
-When printed, the NULL pointer is get back to the null string:
-
-  sym->namespace ?: ""
-
-This saves 1 byte memory allocated for "", but loses the readability.
-
-In kernel-space, we strive to save memory, but modpost is a userspace
-tool used to build the kernel. On modern systems, such small piece of
-memory is not a big deal.
-
-Handle the namespace string as is.
+enum mismatch is no longer used. Remove it as well.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
 
-(no changes since v1)
+Changes in v2:
+  - New patch
 
- scripts/mod/modpost.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ scripts/mod/modpost.c | 61 +++----------------------------------------
+ 1 file changed, 4 insertions(+), 57 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 0bb5bbd176b4..29f30558a398 100644
+index 29f30558a398..90733664a602 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -297,6 +297,13 @@ static bool contains_namespace(struct list_head *head, const char *namespace)
+@@ -847,18 +847,6 @@ static const char *const linker_symbols[] =
+ 	{ "__init_begin", "_sinittext", "_einittext", NULL };
+ static const char *const optim_symbols[] = { "*.constprop.*", NULL };
+ 
+-enum mismatch {
+-	TEXT_TO_ANY_INIT,
+-	DATA_TO_ANY_INIT,
+-	TEXT_TO_ANY_EXIT,
+-	DATA_TO_ANY_EXIT,
+-	XXXINIT_TO_SOME_INIT,
+-	XXXEXIT_TO_SOME_EXIT,
+-	ANY_INIT_TO_ANY_EXIT,
+-	ANY_EXIT_TO_ANY_INIT,
+-	EXTABLE_TO_NON_TEXT,
+-};
+-
+ /**
+  * Describe how to match sections on different criteria:
+  *
+@@ -880,7 +868,6 @@ struct sectioncheck {
+ 	const char *fromsec[20];
+ 	const char *bad_tosec[20];
+ 	const char *good_tosec[20];
+-	enum mismatch mismatch;
+ 	void (*handler)(const char *modname, struct elf_info *elf,
+ 			const struct sectioncheck* const mismatch,
+ 			Elf_Rela *r, Elf_Sym *sym, const char *fromsec);
+@@ -899,56 +886,46 @@ static const struct sectioncheck sectioncheck[] = {
  {
- 	struct namespace_list *list;
- 
-+	/*
-+	 * The default namespace is null string "", which is always implicitly
-+	 * contained.
-+	 */
-+	if (!namespace[0])
-+		return true;
-+
- 	list_for_each_entry(list, head, list) {
- 		if (!strcmp(list->namespace, namespace))
- 			return true;
-@@ -366,7 +373,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
- 	s = alloc_symbol(name);
- 	s->module = mod;
- 	s->is_gpl_only = gpl_only;
--	s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
-+	s->namespace = NOFAIL(strdup(namespace));
- 	list_add_tail(&s->list, &mod->exported_symbols);
- 	hash_add_symbol(s);
- 
-@@ -1928,8 +1935,7 @@ static void check_exports(struct module *mod)
- 		else
- 			basename = mod->name;
- 
--		if (exp->namespace &&
--		    !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
-+		if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
- 			modpost_log(allow_missing_ns_imports ? LOG_WARN : LOG_ERROR,
- 				    "module %s uses symbol %s from namespace %s, but does not import it.\n",
- 				    basename, exp->name, exp->namespace);
-@@ -2015,8 +2021,7 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
- 	list_for_each_entry(sym, &mod->exported_symbols, list)
- 		buf_printf(buf, "KSYMTAB_%s(%s, \"%s\", \"%s\");\n",
- 			   sym->is_func ? "FUNC" : "DATA", sym->name,
--			   sym->is_gpl_only ? "_gpl" : "",
--			   sym->namespace ?: "");
-+			   sym->is_gpl_only ? "_gpl" : "", sym->namespace);
- 
- 	if (!modversions)
- 		return;
-@@ -2284,7 +2289,7 @@ static void write_dump(const char *fname)
- 			buf_printf(&buf, "0x%08x\t%s\t%s\tEXPORT_SYMBOL%s\t%s\n",
- 				   sym->crc, sym->name, mod->name,
- 				   sym->is_gpl_only ? "_GPL" : "",
--				   sym->namespace ?: "");
-+				   sym->namespace);
- 		}
+ 	.fromsec = { TEXT_SECTIONS, NULL },
+ 	.bad_tosec = { ALL_INIT_SECTIONS, NULL },
+-	.mismatch = TEXT_TO_ANY_INIT,
+ },
+ {
+ 	.fromsec = { DATA_SECTIONS, NULL },
+ 	.bad_tosec = { ALL_XXXINIT_SECTIONS, NULL },
+-	.mismatch = DATA_TO_ANY_INIT,
+ },
+ {
+ 	.fromsec = { DATA_SECTIONS, NULL },
+ 	.bad_tosec = { INIT_SECTIONS, NULL },
+-	.mismatch = DATA_TO_ANY_INIT,
+ },
+ {
+ 	.fromsec = { TEXT_SECTIONS, NULL },
+ 	.bad_tosec = { ALL_EXIT_SECTIONS, NULL },
+-	.mismatch = TEXT_TO_ANY_EXIT,
+ },
+ {
+ 	.fromsec = { DATA_SECTIONS, NULL },
+ 	.bad_tosec = { ALL_EXIT_SECTIONS, NULL },
+-	.mismatch = DATA_TO_ANY_EXIT,
+ },
+ /* Do not reference init code/data from meminit code/data */
+ {
+ 	.fromsec = { ALL_XXXINIT_SECTIONS, NULL },
+ 	.bad_tosec = { INIT_SECTIONS, NULL },
+-	.mismatch = XXXINIT_TO_SOME_INIT,
+ },
+ /* Do not reference exit code/data from memexit code/data */
+ {
+ 	.fromsec = { ALL_XXXEXIT_SECTIONS, NULL },
+ 	.bad_tosec = { EXIT_SECTIONS, NULL },
+-	.mismatch = XXXEXIT_TO_SOME_EXIT,
+ },
+ /* Do not use exit code/data from init code */
+ {
+ 	.fromsec = { ALL_INIT_SECTIONS, NULL },
+ 	.bad_tosec = { ALL_EXIT_SECTIONS, NULL },
+-	.mismatch = ANY_INIT_TO_ANY_EXIT,
+ },
+ /* Do not use init code/data from exit code */
+ {
+ 	.fromsec = { ALL_EXIT_SECTIONS, NULL },
+ 	.bad_tosec = { ALL_INIT_SECTIONS, NULL },
+-	.mismatch = ANY_EXIT_TO_ANY_INIT,
+ },
+ {
+ 	.fromsec = { ALL_PCI_INIT_SECTIONS, NULL },
+ 	.bad_tosec = { INIT_SECTIONS, NULL },
+-	.mismatch = ANY_INIT_TO_ANY_EXIT,
+ },
+ {
+ 	.fromsec = { "__ex_table", NULL },
+@@ -957,7 +934,6 @@ static const struct sectioncheck sectioncheck[] = {
+ 	 */
+ 	.bad_tosec = { ".altinstr_replacement", NULL },
+ 	.good_tosec = {ALL_TEXT_SECTIONS , NULL},
+-	.mismatch = EXTABLE_TO_NON_TEXT,
+ 	.handler = extable_mismatch_handler,
+ }
+ };
+@@ -1215,37 +1191,6 @@ static inline void get_pretty_name(int is_func, const char** name, const char**
  	}
- 	write_buf(&buf, fname);
+ }
+ 
+-/*
+- * Print a warning about a section mismatch.
+- * Try to find symbols near it so user can find it.
+- * Check whitelist before warning - it may be a false positive.
+- */
+-static void report_sec_mismatch(const char *modname,
+-				const struct sectioncheck *mismatch,
+-				const char *fromsec,
+-				const char *fromsym,
+-				const char *tosec, const char *tosym)
+-{
+-	sec_mismatch_count++;
+-
+-	switch (mismatch->mismatch) {
+-	case TEXT_TO_ANY_INIT:
+-	case DATA_TO_ANY_INIT:
+-	case TEXT_TO_ANY_EXIT:
+-	case DATA_TO_ANY_EXIT:
+-	case XXXINIT_TO_SOME_INIT:
+-	case XXXEXIT_TO_SOME_EXIT:
+-	case ANY_INIT_TO_ANY_EXIT:
+-	case ANY_EXIT_TO_ANY_INIT:
+-		warn("%s: section mismatch in reference: %s (section: %s) -> %s (section: %s)\n",
+-		     modname, fromsym, fromsec, tosym, tosec);
+-		break;
+-	case EXTABLE_TO_NON_TEXT:
+-		fatal("There's a special handler for this mismatch type, we should never get here.\n");
+-		break;
+-	}
+-}
+-
+ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 				     const struct sectioncheck* const mismatch,
+ 				     Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
+@@ -1266,8 +1211,10 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 	/* check whitelist - we may ignore it */
+ 	if (secref_whitelist(mismatch,
+ 			     fromsec, fromsym, tosec, tosym)) {
+-		report_sec_mismatch(modname, mismatch,
+-				    fromsec, fromsym, tosec, tosym);
++		sec_mismatch_count++;
++
++		warn("%s: section mismatch in reference: %s (section: %s) -> %s (section: %s)\n",
++		     modname, fromsym, fromsec, tosym, tosec);
+ 	}
+ }
+ 
 -- 
 2.34.1
 
