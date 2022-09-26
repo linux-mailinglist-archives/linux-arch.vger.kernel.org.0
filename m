@@ -2,187 +2,312 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A97825E9D02
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 11:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6824F5EB022
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Sep 2022 20:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234287AbiIZJLV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Sep 2022 05:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
+        id S230137AbiIZSiL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Sep 2022 14:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233860AbiIZJLU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 05:11:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F043B957;
-        Mon, 26 Sep 2022 02:11:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA20AB80691;
-        Mon, 26 Sep 2022 09:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6190AC433C1;
-        Mon, 26 Sep 2022 09:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664183474;
-        bh=KalDO0bNMeLlv1wFIbLh7z2AYIvNk9jQZX3B5SSRhPs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=X4Kv9itoaO8T3+NmWeQ9ckeq4cuT2ATIULC73Ws88EeVJWGMpChLt7ZjZosfUiZKe
-         Dfpz51iGqoKL7mWEAN8NpUo4/U4V3FxT7BsPPk9CaQHZkDNamDVOZiuJRy8YtKsIif
-         6ssNkXBd+LiBJFRsyP+lpivFZJcJ3syz13QKI97xXMAKNDGQOSZd3h+TsRm1KhIkcm
-         1cQ2GsOCVMvKbOvhjzt/Mf61XKbTFbeop+P/UMezqrYoKBgGo9HoPLZmnqgOl/bGc3
-         pPVNMQqBu0FTAbMSbot2PHW9bmzZO0ebpQ4cXn9mXxBL+juWl2sqyHQeWIvyhIh1C9
-         kp3aFNfu9I/cA==
-Received: by mail-lf1-f49.google.com with SMTP id k10so9816369lfm.4;
-        Mon, 26 Sep 2022 02:11:14 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1c9O4Jem2d1OWUeBWTY3lH3RPrL12guo8yjp/UJcHyajkoTs79
-        Pc8O+CbOSWDJDM657wfEAtQHfiJhy8Ms7RBMHBE=
-X-Google-Smtp-Source: AMsMyM6gRU+tsSjSXF5mvs4l1lA3eV0j1hR8ThZNIt+HWqkiDnHcBHrkqNlUlScxDzkqyR0ydAODJgL97EL7ccGtfuM=
-X-Received: by 2002:ac2:4431:0:b0:497:aaf5:83eb with SMTP id
- w17-20020ac24431000000b00497aaf583ebmr8290805lfl.228.1664183472334; Mon, 26
- Sep 2022 02:11:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220817161438.32039-2-ysionneau@kalray.eu> <31ce5305-a76b-13d7-ea55-afca82c46cf2@kalray.eu>
- <CAMj1kXF8mZ_pK38T=dCU6Rewqq23pPM5HwnZHyx1cGgo0F7Mew@mail.gmail.com>
- <fbf47f7c-7d42-4510-6dd4-92f46ec70819@kalray.eu> <CAMj1kXHeSemLqAhbBLMGkK4G1225NZbaQvnR3wAWYfJr4AReaw@mail.gmail.com>
- <CAMuHMdUJZBPuD1=3SMg4G1-UoBr5Evd8mBfhxxuAaoh=K6Rm+w@mail.gmail.com>
- <CAMj1kXF6TchD4g0qO1OeEwt8QYU_TZEriE=1yaCxXrNGBYjmCA@mail.gmail.com>
- <CAK7LNAQ0wiBZB7XDZVodXWtP5m_H-e_xQ78z_eJ82W3pFrKWfQ@mail.gmail.com>
- <197eb354-2fc8-1712-3c83-34be9391efa8@kalray.eu> <CAK7LNATccB3K-wagEB3+Tf8FVPp7F26nKAXEiCPPxjOd5qyt-Q@mail.gmail.com>
-In-Reply-To: <CAK7LNATccB3K-wagEB3+Tf8FVPp7F26nKAXEiCPPxjOd5qyt-Q@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 26 Sep 2022 11:11:01 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFK3zygrFJCmdaoyuFANLgxBDTGH7zXYUU2ECk66zR6dg@mail.gmail.com>
-Message-ID: <CAMj1kXFK3zygrFJCmdaoyuFANLgxBDTGH7zXYUU2ECk66zR6dg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] Fix __kcrctab+* sections alignment
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
+        with ESMTP id S230178AbiIZShx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Sep 2022 14:37:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C97D6D9E7
+        for <linux-arch@vger.kernel.org>; Mon, 26 Sep 2022 11:37:49 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id m131-20020a252689000000b006b2bf1dd88cso6566916ybm.19
+        for <linux-arch@vger.kernel.org>; Mon, 26 Sep 2022 11:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date;
+        bh=znhGVGmm6TLIt/hCvZyRbrWMCYyq9RR6vI5Xw2wMKC4=;
+        b=d68/aWCLPiIhe6kggZL49/Bh7V4/p14HgIMbRCvVM2NXYFgGVn+Xq9brpRwfNhGn1c
+         bzJwZSeSD28a7Y9C2q6pU7Ns5YVEFTZe/NUDWalKdLmiDD2Ycu38MkayfNaqystb+Yqe
+         2uitdjgk1pKgDrhsqNj5Zi+us9bovm9f4gWEJiOjaim9mYiKX/XM3sYD5w/R4o2mb4mZ
+         CFQt2YiJ+JQ5f5ciYi+1HTq4fleAv03ZClh98oFN7wKat0tgF+afcbUELEguex2NqQsj
+         ebHSIrxp17+FxDtmN9isOGdXvSr28CY+GxWqR7nRTLSnzGkZucq1jvCcRo3Cov2rfSOI
+         8Xfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date;
+        bh=znhGVGmm6TLIt/hCvZyRbrWMCYyq9RR6vI5Xw2wMKC4=;
+        b=5QnlDL8HLyFO/AuEj/XILlnJIOXWcjr98oKWBwkJh7nCtrqdHHoiSUiASixOEOy4vq
+         C5DjvhPrTLB0u02Bv/LYi+GAucf6AomJzbL7/YM3gJhrGqNk7fZwf58PXGuOE+LDVDHj
+         yfaTBlhjc1wzHG1jxcof9aaOm7aov6ia6IbRlEKdjjUpJ+AaRUt6H9gTxBX2cFDV+biF
+         qfj66yeHeFZYOpqunik5BxNcB/sn/fEfmY4ciJ9ovhZr/N9eUlns9Prss1FnyHdzy2Gh
+         0oncexUABCriR7r0f6/0j951TFew1lHD6cjt5KPirEgKEZ38JwkX4IKpFbuuilGjiJkJ
+         OZKg==
+X-Gm-Message-State: ACrzQf0hBxadGDMq/fRccf/NIGawCV8yOuD0XGcrXC54XF6A6sFJImo+
+        QW8PFQtvVVz0YZJKtw5w/9dbFm4bWzcTMvoFfoQ=
+X-Google-Smtp-Source: AMsMyM4bDMVt1tdnaBnUxux6UCle3vtahK9wHgCGdwWVS1dv1pQjCOyBISO8bmwfU2AlX2gfDPcGjZtYrAVWpRrRAUc=
+X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:0:100e:712:8fb4:fe0d:d74c:5bcb])
+ (user=ndesaulniers job=sendgmr) by 2002:a25:f628:0:b0:6bc:bb6:aec5 with SMTP
+ id t40-20020a25f628000000b006bc0bb6aec5mr929868ybd.139.1664217469129; Mon, 26
+ Sep 2022 11:37:49 -0700 (PDT)
+Date:   Mon, 26 Sep 2022 11:37:25 -0700
+In-Reply-To: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
+Mime-Version: 1.0
+References: <CAKwvOdkCCyP8W2pHf9ETKMgUtKCgcSwUb6=bMJ_8riwjyknpCw@mail.gmail.com>
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1664217445; l=7895;
+ i=ndesaulniers@google.com; s=20220923; h=from:subject; bh=x0RwTwO74GUfeRgTrJP+F6BnwHVqyXRlkCvRcvW1NlM=;
+ b=aATOabxLSS9znVNtm6L5GIkLiNWqOo9CDSaqmGgfeElYHBzA7DRPuBx916vBrYh+uPU8ccbHNwUy
+ 5wYW/6BNB3vDlr9XOrgMb7SvlKfMG6oNcMPwlge2WJWmJuq1ioxM
+X-Mailer: git-send-email 2.37.3.998.g577e59143f-goog
+Message-ID: <20220926183725.1112298-1-ndesaulniers@google.com>
+Subject: [PATCH] ARM: kprobes: move __kretprobe_trampoline to out of line assembler
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Arnd Bergmann <arnd@arndb.de>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        sparkhuang <huangshaobo6@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        Logan Chien <loganchien@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 26 Sept 2022 at 11:06, Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Mon, Sep 26, 2022 at 5:48 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
-> >
-> >
-> > On 8/28/22 16:05, Masahiro Yamada wrote:
-> > > On Fri, Aug 26, 2022 at 7:17 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > >> On Thu, 25 Aug 2022 at 20:01, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > >>> Hi Ard,
-> > >>>
-> > >>> On Thu, Aug 25, 2022 at 2:56 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > >>>> On Thu, 25 Aug 2022 at 14:21, Yann Sionneau <ysionneau@kalray.eu> wrote:
-> > >>>>> Well, I am not completely sure about that. See my cover letter, previous
-> > >>>>> mechanism for symbol CRC was actually enforcing the section alignment to
-> > >>>>> 4 bytes boundary as well.
-> > >>> Yes, because else it may become 2-byte aligned on m68k.
-> > >>>
-> > >>>>> Also, I'm not sure it is forbidden for an architecture/compiler
-> > >>>>> implementation to actually enforce a stronger alignment on u32, which in
-> > >>>>> theory would not break anything.
-> > >>>>>
-> > >>>> u32 is a Linux type, and Linux expects natural alignment (and padding).
-> > >>> Is it? You probably mean its alignment should not be larger than
-> > >>> 4 bytes? Less has been working since basically forever.
-> > >>>
-> > >> You are quite right. of course. And indeed, the issue here is padding
-> > >> not alignment.
-> > >>
-> > > I do not know if __align(4) should be used to avoid the padding issue.
-> > >
-> > >
-> > >
-> > > Do you think it is a good idea to use an inline assembler,
-> > > as prior to 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b ?
-> > >
-> > >
-> > > This patch:
-> > >
-> > > diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
-> > > index c2b1d4fd5987..fb90f326b1b5 100644
-> > > --- a/include/linux/export-internal.h
-> > > +++ b/include/linux/export-internal.h
-> > > @@ -12,6 +12,9 @@
-> > >
-> > >   /* __used is needed to keep __crc_* for LTO */
-> > >   #define SYMBOL_CRC(sym, crc, sec)   \
-> > > -       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
-> > > +       asm(".section \"___kcrctab" sec "+" #sym "\",\"a\""     "\n" \
-> > > +           "__crc_" #sym ":"                                   "\n" \
-> > > +           ".long " #crc                                       "\n" \
-> > > +           ".previous"                                         "\n")
-> > >
-> > >   #endif /* __LINUX_EXPORT_INTERNAL_H__ */
-> >
-> > Ping on this topic, should we "fix our toolchain"?
-> >
-> > Or should Linux code be modified to add either __align(4) or use the
-> > inline assembler? (I've tried your inline asm patch and it seems to fix
-> > the issue I'm having).
-> >
-> > Or both?
-> >
-> > Thanks,
-> >
-> > Yann
-> >
-> >
-> >
-> >
-> >
->
->
-> I queued up the patch.
-> You can see it in linux-next.
->
->
-> Once it lands in the mainline,
-> it will be back-ported.
->
->
->
->
->
->
-> masahiro@zoe:~/ref/linux-next$ git log -1 next-20220923 --
-> include/linux/export-internal.h
-> commit 60ecfddd7a092f9cbd2398dbc55da3abbb803ff0
-> Author: Masahiro Yamada <masahiroy@kernel.org>
-> Date:   Fri Sep 16 15:29:53 2022 +0900
->
->     linux/export: use inline assembler to populate symbol CRCs
->
->     Since commit 7b4537199a4a ("kbuild: link symbol CRCs at final link,
->     removing CONFIG_MODULE_REL_CRCS"), the module versioning on the
->     (non-upstreamed-yet) kvx Linux port is broken due to unexpected padding
->     for __crc_* symbols. The kvx GCC adds padding so u32 gets 8-byte
->     alignment instead of 4.
->
->     I do not know if this happens for upstream architectures in general,
->     but any compiler has the freedom to insert padding for faster access.
->
->     Use the inline assembler to directly specify the wanted data layout.
->     This is how we previously did before the breakage.
->
->     Link: https://lore.kernel.org/lkml/20220817161438.32039-1-ysionneau@kalray.eu/
->     Link: https://lore.kernel.org/linux-kbuild/31ce5305-a76b-13d7-ea55-afca82c46cf2@kalray.eu/
->     Fixes: 7b4537199a4a ("kbuild: link symbol CRCs at final link,
-> removing CONFIG_MODULE_REL_CRCS")
->     Reported-by: Yann Sionneau <ysionneau@kalray.eu>
->     Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->     Tested-by: Yann Sionneau <ysionneau@kalray.eu>
->
+commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+EABI stack unwinder")
+tickled a bug in clang's integrated assembler where the .save and .pad
+directives must have corresponding .fnstart directives. The integrated
+assembler is unaware that the compiler will be generating the .fnstart
+directive.
 
-I don't think we should merge this. kvm is an experimental out of tree
-port, and everywhere else, we already rely heavily on array sections
-constructed by the linker where it just concatenate sections from the
-input objects, and assumes there will be no padding.
+  arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+  .save or .vsave directives
+  <inline asm>:3:2: note: instantiated into assembly here
+  .save   {sp, lr, pc}
+  ^
+  arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+  .pad directive
+  <inline asm>:6:2: note: instantiated into assembly here
+  .pad    #52
+  ^
+
+__kretprobe_trampoline's definition is already entirely inline asm. Move
+it to out-of-line asm to avoid breaking the build.
+
+Link: https://github.com/llvm/llvm-project/issues/57993
+Link: https://github.com/ClangBuiltLinux/linux/issues/1718
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Suggested-by: Logan Chien <loganchien@google.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+Note: I wasn't quite sure if a Fixes tag against 1069c1dd20a3 was
+appropriate here? Either way, if 1069c1dd20a3 gets picked up for stable
+without this, it will break clang builds.
+
+ arch/arm/probes/kprobes/Makefile              |  1 +
+ arch/arm/probes/kprobes/core.c                | 54 ++----------------
+ .../arm/probes/kprobes/kretprobe-trampoline.S | 55 +++++++++++++++++++
+ include/asm-generic/kprobes.h                 | 13 +++--
+ 4 files changed, 69 insertions(+), 54 deletions(-)
+ create mode 100644 arch/arm/probes/kprobes/kretprobe-trampoline.S
+
+diff --git a/arch/arm/probes/kprobes/Makefile b/arch/arm/probes/kprobes/Makefile
+index 6159010dac4a..cdbe9dd99e28 100644
+--- a/arch/arm/probes/kprobes/Makefile
++++ b/arch/arm/probes/kprobes/Makefile
+@@ -3,6 +3,7 @@ KASAN_SANITIZE_actions-common.o := n
+ KASAN_SANITIZE_actions-arm.o := n
+ KASAN_SANITIZE_actions-thumb.o := n
+ obj-$(CONFIG_KPROBES)		+= core.o actions-common.o checkers-common.o
++obj-$(CONFIG_KPROBES)		+= kretprobe-trampoline.o
+ obj-$(CONFIG_ARM_KPROBES_TEST)	+= test-kprobes.o
+ test-kprobes-objs		:= test-core.o
+ 
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 1435b508aa36..17d7e0259e63 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -375,58 +375,10 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ 	return NOTIFY_DONE;
+ }
+ 
+-/*
+- * When a retprobed function returns, trampoline_handler() is called,
+- * calling the kretprobe's handler. We construct a struct pt_regs to
+- * give a view of registers r0-r11, sp, lr, and pc to the user
+- * return-handler. This is not a complete pt_regs structure, but that
+- * should be enough for stacktrace from the return handler with or
+- * without pt_regs.
+- */
+-void __naked __kprobes __kretprobe_trampoline(void)
+-{
+-	__asm__ __volatile__ (
+-		"ldr	lr, =__kretprobe_trampoline	\n\t"
+-#ifdef CONFIG_FRAME_POINTER
+-	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+-#ifdef CONFIG_CC_IS_CLANG
+-		"stmdb	sp, {sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #12		\n\t"
+-		/* In clang case, pt_regs->ip = lr. */
+-		"stmdb	sp!, {r0 - r11, lr}	\n\t"
+-		/* fp points regs->r11 (fp) */
+-		"add	fp, sp,	#44		\n\t"
+-#else /* !CONFIG_CC_IS_CLANG */
+-		/* In gcc case, pt_regs->ip = fp. */
+-		"stmdb	sp, {fp, sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		/* fp points regs->r15 (pc) */
+-		"add	fp, sp, #60		\n\t"
+-#endif /* CONFIG_CC_IS_CLANG */
+-#else /* !CONFIG_FRAME_POINTER */
+-		/* store SP, LR on stack and add EABI unwind hint */
+-		"stmdb  sp, {sp, lr, pc}	\n\t"
+-		".save	{sp, lr, pc}	\n\t"
+-		"sub	sp, sp, #16		\n\t"
+-		"stmdb	sp!, {r0 - r11}		\n\t"
+-		".pad	#52				\n\t"
+-#endif /* CONFIG_FRAME_POINTER */
+-		"mov	r0, sp			\n\t"
+-		"bl	trampoline_handler	\n\t"
+-		"mov	lr, r0			\n\t"
+-		"ldmia	sp!, {r0 - r11}		\n\t"
+-		"add	sp, sp, #16		\n\t"
+-#ifdef CONFIG_THUMB2_KERNEL
+-		"bx	lr			\n\t"
+-#else
+-		"mov	pc, lr			\n\t"
+-#endif
+-		: : : "memory");
+-}
++/*void __kretprobe_trampoline(void);*/
+ 
+ /* Called from __kretprobe_trampoline */
+-static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
++__kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+ 	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->TRAMP_FP);
+ }
+@@ -434,6 +386,8 @@ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
++	extern void __kretprobe_trampoline(void);
++
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+ 	ri->fp = (void *)regs->TRAMP_FP;
+ 
+diff --git a/arch/arm/probes/kprobes/kretprobe-trampoline.S b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+new file mode 100644
+index 000000000000..261c99b8c17f
+--- /dev/null
++++ b/arch/arm/probes/kprobes/kretprobe-trampoline.S
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#include <linux/linkage.h>
++#include <asm/unwind.h>
++#include <asm-generic/kprobes.h>
++
++/*
++ * When a retprobed function returns, trampoline_handler() is called,
++ * calling the kretprobe's handler. We construct a struct pt_regs to
++ * give a view of registers r0-r11, sp, lr, and pc to the user
++ * return-handler. This is not a complete pt_regs structure, but that
++ * should be enough for stacktrace from the return handler with or
++ * without pt_regs.
++ */
++__KPROBE
++SYM_FUNC_START(__kretprobe_trampoline)
++UNWIND(.fnstart)
++	ldr	lr, =__kretprobe_trampoline
++#ifdef CONFIG_FRAME_POINTER
++	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
++#ifdef CONFIG_CC_IS_CLANG
++	stmdb	sp, {sp, lr, pc}
++	sub	sp, sp, #12
++	/* In clang case, pt_regs->ip = lr. */
++	stmdb	sp!, {r0 - r11, lr}
++	/* fp points regs->r11 (fp) */
++	add	fp, sp, #44
++#else /* !CONFIG_CC_IS_CLANG */
++	/* In gcc case, pt_regs->ip = fp. */
++	stmdb	sp, {fp, sp, lr, pc}
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++	/* fp points regs->r15 (pc) */
++	add	fp, sp, #60
++#endif /* CONFIG_CC_IS_CLANG */
++#else /* !CONFIG_FRAME_POINTER */
++	/* store SP, LR on stack and add EABI unwind hint */
++	stmdb	sp, {sp, lr, pc}
++UNWIND(.save	{sp, lr, pc})
++	sub	sp, sp, #16
++	stmdb	sp!, {r0 - r11}
++UNWIND(.pad	#52)
++#endif /* CONFIG_FRAME_POINTER */
++	mov	r0, sp
++	bl	trampoline_handler
++	mov	lr, r0
++	ldmia	sp!, {r0 - r11}
++	add	sp, sp, #16
++#ifdef CONFIG_THUMB2_KERNEL
++	bx	lr
++#else
++	mov	pc, lr
++#endif
++UNWIND(.fnend)
++SYM_FUNC_END(__kretprobe_trampoline)
+diff --git a/include/asm-generic/kprobes.h b/include/asm-generic/kprobes.h
+index 060eab094e5a..1509daa281b8 100644
+--- a/include/asm-generic/kprobes.h
++++ b/include/asm-generic/kprobes.h
+@@ -2,7 +2,11 @@
+ #ifndef _ASM_GENERIC_KPROBES_H
+ #define _ASM_GENERIC_KPROBES_H
+ 
+-#if defined(__KERNEL__) && !defined(__ASSEMBLY__)
++#ifdef __KERNEL__
++
++#ifdef __ASSEMBLY__
++# define __KPROBE .section ".kprobes.text", "ax"
++#else
+ #ifdef CONFIG_KPROBES
+ /*
+  * Blacklist ganerating macro. Specify functions which is not probed
+@@ -16,11 +20,12 @@ static unsigned long __used					\
+ /* Use this to forbid a kprobes attach on very low level functions */
+ # define __kprobes	__section(".kprobes.text")
+ # define nokprobe_inline	__always_inline
+-#else
++#else /* !defined(CONFIG_KPROBES) */
+ # define NOKPROBE_SYMBOL(fname)
+ # define __kprobes
+ # define nokprobe_inline	inline
+-#endif
+-#endif /* defined(__KERNEL__) && !defined(__ASSEMBLY__) */
++#endif /* defined(CONFIG_KPROBES) */
++#endif /* defined(__ASSEMBLY__) */
++#endif /* defined(__KERNEL__) */
+ 
+ #endif /* _ASM_GENERIC_KPROBES_H */
+-- 
+2.37.3.998.g577e59143f-goog
+
