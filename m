@@ -2,827 +2,229 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1715EC5BA
-	for <lists+linux-arch@lfdr.de>; Tue, 27 Sep 2022 16:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635B65ECF1E
+	for <lists+linux-arch@lfdr.de>; Tue, 27 Sep 2022 23:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbiI0ORS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 27 Sep 2022 10:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        id S232735AbiI0VIy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 27 Sep 2022 17:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiI0ORR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Sep 2022 10:17:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA27AE9F2
-        for <linux-arch@vger.kernel.org>; Tue, 27 Sep 2022 07:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1664288234;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JUl86Po1e9YfTZVo8ayh3TaEumAOCT9jGLnDiIK3570=;
-        b=HWZte4E1GYVqw/JeNQ0sHjzFek/EcuuJSXrfcZKkb9jLkJ5cGyXBFtUIuoMZg7puzlzyUX
-        BPdEbyjnr4rFSJupQ1BeWiR8+7rcS613TyWrlB+SHj0EJiAYaYWcdbnTrdhFfmdp/1vmJT
-        y+bxDzFqGOyqzH268AGeiqCjz4vYGpU=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-323-Vu1fW__7P6GbCROXwbMsLg-1; Tue, 27 Sep 2022 10:17:12 -0400
-X-MC-Unique: Vu1fW__7P6GbCROXwbMsLg-1
-Received: by mail-ed1-f71.google.com with SMTP id s17-20020a056402521100b004511c8d59e3so7974123edd.11
-        for <linux-arch@vger.kernel.org>; Tue, 27 Sep 2022 07:17:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JUl86Po1e9YfTZVo8ayh3TaEumAOCT9jGLnDiIK3570=;
-        b=ax1LOnPfZHTvAWYNsXwlICql0Z9x7OvNOJYQxIqgV71usdmFdBE7OehzgBU2u2sibZ
-         bPhhRY5sWm7LrZzLTqp3f6UcsgdEwKkpA9MqnZpQQWHQk+SKZLMC6ibyD2ThdcNYFdVY
-         GIe9PHnsBeXN4/q+szvr8cQQd0iJq0Xy8O4fGbUDxkrNU+hEaHdWBo4xJXJaGaB0pz57
-         aeKp6NctneEH4knn7z6sUDbqpMu/exPjMdMViGPPQaN4TFzKa7mkwem8uAAF1/Pkrggy
-         0ftkAplvzyw7B0RgFDHSy72eyaS537o8zOGG2lK+XoOPgGqaK9K8z47usqeXuwgsuZtJ
-         UhyQ==
-X-Gm-Message-State: ACrzQf30QcKRCmrv5CToZl9VIj6mirQOnTu5/mEAiuV/YT9DCGaYc6Ud
-        WpXw/wfblIMev4MGqk2jWAKXg9e3rNtVYBzINSV7WPzF71Yn5lB+VkL//ZEpr8AL/djEiUSDVPj
-        uP4OpTvjaDhalXjMp/E92Vg==
-X-Received: by 2002:a17:907:e9e:b0:783:1a8c:9198 with SMTP id ho30-20020a1709070e9e00b007831a8c9198mr12896626ejc.202.1664288231166;
-        Tue, 27 Sep 2022 07:17:11 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7tdpvB5IeYC/OBizCLH1zDzPtZByqFT5M2W0RzespwGwcgjJTrqFwveTtDzjMya915EWu1Hw==
-X-Received: by 2002:a17:907:e9e:b0:783:1a8c:9198 with SMTP id ho30-20020a1709070e9e00b007831a8c9198mr12896584ejc.202.1664288230779;
-        Tue, 27 Sep 2022 07:17:10 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id t7-20020a170906a10700b0074136cac2e7sm860833ejy.81.2022.09.27.07.17.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Sep 2022 07:17:09 -0700 (PDT)
-Message-ID: <d2b1e9e7-18d6-c51c-5c8c-77ba1eae580d@redhat.com>
-Date:   Tue, 27 Sep 2022 16:17:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH V4] LoongArch: Add ACPI-based generic laptop driver
+        with ESMTP id S232488AbiI0VIx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 27 Sep 2022 17:08:53 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastus2azon11021025.outbound.protection.outlook.com [52.101.57.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5101C26DD;
+        Tue, 27 Sep 2022 14:08:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AHSH+CVFpSWqtB70BGQpYjS8apw/r9RdiC51GT2W9zN/sJ/aJ5KusSJWtSnf3xmlX8StqUz85aGw3osZ/rY0V9tqqRlbJqpMYK89kB47pFqO97x89iJFHp0hixqyL6CZFvDH7kuJO1p+SieXn9Ll1FmEaChHTP5D1TbnSYpfmHpbT83XWP4ovtbG5kifIz6u3xLStgTyURglXpJtqgPDsmWAMrlmwarbR0pBA5ZdQUsvMWTbDX2V7opbRl8hmrOchju8XA893NWSPVDk1qBC28o35iHqvM0Zh7PsSP09DJH5F2xXhUsR1ccAPfqbOMyNtp9pPmKm0yxJgDvNq/2x7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z6EOQVtueklmSwhWxMvdhmB07wQWZwzUhHz/egqRJWk=;
+ b=jnyBvQnMZjqCDWaSk27w7oU3QULxSB6MVCDpJv31brU7/7N0/NtOWvX+uygAHZOBcqiQHDmcDRCgE3BY5PXfLurYpNtq2JN2yKzGGQy2Ug9+gONcdtP17lySwJTA9SxqYmXcfMZneu2k8V9+AaCkzxIfLQiDp3WtA3xmC+gnw36pIjQQrr+B/RG/SWtAFNVBjq7OBLA+98mHHGSp6HV/ipMeVXNvSLHaK7QXt65vyVmHvvqo9MqVuN+2ClpDPbeTRXNzTOpNJdOsAvdoW968CItyA11xLA6lMjdgJmgrtrhgWbmjnprTCBW9OozDENi3AdmWM78fWnDGICx2MEjvpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z6EOQVtueklmSwhWxMvdhmB07wQWZwzUhHz/egqRJWk=;
+ b=KPrXdlSs4RJSLkI3mwIQuw+lx4HAJQ+Cnuqt5Q+W6O257I87TtiY7awgrZyZdvBW7un8vmHFsQQOaxjf2XRGkcywrLQgq85w32urgjuQCpGUOV8DKlhPw1mZ4BrPjTspDaycurYfJFtKzMVjau3xP+0XRFx2uRqAZg0P19v11JA=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BY5PR21MB1428.namprd21.prod.outlook.com (2603:10b6:a03:21d::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.0; Tue, 27 Sep
+ 2022 21:08:49 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::17f5:70e:721f:df7e]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::17f5:70e:721f:df7e%4]) with mapi id 15.20.5709.000; Tue, 27 Sep 2022
+ 21:08:49 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Li kunyu <kunyu@nfschina.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "arnd@arndb.de" <arnd@arndb.de>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v5] hyperv: simplify and rename generate_guest_id
+Thread-Topic: [PATCH v5] hyperv: simplify and rename generate_guest_id
+Thread-Index: AQHY0kU6yw6DQGKJiECLriNBOOmP7a3zxQzA
+Date:   Tue, 27 Sep 2022 21:08:48 +0000
+Message-ID: <BYAPR21MB1688ABC8562E0AC0830237C9D7559@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20220927074550.3347-1-kunyu@nfschina.com>
+In-Reply-To: <20220927074550.3347-1-kunyu@nfschina.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220919021540.2873061-1-chenhuacai@loongson.cn>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220919021540.2873061-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9d09b948-d7ca-499d-92ab-41aa1cba3f18;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-09-27T21:04:56Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY5PR21MB1428:EE_
+x-ms-office365-filtering-correlation-id: c804d620-a0f0-457f-5e4a-08daa0cc7901
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CcU8R6slQSKldmAOL1UDes/b7Vw7nymRPGJAJyRXD+BBjAQS3U1ffM9GF7yD17Z2e3ImmgA9FamuOzyWp669lxz/9/wNr0mOpEhYSSiQF/NLiLCWz3JXEcmPAUjLHuaYEh3NFsp8C1IR10ziBjwka6AhqXH7XSMPg3ggjO+Cs/uubnRLJLH6lKG/sUtIcxJkMwtuqZufPqZxMJr30WUuRKvv4PivYdrCbh6XK3pti9kKEJ4KsQua/PsNoM+Z9x9sFchPnC3PLpWq+DIbD2W4zFnylK5+efGYa8eyFhsLfsebAYBijr66d76Aa0Tifk5LR6Uqdp7Ymzyhtgmp0Oyzoihm+oTcIQr3L+nFnokaL634HSpCdJ/04c4D1fj9pINU9SLcFUGWn6Sdim16bCIPw90bTts6pFvfTvMRHyspyRGHEVrN9Iv6VAl7V4gcAKCWZD1KwC9UGD+bKj9pqs+0tgRFbEFDI7H0T5s9Nt4WqRr7X2eEK0uCB4OptnaqLVOR1XUxDHtEVF4nFPzkxOW1SxxWeOyAah8jA3jlTYxRHBbNVh69NHvDhND6pGrmMzp+vZ4hPRZuHQmkdVMg61sHgzvx7nSr1ENSt08BTC+VuQxLCdV3YYhhDfxmkFX7D4m3yN/FBZWck0REXta7bPTjgSoTvRPkLJj2aO5451DjsHd9Nuk/0BXRpSIj2YTCcBEMW3iz8hhv3PJlmPtcEmPnz3ES5YEgll1IjEzhsWHCvg4fSTSQUVoZbhLSlm/VrAn+FbrY0bYzHS6J+esjdx2ewU5BRUIFNR/u4ByQQkt4YJiSAO6baTuJ3osyykfBPlctPxJnG/twt2R4fQYo32CJuQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(396003)(39860400002)(136003)(451199015)(83380400001)(9686003)(71200400001)(186003)(38100700002)(82960400001)(82950400001)(2906002)(7416002)(38070700005)(921005)(122000001)(478600001)(6506007)(7696005)(41300700001)(5660300002)(8990500004)(52536014)(55016003)(10290500003)(8936002)(66946007)(66556008)(26005)(66446008)(8676002)(4326008)(76116006)(66476007)(64756008)(54906003)(316002)(33656002)(110136005)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?S6zm/O5lxbxPIDOVzNyqR8tsUrSRlqTuqfOwfVWwRf+QZUsMithUqyvb0VPH?=
+ =?us-ascii?Q?V7zT0KaGYeP723OvxoAR9gz2VRoRCv9Ve9XRpzthIzb40V9EUQo7MLGeowLF?=
+ =?us-ascii?Q?fmieb5OrKDTW38u95dc2GxFdCaJQWqOJ4FiIOS5oxf4sXIYphdaNojAoR2Y8?=
+ =?us-ascii?Q?s55St3Fr0AXo8jRK4tT4OoWzRwCd0hyVEVbEPbfk7Yo6hcxT4hXxQNbTGb7E?=
+ =?us-ascii?Q?2FTitq/3LmccphErPESU+EPvAvzeeQcEJIITtZauVrzSsN1QH7YWg9p8T8JP?=
+ =?us-ascii?Q?AjZnwW/+kf5saW16EpiXaZApNgALifamYty0PhOUXpMFpwddoBs8MVEFCaG/?=
+ =?us-ascii?Q?bx1MP6nTN6QZm/tMGoSdGppzbQlImZnRGNdG17TCvmg++WFhoKbeaPZRGV+J?=
+ =?us-ascii?Q?OY3ygNQ7sxO5nyzhLNtsJ6zoI62P1dtYVor1QaZ+XYzS9YMPAzXs1DRq1uYv?=
+ =?us-ascii?Q?9uQZs7IBtn9Li4ubh3bMQFmsQKN6FO0lg/h+ebjqXqDE8pl9dRrhq+SblGH7?=
+ =?us-ascii?Q?iF3zPxUIxBtB4jPWsdXl+4IpFdGddH4uaG6w602N7fb3IQZT2fQVNEd4VOsY?=
+ =?us-ascii?Q?tHxy6DTDCPeN64NgTOPr82XTYn/EeClWTwb65gH9a2SK+A82pryM+ATd9L1H?=
+ =?us-ascii?Q?wRZNUb1UVHoyWG0DHXt1YsoH4lG+/WUM4/+HMCgLq/RN2MqvdYEZRQXkq7u0?=
+ =?us-ascii?Q?jbIEmUeRt8IsnB0qaT+Dg8FNEwEb41NuUVegTCqGaqglpWlbgA70s29lJbpx?=
+ =?us-ascii?Q?OIgpTw99EW0kJ2G5vFMLT5BsU+dv9GEm+japLkgnVnKu3aqnyO91yVGveVaV?=
+ =?us-ascii?Q?rU3GBNfIsA7eXBVal8CkUXnE0PJ0WMme37/1DZ09nrx/+jfRZG2gWvQdiYgU?=
+ =?us-ascii?Q?R9ZApUEoAX/qHZAYC8oUxgmEahs+R8XkptsTe6SXHOhSzP25t6k6EnuTVmUn?=
+ =?us-ascii?Q?4VagxIFn3gsn5WjrXRyZmtJDX2J7Dp3eXyfP9TziVXI9Xb/UJGt7G1O0fpvu?=
+ =?us-ascii?Q?3Qf4p2Iwzw16oVCuqKXn9LPhIh/REnCeEZizgzJflDjABkgil5qlmrwy0QCd?=
+ =?us-ascii?Q?aMcnkjMDXuynv0W/Z7RZRPCGCv0q+P4eIdLXjnM354R6x00bgwUGIfo9BLl5?=
+ =?us-ascii?Q?ZnvaZWdU2V47BZxsezYyGn2n0tz4F0eiNB3TRCrEIuPL+ElfcJnTY/v/aSWR?=
+ =?us-ascii?Q?eUAE6rMFp9YrAC6AQSLzDOg9eP2X8buOWEmMn9SEMxRLoD54ykezpnPUYyPv?=
+ =?us-ascii?Q?q+5ctyCt9Ajnslx4s3R0S8jCQouyYSQtrlYe4koLbvb11x8nFmv6CB1P7Mbo?=
+ =?us-ascii?Q?DacfuBYHBQ6xkMan8wq1JRDTZyduFti2dfSQ8W/9qvaS9L7cK5NGp4YgqGyh?=
+ =?us-ascii?Q?kNcQyABfeyUZs62YYaB9U7nQ/TGNuZ3jbgFeQ+GJ5qH816KoS9O3fk8VEpoF?=
+ =?us-ascii?Q?QncTCmjhAmHCue7v5WdNrBU8ID47EBBK24TNG16/JVgQtMHYzKmlf2jYGQeo?=
+ =?us-ascii?Q?3VNqFzyrGmuUfBj/N1VYHhvg5z67yz1OnZlI73bq2zCah11Q/CC1QMQj3nO9?=
+ =?us-ascii?Q?5zR1rMu4LtQuecbwNcRHP2qKzu3qqVaFiBa+7kl/P4rgkTfJ1Rx6+O7WDu4M?=
+ =?us-ascii?Q?sQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c804d620-a0f0-457f-5e4a-08daa0cc7901
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2022 21:08:48.9939
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +2y1x2EictKhPvgZI2NPLEPSVdRrEQDJpYtH+QXdudITLNZDZ5W+1pUNjzmGgxOf+HbPlOZ5rCqVVT/GqYGpCokGcdsln+64DQCGjk20odI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1428
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+From: Li kunyu <kunyu@nfschina.com> Sent: Tuesday, September 27, 2022 12:46=
+ AM
+>=20
+> The generate_guest_id function is more suitable for use after the
+> following modifications.
+> 1. Modify the type of the guest_id variable to u64, which is compatible
+> with the caller.
+> 2. Remove all parameters from the function, and write the parameter
+> (LINUX_VERSION_CODE) passed in by the actual call into the function
+> implementation.
 
-On 9/19/22 04:15, Huacai Chen wrote:
-> From: Jianmin Lv <lvjianmin@loongson.cn>
-> 
-> This add ACPI-based generic laptop driver for Loongson-3. Some of the
-> codes are derived from drivers/platform/x86/thinkpad_acpi.c.
-> 
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+The above statement is no longer true.
 
-I am afraid that due to my workload, I will not have time to do
-a full review of this driver anytime soon.
-
-I hope that one of the other folks in the Cc who have done partial
-reviews (like me) can do a full review and give their ack for
-getting this merged.
-
-Regards,
-
-Hans
-
-
+> 3. Rename the function to make it clearly a Hyper-V related function,
+> and modify it to hv_generate_guest_id.
+>=20
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+>=20
+> --------
+>  v2: Fix generate_guest_id to hv_generate_guest_id.
+>  v3: Fix [PATCH v2] asm-generic: Remove the ... to [PATCH v3] hyperv: sim=
+p
+>      lify ... and remove extra spaces
+>  v4: Remove #include <linux/version.h> in the calling file, and add #incl=
+u
+>      de <linux/version.h> in the function implementation file
+>  v5: <linux/version.h> is changed to the definition position before v4, a=
+n
+>      d the LINUX_VERSION_CODE macro is passed in the function call
 > ---
-> V2: Fix problems pointed out by Arnd.
-> V3: Use platform driver instead of acpi driver.
-> V4: 1, Fix problems pointed out by Hans de Goede.
->     2, Fix build errors and warnings reported by kernel test robot.
-> 
->  drivers/platform/Kconfig                     |   2 +
->  drivers/platform/Makefile                    |   1 +
->  drivers/platform/loongarch/Kconfig           |  31 +
->  drivers/platform/loongarch/Makefile          |   1 +
->  drivers/platform/loongarch/loongson-laptop.c | 622 +++++++++++++++++++
->  5 files changed, 657 insertions(+)
->  create mode 100644 drivers/platform/loongarch/Kconfig
->  create mode 100644 drivers/platform/loongarch/Makefile
->  create mode 100644 drivers/platform/loongarch/loongson-laptop.c
-> 
-> diff --git a/drivers/platform/Kconfig b/drivers/platform/Kconfig
-> index b437847b6237..dbd327712205 100644
-> --- a/drivers/platform/Kconfig
-> +++ b/drivers/platform/Kconfig
-> @@ -3,6 +3,8 @@ if MIPS
->  source "drivers/platform/mips/Kconfig"
->  endif
->  
-> +source "drivers/platform/loongarch/Kconfig"
-> +
->  source "drivers/platform/goldfish/Kconfig"
->  
->  source "drivers/platform/chrome/Kconfig"
-> diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
-> index 4de08ef4ec9d..41640172975a 100644
-> --- a/drivers/platform/Makefile
-> +++ b/drivers/platform/Makefile
-> @@ -4,6 +4,7 @@
->  #
->  
->  obj-$(CONFIG_X86)		+= x86/
-> +obj-$(CONFIG_LOONGARCH)		+= loongarch/
->  obj-$(CONFIG_MELLANOX_PLATFORM)	+= mellanox/
->  obj-$(CONFIG_MIPS)		+= mips/
->  obj-$(CONFIG_OLPC_EC)		+= olpc/
-> diff --git a/drivers/platform/loongarch/Kconfig b/drivers/platform/loongarch/Kconfig
-> new file mode 100644
-> index 000000000000..5633e4d73991
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/Kconfig
-> @@ -0,0 +1,31 @@
-> +#
-> +# LoongArch Platform Specific Drivers
-> +#
-> +
-> +menuconfig LOONGARCH_PLATFORM_DEVICES
-> +	bool "LoongArch Platform Specific Device Drivers"
-> +	default y
-> +	depends on LOONGARCH
-> +	help
-> +	  Say Y here to get to see options for device drivers of various
-> +	  LoongArch platforms, including vendor-specific laptop/desktop
-> +	  extension and hardware monitor drivers. This option itself does
-> +	  not add any kernel code.
-> +
-> +	  If you say N, all options in this submenu will be skipped and disabled.
-> +
-> +if LOONGARCH_PLATFORM_DEVICES
-> +
-> +config LOONGSON_LAPTOP
-> +	tristate "Generic Loongson-3 Laptop Driver"
-> +	depends on ACPI
-> +	depends on BACKLIGHT_CLASS_DEVICE
-> +	depends on INPUT
-> +	depends on MACH_LOONGSON64
-> +	select ACPI_VIDEO
-> +	select INPUT_SPARSEKMAP
-> +	default y
-> +	help
-> +	  ACPI-based Loongson-3 family laptops generic driver.
-> +
-> +endif # LOONGARCH_PLATFORM_DEVICES
-> diff --git a/drivers/platform/loongarch/Makefile b/drivers/platform/loongarch/Makefile
-> new file mode 100644
-> index 000000000000..f43ab03db1a2
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_LOONGSON_LAPTOP) += loongson-laptop.o
-> diff --git a/drivers/platform/loongarch/loongson-laptop.c b/drivers/platform/loongarch/loongson-laptop.c
-> new file mode 100644
-> index 000000000000..5a994f179de9
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/loongson-laptop.c
-> @@ -0,0 +1,622 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *  Generic Loongson processor based LAPTOP/ALL-IN-ONE driver
-> + *
-> + *  Jianmin Lv <lvjianmin@loongson.cn>
-> + *  Huacai Chen <chenhuacai@loongson.cn>
-> + *
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/acpi.h>
-> +#include <linux/backlight.h>
-> +#include <linux/device.h>
-> +#include <linux/input.h>
-> +#include <linux/input/sparse-keymap.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +#include <acpi/video.h>
-> +
-> +/* 1. Driver-wide structs and misc. variables */
-> +
-> +/* ACPI HIDs */
-> +#define LOONGSON_ACPI_EC_HID	"PNP0C09"
-> +#define LOONGSON_ACPI_HKEY_HID	"LOON0000"
-> +
-> +#define ACPI_LAPTOP_NAME "loongson-laptop"
-> +#define ACPI_LAPTOP_ACPI_EVENT_PREFIX "loongson"
-> +
-> +#define MAX_ACPI_ARGS			3
-> +#define GENERIC_HOTKEY_MAP_MAX		64
-> +
-> +#define GENERIC_EVENT_TYPE_OFF		12
-> +#define GENERIC_EVENT_TYPE_MASK		0xF000
-> +#define GENERIC_EVENT_CODE_MASK		0x0FFF
-> +
-> +struct generic_sub_driver {
-> +	u32 type;
-> +	char *name;
-> +	acpi_handle *handle;
-> +	struct acpi_device *device;
-> +	struct platform_driver *driver;
-> +	int (*init)(struct generic_sub_driver *sub_driver);
-> +	void (*notify)(struct generic_sub_driver *sub_driver, u32 event);
-> +	u8 acpi_notify_installed;
-> +};
-> +
-> +static u32 input_device_registered;
-> +static struct input_dev *generic_inputdev;
-> +
-> +static acpi_handle hotkey_handle;
-> +static struct key_entry hotkey_keycode_map[GENERIC_HOTKEY_MAP_MAX];
-> +
-> +static int loongson_laptop_backlight_update(struct backlight_device *bd);
-> +
-> +/* 2. ACPI Helpers and device model */
-> +
-> +static int acpi_evalf(acpi_handle handle, int *res, char *method, char *fmt, ...)
-> +{
-> +	char res_type;
-> +	char *fmt0 = fmt;
-> +	va_list ap;
-> +	int success, quiet;
-> +	acpi_status status;
-> +	struct acpi_object_list params;
-> +	struct acpi_buffer result, *resultp;
-> +	union acpi_object in_objs[MAX_ACPI_ARGS], out_obj;
-> +
-> +	if (!*fmt) {
-> +		pr_err("acpi_evalf() called with empty format\n");
-> +		return 0;
-> +	}
-> +
-> +	if (*fmt == 'q') {
-> +		quiet = 1;
-> +		fmt++;
-> +	} else
-> +		quiet = 0;
-> +
-> +	res_type = *(fmt++);
-> +
-> +	params.count = 0;
-> +	params.pointer = &in_objs[0];
-> +
-> +	va_start(ap, fmt);
-> +	while (*fmt) {
-> +		char c = *(fmt++);
-> +		switch (c) {
-> +		case 'd':	/* int */
-> +			in_objs[params.count].integer.value = va_arg(ap, int);
-> +			in_objs[params.count++].type = ACPI_TYPE_INTEGER;
-> +			break;
-> +			/* add more types as needed */
-> +		default:
-> +			pr_err("acpi_evalf() called with invalid format character '%c'\n", c);
-> +			va_end(ap);
-> +			return 0;
-> +		}
-> +	}
-> +	va_end(ap);
-> +
-> +	if (res_type != 'v') {
-> +		result.length = sizeof(out_obj);
-> +		result.pointer = &out_obj;
-> +		resultp = &result;
-> +	} else
-> +		resultp = NULL;
-> +
-> +	status = acpi_evaluate_object(handle, method, &params, resultp);
-> +
-> +	switch (res_type) {
-> +	case 'd':		/* int */
-> +		success = (status == AE_OK && out_obj.type == ACPI_TYPE_INTEGER);
-> +		if (success && res)
-> +			*res = out_obj.integer.value;
-> +		break;
-> +	case 'v':		/* void */
-> +		success = status == AE_OK;
-> +		break;
-> +		/* add more types as needed */
-> +	default:
-> +		pr_err("acpi_evalf() called with invalid format character '%c'\n", res_type);
-> +		return 0;
-> +	}
-> +
-> +	if (!success && !quiet)
-> +		pr_err("acpi_evalf(%s, %s, ...) failed: %s\n",
-> +		       method, fmt0, acpi_format_exception(status));
-> +
-> +	return success;
-> +}
-> +
-> +static int hotkey_status_get(int *status)
-> +{
-> +	if (!acpi_evalf(hotkey_handle, status, "GSWS", "d"))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +static void dispatch_acpi_notify(acpi_handle handle, u32 event, void *data)
-> +{
-> +	struct generic_sub_driver *sub_driver = data;
-> +
-> +	if (!sub_driver || !sub_driver->notify)
-> +		return;
-> +	sub_driver->notify(sub_driver, event);
-> +}
-> +
-> +static int __init setup_acpi_notify(struct generic_sub_driver *sub_driver)
-> +{
-> +	acpi_status status;
-> +
-> +	if (!*sub_driver->handle)
-> +		return 0;
-> +
-> +	sub_driver->device = acpi_fetch_acpi_dev(*sub_driver->handle);
-> +	if (!sub_driver->device) {
-> +		pr_err("acpi_fetch_acpi_dev(%s) failed\n", sub_driver->name);
-> +		return -ENODEV;
-> +	}
-> +
-> +	sub_driver->device->driver_data = sub_driver;
-> +	sprintf(acpi_device_class(sub_driver->device), "%s/%s",
-> +		ACPI_LAPTOP_ACPI_EVENT_PREFIX, sub_driver->name);
-> +
-> +	status = acpi_install_notify_handler(*sub_driver->handle,
-> +			sub_driver->type, dispatch_acpi_notify, sub_driver);
-> +	if (ACPI_FAILURE(status)) {
-> +		if (status == AE_ALREADY_EXISTS) {
-> +			pr_notice("Another device driver is already "
-> +				  "handling %s events\n", sub_driver->name);
-> +		} else {
-> +			pr_err("acpi_install_notify_handler(%s) failed: %s\n",
-> +			       sub_driver->name, acpi_format_exception(status));
-> +		}
-> +		return -ENODEV;
-> +	}
-> +	sub_driver->acpi_notify_installed = 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson_hotkey_suspend(struct device *dev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int loongson_hotkey_resume(struct device *dev)
-> +{
-> +	int status = 0;
-> +	struct key_entry ke;
-> +	struct backlight_device *bd;
-> +
-> +	/*
-> +	 * Only if the firmware supports SW_LID event model, we can handle the
-> +	 * event. This is for the consideration of development board without EC.
-> +	 */
-> +	if (test_bit(SW_LID, generic_inputdev->swbit)) {
-> +		if (hotkey_status_get(&status) < 0)
-> +			return -EIO;
-> +		/*
-> +		 * The input device sw element records the last lid status.
-> +		 * When the system is awakened by other wake-up sources,
-> +		 * the lid event will also be reported. The judgment of
-> +		 * adding SW_LID bit which in sw element can avoid this
-> +		 * case.
-> +		 *
-> +		 * Input system will drop lid event when current lid event
-> +		 * value and last lid status in the same. So laptop driver
-> +		 * doesn't report repeated events.
-> +		 *
-> +		 * Lid status is generally 0, but hardware exception is
-> +		 * considered. So add lid status confirmation.
-> +		 */
-> +		if (test_bit(SW_LID, generic_inputdev->sw) && !(status & (1 << SW_LID))) {
-> +			ke.type = KE_SW;
-> +			ke.sw.value = (u8)status;
-> +			ke.sw.code = SW_LID;
-> +			sparse_keymap_report_entry(generic_inputdev, &ke, 1, true);
-> +		}
-> +	}
-> +
-> +	bd = backlight_device_get_by_type(BACKLIGHT_PLATFORM);
-> +	if (bd) {
-> +		loongson_laptop_backlight_update(bd) ?
-> +		pr_warn("Loongson_backlight: resume brightness failed") :
-> +		pr_info("Loongson_backlight: resume brightness %d\n", bd->props.brightness);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_SIMPLE_DEV_PM_OPS(loongson_hotkey_pm,
-> +		loongson_hotkey_suspend, loongson_hotkey_resume);
-> +
-> +static int loongson_hotkey_probe(struct platform_device *pdev)
-> +{
-> +	hotkey_handle = ACPI_HANDLE(&pdev->dev);
-> +
-> +	if (!hotkey_handle)
-> +		return -ENODEV;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct acpi_device_id loongson_device_ids[] = {
-> +	{LOONGSON_ACPI_HKEY_HID, 0},
-> +	{"", 0},
-> +};
-> +MODULE_DEVICE_TABLE(acpi, loongson_device_ids);
-> +
-> +static struct platform_driver loongson_hotkey_driver = {
-> +	.probe		= loongson_hotkey_probe,
-> +	.driver		= {
-> +		.name	= "loongson-hotkey",
-> +		.owner	= THIS_MODULE,
-> +		.pm	= pm_ptr(&loongson_hotkey_pm),
-> +		.acpi_match_table = loongson_device_ids,
-> +	},
-> +};
-> +
-> +static int hotkey_map(void)
-> +{
-> +	u32 index;
-> +	acpi_status status;
-> +	struct acpi_buffer buf;
-> +	union acpi_object *pack;
-> +
-> +	buf.length = ACPI_ALLOCATE_BUFFER;
-> +	status = acpi_evaluate_object_typed(hotkey_handle, "KMAP", NULL, &buf, ACPI_TYPE_PACKAGE);
-> +	if (status != AE_OK) {
-> +		pr_err("ACPI exception: %s\n", acpi_format_exception(status));
-> +		return -1;
-> +	}
-> +	pack = buf.pointer;
-> +	for (index = 0; index < pack->package.count; index++) {
-> +		union acpi_object *element, *sub_pack;
-> +
-> +		sub_pack = &pack->package.elements[index];
-> +
-> +		element = &sub_pack->package.elements[0];
-> +		hotkey_keycode_map[index].type = element->integer.value;
-> +		element = &sub_pack->package.elements[1];
-> +		hotkey_keycode_map[index].code = element->integer.value;
-> +		element = &sub_pack->package.elements[2];
-> +		hotkey_keycode_map[index].keycode = element->integer.value;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int hotkey_backlight_set(bool enable)
-> +{
-> +	if (!acpi_evalf(hotkey_handle, NULL, "VCBL", "vd", enable ? 1 : 0))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ec_get_brightness(void)
-> +{
-> +	int status = 0;
-> +
-> +	if (!hotkey_handle)
-> +		return -ENXIO;
-> +
-> +	if (!acpi_evalf(hotkey_handle, &status, "ECBG", "d"))
-> +		return -EIO;
-> +
-> +	if (status < 0)
-> +		return status;
-> +
-> +	return status;
-> +}
-> +
-> +static int ec_set_brightness(int level)
-> +{
-> +
-> +	int ret = 0;
-> +
-> +	if (!hotkey_handle)
-> +		return -ENXIO;
-> +
-> +	if (!acpi_evalf(hotkey_handle, NULL, "ECBS", "vd", level))
-> +		ret = -EIO;
-> +
-> +	return ret;
-> +}
-> +
-> +static int ec_backlight_level(u8 level)
-> +{
-> +	int status = 0;
-> +
-> +	if (!hotkey_handle)
-> +		return -ENXIO;
-> +
-> +	if (!acpi_evalf(hotkey_handle, &status, "ECLL", "d"))
-> +		return -EIO;
-> +
-> +	if ((status < 0) || (level > status))
-> +		return status;
-> +
-> +	if (!acpi_evalf(hotkey_handle, &status, "ECSL", "d"))
-> +		return -EIO;
-> +
-> +	if ((status < 0) || (level < status))
-> +		return status;
-> +
-> +	return level;
-> +}
-> +
-> +static int loongson_laptop_backlight_update(struct backlight_device *bd)
-> +{
-> +	int lvl = ec_backlight_level(bd->props.brightness);
-> +
-> +	if (lvl < 0)
-> +		return -EIO;
-> +	if (ec_set_brightness(lvl))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson_laptop_get_brightness(struct backlight_device *bd)
-> +{
-> +	u8 level;
-> +
-> +	level = ec_get_brightness();
-> +	if (level < 0)
-> +		return -EIO;
-> +
-> +	return level;
-> +}
-> +
-> +static const struct backlight_ops backlight_laptop_ops = {
-> +	.update_status = loongson_laptop_backlight_update,
-> +	.get_brightness = loongson_laptop_get_brightness,
-> +};
-> +
-> +static int laptop_backlight_register(void)
-> +{
-> +	int status = 0;
-> +	struct backlight_properties props;
-> +
-> +	memset(&props, 0, sizeof(props));
-> +
-> +	if (!acpi_evalf(hotkey_handle, &status, "ECLL", "d"))
-> +		return -EIO;
-> +
-> +	props.brightness = 1;
-> +	props.max_brightness = status;
-> +	props.type = BACKLIGHT_PLATFORM;
-> +
-> +	backlight_device_register("loongson_laptop",
-> +				NULL, NULL, &backlight_laptop_ops, &props);
-> +
-> +	return 0;
-> +}
-> +
-> +int loongson_laptop_turn_on_backlight(void)
-> +{
-> +	int status;
-> +	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
-> +	struct acpi_object_list args = { 1, &arg0 };
-> +
-> +	arg0.integer.value = 1;
-> +	status = acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
-> +	if (ACPI_FAILURE(status)) {
-> +		pr_info("Loongson lvds error: 0x%x\n", status);
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int loongson_laptop_turn_off_backlight(void)
-> +{
-> +	int status;
-> +	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
-> +	struct acpi_object_list args = { 1, &arg0 };
-> +
-> +	arg0.integer.value = 0;
-> +	status = acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
-> +	if (ACPI_FAILURE(status)) {
-> +		pr_info("Loongson lvds error: 0x%x\n", status);
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init event_init(struct generic_sub_driver *sub_driver)
-> +{
-> +	int ret;
-> +
-> +	ret = hotkey_map();
-> +	if (ret < 0) {
-> +		pr_err("Failed to parse keymap from DSDT\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = sparse_keymap_setup(generic_inputdev, hotkey_keycode_map, NULL);
-> +	if (ret < 0) {
-> +		pr_err("Failed to setup input device keymap\n");
-> +		input_free_device(generic_inputdev);
-> +
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * This hotkey driver handle backlight event when
-> +	 * acpi_video_get_backlight_type() gets acpi_backlight_vendor
-> +	 */
-> +	if (acpi_video_get_backlight_type() == acpi_backlight_vendor)
-> +		hotkey_backlight_set(true);
-> +	else
-> +		hotkey_backlight_set(false);
-> +
-> +	pr_info("ACPI: enabling firmware HKEY event interface...\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static void event_notify(struct generic_sub_driver *sub_driver, u32 event)
-> +{
-> +	int type, scan_code;
-> +	struct key_entry *ke = NULL;
-> +
-> +	scan_code = event & GENERIC_EVENT_CODE_MASK;
-> +	type = (event & GENERIC_EVENT_TYPE_MASK) >> GENERIC_EVENT_TYPE_OFF;
-> +	ke = sparse_keymap_entry_from_scancode(generic_inputdev, scan_code);
-> +	if (ke) {
-> +		if (type == KE_SW) {
-> +			int status = 0;
-> +
-> +			if (hotkey_status_get(&status) < 0)
-> +				return;
-> +
-> +			ke->sw.value = !!(status & (1 << ke->sw.code));
-> +		}
-> +		sparse_keymap_report_entry(generic_inputdev, ke, 1, true);
-> +	}
-> +}
-> +
-> +/* 3. Infrastructure */
-> +
-> +static void generic_subdriver_exit(struct generic_sub_driver *sub_driver);
-> +
-> +static int __init generic_subdriver_init(struct generic_sub_driver *sub_driver)
-> +{
-> +	int ret;
-> +
-> +	BUG_ON(!sub_driver);
-> +
-> +	if (!sub_driver || !sub_driver->driver)
-> +		return -EINVAL;
-> +
-> +	ret = platform_driver_register(sub_driver->driver);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	if (sub_driver->init)
-> +		sub_driver->init(sub_driver);
-> +
-> +	if (sub_driver->notify) {
-> +		ret = setup_acpi_notify(sub_driver);
-> +		if (ret == -ENODEV) {
-> +			ret = 0;
-> +			goto err_out;
-> +		}
-> +		if (ret < 0)
-> +			goto err_out;
-> +	}
-> +
-> +	return 0;
-> +
-> +err_out:
-> +	generic_subdriver_exit(sub_driver);
-> +	return (ret < 0) ? ret : 0;
-> +}
-> +
-> +static void generic_subdriver_exit(struct generic_sub_driver *sub_driver)
-> +{
-> +
-> +	if (sub_driver->acpi_notify_installed) {
-> +		acpi_remove_notify_handler(*sub_driver->handle,
-> +					   sub_driver->type, dispatch_acpi_notify);
-> +		sub_driver->acpi_notify_installed = 0;
-> +	}
-> +}
-> +
-> +static struct generic_sub_driver generic_sub_drivers[] __refdata = {
-> +	{
-> +		.name = "hotkey",
-> +		.init = event_init,
-> +		.notify = event_notify,
-> +		.handle = &hotkey_handle,
-> +		.type = ACPI_DEVICE_NOTIFY,
-> +		.driver = &loongson_hotkey_driver,
-> +	},
-> +};
-> +
-> +static int __init generic_acpi_laptop_init(void)
-> +{
-> +	bool ec_found;
-> +	int i, ret, status;
-> +
-> +	if (acpi_disabled)
-> +		return -ENODEV;
-> +
-> +	/* The EC device is required */
-> +	ec_found = acpi_dev_found(LOONGSON_ACPI_EC_HID);
-> +	if (!ec_found)
-> +		return -ENODEV;
-> +
-> +	/* Enable SCI for EC */
-> +	acpi_write_bit_register(ACPI_BITREG_SCI_ENABLE, 1);
-> +
-> +	generic_inputdev = input_allocate_device();
-> +	if (!generic_inputdev) {
-> +		pr_err("Unable to allocate input device\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	/* Prepare input device, but don't register */
-> +	generic_inputdev->name =
-> +		"Loongson Generic Laptop/All-in-One Extra Buttons";
-> +	generic_inputdev->phys = ACPI_LAPTOP_NAME "/input0";
-> +	generic_inputdev->id.bustype = BUS_HOST;
-> +	generic_inputdev->dev.parent = NULL;
-> +
-> +	/* Init subdrivers */
-> +	for (i = 0; i < ARRAY_SIZE(generic_sub_drivers); i++) {
-> +		ret = generic_subdriver_init(&generic_sub_drivers[i]);
-> +		if (ret < 0) {
-> +			input_free_device(generic_inputdev);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	ret = input_register_device(generic_inputdev);
-> +	if (ret < 0) {
-> +		input_free_device(generic_inputdev);
-> +		pr_err("Unable to register input device\n");
-> +		return ret;
-> +	}
-> +
-> +	input_device_registered = 1;
-> +
-> +	if (acpi_evalf(hotkey_handle, &status, "ECBG", "d")) {
-> +		pr_info("Loongson Laptop used, init brightness is 0x%x\n", status);
-> +		ret = laptop_backlight_register();
-> +		if (ret < 0)
-> +			pr_err("Loongson Laptop: laptop-backlight device register failed\n");
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit generic_acpi_laptop_exit(void)
-> +{
-> +	if (generic_inputdev) {
-> +		if (input_device_registered)
-> +			input_unregister_device(generic_inputdev);
-> +		else
-> +			input_free_device(generic_inputdev);
-> +	}
-> +}
-> +
-> +module_init(generic_acpi_laptop_init);
-> +module_exit(generic_acpi_laptop_exit);
-> +
-> +MODULE_AUTHOR("Jianmin Lv <lvjianmin@loongson.cn>");
-> +MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-> +MODULE_DESCRIPTION("Loongson Laptop/All-in-One ACPI Driver");
-> +MODULE_LICENSE("GPL");
+>  arch/arm64/hyperv/mshyperv.c   | 2 +-
+>  arch/x86/hyperv/hv_init.c      | 2 +-
+>  include/asm-generic/mshyperv.h | 9 +++------
+>  3 files changed, 5 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
+> index bbbe351e9045..a406454578f0 100644
+> --- a/arch/arm64/hyperv/mshyperv.c
+> +++ b/arch/arm64/hyperv/mshyperv.c
+> @@ -38,7 +38,7 @@ static int __init hyperv_init(void)
+>  		return 0;
+>=20
+>  	/* Setup the guest ID */
+> -	guest_id =3D generate_guest_id(0, LINUX_VERSION_CODE, 0);
+> +	guest_id =3D hv_generate_guest_id(LINUX_VERSION_CODE);
+>  	hv_set_vpreg(HV_REGISTER_GUEST_OSID, guest_id);
+>=20
+>  	/* Get the features and hints from Hyper-V */
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 3de6d8b53367..032d85ac33fa 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -426,7 +426,7 @@ void __init hyperv_init(void)
+>  	 * 1. Register the guest ID
+>  	 * 2. Enable the hypercall and register the hypercall page
+>  	 */
+> -	guest_id =3D generate_guest_id(0, LINUX_VERSION_CODE, 0);
+> +	guest_id =3D hv_generate_guest_id(LINUX_VERSION_CODE);
+>  	wrmsrl(HV_X64_MSR_GUEST_OS_ID, guest_id);
+>=20
+>  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
+v.h
+> index c05d2ce9b6cd..bfb9eb9d7215 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -105,15 +105,12 @@ static inline u64 hv_do_rep_hypercall(u16 code, u16
+> rep_count, u16 varhead_size,
+>  }
+>=20
+>  /* Generate the guest OS identifier as described in the Hyper-V TLFS */
+> -static inline  __u64 generate_guest_id(__u64 d_info1, __u64 kernel_versi=
+on,
+> -				       __u64 d_info2)
+> +static inline u64 hv_generate_guest_id(u64 kernel_version)
+>  {
+> -	__u64 guest_id =3D 0;
+> +	u64 guest_id;
+>=20
+> -	guest_id =3D (((__u64)HV_LINUX_VENDOR_ID) << 48);
+> -	guest_id |=3D (d_info1 << 48);
+> +	guest_id =3D (((u64)HV_LINUX_VENDOR_ID) << 48);
+>  	guest_id |=3D (kernel_version << 16);
+> -	guest_id |=3D d_info2;
+>=20
+>  	return guest_id;
+>  }
+> --
+> 2.18.2
+
+I'm good with the code.  Thanks for taking into the account the input
+from Olaf Hering.  But per my comment above, the commit message
+needs to be updated to reflect this last change.
+
+Michael
 
