@@ -2,81 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05E7B5EE200
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Sep 2022 18:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B4175EE4D1
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Sep 2022 21:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbiI1QkD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Sep 2022 12:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S232557AbiI1TKd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Sep 2022 15:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbiI1QkC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Sep 2022 12:40:02 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575215B7AE
-        for <linux-arch@vger.kernel.org>; Wed, 28 Sep 2022 09:39:59 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d10so11885950pfh.6
-        for <linux-arch@vger.kernel.org>; Wed, 28 Sep 2022 09:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=o0ZtcGWZNzFvp0wcIHSx/qDwHK3W4cVWO2PGHB1LS1c=;
-        b=XZti6DE6WlXyQVPePUhXRgoWOS/rerz9MsFfOVbPOLEEBzIyws5QOPAWcdDUeGhDGE
-         u31jUF/c5MBBrGHl4oKgKG4wvvd2rEIOiVIe1k+98ZReRU44SqZqoYlQ2Id6uB089lbj
-         HvdnwKrn9UOt8dkrWlxYRLS+g3gwAqz7cK5GR9OtJf60AwnHBf6zTocLO19jgu3J7vo9
-         AXRif6rmCyWprHQo6n4mThPtrzEvHBkzEeWV7TF8ci3U2f0dFjjDryn2eHu2+ycXe5D/
-         ZfGrsUi9XDUx5x5Lnr02fExY0tVj2w8RJN4ML0c25k2FLxwLyEug4LsvCjLikEmSV+/8
-         pjmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=o0ZtcGWZNzFvp0wcIHSx/qDwHK3W4cVWO2PGHB1LS1c=;
-        b=osq7EM1IKcgzCmBfZlIXXfsf2+W+Lkkq8EZriKqnQsKT/n1ePYcP6RL5uaBeIT6Xn9
-         GcfLWPHE5CuAFqj4iFGUC5jFTUyPycZRrW7zK3+QeSRTFIkLIbnaHh03+Dzz1zUfUjsk
-         gmnssXJxuuLGifFxRbD1+OJyUcYX4m2altS4uXkuwlz3LPZrFZAv360VPgb0eljJAKrT
-         ks82ySRq+zwDFjsWVtXC/4CTYtOPIvBHRl69cWJsDm5fA3yqpzAxJNgm8wrVFZLZ2s+v
-         UUYqFEyqrirIj8JxaQwcOfJmShE8uSI96LFRvwWSmQhubhOP16JiTdoxUSw4oKuoqBF+
-         aPeA==
-X-Gm-Message-State: ACrzQf0OwqDoXkoP33wEK3NWgH98nhoKqBHXngez4f0h/QD8Fdg4YSAJ
-        ZA6R1xq0fcW9awexAma/gCVrOQ1tw0LP4A2YNUq2Xg==
-X-Google-Smtp-Source: AMsMyM6AUXk3l6t7gbTaADsa4xDkK4u+S0bN6AiVVAyB3own/m+Jg36aXqTk6IV6sma1lp9qsIaxjytl2gLCvI9BDNQ=
-X-Received: by 2002:a62:1ad5:0:b0:540:4830:7df6 with SMTP id
- a204-20020a621ad5000000b0054048307df6mr34720102pfa.37.1664383198614; Wed, 28
- Sep 2022 09:39:58 -0700 (PDT)
+        with ESMTP id S232170AbiI1TKc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Sep 2022 15:10:32 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66976A4A9;
+        Wed, 28 Sep 2022 12:10:25 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.49.177]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1Mow06-1p18ZR3rKg-00qSZY; Wed, 28 Sep 2022 21:09:56 +0200
+Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by leknes.fjasle.eu (Postfix) with ESMTPS id 303523C004;
+        Wed, 28 Sep 2022 21:09:54 +0200 (CEST)
+Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
+Received: by localhost.fjasle.eu (Postfix, from userid 1000)
+        id 7FCC2B4D; Wed, 28 Sep 2022 21:09:53 +0200 (CEST)
+Date:   Wed, 28 Sep 2022 21:09:53 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH v3 1/7] kbuild: hard-code KBUILD_ALLDIRS in
+ scripts/Makefile.package
+Message-ID: <YzScAYUStPbp9o0i@bergen.fjasle.eu>
+References: <20220924181915.3251186-1-masahiroy@kernel.org>
+ <20220924181915.3251186-2-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <CAKwvOdnQ4tb7auWqUoF_Mm-F9hiJotaQnP75ZDd6oPJ_1Z4qXg@mail.gmail.com>
- <20220927222851.37550-1-ndesaulniers@google.com> <YzN6rH6wOiC8a8sN@shell.armlinux.org.uk>
-In-Reply-To: <YzN6rH6wOiC8a8sN@shell.armlinux.org.uk>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 28 Sep 2022 09:39:46 -0700
-Message-ID: <CAKwvOdkg5FccDAKMnBfX9uEw5YoEDpBvSYoBO4Y1dJT+hkGVVA@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: kprobes: move __kretprobe_trampoline to out of
- line assembler
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Logan Chien <loganchien@google.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        sparkhuang <huangshaobo6@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="yisc45JTu+esueRF"
+Content-Disposition: inline
+In-Reply-To: <20220924181915.3251186-2-masahiroy@kernel.org>
+Jabber-ID: nicolas@jabber.no
+X-Operating-System: Debian GNU/Linux bookworm/sid
+X-Provags-ID: V03:K1:KLB40yBRNF3j4INUsUj1VHniQuyqvKGqpeRCIP/Jt6wnFKpl7Fj
+ 2kka9RLgLaW3Aq0aan4q/Df+dqzcczGxzTLXa9dvjDhcNEdj132kD9vkq20USnCIeRZwqEA
+ SZi3S03gz803ihnUUASf56Vdzf5uH+SYVdIt1GDWtBvcJ/DOlMSb+iW5kzTi+MDw6//ZqHI
+ F27fQ6w606K7PnQPAyt8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xWfgeOQ8fzU=:kekw7fS0mmwRT0uLAvOpvL
+ fiHDPT/P2tQAvs4bKPQOG7FjzTX2SEpW95McmIWCKS6OGolTVD2ZdJlU3G+I2bAjeDBO5FoNp
+ 0n2G52F24ajgjvQUDxKnxe1x8Xib+vu2ozk3Y2ihB4GJ/91tHW7mMOuwct0Ce0vkPJqLN5Uso
+ umkKigxQyqw9cWAhkR+PcOFvk7CYWWy0+tFZ7GF96gfqtXtAJAxQpVIuJDEu5zGiqJee4Ogew
+ 8mNbwcCX47RR3AeQS3ZaisoMxJayEZWyG/680XRcO+CWfJf/ZbDqepImml/VZfdvzt6tbdI17
+ Jyo0E3dawOdck8kJ2Zq+cxVhDEWOQ7FWNlQ6TuPTU0sQMCkQXET+EgcSlk3SiiCZpjlsJavCB
+ IrakeZPvoDy4C2O5Tn1kiR087oZ+DKA/2Yet5FTtfvVr31hMKYV3p103LaDqzkFYAUUjoWv1B
+ 8SiacZycDpSdI0DzPtbxUN+bGPIiP5IMdHKfdnn0o6hg1S/oPRTO0VgRQHVgZa2UxXwFnL1SG
+ Wdz3gBXDHlghyy5UvRcZgDSBDEl+u+59D+LsQNUGZmA/orOpR6zG8stJju48GHAkIPKPThASp
+ xRIb/eOoiIOOEMq/c/FIeLV1SF8n0MydbBuEPmfnPFkfrAbFvNmBJ9Mgwq3WakguG8+kpiSMR
+ t0xhnGnDxScPFtCLH2AzFH4ezoIyv+1pAk83Do+wjB4EfO2qBvtCoKXEPMIA3WX13RSe4t7BP
+ uAfD0BOP74DRCWw8346xlwPrbEmtTPYYxm7dpz2IQ5sqMqqzq1oAlhDCKngu05mkX95QVG38k
+ jW7Wkc8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,46 +71,92 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 27, 2022 at 3:35 PM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Tue, Sep 27, 2022 at 03:28:51PM -0700, Nick Desaulniers wrote:
-> > commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
-> > EABI stack unwinder")
-> > tickled a bug in clang's integrated assembler where the .save and .pad
-> > directives must have corresponding .fnstart directives. The integrated
-> > assembler is unaware that the compiler will be generating the .fnstart
-> > directive.
->
-> Has it been confirmed that gcc does generate a .fnstart for naked
-> functions?
 
-From what I can tell, the presence of __attribute__((naked)) makes no
-difference with regards to the emission of the .fnstart directive for
-GCC.
+--yisc45JTu+esueRF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One thing I did notice though: https://godbolt.org/z/Mv5GEobc8
-GCC will emit .fnstart directives when -fasynchronous-unwind-tables is
-specified for C (omitting the directive otherwise), or regardless of
--fasynchronous-unwind-tables/-fno-asynchronous-unwind-tables for C++.
-Clang will unconditionally emit .fnstart directives regardless of language mode.
+On Sun, 25 Sep 2022 03:19:09 +0900 Masahiro Yamada wrote:
+> My plan is to list subdirectories in ./Kbuild. Once it occurs,
+> $(vmlinux-alldirs) will not contain all subdirectories.
+>=20
+> Let's hard-code the directory list until I get around to implementing
+> a more sophisticated way for generating a source tarball.
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-I don't see -fasynchronous-unwind-tables being specified under
-arch/arm/. But there are many instances of
-UNWIND(.fnstart)
-in various .S files under arch/arm/.
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-https://sourceware.org/binutils/docs/as/ARM-Unwinding-Tutorial.html
-https://sourceware.org/binutils/docs/as/ARM-Directives.html#arm_005ffnstart
+> Changes in v3:
+>   - New patch
+>=20
+>  Makefile                 | 2 --
+>  scripts/Makefile.package | 5 ++++-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/Makefile b/Makefile
+> index 57cf4a5bea6d..eb4bbbc898d0 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1129,8 +1129,6 @@ KBUILD_VMLINUX_OBJS +=3D $(patsubst %/,%/built-in.a=
+, $(drivers-y))
+> =20
+>  export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
+>  export KBUILD_LDS          :=3D arch/$(SRCARCH)/kernel/vmlinux.lds
+> -# used by scripts/Makefile.package
+> -export KBUILD_ALLDIRS :=3D $(sort $(filter-out arch/%,$(vmlinux-alldirs)=
+) LICENSES arch include scripts tools)
+> =20
+>  vmlinux-deps :=3D $(KBUILD_LDS) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_=
+LIBS)
+> =20
+> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+> index 5017f6b2da80..8bbcced67c22 100644
+> --- a/scripts/Makefile.package
+> +++ b/scripts/Makefile.package
+> @@ -29,7 +29,10 @@ KDEB_SOURCENAME ?=3D linux-upstream
+>  KBUILD_PKG_ROOTCMD ?=3D"fakeroot -u"
+>  export KDEB_SOURCENAME
+>  # Include only those top-level files that are needed by make, plus the G=
+PL copy
+> -TAR_CONTENT :=3D $(KBUILD_ALLDIRS) .config .scmversion Makefile \
+> +TAR_CONTENT :=3D Documentation LICENSES arch block certs crypto drivers =
+fs \
+> +               include init io_uring ipc kernel lib mm net samples scrip=
+ts \
+> +               security sound tools usr virt \
+> +               .config .scmversion Makefile \
+>                 Kbuild Kconfig COPYING $(wildcard localversion*)
+>  MKSPEC     :=3D $(srctree)/scripts/package/mkspec
+> =20
+> --=20
+> 2.34.1
 
+--=20
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
 
->
-> --
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+--yisc45JTu+esueRF
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmM0m/gACgkQB1IKcBYm
+Emmz6A/9GudZhGDEuiScPxyeaDy8UnaNrQ46o6QWmCK7meL9JifsDg33A+C/w2E5
+4wTarbibMH1Z2NUx5R8KYUiNFdKHvQmj5tGb5bvUBeEfbBXKFPnINEPRLy5pZd4M
+MI0AI/bEmfJBRh9p32D1PpmIQaytKbb+0z8VoVV5rluWWXl8d/QFxxn8sTO3s+21
+MYCXrSRP8Jj4qbdZ27uCkCvLHBaKoBLZpzMx7vJSpgmDjIy0rOsbCtNLmilI1bOt
+uMOh8ND3sSRQ96Olg7VPsanP3axjpP9DN1FmY8DRAjA2//115mN884P2+hIlEu6j
+LiXZXhcyIqyR6nUqC6fhqRKWCaB3FcYBFTT2QE1UJwJcwLAA9TvXkC2nYr8Bn8+B
+gDWykOU/s/mws4GBnVSqO85DQkT/9PW1JgD0Xam4gxT+Sl5ETHCWkf8s0w397+vN
+jLHyvY9VKUGsqLe0WmKEfScohzVaNV4eKAqCP0jndr8mSpGFQ2ONuYHUPo3NwTGY
+rbhjzvE6UEnS0JVaX/BXZtE/tg14MK0jq/lPVbcmEQdFXoRPZdelMGC8i2nuaeeL
+sgZ42vXFLJs1qYU5JMB2QxUKlMi3k5KLHZ9i5IEGCFXSdOvDZ6Wx3A1pO1JiimaL
+5tD0/FWrjjA3baDGLEDqS/TWQLEoCDmxlDguSl710B6sjYNXfe0=
+=RsJ9
+-----END PGP SIGNATURE-----
 
---
-Thanks,
-~Nick Desaulniers
+--yisc45JTu+esueRF--
