@@ -2,192 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B4D5EDE33
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Sep 2022 15:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B365E5EDE3B
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Sep 2022 15:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbiI1Nxm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Sep 2022 09:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
+        id S229576AbiI1Ny0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Sep 2022 09:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbiI1Nxl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Sep 2022 09:53:41 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C47786C9;
-        Wed, 28 Sep 2022 06:53:36 -0700 (PDT)
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 28SDrNKs023141;
-        Wed, 28 Sep 2022 22:53:24 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28SDrNKs023141
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1664373204;
-        bh=vkTBDrLr+gSufE4juAwoGOnL+v5TpMQd9Yf1dOOyAlQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=gi7dnhj2nQnit3b/guZ+qZAtmsI2UyVy5RJMJBfcbyuDZf5J96a04A6b/EjKYR4a8
-         wXBy7ge82hp2ocrzXYCYKTPtzKteG/dVWZcH+XfH6wSUpWVqloOLiyWelWf0GCsjiK
-         enmNCh8nGp9Ib0RDAVRmS09OgkSwNy2sUYrVj7vLu3L7wBXPkFQdBX/nNbhsAsyI3T
-         BMOoyTL29Z//aWonBC/8UrrldVr/NZQRkLtk7DNaGVSInhv8gVsSbTLz/CxytsOMDI
-         RXvuFn3Y2x+gCy1yWvRB23FQPvp1BkncOMkTkztFrxu5fhO+DRSNE+vNrpSZ31gX8O
-         tXZkh8BFV2qTw==
-X-Nifty-SrcIP: [209.85.160.50]
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-12803ac8113so17350060fac.8;
-        Wed, 28 Sep 2022 06:53:24 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1ygWZyY0/An+0f3UICl8fwIMHFynLDbjTbMdCN0h9NdmT00H4t
-        E17oxvH+91z55OEWa4H2ToT0NZR4EqFzACMAc8k=
-X-Google-Smtp-Source: AMsMyM4SwXr39hWrhV2jlwLsIq7xsRglwAQ3lU3A0QYTQ6046/z0prPzH2+3QIrGInbvIoFsdlz7vAZB/75K7rBW+lw=
-X-Received: by 2002:a05:6870:6326:b0:131:9200:c99d with SMTP id
- s38-20020a056870632600b001319200c99dmr3805771oao.194.1664373203265; Wed, 28
- Sep 2022 06:53:23 -0700 (PDT)
+        with ESMTP id S231703AbiI1NyX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Sep 2022 09:54:23 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A339597D55;
+        Wed, 28 Sep 2022 06:54:21 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id m4so5582774wrr.5;
+        Wed, 28 Sep 2022 06:54:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=7U1I9hHO4CrRfjBWf9qPspGBAU/gGgUqLwer2phGAFU=;
+        b=lR+4ly1GqQ9V1Zw88E2NKqMKq6QGORarPQZ5OHb23RZqbxmo50m9MfeDRsb7Tzjz3k
+         nDhKhmcV7SFAkvOdhJy6ZeQplE6iOBhMa4jZZTc16i5sN//nVdaqpUJ4doU8d3Y0de9H
+         Uao+Qt3E4OKfYBDzJMve+ngOZjKaS4npyjLRGAiQEQQkeX/4DX3TSM2GqESvqCSlqHxo
+         rJBLc9w69B5Ku1Ds4c60CqmjYjLgvcoGtNMpSlxnFJ8PPc4a1HPvjtMxux3r2HZOaLnK
+         h93tlEB3TUqpQnwQ3HJYBU4m6T8gx8hjToQxUmMaqtADLb4/oyvvo+UQNLHdnkvvpdt/
+         pWsQ==
+X-Gm-Message-State: ACrzQf0PkmIQ8Xy21Q2cSv+FU48GBydD6vrlpZ/CYJef76VvZ+u6WEXc
+        tsoHdz1fag02978M0hiZW1cMHTNQqGg=
+X-Google-Smtp-Source: AMsMyM5vbRTCz4kNFJlsK857jirYeR1NUoxujP2E4vLye+cr6djGWanJ30AQBJBXmEUGSrIzv6vgpQ==
+X-Received: by 2002:a05:6000:1849:b0:228:c87d:2578 with SMTP id c9-20020a056000184900b00228c87d2578mr20938938wri.274.1664373259492;
+        Wed, 28 Sep 2022 06:54:19 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id n16-20020adffe10000000b0022b014fb0b7sm4191199wrr.110.2022.09.28.06.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Sep 2022 06:54:19 -0700 (PDT)
+Date:   Wed, 28 Sep 2022 13:54:17 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        arnd@arndb.de, x86@kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v6] hyperv: simplify and rename generate_guest_id
+Message-ID: <YzRSCSOIhHQ9JYmr@liuwe-devbox-debian-v2>
+References: <20220928064046.3545-1-kunyu@nfschina.com>
 MIME-Version: 1.0
-References: <20220928063947.299333-1-masahiroy@kernel.org> <20220928063947.299333-7-masahiroy@kernel.org>
- <06cf88841dfb48d8ba89dd22adcd1db9@AcuMS.aculab.com>
-In-Reply-To: <06cf88841dfb48d8ba89dd22adcd1db9@AcuMS.aculab.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 28 Sep 2022 22:52:46 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATo0uzbBy+90dX==jjwZ-0da=tS1FfvDJedQU0dSfW++A@mail.gmail.com>
-Message-ID: <CAK7LNATo0uzbBy+90dX==jjwZ-0da=tS1FfvDJedQU0dSfW++A@mail.gmail.com>
-Subject: Re: [PATCH v3 6/8] modpost: use null string instead of NULL pointer
- for default namespace
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220928064046.3545-1-kunyu@nfschina.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 28, 2022 at 6:53 PM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Masahiro Yamada
-> > Sent: 28 September 2022 07:40
-> >
-> > The default namespace is the null string, "".
-> >
-> > When set, the null string "" is converted to NULL:
-> >
-> >   s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
-> >
-> > When printed, the NULL pointer is get back to the null string:
-> >
-> >   sym->namespace ?: ""
-> >
-> > This saves 1 byte memory allocated for "", but loses the readability.
->
-> The code size changes are far larger that any data sizes.
->
-> > In kernel-space, we strive to save memory, but modpost is a userspace
-> > tool used to build the kernel. On modern systems, such small piece of
-> > memory is not a big deal.
-> >
-> > Handle the namespace string as is.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > ---
-> >
-> > (no changes since v1)
-> >
-> >  scripts/mod/modpost.c | 17 +++++++++++------
-> >  1 file changed, 11 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 0bb5bbd176b4..29f30558a398 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -297,6 +297,13 @@ static bool contains_namespace(struct list_head *head, const char *namespace)
-> >  {
-> >       struct namespace_list *list;
-> >
-> > +     /*
-> > +      * The default namespace is null string "", which is always implicitly
-> > +      * contained.
-> > +      */
-> > +     if (!namespace[0])
-> > +             return true;
-> > +
-> >       list_for_each_entry(list, head, list) {
-> >               if (!strcmp(list->namespace, namespace))
-> >                       return true;
-> > @@ -366,7 +373,7 @@ static struct symbol *sym_add_exported(const char *name, struct module *mod,
-> >       s = alloc_symbol(name);
-> >       s->module = mod;
-> >       s->is_gpl_only = gpl_only;
-> > -     s->namespace = namespace[0] ? NOFAIL(strdup(namespace)) : NULL;
-> > +     s->namespace = NOFAIL(strdup(namespace));
-> >       list_add_tail(&s->list, &mod->exported_symbols);
-> >       hash_add_symbol(s);
-> >
-> > @@ -1928,8 +1935,7 @@ static void check_exports(struct module *mod)
-> >               else
-> >                       basename = mod->name;
-> >
-> > -             if (exp->namespace &&
-> > -                 !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
-> > +             if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
->
-> Do you still need to optimise/check for the default namespace?
+On Wed, Sep 28, 2022 at 02:40:46PM +0800, Li kunyu wrote:
+> The generate_guest_id function is more suitable for use after the
+> following modifications.
+> 1. The return value of the function is modified to u64.
+> 2. Remove the d_info1 and d_info2 parameters from the function, keep the
+> u64 type kernel_version parameter.
+> 3. Rename the function to make it clearly a Hyper-V related function,
+> and modify it to hv_generate_guest_id.
+> 
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> 
+> --------
+>  v2: Fix generate_guest_id to hv_generate_guest_id.
+>  v3: Fix [PATCH v2] asm-generic: Remove the ... to [PATCH v3] hyperv: simp
+>      lify ... and remove extra spaces
+>  v4: Remove #include <linux/version.h> in the calling file, and add #inclu
+>      de <linux/version.h> in the function implementation file
+>  v5: <linux/version.h> is changed to the definition position before v4, an
+>      d the LINUX_VERSION_CODE macro is passed in the function call
+>  v6: Modify the patch description information to the changed information a
+>      fter discussion
 
+This part -- normally the change history should be stripped when the
+patch is committed with git-am(1).
 
+The usual way of doing it is to place them (and any other text that is
+not intended to be committed) after three dashes. No fewer, no more,
+only three dashes.
 
-I am not sure if I understood your comment, but
-I changed the contains_namespace() body so that
-contains_namespace(&mod->imported_namespaces, "")
-returns true.
+Why three dashes? Git-am(1) has the following:
 
+  The patch is expected to be inline, directly following the message. Any line that is of the
+  form:
 
+  •   three-dashes and end-of-line, or
 
+  •   a line that begins with "diff -", or
 
+  •   a line that begins with "Index: "
 
+  is taken as the beginning of a patch, and the commit log message is terminated before the
+  first occurrence of such a line.
 
+Notice the last sentence. You used eight dashes. Git-am(1) does not
+consider that pattern terminates the commit log message.
 
+There is no need for you to do anything. I've cleaned up the commit
+message and applied it to hyperv-next. I thought the above tidbit can
+help you (or anyone else who doesn't know about this and happens to read
+this lengthy email) in your future patch submission though. :-)
 
-
-
-
->         David
->
-> >                       modpost_log(allow_missing_ns_imports ? LOG_WARN : LOG_ERROR,
-> >                                   "module %s uses symbol %s from namespace %s, but does not import it.\n",
-> >                                   basename, exp->name, exp->namespace);
-> > @@ -2015,8 +2021,7 @@ static void add_exported_symbols(struct buffer *buf, struct module *mod)
-> >       list_for_each_entry(sym, &mod->exported_symbols, list)
-> >               buf_printf(buf, "KSYMTAB_%s(%s, \"%s\", \"%s\");\n",
-> >                          sym->is_func ? "FUNC" : "DATA", sym->name,
-> > -                        sym->is_gpl_only ? "_gpl" : "",
-> > -                        sym->namespace ?: "");
-> > +                        sym->is_gpl_only ? "_gpl" : "", sym->namespace);
-> >
-> >       if (!modversions)
-> >               return;
-> > @@ -2284,7 +2289,7 @@ static void write_dump(const char *fname)
-> >                       buf_printf(&buf, "0x%08x\t%s\t%s\tEXPORT_SYMBOL%s\t%s\n",
-> >                                  sym->crc, sym->name, mod->name,
-> >                                  sym->is_gpl_only ? "_GPL" : "",
-> > -                                sym->namespace ?: "");
-> > +                                sym->namespace);
-> >               }
-> >       }
-> >       write_buf(&buf, fname);
-> > --
-> > 2.34.1
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+Thanks,
+Wei.
