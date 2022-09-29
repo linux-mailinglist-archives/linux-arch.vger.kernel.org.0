@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B7E5EEB80
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Sep 2022 04:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14FD5EEC02
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Sep 2022 04:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234755AbiI2COE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Sep 2022 22:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
+        id S234851AbiI2Cjk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Sep 2022 22:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbiI2CNw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Sep 2022 22:13:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2741231F0;
-        Wed, 28 Sep 2022 19:13:44 -0700 (PDT)
+        with ESMTP id S234868AbiI2CjC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Sep 2022 22:39:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32522126464;
+        Wed, 28 Sep 2022 19:38:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CC18B822C8;
-        Thu, 29 Sep 2022 02:13:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38951C433D7;
-        Thu, 29 Sep 2022 02:13:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5707461FB1;
+        Thu, 29 Sep 2022 02:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE3FC433D7;
+        Thu, 29 Sep 2022 02:38:51 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>,
-        Weihao Li <liweihao@loongson.cn>
-Subject: [PATCH] LoongArch: Support access filter to /dev/mem interface
-Date:   Thu, 29 Sep 2022 10:12:26 +0800
-Message-Id: <20220929021226.318152-1-chenhuacai@loongson.cn>
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch fixes for v5.19-rc4
+Date:   Thu, 29 Sep 2022 10:37:35 +0800
+Message-Id: <20220929023735.319481-1-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -45,87 +45,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Accidental access to /dev/mem is obviously disastrous, but specific
-access can be used by people debugging the kernel. So select GENERIC_
-LIB_DEVMEM_IS_ALLOWED, as well as define ARCH_HAS_VALID_PHYS_ADDR_RANGE
-and related helpers, to support access filter to /dev/mem interface.
+The following changes since commit a111daf0c53ae91e71fd2bfe7497862d14132e3e:
 
-Signed-off-by: Weihao Li <liweihao@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig          |  1 +
- arch/loongarch/include/asm/io.h |  4 ++++
- arch/loongarch/mm/mmap.c        | 28 ++++++++++++++++++++++++++++
- 3 files changed, 33 insertions(+)
+  Linux 5.19-rc3 (2022-06-19 15:06:47 -0500)
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index fcb5f9489ffd..9c36eb29096a 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -70,6 +70,7 @@ config LOONGARCH
- 	select GENERIC_LIB_CMPDI2
- 	select GENERIC_LIB_LSHRDI3
- 	select GENERIC_LIB_UCMPDI2
-+	select GENERIC_LIB_DEVMEM_IS_ALLOWED
- 	select GENERIC_PCI_IOMAP
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_SMP_IDLE_THREAD
-diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
-index 999944ea1cea..398d1a7b3dd6 100644
---- a/arch/loongarch/include/asm/io.h
-+++ b/arch/loongarch/include/asm/io.h
-@@ -107,4 +107,8 @@ extern void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t
- 
- #include <asm-generic/io.h>
- 
-+#define ARCH_HAS_VALID_PHYS_ADDR_RANGE
-+extern int valid_phys_addr_range(phys_addr_t addr, size_t size);
-+extern int valid_mmap_phys_addr_range(unsigned long pfn, size_t size);
-+
- #endif /* _ASM_IO_H */
-diff --git a/arch/loongarch/mm/mmap.c b/arch/loongarch/mm/mmap.c
-index 381a569635a9..71d45bdffc9e 100644
---- a/arch/loongarch/mm/mmap.c
-+++ b/arch/loongarch/mm/mmap.c
-@@ -3,6 +3,7 @@
-  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-  */
- #include <linux/export.h>
-+#include <linux/memblock.h>
- #include <linux/mm.h>
- #include <linux/mman.h>
- 
-@@ -116,3 +117,30 @@ int __virt_addr_valid(volatile void *kaddr)
- 	return pfn_valid(PFN_DOWN(PHYSADDR(kaddr)));
- }
- EXPORT_SYMBOL_GPL(__virt_addr_valid);
-+
-+/*
-+ * You really shouldn't be using read() or write() on /dev/mem.  This might go
-+ * away in the future.
-+ */
-+int valid_phys_addr_range(phys_addr_t addr, size_t size)
-+{
-+	/*
-+	 * Check whether addr is covered by a memory region without the
-+	 * MEMBLOCK_NOMAP attribute, and whether that region covers the
-+	 * entire range. In theory, this could lead to false negatives
-+	 * if the range is covered by distinct but adjacent memory regions
-+	 * that only differ in other attributes. However, few of such
-+	 * attributes have been defined, and it is debatable whether it
-+	 * follows that /dev/mem read() calls should be able traverse
-+	 * such boundaries.
-+	 */
-+	return memblock_is_region_memory(addr, size) && memblock_is_map_memory(addr);
-+}
-+
-+/*
-+ * Do not allow /dev/mem mappings beyond the supported physical range.
-+ */
-+int valid_mmap_phys_addr_range(unsigned long pfn, size_t size)
-+{
-+	return !(((pfn << PAGE_SHIFT) + size) & ~(GENMASK_ULL(cpu_pabits, 0)));
-+}
--- 
-2.31.1
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-5.19-3
+
+for you to fetch changes up to ea18d434781105ce61ff3ef7f74c9e51812f0580:
+
+  LoongArch: Make compute_return_era() return void (2022-06-25 18:06:07 +0800)
+
+----------------------------------------------------------------
+LoongArch fixes for v5.19-rc4
+
+Some bug fixes and a trivial cleanup.
+----------------------------------------------------------------
+Huacai Chen (4):
+      LoongArch: Fix the !THP build
+      LoongArch: Fix the _stext symbol address
+      LoongArch: Fix sleeping in atomic context in setup_tlb_handler()
+      LoongArch: Fix EENTRY/MERRENTRY setting in setup_tlb_handler()
+
+Tiezhu Yang (2):
+      LoongArch: Fix wrong fpu version
+      LoongArch: Make compute_return_era() return void
+
+ arch/loongarch/include/asm/branch.h  |  3 +--
+ arch/loongarch/include/asm/pgtable.h | 10 +++++-----
+ arch/loongarch/kernel/cpu-probe.c    |  2 +-
+ arch/loongarch/kernel/head.S         |  2 --
+ arch/loongarch/kernel/traps.c        |  3 +--
+ arch/loongarch/kernel/vmlinux.lds.S  |  1 +
+ arch/loongarch/mm/tlb.c              |  7 ++++---
+ 7 files changed, 13 insertions(+), 15 deletions(-)
