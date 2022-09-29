@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0737C5F00B4
+	by mail.lfdr.de (Postfix) with ESMTP id CE8595F00B6
 	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 00:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiI2Whf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Sep 2022 18:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S230324AbiI2Whh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Sep 2022 18:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiI2Wga (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 18:36:30 -0400
+        with ESMTP id S230210AbiI2Wgn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 18:36:43 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFBF25581;
-        Thu, 29 Sep 2022 15:32:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBD74D158;
+        Thu, 29 Sep 2022 15:32:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664490738; x=1696026738;
+  t=1664490745; x=1696026745;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=eB1cPNZIwM/4vJ9UX4P/L+g239SirPcbtbxQL47/qDg=;
-  b=WlCe4mTY7W1XN0onNHE9J56gS8kSWYnUrRRAYftyt93su08kfp9Diorn
-   KujuRuuC3aJgnc2WJn9xZwMO4tWuDCYVdHqwx9GJMujdZQkJHSH4cAp8q
-   +t5Xb+kcxuVLzxYux+s8qICgMm/4yVCTQCAOT5bx4azs5rZj4V8/NSdt9
-   e5Xd5/gxj0eRJieWFHkKKNOAFoTcZBbURTC03xRXY1SALmXZqkOva8q3Q
-   EFViBi0vpHVfrn+E1b2Q0XF3xk6oocjmEgpAy0h6E2tDqropdRxEj91JO
-   txgiokohs7OA4oK9w9DCBtM5poaA6zJDSgo5+tvsHyrBR+bsbOioxWwVD
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="285182195"
+  bh=z6bKqSpBSm7G4FnjcLcDWt5cOl/k3rfBMUw4ayPxySE=;
+  b=dwxH6kv0fMygXixfTtwrohKuYsjP9eARrYOudNiNTMTmf1+lyEqK91g7
+   UZfm3WVjfTYCoWI3wtvvTKkcn9MIpymLVMWmqS0cZrTyBU5QKVWtpy9ti
+   vZcqjYCzXD4b2AznVRfEHv9ame9EobGTzzvndAC+Nds6uMPta4T7YMPls
+   eUeUSnyInIbSeHftcGQEE4u5/11g8RvM8KDCkRH17g44u8uRY0jiN5Myx
+   1b7hj4NCJdVDPCt3eozSzjk0G7qjdLKyycKHI64nN67Sj6fALtZ5o+n0d
+   fPMRRdh7Lb2D+e7oSLoc5QbxbeLYcbAknKDldzq8hxcR/05N4m3Cg6vjL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="285182204"
 X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="285182195"
+   d="scan'208";a="285182204"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:59 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="691016373"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:31:02 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="691016392"
 X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="691016373"
+   d="scan'208";a="691016392"
 Received: from sergungo-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.251.25.88])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:57 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:59 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
         jamorris@linux.microsoft.com, dethoma@microsoft.com
 Cc:     rick.p.edgecombe@intel.com
-Subject: [OPTIONAL/CLEANUP v2 35/39] x86: Improve formatting of user_regset arrays
-Date:   Thu, 29 Sep 2022 15:29:32 -0700
-Message-Id: <20220929222936.14584-36-rick.p.edgecombe@intel.com>
+Subject: [OPTIONAL/RFC v2 36/39] x86/fpu: Add helper for initing features
+Date:   Thu, 29 Sep 2022 15:29:33 -0700
+Message-Id: <20220929222936.14584-37-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
@@ -81,11 +81,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Back in 2018, Ingo Molnar suggested[0] to improve the formatting of the
-struct user_regset arrays. They have multiple member initializations per
-line and some lines exceed 100 chars. Reformat them like he suggested.
+If an xfeature is saved in a buffer, the xfeature's bit will be set in
+xsave->header.xfeatures. The CPU may opt to not save the xfeature if it
+is in it's init state. In this case the xfeature buffer address cannot
+be retrieved with get_xsave_addr().
 
-[0] https://lore.kernel.org/lkml/20180711102035.GB8574@gmail.com/
+Future patches will need to handle the case of writing to an xfeature
+that may not be saved. So provide helpers to init an xfeature in an
+xsave buffer.
+
+This could of course be done directly by reaching into the xsave buffer,
+however this would not be robust against future changes to optimize the
+xsave buffer by compacting it. In that case the xsave buffer would need
+to be re-arranged as well. So the logic properly belongs encapsulated
+in a helper where the logic can be unified.
 
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
@@ -94,150 +103,110 @@ Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 v2:
  - New patch
 
- arch/x86/kernel/ptrace.c | 107 ++++++++++++++++++++++++---------------
- 1 file changed, 65 insertions(+), 42 deletions(-)
+ arch/x86/kernel/fpu/xstate.c | 58 +++++++++++++++++++++++++++++-------
+ arch/x86/kernel/fpu/xstate.h |  6 ++++
+ 2 files changed, 53 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-index 1a4df5fbc5e9..eed8a65d335d 100644
---- a/arch/x86/kernel/ptrace.c
-+++ b/arch/x86/kernel/ptrace.c
-@@ -1235,28 +1235,37 @@ long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 9258fc1169cc..82cee1f2f0c8 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -942,6 +942,24 @@ static void *__raw_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
+ 	return (void *)xsave + xfeature_get_offset(xcomp_bv, xfeature_nr);
+ }
  
- static struct user_regset x86_64_regsets[] __ro_after_init = {
- 	[REGSET_GENERAL64] = {
--		.core_note_type = NT_PRSTATUS,
--		.n = sizeof(struct user_regs_struct) / sizeof(long),
--		.size = sizeof(long), .align = sizeof(long),
--		.regset_get = genregs_get, .set = genregs_set
-+		.core_note_type	= NT_PRSTATUS,
-+		.n		= sizeof(struct user_regs_struct) / sizeof(long),
-+		.size		= sizeof(long),
-+		.align		= sizeof(long),
-+		.regset_get	= genregs_get,
-+		.set		= genregs_set
- 	},
- 	[REGSET_FP64] = {
--		.core_note_type = NT_PRFPREG,
--		.n = sizeof(struct fxregs_state) / sizeof(long),
--		.size = sizeof(long), .align = sizeof(long),
--		.active = regset_xregset_fpregs_active, .regset_get = xfpregs_get, .set = xfpregs_set
-+		.core_note_type	= NT_PRFPREG,
-+		.n		= sizeof(struct fxregs_state) / sizeof(long),
-+		.size		= sizeof(long),
-+		.align		= sizeof(long),
-+		.active		= regset_xregset_fpregs_active,
-+		.regset_get	= xfpregs_get,
-+		.set		= xfpregs_set
- 	},
- 	[REGSET_XSTATE64] = {
--		.core_note_type = NT_X86_XSTATE,
--		.size = sizeof(u64), .align = sizeof(u64),
--		.active = xstateregs_active, .regset_get = xstateregs_get,
--		.set = xstateregs_set
-+		.core_note_type	= NT_X86_XSTATE,
-+		.size		= sizeof(u64),
-+		.align		= sizeof(u64),
-+		.active		= xstateregs_active,
-+		.regset_get	= xstateregs_get,
-+		.set		= xstateregs_set
- 	},
- 	[REGSET_IOPERM64] = {
--		.core_note_type = NT_386_IOPERM,
--		.n = IO_BITMAP_LONGS,
--		.size = sizeof(long), .align = sizeof(long),
--		.active = ioperm_active, .regset_get = ioperm_get
-+		.core_note_type	= NT_386_IOPERM,
-+		.n		= IO_BITMAP_LONGS,
-+		.size		= sizeof(long),
-+		.align		= sizeof(long),
-+		.active		= ioperm_active,
-+		.regset_get	= ioperm_get
- 	},
- };
++static int xsave_buffer_access_checks(int xfeature_nr)
++{
++	/*
++	 * Do we even *have* xsave state?
++	 */
++	if (!boot_cpu_has(X86_FEATURE_XSAVE))
++		return 1;
++
++	/*
++	 * We should not ever be requesting features that we
++	 * have not enabled.
++	 */
++	if (WARN_ON_ONCE(!xfeature_enabled(xfeature_nr)))
++		return 1;
++
++	return 0;
++}
++
+ /*
+  * Given the xsave area and a state inside, this function returns the
+  * address of the state.
+@@ -962,17 +980,7 @@ static void *__raw_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
+  */
+ void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
+ {
+-	/*
+-	 * Do we even *have* xsave state?
+-	 */
+-	if (!boot_cpu_has(X86_FEATURE_XSAVE))
+-		return NULL;
+-
+-	/*
+-	 * We should not ever be requesting features that we
+-	 * have not enabled.
+-	 */
+-	if (WARN_ON_ONCE(!xfeature_enabled(xfeature_nr)))
++	if (xsave_buffer_access_checks(xfeature_nr))
+ 		return NULL;
  
-@@ -1276,42 +1285,56 @@ static const struct user_regset_view user_x86_64_view = {
- #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
- static struct user_regset x86_32_regsets[] __ro_after_init = {
- 	[REGSET_GENERAL32] = {
--		.core_note_type = NT_PRSTATUS,
--		.n = sizeof(struct user_regs_struct32) / sizeof(u32),
--		.size = sizeof(u32), .align = sizeof(u32),
--		.regset_get = genregs32_get, .set = genregs32_set
-+		.core_note_type	= NT_PRSTATUS,
-+		.n		= sizeof(struct user_regs_struct32) / sizeof(u32),
-+		.size		= sizeof(u32),
-+		.align		= sizeof(u32),
-+		.regset_get	= genregs32_get,
-+		.set		= genregs32_set
- 	},
- 	[REGSET_FP32] = {
--		.core_note_type = NT_PRFPREG,
--		.n = sizeof(struct user_i387_ia32_struct) / sizeof(u32),
--		.size = sizeof(u32), .align = sizeof(u32),
--		.active = regset_fpregs_active, .regset_get = fpregs_get, .set = fpregs_set
-+		.core_note_type	= NT_PRFPREG,
-+		.n		= sizeof(struct user_i387_ia32_struct) / sizeof(u32),
-+		.size		= sizeof(u32),
-+		.align		= sizeof(u32),
-+		.active		= regset_fpregs_active,
-+		.regset_get	= fpregs_get,
-+		.set		= fpregs_set
- 	},
- 	[REGSET_XFP32] = {
--		.core_note_type = NT_PRXFPREG,
--		.n = sizeof(struct fxregs_state) / sizeof(u32),
--		.size = sizeof(u32), .align = sizeof(u32),
--		.active = regset_xregset_fpregs_active, .regset_get = xfpregs_get, .set = xfpregs_set
-+		.core_note_type	= NT_PRXFPREG,
-+		.n		= sizeof(struct fxregs_state) / sizeof(u32),
-+		.size		= sizeof(u32),
-+		.align		= sizeof(u32),
-+		.active		= regset_xregset_fpregs_active,
-+		.regset_get	= xfpregs_get,
-+		.set		= xfpregs_set
- 	},
- 	[REGSET_XSTATE32] = {
--		.core_note_type = NT_X86_XSTATE,
--		.size = sizeof(u64), .align = sizeof(u64),
--		.active = xstateregs_active, .regset_get = xstateregs_get,
--		.set = xstateregs_set
-+		.core_note_type	= NT_X86_XSTATE,
-+		.size		= sizeof(u64),
-+		.align		= sizeof(u64),
-+		.active		= xstateregs_active,
-+		.regset_get	= xstateregs_get,
-+		.set		= xstateregs_set
- 	},
- 	[REGSET_TLS32] = {
--		.core_note_type = NT_386_TLS,
--		.n = GDT_ENTRY_TLS_ENTRIES, .bias = GDT_ENTRY_TLS_MIN,
--		.size = sizeof(struct user_desc),
--		.align = sizeof(struct user_desc),
--		.active = regset_tls_active,
--		.regset_get = regset_tls_get, .set = regset_tls_set
-+		.core_note_type	= NT_386_TLS,
-+		.n		= GDT_ENTRY_TLS_ENTRIES,
-+		.bias		= GDT_ENTRY_TLS_MIN,
-+		.size		= sizeof(struct user_desc),
-+		.align		= sizeof(struct user_desc),
-+		.active		= regset_tls_active,
-+		.regset_get	= regset_tls_get,
-+		.set		= regset_tls_set
- 	},
- 	[REGSET_IOPERM32] = {
--		.core_note_type = NT_386_IOPERM,
--		.n = IO_BITMAP_BYTES / sizeof(u32),
--		.size = sizeof(u32), .align = sizeof(u32),
--		.active = ioperm_active, .regset_get = ioperm_get
-+		.core_note_type	= NT_386_IOPERM,
-+		.n		= IO_BITMAP_BYTES / sizeof(u32),
-+		.size		= sizeof(u32),
-+		.align		= sizeof(u32),
-+		.active		= ioperm_active,
-+		.regset_get	= ioperm_get
- 	},
- };
+ 	/*
+@@ -992,6 +1000,34 @@ void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
+ 	return __raw_xsave_addr(xsave, xfeature_nr);
+ }
  
++/*
++ * Given the xsave area and a state inside, this function
++ * initializes an xfeature in the buffer.
++ *
++ * get_xsave_addr() will return NULL if the feature bit is
++ * not present in the header. This function will make it so
++ * the xfeature buffer address is ready to be retrieved by
++ * get_xsave_addr().
++ *
++ * Inputs:
++ *	xstate: the thread's storage area for all FPU data
++ *	xfeature_nr: state which is defined in xsave.h (e.g. XFEATURE_FP,
++ *	XFEATURE_SSE, etc...)
++ * Output:
++ *	1 if the feature cannot be inited, 0 on success
++ */
++int init_xfeature(struct xregs_state *xsave, int xfeature_nr)
++{
++	if (xsave_buffer_access_checks(xfeature_nr))
++		return 1;
++
++	/*
++	 * Mark the feature inited.
++	 */
++	xsave->header.xfeatures |= BIT_ULL(xfeature_nr);
++	return 0;
++}
++
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+ 
+ /*
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index 5ad47031383b..fb8aae678e9f 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -54,6 +54,12 @@ extern void fpu__init_cpu_xstate(void);
+ extern void fpu__init_system_xstate(unsigned int legacy_size);
+ 
+ extern void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr);
++extern int init_xfeature(struct xregs_state *xsave, int xfeature_nr);
++
++static inline int xfeature_saved(struct xregs_state *xsave, int xfeature_nr)
++{
++	return xsave->header.xfeatures & BIT_ULL(xfeature_nr);
++}
+ 
+ static inline u64 xfeatures_mask_supervisor(void)
+ {
 -- 
 2.17.1
 
