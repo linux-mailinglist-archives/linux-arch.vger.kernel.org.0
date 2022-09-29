@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55E25F0067
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 00:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10575F0070
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 00:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiI2WeC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Sep 2022 18:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S230189AbiI2WeO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Sep 2022 18:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiI2WdA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 18:33:00 -0400
+        with ESMTP id S230122AbiI2WdO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 18:33:14 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F84BA6C16;
-        Thu, 29 Sep 2022 15:30:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2E8155668;
+        Thu, 29 Sep 2022 15:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664490660; x=1696026660;
+  t=1664490668; x=1696026668;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=HEoICz/7FChfhD1X/KoxDXONV3hJ7PY4eGyUJG+8lDI=;
-  b=X/FdhvmOPqn0W16yYR15aQTp+S+IV6aZKGBaPyqvU/lLHMIUK5FeXd9+
-   60ysdvJFhCM6pXhvbFaiYlpa6KWB6JWpyVFy9FhaERO4iF9+D51tH5CuX
-   59Ol/dkKOtKbNYjCil5udRCuDyalCHPmBOkB6E0B6/TLB/8FMsJ80thhS
-   9FIlLn064HP+TG0T/no65cjbdiX00DWdEpfzMtvCAP4rOvMcew5figX8Y
-   CNmVdeb6tK0fV5g3e46YEE0PDT2uVOsMHYE8DovmFZJPY8Ha8iP3J5oFI
-   tie3gG1ocbSfg2rH+Kfup3q8zY1tt2KIznx58FU0Cs5geLmNVi0QksnWc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="285181991"
+  bh=4GU+7bD3PIJhe/EOuq1oD0vsUP4qa2yf2XDdcT/yQi0=;
+  b=j01uvTFWiS1LvIY3Q4Lm8eE2V94iniCZ1f0tvdBi4tlbZh5YRXvs4MFm
+   kuRzwy2JenxTBUQLUJ40hKAOYg8L/x6uAI+uh6mJPlESABINJ6FwRskFE
+   u2y6yCHqPCbmPeM2zFlRzPdQd8+DaFCYfEMJvW2ldWGvdinA+gHuEYYmG
+   ULSABs532Akcua8FKbyNE55UQsoVFtFDww8ypcTTTNZdAG+cV7cVWsUoy
+   sr5cFZedJ15bjJfQ6rzxeEWru+o2yUUZ+hwZdSILmw9C8apE9dJyPgJfn
+   FSn8PjuFQSi/C8Ko7jLEBocOwvlctbwVTialMQ/2bZvlWH8bg8io3Hk7V
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="285182002"
 X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="285181991"
+   d="scan'208";a="285182002"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:26 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="691016264"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10485"; a="691016278"
 X-IronPort-AV: E=Sophos;i="5.93,356,1654585200"; 
-   d="scan'208";a="691016264"
+   d="scan'208";a="691016278"
 Received: from sergungo-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.251.25.88])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:24 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2022 15:30:26 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,10 +65,11 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
         jamorris@linux.microsoft.com, dethoma@microsoft.com
-Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v2 20/39] mm/mprotect: Exclude shadow stack from preserve_write
-Date:   Thu, 29 Sep 2022 15:29:17 -0700
-Message-Id: <20220929222936.14584-21-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2 21/39] mm: Re-introduce vm_flags to do_mmap()
+Date:   Thu, 29 Sep 2022 15:29:18 -0700
+Message-Id: <20220929222936.14584-22-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
@@ -83,67 +84,150 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-In change_pte_range(), when a PTE is changed for prot_numa, _PAGE_RW is
-preserved to avoid the additional write fault after the NUMA hinting fault.
-However, pte_write() now includes both normal writable and shadow stack
-(Write=0, Dirty=1) PTEs, but the latter does not have _PAGE_RW and has no
-need to preserve it.
+There was no more caller passing vm_flags to do_mmap(), and vm_flags was
+removed from the function's input by:
 
-Exclude shadow stack from preserve_write test, and apply the same change to
-change_huge_pmd().
+    commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
+
+There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
+do_mmap().  Thus, re-introduce vm_flags to do_mmap().
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Peter Collingbourne <pcc@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: linux-mm@kvack.org
 ---
+ fs/aio.c           |  2 +-
+ include/linux/mm.h |  3 ++-
+ ipc/shm.c          |  2 +-
+ mm/mmap.c          | 10 +++++-----
+ mm/nommu.c         |  4 ++--
+ mm/util.c          |  2 +-
+ 6 files changed, 12 insertions(+), 11 deletions(-)
 
-Yu-cheng v25:
- - Move is_shadow_stack_mapping() to a separate line.
-
-Yu-cheng v24:
- - Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
-
- mm/huge_memory.c | 7 +++++++
- mm/mprotect.c    | 7 +++++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 11fc69eb4717..492c4f190f55 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1800,6 +1800,13 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 		return 0;
+diff --git a/fs/aio.c b/fs/aio.c
+index 606613e9d1f4..a54b5ee72f1c 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -554,7 +554,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
  
- 	preserve_write = prot_numa && pmd_write(*pmd);
-+
-+	/*
-+	 * Preserve only normal writable huge PMD, but not shadow
-+	 * stack (RW=0, Dirty=1).
-+	 */
-+	if (vma->vm_flags & VM_SHADOW_STACK)
-+		preserve_write = false;
- 	ret = 1;
+ 	ctx->mmap_base = do_mmap(ctx->aio_ring_file, 0, ctx->mmap_size,
+ 				 PROT_READ | PROT_WRITE,
+-				 MAP_SHARED, 0, &unused, NULL);
++				 MAP_SHARED, 0, 0, &unused, NULL);
+ 	mmap_write_unlock(mm);
+ 	if (IS_ERR((void *)ctx->mmap_base)) {
+ 		ctx->mmap_size = 0;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 09458e77bf52..6aa0ffe3666c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2667,7 +2667,8 @@ extern unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	struct list_head *uf);
+ extern unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	unsigned long len, unsigned long prot, unsigned long flags,
+-	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
++	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
++	struct list_head *uf);
+ extern int __do_munmap(struct mm_struct *, unsigned long, size_t,
+ 		       struct list_head *uf, bool downgrade);
+ extern int do_munmap(struct mm_struct *, unsigned long, size_t,
+diff --git a/ipc/shm.c b/ipc/shm.c
+index b3048ebd5c31..f236b3e14ec4 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -1646,7 +1646,7 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
+ 			goto invalid;
+ 	}
  
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index bc6bddd156ca..983206529dce 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -114,6 +114,13 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
- 			pte_t ptent;
- 			bool preserve_write = prot_numa && pte_write(oldpte);
+-	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL);
++	addr = do_mmap(file, addr, size, prot, flags, 0, 0, &populate, NULL);
+ 	*raddr = addr;
+ 	err = 0;
+ 	if (IS_ERR_VALUE(addr))
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 8569ef09614c..e1006c41b1cc 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1375,11 +1375,11 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
+  */
+ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			unsigned long len, unsigned long prot,
+-			unsigned long flags, unsigned long pgoff,
+-			unsigned long *populate, struct list_head *uf)
++			unsigned long flags, vm_flags_t vm_flags,
++			unsigned long pgoff, unsigned long *populate,
++			struct list_head *uf)
+ {
+ 	struct mm_struct *mm = current->mm;
+-	vm_flags_t vm_flags;
+ 	int pkey = 0;
  
-+			/*
-+			 * Preserve only normal writable PTE, but not shadow
-+			 * stack (RW=0, Dirty=1).
-+			 */
-+			if (vma->vm_flags & VM_SHADOW_STACK)
-+				preserve_write = false;
-+
- 			/*
- 			 * Avoid trapping faults against the zero or KSM
- 			 * pages. See similar comment in change_huge_pmd.
+ 	*populate = 0;
+@@ -1439,7 +1439,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	 * to. we assume access permissions have been handled by the open
+ 	 * of the memory object, so we don't do any here.
+ 	 */
+-	vm_flags = calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
++	vm_flags |= calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
+ 			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
+ 
+ 	if (flags & MAP_LOCKED)
+@@ -2964,7 +2964,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 
+ 	file = get_file(vma->vm_file);
+ 	ret = do_mmap(vma->vm_file, start, size,
+-			prot, flags, pgoff, &populate, NULL);
++			prot, flags, 0, pgoff, &populate, NULL);
+ 	fput(file);
+ out:
+ 	mmap_write_unlock(mm);
+diff --git a/mm/nommu.c b/mm/nommu.c
+index e819cbc21b39..85b41107a192 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -1059,6 +1059,7 @@ unsigned long do_mmap(struct file *file,
+ 			unsigned long len,
+ 			unsigned long prot,
+ 			unsigned long flags,
++			vm_flags_t vm_flags,
+ 			unsigned long pgoff,
+ 			unsigned long *populate,
+ 			struct list_head *uf)
+@@ -1066,7 +1067,6 @@ unsigned long do_mmap(struct file *file,
+ 	struct vm_area_struct *vma;
+ 	struct vm_region *region;
+ 	struct rb_node *rb;
+-	vm_flags_t vm_flags;
+ 	unsigned long capabilities, result;
+ 	int ret;
+ 
+@@ -1085,7 +1085,7 @@ unsigned long do_mmap(struct file *file,
+ 
+ 	/* we've determined that we can make the mapping, now translate what we
+ 	 * now know into VMA flags */
+-	vm_flags = determine_vm_flags(file, prot, flags, capabilities);
++	vm_flags |= determine_vm_flags(file, prot, flags, capabilities);
+ 
+ 	/* we're going to need to record the mapping */
+ 	region = kmem_cache_zalloc(vm_region_jar, GFP_KERNEL);
+diff --git a/mm/util.c b/mm/util.c
+index c9439c66d8cf..f15929f2c5bd 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -549,7 +549,7 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 	if (!ret) {
+ 		if (mmap_write_lock_killable(mm))
+ 			return -EINTR;
+-		ret = do_mmap(file, addr, len, prot, flag, pgoff, &populate,
++		ret = do_mmap(file, addr, len, prot, flag, 0, pgoff, &populate,
+ 			      &uf);
+ 		mmap_write_unlock(mm);
+ 		userfaultfd_unmap_complete(mm, &uf);
 -- 
 2.17.1
 
