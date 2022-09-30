@@ -2,69 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C76C5F0292
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 04:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8132A5F02E8
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 04:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiI3CKg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Sep 2022 22:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
+        id S229804AbiI3CmQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Sep 2022 22:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiI3CKf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 22:10:35 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E13858B47
-        for <linux-arch@vger.kernel.org>; Thu, 29 Sep 2022 19:10:34 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id c19so2027795qkm.7
-        for <linux-arch@vger.kernel.org>; Thu, 29 Sep 2022 19:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date;
-        bh=xQ1vcv44R7M+xHLcM3UdCcUJ0FmpQ9/QA/hIJR+H2UA=;
-        b=tsMpAMYS9T/aBHCdNULlb4symf7nV2a0qI4uulrb83mI810ItUZOcxgQUmMLsIflWd
-         gIn6QpROC4rtwYoF+fiE7XNB12Uc7sDypXc2V2jPO6+MhbXIoKRCkSZk81T63IiXMF/V
-         nBRElBBq86G8iMEReqfWz+JUsgFXUSwsDpBAg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=xQ1vcv44R7M+xHLcM3UdCcUJ0FmpQ9/QA/hIJR+H2UA=;
-        b=soDSu7gaKnQJLUKiw7nK2P4GJkcWKUIXDZ4BtrPJ+Dkf975YGpqp1nwYXkZFJhQ9xU
-         UdrZempKAxhrcYvmUTtpnjPxw1mjd30QZ8yKq5wOZnlwuH01oTsFuKvAQjE7bf+gWBNy
-         DG58f4U5TYYaJH+k97sh/3yacTYF15wDjNsQiYdChNuqcPvXtYjDzgtBB4lbBfzA01yB
-         nk3E7GloX7zCQ272M4qzsHBjuyugvUzAy9hqAjRwo350DTj0Kz62xk2PkojWaLnmxAPq
-         B+GwQfKGKQoQZIQosJQk4eCZCtkhu5+nIJfqYaoS/GrbMxXwDMSlN9D3ZBqBjOBLKoBQ
-         kWxA==
-X-Gm-Message-State: ACrzQf1Phgq+yNaewv30X1ir2uclg8Buf66h33qxBu/9+VXpNUxfbd5T
-        MNF6YxMWv72rl5eCO5HV8BcCLw==
-X-Google-Smtp-Source: AMsMyM5MVhaTNr4byx/DEtNI2aaHDknopcbm7jd8BfEuUcdE8O3eotOk8ohaZKJjOUyRx5pCcmzObw==
-X-Received: by 2002:a37:686:0:b0:6ce:3883:5ec7 with SMTP id 128-20020a370686000000b006ce38835ec7mr4471547qkg.301.1664503833083;
-        Thu, 29 Sep 2022 19:10:33 -0700 (PDT)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id dt35-20020a05620a47a300b006ce3cffa2c8sm1095285qkb.43.2022.09.29.19.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 19:10:32 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v1] locking/memory-barriers.txt: Improve documentation for writel() usage
-Date:   Thu, 29 Sep 2022 22:10:31 -0400
-Message-Id: <CCD8EFA1-D0CF-4E57-905C-E7CA8E4DA56F@joelfernandes.org>
-References: <20220930020355.98534-1-parav@nvidia.com>
-Cc:     bagasdotme@gmail.com, arnd@arndb.de, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, paulmck@kernel.org,
-        akiyks@gmail.com, dlustig@nvidia.com, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org
-In-Reply-To: <20220930020355.98534-1-parav@nvidia.com>
-To:     Parav Pandit <parav@nvidia.com>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        with ESMTP id S229743AbiI3CmP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 22:42:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A455139BD9;
+        Thu, 29 Sep 2022 19:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3328DB82705;
+        Fri, 30 Sep 2022 02:42:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B85C433C1;
+        Fri, 30 Sep 2022 02:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664505731;
+        bh=89J+XT342DOuM16MG6vi3VPlCbMluYda7siQ4WgQfOk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TgYwqSxB1RmxJ2hVL/hIVDZ70dbrdDBEIX295dr+XigaohWEvgEFAJl34Fs6fMgsX
+         a53mC0sfc/OM1sHbLTmxuj13+8DDHkaCscCYZmCdpByyi8CoEc+9+PTwV5QhHHDXAJ
+         hw0mPnkoHvsbQQu4dcqOF2+G3fTXEu+1kQ2SiKXRwQeIcKA8cuxjKp0f2MWQVCxXq3
+         b9LMNpyYE5szGt9quP24jHwXtAe4J80ynccOu0CrAkg+33DlB2LncphHfXUGD+j4VQ
+         E+lIdFO+EusUHooOgb6OuWydkLd2gGcX5Bf0pIxYXLZ/7qEky/G72yDVvgKprRn0rL
+         6OoIasfBsP51w==
+Received: by mail-vs1-f54.google.com with SMTP id m65so3500947vsc.1;
+        Thu, 29 Sep 2022 19:42:11 -0700 (PDT)
+X-Gm-Message-State: ACrzQf00INq3FsugomVH7ot/hd4MQUyZqV72gO7xMAp03qyvS+INCd8h
+        NN/H4Wi8gSWQPynJZTFwVgT+FPXryEToKGWMhok=
+X-Google-Smtp-Source: AMsMyM6l0s42TpcL/m101J48xwB6udwVmDcTuy8DNrZpc0blyfUFDSuufF3zt59VsyIIr36sML9MzAshM/nVlYaON24=
+X-Received: by 2002:a67:d491:0:b0:398:1bbc:bc85 with SMTP id
+ g17-20020a67d491000000b003981bbcbc85mr3198312vsj.59.1664505730773; Thu, 29
+ Sep 2022 19:42:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220917064020.1639709-1-chenhuacai@loongson.cn>
+ <20220917064020.1639709-2-chenhuacai@loongson.cn> <87a66rhkri.fsf@baylibre.com>
+In-Reply-To: <87a66rhkri.fsf@baylibre.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 30 Sep 2022 10:41:59 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6YLstS+GqaXv2Y9p_QVAU4x=nrunP_Hd2GeznOWG6q4g@mail.gmail.com>
+Message-ID: <CAAhV-H6YLstS+GqaXv2Y9p_QVAU4x=nrunP_Hd2GeznOWG6q4g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Input: i8042: Add LoongArch support in i8042-acpipnpio.h
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,77 +67,84 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Hi, Mattijs,
 
-> On Sep 29, 2022, at 10:04 PM, Parav Pandit <parav@nvidia.com> wrote:
->=20
-> =EF=BB=BFThe cited commit describes that when using writel(), explcit wmb(=
-)
-> is not needed. wmb() is an expensive barrier. writel() uses the needed
-> I/O barrier instead of expensive wmb().
+On Thu, Sep 22, 2022 at 4:32 PM Mattijs Korpershoek
+<mkorpershoek@baylibre.com> wrote:
+>
+> On Sat, Sep 17, 2022 at 14:40, Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> > LoongArch uses ACPI and nearly the same as X86/IA64 for 8042. So modify
+> > i8042-acpipnpio.h slightly and enable it for LoongArch in i8042.h. Then
+> > i8042 driver can work well under the ACPI firmware with PNP typed key-
+> > board and mouse configured in DSDT.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>
+> I would have split the pr_info() move in its own patch since it seems
+> like a "valid fix" on its own, but i'm probably too pedantic about this.
+>
+> So, please take my:
+>
+> Reviewed-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+I think the pr_info is needed for all architectures, and the moving is
+very simple so I haven't split it. But anyway, if Dmitry also thinks
+this patch should be split, I will send a new version. :)
 
-Because you mentioned it in the commit message, Why not mention in the docum=
-entation text as well that writel() has the needed I/O barrier in it?
-
->=20
-> Hence update the example to be more accurate that matches the current
-> implementation.
-
-That would make it more accurate, since accuracy is your goal.
-
-thanks,
-
- - Joel
-
-
->=20
-> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO=
- ordering example")
-> Signed-off-by: Parav Pandit <parav@nvidia.com>
->=20
-> ---
-> changelog:
-> v0->v1:
-> - Corrected to mention I/O barrier instead of dma_wmb().
-> - removed numbered references in commit log
-> - corrected typo 'explcit' to 'explicit' in commit log
-> ---
-> Documentation/memory-barriers.txt | 9 +++++----
-> 1 file changed, 5 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barr=
-iers.txt
-> index 832b5d36e279..2d77a7411e52 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1927,10 +1927,11 @@ There are some more advanced barrier functions:
->      before we read the data from the descriptor, and the dma_wmb() allows=
-
->      us to guarantee the data is written to the descriptor before the devi=
-ce
->      can see it now has ownership.  The dma_mb() implies both a dma_rmb() a=
-nd
-> -     a dma_wmb().  Note that, when using writel(), a prior wmb() is not n=
-eeded
-> -     to guarantee that the cache coherent memory writes have completed be=
-fore
-> -     writing to the MMIO region.  The cheaper writel_relaxed() does not p=
-rovide
-> -     this guarantee and must not be used here.
-> +     a dma_wmb().  Note that, when using writel(), a prior I/O barrier is=
- not
-> +     needed to guarantee that the cache coherent memory writes have compl=
-eted
-> +     before writing to the MMIO region.  The cheaper writel_relaxed() doe=
-s not
-> +     provide this guarantee and must not be used here. Hence, writeX() is=
- always
-> +     preferred.
->=20
->      See the subsection "Kernel I/O barrier effects" for more information o=
-n
->      relaxed I/O accessors and the Documentation/core-api/dma-api.rst file=
- for
-> --=20
-> 2.26.2
->=20
+Huacai
+>
+> > ---
+> >  drivers/input/serio/i8042-acpipnpio.h | 8 ++++++--
+> >  drivers/input/serio/i8042.h           | 2 +-
+> >  2 files changed, 7 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
+> > index d14b9fb59d6c..c22151f180bb 100644
+> > --- a/drivers/input/serio/i8042-acpipnpio.h
+> > +++ b/drivers/input/serio/i8042-acpipnpio.h
+> > @@ -2,6 +2,7 @@
+> >  #ifndef _I8042_ACPIPNPIO_H
+> >  #define _I8042_ACPIPNPIO_H
+> >
+> > +#include <linux/acpi.h>
+> >
+> >  #ifdef CONFIG_X86
+> >  #include <asm/x86_init.h>
+> > @@ -1449,16 +1450,19 @@ static int __init i8042_pnp_init(void)
+> >
+> >       if (!i8042_pnp_kbd_devices && !i8042_pnp_aux_devices) {
+> >               i8042_pnp_exit();
+> > +             pr_info("PNP: No PS/2 controller found.\n");
+> >  #if defined(__ia64__)
+> >               return -ENODEV;
+> > +#elif defined(__loongarch__)
+> > +             if (acpi_disabled == 0)
+> > +                     return -ENODEV;
+> >  #else
+> > -             pr_info("PNP: No PS/2 controller found.\n");
+> >               if (x86_platform.legacy.i8042 !=
+> >                               X86_LEGACY_I8042_EXPECTED_PRESENT)
+> >                       return -ENODEV;
+> > +#endif
+> >               pr_info("Probing ports directly.\n");
+> >               return 0;
+> > -#endif
+> >       }
+> >
+> >       if (i8042_pnp_kbd_devices)
+> > diff --git a/drivers/input/serio/i8042.h b/drivers/input/serio/i8042.h
+> > index bf2592fa9a78..adb5173372d3 100644
+> > --- a/drivers/input/serio/i8042.h
+> > +++ b/drivers/input/serio/i8042.h
+> > @@ -19,7 +19,7 @@
+> >  #include "i8042-snirm.h"
+> >  #elif defined(CONFIG_SPARC)
+> >  #include "i8042-sparcio.h"
+> > -#elif defined(CONFIG_X86) || defined(CONFIG_IA64)
+> > +#elif defined(CONFIG_X86) || defined(CONFIG_IA64) || defined(CONFIG_LOONGARCH)
+> >  #include "i8042-acpipnpio.h"
+> >  #else
+> >  #include "i8042-io.h"
+> > --
+> > 2.31.1
+>
