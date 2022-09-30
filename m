@@ -2,477 +2,397 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4319D5F0363
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 05:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974485F0AA8
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 13:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiI3DlM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Sep 2022 23:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S231660AbiI3Lhw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Sep 2022 07:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiI3DlK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Sep 2022 23:41:10 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8B17EFEE;
-        Thu, 29 Sep 2022 20:41:08 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id u12so3121233pjj.1;
-        Thu, 29 Sep 2022 20:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=GsJL71zBc0kUncy0B1Baf1aatIrD2b+ye64C2hSTZDw=;
-        b=QHUsUemaJemvK+9u/noyxU0kDBzkolQo7gSntrhI+Y8mPIW1QZSUfzsWJYvdTeP+Zx
-         hAKRltsNuwb5Ib6ni9Eu2wqvkjuctWBsBt1+YGsqHAFORs9PWOHJr3EQPIb7FgpFF45C
-         W8JX4iAGyWyVV1+co/0PpLaemTMPHL5mtUvuAZ0Q4QAZW2Z/XZXFWabUUTF1VD2vT6vd
-         iyV2iq8nHkBRYh1UIA0/ZU9wp/jeqzeoBmoy0/BUfF0iGMRJasN5xRDqw4jJT3PcvTez
-         jbQdKF77r84g9q4Smp5dtWEy0lfxRsJt8C+hF1FH9FFU2m9BfnG8ODUJqF3qzkKeUOIu
-         YoBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=GsJL71zBc0kUncy0B1Baf1aatIrD2b+ye64C2hSTZDw=;
-        b=Kd0T2V02jGNmXXJpXeN4q9+SpsgrZRCnlDFL7Xt+tdW9dnRrZRumzXXCQjzhaqpUl/
-         aZEuL5e79uQGIKosJmil+i9wonWD0Wh3vHTUYv1v5CJdNwHj7Mn/oCbcWdWeVS2dUc1g
-         NmGjJORUg7SZXQgxhhDymwKUsXEKjW7ERPRp6CrlnOa8ZqNboSUwgRagRqnD0yBzLgB6
-         z/aaw8k1mSmkMidDLLuDpdi0wTcBdgqaAEvw1SDuu1nebTxJvbc0sgfBou/6LZBgIU5H
-         JvGcACRkBSN7cJ/NdNyFZJ+W7R00mCHljyeN/huM2gdXTC0sgmTxMZ4T4OTZ/qlSuOSq
-         pVsA==
-X-Gm-Message-State: ACrzQf19TJtRLfZJSw2ayhCgSWNv1UTht3G9n/gFTNzK+SIZw2Ndumnk
-        SsFT4TdDyQW5juOdz1yEHGk=
-X-Google-Smtp-Source: AMsMyM5It3aJjg1M83/P5mmD86k816Euz6h2VgrPhh7vuN5+OA4Viy5OUl6Mzc/b5kEy80N5N5l5ZQ==
-X-Received: by 2002:a17:90a:2b0c:b0:203:b7b1:2ba2 with SMTP id x12-20020a17090a2b0c00b00203b7b12ba2mr7332499pjc.34.1664509267586;
-        Thu, 29 Sep 2022 20:41:07 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-57.three.co.id. [116.206.12.57])
-        by smtp.gmail.com with ESMTPSA id m10-20020a17090a668a00b00203ab277966sm4315763pjj.7.2022.09.29.20.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 20:41:06 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 6AB0710374D; Fri, 30 Sep 2022 10:41:03 +0700 (WIB)
-Date:   Fri, 30 Sep 2022 10:41:03 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-Message-ID: <YzZlT7sO56TzXgNc@debian.me>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+        with ESMTP id S230417AbiI3Lhd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 07:37:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715136524D;
+        Fri, 30 Sep 2022 04:29:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA251B82819;
+        Fri, 30 Sep 2022 11:29:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86CBCC43142;
+        Fri, 30 Sep 2022 11:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664537341;
+        bh=4M2D/Jb1cUhjzhI2IvpJW5DClA4LelB/2AizDYaoWQ4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=rM8H6UvWmtNjFN1qfunErWBP1mPN2pCIEkVE6ET/GVOr47nxKR5qLbmUmzeBVJ4kd
+         Bx8rQMJTVfZdXV5mz1RvXOFPWPSLT/NYb7GfsHeIPNnxu2DFwUImCVhEh+HczdDasO
+         1RvGXklJJH/QUtmwWcR1xo5HcI2ntKkWKXeA6wxs2DDMFFOB/fgAgBfNCG2jjymUNG
+         31xPbTx6FXplx1nwhR+mnEhIaXAYMJsz7ppDYwOOeK/S4e/eMPbvysR7yL7RMDWWXZ
+         nOwwZk7i992k8O/ZLDmaux19+wqLTZnXobekw0IZATQ6ptiAkmuv8k/3lfJnGUnQGH
+         Uc4jMuQU/5Zig==
+Received: by mail-oi1-f182.google.com with SMTP id v130so4435577oie.2;
+        Fri, 30 Sep 2022 04:29:01 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0Rg3Kq93FuDJeHSqt3ix+aPEWtXjNZ/F79uWv38tEJt7rcn/Qy
+        5dbnIGrYZbDFQfYnAn3tSFLAtg228kEvzFUQ8dg=
+X-Google-Smtp-Source: AMsMyM61h9KH2iI+tds1ffcSLmUklT4vivVvNnTAC4q0qU56HU0lY37dyL1WvNV9fDBO7Wd8EjGerSKxOP6f3m/KMEE=
+X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
+ q31-20020a056808201f00b0034f9fdfdbbfmr8700739oiw.19.1664537340502; Fri, 30
+ Sep 2022 04:29:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="eGuHlwYLjB6uXtie"
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-2-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-8-guoren@kernel.org>
+ <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net> <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
+ <YylqSsL6bdhIOMte@hirez.programming.kicks-ass.net>
+In-Reply-To: <YylqSsL6bdhIOMte@hirez.programming.kicks-ass.net>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 30 Sep 2022 19:28:48 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTd8GH=ePB03Smg5AqEFEVHDzjuWmxBGcw+LqmH361rTw@mail.gmail.com>
+Message-ID: <CAJF2gTTd8GH=ePB03Smg5AqEFEVHDzjuWmxBGcw+LqmH361rTw@mail.gmail.com>
+Subject: Re: [PATCH V5 07/11] riscv: convert to generic entry
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Sep 20, 2022 at 3:23 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Sep 20, 2022 at 02:36:33PM +0800, Guo Ren wrote:
+> > On Mon, Sep 19, 2022 at 9:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Sun, Sep 18, 2022 at 11:52:42AM -0400, guoren@kernel.org wrote:
+> > >
+> > > > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
+> > > >
+> > > >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
+> > > >  {
+> > > > +     irqentry_state_t state = irqentry_enter(regs);
+> > > >       if (!handle_misaligned_load(regs))
+> > > >               return;
+> > > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> > > >                     "Oops - load address misaligned");
+> > > > +     irqentry_exit(regs, state);
+> > > >  }
+> > > >
+> > > >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
+> > > >  {
+> > > > +     irqentry_state_t state = irqentry_enter(regs);
+> > > >       if (!handle_misaligned_store(regs))
+> > > >               return;
+> > > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+> > > >                     "Oops - store (or AMO) address misaligned");
+> > > > +     irqentry_exit(regs, state);
+> > > >  }
+> > > >  #endif
+> > > >  DO_ERROR_INFO(do_trap_store_fault,
+> > > > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
+> > > >
+> > > >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
+> > > >  {
+> > > > +     irqentry_state_t state = irqentry_enter(regs);
+> > > > +
+> > > >  #ifdef CONFIG_KPROBES
+> > > >       if (kprobe_single_step_handler(regs))
+> > > >               return;
+> > >
+> > > FWIW; on x86 I've classified many of the 'from-kernel' traps as
+> > > NMI-like, since those traps can happen from any context, including with
+> > > IRQs disabled.
+> > The do_trap_break is for ebreak instruction, not NMI. RISC-V NMI has
+> > separate CSR. ref:
+> >
+> > This proposal adds support for resumable non-maskable interrupts
+> > (RNMIs) to RISC-V. The extension adds four new CSRs (`mnepc`,
+> > `mncause`, `mnstatus`, and `mnscratch`) to hold the interrupted state,
+> > and a new instruction to resume from the RNMI handler.
+>
+> Yes, but that's not what I'm saying. I'm saying I've classified
+> 'from-kernel' traps as NMI-like.
+>
+> Consider:
+>
+>         raw_spin_lock_irq(&foo);
+>         ...
+>         <trap>
+>
+> Then you want the trap to behave as if it were an NMI; that is abide by
+> the rules of NMI (strictly wait-free code).
+>
+> So yes, they are not NMI, but they nest just like it, so we want the
+> handlers to abide by the same rules.
+>
+> Does that make sense?
+Yes, thx for clarification. I've looked at exc_int3 of x86. Here is my
+new version:
 
---eGuHlwYLjB6uXtie
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
+index 571556bb9261..41cc1c4bccb3 100644
+--- a/arch/riscv/kernel/sys_riscv.c
++++ b/arch/riscv/kernel/sys_riscv.c
+@@ -5,8 +5,10 @@
+  * Copyright (C) 2017 SiFive
+  */
 
-On Thu, Sep 29, 2022 at 03:28:58PM -0700, Rick Edgecombe wrote:
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Control-flow Enforcement Technology (CET)
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Overview
-> +=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Control-flow Enforcement Technology (CET) is term referring to several
-> +related x86 processor features that provides protection against control
-> +flow hijacking attacks. The HW feature itself can be set up to protect
-> +both applications and the kernel. Only user-mode protection is implement=
-ed
-> +in the 64-bit kernel.
-> +
-> +CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
-> +a secondary stack allocated from memory and cannot be directly modified =
-by
-> +applications. When executing a CALL instruction, the processor pushes the
-> +return address to both the normal stack and the shadow stack. Upon
-> +function return, the processor pops the shadow stack copy and compares it
-> +to the normal stack copy. If the two differ, the processor raises a
-> +control-protection fault. Indirect branch tracking verifies indirect
-> +CALL/JMP targets are intended as marked by the compiler with 'ENDBR'
-> +opcodes. Not all CPU's have both Shadow Stack and Indirect Branch Tracki=
-ng
-> +and only Shadow Stack is currently supported in the kernel.
-> +
-> +The Kconfig options is X86_SHADOW_STACK, and it can be disabled with
-> +the kernel parameter clearcpuid, like this: "clearcpuid=3Dshstk".
-> +
-> +To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0=
-=2E1
-> +or later are required. To build a CET-enabled application, GLIBC v2.28 or
-> +later is also required.
-> +
-> +At run time, /proc/cpuinfo shows CET features if the processor supports
-> +CET.
-> +
-> +Application Enabling
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +An application's CET capability is marked in its ELF header and can be
-> +verified from readelf/llvm-readelf output:
-> +
-> +    readelf -n <application> | grep -a SHSTK
-> +        properties: x86 feature: SHSTK
-> +
-> +The kernel does not process these applications directly. Applications mu=
-st
-> +enable them using the interface descriped in section 4. Typically this
-> +would be done in dynamic loader or static runtime objects, as is the case
-> +in glibc.
-> +
-> +Backward Compatibility
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +GLIBC provides a few CET tunables via the GLIBC_TUNABLES environment
-> +variable:
-> +
-> +GLIBC_TUNABLES=3Dglibc.tune.hwcaps=3D-SHSTK,-WRSS
-> +    Turn off SHSTK/WRSS.
-> +
-> +GLIBC_TUNABLES=3Dglibc.tune.x86_shstk=3D<on, permissive>
-> +    This controls how dlopen() handles SHSTK legacy libraries::
-> +
-> +        on         - continue with SHSTK enabled;
-> +        permissive - continue with SHSTK off.
-> +
-> +Details can be found in the GLIBC manual pages.
-> +
-> +CET arch_prctl()'s
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Elf features should be enabled by the loader using the below arch_prctl'=
-s.
-> +
-> +arch_prctl(ARCH_CET_ENABLE, unsigned int feature)
-> +    Enable a single feature specified in 'feature'. Can only operate on
-> +    one feature at a time.
-> +
-> +arch_prctl(ARCH_CET_DISABLE, unsigned int feature)
-> +    Disable features specified in 'feature'. Can only operate on
-> +    one feature at a time.
-> +
-> +arch_prctl(ARCH_CET_LOCK, unsigned int features)
-> +    Lock in features at their current enabled or disabled status.
-> +
-> +The return values are as following:
-> +    On success, return 0. On error, errno can be::
-> +
-> +        -EPERM if any of the passed feature are locked.
-> +        -EOPNOTSUPP if the feature is not supported by the hardware or
-> +         disabled by kernel parameter.
-> +        -EINVAL arguments (non existing feature, etc)
-> +
-> +Currently shadow stack and WRSS are supported via this interface. WRSS
-> +can only be enabled with shadow stack, and is automatically disabled
-> +if shadow stack is disabled.
-> +
-> +Proc status
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +To check if an application is actually running with shadow stack, the
-> +user can read the /proc/$PID/arch_status. It will report "wrss" or
-> +"shstk" depending on what is enabled.
-> +
-> +The implementation of the Shadow Stack
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +Shadow Stack size
-> +-----------------
-> +
-> +A task's shadow stack is allocated from memory to a fixed size of
-> +MIN(RLIMIT_STACK, 4 GB). In other words, the shadow stack is allocated to
-> +the maximum size of the normal stack, but capped to 4 GB. However,
-> +a compat-mode application's address space is smaller, each of its thread=
-'s
-> +shadow stack size is MIN(1/4 RLIMIT_STACK, 4 GB).
-> +
-> +Signal
-> +------
-> +
-> +By default, the main program and its signal handlers use the same shadow
-> +stack. Because the shadow stack stores only return addresses, a large
-> +shadow stack covers the condition that both the program stack and the
-> +signal alternate stack run out.
-> +
-> +The kernel creates a restore token for the shadow stack and pushes the
-> +restorer address to the shadow stack. Then verifies that token when
-> +restoring from the signal handler.
-> +
-> +Fork
-> +----
-> +
-> +The shadow stack's vma has VM_SHADOW_STACK flag set; its PTEs are requir=
-ed
-> +to be read-only and dirty. When a shadow stack PTE is not RO and dirty, a
-> +shadow access triggers a page fault with the shadow stack access bit set
-> +in the page fault error code.
-> +
-> +When a task forks a child, its shadow stack PTEs are copied and both the
-> +parent's and the child's shadow stack PTEs are cleared of the dirty bit.
-> +Upon the next shadow stack access, the resulting shadow stack page fault
-> +is handled by page copy/re-use.
-> +
-> +When a pthread child is created, the kernel allocates a new shadow stack
-> +for the new thread.
++#include <linux/entry-common.h>
+ #include <linux/syscalls.h>
+ #include <asm/unistd.h>
++#include <asm/syscall.h>
+ #include <asm/cacheflush.h>
+ #include <asm-generic/mman-common.h>
 
-The documentation above can be improved (both grammar and formatting):
+@@ -72,3 +74,28 @@ SYSCALL_DEFINE3(riscv_flush_icache, uintptr_t,
+start, uintptr_t, end,
 
----- >8 ----
-
-diff --git a/Documentation/x86/cet.rst b/Documentation/x86/cet.rst
-index 6b270a24ebc3a2..f691f7995cf088 100644
---- a/Documentation/x86/cet.rst
-+++ b/Documentation/x86/cet.rst
-@@ -15,92 +15,101 @@ in the 64-bit kernel.
-=20
- CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
- a secondary stack allocated from memory and cannot be directly modified by
--applications. When executing a CALL instruction, the processor pushes the
-+applications. When executing a ``CALL`` instruction, the processor pushes =
-the
- return address to both the normal stack and the shadow stack. Upon
- function return, the processor pops the shadow stack copy and compares it
- to the normal stack copy. If the two differ, the processor raises a
- control-protection fault. Indirect branch tracking verifies indirect
--CALL/JMP targets are intended as marked by the compiler with 'ENDBR'
--opcodes. Not all CPU's have both Shadow Stack and Indirect Branch Tracking
--and only Shadow Stack is currently supported in the kernel.
-+``CALL``/``JMP`` targets are intended as marked by the compiler with ``END=
-BR``
-+opcodes. Not all CPUs have both Shadow Stack and Indirect Branch Tracking
-+and only Shadow Stack is currently supported by the kernel.
-=20
--The Kconfig options is X86_SHADOW_STACK, and it can be disabled with
--the kernel parameter clearcpuid, like this: "clearcpuid=3Dshstk".
-+The Kconfig options is ``X86_SHADOW_STACK`` and it can be overridden with
-+the kernel command-line parameter ``clearcpuid`` (for example
-+``clearcpuid=3Dshstk``).
-=20
- To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0.1
--or later are required. To build a CET-enabled application, GLIBC v2.28 or
-+or later are required. To build a CET-enabled application, glibc v2.28 or
- later is also required.
-=20
--At run time, /proc/cpuinfo shows CET features if the processor supports
--CET.
-+At run time, ``/proc/cpuinfo`` shows CET features if the processor supports
-+them
-=20
--Application Enabling
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+Enabling CET in applications
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-=20
--An application's CET capability is marked in its ELF header and can be
--verified from readelf/llvm-readelf output:
-+The CET capability of an application is marked in its ELF header and can be
-+verified from ``readelf``/``llvm-readelf`` output::
-=20
-     readelf -n <application> | grep -a SHSTK
-         properties: x86 feature: SHSTK
-=20
- The kernel does not process these applications directly. Applications must
--enable them using the interface descriped in section 4. Typically this
-+enable them using :ref:`cet-arch_prctl`. Typically this
- would be done in dynamic loader or static runtime objects, as is the case
- in glibc.
-=20
- Backward Compatibility
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--GLIBC provides a few CET tunables via the GLIBC_TUNABLES environment
-+glibc provides a few CET tunables via the ``GLIBC_TUNABLES`` environment
- variable:
-=20
--GLIBC_TUNABLES=3Dglibc.tune.hwcaps=3D-SHSTK,-WRSS
-+  * ``GLIBC_TUNABLES=3Dglibc.tune.hwcaps=3D-SHSTK,-WRSS``
+        return 0;
+ }
 +
-     Turn off SHSTK/WRSS.
-=20
--GLIBC_TUNABLES=3Dglibc.tune.x86_shstk=3D<on, permissive>
--    This controls how dlopen() handles SHSTK legacy libraries::
-+  * ``GLIBC_TUNABLES=3Dglibc.tune.x86_shstk=3D<on, permissive>``
-=20
--        on         - continue with SHSTK enabled;
--        permissive - continue with SHSTK off.
-+    This controls how :manpage:`dlopen(3)` handles SHSTK legacy libraries.
-+    Possible values are:
-=20
--Details can be found in the GLIBC manual pages.
-+    * ``on``         - continue with SHSTK enabled;
-+    * ``permissive`` - continue with SHSTK off.
-=20
--CET arch_prctl()'s
--=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+.. _cet-arch_prctl:
-=20
--Elf features should be enabled by the loader using the below arch_prctl's.
-+CET arch_prctl() interface
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-=20
--arch_prctl(ARCH_CET_ENABLE, unsigned int feature)
--    Enable a single feature specified in 'feature'. Can only operate on
-+ELF features should be enabled by the loader using the following
-+:manpage:`arch_prctl(2)` subfunctions:
++typedef long (*syscall_t)(ulong, ulong, ulong, ulong, ulong, ulong, ulong);
 +
-+  * ``arch_prctl(ARCH_CET_ENABLE, unsigned int feature)``
++asmlinkage void do_sys_ecall_u(struct pt_regs *regs)
++{
++       syscall_t syscall;
++       ulong nr = regs->a7;
 +
-+    Enable a single feature specified in ``feature``. Can only operate on
-     one feature at a time.
-=20
--arch_prctl(ARCH_CET_DISABLE, unsigned int feature)
--    Disable features specified in 'feature'. Can only operate on
-+  * ``arch_prctl(ARCH_CET_DISABLE, unsigned int feature)``
++       regs->epc += 4;
++       regs->orig_a0 = regs->a0;
++       regs->a0 = -ENOSYS;
 +
-+    Disable features specified in ``feature``. Can only operate on
-     one feature at a time.
-=20
--arch_prctl(ARCH_CET_LOCK, unsigned int features)
--    Lock in features at their current enabled or disabled status.
-+  * ``arch_prctl(ARCH_CET_LOCK, unsigned int features)``
++       nr = syscall_enter_from_user_mode(regs, nr);
++#ifdef CONFIG_COMPAT
++       if ((regs->status & SR_UXL) == SR_UXL_32)
++               syscall = compat_sys_call_table[nr];
++       else
++#endif
++               syscall = sys_call_table[nr];
 +
-+    Lock in features at their current status.
++       if (nr < NR_syscalls)
++               regs->a0 = syscall(regs->orig_a0, regs->a1, regs->a2,
++                                  regs->a3, regs->a4, regs->a5, regs->a6);
++       syscall_exit_to_user_mode(regs);
++}
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 588e17c386c6..d20037585c2f 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -17,6 +17,7 @@
+ #include <linux/module.h>
+ #include <linux/irq.h>
+ #include <linux/kexec.h>
++#include <linux/entry-common.h>
+
+ #include <asm/asm-prototypes.h>
+ #include <asm/bug.h>
+@@ -96,10 +97,18 @@ static void do_trap_error(struct pt_regs *regs,
+int signo, int code,
+ #else
+ #define __trap_section noinstr
+ #endif
+-#define DO_ERROR_INFO(name, signo, code, str)                          \
+-asmlinkage __visible __trap_section void name(struct pt_regs *regs)    \
+-{                                                                      \
+-       do_trap_error(regs, signo, code, regs->epc, "Oops - " str);     \
++#define DO_ERROR_INFO(name, signo, code, str)
+         \
++asmlinkage __visible __trap_section void name(struct pt_regs *regs)
+         \
++{
+         \
++       if (user_mode(regs)) {
+         \
++               irqentry_enter_from_user_mode(regs);
+         \
++               do_trap_error(regs, signo, code, regs->epc, "Oops - "
+str);     \
++               irqentry_exit_to_user_mode(regs);
+         \
++       } else {
+         \
++               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
+         \
++               do_trap_error(regs, signo, code, regs->epc, "Oops - "
+str);     \
++               irqentry_nmi_exit(regs, irq_state);
+         \
++       }
+         \
+ }
+
+ DO_ERROR_INFO(do_trap_unknown,
+@@ -123,18 +132,36 @@ int handle_misaligned_store(struct pt_regs *regs);
+
+ asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
+ {
+-       if (!handle_misaligned_load(regs))
+-               return;
+-       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+-                     "Oops - load address misaligned");
++       if (user_mode(regs)) {
++               irqentry_enter_from_user_mode(regs);
++               if (handle_misaligned_load(regs))
++                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
++                             "Oops - load address misaligned");
++               irqentry_exit_to_user_mode(regs);
++       } else {
++               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
++               if (handle_misaligned_load(regs))
++                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
++                             "Oops - load address misaligned");
++               irqentry_nmi_exit(regs, irq_state);
++       }
+ }
+
+ asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
+ {
+-       if (!handle_misaligned_store(regs))
+-               return;
+-       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
+-                     "Oops - store (or AMO) address misaligned");
++       if (user_mode(regs)) {
++               irqentry_enter_from_user_mode(regs);
++               if (handle_misaligned_store(regs))
++                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
++                               "Oops - store (or AMO) address misaligned");
++               irqentry_exit_to_user_mode(regs);
++       } else {
++               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
++               if (handle_misaligned_store(regs))
++                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
++                               "Oops - store (or AMO) address misaligned");
++               irqentry_nmi_exit(regs, irq_state);
++       }
+ }
+ #endif
+ DO_ERROR_INFO(do_trap_store_fault,
+@@ -156,7 +183,7 @@ static inline unsigned long
+get_break_insn_length(unsigned long pc)
+        return GET_INSN_LENGTH(insn);
+ }
+
+-asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
++static void __do_trap_break(struct pt_regs *regs)
+ {
+ #ifdef CONFIG_KPROBES
+        if (kprobe_single_step_handler(regs))
+@@ -186,6 +213,19 @@ asmlinkage __visible __trap_section void
+do_trap_break(struct pt_regs *regs)
+        else
+                die(regs, "Kernel BUG");
+ }
 +
-+  * ``arch_prctl(ARCH_CET_UNLOCK, unsigned int features)``
-=20
--arch_prctl(ARCH_CET_UNLOCK, unsigned int features)
-     Unlock features.
-=20
--The return values are as following:
--    On success, return 0. On error, errno can be::
-+On success, :manpage:`arch_prctl(2)` returns 0, otherwise the errno
-+can be:
-=20
--        -EPERM if any of the passed feature are locked.
--        -EOPNOTSUPP if the feature is not supported by the hardware or
--         disabled by kernel parameter.
--        -EINVAL arguments (non existing feature, etc)
-+  - ``EPERM`` if any of the passed feature are locked.
-+  - ``EOPNOTSUPP`` if the feature is not supported by the hardware or
-+    disabled by the kernel command-line parameter.
-+  - ``EINVAL`` if the arguments are invalid (non existing feature, etc).
-=20
- Currently shadow stack and WRSS are supported via this interface. WRSS
- can only be enabled with shadow stack, and is automatically disabled
- if shadow stack is disabled.
-=20
--Proc status
-+proc status
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
--To check if an application is actually running with shadow stack, the
--user can read the /proc/$PID/arch_status. It will report "wrss" or
--"shstk" depending on what is enabled.
-+To check if an application is actually running with shadow stack, users can
-+read ``/proc/$PID/arch_status``. It will report ``wrss`` or
-+``shstk`` depending on what is enabled.
-=20
- The implementation of the Shadow Stack
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-@@ -108,11 +117,11 @@ The implementation of the Shadow Stack
- Shadow Stack size
- -----------------
-=20
--A task's shadow stack is allocated from memory to a fixed size of
--MIN(RLIMIT_STACK, 4 GB). In other words, the shadow stack is allocated to
-+The shadow stack of a task is allocated from memory to a fixed size of
-+``MIN(RLIMIT_STACK, 4 GB)``. In other words, the shadow stack is allocated=
- to
- the maximum size of the normal stack, but capped to 4 GB. However,
--a compat-mode application's address space is smaller, each of its thread's
--shadow stack size is MIN(1/4 RLIMIT_STACK, 4 GB).
-+the address space of a compat-mode application is smaller; the shadow stack
-+size of each of its thread is ``MIN(1/4 RLIMIT_STACK, 4 GB)``.
-=20
- Signal
- ------
-@@ -123,19 +132,19 @@ shadow stack covers the condition that both the progr=
-am stack and the
- signal alternate stack run out.
-=20
- The kernel creates a restore token for the shadow stack and pushes the
--restorer address to the shadow stack. Then verifies that token when
--restoring from the signal handler.
-+restorer address to it. Then the kernel verifies that token when restoring
-+from the signal handler.
-=20
- Fork
- ----
-=20
--The shadow stack's vma has VM_SHADOW_STACK flag set; its PTEs are required
--to be read-only and dirty. When a shadow stack PTE is not RO and dirty, a
-+The shadow stack vma has ``VM_SHADOW_STACK`` flag set; its PTEs are requir=
-ed
-+to be read-only and dirty. When a shadow stack PTE is read-write and dirty=
-, a
- shadow access triggers a page fault with the shadow stack access bit set
- in the page fault error code.
-=20
- When a task forks a child, its shadow stack PTEs are copied and both the
--parent's and the child's shadow stack PTEs are cleared of the dirty bit.
-+shadow stack PTEs of parent and child are cleared of the dirty bit.
- Upon the next shadow stack access, the resulting shadow stack page fault
- is handled by page copy/re-use.
-=20
-Thanks.
++asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
++{
++       if (user_mode(regs)) {
++               irqentry_enter_from_user_mode(regs);
++               __do_trap_break(regs);
++               irqentry_exit_to_user_mode(regs);
++       } else {
++               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
++               __do_trap_break(regs);
++               irqentry_nmi_exit(regs, irq_state);
++       }
++}
+ NOKPROBE_SYMBOL(do_trap_break);
 
---=20
-An old man doll... just what I always wanted! - Clara
+ #ifdef CONFIG_GENERIC_BUG
+diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+index c7829289e806..cc8e642a91ea 100644
+--- a/arch/riscv/mm/fault.c
++++ b/arch/riscv/mm/fault.c
+@@ -15,6 +15,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/kprobes.h>
+ #include <linux/kfence.h>
++#include <linux/entry-common.h>
 
---eGuHlwYLjB6uXtie
-Content-Type: application/pgp-signature; name="signature.asc"
+ #include <asm/ptrace.h>
+ #include <asm/tlbflush.h>
+@@ -203,7 +204,7 @@ static inline bool access_error(unsigned long
+cause, struct vm_area_struct *vma)
+  * This routine handles page faults.  It determines the address and the
+  * problem, and then passes it off to one of the appropriate routines.
+  */
+-asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
++static void __do_page_fault(struct pt_regs *regs)
+ {
+        struct task_struct *tsk;
+        struct vm_area_struct *vma;
+@@ -350,4 +351,13 @@ asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+        }
+        return;
+ }
++
++asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
++{
++       irqentry_state_t state = irqentry_enter(regs);
++
++       __do_page_fault(regs);
++
++       irqentry_exit(regs, state);
++}
+ NOKPROBE_SYMBOL(do_page_fault);
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYzZlSwAKCRD2uYlJVVFO
-o/E+AQC4R370JtlvOpcNfLV29O/Klt/2032cP5rnzHigPFNppwD9Gg2sSM6SIeq9
-12n3CQKTry04jtXt1YhJb5TVXy4U/Ak=
-=lClp
------END PGP SIGNATURE-----
+        }
+}
 
---eGuHlwYLjB6uXtie--
+>
+> > >
+> > > The basic shape of the trap handlers looks a little like:
+> > >
+> > >         if (user_mode(regs)) {
+> > If nmi comes from user_mode, why we using
+> > irqenrty_enter/exit_from/to_user_mode instead of
+> > irqentry_nmi_enter/exit?
+>
+> s/nmi/trap/ because the 'from-user' trap never nests inside kernel code.
+>
+> Additionally, many 'from-user' traps want to do 'silly' things like send
+> signals, which is something that requires scheduling.
+>
+> They're fundamentally different from 'from-kernel' traps, which per the
+> above, nest most dangerously.
+>
+> > >                 irqenrty_enter_from_user_mode(regs);
+> > >                 do_user_trap();
+> > >                 irqentry_exit_to_user_mode(regs);
+> > >         } else {
+> > >                 irqentry_state_t state = irqentry_nmi_enter(regs);
+> > >                 do_kernel_trap();
+> > >                 irqentry_nmi_exit(regs, state);
+> > >         }
+> > >
+> > > Not saying you have to match Risc-V in this patch-set, just something to
+> > > consider.
+> > I think the shape of the riscv NMI handler looks a little like this:
+> >
+> > asmlinkage __visible __trap_section void do_trap_nmi(struct pt_regs *regs)
+> > {
+> >                  irqentry_state_t state = irqentry_nmi_enter(regs);
+> >                  do_nmi_trap();
+> >                  irqentry_nmi_exit(regs, state);
+> > }
+>
+> That is correct for the NMI handler; but here I'm specifically talking
+> about traps, like the unalign trap, break trap etc. Those that can
+> happen *anywhere* in kernel code and nest most unfortunate.
+
+
+
+--
+Best Regards
+ Guo Ren
