@@ -2,53 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974485F0AA8
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 13:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92555F0BBB
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 14:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiI3Lhw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Sep 2022 07:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S230042AbiI3M2O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Sep 2022 08:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbiI3Lhd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 07:37:33 -0400
+        with ESMTP id S229646AbiI3M2O (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 08:28:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715136524D;
-        Fri, 30 Sep 2022 04:29:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FDF154448;
+        Fri, 30 Sep 2022 05:28:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA251B82819;
-        Fri, 30 Sep 2022 11:29:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86CBCC43142;
-        Fri, 30 Sep 2022 11:29:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8450AB828AC;
+        Fri, 30 Sep 2022 12:28:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4C7C433C1;
+        Fri, 30 Sep 2022 12:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664537341;
-        bh=4M2D/Jb1cUhjzhI2IvpJW5DClA4LelB/2AizDYaoWQ4=;
+        s=k20201202; t=1664540890;
+        bh=/4ALUwugj3Gl5x22JbGPmpfNQMZMiRVYjPgXy1gPB00=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rM8H6UvWmtNjFN1qfunErWBP1mPN2pCIEkVE6ET/GVOr47nxKR5qLbmUmzeBVJ4kd
-         Bx8rQMJTVfZdXV5mz1RvXOFPWPSLT/NYb7GfsHeIPNnxu2DFwUImCVhEh+HczdDasO
-         1RvGXklJJH/QUtmwWcR1xo5HcI2ntKkWKXeA6wxs2DDMFFOB/fgAgBfNCG2jjymUNG
-         31xPbTx6FXplx1nwhR+mnEhIaXAYMJsz7ppDYwOOeK/S4e/eMPbvysR7yL7RMDWWXZ
-         nOwwZk7i992k8O/ZLDmaux19+wqLTZnXobekw0IZATQ6ptiAkmuv8k/3lfJnGUnQGH
-         Uc4jMuQU/5Zig==
-Received: by mail-oi1-f182.google.com with SMTP id v130so4435577oie.2;
-        Fri, 30 Sep 2022 04:29:01 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0Rg3Kq93FuDJeHSqt3ix+aPEWtXjNZ/F79uWv38tEJt7rcn/Qy
-        5dbnIGrYZbDFQfYnAn3tSFLAtg228kEvzFUQ8dg=
-X-Google-Smtp-Source: AMsMyM61h9KH2iI+tds1ffcSLmUklT4vivVvNnTAC4q0qU56HU0lY37dyL1WvNV9fDBO7Wd8EjGerSKxOP6f3m/KMEE=
-X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
- q31-20020a056808201f00b0034f9fdfdbbfmr8700739oiw.19.1664537340502; Fri, 30
- Sep 2022 04:29:00 -0700 (PDT)
+        b=oeFdDAQgFqpzjqRJzGKF+vIiAZAHQfulVNWlmMVMwAHj2u0REi2V5iu9vb+qElzKT
+         smZrXJfoLoerUKwI6og+0fc/EjVTTODG1591hPIpDkikZvUpPaVj/BHp1Bda0a2eSq
+         Vrop+6cUrjHCLuQUNPsgF89atHJ3Xw3EsjWe2aPQQ6QnHzGXHOzz0DwMtFarkV5Ffu
+         2lJDgkB8X4mJIkGikek60Vgtfa+EyCu2PYNZ4xLnAHle7QO/6Mml7YhbCglGFG+UGt
+         at/il5U5MH5iJK/SaXq/h4hBq7kjdKoNBk+Q00f6GeKNzPxR4cODtau9f+C0ffPdb8
+         t/beZj1K1hwtA==
+Received: by mail-oi1-f171.google.com with SMTP id w13so4561778oiw.8;
+        Fri, 30 Sep 2022 05:28:10 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0t0DMHVQYLuHPLYUzLA+tEURZPCwsS8S5KeP9buglPcpfqH+GJ
+        WJnvK7soL7lBkLxMY3b2WRBDrqhhOYVHbIqxlic=
+X-Google-Smtp-Source: AMsMyM7AkR4koVBLJ1BpYLj3z3e6TpYzy4iDz1E5xTYn5b1jVTvl8sCipeZ/PTuVCPUM2xxKtW4Q4YOmg6NnPRJ2Hp4=
+X-Received: by 2002:a05:6808:151f:b0:350:1b5e:2380 with SMTP id
+ u31-20020a056808151f00b003501b5e2380mr9157731oiw.112.1664540889350; Fri, 30
+ Sep 2022 05:28:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-8-guoren@kernel.org>
- <Yyhv4UUXuSfvMOw+@hirez.programming.kicks-ass.net> <CAJF2gTRdkmemEWsDYhVXb8KD0PS6b1VAPu_MfeZ+Rmf2qEGa6Q@mail.gmail.com>
- <YylqSsL6bdhIOMte@hirez.programming.kicks-ass.net>
-In-Reply-To: <YylqSsL6bdhIOMte@hirez.programming.kicks-ass.net>
+References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-7-guoren@kernel.org>
+ <YyhZfUi17TEaOLWv@hirez.programming.kicks-ass.net> <CAJF2gTQxfuHVe=drT3tMCK4prULR5iPS6F++HTokswjD2yRZZQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTQxfuHVe=drT3tMCK4prULR5iPS6F++HTokswjD2yRZZQ@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 30 Sep 2022 19:28:48 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTd8GH=ePB03Smg5AqEFEVHDzjuWmxBGcw+LqmH361rTw@mail.gmail.com>
-Message-ID: <CAJF2gTTd8GH=ePB03Smg5AqEFEVHDzjuWmxBGcw+LqmH361rTw@mail.gmail.com>
-Subject: Re: [PATCH V5 07/11] riscv: convert to generic entry
+Date:   Fri, 30 Sep 2022 20:27:57 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTo2E539HkkPGah-NtAf4U0HFLU_t=6VT0_6S=M1YswzQ@mail.gmail.com>
+Message-ID: <CAJF2gTTo2E539HkkPGah-NtAf4U0HFLU_t=6VT0_6S=M1YswzQ@mail.gmail.com>
+Subject: Re: [PATCH V5 06/11] entry: Prevent DEBUG_PREEMPT warning
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
         luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
@@ -70,329 +69,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 3:23 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Tue, Sep 20, 2022 at 9:45 AM Guo Ren <guoren@kernel.org> wrote:
 >
-> On Tue, Sep 20, 2022 at 02:36:33PM +0800, Guo Ren wrote:
-> > On Mon, Sep 19, 2022 at 9:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Sun, Sep 18, 2022 at 11:52:42AM -0400, guoren@kernel.org wrote:
-> > >
-> > > > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
-> > > >
-> > > >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
-> > > >  {
-> > > > +     irqentry_state_t state = irqentry_enter(regs);
-> > > >       if (!handle_misaligned_load(regs))
-> > > >               return;
-> > > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> > > >                     "Oops - load address misaligned");
-> > > > +     irqentry_exit(regs, state);
-> > > >  }
-> > > >
-> > > >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
-> > > >  {
-> > > > +     irqentry_state_t state = irqentry_enter(regs);
-> > > >       if (!handle_misaligned_store(regs))
-> > > >               return;
-> > > >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> > > >                     "Oops - store (or AMO) address misaligned");
-> > > > +     irqentry_exit(regs, state);
-> > > >  }
-> > > >  #endif
-> > > >  DO_ERROR_INFO(do_trap_store_fault,
-> > > > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
-> > > >
-> > > >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> > > >  {
-> > > > +     irqentry_state_t state = irqentry_enter(regs);
-> > > > +
-> > > >  #ifdef CONFIG_KPROBES
-> > > >       if (kprobe_single_step_handler(regs))
-> > > >               return;
-> > >
-> > > FWIW; on x86 I've classified many of the 'from-kernel' traps as
-> > > NMI-like, since those traps can happen from any context, including with
-> > > IRQs disabled.
-> > The do_trap_break is for ebreak instruction, not NMI. RISC-V NMI has
-> > separate CSR. ref:
+> On Mon, Sep 19, 2022 at 7:59 PM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > This proposal adds support for resumable non-maskable interrupts
-> > (RNMIs) to RISC-V. The extension adds four new CSRs (`mnepc`,
-> > `mncause`, `mnstatus`, and `mnscratch`) to hold the interrupted state,
-> > and a new instruction to resume from the RNMI handler.
->
-> Yes, but that's not what I'm saying. I'm saying I've classified
-> 'from-kernel' traps as NMI-like.
->
-> Consider:
->
->         raw_spin_lock_irq(&foo);
->         ...
->         <trap>
->
-> Then you want the trap to behave as if it were an NMI; that is abide by
-> the rules of NMI (strictly wait-free code).
->
-> So yes, they are not NMI, but they nest just like it, so we want the
-> handlers to abide by the same rules.
->
-> Does that make sense?
-Yes, thx for clarification. I've looked at exc_int3 of x86. Here is my
-new version:
+> > On Sun, Sep 18, 2022 at 11:52:41AM -0400, guoren@kernel.org wrote:
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > When DEBUG_PREEMPT=y,
+> > >       exit_to_user_mode_prepare
+> > >       ->tick_nohz_user_enter_prepare
+> > >         ->tick_nohz_full_cpu(smp_processor_id())
+> > >           ->smp_processor_id()
+> > >             ->debug_smp_processor_id()
+> > >               ->check preempt_count() then:
+> > >
+> > > [    5.717610] BUG: using smp_processor_id() in preemptible [00000000]
+> > > code: S20urandom/94
+> > > [    5.718111] caller is debug_smp_processor_id+0x24/0x38
+> > > [    5.718417] CPU: 1 PID: 94 Comm: S20urandom Not tainted
+> > > 6.0.0-rc3-00010-gfd0a0d619c63-dirty #238
+> > > [    5.718886] Hardware name: riscv-virtio,qemu (DT)
+> > > [    5.719136] Call Trace:
+> > > [    5.719281] [<ffffffff800055fc>] dump_backtrace+0x2c/0x3c
+> > > [    5.719566] [<ffffffff80ae6cb0>] show_stack+0x44/0x5c
+> > > [    5.720023] [<ffffffff80aee870>] dump_stack_lvl+0x74/0xa4
+> > > [    5.720557] [<ffffffff80aee8bc>] dump_stack+0x1c/0x2c
+> > > [    5.721033] [<ffffffff80af65c0>]
+> > > check_preemption_disabled+0x104/0x108
+> > > [    5.721538] [<ffffffff80af65e8>] debug_smp_processor_id+0x24/0x38
+> > > [    5.722001] [<ffffffff800aee30>] exit_to_user_mode_prepare+0x48/0x178
+> > > [    5.722355] [<ffffffff80af5bf4>] irqentry_exit_to_user_mode+0x18/0x30
+> > > [    5.722685] [<ffffffff80af5c70>] irqentry_exit+0x64/0xa4
+> > > [    5.722953] [<ffffffff80af52f4>] do_page_fault+0x1d8/0x544
+> > > [    5.723291] [<ffffffff80003310>] ret_from_exception+0x0/0xb8
+> > >
+> > > (Above is found in riscv platform with generic_entry)
+> > >
+> > > The smp_processor_id() needs irqs disable or preempt_disable, so use
+> > > preempt dis/in protecting the tick_nohz_user_enter_prepare().
+> > >
+> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > ---
+> > >  kernel/entry/common.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> > > index 063068a9ea9b..36e4cd50531c 100644
+> > > --- a/kernel/entry/common.c
+> > > +++ b/kernel/entry/common.c
+> > > @@ -194,8 +194,10 @@ static void exit_to_user_mode_prepare(struct pt_regs *regs)
+> > >
+> > >       lockdep_assert_irqs_disabled();
+> >
+> >     Observe ^^^^
+> Thanks! I would enable PROVE_LOCKING for test.
+It's my bug in page_fault, here is the solution:
 
-diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-index 571556bb9261..41cc1c4bccb3 100644
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -5,8 +5,10 @@
-  * Copyright (C) 2017 SiFive
-  */
+@@ -358,6 +358,8 @@ asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
 
-+#include <linux/entry-common.h>
- #include <linux/syscalls.h>
- #include <asm/unistd.h>
-+#include <asm/syscall.h>
- #include <asm/cacheflush.h>
- #include <asm-generic/mman-common.h>
+        __do_page_fault(regs);
 
-@@ -72,3 +74,28 @@ SYSCALL_DEFINE3(riscv_flush_icache, uintptr_t,
-start, uintptr_t, end,
-
-        return 0;
++       local_irq_disable();
++
+        irqentry_exit(regs, state);
  }
-+
-+typedef long (*syscall_t)(ulong, ulong, ulong, ulong, ulong, ulong, ulong);
-+
-+asmlinkage void do_sys_ecall_u(struct pt_regs *regs)
-+{
-+       syscall_t syscall;
-+       ulong nr = regs->a7;
-+
-+       regs->epc += 4;
-+       regs->orig_a0 = regs->a0;
-+       regs->a0 = -ENOSYS;
-+
-+       nr = syscall_enter_from_user_mode(regs, nr);
-+#ifdef CONFIG_COMPAT
-+       if ((regs->status & SR_UXL) == SR_UXL_32)
-+               syscall = compat_sys_call_table[nr];
-+       else
-+#endif
-+               syscall = sys_call_table[nr];
-+
-+       if (nr < NR_syscalls)
-+               regs->a0 = syscall(regs->orig_a0, regs->a1, regs->a2,
-+                                  regs->a3, regs->a4, regs->a5, regs->a6);
-+       syscall_exit_to_user_mode(regs);
-+}
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index 588e17c386c6..d20037585c2f 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -17,6 +17,7 @@
- #include <linux/module.h>
- #include <linux/irq.h>
- #include <linux/kexec.h>
-+#include <linux/entry-common.h>
-
- #include <asm/asm-prototypes.h>
- #include <asm/bug.h>
-@@ -96,10 +97,18 @@ static void do_trap_error(struct pt_regs *regs,
-int signo, int code,
- #else
- #define __trap_section noinstr
- #endif
--#define DO_ERROR_INFO(name, signo, code, str)                          \
--asmlinkage __visible __trap_section void name(struct pt_regs *regs)    \
--{                                                                      \
--       do_trap_error(regs, signo, code, regs->epc, "Oops - " str);     \
-+#define DO_ERROR_INFO(name, signo, code, str)
-         \
-+asmlinkage __visible __trap_section void name(struct pt_regs *regs)
-         \
-+{
-         \
-+       if (user_mode(regs)) {
-         \
-+               irqentry_enter_from_user_mode(regs);
-         \
-+               do_trap_error(regs, signo, code, regs->epc, "Oops - "
-str);     \
-+               irqentry_exit_to_user_mode(regs);
-         \
-+       } else {
-         \
-+               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
-         \
-+               do_trap_error(regs, signo, code, regs->epc, "Oops - "
-str);     \
-+               irqentry_nmi_exit(regs, irq_state);
-         \
-+       }
-         \
- }
-
- DO_ERROR_INFO(do_trap_unknown,
-@@ -123,18 +132,36 @@ int handle_misaligned_store(struct pt_regs *regs);
-
- asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
- {
--       if (!handle_misaligned_load(regs))
--               return;
--       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
--                     "Oops - load address misaligned");
-+       if (user_mode(regs)) {
-+               irqentry_enter_from_user_mode(regs);
-+               if (handle_misaligned_load(regs))
-+                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-+                             "Oops - load address misaligned");
-+               irqentry_exit_to_user_mode(regs);
-+       } else {
-+               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
-+               if (handle_misaligned_load(regs))
-+                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-+                             "Oops - load address misaligned");
-+               irqentry_nmi_exit(regs, irq_state);
-+       }
- }
-
- asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
- {
--       if (!handle_misaligned_store(regs))
--               return;
--       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
--                     "Oops - store (or AMO) address misaligned");
-+       if (user_mode(regs)) {
-+               irqentry_enter_from_user_mode(regs);
-+               if (handle_misaligned_store(regs))
-+                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-+                               "Oops - store (or AMO) address misaligned");
-+               irqentry_exit_to_user_mode(regs);
-+       } else {
-+               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
-+               if (handle_misaligned_store(regs))
-+                       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-+                               "Oops - store (or AMO) address misaligned");
-+               irqentry_nmi_exit(regs, irq_state);
-+       }
- }
- #endif
- DO_ERROR_INFO(do_trap_store_fault,
-@@ -156,7 +183,7 @@ static inline unsigned long
-get_break_insn_length(unsigned long pc)
-        return GET_INSN_LENGTH(insn);
- }
-
--asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-+static void __do_trap_break(struct pt_regs *regs)
- {
- #ifdef CONFIG_KPROBES
-        if (kprobe_single_step_handler(regs))
-@@ -186,6 +213,19 @@ asmlinkage __visible __trap_section void
-do_trap_break(struct pt_regs *regs)
-        else
-                die(regs, "Kernel BUG");
- }
-+
-+asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-+{
-+       if (user_mode(regs)) {
-+               irqentry_enter_from_user_mode(regs);
-+               __do_trap_break(regs);
-+               irqentry_exit_to_user_mode(regs);
-+       } else {
-+               irqentry_state_t irq_state = irqentry_nmi_enter(regs);
-+               __do_trap_break(regs);
-+               irqentry_nmi_exit(regs, irq_state);
-+       }
-+}
- NOKPROBE_SYMBOL(do_trap_break);
-
- #ifdef CONFIG_GENERIC_BUG
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index c7829289e806..cc8e642a91ea 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -15,6 +15,7 @@
- #include <linux/uaccess.h>
- #include <linux/kprobes.h>
- #include <linux/kfence.h>
-+#include <linux/entry-common.h>
-
- #include <asm/ptrace.h>
- #include <asm/tlbflush.h>
-@@ -203,7 +204,7 @@ static inline bool access_error(unsigned long
-cause, struct vm_area_struct *vma)
-  * This routine handles page faults.  It determines the address and the
-  * problem, and then passes it off to one of the appropriate routines.
-  */
--asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-+static void __do_page_fault(struct pt_regs *regs)
- {
-        struct task_struct *tsk;
-        struct vm_area_struct *vma;
-@@ -350,4 +351,13 @@ asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-        }
-        return;
- }
-+
-+asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-+{
-+       irqentry_state_t state = irqentry_enter(regs);
-+
-+       __do_page_fault(regs);
-+
-+       irqentry_exit(regs, state);
-+}
  NOKPROBE_SYMBOL(do_page_fault);
 
-
-        }
-}
-
 >
-> > >
-> > > The basic shape of the trap handlers looks a little like:
-> > >
-> > >         if (user_mode(regs)) {
-> > If nmi comes from user_mode, why we using
-> > irqenrty_enter/exit_from/to_user_mode instead of
-> > irqentry_nmi_enter/exit?
->
-> s/nmi/trap/ because the 'from-user' trap never nests inside kernel code.
->
-> Additionally, many 'from-user' traps want to do 'silly' things like send
-> signals, which is something that requires scheduling.
->
-> They're fundamentally different from 'from-kernel' traps, which per the
-> above, nest most dangerously.
->
-> > >                 irqenrty_enter_from_user_mode(regs);
-> > >                 do_user_trap();
-> > >                 irqentry_exit_to_user_mode(regs);
-> > >         } else {
-> > >                 irqentry_state_t state = irqentry_nmi_enter(regs);
-> > >                 do_kernel_trap();
-> > >                 irqentry_nmi_exit(regs, state);
-> > >         }
-> > >
-> > > Not saying you have to match Risc-V in this patch-set, just something to
-> > > consider.
-> > I think the shape of the riscv NMI handler looks a little like this:
 > >
-> > asmlinkage __visible __trap_section void do_trap_nmi(struct pt_regs *regs)
-> > {
-> >                  irqentry_state_t state = irqentry_nmi_enter(regs);
-> >                  do_nmi_trap();
-> >                  irqentry_nmi_exit(regs, state);
-> > }
+> > >
+> > > +     preempt_disable();
+> > >       /* Flush pending rcuog wakeup before the last need_resched() check */
+> > >       tick_nohz_user_enter_prepare();
+> > > +     preempt_enable();
+> >
+> > This makes no sense; if IRQs are disabled, check_preemption_disabled()
+> > should bail early per:
+> >
+> >         if (irqs_disabled())
+> >                 goto out;
+> Ditto.
 >
-> That is correct for the NMI handler; but here I'm specifically talking
-> about traps, like the unalign trap, break trap etc. Those that can
-> happen *anywhere* in kernel code and nest most unfortunate.
+>
+> --
+> Best Regards
+>  Guo Ren
 
 
 
---
+-- 
 Best Regards
  Guo Ren
