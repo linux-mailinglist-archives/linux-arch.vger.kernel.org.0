@@ -2,57 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBBA5F0EA6
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 17:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960E25F1244
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 21:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbiI3PRJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Sep 2022 11:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
+        id S230111AbiI3TQx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Sep 2022 15:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbiI3PQ4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 11:16:56 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A16A157BA4
-        for <linux-arch@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id z191so3495615iof.10
-        for <linux-arch@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
-        b=YB6CjrLNYng7WeQ+wslm2VPbitaNP0ShR1T5EE1nM1ZDzkPIUIob+C5C13QD3JXPF1
-         NlTKpUe1scku9p9XtGg1Izf8Dc1TpUfDODtn3jM3q+jUgY+zDC8CkVafqeyuUs5Ukq4H
-         mxgGAAK+DsgqM6tuU2p8NgFuDB9wt0vJRVLYwkBPKv4B/ePv4XSF+IhrLjGkmdoqQgiK
-         rxRERHXXtZc2phGR1txS5Ern3RsbTR4MwgYbmiOu6gqswdwU6HISzy3r1yVdTddsuKrM
-         iiaVoLmXP/g0d+Kep6mJQOi0gGm+i42CSw87iKLR+VGAZR0m1PHT3JTUY1Mdx8cOHtjv
-         UphQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
-        b=qdjmzZ7GYvLtYmFq0bnKUW3bqXZMRvrYv7gjKLSqvWd0PR8fhYuh10VifyCJW9Ccu7
-         BkE5hvbciXDuVdtOVNMsTr6zzQb+B5OytULLNAojoHqm/jBvfWNJqzrDERa0yFHqy/xp
-         AerPz9+EzHni+d2AMHmrsf3ceQoh0r8JR4nqHE2rhlIuYLNm+vsRuVqIMZAbcR6AAYZm
-         wZwxdMHpRb/jYm5LrnHmqPkJdY74GzLTQCZspcTKHpObez1ZRLDBo4yEseYIr/qIqn1G
-         uTcQblIvMvDfpQMEX1LAlVs/2FNzk/qfySxClJRsi8kt01bdiJq0SS0XoaMmD+zEleMF
-         c5uQ==
-X-Gm-Message-State: ACrzQf09/CTbxqTOY1HDx2BObhXWJupsZr/jgL+anSvTnwwq8LCj4GuE
-        dRGB/64LXwHpBknU4j3Cjl9mEORrAey0FabtfsHTqA==
-X-Google-Smtp-Source: AMsMyM6F7AAgEnbDB3rrGofw7Np/IRuyPPKXtazfBLnfUtfrHBecx6ZQ4/DCYfPtN9Dyv/lb8mRBcckQ17dphsFV0xw=
-X-Received: by 2002:a05:6638:31c2:b0:35a:c5b1:b567 with SMTP id
- n2-20020a05663831c200b0035ac5b1b567mr4600630jav.58.1664551009140; Fri, 30 Sep
- 2022 08:16:49 -0700 (PDT)
+        with ESMTP id S229531AbiI3TQw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 15:16:52 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B21C178A0F;
+        Fri, 30 Sep 2022 12:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664565411; x=1696101411;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=Kvg1hmWTB85MGkRfrUrnIZoG1lyvNoMRxkPltDY9hDY=;
+  b=f0+7LnnWGHbHp3JKFxkWhYftdonMaU5jGwf4NjcABEKRVTJQRdcwFbZB
+   rIi9H6lxfFwRNrAH8KmIeOFwon6V2Cv3FWvx0knjHDPPCMfRF2lQpnfrB
+   IAZRIlhJdxf0qsW/jdOLY1i5WAjjX5EIXWQRI4gDx10baGF0cMdXrhK5D
+   uiFjrfPB9ECP47eEs9PvNdSYuEz/MAwPKPx6RYVr263gmdtceiNa5nfbe
+   yU82F57hWCPtUuvfiIQ28Y9T77HDCkSi+ck6hIR6yP1Pv/rrHzjuu4NQk
+   8S3r5BYJtCJrnsfq41155S/Iq35LjdqDN2NpW/o/CQMAbMo/sk2wyKo+d
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="328656818"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="328656818"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 12:16:50 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="726978714"
+X-IronPort-AV: E=Sophos;i="5.93,358,1654585200"; 
+   d="scan'208";a="726978714"
+Received: from lzearing-mobl.amr.corp.intel.com (HELO [10.209.49.67]) ([10.209.49.67])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2022 12:16:48 -0700
+Message-ID: <9fed0342-2d02-aaf2-ed66-20ff08bdfd0b@intel.com>
+Date:   Fri, 30 Sep 2022 12:16:47 -0700
 MIME-Version: 1.0
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-In-Reply-To: <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 30 Sep 2022 17:16:12 +0200
-Message-ID: <CAG48ez3hXfsUkMqcHmVetzywKC8a+PLhGReceTdwCf7B03Oj7g@mail.gmail.com>
-Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 22/39] mm: Don't allow write GUPs to shadow stack
+ memory
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -65,7 +59,7 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
@@ -78,29 +72,30 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-23-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220929222936.14584-23-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 12:30 AM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
-> The reason it's lightly used is that Dirty=1 is normally set _before_ a
-> write. A write with a Write=0 PTE would typically only generate a fault,
-> not set Dirty=1. Hardware can (rarely) both set Write=1 *and* generate the
-> fault, resulting in a Dirty=0,Write=1 PTE. Hardware which supports shadow
-> stacks will no longer exhibit this oddity.
+On 9/29/22 15:29, Rick Edgecombe wrote:
+> @@ -1633,6 +1633,9 @@ static inline bool __pte_access_permitted(unsigned long pteval, bool write)
+>  {
+>  	unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
+>  
+> +	if (write && (pteval & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY)
+> +		return 0;
 
-Stupid question, since I just recently learned that IOMMUv2 is a
-thing: I assume this also holds for IOMMUs that implement IOMMUv2/SVA,
-where the IOMMU directly walks the userspace page tables, and not just
-for the CPU core?
+Do we not have a helper for this?  Seems a bit messy to open-code these
+shadow-stack permissions.  Definitely at least needs a comment.
