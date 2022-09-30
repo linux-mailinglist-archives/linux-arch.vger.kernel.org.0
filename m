@@ -2,62 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1546E5F0C8F
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 15:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBBA5F0EA6
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 17:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbiI3Nll (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Sep 2022 09:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S231612AbiI3PRJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Sep 2022 11:17:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiI3Nlk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 09:41:40 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252AF14E762;
-        Fri, 30 Sep 2022 06:41:39 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id u12so4319253pjj.1;
-        Fri, 30 Sep 2022 06:41:39 -0700 (PDT)
+        with ESMTP id S231806AbiI3PQ4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 11:16:56 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A16A157BA4
+        for <linux-arch@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id z191so3495615iof.10
+        for <linux-arch@vger.kernel.org>; Fri, 30 Sep 2022 08:16:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=Qoz8AmbfL3c1gEhb9RhVqolO2Z1Q7cU3//oNxnT6QiY=;
-        b=lEw9Md54Prt5CXkYBqczlMBRAszMS3UrSUYyupvUcYRiqO09gvfojW/5clCytriixS
-         2808RzoaDYp61oGmZ99HmIzUJaXUj7qfptMeNj8c1POWwsxVBHnMHW5eHJ7eVQ7kbJDC
-         37oHvD+l3+mZZkvB4HR+RV3QXcBs3Gnwia+aka0g/Bvx7s3rv/S2+m7ycYVFA2NzegCX
-         /VsEROR/dBjvTPWylKYne89QtOdOnn5GiizTeDaBCCfx7hMKZMbopyhPWIhn0wZrqUzL
-         wrYqvyrKk7qj4uPS45mcn+WYnyuTZA/rt/bZ0E3bFtZj/6l/7vBHpzi8rbbKXc0catvl
-         XBHw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
+        b=YB6CjrLNYng7WeQ+wslm2VPbitaNP0ShR1T5EE1nM1ZDzkPIUIob+C5C13QD3JXPF1
+         NlTKpUe1scku9p9XtGg1Izf8Dc1TpUfDODtn3jM3q+jUgY+zDC8CkVafqeyuUs5Ukq4H
+         mxgGAAK+DsgqM6tuU2p8NgFuDB9wt0vJRVLYwkBPKv4B/ePv4XSF+IhrLjGkmdoqQgiK
+         rxRERHXXtZc2phGR1txS5Ern3RsbTR4MwgYbmiOu6gqswdwU6HISzy3r1yVdTddsuKrM
+         iiaVoLmXP/g0d+Kep6mJQOi0gGm+i42CSw87iKLR+VGAZR0m1PHT3JTUY1Mdx8cOHtjv
+         UphQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Qoz8AmbfL3c1gEhb9RhVqolO2Z1Q7cU3//oNxnT6QiY=;
-        b=MDZFeLuDpb2ZdI4/7buaDxUio3smlPEdN+egonP28qT5BJHZ8xFD10fXewknn/YJR4
-         IzEy1J6tlry6GF9tQXCstbX01/TfZQ5d88LpQqqZt9BDfUdftHpS5tUjpMChNMQFlM/5
-         GTjqwWUDPEeH07OvenjBJ8bEsU/7G6Xuwy7Im/KbmZHrMBLryGFvGqhSu1H0Y5JK30dS
-         zK98GZRTNVM5turaRlwPfpImJUKlP1Q8WVh2L4IeFrZ/CrkvIPrq9lQPp+0uLHSkVR7Q
-         N8kbzCFH53uBx8n8SMREF66oy/OG9egRj1Crm8SK/xlJ8dMMxXcLhGwMn0vVl5OU4e/q
-         OkvA==
-X-Gm-Message-State: ACrzQf0rxbnDJhIACMBtAoqMMSh2v8WuxdIaYCbCgjgEJUYvs4e9fFSP
-        qRqVE2UL5MwMp+OxHNpKWlDJZaDYlUkreg==
-X-Google-Smtp-Source: AMsMyM4Kafj66tGKNKwprqNaME3IQ0fN09pKpo4y9u0Is68u+11h+++UwFTbdVUZJ5J3UYY2XafLRQ==
-X-Received: by 2002:a17:902:690a:b0:17a:32d:7acc with SMTP id j10-20020a170902690a00b0017a032d7accmr9017854plk.18.1664545298630;
-        Fri, 30 Sep 2022 06:41:38 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-32.three.co.id. [116.206.28.32])
-        by smtp.gmail.com with ESMTPSA id j17-20020a635511000000b00439c6a4e1ccsm1667305pgb.62.2022.09.30.06.41.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Sep 2022 06:41:38 -0700 (PDT)
-Message-ID: <0eb358ac-068c-d025-07e3-80a3c51ef39c@gmail.com>
-Date:   Fri, 30 Sep 2022 20:41:24 +0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=rav/GnxDxXCmb0MWmQJI5rI/wm0ZOCSwNoHHz9z+r7A=;
+        b=qdjmzZ7GYvLtYmFq0bnKUW3bqXZMRvrYv7gjKLSqvWd0PR8fhYuh10VifyCJW9Ccu7
+         BkE5hvbciXDuVdtOVNMsTr6zzQb+B5OytULLNAojoHqm/jBvfWNJqzrDERa0yFHqy/xp
+         AerPz9+EzHni+d2AMHmrsf3ceQoh0r8JR4nqHE2rhlIuYLNm+vsRuVqIMZAbcR6AAYZm
+         wZwxdMHpRb/jYm5LrnHmqPkJdY74GzLTQCZspcTKHpObez1ZRLDBo4yEseYIr/qIqn1G
+         uTcQblIvMvDfpQMEX1LAlVs/2FNzk/qfySxClJRsi8kt01bdiJq0SS0XoaMmD+zEleMF
+         c5uQ==
+X-Gm-Message-State: ACrzQf09/CTbxqTOY1HDx2BObhXWJupsZr/jgL+anSvTnwwq8LCj4GuE
+        dRGB/64LXwHpBknU4j3Cjl9mEORrAey0FabtfsHTqA==
+X-Google-Smtp-Source: AMsMyM6F7AAgEnbDB3rrGofw7Np/IRuyPPKXtazfBLnfUtfrHBecx6ZQ4/DCYfPtN9Dyv/lb8mRBcckQ17dphsFV0xw=
+X-Received: by 2002:a05:6638:31c2:b0:35a:c5b1:b567 with SMTP id
+ n2-20020a05663831c200b0035ac5b1b567mr4600630jav.58.1664551009140; Fri, 30 Sep
+ 2022 08:16:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com> <20220929222936.14584-11-rick.p.edgecombe@intel.com>
+In-Reply-To: <20220929222936.14584-11-rick.p.edgecombe@intel.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 30 Sep 2022 17:16:12 +0200
+Message-ID: <CAG48ez3hXfsUkMqcHmVetzywKC8a+PLhGReceTdwCf7B03Oj7g@mail.gmail.com>
+Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -71,7 +65,8 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
@@ -85,40 +80,27 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
         jamorris@linux.microsoft.com, dethoma@microsoft.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me> <87v8p5f0mg.fsf@meer.lwn.net>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <87v8p5f0mg.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 9/30/22 20:33, Jonathan Corbet wrote:
->>  CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
->>  a secondary stack allocated from memory and cannot be directly modified by
->> -applications. When executing a CALL instruction, the processor pushes the
->> +applications. When executing a ``CALL`` instruction, the processor pushes the
-> 
-> Just to be clear, not everybody is fond of sprinkling lots of ``literal
-> text`` throughout the documentation in this way.  Heavy use of it will
-> certainly clutter the plain-text file and can be a net negative overall.
-> 
+On Fri, Sep 30, 2022 at 12:30 AM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
+> The reason it's lightly used is that Dirty=1 is normally set _before_ a
+> write. A write with a Write=0 PTE would typically only generate a fault,
+> not set Dirty=1. Hardware can (rarely) both set Write=1 *and* generate the
+> fault, resulting in a Dirty=0,Write=1 PTE. Hardware which supports shadow
+> stacks will no longer exhibit this oddity.
 
-Actually there is a trade-off between semantic correctness and plain-text
-clarity. With regards to inline code samples (like identifiers), I fall
-into the former camp. But when I'm reviewing patches for which the
-surrounding documentation go latter camp (leave code samples alone without
-markup), I can adapt to that style as long as it causes no warnings
-whatsover.
-
--- 
-An old man doll... just what I always wanted! - Clara
+Stupid question, since I just recently learned that IOMMUv2 is a
+thing: I assume this also holds for IOMMUs that implement IOMMUv2/SVA,
+where the IOMMU directly walks the userspace page tables, and not just
+for the CPU core?
