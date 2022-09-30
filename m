@@ -2,163 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92555F0BBB
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 14:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4271C5F0C7C
+	for <lists+linux-arch@lfdr.de>; Fri, 30 Sep 2022 15:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiI3M2O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Sep 2022 08:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
+        id S231316AbiI3NdP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 30 Sep 2022 09:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiI3M2O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 08:28:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FDF154448;
-        Fri, 30 Sep 2022 05:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S230131AbiI3NdO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Sep 2022 09:33:14 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BDD15FC7A;
+        Fri, 30 Sep 2022 06:33:13 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8450AB828AC;
-        Fri, 30 Sep 2022 12:28:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4C7C433C1;
-        Fri, 30 Sep 2022 12:28:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664540890;
-        bh=/4ALUwugj3Gl5x22JbGPmpfNQMZMiRVYjPgXy1gPB00=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oeFdDAQgFqpzjqRJzGKF+vIiAZAHQfulVNWlmMVMwAHj2u0REi2V5iu9vb+qElzKT
-         smZrXJfoLoerUKwI6og+0fc/EjVTTODG1591hPIpDkikZvUpPaVj/BHp1Bda0a2eSq
-         Vrop+6cUrjHCLuQUNPsgF89atHJ3Xw3EsjWe2aPQQ6QnHzGXHOzz0DwMtFarkV5Ffu
-         2lJDgkB8X4mJIkGikek60Vgtfa+EyCu2PYNZ4xLnAHle7QO/6Mml7YhbCglGFG+UGt
-         at/il5U5MH5iJK/SaXq/h4hBq7kjdKoNBk+Q00f6GeKNzPxR4cODtau9f+C0ffPdb8
-         t/beZj1K1hwtA==
-Received: by mail-oi1-f171.google.com with SMTP id w13so4561778oiw.8;
-        Fri, 30 Sep 2022 05:28:10 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0t0DMHVQYLuHPLYUzLA+tEURZPCwsS8S5KeP9buglPcpfqH+GJ
-        WJnvK7soL7lBkLxMY3b2WRBDrqhhOYVHbIqxlic=
-X-Google-Smtp-Source: AMsMyM7AkR4koVBLJ1BpYLj3z3e6TpYzy4iDz1E5xTYn5b1jVTvl8sCipeZ/PTuVCPUM2xxKtW4Q4YOmg6NnPRJ2Hp4=
-X-Received: by 2002:a05:6808:151f:b0:350:1b5e:2380 with SMTP id
- u31-20020a056808151f00b003501b5e2380mr9157731oiw.112.1664540889350; Fri, 30
- Sep 2022 05:28:09 -0700 (PDT)
+        by ms.lwn.net (Postfix) with ESMTPSA id 0E2B27C0;
+        Fri, 30 Sep 2022 13:33:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0E2B27C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1664544792; bh=X9KMoc6wKBFQqqh02TQnYl/8HMk3OVzEUhHumF3CpUI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=kAqoBsdLwJvwA/TnNO/OyRTe2bzVmSSUI9PjBrUPKUk9/BKv7DANoLUEyUh86zUzM
+         Tbc5O4vzMtnEr14y3c0B5KoNEloNewUcVaNYsryTveAiUZJdd9tDUFy8BkrMkk6+1Z
+         4DO9iLaZs6s6psbIVtfQAEv89PJUiK/SzYjo2UkehxhoEG3FavVvfiuFvfztMr7aT8
+         xe1dQBqlt3fAwse16dnmBymfM3LKrJNUgB+404pJu5Az8ICKy1S/V4gyFtA3mwCe40
+         MSN+M9e1UAjp8Vm+qWOaCB5LdtBTcrwIgapidvz/MjTAdezwNNCm0q6BavLWAZYAeg
+         89b3RqCM2Ljkg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+In-Reply-To: <YzZlT7sO56TzXgNc@debian.me>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+ <YzZlT7sO56TzXgNc@debian.me>
+Date:   Fri, 30 Sep 2022 07:33:11 -0600
+Message-ID: <87v8p5f0mg.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <20220918155246.1203293-1-guoren@kernel.org> <20220918155246.1203293-7-guoren@kernel.org>
- <YyhZfUi17TEaOLWv@hirez.programming.kicks-ass.net> <CAJF2gTQxfuHVe=drT3tMCK4prULR5iPS6F++HTokswjD2yRZZQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTQxfuHVe=drT3tMCK4prULR5iPS6F++HTokswjD2yRZZQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 30 Sep 2022 20:27:57 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTo2E539HkkPGah-NtAf4U0HFLU_t=6VT0_6S=M1YswzQ@mail.gmail.com>
-Message-ID: <CAJF2gTTo2E539HkkPGah-NtAf4U0HFLU_t=6VT0_6S=M1YswzQ@mail.gmail.com>
-Subject: Re: [PATCH V5 06/11] entry: Prevent DEBUG_PREEMPT warning
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 9:45 AM Guo Ren <guoren@kernel.org> wrote:
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
+
+> The documentation above can be improved (both grammar and formatting):
 >
-> On Mon, Sep 19, 2022 at 7:59 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Sun, Sep 18, 2022 at 11:52:41AM -0400, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > When DEBUG_PREEMPT=y,
-> > >       exit_to_user_mode_prepare
-> > >       ->tick_nohz_user_enter_prepare
-> > >         ->tick_nohz_full_cpu(smp_processor_id())
-> > >           ->smp_processor_id()
-> > >             ->debug_smp_processor_id()
-> > >               ->check preempt_count() then:
-> > >
-> > > [    5.717610] BUG: using smp_processor_id() in preemptible [00000000]
-> > > code: S20urandom/94
-> > > [    5.718111] caller is debug_smp_processor_id+0x24/0x38
-> > > [    5.718417] CPU: 1 PID: 94 Comm: S20urandom Not tainted
-> > > 6.0.0-rc3-00010-gfd0a0d619c63-dirty #238
-> > > [    5.718886] Hardware name: riscv-virtio,qemu (DT)
-> > > [    5.719136] Call Trace:
-> > > [    5.719281] [<ffffffff800055fc>] dump_backtrace+0x2c/0x3c
-> > > [    5.719566] [<ffffffff80ae6cb0>] show_stack+0x44/0x5c
-> > > [    5.720023] [<ffffffff80aee870>] dump_stack_lvl+0x74/0xa4
-> > > [    5.720557] [<ffffffff80aee8bc>] dump_stack+0x1c/0x2c
-> > > [    5.721033] [<ffffffff80af65c0>]
-> > > check_preemption_disabled+0x104/0x108
-> > > [    5.721538] [<ffffffff80af65e8>] debug_smp_processor_id+0x24/0x38
-> > > [    5.722001] [<ffffffff800aee30>] exit_to_user_mode_prepare+0x48/0x178
-> > > [    5.722355] [<ffffffff80af5bf4>] irqentry_exit_to_user_mode+0x18/0x30
-> > > [    5.722685] [<ffffffff80af5c70>] irqentry_exit+0x64/0xa4
-> > > [    5.722953] [<ffffffff80af52f4>] do_page_fault+0x1d8/0x544
-> > > [    5.723291] [<ffffffff80003310>] ret_from_exception+0x0/0xb8
-> > >
-> > > (Above is found in riscv platform with generic_entry)
-> > >
-> > > The smp_processor_id() needs irqs disable or preempt_disable, so use
-> > > preempt dis/in protecting the tick_nohz_user_enter_prepare().
-> > >
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > ---
-> > >  kernel/entry/common.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-> > > index 063068a9ea9b..36e4cd50531c 100644
-> > > --- a/kernel/entry/common.c
-> > > +++ b/kernel/entry/common.c
-> > > @@ -194,8 +194,10 @@ static void exit_to_user_mode_prepare(struct pt_regs *regs)
-> > >
-> > >       lockdep_assert_irqs_disabled();
-> >
-> >     Observe ^^^^
-> Thanks! I would enable PROVE_LOCKING for test.
-It's my bug in page_fault, here is the solution:
-
-@@ -358,6 +358,8 @@ asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-
-        __do_page_fault(regs);
-
-+       local_irq_disable();
-+
-        irqentry_exit(regs, state);
- }
- NOKPROBE_SYMBOL(do_page_fault);
-
+> ---- >8 ----
 >
-> >
-> > >
-> > > +     preempt_disable();
-> > >       /* Flush pending rcuog wakeup before the last need_resched() check */
-> > >       tick_nohz_user_enter_prepare();
-> > > +     preempt_enable();
-> >
-> > This makes no sense; if IRQs are disabled, check_preemption_disabled()
-> > should bail early per:
-> >
-> >         if (irqs_disabled())
-> >                 goto out;
-> Ditto.
->
->
-> --
-> Best Regards
->  Guo Ren
+> diff --git a/Documentation/x86/cet.rst b/Documentation/x86/cet.rst
+> index 6b270a24ebc3a2..f691f7995cf088 100644
+> --- a/Documentation/x86/cet.rst
+> +++ b/Documentation/x86/cet.rst
+> @@ -15,92 +15,101 @@ in the 64-bit kernel.
+>  
+>  CET introduces Shadow Stack and Indirect Branch Tracking. Shadow stack is
+>  a secondary stack allocated from memory and cannot be directly modified by
+> -applications. When executing a CALL instruction, the processor pushes the
+> +applications. When executing a ``CALL`` instruction, the processor pushes the
 
+Just to be clear, not everybody is fond of sprinkling lots of ``literal
+text`` throughout the documentation in this way.  Heavy use of it will
+certainly clutter the plain-text file and can be a net negative overall.
 
+Thanks,
 
--- 
-Best Regards
- Guo Ren
+jon
