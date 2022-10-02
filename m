@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC345F20DD
-	for <lists+linux-arch@lfdr.de>; Sun,  2 Oct 2022 03:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B445F20DF
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Oct 2022 03:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiJBB0F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Oct 2022 21:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S229666AbiJBB0I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Oct 2022 21:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJBBZs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Oct 2022 21:25:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB054C62E;
-        Sat,  1 Oct 2022 18:25:44 -0700 (PDT)
+        with ESMTP id S229573AbiJBB0D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Oct 2022 21:26:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E1B4D26E;
+        Sat,  1 Oct 2022 18:25:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FE8C60C3A;
-        Sun,  2 Oct 2022 01:25:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C75C433D7;
-        Sun,  2 Oct 2022 01:25:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6067160DD1;
+        Sun,  2 Oct 2022 01:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030A8C43152;
+        Sun,  2 Oct 2022 01:25:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664673943;
-        bh=thj4lp5B0J2/kj7Zi1BMTTtT9fAnJMteMKwuLQ0ArOk=;
+        s=k20201202; t=1664673949;
+        bh=DEvoceoa51GjIrkhPQ7BHRzc0Y6qi+1P763yh9ux/40=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WUBoCUyhvdRDzQHAvvX7bbmPai+mllpQvReXbilknRVD+Vp5tDQirdG+H9jqqjYqx
-         W909SclMyLyWpOYfJWo1Gh2mjhtvWVcnSlKtaa67yLEZpskYRlE/cfJY9bCZES4AFm
-         xZFnjsF3cZdUsQfHmQKKGYR93JVB5T+Ai432iTbNNW1k4IFC8+t6akucDpq1wif+1R
-         scCtTeOoMHdadzFh0X2vd67Kk01yQyJuVcgHZUh4H+t0jhmfYv7vkISM40FyPzY3uk
-         MkmYA1rGydZmm2+LTKAmRW16HeoW+KQyJ5jLsatEsv+4GJufbqiV7F14BTu0MpJXo8
-         rqWlHbTv9/0hQ==
+        b=Ppz+xqzeSXFhbPI6utaYdIThP3K6Nz8Mr271TNX2vXYINZ5QJZo6BF5NBGhryyY//
+         32/rxcGNPdnz82SjbfOLoletGSxVjHWJm+UXkXtvYnuLRfi8aha5E/XrBlNoJyxQEn
+         4BfWP3j+ClveyZ0INP29NCLToUiURl5VlA2Eo9ykYnyvFLheWCz/N6vBOyfgnvKYR4
+         reDPriwbXSQAk3E1v88ZXj6Fyj2W6ps3ui326CZj6oN9RkQyAGXfPDHKToIatTk0QU
+         IUHrnY5VEjZ5YjyEFmHUfHlgoOz9nbPV3mnF6ntwWItFQQnZMrAVDTsSOhNDcM9vbf
+         ruTfMtEzHbfIg==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -42,11 +42,14 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         David.Laight@aculab.com, chenzhongjin@huawei.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: [PATCH V6 03/11] riscv: ptrace: Remove duplicate operation
-Date:   Sat,  1 Oct 2022 21:24:43 -0400
-Message-Id: <20221002012451.2351127-4-guoren@kernel.org>
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for noinstr
+Date:   Sat,  1 Oct 2022 21:24:44 -0400
+Message-Id: <20221002012451.2351127-5-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221002012451.2351127-1-guoren@kernel.org>
 References: <20221002012451.2351127-1-guoren@kernel.org>
@@ -61,32 +64,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Lai Jiangshan <laijs@linux.alibaba.com>
 
-The TIF_SYSCALL_TRACE is controlled by a common code, see
-kernel/ptrace.c and include/linux/thread.h.
+And it will be extended for C entry code.
 
-clear_task_syscall_work(child, SYSCALL_TRACE);
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 ---
- arch/riscv/kernel/ptrace.c | 1 -
- 1 file changed, 1 deletion(-)
+ include/linux/compiler_types.h | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 2ae8280ae475..44f4b1ca315d 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -212,7 +212,6 @@ unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 4f2a819fd60a..e9ce11ea4d8b 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -227,9 +227,11 @@ struct ftrace_likely_data {
+ #endif
  
- void ptrace_disable(struct task_struct *child)
- {
--	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
- }
+ /* Section for code which can't be instrumented at all */
+-#define noinstr								\
+-	noinline notrace __attribute((__section__(".noinstr.text")))	\
+-	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
++#define __noinstr_section(section)				\
++	noinline notrace __section(section) __no_profile	\
++	__no_kcsan __no_sanitize_address __no_sanitize_coverage
++
++#define noinstr __noinstr_section(".noinstr.text")
  
- long arch_ptrace(struct task_struct *child, long request,
+ #endif /* __KERNEL__ */
+ 
 -- 
 2.36.1
 
