@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DB65F20DA
-	for <lists+linux-arch@lfdr.de>; Sun,  2 Oct 2022 03:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC345F20DD
+	for <lists+linux-arch@lfdr.de>; Sun,  2 Oct 2022 03:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiJBBZu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Oct 2022 21:25:50 -0400
+        id S229636AbiJBB0F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Oct 2022 21:26:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiJBBZn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Oct 2022 21:25:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA5D4B9B2;
-        Sat,  1 Oct 2022 18:25:38 -0700 (PDT)
+        with ESMTP id S229598AbiJBBZs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Oct 2022 21:25:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB054C62E;
+        Sat,  1 Oct 2022 18:25:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ECEB60D57;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FE8C60C3A;
+        Sun,  2 Oct 2022 01:25:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49C75C433D7;
         Sun,  2 Oct 2022 01:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943CFC4347C;
-        Sun,  2 Oct 2022 01:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664673937;
-        bh=RGP7CDjbcyHeNMuZLodmYJfbkQkcESukcz8ylbmajf8=;
+        s=k20201202; t=1664673943;
+        bh=thj4lp5B0J2/kj7Zi1BMTTtT9fAnJMteMKwuLQ0ArOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZMFBLn2G+UvbiLeHepXOfif7F+qyyvu9xqAvdjqn1abuX4vEe4ZrsW900oU2rSOwz
-         k7nMuuwUgyo5NPjtwiKxVf4FX854JRWGWFo9KJJjSqhD2mhkymembN351gedLUaIHd
-         juiQm6XaXgDAU253T8uG74/pMz0HoaVcQVPiaJz5XZfaofKIalSUk1N+B5KYJPdYz+
-         DmqxXUxoG9tVvwGk+6X5xYC7InK9/MpQcq4xltKnHqULcgVuM23HNrcMHENOPPGJ20
-         g/JeWs1dNqH/IUXOKhYYPMWcQ7rWrc0n9rLI3N6J5R6M/scPM9ck0bqunHZ6xyIKvR
-         KDPF9PpIoAJlw==
+        b=WUBoCUyhvdRDzQHAvvX7bbmPai+mllpQvReXbilknRVD+Vp5tDQirdG+H9jqqjYqx
+         W909SclMyLyWpOYfJWo1Gh2mjhtvWVcnSlKtaa67yLEZpskYRlE/cfJY9bCZES4AFm
+         xZFnjsF3cZdUsQfHmQKKGYR93JVB5T+Ai432iTbNNW1k4IFC8+t6akucDpq1wif+1R
+         scCtTeOoMHdadzFh0X2vd67Kk01yQyJuVcgHZUh4H+t0jhmfYv7vkISM40FyPzY3uk
+         MkmYA1rGydZmm2+LTKAmRW16HeoW+KQyJ5jLsatEsv+4GJufbqiV7F14BTu0MpJXo8
+         rqWlHbTv9/0hQ==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -43,10 +43,10 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH V6 02/11] riscv: compat_syscall_table: Fixup compile warning
-Date:   Sat,  1 Oct 2022 21:24:42 -0400
-Message-Id: <20221002012451.2351127-3-guoren@kernel.org>
+        Oleg Nesterov <oleg@redhat.com>
+Subject: [PATCH V6 03/11] riscv: ptrace: Remove duplicate operation
+Date:   Sat,  1 Oct 2022 21:24:43 -0400
+Message-Id: <20221002012451.2351127-4-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221002012451.2351127-1-guoren@kernel.org>
 References: <20221002012451.2351127-1-guoren@kernel.org>
@@ -63,35 +63,30 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-../arch/riscv/kernel/compat_syscall_table.c:12:41: warning: initialized
-field overwritten [-Woverride-init]
-   12 | #define __SYSCALL(nr, call)      [nr] = (call),
-      |                                         ^
-../include/uapi/asm-generic/unistd.h:567:1: note: in expansion of macro
-'__SYSCALL'
-  567 | __SYSCALL(__NR_semget, sys_semget)
+The TIF_SYSCALL_TRACE is controlled by a common code, see
+kernel/ptrace.c and include/linux/thread.h.
 
-Fixes: 59c10c52f573 ("riscv: compat: syscall: Add compat_sys_call_table implementation")
+clear_task_syscall_work(child, SYSCALL_TRACE);
+
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 ---
- arch/riscv/kernel/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/kernel/ptrace.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 33bb60a354cd..01da14e21019 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -9,6 +9,7 @@ CFLAGS_REMOVE_patch.o	= $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_sbi.o	= $(CC_FLAGS_FTRACE)
- endif
- CFLAGS_syscall_table.o	+= $(call cc-option,-Wno-override-init,)
-+CFLAGS_compat_syscall_table.o += $(call cc-option,-Wno-override-init,)
+diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+index 2ae8280ae475..44f4b1ca315d 100644
+--- a/arch/riscv/kernel/ptrace.c
++++ b/arch/riscv/kernel/ptrace.c
+@@ -212,7 +212,6 @@ unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
  
- ifdef CONFIG_KEXEC
- AFLAGS_kexec_relocate.o := -mcmodel=medany $(call cc-option,-mno-relax)
+ void ptrace_disable(struct task_struct *child)
+ {
+-	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+ }
+ 
+ long arch_ptrace(struct task_struct *child, long request,
 -- 
 2.36.1
 
