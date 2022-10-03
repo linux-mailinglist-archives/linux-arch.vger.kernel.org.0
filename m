@@ -2,52 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E0B5F3672
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 21:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39675F3687
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 21:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiJCTjF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 15:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S229515AbiJCTmU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 15:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJCTjF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 15:39:05 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFB02CC8E;
-        Mon,  3 Oct 2022 12:39:04 -0700 (PDT)
+        with ESMTP id S229484AbiJCTmT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 15:42:19 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C5BB93;
+        Mon,  3 Oct 2022 12:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664825944; x=1696361944;
+  t=1664826138; x=1696362138;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=KSXJiNJHu5j7SgNbcobNcS6+T8nWWfA9o3cdPWEIKsc=;
-  b=gDotFDFcUFOdL8+Iuy9CvYMorvuOWQ4YAISgNnqFUfm4CrsajY3yKLSE
-   BU2Xi6WWlslnjpEYIu0c1ZHhoy7OUHPzhA10LWB62vjQ99bKw2uh5Mxx0
-   vlD7TMwXwB+lvud3YGZG4/rn3DIAjLTW4OLU6ij1rWSNx9iA3tcuHsLLr
-   GCvxO+f+IRUbEYd+I5Nn2LaSOBDVY9jkdtMu4yTBBTGcBScm4O4z1u2hm
-   b1TgO1TOMyyRjCNKGCZa4x7AZdXt5XSgyBFPfk+GUr+U0jOCF8CydU8S9
-   5JhqH3M73BnvpWaCjZwewzTVHGhfXyVXZC1rHdYrwFgO5vb9LfUst0L7/
+  bh=2vg3bLjyeUzK6paD5/QSLqHjaBUk826u4c5n0Pm3n0U=;
+  b=dmNDLpD0rahgCInzkxntUOT9FMGH70XbzCNSXZFPeyo0NRQn1+iZxZTr
+   ivPRJH+WKEZeHOgQVvTPODvQoHtfqf+LIErBUZUJCTR3/0pqmEfRQRTjl
+   i79ugijAf+vlHCd48Mb45Y8OOx0czAq9ToU/VhLiE+0M5Q11mXqEST2T9
+   VkBlFNHB79d3sC7lFMxKnNty52YmPwOThfqB7g31ebA3BrSeIS2xDAA/E
+   J1m4cpd35Z/GJN71JMmcPcMfZ03Wn2URTN0uE2LUfR5gXMfIEat9Z/m+r
+   +7bep3NrQ79UNFopNz6W+SQ0awcXray6rTMn+laaY+Wl1FNBqPXQa4ePM
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="389033368"
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="283109878"
 X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="389033368"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:39:03 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="574771381"
+   d="scan'208";a="283109878"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:42:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="692216031"
 X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="574771381"
+   d="scan'208";a="692216031"
 Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:39:00 -0700
-Message-ID: <fa725333-10e4-10ba-9762-add672894aba@intel.com>
-Date:   Mon, 3 Oct 2022 12:39:00 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 12:42:13 -0700
+Message-ID: <18be9cae-91e7-c6f6-a5a7-ec7ceefa5523@intel.com>
+Date:   Mon, 3 Oct 2022 12:42:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
+ Stack
 Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
@@ -73,14 +72,12 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
+        jamorris@linux.microsoft.com, dethoma@microsoft.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me>
- <4102e1ef-c0da-37b7-6b54-89027fd9d080@nvidia.com>
+ <20220929222936.14584-3-rick.p.edgecombe@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <4102e1ef-c0da-37b7-6b54-89027fd9d080@nvidia.com>
+In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -93,11 +90,16 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/3/22 12:35, John Hubbard wrote:
-> It's always a judgment call, as to whether to use something like ``CALL`
-> or just plain CALL. Here, I'd like to opine that that the benefits of
-> ``CALL`` are very small, whereas plain text in cet.rst has been made
-> significantly worse. So the result is, "this is not worth it".
+On 9/29/22 15:28, Rick Edgecombe wrote:
+> +config X86_SHADOW_STACK
+> +	prompt "X86 Shadow Stack"
+> +	def_bool n
+> +	depends on ARCH_HAS_SHADOW_STACK
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	help
+> +	  Shadow Stack protection is a hardware feature that detects function
+> +	  return address corruption. Today the kernel's support is limited to
+> +	  virtualizing it in KVM guests.
+> +
 
-I'm definitely in this camp as well.  Unless the markup *really* adds to
-readability, just leave it alone.
+Is this help text up to date?  It seems a bit at odds with the series title.
