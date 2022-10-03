@@ -2,207 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46E45F2EDA
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 12:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3325F2FBA
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 13:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiJCKhV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 06:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S229842AbiJCLfB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 07:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiJCKhU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 06:37:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832961DA74;
-        Mon,  3 Oct 2022 03:37:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4C8B6B8104F;
-        Mon,  3 Oct 2022 10:37:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF1CC43143;
-        Mon,  3 Oct 2022 10:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1664793437;
-        bh=dewb3mLvV1IqnE1lyvfrRRv9KWdb78cCHePpaZtvzkU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iLCaZVgNesImD+AGu4Ie8hAJLKSh3Ni0jx3C7mzBtfrrhvy7XGdKdzHI+Yhrw7akR
-         PWxY3VZXKtcqsGRRF2ys90uMFRScEpBTHVDyH1oCWnFtHsH2cJgoN86LAn9m9Vayww
-         ZqwwPs6HcnZ4gMNZt+2P5wHNEJQpoj384eBb1+Jvp1t3B7aG61OX4XjVZ7SnxTnDoz
-         o0VKf7RfwW4qgLJrNCUozzl0H12cdGIWGZ7ELUGw+EMUE7MPsobks4n1fLOs6cMhTL
-         8rlDVMRztINBS4Y9XxLQBlZy8NKBI4zkWnhHGXcA5dkJeucmyk46Qfj4Ms60BT1MQ8
-         PBd9o8TvOlmAg==
-Date:   Mon, 3 Oct 2022 13:36:54 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 25/39] x86/cet/shstk: Handle thread shadow stack
-Message-ID: <Yzq7RjsnM8ix+enT@kernel.org>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-26-rick.p.edgecombe@intel.com>
+        with ESMTP id S229851AbiJCLfA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 07:35:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC0F61208F;
+        Mon,  3 Oct 2022 04:34:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F24CB139F;
+        Mon,  3 Oct 2022 04:35:00 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.80.159])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9DAFC3F67D;
+        Mon,  3 Oct 2022 04:34:50 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 12:34:45 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zouyipeng@huawei.com,
+        bigeasy@linutronix.de, David.Laight@aculab.com,
+        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Dao Lu <daolu@rivosinc.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>
+Subject: Re: [PATCH V6 09/11] riscv: Add support for STACKLEAK gcc plugin
+Message-ID: <YzrI1QFMpHnhvDnI@FVFF77S0Q05N>
+References: <20221002012451.2351127-1-guoren@kernel.org>
+ <20221002012451.2351127-10-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-26-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221002012451.2351127-10-guoren@kernel.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:22PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On Sat, Oct 01, 2022 at 09:24:49PM -0400, guoren@kernel.org wrote:
+> From: Dao Lu <daolu@rivosinc.com>
 > 
-> When a process is duplicated, but the child shares the address space with
-> the parent, there is potential for the threads sharing a single stack to
-> cause conflicts for each other. In the normal non-cet case this is handled
-> in two ways.
-> 
-> With regular CLONE_VM a new stack is provided by userspace such that the
-> parent and child have different stacks.
-> 
-> For vfork, the parent is suspended until the child exits. So as long as
-> the child doesn't return from the vfork()/CLONE_VFORK calling function and
-> sticks to a limited set of operations, the parent and child can share the
-> same stack.
-> 
-> For shadow stack, these scenarios present similar sharing problems. For the
-> CLONE_VM case, the child and the parent must have separate shadow stacks.
-> Instead of changing clone to take a shadow stack, have the kernel just
-> allocate one and switch to it.
-> 
-> Use stack_size passed from clone3() syscall for thread shadow stack size. A
-> compat-mode thread shadow stack size is further reduced to 1/4. This
-> allows more threads to run in a 32-bit address space. The clone() does not
-> pass stack_size, which was added to clone3(). In that case, use
-> RLIMIT_STACK size and cap to 4 GB.
-> 
-> For shadow stack enabled vfork(), the parent and child can share the same
-> shadow stack, like they can share a normal stack. Since the parent is
-> suspended until the child terminates, the child will not interfere with
-> the parent while executing as long as it doesn't return from the vfork()
-> and overwrite up the shadow stack. The child can safely overwrite down
-> the shadow stack, as the parent can just overwrite this later. So CET does
-> not add any additional limitations for vfork().
-> 
-> Userspace implementing posix vfork() can actually prevent the child from
-> returning from the vfork() calling function, using CET. Glibc does this
-> by adjusting the shadow stack pointer in the child, so that the child
-> receives a #CP if it tries to return from vfork() calling function.
-> 
-> Free the shadow stack on thread exit by doing it in mm_release(). Skip
-> this when exiting a vfork() child since the stack is shared in the
-> parent.
-> 
-> During this operation, the shadow stack pointer of the new thread needs
-> to be updated to point to the newly allocated shadow stack. Since the
-> ability to do this is confined to the FPU subsystem, change
-> fpu_clone() to take the new shadow stack pointer, and update it
-> internally inside the FPU subsystem. This part was suggested by Thomas
-> Gleixner.
-> 
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> 
+> Add support for STACKLEAK gcc plugin to riscv by implementing
+> stackleak_check_alloca, based heavily on the arm64 version, and
+> modifying the entry.S. Additionally, this disables the plugin for EFI
+> stub code for riscv. All modifications base on generic_entry.
+
+I think this commit message is stale; `stackleak_check_alloca` doesn't exist
+any more.
+
+> Link: https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
+> Signed-off-by: Dao Lu <daolu@rivosinc.com>
+> Co-developed-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> Co-developed-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Conor Dooley <Conor.Dooley@microchip.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
 > ---
+>  arch/riscv/Kconfig                    | 1 +
+>  arch/riscv/kernel/entry.S             | 8 +++++++-
+>  drivers/firmware/efi/libstub/Makefile | 2 +-
+>  3 files changed, 9 insertions(+), 2 deletions(-)
 > 
-> v2:
->  - Have fpu_clone() take new shadow stack pointer and update SSP in
->    xsave buffer for new task. (tglx)
-> 
-> v1:
->  - Expand commit log.
->  - Add more comments.
->  - Switch to xsave helpers.
-> 
-> Yu-cheng v30:
->  - Update comments about clone()/clone3(). (Borislav Petkov)
-> 
-> Yu-cheng v29:
->  - WARN_ON_ONCE() when get_xsave_addr() returns NULL, and update comments.
->    (Dave Hansen)
-> 
->  arch/x86/include/asm/cet.h         |  7 +++++
->  arch/x86/include/asm/fpu/sched.h   |  3 +-
->  arch/x86/include/asm/mmu_context.h |  2 ++
->  arch/x86/kernel/fpu/core.c         | 40 ++++++++++++++++++++++++-
->  arch/x86/kernel/process.c          | 17 ++++++++++-
->  arch/x86/kernel/shstk.c            | 48 +++++++++++++++++++++++++++++-
->  6 files changed, 113 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index 778d3054ccc7..f332e9b42b6d 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -555,8 +555,40 @@ static inline void fpu_inherit_perms(struct fpu *dst_fpu)
->  	}
->  }
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index dfe600f3526c..76bde12d9f8c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -81,6 +81,7 @@ config RISCV
+>  	select HAVE_ARCH_MMAP_RND_BITS if MMU
+>  	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
+>  	select HAVE_ARCH_SECCOMP_FILTER
+> +	select HAVE_ARCH_STACKLEAK
+>  	select HAVE_ARCH_TRACEHOOK
+>  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
+>  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index 5f49517cd3a2..39097c1474a0 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -130,7 +130,6 @@ END(handle_exception)
+>  ENTRY(ret_from_exception)
+>  	REG_L s0, PT_STATUS(sp)
 >  
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
-> +{
-> +	struct cet_user_state *xstate;
-> +
-> +	/* If ssp update is not needed. */
-> +	if (!ssp)
-> +		return 0;
-> +
-> +	xstate = get_xsave_addr(&dst->thread.fpu.fpstate->regs.xsave,
-> +				XFEATURE_CET_USER);
-> +
-> +	/*
-> +	 * If there is a non-zero ssp, then 'dst' must be configured with a shadow
-> +	 * stack and the fpu state should be up to date since it was just copied
-> +	 * from the parent in fpu_clone(). So there must be a valid non-init CET
-> +	 * state location in the buffer.
-> +	 */
-> +	if (WARN_ON_ONCE(!xstate))
-> +		return 1;
-> +
-> +	xstate->user_ssp = (u64)ssp;
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long shstk_addr)
-> +{
-
-return 0; ?
-
-> +}
+> -	csrc CSR_STATUS, SR_IE
+>  #ifdef CONFIG_RISCV_M_MODE
+>  	/* the MPP value is too large to be used as an immediate arg for addi */
+>  	li t0, SR_MPP
+> @@ -139,6 +138,9 @@ ENTRY(ret_from_exception)
+>  	andi s0, s0, SR_SPP
+>  #endif
+>  	bnez s0, 1f
+> +#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
+> +	call stackleak_erase
 > +#endif
-> +
 
--- 
-Sincerely yours,
-Mike.
+I assume this can happen on an arbitrary stack, and so you can't use the
+stackleak_erase_{on,off}_task_stack variants?
+
+Just to check, have you given this a spin with LKDTM and the STACKLEAK_ERASING
+test? If not, it'd be good to test that (and ideally, put some sample output
+from that into the commit message).
+
+For example, as per:
+
+  https://lore.kernel.org/all/20220427173128.2603085-1-mark.rutland@arm.com/
+
+... on arm64 this looks something like:
+
+| # uname -a
+| Linux buildroot 5.18.0-rc1-00013-g26f638ab0d7c #3 SMP PREEMPT Wed Apr 27 16:21:37 BST 2022 aarch64 GNU/Linux
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT 
+| lkdtm: Performing direct entry STACKLEAK_ERASING
+| lkdtm: stackleak stack usage:
+|   high offset: 336 bytes
+|   current:     688 bytes
+|   lowest:      1232 bytes
+|   tracked:     1232 bytes
+|   untracked:   672 bytes
+|   poisoned:    14136 bytes
+|   low offset:  8 bytes
+| lkdtm: OK: the rest of the thread stack is properly erased
+
+Thanks,
+Mark.
+
+>  
+>  	/* Save unwound kernel stack pointer in thread_info */
+>  	addi s0, sp, PT_SIZE_ON_STACK
+> @@ -148,8 +150,12 @@ ENTRY(ret_from_exception)
+>  	 * Save TP into the scratch register , so we can find the kernel data
+>  	 * structures again.
+>  	 */
+> +	csrc CSR_STATUS, SR_IE
+>  	csrw CSR_SCRATCH, tp
+> +	j 2f
+>  1:
+> +	csrc CSR_STATUS, SR_IE
+> +2:
+>  	/*
+>  	 * The current load reservation is effectively part of the processor's
+>  	 * state, in the sense that load reservations cannot be shared between
+> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> index d0537573501e..5e1fc4f82883 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+>  				   -fno-builtin -fpic \
+>  				   $(call cc-option,-mno-single-pic-base)
+>  cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> -				   -fpic
+> +				   -fpic $(DISABLE_STACKLEAK_PLUGIN)
+>  
+>  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+>  
+> -- 
+> 2.36.1
+> 
