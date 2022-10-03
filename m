@@ -2,115 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CCC5F30AC
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 15:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7975F3161
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 15:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbiJCNFH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 09:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S229918AbiJCNkT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 09:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiJCNFE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 09:05:04 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0F21C118;
-        Mon,  3 Oct 2022 06:05:02 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1F38E58039C;
-        Mon,  3 Oct 2022 09:05:02 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 03 Oct 2022 09:05:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1664802302; x=1664805902; bh=IxedUfhaz4
-        AE03vRli7rrJA0oAe3quAOi2FtrsBi/Mc=; b=r9Jdkr/Gr2Kj90IOTigFzOwng6
-        fKoFfmdStbz0Wp11GyjQWUrFGqRFUF2hc3m6LeIgE1nJ28dtffrjUZPy50SEFPJu
-        no9TYq7W/qbO+PndUGrUGzvMI0vnywcWV9xpQel8FMq+GdkBXl8x3uWOBfLyeUiK
-        zOHrhCE/LVAiIOVaVOfO83wWrl54GvkAcEHfIfC0bN5CUgJ4YPp5TY70/6oUni2p
-        upUsf9URei5ajXHxw1ZzXHSX9RH+oeQJwKdc9814sbN78a1ikDIoj4b7qNYS+Aki
-        LuLTmR0KbEKC8sHPADPhOGZwRpITScr/9SuPLWoWOMDCAwhaW/YoYC5HDPZA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1664802302; x=1664805902; bh=IxedUfhaz4AE03vRli7rrJA0oAe3
-        quAOi2FtrsBi/Mc=; b=bdjKk2+P6AyfC5zmWszJzPY3kYCbXYq+dq9qC44CR7Dh
-        TunlFhpT1JSgYutT3fvqpXpuIDV3L7aggs3H5/VoBE7gdveGxzz+NWjGmTCrx7nR
-        3AzAbzPv5cZpGUA4Ch44Vma+wR66Bd6uRNztEpxEepP7HwIDXQiVplZc3LxQoQ6z
-        VTVy0wNEF0kIb6CG2Jjh0vIDfIDCvcZD4dh0KSCn87LiGVi8FwFjW9SZiOOfvYUj
-        pv1PktfE6zU6v2jCn0X+tcOi0oB18vrTPgoZPs7zskjHtF7+K45jtIN8PgU114c0
-        8ZY6peAZ/HI/ZHlDQpmom8QXSXu2qQp3KxETPg8gWg==
-X-ME-Sender: <xms:_d06Yyqx44g5Wud1elRXmydShFsXMQv-xDC_wrJaCVxG9gUgeoMsOQ>
-    <xme:_d06YwpHzODswsUNU6SOYMrJe6JMLhfMMU6TTVeJTI5trV-vHC6HJcO2niKOxRS4D
-    MUXWYZ_0h6d3lxd77A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeehledgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:_d06Y3OTZV_JCSA-2_J2DkPIKUAPX2JATms9h0yEg67mMQH4NALJUg>
-    <xmx:_d06Yx6GoM3bi4sikSZHc-SjDLn8zGYt_lfDAS3lEq0Y2U-pIwhvJg>
-    <xmx:_d06Yx7Tw6mldFFAAh1xk451brCfwEHMjWvUm6qroQdGRt6TiWjNjA>
-    <xmx:_d06Y00YaQs6F9QVDYJR-cW5os7IjmHB5anBTBOTEz4Wj3xlESIcOg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4E90DB60089; Mon,  3 Oct 2022 09:05:01 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-968-g04df58079d-fm-20220921.001-g04df5807
-Mime-Version: 1.0
-Message-Id: <49e40308-969f-4b22-a8b5-d7f07e50b8ef@app.fastmail.com>
-In-Reply-To: <20221003121316.2540339-1-linus.walleij@linaro.org>
-References: <20221003121316.2540339-1-linus.walleij@linaro.org>
-Date:   Mon, 03 Oct 2022 15:04:41 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, "Guenter Roeck" <linux@roeck-us.net>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] alpha: Fix ioread64/iowrite64 helpers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229864AbiJCNkS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 09:40:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520202936D;
+        Mon,  3 Oct 2022 06:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1664804417; x=1696340417;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+5qCpWO+BAGW3ExOyW3chioNW0LHy3lT3j4pg7MiQnQ=;
+  b=OOOksX1axHfX1SVR+j4lORPLuVLsK7iwzxqWdv6ApHo38UIGUD5DsgI6
+   DS2UKQPzmtIpOjKtBynm0y8ig/SQbmU7Voq4AYonpgFjt4o5A4RWs5vgw
+   L20DqmmJTRMDC69VHNVL1L6pp0eJUcPEqJUD7grm0rc7fKw66j/lhfBew
+   srJqETT1T9DSAIkxJg7jpDzfzvuPpRoTDvYGg1G5eH7xnwygVFNP+bXnB
+   LPFi11WXwovj+EFuXoG9m466JpNm5HC44ySawY09MNBqcqHgCbNksPoCS
+   u6vUxznHfEnbBGEESA+gwkhNmRlcKyyVFvkibI/JkpMmX7J2DoEzkYkyj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="283003462"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="283003462"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 06:40:16 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="952343480"
+X-IronPort-AV: E=Sophos;i="5.93,365,1654585200"; 
+   d="scan'208";a="952343480"
+Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 06:40:08 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 7FA5C104CE4; Mon,  3 Oct 2022 16:40:06 +0300 (+03)
+Date:   Mon, 3 Oct 2022 16:40:06 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
+ Stack
+Message-ID: <20221003134006.yoye7dvywuec6bco@box.shutemov.name>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 3, 2022, at 2:13 PM, Linus Walleij wrote:
-> When doing allmod builds it turns out some modules are using
-> ioread64() and iowrite64() that the alpha does not implement,
-> as it is using <asm-generic/iomap.h> without selecting
-> GENERIC_IOMAP.
->
-> Fix this by implementing the ioread64()/iowrite64() stubs
-> as well, using readq() and writeq() respectively.
->
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Fixes: 7e772dad9913 ("alpha: Use generic <asm-generic/io.h>")
-> Link: https://lore.kernel.org/linux-arch/20221002224521.GA968453@roeck-us.net/
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Richard Henderson <richard.henderson@linaro.org>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-alpha@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+On Thu, Sep 29, 2022 at 03:28:59PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> Shadow Stack provides protection against function return address
+> corruption. It is active when the processor supports it, the kernel has
+> CONFIG_X86_SHADOW_STACK enabled, and the application is built for the
+> feature. This is only implemented for the 64-bit kernel. When it is
+> enabled, legacy non-Shadow Stack applications continue to work, but without
+> protection.
+> 
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> 
 > ---
-> Arnd if this looks OK then please apply it on linux-arch
-> for fixes.
-> --
+> 
+> v2:
+>  - Remove already wrong kernel size increase info (tlgx)
+>  - Change prompt to remove "Intel" (tglx)
+>  - Update line about what CPUs are supported (Dave)
+> 
+> Yu-cheng v25:
+>  - Remove X86_CET and use X86_SHADOW_STACK directly.
+> 
+> Yu-cheng v24:
+>  - Update for the splitting X86_CET to X86_SHADOW_STACK and X86_IBT.
+> 
+>  arch/x86/Kconfig           | 18 ++++++++++++++++++
+>  arch/x86/Kconfig.assembler |  5 +++++
+>  2 files changed, 23 insertions(+)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index f9920f1341c8..b68eb75887b8 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -26,6 +26,7 @@ config X86_64
+>  	depends on 64BIT
+>  	# Options that are inherently 64-bit kernel only:
+>  	select ARCH_HAS_GIGANTIC_PAGE
+> +	select ARCH_HAS_SHADOW_STACK
+>  	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>  	select ARCH_USE_CMPXCHG_LOCKREF
+>  	select HAVE_ARCH_SOFT_DIRTY
+> @@ -1936,6 +1937,23 @@ config X86_SGX
+>  
+>  	  If unsure, say N.
+>  
+> +config ARCH_HAS_SHADOW_STACK
+> +	def_bool n
 
-It looks like we just crossed patches. I also sent a fix a minute
-ago, but I think mine is better here because it also works on
-I/O ports.
+Hm. Shouldn't ARCH_HAS_SHADOW_STACK definition be in arch/Kconfig, not
+under arch/x86?
 
-     Arnd
+Also, I think "def_bool n" has the same meaning as just "bool", no?
+
+> +
+> +config X86_SHADOW_STACK
+> +	prompt "X86 Shadow Stack"
+> +	def_bool n
+
+Maybe just
+
+	bool "X86 Shadow Stack"
+
+?
+
+> +	depends on ARCH_HAS_SHADOW_STACK
+> +	select ARCH_USES_HIGH_VMA_FLAGS
+> +	help
+> +	  Shadow Stack protection is a hardware feature that detects function
+> +	  return address corruption. Today the kernel's support is limited to
+> +	  virtualizing it in KVM guests.
+> +
+> +	  CPUs supporting shadow stacks were first released in 2020.
+> +
+> +	  If unsure, say N.
+> +
+>  config EFI
+>  	bool "EFI runtime service support"
+>  	depends on ACPI
+> diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
+> index 26b8c08e2fc4..00c79dd93651 100644
+> --- a/arch/x86/Kconfig.assembler
+> +++ b/arch/x86/Kconfig.assembler
+> @@ -19,3 +19,8 @@ config AS_TPAUSE
+>  	def_bool $(as-instr,tpause %ecx)
+>  	help
+>  	  Supported by binutils >= 2.31.1 and LLVM integrated assembler >= V7
+> +
+> +config AS_WRUSS
+> +	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
+> +	help
+> +	  Supported by binutils >= 2.31 and LLVM integrated assembler
+> -- 
+> 2.17.1
+> 
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
