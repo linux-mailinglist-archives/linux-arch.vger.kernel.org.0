@@ -2,109 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F405F2FC8
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 13:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D568D5F300D
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Oct 2022 14:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiJCLk7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 07:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
+        id S229786AbiJCMNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 08:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiJCLk6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 07:40:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 675726389;
-        Mon,  3 Oct 2022 04:40:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD7E4139F;
-        Mon,  3 Oct 2022 04:41:03 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.80.159])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7E7E3F73B;
-        Mon,  3 Oct 2022 04:40:53 -0700 (PDT)
-Date:   Mon, 3 Oct 2022 12:40:50 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V6 05/11] riscv: traps: Add noinstr to prevent
- instrumentation inserted
-Message-ID: <YzrKQkK4Kfbd7Wik@FVFF77S0Q05N>
-References: <20221002012451.2351127-1-guoren@kernel.org>
- <20221002012451.2351127-6-guoren@kernel.org>
+        with ESMTP id S229763AbiJCMNY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 08:13:24 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FB9520A8
+        for <linux-arch@vger.kernel.org>; Mon,  3 Oct 2022 05:13:22 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id t16so11550030ljh.3
+        for <linux-arch@vger.kernel.org>; Mon, 03 Oct 2022 05:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=YsLY1swMVj4DKjC2Q49eQR4Pp7U9mFeotQVi/NOOp94=;
+        b=pV53mRtibSCQbNNhXfTXs70Kmg8n3Z+FVWKdAtto7dRD3YuIZyNVFPInMy3JGWS3MD
+         FBsQWZ+GAJHC7TItFNEGBj6pQdVskouXi66wSGxST8L8thTQDQST6VHHLeAaD732CbTm
+         QLVxgKBWZT8Yz6EiRY5KjKJ/i5oojzRPwOolKi1GsscMGPbxvEn9VWJzUb07ObMNssIQ
+         HkE9fXeTFtCOtxnL3uzM3p/ktu4I3MVsr7/ehRHh4GawuEyuJgpYb5lVSZHxMV3CO+kX
+         gYXhjlFYAd3c9H5gG2TZxmvD3uDF0nfgqC1PN0yi0PbUf/1UI1AAEeAt1wuDgKuF1SlQ
+         LRsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=YsLY1swMVj4DKjC2Q49eQR4Pp7U9mFeotQVi/NOOp94=;
+        b=FmzlXuU7Ju0L9MGW4KlGR9VKBcJ28soITJTwbPapo3r6sjZye8EsaADRFvnkO/NKlF
+         Em4QUF4q3RJ04JewQ7uU0yfH0Ja3baxvh4v6rvU6b0JsdWzJsq8p9CDcdCw+uxeaRBdv
+         Qt9ld6XIVleV4NKXqBlwgp9SrYnGMGD8zsoaWsKIylzzytzjCAHsAihhBm/45MGBucYd
+         TKI+Mb7R86VCYRs6X2gsBDAMYFhp9TwGlRkCgX2uUL9vJxR7Mdn6EgT1R2IqjSfGXfrG
+         Pn00/F/5kL5TYLg1J6afIJOtgImUtCdML2koo3LXFz3wKBZn6yZBAJi7kih1go+QbsWH
+         uh8w==
+X-Gm-Message-State: ACrzQf2ZkDpN4KJu4ZfVKWIOhU0Qfjvw0XrE6al5fbBJzOV/FEVeYF53
+        VxxvH7fVkgrL0dsgXdYcC0qn7Q==
+X-Google-Smtp-Source: AMsMyM5jkom1WL6i/J8FWjPHF3VUaTG9/NOtjIVcSs2jkS65wz9QlEyEI1W5sI+i9gtnHsXm+73LdQ==
+X-Received: by 2002:a2e:b8d6:0:b0:26c:4776:ba2e with SMTP id s22-20020a2eb8d6000000b0026c4776ba2emr5998334ljp.143.1664799200257;
+        Mon, 03 Oct 2022 05:13:20 -0700 (PDT)
+Received: from fedora.. ([85.235.10.72])
+        by smtp.gmail.com with ESMTPSA id k15-20020a05651239cf00b00492dadd8143sm1431154lfu.168.2022.10.03.05.13.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 05:13:19 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-alpha@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-arch@vger.kernel.org
+Subject: [PATCH] alpha: Fix ioread64/iowrite64 helpers
+Date:   Mon,  3 Oct 2022 14:13:16 +0200
+Message-Id: <20221003121316.2540339-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221002012451.2351127-6-guoren@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 01, 2022 at 09:24:45PM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> Without noinstr the compiler is free to insert instrumentation (think
-> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> yet ready to run this early in the entry path, for instance it could
-> rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> 
-> Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> ---
->  arch/riscv/kernel/traps.c | 4 ++--
->  arch/riscv/mm/fault.c     | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> index 635e6ec26938..588e17c386c6 100644
-> --- a/arch/riscv/kernel/traps.c
-> +++ b/arch/riscv/kernel/traps.c
-> @@ -92,9 +92,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
->  }
->  
->  #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
-> -#define __trap_section		__section(".xip.traps")
-> +#define __trap_section __noinstr_section(".xip.traps")
+When doing allmod builds it turns out some modules are using
+ioread64() and iowrite64() that the alpha does not implement,
+as it is using <asm-generic/iomap.h> without selecting
+GENERIC_IOMAP.
 
-I assume that for CONFIG_XIP_KERNEL, KPROBES is not possible, and so functions
-marked with __trap_section don't need to be excluded from kprobes.
+Fix this by implementing the ioread64()/iowrite64() stubs
+as well, using readq() and writeq() respectively.
 
-Is that assumption correct, or does something need to be done to inhibit that?
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 7e772dad9913 ("alpha: Use generic <asm-generic/io.h>")
+Link: https://lore.kernel.org/linux-arch/20221002224521.GA968453@roeck-us.net/
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Richard Henderson <richard.henderson@linaro.org>
+Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+Cc: Matt Turner <mattst88@gmail.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Arnd if this looks OK then please apply it on linux-arch
+for fixes.
+---
+ arch/alpha/kernel/io.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Thanks,
-Mark.
+diff --git a/arch/alpha/kernel/io.c b/arch/alpha/kernel/io.c
+index 838586abb1e0..5f3e75a945c1 100644
+--- a/arch/alpha/kernel/io.c
++++ b/arch/alpha/kernel/io.c
+@@ -41,6 +41,11 @@ unsigned int ioread32(const void __iomem *addr)
+ 	return ret;
+ }
+ 
++u64 ioread64(const void __iomem *addr)
++{
++	return readq(addr);
++}
++
+ void iowrite8(u8 b, void __iomem *addr)
+ {
+ 	mb();
+@@ -59,12 +64,19 @@ void iowrite32(u32 b, void __iomem *addr)
+ 	IO_CONCAT(__IO_PREFIX,iowrite32)(b, addr);
+ }
+ 
++void iowrite64(u64 b, void __iomem *addr)
++{
++	writeq(b, addr);
++}
++
+ EXPORT_SYMBOL(ioread8);
+ EXPORT_SYMBOL(ioread16);
+ EXPORT_SYMBOL(ioread32);
++EXPORT_SYMBOL(ioread64);
+ EXPORT_SYMBOL(iowrite8);
+ EXPORT_SYMBOL(iowrite16);
+ EXPORT_SYMBOL(iowrite32);
++EXPORT_SYMBOL(iowrite64);
+ 
+ u8 inb(unsigned long port)
+ {
+-- 
+2.34.1
 
->  #else
-> -#define __trap_section
-> +#define __trap_section noinstr
->  #endif
->  #define DO_ERROR_INFO(name, signo, code, str)				\
->  asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index f2fbd1400b7c..c7829289e806 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -203,7 +203,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
->   * This routine handles page faults.  It determines the address and the
->   * problem, and then passes it off to one of the appropriate routines.
->   */
-> -asmlinkage void do_page_fault(struct pt_regs *regs)
-> +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
->  {
->  	struct task_struct *tsk;
->  	struct vm_area_struct *vma;
-> -- 
-> 2.36.1
-> 
