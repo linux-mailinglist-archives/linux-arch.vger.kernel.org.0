@@ -2,226 +2,275 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316BC5F38BA
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 00:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461815F38C1
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 00:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiJCWUr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 18:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S229758AbiJCWV7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 18:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbiJCWUq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 18:20:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE2B52E49;
-        Mon,  3 Oct 2022 15:20:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664835644; x=1696371644;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=fzQP40Xk77O3OheaSOHjbyOE7OQvMSlKMArekNbbDig=;
-  b=ZA3T+fxUo211nL6y5ptchRgM2nvbIWf08wRVyl9R9l5KLtahuIYkCa7z
-   hh5IERF+J9PUGZemRDEDB25a3is7a7Jn9FTjFL13W4XY9xma3zGCZ0Zp3
-   58hiGiaHw2gngEkBFr21nCH6ZVGDnrLRITCzKff6StC0M6TRQPmqHwm5y
-   RV6zDanJaJpKZUguS0dX2n8s2nZCgfpowvb6au/CYFrHyDtkk8iYh8LYM
-   kMXhhqSMzX1HLK4/FdBiybtyMYLpNyVcd/YMxJMljncZhPxADXI5xC5Wc
-   0q8AD8FO4z/LSouzFFWPnGpRpjlTJomJn4wEq+HjneSwo8oy5YWPfO7Fm
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="300375191"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="300375191"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 15:20:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="868784027"
-X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="868784027"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Oct 2022 15:20:26 -0700
-Received: from orsmsx608.amr.corp.intel.com (10.22.229.21) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 15:20:26 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX608.amr.corp.intel.com (10.22.229.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 3 Oct 2022 15:20:25 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 3 Oct 2022 15:20:25 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.44) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 3 Oct 2022 15:20:25 -0700
+        with ESMTP id S229668AbiJCWV5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 18:21:57 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20719.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::719])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238D653037;
+        Mon,  3 Oct 2022 15:21:56 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nblFrrkJH3Art9GSQeLS3Q6eVG9yMBhsIhHyOzNJsyWGDa2rzUG472oQE9dvZdqGYUwtOUw7B7iv/R9DbZRugc4aiOtBthsFEagMA5tJFc2YzgYb9mY7q5GQUi/lCsfvuPQB4kWT1D4bnQoDuY6vi9RriUUH/JDZgtsCm/ZMFslNS+g2lvLtt1TTw+cObnHwIaHbiSDJ2uYfN++UoR1Mxp1fW208VbMc/XO3tRYrval7B3pgaKrBtyNeOPOJOOgTEdGO6xSL7vxr7gdRjoQcaxYKPrsEA1UtqfZJlz501FFjrQhMV/HywbJg3CbKZb4YmSCxZxFQxOtX0fidcW927w==
+ b=iSrbsMt6xnkbgDIFP1lq0e7w+nwMglxtF4et3ifiJDN+LjSYJZ7nGeqemGkyvnM+sP54QL5+KReR/4rGRxElhCNKBDryRSWO7H/qNon0DfjBpg4LhrKrvctP0DDKztXde0fOkx3XVsoUasI7B/PFHkDYDR1OV79DhvVXtdEdNfG1MdCTb4YayH4Uxbs14dVBOpRkUNZURJ+n9bXPbyZjckXOZqNREmwO6MdWdD1LiYO8GKClLlaFI/0GWLclbSyJEyzuuf4ZOkGEZMe/XO96a/flCoCseX41DY6islNf0wxpSIzQeGlvDBwtE7Nb5qVtOCsWaDoyv1B/hQLef9gEaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fzQP40Xk77O3OheaSOHjbyOE7OQvMSlKMArekNbbDig=;
- b=A4X+30AaAesYWyd7D9OW/Gi+RJDvZ1Zskd9Diep1hnjsH/ezC3w4sA4V6OiHYYcv8DDfWUYfXGo2uRqsBU4hQAPSA7ligprLCEMfSFc/ZbdPSEWsrZiF/AIA5NXL9LMBDkcbSZn9Xj8Ntzj1eHTOArDejO8PBVK3isp66zMDZkWbbpgFKvwQ7AHt7Z8L7Op7cdK56xT/nkC7F5fGKlPkhzlkS3U5rpG9aZvAkBXIljwXD5CwI9/XF8InLU3lZHclezcnomEdOfNXUNnralBUHDAXNTAJgq+ZIRtUvOXOmbXAWp+Qbvp2Y9g5zu3pZ6uY8uf7euYSmwDZhAlRqH9CHw==
+ bh=Dpw2FHL2mwzQM0JW5AQf63SBBPNCd74oXpIyO+bDqAs=;
+ b=jFn51eocjLEYCr4Yd6absV9Bv9qwPkAN4M9E143NyM85Yz+gv7Si9n3rSXG73W+OvdQcvArreic1jDos3VvFz0vN+LYimFpSymRnSmulIxMymegYumgySDsPbLMcr5G9Niq6g52MF77MF+lZQSkSFnkWAzRd3q2/kdk2Tmlsb75UsOymGnmWQyEzIRrnRYPUjIvlG8U8daxe/tpMeDBNdepgcrpacqA5HtEV+fB94hCrM9qk5F7dvG+vWxukvoN7I+9peu/V7MB5vxmp4uAPKhit9W7YnZBPBWyGC3wIMf38V5iln1ZDSJyM/zATrZ1xKiVqJ5IAb2xJ9xRS57AMCw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by SA1PR11MB5825.namprd11.prod.outlook.com (2603:10b6:806:234::5) with
+ smtp.mailfrom=bu.edu; dmarc=pass action=none header.from=bu.edu; dkim=pass
+ header.d=bu.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bu.edu; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Dpw2FHL2mwzQM0JW5AQf63SBBPNCd74oXpIyO+bDqAs=;
+ b=XLAc01olul3ptAPhuQ8o2tbBtazkmV4jmii95zvFPv86r/m80zZIlgXXSzY2rb0GUesbaaD01YbIveDqhw6xNbVYSzi7XycxLVG0+z2arKBd+SFfM1RlBiqRZ0q4tanoeCKiZTsF7e4DuhrtmqN6d+kyOzIwNcMDbUjqMSlQlxrMVk0jZCZOalzVmBIEJgzTVup9XDFN4v1zuoIXA5zsM5y8OA6bpxdc5D8EJXQOiHDw+3OjA3m05PupqliC9Qu9Z7J6Me/AgpE0xbJcvw8STNSdPMeXmhI1AoPH3IZz2zhmi43ODFs44qNjufexVH2P8VPoNiTSou2YLoEUwWKNYw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bu.edu;
+Received: from BL0PR03MB4129.namprd03.prod.outlook.com (2603:10b6:208:65::33)
+ by MN2PR03MB4928.namprd03.prod.outlook.com (2603:10b6:208:1a7::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Mon, 3 Oct
- 2022 22:20:21 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::99f8:3b5c:33c9:359a%4]) with mapi id 15.20.5676.028; Mon, 3 Oct 2022
- 22:20:20 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "jannh@google.com" <jannh@google.com>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-Thread-Topic: [PATCH v2 10/39] x86/mm: Introduce _PAGE_COW
-Thread-Index: AQHY1FMOaUlv/a8lEUG05TjT32eaO6384Q6AgABWmICAAAUGgIAAB1GA
-Date:   Mon, 3 Oct 2022 22:20:20 +0000
-Message-ID: <685728bda0fdd33d9f27111384828a6cbdc537db.camel@intel.com>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-         <20220929222936.14584-11-rick.p.edgecombe@intel.com>
-         <20221003162613.2yvhvb6hmnae2awz@box.shutemov.name>
-         <9e9f2ce8193ea2e86474ab999ad2a034c49d8b22.camel@intel.com>
-         <CAG48ez1S+zN1tLKYuPL-yBu-ZxT7AMm5faWypi3J-XtnQCUiEg@mail.gmail.com>
-In-Reply-To: <CAG48ez1S+zN1tLKYuPL-yBu-ZxT7AMm5faWypi3J-XtnQCUiEg@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|SA1PR11MB5825:EE_
-x-ms-office365-filtering-correlation-id: ace2a40d-87e9-4a2b-8caf-08daa58d757a
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Q7EZWJFSd01s1jYeTO74DDHEmuydHpB1M9jYiZ9b2KxHHTHycVx57DpmYK6EhIrsBNuV+3HjlQNLwB4De1afWA74UDOZEdJv/n9mIRZ3NmqpPTdntFkcBNcw8Xy+r6c0rc6J0PuqcnQzsn/qwjME7WBB6oHDS4pGozla+yz770amDEzPNtXkJ/ky8y+ELz8VGqzy9c+vhhZ37PzveVlIeT85yl6d3KMNjemKzWnBjCJgSkTItjtQN97+c+ynZW/+rkvQdG5RF5+ROmn39VT8h2BVrqvYmoBnhFirGHOt74i9eoOKMB9TeLkZ3e7CnknPC25TRyqdRrP4ubY5KA4fuP7ilnDO6+9JmzI1FV8MQFdn6VCBIKGZ8vHr3a4gUT4ncDnWLAuXyo5Tu0PWXpKVtRLJoUoJbrRfxRAg9w15OId5QP0x0B6PeBwOGn11SB8fcLmF/VEucQdJbAAILFfyPD0x3QVAUVNbsHcGq1FLQYoKi3E96/Xg9lvQmB8TcWHPRnJm5DVu11iJxPqIiYms1M/7KTbdN/Youw56aMoSRYTFOOVLn0Y1fr7ydp10cTHTi3rlyWCsPF5nyeTwFMsvcoq9cBuWB19ZJH1MbmuKdFV6atIZafq3Pgd2uPanm5VmqzJhAWDv0Y+cVyjM+aFKZRULa1O1SkkSgROosK8A9AbQOojT1iSlM+aUgnq50AV4ReMR7wFfSZVRq6SqBrRYuaxUK2oKtWgLdHyAyPuMbQLaYup55NDpj+H21wf/v4EubvE9yaWZGg/uPSdHi+GzvY6RX3N2A9oi4wT2UN2yjeY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(396003)(136003)(39860400002)(376002)(366004)(451199015)(2616005)(38070700005)(82960400001)(86362001)(41300700001)(122000001)(5660300002)(38100700002)(7406005)(8936002)(66946007)(76116006)(64756008)(7416002)(66556008)(66476007)(66446008)(4326008)(54906003)(2906002)(6512007)(26005)(6506007)(478600001)(186003)(71200400001)(316002)(8676002)(6916009)(6486002)(36756003)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z25iUnpLYjNVaXZIQ2VreHZNRlE0OEJkYWR1enpXS0NPWFBpdC9qL3JLWVdP?=
- =?utf-8?B?TnVPdDVQbWt2MmFWc3JJZVYrTjFoT3BUKzdKaHlsVXFvQTR2R1Z4T3hoUHVN?=
- =?utf-8?B?RzhYdTM0QnBjeHE1YS9KU3dPQVRaUmowbXNtOUk5VmhNVmVTUk85YndZNnZq?=
- =?utf-8?B?MERMNUtaenZieU1FUHRmaDJHblBIK0lSV3Q0aTFwSUtTS3daR0pXTklCMlZi?=
- =?utf-8?B?Q3RMK3k3NWdqWGdVNERYT0Q1VlduOTB0OCtjZUp1ZkpUSEdBc3FNWkg5aHZN?=
- =?utf-8?B?V2JXZ2R0Z1hSS1VEZjRYTHVjL3JPTU1oTkhnaytwVUE5OFc5TWJGRVhuQ3Z2?=
- =?utf-8?B?QkQ1NmRTcmlqVk5SVlIySkh6a0lBR0tXYWcxc3lOYzNabFFVZnVuVXJKZjk3?=
- =?utf-8?B?S0YwLzk4RGZlYVI2OWNZQmdwME1vRVdINllyMHp1VWtySVBOVThNUUZ3QnFS?=
- =?utf-8?B?d016Uk9BaU02cVpPWjBJSXdIMUx6R2pRZnYxakRjcU16VE1Jb3J2TlBXdkNF?=
- =?utf-8?B?SXhrTEVQeFFmaFdjOVo1dVhBa0VNSkF1Mkx2aGF6bm5hNTlucTgxZ2F4VXJU?=
- =?utf-8?B?TFh0dGhtbnBxbkdReGswcjR2UHNneEdHOTlmdHN2eHZGU3NIdWhkcWI2MktZ?=
- =?utf-8?B?SFJ0UE5hRWRZWERvWG04VW1FQ0NWcjVTcWl1a0JicjlPbi9qT2kzK1RwT2pW?=
- =?utf-8?B?TzN5RzBEQmxHM2cySCtHaE1CVGcvdnZKd2lsVkZxMjE5TTgvQnlOYW9tWVYz?=
- =?utf-8?B?ajJGT2tCMXI3UnBvSEtveVJwaHErMVp4cWxuZEZ6RmNGa0hlRWVxZWRwQldy?=
- =?utf-8?B?MXcvcmFPSG53aTVDNmloOWdEeGdISFNjbnFjLy8xUjk4T2FMYjQrSXZ3SlFB?=
- =?utf-8?B?THVkaHRSTk9OVWpFSG50S3FXOC9RQ24wa3crMFFDM3plL3pEa05BRGEvSFc2?=
- =?utf-8?B?OWdZRWI4WDZSU2VhTmJEaHI4bVZzdXhUUjFXSHFIQm1JTVNKdGtRZXplZUI4?=
- =?utf-8?B?SHRRVjczKzN0cVEwVEM1eWZkS09iOW1MYXA1cHpteFY1TWFJL0NWT240NUw3?=
- =?utf-8?B?Z1NjYWx3dUs0eGhIZzV4OGRDZkpTVHpORFBJQ0tzaEVFMVF1K09xWVBFMnVJ?=
- =?utf-8?B?R2c4Y2NZMGFtT3poSElDVEJ2eVVtVFRId09BWlV6VjRaYkY5LzhGa2IxQ3Qz?=
- =?utf-8?B?S2g2M2VPNndBSThZUE81N0RQM1hFK1preXNic0xjalVDSWttcm4vcjI1Qmxk?=
- =?utf-8?B?OWdTVEhxQk5sNU9wVzdiT09kSUJEZkZVTGwvR2NTeXhNbzRTbVIxVk53ZlFi?=
- =?utf-8?B?aFJVNm5SNERkbnN5Qk8wZTlWSlIwb1kzb2hSSkR3TkpKNGEzQWppZjlVR0VF?=
- =?utf-8?B?S0VOTXBTQmxQMVEydWYrd1lZbnE1RWNBWjFzRU1QQnZ0cDdmbjMvWGg0dzBr?=
- =?utf-8?B?TDJjMGJqNExIamdDSUV2VEEwd010R2U3Y1JJa3hzNkNQSU54SW1tT1N5QlVX?=
- =?utf-8?B?cVlDb1Fya0tyaERPZEEwVnhUbFlaV2kwa3NxWHUwd0tlSmxmUEtzUnV1ZGw5?=
- =?utf-8?B?Z01Hak5obXZSZjAxSTBiT3FXNVhaS1hmaWZVSzBRVHlrNDdnUndhN2dPcXFp?=
- =?utf-8?B?elpIOTVqVEVmUnNhbjJKOFZWeHdyMUdyZFg5UlFublhPNDVvaS9pNmQzenBW?=
- =?utf-8?B?UTJ5LzhMMlZ1cHBhU2d2YnBiN2Foc0JUSm5KeHYzcHBxYmtYemk5MXJMVFZu?=
- =?utf-8?B?aXVvRFExSElzNjZSbDdHeEtOd3E1bmhMenY5NnQrMEMwMmxnYjV2L01hNjdV?=
- =?utf-8?B?VGIzUXZpWHMyNXRmdjVsSzgvcUIvaWM0ajU4Q1FVOCtabTFtOFc3WUhyaVFz?=
- =?utf-8?B?eXNYSWYvU05uNnVKNHlvUkZpb3VyNXFOZGlUNFJUbG52eU9MaU9mWVRkUFlR?=
- =?utf-8?B?cGRwaDhFL3BBamRRaEQzell6U2VlSFc4T3RkeWtkQ0F0TVYySTV4bU1DcjFw?=
- =?utf-8?B?eUExc2dPZVlsMHovWmVEZWxTek9RUmZDaHlKTEhCS3R1cUo2OU1WdmlFTlI0?=
- =?utf-8?B?UGZ6R3l4a2V6VmJCNy9HcmdXZGdVYks2Q3EyV1JKbkZTTFJ3YlcwT1RrTWtB?=
- =?utf-8?B?RG9waVBKNnZrV05RY0VTeVJVS2U0K1g5dUJMMDBPdWRCSUt3YmhmWnNQRjBa?=
- =?utf-8?Q?NlMYaNPzdPdahiJ1kMKiIBI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <15431DF6238EA847B1B88BABB23B2051@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Mon, 3 Oct
+ 2022 22:21:54 +0000
+Received: from BL0PR03MB4129.namprd03.prod.outlook.com
+ ([fe80::9e2b:bf05:79ec:581]) by BL0PR03MB4129.namprd03.prod.outlook.com
+ ([fe80::9e2b:bf05:79ec:581%4]) with mapi id 15.20.5676.030; Mon, 3 Oct 2022
+ 22:21:53 +0000
+From:   Ali Raza <aliraza@bu.edu>
+To:     linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        luto@kernel.org, ebiederm@xmission.com, keescook@chromium.org,
+        peterz@infradead.org, viro@zeniv.linux.org.uk, arnd@arndb.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        pbonzini@redhat.com, jpoimboe@kernel.org,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, x86@kernel.org, rjones@redhat.com,
+        munsoner@bu.edu, tommyu@bu.edu, drepper@redhat.com,
+        lwoodman@redhat.com, mboydmcse@gmail.com, okrieg@bu.edu,
+        rmancuso@bu.edu, Ali Raza <aliraza@bu.edu>
+Subject: [RFC UKL 00/10] Unikernel Linux (UKL)
+Date:   Mon,  3 Oct 2022 18:21:23 -0400
+Message-Id: <20221003222133.20948-1-aliraza@bu.edu>
+X-Mailer: git-send-email 2.37.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR04CA0031.namprd04.prod.outlook.com
+ (2603:10b6:208:d4::44) To BL0PR03MB4129.namprd03.prod.outlook.com
+ (2603:10b6:208:65::33)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL0PR03MB4129:EE_|MN2PR03MB4928:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1f5fc72-6335-4464-6ad9-08daa58dacc9
+X-LD-Processed: d57d32cc-c121-488f-b07b-dfe705680c71,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gyr9k7zkumh12C39MMAH2hnXm4JDYfaxuQ9BXKxA5p8tA9UWvJXEbckDCPq7wzXWwaPDwG2JsLfOD/WL8jRwjUR//nrhXEUlwEcC8Q0TeqzcJWF+0OAaGNM25oy4+CWwOTR4kFZMlaPWGacc+hgHIauGNY4x4K7tz1zVDoQQ3L+rBqzyTqDW/9zr96TEyd6jFeFyi2QbDOqBeBFCInduL+3ZhIlQe4VWVVJ8nIJZEu+OOSWGWbYTlPbSJVJ3qJfiusVrC/QDhUcTymhUQEV7vg7Ash1NFEZr3NnlshdFnCbyktCMBY26ala+EDe/aDk/CGH7h/vAfPgAcUmIgRH/xAS2fjgmA9xg/xp9h8Vc3zfe00An7QbkrMtCWYMKrC6BkcjGUKcg3nZeYZD3+wER+YZFYHga+jSYKVhiPDwW9TfoYC+OPkl9e5QemHbBW7dL1xfRvHvat8hLCkvcamQZIxpLq3RZ+6ykRoQLO1XwhEYhyE5Yn3I2fOANUveqZXJAFGb6o2bXZvzZCMzQj2Cr2wMa4nxOi0ItHL/F+mVAT1vLb0Xv77F7/9KK8K7Xlvy/lPzzzh3eoeTfbCDut6MKXGWd10vT7NlazPDSBP4D5CJEbGVRdz06uAthtpM1l/4AB2SKOJ247QhPWC45AO2asKyWLYux773PZPVRkt3z4MP2sBkJcKftF5rbh6Z5Y9JOcCLwe/EYVDkH8iAb41lanYolax3Akmd81O7YR0D0hdMyIc33O51yCb11QjL2JhG+2q8ObP1WpztBLz/xqTQBo6Tp6x1O/EB786+2gaf31gbPaA7FjWDeHaxOS7Tb6S4TugsSRH+0GOrNZwM1OCXqZA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR03MB4129.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(346002)(366004)(396003)(39860400002)(451199015)(8936002)(7406005)(41300700001)(6666004)(38350700002)(75432002)(66556008)(66476007)(4326008)(8676002)(1076003)(186003)(6512007)(2906002)(2616005)(66946007)(83380400001)(52116002)(6506007)(36756003)(5660300002)(7416002)(26005)(86362001)(966005)(41320700001)(6916009)(38100700002)(316002)(6486002)(478600001)(786003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uvmjxrLvBWu+BlcM/9SSITiDZ2rZtYib4ZqWXrYp4NF4xFzv0RQ6G9MTwkWf?=
+ =?us-ascii?Q?MMBQHKBBiE8TYNAtDyDVEYGiOQ3tisy709lIE3K3T7+ECfP+z/PV/TxckZac?=
+ =?us-ascii?Q?JCCTahAwBV5EeNaJAOROG/mxWb+pFQcmM5Ey3m8bOZQpgGigEWEJn+4Y6bYj?=
+ =?us-ascii?Q?kgt6PJI/sdOeoDX8Nq779mrMWiYf27PGr62uu0UqVGgq8mq9YA7caDHAG2Ye?=
+ =?us-ascii?Q?q0sstnRZ6G44/eDk3TfzNp7KEJaLFYkgVcD0XrJFht0q+cEGc7IHEmC97wn+?=
+ =?us-ascii?Q?oQrlLrFtd/DK476bBfBJLAP7sWdiEKW1Y4tSpUrN/mlc7xnkiTvvXkbsx4kq?=
+ =?us-ascii?Q?1X8Kw/DJ8kS9JoA6dGX9QoXbL0TX/wJ/bGSSiOjYUsjZNXvyBnP1K6nxkMl7?=
+ =?us-ascii?Q?qIXEVdPbjD/kgLNhFMtNZ4auJ1x1Q6aCvVdZ4ES+EQPndzIVRpi8pAQrsZFb?=
+ =?us-ascii?Q?Nq6gpeUAfdBZho64eDB3gGPJdF/LOU4/JxGK7D74g32oFo6EhpnxT4rD4QJ6?=
+ =?us-ascii?Q?N/oIpSYRKXWWvPnaJuA+aOFK5kHtwCeURwtghhco5UxA3RlNr3iTj+YasH10?=
+ =?us-ascii?Q?4DpsHqU/sebVADpd7t4i5uOUmfB3A6nRKEsA+kkTzh0CgsLoI0Omq3LGXO3y?=
+ =?us-ascii?Q?EbY6EHN8t13M3wxjeiVqDojZI1bq6ci5zPq14vQ+AT3ujyJVj7wqf1d+pWkP?=
+ =?us-ascii?Q?jQKi5gHDQtwFF+fnMZAmcxnOOfYlCeoJXwWLJeBrTp/MAYbabCgu4dP2JfaH?=
+ =?us-ascii?Q?X5DxADRHI5I891q0kjJpWm84Sgd6+o6daq7OKrVrWTe77BgY3pidovQrfRUK?=
+ =?us-ascii?Q?kduQamRWFFySUHAF9ko2F+681B905ItW+qrPf/C3nidsG5I8x7XtNVfDqigZ?=
+ =?us-ascii?Q?U/r3Bbjc/coTMAJfALpK0mG6rOdhI1iFL69gU//B9Bs/odStsm2DORAvUqEY?=
+ =?us-ascii?Q?BwHJ4PGk9Xx7TdoXSGHeuRsqPDhqgvOpopRjas3FIwl7gDfuEIxLwt5xWuMm?=
+ =?us-ascii?Q?Gv+FHRElqUsBK1KpboMM3T1QIBj4m4VOBP5+CB2bUYv0Npf5zI5I6tiY+veJ?=
+ =?us-ascii?Q?NOB/aGiFWPOzuDaLntW7tgsbowPiginN0IOgOM+k69fKugzu6vJMhGPBx0OW?=
+ =?us-ascii?Q?955F2Wrd6QS/JXfSnkvxPSoSfQXovNjPjnSAUzZsgmXBuknWFFLDU2BI9xVE?=
+ =?us-ascii?Q?cB9ZJRizyv+yoiOpNjxl2E6dLc4JN5/qcO3/jkNVAWxW81/Ef32ItBmhlY0V?=
+ =?us-ascii?Q?APxNHlsJr7lKxFCftsxmjLIUKVJ8igFZtz+buZwPhexh5S1EitEt5DTVDgjV?=
+ =?us-ascii?Q?R0yF0CbIwVeDmZ/A3O4OqpDMJnsCndKPY0lsU/JDpOnb3oVluuTJU0dfPcrO?=
+ =?us-ascii?Q?NAWI1Tnirj/KlI3HosFhF2aPPsKhqQQfm9GhA8d9+R0aUETF33WKE92Sgp/7?=
+ =?us-ascii?Q?ku4ETAhb91KC2PHOk1zwKnAKxc5fL1F4cugu5pV+4awIBAPvQK8ngyfWSyYd?=
+ =?us-ascii?Q?0R1h9QFS05xDVBFc3linHYgJmH23YWtfFOwIrnc57KnHK8ujceNw8L/97pvd?=
+ =?us-ascii?Q?keWUoqxNv5jSslwJzhkFZdczCXOZWk7SafJJh02H?=
+X-OriginatorOrg: bu.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1f5fc72-6335-4464-6ad9-08daa58dacc9
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR03MB4129.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ace2a40d-87e9-4a2b-8caf-08daa58d757a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2022 22:20:20.5502
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 22:21:53.6855
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l7n5cwBZMSbf7ksWtmStjXnJmEh0M/QbFyd1Ym2lPDvug0N0C7ldFsbC0lbchvSRYWBmhlJN4PcVAx0Lt9uGG6nyHZuvb3O77/wl8+JDBgA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB5825
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d57d32cc-c121-488f-b07b-dfe705680c71
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uTpEXc9ZRbdUHwjL77z8elePwIwfSNM1PFbC6ieXhXoeaXiQuhR4dLzVZ77Muvl4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB4928
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTEwLTAzIGF0IDIzOjU0ICswMjAwLCBKYW5uIEhvcm4gd3JvdGU6DQo+ID4g
-PiBUaGVzZSBYODZfRkVBVFVSRV9TSFNUSyBjaGVja3MgbWFrZSBtZSB1bmVhc3kuIE1heWJlIHVz
-ZSB0aGUNCj4gPiA+IF9QQUdFX0NPVw0KPiA+ID4gbG9naWMgZm9yIGFsbCBtYWNoaW5lcyB3aXRo
-IDY0LWJpdCBlbnRyaWVzLiBJdCB3aWxsIGdldCB5b3UgbXVjaA0KPiA+ID4gbW9yZQ0KPiA+ID4g
-Y292ZXJhZ2UgYW5kIG1vcmUgdW5pdmVyc2FsIHJ1bGVzLg0KPiA+IA0KPiA+IFllcywgSSBkaWRu
-J3QgbGlrZSB0aGVtIGVpdGhlciBhdCBmaXJzdC4gVGhlIHJlYXNvbmluZyBvcmlnaW5hbGx5DQo+
-ID4gd2FzDQo+ID4gdGhhdCBfUEFHRV9DT1cgaXMgYSBiaXQgbW9yZSB3b3JrIGFuZCBpdCBtaWdo
-dCBzaG93IHVwIGZvciBzb21lDQo+ID4gYmVuY2htYXJrLg0KPiA+IA0KPiA+IExvb2tpbmcgYXQg
-dGhpcyBhZ2FpbiB0aG91Z2gsIGl0IGlzIGp1c3QgYSBmZXcgbW9yZSBvcGVyYXRpb25zIG9uDQo+
-ID4gbWVtb3J5IHRoYXQgaXMgYWxyZWFkeSBnZXR0aW5nIHRvdWNoZWQgZWl0aGVyIHdheS4gSXQg
-bXVzdCBiZSBhDQo+ID4gdmVyeQ0KPiA+IHRpbnkgYW1vdW50IG9mIGltcGFjdCBpZiBhbnkuIEkn
-bSBmaW5lIHJlbW92aW5nIHRoZW0uIEhhdmluZyBqdXN0DQo+ID4gb25lDQo+ID4gc2V0IG9mIGxv
-Z2ljIGFyb3VuZCB0aGlzIHdvdWxkIG1ha2UgaXQgZWFzaWVyIHRvIHJlYXNvbiBhYm91dC4NCj4g
-PiANCj4gPiBEYXZlLCBhbnkgdGhvdWdodHMgb24gdGhpcz8NCj4gDQo+IEJ1dCB0aGUgcnVsZXMg
-d291bGRuJ3QgYWN0dWFsbHkgYmUgdW5pdmVyc2FsIC0geW91J2Qgc3RpbGwgaGF2ZSB0bw0KPiBs
-b29rIGF0IFg4Nl9GRUFUVVJFX1NIU1RLIGluIGNvZGUgdGhhdCB3YW50cyB0byBmaWd1cmUgb3V0
-IHdoZXRoZXIgYQ0KPiBQVEUgaXMgc2hhZG93IHN0YWNrIChvbiBhIG5ld2VyIENQVSkgb3IgcmVh
-ZG9ubHkgZGlydHkgKG9uIGFuIG9sZGVyDQo+IENQVSB0aGF0IGNhbiBzZXQgZGlydHkgYml0cyBv
-biBub24tcHJlc2VudCBQVEVzKSwgcmlnaHQ/DQoNCkdvb2QgcG9pbnQuIEl0IHN0aWxsIHdvdWxk
-IG5lZWQgYSBjaGVjayBpbiBwdGVfc2hzdGsoKSBvciBwdGVfd3JpdGUoKSwNCnNvIHB0ZV93cml0
-ZSgpIGRvZXNuJ3QgdGhpbmsgQ1BVIGNyZWF0ZWQgV3JpdGU9MCxEaXJ0eT0xIG1lbW9yeSBpcw0K
-d3JpdGFibGUuIFdoaWNoIHRoZW4gcGVyY29sYXRlcyB0byBtb3N0IG9mIHRoZSBvdGhlciBjaGVj
-a3MgYW55d2F5Lg0K
+Unikernel Linux (UKL) is a research project aimed at integrating
+application specific optimizations to the Linux kernel. This RFC aims to
+introduce this research to the community. Any feedback regarding the idea,
+goals, implementation and research is highly appreciated.
+
+Unikernels are specialized operating systems where an application is linked
+directly with the kernel and runs in supervisor mode. This allows the
+developers to implement application specific optimizations to the kernel,
+which can be directly invoked by the application (without going through the
+syscall path). An application can control scheduling and resource
+management and directly access the hardware. Application and the kernel can
+be co-optimized, e.g., through LTO, PGO, etc. All of these optimizations,
+and others, provide applications with huge performance benefits over
+general purpose operating systems.
+
+Linux is the de-facto operating system of today. Applications depend on its
+battle tested code base, large developer community, support for legacy
+code, a huge ecosystem of tools and utilities, and a wide range of
+compatible hardware and device drivers. Linux also allows some degree of
+application specific optimizations through build time config options,
+runtime configuration, and recently through eBPF. But still, there is a
+need for even more fine-grained application specific optimizations, and
+some developers resort to kernel bypass techniques.
+
+Unikernel Linux (UKL) aims to get the best of both worlds by bringing
+application specific optimizations to the Linux ecosystem. This way,
+unmodified applications can keep getting the benefits of Linux while taking
+advantage of the unikernel-style optimizations. Optionally, applications
+can be modified to invoke deeper optimizations.
+
+There are two steps to unikernel-izing Linux, i.e., first, equip Linux with
+a unikernel model, and second, actually use that model to implement
+application specific optimizations. This patch focuses on the first part.
+Through this patch, unmodified applications can be built as Linux
+unikernels, albeit with only modest performance advantages. Like
+unikernels, UKL would allow an application to be statically linked into the
+kernel and executed in supervisor mode. However, UKL preserves most of the
+invariants and design of Linux, including a separate page-able application
+portion of the address space and a pinned kernel portion, the ability to
+run multiple processes, and distinct execution modes for application and
+kernel code. Kernel execution mode and application execution mode are
+different, e.g., the application execution mode allows application threads
+to be scheduled, handle signals, etc., which do not apply to kernel
+threads. Application built as a Linux unikernel will have its text and data
+loaded with the kernel at boot time, while the rest of the address space
+would remain unchanged. These applications invoke the system call
+functionality through a function call into the kernel system call entry
+point instead of through the syscall assembly instruction. UKL would
+support a normal userspace so the UKL application can be started, managed,
+profiled, etc., using normal command line utilities.
+
+Once Linux has a unikernel model, different application specific
+optimizations are possible. We have tried a few, e.g., fast system call
+transitions, shared stacks to allow LTO, invoking kernel functions
+directly, etc. We have seen huge performance benefits, details of which are
+not relevant to this patch and can be found in our paper.
+(https://arxiv.org/pdf/2206.00789.pdf)
+
+UKL differs significantly from previous projects, e.g., UML, KML and LKL.
+User Mode Linux (UML) is a virtual machine monitor implemented on syscall
+interface, a very different goal from UKL. Kernel Mode Linux (KML) allows
+applications to run in kernel mode and replaces syscalls with function
+calls. While KML stops there, UKL goes further. UKL links applications and
+kernel together which allows further optimizations e.g., fast system call
+transitions, shared stacks to allow LTO, invoking kernel functions directly
+etc. Details can be found in the paper linked above. Linux Kernel Library
+(LKL) harvests arch independent code from Linux, takes it to userspace as a
+library to be linked with applications. A host needs to provide arch
+dependent functionality. This model is very different from UKL. A detailed
+discussion of related work is present in the paper linked above.
+
+See samples/ukl for a simple TCP echo server example which can be built as
+a normal user space application and also as a UKL application. In the Linux
+config options, a path to the compiled and partially linked application
+binary can be specified. Kernel built with UKL enabled will search this
+location for the binary and link with the kernel. Applications and required
+libraries need to be compiled with -mno-red-zone -mcmodel=kernel flags
+because kernel mode execution can trample on application red zones and in
+order to link with the kernel and be loaded in the high end of the address
+space, application should have the correct memory model. Examples of other
+applications like Redis, Memcached etc along with glibc and libgcc etc.,
+can be found at https://github.com/unikernelLinux/ukl
+
+List of authors and contributors:
+=================================
+
+Ali Raza - aliraza@bu.edu
+Thomas Unger - tommyu@bu.edu
+Matthew Boyd - mboydmcse@gmail.com
+Eric Munson - munsoner@bu.edu
+Parul Sohal - psohal@bu.edu
+Ulrich Drepper - drepper@redhat.com
+Richard W.M. Jones - rjones@redhat.com
+Daniel Bristot de Oliveira - bristot@kernel.org
+Larry Woodman - lwoodman@redhat.com
+Renato Mancuso - rmancuso@bu.edu
+Jonathan Appavoo - jappavoo@bu.edu
+Orran Krieger - okrieg@bu.edu
+
+Ali Raza (9):
+  kbuild: Add sections and symbols to linker script for UKL support
+  x86/boot: Load the PT_TLS segment for Unikernel configs
+  sched: Add task_struct tracking of kernel or application execution
+  x86/entry: Create alternate entry path for system calls
+  x86/uaccess: Make access_ok UKL aware
+  x86/fault: Skip checking kernel mode access to user address space for
+    UKL
+  x86/signal: Adjust signal handler register values and return frame
+  exec: Make exec path for starting UKL application
+  Kconfig: Add config option for enabling and sample for testing UKL
+
+Eric B Munson (1):
+  exec: Give userspace a method for starting UKL process
+
+ Documentation/index.rst           |   1 +
+ Documentation/ukl/ukl.rst         | 104 +++++++++++++++++++++++
+ Kconfig                           |   2 +
+ Makefile                          |   4 +
+ arch/x86/boot/compressed/misc.c   |   3 +
+ arch/x86/entry/entry_64.S         | 133 ++++++++++++++++++++++++++++++
+ arch/x86/include/asm/elf.h        |   9 +-
+ arch/x86/include/asm/uaccess.h    |   8 ++
+ arch/x86/kernel/process.c         |  13 +++
+ arch/x86/kernel/process_64.c      |  49 ++++++++---
+ arch/x86/kernel/signal.c          |  22 +++--
+ arch/x86/kernel/vmlinux.lds.S     |  98 ++++++++++++++++++++++
+ arch/x86/mm/fault.c               |   7 +-
+ fs/binfmt_elf.c                   |  28 +++++++
+ fs/exec.c                         |  75 +++++++++++++----
+ include/asm-generic/sections.h    |   4 +
+ include/asm-generic/vmlinux.lds.h |  32 ++++++-
+ include/linux/sched.h             |  26 ++++++
+ kernel/Kconfig.ukl                |  41 +++++++++
+ samples/ukl/Makefile              |  16 ++++
+ samples/ukl/README                |  17 ++++
+ samples/ukl/syscall.S             |  28 +++++++
+ samples/ukl/tcp_server.c          |  99 ++++++++++++++++++++++
+ scripts/mod/modpost.c             |   4 +
+ 24 files changed, 785 insertions(+), 38 deletions(-)
+ create mode 100644 Documentation/ukl/ukl.rst
+ create mode 100644 kernel/Kconfig.ukl
+ create mode 100644 samples/ukl/Makefile
+ create mode 100644 samples/ukl/README
+ create mode 100644 samples/ukl/syscall.S
+ create mode 100644 samples/ukl/tcp_server.c
+
+
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+-- 
+2.21.3
+
