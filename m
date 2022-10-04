@@ -2,46 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927805F3A50
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 02:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBB05F3A5C
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 02:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbiJDAD5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 20:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S230010AbiJDAJP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 20:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiJDADv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 20:03:51 -0400
+        with ESMTP id S230005AbiJDAJI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 20:09:08 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F3E193EA;
-        Mon,  3 Oct 2022 17:03:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA182339B;
+        Mon,  3 Oct 2022 17:09:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664841829; x=1696377829;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Os63+EX8WH0KuFh3ggC0GBsbdgmNnf/a/c28uddDCRs=;
-  b=EZvh8XdO1EBPFl2b4cjCcrZmrosIvJdkJXcT90hLU79P2EbNFS2B1WsB
-   dfx1NGWcq6hqYvvnwayHO3SXUoEXDn0QKKnSIu0+evh9iGxDFIF30rqTY
-   72Ha8E/qHVWlBIpveJ4V6gaGdBI5bOR5pOFQU0+pEGRZN88pk1wFCWOhm
-   HxZX4wlTHkBCNTt/TRvIggQvjo2tHQ5kI+Urfwy05bqoyVAhRW9IDgisU
-   y5V7KQNUOaKO9acNf8IUmOvINnfdOw4nGrLscSLEzM4aKQX/XpWSioip/
-   mfVTPSNX+zd4crb5U4O1yYMYdDyuoQPyIBf4z2AX8oXzwczj61QmJbdNU
+  t=1664842147; x=1696378147;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aa9xL1h4AcH+tfPWyZLVKtFOv8x6EYzjVZIOkGJl5EU=;
+  b=k1wsmHsff3H5IzKJNzpXQzzG05jYB1/xZ9MviwOep9TmP0O33QDKYoZt
+   U7F0NtG6pAODqA3U2nv963lV8hb0vWVG7j1UKkmERLjiUJQpY5cfGoY7c
+   3TQvIhfujHOFIYTA1+Ngp0PYgKhZmttUyOpH2oYNAUhgzBMw2hrKx55nz
+   RnTemRMBQ+NTxc5Dl+U2yVMaYILqjxr8uUz9eDddFrLyo3OgpjrylDoIF
+   lVXe0hSM3Ygwa28Zmtr48lEqxKxgLpbAU5ZgpbGp0TmXlyM12SDpOhiaP
+   ltaCr2307uMO5DHbzKkAh0PL2sMwmrMehBQPXEaVOA/oq8BHA4txaEZKn
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="290010298"
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="290011189"
 X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="290010298"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:03:47 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="656943083"
+   d="scan'208";a="290011189"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:09:07 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10489"; a="952574919"
 X-IronPort-AV: E=Sophos;i="5.93,366,1654585200"; 
-   d="scan'208";a="656943083"
-Received: from bandrei-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.37.219])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:03:38 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 659E3104CE4; Tue,  4 Oct 2022 03:03:36 +0300 (+03)
-Date:   Tue, 4 Oct 2022 03:03:36 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+   d="scan'208";a="952574919"
+Received: from akashred-mobl.amr.corp.intel.com (HELO [10.212.139.217]) ([10.212.139.217])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2022 17:09:04 -0700
+Message-ID: <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
+Date:   Mon, 3 Oct 2022 17:09:04 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 33/39] x86/cpufeatures: Limit shadow stack to Intel
+ CPUs
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
@@ -57,7 +62,6 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Florian Weimer <fweimer@redhat.com>,
         "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
@@ -65,69 +69,48 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com, rppt@kernel.org,
         jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 19/39] mm/mmap: Add shadow stack pages to memory
- accounting
-Message-ID: <20221004000336.cpuats6iamw5ob3h@box.shutemov.name>
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Moger, Babu" <babu.moger@amd.com>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-20-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-20-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220929222936.14584-34-rick.p.edgecombe@intel.com>
+ <202210031656.23FAA3195@keescook>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <202210031656.23FAA3195@keescook>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:16PM -0700, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> Account shadow stack pages to stack memory.
-> 
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> 
-> ---
-> 
-> v2:
->  - Remove is_shadow_stack_mapping() and just change it to directly bitwise
->    and VM_SHADOW_STACK.
-> 
-> Yu-cheng v26:
->  - Remove redundant #ifdef CONFIG_MMU.
-> 
-> Yu-cheng v25:
->  - Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping().
-> 
->  mm/mmap.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index f0d2e9143bd0..8569ef09614c 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1682,6 +1682,9 @@ static inline int accountable_mapping(struct file *file, vm_flags_t vm_flags)
->  	if (file && is_file_hugepages(file))
->  		return 0;
->  
-> +	if (vm_flags & VM_SHADOW_STACK)
-> +		return 1;
-> +
->  	return (vm_flags & (VM_NORESERVE | VM_SHARED | VM_WRITE)) == VM_WRITE;
+On 10/3/22 16:57, Kees Cook wrote:
+> On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe wrote:
+>> Shadow stack is supported on newer AMD processors, but the kernel
+>> implementation has not been tested on them. Prevent basic issues from
+>> showing up for normal users by disabling shadow stack on all CPUs except
+>> Intel until it has been tested. At which point the limitation should be
+>> removed.
+>>
+>> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> So running the selftests on an AMD system is sufficient to drop this
+> patch?
 
-Hm. Isn't the last check true for shadow stack too? IIUC, shadow stack has
-VM_WRITE set, so accountable_mapping() should work correctly as is.
+Yes, that's enough.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+I _thought_ the AMD folks provided some tested-by's at some point in the
+past.  But, maybe I'm confusing this for one of the other shared
+features.  Either way, I'm sure no tested-by's were dropped on purpose.
+
+I'm sure Rick is eager to trim down his series and this would be a great
+patch to drop.  Does anyone want to make that easy for Rick?
+
+<hint> <hint>
