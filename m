@@ -2,69 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4E35F3B40
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 04:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5DB5F3BEC
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 05:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiJDCSP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Oct 2022 22:18:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        id S229662AbiJDD7N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Oct 2022 23:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiJDCRR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 22:17:17 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB3A357F4;
-        Mon,  3 Oct 2022 19:16:47 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id gf8so9077460pjb.5;
-        Mon, 03 Oct 2022 19:16:47 -0700 (PDT)
+        with ESMTP id S229602AbiJDD7K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Oct 2022 23:59:10 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338F84055A
+        for <linux-arch@vger.kernel.org>; Mon,  3 Oct 2022 20:59:07 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso7488920pjk.1
+        for <linux-arch@vger.kernel.org>; Mon, 03 Oct 2022 20:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CaXno1qEaV74BR47NIHz1H2pJTTUIFFA+A4lpB/mgXA=;
-        b=eloCpiVf/0XcI+V+9l2I+AY6JDTwodTaVWUcwJM8+ymYWCbCYU6oBKazVN4ASxEJX6
-         kk9rcQNkV9iNEBCEfBpiQL8dJO8Ze5SU5jT+OEylww1Rdoa2cSXdVmfP8YB9ZS+TH1ok
-         h98MPxQcbqwHETxS/dd25Mmf0WuqbMHpi/wUbu+ALDMg0/lCf5WzLQTsU9cEs0W/u242
-         s0Ymg5MD1aqfX3VyUTM64F0uWzm19iJV4OPDMpgg3sQgr/nMEdZXKUqfcKtchsO3+TO4
-         WcxOl4sdDhoTC772r6pirqm5F/HfdZ/bE36pFYNbWNSppnVLW50Yi/HaYpOzQmMfBoy7
-         o0dw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=6ZXZFqW1zvCEoHZIgPOM5DbWMEQFUkDUHhmwfnnqfck=;
+        b=M06N2WAnCq6ae00Dt1ENQITbBcoMx6NqoCSc7aGK2zRr09KbTJuXqJ7I6KBSXpeouq
+         WlPVfOqBFfWxcUNfCQleD0l3vdGcnc2mgsI/jkhnq1r94kJku4kfV2O+E/Ac3FdCrgST
+         1GLcCVgfuKoNNA0mDgizAkNa8H7zCCMkkVtA8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CaXno1qEaV74BR47NIHz1H2pJTTUIFFA+A4lpB/mgXA=;
-        b=bAccHQpbUdWEuiIUQID8I46Wts5SqvCAgb9SjTuaUJVHO2NxaeoAeF87pkGxwJT7Rp
-         Tw0rX1HGGLSGUS0pGPTIVvRhrfzt5MS9ojVOSprPcmfkgYhDtU2cDqXFjqFeTwSw6Zmr
-         ObQVp4WLZvtiRshX4N0r518nyVeharmshSWg6NKw3H4NlLTG9O1d0qunGfaypPprDSY3
-         r886Mx5ZbMjVDqTDLhIlgvYimLaAiiCFRDkO+JnPSyCn97RLJLXU2uC3IsT7Kkn0NZKe
-         9iyNVZR9V6MdBwHT12OcmCYhZp157RpxJwHXw0MnrdEprH+oqTIdVRVPhSr9mOtjuTGR
-         OMYw==
-X-Gm-Message-State: ACrzQf2uP7/UiNJO9h2zjuyOUqLOwUZN5vCNgviwFj3z3VDPgOXCygr/
-        jbYALHcbclqly/R8VXyEY+c=
-X-Google-Smtp-Source: AMsMyM7z7mqbqxau9dc5BF4w7ZntoA9ZSL+qDurMSeilS3c8J2q9EzScXlqJREt95R+vDsKYOP4Ufg==
-X-Received: by 2002:a17:902:c205:b0:178:5083:f656 with SMTP id 5-20020a170902c20500b001785083f656mr24923647pll.81.1664849802859;
-        Mon, 03 Oct 2022 19:16:42 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-17.three.co.id. [180.214.232.17])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa79ae5000000b00561382a5a25sm30703pfp.26.2022.10.03.19.16.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Oct 2022 19:16:42 -0700 (PDT)
-Message-ID: <5baaba9c-b07d-4d28-9416-217ebed14eb4@gmail.com>
-Date:   Tue, 4 Oct 2022 09:16:31 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=6ZXZFqW1zvCEoHZIgPOM5DbWMEQFUkDUHhmwfnnqfck=;
+        b=IsrwFEwTZcK1455G7gnYtQfBfg+Kd1FebnXOcSMbk2iPwFE1UddmjiEB83H9AfsguS
+         SfQsIo086WWxW+pZ80/VhIWawS0jVwXOTgi2IYrhiitAlXHiWubj+RSMkjgej3REYP3p
+         R5o/lWtXleir3GgHiuUhXEBYzwrqY5m6Fv4UuyQh1QoytgYQ2c2nWNz4yT3OyOdEaHkT
+         bKbkhK/UmD7DAn6CYwECnv1F0nYtneka33jf3yxCT20zyOQoPyPyJdGsWqzEkaZRqJTX
+         z4piqxzZe7WEB6PI6iVuIcU5VA16qowH1IjmpKSvz6fE6L2POfJDHTKhuUOm/JR2U00T
+         SpCQ==
+X-Gm-Message-State: ACrzQf0xNEg2cqZsl/mIL9oPwJ8qeRRMZqW5X5BmYvGk4Q69vJfJuLjM
+        /vo5fib1rlOuaddZ6pZba4thPQ==
+X-Google-Smtp-Source: AMsMyM50Foz8ANOtkKfZBNm5Ztw8tPSpl+z4P2LOSKo520ZEeaXLe42fyqEuBCWyfUwPzX1G0DOZwQ==
+X-Received: by 2002:a17:902:7009:b0:178:b9c9:979f with SMTP id y9-20020a170902700900b00178b9c9979fmr24273802plk.39.1664855946656;
+        Mon, 03 Oct 2022 20:59:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h19-20020a656393000000b0042c0ffa0e62sm7543842pgv.47.2022.10.03.20.59.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Oct 2022 20:59:05 -0700 (PDT)
+Date:   Mon, 3 Oct 2022 20:59:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
 Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
         "hpa@zytor.com" <hpa@zytor.com>,
         "Syromiatnikov, Eugene" <esyr@redhat.com>,
         "peterz@infradead.org" <peterz@infradead.org>,
         "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
         "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
         "Eranian, Stephane" <eranian@google.com>,
@@ -74,84 +63,89 @@ Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
         "jannh@google.com" <jannh@google.com>,
         "dethoma@microsoft.com" <dethoma@microsoft.com>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
         "oleg@redhat.com" <oleg@redhat.com>,
         "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
         "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
         "Moreira, Joao" <joao.moreira@intel.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
         "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
         "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
         "john.allen@amd.com" <john.allen@amd.com>,
         "rppt@kernel.org" <rppt@kernel.org>,
         "mingo@redhat.com" <mingo@redhat.com>,
         "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 00/39] Shadowstacks for userspace
+Message-ID: <202210032058.D17B1A3@keescook>
 References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-2-rick.p.edgecombe@intel.com>
- <YzZlT7sO56TzXgNc@debian.me> <87v8p5f0mg.fsf@meer.lwn.net>
- <0eb358ac-068c-d025-07e3-80a3c51ef39c@gmail.com>
- <5832fa687e6da50697a7627d53453b728ed1b7b7.camel@intel.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <5832fa687e6da50697a7627d53453b728ed1b7b7.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ <202210030946.CB90B94C11@keescook>
+ <7c85acd79688c5ea41f760535612ef77093a41c7.camel@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7c85acd79688c5ea41f760535612ef77093a41c7.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/3/22 23:56, Edgecombe, Rick P wrote:
-> On Fri, 2022-09-30 at 20:41 +0700, Bagas Sanjaya wrote:
->> On 9/30/22 20:33, Jonathan Corbet wrote:
->>>>   CET introduces Shadow Stack and Indirect Branch Tracking.
->>>> Shadow stack is
->>>>   a secondary stack allocated from memory and cannot be directly
->>>> modified by
->>>> -applications. When executing a CALL instruction, the processor
->>>> pushes the
->>>> +applications. When executing a ``CALL`` instruction, the
->>>> processor pushes the
->>>
->>> Just to be clear, not everybody is fond of sprinkling lots of
->>> ``literal
->>> text`` throughout the documentation in this way.  Heavy use of it
->>> will
->>> certainly clutter the plain-text file and can be a net negative
->>> overall.
->>>
->>
->> Actually there is a trade-off between semantic correctness and plain-
->> text
->> clarity. With regards to inline code samples (like identifiers), I
->> fall
->> into the former camp. But when I'm reviewing patches for which the
->> surrounding documentation go latter camp (leave code samples alone
->> without
->> markup), I can adapt to that style as long as it causes no warnings
->> whatsover.
+On Mon, Oct 03, 2022 at 06:33:52PM +0000, Edgecombe, Rick P wrote:
+> On Mon, 2022-10-03 at 10:04 -0700, Kees Cook wrote:
+> > > Shadow stack signal format
+> > > --------------------------
+> > > So to handle alt shadow stacks we need to push some data onto a
+> > > stack. To 
+> > > prevent SROP we need to push something to the shadow stack that the
+> > > kernel can 
+> > > [...]
+> > > shadow stack return address or a shadow stack tokens. To make sure
+> > > it can’t be 
+> > > used, data is pushed with the high bit (bit 63) set. This bit is a
+> > > linear 
+> > > address bit in both the token format and a normal return address,
+> > > so it should 
+> > > not conflict with anything. It puts any return address in the
+> > > kernel half of 
+> > > the address space, so would never be created naturally by a
+> > > userspace program. 
+> > > It will not be a valid restore token either, as the kernel address
+> > > will never 
+> > > be pointing to the previous frame in the shadow stack.
+> > > 
+> > > When a signal hits, the format pushed to the stack that is handling
+> > > the signal 
+> > > is four 8 byte values (since we are 64 bit only):
+> > > > 1...old SSP|1...alt stack size|1...alt stack base|0|
+> > 
+> > Do these end up being non-canonical addresses? (To avoid confusion
+> > with
+> > "real" kernel addresses?)
 > 
-> Thanks. Unless anyone has any objections, I think I'll take all these
-> changes, except for the literal-izing of the instructions. They are not
-> really being used as code samples in this case.
+> Usually, but not necessarily with LAM. LAM cannot mask bit 63 though.
+> So hypothetically they could become "real" kernel addresses some day.
+> To keep them in the user half but still make sure they are not usable,
+> you would either have to encode the bits over a lot of entries which
+> would use extra space, or shrink the available address space, which
+> could cause compatibility problems.
 > 
-> Bagas, can you reply with your sign-off and I'll just apply it?
+> Do you think it's an issue?
 
-OK, here goes...
-
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Nah; I think it's a good solution. I was just trying to make sure I
+understood it correctly. Thanks!
 
 -- 
-An old man doll... just what I always wanted! - Clara
+Kees Cook
