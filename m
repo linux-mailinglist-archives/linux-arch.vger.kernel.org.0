@@ -2,80 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F455F49CD
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 21:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0DC5F49CF
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Oct 2022 21:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiJDTmb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Oct 2022 15:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S229695AbiJDTnc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Oct 2022 15:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiJDTma (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Oct 2022 15:42:30 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49BA659EA;
-        Tue,  4 Oct 2022 12:42:29 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so426454pgr.12;
-        Tue, 04 Oct 2022 12:42:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=HpG5i02vmxe3dnsSL7vxsuxzal8c9ky/pIndry6A4cs=;
-        b=hJcs4dlEb7BByvrgCfy9uPQh9LlR4GiVDIbolUzf4p6P20IwqIr9yJ7pvGcXrM8bru
-         J9z6f4x8AnlFbo5w3rVHAYIF/qrvUx9rNM/9DM2JrYWA1+Utbbi7rNtqQ8uZE/768etO
-         xEzuPqNICgQyZnbbc5UPLgPH2XSYtweENUJizJU60+KhjLBHwNUpDwYJP95E/hG9kvZr
-         r6s/gqGxv16/0LDu0c9snGxj2BNDq+vEKxU2sziXYykWcZBYQCJ/4fjw657YOyDIt7h2
-         g4sux0RMZY8/Be0j+/IGmLb8jZ2UaeydAI+kN4183nUvNVMPhwku9BKAtBvqoSM0RMZr
-         zCxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=HpG5i02vmxe3dnsSL7vxsuxzal8c9ky/pIndry6A4cs=;
-        b=58QCmq41ebLeT8YAFIgq/b20Cpx6LmGib7X9xm9Xj/i40imn8z4olZh99Ql190VU18
-         6EvtNuZp/NNJJBk2Yt7vszdBsSw9up4LFXdjLLdx9gtEQSk9+pdy/m/8wQKl8d7/qYxF
-         G2RhLvHcBoFf7iRKz7QXW+r/hlXY5c8+pbjW6kXOwE5nnKuBRxbd5EWtlXVbT5J7flh0
-         YfXmImoOMjrjZke/fy0EFKdMfAWtfkPOUEmBX3szuyRYr2qV9PBmP9mNCNnQ5ooStHYL
-         ++8GLR8tDzs1E1lmWn9y3AmBHPtEV7z/Nn5cy27SgAUZW70KrZ3GT9rSM/4wLSoRCrnN
-         G25w==
-X-Gm-Message-State: ACrzQf3X1HEJOx+mok0eOEvn1UfFDEtHBnq4GhE7mFm/EdFJcnVVBV6t
-        v9Ed6Y3T3C0WR/pL1ObsRVA=
-X-Google-Smtp-Source: AMsMyM7GWgLHJkfVRRnc+wJMyGv6IHovqHeLpZFMtUdxFGhooTwzbJXACUygN9YbTWxKM8GoaBS3JQ==
-X-Received: by 2002:a63:ed0a:0:b0:442:2514:95f5 with SMTP id d10-20020a63ed0a000000b00442251495f5mr19483881pgi.402.1664912549362;
-        Tue, 04 Oct 2022 12:42:29 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902ec8a00b00177f4ef7970sm9260926plg.11.2022.10.04.12.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 12:42:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <57200020-c460-74ec-c786-9a2c16f4870e@roeck-us.net>
-Date:   Tue, 4 Oct 2022 12:42:27 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h>
+        with ESMTP id S229539AbiJDTnb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Oct 2022 15:43:31 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BA7659F2;
+        Tue,  4 Oct 2022 12:43:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iNEkoXBoo8OxfULHw5cFrYNmZiwCZ76hDU4Pysb/JxgxKGm6rydQeUmk7qgo0iT8XfTwIyMDagAZDQBZIf/d7eV7IE65Evzqv962LSf0GZE5On9oAENme1SdRbdWtAW57sZBLgbex3Ao6UmLzjoKLOkJaJ+u7r2Zp/+hAuSSDPiYB1jP4EFa0QBtrIB1u87NvHpH3LdCrR6rMlJYT7HGeBk3h0ZgKntIyPtTa9A60VpCAzRsT3HekBci2KBPtuhNB1pfDJAsKjdu54IdCJrsVX4BK0NBa5aaD4jvhBey/9kQmC9uaH8vPy4Wg/gnQhcYDbgBX9t8xuDHcZoaa/qeJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dOH/LEb2GfanRxMIbt9KpBCiit+uIMD1BTQ6MJ5CblM=;
+ b=Th46XRor3AAIOJdWGFyFuZ6C+sFMMY/IYuafsQdTz/NK2GqQdfFP+OzL6xShk27rJ+kL6/rj0x0FNkIQZsMuxEhIevvgQaw/uxjEW0OkvIL5aozT/wv2wip8lbcUGcqMxJFCOuVrM5u4LN1szc3VgegPpvbK3b10Km2h1mOiNas30qlAVgYcrRf+gjWhS+WX29zNp4EdoC+EzpLegzIGpcVrysK/8tfJyEncIMlO9eMSLRVx/x/ej2IpqbBM2q1oJZvz3pQmEUMyXngwnFAGQ6LyC+h1bixh2DWMZ7e+C7b+aQ6f3Xao8eG0uSUFsoT/PNZ/rvzwBbGlAu31XabTzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dOH/LEb2GfanRxMIbt9KpBCiit+uIMD1BTQ6MJ5CblM=;
+ b=G+Og3E/ffN4Zf+UwS23wdhfjD0cG72wFP1Jk2h8bszrlql069zeIWD0W5xyTBkO9BHu+3DZS+8UgwjZua5L0SCiyHIFo0Zp1IoJZCJAFvgJJRd1XV+ZFqFhVzXO8ZumFWxYg+dXozdDMTxwsYMLgF4o2zEy1VYkK6rhdPdJi/8U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20)
+ by PH7PR12MB5596.namprd12.prod.outlook.com (2603:10b6:510:136::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Tue, 4 Oct
+ 2022 19:43:27 +0000
+Received: from BL1PR12MB5995.namprd12.prod.outlook.com
+ ([fe80::9e7d:6fa5:ddb4:986f]) by BL1PR12MB5995.namprd12.prod.outlook.com
+ ([fe80::9e7d:6fa5:ddb4:986f%5]) with mapi id 15.20.5676.031; Tue, 4 Oct 2022
+ 19:43:27 +0000
+Message-ID: <ae5fea4b-8c33-c523-9d6d-3f27a9ae03d0@amd.com>
+Date:   Tue, 4 Oct 2022 14:43:19 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 33/39] x86/cpufeatures: Limit shadow stack to Intel
+ CPUs
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <20220818092059.103884-1-linus.walleij@linaro.org>
- <20221002224521.GA968453@roeck-us.net>
- <fd905ca5-fe0d-4cfb-a0d0-aea8af539cc7@app.fastmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <fd905ca5-fe0d-4cfb-a0d0-aea8af539cc7@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, kcc@google.com, eranian@google.com,
+        rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, Tom Lendacky <thomas.lendacky@amd.com>,
+        "Moger, Babu" <babu.moger@amd.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-34-rick.p.edgecombe@intel.com>
+ <202210031656.23FAA3195@keescook>
+ <559f937f-cab4-d408-6d95-fc85b4809aa9@intel.com>
+ <202210032147.ED1310CEA8@keescook> <YzxViiyfMRKrmoMY@dev-arch.thelio-3990X>
+From:   John Allen <john.allen@amd.com>
+In-Reply-To: <YzxViiyfMRKrmoMY@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR05CA0097.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::38) To BL1PR12MB5995.namprd12.prod.outlook.com
+ (2603:10b6:208:39b::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5995:EE_|PH7PR12MB5596:EE_
+X-MS-Office365-Filtering-Correlation-Id: 34873315-46ac-4f5c-d4a0-08daa640b525
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k6UwpSJ3PG4YNWU0k3cY19TkABVLTJfvmIvXYC0MucOp85tFfiup9Y/b28tElsmlA/KNURk38i5V8UjSuqsIY2GKwLFjyjSN5myjhn7V2WYTkGOyLx/dvVgiHGa4Hsf6j6CKoaJAqOgbln5EKdCm5XFhjfEdTlAb6Xe7sPhlO6N0ALfxh1NurSeFSKDY36wcQoo8ecrW1t7xOD40A4oQSW23LdkNDf4HsLuKhV6EWfBrDou68i8V2NrRTnIdqeo43F+ooIkKUZn3DV/jbuwtnt8Z417yiM2SA63jUC4fyErLirlmBK+01pR3O4H6MA2V42SHGWydvaH7rPBX4dQFzL1Q7v1e4lMZ/0Syd15+ZX0gFhuMfTqkGv7bMTr5gI6Cd59sxIVARc6Am7qQYrvlS9qmfUzXE6EK60ZQc4hi6nmtAIbzuC0uujazIsH4TwU1Sz0MbltIPF0nXkUqG7OxktygYjrnXKoS2aCj7diQz1lcjQGNnxu9c+vFLbD4XecfJpKY1CL5/DkamteUvcOUmtUMdwVBzQ79aMeuZGvsgHutLbp4UnoMWe9MmsVM7goHwxtaYZ0+p3joJSW1vkcfdWrMN0I1J/YZ5Di4nAS0NcwtecBWhdOrk2pkn0YRisk6MHlASUWoJuKBYN0U7V8wmqvYIzEFZG8R2MxJfufV3SIrmzVkPvqvw6PDCgAYWX/gcQw0FyVJxA2HVumLuT8JKRh72sYr0bdIG6xJs/gn98IlFB41Wm39iKmU5COHc59NNuwIzGL2Cs0aQqe0e/eKxVynAaqtNoLBMxRAiUXPGxI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5995.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199015)(66556008)(316002)(53546011)(54906003)(6512007)(6666004)(66476007)(8676002)(4326008)(2616005)(110136005)(478600001)(36756003)(31696002)(38100700002)(86362001)(6506007)(6486002)(186003)(66946007)(83380400001)(26005)(31686004)(7416002)(5660300002)(8936002)(41300700001)(7406005)(2906002)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q0QyL2VBaENaajI5WFNiUnBTdG5IWSsxZnBOMDg4NlhQbUN4aTRNQUxtYmdB?=
+ =?utf-8?B?bU5NN05zNW5rRDAwY2dKYkNtTXUvWmdKM3NMd3NWUDBoNndPTitCRDd1TTVO?=
+ =?utf-8?B?V013dkdkYmwwcFdyeVJ0WU1Jamw0a3l5TXFBNGxLWkgzOHNlNGt3djFLaW8v?=
+ =?utf-8?B?T2FSWm5pWEg3QXBQMzlrMU90U2dydEhyYkNpYVRBN2Yzd2NEY0hsc2l5R0Vw?=
+ =?utf-8?B?OHRjZzVjWFRyUW5DVU1RQTNTRlkzL0RtbFE2djQzYjlnaHRoK2ZzWWFSY2lm?=
+ =?utf-8?B?U3pkZ2o3Zkd5T0dqbTJRZjVINnlsRTJlREN4dTZLOWlaUHJ5RUduNWhhdXBw?=
+ =?utf-8?B?QUhidk5xWUpjeGRDTy9tRWxwSFFnSFYwcm5EdkxJNnZOTnh3Y2ZJb2pkS0c5?=
+ =?utf-8?B?QzNGa3IwY0tqbjZOY3NodVN2MmREU1dvdjlWbjZFaGxiT09tRGg3UFI3b3Zv?=
+ =?utf-8?B?bmhZRjVkUFF0SHJKWXphNVU3SWZZOEtvMUZMOGlReDBtZ1dhc2FmMmt3dUw4?=
+ =?utf-8?B?MnhnZWxucTI0Vk5wVEZKOVBYVVB5U0E0cXRGajlWclNDYTQ0eHROd3hybjJG?=
+ =?utf-8?B?aWdyWWdzZksrNUJPa21XN2VrQWpLWUI2anBRUzBKZGRGTWsvdFA0Skh2ZUI1?=
+ =?utf-8?B?SjdocTc5VWU2b3R4aGE4V1l1Nlc0M0FpYVdxaitaVGI1OXozRk9sTzBhRWxv?=
+ =?utf-8?B?UVNVVHB1bG12UmN3QVlIUTZQYnNFL1JYR0FsM3lETkNvQUdqS1NobStZSEpX?=
+ =?utf-8?B?M3NQeE1UZDlrbHZNRlVNQ2Q0RjhmTGRvdC9Xa3gyd2NEQ1pCR3FEbzloVjBk?=
+ =?utf-8?B?ZnQxRzFHRHA0dUIzRk5JN25EcEJHWWY0dUVvekpZRHkvRC9GbUlTYXZ2dVN0?=
+ =?utf-8?B?SUY4L1hmbU1tMUxxNWp3ODVEejRqM0o5TlhUb1FNRjFCZnZOQzFmK0xXdUsr?=
+ =?utf-8?B?bE5NZmQ2QkpSdENiVHRORlI2NllETzA0UnpCajVZZWlFMjNraytwTXVaSGtx?=
+ =?utf-8?B?a3JMTkZMSG1RdzZsNlBIT0t2RWZxMysyZHczcnEwbE1wUXozVE5FcWxpYmJ4?=
+ =?utf-8?B?eVdPNmo1R09MU09WSFFkZGh4d05mTzFhVGVNUUo4ZWtML005bmZYNGlUSlB1?=
+ =?utf-8?B?VDNFZ1BoU2t0Tk5rcEhLTVJldFNQSWdZWVlrMzZvS0ZCR09MRGF4YU9sNGg1?=
+ =?utf-8?B?Q3FyQVo5ZVl1a0hTUWphcUN1aUZBUlhRUXVoNGtYblMyNzBTUUUyYXhLNE5L?=
+ =?utf-8?B?MlNGRnFuTDkyTDBmVUxlQlBvSUN2MkpXZUtlRHE4NCtPM3pkZSt5K1VWVys2?=
+ =?utf-8?B?RmxMbDE1L0hGVE81YmlPRHlaWDl3UkkvdVV1dDZjUG1yd3MvMHhTZDduMUt1?=
+ =?utf-8?B?MWM1VlFjWDRjb2JJRVltMlU2c2hRYkhERS85eSsrUmJjS1R2a0YyYW1WR0Jk?=
+ =?utf-8?B?eVMzWXI4MkxBRk5JWjlLWlNhWUZmUDdGVG55K3lKbHhia1JBUFVwakR5Z3ZI?=
+ =?utf-8?B?YkVDajBoTE4ra0I4NFhVSlliMHpsRFFUdEJGRkRJamxYRjdVMDlKaFd1bU5s?=
+ =?utf-8?B?U2E1VzlwKzE5cmhZbWRnbWx2N2NBdnVTZFMvZVdxU2hYZ2hGTm5zT0xZM21Q?=
+ =?utf-8?B?dm5MZUlGbEZKL0V4bzc3UDlSWmJsakdXT3owYW1mYkxxTnJOc3ErZTYzTTZk?=
+ =?utf-8?B?anhnamJRYnc2UzVWd2ZrQXJwdWtWSUo1U0dqcXBCS3FKYUxBWU1yTi8wV2NT?=
+ =?utf-8?B?OXlnVVI2SERwMklma2g0eVpFdUduNE1YT0kwc3FEcytHYmtqSlB6YkdWMmdt?=
+ =?utf-8?B?dlNrNUhJWlRqb24rSC9JeFl4T1Y1QW5yVlJsZXpyV0V5NC9hc05saFplZmRB?=
+ =?utf-8?B?bGFRbms0S3Rscnl0YlNQSDZNZXg1bnVJVE9rMnF6TFpnZUprN0RtYVdhWlhN?=
+ =?utf-8?B?SkpSOXJBT1J2L1h0Njk0OXBVZUE3dTMvb29BTFpmZW5YcW15S2lkNnF4TnVz?=
+ =?utf-8?B?eWJya1pLNEFpU0xRUXJ4ZWpPcHJHOGRNZ3JJaUhya3hDTGJtS2x4Umg4OHA1?=
+ =?utf-8?B?R2JuM0VrMngyRjhxRmhZWGlMQU1Gb2ZrZGhWV3BLZVZ0RnVBdkhzZXA5MTFP?=
+ =?utf-8?Q?tco43NZu0xqvri0c88kyidG3p?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34873315-46ac-4f5c-d4a0-08daa640b525
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5995.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2022 19:43:27.6587
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: re1ULdxRQtzSmF5c8iZ57JyXBJiRDEy2WwcQAtA4Jz7WZOHgVBJswVUzjZWKIF0hoqDT6Wl/UFsVC3l+xdK+nQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5596
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,65 +158,127 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/3/22 06:03, Arnd Bergmann wrote:
-> On Mon, Oct 3, 2022, at 12:45 AM, Guenter Roeck wrote:
+On 10/4/22 10:47 AM, Nathan Chancellor wrote:
+> Hi Kees,
 > 
+> On Mon, Oct 03, 2022 at 09:54:26PM -0700, Kees Cook wrote:
+>> On Mon, Oct 03, 2022 at 05:09:04PM -0700, Dave Hansen wrote:
+>>> On 10/3/22 16:57, Kees Cook wrote:
+>>>> On Thu, Sep 29, 2022 at 03:29:30PM -0700, Rick Edgecombe wrote:
+>>>>> Shadow stack is supported on newer AMD processors, but the kernel
+>>>>> implementation has not been tested on them. Prevent basic issues from
+>>>>> showing up for normal users by disabling shadow stack on all CPUs except
+>>>>> Intel until it has been tested. At which point the limitation should be
+>>>>> removed.
+>>>>>
+>>>>> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+>>>> So running the selftests on an AMD system is sufficient to drop this
+>>>> patch?
 >>>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Link: https://lore.kernel.org/linux-mm/202208181447.G9FLcMkI-lkp@intel.com/
->>> Cc: Mark Brown <broonie@kernel.org>
->>> Cc: Arnd Bergmann <arnd@arndb.de>
->>> Cc: Richard Henderson <richard.henderson@linaro.org>
->>> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
->>> Cc: Matt Turner <mattst88@gmail.com>
->>> Cc: linux-arch@vger.kernel.org
->>> Cc: linux-alpha@vger.kernel.org
->>> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>>> Yes, that's enough.
+>>>
+>>> I _thought_ the AMD folks provided some tested-by's at some point in the
+>>> past.  But, maybe I'm confusing this for one of the other shared
+>>> features.  Either way, I'm sure no tested-by's were dropped on purpose.
+>>>
+>>> I'm sure Rick is eager to trim down his series and this would be a great
+>>> patch to drop.  Does anyone want to make that easy for Rick?
+>>>
+>>> <hint> <hint>
 >>
->> This patch results in the following build errors when trying to build
->> alpha:allmodconfig.
->>
->> ERROR: modpost: "ioread64" [drivers/pci/switch/switchtec.ko] undefined!
->> ERROR: modpost: "ioread64"
->> [drivers/net/ethernet/freescale/enetc/fsl-enetc.ko] undefined!
->> ERROR: modpost: "ioread64"
->> [drivers/net/ethernet/freescale/enetc/fsl-enetc-vf.ko] undefined!
->> ERROR: modpost: "iowrite64"
->> [drivers/net/ethernet/xilinx/xilinx_emac.ko] undefined!
->> ERROR: modpost: "iowrite64" [drivers/net/wwan/t7xx/mtk_t7xx.ko]
->> undefined!
->> ERROR: modpost: "ioread64" [drivers/net/wwan/t7xx/mtk_t7xx.ko]
->> undefined!
->> ERROR: modpost: "iowrite64" [drivers/firmware/arm_scmi/scmi-module.ko]
->> undefined!
->> ERROR: modpost: "ioread64" [drivers/firmware/arm_scmi/scmi-module.ko]
->> undefined!
->> ERROR: modpost: "iowrite64" [drivers/vfio/pci/vfio-pci-core.ko]
->> undefined!
->> ERROR: modpost: "ioread64" [drivers/ntb/hw/mscc/ntb_hw_switchtec.ko]
->> undefined!
->>
->> Reverting it doesn't help because that just reintroduces the problem
->> that was supposed to be fixed by this patch.
+>> Hey Gustavo, Nathan, or Nick! I know y'all have some fancy AMD testing
+>> rigs. Got a moment to spin up this series and run the selftests? :)
 > 
-> Thanks for the report, I've now added this patch on top.
+> I do have access to a system with an EPYC 7513, which does have Shadow
+> Stack support (I can see 'shstk' in the "Flags" section of lscpu with
+> this series). As far as I understand it, AMD only added Shadow Stack
+> with Zen 3; my regular AMD test system is Zen 2 (probably should look at
+> procurring a Zen 3 or Zen 4 one at some point).
 > 
-> Matt, can you take a look if this look correct?
+> I applied this series on top of 6.0 and reverted this change then booted
+> it on that system. After building the selftest (which did require
+> 'make headers_install' and a small addition to make it build beyond
+> that, see below), I ran it and this was the result. I am not sure if
+> that is expected or not but the other results seem promising for
+> dropping this patch.
 > 
+>   $ ./test_shadow_stack_64
+>   [INFO]  new_ssp = 7f8a36c9fff8, *new_ssp = 7f8a36ca0001
+>   [INFO]  changing ssp from 7f8a374a0ff0 to 7f8a36c9fff8
+>   [INFO]  ssp is now 7f8a36ca0000
+>   [OK]    Shadow stack pivot
+>   [OK]    Shadow stack faults
+>   [INFO]  Corrupting shadow stack
+>   [INFO]  Generated shadow stack violation successfully
+>   [OK]    Shadow stack violation test
+>   [INFO]  Gup read -> shstk access success
+>   [INFO]  Gup write -> shstk access success
+>   [INFO]  Violation from normal write
+>   [INFO]  Gup read -> write access success
+>   [INFO]  Violation from normal write
+>   [INFO]  Gup write -> write access success
+>   [INFO]  Cow gup write -> write access success
+>   [OK]    Shadow gup test
+>   [INFO]  Violation from shstk access
+>   [OK]    mprotect() test
+>   [OK]    Userfaultfd test
+>   [FAIL]  Alt shadow stack test
 
-Looks like something was missed. When building alpha:allnoconfig
-in next-20221004:
+The selftest is looking OK on my system (Dell PowerEdge R6515 w/ EPYC
+7713). I also just pulled a fresh 6.0 kernel and applied the series
+including the fix Nathan mentions below.
 
-Building alpha:allnoconfig ... failed
---------------
-Error log:
-<stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-arch/alpha/kernel/core_marvel.c:807:1: error: conflicting types for 'marvel_ioread8'; have 'unsigned int(const void *)'
-   807 | marvel_ioread8(const void __iomem *xaddr)
-       | ^~~~~~~~~~~~~~
-In file included from arch/alpha/kernel/core_marvel.c:10:
-arch/alpha/include/asm/core_marvel.h:335:11: note: previous declaration of 'marvel_ioread8' with type 'u8(const void *)' {aka 'unsigned char(const void *)'}
-   335 | extern u8 marvel_ioread8(const void __iomem *);
-       |           ^~~~~~~~~~~~~~
+$ tools/testing/selftests/x86/test_shadow_stack_64
+[INFO]  new_ssp = 7f30cccc5ff8, *new_ssp = 7f30cccc6001
+[INFO]  changing ssp from 7f30cd4c6ff0 to 7f30cccc5ff8
+[INFO]  ssp is now 7f30cccc6000
+[OK]    Shadow stack pivot
+[OK]    Shadow stack faults
+[INFO]  Corrupting shadow stack
+[INFO]  Generated shadow stack violation successfully
+[OK]    Shadow stack violation test
+[INFO]  Gup read -> shstk access success
+[INFO]  Gup write -> shstk access success
+[INFO]  Violation from normal write
+[INFO]  Gup read -> write access success
+[INFO]  Violation from normal write
+[INFO]  Gup write -> write access success
+[INFO]  Cow gup write -> write access success
+[OK]    Shadow gup test
+[INFO]  Violation from shstk access
+[OK]    mprotect() test
+[OK]    Userfaultfd test
+[OK]    Alt shadow stack test.
 
-Guenter
+> 
+>   $ echo $?
+>   1
+> 
+> I am happy to provide any information that would be useful for exploring
+> this failure and test further iterations of this series as necessary.
+> 
+> Cheers,
+> Nathan
+> 
+> test_shadow_stack.c: In function ‘create_shstk’:
+> test_shadow_stack.c:86:70: error: ‘SHADOW_STACK_SET_TOKEN’ undeclared (first use in this function)
+>    86 |         return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
+>       |                                                                      ^~~~~~~~~~~~~~~~~~~~~~
+> test_shadow_stack.c:86:70: note: each undeclared identifier is reported only once for each function it appears in
+> test_shadow_stack.c:87:1: warning: control reaches end of non-void function [-Wreturn-type]
+>    87 | }
+>       | ^
+> 
+> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
+> index 22b856de5cdd..958dbb248518 100644
+> --- a/tools/testing/selftests/x86/test_shadow_stack.c
+> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
+> @@ -11,6 +11,7 @@
+>  #define _GNU_SOURCE
+>  
+>  #include <sys/syscall.h>
+> +#include <asm/mman.h>
+>  #include <sys/mman.h>
+>  #include <sys/stat.h>
+>  #include <sys/wait.h>
+
