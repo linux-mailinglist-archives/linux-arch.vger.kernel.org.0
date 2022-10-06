@@ -2,48 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E685F700E
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Oct 2022 23:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0812D5F701E
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Oct 2022 23:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiJFVQt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Oct 2022 17:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S230148AbiJFVUt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Oct 2022 17:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232346AbiJFVQr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Oct 2022 17:16:47 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2113.outbound.protection.outlook.com [40.107.93.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91B913D00;
-        Thu,  6 Oct 2022 14:16:46 -0700 (PDT)
+        with ESMTP id S229567AbiJFVUs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Oct 2022 17:20:48 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2100.outbound.protection.outlook.com [40.107.92.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DBDC694D;
+        Thu,  6 Oct 2022 14:20:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Whl6X34tFhydxn6h0QUTUG2Rf7tOj89a5EkaRcxu2K+mm+51lJnojDS8/bv2poh4S/Phk16XsOO6QryG4Ng7sH19ER/9PAdKn0tLEt1DjtoMUP2pJyI4PuS3Ft5VeUPgeuNigCM5fQpYw8VsnXtHlDKLewk7Q2Iq5wh6kFE0VgzBumQ9czjMhg7B0VqGAtWCmhFkkgIlLg1U8tJz0CtVOi9YzCCTIFviklquFHWOxhNMzGZTXLCVQpPZzmxPDdvfDZP0Jfa8RO2JvLFU9aCSLHivD/6jWHYu6HIF1vc9ccUoWu/Z/0070S1A9MRpWOl5n/04692Hasa6heCwinV3MA==
+ b=h4OdeOO9+ZIpRKUrJ6XTXLGmARg/aXDZFe7Tv25v1ZXjhZrU9n+7sP/vkyb+/NgdutYEBoInbo+F07DmUBOdgajMZ2SIypXb39s/E2UKnCo/tskCFVl1FwbXJw1ux38ObVG3iGUh1m3rPAX1hE33SYC4vB7j2T62vschez2b/s4C/XfQKDlRBqK9B7McTB2oSS/7+GKdBWWHOdQZwkZsh2cNbY2Z5XQAKjs6nrZld8Ghil9uw3D2+NBSvMJsVg1SuiqYNhj8iYc6XDZKUiF0H9ZYyEI0mjRXOowrHn3LSVA8XWpSM8LzWOzJGZyPU8uGnSlivJlzN8mruuqpm/Mjxg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vwxyLIynVnfnJ5qj7Jgy/nAW2F4A9Pqa+q6L3AOBiTc=;
- b=QPknt4BLoTxaSsZqrO1QWQjx2iE5ssZkFJd3WFdVoTnVVdEt9Yi6SeycNGaWH1TC8w7K0D/H/xBQOWTu9cE7sUbL3+G3XVG5jdjhrJldCeqTwdC5ZipWW7WHqJlGb1W9REQzwIOSqOYLbOTJA8B3Tirq6ltCZkv/4IZbuJN1nfAo2udeadL37KEXwFLDWUrMKIdiQLhoJMfos18rvo11+EEC66+SYXHKfmfjDxL1XLckr3PiP6xnXMhO6Fwr9jhvcuQHICSdJDzqlOtg1gLcJyP0Whv6mhtwqnTCKH4I2aGozPk+OOP95/ZkeZvx6QZzoW71317l5Gx5JOS9CxTCBg==
+ bh=Po7SsjWlXsvkiYW5fjqK2WL5VkHQms8a3UXvGuNbrL8=;
+ b=n1bNOyHY5GOSdFnVnZXNT6mfqmX3xcS1Kgbw9tEV6/PUcwpZaVHl8NjTa5cqdZln7Hh/1SKULSHpltpksNyfMUkpGfa25NmexNHwf6zfUgoNej+K34UYMiztso4O5v9C8yy9sAl0Bv6xohD3VvdvXDsGXhLzNkZ1CLbBTplEv43abE0JRiXWf53lLvJBVVgdifA1HN9JUW72TzQAYQ0Sgo78L3a/e2l0Kr4Qxwlm1INCT/92PkIYEaTDrPw78rKDWoWO4OHFPsLP4f+BNP+EnVBSMsSeMCiZ+Ezc1wc2EZaatT+j6xGeZ3Wuv2fhh4129pugSjwuXxYXYwBiJmP8zQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bu.edu; dmarc=pass action=none header.from=bu.edu; dkim=pass
  header.d=bu.edu; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bu.edu; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vwxyLIynVnfnJ5qj7Jgy/nAW2F4A9Pqa+q6L3AOBiTc=;
- b=sW8/hxm2b9Q4kEETyNec3hBbHy8/+YkEOn6kD7GO7S88mwRh5TlkTzJR5C/c5LfmGD9X+E6CfRn4sTEnTryF4IaAVacK5undH22ZOYBlxzs1MfM8pMcCrqz8LK//gfHPrfCGBqVht4R8q2clkF+Hb9EOZPL3jyrdD5fucXpjDyCPSfAP9pZyBwaizDKDn7wlVZ3he5HOUYnNESbUa4vBZpnFlCtEfh9Qn82K9jv+ozjEH3O/Sv6bNI3jolWfXfKSEgfJwXrQH2pKwDKWiIAa74HiZPNJE5VS5RflQFJMubCy1W5Yrht+Lvke0FT7ASYK5R533EviEg+DkY+qptcCYQ==
+ bh=Po7SsjWlXsvkiYW5fjqK2WL5VkHQms8a3UXvGuNbrL8=;
+ b=OR2P6pRyNW6dOiN55NGK0cTrJObGEzH6Hrm+z5f2+r63hWH1PbixscPUyaCYP7cOmGigzLZ/j1Sul1WAQug/8t3nHF/w4R5ChZr2quDEXdx3G6aL62E0A5lK5TWDTAlla7HL5z1syRwq4SRGj/erLxsru/Fmn+igaLdMKQifdD/vZG80la0IouV82gdlJ/3dTtNe//R4tnvAk1uMmXyOTYtihoPcZUP4V3YkvyH2CKytNxmRsxQWWMJe0Ltq4syK8K9eqiJaeJAGNSTuvaJvHYZUgpF/Rmp4rQ9adfXj1n7xfewVc+dLVoWFSy5X+SF+yDSdse6k6t53VBVWdCUmlg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bu.edu;
 Received: from BL0PR03MB4129.namprd03.prod.outlook.com (2603:10b6:208:65::33)
- by BN9PR03MB6202.namprd03.prod.outlook.com (2603:10b6:408:11f::14) with
+ by MN2PR03MB5007.namprd03.prod.outlook.com (2603:10b6:208:1b1::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Thu, 6 Oct
- 2022 21:16:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Thu, 6 Oct
+ 2022 21:20:43 +0000
 Received: from BL0PR03MB4129.namprd03.prod.outlook.com
  ([fe80::9e2b:bf05:79ec:581]) by BL0PR03MB4129.namprd03.prod.outlook.com
  ([fe80::9e2b:bf05:79ec:581%4]) with mapi id 15.20.5676.034; Thu, 6 Oct 2022
- 21:16:45 +0000
-Message-ID: <0a7fdb8b-9b7c-86bd-b409-736b664b19a7@bu.edu>
-Date:   Thu, 6 Oct 2022 17:16:36 -0400
+ 21:20:43 +0000
+Message-ID: <fd0c0121-ec9e-94d7-e03e-1493799378dc@bu.edu>
+Date:   Thu, 6 Oct 2022 17:20:40 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.1
-Subject: Re: [RFC UKL 05/10] x86/uaccess: Make access_ok UKL aware
+Subject: Re: [RFC UKL 07/10] x86/signal: Adjust signal handler register values
+ and return frame
 Content-Language: en-US
 To:     Andy Lutomirski <luto@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
@@ -72,73 +73,73 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, masahiroy@kernel.org,
         lwoodman@redhat.com, mboydmcse@gmail.com, okrieg@bu.edu,
         rmancuso@bu.edu
 References: <20221003222133.20948-1-aliraza@bu.edu>
- <20221003222133.20948-6-aliraza@bu.edu>
- <d32399c1-88ae-4b7d-925e-b82b2a983e30@app.fastmail.com>
+ <20221003222133.20948-8-aliraza@bu.edu>
+ <40484dc2-8da3-486d-9c53-02ae23a50fbb@app.fastmail.com>
 From:   Ali Raza <aliraza@bu.edu>
-In-Reply-To: <d32399c1-88ae-4b7d-925e-b82b2a983e30@app.fastmail.com>
+In-Reply-To: <40484dc2-8da3-486d-9c53-02ae23a50fbb@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR05CA0010.namprd05.prod.outlook.com
- (2603:10b6:208:c0::23) To BL0PR03MB4129.namprd03.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0015.namprd03.prod.outlook.com
+ (2603:10b6:208:32b::20) To BL0PR03MB4129.namprd03.prod.outlook.com
  (2603:10b6:208:65::33)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR03MB4129:EE_|BN9PR03MB6202:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6850e9ef-e7a6-4cba-9d09-08daa7e01224
+X-MS-TrafficTypeDiagnostic: BL0PR03MB4129:EE_|MN2PR03MB5007:EE_
+X-MS-Office365-Filtering-Correlation-Id: 36c7ece1-3ea8-4eb3-a77e-08daa7e0a02d
 X-LD-Processed: d57d32cc-c121-488f-b07b-dfe705680c71,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gYhK878do7lUqDnDI37IxlM6N4JvOXJ+rS/91xOvQKi4rDOCYIWm37+q+6cTem3xgYNWSZXCyu6HuCC2Z2LJQD63bUmdNICFHm8sD550me2HIgapFtkntcmwb69+W0GV+rBofR36fp9IuMQ81Jr7MhMUOdR3M1zsPVeH8Ve6004Y31KPV0Rwwm6E5Onj7O69wNhJ+lcR9coweLU2GNP14RARFyAoduEsKMGGxNQwp8vSOprYp8RwHKkFqRzvO2OwBGkNKqvQ5d7zGVFlqKFdH0CnJly2SkQ8kqDoGjUjQl2/5ZH26nSJzh5SntsCGoxRa0wc7S+rxiae6bbHKCCvFySdIwEDjelMDBQ2ArNvYbXWg19zRy/vD5FMO/55uUMf9ZjPF2+Tce/HLQdxTsobX+wSc4zxF8XHld/0j3f//ioYxO5ZJD4rb8fnHqaQ4betlO3upZwE1gLgI1d2RFAHKi5lUU3flFA5HjkfQJCIcBnqLQxbVDJMiZzhwZtrkSBiGj1jCPNP1rhduy7UzCLlSSpfBwzrqpZoWsf6B65j+t0jC3EkOT05c2L2iTVpez1Bxl9MquqqGsXYqhzZSPgGeTkBEtGUpUe0VkN6sYNp+HPlXvhBoZTGNfk3JaFCS4OpkoasQa9AJ5j4u8cn7R93K925Bv0cO052jUz9F/qk5wWgE3rB7WjP99v6hGLCPsY2aDIxIoKfI8re2lT2rdr/hiDlgd8YHe2keOVDs0FfxX7bLDkYmTs/YttEi/d2Iuuwz+8cbw7kXPk264xRNIghS5jTGjjR1+JmWYqUuUn/X8k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR03MB4129.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(366004)(376002)(39860400002)(136003)(451199015)(31686004)(83380400001)(186003)(41320700001)(110136005)(54906003)(36756003)(53546011)(6512007)(66946007)(41300700001)(66556008)(66476007)(8676002)(4326008)(75432002)(6666004)(26005)(6506007)(2906002)(2616005)(8936002)(38100700002)(31696002)(86362001)(7406005)(7416002)(786003)(316002)(478600001)(6486002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 8d9I6Jk3cxxZ3Xwnv5dhJp2eDi5XPxnyUy7GLhhkNKwXDqKo28wCsli7JcFjO6HuIpnXob6we01DQr2IRZLasvhNrwISz4DlrvtNy+iLQ+N02rayYK6X1lgf79BN17gHRB1AXmXzOv7PGyatUNuMRl0P3XsZyFQ+KliKtPcwI4dKOb+1TA4uUyQd52gCoxc34K2DrFyIFz3l49pM/BuA/4SW3xZJP5Gqos2wUi/Fjs6rKv7Yju7WM4AR2VePbCDcTmUEkd/UNyK8xiHGsE7LKfg7goyXW20lDPoZTbW7HO1AZ6/VgZzlZ1fWDWN+wuiWMyuVnpCa1U9iaKAC9QLEVI5jZoHu3Kf9t6V5lFl8bqJniEwiqFRHRsahrixdQiBt4kmRd3+j93zIZGGpn20ajGK6LPBqxFjn1jfdnxlr7vQy/QE2JH+kcnwiRMQZHARoyLNEFk4WmgA4/jkCQJ21X5X+0vguR5o0zu4M8ocT6wGTZCPK990kHODIIQl4nRa45K/JC8ETKpanEJ2xWcDN1/cTYhPpYIHO938rFait0G7D0XhA3dDlGI/fQ/cDF0gWmSgWAjFCrd6pWdxBhIZc2T/1TkEKYyL364XAVO/BOnvrecnoP9LLQNaJlHYZk5vknlkY2uKoTnjvenspoP2M2bKcbOLeYeDlfEB5x1meKkPKnSUkgdYv8aW2/lpDXLsQHhZ30s4OnTOvTKJRrUW3mvlG16V1cWzq2I3/tr3/eub6k9wsVJhkRlQtxixVBe+ND5AtmOGDcBUOE9laB1mhh9nOrbzY7giq5JJncbcQY04=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR03MB4129.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(366004)(136003)(376002)(451199015)(83380400001)(186003)(6512007)(5660300002)(2616005)(38100700002)(786003)(7406005)(7416002)(2906002)(8936002)(75432002)(41300700001)(41320700001)(478600001)(53546011)(6486002)(26005)(6506007)(4326008)(54906003)(66556008)(8676002)(316002)(66476007)(66946007)(31696002)(110136005)(36756003)(31686004)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmZSVkNzQmg5UGFiaHNyamFPaitsckNaYmVYS0NGaEJqOXNJUXcrYVhKM2c5?=
- =?utf-8?B?d2dOZFlWL3lpajFMWFVMbUNERUZGNnphM0Z4OUE5QWpWS1FuT3paZlhKVkRO?=
- =?utf-8?B?dVBtVS84MDVURnBmUzlCb3IzNUQ4SStlbUQ5b2U2UDdZdDdBZTdVM3gwSTZ6?=
- =?utf-8?B?NTAzb1BBcXhKdXVzM0YxMUtXMjdKU24wcFY4SElWMEZqREpWbDFlSHpSSUlT?=
- =?utf-8?B?ZExQYUQ5aVpNVHdCdVBBdmlpTElMR3hoWWhPNW9wcnpwd2VNUXB2NnZRL2p4?=
- =?utf-8?B?R01KakZQbHBENXhVNVlyWEk5REtYcGk2TUVRWFJ6S1J0eVg0YUpEZXprOUFa?=
- =?utf-8?B?bDRzMDFKTFE0djVJZ0R1M0R2Qjh5ZlBia3RvNGRxZ3ZZeUpBTXgxanNzZDAz?=
- =?utf-8?B?a3dIYU5QMEsxTVlGMWFUbGpaYlV0WXdwZkVSNTh1WFRLRlFHdFdlU3BPN3c0?=
- =?utf-8?B?K0tESGJPYWtLQlF3UVgvTmpZNnVNblRmR2FGWDlEdnNobkJQV3BJbWU2RzhJ?=
- =?utf-8?B?RUNONHdJQlpraFd3WTM5T0FYekNyTllzcVdBVW5lVHJjc0VWYnd3ci9qOUNq?=
- =?utf-8?B?SitURGVOa1A3d2Juc1VyYVlSeDBTcy8wcUdVMCtPYnJKVjRxcDJzOE1JeTJD?=
- =?utf-8?B?ak1sNzA4UWhLWDBmVGRWYi9GZmpPdk9UeFBmSmdKcXN5UGt1N2VsaFJiN2VB?=
- =?utf-8?B?WFdWVTNiTlJwcmgvRlZWUzlIbDVOL2E3WWd0eXZEUlJtS0QrSDFmK09JVXJl?=
- =?utf-8?B?SVVzM1BabG5ZUFdhdVhJNm5OekpPUEU2MXp6OHRrZzY1MFByRSs2RkVrbDJv?=
- =?utf-8?B?ZkxpNDdrTTZJbTRmZ1dOU3BKdFpiZmhyVjBzRUVvaXBGL0VOL1VIRVgxc0xw?=
- =?utf-8?B?Y05mQXRSbUNMd1Z1a0FJNkNPaFFWallHYXZwM3FxdUFRVTRJOERtelUxY0Ri?=
- =?utf-8?B?ZHVkRlhKelZ4TWtTd1l3cTltNkJEL3pwU2NZRm4vc29iQklWc3UwSVhVQXB6?=
- =?utf-8?B?aVc3aXVSN240MmxTRkQ2RFA0YzZxTGJMdVd4WlJPNDFWbTdTOTFMT3AzVDQ0?=
- =?utf-8?B?TndVTWUvcVNGR1dWMXBxdXBXcUV0R0lBMEJPcjRVdC92L2V5T3lhWmVGVEJk?=
- =?utf-8?B?UnptQmJZUnJVamhvNnFtbUFZZ2VkWVB3YTZuY0wrNDNmZzBYclQvckYyWkt3?=
- =?utf-8?B?c2NEaDFiSjBjSi9KcHkzdThNR2RLK0I4Vlk2YXM2Zk5rNVhNTUYxUkRJUG9C?=
- =?utf-8?B?ZytRRGw0UXRSS2JobEErZy92N0k0SmIyRzRHK3RkSVczT1pCN1I0dENGUzRO?=
- =?utf-8?B?RmMyc3ZOZ1dpSHIySGlXVE5NSFIzWEwwSVFSTWdTZjN4VEphVksvVlp2OGNy?=
- =?utf-8?B?NVAxNTFmdFlFZVF4SExjdWFWcWx2ZnpseFJqTDArdVFaS2tDV2VENTVFZGtS?=
- =?utf-8?B?ajRTRU85OHFnN0JUSGdub2xYdEN0ejdzeW84Sm1TUkNpc21xdUFJdDludi85?=
- =?utf-8?B?WldFOGVTbi9IUlZoT2g5cUhDVE5XYk1kNEtjQXNuNUdVUGhJMGVQWjNrQnVl?=
- =?utf-8?B?clZXVVYyNjlTdHNOenQrNHAyamlnbkc1Tjk2U05TSEZnSjQvYVBMTkVtWDNo?=
- =?utf-8?B?ekhqdlBlR1BkWm8xQjEyalN2MytVV1FKYlRKaXN5Rit4RW9Ndmx0T01Zb1Jl?=
- =?utf-8?B?TUNWWGVDZHkzcS9LM3VjOXU4Qm5FNG5XUzllNU9HaWd4OS9oQ3hpSzREbVpW?=
- =?utf-8?B?ajJ2SVNRTmJKdlEvWEJGMStMbzBqdHcxVTlwS09UN0QvMEJ2TlRGWElQRlRL?=
- =?utf-8?B?Ym5hSzc2L2JRaEk5KzZ2TWx5ZUxQVjloUUEvNFpiakoyOEVVYy9TcnFYQjRX?=
- =?utf-8?B?Tlp1QjJhd2lxM2JQbkluY0dNaGZ1cHBWNjRnSUJQMnB0bmFVYi8vdEo4R1U2?=
- =?utf-8?B?cHFxN0lZbklZRWtXQjBZbEptVGxOVlhPWmdvZWRFdlloWnRYQmJWNU5zdkpv?=
- =?utf-8?B?MTZYaTllVXdyTU1ySVdxK1JJM2tzSGVGaGxRcGJpamZ3YVdmVnJVS2N2Vm5S?=
- =?utf-8?B?NjRFeUFSN2FEWVJsKzRmLzZUUitIU3RML216dG1oVG1rRWRyVjJpMURVNEJu?=
- =?utf-8?Q?k4iyW8O0ooFdfs0PERHzzt1h+?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S2JyR0QwTzlmTnVNS3M2UzZPc280T2p5UUk2dHBwaEtrUHhFeGxMd1dHQUVZ?=
+ =?utf-8?B?ZnVLeXNLdDBJZHlmSnc4QUxMSFV1U2o1ZnFXb3l3WCtNelhjU0ZEMXpaMGFq?=
+ =?utf-8?B?cmR4RWVVS2p6c091RkZVczZIeG1GNmVCT3U0OTRrNGhDdVQwYWQ1QXI0UVQ4?=
+ =?utf-8?B?QklveURUUGtSYTBLMEtQdHEyajZkTzZyWnVuNlplOUF2eHR1Q3NOcldPbmFj?=
+ =?utf-8?B?MjJ2QVh3SVZTVWpUa1JjM1ZIYU05OGRaSzdJYzBlS0ZzS2hLY1hIRkJ3RDJ1?=
+ =?utf-8?B?VDdMdG53YklDQ3ltV2FRQ1k2b0Q5TWF4N0VyZ0ZOZnV5QjJ0NXFBSzNocExn?=
+ =?utf-8?B?S2V0TlVuVy85WnZOZzlOYUErSEhuWGJrOUFkcTExc29aN2Y4MUxJV1ZqQ0pE?=
+ =?utf-8?B?Uks3bWQvSzE3eUNKb1REMUlzRWxwU3FyTHQ4ampBWWNJM2lWSU9GZCthZ3Ri?=
+ =?utf-8?B?MWFiMWxLN0JlR3FMRFlRSFNRZDBFUnoxWDBXTk5jUnFKckM0R2FpaXpnL2ZB?=
+ =?utf-8?B?a3FVRWFyTjhxWVVYN0k0SjlHaEJsYm9GUWhWdENVWmx0ZWRQTGNlaG5taTgr?=
+ =?utf-8?B?eEg0ZVdDc0N5dDhMYWtxZ0I3U1c0eTZCVjJTeHZXMm5XdUtsVDdCT2RDTENS?=
+ =?utf-8?B?SHEwUFNyMllHcERQTXRiQVZ5K1R6VmVvcmt2cFU3cFU4ZFNGY1Npc09Cbjc5?=
+ =?utf-8?B?NWVvdUM1Z0R6cUtXdDhRRkk2YzF0SGxURHorWEVXeHdCeFRoZ0JzSDNVMFZK?=
+ =?utf-8?B?SDRqWFg1MWJHWklUZ3JqczhZdzVtTU9GR3Q1VWNzWkFEN25sWDlCUnZraTNz?=
+ =?utf-8?B?WjNlTkh1VlBQQi9ua0szVlRpOTVpWjV1ZkJBdkdQc2xpVmZ6Sm5vVlFnby9R?=
+ =?utf-8?B?bTNKRnhBOVVWSXZnNHh0R3h5Sm9scFgvV1U5S0ovai9sUjMzTnJLTW12c3V2?=
+ =?utf-8?B?ZkNpODZnZFhVSlRqeEFlMGhyRm9RQkVnaFVGU2N0RzdKUTFUUkwxVjVHbG03?=
+ =?utf-8?B?WGFRclFMYnA2a24rSHljbFpCcjB4NUJqeDVIRkg0YTdQaUs4Wnl6WEhJRHU5?=
+ =?utf-8?B?eGVsS2RKVmRSU3B3Ynl3M2JwQkZJVjhkOHRENTBHQ2JYZnJJazhVRGdqdDVm?=
+ =?utf-8?B?dVpiTHk1aVBpUytZNnR5NkNTNVBhMUx4R1IxRkJhbFlzRXdqS1JSSUJHWjhk?=
+ =?utf-8?B?TUtkN3FIb3BoYnpiSXRLQ2tIaGk3VTdtM1JPQWwySm5KMlQ2dHovbUlUSW8x?=
+ =?utf-8?B?REZrT0NPSXB5bXBjcUhJZFh5ZGdyZEZMeGtMd2VpZmF2TjFjVkp3eW51eTh1?=
+ =?utf-8?B?Z0hrYWVNWVkxZmdDTkRKZHpDdkZmRkkweFd2L28wU3RIbmZvZ3Z4bjdaakhu?=
+ =?utf-8?B?V2kyeDQzTC8wdng3bjFCWXRJYmY3ZXNXQ3hOT0N0ZUMrVEhOOGlOSlJySWgx?=
+ =?utf-8?B?UGZTMm0rN1BPa2JKZkdqcWQ5QjdmR2NZRkFiZHdYZXZMS1dmRWU2Wm1pc2xZ?=
+ =?utf-8?B?SzMvQzA4cDhycGRPNEFDa0FEWFQ0Yld6VW4rWng5UDBielMvNTA3dmkyYjB6?=
+ =?utf-8?B?UDZqSi9nckVnY0JMVjhpR1JMelIzSzhlQzN5ZUhQYWNXRmtNaFhHL2tGNndS?=
+ =?utf-8?B?ZUtPcVZIdUp0SGJtcjExcWg1RkVja1AwdFd6RTZMRzgvS2hLaERuYlN6T1RD?=
+ =?utf-8?B?K3JFcmNTbG5HalEwcmdGOUZ6TFlGK1F6U2k5SXcrRjg2MUJHUGZObGp0bmEz?=
+ =?utf-8?B?OGhRallDS013SUJITVhHN2JGNms4ZUIzcldTYURjNHdrbzcrTnl6akRXK0ZL?=
+ =?utf-8?B?WHAyUnFHOTZaTVAyOE5IMmVJRVZydHJ4Q241Skc0eGJHZFJocHhDeXg1dytm?=
+ =?utf-8?B?NkZwcFdFR2RQbDA4WmpMNGdDUHNQN1M2VUEvaE0rTmVnQXIxcnNLNTYxc1V6?=
+ =?utf-8?B?Y2tIazRaVysvYllRM1pHRHc2c1F5R2o2ZUZkdHJmVGJIZ1JacGF5NXpsOE1D?=
+ =?utf-8?B?T3JOZ3ZtbDM0T0xURTRSUTdvTm9wbk44dnNZUGliUjYyYllMQ3lVZ3l5VGpE?=
+ =?utf-8?B?TldOeEw1TWlqa1dLS1JCMDdLVTNkMkpsRS9Ed3gwZU94VlFUUFZJQzltcFpv?=
+ =?utf-8?Q?iElrd2aaLqEBF6uwvvuB2B4xJ?=
 X-OriginatorOrg: bu.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6850e9ef-e7a6-4cba-9d09-08daa7e01224
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36c7ece1-3ea8-4eb3-a77e-08daa7e0a02d
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR03MB4129.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 21:16:44.7904
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 21:20:43.0237
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d57d32cc-c121-488f-b07b-dfe705680c71
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: El9netViXzDzLQB/gHGNcw0dhgG+upJTfAMQoFVsS8lhCgIRam1VgGcgRCe4KdL3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR03MB6202
+X-MS-Exchange-CrossTenant-UserPrincipalName: cv4DduUJuvaZ2ZLFaU4cjlyqN8u+RgYQpBd9zI4uvkRYOeIe68kHFQAXzbcXQN9p
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB5007
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -149,86 +150,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/4/22 13:36, Andy Lutomirski wrote:
+On 10/4/22 13:34, Andy Lutomirski wrote:
 > 
 > 
 > On Mon, Oct 3, 2022, at 3:21 PM, Ali Raza wrote:
->> When configured for UKL, access_ok needs to account for the unified address
->> space that is used by the kernel and the process being run. To do this,
->> they need to check the task struct field added earlier to determine where
->> the execution that is making the check is running. For a zero value, the
->> normal boundary definitions apply, but non-zero value indicates a UKL
->> thread and a shared address space should be assumed.
+>> For a UKL thread, returning to a signal handler is not done with iret or
+>> sysret.  This means we need to adjust the way the return stack frame is
+>> handled for these threads.  When constructing the signal frame, we leave
+>> the previous frame in place because we will return to it from the signal
+>> handler.  We also leave space for pushing eflags and the return address.
+>> UKL threads will only use the __KERNEL_DS value in the ss register and 0xC3
+>> in the cs register.
 > 
-> I think this is just wrong.  Why should a UKL process be able to read() to kernel (high-half) memory?
+> This is unclear.  Are you taking about returning from the kernel fault code *to* the signal handler or are you talking about returning *from* the user signal hander to the user code that was running when the signal happened?
 > 
-> set_fs() is gone.  Please keep it gone.
+> In any case, I don't see what this has to do with iret or sysret.  Surely UKL can use a sigreturn() just like regular Linux.
+> 
+> The part where a UKL thread has permission to return to a CPL0 context should be a separate patch.
+> 
+> --Andy
 
-UKL needs access to kernel memory because the UKL application is linked
-with the kernel, so its data lives along with kernel data in the kernel
-half of memory. So any thing which involves a check to see if user
-pointer indeed lives in user part of memory would fail. For example,
-anything which invokes copy_to_user or copy_from_user would involve a
-call to access_ok. This would fail because the UKL user pointer will
-have a kernel address.
+Yes, the commit message should have been clearer. 
 
-> 
->>
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: Masahiro Yamada <masahiroy@kernel.org>
->> Cc: Michal Marek <michal.lkml@markovi.net>
->> Cc: Nick Desaulniers <ndesaulniers@google.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Ingo Molnar <mingo@redhat.com>
->> Cc: Borislav Petkov <bp@alien8.de>
->> Cc: Dave Hansen <dave.hansen@linux.intel.com>
->> Cc: "H. Peter Anvin" <hpa@zytor.com>
->> Cc: Andy Lutomirski <luto@kernel.org>
->> Cc: Eric Biederman <ebiederm@xmission.com>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Juri Lelli <juri.lelli@redhat.com>
->> Cc: Vincent Guittot <vincent.guittot@linaro.org>
->> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> Cc: Steven Rostedt <rostedt@goodmis.org>
->> Cc: Ben Segall <bsegall@google.com>
->> Cc: Mel Gorman <mgorman@suse.de>
->> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
->> Cc: Valentin Schneider <vschneid@redhat.com>
->> Cc: Paolo Bonzini <pbonzini@redhat.com>
->> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
->>
->> Signed-off-by: Ali Raza <aliraza@bu.edu>
->> ---
->>  arch/x86/include/asm/uaccess.h | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
->> index 913e593a3b45..adef521b2e59 100644
->> --- a/arch/x86/include/asm/uaccess.h
->> +++ b/arch/x86/include/asm/uaccess.h
->> @@ -37,11 +37,19 @@ static inline bool pagefault_disabled(void);
->>   * Return: true (nonzero) if the memory block may be valid, false (zero)
->>   * if it is definitely invalid.
->>   */
->> +#ifdef CONFIG_UNIKERNEL_LINUX
->> +#define access_ok(addr, size)					\
->> +({									\
->> +	WARN_ON_IN_IRQ();						\
->> +	(is_ukl_thread() ? 1 : likely(__access_ok(addr, size)));	\
->> +})
->> +#else
->>  #define access_ok(addr, size)					\
->>  ({									\
->>  	WARN_ON_IN_IRQ();						\
->>  	likely(__access_ok(addr, size));				\
->>  })
->> +#endif
->>
->>  #include <asm-generic/access_ok.h>
->>
->> -- 
->> 2.21.3
+The changes in __setup_rt_frame make sure that in case of a UKL thread,
+the new frame should have the UKL specific regs->cs and regs->ds values,
+and not have them overwritten with __USER_CS and __USER_DS. This helps
+creating the correct iret frame in the interrupt return case where an
+iret is used.
+
+After the signal handler is invoked, user code calls sigreturn() as it
+normally would. Once inside the rt_sigreturn() system call, UKL case is
+handled a little different than normal. This is because UKL invokes
+systems calls as function calls, so user stack gets a return address.
+Also, UKL stores eflags on the user stack. This is used on return from
+system calls in UKL, where we first switch to the user stack, then
+restore flags through popfq. This restarts the interrupts so it is
+important to have already switched to user stack from kernel stack. Once
+flags are restored, we do a ret instead of iret. 
+
+So, in rt_sigreturn() system call, we calculate the correct UKL regs->sp
+by allowing space for the flags and return address on stack. Second, in
+restore_sigcontext(), we again make sure that regs->cs and regs->ss are
+only updated to user values for non UKL case.
+
+Since, this patch involves both the signal handling and sigreturn case,
+yes this can be broken into two patches.
+
+
 
