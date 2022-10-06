@@ -2,157 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED405F5FBC
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Oct 2022 05:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F92C5F63AA
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Oct 2022 11:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJFDp3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Oct 2022 23:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        id S231422AbiJFJbQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Oct 2022 05:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJFDp1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Oct 2022 23:45:27 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2057.outbound.protection.outlook.com [40.107.96.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F043DBEB;
-        Wed,  5 Oct 2022 20:45:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DRTnJMiXUVYXZV7TuuqxMP0pHJMPTurie2yUhaR8mHh8ObmKbM+vDc+wSabz3Wr2KaD9uzFHgdGTSAIcm0GVfpaitRRDWLSWRMqgkd0ueRDP1xVf9/D9b1GEYpO47yyt2s49bdQPAQ20o89Sk3nd4Hf3DjuZ7VL8Nl3w3tfBsP4r+TcN8GV0c5qZKXwRMUzYtTb3EJ4qWGkG1hdZ3idfS11rKXp0Y/wZ+8z3/eCzs4xTVM3RcH62zsdHpbLfS2I/Iu5lD1LWVS4r8D4R67/Vn6XdbSUFIfHpZ8MuAHlY5b9ctCSV+w9bGdbpVa2XfFACQd/WB/TwQrugyTE4A77VfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a/XRDlmYqaqGjwNuOhUP0NoAa9fXQ1QRK3+jfW/X5z8=;
- b=Qo0Ej5MyNSSPHGfd3XkfdOAXGZI5tfXyQx05vn+JFnYQxlArAupOu3wYvxGD5Z4WyroLLEHGcLCZXRDHtjJStX6lXDksSKYafxWvdh79wLFcUYb4ffv9EmR00CxNyFFvI4AHEZwynBcK5SbwS/GZC6gztHFznIBFhNIZ2IkbaCMlSmmG6LiGPxfsPH1muhjZYa8dm5KWSp3wdl5K1EcK48RaGMkusPVRxqF//61YTIKeh2TeSz/A+osMmseXkSPE4L5B3eBqpwSQw/hLKARgBG+ICgcyLu8auIVUe2vjLWSS0QHVQulfWX0E8wLfT7nbJGmuMfZPqKv0Ts2E+JK5vQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a/XRDlmYqaqGjwNuOhUP0NoAa9fXQ1QRK3+jfW/X5z8=;
- b=N/akIxYRPFexCNdP56jg6b44GZ6as5vzDhuNWLgQ/sVFxdiyTNgb3jY2Xisn+uzUhuJb8Ej/zt0nGDUthrGj7kS/9hp0JrnCejljlxdWQ40L9eRJL0UBD4WoFeJhpRxvQxtIHBAupu6aq+xrghbz1XdIHnOaORjfBNOjmHn6bJARUMkeWn/lyARsBLds+NT0QWOde8X1DH30saufeg5m3sHoQlaDfOxghGnyMgDH5QrQ2VeSfwHi+sPopDg1BK3Lguoc/L4QiVlYMPubD/eeDD7bjVz318FGHKmM6TlSr1OiXi4dcpi5Wb8giDXaPd0MkxeDa1/h4zKZTze9m4fVTw==
-Received: from DM6PR03CA0049.namprd03.prod.outlook.com (2603:10b6:5:100::26)
- by DM6PR12MB4249.namprd12.prod.outlook.com (2603:10b6:5:223::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.28; Thu, 6 Oct
- 2022 03:45:19 +0000
-Received: from DM6NAM11FT091.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:100:cafe::fd) by DM6PR03CA0049.outlook.office365.com
- (2603:10b6:5:100::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.23 via Frontend
- Transport; Thu, 6 Oct 2022 03:45:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT091.mail.protection.outlook.com (10.13.173.108) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5709.10 via Frontend Transport; Thu, 6 Oct 2022 03:45:19 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 5 Oct 2022
- 20:45:13 -0700
-Received: from sw-mtx-036.mtx.labs.mlnx (10.126.230.35) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 5 Oct 2022 20:45:11 -0700
-From:   Parav Pandit <parav@nvidia.com>
-To:     <bagasdotme@gmail.com>, <arnd@arndb.de>,
-        <stern@rowland.harvard.edu>, <parri.andrea@gmail.com>,
-        <will@kernel.org>, <peterz@infradead.org>, <boqun.feng@gmail.com>,
-        <npiggin@gmail.com>, <dhowells@redhat.com>, <j.alglave@ucl.ac.uk>,
-        <luc.maranget@inria.fr>, <paulmck@kernel.org>, <akiyks@gmail.com>,
-        <dlustig@nvidia.com>, <joel@joelfernandes.org>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-CC:     Parav Pandit <parav@nvidia.com>
-Subject: [PATCH v3] locking/memory-barriers.txt: Improve documentation for writel() example
-Date:   Thu, 6 Oct 2022 06:44:57 +0300
-Message-ID: <20221006034457.165878-1-parav@nvidia.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S231447AbiJFJbP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Oct 2022 05:31:15 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1256171A;
+        Thu,  6 Oct 2022 02:31:14 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id ED8A7580420;
+        Thu,  6 Oct 2022 05:31:13 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 06 Oct 2022 05:31:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1665048673; x=1665052273; bh=fyun8m++OCXQaSzrMWRm/s4+lmV+aUX5yLj
+        qKG/xgY8=; b=vuJSqGHrU/yyR5YCgbXwOv+J4DvFookOIeodLLhOjW+m/5FDrKi
+        5IEYVbn0oVMcet1C6FBAEjuu6TGz5Iw2IrjWQCA3+RNHPYIrPl8OvNbPvXCJ3C8A
+        3Wu1uxLznmLilePKxNFMVgWItZXnxKqzNN+rxbyl2WpI4a8AS+rI66pfCGNHUIn6
+        iRVSmqYKMuv1nXOcdxDD77Rw0/CbVLuc4cCkpj6tEzUMexOUvUFj8MZV5z/73isA
+        tbgDmg9be21TS05Re896BLn/bwG57BxXu9DGNCPNLPv8NMOmMd451ewqTLd/pA+i
+        u6A8WQL9t9fMICQsWkSTxNfxhHDQKK6rBWw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1665048673; x=
+        1665052273; bh=fyun8m++OCXQaSzrMWRm/s4+lmV+aUX5yLjqKG/xgY8=; b=D
+        29u2egZPzdgQwDiA0GEWSq5TR4F1bxUUtqyxImUaz6SOxVTKUFHPHAW0HGEQGM2l
+        dGamWgTwuZMkMLn3Aubmd/GmKKoF+ngDLVY0OyKB+JW1U7YTrZPYIx7zJmW3cvtp
+        mEcjwLbLj33vPH240ktkyZ+X5Rtuq3eQd/KGyK9sMONWVI+NRV3kCWbpLQtaiL62
+        arpA/7sRDKpH7BwEEGrR3Gxygr6rQ0XqeGLmrSHdajUtyWNB4dc5r3qKfubAQhu9
+        D0iXxdggaWVAPL1rZrn+7R3Wx0oaJzWengim91P0RlL2lZ0QHHB7Y7si/VQK8q7y
+        AkXJP6OsdtFaT31P+4K+A==
+X-ME-Sender: <xms:YaA-Y3vgfDvBONVNg63le4yi6XwNeErtPyf54WcphtCdDLhYe8iLwQ>
+    <xme:YaA-Y4cyNGkfPovEZx5x1ix1nv3jlXU_7tjn0dXMasvpDFK1zSazY9eqZbqLNuvBd
+    G3lWkl0XibAZcftj30>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeihedgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:YaA-Y6wlc07QnDJPDUIvwT1AZZxsETF5f6nxd3ACad_k9t60dmiCWw>
+    <xmx:YaA-Y2P-UgKVqZrVlUxk5Iad7afcTPwvzrUwwAbGcETEZFSIX7IZow>
+    <xmx:YaA-Y38GaydwfrOG-FlFF9-jUH_jNwGOY_HhNWqAzxtFp0qoFmXIeQ>
+    <xmx:YaA-Y0HMZg9DWC007Wi2TB0cDoxWSsb7NqAbx6wAZP3oGkgm1AVNXg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A25DDB60086; Thu,  6 Oct 2022 05:31:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
+Mime-Version: 1.0
+Message-Id: <5c3aa67f-bc78-4abe-aba2-e5679cb66994@app.fastmail.com>
+Date:   Thu, 06 Oct 2022 11:30:38 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] asm-generic updates for 6.1
 Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT091:EE_|DM6PR12MB4249:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef49ca1e-704a-4acd-91dd-08daa74d3089
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SOySnkwP5DFCUTV+JPNveEz4rHEsWVSbL1aWrrn8swQUiEfzBEWPpLtRE1bEOJMyVGXSRBjCFGHcvytMkn3eDT5g3ExwogQYQM+YqRf7PVoooj33+3oc0PcjqGx2nuWWCAaP1HhgcIzC1abi/yFt0KhfE2g+8LaAPKnen4XOZUiDnWXNFaDaGfp6xxbNRk7+3RBevUAHRORYbXU7jHCLWXHHa8qLxkrzPpmWoofa9W/exe638HH8e+uvS3W79lQUny1fWoqJgDLWq+lZTTEKA6iX2ZtcuM27Enf89yxhK7aGAiYhM51z+mRHaqVUZ9HEU3tELeC6YXRePxze1VruK+KCt3q2jVtBBRCH47S2RB3ngaRx+pMxBMCJVi0t8k3+9mEfqs7ImdygeYrM7aZjMmnkhc88f8r5ppB8dUqKJa/agqvsB+41JBF4LsUUYQLxeO1+m42vyRxZ/AefnNk42f/jefZZCdA/F1YijwcRTm5s4tPOua2f99JkMNcG3iYKWS4/Jm7xYDi2olz/AYLj6ufcejh2hYUXAvOvaaMN6PEsG8b3zkYv1oHe5Wu/9kqS5Mhba08M+rzGgl5MF13dotr3jZC8/kHqxHTCvzM0ARuYKwefM4rLM5pJexjGNYMUGIQbFHVbhUAbfxuJ7RG5s263ab3Vatir116NsxZj8W84v4erttDfk5We1XhdAj5MglCv8MGQm3hrjRMtpW+RBxDXe5Gw3HzxMI/ey6E1rHIwFjjjuyyva35hDaWVjLpftx6XTzUCh6Mroq4jC5q4PX6BCgEbLRCLDzi+voloHtA=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(2906002)(41300700001)(7416002)(36756003)(26005)(478600001)(82740400003)(6666004)(107886003)(40480700001)(82310400005)(8936002)(5660300002)(40460700003)(336012)(86362001)(426003)(921005)(356005)(47076005)(1076003)(186003)(2616005)(16526019)(36860700001)(83380400001)(7636003)(316002)(110136005)(70206006)(4326008)(8676002)(70586007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2022 03:45:19.3270
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef49ca1e-704a-4acd-91dd-08daa74d3089
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT091.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4249
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The cited commit describes that when using writel(), explcit wmb()
-is not needed. wmb() is an expensive barrier. writel() uses the needed
-platform specific barrier instead of expensive wmb().
+The following changes since commit 7e18e42e4b280c85b76967a9106a13ca61c16179:
 
-Hence update the example to be more accurate that matches the current
-implementation.
+  Linux 6.0-rc4 (2022-09-04 13:10:01 -0700)
 
-commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
+are available in the Git repository at:
 
-Signed-off-by: Parav Pandit <parav@nvidia.com>
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.1
 
----
-changelog:
-v2->v3:
-- removed redundant description for writeX()
-- updated text for alignment and smaller change lines
-- updated commit log with blank line before signed-off-by line
-v1->v2:
-- Further improved description of writel() example
-- changed commit subject from 'usage' to 'example'
-v0->v1:
-- Corrected to mention I/O barrier instead of dma_wmb().
-- removed numbered references in commit log
-- corrected typo 'explcit' to 'explicit' in commit log
----
- Documentation/memory-barriers.txt | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+for you to fetch changes up to e19d4ebc536dadb607fe305fdaf48218d3e32d7c:
 
-diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-index 832b5d36e279..8952fd86c6e6 100644
---- a/Documentation/memory-barriers.txt
-+++ b/Documentation/memory-barriers.txt
-@@ -1927,10 +1927,11 @@ There are some more advanced barrier functions:
-      before we read the data from the descriptor, and the dma_wmb() allows
-      us to guarantee the data is written to the descriptor before the device
-      can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
--     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
-+     a dma_wmb().  Note that, when using writel(), a prior barrier is not needed
-      to guarantee that the cache coherent memory writes have completed before
-      writing to the MMIO region.  The cheaper writel_relaxed() does not provide
--     this guarantee and must not be used here.
-+     this guarantee and must not be used here. Hence, writeX() is always
-+     preferred.
- 
-      See the subsection "Kernel I/O barrier effects" for more information on
-      relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
--- 
-2.26.2
+  alpha: add full ioread64/iowrite64 implementation (2022-10-04 11:23:29 +0200)
 
+----------------------------------------------------------------
+asm-generic updates for v6.1
+
+This contains a series from Linus Walleij to unify the linux/io.h
+interface by making the ia64, alpha, parisc and sparc include
+asm-generic/io.h. All functions provided by the generic header are
+now available to all drivers, but the architectures can still override
+this. For the moment, mips and sh still don't include asm-generic/io.h
+but provide a full set of functions themselves.
+
+There are also a few minor cleanups unrelated to this.
+
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      parisc: hide ioread64 declaration on 32-bit
+      alpha: add full ioread64/iowrite64 implementation
+
+Christophe Leroy (1):
+      asm-generic: Remove empty #ifdef SA_RESTORER
+
+Linus Walleij (5):
+      alpha: Use generic <asm-generic/io.h>
+      sparc: Fix the generic IO helpers
+      parisc: Remove 64bit access on 32bit machines
+      parisc: Use the generic IO helpers
+      parisc: Drop homebrewn io[read|write]64_[lo_hi|hi_lo]
+
+Randy Dunlap (1):
+      ia64: export memory_add_physaddr_to_nid to fix cxl build error
+
+ arch/alpha/include/asm/core_apecs.h  |  22 +++++-
+ arch/alpha/include/asm/core_cia.h    |  22 +++++-
+ arch/alpha/include/asm/core_lca.h    |  22 +++++-
+ arch/alpha/include/asm/core_marvel.h |   4 +-
+ arch/alpha/include/asm/core_mcpcia.h |  28 +++++++-
+ arch/alpha/include/asm/core_t2.h     |  16 ++++-
+ arch/alpha/include/asm/io.h          |  97 ++++++++++++++++++++++---
+ arch/alpha/include/asm/io_trivial.h  |  18 ++++-
+ arch/alpha/include/asm/jensen.h      |  18 ++++-
+ arch/alpha/include/asm/machvec.h     |   8 ++-
+ arch/alpha/kernel/core_marvel.c      |   2 +-
+ arch/alpha/kernel/io.c               |  17 +++++
+ arch/alpha/kernel/machvec_impl.h     |   2 +
+ arch/ia64/mm/numa.c                  |   1 +
+ arch/parisc/include/asm/io.h         | 134 ++++++++++++-----------------------
+ arch/parisc/lib/iomap.c              |  60 ++++++----------
+ arch/sparc/include/asm/io.h          |   2 +
+ arch/sparc/include/asm/io_64.h       |  22 ++++++
+ drivers/parisc/sba_iommu.c           |   6 ++
+ include/asm-generic/signal.h         |   2 -
+ 20 files changed, 341 insertions(+), 162 deletions(-)
