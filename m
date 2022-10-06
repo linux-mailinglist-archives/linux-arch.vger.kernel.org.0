@@ -2,271 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0965F7192
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Oct 2022 01:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0F85F70EF
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Oct 2022 00:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiJFXQT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Oct 2022 19:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S231693AbiJFWFe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Oct 2022 18:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiJFXQS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Oct 2022 19:16:18 -0400
-X-Greylist: delayed 3595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 16:16:15 PDT
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AA94120;
-        Thu,  6 Oct 2022 16:16:14 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 296LRJ1M3706824
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 6 Oct 2022 14:27:19 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 296LRJ1M3706824
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022090501; t=1665091641;
-        bh=83oafeKZfAlix6QiAi5tyBeuvZ5eUW0hhmVMZremg+o=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=he58tKmvIQguFWQuXk4StAkobvC4MMRcgWm5oocTjATGRjxGaMUIwUgQuvmY5viZp
-         OdiI5JtB78Nl6Q1Or4ZYxFqSiYbDj5OE1/uFwvcSGRkGH9dGkt9d879hBtR0vH2bGc
-         7aH12+QOMsIw09wrwwGzj2TSdqLbgGqiZuNdlE8L9+qEaqPDRyBgWXppvye9w/e69Z
-         IOaxQKuLoOW8QXyzS/uMpO/UHI9HiQCdbc5SdJmT/mKBZrAn0s6hAWyQl9aY9IVHYZ
-         DtSBH3xBedi5AtXWjOr9sBXBoZLsUc4D7Mvh3VswLI+oqxa63rPjDEAwHeVQp+3PDI
-         GTqTedLcwbnfQ==
-Date:   Thu, 06 Oct 2022 14:27:18 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Ali Raza <aliraza@bu.edu>, linux-kernel@vger.kernel.org
-CC:     corbet@lwn.net, masahiroy@kernel.org, michal.lkml@markovi.net,
-        ndesaulniers@google.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, luto@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org, peterz@infradead.org,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, pbonzini@redhat.com,
-        jpoimboe@kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, rjones@redhat.com, munsoner@bu.edu, tommyu@bu.edu,
-        drepper@redhat.com, lwoodman@redhat.com, mboydmcse@gmail.com,
-        okrieg@bu.edu, rmancuso@bu.edu
-Subject: Re: [RFC UKL 00/10] Unikernel Linux (UKL)
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221003222133.20948-1-aliraza@bu.edu>
-References: <20221003222133.20948-1-aliraza@bu.edu>
-Message-ID: <85EF9D5D-6DCC-410C-96F5-C16F0E62BF22@zytor.com>
+        with ESMTP id S232057AbiJFWFK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Oct 2022 18:05:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E591AD8F
+        for <linux-arch@vger.kernel.org>; Thu,  6 Oct 2022 15:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665093891; x=1696629891;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oILdn99IiSLJZQ0xtX1dFxkdF04AYRHeXJ1RsWZuzlM=;
+  b=cXRjil7L4bD2ujtJlW3/L2wlh2/tBEt2KWSyR2xr3Nug7klP6BCK33zh
+   1HBxOwtCEpTpg7uIWyifwFNdcdqHjubprklNY6B6dhe7qS9x98eSumm35
+   jndRE/L8SPLCn2qXQ0xGzKGxhINyVPYQzfMJAB/+rMBco0yznWaBJmE84
+   WCi3xPhuWcj7Nrm36SUgvHISv/ybgCwX2AUINHF+OAvtn4SbuTo550l1d
+   k2iPHhTKEmx0Grf0U6th3jrVoS/bvkvqCghoeAf0dV4+joUpHB47z3fJ+
+   +V7eiRZVftQpdsB3jHcWw4GXraunNP9NZcB7Ec4qVP13pdRn1rwVpwNvq
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="305166027"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="305166027"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Oct 2022 15:04:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="693537387"
+X-IronPort-AV: E=Sophos;i="5.95,164,1661842800"; 
+   d="scan'208";a="693537387"
+Received: from lkp-server01.sh.intel.com (HELO 3c15167049b7) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Oct 2022 15:04:49 -0700
+Received: from kbuild by 3c15167049b7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ogYz2-0000Wt-2O;
+        Thu, 06 Oct 2022 22:04:48 +0000
+Date:   Fri, 07 Oct 2022 06:03:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD REGRESSION
+ e19d4ebc536dadb607fe305fdaf48218d3e32d7c
+Message-ID: <633f50cd.f8YCVB8cGH9bOVWW%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On October 3, 2022 3:21:23 PM PDT, Ali Raza <aliraza@bu=2Eedu> wrote:
->Unikernel Linux (UKL) is a research project aimed at integrating
->application specific optimizations to the Linux kernel=2E This RFC aims t=
-o
->introduce this research to the community=2E Any feedback regarding the id=
-ea,
->goals, implementation and research is highly appreciated=2E
->
->Unikernels are specialized operating systems where an application is link=
-ed
->directly with the kernel and runs in supervisor mode=2E This allows the
->developers to implement application specific optimizations to the kernel,
->which can be directly invoked by the application (without going through t=
-he
->syscall path)=2E An application can control scheduling and resource
->management and directly access the hardware=2E Application and the kernel=
- can
->be co-optimized, e=2Eg=2E, through LTO, PGO, etc=2E All of these optimiza=
-tions,
->and others, provide applications with huge performance benefits over
->general purpose operating systems=2E
->
->Linux is the de-facto operating system of today=2E Applications depend on=
- its
->battle tested code base, large developer community, support for legacy
->code, a huge ecosystem of tools and utilities, and a wide range of
->compatible hardware and device drivers=2E Linux also allows some degree o=
-f
->application specific optimizations through build time config options,
->runtime configuration, and recently through eBPF=2E But still, there is a
->need for even more fine-grained application specific optimizations, and
->some developers resort to kernel bypass techniques=2E
->
->Unikernel Linux (UKL) aims to get the best of both worlds by bringing
->application specific optimizations to the Linux ecosystem=2E This way,
->unmodified applications can keep getting the benefits of Linux while taki=
-ng
->advantage of the unikernel-style optimizations=2E Optionally, application=
-s
->can be modified to invoke deeper optimizations=2E
->
->There are two steps to unikernel-izing Linux, i=2Ee=2E, first, equip Linu=
-x with
->a unikernel model, and second, actually use that model to implement
->application specific optimizations=2E This patch focuses on the first par=
-t=2E
->Through this patch, unmodified applications can be built as Linux
->unikernels, albeit with only modest performance advantages=2E Like
->unikernels, UKL would allow an application to be statically linked into t=
-he
->kernel and executed in supervisor mode=2E However, UKL preserves most of =
-the
->invariants and design of Linux, including a separate page-able applicatio=
-n
->portion of the address space and a pinned kernel portion, the ability to
->run multiple processes, and distinct execution modes for application and
->kernel code=2E Kernel execution mode and application execution mode are
->different, e=2Eg=2E, the application execution mode allows application th=
-reads
->to be scheduled, handle signals, etc=2E, which do not apply to kernel
->threads=2E Application built as a Linux unikernel will have its text and =
-data
->loaded with the kernel at boot time, while the rest of the address space
->would remain unchanged=2E These applications invoke the system call
->functionality through a function call into the kernel system call entry
->point instead of through the syscall assembly instruction=2E UKL would
->support a normal userspace so the UKL application can be started, managed=
-,
->profiled, etc=2E, using normal command line utilities=2E
->
->Once Linux has a unikernel model, different application specific
->optimizations are possible=2E We have tried a few, e=2Eg=2E, fast system =
-call
->transitions, shared stacks to allow LTO, invoking kernel functions
->directly, etc=2E We have seen huge performance benefits, details of which=
- are
->not relevant to this patch and can be found in our paper=2E
->(https://arxiv=2Eorg/pdf/2206=2E00789=2Epdf)
->
->UKL differs significantly from previous projects, e=2Eg=2E, UML, KML and =
-LKL=2E
->User Mode Linux (UML) is a virtual machine monitor implemented on syscall
->interface, a very different goal from UKL=2E Kernel Mode Linux (KML) allo=
-ws
->applications to run in kernel mode and replaces syscalls with function
->calls=2E While KML stops there, UKL goes further=2E UKL links application=
-s and
->kernel together which allows further optimizations e=2Eg=2E, fast system =
-call
->transitions, shared stacks to allow LTO, invoking kernel functions direct=
-ly
->etc=2E Details can be found in the paper linked above=2E Linux Kernel Lib=
-rary
->(LKL) harvests arch independent code from Linux, takes it to userspace as=
- a
->library to be linked with applications=2E A host needs to provide arch
->dependent functionality=2E This model is very different from UKL=2E A det=
-ailed
->discussion of related work is present in the paper linked above=2E
->
->See samples/ukl for a simple TCP echo server example which can be built a=
-s
->a normal user space application and also as a UKL application=2E In the L=
-inux
->config options, a path to the compiled and partially linked application
->binary can be specified=2E Kernel built with UKL enabled will search this
->location for the binary and link with the kernel=2E Applications and requ=
-ired
->libraries need to be compiled with -mno-red-zone -mcmodel=3Dkernel flags
->because kernel mode execution can trample on application red zones and in
->order to link with the kernel and be loaded in the high end of the addres=
-s
->space, application should have the correct memory model=2E Examples of ot=
-her
->applications like Redis, Memcached etc along with glibc and libgcc etc=2E=
-,
->can be found at https://github=2Ecom/unikernelLinux/ukl
->
->List of authors and contributors:
->=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->Ali Raza - aliraza@bu=2Eedu
->Thomas Unger - tommyu@bu=2Eedu
->Matthew Boyd - mboydmcse@gmail=2Ecom
->Eric Munson - munsoner@bu=2Eedu
->Parul Sohal - psohal@bu=2Eedu
->Ulrich Drepper - drepper@redhat=2Ecom
->Richard W=2EM=2E Jones - rjones@redhat=2Ecom
->Daniel Bristot de Oliveira - bristot@kernel=2Eorg
->Larry Woodman - lwoodman@redhat=2Ecom
->Renato Mancuso - rmancuso@bu=2Eedu
->Jonathan Appavoo - jappavoo@bu=2Eedu
->Orran Krieger - okrieg@bu=2Eedu
->
->Ali Raza (9):
->  kbuild: Add sections and symbols to linker script for UKL support
->  x86/boot: Load the PT_TLS segment for Unikernel configs
->  sched: Add task_struct tracking of kernel or application execution
->  x86/entry: Create alternate entry path for system calls
->  x86/uaccess: Make access_ok UKL aware
->  x86/fault: Skip checking kernel mode access to user address space for
->    UKL
->  x86/signal: Adjust signal handler register values and return frame
->  exec: Make exec path for starting UKL application
->  Kconfig: Add config option for enabling and sample for testing UKL
->
->Eric B Munson (1):
->  exec: Give userspace a method for starting UKL process
->
-> Documentation/index=2Erst           |   1 +
-> Documentation/ukl/ukl=2Erst         | 104 +++++++++++++++++++++++
-> Kconfig                           |   2 +
-> Makefile                          |   4 +
-> arch/x86/boot/compressed/misc=2Ec   |   3 +
-> arch/x86/entry/entry_64=2ES         | 133 ++++++++++++++++++++++++++++++
-> arch/x86/include/asm/elf=2Eh        |   9 +-
-> arch/x86/include/asm/uaccess=2Eh    |   8 ++
-> arch/x86/kernel/process=2Ec         |  13 +++
-> arch/x86/kernel/process_64=2Ec      |  49 ++++++++---
-> arch/x86/kernel/signal=2Ec          |  22 +++--
-> arch/x86/kernel/vmlinux=2Elds=2ES     |  98 ++++++++++++++++++++++
-> arch/x86/mm/fault=2Ec               |   7 +-
-> fs/binfmt_elf=2Ec                   |  28 +++++++
-> fs/exec=2Ec                         |  75 +++++++++++++----
-> include/asm-generic/sections=2Eh    |   4 +
-> include/asm-generic/vmlinux=2Elds=2Eh |  32 ++++++-
-> include/linux/sched=2Eh             |  26 ++++++
-> kernel/Kconfig=2Eukl                |  41 +++++++++
-> samples/ukl/Makefile              |  16 ++++
-> samples/ukl/README                |  17 ++++
-> samples/ukl/syscall=2ES             |  28 +++++++
-> samples/ukl/tcp_server=2Ec          |  99 ++++++++++++++++++++++
-> scripts/mod/modpost=2Ec             |   4 +
-> 24 files changed, 785 insertions(+), 38 deletions(-)
-> create mode 100644 Documentation/ukl/ukl=2Erst
-> create mode 100644 kernel/Kconfig=2Eukl
-> create mode 100644 samples/ukl/Makefile
-> create mode 100644 samples/ukl/README
-> create mode 100644 samples/ukl/syscall=2ES
-> create mode 100644 samples/ukl/tcp_server=2Ec
->
->
->base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: e19d4ebc536dadb607fe305fdaf48218d3e32d7c  alpha: add full ioread64/iowrite64 implementation
 
-This is basically taking Linux and turning it into a whole new operating s=
-ystem, while expecting the Linux kernel community to carry the support burd=
-en thereof=2E
+Error/Warning reports:
 
-We have seen this before, notably with Xen=2E It is *expensive* and *painf=
-ul* for the maintenance of the mainstream kernel=2E
+https://lore.kernel.org/linux-arch/202210040004.JSEtm9uf-lkp@intel.com
+https://lore.kernel.org/linux-arch/202210062117.wJypzBWL-lkp@intel.com
 
-Linux already has a notion of "kernel mode applications", they are called =
-kernel modules and kernel threads=2E It seems to me that you are trying to =
-introduce a user space compatibility layer into the kernel, with the only b=
-enefit being avoiding the syscall overhead=2E The latter is bigger than we =
-would like, which is why we are changing the x86 hardware architecture to i=
-mprove it=2E
+Error/Warning: (recently discovered and may have been fixed)
 
-In my opinion, this would require *enormous* justification to put it into =
-mainline=2E
+arch/alpha/include/asm/core_t2.h:587:23: warning: no previous prototype for 't2_ioread64' [-Wmissing-prototypes]
+arch/alpha/include/asm/core_t2.h:594:22: warning: no previous prototype for 't2_iowrite64' [-Wmissing-prototypes]
+arch/alpha/include/asm/jensen.h:187:21: warning: no previous prototype for 'jensen_inq' [-Wmissing-prototypes]
+arch/alpha/include/asm/jensen.h:207:22: warning: no previous prototype for 'jensen_outq' [-Wmissing-prototypes]
+arch/alpha/include/asm/jensen.h:322:23: warning: no previous prototype for 'jensen_ioread64' [-Wmissing-prototypes]
+arch/alpha/include/asm/jensen.h:329:22: warning: no previous prototype for 'jensen_iowrite64' [-Wmissing-prototypes]
+arch/alpha/kernel/core_marvel.c:807:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'marvel_ioread8'
 
+Error/Warning ids grouped by kconfigs:
 
+gcc_recent_errors
+|-- alpha-allnoconfig
+|   `-- arch-alpha-kernel-core_marvel.c:error:expected-asm-or-__attribute__-before-marvel_ioread8
+|-- alpha-allyesconfig
+|   |-- arch-alpha-include-asm-core_t2.h:warning:no-previous-prototype-for-t2_ioread64
+|   |-- arch-alpha-include-asm-core_t2.h:warning:no-previous-prototype-for-t2_iowrite64
+|   |-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_inq
+|   |-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_ioread64
+|   |-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_iowrite64
+|   `-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_outq
+`-- alpha-defconfig
+    |-- arch-alpha-include-asm-core_t2.h:warning:no-previous-prototype-for-t2_ioread64
+    |-- arch-alpha-include-asm-core_t2.h:warning:no-previous-prototype-for-t2_iowrite64
+    |-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_inq
+    |-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_ioread64
+    |-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_iowrite64
+    `-- arch-alpha-include-asm-jensen.h:warning:no-previous-prototype-for-jensen_outq
 
+elapsed time: 720m
+
+configs tested: 111
+configs skipped: 14
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+x86_64                              defconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+i386                                defconfig
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a011-20221003
+i386                 randconfig-a012-20221003
+arm                                 defconfig
+x86_64                               rhel-8.3
+s390                             allmodconfig
+i386                 randconfig-a013-20221003
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+riscv                randconfig-r042-20221003
+i386                 randconfig-a015-20221003
+x86_64                           allyesconfig
+x86_64               randconfig-a015-20221003
+i386                 randconfig-a016-20221003
+x86_64               randconfig-a016-20221003
+s390                             allyesconfig
+s390                 randconfig-r044-20221003
+i386                             allyesconfig
+powerpc                           allnoconfig
+arc                  randconfig-r043-20221003
+i386                 randconfig-a014-20221003
+arm64                            allyesconfig
+arc                  randconfig-r043-20221002
+arm                              allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+x86_64               randconfig-a011-20221003
+mips                             allyesconfig
+x86_64               randconfig-a013-20221003
+x86_64               randconfig-a012-20221003
+m68k                             allmodconfig
+x86_64               randconfig-a014-20221003
+arc                              allyesconfig
+ia64                             allmodconfig
+alpha                            allyesconfig
+i386                          randconfig-c001
+m68k                             allyesconfig
+arm                     eseries_pxa_defconfig
+mips                         cobalt_defconfig
+openrisc                            defconfig
+nios2                            alldefconfig
+mips                        bcm47xx_defconfig
+arm                          simpad_defconfig
+powerpc                      cm5200_defconfig
+arm                           viper_defconfig
+s390                                defconfig
+arc                        nsim_700_defconfig
+sh                          r7780mp_defconfig
+xtensa                              defconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+m68k                            q40_defconfig
+mips                  decstation_64_defconfig
+powerpc                     tqm8548_defconfig
+mips                      loongson3_defconfig
+xtensa                  nommu_kc705_defconfig
+m68k                            mac_defconfig
+powerpc                     taishan_defconfig
+powerpc                       eiger_defconfig
+loongarch                        alldefconfig
+powerpc                 mpc85xx_cds_defconfig
+parisc                generic-64bit_defconfig
+arm                  randconfig-c002-20221002
+x86_64                        randconfig-c001
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+powerpc                     tqm8555_defconfig
+sh                           se7619_defconfig
+riscv                            allyesconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+
+clang tested configs:
+x86_64               randconfig-a003-20221003
+x86_64               randconfig-a002-20221003
+x86_64               randconfig-a001-20221003
+hexagon              randconfig-r045-20221003
+x86_64               randconfig-a005-20221003
+hexagon              randconfig-r041-20221003
+hexagon              randconfig-r041-20221002
+x86_64               randconfig-a004-20221003
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+i386                 randconfig-a001-20221003
+hexagon              randconfig-r045-20221002
+i386                 randconfig-a005-20221003
+x86_64               randconfig-a006-20221003
+i386                 randconfig-a006-20221003
+i386                 randconfig-a004-20221003
+riscv                randconfig-r042-20221002
+powerpc                    mvme5100_defconfig
+powerpc                     ppa8548_defconfig
+s390                 randconfig-r044-20221002
+x86_64                        randconfig-k001
+riscv                randconfig-r042-20221006
+hexagon              randconfig-r041-20221006
+s390                 randconfig-r044-20221006
+hexagon              randconfig-r045-20221006
+i386                             allyesconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
