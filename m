@@ -2,56 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91B55F7389
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFA65F7387
 	for <lists+linux-arch@lfdr.de>; Fri,  7 Oct 2022 06:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbiJGE0h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S229470AbiJGE0h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 7 Oct 2022 00:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiJGE0f (ORCPT
+        with ESMTP id S229445AbiJGE0f (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Oct 2022 00:26:35 -0400
+X-Greylist: delayed 386 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 06 Oct 2022 21:26:33 PDT
 Received: from mail.lintas.net.id (mail.lintas.net.id [103.242.106.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68476C512E;
-        Thu,  6 Oct 2022 21:26:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B997FC5113;
+        Thu,  6 Oct 2022 21:26:33 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.lintas.net.id (Postfix) with ESMTP id 7E742170DBA3;
-        Fri,  7 Oct 2022 11:16:26 +0700 (WIB)
+        by mail.lintas.net.id (Postfix) with ESMTP id E0932173ACF4;
+        Fri,  7 Oct 2022 11:17:26 +0700 (WIB)
 Received: from mail.lintas.net.id ([127.0.0.1])
         by localhost (mail.lintas.net.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id BnhldqdKZ2KA; Fri,  7 Oct 2022 11:16:25 +0700 (WIB)
+        with ESMTP id i1ucRFjMv4Pi; Fri,  7 Oct 2022 11:17:25 +0700 (WIB)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.lintas.net.id (Postfix) with ESMTP id 0C40C1726D7E;
-        Fri,  7 Oct 2022 11:16:23 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.lintas.net.id 0C40C1726D7E
+        by mail.lintas.net.id (Postfix) with ESMTP id 85A7A173ACFB;
+        Fri,  7 Oct 2022 11:17:23 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.lintas.net.id 85A7A173ACFB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lintas.net.id;
-        s=F92A790A-805A-11EA-A140-F25EC2A2148A; t=1665116184;
+        s=F92A790A-805A-11EA-A140-F25EC2A2148A; t=1665116244;
         bh=gZiSU8BF75oNvlb6qfUUuu+jcJW0UzNNn6MGM2sggoI=;
         h=Date:From:Message-ID:MIME-Version;
-        b=lFo3C+K9/FCFBRz/jibzo1QdirULpByRgoYKHHi4RZ+kdu6TK2yooeMJYQX6mq9bb
-         CmrZJePS4nH02xO3WnhF5GvOSZ7e532XtSbioBcvSdBgGZLkcSIfh4fBYAmiBSAiJL
-         Mg79sjPxSC0LNY+zm9GypHAoIuxPDRh7I5vKVY1795LAzm1e/1DrCQMo9AiGMMhpLP
-         8yinYN48HNwF1Sa9JHa3uABLVBrHJI6tCxtHS6XynEUG05UE+PwZv7v/uhnFWpM3AA
-         tQr66e/bTFyhUTd40E595yPVbGTWeI/q9MUmHX8Zi1bxAMJgKl3e1dvBBGdOZxzeDZ
-         qWf8H6r8TPhmw==
+        b=10/Z/NNeJoE2dVsh5Y3FJe8Df1fZQ8FXmNKL/u7d/Ce93y/LPeFLZ2eTfX7QriBlG
+         IvBsX3/fQPbF22YzKKh8iU7IADQxg0i+oKq3ItSStwp7Ibj9ilbVD59aMfUpvHRt3i
+         eXGLN7STdaGVVYA2nWes4J2weFrR5wAqrnimKO7KvmM/w7froEomtEWMO4zxkn675H
+         Q1v9rOeA3T0CamB1W+lOOKxOyKycee/os6SxNNCyTSlcNavMMcSgxx5WZVjltwy17D
+         ERCJC1k0nozbKY5pmR7E6Ajwee+Ga4QaLEyduBxZFgFMeG9wxGM5cPGGsZ+rDi5H6u
+         gCoMfmfYI9cig==
 X-Virus-Scanned: amavisd-new at lintas.net.id
 Received: from mail.lintas.net.id ([127.0.0.1])
         by localhost (mail.lintas.net.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id quzFQvV6kg5R; Fri,  7 Oct 2022 11:16:22 +0700 (WIB)
+        with ESMTP id QU55CVOcIop8; Fri,  7 Oct 2022 11:17:22 +0700 (WIB)
 Received: from mail.lintas.net.id (mail.lintas.net.id [103.242.106.86])
-        by mail.lintas.net.id (Postfix) with ESMTP id 006C416DAE7A;
-        Fri,  7 Oct 2022 11:16:08 +0700 (WIB)
-Date:   Fri, 7 Oct 2022 11:16:08 +0700 (WIB)
+        by mail.lintas.net.id (Postfix) with ESMTP id 9DAEB173ACE7;
+        Fri,  7 Oct 2022 11:17:14 +0700 (WIB)
+Date:   Fri, 7 Oct 2022 11:17:14 +0700 (WIB)
 From:   =?utf-8?B?0YHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
         <nancy@lintas.net.id>
 Reply-To: sistemassadmins@mail2engineer.com
-Message-ID: <292752197.1510648.1665116168861.JavaMail.zimbra@lintas.net.id>
+Message-ID: <1197023753.1510739.1665116234525.JavaMail.zimbra@lintas.net.id>
 Subject: 
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 X-Originating-IP: [103.242.106.86]
 X-Mailer: Zimbra 8.8.15_GA_3888 (zclient/8.8.15_GA_3888)
-Thread-Index: v87tlOH5chRHkMfLhF7Am5fXIiFf8Q==
+Thread-Index: lu219HWEE6/d5rD2WUvY77c9OQ0VHA==
 Thread-Topic: 
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
@@ -59,11 +60,11 @@ X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         MISSING_HEADERS,RCVD_IN_VALIDITY_RPBL,REPLYTO_WITHOUT_TO_CC,
         SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no
         version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5181]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
         *      https://senderscore.org/blocklistlookup/
         *      [103.242.106.86 listed in bl.score.senderscore.com]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5033]
         *  1.0 MISSING_HEADERS Missing To: header
         * -0.0 SPF_PASS SPF: sender matches SPF record
         *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
