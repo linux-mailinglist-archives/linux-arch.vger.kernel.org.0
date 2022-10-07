@@ -2,118 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8685F76C9
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Oct 2022 12:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21BC5F776E
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Oct 2022 13:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiJGKWa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Oct 2022 06:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S229495AbiJGLaJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Oct 2022 07:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJGKW3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Oct 2022 06:22:29 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B833DBED;
-        Fri,  7 Oct 2022 03:22:27 -0700 (PDT)
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 297AMEvQ026718;
-        Fri, 7 Oct 2022 19:22:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 297AMEvQ026718
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665138135;
-        bh=v6R9VW9CvNnIPxZU2kpYVPvJFCqUvYSumQarCG0Cerk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zLSJjHLIQJAkeagXnGYLwewIgt97fZLTzOId4Oe8VaS10oWFyd9D+CNgzkwUOlRVc
-         JEegGYepg822P00bA0N/ktpVz7Od6lVius4h4rtoHWlOyeCjUr5oe1C+457OTZMnH6
-         QpW6iUVrYSxr6ZVPRf9Q70yrdcFpTo9/FOMR94tiJQzy6ffL7ZhTV3Alj8dKKyMVEO
-         QZ/hH9OaK0hEKBFTCMTRouTa0vWlvOIqhjj4/mp0hoTjOwrtCiOTw3S+mVoNi9UTlR
-         AroDM6GIpTyuc9c4CJ50gO+3diiSvj1ja4wW9v2V1Cu8p4dyVdfKWUepyeXpj49acI
-         6K0wXPsNUgySQ==
-X-Nifty-SrcIP: [209.85.160.44]
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-132fb4fd495so5076569fac.12;
-        Fri, 07 Oct 2022 03:22:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2nYq3OFkh3JYTwcuc+uyA9Vw1fzimcAUwgm1YcYBxlcmWV11V7
-        HCEOSdddAx0zpIS6Ro9B8aMY0ypJhJMeCOxv7RA=
-X-Google-Smtp-Source: AMsMyM6p4RmVl0lWCJhJ6LJiYVBZr+poUdbCGiq93ZYl33z69uioaMPeZvHhvZHGTn59a1RuLFsTqu2SZdyREGXDS0k=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr2087845oab.287.1665138134138; Fri, 07
- Oct 2022 03:22:14 -0700 (PDT)
+        with ESMTP id S229470AbiJGLaI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Oct 2022 07:30:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ED8A476F4;
+        Fri,  7 Oct 2022 04:30:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 746711063;
+        Fri,  7 Oct 2022 04:30:10 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 695033F792;
+        Fri,  7 Oct 2022 04:30:00 -0700 (PDT)
+Date:   Fri, 7 Oct 2022 12:29:49 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Conor.Dooley@microchip.com, guoren@kernel.org, oleg@redhat.com,
+        vgupta@kernel.org, linux@armlinux.org.uk, monstr@monstr.eu,
+        dinguyen@kernel.org, davem@davemloft.net,
+        Arnd Bergmann <arnd@arndb.de>, shorne@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, ardb@kernel.org, heiko@sntech.de,
+        daolu@rivosinc.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
+        openrisc@lists.librecores.org, xianting.tian@linux.alibaba.com,
+        linux-efi@vger.kernel.org
+Subject: Re: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the
+ end of syscalls
+Message-ID: <Y0ANrYa2IQCg8UTd@FVFF77S0Q05N>
+References: <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
+ <mhng-8c3bb2e7-e84e-4aaa-bce8-3e8054255a2c@palmer-ri-x1c9>
 MIME-Version: 1.0
-References: <20221003222133.20948-1-aliraza@bu.edu> <20221003222133.20948-11-aliraza@bu.edu>
- <d2089a89-21a9-1e05-5d58-91b8411f7141@gmail.com> <53c84c25-31ff-29d5-c6fb-85cb307f1704@bu.edu>
-In-Reply-To: <53c84c25-31ff-29d5-c6fb-85cb307f1704@bu.edu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 7 Oct 2022 19:21:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT-Q=sS-9L1eRuOnomqqDNyRp2knZh+2SYLqB2Gn8ekHg@mail.gmail.com>
-Message-ID: <CAK7LNAT-Q=sS-9L1eRuOnomqqDNyRp2knZh+2SYLqB2Gn8ekHg@mail.gmail.com>
-Subject: Re: [RFC UKL 10/10] Kconfig: Add config option for enabling and
- sample for testing UKL
-To:     Ali Raza <aliraza@bu.edu>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, michal.lkml@markovi.net, ndesaulniers@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org, peterz@infradead.org,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, pbonzini@redhat.com,
-        jpoimboe@kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, rjones@redhat.com, munsoner@bu.edu, tommyu@bu.edu,
-        drepper@redhat.com, lwoodman@redhat.com, mboydmcse@gmail.com,
-        okrieg@bu.edu, rmancuso@bu.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <mhng-8c3bb2e7-e84e-4aaa-bce8-3e8054255a2c@palmer-ri-x1c9>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 6:29 AM Ali Raza <aliraza@bu.edu> wrote:
->
-> On 10/3/22 22:11, Bagas Sanjaya wrote:
-> > On 10/4/22 05:21, Ali Raza wrote:
-> >> Add the KConfig file that will enable building UKL. Documentation
-> >> introduces the technical details for how UKL works and the motivations
-> >> behind why it is useful. Sample provides a simple program that still uses
-> >> the standard system call interface, but does not require a modified C
-> >> library.
-> >>
-> > <snipped>
-> >>  Documentation/index.rst   |   1 +
-> >>  Documentation/ukl/ukl.rst | 104 ++++++++++++++++++++++++++++++++++++++
-> >>  Kconfig                   |   2 +
-> >>  kernel/Kconfig.ukl        |  41 +++++++++++++++
-> >>  samples/ukl/Makefile      |  16 ++++++
-> >>  samples/ukl/README        |  17 +++++++
-> >>  samples/ukl/syscall.S     |  28 ++++++++++
-> >>  samples/ukl/tcp_server.c  |  99 ++++++++++++++++++++++++++++++++++++
-> >>  8 files changed, 308 insertions(+)
-> >>  create mode 100644 Documentation/ukl/ukl.rst
-> >>  create mode 100644 kernel/Kconfig.ukl
-> >>  create mode 100644 samples/ukl/Makefile
-> >>  create mode 100644 samples/ukl/README
-> >>  create mode 100644 samples/ukl/syscall.S
-> >>  create mode 100644 samples/ukl/tcp_server.c
-> >
-> > Shouldn't the documentation be split into its own patch?
-> >
-> Thanks for pointing that out.
->
-> --Ali
->
+On Thu, Oct 06, 2022 at 07:31:01PM -0700, Palmer Dabbelt wrote:
+> On Tue, 06 Sep 2022 10:35:10 PDT (-0700), Conor.Dooley@microchip.com wrote:
+> > On 03/09/2022 17:23, guoren@kernel.org wrote:
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > > 
+> > > From: Xianting Tian <xianting.tian@linux.alibaba.com>
+> > > 
+> > > This adds support for the STACKLEAK gcc plugin to RISC-V and disables
+> > > the plugin in EFI stub code, which is out of scope for the protection.
+> > > 
+> > > For the benefits of STACKLEAK feature, please check the commit
+> > > afaef01c0015 ("x86/entry: Add STACKLEAK erasing the kernel stack at the end of syscalls")
+> > > 
+> > > Performance impact (tested on qemu env with 1 riscv64 hart, 1GB mem)
+> > >     hackbench -s 512 -l 200 -g 15 -f 25 -P
+> > >     2.0% slowdown
+> > > 
+> > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> > 
+> > What changed since Xianting posted it himself a week ago:
+> > https://lore.kernel.org/linux-riscv/20220828135407.3897717-1-xianting.tian@linux.alibaba.com/
+> > 
+> > There's an older patch from Du Lao adding STACKLEAK too:
+> > https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
+> > 
+> > But since there's been no activity there since June...
+> 
+> Looks like the only issues were some commit log wording stuff, and that
+> there's a test suite that should be run.  It's not clear from the commits
+> that anyone has done that, I'm fine with the patch if it passes the tests
+> but don't really know how to run them.
 
+Enable CONFIG_LKDTM, and do:
 
-The commit subject "Kconfig:" is used for changes
-under scripts/kconfig/.
+  echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
 
-Please use something else.
+Example GOOD/BAD output below, taken from:
 
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/misc/lkdtm/stackleak.c?id=72b61896f2b47fa4b98e86184bc0e6ddbd1a8db1
 
--- 
-Best Regards
-Masahiro Yamada
+GOOD result on x86_64:
+
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| lkdtm: Performing direct entry STACKLEAK_ERASING
+| lkdtm: stackleak stack usage:
+|   high offset: 168 bytes
+|   current:     336 bytes
+|   lowest:      656 bytes
+|   tracked:     656 bytes
+|   untracked:   400 bytes
+|   poisoned:    15152 bytes
+|   low offset:  8 bytes
+| lkdtm: OK: the rest of the thread stack is properly erased
+
+GOOD result on arm64:
+
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| lkdtm: Performing direct entry STACKLEAK_ERASING
+| lkdtm: stackleak stack usage:
+|   high offset: 336 bytes
+|   current:     656 bytes
+|   lowest:      1232 bytes
+|   tracked:     1232 bytes
+|   untracked:   672 bytes
+|   poisoned:    14136 bytes
+|   low offset:  8 bytes
+| lkdtm: OK: the rest of the thread stack is properly erased
+
+BAD result on arm64:
+
+| # echo STACKLEAK_ERASING > /sys/kernel/debug/provoke-crash/DIRECT
+| lkdtm: Performing direct entry STACKLEAK_ERASING
+| lkdtm: FAIL: non-poison value 24 bytes below poison boundary: 0x0
+| lkdtm: FAIL: non-poison value 32 bytes below poison boundary: 0xffff8000083dbc00
+...
+| lkdtm: FAIL: non-poison value 1912 bytes below poison boundary: 0x78b4b9999e8cb15
+| lkdtm: FAIL: non-poison value 1920 bytes below poison boundary: 0xffff8000083db400
+| lkdtm: stackleak stack usage:
+|   high offset: 336 bytes
+|   current:     688 bytes
+|   lowest:      1232 bytes
+|   tracked:     576 bytes
+|   untracked:   288 bytes
+|   poisoned:    15176 bytes
+|   low offset:  8 bytes
+| lkdtm: FAIL: the thread stack is NOT properly erased!
+| lkdtm: Unexpected! This kernel (5.18.0-rc1-00013-g1f7b1f1e29e0-dirty aarch64) was built with CONFIG_GCC_PLUGIN_STACKLEAK=y
+
+Mark.
