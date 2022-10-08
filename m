@@ -2,43 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A015F8654
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Oct 2022 19:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5155F865B
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Oct 2022 19:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiJHRtx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Oct 2022 13:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45672 "EHLO
+        id S230371AbiJHRuA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Oct 2022 13:50:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiJHRtv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Oct 2022 13:49:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91C215FE3;
-        Sat,  8 Oct 2022 10:49:49 -0700 (PDT)
+        with ESMTP id S230348AbiJHRty (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Oct 2022 13:49:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84EA17076;
+        Sat,  8 Oct 2022 10:49:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5E5B80B6E;
-        Sat,  8 Oct 2022 17:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7874BC433D7;
-        Sat,  8 Oct 2022 17:49:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4102160A56;
+        Sat,  8 Oct 2022 17:49:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7558CC433C1;
+        Sat,  8 Oct 2022 17:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665251386;
-        bh=rhu4tXwJzEldn38Q3iAECeDkTTaB/gJXB15p4JdG7Po=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KdxC3MeYBrkOWUzs2CkoPIlvzx63uadcYz3zz5/zsHkwYRIx4rbnJxJARWBBMPR4Z
-         arkyyNNpTjTIEJVIB4i1BNe+UHf1b0Ncv4C0cXS+9wJsjW3buIl5zZWrBzAwLQgEuL
-         csaSWSvDhUSIkJyUFb0yL60ksDOuWvX3dgpyO7amY3fryxSOOYgkhTNLW9/dkBZf7z
-         bzv1wGXx3l7U9/AKlGGRSadKmBZINASJUb4es/Fy3fEZporpWaULj0o7ZDiQLG27U1
-         bCd0FUMNSFyBg1oZ95jbVWyfUzZY6lgAWQVIDKYAVNy/NoIw1yDAT/2C+0lwwWCXgN
-         MJygrqc701ySA==
+        s=k20201202; t=1665251391;
+        bh=N5Mp1LMvYGmWidyUVou9/bUp0B2acFPwWxHvVp2oik0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hhFdUCtx3n3tzgvPWAIsaehNUYXR8qd3G0dkmmRF/AxDuR9QpJVhhh6kDoCN9ierb
+         UfNGqMXhXlf9qHfANcLeUmZrM9g6MT8puDHAgCelgk0+jSSGSH+L1ZYvRMnD4PtxYs
+         Aus6UlZv6apNS9X65rwIg5ysLA8M8iFLq3CCFNDnxUPJ7LbbB/qdgmF5mGkD17ny9S
+         NSiIdBCCulKQ78UZrfMHW0Q8IvWSgpiLESTll9aJFXR3APCTEDudEefNpm5h6feD5V
+         u135Rbp9JZsZ3vDds3RVnIQz5kknPejG7GUJ25rlyTX1XjDuSXKLXdbg8q0DpVNMfF
+         CLeKBt/vO47CQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     paulmck@kernel.org, corbet@lwn.net
 Cc:     linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 0/4] docs/memory-barriers.txt: Fix nits and update Korean translation
-Date:   Sat,  8 Oct 2022 10:49:24 -0700
-Message-Id: <20221008174928.13479-1-sj@kernel.org>
+Subject: [PATCH 1/4] docs/memory-barriers.txt: Add a missed closing parenthesis
+Date:   Sat,  8 Oct 2022 10:49:25 -0700
+Message-Id: <20221008174928.13479-2-sj@kernel.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20221008174928.13479-1-sj@kernel.org>
+References: <20221008174928.13479-1-sj@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -48,22 +50,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patchset fixes one trivial nit in memory-barriers.txt (patch 1) and
-updates Korean translation to match the content of the original one
-(patches 2-4).
+Description of io_stop_wc(), which added by commit d5624bb29f49
+("asm-generic: introduce io_stop_wc() and add implementation for
+ARM64"), have unclosed parenthesis.  This commit closes it.
 
-SeongJae Park (4):
-  docs/memory-barriers.txt: Add a missed closing parenthesis
-  docs/memory-barriers.txt/kokr: introduce io_stop_wc() and add
-    implementation for ARM64
-  docs/memory-barriers.txt/kokr: Add memory barrier dma_mb()
-  docs/memory-barriers.txt/kokr: Fix confusing name of 'data dependency
-    barrier'
+Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ Documentation/memory-barriers.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/memory-barriers.txt             |   2 +-
- .../translations/ko_KR/memory-barriers.txt    | 149 ++++++++++--------
- 2 files changed, 86 insertions(+), 65 deletions(-)
-
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 06f80e3785c5..cc621decd943 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -1966,7 +1966,7 @@ There are some more advanced barrier functions:
+  (*) io_stop_wc();
+ 
+      For memory accesses with write-combining attributes (e.g. those returned
+-     by ioremap_wc(), the CPU may wait for prior accesses to be merged with
++     by ioremap_wc()), the CPU may wait for prior accesses to be merged with
+      subsequent ones. io_stop_wc() can be used to prevent the merging of
+      write-combining memory accesses before this macro with those after it when
+      such wait has performance implications.
 -- 
 2.17.1
 
