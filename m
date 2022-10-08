@@ -2,143 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF065F8251
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Oct 2022 04:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8515F82A5
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Oct 2022 05:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiJHCQy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Oct 2022 22:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S229565AbiJHDKo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Oct 2022 23:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJHCQx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Oct 2022 22:16:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3659A8285B;
-        Fri,  7 Oct 2022 19:16:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2958B8245F;
-        Sat,  8 Oct 2022 02:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90EEBC43144;
-        Sat,  8 Oct 2022 02:16:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665195409;
-        bh=fJZiXIczXHKWSWOJREIPZZI4lyDP1osRfKH0d9gMG9w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XJdre88GuzkyX8miOvR5lz7t5nMrVg+RdgltnzIt7wijp9gBMVTJ5Ugj94xyDWOvT
-         R7UFdbISnUHuUSzaVN1xGm8DM8NQ2SA76723qzSFI6O2mVqcAXL0E1P7kRCR+qH8UR
-         yQXckh7ShWuPweU1ibuRee4wrAHXyPfhH8rL7ts5yP505HgqsGK2HFNvQj0akqKl0/
-         gY8Ls0GkczDGLnRi/9nl/29QrOhsVIiSwCoJuylivZHNb7lLUXG0I/K0eMAwaXLNmr
-         YafuAPSA2CNX7ychb2j3Pu9FOXHJIoT3dBu4skrfit9fXonENb7AJxXaH8q56IOB74
-         kPYBqli3C+Zmg==
-Received: by mail-oi1-f180.google.com with SMTP id t79so7511218oie.0;
-        Fri, 07 Oct 2022 19:16:49 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3MtAb5vPqJtOiPBsmbvrLOlQ4VgKAH1wxRMSgK7KmnxYsXXYY6
-        RuAmmbDbjHvSzzIQE3Hf6N6bBn5G+7L3Khgjqgo=
-X-Google-Smtp-Source: AMsMyM4WITxFNS7eyExidUgQiJ5ich4TeNeqmzLVzbaZ1CMDMKDcOXm1GjRQmdAu1Nym8En0zhJcdL3W8uqF1Vnen3U=
-X-Received: by 2002:a05:6808:151f:b0:350:1b5e:2380 with SMTP id
- u31-20020a056808151f00b003501b5e2380mr9188426oiw.112.1665195408646; Fri, 07
- Oct 2022 19:16:48 -0700 (PDT)
+        with ESMTP id S229452AbiJHDKm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Oct 2022 23:10:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16160A2222;
+        Fri,  7 Oct 2022 20:10:38 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MkqnW5LF8zlXhx;
+        Sat,  8 Oct 2022 11:06:07 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 8 Oct 2022 11:10:36 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 8 Oct
+ 2022 11:10:36 +0800
+Message-ID: <6b4ccb6b-c6c2-e0cc-1670-1776877ecf46@huawei.com>
+Date:   Sat, 8 Oct 2022 11:10:36 +0800
 MIME-Version: 1.0
-References: <20221002012451.2351127-1-guoren@kernel.org> <20221002012451.2351127-6-guoren@kernel.org>
- <YzrKQkK4Kfbd7Wik@FVFF77S0Q05N>
-In-Reply-To: <YzrKQkK4Kfbd7Wik@FVFF77S0Q05N>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 8 Oct 2022 10:16:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQTWAGwdOta4_QQx0Q6h2OKjJuz43a_OWt0R9XVe3Rzbw@mail.gmail.com>
-Message-ID: <CAJF2gTQTWAGwdOta4_QQx0Q6h2OKjJuz43a_OWt0R9XVe3Rzbw@mail.gmail.com>
-Subject: Re: [PATCH V6 05/11] riscv: traps: Add noinstr to prevent
- instrumentation inserted
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH v3] ARM: kprobes: move __kretprobe_trampoline to out of
+ line assembler
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>
+CC:     "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        sparkhuang <huangshaobo6@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <llvm@lists.linux.dev>, Naresh Kamboju <naresh.kamboju@linaro.org>,
+        <regressions@lists.linux.dev>, <lkft-triage@lists.linaro.org>,
+        "Linux Kernel Functional Testing" <lkft@linaro.org>,
+        Logan Chien <loganchien@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+References: <202209291607.0MlscIht-lkp@intel.com>
+ <20220930211505.209939-1-ndesaulniers@google.com>
+ <CAKwvOd=0p31f-Yya6S-9xKEv6CtUWpOCRxHO=jG2uk-hZgZ1bQ@mail.gmail.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <CAKwvOd=0p31f-Yya6S-9xKEv6CtUWpOCRxHO=jG2uk-hZgZ1bQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 3, 2022 at 7:41 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Sat, Oct 01, 2022 at 09:24:45PM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Without noinstr the compiler is free to insert instrumentation (think
-> > all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> > yet ready to run this early in the entry path, for instance it could
-> > rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
-> >
-> > Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
-> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/kernel/traps.c | 4 ++--
-> >  arch/riscv/mm/fault.c     | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> > index 635e6ec26938..588e17c386c6 100644
-> > --- a/arch/riscv/kernel/traps.c
-> > +++ b/arch/riscv/kernel/traps.c
-> > @@ -92,9 +92,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
-> >  }
-> >
-> >  #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
-> > -#define __trap_section               __section(".xip.traps")
-> > +#define __trap_section __noinstr_section(".xip.traps")
->
-> I assume that for CONFIG_XIP_KERNEL, KPROBES is not possible, and so functions
-> marked with __trap_section don't need to be excluded from kprobes.
->
-> Is that assumption correct, or does something need to be done to inhibit that?
-Correct!
+Hi,
 
-In riscv, "we select HAVE_KPROBES if !XIP_KERNEL", so don't worry
-about that. I don't think we could enable kprobe for XIP_KERNEL in the
-future.
+Sorry for late reply because I just found this thread before the long 
+vacation so I didn't have much time to deal with it.
 
->
-> Thanks,
-> Mark.
->
-> >  #else
-> > -#define __trap_section
-> > +#define __trap_section noinstr
-> >  #endif
-> >  #define DO_ERROR_INFO(name, signo, code, str)                                \
-> >  asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
-> > diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> > index f2fbd1400b7c..c7829289e806 100644
-> > --- a/arch/riscv/mm/fault.c
-> > +++ b/arch/riscv/mm/fault.c
-> > @@ -203,7 +203,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
-> >   * This routine handles page faults.  It determines the address and the
-> >   * problem, and then passes it off to one of the appropriate routines.
-> >   */
-> > -asmlinkage void do_page_fault(struct pt_regs *regs)
-> > +asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
-> >  {
-> >       struct task_struct *tsk;
-> >       struct vm_area_struct *vma;
-> > --
-> > 2.36.1
-> >
+On 2022/10/7 4:35, Nick Desaulniers wrote:
+> On Fri, Sep 30, 2022 at 2:15 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+>> commit 1069c1dd20a3 ("ARM: 9231/1: Recover kretprobes return address for
+>> EABI stack unwinder")
+>> tickled a bug in clang's integrated assembler where the .save and .pad
+>> directives must have corresponding .fnstart directives. The integrated
+>> assembler is unaware that the compiler will be generating the .fnstart
+>> directive.
+>>
+>>    arch/arm/probes/kprobes/core.c:409:30: error: .fnstart must precede
+>>    .save or .vsave directives
+>>    <inline asm>:3:2: note: instantiated into assembly here
+>>    .save   {sp, lr, pc}
+>>    ^
+>>    arch/arm/probes/kprobes/core.c:412:29: error: .fnstart must precede
+>>    .pad directive
+>>    <inline asm>:6:2: note: instantiated into assembly here
+>>    .pad    #52
+>>    ^
+>>
+> Chen, I noticed that your patch was discarded; it's not in linux-next today.
+> https://lore.kernel.org/linux-arm-kernel/YzHPGvhLkdQcDYzx@shell.armlinux.org.uk/
+> https://www.arm.linux.org.uk/developer/patches/viewpatch.php?id=9231/1
+> How would you like to proceed here?
+
+Since 6.1 is closing now. Let's reorganize everything and queue it up 
+for -next for 6.2
+
+> I think moving this out of line, incorporating Ard's feedback, then
+> putting the UNWIND directives on top might be the way to go. What do
+> you think?
+
+This way looks good to me.
+
+How about making a set for this,  to make everything more clear:
+
+1. Move this out of line
+
+2. Apply the feature, test with gcc & clang
+
+3. Other cleaning, or merge with 2 if the cleaning is tiny.
+
+I'll send another version for this, rebased to 6.1-rc1
+
+Thanks for your time!
 
 
+Best,
 
--- 
-Best Regards
- Guo Ren
+Chen
+
+
