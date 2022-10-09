@@ -2,93 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D165F8AD1
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Oct 2022 13:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04325F8AD4
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Oct 2022 13:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiJILKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Oct 2022 07:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
+        id S229683AbiJILN7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Oct 2022 07:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiJILKD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Oct 2022 07:10:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D96C11A2A;
-        Sun,  9 Oct 2022 04:10:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A99860B36;
-        Sun,  9 Oct 2022 11:10:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C4AC433D6;
-        Sun,  9 Oct 2022 11:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665313801;
-        bh=V01vuyqwZci7AkmO4Lse2j82kGbZfEmmOuRsGCe1P20=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Q7Aw9qmZHSl9OGgYyw08jxGtR0iMBzEhEFIMXWq3XaNu+wDmMfa9RUSjiGLo7bZrN
-         t8q4rV6cspXHHseXOy96xm/yVymPS07vn/eoSPGNQDFwpSq6Zwi4rYZXOVEV0JcpS9
-         HmoOpjIKQXJfibati0xigSURmRNKZfCqISJLhIDs2Tib8+8B7k3i9NRiOAiRORlOVM
-         Ymrc4ARUtx7L8iaxrnpY7Gsy90F3q9nUlUUSp0M/rCDMmMhZmeU05Y9IcOYCX/z2RX
-         cs+lkBtWU40Kzb/lUD5E6LIfHPyhvWV2G4P+qFYKqGTVhSYZe5m/H5MQu1mxqEhYjX
-         V6QPMyrFHePAg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01C7A5C0546; Sun,  9 Oct 2022 04:10:00 -0700 (PDT)
-Date:   Sun, 9 Oct 2022 04:10:00 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] docs/memory-barriers.txt: Add a missed closing
- parenthesis
-Message-ID: <20221009111000.GQ4196@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221008174928.13479-1-sj@kernel.org>
- <20221008174928.13479-2-sj@kernel.org>
+        with ESMTP id S229663AbiJILN5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Oct 2022 07:13:57 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D9027141;
+        Sun,  9 Oct 2022 04:13:55 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MlfSg0MX3z1P75B;
+        Sun,  9 Oct 2022 19:09:23 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 9 Oct 2022 19:13:53 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sun, 9 Oct 2022 19:13:52 +0800
+Message-ID: <10ada8f0-0931-b6a6-e240-fc8b500e578d@huawei.com>
+Date:   Sun, 9 Oct 2022 19:13:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221008174928.13479-2-sj@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 03/11] mm/ioremap: change the return value of
+ io[re|un]map_allowed and rename
+Content-Language: en-US
+To:     Baoquan He <bhe@redhat.com>, <linux-kernel@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, <akpm@linux-foundation.org>,
+        <hch@infradead.org>, <agordeev@linux.ibm.com>,
+        <christophe.leroy@csgroup.eu>, <schnelle@linux.ibm.com>,
+        <David.Laight@ACULAB.COM>, <shorne@gmail.com>,
+        "Arnd Bergmann" <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221009103114.149036-1-bhe@redhat.com>
+ <20221009103114.149036-4-bhe@redhat.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20221009103114.149036-4-bhe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Oct 08, 2022 at 10:49:25AM -0700, SeongJae Park wrote:
-> Description of io_stop_wc(), which added by commit d5624bb29f49
-> ("asm-generic: introduce io_stop_wc() and add implementation for
-> ARM64"), have unclosed parenthesis.  This commit closes it.
-> 
-> Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
-> Signed-off-by: SeongJae Park <sj@kernel.org>
 
-I have pulled this in, good eyes, and thank you!
-
-On the other three, we have traditionally asked for an ack from a
-Korean speaker.  Do we still feel the need to do this?
-
-							Thanx, Paul
-
-> ---
->  Documentation/memory-barriers.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index 06f80e3785c5..cc621decd943 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1966,7 +1966,7 @@ There are some more advanced barrier functions:
->   (*) io_stop_wc();
->  
->       For memory accesses with write-combining attributes (e.g. those returned
-> -     by ioremap_wc(), the CPU may wait for prior accesses to be merged with
-> +     by ioremap_wc()), the CPU may wait for prior accesses to be merged with
->       subsequent ones. io_stop_wc() can be used to prevent the merging of
->       write-combining memory accesses before this macro with those after it when
->       such wait has performance implications.
-> -- 
-> 2.17.1
-> 
+On 2022/10/9 18:31, Baoquan He wrote:
+> Currently, hooks ioremap_allowed() and iounmap_allowed() are used to
+> check if it's qualified to do ioremap, and now this is done on ARM64.
+> However, in oder to convert more architectures to take GENERIC_IOREMAP
+> method, several more things need be done in those two hooks:
+>   1) The io address mapping need be handled specifically on architectures,
+>      e.g arc, ia64, s390;
+>   2) The original physical address passed into ioremap_prot() need be
+>      fixed up, e.g arc;
+>   3) The 'prot' passed into ioremap_prot() need be adjusted, e.g on arc
+>      and xtensa.
+>
+> To handle these three issues,
+>
+>   1) Rename ioremap_allowed() and iounmap_allowed() to arch_ioremap()
+>      and arch_iounmap() since the old name can't reflect their
+>      functionality after change;
+>   2) Change the return value of arch_ioremap() so that arch can add
+>      specifical io address mapping handling inside and return the maped
+>      address. Now their returned value means:
+>      ===
+>      arch_ioremap() return a bool,
+pointer?
+>        - IS_ERR means return an error
+>        - 0 means continue to remap
+>        - a non-zero, non-IS_ERR pointer is returned directly
+>      arch_iounmap() return a bool,
+>        - true means continue to vunmap
+>        - false means skip vunmap and return directly
+...
+>   /*
+> diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+> index a68f8fbf423b..2ae16906f3be 100644
+> --- a/include/asm-generic/io.h
+> +++ b/include/asm-generic/io.h
+> @@ -1049,25 +1049,26 @@ static inline void iounmap(volatile void __iomem *addr)
+>   
+>   /*
+>    * Arch code can implement the following two hooks when using GENERIC_IOREMAP
+> - * ioremap_allowed() return a bool,
+> - *   - true means continue to remap
+> - *   - false means skip remap and return directly
+> - * iounmap_allowed() return a bool,
+> + * arch_ioremap() return a bool,
+ditto...
+>   	area = get_vm_area_caller(size, VM_IOREMAP,
+>   			__builtin_return_address(0));
+>   	if (!area)
+> @@ -52,7 +57,7 @@ void iounmap(volatile void __iomem *addr)
+>   {
+>   	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
+>   
+> -	if (!iounmap_allowed(vaddr))
+> +	if (!arch_iounmap((void __iomem *)addr))
+vaddr?
+>   		return;
+>   
+>   	if (is_vmalloc_addr(vaddr))
