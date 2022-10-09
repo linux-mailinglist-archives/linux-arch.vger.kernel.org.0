@@ -2,104 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFE65F8AA0
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Oct 2022 12:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D165F8AD1
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Oct 2022 13:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbiJIKcq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Oct 2022 06:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S230074AbiJILKF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Oct 2022 07:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiJIKc0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Oct 2022 06:32:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390502E6A8
-        for <linux-arch@vger.kernel.org>; Sun,  9 Oct 2022 03:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665311538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h0wz1H1leA7CuWV687C4HqKWq96HEonICKC1esEFR0M=;
-        b=U0TE9ILg9Q3gAWolGbTawyzTVwGLbHIp+FiPYsCfgYigKvzWwoIybC3i6vIshBPHMI6zuC
-        dVWB1IYgEI86oxYGzxZsL/8U8waM/ltzHDXnBdMlS+72/TJdCrrtTIJ5vFpDiYDnZrOqWN
-        oudX87bKhiFgwNQyb18hXzg/X7Ei/N4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-271-HV8un_y7MuqyqxHBgOZLEg-1; Sun, 09 Oct 2022 06:32:12 -0400
-X-MC-Unique: HV8un_y7MuqyqxHBgOZLEg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S230019AbiJILKD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Oct 2022 07:10:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D96C11A2A;
+        Sun,  9 Oct 2022 04:10:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5265729AB3FD;
-        Sun,  9 Oct 2022 10:32:11 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-36.pek2.redhat.com [10.72.12.36])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B8D640D298B;
-        Sun,  9 Oct 2022 10:31:48 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        christophe.leroy@csgroup.eu, schnelle@linux.ibm.com,
-        David.Laight@ACULAB.COM, shorne@gmail.com, bhe@redhat.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
-Subject: [PATCH v3 04/11] mm: ioremap: allow ARCH to have its own ioremap definition
-Date:   Sun,  9 Oct 2022 18:31:07 +0800
-Message-Id: <20221009103114.149036-5-bhe@redhat.com>
-In-Reply-To: <20221009103114.149036-1-bhe@redhat.com>
-References: <20221009103114.149036-1-bhe@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A99860B36;
+        Sun,  9 Oct 2022 11:10:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C4AC433D6;
+        Sun,  9 Oct 2022 11:10:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665313801;
+        bh=V01vuyqwZci7AkmO4Lse2j82kGbZfEmmOuRsGCe1P20=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Q7Aw9qmZHSl9OGgYyw08jxGtR0iMBzEhEFIMXWq3XaNu+wDmMfa9RUSjiGLo7bZrN
+         t8q4rV6cspXHHseXOy96xm/yVymPS07vn/eoSPGNQDFwpSq6Zwi4rYZXOVEV0JcpS9
+         HmoOpjIKQXJfibati0xigSURmRNKZfCqISJLhIDs2Tib8+8B7k3i9NRiOAiRORlOVM
+         Ymrc4ARUtx7L8iaxrnpY7Gsy90F3q9nUlUUSp0M/rCDMmMhZmeU05Y9IcOYCX/z2RX
+         cs+lkBtWU40Kzb/lUD5E6LIfHPyhvWV2G4P+qFYKqGTVhSYZe5m/H5MQu1mxqEhYjX
+         V6QPMyrFHePAg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 01C7A5C0546; Sun,  9 Oct 2022 04:10:00 -0700 (PDT)
+Date:   Sun, 9 Oct 2022 04:10:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] docs/memory-barriers.txt: Add a missed closing
+ parenthesis
+Message-ID: <20221009111000.GQ4196@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221008174928.13479-1-sj@kernel.org>
+ <20221008174928.13479-2-sj@kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221008174928.13479-2-sj@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Architectures like xtensa, arc, can be converted to GENERIC_IOREMAP,
-to take standard ioremap_prot() and ioremap_xxx() way. But they have
-ARCH specific handling for ioremap() method, than standard ioremap()
-method.
+On Sat, Oct 08, 2022 at 10:49:25AM -0700, SeongJae Park wrote:
+> Description of io_stop_wc(), which added by commit d5624bb29f49
+> ("asm-generic: introduce io_stop_wc() and add implementation for
+> ARM64"), have unclosed parenthesis.  This commit closes it.
+> 
+> Fixes: d5624bb29f49 ("asm-generic: introduce io_stop_wc() and add implementation for ARM64")
+> Signed-off-by: SeongJae Park <sj@kernel.org>
 
-In oder to convert them to take GENERIC_IOREMAP method, allow these
-architecutres to have their own ioremap definition.
+I have pulled this in, good eyes, and thank you!
 
-This is a preparation patch, no functionality change.
+On the other three, we have traditionally asked for an ack from a
+Korean speaker.  Do we still feel the need to do this?
 
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-arch@vger.kernel.org
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
----
- include/asm-generic/io.h | 3 +++
- 1 file changed, 3 insertions(+)
+							Thanx, Paul
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 2ae16906f3be..8878914579d8 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1078,11 +1078,14 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 			   unsigned long prot);
- void iounmap(volatile void __iomem *addr);
- 
-+#ifndef ioremap
-+#define ioremap ioremap
- static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
- {
- 	/* _PAGE_IOREMAP needs to be supplied by the architecture */
- 	return ioremap_prot(addr, size, _PAGE_IOREMAP);
- }
-+#endif
- #endif /* !CONFIG_MMU || CONFIG_GENERIC_IOREMAP */
- 
- #ifndef ioremap_wc
--- 
-2.34.1
-
+> ---
+>  Documentation/memory-barriers.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index 06f80e3785c5..cc621decd943 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1966,7 +1966,7 @@ There are some more advanced barrier functions:
+>   (*) io_stop_wc();
+>  
+>       For memory accesses with write-combining attributes (e.g. those returned
+> -     by ioremap_wc(), the CPU may wait for prior accesses to be merged with
+> +     by ioremap_wc()), the CPU may wait for prior accesses to be merged with
+>       subsequent ones. io_stop_wc() can be used to prevent the merging of
+>       write-combining memory accesses before this macro with those after it when
+>       such wait has performance implications.
+> -- 
+> 2.17.1
+> 
