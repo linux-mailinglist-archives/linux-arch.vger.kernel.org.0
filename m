@@ -2,103 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9A85F9E4F
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Oct 2022 14:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB505F9E96
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Oct 2022 14:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiJJMFT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Oct 2022 08:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S231381AbiJJMTR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Oct 2022 08:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiJJMFR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Oct 2022 08:05:17 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D384746DA9;
-        Mon, 10 Oct 2022 05:05:14 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 7C7982B06795;
-        Mon, 10 Oct 2022 08:05:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 10 Oct 2022 08:05:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665403513; x=1665407113; bh=YTwEq0FuNB
-        DUiayerqkRMfFBTk/XwiZ5UcKY7hh9tes=; b=m0mau8NTnitQZydqPCyzPvsxat
-        kiOKAfvhVdcNmQfMAuTPtYBM2lvXwNHDTQjxd/M4txAqGJ3m8rAIzUUsEqdQ5l8e
-        2hwqM4QS/MDcgN/gdXV2HtY1gbH1oFEOeuaAjRbfVM8nBCGXzqI2Mcx7eTOekGNc
-        MohyzVNr3WLnyTnWftq996PGZ+TTZr8o8eBStmDi03n2Vpo6bNygt688vEVy4U51
-        YdktG21W/pIKxyx/rrMvpoyOXtVXW19YxR40KdxptlI+NKZ+/2U6im5B8428uCin
-        NGS+CdowzRCGpUgRfTy97lNXIoBkMGZLdYHWZMo/MvdP+HOGKOQmPbAvqWow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665403513; x=1665407113; bh=YTwEq0FuNBDUiayerqkRMfFBTk/X
-        wiZ5UcKY7hh9tes=; b=XzTlKwew07gMwGudCG/jIWNdJzyMJfrh08OnzsLgr/Nh
-        LLOlUmI4YCNTo82pL9hSLF4x10rri/f6Y5fj2gJC4tEJgY+8jcYhVMMOrX0JQf8O
-        dVFTK+PKlVri/kGXZ44uL1iItOL2qwtY7HnX5ioZRT634+xFDzA6TAF+0CkzSPTj
-        QYRyYFNR+AHTkPFRCuXIHEVM876+wyFHxZ9ksPwmeLfn9+4vnsYq7o3QK/sDsBmg
-        cP8LU+XNZhM4CMLvsyK3cC9SiDPNUenqR1soU43DscIOp/guhd/8z6o9WfJAj8fC
-        6nwLS1m+3UNsrZ9pNI6DtQnNZFc50DzH0/iOf+sT7A==
-X-ME-Sender: <xms:eApEY2h_a2NdBdMRPkYsTd5LFKIb11gQM0EtLmQnG13YulQpZSLVeg>
-    <xme:eApEY3DLEtXLRU0KPEEbOYUOb8TX-MCo3Plsl4WeWq2ylE9j5GdAsPgytXxyBhnKq
-    fuG1er7Bwt1dpFIupQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejgedggeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:eApEY-GWZz7WfqlbWCBYtZjYr6OsImE-FJ-l8F38T8x7Jge9xXAkNA>
-    <xmx:eApEY_TP-B1CkJJMuKcYZC4vZhkrsMz8X4Gof0sma22nntDtuf8Odg>
-    <xmx:eApEYzyH-dbXFYzq7h5xnJWirKBnRxNMUPIJuN4gouGp9TA5iwqclg>
-    <xmx:eQpEY6mO13uF-udZJGXL-Vt2x06vPvy0iQcoHdZH5VCwllUrzqVUDd2-TLY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 55465B60086; Mon, 10 Oct 2022 08:05:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1015-gaf7d526680-fm-20220929.001-gaf7d5266
-Mime-Version: 1.0
-Message-Id: <03e79306-1b6a-48a9-b851-d9be057bf83e@app.fastmail.com>
-In-Reply-To: <20221010115620.779812-1-chenhuacai@loongson.cn>
-References: <20221010115620.779812-1-chenhuacai@loongson.cn>
-Date:   Mon, 10 Oct 2022 14:04:52 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Huacai Chen" <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
-        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Mark __xchg() and __cmpxchg() as __always_inline
+        with ESMTP id S230384AbiJJMTR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Oct 2022 08:19:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B0D1901C
+        for <linux-arch@vger.kernel.org>; Mon, 10 Oct 2022 05:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665404354;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vuVFVTcNy3PvU+4gEYPhzjX6GgrNG/BY4EXShYmdUcQ=;
+        b=gFSOsuIhrtRLHWjL0DS2bVPtrratVW2oTgiPwq6VNbbkUirG6uzIlH9S1hR3viaR0M6C+q
+        eLgCrqbZ/1u0vUNplR+c4BZz0/09jVQjf9RYIpCrnnlj64AlngZsfM7vPjsyqtYcr/S3FB
+        ovlh/V+RbNpIm7WQg6RlH3NIpdE8WJw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-cHpdmPekN6WixYccXEvHVw-1; Mon, 10 Oct 2022 08:19:11 -0400
+X-MC-Unique: cHpdmPekN6WixYccXEvHVw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF8433810D22;
+        Mon, 10 Oct 2022 12:19:09 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.124])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6FBAE401D45;
+        Mon, 10 Oct 2022 12:19:02 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+        <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+Date:   Mon, 10 Oct 2022 14:19:00 +0200
+In-Reply-To: <20220929222936.14584-2-rick.p.edgecombe@intel.com> (Rick
+        Edgecombe's message of "Thu, 29 Sep 2022 15:28:58 -0700")
+Message-ID: <87ilkr27nv.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 10, 2022, at 1:56 PM, Huacai Chen wrote:
-> Commit ac7c3e4ff401 ("compiler: enable CONFIG_OPTIMIZE_INLINING
-> forcibly") allows compiler to uninline functions marked as 'inline'.
-> In case of __xchg()/__cmpxchg() this would cause to reference
-> BUILD_BUG(), which is an error case for catching bugs and will not
-> happen for correct code, if __xchg()/__cmpxchg() is inlined.
->
-> This bug can be produced with CONFIG_DEBUG_SECTION_MISMATCH enabled,
-> and the solution is similar to below commits:
-> 46f1619500d0225 ("MIPS: include: Mark __xchg as __always_inline"),
-> 88356d09904bc60 ("MIPS: include: Mark __cmpxchg as __always_inline").
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+* Rick Edgecombe:
 
-Looks good to me,
+> +To build a CET-enabled kernel, Binutils v2.31 and GCC v8.1 or LLVM v10.0.1
+> +or later are required. To build a CET-enabled application, GLIBC v2.28 or
+> +later is also required.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Uhm, I think we are using binutils 2.30 with extra fixes.  I hope that
+these binaries are still valid.
+
+More importantly, glibc needs to be configured with --enable-cet
+explicitly (unless the compiler defaults to CET).  The default glibc
+build with a default GCC will produce dynamically-linked executables
+that disable CET (when running on later/differently configured glibc
+builds).  The statically linked object files are not marked up for CET
+in that case.
+
+I think the goal is to support the new kernel interface for actually
+switching on SHSTK in glibc 2.37.  But at that point, hopefully all
+those existing binaries can start enjoying the STSTK benefits.
+
+Thanks,
+Florian
+
