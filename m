@@ -2,413 +2,215 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F8E5FAADF
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Oct 2022 04:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0AE5FAF7F
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Oct 2022 11:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJKC6p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Oct 2022 22:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
+        id S230044AbiJKJhh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Oct 2022 05:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiJKC6i (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Oct 2022 22:58:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA5B7D1CC;
-        Mon, 10 Oct 2022 19:58:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 632D26108E;
-        Tue, 11 Oct 2022 02:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B7AC4347C;
-        Tue, 11 Oct 2022 02:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665457115;
-        bh=CD4j8DKFfvqHfZFrqt9Q08OKyaVmg+9Q5G7rs7g8FyI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n67juQI7xhtp4+FD1TaV+LZ8/Qj+RbpkP9p97PXMx3fnKLvjrTDfZBQ0C6Wy/qHD+
-         ljP7mwmzUTMcvnaY+LA0GqPHa8SzUR1f/8MBuiLZ600Wp93twq8n1PSrVhBOSkwhfQ
-         VPfCkXB4Rh2jXx8xwoTAqihekD/JlWcmNbHiaEvU4Y19aEl89Mz/k/KnQASeS53bcO
-         5fMKviSS6AQiYm4aSi2gmaePpYbi0EKs/aKdE6wuVdNrCm8QVn8RbiFOKmrQXL2375
-         h6xg44Fydw1nMqq345XSNhmRWgDwUUXeC2DwZAb6D+f/Qxr/WMB0vF5qBCtPpgy8Ne
-         wZI+0LdVT8i9w==
-From:   SeongJae Park <sj@kernel.org>
-To:     paulmck@kernel.org, corbet@lwn.net
-Cc:     lyj7694@gmail.com, linux-doc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 3/3] docs/memory-barriers.txt/kokr: Fix confusing name of 'data dependency barrier'
-Date:   Mon, 10 Oct 2022 19:58:09 -0700
-Message-Id: <20221011025809.25821-4-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221011025809.25821-1-sj@kernel.org>
-References: <20221011025809.25821-1-sj@kernel.org>
+        with ESMTP id S229926AbiJKJhF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Oct 2022 05:37:05 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE16A816B6;
+        Tue, 11 Oct 2022 02:37:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665481024; x=1697017024;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nWubjhDs6KyFq9WHIsJpVZNfhlC96MmddFC4Vmw55G8=;
+  b=Shx5E86FrFGsFnl1UJe//ffCkBydEcWmmLa5T5wxkT5noKKXdmQDv6rN
+   isrrsgvrzg1Y+mkLu7ODUI/F4mpEBLrLRLseUiQcG1+2xnQ1B7evINebs
+   xeC97H9Vxx6xxgOGwm7x9F5dUSBMW9VJ5OQtxg+RksOhz2RLvNem9Y6e5
+   qxBHGhWq0N6Vprx5mDOw0ZY4cOuBnp0dgef/YXKqE6dC/5yskTjGy4u6S
+   d2Wqo4fjBOHP6vEisX9jPhiZ7ewLH93ZbWsbe6lEMW0BJse8737SJtLfZ
+   zgeCEIhhUw1fKeP6ZOgRodbXmr2FwnJAVJq1DSmKMaU3966kGDXeEMU8w
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="366450034"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="366450034"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 02:37:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10496"; a="694992304"
+X-IronPort-AV: E=Sophos;i="5.95,176,1661842800"; 
+   d="scan'208";a="694992304"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Oct 2022 02:37:03 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 02:37:02 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 11 Oct 2022 02:36:57 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 11 Oct 2022 02:36:57 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 11 Oct 2022 02:36:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HlA/lQ3RBPClNWVd5Y44suBA40B2pb+1GaHmzE4pxsPkP9KP7VUXJU8OcXbpcZc1149qOTKVDHGc40lUXEFgn+RuE/U5seYRA/oLODbWljZ929vBA2LiwB3q5PQDQqVvpT8DLeeJ5F859ID6uUsxcZMUuRF9XS5zfy0YdJEbhdO5+CsWhM7fFk/8hKTCjnQLfoGOHC59fxbL7ZSwsB9ZE4PXS4kI85jEb5o4BaWaGqHw8R7DU2jmfaD44HXHuC0T/vSjBv1ib99EJDhoZO8bvnhgoSeSiJEOdYJwHQX11snASfxeTZaX/qa3PgHteSfd909EwUPCFkE7qUErBJ818A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=euuwYbijzkOGwTNfca6bV+9g2S5aeow5fMBKOq+SFI4=;
+ b=k+j6hJ1yPyxU8j6NvVuvujj4Xw6EQjpECc60QS+GndiZSOqldspWBqNuwQiQ/vx+nGEP4nsX8J2tNAm//Ly9FtNSWETlc7YlPxdq8Y70w0poSDfbxADwqrUGJFRKpxNO6d4Ey076dBj8y6hpx726O+9rW8b1Rdp5bcjSd25q8QtDHzxHdSqT5GYJ84L2azEAozxoNI5lgwDsJvUBa6/YqT0c4LyRQMhEEjkCPGksRoX5XpUODWi0Q9VNLJOsIoZ252c4FcQJi5kIXAHqy+Q4eZfi8ll8/6jBHG0pC8/57xwrWWp7EAi0A/tPsThFGLA0pQQsPVGMRghm+owz5PU4FQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB6397.namprd11.prod.outlook.com (2603:10b6:8:ca::12) by
+ SA2PR11MB5017.namprd11.prod.outlook.com (2603:10b6:806:11e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.21; Tue, 11 Oct
+ 2022 09:36:24 +0000
+Received: from DS0PR11MB6397.namprd11.prod.outlook.com
+ ([fe80::3a1b:7b6b:aded:fbfc]) by DS0PR11MB6397.namprd11.prod.outlook.com
+ ([fe80::3a1b:7b6b:aded:fbfc%5]) with mapi id 15.20.5654.025; Tue, 11 Oct 2022
+ 09:36:24 +0000
+Message-ID: <f09f2fb1-ae86-5419-4361-bdd8f8a22e11@intel.com>
+Date:   Tue, 11 Oct 2022 17:36:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.3.2
+Subject: Re: [kbuild] b3830bad81: System_halted
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+CC:     <lkp@lists.01.org>, <lkp@intel.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        "Michal Marek" <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20220928063947.299333-3-masahiroy@kernel.org>
+ <202210090942.a159fe4-yujie.liu@intel.com>
+ <CAK7LNASUhDMo72eNge_GvdfbmOkpBCJA88Xw=_V69jcf+_072Q@mail.gmail.com>
+From:   Yujie Liu <yujie.liu@intel.com>
+In-Reply-To: <CAK7LNASUhDMo72eNge_GvdfbmOkpBCJA88Xw=_V69jcf+_072Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0129.apcprd02.prod.outlook.com
+ (2603:1096:4:188::19) To DS0PR11MB6397.namprd11.prod.outlook.com
+ (2603:10b6:8:ca::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB6397:EE_|SA2PR11MB5017:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68af87f9-1a85-4433-4d8d-08daab6c0feb
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eUqyEWb3A1ldp/oPcmXj7646jbx4QL36oBMY/od0y/6VQLOA2aXrMzEwDrtmDkPZbP/37LmYzwX9aF6qCAmHq025rP1LVPzZyoZwMZza2BQaXDhNkl7YKDNFnH47/jM2ZQdWFear+PAdS8RG4cf/A0rnh1+Xhp3aAsTsKTPCj9refI4Fi+Uy20OTztHMTrIO+CevIdJ7ewUwYOumkMUqQCgemHnXjMvfDw27qFVaRrBhyWgNOGinT3lVrBCP2SmpZy7f8m1fZjsbmEyTKAymOXCpt+ryFB4t7jpMAzi2wBj0b8+mo3K7+3Qw93cxMprUnUYee+tUnm7sZFmPlfQ52NPL36BOsAHPoLKu3zspIVjQeBQ0Ow68oX2gTwkk3rGxNZC3Zfwj8fNG18RE7OXfG1JaFtT95cbwlLa/ZXt4oDvRRYx1BfXr6yNTSUiV6bGAPbtNwFRgqgI6UeK+pX0V0XuO5vWB6s/TCU1K+YEdUsfQJNexLx4bvNACRkUVruHV90BrBFxbJAihk++yNEeirG44o4ifMzfUvDPr+U9J8/K45ZLyjcnQc0jmubxL8iwRABKndfD6m9hkTgMyGu1kvOtWcbsU6RM82xr5YjBFZtCKDUTKocqiviCST8DDqUbsHAgSsCEAKf9mmmpCaTe+kw1P47SEBD+yODBGavD9+12uyGuYOoEPaYmrbl9CECGOTCByxhneD8ZhN+9P9de3qVUKQa/cEIKUuKODV7d0xuuhagubwSrrv1TnNGBSxO0sLDy5fV7VJp3IstvUnMVkjyx3PunRUA7mBa89HugoF5bgDVrLXoBgvUOGaCUxdz4DIC537aL6T3ou1zPQa2PV0K7lE5rkV/RvchcGYTvR5HN2G2jDVz8AS4lXsamLgfVF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB6397.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(396003)(366004)(376002)(346002)(451199015)(6512007)(26005)(7416002)(31686004)(6916009)(316002)(38100700002)(6486002)(8676002)(54906003)(82960400001)(36756003)(31696002)(86362001)(83380400001)(6506007)(2616005)(6666004)(53546011)(186003)(966005)(478600001)(5660300002)(44832011)(2906002)(8936002)(41300700001)(66946007)(4326008)(66476007)(66556008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmZFL0ZwUUxYQmM4WXd3eHJnTUhsU1d5Tm51eE9kNnVHVlpucEJOV2VUNDEv?=
+ =?utf-8?B?Sjk3N0JqZlpPMnBkR0psR2VIY1AwTjRNTVJWMmJqRVVPQ1A3NU1ldDd1Wlhk?=
+ =?utf-8?B?aTBjSTNZK2NKMkxSUWVmaVpoNzVtS1YvdXdIU2p2TGQ5K2xaTXV0U0xGdU9u?=
+ =?utf-8?B?Q25HNE5ScFo5amttbjNjQjZLRzdKQjdQZUtkWWZXWUhEallIMFFxVVhJcFNW?=
+ =?utf-8?B?UzRzUXpQM1JjUmQ4UFpEZUhRUldTdG8wN3hhN2RYcVNlWXMwdjgyd2xpaU5C?=
+ =?utf-8?B?VXJMeDNjTEVTOStJcGoza1hnRkxXb3MxaHRMaTBkVGZ6V2RjZ0haNzlnL1R3?=
+ =?utf-8?B?WW1Bcmx3cDBNNWZxTXlBVUgvNXA1VVhiN0JZRFdPcUtmUEd2eDkxaUlHVmZw?=
+ =?utf-8?B?NVhzTzAyak5QejJrUytneFJGbERMbjhTWFNEM3VGUkpMUTJvWmowOG01dG9j?=
+ =?utf-8?B?djdUekI1ZzkvZ1N1Qm8rZUx4VisvdFFnQmN4V09DaXZYYUZucVUxekl0c0JS?=
+ =?utf-8?B?MHc4MWE4MFU2My9BN2lubS9mMUU4ak4xYzM1L1RTbjlySFBtKzNCV3ZvaE5v?=
+ =?utf-8?B?K2xJQjdlNkpGQk5IZU9VVUhCVFB0Sm1jajk5MzVXcTAvQkdReEZXY2oxT1ZR?=
+ =?utf-8?B?TUY1Zm4yUWNBd3gwdlJocHQra1lvWkc1OU9sNmZwM0NranZYWnVGeit5VWF2?=
+ =?utf-8?B?REttQW96bmt0bDVpeUZsSTdFQzFQQnJocmJZelc2dWJRbDRKa2FaWDBWanRW?=
+ =?utf-8?B?MXV4ajE2ZlBMdkdDcExmVXJ2cWF4WUd1NGNtSm9FanJqaHh6RWh2MkZEb0F2?=
+ =?utf-8?B?RXZFQWphbXk0OVMzaS9teWVzKzh3QmJRK3Y0S01nZ2c3eEhLMGIybUJpMXNz?=
+ =?utf-8?B?V3BEQVZHUVB6Vm5VWWFWcUU1RUxqc2pkZXJqdVlkMko4bXpENEE4Yk81WXNr?=
+ =?utf-8?B?MXIveFRLVXN4RTZ0dTVXZ0FxK0xYbVdkdGU0M0E5WURoSHpjNzNtK01XbmN5?=
+ =?utf-8?B?ckYwL2IreDY3T2tKUDQyd3lDS3lteGVuT0xQOVRNSWlqYW9IR01HaUZXZjdH?=
+ =?utf-8?B?RU5sbXZBdmc4Vjk4NUhoT2psck00UHNYUFl1cHZWMXV0Sit6TnV6dzFYazVm?=
+ =?utf-8?B?NGM5aWt5NU1KOUdOaWZhalZNSEFXbDQxWGVOUzRadE5CdWVoaWllbFEvVEth?=
+ =?utf-8?B?VXNIK1NmQi84eHh2VWI3L2lnQzZxMWhjdmRXMVZueXJmQ05hOXVMcW00Uk9C?=
+ =?utf-8?B?VlF1QnRMa3pXTHR0KzJPNmdVMVdSOU8wcFFVOWZZR0swV0hmam1QMENMK2pR?=
+ =?utf-8?B?cFBGZzQrcm8yMEJTUVNtVEljUGRUdllOalVwTG9XSUtHclJ0ZDQ2M2RJNmRx?=
+ =?utf-8?B?Tm5KQkJvcnc1RlRmNXhpY3gyNEtYU2pZZkF0OWNCZC9wMnRaRTI0WWxBSGlJ?=
+ =?utf-8?B?Z3JKcXlEUmgyeS9Xb0dpcUk4TkcxUU9jSWRjUk00ZWRHYXFMb1pUU1UwQnNk?=
+ =?utf-8?B?eTY5a0s4OEovSldGN3lzRmNxTXprcUhDUUhYdHc2cGMxY1dPaFNLSmpNUHR3?=
+ =?utf-8?B?K1czVVZXblRvSGxpV0YzbzQyVWFxT1VUSG5jSy84bXNNUnl0b0M3SHhHU3Za?=
+ =?utf-8?B?VEVJWnJ5LzBJeEJmaExtM3hYeUpKUmdmRHpoNVpvYnZ0R2NKMFF5NGxTZUo5?=
+ =?utf-8?B?alZBZjFyR1RzWmd2bU56My9qQlNvUit5Zm9rMnBLWDgzUlpibXp3dDhvOUhr?=
+ =?utf-8?B?a0FjMzdoWFBvR2RUQWxISlRzVmVpbVQ5RWVhUDJWL0lvVnZ5ckdGOC9XZ1dv?=
+ =?utf-8?B?R1FicEE3YUJ1R3AyMzBacjdueUdqeWlKZm1JN1EremxwdEVzUnduOXczL3lw?=
+ =?utf-8?B?czZFYUY1SGZxK1Qzd0UzSGxnVEV6UTVUTnhUeHh5dFV5RVpRR1RJdG02UE05?=
+ =?utf-8?B?Z2ZvaFF5cys4Ymc2WHRzUzM1Ym02eVExRmdleERqaHVTNkhMbTRTQ0pUckI4?=
+ =?utf-8?B?SlIyUGpBNjl3b2FETjc3c3lwUFFpQzBOdm9HN1FQc1hzajRwSXA5Um82Slkw?=
+ =?utf-8?B?TGNwVlZQRXlJcitUT29kZVZITTNQNG53WE41ZTNONXYrNC8ySmV4UTQ2dVJN?=
+ =?utf-8?Q?1Ki3JYU1R5J8/v88u9EVg7hWe?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68af87f9-1a85-4433-4d8d-08daab6c0feb
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB6397.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2022 09:36:24.1055
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lGdRSxoD8WW4W1bpkGZnNfeJKeYYovuWt4b4pm5yFAH/OczFEbMDQZt341ce6MqkGfIg0a3z3GW1WGFPM0MUSQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5017
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Translate this commit to Korean:
+On 10/11/2022 03:29, Masahiro Yamada wrote:
+> On Sun, Oct 9, 2022 at 10:21 AM kernel test robot <yujie.liu@intel.com> wrote:
+>>
+>> Greeting,
+>>
+>> FYI, we noticed the following commit (built with gcc-11):
+>>
+>> commit: b3830bad81e872632431363853c810c5f652a040 ("[PATCH v3 2/8] kbuild: rebuild .vmlinux.export.o when its prerequisite is updated")
+>> url: https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/Unify-linux-export-h-and-asm-export-h-remove-EXPORT_DATA_SYMBOL-faster-TRIM_UNUSED_KSYMS/20220928-144539
+>> base: https://git.kernel.org/cgit/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+>> patch link: https://lore.kernel.org/linux-kbuild/20220928063947.299333-3-masahiroy@kernel.org
+>>
+>> in testcase: boot
+>>
+>> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+>>
+>> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> 
+> 
+> I think this is a false-positive alarm.
+> 
+> As I replied before [1], I know my patch set is broken.
+> I think 0day bot is testing the patch set I had already retracted.
+> 
+> I only picked up low-hanging fruits with fixes to my tree,
+> and did boot tests.
+> 
+> Please let me know if linux-next is broken.
+> 
+> 
+> [1] : https://lore.kernel.org/linux-kbuild/CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com/T/#t
+> 
 
-    203185f6b1e3 ("Fix confusing name of 'data dependency barrier'")
+Sorry for this false-positive report.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- .../translations/ko_KR/memory-barriers.txt    | 127 ++++++++++--------
- 1 file changed, 69 insertions(+), 58 deletions(-)
+Thanks for the info, we noticed that this patch has been merged into
+linux-next, so we tested below commits:
 
-diff --git a/Documentation/translations/ko_KR/memory-barriers.txt b/Documentation/translations/ko_KR/memory-barriers.txt
-index 38656f6680e2..7165927a708e 100644
---- a/Documentation/translations/ko_KR/memory-barriers.txt
-+++ b/Documentation/translations/ko_KR/memory-barriers.txt
-@@ -80,7 +80,7 @@ Documentation/memory-barriers.txt
- 
-      - 메모리 배리어의 종류.
-      - 메모리 배리어에 대해 가정해선 안될 것.
--     - 데이터 의존성 배리어 (역사적).
-+     - 주소 데이터 의존성 배리어 (역사적).
-      - 컨트롤 의존성.
-      - SMP 배리어 짝맞추기.
-      - 메모리 배리어 시퀀스의 예.
-@@ -217,7 +217,7 @@ Documentation/memory-barriers.txt
- 	P = &B		D = *Q;
- 
- D 로 읽혀지는 값은 CPU 2 에서 P 로부터 읽혀진 주소값에 의존적이기 때문에 여기엔
--분명한 데이터 의존성이 있습니다.  하지만 이 이벤트들의 실행 결과로는 아래의
-+분명한 주소 의존성이 있습니다.  하지만 이 이벤트들의 실행 결과로는 아래의
- 결과들이 모두 나타날 수 있습니다:
- 
- 	(Q == &A) and (D == 1)
-@@ -416,19 +416,19 @@ CPU 에게 기대할 수 있는 최소한의 보장사항 몇가지가 있습니
-      하나씩 요청해 집어넣습니다.  쓰기 배리어 앞의 모든 스토어 오퍼레이션들은
-      쓰기 배리어 뒤의 모든 스토어 오퍼레이션들보다 _앞서_ 수행될 겁니다.
- 
--     [!] 쓰기 배리어들은 읽기 또는 데이터 의존성 배리어와 함께 짝을 맞춰
-+     [!] 쓰기 배리어들은 읽기 또는 주소 의존성 배리어와 함께 짝을 맞춰
-      사용되어야만 함을 알아두세요; "SMP 배리어 짝맞추기" 서브섹션을 참고하세요.
- 
- 
-- (2) 데이터 의존성 배리어.
-+ (2) 주소 의존성 배리어 (역사적).
- 
--     데이터 의존성 배리어는 읽기 배리어의 보다 완화된 형태입니다.  두개의 로드
-+     주소 의존성 배리어는 읽기 배리어의 보다 완화된 형태입니다.  두개의 로드
-      오퍼레이션이 있고 두번째 것이 첫번째 것의 결과에 의존하고 있을 때(예:
-      두번째 로드가 참조할 주소를 첫번째 로드가 읽는 경우), 두번째 로드가 읽어올
-      데이터는 첫번째 로드에 의해 그 주소가 얻어진 뒤에 업데이트 됨을 보장하기
--     위해서 데이터 의존성 배리어가 필요할 수 있습니다.
-+     위해서 주소 의존성 배리어가 필요할 수 있습니다.
- 
--     데이터 의존성 배리어는 상호 의존적인 로드 오퍼레이션들 사이의 부분적 순서
-+     주소 의존성 배리어는 상호 의존적인 로드 오퍼레이션들 사이의 부분적 순서
-      세우기입니다; 스토어 오퍼레이션들이나 독립적인 로드들, 또는 중복되는
-      로드들에 대해서는 어떤 영향도 끼치지 않습니다.
- 
-@@ -436,37 +436,41 @@ CPU 에게 기대할 수 있는 최소한의 보장사항 몇가지가 있습니
-      오퍼레이션들을 던져 넣고 있으며, 거기에 관심이 있는 다른 CPU 는 그
-      오퍼레이션들을 메모리 시스템이 실행한 결과를 인지할 수 있습니다.  이처럼
-      다른 CPU 의 스토어 오퍼레이션의 결과에 관심을 두고 있는 CPU 가 수행 요청한
--     데이터 의존성 배리어는, 배리어 앞의 어떤 로드 오퍼레이션이 다른 CPU 에서
-+     주소 의존성 배리어는, 배리어 앞의 어떤 로드 오퍼레이션이 다른 CPU 에서
-      던져 넣은 스토어 오퍼레이션과 같은 영역을 향했다면, 그런 스토어
--     오퍼레이션들이 만들어내는 결과가 데이터 의존성 배리어 뒤의 로드
-+     오퍼레이션들이 만들어내는 결과가 주소 의존성 배리어 뒤의 로드
-      오퍼레이션들에게는 보일 것을 보장합니다.
- 
-      이 순서 세우기 제약에 대한 그림을 보기 위해선 "메모리 배리어 시퀀스의 예"
-      서브섹션을 참고하시기 바랍니다.
- 
--     [!] 첫번째 로드는 반드시 _데이터_ 의존성을 가져야지 컨트롤 의존성을 가져야
-+     [!] 첫번째 로드는 반드시 _주소_ 의존성을 가져야지 컨트롤 의존성을 가져야
-      하는게 아님을 알아두십시오.  만약 두번째 로드를 위한 주소가 첫번째 로드에
-      의존적이지만 그 의존성은 조건적이지 그 주소 자체를 가져오는게 아니라면,
-      그것은 _컨트롤_ 의존성이고, 이 경우에는 읽기 배리어나 그보다 강력한
-      무언가가 필요합니다.  더 자세한 내용을 위해서는 "컨트롤 의존성" 서브섹션을
-      참고하시기 바랍니다.
- 
--     [!] 데이터 의존성 배리어는 보통 쓰기 배리어들과 함께 짝을 맞춰 사용되어야
-+     [!] 주소 의존성 배리어는 보통 쓰기 배리어들과 함께 짝을 맞춰 사용되어야
-      합니다; "SMP 배리어 짝맞추기" 서브섹션을 참고하세요.
- 
-+     [!] 커널 v5.9 릴리즈에서 명시적 주소 의존성 배리어를 위한 커널 API 들이
-+     삭제되었습니다.  오늘날에는 공유된 변수들의 로드를 표시하는 READ_ONCE() 나
-+     rcu_dereference() 와 같은 API 들은 묵시적으로 주소 의존성 배리어를 제공합니다.
-+
- 
-  (3) 읽기 (또는 로드) 메모리 배리어.
- 
--     읽기 배리어는 데이터 의존성 배리어 기능의 보장사항에 더해서 배리어보다
--     앞서 명시된 모든 LOAD 오퍼레이션들이 배리어 뒤에 명시되는 모든 LOAD
-+     읽기 배리어는 주소 의존성 배리어 기능의 보장사항에 더해서 배리어보다 앞서
-+     명시된 모든 LOAD 오퍼레이션들이 배리어 뒤에 명시되는 모든 LOAD
-      오퍼레이션들보다 먼저 행해진 것으로 시스템의 다른 컴포넌트들에 보여질 것을
-      보장합니다.
- 
-      읽기 배리어는 로드 오퍼레이션에 행해지는 부분적 순서 세우기입니다; 스토어
-      오퍼레이션에 대해서는 어떤 영향도 끼치지 않습니다.
- 
--     읽기 메모리 배리어는 데이터 의존성 배리어를 내장하므로 데이터 의존성
--     배리어를 대신할 수 있습니다.
-+     읽기 메모리 배리어는 주소 의존성 배리어를 내장하므로 주소 의존성 배리어를
-+     대신할 수 있습니다.
- 
-      [!] 읽기 배리어는 일반적으로 쓰기 배리어들과 함께 짝을 맞춰 사용되어야
-      합니다; "SMP 배리어 짝맞추기" 서브섹션을 참고하세요.
-@@ -571,16 +575,20 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
- 	    Documentation/core-api/dma-api.rst
- 
- 
--데이터 의존성 배리어 (역사적)
-------------------------------
-+주소 의존성 배리어 (역사적)
-+---------------------------
- 
- 리눅스 커널 v4.15 기준으로, smp_mb() 가 DEC Alpha 용 READ_ONCE() 코드에
- 추가되었는데, 이는 이 섹션에 주의를 기울여야 하는 사람들은 DEC Alpha 아키텍쳐
- 전용 코드를 만드는 사람들과 READ_ONCE() 자체를 만드는 사람들 뿐임을 의미합니다.
--그런 분들을 위해, 그리고 역사에 관심 있는 분들을 위해, 여기 데이터 의존성
-+그런 분들을 위해, 그리고 역사에 관심 있는 분들을 위해, 여기 주소 의존성
- 배리어에 대한 이야기를 적습니다.
- 
--데이터 의존성 배리어의 사용에 있어 지켜야 하는 사항들은 약간 미묘하고, 데이터
-+[!] 주소 의존성은 로드에서 로드로와 로드에서 스토어로의 관계들 모두에서
-+나타나지만, 주소 의존성 배리어는 로드에서 스토어로의 상황에서는 필요하지
-+않습니다.
-+
-+주소 의존성 배리어의 사용에 있어 지켜야 하는 사항들은 약간 미묘하고, 데이터
- 의존성 배리어가 사용되어야 하는 상황도 항상 명백하지는 않습니다.  설명을 위해
- 다음의 이벤트 시퀀스를 생각해 봅시다:
- 
-@@ -590,10 +598,13 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
- 	B = 4;
- 	<쓰기 배리어>
- 	WRITE_ONCE(P, &B)
--			      Q = READ_ONCE(P);
-+			      Q = READ_ONCE_OLD(P);
- 			      D = *Q;
- 
--여기엔 분명한 데이터 의존성이 존재하므로, 이 시퀀스가 끝났을 때 Q 는 &A 또는 &B
-+[!] READ_ONCE_OLD() 는 4.15 커널 전의 버전에서의, 주소 의존성 배리어를 내포하지
-+않는 READ_ONCE() 에 해당합니다.
-+
-+여기엔 분명한 주소 의존성이 존재하므로, 이 시퀀스가 끝났을 때 Q 는 &A 또는 &B
- 일 것이고, 따라서:
- 
- 	(Q == &A) 는 (D == 1) 를,
-@@ -608,8 +619,8 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
- 그렇지 않습니다, 그리고 이 현상은 (DEC Alpha 와 같은) 여러 CPU 에서 실제로
- 발견될 수 있습니다.
- 
--이 문제 상황을 제대로 해결하기 위해, 데이터 의존성 배리어나 그보다 강화된
--무언가가 주소를 읽어올 때와 데이터를 읽어올 때 사이에 추가되어야만 합니다:
-+이 문제 상황을 제대로 해결하기 위해, READ_ONCE() 는 커널 v4.15 릴리즈 부터
-+묵시적 주소 의존성 배리어를 제공합니다:
- 
- 	CPU 1		      CPU 2
- 	===============	      ===============
-@@ -618,7 +629,7 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
- 	<쓰기 배리어>
- 	WRITE_ONCE(P, &B);
- 			      Q = READ_ONCE(P);
--			      <데이터 의존성 배리어>
-+			      <묵시적 주소 의존성 배리어>
- 			      D = *Q;
- 
- 이 변경은 앞의 처음 두가지 결과 중 하나만이 발생할 수 있고, 세번째의 결과는
-@@ -634,7 +645,7 @@ P 는 짝수 번호 캐시 라인에 저장되어 있고, 변수 B 는 홀수 
- 중이라면 포인터 P (&B) 의 새로운 값과 변수 B 의 기존 값 (2) 를 볼 수 있습니다.
- 
- 
--의존적 쓰기들의 순서를 맞추는데에는 데이터 의존성 배리어가 필요치 않은데, 이는
-+의존적 쓰기들의 순서를 맞추는데에는 주소 의존성 배리어가 필요치 않은데, 이는
- 리눅스 커널이 지원하는 CPU 들은 (1) 쓰기가 정말로 일어날지, (2) 쓰기가 어디에
- 이루어질지, 그리고 (3) 쓰여질 값을 확실히 알기 전까지는 쓰기를 수행하지 않기
- 때문입니다.  하지만 "컨트롤 의존성" 섹션과
-@@ -647,12 +658,12 @@ Documentation/RCU/rcu_dereference.rst 파일을 주의 깊게 읽어 주시기 
- 	B = 4;
- 	<쓰기 배리어>
- 	WRITE_ONCE(P, &B);
--			      Q = READ_ONCE(P);
-+			      Q = READ_ONCE_OLD(P);
- 			      WRITE_ONCE(*Q, 5);
- 
--따라서, Q 로의 읽기와 *Q 로의 쓰기 사이에는 데이터 종속성 배리어가 필요치
--않습니다.  달리 말하면, 데이터 종속성 배리어가 없더라도 다음 결과는 생기지
--않습니다:
-+따라서, Q 로의 읽기와 *Q 로의 쓰기 사이에는 주소 의존성 배리어가 필요치
-+않습니다.  달리 말하면, 오늘날의 READ_ONCE() 의 묵시적 주소 의존성 배리어가
-+없더라도 다음 결과는 생기지 않습니다:
- 
- 	(Q == &B) && (B == 4)
- 
-@@ -663,16 +674,16 @@ Documentation/RCU/rcu_dereference.rst 파일을 주의 깊게 읽어 주시기 
- 해줍니다.
- 
- 
--데이터 의존성에 의해 제공되는 이 순서규칙은 이를 포함하고 있는 CPU 에
-+주소 의존성에 의해 제공되는 이 순서규칙은 이를 포함하고 있는 CPU 에
- 지역적임을 알아두시기 바랍니다.  더 많은 정보를 위해선 "Multicopy 원자성"
- 섹션을 참고하세요.
- 
- 
--데이터 의존성 배리어는 매우 중요한데, 예를 들어 RCU 시스템에서 그렇습니다.
-+주소 의존성 배리어는 매우 중요한데, 예를 들어 RCU 시스템에서 그렇습니다.
- include/linux/rcupdate.h 의 rcu_assign_pointer() 와 rcu_dereference() 를
--참고하세요.  여기서 데이터 의존성 배리어는 RCU 로 관리되는 포인터의 타겟을 현재
--타겟에서 수정된 새로운 타겟으로 바꾸는 작업에서 새로 수정된 타겟이 초기화가
--완료되지 않은 채로 보여지는 일이 일어나지 않게 해줍니다.
-+참고하세요.  이것들은 RCU 로 관리되는 포인터의 타겟을 현재 타겟에서 수정된
-+새로운 타겟으로 바꾸는 작업에서 새로 수정된 타겟이 초기화가 완료되지 않은 채로
-+보여지는 일이 일어나지 않게 해줍니다.
- 
- 더 많은 예를 위해선 "캐시 일관성" 서브섹션을 참고하세요.
- 
-@@ -684,16 +695,17 @@ include/linux/rcupdate.h 의 rcu_assign_pointer() 와 rcu_dereference() 를
- 약간 다루기 어려울 수 있습니다.  이 섹션의 목적은 여러분이 컴파일러의 무시로
- 인해 여러분의 코드가 망가지는 걸 막을 수 있도록 돕는겁니다.
- 
--로드-로드 컨트롤 의존성은 데이터 의존성 배리어만으로는 정확히 동작할 수가
--없어서 읽기 메모리 배리어를 필요로 합니다.  아래의 코드를 봅시다:
-+로드-로드 컨트롤 의존성은 (묵시적인) 주소 의존성 배리어만으로는 정확히 동작할
-+수가 없어서 읽기 메모리 배리어를 필요로 합니다.  아래의 코드를 봅시다:
- 
- 	q = READ_ONCE(a);
-+	<묵시적 주소 의존성 배리어>
- 	if (q) {
--		<데이터 의존성 배리어>  /* BUG: No data dependency!!! */
-+		/* BUG: No address dependency!!! */
- 		p = READ_ONCE(b);
- 	}
- 
--이 코드는 원하는 대로의 효과를 내지 못할 수 있는데, 이 코드에는 데이터 의존성이
-+이 코드는 원하는 대로의 효과를 내지 못할 수 있는데, 이 코드에는 주소 의존성이
- 아니라 컨트롤 의존성이 존재하기 때문으로, 이런 상황에서 CPU 는 실행 속도를 더
- 빠르게 하기 위해 분기 조건의 결과를 예측하고 코드를 재배치 할 수 있어서 다른
- CPU 는 b 로부터의 로드 오퍼레이션이 a 로부터의 로드 오퍼레이션보다 먼저 발생한
-@@ -930,9 +942,9 @@ CPU 간 상호작용을 다룰 때에 일부 타입의 메모리 배리어는 
- 범용 배리어들은 범용 배리어끼리도 짝을 맞추지만 multicopy 원자성이 없는
- 대부분의 다른 타입의 배리어들과도 짝을 맞춥니다.  ACQUIRE 배리어는 RELEASE
- 배리어와 짝을 맞춥니다만, 둘 다 범용 배리어를 포함해 다른 배리어들과도 짝을
--맞출 수 있습니다.  쓰기 배리어는 데이터 의존성 배리어나 컨트롤 의존성, ACQUIRE
-+맞출 수 있습니다.  쓰기 배리어는 주소 의존성 배리어나 컨트롤 의존성, ACQUIRE
- 배리어, RELEASE 배리어, 읽기 배리어, 또는 범용 배리어와 짝을 맞춥니다.
--비슷하게 읽기 배리어나 컨트롤 의존성, 또는 데이터 의존성 배리어는 쓰기 배리어나
-+비슷하게 읽기 배리어나 컨트롤 의존성, 또는 주소 의존성 배리어는 쓰기 배리어나
- ACQUIRE 배리어, RELEASE 배리어, 또는 범용 배리어와 짝을 맞추는데, 다음과
- 같습니다:
- 
-@@ -951,7 +963,7 @@ ACQUIRE 배리어, RELEASE 배리어, 또는 범용 배리어와 짝을 맞추
- 	a = 1;
- 	<쓰기 배리어>
- 	WRITE_ONCE(b, &a);    x = READ_ONCE(b);
--			      <데이터 의존성 배리어>
-+			      <묵시적 주소 의존성 배리어>
- 			      y = *x;
- 
- 또는:
-@@ -970,8 +982,8 @@ ACQUIRE 배리어, RELEASE 배리어, 또는 범용 배리어와 짝을 맞추
- 기본적으로, 여기서의 읽기 배리어는 "더 완화된" 타입일 순 있어도 항상 존재해야
- 합니다.
- 
--[!] 쓰기 배리어 앞의 스토어 오퍼레이션은 일반적으로 읽기 배리어나 데이터
--의존성 배리어 뒤의 로드 오퍼레이션과 매치될 것이고, 반대도 마찬가지입니다:
-+[!] 쓰기 배리어 앞의 스토어 오퍼레이션은 일반적으로 읽기 배리어나 주소 의존성
-+배리어 뒤의 로드 오퍼레이션과 매치될 것이고, 반대도 마찬가지입니다:
- 
- 	CPU 1                               CPU 2
- 	===================                 ===================
-@@ -1023,7 +1035,7 @@ ACQUIRE 배리어, RELEASE 배리어, 또는 범용 배리어와 짝을 맞추
- 	                   V
- 
- 
--둘째, 데이터 의존성 배리어는 데이터 의존적 로드 오퍼레이션들의 부분적 순서
-+둘째, 주소 의존성 배리어는 데이터 의존적 로드 오퍼레이션들의 부분적 순서
- 세우기로 동작합니다.  다음 일련의 이벤트들을 보세요:
- 
- 	CPU 1			CPU 2
-@@ -1069,7 +1081,7 @@ ACQUIRE 배리어, RELEASE 배리어, 또는 범용 배리어와 짝을 맞추
- 앞의 예에서, CPU 2 는 (B 의 값이 될) *C 의 값 읽기가 C 의 LOAD 뒤에 이어짐에도
- B 가 7 이라는 결과를 얻습니다.
- 
--하지만, 만약 데이터 의존성 배리어가 C 의 로드와 *C (즉, B) 의 로드 사이에
-+하지만, 만약 주소 의존성 배리어가 C 의 로드와 *C (즉, B) 의 로드 사이에
- 있었다면:
- 
- 	CPU 1			CPU 2
-@@ -1080,7 +1092,7 @@ B 가 7 이라는 결과를 얻습니다.
- 	<쓰기 배리어>
- 	STORE C = &B		LOAD X
- 	STORE D = 4		LOAD C (gets &B)
--				<데이터 의존성 배리어>
-+				<주소 의존성 배리어>
- 				LOAD *C (reads B)
- 
- 다음과 같이 됩니다:
-@@ -1103,7 +1115,7 @@ B 가 7 이라는 결과를 얻습니다.
- 	                               |        +-------+       |       |
- 	                               |        | X->9  |------>|       |
- 	                               |        +-------+       |       |
--	  C 로의 스토어 앞의     --->   \   ddddddddddddddddd   |       |
-+	  C 로의 스토어 앞의     --->   \   aaaaaaaaaaaaaaaaa   |       |
- 	  모든 이벤트 결과가             \      +-------+       |       |
- 	  뒤의 로드에게                   ----->| B->2  |------>|       |
- 	  보이게 강제한다                       +-------+       |       |
-@@ -1291,7 +1303,7 @@ A 의 로드 두개가 모두 B 의 로드 뒤에 있지만, 서로 다른 값
- 	즉각 완료한다                           :       :       +-------+
- 
- 
--읽기 배리어나 데이터 의존성 배리어를 두번째 로드 직전에 놓는다면:
-+읽기 배리어나 주소 의존성 배리어를 두번째 로드 직전에 놓는다면:
- 
- 	CPU 1			CPU 2
- 	=======================	=======================
-@@ -1785,21 +1797,20 @@ READ_ONCE(jiffies) 라고 할 필요가 없습니다.  READ_ONCE() 와 WRITE_ONC
- CPU 메모리 배리어
- -----------------
- 
--리눅스 커널은 다음의 여덟개 기본 CPU 메모리 배리어를 가지고 있습니다:
-+리눅스 커널은 다음의 일곱개 기본 CPU 메모리 배리어를 가지고 있습니다:
- 
- 	TYPE		MANDATORY		SMP CONDITIONAL
--	===============	=======================	===========================
-+	===============	=======================	===============
- 	범용		mb()			smp_mb()
- 	쓰기		wmb()			smp_wmb()
- 	읽기		rmb()			smp_rmb()
--	데이터 의존성				READ_ONCE()
-+	주소 의존성				READ_ONCE()
- 
- 
--데이터 의존성 배리어를 제외한 모든 메모리 배리어는 컴파일러 배리어를
--포함합니다.  데이터 의존성은 컴파일러에의 추가적인 순서 보장을 포함하지
--않습니다.
-+주소 의존성 배리어를 제외한 모든 메모리 배리어는 컴파일러 배리어를 포함합니다.
-+주소 의존성은 컴파일러에의 추가적인 순서 보장을 포함하지 않습니다.
- 
--방백: 데이터 의존성이 있는 경우, 컴파일러는 해당 로드를 올바른 순서로 일으킬
-+방백: 주소 의존성이 있는 경우, 컴파일러는 해당 로드를 올바른 순서로 일으킬
- 것으로 (예: `a[b]` 는 a[b] 를 로드 하기 전에 b 의 값을 먼저 로드한다)
- 기대되지만, C 언어 사양에는 컴파일러가 b 의 값을 추측 (예: 1 과 같음) 해서
- b  로드 전에 a 로드를 하는 코드 (예: tmp = a[1]; if (b != 1) tmp = a[b]; ) 를
-@@ -2837,9 +2848,9 @@ ld.acq 와 stl.rel 인스트럭션을 각각 만들어 내도록 합니다.
- DEC Alpha CPU 는 가장 완화된 메모리 순서의 CPU 중 하나입니다.  뿐만 아니라,
- Alpha CPU 의 일부 버전은 분할된 데이터 캐시를 가지고 있어서, 의미적으로
- 관계되어 있는 두개의 캐시 라인이 서로 다른 시간에 업데이트 되는게 가능합니다.
--이게 데이터 의존성 배리어가 정말 필요해지는 부분인데, 데이터 의존성 배리어는
--메모리 일관성 시스템과 함께 두개의 캐시를 동기화 시켜서, 포인터 변경과 새로운
--데이터의 발견을 올바른 순서로 일어나게 하기 때문입니다.
-+이게 주소 의존성 배리어가 정말 필요해지는 부분인데, 주소 의존성 배리어는 메모리
-+일관성 시스템과 함께 두개의 캐시를 동기화 시켜서, 포인터 변경과 새로운 데이터의
-+발견을 올바른 순서로 일어나게 하기 때문입니다.
- 
- 리눅스 커널의 메모리 배리어 모델은 Alpha 에 기초해서 정의되었습니다만, v4.15
- 부터는 Alpha 용 READ_ONCE() 코드 내에 smp_mb() 가 추가되어서 메모리 모델로의
--- 
-2.17.1
+b9f85101cad33 (tag: next-20221011, linux-next/master) Add linux-next specific files for 20221011
+5d4aeffbf7092 kbuild: rebuild .vmlinux.export.o when its prerequisite is updated
 
+They all passed the boot tests.
+
+--
+Best Regards,
+Yujie
