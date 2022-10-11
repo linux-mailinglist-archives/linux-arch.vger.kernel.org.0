@@ -2,120 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9E75FB4CE
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Oct 2022 16:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 878A65FB527
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Oct 2022 16:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiJKOnz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Oct 2022 10:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S230129AbiJKOvm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Oct 2022 10:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJKOnz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Oct 2022 10:43:55 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601865141C;
-        Tue, 11 Oct 2022 07:43:51 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 29BEhQVh028058;
-        Tue, 11 Oct 2022 23:43:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 29BEhQVh028058
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1665499407;
-        bh=f7cFsivqt5aB8JibP0uT38jXQu/Wbj/dqE/9O7jlMto=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qOGRld0JJhbnaZ4tp5bXCh8X+a3tamoliyOdSOL++AcJ/NyAFRT5sqviP1CMKFnRu
-         fPS+ED2Q8niO2KVFkOcs+YhcAMZDfPbwoNYDII+FAamLnWBaBA47uqxdj7UbD73T3S
-         THyJCcbvTodfRvi3TnwAeohLJoBtpIyLv3GH2bSoFamML7yuMu1X2bUs84u17+xzGM
-         dXiCupNuOYdvKTxmEj0dpWy4ZxvKf10u0YoQSsbDZtUoz5JzB6ILdlaxIX6xnhp0WK
-         MhjJRRwPl5wtZlmWCCsbsUZ42Qj2WtQlne0HE/7a6Tk9sBlKOYDx2v1svR5rp8D9EV
-         TTnZgyo9ca72Q==
-X-Nifty-SrcIP: [209.85.167.41]
-Received: by mail-lf1-f41.google.com with SMTP id b2so21451496lfp.6;
-        Tue, 11 Oct 2022 07:43:26 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1sCJbpYJdVCzOzDuctB8MSBVhPQe6FLVlhxvo4DAOzjLowXwiR
-        ZDYjJY1R9+WvbXG1kAnPf+YnkM/2OSIVBMt3pbY=
-X-Google-Smtp-Source: AMsMyM6WYbxn4XqdnP3i8B7Mg5ouZcvg+JX5c5rIz8T9AFPEHexE5+sM5jJfYqjyUaDcsRGwDNd1eVbsUFwlrGrxgCk=
-X-Received: by 2002:a05:6512:2310:b0:4a2:593e:3443 with SMTP id
- o16-20020a056512231000b004a2593e3443mr8490807lfu.226.1665499405103; Tue, 11
- Oct 2022 07:43:25 -0700 (PDT)
+        with ESMTP id S229980AbiJKOvA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Oct 2022 10:51:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48886BCEF;
+        Tue, 11 Oct 2022 07:50:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8D9BB811F5;
+        Tue, 11 Oct 2022 14:50:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C165C4347C;
+        Tue, 11 Oct 2022 14:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665499843;
+        bh=8MLmv8j3T46AmOBVlkUxEoYYnaocUtHwPDy2md3Eo98=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TBah5+h+BzyORQ8LGDiLpzV/KCpFVc+8dwVIgtuYs9x01Wx+7BUftscdjbDjIGjY+
+         UNgXS4BEhFNwb9NxHFWV7DVdA3V8TGfmoGiBnrzswAPhk20LSnT6B9nFgmceEMXTcO
+         S8sY91FGsi9uoxgImUAVzkK1xR8xMULQMJlbFVXNwG78hHnaREljogRq1akQRceegl
+         l2R7+10wC7KFyI7WDz54+4HGc615fW80XY2IcYd+WhS4k+t5xjJXAbQ92yXbP3vfSC
+         TEzTsHNBz11WPlHnsVxohhGMJrXW4/0uKtopxeAZm8J3eQwdaFTHEfGRMh6WfjkgNi
+         d/+zlgPqoGjPg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        kernel test robot <lkp@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.0 16/46] sparc: Fix the generic IO helpers
+Date:   Tue, 11 Oct 2022 10:49:44 -0400
+Message-Id: <20221011145015.1622882-16-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221011145015.1622882-1-sashal@kernel.org>
+References: <20221011145015.1622882-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20220928063947.299333-3-masahiroy@kernel.org> <202210090942.a159fe4-yujie.liu@intel.com>
- <CAK7LNASUhDMo72eNge_GvdfbmOkpBCJA88Xw=_V69jcf+_072Q@mail.gmail.com> <f09f2fb1-ae86-5419-4361-bdd8f8a22e11@intel.com>
-In-Reply-To: <f09f2fb1-ae86-5419-4361-bdd8f8a22e11@intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 11 Oct 2022 23:42:46 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASFi-q-fbMq+3orWnJS6b3Yc7ZQAvRDNvwTSCj2UkP1MQ@mail.gmail.com>
-Message-ID: <CAK7LNASFi-q-fbMq+3orWnJS6b3Yc7ZQAvRDNvwTSCj2UkP1MQ@mail.gmail.com>
-Subject: Re: [kbuild] b3830bad81: System_halted
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     lkp@lists.01.org, lkp@intel.com, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 6:37 PM Yujie Liu <yujie.liu@intel.com> wrote:
->
-> On 10/11/2022 03:29, Masahiro Yamada wrote:
-> > On Sun, Oct 9, 2022 at 10:21 AM kernel test robot <yujie.liu@intel.com> wrote:
-> >>
-> >> Greeting,
-> >>
-> >> FYI, we noticed the following commit (built with gcc-11):
-> >>
-> >> commit: b3830bad81e872632431363853c810c5f652a040 ("[PATCH v3 2/8] kbuild: rebuild .vmlinux.export.o when its prerequisite is updated")
-> >> url: https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/Unify-linux-export-h-and-asm-export-h-remove-EXPORT_DATA_SYMBOL-faster-TRIM_UNUSED_KSYMS/20220928-144539
-> >> base: https://git.kernel.org/cgit/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-> >> patch link: https://lore.kernel.org/linux-kbuild/20220928063947.299333-3-masahiroy@kernel.org
-> >>
-> >> in testcase: boot
-> >>
-> >> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> >>
-> >> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> >
-> >
-> > I think this is a false-positive alarm.
-> >
-> > As I replied before [1], I know my patch set is broken.
-> > I think 0day bot is testing the patch set I had already retracted.
-> >
-> > I only picked up low-hanging fruits with fixes to my tree,
-> > and did boot tests.
-> >
-> > Please let me know if linux-next is broken.
-> >
-> >
-> > [1] : https://lore.kernel.org/linux-kbuild/CAK7LNATcD6k+R66YFVg_mhe7-FGNc0nYaTPuORCcd34Qw3ra2g@mail.gmail.com/T/#t
-> >
->
-> Sorry for this false-positive report.
->
-> Thanks for the info, we noticed that this patch has been merged into
-> linux-next, so we tested below commits:
->
-> b9f85101cad33 (tag: next-20221011, linux-next/master) Add linux-next specific files for 20221011
-> 5d4aeffbf7092 kbuild: rebuild .vmlinux.export.o when its prerequisite is updated
->
-> They all passed the boot tests.
+From: Linus Walleij <linus.walleij@linaro.org>
 
+[ Upstream commit 2c230431e1e809270178905974f57cf3878939f5 ]
 
-Thank you for testing them!
+This enables the Sparc to use <asm-generic/io.h> to fill in the
+missing (undefined) [read|write]sq I/O accessor functions.
 
+This is needed if Sparc[64] ever wants to uses CONFIG_REGMAP_MMIO
+which has been patches to use accelerated _noinc accessors
+such as readsq/writesq that Sparc64, while being a 64bit platform,
+as of now not yet provide.
 
+This comes with the requirement that everything the architecture
+already provides needs to be defined, rather than just being,
+say, static inline functions.
 
+Bite the bullet and just provide the definitions and make it work.
+Compile-tested on sparc32 and sparc64.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-arm-kernel/202208201639.HXye3ke4-lkp@intel.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/sparc/include/asm/io.h    |  2 ++
+ arch/sparc/include/asm/io_64.h | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
+diff --git a/arch/sparc/include/asm/io.h b/arch/sparc/include/asm/io.h
+index 2eefa526b38f..2dad9be9ec75 100644
+--- a/arch/sparc/include/asm/io.h
++++ b/arch/sparc/include/asm/io.h
+@@ -19,4 +19,6 @@
+ #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
+ #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
+ 
++#include <asm-generic/io.h>
++
+ #endif
+diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
+index 5ffa820dcd4d..9303270b22f3 100644
+--- a/arch/sparc/include/asm/io_64.h
++++ b/arch/sparc/include/asm/io_64.h
+@@ -9,6 +9,7 @@
+ #include <asm/page.h>      /* IO address mapping routines need this */
+ #include <asm/asi.h>
+ #include <asm-generic/pci_iomap.h>
++#define pci_iomap pci_iomap
+ 
+ /* BIO layer definitions. */
+ extern unsigned long kern_base, kern_size;
+@@ -239,38 +240,51 @@ static inline void outl(u32 l, unsigned long addr)
+ void outsb(unsigned long, const void *, unsigned long);
+ void outsw(unsigned long, const void *, unsigned long);
+ void outsl(unsigned long, const void *, unsigned long);
++#define outsb outsb
++#define outsw outsw
++#define outsl outsl
+ void insb(unsigned long, void *, unsigned long);
+ void insw(unsigned long, void *, unsigned long);
+ void insl(unsigned long, void *, unsigned long);
++#define insb insb
++#define insw insw
++#define insl insl
+ 
+ static inline void readsb(void __iomem *port, void *buf, unsigned long count)
+ {
+ 	insb((unsigned long __force)port, buf, count);
+ }
++#define readsb readsb
++
+ static inline void readsw(void __iomem *port, void *buf, unsigned long count)
+ {
+ 	insw((unsigned long __force)port, buf, count);
+ }
++#define readsw readsw
+ 
+ static inline void readsl(void __iomem *port, void *buf, unsigned long count)
+ {
+ 	insl((unsigned long __force)port, buf, count);
+ }
++#define readsl readsl
+ 
+ static inline void writesb(void __iomem *port, const void *buf, unsigned long count)
+ {
+ 	outsb((unsigned long __force)port, buf, count);
+ }
++#define writesb writesb
+ 
+ static inline void writesw(void __iomem *port, const void *buf, unsigned long count)
+ {
+ 	outsw((unsigned long __force)port, buf, count);
+ }
++#define writesw writesw
+ 
+ static inline void writesl(void __iomem *port, const void *buf, unsigned long count)
+ {
+ 	outsl((unsigned long __force)port, buf, count);
+ }
++#define writesl writesl
+ 
+ #define ioread8_rep(p,d,l)	readsb(p,d,l)
+ #define ioread16_rep(p,d,l)	readsw(p,d,l)
+@@ -344,6 +358,7 @@ static inline void memset_io(volatile void __iomem *dst, int c, __kernel_size_t
+ 		d++;
+ 	}
+ }
++#define memset_io memset_io
+ 
+ static inline void sbus_memcpy_fromio(void *dst, const volatile void __iomem *src,
+ 				      __kernel_size_t n)
+@@ -369,6 +384,7 @@ static inline void memcpy_fromio(void *dst, const volatile void __iomem *src,
+ 		src++;
+ 	}
+ }
++#define memcpy_fromio memcpy_fromio
+ 
+ static inline void sbus_memcpy_toio(volatile void __iomem *dst, const void *src,
+ 				    __kernel_size_t n)
+@@ -395,6 +411,7 @@ static inline void memcpy_toio(volatile void __iomem *dst, const void *src,
+ 		d++;
+ 	}
+ }
++#define memcpy_toio memcpy_toio
+ 
+ #ifdef __KERNEL__
+ 
+@@ -412,7 +429,9 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
+ static inline void __iomem *ioremap_np(unsigned long offset, unsigned long size)
+ {
+ 	return NULL;
++
+ }
++#define ioremap_np ioremap_np
+ 
+ static inline void iounmap(volatile void __iomem *addr)
+ {
+@@ -432,10 +451,13 @@ static inline void iounmap(volatile void __iomem *addr)
+ /* Create a virtual mapping cookie for an IO port range */
+ void __iomem *ioport_map(unsigned long port, unsigned int nr);
+ void ioport_unmap(void __iomem *);
++#define ioport_map ioport_map
++#define ioport_unmap ioport_unmap
+ 
+ /* Create a virtual mapping cookie for a PCI BAR (memory or IO) */
+ struct pci_dev;
+ void pci_iounmap(struct pci_dev *dev, void __iomem *);
++#define pci_iounmap pci_iounmap
+ 
+ static inline int sbus_can_dma_64bit(void)
+ {
 -- 
-Best Regards
-Masahiro Yamada
+2.35.1
+
