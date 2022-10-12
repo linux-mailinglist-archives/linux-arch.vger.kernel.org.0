@@ -2,102 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C785FBDF2
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 00:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979205FC07D
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 08:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiJKWto (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Oct 2022 18:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S229546AbiJLGQr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Oct 2022 02:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiJKWtn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Oct 2022 18:49:43 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683172DCD
-        for <linux-arch@vger.kernel.org>; Tue, 11 Oct 2022 15:49:42 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id h203so4434511iof.1
-        for <linux-arch@vger.kernel.org>; Tue, 11 Oct 2022 15:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
-        b=GEoUpWzyQJ1EOpEsREXd5rTYPMHiuAtqAlmA0RR0NMubUUPrnJ4/XkiOaDGQLJrOu8
-         FuvNQm2L8j7Lcya9lRWWV+Bs+fCZTboDyWd/H71oavlGvovpnNwepb9T5Az1cjsOxmCl
-         4b2f9h3cdBvjSOva+H1+oKdfmwZwoIgQAI7hpsGP2hm01xv2Xp8lTmeJCXfCQ5qwmpwv
-         lWiZ4lphzHITpaEyXvNgHDhDJlBIWdgrhKw8Ds6IFnbhypMaypZ7MsrGhvMuq/Ti5DjW
-         S0Yzrpr+ovSetT0en3/fIhcod5jPEX/deYIEdxuJTAvTGY7URssjTt7/yAtymbdJDmD5
-         au4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6c6RloR1f1meVJL/BrGR4Y0ez6uzlYlKHhaiRNYhs0=;
-        b=4TpsVqiAfOqD19/VgUEkwEFX6VC5gcmBL3dGuvgNILEPF9YvjTIsL/R4bFzxCJ44A2
-         steFTC5AlNFNEI43iscLxMZtNbkZtVbcLH4Hmlpm0Qv38LklJ4/b2rVQg1kIODvj0Kmv
-         LE+8j3Q1JqD+8ezO20ckonzJHM7AjQ2HjVE+TT4lHcBMqEgbE/B1yKtY2FFHbLhqhRpJ
-         78OPWSU+eSDP3qzO8TO7GnupHU800x6ImEKQMVbm7d21qesar2Ws+AG/VM73yTDrIorz
-         HjiaPMg0z8Z9HUzSBFWllr11JX0AkyT1jCrOq0LAWjE0Z9b2db3sCM3hyqzlml3fYT/1
-         M5aw==
-X-Gm-Message-State: ACrzQf339E46GD9sdQGJ4Wm6alqBF/MEyu8IjZ0Ct/+8zHd0SRxx+DwO
-        weWNPWLUnbZ1zo4MbGgO/8I4gJw3FTCcIWyBVaI=
-X-Google-Smtp-Source: AMsMyM7lj2VaHp6DpaLYCPCiyTlfN8Mg/6zisqjcfW7o7ASVVQ4oZXaJvGu9y1QaAD+MjDAzjEMpD4rowwV/MJw0dKE=
-X-Received: by 2002:a05:6638:2641:b0:363:a80a:644f with SMTP id
- n1-20020a056638264100b00363a80a644fmr9546775jat.205.1665528581803; Tue, 11
- Oct 2022 15:49:41 -0700 (PDT)
+        with ESMTP id S229657AbiJLGQp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 02:16:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00138AA34F;
+        Tue, 11 Oct 2022 23:16:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34BC3613FB;
+        Wed, 12 Oct 2022 06:16:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 665C3C433D6;
+        Wed, 12 Oct 2022 06:16:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665555403;
+        bh=I6RnW5IpmR7g0+YGxHas+7A6fFvaR/Qzrs1BzkOlIRw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=u5v/8LidQwH30eIemf1uWspk1VX+z6vdU8BHsiU3NWXnUtGPNX3WY8YlDH5AEv8+M
+         3FKSLWDLv5HXlP7fWBy+wf6+ZJw8VnbS/edEHRH7cLeK4o6kreGQR8jf/Sz7ig65fQ
+         KQKY6jYJ3hpTE2jOL6bUJHRa045kjdgTQOd/wg+c511b3TDJeAlgTA51e2zGG1vkHT
+         k7juB0v98t08ulBVxJy7dQmaYb7/IwghWelH2f/5y+O4v3gte5q9EphjI3c+aY6Kr/
+         R/iT98WoGlfjd2iS6OWqusMIDJ+ouNfWwWGyILq31fEtiyyAaXnBdGIKuNMOCvAFlS
+         +8pfwIs/QnHsA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8882B5C196D; Tue, 11 Oct 2022 23:16:39 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 23:16:39 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     corbet@lwn.net, lyj7694@gmail.com, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] docs/memory-barriers/kokr: Update the content
+Message-ID: <20221012061639.GK4221@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221011025809.25821-1-sj@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a4f:f154:0:0:0:0:0 with HTTP; Tue, 11 Oct 2022 15:49:41
- -0700 (PDT)
-Reply-To: mmrstephen16@gmail.com
-From:   "Mr. Stephen Melvin" <mr.bruceross22@gmail.com>
-Date:   Tue, 11 Oct 2022 15:49:41 -0700
-Message-ID: <CAKeG-00cDdf1Sks1M9piNQsn=prK3xGE-zsZwdw+ZV8SH52BRw@mail.gmail.com>
-Subject: Reply and let me know if you received this email.!!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d42 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mmrstephen16[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mr.bruceross22[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mr.bruceross22[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011025809.25821-1-sj@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Dear, How are you today and your family? Want to believe you are
-all doing great.
+On Mon, Oct 10, 2022 at 07:58:06PM -0700, SeongJae Park wrote:
+> There are updates to memory-barriers.txt that not applied to the Korean
+> translation.  This patchset applies the changes.
+> 
+> Changes from v1
+> (https://lore.kernel.org/all/20221008174928.13479-1-sj@kernel.org/)
+> - Drop first one, which is not for translation and already pulled
+> - Use better expressions for Korean (Yunjae Lee)
+> - Fix a typo (Yunjae Lee)
+> 
+> SeongJae Park (3):
+>   docs/memory-barriers.txt/kokr: introduce io_stop_wc() and add
+>     implementation for ARM64
+>   docs/memory-barriers.txt/kokr: Add memory barrier dma_mb()
+>   docs/memory-barriers.txt/kokr: Fix confusing name of 'data dependency
+>     barrier'
 
-Please reply to me as fast as possible. I have important information for you.
+Hearing no objections, I pulled these in.  If someone else wants to take
+them, please let me know.
 
-Kind Regards,
-Mr. Stephen Melvin.
+							Thanx, Paul
+
+>  .../translations/ko_KR/memory-barriers.txt    | 149 ++++++++++--------
+>  1 file changed, 85 insertions(+), 64 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
