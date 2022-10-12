@@ -2,85 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8866A5FCAEF
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 20:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C105FCBC9
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 22:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiJLSsb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Oct 2022 14:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S229451AbiJLUEU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Oct 2022 16:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiJLSsa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 14:48:30 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CBBC4DB7
-        for <linux-arch@vger.kernel.org>; Wed, 12 Oct 2022 11:48:29 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-132b8f6f1b2so20427518fac.11
-        for <linux-arch@vger.kernel.org>; Wed, 12 Oct 2022 11:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ESROyxdmNaMCuLAvwDxLztz/p3doaWu/k516wwQHrw=;
-        b=TxUslp/5MFOT246DWlq1s20VNKGGSSTTxByLdcsEMJmdAKLTiDSE0c2Hq5L+HVw4JY
-         W5kDSqOsorAPAC0AWFewpZG+wc6mkemgAROu3M43P7g+Nr+xOV2FWfEaSoXlwIz/0n0U
-         SxfcCTSnFEGvvBl9RwIWsBnbuy5EkfYyyf6ds=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8ESROyxdmNaMCuLAvwDxLztz/p3doaWu/k516wwQHrw=;
-        b=g7AD11yiZ0jusCHY78e5ASLsp7lF0wrDaRTva/V3iaeyzxirSSgrNh5H+QXIfzfrkj
-         nm+BPHdfmdZOJZuwNVxYcAaYlaFbyfwRMeQK0WSF2etG2BRjY2pY5K7UA8HtzZ8hOjXS
-         SHZA/Cmh5HCZLk2nk/5vCWq+hVw6ceGA7a0A4541dQlXSy0CKEdtUdoGCXPDHMBrrgcr
-         EcAH5V3QFXtvVRrS/qo08dJJmJTEGV8S503ua8W/niPZ630hOmwsxJNbsLRwezhmMI6W
-         6+Xzq3egxNAuQ0CkXQP/AFUvsMmxaVkRicyNlV1OCwnZMn+P6khr03bs23rwufofLEHQ
-         ozDw==
-X-Gm-Message-State: ACrzQf1AK3/62GA/RzeiTE3Q0I2e9TsHhH2UAyGqKqIumxGLhb9e869g
-        8LGOnnbvCnGSOm7CMvZZG4J0bK7mo+DLSw==
-X-Google-Smtp-Source: AMsMyM5cLWfJN/+bjYv2ChKqte7wpL4q2o1RNgX4AASeq/CPRr9SxZftbBmVtRbvYLvX6ekhsDC/ww==
-X-Received: by 2002:a05:6870:51a:b0:130:ae8d:daaf with SMTP id j26-20020a056870051a00b00130ae8ddaafmr3135655oao.103.1665600508649;
-        Wed, 12 Oct 2022 11:48:28 -0700 (PDT)
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
-        by smtp.gmail.com with ESMTPSA id t12-20020a4ad0ac000000b0047537233dfasm1254989oor.21.2022.10.12.11.48.27
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 11:48:27 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id r11-20020a4aa2cb000000b004806f49e27eso6657423ool.7
-        for <linux-arch@vger.kernel.org>; Wed, 12 Oct 2022 11:48:27 -0700 (PDT)
-X-Received: by 2002:a4a:4e41:0:b0:480:8a3c:a797 with SMTP id
- r62-20020a4a4e41000000b004808a3ca797mr2985303ooa.71.1665600507237; Wed, 12
- Oct 2022 11:48:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221012181841.333325-1-masahiroy@kernel.org>
-In-Reply-To: <20221012181841.333325-1-masahiroy@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 12 Oct 2022 11:48:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whTCVWhFz1MK22hq9WNEmhKy2kpNerA3fyyBYzP7z8XWg@mail.gmail.com>
-Message-ID: <CAHk-=whTCVWhFz1MK22hq9WNEmhKy2kpNerA3fyyBYzP7z8XWg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: raise minimum supported version of
- binutils to 2.25
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        with ESMTP id S229492AbiJLUES (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 16:04:18 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EADD0CC3;
+        Wed, 12 Oct 2022 13:04:18 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e705329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e705:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ADAA71EC064C;
+        Wed, 12 Oct 2022 22:04:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665605052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=PLO4zeP3zv6Xy77o0G6Y6mDad/C0l3CRrS49slx6uWI=;
+        b=hn4ux4Y+b3pkiTvml7dz5rvwcps6ZFCZ4Zc3OG/TCBLyIhRrcNMFCif4DE3Jyqfk9WV8yE
+        GzWBcJhwU5qRzjX9jl+VK92HHTPT7Ury0lZALvp2EKWlx3Mnjh8d0nm7RWpqexsXqjHq1p
+        gooxOGhJocW7MzngNOSZZ8rxXiOhFFw=
+Date:   Wed, 12 Oct 2022 22:04:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
+ Stack
+Message-ID: <Y0cduNYq/ml6vtxB@zn.tnic>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220929222936.14584-3-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 11:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Bump the binutils version to 2.25, which was released one year before
-> GCC 5.1.
+On Thu, Sep 29, 2022 at 03:28:59PM -0700, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Ack, sounds sane.
+> Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow Stack
 
-               Linus
+Please remove all "CET", "cet", etc strings from the text as that is
+confusing. We should use either shadow stack or IBT and not CET.
+
+> +config ARCH_HAS_SHADOW_STACK
+
+Do I see it correctly that this thing is needed only once in
+show_smap_vma_flags()?
+
+If so, can we do a arch_show_smap_vma_flags(), call it at the end of
+former function and avoid adding yet another Kconfig symbol?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
