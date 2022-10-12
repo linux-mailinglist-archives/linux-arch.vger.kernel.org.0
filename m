@@ -2,138 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAA25FC549
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 14:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E9F5FC6F9
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 16:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiJLM3c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Oct 2022 08:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
+        id S229586AbiJLOF1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Oct 2022 10:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJLM3b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 08:29:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CC8C513A
-        for <linux-arch@vger.kernel.org>; Wed, 12 Oct 2022 05:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665577769;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yatbm6s+sCCHHYxeiS9jcRF6BVrcOy6ikVoqgXdujac=;
-        b=RCHw6zae2PnvHI+q9N86tNOJUaMmNtJrvoOY9xzBmT/VJe0gFY0elourDp49VNS7qk6Ull
-        kYMzouFsIMOuXzJ3H3XVPYiZaYvQVRfhlkvmC+wHCQLKZ7q3jpFy+lD4nA5pYxD5aDW7sc
-        0TmPAaUvtYmzwQLEZ5PYjGCRK4kqlIg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-594-foHGkTWmNQyaIYxC2fG-KA-1; Wed, 12 Oct 2022 08:29:25 -0400
-X-MC-Unique: foHGkTWmNQyaIYxC2fG-KA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B8B101C08968;
-        Wed, 12 Oct 2022 12:29:23 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.192.47])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A5F974EA47;
-        Wed, 12 Oct 2022 12:29:15 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
-        <20220929222936.14584-2-rick.p.edgecombe@intel.com>
-        <87ilkr27nv.fsf@oldenburg.str.redhat.com>
-        <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
-Date:   Wed, 12 Oct 2022 14:29:13 +0200
-In-Reply-To: <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com> (Rick
-        P. Edgecombe's message of "Mon, 10 Oct 2022 16:44:33 +0000")
-Message-ID: <87v8opz0me.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        with ESMTP id S229502AbiJLOFZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 10:05:25 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C429D3911D;
+        Wed, 12 Oct 2022 07:05:23 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso2162328pjk.1;
+        Wed, 12 Oct 2022 07:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LBlu7tPT0Tx5MrjvdiscmABwb2kCDpiFMguHWsE1qRI=;
+        b=TriEn0TBit/DhtfVmixexLUZ4cUN9xq7qt7CmMgifx0UYigJtkT8QUVnkhv34TEPqV
+         WvL7xPmd1PvCBxp4IEbGmJOfyAH3pw9dFJcFEaRY2ghKvoMiSon30uxminzvjSS6s1gh
+         7hRpGaqX7MCzROsRMGzLYNd4HM4lbnEdvkNPjgwYFRx8UzsZ28boB3Y09SiyEIJxxIQ3
+         ZRTs/GO0NM23bjGMkHwdX8dklDjz+orMbj+wRThAa0YxQyFPq02854mvleJ2oxRgHwRO
+         +8DR32cLkSVyBJuRrD27zQxAzzakPoSzrXiUuyMNBsSTwFKUhozZ1fbiJ0F9XNy8mSB/
+         Mn4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LBlu7tPT0Tx5MrjvdiscmABwb2kCDpiFMguHWsE1qRI=;
+        b=o2VxKsqlWBb7c8e1T2V7NNEwguBUUZI+wEkVWCG83+R1gdlnQTH+rXaZcSqjTDsOTM
+         S/FZMFlxZ0aEi0G5cWAl/RX/l/967+q1u7WT8RZIpZK9PkRVNMOu7EZlw+50qHFb8fCl
+         dM4x39f+94US9Ajhsgm/WFIzw6aKWpKjVmyIuWlACaCcYansK/jSAko8UniTTCgkEFTt
+         uPrT54uzAyD32SeGtvio8g1GrZSEwSlOeHOSLFS0xUXK8r+Nz2Rp82HD+xvpaP7Aejk0
+         VmBj68kGvQaFOeJRYN3Ch89x7faL/5h0wOBtZc3dFh49t7EtxnfR9c4mhp+fkkwf4LvL
+         WxZg==
+X-Gm-Message-State: ACrzQf3d5ZjOPaLiZdsCpRyIIwi8dKB0DxSfWqRUTf/pzxnw/+MGek2R
+        uPCMIltaxo7gMfzixZ7grGA=
+X-Google-Smtp-Source: AMsMyM533bBiEubHIjupTgGRt7/XMfF4p3p2/+tATp4bKUGSSf5uOxbPfntEFeuulxdGlsyniGXYUA==
+X-Received: by 2002:a17:90b:4b42:b0:20d:954e:28d with SMTP id mi2-20020a17090b4b4200b0020d954e028dmr2205621pjb.93.1665583523209;
+        Wed, 12 Oct 2022 07:05:23 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f9-20020a636a09000000b004277f43b736sm9607783pgc.92.2022.10.12.07.05.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 07:05:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 12 Oct 2022 07:05:19 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h>
+Message-ID: <20221012140519.GA2405113@roeck-us.net>
+References: <20220818092059.103884-1-linus.walleij@linaro.org>
+ <20221002224521.GA968453@roeck-us.net>
+ <fd905ca5-fe0d-4cfb-a0d0-aea8af539cc7@app.fastmail.com>
+ <57200020-c460-74ec-c786-9a2c16f4870e@roeck-us.net>
+ <2e110666-7519-4693-8a89-240cbb118c7e@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e110666-7519-4693-8a89-240cbb118c7e@app.fastmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* Rick P. Edgecombe:
+On Tue, Oct 04, 2022 at 10:28:24PM +0200, Arnd Bergmann wrote:
+> On Tue, Oct 4, 2022, at 9:42 PM, Guenter Roeck wrote:
+> > On 10/3/22 06:03, Arnd Bergmann wrote:
+> >> On Mon, Oct 3, 2022, at 12:45 AM, Guenter Roeck wrote:
+> >
+> > Looks like something was missed. When building alpha:allnoconfig
+> > in next-20221004:
+> >
+> > Building alpha:allnoconfig ... failed
+> > --------------
+> > Error log:
+> > <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+> > arch/alpha/kernel/core_marvel.c:807:1: error: conflicting types for 
+> > 'marvel_ioread8'; have 'unsigned int(const void *)'
+> >    807 | marvel_ioread8(const void __iomem *xaddr)
+> >        | ^~~~~~~~~~~~~~
+> > In file included from arch/alpha/kernel/core_marvel.c:10:
+> > arch/alpha/include/asm/core_marvel.h:335:11: note: previous declaration 
+> > of 'marvel_ioread8' with type 'u8(const void *)' {aka 'unsigned 
+> > char(const void *)'}
+> >    335 | extern u8 marvel_ioread8(const void __iomem *);
+> >        |           ^~~~~~~~~~~~~~
+> 
+> Right, I already noticed this and uploaded a fixed branch earlier today.
+> Should be ok tomorrow.
+> 
 
->> I think the goal is to support the new kernel interface for actually
->> switching on SHSTK in glibc 2.37.  But at that point, hopefully all
->> those existing binaries can start enjoying the STSTK benefits.
->
-> Can you share more about this plan? HJ was previously planning to wait
-> until the kernel support was upstream before making any more glibc
-> changes. Hopefully this will be in time for that, but I'd really rather
-> not repeat what happened last time where we had to design the kernel
-> interface around not breaking old glibc's with mismatched CET
-> enablement.
+Unfortunately that did not completely fix the problem, or maybe the fix got
+lost. In mainline, when building alpha:allnoconfig:
 
-You're still doing that (keeping that gap in this constant), and this
-appreciated and very much necessary.
+arch/alpha/kernel/core_marvel.c:807:1: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'marvel_ioread8'
+  807 | marvel_ioread8(const void __iomem *xaddr)
 
-> What did you think of the proposal to disable existing binaries and
-> start from scratch? Elaborated in the coverletter in the section
-> "Compatibility of Existing Binaries/Enabling Interface".
+The code is:
 
-The ABI was finalized around four years ago, and we have shipped several
-Fedora and Red Hat Enterprise Linux versions with it.  Other
-distributions did as well.  It's a bit late to make changes now, and
-certainly not for such trivialities.  In the case of the IBT ABI, it may
-be tempting to start over in a less trivial way, to radically reduce the
-amount of ENDBR instructions.  But that doesn't concern SHSTK, and
-there's no actual implementation anyway.
+unsigned u8
+marvel_ioread8(const void __iomem *xaddr)
 
-But as H.J. implied, you would have to do rather nasty things in the
-kernel to prevent us from achieving ABI compatibility in userspace, like
-parsing property notes on the main executable and disabling the new
-arch_prctl calls if you see something there that you don't like. 8-)
-Of course no one is going to implement that.
+The compiler doesn't like "unsigned u8".
 
-(We are fine with swapping out glibc and its dynamic loader to enable
-CET with the appropriate kernel mechanism, but we wouldn't want to
-change the way all other binaries are marked up.)
+#regzbot ^introduced: e19d4ebc536d
+#regzbot title: alpha:allnoconfig fails to build
+#regzbot monitor: https://lore.kernel.org/linux-arch/202210062117.wJypzBWL-lkp@intel.com/
 
-Thanks,
-Florian
-
+Guenter
