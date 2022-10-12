@@ -2,145 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD3F5FC874
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 17:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3275FC8CC
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 18:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229471AbiJLPd0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Oct 2022 11:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
+        id S230030AbiJLQAH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Oct 2022 12:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJLPdZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 11:33:25 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EE3E319C;
-        Wed, 12 Oct 2022 08:33:24 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4F14D5C00D6;
-        Wed, 12 Oct 2022 11:33:21 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 12 Oct 2022 11:33:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665588801; x=1665675201; bh=p46JJgtAdn
-        om3Y0Add8r9JIUoWNZUEiLnPyZNJRpZL0=; b=grWUM07WK4ujl6DYMF2oCDykzc
-        R2YXZIK+2jB3phTxqA5kFcHsLaChyfa6wFn3WgiZ+UmygkFPRgjvD7Fst/M0TL2v
-        OtUg6YzMEGSjlW1/FFmhkXY4hQLkpXi+uEM8beKFx/cjx3LAV6lFs0Al5Wp+BXez
-        YKFvvL8HcZFOYSpGx+0/9fVBZkUAtIjib7MuBcy5a5ozl4XQrpogbG0fHnIC7+VI
-        s/GLRc+wn5ulBV10Q+ONwn1w7Jxng17EQ4XIP9UWFVcqlpVYXojrW4LIZebij5r6
-        c9Taq7bJrILbSRkPahh/1hBhPuLbh5fh1wD96rdSG5iH9v+DWXSTIJc5EwYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665588801; x=1665675201; bh=p46JJgtAdnom3Y0Add8r9JIUoWNZ
-        UEiLnPyZNJRpZL0=; b=r8MRYbUFdGX2N0CSQslCsGokunE10rTGgPPhwrQaxasP
-        F1kGKq0kclUrE2MBRyWbvfJ+8Dxzg2sbc45bNIGTCSyewIK8d7yEXz3/qzuEsTSo
-        MQZaNNa8R5rd6XcHHyJdysG5QIvSmq9wypWlIkcYYEoqC1X4nZYccmVu2l298qFg
-        1B34GqRkkCnpbQX1u/MFq2TblhEVDZVSoEoxJDcbqATPz77766knTBj1SugdjFBx
-        hLrWdVVnHfn3571d31+BZSFnUC/57c1A8pB5Ltn0HdakpuRJmPIGdWFSMBEgFVNG
-        n4cJNb0MPrNHmdJyEw/KA6Y8kHCDi5JsYKC1L7JVFw==
-X-ME-Sender: <xms:P95GY7mexFwbDp5ju7nPMzw_fEYmfJ26oCj4skT5_8b5YNP4NogPkw>
-    <xme:P95GY-3m0y7QOQM18D0qvemnMrfCDKRSsWA8ITtVPObXiKkpwxMg588eo3ZZ9CA87
-    8JjiddEwsYJkXFf2TE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:P95GYxqZjrHW-bsevMX0QjgE2Pa_BYfH4A23Xz1Qtx_a2gRaaH_Bdg>
-    <xmx:P95GYzn4H6y8PRSNuFtCAgUThrxt-L-u5yqYFVAjal-OCicPm83Kqw>
-    <xmx:P95GY52qb4EvffvFOIfUw58Ev6fT-Tqx_WSet0E55uGTRiQJhSGF8Q>
-    <xmx:Qd5GY2kGaQGz9jZMxvPYvCizq-6ImEQuaWATbJ9RSqzZRFkpyjD1AA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 68F12B60086; Wed, 12 Oct 2022 11:33:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <e99d33ff-4bfe-4727-a5ca-f4987b871ccd@app.fastmail.com>
-In-Reply-To: <20221012140519.GA2405113@roeck-us.net>
-References: <20220818092059.103884-1-linus.walleij@linaro.org>
- <20221002224521.GA968453@roeck-us.net>
- <fd905ca5-fe0d-4cfb-a0d0-aea8af539cc7@app.fastmail.com>
- <57200020-c460-74ec-c786-9a2c16f4870e@roeck-us.net>
- <2e110666-7519-4693-8a89-240cbb118c7e@app.fastmail.com>
- <20221012140519.GA2405113@roeck-us.net>
-Date:   Wed, 12 Oct 2022 17:32:59 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Guenter Roeck" <linux@roeck-us.net>
-Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        "kernel test robot" <lkp@intel.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229620AbiJLQAA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 12:00:00 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A341A83A;
+        Wed, 12 Oct 2022 08:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665590397; x=1697126397;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x+Vvi8HGhrn79pVpDuauzqv2LPYrdQbCpKoSgkWyCaQ=;
+  b=N7H43qoXTLbxJSfPjHM4NCPeS1rlSqKT03ZpBOZfCc1HCUKHpvN2S7Lc
+   /LWM+V7kffocXoUn8fZCkc0Z7cVyGwDk/Qmaal8Bqzu04A3nbtWoinE6P
+   69fKUtdPsCQA6HW+mZJa17pRGrRd3fUTd+w0ZgxhPDX0PxFXkjyKwO86+
+   V3kK5xp/YaluMUOKgQcpyz1jxamEzBO0mqSyx6ybe7FnAYp3w9cvJ1S/Z
+   63o7Kad+a/GYCNvcEdllfimxNhzEr5FA95UOHelCKBzmqmvyilpYSImZx
+   yz98Lw1AdjlaJFeIZ6hcwx2bnHKijetXcPTFBoa2eOwoNU8cSozsmEXUS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="304818430"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="304818430"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 08:59:56 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10498"; a="695522374"
+X-IronPort-AV: E=Sophos;i="5.95,179,1661842800"; 
+   d="scan'208";a="695522374"
+Received: from mpatter1-mobl.amr.corp.intel.com (HELO [10.209.53.34]) ([10.209.53.34])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2022 08:59:51 -0700
+Message-ID: <e3c3d68d-ce99-a70a-1026-0ba99520ae57@intel.com>
+Date:   Wed, 12 Oct 2022 08:59:51 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+Content-Language: en-US
+To:     Florian Weimer <fweimer@redhat.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+ <87ilkr27nv.fsf@oldenburg.str.redhat.com>
+ <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
+ <87v8opz0me.fsf@oldenburg.str.redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <87v8opz0me.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 12, 2022, at 4:05 PM, Guenter Roeck wrote:
-> On Tue, Oct 04, 2022 at 10:28:24PM +0200, Arnd Bergmann wrote:
->> On Tue, Oct 4, 2022, at 9:42 PM, Guenter Roeck wrote:
->> > On 10/3/22 06:03, Arnd Bergmann wrote:
->> >> On Mon, Oct 3, 2022, at 12:45 AM, Guenter Roeck wrote:
->> >
->> > Looks like something was missed. When building alpha:allnoconfig
->> > in next-20221004:
->> >
->> > Building alpha:allnoconfig ... failed
->> > --------------
->> > Error log:
->> > <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
->> > arch/alpha/kernel/core_marvel.c:807:1: error: conflicting types for 
->> > 'marvel_ioread8'; have 'unsigned int(const void *)'
->> >    807 | marvel_ioread8(const void __iomem *xaddr)
->> >        | ^~~~~~~~~~~~~~
->> > In file included from arch/alpha/kernel/core_marvel.c:10:
->> > arch/alpha/include/asm/core_marvel.h:335:11: note: previous declaration 
->> > of 'marvel_ioread8' with type 'u8(const void *)' {aka 'unsigned 
->> > char(const void *)'}
->> >    335 | extern u8 marvel_ioread8(const void __iomem *);
->> >        |           ^~~~~~~~~~~~~~
->> 
->> Right, I already noticed this and uploaded a fixed branch earlier today.
->> Should be ok tomorrow.
->> 
->
-> Unfortunately that did not completely fix the problem, or maybe the fix got
-> lost. In mainline, when building alpha:allnoconfig:
->
-> arch/alpha/kernel/core_marvel.c:807:1: error: expected '=', ',', ';', 
-> 'asm' or '__attribute__' before 'marvel_ioread8'
->   807 | marvel_ioread8(const void __iomem *xaddr)
->
-> The code is:
->
-> unsigned u8
-> marvel_ioread8(const void __iomem *xaddr)
->
-> The compiler doesn't like "unsigned u8".
+On 10/12/22 05:29, Florian Weimer wrote:
+>> What did you think of the proposal to disable existing binaries and
+>> start from scratch? Elaborated in the coverletter in the section
+>> "Compatibility of Existing Binaries/Enabling Interface".
+> The ABI was finalized around four years ago, and we have shipped several
+> Fedora and Red Hat Enterprise Linux versions with it.  Other
+> distributions did as well.  It's a bit late to make changes now, and
+> certainly not for such trivialities. 
 
-Right, I fixed up a different bug and introduced this wrong type.
-I didn't catch my mistake until after the pull request was
-merged, but fixed it in
-
-https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=2e21c1575208
-
-which should be in linux-next. I was giving it a little more
-time to be see if there are any other regressions I caused.
-
-     Arnd
+Just to be clear: You're saying that a user/kernel ABI was "finalized"
+by glibc shipping the user side of it, before there being an upstream
+kernel implementation?
