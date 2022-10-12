@@ -2,104 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2A525FC3D8
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 12:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191A65FC523
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Oct 2022 14:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiJLKji (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Oct 2022 06:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S229731AbiJLMTK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Oct 2022 08:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiJLKjh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 06:39:37 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CBF294;
-        Wed, 12 Oct 2022 03:39:35 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 6326632007F1;
-        Wed, 12 Oct 2022 06:39:32 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Wed, 12 Oct 2022 06:39:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1665571171; x=1665657571; bh=4NHIBJRK0S
-        amuGDP4q/b7eYOgsGuZ3RhmtCcXnkYKHQ=; b=JyJvSThpou28493tlw6idF9HHr
-        jR7j9eGMXfbaEhQWp0deYOM6aMjYDcnKvGOGsRiZV/ki6SUFgqbtEKVs9QWoF9DY
-        QQxdUDVs9OZjNFzQx6xNXYH8iZt3a9VQ4dXjIbjWS7W4hfkTl6fYKQZADBafwzli
-        vb14y4FzTj5tyvVwAhJjw8R7+EY1UkhrrsG3zxfWbYonYFyRVFmc6p0S3SL/BfGI
-        K+zxN4IVtjiroMPc3nyyMqnqtY8VUIyf87oN35h1IOihw9AGeXBp0ePDamIyTdLS
-        RkfNN28CLkx/uX2RPE5y41zN6hK7g+TP/AVb/wihI7IeBNjso2wkfFCC/E3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1665571171; x=1665657571; bh=4NHIBJRK0SamuGDP4q/b7eYOgsGu
-        Z3RhmtCcXnkYKHQ=; b=eyFfzN3aKrhmVu115PuUa6ojCuGO4de+k2p5R1YRHXm9
-        gb0Cybwe/+3FXYE3u/TMlQP9A/EvFt0rJKYOMoxmjRmODXAX1GN78e0pQj7KNo5H
-        5KiwuVGVrg8RerOZOh9VaB6duTPyqhjZGvXurpqbKdkawdrGYi+1U2HWI8jM+an+
-        yd3A8UDK4ijszwNYQZoQu3z18mLvwbXBEMHW67nIrEzMjQnxMRG3itGkkHLe0Y3a
-        aeMA8nHnWed2XkMySVjQjE4qbkjGsnxB6m+xdCh9tooeeuR1VgWvY1b8TpwvhqMg
-        G1F9SC7zCoEacFF1WIYGAJf1U1xitGSwdmex1lsFfw==
-X-ME-Sender: <xms:Y5lGY7aZanzJdbn0orApJmyqL_j4ON81DaLdpEnTq1K6GWzuN5f7dQ>
-    <xme:Y5lGY6YSO4-N205NwypyYg8AV0B0pFB3sTHkAH-xejLTcBJi1JahJ82s4ri2TEQtm
-    HCkExd4Ec-o51jn2mA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedgfeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:Y5lGY99sUCtkc-aBjzoqRAzsB7KpJcn5ZAbQcNaF7W8G3K8eAlSggw>
-    <xmx:Y5lGYxohhrd7R2czC4-zquXXiffqnCc1EOpBfvtZgSgEJ4dSMmS4qw>
-    <xmx:Y5lGY2o4FfKjMMe1o4yJ33cHdwyNB-Pw7loCLMG4qvVOG7RAsCVhow>
-    <xmx:Y5lGY128LYJ-NG1X4-lKE7ggEWRHfLg-obAbNe0UO3u79nZAI9UOYQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 6E147B60086; Wed, 12 Oct 2022 06:39:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <d0acd053-96d3-4e18-a9de-97987d8be14b@app.fastmail.com>
-In-Reply-To: <8c7ac4667c6a3cc48f98110117536f60d51ece4a.1665568707.git.christophe.leroy@csgroup.eu>
-References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
- <8c7ac4667c6a3cc48f98110117536f60d51ece4a.1665568707.git.christophe.leroy@csgroup.eu>
-Date:   Wed, 12 Oct 2022 12:39:11 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Baoquan He" <bhe@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Christoph Hellwig" <hch@infradead.org>, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@ACULAB.COM, shorne@gmail.com
-Subject: Re: [RFC PATCH 7/8] mm/ioremap: Consider IOREMAP space in generic ioremap
+        with ESMTP id S229459AbiJLMTJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Oct 2022 08:19:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B647BEAC0
+        for <linux-arch@vger.kernel.org>; Wed, 12 Oct 2022 05:19:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665577147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NV9CicB0DRH4ogY4pUsl7yjoSLbllPXxF4kP6gpANzQ=;
+        b=ZkdFf4RSyplWIFAZsiTBd1eC38yxC4jqCcTmT2b2alQ3A3NN3PoyHHda7lfpms+UpCV42o
+        YinuqKnTn2KnnTI3pA1PMZ8gm6RDgUXPy9ShiVq+ARkciW4TcK1ASiuVoCZHFaP726PPqc
+        t1XN8hCIg5p+27MIUNYYcvPVvk6wOaQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-83-Mfy2mdPFOvymBf8YsiyteA-1; Wed, 12 Oct 2022 08:19:04 -0400
+X-MC-Unique: Mfy2mdPFOvymBf8YsiyteA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 526D8811E75;
+        Wed, 12 Oct 2022 12:19:02 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5D68C414A809;
+        Wed, 12 Oct 2022 12:18:54 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 23/39] x86: Introduce userspace API for CET enabling
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+        <20220929222936.14584-24-rick.p.edgecombe@intel.com>
+        <87v8os0wx5.fsf@oldenburg.str.redhat.com>
+        <8599719452d9615235f7fdd274a9b6ea04ab1f7c.camel@intel.com>
+Date:   Wed, 12 Oct 2022 14:18:52 +0200
+In-Reply-To: <8599719452d9615235f7fdd274a9b6ea04ab1f7c.camel@intel.com> (Rick
+        P. Edgecombe's message of "Mon, 10 Oct 2022 16:28:57 +0000")
+Message-ID: <87zge1z13n.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 12, 2022, at 12:09 PM, Christophe Leroy wrote:
-> Some architecture have a dedicated space for IOREMAP mappings.
+* Rick P. Edgecombe:
+
+> On Mon, 2022-10-10 at 12:56 +0200, Florian Weimer wrote:
+>> > +     /* Only support enabling/disabling one feature at a time. */
+>> > +     if (hweight_long(features) > 1)
+>> > +             return -EINVAL;
+>> 
+>> This means we'll soon need three extra system calls for x86-64
+>> process
+>> start: SHSTK, IBT, and switching off vsyscall emulation.  (The latter
+>> does not need any special CPU support.)
+>> 
+>> Maybe we can do something else instead to make the strace output a
+>> little bit cleaner?
 >
-> If so, use it in generic_ioremap_pro().
+> In previous versions it supported enabling multiple features in a
+> single syscall. Thomas Gleixner pointed out that (this was on the LAM
+> patchset that shared the interface at the time) it makes the behavior
+> of what to do when one feature fails to enable complicated:
 >
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> https://lore.kernel.org/lkml/87zgjjqico.ffs@tglx/
 
-"Some" means exactly powerpc64, right? It looks like microblaze
-and powerpc32 still share some of this code, but effectively
-just use the vmalloc area once the slab allocator is up.
+Can we return the bits for the features that were actually enabled?
+Those three don't have cross-dependencies in the sense that you would
+only use X & Y together, but not X or Y alone.
 
-Is the special case still useful for powerpc64 or could this be
-changed to do it the same as everything else?
+Thanks,
+Florian
 
-    Arnd
