@@ -2,112 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A619A5FD6E5
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 11:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149E85FD941
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 14:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiJMJVt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Oct 2022 05:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S229529AbiJMMg5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Oct 2022 08:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJMJVs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 05:21:48 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BECCF53FF;
-        Thu, 13 Oct 2022 02:21:47 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e733329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e733:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 69BF11EC053B;
-        Thu, 13 Oct 2022 11:21:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665652901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LnnwRuw3rWkfmMreTNatsscTtvI113RGrzj3mDZQgt8=;
-        b=IR4M12YIlBzE0MjYoQkPm9YQGawwBKItPFR1A5j38MojCMdB6INXbCzDfJl7BCrCqwvDLk
-        vFprQY8OXhEdV/nrLCnqbyE1/PQLJoy0lmRPhi/B8vMtKUOEl6D9FLnPNxQcdw+T18xnB+
-        sUmZcBp5AcpqUJo1RmRC9rh5vKxdfEY=
-Date:   Thu, 13 Oct 2022 11:21:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v2 02/39] x86/cet/shstk: Add Kconfig option for Shadow
- Stack
-Message-ID: <Y0fYoG+BCYncSNmL@zn.tnic>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-3-rick.p.edgecombe@intel.com>
- <Y0cduNYq/ml6vtxB@zn.tnic>
- <d2cb7f4d97d05036608c8b4324de17df2e2acfa7.camel@intel.com>
+        with ESMTP id S229513AbiJMMgz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 08:36:55 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44F911E46C;
+        Thu, 13 Oct 2022 05:36:53 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oixSC-00069y-7l; Thu, 13 Oct 2022 14:36:48 +0200
+Message-ID: <3c7c22f1-2e9d-8bdc-33b7-eb8dcb8a3593@leemhuis.info>
+Date:   Thu, 13 Oct 2022 14:36:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d2cb7f4d97d05036608c8b4324de17df2e2acfa7.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US, de-DE
+To:     regressions@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-alpha@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+References: <20220818092059.103884-1-linus.walleij@linaro.org>
+ <20221002224521.GA968453@roeck-us.net>
+ <fd905ca5-fe0d-4cfb-a0d0-aea8af539cc7@app.fastmail.com>
+ <57200020-c460-74ec-c786-9a2c16f4870e@roeck-us.net>
+ <2e110666-7519-4693-8a89-240cbb118c7e@app.fastmail.com>
+ <20221012140519.GA2405113@roeck-us.net>
+ <e99d33ff-4bfe-4727-a5ca-f4987b871ccd@app.fastmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h> #forregzbot
+In-Reply-To: <e99d33ff-4bfe-4727-a5ca-f4987b871ccd@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1665664613;f968989d;
+X-HE-SMSGID: 1oixSC-00069y-7l
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 12:31:38AM +0000, Edgecombe, Rick P wrote:
-> Yea, I was thinking to maybe just change it to
-> CONFIG_X86_USER_SHADOW_STACK in show_smap_vma_flags(). In that function
-> there is already CONFIG_ARM64_BTI and CONFIG_ARM64_MTE.
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
 
-I was thinking exactly the same thing. :-)
+On 12.10.22 17:32, Arnd Bergmann wrote:
+> On Wed, Oct 12, 2022, at 4:05 PM, Guenter Roeck wrote:
+>> On Tue, Oct 04, 2022 at 10:28:24PM +0200, Arnd Bergmann wrote:
+>> Unfortunately that did not completely fix the problem, or maybe the fix got
+>> lost. In mainline, when building alpha:allnoconfig:
+>>
+>> arch/alpha/kernel/core_marvel.c:807:1: error: expected '=', ',', ';', 
+>> 'asm' or '__attribute__' before 'marvel_ioread8'
+>>   807 | marvel_ioread8(const void __iomem *xaddr)
+>>
+>> The code is:
+>>
+>> unsigned u8
+>> marvel_ioread8(const void __iomem *xaddr)
+>>
+>> The compiler doesn't like "unsigned u8".
+> 
+> Right, I fixed up a different bug and introduced this wrong type.
+> I didn't catch my mistake until after the pull request was
+> merged, but fixed it in
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=2e21c1575208
+> 
+> which should be in linux-next. I was giving it a little more
+> time to be see if there are any other regressions I caused.
 
-> I'm not sure if there is any aversion to having arch CONFIGs in core
-> code, but it's kind of nice to have all of the potentially conflicting
-> strings in once place.
+In that case:
 
-Yeah, ok.
+#regzbot fixed-by: 2e21c157520
 
-I guess you can do the CONFIG_X86_USER_SHADOW_STACK thing for the sake
-of simplicity. We have *waaay* too many Kconfig symbols and we should
-introduce only the least amount of new ones.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Ciao, Thorsten
