@@ -2,91 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461B95FDD23
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 17:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413485FDEB0
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 19:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiJMP1k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Oct 2022 11:27:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S229526AbiJMRKw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Oct 2022 13:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiJMP1k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 11:27:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DDF3055F;
-        Thu, 13 Oct 2022 08:27:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F123261842;
-        Thu, 13 Oct 2022 15:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C535C433D6;
-        Thu, 13 Oct 2022 15:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665674858;
-        bh=myeHeaWInMdCAm60tY6McH+eKfDRYbTXRzlUHuFH74Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NwvNpc5DoZ9Q/vC851T9KWaWr01cC1qCEY2hDUK+S4iE0CI2ohNq7DhrmaJcxs3wa
-         tygy+ZdpNwCKcAzEbeTDQzieegX4wKGvrp27bxd2rwUNRZ4t5oHz+OXoNMzUBBVr0+
-         ao81gFaolxvfcKypSeFiOAk4UhnFKR9S1YTClxX4W5aZWYYn5Lzt0amMStpsw646t7
-         1/tpuWcawMlOlxRmufnVs3USljjAH9kkxPDuipbKzWwFS33MY9KvuCFwA5/9AXFpGw
-         mdWpjFNC+xcgXHHLSsSXZaP/l/ivicn5tNTMID7U/pQa459qWsiC4LtfZZVMslwsUf
-         xwLF6/i011nvg==
-Received: by mail-ed1-f41.google.com with SMTP id l22so3136850edj.5;
-        Thu, 13 Oct 2022 08:27:38 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1HQAjkHfbtpq74svDwOya1s6ZSXoD9U55xq9KAhN/jnVdBENml
-        f51PH/9C5aaXFUexMNa7p7T8B2HBDktXHApsVIo=
-X-Google-Smtp-Source: AMsMyM61ntkQ09tAxmD/aksdqFbedBD1EgpOXV90Jy2r2V93n3AtnJgua0sIPdZJp2Qzl14ulQmFptdaSMyb1iDxp6w=
-X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id
- fi14-20020a056402550e00b00456f79f2bedmr316976edb.106.1665674856608; Thu, 13
- Oct 2022 08:27:36 -0700 (PDT)
+        with ESMTP id S229436AbiJMRKw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 13:10:52 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDD71900E;
+        Thu, 13 Oct 2022 10:10:42 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.97.193]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1N7zJl-1pElmK1yvz-014zSo; Thu, 13 Oct 2022 19:07:47 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id B53E93C186; Thu, 13 Oct 2022 19:07:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1665680865; bh=nYzni+L9VyrG5x0Rm0GekVqt+5sAuaP0Uw0wWRtznbs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YybbEip1ziptyerFZW5x4mHETsrpJ3v3H7/cNimPA9plNumzlqdDT+4GgSMkIrxrI
+         YiSjrA7SbDK6Co+Ar4RZP8WqwKv9LSa6jpUtfcvlB/KnUGlPC8UMg7XYEGNLrvOo7W
+         mFbducFtcLs8gz7GPbuFq9KttC/1RQYe6LLySJGg=
+Date:   Thu, 13 Oct 2022 19:07:45 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+Message-ID: <Y0hF4XfsgKxevNzj@fjasle.eu>
+References: <20221012233500.156764-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-References: <20221012144846.2963749-1-chenhuacai@loongson.cn> <CAHk-=wj=62F=soverz1NT41B1_CMtaxnUZX+_qGQ3mbeQdjivg@mail.gmail.com>
-In-Reply-To: <CAHk-=wj=62F=soverz1NT41B1_CMtaxnUZX+_qGQ3mbeQdjivg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 13 Oct 2022 23:27:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H49Te6h4Qx0xaKwk8y29pgW+12=hpsJh8w6Tkyp84f0UQ@mail.gmail.com>
-Message-ID: <CAAhV-H49Te6h4Qx0xaKwk8y29pgW+12=hpsJh8w6Tkyp84f0UQ@mail.gmail.com>
-Subject: Re: [GIT PULL] LoongArch changes for v6.1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221012233500.156764-1-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:nNax0N1B61G4QZH1bsIn90CO6far/9fS9B2aw4JVF3yySGv09F8
+ htH/J6uXUBR/KxIOEg++8HQ/B7UxLWVhLs/LtTXBEUpNIj413gwcD6jauODM82IybtVrC8a
+ B6+D6kxAVA6xOlngSyPWaL/9YeChjJm7xZ13aeoANMDFqRrs6mQR7hKOX6+7mnebE1Q1RwA
+ w1s5qCIrJ1+xko0c0wGFg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:62mvNxEj8YQ=:l8rqU7jgDxoy/CFAQjc5Gc
+ OU8VTF5vkXhHKJQ5iXYvU1F80n7vU96GDUQ3cXHJfHCnpFzNzJoRtz18EICY+CpsghJ7qoghU
+ R46AF6zlBWqe6AXkzEo3qKApUqsdkZTJhX14Ao51hv5UPnrsjh5WXMTmi+/rcK+3wpUPXmf51
+ Ara0DAXguWqUIZyCmm5KfSdRciw01FyKeoClJxAjTDZegJL937KqQTkt3fbcWWflSkcKNS86e
+ 7bKgWDTLm5FJ8GT83pA2wZTz8+EvkpSxhm3tvrbS2NI4ITtDTCUIMMNZcmoh+1jkaBh/PYy0P
+ rmyduLA87e4f0sFwY1Z3VAspcFJb4wwCi30SoHGqqSnOun5H+yowP474wBWj6RAJpoqYla4Vw
+ +oYg3r8vi0Q10uJmTq4Y2J14fw1DaVF5JPJkUNpNESATSgiaEsyF5vMGA+PqfF6cDs0s3+9/T
+ SvJHps014cUh2OUmGlgy39CqHHkegpxLQKjWlQymbxBBRpz7o+UBShlQDIelCPECiNtiY1MiA
+ DPPnOLWgxJWc8e/Qt8JTULMhw2aSijtdxWnpKikCdaVO6goAxWQGPia4CXoDCnCki3sEflNVW
+ 1t/KAZEhQKVZ4DJX+vZZg+Q0iwnKO8fUbveQPhxtBMRLa+VtLrKLYLdC/B4l28xAuD6qZaN42
+ OZ7thCbeCa1B/MIr8UcEtVABekioyb3XNfdm5ov6q0WhLEpM7YD/ZbDo/Li1Syyt+9T0RSOU6
+ 5Urh+G+k9qpYXp+vY1ASa3csUNz3ZkaEar2J8EIquDcSoe7G4CWgwOZaZB3D6TTVq4D+HZH3o
+ hz3zoAb
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Linus,
+On Thu, Oct 13, 2022 at 08:35:00AM +0900, Masahiro Yamada wrote:
+> Date: Thu, 13 Oct 2022 08:35:00 +0900
+> From: Masahiro Yamada <masahiroy@kernel.org>
+> To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+>  <will@kernel.org>, linux-arm-kernel@lists.infradead.org
+> Cc: linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>, Masahiro
+>  Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+>  linux-kernel@vger.kernel.org
+> Subject: [PATCH] arm64: remove special treatment for the link order of
+>  head.o
+> Message-Id: <20221012233500.156764-1-masahiroy@kernel.org>
+> X-Mailer: git-send-email 2.34.1
+> 
+> In the previous discussion (see the Link tag), Ard pointed out that
+> arm/arm64/kernel/head.o does not need any special treatment - the only
+> piece that must appear right at the start of the binary image is the
+> image header which is emitted into .head.text.
+> 
+> The linker script does the right thing to do. The build system does
+> not need to manipulate the link order of head.o.
+> 
+> Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-On Thu, Oct 13, 2022 at 2:24 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Oct 12, 2022 at 7:51 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> >   git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.1
->
-> Grr.
->
-> This was rebased mere hours before the pull request.
->
-> Much (all?) of it has been in next - with different commit IDs, of
-> course, but the question remains why you have rebased it?
-I'm very sorry for that. The patches are in linux-next for some days,
-but the kernel test robot reports that there is a "define but not
-used" warning, so I fixed that warning and rebased.
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-> It just makes it much less convenient for me to check "was this in
-> next?" and is generally a *horrible* thing to do.
-I will avoid such operations in future, sorry for that again.
+>  scripts/head-object-list.txt | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+> index b16326a92c45..f226e45e3b7b 100644
+> --- a/scripts/head-object-list.txt
+> +++ b/scripts/head-object-list.txt
+> @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+>  arch/arc/kernel/head.o
+>  arch/arm/kernel/head-nommu.o
+>  arch/arm/kernel/head.o
+> -arch/arm64/kernel/head.o
+>  arch/csky/kernel/head.o
+>  arch/hexagon/kernel/head.o
+>  arch/ia64/kernel/head.o
+> -- 
+> 2.34.1
 
-Huacai
-
->
->                        Linus
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
