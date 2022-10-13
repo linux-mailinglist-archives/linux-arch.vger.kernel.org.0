@@ -2,45 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149E85FD941
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 14:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461B95FDD23
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 17:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiJMMg5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Oct 2022 08:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S229735AbiJMP1k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Oct 2022 11:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiJMMgz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 08:36:55 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44F911E46C;
-        Thu, 13 Oct 2022 05:36:53 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oixSC-00069y-7l; Thu, 13 Oct 2022 14:36:48 +0200
-Message-ID: <3c7c22f1-2e9d-8bdc-33b7-eb8dcb8a3593@leemhuis.info>
-Date:   Thu, 13 Oct 2022 14:36:47 +0200
+        with ESMTP id S229540AbiJMP1k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 11:27:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DDF3055F;
+        Thu, 13 Oct 2022 08:27:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F123261842;
+        Thu, 13 Oct 2022 15:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C535C433D6;
+        Thu, 13 Oct 2022 15:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665674858;
+        bh=myeHeaWInMdCAm60tY6McH+eKfDRYbTXRzlUHuFH74Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NwvNpc5DoZ9Q/vC851T9KWaWr01cC1qCEY2hDUK+S4iE0CI2ohNq7DhrmaJcxs3wa
+         tygy+ZdpNwCKcAzEbeTDQzieegX4wKGvrp27bxd2rwUNRZ4t5oHz+OXoNMzUBBVr0+
+         ao81gFaolxvfcKypSeFiOAk4UhnFKR9S1YTClxX4W5aZWYYn5Lzt0amMStpsw646t7
+         1/tpuWcawMlOlxRmufnVs3USljjAH9kkxPDuipbKzWwFS33MY9KvuCFwA5/9AXFpGw
+         mdWpjFNC+xcgXHHLSsSXZaP/l/ivicn5tNTMID7U/pQa459qWsiC4LtfZZVMslwsUf
+         xwLF6/i011nvg==
+Received: by mail-ed1-f41.google.com with SMTP id l22so3136850edj.5;
+        Thu, 13 Oct 2022 08:27:38 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1HQAjkHfbtpq74svDwOya1s6ZSXoD9U55xq9KAhN/jnVdBENml
+        f51PH/9C5aaXFUexMNa7p7T8B2HBDktXHApsVIo=
+X-Google-Smtp-Source: AMsMyM61ntkQ09tAxmD/aksdqFbedBD1EgpOXV90Jy2r2V93n3AtnJgua0sIPdZJp2Qzl14ulQmFptdaSMyb1iDxp6w=
+X-Received: by 2002:a05:6402:550e:b0:456:f79f:2bed with SMTP id
+ fi14-20020a056402550e00b00456f79f2bedmr316976edb.106.1665674856608; Thu, 13
+ Oct 2022 08:27:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US, de-DE
-To:     regressions@lists.linux.dev, Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-alpha@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <20220818092059.103884-1-linus.walleij@linaro.org>
- <20221002224521.GA968453@roeck-us.net>
- <fd905ca5-fe0d-4cfb-a0d0-aea8af539cc7@app.fastmail.com>
- <57200020-c460-74ec-c786-9a2c16f4870e@roeck-us.net>
- <2e110666-7519-4693-8a89-240cbb118c7e@app.fastmail.com>
- <20221012140519.GA2405113@roeck-us.net>
- <e99d33ff-4bfe-4727-a5ca-f4987b871ccd@app.fastmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h> #forregzbot
-In-Reply-To: <e99d33ff-4bfe-4727-a5ca-f4987b871ccd@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1665664613;f968989d;
-X-HE-SMSGID: 1oixSC-00069y-7l
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20221012144846.2963749-1-chenhuacai@loongson.cn> <CAHk-=wj=62F=soverz1NT41B1_CMtaxnUZX+_qGQ3mbeQdjivg@mail.gmail.com>
+In-Reply-To: <CAHk-=wj=62F=soverz1NT41B1_CMtaxnUZX+_qGQ3mbeQdjivg@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 13 Oct 2022 23:27:24 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H49Te6h4Qx0xaKwk8y29pgW+12=hpsJh8w6Tkyp84f0UQ@mail.gmail.com>
+Message-ID: <CAAhV-H49Te6h4Qx0xaKwk8y29pgW+12=hpsJh8w6Tkyp84f0UQ@mail.gmail.com>
+Subject: Re: [GIT PULL] LoongArch changes for v6.1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,40 +63,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
+Hi, Linus,
 
-On 12.10.22 17:32, Arnd Bergmann wrote:
-> On Wed, Oct 12, 2022, at 4:05 PM, Guenter Roeck wrote:
->> On Tue, Oct 04, 2022 at 10:28:24PM +0200, Arnd Bergmann wrote:
->> Unfortunately that did not completely fix the problem, or maybe the fix got
->> lost. In mainline, when building alpha:allnoconfig:
->>
->> arch/alpha/kernel/core_marvel.c:807:1: error: expected '=', ',', ';', 
->> 'asm' or '__attribute__' before 'marvel_ioread8'
->>   807 | marvel_ioread8(const void __iomem *xaddr)
->>
->> The code is:
->>
->> unsigned u8
->> marvel_ioread8(const void __iomem *xaddr)
->>
->> The compiler doesn't like "unsigned u8".
-> 
-> Right, I fixed up a different bug and introduced this wrong type.
-> I didn't catch my mistake until after the pull request was
-> merged, but fixed it in
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=2e21c1575208
-> 
-> which should be in linux-next. I was giving it a little more
-> time to be see if there are any other regressions I caused.
+On Thu, Oct 13, 2022 at 2:24 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, Oct 12, 2022 at 7:51 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.1
+>
+> Grr.
+>
+> This was rebased mere hours before the pull request.
+>
+> Much (all?) of it has been in next - with different commit IDs, of
+> course, but the question remains why you have rebased it?
+I'm very sorry for that. The patches are in linux-next for some days,
+but the kernel test robot reports that there is a "define but not
+used" warning, so I fixed that warning and rebased.
 
-In that case:
+> It just makes it much less convenient for me to check "was this in
+> next?" and is generally a *horrible* thing to do.
+I will avoid such operations in future, sorry for that again.
 
-#regzbot fixed-by: 2e21c157520
+Huacai
 
-Ciao, Thorsten
+>
+>                        Linus
