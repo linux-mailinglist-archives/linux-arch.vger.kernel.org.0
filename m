@@ -2,188 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D755FDEA9
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 19:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575AD5FDF39
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Oct 2022 19:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiJMRJE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Oct 2022 13:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
+        id S229600AbiJMRpX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Oct 2022 13:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJMRJB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 13:09:01 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2128.outbound.protection.outlook.com [40.107.101.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11055B4893;
-        Thu, 13 Oct 2022 10:09:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AHlqGApfYsFnQTpeVNS/PMg2EK2rSPdvnVnZIP5GXcTqHInhgZcjwjZbHnQ4ihpVxNx2Rha9XNfUbnmicI3sU8Ub4urwTKSMPPrFJjRegxp4fo1dmq9qAEUW2JlNeJfnInWFCANg+jpLGjeZz+yM8265iTgBZ2aQpOETYxBoqbAScB6+VEw+24CpIkXtdUunDZf9X7buJ/Taa8vF1at4JWOYOCSsr4Msb85tI6a1aMCV+WBMer5p/7Wv0JB+QprVPAnKsDz/liitN33FMK+UnpLqz62SaD8OL/Tsja0lMMAIi7tqcM4iiOxf+JbTihdHG2sp8a4DaY3Pr/pS4erKmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NHCSsJ+NTPZKshltTGwnKokpNkpiDs2fQeVQ7Yjuwow=;
- b=dqWMJgvZBGDHZdPUZ2fbAryVzO4SVUTvpqhizlFPKE4Ci3E7M28LHHNu88VixBAii2s8Fnq1d4kcSh/O82SsRgXzoGAXS4DlJ0AK10tC/qGFzcMRspASIxz9j0uK60jcLZveqScjAgmD9uwd4aa58CrDtTwbNABJOmXPKaXOJjw3KMyVfGTVN1tUffFApokrnx4T6DQzYHC9rXmV6ZfnvFszgoffwrS9f3AAH0SGxArd4kOk3Xsrx4FF+ALIcAnlJid8/fjBn+kFZ93fnpf5MFbMMwVtBv8ogLAxjawhkZgv3EmmdEULXuVFJMbRxKZkoV02hAJSjjD+pKTYSHwOkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bu.edu; dmarc=pass action=none header.from=bu.edu; dkim=pass
- header.d=bu.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bu.edu; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NHCSsJ+NTPZKshltTGwnKokpNkpiDs2fQeVQ7Yjuwow=;
- b=efWG0B0UqcA3/QnIqVD6BnxIKNJTSXDivjpZSo1isP+jyM6cr088AnD3/g37qxG7nTOrL8Q9N0vpa9EFb+WYTwWdktj/1W1Mvhy54YoaJjDZvikPODHIXu+XmMBye7NWja+J68oCPbMu0zHfQCSyBPEPKNBIg3pBC/ePWhg4+UirDi9zLueP6gocAZr58259ggvwFFCJ8Sm0M8Y8YVd6PX/0yYueDGX7uS2paL1UgQjJ1CgKtwBtLkO6EWc8Jeik8+LUgdvh/jSB5FT3VX7ms3KUEXBwlp2uAvCUYBZQ3YMq1QZ2D0EfGte3nuJlSgHZcJPZp0QvYVKHYWP74QupoQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bu.edu;
-Received: from BL0PR03MB4129.namprd03.prod.outlook.com (2603:10b6:208:65::33)
- by DM6PR03MB5049.namprd03.prod.outlook.com (2603:10b6:5:1ee::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Thu, 13 Oct
- 2022 17:08:58 +0000
-Received: from BL0PR03MB4129.namprd03.prod.outlook.com
- ([fe80::9e2b:bf05:79ec:581]) by BL0PR03MB4129.namprd03.prod.outlook.com
- ([fe80::9e2b:bf05:79ec:581%4]) with mapi id 15.20.5709.021; Thu, 13 Oct 2022
- 17:08:58 +0000
-Message-ID: <4ae5f680-9db6-a087-a11b-a8b1ff7237a0@bu.edu>
-Date:   Thu, 13 Oct 2022 13:08:54 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [RFC UKL 10/10] Kconfig: Add config option for enabling and
- sample for testing UKL
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, michal.lkml@markovi.net, ndesaulniers@google.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-        ebiederm@xmission.com, keescook@chromium.org, peterz@infradead.org,
-        viro@zeniv.linux.org.uk, arnd@arndb.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, pbonzini@redhat.com,
-        jpoimboe@kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, rjones@redhat.com, munsoner@bu.edu, tommyu@bu.edu,
-        drepper@redhat.com, lwoodman@redhat.com, mboydmcse@gmail.com,
-        okrieg@bu.edu, rmancuso@bu.edu
-References: <20221003222133.20948-1-aliraza@bu.edu>
- <20221003222133.20948-11-aliraza@bu.edu>
- <d2089a89-21a9-1e05-5d58-91b8411f7141@gmail.com>
- <53c84c25-31ff-29d5-c6fb-85cb307f1704@bu.edu>
- <CAK7LNAT-Q=sS-9L1eRuOnomqqDNyRp2knZh+2SYLqB2Gn8ekHg@mail.gmail.com>
-Content-Language: en-US
-From:   Ali Raza <aliraza@bu.edu>
-In-Reply-To: <CAK7LNAT-Q=sS-9L1eRuOnomqqDNyRp2knZh+2SYLqB2Gn8ekHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR11CA0007.namprd11.prod.outlook.com
- (2603:10b6:208:23b::12) To BL0PR03MB4129.namprd03.prod.outlook.com
- (2603:10b6:208:65::33)
+        with ESMTP id S229491AbiJMRpW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Oct 2022 13:45:22 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3335963366
+        for <linux-arch@vger.kernel.org>; Thu, 13 Oct 2022 10:45:21 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so5574008pjq.3
+        for <linux-arch@vger.kernel.org>; Thu, 13 Oct 2022 10:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ZkeUyFWIjLvxMFg7brz1pr43wrdZfuQ/bNA+wt0kz0=;
+        b=Oyl3aTOEOtogOBtfUuv1T7whUHgFt3/b5KjJ+KNujD3CVmO9CECkcsWeNZqm2l79Pj
+         7c/GDjpcT7G8wiRhUBB7V0tkoB3v2eQ6bbAAcm3iRIBIivASknKeDN49CgJ1Cw2lmfdJ
+         rLjngG7sy8WYzMgRqA1dphHW+q1jBqkQ1r67mZxIxu/0CZitoIpbTNM0nC/89yxK3S0a
+         Ak+B7SszYIlKZFueImPugmAh1C3IuuKJuqWv/HpWMaQy3faF6gcaexP1r/s7u/xYm7ky
+         VkVt57MuK1ONXSu/dh8cxswOhunxB1Yjz/u17N501OnLF71QurkyfGssa9XBijY5WUW+
+         2FMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9ZkeUyFWIjLvxMFg7brz1pr43wrdZfuQ/bNA+wt0kz0=;
+        b=urNWNVvSarzSFBejP2R9mrrZ6HtosIyrQo/QQd+v4/VhKZwGMrSBFYMPH8tY75lCID
+         vT6qeYk8h3dQWreqZmeRtwO6ZuYseu5W/jKYS8V3j2zj17HCWgi1TH6wNOrRiFclEg/s
+         zcGgUCF97EKM95bBGoW6Z6KHeAsD0/vpWvHhT0E1PVqesxPkF+NbKFvG991IUde4ehYU
+         QSbBWWSCohlMmnbMYAv/VPzH8XwOIh8Q3dX8Wm7KnngXTxHDok7cQlSqDj9Eb2tAELcR
+         ZF/95AB7H7ow54734ofFr7TUIOJrPA1/Z9Fx2qG4p7YILFz+cs0eKEG7QMmsk1PFYPUd
+         vXzQ==
+X-Gm-Message-State: ACrzQf1Xc7Y1nxBptmNfUyJexhDuTljq7ICF3GjLj+KSlXkp1mbiGS5z
+        /dPodN05NY3zw2IcNtoydKj722QZUD6UcVZSdZCuuw==
+X-Google-Smtp-Source: AMsMyM48uQktZ+YTsNROG9cNsn/6MzYVYWhM8oCuC4mWFtmHh5UhmPWtU9OkeE0rTLc4j03w7LrjDZpeEoLncjJHAKc=
+X-Received: by 2002:a17:90b:3a88:b0:209:f35d:ad53 with SMTP id
+ om8-20020a17090b3a8800b00209f35dad53mr12593187pjb.102.1665683120401; Thu, 13
+ Oct 2022 10:45:20 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR03MB4129:EE_|DM6PR03MB5049:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50b6728b-3ef1-48b7-21d1-08daad3d9dd6
-X-LD-Processed: d57d32cc-c121-488f-b07b-dfe705680c71,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dczwaZO5QeIJyszKutqsMeqGH7JJPLmkQ1PmjZmwGwd5gDOy7lqqxrvTZHSIgjp4qHxTKThsyRUKaYduVkB1+ns9uXWCxNsaQlr5mjYEJn0Fo+xQo0QsV2/wCY8r61hcw1mIc8uVzIMDm80ehLzy1K1/ZZCsDf9ATSGSNgpcY+BOyMSW46XKJFvoRP85+S5hRB37oRm0WOF5L+XxkzIdY2Px0IbvjkIa+ubdgRdKP8HCXyIRP7AQcgxyPFuomVXE1sE6e9oIkEOhlTv5P6OJdiMqEhgH4yHVq0QBJY512aXh2/OsZ0/SN8PIj5xRKqK6OIG7Ax65HY0n0z5hL8jCfMkimJzrdPFPCwk8InZjRjAMSRANZuyfNf84QaVExuVUGOehqxCk1NHmAUrBg8IU9+GMgN84m7JplHWVvyC7xWGo28itVkFLczc/KJ6N6TF770IISFcDzoI1GNbcPikQaIzuntZgQAeICcpGAAcHYIbT7xY13MdOYjr57yIZFLZcRlUBh1gJXZ+7yuuPQQ2SRK6jR/eqIowcbSEWqs2nC8QPXDnysltn0LkGpSpHlAosCMpWuOJXt0afD6+cNNv7MTzpleemF8v+e8SlHNSo8142VaOPneM9lcRoYZYVZr9stYCjKzibEyNUokZIx/vaNjfXXX2t4nq+WRE+Lpje5JF0mirFvPkdaXKRsESpR9WqI8ppqZN+0tZrwmD8HgeXM2WwJ8g2tjSD5R4HVNHnGBQjQjDIHHFUR5WkpMMm9OsGktdkZBYOm0xEeilqsHk36cgGwJERRKDVc7qERJBXP0g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR03MB4129.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(346002)(136003)(376002)(396003)(451199015)(36756003)(2616005)(186003)(26005)(6512007)(2906002)(41320700001)(786003)(316002)(6916009)(41300700001)(86362001)(66946007)(66556008)(66476007)(8936002)(8676002)(4326008)(31696002)(6666004)(53546011)(75432002)(38100700002)(7416002)(6506007)(478600001)(5660300002)(7406005)(6486002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGo1aXNRQUxEaENVV3hXUkZEdGU1eTF2RXNMYzVyQnhoeTBLRkFHNEl3b2RB?=
- =?utf-8?B?bmtxZ05MRTJOQTVQb3VsR2VWOVYrVjdWWXVLVkdwSW5UNTZZTldzRjFuV09F?=
- =?utf-8?B?YSs2S2ZUNWNMaFVOWmVKVWlUR0hlWStyMXpTV1FlRENVenJkNGVLa0s3VTJi?=
- =?utf-8?B?b1Q0NnptdU1VbFFIY2kvV1RQT2VFamtCYzd5eUFzQzJhU2t2aE1hTFBKenho?=
- =?utf-8?B?c0N2QnQ2Z3kzMk5YTGdkZ2RVRWdyNE5XQnhzVmdlcS9yTk1vQVRtdWFvTnUz?=
- =?utf-8?B?RE5sOGx0azRCODJGYk1GSUF1eUFBN3ZINFh3ZUpYblVXUThiSHNqVS9WcDJj?=
- =?utf-8?B?cmVXVkZGeng0UXgyS3VHaU9sNUk1cHo4ZENzNTJiUktBcm5qV0tFWmxJWTA3?=
- =?utf-8?B?cUJ1MXZxL20zdXdwL0FvWlVOZHJVTTk4VzQ3TFNEeUcrZVRiakVYdEdMY3Ez?=
- =?utf-8?B?ZGhXWUg0dTZmekd0dElVNzdYbDRUd2taa3Z5RDdWWHBlOUdZNFRzOFAwVW5p?=
- =?utf-8?B?eU5nOFdXOE80bEJpOXBqNFJpcGsrK2lMa2dNSmhiNzFCOWYyMXU3dDJYcHZQ?=
- =?utf-8?B?Y2hPazFLdSt4YW1iUXp3MTd1RFpvOTlTOWhmWUZLcmNaNlRDK0RNTEtQcEY2?=
- =?utf-8?B?c2g3L1NSdFJqVW02eExZTW0zdDRseC9FS0RIYm5KK242UUhSaFE3d2FLbmQ1?=
- =?utf-8?B?azlUVXFSSUFndGplbmh1aTlDcEE4UDExOGtYdnU0UVhhSS9KYjlMNGNIc21T?=
- =?utf-8?B?a0VEQkN4ejNOM0hjcElHUWVIaW1Db1RGRjg3SFRVVS9PRnRCRzZQR201eEda?=
- =?utf-8?B?MW1QTjVzU0tKOHVnYjhoRTBPYm5UV0U5VWErRDFHdm5uQmF2R24zVTBxZ3RW?=
- =?utf-8?B?MmVJME5pTVFKT3V5YWJGYXJrVm1FbDh3ZWwvZXZmNGxLLy9uQTE2RElZQUZG?=
- =?utf-8?B?bG8wWUcrSi95L3F4UDZFWG9UdlhhbVduNHpyK3BUY29hbzY2NnZ4VlR2cmp0?=
- =?utf-8?B?OW1QT3RZc0N6d3l4emRFVTVLZTZYVHYwMHhhaU05RFRUYy91aVlkcTlVVnl0?=
- =?utf-8?B?VjRtL1JHOWEzOWl2MUNJbCs3K21rZ1J0RUliNmhLSFFYbFRraERxZ3ErZ2t4?=
- =?utf-8?B?VTdsdDhoZm4wQVh6UnNvSExGVmplN24xVlZqVjZHMDEwRFhpWS9HNnBHNG5n?=
- =?utf-8?B?TzBwWE9zTXE3N2oxQkxmWDhtcVgrNXB3dlgzc2U3Sm9nN2RMUmJsb2FXdlhP?=
- =?utf-8?B?RkpSOE5CL2Y0SEpTNW5tVXJUdE5qVmhCT0lBU29DNGlWNXl3VW5ERDZETGZi?=
- =?utf-8?B?ajBXbDVReEJyR0RhT2JLdWJ2bzlDSDFCdnFBR0dHQTdWKzJhTEJzaWlsQW5n?=
- =?utf-8?B?ZUpSUXNYakd2OUtjL1VxL0RqVlpXVi9kRURqNjN1NmlQeEsxNnFONlAxa0ZL?=
- =?utf-8?B?eGw0WXBxa3lPZzJJemZtRS9mR3hDVUZLeEhUVkhXcWFkd3lQZ1VDVklpUlB0?=
- =?utf-8?B?NkdOWkhuV3hudDJlbGRxUlhRcW56bERETHZQZzJwTEJTZkRGN0tDTEhINkZH?=
- =?utf-8?B?a0VYdVlJWDJtS3cwUzhSbEVrMmZtYlRYY2R1SSsvaFZXYUtxamhmSUU1ZEZz?=
- =?utf-8?B?QUFjbUhDOUxhYkhEL0FzRlNYSkF4TnhYeHBzakVSVlAvSnVVSE1ETndxVVNx?=
- =?utf-8?B?MkVHem4yZGxMRS9VRUloZFA4V1MwRXp0SDdqekJGNkUvL1NzWVVSNWhlaEJJ?=
- =?utf-8?B?ZEhFQUtzdjE4Mjl5WWg4MXFEdlk0dnlxRnQ4dDNyZkZwSlRhN0hxZlVzbVpZ?=
- =?utf-8?B?TGF2dGdHczNEMmNuMU5Pc3hxZEhzZHZnTnFkVUVhYm42Vmttd3F0U1oxenBJ?=
- =?utf-8?B?MkUrUFUwbnhoQmI0NjRTYU54c1VaUVhmYm1IMWU5cGMzYS8vUGpuRnJVT2dJ?=
- =?utf-8?B?TjNETG93Y1BIZ0ZlcU9BWHdEaGlDcS92S2VaeVp1SlJCalFuZHdBTXZLaHdM?=
- =?utf-8?B?d1o2TkdweTVicmp1TjNDclk5aVZQUmc1SmMxeHp0SzlESEtLOGh5cUhNT3Nt?=
- =?utf-8?B?SlJoajl4dFZJMExKV09PR2d6OTgxTXJZRGxYcjJnazFVV2x0TlNPYXhGU1dS?=
- =?utf-8?Q?wlR3MNjbt0OrQdKqbdq1VLgCT?=
-X-OriginatorOrg: bu.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50b6728b-3ef1-48b7-21d1-08daad3d9dd6
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR03MB4129.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2022 17:08:58.2919
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d57d32cc-c121-488f-b07b-dfe705680c71
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 15HgxxxuIWCwGQyGWEwrCD6YuPuoee5/y3ljgXH+RrSOdf958FPZU6SvjopOH8LN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5049
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221012181841.333325-1-masahiroy@kernel.org>
+In-Reply-To: <20221012181841.333325-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 13 Oct 2022 10:45:09 -0700
+Message-ID: <CAKwvOdn-0rp6NCVOrQM9Xe0zcTshKbyorpkx5WzQSTu1o45AcA@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: raise minimum supported version of
+ binutils to 2.25
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/7/22 06:21, Masahiro Yamada wrote:
-> On Fri, Oct 7, 2022 at 6:29 AM Ali Raza <aliraza@bu.edu> wrote:
->>
->> On 10/3/22 22:11, Bagas Sanjaya wrote:
->>> On 10/4/22 05:21, Ali Raza wrote:
->>>> Add the KConfig file that will enable building UKL. Documentation
->>>> introduces the technical details for how UKL works and the motivations
->>>> behind why it is useful. Sample provides a simple program that still uses
->>>> the standard system call interface, but does not require a modified C
->>>> library.
->>>>
->>> <snipped>
->>>>  Documentation/index.rst   |   1 +
->>>>  Documentation/ukl/ukl.rst | 104 ++++++++++++++++++++++++++++++++++++++
->>>>  Kconfig                   |   2 +
->>>>  kernel/Kconfig.ukl        |  41 +++++++++++++++
->>>>  samples/ukl/Makefile      |  16 ++++++
->>>>  samples/ukl/README        |  17 +++++++
->>>>  samples/ukl/syscall.S     |  28 ++++++++++
->>>>  samples/ukl/tcp_server.c  |  99 ++++++++++++++++++++++++++++++++++++
->>>>  8 files changed, 308 insertions(+)
->>>>  create mode 100644 Documentation/ukl/ukl.rst
->>>>  create mode 100644 kernel/Kconfig.ukl
->>>>  create mode 100644 samples/ukl/Makefile
->>>>  create mode 100644 samples/ukl/README
->>>>  create mode 100644 samples/ukl/syscall.S
->>>>  create mode 100644 samples/ukl/tcp_server.c
->>>
->>> Shouldn't the documentation be split into its own patch?
->>>
->> Thanks for pointing that out.
->>
->> --Ali
->>
-> 
-> 
-> The commit subject "Kconfig:" is used for changes
-> under scripts/kconfig/.
-> 
-> Please use something else.
-> 
-> 
-Will do, thank you!
+On Wed, Oct 12, 2022 at 11:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Binutils 2.23 was released in 2012. Almost 10 years old.
+>
+> We already require GCC 5.1, released in 2015.
+>
+> Bump the binutils version to 2.25, which was released one year before
+> GCC 5.1.
+>
+> With this applied, some subsystems can start to clean up code.
+> Examples:
+>   arch/arm/Kconfig.assembler
+>   arch/mips/vdso/Kconfig
+>   arch/powerpc/Makefile
+>   arch/x86/Kconfig.assembler
 
---Ali
+Thanks for the patch! Indeed, it looks like 2.25 is from 2014.
+https://ftp.gnu.org/gnu/binutils/
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  Documentation/process/changes.rst | 4 ++--
+>  scripts/min-tool-version.sh       | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+> index 9844ca3a71a6..ef540865ad22 100644
+> --- a/Documentation/process/changes.rst
+> +++ b/Documentation/process/changes.rst
+> @@ -35,7 +35,7 @@ Rust (optional)        1.62.0           rustc --version
+>  bindgen (optional)     0.56.0           bindgen --version
+>  GNU make               3.82             make --version
+>  bash                   4.2              bash --version
+> -binutils               2.23             ld -v
+> +binutils               2.25             ld -v
+>  flex                   2.5.35           flex --version
+>  bison                  2.0              bison --version
+>  pahole                 1.16             pahole --version
+> @@ -119,7 +119,7 @@ Bash 4.2 or newer is needed.
+>  Binutils
+>  --------
+>
+> -Binutils 2.23 or newer is needed to build the kernel.
+> +Binutils 2.25 or newer is needed to build the kernel.
+>
+>  pkg-config
+>  ----------
+> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+> index 8766e248ffbb..4e5b45d9b526 100755
+> --- a/scripts/min-tool-version.sh
+> +++ b/scripts/min-tool-version.sh
+> @@ -14,7 +14,7 @@ fi
+>
+>  case "$1" in
+>  binutils)
+> -       echo 2.23.0
+> +       echo 2.25.0
+>         ;;
+>  gcc)
+>         echo 5.1.0
+> --
+> 2.34.1
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
