@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF27A5FF9E8
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Oct 2022 13:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F565FF9EA
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Oct 2022 13:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiJOLvc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 Oct 2022 07:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S229745AbiJOLvp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 Oct 2022 07:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiJOLu4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Oct 2022 07:50:56 -0400
+        with ESMTP id S229751AbiJOLvE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Oct 2022 07:51:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018CE2A248;
-        Sat, 15 Oct 2022 04:50:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7E0437EC;
+        Sat, 15 Oct 2022 04:51:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAB7EB80935;
-        Sat, 15 Oct 2022 11:50:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA39AC43470;
-        Sat, 15 Oct 2022 11:50:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0BAF9B803F1;
+        Sat, 15 Oct 2022 11:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A4CC43141;
+        Sat, 15 Oct 2022 11:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665834652;
-        bh=OUataWC9fARm49pEXA4aATXkLJrVEmd1f27FTiOL3wY=;
+        s=k20201202; t=1665834660;
+        bh=oLo4LwoP9GQ++MbZ72D5YQbDVqlBfgDub+AiMlYcSSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P065BAijKebt4Z+kEZu4mqHiTux2J18I2fl0VBYxJMiqsBgT+DMc5+NFVUdE5wiBL
-         6F47C8ZspEvbkino8+me3w9PzKHk3frpVMkznIVpUBlaMkMlGiuFrTVZjdTC/2vant
-         9vNkoQ+sxWLME2qbc/lNT20ZBGz+acdbl8x687OGA9bFWY1DRLq9SFwmKT5MASycfi
-         feAiHYVGJ9LFq21DZUYkWmqRo45Drru6N4wUz5F0vHiEX8Ae8kVsAwG9eJmQZWnr9r
-         TYYXxdyHOXQ4TB1DlH7bC9jOx0RB6BQyr6+VCEkUKOGaozhwbrCnqMMipKZRVJqM9J
-         0evsTPWTQLL0A==
+        b=OZFpcuhmd07fYgBYAS5TwzVG8AehUdodUEadsWOOgzRKzvzuZ+WhZ+ZkaKFNEMD4c
+         LaMoPw3UWjDmcsw1ruVEjKtStM00XBh+pYE4sPERfXlE3qrpE1jEym+BXXToagTHQC
+         butOe4XM7YxAsDaxFsjGhvTk9xqRlMgJ3hs5TbeBZJZzGLiWLsVsV/vCUV9CSDAFje
+         LN0CL+wxleW7fQO9UczP3OTGvx8yaJzWn+uehKcYATYfQHZ40no2TEaPMbxcngQ03c
+         pIbXBAcxkx7RkbbKGUjxNXqp2U0Tw0nb66HD7QIwUvwKqboCNvDaSvt0UXNKBpWOge
+         TxyGFaY2SzC6A==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -43,9 +43,9 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         greentime.hu@sifive.com, andy.chiu@sifive.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V7 07/12] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-Date:   Sat, 15 Oct 2022 07:46:57 -0400
-Message-Id: <20221015114702.3489989-8-guoren@kernel.org>
+Subject: [PATCH V7 08/12] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+Date:   Sat, 15 Oct 2022 07:46:58 -0400
+Message-Id: <20221015114702.3489989-9-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221015114702.3489989-1-guoren@kernel.org>
 References: <20221015114702.3489989-1-guoren@kernel.org>
@@ -62,155 +62,59 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Add independent irq stacks for percpu to prevent kernel stack overflows.
-It is also compatible with VMAP_STACK by implementing
-arch_alloc_vmap_stack.  Many architectures have supported
-HAVE_IRQ_EXIT_ON_IRQ_STACK, riscv should follow up.
+Add the HAVE_SOFTIRQ_ON_OWN_STACK feature for the IRQ_STACKS config. The
+irq and softirq use the same independent irq_stack of percpu by time
+division multiplexing.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- arch/riscv/Kconfig                   |  8 ++++
- arch/riscv/include/asm/thread_info.h |  2 +
- arch/riscv/include/asm/vmap_stack.h  | 28 ++++++++++++
- arch/riscv/kernel/irq.c              | 66 +++++++++++++++++++++++++++-
- 4 files changed, 102 insertions(+), 2 deletions(-)
- create mode 100644 arch/riscv/include/asm/vmap_stack.h
+ arch/riscv/Kconfig      |  7 ++++---
+ arch/riscv/kernel/irq.c | 33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+), 3 deletions(-)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 7083c7cd20bd..e65a9cc0df5d 100644
+index e65a9cc0df5d..04d2d20fb0ab 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -443,6 +443,14 @@ config FPU
- 
+@@ -444,12 +444,13 @@ config FPU
  	  If you don't know what to do here, say Y.
  
-+config IRQ_STACKS
-+	bool "Independent irq stacks" if EXPERT
-+	default y
-+	select HAVE_IRQ_EXIT_ON_IRQ_STACK
-+	help
-+	  Add independent irq stacks for percpu to prevent kernel stack overflows.
-+	  We may save some memory footprint by disabling IRQ_STACKS.
-+
+ config IRQ_STACKS
+-	bool "Independent irq stacks" if EXPERT
++	bool "Independent irq & softirq stacks" if EXPERT
+ 	default y
+ 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
++	select HAVE_SOFTIRQ_ON_OWN_STACK
+ 	help
+-	  Add independent irq stacks for percpu to prevent kernel stack overflows.
+-	  We may save some memory footprint by disabling IRQ_STACKS.
++	  Add independent irq & softirq stacks for percpu to prevent kernel stack
++	  overflows. We may save some memory footprint by disabling IRQ_STACKS.
+ 
  endmenu # "Platform type"
  
- menu "Kernel features"
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 7de4fb96f0b5..043da8ccc7e6 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -40,6 +40,8 @@
- #define OVERFLOW_STACK_SIZE     SZ_4K
- #define SHADOW_OVERFLOW_STACK_SIZE (1024)
- 
-+#define IRQ_STACK_SIZE		THREAD_SIZE
-+
- #ifndef __ASSEMBLY__
- 
- extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
-diff --git a/arch/riscv/include/asm/vmap_stack.h b/arch/riscv/include/asm/vmap_stack.h
-new file mode 100644
-index 000000000000..3fbf481abf4f
---- /dev/null
-+++ b/arch/riscv/include/asm/vmap_stack.h
-@@ -0,0 +1,28 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+// Copied from arch/arm64/include/asm/vmap_stack.h.
-+#ifndef _ASM_RISCV_VMAP_STACK_H
-+#define _ASM_RISCV_VMAP_STACK_H
-+
-+#include <linux/bug.h>
-+#include <linux/gfp.h>
-+#include <linux/kconfig.h>
-+#include <linux/vmalloc.h>
-+#include <linux/pgtable.h>
-+#include <asm/thread_info.h>
-+
-+/*
-+ * To ensure that VMAP'd stack overflow detection works correctly, all VMAP'd
-+ * stacks need to have the same alignment.
-+ */
-+static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, int node)
-+{
-+	void *p;
-+
-+	BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
-+
-+	p = __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, node,
-+			__builtin_return_address(0));
-+	return kasan_reset_tag(p);
-+}
-+
-+#endif /* _ASM_RISCV_VMAP_STACK_H */
 diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 24c2e1bd756a..5d77f692b198 100644
+index 5d77f692b198..a6406da34937 100644
 --- a/arch/riscv/kernel/irq.c
 +++ b/arch/riscv/kernel/irq.c
-@@ -10,6 +10,37 @@
- #include <linux/irqchip.h>
+@@ -11,6 +11,7 @@
  #include <linux/seq_file.h>
  #include <asm/smp.h>
-+#include <asm/vmap_stack.h>
-+
-+#ifdef CONFIG_IRQ_STACKS
-+static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
-+
-+#ifdef CONFIG_VMAP_STACK
-+static void init_irq_stacks(void)
-+{
-+	int cpu;
-+	ulong *p;
-+
-+	for_each_possible_cpu(cpu) {
-+		p = arch_alloc_vmap_stack(IRQ_STACK_SIZE, cpu_to_node(cpu));
-+		per_cpu(irq_stack_ptr, cpu) = p;
-+	}
-+}
-+#else
-+/* irq stack only needs to be 16 byte aligned - not IRQ_STACK_SIZE aligned. */
-+DEFINE_PER_CPU_ALIGNED(ulong [IRQ_STACK_SIZE/sizeof(ulong)], irq_stack);
-+
-+static void init_irq_stacks(void)
-+{
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu)
-+		per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
-+}
-+#endif /* CONFIG_VMAP_STACK */
-+#else
-+static void init_irq_stacks(void) {}
-+#endif /* CONFIG_IRQ_STACKS */
+ #include <asm/vmap_stack.h>
++#include <asm/softirq_stack.h>
  
- int arch_show_interrupts(struct seq_file *p, int prec)
- {
-@@ -19,21 +50,52 @@ int arch_show_interrupts(struct seq_file *p, int prec)
- 
- void __init init_IRQ(void)
- {
-+	init_irq_stacks();
- 	irqchip_init();
- 	if (!handle_arch_irq)
- 		panic("No interrupt controller found.");
+ #ifdef CONFIG_IRQ_STACKS
+ static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
+@@ -38,6 +39,38 @@ static void init_irq_stacks(void)
+ 		per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
  }
- 
--asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
-+static void noinstr handle_riscv_irq(struct pt_regs *regs)
- {
- 	struct pt_regs *old_regs;
--	irqentry_state_t state = irqentry_enter(regs);
- 
- 	irq_enter_rcu();
- 	old_regs = set_irq_regs(regs);
- 	handle_arch_irq(regs);
- 	set_irq_regs(old_regs);
- 	irq_exit_rcu();
-+}
+ #endif /* CONFIG_VMAP_STACK */
 +
-+asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
++#ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
++void do_softirq_own_stack(void)
 +{
-+	irqentry_state_t state = irqentry_enter(regs);
 +#ifdef CONFIG_IRQ_STACKS
 +	if (on_thread_stack()) {
 +		ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id())
@@ -222,24 +126,26 @@ index 24c2e1bd756a..5d77f692b198 100644
 +		REG_S"  s0, (sp)		\n"
 +		"addi	s0, sp, 2*"RISCV_SZPTR "\n"
 +		"move	sp, %[sp]		\n"
-+		"move	a0, %[regs]		\n"
-+		"call	handle_riscv_irq	\n"
++		"call	__do_softirq		\n"
 +		"addi	sp, s0, -2*"RISCV_SZPTR"\n"
 +		REG_L"  s0, (sp)		\n"
 +		"addi	sp, sp, "RISCV_SZPTR   "\n"
 +		REG_L"  ra, (sp)		\n"
 +		"addi	sp, sp, "RISCV_SZPTR   "\n"
 +		:
-+		: [sp] "r" (sp), [regs] "r" (regs)
++		: [sp] "r" (sp)
 +		: "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
 +		  "t0", "t1", "t2", "t3", "t4", "t5", "t6",
 +		  "memory");
 +	} else
 +#endif
-+		handle_riscv_irq(regs);
- 
- 	irqentry_exit(regs, state);
- }
++		__do_softirq();
++}
++#endif /* CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK */
++
+ #else
+ static void init_irq_stacks(void) {}
+ #endif /* CONFIG_IRQ_STACKS */
 -- 
 2.36.1
 
