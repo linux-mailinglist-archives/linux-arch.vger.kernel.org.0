@@ -2,124 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1414E5FF66C
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Oct 2022 00:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A3A5FF985
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Oct 2022 11:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJNWpC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 14 Oct 2022 18:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S229723AbiJOJrB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 Oct 2022 05:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiJNWpB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 14 Oct 2022 18:45:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9957B27CC9;
-        Fri, 14 Oct 2022 15:44:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229556AbiJOJrA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Oct 2022 05:47:00 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9535018D;
+        Sat, 15 Oct 2022 02:46:58 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e79c329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e79c:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 588A4B82447;
-        Fri, 14 Oct 2022 22:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4BEC433C1;
-        Fri, 14 Oct 2022 22:44:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665787495;
-        bh=76auTpYAGb5cdGloWPsQFXvwKjAB8wQIcC8hAOFyJ4Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JpKcL3K2iulReMROCM55Cs+TE2+e0d+NAM+jMxEljicqOmnKqHujg5jMf6hwNw/bP
-         ATSlDOcQ5mTqZqc7zQrln7DFflbdDgzamUeSxhfunuNSTjEadOSOYlp57FcHovP4jW
-         WhZSNA6t+4jzhubRKOLhZ1nZAJTWcnTCi09ovzU0EGcbZA4nqpMpe2MbQKf0x+z/mi
-         uuCNvTa9TqpAa3ISdJh+j0qp9uePc9/5qC9UZagS5/o1Rmm8Qt5QS/d7ZX6Hf+vGbe
-         /8U3svS4kx4SEHa8vj8bKFbMaAhESTvefXV4rXo/NPDWUvRal+gVE7IrKCyYNF1rmI
-         3mVvLa35kicmw==
-Date:   Fri, 14 Oct 2022 15:44:53 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, peterz@infradead.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, mbenes@suse.cz
-Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
- inactive tasks"
-Message-ID: <20221014224453.5upiioslqjzo2bow@treble>
-References: <20220727031506.59322-1-chenzhongjin@huawei.com>
- <20220804045518.bfhe3rxhpkxzn4hk@treble>
- <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
- <20220804220623.a2s7ucblryudm63m@treble>
- <a3d754f7-5dde-4adc-205a-c4c380a30372@huawei.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 884F61EC0531;
+        Sat, 15 Oct 2022 11:46:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1665827212;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=mOCTkWac8uVSFd/Mt41ebNXstiZYPl5RE7hElNiS0dc=;
+        b=sPD2w+UBotPMH9OxZPAJ/j+ni1w6/2Kpg4ADVQvVkKo4cdA6FiKWUKduZYVfg6cj4lBKyh
+        OSwthJeo7BAUzmiVrhLmYdZqgLJNw2z+3BzEvRGCCBLrsvPcyhYvykaTOHWL5jGLWADOjI
+        by67HoeKwb/J+fBMhTUX2PSHADzlCO4=
+Date:   Sat, 15 Oct 2022 11:46:49 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v2 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
+ supervisor states
+Message-ID: <Y0qBiSXdZepd7Is9@zn.tnic>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+ <20220929222936.14584-6-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a3d754f7-5dde-4adc-205a-c4c380a30372@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220929222936.14584-6-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Oct 09, 2022 at 11:14:05AM +0800, Chen Zhongjin wrote:
-> Hi Josh,
-> 
-> On 2022/8/5 6:06, Josh Poimboeuf wrote:
-> > On Thu, Aug 04, 2022 at 03:27:39PM +0800, Chen Zhongjin wrote:
-> > > I believe disassemble show_stack in vmlinux and if we have:
-> > > 
-> > >      push   %rbp
-> > > 
-> > >      mov    %rsp,%rbp
-> > > 
-> > >      ... (no regs pushed to stack)
-> > > 
-> > >      callq  <show_trace_log_lvl>
-> > > 
-> > > This can be reproduced.
-> > Weird, that's what I have.  This is GCC 12.1.
-> > 
-> > ffffffff81056de0 <show_stack>:
-> > ffffffff81056de0:	e8 0b 43 05 00       	call   ffffffff810ab0f0 <__fentry__>
-> > ffffffff81056de5:	55                   	push   %rbp
-> > ffffffff81056de6:	48 83 05 b2 0f c9 02 01 	addq   $0x1,0x2c90fb2(%rip)        # ffffffff83ce7da0 <__gcov0.show_stack>
-> > ffffffff81056dee:	48 89 e5             	mov    %rsp,%rbp
-> > ffffffff81056df1:	48 85 ff             	test   %rdi,%rdi
-> > ffffffff81056df4:	74 41                	je     ffffffff81056e37 <show_stack+0x57>
-> > ffffffff81056df6:	48 85 f6             	test   %rsi,%rsi
-> > ffffffff81056df9:	0f 85 c2 24 15 01    	jne    ffffffff821a92c1 <show_stack.cold+0xd>
-> > ffffffff81056dff:	65 48 8b 04 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rax
-> > ffffffff81056e08:	48 39 c7             	cmp    %rax,%rdi
-> > ffffffff81056e0b:	0f 85 a3 24 15 01    	jne    ffffffff821a92b4 <show_stack.cold>
-> > ffffffff81056e11:	48 83 05 af 0f c9 02 01 	addq   $0x1,0x2c90faf(%rip)        # ffffffff83ce7dc8 <__gcov0.show_stack+0x28>
-> > ffffffff81056e19:	48 89 ee             	mov    %rbp,%rsi
-> > ffffffff81056e1c:	48 89 d1             	mov    %rdx,%rcx
-> > ffffffff81056e1f:	48 89 f2             	mov    %rsi,%rdx
-> > ffffffff81056e22:	31 f6                	xor    %esi,%esi
-> > ffffffff81056e24:	e8 8e 20 15 01       	call   ffffffff821a8eb7 <show_trace_log_lvl>
-> > ffffffff81056e29:	48 83 05 9f 0f c9 02 01 	addq   $0x1,0x2c90f9f(%rip)        # ffffffff83ce7dd0 <__gcov0.show_stack+0x30>
-> > ffffffff81056e31:	5d                   	pop    %rbp
-> > ffffffff81056e32:	e9 49 b2 5a 01       	jmp    ffffffff82602080 <__x86_return_thunk>
-> > ffffffff81056e37:	48 83 05 69 0f c9 02 01 	addq   $0x1,0x2c90f69(%rip)        # ffffffff83ce7da8 <__gcov0.show_stack+0x8>
-> > ffffffff81056e3f:	65 48 8b 3c 25 c0 bd 01 00 	mov    %gs:0x1bdc0,%rdi
-> > ffffffff81056e48:	eb ac                	jmp    ffffffff81056df6 <show_stack+0x16>
-> > ffffffff81056e4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
-> 
-> This problem still exist on my machine:
-> 
-> CONFIG: defconfig + CONFIG_GCOV_PROFILE_ALL
-> 
-> GCC: gcc 7.5.0 & 12.1.0
-> 
-> TRIGGER:
-> 
-> # echo l > /proc/sysrq-trigger
+On Thu, Sep 29, 2022 at 03:29:02PM -0700, Rick Edgecombe wrote:
+> Both XSAVE state components are supervisor states, even the state
+> controlling user-mode operation. This is a departure from earlier features
+> like protection keys where the PKRU state a normal user (non-supervisor)
+^^^^^
 
-Hi Chen,
+A verb is missing in that sentence.
 
-Thanks for your patience.  I'm able to recreate now.  I still have no
-idea why I couldn't recreate before.
+> +	"x87 floating point registers"			,
+> +	"SSE registers"					,
+> +	"AVX registers"					,
+> +	"MPX bounds registers"				,
+> +	"MPX CSR"					,
+> +	"AVX-512 opmask"				,
+> +	"AVX-512 Hi256"					,
+> +	"AVX-512 ZMM_Hi256"				,
+> +	"Processor Trace (unused)"			,
+> +	"Protection Keys User registers"		,
+> +	"PASID state"					,
+> +	"Control-flow User registers"			,
+> +	"Control-flow Kernel registers (unused)"	,
+> +	"unknown xstate feature"			,
+> +	"unknown xstate feature"			,
+> +	"unknown xstate feature"			,
+> +	"unknown xstate feature"			,
+> +	"AMX Tile config"				,
+> +	"AMX Tile data"					,
+> +	"unknown xstate feature"			,
 
-Anyway the patch looks good.  I'll run it through some more testing.
+What Kees said. :)
+
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_YMM,       struct ymmh_struct);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_BNDREGS,   struct mpx_bndreg_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_BNDCSR,    struct mpx_bndcsr_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_OPMASK,    struct avx_512_opmask_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_ZMM_Hi256, struct avx_512_zmm_uppers_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_Hi16_ZMM,  struct avx_512_hi16_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_PKRU,      struct pkru_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_PASID,     struct ia32_pasid_state);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_XTILE_CFG, struct xtile_cfg);
+> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_CET_USER,  struct cet_user_state);
+
+That looks silly. I wonder if you could do:
+
+	switch (nr) {
+	case XFEATURE_YMM:	XCHECK_SZ(sz, XFEATURE_YMM, struct ymmh_struct);	  return;
+	case XFEATURE_BNDREGS:	XCHECK_SZ(sz, XFEATURE_BNDREGS, struct mpx_bndreg_state); return;
+	case ...
+	...
+	default:
+		/* that falls into the WARN etc */
+
+and then you get rid of the if check in the macro itself and leave the
+macro be a dumb, unconditional one.
+
+Hmmm.
 
 -- 
-Josh
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
