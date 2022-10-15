@@ -2,139 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A3A5FF985
-	for <lists+linux-arch@lfdr.de>; Sat, 15 Oct 2022 11:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888B15FF9DA
+	for <lists+linux-arch@lfdr.de>; Sat, 15 Oct 2022 13:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiJOJrB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 Oct 2022 05:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
+        id S229577AbiJOLty (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 15 Oct 2022 07:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJOJrA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Oct 2022 05:47:00 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9535018D;
-        Sat, 15 Oct 2022 02:46:58 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e79c329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e79c:329c:23ff:fea6:a903])
+        with ESMTP id S229567AbiJOLtx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Oct 2022 07:49:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA6624F1F;
+        Sat, 15 Oct 2022 04:49:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 884F61EC0531;
-        Sat, 15 Oct 2022 11:46:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1665827212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=mOCTkWac8uVSFd/Mt41ebNXstiZYPl5RE7hElNiS0dc=;
-        b=sPD2w+UBotPMH9OxZPAJ/j+ni1w6/2Kpg4ADVQvVkKo4cdA6FiKWUKduZYVfg6cj4lBKyh
-        OSwthJeo7BAUzmiVrhLmYdZqgLJNw2z+3BzEvRGCCBLrsvPcyhYvykaTOHWL5jGLWADOjI
-        by67HoeKwb/J+fBMhTUX2PSHADzlCO4=
-Date:   Sat, 15 Oct 2022 11:46:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v2 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-Message-ID: <Y0qBiSXdZepd7Is9@zn.tnic>
-References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
- <20220929222936.14584-6-rick.p.edgecombe@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E34460C99;
+        Sat, 15 Oct 2022 11:49:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004A8C433C1;
+        Sat, 15 Oct 2022 11:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665834591;
+        bh=7y/CgyYo78xkDQEDlPgEPJm42Pbu48zMquJ1lkQsCD8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O332pcdyzfIAyKl9yzlsWwsBINGLEAJBfhevDSZpfHg9oH9ip8hhW9i+QhnUrhr8t
+         vhH8VtY5RhaUeOaek68sMHFAZR1BVRYRkTal00eC7b0IakjtXOk94y0BureZhnUYnF
+         rZ4b8vbdAu83yxeZfxtFk60/XO0fhlp6dxOpsH3CQZJ4FEzi+5wbd+zz3dE9pcMLdN
+         f8nxCZw2X4E9G1a8Feq1RXO6U4yQm4F/d2Wl0Nd5hDa07B/IjX1qdQPy0ojzZ80zTQ
+         gcUubM2zvFRLEfUHW4saj58NRKKaMEy987KMLle/WNRyn1J2SjjLw8Co807lrQ1vdL
+         18gx/HOmxnZrw==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V7 00/12] riscv: Add GENERIC_ENTRY support and related features
+Date:   Sat, 15 Oct 2022 07:46:50 -0400
+Message-Id: <20221015114702.3489989-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220929222936.14584-6-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 03:29:02PM -0700, Rick Edgecombe wrote:
-> Both XSAVE state components are supervisor states, even the state
-> controlling user-mode operation. This is a departure from earlier features
-> like protection keys where the PKRU state a normal user (non-supervisor)
-^^^^^
+From: Guo Ren <guoren@linux.alibaba.com>
 
-A verb is missing in that sentence.
+The patches convert riscv to use the generic entry infrastructure from
+kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
+for percpu to prevent kernel stack overflows. Add generic_entry based
+STACKLEAK support.
 
-> +	"x87 floating point registers"			,
-> +	"SSE registers"					,
-> +	"AVX registers"					,
-> +	"MPX bounds registers"				,
-> +	"MPX CSR"					,
-> +	"AVX-512 opmask"				,
-> +	"AVX-512 Hi256"					,
-> +	"AVX-512 ZMM_Hi256"				,
-> +	"Processor Trace (unused)"			,
-> +	"Protection Keys User registers"		,
-> +	"PASID state"					,
-> +	"Control-flow User registers"			,
-> +	"Control-flow Kernel registers (unused)"	,
-> +	"unknown xstate feature"			,
-> +	"unknown xstate feature"			,
-> +	"unknown xstate feature"			,
-> +	"unknown xstate feature"			,
-> +	"AMX Tile config"				,
-> +	"AMX Tile data"					,
-> +	"unknown xstate feature"			,
+You can directly try it with:
+[1] https://github.com/guoren83/linux/tree/generic_entry_v7
 
-What Kees said. :)
+v7:
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment 
 
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_YMM,       struct ymmh_struct);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_BNDREGS,   struct mpx_bndreg_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_BNDCSR,    struct mpx_bndcsr_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_OPMASK,    struct avx_512_opmask_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_ZMM_Hi256, struct avx_512_zmm_uppers_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_Hi16_ZMM,  struct avx_512_hi16_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_PKRU,      struct pkru_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_PASID,     struct ia32_pasid_state);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_XTILE_CFG, struct xtile_cfg);
-> +	XCHECK_SZ(&chked, sz, nr, XFEATURE_CET_USER,  struct cet_user_state);
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
 
-That looks silly. I wonder if you could do:
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
 
-	switch (nr) {
-	case XFEATURE_YMM:	XCHECK_SZ(sz, XFEATURE_YMM, struct ymmh_struct);	  return;
-	case XFEATURE_BNDREGS:	XCHECK_SZ(sz, XFEATURE_BNDREGS, struct mpx_bndreg_state); return;
-	case ...
-	...
-	default:
-		/* that falls into the WARN etc */
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
 
-and then you get rid of the if check in the macro itself and leave the
-macro be a dumb, unconditional one.
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
 
-Hmmm.
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Dao Lu (1):
+  riscv: Add support for STACKLEAK gcc plugin
+
+Guo Ren (9):
+  riscv: elf_kexec: Fixup compile warning
+  riscv: compat_syscall_table: Fixup compile warning
+  riscv: ptrace: Remove duplicate operation
+  riscv: traps: Add noinstr to prevent instrumentation inserted
+  riscv: convert to generic entry
+  riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: Add config of thread stack size
+  riscv: Typo fixup for addi -> andi in comment
+
+Jisheng Zhang (1):
+  riscv: remove extra level wrappers of trace_hardirqs_{on,off}
+
+Lai Jiangshan (1):
+  compiler_types.h: Add __noinstr_section() for noinstr
+
+ arch/riscv/Kconfig                    |  21 +++
+ arch/riscv/include/asm/csr.h          |   1 -
+ arch/riscv/include/asm/entry-common.h |   8 +
+ arch/riscv/include/asm/ptrace.h       |  10 +-
+ arch/riscv/include/asm/stacktrace.h   |   5 +
+ arch/riscv/include/asm/syscall.h      |   6 +
+ arch/riscv/include/asm/thread_info.h  |  27 +--
+ arch/riscv/include/asm/vmap_stack.h   |  28 +++
+ arch/riscv/kernel/Makefile            |   3 +-
+ arch/riscv/kernel/elf_kexec.c         |   2 +-
+ arch/riscv/kernel/entry.S             | 239 ++++----------------------
+ arch/riscv/kernel/irq.c               | 110 ++++++++++++
+ arch/riscv/kernel/ptrace.c            |  44 -----
+ arch/riscv/kernel/signal.c            |  21 +--
+ arch/riscv/kernel/sys_riscv.c         |  27 +++
+ arch/riscv/kernel/trace_irq.c         |  27 ---
+ arch/riscv/kernel/trace_irq.h         |  11 --
+ arch/riscv/kernel/traps.c             |  74 ++++++--
+ arch/riscv/mm/fault.c                 |  16 +-
+ drivers/firmware/efi/libstub/Makefile |   2 +-
+ include/linux/compiler_types.h        |   8 +-
+ 21 files changed, 332 insertions(+), 358 deletions(-)
+ create mode 100644 arch/riscv/include/asm/entry-common.h
+ create mode 100644 arch/riscv/include/asm/vmap_stack.h
+ delete mode 100644 arch/riscv/kernel/trace_irq.c
+ delete mode 100644 arch/riscv/kernel/trace_irq.h
 
 -- 
-Regards/Gruss,
-    Boris.
+2.36.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
