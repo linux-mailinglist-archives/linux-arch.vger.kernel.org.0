@@ -2,179 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A43C5FFE10
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Oct 2022 10:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E04F5FFEFF
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Oct 2022 13:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbiJPIPW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 16 Oct 2022 04:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S229594AbiJPLw0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Oct 2022 07:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiJPIPV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Oct 2022 04:15:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6122C135;
-        Sun, 16 Oct 2022 01:15:19 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29G3wxUw032333;
-        Sun, 16 Oct 2022 08:14:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=hMozpMwg+vZnUk1wC1EQIabeNAUmNvS/E5iI/01UZHU=;
- b=KDoOnXfRMJz3cUc7B79z9yw8KStrFIzwJBmhtyFhn5/O2AEXWmIylIQv6HU5ttKb4Ijg
- 876VNGIYgG8P9OIbZ2ox5RQ+PmwtglxLZrOFu5Gq86h9EuqnIEvVLBkunbGalu8wC3vB
- SA19IzqdxHxXs0JM6j2HxT8vY9vPXy85t/pOfD8oCAeykIxNxDh3Yc2mtfmoS0HO6Xsq
- 9zZz6Ag1PXmvW9fKvh9S4qetJkqaNiLLQUj4qRToN/QuuoqUtfzTomy8qDhYsbKXkD87
- 19SX/TLy4forcuPlIUbvv49R2MGtusMWffSqAr0Gj8Lh9aYoaexQkxtaTZhcH6FMl0IE gg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k866art41-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 16 Oct 2022 08:14:57 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29G8Eujq012129;
-        Sun, 16 Oct 2022 08:14:56 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3k866art3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 16 Oct 2022 08:14:56 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29G85b5O007953;
-        Sun, 16 Oct 2022 08:14:53 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3k7mg8s2b4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 16 Oct 2022 08:14:53 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29G8EpBx50594108
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 16 Oct 2022 08:14:51 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7FA914203F;
-        Sun, 16 Oct 2022 08:14:51 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E79014204B;
-        Sun, 16 Oct 2022 08:14:50 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.58.10])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sun, 16 Oct 2022 08:14:50 +0000 (GMT)
-Date:   Sun, 16 Oct 2022 10:14:49 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Baoquan He <bhe@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        akpm@linux-foundation.org, hch@infradead.org,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com
-Subject: Re: [RFC PATCH 3/8] mm/ioremap: Define generic_ioremap_prot() and
- generic_iounmap()
-Message-ID: <Y0u9ec0Bi+FWtyA5@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+        with ESMTP id S229531AbiJPLwZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Oct 2022 07:52:25 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522603A4B3;
+        Sun, 16 Oct 2022 04:52:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 404C0320031A;
+        Sun, 16 Oct 2022 07:52:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Sun, 16 Oct 2022 07:52:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1665921138; x=1666007538; bh=3j8ISkoR6c
+        dwfWmQo4rJN/bj92WrzimiU8KQFUYoUF0=; b=BwiqToW3oTdY5zXr35/AZUAY86
+        Rwm1kHuwPS3CtxuwCPPV10aM+fZSs+Wm1T8C7x6OoJCJlnlBGyiz1oZ11AGE+p0D
+        AO71Sdg9wdEAc4YbWVzw3PlNjC2iIzRMoqDwPhkMHee/Be30DQciPSU490SwroEH
+        S1XhXZTmzaffK/+IOlGEEcxhqVs6eaHiOzeeFxziHSAbeN3LSoz4xLdjjCRQhBkf
+        QP9T+bhdlvm/oj5xAYoIr4vPGBg2hVNNQIH2P3cmYW+yN8+jbACLeTWXB/3HjpjD
+        D2Mm9qm4DdtO2W/2pUotuISFbrk6gSUeu6E6Q1vc8iqGPOH1nM7NNmzgKyDQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1665921138; x=1666007538; bh=3j8ISkoR6cdwfWmQo4rJN/bj92Wr
+        zimiU8KQFUYoUF0=; b=dCq2XjpLGT/z2XwOBjLsH8c0uzJQ0IJen9keOEt6Yct1
+        593a4qk+PDeJnCF7kOWoHla2MAOjwltIASuFOOqJYl9tRPrJ6HiPI8ToRphpjEel
+        DJ8s4bBZ/3hZu30HAoytUYaHbBKy1lpwRY/oT1n65DIJdUjx6OI1B+MimKBaJP9j
+        TX16kxUzDtXAj5pjUVHm77NJxWvIxbt/8VDmbFpzAacohdCYb8PzKnFSyHsLJJiY
+        KZQHEGPh8/3wQ18o9UE4XZ2GWWwjHGZP9dL/sISOllvtK573zFdpqgsw5XcjifdC
+        caL6JOctDn3qyHvOQYsW2BpgNrR3AjZp8ILYym/h6Q==
+X-ME-Sender: <xms:cfBLY2fFXagqwKbxO7EYGXIAcmuFF6xzzcaLpDAKi20vM09p5llUmw>
+    <xme:cfBLYwOzMYTsrHCBANQGJUE78V0QYZ4m7UwSebf1akXk5RKtZ-16_si-0tlrX5GLD
+    cRx9j-akYjc3ASWFSs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeekjedggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cfBLY3hCIoiajHCnRgcA0Q3XsEIgYMXrSj3-OKTXuBsMDEJPBkJ9Dw>
+    <xmx:cfBLYz-J0VmRW__6uOKpAf9GEdRSzdMPRdNIvsMRunrajNM9CxcgtQ>
+    <xmx:cfBLYyvO3eNW7CbIom4HpOxrfLVJKk0jq4SrHl7HMs6I5fKQ5hcDaA>
+    <xmx:cvBLYzlB0LKq4VRHgOpDDXmNTOmYY4Me5JmQowNziVzRv_QT0XUwhg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 77C46B60086; Sun, 16 Oct 2022 07:52:17 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <af8ba7b8-5198-42a1-84c7-9b7d7892ceb3@app.fastmail.com>
+In-Reply-To: <Y0u4tN+mIgNSWwdi@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
 References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
- <32dedfbe00c1da0114f66d6a43c56f4a16a85b64.1665568707.git.christophe.leroy@csgroup.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <32dedfbe00c1da0114f66d6a43c56f4a16a85b64.1665568707.git.christophe.leroy@csgroup.eu>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: jBURfmDGT6azRIRzYI1iuxxRjRloJWlc
-X-Proofpoint-ORIG-GUID: 6KdXepSdsv_24mTO-01aIVOQKmd5G-rM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-16_03,2022-10-14_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 adultscore=0 mlxlogscore=819 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210160049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+ <8c7ac4667c6a3cc48f98110117536f60d51ece4a.1665568707.git.christophe.leroy@csgroup.eu>
+ <d0acd053-96d3-4e18-a9de-97987d8be14b@app.fastmail.com>
+ <Y0u4tN+mIgNSWwdi@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+Date:   Sun, 16 Oct 2022 13:51:57 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Alexander Gordeev" <agordeev@linux.ibm.com>
+Cc:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Baoquan He" <bhe@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        "David Laight" <David.Laight@aculab.com>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>
+Subject: Re: [RFC PATCH 7/8] mm/ioremap: Consider IOREMAP space in generic ioremap
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 12:09:39PM +0200, Christophe Leroy wrote:
-> Define a generic version of ioremap_prot() and iounmap() that
-> architectures can call after they have performed the necessary
-> alteration to parameters and/or necessary verifications.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Sun, Oct 16, 2022, at 9:54 AM, Alexander Gordeev wrote:
+> On Wed, Oct 12, 2022 at 12:39:11PM +0200, Arnd Bergmann wrote:
+>> "Some" means exactly powerpc64, right? It looks like microblaze
+>> and powerpc32 still share some of this code, but effectively
+>> just use the vmalloc area once the slab allocator is up.
+>> 
+>> Is the special case still useful for powerpc64 or could this be
+>> changed to do it the same as everything else?
+>
+> Or make it the other way around and set IOREMAP_START/IOREMAP_END
+> to VMALLOC_START/VMALLOC_END by default?
 
-[...]
+Sure, if there is a reason for actually making them different.
+From the git history, it appears that before commit 3d5134ee8341
+("[POWERPC] Rewrite IO allocation & mapping on powerpc64"), the
+ioremap() and vmalloc() handling was largely duplicated. Ben
+cleaned it up by making most of the implementation shared but left
+the separate address spaces.
 
-> diff --git a/mm/ioremap.c b/mm/ioremap.c
-> index 8652426282cc..9f34a8f90b58 100644
-> --- a/mm/ioremap.c
-> +++ b/mm/ioremap.c
-> @@ -11,8 +11,8 @@
->  #include <linux/io.h>
->  #include <linux/export.h>
->  
-> -void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> -			   unsigned long prot)
-> +void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +				   pgprot_t prot)
->  {
->  	unsigned long offset, vaddr;
->  	phys_addr_t last_addr;
-> @@ -28,7 +28,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
->  	phys_addr -= offset;
->  	size = PAGE_ALIGN(size + offset);
->  
-> -	if (!ioremap_allowed(phys_addr, size, prot))
-> +	if (!ioremap_allowed(phys_addr, size, pgprot_val(prot)))
->  		return NULL;
+My guess is that there was no technical reason for this, other
+than having no reason to change the behavior at the time.
 
-It seems to me ioremap_allowed() is not needed anymore.
-Whatever is checked here would move to architecture-
-specific implementation.
-
->  	area = get_vm_area_caller(size, VM_IOREMAP,
-> @@ -38,17 +38,24 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
->  	vaddr = (unsigned long)area->addr;
->  	area->phys_addr = phys_addr;
->  
-> -	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
-> -			       __pgprot(prot))) {
-> +	if (ioremap_page_range(vaddr, vaddr + size, phys_addr, prot)) {
->  		free_vm_area(area);
->  		return NULL;
->  	}
->  
->  	return (void __iomem *)(vaddr + offset);
->  }
-> +
-> +#ifndef ioremap_prot
-
-I guess, this is also needed:
-
-#define ioremap_prot ioremap_prot
-
-> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +			   unsigned long prot)
-> +{
-> +	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
-> +}
->  EXPORT_SYMBOL(ioremap_prot);
-> +#endif
->  
-> -void iounmap(volatile void __iomem *addr)
-> +void generic_iounmap(volatile void __iomem *addr)
->  {
->  	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
->  
-> @@ -58,4 +65,11 @@ void iounmap(volatile void __iomem *addr)
->  	if (is_vmalloc_addr(vaddr))
->  		vunmap(vaddr);
->  }
-> +
-> +#ifndef iounmap
-
-Same here.
-
-> +void iounmap(volatile void __iomem *addr)
-> +{
-> +	generic_iounmap(addr);
-> +}
->  EXPORT_SYMBOL(iounmap);
-> +#endif
+       Arnd
