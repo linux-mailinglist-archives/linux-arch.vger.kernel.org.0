@@ -2,136 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA15C60048E
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Oct 2022 02:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B258F60054C
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Oct 2022 04:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJQAiS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 16 Oct 2022 20:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S231209AbiJQCmS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Oct 2022 22:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJQAht (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Oct 2022 20:37:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA3734707
-        for <linux-arch@vger.kernel.org>; Sun, 16 Oct 2022 17:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665967067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrPx+xR3T4mzJ2SXos5UT8R6YqjTT59drwhZY5KZJGw=;
-        b=Y+j2nvdho5+1Ws8s2SqvyuQaA04cMi0tQX4rVdA+Bz0a9Ahb8POPHjOk+7wNPS4mjI9QzS
-        MWLbMw6LVCB0D3nHWa7iP+zTtCDL2Moa++eT84nn1Woud7t0Wps5k4L+mtscy8gNrQdSY2
-        98tu5HX4Kzu9BkoDyv53QCsL8TrVZxs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-5RkVEvMLNkyI49PujRu1vA-1; Sun, 16 Oct 2022 20:37:43 -0400
-X-MC-Unique: 5RkVEvMLNkyI49PujRu1vA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S231214AbiJQCmR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Oct 2022 22:42:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F311146841;
+        Sun, 16 Oct 2022 19:42:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08AC73C0F225;
-        Mon, 17 Oct 2022 00:37:43 +0000 (UTC)
-Received: from localhost (ovpn-12-20.pek2.redhat.com [10.72.12.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1B29856D21A;
-        Mon, 17 Oct 2022 00:37:40 +0000 (UTC)
-Date:   Mon, 17 Oct 2022 08:37:36 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, akpm@linux-foundation.org,
-        hch@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@aculab.com, shorne@gmail.com
-Subject: Re: [RFC PATCH 0/8] mm: ioremap: Convert architectures to take
- GENERIC_IOREMAP way (Alternative)
-Message-ID: <Y0yj0IDBVOFwCFuv@MiWiFi-R3L-srv>
-References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C00460EF9;
+        Mon, 17 Oct 2022 02:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1925DC433C1;
+        Mon, 17 Oct 2022 02:42:09 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V11 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Mon, 17 Oct 2022 10:40:23 +0800
+Message-Id: <20221017024027.2389370-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1665568707.git.christophe.leroy@csgroup.eu>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Christophe,
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-On 10/12/22 at 12:09pm, Christophe Leroy wrote:
-> From: 
-> 
-> As proposed in the discussion related to your series, here comes an
-> exemple of how it could be.
-> 
-> I have taken it into ARC and IA64 architectures as an exemple. This is
-> untested, even not compiled, it is just to illustrated my meaning in the
-> discussion.
-> 
-> I also added a patch for powerpc architecture, that one in tested with
-> both pmac32_defconfig and ppc64_le_defconfig.
-> 
-> From my point of view, this different approach provide less churn and
-> less intellectual disturbance than the way you do it.
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
-Yes, I agree, and admire your insistence on the thing you think right or
-better. Learn from you.
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
 
-When you suggested this in my v2 post, I made a draft patch at below link
-according to your suggestion to request people to review. What worried
-me is that I am not sure it's ignored or disliked after one week of
-waiting.
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
 
-https://lore.kernel.org/all/YwtND%2FL8xD+ViN3r@MiWiFi-R3L-srv/#related
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
 
-Up to now, seems people don't oppose this generic_ioremap_prot() way, we
-can take it. So what's your plan? You want me to continue with your
-patches wrapped in, or I can leave it to you if you want to take over?
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
 
-Thanks
-Baoquan
+V6 -> V7:
+Fix build warnings of "no previous prototype".
 
-> 
-> Baoquan He (5):
->   hexagon: mm: Convert to GENERIC_IOREMAP
->   openrisc: mm: remove unneeded early ioremap code
->   mm: ioremap: allow ARCH to have its own ioremap definition
->   arc: mm: Convert to GENERIC_IOREMAP
->   ia64: mm: Convert to GENERIC_IOREMAP
-> 
-> Christophe Leroy (3):
->   mm/ioremap: Define generic_ioremap_prot() and generic_iounmap()
->   mm/ioremap: Consider IOREMAP space in generic ioremap
->   powerpc: mm: Convert to GENERIC_IOREMAP
-> 
->  arch/arc/Kconfig              |  1 +
->  arch/arc/include/asm/io.h     |  7 +++---
->  arch/arc/mm/ioremap.c         | 46 +++--------------------------------
->  arch/hexagon/Kconfig          |  1 +
->  arch/hexagon/include/asm/io.h |  9 +++++--
->  arch/hexagon/mm/ioremap.c     | 44 ---------------------------------
->  arch/ia64/Kconfig             |  1 +
->  arch/ia64/include/asm/io.h    | 11 ++++++---
->  arch/ia64/mm/ioremap.c        | 45 ++++++----------------------------
->  arch/openrisc/mm/ioremap.c    | 22 ++++-------------
->  arch/powerpc/Kconfig          |  1 +
->  arch/powerpc/include/asm/io.h | 11 ++++++---
->  arch/powerpc/mm/ioremap.c     | 26 +-------------------
->  arch/powerpc/mm/ioremap_32.c  | 25 ++++++++-----------
->  arch/powerpc/mm/ioremap_64.c  | 22 +++++++----------
->  include/asm-generic/io.h      |  7 ++++++
->  mm/ioremap.c                  | 33 +++++++++++++++++++------
->  17 files changed, 98 insertions(+), 214 deletions(-)
->  delete mode 100644 arch/hexagon/mm/ioremap.c
-> 
-> -- 
-> 2.37.1
-> 
+V7 -> V8:
+Fix build error for MIPS pud_init().
+
+V8 -> V9:
+Remove redundant #include to avoid build error with latest upstream
+kernel.
+
+V9 -> V10:
+Fix build error due to VMEMMAP changes in 6.0-rc1.
+
+V10 -> V11:
+Adjust context due to ARM64 changes in 6.1-rc1.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
 
