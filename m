@@ -2,129 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1466C6008E5
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Oct 2022 10:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA2D6009E3
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Oct 2022 11:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiJQIl6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Oct 2022 04:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
+        id S230489AbiJQJFJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Oct 2022 05:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiJQIl6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Oct 2022 04:41:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63BE2AC45
-        for <linux-arch@vger.kernel.org>; Mon, 17 Oct 2022 01:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665996116;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AYu+Olly91MbNGXLgDC9bc9k1FpmlocPO3fPhrKXidQ=;
-        b=QC/3LJWPgKdK1nUuEI0z2j1jGejRKjMXiVp5pX31dxLOAOoLLTfY9RzAovGX/tSCW9vuEN
-        Sf13qaaQScntkQ3pEtJ45FSlSm10J12dSXxYe9DnFLj25Ctp9S1ZevsAKOHAi3hXQLAdw9
-        ibQIX2wrWUCte1FkyiEAI5KxcrDyk10=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-418-eAMSp4PVPXC20ZS6s-tXog-1; Mon, 17 Oct 2022 04:41:55 -0400
-X-MC-Unique: eAMSp4PVPXC20ZS6s-tXog-1
-Received: by mail-wr1-f69.google.com with SMTP id p7-20020adfba87000000b0022cc6f805b1so3480360wrg.21
-        for <linux-arch@vger.kernel.org>; Mon, 17 Oct 2022 01:41:55 -0700 (PDT)
+        with ESMTP id S230477AbiJQJFH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Oct 2022 05:05:07 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10273C8D9
+        for <linux-arch@vger.kernel.org>; Mon, 17 Oct 2022 02:05:04 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id 1so6528518vsx.1
+        for <linux-arch@vger.kernel.org>; Mon, 17 Oct 2022 02:05:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y08BEzM6DYxdnl2qnEG/br3gYbPALZULbaElMWZPm6A=;
+        b=owqU7fm1s2j12IEDft/JDsVc22SaszQ8Nr/Jqw+665feERL9Pgle2zBej1aIuf9MfK
+         bQiAHpB+/KdA+86G3/NAY/mNQjPMexqiwL62j3U0y3MbvBJ5BQlmegskGxKn7uDdJjSR
+         xmOt/N/TqXsAaryinyTWWPY3X2zpMCQVlD6leE8JRbl+k0bdzff6p7xU42oqNO44xE90
+         aRy8MKjnDY+XH33Ut4mEvoaC+OfyX6sPbNLIK1OIPVYr4bbxBMDyxDFgWaI07gCEwh4+
+         1BnqiXXedgdCaKJmrqc4e5MwJyQwzFluDReccwc3+ncM7Kx4blWXvUAAvvoIZrxcjmxs
+         5Ctg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AYu+Olly91MbNGXLgDC9bc9k1FpmlocPO3fPhrKXidQ=;
-        b=h1DfJWpCJ808axtCG0OjH8VSDUxAHl1ZQitP1ZhIOlkR7oAguHkKhZGMZvzhzUhvdG
-         v2gq5oaVAcfVjtCWwyMquFdybLEAroqquX0AzIwXVgNU2fQ0x7aVGGzYQg9DbCaG97PA
-         czXsPxEAXjx4TW2gXixZcKA7662qJJceq++Z2TGv4piAmySu1/Y85AYJNlmkEPcGiAH6
-         CXzKqag9YK267E9zzQWB1nYeUU8AMYBnzSqtZbr2qcwrMKfPnSggsgxPywkvyKmc8viD
-         oyCrwgvF04L0nnHa5dfMgoRLE3MALCnHk4y4jmY1iM/iCEMU27chiCWgNZPNaGscwTUv
-         /DIA==
-X-Gm-Message-State: ACrzQf3AGBSAL5FT9WtJbZMGEwPRPZDta+XKo3lx4WkW3lisGF/uI+M6
-        sdNvdYqm/4Yke143fOYenVRRlP/zpqRhpjopumzrM8/N6yF1lNJd+11WJwHwk24FJ4GVW0jzzr/
-        zZlAYJ+uanJFeKPaSfjiRTQ==
-X-Received: by 2002:a7b:c5c2:0:b0:3c4:fd96:fb68 with SMTP id n2-20020a7bc5c2000000b003c4fd96fb68mr6474791wmk.36.1665996114160;
-        Mon, 17 Oct 2022 01:41:54 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM44s/3N3JjFxznWXGrQX+rdkuNXuUerrs1tO5v7ve4FrMytiiusaeyg5H7HECTjpmjok+oUpw==
-X-Received: by 2002:a7b:c5c2:0:b0:3c4:fd96:fb68 with SMTP id n2-20020a7bc5c2000000b003c4fd96fb68mr6474777wmk.36.1665996113848;
-        Mon, 17 Oct 2022 01:41:53 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:2300:e5ce:21ba:1d93:4323? (p200300cbc7072300e5ce21ba1d934323.dip0.t-ipconnect.de. [2003:cb:c707:2300:e5ce:21ba:1d93:4323])
-        by smtp.gmail.com with ESMTPSA id v1-20020adfedc1000000b00228daaa84aesm7881318wro.25.2022.10.17.01.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 01:41:53 -0700 (PDT)
-Message-ID: <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
-Date:   Mon, 17 Oct 2022 10:41:52 +0200
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y08BEzM6DYxdnl2qnEG/br3gYbPALZULbaElMWZPm6A=;
+        b=xPVFtedBUYQ5p1utxvonmeadHiC5dIHAhPjml6L/Hl7WGVgHd9PXRKF+0CTyurwy9R
+         xFrOTYjAjjCXWvZlaSgfLSyTQfZKhtfhQPaB5J8dSTpeTjRCqr85U8QcwNYXjnN8YdgC
+         mVxINVp16Q5Z3nC2cs7TQiaHd48K6ikQEgJhQ7PaylJ1C410UI4DsypKgDLbQOLDCvHh
+         2oGTJ2aocZsWZBwyw8/GyowQA663wmICbA0lFw9tIbPlnYZTyI+VhOyarxaOpn8K5Mhs
+         pwyspZCFP23OGwhOQdp8XuT3geQiwT1YUoVwZ2m+UP/1RJ+HS4WvTJBvhGs6QRLr+NOx
+         HqqA==
+X-Gm-Message-State: ACrzQf0Jnil1K9dkZU/lnPXGR4Lp8GYcHouJgqSI9LZRqymvgqDCuuMb
+        VtsVGVifr+n4z/XY9PVD706YRa/rOFTzSnLX6taQ5g==
+X-Google-Smtp-Source: AMsMyM5H7wjhZ2SfnPL+DgBR4vQWcXymrvWDmK0+/tG6rD0Ctq0lVpYpH41QUP9UKOzDFcuWrlXSz6JRhwihdhHs9r8=
+X-Received: by 2002:a67:ac09:0:b0:39a:eab8:a3a6 with SMTP id
+ v9-20020a67ac09000000b0039aeab8a3a6mr3689598vse.9.1665997502795; Mon, 17 Oct
+ 2022 02:05:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [RFC PATCH] mm: Introduce new MADV_NOMOVABLE behavior
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     arnd@arndb.de, jingshan@linux.alibaba.com, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+ <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
+ <b348a306-3043-4ccc-9067-81759ab29143@www.fastmail.com> <CACRpkdbazHcUassRMqZ2oHmama3nWEZ3U3bB-y-3dmo3jgFPWg@mail.gmail.com>
+ <a7cb856c-8a3f-4737-ae9e-b75c306ad88e@www.fastmail.com> <da8e0775-7d3e-d6fa-e1ff-395769d35614@csgroup.eu>
+ <CAMRc=MdNnUS72cSARv8dAVUsujkUM9jyjutJsty9o+=LOkOefg@mail.gmail.com>
+In-Reply-To: <CAMRc=MdNnUS72cSARv8dAVUsujkUM9jyjutJsty9o+=LOkOefg@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 17 Oct 2022 11:04:51 +0200
+Message-ID: <CAMRc=MeZUap-h=NZm1L0BfN2=ms6VeOJA+05HPyLq_hE8kVuEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Davide Ciminaghi <ciminaghi@gnudd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-doc <linux-doc@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 17.10.22 09:32, Baolin Wang wrote:
-> When creating a virtual machine, we will use memfd_create() to get
-> a file descriptor which can be used to create share memory mappings
-> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
-> flag to allocate physical pages for the virtual machine.
-> 
-> When allocating physical pages for the guest, the host can fallback to
-> allocate some CMA pages for the guest when over half of the zone's free
-> memory is in the CMA area.
-> 
-> In guest os, when the application wants to do some data transaction with
-> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
-> create IOMMU mappings for the DMA pages. However, when calling
-> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
-> failed to longterm-pin sometimes.
-> 
-> After some invetigation, we found the pages used to do DMA mapping can
-> contain some CMA pages, and these CMA pages will cause a possible
-> failure of the longterm-pin, due to failed to migrate the CMA pages.
-> The reason of migration failure may be temporary reference count or
-> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
-> ioctl returns error, which makes the application failed to start.
-> 
-> To fix this issue, this patch introduces a new madvise behavior, named
-> as MADV_NOMOVABLE, to avoid allocating CMA pages and movable pages if
-> the users want to do longterm-pin, which can remove the possible failure
-> of movable or CMA pages migration.
+On Fri, Oct 14, 2022 at 4:22 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Fri, Oct 14, 2022 at 4:13 PM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+> >
+> > Hi Linus,
+> >
+> > Le 14/09/2022 =C3=A0 15:03, Arnd Bergmann a =C3=A9crit :
+> > > On Wed, Sep 14, 2022, at 2:38 PM, Linus Walleij wrote:
+> > >> On Wed, Sep 7, 2022 at 12:15 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >>>>>   drivers/gpio/gpio-sta2x11.c              | 411 ----------------=
+-------
+> > >> (...)
+> > >>> sta2x11 is an x86 driver, so not my area, but I think it would be
+> > >>> best to kill off the entire platform rather than just its gpio
+> > >>> driver, since everything needs to work together and it's clearly
+> > >>> not functional at the moment.
+> > >>>
+> > >>> $ git grep -l STA2X11
+> > >>> Documentation/admin-guide/media/pci-cardlist.rst
+> > >>> arch/x86/Kconfig
+> > >>> arch/x86/include/asm/sta2x11.h
+> > >>> arch/x86/pci/Makefile
+> > >>> arch/x86/pci/sta2x11-fixup.c
+> > >>> drivers/ata/ahci.c
+> > >>> drivers/gpio/Kconfig
+> > >>> drivers/gpio/Makefile
+> > >>> drivers/gpio/gpio-sta2x11.c
+> > >>> drivers/i2c/busses/Kconfig
+> > >>> drivers/media/pci/Makefile
+> > >>> drivers/media/pci/sta2x11/Kconfig
+> > >>> drivers/media/pci/sta2x11/Makefile
+> > >>> drivers/media/pci/sta2x11/sta2x11_vip.c
+> > >>> drivers/media/pci/sta2x11/sta2x11_vip.h
+> > >>> drivers/mfd/Kconfig
+> > >>> drivers/mfd/Makefile
+> > >>> drivers/mfd/sta2x11-mfd.c
+> > >>> include/linux/mfd/sta2x11-mfd.h
+> > >>>
+> > >>> Removing the other sta2x11 bits (mfd, media, x86) should
+> > >>> probably be done through the respective tree, but it would
+> > >>> be good not to forget those.
+> > >>
+> > >> Andy is pretty much default x86 platform device maintainer, maybe
+> > >> he can ACK or brief us on what he knows about the status of
+> > >> STA2x11?
+> > >
+> > > I think the explanation given by Davide and Alessandro
+> > > was rather detailed already:
+> > >
+> > > https://lore.kernel.org/lkml/Yw3LQjhZWmZaU2N1@arcana.i.gnudd.com/
+> > > https://lore.kernel.org/lkml/Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com/
+> > >
+> >
+> > I can't see this series in neither linus tree nor linux-next.
+> >
+> > Following the ACK from Andy + the above explanations from Arnd, do you
+> > plan to merge this series anytime soon ?
+> >
+> > Do you need anything more from me ?
+> >
+> > Thanks
+> > Christophe
+>
+> I will take it after v6.1-rc1 is tagged.
+>
+> Bart
 
-Sorry to say, but that sounds like a hack to work around a kernel 
-implementation detail (how often we retry to migrate pages).
+Now queued.
 
-If there are CMA/ZONE_MOVABLE issue, please fix them instead, and avoid 
-leaking these details to user space.
-
-ALSO, with MAP_POPULATE as described by you this madvise flag doesn't 
-make too much sense, because it will gets et after all memory already 
-was allocated ...
-
-NAK
-
--- 
-Thanks,
-
-David / dhildenb
-
+Bart
