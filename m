@@ -2,126 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459E860207B
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Oct 2022 03:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D9A6020B4
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Oct 2022 03:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJRBhd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Oct 2022 21:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S229520AbiJRB7c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Oct 2022 21:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJRBhd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Oct 2022 21:37:33 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC703E74D;
-        Mon, 17 Oct 2022 18:37:31 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id n83so14098814oif.11;
-        Mon, 17 Oct 2022 18:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lWnmh28h2aLsD/0ANNQ/ycG5csRGVfEzVy619u1CtWY=;
-        b=Q3wgAW6pcf7gEFMG4xEiC7GUskXqWVEz/48HOdsA4QO6rHGXIqYyoMImvJ6OfTY8Sm
-         xTQGtW2+MviyEAtTzMbAf0sxbolFd/rJVWavp1dNWDYUxeI6ca+XTlIHXwRqFedIEpn2
-         rLzQdNB585dqPE5SHxocV+w0EfTkr8tHhZF0TN2dIRdU1Qji1q4LBkaNSNVPsqxFV5eH
-         itGgOs+b/YJwM1wajxX33DYuAiVYQuZwJurPsD3461hLF9z4yZ1MMXGBWeNwLxp37lG9
-         7iA1iwIBi83qJ5UeLeOuiaYUo1iSKbd8vvvAoNDO1mwm2iDjd0WsvxUEE/zzEGR+NfLq
-         BLzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lWnmh28h2aLsD/0ANNQ/ycG5csRGVfEzVy619u1CtWY=;
-        b=TD38xYBXNrd8lje7jnoUbynuhXx/aJ7MyJB6fC+mcNuPJ4J+w9pPWMdt1TgT+/NJn6
-         mGO6BGgxl+5k/0cCTLKGQqlfxEtaX6oxdBUePPUGXfus3Y1I3eQNSAmDYbdH8tf5gr1t
-         2LDmVj/X6h5cUhqn6zT4Ut8EMvem/o8Fu5mTarwqS8f/xPMkOBevNhX6eK9y0v1STvFz
-         RkMJZpFHAeqAV3HR7q9pjH1zliinNz7gffsU4NoAjXHi9/UGkwEzLfFmVQrfIMwbHFqT
-         CKOkprAm9GTID3RAhQdnda2NDY3nDh6DgiDz5EviRe/ZBvS8vDxtYosQatWmhoEHKnsh
-         CPnQ==
-X-Gm-Message-State: ACrzQf04MklsXVe2sorxd0uV1l3hrZ+nkckBWq7lMB6B3WJTVHCIshhi
-        Oi/ZJrZRVq5SFKiDgefbwKvhfocWSzSYFQ==
-X-Google-Smtp-Source: AMsMyM62lbFLtDgzWB25hcG6uvhkrNNyTTE3T3CWrlaD/HteSNE/hKzTuFzt0r1qwSs2qj2fvvGqoQ==
-X-Received: by 2002:a17:90b:4a09:b0:20d:5b67:1496 with SMTP id kk9-20020a17090b4a0900b0020d5b671496mr35679427pjb.67.1666057041099;
-        Mon, 17 Oct 2022 18:37:21 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id f15-20020a17090a664f00b0020d3662cc77sm10019417pjm.48.2022.10.17.18.37.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 18:37:20 -0700 (PDT)
-Message-ID: <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
-Date:   Tue, 18 Oct 2022 10:37:15 +0900
+        with ESMTP id S229905AbiJRB7b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Oct 2022 21:59:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145E1101B;
+        Mon, 17 Oct 2022 18:59:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CB8FB81BF0;
+        Tue, 18 Oct 2022 01:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C48AC4347C;
+        Tue, 18 Oct 2022 01:59:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666058364;
+        bh=afqllA9B+pLQ3PQHZjpVZ98NziD/czmrfnB4F3JDvfY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nsfq06HSNWpqo/8lAVbttFBI+Ee1jSsAlYogNkalZXJHyDKO0GihPIbbo53psvYsH
+         scSQSVKz6/hGQa2PMClA8DgVmvUKZphQ5idYXf+VaH3yRTBLlnJ7boXm2bnJnlqIsy
+         iXdf/z39dDfx0MeKUWrOU1XZiyyzGhO4dM0B5JF7GKgAbPCQDAdg9JltHezdCQoOIu
+         OcYgbdso+KWq5tgBoB+vDS6pOi87/Ovz/WJ7HwtYUeKxbPo3ygyRpC/epH8Bircfyk
+         zcu8jD6rD0EpWUNoyEUPAVCzwN5dYLmHNO0wE6p1eo0htOTYN32zHKRnbEF8AsKbzn
+         9sBPlJZMH1YHQ==
+Received: by mail-ej1-f41.google.com with SMTP id w18so28919716ejq.11;
+        Mon, 17 Oct 2022 18:59:24 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2rPQjQjAooV1mbne7IY4I/gOZXiLUNcOSLJJO3RqGuSWe8Zize
+        twrE/r0NcMAECTb0DkaygMISdzJGCW08JE7ns+4=
+X-Google-Smtp-Source: AMsMyM6RoqfZP7DPHNWQUxMV6MeJZVtdRdzC5IoZxellyAfNsD9ory7aqVzhQEuYMWglSXx6948ZfSD1sT5OhQmKr3g=
+X-Received: by 2002:a17:907:7f05:b0:78d:e869:f2fe with SMTP id
+ qf5-20020a1709077f0500b0078de869f2femr452896ejc.684.1666058362517; Mon, 17
+ Oct 2022 18:59:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation for
- writel() example
-To:     Arnd Bergmann <arnd@arndb.de>, Parav Pandit <parav@nvidia.com>
-References: <20221010101331.29942-1-parav@nvidia.com>
- <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
-Content-Language: en-US
-Cc:     bagasdotme@gmail.com, Alan Stern <stern@rowland.harvard.edu>,
-        parri.andrea@gmail.com, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, boqun.feng@gmail.com,
-        Nicholas Piggin <npiggin@gmail.com>, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        "Paul E. McKenney" <paulmck@kernel.org>, dlustig@nvidia.com,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221017125209.2639531-1-chenhuacai@loongson.cn>
+ <39ea2a6fee654b68974ef38237a61e80@AcuMS.aculab.com> <b31086df86febba62f76ff9ec775b7a6e16c1933.camel@xry111.site>
+In-Reply-To: <b31086df86febba62f76ff9ec775b7a6e16c1933.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 18 Oct 2022 09:59:09 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5XoJqbnh+DzX0Gsq_sDTLB7bK9H7-=fLTPuA4s7VY+Ug@mail.gmail.com>
+Message-ID: <CAAhV-H5XoJqbnh+DzX0Gsq_sDTLB7bK9H7-=fLTPuA4s7VY+Ug@mail.gmail.com>
+Subject: Re: [PATCH V3] LoongArch: Add unaligned access support
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2022/10/18 5:55, Arnd Bergmann wrote:
-> On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
->> The cited commit describes that when using writel(), explcit wmb()
->> is not needed. wmb() is an expensive barrier. writel() uses the needed
->> platform specific barrier instead of expensive wmb().
->>
->> Hence update the example to be more accurate that matches the current
->> implementation.
->>
->> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. 
->> MMIO ordering example")
->>
->> Signed-off-by: Parav Pandit <parav@nvidia.com>
-> 
-> I have no objections, though I still don't see a real need to change
-> the wording here.
+On Mon, Oct 17, 2022 at 10:20 PM Xi Ruoyao <xry111@xry111.site> wrote:
+>
+> On Mon, 2022-10-17 at 13:11 +0000, David Laight wrote:
+> > From: Huacai Chen
+> > > Sent: 17 October 2022 13:52
+> > >
+> > > Loongson-2 series (Loongson-2K500, Loongson-2K1000) don't support
+> > > unaligned access in hardware, while Loongson-3 series (Loongson-3A5000,
+> > > Loongson-3C5000) are configurable whether support unaligned access in
+> > > hardware. This patch add unaligned access emulation for those LoongArch
+> > > processors without hardware support.
+> > >
+> > .....
+> > > +       } else if (insn.reg2i12_format.opcode == fstd_op ||
+> > > +               insn.reg3_format.opcode == fstxd_op) {
+> > > +               value = read_fpr(insn.reg2i12_format.rd);
+> > > +               res = unaligned_write(addr, value, 8);
+> > > +               if (res)
+> > > +                       goto fault;
+> > > +       } else if (insn.reg2i12_format.opcode == fsts_op ||
+> > > +               insn.reg3_format.opcode == fstxs_op) {
+> > > +               value = read_fpr(insn.reg2i12_format.rd);
+> > > +               res = unaligned_write(addr, value, 4);
+> > > +               if (res)
+> > > +                       goto fault;
+> >
+> > Are those right?
+> > Shouldn't something be converting from 'double' to
+> > 'float' in there?
+> > And generating SIGFPE (?) if the exponent is out of range.
+>
+> To me it looks right.
+>
+> The semantic of FST.S does not include conversion.  It just stores the
+> lower 32 bits of a floating-point register into the memory.  If someone
+> attempts to use FST.S to convert a double into a float, it's a
+> programming error.
+Agree.
 
-Parav, I think you need a full rewrite of the Changelog as the change
-has become a simple substitution of s/wmb()/barrier/.
-
-In second thought, I'm not sure such a substitution is really safe to
-make.
-
-"a barrier" can mean "any barrier", which can include a full barrier
-in theory.
-
-So I'd rather make the substituted text read something like:
-
-  Note that, when using writel(), a prior wmb() or weaker is not
-  needed to guarantee that the cache coherent memory writes have
-  completed before writing to the MMIO region.
-
-In my opinion, "or weaker" is redundant for careful readers who are
-well aware of context of this example, but won't do no harm.
-
-Thoughts?
-
-        Thanks, Akira
-
-> 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
