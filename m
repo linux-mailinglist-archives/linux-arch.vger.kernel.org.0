@@ -2,87 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35845602CF5
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Oct 2022 15:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A939F6031C6
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Oct 2022 19:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiJRN3L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Oct 2022 09:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S230053AbiJRRtK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Oct 2022 13:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbiJRN3F (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Oct 2022 09:29:05 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102E7719BC
-        for <linux-arch@vger.kernel.org>; Tue, 18 Oct 2022 06:29:04 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id n12so23433746wrp.10
-        for <linux-arch@vger.kernel.org>; Tue, 18 Oct 2022 06:29:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
-        b=eEqeweMgoAha2gA3agmhPrwheBhBw4LuItboa3KIkd3futKzMLro4OSFn/+GsHoO2q
-         1g0UsVLbq6G7LYgkvrjjF0/aK9i1HtM2ftwQjwVtT+HxYmYOQu0iXWkYvn5R2pCAGqs4
-         s9cqF+SV17FECoYNEG3BbIsBfCDRYocVPcCDrmyfVwRyAV9hx0spYE9DLW1VgzgBS4tr
-         UbQ3nKR9UHhV4a0DtNBqTW1c7Zei2Dx2gjoyD+xI5pcx7YWlyHGRsdGlvYb4iC3lrx8I
-         5fNhFiugt5kE/2K8pSWMOmRr7GxD0aGVofbLzCMH3mgH/+99nu8B3Ir/+6nZinH/MMQ3
-         hyTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcJzlEsI0Q0Zkw3UiSk1AeQ+ZeMU0Uy0FowbXkpqvqY=;
-        b=WIGlJMSylkc6OWYHfayZ/6EpnpaAyfatVYGmIQkfGPJfXB262Wq8nSH+ZHF4ZRroZm
-         3o3D4Jw9MGEz578FhInJo1gSl2vBg/0QTwG46xKJTOBh6K532shxdKeNE6ViDUZwZN61
-         AP5ScWsO8XO0M+KeADOmd50fC6YQb65RwHnuXTSVPSo/9/j87XpfmfA4+yS2yjLGzEEm
-         GXheJIVlzWHCqSb/G8dhJMNHrMKst7lYYDdObNR78irSWlFYsaUGpeTN+iJuomkiXS/8
-         OpJuq9+mD2/I8UBUuIyWx3w25/4xBX0I1POAGlTA9KKvJbNVZEo2irfWuz4XWM49ho43
-         R27g==
-X-Gm-Message-State: ACrzQf2gWLleFAmsZ36BgU4QE3kxM59Vu4RAePVWA99CWp4CYNSY+lrd
-        6j9sKIEcS3eFjh8+mBWhxK9Ipw==
-X-Google-Smtp-Source: AMsMyM51yRiBRyVMbbU7I9haBznkPLb7xvkfhQYeXVron/xlOZ8CJeyh1CIWGi75RgG0LYv0FAdxow==
-X-Received: by 2002:a05:6000:1190:b0:232:c73d:7524 with SMTP id g16-20020a056000119000b00232c73d7524mr1991986wrx.371.1666099742541;
-        Tue, 18 Oct 2022 06:29:02 -0700 (PDT)
-Received: from [192.168.1.115] ([185.126.107.38])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05600c089300b003c409244bb0sm12880231wmp.6.2022.10.18.06.28.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Oct 2022 06:29:01 -0700 (PDT)
-Message-ID: <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
-Date:   Tue, 18 Oct 2022 15:28:58 +0200
+        with ESMTP id S229827AbiJRRtJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Oct 2022 13:49:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1882CC82C;
+        Tue, 18 Oct 2022 10:49:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6685D616A0;
+        Tue, 18 Oct 2022 17:49:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF478C433D6;
+        Tue, 18 Oct 2022 17:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666115347;
+        bh=h6JE2xNk6lHxh3XrYY63nPsxtKYGE/KNHOKEoSVIx+c=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=mjAl4E7So3NZg7D7R/t7IwcCgoLqJFNf9f0riOu8XrqaW8Lr9oUafZTPJ6gTvp1n8
+         dCgCt2HgYX2DFKTvOMw5oKrRgdPZ75Qg0kQNZK0Qol17QFo5s0FtLx8dcJQLgBt8Qv
+         FTc5HPpxRugBt4RaES2AxV8AJL2knwRS51KKZggQ4/WAESoyZ9+Uuc0yMGxZJ2ba7n
+         pdK5auRINkZjxWT+aXDGKD5OiISIkXIw9m0UoFhBmI1J1AI0ueWPJzAtM90YvIlwfL
+         TtyCWJjQ/jBCg7xud2HmhVLd+bxklrd53+IyOOvQv7vg+4dmwaWZQAy/o69sRd7WF2
+         cPuFh2VL75mkw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 581B05C0528; Tue, 18 Oct 2022 10:49:07 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 10:49:07 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Parav Pandit <parav@nvidia.com>,
+        bagasdotme@gmail.com, Alan Stern <stern@rowland.harvard.edu>,
+        parri.andrea@gmail.com, Peter Zijlstra <peterz@infradead.org>,
+        boqun.feng@gmail.com, Nicholas Piggin <npiggin@gmail.com>,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        Akira Yokosawa <akiyks@gmail.com>, dlustig@nvidia.com,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation
+ for writel() example
+Message-ID: <20221018174907.GT5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221010101331.29942-1-parav@nvidia.com>
+ <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
+ <20221018100554.GA3112@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH V11 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of
- p?d_init()
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
- <20221017024027.2389370-2-chenhuacai@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221017024027.2389370-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018100554.GA3112@willie-the-truck>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,66 +66,88 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 17/10/22 04:40, Huacai Chen wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
+On Tue, Oct 18, 2022 at 11:05:55AM +0100, Will Deacon wrote:
+> On Mon, Oct 17, 2022 at 10:55:00PM +0200, Arnd Bergmann wrote:
+> > On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
+> > > The cited commit describes that when using writel(), explcit wmb()
+> > > is not needed. wmb() is an expensive barrier. writel() uses the needed
+> > > platform specific barrier instead of expensive wmb().
+> > >
+> > > Hence update the example to be more accurate that matches the current
+> > > implementation.
+> > >
+> > > commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. 
+> > > MMIO ordering example")
+> > >
+> > > Signed-off-by: Parav Pandit <parav@nvidia.com>
+> > 
+> > I have no objections, though I still don't see a real need to change
+> > the wording here.
 > 
-> We are preparing to add sparse vmemmap support to LoongArch. MIPS and
-> LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
-> page tables, so adjust their prototypes to make generic helpers can call
-> them.
+> FWIW, I also don't think this change is necessary. If anything, I'd say
+> we'd be better off _removing_ the text about writel from this section and
+> extending the reference to the "KERNEL I/O BARRIER EFFECTS" section,
+> as you could make similar comments about e.g. readb() and subsequent
+> barriers.
 > 
-> NIOS2 declares pmd_init() but doesn't use, just remove it to avoid build
-> errors.
+> For example, something like the diff below.
+
+I do like this change, but we might be dealing with two different groups
+of readers.  Will and Arnd implemented significant parts of the current
+MMIO/DMA ordering infrastructure.  It is thus quite possible that wording
+which suffices to remind them of how things work might or might not help
+someone new to Linux who is trying to figure out what is required to make
+their driver work.
+
+The traditional resolution of this sort of thing is to provide the
+documentation to a newbie and take any resulting confusion seriously.
+
+Parav, thoughts?
+
+							Thanx, Paul
+
+> Will
 > 
-> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
->   arch/loongarch/include/asm/pgtable.h |  8 ++++----
->   arch/loongarch/kernel/numa.c         |  4 ++--
->   arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
->   arch/mips/include/asm/pgalloc.h      | 10 +++++-----
->   arch/mips/include/asm/pgtable-64.h   |  8 ++++----
->   arch/mips/kvm/mmu.c                  |  3 +--
->   arch/mips/mm/pgtable-32.c            | 10 +++++-----
->   arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
->   arch/mips/mm/pgtable.c               |  2 +-
->   arch/nios2/include/asm/pgalloc.h     |  5 -----
->   11 files changed, 47 insertions(+), 57 deletions(-)
-
-> diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
-> index 61891af25019..88819a21d97e 100644
-> --- a/arch/mips/mm/pgtable-32.c
-> +++ b/arch/mips/mm/pgtable-32.c
-> @@ -13,9 +13,9 @@
->   #include <asm/pgalloc.h>
->   #include <asm/tlbflush.h>
->   
-> -void pgd_init(unsigned long page)
-> +void pgd_init(void *addr)
->   {
-> -	unsigned long *p = (unsigned long *) page;
-> +	unsigned long *p = (unsigned long *)addr;
->   	int i;
->   
->   	for (i = 0; i < USER_PTRS_PER_PGD; i+=8) {
-> @@ -61,9 +61,9 @@ void __init pagetable_init(void)
->   #endif
->   
->   	/* Initialize the entire pgd.  */
-> -	pgd_init((unsigned long)swapper_pg_dir);
-> -	pgd_init((unsigned long)swapper_pg_dir
-> -		 + sizeof(pgd_t) * USER_PTRS_PER_PGD);
-> +	pgd_init(swapper_pg_dir);
-> +	pgd_init((void *)((unsigned long)swapper_pg_dir
-> +		 + sizeof(pgd_t) * USER_PTRS_PER_PGD));
-
-Pre-existing, but why not use:
-
-         pgd_init(&swapper_pg_dir[USER_PTRS_PER_PGD]);
-
-?
-
-Otherwise:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> --->8
+> 
+> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+> index 06f80e3785c5..93d9a90b7cfa 100644
+> --- a/Documentation/memory-barriers.txt
+> +++ b/Documentation/memory-barriers.txt
+> @@ -1910,7 +1910,8 @@ There are some more advanced barrier functions:
+>  
+>       These are for use with consistent memory to guarantee the ordering
+>       of writes or reads of shared memory accessible to both the CPU and a
+> -     DMA capable device.
+> +     DMA capable device. See Documentation/core-api/dma-api.rst file for more
+> +     information about consistent memory.
+>  
+>       For example, consider a device driver that shares memory with a device
+>       and uses a descriptor status value to indicate if the descriptor belongs
+> @@ -1935,18 +1936,15 @@ There are some more advanced barrier functions:
+>                 writel(DESC_NOTIFY, doorbell);
+>         }
+>  
+> -     The dma_rmb() allows us guarantee the device has released ownership
+> +     The dma_rmb() allows us to guarantee that the device has released ownership
+>       before we read the data from the descriptor, and the dma_wmb() allows
+>       us to guarantee the data is written to the descriptor before the device
+> -     can see it now has ownership.  The dma_mb() implies both a dma_rmb() and
+> -     a dma_wmb().  Note that, when using writel(), a prior wmb() is not needed
+> -     to guarantee that the cache coherent memory writes have completed before
+> -     writing to the MMIO region.  The cheaper writel_relaxed() does not provide
+> -     this guarantee and must not be used here.
+> -
+> -     See the subsection "Kernel I/O barrier effects" for more information on
+> -     relaxed I/O accessors and the Documentation/core-api/dma-api.rst file for
+> -     more information on consistent memory.
+> +     can see it now has ownership.  dma_mb() implies both a dma_rmb() and
+> +     a dma_wmb().
+> +
+> +     Note that the dma_*() barriers do not provide any ordering guarantees for
+> +     accesses to MMIO regions.  See the later "KERNEL I/O BARRIER EFFECTS"
+> +     subsection for more information about I/O accessors and MMIO ordering.
+>  
+>   (*) pmem_wmb();
+>  
+> 
