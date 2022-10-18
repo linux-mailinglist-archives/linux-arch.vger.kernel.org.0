@@ -2,42 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D1E60214D
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Oct 2022 04:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BE56024AD
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Oct 2022 08:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJRCmk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Oct 2022 22:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
+        id S229454AbiJRGoi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Oct 2022 02:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbiJRCmk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Oct 2022 22:42:40 -0400
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35CE89839;
-        Mon, 17 Oct 2022 19:42:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VSSSWKB_1666060954;
-Received: from 30.97.48.52(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSSSWKB_1666060954)
-          by smtp.aliyun-inc.com;
-          Tue, 18 Oct 2022 10:42:35 +0800
-Message-ID: <c163ba0e-80d9-6362-b4f0-c5a2a12deec5@linux.alibaba.com>
-Date:   Tue, 18 Oct 2022 10:43:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH] mm: Introduce new MADV_NOMOVABLE behavior
-To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
-Cc:     arnd@arndb.de, jingshan@linux.alibaba.com, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
- <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
- <8007f4fc-d2e6-7aae-7297-805326adce2a@linux.alibaba.com>
- <a83656e2-07b0-8a5f-40ae-077e23c4cd24@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <a83656e2-07b0-8a5f-40ae-077e23c4cd24@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        with ESMTP id S229833AbiJRGoh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Oct 2022 02:44:37 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDEE31DF3;
+        Mon, 17 Oct 2022 23:44:35 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 1FC0D320097B;
+        Tue, 18 Oct 2022 02:44:32 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 18 Oct 2022 02:44:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666075471; x=1666161871; bh=u2SaGnC5yw
+        r5cuY3ReRbz6hIRErCTTDk96Lbny/ETMo=; b=L7mmMQG0UCaYJ6FD6sQLwpU9ib
+        sZmfLxRZrQnOPJOAt6/ucNIKLQzR81Cns1CrcIToHfGWfJz6PTKbNrgNSxUnE6Iz
+        UGyPV568LBmYSogcIST5B/4p8U3kfynaMCOfXcefZzO/fyQh17t62QE/vfgCSApc
+        VLkkjsayii21BORI4EAPXy7CFMd/qnOxWT3kq5JWtQdHuPIG+6gXOMq7FD5DOQAy
+        7LuQY66QJXNnewnLbNaw0D4mNU4OspUma0/d2tcxtYsdCsnfQzzWWCOMYW3kwic/
+        6luSxyGU8LqwjcIPb3XZvXtua/yWV0D5aUlrGA8o0PZDZ+Rp8Pr87kCNjyiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666075471; x=1666161871; bh=u2SaGnC5ywr5cuY3ReRbz6hIRErC
+        TTDk96Lbny/ETMo=; b=GHRmO7y+iNJQgMAUGEoQeABp071zUnmBadFqtMKBrnjy
+        1/+E0m7eksuWGdrqHIRqgHhIsCV0XOxury7/Tk298pkCHnsdnCRcjH2JbOU0MT46
+        oSbVk/t4NuRbhKtrT37XE8KytbX5YmcmAogKnINV8FghnqB0vQB8zvTxZd28c/P/
+        VPsqu3G4GyTZpbSJOetGMEB5qnM/urt/fylXZ0k5yLgJOtkQkg6GLtvq9su/ptWX
+        gHGYXj785HTF2ep4sU3zXduYG1gHzSVOQqNIhbODGqOIfGrv6WlVf7m9KXdFxM9G
+        FziPbzVBDLAWC9MeMuM56Sx35BsJ9aCzqT3Ju+hLJw==
+X-ME-Sender: <xms:T0tOY0QKHboqStLgocWZ4bx-NvOaOGliaeUL_32xtwrmD3dnEiA9Dg>
+    <xme:T0tOYxyTPAwQwJMAn9DrthrNJASn9s07tVy7RbxwlfIHZKwVlhDxrafaDbej4bJJG
+    c1VY-PxCMMOjZs6Rq0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeeltddguddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:T0tOYx0jJn_nLWkRIhjRpJ-ZOmqa_zNPAFgKEBcwzqQIoiGJdaMSMw>
+    <xmx:T0tOY4BtaDD9_SMrI8vMcJhmUxgGljSKl2yM8UaZ53SUGlPrlrOHzw>
+    <xmx:T0tOY9hjG52WpcU7GXh_PfY1Pi33fp9YMcCaQ0mFWqocxMpa6PHp7A>
+    <xmx:T0tOY8ROiwhfbza7UGDsNoRHqSgpU8dM9LlJO5f6oRlYJbEhLqSWSQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 40EDCB60089; Tue, 18 Oct 2022 02:44:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <12f51033-1461-43f9-8d8d-cd726fbb4758@app.fastmail.com>
+In-Reply-To: <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
+References: <20221010101331.29942-1-parav@nvidia.com>
+ <d5faaf6f-7de5-49b0-92d6-9989ffbdbf2e@app.fastmail.com>
+ <59d99be6-f79e-45bd-203c-17972255cc39@gmail.com>
+Date:   Tue, 18 Oct 2022 08:44:09 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Akira Yokosawa" <akiyks@gmail.com>,
+        "Parav Pandit" <parav@nvidia.com>
+Cc:     bagasdotme@gmail.com, "Alan Stern" <stern@rowland.harvard.edu>,
+        parri.andrea@gmail.com, "Will Deacon" <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>, boqun.feng@gmail.com,
+        "Nicholas Piggin" <npiggin@gmail.com>, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        "Paul E. McKenney" <paulmck@kernel.org>, dlustig@nvidia.com,
+        "Joel Fernandes" <joel@joelfernandes.org>,
+        "Jonathan Corbet" <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4] locking/memory-barriers.txt: Improve documentation for writel()
+ example
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,123 +94,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Oct 18, 2022, at 3:37 AM, Akira Yokosawa wrote:
+> On 2022/10/18 5:55, Arnd Bergmann wrote:
+>> On Mon, Oct 10, 2022, at 12:13 PM, Parav Pandit wrote:
+>
+> "a barrier" can mean "any barrier", which can include a full barrier
+> in theory.
+>
+> So I'd rather make the substituted text read something like:
+>
+>   Note that, when using writel(), a prior wmb() or weaker is not
+>   needed to guarantee that the cache coherent memory writes have
+>   completed before writing to the MMIO region.
+>
+> In my opinion, "or weaker" is redundant for careful readers who are
+> well aware of context of this example, but won't do no harm.
 
+I think that would be more confusing than either of the other variants.
 
-On 10/17/2022 7:27 PM, David Hildenbrand wrote:
-> On 17.10.22 11:09, Baolin Wang wrote:
->>
->>
->> On 10/17/2022 4:41 PM, David Hildenbrand wrote:
->>> On 17.10.22 09:32, Baolin Wang wrote:
->>>> When creating a virtual machine, we will use memfd_create() to get
->>>> a file descriptor which can be used to create share memory mappings
->>>> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
->>>> flag to allocate physical pages for the virtual machine.
->>>>
->>>> When allocating physical pages for the guest, the host can fallback to
->>>> allocate some CMA pages for the guest when over half of the zone's free
->>>> memory is in the CMA area.
->>>>
->>>> In guest os, when the application wants to do some data transaction 
->>>> with
->>>> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
->>>> create IOMMU mappings for the DMA pages. However, when calling
->>>> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
->>>> failed to longterm-pin sometimes.
->>>>
->>>> After some invetigation, we found the pages used to do DMA mapping can
->>>> contain some CMA pages, and these CMA pages will cause a possible
->>>> failure of the longterm-pin, due to failed to migrate the CMA pages.
->>>> The reason of migration failure may be temporary reference count or
->>>> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
->>>> ioctl returns error, which makes the application failed to start.
->>>>
->>>> To fix this issue, this patch introduces a new madvise behavior, named
->>>> as MADV_NOMOVABLE, to avoid allocating CMA pages and movable pages if
->>>> the users want to do longterm-pin, which can remove the possible 
->>>> failure
->>>> of movable or CMA pages migration.
->>>
->>> Sorry to say, but that sounds like a hack to work around a kernel
->>> implementation detail (how often we retry to migrate pages).
->>
->> IMO, in our case one migration failure will make our application failed
->> to start, which is not a trival problem. So mitigate the failure of
->> migration can be important in this case.
-> 
-> The right thing to do is to understand why these migrations fail and see 
-> if we can improve the migration code.
+Anything weaker than a full "wmb()" probably makes the driver calling
+the writel() non-portable, so that is both vague and incorrect.
 
-OK. See below.
+The current version works because it specifically mentions the correct
+barrier to use, while Parav's version works because it doesn't
+make any attempt to name the specific barrier and just states that
+adding one is a bad idea regardless.
 
-> 
->>
->>> If there are CMA/ZONE_MOVABLE issue, please fix them instead, and avoid
->>> leaking these details to user space.
->>
->> Now we can not forbid the fallback to CMA allocation if there are enough
->> free CMA in the zone, right? So adding a hint to help to diable
->> ALLOC_CMA flag seems reasonable?
->>
->> For CMA/ZONE_MOVABLE details, yes, not suitable to leak to user space.
->> so how about rename the madvise as MADV_PINNABLE, which means we will do
->> longterm-pin after allocation, and no CMA/ZONE_MOVABLE pages will be
->> allocated.
->>
-> 
-> I really don't think any of these new user-visible madv modes with 
-> questionable semantics to workaround kernel implementation issues are a 
-> good idea.
-> 
-> Especially MADV_PINNABLE has a *very* misleading name.
-> 
-> 
-> I understand that something like "MADV_MIGHT_PIN" *might* be helpful to 
-> minimize page migration. But IMHO that could only be a pure 
-> optimization, but wouldn't stop us from allocating (or migrating to) 
-> CMA/ZONE_MOVABLE in the kernel on all code paths. It would be best 
-> effort only.
-> 
-> It's not user space decision how/where the kernel allocates memory. No 
-> hacking around that.
-> 
->> Or do you have any good idea? Thanks.
-> 
-> Investigate why migration of these pages fails and how we can improve 
-> the code to make migration of these pages work more reliably.
-
-I observed one migration failure case (which is not easy to reproduce) 
-is that, the 'thp_migration_fail' count is 1 and the 
-'thp_split_page_failed' count is also 1.
-
-That means when migrating a THP which is in CMA area, but can not 
-allocate a new THP due to memory fragmentation, so it will split the 
-THP. However THP split is also failed, probably the reason is temporary 
-reference count of this THP. And the temporary reference count can be 
-caused by dropping page caches (I observed the drop caches operation in 
-the system), but we can not drop the shmem page caches due to they are 
-already dirty at that time.
-
-So we can try again in migrate_pages() if THP split is failed to 
-mitigate the failure of migration, especially for the failure reason is 
-temporary reference count? Does this sound reasonable for you?
-
-However I still worried there are other possible cases to cause 
-migration failure, so no CMA allocation for our case seems more stable IMO.
-
-> I am not completely against having a kernel parameter that would disable 
-> allocating from CMA areas completely, even though it defeats the purpose 
-> of CMA. But it wouldn't apply to ZONE_MOVABLE, so it would be just 
-> another hackish approach.
-> 
->>
->>> ALSO, with MAP_POPULATE as described by you this madvise flag doesn't
->>> make too much sense, because it will gets et after all memory already
->>> was allocated ...
->>
->> This is not a problem I think, we can change to use MADV_POPULATE_XXX to
->> preallocate the physical pages after MADV_NOMOVABLE madvise.
-> 
-> Yes, I know; I'm pointing out that your patch description is inconsistent.
-
-OK. Thanks.
+      Arnd
