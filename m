@@ -2,121 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171C6603715
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 02:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1ED56037BC
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 04:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiJSA0A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Oct 2022 20:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S229800AbiJSCAk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Oct 2022 22:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiJSAZ5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Oct 2022 20:25:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EF3B978B
-        for <linux-arch@vger.kernel.org>; Tue, 18 Oct 2022 17:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666139155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OeOa45B93JvYwgR1hDKpdl7iPLUwP3auE5S9Nrg+8/s=;
-        b=BBYbfw23P8aA4ZGb6/ntFEPdgpHO/R8eJU/ihxvAnUVHUpDTH2uqoYDQ07adX+Ox/+9RmU
-        m2ajYI/4vcHcxLMtWxqL9TzVj7CSxrCiKHXzqVirgfwpWrxBDOk+gdOvWmejwo6wzvpsdz
-        XnDdK2CYo7JJ1SiooaMOquFcq/D9qFo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-520-OqOberSEOZ2v8-pjdQdPsw-1; Tue, 18 Oct 2022 20:25:50 -0400
-X-MC-Unique: OqOberSEOZ2v8-pjdQdPsw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229602AbiJSCAj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Oct 2022 22:00:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BBC9C7E2;
+        Tue, 18 Oct 2022 19:00:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6830980280D;
-        Wed, 19 Oct 2022 00:25:49 +0000 (UTC)
-Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AE99C84426;
-        Wed, 19 Oct 2022 00:25:47 +0000 (UTC)
-Date:   Wed, 19 Oct 2022 08:25:42 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "wangkefeng.wang@huawei.com" <wangkefeng.wang@huawei.com>,
-        "schnelle@linux.ibm.com" <schnelle@linux.ibm.com>,
-        "David.Laight@aculab.com" <David.Laight@aculab.com>,
-        "shorne@gmail.com" <shorne@gmail.com>
-Subject: Re: [RFC PATCH 0/8] mm: ioremap: Convert architectures to take
- GENERIC_IOREMAP way (Alternative)
-Message-ID: <Y09EBgoqPGy2A5WL@MiWiFi-R3L-srv>
-References: <cover.1665568707.git.christophe.leroy@csgroup.eu>
- <Y0yj0IDBVOFwCFuv@MiWiFi-R3L-srv>
- <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD46B821CF;
+        Wed, 19 Oct 2022 02:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B34BEC43142;
+        Wed, 19 Oct 2022 02:00:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666144835;
+        bh=TCSW17AvKHdkoRbEkTskjv1Qo5Q/OxvcAE+xqUKV4UM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hz2yl4Id2b3n0774YtVIuKgTYQo3ezL3TMyAdSVbtuHTKfklHhxuGx88xZX1X4RZh
+         3sjMR9qNcG1/LOUCDLVF+Pf0Hx03JfvwFr5y4bGL47TR6vLIKN4u+AOEMgXwrY6FG5
+         rctrVP2SNH0TArAZOGDWD9bHynPTVUNRw45B/GhAwgVpBpQNUkzT2SOs2TYOzfrPl5
+         2X2xfwOFzh9NGzFg1r8s3YbbY9w7GO3JBrVIfi5l2VezlXiwQn5TwlmtXMo6vw0UiV
+         oqEi4jsMU4IcE8qIxpW8I2+wIWe51CdUFAf1T5GTEQPZ1+IFASMdoY15+Y6cytojDQ
+         VcxXQ7/F8OmBg==
+Received: by mail-ed1-f53.google.com with SMTP id r14so23130940edc.7;
+        Tue, 18 Oct 2022 19:00:35 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0i9gGyhFfE7om7M20YNOm7B8pWkczkP83m8y8BjTvwdswYEhgR
+        PxKXwWKXZblfCGVwdTidMSEDLgTsjfXeZcXTt7U=
+X-Google-Smtp-Source: AMsMyM64mo5oO4aZyzU8eaQiDb6rojExVJjHSCuo0K2CqponBGF6WAHNIqRGxtJ/4teFs6yoHZ3KmXPEqi1H/ao5Pe8=
+X-Received: by 2002:aa7:df16:0:b0:45b:f51f:ab73 with SMTP id
+ c22-20020aa7df16000000b0045bf51fab73mr5144349edy.366.1666144833892; Tue, 18
+ Oct 2022 19:00:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd7aa861-a85a-cc6d-df62-6e5e9a1b3149@csgroup.eu>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221017024027.2389370-1-chenhuacai@loongson.cn>
+ <20221017024027.2389370-2-chenhuacai@loongson.cn> <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
+In-Reply-To: <95a0537f-27b2-adc9-d44e-527281326b0d@linaro.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 19 Oct 2022 10:00:22 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5x6fskGSObfh=P2JeDEhhFs6c9iQcOAKroeQQv4fu3uA@mail.gmail.com>
+Message-ID: <CAAhV-H5x6fskGSObfh=P2JeDEhhFs6c9iQcOAKroeQQv4fu3uA@mail.gmail.com>
+Subject: Re: [PATCH V11 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init()
+To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/17/22 at 05:06pm, Christophe Leroy wrote:
-> Hi Baoquan,
-> 
-> Le 17/10/2022 à 02:37, Baoquan He a écrit :
-> > Hi Christophe,
-> > 
-> > On 10/12/22 at 12:09pm, Christophe Leroy wrote:
-> >> From:
-> >>
-> >> As proposed in the discussion related to your series, here comes an
-> >> exemple of how it could be.
-> >>
-> >> I have taken it into ARC and IA64 architectures as an exemple. This is
-> >> untested, even not compiled, it is just to illustrated my meaning in the
-> >> discussion.
-> >>
-> >> I also added a patch for powerpc architecture, that one in tested with
-> >> both pmac32_defconfig and ppc64_le_defconfig.
-> >>
-> >>  From my point of view, this different approach provide less churn and
-> >> less intellectual disturbance than the way you do it.
-> > 
-> > Yes, I agree, and admire your insistence on the thing you think right or
-> > better. Learn from you.
-> > 
-> > When you suggested this in my v2 post, I made a draft patch at below link
-> > according to your suggestion to request people to review. What worried
-> > me is that I am not sure it's ignored or disliked after one week of
-> > waiting.
-> > 
-> > https://lore.kernel.org/all/YwtND%2FL8xD+ViN3r@MiWiFi-R3L-srv/#related
-> > 
-> > Up to now, seems people don't oppose this generic_ioremap_prot() way, we
-> > can take it. So what's your plan? You want me to continue with your
-> > patches wrapped in, or I can leave it to you if you want to take over?
-> 
-> I don't plan to steal your work. If you feel confortable with my 
-> proposal, feel free to continue with it and amplify it. You have done 
-> most of the job, you have a clear view of all subtilities in the 
-> different architectures, so please continue, I don't plan to take over 
-> the good work you've done until now.
-> 
-> The only purpose of my series was to illustrate my comments and convince 
-> myself it was a possible way, nothing more.
+Hi, Philippe,
 
-Thanks a lot for all these you have done, I will post another version with
-the introducing generic_ioremap_prot() way you suggesed.
+On Tue, Oct 18, 2022 at 9:29 PM Philippe Mathieu-Daud=C3=A9
+<philmd@linaro.org> wrote:
+>
+> On 17/10/22 04:40, Huacai Chen wrote:
+> > From: Feiyang Chen <chenfeiyang@loongson.cn>
+> >
+> > We are preparing to add sparse vmemmap support to LoongArch. MIPS and
+> > LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
+> > page tables, so adjust their prototypes to make generic helpers can cal=
+l
+> > them.
+> >
+> > NIOS2 declares pmd_init() but doesn't use, just remove it to avoid buil=
+d
+> > errors.
+> >
+> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/include/asm/pgalloc.h | 13 ++-----------
+> >   arch/loongarch/include/asm/pgtable.h |  8 ++++----
+> >   arch/loongarch/kernel/numa.c         |  4 ++--
+> >   arch/loongarch/mm/pgtable.c          | 23 +++++++++++++----------
+> >   arch/mips/include/asm/pgalloc.h      | 10 +++++-----
+> >   arch/mips/include/asm/pgtable-64.h   |  8 ++++----
+> >   arch/mips/kvm/mmu.c                  |  3 +--
+> >   arch/mips/mm/pgtable-32.c            | 10 +++++-----
+> >   arch/mips/mm/pgtable-64.c            | 18 ++++++++++--------
+> >   arch/mips/mm/pgtable.c               |  2 +-
+> >   arch/nios2/include/asm/pgalloc.h     |  5 -----
+> >   11 files changed, 47 insertions(+), 57 deletions(-)
+>
+> > diff --git a/arch/mips/mm/pgtable-32.c b/arch/mips/mm/pgtable-32.c
+> > index 61891af25019..88819a21d97e 100644
+> > --- a/arch/mips/mm/pgtable-32.c
+> > +++ b/arch/mips/mm/pgtable-32.c
+> > @@ -13,9 +13,9 @@
+> >   #include <asm/pgalloc.h>
+> >   #include <asm/tlbflush.h>
+> >
+> > -void pgd_init(unsigned long page)
+> > +void pgd_init(void *addr)
+> >   {
+> > -     unsigned long *p =3D (unsigned long *) page;
+> > +     unsigned long *p =3D (unsigned long *)addr;
+> >       int i;
+> >
+> >       for (i =3D 0; i < USER_PTRS_PER_PGD; i+=3D8) {
+> > @@ -61,9 +61,9 @@ void __init pagetable_init(void)
+> >   #endif
+> >
+> >       /* Initialize the entire pgd.  */
+> > -     pgd_init((unsigned long)swapper_pg_dir);
+> > -     pgd_init((unsigned long)swapper_pg_dir
+> > -              + sizeof(pgd_t) * USER_PTRS_PER_PGD);
+> > +     pgd_init(swapper_pg_dir);
+> > +     pgd_init((void *)((unsigned long)swapper_pg_dir
+> > +              + sizeof(pgd_t) * USER_PTRS_PER_PGD));
+>
+> Pre-existing, but why not use:
+>
+>          pgd_init(&swapper_pg_dir[USER_PTRS_PER_PGD]);
+>
+> ?
+OK, that seems better, thanks.
 
+Huacai
+>
+> Otherwise:
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+>
