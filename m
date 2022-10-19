@@ -2,93 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CAE604F38
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 19:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03987604F5D
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 20:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiJSR7D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Oct 2022 13:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
+        id S229988AbiJSSLD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Oct 2022 14:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiJSR7B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 13:59:01 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6A1CD6B3
-        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 10:59:00 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id t186so21766716yba.12
-        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 10:59:00 -0700 (PDT)
+        with ESMTP id S230346AbiJSSLC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 14:11:02 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F82A1799B7
+        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 11:10:58 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id m81so20179495oia.1
+        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 11:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j5qHi6nHuKOfTP8VfwA/3L86+MJKtgh8T4LGj4c4RHw=;
-        b=RfiBykGYswiG2vh8XMUmoLM74qAx5iJOEWUMd5Wtj8Yp8nrAk8j4By7i2dsHjBxjgb
-         tGEEAxp6QuPLXlwbcCsZoscO5zafgPB7CxvCsiVWHoYW230QZSClPC6nC+RC5DaUT346
-         W98lfsbJFxh5fLZLY+S0cewDtjJd9ViR16NEzMeO8E2CELEDquTw3JlbpySt+LF9v8xu
-         74cL+Jxsrfp8588RAPFJIK5ursfoWQJr8USrp5hmZxy3YEMs2zKU33qLjowdAeouhhHy
-         +pphZCXara/jRuW64fh6o0939nY93ikjJmL5P72xDFafy/M5DDpyv7G8X+VxOWqq84VP
-         AKVQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZGR0rDpTW7xgTFS4grRDMvtr/PpXo8umrs2yrJ3UML4=;
+        b=f3558QuEtp4oWAGxzHD+nDzX3s6SI6mqk07d4unwH/uZPll67kvPzY5AlfzYZxg+X6
+         zTvnWZUR0E1tCYrtFi8p6tx/eQUaR2VTkJl/mvo2YuQvLCirD1YWJB+uMQf8JMGXKP2W
+         aSE+S294zj9djVP4FNih8XJ1S1uIJi++YZ+5HcWgOVKJgWDE5yCARXTCgtR/KOlGbhbw
+         1NhjRBzW2Z973G/YIF7Bkxhfyd1R4ltMyZk1UPVJ7daouoWbA5/MQhDb0MSgOwsymsd1
+         Mpqg/WMXHG8MhM6u6vKyBivd8kgGCyhxnJD2YGfEq4797fki4azwmj016iMI484UoGo2
+         cPcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j5qHi6nHuKOfTP8VfwA/3L86+MJKtgh8T4LGj4c4RHw=;
-        b=zYiddFE7/IZky15OE/K15U5lNnCq6+OhSDVdWVGSj2JP1U6cUTL1PKLIbkacX2n0f7
-         XfgrKFV6+j66bSQmRbtunHaaekgwXTwgRwufoa/hP2rkOQDRWdSIrxaV5m3GAEGcpv3b
-         iHYGpAPH5OhJvhIujf4bKgDCyv1Zh9idmauAknfcBt8bScMsrbl78xmcSbqyI34bvcsx
-         9PoexfAXN43GIWXUlM14l/fuln1gmOocBiTun78WRSEmS1EU21gCQD6C9QZNGtddg6bD
-         lXe/3p34FklmxRKIEsiIXC3M0owXymmyuUEOlGYZYV3ICMh/UBWF9Cp57J+vKSPcef+b
-         UbLw==
-X-Gm-Message-State: ACrzQf2WYGo+SZBawMv/PfIRukJblOgy3mBO4qgxRcbagqSMYQ7svCPO
-        CNGT8zjI9yj8aQNCXt0IcNrt5rH1ggbYBHmSFCgnSw==
-X-Google-Smtp-Source: AMsMyM59+L+KMwxfbImKjoRVlkgY8srfuJQpvYqOIm3ItZkiLy2MZkIg8zdS6EYzdbHm3Ex62iXEx47Jxg1tHbxXzc0=
-X-Received: by 2002:a05:6902:305:b0:6c3:b4d6:7a04 with SMTP id
- b5-20020a056902030500b006c3b4d67a04mr7524830ybs.93.1666202339610; Wed, 19 Oct
- 2022 10:58:59 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZGR0rDpTW7xgTFS4grRDMvtr/PpXo8umrs2yrJ3UML4=;
+        b=RcerAVqEOTrrwpIQPEE2fzo97K64W9GDvarQzu/5faP/kfo9Mvm2ngPWh1JE7vIcMq
+         exeiLWxdDY4rGJxWYo200weDew60wliJW8o9Xlu6aJlkgb7fFmlg7lAnTOR/qA7W32g9
+         PHVCTj5HOHim4eedj9hEZTbDkK7MGjlELIi0DnPHjCaJVdZUoSYJIl3mI2OKGrpdqtAd
+         IxHQPqd4C8SkBXL8KybZ+UK8a9+IESFwD7/OtA7Z86rZCx3Nsic14X5Gdh9C8qQS+9b1
+         Z8cH1bVMCofMfjga8DU5jA0zNlkvR45s+m2vsulvPosXx2DMcsQHty/aH5rQEbH60nnb
+         TtAw==
+X-Gm-Message-State: ACrzQf22U3cEPGzGE1QydaiXBRapXymOcT6YAIk/krHDtW0UisIoXOiX
+        pTnBoO+xDAOaKG3GEcF9BwLOuTeO7SjgWTUqyIz3m9ueAeKPXA==
+X-Google-Smtp-Source: AMsMyM7MuUj4C35EpdRK3az+tECYwbYHlpD6xn0OX0sCzW4tLI+w8FIXQovOYVJg+ChLDWtMvTKNoWMI0kE/hHHzMJY=
+X-Received: by 2002:a17:90b:1a8d:b0:20d:be0b:a320 with SMTP id
+ ng13-20020a17090b1a8d00b0020dbe0ba320mr32474975pjb.107.1666203046751; Wed, 19
+ Oct 2022 11:10:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
- <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
-In-Reply-To: <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 19 Oct 2022 10:58:23 -0700
-Message-ID: <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
-Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-To:     youling 257 <youling257@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com> <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 19 Oct 2022 11:10:34 -0700
+Message-ID: <CAKwvOdmDz2VfU1JJkAEnPLTcx4PHH48KfZQfW6gvO6we_QbrRQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -100,31 +75,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 19 Oct 2022 at 10:37, youling 257 <youling257@gmail.com> wrote:
+On Wed, Oct 19, 2022 at 10:26 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
+> On Wed, Oct 19, 2022 at 10:14 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > The pointer-sign thing doesn't actually help (ie it won't find places
+> > where you actually compare a char), and it causes untold damage in
+> > doing completely insane things.
 >
->
-> ---------- Forwarded message ---------
-> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A youling257 <youling257@gmail.com>
-> Date: 2022=E5=B9=B410=E6=9C=8820=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=
-=8D=881:36
-> Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-> To: <glider@google.com>
-> Cc: <youling257@gmail.com>
->
->
-> i using linux kernel 6.1rc1 on android, i use gcc12 build kernel 6.1 for =
-android, CONFIG_KMSAN is not set.
-> "instrumented.h: add KMSAN support" cause android bluetooth high CPU usag=
-e.
-> git bisect linux kernel 6.1rc1, "instrumented.h: add KMSAN support" is a =
-bad commit for my android.
->
-> this is my kernel 6.1,  revert include/linux/instrumented.h fix high cpu =
-usage problem.
-> https://github.com/youling257/android-mainline/commits/6.1
+> Side note: several years ago I tried to make up some sane rules to
+> have 'sparse' actually be able to warn when a 'char' was used in a
+> context where the sign mattered.
 
-What arch?
-If x86, can you try to revert only the change to
-instrument_get_user()? (I wonder if the u64 conversion is causing
-issues.)
+Do you have examples? Maybe we could turn this into a compiler feature
+request.  Having prior art on the problem would be a boon.
+
+>
+> I failed miserably.
+>
+> You actually can see some signs (heh) of that in the sparse sources,
+> in that the type system actually has a bit for explicitly signed types
+> ("MOD_EXPLICITLY_SIGNED"), but it ends up being almost entirely
+> unused.
+>
+> That bit does still have one particular use: the "bitfield is
+> dubiously signed" thing where sparse will complain about bitfields
+> that are implicitly (but not explicitly) signed. Because people really
+> expect 'int a:1' to have values 0/1, not 0/-1.
+
+Clang's -Wbitfield-constant-conversion can catch that.
+commit 5c5c2baad2b5 ("ASoC: mchp-spdiftx: Fix clang
+-Wbitfield-constant-conversion")
+commit eab9100d9898 ("ASoC: mchp-spdiftx: Fix clang
+-Wbitfield-constant-conversion")
+commit 37209783c73a ("thunderbolt: Make priority unsigned in struct tb_path")
+
+>
+> But the original intent was to find code where people used a 'char'
+> that wasn't explicitly signed, and that then had architecture-defined
+> behavior.
+>
+> I just could not come up with any even remotely sane warning
+> heuristics that didn't have a metric buttload of false positives.
+>
+> I still have this feeling that it *should* be possible to warn about
+> the situation where you end up doing an implicit type widening (ie the
+> normal C "arithmetic is always done in at least 'int'") that then does
+> not get narrowed down again without the upper bits ever mattering.
+>
+> But it needs somebody smarter than me, I'm afraid.
+>
+> And the fact that I don't think any other compiler has that warning
+> either makes me just wonder if my feeling that it should be possible
+> is just wrong.
+>
+>                    Linus
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers
