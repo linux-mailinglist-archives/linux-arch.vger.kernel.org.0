@@ -2,95 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C301B605050
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 21:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A300D605061
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 21:29:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiJSTXs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Oct 2022 15:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
+        id S230307AbiJST3H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Oct 2022 15:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbiJSTXr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 15:23:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E8C189C25;
-        Wed, 19 Oct 2022 12:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666207427; x=1697743427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TjWUFvFKsOIIbSlG12ow2qLmIR/bUPMunVi0DA5Do2M=;
-  b=naAaCCOfUVckjESbS8fEGo2FrNvKHhXsSqsMbNvqQ1sjVFFRnj2TTkTA
-   HLSRwoWkWEXpXmUon1iKS6gceCEXH14RNOzddox1nUFXvJSzCvnCZ+Q4D
-   5nQrmS7beiOlRh61gSbygSITaCpBgSRpGq4vspKTVC5qoLOwqpYchogr6
-   fYRyDiyF7lKDUL4m8tj9kXhH4RqLvpn4lIRkH2Pry3Ov6qDvbyNBJTffn
-   Erc/gq9U76z5cYqc05P9b2NvdwFtBzWDp+VHrsDePwSTj3S5aMTYxMbbe
-   mqsVPH/O//+d01V+RfLFbqBMedWIYdJH971dzQZYnyuXQnoilEMFmwZ1h
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="286902847"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="286902847"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2022 12:23:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10505"; a="607247341"
-X-IronPort-AV: E=Sophos;i="5.95,196,1661842800"; 
-   d="scan'208";a="607247341"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 19 Oct 2022 12:23:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1olEf7-00A4h6-00;
-        Wed, 19 Oct 2022 22:23:33 +0300
-Date:   Wed, 19 Oct 2022 22:23:32 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <Y1BOtMpS5KtL4blg@smile.fi.intel.com>
-References: <20221019162648.3557490-1-Jason@zx2c4.com>
- <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <CAHk-=whggBoH78ojE0wttyHKwuf48hrSS_X7s3D3Qd_516ayzQ@mail.gmail.com>
- <CAKwvOdmDz2VfU1JJkAEnPLTcx4PHH48KfZQfW6gvO6we_QbrRQ@mail.gmail.com>
- <CAHk-=wimUGWN6WuQ8q5Mba2jgG2FPEvp-TEoGR3k5rEekQ2wNg@mail.gmail.com>
+        with ESMTP id S229936AbiJST3F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 15:29:05 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA611960A3;
+        Wed, 19 Oct 2022 12:29:04 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id a6so23493634ljq.5;
+        Wed, 19 Oct 2022 12:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1J+LkGJJsG58CkJ3Qd9XTdOjWMcQXIZDNg+2efZ9DT8=;
+        b=Zs3D8ie/O78VXdUFRbswnnVyMUFKQTi+weY/1rbfp0bq2vH4HC+4WLyeQVMXHPYCAi
+         2ECkR/KLht8Hyqa3u2Z0PQC1zsqs1nr5elWU/6lftN85gXuL4+vQ+fwZns1FtCnp5Jxw
+         qSopG89Arj3LY54xjxvkbBdgMT/cgvL2QvQjYNBrWIDlqcHiJZ8wVIUNe5/p2yafobMH
+         DnICUEblvNYeI69wK3h6gx1Kzy8oiKELAPgzmBmz7GTs97IH9q6ahlbKctexF3JZYQuW
+         rwtwT7TvHoAVzG1+nXmvdN5ZyW5yDdOt/Y0LeejRX9gtyUXq0FHVQIDXv5ysgrta+ri0
+         1nag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :references:in-reply-to:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1J+LkGJJsG58CkJ3Qd9XTdOjWMcQXIZDNg+2efZ9DT8=;
+        b=6zWQSWgwRVFlroCS9neZlVrn446RpV3NSJfRwwUvWPr8R8s/4K/vRhh4980qGzTenG
+         U077zQE8XbYzHVvxQsggbFikZuIGi49EdFZ4BnhQ5QpGvCjUKCP/pQS3CuxQOLza4PSq
+         SFgBnyTptyZ1IXIDTbvkQHOSZWLsuB4lemrF07cLW1hEFabKQV5lWldRfrsbtSlgvZ/M
+         YDYFPZapsBHDf0ckNj2zJ3q+/IvLt6J184Mgg8O4AsfxWph87bJeda3eL6+WYcIpRCAv
+         YFx1Enhj8b8mBTPSBDHLIT3ytKELTwKfLnwtPQu+gpdW0ItEwBSrlI8w5P6qWljuKD1e
+         teJg==
+X-Gm-Message-State: ACrzQf11WoNgN8SdrcVNBLc+yF223TL5a1XW6nlclJxIbGuYbPnBTUwq
+        73DWg8wVPkzQSNV/MqDj44AfBfQb+J4XIwk8jE0=
+X-Google-Smtp-Source: AMsMyM4/a8mro7O35SGkjXAGwMZz8FGjEXZwFrLyoLo7XaOhAeR+5e35yobKB5fffcFn7Qi0JTM+jG1hgh5hA0qfPsg=
+X-Received: by 2002:a2e:8796:0:b0:26e:8b13:a29c with SMTP id
+ n22-20020a2e8796000000b0026e8b13a29cmr3457109lji.210.1666207742198; Wed, 19
+ Oct 2022 12:29:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wimUGWN6WuQ8q5Mba2jgG2FPEvp-TEoGR3k5rEekQ2wNg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab3:5411:0:b0:1f6:575a:5fb7 with HTTP; Wed, 19 Oct 2022
+ 12:29:01 -0700 (PDT)
+In-Reply-To: <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com> <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+From:   youling 257 <youling257@gmail.com>
+Date:   Thu, 20 Oct 2022 03:29:01 +0800
+Message-ID: <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 11:35:50AM -0700, Linus Torvalds wrote:
-> On Wed, Oct 19, 2022 at 11:10 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
+arch x86, this's my revert,
+https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87a5b=
+e8e2dda68ac5702389f
+i tried different revert, have to remove kmsan_copy_to_user.
 
-...
-
-> We do have a couple of signed bitfields in the kernel, but they are
-> unusual enough that it's actually a good thing that sparse just made
-> people be explicit about it.
-
-At least drivers/media/usb/msi2500/msi2500.c:289 can be converted
-to use sign_extend32() I believe.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+2022-10-20 1:58 GMT+08:00, Marco Elver <elver@google.com>:
+> On Wed, 19 Oct 2022 at 10:37, youling 257 <youling257@gmail.com> wrote:
+>>
+>>
+>>
+>> ---------- Forwarded message ---------
+>> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A youling257 <youling257@gmail.com>
+>> Date: 2022=E5=B9=B410=E6=9C=8820=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=
+=8D=881:36
+>> Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+>> To: <glider@google.com>
+>> Cc: <youling257@gmail.com>
+>>
+>>
+>> i using linux kernel 6.1rc1 on android, i use gcc12 build kernel 6.1 for
+>> android, CONFIG_KMSAN is not set.
+>> "instrumented.h: add KMSAN support" cause android bluetooth high CPU
+>> usage.
+>> git bisect linux kernel 6.1rc1, "instrumented.h: add KMSAN support" is a
+>> bad commit for my android.
+>>
+>> this is my kernel 6.1,  revert include/linux/instrumented.h fix high cpu
+>> usage problem.
+>> https://github.com/youling257/android-mainline/commits/6.1
+>
+> What arch?
+> If x86, can you try to revert only the change to
+> instrument_get_user()? (I wonder if the u64 conversion is causing
+> issues.)
+>
