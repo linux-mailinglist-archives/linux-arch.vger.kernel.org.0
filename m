@@ -2,106 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481D5604F22
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 19:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CAE604F38
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 19:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiJSRqf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Oct 2022 13:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
+        id S229552AbiJSR7D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Oct 2022 13:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiJSRqZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 13:46:25 -0400
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A17531C843D;
-        Wed, 19 Oct 2022 10:46:22 -0700 (PDT)
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 29JHhjS0005682;
-        Wed, 19 Oct 2022 12:43:46 -0500
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 29JHhjxm005681;
-        Wed, 19 Oct 2022 12:43:45 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Wed, 19 Oct 2022 12:43:45 -0500
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        with ESMTP id S230259AbiJSR7B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 13:59:01 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6A1CD6B3
+        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 10:59:00 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id t186so21766716yba.12
+        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 10:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j5qHi6nHuKOfTP8VfwA/3L86+MJKtgh8T4LGj4c4RHw=;
+        b=RfiBykGYswiG2vh8XMUmoLM74qAx5iJOEWUMd5Wtj8Yp8nrAk8j4By7i2dsHjBxjgb
+         tGEEAxp6QuPLXlwbcCsZoscO5zafgPB7CxvCsiVWHoYW230QZSClPC6nC+RC5DaUT346
+         W98lfsbJFxh5fLZLY+S0cewDtjJd9ViR16NEzMeO8E2CELEDquTw3JlbpySt+LF9v8xu
+         74cL+Jxsrfp8588RAPFJIK5ursfoWQJr8USrp5hmZxy3YEMs2zKU33qLjowdAeouhhHy
+         +pphZCXara/jRuW64fh6o0939nY93ikjJmL5P72xDFafy/M5DDpyv7G8X+VxOWqq84VP
+         AKVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j5qHi6nHuKOfTP8VfwA/3L86+MJKtgh8T4LGj4c4RHw=;
+        b=zYiddFE7/IZky15OE/K15U5lNnCq6+OhSDVdWVGSj2JP1U6cUTL1PKLIbkacX2n0f7
+         XfgrKFV6+j66bSQmRbtunHaaekgwXTwgRwufoa/hP2rkOQDRWdSIrxaV5m3GAEGcpv3b
+         iHYGpAPH5OhJvhIujf4bKgDCyv1Zh9idmauAknfcBt8bScMsrbl78xmcSbqyI34bvcsx
+         9PoexfAXN43GIWXUlM14l/fuln1gmOocBiTun78WRSEmS1EU21gCQD6C9QZNGtddg6bD
+         lXe/3p34FklmxRKIEsiIXC3M0owXymmyuUEOlGYZYV3ICMh/UBWF9Cp57J+vKSPcef+b
+         UbLw==
+X-Gm-Message-State: ACrzQf2WYGo+SZBawMv/PfIRukJblOgy3mBO4qgxRcbagqSMYQ7svCPO
+        CNGT8zjI9yj8aQNCXt0IcNrt5rH1ggbYBHmSFCgnSw==
+X-Google-Smtp-Source: AMsMyM59+L+KMwxfbImKjoRVlkgY8srfuJQpvYqOIm3ItZkiLy2MZkIg8zdS6EYzdbHm3Ex62iXEx47Jxg1tHbxXzc0=
+X-Received: by 2002:a05:6902:305:b0:6c3:b4d6:7a04 with SMTP id
+ b5-20020a056902030500b006c3b4d67a04mr7524830ybs.93.1666202339610; Wed, 19 Oct
+ 2022 10:58:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+In-Reply-To: <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 19 Oct 2022 10:58:23 -0700
+Message-ID: <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+To:     youling 257 <youling257@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <20221019174345.GM25951@gate.crashing.org>
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org> <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi!
+On Wed, 19 Oct 2022 at 10:37, youling 257 <youling257@gmail.com> wrote:
+>
+>
+>
+> ---------- Forwarded message ---------
+> =E5=8F=91=E4=BB=B6=E4=BA=BA=EF=BC=9A youling257 <youling257@gmail.com>
+> Date: 2022=E5=B9=B410=E6=9C=8820=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=
+=8D=881:36
+> Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+> To: <glider@google.com>
+> Cc: <youling257@gmail.com>
+>
+>
+> i using linux kernel 6.1rc1 on android, i use gcc12 build kernel 6.1 for =
+android, CONFIG_KMSAN is not set.
+> "instrumented.h: add KMSAN support" cause android bluetooth high CPU usag=
+e.
+> git bisect linux kernel 6.1rc1, "instrumented.h: add KMSAN support" is a =
+bad commit for my android.
+>
+> this is my kernel 6.1,  revert include/linux/instrumented.h fix high cpu =
+usage problem.
+> https://github.com/youling257/android-mainline/commits/6.1
 
-On Wed, Oct 19, 2022 at 10:14:20AM -0700, Linus Torvalds wrote:
-> On Wed, Oct 19, 2022 at 9:57 AM Segher Boessenkool
-> <segher@kernel.crashing.org> wrote:
-> >
-> > This is an ABI change.  It is also hugely detrimental to generated
-> > code quality on architectures that make the saner choice (that is, have
-> > most instructions zero-extend byte quantities).
-> 
-> Yeah, I agree. We should just accept the standard wording, and be
-> aware that 'char' has indeterminate signedness.
-
-And plain "char" is a separate type from "signed char" and "unsigned
-char" both.
-
-> But:
-> 
-> > Instead, don't actively disable the compiler warnings that catch such
-> > cases?  So start with removing footguns like
-> >
-> >   # disable pointer signed / unsigned warnings in gcc 4.0
-> >   KBUILD_CFLAGS += -Wno-pointer-sign
-> 
-> Nope, that won't fly.
-> 
-> The pointer-sign thing doesn't actually help (ie it won't find places
-> where you actually compare a char), and it causes untold damage in
-> doing completely insane things.
-
-When I did this more than a decade ago there indeed was a LOT of noise,
-mostly caused by dubious code.  I do agree many cases detected are not
-very important, but it also revealed cases where a filesystem's disk
-format changed (atarifs or amigafs or such iirc) -- many cases it is
-annoying to be reminded of sloppy code, but in some cases it detects
-crucial problems.
-
-> Seriously, -Wpointer-sign is not just useless, it's actively _evil_.
-
-Then suggest something better?  Or suggest improvements to the existing
-warning?
-
-This warning is part of -Wall, most people must not have problems with
-it (or people are so apathetic about this that they have not complained
-about it).
-
-It is easy to improve your code when the compiler detects problems like
-this.  Of course after such a long time of lax code sanity enforcement
-you get all warnings at once :-/
-
-> The fact that you suggest that clearly means that you've never used
-> it.
-
-Ah, ad hominems.  Great.
-
-
-Segher
+What arch?
+If x86, can you try to revert only the change to
+instrument_get_user()? (I wonder if the u64 conversion is causing
+issues.)
