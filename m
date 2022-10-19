@@ -2,77 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D226050D5
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 21:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E736050EF
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Oct 2022 22:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiJSTys (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Oct 2022 15:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S231289AbiJSUAS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Oct 2022 16:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiJSTyg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 15:54:36 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DB9D6F
-        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 12:54:26 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-131dda37dddso22054284fac.0
-        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 12:54:26 -0700 (PDT)
+        with ESMTP id S230474AbiJSUAO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 16:00:14 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4041213C5
+        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 13:00:12 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so831937wms.0
+        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 13:00:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=google.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hSG5J/Jp19bLIoPO0PSW05M1FrVD5Y1lwTSpwfUz75M=;
-        b=ZrWRNl/i7xLO3nCLpj86TANKjfrJc9VYQdyddvCNNDWkZjgWsynXIGYYloHFmBLkKo
-         ZR9Y3xyXyLHydBorVZbvJSJonq7xYGlgjFoDKaaU/SmxYWVFgc92FuQ5ds//JqPJOM9o
-         JGfjyqN/Ol18NKSuEY7LLTfvzFHs7HKX9e1iI=
+        bh=Y2N+V1uC9FDjbZcJb9aKbA76091h0TpDZZKWHaAmAek=;
+        b=Lw4jVYTIUktL0VD/hUyxuK2pdB+TLLlMZirRYUqhs2U98/w8T/30PXKiSQ70UgVAq6
+         +grAdpBFztsHMbqs06MBtqGFYggBuQ8eB5hLxlopjVREuCd6GoyGxs5nbQQMkDUAsspT
+         YhQ9IztsM9nZHCvOhL03IV/fnoWIqaxZ0utZhXJVoblGjV2OUVXW5EiT9sjDw6u7+lUt
+         9ZQvxCuqtpyMDdIxf6qk3fgrd6wCkkmmNjf4LKAopOmbVPc/vI+MkblfYwX6EnXL/YVt
+         U5YgOhvlpQ8y6+A+Fx25TgNIreQUA+4XldEr3KiLCwcLqj9JsYgRtuPqCqw88ukO8vGV
+         0fMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hSG5J/Jp19bLIoPO0PSW05M1FrVD5Y1lwTSpwfUz75M=;
-        b=SmQWdS1Y7uq8uLUfqJTlxMdXWZZdH36Wn5/GktCCnlKYfntfubeqny1s+SJY7VHzGp
-         WbEBrgj4Yp947eayeaLcd1sQGJ6PJlH69OjW0//aOr1ZxKTcbamAxZYNYSbg2zF64oNO
-         a10T+5AO41el8ZHTmrGXGg3+GiY0Doc66Sl87w6ivNJFksrfteVHKddUgeTinksQJs3h
-         XvJiLfmNGX/cWjKcN4Tv8lE0sVkBHduveeWpAALaLMSRgvT4xA1/F7XjhNPlP/pFucf+
-         gZ7i6escX/cabk3qumGnAARxrH1auAEkDiDj/hM8G5MXlnA1YErILE2nDir1WZWv1C6t
-         6+PQ==
-X-Gm-Message-State: ACrzQf29jOFnQ8JH9nh5HpClTRPgLUQukf983OiWFrvPkrePOlBQ96ND
-        B6Wm44XwQuEyyWJQwbuQypWp5X8PWaqwlQ==
-X-Google-Smtp-Source: AMsMyM7NJ2ojBlOH2DLFTc8asfHJGfsWRryX6dxfnJaBPKyXSdBw4ar5rtHee37zXbJed1YJEhERBw==
-X-Received: by 2002:a05:6870:630f:b0:132:8af2:c8f2 with SMTP id s15-20020a056870630f00b001328af2c8f2mr23149048oao.284.1666209264927;
-        Wed, 19 Oct 2022 12:54:24 -0700 (PDT)
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com. [209.85.210.52])
-        by smtp.gmail.com with ESMTPSA id z36-20020a056870d6a400b0012b298699dbsm8161274oap.1.2022.10.19.12.54.23
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Oct 2022 12:54:23 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id p24-20020a9d6958000000b00661c528849eso10135465oto.9
-        for <linux-arch@vger.kernel.org>; Wed, 19 Oct 2022 12:54:23 -0700 (PDT)
-X-Received: by 2002:a05:6830:4408:b0:661:dfa1:f018 with SMTP id
- q8-20020a056830440800b00661dfa1f018mr4856482otv.69.1666209262824; Wed, 19 Oct
- 2022 12:54:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com>
-In-Reply-To: <20221019162648.3557490-1-Jason@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 19 Oct 2022 12:54:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
-Message-ID: <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        bh=Y2N+V1uC9FDjbZcJb9aKbA76091h0TpDZZKWHaAmAek=;
+        b=pplnIQxsJUVOO4Zzpgb+WQBn+VmE95mPF2U7kVBYJQ+D5Ui6fMNbrYv9nyYpwaE8bk
+         jvo8REmMS5iDIzJTClGGW2RDAJZMKiLShJKOWtZ7OkLOjcNT7p2O15DOjVUqEFm0jg3P
+         yu5Hkbnl8C3uZv37/4zEyihvyW/3JNiLMvrIOwnk3e29850eJnBKzCWQ+7i8qFeDK45X
+         /KXU2PM6QtM0bnlSUEkpbu2Wg++miOo2bvgT9+YXo67U3PmUmfB0AOAgihV4E1xtxJx4
+         E5N0tWKvXrOhAF3ZL7426iQJVZ50pA0568G5CSHJvw9mBmOAFzjf06LgQed6WIJZjWiZ
+         RKBQ==
+X-Gm-Message-State: ACrzQf35BS8dQVADDJ5gRZXsOYlBkWrdOyDjPm4v20dx03AnoqtYiAmT
+        U9F3ycilQ2VD5c2Fi4U7GaScrQ==
+X-Google-Smtp-Source: AMsMyM6B3pwfghBShw4QCFh8wsWBS8bi/WgiLJm5OdtkiIadPOi40t5IpnUu2dUWkrkhhaqvsZnpVw==
+X-Received: by 2002:a05:600c:a45:b0:3bc:c676:a573 with SMTP id c5-20020a05600c0a4500b003bcc676a573mr28289654wmq.118.1666209610271;
+        Wed, 19 Oct 2022 13:00:10 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:b751:df72:2e0f:684c])
+        by smtp.gmail.com with ESMTPSA id ay18-20020a5d6f12000000b0022e62529888sm945871wrb.67.2022.10.19.13.00.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 13:00:09 -0700 (PDT)
+Date:   Wed, 19 Oct 2022 22:00:02 +0200
+From:   Marco Elver <elver@google.com>
+To:     youling 257 <youling257@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
+Message-ID: <Y1BXQlu+JOoJi6Yk@elver.google.com>
+References: <20220915150417.722975-19-glider@google.com>
+ <20221019173620.10167-1-youling257@gmail.com>
+ <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
+ <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
+ <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,67 +107,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 9:27 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> So let's just eliminate this particular variety of heisensigned bugs
-> entirely. Set `-fsigned-char` globally, so that gcc makes the type
-> signed on all architectures.
+On Thu, Oct 20, 2022 at 03:29AM +0800, youling 257 wrote:
+[...]
+> > What arch?
+> > If x86, can you try to revert only the change to
+> > instrument_get_user()? (I wonder if the u64 conversion is causing
+> > issues.)
+> >
+> arch x86, this's my revert,
+> https://github.com/youling257/android-mainline/commit/401cbfa61cbfc20c87a5be8e2dda68ac5702389f
+> i tried different revert, have to remove kmsan_copy_to_user.
 
-Btw, I do wonder if we might actually be better off doing this - but
-doing it the other way around.
+There you reverted only instrument_put_user() - does it fix the issue?
 
-IOW, make 'char' always UNsigned. Unlike the signed char thing, it
-shouldn't generate any worse code on any common architecture.
+If not, can you try only something like this (only revert
+instrument_get_user()):
 
-And I do think that having odd architecture differences is generally a
-bad idea, and making the language rules stricter to avoid differences
-is a good thing.
+diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+index 501fa8486749..dbe3ec38d0e6 100644
+--- a/include/linux/instrumented.h
++++ b/include/linux/instrumented.h
+@@ -167,9 +167,6 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
+  */
+ #define instrument_get_user(to)				\
+ ({							\
+-	u64 __tmp = (u64)(to);				\
+-	kmsan_unpoison_memory(&__tmp, sizeof(__tmp));	\
+-	to = __tmp;					\
+ })
+ 
 
-Now, you did '-fsigned-char', because that's the "common default" in
-an x86-centric world.
+Once we know which one of these is the issue, we can figure out a proper
+fix.
 
-You are also right that people might think that "char" works like
-"int", and that if you don't specify the sign, it's signed.
+Thanks,
 
-But those people are obviously wrong anyway, so it's not a very strong argu=
-ment.
-
-And from a kernel perspective, I do think that "treat char as a byte"
-and making it be unsigned is in many ways the saner model. There's a
-reason we use 'unsigned char' in a fair number of places.
-
-So using '-funsigned-char' might not be a bad idea.
-
-Hilariously (and by "hilariously", I obviously mean "NOT
-hilariously"), it doesn't actually fix the warning for
-
-   const unsigned char *c =3D "p";
-
-which still complains about
-
-   warning: pointer targets in initialization of =E2=80=98const unsigned ch=
-ar
-*=E2=80=99 from =E2=80=98char *=E2=80=99 differ in signedness
-
-even when you've specified that 'char' should be unsigned with -funsigned-c=
-har.
-
-Because gcc actually tries to be helpful, and has (reasonably, from a
-"type sanity" standpoint) decided that
-
-   "The type char is always a distinct type from each of signed char
-or unsigned char, even though its behavior is always just like one of
-those two"
-
-so using "-funsigned-char" gives us well-defined *behavior*, but
-doesn't really help us with cleaning up our code.
-
-I understand why gcc would want to make it clear that despite any
-behavioral issues, "char" is *not* the same as "[un]signed char" in
-general. But in this kind of use case, that warning is just pointless
-and annoying.
-
-Oh well. You *really* can't win this thing. The game is rigged like
-some geeky carnival game.
-
-              Linus
+-- Marco
