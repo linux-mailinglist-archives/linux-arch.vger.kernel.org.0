@@ -2,97 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604C0605837
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 09:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E343605865
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 09:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiJTHRS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Oct 2022 03:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S229515AbiJTHZU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Oct 2022 03:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiJTHRC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 03:17:02 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110FE148F7F;
-        Thu, 20 Oct 2022 00:16:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VSe4JAy_1666250126;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSe4JAy_1666250126)
-          by smtp.aliyun-inc.com;
-          Thu, 20 Oct 2022 15:15:28 +0800
-Message-ID: <70610ea1-5932-a19f-5eba-c4fba06335da@linux.alibaba.com>
-Date:   Thu, 20 Oct 2022 15:15:26 +0800
+        with ESMTP id S229727AbiJTHZS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 03:25:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DDFD77C6;
+        Thu, 20 Oct 2022 00:25:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3136619C8;
+        Thu, 20 Oct 2022 07:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4463CC433D7;
+        Thu, 20 Oct 2022 07:25:11 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V12 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Thu, 20 Oct 2022 15:23:13 +0800
+Message-Id: <20221020072317.492906-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFC PATCH] mm: Introduce new MADV_NOMOVABLE behavior
-To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
-Cc:     arnd@arndb.de, jingshan@linux.alibaba.com, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
- <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
- <8007f4fc-d2e6-7aae-7297-805326adce2a@linux.alibaba.com>
- <a83656e2-07b0-8a5f-40ae-077e23c4cd24@redhat.com>
- <c163ba0e-80d9-6362-b4f0-c5a2a12deec5@linux.alibaba.com>
- <470dc638-a300-f261-94b4-e27250e42f96@redhat.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <470dc638-a300-f261-94b4-e27250e42f96@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
-On 10/19/2022 11:17 PM, David Hildenbrand wrote:
->> I observed one migration failure case (which is not easy to reproduce)
->> is that, the 'thp_migration_fail' count is 1 and the
->> 'thp_split_page_failed' count is also 1.
->>
->> That means when migrating a THP which is in CMA area, but can not
->> allocate a new THP due to memory fragmentation, so it will split the
->> THP. However THP split is also failed, probably the reason is temporary
->> reference count of this THP. And the temporary reference count can be
->> caused by dropping page caches (I observed the drop caches operation in
->> the system), but we can not drop the shmem page caches due to they are
->> already dirty at that time.
->>
->> So we can try again in migrate_pages() if THP split is failed to
->> mitigate the failure of migration, especially for the failure reason is
->> temporary reference count? Does this sound reasonable for you?
-> 
-> It sound reasonable, and I understand that debugging these issues is 
-> tricky. But we really have to figure out the root cause to make these 
-> pages that are indeed movable (but only temporarily not movable for 
-> reason XYZ) movable.
-> 
-> We'd need some indication to retry migration longer / again.
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
 
-OK. Let me try this and see if there are other possible failure cases in 
-the products.
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
 
->>
->> However I still worried there are other possible cases to cause
->> migration failure, so no CMA allocation for our case seems more stable 
->> IMO.
-> 
-> Yes, I can understand that. But as one example, you're approach doesn't 
-> handle the case that a page that was allocated on !CMA/!ZONE_MOVABLE 
-> would get migrated to CMA/ZONE_MOVABLE just before you would try pinning 
-> the page (to migrate it again off CMA/ZONE_MOVABLE).
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
 
-Indeed, like you said before, just helpful to minimize page migration 
-now. Maybe I can take MADV_PINNABLE into considering when allocating new 
-pages, such as alloc_migration_target().
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
 
-Anyway let me try to fix the root cause first to see if it can solve our 
-problem.
+V6 -> V7:
+Fix build warnings of "no previous prototype".
 
-> We really have to fix the root cause.
+V7 -> V8:
+Fix build error for MIPS pud_init().
 
-OK. Thanks for your input.
+V8 -> V9:
+Remove redundant #include to avoid build error with latest upstream
+kernel.
+
+V9 -> V10:
+Fix build error due to VMEMMAP changes in 6.0-rc1.
+
+V10 -> V11:
+Adjust context due to ARM64 changes in 6.1-rc1.
+
+V11 -> V12:
+1, Fix build error for !SPARSEMEM;
+2, Simplify pagetable_init() for MIPS32.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
+
