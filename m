@@ -2,108 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB70606855
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 20:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE7C606896
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 21:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiJTSle (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Oct 2022 14:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S229720AbiJTTEb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Oct 2022 15:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJTSld (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 14:41:33 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1248208806
-        for <linux-arch@vger.kernel.org>; Thu, 20 Oct 2022 11:41:31 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y4so146452plb.2
-        for <linux-arch@vger.kernel.org>; Thu, 20 Oct 2022 11:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7nPBTU3PqdP5EK9iSk8h8ufgxACQharp0pBd9nt0BIc=;
-        b=V87BkIgQjC4K7MYDNkBaUMfBiwNsRounMByDxYac7tRM8jK6sBUrEZidRmmlXpC9YB
-         Ie7MDrLvE6AArCQgek5J0VqBNd+y0aPXnEktH0qMOtcLrMv3Jw3ejmBf8/tdQz1xaKPC
-         A7AUcNXuDyNgx3VmkwC8GEorFfF+SdXKj2Enc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7nPBTU3PqdP5EK9iSk8h8ufgxACQharp0pBd9nt0BIc=;
-        b=iP3ooD7mRYjCPvDtloUZUAA3NyIFstjLAmW98aeVhxtMSMjZk+Ca3OfaqZRbMYHz7W
-         V66NlmJ9WcCM4iWuziXZqByO4gpv76DavAbpl4eIQcCyGIVmA1oP3eq6UrDQiyRYZvGt
-         XG5FJe/WDzDeHjN8eBn78+8yH/nOc7sGZHJB1uqxHSrelHSZOGBfFCNQTfnZngfw/4di
-         DOpK/rTEaFbUXWXi9lpWVOFNGvVKGhIuiYXIKA2L71kQaYJApftfqzhohNMMLm+xi93G
-         WBQS2FRqvJkhdbxirhxVcAtScGqh5qH7r+eB49GEQW42p2To1RRTwSf7INMWolmKZwAF
-         bJhQ==
-X-Gm-Message-State: ACrzQf3E3ZRAEioL7vOCR0sjkNDR/Gf7/EWTr+gB/7LjpMSDfyR4Jddh
-        j6dvARkTbM8r/Yh9ydKILeve/Q==
-X-Google-Smtp-Source: AMsMyM7jtj0lrm66FgtcXeuW3VLHNK1EiZ1HwCHhzPxNj/ARdDq42D4QCAl03CKpknF5hSdF+2b6lg==
-X-Received: by 2002:a17:903:22c1:b0:184:983f:11b2 with SMTP id y1-20020a17090322c100b00184983f11b2mr15663540plg.40.1666291291263;
-        Thu, 20 Oct 2022 11:41:31 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170902780700b0017bb38e4591sm178160pll.41.2022.10.20.11.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 11:41:30 -0700 (PDT)
-Date:   Thu, 20 Oct 2022 11:41:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-Message-ID: <202210201056.DEE610F6F@keescook>
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
- <20221019203034.3795710-1-Jason@zx2c4.com>
- <CAHk-=wit-67VU=kt-8Ojtx04m6wxfqypKLzW7CuSeEH_9MYZvw@mail.gmail.com>
- <Y1CP/uJb1SQjyS0n@zx2c4.com>
- <CAHk-=whg00wpUzNLs0obmMKA3GhUnLzat9syA1=_tfi8Ms8TLg@mail.gmail.com>
+        with ESMTP id S229509AbiJTTEa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 15:04:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C34D12A86;
+        Thu, 20 Oct 2022 12:04:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC58761CDB;
+        Thu, 20 Oct 2022 19:04:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9294C433D6;
+        Thu, 20 Oct 2022 19:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666292667;
+        bh=HR30xac7/0YN9/YwEhlF6z4rb2w90/XCBJ4nOHc4JoI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Pb2vN61GH6AyB/9TndECIzbx7fKtS3d7yJ6Tb8Sfw/uoqPO4ByAHO17ZJfegVtIlD
+         rSfJOBKQhzM7LxnxtlktqClL1O/tRD4Ae1ht9n4dho7mwAklUAy5PzzGb7JAjwluLZ
+         n8ze8fw/7wasYn87KfWwq/K43u3Y7nA/3f9/A2Dhbl31HAo7n2sLJ04aaEiO+GcoiJ
+         xalfYfmUaAmFChDgmY+R4NsQuEfVyHGmwAe/ONKqoXXwb5Q+uOfiaKPtzOtqgkQEam
+         GD2o4GPtlYujTfy26V/xxzMKExgwEHN5f4O6pR7YED1It55IYIb48cVFDT60Ey8f7U
+         9T2TPD4p35uOA==
+Date:   Thu, 20 Oct 2022 14:04:25 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        luto@kernel.org, peterz@infradead.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH 11/12] PCI: hv: Add hypercalls to read/write MMIO space
+Message-ID: <20221020190425.GA139674@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whg00wpUzNLs0obmMKA3GhUnLzat9syA1=_tfi8Ms8TLg@mail.gmail.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1666288635-72591-12-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 05:38:55PM -0700, Linus Torvalds wrote:
-> Having some scripting automation that just notices "this changes code
-> generation in function X" might actually be interesting, and judging
-> by my quick tests might not be *too* verbose.
+On Thu, Oct 20, 2022 at 10:57:14AM -0700, Michael Kelley wrote:
+> To support PCI pass-thru devices in Confidential VMs, Hyper-V
+> has added hypercalls to read and write MMIO space. Add the
+> appropriate definitions to hyperv-tlfs.h and implement
+> functions to make the hypercalls. These functions are used
+> in a subsequent patch.
+> 
+> Co-developed-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h  |  3 ++
+>  drivers/pci/controller/pci-hyperv.c | 62 +++++++++++++++++++++++++++++++++++++
+>  include/asm-generic/hyperv-tlfs.h   | 22 +++++++++++++
+>  3 files changed, 87 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 3089ec3..f769b9d 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -117,6 +117,9 @@
+>  /* Recommend using enlightened VMCS */
+>  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+>  
+> +/* Use hypercalls for MMIO config space access */
+> +#define HV_X64_USE_MMIO_HYPERCALLS			BIT(21)
+> +
+>  /*
+>   * CPU management features identification.
+>   * These are HYPERV_CPUID_CPU_MANAGEMENT_FEATURES.EAX bits.
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index e7c6f66..02ebf3e 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1054,6 +1054,68 @@ static int wslot_to_devfn(u32 wslot)
+>  	return PCI_DEVFN(slot_no.bits.dev, slot_no.bits.func);
+>  }
+>  
+> +static void hv_pci_read_mmio(phys_addr_t gpa, int size, u32 *val)
+> +{
+> +	struct hv_mmio_read_input *in;
+> +	struct hv_mmio_read_output *out;
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Must be called with interrupts disabled so it is safe
+> +	 * to use the per-cpu input argument page.  Use it for
+> +	 * both input and output.
+> +	 */
+> +	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	out = *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
+> +	in->gpa = gpa;
+> +	in->size = size;
+> +
+> +	ret = hv_do_hypercall(HVCALL_MMIO_READ, in, out);
+> +	if (hv_result_success(ret)) {
+> +		switch (size) {
+> +		case 1:
+> +			*val = *(u8 *)(out->data);
+> +			break;
+> +		case 2:
+> +			*val = *(u16 *)(out->data);
+> +			break;
+> +		default:
+> +			*val = *(u32 *)(out->data);
+> +			break;
+> +		}
+> +	} else
+> +		pr_err("MMIO read hypercall failed with status %llx\n", ret);
 
-On the reproducible build comparison system[1] we use for checking a lot
-of the KSPP work for .text deltas, an allmodconfig finds a fair bit for
-this change. Out of 33900 .o files, 1005 have changes.
+Too bad there's not more information to give the user/administrator
+here.  Seeing "MMIO read hypercall failed with status -5" in the log
+doesn't give many clues about where to look or who to notify.  I don't
+know what's even feasible, but driver name, device, address (gpa),
+size would all be possibilities.
 
-Spot checking matches a lot of what you found already...
-
-        u64 flags = how->flags;
-	...
-fs/open.c:1123:
-        int acc_mode = ACC_MODE(flags);
--    1c86:      movsbl 0x0(%rdx),%edx
-+    1c86:      movzbl 0x0(%rdx),%edx
-
-#define ACC_MODE(x) ("\004\002\006\006"[(x)&O_ACCMODE])
-
-Ignoring those, it goes down to 625, and spot checking those is more
-difficult, but looks to be mostly register selection changes dominating
-the delta. The resulting vmlinux sizes are identical, though.
-
--Kees
-
-[1] A fancier version of:
-    https://outflux.net/blog/archives/2022/06/24/finding-binary-differences/
-
--- 
-Kees Cook
+Bjorn
