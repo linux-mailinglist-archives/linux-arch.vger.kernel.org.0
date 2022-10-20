@@ -2,75 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE366055D1
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 05:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604C0605837
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 09:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiJTDMH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Oct 2022 23:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
+        id S230370AbiJTHRS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Oct 2022 03:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiJTDMG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Oct 2022 23:12:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA0113FDF0;
-        Wed, 19 Oct 2022 20:12:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DBF7619D7;
-        Thu, 20 Oct 2022 03:12:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B04C433D7;
-        Thu, 20 Oct 2022 03:12:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UYPPWo07"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666235520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qadNFZ7XWekAb/DyZLHG/LNLJMySf8HJL6Ybo4oyuUY=;
-        b=UYPPWo07B4JIquDZmfeMceCq/7TtxQ6+A1anGpsJuDWQP7mLbxXUNzp45Z3SSOvKGJKF0i
-        F9bsBR7UsgpNykbqeqOjU4d28CF26tefLa9feTLt/xP+Lh8M/17pyrKrphSFmzXqMpbpLG
-        aYqFfA8ad216c82Dm64hXKfYGEMBE5I=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7c50f5bb (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Oct 2022 03:12:00 +0000 (UTC)
-Received: by mail-vk1-f179.google.com with SMTP id o28so9184345vkn.11;
-        Wed, 19 Oct 2022 20:11:59 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0h0/Tadi32Ztg+REpu9BJ44rRFNpy+pzIXkB+R3qTCiJFMVjaX
-        PRHyM7G2WIshF/XJ9h1OKAFdNwDrza35QTsqtBw=
-X-Google-Smtp-Source: AMsMyM6bTiFb+XKZ7aoBA18LydUNCto9/ceSwOPm+hNQxvS4xU5UEdlUYPzLFfCMDc9XYweqgfL3hCwkYcFoBa2v1aI=
-X-Received: by 2002:a1f:e0c4:0:b0:3ab:191d:e135 with SMTP id
- x187-20020a1fe0c4000000b003ab191de135mr5171014vkg.41.1666235518593; Wed, 19
- Oct 2022 20:11:58 -0700 (PDT)
+        with ESMTP id S230389AbiJTHRC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 03:17:02 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110FE148F7F;
+        Thu, 20 Oct 2022 00:16:23 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VSe4JAy_1666250126;
+Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSe4JAy_1666250126)
+          by smtp.aliyun-inc.com;
+          Thu, 20 Oct 2022 15:15:28 +0800
+Message-ID: <70610ea1-5932-a19f-5eba-c4fba06335da@linux.alibaba.com>
+Date:   Thu, 20 Oct 2022 15:15:26 +0800
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org> <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
- <CAKwvOdn4iocWHY_-sXMqE7F1XrV669QsyQDzh7vPFg6+7368Cg@mail.gmail.com>
- <CAHk-=wiD90ZphsbTzSetHsK3_kQzhgyiYYS0msboVsJ3jbNALQ@mail.gmail.com>
- <202210191209.919149F4@keescook> <CAHk-=wgz3Uba8w7kdXhsqR1qvfemYL+OFQdefJnkeqXG8qZ_pA@mail.gmail.com>
- <Y1Bfg06qV0sDiugt@zx2c4.com> <CAHk-=wjsbYJuO=3331LmQGePXWAdHEdT33HOup53shjMJFan6Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wjsbYJuO=3331LmQGePXWAdHEdT33HOup53shjMJFan6Q@mail.gmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 19 Oct 2022 21:11:46 -0600
-X-Gmail-Original-Message-ID: <CAHmME9p6BKrV6r3Rh5Cwq2AvV6-=ZQEKK=k10EqV_+yDCdWq4g@mail.gmail.com>
-Message-ID: <CAHmME9p6BKrV6r3Rh5Cwq2AvV6-=ZQEKK=k10EqV_+yDCdWq4g@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sultan Alsawaf <sultan@kerneltoast.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFC PATCH] mm: Introduce new MADV_NOMOVABLE behavior
+To:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org
+Cc:     arnd@arndb.de, jingshan@linux.alibaba.com, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <bc27af32b0418ed1138a1c3a41e46f54559025a5.1665991453.git.baolin.wang@linux.alibaba.com>
+ <6227ba4c-9455-9652-7434-7842b2b3edcb@redhat.com>
+ <8007f4fc-d2e6-7aae-7297-805326adce2a@linux.alibaba.com>
+ <a83656e2-07b0-8a5f-40ae-077e23c4cd24@redhat.com>
+ <c163ba0e-80d9-6362-b4f0-c5a2a12deec5@linux.alibaba.com>
+ <470dc638-a300-f261-94b4-e27250e42f96@redhat.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <470dc638-a300-f261-94b4-e27250e42f96@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +47,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 6:11 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Oct 19, 2022 at 1:35 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> >
-> > I wish folks would use `u8 *` when they mean "byte array".
->
-> Together with '-funsigned-char', we could typedef 'u8' to just 'char'
-> (just for __KERNEL__ code, though!), and then we really could just use
-> 'strlen()' and friends on said kind of arrays without any warnings.
->
-> But we do have a *lot* of 'unsigned char' users, so it would be a huge
-> amount of churn to do this kind of thing.
 
-I think, though, there's an argument to be made that every use of
-`unsigned char` is much better off as a `u8`. We don't have any C23
-fancy unicode strings. As far as I can tell, the only usage of
-`unsigned char` ought to be "treat this as a byte array", and that's
-what u8 is for. Yea, that'd be churn. But technically, it wouldn't
-really be difficult churn: If naive-sed mangles that, I'm sure
-Coccinelle would be up to the task. If you think that's a wise
-direction, I can play with it and see how miserable it is to do.
 
-(As a sidebar, Sultan and I were discussing today... I find the
-radical extension of this idea to its logical end somewhat attractive:
-exclusively using u64, s64, u32, s32, u16, s16, u8, s8, uword (native
-size), sword (native size), char (string/character). It'd hardly look
-like C any more, though, and the very mention of the idea is probably
-triggering for some. So I'm not actually suggesting we do that in
-earnest. But there is some appeal.)
+On 10/19/2022 11:17 PM, David Hildenbrand wrote:
+>> I observed one migration failure case (which is not easy to reproduce)
+>> is that, the 'thp_migration_fail' count is 1 and the
+>> 'thp_split_page_failed' count is also 1.
+>>
+>> That means when migrating a THP which is in CMA area, but can not
+>> allocate a new THP due to memory fragmentation, so it will split the
+>> THP. However THP split is also failed, probably the reason is temporary
+>> reference count of this THP. And the temporary reference count can be
+>> caused by dropping page caches (I observed the drop caches operation in
+>> the system), but we can not drop the shmem page caches due to they are
+>> already dirty at that time.
+>>
+>> So we can try again in migrate_pages() if THP split is failed to
+>> mitigate the failure of migration, especially for the failure reason is
+>> temporary reference count? Does this sound reasonable for you?
+> 
+> It sound reasonable, and I understand that debugging these issues is 
+> tricky. But we really have to figure out the root cause to make these 
+> pages that are indeed movable (but only temporarily not movable for 
+> reason XYZ) movable.
+> 
+> We'd need some indication to retry migration longer / again.
 
-Jason
+OK. Let me try this and see if there are other possible failure cases in 
+the products.
+
+>>
+>> However I still worried there are other possible cases to cause
+>> migration failure, so no CMA allocation for our case seems more stable 
+>> IMO.
+> 
+> Yes, I can understand that. But as one example, you're approach doesn't 
+> handle the case that a page that was allocated on !CMA/!ZONE_MOVABLE 
+> would get migrated to CMA/ZONE_MOVABLE just before you would try pinning 
+> the page (to migrate it again off CMA/ZONE_MOVABLE).
+
+Indeed, like you said before, just helpful to minimize page migration 
+now. Maybe I can take MADV_PINNABLE into considering when allocating new 
+pages, such as alloc_migration_target().
+
+Anyway let me try to fix the root cause first to see if it can solve our 
+problem.
+
+> We really have to fix the root cause.
+
+OK. Thanks for your input.
