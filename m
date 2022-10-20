@@ -2,83 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE066065E5
-	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 18:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAB7606753
+	for <lists+linux-arch@lfdr.de>; Thu, 20 Oct 2022 19:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiJTQe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 20 Oct 2022 12:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
+        id S229732AbiJTRxz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 20 Oct 2022 13:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiJTQeZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 12:34:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F3B17D288;
-        Thu, 20 Oct 2022 09:34:13 -0700 (PDT)
+        with ESMTP id S229484AbiJTRxy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 20 Oct 2022 13:53:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2B31E7446;
+        Thu, 20 Oct 2022 10:53:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A24BFB826A9;
-        Thu, 20 Oct 2022 16:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED493C433D7;
-        Thu, 20 Oct 2022 16:34:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ladaFUCN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666283647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j6/3/s/F9AiqZ8ACkktuUlP8j8csHgAdMQTJ3xPu0RU=;
-        b=ladaFUCNFHYEdS+B5lBVsUu7VOyg2l1LsONGKpmaJE+SQOzJeKVPlPFPd6VRQMtvOsKnrQ
-        Fbc98kpAvzczoJ0ualK85kOyjs0aW1klyXlXUWaIfjIJqLFmYapVadnDOv0pFQ7zpifsOl
-        gHzeoVDoUomAff/UMawkFmbDk12k7KI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 49be7ccd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Oct 2022 16:34:06 +0000 (UTC)
-Received: by mail-ua1-f51.google.com with SMTP id y20so9978880uao.8;
-        Thu, 20 Oct 2022 09:34:06 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0FLEp+HUka5qpbpFxwBy7ZurjveFakUSMekepBsywVxhZo3KrX
-        CjqH+dqjqLSKND25CcoZWnnTISV22IbmAUWC9Rg=
-X-Google-Smtp-Source: AMsMyM4UbgKYinuY1PeLlQUJ+zAbDnXOqoO0YgQNW243VlJSovQbjZ4gksu4qa/PVM5AIgL5W9c5Duh97XLbOtbizJw=
-X-Received: by 2002:a05:6102:7c9:b0:3a7:6261:935 with SMTP id
- y9-20020a05610207c900b003a762610935mr7838965vsg.73.1666283644745; Thu, 20 Oct
- 2022 09:34:04 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38BC761B4B;
+        Thu, 20 Oct 2022 17:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADCCC433D6;
+        Thu, 20 Oct 2022 17:53:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666288432;
+        bh=ENyBHTU+PlCOFSNauBVolLBO7eB6Z+yD7cAHq5oAFfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=itsqb22tDrJn/TaivCWnwHoR/9a1Q/K3QjttRaDQ6N0wPGbj3sGv4KhTbdN4/5Nxy
+         qe9lpYkzAHrw8iXhNx+gUH/eJBvgfpinLFdJht+aIV7B43iS5L474MXiI9lVQER+YZ
+         YTk7aj6vm6U8rTbfb7xKZUYPy+pGcWR7F8pJu2zwTF87vqlR9Ehr4jsb3uNftkF6wX
+         W433vYi8ytZV2h2vgJcXNFub79eBqffDd5s+X9Ii4M3CXEkxnezmYYWH1bZSoXfnhK
+         /DRZwynNDXEwrQwvO3QTUtZeYnREpKChG+YqGe2lhRXJ0yI7Xzeaa98a9j5d59l671
+         vlXEDoBoA2chA==
+Date:   Thu, 20 Oct 2022 10:53:50 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "H.Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>
+Subject: Re: upgrade the orphan section warning to a hard link error
+Message-ID: <Y1GLLnYsEC8lYTdp@dev-arch.thelio-3990X>
+References: <BN6PR1101MB216105D169D482FC8C539059A8269@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y02eZ6A/vlj8+B/c@dev-arch.thelio-3990X>
+ <202210171230.CC40461C@keescook>
+ <Y02zWFxC92VDSpdZ@dev-arch.thelio-3990X>
+ <BN6PR1101MB216126260E3A9AFEE3F9CFB8A82A9@BN6PR1101MB2161.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <202210201618.8XhEGsLd-lkp@intel.com>
-In-Reply-To: <202210201618.8XhEGsLd-lkp@intel.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Oct 2022 10:33:53 -0600
-X-Gmail-Original-Message-ID: <CAHmME9pqXvoYZL4u3dzfQDNyDB3TbaMAkynn=MLqagC_Dmk6TQ@mail.gmail.com>
-Message-ID: <CAHmME9pqXvoYZL4u3dzfQDNyDB3TbaMAkynn=MLqagC_Dmk6TQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-To:     kernel test robot <lkp@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        kbuild-all@lists.01.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN6PR1101MB216126260E3A9AFEE3F9CFB8A82A9@BN6PR1101MB2161.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 2:40 AM kernel test robot <lkp@intel.com> wrote:
-> >> drivers/s390/block/dasd.c:1912:9: warning: case label value exceeds maximum value for type [-Wswitch-outside-range]
->     1912 |         case DASD_CQR_ERROR:
+On Thu, Oct 20, 2022 at 05:17:35AM +0000, Li, Xin3 wrote:
+> Hi Nathan,
+> 
+> > On Mon, Oct 17, 2022 at 12:32:39PM -0700, Kees Cook wrote:
+> > > On Mon, Oct 17, 2022 at 11:26:47AM -0700, Nathan Chancellor wrote:
+> > > > It might be interesting to turn orphan sections into an error if
+> > > > CONFIG_WERROR is set. Perhaps something like the following (FYI, not
+> > > > even compile tested)?
+> > > >
+> > > > diff --git a/Makefile b/Makefile
+> > > > index 0837445110fc..485f47fc2c07 100644
+> > > > --- a/Makefile
+> > > > +++ b/Makefile
+> > > > @@ -1119,7 +1119,7 @@ endif
+> > > >  # We never want expected sections to be placed heuristically by the
+> > > > # linker. All sections should be explicitly named in the linker script.
+> > > >  ifdef CONFIG_LD_ORPHAN_WARN
+> > > > -LDFLAGS_vmlinux += --orphan-handling=warn
+> > > > +LDFLAGS_vmlinux += --orphan-handling=$(if
+> > > > +$(CONFIG_WERROR),error,warn)
+> > > >  endif
+> > >
+> > > Yes, this is much preferred.
+> > >
+> > > > Outright turning the warning into an error with no escape hatch
+> > > > might be too aggressive, as we have had these warnings triggered by
+> > > > new compiler generated sections, such as in commit 848378812e40
+> > ("vmlinux.lds.h:
+> > > > Handle clang's module.{c,d}tor sections"). Unconditionally breaking
+> > > > the build in these situations is unfortunate but the warnings do
+> > > > need to be dealt with so I think having it error by default with the
+> > > > ability to opt-out is probably worth doing. I do not have a strong opinion
+> > though.
+> > >
+> > > Correct; the mandate from Linus (disregarding his addition of
+> > > CONFIG_WERROR for all*config builds), is that we should avoid breaking
+> > > builds. It wrecks bisection, it causes problems across compiler
+> > > versions, etc.
+> > >
+> > > So, yes, only on CONFIG_WERROR=y.
+> > 
+> > We would probably want to alter the text of CONFIG_WERROR in some manner
+> > to convey this, perhaps like so:
+> > 
+> > diff --git a/init/Kconfig b/init/Kconfig index a19314933e54..1fc03e4b2af2
+> > 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -165,10 +165,12 @@ config WERROR
+> >  	help
+> >  	  A kernel build should not cause any compiler warnings, and this
+> >  	  enables the '-Werror' (for C) and '-Dwarnings' (for Rust) flags
+> > -	  to enforce that rule by default.
+> > +	  to enforce that rule by default. Certain warnings from other tools
+> > +	  such as the linker may be upgraded to errors with this option as
+> > +	  well.
+> > 
+> > -	  However, if you have a new (or very old) compiler with odd and
+> > -	  unusual warnings, or you have some architecture with problems,
+> > +	  However, if you have a new (or very old) compiler or linker with odd
+> > +	  and unusual warnings, or you have some architecture with problems,
+> >  	  you may need to disable this config option in order to
+> >  	  successfully build the kernel.
+> 
+> Thanks a lot for making this crystal clear.
+> 
+> Do you want me to continue?  Or maybe it's easier for you to complete it?
 
-Just to save other readers the momentary "huh?" that I experienced,
-this warning/error is from the -fsigned-char patch. We ultimately went
-with (or are trying to go with) the -funsigned-char approach instead.
-So safely ignore this kernel test bot error, as it applies to v1
-rather than the v2 here:
-https://lore.kernel.org/lkml/20221019203034.3795710-1-Jason@zx2c4.com/
+Sure, I think it is reasonable for you to continue with this as you
+brought up the idea initially! Feel free to just take those diffs
+wholesale if they work and stick a
 
-Jason
+    Suggested-by: Nathan Chancellor <nathan@kernel.org>
+
+or
+
+    Co-developed-by: Nathan Chancellor <nathan@kernel.org>
+    Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+on the patch if you are so inclined or rework them in a way you see fit,
+I do not have a strong opinion.
+
+> I will need to find resources to test the patch on other platforms besides x86.
+
+In theory, we should have already cleaned up all these warnings when we
+enabled CONFIG_LD_ORPHAN_WARN for all these architectures, so that
+change should be a no-op. More testing is never a bad idea though :)
+
+I can throw it into my LLVM testing matrix as well.
+
+Cheers,
+Nathan
