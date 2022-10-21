@@ -2,182 +2,251 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF7F6074D8
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Oct 2022 12:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A6860792A
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Oct 2022 16:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiJUKRX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Oct 2022 06:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S231177AbiJUOFB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Oct 2022 10:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbiJUKRG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Oct 2022 06:17:06 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D02514F4
-        for <linux-arch@vger.kernel.org>; Fri, 21 Oct 2022 03:16:55 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1647555wmq.4
-        for <linux-arch@vger.kernel.org>; Fri, 21 Oct 2022 03:16:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+5cnDmrVndRxKiTHUVemxonBJmpJGHILsZC3ogF/MOw=;
-        b=JPtq+/IRujntwIE/R0H50vcNFzBxZsG6vivxycGAXnEB2uRQt6ffZwiejqzB7e2thQ
-         NUlcGdmwHolJLIyBZw0eVbnviS2rST1avPMOUkg8ACV8YerSEMWgInAYBS94wGapJw4i
-         bfRlNjVOU9KrSi7RqliTvkKJa7cZtLfpxfwmxtE2ad1zmQef69xoS1eIddjy6V/CVYIV
-         OSX1sAbFVNxDQkT8WjHl639ubVOThBYSN7UldhIlgneUKM+K/ZRScAH6fxsbB5g0MWT/
-         301O4bxqIRd29ca4wje7C/60v3tVfhwf0S5eO9cBOGxlGkTMgxAyQO3qnOla5YK5a34j
-         LIJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5cnDmrVndRxKiTHUVemxonBJmpJGHILsZC3ogF/MOw=;
-        b=K6v5RUm7XBEx0vf3V1tPokSz09ISJHJ1M6Ja8wICiisuaH6JTIVDMuO9L1yIGcENEn
-         RjS+8rc9LBjnORZc6mNqIBf1l0dJYlzM5wRAJLsLzFFmTqb40QKwVWkdJRepUsEKxfMj
-         gGrN1+7IaQYGRv4DnRkTTp0yf93a2LY7oxO7YYjyckvarKWWeq/zgKPUjZLuQ2+RLroZ
-         o2eqZhk3qtYiDmJhvIz2jOhRpjLgF0Xsj2HpFcRbLBj4wr0kiTSZwr3fiUzRcHjBrgA6
-         sT0/5MB209oX96PlOVdsq4n1SvX2wrc7hx/v/nk58k732VX8wNi5qh1q0aAUesG/H82B
-         fLGg==
-X-Gm-Message-State: ACrzQf29qzwYA349luu+VEWzy1OjYdWfCF6riAsSyRCzPwqLuwzqyPkV
-        lv39PBgkWj4EA4kDz6ROAdLDWQ==
-X-Google-Smtp-Source: AMsMyM7lFiRw/3BBe90FzLXlb+jXp4Bsd46molv2+M4Io/03D653ZKfrdrAMjZSj/Yk+qHqfl4wzbA==
-X-Received: by 2002:a7b:c841:0:b0:3c6:ce2f:3438 with SMTP id c1-20020a7bc841000000b003c6ce2f3438mr12545988wml.51.1666347414085;
-        Fri, 21 Oct 2022 03:16:54 -0700 (PDT)
-Received: from [10.50.0.10] (ec2-54-194-108-71.eu-west-1.compute.amazonaws.com. [54.194.108.71])
-        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b003c6f0ebf988sm2166623wmb.30.2022.10.21.03.16.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 03:16:53 -0700 (PDT)
-Message-ID: <1ca11693-17c2-7260-b642-70b033c64b30@linaro.org>
-Date:   Fri, 21 Oct 2022 12:16:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH V12 4/4] LoongArch: Enable
- ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+        with ESMTP id S231326AbiJUOE5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Oct 2022 10:04:57 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11022024.outbound.protection.outlook.com [40.93.200.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804F4501B1;
+        Fri, 21 Oct 2022 07:04:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BsLfEeptk+/s6utk/GBGHD8k15WWGJJBoi7WhQzqS+WzJruscUOal3AuwnvmlhHhNPAqrcaL0kWN/2L093p9v5K09uBrGUKvjXlWMniO7VcKTNDzntL12OYKSEbJStZhs4le97QzXIQxuaq1s3mfIq56jSQG2ku9xu5hN3bqwdjfa/VVlr0g5fkviJ4lQZAIYhSxBIAPL6hXRlAbt4edkpMi88WmgST4IOEaMeWjGjWU3h6rHjVytGxmTKGxX3lDZ9agwXfbBEBg7WLzlE43k6Ctz88RbSYfSrC22e/jagDQQeqbvOqFjdfrsOfvrF6lSBQn1YF+vRZ7lCknnOS3lQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R/HpdaHK2pUaI9JDG/wCYtJpF9sNzdQkPSbxIUaM818=;
+ b=f7Gide63hlEgCm55XfMJD24uqToCnnsExUaf7V16NADzxddgM0AL4tM1JcqD9xhuNRkhEsuDIYNv26ycQdZKBvU64xXMaEWk4wn7aJcm2tZJ4KamAqejJUn4IO+tijxrTn6EFBt+EFlR22+3Te0yO0h8QwKmcL+ws/cpnIIi41T5Q/ELWwxbrw5vreTq2jDR7cF91DHDmMtM9MWgWZdXKeAbZYUXhuk5ysYPMlCq+85CEBIjPMePoC/3Q0KXcQX9d+fJFx8y6xPij2ZzwgzGP4A6aOrIubLo15FtMQ2AwGFoWwG5fa/kT04TkztWZ4BYh/F9/R+H359voHXa02fEJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R/HpdaHK2pUaI9JDG/wCYtJpF9sNzdQkPSbxIUaM818=;
+ b=QFmbb3hx1t2zc4a27WCR+8pGg840S9YS29WUGEjrmB2rbq0CWmmNR1l2Zqt9mdeNPNH8IQLey78+PXPpT/HNvaQCXPmUxnJxR+FwYu11HsCnaHhw3MYgeUO4C5vxE5q/ZykIExv3Ec/xC3Rk5xCzF4OcPY+uFzys0GqlEmeexZk=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by DS7PR21MB3692.namprd21.prod.outlook.com (2603:10b6:8:92::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.6; Fri, 21 Oct
+ 2022 14:04:52 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b%6]) with mapi id 15.20.5769.007; Fri, 21 Oct 2022
+ 14:04:51 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [PATCH 11/12] PCI: hv: Add hypercalls to read/write MMIO space
+Thread-Topic: [PATCH 11/12] PCI: hv: Add hypercalls to read/write MMIO space
+Thread-Index: AQHY5K2aiO7H3wTya0WAgYUxXMGXe64XpC+AgAE9nNA=
+Date:   Fri, 21 Oct 2022 14:04:51 +0000
+Message-ID: <BYAPR21MB168877CB0C775A89F6B9DDA4D72D9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1666288635-72591-12-git-send-email-mikelley@microsoft.com>
+ <20221020190425.GA139674@bhelgaas>
+In-Reply-To: <20221020190425.GA139674@bhelgaas>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-References: <20221020072317.492906-1-chenhuacai@loongson.cn>
- <20221020072317.492906-5-chenhuacai@loongson.cn>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221020072317.492906-5-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=e4eac2cb-c74c-476c-94e2-7f7fce9f444a;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-10-21T14:01:11Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DS7PR21MB3692:EE_
+x-ms-office365-filtering-correlation-id: 22da442a-f870-4714-e87e-08dab36d3926
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CE2tB3ifGVAsbbi8ypiyCj6wSW6gJgr4Sb6WTaVpOezmuFRQhOSZ0wQGeVtavlTjByYFGLmEuVqGZ86GbVNfxFEgzKD5SJm8r9xbCCRAp4eacIwj3CD3oAkrjszWQrCwg7woECDG2PZDURU5gUpvBSQjCunxotpgfwQaCKa0AHRghZTw/VKjuWr4D3u1xiy/SpkJczZsYgzchGkHpCkzujl9BLyBQV1GTocWrwAjOc3ibrjOsOR7a25IdJ+JARkqlE6/JwV/PAsi0cNVvhtXDDDWmns0gSPWlyts/Mlg89u9ojyB3paYFxAg0+NHtqxiG6K/zMH83g0511GjB4g5vK8XDwXnprxXpY74fVZD3fa4N8c72VCJgje60/1BfaSSeCBcGWQz5qtYpdO4h+a230NLk5thb/7jeUjDU4EtoezG5LSrBio2IM9JfQlbPuhVEMDfkHHQ4yEx9VYXSvtMDdIZh+T5xX/pdml/weD1KbYwSO3NSGSVSuiHFkfTCeePNLGGQTtVbCBFhqgGx2vtQVECh/H6dbvNE8jQYwW2BsjdaElqQvT7QPU0Qkl2l85/tdVAjI9j+jUSTLbpPr5MO5HyxB9t+PGDOxn85poLChct4IOuGuVIFYN09hVaDJ3OVsuTIALIoF4y2/w2UjCUK/RC8fmPeS6NsCs9wWW4KWbFnN3GI8obOAhuVkohdpkaHB4429UQP0shmEFLJ/CbouPMd5lgvLFL3+aWfwN++eeySvKkAVsOR2gHscYuI7h17HotEeV7to1otnRx7EGBjyO2ESfiKiTEeiidEVCkhGOcSbzrmT+3E+83sesI0nFj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(451199015)(8936002)(82960400001)(86362001)(8676002)(66446008)(83380400001)(76116006)(66946007)(186003)(41300700001)(7696005)(316002)(122000001)(82950400001)(6916009)(478600001)(55016003)(26005)(6506007)(71200400001)(38070700005)(8990500004)(52536014)(4326008)(7416002)(9686003)(64756008)(66556008)(2906002)(10290500003)(54906003)(5660300002)(33656002)(7406005)(66476007)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Yu7WIEtDlE+jV+hW334cJvQihs4EAFmRiSW3vzCurskUaiGZKtEz7jFOdycy?=
+ =?us-ascii?Q?bw/DjGZtOb3mru2EdhGThps5aI41EhRq2GMs+VcVWgCj/Yw0KDqKV33STFgX?=
+ =?us-ascii?Q?Y6lZYwRAJY7WQ8Y5/8wrxGXSkYNzKTijHlj0zGR9k9UO4HkPT5QLg2Q8YnfW?=
+ =?us-ascii?Q?sFrVwbd+2cpaoJfZfabInVdb3+Sm8NTC5t4MKxSEhcvC5TWpWDEZf/KXnlxx?=
+ =?us-ascii?Q?IcUK/3dN/nRO1ZImU7MNbHpWNx87MNczexGVor0uP76IBsmvEe7freLCBaDs?=
+ =?us-ascii?Q?ENFXUC/L3woxn4ll4rLNr6eiY34wg6phGohMYjk6fsVsxAposhMxmurxgRAQ?=
+ =?us-ascii?Q?jlTwyoTB1klWtnH7E+cqLRkghxPZbse+pTH4n584Y3wwlJKl/TFVT9jPgKop?=
+ =?us-ascii?Q?uLUnE8iGeDAlBDR3NpopHEDp5J4k/G/iMdmySIT/w2B8R1tkFbJD3JGaT+r8?=
+ =?us-ascii?Q?JM7P/PCvVIhSAILsrPJQNgiN20n/a3sYH+KeHdFuhdbkQPg5uh5rhbTts/h8?=
+ =?us-ascii?Q?84NqYKOhBHDHzSeRul7TNSFTjPoPFrL4sTfh3brJaWYipSiO+2zjkZOmtwIn?=
+ =?us-ascii?Q?ZeVVjwuseLanOhFXGxgzYqYHKYGxTpIuqAjL7U1IReGYchgAHZ9hWRO/UOxE?=
+ =?us-ascii?Q?VocqREoadfLz4vxPXc1b6NS2da25jIGFI07abAI0pjL+GCxg61J4lapMDGUF?=
+ =?us-ascii?Q?PrxmDvgwZPhpqTF7W4nLY1eiHAqBnRFoHogn1wYDdsieA5Zzfo6+dMwhRCZh?=
+ =?us-ascii?Q?vx33zHT4VWpK0Dtf0/aRfylGdiGDy5lTnWNVKg2rJcRiSdAKPlYhLHy3vU26?=
+ =?us-ascii?Q?GXZxCo/BzswAs7DngCDDON+nBwQ10wsZw2MHRtAZOOJKrMWtoqqzUtGq+wTE?=
+ =?us-ascii?Q?uixvCUSgze/f2ATXHY+95wyKXX7+DLYuWbZrWS8RUf4usevwqGOOTiiDS5gq?=
+ =?us-ascii?Q?+avdfRzHocxKBvlYLA+dQR8lFpXXLR29DDGIXuJpzwGr64pFpQmzykO3l9cA?=
+ =?us-ascii?Q?6SBzom6gvNQuTXXesi/YIqImZDlmSwJPatxHtnTWrArwVE3+IelKCE4F//yb?=
+ =?us-ascii?Q?dn6wAf5IfDTGnU+h6PrQBLvAT/Eik9ucRZKOeDiaF0ipoWvwaVrVfyYJHDNH?=
+ =?us-ascii?Q?gBttCTpIU6fHJQONt6xHAEwN23bHgH5Zx02PkyUp39ZiuZOe/UnEzm53xjQM?=
+ =?us-ascii?Q?TOXJrXZlVNz5CoO7oZnsGi8jrw3ZxVVS60lV+yLK03Z1vPYer2kMWhg1oNVN?=
+ =?us-ascii?Q?8qzreIR/g+ZM2C0fmauFwXgrSGGjnWvig57MjgjZL89CpnPwUOE6BrQdVtQi?=
+ =?us-ascii?Q?oB1DJTG+eLoLoAYWm0eQBdPlmZzBK/m1BbbobaBKdybu1tnN3vOhF2YHK6Eh?=
+ =?us-ascii?Q?lBJGRCyEuS9rroC692hxw1i0IrrH14+px/OP8i3LpAFPW3FPMS4Sd27oH0lI?=
+ =?us-ascii?Q?rfuN23oclGQenuGBjCo0LTBGWCE0HXV2mbYd2FSv7B+H99AbXmOLn8CcN+in?=
+ =?us-ascii?Q?I7NZNaFORBYIXQjJu8O/wL8s02EMsmg7g6Ufis628TTc7NGn0rfiZMnu2Hsu?=
+ =?us-ascii?Q?q+7ET0CiH+hUEAx9wS+ny16ZTAjwmhXgTT/+wBoHOgPUkKkp89tRHmbx5mwl?=
+ =?us-ascii?Q?+A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22da442a-f870-4714-e87e-08dab36d3926
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2022 14:04:51.7379
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6sBwWfbTBvkJ11ZHmezPruEIZwlu7Iy+xQXpIvw03pmSF34jpzMq+HtzG0Aup1CeU7gY59v0JkJetmNKGVgAtnKWWnmeLrtD4monKaN5PTM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3692
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 20/10/22 09:23, Huacai Chen wrote:
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
-> 
-> The feature of minimizing overhead of struct page associated with each
-> HugeTLB page is implemented on x86_64. However, the infrastructure of
-> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
-> 
-> To avoid the following build error on LoongArch we should include linux/
+From: Bjorn Helgaas <helgaas@kernel.org> Sent: Thursday, October 20, 2022 1=
+2:04 PM
+>=20
+> On Thu, Oct 20, 2022 at 10:57:14AM -0700, Michael Kelley wrote:
+> > To support PCI pass-thru devices in Confidential VMs, Hyper-V
+> > has added hypercalls to read and write MMIO space. Add the
+> > appropriate definitions to hyperv-tlfs.h and implement
+> > functions to make the hypercalls. These functions are used
+> > in a subsequent patch.
+> >
+> > Co-developed-by: Dexuan Cui <decui@microsoft.com>
+> > Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> > Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> > ---
+> >  arch/x86/include/asm/hyperv-tlfs.h  |  3 ++
+> >  drivers/pci/controller/pci-hyperv.c | 62
+> +++++++++++++++++++++++++++++++++++++
+> >  include/asm-generic/hyperv-tlfs.h   | 22 +++++++++++++
+> >  3 files changed, 87 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/=
+hyperv-
+> tlfs.h
+> > index 3089ec3..f769b9d 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -117,6 +117,9 @@
+> >  /* Recommend using enlightened VMCS */
+> >  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+> >
+> > +/* Use hypercalls for MMIO config space access */
+> > +#define HV_X64_USE_MMIO_HYPERCALLS			BIT(21)
+> > +
+> >  /*
+> >   * CPU management features identification.
+> >   * These are HYPERV_CPUID_CPU_MANAGEMENT_FEATURES.EAX bits.
+> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controll=
+er/pci-hyperv.c
+> > index e7c6f66..02ebf3e 100644
+> > --- a/drivers/pci/controller/pci-hyperv.c
+> > +++ b/drivers/pci/controller/pci-hyperv.c
+> > @@ -1054,6 +1054,68 @@ static int wslot_to_devfn(u32 wslot)
+> >  	return PCI_DEVFN(slot_no.bits.dev, slot_no.bits.func);
+> >  }
+> >
+> > +static void hv_pci_read_mmio(phys_addr_t gpa, int size, u32 *val)
+> > +{
+> > +	struct hv_mmio_read_input *in;
+> > +	struct hv_mmio_read_output *out;
+> > +	u64 ret;
+> > +
+> > +	/*
+> > +	 * Must be called with interrupts disabled so it is safe
+> > +	 * to use the per-cpu input argument page.  Use it for
+> > +	 * both input and output.
+> > +	 */
+> > +	in =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
+> > +	out =3D *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
+> > +	in->gpa =3D gpa;
+> > +	in->size =3D size;
+> > +
+> > +	ret =3D hv_do_hypercall(HVCALL_MMIO_READ, in, out);
+> > +	if (hv_result_success(ret)) {
+> > +		switch (size) {
+> > +		case 1:
+> > +			*val =3D *(u8 *)(out->data);
+> > +			break;
+> > +		case 2:
+> > +			*val =3D *(u16 *)(out->data);
+> > +			break;
+> > +		default:
+> > +			*val =3D *(u32 *)(out->data);
+> > +			break;
+> > +		}
+> > +	} else
+> > +		pr_err("MMIO read hypercall failed with status %llx\n", ret);
+>=20
+> Too bad there's not more information to give the user/administrator
+> here.  Seeing "MMIO read hypercall failed with status -5" in the log
+> doesn't give many clues about where to look or who to notify.  I don't
+> know what's even feasible, but driver name, device, address (gpa),
+> size would all be possibilities.
+>=20
 
-s/should/have to/
+Good point.  We can pass the device as an input argument to hv_pci_read_mmi=
+o()
+and hv_pci_write_mmio(), use dev_err() instead of pr_err(), and provide the
+gpa and size in the message.   This is one of those errors that should neve=
+r
+happen, but when it does, having the additional info will be helpful for
+debugging.  I'll do this in v2.
 
-> static_key.h in page-flags.h.
-
-This looks like 2 different changes in a single patch.. The first is a
-generic "fix missing include" and the second is LoongArch specific.
-
-Splitting in 2 would ease backport cherry-picks.
-
-> In file included from ./include/linux/mmzone.h:22,
-> from ./include/linux/gfp.h:6,
-> from ./include/linux/mm.h:7,
-> from arch/loongarch/kernel/asm-offsets.c:9:
-> ./include/linux/page-flags.h:208:1: warning: data definition has no
-> type or storage class
-> 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-> | ^~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-> declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-> ./include/linux/page-flags.h:209:26: warning: parameter names (without
-> types) in function declaration
-> 209 | hugetlb_optimize_vmemmap_key);
-> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-> ./include/linux/page-flags.h:213:16: error: implicit declaration of
-> function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-> | ^~~~~~~~~~~~~~~~~~~
-> ./include/linux/page-flags.h:213:36: error:
-> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-> use in this function); did you mean
-> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> | CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-> ./include/linux/page-flags.h:213:36: note: each undeclared identifier
-> is reported only once for each function it appears in
-> ./include/linux/page-flags.h:214:37: error:
-> 'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-> function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-> 214 | &hugetlb_optimize_vmemmap_key);
-> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> | hugetlb_optimize_vmemmap_enabled
-> 
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/Kconfig     | 1 +
->   include/linux/page-flags.h | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 6f7fa0c0ca08..0a6ef613124c 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -52,6 +52,7 @@ config LOONGARCH
->   	select ARCH_USE_QUEUED_RWLOCKS
->   	select ARCH_USE_QUEUED_SPINLOCKS
->   	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> +	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->   	select ARCH_WANT_LD_ORPHAN_WARN
->   	select ARCH_WANTS_NO_INSTR
->   	select BUILDTIME_TABLE_SORT
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index 0b0ae5084e60..1aafdc73e399 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -9,6 +9,7 @@
->   #include <linux/types.h>
->   #include <linux/bug.h>
->   #include <linux/mmdebug.h>
-> +#include <linux/static_key.h>
->   #ifndef __GENERATING_BOUNDS_H
->   #include <linux/mm_types.h>
->   #include <generated/bounds.h>
-
-Preferably splitting in 2 distinct patches (for each):
-
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-
+Michael
