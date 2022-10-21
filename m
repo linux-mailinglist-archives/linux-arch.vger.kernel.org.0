@@ -2,102 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657AF607141
-	for <lists+linux-arch@lfdr.de>; Fri, 21 Oct 2022 09:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF7F6074D8
+	for <lists+linux-arch@lfdr.de>; Fri, 21 Oct 2022 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJUHiF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 21 Oct 2022 03:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S230463AbiJUKRX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 21 Oct 2022 06:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJUHiE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Oct 2022 03:38:04 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C48239200
-        for <linux-arch@vger.kernel.org>; Fri, 21 Oct 2022 00:38:03 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y72so2344025yby.13
-        for <linux-arch@vger.kernel.org>; Fri, 21 Oct 2022 00:38:03 -0700 (PDT)
+        with ESMTP id S231172AbiJUKRG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 21 Oct 2022 06:17:06 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D02514F4
+        for <linux-arch@vger.kernel.org>; Fri, 21 Oct 2022 03:16:55 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1647555wmq.4
+        for <linux-arch@vger.kernel.org>; Fri, 21 Oct 2022 03:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqCI81aYTBUvq0AjF/BYw/CwZWDfTatRIRM86fy8mzM=;
-        b=hdGApCLDmq0zk1404naN816WsPf7cus4RecqB5gWNPeMIwXuVT2JpTqOAePyNFo0Q+
-         +A7vMQhDqeCFfi6RbOgeeW1dRh4oUJvWP0hZnDs/KK+Nv7HoCDL7+y5jUnB24RrIxW1V
-         l9Grn4St0VsHs99MbtHIi8V8+4PhGRywmpkMY5QpBoXmPWTZOrPflcxxw9Cddy0OkLXA
-         1H83ZHNUriu0YQIACgBzfbWOrYIhJ4nYjCzGVKWq6lY+RHeOyNcAEqr07B+mZpQ06BZz
-         JUWPvoaYDWVI28Wb9OBW92L2zM729XBkw1zK4NjdriUn0h0Tp9lUzd5pmxDXhdbubX15
-         x9Ag==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+5cnDmrVndRxKiTHUVemxonBJmpJGHILsZC3ogF/MOw=;
+        b=JPtq+/IRujntwIE/R0H50vcNFzBxZsG6vivxycGAXnEB2uRQt6ffZwiejqzB7e2thQ
+         NUlcGdmwHolJLIyBZw0eVbnviS2rST1avPMOUkg8ACV8YerSEMWgInAYBS94wGapJw4i
+         bfRlNjVOU9KrSi7RqliTvkKJa7cZtLfpxfwmxtE2ad1zmQef69xoS1eIddjy6V/CVYIV
+         OSX1sAbFVNxDQkT8WjHl639ubVOThBYSN7UldhIlgneUKM+K/ZRScAH6fxsbB5g0MWT/
+         301O4bxqIRd29ca4wje7C/60v3tVfhwf0S5eO9cBOGxlGkTMgxAyQO3qnOla5YK5a34j
+         LIJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YqCI81aYTBUvq0AjF/BYw/CwZWDfTatRIRM86fy8mzM=;
-        b=HxnOHnYiDA2UZZIz/y/qYUyTjApEEc9cSeENDMxWryywutM1jBmLvoFcl+Ss+mMA40
-         8B2yeWZ5m2F5FU01Az8TCsIATmu0UKR+OpgqjzE0wDjesZhsD/S5UfgmByM6b4kKj6hs
-         emb8bJrfWZ4ctVeEOSYEF2tDYFgzSQl/J94j2UIii6KVGw5YCt1VHtWmf25kDHTyPKRr
-         CtMBSfIilX9VuHEufXZBRre1htDxD8VNXYtMVAjUwaPlVe7px7+cbUh3cf6iwsxWRwAP
-         fB/HQ1z3hH/I04NJiVH5aF4xB32tcVk9/vda5CDvQhbwW18rtXo5iAj5Yp5QVggpcPds
-         n3Kg==
-X-Gm-Message-State: ACrzQf1fQ42XcFzOZ6jA8rTN7nDzl60ijonMkkBxr3ZFumGhw1jxV8zQ
-        yJ5XXBZh6p0sLsfNIuSjaQVS8NCnv9wjhgLqrasbng==
-X-Google-Smtp-Source: AMsMyM62GSx0NWUinN6ObtQibLc5Ih1zlGVGyMCuv7Iu8ly2udUc3uKngmrdcVX2ldvl3SdCr2LW4qra3FYqJuzBJNY=
-X-Received: by 2002:a25:7b42:0:b0:6ca:1d03:2254 with SMTP id
- w63-20020a257b42000000b006ca1d032254mr8096145ybc.584.1666337882424; Fri, 21
- Oct 2022 00:38:02 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+5cnDmrVndRxKiTHUVemxonBJmpJGHILsZC3ogF/MOw=;
+        b=K6v5RUm7XBEx0vf3V1tPokSz09ISJHJ1M6Ja8wICiisuaH6JTIVDMuO9L1yIGcENEn
+         RjS+8rc9LBjnORZc6mNqIBf1l0dJYlzM5wRAJLsLzFFmTqb40QKwVWkdJRepUsEKxfMj
+         gGrN1+7IaQYGRv4DnRkTTp0yf93a2LY7oxO7YYjyckvarKWWeq/zgKPUjZLuQ2+RLroZ
+         o2eqZhk3qtYiDmJhvIz2jOhRpjLgF0Xsj2HpFcRbLBj4wr0kiTSZwr3fiUzRcHjBrgA6
+         sT0/5MB209oX96PlOVdsq4n1SvX2wrc7hx/v/nk58k732VX8wNi5qh1q0aAUesG/H82B
+         fLGg==
+X-Gm-Message-State: ACrzQf29qzwYA349luu+VEWzy1OjYdWfCF6riAsSyRCzPwqLuwzqyPkV
+        lv39PBgkWj4EA4kDz6ROAdLDWQ==
+X-Google-Smtp-Source: AMsMyM7lFiRw/3BBe90FzLXlb+jXp4Bsd46molv2+M4Io/03D653ZKfrdrAMjZSj/Yk+qHqfl4wzbA==
+X-Received: by 2002:a7b:c841:0:b0:3c6:ce2f:3438 with SMTP id c1-20020a7bc841000000b003c6ce2f3438mr12545988wml.51.1666347414085;
+        Fri, 21 Oct 2022 03:16:54 -0700 (PDT)
+Received: from [10.50.0.10] (ec2-54-194-108-71.eu-west-1.compute.amazonaws.com. [54.194.108.71])
+        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b003c6f0ebf988sm2166623wmb.30.2022.10.21.03.16.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 03:16:53 -0700 (PDT)
+Message-ID: <1ca11693-17c2-7260-b642-70b033c64b30@linaro.org>
+Date:   Fri, 21 Oct 2022 12:16:50 +0200
 MIME-Version: 1.0
-References: <20220915150417.722975-19-glider@google.com> <20221019173620.10167-1-youling257@gmail.com>
- <CAOzgRda_CToTVicwxx86E7YcuhDTcayJR=iQtWQ3jECLLhHzcg@mail.gmail.com>
- <CANpmjNMPKokoJVFr9==-0-+O1ypXmaZnQT3hs4Ys0Y4+o86OVA@mail.gmail.com>
- <CAOzgRdbbVWTWR0r4y8u5nLUeANA7bU-o5JxGCHQ3r7Ht+TCg1Q@mail.gmail.com>
- <Y1BXQlu+JOoJi6Yk@elver.google.com> <CAOzgRdY6KSxDMRJ+q2BWHs4hRQc5y-PZ2NYG++-AMcUrO8YOgA@mail.gmail.com>
- <Y1Bt+Ia93mVV/lT3@elver.google.com> <CAG_fn=WLRN=C1rKrpq4=d=AO9dBaGxoa6YsG7+KrqAck5Bty0Q@mail.gmail.com>
- <CAOzgRdb+W3_FuOB+P_HkeinDiJdgpQSsXMC4GArOSixL9K5avg@mail.gmail.com>
- <CANpmjNMUCsRm9qmi5eydHUHP2f5Y+Bt_thA97j8ZrEa5PN3sQg@mail.gmail.com> <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com>
-In-Reply-To: <CAOzgRdZsNWRHOUUksiOhGfC7XDc+Qs2TNKtXQyzm2xj4to+Y=Q@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 21 Oct 2022 00:37:26 -0700
-Message-ID: <CANpmjNPUqVwHLVg5weN3+m7RJ7pCfDjBqJ2fBKueeMzKn=R=jA@mail.gmail.com>
-Subject: Re: [PATCH v7 18/43] instrumented.h: add KMSAN support
-To:     youling 257 <youling257@gmail.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH V12 4/4] LoongArch: Enable
+ ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+References: <20221020072317.492906-1-chenhuacai@loongson.cn>
+ <20221020072317.492906-5-chenhuacai@loongson.cn>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221020072317.492906-5-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,29 +91,93 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 20 Oct 2022 at 23:39, youling 257 <youling257@gmail.com> wrote:
->
-> PerfTop:    8253 irqs/sec  kernel:75.3%  exact: 100.0% lost: 0/0 drop:
-> 0/17899 [4000Hz cycles],  (all, 8 CPUs)
-> ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
->
->     14.87%  [kernel]              [k] 0xffffffff941d1f37
->      6.71%  [kernel]              [k] 0xffffffff942016cf
->
-> what is 0xffffffff941d1f37?
+On 20/10/22 09:23, Huacai Chen wrote:
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
+> 
+> The feature of minimizing overhead of struct page associated with each
+> HugeTLB page is implemented on x86_64. However, the infrastructure of
+> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
+> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+> 
+> To avoid the following build error on LoongArch we should include linux/
 
-You need to build with debug symbols:
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+s/should/have to/
 
-Then it'll show function names.
+> static_key.h in page-flags.h.
 
-> 2022-10-21 14:16 GMT+08:00, Marco Elver <elver@google.com>:
-> > On Thu, 20 Oct 2022 at 22:55, youling 257 <youling257@gmail.com> wrote:
-> >>
-> >> How to use perf tool?
-> >
-> > The simplest would be to try just "perf top" - and see which kernel
-> > functions consume most CPU cycles. I would suggest you compare both
-> > kernels, and see if you can spot a function which uses more cycles% in
-> > the problematic kernel.
-> >
+This looks like 2 different changes in a single patch.. The first is a
+generic "fix missing include" and the second is LoongArch specific.
+
+Splitting in 2 would ease backport cherry-picks.
+
+> In file included from ./include/linux/mmzone.h:22,
+> from ./include/linux/gfp.h:6,
+> from ./include/linux/mm.h:7,
+> from arch/loongarch/kernel/asm-offsets.c:9:
+> ./include/linux/page-flags.h:208:1: warning: data definition has no
+> type or storage class
+> 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> types) in function declaration
+> 209 | hugetlb_optimize_vmemmap_key);
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
+> ./include/linux/page-flags.h:213:16: error: implicit declaration of
+> function 'static_branch_maybe' [-Werror=implicit-function-declaration]
+> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:213:36: error:
+> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
+> use in this function); did you mean
+> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
+> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> | CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> ./include/linux/page-flags.h:213:36: note: each undeclared identifier
+> is reported only once for each function it appears in
+> ./include/linux/page-flags.h:214:37: error:
+> 'hugetlb_optimize_vmemmap_key' undeclared (first use in this
+> function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
+> 214 | &hugetlb_optimize_vmemmap_key);
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> | hugetlb_optimize_vmemmap_enabled
+> 
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>   arch/loongarch/Kconfig     | 1 +
+>   include/linux/page-flags.h | 1 +
+>   2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 6f7fa0c0ca08..0a6ef613124c 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -52,6 +52,7 @@ config LOONGARCH
+>   	select ARCH_USE_QUEUED_RWLOCKS
+>   	select ARCH_USE_QUEUED_SPINLOCKS
+>   	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> +	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>   	select ARCH_WANT_LD_ORPHAN_WARN
+>   	select ARCH_WANTS_NO_INSTR
+>   	select BUILDTIME_TABLE_SORT
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 0b0ae5084e60..1aafdc73e399 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -9,6 +9,7 @@
+>   #include <linux/types.h>
+>   #include <linux/bug.h>
+>   #include <linux/mmdebug.h>
+> +#include <linux/static_key.h>
+>   #ifndef __GENERATING_BOUNDS_H
+>   #include <linux/mm_types.h>
+>   #include <generated/bounds.h>
+
+Preferably splitting in 2 distinct patches (for each):
+
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+
