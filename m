@@ -2,43 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1DC608C1E
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Oct 2022 13:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE6E608EF2
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Oct 2022 20:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiJVLBy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sat, 22 Oct 2022 07:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S229912AbiJVSQz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 22 Oct 2022 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbiJVLBT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Oct 2022 07:01:19 -0400
-X-Greylist: delayed 1783 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 22 Oct 2022 03:19:43 PDT
-Received: from mx08-006a4e02.pphosted.com (mx08-006a4e02.pphosted.com [143.55.148.243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9AB5A834;
-        Sat, 22 Oct 2022 03:19:41 -0700 (PDT)
-Received: from pps.filterd (m0316698.ppops.net [127.0.0.1])
-        by mx08-006a4e02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29M5tZmh007584;
-        Sat, 22 Oct 2022 08:06:30 +0200
-Received: from mta-out01.sim.rediris.es (mta-out01.sim.rediris.es [130.206.24.43])
-        by mx08-006a4e02.pphosted.com (PPS) with ESMTPS id 3kbp6ce53y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 22 Oct 2022 08:06:30 +0200
-Received: from mta-out01.sim.rediris.es (localhost.localdomain [127.0.0.1])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTPS id 5FE293008AAC;
-        Sat, 22 Oct 2022 08:06:29 +0200 (CEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTP id 4C10E3008C30;
-        Sat, 22 Oct 2022 08:06:29 +0200 (CEST)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        mta-out01.sim.rediris.es
-Received: from mta-out01.sim.rediris.es ([127.0.0.1])
-        by localhost (mta-out01.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 5h559gs9VuxO; Sat, 22 Oct 2022 08:06:29 +0200 (CEST)
-Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
-        by mta-out01.sim.rediris.es (Postfix) with ESMTPA id 3D3823008AAC;
-        Sat, 22 Oct 2022 08:06:27 +0200 (CEST)
-Date:   Sat, 22 Oct 2022 08:06:21 +0200
-From:   Gabriel Paubert <paubert@iram.es>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        with ESMTP id S229631AbiJVSQy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Oct 2022 14:16:54 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF08EA9EB
+        for <linux-arch@vger.kernel.org>; Sat, 22 Oct 2022 11:16:52 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id o2so3932088qkk.10
+        for <linux-arch@vger.kernel.org>; Sat, 22 Oct 2022 11:16:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8d0KCdG35QJgPzxY2PI5qF4wSDq+As804wur+n4mrk0=;
+        b=Dlapqk7u3r5R+hK/Sg/KWPsYs7tfU6S9C02brY3SkmFAMIHHhptUQoMcR3/b7mTkYi
+         MbJkeUIbDnrtnp02J3XF1lFi4YRuFRnn+UlALHdVhdPTVUv7JgEC44f9h8+dASuHGJac
+         gfstM1uSAC+JNHVJYDEwl7uW6MEu4hiaC10EI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8d0KCdG35QJgPzxY2PI5qF4wSDq+As804wur+n4mrk0=;
+        b=i5U0IFKes12fqRq0oQL/8u2HmcfoAtIzlRYeCSsUTpZHbbPN/0OFT8QadMTnp4WsnL
+         RU2XWWkTzVdW0TKf3YI0MAheIATA1iIb8QoJhEVANA7Uev5teR2sN9npupeVfGyyfo0+
+         zzNSj2fZUN10l6LvP8JG2mBDA3FX7NqlQfV6QtpIu6QCb8RxQg0DeJD/OnNm1gyREcrl
+         E1pujWX7fSQNpqCDQgCVI9Poa9ZcVtRkly18bDUykz8UAd7RgEOsxZFLRlNtBkSh5x3c
+         xQkrwrOFDWfnWJF+CESR2pD0TfFGjz8FqP+neLcdxkLk7qchC12K0nPsEKlO/Kb7lt8p
+         BiKw==
+X-Gm-Message-State: ACrzQf2geg7wBGr9Dp2z0zvGaXxEWm9u7MgtIq9dEyzmUAV96W2RoBtj
+        wSikYjaO8K4XSPGFuyNPXa+giTGVVpCEZw==
+X-Google-Smtp-Source: AMsMyM6KyNLjV9XzC7iBqycrbZv/L6SdoeGAEVgentBnUcs3q7veFF3Et3WHwgRKIFAfaykCmM62sg==
+X-Received: by 2002:a37:5401:0:b0:6df:aeea:89f0 with SMTP id i1-20020a375401000000b006dfaeea89f0mr17375050qkb.763.1666462611673;
+        Sat, 22 Oct 2022 11:16:51 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id gd21-20020a05622a5c1500b00399ad646794sm10069774qtb.41.2022.10.22.11.16.49
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 11:16:49 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-369426664f9so51761747b3.12
+        for <linux-arch@vger.kernel.org>; Sat, 22 Oct 2022 11:16:49 -0700 (PDT)
+X-Received: by 2002:a81:11d0:0:b0:35b:dd9f:5358 with SMTP id
+ 199-20020a8111d0000000b0035bdd9f5358mr22201031ywr.401.1666462609310; Sat, 22
+ Oct 2022 11:16:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+ <20221019174345.GM25951@gate.crashing.org> <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+ <Y1Elx+e5VLCTfyXi@lt-gp.iram.es> <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
+ <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
+In-Reply-To: <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 22 Oct 2022 11:16:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
+Message-ID: <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+To:     Gabriel Paubert <paubert@iram.es>
 Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -48,32 +74,11 @@ Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
-References: <20221019162648.3557490-1-Jason@zx2c4.com>
- <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org>
- <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
- <Y1Elx+e5VLCTfyXi@lt-gp.iram.es>
- <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-GUID: QhCUmQhypiY_jIEz4kLssNrn_gVxl2_Z
-X-Proofpoint-ORIG-GUID: QhCUmQhypiY_jIEz4kLssNrn_gVxl2_Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbounddefault_notspam policy=outbounddefault score=0 bulkscore=0
- impostorscore=0 malwarescore=0 suspectscore=0 priorityscore=1501
- spamscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011
- adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210220038
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,130 +86,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 03:46:01PM -0700, Linus Torvalds wrote:
-> On Thu, Oct 20, 2022 at 3:41 AM Gabriel Paubert <paubert@iram.es> wrote:
-> >
-> > I must miss something, the strcmp man page says:
-> >
-> > "The comparison is done using unsigned characters."
-> 
-> You're not missing anything, I just hadn't looked at strcmp() in forever.
-> 
-> Yeah, strcmp clearly doesn't care about the signedness of 'char', and
-> arguably an unsigned char argument makes more sense considering the
-> semantics of the funmction.
-> 
-> > But it's not for this that I wrote this message. Has anybody considered
-> > using transparent unions?
-> 
-> I don't love the transparent union-as-argument syntax, but you're
-> right, that would fix the warning.
+On Fri, Oct 21, 2022 at 11:06 PM Gabriel Paubert <paubert@iram.es> wrote:
+>
+> Ok, I=C2=B4ve just tried it, except that I had something slightly differe=
+nt in
+> mind, but perhaps should have been clearer in my first post.
+>
+> I have change your code to the following:
 
-I'm not in love with the syntax either.
+I actually tested that, but using a slightly different version, and my
+non-union test case ended up like
 
-> 
-> Except it then doesn't actually *work* very well.
-> 
-> Try this:
-> 
->         #include <sys/types.h>
-> 
->         #if USE_UNION
->         typedef union {
->                 const char *a;
->                 const signed char *b;
->                 const unsigned char *c;
->         } conststring_arg __attribute__ ((__transparent_union__));
->         size_t strlen(conststring_arg);
->         #else
->         size_t strlen(const char *);
->         #endif
-> 
->         int test(char *a, unsigned char *b)
->         {
->                 return strlen(a)+strlen(b);
->         }
-> 
->         int test2(void)
->         {
->                 return strlen("hello");
->         }
-> 
-> and now compile it both ways with
-> 
->         gcc -DUSE_UNION -Wall -O2 -S t.c
->         gcc -Wall -O2 -S t.c
-> 
+   size_t strlen(const char *p)
+  {
+        return __builtin_strlen(p);
+  }
 
-Ok, I´ve just tried it, except that I had something slightly different in
-mind, but perhaps should have been clearer in my first post.
+and then gcc actually complains about
 
-I have change your code to the following:
+    warning: infinite recursion detected
 
+and I (incorrectly) thought this was unworkable. But your version
+seems to work fine.
 
-#include <sys/types.h>
+So yeah, for the kernel I think we could do something like this. It's
+ugly, but it gets rid of the crazy warning.
 
-#if USE_UNION
-typedef union {
-	const char *a;
-	const signed char *b;
-	const unsigned char *c;
-} conststring_arg __attribute__ ((__transparent_union__));
-static inline size_t strlen(conststring_arg p)
-{
-	return __builtin_strlen(p.a);
-}
-#else
-size_t strlen(const char *);
-#endif
+Practically speaking this might be a bit painful, because we've got
+several different variations of this all due to all the things like
+our debugging versions (see <linux/fortify-string.h> for example), so
+some of our code is this crazy jungle of "with this config, use this
+wrapper".
 
-int test(char *a, unsigned char *b)
-{
-	return strlen(a)+strlen(b);
-}
+But if somebody wants to deal with the '-Wpointer-sign' warnings,
+there does seem to be a way out. Maybe with another set of helper
+macros, creating those odd __transparent_union__ wrappers might even
+end up reasonable.
 
-int test2(void)
-{
-	return strlen("hello");
-}
+It's not like we don't have crazy macros for function wrappers
+elsewhere (the SYSCALL macros come to mind - shudder). The macros
+themselves may be a nasty horror, but when done right the _use_ point
+of said macros can be nice and clean.
 
-> and notice how yes, the "-DUSE_UNION" one silences the warning about
-> using 'unsigned char *' for strlen. So it seems to work fine.
-> 
-> But then look at the code it generates for 'test2()" in the two cases.
-
-Now test2 looks properly optimized.
-
-This is a bit exploiting a compiler loophole, it calls an external
-function which has been defined with the same name!
-
-Depending on how you look at it, it's either disgusting or clever.
-
-I don´t have clang installed, so I don't know whether it would swallow
-this code or react with a strong allergy.
-
-	Gabriel
-> 
-> The transparent union version actually generates a function call to an
-> external 'strlen()' function.
-> 
-> The regular version uses the compiler builtin, and just compiles
-> test2() to return the constant value 5.
-> 
-> So playing games with anonymous union arguments ends up also disabling
-> all the compiler optimizations we do want, becaue apparently gcc then
-> decides "ok, I'm not going to warn about you declaring this
-> differently, but I'm also not going to use the regular one because you
-> declared it differently".
-> 
-> This, btw, is also the reason why we don't use --freestanding in the
-> kernel. We do want the basic <string.h> things to just DTRT.
-> 
-> For the sockaddr_in games, the above isn't an issue. For strlen() and
-> friends, it very much is.
-> 
->                        Linus
-
-
- 
-
+                  Linus
