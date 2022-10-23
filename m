@@ -2,121 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D70F6093AB
-	for <lists+linux-arch@lfdr.de>; Sun, 23 Oct 2022 15:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 912D1609618
+	for <lists+linux-arch@lfdr.de>; Sun, 23 Oct 2022 22:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiJWNeP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 23 Oct 2022 09:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S230518AbiJWUY5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Sun, 23 Oct 2022 16:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiJWNeG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 23 Oct 2022 09:34:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0A93AE49;
-        Sun, 23 Oct 2022 06:34:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B2C0B80BFF;
-        Sun, 23 Oct 2022 13:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D109C43470;
-        Sun, 23 Oct 2022 13:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666532040;
-        bh=HgCI1fwpCRV6cbIVNToGS+BLd1ULTdQix8qchtvlux4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AVFtjHfSb8Pix+ZODNxlJQR5O5aUXDkMSRquLor3ywU7ifraASh1B9mCOEjvSpmhi
-         5pwloxojUVQPEPJ2nXi5g1JVDuDE1h3HpRLY42daghXEUPTF7NpE69kjP4CO1wc0ML
-         OzbFYnrf6HzV8oxKV1yp5MMhWhLI4SLmS2V+DRTzZxBvEFKaEvXBlJ6KnhO+lYL3dI
-         1IWrS6h4wVbfMAXen6V8wN5llaAW/lK3lOeEvN7oClwG3ggzWrMfgYvsVvCq5yv/EB
-         qeU0OFXs587rqByUX1KKY/7/nHUUujPncosY2MQnzIcadA2hayGkXIyo9eL+kUJ0RU
-         yMZXSDWBeTMUQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, palmer@rivosinc.com,
-        heiko@sntech.de, arnd@arndb.de, songmuchun@bytedance.com,
-        catalin.marinas@arm.com, chenhuacai@loongson.cn,
-        Conor.Dooley@microchip.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-mm@kvack.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 2/2] riscv: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Sun, 23 Oct 2022 09:32:05 -0400
-Message-Id: <20221023133205.3493564-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221023133205.3493564-1-guoren@kernel.org>
-References: <20221023133205.3493564-1-guoren@kernel.org>
+        with ESMTP id S230385AbiJWUYz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 23 Oct 2022 16:24:55 -0400
+Received: from mx07-006a4e02.pphosted.com (mx07-006a4e02.pphosted.com [143.55.146.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E4813CD4;
+        Sun, 23 Oct 2022 13:24:44 -0700 (PDT)
+Received: from pps.filterd (m0316692.ppops.net [127.0.0.1])
+        by m0316692.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 29NKKQJ6017297;
+        Sun, 23 Oct 2022 22:24:06 +0200
+Received: from mta-out01.sim.rediris.es (mta-out01.sim.rediris.es [130.206.24.43])
+        by m0316692.ppops.net (PPS) with ESMTPS id 3kcu9mc2sc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 23 Oct 2022 22:24:06 +0200
+Received: from mta-out01.sim.rediris.es (localhost.localdomain [127.0.0.1])
+        by mta-out01.sim.rediris.es (Postfix) with ESMTPS id 26DDA3000047;
+        Sun, 23 Oct 2022 22:24:05 +0200 (CEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta-out01.sim.rediris.es (Postfix) with ESMTP id E22013197C11;
+        Sun, 23 Oct 2022 22:24:04 +0200 (CEST)
+X-Amavis-Modified: Mail body modified (using disclaimer) -
+        mta-out01.sim.rediris.es
+Received: from mta-out01.sim.rediris.es ([127.0.0.1])
+        by localhost (mta-out01.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id AvB5T1Imovv1; Sun, 23 Oct 2022 22:24:04 +0200 (CEST)
+Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
+        by mta-out01.sim.rediris.es (Postfix) with ESMTPA id B07C23000047;
+        Sun, 23 Oct 2022 22:24:01 +0200 (CEST)
+Date:   Sun, 23 Oct 2022 22:23:56 +0200
+From:   Gabriel Paubert <paubert@iram.es>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+Message-ID: <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+ <20221019174345.GM25951@gate.crashing.org>
+ <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+ <Y1Elx+e5VLCTfyXi@lt-gp.iram.es>
+ <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
+ <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
+ <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-ORIG-GUID: zgBEguqV2sx207ySGJtcCtxIxSPFqKi5
+X-Proofpoint-GUID: zgBEguqV2sx207ySGJtcCtxIxSPFqKi5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbounddefault_notspam policy=outbounddefault score=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=769 spamscore=0 priorityscore=1501
+ adultscore=0 clxscore=1015 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210230130
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Sat, Oct 22, 2022 at 11:16:33AM -0700, Linus Torvalds wrote:
+> On Fri, Oct 21, 2022 at 11:06 PM Gabriel Paubert <paubert@iram.es> wrote:
+> >
+> > Ok, I´ve just tried it, except that I had something slightly different in
+> > mind, but perhaps should have been clearer in my first post.
+> >
+> > I have change your code to the following:
+> 
+> I actually tested that, but using a slightly different version, and my
+> non-union test case ended up like
+> 
+>    size_t strlen(const char *p)
+>   {
+>         return __builtin_strlen(p);
+>   }
+> 
+> and then gcc actually complains about
+> 
+>     warning: infinite recursion detected
+> 
+> and I (incorrectly) thought this was unworkable. But your version
+> seems to work fine.
 
-This patch enable the feature of "free some vmemmap pages of HugeTLB
-page" [1]. To make it work correct, we also need fixup PG_dcache_clean
-setting for huge page [2].
+Incidentally, it also gives exactly the same code with -ffreestanding.
 
-[1] https://lore.kernel.org/linux-doc/20210510030027.56044-1-songmuchun@bytedance.com/
-[2] https://lore.kernel.org/linux-mm/20220302084624.33340-1-songmuchun@bytedance.com/
+> 
+> So yeah, for the kernel I think we could do something like this. It's
+> ugly, but it gets rid of the crazy warning.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Muchun Song <songmuchun@bytedance.com>
-Cc: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Arnd Bergmann <arnd@arndb.de>
----
- arch/riscv/Kconfig                  | 1 +
- arch/riscv/include/asm/cacheflush.h | 3 +++
- arch/riscv/mm/cacheflush.c          | 3 +++
- 3 files changed, 7 insertions(+)
+Not as ugly as casts IMO, and it's localized in a few header files.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 6b48a3ae9843..81ac25b0e005 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -45,6 +45,7 @@ config RISCV
- 	select ARCH_WANT_FRAME_POINTERS
- 	select ARCH_WANT_GENERAL_HUGETLB
- 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_THP_SWAP if HAVE_ARCH_TRANSPARENT_HUGEPAGE
- 	select BINFMT_FLAT_NO_DATA_START_OFFSET if !MMU
- 	select BUILDTIME_TABLE_SORT if MMU
-diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-index 8a5c246b0a21..96f7381aeeeb 100644
---- a/arch/riscv/include/asm/cacheflush.h
-+++ b/arch/riscv/include/asm/cacheflush.h
-@@ -17,6 +17,9 @@ static inline void local_flush_icache_all(void)
+However, it does not solve the problem of assigning a constant string to
+an u8 *; I've no idea on how to fix that.
+
+> 
+> Practically speaking this might be a bit painful, because we've got
+> several different variations of this all due to all the things like
+> our debugging versions (see <linux/fortify-string.h> for example), so
+> some of our code is this crazy jungle of "with this config, use this
+> wrapper".
+
+I've just had a look at that code, and I don't want to touch it with a
+10 foot pole. If someone else to get his hands dirty... 
+
+	Gabriel
+
+> 
+> But if somebody wants to deal with the '-Wpointer-sign' warnings,
+> there does seem to be a way out. Maybe with another set of helper
+> macros, creating those odd __transparent_union__ wrappers might even
+> end up reasonable.
+> 
+> It's not like we don't have crazy macros for function wrappers
+> elsewhere (the SYSCALL macros come to mind - shudder). The macros
+> themselves may be a nasty horror, but when done right the _use_ point
+> of said macros can be nice and clean.
+> 
+>                   Linus
  
- static inline void flush_dcache_page(struct page *page)
- {
-+	if (PageHuge(page))
-+		page = compound_head(page);
-+
- 	if (test_bit(PG_dcache_clean, &page->flags))
- 		clear_bit(PG_dcache_clean, &page->flags);
- }
-diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-index 7c9f97fa3938..ca35807cf185 100644
---- a/arch/riscv/mm/cacheflush.c
-+++ b/arch/riscv/mm/cacheflush.c
-@@ -82,6 +82,9 @@ void flush_icache_pte(pte_t pte)
- {
- 	struct page *page = pte_page(pte);
- 
-+	if (PageHuge(page))
-+		page = compound_head(page);
-+
- 	if (!test_bit(PG_dcache_clean, &page->flags)) {
- 		flush_icache_all();
- 		set_bit(PG_dcache_clean, &page->flags);
--- 
-2.36.1
 
