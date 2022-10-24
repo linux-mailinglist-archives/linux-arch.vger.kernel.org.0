@@ -2,185 +2,280 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A29060B923
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Oct 2022 22:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CFC60BFB6
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Oct 2022 02:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbiJXUFL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Oct 2022 16:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S229973AbiJYAgp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Oct 2022 20:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbiJXUEr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 16:04:47 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554481669BD;
-        Mon, 24 Oct 2022 11:25:49 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id y14so6959647ejd.9;
-        Mon, 24 Oct 2022 11:25:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:subject:from:references:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=69LcZzU5hZbA58GvMHIPitCdsVL44ZarIKrTqICwzW4=;
-        b=y7IwfOxqnc9/1hsPAc9NM/W5RDRRBFT4BCfUGD28x2/TRh/NVT+fa5uy70LC0bdzJS
-         3JwEoYA2fz28m09moyyg5JSbyZe9CpeED3b0MrH7f0nKGvQPckNovhpHx+daJa6POUas
-         NIvJs06qMJBcBKgbkmb8BFUYDawHPxA56WYS+1pYreDJIDWIUR2D1I64mSCY7rN8TkHr
-         oIHgTzxTC5bBX5DotRvrLxZL1eyo7zU3gSpRHC0Yuu74Bx7AVAFKGNiYQkzru6MNhykd
-         negIlWtjdMLcJ8S+k8qbbvWhul8JAG2VueyurSnyF2ov/ITLjZgrch39qtGcwtV/Ipy3
-         ZlNQ==
-X-Gm-Message-State: ACrzQf27lbRbGU/6ud0yRjLvTreq4BA+xiQEZCaUZYN0hI0fEnzCF6t9
-        jk8TAfNZRW/KbQ2cVsRsRbU=
-X-Google-Smtp-Source: AMsMyM6rbntrv1V4U9FCmxGo0InoNtMIj4Hhk9qbw5320ZABzRLLJTi/MkJzB7yfvww6Jv1k51sdtg==
-X-Received: by 2002:a17:907:3207:b0:741:3a59:738d with SMTP id xg7-20020a170907320700b007413a59738dmr28808683ejb.110.1666635892872;
-        Mon, 24 Oct 2022 11:24:52 -0700 (PDT)
-Received: from [192.168.1.47] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id 27-20020a170906059b00b0078a86e013c4sm233433ejn.61.2022.10.24.11.24.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 11:24:51 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------jtZ8QEXoCLEx4rYcRxfUthpP"
-Message-ID: <ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org>
-Date:   Mon, 24 Oct 2022 20:24:50 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        Michael Matz <matz@suse.de>, Borislav Petkov <bpetkov@suse.de>,
+        with ESMTP id S230071AbiJYAgP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 20:36:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C568683F15;
+        Mon, 24 Oct 2022 16:03:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 486AEB810B2;
+        Mon, 24 Oct 2022 23:03:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80ECC433D7;
+        Mon, 24 Oct 2022 23:03:00 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 19:03:11 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20220924181915.3251186-1-masahiroy@kernel.org>
- <20220924181915.3251186-7-masahiroy@kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v3 6/7] kbuild: use obj-y instead extra-y for objects
- placed at the head
-In-Reply-To: <20220924181915.3251186-7-masahiroy@kernel.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arch@vger.kernel.org
+Subject: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be called in
+ early boot
+Message-ID: <20221024190311.65b89ecb@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------jtZ8QEXoCLEx4rYcRxfUthpP
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Hi,
+Currently text_poke() just does a simple memcpy() on early boot because
+the kernel code is read writable at that time. But ftrace uses text_poke
+on the ftrace trampoline, which is not part of kernel text, and having non
+kernel text around that can be writable and executable causes several
+special cases where checks for system_state == SYSTEM_BOOTING needs to be
+done to ignore this special case. This is tricky and can lead to memory
+that can be kernel writable and executable after boot (due to bugs).
 
-following an IRC discussion with many parties...
+By moving poking_init() to mm_init() which is called before ftrace_init(),
+this will allow ftrace to create its trampoline as read only, and the
+text_poke() will do its normal thing.
 
-On 24. 09. 22, 20:19, Masahiro Yamada wrote:
-> The objects placed at the head of vmlinux need special treatments:
-> 
->   - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
->     them before other archives in the linker command line.
-> 
->   - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
->     obj-y to avoid them going into built-in.a.
-> 
-> This commit gets rid of the latter.
-> 
-> Create vmlinux.a to collect all the objects that are unconditionally
-> linked to vmlinux. The objects listed in head-y are moved to the head
-> of vmlinux.a by using 'ar m'.
-> 
-> With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
-> for builtin objects.
-> 
-> There is no *.o that is directly linked to vmlinux. Drop unneeded code
-> in scripts/clang-tools/gen_compile_commands.py.
-> 
-> $(AR) mPi needs 'T' to workaround the llvm-ar bug. The fix was suggested
-> by Nathan Chancellor [1].
-> 
-> [1]: https://lore.kernel.org/llvm/YyjjT5gQ2hGMH0ni@dev-arch.thelio-3990X/
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-...
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -18,7 +18,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
->   	$(PERL) $(real-prereqs) > $@
->   
->   .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-> -		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-> +		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+This required some updates to fork and the maple_tree code to allow it to
+be called with enabling interrupts in the time when interrupts must remain
+disabled.
 
-There is a slight problem with this. The kernel built with gcc-LTO does 
-not boot. But as I understand it, it's not limited to gcc-LTO only.
+text_poke() will still use memcpy() on kernel core text during boot up as
+it keeps things fast for all static_branch()es and such as well as
+modifying the ftrace locations at boot up too.
 
-On x86, startup_64() is supposed to be at offset >zero< of the image 
-(see .Lrelocated()). It was ensured by putting head64.o to the beginning 
-of vmlinux (by KBUILD_VMLINUX_OBJS on the LD command-line above). The 
-patch above instead packs head64.o into vmlinux.a and then moves it 
-using "ar -m" to the beginning (it's in 7/7 of the series IIRC).
+This removes the special code added around ftrace trampolines in x86 to be
+writable and executable during boot up.
 
-The problem is that .o files listed on the LD command line explicitly 
-are taken as spelled. But unpacking .a inside LD gives no guarantees on 
-the order of packed objects. To quote: "that it happens to work 
-sometimes is pure luck." (Correct me guys, if I misunderstood you.)
+Link: https://lore.kernel.org/r/20221024112730.180916b3@gandalf.local.home
 
-For x86, the most ideal fix seems to be to fix it in the linker script. 
-By putting startup_64() to a different section and handle it in the ld 
-script specially -- see the attachment. It should always have been put 
-this way, the command line order is only a workaround. But this might 
-need more fixes on other archs too -- I haven't take a look.
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
 
-Ideas, comments? I'll send the attachment as a PATCH later (if there are 
-no better suggestions).
+ ** Note this may break other architectures. **
 
-thanks,
+ arch/x86/include/asm/ftrace.h |  6 ------
+ arch/x86/kernel/alternative.c |  6 ++++--
+ arch/x86/kernel/ftrace.c      | 29 +----------------------------
+ arch/x86/mm/init_64.c         |  2 --
+ init/main.c                   |  8 ++++----
+ kernel/fork.c                 |  8 +++++++-
+ lib/maple_tree.c              | 16 +++++++++++++++-
+ 7 files changed, 31 insertions(+), 44 deletions(-)
+
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 908d99b127d3..b27cd4de3fb3 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -85,12 +85,6 @@ struct dyn_arch_ftrace {
+ 
+ #ifndef __ASSEMBLY__
+ 
+-#if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_DYNAMIC_FTRACE)
+-extern void set_ftrace_ops_ro(void);
+-#else
+-static inline void set_ftrace_ops_ro(void) { }
+-#endif
+-
+ #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
+ static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
+ {
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 5cadcea035e0..ef30a6b78837 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1681,7 +1681,8 @@ void __ref text_poke_queue(void *addr, const void *opcode, size_t len, const voi
+ {
+ 	struct text_poke_loc *tp;
+ 
+-	if (unlikely(system_state == SYSTEM_BOOTING)) {
++	if (unlikely(system_state == SYSTEM_BOOTING &&
++		     core_kernel_text((unsigned long)addr))) {
+ 		text_poke_early(addr, opcode, len);
+ 		return;
+ 	}
+@@ -1707,7 +1708,8 @@ void __ref text_poke_bp(void *addr, const void *opcode, size_t len, const void *
+ {
+ 	struct text_poke_loc tp;
+ 
+-	if (unlikely(system_state == SYSTEM_BOOTING)) {
++	if (unlikely(system_state == SYSTEM_BOOTING &&
++		     core_kernel_text((unsigned long)addr))) {
+ 		text_poke_early(addr, opcode, len);
+ 		return;
+ 	}
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index bd165004776d..3aa4c02f63d2 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -415,8 +415,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 
+ 	set_vm_flush_reset_perms(trampoline);
+ 
+-	if (likely(system_state != SYSTEM_BOOTING))
+-		set_memory_ro((unsigned long)trampoline, npages);
++	set_memory_ro((unsigned long)trampoline, npages);
+ 	set_memory_x((unsigned long)trampoline, npages);
+ 	return (unsigned long)trampoline;
+ fail:
+@@ -424,32 +423,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	return 0;
+ }
+ 
+-void set_ftrace_ops_ro(void)
+-{
+-	struct ftrace_ops *ops;
+-	unsigned long start_offset;
+-	unsigned long end_offset;
+-	unsigned long npages;
+-	unsigned long size;
+-
+-	do_for_each_ftrace_op(ops, ftrace_ops_list) {
+-		if (!(ops->flags & FTRACE_OPS_FL_ALLOC_TRAMP))
+-			continue;
+-
+-		if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+-			start_offset = (unsigned long)ftrace_regs_caller;
+-			end_offset = (unsigned long)ftrace_regs_caller_end;
+-		} else {
+-			start_offset = (unsigned long)ftrace_caller;
+-			end_offset = (unsigned long)ftrace_caller_end;
+-		}
+-		size = end_offset - start_offset;
+-		size = size + RET_SIZE + sizeof(void *);
+-		npages = DIV_ROUND_UP(size, PAGE_SIZE);
+-		set_memory_ro((unsigned long)ops->trampoline, npages);
+-	} while_for_each_ftrace_op(ops);
+-}
+-
+ static unsigned long calc_trampoline_call_offset(bool save_regs)
+ {
+ 	unsigned long start_offset;
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 3f040c6e5d13..03ac9f914f28 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -1398,8 +1398,6 @@ void mark_rodata_ro(void)
+ 	all_end = roundup((unsigned long)_brk_end, PMD_SIZE);
+ 	set_memory_nx(text_end, (all_end - text_end) >> PAGE_SHIFT);
+ 
+-	set_ftrace_ops_ro();
+-
+ #ifdef CONFIG_CPA_DEBUG
+ 	printk(KERN_INFO "Testing CPA: undo %lx-%lx\n", start, end);
+ 	set_memory_rw(start, (end-start) >> PAGE_SHIFT);
+diff --git a/init/main.c b/init/main.c
+index aa21add5f7c5..e5f4ae2d4cca 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -860,6 +860,10 @@ static void __init mm_init(void)
+ 	/* Should be run after espfix64 is set up. */
+ 	pti_init();
+ 	kmsan_init_runtime();
++	proc_caches_init();
++	radix_tree_init();
++	maple_tree_init();
++	poking_init();
+ }
+ 
+ #ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+@@ -1011,8 +1015,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	if (WARN(!irqs_disabled(),
+ 		 "Interrupts were enabled *very* early, fixing it\n"))
+ 		local_irq_disable();
+-	radix_tree_init();
+-	maple_tree_init();
+ 
+ 	/*
+ 	 * Set up housekeeping before setting up workqueues to allow the unbound
+@@ -1117,7 +1119,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	thread_stack_cache_init();
+ 	cred_init();
+ 	fork_init();
+-	proc_caches_init();
+ 	uts_ns_init();
+ 	key_init();
+ 	security_init();
+@@ -1134,7 +1135,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	taskstats_init_early();
+ 	delayacct_init();
+ 
+-	poking_init();
+ 	check_bugs();
+ 
+ 	acpi_subsystem_init();
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 08969f5aa38d..672967a9cbe9 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -702,7 +702,13 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+ 	mas_destroy(&mas);
+ out:
+ 	mmap_write_unlock(mm);
+-	flush_tlb_mm(oldmm);
++	/*
++	 * poking_init() calls into here at early boot up.
++	 * At that time, there's no need to flush the tlb.
++	 * If we do, it will enable interrupts and cause a bug.
++	 */
++	if (likely(!early_boot_irqs_disabled))
++		flush_tlb_mm(oldmm);
+ 	mmap_write_unlock(oldmm);
+ 	dup_userfaultfd_complete(&uf);
+ fail_uprobe_end:
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index e1743803c851..e32206e840f6 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -1253,7 +1253,21 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
+ 		}
+ 
+ 		max_req = min(requested, max_req);
+-		count = mt_alloc_bulk(gfp, max_req, slots);
++
++		/*
++		 * text_poke() can be called very early, and it
++		 * calls dup_mm() which eventually leads down to here.
++		 * In that case, mt_alloc_bulk() will call kmem_cache_alloc_bulk()
++		 * which must be called with interrupts enabled. To avoid
++		 * doing that in early bootup, where interrupts must remain
++		 * disabled, just allocate a single slot.
++		 */
++		if (unlikely(early_boot_irqs_disabled)) {
++			slots[0] = mt_alloc_one(gfp | GFP_ATOMIC);
++			count = slots[0] ? 1 : 0;
++		} else {
++			count = mt_alloc_bulk(gfp, max_req, slots);
++		}
+ 		if (!count)
+ 			goto nomem_bulk;
+ 
 -- 
-js
-suse labs
+2.35.1
 
---------------jtZ8QEXoCLEx4rYcRxfUthpP
-Content-Type: text/x-patch; charset=UTF-8; name="0001-head-fix.patch"
-Content-Disposition: attachment; filename="0001-head-fix.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA4NTY1ZTEzZDVkMjllYjMyYmVkOTY3NDI0MDU5MzMxNWYzYmRkN2Y1IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKaXJpIFNsYWJ5IDxqc2xhYnlAc3VzZS5jej4KRGF0
-ZTogTW9uLCAyNCBPY3QgMjAyMiAxMToxNzowNCArMDIwMApTdWJqZWN0OiBbUEFUQ0hdIGhl
-YWQgZml4CgpTaWduZWQtb2ZmLWJ5OiBKaXJpIFNsYWJ5IDxqc2xhYnlAc3VzZS5jej4KLS0t
-CiBhcmNoL3g4Ni9rZXJuZWwvaGVhZF82NC5TICAgICB8IDQgKysrLQogYXJjaC94ODYva2Vy
-bmVsL3ZtbGludXgubGRzLlMgfCAxICsKIGluY2x1ZGUvbGludXgvaW5pdC5oICAgICAgICAg
-IHwgMSArCiAzIGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigt
-KQoKZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9oZWFkXzY0LlMgYi9hcmNoL3g4Ni9r
-ZXJuZWwvaGVhZF82NC5TCmluZGV4IGQ4NjBkNDM3NjMxYi4uNDE3YmNkOWRhM2RmIDEwMDY0
-NAotLS0gYS9hcmNoL3g4Ni9rZXJuZWwvaGVhZF82NC5TCisrKyBiL2FyY2gveDg2L2tlcm5l
-bC9oZWFkXzY0LlMKQEAgLTM5LDggKzM5LDggQEAgTDRfU1RBUlRfS0VSTkVMID0gbDRfaW5k
-ZXgoX19TVEFSVF9LRVJORUxfbWFwKQogTDNfU1RBUlRfS0VSTkVMID0gcHVkX2luZGV4KF9f
-U1RBUlRfS0VSTkVMX21hcCkKIAogCS50ZXh0Ci0JX19IRUFECiAJLmNvZGU2NAorCV9fSEVB
-RF9GSVJTVAogU1lNX0NPREVfU1RBUlRfTk9BTElHTihzdGFydHVwXzY0KQogCVVOV0lORF9I
-SU5UX0VNUFRZCiAJLyoKQEAgLTEyNiw2ICsxMjYsOCBAQCBTWU1fQ09ERV9TVEFSVF9OT0FM
-SUdOKHN0YXJ0dXBfNjQpCiAJam1wIDFmCiBTWU1fQ09ERV9FTkQoc3RhcnR1cF82NCkKIAor
-CV9fSEVBRAorCiBTWU1fQ09ERV9TVEFSVChzZWNvbmRhcnlfc3RhcnR1cF82NCkKIAlVTldJ
-TkRfSElOVF9FTVBUWQogCUFOTk9UQVRFX05PRU5EQlIKZGlmZiAtLWdpdCBhL2FyY2gveDg2
-L2tlcm5lbC92bWxpbnV4Lmxkcy5TIGIvYXJjaC94ODYva2VybmVsL3ZtbGludXgubGRzLlMK
-aW5kZXggMTVmMjkwNTNjZWM0Li5hMTBhOWM1MGJjM2YgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2
-L2tlcm5lbC92bWxpbnV4Lmxkcy5TCisrKyBiL2FyY2gveDg2L2tlcm5lbC92bWxpbnV4Lmxk
-cy5TCkBAIC0xMjYsNiArMTI2LDcgQEAgU0VDVElPTlMKIAkJX3RleHQgPSAuOwogCQlfc3Rl
-eHQgPSAuOwogCQkvKiBib290c3RyYXBwaW5nIGNvZGUgKi8KKwkJS0VFUCgqKC5oZWFkLmZp
-cnN0LnRleHQpKQogCQlIRUFEX1RFWFQKIAkJVEVYVF9URVhUCiAJCVNDSEVEX1RFWFQKZGlm
-ZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvaW5pdC5oIGIvaW5jbHVkZS9saW51eC9pbml0LmgK
-aW5kZXggY2E4MjdlMmZiMGRhLi4zYTExZDE5ZTM5Y2YgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUv
-bGludXgvaW5pdC5oCisrKyBiL2luY2x1ZGUvbGludXgvaW5pdC5oCkBAIC05Miw2ICs5Miw3
-IEBACiAjZGVmaW5lIF9fbWVtZXhpdGNvbnN0ICAgX19zZWN0aW9uKCIubWVtZXhpdC5yb2Rh
-dGEiKQogCiAvKiBGb3IgYXNzZW1ibHkgcm91dGluZXMgKi8KKyNkZWZpbmUgX19IRUFEX0ZJ
-UlNUCS5zZWN0aW9uCSIuaGVhZC5maXJzdC50ZXh0IiwiYXgiCiAjZGVmaW5lIF9fSEVBRAkJ
-LnNlY3Rpb24JIi5oZWFkLnRleHQiLCJheCIKICNkZWZpbmUgX19JTklUCQkuc2VjdGlvbgki
-LmluaXQudGV4dCIsImF4IgogI2RlZmluZSBfX0ZJTklUCQkucHJldmlvdXMKLS0gCjIuMzgu
-MAoK
-
---------------jtZ8QEXoCLEx4rYcRxfUthpP--
