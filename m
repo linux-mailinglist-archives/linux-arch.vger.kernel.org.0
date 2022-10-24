@@ -2,60 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240AE609C01
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Oct 2022 10:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F77609C06
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Oct 2022 10:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJXIDH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Oct 2022 04:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S229720AbiJXIE1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Oct 2022 04:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJXIDG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 04:03:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464AA5805C;
-        Mon, 24 Oct 2022 01:03:05 -0700 (PDT)
+        with ESMTP id S229587AbiJXIE0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 04:04:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809A72663;
+        Mon, 24 Oct 2022 01:04:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE33A61073;
-        Mon, 24 Oct 2022 08:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A585C43145;
-        Mon, 24 Oct 2022 08:03:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A550B80E76;
+        Mon, 24 Oct 2022 08:04:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A10C433D6;
+        Mon, 24 Oct 2022 08:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666598584;
-        bh=CXws4eLr0gl3odZwqTEuuhZZp1WDhaclsxdDRXlhMQQ=;
+        s=k20201202; t=1666598660;
+        bh=zMRCR9aO2hv7wIrVCElL/LTJoQUq5XjLprILNRp63eY=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YIj6ATKSLfUvngOWKyQpxY0uDpchrCF9EfJF3NhblMSs0sZd1UQFhe3JsKjQx1JOg
-         aEuKTT4mup0cKdPRcGDGVUjf4cpVK14Lz5PXYVL4gAgSMXAxOYefSV7nfIfeCmZPEA
-         0iyRrEbnZ/av/766ux6DZTpYX0aF1r+Iuspd/stry1Stle/WBLw9aZB14gbjaZIPyI
-         8UY4zsjz/drcQgifIw/F/8YYbEjLdNkTJr/0aBcEidr81pJ0zfrWC9rgwjxglsKFaL
-         SrVRRRAExIAkiHYqi11Kf66WHK9dnD/ONhh12JEfcVcH5BmSd/q4I0+s34qKwMgc3W
-         7dtdnWAcYBNqw==
-Received: by mail-oi1-f176.google.com with SMTP id r204so7294519oie.5;
-        Mon, 24 Oct 2022 01:03:04 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2uWM4k5sT0QRntcbeO5iaiVl+m9id4o50LGwqVz8l4M6672iUN
-        zW8ZnIAadhjTxDYWioLpVRwGq9KExkvyD4FVUKI=
-X-Google-Smtp-Source: AMsMyM4opuf9ZlLlQKT18CpSvfe9XotBrtNnzZrG6O6GBcHpNVvd4QnPrdeLYevOyANG4WDlsZD5B1GA8zDQRLU5blc=
-X-Received: by 2002:a05:6808:14cf:b0:355:5204:dd81 with SMTP id
- f15-20020a05680814cf00b003555204dd81mr15684588oiw.112.1666598583325; Mon, 24
- Oct 2022 01:03:03 -0700 (PDT)
+        b=q39Z0Jl1UbJQ+ydOt0a6xHmvicc/CX107NlZd3AVvTnKjNVdSgR0yjGIvpQIeKoF4
+         x8ScpUmx4bU5yFkA8Q2mPwRADEbzogttzxfhc5qzex2wOgJXhACgAce/zDCqs9i3XG
+         NaMEfTGrBDIjxA/FxD4lj8kEquBpzogImnn96Af3ycNgLiTD5C4072MGl1jtDduFrQ
+         tEbxO3hNlFVws9P3RAaG8UOjIIJzc0l2hiDgGRKKUWZdqrdXkg4p94POm7JdNESXoI
+         +p02DGC+oLj+KXmw39glLG3xh67JSd9QYCbOAceb1shPxLGQ3MUWshAft+HLP28MCi
+         gpswHMEoSy9uQ==
+Received: by mail-ot1-f49.google.com with SMTP id w6-20020a056830110600b00665bf86f012so325628otq.0;
+        Mon, 24 Oct 2022 01:04:20 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0JrIaprp3Su8qQ5QyS/NmMvUx1c3sU3810OFtsdtrzrcJnRWz1
+        QMn8JibpqzfFtjES4w6reVMPDvaXh4zZ5v33ajc=
+X-Google-Smtp-Source: AMsMyM5Cx/80n+ESwscTL8gLYrU0vtuSa4ffmqiRXpnSWEObRQEOy2bsVIlgF7y6VDAQAMzssohT33tmfwmul1u3/3E=
+X-Received: by 2002:a9d:58c6:0:b0:663:c327:8bb with SMTP id
+ s6-20020a9d58c6000000b00663c32708bbmr4290089oth.308.1666598659933; Mon, 24
+ Oct 2022 01:04:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221023133205.3493564-1-guoren@kernel.org> <20221023133205.3493564-3-guoren@kernel.org>
- <1F5AF29D-708A-483B-A29F-CAEE6F554866@linux.dev>
-In-Reply-To: <1F5AF29D-708A-483B-A29F-CAEE6F554866@linux.dev>
+References: <20221024070105.306280-1-chenhuacai@loongson.cn> <20221024070105.306280-5-chenhuacai@loongson.cn>
+In-Reply-To: <20221024070105.306280-5-chenhuacai@loongson.cn>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 24 Oct 2022 16:02:51 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSmSR7uKrCGZ24+NSa31FAecOBpUh8G0SMAEV-5oFGJyQ@mail.gmail.com>
-Message-ID: <CAJF2gTSmSR7uKrCGZ24+NSa31FAecOBpUh8G0SMAEV-5oFGJyQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-To:     Muchun Song <muchun.song@linux.dev>
-Cc:     palmer@dabbelt.com, palmer@rivosinc.com, heiko@sntech.de,
-        arnd@arndb.de, Muchun Song <songmuchun@bytedance.com>,
-        catalin.marinas@arm.com, chenhuacai@loongson.cn,
-        Conor.Dooley@microchip.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-mm@kvack.org, Guo Ren <guoren@linux.alibaba.com>
+Date:   Mon, 24 Oct 2022 16:04:06 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
+Message-ID: <CAJF2gTSN3zzvgAdiM8rYc3EGFxR4JJnHSh12mvsfUOQsqRRvkg@mail.gmail.com>
+Subject: Re: [PATCH V13 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,44 +75,95 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 3:07 PM Muchun Song <muchun.song@linux.dev> wrote:
+On Mon, Oct 24, 2022 at 3:05 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
 >
+> From: Feiyang Chen <chenfeiyang@loongson.cn>
 >
+> The feature of minimizing overhead of struct page associated with each
+> HugeTLB page is implemented on x86_64. However, the infrastructure of
+> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
+> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
 >
-> > On Oct 23, 2022, at 21:32, guoren@kernel.org wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > This patch enable the feature of "free some vmemmap pages of HugeTLB
+> To avoid the following build error on LoongArch we should include linux/
+> static_key.h in page-flags.h. This is straightforward but the build
+> error is implicitly a LoongArch-specific problem, because ARM64 and X86
+> have already include static_key.h from their arch-specific core headers.
 >
-> We have a new name =E2=80=9CHVO" to refer to this feature. So I=E2=80=99d=
- like to rewrite
-> The changelog to something like =E2=80=9CEnable HVO [1] for RISCV=E2=80=
-=9D.
-Okay.
+> In file included from ./include/linux/mmzone.h:22,
+> from ./include/linux/gfp.h:6,
+> from ./include/linux/mm.h:7,
+> from arch/loongarch/kernel/asm-offsets.c:9:
+> ./include/linux/page-flags.h:208:1: warning: data definition has no
+> type or storage class
+> 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAU=
+LT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=3Dimplicit-int]
+> ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> types) in function declaration
+> 209 | hugetlb_optimize_vmemmap_key);
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabl=
+ed':
+> ./include/linux/page-flags.h:213:16: error: implicit declaration of
+> function 'static_branch_maybe' [-Werror=3Dimplicit-function-declaration]
+> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEF=
+AULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~
+> ./include/linux/page-flags.h:213:36: error:
+> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
+> use in this function); did you mean
+> 'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
+> 213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEF=
+AULT_ON,
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> | CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+> ./include/linux/page-flags.h:213:36: note: each undeclared identifier
+> is reported only once for each function it appears in
+> ./include/linux/page-flags.h:214:37: error:
+> 'hugetlb_optimize_vmemmap_key' undeclared (first use in this
+> function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
+> 214 | &hugetlb_optimize_vmemmap_key);
+> | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> | hugetlb_optimize_vmemmap_enabled
+>
+> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig     | 1 +
+>  include/linux/page-flags.h | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 6f7fa0c0ca08..0a6ef613124c 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -52,6 +52,7 @@ config LOONGARCH
+>         select ARCH_USE_QUEUED_RWLOCKS
+>         select ARCH_USE_QUEUED_SPINLOCKS
+>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> +       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+>         select ARCH_WANT_LD_ORPHAN_WARN
+>         select ARCH_WANTS_NO_INSTR
+>         select BUILDTIME_TABLE_SORT
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 0b0ae5084e60..1aafdc73e399 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/types.h>
+>  #include <linux/bug.h>
+>  #include <linux/mmdebug.h>
+> +#include <linux/static_key.h>
+Em... riscv needn't this.
 
->
-> > page" [1]. To make it work correct, we also need fixup PG_dcache_clean
-> > setting for huge page [2].
-> >
-> > [1] https://lore.kernel.org/linux-doc/20210510030027.56044-1-songmuchun=
-@bytedance.com/
-> > [2] https://lore.kernel.org/linux-mm/20220302084624.33340-1-songmuchun@=
-bytedance.com/
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Muchun Song <songmuchun@bytedance.com>
-> > Cc: Huacai Chen <chenhuacai@loongson.cn>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
->
-> I=E2=80=99am really glad to see more and more arches for support HVO.
->
-> Acked-by: Muchun Song <songmuchun@bytedance.com>
-Thx
-
->
-> Thanks.
+>  #ifndef __GENERATING_BOUNDS_H
+>  #include <linux/mm_types.h>
+>  #include <generated/bounds.h>
+> --
+> 2.31.1
 >
 
 
