@@ -2,70 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C6060BA27
-	for <lists+linux-arch@lfdr.de>; Mon, 24 Oct 2022 22:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674B460B954
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Oct 2022 22:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiJXU0z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Oct 2022 16:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S230260AbiJXUJy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Oct 2022 16:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiJXUYx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 16:24:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ACC2E6BE;
-        Mon, 24 Oct 2022 11:39:38 -0700 (PDT)
+        with ESMTP id S233998AbiJXUI7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 16:08:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F99CB4481;
+        Mon, 24 Oct 2022 11:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PQNqs6IdtT9gCZUPfrGepUfUTCnXjYqE6ZtxOOCZbuY=; b=bZUxoZ3o+SOLm2CQBy+VttoP2B
-        OUQg3xIogy0yBtLBjNHhw1AD98RCzB0kPet/YEkeMNmVR/Jmhxl2GbO9TFg6nk3qeBdntj9dcE/v/
-        nQts5mvftu6i0IDZtQ3YnguK28E+WnrwyIOrUDc2x63UPAzQ2pixygVcHRlZTrLavNxyFHLVHL2uS
-        k14/UwfFI3DWikDyw/rSul/fVBClCA0zMSCYm8I+/lV1m1y334PA5s+FYIfGEhpNvPf/n04//nkZ8
-        1QoLyLZHGM65OVUTIkaIUyY+clnTYDxYiZgdNLCVFW2kkrWV6IfNI1VNDdOMV6HcwySTaqQIE5mqt
-        xqXw/k8w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omwDX-0063bj-GO; Mon, 24 Oct 2022 12:06:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7AEE33000DD;
-        Mon, 24 Oct 2022 14:06:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5BAEE2018F17F; Mon, 24 Oct 2022 14:06:04 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 14:06:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Guo Ren <guoren@kernel.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>, arnd@arndb.de,
-        palmer@rivosinc.com, tglx@linutronix.de, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for
- noinstr
-Message-ID: <Y1Z/rLaaUp7e9xoy@hirez.programming.kicks-ass.net>
-References: <20221002012451.2351127-1-guoren@kernel.org>
- <20221002012451.2351127-5-guoren@kernel.org>
- <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N>
- <CAJF2gTRBEGx3qncpk_C8rCsFN+kqxjgeAcPvZU5m7kDnpwytoA@mail.gmail.com>
- <Y1ERsP0YYVNulWnw@FVFF77S0Q05N>
- <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
- <Y1Z9U7XN4nlGg8yb@FVFF77S0Q05N>
+        bh=smrlip5a13obHQefsrQCDEQn5FVgi9wQ3jfaysBd41A=; b=NsKy3KADUVtTLDLcow8PjYW4Wo
+        u6xSIAOYezInwqNo4+VT4wXNh9YuZGynjlYH9HyRLsxjXAu7kOE3YYpM5vo2KK5Pd+utDaLWiQbYC
+        HRXXEhnWxE4UH/sbLmRBRQr0Xt9ABDoMTGEbbr4YxdTsO1AI5D+O2/MoLsnrLCzvQ/823wQayvkRq
+        FhklZ7JXqNnbcsXc9bH5iJMN03RBwLg5kZ7KeA8EJBlppNQ3vcpgBt2Jj3NjIoakO14Nx+KJKtJ9m
+        GrXYA5oVoFe3jLO7ovLun05d0vuXmlnCFUL7TNGWThrId8XaRc6F1+Ve1ZxMF/YkvUsUQ3HPSO1r2
+        lA9+dfiQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1omzUq-0026gk-I2; Mon, 24 Oct 2022 15:36:12 +0000
+Date:   Mon, 24 Oct 2022 08:36:12 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        luto@kernel.org, peterz@infradead.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH 06/12] swiotlb: Remove bounce buffer remapping for Hyper-V
+Message-ID: <Y1aw7L5IdpjFpQvw@infradead.org>
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1Z9U7XN4nlGg8yb@FVFF77S0Q05N>
+In-Reply-To: <1666288635-72591-7-git-send-email-mikelley@microsoft.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -75,30 +64,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 12:56:03PM +0100, Mark Rutland wrote:
-
-> How about we split this like:
+On Thu, Oct 20, 2022 at 10:57:09AM -0700, Michael Kelley wrote:
+> With changes to how Hyper-V guest VMs flip memory between private
+> (encrypted) and shared (decrypted), creating a second kernel virtual
+> mapping for shared memory is no longer necessary. Everything needed
+> for the transition to shared is handled by set_memory_decrypted().
 > 
-> | /*
-> |  * Prevent the compiler from instrumenting this code in any way
-> |  * This does not prevent instrumentation via KPROBES, which must be
-> |  * prevented through other means if necessary.
-
-Perhaps point to NOINSTR_TEXT in vmlinux.lds.h
-
-> |  */
-> | #define __no_compiler_instrument				\
-> | 	noinline notrace noinline notrace __no_kcsan		\
-> | 	__no_sanitize_address __no_sanitize_coverage
-> | 
-> | /* 
-> |  * Section for code which can't be instrumented at all.
-> |  * Any code in this section cannot be instrumented with KPROBES.
-> |  */
-> | #define noinstr __no_compiler_instrument section(".noinstr.text")
+> As such, remove swiotlb_unencrypted_base and the associated
+> code.
 > 
-> ... then we don't need __noinstr_section(), and IMO the split is
-> clearer.
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-Yeah, perhaps, no strong feelings. Note I have this in the sched-idle
-series as well (which I still need to rebase and repost :/).
+I'm more than glad that we can kill this code:
+
+Acked-by: Christoph Hellwig <hch@lst.de>
