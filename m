@@ -2,119 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9975060D4A1
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Oct 2022 21:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3ECB60D79A
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 01:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbiJYTWz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Oct 2022 15:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S232504AbiJYXAh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Oct 2022 19:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYTWt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Oct 2022 15:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB62B1B81;
-        Tue, 25 Oct 2022 12:22:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C10361AF5;
-        Tue, 25 Oct 2022 19:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7FDC433C1;
-        Tue, 25 Oct 2022 19:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666725767;
-        bh=ftFE81qWKNF97F1+cBxFeqLoApotXUldU+KauLM18kg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=UwqgP6us0tlufLoD0tWGWtVkoYygJXXt0/XrmsC3fpjKUm5EDIq/AkzAvEWDEpmfU
-         8YaD/C/pqjsmcpVeKkc+ywUp5xVqklZnGGgwMNP89V6tb0cJMmjy4OL8Nkl57B/xsb
-         G6oVYLvuqgDV00UyUWobFEcQX4IgNlLQ4oTShMff68u3VkYGSVwd2RrMXI7pqPfOCK
-         6JBrvkrTMM/dRgG9FRzIIxOHMNE0qe6sSZIcKGPfFWpt/Mnjgqeqm59MGqn1tBB/VT
-         Gq2yM6aH6tQNyXps4PJ0CqAXES6QhqSZcpm6aufPVJmub1it3NDXFsx0e9XOb0UN+I
-         AsskWC4Sg1ScA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+        with ESMTP id S232433AbiJYXAf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Oct 2022 19:00:35 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC6CCE9A7
+        for <linux-arch@vger.kernel.org>; Tue, 25 Oct 2022 16:00:33 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9so2087006pll.7
+        for <linux-arch@vger.kernel.org>; Tue, 25 Oct 2022 16:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s6LZP8hvZm1H8c+TGDoLOM2VTr5Lxnor/nw5sFV/2mY=;
+        b=eBUosIjwxzoCivbiFw947tiAH5Kc5Zjv1vE5XKCjauANrPGnJZaAjWvYUDGuc2p3ra
+         D0o1CDbvF+anvekmPVnVtDC7TRRKwRsL6DsbvrN33f10kJRVrqHzLepIxWOfr8YWUHdG
+         5iP/4geENpl6p+WCcY5oEeLfXkWqGUaRijJpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s6LZP8hvZm1H8c+TGDoLOM2VTr5Lxnor/nw5sFV/2mY=;
+        b=MQChpdpDALZ6rLBuP5Z1G7eu7vA306zwh1sVcqmsGt7wrmfWcmVgzeFDtsSE3kegiS
+         1Q6hGWrj0vOSyNlG9CPKj8KhF2+qU9aXJ6qB+KuhkDK/wk3Uhu7/4S7HFRrXngdUlEHn
+         hG97plmeRS6NuXP+pWeziZopZ8P6fBiPKP0d6ENKm0R3nkGQ/O1M2GeUD3qv8snLLir7
+         zrtQKUndOMc9GTuy/puYbd4uU6QOQaYKqVX+L42wEcBTUFM0t+JFjvTY4ufGC6SKki96
+         XYVrWQa8lx4vnxaUAvF0RVP2c/YdZs8E9D7vOZzss3t0WPFknEe/CHrClvtDW7syeJtd
+         QQJQ==
+X-Gm-Message-State: ACrzQf133WLO40uhkcd4wTnJHnvd0Xxz7zTUM6M1zlOZIWLnKINCvO7W
+        Xz7M9OlFC1pENLXXOe8U0siBbQ==
+X-Google-Smtp-Source: AMsMyM54nuuM6c/UCbGYg0BC7n31Zk4wLqgiVvdCYEO4DeWdRrGI+Ggys2dZfI4gYVoed9ITHFD2RA==
+X-Received: by 2002:a17:902:ec8a:b0:185:5462:261a with SMTP id x10-20020a170902ec8a00b001855462261amr40802031plg.160.1666738832501;
+        Tue, 25 Oct 2022 16:00:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cc21-20020a17090af11500b002086ac07041sm90501pjb.44.2022.10.25.16.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 16:00:31 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 16:00:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gabriel Paubert <paubert@iram.es>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>, mikem@ring3k.org,
-        wlanfae@realtek.com
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
-        <20221019203034.3795710-1-Jason@zx2c4.com> <Y1ZZyP4ZRBIbv+Kg@kili>
-        <Y1ZbI4IzAOaNwhoD@kadam> <Y1a+cHkFt54gJv54@zx2c4.com>
-        <CAHk-=wgK3Vs+7Kor-SisRHJYzV1tXD+=D4+W1XkfHOV2KN_OGw@mail.gmail.com>
-        <CAHmME9ox7JNqOOZHEHCgaS95rsn-dVr4QOnN1mfmFEn=i9_jvw@mail.gmail.com>
-Date:   Tue, 25 Oct 2022 22:22:41 +0300
-In-Reply-To: <CAHmME9ox7JNqOOZHEHCgaS95rsn-dVr4QOnN1mfmFEn=i9_jvw@mail.gmail.com>
-        (Jason A. Donenfeld's message of "Mon, 24 Oct 2022 19:17:25 +0200")
-Message-ID: <874jvrzp1a.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+Message-ID: <202210251555.88933A57F@keescook>
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+ <20221019174345.GM25951@gate.crashing.org>
+ <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+ <Y1Elx+e5VLCTfyXi@lt-gp.iram.es>
+ <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
+ <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
+ <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
+ <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+On Sun, Oct 23, 2022 at 10:23:56PM +0200, Gabriel Paubert wrote:
+> On Sat, Oct 22, 2022 at 11:16:33AM -0700, Linus Torvalds wrote:
+> > Practically speaking this might be a bit painful, because we've got
+> > several different variations of this all due to all the things like
+> > our debugging versions (see <linux/fortify-string.h> for example), so
+> > some of our code is this crazy jungle of "with this config, use this
+> > wrapper".
+> 
+> I've just had a look at that code, and I don't want to touch it with a
+> 10 foot pole. If someone else to get his hands dirty... 
 
-> Hi Linus,
->
-> On Mon, Oct 24, 2022 at 7:11 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->> IOW, I don't think these are 6.1 material as some kind of obvious
->> fixes, at least not without driver author acks.
->
-> Right, these are posted to the authors and maintainers to look at.
-> Maybe they punt them until 6.2 which would be fine too.
->
->> On Mon, Oct 24, 2022 at 9:34 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->> Some of those may need more thought. For example, that first one:
->>
->> > https://lore.kernel.org/all/20221024163005.536097-1-Jason@zx2c4.com
->>
->> looks just *strange*. As far as I can tell, no other wireless drivers
->> do any sign checks at all.
->>
->> Now, I didn't really look around a lot, but looking at a few other
->> SIOCSIWESSID users, most don't even seem to treat it as a string at
->> all, but as just a byte dump (so memcpy() instead of strncpy())
+Heh. Yes, fortify-string.h is a twisty maze. I've tried to keep it as
+regular as possible, but I admit it is weird. On my list is to split
+compile-time from run-time logic (as suggested by Linus a while back),
+but I've worried it would end up spilling some of the ugly back into
+string.h, which should probably not happen. As such, I've tried to keep
+it all contained in fortify-string.h.
 
-Yes, SSID should be handled as a byte array with a specified length.
-Back in the day some badly written code treated it as string but luckily
-it's rare now.
-
->> As far as I know, there are no actual rules for SSID character sets,
->> and while using utf-8 or something else might cause interoperability
->> problems, this driver seems to be just confused. If you want to check
->> for "printable characters", that check is still wrong.
->>
->> So I don't think this is a "assume char is signed" issue. I think this
->> is a "driver is confused" issue.
->
-> Yea I had a few versions of this. In one of them, I changed `char
-> *extra` throughout the wireless stack into `s8 *extra` and in another
-> `u8 *extra`, after realizing they're mostly just bags of bits. But
-> that seemed pretty invasive when, indeed, this staging driver is just
-> a little screwy.
->
-> So perhaps the right fix is to just kill that whole snippet? Kalle - opinions?
-
-I would also remove the whole 'extra[i] < 0', seems like a pointless
-check to me. And I see that you already submitted v2, good.
+Regardless, I think I'd rather avoid yet more special cases in the
+fortify code, so I'd like to avoid using transparent union if we can. It
+seems like -funsigned-char and associated fixes will be sufficient,
+though, yes?
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Kees Cook
