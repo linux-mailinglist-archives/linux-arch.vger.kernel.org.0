@@ -2,280 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CFC60BFB6
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Oct 2022 02:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4D860C06C
+	for <lists+linux-arch@lfdr.de>; Tue, 25 Oct 2022 03:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiJYAgp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 24 Oct 2022 20:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
+        id S229696AbiJYBGb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Oct 2022 21:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiJYAgP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 20:36:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C568683F15;
-        Mon, 24 Oct 2022 16:03:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 486AEB810B2;
-        Mon, 24 Oct 2022 23:03:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80ECC433D7;
-        Mon, 24 Oct 2022 23:03:00 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 19:03:11 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
+        with ESMTP id S231255AbiJYBF5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Oct 2022 21:05:57 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3DDA3ABD
+        for <linux-arch@vger.kernel.org>; Mon, 24 Oct 2022 17:11:33 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id h10so7561357qvq.7
+        for <linux-arch@vger.kernel.org>; Mon, 24 Oct 2022 17:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TkJXjWEEV4IPx8IB5aoBytjP/YQvDH4AuK2z6X+NI4g=;
+        b=PDOoNQUxhYaFTlb6u47Ovelh94d5tKzEWMvkYLgZp3kE5bVAP+9wrE1k8muv0yLeCp
+         ldNNLmOuZDtT+gtEWYBnwsZqbRcrxgeAd0Pt0omhk4686IiT7Bjdnw/yybYlDfN7gNwM
+         6SM3AsIYRJklbOtAyNOMGoKsYSu1k6hLh2Q/A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TkJXjWEEV4IPx8IB5aoBytjP/YQvDH4AuK2z6X+NI4g=;
+        b=Z1BWatpk1zPYBJ0mJudv3ArVHxzaGH0CTZa9lxNKaUI9qH/AgyIbtepR6YEHIZj4Vq
+         IWdpNgyrDI0ytcfBIfKrVR3abomUbzUjSy2dWrDdvVkadig9wfw9+J2FfRTxVoTj6AG+
+         +M/vhsnwShJkN7N6heZBPitkFJ52rpAl448Kl8j1y/U9e2c1/lt80phT+e58I+JJVLrH
+         s3k/9g4ZlEgTsRYqIB/h0SU4eNELtxoWpM3pzLymh6RLRB2n7oyfFm3xOuzy+si8aq3M
+         imr0fdBQbxM1Y2fOSibLt7cc1SYhnhJecBvOh2Fkz1puoP3FFLRTu0r1BWz/gk8yr4Bb
+         8l1A==
+X-Gm-Message-State: ACrzQf1tbSXK4OlfSfEHEjQdn1C4FgsEJHwx80KWUhGlTw1t/Av9tjTt
+        58XoHAK2YQq5n00Ij+bwybLioj8Kf3w0IQ==
+X-Google-Smtp-Source: AMsMyM4KjN/Y4/ge+72l7Qr0K8e+M+jNv7Qh2gnShOV17pfFq4IpE81w6NDbSSZTIBiddO7i3qai1Q==
+X-Received: by 2002:ad4:5ca6:0:b0:4b7:58a9:e40e with SMTP id q6-20020ad45ca6000000b004b758a9e40emr23210337qvh.113.1666656692096;
+        Mon, 24 Oct 2022 17:11:32 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id x14-20020a05620a448e00b006ed30a8fb21sm984673qkp.76.2022.10.24.17.11.29
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 17:11:30 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-36d2188004bso38853487b3.4
+        for <linux-arch@vger.kernel.org>; Mon, 24 Oct 2022 17:11:29 -0700 (PDT)
+X-Received: by 2002:a81:11d0:0:b0:35b:dd9f:5358 with SMTP id
+ 199-20020a8111d0000000b0035bdd9f5358mr31581502ywr.401.1666656689597; Mon, 24
+ Oct 2022 17:11:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221024190311.65b89ecb@gandalf.local.home>
+In-Reply-To: <20221024190311.65b89ecb@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 24 Oct 2022 17:11:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
+Message-ID: <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
+Subject: Re: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be called
+ in early boot
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         "x86@kernel.org" <x86@kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Kees Cook <keescook@chromium.org>,
         Dave Hansen <dave.hansen@intel.com>,
         Sean Christopherson <seanjc@google.com>,
         linux-arch@vger.kernel.org
-Subject: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be called in
- early boot
-Message-ID: <20221024190311.65b89ecb@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Mon, Oct 24, 2022 at 4:03 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> This required some updates to fork and the maple_tree code to allow it to
+> be called with enabling interrupts in the time when interrupts must remain
+> disabled.
 
-Currently text_poke() just does a simple memcpy() on early boot because
-the kernel code is read writable at that time. But ftrace uses text_poke
-on the ftrace trampoline, which is not part of kernel text, and having non
-kernel text around that can be writable and executable causes several
-special cases where checks for system_state == SYSTEM_BOOTING needs to be
-done to ignore this special case. This is tricky and can lead to memory
-that can be kernel writable and executable after boot (due to bugs).
+Yeah, moving special cases from one place to another doesn't really
+help. Particularly to something as core as dup_mm().
 
-By moving poking_init() to mm_init() which is called before ftrace_init(),
-this will allow ftrace to create its trampoline as read only, and the
-text_poke() will do its normal thing.
+All of this comes from "poking_init()" being a steaming pile of bovine
+excrement, doing random odd things, and having that special
+"copy_init_mm()" helper that just makes things even worse. Nothing
+else uses that, and it shouldn't have called "dup_mm()" in the first
+place.
 
-This required some updates to fork and the maple_tree code to allow it to
-be called with enabling interrupts in the time when interrupts must remain
-disabled.
+At this point, there is no actual user VM to even copy, so 99% of
+everything that duip_mm() does is not just pointless, but actively
+wrong, like the mmap_write_lock_nested() when we're in early boot.
 
-text_poke() will still use memcpy() on kernel core text during boot up as
-it keeps things fast for all static_branch()es and such as well as
-modifying the ftrace locations at boot up too.
+I'm not even sure why "poking_mm" exists at all, and why it has
+created a whole new copy of "init_mm", and why this code isn't just
+using '&init_mm' like everything else that wants to just walk the
+kernel page tables.
 
-This removes the special code added around ftrace trampolines in x86 to be
-writable and executable during boot up.
+Yes, I see that commit 4fc19708b165 ("x86/alternatives: Initialize
+temporary mm for patching"), and no, none of that makes any sense to
+me. It seems just (mis-)designed to fail.
 
-Link: https://lore.kernel.org/r/20221024112730.180916b3@gandalf.local.home
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-
- ** Note this may break other architectures. **
-
- arch/x86/include/asm/ftrace.h |  6 ------
- arch/x86/kernel/alternative.c |  6 ++++--
- arch/x86/kernel/ftrace.c      | 29 +----------------------------
- arch/x86/mm/init_64.c         |  2 --
- init/main.c                   |  8 ++++----
- kernel/fork.c                 |  8 +++++++-
- lib/maple_tree.c              | 16 +++++++++++++++-
- 7 files changed, 31 insertions(+), 44 deletions(-)
-
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index 908d99b127d3..b27cd4de3fb3 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -85,12 +85,6 @@ struct dyn_arch_ftrace {
- 
- #ifndef __ASSEMBLY__
- 
--#if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_DYNAMIC_FTRACE)
--extern void set_ftrace_ops_ro(void);
--#else
--static inline void set_ftrace_ops_ro(void) { }
--#endif
--
- #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
- static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
- {
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 5cadcea035e0..ef30a6b78837 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1681,7 +1681,8 @@ void __ref text_poke_queue(void *addr, const void *opcode, size_t len, const voi
- {
- 	struct text_poke_loc *tp;
- 
--	if (unlikely(system_state == SYSTEM_BOOTING)) {
-+	if (unlikely(system_state == SYSTEM_BOOTING &&
-+		     core_kernel_text((unsigned long)addr))) {
- 		text_poke_early(addr, opcode, len);
- 		return;
- 	}
-@@ -1707,7 +1708,8 @@ void __ref text_poke_bp(void *addr, const void *opcode, size_t len, const void *
- {
- 	struct text_poke_loc tp;
- 
--	if (unlikely(system_state == SYSTEM_BOOTING)) {
-+	if (unlikely(system_state == SYSTEM_BOOTING &&
-+		     core_kernel_text((unsigned long)addr))) {
- 		text_poke_early(addr, opcode, len);
- 		return;
- 	}
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index bd165004776d..3aa4c02f63d2 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -415,8 +415,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 
- 	set_vm_flush_reset_perms(trampoline);
- 
--	if (likely(system_state != SYSTEM_BOOTING))
--		set_memory_ro((unsigned long)trampoline, npages);
-+	set_memory_ro((unsigned long)trampoline, npages);
- 	set_memory_x((unsigned long)trampoline, npages);
- 	return (unsigned long)trampoline;
- fail:
-@@ -424,32 +423,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 	return 0;
- }
- 
--void set_ftrace_ops_ro(void)
--{
--	struct ftrace_ops *ops;
--	unsigned long start_offset;
--	unsigned long end_offset;
--	unsigned long npages;
--	unsigned long size;
--
--	do_for_each_ftrace_op(ops, ftrace_ops_list) {
--		if (!(ops->flags & FTRACE_OPS_FL_ALLOC_TRAMP))
--			continue;
--
--		if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
--			start_offset = (unsigned long)ftrace_regs_caller;
--			end_offset = (unsigned long)ftrace_regs_caller_end;
--		} else {
--			start_offset = (unsigned long)ftrace_caller;
--			end_offset = (unsigned long)ftrace_caller_end;
--		}
--		size = end_offset - start_offset;
--		size = size + RET_SIZE + sizeof(void *);
--		npages = DIV_ROUND_UP(size, PAGE_SIZE);
--		set_memory_ro((unsigned long)ops->trampoline, npages);
--	} while_for_each_ftrace_op(ops);
--}
--
- static unsigned long calc_trampoline_call_offset(bool save_regs)
- {
- 	unsigned long start_offset;
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 3f040c6e5d13..03ac9f914f28 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -1398,8 +1398,6 @@ void mark_rodata_ro(void)
- 	all_end = roundup((unsigned long)_brk_end, PMD_SIZE);
- 	set_memory_nx(text_end, (all_end - text_end) >> PAGE_SHIFT);
- 
--	set_ftrace_ops_ro();
--
- #ifdef CONFIG_CPA_DEBUG
- 	printk(KERN_INFO "Testing CPA: undo %lx-%lx\n", start, end);
- 	set_memory_rw(start, (end-start) >> PAGE_SHIFT);
-diff --git a/init/main.c b/init/main.c
-index aa21add5f7c5..e5f4ae2d4cca 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -860,6 +860,10 @@ static void __init mm_init(void)
- 	/* Should be run after espfix64 is set up. */
- 	pti_init();
- 	kmsan_init_runtime();
-+	proc_caches_init();
-+	radix_tree_init();
-+	maple_tree_init();
-+	poking_init();
- }
- 
- #ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
-@@ -1011,8 +1015,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 	if (WARN(!irqs_disabled(),
- 		 "Interrupts were enabled *very* early, fixing it\n"))
- 		local_irq_disable();
--	radix_tree_init();
--	maple_tree_init();
- 
- 	/*
- 	 * Set up housekeeping before setting up workqueues to allow the unbound
-@@ -1117,7 +1119,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 	thread_stack_cache_init();
- 	cred_init();
- 	fork_init();
--	proc_caches_init();
- 	uts_ns_init();
- 	key_init();
- 	security_init();
-@@ -1134,7 +1135,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
- 	taskstats_init_early();
- 	delayacct_init();
- 
--	poking_init();
- 	check_bugs();
- 
- 	acpi_subsystem_init();
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 08969f5aa38d..672967a9cbe9 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -702,7 +702,13 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
- 	mas_destroy(&mas);
- out:
- 	mmap_write_unlock(mm);
--	flush_tlb_mm(oldmm);
-+	/*
-+	 * poking_init() calls into here at early boot up.
-+	 * At that time, there's no need to flush the tlb.
-+	 * If we do, it will enable interrupts and cause a bug.
-+	 */
-+	if (likely(!early_boot_irqs_disabled))
-+		flush_tlb_mm(oldmm);
- 	mmap_write_unlock(oldmm);
- 	dup_userfaultfd_complete(&uf);
- fail_uprobe_end:
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index e1743803c851..e32206e840f6 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -1253,7 +1253,21 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
- 		}
- 
- 		max_req = min(requested, max_req);
--		count = mt_alloc_bulk(gfp, max_req, slots);
-+
-+		/*
-+		 * text_poke() can be called very early, and it
-+		 * calls dup_mm() which eventually leads down to here.
-+		 * In that case, mt_alloc_bulk() will call kmem_cache_alloc_bulk()
-+		 * which must be called with interrupts enabled. To avoid
-+		 * doing that in early bootup, where interrupts must remain
-+		 * disabled, just allocate a single slot.
-+		 */
-+		if (unlikely(early_boot_irqs_disabled)) {
-+			slots[0] = mt_alloc_one(gfp | GFP_ATOMIC);
-+			count = slots[0] ? 1 : 0;
-+		} else {
-+			count = mt_alloc_bulk(gfp, max_req, slots);
-+		}
- 		if (!count)
- 			goto nomem_bulk;
- 
--- 
-2.35.1
-
+                 Linus
