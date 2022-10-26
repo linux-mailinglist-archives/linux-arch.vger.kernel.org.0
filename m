@@ -2,77 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C48B60E703
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 20:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC5460EA7E
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 22:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiJZSLZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Oct 2022 14:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S234154AbiJZUqZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Oct 2022 16:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbiJZSLT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 14:11:19 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9128B83F2B
-        for <linux-arch@vger.kernel.org>; Wed, 26 Oct 2022 11:11:16 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id b25so11214712qkk.7
-        for <linux-arch@vger.kernel.org>; Wed, 26 Oct 2022 11:11:16 -0700 (PDT)
+        with ESMTP id S234241AbiJZUqY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 16:46:24 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ED2792F4;
+        Wed, 26 Oct 2022 13:46:23 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so3976145pji.1;
+        Wed, 26 Oct 2022 13:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
-        b=euOzt4OtQ6r2FoqktgoiitkA8qilHqWaety7Buy4Wc/kLai3+4S/yKJ+b8cr/78vie
-         65EAmm5Nk2Ou8O4UkVxUCQrdIYy4Jt0zqWrXA2jzp/FrxwIK4YXMEVDcaQQgF11XbHVL
-         dUvryBX9A+1fa9gOcaAoRkiAkEUCX4yINBJmM=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=osbqX8leV6g/SkiEHlFgEuxy7LRzWU2Y7Uh+l7tX15w=;
+        b=jpYjPBLG06J9WOn/bBWpwBCbAYRsRYqGtpSJMTFmnFYTA2ZFnazgRXI8p//toCQ2TJ
+         y0spJgx5cSlhzZ3SljvtDIADHdIjucdfN8NSuX9QNmLHoPzorq79XbjryWXjfHFl30lq
+         a+yGNHUmONi8/9fjz20oKzw3ydyHBmBZfyBBhDMaJiuRleHwSAzhKieuIBUJl+OaRWkx
+         J8ePiRgrp1obhqOjSj/zBR/mn+zZs1yFys+iRMsX91dPwar3019jAkA21DzvD4AEs3Ci
+         EqQhVJdb++3PMZsV4Ve+oth/VTO9h3hSFBdHXErMhMsb9uXlU65Dc3fy+9wGFc3kxwVE
+         7xyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
-        b=v8srSXW9f7AEz+4vdXOzVLarK0YuPIaaP6NdbC2tt5Sx87Np9qm6TSafAR0ilT/oUO
-         mTDws1fT9joDpUaxkdolnrvfq+B4pvNXz7Hot/6z1jAJFDC3tbOj061C14IhEz+8j5eh
-         34x36Wtfozec6X8RxBDNneTNO+8hg5Lvt4EO+qHHSbzp+Ke4Ks6WtmqZIN9jR0khtbfR
-         KI6IdzztcS9sW51MrLg6/z905HUv3LkszXzsr+OMMlzG5oQst1TPgalOy6YtyEnH4qBq
-         q6ElhoAR43YoaLV6mkKMqOCShx2KGZ2ggpjkDvz4esAIyh3g93VznzyYV4sXen5mdjvu
-         vMaw==
-X-Gm-Message-State: ACrzQf1n/Fd85CSvx6st/7BF325POfzTE612B9WEBpo9umuGUGEBwuod
-        hUTKFBDcwn+L2xh1P6Y9B1cFKasf7dCsaQ==
-X-Google-Smtp-Source: AMsMyM7azato/67NhiVOxi5NJSb0r9a0Rgp3GBcnAS+Ns6LBG9TM/MmaRWNzwLDCUE20B1cDnLx6Ew==
-X-Received: by 2002:a05:620a:40a:b0:6ed:2700:e080 with SMTP id 10-20020a05620a040a00b006ed2700e080mr31065111qkp.649.1666807875223;
-        Wed, 26 Oct 2022 11:11:15 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac86bcd000000b0039cbbcc7da8sm3523292qtt.7.2022.10.26.11.11.14
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 187so10918928ybe.1
-        for <linux-arch@vger.kernel.org>; Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
- c4-20020a5b0984000000b006ca9345b2eemr3573582ybq.362.1666807873800; Wed, 26
- Oct 2022 11:11:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
- <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
-In-Reply-To: <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 26 Oct 2022 11:10:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
-Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
-Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always signed)
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=osbqX8leV6g/SkiEHlFgEuxy7LRzWU2Y7Uh+l7tX15w=;
+        b=pWmAG25EI2ueXl0IeDbrrmorANO51zg96TsFc9GR9OutZa1SD+xCY0aiXmSYs+KU3s
+         y5tDb4/IHsUcOdKEhIsKqDmj1Ifj66lYr0E8M9+fKX7sXhV8LYV9kJFQKCQ5SDgyacO4
+         HUm4KWW9Z1dg0axMoJWVpVhr3d0R7gdaRSTj/VVh/kFU7Z8g1m6Pjjsqb1REAtFgB6Ng
+         nkgLO1Fz6w1JjWypm7K4Pe3oizY3otijOI4D/Gw2dvVnt8/R4/4tnn9rDLSdBCbaJO34
+         DZbE7t2DO0CLDVSBk1+tFw5eU3KHCHowrWnY+NSdpipC8HxqHU3rEakdZBBQq2490C5f
+         whxg==
+X-Gm-Message-State: ACrzQf0DqPeWIXYkG2Zift1zj+gIF4S7nUEcWUKObQKS860e5uRKzLqC
+        +4lB2rLiD/7q4bcHvhDZg9o=
+X-Google-Smtp-Source: AMsMyM7NaRTKclIWYEWcxpgdPdqgRZFy22OSD7N8p45NptTu2RyVSV2oujVK1I0Ov2AG9q7XgNRCoQ==
+X-Received: by 2002:a17:902:7b95:b0:178:ab50:76b5 with SMTP id w21-20020a1709027b9500b00178ab5076b5mr46490591pll.161.1666817182250;
+        Wed, 26 Oct 2022 13:46:22 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id a8-20020a170902710800b00172973d3cd9sm3308650pll.55.2022.10.26.13.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 13:46:21 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 13:46:20 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        isaku.yamahata@gmail.com
+Subject: Re: [PATCH v9 6/8] KVM: Update lpage info when private/shared memory
+ are mixed
+Message-ID: <20221026204620.GB3819453@ls.amr.corp.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-7-chao.p.peng@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221025151344.3784230-7-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,39 +102,151 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 5:10 PM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
->
-> Only very tangentially related (because it has to do with chars...): Can
-> we switch our ctype to be ASCII only, just as it was back in the good'ol
-> mid 90s
+On Tue, Oct 25, 2022 at 11:13:42PM +0800,
+Chao Peng <chao.p.peng@linux.intel.com> wrote:
 
-Those US-ASCII days weren't really very "good" old days, but I forget
-why we did this (it's attributed to me, but that's from the
-pre-BK/pre-git days before we actually tracked things all that well,
-so..)
+> When private/shared memory are mixed in a large page, the lpage_info may
+> not be accurate and should be updated with this mixed info. A large page
+> has mixed pages can't be really mapped as large page since its
+> private/shared pages are from different physical memory.
+> 
+> Update lpage_info when private/shared memory attribute is changed. If
+> both private and shared pages are within a large page region, it can't
+> be mapped as large page. It's a bit challenge to track the mixed
+> info in a 'count' like variable, this patch instead reserves a bit in
+> 'disallow_lpage' to indicate a large page has mixed private/share pages.
+> 
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |   8 +++
+>  arch/x86/kvm/mmu/mmu.c          | 112 +++++++++++++++++++++++++++++++-
+>  arch/x86/kvm/x86.c              |   2 +
+>  include/linux/kvm_host.h        |  19 ++++++
+>  virt/kvm/kvm_main.c             |  16 +++--
+>  5 files changed, 152 insertions(+), 5 deletions(-)
+> 
+...
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 33b1aec44fb8..67a9823a8c35 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+...
+> @@ -6910,3 +6915,108 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+>  	if (kvm->arch.nx_lpage_recovery_thread)
+>  		kthread_stop(kvm->arch.nx_lpage_recovery_thread);
+>  }
+> +
+> +static inline bool linfo_is_mixed(struct kvm_lpage_info *linfo)
+> +{
+> +	return linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> +}
+> +
+> +static inline void linfo_update_mixed(struct kvm_lpage_info *linfo, bool mixed)
+> +{
+> +	if (mixed)
+> +		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> +	else
+> +		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> +}
+> +
+> +static bool mem_attr_is_mixed_2m(struct kvm *kvm, unsigned int attr,
+> +				 gfn_t start, gfn_t end)
+> +{
+> +	XA_STATE(xas, &kvm->mem_attr_array, start);
+> +	gfn_t gfn = start;
+> +	void *entry;
+> +	bool shared = attr == KVM_MEM_ATTR_SHARED;
+> +	bool mixed = false;
+> +
+> +	rcu_read_lock();
+> +	entry = xas_load(&xas);
+> +	while (gfn < end) {
+> +		if (xas_retry(&xas, entry))
+> +			continue;
+> +
+> +		KVM_BUG_ON(gfn != xas.xa_index, kvm);
+> +
+> +		if ((entry && !shared) || (!entry && shared)) {
+> +			mixed = true;
+> +			goto out;
 
-Anyway, I think anybody using ctype.h on 8-bit chars gets what they
-deserve, and I think Latin1 (or something close to it) is better than
-US-ASCII, in that it's at least the same as Unicode in the low 8
-chars.
+nitpick: goto isn't needed. break should work.
 
-So no, I'm disinclined to go back in time to what I think is an even
-worse situation. Latin1 isn't great, but it sure beats US-ASCII. And
-if you really want just US-ASII, then don't use the high bit, and make
-your disgusting 7-bit code be *explicitly* 7-bit.
+> +		}
+> +
+> +		entry = xas_next(&xas);
+> +		gfn++;
+> +	}
+> +out:
+> +	rcu_read_unlock();
+> +	return mixed;
+> +}
+> +
+> +static bool mem_attr_is_mixed(struct kvm *kvm, struct kvm_memory_slot *slot,
+> +			      int level, unsigned int attr,
+> +			      gfn_t start, gfn_t end)
+> +{
+> +	unsigned long gfn;
+> +	void *entry;
+> +
+> +	if (level == PG_LEVEL_2M)
+> +		return mem_attr_is_mixed_2m(kvm, attr, start, end);
+> +
+> +	entry = xa_load(&kvm->mem_attr_array, start);
+> +	for (gfn = start; gfn < end; gfn += KVM_PAGES_PER_HPAGE(level - 1)) {
+> +		if (linfo_is_mixed(lpage_info_slot(gfn, slot, level - 1)))
+> +			return true;
+> +		if (xa_load(&kvm->mem_attr_array, gfn) != entry)
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+> +void kvm_arch_update_mem_attr(struct kvm *kvm, struct kvm_memory_slot *slot,
+> +			      unsigned int attr, gfn_t start, gfn_t end)
+> +{
+> +
+> +	unsigned long lpage_start, lpage_end;
+> +	unsigned long gfn, pages, mask;
+> +	int level;
+> +
+> +	WARN_ONCE(!(attr & (KVM_MEM_ATTR_PRIVATE | KVM_MEM_ATTR_SHARED)),
+> +			"Unsupported mem attribute.\n");
+> +
+> +	/*
+> +	 * The sequence matters here: we update the higher level basing on the
+> +	 * lower level's scanning result.
+> +	 */
+> +	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
+> +		pages = KVM_PAGES_PER_HPAGE(level);
+> +		mask = ~(pages - 1);
 
-Now, if there are errors in that table wrt Latin1 / "first 256
-codepoints of Unicode" too, then we can fix those.
+nitpick: KVM_HPAGE_MASK(level).  Maybe matter of preference.
 
-Not that anybody has apparently cared since 2.0.1 was released back in
-July of 1996 (btw, it's sad how none of the old linux git archive
-creations seem to have tried to import the dates, so you have to look
-those up separately)
 
-And if nobody has cared since 1996, I don't really think it matters.
+> +		lpage_start = max(start & mask, slot->base_gfn);
+> +		lpage_end = (end - 1) & mask;
+> +
+> +		/*
+> +		 * We only need to scan the head and tail page, for middle pages
+> +		 * we know they are not mixed.
+> +		 */
+> +		linfo_update_mixed(lpage_info_slot(lpage_start, slot, level),
+> +				   mem_attr_is_mixed(kvm, slot, level, attr,
+> +						     lpage_start, start));
+> +
+> +		if (lpage_start == lpage_end)
+> +			return;
+> +
+> +		for (gfn = lpage_start + pages; gfn < lpage_end; gfn += pages)
+> +			linfo_update_mixed(lpage_info_slot(gfn, slot, level),
+> +					   false);
+> +
+> +		linfo_update_mixed(lpage_info_slot(lpage_end, slot, level),
+> +				   mem_attr_is_mixed(kvm, slot, level, attr,
+> +						     end, lpage_end + pages));
+> +	}
+> +}
 
-But fundamentally, I think anybody calling US-ASCII "good" is either
-very very very confused, or is comparing it to EBCDIC.
-
-                 Linus
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
