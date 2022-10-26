@@ -2,99 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2CC60E685
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 19:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C48B60E703
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 20:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbiJZRbw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Oct 2022 13:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S233905AbiJZSLZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Oct 2022 14:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233466AbiJZRbu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 13:31:50 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E04DFB7A;
-        Wed, 26 Oct 2022 10:31:48 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so984287pjd.4;
-        Wed, 26 Oct 2022 10:31:48 -0700 (PDT)
+        with ESMTP id S233891AbiJZSLT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 14:11:19 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9128B83F2B
+        for <linux-arch@vger.kernel.org>; Wed, 26 Oct 2022 11:11:16 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id b25so11214712qkk.7
+        for <linux-arch@vger.kernel.org>; Wed, 26 Oct 2022 11:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0KEX8H9AH+VpJzTG5dP3lIPlij9N0zbSJwy+i7UPqHg=;
-        b=cGCfgC4hjmQQkF1Pxvr7cLXhW9PwDG011Q1yYpkKlGkU1OdLX/EXJIuLnwqbTCMenA
-         qQcxLWZcGJwon4OZ/EY7D/3JZcT+CmJYRc+SMzVP+aoV5fpH0LlOcHeQ5Rvu5/TVKZfu
-         7zs0vqSrqvQhdjoUVr9e4w8kyQepA7Bh73nOUhsTf8dbXvD5yNraTKvL9vXLLNDXcIk3
-         PFw+FqKwfN6Qkd1BQoOhVO/0zCAaQKI7rU5r6TuvH7WyVvQZUdOUIhL0305Fdfo6F+7N
-         bwu2wgky+pRe17X5czHVGnuD+R53XZYyqR79oq0bSJ8jTMTnfmqG7ITY+PjsZzrUcEcH
-         Fu2g==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
+        b=euOzt4OtQ6r2FoqktgoiitkA8qilHqWaety7Buy4Wc/kLai3+4S/yKJ+b8cr/78vie
+         65EAmm5Nk2Ou8O4UkVxUCQrdIYy4Jt0zqWrXA2jzp/FrxwIK4YXMEVDcaQQgF11XbHVL
+         dUvryBX9A+1fa9gOcaAoRkiAkEUCX4yINBJmM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0KEX8H9AH+VpJzTG5dP3lIPlij9N0zbSJwy+i7UPqHg=;
-        b=7ypswvZG8t3K3PB90TPAMabnAdWl5E0oLmOqVH3DSCT1QnzC06x4zCL9lvG+p9sw7M
-         jBNpHfNpmIoMS2g8eahVdn/bFZ+lo5TExu5S4ozhHF3uoiZDzoTfoblKdqa/DKj1l58u
-         jjtJ1I9bDL8+cBR53lNTWlL6y5MLt1eHfkkyeCaw02gervxnGMGZrOG7QTo9beXHA8eD
-         0wMyMSRK8Ywk993blLmcHxmA7ftCeTGOyaiilTWtUR8pBqhqed9SjpSmtMNFAjDC8EAn
-         bLaia/25LHdatSeHU4GftXCW8hea2qJH7awPCuyiWZ90Wn7BXzRW3Wjpr4cHhkBw2xNX
-         pAJQ==
-X-Gm-Message-State: ACrzQf3PcyQPtIDlE1XGDQwS4jJybPeYw+eZg5x/JOb9/1V3pAODpJk1
-        3TA1zWwaPCGTxB0N706UMmw=
-X-Google-Smtp-Source: AMsMyM5iyIsTFBeWCWiI/ZizQ3W6VbjiybP1poF7CjbEgG2VkVSvkP2kgtm+tVjWT4X2rpwsf2fFIQ==
-X-Received: by 2002:a17:902:6542:b0:172:95d8:a777 with SMTP id d2-20020a170902654200b0017295d8a777mr45124260pln.61.1666805507753;
-        Wed, 26 Oct 2022 10:31:47 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id y7-20020aa78f27000000b0056c814a501dsm436498pfr.10.2022.10.26.10.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 10:31:47 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 10:31:45 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221026173145.GA3819453@ls.amr.corp.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ITulc6XgqsqjNhbd41aCpior1CUyIgJHMI2V6YZSYqc=;
+        b=v8srSXW9f7AEz+4vdXOzVLarK0YuPIaaP6NdbC2tt5Sx87Np9qm6TSafAR0ilT/oUO
+         mTDws1fT9joDpUaxkdolnrvfq+B4pvNXz7Hot/6z1jAJFDC3tbOj061C14IhEz+8j5eh
+         34x36Wtfozec6X8RxBDNneTNO+8hg5Lvt4EO+qHHSbzp+Ke4Ks6WtmqZIN9jR0khtbfR
+         KI6IdzztcS9sW51MrLg6/z905HUv3LkszXzsr+OMMlzG5oQst1TPgalOy6YtyEnH4qBq
+         q6ElhoAR43YoaLV6mkKMqOCShx2KGZ2ggpjkDvz4esAIyh3g93VznzyYV4sXen5mdjvu
+         vMaw==
+X-Gm-Message-State: ACrzQf1n/Fd85CSvx6st/7BF325POfzTE612B9WEBpo9umuGUGEBwuod
+        hUTKFBDcwn+L2xh1P6Y9B1cFKasf7dCsaQ==
+X-Google-Smtp-Source: AMsMyM7azato/67NhiVOxi5NJSb0r9a0Rgp3GBcnAS+Ns6LBG9TM/MmaRWNzwLDCUE20B1cDnLx6Ew==
+X-Received: by 2002:a05:620a:40a:b0:6ed:2700:e080 with SMTP id 10-20020a05620a040a00b006ed2700e080mr31065111qkp.649.1666807875223;
+        Wed, 26 Oct 2022 11:11:15 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id b13-20020ac86bcd000000b0039cbbcc7da8sm3523292qtt.7.2022.10.26.11.11.14
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 187so10918928ybe.1
+        for <linux-arch@vger.kernel.org>; Wed, 26 Oct 2022 11:11:14 -0700 (PDT)
+X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
+ c4-20020a5b0984000000b006ca9345b2eemr3573582ybq.362.1666807873800; Wed, 26
+ Oct 2022 11:11:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221019162648.3557490-1-Jason@zx2c4.com> <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+ <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
+In-Reply-To: <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 26 Oct 2022 11:10:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
+Message-ID: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
+Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always signed)
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,46 +80,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:13:37PM +0800,
-Chao Peng <chao.p.peng@linux.intel.com> wrote:
+On Tue, Oct 25, 2022 at 5:10 PM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+>
+> Only very tangentially related (because it has to do with chars...): Can
+> we switch our ctype to be ASCII only, just as it was back in the good'ol
+> mid 90s
 
-> +int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> +			   struct page **pagep, int *order)
-> +{
-> +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> +	struct file *memfd = data->memfd;
-> +	struct page *page;
-> +	int ret;
-> +
-> +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
+Those US-ASCII days weren't really very "good" old days, but I forget
+why we did this (it's attributed to me, but that's from the
+pre-BK/pre-git days before we actually tracked things all that well,
+so..)
 
-shmem_getpage() was removed.
-https://lkml.kernel.org/r/20220902194653.1739778-34-willy@infradead.org
+Anyway, I think anybody using ctype.h on 8-bit chars gets what they
+deserve, and I think Latin1 (or something close to it) is better than
+US-ASCII, in that it's at least the same as Unicode in the low 8
+chars.
 
-I needed the following fix to compile.
+So no, I'm disinclined to go back in time to what I think is an even
+worse situation. Latin1 isn't great, but it sure beats US-ASCII. And
+if you really want just US-ASII, then don't use the high bit, and make
+your disgusting 7-bit code be *explicitly* 7-bit.
 
-thanks,
+Now, if there are errors in that table wrt Latin1 / "first 256
+codepoints of Unicode" too, then we can fix those.
 
-diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-index e5bf8907e0f8..4694dd5609d6 100644
---- a/mm/restrictedmem.c
-+++ b/mm/restrictedmem.c
-@@ -231,13 +231,15 @@ int restrictedmem_get_page(struct file *file, pgoff_t offset,
- {
-        struct restrictedmem_data *data = file->f_mapping->private_data;
-        struct file *memfd = data->memfd;
-+       struct folio *folio = NULL;
-        struct page *page;
-        int ret;
- 
--       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-+       ret = shmem_get_folio(file_inode(memfd), offset, &folio, SGP_WRITE);
-        if (ret)
-                return ret;
- 
-+       page = folio_file_page(folio, offset);
-        *pagep = page;
-        if (order)
-                *order = thp_order(compound_head(page));
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Not that anybody has apparently cared since 2.0.1 was released back in
+July of 1996 (btw, it's sad how none of the old linux git archive
+creations seem to have tried to import the dates, so you have to look
+those up separately)
+
+And if nobody has cared since 1996, I don't really think it matters.
+
+But fundamentally, I think anybody calling US-ASCII "good" is either
+very very very confused, or is comparing it to EBCDIC.
+
+                 Linus
