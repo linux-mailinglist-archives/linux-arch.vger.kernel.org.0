@@ -2,105 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2D360D84D
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 02:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2976E60D853
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 02:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiJZAEs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Oct 2022 20:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
+        id S232560AbiJZAKI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Oct 2022 20:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiJZAEn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Oct 2022 20:04:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848221DA41;
-        Tue, 25 Oct 2022 17:04:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B3A461BBE;
-        Wed, 26 Oct 2022 00:04:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 458A7C433D6;
-        Wed, 26 Oct 2022 00:04:38 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IRMU2CLv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666742676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IkwAfVtYTtU51oc7/jn0Fs/YPN6o4wcDABPb9JF67Co=;
-        b=IRMU2CLvIifkL42MsPhI3sulQbEzr9U6+3fTzexuHGDEHqDdCJoRJwnwnjVfq7kOB0P29/
-        DdnlPZAq8bFUyY7kzXADuQeAVqE2/bIzAWRbc4tqLPkYqrlX6bvTUBGGbatNvgoZNC+stY
-        P429xx95hvHaPve3E+kljj0BMdcS6wg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd4b7e5d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 26 Oct 2022 00:04:35 +0000 (UTC)
-Date:   Wed, 26 Oct 2022 02:04:30 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Gabriel Paubert <paubert@iram.es>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        with ESMTP id S231645AbiJZAKH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Oct 2022 20:10:07 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF864A2205
+        for <linux-arch@vger.kernel.org>; Tue, 25 Oct 2022 17:10:05 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id b12so38983926edd.6
+        for <linux-arch@vger.kernel.org>; Tue, 25 Oct 2022 17:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4taiE5ssQYH2zlfw716I5D+61K8WmNsXSyJ4aqN82N8=;
+        b=icD7feogwbnZHXxEHSUlJiUdinyKhya/zRuuqtoVUhyaraQ0seuTNAk/XrxuwJ0hxQ
+         +RHi4wpnmQXkdR81PLGgT49IxOWoALW+IFaAfe8ECx3bjTYBHnBCZBluni8j1cgygBJG
+         xgmIG0ZBIm2nZn5xaAhnqeRvJwkGoND+Q7SEo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4taiE5ssQYH2zlfw716I5D+61K8WmNsXSyJ4aqN82N8=;
+        b=28+f9ld/hzsFJXf70jCsDNlKJGoTDauVGm8yFbZMUlir+biCOh/Bzny5dl13SlgNyD
+         Eg01umszMbTWebyK2AiVujJbC/0FFjnrJF8lyQt+4ojjpEFQLnpjP+HhnZt7eUD6psFW
+         LpbAnXaTuWFpBg565V08KHhhYaxq9zoOYO3D79uDgUhyoXVZYum4bxT3bfgkXyS8pqs+
+         +85dVw4JD1t3ECh4kMtjHzjaLe1cc2S/Qq+OG53Niqa5yFv9sB2Tm8vcYeF5BA6nx2TW
+         6uakgIwLivCG+JkY2R/iUU8XfLIIZGUyQSRGXEgwzJDtr8j50MFpZUc7xUHmZL5YpR/7
+         HjYw==
+X-Gm-Message-State: ACrzQf3NGIBTA0RDmmx+wQIdbabEQjxnv3fQMd8SvO81gAhxUaIan6QT
+        SlYMCNh2CmpV7hUQQRq7cPdobQgcQYdn88vbLss=
+X-Google-Smtp-Source: AMsMyM7YfH3zjdroxgQqniV4fSiNgFe9/PT7uYZeGKrCNU79xQR9xfgcxWPG1xDwPXa1oHQRbz8xag==
+X-Received: by 2002:a05:6402:5288:b0:457:22e5:8022 with SMTP id en8-20020a056402528800b0045722e58022mr37785972edb.244.1666743004203;
+        Tue, 25 Oct 2022 17:10:04 -0700 (PDT)
+Received: from [192.168.1.149] ([80.208.71.65])
+        by smtp.gmail.com with ESMTPSA id a7-20020a17090640c700b0073d7bef38e3sm2104978ejk.45.2022.10.25.17.10.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 17:10:03 -0700 (PDT)
+Message-ID: <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
+Date:   Wed, 26 Oct 2022 02:10:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: make ctype ascii only? (was [PATCH] kbuild: treat char as always
+ signed)
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] kbuild: treat char as always signed
-Message-ID: <Y1h5jr/ZS7BORewp@zx2c4.com>
-References: <20221019165455.GL25951@gate.crashing.org>
- <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
- <20221019174345.GM25951@gate.crashing.org>
- <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
- <Y1Elx+e5VLCTfyXi@lt-gp.iram.es>
- <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
- <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
- <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
- <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
- <202210251555.88933A57F@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202210251555.88933A57F@keescook>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 04:00:30PM -0700, Kees Cook wrote:
-> On Sun, Oct 23, 2022 at 10:23:56PM +0200, Gabriel Paubert wrote:
-> > On Sat, Oct 22, 2022 at 11:16:33AM -0700, Linus Torvalds wrote:
-> > > Practically speaking this might be a bit painful, because we've got
-> > > several different variations of this all due to all the things like
-> > > our debugging versions (see <linux/fortify-string.h> for example), so
-> > > some of our code is this crazy jungle of "with this config, use this
-> > > wrapper".
-> > 
-> > I've just had a look at that code, and I don't want to touch it with a
-> > 10 foot pole. If someone else to get his hands dirty... 
+On 19/10/2022 21.54, Linus Torvalds wrote:
+> On Wed, Oct 19, 2022 at 9:27 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>>
+>> So let's just eliminate this particular variety of heisensigned bugs
+>> entirely. Set `-fsigned-char` globally, so that gcc makes the type
+>> signed on all architectures.
 > 
-> Heh. Yes, fortify-string.h is a twisty maze. I've tried to keep it as
-> regular as possible, but I admit it is weird. On my list is to split
-> compile-time from run-time logic (as suggested by Linus a while back),
-> but I've worried it would end up spilling some of the ugly back into
-> string.h, which should probably not happen. As such, I've tried to keep
-> it all contained in fortify-string.h.
-> 
-> Regardless, I think I'd rather avoid yet more special cases in the
-> fortify code, so I'd like to avoid using transparent union if we can. It
-> seems like -funsigned-char and associated fixes will be sufficient,
-> though, yes?
+> Btw, I do wonder if we might actually be better off doing this - but
+> doing it the other way around.
 
-I thought some of the motivation behind the transparent union was that
-gcc still treats `char` as a distinct type from `unsigned char`, so
-gcc's checker can still get upset and warn when passing a u8[] to a
-string handling function that expects a char[]. (Once the
--funsigned-char changes go in, though, we should probably decide that
-s8[] is never a valid string.)
+Only very tangentially related (because it has to do with chars...): Can
+we switch our ctype to be ASCII only, just as it was back in the good'ol
+mid 90s [i.e. before
+https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/lib/ctype.c?id=036b97b05489161be06e63be77c5fad9247d23ff].
 
-Jason
+It bugs me that it's almost-but-not-quite-latin1, that toupper() isn't
+idempotent, and that one can hit an isalpha() with toupper() and get
+something that isn't isalpha().
+
+Rasmus
