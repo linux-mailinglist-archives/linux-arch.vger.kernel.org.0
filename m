@@ -2,141 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0909960E631
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2CC60E685
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 19:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234111AbiJZRJ4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Oct 2022 13:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
+        id S233640AbiJZRbw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Oct 2022 13:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233986AbiJZRJx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 13:09:53 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382D81E3EF;
-        Wed, 26 Oct 2022 10:09:50 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 57E3B1F899;
-        Wed, 26 Oct 2022 17:09:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666804189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gqqP6Dxm/MenMy0jC9uBeRG4Y6goegyMzGhboeAYhMc=;
-        b=GBy+EhssxqBv5fnX3Djku2r5jD+rDQIs04u+mr9+9tnoJAi7ZX0fMxgNM7KSwgrAvYa7KR
-        nh/fVFjCtdFInhZCDGtBmsEM2FmOuUkc7DTQ72Rw39rmfjP75s/V7wkWtCEJ3y+iB5aAuV
-        5jM5chKxGhN+JtxTIqQnMWkWiS6FHKY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666804189;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gqqP6Dxm/MenMy0jC9uBeRG4Y6goegyMzGhboeAYhMc=;
-        b=o4qjblqFXezmnNRfDo8rXRh5pZsneQmVNrbg/XNK98AQI99zcOedlpnsKf0WopNHM5/LmM
-        fXIYzbLyEAksFwCg==
-Received: from wotan.suse.de (wotan.suse.de [10.160.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 4842A2C142;
-        Wed, 26 Oct 2022 17:09:49 +0000 (UTC)
-Received: by wotan.suse.de (Postfix, from userid 10510)
-        id 3A8A46462; Wed, 26 Oct 2022 17:09:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by wotan.suse.de (Postfix) with ESMTP id 38F4162DC;
-        Wed, 26 Oct 2022 17:09:49 +0000 (UTC)
-Date:   Wed, 26 Oct 2022 17:09:49 +0000 (UTC)
-From:   Michael Matz <matz@suse.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-cc:     Jiri Slaby <jirislaby@kernel.org>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?ISO-8859-15?Q?Martin_Li=A8ka?= <mliska@suse.cz>,
-        Borislav Petkov <bpetkov@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v3 6/7] kbuild: use obj-y instead extra-y for objects
- placed at the head
-In-Reply-To: <CAK7LNASs_8yjxLj-DxsFkej67b5JbHbRu9NgmtzT8+zdCcuPiQ@mail.gmail.com>
-Message-ID: <alpine.LSU.2.20.2210261653340.29399@wotan.suse.de>
-References: <20220924181915.3251186-1-masahiroy@kernel.org> <20220924181915.3251186-7-masahiroy@kernel.org> <ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org> <alpine.LSU.2.20.2210251210140.29399@wotan.suse.de>
- <CAK7LNASs_8yjxLj-DxsFkej67b5JbHbRu9NgmtzT8+zdCcuPiQ@mail.gmail.com>
-User-Agent: Alpine 2.20 (LSU 67 2015-01-07)
+        with ESMTP id S233466AbiJZRbu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 13:31:50 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E04DFB7A;
+        Wed, 26 Oct 2022 10:31:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so984287pjd.4;
+        Wed, 26 Oct 2022 10:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0KEX8H9AH+VpJzTG5dP3lIPlij9N0zbSJwy+i7UPqHg=;
+        b=cGCfgC4hjmQQkF1Pxvr7cLXhW9PwDG011Q1yYpkKlGkU1OdLX/EXJIuLnwqbTCMenA
+         qQcxLWZcGJwon4OZ/EY7D/3JZcT+CmJYRc+SMzVP+aoV5fpH0LlOcHeQ5Rvu5/TVKZfu
+         7zs0vqSrqvQhdjoUVr9e4w8kyQepA7Bh73nOUhsTf8dbXvD5yNraTKvL9vXLLNDXcIk3
+         PFw+FqKwfN6Qkd1BQoOhVO/0zCAaQKI7rU5r6TuvH7WyVvQZUdOUIhL0305Fdfo6F+7N
+         bwu2wgky+pRe17X5czHVGnuD+R53XZYyqR79oq0bSJ8jTMTnfmqG7ITY+PjsZzrUcEcH
+         Fu2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0KEX8H9AH+VpJzTG5dP3lIPlij9N0zbSJwy+i7UPqHg=;
+        b=7ypswvZG8t3K3PB90TPAMabnAdWl5E0oLmOqVH3DSCT1QnzC06x4zCL9lvG+p9sw7M
+         jBNpHfNpmIoMS2g8eahVdn/bFZ+lo5TExu5S4ozhHF3uoiZDzoTfoblKdqa/DKj1l58u
+         jjtJ1I9bDL8+cBR53lNTWlL6y5MLt1eHfkkyeCaw02gervxnGMGZrOG7QTo9beXHA8eD
+         0wMyMSRK8Ywk993blLmcHxmA7ftCeTGOyaiilTWtUR8pBqhqed9SjpSmtMNFAjDC8EAn
+         bLaia/25LHdatSeHU4GftXCW8hea2qJH7awPCuyiWZ90Wn7BXzRW3Wjpr4cHhkBw2xNX
+         pAJQ==
+X-Gm-Message-State: ACrzQf3PcyQPtIDlE1XGDQwS4jJybPeYw+eZg5x/JOb9/1V3pAODpJk1
+        3TA1zWwaPCGTxB0N706UMmw=
+X-Google-Smtp-Source: AMsMyM5iyIsTFBeWCWiI/ZizQ3W6VbjiybP1poF7CjbEgG2VkVSvkP2kgtm+tVjWT4X2rpwsf2fFIQ==
+X-Received: by 2002:a17:902:6542:b0:172:95d8:a777 with SMTP id d2-20020a170902654200b0017295d8a777mr45124260pln.61.1666805507753;
+        Wed, 26 Oct 2022 10:31:47 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id y7-20020aa78f27000000b0056c814a501dsm436498pfr.10.2022.10.26.10.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 10:31:47 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 10:31:45 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
+        isaku.yamahata@gmail.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221026173145.GA3819453@ls.amr.corp.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+On Tue, Oct 25, 2022 at 11:13:37PM +0800,
+Chao Peng <chao.p.peng@linux.intel.com> wrote:
 
-On Thu, 27 Oct 2022, Masahiro Yamada wrote:
+> +int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> +			   struct page **pagep, int *order)
+> +{
+> +	struct restrictedmem_data *data = file->f_mapping->private_data;
+> +	struct file *memfd = data->memfd;
+> +	struct page *page;
+> +	int ret;
+> +
+> +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
 
-> > To be precise: I know of no linker (outside LTO-like modes) that processes
-> > archives in a different order than first-to-last-member (under
-> > whole-archive), but that's not guaranteed anywhere.  So relying on
-> > member-order within archives is always brittle.
-> 
-> The objects in an archive are linked first-to-last-member for a long time.
-> This is the assumption which we have relied on for a long time.
+shmem_getpage() was removed.
+https://lkml.kernel.org/r/20220902194653.1739778-34-willy@infradead.org
 
-Sure, that doesn't mean it's guaranteed, for this I'm just devils 
-advocate.  As I said, it's the mode of operation of all currently existing 
-linkers I know, so for the forseeable future you can continue to rely on 
-it.  But as soon as LTO enters the picture that all breaks down, as you 
-see here.
+I needed the following fix to compile.
 
-Consider how LTO works, the granularity of shuffling stuff around is the 
-functions of all inputs, not the object files.  So, even if you say
-  obj1.o obj2.o
-on the link command line, and supposed there are two functions in each of 
-obj1 and obj2, then it may just so happen that LTO partitions the program 
-such that it ends up with partitions
-  part1 : obj1:foo obj2:bar
-  part2 : obj1:bar obj2:foo
-now, suddenly there is no order between part1 and part2 anymore that 
-would faithfully represent the original order between obj1 and obj2 
-functions.  Of course the partitioning algorithm could be changed, but 
-that would limit the effectiveness of LTO.
+thanks,
 
-> We assume the initcall order is preserved.
-> The call order within each of core_initcall, arch_initcall,
-> device_initcall, etc.
-> is the order of objects in built-in.a, in other words,
-> the order they appear in Makefiles.
-
-If you rely on relative order of these, then you will probably see 
-interesting effects in LTO mode eventually.
-
-> So, this is happening on (not-upstreamed-yet) GCC LTO only?
-
-I don't know.  As any kind of whole-program transformations is in 
-principle cross-file on per-function basis (that's the whole purpose) I 
-would imagine that you can see these effects in all compilers, if you try 
-hard enough.
-
-> > There are only two ways of guaranteeing an ordering: put non-LTO-.o files
-> > at certain places of the link command, or, better, use a linker script to
-> > specify an order.
-> 
-> The objects directly given in the command line are linked in the same order,
-> even under LTO mode. Is this what you mean?
-
-If they don't contain LTO code then yes, they are linked 
-in exactly the given order.  If they do, they become part of the LTO blob 
-whose ordering isn't precisely influenced by cmdline order.
-
-> Any documentation about that?
-
-I think so, but I can't point my finger to anything.  Several parts of the 
-toolchain rely on that (so the kernel is not alone), but those are either 
-carefully avoiding LTO or using other ordering means like linker script to 
-achieve what they need.
-
-
-Ciao,
-Michael.
+diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+index e5bf8907e0f8..4694dd5609d6 100644
+--- a/mm/restrictedmem.c
++++ b/mm/restrictedmem.c
+@@ -231,13 +231,15 @@ int restrictedmem_get_page(struct file *file, pgoff_t offset,
+ {
+        struct restrictedmem_data *data = file->f_mapping->private_data;
+        struct file *memfd = data->memfd;
++       struct folio *folio = NULL;
+        struct page *page;
+        int ret;
+ 
+-       ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
++       ret = shmem_get_folio(file_inode(memfd), offset, &folio, SGP_WRITE);
+        if (ret)
+                return ret;
+ 
++       page = folio_file_page(folio, offset);
+        *pagep = page;
+        if (order)
+                *order = thp_order(compound_head(page));
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
