@@ -2,177 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357F260E28D
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 15:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF2660E286
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Oct 2022 15:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbiJZNtG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Oct 2022 09:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
+        id S232848AbiJZNsm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Oct 2022 09:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbiJZNsR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 09:48:17 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 260754DB44;
-        Wed, 26 Oct 2022 06:48:17 -0700 (PDT)
-Received: from anrayabh-desk.corp.microsoft.com (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5E5BC210AF1E;
-        Wed, 26 Oct 2022 06:48:12 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5E5BC210AF1E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666792097;
-        bh=XpK1X4zhf3TiHKLaOrNIEobrLMtZr0H214Cll4f/OsA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BbMgTmVDjRypDBMGQCoY/WEcjAKoYiqGtbMw7VkVQCYwmx96GFslPqIgK9LXhWMkD
-         KoOtLQIBZT6ugsXoEcRBbketkQoxa5gk4b3zu7wasD7XT3GcqAUvbMkx6qnGYjp8k5
-         EigtvY+winLAwR0gxpSi4HqGK/bXuoqTj6d5aUCc=
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, daniel.lezcano@linaro.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        kumarpraveen@linux.microsoft.com, mail@anirudhrb.com
-Subject: [PATCH 2/2] clocksource/drivers/hyperv: add data structure for reference TSC MSR
-Date:   Wed, 26 Oct 2022 19:17:15 +0530
-Message-Id: <20221026134715.1438789-3-anrayabh@linux.microsoft.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221026134715.1438789-1-anrayabh@linux.microsoft.com>
-References: <20221026134715.1438789-1-anrayabh@linux.microsoft.com>
+        with ESMTP id S233797AbiJZNsL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Oct 2022 09:48:11 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227BC7C745;
+        Wed, 26 Oct 2022 06:48:09 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QBrWH8009875;
+        Wed, 26 Oct 2022 13:47:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=qROz7Q4h+euUkMj2OP5dbVzng8lReyZz1cRah01gads=;
+ b=PX/LA1KPq7ZndaKQVpsF2eMwQTaYErginuKf68ZQo29lGgI+vUl/wlb44471zUPcY223
+ JxkzG7yFtwZg9BOGnItjqbHoXmcQYRwq685wAT+7SQnVE4tlBuRQf079/g6CkBeI1DmJ
+ Y+/tMhQKd3CHY4xSxq08mT5OuvD2AmHZ/8a4ID9C4VaNq+heMY97/g6uEOvL05J8JbWT
+ XSuAD7QB1F7yDRAmX/00q6/ETM6K3xqWU82/m2dSM4PkCK2OG3jXJoB8q/82di6GRNfZ
+ b4E5HO54PEsf6zOfIAuQ3k5/xkfA8VymsAe012IcV58XVG+PXPhgr0AuaGvYAPE3mJgW LQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3keapmbg9s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 13:47:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QDltUR022659
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 13:47:55 GMT
+Received: from [10.50.1.107] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 26 Oct
+ 2022 06:47:52 -0700
+Message-ID: <2f19ea9c-10e6-d0f7-2fc9-fb0f896bfc64@quicinc.com>
+Date:   Wed, 26 Oct 2022 19:17:49 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH] asm-generic/io: Add _RET_IP_ to MMIO trace for more
+ accurate debug info
+To:     Steven Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>
+CC:     Masami Hiramatsu <mhiramat@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <quic_satyap@quicinc.com>
+References: <20221017143450.9161-1-quic_saipraka@quicinc.com>
+ <20221024120929.41241e07@gandalf.local.home>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20221024120929.41241e07@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mz8AsCI6BvtCTyl7hHWO8ub7XkBvP5Z_
+X-Proofpoint-ORIG-GUID: mz8AsCI6BvtCTyl7hHWO8ub7XkBvP5Z_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ malwarescore=0 mlxlogscore=748 spamscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210260077
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add a data structure to represent the reference TSC MSR similar to
-other MSRs. This simplifies the code for updating the MSR.
+Hi Steve,
 
-Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
----
- arch/x86/hyperv/hv_init.c          | 10 +++++-----
- drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
- include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
- 3 files changed, 28 insertions(+), 19 deletions(-)
+On 10/24/2022 9:39 PM, Steven Rostedt wrote:
+> On Mon, 17 Oct 2022 20:04:50 +0530
+> Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
+> 
+>> Due to compiler optimizations like inlining, there are cases where
+>> MMIO traces using _THIS_IP_ for caller information might not be
+>> sufficient to provide accurate debug traces.
+>>
+>> 1) With optimizations (Seen with GCC):
+>>
+>> In this case, _THIS_IP_ works fine and prints the caller information
+>> since it will be inlined into the caller and we get the debug traces
+>> on who made the MMIO access, for ex:
+>>
+>> rwmmio_read: qcom_smmu_tlb_sync+0xe0/0x1b0 width=32 addr=0xffff8000087447f4
+>> rwmmio_post_read: qcom_smmu_tlb_sync+0xe0/0x1b0 width=32 val=0x0 addr=0xffff8000087447f4
+>>
+>> 2) Without optimizations (Seen with Clang):
+>>
+>> _THIS_IP_ will not be sufficient in this case as it will print only
+>> the MMIO accessors itself which is of not much use since it is not
+>> inlined as below for example:
+>>
+>> rwmmio_read: readl+0x4/0x80 width=32 addr=0xffff8000087447f4
+>> rwmmio_post_read: readl+0x48/0x80 width=32 val=0x4 addr=0xffff8000087447f4
+>>
+>> So in order to handle this second case as well irrespective of the compiler
+>> optimizations, add _RET_IP_ to MMIO trace to make it provide more accurate
+>> debug information in all these scenarios.
+>>
+>> Before:
+>>
+>> rwmmio_read: readl+0x4/0x80 width=32 addr=0xffff8000087447f4
+>> rwmmio_post_read: readl+0x48/0x80 width=32 val=0x4 addr=0xffff8000087447f4
+>>
+>> After:
+>>
+>> rwmmio_read: qcom_smmu_tlb_sync+0xe0/0x1b0 -> readl+0x4/0x80 width=32 addr=0xffff8000087447f4
+>> rwmmio_post_read: qcom_smmu_tlb_sync+0xe0/0x1b0 -> readl+0x4/0x80 width=32 val=0x0 addr=0xffff8000087447f4
+>>
+>> Fixes: 210031971cdd ("asm-generic/io: Add logging support for MMIO accessors")
+>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> 
+> 
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> What tree should this go through?
+> 
+> -- Steve
 
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 76ff63d69461..78993148d14c 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -537,7 +537,7 @@ void __init hyperv_init(void)
- void hyperv_cleanup(void)
- {
- 	union hv_x64_msr_hypercall_contents hypercall_msr;
--	u64 tsc_msr;
-+	union hv_reference_tsc_msr tsc_msr;
- 
- 	unregister_syscore_ops(&hv_syscore_ops);
- 
-@@ -557,10 +557,10 @@ void hyperv_cleanup(void)
- 	hypercall_msr.enable = 0;
- 	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
- 
--	/* Reset the TSC page */
--	rdmsrl(HV_X64_MSR_REFERENCE_TSC, tsc_msr);
--	tsc_msr &= ~BIT_ULL(0);
--	wrmsrl(HV_X64_MSR_REFERENCE_TSC, tsc_msr);
-+	/* Reset the TSC page. */
-+	rdmsrl(HV_X64_MSR_REFERENCE_TSC, tsc_msr.as_uint64);
-+	tsc_msr.enable = 0;
-+	wrmsrl(HV_X64_MSR_REFERENCE_TSC, tsc_msr.as_uint64);
- }
- 
- void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die)
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index bb47610bbd1c..11332c82d1af 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
- 
- static void suspend_hv_clock_tsc(struct clocksource *arg)
- {
--	u64 tsc_msr;
-+	union hv_reference_tsc_msr tsc_msr;
- 
- 	/* Disable the TSC page */
--	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
--	tsc_msr &= ~BIT_ULL(0);
--	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-+	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-+	tsc_msr.enable = 0;
-+	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
- }
- 
- 
- static void resume_hv_clock_tsc(struct clocksource *arg)
- {
- 	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
--	u64 tsc_msr;
-+	union hv_reference_tsc_msr tsc_msr;
- 
- 	/* Re-enable the TSC page */
--	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
--	tsc_msr &= GENMASK_ULL(11, 0);
--	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
--	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-+	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-+	tsc_msr.enable = 1;
-+	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-+	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
- }
- 
- #ifdef HAVE_VDSO_CLOCKMODE_HVCLOCK
-@@ -495,7 +495,7 @@ static __always_inline void hv_setup_sched_clock(void *sched_clock) {}
- 
- static bool __init hv_init_tsc_clocksource(void)
- {
--	u64		tsc_msr;
-+	union hv_reference_tsc_msr tsc_msr;
- 	phys_addr_t	phys_addr;
- 
- 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
-@@ -530,10 +530,10 @@ static bool __init hv_init_tsc_clocksource(void)
- 	 * (which already has at least the low 12 bits set to zero since
- 	 * it is page aligned). Also set the "enable" bit, which is bit 0.
- 	 */
--	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
--	tsc_msr &= GENMASK_ULL(11, 0);
--	tsc_msr = tsc_msr | 0x1 | (u64)phys_addr;
--	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-+	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-+	tsc_msr.enable = 1;
-+	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-+	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
- 
- 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
- 
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index fdce7a4cfc6f..b17c6eeb9afa 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -102,6 +102,15 @@ struct ms_hyperv_tsc_page {
- 	volatile s64 tsc_offset;
- } __packed;
- 
-+union hv_reference_tsc_msr {
-+	u64 as_uint64;
-+	struct {
-+		u64 enable:1;
-+		u64 reserved:11;
-+		u64 pfn:52;
-+	} __packed;
-+};
-+
- /*
-  * The guest OS needs to register the guest ID with the hypervisor.
-  * The guest ID is a 64 bit entity and the structure of this ID is
--- 
-2.34.1
 
+Thanks for the ack, with this I believe Arnd can take it through his 
+tree like last time.
+
+Thanks,
+Sai
