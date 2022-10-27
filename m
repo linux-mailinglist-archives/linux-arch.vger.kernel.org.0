@@ -2,194 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BB360F981
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 15:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A1E60FC15
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 17:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235132AbiJ0Nop (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Oct 2022 09:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S234879AbiJ0Pfn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Oct 2022 11:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233978AbiJ0Noo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 09:44:44 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11023016.outbound.protection.outlook.com [52.101.64.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E327FAE8;
-        Thu, 27 Oct 2022 06:44:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NkvqBT7RrZdQ/b0mLu94W0gTwI3FiHcI3jg0INeOJXgI2Sdk3Md07vzG06YRG6vLZpB/go2ZizhtpX9D0ZL+pz18ilZfsPyw5mHvRXz+xypdQRStSCIvC+bcA0T7UQdeM4D7yU5m33UJDSNrAgZaYrS8/LGaRPE/2sFWt93rif2ojO1Ewc7bkfXM49akSCoQHdl/5lRjcfOV3pw/6APh3VKmKsWDQQZy8fa/Nf8hy1kIricv+x4eje5r6GtOEmmBXyBNR/cMNGGhuR1BvrDiM0jY4i8szoeGXqKIUqJRr4yOwObWf7RBnDEUgE8anhYxhcIFeXpdjQqzFff4Gcsybw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8cYJoaG6KVUlnx0tVpextdzky09PM0w/nfES/Fi1XRc=;
- b=j2WoCuBGDku9RGlh9HR7WvMkdbqrS6Z1G8duEd03mRPtsFreSdNqNYbfaG+f/BzaJUsS7F48SHUkzbKB6X+x6umEeI2GhT7fF0XxupcxcwzuDbpbV7PsmKQ+bLRbsl0ZyB+vz/RNORkC+arvW2a2TbVBO7wc8FnxlUmVrl7J47fi/yHJx1lPJPEYSFJ+LFLu7Teo363w1w5cvA/vNAIFAf0R/crtEouG/5Xhil33u/MSf2oLSV8JMMGFB64xgrCwwZBR9yhhglst60f6HNb+NS/B63iCKKivGgDJ9mUi1TG/edWP0iPeeBhUTMb6eZ0ZfGDKml/TBAGtSUpjRctwvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8cYJoaG6KVUlnx0tVpextdzky09PM0w/nfES/Fi1XRc=;
- b=eJpcDDQLIgVqS/BB+p/QX8sWTU7PitVwi5acXMN2Uh/kVXdvTR/VZS52hLjIwwn6C/T90SemCr8Wk4JeoqY2WIpgE9aXJayCHdvLKYFSql2rvWNKohkXJ+dDIsqNu4oaGhSTVBH+EFvu/4+7eDmFhCTUNWsc0oi1+EXQpnir/o0=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by SA1PR21MB3809.namprd21.prod.outlook.com (2603:10b6:806:2b5::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.9; Thu, 27 Oct
- 2022 13:44:41 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::f565:80ed:8070:474b]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::f565:80ed:8070:474b%8]) with mapi id 15.20.5791.008; Thu, 27 Oct 2022
- 13:44:40 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-CC:     "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>
-Subject: RE: [PATCH v2 2/2] x86/hyperv: fix invalid writes to MSRs during root
- partition kexec
-Thread-Topic: [PATCH v2 2/2] x86/hyperv: fix invalid writes to MSRs during
- root partition kexec
-Thread-Index: AQHY6erhFE1zdq3efUKf5zsoIswvq64iQBpw
-Date:   Thu, 27 Oct 2022 13:44:40 +0000
-Message-ID: <BYAPR21MB168872A298C1CDC140FBF454D7339@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
- <20221027095729.1676394-3-anrayabh@linux.microsoft.com>
-In-Reply-To: <20221027095729.1676394-3-anrayabh@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=26158297-5d35-4ff9-a477-14a9bd09a902;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-10-27T13:42:34Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SA1PR21MB3809:EE_
-x-ms-office365-filtering-correlation-id: 7c3c8bff-0897-4eb3-d7c6-08dab82165df
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gOHLH/CtQzLuejL8h9KZ4/DwHuMkxwDH+1ac0MxC3PUqcMMQeHbCqGt40A8TsnIwAqO2aLBZ0W/hZ3dg6W1CBCS6o4lox8bg/JkwB7RosgsSiGsFm5OmMXr4v4Le1r5h1z6j0F7uERSvHAQdlNYdPh4GkO6tJiXP0N7GSEp6ESgUz/CnGqZywhOevj1Zo70g3TJ71+6zT4dpNc8wBkS9gAtXg8vaFOVwt32JZvcHH38P1kfBmhwezefSb0I3vTPFbrGf3FMD1Va6zVnR/BvjOspt2Ue8tO425aqW184VmbsZoZEf7E1rZyJWFzuiVEDyb9PDbUg936tT0vkrnS3yPZ7lVWRuNHHRbtnmKk8RMe2TM7rs1KGP8tmhM8HMuR4jR3OXEY2Ojmg8WRFM8M1wg/3M/4ek0CLTjGiB6PG3keVwhylUSh9zrjNOc9Oe21CByHTMhAC0i8qp4n/Rw0M7hxlmt8Q5Vtv+uJ77+vQ8lvBWtgUl0yFu9PRoX4XHJdeAdQgI11AdCpM7QxGeHSSIHFgSiiVyDhIdVE0EsuaDqDZMe0bzhZXr/7Gsx+eAnsVLpyOsrHxI2mAy4zhfIqIQrJy/4cb4K3ukVlnLleI/fpJLNu7e4HFIypeZJykJiVdqko+XyZ/u8apu+rdAsfaSDhJJ13CLP9ag5kaJGS1KZ4riw0gMYx2ci1x55IRonpgPtDBeoJ1xG4kt47x0jl0wbctKDFjC91ekMuFWHJNAlwSNoQzEiz67PAcP1y5PzuNd0xXuMKhPE/QEKA0nFyvW6atoNKoSK4TG8KKU4mTozK1T1FbXgFPxwsoo3zbTEdEp6Z91GwXP2MdsXAhS/HR6sQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(136003)(376002)(346002)(396003)(451199015)(33656002)(2906002)(8990500004)(64756008)(66446008)(66476007)(66556008)(38070700005)(921005)(38100700002)(122000001)(7416002)(5660300002)(110136005)(52536014)(41300700001)(54906003)(8936002)(316002)(71200400001)(66946007)(55016003)(10290500003)(4326008)(8676002)(76116006)(83380400001)(9686003)(26005)(478600001)(6506007)(82950400001)(82960400001)(7696005)(186003)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9sHptFkmZEoMSNEIsxCJ0M2Vt3k8cLVmBC8YGg6aXbTipE1JrBK5ygjAqIUO?=
- =?us-ascii?Q?Hv5d0WuWJHbfEBldLsmLnLw2xCDf3X9GqEltpu7CHagsO6ap5Vc1hgihIFfk?=
- =?us-ascii?Q?RwYw7hdCDNmtwVrbMbyD8NjHCOWlOp45MUjwpJU6RVLt0QbZQVFC1EHj7P7n?=
- =?us-ascii?Q?z/UAjvjX/CG0s770ITU5zNASEvGnztDAvX2cgcu70woNLCkWRn0bgNacsjN/?=
- =?us-ascii?Q?+tcjajUIzhUhLiIoG9z219lgI6EWl5pkRvPiuUbcjQ9F75ih8x3uAVSsaaAQ?=
- =?us-ascii?Q?Rsm0pWWRJ4TRw6wXrrMLkiZBP286spvj6x0PyR3E9MszZqMd0kOozsvanM9U?=
- =?us-ascii?Q?JjORKkPLTP87Ljy1sO0XoHi6OtgHk+9c1NDBVl3ZCTrGVgcz0foga4MeDZhe?=
- =?us-ascii?Q?w5Y0iIZm9rs0ctv5WTxZCDIot6SHLx7ILDHIJV+ofsbuSI2DsinMi8ek5fyr?=
- =?us-ascii?Q?ZPRGOxwaSycpbzPDWHqlYnHqvVCF+eUafbIOKrWWEAD/pLGjYoKJsXMrE0qB?=
- =?us-ascii?Q?1UjQU3EOMEMoCcgyzi7ztbI4fLBZ3VCeL3f3nhH98xzIntvlFfV9rNcmiyRl?=
- =?us-ascii?Q?BrEFpkJg8pApcBGTI7P1g+uGhpzwyDBaJTrj9+Ukx07VZOJdvcfsQecld+11?=
- =?us-ascii?Q?BhdEaAvup/yGII2bQRAUaQ2M31wLCl1qrZMAus3NQZSkRiIqDvZwM1yw6doQ?=
- =?us-ascii?Q?NAgylu9u4gh9P5v01HSS0uecqIMr5mXGweFpbnOhMGgP1Ne7bjHqGgJqmfRA?=
- =?us-ascii?Q?7MZI7P5QZsV8+DBL3dcvOpIr83RQrDsUUC4fQ0N/7KXec40d3HHlGImBmEMZ?=
- =?us-ascii?Q?IqieX+3NuOdCRuu8RgKoM8+oLBvVmAmUkDBsG/uNjE0lmhWYmbi5JqenG0rk?=
- =?us-ascii?Q?HW56SmeEFB60AlR0doY3S+jPTPDgh3scg9rlPQfgNhHg22ZBI3HR3B3YsTK5?=
- =?us-ascii?Q?lmZwSQmJuz6fhQ68wz8Q3JBZ0Za86DlHOmFVcTLjlItsclqo/K+ziL2Y/Ocp?=
- =?us-ascii?Q?3aw8LCY76DLTV8edZ6tP7lqk39p1fmjSlTp3emZy9NkauUja5S3TJEEGhyzB?=
- =?us-ascii?Q?sMAIlZ21HL4k7n8MoLFtTWKYSF1ux8BxclGL5YgMZ+xjmmiwH/pWHoRFyyCq?=
- =?us-ascii?Q?udLymTHxRgGwMvve3XZuFgzSsxYGz5U60N3hfyQ1OvkqDKAvl32kLRFIwvyo?=
- =?us-ascii?Q?GVSRsUZ5rxzNo2B0dZSMjB6oImBiG4OIDNH8Zaq3iUvMHS7pGst6/aFFIhiV?=
- =?us-ascii?Q?9CLR6OqsR+HaepwHZg4X9yaxGB9tWUPWxqXxO53WQSxtKJYDVcd9Isui9AUz?=
- =?us-ascii?Q?zfskIQrIvVSEXTa01nSR2sXGa0qP3+98Ltc34itWGQYboSEjqBWr52vBj40H?=
- =?us-ascii?Q?Finye4od51PZzpJmcr/oUFMtKDPB2iP+A4q5JsQzFbBChJtIHC1a+YQgMbBW?=
- =?us-ascii?Q?PsT2AhECnLPRqaI0Nrg051+oQ6twqlpMUo/KmJpumXdSo4rDeAZXATgSPvFY?=
- =?us-ascii?Q?UBzmnm0qNCo/U0bIY4VNJ0tTW41zbW7Cp+twALSgSzkZORE1EWKNIBfjSgVu?=
- =?us-ascii?Q?5DblBg3mayR0NNmyD2v2H4T0O36qkeri/CN5bJ7JFCDH1EqyZryPPddjMsgT?=
- =?us-ascii?Q?2A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S233598AbiJ0Pfm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 11:35:42 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7656E2E1;
+        Thu, 27 Oct 2022 08:35:41 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 64EB35C01E4;
+        Thu, 27 Oct 2022 11:35:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 27 Oct 2022 11:35:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666884939; x=
+        1666971339; bh=dRLTpNEzJ/9mC9yd5buzdWEinbRx6mGEu2drnGQzQZk=; b=a
+        koTNboqVrga1QpOEfjJJq4x77jtON5kwaOeHAUiJ/SdiHugV3R+yArzONiBKQTxC
+        cdRQJHUMZFi25qnWiRwv27AuZqRlyUFzhWBqN5OXPlqvLhZlAsx1KAVqFoNC6pUU
+        Hhy0strCFmBzuMXm+5ptjIwfHCd9seYxULxeo7f15zed6ZhPnd98QSr5NWdciUT/
+        Ef9Nu9fCTAt4z5WK4XebLUOqGBH6sba4UtDZOFM8ODkP9x57OgNFaTJ8k1hBS7wa
+        YctL5P+IdVuFN7ks879hsQo4/hjZcjAr3QcEaQu6IlA+owHtTBy1FuOJEZqwvLC1
+        FnNVYHCSdqpEBSObI8/jA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666884939; x=1666971339; bh=dRLTpNEzJ/9mC9yd5buzdWEinbRx
+        6mGEu2drnGQzQZk=; b=feXVXU+IhVmbOWpTfmWIfgAydP4D5uoTkcDDuYl1MRK3
+        K3Lyc9q9z/eV1tiPi9oZyPbO2f6eU6EZMjL368QIqfW8RU3+DbP2nxjKVTL4QqPg
+        O3lpL/UVAFZ78vF1C2wsHa+Wy6ZjkYJzgeRJ+iZQCOslAbfjPBapZbYoQyi543R9
+        6svOA5uMxJ9ugxVqukMWSJu4CF0G1smW5qoKaAkBNReK/V/fccHR6eP1uUHbu/GH
+        DHt5I43fPXIrIgYGFJnfpNXzmZX/5HR0vXjyYOriQuW9gPTRTJkmGd+u3wM+Y8Bt
+        rVwymf/P7E6W9TwTB7t+DqrLac1yx3B82sJ2mmmDlg==
+X-ME-Sender: <xms:SqVaY9GFRul5if9IB4ujb2XDH1nVLL00Knhp17-5eEVcqx001Aoe9g>
+    <xme:SqVaYyXc4pFaPt1_td30D-AKLaQiDLC2jV84J_8sipoBagq80IoqnoP1Y8WhVeet3
+    prqs2Fmaiom3qI>
+X-ME-Received: <xmr:SqVaY_JR3e661_XWRxt4HXIgYB-2YJoYIzWlCl7RBT5h0w41xEIO1HLMSWIsHpPWxBZOAXpOmIpC4jHaNM42Iwnhy0x-VKII1P820LT0qg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdeggdeklecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeghohhjthgv
+    khcurfhorhgtiiihkhcuoeifohhjuhesihhnvhhishhisghlvghthhhinhhgshhlrggsrd
+    gtohhmqeenucggtffrrghtthgvrhhnpeelgeeifefgheeffeegfefhuedtgefgtdekkeei
+    ffdvtedtudejvdekfeffhedtheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpeifohhjuhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgt
+    ohhm
+X-ME-Proxy: <xmx:SqVaYzG81jee9twupnr_iuZD-FHVs0_E1sZc6vwSrMa9Gwg5hC4BNA>
+    <xmx:SqVaYzXr8eq7pHMCZgaIR-UMdnrRyybNTczg23-6U5O0sKVtrG0JQQ>
+    <xmx:SqVaY-NfFa7ONQOcr6yhB81RbERSD0MI0Zsx5ois6nx17WTxC1Lh2Q>
+    <xmx:S6VaY6G5f2Om4lHhP_ZAn2qF1JHo4bJPTLvPZugWu76lnA02OWNNHg>
+Feedback-ID: i71cc40f3:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Oct 2022 11:35:38 -0400 (EDT)
+Received: by mail-itl.localdomain (Postfix, from userid 1000)
+        id BD8E895E70; Thu, 27 Oct 2022 17:35:34 +0200 (CEST)
+Date:   Thu, 27 Oct 2022 17:35:34 +0200
+From:   Wojtek Porczyk <woju@invisiblethingslab.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH V2] uapi: Fixup strace compile error
+Message-ID: <Y1qlRlncUqTtwzE2@invisiblethingslab.com>
+Mail-Followup-To: guoren@kernel.org, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>, Heiko Stuebner <heiko@sntech.de>
+References: <20220804025448.1240780-1-guoren@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c3c8bff-0897-4eb3-d7c6-08dab82165df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Oct 2022 13:44:40.8321
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nPvPg7HZK3Xpl7akj4VnzfrV7gFA0+lUrTP0sOfA0YeMJywGvzKo/tjpiP3XHzoLgJ8Ymk+8mQhmOTOxhzQRRe74UljarsGioUO7QtDY7t4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB3809
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qsbsHDHXj9B+EzsL"
+Content-Disposition: inline
+In-Reply-To: <20220804025448.1240780-1-guoren@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday, Oct=
-ober 27, 2022 2:57 AM
->=20
-> hv_cleanup resets the hypercall page by setting the MSR to 0. However,
 
-The function name is hyperv_cleanup(), not hv_cleanup().
+--qsbsHDHXj9B+EzsL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> the root partition is not allowed to write to the GPA bits of the MSR.
-> Instead, it uses the hypercall page provided by the MSR. Similar is the
-> case with the reference TSC MSR.
+On Wed, Aug 03, 2022 at 10:54:48PM -0400, guoren@kernel.org wrote:
+> Export F_*64 definitions to userspace permanently. "ifndef" usage made it
+> vailable at all times to the userspace, and this change has actually brok=
+en
+> building strace with the latest kernel headers. There could be some debate
+> whether having these F_*64 definitions exposed to the user space 64-bit
+> applications, but it seems that were no harm (as they were exposed already
+> for quite some time), and they are useful at least for strace for compat
+> application tracing purposes.
 >=20
-> Clear only the enable bit instead of zeroing the entire MSR to make
-> the code valid for root partition too.
->=20
-> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+> Fixes: 306f7cc1e9061 "uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 =
+in fcntl.h"
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reported-by: Eugene Syromiatnikov <esyr@redhat.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Heiko Stuebner <heiko@sntech.de>
 > ---
->  arch/x86/hyperv/hv_init.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->=20
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 29774126e931..80fdfff9266c 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -537,6 +537,7 @@ void __init hyperv_init(void)
->  void hyperv_cleanup(void)
->  {
->  	union hv_x64_msr_hypercall_contents hypercall_msr;
-> +	union hv_reference_tsc_msr tsc_msr;
->=20
->  	unregister_syscore_ops(&hv_syscore_ops);
->=20
-> @@ -552,12 +553,14 @@ void hyperv_cleanup(void)
->  	hv_hypercall_pg =3D NULL;
->=20
->  	/* Reset the hypercall page */
-> -	hypercall_msr.as_uint64 =3D 0;
-> -	wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> +	hypercall_msr.as_uint64 =3D hv_get_register(HV_X64_MSR_HYPERCALL);
-> +	hypercall_msr.enable =3D 0;
-> +	hv_set_register(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
->=20
->  	/* Reset the TSC page */
-> -	hypercall_msr.as_uint64 =3D 0;
-> -	wrmsrl(HV_X64_MSR_REFERENCE_TSC, hypercall_msr.as_uint64);
-> +	tsc_msr.as_uint64 =3D hv_get_register(HV_X64_MSR_REFERENCE_TSC);
-> +	tsc_msr.enable =3D 0;
-> +	hv_set_register(HV_X64_MSR_REFERENCE_TSC, tsc_msr.as_uint64);
->  }
->=20
->  void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die)
-> --
-> 2.34.1
+>  include/uapi/asm-generic/fcntl.h | 2 --
+>  1 file changed, 2 deletions(-)
 
-Modulo the nit in the commit message,
+Hello,
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Is this patch getting merged for 6.1? Will it be included in stable 6.0?
 
+
+--=20
+pozdrawiam / best regards
+Wojtek Porczyk
+Gramine / Invisible Things Lab
+=20
+ I do not fear computers,
+ I fear lack of them.
+    -- Isaac Asimov
+
+--qsbsHDHXj9B+EzsL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEaO0VFfpr0tEF6hYkv2vZMhA6I1EFAmNapUYACgkQv2vZMhA6
+I1H3Tw//YUasUYN+M0z/OYxIB5ix7tTHJDCeafXY4QknOH+wIr7gPxlYU8Kj5+wH
+aFBUAuJsGl3cR19rGVGMIV6w+kYfHB6D7skaCa7E4TX+PEQqRRCwtsePRE65JDR0
+aE9qYNpEZNwdT9lgV5z6W91r99vt4H3E0Kz4VZeseFIzD/d8+JJe6oqp8q9Z9Q1N
+FDJ7sqPWK34XRzGR48rmajRkOxSxHnqwPwDjD/Gd0dG99+lj6d4mL5QYKOI1tPqH
+zvnvLpZi0c6oFTtOQZR7zrgZ3c2P2AKbdEIzWmxH3gZtK/pqHFFZkDzHz0IBbe1x
+OwElFL1N6EGuzH9WflX7Z3lpYiDy1XDRhAmsvOx+a9RYvHWyGtipaYbCDR5FBhnh
+dnrm6Bh6QbVaS9hBQ0RihlL+bch3azAjiagljVy+XoVgBhYelMRkTreYh1BVz24J
+MUeS7MET3NuTdq8yYKrSD7YdF56k87BhlVKRd90m6Pp/lQhOFgcUuMHF6Nm5lJMp
+PvBVuNR0bvd9uehz0pD3DJ8ENMecOC+sQNSRccSk8GyA7B3sB4Vv2tUBq3JibqqY
+BJRxuGz47NEWJV8iNs9d0jcCIy/l8XZndQQNYxzbFC3wVHfWZeuq45WjJduooyPm
+8XtOzfByM3+ggDdbTCDyBh/bYLFdkoPW0PQBBu6ljT2t03Z+M7w=
+=VQwt
+-----END PGP SIGNATURE-----
+
+--qsbsHDHXj9B+EzsL--
