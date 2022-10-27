@@ -2,62 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC4060EF18
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 06:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8CA60EF19
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 06:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbiJ0EiX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Oct 2022 00:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S233707AbiJ0EiY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Oct 2022 00:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233699AbiJ0EiR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 00:38:17 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A7314C526;
-        Wed, 26 Oct 2022 21:38:16 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id l9so88973qkk.11;
-        Wed, 26 Oct 2022 21:38:16 -0700 (PDT)
+        with ESMTP id S229842AbiJ0EiS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 00:38:18 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFE714D1CE;
+        Wed, 26 Oct 2022 21:38:18 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id i12so315710qvs.2;
+        Wed, 26 Oct 2022 21:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BjKP27biUqpnASva4/HbDerbIo+s90SIvtbYwBYn4Ec=;
-        b=V64zp136AR+C+6AuSHFdXTgRD3nrSrJqfP0fnnxtMQ79w5MkfdPVs24tQJQ59bv3Bf
-         qLxVvbHqcpKGqFURxiYyChFTvug7KGhBrSRMTSJeW4eW2K+qg/vzk3Kovv/scdmXygPb
-         0Pz3bm/T06kd5E8DH1mZ/OMP/V029pAp7RC9Rs6KlY4y1dJU4hX43r6Gpcjp2nDsM0OV
-         TlVUAtW6/gPVSJPou7/WCUK57e9CwlxnPfjLQiOv610kut0ljLKfBPkMp0Jth2guFhsM
-         +ih5ammstBTlFtaFNnc2VLjoJaAm/ceS0QOAYBWdVdjc/ojSI3Knm9MgB4/SVCKPhHRb
-         HczQ==
+        bh=oAVctpr4Foqzwmq/8lLQnNPWsibHQgV5zVJ+LmSnobA=;
+        b=UuKCjQP8ZW2SctP3nvJFTdHPIXTKXnnE2JToPG+a2xe0a4lwOJgzOjMtrgtjey9okJ
+         o6s21sWcrOnFCLGGiYX1Ud+t8lXJkemF9z2Mj1oAIppGpLhPBdENsIn/7wmu9Ik4Tdpj
+         ZaGFg8S465UtnH7PQWbUfW4AkkSzBa2eWbSAjIzglg6a03Q6TaRv5aSPXX5fE0WHh2A/
+         +Uou7NuqMw4b2f9WcloBTWC+cyo8ELT2mXUl/YYDO04ihDGDsUHxJyZFLpwi8tvd3uI6
+         Ho1ui6UrnwdwKC4bV/ungur9LNFFvnLpphxhLxf5R1lQFfREE+i1LS7Y4QLk5oSWKxMz
+         2CvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BjKP27biUqpnASva4/HbDerbIo+s90SIvtbYwBYn4Ec=;
-        b=IPWGNISNGYRbO3VZcPMh5nlGOypP6jJzxFmNPoso5ZXjLjKcH+AHsgnNdlVCROtMmR
-         nnYe9VJFLesf2ImD3mC1svmqmaFxAzYNrHY6V/tN51YvSqAsz8ZdgV6qwkBcw4OVM78P
-         0hkdsNDFtBda/gOYugu6GnizrK3uh3I/0ZaHTUouS+cVDmOjXLkuNlfNy3Jc5nmZtmuo
-         ULT1IZoqCshy5A5NmD/gR+b2nvz5Kto6NdyNhOQVwKSAYst9eq4nqTv6sFH0C8WMYlTh
-         ckt86WZI5SsC3WpDH1K/Gpw2aqVc3mvXFlo3tdQwOw/s4RkxVRZQi7R6NduGCo0oDjP5
-         5Agw==
-X-Gm-Message-State: ACrzQf2dlo28gB2+OyZ+tYBu3VkkYxCU/S9dwUQQ6A4s6EydnCXUkW48
-        YbH356t+FnK0QG2gALtLpvIKFqXUpOc=
-X-Google-Smtp-Source: AMsMyM4FSm6Y5OgB3shikwKk/UQiaBgf5vmw9hV4ppqu4h0N4YSjPx0uG/RtaTagJQg2sahRIo2bxA==
-X-Received: by 2002:a05:620a:8016:b0:6ee:9481:9298 with SMTP id ee22-20020a05620a801600b006ee94819298mr33101206qkb.251.1666845495725;
-        Wed, 26 Oct 2022 21:38:15 -0700 (PDT)
+        bh=oAVctpr4Foqzwmq/8lLQnNPWsibHQgV5zVJ+LmSnobA=;
+        b=6JV8GOqxOHdUJzWh7v7FxoqVPFJpq+Ca6IZlgSz/SkXQ2BlmR23uB6a/E+3ckqEfnC
+         4D+7Bn5g2kUGiAayeApWOzIA4Tahj7WkKrUYQPrtAMYpVeNt0rySelb6nDiGdbMktRaH
+         pqNdGbnkZQAiw9DbBDRYZ4/l8OlfKiDWr6l/eSlCOUWMeouZb170piibXdNq/fM33wEE
+         JpYnRN6T5ug8zEFUNNQa77xBOnKnglLpPMwV3tS97LhashG9D9lkPr6VMZkSJMuCk92G
+         z5UYzVSMiOW6cHy3g/7ukmcXhYzlEhn3MVk9mwh/1oiNMti1rF11sU5DcCxeYUDbOa84
+         q5YQ==
+X-Gm-Message-State: ACrzQf0lF+nMaOxLyQlQ7ieffIFItq59kMffObwiZzw8XhwaAIXm1euG
+        D7H51EpBYBJnNgjl+IWTkH5Y11duJ7U=
+X-Google-Smtp-Source: AMsMyM4YBwpuDAiofyXBx6bu71A8JyAwOkUf9hqrUE204qUMiDenNd3IFrAbX4IZ8HBBnPBn6BXkGA==
+X-Received: by 2002:a05:6214:21ae:b0:4b4:3c9:71f6 with SMTP id t14-20020a05621421ae00b004b403c971f6mr39868870qvc.17.1666845496972;
+        Wed, 26 Oct 2022 21:38:16 -0700 (PDT)
 Received: from localhost ([2601:589:4102:7400:ade5:9c32:44f6:bc7d])
-        by smtp.gmail.com with ESMTPSA id dm45-20020a05620a1d6d00b006e8f8ca8287sm308781qkb.120.2022.10.26.21.38.15
+        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b006b929a56a2bsm358504qkd.3.2022.10.26.21.38.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 21:38:15 -0700 (PDT)
+        Wed, 26 Oct 2022 21:38:16 -0700 (PDT)
 From:   Yury Norov <yury.norov@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 2/3] bitmap: improve small_const case for find_next() functions
-Date:   Wed, 26 Oct 2022 21:38:09 -0700
-Message-Id: <20221027043810.350460-3-yury.norov@gmail.com>
+Subject: [PATCH 3/3] bitmap: add tests for find_next_bit()
+Date:   Wed, 26 Oct 2022 21:38:10 -0700
+Message-Id: <20221027043810.350460-4-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221027043810.350460-1-yury.norov@gmail.com>
 References: <20221027043810.350460-1-yury.norov@gmail.com>
@@ -73,133 +73,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-find_next_bit() and friends use small_const_nbits() to detect possibility
-of compile-time optimization. It works well for nbits up to BITS_PER_LONG,
-i.e. for 1-word bitmaps. When nbits belongs to 2nd, 3rd or any other word,
-small_const_nbits() returns false.
-
-But when both offset and size are within the same word boundary, we still
-can make a small_const optimization because the whole business is just
-fetching a single word, and masking head and tail bits if needed.
-
-This patch adds a new small_const_nbits_off() macro doing that. It replaces
-small_const_nbits() in find_next_bit() functions.
+Test out-of-line and inline paths of find_next_bit().
 
 Signed-off-by: Yury Norov <yury.norov@gmail.com>
 ---
- include/asm-generic/bitsperlong.h | 12 +++++++++
- include/linux/find.h              | 45 ++++++++++++-------------------
- 2 files changed, 29 insertions(+), 28 deletions(-)
+ lib/test_bitmap.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-diff --git a/include/asm-generic/bitsperlong.h b/include/asm-generic/bitsperlong.h
-index 1023e2a4bd37..c294ff798154 100644
---- a/include/asm-generic/bitsperlong.h
-+++ b/include/asm-generic/bitsperlong.h
-@@ -35,4 +35,16 @@
- #define small_const_nbits(nbits) \
- 	(__builtin_constant_p(nbits) && (nbits) <= BITS_PER_LONG && (nbits) > 0)
+diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+index a8005ad3bd58..becf9c7a95a1 100644
+--- a/lib/test_bitmap.c
++++ b/lib/test_bitmap.c
+@@ -221,7 +221,7 @@ static void __init test_zero_clear(void)
+ 	expect_eq_pbl("", bmap, 1024);
+ }
  
-+/*
-+ * small_const_nbits_off(nbits, off) is true precisely when it is known at
-+ * compile-time that all bits in range [off, nbits) belong to the same word.
-+ * Bitmaps of size 0 are very rare, and a compile-time-known-size 0 is most
-+ * likely a sign of error. They will be handled correctly by the bit/bitmap
-+ * APIs using the out-of-line functions, so that the inline implementations
-+ * can unconditionally dereference the pointer(s).
-+ */
-+#define small_const_nbits_off(nbits, off) \
-+	(__builtin_constant_p(nbits) && __builtin_constant_p(off) && (nbits) > 0 && \
-+	 (nbits) > (off) && (off) / BITS_PER_LONG == ((nbits) - 1) / BITS_PER_LONG)
+-static void __init test_find_nth_bit(void)
++static void __init test_find_bit(void)
+ {
+ 	unsigned long b, bit, cnt = 0;
+ 	DECLARE_BITMAP(bmap, 64 * 3);
+@@ -236,6 +236,25 @@ static void __init test_find_nth_bit(void)
+ 	__set_bit(80, bmap);
+ 	__set_bit(123, bmap);
+ 
++	expect_eq_uint(10,  find_next_bit(bmap, 64 * 3, 0));
++	expect_eq_uint(20,  find_next_bit(bmap, 64 * 3, 11));
++	expect_eq_uint(30,  find_next_bit(bmap, 64 * 3, 21));
++	expect_eq_uint(40,  find_next_bit(bmap, 64 * 3, 31));
++	expect_eq_uint(50,  find_next_bit(bmap, 64 * 3, 41));
++	expect_eq_uint(60,  find_next_bit(bmap, 64 * 3, 51));
++	expect_eq_uint(80,  find_next_bit(bmap, 64 * 3, 61));
++	expect_eq_uint(123, find_next_bit(bmap, 64 * 3, 81));
 +
- #endif /* __ASM_GENERIC_BITS_PER_LONG */
-diff --git a/include/linux/find.h b/include/linux/find.h
-index db2f2851601d..df5c4d1adf4c 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -7,6 +7,7 @@
- #endif
++	/* Test small_const_nbits_off() optimization path */
++	expect_eq_uint(10,  find_next_bit(bmap, 20 + 0,  0));
++	expect_eq_uint(20,  find_next_bit(bmap, 20 + 11, 11));
++	expect_eq_uint(30,  find_next_bit(bmap, 20 + 21, 21));
++	expect_eq_uint(40,  find_next_bit(bmap, 20 + 31, 31));
++	expect_eq_uint(50,  find_next_bit(bmap, 20 + 41, 41));
++	expect_eq_uint(60,  find_next_bit(bmap, 20 + 51, 51));
++	expect_eq_uint(80,  find_next_bit(bmap, 20 + 61, 61));
++	expect_eq_uint(90,  find_next_bit(bmap, 20 + 70, 81));
++
+ 	expect_eq_uint(10,  find_nth_bit(bmap, 64 * 3, 0));
+ 	expect_eq_uint(20,  find_nth_bit(bmap, 64 * 3, 1));
+ 	expect_eq_uint(30,  find_nth_bit(bmap, 64 * 3, 2));
+@@ -1226,7 +1245,7 @@ static void __init selftest(void)
+ 	test_bitmap_print_buf();
+ 	test_bitmap_const_eval();
  
- #include <linux/bitops.h>
-+#include <linux/math.h>
- 
- unsigned long _find_next_bit(const unsigned long *addr1, unsigned long nbits,
- 				unsigned long start);
-@@ -49,14 +50,11 @@ static __always_inline
- unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
- 			    unsigned long offset)
- {
--	if (small_const_nbits(size)) {
--		unsigned long val;
-+	if (small_const_nbits_off(size, offset)) {
-+		unsigned long val = addr[offset/BITS_PER_LONG] &
-+				    GENMASK((size - 1) % BITS_PER_LONG, offset % BITS_PER_LONG);
- 
--		if (unlikely(offset >= size))
--			return size;
--
--		val = *addr & GENMASK(size - 1, offset);
--		return val ? __ffs(val) : size;
-+		return val ? round_down(offset, BITS_PER_LONG) + __ffs(val) : size;
- 	}
- 
- 	return _find_next_bit(addr, size, offset);
-@@ -79,14 +77,11 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
- 		const unsigned long *addr2, unsigned long size,
- 		unsigned long offset)
- {
--	if (small_const_nbits(size)) {
--		unsigned long val;
-+	if (small_const_nbits_off(size, offset)) {
-+		unsigned long val = addr1[offset/BITS_PER_LONG] & addr2[offset/BITS_PER_LONG] &
-+				    GENMASK((size - 1) % BITS_PER_LONG, offset % BITS_PER_LONG);
- 
--		if (unlikely(offset >= size))
--			return size;
--
--		val = *addr1 & *addr2 & GENMASK(size - 1, offset);
--		return val ? __ffs(val) : size;
-+		return val ? round_down(offset, BITS_PER_LONG) + __ffs(val) : size;
- 	}
- 
- 	return _find_next_and_bit(addr1, addr2, size, offset);
-@@ -110,14 +105,11 @@ unsigned long find_next_andnot_bit(const unsigned long *addr1,
- 		const unsigned long *addr2, unsigned long size,
- 		unsigned long offset)
- {
--	if (small_const_nbits(size)) {
--		unsigned long val;
-+	if (small_const_nbits_off(size, offset)) {
-+		unsigned long val = addr1[offset/BITS_PER_LONG] & ~addr2[offset/BITS_PER_LONG] &
-+				    GENMASK((size - 1) % BITS_PER_LONG, offset % BITS_PER_LONG);
- 
--		if (unlikely(offset >= size))
--			return size;
--
--		val = *addr1 & ~*addr2 & GENMASK(size - 1, offset);
--		return val ? __ffs(val) : size;
-+		return val ? round_down(offset, BITS_PER_LONG) + __ffs(val) : size;
- 	}
- 
- 	return _find_next_andnot_bit(addr1, addr2, size, offset);
-@@ -138,14 +130,11 @@ static __always_inline
- unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
- 				 unsigned long offset)
- {
--	if (small_const_nbits(size)) {
--		unsigned long val;
-+	if (small_const_nbits_off(size, offset)) {
-+		unsigned long val = addr[offset/BITS_PER_LONG] |
-+				    ~GENMASK((size - 1) % BITS_PER_LONG, offset % BITS_PER_LONG);
- 
--		if (unlikely(offset >= size))
--			return size;
--
--		val = *addr | ~GENMASK(size - 1, offset);
--		return val == ~0UL ? size : ffz(val);
-+		return val == ~0UL ? size : round_down(offset, BITS_PER_LONG) + ffz(val);
- 	}
- 
- 	return _find_next_zero_bit(addr, size, offset);
+-	test_find_nth_bit();
++	test_find_bit();
+ 	test_for_each_set_bit();
+ 	test_for_each_set_bit_from();
+ 	test_for_each_clear_bit();
 -- 
 2.34.1
 
