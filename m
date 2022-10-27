@@ -2,131 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D26610031
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 20:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42380610166
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 21:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiJ0S2h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Oct 2022 14:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S236451AbiJ0TRF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Oct 2022 15:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbiJ0S2W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 14:28:22 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10E779638
-        for <linux-arch@vger.kernel.org>; Thu, 27 Oct 2022 11:28:21 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id a24so1822813qto.10
-        for <linux-arch@vger.kernel.org>; Thu, 27 Oct 2022 11:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEdZOEYjrllCAot2dTAA4KX0CdNoEXMJ9BmzaOuDVdI=;
-        b=T/yx4PJ4RHQPFV86A2BeP473agGj/WJk6zWc5l56IseidOqLDSaXwuFZkIocHU533Q
-         Yqz3muzZsTyk8+MlpD0cvUoOsFqBfxZMuROtUtg57iTtb/5PSYiTdWosU7yAfnitmzIM
-         28RHz7CU3/A6B1cqE3d5MA8RJ7WNWOjaLOxLI=
+        with ESMTP id S236462AbiJ0TRC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 15:17:02 -0400
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA58748D9;
+        Thu, 27 Oct 2022 12:17:01 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so1946913wmb.2;
+        Thu, 27 Oct 2022 12:17:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wEdZOEYjrllCAot2dTAA4KX0CdNoEXMJ9BmzaOuDVdI=;
-        b=UVOKI7HnpCHub0rfOy3prtFIFW8Z6wQlIMwj3pCQLu4YokmOUVJAocEYpSsr6E/DKZ
-         42IA2UMNb5YmG+WnUPuR+wweheUUdY+gdTFbZZmcBwA6WugZzGP7tXggbGBteK5UpKEx
-         YdXN38z0XdQUY0MpOKjeGZgymKiWmirUsdJrADsNCyFwuo6gIUXYZlyl1IyJsKE3HdHP
-         OL99OrF0m8LXudqWBgaSwIvfh3tX5fM4ZjB5nCYsJG8GZ4hacmb6ckqjVYxaMPI/D7dH
-         TgZGctVtViGqVaLMGHfTLE15tQOCQGM7CI7NVrD/J8L/QcJd6yKY0OfW19/hXjTlHpxG
-         2i4w==
-X-Gm-Message-State: ACrzQf2WyTJZ9GRDDbDF4Ru1wvs9q8vJvQR6xVW+JPrpiyrlW+kwvde9
-        MgzhlO+IlYegdOwux4G6mnToyuPQ6NiJyw==
-X-Google-Smtp-Source: AMsMyM6wFHG07wynTg6DCPY7/W5DPKEvimvoeDwlFBII4Z9xmVNGleW23hZXaHM02fyZWZ0Il1beLg==
-X-Received: by 2002:ac8:5cc6:0:b0:3a4:e3a6:5dd5 with SMTP id s6-20020ac85cc6000000b003a4e3a65dd5mr11462261qta.468.1666895300626;
-        Thu, 27 Oct 2022 11:28:20 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id bi32-20020a05620a31a000b006ef1a8f1b81sm1451636qkb.5.2022.10.27.11.28.18
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 11:28:18 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 185so3267969ybc.3
-        for <linux-arch@vger.kernel.org>; Thu, 27 Oct 2022 11:28:18 -0700 (PDT)
-X-Received: by 2002:a5b:984:0:b0:6ca:9345:b2ee with SMTP id
- c4-20020a5b0984000000b006ca9345b2eemr8266384ybq.362.1666895298062; Thu, 27
- Oct 2022 11:28:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zJcckZeOTdB25gr4pjliB22U8P9HPBiHkU/B4Huj7SY=;
+        b=slvFftCHAMsncxJNYUOYijBJVZDDlekHMbk+pIOltOXQHLAzHWqI+3e3Y2rNkagiqG
+         1gwC6RiKzyIQrK32+f95WlxNzF34duTJNCVODDlU7I3r41tXsugFm2ozTe7B15W2D+Pk
+         wBBUueQidmKlwRqHe5O8kVRi1N6J8h7B2uIIJfZW9b2vKeAksSvpHGq+ybNf16C6C0tb
+         U2IYEt0d8zKv+ye3oBP2xxqm5M9ifp25fPJjVMHI5xDnb9bNnAn+EnLJ0ZhSzTtk/B0z
+         teqNWXbe0jP79TK+hRn9Hbws4EAsvnx20E9sDFomCk3mgQIFLDUvau0grB2hxoPlsw3C
+         ns3g==
+X-Gm-Message-State: ACrzQf2rE7ItOs5A6xa67/GsbjdyM1tK03KUZITsr1jKEXs2XViwJGTP
+        V/TAknl5y4pn8qBkiqU/xQE=
+X-Google-Smtp-Source: AMsMyM6S7ga9qJvgAIXjFx3qSmDbTrpoJHriyV5xM3ygzlctpeiRve8/yZfzVOrDxAjqLsKhGg8pZQ==
+X-Received: by 2002:a05:600c:4f10:b0:3c6:dcc6:51d7 with SMTP id l16-20020a05600c4f1000b003c6dcc651d7mr7055867wmq.91.1666898219923;
+        Thu, 27 Oct 2022 12:16:59 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05600c2ca500b003b435c41103sm7416395wmc.0.2022.10.27.12.16.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Oct 2022 12:16:52 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 19:16:49 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "mail@anirudhrb.com" <mail@anirudhrb.com>
+Subject: Re: [PATCH v2 2/2] x86/hyperv: fix invalid writes to MSRs during
+ root partition kexec
+Message-ID: <Y1rZIQnLATztxw2G@liuwe-devbox-debian-v2>
+References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
+ <20221027095729.1676394-3-anrayabh@linux.microsoft.com>
+ <BYAPR21MB168872A298C1CDC140FBF454D7339@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221019162648.3557490-1-Jason@zx2c4.com> <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
- <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk> <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
- <915a104b-0e70-dfb8-3c85-54fd1e5e63e5@rasmusvillemoes.dk>
-In-Reply-To: <915a104b-0e70-dfb8-3c85-54fd1e5e63e5@rasmusvillemoes.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 27 Oct 2022 11:28:02 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgadqCK7xAOzCdDHa7CQWC1z3df6a-pHQaF73ZjSZ58wg@mail.gmail.com>
-Message-ID: <CAHk-=wgadqCK7xAOzCdDHa7CQWC1z3df6a-pHQaF73ZjSZ58wg@mail.gmail.com>
-Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always signed)
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB168872A298C1CDC140FBF454D7339@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 12:59 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
->
-> AFAICT, the differences are:
->
-> - 0xaa (FEMININE ORDINAL INDICATOR), 0xb5 (MICRO SIGN), 0xba (FEMININE
-> ORDINAL INDICATOR) should be lower (hence alpha and alnum), not punct.
->
-> - depending a little on just exactly what one wants latin1 to mean, but
-> if it does mean "first 256 codepoints of Unicode", 0x80-0x9f should be cntrl
->
-> - for some reason at least glibc seems to classify 0xa0 as punctuation
-> and not space (hence also as isgraph)
->
-> - 0xdf and 0xff are correctly classified as lower, but since they don't
-> have upper-case versions (at least not any that are representable in
-> latin1), correct toupper() behaviour is to return them unchanged, but we
-> just subtract 0x20, so 0xff becomes 0xdf which isn't isupper() and 0xdf
-> becomes something that isn't even isalpha().
+On Thu, Oct 27, 2022 at 01:44:40PM +0000, Michael Kelley (LINUX) wrote:
+> From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday, October 27, 2022 2:57 AM
+> > 
+> > hv_cleanup resets the hypercall page by setting the MSR to 0. However,
+> 
+> The function name is hyperv_cleanup(), not hv_cleanup().
 
-Heh.
-
-Honestly, I don't think we should care at all.
-
-For the byte range 128-255, anybody who uses ctype on them gets what
-they get. In the kernel, the most likely use of it is for 'isprint()',
-and if those care, they can (and some do) use 'isascii()' in addition.
-
-I don't know if you realize, but the kernel already says "screw libc",
-and makes all the isxyz() things just cast the argument to 'unsigned
-char', and doesn't care about EOF.
-
-And for the rest, let's just call it the "kernel locale", and just
-admit that the kernel locale is entirely historical.
-
-Boom - problem solved, and it's entirely standards conformant (apart
-possibly from the EOF case, I think that is marked as a "lower case
-character" right now ;)
-
-Looking through
-
-    https://pubs.opengroup.org/onlinepubs/9699919799/
-
-I'm not actually seeing anything that says that we don't do *exactly*
-what the standard requires.
-
-You thinking that the kernel locale is US-ASCII is just wrong.
-
-              Linus
+I fixed this and applied both patches to hyperv-fixes. Thank you both.
