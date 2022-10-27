@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF9660F42E
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 11:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7444060F435
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 11:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235141AbiJ0J6o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Oct 2022 05:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S234728AbiJ0J67 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Oct 2022 05:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbiJ0J6N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 05:58:13 -0400
+        with ESMTP id S233800AbiJ0J6P (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 05:58:15 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630EE9A9F6;
-        Thu, 27 Oct 2022 02:57:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A62C6CBFF6;
+        Thu, 27 Oct 2022 02:57:57 -0700 (PDT)
 Received: from anrayabh-desk.corp.microsoft.com (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3D1DF210CC07;
-        Thu, 27 Oct 2022 02:57:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3D1DF210CC07
+        by linux.microsoft.com (Postfix) with ESMTPSA id 922C3210DC49;
+        Thu, 27 Oct 2022 02:57:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 922C3210DC49
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1666864670;
-        bh=Bvmo3uopcCHqTy41GnJDIxmpJghyOohBNndaPK/207U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GuK58xEfqlzPOT12zgrPQ0v9aqqYhgJimibJuxL8K7MXXVFvxrbgyuNVm03gEN5LZ
-         ShREypEUJbZUSHdP2rRGgvnURgHbHnxj6Iyv0QnQTt5hZ4Qmb37tvuam4kiK6ykkyj
-         1d2DEvY182zQrWbe+qS0z3rw8e/8kqoVZSryg3j4=
+        s=default; t=1666864677;
+        bh=Jv8NcD1chwUmTNicZiXn9+nD54mc1QBuHCDjeK1fu1g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=U/EgMw2zZOefvoFHn/RekYsccgXiLi7igBivU1EeT43/i10zRG9Sp43FvZo5Qs99q
+         zHriW17mmsEI/6STWPT+G4FM90PgdPnQszp2RTsSaFtF7QNBC03wN5rjFmFLOujX3E
+         JtlwbfAkTM1ixlbOYTJw9rVIchpMAglivh9Q8c8c=
 From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
 To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
         wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
@@ -35,10 +35,12 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
 Cc:     stanislav.kinsburskiy@gmail.com,
         Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
         kumarpraveen@linux.microsoft.com, mail@anirudhrb.com
-Subject: [PATCH v2 0/2] Fix MSR access errors during kexec in root partition
-Date:   Thu, 27 Oct 2022 15:27:27 +0530
-Message-Id: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
+Subject: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure for reference TSC MSR
+Date:   Thu, 27 Oct 2022 15:27:28 +0530
+Message-Id: <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
+References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -51,25 +53,98 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Fixes a couple of MSR access errors seen during kexec in root partition
-and opportunistically introduces a data structure for the reference TSC
-MSR in order to simplify the code that updates that MSR.
+Add a data structure to represent the reference TSC MSR similar to
+other MSRs. This simplifies the code for updating the MSR.
 
-New in v2:
-1. Reverse the patch order as suggested by Michael. First introduce the
-   new structure for reference tsc MSR and then use it in the hv_cleanup
-   fix.
-2. Use hv_{get,set}_register functions in hv_cleanup().
-
-Anirudh Rayabharam (2):
-  clocksource/drivers/hyperv: add data structure for reference TSC MSR
-  x86/hyperv: fix invalid writes to MSRs during root partition kexec
-
- arch/x86/hyperv/hv_init.c          | 11 +++++++----
+Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+---
  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
- 3 files changed, 30 insertions(+), 18 deletions(-)
+ 2 files changed, 23 insertions(+), 14 deletions(-)
 
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index bb47610bbd1c..11332c82d1af 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
+ 
+ static void suspend_hv_clock_tsc(struct clocksource *arg)
+ {
+-	u64 tsc_msr;
++	union hv_reference_tsc_msr tsc_msr;
+ 
+ 	/* Disable the TSC page */
+-	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+-	tsc_msr &= ~BIT_ULL(0);
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
++	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.enable = 0;
++	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+ 
+ static void resume_hv_clock_tsc(struct clocksource *arg)
+ {
+ 	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
+-	u64 tsc_msr;
++	union hv_reference_tsc_msr tsc_msr;
+ 
+ 	/* Re-enable the TSC page */
+-	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+-	tsc_msr &= GENMASK_ULL(11, 0);
+-	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
++	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.enable = 1;
++	tsc_msr.pfn = __phys_to_pfn(phys_addr);
++	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+ #ifdef HAVE_VDSO_CLOCKMODE_HVCLOCK
+@@ -495,7 +495,7 @@ static __always_inline void hv_setup_sched_clock(void *sched_clock) {}
+ 
+ static bool __init hv_init_tsc_clocksource(void)
+ {
+-	u64		tsc_msr;
++	union hv_reference_tsc_msr tsc_msr;
+ 	phys_addr_t	phys_addr;
+ 
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+@@ -530,10 +530,10 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	 * (which already has at least the low 12 bits set to zero since
+ 	 * it is page aligned). Also set the "enable" bit, which is bit 0.
+ 	 */
+-	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+-	tsc_msr &= GENMASK_ULL(11, 0);
+-	tsc_msr = tsc_msr | 0x1 | (u64)phys_addr;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
++	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.enable = 1;
++	tsc_msr.pfn = __phys_to_pfn(phys_addr);
++	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ 
+ 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+ 
+diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+index fdce7a4cfc6f..b17c6eeb9afa 100644
+--- a/include/asm-generic/hyperv-tlfs.h
++++ b/include/asm-generic/hyperv-tlfs.h
+@@ -102,6 +102,15 @@ struct ms_hyperv_tsc_page {
+ 	volatile s64 tsc_offset;
+ } __packed;
+ 
++union hv_reference_tsc_msr {
++	u64 as_uint64;
++	struct {
++		u64 enable:1;
++		u64 reserved:11;
++		u64 pfn:52;
++	} __packed;
++};
++
+ /*
+  * The guest OS needs to register the guest ID with the hypervisor.
+  * The guest ID is a 64 bit entity and the structure of this ID is
 -- 
 2.34.1
 
