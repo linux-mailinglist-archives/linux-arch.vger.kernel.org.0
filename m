@@ -2,132 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8CA60EF19
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 06:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE4E60F1AD
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Oct 2022 09:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233707AbiJ0EiY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Oct 2022 00:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S229743AbiJ0H7V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Oct 2022 03:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiJ0EiS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 00:38:18 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFE714D1CE;
-        Wed, 26 Oct 2022 21:38:18 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id i12so315710qvs.2;
-        Wed, 26 Oct 2022 21:38:18 -0700 (PDT)
+        with ESMTP id S234874AbiJ0H7L (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Oct 2022 03:59:11 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8381416CA7E
+        for <linux-arch@vger.kernel.org>; Thu, 27 Oct 2022 00:59:09 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id bs14so1159455ljb.9
+        for <linux-arch@vger.kernel.org>; Thu, 27 Oct 2022 00:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oAVctpr4Foqzwmq/8lLQnNPWsibHQgV5zVJ+LmSnobA=;
-        b=UuKCjQP8ZW2SctP3nvJFTdHPIXTKXnnE2JToPG+a2xe0a4lwOJgzOjMtrgtjey9okJ
-         o6s21sWcrOnFCLGGiYX1Ud+t8lXJkemF9z2Mj1oAIppGpLhPBdENsIn/7wmu9Ik4Tdpj
-         ZaGFg8S465UtnH7PQWbUfW4AkkSzBa2eWbSAjIzglg6a03Q6TaRv5aSPXX5fE0WHh2A/
-         +Uou7NuqMw4b2f9WcloBTWC+cyo8ELT2mXUl/YYDO04ihDGDsUHxJyZFLpwi8tvd3uI6
-         Ho1ui6UrnwdwKC4bV/ungur9LNFFvnLpphxhLxf5R1lQFfREE+i1LS7Y4QLk5oSWKxMz
-         2CvA==
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wUr2EXQ4ftgpTV8ZEQ41jHHOycsGjgaOj2fkUN/SmwY=;
+        b=RjUFbbMfNxCxFcmIKsdWa5O9byrd1jpSQlJe5eU3whNU+B6yepvb7B0D9b8+Jm2SvU
+         K2AC1/Qphb//OHOael7l/Nmty1KTOoEHMsSJtADAHM3UvBWii75uGpQUvhid/+irjrGQ
+         BxwH1/loV9BB3luEH+etQBpjeAC8ZqCizyO/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oAVctpr4Foqzwmq/8lLQnNPWsibHQgV5zVJ+LmSnobA=;
-        b=6JV8GOqxOHdUJzWh7v7FxoqVPFJpq+Ca6IZlgSz/SkXQ2BlmR23uB6a/E+3ckqEfnC
-         4D+7Bn5g2kUGiAayeApWOzIA4Tahj7WkKrUYQPrtAMYpVeNt0rySelb6nDiGdbMktRaH
-         pqNdGbnkZQAiw9DbBDRYZ4/l8OlfKiDWr6l/eSlCOUWMeouZb170piibXdNq/fM33wEE
-         JpYnRN6T5ug8zEFUNNQa77xBOnKnglLpPMwV3tS97LhashG9D9lkPr6VMZkSJMuCk92G
-         z5UYzVSMiOW6cHy3g/7ukmcXhYzlEhn3MVk9mwh/1oiNMti1rF11sU5DcCxeYUDbOa84
-         q5YQ==
-X-Gm-Message-State: ACrzQf0lF+nMaOxLyQlQ7ieffIFItq59kMffObwiZzw8XhwaAIXm1euG
-        D7H51EpBYBJnNgjl+IWTkH5Y11duJ7U=
-X-Google-Smtp-Source: AMsMyM4YBwpuDAiofyXBx6bu71A8JyAwOkUf9hqrUE204qUMiDenNd3IFrAbX4IZ8HBBnPBn6BXkGA==
-X-Received: by 2002:a05:6214:21ae:b0:4b4:3c9:71f6 with SMTP id t14-20020a05621421ae00b004b403c971f6mr39868870qvc.17.1666845496972;
-        Wed, 26 Oct 2022 21:38:16 -0700 (PDT)
-Received: from localhost ([2601:589:4102:7400:ade5:9c32:44f6:bc7d])
-        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b006b929a56a2bsm358504qkd.3.2022.10.26.21.38.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 21:38:16 -0700 (PDT)
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: [PATCH 3/3] bitmap: add tests for find_next_bit()
-Date:   Wed, 26 Oct 2022 21:38:10 -0700
-Message-Id: <20221027043810.350460-4-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221027043810.350460-1-yury.norov@gmail.com>
-References: <20221027043810.350460-1-yury.norov@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wUr2EXQ4ftgpTV8ZEQ41jHHOycsGjgaOj2fkUN/SmwY=;
+        b=AtozwFpUiF9nWZ4nt17BIsZEtdSl2bkFjDfe7HkmR00U6Xtkd5HrLeew6vzn74++7I
+         BJJ1V8KEXcbXy5L6mHFUcNxHailBeVJYP45ttqfoeYwwjlhqXjUPwmP0JeZm3O3AdmMk
+         x7Jez2DpazSaX9GaI965FrBqRMrUFpDMIx3EInNSPd35S1Q6gYnHBmfNYv63Bi011EYZ
+         hVSxNYc0AqGVs3ew6pa6DcOAQxg3hS/wX3qaxz9bw9zW0vpCH8J/VrEWqNuH/Ki1ZFad
+         OeDdWXGKZTrhuVuicvUrzI1EZEjWaQAuOTMD2j3cX/BP9Twt+ba0n08EXCxVi4AUrf3x
+         2ojQ==
+X-Gm-Message-State: ACrzQf1nanWYIQCxLKZbNIma0yFKMquiiOVRFQGLdgr2wckxSDBBMnrp
+        brAG0FqwifewDeW+n7Url6YyJl2a+qClr0o3sGU=
+X-Google-Smtp-Source: AMsMyM6JfSRaduVbrfa57dcCJjTzQ7W0+QDnmLqDB+SkcXec0y+BqsXViensSxRqxUz8HX+M/nNvgg==
+X-Received: by 2002:a2e:9e47:0:b0:276:1ee8:7216 with SMTP id g7-20020a2e9e47000000b002761ee87216mr11763411ljk.339.1666857547760;
+        Thu, 27 Oct 2022 00:59:07 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id t27-20020a2e8e7b000000b0027709875c3esm130842ljk.32.2022.10.27.00.59.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Oct 2022 00:59:07 -0700 (PDT)
+Message-ID: <915a104b-0e70-dfb8-3c85-54fd1e5e63e5@rasmusvillemoes.dk>
+Date:   Thu, 27 Oct 2022 09:59:05 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: make ctype ascii only? (was [PATCH] kbuild: treat char as always
+ signed)
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <CAHk-=whT+xyge9UjH+r6dt0FG-eUdrzu5hDMce_vC+n8uLam2A@mail.gmail.com>
+ <3a2fa7c1-2e31-0479-761f-9c189f8ed8c3@rasmusvillemoes.dk>
+ <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <CAHk-=wg9RNhvDyanUQnxa_xnir70TUiMgjhVhRWUuF5Ojj96Dw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Test out-of-line and inline paths of find_next_bit().
+On 26/10/2022 20.10, Linus Torvalds wrote:
+> On Tue, Oct 25, 2022 at 5:10 PM Rasmus Villemoes
+> <linux@rasmusvillemoes.dk> wrote:
+>>
+>> Only very tangentially related (because it has to do with chars...): Can
+>> we switch our ctype to be ASCII only, just as it was back in the good'ol
+>> mid 90s
+> 
+> Those US-ASCII days weren't really very "good" old days, but I forget
+> why we did this (it's attributed to me, but that's from the
+> pre-BK/pre-git days before we actually tracked things all that well,
+> so..)
+> 
+> Anyway, I think anybody using ctype.h on 8-bit chars gets what they
+> deserve, and I think Latin1 (or something close to it) is better than
+> US-ASCII, in that it's at least the same as Unicode in the low 8
+> chars.
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
----
- lib/test_bitmap.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+My concern is that it's currently somewhat ill specified what our ctype
+actually represents, and that would be a lot easier to specify if we
+just said ASCII, everything above 0x7f is neither punct or ctrl or alpha
+or anything else.
 
-diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-index a8005ad3bd58..becf9c7a95a1 100644
---- a/lib/test_bitmap.c
-+++ b/lib/test_bitmap.c
-@@ -221,7 +221,7 @@ static void __init test_zero_clear(void)
- 	expect_eq_pbl("", bmap, 1024);
- }
- 
--static void __init test_find_nth_bit(void)
-+static void __init test_find_bit(void)
- {
- 	unsigned long b, bit, cnt = 0;
- 	DECLARE_BITMAP(bmap, 64 * 3);
-@@ -236,6 +236,25 @@ static void __init test_find_nth_bit(void)
- 	__set_bit(80, bmap);
- 	__set_bit(123, bmap);
- 
-+	expect_eq_uint(10,  find_next_bit(bmap, 64 * 3, 0));
-+	expect_eq_uint(20,  find_next_bit(bmap, 64 * 3, 11));
-+	expect_eq_uint(30,  find_next_bit(bmap, 64 * 3, 21));
-+	expect_eq_uint(40,  find_next_bit(bmap, 64 * 3, 31));
-+	expect_eq_uint(50,  find_next_bit(bmap, 64 * 3, 41));
-+	expect_eq_uint(60,  find_next_bit(bmap, 64 * 3, 51));
-+	expect_eq_uint(80,  find_next_bit(bmap, 64 * 3, 61));
-+	expect_eq_uint(123, find_next_bit(bmap, 64 * 3, 81));
-+
-+	/* Test small_const_nbits_off() optimization path */
-+	expect_eq_uint(10,  find_next_bit(bmap, 20 + 0,  0));
-+	expect_eq_uint(20,  find_next_bit(bmap, 20 + 11, 11));
-+	expect_eq_uint(30,  find_next_bit(bmap, 20 + 21, 21));
-+	expect_eq_uint(40,  find_next_bit(bmap, 20 + 31, 31));
-+	expect_eq_uint(50,  find_next_bit(bmap, 20 + 41, 41));
-+	expect_eq_uint(60,  find_next_bit(bmap, 20 + 51, 51));
-+	expect_eq_uint(80,  find_next_bit(bmap, 20 + 61, 61));
-+	expect_eq_uint(90,  find_next_bit(bmap, 20 + 70, 81));
-+
- 	expect_eq_uint(10,  find_nth_bit(bmap, 64 * 3, 0));
- 	expect_eq_uint(20,  find_nth_bit(bmap, 64 * 3, 1));
- 	expect_eq_uint(30,  find_nth_bit(bmap, 64 * 3, 2));
-@@ -1226,7 +1245,7 @@ static void __init selftest(void)
- 	test_bitmap_print_buf();
- 	test_bitmap_const_eval();
- 
--	test_find_nth_bit();
-+	test_find_bit();
- 	test_for_each_set_bit();
- 	test_for_each_set_bit_from();
- 	test_for_each_clear_bit();
--- 
-2.34.1
+For example, people may do stuff like isprint(c) ? c : '.' in a printk()
+call, but most likely the consumer (somebody doing dmesg) would, at
+least these days, use utf-8, so that just results in a broken utf-8
+sequence. Now I see that a lot of callers actually do "isascii(c) &&
+isprint(c)", so they already know about this, but there are also many
+instances where isprint() is used by itself.
 
+There's also stuff like fs/afs/cell.c and other places that use
+isprint/isalnum/... to make decisions on what is allowed on the wire
+and/or in a disk format, where it's then hard to reason about just
+exactly what is accepted. And places that use toupper() on their strings
+to normalize them; that's broken when toupper() isn't idempotent.
+
+> So no, I'm disinclined to go back in time to what I think is an even
+> worse situation. Latin1 isn't great, but it sure beats US-ASCII. And
+> if you really want just US-ASII, then don't use the high bit, and make
+> your disgusting 7-bit code be *explicitly* 7-bit.
+> 
+> Now, if there are errors in that table wrt Latin1 / "first 256
+> codepoints of Unicode" too, then we can fix those.
+
+AFAICT, the differences are:
+
+- 0xaa (FEMININE ORDINAL INDICATOR), 0xb5 (MICRO SIGN), 0xba (FEMININE
+ORDINAL INDICATOR) should be lower (hence alpha and alnum), not punct.
+
+- depending a little on just exactly what one wants latin1 to mean, but
+if it does mean "first 256 codepoints of Unicode", 0x80-0x9f should be cntrl
+
+- for some reason at least glibc seems to classify 0xa0 as punctuation
+and not space (hence also as isgraph)
+
+- 0xdf and 0xff are correctly classified as lower, but since they don't
+have upper-case versions (at least not any that are representable in
+latin1), correct toupper() behaviour is to return them unchanged, but we
+just subtract 0x20, so 0xff becomes 0xdf which isn't isupper() and 0xdf
+becomes something that isn't even isalpha().
+
+Fixing the first would create more instances of the last, and I think
+the only sane way to fix that would be a 256 byte lookup table to use by
+toupper().
+
+> Not that anybody has apparently cared since 2.0.1 was released back in
+> July of 1996 
+(btw, it's sad how none of the old linux git archive
+> creations seem to have tried to import the dates, so you have to look
+> those up separately)
+
+Huh? That commit has 1996 as the author date, while its commit date is
+indeed 2007. The very first line says:
+
+author	linus1 <torvalds@linuxfoundation.org>	1996-07-02 11:00:00 -0600
+
+> And if nobody has cared since 1996, I don't really think it matters.
+
+Indeed, I don't think it's a huge problem in practice. But it still
+bothers me that such a simple (and usually overlooked) corner of the
+kernel's C library is ill-defined and arguably a little buggy.
+
+Rasmus
