@@ -2,42 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D23B61265E
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Oct 2022 01:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1D5612664
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Oct 2022 01:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbiJ2XQx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Oct 2022 19:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
+        id S229779AbiJ2XSy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Oct 2022 19:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2XQx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Oct 2022 19:16:53 -0400
+        with ESMTP id S229441AbiJ2XSx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Oct 2022 19:18:53 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21962EF24;
-        Sat, 29 Oct 2022 16:16:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A5B2F007;
+        Sat, 29 Oct 2022 16:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=LImzIWyWeyV4UtuipZzTE0blZZG9s3NFxdeKryOx2nA=; b=XdawGtzhCWEuhGGAUzwVWInbBs
-        UWiS8I1AK15Br0oB3cVIha5mscbudSbzZtKTm03EP4l3dfTTD5Sk+oVOuyJyUtsLa1YknihzNSYrZ
-        GRIR86H1APz4fJvAP/plfHic5Za1cfihUGDe2jL3ofAkvQrbq4ifKjmP8o3GhxmXwf7/sR1dczu5o
-        L14CaCLwOkTXOqPPuU/YLEbBMJWD5HzbyFdGVkusKLpEdUQKOWr5spUEKJqk5d4ObHSHvK5FjPabU
-        QQ7vB1bbu4rktOi6Q1oL+TRnu6PNYZH/mHdawqHkvP+9fbp55m+rwM2jmTqg4cJjo6r9H0zmyJjaf
-        9Q+dq+TQ==;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=72jtzsfdBJvTgzNVU9mb5qNZZ75BLtKRZFZfbeGDBNg=; b=v8sMHHOMqaV+I7Og/bqdh3MjKC
+        yJj9+SjgCHJGUS3+VwuR2Arofn5pLFRdNIH1hQWb1TihodaHKsqGaab0tIZLpGzTOEUvWXfXDSPtP
+        dQPIydfpCRYbiVK131Z0N+yloDx83EK4YQIGLxF63KUhPSgJQK6z4zSHxpesShjTZ0oB+2nwP7Pfp
+        7Bm6YBXQX9GYvPGHYW3r7aiFai+kxtB23bZcEcztkpLPiEqPN/7XpljTGkYVDHcpmfg7nbhd0W5kG
+        ofnmJZEv/yaOHzRYZOOgN3DmjVLSIor8PJmGrPUBEz4HSTpattmDyNkD40ThLPC0jwX2KbxIw74wn
+        whjJ8mQw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oov4J-00FOGN-2Y;
-        Sat, 29 Oct 2022 23:16:47 +0000
-Date:   Sun, 30 Oct 2022 00:16:47 +0100
+        id 1oov6I-00FOKS-3D;
+        Sat, 29 Oct 2022 23:18:51 +0000
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     linux-arch@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [RFC][PATCHSET] coredump unification for regset and non-regset
- architectures
-Message-ID: <Y120X8dWqe15FPPG@ZenIV>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 01/10] kill signal_pt_regs()
+Date:   Sun, 30 Oct 2022 00:18:41 +0100
+Message-Id: <20221029231850.3668437-1-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <Y120X8dWqe15FPPG@ZenIV>
+References: <Y120X8dWqe15FPPG@ZenIV>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -48,53 +49,77 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-	Resurrecting an old work - elf coredumps mess reduction.
-Back in 2008 some of the architectures have switched to use of
-regsets for elf coredumps.  Unfortunately, back then the helpers
-used by other architectures used to be shared with a.out coredump
-support, which made their calling conventions, etc. hard to
-modify.  As the result, Roland went for duplicating quite a bit
-of coredump-generating logics, with ifdef selecting the right
-variant.
+Once upon at it was used on hot paths, but that had not been
+true since 2013.  IOW, there's no point for arch-optimized
+equivalent of task_pt_regs(current) - remaining two users are
+not worth bothering with.
 
-	Since then the copies had drifted apart - changes made
-to one of them and applicable to both had not been propagated,
-etc.  Many (but not all) architectures have switched to regset
-variant.  And a.out coredump support had been removed, which
-made it easier to modify the primitives on non-regset architectures.
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ arch/alpha/include/asm/ptrace.h | 1 -
+ fs/coredump.c                   | 2 +-
+ include/linux/ptrace.h          | 9 ---------
+ kernel/signal.c                 | 2 +-
+ 4 files changed, 2 insertions(+), 12 deletions(-)
 
-	Series below attempts to make use of that; it had been
-started about 4 years ago, but got stalled several times.
+diff --git a/arch/alpha/include/asm/ptrace.h b/arch/alpha/include/asm/ptrace.h
+index df5f317ab3fc..3557ce64ed21 100644
+--- a/arch/alpha/include/asm/ptrace.h
++++ b/arch/alpha/include/asm/ptrace.h
+@@ -16,7 +16,6 @@
+ 
+ #define current_pt_regs() \
+   ((struct pt_regs *) ((char *)current_thread_info() + 2*PAGE_SIZE) - 1)
+-#define signal_pt_regs current_pt_regs
+ 
+ #define force_successful_syscall_return() (current_pt_regs()->r0 = 0)
+ 
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 7bad7785e8e6..b4ec1bf889f9 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -525,7 +525,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 	static atomic_t core_dump_count = ATOMIC_INIT(0);
+ 	struct coredump_params cprm = {
+ 		.siginfo = siginfo,
+-		.regs = signal_pt_regs(),
++		.regs = task_pt_regs(current),
+ 		.limit = rlimit(RLIMIT_CORE),
+ 		/*
+ 		 * We must use the same mm->flags while dumping core to avoid
+diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+index c952c5ba8fab..eaaef3ffec22 100644
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -389,15 +389,6 @@ static inline void user_single_step_report(struct pt_regs *regs)
+ #define current_pt_regs() task_pt_regs(current)
+ #endif
+ 
+-/*
+- * unlike current_pt_regs(), this one is equal to task_pt_regs(current)
+- * on *all* architectures; the only reason to have a per-arch definition
+- * is optimisation.
+- */
+-#ifndef signal_pt_regs
+-#define signal_pt_regs() task_pt_regs(current)
+-#endif
+-
+ #ifndef current_user_stack_pointer
+ #define current_user_stack_pointer() user_stack_pointer(current_pt_regs())
+ #endif
+diff --git a/kernel/signal.c b/kernel/signal.c
+index d140672185a4..848d5c282d35 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1255,7 +1255,7 @@ int send_signal_locked(int sig, struct kernel_siginfo *info,
+ 
+ static void print_fatal_signal(int signr)
+ {
+-	struct pt_regs *regs = signal_pt_regs();
++	struct pt_regs *regs = task_pt_regs(current);
+ 	pr_info("potentially unexpected fatal signal %d.\n", signr);
+ 
+ #if defined(__i386__) && !defined(__arch_um__)
+-- 
+2.30.2
 
-	Review and testing would be very appreciated.  Individual
-patches - in followups.  Alternatively, it can be found in
-git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.gitd #work.elfcore.
-
-Al Viro (10):
-      kill signal_pt_regs()
-      kill coredump_params->regs
-      kill extern of vsyscall32_sysctl
-      [elf][regset] clean fill_note_info() a bit
-      [elf][regset] simplify thread list handling in fill_note_info()
-      elf_core_copy_task_regs(): task_pt_regs is defined everywhere
-      [elf][non-regset] uninline elf_core_copy_task_fpregs() (and lose pt_regs argument)
-      [elf][non-regset] use elf_core_copy_task_regs() for dumper as well
-      [elf] unify regset and non-regset cases
-      [elf] get rid of get_note_info_size()
-
- arch/alpha/include/asm/elf.h     |   6 -
- arch/alpha/include/asm/ptrace.h  |   1 -
- arch/alpha/kernel/process.c      |   8 +-
- arch/csky/kernel/process.c       |   3 +-
- arch/m68k/kernel/process.c       |   3 +-
- arch/microblaze/kernel/process.c |   2 +-
- arch/um/kernel/process.c         |   2 +-
- arch/x86/include/asm/elf.h       |   1 -
- arch/x86/um/asm/elf.h            |   4 -
- fs/binfmt_elf.c                  | 271 ++++++++-------------------------------
- fs/coredump.c                    |   1 -
- include/linux/coredump.h         |   1 -
- include/linux/elfcore.h          |  13 +-
- include/linux/ptrace.h           |   9 --
- kernel/signal.c                  |   2 +-
- 15 files changed, 61 insertions(+), 266 deletions(-)
