@@ -2,86 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9DD61266E
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Oct 2022 01:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBEB61294D
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Oct 2022 10:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiJ2XS7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Oct 2022 19:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S229476AbiJ3JTC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Oct 2022 05:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiJ2XSy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Oct 2022 19:18:54 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE572F007;
-        Sat, 29 Oct 2022 16:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=WhbUv9HBxQIPXWwFYMtnUUjJ/kZ/8c6XmqS5a0sNtkc=; b=rQCFH1SCYQTChP+jdlWCMmd6Jm
-        YH+4xQ4FeuldtfDjL2HIdNvtPTyRdo1XiVCFq1gNbQLKk1T4n9NyhPrGXaOKI6NmqOs56ggr/Ew5M
-        vUCugji4OPCXfpKVd8efw36D+akpEiseI5l0DV+ixe/R7cCDenDVHX9LVa+1hzLtIlQout2DCSIgN
-        yA2Qn7Wcjyoze3YtV+5VzBBFUBiwrQNcgZEPsmKpcMaAULPDzH/u2a09Lgf/MOqC4r5ij1qNQQH6e
-        cVdwLBh/sxmd0B2rsbEJo/fSItkPq7GYIQ+fgBRvlid2kbFPfGarfxWKceOVrOB69HtzCVicw+SUC
-        L3j1NgKA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1oov6K-00FOLB-2F;
-        Sat, 29 Oct 2022 23:18:52 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     linux-arch@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 10/10] [elf] get rid of get_note_info_size()
-Date:   Sun, 30 Oct 2022 00:18:50 +0100
-Message-Id: <20221029231850.3668437-10-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221029231850.3668437-1-viro@zeniv.linux.org.uk>
-References: <Y120X8dWqe15FPPG@ZenIV>
- <20221029231850.3668437-1-viro@zeniv.linux.org.uk>
+        with ESMTP id S229632AbiJ3JTA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Oct 2022 05:19:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879C3190;
+        Sun, 30 Oct 2022 02:18:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01CA560E15;
+        Sun, 30 Oct 2022 09:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED56DC433D6;
+        Sun, 30 Oct 2022 09:18:55 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch fixes for v6.1-rc3
+Date:   Sun, 30 Oct 2022 17:16:58 +0800
+Message-Id: <20221030091658.1843946-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-it's trivial now...
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/binfmt_elf.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 3758a617c9d8..65d2d2ba4d9e 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1946,11 +1946,6 @@ static int fill_note_info(struct elfhdr *elf, int phdrs,
- 	return 1;
- }
- 
--static size_t get_note_info_size(struct elf_note_info *info)
--{
--	return info->size;
--}
--
- /*
-  * Write all the notes for each thread.  When writing the first thread, the
-  * process-wide notes are interleaved after the first thread-specific note.
-@@ -2068,7 +2063,7 @@ static int elf_core_dump(struct coredump_params *cprm)
- 
- 	/* Write notes phdr entry */
- 	{
--		size_t sz = get_note_info_size(&info);
-+		size_t sz = info.size;
- 
- 		/* For cell spufs */
- 		sz += elf_coredump_extra_notes_size();
--- 
-2.30.2
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-1
+
+for you to fetch changes up to d81916910f7498fe7a768697e0101d488f9fe665:
+
+  platform/loongarch: laptop: Fix possible UAF and simplify generic_acpi_laptop_init() (2022-10-29 16:29:31 +0800)
+
+----------------------------------------------------------------
+LoongArch fixes for v6.1-rc3
+
+Remove unused kernel stack padding, fix some build errors/warnings and
+two bugs in laptop platform driver.
+----------------------------------------------------------------
+Huacai Chen (2):
+      LoongArch: BPF: Avoid declare variables in switch-case
+      platform/loongarch: laptop: Adjust resume order for loongson_hotkey_resume()
+
+Jinyang He (1):
+      LoongArch: Remove unused kernel stack padding
+
+Yang Yingliang (1):
+      platform/loongarch: laptop: Fix possible UAF and simplify generic_acpi_laptop_init()
+
+Yushan Zhou (1):
+      LoongArch: Use flexible-array member instead of zero-length array
+
+ arch/loongarch/include/asm/processor.h       |  2 +-
+ arch/loongarch/include/asm/ptrace.h          |  4 ++--
+ arch/loongarch/kernel/head.S                 |  3 +--
+ arch/loongarch/kernel/process.c              |  4 ++--
+ arch/loongarch/kernel/switch.S               |  2 +-
+ arch/loongarch/net/bpf_jit.c                 | 31 ++++++++++++----------------
+ drivers/platform/loongarch/loongson-laptop.c | 24 ++++++++++++---------
+ 7 files changed, 34 insertions(+), 36 deletions(-)
