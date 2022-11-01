@@ -2,369 +2,284 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D40F614207
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Nov 2022 01:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEB86142D6
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Nov 2022 02:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiKAAC7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Oct 2022 20:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
+        id S229886AbiKABm1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Oct 2022 21:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiKAAC4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Oct 2022 20:02:56 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CB514D06;
-        Mon, 31 Oct 2022 17:02:53 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id m6so12098696pfb.0;
-        Mon, 31 Oct 2022 17:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oS6N/+L/OhffcO3EfR3Iv/UryqKn7hoaC0JJFd1ABbs=;
-        b=FEU+ej6a2Z4dObdFfkYQNzqWvGRTS0az/uZN2S7EHoxHRay6dQk1Cm1KybCC1dfxDT
-         OyB76sl3fY+1ShqDOwB3Svf48LU6q4YPHuesBoXIj91JVbK+wBWEwsQ/LKaTqEcjqUce
-         ApyLN2awgPGKrOu7qBWNVvBywCRkyf+f+BNJpmZyHGXmPvrRmg5V0Opi7kqMaFhl7YC7
-         ZfItoBUMXHhr7a2iS6ZLIrKtHZ8b5vdumqDnKfLPIITDYeQ3WWefGuzUL8+oumQUHhW7
-         lrYxXkQVjaLUTllewkTl0IIpNOQO9Sv3RFVOqiv2p4SK1UAo9kdR2AdyASdskNj5FmMw
-         PhjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oS6N/+L/OhffcO3EfR3Iv/UryqKn7hoaC0JJFd1ABbs=;
-        b=u4w2Mhd+3ftjHC54uzTlbQFWrJu+fudOeBMUnOh7edEQ0E4NOil98cVvPPdZMfLgjV
-         7zCyNkzi/uNo2HSgjfrni2565DMe6ywE4wExU1FaXOnvcOtBhOTxkSNoJEUcQQ/rdGxX
-         oZ9Nq8p2XWGimKe4nJ2mSF4vlw5UO2RmGnPuenA8AQfhu4WZG3YR/MPpp9Dhw0ED8kJC
-         mkR6c3VerApSZ/7H/W4JZvXmgwPyZ5aO8hgijbGaBc9ZukQiYP+aYJmFZOIR6wmuMyG6
-         pflUjFUPN0HRIcwqDaOrmFPjnkk8yvYbKIhVceaitMS+GerI3Fvnn35Civuo350YVvse
-         uquA==
-X-Gm-Message-State: ACrzQf3wbYptGtXNKwlAkyjRcSXhLCT1O/hIQIvGic7E7INuBwkjm8l+
-        OJLuNZX3UfNaH+HaVzgeXSM=
-X-Google-Smtp-Source: AMsMyM6Ux5ge+1rBOdMB9VQXkykvW/cRl7baTLO/ElNy8RU81cUDIaiW2cViWcwou8S0KckvrDFrgA==
-X-Received: by 2002:a05:6a00:805:b0:561:9a81:ef11 with SMTP id m5-20020a056a00080500b005619a81ef11mr29717pfk.86.1667260972541;
-        Mon, 31 Oct 2022 17:02:52 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id b1-20020a170902ed0100b001806445887asm4940403pld.223.2022.10.31.17.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 17:02:51 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 17:02:50 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 7/8] KVM: Handle page fault for private memory
-Message-ID: <20221101000250.GA674570@ls.amr.corp.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-8-chao.p.peng@linux.intel.com>
- <20221026215425.GC3819453@ls.amr.corp.intel.com>
- <20221028065545.GD3885130@chaop.bj.intel.com>
+        with ESMTP id S229881AbiKABmZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Oct 2022 21:42:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44B017402;
+        Mon, 31 Oct 2022 18:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667266943; x=1698802943;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4OYGu0RKdW2L34vFwgyzV4Q3BN/6r7P6a5YCMK9FnSI=;
+  b=TbxqET0+S+Pp+DCxMfnzCGfvxfAfXbCViGhpQ394H98lyXUcrXi6Fy+f
+   o9XZVMdG5uHveEIz9F+Jp03aDl/IP0fsE6l/41lavlP3uAdixxXKjPPwk
+   FNeDAOEHSi1W/zyuhs4bMAd/LdOrX9T1HpnAwHlOkUn28XWWjpMtPU/oc
+   ePavYyz/1qIGXPyWQotnVHBpbm8pB6/jIjWjdUiJKLyaEn01rsp5ibIYO
+   TlHZujfsmF3oe//GHHJrrX89ocyWrGXxbXWDnAuhlFHmuQz7paIkGV1ju
+   gTGQsCa18o+DyO0zc03vfOaVz4qA6cmmoGn3Q58zTDNwxH+pL8eBw7YbH
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310136106"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="310136106"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 18:42:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="628433612"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="628433612"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 31 Oct 2022 18:42:19 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1opgIF-000DBA-00;
+        Tue, 01 Nov 2022 01:42:19 +0000
+Date:   Tue, 01 Nov 2022 09:42:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     sound-open-firmware@alsa-project.org, ntfs3@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-ext4@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arch@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c
+Message-ID: <6360796a.Im9eP1m6DSU/3Bdw%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221028065545.GD3885130@chaop.bj.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 02:55:45PM +0800,
-Chao Peng <chao.p.peng@linux.intel.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c  Add linux-next specific files for 20221031
 
-> On Wed, Oct 26, 2022 at 02:54:25PM -0700, Isaku Yamahata wrote:
-> > On Tue, Oct 25, 2022 at 11:13:43PM +0800,
-> > Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> > 
-> > > A memslot with KVM_MEM_PRIVATE being set can include both fd-based
-> > > private memory and hva-based shared memory. Architecture code (like TDX
-> > > code) can tell whether the on-going fault is private or not. This patch
-> > > adds a 'is_private' field to kvm_page_fault to indicate this and
-> > > architecture code is expected to set it.
-> > > 
-> > > To handle page fault for such memslot, the handling logic is different
-> > > depending on whether the fault is private or shared. KVM checks if
-> > > 'is_private' matches the host's view of the page (maintained in
-> > > mem_attr_array).
-> > >   - For a successful match, private pfn is obtained with
-> > >     restrictedmem_get_page () from private fd and shared pfn is obtained
-> > >     with existing get_user_pages().
-> > >   - For a failed match, KVM causes a KVM_EXIT_MEMORY_FAULT exit to
-> > >     userspace. Userspace then can convert memory between private/shared
-> > >     in host's view and retry the fault.
-> > > 
-> > > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c          | 56 +++++++++++++++++++++++++++++++--
-> > >  arch/x86/kvm/mmu/mmu_internal.h | 14 ++++++++-
-> > >  arch/x86/kvm/mmu/mmutrace.h     |  1 +
-> > >  arch/x86/kvm/mmu/spte.h         |  6 ++++
-> > >  arch/x86/kvm/mmu/tdp_mmu.c      |  3 +-
-> > >  include/linux/kvm_host.h        | 28 +++++++++++++++++
-> > >  6 files changed, 103 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 67a9823a8c35..10017a9f26ee 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -3030,7 +3030,7 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
-> > >  
-> > >  int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> > > -			      int max_level)
-> > > +			      int max_level, bool is_private)
-> > >  {
-> > >  	struct kvm_lpage_info *linfo;
-> > >  	int host_level;
-> > > @@ -3042,6 +3042,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  			break;
-> > >  	}
-> > >  
-> > > +	if (is_private)
-> > > +		return max_level;
-> > 
-> > Below PG_LEVEL_NUM is passed by zap_collapsible_spte_range().  It doesn't make
-> > sense.
-> > 
-> > > +
-> > >  	if (max_level == PG_LEVEL_4K)
-> > >  		return PG_LEVEL_4K;
-> > >  
-> > > @@ -3070,7 +3073,8 @@ void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> > >  	 * level, which will be used to do precise, accurate accounting.
-> > >  	 */
-> > >  	fault->req_level = kvm_mmu_max_mapping_level(vcpu->kvm, slot,
-> > > -						     fault->gfn, fault->max_level);
-> > > +						     fault->gfn, fault->max_level,
-> > > +						     fault->is_private);
-> > >  	if (fault->req_level == PG_LEVEL_4K || fault->huge_page_disallowed)
-> > >  		return;
-> > >  
-> > > @@ -4141,6 +4145,32 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
-> > >  	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
-> > >  }
-> > >  
-> > > +static inline u8 order_to_level(int order)
-> > > +{
-> > > +	BUILD_BUG_ON(KVM_MAX_HUGEPAGE_LEVEL > PG_LEVEL_1G);
-> > > +
-> > > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_1G))
-> > > +		return PG_LEVEL_1G;
-> > > +
-> > > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_2M))
-> > > +		return PG_LEVEL_2M;
-> > > +
-> > > +	return PG_LEVEL_4K;
-> > > +}
-> > > +
-> > > +static int kvm_faultin_pfn_private(struct kvm_page_fault *fault)
-> > > +{
-> > > +	int order;
-> > > +	struct kvm_memory_slot *slot = fault->slot;
-> > > +
-> > > +	if (kvm_restricted_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
-> > > +		return RET_PF_RETRY;
-> > > +
-> > > +	fault->max_level = min(order_to_level(order), fault->max_level);
-> > > +	fault->map_writable = !(slot->flags & KVM_MEM_READONLY);
-> > > +	return RET_PF_CONTINUE;
-> > > +}
-> > > +
-> > >  static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > >  {
-> > >  	struct kvm_memory_slot *slot = fault->slot;
-> > > @@ -4173,6 +4203,22 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > >  			return RET_PF_EMULATE;
-> > >  	}
-> > >  
-> > > +	if (kvm_slot_can_be_private(slot) &&
-> > > +	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
-> > > +		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> > > +		if (fault->is_private)
-> > > +			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> > > +		else
-> > > +			vcpu->run->memory.flags = 0;
-> > > +		vcpu->run->memory.padding = 0;
-> > > +		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> > > +		vcpu->run->memory.size = PAGE_SIZE;
-> > > +		return RET_PF_USER;
-> > > +	}
-> > > +
-> > > +	if (fault->is_private)
-> > > +		return kvm_faultin_pfn_private(fault);
-> > > +
-> > >  	async = false;
-> > >  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
-> > >  					  fault->write, &fault->map_writable,
-> > > @@ -5557,6 +5603,9 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
-> > >  			return -EIO;
-> > >  	}
-> > >  
-> > > +	if (r == RET_PF_USER)
-> > > +		return 0;
-> > > +
-> > >  	if (r < 0)
-> > >  		return r;
-> > >  	if (r != RET_PF_EMULATE)
-> > > @@ -6408,7 +6457,8 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-> > >  		 */
-> > >  		if (sp->role.direct &&
-> > >  		    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
-> > > -							       PG_LEVEL_NUM)) {
-> > > +							       PG_LEVEL_NUM,
-> > > +							       false)) {
-> > >  			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
-> > >  
-> > >  			if (kvm_available_flush_tlb_with_range())
-> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > > index 582def531d4d..5cdff5ca546c 100644
-> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > @@ -188,6 +188,7 @@ struct kvm_page_fault {
-> > >  
-> > >  	/* Derived from mmu and global state.  */
-> > >  	const bool is_tdp;
-> > > +	const bool is_private;
-> > >  	const bool nx_huge_page_workaround_enabled;
-> > >  
-> > >  	/*
-> > > @@ -236,6 +237,7 @@ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> > >   * RET_PF_RETRY: let CPU fault again on the address.
-> > >   * RET_PF_EMULATE: mmio page fault, emulate the instruction directly.
-> > >   * RET_PF_INVALID: the spte is invalid, let the real page fault path update it.
-> > > + * RET_PF_USER: need to exit to userspace to handle this fault.
-> > >   * RET_PF_FIXED: The faulting entry has been fixed.
-> > >   * RET_PF_SPURIOUS: The faulting entry was already fixed, e.g. by another vCPU.
-> > >   *
-> > > @@ -252,6 +254,7 @@ enum {
-> > >  	RET_PF_RETRY,
-> > >  	RET_PF_EMULATE,
-> > >  	RET_PF_INVALID,
-> > > +	RET_PF_USER,
-> > >  	RET_PF_FIXED,
-> > >  	RET_PF_SPURIOUS,
-> > >  };
-> > > @@ -309,7 +312,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> > >  
-> > >  int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> > > -			      int max_level);
-> > > +			      int max_level, bool is_private);
-> > >  void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> > >  void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_level);
-> > >  
-> > > @@ -318,4 +321,13 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> > >  void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > >  void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > >  
-> > > +#ifndef CONFIG_HAVE_KVM_RESTRICTED_MEM
-> > > +static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
-> > > +					gfn_t gfn, kvm_pfn_t *pfn, int *order)
-> > > +{
-> > > +	WARN_ON_ONCE(1);
-> > > +	return -EOPNOTSUPP;
-> > > +}
-> > > +#endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
-> > > +
-> > >  #endif /* __KVM_X86_MMU_INTERNAL_H */
-> > > diff --git a/arch/x86/kvm/mmu/mmutrace.h b/arch/x86/kvm/mmu/mmutrace.h
-> > > index ae86820cef69..2d7555381955 100644
-> > > --- a/arch/x86/kvm/mmu/mmutrace.h
-> > > +++ b/arch/x86/kvm/mmu/mmutrace.h
-> > > @@ -58,6 +58,7 @@ TRACE_DEFINE_ENUM(RET_PF_CONTINUE);
-> > >  TRACE_DEFINE_ENUM(RET_PF_RETRY);
-> > >  TRACE_DEFINE_ENUM(RET_PF_EMULATE);
-> > >  TRACE_DEFINE_ENUM(RET_PF_INVALID);
-> > > +TRACE_DEFINE_ENUM(RET_PF_USER);
-> > >  TRACE_DEFINE_ENUM(RET_PF_FIXED);
-> > >  TRACE_DEFINE_ENUM(RET_PF_SPURIOUS);
-> > >  
-> > > diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> > > index 7670c13ce251..9acdf72537ce 100644
-> > > --- a/arch/x86/kvm/mmu/spte.h
-> > > +++ b/arch/x86/kvm/mmu/spte.h
-> > > @@ -315,6 +315,12 @@ static inline bool is_dirty_spte(u64 spte)
-> > >  	return dirty_mask ? spte & dirty_mask : spte & PT_WRITABLE_MASK;
-> > >  }
-> > >  
-> > > +static inline bool is_private_spte(u64 spte)
-> > > +{
-> > > +	/* FIXME: Query C-bit/S-bit for SEV/TDX. */
-> > > +	return false;
-> > > +}
-> > > +
-> > 
-> > PFN encoded in spte doesn't make sense.  In VMM for TDX, private-vs-shared is
-> > determined by S-bit of GFN.
-> 
-> My understanding is we will have software bit in the spte, will we? In
-> current TDX code I see we have SPTE_SHARED_MASK bit defined.
+Error/Warning reports:
 
-I'm afraid that you're referring old version.  It's not.  For TDX, gfn needs
-to be checked.  Which isn't encoded in spte.
+https://lore.kernel.org/linux-mm/202210090954.pTR6m6rj-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210111318.mbUfyhps-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210261404.b6UlzG7H-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210270637.Q5Y7FiKJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210271517.snUEnhD0-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210290926.rwDI063c-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210300751.rG3UDsuc-lkp@intel.com
 
+Error/Warning: (recently discovered and may have been fixed)
 
-> > >  static inline u64 get_rsvd_bits(struct rsvd_bits_validate *rsvd_check, u64 pte,
-> > >  				int level)
-> > >  {
-> > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > index 672f0432d777..9f97aac90606 100644
-> > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > @@ -1768,7 +1768,8 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
-> > >  			continue;
-> > >  
-> > >  		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
-> > > -							      iter.gfn, PG_LEVEL_NUM);
-> > > +						iter.gfn, PG_LEVEL_NUM,
-> > > +						is_private_spte(iter.old_spte));
-> > >  		if (max_mapping_level < iter.level)
-> > >  			continue;
-> > 
-> > This is to merge pages into a large page on the next kvm page fault.  large page
-> > support is not yet supported.  Let's skip the private slot until large page
-> > support is done.
-> 
-> So what your suggestion is passing in a 'false' at this time for
-> 'is_private'? Unless we will decide not use the above is_private_spte,
-> this code does not hurt, right? is_private_spte() return false before
-> we finally get chance to add the large page support.
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4878: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5044:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:102:9: error: implicit declaration of function 'u32p_replace_bits' [-Werror=implicit-function-declaration]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:127:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:233:23: error: implicit declaration of function 'u32_encode_bits' [-Werror=implicit-function-declaration]
+include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+lib/test_maple_tree.c:453:12: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+mm/hugetlb_vmemmap.c:419:11: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+mm/hugetlb_vmemmap.c:419:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+mm/hugetlb_vmemmap.c:419:59: error: expected ')' before 'bool'
+mm/hugetlb_vmemmap.c:419:60: error: unexpected type name 'bool': expected identifier
+mm/hugetlb_vmemmap.c:419:66: error: expected identifier
+sound/soc/sof/amd/../ops.h:309:56: error: too many arguments provided to function-like macro invocation
+sound/soc/sof/amd/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/amd/../ops.h:336:10: error: incompatible pointer to integer conversion returning 'u8 (*)(struct snd_sof_dev *, void *)' (aka 'unsigned char (*)(struct snd_sof_dev *, void *)') from a function with result type 'u8' (aka 'unsigned char') [-Wint-conversion]
+sound/soc/sof/amd/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/imx/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/imx/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/intel/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/intel/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/mt8186/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/mt8186/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/mt8195/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/mt8195/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
 
-Let's pass false always for now.
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/thermal/thermal_core.c:929 __thermal_cooling_device_register() warn: passing zero to 'ERR_PTR'
+lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
+lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|-- alpha-randconfig-m041-20221030
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-thermal-thermal_core.c-__thermal_cooling_device_register()-warn:passing-zero-to-ERR_PTR
+|   `-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   `-- sound-soc-sof-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|-- arc-randconfig-r043-20221030
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-FIELD_GET
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32_encode_bits
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32p_replace_bits
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
+clang_recent_errors
+|-- hexagon-allmodconfig
+|   `-- lib-test_maple_tree.c:warning:result-of-comparison-of-constant-with-expression-of-type-unsigned-long-is-always-false
+|-- riscv-randconfig-r024-20221030
+|   |-- sound-soc-sof-amd-..-ops.h:error:incompatible-pointer-to-integer-conversion-returning-u8-(-)(struct-snd_sof_dev-void-)-(aka-unsigned-char-(-)(struct-snd_sof_dev-void-)-)-from-a-function-with-result-ty
+|   `-- sound-soc-sof-amd-..-ops.h:error:too-many-arguments-provided-to-function-like-macro-invocation
+`-- s390-randconfig-r044-20221030
+    |-- mm-hugetlb_vmemmap.c:error:a-function-declaration-without-a-prototype-is-deprecated-in-all-versions-of-C-Werror-Wstrict-prototypes
+    |-- mm-hugetlb_vmemmap.c:error:expected-identifier
+    |-- mm-hugetlb_vmemmap.c:error:type-specifier-missing-defaults-to-int-ISO-C99-and-later-do-not-support-implicit-int
+    `-- mm-hugetlb_vmemmap.c:error:unexpected-type-name-bool:expected-identifier
+
+elapsed time: 1039m
+
+configs tested: 85
+configs skipped: 3
+
+gcc tested configs:
+arm                                 defconfig
+um                           x86_64_defconfig
+arm                              allyesconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arm64                            allyesconfig
+i386                                defconfig
+x86_64                              defconfig
+x86_64               randconfig-a014-20221031
+x86_64               randconfig-a012-20221031
+x86_64               randconfig-a011-20221031
+x86_64               randconfig-a013-20221031
+i386                 randconfig-a011-20221031
+x86_64               randconfig-a016-20221031
+i386                 randconfig-a012-20221031
+x86_64               randconfig-a015-20221031
+x86_64                               rhel-8.3
+m68k                             allmodconfig
+powerpc                           allnoconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+i386                 randconfig-a013-20221031
+arm                     eseries_pxa_defconfig
+powerpc                          allmodconfig
+ia64                             allmodconfig
+i386                 randconfig-a015-20221031
+alpha                            allyesconfig
+m68k                             allyesconfig
+arc                      axs103_smp_defconfig
+sh                               allmodconfig
+i386                 randconfig-a014-20221031
+x86_64                           rhel-8.3-syz
+i386                             allyesconfig
+i386                 randconfig-a016-20221031
+arm                           stm32_defconfig
+mips                             allyesconfig
+powerpc                     ep8248e_defconfig
+m68k                       bvme6000_defconfig
+arc                  randconfig-r043-20221031
+riscv                randconfig-r042-20221031
+arc                  randconfig-r043-20221030
+arm                         cm_x300_defconfig
+s390                 randconfig-r044-20221031
+arm                        mvebu_v7_defconfig
+x86_64                           rhel-8.3-kvm
+m68k                            q40_defconfig
+powerpc                      chrp32_defconfig
+xtensa                           alldefconfig
+x86_64                         rhel-8.3-kunit
+loongarch                 loongson3_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                    adder875_defconfig
+sh                                  defconfig
+sh                            hp6xx_defconfig
+i386                          randconfig-c001
+sh                           se7705_defconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+
+clang tested configs:
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+i386                 randconfig-a005-20221031
+i386                 randconfig-a001-20221031
+hexagon              randconfig-r045-20221031
+hexagon              randconfig-r041-20221030
+arm                        mvebu_v5_defconfig
+riscv                randconfig-r042-20221030
+x86_64               randconfig-a004-20221031
+s390                 randconfig-r044-20221030
+x86_64               randconfig-a003-20221031
+hexagon              randconfig-r041-20221031
+x86_64               randconfig-a002-20221031
+hexagon              randconfig-r045-20221030
+x86_64               randconfig-a001-20221031
+x86_64               randconfig-a006-20221031
+x86_64               randconfig-a005-20221031
+arm                         lpc32xx_defconfig
+powerpc                       ebony_defconfig
+arm                        vexpress_defconfig
+x86_64                          rhel-8.3-rust
+
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+0-DAY CI Kernel Test Service
+https://01.org/lkp
