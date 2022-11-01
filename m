@@ -2,284 +2,484 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADEB86142D6
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Nov 2022 02:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4C26149C5
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Nov 2022 12:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiKABm1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Oct 2022 21:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        id S230296AbiKALtC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Nov 2022 07:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbiKABmZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Oct 2022 21:42:25 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44B017402;
-        Mon, 31 Oct 2022 18:42:22 -0700 (PDT)
+        with ESMTP id S230421AbiKALsf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Nov 2022 07:48:35 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15361AD9E;
+        Tue,  1 Nov 2022 04:42:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667266943; x=1698802943;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4OYGu0RKdW2L34vFwgyzV4Q3BN/6r7P6a5YCMK9FnSI=;
-  b=TbxqET0+S+Pp+DCxMfnzCGfvxfAfXbCViGhpQ394H98lyXUcrXi6Fy+f
-   o9XZVMdG5uHveEIz9F+Jp03aDl/IP0fsE6l/41lavlP3uAdixxXKjPPwk
-   FNeDAOEHSi1W/zyuhs4bMAd/LdOrX9T1HpnAwHlOkUn28XWWjpMtPU/oc
-   ePavYyz/1qIGXPyWQotnVHBpbm8pB6/jIjWjdUiJKLyaEn01rsp5ibIYO
-   TlHZujfsmF3oe//GHHJrrX89ocyWrGXxbXWDnAuhlFHmuQz7paIkGV1ju
-   gTGQsCa18o+DyO0zc03vfOaVz4qA6cmmoGn3Q58zTDNwxH+pL8eBw7YbH
+  t=1667302929; x=1698838929;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=fVnmfE4aAQhJRses/HkLxskjBJG6DmPsjixSgyOEAeU=;
+  b=iaEpHSu2YlKrBePJq2R96njxAhZwSqfv+Utube6tNxS7V3g0mfPRnEyo
+   II8haeBgnH6asY85war8AEUZEgEXuX4iKwdX+gUHH0CfFP1BFZU8qlqEY
+   NPZxIo1yvdJ2tnr1sla+K+UeEq5Og5VGGT38OCsDnGuGZp+JRU3RXH6C7
+   9W4glB9p8bf6bpN0nOo9LXjoC+auMfdQH9gHi3bhDSF/9lEXnj/q8235T
+   CCvHcEYtp5BT0kson7QeGAtS4ttYSQQPH1vX6iuvkCLBy+NQaJzYnj98w
+   sfo49A6w/aUA21aUCPvU+9CaerDZN1vaZsF32+6VMhFPrWXqL1hYYkfSB
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310136106"
-X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
-   d="scan'208";a="310136106"
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="373331312"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="373331312"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 18:42:22 -0700
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 04:42:08 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="628433612"
-X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
-   d="scan'208";a="628433612"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 31 Oct 2022 18:42:19 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1opgIF-000DBA-00;
-        Tue, 01 Nov 2022 01:42:19 +0000
-Date:   Tue, 01 Nov 2022 09:42:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     sound-open-firmware@alsa-project.org, ntfs3@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org,
-        linux-ext4@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arch@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c
-Message-ID: <6360796a.Im9eP1m6DSU/3Bdw%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="628549426"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="628549426"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 01 Nov 2022 04:41:57 -0700
+Date:   Tue, 1 Nov 2022 19:37:29 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221101113729.GA4015495@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <20221031174738.fklhlia5fmaiinpe@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20221031174738.fklhlia5fmaiinpe@amd.com>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c  Add linux-next specific files for 20221031
+On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
+> On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
+> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > 
+> > Introduce 'memfd_restricted' system call with the ability to create
+> > memory areas that are restricted from userspace access through ordinary
+> > MMU operations (e.g. read/write/mmap). The memory content is expected to
+> > be used through a new in-kernel interface by a third kernel module.
+> > 
+> > memfd_restricted() is useful for scenarios where a file descriptor(fd)
+> > can be used as an interface into mm but want to restrict userspace's
+> > ability on the fd. Initially it is designed to provide protections for
+> > KVM encrypted guest memory.
+> > 
+> > Normally KVM uses memfd memory via mmapping the memfd into KVM userspace
+> > (e.g. QEMU) and then using the mmaped virtual address to setup the
+> > mapping in the KVM secondary page table (e.g. EPT). With confidential
+> > computing technologies like Intel TDX, the memfd memory may be encrypted
+> > with special key for special software domain (e.g. KVM guest) and is not
+> > expected to be directly accessed by userspace. Precisely, userspace
+> > access to such encrypted memory may lead to host crash so should be
+> > prevented.
+> > 
+> > memfd_restricted() provides semantics required for KVM guest encrypted
+> > memory support that a fd created with memfd_restricted() is going to be
+> > used as the source of guest memory in confidential computing environment
+> > and KVM can directly interact with core-mm without the need to expose
+> > the memoy content into KVM userspace.
+> > 
+> > KVM userspace is still in charge of the lifecycle of the fd. It should
+> > pass the created fd to KVM. KVM uses the new restrictedmem_get_page() to
+> > obtain the physical memory page and then uses it to populate the KVM
+> > secondary page table entries.
+> > 
+> > The userspace restricted memfd can be fallocate-ed or hole-punched
+> > from userspace. When these operations happen, KVM can get notified
+> > through restrictedmem_notifier, it then gets chance to remove any
+> > mapped entries of the range in the secondary page tables.
+> > 
+> > memfd_restricted() itself is implemented as a shim layer on top of real
+> > memory file systems (currently tmpfs). Pages in restrictedmem are marked
+> > as unmovable and unevictable, this is required for current confidential
+> > usage. But in future this might be changed.
+> > 
+> > By default memfd_restricted() prevents userspace read, write and mmap.
+> > By defining new bit in the 'flags', it can be extended to support other
+> > restricted semantics in the future.
+> > 
+> > The system call is currently wired up for x86 arch.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+> >  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+> >  include/linux/restrictedmem.h          |  62 ++++++
+> >  include/linux/syscalls.h               |   1 +
+> >  include/uapi/asm-generic/unistd.h      |   5 +-
+> >  include/uapi/linux/magic.h             |   1 +
+> >  kernel/sys_ni.c                        |   3 +
+> >  mm/Kconfig                             |   4 +
+> >  mm/Makefile                            |   1 +
+> >  mm/restrictedmem.c                     | 250 +++++++++++++++++++++++++
+> >  10 files changed, 328 insertions(+), 1 deletion(-)
+> >  create mode 100644 include/linux/restrictedmem.h
+> >  create mode 100644 mm/restrictedmem.c
+> > 
+> > diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+> > index 320480a8db4f..dc70ba90247e 100644
+> > --- a/arch/x86/entry/syscalls/syscall_32.tbl
+> > +++ b/arch/x86/entry/syscalls/syscall_32.tbl
+> > @@ -455,3 +455,4 @@
+> >  448	i386	process_mrelease	sys_process_mrelease
+> >  449	i386	futex_waitv		sys_futex_waitv
+> >  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
+> > +451	i386	memfd_restricted	sys_memfd_restricted
+> > diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+> > index c84d12608cd2..06516abc8318 100644
+> > --- a/arch/x86/entry/syscalls/syscall_64.tbl
+> > +++ b/arch/x86/entry/syscalls/syscall_64.tbl
+> > @@ -372,6 +372,7 @@
+> >  448	common	process_mrelease	sys_process_mrelease
+> >  449	common	futex_waitv		sys_futex_waitv
+> >  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+> > +451	common	memfd_restricted	sys_memfd_restricted
+> >  
+> >  #
+> >  # Due to a historical design error, certain syscalls are numbered differently
+> > diff --git a/include/linux/restrictedmem.h b/include/linux/restrictedmem.h
+> > new file mode 100644
+> > index 000000000000..9c37c3ea3180
+> > --- /dev/null
+> > +++ b/include/linux/restrictedmem.h
+> > @@ -0,0 +1,62 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +#ifndef _LINUX_RESTRICTEDMEM_H
+> > +
+> > +#include <linux/file.h>
+> > +#include <linux/magic.h>
+> > +#include <linux/pfn_t.h>
+> > +
+> > +struct restrictedmem_notifier;
+> > +
+> > +struct restrictedmem_notifier_ops {
+> > +	void (*invalidate_start)(struct restrictedmem_notifier *notifier,
+> > +				 pgoff_t start, pgoff_t end);
+> > +	void (*invalidate_end)(struct restrictedmem_notifier *notifier,
+> > +			       pgoff_t start, pgoff_t end);
+> > +};
+> > +
+> > +struct restrictedmem_notifier {
+> > +	struct list_head list;
+> > +	const struct restrictedmem_notifier_ops *ops;
+> > +};
+> > +
+> > +#ifdef CONFIG_RESTRICTEDMEM
+> > +
+> > +void restrictedmem_register_notifier(struct file *file,
+> > +				     struct restrictedmem_notifier *notifier);
+> > +void restrictedmem_unregister_notifier(struct file *file,
+> > +				       struct restrictedmem_notifier *notifier);
+> > +
+> > +int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> > +			   struct page **pagep, int *order);
+> > +
+> > +static inline bool file_is_restrictedmem(struct file *file)
+> > +{
+> > +	return file->f_inode->i_sb->s_magic == RESTRICTEDMEM_MAGIC;
+> > +}
+> > +
+> > +#else
+> > +
+> > +static inline void restrictedmem_register_notifier(struct file *file,
+> > +				     struct restrictedmem_notifier *notifier)
+> > +{
+> > +}
+> > +
+> > +static inline void restrictedmem_unregister_notifier(struct file *file,
+> > +				       struct restrictedmem_notifier *notifier)
+> > +{
+> > +}
+> > +
+> > +static inline int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> > +					 struct page **pagep, int *order)
+> > +{
+> > +	return -1;
+> > +}
+> > +
+> > +static inline bool file_is_restrictedmem(struct file *file)
+> > +{
+> > +	return false;
+> > +}
+> > +
+> > +#endif /* CONFIG_RESTRICTEDMEM */
+> > +
+> > +#endif /* _LINUX_RESTRICTEDMEM_H */
+> > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> > index a34b0f9a9972..f9e9e0c820c5 100644
+> > --- a/include/linux/syscalls.h
+> > +++ b/include/linux/syscalls.h
+> > @@ -1056,6 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+> >  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+> >  					    unsigned long home_node,
+> >  					    unsigned long flags);
+> > +asmlinkage long sys_memfd_restricted(unsigned int flags);
+> >  
+> >  /*
+> >   * Architecture-specific system calls
+> > diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> > index 45fa180cc56a..e93cd35e46d0 100644
+> > --- a/include/uapi/asm-generic/unistd.h
+> > +++ b/include/uapi/asm-generic/unistd.h
+> > @@ -886,8 +886,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+> >  #define __NR_set_mempolicy_home_node 450
+> >  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+> >  
+> > +#define __NR_memfd_restricted 451
+> > +__SYSCALL(__NR_memfd_restricted, sys_memfd_restricted)
+> > +
+> >  #undef __NR_syscalls
+> > -#define __NR_syscalls 451
+> > +#define __NR_syscalls 452
+> >  
+> >  /*
+> >   * 32 bit systems traditionally used different
+> > diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+> > index 6325d1d0e90f..8aa38324b90a 100644
+> > --- a/include/uapi/linux/magic.h
+> > +++ b/include/uapi/linux/magic.h
+> > @@ -101,5 +101,6 @@
+> >  #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
+> >  #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
+> >  #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
+> > +#define RESTRICTEDMEM_MAGIC	0x5245534d	/* "RESM" */
+> >  
+> >  #endif /* __LINUX_MAGIC_H__ */
+> > diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+> > index 860b2dcf3ac4..7c4a32cbd2e7 100644
+> > --- a/kernel/sys_ni.c
+> > +++ b/kernel/sys_ni.c
+> > @@ -360,6 +360,9 @@ COND_SYSCALL(pkey_free);
+> >  /* memfd_secret */
+> >  COND_SYSCALL(memfd_secret);
+> >  
+> > +/* memfd_restricted */
+> > +COND_SYSCALL(memfd_restricted);
+> > +
+> >  /*
+> >   * Architecture specific weak syscall entries.
+> >   */
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index 0331f1461f81..0177d53676c7 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -1076,6 +1076,10 @@ config IO_MAPPING
+> >  config SECRETMEM
+> >  	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+> >  
+> > +config RESTRICTEDMEM
+> > +	bool
+> > +	depends on TMPFS
+> > +
+> >  config ANON_VMA_NAME
+> >  	bool "Anonymous VMA name support"
+> >  	depends on PROC_FS && ADVISE_SYSCALLS && MMU
+> > diff --git a/mm/Makefile b/mm/Makefile
+> > index 9a564f836403..6cb6403ffd40 100644
+> > --- a/mm/Makefile
+> > +++ b/mm/Makefile
+> > @@ -117,6 +117,7 @@ obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
+> >  obj-$(CONFIG_PAGE_TABLE_CHECK) += page_table_check.o
+> >  obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
+> >  obj-$(CONFIG_SECRETMEM) += secretmem.o
+> > +obj-$(CONFIG_RESTRICTEDMEM) += restrictedmem.o
+> >  obj-$(CONFIG_CMA_SYSFS) += cma_sysfs.o
+> >  obj-$(CONFIG_USERFAULTFD) += userfaultfd.o
+> >  obj-$(CONFIG_IDLE_PAGE_TRACKING) += page_idle.o
+> > diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> > new file mode 100644
+> > index 000000000000..e5bf8907e0f8
+> > --- /dev/null
+> > +++ b/mm/restrictedmem.c
+> > @@ -0,0 +1,250 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include "linux/sbitmap.h"
+> > +#include <linux/pagemap.h>
+> > +#include <linux/pseudo_fs.h>
+> > +#include <linux/shmem_fs.h>
+> > +#include <linux/syscalls.h>
+> > +#include <uapi/linux/falloc.h>
+> > +#include <uapi/linux/magic.h>
+> > +#include <linux/restrictedmem.h>
+> > +
+> > +struct restrictedmem_data {
+> > +	struct mutex lock;
+> > +	struct file *memfd;
+> > +	struct list_head notifiers;
+> > +};
+> > +
+> > +static void restrictedmem_notifier_invalidate(struct restrictedmem_data *data,
+> > +				 pgoff_t start, pgoff_t end, bool notify_start)
+> > +{
+> > +	struct restrictedmem_notifier *notifier;
+> > +
+> > +	mutex_lock(&data->lock);
+> > +	list_for_each_entry(notifier, &data->notifiers, list) {
+> > +		if (notify_start)
+> > +			notifier->ops->invalidate_start(notifier, start, end);
+> > +		else
+> > +			notifier->ops->invalidate_end(notifier, start, end);
+> > +	}
+> > +	mutex_unlock(&data->lock);
+> > +}
+> > +
+> > +static int restrictedmem_release(struct inode *inode, struct file *file)
+> > +{
+> > +	struct restrictedmem_data *data = inode->i_mapping->private_data;
+> > +
+> > +	fput(data->memfd);
+> > +	kfree(data);
+> > +	return 0;
+> > +}
+> > +
+> > +static long restrictedmem_fallocate(struct file *file, int mode,
+> > +				    loff_t offset, loff_t len)
+> > +{
+> > +	struct restrictedmem_data *data = file->f_mapping->private_data;
+> > +	struct file *memfd = data->memfd;
+> > +	int ret;
+> > +
+> > +	if (mode & FALLOC_FL_PUNCH_HOLE) {
+> > +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+> > +			return -EINVAL;
+> > +	}
+> > +
+> > +	restrictedmem_notifier_invalidate(data, offset, offset + len, true);
+> > +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
+> > +	restrictedmem_notifier_invalidate(data, offset, offset + len, false);
+> > +	return ret;
+> > +}
+> 
+> In v8 there was some discussion about potentially passing the page/folio
+> and order as part of the invalidation callback, I ended up needing
+> something similar for SEV-SNP, and think it might make sense for other
+> platforms. This main reasoning is:
 
-Error/Warning reports:
+In that context what we talked on is the inaccessible_get_pfn(), I was
+not aware there is need for invalidation callback as well.
 
-https://lore.kernel.org/linux-mm/202210090954.pTR6m6rj-lkp@intel.com
-https://lore.kernel.org/linux-mm/202210111318.mbUfyhps-lkp@intel.com
-https://lore.kernel.org/linux-mm/202210261404.b6UlzG7H-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210270637.Q5Y7FiKJ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210271517.snUEnhD0-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210290926.rwDI063c-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202210300751.rG3UDsuc-lkp@intel.com
+> 
+>   1) restoring kernel directmap:
+> 
+>      Currently SNP (and I believe TDX) need to either split or remove kernel
+>      direct mappings for restricted PFNs, since there is no guarantee that
+>      other PFNs within a 2MB range won't be used for non-restricted
+>      (which will cause an RMP #PF in the case of SNP since the 2MB
+>      mapping overlaps with guest-owned pages)
 
-Error/Warning: (recently discovered and may have been fixed)
+Has the splitting and restoring been a well-discussed direction? I'm
+just curious whether there is other options to solve this issue.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4878: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5044:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
-drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:102:9: error: implicit declaration of function 'u32p_replace_bits' [-Werror=implicit-function-declaration]
-drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:127:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:233:23: error: implicit declaration of function 'u32_encode_bits' [-Werror=implicit-function-declaration]
-include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
-include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-lib/test_maple_tree.c:453:12: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
-mm/hugetlb_vmemmap.c:419:11: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-mm/hugetlb_vmemmap.c:419:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-mm/hugetlb_vmemmap.c:419:59: error: expected ')' before 'bool'
-mm/hugetlb_vmemmap.c:419:60: error: unexpected type name 'bool': expected identifier
-mm/hugetlb_vmemmap.c:419:66: error: expected identifier
-sound/soc/sof/amd/../ops.h:309:56: error: too many arguments provided to function-like macro invocation
-sound/soc/sof/amd/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/amd/../ops.h:336:10: error: incompatible pointer to integer conversion returning 'u8 (*)(struct snd_sof_dev *, void *)' (aka 'unsigned char (*)(struct snd_sof_dev *, void *)') from a function with result type 'u8' (aka 'unsigned char') [-Wint-conversion]
-sound/soc/sof/amd/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
-sound/soc/sof/imx/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/imx/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
-sound/soc/sof/intel/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/intel/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
-sound/soc/sof/mediatek/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/mediatek/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
-sound/soc/sof/mediatek/mt8186/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/mediatek/mt8186/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
-sound/soc/sof/mediatek/mt8195/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/mediatek/mt8195/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
-sound/soc/sof/ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
-sound/soc/sof/ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+> 
+>      Previously we were able to restore 2MB mappings to some degree
+>      since both shared/restricted pages were all pinned, so anything
+>      backed by a THP (or hugetlb page once that is implemented) at guest
+>      teardown could be restored as 2MB direct mapping.
+> 
+>      Invalidation seems like the most logical time to have this happen,
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Currently invalidation only happens at user-initiated fallocate(). It
+does not cover the VM teardown case where the restoring might also be
+expected to be handled.
 
-drivers/thermal/thermal_core.c:929 __thermal_cooling_device_register() warn: passing zero to 'ERR_PTR'
-lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
+>      but whether or not to restore as 2MB requires the order to be 2MB
+>      or larger, and for GPA range being invalidated to cover the entire
+>      2MB (otherwise it means the page was potentially split and some
+>      subpages free back to host already, in which case it can't be
+>      restored as 2MB).
+> 
+>   2) Potentially less invalidations:
+>       
+>      If we pass the entire folio or compound_page as part of
+>      invalidation, we only needed to issue 1 invalidation per folio.
 
-Error/Warning ids grouped by kconfigs:
+I'm not sure I agree, the current invalidation covers the whole range
+that passed from userspace and the invalidation is invoked only once for
+each usrspace fallocate().
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|-- alpha-randconfig-m041-20221030
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-thermal-thermal_core.c-__thermal_cooling_device_register()-warn:passing-zero-to-ERR_PTR
-|   `-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
-|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
-|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   `-- sound-soc-sof-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|-- arc-randconfig-r043-20221030
-|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
-|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-FIELD_GET
-|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32_encode_bits
-|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32p_replace_bits
-|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
-|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
-|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
-|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
-clang_recent_errors
-|-- hexagon-allmodconfig
-|   `-- lib-test_maple_tree.c:warning:result-of-comparison-of-constant-with-expression-of-type-unsigned-long-is-always-false
-|-- riscv-randconfig-r024-20221030
-|   |-- sound-soc-sof-amd-..-ops.h:error:incompatible-pointer-to-integer-conversion-returning-u8-(-)(struct-snd_sof_dev-void-)-(aka-unsigned-char-(-)(struct-snd_sof_dev-void-)-)-from-a-function-with-result-ty
-|   `-- sound-soc-sof-amd-..-ops.h:error:too-many-arguments-provided-to-function-like-macro-invocation
-`-- s390-randconfig-r044-20221030
-    |-- mm-hugetlb_vmemmap.c:error:a-function-declaration-without-a-prototype-is-deprecated-in-all-versions-of-C-Werror-Wstrict-prototypes
-    |-- mm-hugetlb_vmemmap.c:error:expected-identifier
-    |-- mm-hugetlb_vmemmap.c:error:type-specifier-missing-defaults-to-int-ISO-C99-and-later-do-not-support-implicit-int
-    `-- mm-hugetlb_vmemmap.c:error:unexpected-type-name-bool:expected-identifier
+> 
+>   3) Potentially useful for hugetlbfs support:
+> 
+>      One issue with hugetlbfs is that we don't support splitting the
+>      hugepage in such cases, which was a big obstacle prior to UPM. Now
+>      however, we may have the option of doing "lazy" invalidations where
+>      fallocate(PUNCH_HOLE, ...) won't free a shmem-allocate page unless
+>      all the subpages within the 2M range are either hole-punched, or the
+>      guest is shut down, so in that way we never have to split it. Sean
+>      was pondering something similar in another thread:
+> 
+>        https://lore.kernel.org/linux-mm/YyGLXXkFCmxBfu5U@google.com/
+> 
+>      Issuing invalidations with folio-granularity ties in fairly well
+>      with this sort of approach if we end up going that route.
 
-elapsed time: 1039m
+There is semantics difference between the current one and the proposed
+one: The invalidation range is exactly what userspace passed down to the
+kernel (being fallocated) while the proposed one will be subset of that
+(if userspace-provided addr/size is not aligned to power of two), I'm
+not quite confident this difference has no side effect.
 
-configs tested: 85
-configs skipped: 3
+> 
+> I need to rework things for v9, and we'll probably want to use struct
+> folio instead of struct page now, but as a proof-of-concept of sorts this
+> is what I'd added on top of v8 of your patchset to implement 1) and 2):
+> 
+>   https://github.com/mdroth/linux/commit/127e5ea477c7bd5e4107fd44a04b9dc9e9b1af8b
+> 
+> Does an approach like this seem reasonable? Should be work this into the
+> base restricted memslot support?
 
-gcc tested configs:
-arm                                 defconfig
-um                           x86_64_defconfig
-arm                              allyesconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-arm64                            allyesconfig
-i386                                defconfig
-x86_64                              defconfig
-x86_64               randconfig-a014-20221031
-x86_64               randconfig-a012-20221031
-x86_64               randconfig-a011-20221031
-x86_64               randconfig-a013-20221031
-i386                 randconfig-a011-20221031
-x86_64               randconfig-a016-20221031
-i386                 randconfig-a012-20221031
-x86_64               randconfig-a015-20221031
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-powerpc                           allnoconfig
-arc                              allyesconfig
-x86_64                           allyesconfig
-i386                 randconfig-a013-20221031
-arm                     eseries_pxa_defconfig
-powerpc                          allmodconfig
-ia64                             allmodconfig
-i386                 randconfig-a015-20221031
-alpha                            allyesconfig
-m68k                             allyesconfig
-arc                      axs103_smp_defconfig
-sh                               allmodconfig
-i386                 randconfig-a014-20221031
-x86_64                           rhel-8.3-syz
-i386                             allyesconfig
-i386                 randconfig-a016-20221031
-arm                           stm32_defconfig
-mips                             allyesconfig
-powerpc                     ep8248e_defconfig
-m68k                       bvme6000_defconfig
-arc                  randconfig-r043-20221031
-riscv                randconfig-r042-20221031
-arc                  randconfig-r043-20221030
-arm                         cm_x300_defconfig
-s390                 randconfig-r044-20221031
-arm                        mvebu_v7_defconfig
-x86_64                           rhel-8.3-kvm
-m68k                            q40_defconfig
-powerpc                      chrp32_defconfig
-xtensa                           alldefconfig
-x86_64                         rhel-8.3-kunit
-loongarch                 loongson3_defconfig
-openrisc                 simple_smp_defconfig
-powerpc                    adder875_defconfig
-sh                                  defconfig
-sh                            hp6xx_defconfig
-i386                          randconfig-c001
-sh                           se7705_defconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allmodconfig
-s390                             allyesconfig
+If the above mentioned semantics difference is not a problem, I don't
+have strong objection on this.
 
-clang tested configs:
-i386                 randconfig-a003-20221031
-i386                 randconfig-a002-20221031
-i386                 randconfig-a004-20221031
-i386                 randconfig-a006-20221031
-i386                 randconfig-a005-20221031
-i386                 randconfig-a001-20221031
-hexagon              randconfig-r045-20221031
-hexagon              randconfig-r041-20221030
-arm                        mvebu_v5_defconfig
-riscv                randconfig-r042-20221030
-x86_64               randconfig-a004-20221031
-s390                 randconfig-r044-20221030
-x86_64               randconfig-a003-20221031
-hexagon              randconfig-r041-20221031
-x86_64               randconfig-a002-20221031
-hexagon              randconfig-r045-20221030
-x86_64               randconfig-a001-20221031
-x86_64               randconfig-a006-20221031
-x86_64               randconfig-a005-20221031
-arm                         lpc32xx_defconfig
-powerpc                       ebony_defconfig
-arm                        vexpress_defconfig
-x86_64                          rhel-8.3-rust
+Sean, since you have much better understanding on this, what is your
+take on this?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Chao
+> 
+> Thanks,
+> 
+> Mike
