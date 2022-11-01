@@ -2,344 +2,263 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56DA614E31
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Nov 2022 16:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBD66151B7
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Nov 2022 19:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiKAPUX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Nov 2022 11:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S230085AbiKASoO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Nov 2022 14:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiKAPUI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Nov 2022 11:20:08 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2046.outbound.protection.outlook.com [40.107.237.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E74C0D;
-        Tue,  1 Nov 2022 08:20:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gSs+JTlzPr8QqtV3Rkvvh5etYgfxg4eAyOwO8mdNcFlZx4iCJro+wKA2bz9XWbVVmJtW3RJSemxR84FqrjsJmDHHFNFP0PlhSZr3MmN1uSv8VCPwl03YwFBziTQW/htuf8Du8oaD1HfzZK25XMhfsm4ddaNeaNukcAfYcV/w4ErIlmInFNFWA+EOU9M/5YdK6/EFQNzeXeBN7oHyFr4h438cuE2uAr/fajn/gC4ZNLxKuxghdGMGeF1jdIKfrY/0vB2lvMiezhOSypMWcMo5KwJvUjizwBejijTSlGLjet9Odl7xNB7IdF/N5NnSD6x4Qr+sk9Ls5tEiVaCrmze/2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8SKoWoYcAKO/nnwiw3Q0uRIl4iyB1XAGG/11kmZPbT8=;
- b=Eb0ft1APpgNVzcmXB/fxNJEKplkbvUieLODuUBqxs4IdXL79Cp0div3T6PZQkykxgJKL7TjZJWLIdTd0uFsPX2kpeiVhMRWQzUhe3xUmLB6idZfHUB4+RYlHe4QRLH5kvC7/IuBRPEuw8wZyKRizB0A/gjsHV1wFmUCpzD0WUIPfH5f+OFm/s8RMtnluqaqtCjs1LkFMcYIUJEtosWsvUZoWocDfnj678HwA//14O43SlvP6hU7Yz6fAssgl6dizDJvx5hbqlpS1zAtvbAXOx39f3DFMm0htbs35HHve2rENCqFXrbSRMMRFL8S9lKyqt0iBBdYGOtGM4gsm5Oph7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8SKoWoYcAKO/nnwiw3Q0uRIl4iyB1XAGG/11kmZPbT8=;
- b=LtML3CDP0Blbd4Fu6NzP6CBIm3CArWr5PzjnwPohwkSNhn3foFfbxp/gZ/7st02tL7XsvIo6y9iMR7CQi1nv+6EW0qNTAsMq35X2zG9LVp5Ldr6OthxaXFHxZzXZUUzzAyAUu86mHIZ8ZsPNT6BXEs22kx2vRLTG/A4i+qxDi4I=
-Received: from DS7PR03CA0259.namprd03.prod.outlook.com (2603:10b6:5:3b3::24)
- by BY5PR12MB4180.namprd12.prod.outlook.com (2603:10b6:a03:213::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
- 2022 15:20:02 +0000
-Received: from DM6NAM11FT075.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b3:cafe::53) by DS7PR03CA0259.outlook.office365.com
- (2603:10b6:5:3b3::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19 via Frontend
- Transport; Tue, 1 Nov 2022 15:20:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT075.mail.protection.outlook.com (10.13.173.42) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5769.14 via Frontend Transport; Tue, 1 Nov 2022 15:20:02 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
- 2022 10:20:00 -0500
-Date:   Tue, 1 Nov 2022 10:19:44 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <tabba@google.com>,
-        <mhocko@suse.com>, Muchun Song <songmuchun@bytedance.com>,
-        <wei.w.wang@intel.com>
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221101151944.rhpav47pdulsew7l@amd.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221031174738.fklhlia5fmaiinpe@amd.com>
- <20221101113729.GA4015495@chaop.bj.intel.com>
+        with ESMTP id S230127AbiKASoM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Nov 2022 14:44:12 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74431C435;
+        Tue,  1 Nov 2022 11:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667328250; x=1698864250;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bQSMHznVBZB4rDVU8y/w9qHpcPgIeTyy6fMjKL2pzz8=;
+  b=TaUBXl6AAY8xzJixlz9Zh4USoORXfDIcOCJtQAbFwLR5swrYWEAKvmdA
+   oVjUOfY/yVfPcq5sGt1eqdm7w0enflIEYlnI8iI0HrV3/ZbWoIZRQZvpc
+   CBA+yio42lBQD9n4BYqDtro+CXG45AvMB+/Hib2hp9eYjMziRBgSU6oOa
+   dc0dvN40YNyoBx2L1rMzX4H9MvxY0zUC5Hs7VANySiLzOv2jKA2Cq8f1X
+   wRNdaKM8l/6SFa6ITF949QW/wjB5GkGjVqL4YoFi0HpruyZaHaRENnrbk
+   FyeuuoWSid+0v6ZuXeuccbMSINQNTbGO5XFLxWj/9BB5SRfB3w9Z44Bi8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="289601846"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="289601846"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 11:44:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="808996415"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="808996415"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 01 Nov 2022 11:44:07 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1opwF4-000Dvo-2t;
+        Tue, 01 Nov 2022 18:44:06 +0000
+Date:   Wed, 02 Nov 2022 02:43:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     sound-open-firmware@alsa-project.org, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        kvm@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ e9d267f752f8ff62f0111cea90e3ced4fc595b4f
+Message-ID: <636168d9.QfrzhK0gRCwBz/jv%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221101113729.GA4015495@chaop.bj.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT075:EE_|BY5PR12MB4180:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31d0c1ae-a892-40ba-4aa0-08dabc1c8c49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a4IwM+kP159b8Z7zh5Kw34P4pqk8ijEe3MinBoWvsOCVrJBRNw0A6I5bGst2aswj7/grUgfU9ImSq0VUZH8eLRR+b5xoqLhFcYm9DNkDrMvedGjYT46mXMz3vYgabrwYhTSpofehOkATfkpXRdsStZ/WbDAZRkDJZKs2HRR6QJMwZDf9Zrwh0TLCTIvvwKC9YtDoGebXHWLCoySh9D0GmMGHGN9ofOVf3O3XBn13u+7Bt/vbNR1e/ysI/rZbjtyl/pVfni6/DqQczZy7iVj6qRuRZxFCY+oP+OfOIzMPwNGJsgTazOYlheg1YMasiG4KUQ8pbuFFbvuPRQOIZQWotkiD5/ebD+N2mVbshdv4TWErWjDVa95nbhvizWnreDIVY4zuePOuhR8jinQB03EH7Ok3H3ggAq8FTEKVs07FfqijC7fO8b4CGwqMH8OyQbsbnXzNAmoCpOJplcsQWBv8eIGaOcwyGlOR12l+4JpBqn2TZRyEtIRsDVoKkgsSVor+syiM2B+lTRsNkRGQbICIS/QdGi0w6URSojrxi4L7tbEq8Ildm6tHu1vqndywDIUkxDVdWW5g3luWuA9stmwIDgwtOmbRoVMej8tUxDa1N0P7ag052dqmOM2rIouavWZU9vZwPISaiBzmkYEeGIEGbEK5MYXRP7nb1jmaeWhV6rJpQ2VIWNl5A8DtklSbRVKgCr7OWkHmzkDTwVf+vpsFcwEjKfLxccCaosdVxYC/3oQVwjcEafpoLINNHtlvysgLFQVSCPNavp7IXQiXFXKcQO1dDOSwOIVs8LiNYrjR6D6JGElA5uZlw5JzYRT1Q/nHc0FVwjB6jrrtZokJ/kwco+WnOE4AJbaaBuvMXK3U3dyiSdz818vuLRZYalUfCcXJ5ncxQ8PQ2GdMOSx/juX1Xw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199015)(46966006)(40470700004)(36840700001)(966005)(478600001)(2906002)(186003)(1076003)(16526019)(336012)(2616005)(44832011)(41300700001)(70206006)(4326008)(6666004)(36756003)(54906003)(316002)(70586007)(8676002)(6916009)(83380400001)(82740400003)(40480700001)(40460700003)(45080400002)(82310400005)(47076005)(5660300002)(86362001)(426003)(7406005)(26005)(8936002)(7416002)(36860700001)(81166007)(356005)(3714002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 15:20:02.4128
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31d0c1ae-a892-40ba-4aa0-08dabc1c8c49
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT075.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 07:37:29PM +0800, Chao Peng wrote:
-> On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
-> > On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
-> > > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> > > 
-> > > +struct restrictedmem_data {
-> > > +	struct mutex lock;
-> > > +	struct file *memfd;
-> > > +	struct list_head notifiers;
-> > > +};
-> > > +
-> > > +static void restrictedmem_notifier_invalidate(struct restrictedmem_data *data,
-> > > +				 pgoff_t start, pgoff_t end, bool notify_start)
-> > > +{
-> > > +	struct restrictedmem_notifier *notifier;
-> > > +
-> > > +	mutex_lock(&data->lock);
-> > > +	list_for_each_entry(notifier, &data->notifiers, list) {
-> > > +		if (notify_start)
-> > > +			notifier->ops->invalidate_start(notifier, start, end);
-> > > +		else
-> > > +			notifier->ops->invalidate_end(notifier, start, end);
-> > > +	}
-> > > +	mutex_unlock(&data->lock);
-> > > +}
-> > > +
-> > > +static int restrictedmem_release(struct inode *inode, struct file *file)
-> > > +{
-> > > +	struct restrictedmem_data *data = inode->i_mapping->private_data;
-> > > +
-> > > +	fput(data->memfd);
-> > > +	kfree(data);
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static long restrictedmem_fallocate(struct file *file, int mode,
-> > > +				    loff_t offset, loff_t len)
-> > > +{
-> > > +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> > > +	struct file *memfd = data->memfd;
-> > > +	int ret;
-> > > +
-> > > +	if (mode & FALLOC_FL_PUNCH_HOLE) {
-> > > +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> > > +			return -EINVAL;
-> > > +	}
-> > > +
-> > > +	restrictedmem_notifier_invalidate(data, offset, offset + len, true);
-> > > +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> > > +	restrictedmem_notifier_invalidate(data, offset, offset + len, false);
-> > > +	return ret;
-> > > +}
-> > 
-> > In v8 there was some discussion about potentially passing the page/folio
-> > and order as part of the invalidation callback, I ended up needing
-> > something similar for SEV-SNP, and think it might make sense for other
-> > platforms. This main reasoning is:
-> 
-> In that context what we talked on is the inaccessible_get_pfn(), I was
-> not aware there is need for invalidation callback as well.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: e9d267f752f8ff62f0111cea90e3ced4fc595b4f  Add linux-next specific files for 20221101
 
-Right, your understanding is correct. I think Sean had only mentioned in
-passing that it was something we could potentially do, and in the cases I
-was looking at it ended up being useful. I only mentioned it so I don't
-seem like I'm too far out in the weeds here :)
+Error/Warning reports:
 
-> 
-> > 
-> >   1) restoring kernel directmap:
-> > 
-> >      Currently SNP (and I believe TDX) need to either split or remove kernel
-> >      direct mappings for restricted PFNs, since there is no guarantee that
-> >      other PFNs within a 2MB range won't be used for non-restricted
-> >      (which will cause an RMP #PF in the case of SNP since the 2MB
-> >      mapping overlaps with guest-owned pages)
-> 
-> Has the splitting and restoring been a well-discussed direction? I'm
-> just curious whether there is other options to solve this issue.
+https://lore.kernel.org/linux-mm/202210090954.pTR6m6rj-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210261404.b6UlzG7H-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210270637.Q5Y7FiKJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210271517.snUEnhD0-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210290926.rwDI063c-lkp@intel.com
 
-For SNP it's been discussed for quite some time, and either splitting or
-removing private entries from directmap are the well-discussed way I'm
-aware of to avoid RMP violations due to some other kernel process using
-a 2MB mapping to access shared memory if there are private pages that
-happen to be within that range.
+Error/Warning: (recently discovered and may have been fixed)
 
-In both cases the issue of how to restore directmap as 2M becomes a
-problem.
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4878: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5044:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:102:9: error: implicit declaration of function 'u32p_replace_bits' [-Werror=implicit-function-declaration]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:127:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:233:23: error: implicit declaration of function 'u32_encode_bits' [-Werror=implicit-function-declaration]
+include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+lib/test_maple_tree.c:453:12: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+sound/soc/sof/amd/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/amd/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/imx/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/imx/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/intel/../ops.h:309:56: error: too many arguments provided to function-like macro invocation
+sound/soc/sof/intel/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/intel/../ops.h:336:10: error: incompatible pointer to integer conversion returning 'u8 (*)(struct snd_sof_dev *, void *)' (aka 'unsigned char (*)(struct snd_sof_dev *, void *)') from a function with result type 'u8' (aka 'unsigned char') [-Wint-conversion]
+sound/soc/sof/intel/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/mt8186/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/mt8186/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/mt8195/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/mt8195/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
 
-I was also under the impression TDX had similar requirements. If so,
-do you know what the plan is for handling this for TDX?
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-There are also 2 potential alternatives I'm aware of, but these haven't
-been discussed in much detail AFAIK:
+arc-rimi.c:(.exit.text+0x54): undefined reference to `iounmap'
+arc-rimi.c:(.init.text+0x5b6): undefined reference to `ioremap'
+arc-rimi.c:(.text+0x5a): undefined reference to `ioremap'
+drivers/iio/adc/at91-sama5d2_adc.c:892 at91_adc_config_emr() error: uninitialized symbol 'osr'.
+drivers/thermal/thermal_core.c:929 __thermal_cooling_device_register() warn: passing zero to 'ERR_PTR'
+drivers/vfio/pci/vfio_pci_core.c:958 vfio_pci_ioctl_get_region_info() warn: potential spectre issue 'pdev->resource' [w]
+lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
+lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
+s390x-linux-ld: arc-rimi.c:(.init.text+0x616): undefined reference to `iounmap'
+s390x-linux-ld: arc-rimi.c:(.init.text+0x954): undefined reference to `ioremap'
+s390x-linux-ld: arc-rimi.c:(.text+0xaa): undefined reference to `iounmap'
+s390x-linux-ld: main.c:(.text+0x374): undefined reference to `iounmap'
+s390x-linux-ld: main.c:(.text+0xf26): undefined reference to `ioremap'
 
-a) Ensure confidential guests are backed by 2MB pages. shmem has a way to
-   request 2MB THP pages, but I'm not sure how reliably we can guarantee
-   that enough THPs are available, so if we went that route we'd probably
-   be better off requiring the use of hugetlbfs as the backing store. But
-   obviously that's a bit limiting and it would be nice to have the option
-   of using normal pages as well. One nice thing with invalidation
-   scheme proposed here is that this would "Just Work" if implement
-   hugetlbfs support, so an admin that doesn't want any directmap
-   splitting has this option available, otherwise it's done as a
-   best-effort.
+Error/Warning ids grouped by kconfigs:
 
-b) Implement general support for restoring directmap as 2M even when
-   subpages might be in use by other kernel threads. This would be the
-   most flexible approach since it requires no special handling during
-   invalidations, but I think it's only possible if all the CPA
-   attributes for the 2M range are the same at the time the mapping is
-   restored/unsplit, so some potential locking issues there and still
-   chance for splitting directmap over time.
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   `-- sound-soc-sof-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|-- arc-randconfig-m041-20221031
+|   |-- drivers-thermal-thermal_core.c-__thermal_cooling_device_register()-warn:passing-zero-to-ERR_PTR
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequence()-warn:inconsistent-indenting
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEnd()-warn:inconsistent-indenting
+|   |-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
+|   `-- lib-zstd-decompress-zstd_decompress_internal.h-ZSTD_DCtx_get_bmi2()-warn:inconsistent-indenting
+|-- arc-randconfig-r043-20221101
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-FIELD_GET
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32_encode_bits
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32p_replace_bits
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+clang_recent_errors
+|-- arm-randconfig-r012-20221031
+|   |-- sound-soc-sof-intel-..-ops.h:error:incompatible-pointer-to-integer-conversion-returning-u8-(-)(struct-snd_sof_dev-void-)-(aka-unsigned-char-(-)(struct-snd_sof_dev-void-)-)-from-a-function-with-result-
+|   `-- sound-soc-sof-intel-..-ops.h:error:too-many-arguments-provided-to-function-like-macro-invocation
+|-- hexagon-randconfig-r011-20221101
+|   `-- lib-test_maple_tree.c:warning:result-of-comparison-of-constant-with-expression-of-type-unsigned-long-is-always-false
+`-- s390-randconfig-r035-20221031
+    |-- arc-rimi.c:(.exit.text):undefined-reference-to-iounmap
+    |-- arc-rimi.c:(.init.text):undefined-reference-to-ioremap
+    |-- arc-rimi.c:(.text):undefined-reference-to-ioremap
+    |-- s39-linux-ld:arc-rimi.c:(.init.text):undefined-reference-to-ioremap
+    |-- s39-linux-ld:arc-rimi.c:(.init.text):undefined-reference-to-iounmap
+    |-- s39-linux-ld:arc-rimi.c:(.text):undefined-reference-to-iounmap
+    |-- s39-linux-ld:main.c:(.text):undefined-reference-to-ioremap
+    `-- s39-linux-ld:main.c:(.text):undefined-reference-to-iounmap
 
-> 
-> > 
-> >      Previously we were able to restore 2MB mappings to some degree
-> >      since both shared/restricted pages were all pinned, so anything
-> >      backed by a THP (or hugetlb page once that is implemented) at guest
-> >      teardown could be restored as 2MB direct mapping.
-> > 
-> >      Invalidation seems like the most logical time to have this happen,
-> 
-> Currently invalidation only happens at user-initiated fallocate(). It
-> does not cover the VM teardown case where the restoring might also be
-> expected to be handled.
+elapsed time: 720m
 
-Right, I forgot to add that in my proposed changes I added invalidations
-for any still-allocated private pages present when the restricted memfd
-notifier is unregistered. This was needed to avoid leaking pages back to
-the kernel that still need directmap or RMP table fixups. I also added
-similar invalidations for memfd->release(), since it seems possible that
-userspace might close() it before shutting down guest, but maybe the
-latter is not needed if KVM takes a reference on the FD during life of
-the guest.
+configs tested: 58
+configs skipped: 2
 
-> 
-> >      but whether or not to restore as 2MB requires the order to be 2MB
-> >      or larger, and for GPA range being invalidated to cover the entire
-> >      2MB (otherwise it means the page was potentially split and some
-> >      subpages free back to host already, in which case it can't be
-> >      restored as 2MB).
-> > 
-> >   2) Potentially less invalidations:
-> >       
-> >      If we pass the entire folio or compound_page as part of
-> >      invalidation, we only needed to issue 1 invalidation per folio.
-> 
-> I'm not sure I agree, the current invalidation covers the whole range
-> that passed from userspace and the invalidation is invoked only once for
-> each usrspace fallocate().
+gcc tested configs:
+um                           x86_64_defconfig
+um                             i386_defconfig
+i386                                defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                              defconfig
+arc                                 defconfig
+x86_64                        randconfig-a015
+s390                             allmodconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                  randconfig-r043-20221101
+x86_64                               rhel-8.3
+arc                              allyesconfig
+x86_64                           allyesconfig
+s390                                defconfig
+m68k                             allyesconfig
+arm                                 defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-syz
+s390                             allyesconfig
+powerpc                          allmodconfig
+m68k                             allmodconfig
+i386                             allyesconfig
+i386                          randconfig-a014
+mips                             allyesconfig
+x86_64                         rhel-8.3-kunit
+i386                          randconfig-a012
+sh                               allmodconfig
+i386                          randconfig-a016
+arm                              allyesconfig
+arm64                            allyesconfig
 
-That's true, it only reduces invalidations if we decide to provide a
-struct page/folio as part of the invalidation callbacks, which isn't
-the case yet. Sorry for the confusion.
+clang tested configs:
+i386                 randconfig-a001-20221031
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+i386                 randconfig-a005-20221031
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20221101
+hexagon              randconfig-r045-20221101
+riscv                randconfig-r042-20221101
+s390                 randconfig-r044-20221101
+x86_64               randconfig-a004-20221031
+x86_64               randconfig-a005-20221031
+x86_64               randconfig-a003-20221031
+i386                          randconfig-a013
+x86_64               randconfig-a002-20221031
+i386                          randconfig-a011
+x86_64               randconfig-a001-20221031
+x86_64               randconfig-a006-20221031
+i386                          randconfig-a015
+x86_64                          rhel-8.3-rust
 
-> 
-> > 
-> >   3) Potentially useful for hugetlbfs support:
-> > 
-> >      One issue with hugetlbfs is that we don't support splitting the
-> >      hugepage in such cases, which was a big obstacle prior to UPM. Now
-> >      however, we may have the option of doing "lazy" invalidations where
-> >      fallocate(PUNCH_HOLE, ...) won't free a shmem-allocate page unless
-> >      all the subpages within the 2M range are either hole-punched, or the
-> >      guest is shut down, so in that way we never have to split it. Sean
-> >      was pondering something similar in another thread:
-> > 
-> >        https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-mm%2FYyGLXXkFCmxBfu5U%40google.com%2F&amp;data=05%7C01%7Cmichael.roth%40amd.com%7C3aba56bf7d574c749ea708dabbfe2224%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638028997419628807%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=c7gSLjJEAxuX8xmMiTDMUHNwUdQNKN00xqtAZAEeow8%3D&amp;reserved=0
-> > 
-> >      Issuing invalidations with folio-granularity ties in fairly well
-> >      with this sort of approach if we end up going that route.
-> 
-> There is semantics difference between the current one and the proposed
-> one: The invalidation range is exactly what userspace passed down to the
-> kernel (being fallocated) while the proposed one will be subset of that
-> (if userspace-provided addr/size is not aligned to power of two), I'm
-> not quite confident this difference has no side effect.
-
-In theory userspace should not be allocating/hole-punching restricted
-pages for GPA ranges that are already mapped as private in the xarray,
-and KVM could potentially fail such requests (though it does currently).
-
-But if we somehow enforced that, then we could rely on
-KVM_MEMORY_ENCRYPT_REG_REGION to handle all the MMU invalidation stuff,
-which would free up the restricted fd invalidation callbacks to be used
-purely to handle doing things like RMP/directmap fixups prior to returning
-restricted pages back to the host. So that was sort of my thinking why the
-new semantics would still cover all the necessary cases.
-
--Mike
-
-> 
-> > 
-> > I need to rework things for v9, and we'll probably want to use struct
-> > folio instead of struct page now, but as a proof-of-concept of sorts this
-> > is what I'd added on top of v8 of your patchset to implement 1) and 2):
-> > 
-> >   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommit%2F127e5ea477c7bd5e4107fd44a04b9dc9e9b1af8b&amp;data=05%7C01%7Cmichael.roth%40amd.com%7C3aba56bf7d574c749ea708dabbfe2224%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638028997419628807%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=jOFT0iLmeU7rKniEkWOsTf2%2FPI13EAw4Qm7arI1q970%3D&amp;reserved=0
-> > 
-> > Does an approach like this seem reasonable? Should be work this into the
-> > base restricted memslot support?
-> 
-> If the above mentioned semantics difference is not a problem, I don't
-> have strong objection on this.
-> 
-> Sean, since you have much better understanding on this, what is your
-> take on this?
-> 
-> Chao
-> > 
-> > Thanks,
-> > 
-> > Mike
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
