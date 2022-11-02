@@ -2,116 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240ED616C1D
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 19:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16ACD616EC8
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 21:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiKBS2c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Nov 2022 14:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S230229AbiKBUau (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Nov 2022 16:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbiKBS2b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 14:28:31 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9542F3AE
-        for <linux-arch@vger.kernel.org>; Wed,  2 Nov 2022 11:28:29 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso10763314otb.6
-        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 11:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tkh6E9H5or1YlWc4iLnwjF2u8GuATub7/RIB4RZroEI=;
-        b=PUV2oYskmBz3NBHQa4xg86wO3U87o5XqjQwsvV7oSoiTe/piGIP5nBJpJ45viq+R2Z
-         bAj40imTzIsGbqe0Q7TSsJdMOqjUHrqbe1jzVK5k0jJ0wCIP4faAmk2wQnUzpuSnBsj1
-         Y3Q9jDnJzlfkaTRvkFbL51E9vliot00WDNmm8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tkh6E9H5or1YlWc4iLnwjF2u8GuATub7/RIB4RZroEI=;
-        b=5YlH9q8K9cRHpeDaffmuSb+KM1GWVIN4+ZVhy8wrmFWAl3dG4/pBofBEXLYlq5S+B7
-         QcxQ2CbkkbQC1jtY3WgpMs1msuaoV/+piLqba8MCVMgF+YTQXIkQazo2eLrrxlwFNSCA
-         8SxJOoXLB3m3FOzoWFP6tOaTCnUBBo4JbbDNEJrR5oWABrCxK01RR0u0JVQIDivVVx3i
-         e1gGwjFGpxCsMho7KfqBrNpYYFYhpSZRSlRx1n7hHDkuOZbRmStxTgLyldvIIiWd7sd+
-         3H/a2w2UyAEIWF6C35Ksp1tCmVsuWtodeamspAyrEqhbP9nrNMj/j2AyBbByiNcbgE0o
-         /6cw==
-X-Gm-Message-State: ACrzQf2E21opyDVwh5V0TCG7M6xoEXkIfDslu07hY3z/mqJQpoUq8FZx
-        4ayh1dRoJPz0fHs3mo5JXdoxYsMFbruoQw==
-X-Google-Smtp-Source: AMsMyM64p6+p/dq+4KgSNTgRSpkxrhRwzU45C0OhbKYCb63tU/KK5zEXxJTr4hLt6Xr31vSOb4ZHbg==
-X-Received: by 2002:a05:6830:418b:b0:637:3897:e279 with SMTP id r11-20020a056830418b00b006373897e279mr12890621otu.78.1667413708058;
-        Wed, 02 Nov 2022 11:28:28 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id e66-20020a4a5545000000b004805e9e9f3dsm4756242oob.1.2022.11.02.11.28.27
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:28:27 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso10722407otf.13
-        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 11:28:27 -0700 (PDT)
-X-Received: by 2002:a81:8241:0:b0:370:5fad:47f0 with SMTP id
- s62-20020a818241000000b003705fad47f0mr16875068ywf.441.1667413697206; Wed, 02
- Nov 2022 11:28:17 -0700 (PDT)
+        with ESMTP id S231196AbiKBUar (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 16:30:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC063896;
+        Wed,  2 Nov 2022 13:30:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 844FE61BDF;
+        Wed,  2 Nov 2022 20:30:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF51C433C1;
+        Wed,  2 Nov 2022 20:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667421045;
+        bh=hud8Dpz5A5Zx36M35iJBXmY3CB9VaHEsQIX80WqYh4c=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=RweD87Fa6HGuEDGwF4YVqM+BdcUvNOQL+CMELNcieFg3TcfJ/1Ez22e9NT+/s1lgd
+         e4VU6afapXCtyFo+WA6PmVqy38OSsn/axYwHhoc8Kcxp5LlYykp9q8qjOol2CMmI6D
+         4yT8xgHA2rx/YuFRaCqvsbJQVz46bF/chq6ihok0mgH4WO0alIDF59jldBgi7j/ktS
+         i2XuGWQSb+8WoSSIZ260tZ4LaDgh+lwN1uQ4h38CqDfdi/dGH8+7Kv3r8lbzjR/46a
+         l6SjLq3Sx+Ww+0bBrlQ5qly3VRZ9YCxgASxJ5xw74nT/ST0quoQik10daC5ftS6jY2
+         mqFtGJNN+3m5g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7F2415C1813; Wed,  2 Nov 2022 13:30:45 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 13:30:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Parav Pandit <parav@nvidia.com>, bagasdotme@gmail.com,
+        arnd@arndb.de, stern@rowland.harvard.edu, parri.andrea@gmail.com,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5] locking/memory-barriers.txt: Improve documentation
+ for writel() example
+Message-ID: <20221102203045.GS5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221027201000.219731-1-parav@nvidia.com>
+ <20221102060553.GA15438@willie-the-truck>
 MIME-Version: 1.0
-References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
- <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
- <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
- <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
- <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
- <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
- <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
- <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com> <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 2 Nov 2022 11:28:01 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wikAVbx6OUUGXpgVZNzTKK_dHhn6HyNvcf5eRKC+LkF9g@mail.gmail.com>
-Message-ID: <CAHk-=wikAVbx6OUUGXpgVZNzTKK_dHhn6HyNvcf5eRKC+LkF9g@mail.gmail.com>
-Subject: Re: mm: delay rmap removal until after TLB flush
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102060553.GA15438@willie-the-truck>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 10:55 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> So I'll do that minimal fix and update that branch, but if s390 people
-> end up having a better fix, please holler.
+On Wed, Nov 02, 2022 at 06:05:54AM +0000, Will Deacon wrote:
+> On Thu, Oct 27, 2022 at 11:10:00PM +0300, Parav Pandit wrote:
+> > The cited commit describes that when using writel(), explicit wmb()
+> > is not needed. wmb() is an expensive barrier. writel() uses the needed
+> > platform specific barrier instead of wmb().
+> > 
+> > writeX() section of "KERNEL I/O BARRIER EFFECTS" already describes
+> > ordering of I/O accessors with MMIO writes.
+> > 
+> > Hence add the comment for pseudo code of writel() and remove confusing
+> > text around writel() and wmb().
+> > 
+> > commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
+> > 
+> > Signed-off-by: Parav Pandit <parav@nvidia.com>
+> > ---
+> > changelog:
+> > v4->v5:
+> > - Used suggested documentation update from Will
+> > - Added comment to the writel() pseudo code example
+> > - updated commit log for newer changes
+> 
+> Sorry for the delay on this, I'm really behind on patches at the moment.
+> This patch looks good to me, so thanks for doing it. You can either add
+> my:
+> 
+> Acked-by: Will Deacon <will@kernel.org>
+> 
+> or, since we worked on this together:
+> 
+> Co-developed-by: Will Deacon <will@kernel.org>
+> Signed-off-by: Will Deacon <will@kernel.org>
 
-I've updated the branch with that, so hopefully s390 builds now.
+Thank you!  I will apply these tags on the next rebase.
 
-I also fixed a typo in the commit message and added Peter's ack. Other
-than that it's all the same it was before.
-
-                 Linus
+							Thanx, Paul
