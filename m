@@ -2,163 +2,235 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E4CA616449
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 15:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF0E616569
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 15:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbiKBOBp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Nov 2022 10:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S230208AbiKBO6V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Nov 2022 10:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiKBOBN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 10:01:13 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2B441006B;
-        Wed,  2 Nov 2022 07:00:48 -0700 (PDT)
-Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E5565205DA2A;
-        Wed,  2 Nov 2022 07:00:44 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E5565205DA2A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667397648;
-        bh=J4DNJwZlTDLqAsrM8lj5O6r1qnyNqnGW9RCCuM0lraM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k+t8SwzDmvpqc/NMa3N2qQmq/uulPf1lhHLNJrGiVeRSi7T0UCW0RC6+aG9FPMQEq
-         cRTvlZQCa6xjJgvkpnvB+TP7ZlMUcoHAF9u2KK+/nBhslGzXIyVWwSVfO7NTV7+tQ/
-         xKxq7J8zHbeHcGoeWi/FHQTHYmC6I23YtCpTrqMM=
-From:   Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 6/6] hv, mshv : Change interrupt vector for nested root partition
-Date:   Wed,  2 Nov 2022 14:00:17 +0000
-Message-Id: <22b6428cc90efb4ed970d61249c877b373a7002a.1667394408.git.jinankjain@microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1667394408.git.jinankjain@microsoft.com>
-References: <cover.1667394408.git.jinankjain@microsoft.com>
+        with ESMTP id S230115AbiKBO6F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 10:58:05 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8FA2A700;
+        Wed,  2 Nov 2022 07:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667401083; x=1698937083;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=uie0uv8Iy7FMg7x2ZTUU5aJpcMzyu1e6Q6enp9LSoyY=;
+  b=ZiV4Qqs0Tt+CbXwtP/lHN/yu9lfS50Vv2S0cQq5gcuYJF66onjt18zGP
+   GfvBclorFR939PfYtZw8lA+rW3DwdpAW6BkiGfX+2eHLq1+O/oDxmyDWT
+   XfbTRvWSAl6O/CZu7F9zPxpYY9zlIXawPWpT1QU0/f6PbNzpptLfqtOsr
+   vPD58yWdqmGUGJ5aTXamr3u0t0Ii5h3crkal5pCJn9zveoFVW/kKKb2Fb
+   b3nu/QzL83xh8AbHlX/jn5Hf1AJ82pr5+DwpNHD9njXFwsovA5hrk2zx7
+   wOE9a1Jjs8Rxk8Hto0ovK14RHR9xSP0TJGNVGOwjgEXp2G5O3sm5wfna2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="296875186"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="296875186"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 07:58:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="665588091"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="665588091"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 02 Nov 2022 07:57:52 -0700
+Date:   Wed, 2 Nov 2022 22:53:25 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221102145325.GA4068513@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <20221031174738.fklhlia5fmaiinpe@amd.com>
+ <20221101113729.GA4015495@chaop.bj.intel.com>
+ <20221101151944.rhpav47pdulsew7l@amd.com>
+ <20221101193058.tpzkap3kbrbgasqi@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101193058.tpzkap3kbrbgasqi@amd.com>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
-the VMBus interrupt. But this does not work in case of nested
-hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
-vector range for VMBus and thus we have to use one of the vectors from
-that range and setup the IDT accordingly.
+On Tue, Nov 01, 2022 at 02:30:58PM -0500, Michael Roth wrote:
+> On Tue, Nov 01, 2022 at 10:19:44AM -0500, Michael Roth wrote:
+> > On Tue, Nov 01, 2022 at 07:37:29PM +0800, Chao Peng wrote:
+> > > On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
+> > > > On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
+> > > 
+> > > > 
+> > > >   3) Potentially useful for hugetlbfs support:
+> > > > 
+> > > >      One issue with hugetlbfs is that we don't support splitting the
+> > > >      hugepage in such cases, which was a big obstacle prior to UPM. Now
+> > > >      however, we may have the option of doing "lazy" invalidations where
+> > > >      fallocate(PUNCH_HOLE, ...) won't free a shmem-allocate page unless
+> > > >      all the subpages within the 2M range are either hole-punched, or the
+> > > >      guest is shut down, so in that way we never have to split it. Sean
+> > > >      was pondering something similar in another thread:
+> > > > 
+> > > >        https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-mm%2FYyGLXXkFCmxBfu5U%40google.com%2F&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C28ba5dbb51844f910dec08dabc1c99e6%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638029128345507924%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bxcRfuJIgo1Z1G8HQ800HscE6y7RXRQwvWSkfc5M8Bs%3D&amp;reserved=0
+> > > > 
+> > > >      Issuing invalidations with folio-granularity ties in fairly well
+> > > >      with this sort of approach if we end up going that route.
+> > > 
+> > > There is semantics difference between the current one and the proposed
+> > > one: The invalidation range is exactly what userspace passed down to the
+> > > kernel (being fallocated) while the proposed one will be subset of that
+> > > (if userspace-provided addr/size is not aligned to power of two), I'm
+> > > not quite confident this difference has no side effect.
+> > 
+> > In theory userspace should not be allocating/hole-punching restricted
+> > pages for GPA ranges that are already mapped as private in the xarray,
+> > and KVM could potentially fail such requests (though it does currently).
+> > 
+> > But if we somehow enforced that, then we could rely on
+> > KVM_MEMORY_ENCRYPT_REG_REGION to handle all the MMU invalidation stuff,
+> > which would free up the restricted fd invalidation callbacks to be used
+> > purely to handle doing things like RMP/directmap fixups prior to returning
+> > restricted pages back to the host. So that was sort of my thinking why the
+> > new semantics would still cover all the necessary cases.
+> 
+> Sorry, this explanation is if we rely on userspace to fallocate() on 2MB
+> boundaries, and ignore any non-aligned requests in the kernel. But
+> that's not how I actually ended up implementing things, so I'm not sure
+> why answered that way...
+> 
+> In my implementation we actually do issue invalidations for fallocate()
+> even for non-2M-aligned GPA/offset ranges. For instance (assuming
+> restricted FD offset 0 corresponds to GPA 0), an fallocate() on GPA
+> range 0x1000-0x402000 would result in the following invalidations being
+> issued if everything was backed by a 2MB page:
+> 
+>   invalidate GPA: 0x001000-0x200000, Page: pfn_to_page(I), order:9
+>   invalidate GPA: 0x200000-0x400000, Page: pfn_to_page(J), order:9
+>   invalidate GPA: 0x400000-0x402000, Page: pfn_to_page(K), order:9
 
-Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
----
- arch/x86/include/asm/idtentry.h    |  2 ++
- arch/x86/include/asm/irq_vectors.h |  6 ++++++
- arch/x86/kernel/cpu/mshyperv.c     | 15 +++++++++++++++
- arch/x86/kernel/idt.c              |  9 +++++++++
- drivers/hv/vmbus_drv.c             |  3 ++-
- 5 files changed, 34 insertions(+), 1 deletion(-)
+Only see this I understand what you are actually going to propose;)
 
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 72184b0b2219..c0648e3e4d4a 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -686,6 +686,8 @@ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested
- DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_hyperv_callback);
- DECLARE_IDTENTRY_SYSVEC(HYPERV_REENLIGHTENMENT_VECTOR,	sysvec_hyperv_reenlightenment);
- DECLARE_IDTENTRY_SYSVEC(HYPERV_STIMER0_VECTOR,	sysvec_hyperv_stimer0);
-+DECLARE_IDTENTRY_SYSVEC(HYPERV_INTR_NESTED_VMBUS_VECTOR,
-+			sysvec_hyperv_nested_vmbus_intr);
- #endif
- 
- #if IS_ENABLED(CONFIG_ACRN_GUEST)
-diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
-index 43dcb9284208..729d19eab7f5 100644
---- a/arch/x86/include/asm/irq_vectors.h
-+++ b/arch/x86/include/asm/irq_vectors.h
-@@ -102,6 +102,12 @@
- #if IS_ENABLED(CONFIG_HYPERV)
- #define HYPERV_REENLIGHTENMENT_VECTOR	0xee
- #define HYPERV_STIMER0_VECTOR		0xed
-+/*
-+ * FIXME: Change this, once Microsoft Hypervisor changes its assumption
-+ * around VMBus interrupt vector allocation for nested root partition.
-+ * Or provides a better interface to detect this instead of hardcoding.
-+ */
-+#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
- #endif
- 
- #define LOCAL_TIMER_VECTOR		0xec
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 2555535f5237..83aab88bf298 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -61,6 +61,21 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
- 	set_irq_regs(old_regs);
- }
- 
-+DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_nested_vmbus_intr)
-+{
-+	struct pt_regs *old_regs = set_irq_regs(regs);
-+
-+	inc_irq_stat(irq_hv_callback_count);
-+
-+	if (vmbus_handler)
-+		vmbus_handler();
-+
-+	if (ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED)
-+		ack_APIC_irq();
-+
-+	set_irq_regs(old_regs);
-+}
-+
- void hv_setup_vmbus_handler(void (*handler)(void))
- {
- 	vmbus_handler = handler;
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index a58c6bc1cd68..ace648856a0b 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -160,6 +160,15 @@ static const __initconst struct idt_data apic_idts[] = {
- # endif
- 	INTG(SPURIOUS_APIC_VECTOR,		asm_sysvec_spurious_apic_interrupt),
- 	INTG(ERROR_APIC_VECTOR,			asm_sysvec_error_interrupt),
-+#ifdef CONFIG_HYPERV
-+	/*
-+	 * This is a hack because we cannot install this interrupt handler via alloc_intr_gate
-+	 * as it does not allow interrupt vector less than FIRST_SYSTEM_VECTORS. And hyperv
-+	 * does not want anything other than 0x31-0x34 as the interrupt vector for vmbus
-+	 * interrupt in case of nested setup.
-+	 */
-+	INTG(HYPERV_INTR_NESTED_VMBUS_VECTOR, asm_sysvec_hyperv_nested_vmbus_intr),
-+#endif
- #endif
- };
- 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 2f0cf75e811b..e6fb77fb44b9 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2746,7 +2746,8 @@ static int __init hv_acpi_init(void)
- 	 * normal Linux IRQ mechanism is not used in this case.
- 	 */
- #ifdef HYPERVISOR_CALLBACK_VECTOR
--	vmbus_interrupt = HYPERVISOR_CALLBACK_VECTOR;
-+	vmbus_interrupt = hv_nested ? HYPERV_INTR_NESTED_VMBUS_VECTOR :
-+					    HYPERVISOR_CALLBACK_VECTOR;
- 	vmbus_irq = -1;
- #endif
- 
--- 
-2.25.1
+So the memory range(start/end) will be still there and covers exactly
+what it should be from usrspace point of view, the page+order(or just
+folio) is really just a _hint_ for the invalidation callbacks. Looks
+ugly though.
 
+In v9 we use a invalidate_start/ invalidate_end pair to solve a race
+contention issue(https://lore.kernel.org/kvm/Y1LOe4JvnTbFNs4u@google.com/).
+To work with this, I believe we only need pass this hint info for
+invalidate_start() since at the invalidate_end() time, the page has
+already been discarded.
+
+Another worth-mentioning-thing is invalidate_start/end is not just
+invoked for hole punching, but also for allocation(e.g. default
+fallocate). While for allocation we can get the page only at the
+invalidate_end() time. But AFAICS, the invalidate() is called for
+fallocate(allocation) is because previously we rely on the existence in
+memory backing store to tell a page is private and we need notify KVM
+that the page is being converted from shared to private, but that is not
+true for current code and fallocate() is also not mandatory since KVM
+can call restrictedmem_get_page() to allocate dynamically, so I think we
+can remove the invalidation path for fallocate(allocation).
+
+> 
+> So you still cover the same range, but the arch/platform callbacks can
+> then, as a best effort, do things like restore 2M directmap if they see
+> that the backing page is 2MB+ and the GPA range covers the entire range.
+> If the GPA doesn't covers the whole range, or the backing page is
+> order:0, then in that case we are still forced to leave the directmap
+> split.
+> 
+> But with that in place we can then improve on that by allowing for the
+> use of hugetlbfs.
+> 
+> We'd still be somewhat reliant on userspace to issue fallocate()'s on
+> 2M-aligned boundaries to some degree (guest teardown invalidations
+> could be issued as 2M-aligned, which would be the bulk of the pages
+> in most cases, but for discarding pages after private->shared
+> conversion we could still get fragmentation). This could maybe be
+> addressed by keeping track of those partial/non-2M-aligned fallocate()
+> requests and then issuing them as a batched 2M invalidation once all
+> the subpages have been fallocate(HOLE_PUNCH)'d. We'd need to enforce
+> that fallocate(PUNCH_HOLE) is preceeded by
+> KVM_MEMORY_ENCRYPT_UNREG_REGION to make sure MMU invalidations happen
+> though.
+
+Don't understand why the sequence matters here, we should do MMU
+invalidation for both fallocate(PUNCH_HOLE) and
+KVM_MEMORY_ENCRYPT_UNREG_REGION, right?
+
+Thanks,
+Chao
+> 
+> Not sure on these potential follow-ups, but they all at least seem
+> compatible with the proposed invalidation scheme.
+> 
+> -Mike
+> 
+> > 
+> > -Mike
+> > 
+> > > 
+> > > > 
+> > > > I need to rework things for v9, and we'll probably want to use struct
+> > > > folio instead of struct page now, but as a proof-of-concept of sorts this
+> > > > is what I'd added on top of v8 of your patchset to implement 1) and 2):
+> > > > 
+> > > >   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommit%2F127e5ea477c7bd5e4107fd44a04b9dc9e9b1af8b&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C28ba5dbb51844f910dec08dabc1c99e6%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638029128345507924%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=iv%2BOMPe5AZuUtIW6bCH%2BRhJPljS14JrTXbQXptLG9fM%3D&amp;reserved=0
+> > > > 
+> > > > Does an approach like this seem reasonable? Should be work this into the
+> > > > base restricted memslot support?
+> > > 
+> > > If the above mentioned semantics difference is not a problem, I don't
+> > > have strong objection on this.
+> > > 
+> > > Sean, since you have much better understanding on this, what is your
+> > > take on this?
+> > > 
+> > > Chao
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > Mike
