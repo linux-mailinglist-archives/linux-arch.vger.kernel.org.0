@@ -2,169 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E2961704A
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 23:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F326170AF
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 23:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiKBWH0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Nov 2022 18:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S230336AbiKBWal (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Nov 2022 18:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiKBWHY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 18:07:24 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E774E9FC4;
-        Wed,  2 Nov 2022 15:07:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R8RMtwYLjlcORJMERRZB5IM6k4I1P2/hL7DQR5zYnqU3tBiUC3JHZ5bfcDcyPj++16yTaiLuX7lSfbWQcfYw1VGdIleMQ/cqS2WxLnnAJlSUgypJU7YiK/xsbJ3NxNkPs2yDLJsqTFnhfOfxpwYZVMW/9GUd6BTfRdLgNjugpU6ZRzabRQQq1Lw3caXW9+4iJ3+Qjr+qmYrSqyICzdbwX6kohp5I6C7HPF9gg/eaI2HBwO3W/6N4q5MvHJVuBohipC9+GleOLlwiYE5lUcm5Bh5HBOdGjBUiGEwaJIihea1mgEOhF7aRXfn/zJ3vTi54BWTARBYA+zJgIQEdrIwwyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xmgh0iZGAX/QaShdCQlzD7eUL2K+mNnD0XRsqFHwmKQ=;
- b=WQ+bfzaPxSbjwghcCrtrYWLuf0oxJ3rm7HeepCWE3686uZSOjFAzZSsdvWMkoClFEsteYBcW2ua4MZFWwLrpEhtyPY7PrtcsZmalptjHIhL/izM5eY+ETfwB26Qp8FkaH2PSXlL8FJ0JQzfDcODt698958ZIdd2stidP7Q2yS+4ylPxfyzzBseVE409AMKr/PJRhp488e6dM2gnRPklsRPLMIAOFue3/QsUAc9vJFVgtvizezMe4RMz6PgFPWHo5/T/tI+nlCMaCRjLWQm7EJQbkSzBESQ2FIaRdthvOVhVMQSyMgXqfx9oIkWBxWWcY4qy/za9615YWfrXLEeHhbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=shutemov.name smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xmgh0iZGAX/QaShdCQlzD7eUL2K+mNnD0XRsqFHwmKQ=;
- b=D+EjUkf7VsYyfWM7okA4VBupydeKxXIDLiltbX9HLxlZ9DeCB0KjkvRUt7DGq3eYqvHD+D0fh92CaaPCSAbO47QHhQUvkHjT7aT825DGAzmB+dIM8pwK5GUCWB5h+6OR/MaYBmk6lhHslt9OUbPMxAsYRqBvZ/qMjPdYaNPVzMo=
-Received: from MW4PR03CA0106.namprd03.prod.outlook.com (2603:10b6:303:b7::21)
- by DS7PR12MB6006.namprd12.prod.outlook.com (2603:10b6:8:7d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 2 Nov
- 2022 22:07:20 +0000
-Received: from CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b7:cafe::47) by MW4PR03CA0106.outlook.office365.com
- (2603:10b6:303:b7::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20 via Frontend
- Transport; Wed, 2 Nov 2022 22:07:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT088.mail.protection.outlook.com (10.13.175.131) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 22:07:20 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
- 2022 17:07:18 -0500
-Date:   Wed, 2 Nov 2022 17:07:00 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     Chao Peng <chao.p.peng@linux.intel.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <qemu-devel@nongnu.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+        with ESMTP id S230175AbiKBWak (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 18:30:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1AA95A6;
+        Wed,  2 Nov 2022 15:30:39 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2MMjMm026692;
+        Wed, 2 Nov 2022 22:30:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9bcvBNVAtfWLhzk+C7N9ZU35vBoa+nKNpCdOWBorsPQ=;
+ b=F6JepXmZF6InnQfiXLpRCD45SFK0dRMYASUNqr3WS0Ls4Uojbm+kk2tuAYhpJGdsN3sk
+ oPVaAW9mltuK3t6QE8B1VDnnNJQiiaxsc6q8NI5vpBrgRU9n389BsvADlT5AyPwojGIT
+ s+lHXIHlLOeZrBn6a/qDDYLszKYJDvI4sE0E3m9XUc6S2G1euhrCfcaWTrz/+ZPTSslA
+ tskqzYPOg9iIgbEJk1TWNwAbrmRjTXuYulwDoRChJLzt9qlyoCHIwifLguYEIEK08JUt
+ DH9wVYdkr2nA7uFhYWpVaW6gTXZ3uS2iShFjtc9vJDwxBM8u7+r/IJJagZQp/gGTZmqs 3Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km19v04av-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:30:08 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2MMnqq027183;
+        Wed, 2 Nov 2022 22:30:08 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km19v048j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:30:08 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2MKcvw018509;
+        Wed, 2 Nov 2022 22:30:05 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kgut97mx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:30:05 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2MU1RZ16319110
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 22:30:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7415FA404D;
+        Wed,  2 Nov 2022 22:30:01 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6489DA4040;
+        Wed,  2 Nov 2022 22:30:00 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.6.109])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed,  2 Nov 2022 22:30:00 +0000 (GMT)
+Date:   Wed, 2 Nov 2022 23:29:58 +0100
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <tabba@google.com>,
-        <mhocko@suse.com>, Muchun Song <songmuchun@bytedance.com>,
-        <wei.w.wang@intel.com>
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221102220700.5u4mj7fm37m6ust2@amd.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221031174738.fklhlia5fmaiinpe@amd.com>
- <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <20221102232958.3f5eaa53@thinkpad>
+In-Reply-To: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+        <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+        <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
+        <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+        <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+        <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+        <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+        <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+        <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+        <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+        <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+        <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+        <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+        <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+        <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT088:EE_|DS7PR12MB6006:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff531ccf-3b4d-4dae-a24f-08dabd1e9cd7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /hC8O7xYZw4KFGp1bNZdyhvnG7UfsRdVmw4OKn2REFbUZDpuTxcdT4NtGFSWYx6dGw96vzaMUT+Mj9LlBPM02HNyy0EPlowS8hUS5L1zpcTkPM5wid2w5aLewwbL1Inz31kbu3ykJUeEth7dX4VN1r33kddPCS0nqKfO6DUvY9UJSSEeVJUDTDd98D85oAiwG4VaLKxQTspvHcr352emgwNf6rer5N0Duy4tjQoQ8yO2NoPFWxHi+pw69Rds9PXE0TsBOKq+GJ8x8zfqdD+tyXiX8A9dKFnkEJmvlN1AvmZ3AkVr2wZcE1PdAcGO/E0/qKUDLWoagXcpuUReAEDO/nyGLhWIlz6DzUrL0/5jP783Zxxw3HtZLFsva4jd7YTg0/tOMV61WF+krJcXZ3nv25myMJPKbMTmylWvY71zEkaN9zxt1XadCvzo6Iy5+91/4hBbtNveG+q2GIwsmNpkAPTd81wM3tEX5cKdtF6v3wfJXunDs8Rizf6b6qHboJBDwJi97cQvNLLidVEZ5XFd5UXgSC665zpt7iKB2D7/jhcDegco8dHMh7DZUsEVEgf+7Nq1HGzIPsNiw072D+Nprkp6lqnxLuPs6n2KcbSW9oBKDgtZ7a7r+svitQQ1bpttTMefNaN8KPib/leePspTWzLV4ZpfVqLCTRFMzc24UYnLBVcpvAT6ivwm1BnPDeot+hJTq71bO7KaZ7Au3L/UimZYTtM72xuFD+JKmYEc0om5y/wu/LCmyKsEGbDrUdr/k8RGhPnWb22Bccd3w+RwqAzrXQlzFNGxTBbHDbaVtssdxY18dzbABCJeC99XubarZvBsxLUwRjIF00tt60jkCQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(86362001)(81166007)(356005)(36756003)(82740400003)(40480700001)(26005)(8676002)(83380400001)(2906002)(40460700003)(186003)(4326008)(41300700001)(8936002)(70586007)(16526019)(70206006)(336012)(2616005)(426003)(82310400005)(47076005)(1076003)(6666004)(44832011)(966005)(7406005)(5660300002)(478600001)(7416002)(6916009)(316002)(54906003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 22:07:20.2830
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff531ccf-3b4d-4dae-a24f-08dabd1e9cd7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6006
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: x6KDpMx1-hZ1Wv6Lmf2TD7IsfYnRJzO5
+X-Proofpoint-GUID: 5beV_M9V3vzREGfV2fcnorJeJPYJUuNu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ phishscore=0 impostorscore=0 suspectscore=0 bulkscore=0 mlxlogscore=712
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 12:14:04AM +0300, Kirill A. Shutemov wrote:
-> On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
-> > 
-> > In v8 there was some discussion about potentially passing the page/folio
-> > and order as part of the invalidation callback, I ended up needing
-> > something similar for SEV-SNP, and think it might make sense for other
-> > platforms. This main reasoning is:
-> > 
-> >   1) restoring kernel directmap:
-> > 
-> >      Currently SNP (and I believe TDX) need to either split or remove kernel
-> >      direct mappings for restricted PFNs, since there is no guarantee that
-> >      other PFNs within a 2MB range won't be used for non-restricted
-> >      (which will cause an RMP #PF in the case of SNP since the 2MB
-> >      mapping overlaps with guest-owned pages)
+On Wed, 2 Nov 2022 10:55:10 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Wed, Nov 2, 2022 at 2:15 AM Christian Borntraeger
+> <borntraeger@linux.ibm.com> wrote:
+> >
+> > It certainly needs a build fix for s390:
+> >
+> > In file included from kernel/sched/core.c:78:
+> > ./arch/s390/include/asm/tlb.h: In function '__tlb_remove_page_size':
+> > ./arch/s390/include/asm/tlb.h:50:17: error: implicit declaration of function 'page_zap_pte_rmap' [-Werror=implicit-function-declaration]
+> >     50 |                 page_zap_pte_rmap(page);
+> >        |                 ^~~~~~~~~~~~~~~~~
 > 
-> That's news to me. Where the restriction for SNP comes from?
-
-Sorry, missed your first question.
-
-For SNP at least, the restriction is documented in APM Volume 2, Section
-15.36.10, First row of Table 15-36 (preceeding paragraph has more
-context). I forgot to mention this is only pertaining to writes by the
-host to 2MB pages that contain guest-owned subpages, for reads it's
-not an issue, but I think the implementation requirements end up being
-the same either way:
-
-  https://www.amd.com/system/files/TechDocs/24593.pdf
-
--Mike
-
-> That's news to me. Where the restriction for SNP comes from? There's no
-> such limitation on TDX side AFAIK?
+> Hmm. I'm not sure if I can add a
 > 
-> Could you point me to relevant documentation if there's any?
+>    #include <linux/rmap.h>
 > 
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
+> to that s390 asm header file without causing more issues.
+> 
+> The minimal damage would probably be to duplicate the declaration of
+> page_zap_pte_rmap() in the s390 asm/tlb.h header where it is used.
+> 
+> Not pretty to have two different declarations of that thing, but
+> anything that then includes both <asm/tlb.h> and <linux/rmap.h> (which
+> is much of mm) would then verify the consistency of  them.
+> 
+> So I'll do that minimal fix and update that branch, but if s390 people
+> end up having a better fix, please holler.
+
+It compiles now with your duplicate declaration, but adding the #include
+also did not cause any damage, so that should also be OK.
