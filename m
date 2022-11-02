@@ -2,87 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE32616AB8
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 18:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B19616B4E
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 18:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbiKBR3O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Nov 2022 13:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S230249AbiKBRzn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Nov 2022 13:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiKBR3L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 13:29:11 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8E21130;
-        Wed,  2 Nov 2022 10:29:09 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso4021502pjn.0;
-        Wed, 02 Nov 2022 10:29:09 -0700 (PDT)
+        with ESMTP id S231420AbiKBRzl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 13:55:41 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512CF2EF16
+        for <linux-arch@vger.kernel.org>; Wed,  2 Nov 2022 10:55:39 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bef14ea06so21140230fac.3
+        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 10:55:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XngaLyoddCmH4VlYM2PfyFy1z8QIlSHJsQqMTNSL+fY=;
-        b=LFmDcNdVJo4K4/FarOGyy+iYSahg3fpZVoW20EDjy0GMIKfgTNw8fvtAhQ15msH1Qk
-         VHt/frVwIRzA+95aTCRBawF42Gjwv69pcfAiYAtFa+IxWw2c0L81a72SzNLI/zhYVV0t
-         K0ZHQnNrJhHrs41sUlChWL8od2BcBx7+xb65Sk1Jcosp5Emqdq+E1yeRQzcf4I9RGVys
-         8ZCwtkteD0c7nGMW6HOZLCT7XbRkNkFFlndsU3/uIegcdYqiHKLssHEw65pubDMfcOz6
-         H3vQiqJ9dW6NCjeFtTBEAmTHFWCogGMbqctU+cPtFHx9OfivrJ2DvIF1PBdYIYi7VXf1
-         hMPw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+tfgl/2wz1H/8UpZUR1BGxO9QY8fMwSWN8ozNgnnwNo=;
+        b=NeK0NeRjuTAZUtHhMjgNyr6bYudXXk6DWAHX3bTjmN4JSWdzL6JeZGWMcTF+HKB1jh
+         MxgfTRp94CqtCSRHcGW+QimC0eY6cr+M+yV1ssIcn+3APuGyZYLufIf07JWzaUc4957/
+         eUOIf2N32qzKN+9Hwta9aX6xiuqzbYaFCmZks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XngaLyoddCmH4VlYM2PfyFy1z8QIlSHJsQqMTNSL+fY=;
-        b=rszwyG6zHme+cXKv/nV3uJZLtZ/1sqOF6SNhzKcPXjyv35ctpTEIoQ8p5UvGa4fZkK
-         DsNDtfxhNQhMl7UgYIgpMppSvipA/GXuwDN7m5Os2WuYmK8N8bTORTKfXyqfd+wH+fqr
-         aJgphCxJ+j7WFebJw6WjNkVfWbANTqIN1awXxm+9Ls5IDAZIuddccvAmVRJkOJ5QHW3P
-         JiuKnG2KAURXtf3iL23J7QvkaZ8OMgV/PwN445T6kJHzglCxwtroLSIsevtbqX63v8DK
-         FsBhcbABj6Ift+SpgkRE8A/kgGUyyAd9GpJCvRcQGoe77JV7aTtWXPBMp5qd+qKCMecd
-         YD5w==
-X-Gm-Message-State: ACrzQf26OX4C+3hfPW1fYnXy80mduJP4py5TIjLXnetNGUgDIXSmiEYg
-        KVatFTG1pqQH24U2pVLxXUM=
-X-Google-Smtp-Source: AMsMyM468ueCiGPw9Rp6pG6tj4yCN+Kg/96HSi3gaDaAY7Jy/SDnxCyzS2YodJhnzcubFb/rCwO4cw==
-X-Received: by 2002:a17:902:ab89:b0:186:7cfc:cde8 with SMTP id f9-20020a170902ab8900b001867cfccde8mr26293355plr.9.1667410149118;
-        Wed, 02 Nov 2022 10:29:09 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b0016f196209c9sm8651878plh.123.2022.11.02.10.28.55
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+tfgl/2wz1H/8UpZUR1BGxO9QY8fMwSWN8ozNgnnwNo=;
+        b=El5XIfos76bDwhVq5Dqygbui3IDZxIRZwq8nPQqMKg4mtzCYoVEeQbXS7s/xIZ6F6B
+         EZA3P91tzw5pVZBERtuMhYHVAiWIfbgbc5S+gRyxj2rMVyxpywd/QXfn+tGtbIfFypUe
+         nk8E512BbdfuGsOsJCBwq2EBeEeoVRg/yr50MJZfwLzdpaTQRgyaDf4VLLLFRH8lyUEq
+         tqkQiJ0zTiuIX1/SOhTr3ZkH/E0ENFwAWxB42WZ5RIYRWhHsXY3josFbNCf3oB0HxKE5
+         RHxDgzwCPayQzJOZhlDPwLCHUYbFxzPojHApJ4e/xDaR7KFJEPn79Qjc4u0456y7EoRE
+         ZdRQ==
+X-Gm-Message-State: ACrzQf0/aDMN8jyB5XW+NakSyqbXl3VmVSL6OTr3OkutX7pJiB24uqqB
+        Kivxm+VZpSuu9yh+/86PwApv3Kip49g6kg==
+X-Google-Smtp-Source: AMsMyM4x7pyZV1/Qtp6rk7xAviWkAXBP2V8zvdARmfndelNbxoBvQ76hQk13tOZHdtwNLE4IEmhBpQ==
+X-Received: by 2002:a05:6870:a7a5:b0:125:76da:1bc1 with SMTP id x37-20020a056870a7a500b0012576da1bc1mr26465170oao.272.1667411738251;
+        Wed, 02 Nov 2022 10:55:38 -0700 (PDT)
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
+        by smtp.gmail.com with ESMTPSA id o195-20020a4a2ccc000000b00480816a5b8csm4681982ooo.18.2022.11.02.10.55.37
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:29:08 -0700 (PDT)
-Message-ID: <b0aa0d72-d3f3-93a9-1fa9-553c1c0351ee@gmail.com>
-Date:   Thu, 3 Nov 2022 01:28:54 +0800
+        Wed, 02 Nov 2022 10:55:37 -0700 (PDT)
+Received: by mail-ot1-f42.google.com with SMTP id 16-20020a9d0490000000b0066938311495so10692285otm.4
+        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 10:55:37 -0700 (PDT)
+X-Received: by 2002:a81:114e:0:b0:36a:fc80:fa62 with SMTP id
+ 75-20020a81114e000000b0036afc80fa62mr25201108ywr.58.1667411726040; Wed, 02
+ Nov 2022 10:55:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 03/12] x86/hyperv: Reorder code in prep for subsequent
- patch
-Content-Language: en-US
-To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
- <1666288635-72591-4-git-send-email-mikelley@microsoft.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <1666288635-72591-4-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com> <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+In-Reply-To: <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 2 Nov 2022 10:55:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+Message-ID: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+Subject: Re: mm: delay rmap removal until after TLB flush
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,97 +102,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/21/2022 1:57 AM, Michael Kelley wrote:
-> Reorder some code as preparation for a subsequent patch.  No
-> functional change.
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+On Wed, Nov 2, 2022 at 2:15 AM Christian Borntraeger
+<borntraeger@linux.ibm.com> wrote:
+>
+> It certainly needs a build fix for s390:
+>
+> In file included from kernel/sched/core.c:78:
+> ./arch/s390/include/asm/tlb.h: In function '__tlb_remove_page_size':
+> ./arch/s390/include/asm/tlb.h:50:17: error: implicit declaration of function 'page_zap_pte_rmap' [-Werror=implicit-function-declaration]
+>     50 |                 page_zap_pte_rmap(page);
+>        |                 ^~~~~~~~~~~~~~~~~
 
-Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
-> ---
->   arch/x86/hyperv/ivm.c | 68 +++++++++++++++++++++++++--------------------------
->   1 file changed, 34 insertions(+), 34 deletions(-)
-> 
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index 1dbcbd9..f33c67e 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -235,40 +235,6 @@ void hv_ghcb_msr_read(u64 msr, u64 *value)
->   EXPORT_SYMBOL_GPL(hv_ghcb_msr_read);
->   #endif
->   
-> -enum hv_isolation_type hv_get_isolation_type(void)
-> -{
-> -	if (!(ms_hyperv.priv_high & HV_ISOLATION))
-> -		return HV_ISOLATION_TYPE_NONE;
-> -	return FIELD_GET(HV_ISOLATION_TYPE, ms_hyperv.isolation_config_b);
-> -}
-> -EXPORT_SYMBOL_GPL(hv_get_isolation_type);
-> -
-> -/*
-> - * hv_is_isolation_supported - Check system runs in the Hyper-V
-> - * isolation VM.
-> - */
-> -bool hv_is_isolation_supported(void)
-> -{
-> -	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-> -		return false;
-> -
-> -	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
-> -		return false;
-> -
-> -	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
-> -}
-> -
-> -DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
-> -
-> -/*
-> - * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
-> - * isolation VM.
-> - */
-> -bool hv_isolation_type_snp(void)
-> -{
-> -	return static_branch_unlikely(&isolation_type_snp);
-> -}
-> -
->   /*
->    * hv_mark_gpa_visibility - Set pages visible to host via hvcall.
->    *
-> @@ -387,3 +353,37 @@ void hv_unmap_memory(void *addr)
->   {
->   	vunmap(addr);
->   }
-> +
-> +enum hv_isolation_type hv_get_isolation_type(void)
-> +{
-> +	if (!(ms_hyperv.priv_high & HV_ISOLATION))
-> +		return HV_ISOLATION_TYPE_NONE;
-> +	return FIELD_GET(HV_ISOLATION_TYPE, ms_hyperv.isolation_config_b);
-> +}
-> +EXPORT_SYMBOL_GPL(hv_get_isolation_type);
-> +
-> +/*
-> + * hv_is_isolation_supported - Check system runs in the Hyper-V
-> + * isolation VM.
-> + */
-> +bool hv_is_isolation_supported(void)
-> +{
-> +	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
-> +		return false;
-> +
-> +	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
-> +		return false;
-> +
-> +	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
-> +}
-> +
-> +DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
-> +
-> +/*
-> + * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
-> + * isolation VM.
-> + */
-> +bool hv_isolation_type_snp(void)
-> +{
-> +	return static_branch_unlikely(&isolation_type_snp);
-> +}
+Hmm. I'm not sure if I can add a
+
+   #include <linux/rmap.h>
+
+to that s390 asm header file without causing more issues.
+
+The minimal damage would probably be to duplicate the declaration of
+page_zap_pte_rmap() in the s390 asm/tlb.h header where it is used.
+
+Not pretty to have two different declarations of that thing, but
+anything that then includes both <asm/tlb.h> and <linux/rmap.h> (which
+is much of mm) would then verify the consistency of  them.
+
+So I'll do that minimal fix and update that branch, but if s390 people
+end up having a better fix, please holler.
+
+                Linus
