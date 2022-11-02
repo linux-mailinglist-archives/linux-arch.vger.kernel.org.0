@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B19616B4E
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 18:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240ED616C1D
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 19:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiKBRzn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Nov 2022 13:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S230244AbiKBS2c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Nov 2022 14:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231420AbiKBRzl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 13:55:41 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512CF2EF16
-        for <linux-arch@vger.kernel.org>; Wed,  2 Nov 2022 10:55:39 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bef14ea06so21140230fac.3
-        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 10:55:39 -0700 (PDT)
+        with ESMTP id S230311AbiKBS2b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 14:28:31 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9542F3AE
+        for <linux-arch@vger.kernel.org>; Wed,  2 Nov 2022 11:28:29 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso10763314otb.6
+        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 11:28:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+tfgl/2wz1H/8UpZUR1BGxO9QY8fMwSWN8ozNgnnwNo=;
-        b=NeK0NeRjuTAZUtHhMjgNyr6bYudXXk6DWAHX3bTjmN4JSWdzL6JeZGWMcTF+HKB1jh
-         MxgfTRp94CqtCSRHcGW+QimC0eY6cr+M+yV1ssIcn+3APuGyZYLufIf07JWzaUc4957/
-         eUOIf2N32qzKN+9Hwta9aX6xiuqzbYaFCmZks=
+        bh=Tkh6E9H5or1YlWc4iLnwjF2u8GuATub7/RIB4RZroEI=;
+        b=PUV2oYskmBz3NBHQa4xg86wO3U87o5XqjQwsvV7oSoiTe/piGIP5nBJpJ45viq+R2Z
+         bAj40imTzIsGbqe0Q7TSsJdMOqjUHrqbe1jzVK5k0jJ0wCIP4faAmk2wQnUzpuSnBsj1
+         Y3Q9jDnJzlfkaTRvkFbL51E9vliot00WDNmm8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+tfgl/2wz1H/8UpZUR1BGxO9QY8fMwSWN8ozNgnnwNo=;
-        b=El5XIfos76bDwhVq5Dqygbui3IDZxIRZwq8nPQqMKg4mtzCYoVEeQbXS7s/xIZ6F6B
-         EZA3P91tzw5pVZBERtuMhYHVAiWIfbgbc5S+gRyxj2rMVyxpywd/QXfn+tGtbIfFypUe
-         nk8E512BbdfuGsOsJCBwq2EBeEeoVRg/yr50MJZfwLzdpaTQRgyaDf4VLLLFRH8lyUEq
-         tqkQiJ0zTiuIX1/SOhTr3ZkH/E0ENFwAWxB42WZ5RIYRWhHsXY3josFbNCf3oB0HxKE5
-         RHxDgzwCPayQzJOZhlDPwLCHUYbFxzPojHApJ4e/xDaR7KFJEPn79Qjc4u0456y7EoRE
-         ZdRQ==
-X-Gm-Message-State: ACrzQf0/aDMN8jyB5XW+NakSyqbXl3VmVSL6OTr3OkutX7pJiB24uqqB
-        Kivxm+VZpSuu9yh+/86PwApv3Kip49g6kg==
-X-Google-Smtp-Source: AMsMyM4x7pyZV1/Qtp6rk7xAviWkAXBP2V8zvdARmfndelNbxoBvQ76hQk13tOZHdtwNLE4IEmhBpQ==
-X-Received: by 2002:a05:6870:a7a5:b0:125:76da:1bc1 with SMTP id x37-20020a056870a7a500b0012576da1bc1mr26465170oao.272.1667411738251;
-        Wed, 02 Nov 2022 10:55:38 -0700 (PDT)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
-        by smtp.gmail.com with ESMTPSA id o195-20020a4a2ccc000000b00480816a5b8csm4681982ooo.18.2022.11.02.10.55.37
+        bh=Tkh6E9H5or1YlWc4iLnwjF2u8GuATub7/RIB4RZroEI=;
+        b=5YlH9q8K9cRHpeDaffmuSb+KM1GWVIN4+ZVhy8wrmFWAl3dG4/pBofBEXLYlq5S+B7
+         QcxQ2CbkkbQC1jtY3WgpMs1msuaoV/+piLqba8MCVMgF+YTQXIkQazo2eLrrxlwFNSCA
+         8SxJOoXLB3m3FOzoWFP6tOaTCnUBBo4JbbDNEJrR5oWABrCxK01RR0u0JVQIDivVVx3i
+         e1gGwjFGpxCsMho7KfqBrNpYYFYhpSZRSlRx1n7hHDkuOZbRmStxTgLyldvIIiWd7sd+
+         3H/a2w2UyAEIWF6C35Ksp1tCmVsuWtodeamspAyrEqhbP9nrNMj/j2AyBbByiNcbgE0o
+         /6cw==
+X-Gm-Message-State: ACrzQf2E21opyDVwh5V0TCG7M6xoEXkIfDslu07hY3z/mqJQpoUq8FZx
+        4ayh1dRoJPz0fHs3mo5JXdoxYsMFbruoQw==
+X-Google-Smtp-Source: AMsMyM64p6+p/dq+4KgSNTgRSpkxrhRwzU45C0OhbKYCb63tU/KK5zEXxJTr4hLt6Xr31vSOb4ZHbg==
+X-Received: by 2002:a05:6830:418b:b0:637:3897:e279 with SMTP id r11-20020a056830418b00b006373897e279mr12890621otu.78.1667413708058;
+        Wed, 02 Nov 2022 11:28:28 -0700 (PDT)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
+        by smtp.gmail.com with ESMTPSA id e66-20020a4a5545000000b004805e9e9f3dsm4756242oob.1.2022.11.02.11.28.27
         for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:55:37 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id 16-20020a9d0490000000b0066938311495so10692285otm.4
-        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 10:55:37 -0700 (PDT)
-X-Received: by 2002:a81:114e:0:b0:36a:fc80:fa62 with SMTP id
- 75-20020a81114e000000b0036afc80fa62mr25201108ywr.58.1667411726040; Wed, 02
- Nov 2022 10:55:26 -0700 (PDT)
+        Wed, 02 Nov 2022 11:28:27 -0700 (PDT)
+Received: by mail-ot1-f47.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso10722407otf.13
+        for <linux-arch@vger.kernel.org>; Wed, 02 Nov 2022 11:28:27 -0700 (PDT)
+X-Received: by 2002:a81:8241:0:b0:370:5fad:47f0 with SMTP id
+ s62-20020a818241000000b003705fad47f0mr16875068ywf.441.1667413697206; Wed, 02
+ Nov 2022 11:28:17 -0700 (PDT)
 MIME-Version: 1.0
 References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
  <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
@@ -61,12 +61,13 @@ References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
  <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
  <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
  <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com> <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
-In-Reply-To: <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com> <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 2 Nov 2022 10:55:10 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
-Message-ID: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+Date:   Wed, 2 Nov 2022 11:28:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wikAVbx6OUUGXpgVZNzTKK_dHhn6HyNvcf5eRKC+LkF9g@mail.gmail.com>
+Message-ID: <CAHk-=wikAVbx6OUUGXpgVZNzTKK_dHhn6HyNvcf5eRKC+LkF9g@mail.gmail.com>
 Subject: Re: mm: delay rmap removal until after TLB flush
 To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
         Gerald Schaefer <gerald.schaefer@linux.ibm.com>
@@ -102,31 +103,15 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 2:15 AM Christian Borntraeger
-<borntraeger@linux.ibm.com> wrote:
+On Wed, Nov 2, 2022 at 10:55 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> It certainly needs a build fix for s390:
->
-> In file included from kernel/sched/core.c:78:
-> ./arch/s390/include/asm/tlb.h: In function '__tlb_remove_page_size':
-> ./arch/s390/include/asm/tlb.h:50:17: error: implicit declaration of function 'page_zap_pte_rmap' [-Werror=implicit-function-declaration]
->     50 |                 page_zap_pte_rmap(page);
->        |                 ^~~~~~~~~~~~~~~~~
+> So I'll do that minimal fix and update that branch, but if s390 people
+> end up having a better fix, please holler.
 
-Hmm. I'm not sure if I can add a
+I've updated the branch with that, so hopefully s390 builds now.
 
-   #include <linux/rmap.h>
+I also fixed a typo in the commit message and added Peter's ack. Other
+than that it's all the same it was before.
 
-to that s390 asm header file without causing more issues.
-
-The minimal damage would probably be to duplicate the declaration of
-page_zap_pte_rmap() in the s390 asm/tlb.h header where it is used.
-
-Not pretty to have two different declarations of that thing, but
-anything that then includes both <asm/tlb.h> and <linux/rmap.h> (which
-is much of mm) would then verify the consistency of  them.
-
-So I'll do that minimal fix and update that branch, but if s390 people
-end up having a better fix, please holler.
-
-                Linus
+                 Linus
