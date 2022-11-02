@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1F3616FB4
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 22:27:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E2961704A
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Nov 2022 23:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiKBV1T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Nov 2022 17:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S229547AbiKBWH0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Nov 2022 18:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiKBV1S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 17:27:18 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2069.outbound.protection.outlook.com [40.107.237.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CAADFBC;
-        Wed,  2 Nov 2022 14:27:16 -0700 (PDT)
+        with ESMTP id S231140AbiKBWHY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Nov 2022 18:07:24 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E774E9FC4;
+        Wed,  2 Nov 2022 15:07:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dnEyxpEgCLBUr11R4tfOG52fK4v1GHFzYhQ+/c5HFLP35fGnIAUMhL3wEzSbrp1vSIYxBouHzlV1HeRLRw4MulpM75UFecOotXjw/rVO38aziYGaR5q89jMIhaeFtFNzP7I6iFoVqqNXXdMdP4nQglPxfNBe+HKCisK6q5HjDHw8S2xgyBxKPdOGtXP+O3mbeGlghI3U5bvGc9xa1aK98hLulW+gAC8bdTzM0H1VMjAz9U7LdjoVKThdEcmMLxAhn/pbSasoxqLi2LT6gB62BWtPU0WfqVuDyCj1o563T0ENWmbd8rZDOxSjMWkwmTFlc8OUFUpXjMCPoOz406VdZA==
+ b=R8RMtwYLjlcORJMERRZB5IM6k4I1P2/hL7DQR5zYnqU3tBiUC3JHZ5bfcDcyPj++16yTaiLuX7lSfbWQcfYw1VGdIleMQ/cqS2WxLnnAJlSUgypJU7YiK/xsbJ3NxNkPs2yDLJsqTFnhfOfxpwYZVMW/9GUd6BTfRdLgNjugpU6ZRzabRQQq1Lw3caXW9+4iJ3+Qjr+qmYrSqyICzdbwX6kohp5I6C7HPF9gg/eaI2HBwO3W/6N4q5MvHJVuBohipC9+GleOLlwiYE5lUcm5Bh5HBOdGjBUiGEwaJIihea1mgEOhF7aRXfn/zJ3vTi54BWTARBYA+zJgIQEdrIwwyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6HOpdvixxTPUhGk84Cr9YvdY4Oa5RaCqh51pwnSr8Pw=;
- b=jPZ3BIXAxxSpMw5ONlBpCFrx+X02du4dFaskw4TW6qX6fqiAowREeHkvANMc4ejAKmFpw4Fs8w3oohGTt3Fbyvqynfzjzh0DasYTvcivJ2lZggusmJkSqRGmpYrqrBk2y5vSbZuqPPgDdoKIWfl9A9iB1UBparrP1eeXsc4FDTPhKGst0/fmC5P9Tb3mS1jskLZ6ISu2YYyH7R+W4AVaHFpm+ifKDKndUqz2sZcgCELcOskxBiTg999PcYfmpZoMXlV96plzBrnlJGjrGlC6PxTx5kehtL37JofRpDpnjNGRICk4KJCCTvoS/XXUvOGc8Ygw/PBaVWsEO9gbBqNx6g==
+ bh=xmgh0iZGAX/QaShdCQlzD7eUL2K+mNnD0XRsqFHwmKQ=;
+ b=WQ+bfzaPxSbjwghcCrtrYWLuf0oxJ3rm7HeepCWE3686uZSOjFAzZSsdvWMkoClFEsteYBcW2ua4MZFWwLrpEhtyPY7PrtcsZmalptjHIhL/izM5eY+ETfwB26Qp8FkaH2PSXlL8FJ0JQzfDcODt698958ZIdd2stidP7Q2yS+4ylPxfyzzBseVE409AMKr/PJRhp488e6dM2gnRPklsRPLMIAOFue3/QsUAc9vJFVgtvizezMe4RMz6PgFPWHo5/T/tI+nlCMaCRjLWQm7EJQbkSzBESQ2FIaRdthvOVhVMQSyMgXqfx9oIkWBxWWcY4qy/za9615YWfrXLEeHhbg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=shutemov.name smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6HOpdvixxTPUhGk84Cr9YvdY4Oa5RaCqh51pwnSr8Pw=;
- b=YDKe2vZMKlBVF9x5uyjg0aE35gk6c80qghVEX2QkjQgWJKBmCutUmlfCiZESc5dKdDUZvrx0E9UsX0p2bTDETwt/o2l5E/TlOUQ5S8JoTXOXszdNiy7UEQqAIhF0uhgA9NSsm07rFlnO2303o8BZJVL9LP99zZ4eiEsY/bh80bY=
-Received: from DM6PR17CA0020.namprd17.prod.outlook.com (2603:10b6:5:1b3::33)
- by SJ0PR12MB6783.namprd12.prod.outlook.com (2603:10b6:a03:44e::11) with
+ bh=xmgh0iZGAX/QaShdCQlzD7eUL2K+mNnD0XRsqFHwmKQ=;
+ b=D+EjUkf7VsYyfWM7okA4VBupydeKxXIDLiltbX9HLxlZ9DeCB0KjkvRUt7DGq3eYqvHD+D0fh92CaaPCSAbO47QHhQUvkHjT7aT825DGAzmB+dIM8pwK5GUCWB5h+6OR/MaYBmk6lhHslt9OUbPMxAsYRqBvZ/qMjPdYaNPVzMo=
+Received: from MW4PR03CA0106.namprd03.prod.outlook.com (2603:10b6:303:b7::21)
+ by DS7PR12MB6006.namprd12.prod.outlook.com (2603:10b6:8:7d::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 2 Nov
- 2022 21:27:13 +0000
-Received: from DM6NAM11FT081.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b3:cafe::f1) by DM6PR17CA0020.outlook.office365.com
- (2603:10b6:5:1b3::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15 via Frontend
- Transport; Wed, 2 Nov 2022 21:27:13 +0000
+ 2022 22:07:20 +0000
+Received: from CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::47) by MW4PR03CA0106.outlook.office365.com
+ (2603:10b6:303:b7::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20 via Frontend
+ Transport; Wed, 2 Nov 2022 22:07:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,14 +46,14 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT081.mail.protection.outlook.com (10.13.172.136) with Microsoft SMTP
+ CO1NAM11FT088.mail.protection.outlook.com (10.13.175.131) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 21:27:13 +0000
+ 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 22:07:20 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
- 2022 16:27:12 -0500
-Date:   Wed, 2 Nov 2022 16:26:56 -0500
+ 2022 17:07:18 -0500
+Date:   Wed, 2 Nov 2022 17:07:00 -0500
 From:   Michael Roth <michael.roth@amd.com>
 To:     "Kirill A. Shutemov" <kirill@shutemov.name>
 CC:     Chao Peng <chao.p.peng@linux.intel.com>, <kvm@vger.kernel.org>,
@@ -89,7 +89,7 @@ CC:     Chao Peng <chao.p.peng@linux.intel.com>, <kvm@vger.kernel.org>,
         <wei.w.wang@intel.com>
 Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
  create restricted user memory
-Message-ID: <20221102212656.6giugw542jdxsvhh@amd.com>
+Message-ID: <20221102220700.5u4mj7fm37m6ust2@amd.com>
 References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
  <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
  <20221031174738.fklhlia5fmaiinpe@amd.com>
@@ -99,27 +99,27 @@ Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 In-Reply-To: <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
 X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT081:EE_|SJ0PR12MB6783:EE_
-X-MS-Office365-Filtering-Correlation-Id: de5815e3-d15f-4939-3067-08dabd1901fc
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT088:EE_|DS7PR12MB6006:EE_
+X-MS-Office365-Filtering-Correlation-Id: ff531ccf-3b4d-4dae-a24f-08dabd1e9cd7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j2EItDXdgy1qVdqJxR4GEQrDaZ3DofdFzS+LNVJ6NsAJTMVFdBSp6zUpoaPvMWb6267FNjpOK3GF0L3xXcyq5uWRNLuq/Ufi4fc+ayxaUgAqwRo9rfluD4KybXiyZZkiAzOPeFB5kHGevljPKuxckYaN9ZREL/xrn9reHrF51j9Jtbtl4uHTHmj3fIYMmQVw1UvXacSTWAfgLOgY1ajIt+FHI7moRMF0bhhC1P6hC2h74Bu9XyAx4wShywFQZIoUbktcSgP2tS1Cs5jrQC/Oj3pWbOa9BZBYGZymrthBCap+Ro5nt2PPpjksvWECVuAPoXl12GfJIae/dQHmYbzGp4w01iMWCHWC9TnK9Ldx+q5jVs/o49bliHpyBYZDd8oIO8lsBU+FUjwFpFR2iu1qPlYZv51mMJoyUyMB9+hyUoVBR7coUvKyOPy0NguANTaArge8yyEuu7CphmRAvPo7bzFbIXHJU/b5j7a0E0zijVMfhWRVBz/nlXsZSKNYjjawjN4W7W4kjsz8ijEeKvj4kbLv5fGAsriKqEezuLPaSt08x+tqe4UI+TcxnHD4N1Sr1ZMjIyZlZFVONyxcmneXuOHmQiRerPQNmOSV7ylXag19ZczMTaJ6hI0iLDMwCBulYMjpw4eTEl243osrt4sPO67dBldmi9cTvkV+FBaRQxyxxKidT98W7E8jJE4xc8b2Ad4OdFhWzxOKa7QiuVKAsE/V9uxvLDLS6oCnFjdxCNz6+fidm5sAPmXEhy+X9qeMGvpjx5hupHqTkmx8jms/nYBjncmOrcR5JMWkY+VjwL8vWL+/Wq1dft740rMPewc/E4aOUi6BbVaeic5mLrHqbw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199015)(46966006)(40470700004)(36840700001)(47076005)(186003)(6666004)(26005)(36860700001)(54906003)(1076003)(478600001)(336012)(426003)(2616005)(40480700001)(83380400001)(2906002)(16526019)(40460700003)(44832011)(7406005)(82310400005)(70586007)(5660300002)(8676002)(70206006)(7416002)(8936002)(316002)(966005)(4326008)(41300700001)(86362001)(36756003)(82740400003)(81166007)(356005)(6916009)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /hC8O7xYZw4KFGp1bNZdyhvnG7UfsRdVmw4OKn2REFbUZDpuTxcdT4NtGFSWYx6dGw96vzaMUT+Mj9LlBPM02HNyy0EPlowS8hUS5L1zpcTkPM5wid2w5aLewwbL1Inz31kbu3ykJUeEth7dX4VN1r33kddPCS0nqKfO6DUvY9UJSSEeVJUDTDd98D85oAiwG4VaLKxQTspvHcr352emgwNf6rer5N0Duy4tjQoQ8yO2NoPFWxHi+pw69Rds9PXE0TsBOKq+GJ8x8zfqdD+tyXiX8A9dKFnkEJmvlN1AvmZ3AkVr2wZcE1PdAcGO/E0/qKUDLWoagXcpuUReAEDO/nyGLhWIlz6DzUrL0/5jP783Zxxw3HtZLFsva4jd7YTg0/tOMV61WF+krJcXZ3nv25myMJPKbMTmylWvY71zEkaN9zxt1XadCvzo6Iy5+91/4hBbtNveG+q2GIwsmNpkAPTd81wM3tEX5cKdtF6v3wfJXunDs8Rizf6b6qHboJBDwJi97cQvNLLidVEZ5XFd5UXgSC665zpt7iKB2D7/jhcDegco8dHMh7DZUsEVEgf+7Nq1HGzIPsNiw072D+Nprkp6lqnxLuPs6n2KcbSW9oBKDgtZ7a7r+svitQQ1bpttTMefNaN8KPib/leePspTWzLV4ZpfVqLCTRFMzc24UYnLBVcpvAT6ivwm1BnPDeot+hJTq71bO7KaZ7Au3L/UimZYTtM72xuFD+JKmYEc0om5y/wu/LCmyKsEGbDrUdr/k8RGhPnWb22Bccd3w+RwqAzrXQlzFNGxTBbHDbaVtssdxY18dzbABCJeC99XubarZvBsxLUwRjIF00tt60jkCQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(86362001)(81166007)(356005)(36756003)(82740400003)(40480700001)(26005)(8676002)(83380400001)(2906002)(40460700003)(186003)(4326008)(41300700001)(8936002)(70586007)(16526019)(70206006)(336012)(2616005)(426003)(82310400005)(47076005)(1076003)(6666004)(44832011)(966005)(7406005)(5660300002)(478600001)(7416002)(6916009)(316002)(54906003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 21:27:13.0077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 22:07:20.2830
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: de5815e3-d15f-4939-3067-08dabd1901fc
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff531ccf-3b4d-4dae-a24f-08dabd1e9cd7
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT081.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6783
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6006
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -146,23 +146,25 @@ On Thu, Nov 03, 2022 at 12:14:04AM +0300, Kirill A. Shutemov wrote:
 > >      (which will cause an RMP #PF in the case of SNP since the 2MB
 > >      mapping overlaps with guest-owned pages)
 > 
+> That's news to me. Where the restriction for SNP comes from?
+
+Sorry, missed your first question.
+
+For SNP at least, the restriction is documented in APM Volume 2, Section
+15.36.10, First row of Table 15-36 (preceeding paragraph has more
+context). I forgot to mention this is only pertaining to writes by the
+host to 2MB pages that contain guest-owned subpages, for reads it's
+not an issue, but I think the implementation requirements end up being
+the same either way:
+
+  https://www.amd.com/system/files/TechDocs/24593.pdf
+
+-Mike
+
 > That's news to me. Where the restriction for SNP comes from? There's no
 > such limitation on TDX side AFAIK?
 > 
 > Could you point me to relevant documentation if there's any?
-
-I could be mistaken, I haven't looked into the specific documentation and was
-going off of this discussion from a ways back:
-
-  https://lore.kernel.org/all/YWb8WG6Ravbs1nbx@google.com/
-
-Sean, is my read of that correct? Do you happen to know where there's
-some documentation on that for the TDX side?
-
-Thanks,
-
-Mike
-
 > 
 > -- 
 >   Kiryl Shutsemau / Kirill A. Shutemov
