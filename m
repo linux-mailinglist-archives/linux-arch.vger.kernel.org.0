@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B176F6180B2
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 16:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E786182A0
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 16:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbiKCPKu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Nov 2022 11:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
+        id S230017AbiKCPZg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Nov 2022 11:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231656AbiKCPK3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 11:10:29 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60281A380;
-        Thu,  3 Nov 2022 08:09:40 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso5519445pjc.0;
-        Thu, 03 Nov 2022 08:09:40 -0700 (PDT)
+        with ESMTP id S230261AbiKCPZe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 11:25:34 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98883D5A;
+        Thu,  3 Nov 2022 08:25:33 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id v3so1955805pgh.4;
+        Thu, 03 Nov 2022 08:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TYQSkbtesSkMhkx4ROSMNbPqpw1PNy8BUmQtQA+bWtY=;
-        b=dijdhOsu77eKvXnUHftUveI8NwZ1Ehpt1s+21QoMwl9hJSKfkYNlkijrw7517RoVNc
-         lrhOqT5oNusRUMg/rDZ/6n5UccBbo7OJkrkyawN66zbQGqsLMhMqrvXUy8l2OPZiTMNI
-         7ufe+t33Zk9tYdcf6pftVFcGDbwCk2PAHJ4AzLeX5w7MCrOZ7SSVLafyTtKMZCpEa+XZ
-         T01VmDokOsZCIxTPl3lsDHT7tq0XAvoVoM2OrK+fQmEqXRlSiRjai2dNnIh92amI9e4g
-         +XunRWJ2Af1UDab7VFqQwSAjwNGVO/NAt4q+dWwl7uJRQw+NU83er0XI0i5xV96+TcKH
-         EFdQ==
+        bh=WUQgPY5LlhEQkDbEFu400GoVmGB8P4bd1+MGak4qYKo=;
+        b=Gor4YRFoxRJZT9UaDxUxYPqsA24bFRjGhIXCXIW/UDjSUkzD0J3VLUiYKKR1i9alm1
+         sJTz8Fz0P1VeBrVxc8Ql0OatGP907sfKFk8N2Eu/jw1bWtcU3AMYxN/LD50yjBPIw+ex
+         ucLRjmt6/fOFtnS0Z5VVgeh3WQ0CIOmmPAzc2YySqXd4CZM/F7NaQ0ojQRuMEbstlJfv
+         hmTLZ3RWVhBkehdr99oFys8hz8RGkv59dnmgOHdWP4Za30Rt673SnDDSLS88tlArfq4D
+         DeNXStoXGM7ExTcA7tjTyQ7pECuQysemEZ5UbA0Hx2fntNx6AfdsGXKhc6zuAIlA/haF
+         bCrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TYQSkbtesSkMhkx4ROSMNbPqpw1PNy8BUmQtQA+bWtY=;
-        b=F5KvRCk6oG65rLmodKeH8uezWNUemhENnrDwSdSHN5cnm0J2NEFniRCu5b0Z3NnLi8
-         vuWnpILGKKYo3FQ9XglsEKNZ1KXl8IrYOXAr83E8a81iRKTFabXRqcgZvKyZYBm/h0Cu
-         xA3cKVHzoi0th12q+Ujw+dX+D30e0poFDXNWScJowQvuIgG7x7zbbevzNUZs7rPjpAxJ
-         KwCijUe1nD5+/ig1yD9iAa4S6SKoVEZ/oRfhGi+aqxCAQGxOFxpZd5K4JGW1X/9htC7N
-         JGxFMnCTqlAKOeScpw2OA9MbZyfDH3WwlKCjixEplA20L6vfJZOZHCr0Cl4HZoe0mbnR
-         BsIg==
-X-Gm-Message-State: ACrzQf2sCZqdtcnp6FDhBtIeqalMWtqbfqBW1pE7KjF4/HZMXdoy7Rpn
-        gTcRt5ke5XDLJyyqrHL1xqM=
-X-Google-Smtp-Source: AMsMyM6SqR6ACkO3klsnuvux/9Q488rsDcFTmuh1ek/hg4l1rICRFfT/gTPZ4y4ho6jV13S0MvMkBw==
-X-Received: by 2002:a17:902:8c92:b0:178:29d4:600f with SMTP id t18-20020a1709028c9200b0017829d4600fmr30829208plo.40.1667488180159;
-        Thu, 03 Nov 2022 08:09:40 -0700 (PDT)
+        bh=WUQgPY5LlhEQkDbEFu400GoVmGB8P4bd1+MGak4qYKo=;
+        b=octXuNykNaLr3V3uVcCNHD4tjzV3aQ3uh9wS0ELSWVPn+XBSJ2WeZ6s0iX+3PmbLyM
+         8rR5cmZ/icTPTGTfZJtAUgIRO6mnhYjjUdybDtQvhah5J36lPL7ICARus7hsLgJXIsnR
+         cOPUpFFwa6m5zrtdMVSDB4kQdl766F8Pm47phaP0E0Zu6glBUyDGWIqoHZk6Et3ZVVme
+         7AXBpj+HwtN5dHvIhzSrFZZPRIjYt994ZY6EQtgJh/TnRqOVrZazT+mwYhqqNhCtEBr/
+         BXzqbJ7vvNu1gzoAPWUTZbSpFXulO5T7sRtVZz6V9k6ndlSMwtHe9szugsx8KgBRyiZv
+         9vag==
+X-Gm-Message-State: ACrzQf3GRBopNjOSDhExBqepdO6zLm71snIpq5SKpsKcMGruIQYAIZTR
+        5zAP7eqQUKjP1epQ5KhTtbM=
+X-Google-Smtp-Source: AMsMyM7RlBAEQPJB/ysiIbhg6yyEIGOXEXML6b/Ot1TWySn1fJWemfKUcS+hMg3DQj0gpM9hVmYQxg==
+X-Received: by 2002:a05:6a00:88f:b0:530:dec:81fd with SMTP id q15-20020a056a00088f00b005300dec81fdmr30822569pfj.64.1667489133099;
+        Thu, 03 Nov 2022 08:25:33 -0700 (PDT)
 Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id p8-20020a1709027ec800b0018703bf3ec9sm815459plb.61.2022.11.03.08.09.28
+        by smtp.gmail.com with ESMTPSA id bi11-20020a170902bf0b00b001866a019010sm815765plb.97.2022.11.03.08.25.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:09:39 -0700 (PDT)
-Message-ID: <9dced807-952f-1ddd-ad58-f3fc3ec32071@gmail.com>
-Date:   Thu, 3 Nov 2022 23:09:27 +0800
+        Thu, 03 Nov 2022 08:25:32 -0700 (PDT)
+Message-ID: <941fe781-674c-ad08-3f33-b99d1c7e3539@gmail.com>
+Date:   Thu, 3 Nov 2022 23:25:19 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH 09/12] hv_netvsc: Remove second mapping of send and recv
- buffers
+Subject: Re: [PATCH 10/12] Drivers: hv: Don't remap addresses that are above
+ shared_gpa_boundary
 Content-Language: en-US
 To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
@@ -75,9 +75,9 @@ To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
         iommu@lists.linux.dev
 References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
- <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-11-git-send-email-mikelley@microsoft.com>
 From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1666288635-72591-11-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,17 +91,18 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 10/21/2022 1:57 AM, Michael Kelley wrote:
-> With changes to how Hyper-V guest VMs flip memory between private
-> (encrypted) and shared (decrypted), creating a second kernel virtual
-> mapping for shared memory is no longer necessary.  Everything needed
-> for the transition to shared is handled by set_memory_decrypted().
+> With the vTOM bit now treated as a protection flag and not part of
+> the physical address, avoid remapping physical addresses with vTOM set
+> since technically such addresses aren't valid.  Use ioremap_cache()
+> instead of memremap() to ensure that the mapping provides decrypted
+> access, which will correctly set the vTOM bit as a protection flag.
 > 
-> As such, remove the code to create and manage the second
-> mapping for the pre-allocated send and recv buffers.  This mapping
-> is the last user of hv_map_memory()/hv_unmap_memory(), so delete
-> these functions as well.  Finally, hv_map_memory() is the last
-> user of vmap_pfn() in Hyper-V guest code, so remove the Kconfig
-> selection of VMAP_PFN.
+> While this change is not required for correctness with the current
+> implementation of memremap(), for general code hygiene it's better to
+> not depend on the mapping functions doing something reasonable with
+> a physical address that is out-of-range.
+> 
+> While here, fix typos in two error messages.
 > 
 > Signed-off-by: Michael Kelley<mikelley@microsoft.com>
 > ---
