@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A94617D67
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 14:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57065617D69
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 14:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiKCNF1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Nov 2022 09:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S229733AbiKCNF2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Nov 2022 09:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbiKCNFJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 09:05:09 -0400
+        with ESMTP id S231226AbiKCNFL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 09:05:11 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 915EB178BF;
-        Thu,  3 Nov 2022 06:04:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F358417E32;
+        Thu,  3 Nov 2022 06:04:17 -0700 (PDT)
 Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1A66B20B9F81;
-        Thu,  3 Nov 2022 06:04:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1A66B20B9F81
+        by linux.microsoft.com (Postfix) with ESMTPSA id A0E09205DA2F;
+        Thu,  3 Nov 2022 06:04:13 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A0E09205DA2F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667480653;
-        bh=AN7mmvGxBvUuf9Ip8jEZg4kDB3svnoriD2HrczLSwDg=;
+        s=default; t=1667480657;
+        bh=HLgBEfqnfR/pSo3ZddLSeTCBJ4DSAnSoOy6+9I7tDbg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S0dCEIZ/u+kEPxD2IdDHWcQrGjvD1xZJor3tAKzbqw+1lT6+otiotEiXBjfhy45jU
-         OCV+zq2NyTO24z2rOzZdp1FY/aYZMRwidSNsFU9vtacLg5u0S9SKLPaiZVYfoWDI+L
-         VYafYJ0kJDTG15QXMLlkMFHD6n/XJUFHnSSqZFOU=
+        b=tInIXzvZ5DLoKnJIuYBKNbwTa4rSOgbayfk53bVeJyTmK26j7jjfnGAuzBxv2YiR3
+         3bR2rI8U/yG2dnJxzMBLwr9g16xnc4PWetTLiDM7QG3jRbkJ74Y8vyLLuUnPG8a2Li
+         Q6dVE3ZkxlJuz+jLcNIFgwtwwh1m1xPSVqTTNfPs=
 From:   Jinank Jain <jinankjain@linux.microsoft.com>
 To:     jinankjain@microsoft.com
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
@@ -37,12 +37,12 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
         mikelley@microsoft.com
-Subject: [PATCH v3 0/5]  Add support running nested Microsoft Hypervisor
-Date:   Thu,  3 Nov 2022 13:04:02 +0000
-Message-Id: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+Subject: [PATCH v3 1/5] x86/hyperv: Add support for detecting nested hypervisor
+Date:   Thu,  3 Nov 2022 13:04:03 +0000
+Message-Id: <285b15b90ac6f29ef8ab6b6ececeeef7d7c6f380.1667480257.git.jinankjain@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <https://lore.kernel.org/linux-hyperv/cover.1667406350.git.jinankjain@linux.microsoft.com/T/#t>
-References: <https://lore.kernel.org/linux-hyperv/cover.1667406350.git.jinankjain@linux.microsoft.com/T/#t>
+In-Reply-To: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+References: <cover.1667480257.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -55,31 +55,97 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch series plans to add support for running nested Microsoft
-Hypervisor. In case of nested Microsoft Hypervisor there are few
-privileged hypercalls which need to go L0 Hypervisor instead of L1
-Hypervisor. This patches series basically identifies such hypercalls and
-replace them with nested hypercalls.
+When Linux runs as a root partition for Microsoft Hypervisor. It is
+possible to detect if it is running as nested hypervisor using
+hints exposed by mshv. While at it expose a new variable called
+hv_nested which can be used later for making decisions specific to
+nested use case.
 
-Jinank Jain (5):
-  x86/hyperv: Add support for detecting nested hypervisor
-  Drivers: hv: Setup synic registers in case of nested root partition
-  x86/hyperv: Add an interface to do nested hypercalls
-  Drivers: hv: Enable vmbus driver for nested root partition
-  x86/hyperv: Change interrupt vector for nested root partition
+Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+---
+ arch/x86/include/asm/hyperv-tlfs.h | 3 +++
+ arch/x86/include/asm/mshyperv.h    | 2 ++
+ arch/x86/kernel/cpu/mshyperv.c     | 7 +++++++
+ drivers/hv/hv_common.c             | 7 +++++--
+ 4 files changed, 17 insertions(+), 2 deletions(-)
 
- arch/x86/include/asm/hyperv-tlfs.h | 17 +++++++-
- arch/x86/include/asm/idtentry.h    |  2 +
- arch/x86/include/asm/irq_vectors.h |  6 +++
- arch/x86/include/asm/mshyperv.h    | 68 ++++++++++++++++++++++++++++--
- arch/x86/kernel/cpu/mshyperv.c     | 22 ++++++++++
- arch/x86/kernel/idt.c              |  9 ++++
- drivers/hv/hv.c                    | 18 +++++---
- drivers/hv/hv_common.c             |  7 ++-
- drivers/hv/vmbus_drv.c             |  5 ++-
- include/asm-generic/hyperv-tlfs.h  |  1 +
- 10 files changed, 141 insertions(+), 14 deletions(-)
-
+diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+index 3089ec352743..d9a611565859 100644
+--- a/arch/x86/include/asm/hyperv-tlfs.h
++++ b/arch/x86/include/asm/hyperv-tlfs.h
+@@ -114,6 +114,9 @@
+ /* Recommend using the newer ExProcessorMasks interface */
+ #define HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED		BIT(11)
+ 
++/* Indicates that the hypervisor is nested within a Hyper-V partition. */
++#define HV_X64_HYPERV_NESTED				BIT(12)
++
+ /* Recommend using enlightened VMCS */
+ #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+ 
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 61f0c206bff0..3c39923e5969 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -26,6 +26,8 @@ void hyperv_vector_handler(struct pt_regs *regs);
+ #if IS_ENABLED(CONFIG_HYPERV)
+ extern int hyperv_init_cpuhp;
+ 
++extern bool hv_nested;
++
+ extern void *hv_hypercall_pg;
+ 
+ extern u64 hv_current_partition_id;
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 831613959a92..9a4204139490 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -37,6 +37,8 @@
+ 
+ /* Is Linux running as the root partition? */
+ bool hv_root_partition;
++/* Is Linux running on nested Microsoft Hypervisor */
++bool hv_nested;
+ struct ms_hyperv_info ms_hyperv;
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
+@@ -301,6 +303,11 @@ static void __init ms_hyperv_init_platform(void)
+ 		pr_info("Hyper-V: running as root partition\n");
+ 	}
+ 
++	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
++		hv_nested = true;
++		pr_info("Hyper-V: running on a nested hypervisor\n");
++	}
++
+ 	/*
+ 	 * Extract host information.
+ 	 */
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index ae68298c0dca..dcb336ce374f 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -25,8 +25,8 @@
+ #include <asm/mshyperv.h>
+ 
+ /*
+- * hv_root_partition and ms_hyperv are defined here with other Hyper-V
+- * specific globals so they are shared across all architectures and are
++ * hv_root_partition, ms_hyperv and hv_nested are defined here with other
++ * Hyper-V specific globals so they are shared across all architectures and are
+  * built only when CONFIG_HYPERV is defined.  But on x86,
+  * ms_hyperv_init_platform() is built even when CONFIG_HYPERV is not
+  * defined, and it uses these two variables.  So mark them as __weak
+@@ -36,6 +36,9 @@
+ bool __weak hv_root_partition;
+ EXPORT_SYMBOL_GPL(hv_root_partition);
+ 
++bool __weak hv_nested;
++EXPORT_SYMBOL_GPL(hv_nested);
++
+ struct ms_hyperv_info __weak ms_hyperv;
+ EXPORT_SYMBOL_GPL(ms_hyperv);
+ 
 -- 
 2.25.1
 
