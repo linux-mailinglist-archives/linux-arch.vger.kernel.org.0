@@ -2,144 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E00617F5E
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 15:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482F6617F7B
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 15:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiKCOYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Nov 2022 10:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S231366AbiKCO1o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Nov 2022 10:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKCOYR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 10:24:17 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49815838;
-        Thu,  3 Nov 2022 07:24:16 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1294771wmq.4;
-        Thu, 03 Nov 2022 07:24:16 -0700 (PDT)
+        with ESMTP id S231294AbiKCO1l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 10:27:41 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF71F1705F;
+        Thu,  3 Nov 2022 07:27:40 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y13so1753543pfp.7;
+        Thu, 03 Nov 2022 07:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IIuosJEuTIxTU4vgxtOOKlEeHtCDZ/WY4hzhdvsVb58=;
+        b=Ba26o1h0RwuZQrcVdQXGiWeePY+jTdQIWBBQKuQzaN7V42GxlZj2i1fdP1awb5nRYi
+         I+XlmteiHLFtd+YYOFakh8deA+ZTwe2sijmvTewpGEHDXDgiBdwKoZO8LVgkGNlkjUQg
+         ejex1GdrLJHlvKCDujXrlOUJYkLPMXbUlQ9kTKFZY3xU2PYafUzIzitV6KUUNFvgkb99
+         rcUp7UGzwyyAO2CAjupw4+6fZeuJTIOT2pe6EX1nDLTtAA2nMBUtjeOy7FAtVDtHUPbk
+         AJlpy/v/2QXPCaDVK9fBaIvova8EoGRWFJspfPqLri0gnzTKjruMX+Y7mYIzhiWKankj
+         9oMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X1LT03bLiRuIHRMNZ/VBHuLAuNEKFfSIdBpGFc2+9sA=;
-        b=r1t3vLWxamxM4coqto9QOkOiy1is0Ax+3QyuRBz5axMJZeDIgRWLJOw9n+uoSB1T7K
-         Kq+HOX3D+9un5owkZN5X7gN75ZqwazJ4FeuE0ZBjam3vfx+7XlBp4RgHDKCEbt27A76J
-         4sNY4+3912HqeZ55Ty+RkP7H6dT2YBjlVFE8DnWPsSYmzEgyrNjyqixdv1jOERcSm6X7
-         2cvG5j3Rz6WQONgdpNQInMhW9aIpMD1nm3/dUjgLRtUNIt7oeR4+ITLFpxsGgudI51ot
-         wGz/OWr9OUvls81h+PmxEDHw7i5zUP+THIBavlyrwxFV1IRk4NuT6PRgEAgDXfbVpptW
-         jSjg==
-X-Gm-Message-State: ACrzQf2p72c4spr+BjXbjYdQtVaGYAhpWBRq6xhVcOVNYpzcvMV3oLf1
-        pz7piTNkhIERo/wEa3rpemY=
-X-Google-Smtp-Source: AMsMyM4ke2iyyMAnoCrhGCzCaGHhhDeyDynNHBdskVE6dhi6oDEpiIQ2fWHmd9zmf+pjyz4RpsKJsA==
-X-Received: by 2002:a05:600c:4fcf:b0:3c6:cdb9:b68f with SMTP id o15-20020a05600c4fcf00b003c6cdb9b68fmr30684663wmq.73.1667485454723;
-        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003cf57329221sm47245wmb.14.2022.11.03.07.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 14:24:05 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>
-Subject: Re: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure
- for reference TSC MSR
-Message-ID: <Y2PPBREz76rMyhnx@liuwe-devbox-debian-v2>
-References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
- <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688E0040710DF040BB7FCCDD7339@BYAPR21MB1688.namprd21.prod.outlook.com>
- <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIuosJEuTIxTU4vgxtOOKlEeHtCDZ/WY4hzhdvsVb58=;
+        b=2K0yo5aI9rGnVi28nYdWHN+5AdYUv5LSH1kFHLj1IJTM5tzE3V93YoU7i/FD9VDqvr
+         p2+iDiZ4LazMF2n30J+xEbceCKBkWtxQxquNF2A6QRYXyicDEvyxfT/L88Y5yOfmt/Nx
+         CToBwJ90pU7euETfIzP1AUh4LqIvsJP+GI/zKFJ/YGPtvVB+9sV80esVCaAfe7HSWxMP
+         jhuAl84etXoL2jZMuHdXADWac0wPEXhSzpcAhb25UUqnH6hvw88hn+byTaZno2KjmfnQ
+         YMGGSjmf6NiXCwxNCHtgmrq4dDp3P6sLxqOiE9mfG4EmZBz6odjC3cPl88IlrVeWrWDm
+         auPQ==
+X-Gm-Message-State: ACrzQf3alWIEHmyN13Q9o6zaTgUlsIVbWtaafcgkwFryX93AH482DqSz
+        5udLdxgK/WEriVbzIW3X6S4=
+X-Google-Smtp-Source: AMsMyM5wdqSY1H/m6g6FYCRAGcDeMB7vyoR6fpb0bzRrRGYER7iaHfadrE7m+/r3x3fwIfKhXP6/BQ==
+X-Received: by 2002:a63:f964:0:b0:46f:e243:fd8e with SMTP id q36-20020a63f964000000b0046fe243fd8emr13936135pgk.207.1667485660470;
+        Thu, 03 Nov 2022 07:27:40 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0056b9df2a15esm825190pfn.62.2022.11.03.07.27.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 07:27:39 -0700 (PDT)
+Message-ID: <f295f2f4-b7c7-0faf-cc99-9a052a7bf7ef@gmail.com>
+Date:   Thu, 3 Nov 2022 22:27:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 07/12] Drivers: hv: vmbus: Remove second mapping of VMBus
+ monitor pages
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-8-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-8-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 08:33:31PM +0000, Michael Kelley (LINUX) wrote:
-> From: Michael Kelley (LINUX) <mikelley@microsoft.com> Sent: Thursday, October 27, 2022 6:43 AM
-> > From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday,
-> > October 27, 2022 2:57 AM
-> > >
-> > > Add a data structure to represent the reference TSC MSR similar to
-> > > other MSRs. This simplifies the code for updating the MSR.
-> > >
-> > > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-> > > ---
-> > >  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
-> > >  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
-> > >  2 files changed, 23 insertions(+), 14 deletions(-)
-> > >
-> > > diff --git a/drivers/clocksource/hyperv_timer.c
-> > b/drivers/clocksource/hyperv_timer.c
-> > > index bb47610bbd1c..11332c82d1af 100644
-> > > --- a/drivers/clocksource/hyperv_timer.c
-> > > +++ b/drivers/clocksource/hyperv_timer.c
-> > > @@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
-> > >
-> > >  static void suspend_hv_clock_tsc(struct clocksource *arg)
-> > >  {
-> > > -	u64 tsc_msr;
-> > > +	union hv_reference_tsc_msr tsc_msr;
-> > >
-> > >  	/* Disable the TSC page */
-> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > -	tsc_msr &= ~BIT_ULL(0);
-> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > +	tsc_msr.enable = 0;
-> > > +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
-> > >  }
-> > >
-> > >
-> > >  static void resume_hv_clock_tsc(struct clocksource *arg)
-> > >  {
-> > >  	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
-> > > -	u64 tsc_msr;
-> > > +	union hv_reference_tsc_msr tsc_msr;
-> > >
-> > >  	/* Re-enable the TSC page */
-> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > -	tsc_msr &= GENMASK_ULL(11, 0);
-> > > -	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
-> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
-> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > > +	tsc_msr.enable = 1;
-> > > +	tsc_msr.pfn = __phys_to_pfn(phys_addr);
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> With changes to how Hyper-V guest VMs flip memory between private
+> (encrypted) and shared (decrypted), creating a second kernel virtual
+> mapping for shared memory is no longer necessary.  Everything needed
+> for the transition to shared is handled by set_memory_decrypted().
 > 
-> My previous review missed a problem here (and in the similar line below).
-> __phys_to_pfn() will return a PFN based on the guest page size, which might
-> be different from Hyper-V's page size that is always 4K.  This needs to be a
-> Hyper-V PFN, and we have virt_to_hvpfn() available to do just that, assuming
-> that function is safe to use here and in the case below. 
+> As such, remove the code to create and manage the second
+> mapping for VMBus monitor pages. Because set_memory_decrypted()
+> and set_memory_encrypted() are no-ops in normal VMs, it's
+> not even necessary to test for being in a Confidential VM
+> (a.k.a., "Isolation VM").
+> 
+> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
 
-Anirudh, please take a look.
-
-I'm holding off sending hyperv-fixes to Linus for now.
-
-Thanks,
-Wei.
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
