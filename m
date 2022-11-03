@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482F6617F7B
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 15:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968C96180A1
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 16:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiKCO1o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Nov 2022 10:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S232025AbiKCPJY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Nov 2022 11:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiKCO1l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 10:27:41 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF71F1705F;
-        Thu,  3 Nov 2022 07:27:40 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y13so1753543pfp.7;
-        Thu, 03 Nov 2022 07:27:40 -0700 (PDT)
+        with ESMTP id S232023AbiKCPJE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 11:09:04 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2481A381;
+        Thu,  3 Nov 2022 08:07:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id q9so1874247pfg.5;
+        Thu, 03 Nov 2022 08:07:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IIuosJEuTIxTU4vgxtOOKlEeHtCDZ/WY4hzhdvsVb58=;
-        b=Ba26o1h0RwuZQrcVdQXGiWeePY+jTdQIWBBQKuQzaN7V42GxlZj2i1fdP1awb5nRYi
-         I+XlmteiHLFtd+YYOFakh8deA+ZTwe2sijmvTewpGEHDXDgiBdwKoZO8LVgkGNlkjUQg
-         ejex1GdrLJHlvKCDujXrlOUJYkLPMXbUlQ9kTKFZY3xU2PYafUzIzitV6KUUNFvgkb99
-         rcUp7UGzwyyAO2CAjupw4+6fZeuJTIOT2pe6EX1nDLTtAA2nMBUtjeOy7FAtVDtHUPbk
-         AJlpy/v/2QXPCaDVK9fBaIvova8EoGRWFJspfPqLri0gnzTKjruMX+Y7mYIzhiWKankj
-         9oMw==
+        bh=w2z6fO+MbyvEiP5JpeiVd1gSvr6rs1hB7YCmNmUxll4=;
+        b=gHTFxAQAhXrKKmhv7RuDgqKnsGsxCqlqugARUQMfSbZRJUyGGl3mL8wkQSmtx1yM0k
+         rWAXPxKYKEmKaR06qaWeVuQv+zd78X+kjfMmieFmqP0YltSfhp8sGGWQQEsfT/puNDOq
+         iGw8EefwxKFixX+hoGi1CiYBQp+RX63QyMGoeVW2KwhYfwJ055FVmGQXQ8av3FmL62zq
+         B/13wxMSpgGo5/XcRvsbgI5ffvGI4BWlUQI0jz0DMvA8gjXVcQ8BgeliRdhw+5lJOzoJ
+         5L3Yt+biFkv3NnET5xb0mzInjQ+qeLoV+u5gsS8hS3Ojr9W8YmLeUJHtr/quFyYC8F1i
+         We9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IIuosJEuTIxTU4vgxtOOKlEeHtCDZ/WY4hzhdvsVb58=;
-        b=2K0yo5aI9rGnVi28nYdWHN+5AdYUv5LSH1kFHLj1IJTM5tzE3V93YoU7i/FD9VDqvr
-         p2+iDiZ4LazMF2n30J+xEbceCKBkWtxQxquNF2A6QRYXyicDEvyxfT/L88Y5yOfmt/Nx
-         CToBwJ90pU7euETfIzP1AUh4LqIvsJP+GI/zKFJ/YGPtvVB+9sV80esVCaAfe7HSWxMP
-         jhuAl84etXoL2jZMuHdXADWac0wPEXhSzpcAhb25UUqnH6hvw88hn+byTaZno2KjmfnQ
-         YMGGSjmf6NiXCwxNCHtgmrq4dDp3P6sLxqOiE9mfG4EmZBz6odjC3cPl88IlrVeWrWDm
-         auPQ==
-X-Gm-Message-State: ACrzQf3alWIEHmyN13Q9o6zaTgUlsIVbWtaafcgkwFryX93AH482DqSz
-        5udLdxgK/WEriVbzIW3X6S4=
-X-Google-Smtp-Source: AMsMyM5wdqSY1H/m6g6FYCRAGcDeMB7vyoR6fpb0bzRrRGYER7iaHfadrE7m+/r3x3fwIfKhXP6/BQ==
-X-Received: by 2002:a63:f964:0:b0:46f:e243:fd8e with SMTP id q36-20020a63f964000000b0046fe243fd8emr13936135pgk.207.1667485660470;
-        Thu, 03 Nov 2022 07:27:40 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0056b9df2a15esm825190pfn.62.2022.11.03.07.27.28
+        bh=w2z6fO+MbyvEiP5JpeiVd1gSvr6rs1hB7YCmNmUxll4=;
+        b=tquTsXCCv0C3I8eUgFCkftRbl4himl8XP3g87tyu9BEttGI24ps0NrLiQyIqDyoWTE
+         gqH3sKpRgxD1Ja9NhRfSdavDpJ0FdsR9J3pjqGTSn+KHpum8MmEo4xv/SjZtAQ832NXE
+         kNECsoYMoxUxOEjqIPHupA+PHD9crvulTaz8CieW1rY0rSbYJi1I0N++mFXMmsMY4t1s
+         RaoRdPz0EuP3/wuBPP0N6ttoW1n5RY48VhbTC+ZhRd6hsVZ274+yztirAijSYX4TvTsP
+         TGd4q+n1H5KYQr25fOOIiCkXBlCfynfB53BkUJjTnpNRMN+Gy7/q7gOFV9MkTQ2q69eb
+         rO+A==
+X-Gm-Message-State: ACrzQf1lB1soWPpgArkcZDvQnEF1YiGxMdipPO91CnelRavact7GYsxA
+        WH8mxpfIaW34UvV5KuPRp7yQx7ce33ny6bL+
+X-Google-Smtp-Source: AMsMyM64XJzUHkbNPgJU9Pbog8Ij7QoURi5yiSqvzbNa01qcX2i7L0deLMBHbJeokkmw94e2KlZHQQ==
+X-Received: by 2002:a63:b12:0:b0:44a:d193:6b16 with SMTP id 18-20020a630b12000000b0044ad1936b16mr26809861pgl.604.1667488066226;
+        Thu, 03 Nov 2022 08:07:46 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id r12-20020a63ec4c000000b0046ae818b626sm896747pgj.30.2022.11.03.08.07.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 07:27:39 -0700 (PDT)
-Message-ID: <f295f2f4-b7c7-0faf-cc99-9a052a7bf7ef@gmail.com>
-Date:   Thu, 3 Nov 2022 22:27:28 +0800
+        Thu, 03 Nov 2022 08:07:45 -0700 (PDT)
+Message-ID: <900971fc-e8c0-b81b-8836-c416554a4c22@gmail.com>
+Date:   Thu, 3 Nov 2022 23:07:34 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH 07/12] Drivers: hv: vmbus: Remove second mapping of VMBus
- monitor pages
+Subject: Re: [PATCH 08/12] Drivers: hv: vmbus: Remove second way of mapping
+ ring buffers
 Content-Language: en-US
 To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
@@ -75,9 +75,9 @@ To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
         iommu@lists.linux.dev
 References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
- <1666288635-72591-8-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-9-git-send-email-mikelley@microsoft.com>
 From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <1666288635-72591-8-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1666288635-72591-9-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -92,16 +92,15 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On 10/21/2022 1:57 AM, Michael Kelley wrote:
 > With changes to how Hyper-V guest VMs flip memory between private
-> (encrypted) and shared (decrypted), creating a second kernel virtual
-> mapping for shared memory is no longer necessary.  Everything needed
-> for the transition to shared is handled by set_memory_decrypted().
+> (encrypted) and shared (decrypted), it's no longer necessary to
+> have separate code paths for mapping VMBus ring buffers for
+> for normal VMs and for Confidential VMs.
 > 
-> As such, remove the code to create and manage the second
-> mapping for VMBus monitor pages. Because set_memory_decrypted()
-> and set_memory_encrypted() are no-ops in normal VMs, it's
-> not even necessary to test for being in a Confidential VM
-> (a.k.a., "Isolation VM").
+> As such, remove the code path that uses vmap_pfn(), and set
+> the protection flags argument to vmap() to account for the
+> difference between normal and Confidential VMs.
 > 
 > Signed-off-by: Michael Kelley<mikelley@microsoft.com>
+> ---
 
 Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
