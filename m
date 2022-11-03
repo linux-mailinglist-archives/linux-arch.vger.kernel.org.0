@@ -2,49 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CC9617F3C
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 15:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E00617F5E
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Nov 2022 15:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbiKCOSN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Nov 2022 10:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S231154AbiKCOYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Nov 2022 10:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiKCORy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 10:17:54 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC57326DC;
-        Thu,  3 Nov 2022 07:16:47 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id bk15so2937822wrb.13;
-        Thu, 03 Nov 2022 07:16:47 -0700 (PDT)
+        with ESMTP id S229667AbiKCOYR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Nov 2022 10:24:17 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49815838;
+        Thu,  3 Nov 2022 07:24:16 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so1294771wmq.4;
+        Thu, 03 Nov 2022 07:24:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=80B2b1bMn1FZmClWYd3FX65ywdaYJT+10GImN40lUiM=;
-        b=YtiSEalBmGnnNRutR6EHaozR1TvbreGBqzWUT6T+5vejXH40Dj9xEEg7PQivKifH+u
-         yTUItl/Wxqz7LpYeOs2ZroRxSGVdVGyLcHkUzJX5DaxM4mM71qs0y5x0bsIDpaqvgNa1
-         Y3Ahk3zvSJcwF2zOUD5d2/GHtGzhgOxSWL3Bt48bDhBBVhCP8lJMDo71sbwKEDXDkS+S
-         emY4D2Np80NB5Q5N6HA/4gLFAEDkOk0Ben4EcrkXXRa7AhnBv7S20PdLf8YS0lhbmoEv
-         q4wISvqGWDlXvsxga8vCd1iDodODIB051CfXgoqYSXxOwG0ujuMj5/mfmrzg7r6kiVu2
-         owuw==
-X-Gm-Message-State: ACrzQf3s9YgT7dHW95H3VJbsTBQy03LqntsLJVU45yWUr2QuD1ckWxpF
-        AWBPqtC58D/me8cQvh+nJoE=
-X-Google-Smtp-Source: AMsMyM7on/BQsGLd9/ikyaypEllg8CbAEx0xNHuurebxCLJjdkjrBl+DoN6mhjxyOUzqX2ta/wscow==
-X-Received: by 2002:a5d:4cca:0:b0:236:aecc:60cb with SMTP id c10-20020a5d4cca000000b00236aecc60cbmr18748510wrt.11.1667485006250;
-        Thu, 03 Nov 2022 07:16:46 -0700 (PDT)
+        bh=X1LT03bLiRuIHRMNZ/VBHuLAuNEKFfSIdBpGFc2+9sA=;
+        b=r1t3vLWxamxM4coqto9QOkOiy1is0Ax+3QyuRBz5axMJZeDIgRWLJOw9n+uoSB1T7K
+         Kq+HOX3D+9un5owkZN5X7gN75ZqwazJ4FeuE0ZBjam3vfx+7XlBp4RgHDKCEbt27A76J
+         4sNY4+3912HqeZ55Ty+RkP7H6dT2YBjlVFE8DnWPsSYmzEgyrNjyqixdv1jOERcSm6X7
+         2cvG5j3Rz6WQONgdpNQInMhW9aIpMD1nm3/dUjgLRtUNIt7oeR4+ITLFpxsGgudI51ot
+         wGz/OWr9OUvls81h+PmxEDHw7i5zUP+THIBavlyrwxFV1IRk4NuT6PRgEAgDXfbVpptW
+         jSjg==
+X-Gm-Message-State: ACrzQf2p72c4spr+BjXbjYdQtVaGYAhpWBRq6xhVcOVNYpzcvMV3oLf1
+        pz7piTNkhIERo/wEa3rpemY=
+X-Google-Smtp-Source: AMsMyM4ke2iyyMAnoCrhGCzCaGHhhDeyDynNHBdskVE6dhi6oDEpiIQ2fWHmd9zmf+pjyz4RpsKJsA==
+X-Received: by 2002:a05:600c:4fcf:b0:3c6:cdb9:b68f with SMTP id o15-20020a05600c4fcf00b003c6cdb9b68fmr30684663wmq.73.1667485454723;
+        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
 Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d5266000000b00236a16c00ffsm1032357wrc.43.2022.11.03.07.16.45
+        by smtp.gmail.com with ESMTPSA id fc15-20020a05600c524f00b003cf57329221sm47245wmb.14.2022.11.03.07.24.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:16:45 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 14:16:36 +0000
+        Thu, 03 Nov 2022 07:24:14 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 14:24:05 +0000
 From:   Wei Liu <wei.liu@kernel.org>
 To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Jinank Jain <jinankjain@linux.microsoft.com>,
-        Jinank Jain <jinankjain@microsoft.com>,
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
         KY Srinivasan <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
-        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
         "wei.liu@kernel.org" <wei.liu@kernel.org>,
         Dexuan Cui <decui@microsoft.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
@@ -52,26 +51,25 @@ Cc:     Jinank Jain <jinankjain@linux.microsoft.com>,
         "bp@alien8.de" <bp@alien8.de>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
         "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2 4/5] hv: Enable vmbus driver for nested root partition
-Message-ID: <Y2PNRKLTnbHUPPFq@liuwe-devbox-debian-v2>
-References: <cover.1667406350.git.jinankjain@linux.microsoft.com>
- <b5ea40f7e84e17a4338a313ab74292a293b1efa4.1667406350.git.jinankjain@linux.microsoft.com>
- <BYAPR21MB16880A610264D54C141B7D79D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "stanislav.kinsburskiy@gmail.com" <stanislav.kinsburskiy@gmail.com>,
+        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "mail@anirudhrb.com" <mail@anirudhrb.com>
+Subject: Re: [PATCH v2 1/2] clocksource/drivers/hyperv: add data structure
+ for reference TSC MSR
+Message-ID: <Y2PPBREz76rMyhnx@liuwe-devbox-debian-v2>
+References: <20221027095729.1676394-1-anrayabh@linux.microsoft.com>
+ <20221027095729.1676394-2-anrayabh@linux.microsoft.com>
+ <BYAPR21MB1688E0040710DF040BB7FCCDD7339@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16880A610264D54C141B7D79D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB168844A39612131C920DA954D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -82,44 +80,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:30:35AM +0000, Michael Kelley (LINUX) wrote:
-> From: Jinank Jain <jinankjain@linux.microsoft.com> Sent: Wednesday, November 2, 2022 9:36 AM
-> > 
-> > Currently VMBus driver is not initialized for root partition but we need
-> > to enable the VMBus driver for nested root partition. This is required
-> > to expose VMBus devices to the L2 guest in the nested setup.
-> > 
-> > Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> > ---
-> >  drivers/hv/vmbus_drv.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> > index 8b2e413bf19c..2f0cf75e811b 100644
-> > --- a/drivers/hv/vmbus_drv.c
-> > +++ b/drivers/hv/vmbus_drv.c
-> > @@ -2723,7 +2723,7 @@ static int __init hv_acpi_init(void)
-> >  	if (!hv_is_hyperv_initialized())
-> >  		return -ENODEV;
-> > 
-> > -	if (hv_root_partition)
-> > +	if (hv_root_partition && !hv_nested)
+On Wed, Nov 02, 2022 at 08:33:31PM +0000, Michael Kelley (LINUX) wrote:
+> From: Michael Kelley (LINUX) <mikelley@microsoft.com> Sent: Thursday, October 27, 2022 6:43 AM
+> > From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday,
+> > October 27, 2022 2:57 AM
+> > >
+> > > Add a data structure to represent the reference TSC MSR similar to
+> > > other MSRs. This simplifies the code for updating the MSR.
+> > >
+> > > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+> > > ---
+> > >  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
+> > >  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
+> > >  2 files changed, 23 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/drivers/clocksource/hyperv_timer.c
+> > b/drivers/clocksource/hyperv_timer.c
+> > > index bb47610bbd1c..11332c82d1af 100644
+> > > --- a/drivers/clocksource/hyperv_timer.c
+> > > +++ b/drivers/clocksource/hyperv_timer.c
+> > > @@ -395,25 +395,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
+> > >
+> > >  static void suspend_hv_clock_tsc(struct clocksource *arg)
+> > >  {
+> > > -	u64 tsc_msr;
+> > > +	union hv_reference_tsc_msr tsc_msr;
+> > >
+> > >  	/* Disable the TSC page */
+> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > -	tsc_msr &= ~BIT_ULL(0);
+> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > +	tsc_msr.enable = 0;
+> > > +	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+> > >  }
+> > >
+> > >
+> > >  static void resume_hv_clock_tsc(struct clocksource *arg)
+> > >  {
+> > >  	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
+> > > -	u64 tsc_msr;
+> > > +	union hv_reference_tsc_msr tsc_msr;
+> > >
+> > >  	/* Re-enable the TSC page */
+> > > -	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > -	tsc_msr &= GENMASK_ULL(11, 0);
+> > > -	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
+> > > -	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
+> > > +	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+> > > +	tsc_msr.enable = 1;
+> > > +	tsc_msr.pfn = __phys_to_pfn(phys_addr);
 > 
-> Note that this code must compile and run when Linux is built
-> to run as a guest on Hyper-V for ARM64.  There's currently
-> no definition for hv_nested on the ARM64 side, so the compile
-> will fail.  But per my comments in Patch 1 in this series, using the
-> same technique as for hv_root_partition in hv_common.c should
-> solve the ARM64 problem as well.
+> My previous review missed a problem here (and in the similar line below).
+> __phys_to_pfn() will return a PFN based on the guest page size, which might
+> be different from Hyper-V's page size that is always 4K.  This needs to be a
+> Hyper-V PFN, and we have virt_to_hvpfn() available to do just that, assuming
+> that function is safe to use here and in the case below. 
 
-Jinank, you can use the following commands to cross-compile Linux.
+Anirudh, please take a look.
 
-  make ARCH=arm64 mshv_defconfig
-  make -j$(nproc) ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- Image
-
-I think there are some follow-up patches in the internal tree which
-fixed the arm64 build. You may be able to squash some of those patches
-into series.
+I'm holding off sending hyperv-fixes to Linus for now.
 
 Thanks,
 Wei.
