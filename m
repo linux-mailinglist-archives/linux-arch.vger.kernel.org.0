@@ -2,119 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A77619244
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 08:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C99DF6192CC
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 09:33:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiKDH7D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 03:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S229523AbiKDIdY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 04:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDH7C (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 03:59:02 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983E12DA;
-        Fri,  4 Nov 2022 00:59:00 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id E5D875C0096;
-        Fri,  4 Nov 2022 03:58:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 04 Nov 2022 03:58:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1667548737; x=1667635137; bh=WLsXF8VSMf
-        rCKRyOeBPs8DaU3UDGa1qmblIda8xJdq0=; b=L7RezY3WEtGld8lvkB/qzxrxoC
-        r29N5C90Dpdj9jxpi5jYjA4ZvF6aP/Jhc8/kewGRDjccxpbTGJHXfY4OqL0zpwD8
-        C+g8WDhQMDAXN9TwI6dGvAkNigBYCkIlnGNreIj6bynK1oomGuoAkY21BZuYRAob
-        29AhDu9R9UBTuwhKrL5eWQrMAa9bWtbIb6pMGxujiug6QsPAfeAXYS8tRKFqrgF6
-        tPDLyUp6wEx0a4l9xqNJGST+Cdq4F4rdkklX7D6RqiZvcSvUu6kIBx0CFWgq1YBG
-        Q49CupBi8sHm+wopdvdxxDyuWk6uyTKP8pTEPqdhlco+haQvAbgnKyiktDUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667548737; x=1667635137; bh=WLsXF8VSMfrCKRyOeBPs8DaU3UDG
-        a1qmblIda8xJdq0=; b=BU9oJrQ5G7/T+gkA14HjtyRy8pUpEQFxhEZOESPF5Enz
-        Sf4VFwXyOCs4arzBsVjC/oLN8lB23h33tyo9R9dF9QDI557b/+p/GMu1yeqKVLYH
-        MWLbm1GEkKzQNGC257Yq06xU3m9QrJUFK39oEiGqwqmmqrSqxz5+51VhHdUNazVD
-        IP9lStzvuzrr+ZGaHYSJPfy4JFoPHfhRGrwIHmgytrqZhjMNJPcYFtsgirZ+W48H
-        +YHIHbDrh3haEoQk7LdOHXuisD6T0ePwTq4DI6qDDPQAJJeklOhyKVAyjq1M6zop
-        ukYrEKQBbDVGGCDR+FwOi6H0ZKTfrJ0rDZHhH3Aj0A==
-X-ME-Sender: <xms:QcZkY4lVTl2SdhcFA8krnB-r0uH5Y8XCIj7c5_C_Rmqihds7Y-wKtA>
-    <xme:QcZkY32ddQvQUJqJmSdsdnAVVMcqJi7osl3vBt2xh_JU0ncFmyPNOTCcACzz2aQ2B
-    tYG8i2XE4IPNdrtZG0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrvddtgdduudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfgjfhffhffvvefutgesth
-    dtredtreertdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnuges
-    rghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpeffheeugeetiefhgeethfejgfdtue
-    fggeejleehjeeutefhfeeggefhkedtkeetffenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QcZkY2q0Lhle1ylZnJyXKl4Xx_wB2Gve9j7cPNDmWWelIIWV1EE1Cw>
-    <xmx:QcZkY0l5lTHtKCdQFOGM3NFDFldX5lbp6Z5JHmYquwT6BueiqV-LEw>
-    <xmx:QcZkY23-K8HVfS2NWOsXehaSlU86o1HcI4t4j-R4BD8aes8zMGAJxw>
-    <xmx:QcZkY780slJfalZkalyjGKhgdrw11yOWWhepuiSvLo454NFIq-60Tg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id ABF88B603ED; Fri,  4 Nov 2022 03:58:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <7383e5a2-5583-4d35-8a19-40a8c6f977ad@app.fastmail.com>
-In-Reply-To: <20221104032808.24565-1-hanzj.it@gmail.com>
-References: <20221104032808.24565-1-hanzj.it@gmail.com>
-Date:   Fri, 04 Nov 2022 08:58:39 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "zhijun.han" <hanzj.it@gmail.com>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: swap the definition of CONFIG_SPARSEMEM_VMEMMAP and
- CONFIG_SPARSEMEM
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230029AbiKDIdX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 04:33:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6368C17;
+        Fri,  4 Nov 2022 01:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667550800; x=1699086800;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=LBhw6eQcS71AQTHPgtJidpmNdTMwoZDoM5imFH5VGeA=;
+  b=VtuW8FrM4T9Pr7uZdJIrQ3z55NoK7YDpcRqyxOXaUIktGDj0O0kSKPc/
+   Tr79ep6jfD59cgU1/e/YA9/fi4q+686UL25P3g6n0jqXJmLyzu9BdZiYu
+   kbbxJi3qPRwkMwRHDV/pM6BmxYI9YkDU3EzQ74662jnALnicw1fJiLigs
+   AylKZiiM4oRcOV/5RQGzhabQzUNIhe5MLREEVvZLovIilcqvwXpxXq8Ak
+   6ffobuKuR1IyqbslUrxao3a6GCrpIuzIay8OeDhu4zuZ57LMEWjHFQWER
+   XtOKe0tVuutRHiSvAR6xI/fIIAUYzXvlvTmr8QLPrze7X6JfjUhg0bN74
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="289632654"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="289632654"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 01:33:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="637512630"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="637512630"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Nov 2022 01:33:10 -0700
+Date:   Fri, 4 Nov 2022 16:28:43 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <20221104082843.GA4142342@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
+ <Y2RJFWplouV2iF5E@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2RJFWplouV2iF5E@google.com>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 4, 2022, at 04:28, zhijun.han wrote:
-> CONFIG_SPARSEMEM_VMEMMAP depends on CONFIG_SPARSEMEM
-> When CONFIG_SPARSEMEM_VMEMMAP is enabled,
-> CONFIG_SPARSEMEM will be enabled too.
-> Causes __pfn_to_page and __page_to_pfn to be overwritten
->
-> Signed-off-by: zhijun.han <hanzj.it@gmail.com>
-
-I'm sorry, but I don't follow the logic here. Your explanation
-makes sense, but from your patch it appears that your are
-introducing the problem that you explain, instead of fixing it.
-
-> --- a/include/asm-generic/memory_model.h
-> +++ b/include/asm-generic/memory_model.h
-> @@ -19,12 +19,6 @@
->  #define __page_to_pfn(page)	((unsigned long)((page) - mem_map) + \
->  				 ARCH_PFN_OFFSET)
+On Thu, Nov 03, 2022 at 11:04:53PM +0000, Sean Christopherson wrote:
+> On Tue, Oct 25, 2022, Chao Peng wrote:
+> > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
+> >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> >  		break;
+> >  	}
+> > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
 > 
-> -#elif defined(CONFIG_SPARSEMEM_VMEMMAP)
-> -
-> -/* memmap is virtually contiguous.  */
-> -#define __pfn_to_page(pfn)	(vmemmap + (pfn))
-> -#define __page_to_pfn(page)	(unsigned long)((page) - vmemmap)
-> -
->  #elif defined(CONFIG_SPARSEMEM)
->  /*
->   * Note: section's mem_map is encoded to reflect its start_pfn.
+> I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
+> from the fact that restricted/protected memory may not be encrypted, there are
+> other potential use cases for per-page memory attributes[*], e.g. to make memory
+> read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
+> 
+> Any paravirt use case where the attributes of a page are effectively dictated by
+> the guest is going to run into the exact same performance problems with memslots,
+> which isn't suprising in hindsight since shared vs. private is really just an
+> attribute, albeit with extra special semantics.
+> 
+> And if we go with a brand new ioctl(), maybe someday in the very distant future
+> we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
+> 
+> Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
+> of a wrench into things.
+> 
+> Something like:
+> 
+>   KVM_SET_MEMORY_ATTRIBUTES
+> 
+>   struct kvm_memory_attributes {
+> 	__u64 address;
+> 	__u64 size;
+> 	__u64 flags;
+>   }
 
-What I see in the existing code is that checking
-CONFIG_SPARSEMEM_VMEMMAP first catches only the case where
-both SPARSEMEM and SPARSEMEM_VMEMMAP are set, so the third
-elseif case is not used. When you swap them around, we
-always get the definition for the SPARSEMEM case, since the
-third elseif is never reached.
+I like the idea of adding a new ioctl(). But putting all attributes into
+a flags in uAPI sounds not good to me, e.g. forcing userspace to set all
+attributes in one call can cause pain for userspace, probably for KVM
+implementation as well. For private<->shared memory conversion, we
+actually only care the KVM_MEM_ATTR_SHARED or KVM_MEM_ATTR_PRIVATE bit,
+but we force userspace to set other irrelevant bits as well if use this
+API.
 
-     Arnd
+I looked at kvm_device_attr, sounds we can do similar:
+
+  KVM_SET_MEMORY_ATTR
+
+  struct kvm_memory_attr {
+	__u64 address;
+	__u64 size;
+#define KVM_MEM_ATTR_SHARED	BIT(0)
+#define KVM_MEM_ATTR_READONLY	BIT(1)
+#define KVM_MEM_ATTR_NOEXEC	BIT(2)
+	__u32 attr;
+	__u32 pad;
+  }
+
+I'm not sure if we need KVM_GET_MEMORY_ATTR/KVM_HAS_MEMORY_ATTR as well,
+but sounds like we need a KVM_UNSET_MEMORY_ATTR.
+
+Since we are exposing the attribute directly to userspace I also think
+we'd better treat shared memory as the default, so even when the private
+memory is not used, the bit can still be meaningful. So define BIT(0) as
+KVM_MEM_ATTR_PRIVATE instead of KVM_MEM_ATTR_SHARED.
+
+Thanks,
+Chao
+
+> 
+> [*] https://lore.kernel.org/all/Y1a1i9vbJ%2FpVmV9r@google.com
+> 
+> > +		struct kvm_enc_region region;
+> > +		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
+> > +
+> > +		if (!kvm_arch_has_private_mem(kvm))
+> > +			goto arch_vm_ioctl;
+> > +
+> > +		r = -EFAULT;
+> > +		if (copy_from_user(&region, argp, sizeof(region)))
+> > +			goto out;
+> > +
+> > +		r = kvm_vm_ioctl_set_mem_attr(kvm, region.addr,
+> > +					      region.size, set);
+> > +		break;
+> > +	}
+> > +#endif
