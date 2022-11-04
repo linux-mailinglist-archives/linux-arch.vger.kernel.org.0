@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E92E61A47A
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 23:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A0E61A47F
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 23:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiKDWm0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 18:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49510 "EHLO
+        id S230205AbiKDWmi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 18:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiKDWlf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 18:41:35 -0400
+        with ESMTP id S230214AbiKDWlh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 18:41:37 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F2C4E416;
-        Fri,  4 Nov 2022 15:39:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E6E4E43F;
+        Fri,  4 Nov 2022 15:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667601580; x=1699137580;
+  t=1667601582; x=1699137582;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=QCRYLxuft9By+ea93NBBljihOI4kEYqg35nP/V5qBtI=;
-  b=hVRKlIISj5c7QqVHNns+LxPHtM8v7CamYB0xN3pu3JkES5y33sKnwY1u
-   7PK6E/N2nH1HECFvM0BT2kVsi96U/+Bk8c2OD2mpBRnw/xlw6t9EZrLhc
-   l1mkRI1FF5cvpVZiagyO2fMo5priKOKPCY3i7wIpBOFQycdzoqNdBvMat
-   PYOGjRqmrFqTRGFr3Lw2bgv+pof3on4eEqHwz1LCongwNLSH6SD8TOpmH
-   fWcnPMhd6wZZv8js63x90RqQ09pJfo5nQ1UK6TbbpEmalDyeddMB5Xkvs
-   PedHk2Kq6IBXxFa3gDrbYupNt4YLEpCmH631pclIEf9vlPX/5vI7sdikz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311840556"
+  bh=4aVCw5ODNp+SkJKgvPAW6TwS6KUC24UPNM4SuYiLUfg=;
+  b=QOaLeC5hksoUbpgOqXEw0SygnmAo8GB4E2veLGgHokb83WqMo9qKmclN
+   A5PkTqwoDrJ5DfvLC1pX3Gn5xaZe/IwPpSqXGrJbSYNHBVXD1v+bUcqOP
+   Zib9IqyjDCv0z8EUx/Jj6muWAcQHcD7Tkwqq7vjJQTbmHt3CRI4vrABnY
+   i9AU+UwabwTZk47lzfLJK7g7llXp2ZDr4RPf86aW6B1V2L/zILFlPHbMM
+   VpiRpUzwVmBrcaGfqe3j0WoB1QC5mNbmCjrOPklGxP45H8FHajhL2ae19
+   VBEzDXbOddrcXqSutRnoECIEEz2gWBm+BBaHOUfyeUYoxbPP0ishNiA9F
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311840561"
 X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="311840556"
+   d="scan'208";a="311840561"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668514085"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:40 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668514089"
 X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="668514085"
+   d="scan'208";a="668514089"
 Received: from adhjerms-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.227.68])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:38 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:39 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v3 19/37] mm/mmap: Add shadow stack pages to memory accounting
-Date:   Fri,  4 Nov 2022 15:35:46 -0700
-Message-Id: <20221104223604.29615-20-rick.p.edgecombe@intel.com>
+Subject: [PATCH v3 20/37] mm/mprotect: Exclude shadow stack from preserve_write
+Date:   Fri,  4 Nov 2022 15:35:47 -0700
+Message-Id: <20221104223604.29615-21-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
 References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
@@ -88,47 +88,69 @@ type of memory called shadow stack. This shadow stack memory has some
 unusual properties, which requires some core mm changes to function
 properly.
 
-Account shadow stack pages to stack memory.
+In change_pte_range(), when a PTE is changed for prot_numa, _PAGE_RW is
+preserved to avoid the additional write fault after the NUMA hinting fault.
+However, pte_write() now includes both normal writable and shadow stack
+(Write=0, Dirty=1) PTEs, but the latter does not have _PAGE_RW and has no
+need to preserve it.
+
+Exclude shadow stack from preserve_write test, and apply the same change to
+change_huge_pmd().
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
 
 ---
 
-v3:
- - Remove unneeded VM_SHADOW_STACK check in accountable_mapping()
-   (Kirill)
-
-v2:
- - Remove is_shadow_stack_mapping() and just change it to directly bitwise
-   and VM_SHADOW_STACK.
-
-Yu-cheng v26:
- - Remove redundant #ifdef CONFIG_MMU.
-
 Yu-cheng v25:
- - Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping().
+ - Move is_shadow_stack_mapping() to a separate line.
 
- mm/mmap.c | 2 ++
- 1 file changed, 2 insertions(+)
+Yu-cheng v24:
+ - Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index f67606fbc464..4dc157869b34 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -3298,6 +3298,8 @@ void vm_stat_account(struct mm_struct *mm, vm_flags_t flags, long npages)
- 		mm->exec_vm += npages;
- 	else if (is_stack_mapping(flags))
- 		mm->stack_vm += npages;
-+	else if (flags & VM_SHADOW_STACK)
-+		mm->stack_vm += npages;
- 	else if (is_data_mapping(flags))
- 		mm->data_vm += npages;
- }
+ mm/huge_memory.c | 7 +++++++
+ mm/mprotect.c    | 7 +++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 73b9b78f8cf4..7643a4db1b50 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1803,6 +1803,13 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 		return 0;
+ 
+ 	preserve_write = prot_numa && pmd_write(*pmd);
++
++	/*
++	 * Preserve only normal writable huge PMD, but not shadow
++	 * stack (RW=0, Dirty=1).
++	 */
++	if (vma->vm_flags & VM_SHADOW_STACK)
++		preserve_write = false;
+ 	ret = 1;
+ 
+ #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 668bfaa6ed2a..ea82ce5f38fe 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -115,6 +115,13 @@ static unsigned long change_pte_range(struct mmu_gather *tlb,
+ 			pte_t ptent;
+ 			bool preserve_write = prot_numa && pte_write(oldpte);
+ 
++			/*
++			 * Preserve only normal writable PTE, but not shadow
++			 * stack (RW=0, Dirty=1).
++			 */
++			if (vma->vm_flags & VM_SHADOW_STACK)
++				preserve_write = false;
++
+ 			/*
+ 			 * Avoid trapping faults against the zero or KSM
+ 			 * pages. See similar comment in change_huge_pmd.
 -- 
 2.17.1
 
