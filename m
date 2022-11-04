@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FEE61A48E
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 23:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6400C61A490
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 23:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiKDWni (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 18:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S230349AbiKDWnn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 18:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiKDWnA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 18:43:00 -0400
+        with ESMTP id S230298AbiKDWnR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 18:43:17 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA6259FDF;
-        Fri,  4 Nov 2022 15:39:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8553E59FED;
+        Fri,  4 Nov 2022 15:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667601598; x=1699137598;
+  t=1667601601; x=1699137601;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=YH9KUY8mxtUoG/C7O+owx6kIzcNei0xchFyR6pwYJYk=;
-  b=l7kc6a2lgzOgTJRzzXLDuIUJ5wNlXL0rkVlEyNEp+q9K6JjnXaK5JCNl
-   6cqhdu9R6mPtxGd/uLx1xou8AsbWAUj2/v0GHSd60NYZm85xYuFe0aQ/a
-   ZDJtBstL6Jdpzlep1XLv43DGEZyd1O9YrlOjLcpPFSj5dYTZNIKEh9RoC
-   q2jP2ZK9/ZNoPyNoJ9bRGCyOG7g5GrRDUK/POkcpjxgkwVAXxWx/ExJYG
-   TfVYb4SfQJrwFFPpDebKbesFAyA31vZrPzgHPrT5cJq56fLf27H4IHOTl
-   O20wgI6fNkStZSTI19COhaYVkjRp5zhbBIBGVasEMm+v3UuI+g8aPmFMV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311840575"
+  bh=of60iN5sOAyNYUtQIOruia5Wg5JZGtNeyl3TvdwitXo=;
+  b=R8qzkDLg+mL96ra/ohxGtVrP9H660y+7JpK16wy0neLQFOoQjR+lXmCW
+   8IgEMyCTiRei8zyF3YuGBy3bqikt6ykThOvKdkzFOxKuPd7iaYK5M4no0
+   YCwSX/jUeYSX/S9akjoaNAghOqiyEnL9OmkClFaUm3cIpzvplDK3Hn3ec
+   B1rSsEKjIOL3nbffteJjRwvWx1d0W+LqSgSngojgLRVKeMuu9u+cJFDQL
+   Hnr+5+MD5hsCXJtZi2xmfhVlOzR5piMNI0WHLDFsk9E1FErcCy8cKDN8R
+   4XnC2MY+dM2/01TZxtdBQNWSygYZZnz9YH7VVi7JMeTs7cScpFx8nHXi+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311840579"
 X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="311840575"
+   d="scan'208";a="311840579"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:44 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668514107"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:45 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668514117"
 X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="668514107"
+   d="scan'208";a="668514117"
 Received: from adhjerms-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.227.68])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:43 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:44 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,10 +65,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         John Allen <john.allen@amd.com>, kcc@google.com,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v3 24/37] x86: Introduce userspace API for CET enabling
-Date:   Fri,  4 Nov 2022 15:35:51 -0700
-Message-Id: <20221104223604.29615-25-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v3 25/37] x86/shstk: Add user-mode shadow stack support
+Date:   Fri,  4 Nov 2022 15:35:52 -0700
+Message-Id: <20221104223604.29615-26-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
 References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
@@ -81,200 +81,297 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Add three new arch_prctl() handles:
+Introduce basic shadow stack enabling/disabling/allocation routines.
+A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
+and has a fixed size of min(RLIMIT_STACK, 4GB).
 
- - ARCH_CET_ENABLE/DISABLE enables or disables the specified
-   feature. Returns 0 on success or an error.
+Keep the task's shadow stack address and size in thread_struct. This will
+be copied when cloning new threads, but needs to be cleared during exec,
+so add a function to do this.
 
- - ARCH_CET_LOCK prevents future disabling or enabling of the
-   specified feature. Returns 0 on success or an error
-
-The features are handled per-thread and inherited over fork(2)/clone(2),
-but reset on exec().
-
-This is preparation patch. It does not implement any features.
+Do not support IA32 emulation or x32.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-[tweaked with feedback from tglx]
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
 
 ---
 
 v3:
- - Move shstk.c Makefile changes earlier (Kees)
- - Add #ifdef around features_locked and features (Kees)
- - Encapsulate features reset earlier in reset_thread_features() so
-   features and features_locked are not referenced in code that would be
-   compiled !CONFIG_X86_USER_SHADOW_STACK. (Kees)
- - Fix typo in commit log (Kees)
- - Switch arch_prctl() numbers to avoid conflict with LAM
+ - Use define for set_clr_bits_msrl() (Kees)
+ - Make some functions static (Kees)
+ - Change feature_foo() to features_foo() (Kees)
+ - Centralize shadow stack size rlimit checks (Kees)
+ - Disable x32 support
 
 v2:
- - Only allow one enable/disable per call (tglx)
- - Return error code like a normal arch_prctl() (Alexander Potapenko)
- - Make CET only (tglx)
+ - Get rid of unnessary shstk->base checks
+ - Don't support IA32 emulation
 
- arch/x86/include/asm/cet.h        | 21 +++++++++++++++
- arch/x86/include/asm/processor.h  |  5 ++++
- arch/x86/include/uapi/asm/prctl.h |  6 +++++
- arch/x86/kernel/Makefile          |  2 ++
- arch/x86/kernel/process_64.c      |  7 ++++-
- arch/x86/kernel/shstk.c           | 44 +++++++++++++++++++++++++++++++
- 6 files changed, 84 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/include/asm/cet.h
- create mode 100644 arch/x86/kernel/shstk.c
+v1:
+ - Switch to xsave helpers.
+ - Expand commit log.
+
+Yu-cheng v30:
+ - Remove superfluous comments for struct thread_shstk.
+ - Replace 'populate' with 'unused'.
+
+ arch/x86/include/asm/cet.h        |   7 ++
+ arch/x86/include/asm/msr.h        |  11 +++
+ arch/x86/include/asm/processor.h  |   3 +
+ arch/x86/include/uapi/asm/prctl.h |   3 +
+ arch/x86/kernel/shstk.c           | 146 ++++++++++++++++++++++++++++++
+ 5 files changed, 170 insertions(+)
 
 diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
-new file mode 100644
-index 000000000000..a2f3c6e06ef5
---- /dev/null
+index a2f3c6e06ef5..cade110b2ea8 100644
+--- a/arch/x86/include/asm/cet.h
 +++ b/arch/x86/include/asm/cet.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_CET_H
-+#define _ASM_X86_CET_H
+@@ -8,12 +8,19 @@
+ struct task_struct;
+ 
+ #ifdef CONFIG_X86_USER_SHADOW_STACK
++struct thread_shstk {
++	u64	base;
++	u64	size;
++};
 +
-+#ifndef __ASSEMBLY__
-+#include <linux/types.h>
+ long cet_prctl(struct task_struct *task, int option, unsigned long features);
+ void reset_thread_features(void);
++void shstk_free(struct task_struct *p);
+ #else
+ static inline long cet_prctl(struct task_struct *task, int option,
+ 			     unsigned long features) { return -EINVAL; }
+ static inline void reset_thread_features(void) {}
++static inline void shstk_free(struct task_struct *p) {}
+ #endif /* CONFIG_X86_USER_SHADOW_STACK */
+ 
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
+index 65ec1965cd28..a4b86eb537d6 100644
+--- a/arch/x86/include/asm/msr.h
++++ b/arch/x86/include/asm/msr.h
+@@ -310,6 +310,17 @@ void msrs_free(struct msr *msrs);
+ int msr_set_bit(u32 msr, u8 bit);
+ int msr_clear_bit(u32 msr, u8 bit);
+ 
++/* Helper that can never get accidentally un-inlined. */
++#define set_clr_bits_msrl(msr, set, clear)	do {	\
++	u64 __val, __new_val;				\
++							\
++	rdmsrl(msr, __val);				\
++	__new_val = (__val & ~(clear)) | (set);		\
++							\
++	if (__new_val != __val)				\
++		wrmsrl(msr, __new_val);			\
++} while (0)
 +
-+struct task_struct;
-+
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+long cet_prctl(struct task_struct *task, int option, unsigned long features);
-+void reset_thread_features(void);
-+#else
-+static inline long cet_prctl(struct task_struct *task, int option,
-+			     unsigned long features) { return -EINVAL; }
-+static inline void reset_thread_features(void) {}
-+#endif /* CONFIG_X86_USER_SHADOW_STACK */
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _ASM_X86_CET_H */
+ #ifdef CONFIG_SMP
+ int rdmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 *l, u32 *h);
+ int wrmsr_on_cpu(unsigned int cpu, u32 msr_no, u32 l, u32 h);
 diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 67c9d73b31fa..ca66d320a263 100644
+index ca66d320a263..a6c414dfd10f 100644
 --- a/arch/x86/include/asm/processor.h
 +++ b/arch/x86/include/asm/processor.h
-@@ -530,6 +530,11 @@ struct thread_struct {
- 	 */
- 	u32			pkru;
+@@ -27,6 +27,7 @@ struct vm86;
+ #include <asm/unwind_hints.h>
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
++#include <asm/cet.h>
  
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+	unsigned long		features;
-+	unsigned long		features_locked;
-+#endif
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+@@ -533,6 +534,8 @@ struct thread_struct {
+ #ifdef CONFIG_X86_USER_SHADOW_STACK
+ 	unsigned long		features;
+ 	unsigned long		features_locked;
 +
++	struct thread_shstk	shstk;
+ #endif
+ 
  	/* Floating point and extended processor state */
- 	struct fpu		fpu;
- 	/*
 diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 500b96e71f18..2dae9997ee17 100644
+index 2dae9997ee17..dad5288bf086 100644
 --- a/arch/x86/include/uapi/asm/prctl.h
 +++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -20,4 +20,10 @@
- #define ARCH_MAP_VDSO_32		0x2002
- #define ARCH_MAP_VDSO_64		0x2003
+@@ -26,4 +26,7 @@
+ #define ARCH_CET_DISABLE		0x5002
+ #define ARCH_CET_LOCK			0x5003
  
-+/* Don't use 0x3001-0x3004 because of old glibcs */
-+
-+#define ARCH_CET_ENABLE			0x5001
-+#define ARCH_CET_DISABLE		0x5002
-+#define ARCH_CET_LOCK			0x5003
++/* ARCH_CET_ features bits */
++#define CET_SHSTK			(1ULL <<  0)
 +
  #endif /* _ASM_X86_PRCTL_H */
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index f901658d9f7c..fbb1cb34188d 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -143,6 +143,8 @@ obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
- 
- obj-$(CONFIG_CFI_CLANG)			+= cfi.o
- 
-+obj-$(CONFIG_X86_USER_SHADOW_STACK)	+= shstk.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 6b3418bff326..17fec059317c 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -514,6 +514,8 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
- 		load_gs_index(__USER_DS);
- 	}
- 
-+	reset_thread_features();
-+
- 	loadsegment(fs, 0);
- 	loadsegment(es, _ds);
- 	loadsegment(ds, _ds);
-@@ -830,7 +832,10 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_MAP_VDSO_64:
- 		return prctl_map_vdso(&vdso_image_64, arg2);
- #endif
--
-+	case ARCH_CET_ENABLE:
-+	case ARCH_CET_DISABLE:
-+	case ARCH_CET_LOCK:
-+		return cet_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
- 		break;
 diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-new file mode 100644
-index 000000000000..ed6f25cc07c5
---- /dev/null
+index ed6f25cc07c5..20da2008e021 100644
+--- a/arch/x86/kernel/shstk.c
 +++ b/arch/x86/kernel/shstk.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * shstk.c - Intel shadow stack support
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * Yu-cheng Yu <yu-cheng.yu@intel.com>
-+ */
-+
-+#include <linux/sched.h>
-+#include <linux/bitops.h>
-+#include <asm/prctl.h>
-+
-+void reset_thread_features(void)
+@@ -8,14 +8,160 @@
+ 
+ #include <linux/sched.h>
+ #include <linux/bitops.h>
++#include <linux/types.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <linux/sched/signal.h>
++#include <linux/compat.h>
++#include <linux/sizes.h>
++#include <linux/user.h>
++#include <asm/msr.h>
++#include <asm/fpu/xstate.h>
++#include <asm/fpu/types.h>
++#include <asm/cet.h>
++#include <asm/special_insns.h>
++#include <asm/fpu/api.h>
+ #include <asm/prctl.h>
+ 
++static bool features_enabled(unsigned long features)
 +{
-+	current->thread.features = 0;
-+	current->thread.features_locked = 0;
++	return current->thread.features & features;
 +}
 +
-+long cet_prctl(struct task_struct *task, int option, unsigned long features)
++static void features_set(unsigned long features)
 +{
-+	if (option == ARCH_CET_LOCK) {
-+		task->thread.features_locked |= features;
++	current->thread.features |= features;
++}
++
++static void features_clr(unsigned long features)
++{
++	current->thread.features &= ~features;
++}
++
++static unsigned long alloc_shstk(unsigned long size)
++{
++	int flags = MAP_ANONYMOUS | MAP_PRIVATE;
++	struct mm_struct *mm = current->mm;
++	unsigned long addr, unused;
++
++	mmap_write_lock(mm);
++	addr = do_mmap(NULL, addr, size, PROT_READ, flags,
++		       VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
++
++	mmap_write_unlock(mm);
++
++	return addr;
++}
++
++static unsigned long adjust_shstk_size(unsigned long size)
++{
++	if (size)
++		return PAGE_ALIGN(size);
++
++	return PAGE_ALIGN(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G));
++}
++
++static void unmap_shadow_stack(u64 base, u64 size)
++{
++	while (1) {
++		int r;
++
++		r = vm_munmap(base, size);
++
++		/*
++		 * vm_munmap() returns -EINTR when mmap_lock is held by
++		 * something else, and that lock should not be held for a
++		 * long time.  Retry it for the case.
++		 */
++		if (r == -EINTR) {
++			cond_resched();
++			continue;
++		}
++
++		/*
++		 * For all other types of vm_munmap() failure, either the
++		 * system is out of memory or there is bug.
++		 */
++		WARN_ON_ONCE(r);
++		break;
++	}
++}
++
++static int shstk_setup(void)
++{
++	struct thread_shstk *shstk = &current->thread.shstk;
++	unsigned long addr, size;
++
++	/* Already enabled */
++	if (features_enabled(CET_SHSTK))
 +		return 0;
-+	}
 +
-+	/* Don't allow via ptrace */
-+	if (task != current)
-+		return -EINVAL;
++	/* Also not supported for 32 bit and x32 */
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) || in_32bit_syscall())
++		return -EOPNOTSUPP;
 +
-+	/* Do not allow to change locked features */
-+	if (features & task->thread.features_locked)
-+		return -EPERM;
++	size = adjust_shstk_size(0);
++	addr = alloc_shstk(size);
++	if (IS_ERR_VALUE(addr))
++		return PTR_ERR((void *)addr);
 +
-+	/* Only support enabling/disabling one feature at a time. */
-+	if (hweight_long(features) > 1)
-+		return -EINVAL;
++	fpregs_lock_and_load();
++	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
++	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
++	fpregs_unlock();
 +
-+	if (option == ARCH_CET_DISABLE) {
-+		return -EINVAL;
-+	}
++	shstk->base = addr;
++	shstk->size = size;
++	features_set(CET_SHSTK);
 +
-+	/* Handle ARCH_CET_ENABLE */
-+	return -EINVAL;
++	return 0;
 +}
++
+ void reset_thread_features(void)
+ {
++	memset(&current->thread.shstk, 0, sizeof(struct thread_shstk));
+ 	current->thread.features = 0;
+ 	current->thread.features_locked = 0;
+ }
+ 
++void shstk_free(struct task_struct *tsk)
++{
++	struct thread_shstk *shstk = &tsk->thread.shstk;
++
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
++	    !features_enabled(CET_SHSTK))
++		return;
++
++	if (!tsk->mm)
++		return;
++
++	unmap_shadow_stack(shstk->base, shstk->size);
++}
++
++
++static int shstk_disable(void)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++		return -EOPNOTSUPP;
++
++	/* Already disabled? */
++	if (!features_enabled(CET_SHSTK))
++		return 0;
++
++	fpregs_lock_and_load();
++	/* Disable WRSS too when disabling shadow stack */
++	set_clr_bits_msrl(MSR_IA32_U_CET, 0, CET_SHSTK_EN);
++	wrmsrl(MSR_IA32_PL3_SSP, 0);
++	fpregs_unlock();
++
++	shstk_free(current);
++	features_clr(CET_SHSTK);
++
++	return 0;
++}
++
+ long cet_prctl(struct task_struct *task, int option, unsigned long features)
+ {
+ 	if (option == ARCH_CET_LOCK) {
 -- 
 2.17.1
 
