@@ -2,253 +2,257 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A6661A328
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 22:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439E561A374
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 22:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiKDVTo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 17:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S230099AbiKDViB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 17:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiKDVTi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 17:19:38 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B0A6250
-        for <linux-arch@vger.kernel.org>; Fri,  4 Nov 2022 14:19:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id z26so5584089pff.1
-        for <linux-arch@vger.kernel.org>; Fri, 04 Nov 2022 14:19:36 -0700 (PDT)
+        with ESMTP id S230106AbiKDVhx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 17:37:53 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E4C4B99D
+        for <linux-arch@vger.kernel.org>; Fri,  4 Nov 2022 14:37:41 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id g7so9071268lfv.5
+        for <linux-arch@vger.kernel.org>; Fri, 04 Nov 2022 14:37:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9ugyqOccmZowmlQRWmpT6Mn2YOA1KD6X2k+Tf7TPbA=;
-        b=RdPxBPZxRTrKi5VyUPbTa4PsV8EOmVSMHgdDTAto2Y3fDrK1yMJfnyHZGOAvZE51hC
-         MUTtzoVHHX3zY/UFvFQlLPFajO7Vk3UMWasOYjOunInXxRe9GMgvy1prXwrGnsWHLQTq
-         MkB4hXkPdaYmZNJhW5Z57kkp8cXynosPMw6g3gXtm3aJ5VZv/vU0u99UNnhtOR7mBQ/S
-         QL/4AUeWJ9N/SNvmKiWOBa8KZXdzPs5PSg0nheKWUsEYBsob3rOduKBZLw054Y3uq3k4
-         U296HEgVheMABieNv5oHp9dnkof3mwu5OIEwrSvKx9gbTi9SI4ERJkf3JYtYBgDx3FuJ
-         lMUA==
+        bh=PvSWpxJgGl2A+yuTtFFpWgClmp36FYJZSW8HWdXrt58=;
+        b=aQCjWQq9itbtlAHPWgZJ2akFWRpo1nfp/o0HYGdZRWAWjrKKYjkZwNf3TJCjGr3+iw
+         lztqvPmWUnww+WpH5I2pgE0BPb/wfvX6IH/JB8uDHnxssHR6FaHs3tOLFH1vvSaJrw5p
+         BoMxVLfhg97/92Q5ChBY1JuLkjl/CiCAyRCk1JGQe3EVaU/8s9qLkT/rUchQ4smvoVU5
+         HxGF/7qT9whWKKeuTFs2OoSdWoz4WRuH0h09Sc7oTQjzH6aGy3ZKmtMmP8RGGWJMTopb
+         SQg9fvVhBkClGARk14E73QP7efmSwL/9ipoDD4++q30bZ8yXB0mN4DU1u4bibRKik8fW
+         G1cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q9ugyqOccmZowmlQRWmpT6Mn2YOA1KD6X2k+Tf7TPbA=;
-        b=7Hfh3dEQj6Th9NOp/K3ebX6j5m2s+DyJt41sYKyhY5yRxTaYavFczJLPaCjUgOkIec
-         7sS5iQS6du2EMaUTuH6sn/f7b4CqwimjvVM8MOIqpoagpJreCY4rO6IzM6zLBQV2C5fu
-         kLRW3GZXzXemuAG22ngwmia/eApAJ6J+ugwM/4HqeUfs+1zoPVst6wUyad6E2XoA4m3L
-         PyEokujsXgfUuyuxyaMb5SRf47r7vbo3VYrz7K8vzQZIojdDjvBwbyVQnUXY+HFyauC3
-         Y1JhpZ8btSp0oPYhiPSIbANMytEUDcdTgd2Y7ku4weDzDAgi2Zxmrq+WxLawmoWaU3Hm
-         yPfQ==
-X-Gm-Message-State: ACrzQf0kAymDvVubXtx8JCtbgYB0slhdGPlaFC7NjOqSubJVtvRdcJmm
-        oqfLv37YLJQZeNzF6W7kmzgY1w==
-X-Google-Smtp-Source: AMsMyM5HLN09MZ7XXfHooCD3zs8msfwo0CBHOrCrZEPWc/5ODnQb86suM3i3C9TKpVcD/J1sy4dlFA==
-X-Received: by 2002:a63:215f:0:b0:46f:c464:a054 with SMTP id s31-20020a63215f000000b0046fc464a054mr23293449pgm.420.1667596775547;
-        Fri, 04 Nov 2022 14:19:35 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d10-20020a621d0a000000b00562664d5027sm77216pfd.61.2022.11.04.14.19.34
+        bh=PvSWpxJgGl2A+yuTtFFpWgClmp36FYJZSW8HWdXrt58=;
+        b=z+I90BlGwWdOAiwC7lDduL9/+k9i/geAy5MAKUVVX7nLa1c8X2H5Q4Mpy6aOrnDv5K
+         wUBXXwYVfPSi5CnsfWgtfIH7tjezG+T/CNPJZth9ihNhpOngE3zZjGWyAzAdkHmKLe2I
+         MocR89mMnwWNN9PBsEZEbz3ezRRORAdwC/zrSEOP0rH5YbJAEjHdJKGYi5qoxkVilxbP
+         fRr+Flc/EY984TxHDloVNmUdH50/PytbZgJg2RoLmSbFKXaYSwNxxlHOjbzfZgrdbzRx
+         5YG7PGrIFrO+JnMpjjgkqo7AuYHqoJnt2nHzTgmpkUnOzM34FjctJtWP4zluuG0HB8HM
+         FkVQ==
+X-Gm-Message-State: ACrzQf25lFWRb9vKZ4LtwRnewJt7g8l2Ipy4ssfgwVWtSUCU8LaWEqpk
+        yzr5oZIauMJepjUGtilXhCDNR3JY1eCh7A==
+X-Google-Smtp-Source: AMsMyM6pxHxMT0FlYTCZm1EKL1Elt3l5nMSi/KgrXNQr3YqAI2f3xC0M9rJRxWsv16xDhMMP16z9Eg==
+X-Received: by 2002:a05:6512:e83:b0:4a2:cdaa:5e3e with SMTP id bi3-20020a0565120e8300b004a2cdaa5e3emr13578764lfb.308.1667597859685;
+        Fri, 04 Nov 2022 14:37:39 -0700 (PDT)
+Received: from curiosity ([5.188.167.245])
+        by smtp.gmail.com with ESMTPSA id k19-20020a192d13000000b00492b0d23d24sm34468lfj.247.2022.11.04.14.37.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 14:19:35 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 21:19:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
- regions
-Message-ID: <Y2WB48kD0J4VGynX@google.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
- <Y2RJFWplouV2iF5E@google.com>
- <20221104082843.GA4142342@chaop.bj.intel.com>
+        Fri, 04 Nov 2022 14:37:38 -0700 (PDT)
+Date:   Sat, 5 Nov 2022 00:37:37 +0300
+From:   Sergey Matyukevich <geomatsi@gmail.com>
+To:     Andrew Bresticker <abrestic@rivosinc.com>
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>
+Subject: Re: [RFC PATCH v1] riscv: support for hardware
+ breakpoints/watchpoints
+Message-ID: <Y2WGIQ+m7jk5RPZv@curiosity>
+References: <20221031213225.912258-1-geomatsi@gmail.com>
+ <CALE4mHo2yFPpF68RvvDbKji6_peAX60_cXqnFMxydJTLjnLnUQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104082843.GA4142342@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <CALE4mHo2yFPpF68RvvDbKji6_peAX60_cXqnFMxydJTLjnLnUQ@mail.gmail.com>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Paolo, any thoughts before I lead things further astray?
+Hi Andrew,
 
-On Fri, Nov 04, 2022, Chao Peng wrote:
-> On Thu, Nov 03, 2022 at 11:04:53PM +0000, Sean Christopherson wrote:
-> > On Tue, Oct 25, 2022, Chao Peng wrote:
-> > > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
-> > >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
-> > >  		break;
-> > >  	}
-> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
-> > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
-> > 
-> > I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
-> > from the fact that restricted/protected memory may not be encrypted, there are
-> > other potential use cases for per-page memory attributes[*], e.g. to make memory
-> > read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
-> > 
-> > Any paravirt use case where the attributes of a page are effectively dictated by
-> > the guest is going to run into the exact same performance problems with memslots,
-> > which isn't suprising in hindsight since shared vs. private is really just an
-> > attribute, albeit with extra special semantics.
-> > 
-> > And if we go with a brand new ioctl(), maybe someday in the very distant future
-> > we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
-> > 
-> > Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
-> > of a wrench into things.
-> > 
-> > Something like:
-> > 
-> >   KVM_SET_MEMORY_ATTRIBUTES
-> > 
-> >   struct kvm_memory_attributes {
-> > 	__u64 address;
-> > 	__u64 size;
-> > 	__u64 flags;
+> > RISC-V Debug specification includes Sdtrig ISA extension. This extension
+> > describes Trigger Module. Triggers can cause a breakpoint exception,
+> > entry into Debug Mode, or a trace action without having to execute a
+> > special instruction. For native debugging triggers can be used to
+> > implement hardware breakpoints and watchpoints.
 
-Oh, this is half-baked.  I lost track of which flags were which.  What I intended
-was a separate, initially-unused flags, e.g.
+... [snip]
 
- struct kvm_memory_attributes {
-	__u64 address;
-	__u64 size;
-	__u64 attributes;
-	__u64 flags;
-  }
+> > Despite missing userspace debug, initial implementation can be tested
+> > on QEMU using kernel breakpoints, e.g. see samples/hw_breakpoint and
+> > register_wide_hw_breakpoint. Hardware breakpoints work on upstream QEMU.
+> 
+> We should also be able to enable the use of HW breakpoints (and
+> watchpoints, modulo the issue mentioned below) in kdb, right?
 
-so that KVM can tweak behavior and/or extend the effective size of the struct.
+Interesting. So far I didn't think about using hw breakpoints in kgdb.
+I took a quick look at riscv and arm64 kgdb code. It looks like there
+is nothing wrong in adding arch-specific implementation of the function
+'kgdb_arch_set_breakpoint' that will use hw breakpoints if possible.
+Besides it looks like in this case it makes sense to handle KGDB earlier
+than hw breakpoints in do_trap_break. 
 
-> I like the idea of adding a new ioctl(). But putting all attributes into
-> a flags in uAPI sounds not good to me, e.g. forcing userspace to set all
-> attributes in one call can cause pain for userspace, probably for KVM
-> implementation as well. For private<->shared memory conversion, we
-> actually only care the KVM_MEM_ATTR_SHARED or KVM_MEM_ATTR_PRIVATE bit,
+> > However this is not the case for watchpoints since there is no way to
+> > figure out which watchpoint is triggered. IIUC there are two possible
+> > options for doing this: using 'hit' bit in tdata1 or reading faulting
+> > virtual address from STVAL. QEMU implements neither of them. Current
+> > implementation opts for STVAL. So the following experimental QEMU patch
+> > is required to make watchpoints work:
+> >
+> > :  diff --git a/target/riscv/cpu_helper.c b/target/riscv/cpu_helper.c
+> > :  index 278d163803..8858be7411 100644
+> > :  --- a/target/riscv/cpu_helper.c
+> > :  +++ b/target/riscv/cpu_helper.c
+> > :  @@ -1639,6 +1639,10 @@ void riscv_cpu_do_interrupt(CPUState *cs)
+> > :           case RISCV_EXCP_VIRT_INSTRUCTION_FAULT:
+> > :               tval = env->bins;
+> > :               break;
+> > :  +        case RISCV_EXCP_BREAKPOINT:
+> > :  +            tval = env->badaddr;
+> > :  +            env->badaddr = 0x0;
+> > :  +            break;
+> > :           default:
+> > :               break;
+> > :           }
+> > :  diff --git a/target/riscv/debug.c b/target/riscv/debug.c
+> > :  index 26ea764407..b4d1d566ab 100644
+> > :  --- a/target/riscv/debug.c
+> > :  +++ b/target/riscv/debug.c
+> > :  @@ -560,6 +560,7 @@ void riscv_cpu_debug_excp_handler(CPUState *cs)
+> > :
+> > :       if (cs->watchpoint_hit) {
+> > :           if (cs->watchpoint_hit->flags & BP_CPU) {
+> > :  +            env->badaddr = cs->watchpoint_hit->hitaddr;
+> > :               cs->watchpoint_hit = NULL;
+> > :               do_trigger_action(env, DBG_ACTION_BP);
+> > :           }
 
-Not necessarily, e.g. I can see pKVM wanting to convert from RW+PRIVATE => RO+SHARED
-or even RW+PRIVATE => NONE+SHARED so that the guest can't write/access the memory
-while it's accessible from the host.
+... [snip]
 
-And if this does extend beyond shared/private, dropping from RWX=>R, i.e. dropping
-WX permissions, would also be a common operation.
+> > +int arch_install_hw_breakpoint(struct perf_event *bp)
+> > +{
+> > +       struct arch_hw_breakpoint *info = counter_arch_bp(bp);
+> > +       struct sbi_dbtr_data_msg *xmit;
+> > +       struct sbi_dbtr_id_msg *recv;
+> > +       struct perf_event **slot;
+> > +       struct sbiret ret;
+> > +       int err = 0;
+> > +
+> > +       xmit = kzalloc(SBI_MSG_SZ_ALIGN(sizeof(*xmit)), GFP_ATOMIC);
+> > +       if (!xmit) {
+> > +               err = -ENOMEM;
+> > +               goto out;
+> > +       }
+> > +
+> > +       recv = kzalloc(SBI_MSG_SZ_ALIGN(sizeof(*recv)), GFP_ATOMIC);
+> > +       if (!recv) {
+> > +               err = -ENOMEM;
+> > +               goto out;
+> > +       }
+> 
+> Do these really need to be dynamically allocated?
 
-Hmm, typing that out makes me think that if we do end up supporting other "attributes",
-i.e. protections, we should go straight to full RWX protections instead of doing
-things piecemeal, i.e. add individual protections instead of combinations like
-NO_EXEC and READ_ONLY.  The protections would have to be inverted for backwards
-compatibility, but that's easy enough to handle.  The semantics could be like
-protection keys, which also have inverted persmissions, where the final protections
-are the combination of memslot+attributes, i.e. a read-only memslot couldn't be made
-writable via attributes.
-
-E.g. userspace could do "NO_READ | NO_WRITE | NO_EXEC" to temporarily block access
-to memory without needing to delete the memslot.  KVM would need to disallow
-unsupported combinations, e.g. disallowed effective protections would be:
-
-  - W or WX [unless there's an arch that supports write-only memory]
-  - R or RW [until KVM plumbs through support for no-exec, or it's unsupported in hardware]
-  - X       [until KVM plumbs through support for exec-only, or it's unsupported in hardware]
-
-Anyways, that's all future work...
-
-> but we force userspace to set other irrelevant bits as well if use this
-> API.
-
-They aren't irrelevant though, as the memory attributes are all describing the
-allowed protections for a given page.  If there's a use case where userspace "can't"
-keep track of the attributes for whatever reason, then userspace could do a RMW
-to set/clear attributes.  Alternatively, the ioctl() could take an "operation" and
-support WRITE/OR/AND to allow setting/clearing individual flags, e.g. tweak the
-above to be: 
+According to SBI extension proposal, base address of this memory chunk
+must be 16-bytes aligned. To simplify things, buffer with 'power of two
+bytes' size (and >= 16 bytes) is allocated. In this case alignment of
+the kmalloc buffer is guaranteed to be at least this size. IIUC more
+efforts are needed to guarantee such alignment for a buffer on stack.
  
- struct kvm_memory_attributes {
-	__u64 address;
-	__u64 size;
-	__u64 attributes;
-	__u32 operation;
-	__u32 flags;
-  }
+> > +
+> > +       xmit->tdata1 = info->trig_data1.value;
+> > +       xmit->tdata2 = info->trig_data2;
+> > +       xmit->tdata3 = info->trig_data3;
+> > +
+> > +       ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_TRIGGER_INSTALL,
+> > +                       1, __pa(xmit) >> 4, __pa(recv) >> 4,
+> > +                       0, 0, 0);
+> > +       if (ret.error) {
+> > +               pr_warn("%s: failed to install trigger\n", __func__);
+> > +               err = -EIO;
+> > +               goto out;
+> > +       }
+> > +
+> > +       if (recv->idx >= dbtr_total_num) {
+> > +               pr_warn("%s: invalid trigger index %lu\n", __func__, recv->idx);
+> > +               err = -EINVAL;
+> > +               goto out;
+> > +       }
+> > +
+> > +       slot = this_cpu_ptr(&bp_per_reg[recv->idx]);
+> > +       if (*slot) {
+> > +               pr_warn("%s: slot %lu is in use\n", __func__, recv->idx);
+> > +               err = -EBUSY;
+> > +               goto out;
+> > +       }
+> > +
+> > +       *slot = bp;
+> > +
+> > +out:
+> > +       kfree(xmit);
+> > +       kfree(recv);
+> > +
+> > +       return err;
+> > +}
 
-> I looked at kvm_device_attr, sounds we can do similar:
+... [snip]
 
-The device attributes deal with isolated, arbitrary values, whereas memory attributes
-are flags, i.e. devices are 1:1 whereas memory is 1:MANY.  There is no "unset" for
-device attributes, because they aren't flags.  Device attributes vs. memory attributes
-really are two very different things that just happen to use a common name.
-
-If it helped clarify things without creating naming problems, we could even use
-PROTECTIONS instead of ATTRIBUTES.
-
->   KVM_SET_MEMORY_ATTR
+> > +static int __init arch_hw_breakpoint_init(void)
+> > +{
+> > +       union riscv_dbtr_tdata1 tdata1;
+> > +       struct sbiret ret;
+> > +
+> > +       if (sbi_probe_extension(SBI_EXT_DBTR) <= 0) {
+> > +               pr_info("%s: SBI_EXT_DBTR is not supported\n", __func__);
+> > +               return 0;
+> > +       }
+> > +
+> > +       ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS,
+> > +                       0, 0, 0, 0, 0, 0);
+> > +       if (ret.error) {
+> > +               pr_warn("%s: failed to detect triggers\n", __func__);
+> > +               return 0;
+> > +       }
+> > +
+> > +       pr_info("%s: total number of triggers: %lu\n", __func__, ret.value);
+> > +
+> > +       tdata1.value = 0;
+> > +       tdata1.type = RISCV_DBTR_TRIG_MCONTROL6;
+> > +
+> > +       ret = sbi_ecall(SBI_EXT_DBTR, SBI_EXT_DBTR_NUM_TRIGGERS,
+> > +                       tdata1.value, 0, 0, 0, 0, 0);
+> > +       if (ret.error) {
+> > +               pr_warn("%s: failed to detect triggers\n", __func__);
+> > +               dbtr_total_num = 0;
+> > +               return 0;
+> > +       }
 > 
->   struct kvm_memory_attr {
-> 	__u64 address;
-> 	__u64 size;
-> #define KVM_MEM_ATTR_SHARED	BIT(0)
-> #define KVM_MEM_ATTR_READONLY	BIT(1)
-> #define KVM_MEM_ATTR_NOEXEC	BIT(2)
-> 	__u32 attr;
+> nit: This is basically identical to hw_breakpoint_slots() -- just call
+> it here, or perhaps pull the DBTR_NUM_TRIGGERS ECALL into its own
+> function to reduce the duplication, e.g. 'dbtr_num_triggers(unsigned
+> long type)'?
 
-As above, letting userspace set only a single attribute would prevent setting
-(or clearing) multiple attributes in a single ioctl().
+Good point. More similar requests will be added, e.g. for MCONTROL and
+possibly other trigger types. So I will add a separate
+'dbtr_num_triggers' function.
 
-> 	__u32 pad;
->   }
-> 
-> I'm not sure if we need KVM_GET_MEMORY_ATTR/KVM_HAS_MEMORY_ATTR as well,
+> > +
+> > +       pr_info("%s: total number of type %d triggers: %lu\n",
+> > +               __func__, tdata1.type, ret.value);
+> > +
+> > +       dbtr_total_num = ret.value;
+> > +
+> > +       return 0;
+> > +}
 
-Definitely would need to communicate to userspace that various attributes are
-supported.  That doesn't necessarily require a common ioctl(), but I don't see
-any reason not to add a common helper, and adding a common helper would mean
-KVM_CAP_PRIVATE_MEM can go away.  But it should return a bitmask so that userspace
-can do a single query to get all supported attributes, e.g. KVM_SUPPORTED_MEMORY_ATTRIBUTES.  
-
-As for KVM_GET_MEMORY_ATTRIBUTES, we wouldn't necessarily have to provide such an
-API, e.g. we could hold off until someone came along with a RMW use case (as above).
-That said, debug would likely be a nightmare without KVM_GET_MEMORY_ATTRIBUTES,
-so it's probably best to add it straightway.
-
-> but sounds like we need a KVM_UNSET_MEMORY_ATTR.
-
-No need if the setter operates on all attributes.
-
-> Since we are exposing the attribute directly to userspace I also think
-> we'd better treat shared memory as the default, so even when the private
-> memory is not used, the bit can still be meaningful. So define BIT(0) as
-> KVM_MEM_ATTR_PRIVATE instead of KVM_MEM_ATTR_SHARED.
-
-Ah, right.
+Thanks!
+Sergey
