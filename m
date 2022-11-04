@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2308E61A448
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 23:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6CB61A445
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 23:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbiKDWkN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 18:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S229570AbiKDWkM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 18:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKDWj6 (ORCPT
+        with ESMTP id S229492AbiKDWj6 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 18:39:58 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABAA4044F;
-        Fri,  4 Nov 2022 15:39:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1646E41985;
+        Fri,  4 Nov 2022 15:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667601570; x=1699137570;
+  t=1667601571; x=1699137571;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=s4pESg4b+rdmfkzmthwTSS4lIUw19qtNeWA9uReG7HU=;
-  b=delmJX49R61nYkAZk3MvRj3Jq9D/QyZ4NQF4GBg1+EalmV48rPnwzb8r
-   PJdHnGdL+jhFfIV31xso1GnZRAOSWj4bpo3bi5FCtdN7Cwu904ypv00G3
-   0Z+204qWDF7JFk6XEm1HW72bbyhZ/dtX3j8yyvBk2Nwf4yUpMrstA7oZS
-   ra4EJuqU6QNAutV9EtD4CMttoU0nTxTs7SyLhGL6V6Uafq+OE4ToypEpj
-   /iOpVMsyZIK95MFpo1J/gPhZs9x4MZP3ZuySzmi/e1kb5ClvSqPN6tMbv
-   dGMXgXWVwMZNspN2EpbXZhZVugmnOVZIksBmVhyWFH8bDcq8saa96Sx0G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311840506"
+  bh=poplwKY6u8XD6c+b4FqOVfxOhvQPYQQiQgDKo7YigJ8=;
+  b=UtajLHmcYYmrIISyZVlFrFI6GpzOeK5R4Y5PuWZKMT74+P1uxt7QoewO
+   qc7KZl4z0XWZhySG58qrnB66JLMUPOORFOaQhPZpyWAqP0q9QgOf6Uf56
+   NiXW8wSQK5Yynwdq73qBN97aIeYxAQZYgfliRmvy+vJuW20Zr6IpS33fV
+   Whm7tpD6n3n2gDuxU5clwwFlMQrYsuZu/fwBfS8SpYqLk8/1Gwf0Fb1Oj
+   ex+ExoDj7ZYAdRCb+wrA1kI6U469ZIa9e+3+0YF7sGwtZAKTbRYcDcKqz
+   7WUG9e45XIf+1qQTIilkWkgZLjGFVhMC135CbGfb6fW3ilL0Ilfxf2ZjH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="311840510"
 X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="311840506"
+   d="scan'208";a="311840510"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668514010"
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:30 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10521"; a="668514015"
 X-IronPort-AV: E=Sophos;i="5.96,138,1665471600"; 
-   d="scan'208";a="668514010"
+   d="scan'208";a="668514015"
 Received: from adhjerms-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.227.68])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:28 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 15:39:29 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,11 +65,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         John Allen <john.allen@amd.com>, kcc@google.com,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org
-Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v3 08/37] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
-Date:   Fri,  4 Nov 2022 15:35:35 -0700
-Message-Id: <20221104223604.29615-9-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v3 09/37] x86/mm: Move pmd_write(), pud_write() up in the file
+Date:   Fri,  4 Nov 2022 15:35:36 -0700
+Message-Id: <20221104223604.29615-10-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
 References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
@@ -84,81 +83,69 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-New processors that support Shadow Stack regard Write=0,Dirty=1 PTEs as
-shadow stack pages.
-
-In normal cases, it can be helpful to create Write=1 PTEs as also Dirty=1
-if HW dirty tracking is not needed, because if the Dirty bit is not already
-set the CPU has to set Dirty=1 when it the memory gets written to. This
-creates addiontal work for the CPU. So tradional wisdom was to simply set
-the Dirty bit whenever you didn't care about it. However, it was never
-really very helpful for read only kernel memory.
-
-When CR4.CET=1 and IA32_S_CET.SH_STK_EN=1, some instructions can write to
-such supervisor memory. The kernel does not set IA32_S_CET.SH_STK_EN, so
-avoiding kernel Write=0,Dirty=1 memory is not strictly needed for any
-functional reason. But having Write=0,Dirty=1 kernel memory doesn't have
-any functional benefit either, so to reduce ambiguity between shadow stack
-and regular Write=0 pages, removed Dirty=1 from any kernel Write=0 PTEs.
+To prepare the introduction of _PAGE_COW, move pmd_write() and
+pud_write() up in the file, so that they can be used by other
+helpers below.  No functional changes.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-
 ---
+ arch/x86/include/asm/pgtable.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-v3:
- - Update commit log (Andrew Cooper, Peterz)
-
-v2:
- - Normalize PTE bit descriptions between patches
-
- arch/x86/include/asm/pgtable_types.h | 6 +++---
- arch/x86/mm/pat/set_memory.c         | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-index aa174fed3a71..ff82237e7b6b 100644
---- a/arch/x86/include/asm/pgtable_types.h
-+++ b/arch/x86/include/asm/pgtable_types.h
-@@ -192,10 +192,10 @@ enum page_cache_mode {
- #define _KERNPG_TABLE		 (__PP|__RW|   0|___A|   0|___D|   0|   0| _ENC)
- #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
- #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
--#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
--#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
-+#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|   0|   0|___G)
-+#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|   0|   0|___G)
- #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
--#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|___D|   0|___G)
-+#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|   0|   0|___G)
- #define __PAGE_KERNEL_LARGE	 (__PP|__RW|   0|___A|__NX|___D|_PSE|___G)
- #define __PAGE_KERNEL_LARGE_EXEC (__PP|__RW|   0|___A|   0|___D|_PSE|___G)
- #define __PAGE_KERNEL_WP	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __WP)
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 2e5a045731de..af2267a9cdab 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2026,7 +2026,7 @@ int set_memory_nx(unsigned long addr, int numpages)
- 
- int set_memory_ro(unsigned long addr, int numpages)
- {
--	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW), 0);
-+	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW | _PAGE_DIRTY), 0);
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 5059799bebe3..a1d6f121ee35 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -159,6 +159,18 @@ static inline int pte_write(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_RW;
  }
  
- int set_memory_rw(unsigned long addr, int numpages)
++#define pmd_write pmd_write
++static inline int pmd_write(pmd_t pmd)
++{
++	return pmd_flags(pmd) & _PAGE_RW;
++}
++
++#define pud_write pud_write
++static inline int pud_write(pud_t pud)
++{
++	return pud_flags(pud) & _PAGE_RW;
++}
++
+ static inline int pte_huge(pte_t pte)
+ {
+ 	return pte_flags(pte) & _PAGE_PSE;
+@@ -1103,12 +1115,6 @@ extern int pmdp_clear_flush_young(struct vm_area_struct *vma,
+ 				  unsigned long address, pmd_t *pmdp);
+ 
+ 
+-#define pmd_write pmd_write
+-static inline int pmd_write(pmd_t pmd)
+-{
+-	return pmd_flags(pmd) & _PAGE_RW;
+-}
+-
+ #define __HAVE_ARCH_PMDP_HUGE_GET_AND_CLEAR
+ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm, unsigned long addr,
+ 				       pmd_t *pmdp)
+@@ -1138,12 +1144,6 @@ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
+ }
+ 
+-#define pud_write pud_write
+-static inline int pud_write(pud_t pud)
+-{
+-	return pud_flags(pud) & _PAGE_RW;
+-}
+-
+ #ifndef pmdp_establish
+ #define pmdp_establish pmdp_establish
+ static inline pmd_t pmdp_establish(struct vm_area_struct *vma,
 -- 
 2.17.1
 
