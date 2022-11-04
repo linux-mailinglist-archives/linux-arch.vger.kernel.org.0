@@ -2,96 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB00D619EDC
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 18:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A6661A328
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 22:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiKDRfu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 13:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S230119AbiKDVTo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 17:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiKDRfs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 13:35:48 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE952FC25
-        for <linux-arch@vger.kernel.org>; Fri,  4 Nov 2022 10:35:47 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id mi9so3659258qvb.8
-        for <linux-arch@vger.kernel.org>; Fri, 04 Nov 2022 10:35:47 -0700 (PDT)
+        with ESMTP id S230121AbiKDVTi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 17:19:38 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B0A6250
+        for <linux-arch@vger.kernel.org>; Fri,  4 Nov 2022 14:19:36 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id z26so5584089pff.1
+        for <linux-arch@vger.kernel.org>; Fri, 04 Nov 2022 14:19:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7JBbJ2Fvdhb3EiG7i7cT3Xt7aRcECjo+Ml9qZORLks=;
-        b=QtMfbnehToVkf5LyUXFO65eJG6We/YS6qgzH8Z2QVSs2weEaaF7YugQA4+T+JfaIPw
-         6dimRZa67FxZZM+NBrxbn3JA/iGOuUs1OWmETpF/W40mXdVqlUFdgDVv7Dko3fTRTMqj
-         2E8UHpNacdU4QteBhPkPgS/IGURatVauQnjJM=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9ugyqOccmZowmlQRWmpT6Mn2YOA1KD6X2k+Tf7TPbA=;
+        b=RdPxBPZxRTrKi5VyUPbTa4PsV8EOmVSMHgdDTAto2Y3fDrK1yMJfnyHZGOAvZE51hC
+         MUTtzoVHHX3zY/UFvFQlLPFajO7Vk3UMWasOYjOunInXxRe9GMgvy1prXwrGnsWHLQTq
+         MkB4hXkPdaYmZNJhW5Z57kkp8cXynosPMw6g3gXtm3aJ5VZv/vU0u99UNnhtOR7mBQ/S
+         QL/4AUeWJ9N/SNvmKiWOBa8KZXdzPs5PSg0nheKWUsEYBsob3rOduKBZLw054Y3uq3k4
+         U296HEgVheMABieNv5oHp9dnkof3mwu5OIEwrSvKx9gbTi9SI4ERJkf3JYtYBgDx3FuJ
+         lMUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y7JBbJ2Fvdhb3EiG7i7cT3Xt7aRcECjo+Ml9qZORLks=;
-        b=4GsR16Y2/feZNYWTo8KdrcF/muc1qY3FUWsjrGAEvswMvwUHRf6SNCp0ufGb0UZ0nV
-         l8lHXhXx+1KhH2YEA0nzmgrBEpUUXcO8Bs54cA9XAR1PBfY3Rl9OZ4AKGKzlH0kRLQOb
-         cc3GtHb34Qk6tukL8zIMCwYsgYqRWVME23GRYo0DL6r+H/gTBaeuGw9W/WFxB0CG7GI9
-         yLJwt5cLIYC9p1VETPSzP+Xi+qcD59DFMQ5sJe8I4i2+vPyTCZq1C7kcuFhkZwQC8iFO
-         h4z/9xubcFWz3Vem837fBtuXEiQBBZxyzClBAfLSsf5jRx2pcXRGEgbzdsK/N3v5Ahs9
-         +eAA==
-X-Gm-Message-State: ACrzQf3pwPzuCU1OfzR7IrDNckSiOC/EzmqH+9atcR9kqQLpCIWacvXn
-        f65H2O0whndTVirPOvh64Qz3/jYMA1Tqhg==
-X-Google-Smtp-Source: AMsMyM79Z3H3Y7gu7xDq+FOEkxKoDvovwIGjMBbY354RJpWNCfzosihNp9QwxaMJ0yRhpAWDU4GB7A==
-X-Received: by 2002:a05:6214:212e:b0:4bb:9ad7:296b with SMTP id r14-20020a056214212e00b004bb9ad7296bmr33679155qvc.20.1667583346903;
-        Fri, 04 Nov 2022 10:35:46 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id cg13-20020a05622a408d00b003a51e8ef03dsm2813702qtb.62.2022.11.04.10.35.46
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 10:35:46 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id g127so6605353ybg.8
-        for <linux-arch@vger.kernel.org>; Fri, 04 Nov 2022 10:35:46 -0700 (PDT)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr37488759ybu.310.1667583334773; Fri, 04
- Nov 2022 10:35:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
- <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
- <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
- <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
- <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
- <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com> <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-In-Reply-To: <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 4 Nov 2022 10:35:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
-Message-ID: <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
-Subject: Re: mm: delay rmap removal until after TLB flush
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q9ugyqOccmZowmlQRWmpT6Mn2YOA1KD6X2k+Tf7TPbA=;
+        b=7Hfh3dEQj6Th9NOp/K3ebX6j5m2s+DyJt41sYKyhY5yRxTaYavFczJLPaCjUgOkIec
+         7sS5iQS6du2EMaUTuH6sn/f7b4CqwimjvVM8MOIqpoagpJreCY4rO6IzM6zLBQV2C5fu
+         kLRW3GZXzXemuAG22ngwmia/eApAJ6J+ugwM/4HqeUfs+1zoPVst6wUyad6E2XoA4m3L
+         PyEokujsXgfUuyuxyaMb5SRf47r7vbo3VYrz7K8vzQZIojdDjvBwbyVQnUXY+HFyauC3
+         Y1JhpZ8btSp0oPYhiPSIbANMytEUDcdTgd2Y7ku4weDzDAgi2Zxmrq+WxLawmoWaU3Hm
+         yPfQ==
+X-Gm-Message-State: ACrzQf0kAymDvVubXtx8JCtbgYB0slhdGPlaFC7NjOqSubJVtvRdcJmm
+        oqfLv37YLJQZeNzF6W7kmzgY1w==
+X-Google-Smtp-Source: AMsMyM5HLN09MZ7XXfHooCD3zs8msfwo0CBHOrCrZEPWc/5ODnQb86suM3i3C9TKpVcD/J1sy4dlFA==
+X-Received: by 2002:a63:215f:0:b0:46f:c464:a054 with SMTP id s31-20020a63215f000000b0046fc464a054mr23293449pgm.420.1667596775547;
+        Fri, 04 Nov 2022 14:19:35 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id d10-20020a621d0a000000b00562664d5027sm77216pfd.61.2022.11.04.14.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Nov 2022 14:19:35 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 21:19:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
+ regions
+Message-ID: <Y2WB48kD0J4VGynX@google.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
+ <Y2RJFWplouV2iF5E@google.com>
+ <20221104082843.GA4142342@chaop.bj.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104082843.GA4142342@chaop.bj.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,81 +103,152 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 11:33 PM Alexander Gordeev
-<agordeev@linux.ibm.com> wrote:
->
-> I rather have a question to the generic part (had to master the code quotting).
+Paolo, any thoughts before I lead things further astray?
 
-Sure.
+On Fri, Nov 04, 2022, Chao Peng wrote:
+> On Thu, Nov 03, 2022 at 11:04:53PM +0000, Sean Christopherson wrote:
+> > On Tue, Oct 25, 2022, Chao Peng wrote:
+> > > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
+> > >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> > >  		break;
+> > >  	}
+> > > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
+> > > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+> > 
+> > I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
+> > from the fact that restricted/protected memory may not be encrypted, there are
+> > other potential use cases for per-page memory attributes[*], e.g. to make memory
+> > read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
+> > 
+> > Any paravirt use case where the attributes of a page are effectively dictated by
+> > the guest is going to run into the exact same performance problems with memslots,
+> > which isn't suprising in hindsight since shared vs. private is really just an
+> > attribute, albeit with extra special semantics.
+> > 
+> > And if we go with a brand new ioctl(), maybe someday in the very distant future
+> > we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
+> > 
+> > Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
+> > of a wrench into things.
+> > 
+> > Something like:
+> > 
+> >   KVM_SET_MEMORY_ATTRIBUTES
+> > 
+> >   struct kvm_memory_attributes {
+> > 	__u64 address;
+> > 	__u64 size;
+> > 	__u64 flags;
 
-Although now I think the series in in Andrew's -mm tree, or just about
-to get moved in there, so I'm not going to touch my actual branch any
-more.
+Oh, this is half-baked.  I lost track of which flags were which.  What I intended
+was a separate, initially-unused flags, e.g.
 
-> > static void clean_and_free_pages_and_swap_cache(struct encoded_page **pages, unsigned int nr)
-> > {
-> >       for (unsigned int i = 0; i < nr; i++) {
-> >               struct encoded_page *encoded = pages[i];
-> >               unsigned int flags = encoded_page_flags(encoded);
-> >               if (flags) {
-> >                       /* Clean the flagged pointer in-place */
-> >                       struct page *page = encoded_page_ptr(encoded);
-> >                       pages[i] = encode_page(page, 0);
-> >
-> >                       /* The flag bit being set means that we should zap the rmap */
->
-> Why TLB_ZAP_RMAP bit is not checked explicitly here, like in s390 version?
-> (I assume, when/if ENCODE_PAGE_BITS is not TLB_ZAP_RMAP only, calling
-> page_zap_pte_rmap() without such a check would be a bug).
+ struct kvm_memory_attributes {
+	__u64 address;
+	__u64 size;
+	__u64 attributes;
+	__u64 flags;
+  }
 
-No major reason. This is basically the same issue as the naming, which
-I touched on in
+so that KVM can tweak behavior and/or extend the effective size of the struct.
 
-  https://lore.kernel.org/all/CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com/
+> I like the idea of adding a new ioctl(). But putting all attributes into
+> a flags in uAPI sounds not good to me, e.g. forcing userspace to set all
+> attributes in one call can cause pain for userspace, probably for KVM
+> implementation as well. For private<->shared memory conversion, we
+> actually only care the KVM_MEM_ATTR_SHARED or KVM_MEM_ATTR_PRIVATE bit,
 
-and the follow-up note about how I hope the "encoded page pointer with
-flags" thing gets used by the mlock code some day too.
+Not necessarily, e.g. I can see pKVM wanting to convert from RW+PRIVATE => RO+SHARED
+or even RW+PRIVATE => NONE+SHARED so that the guest can't write/access the memory
+while it's accessible from the host.
 
-IOW, there's kind of a generic "I have extra flags associated with the
-pointer", and then the specific "this case uses this flag", and
-depending on which mindset you have at the time, you might do one or
-the other.
+And if this does extend beyond shared/private, dropping from RWX=>R, i.e. dropping
+WX permissions, would also be a common operation.
 
-So in that clean_and_free_pages_and_swap_cache(), the code basically
-knows "I have a pointer with extra flags", and it's written that way.
-And that's partly historical, because it actually started with the
-original code tracking the dirty bit as the extra piece of
-information, and then transformed into this "no, the information is
-TLB_ZAP_RMAP".
+Hmm, typing that out makes me think that if we do end up supporting other "attributes",
+i.e. protections, we should go straight to full RWX protections instead of doing
+things piecemeal, i.e. add individual protections instead of combinations like
+NO_EXEC and READ_ONLY.  The protections would have to be inverted for backwards
+compatibility, but that's easy enough to handle.  The semantics could be like
+protection keys, which also have inverted persmissions, where the final protections
+are the combination of memslot+attributes, i.e. a read-only memslot couldn't be made
+writable via attributes.
 
-So "unsigned int flags" at one point was "bool dirty" instead, but
-then became more of a "I think this whole page pointer with flags is
-general", and the naming changed, and I had both cases in mind, and
-then the code is perhaps not so specifically named. I'm not sure the
-zap_page_range() case will ever use more than one flag, but the mlock
-case already has two different flags. So the "encode_page" thing is
-very much written to be about more than just the zap_page_range()
-case.
+E.g. userspace could do "NO_READ | NO_WRITE | NO_EXEC" to temporarily block access
+to memory without needing to delete the memslot.  KVM would need to disallow
+unsupported combinations, e.g. disallowed effective protections would be:
 
-But yes, that code could (and maybe should) use "if (flags &
-TLB_ZAP_RMAP)" to make it clear that in this case, the single flags
-bit is that one bit.
+  - W or WX [unless there's an arch that supports write-only memory]
+  - R or RW [until KVM plumbs through support for no-exec, or it's unsupported in hardware]
+  - X       [until KVM plumbs through support for exec-only, or it's unsupported in hardware]
 
-But the "if ()" there actually does two conceptually *separate*
-things: it needs to clean the pointer in-place (which is regardless of
-"which" flag bit is set, and then it does that page_zap_pte_rmap(),
-which is just for the TLB_ZAP_RMAP bit.
+Anyways, that's all future work...
 
-So to be really explicit about it, you'd have two different tests: one
-for "do I have flags that need to be cleaned up" and then an inner
-test for each flag. And since there is only one flag in this
-particular use case, it's essentially that inner test that I dropped
-as pointless.
+> but we force userspace to set other irrelevant bits as well if use this
+> API.
 
-In contrast, in the s390 version, that bit was never encoded as a a
-general "flags associated with a page pointer" in the first place, so
-there was never any such duality. There is only TLB_ZAP_RMAP.
+They aren't irrelevant though, as the memory attributes are all describing the
+allowed protections for a given page.  If there's a use case where userspace "can't"
+keep track of the attributes for whatever reason, then userspace could do a RMW
+to set/clear attributes.  Alternatively, the ioctl() could take an "operation" and
+support WRITE/OR/AND to allow setting/clearing individual flags, e.g. tweak the
+above to be: 
+ 
+ struct kvm_memory_attributes {
+	__u64 address;
+	__u64 size;
+	__u64 attributes;
+	__u32 operation;
+	__u32 flags;
+  }
 
-Hope that explains the thinking.
+> I looked at kvm_device_attr, sounds we can do similar:
 
-                 Linus
+The device attributes deal with isolated, arbitrary values, whereas memory attributes
+are flags, i.e. devices are 1:1 whereas memory is 1:MANY.  There is no "unset" for
+device attributes, because they aren't flags.  Device attributes vs. memory attributes
+really are two very different things that just happen to use a common name.
+
+If it helped clarify things without creating naming problems, we could even use
+PROTECTIONS instead of ATTRIBUTES.
+
+>   KVM_SET_MEMORY_ATTR
+> 
+>   struct kvm_memory_attr {
+> 	__u64 address;
+> 	__u64 size;
+> #define KVM_MEM_ATTR_SHARED	BIT(0)
+> #define KVM_MEM_ATTR_READONLY	BIT(1)
+> #define KVM_MEM_ATTR_NOEXEC	BIT(2)
+> 	__u32 attr;
+
+As above, letting userspace set only a single attribute would prevent setting
+(or clearing) multiple attributes in a single ioctl().
+
+> 	__u32 pad;
+>   }
+> 
+> I'm not sure if we need KVM_GET_MEMORY_ATTR/KVM_HAS_MEMORY_ATTR as well,
+
+Definitely would need to communicate to userspace that various attributes are
+supported.  That doesn't necessarily require a common ioctl(), but I don't see
+any reason not to add a common helper, and adding a common helper would mean
+KVM_CAP_PRIVATE_MEM can go away.  But it should return a bitmask so that userspace
+can do a single query to get all supported attributes, e.g. KVM_SUPPORTED_MEMORY_ATTRIBUTES.  
+
+As for KVM_GET_MEMORY_ATTRIBUTES, we wouldn't necessarily have to provide such an
+API, e.g. we could hold off until someone came along with a RMW use case (as above).
+That said, debug would likely be a nightmare without KVM_GET_MEMORY_ATTRIBUTES,
+so it's probably best to add it straightway.
+
+> but sounds like we need a KVM_UNSET_MEMORY_ATTR.
+
+No need if the setter operates on all attributes.
+
+> Since we are exposing the attribute directly to userspace I also think
+> we'd better treat shared memory as the default, so even when the private
+> memory is not used, the bit can still be meaningful. So define BIT(0) as
+> KVM_MEM_ATTR_PRIVATE instead of KVM_MEM_ATTR_SHARED.
+
+Ah, right.
