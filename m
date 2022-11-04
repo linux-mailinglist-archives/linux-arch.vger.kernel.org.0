@@ -2,179 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99DF6192CC
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 09:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600D4619467
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Nov 2022 11:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229523AbiKDIdY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Nov 2022 04:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S231659AbiKDKY4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Nov 2022 06:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230029AbiKDIdX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 04:33:23 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6368C17;
-        Fri,  4 Nov 2022 01:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667550800; x=1699086800;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=LBhw6eQcS71AQTHPgtJidpmNdTMwoZDoM5imFH5VGeA=;
-  b=VtuW8FrM4T9Pr7uZdJIrQ3z55NoK7YDpcRqyxOXaUIktGDj0O0kSKPc/
-   Tr79ep6jfD59cgU1/e/YA9/fi4q+686UL25P3g6n0jqXJmLyzu9BdZiYu
-   kbbxJi3qPRwkMwRHDV/pM6BmxYI9YkDU3EzQ74662jnALnicw1fJiLigs
-   AylKZiiM4oRcOV/5RQGzhabQzUNIhe5MLREEVvZLovIilcqvwXpxXq8Ak
-   6ffobuKuR1IyqbslUrxao3a6GCrpIuzIay8OeDhu4zuZ57LMEWjHFQWER
-   XtOKe0tVuutRHiSvAR6xI/fIIAUYzXvlvTmr8QLPrze7X6JfjUhg0bN74
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="289632654"
-X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
-   d="scan'208";a="289632654"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 01:33:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="637512630"
-X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
-   d="scan'208";a="637512630"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Nov 2022 01:33:10 -0700
-Date:   Fri, 4 Nov 2022 16:28:43 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
- regions
-Message-ID: <20221104082843.GA4142342@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
- <Y2RJFWplouV2iF5E@google.com>
+        with ESMTP id S231309AbiKDKYz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Nov 2022 06:24:55 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3AB96162;
+        Fri,  4 Nov 2022 03:24:54 -0700 (PDT)
+Received: from anrayabh-desk (unknown [167.220.238.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EFC91205DA4D;
+        Fri,  4 Nov 2022 03:24:48 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EFC91205DA4D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667557494;
+        bh=8CZc6ie+M2e82JGKPjhLdxrXq0jJEkH38UjNhjZSp6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pN/agJ8c4ZP+qZ372rMTv3NFHY0P8aBaBlOUt4QrgPVaB76YE9mboq+JcfbztS4Kw
+         SHPB+xNqgvfk473M1yCg5JlAUvhf3TRTaILi0Hxt80qeY22EEmS8SWe+Afe9UFLNIA
+         9SnxOKyDUIofgZr0br524hTF0Rs0l1P+sYHAcudo=
+Date:   Fri, 4 Nov 2022 15:54:44 +0530
+From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, mikelley@microsoft.com
+Subject: Re: [PATCH v3 1/5] x86/hyperv: Add support for detecting nested
+ hypervisor
+Message-ID: <Y2TobFUO2dM1yVmq@anrayabh-desk>
+References: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+ <285b15b90ac6f29ef8ab6b6ececeeef7d7c6f380.1667480257.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2RJFWplouV2iF5E@google.com>
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <285b15b90ac6f29ef8ab6b6ececeeef7d7c6f380.1667480257.git.jinankjain@linux.microsoft.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:04:53PM +0000, Sean Christopherson wrote:
-> On Tue, Oct 25, 2022, Chao Peng wrote:
-> > @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
-> >  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
-> >  		break;
-> >  	}
-> > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
-> > +	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> > +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+On Thu, Nov 03, 2022 at 01:04:03PM +0000, Jinank Jain wrote:
+> When Linux runs as a root partition for Microsoft Hypervisor. It is
+> possible to detect if it is running as nested hypervisor using
+> hints exposed by mshv. While at it expose a new variable called
+> hv_nested which can be used later for making decisions specific to
+> nested use case.
 > 
-> I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
-> from the fact that restricted/protected memory may not be encrypted, there are
-> other potential use cases for per-page memory attributes[*], e.g. to make memory
-> read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 3 +++
+>  arch/x86/include/asm/mshyperv.h    | 2 ++
+>  arch/x86/kernel/cpu/mshyperv.c     | 7 +++++++
+>  drivers/hv/hv_common.c             | 7 +++++--
+>  4 files changed, 17 insertions(+), 2 deletions(-)
 > 
-> Any paravirt use case where the attributes of a page are effectively dictated by
-> the guest is going to run into the exact same performance problems with memslots,
-> which isn't suprising in hindsight since shared vs. private is really just an
-> attribute, albeit with extra special semantics.
-> 
-> And if we go with a brand new ioctl(), maybe someday in the very distant future
-> we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
-> 
-> Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
-> of a wrench into things.
-> 
-> Something like:
-> 
->   KVM_SET_MEMORY_ATTRIBUTES
-> 
->   struct kvm_memory_attributes {
-> 	__u64 address;
-> 	__u64 size;
-> 	__u64 flags;
->   }
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 3089ec352743..d9a611565859 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -114,6 +114,9 @@
+>  /* Recommend using the newer ExProcessorMasks interface */
+>  #define HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED		BIT(11)
+>  
+> +/* Indicates that the hypervisor is nested within a Hyper-V partition. */
+> +#define HV_X64_HYPERV_NESTED				BIT(12)
+> +
+>  /* Recommend using enlightened VMCS */
+>  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+>  
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 61f0c206bff0..3c39923e5969 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -26,6 +26,8 @@ void hyperv_vector_handler(struct pt_regs *regs);
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  extern int hyperv_init_cpuhp;
+>  
+> +extern bool hv_nested;
+> +
+>  extern void *hv_hypercall_pg;
+>  
+>  extern u64 hv_current_partition_id;
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index 831613959a92..9a4204139490 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -37,6 +37,8 @@
+>  
+>  /* Is Linux running as the root partition? */
+>  bool hv_root_partition;
+> +/* Is Linux running on nested Microsoft Hypervisor */
+> +bool hv_nested;
+>  struct ms_hyperv_info ms_hyperv;
+>  
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> @@ -301,6 +303,11 @@ static void __init ms_hyperv_init_platform(void)
+>  		pr_info("Hyper-V: running as root partition\n");
+>  	}
+>  
+> +	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
+> +		hv_nested = true;
+> +		pr_info("Hyper-V: running on a nested hypervisor\n");
+> +	}
+> +
+>  	/*
+>  	 * Extract host information.
+>  	 */
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index ae68298c0dca..dcb336ce374f 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -25,8 +25,8 @@
+>  #include <asm/mshyperv.h>
+>  
+>  /*
+> - * hv_root_partition and ms_hyperv are defined here with other Hyper-V
+> - * specific globals so they are shared across all architectures and are
+> + * hv_root_partition, ms_hyperv and hv_nested are defined here with other
+> + * Hyper-V specific globals so they are shared across all architectures and are
+>   * built only when CONFIG_HYPERV is defined.  But on x86,
+>   * ms_hyperv_init_platform() is built even when CONFIG_HYPERV is not
+>   * defined, and it uses these two variables.  So mark them as __weak
+> @@ -36,6 +36,9 @@
+>  bool __weak hv_root_partition;
+>  EXPORT_SYMBOL_GPL(hv_root_partition);
+>  
+> +bool __weak hv_nested;
+> +EXPORT_SYMBOL_GPL(hv_nested);
+> +
+>  struct ms_hyperv_info __weak ms_hyperv;
+>  EXPORT_SYMBOL_GPL(ms_hyperv);
+>  
+> -- 
+> 2.25.1
 
-I like the idea of adding a new ioctl(). But putting all attributes into
-a flags in uAPI sounds not good to me, e.g. forcing userspace to set all
-attributes in one call can cause pain for userspace, probably for KVM
-implementation as well. For private<->shared memory conversion, we
-actually only care the KVM_MEM_ATTR_SHARED or KVM_MEM_ATTR_PRIVATE bit,
-but we force userspace to set other irrelevant bits as well if use this
-API.
+Reviewed-by: <anrayabh@linux.microsoft.com>
 
-I looked at kvm_device_attr, sounds we can do similar:
-
-  KVM_SET_MEMORY_ATTR
-
-  struct kvm_memory_attr {
-	__u64 address;
-	__u64 size;
-#define KVM_MEM_ATTR_SHARED	BIT(0)
-#define KVM_MEM_ATTR_READONLY	BIT(1)
-#define KVM_MEM_ATTR_NOEXEC	BIT(2)
-	__u32 attr;
-	__u32 pad;
-  }
-
-I'm not sure if we need KVM_GET_MEMORY_ATTR/KVM_HAS_MEMORY_ATTR as well,
-but sounds like we need a KVM_UNSET_MEMORY_ATTR.
-
-Since we are exposing the attribute directly to userspace I also think
-we'd better treat shared memory as the default, so even when the private
-memory is not used, the bit can still be meaningful. So define BIT(0) as
-KVM_MEM_ATTR_PRIVATE instead of KVM_MEM_ATTR_SHARED.
-
-Thanks,
-Chao
-
-> 
-> [*] https://lore.kernel.org/all/Y1a1i9vbJ%2FpVmV9r@google.com
-> 
-> > +		struct kvm_enc_region region;
-> > +		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> > +
-> > +		if (!kvm_arch_has_private_mem(kvm))
-> > +			goto arch_vm_ioctl;
-> > +
-> > +		r = -EFAULT;
-> > +		if (copy_from_user(&region, argp, sizeof(region)))
-> > +			goto out;
-> > +
-> > +		r = kvm_vm_ioctl_set_mem_attr(kvm, region.addr,
-> > +					      region.size, set);
-> > +		break;
-> > +	}
-> > +#endif
