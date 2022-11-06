@@ -2,73 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9906361DA06
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Nov 2022 13:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A0061E14F
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Nov 2022 10:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiKEMjH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Nov 2022 08:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
+        id S229807AbiKFJe1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Nov 2022 04:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiKEMiy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Nov 2022 08:38:54 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8133178A4
-        for <linux-arch@vger.kernel.org>; Sat,  5 Nov 2022 05:38:51 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j12so7202246plj.5
-        for <linux-arch@vger.kernel.org>; Sat, 05 Nov 2022 05:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=dP/vGfJ52tqdGGbdLFa+Ia1xCAutipWeAOPq8jKDnWkU62hZU7sMsZY49TgkwXAA5g
-         1yeGamAlfRFs90wkvR6lgaV3Wg24N6HDnekdo8UURsmSP5otybZlRkZzNxJ7AfUj6Q2+
-         CKiyBj4FP1EFkZc1H9L2i7zRAVvwvNQ+/TJeOdzeNP7tRScDVLp3Vlh/OdENcMPFJkDn
-         oSEUQfZcVQpylzARvlDhQNJui4E2RbhaxAaa7n3Kdgsd4f/k34LkyqWLBylB/XpPW04g
-         dKDuUZyENsU3QsJf+hTLTKsTcNOWBj2897N39hnlhbs7/J2gK6gRaL+j/IeFSdFJ1ntP
-         NWQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c8XA1N0uaxkLO/wKHErNWHaSuu64k5Pjb5u9dmcZrOc=;
-        b=s0ebGDNbSJ6jNI8O+PND9r00E/7cbIJnxv/ZjY260fe4OtXMlPvo/Hyx6DISDYGUxB
-         pUYIsQ08JqSJM1wjAHVsfq9/Pe4xVrj6QyM6HrgmJMXkR2smjnmrJqxqZS91x09+Ev9y
-         /wtV303wISUu2iilNGCSDUy86lMq7Puh5lJFBbnO5ajMdLsXZoHgJSIc/Ev6layNqwMg
-         X0CnQWSs9jum9vwYDQzObS6Gm8wqa/GuS0wHPI+V460SVYTpaI4XjdNP05792WzG/sky
-         apYJykLwZIP52RuYd2wBtpBYe85j3KfwFrG1eqN1NK+dQl0wrAdvIo7/JnvfynzSpkRO
-         qKPA==
-X-Gm-Message-State: ACrzQf06AP9c9Ouj+Eip/FwSyb53IeaCwFY9wjKVmW2jKEDndV+CuJNt
-        58zRWa+x1SSpvoyU/ZeGtqCCZ6Jcb+yXcByR1V0=
-X-Google-Smtp-Source: AMsMyM4olsI8J+PUrJBDqcdS3+ybCY1m5BPCD8wMv7D7l+O5tLdAL0JwRK1eWuD3q/Waqjsy5xHfJk1xeIU90M7q0J0=
-X-Received: by 2002:a17:902:f28b:b0:186:b069:63fc with SMTP id
- k11-20020a170902f28b00b00186b06963fcmr41192256plc.38.1667651930280; Sat, 05
- Nov 2022 05:38:50 -0700 (PDT)
+        with ESMTP id S229772AbiKFJe0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Nov 2022 04:34:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B735563EB
+        for <linux-arch@vger.kernel.org>; Sun,  6 Nov 2022 01:33:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667727209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zh55VMQOWIkhaJAfQsJ8QsFJiksbwnIoMMdZI6R95ts=;
+        b=FgmhbMDwsc8SPUWtdru5VBBnHeNGxb9G7mRRQtQiuBbj2QHueEJHsnwLAWd+CJ5DY4cIEy
+        rzLLj/FjoaumvyOcpQyKUoK7uaxvqZce+Cu/5K2BSs9UA0PGZjjpGpQ1w3fZVKAzNN91iI
+        J4I+3uAdC6IYJXITexlNSbaavuHtjfs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-96-_TRw53ORONGgtKkEmETIFA-1; Sun, 06 Nov 2022 04:33:25 -0500
+X-MC-Unique: _TRw53ORONGgtKkEmETIFA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0760238041D5;
+        Sun,  6 Nov 2022 09:33:24 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E146C40C2064;
+        Sun,  6 Nov 2022 09:33:11 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [RFC 37/37] fs/binfmt_elf: Block old shstk elf bit
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+        <20221104223604.29615-38-rick.p.edgecombe@intel.com>
+        <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+Date:   Sun, 06 Nov 2022 10:33:10 +0100
+In-Reply-To: <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
+        (H. J. Lu's message of "Fri, 4 Nov 2022 15:56:16 -0700")
+Message-ID: <87iljs4ecp.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Received: by 2002:a05:7301:2e91:b0:83:922d:c616 with HTTP; Sat, 5 Nov 2022
- 05:38:49 -0700 (PDT)
-Reply-To: stefanopessia755@hotmail.com
-From:   Stefano Pessina <wamathaibenard@gmail.com>
-Date:   Sat, 5 Nov 2022 15:38:49 +0300
-Message-ID: <CAN7bvZJK9DwWPHW=SDzsdiMac2NZ4YPui9Vp11ivOjS8hNwTjg@mail.gmail.com>
-Subject: Geldspende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Die Summe von 500.000,00 =E2=82=AC wurde Ihnen von STEFANO PESSINA gespende=
-t.
-Bitte kontaktieren Sie uns f=C3=BCr weitere Informationen =C3=BCber
-stefanopessia755@hotmail.com
+* H. J. Lu:
+
+> This change doesn't make a binary CET compatible.  It just requires
+> that the toolchain must be updated and all binaries have to be
+> recompiled with the new toolchain to enable CET.  It doesn't solve any
+> issue which can't be solved by not updating glibc.
+
+Right, and it doesn't even address the library case (the kernel would
+have to hook into mmap for that).  The kernel shouldn't do this.
+
+Thanks,
+Florian
+
