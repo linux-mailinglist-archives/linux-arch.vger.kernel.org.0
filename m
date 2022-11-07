@@ -2,74 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B38461F1C1
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Nov 2022 12:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7337761F60B
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Nov 2022 15:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiKGLYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Nov 2022 06:24:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
+        id S232414AbiKGOaU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Nov 2022 09:30:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiKGLYu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Nov 2022 06:24:50 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2AF1789B
-        for <linux-arch@vger.kernel.org>; Mon,  7 Nov 2022 03:24:48 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id io19so10767615plb.8
-        for <linux-arch@vger.kernel.org>; Mon, 07 Nov 2022 03:24:48 -0800 (PST)
+        with ESMTP id S232406AbiKGO3v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Nov 2022 09:29:51 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603C9201AD
+        for <linux-arch@vger.kernel.org>; Mon,  7 Nov 2022 06:25:28 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id z192so13840077yba.0
+        for <linux-arch@vger.kernel.org>; Mon, 07 Nov 2022 06:25:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bkXHaDGtvuVhiN69GarlKgDdz00NM6Kt+0lKI4zsZLs=;
-        b=P3SUE17FIdMrZVLaiOZj5XVS/b5P9DJZJufnSMg25v9pjcIDMZIQZ4ZR1H0Iz2XFGP
-         370EBWXfcGso+1RQsk2HIwlD7yktCzn9piMj2JlEncapGvtB2/WTec7vNx4mjHmtzeWa
-         OxoUk9/CEYAm55OESegTyYEG07BFgZka0y6MTFLLA6N0WLTIwRFg6bWdM0sFIBSdIMlF
-         Ds0Gvz0G5k3zenG48gpAB51CRzNUzlJZ9qENz4ONaUuJ/1QlUi4/8aDzxE1mVVoUhIOR
-         yd54smgQVa+DC4rFbqOEfIpJyRZzfGZcDVcAZj3SOfNtpkx2Xxl2Lo3g0Vl00d1UtejU
-         lm4g==
+        bh=oboWyf02L04GWiqbRTZkWaKzcVjcV8xl9eLiAMUj/TI=;
+        b=LdnEeXZkxBrQg9Ms96uDBWkmElXhDznOcnELRv2Ey5Qwll0tTlJBePAmkt5+/Bbgqp
+         q7gWl5N2Ha+HWWYHMbnqhcUvL9V3lNfkloK5KP2RdfxwmNn8IDDePW8A2e0yAMQ0+00d
+         8FAkRtjvCegWhjpi/bd+oMzdEMxLWGT0xG0KM098sa5nadSYtYZ3NC/p4zDg8+eT2eD7
+         wZaUu/5z2aHRkzozSD5CIWAOb0PuNPPcP1HU3/04D7VQVHELTnERd4sovNIz1KIEEwGl
+         Et0KI5ry9O5LyqrPLnuNo36Cg7rEWhj1L5GUcL6HCr182XnTrdq9vADERKTXKSsMaNsK
+         7h1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bkXHaDGtvuVhiN69GarlKgDdz00NM6Kt+0lKI4zsZLs=;
-        b=7XbIMyPYVBm5vpPOcfOUdcon2s+Io9t7D1JX5RFzk2/+iy69p0irbsANXpPytwdt5Q
-         AmjfTMqIMElxxkW3aqHOjG4VfH/RmPlCuTtzqi4tYpSleeLaICeIR1RKNBgvkYG3K6t2
-         IfUiBy2fcslpN7mdKdVb9321FstDkp84g1h76nTFUPA6hAp1hkn4tf8LytiIrr9O1lv1
-         5dwa+7XSJpR/EmOjfsPwub/QvQB19l2BXZvkrLDkIC+g4u12D+8j0l3i0YbNswDAwfJ2
-         2iCAX7x7porGUrvwPFkaFkbhcNsK8dnvPVw8FU6hU4KCo+ahdLSLK8L3r7fnxbFastkB
-         sG7Q==
-X-Gm-Message-State: ACrzQf1kICjKfcipIlr1aoQkGB7+LgyDFoScOdT7OlT6M4rYaHAAAoBR
-        /hw6D/dwaZKuTlQCJ0cwfP9TQEyNBWs=
-X-Google-Smtp-Source: AMsMyM7KjokBcg5L0y/OxERq4lN5FFXKLnb6DW/ZfRn6ab/4EpD+J3ir8DKPrYMhPNVnSPTvm6iT4A==
-X-Received: by 2002:a17:903:22c9:b0:187:29fe:bda8 with SMTP id y9-20020a17090322c900b0018729febda8mr39108409plg.40.1667820288365;
-        Mon, 07 Nov 2022 03:24:48 -0800 (PST)
-Received: from localhost (203-221-202-134.tpgi.com.au. [203.221.202.134])
-        by smtp.gmail.com with ESMTPSA id z17-20020aa79e51000000b0053e62b6fd22sm4218231pfq.126.2022.11.07.03.24.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 03:24:47 -0800 (PST)
-Mime-Version: 1.0
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oboWyf02L04GWiqbRTZkWaKzcVjcV8xl9eLiAMUj/TI=;
+        b=Y8MrLgdQ/owPRyaTP9MYx45ukQf0AEm1o60K2u+LXeo7DFdhguIX9CvNnBwCKvgn7b
+         YOmsFu0HLZRVZT9/63ExjNn3pKNJK0LnI1goPe7tSrHFxnhPq7wJidpkzrbd2f7nl4Lv
+         1I/wtELoPooOoHXCV47l3eBoVnPFR5xDjwJl4/X0A3hnFo7JSIORrFqZkZR0f9p1lE5a
+         ZOlA4OCgNIubwWLjHmdMeyG8Z5SPyjkdxEvFywguyxV9SrLVVcoWA6FV2jxz+0LM4CEk
+         llsTMnJkytR9nvpblPLOECbposB3D7CVX9Mp0FG+KNNBjpPhUkWA1eAeJrEpkL1o5gzW
+         UOpw==
+X-Gm-Message-State: ACrzQf1UM7AzQxYEh8HNU7L1ZtObMWcxez79qxiqG0RWbsxU4Z/FbFFC
+        REi+YcTNblmTEfOsQByCb9gJZ5G69MIT3o1sdXYrOg==
+X-Google-Smtp-Source: AMsMyM7Mom0FLlg17x5LYT6YE5L4ZOZDJwMsDDGTbFczWdDPz7zdoi3jn/lnW2YZ3cWVNAW1AOW75h9ViiPgOjuZAEk=
+X-Received: by 2002:a25:9b43:0:b0:6b3:9cc2:a651 with SMTP id
+ u3-20020a259b43000000b006b39cc2a651mr47557091ybo.485.1667831127440; Mon, 07
+ Nov 2022 06:25:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20220905122452.2258262-1-glider@google.com> <20220905122452.2258262-7-glider@google.com>
+ <Yxa6Isgcii+EQWwX@debian.me>
+In-Reply-To: <Yxa6Isgcii+EQWwX@debian.me>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 7 Nov 2022 15:24:50 +0100
+Message-ID: <CAG_fn=VXR0FGoJZ5BonxiFd7Wr3LX1hfF7PRRfm1=26B5v7vMA@mail.gmail.com>
+Subject: Re: [PATCH v6 6/44] kmsan: add ReST documentation
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 07 Nov 2022 21:24:42 +1000
-Message-Id: <CO60Y4MBO8W7.1OSJEIWNIBAHH@bobo>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-Cc:     <linuxppc-dev@lists.ozlabs.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Jordan Niethe" <jniethe5@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 0/5] powerpc/kprobes: preempt related changes and
- cleanups
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-X-Mailer: aerc 0.11.0
-References: <cover.1666262278.git.naveen.n.rao@linux.vnet.ibm.com>
-In-Reply-To: <cover.1666262278.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,46 +99,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+linux-arch
+On Tue, Sep 6, 2022 at 5:10 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
 
-FYI most preempt_enable_no_resched() calls outside of core scheduler
-code come from kprobes copy-and-paste, and can possibly be fixed in
-similar ways as this series. It's a bit of a footgun API that should
-be banished from outside kernel/sched/, at least without an explicit
-comment for each case that explains the need and how the missed
-resched is resolved or not applicable.
+Uh-oh, somehow missed this letter during the review process.
 
-Thanks,
-Nick
+> > +  CPU: 0 PID: 6731 Comm: kunit_try_catch Tainted: G    B       E     5=
+.16.0-rc3+ #104
+> > +  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2=
+ 04/01/2014
+> > +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+>
+> Are these table markers in the code block above part of kmsan output?
 
-On Fri Oct 21, 2022 at 3:28 AM AEST, Naveen N. Rao wrote:
-> This series attempts to address some of the concerns raised in=20
-> https://github.com/linuxppc/issues/issues/440
->
-> The last two patches are minor cleanups in related kprobes code.
->
-> - Naveen
->
->
-> Naveen N. Rao (5):
->   powerpc/kprobes: Remove preempt disable around call to get_kprobe() in
->     arch_prepare_kprobe()
->   powerpc/kprobes: Have optimized_callback() use preempt_enable()
->   powerpc/kprobes: Use preempt_enable() rather than the no_resched
->     variant
->   powerpc/kprobes: Setup consistent pt_regs across kprobes, optprobes
->     and KPROBES_ON_FTRACE
->   powerpc/kprobes: Remove unnecessary headers from kprobes
->
->  arch/powerpc/kernel/kprobes-ftrace.c        |  4 ----
->  arch/powerpc/kernel/kprobes.c               | 16 ++++++----------
->  arch/powerpc/kernel/optprobes.c             |  2 +-
->  arch/powerpc/kernel/optprobes_head.S        |  5 +----
->  arch/powerpc/kernel/trace/ftrace_mprofile.S |  6 ++++++
->  5 files changed, 14 insertions(+), 19 deletions(-)
->
->
-> base-commit: 7dc2a00fdd44a4d0c3bac9fd10558b3933586a0c
-> --=20
-> 2.38.0
+Correct.
 
+>
+> > +A use of uninitialized value ``v`` is reported by KMSAN in the followi=
+ng cases:
+> > + - in a condition, e.g. ``if (v) { ... }``;
+> > + - in an indexing or pointer dereferencing, e.g. ``array[v]`` or ``*v`=
+`;
+> > + - when it is copied to userspace or hardware, e.g. ``copy_to_user(...=
+, &v, ...)``;
+> > + - when it is passed as an argument to a function, and
+> > +   ``CONFIG_KMSAN_CHECK_PARAM_RETVAL`` is enabled (see below).
+>
+> The sentence before the list above is rendered as definition list term
+> instead, so I add the blank line separator:
+>
+> ---- >8 ----
+>
+> diff --git a/Documentation/dev-tools/kmsan.rst b/Documentation/dev-tools/=
+kmsan.rst
+> index 2a53a801198cbf..55fa82212eb255 100644
+> --- a/Documentation/dev-tools/kmsan.rst
+> +++ b/Documentation/dev-tools/kmsan.rst
+> @@ -67,6 +67,7 @@ uninitialized in the local variable, as well as the sta=
+ck where the value was
+>  copied to another memory location before use.
+>
+>  A use of uninitialized value ``v`` is reported by KMSAN in the following=
+ cases:
+> +
+>   - in a condition, e.g. ``if (v) { ... }``;
+>   - in an indexing or pointer dereferencing, e.g. ``array[v]`` or ``*v``;
+>   - when it is copied to userspace or hardware, e.g. ``copy_to_user(..., =
+&v, ...)``;
+
+Nice catch, thank you! Sent a patch to fix this.
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
