@@ -2,105 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA986203F2
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 00:46:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5286D6203F9
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 00:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbiKGXqU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Nov 2022 18:46:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S232613AbiKGXsL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Nov 2022 18:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232636AbiKGXqO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Nov 2022 18:46:14 -0500
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C728B220D6;
-        Mon,  7 Nov 2022 15:46:12 -0800 (PST)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13bd2aea61bso14598646fac.0;
-        Mon, 07 Nov 2022 15:46:12 -0800 (PST)
+        with ESMTP id S232611AbiKGXsJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Nov 2022 18:48:09 -0500
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46F2201B0
+        for <linux-arch@vger.kernel.org>; Mon,  7 Nov 2022 15:48:08 -0800 (PST)
+Received: by mail-oi1-x232.google.com with SMTP id c129so13967831oia.0
+        for <linux-arch@vger.kernel.org>; Mon, 07 Nov 2022 15:48:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GZv4VEzTh60ff7rQ3G/lXHbECUZzBVMWsmSC7ny0h2U=;
-        b=VjP2xLNvuzSQgD3I3ozjFn7UeaPo9By3BYlMaoCMJk7jmaecIwNEmn+KVxkbozJ7in
-         F2T2cyAWTUBqTEppT1Z4uygxuQQqa0BFMXysIOX3ba4Bf4OIog1kUBS5sKaSzp8hJgTQ
-         7kmPR4ebc4Nv2rSnS2g7PO8DAcXe0rC/Grjgmv0zZPBqjPAiJyUIyovdGmVnaRD/JH11
-         U9WV72vCmRz5dYRVfd2svO3Q8bh7pL9DqQ0WNsX9c6EDzdRPjEH8nw1ljnil5NXImYbn
-         ex+rfomJIlLAdipHuqEbJeYk8qUnJNN7RU32EXCJgUd7YpLUYkVAHaqLIGBP1VV9M4J6
-         yvEw==
+        bh=2nUGmNm82TyRLx97jZms1dOOGi76NwVe8JFuVeWiOQg=;
+        b=My5uqWQwXOffTiWXNHqYQhulwxGxYGEm7K9+0FNU7iSCJTiHIpLKcqjmRdDQF+ZBkb
+         Pg1ba84w3LhFXgshAIEFlqw202AajwYhP3vp8snD7MElUpy1fGUKi0JL4ot9xEL1OZHD
+         srxGnutg7uHNcTHztzXfNg/I2NN1QnphRTqmo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GZv4VEzTh60ff7rQ3G/lXHbECUZzBVMWsmSC7ny0h2U=;
-        b=FojNV/pKvq6Csn8+W7wDsN4sutI/KZ5bXUAdX+z2yraOnVl4fF7mwNZw3cQkQraFrH
-         jgL18qMksvXeHQNRKtb0eICrfR3+hRgASBxU7zvHEfKwqA5ZapDSg+29s+3Gk+X/9brA
-         lh0AJcADqcOjwInPcsCg8duKG1gKelZI6HlXHxbhZZ0wFz3Hat1LQLF5qK5AEEDNUiZn
-         GwFSV+kXlaCr+QgjsKKqi60jIbbfjLCubazjpKpYa9Xim8v+I07RBmQiII36U/A58Cte
-         KKpLnBwGZvQt0HDlMMhyd9xMH8i3byA4OlsxvVk2jvBPO2JJb8GMIpK2jSLbP4fdcgA5
-         S1Tw==
-X-Gm-Message-State: ACrzQf3WLKXZb0ofALuYq05Is4sMFi3J2KRJsB7YfhHQAFAoDP1fQwWU
-        QwwPuWpiGCEdrKjh8RZZPdw6Ud5qoZGNMtEj+Cs=
-X-Google-Smtp-Source: AMsMyM5HPQzYIO4bhvVrQ4BX4/oYdqe2G9XJrxXQcHtdlRvqzM3YxSvaL6WZ/k4sAb+Aygi8fxH2APLc7Pk5juNOlOo=
-X-Received: by 2002:a05:6870:5781:b0:13b:8bb8:5c5b with SMTP id
- i1-20020a056870578100b0013b8bb85c5bmr664481oap.298.1667864772071; Mon, 07 Nov
- 2022 15:46:12 -0800 (PST)
+        bh=2nUGmNm82TyRLx97jZms1dOOGi76NwVe8JFuVeWiOQg=;
+        b=5bWyyTT7rrMTzx3dPvrxD2JGfiFbWZbNf0Sgth8ZGHpD/Dwgtt7X+o3Hka8QvSPm8/
+         cR8uU+87aJ9E5sd9dPv0XmSCHAoWibt3qOkhePzZRlOfa0sEU/QLD75MienaCWfbz3Df
+         nBJRNJZuGj+umjOvGXUaYvnJFJ9rgKOnCPxv1dIq1XVus4RinbmwHuLrtHltQkbe9AJK
+         kINyCi6dB/Qq43sA9i8mQYsiqy6hK0hUoXqD6prsxVqE6dke02Eu9hgXGwCI7GoO+ilA
+         YgBsRo8DzOr6YUx5LrsoiqewddtYkGuJUCIj0mDorSFjnRcWbDLcudBq9ZXz16Bi11bM
+         vchg==
+X-Gm-Message-State: ACrzQf0DACJO7skFtBnfUDzBzZGDR2H5X1/gn7gzVreIo7SAO0b+fL7/
+        ja6qhLGH2hHg4VHcFy98xf1LR9o4S9HHwA==
+X-Google-Smtp-Source: AMsMyM4uvbyS6LdOqnBTqOlTcWNEYbUuWE8qTkag43bcsPcQVFgm/gaYdgdmQfkWdPK6UbXj4Bgwfw==
+X-Received: by 2002:a05:6808:e8e:b0:34d:7829:135 with SMTP id k14-20020a0568080e8e00b0034d78290135mr29110828oil.252.1667864887899;
+        Mon, 07 Nov 2022 15:48:07 -0800 (PST)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id z39-20020a056870462700b0012796e8033dsm3803037oao.57.2022.11.07.15.48.06
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Nov 2022 15:48:07 -0800 (PST)
+Received: by mail-ot1-f45.google.com with SMTP id f4-20020a056830264400b0066c8e56828aso5775850otu.1
+        for <linux-arch@vger.kernel.org>; Mon, 07 Nov 2022 15:48:06 -0800 (PST)
+X-Received: by 2002:a81:114e:0:b0:36a:fc80:fa62 with SMTP id
+ 75-20020a81114e000000b0036afc80fa62mr51708860ywr.58.1667864875345; Mon, 07
+ Nov 2022 15:47:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
- <20221104223604.29615-38-rick.p.edgecombe@intel.com> <CAMe9rOpfSccXVWmgK6E0Y0DXC=VX3PpdxXookN1Ty8soeAxrKw@mail.gmail.com>
- <87iljs4ecp.fsf@oldenburg.str.redhat.com> <ca106fe1b5005f54525e7a644684108f6a823e14.camel@intel.com>
- <87h6zaiu05.fsf@oldenburg.str.redhat.com> <f60f1138813f850d52dd92bc6b3df067c021a197.camel@intel.com>
- <CAMe9rOpVUwCccRb5DAyraEKO48rix+Xfiamfp_Vc_aHhjp7=LQ@mail.gmail.com>
- <73b8f726c424db1af1c10a48e101bf74703a186a.camel@intel.com>
- <CAMe9rOo6+Di5-mdWa6rviZ7zdO3yMgFPeTw-CXxXZNSQc=-8Wg@mail.gmail.com>
- <31b5284ce7930835b055e4207059e4bea32367be.camel@intel.com>
- <CAMe9rOr1XpnisqWHh6C6Wi6tUAu5avhbKb_7E7ZpN_eMkktTww@mail.gmail.com> <2f8fe2ede43909ea3c51ff05f7dae5f63d5ed8c8.camel@intel.com>
-In-Reply-To: <2f8fe2ede43909ea3c51ff05f7dae5f63d5ed8c8.camel@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Mon, 7 Nov 2022 15:45:35 -0800
-Message-ID: <CAMe9rOqULmJLM8O-_z7iZVoE6Ysngvw2UjBSwQ4BDB-+A__tdA@mail.gmail.com>
-Subject: Re: [RFC 37/37] fs/binfmt_elf: Block old shstk elf bit
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
+References: <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+ <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
+ <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com> <Y2llcRiDLHc2kg/N@cmpxchg.org>
+ <CAHk-=whw1Oo0eJ7fFjy_Fus80CM8CnA4Lb5BrrCdot3Rc1ZZRQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whw1Oo0eJ7fFjy_Fus80CM8CnA4Lb5BrrCdot3Rc1ZZRQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 7 Nov 2022 15:47:38 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
+Message-ID: <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
+Subject: Re: mm: delay rmap removal until after TLB flush
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,101 +104,18 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 2:47 PM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
+On Mon, Nov 7, 2022 at 12:29 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> On Mon, 2022-11-07 at 13:47 -0800, H.J. Lu wrote:
-> > On Mon, Nov 7, 2022 at 1:34 PM Edgecombe, Rick P
-> > <rick.p.edgecombe@intel.com> wrote:
-> > >
-> > > On Mon, 2022-11-07 at 13:21 -0800, H.J. Lu wrote:
-> > > > > > Some applications and libraries are compiled with -fcf-
-> > > > > > protection,
-> > > > > > but
-> > > > > > they manipulate the stack in such a way that they aren't
-> > > > > > compatible
-> > > > > > with the shadow stack.   However, if the build/test setup
-> > > > > > doesn't
-> > > > > > support
-> > > > > > shadow stack, it is impossible to validate.
-> > > > > >
-> > > > >
-> > > > > When we have everything in place, the problems would be much
-> > > > > more
-> > > > > obvious when distros started turning it on. But we can't turn
-> > > > > it on
-> > > > > as
-> > > >
-> > > > Not necessarily.  The problem will show up only in a CET enabled
-> > > > environment since build/test setup may not be on a CET capable
-> > > > hardware.
-> > >
-> > > Well, I'm not sure of the details of distro testing, but there are
-> > > plenty of TGL and later systems out there today. With kernel
-> > > support,
-> > > I'm thinking these types of problems couldn't lurk for years like
-> > > they
-> > > have.
-> >
-> > If this is the case, we would have nothing to worry about since the
-> > CET
-> > enabled applications won't pass validation if they aren't CET
-> > compatible.
->
-> Hmm, I think you couldn't have already forgotten the problem binaries
-> are already shipped...
+> That said, if always doing the rmap removal under the page table lock
+> means that that memcg lock can just be deleted in that whole path, I
+> will certainly bow to _that_ simplification instead, and just handle
+> the dirty pages after the TLB flush but before the page table drop.
 
-It should be OK since glibc doesn't support CET.
+Ok, so I think I have a fairly clean way to do this.
 
-> >
-> > > >
-> > > > > planned without breaking things for existing binaries. We can
-> > > > > have
-> > > > > both
-> > > > > by:
-> > > > > 1. Choosing a new bit, adding it to the tools, and never
-> > > > > supporting
-> > > > > the
-> > > > > old bit in glibc.
-> > > > > 2. Providing the option to have the kernel block the old bit,
-> > > > > so
-> > > > > upgraded users can decide what experience they would like. Then
-> > > > > distros
-> > > > > can find the problems and adjust their packages. I'm starting
-> > > > > to
-> > > > > think
-> > > > > a default off sysctl toggle might be better than a Kconfig.
-> > > > > 3. Any other ideas?
-> > > >
-> > > > Don't enable CET in glibc until we can validate CET
-> > > > functionality.
-> > >
-> > > Can you elaborate on what you mean by this? Not upstream glibc CET
-> > > support? Or have users not enable it? If the latter, how would they
-> > > know about all these problems.
-> >
-> > The current glibc doesn't support CET.  To enable CET in an
-> > application,
-> > one should validate it together with the CET enabled glibc under the
-> > CET
-> > enabled kernel on a CET capable machine.
->
-> Agreed that this is how it should have gone.
->
-> >
-> > >
-> > > And what is wrong with the cleanest option, number 1? The ABI
-> > > document
-> > > can be updated.
-> >
-> > It doesn't help resolve any issues.
->
-> Please read the coverletter if you are unsure of what issues this is
-> trying to address. I should have put more in the commit log.
->
->
->
+Let me try to make that series look reasonable, although it might be
+until tomorrow. I'll need to massage my mess into not just prettier
+code, but a sane history.
 
-
--- 
-H.J.
+               Linus
