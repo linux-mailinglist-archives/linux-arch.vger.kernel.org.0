@@ -2,105 +2,184 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EEC620E95
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 12:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B71620F77
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 12:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbiKHLUp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Nov 2022 06:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S233967AbiKHLtQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Nov 2022 06:49:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233333AbiKHLUi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 06:20:38 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DDD222A1
-        for <linux-arch@vger.kernel.org>; Tue,  8 Nov 2022 03:20:37 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id n85so11375591yba.1
-        for <linux-arch@vger.kernel.org>; Tue, 08 Nov 2022 03:20:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
-        b=J4BNN7jKfVfT0aL+JmOkjuoB8t6+kSq+FK+qtmRP1DScVaKYSfpiIdvKdYE9swFUQY
-         XtHjWaqnZFsSXqYA0o+q8CHye3arwTjr+hJBusI7mFqLyj6iQwnPEZnxpt7jEFXDv67C
-         i1RnWN77TDRD4R5bcXZk31BtpxWQI5F6il/aa7D6YEvXraa0x5EmFHE7S5DfyEv8K6Mr
-         sqvmxMR+LFYCNchTyksG6bgH4YMBdFO7Jyo5yt1Gfv8N5WpJHQg7liyYPj6Ln7TcsJ1M
-         7IF7H63JmVDaojfGa4RBrUx2qi70wmC2uC2C6sS9nlgayiVSuogPYEW3OyiZYJzoef10
-         VIFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
-        b=jFLYa+tN6wVjf4b6brQKzTf5KXlnMCU5E0rxHIVQXUqnTCSnp0uLYRg3Zip1DexeDj
-         qvPshwm4Ml7SskU4YmCDkqjbSwfpnGQY+/0Sx8aDNB0W2y66/1c6Mp3zIaXZr1EtK85s
-         MlovkesSHm5q1IV73H4UX/d7ZdvQfynGsEIpp/U86/bEDwRd8O3c7nDCiub5cei5xofn
-         dhMgYrYCA+eUXa0cHhqB1ifltbJi0nhtn2TMX4gHX4Jmj0IqCjjSHxudg73qe3AaagQe
-         rpqfzjsjfefSC/hGR97IW4OVU1+7Lzpm7MQUJTcSmRmz+HdgXECecAIgGwwSj6maL2wL
-         Tgqw==
-X-Gm-Message-State: ACrzQf3k5yf37sdU8DFgn13lWaT0qI6j+wkdS8vPK34TGbgWjni+A8Wd
-        txeTgv0AF4QQM9IY/v8W3Hf+Gxa5PyishL+hODA=
-X-Google-Smtp-Source: AMsMyM6xKqU5Rjh4+2+AxAqC0U0YC7Pv+rLQ5ILVu1L9p+G2RCExT06n9hL8M7TD2Z3SGUMSH2B3gfKMmkK13680VKQ=
-X-Received: by 2002:a25:a088:0:b0:6ca:33ff:5b30 with SMTP id
- y8-20020a25a088000000b006ca33ff5b30mr54330551ybh.242.1667906436602; Tue, 08
- Nov 2022 03:20:36 -0800 (PST)
+        with ESMTP id S233951AbiKHLtO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 06:49:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB912FFF8;
+        Tue,  8 Nov 2022 03:49:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D4A4B81A9A;
+        Tue,  8 Nov 2022 11:49:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323B5C433C1;
+        Tue,  8 Nov 2022 11:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667908149;
+        bh=0696B0kSE64dgIUqPIU01jhuP+IbrVpbE6EZLipOlos=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TWNAzCFvCJj7oTSUAc9q/N1ByzlxUQz1pgP/4zshfpKbWJ5C+6Sw42rifjVaUNyG9
+         YZ8szw0A4ZzXi9zC9CVhRRgopLgLUfLdG1QpA/uHUw9EpbYyDblbNHAvLYRfZt0ORE
+         YSa7+dpaILyLeoPJdRsxzHeEiKvQk/GkDO2pvF/s/RIqzWEpkCKwpQX8n7rM1p4Ob9
+         nNvq/yOiiYl/tBLynGQDUodAsZzeSqNfsYgW1i5H1JvjDbDhHDAgxpzlOZA/LlL9MC
+         pbgwboBiGD7uGVRsYyx3zVCJ7T1IitFDl6ZvSMqCbvdzmXso5wZag4mFeKk5KDtILY
+         q8B7+E8ZWsBiQ==
+Date:   Tue, 8 Nov 2022 13:48:54 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     linux-arch@vger.kernel.org
+Cc:     Song Liu <song@kernel.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, x86@kernel.org,
+        peterz@infradead.org, hch@lst.de, rick.p.edgecombe@intel.com,
+        aaron.lu@intel.com, mcgrof@kernel.org
+Subject: Re: [PATCH bpf-next v2 0/5] execmem_alloc for BPF programs
+Message-ID: <Y2pCJpY+KALsGk60@kernel.org>
+References: <20221107223921.3451913-1-song@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:a38a:b0:313:c983:1d7e with HTTP; Tue, 8 Nov 2022
- 03:20:36 -0800 (PST)
-Reply-To: mrinvest1010@gmail.com
-From:   "K. A. Mr. Kairi" <ctocik2@gmail.com>
-Date:   Tue, 8 Nov 2022 03:20:36 -0800
-Message-ID: <CAC9COZf4gVM4aT_ghoemxu3B8PtJ41D3GAMuMHbW-Zm3a0vanw@mail.gmail.com>
-Subject: Re: My Response..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrinvest1010[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ctocik2[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ctocik2[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107223921.3451913-1-song@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+(added linux-arch list)
+
+On Mon, Nov 07, 2022 at 02:39:16PM -0800, Song Liu wrote:
+> This patchset tries to address the following issues:
+> 
+> 1. Direct map fragmentation
+> 
+> On x86, STRICT_*_RWX requires the direct map of any RO+X memory to be also
+> RO+X. These set_memory_* calls cause 1GB page table entries to be split
+> into 2MB and 4kB ones. This fragmentation in direct map results in bigger
+> and slower page table, and pressure for both instruction and data TLB.
+> 
+> Our previous work in bpf_prog_pack tries to address this issue from BPF
+> program side. Based on the experiments by Aaron Lu [4], bpf_prog_pack has
+> greatly reduced direct map fragmentation from BPF programs.
+> 
+> 2. iTLB pressure from BPF program
+> 
+> Dynamic kernel text such as modules and BPF programs (even with current
+> bpf_prog_pack) use 4kB pages on x86, when the total size of modules and
+> BPF program is big, we can see visible performance drop caused by high
+> iTLB miss rate.
+> 
+> 3. TLB shootdown for short-living BPF programs
+> 
+> Before bpf_prog_pack loading and unloading BPF programs requires global
+> TLB shootdown. This patchset (and bpf_prog_pack) replaces it with a local
+> TLB flush.
+> 
+> 4. Reduce memory usage by BPF programs (in some cases)
+> 
+> Most BPF programs and various trampolines are small, and they often
+> occupies a whole page. From a random server in our fleet, 50% of the
+> loaded BPF programs are less than 500 byte in size, and 75% of them are
+> less than 2kB in size. Allowing these BPF programs to share 2MB pages
+> would yield some memory saving for systems with many BPF programs. For
+> systems with only small number of BPF programs, this patch may waste a
+> little memory by allocating one 2MB page, but using only part of it.
+> 
+> 
+> Based on our experiments [5], we measured 0.5% performance improvement
+> from bpf_prog_pack. This patchset further boosts the improvement to 0.7%.
+> The difference is because bpf_prog_pack uses 512x 4kB pages instead of
+> 1x 2MB page, bpf_prog_pack as-is doesn't resolve #2 above.
+> 
+> This patchset replaces bpf_prog_pack with a better API and makes it
+> available for other dynamic kernel text, such as modules, ftrace, kprobe.
+> 
+> 
+> This set enables bpf programs and bpf dispatchers to share huge pages with
+> new API:
+>   execmem_alloc()
+>   execmem_alloc()
+>   execmem_fill()
+> 
+> The idea is similar to Peter's suggestion in [1].
+> 
+> execmem_alloc() manages a set of PMD_SIZE RO+X memory, and allocates these
+> memory to its users. execmem_alloc() is used to free memory allocated by
+> execmem_alloc(). execmem_fill() is used to update memory allocated by
+> execmem_alloc().
+> 
+> Memory allocated by execmem_alloc() is RO+X, so this doesnot violate W^X.
+> The caller has to update the content with text_poke like mechanism.
+> Specifically, execmem_fill() is provided to update memory allocated by
+> execmem_alloc(). execmem_fill() also makes sure the update stays in the
+> boundary of one chunk allocated by execmem_alloc(). Please refer to patch
+> 1/5 for more details of
+> 
+> Patch 3/5 uses these new APIs in bpf program and bpf dispatcher.
+> 
+> Patch 4/5 and 5/5 allows static kernel text (_stext to _etext) to share
+> PMD_SIZE pages with dynamic kernel text on x86_64. This is achieved by
+> allocating PMD_SIZE pages to roundup(_etext, PMD_SIZE), and then use
+> _etext to roundup(_etext, PMD_SIZE) for dynamic kernel text.
+> 
+> [1] https://lore.kernel.org/bpf/Ys6cWUMHO8XwyYgr@hirez.programming.kicks-ass.net/
+> [2] RFC v1: https://lore.kernel.org/linux-mm/20220818224218.2399791-3-song@kernel.org/T/
+> [3] v1: https://lore.kernel.org/bpf/20221031222541.1773452-1-song@kernel.org/
+> [4] https://lore.kernel.org/bpf/Y2ioTodn+mBXdIqp@ziqianlu-desk2/
+> [5] https://lore.kernel.org/bpf/20220707223546.4124919-1-song@kernel.org/
+> 
+> Changes PATCH v1 => v2:
+> 1. Rename the APIs as execmem_* (Christoph Hellwig)
+> 2. Add more information about the motivation of this work (and follow up
+>    works in for kernel modules, various trampolines, etc).
+>    (Luis Chamberlain, Rick Edgecombe, Mike Rapoport, Aaron Lu)
+> 3. Include expermential results from previous bpf_prog_pack and the
+>    community. (Aaron Lu, Luis Chamberlain, Rick Edgecombe)
+> 
+> Changes RFC v2 => PATCH v1:
+> 1. Add vcopy_exec(), which updates memory allocated by vmalloc_exec(). It
+>    also ensures vcopy_exec() is only used to update memory from one single
+>    vmalloc_exec() call. (Christoph Hellwig)
+> 2. Add arch_vcopy_exec() and arch_invalidate_exec() as wrapper for the
+>    text_poke() like logic.
+> 3. Drop changes for kernel modules and focus on BPF side changes.
+> 
+> Changes RFC v1 => RFC v2:
+> 1. Major rewrite of the logic of vmalloc_exec and vfree_exec. They now
+>    work fine with BPF programs (patch 1, 2, 4). But module side (patch 3)
+>    still need some work.
+> 
+> Song Liu (5):
+>   vmalloc: introduce execmem_alloc, execmem_free, and execmem_fill
+>   x86/alternative: support execmem_alloc() and execmem_free()
+>   bpf: use execmem_alloc for bpf program and bpf dispatcher
+>   vmalloc: introduce register_text_tail_vm()
+>   x86: use register_text_tail_vm
+> 
+>  arch/x86/include/asm/pgtable_64_types.h |   1 +
+>  arch/x86/kernel/alternative.c           |  12 +
+>  arch/x86/mm/init_64.c                   |   4 +-
+>  arch/x86/net/bpf_jit_comp.c             |  23 +-
+>  include/linux/bpf.h                     |   3 -
+>  include/linux/filter.h                  |   5 -
+>  include/linux/vmalloc.h                 |   9 +
+>  kernel/bpf/core.c                       | 180 +-----------
+>  kernel/bpf/dispatcher.c                 |  11 +-
+>  mm/nommu.c                              |  12 +
+>  mm/vmalloc.c                            | 354 ++++++++++++++++++++++++
+>  11 files changed, 412 insertions(+), 202 deletions(-)
+> 
+> --
+> 2.30.2
+
 -- 
-Hi
-
-How are you with your family, I have a serious client, whom will be
-interested to invest in your country, I got your Details through the
-Investment Network and world Global Business directory.
-
-If you are interested for more details.....
-
-Sincerely,
-Kairi Andrew
+Sincerely yours,
+Mike.
