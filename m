@@ -2,125 +2,184 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B70A621D8B
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 21:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C071622011
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 00:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiKHUTX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Nov 2022 15:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S229576AbiKHXHn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Nov 2022 18:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiKHUTR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 15:19:17 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0131A80A
-        for <linux-arch@vger.kernel.org>; Tue,  8 Nov 2022 12:19:15 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id l15so9325022qtv.4
-        for <linux-arch@vger.kernel.org>; Tue, 08 Nov 2022 12:19:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rYTJsr3y3DSpzuW7jbv9zORF+HiPBsmrV3dtI+qjb2g=;
-        b=RktMLy/W0Aalvj/azaMLVb1FNgDV1yEPtRfoOCAalX5a3JOa/QZKm/gQYlMeehBILF
-         Z8FRelGTxwLlt2r/PHfGWfm7hcJhjQ+Ccxx9+6hwjwDVkjbRbmOXWEwQ5Og3WEMnSrUe
-         jvI9rMDLZTywmAFs2PxsTOcuGTZL45ITlqnps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rYTJsr3y3DSpzuW7jbv9zORF+HiPBsmrV3dtI+qjb2g=;
-        b=FFWnpaWsIyUdYYe4Vs9jQrPK8ugm0ugGr519QTIj4tF/Ds1u6t/+rAh0Bw1bnOqvhD
-         NXyS8j6VoRh+WOQphHgzk1p4FVpIVbyD4QJgjJR89fwuNw1Mii+kFCwlPk8BHt2D5Zhf
-         gMLzJvbiqZMaK2HLyRzm8NIRCOO61GM162jauylJRBqNnX9s1sqR9xttm0DeKPRubLH1
-         ZkmBfU9B7HbmXi51edcdR6oeTExmyN+JtO8XUShT6qsILKxjmFopuiGzj14Ui4LP1DDy
-         NRfuTyuUTMV5ViK/ZAmSTnznHUziIrPdlI6ROmf1tlH9VnupttnI4TUXo8+HL/Rnzejl
-         CmNA==
-X-Gm-Message-State: ACrzQf1yCZXfSLZWUTzFENKrV1HQ3Z+5/mszDJ6Tj5bEHOVGAvBVlesA
-        brKEJrdKa+mqei71STkpZsv+5hBkHO7oxQ==
-X-Google-Smtp-Source: AMsMyM66uYM31RBxIO2fYrni2EaG50ARXUmDqUFmiEBwRtlnUZOLNhmCBClgHSEvZBEy78W+ITi5zw==
-X-Received: by 2002:ac8:6e83:0:b0:3a5:1fcb:3953 with SMTP id c3-20020ac86e83000000b003a51fcb3953mr39749343qtv.373.1667938754637;
-        Tue, 08 Nov 2022 12:19:14 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id q37-20020a05620a2a6500b006ee7923c187sm1655532qkp.42.2022.11.08.12.19.13
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 12:19:14 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-36a4b86a0abso144205927b3.7
-        for <linux-arch@vger.kernel.org>; Tue, 08 Nov 2022 12:19:13 -0800 (PST)
-X-Received: by 2002:a0d:ef07:0:b0:373:5257:f897 with SMTP id
- y7-20020a0def07000000b003735257f897mr35789530ywe.401.1667938743084; Tue, 08
- Nov 2022 12:19:03 -0800 (PST)
+        with ESMTP id S229470AbiKHXHm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 18:07:42 -0500
+Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B51C63159
+        for <linux-arch@vger.kernel.org>; Tue,  8 Nov 2022 15:07:41 -0800 (PST)
+X-ASG-Debug-ID: 1667948858-1cf43916953bcb50002-nV0IUL
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id lYGEv62L2AfLvHwX; Tue, 08 Nov 2022 18:07:38 -0500 (EST)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=Ltmgz4FRGZvYJ6x9NIHhx3nQQsP+YYpgZpdkS9JvU+o=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
+        Content-Language:Subject:MIME-Version:Date:Message-ID; b=CYxZCfWI9CbLN1OQJ+F/
+        lwI/60xTPhKB9vLfRVxOtlpVip1ZX818BGZVCOx0M+/d5dhtONKggrqo35EvYWpK5LeWR7KCcNYK9
+        Uu39J11IXKaGtG99iwsRZLDHr6rCR/gtHmFLTeclZXqUP9XdBDY2UEuE/CpD6ceXZSW1OGYti0=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 12318971; Tue, 08 Nov 2022 18:07:38 -0500
+Message-ID: <bb6dfd57-0a46-9aa5-050f-40e207bd44f4@cybernetics.com>
+Date:   Tue, 8 Nov 2022 18:07:37 -0500
 MIME-Version: 1.0
-References: <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <Y2SyJuohLFLqIhlZ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CAHk-=wjzp65=-QE1dg8KfqG-tVHiT+yAfHXGx9sro=8yOceELg@mail.gmail.com>
- <8a1e97c9-bd5-7473-6da8-2aa75198fbe8@google.com> <Y2llcRiDLHc2kg/N@cmpxchg.org>
- <CAHk-=whw1Oo0eJ7fFjy_Fus80CM8CnA4Lb5BrrCdot3Rc1ZZRQ@mail.gmail.com>
- <CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com>
- <CAHk-=whi2BB9FviYiuUWV0KHibP_Lx_CWDWkxxv3SXA1PKV0Lg@mail.gmail.com>
- <CAHk-=wivgyfywteXoO7K0Mj_KoCRF-RyXDH-eGW0A_fev+dGug@mail.gmail.com> <20221108200345.xxcvnsnwgjyb7w3a@meerkat.local>
-In-Reply-To: <20221108200345.xxcvnsnwgjyb7w3a@meerkat.local>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 8 Nov 2022 12:18:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjFdzHxB+f9WOTM1jZKBig9sY0s_-ASCZEUGsQ1mirjgQ@mail.gmail.com>
-Message-ID: <CAHk-=wjFdzHxB+f9WOTM1jZKBig9sY0s_-ASCZEUGsQ1mirjgQ@mail.gmail.com>
-Subject: Re: mm: delay rmap removal until after TLB flush
-To:     Konstantin Ryabitsev <mricon@kernel.org>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: io_ordering.rst vs. memory-barriers.txt
+Content-Language: en-US
+X-ASG-Orig-Subj: Re: io_ordering.rst vs. memory-barriers.txt
+From:   Tony Battersby <tonyb@cybernetics.com>
+To:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org
+References: <1924eda8-aea6-da64-04a7-35f3327a7f4f@cybernetics.com>
+In-Reply-To: <1924eda8-aea6-da64-04a7-35f3327a7f4f@cybernetics.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1667948858
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 4231
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 12:03 PM Konstantin Ryabitsev <mricon@kernel.org> wrote:
->
-> Yes, --no-parent.
+(resending in plaintext; damn Thunderbird upgrades...)
 
-Ahh, that's new. I guess I need to update my ancient b4-0.8.0 install..
+While looking up documentation for PCI write posting I noticed that the
+example in Documentation/driver-api/io_ordering.rst seems to contradict
+Documentation/memory-barriers.txt:
 
-But yes, with that, and the manual parent lookup (because otherwise
-"--no-parent" will fetch *just* the patch itself, not even walking up
-the single parent chain). it works.
+-----------
 
-Maybe a "--single-parent" or "--deadbeat-parent" option would be a good idea?
+Documentation/driver-api/io_ordering.rst:
 
-Anyway, with a more recent b4 version, the command
+On some platforms, so-called memory-mapped I/O is weakly ordered.  On such
+platforms, driver writers are responsible for ensuring that I/O writes to
+memory-mapped addresses on their device arrive in the order intended.  This is
+typically done by reading a 'safe' device or bridge register, causing the I/O
+chipset to flush pending writes to the device before any reads are posted.  A
+driver would usually use this technique immediately prior to the exit of a
+critical section of code protected by spinlocks.  This would ensure that
+subsequent writes to I/O space arrived only after all prior writes (much like a
+memory barrier op, mb(), only with respect to I/O).
 
-   b4 am --no-parent
-CAHk-=wh6MxaCA4pXpt1F5Bn2__6MxCq0Dr-rES4i=MOL9ibjpg@mail.gmail.com
+A more concrete example from a hypothetical device driver::
 
-gets that series and only that series.
+		...
+	CPU A:  spin_lock_irqsave(&dev_lock, flags)
+	CPU A:  val = readl(my_status);
+	CPU A:  ...
+	CPU A:  writel(newval, ring_ptr);
+	CPU A:  spin_unlock_irqrestore(&dev_lock, flags)
+		...
+	CPU B:  spin_lock_irqsave(&dev_lock, flags)
+	CPU B:  val = readl(my_status);
+	CPU B:  ...
+	CPU B:  writel(newval2, ring_ptr);
+	CPU B:  spin_unlock_irqrestore(&dev_lock, flags)
+		...
 
-              Linus
+In the case above, the device may receive newval2 before it receives newval,
+which could cause problems.  Fixing it is easy enough though::
+
+		...
+	CPU A:  spin_lock_irqsave(&dev_lock, flags)
+	CPU A:  val = readl(my_status);
+	CPU A:  ...
+	CPU A:  writel(newval, ring_ptr);
+	CPU A:  (void)readl(safe_register); /* maybe a config register? */
+	CPU A:  spin_unlock_irqrestore(&dev_lock, flags)
+		...
+	CPU B:  spin_lock_irqsave(&dev_lock, flags)
+	CPU B:  val = readl(my_status);
+	CPU B:  ...
+	CPU B:  writel(newval2, ring_ptr);
+	CPU B:  (void)readl(safe_register); /* maybe a config register? */
+	CPU B:  spin_unlock_irqrestore(&dev_lock, flags)
+
+Here, the reads from safe_register will cause the I/O chipset to flush any
+pending writes before actually posting the read to the chipset, preventing
+possible data corruption.
+
+-----------
+
+Documentation/memory-barriers.txt:
+
+==========================
+KERNEL I/O BARRIER EFFECTS
+==========================
+
+Interfacing with peripherals via I/O accesses is deeply architecture and device
+specific. Therefore, drivers which are inherently non-portable may rely on
+specific behaviours of their target systems in order to achieve synchronization
+in the most lightweight manner possible. For drivers intending to be portable
+between multiple architectures and bus implementations, the kernel offers a
+series of accessor functions that provide various degrees of ordering
+guarantees:
+
+ (*) readX(), writeX():
+
+	The readX() and writeX() MMIO accessors take a pointer to the
+	peripheral being accessed as an __iomem * parameter. For pointers
+	mapped with the default I/O attributes (e.g. those returned by
+	ioremap()), the ordering guarantees are as follows:
+
+	1. All readX() and writeX() accesses to the same peripheral are ordered
+	   with respect to each other. This ensures that MMIO register accesses
+	   by the same CPU thread to a particular device will arrive in program
+	   order.
+
+	2. A writeX() issued by a CPU thread holding a spinlock is ordered
+	   before a writeX() to the same peripheral from another CPU thread
+	   issued after a later acquisition of the same spinlock. This ensures
+	   that MMIO register writes to a particular device issued while holding
+	   a spinlock will arrive in an order consistent with acquisitions of
+	   the lock.
+
+-----------
+
+To summarize:
+
+io_ordering.rst says to use readX() before spin_unlock to order writeX()
+calls (on some platforms).
+
+memory-barriers.txt says writeX() calls are already ordered when holding
+the same spinlock.
+
+So...which one is correct?
+
+
+There is another example of flushing posted PCI writes at the bottom of
+Documentation/PCI/pci.rst, but that one is consistent with
+memory-barriers.txt.
+
+Tony Battersby
+Cybernetics
+
