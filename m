@@ -2,89 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5745620C86
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 10:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B305620D79
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 11:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiKHJmX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Nov 2022 04:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
+        id S234020AbiKHKhd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Nov 2022 05:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233902AbiKHJl7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 04:41:59 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93CD27176;
-        Tue,  8 Nov 2022 01:41:56 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id hh9so8319034qtb.13;
-        Tue, 08 Nov 2022 01:41:56 -0800 (PST)
+        with ESMTP id S234024AbiKHKhN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 05:37:13 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67584298A;
+        Tue,  8 Nov 2022 02:36:54 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id b21so13790400plc.9;
+        Tue, 08 Nov 2022 02:36:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7FC4xTWKbEcJxVm+LBMuB4SUqqHDVOvyFDbcq+yh01A=;
+        b=oCWmwDp8Mq/94lPgWOpRNMqusVjIbpZKRV9JeuSrdvQOJhGpRXChOO08QAlKk8Wx73
+         s9dECqgOGqSg/8HsqRHiP/XKfZq37XO9aPQHjT6sIVfwd2T5rgHuMt0YXR0vcVnuqJPC
+         bYyXpc+YB5DY79XuJsgDgEnii3hXBb2hLVOouhQABdDKDpptyrIasT3qltTbts8XnJrU
+         VZTd4OMKS0clmozmVyOJgYGhRCfkJh6l8h11/FOcCQ+LBk3+XZqX0RE3+w4sLEria5R3
+         Qsi/EmUKkAqx8Cc/Ujp41/7pVyFg5TMnjalYEafM8z3HSH10qmw+8OMIN07CWneo6bGA
+         xdsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B0xAJLxS4jYE+47ZWAmS8AWJyvD2QxuXvjLK3DII+Ys=;
-        b=yKsxjt4zmALu9n8wxgnDPE8jybXjoVlsJkLD9sD6eDOOrubRDnp17vx1K1o87qS5q7
-         faSqWlRwMSoCSoaafaL0lLX1QCDaX2FcU4wzHaBHqDqIKzs79AIf7l0xaJuGX72iXGq6
-         A9ZvtPvIRZpndJwLflV+D0pXh26XORfySNfcDjHGycAOB4sxf5+5SLxTghmjHdYM2bFW
-         VKTgsCZKasQfgqK39HuLkbVP2wNpXwezm4eZc0ziWRePHfptemsKfOKMlDnbrDJFqTq0
-         85IXvbHfOj8q5QQfDOCG67UkkQoiLYS2AnBCi+0pqgKiRIpDc87S4zw3573IwzyBhQr0
-         0FDA==
-X-Gm-Message-State: ACrzQf3RZ8Kp2HkpbYvOvt/VWSGLjHooSELXXUM3jWmX/eqKjCrn2oWT
-        hhBt8dh+wyxmkIc+f9cOVRBt8E+vk9BBxQ==
-X-Google-Smtp-Source: AMsMyM5HZAPaJZVamqxiZOYz8th/Oulr55msK790pV9yVVcIHYx+8mz5n0WgCdX6Txas7njtsD9SEQ==
-X-Received: by 2002:ac8:5a16:0:b0:39c:efc6:b370 with SMTP id n22-20020ac85a16000000b0039cefc6b370mr42168014qta.374.1667900515787;
-        Tue, 08 Nov 2022 01:41:55 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id q22-20020a05620a0d9600b006fafaac72a6sm2364272qkl.84.2022.11.08.01.41.55
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7FC4xTWKbEcJxVm+LBMuB4SUqqHDVOvyFDbcq+yh01A=;
+        b=pJruh9JrSZeI3RPG9Djmph6xka+bXU3ieDTszK6HR9tUalxsckaWfe08+qq/ThY7rW
+         Dgewo09gIoPDObpiqAtXZhN2EgNx+1VonZrwd/pAerJyVAtoSHIrmRiuUm7cUxv4+3si
+         Xd0hmEPByQzYXjfY7w1Gtg5wjyPtNxjyYcZ8YFgVzxpFO0cBm1kfK89TBu1DuhSvJmZb
+         VtB6uWqwaH7crvvfBMxc/1nPnTKJevXXzkSqreEBafOcIPr4UOsyx0S5q0jdmG5/jtaN
+         ozoUjZw6xqpKbEr7shyIbsY6KvqXtGAQckvg+Ndxpz2vqfnaux544xZgacm9+4FCDE2d
+         JkXw==
+X-Gm-Message-State: ACrzQf1TXcmCs2LcDd1iFpoNzqc69NWs4kFVc/HKVMl8bS+vqP6KLIXm
+        /xXpd//U0QrwDdyNGJN01qQ=
+X-Google-Smtp-Source: AMsMyM4t0UZsTKGoBIe7o5gVWR0wgRXPrt+fajdjHMMuWw0RmjuTkgxkIK95E7qPspPcKE7d1giP0A==
+X-Received: by 2002:a17:90b:254c:b0:20a:8a92:ea5b with SMTP id nw12-20020a17090b254c00b0020a8a92ea5bmr56165515pjb.81.1667903814151;
+        Tue, 08 Nov 2022 02:36:54 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id h5-20020a17090a648500b0020a11217682sm5700073pjj.27.2022.11.08.02.36.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 01:41:55 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-36cbcda2157so128441707b3.11;
-        Tue, 08 Nov 2022 01:41:55 -0800 (PST)
-X-Received: by 2002:a81:9c49:0:b0:34a:de:97b8 with SMTP id n9-20020a819c49000000b0034a00de97b8mr51653454ywa.384.1667900514891;
- Tue, 08 Nov 2022 01:41:54 -0800 (PST)
+        Tue, 08 Nov 2022 02:36:53 -0800 (PST)
+Message-ID: <9a4edf34-6e49-9fd0-fc23-2536c5f087ea@gmail.com>
+Date:   Tue, 8 Nov 2022 18:36:40 +0800
 MIME-Version: 1.0
-References: <Y120X8dWqe15FPPG@ZenIV> <20221029231850.3668437-1-viro@zeniv.linux.org.uk>
- <20221029231850.3668437-7-viro@zeniv.linux.org.uk>
-In-Reply-To: <20221029231850.3668437-7-viro@zeniv.linux.org.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Nov 2022 10:41:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX010izuMLJ8me2WMLOHZ52FxyaGfA31oCekkwjriyBvA@mail.gmail.com>
-Message-ID: <CAMuHMdX010izuMLJ8me2WMLOHZ52FxyaGfA31oCekkwjriyBvA@mail.gmail.com>
-Subject: Re: [PATCH 07/10] [elf][non-regset] uninline elf_core_copy_task_fpregs()
- (and lose pt_regs argument)
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 09/12] hv_netvsc: Remove second mapping of send and recv
+ buffers
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 1:20 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> Don't bother with pointless macros - we are not sharing it with aout coredumps
-> anymore.  Just convert the underlying functions to the same arguments (nobody
-> uses regs, actually) and call them elf_core_copy_task_fpregs().  And unexport
-> the entire bunch, while we are at it.
->
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> With changes to how Hyper-V guest VMs flip memory between private
+> (encrypted) and shared (decrypted), creating a second kernel virtual
+> mapping for shared memory is no longer necessary.  Everything needed
+> for the transition to shared is handled by set_memory_decrypted().
+> 
+> As such, remove the code to create and manage the second
+> mapping for the pre-allocated send and recv buffers.  This mapping
+> is the last user of hv_map_memory()/hv_unmap_memory(), so delete
+> these functions as well.  Finally, hv_map_memory() is the last
+> user of vmap_pfn() in Hyper-V guest code, so remove the Kconfig
+> selection of VMAP_PFN.
+> 
+> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
 
->  arch/m68k/kernel/process.c       |  3 +--
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
