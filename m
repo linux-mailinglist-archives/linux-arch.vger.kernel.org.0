@@ -2,107 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B305620D79
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 11:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EEC620E95
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 12:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234020AbiKHKhd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Nov 2022 05:37:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S233619AbiKHLUp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Nov 2022 06:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbiKHKhN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 05:37:13 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67584298A;
-        Tue,  8 Nov 2022 02:36:54 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id b21so13790400plc.9;
-        Tue, 08 Nov 2022 02:36:54 -0800 (PST)
+        with ESMTP id S233333AbiKHLUi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 06:20:38 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DDD222A1
+        for <linux-arch@vger.kernel.org>; Tue,  8 Nov 2022 03:20:37 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id n85so11375591yba.1
+        for <linux-arch@vger.kernel.org>; Tue, 08 Nov 2022 03:20:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7FC4xTWKbEcJxVm+LBMuB4SUqqHDVOvyFDbcq+yh01A=;
-        b=oCWmwDp8Mq/94lPgWOpRNMqusVjIbpZKRV9JeuSrdvQOJhGpRXChOO08QAlKk8Wx73
-         s9dECqgOGqSg/8HsqRHiP/XKfZq37XO9aPQHjT6sIVfwd2T5rgHuMt0YXR0vcVnuqJPC
-         bYyXpc+YB5DY79XuJsgDgEnii3hXBb2hLVOouhQABdDKDpptyrIasT3qltTbts8XnJrU
-         VZTd4OMKS0clmozmVyOJgYGhRCfkJh6l8h11/FOcCQ+LBk3+XZqX0RE3+w4sLEria5R3
-         Qsi/EmUKkAqx8Cc/Ujp41/7pVyFg5TMnjalYEafM8z3HSH10qmw+8OMIN07CWneo6bGA
-         xdsg==
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
+        b=J4BNN7jKfVfT0aL+JmOkjuoB8t6+kSq+FK+qtmRP1DScVaKYSfpiIdvKdYE9swFUQY
+         XtHjWaqnZFsSXqYA0o+q8CHye3arwTjr+hJBusI7mFqLyj6iQwnPEZnxpt7jEFXDv67C
+         i1RnWN77TDRD4R5bcXZk31BtpxWQI5F6il/aa7D6YEvXraa0x5EmFHE7S5DfyEv8K6Mr
+         sqvmxMR+LFYCNchTyksG6bgH4YMBdFO7Jyo5yt1Gfv8N5WpJHQg7liyYPj6Ln7TcsJ1M
+         7IF7H63JmVDaojfGa4RBrUx2qi70wmC2uC2C6sS9nlgayiVSuogPYEW3OyiZYJzoef10
+         VIFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7FC4xTWKbEcJxVm+LBMuB4SUqqHDVOvyFDbcq+yh01A=;
-        b=pJruh9JrSZeI3RPG9Djmph6xka+bXU3ieDTszK6HR9tUalxsckaWfe08+qq/ThY7rW
-         Dgewo09gIoPDObpiqAtXZhN2EgNx+1VonZrwd/pAerJyVAtoSHIrmRiuUm7cUxv4+3si
-         Xd0hmEPByQzYXjfY7w1Gtg5wjyPtNxjyYcZ8YFgVzxpFO0cBm1kfK89TBu1DuhSvJmZb
-         VtB6uWqwaH7crvvfBMxc/1nPnTKJevXXzkSqreEBafOcIPr4UOsyx0S5q0jdmG5/jtaN
-         ozoUjZw6xqpKbEr7shyIbsY6KvqXtGAQckvg+Ndxpz2vqfnaux544xZgacm9+4FCDE2d
-         JkXw==
-X-Gm-Message-State: ACrzQf1TXcmCs2LcDd1iFpoNzqc69NWs4kFVc/HKVMl8bS+vqP6KLIXm
-        /xXpd//U0QrwDdyNGJN01qQ=
-X-Google-Smtp-Source: AMsMyM4t0UZsTKGoBIe7o5gVWR0wgRXPrt+fajdjHMMuWw0RmjuTkgxkIK95E7qPspPcKE7d1giP0A==
-X-Received: by 2002:a17:90b:254c:b0:20a:8a92:ea5b with SMTP id nw12-20020a17090b254c00b0020a8a92ea5bmr56165515pjb.81.1667903814151;
-        Tue, 08 Nov 2022 02:36:54 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id h5-20020a17090a648500b0020a11217682sm5700073pjj.27.2022.11.08.02.36.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 02:36:53 -0800 (PST)
-Message-ID: <9a4edf34-6e49-9fd0-fc23-2536c5f087ea@gmail.com>
-Date:   Tue, 8 Nov 2022 18:36:40 +0800
+        bh=jD/YBCtOhOa1ipEyheDVa6geA3XolzkSqDbroMLmTEw=;
+        b=jFLYa+tN6wVjf4b6brQKzTf5KXlnMCU5E0rxHIVQXUqnTCSnp0uLYRg3Zip1DexeDj
+         qvPshwm4Ml7SskU4YmCDkqjbSwfpnGQY+/0Sx8aDNB0W2y66/1c6Mp3zIaXZr1EtK85s
+         MlovkesSHm5q1IV73H4UX/d7ZdvQfynGsEIpp/U86/bEDwRd8O3c7nDCiub5cei5xofn
+         dhMgYrYCA+eUXa0cHhqB1ifltbJi0nhtn2TMX4gHX4Jmj0IqCjjSHxudg73qe3AaagQe
+         rpqfzjsjfefSC/hGR97IW4OVU1+7Lzpm7MQUJTcSmRmz+HdgXECecAIgGwwSj6maL2wL
+         Tgqw==
+X-Gm-Message-State: ACrzQf3k5yf37sdU8DFgn13lWaT0qI6j+wkdS8vPK34TGbgWjni+A8Wd
+        txeTgv0AF4QQM9IY/v8W3Hf+Gxa5PyishL+hODA=
+X-Google-Smtp-Source: AMsMyM6xKqU5Rjh4+2+AxAqC0U0YC7Pv+rLQ5ILVu1L9p+G2RCExT06n9hL8M7TD2Z3SGUMSH2B3gfKMmkK13680VKQ=
+X-Received: by 2002:a25:a088:0:b0:6ca:33ff:5b30 with SMTP id
+ y8-20020a25a088000000b006ca33ff5b30mr54330551ybh.242.1667906436602; Tue, 08
+ Nov 2022 03:20:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 09/12] hv_netvsc: Remove second mapping of send and recv
- buffers
-Content-Language: en-US
-To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
- <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <1666288635-72591-10-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Received: by 2002:a05:7010:a38a:b0:313:c983:1d7e with HTTP; Tue, 8 Nov 2022
+ 03:20:36 -0800 (PST)
+Reply-To: mrinvest1010@gmail.com
+From:   "K. A. Mr. Kairi" <ctocik2@gmail.com>
+Date:   Tue, 8 Nov 2022 03:20:36 -0800
+Message-ID: <CAC9COZf4gVM4aT_ghoemxu3B8PtJ41D3GAMuMHbW-Zm3a0vanw@mail.gmail.com>
+Subject: Re: My Response..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5001]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrinvest1010[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [ctocik2[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ctocik2[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/21/2022 1:57 AM, Michael Kelley wrote:
-> With changes to how Hyper-V guest VMs flip memory between private
-> (encrypted) and shared (decrypted), creating a second kernel virtual
-> mapping for shared memory is no longer necessary.  Everything needed
-> for the transition to shared is handled by set_memory_decrypted().
-> 
-> As such, remove the code to create and manage the second
-> mapping for the pre-allocated send and recv buffers.  This mapping
-> is the last user of hv_map_memory()/hv_unmap_memory(), so delete
-> these functions as well.  Finally, hv_map_memory() is the last
-> user of vmap_pfn() in Hyper-V guest code, so remove the Kconfig
-> selection of VMAP_PFN.
-> 
-> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
+-- 
+Hi
 
-Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+How are you with your family, I have a serious client, whom will be
+interested to invest in your country, I got your Details through the
+Investment Network and world Global Business directory.
+
+If you are interested for more details.....
+
+Sincerely,
+Kairi Andrew
