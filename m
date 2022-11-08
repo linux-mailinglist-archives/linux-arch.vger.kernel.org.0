@@ -2,97 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFAE621662
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 15:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3326216E4
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Nov 2022 15:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbiKHO1L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Nov 2022 09:27:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S233521AbiKHOfk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Nov 2022 09:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiKHO0p (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 09:26:45 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E4E101CF
-        for <linux-arch@vger.kernel.org>; Tue,  8 Nov 2022 06:25:31 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id i3so13925239pfc.11
-        for <linux-arch@vger.kernel.org>; Tue, 08 Nov 2022 06:25:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=dj7L8L4Tt3T52fNCiLgU1wmk4q3GKw+FgtxNNdpNZejQJQ1k3Xi+uLyqI46mZtlAe9
-         HLOA9P1jXmiTZuSDq5pdxRxdF0a/HoEZnGcKQ3YQ37POKm1J5RjeTmEaXOGvNGsQ/aCd
-         x8X3wRq447BygztmxjMMFJOJydFOJUOGXobl/qzDVFAJS2xNGHdVGGQVxwZyaR/NBt0/
-         bE+cdHmQ/pyeyXGzJcY+3ABqxwuM8e+fvQz2jyAv1cJHWTFyjffI5j3/3Sk+yOdlf96H
-         6ymXuWHpJpL3yt30UdlgfE5yAEKuZaLtj9+SPJvm7HvWfCahTeKPqye7UyLe1WT7erj+
-         Thwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=4y7A+dcaeaKjntU7yx3m7FQBeUMBTPYOBVh5/rQed4hnN1nU1ma12WOr9wTlsU8Sq2
-         lPuy7xJXJ1BQPEN7jaUM7gqAWYTpzF9sBgHYdIaFLcVzULjnoZ4d6LtS3T3aOzsOmNxC
-         hAwVUnpHmzjGGNCQMa649tc1eEehQgNCDlAQxRR15uX9kqJSOgyWVqhRqU4yY8lkhOC0
-         D6xRNn4F/B9tsX6rjiR53Ow1NBq0SqOg3ANnaQ4XEFr1gdPhYGhiuxtcoL32OiqkVbQp
-         yxMbDKWohkq8RfMCfdko/7LLIkvOOVIhs4xno4tw/CJOcuonx4HaL1ZTAAPkPozzMDUx
-         e15g==
-X-Gm-Message-State: ACrzQf06On89XAIJlwAWw4AyQi3GNK1FYmk2095jzmh8wRoTpkwOJE/m
-        YdOAmfKm3Iclu29tFfSfMyemHKBBTcLqIfHYEoQ=
-X-Google-Smtp-Source: AMsMyM5/o8Tv1jtvv5i5ish68BM3WfS9X9eqWOTVG2elMlgZjohDVk/23K/5zEIB58o7eHSGPzDyTC5sLFDQxOS4ibc=
-X-Received: by 2002:a63:2c8b:0:b0:41c:5f9e:a1d6 with SMTP id
- s133-20020a632c8b000000b0041c5f9ea1d6mr47624667pgs.601.1667917531062; Tue, 08
- Nov 2022 06:25:31 -0800 (PST)
+        with ESMTP id S233214AbiKHOfk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 09:35:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A819FFC;
+        Tue,  8 Nov 2022 06:35:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D2A615E2;
+        Tue,  8 Nov 2022 14:35:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4264AC433C1;
+        Tue,  8 Nov 2022 14:35:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667918138;
+        bh=iRCXVVce81K56uY3wSFuiW3EJnWmIFxRfYgwuiKPlUA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=agtcviDySGTRQAGRdA4+4QiePjTCK4ixmbAAO9VyyCkejdj6bpetZ+2TUOth68dlQ
+         3AawLukUepPql4XJYdS9DAa+ussxB4UHOaOnj2u4TlVfluF/LxGxIjEynOXFyhKY9Y
+         W/ljr1/Y6gBrO1oq9/yLuZyvDo56Xzvj2rZ/SS4DAlh/oAdr1qC1mF0blUMbJ2zOyp
+         ULAhto29r3IV5daLcoq/DELL9FC1GKiz+0H6/pf1pnL61Q13wKXqOMbVdFDkC0QzSw
+         fGrkLPwuPHEh1mqLeS2wuVyGAFXK7JJsbofMpdQUcKzJzaAKTq4CoaxFxlsTEE1qqx
+         AWEvcCOS8j2YA==
+Date:   Tue, 8 Nov 2022 07:35:36 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     xiafukun <xiafukun@huawei.com>, Ard Biesheuvel <ardb@kernel.org>
+Cc:     arnd@arndb.de, keescook@chromium.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yusongping@huawei.com,
+        zhaowenhui8@huawei.comx
+Subject: Re: vmlinux.lds.h: Bug report: unable to handle page fault when
+ start the virtual machine with qemu
+Message-ID: <Y2ppOJ4zguDznRAc@dev-arch.thelio-3990X>
+References: <cbbd3548-880c-d2ca-1b67-5bb93b291d5f@huawei.com>
+ <CAMj1kXESRP9RvhPC5Wgg38BqyCn5ANv7+X9Ezyx5MXNNvEZ1kA@mail.gmail.com>
+ <b714ad78-4689-ad0b-9316-efcc1665f6bf@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7300:5388:b0:85:81c6:896c with HTTP; Tue, 8 Nov 2022
- 06:25:29 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli11@gmail.com>
-Date:   Tue, 8 Nov 2022 14:25:29 +0000
-Message-ID: <CAPBO+FLUDBD86dHQM6-TOwtKbf996Qz13VQWrvY27T9ETbCTEA@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:435 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4711]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli11[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli11[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b714ad78-4689-ad0b-9316-efcc1665f6bf@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On Tue, Nov 08, 2022 at 03:46:32PM +0800, xiafukun wrote:
+> Thank you for your reply.
+> We tested your changes to this patch and did fix the issue. Following the
+> solution you provided, we recompile the kernel and successfully start the
+> virtual machine.
+
+Thank you a lot for testing and sorry about the breakage in the first
+place :(
+
+Ard, were you going to send a patch? Feel free to preemptively add:
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+if so; otherwise, I can send one later today.
+
+> 在 2022/11/8 0:00, Ard Biesheuvel 写道:
+> > 
+> > That patch looks incorrect to me. Without CONFIG_SMP, the PERCPU
+> > sections are not instantiated, and the only copy of those variables is
+> > created in the ordinary .data/.bss sections
+> > 
+> > Does the change below fix the issue for you?
+> > 
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -347,6 +347,7 @@
+> >  #define DATA_DATA                                                      \
+> >         *(.xiptext)                                                     \
+> >         *(DATA_MAIN)                                                    \
+> > +       *(.data..decrypted)                                             \
+> >         *(.ref.data)                                                    \
+> >         *(.data..shared_aligned) /* percpu related */                   \
+> >         MEM_KEEP(init.data*)                                            \
+> > @@ -995,7 +996,6 @@
+> >  #ifdef CONFIG_AMD_MEM_ENCRYPT
+> >  #define PERCPU_DECRYPTED_SECTION                                       \
+> >         . = ALIGN(PAGE_SIZE);                                           \
+> > -       *(.data..decrypted)                                             \
+> >         *(.data..percpu..decrypted)                                     \
+> >         . = ALIGN(PAGE_SIZE);
+> >  #else
