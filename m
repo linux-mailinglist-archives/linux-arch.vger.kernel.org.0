@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BCE6234EB
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 21:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E556234EF
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 21:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiKIUxY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Nov 2022 15:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S231298AbiKIUyH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Nov 2022 15:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiKIUxX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Nov 2022 15:53:23 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE2F27B37;
-        Wed,  9 Nov 2022 12:53:20 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id io19so18216642plb.8;
-        Wed, 09 Nov 2022 12:53:20 -0800 (PST)
+        with ESMTP id S231828AbiKIUx5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Nov 2022 15:53:57 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68091286E4;
+        Wed,  9 Nov 2022 12:53:56 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id p12so12725860plq.4;
+        Wed, 09 Nov 2022 12:53:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
         bh=NQ9Dolrn30ZEqCTjBOSWfRyBoKcMQaygSY6Y+KT0Mec=;
-        b=NX5S/PpvIB7oLqcAwzdN/Ioz4UByjq90t5Su7sRUT3us5IJbhaw+Znt5IXbXVWh1Z0
-         fL5hjn8LoJQwT/Alod0MpVLNjLWtasCGoAZpGi58bNZEu/RJ8kK8nDa9kk5gNcOv1aFR
-         CIbP5TgV00ob1KELFcj+4uaHkA+9Ug2qc3ABDxXtYlzlg+Y95CuMLIUbN+hEBj99DeTd
-         NUL5D5mCbJ1C2cl6wZJI+5hurMdfzwjakCWlAs0RgRmsf49qUt1eIc3laBhDx1l8OlzK
-         litzszx7bMY8wB40GkcbCi/t9lF91XpX49Wx87RXhf8YkEmSf53Wkc/89+DWi6DzETXF
-         YA0w==
+        b=qLbxYrgl1ZN/UswoiK7uP6bl3k7n4V7rFL8eBdix5GBW1RkvvHL5x8NwRrAve2IX8V
+         XVz61VfO8tCoqLRp5WgxmDhsIuwxaPaoEnshV6U2O7Zh/pDOMVYXsKAGfk6ObCayJ7bd
+         Q8/GSxUO4iAQOWzU/jJvuunrJ6n6DyJ4HjgF0UwGtl0KBTqHWIwxrwleaspCI78CCv2g
+         bBvmt4y9TY4P9NbuifhQI5jWcsqB8A9fMeV2QJjD36c3GMiRbulbVd8izKXZcWiqSWFM
+         kYYcdyaRfeI5xbXtxRXz86EWH0l5/bPJYop3OXP/eh8RiUPG08H7KZHiXAf9v/hYxXnx
+         gOLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=NQ9Dolrn30ZEqCTjBOSWfRyBoKcMQaygSY6Y+KT0Mec=;
-        b=qYV6Tj6rcQbB9JkEUwNBfjsT0YNoI4IG6HFo8fVVz8kk9vvOvcPnclC/+RQGtxIC0W
-         zeLhZAcIiB1sCEhFf80Lnr8ci3TDk3UyGQ8P1owDEkd/Lpm8BUT9Sx9lhKrS2PET16BY
-         71HggB6shAk8Od4lwRq451zxzCmWXQo2A1yKv1LPJ3JeyXjnOqUOsB+JmdZEnG/0Lpjv
-         yfS7XynVfhCSEpVSOMoM3zsO9vVXRaVLSJSUHKZGdtramfoHGAIT+fUbXZaZXOWnBgTG
-         tKZnpWsnEBE4CxAF9bxWtRS4demJr/fvHrmnRJlTOewP90L7sPHnnhndjxWtH7Z+bIN8
-         +rfQ==
-X-Gm-Message-State: ACrzQf0dtqCS74WAMj1evhpZZapnWFe8GQJ0WGK3kWqHT7jyneYOkQam
-        K7X40TKh+zBq7dnT9jvA5DU/VPfWdih7lA==
-X-Google-Smtp-Source: AMsMyM4yPvUCtlV3AR1sV5khbTRv3EDOSYNzQcaXkYigDxudTUruWCdW/VPp4VujTZbbU1AvA5ro1w==
-X-Received: by 2002:a17:90a:24b:b0:213:9da2:5c98 with SMTP id t11-20020a17090a024b00b002139da25c98mr64206526pje.123.1668027200320;
-        Wed, 09 Nov 2022 12:53:20 -0800 (PST)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:1:c61f:2003:6c97:8057])
-        by smtp.gmail.com with ESMTPSA id y7-20020aa79427000000b0056baca45977sm8659378pfo.21.2022.11.09.12.53.18
+        b=silEL06JEhorkOP+yEjq0I/wQVODfF3tyMZ1ARCtJOK9XgC234v1Dg7MGRxJrtdwUy
+         IzTmP4RZKuSAivTJGRYcpRe1JvqE+moJkdVq25ZCxr+hwZomB4IEEk/w0xk8W8Ez29zy
+         vGpUhkQ3/WGU4QYaUBic8CXBF0pAOMOMOZC0tAXs839N3NpdZff7fjb38asWC7F8O5PL
+         C5nBrwj3cxked06rCGLwEfWj4y1aXDMgeY2pZOrjBqc394GSHe4Rt2wEg+7SBKvOubCa
+         oREiG8lVv5UG4mfX55S0+FtFmjrPTmPUBPFoJoSAy01br1auwQyoQvDvtu05LkJNjKBf
+         ng6g==
+X-Gm-Message-State: ACrzQf1p/fG3J0Adkd1BjQ5wNzb5rppCCE9lqPXg/Af5ImNNc4aTwHLt
+        ZwlWS6r+WvPxPAiHoG2VXP8=
+X-Google-Smtp-Source: AMsMyM6qvRntv/3D7PYJSebUihbdSHiS2MJu1WuoU/KZ3Lwzx8hBxV/3cqEUL1SeLx1G4jQirEc8vw==
+X-Received: by 2002:a17:90a:bb92:b0:213:8077:c920 with SMTP id v18-20020a17090abb9200b002138077c920mr64183510pjr.105.1668027235859;
+        Wed, 09 Nov 2022 12:53:55 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:a:c616:2003:6c97:8057])
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090a108200b002137d3da760sm1633984pja.39.2022.11.09.12.53.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 12:53:19 -0800 (PST)
+        Wed, 09 Nov 2022 12:53:55 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,8 +65,8 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
 Subject: [RFC PATCH 00/17] x86/hyperv/sev: Add AMD sev-snp enlightened guest support on hyperv
-Date:   Wed,  9 Nov 2022 15:52:58 -0500
-Message-Id: <20221109205316.984635-1-ltykernel@gmail.com>
+Date:   Wed,  9 Nov 2022 15:53:35 -0500
+Message-Id: <20221109205353.984745-1-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
