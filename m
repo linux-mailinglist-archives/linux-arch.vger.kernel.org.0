@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4808623502
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 21:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0480662350B
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 21:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiKIUyR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Nov 2022 15:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49286 "EHLO
+        id S231858AbiKIUy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Nov 2022 15:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231879AbiKIUyL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Nov 2022 15:54:11 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D775821E19;
-        Wed,  9 Nov 2022 12:54:10 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id l2so18196781pld.13;
-        Wed, 09 Nov 2022 12:54:10 -0800 (PST)
+        with ESMTP id S231891AbiKIUyM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Nov 2022 15:54:12 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B5E27FC2;
+        Wed,  9 Nov 2022 12:54:12 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b21so18218700plc.9;
+        Wed, 09 Nov 2022 12:54:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wN6eB0wxJRf6zzRxY6T7pa65W2+E1oedx78oWdQ5Oug=;
-        b=cauI3nQmhA4WSX/OaYCTewup7EB+F5FVDFiGvtURXi1E84Ze0iEtTgzD8Rbx2nblxT
-         2By8+l78vIEz0KaH7vJAwyjM9pmU9ZGJOmOI383sd6iM2L74tJ9tJel90eh7b9aeUuqk
-         jBDlH33hr7pj1RVARknPKi6p4zY/yv+KPeKP1y/JrhdC8Sb7j7O/xk2hEXpiVy8zqzl9
-         ieSVotSG6yWbedtJP99u8AfkIbg5oPex7F5QEp1bzPUKYz9GHLoiytc78f7cl++wnzfY
-         YlkOGWJ+4m3OU/f+KTPyRBiR+D8bvjmcZXc2iP0tM7201E70469rEtO8RHtJ6GDsA/Yd
-         olhw==
+        bh=xAXRqP2y00DrPAfpogwk3TLv9UhC4S/D5/TlIyE91Hw=;
+        b=Te6H+TH+yST8c6KwaFmZrKwGmb/qFLAP4Ijs+O0sg16ggjNVi1pniMt8qRquxctGo8
+         bG894KSqsGQzNTkQVawrXkjvUz4MBGbwm5emlok9cQrNP4cVVAoh/pKOj7RYoX8RYy4a
+         t1rVYkdBA4ze+dGdcEbpVjwLF6N3/v38VH0wLJF3nyT4/ZqSA+Vgy135v+xS+BMvGnRx
+         kOxqG5zEKlE9xIXEp3MFMedPJVROB5SwJ52rVvpQLyxHQ4jlNbjNYliYygSrqD1HqhrQ
+         MuqDpIY5atERxparXSh5/f7em9davf9PVRDaVx8XB4m01uKCdc55EVJoWHRc87AEZ/jR
+         2Pfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wN6eB0wxJRf6zzRxY6T7pa65W2+E1oedx78oWdQ5Oug=;
-        b=G6Bcdwpcmdvz0PjZfG0SeqbuTmjo2aUGN3IC1WRNYxtcboIKN0iukH+oVOnSo2uWiP
-         /oPrngJij+C+JMjARV65yHuG/LXOu6R0ZhbS5lVcm1jg7gqOJNr/pxLLlbXHlcyq9Irk
-         XaagS6VVPoymTUgm00wou6ZukGoTSSbdNkupdxftwNhhwqLwP9oXdi1GCOMPe8rxJjfE
-         K9r7DX/Sj/m2bdcpDsC8HllKsZrLH6Wu8Q1mdihVdTBHpwIjj2Xq5Ug0JulMSyVHVY8X
-         gvPXbEPjUGarUinfSuJjLkBAeG65ZBdXAJRj3JarlzxIoNGHkkKzGjhpqPwPyiC57662
-         UCHQ==
-X-Gm-Message-State: ACrzQf3oBpsCWKUxX0CL81cIYOTJ6qdm1fJCs+2Y8ek89LAMWRj9TJVN
-        SLZx58PfYuMcFQpsPweOQBg=
-X-Google-Smtp-Source: AMsMyM4luDAJu7PT7s5+o53Wz7Ymth7QCE0nP0qncCs9XPoDxi+wgcbfnkDK829znHHtTSew3IYeWw==
-X-Received: by 2002:a17:902:cac3:b0:186:6ce4:f94a with SMTP id y3-20020a170902cac300b001866ce4f94amr61537422pld.145.1668027250367;
-        Wed, 09 Nov 2022 12:54:10 -0800 (PST)
+        bh=xAXRqP2y00DrPAfpogwk3TLv9UhC4S/D5/TlIyE91Hw=;
+        b=DdvZVPn7QHmKcYJAd1scW8gBiT82UIs8QII7Jt9MXcxyn7MnrBH4VHNC2oCF6jSeL5
+         LLt0Mhmzs/ZOiuKZK9HCdJ2p5srefmNLe+2sFNrEOg9fQV5SC2nsobdhuj1KypieQTDi
+         maX7vjhsJBKmYahfWBY0PEdX1Fj3YZFkopHMhSLk1xhh9+T0kI4GtgrNl34Kj8e6C0Ix
+         EKq2U4OGbm/5+gB7uDa4HDyo+0CSyZ8gRTPEQFJNFxcT8NuON637NR4pqHTHVRk74aii
+         7g3g192BewBD/qwwxdwvn4LGr8/PNmjtEqH020mxPdr1FB69kQXqC2/zUJCBjRWRYAzC
+         2SXA==
+X-Gm-Message-State: ACrzQf1OxfTPc6E/UT72CV7u++hyeIlEujWWRtPa79auV8LaFxWoFmMN
+        tNxq5Tu99u4wLc4TEqJLRIA=
+X-Google-Smtp-Source: AMsMyM6FKraDvmCSKM8SltaKBfYOM83RXMvfiFmhKbOkh7EavSs25oEeebRK8YEEiRnFDRRvUgoSDA==
+X-Received: by 2002:a17:902:b70c:b0:179:eb79:cf9a with SMTP id d12-20020a170902b70c00b00179eb79cf9amr62100881pls.130.1668027251732;
+        Wed, 09 Nov 2022 12:54:11 -0800 (PST)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:a:c616:2003:6c97:8057])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090a108200b002137d3da760sm1633984pja.39.2022.11.09.12.54.09
+        by smtp.gmail.com with ESMTPSA id c2-20020a17090a108200b002137d3da760sm1633984pja.39.2022.11.09.12.54.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Nov 2022 12:54:09 -0800 (PST)
+        Wed, 09 Nov 2022 12:54:11 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,9 +65,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [RFC PATCH 10/17] x86/hyperv: set target vtl in the vmbus init message
-Date:   Wed,  9 Nov 2022 15:53:45 -0500
-Message-Id: <20221109205353.984745-11-ltykernel@gmail.com>
+Subject: [RFC PATCH 11/17] drivers: hv: Decrypt percpu hvcall input arg page in sev-snp enlightened guest
+Date:   Wed,  9 Nov 2022 15:53:46 -0500
+Message-Id: <20221109205353.984745-12-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221109205353.984745-1-ltykernel@gmail.com>
 References: <20221109205353.984745-1-ltykernel@gmail.com>
@@ -85,41 +85,61 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-Set target vtl (Virtual Trust Level) in the vmbus init message.
+Hypervisor needs to access iput arg page and guest should decrypt
+the page.
 
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
- drivers/hv/connection.c | 1 +
- include/linux/hyperv.h  | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/hv/hv_common.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 43141225ea15..09a1253b539a 100644
---- a/drivers/hv/connection.c
-+++ b/drivers/hv/connection.c
-@@ -98,6 +98,7 @@ int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo, u32 version)
- 	 */
- 	if (version >= VERSION_WIN10_V5) {
- 		msg->msg_sint = VMBUS_MESSAGE_SINT;
-+		msg->msg_vtl = ms_hyperv.vtl;
- 		vmbus_connection.msg_conn_id = VMBUS_MESSAGE_CONNECTION_ID_4;
- 	} else {
- 		msg->interrupt_page = virt_to_phys(vmbus_connection.int_page);
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index 3b42264333ef..2be0b5efd1ea 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -665,8 +665,8 @@ struct vmbus_channel_initiate_contact {
- 		u64 interrupt_page;
- 		struct {
- 			u8	msg_sint;
--			u8	padding1[3];
--			u32	padding2;
-+			u8	msg_vtl;
-+			u8	reserved[6];
- 		};
- 	};
- 	u64 monitor_page1;
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index 2c6602571c47..c16961e686a0 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -21,6 +21,7 @@
+ #include <linux/ptrace.h>
+ #include <linux/slab.h>
+ #include <linux/dma-map-ops.h>
++#include <linux/set_memory.h>
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
+ 
+@@ -125,6 +126,7 @@ int hv_common_cpu_init(unsigned int cpu)
+ 	u64 msr_vp_index;
+ 	gfp_t flags;
+ 	int pgcount = hv_root_partition ? 2 : 1;
++	int ret;
+ 
+ 	/* hv_cpu_init() can be called with IRQs disabled from hv_resume() */
+ 	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
+@@ -134,6 +136,16 @@ int hv_common_cpu_init(unsigned int cpu)
+ 	if (!(*inputarg))
+ 		return -ENOMEM;
+ 
++	if (hv_isolation_type_en_snp()) {
++		ret = set_memory_decrypted((unsigned long)*inputarg, 1);
++		if (ret) {
++			kfree(*inputarg);
++			return ret;
++		}
++
++		memset(*inputarg, 0x00, PAGE_SIZE);
++	}
++
+ 	if (hv_root_partition) {
+ 		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+ 		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+@@ -168,6 +180,9 @@ int hv_common_cpu_die(unsigned int cpu)
+ 
+ 	local_irq_restore(flags);
+ 
++	if (hv_isolation_type_en_snp())
++		set_memory_encrypted((unsigned long)mem, 1);
++
+ 	kfree(mem);
+ 
+ 	return 0;
 -- 
 2.25.1
 
