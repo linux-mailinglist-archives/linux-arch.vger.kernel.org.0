@@ -2,448 +2,406 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8685622158
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 02:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F27D6222FC
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Nov 2022 05:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiKIB1j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Nov 2022 20:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S229463AbiKIESm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Nov 2022 23:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiKIB1i (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 20:27:38 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729B55EFBE
-        for <linux-arch@vger.kernel.org>; Tue,  8 Nov 2022 17:27:36 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id b62so14945171pgc.0
-        for <linux-arch@vger.kernel.org>; Tue, 08 Nov 2022 17:27:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YTNMO4ck2krXz++IbBwhQ3ijjUgWxkKz9BEoZHo6y3I=;
-        b=NQU8H5A4L1pu8n9aX/u/fdgBeTsB92TRoUCas++Wq2U47ze1vXQbN5kMKqbcdw4KU7
-         pqcfiuhxAEtWlrgBhgfSRM9lzCvN1NKZRn1/Vrq1mQ/OAyipfmCn9AESHXkRAFU2ilIS
-         Hb8tGealiQREStnxSFmSlDqKzawZ+Pgv8Dl9PSeYu65QVb9cx/2vPzwlL5kwI59PKLw1
-         eFEUFuN1sJH3wTW8Bpmu9XggJby78Q4Wt3E3/jYCSC9ZOWvbbfba/brOOsEdpxcw98eK
-         5a4nR4MfxzHMUw8rU4l4vqW64e3IkXtvha1KAltpzZ6lb6g8TcAcX58z8X9WgLHGrtlK
-         Aesw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YTNMO4ck2krXz++IbBwhQ3ijjUgWxkKz9BEoZHo6y3I=;
-        b=OkPOYk6WtqWuThTGP+6ZiZ3H7byFhP1I4DjFtOcnbVg9RylcCa/YMThRTwKUudm9Ao
-         KSo+dZeq0tnRruFvpNdTEmwvZL94jLArj84fxosmOId+sqJP+eX9PI4a3ndwDykLHZwk
-         V/Yqdrfyg9YWZ6gXyrkRAIcQqk7uARIXltm4tsZnZO7FatKBZF3utcPKRgxZ56zUzF+i
-         cqZSod44CfFwkW7W1HBSLAZ1NZXwalGKu+uMxVi58hDb6UdNQOXa2+7urq5TfJViy/Yt
-         UKWPngLM/kUy6zASkYuX+Y/mi8Rn6r4F0EjCLSWJemOU2dTgFBHEqw1QN/bXzKjFQMwp
-         f2HA==
-X-Gm-Message-State: ACrzQf3va2aM5mnWqDWRHt/mz8q9EmsyXUVTd/DhTEPdzrXUlluxDJVr
-        jB7jgkjV+mOiwEQAx4xd8crEBA==
-X-Google-Smtp-Source: AMsMyM6eL7brZj6EJJj1SSZHlqWgSus0UcfCF0Vgs3aUuypQ7Ex6Np8S09nwKj+b3bhTrjwlqsCprQ==
-X-Received: by 2002:a05:6a00:140a:b0:56c:b679:f812 with SMTP id l10-20020a056a00140a00b0056cb679f812mr58769082pfu.46.1667957255680;
-        Tue, 08 Nov 2022 17:27:35 -0800 (PST)
-Received: from [192.168.50.116] (c-24-4-73-83.hsd1.ca.comcast.net. [24.4.73.83])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b00186e34524e3sm7556782plk.136.2022.11.08.17.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Nov 2022 17:27:35 -0800 (PST)
-Message-ID: <0b065367-c51d-10fc-795c-697555d40863@rivosinc.com>
-Date:   Tue, 8 Nov 2022 17:27:32 -0800
+        with ESMTP id S229488AbiKIESj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Nov 2022 23:18:39 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E090DCE0D;
+        Tue,  8 Nov 2022 20:18:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667967518; x=1699503518;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=zBd0WQHBdR3NPWzJNZfDs4ykgtZDGmbYGFzZ8L5rmrk=;
+  b=fAFMKNHw15zWY78fsi5/fwnE2M1yhsQ9J7CDxVMD5BvjXLJhc/ocnGSi
+   X+ndghdg/x7VQW9hQIedjzLSTy89lzq40zSrBqfaG3yhQLz8tHJVA8Z5c
+   C4gWiBrF+EmwnYsa8lN8DU8vMkhUHuKamA1K8LeDkPOd3qV61VeQSaQeY
+   N9NBhpyZ2XlbPCiBCmpihYLX7QswAj/1NPihyCeLNaGWLyiKl28o/T9AQ
+   h2stzUaNDMiCaECgXCsQlgr1LMQtMA/kuHMhfMLHwWh6erY8dDuJrmOou
+   GFmXR57iKdBnHyHXGJG5x0Hxka16WZxiL5Hc7cLKo41nV2vpLPTV3SP91
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="373029544"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="373029544"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 20:18:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="614533677"
+X-IronPort-AV: E=Sophos;i="5.96,149,1665471600"; 
+   d="scan'208";a="614533677"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga006.jf.intel.com with ESMTP; 08 Nov 2022 20:18:25 -0800
+Date:   Wed, 9 Nov 2022 12:13:58 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 6/8] KVM: Update lpage info when private/shared memory
+ are mixed
+Message-ID: <20221109041358.GA118963@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-7-chao.p.peng@linux.intel.com>
+ <20221108120805.kize74qgzsmarze5@yy-desk-7060>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v12 10/17] riscv: Add sigcontext save/restore for vector
-Content-Language: en-US
-To:     Chris Stillson <stillson@rivosinc.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Dao Lu <daolu@rivosinc.com>,
-        Conor Dooley <Conor.Dooley@microchip.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-arch <linux-arch@vger.kernel.org>
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
- <20220921214439.1491510-10-stillson@rivosinc.com>
-From:   Vineet Gupta <vineetg@rivosinc.com>
-In-Reply-To: <20220921214439.1491510-10-stillson@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221108120805.kize74qgzsmarze5@yy-desk-7060>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+CC linux-arch, Al Viro
-
-On 9/21/22 14:43, Chris Stillson wrote:
-> From: Greentime Hu <greentime.hu@sifive.com>
+On Tue, Nov 08, 2022 at 08:08:05PM +0800, Yuan Yao wrote:
+> On Tue, Oct 25, 2022 at 11:13:42PM +0800, Chao Peng wrote:
+> > When private/shared memory are mixed in a large page, the lpage_info may
+> > not be accurate and should be updated with this mixed info. A large page
+> > has mixed pages can't be really mapped as large page since its
+> > private/shared pages are from different physical memory.
+> >
+> > Update lpage_info when private/shared memory attribute is changed. If
+> > both private and shared pages are within a large page region, it can't
+> > be mapped as large page. It's a bit challenge to track the mixed
+> > info in a 'count' like variable, this patch instead reserves a bit in
+> > 'disallow_lpage' to indicate a large page has mixed private/share pages.
+> >
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  arch/x86/include/asm/kvm_host.h |   8 +++
+> >  arch/x86/kvm/mmu/mmu.c          | 112 +++++++++++++++++++++++++++++++-
+> >  arch/x86/kvm/x86.c              |   2 +
+> >  include/linux/kvm_host.h        |  19 ++++++
+> >  virt/kvm/kvm_main.c             |  16 +++--
+> >  5 files changed, 152 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index 7551b6f9c31c..db811a54e3fd 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -37,6 +37,7 @@
+> >  #include <asm/hyperv-tlfs.h>
+> >
+> >  #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
+> > +#define __KVM_HAVE_ARCH_UPDATE_MEM_ATTR
+> >
+> >  #define KVM_MAX_VCPUS 1024
+> >
+> > @@ -952,6 +953,13 @@ struct kvm_vcpu_arch {
+> >  #endif
+> >  };
+> >
+> > +/*
+> > + * Use a bit in disallow_lpage to indicate private/shared pages mixed at the
+> > + * level. The remaining bits are used as a reference count.
+> > + */
+> > +#define KVM_LPAGE_PRIVATE_SHARED_MIXED		(1U << 31)
+> > +#define KVM_LPAGE_COUNT_MAX			((1U << 31) - 1)
+> > +
+> >  struct kvm_lpage_info {
+> >  	int disallow_lpage;
+> >  };
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 33b1aec44fb8..67a9823a8c35 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -762,11 +762,16 @@ static void update_gfn_disallow_lpage_count(const struct kvm_memory_slot *slot,
+> >  {
+> >  	struct kvm_lpage_info *linfo;
+> >  	int i;
+> > +	int disallow_count;
+> >
+> >  	for (i = PG_LEVEL_2M; i <= KVM_MAX_HUGEPAGE_LEVEL; ++i) {
+> >  		linfo = lpage_info_slot(gfn, slot, i);
+> > +
+> > +		disallow_count = linfo->disallow_lpage & KVM_LPAGE_COUNT_MAX;
+> > +		WARN_ON(disallow_count + count < 0 ||
+> > +			disallow_count > KVM_LPAGE_COUNT_MAX - count);
+> > +
+> >  		linfo->disallow_lpage += count;
+> > -		WARN_ON(linfo->disallow_lpage < 0);
+> >  	}
+> >  }
+> >
+> > @@ -6910,3 +6915,108 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+> >  	if (kvm->arch.nx_lpage_recovery_thread)
+> >  		kthread_stop(kvm->arch.nx_lpage_recovery_thread);
+> >  }
+> > +
+> > +static inline bool linfo_is_mixed(struct kvm_lpage_info *linfo)
+> > +{
+> > +	return linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> > +}
+> > +
+> > +static inline void linfo_update_mixed(struct kvm_lpage_info *linfo, bool mixed)
+> > +{
+> > +	if (mixed)
+> > +		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> > +	else
+> > +		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> > +}
+> > +
+> > +static bool mem_attr_is_mixed_2m(struct kvm *kvm, unsigned int attr,
+> > +				 gfn_t start, gfn_t end)
+> > +{
+> > +	XA_STATE(xas, &kvm->mem_attr_array, start);
+> > +	gfn_t gfn = start;
+> > +	void *entry;
+> > +	bool shared = attr == KVM_MEM_ATTR_SHARED;
+> > +	bool mixed = false;
+> > +
+> > +	rcu_read_lock();
+> > +	entry = xas_load(&xas);
+> > +	while (gfn < end) {
+> > +		if (xas_retry(&xas, entry))
+> > +			continue;
+> > +
+> > +		KVM_BUG_ON(gfn != xas.xa_index, kvm);
+> > +
+> > +		if ((entry && !shared) || (!entry && shared)) {
+> > +			mixed = true;
+> > +			goto out;
+> > +		}
+> > +
+> > +		entry = xas_next(&xas);
+> > +		gfn++;
+> > +	}
+> > +out:
+> > +	rcu_read_unlock();
+> > +	return mixed;
+> > +}
+> > +
+> > +static bool mem_attr_is_mixed(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > +			      int level, unsigned int attr,
+> > +			      gfn_t start, gfn_t end)
+> > +{
+> > +	unsigned long gfn;
+> > +	void *entry;
+> > +
+> > +	if (level == PG_LEVEL_2M)
+> > +		return mem_attr_is_mixed_2m(kvm, attr, start, end);
+> > +
+> > +	entry = xa_load(&kvm->mem_attr_array, start);
+> > +	for (gfn = start; gfn < end; gfn += KVM_PAGES_PER_HPAGE(level - 1)) {
+> > +		if (linfo_is_mixed(lpage_info_slot(gfn, slot, level - 1)))
+> > +			return true;
+> > +		if (xa_load(&kvm->mem_attr_array, gfn) != entry)
+> > +			return true;
+> > +	}
+> > +	return false;
+> > +}
+> > +
+> > +void kvm_arch_update_mem_attr(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > +			      unsigned int attr, gfn_t start, gfn_t end)
+> > +{
+> > +
+> > +	unsigned long lpage_start, lpage_end;
+> > +	unsigned long gfn, pages, mask;
+> > +	int level;
+> > +
+> > +	WARN_ONCE(!(attr & (KVM_MEM_ATTR_PRIVATE | KVM_MEM_ATTR_SHARED)),
+> > +			"Unsupported mem attribute.\n");
+> > +
+> > +	/*
+> > +	 * The sequence matters here: we update the higher level basing on the
+> > +	 * lower level's scanning result.
+> > +	 */
+> > +	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
+> > +		pages = KVM_PAGES_PER_HPAGE(level);
+> > +		mask = ~(pages - 1);
+> > +		lpage_start = max(start & mask, slot->base_gfn);
+> > +		lpage_end = (end - 1) & mask;
+> > +
+> > +		/*
+> > +		 * We only need to scan the head and tail page, for middle pages
+> > +		 * we know they are not mixed.
+> > +		 */
+> > +		linfo_update_mixed(lpage_info_slot(lpage_start, slot, level),
+> > +				   mem_attr_is_mixed(kvm, slot, level, attr,
+> > +						     lpage_start, start));
 > 
-> This patch adds sigcontext save/restore for vector. The vector registers
-> will be saved in datap pointer. The datap pointer will be allocated
-> dynamically when the task needs in kernel space. The datap pointer will
-> be set right after the __riscv_v_state data structure to save all the
-> vector registers in the signal handler stack.
+> Looks only query the lpage_start, start is not enough:
 > 
-> Co-developed-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
-> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
-> ---
->   arch/riscv/include/uapi/asm/sigcontext.h |  24 ++++
->   arch/riscv/kernel/asm-offsets.c          |   2 +
->   arch/riscv/kernel/signal.c               | 165 ++++++++++++++++++++++-
->   3 files changed, 187 insertions(+), 4 deletions(-)
+> A and B are private gfns from same lpage_start as below, A > B :
+> lpage_start
+>        |---------A
+>        |----B
 > 
-> diff --git a/arch/riscv/include/uapi/asm/sigcontext.h b/arch/riscv/include/uapi/asm/sigcontext.h
-> index 84f2dfcfdbce..b8a0fd7d7cfc 100644
-> --- a/arch/riscv/include/uapi/asm/sigcontext.h
-> +++ b/arch/riscv/include/uapi/asm/sigcontext.h
-> @@ -8,6 +8,23 @@
->   
->   #include <asm/ptrace.h>
->   
-> +/* The Magic number for signal context frame header. */
-> +#define RVV_MAGIC	0x53465457
-> +#define END_MAGIC	0x0
-> +
-> +/* The size of END signal context header. */
-> +#define END_HDR_SIZE	0x0
-> +
-> +struct __riscv_ctx_hdr {
-> +	__u32 magic;
-> +	__u32 size;
-> +};
-> +
-> +struct __sc_riscv_v_state {
-> +	struct __riscv_ctx_hdr head;
-> +	struct __riscv_v_state v_state;
-> +} __attribute__((aligned(16)));
-> +
->   /*
->    * Signal context structure
->    *
-> @@ -17,6 +34,13 @@
->   struct sigcontext {
->   	struct user_regs_struct sc_regs;
->   	union __riscv_fp_state sc_fpregs;
-> +	/*
-> +	 * 4K + 128 reserved for vector state and future expansion.
-> +	 * This space is enough to store the vector context whose VLENB
-> +	 * is less or equal to 128.
-> +	 * (The size of the vector context is 4144 byte as VLENB is 128)
+> Convert A to shared, this makes the upper 2M page to MIX.
+> Convert B to shared, this also makes the upper 2M page to MIX.
+> Convert B to private, this makes the upper 2M page to Non-MIX, but
+> it's incorrect, due to A is shared.
 
-At first glace it seems this only supports 128 byte V regs. Better to 
-add some words saying that wider reg file is handled in code too.
+In previous versions this is actually "lpage_start, lpage_start +
+pages", e.g. covers the whole large page. While fixing another issue[*]
+in v8 this was wrongly changed to "lpage_start, start", at that time I
+made an assumption that "end > lpage_start + pages" so the remaining
+scanning in the same large page is useless if we know what attribute we
+will set, this is definitely not true though.
 
-> +	 */
-> +	__u8 __reserved[4224] __attribute__((__aligned__(16)));
+[*]
+https://lore.kernel.org/linux-mm/20220930085914.GA2799703@chaop.bj.intel.com/
 
-Is alignment of 8 not enough or is this future-proofing.
-
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> index 37e3e6a8d877..80316ef7bb78 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -75,6 +75,8 @@ void asm_offsets(void)
->   	OFFSET(TSK_STACK_CANARY, task_struct, stack_canary);
->   #endif
->   
-> +	OFFSET(RISCV_V_STATE_MAGIC, __riscv_ctx_hdr, magic);
-> +	OFFSET(RISCV_V_STATE_SIZE, __riscv_ctx_hdr, size);
->   	OFFSET(RISCV_V_STATE_VSTART, __riscv_v_state, vstart);
->   	OFFSET(RISCV_V_STATE_VL, __riscv_v_state, vl);
->   	OFFSET(RISCV_V_STATE_VTYPE, __riscv_v_state, vtype);
-> diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-> index 38b05ca6fe66..41d9a02c7098 100644
-> --- a/arch/riscv/kernel/signal.c
-> +++ b/arch/riscv/kernel/signal.c
-> @@ -20,15 +20,16 @@
->   #include <asm/csr.h>
->   
->   extern u32 __user_rt_sigreturn[2];
-> +static size_t rvv_sc_size;
->   
->   #define DEBUG_SIG 0
->   
->   struct rt_sigframe {
->   	struct siginfo info;
-> -	struct ucontext uc;
->   #ifndef CONFIG_MMU
->   	u32 sigreturn_code[2];
->   #endif
-> +	struct ucontext uc;
->   };
-
-Just for the record this is NOT a userspace abi change (for SA_SIGINFO 
-signal handlers in userspace) since they are only provided struct 
-ucontext pointer. kernel is free to rearrange stuff in struct 
-rt_sigframe as it deems fits.
-
->   
->   #ifdef CONFIG_FPU
-> @@ -85,16 +86,155 @@ static long save_fp_state(struct pt_regs *regs,
->   #define restore_fp_state(task, regs) (0)
->   #endif
->   
-> +#ifdef CONFIG_VECTOR
-> +static long restore_v_state(struct pt_regs *regs, void **sc_reserved_ptr)
-
-For ease of reading I would move save before restore.
-
-> +{
-> +	long err;
-> +	struct __sc_riscv_v_state __user *state = (struct __sc_riscv_v_state *)(*sc_reserved_ptr);
-> +	void *datap;
-> +	__u32 magic;
-> +	__u32 size;
-> +
-> +	/* Get magic number and check it. */
-> +	err = __get_user(magic, &state->head.magic);
-> +	err = __get_user(size, &state->head.size);
-> +	if (unlikely(err))
-> +		return err;
-> +
-> +	if (magic != RVV_MAGIC || size != rvv_sc_size)
-> +		return -EINVAL;
-> +
-> +	/* Copy everything of __sc_riscv_v_state except datap. */
-> +	err = __copy_from_user(&current->thread.vstate, &state->v_state,
-> +			       RISCV_V_STATE_DATAP);
-> +	if (unlikely(err))
-> +		return err;
-> +
-> +	/* Copy the pointer datap itself. */
-> +	err = __get_user(datap, &state->v_state.datap);
-> +	if (unlikely(err))
-> +		return err;
-> +
-> +
-> +	/* Copy the whole vector content from user space datap. */
-> +	err = __copy_from_user(current->thread.vstate.datap, datap, riscv_vsize);
-> +	if (unlikely(err))
-> +		return err;
-> +
-> +	vstate_restore(current, regs);
-> +
-> +	/* Move sc_reserved_ptr to point the next signal context frame. */
-> +	*sc_reserved_ptr += size;
-> +
-> +	return err;
-> +}
-> +
-> +static long save_v_state(struct pt_regs *regs, void **sc_reserved_free_ptr)
-> +{
-> +	/*
-> +	 * Put __sc_riscv_v_state to the user's signal context space pointed
-> +	 * by sc_reserved_free_ptr and the datap point the address right
-> +	 * after __sc_riscv_v_state.
-> +	 */
-> +	struct __sc_riscv_v_state __user *state = (struct __sc_riscv_v_state *)
-> +		(*sc_reserved_free_ptr);
-> +	void *datap = state + 1;
-> +	long err;
-> +
-> +	*sc_reserved_free_ptr += rvv_sc_size;
-> +
-> +	err = __put_user(RVV_MAGIC, &state->head.magic);
-> +	err = __put_user(rvv_sc_size, &state->head.size);
-
-Can we copy these markers *after* the actual context is succesfully 
-copied. What if it fails (user stack can't grow anymore etc), then we 
-leave this half cooked state on stack.
-
-Granted the process would most likely be killed anyways in such case.
-
-> +
-> +	vstate_save(current, regs);
-> +	/* Copy everything of vstate but datap. */
-> +	err = __copy_to_user(&state->v_state, &current->thread.vstate,
-> +			     RISCV_V_STATE_DATAP);
-> +	if (unlikely(err))
-> +		return err;
-> +
-> +	/* Copy the pointer datap itself. */
-> +	err = __put_user(datap, &state->v_state.datap);
-> +	if (unlikely(err))
-> +		return err;
-> +
-> +	/* Copy the whole vector content to user space datap. */
-> +	err = __copy_to_user(datap, current->thread.vstate.datap, riscv_vsize);
-> +
-> +	return err;
-> +}
-> +#else
-> +#define save_v_state(task, regs) (0)
-> +#define restore_v_state(task, regs) (0)
-> +#endif
-> +
->   static long restore_sigcontext(struct pt_regs *regs,
->   	struct sigcontext __user *sc)
->   {
->   	long err;
-> +	void *sc_reserved_ptr = sc->__reserved;
->   	/* sc_regs is structured the same as the start of pt_regs */
->   	err = __copy_from_user(regs, &sc->sc_regs, sizeof(sc->sc_regs));
->   	/* Restore the floating-point state. */
->   	if (has_fpu())
->   		err |= restore_fp_state(regs, &sc->sc_fpregs);
-> +
-> +	while (1 && !err) {
-> +		__u32 magic, size;
-> +		struct __riscv_ctx_hdr *head = (struct __riscv_ctx_hdr *)sc_reserved_ptr;
-> +
-> +		err |= __get_user(magic, &head->magic);
-> +		err |= __get_user(size, &head->size);
-> +		if (err)
-> +			goto done;
-> +
-> +		switch (magic) {
-> +		case 0:
-> +			if (size)
-> +				goto invalid;
-> +			goto done;
-> +		case RVV_MAGIC:
-> +			if (!has_vector())
-> +				goto invalid;
-> +			if (size != rvv_sc_size)
-> +				goto invalid;
-> +			err |= restore_v_state(regs, &sc_reserved_ptr);
-> +			break;
-
-See question below. Is this 2 pass header check due to Vector or for 
-some future extension ?
-
-> +		default:
-> +			goto invalid;
-> +		}
-> +	}
-> +done:
->   	return err;
-> +
-> +invalid:
-> +	return -EINVAL;
-> +}
-> +
-> +static size_t cal_rt_frame_size(void)
-
-> +{
-> +	struct rt_sigframe __user *frame;
-> +	static size_t frame_size;
-> +	size_t total_context_size = 0;
-> +	size_t sc_reserved_size = sizeof(frame->uc.uc_mcontext.__reserved);
-
-Perhaps nit-picking, but "sc_reserved_size" and such names are 
-confusing. Its ok to call the mcontext field __reserved but in rest of 
-code lets avoid reserved - plain sctxt or some such will suffice.
-
-> +
-> +	if (frame_size)
-> +		goto done;
-> +
-> +	frame_size = sizeof(*frame);
-> +
-> +	if (has_vector())
-> +		total_context_size += rvv_sc_size;
-> +	/* Preserved a __riscv_ctx_hdr for END signal context header. */
-> +	total_context_size += sizeof(struct __riscv_ctx_hdr);
-> +
-> +	if (total_context_size > sc_reserved_size)
-> +		frame_size += (total_context_size - sc_reserved_size);
-> +
-> +	frame_size = round_up(frame_size, 16);
-> +done:
-> +	return frame_size;
-
-This seems to be a one time computation, given we are checking a static 
-frame_size everytime, could we just calculate this once in 
-init_rt_signal_env() below in a now file scoped static variable ?
-
-> +
->   }
->   
->   SYSCALL_DEFINE0(rt_sigreturn)
-> @@ -103,13 +243,14 @@ SYSCALL_DEFINE0(rt_sigreturn)
->   	struct rt_sigframe __user *frame;
->   	struct task_struct *task;
->   	sigset_t set;
-> +	size_t frame_size = cal_rt_frame_size();
->   
->   	/* Always make any pending restarted system calls return -EINTR */
->   	current->restart_block.fn = do_no_restart_syscall;
->   
->   	frame = (struct rt_sigframe __user *)regs->sp;
->   
-> -	if (!access_ok(frame, sizeof(*frame)))
-> +	if (!access_ok(frame, frame_size))
->   		goto badframe;
->   
->   	if (__copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(set)))
-> @@ -142,11 +283,20 @@ static long setup_sigcontext(struct rt_sigframe __user *frame,
->   {
->   	struct sigcontext __user *sc = &frame->uc.uc_mcontext;
->   	long err;
-> +	void *sc_reserved_free_ptr = sc->__reserved;
-> +
->   	/* sc_regs is structured the same as the start of pt_regs */
->   	err = __copy_to_user(&sc->sc_regs, regs, sizeof(sc->sc_regs));
->   	/* Save the floating-point state. */
->   	if (has_fpu())
->   		err |= save_fp_state(regs, &sc->sc_fpregs);
-> +	/* Save the vector state. */
-> +	if (has_vector())
-> +		err |= save_v_state(regs, &sc_reserved_free_ptr);
-> +
-> +	/* Put END __riscv_ctx_hdr at the end. */
-> +	err = __put_user(END_MAGIC, &((struct __riscv_ctx_hdr *)sc_reserved_free_ptr)->magic);
-> +	err = __put_user(END_HDR_SIZE, &((struct __riscv_ctx_hdr *)sc_reserved_free_ptr)->size);
-
-I really don't understand the need for this trailing header stuff. Is 
-this due to variable sized vector or enginnering for a yet to be 
-invented future extension's state.
-But if so, won't we add a new ctx_hdr + magic for "foo" when that 
-happens. After all we were not doing this for existing FP stuff, granted 
-FP is all fixed size.
-
-For Vector: magic+size tuple should be enough to identify/locate the ctx 
-info.
-
-
->   	return err;
->   }
->   
-> @@ -178,9 +328,10 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
->   {
->   	struct rt_sigframe __user *frame;
->   	long err = 0;
-> +	size_t frame_size = cal_rt_frame_size();
->   
-> -	frame = get_sigframe(ksig, regs, sizeof(*frame));
-> -	if (!access_ok(frame, sizeof(*frame)))
-> +	frame = get_sigframe(ksig, regs, frame_size);
-> +	if (!access_ok(frame, frame_size))
->   		return -EFAULT;
->   
->   	err |= copy_siginfo_to_user(&frame->info, &ksig->info);
-> @@ -326,3 +477,9 @@ asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
->   	if (thread_info_flags & _TIF_NOTIFY_RESUME)
->   		resume_user_mode_work(regs);
->   }
-> +
-> +void init_rt_signal_env(void);
-> +void __init init_rt_signal_env(void)
-> +{
-> +	rvv_sc_size = sizeof(struct __sc_riscv_v_state) + riscv_vsize;
-
-See above, should be precompute the output of cal_rt_frame_size() here too.
+Thanks,
+Chao
+> 
+> Same to tail case.
+> 
+> > +
+> > +		if (lpage_start == lpage_end)
+> > +			return;
+> > +
+> > +		for (gfn = lpage_start + pages; gfn < lpage_end; gfn += pages)
+> > +			linfo_update_mixed(lpage_info_slot(gfn, slot, level),
+> > +					   false);
+> > +
+> > +		linfo_update_mixed(lpage_info_slot(lpage_end, slot, level),
+> > +				   mem_attr_is_mixed(kvm, slot, level, attr,
+> > +						     end, lpage_end + pages));
+> > +	}
+> > +}
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 02ad31f46dd7..4276ca73bd7b 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -12563,6 +12563,8 @@ static int kvm_alloc_memslot_metadata(struct kvm *kvm,
+> >  		if ((slot->base_gfn + npages) & (KVM_PAGES_PER_HPAGE(level) - 1))
+> >  			linfo[lpages - 1].disallow_lpage = 1;
+> >  		ugfn = slot->userspace_addr >> PAGE_SHIFT;
+> > +		if (kvm_slot_can_be_private(slot))
+> > +			ugfn |= slot->restricted_offset >> PAGE_SHIFT;
+> >  		/*
+> >  		 * If the gfn and userspace address are not aligned wrt each
+> >  		 * other, disable large page support for this slot.
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 4ce98fa0153c..6ce36065532c 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -2284,4 +2284,23 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
+> >  /* Max number of entries allowed for each kvm dirty ring */
+> >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> >
+> > +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> > +
+> > +#define KVM_MEM_ATTR_SHARED	0x0001
+> > +#define KVM_MEM_ATTR_PRIVATE	0x0002
+> > +
+> > +#ifdef __KVM_HAVE_ARCH_UPDATE_MEM_ATTR
+> > +void kvm_arch_update_mem_attr(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > +			      unsigned int attr, gfn_t start, gfn_t end);
+> > +#else
+> > +static inline void kvm_arch_update_mem_attr(struct kvm *kvm,
+> > +					    struct kvm_memory_slot *slot,
+> > +					    unsigned int attr,
+> > +					    gfn_t start, gfn_t end)
+> > +{
+> > +}
+> > +#endif
+> > +
+> > +#endif /* CONFIG_KVM_GENERIC_PRIVATE_MEM */
+> > +
+> >  #endif
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index fc3835826ace..13a37b4d9e97 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -939,7 +939,8 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+> >
+> >  #ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
+> >
+> > -static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
+> > +static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end,
+> > +				unsigned int attr)
+> >  {
+> >  	struct kvm_gfn_range gfn_range;
+> >  	struct kvm_memory_slot *slot;
+> > @@ -963,6 +964,7 @@ static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
+> >  			gfn_range.slot = slot;
+> >
+> >  			r |= kvm_unmap_gfn_range(kvm, &gfn_range);
+> > +			kvm_arch_update_mem_attr(kvm, slot, attr, start, end);
+> >  		}
+> >  	}
+> >
+> > @@ -970,7 +972,6 @@ static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
+> >  		kvm_flush_remote_tlbs(kvm);
+> >  }
+> >
+> > -#define KVM_MEM_ATTR_SHARED	0x0001
+> >  static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> >  				     bool is_private)
+> >  {
+> > @@ -979,6 +980,7 @@ static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> >  	void *entry;
+> >  	int idx;
+> >  	int r = 0;
+> > +	unsigned int attr;
+> >
+> >  	if (size == 0 || gpa + size < gpa)
+> >  		return -EINVAL;
+> > @@ -992,7 +994,13 @@ static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> >  	 * Guest memory defaults to private, kvm->mem_attr_array only stores
+> >  	 * shared memory.
+> >  	 */
+> > -	entry = is_private ? NULL : xa_mk_value(KVM_MEM_ATTR_SHARED);
+> > +	if (is_private) {
+> > +		attr = KVM_MEM_ATTR_PRIVATE;
+> > +		entry = NULL;
+> > +	} else {
+> > +		attr = KVM_MEM_ATTR_SHARED;
+> > +		entry = xa_mk_value(KVM_MEM_ATTR_SHARED);
+> > +	}
+> >
+> >  	idx = srcu_read_lock(&kvm->srcu);
+> >  	KVM_MMU_LOCK(kvm);
+> > @@ -1005,7 +1013,7 @@ static int kvm_vm_ioctl_set_mem_attr(struct kvm *kvm, gpa_t gpa, gpa_t size,
+> >  			goto err;
+> >  	}
+> >
+> > -	kvm_unmap_mem_range(kvm, start, end);
+> > +	kvm_unmap_mem_range(kvm, start, end, attr);
+> >
+> >  	goto ret;
+> >  err:
+> > --
+> > 2.25.1
+> >
