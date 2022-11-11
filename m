@@ -2,405 +2,400 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F9D6253C3
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Nov 2022 07:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D512B625559
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Nov 2022 09:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbiKKG1N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Nov 2022 01:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S232133AbiKKIcU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Nov 2022 03:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiKKG0q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Nov 2022 01:26:46 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11022025.outbound.protection.outlook.com [52.101.53.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA488BF47;
-        Thu, 10 Nov 2022 22:23:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dDL6YZLl0JrWEIS1KY8tinsMfJBC7LL6iy9Hh0J12kAMz3KOx3PYdBinorLPzbC23Nv8EG30+6hKhQsHPVGfDUnWfEX5yfT2V4zgqRhSy38TojV7ySqUDmilyxApqbPQ+AUHxebxSxlGMpLjImJQLStmjqp4a1kAbBM7ukPK2OwL8b4AwxwW6jhwLKYq/7s7St07UmjfyfxAXPR7qhbttDD9XUrigwGkjnhCawu+fWw/ny+2svjdj7qKUDoil0slqRkTTy6N03riL94dia3MBTc2Kwkt87kiFldZMm4TQ48cHdQ1XCOsxf3SzpIGzcJ/PGdH9nozP+kCimYZYzcyCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0vfRKktGtusAn2CuHkYy3SoKI+4YG9f3c1x8BjXPr9U=;
- b=Y3Up6zVbbaKNYW9CWyEJ7KyGIDNK8BGsvsFB/WjTh2ugqKj0m7VmsM3n4WIK2biK7Z8fUXL4F03aM9NPc7NkqtJ6VI1I8ss1SO4MtsjE0QnsHYY5BoJQtBmPil0Dl9YKAseeKHVoiUwIJhs4yWnw5r6AL4UbK2w8bcdus42Oi3EsKM+lbi0TBHqPJmIgv+vF1X5S8ENxhgmW3p378oereWbLeKUBqg1a52+TcRh9Sgcgke99xgErJAMLCw6QwaXKpofTICpSGLHReIRyJnIBt8r/T2QVQXyltn9svMxKn9pgYVwwWxhE/GWPdBRnMrYLcU51ErO7YXtBmDL12tYhHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0vfRKktGtusAn2CuHkYy3SoKI+4YG9f3c1x8BjXPr9U=;
- b=GAV3oE7v8Aap1vFNmCyDs19WaWsTlY7eEhckD0FfhImEhG2kXKwRoJ+iOdnzROAYWZcRKEFkMfDsJz3TGy5B9qSkfKK3SiKAQ+oAROaRtscPz0vt7pnP69vMpCwMAedpMcDxcFuSWN3CKgvfQGVQq0OTQglLOBVoW702zqXPVXA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
- by MW4PR21MB1857.namprd21.prod.outlook.com (2603:10b6:303:74::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5834.2; Fri, 11 Nov
- 2022 06:22:36 +0000
-Received: from DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::c3e3:a6ef:232c:299b]) by DM6PR21MB1370.namprd21.prod.outlook.com
- ([fe80::c3e3:a6ef:232c:299b%7]) with mapi id 15.20.5834.002; Fri, 11 Nov 2022
- 06:22:36 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Cc:     mikelley@microsoft.com
-Subject: [PATCH v2 12/12] PCI: hv: Enable PCI pass-thru devices in Confidential VMs
-Date:   Thu, 10 Nov 2022 22:21:41 -0800
-Message-Id: <1668147701-4583-13-git-send-email-mikelley@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
-References: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0329.namprd04.prod.outlook.com
- (2603:10b6:303:82::34) To DM6PR21MB1370.namprd21.prod.outlook.com
- (2603:10b6:5:16b::28)
+        with ESMTP id S232978AbiKKIcT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Nov 2022 03:32:19 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128CD73744;
+        Fri, 11 Nov 2022 00:32:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668155538; x=1699691538;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=IKVU9Q/fDJqTFbQbiTsRm7ednwn42qF/GjJlkMKg1z0=;
+  b=Y6sFNH1DDRHZb3WIKdL3N4jSZ2FX+m1QuW3mg3C1CZ/NECiNC36pA2eF
+   v3QlRctza6GpfMIT6ImPIZ+9D3qdaa9JOy20IYNR1wZ2f5rtlO4EfHog2
+   JWzkysbakjOaakll+7JES8bC7JRFfydM5vw+TmhXVcGiRuUhtWuHDZpx4
+   U4fCG43NBTY0laW7YsPp60W8bdMPLIb5P0fPvRzx0Tij4bxi+88y4Zu+I
+   GyUeC01vZRugLcnZ/1AKpIR1t0VEUXuEmRmjtJ3Uh5Vd+sIlETJ06npHj
+   BEC6m2A/U4YC6dKMMXC6UII2iqHZJGgBQ3/Da4GAxS3Yc5KWj/2YWrhB3
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309181801"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="309181801"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 00:32:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="615423370"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="615423370"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga006.jf.intel.com with ESMTP; 11 Nov 2022 00:32:05 -0800
+Date:   Fri, 11 Nov 2022 16:27:39 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 4/8] KVM: Use gfn instead of hva for mmu_notifier_retry
+Message-ID: <20221111082739.GA203765@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-5-chao.p.peng@linux.intel.com>
+ <Y21ZyTdIHSe4HLkU@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR21MB1370:EE_|MW4PR21MB1857:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1e3d493-6603-4beb-c515-08dac3ad202a
-X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L6dLEXvJhw3Hv+YTYtjwlO4FqoiUlslw/7fjhKItZ25HyixIzuqbyzp8HO7Qcv5NP0LWi3xRh+Ntytt4/AS1gT2wTZm6vKdR6vc8QNKAsE1MW+FreYOrUZ0PnSYWrvZlbvbZpSwdAZhXM/v6IOU3tdI93ttocIfVb7iyS0z6ioFgSc/IIoi0fsDwa7k8gQZ3aPEPAwQTN8o6Y7C/Q8O9RMsDi5TRXXx3eAkiqq6H8rs/bBIBwlWwMputLrZR/K6f+iMGB2I9tC8Q0JWv0s950e8zcC1MEfYKR1c81+w0aIQmmq3OigSOaeLJta6iYU81QDs1IfzvwQT7pWRUcK4Kqv2ePPegsGPnmywFmZhJRT+Bity1nR3wQVNBdNhr/g95xD54oPdrMe8gMcjxsrP1ZUsZkgbaL8eKBvWNpoL2e7JtddQiIe4lP8uGbyIZfsL94JTGYsV20PH+64HsAogSf3I2usftT/Q8uEKUtxkmq2CmCn4YWMGppxKZnVTdruTKO59J75X+4HqqqlmDOmLiU8ppWX7/9tvdxOfde0PcSYyUAYruLc4tfmMlJaWCQPPSXuRZC1HXL+5/6YLtGie1KIlvOCdK0rldp6oIqoGeRqjwvnuC3fnSB9IK+p5ZAAIlHcgi+tVF/5pHmdE2cxSQUPFrqs1I3SCUHDW+pcYNK+/QHX4aa7Uqj5DmR3ZDZxEc2ZOC4aZEy849StSgDs+bwLmRbqf3pau6S6e0DeFBFezztQw+89TGW0EbdNe5jniadf0hCGv8MfFmRCuk2UgY0KznI6xu3qNzNc843L5tvZLgITdanmKRnist5qX58N+XCoQJ1F0z9Ndgt9O97faHhnXdISypThIu0o/HuiNhMRA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(366004)(136003)(396003)(451199015)(83380400001)(52116002)(26005)(6666004)(6512007)(186003)(38100700002)(107886003)(2616005)(7406005)(2906002)(316002)(7416002)(6506007)(10290500003)(6486002)(66946007)(66476007)(5660300002)(966005)(8936002)(41300700001)(8676002)(4326008)(66556008)(478600001)(38350700002)(36756003)(86362001)(921005)(82960400001)(82950400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?t40nKXbEll/pv94uG4XiAhccctpehCFbCqcIMnI08ih7fWzKoIKLTtYjUURW?=
- =?us-ascii?Q?uX+uTZncQVd5JGEtEAiJF9aRsB8YOvqVht9ARCeFMsVeTM93/M4jtuu9gjtW?=
- =?us-ascii?Q?MLvJd8Hawkm8SOh8/rJQl3+ZrKheUH2Dcxk4yZnck8R3t3KB7w7UisukvgzP?=
- =?us-ascii?Q?tB38IT4oEPObntCcvfN/nO9Isu9EgWnKjNgLpDU5pC/euDMA5IrpGHu5KxCh?=
- =?us-ascii?Q?oyjuDkosIZJnFGgT/1OMroJK+yFRol23yYHWz6AybpvOhmDg/7arXYnxTyC/?=
- =?us-ascii?Q?HHTgN2CB3lDcQRo9MZ8gLQHZRTCJCfh0uq/IaKbW6ihdVW6o5TY2Ur6A2/oh?=
- =?us-ascii?Q?otUlXXZw9GTxT07/Pcpzr2FnrqMSZcnWYLVfzWPCP2By4N6r/B7/ai5Cv8HJ?=
- =?us-ascii?Q?SW8dmpILVaTOTkbUjKw4hp/dFr8zMESffkdIqz+iCF5SNGMrL3xorUXvQZvq?=
- =?us-ascii?Q?NDRKlnTN0Pu8VqO1139SMplvveKYxPQkDtjLadnZ8XtPsAd/KEHdDXccWhqa?=
- =?us-ascii?Q?A+iroEvWWAq7MLfJKfFcRk5ZDKHPOi7gw6ijsU92m9vGAA4nNGQXiSWN+NuU?=
- =?us-ascii?Q?MdqgZ5vRITTQnQAGYDDYgLl59wWSsPo8I8OYI4T0hUSMxuO9F+v65g1+9gCg?=
- =?us-ascii?Q?FxQS1M5AUsyIi2ucK9j0s7D7guSmRY7YuHto4wCCp2EKavba1vXE9Z1llbJK?=
- =?us-ascii?Q?6tZ6ZKIUJXGxHSRbFHXX2kRGiA2ZlPN14zHcs7SIxhSiXOfOpoTBGpmND4lS?=
- =?us-ascii?Q?+G8b++tz6kQMWNfSmVgeppX2VM8a82nJdanPtvRBiplGUM+tB14p0XAzV6Aq?=
- =?us-ascii?Q?NMBCX5t66YY9ZmQmLExYRq0NJiYGTIUxfCb7gGVo10HpwMZpw5l4PXaksN1i?=
- =?us-ascii?Q?SvHnms+V18njpkpEBAyxMpq7tl451xqVNW2LS2b9+U52fBSp5ujNW1NqzJH6?=
- =?us-ascii?Q?kxRpvBTSrkBX12effhPNwsWey2UBCnxmZLlLLpRkjwvYeH/9yaENSGsSSPmZ?=
- =?us-ascii?Q?g/Yj30Sesnt71pqNhDh0Nvbd8cwqMFJuKWDZ53+3Ij5YOOC7r+VZX8Mdt4fi?=
- =?us-ascii?Q?62lkontgtJCRM9WlM6+J9k9n+veCOL9vXeLfvAFx/zTXuxRs4Tq5Lso3Q+lw?=
- =?us-ascii?Q?jSu2AcLfUVReYUTkcAObVRqjUcP5MD5U2VYqnuUdVflYU8hhlmJbpQj+huMT?=
- =?us-ascii?Q?PTnT6xJO5RimagWf2ESiKpiklHalcLK7f/vPBbatJVSYTLBNvNAxx7C+9gjV?=
- =?us-ascii?Q?iFYXdtU/ep200CR3/OabH+62lrtQ255SYiseEkR0Y+wVlN5TWEo7HBtZqPHv?=
- =?us-ascii?Q?ZdXRyZhjrJI5BVzkCioc+YcEKIggMyrOjSNOdMM9fT4Enr6B7Ri5jKZj9Zq4?=
- =?us-ascii?Q?Am3hBnOCX/SKTAq1R+znLc+8leSZs96RWKpRoOaURwZK71rpa3kcvc8RLCV0?=
- =?us-ascii?Q?kddNDO/fdDNjl93taO0xV7n92dxtaQaOxCTC7k/ro2L/13ymHziG7dtJrMHG?=
- =?us-ascii?Q?7IIYCMlRJWL/C2qMsaSfivU/9BL7lRnQ2gWQuVdLNwZKVnK70mXG8lN9Tev0?=
- =?us-ascii?Q?S1U5BVXqxT8hZILu72tTOdyUJ1tfnYfiiPH+MIWikoFr1Gx7fqk43t50wRBg?=
- =?us-ascii?Q?Hg=3D=3D?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1e3d493-6603-4beb-c515-08dac3ad202a
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 06:22:36.4810
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PzwHSP8bHTjp0BSFZNcfnU14VY7geNXCsdnZdm4DoEWumVeLW6TaS9bxmb95rlIoiTsniDAMgo1P67arE/SfxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1857
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y21ZyTdIHSe4HLkU@google.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For PCI pass-thru devices in a Confidential VM, Hyper-V requires
-that PCI config space be accessed via hypercalls.  In normal VMs,
-config space accesses are trapped to the Hyper-V host and emulated.
-But in a confidential VM, the host can't access guest memory to
-decode the instruction for emulation, so an explicit hypercall must
-be used.
+On Thu, Nov 10, 2022 at 08:06:33PM +0000, Sean Christopherson wrote:
+> On Tue, Oct 25, 2022, Chao Peng wrote:
+> > @@ -715,15 +715,9 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+> >  	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+> >  }
+> >  
+> > -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> > -			      unsigned long end)
+> > +static inline
+> 
+> Don't tag static functions with "inline" unless they're in headers, in which case
+> the inline is effectively required.  In pretty much every scenario, the compiler
+> can do a better job of optimizing inline vs. non-inline, i.e. odds are very good
+> the compiler would inline this helper anyways, and if not, there would likely be
+> a good reason not to inline it.
 
-Update the PCI config space access functions to use the hypercalls
-when such use is indicated by Hyper-V flags.  Also, set the flag to
-allow the Hyper-V PCI driver to be loaded and used in a Confidential
-VM (a.k.a., "Isolation VM").  The driver has previously been hardened
-against a malicious Hyper-V host[1].
+Yep, I know the rationale behind, I made a mistake.
 
-[1] https://lore.kernel.org/all/20220511223207.3386-2-parri.andrea@gmail.com/
+> 
+> It'll be a moot point in this case (more below), but this would also reduce the
+> line length and avoid the wrap.
+> 
+> > void update_invalidate_range(struct kvm *kvm, gfn_t start,
+> > +							    gfn_t end)
+> 
+> I appreciate the effort to make this easier to read, but making such a big divergence
+> from the kernel's preferred formatting is often counter-productive, e.g. I blinked a
+> few times when first reading this code.
+> 
+> Again, moot point this time (still below ;-) ), but for future reference, better
+> options are to either let the line poke out or simply wrap early to get the
+> bundling of parameters that you want, e.g.
+> 
+>   static inline void update_invalidate_range(struct kvm *kvm, gfn_t start, gfn_t end)
+> 
+> or 
+> 
+>   static inline void update_invalidate_range(struct kvm *kvm,
+> 					     gfn_t start, gfn_t end)
 
-Co-developed-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
----
- drivers/hv/channel_mgmt.c           |   2 +-
- drivers/pci/controller/pci-hyperv.c | 168 ++++++++++++++++++++++--------------
- 2 files changed, 105 insertions(+), 65 deletions(-)
+Fully agreed.
 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 5b12040..c0f9ac2 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -67,7 +67,7 @@
- 	{ .dev_type = HV_PCIE,
- 	  HV_PCIE_GUID,
- 	  .perf_device = false,
--	  .allowed_in_isolated = false,
-+	  .allowed_in_isolated = true,
- 	},
- 
- 	/* Synthetic Frame Buffer */
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 09b40a1..6ce83e4 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -514,6 +514,7 @@ struct hv_pcibus_device {
- 
- 	/* Highest slot of child device with resources allocated */
- 	int wslot_res_allocated;
-+	bool use_calls; /* Use hypercalls to access mmio cfg space */
- 
- 	/* hypercall arg, must not cross page boundary */
- 	struct hv_retarget_device_interrupt retarget_msi_interrupt_params;
-@@ -1136,8 +1137,10 @@ static void hv_pci_write_mmio(struct device *dev, phys_addr_t gpa, int size, u32
- static void _hv_pcifront_read_config(struct hv_pci_dev *hpdev, int where,
- 				     int size, u32 *val)
- {
-+	struct hv_pcibus_device *hbus = hpdev->hbus;
-+	struct device *dev = &hbus->hdev->device;
-+	int offset = where + CFG_PAGE_OFFSET;
- 	unsigned long flags;
--	void __iomem *addr = hpdev->hbus->cfg_addr + CFG_PAGE_OFFSET + where;
- 
- 	/*
- 	 * If the attempt is to read the IDs or the ROM BAR, simulate that.
-@@ -1165,56 +1168,79 @@ static void _hv_pcifront_read_config(struct hv_pci_dev *hpdev, int where,
- 		 */
- 		*val = 0;
- 	} else if (where + size <= CFG_PAGE_SIZE) {
--		spin_lock_irqsave(&hpdev->hbus->config_lock, flags);
--		/* Choose the function to be read. (See comment above) */
--		writel(hpdev->desc.win_slot.slot, hpdev->hbus->cfg_addr);
--		/* Make sure the function was chosen before we start reading. */
--		mb();
--		/* Read from that function's config space. */
--		switch (size) {
--		case 1:
--			*val = readb(addr);
--			break;
--		case 2:
--			*val = readw(addr);
--			break;
--		default:
--			*val = readl(addr);
--			break;
-+
-+		spin_lock_irqsave(&hbus->config_lock, flags);
-+		if (hbus->use_calls) {
-+			phys_addr_t addr = hbus->mem_config->start + offset;
-+
-+			hv_pci_write_mmio(dev, hbus->mem_config->start, 4,
-+						hpdev->desc.win_slot.slot);
-+			hv_pci_read_mmio(dev, addr, size, val);
-+		} else {
-+			void __iomem *addr = hbus->cfg_addr + offset;
-+
-+			/* Choose the function to be read. (See comment above) */
-+			writel(hpdev->desc.win_slot.slot, hbus->cfg_addr);
-+			/* Make sure the function was chosen before reading. */
-+			mb();
-+			/* Read from that function's config space. */
-+			switch (size) {
-+			case 1:
-+				*val = readb(addr);
-+				break;
-+			case 2:
-+				*val = readw(addr);
-+				break;
-+			default:
-+				*val = readl(addr);
-+				break;
-+			}
-+			/*
-+			 * Make sure the read was done before we release the
-+			 * spinlock allowing consecutive reads/writes.
-+			 */
-+			mb();
- 		}
--		/*
--		 * Make sure the read was done before we release the spinlock
--		 * allowing consecutive reads/writes.
--		 */
--		mb();
--		spin_unlock_irqrestore(&hpdev->hbus->config_lock, flags);
-+		spin_unlock_irqrestore(&hbus->config_lock, flags);
- 	} else {
--		dev_err(&hpdev->hbus->hdev->device,
--			"Attempt to read beyond a function's config space.\n");
-+		dev_err(dev, "Attempt to read beyond a function's config space.\n");
- 	}
- }
- 
- static u16 hv_pcifront_get_vendor_id(struct hv_pci_dev *hpdev)
- {
-+	struct hv_pcibus_device *hbus = hpdev->hbus;
-+	struct device *dev = &hbus->hdev->device;
-+	u32 val;
- 	u16 ret;
- 	unsigned long flags;
--	void __iomem *addr = hpdev->hbus->cfg_addr + CFG_PAGE_OFFSET +
--			     PCI_VENDOR_ID;
- 
--	spin_lock_irqsave(&hpdev->hbus->config_lock, flags);
-+	spin_lock_irqsave(&hbus->config_lock, flags);
- 
--	/* Choose the function to be read. (See comment above) */
--	writel(hpdev->desc.win_slot.slot, hpdev->hbus->cfg_addr);
--	/* Make sure the function was chosen before we start reading. */
--	mb();
--	/* Read from that function's config space. */
--	ret = readw(addr);
--	/*
--	 * mb() is not required here, because the spin_unlock_irqrestore()
--	 * is a barrier.
--	 */
-+	if (hbus->use_calls) {
-+		phys_addr_t addr = hbus->mem_config->start +
-+					 CFG_PAGE_OFFSET + PCI_VENDOR_ID;
-+
-+		hv_pci_write_mmio(dev, hbus->mem_config->start, 4,
-+					hpdev->desc.win_slot.slot);
-+		hv_pci_read_mmio(dev, addr, 2, &val);
-+		ret = val;  /* Truncates to 16 bits */
-+	} else {
-+		void __iomem *addr = hbus->cfg_addr + CFG_PAGE_OFFSET +
-+					     PCI_VENDOR_ID;
-+		/* Choose the function to be read. (See comment above) */
-+		writel(hpdev->desc.win_slot.slot, hbus->cfg_addr);
-+		/* Make sure the function was chosen before we start reading. */
-+		mb();
-+		/* Read from that function's config space. */
-+		ret = readw(addr);
-+		/*
-+		 * mb() is not required here, because the
-+		 * spin_unlock_irqrestore() is a barrier.
-+		 */
-+	}
- 
--	spin_unlock_irqrestore(&hpdev->hbus->config_lock, flags);
-+	spin_unlock_irqrestore(&hbus->config_lock, flags);
- 
- 	return ret;
- }
-@@ -1229,39 +1255,51 @@ static u16 hv_pcifront_get_vendor_id(struct hv_pci_dev *hpdev)
- static void _hv_pcifront_write_config(struct hv_pci_dev *hpdev, int where,
- 				      int size, u32 val)
- {
-+	struct hv_pcibus_device *hbus = hpdev->hbus;
-+	struct device *dev = &hbus->hdev->device;
-+	int offset = where + CFG_PAGE_OFFSET;
- 	unsigned long flags;
--	void __iomem *addr = hpdev->hbus->cfg_addr + CFG_PAGE_OFFSET + where;
- 
- 	if (where >= PCI_SUBSYSTEM_VENDOR_ID &&
- 	    where + size <= PCI_CAPABILITY_LIST) {
- 		/* SSIDs and ROM BARs are read-only */
- 	} else if (where >= PCI_COMMAND && where + size <= CFG_PAGE_SIZE) {
--		spin_lock_irqsave(&hpdev->hbus->config_lock, flags);
--		/* Choose the function to be written. (See comment above) */
--		writel(hpdev->desc.win_slot.slot, hpdev->hbus->cfg_addr);
--		/* Make sure the function was chosen before we start writing. */
--		wmb();
--		/* Write to that function's config space. */
--		switch (size) {
--		case 1:
--			writeb(val, addr);
--			break;
--		case 2:
--			writew(val, addr);
--			break;
--		default:
--			writel(val, addr);
--			break;
-+		spin_lock_irqsave(&hbus->config_lock, flags);
-+
-+		if (hbus->use_calls) {
-+			phys_addr_t addr = hbus->mem_config->start + offset;
-+
-+			hv_pci_write_mmio(dev, hbus->mem_config->start, 4,
-+						hpdev->desc.win_slot.slot);
-+			hv_pci_write_mmio(dev, addr, size, val);
-+		} else {
-+			void __iomem *addr = hbus->cfg_addr + offset;
-+
-+			/* Choose the function to write. (See comment above) */
-+			writel(hpdev->desc.win_slot.slot, hbus->cfg_addr);
-+			/* Make sure the function was chosen before writing. */
-+			wmb();
-+			/* Write to that function's config space. */
-+			switch (size) {
-+			case 1:
-+				writeb(val, addr);
-+				break;
-+			case 2:
-+				writew(val, addr);
-+				break;
-+			default:
-+				writel(val, addr);
-+				break;
-+			}
-+			/*
-+			 * Make sure the write was done before we release the
-+			 * spinlock allowing consecutive reads/writes.
-+			 */
-+			mb();
- 		}
--		/*
--		 * Make sure the write was done before we release the spinlock
--		 * allowing consecutive reads/writes.
--		 */
--		mb();
--		spin_unlock_irqrestore(&hpdev->hbus->config_lock, flags);
-+		spin_unlock_irqrestore(&hbus->config_lock, flags);
- 	} else {
--		dev_err(&hpdev->hbus->hdev->device,
--			"Attempt to write beyond a function's config space.\n");
-+		dev_err(dev, "Attempt to write beyond a function's config space.\n");
- 	}
- }
- 
-@@ -3580,6 +3618,7 @@ static int hv_pci_probe(struct hv_device *hdev,
- 	hbus->bridge->domain_nr = dom;
- #ifdef CONFIG_X86
- 	hbus->sysdata.domain = dom;
-+	hbus->use_calls = !!(ms_hyperv.hints & HV_X64_USE_MMIO_HYPERCALLS);
- #elif defined(CONFIG_ARM64)
- 	/*
- 	 * Set the PCI bus parent to be the corresponding VMbus
-@@ -3589,6 +3628,7 @@ static int hv_pci_probe(struct hv_device *hdev,
- 	 * information to devices created on the bus.
- 	 */
- 	hbus->sysdata.parent = hdev->device.parent;
-+	hbus->use_calls = false;
- #endif
- 
- 	hbus->hdev = hdev;
--- 
-1.8.3.1
+> 
+> >  {
+> > -	/*
+> > -	 * The count increase must become visible at unlock time as no
+> > -	 * spte can be established without taking the mmu_lock and
+> > -	 * count is also read inside the mmu_lock critical section.
+> > -	 */
+> > -	kvm->mmu_invalidate_in_progress++;
+> >  	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> >  		kvm->mmu_invalidate_range_start = start;
+> >  		kvm->mmu_invalidate_range_end = end;
+> > @@ -744,6 +738,28 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> >  	}
+> >  }
+> >  
+> > +static void mark_invalidate_in_progress(struct kvm *kvm, gfn_t start, gfn_t end)
+> 
+> Splitting the helpers this way yields a weird API overall, e.g. it's possible
+> (common, actually) to have an "end" without a "begin".
+> 
+> Taking the range in the "end" is also dangerous/misleading/imbalanced, because _if_
+> there are multiple ranges in a batch, each range would need to be unwound
+> independently, e.g. the invocation of the "end" helper in
+> kvm_mmu_notifier_invalidate_range_end() is flat out wrong, it just doesn't cause
+> problems because KVM doesn't (currently) try to unwind regions (and probably never
+> will, but that's beside the point).
 
+I actually also don't feel good with existing code (taking range in the
+"start" and "end") but didn't go further to find a better solution.
+
+> 
+> Rather than shunt what is effectively the "begin" into a separate helper, provide
+> three separate APIs, e.g. begin, range_add, end.  That way, begin+end don't take a
+> range and thus are symmetrical, always paired, and can't screw up unwinding since
+> they don't have a range to unwind.
+
+This looks much better to me.
+
+> 
+> It'll require three calls in every case, but that's not the end of the world since
+> none of these flows are super hot paths.
+> 
+> > +{
+> > +	/*
+> > +	 * The count increase must become visible at unlock time as no
+> > +	 * spte can be established without taking the mmu_lock and
+> > +	 * count is also read inside the mmu_lock critical section.
+> > +	 */
+> > +	kvm->mmu_invalidate_in_progress++;
+> 
+> This should invalidate (ha!) mmu_invalidate_range_{start,end}, and then WARN in
+> mmu_invalidate_retry() if the range isn't valid.  And the "add" helper should
+> WARN if mmu_invalidate_in_progress == 0.
+> 
+> > +}
+> > +
+> > +static bool kvm_mmu_handle_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> 
+> "handle" is waaaay too generic.  Just match kvm_unmap_gfn_range() and call it
+> kvm_mmu_unmap_gfn_range().  This is a local function so it's unlikely to collide
+> with arch code, now or in the future.
+
+Agreed.
+
+> 
+> > +{
+> > +	update_invalidate_range(kvm, range->start, range->end);
+> > +	return kvm_unmap_gfn_range(kvm, range);
+> > +}
+> 
+> Overall, this?  Compile tested only...
+
+Thanks!
+Chao
+> 
+> ---
+>  arch/x86/kvm/mmu/mmu.c   |  8 +++++---
+>  include/linux/kvm_host.h | 33 +++++++++++++++++++++------------
+>  virt/kvm/kvm_main.c      | 30 +++++++++++++++++++++---------
+>  3 files changed, 47 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 93c389eaf471..d4b373e3e524 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4259,7 +4259,7 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+>  		return true;
+>  
+>  	return fault->slot &&
+> -	       mmu_invalidate_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
+> +	       mmu_invalidate_retry_gfn(vcpu->kvm, mmu_seq, fault->gfn);
+>  }
+>  
+>  static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+> @@ -6098,7 +6098,9 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+>  
+>  	write_lock(&kvm->mmu_lock);
+>  
+> -	kvm_mmu_invalidate_begin(kvm, gfn_start, gfn_end);
+> +	kvm_mmu_invalidate_begin(kvm);
+> +
+> +	kvm_mmu_invalidate_range_add(kvm, gfn_start, gfn_end);
+>  
+>  	flush = kvm_rmap_zap_gfn_range(kvm, gfn_start, gfn_end);
+>  
+> @@ -6112,7 +6114,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+>  		kvm_flush_remote_tlbs_with_address(kvm, gfn_start,
+>  						   gfn_end - gfn_start);
+>  
+> -	kvm_mmu_invalidate_end(kvm, gfn_start, gfn_end);
+> +	kvm_mmu_invalidate_end(kvm);
+>  
+>  	write_unlock(&kvm->mmu_lock);
+>  }
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index e6e66c5e56f2..29aa6d6827cc 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -778,8 +778,8 @@ struct kvm {
+>  	struct mmu_notifier mmu_notifier;
+>  	unsigned long mmu_invalidate_seq;
+>  	long mmu_invalidate_in_progress;
+> -	unsigned long mmu_invalidate_range_start;
+> -	unsigned long mmu_invalidate_range_end;
+> +	gfn_t mmu_invalidate_range_start;
+> +	gfn_t mmu_invalidate_range_end;
+>  #endif
+>  	struct list_head devices;
+>  	u64 manual_dirty_log_protect;
+> @@ -1378,10 +1378,9 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
+>  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+>  #endif
+>  
+> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> -			      unsigned long end);
+> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
+> -			    unsigned long end);
+> +void kvm_mmu_invalidate_begin(struct kvm *kvm);
+> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end);
+> +void kvm_mmu_invalidate_end(struct kvm *kvm);
+>  
+>  long kvm_arch_dev_ioctl(struct file *filp,
+>  			unsigned int ioctl, unsigned long arg);
+> @@ -1952,9 +1951,9 @@ static inline int mmu_invalidate_retry(struct kvm *kvm, unsigned long mmu_seq)
+>  	return 0;
+>  }
+>  
+> -static inline int mmu_invalidate_retry_hva(struct kvm *kvm,
+> +static inline int mmu_invalidate_retry_gfn(struct kvm *kvm,
+>  					   unsigned long mmu_seq,
+> -					   unsigned long hva)
+> +					   gfn_t gfn)
+>  {
+>  	lockdep_assert_held(&kvm->mmu_lock);
+>  	/*
+> @@ -1963,10 +1962,20 @@ static inline int mmu_invalidate_retry_hva(struct kvm *kvm,
+>  	 * that might be being invalidated. Note that it may include some false
+>  	 * positives, due to shortcuts when handing concurrent invalidations.
+>  	 */
+> -	if (unlikely(kvm->mmu_invalidate_in_progress) &&
+> -	    hva >= kvm->mmu_invalidate_range_start &&
+> -	    hva < kvm->mmu_invalidate_range_end)
+> -		return 1;
+> +	if (unlikely(kvm->mmu_invalidate_in_progress)) {
+> +		/*
+> +		 * Dropping mmu_lock after bumping mmu_invalidate_in_progress
+> +		 * but before updating the range is a KVM bug.
+> +		 */
+> +		if (WARN_ON_ONCE(kvm->mmu_invalidate_range_start == INVALID_GPA ||
+> +				 kvm->mmu_invalidate_range_end == INVALID_GPA))
+> +			return 1;
+> +
+> +		if (gfn >= kvm->mmu_invalidate_range_start &&
+> +		    gfn < kvm->mmu_invalidate_range_end)
+> +			return 1;
+> +	}
+> +
+>  	if (kvm->mmu_invalidate_seq != mmu_seq)
+>  		return 1;
+>  	return 0;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 43bbe4fde078..e9e03b979f77 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -540,9 +540,7 @@ static void kvm_mmu_notifier_invalidate_range(struct mmu_notifier *mn,
+>  
+>  typedef bool (*hva_handler_t)(struct kvm *kvm, struct kvm_gfn_range *range);
+>  
+> -typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
+> -			     unsigned long end);
+> -
+> +typedef void (*on_lock_fn_t)(struct kvm *kvm);
+>  typedef void (*on_unlock_fn_t)(struct kvm *kvm);
+>  
+>  struct kvm_hva_range {
+> @@ -628,7 +626,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  				locked = true;
+>  				KVM_MMU_LOCK(kvm);
+>  				if (!IS_KVM_NULL_FN(range->on_lock))
+> -					range->on_lock(kvm, range->start, range->end);
+> +					range->on_lock(kvm);
+> +
+>  				if (IS_KVM_NULL_FN(range->handler))
+>  					break;
+>  			}
+> @@ -715,8 +714,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+>  	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+>  }
+>  
+> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+> -			      unsigned long end)
+> +void kvm_mmu_invalidate_begin(struct kvm *kvm)
+>  {
+>  	/*
+>  	 * The count increase must become visible at unlock time as no
+> @@ -724,6 +722,15 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+>  	 * count is also read inside the mmu_lock critical section.
+>  	 */
+>  	kvm->mmu_invalidate_in_progress++;
+> +
+> +	kvm->mmu_invalidate_range_start = INVALID_GPA;
+> +	kvm->mmu_invalidate_range_end = INVALID_GPA;
+> +}
+> +
+> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
+> +{
+> +	WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
+> +
+>  	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+>  		kvm->mmu_invalidate_range_start = start;
+>  		kvm->mmu_invalidate_range_end = end;
+> @@ -744,6 +751,12 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
+>  	}
+>  }
+>  
+> +static bool kvm_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> +{
+> +	kvm_mmu_invalidate_range_add(kvm, range->start, range->end);
+> +	return kvm_unmap_gfn_range(kvm, range);
+> +}
+> +
+>  static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  					const struct mmu_notifier_range *range)
+>  {
+> @@ -752,7 +765,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  		.start		= range->start,
+>  		.end		= range->end,
+>  		.pte		= __pte(0),
+> -		.handler	= kvm_unmap_gfn_range,
+> +		.handler	= kvm_mmu_unmap_gfn_range,
+>  		.on_lock	= kvm_mmu_invalidate_begin,
+>  		.on_unlock	= kvm_arch_guest_memory_reclaimed,
+>  		.flush_on_ret	= true,
+> @@ -791,8 +804,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  	return 0;
+>  }
+>  
+> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
+> -			    unsigned long end)
+> +void kvm_mmu_invalidate_end(struct kvm *kvm)
+>  {
+>  	/*
+>  	 * This sequence increase will notify the kvm page fault that
+> 
+> base-commit: d663b8a285986072428a6a145e5994bc275df994
+> -- 
+> 
