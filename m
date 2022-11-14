@@ -2,76 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E906283DA
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Nov 2022 16:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A516284D6
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Nov 2022 17:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236339AbiKNP3O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Nov 2022 10:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S237250AbiKNQRI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Nov 2022 11:17:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236934AbiKNP2z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Nov 2022 10:28:55 -0500
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A79E09C;
-        Mon, 14 Nov 2022 07:28:52 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id BD4962B067C3;
-        Mon, 14 Nov 2022 10:28:48 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 14 Nov 2022 10:28:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668439728; x=1668446928; bh=Nk
-        bbGytzJ7I7fdZjJ8Fl0BV2oDQacMuRT8wrkqNypwg=; b=L+fg9psCjGWR+Q4jar
-        Mh8WPN0CCVKtE8QULFZl/REBBGfEYLOoG5tTfwzN2fLvRfihDZ0CUPaHxOTUYHgN
-        +f0XudZX5n2uU9Zk262NyzcpFGRRDtJoWAoc8JwvaQmfWt8ENHQA6z/bl7D7zv1j
-        stjmAjSQgumSVaN7IVmX7VjTeL7anz0EPhVYEJbMwNJF0wgd5r6RGPz80nDeGRIS
-        5U9ySXNkmdE/w/yBigY3Rx3yFbACIc4cb0hBrdw/YOLobVtkqXvHu1Wc+/Tc+Mo0
-        TsAi0HYkU2U+JWkiZhU99J/Rd1WejZwmC3+i8aR3e2dYkVY3CF08l1y9hbmQUXj5
-        XQoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668439728; x=1668446928; bh=NkbbGytzJ7I7fdZjJ8Fl0BV2oDQa
-        cMuRT8wrkqNypwg=; b=OSToxW/AKRZaXNJ4BEd/AfCajCfbDqN1unwhNaXMlb9t
-        gBO67tNkQ7mqXA1AQ+PhqQadLiKZ6cu5xEbfTKv1UtTrVeWL9sP4ytoewiuSj1Ks
-        BBC694bRwD2HHIJeQSaeEBV2jt9gSr7nEGve1a7AVzb3q2yf7pOa1kMcencyzD/z
-        3DFaSyJ7bmfdtINjvmK8PGAsAt9Yq9t5XdVVz6oLDmHHq+3tD+atDSuLlkEUfNWG
-        r0CU0ehV3Oq8cdxwsBSBfEkWuWaYR8G1HRnSlk1MucqsgCqrtCknz01vR9JGWymU
-        ec23kvRXthssYr0nlcCFXMk42bb8tf09b03GWaO3aQ==
-X-ME-Sender: <xms:r15yY_0QRYhyAkn-aGlVslxWDhm_9bvHMBd6L_bA6_qmkRguiYaqfg>
-    <xme:r15yY-Gl3WluqhzR5HczYZyXS396xm8TKAb-aw0uzyy_Lwjlq_FFDx78c9GcSLxVg
-    omFr3Xg_KAP38qJKcY>
-X-ME-Received: <xmr:r15yY_4eNDfu6njZp1k19j2OAE3egUL8KFpHjFGbrTkXA6fmmfh5gR4fdxZPNA5MVmYq0A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdehtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:r15yY03SFHC1V2ev4RxYj9TRgPZ9wbV1HZ2kMPfVye6Ouoozly-5pA>
-    <xmx:r15yYyF9Dk-M3xacDgcx9XiIc2UyNRI_n1wX8zQbg2MGr7E4GWvUYA>
-    <xmx:r15yY1-J6Sa29ay92N9akyCSYEV3nNXagqOnIPGeHpRBz_8zvlV44w>
-    <xmx:sF5yY3QIa2TGTJD3XJpjfYjCXVPw48yakbN9YPL0_2IRk6C7cvZVbImWW3U>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Nov 2022 10:28:46 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 18B2A109875; Mon, 14 Nov 2022 18:28:43 +0300 (+03)
-Date:   Mon, 14 Nov 2022 18:28:43 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Michael Roth <michael.roth@amd.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        with ESMTP id S237415AbiKNQQ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Nov 2022 11:16:58 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788B32ED6D
+        for <linux-arch@vger.kernel.org>; Mon, 14 Nov 2022 08:16:49 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id k8so19208904wrh.1
+        for <linux-arch@vger.kernel.org>; Mon, 14 Nov 2022 08:16:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o2wttqJnXSnC6uZPwQbYPo9kiCshXn3+hg9VUqJAS7M=;
+        b=AS14hnGGiqK/73Br6q4ctHEmYxSJLtmg4E6RwnYAOOonyG/OWiunyXCsv7l0YMbtxk
+         FFiLStmuVhfqOD4nRXePmg33rDgkhxfEKBse9x0PAKsiyCQO1+x208lVfXsnwgKfWyS1
+         HhIBvVEFz+mGT3Qdx3QkEcIfFLEiHz2BSWcMpcz2/z43xy9PA/QS5W2OnbWjoBne6CK+
+         hql4JFuXceWIKP+O34L+ElNlZzKoe2HGANi6KfdHUujdmLGCS2aMr7ouKbsDBe96/3We
+         b0C4ESmCPIstXLjLoytDuMus1COG6HNXX6U+iGPIoLn2zVZCzctbKN2u1+jx8P8GSE1z
+         sSMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=o2wttqJnXSnC6uZPwQbYPo9kiCshXn3+hg9VUqJAS7M=;
+        b=n1I8YjpqaEHCshm7dfq8JdVOtBWxQ/0tVCGifj/YKn5inKRqf3GjY95M9Tvhund6v4
+         TwqGNxwCCQMvukio4ntlp9baap/Q15mHT3+euIAINEoNdp87NB8aW/8Zds8Fbez6vJOA
+         2cqA57vyPuCjCG2jE4sJ+iMysFob3RXk1jTGOOfQrZTnzDjGNAs9JeEVFgmwJwYZdj4P
+         5CJdPKIJRf5RHg7Jr9E5peE/ogceZqJmFk/8DLfdsa1ddzf2+7idMk/v9qmuOF0a3S0C
+         JSA5FX0AACVPivqodbHbFKoX14Q9oLEMVBl59+S1nHvwubFW+i4sTbpt7Wu8S0IBHu8I
+         W9mA==
+X-Gm-Message-State: ANoB5pnNEw3Q12LDXqyvGjn9TK0KfbMMo89IAFV0MbW9VJ+I6wj3bbmb
+        5plgtNfC5ar247oiRcEpsu9uBQ==
+X-Google-Smtp-Source: AA0mqf7ZKNStJWa0mWZO3bJ4kIF1ETNlGvcQZphUqWfvliInpXUyj1tpislQW3IoJFdPrnY5nyeH8Q==
+X-Received: by 2002:adf:fac3:0:b0:22e:244d:687a with SMTP id a3-20020adffac3000000b0022e244d687amr8045877wrs.82.1668442607847;
+        Mon, 14 Nov 2022 08:16:47 -0800 (PST)
+Received: from zen.linaroharston ([185.81.254.11])
+        by smtp.gmail.com with ESMTPSA id n18-20020a7bcbd2000000b003cf9bf5208esm18044922wmi.19.2022.11.14.08.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 08:16:46 -0800 (PST)
+Received: from zen (localhost [127.0.0.1])
+        by zen.linaroharston (Postfix) with ESMTP id 9F2D91FFB7;
+        Mon, 14 Nov 2022 16:16:45 +0000 (GMT)
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-3-chao.p.peng@linux.intel.com>
+User-agent: mu4e 1.9.2; emacs 28.2.50
+From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -88,6 +78,7 @@ Cc:     Michael Roth <michael.roth@amd.com>,
         Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
         Steven Price <steven.price@arm.com>,
         "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Vishal Annapurve <vannapurve@google.com>,
         Yu Zhang <yu.c.zhang@linux.intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -95,91 +86,241 @@ Cc:     Michael Roth <michael.roth@amd.com>,
         ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
         ddutile@redhat.com, dhildenb@redhat.com,
         Quentin Perret <qperret@google.com>, tabba@google.com,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221114152843.ylxe4dis254vrj5u@box.shutemov.name>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221031174738.fklhlia5fmaiinpe@amd.com>
- <20221101113729.GA4015495@chaop.bj.intel.com>
- <20221101151944.rhpav47pdulsew7l@amd.com>
- <20a11042-2cfb-8f42-9d80-6672e155ca2c@suse.cz>
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 2/8] KVM: Extend the memslot to support fd-based
+ private memory
+Date:   Mon, 14 Nov 2022 16:04:59 +0000
+In-reply-to: <20221025151344.3784230-3-chao.p.peng@linux.intel.com>
+Message-ID: <877czxbjf6.fsf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20a11042-2cfb-8f42-9d80-6672e155ca2c@suse.cz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 03:02:37PM +0100, Vlastimil Babka wrote:
-> On 11/1/22 16:19, Michael Roth wrote:
-> > On Tue, Nov 01, 2022 at 07:37:29PM +0800, Chao Peng wrote:
-> >> > 
-> >> >   1) restoring kernel directmap:
-> >> > 
-> >> >      Currently SNP (and I believe TDX) need to either split or remove kernel
-> >> >      direct mappings for restricted PFNs, since there is no guarantee that
-> >> >      other PFNs within a 2MB range won't be used for non-restricted
-> >> >      (which will cause an RMP #PF in the case of SNP since the 2MB
-> >> >      mapping overlaps with guest-owned pages)
-> >> 
-> >> Has the splitting and restoring been a well-discussed direction? I'm
-> >> just curious whether there is other options to solve this issue.
-> > 
-> > For SNP it's been discussed for quite some time, and either splitting or
-> > removing private entries from directmap are the well-discussed way I'm
-> > aware of to avoid RMP violations due to some other kernel process using
-> > a 2MB mapping to access shared memory if there are private pages that
-> > happen to be within that range.
-> > 
-> > In both cases the issue of how to restore directmap as 2M becomes a
-> > problem.
-> > 
-> > I was also under the impression TDX had similar requirements. If so,
-> > do you know what the plan is for handling this for TDX?
-> > 
-> > There are also 2 potential alternatives I'm aware of, but these haven't
-> > been discussed in much detail AFAIK:
-> > 
-> > a) Ensure confidential guests are backed by 2MB pages. shmem has a way to
-> >    request 2MB THP pages, but I'm not sure how reliably we can guarantee
-> >    that enough THPs are available, so if we went that route we'd probably
-> >    be better off requiring the use of hugetlbfs as the backing store. But
-> >    obviously that's a bit limiting and it would be nice to have the option
-> >    of using normal pages as well. One nice thing with invalidation
-> >    scheme proposed here is that this would "Just Work" if implement
-> >    hugetlbfs support, so an admin that doesn't want any directmap
-> >    splitting has this option available, otherwise it's done as a
-> >    best-effort.
-> > 
-> > b) Implement general support for restoring directmap as 2M even when
-> >    subpages might be in use by other kernel threads. This would be the
-> >    most flexible approach since it requires no special handling during
-> >    invalidations, but I think it's only possible if all the CPA
-> >    attributes for the 2M range are the same at the time the mapping is
-> >    restored/unsplit, so some potential locking issues there and still
-> >    chance for splitting directmap over time.
-> 
-> I've been hoping that
-> 
-> c) using a mechanism such as [1] [2] where the goal is to group together
-> these small allocations that need to increase directmap granularity so
-> maximum number of large mappings are preserved.
 
-As I mentioned in the other thread the restricted memfd can be backed by
-secretmem instead of plain memfd. It already handles directmap with care.
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-But I don't think it has to be part of initial restricted memfd
-implementation. It is SEV-specific requirement and AMD folks can extend
-implementation as needed later.
+> In memory encryption usage, guest memory may be encrypted with special
+> key and can be accessed only by the guest itself. We call such memory
+> private memory. It's valueless and sometimes can cause problem to allow
+> userspace to access guest private memory. This new KVM memslot extension
+> allows guest private memory being provided though a restrictedmem
+> backed file descriptor(fd) and userspace is restricted to access the
+> bookmarked memory in the fd.
+>
+<snip>
+> To make code maintenance easy, internally we use a binary compatible
+> alias struct kvm_user_mem_region to handle both the normal and the
+> '_ext' variants.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 0d5d4419139a..f1ae45c10c94 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -103,6 +103,33 @@ struct kvm_userspace_memory_region {
+>  	__u64 userspace_addr; /* start of the userspace allocated memory */
+>  };
+>=20=20
+> +struct kvm_userspace_memory_region_ext {
+> +	struct kvm_userspace_memory_region region;
+> +	__u64 restricted_offset;
+> +	__u32 restricted_fd;
+> +	__u32 pad1;
+> +	__u64 pad2[14];
+> +};
+> +
+> +#ifdef __KERNEL__
+> +/*
+> + * kvm_user_mem_region is a kernel-only alias of kvm_userspace_memory_re=
+gion_ext
+> + * that "unpacks" kvm_userspace_memory_region so that KVM can directly a=
+ccess
+> + * all fields from the top-level "extended" region.
+> + */
+> +struct kvm_user_mem_region {
+> +	__u32 slot;
+> +	__u32 flags;
+> +	__u64 guest_phys_addr;
+> +	__u64 memory_size;
+> +	__u64 userspace_addr;
+> +	__u64 restricted_offset;
+> +	__u32 restricted_fd;
+> +	__u32 pad1;
+> +	__u64 pad2[14];
+> +};
+> +#endif
+
+I'm not sure I buy the argument this makes the code maintenance easier
+because you now have multiple places to update if you extend the field.
+Was this simply to avoid changing:
+
+  foo->slot to foo->region.slot
+
+in the underlying code?
+
+> +
+>  /*
+>   * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for usersp=
+ace,
+>   * other bits are reserved for kvm internal use which are defined in
+> @@ -110,6 +137,7 @@ struct kvm_userspace_memory_region {
+>   */
+>  #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
+>  #define KVM_MEM_READONLY	(1UL << 1)
+> +#define KVM_MEM_PRIVATE		(1UL << 2)
+>=20=20
+>  /* for KVM_IRQ_LINE */
+>  struct kvm_irq_level {
+> @@ -1178,6 +1206,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_S390_ZPCI_OP 221
+>  #define KVM_CAP_S390_CPU_TOPOLOGY 222
+>  #define KVM_CAP_DIRTY_LOG_RING_ACQ_REL 223
+> +#define KVM_CAP_PRIVATE_MEM 224
+>=20=20
+>  #ifdef KVM_CAP_IRQ_ROUTING
+>=20=20
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index 800f9470e36b..9ff164c7e0cc 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -86,3 +86,6 @@ config KVM_XFER_TO_GUEST_WORK
+>=20=20
+>  config HAVE_KVM_PM_NOTIFIER
+>         bool
+> +
+> +config HAVE_KVM_RESTRICTED_MEM
+> +       bool
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index e30f1b4ecfa5..8dace78a0278 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1526,7 +1526,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+>  	}
+>  }
+>=20=20
+> -static int check_memory_region_flags(const struct kvm_userspace_memory_r=
+egion *mem)
+> +static int check_memory_region_flags(const struct kvm_user_mem_region *m=
+em)
+>  {
+>  	u32 valid_flags =3D KVM_MEM_LOG_DIRTY_PAGES;
+>=20=20
+> @@ -1920,7 +1920,7 @@ static bool kvm_check_memslot_overlap(struct kvm_me=
+mslots *slots, int id,
+>   * Must be called holding kvm->slots_lock for write.
+>   */
+>  int __kvm_set_memory_region(struct kvm *kvm,
+> -			    const struct kvm_userspace_memory_region *mem)
+> +			    const struct kvm_user_mem_region *mem)
+>  {
+>  	struct kvm_memory_slot *old, *new;
+>  	struct kvm_memslots *slots;
+> @@ -2024,7 +2024,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>  EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
+>=20=20
+>  int kvm_set_memory_region(struct kvm *kvm,
+> -			  const struct kvm_userspace_memory_region *mem)
+> +			  const struct kvm_user_mem_region *mem)
+>  {
+>  	int r;
+>=20=20
+> @@ -2036,7 +2036,7 @@ int kvm_set_memory_region(struct kvm *kvm,
+>  EXPORT_SYMBOL_GPL(kvm_set_memory_region);
+>=20=20
+>  static int kvm_vm_ioctl_set_memory_region(struct kvm *kvm,
+> -					  struct kvm_userspace_memory_region *mem)
+> +					  struct kvm_user_mem_region *mem)
+>  {
+>  	if ((u16)mem->slot >=3D KVM_USER_MEM_SLOTS)
+>  		return -EINVAL;
+> @@ -4627,6 +4627,33 @@ static int kvm_vm_ioctl_get_stats_fd(struct kvm *k=
+vm)
+>  	return fd;
+>  }
+>=20=20
+> +#define SANITY_CHECK_MEM_REGION_FIELD(field)					\
+> +do {										\
+> +	BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=3D		\
+> +		     offsetof(struct kvm_userspace_memory_region, field));	\
+> +	BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=3D		\
+> +		     sizeof_field(struct kvm_userspace_memory_region, field));	\
+> +} while (0)
+> +
+> +#define SANITY_CHECK_MEM_REGION_EXT_FIELD(field)					\
+> +do {											\
+> +	BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=3D			\
+> +		     offsetof(struct kvm_userspace_memory_region_ext, field));		\
+> +	BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=3D			\
+> +		     sizeof_field(struct kvm_userspace_memory_region_ext, field));	\
+> +} while (0)
+> +
+> +static void kvm_sanity_check_user_mem_region_alias(void)
+> +{
+> +	SANITY_CHECK_MEM_REGION_FIELD(slot);
+> +	SANITY_CHECK_MEM_REGION_FIELD(flags);
+> +	SANITY_CHECK_MEM_REGION_FIELD(guest_phys_addr);
+> +	SANITY_CHECK_MEM_REGION_FIELD(memory_size);
+> +	SANITY_CHECK_MEM_REGION_FIELD(userspace_addr);
+> +	SANITY_CHECK_MEM_REGION_EXT_FIELD(restricted_offset);
+> +	SANITY_CHECK_MEM_REGION_EXT_FIELD(restricted_fd);
+> +}
+
+Do we have other examples in the kernel that jump these hoops?
+
+>  static long kvm_vm_ioctl(struct file *filp,
+>  			   unsigned int ioctl, unsigned long arg)
+>  {
+> @@ -4650,14 +4677,20 @@ static long kvm_vm_ioctl(struct file *filp,
+>  		break;
+>  	}
+>  	case KVM_SET_USER_MEMORY_REGION: {
+> -		struct kvm_userspace_memory_region kvm_userspace_mem;
+> +		struct kvm_user_mem_region mem;
+> +		unsigned long size =3D sizeof(struct kvm_userspace_memory_region);
+> +
+> +		kvm_sanity_check_user_mem_region_alias();
+>=20=20
+>  		r =3D -EFAULT;
+> -		if (copy_from_user(&kvm_userspace_mem, argp,
+> -						sizeof(kvm_userspace_mem)))
+> +		if (copy_from_user(&mem, argp, size))
+> +			goto out;
+> +
+> +		r =3D -EINVAL;
+> +		if (mem.flags & KVM_MEM_PRIVATE)
+>  			goto out;
+
+Hmm I can see in the later code you explicitly check for the
+KVM_MEM_PRIVATE flag with:
+
+		if (get_user(flags, (u32 __user *)(argp + flags_offset)))
+			goto out;
+
+		if (flags & KVM_MEM_PRIVATE)
+			size =3D sizeof(struct kvm_userspace_memory_region_ext);
+		else
+			size =3D sizeof(struct kvm_userspace_memory_region);
+
+I think it would make sense to bring that sanity checking forward into
+this patch to avoid the validation logic working in two different ways
+over the series.
+
+>=20=20
+> -		r =3D kvm_vm_ioctl_set_memory_region(kvm, &kvm_userspace_mem);
+> +		r =3D kvm_vm_ioctl_set_memory_region(kvm, &mem);
+>  		break;
+>  	}
+>  	case KVM_GET_DIRTY_LOG: {
+
+
+--=20
+Alex Benn=C3=A9e
