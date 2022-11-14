@@ -2,67 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5EE6281DE
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Nov 2022 15:02:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E906283DA
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Nov 2022 16:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236618AbiKNOCn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Nov 2022 09:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S236339AbiKNP3O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Nov 2022 10:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235865AbiKNOCm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Nov 2022 09:02:42 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FEA2AC7F;
-        Mon, 14 Nov 2022 06:02:39 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9CA5722B02;
-        Mon, 14 Nov 2022 14:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668434558; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mayE7Lg0BQ8hDkq+3cJ1RU+23EhKOBsT9P5RmwpQqZg=;
-        b=CRVfTYw9S79rQb/maxbJb5Rb+xGiQrI/zNIQUn8hti/eA+HHOydrfJXOCPvacAZvtp+qfG
-        NyUu7a0lynHJoULvD0Ym4rGHZQ8ntVqyIgSyza22+c5pXt6yBQC3quckfvjk+eCJo2n6CU
-        DJTqPmMf+ZSOKq19iXMVwvt3TIeiv7A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668434558;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mayE7Lg0BQ8hDkq+3cJ1RU+23EhKOBsT9P5RmwpQqZg=;
-        b=edS4ElukmcUiY4HgCNAWi+BGiMSz4zN4KxQqC3YhbOyfv7rJQWyINb0mhFlFH83SBx0dEJ
-        qVX43crJKTJVDaBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 02E9A13A92;
-        Mon, 14 Nov 2022 14:02:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Q2I1AH5KcmM7XQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 14 Nov 2022 14:02:38 +0000
-Message-ID: <20a11042-2cfb-8f42-9d80-6672e155ca2c@suse.cz>
-Date:   Mon, 14 Nov 2022 15:02:37 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Content-Language: en-US
-To:     Michael Roth <michael.roth@amd.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        with ESMTP id S236934AbiKNP2z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Nov 2022 10:28:55 -0500
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A79E09C;
+        Mon, 14 Nov 2022 07:28:52 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.west.internal (Postfix) with ESMTP id BD4962B067C3;
+        Mon, 14 Nov 2022 10:28:48 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 14 Nov 2022 10:28:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1668439728; x=1668446928; bh=Nk
+        bbGytzJ7I7fdZjJ8Fl0BV2oDQacMuRT8wrkqNypwg=; b=L+fg9psCjGWR+Q4jar
+        Mh8WPN0CCVKtE8QULFZl/REBBGfEYLOoG5tTfwzN2fLvRfihDZ0CUPaHxOTUYHgN
+        +f0XudZX5n2uU9Zk262NyzcpFGRRDtJoWAoc8JwvaQmfWt8ENHQA6z/bl7D7zv1j
+        stjmAjSQgumSVaN7IVmX7VjTeL7anz0EPhVYEJbMwNJF0wgd5r6RGPz80nDeGRIS
+        5U9ySXNkmdE/w/yBigY3Rx3yFbACIc4cb0hBrdw/YOLobVtkqXvHu1Wc+/Tc+Mo0
+        TsAi0HYkU2U+JWkiZhU99J/Rd1WejZwmC3+i8aR3e2dYkVY3CF08l1y9hbmQUXj5
+        XQoA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668439728; x=1668446928; bh=NkbbGytzJ7I7fdZjJ8Fl0BV2oDQa
+        cMuRT8wrkqNypwg=; b=OSToxW/AKRZaXNJ4BEd/AfCajCfbDqN1unwhNaXMlb9t
+        gBO67tNkQ7mqXA1AQ+PhqQadLiKZ6cu5xEbfTKv1UtTrVeWL9sP4ytoewiuSj1Ks
+        BBC694bRwD2HHIJeQSaeEBV2jt9gSr7nEGve1a7AVzb3q2yf7pOa1kMcencyzD/z
+        3DFaSyJ7bmfdtINjvmK8PGAsAt9Yq9t5XdVVz6oLDmHHq+3tD+atDSuLlkEUfNWG
+        r0CU0ehV3Oq8cdxwsBSBfEkWuWaYR8G1HRnSlk1MucqsgCqrtCknz01vR9JGWymU
+        ec23kvRXthssYr0nlcCFXMk42bb8tf09b03GWaO3aQ==
+X-ME-Sender: <xms:r15yY_0QRYhyAkn-aGlVslxWDhm_9bvHMBd6L_bA6_qmkRguiYaqfg>
+    <xme:r15yY-Gl3WluqhzR5HczYZyXS396xm8TKAb-aw0uzyy_Lwjlq_FFDx78c9GcSLxVg
+    omFr3Xg_KAP38qJKcY>
+X-ME-Received: <xmr:r15yY_4eNDfu6njZp1k19j2OAE3egUL8KFpHjFGbrTkXA6fmmfh5gR4fdxZPNA5MVmYq0A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdehtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
+    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:r15yY03SFHC1V2ev4RxYj9TRgPZ9wbV1HZ2kMPfVye6Ouoozly-5pA>
+    <xmx:r15yYyF9Dk-M3xacDgcx9XiIc2UyNRI_n1wX8zQbg2MGr7E4GWvUYA>
+    <xmx:r15yY1-J6Sa29ay92N9akyCSYEV3nNXagqOnIPGeHpRBz_8zvlV44w>
+    <xmx:sF5yY3QIa2TGTJD3XJpjfYjCXVPw48yakbN9YPL0_2IRk6C7cvZVbImWW3U>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Nov 2022 10:28:46 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 18B2A109875; Mon, 14 Nov 2022 18:28:43 +0300 (+03)
+Date:   Mon, 14 Nov 2022 18:28:43 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Michael Roth <michael.roth@amd.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Sean Christopherson <seanjc@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
@@ -88,203 +97,89 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Quentin Perret <qperret@google.com>, tabba@google.com,
         mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
         wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221114152843.ylxe4dis254vrj5u@box.shutemov.name>
 References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
  <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
  <20221031174738.fklhlia5fmaiinpe@amd.com>
  <20221101113729.GA4015495@chaop.bj.intel.com>
  <20221101151944.rhpav47pdulsew7l@amd.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221101151944.rhpav47pdulsew7l@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20a11042-2cfb-8f42-9d80-6672e155ca2c@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20a11042-2cfb-8f42-9d80-6672e155ca2c@suse.cz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/1/22 16:19, Michael Roth wrote:
-> On Tue, Nov 01, 2022 at 07:37:29PM +0800, Chao Peng wrote:
->> > 
->> >   1) restoring kernel directmap:
->> > 
->> >      Currently SNP (and I believe TDX) need to either split or remove kernel
->> >      direct mappings for restricted PFNs, since there is no guarantee that
->> >      other PFNs within a 2MB range won't be used for non-restricted
->> >      (which will cause an RMP #PF in the case of SNP since the 2MB
->> >      mapping overlaps with guest-owned pages)
->> 
->> Has the splitting and restoring been a well-discussed direction? I'm
->> just curious whether there is other options to solve this issue.
+On Mon, Nov 14, 2022 at 03:02:37PM +0100, Vlastimil Babka wrote:
+> On 11/1/22 16:19, Michael Roth wrote:
+> > On Tue, Nov 01, 2022 at 07:37:29PM +0800, Chao Peng wrote:
+> >> > 
+> >> >   1) restoring kernel directmap:
+> >> > 
+> >> >      Currently SNP (and I believe TDX) need to either split or remove kernel
+> >> >      direct mappings for restricted PFNs, since there is no guarantee that
+> >> >      other PFNs within a 2MB range won't be used for non-restricted
+> >> >      (which will cause an RMP #PF in the case of SNP since the 2MB
+> >> >      mapping overlaps with guest-owned pages)
+> >> 
+> >> Has the splitting and restoring been a well-discussed direction? I'm
+> >> just curious whether there is other options to solve this issue.
+> > 
+> > For SNP it's been discussed for quite some time, and either splitting or
+> > removing private entries from directmap are the well-discussed way I'm
+> > aware of to avoid RMP violations due to some other kernel process using
+> > a 2MB mapping to access shared memory if there are private pages that
+> > happen to be within that range.
+> > 
+> > In both cases the issue of how to restore directmap as 2M becomes a
+> > problem.
+> > 
+> > I was also under the impression TDX had similar requirements. If so,
+> > do you know what the plan is for handling this for TDX?
+> > 
+> > There are also 2 potential alternatives I'm aware of, but these haven't
+> > been discussed in much detail AFAIK:
+> > 
+> > a) Ensure confidential guests are backed by 2MB pages. shmem has a way to
+> >    request 2MB THP pages, but I'm not sure how reliably we can guarantee
+> >    that enough THPs are available, so if we went that route we'd probably
+> >    be better off requiring the use of hugetlbfs as the backing store. But
+> >    obviously that's a bit limiting and it would be nice to have the option
+> >    of using normal pages as well. One nice thing with invalidation
+> >    scheme proposed here is that this would "Just Work" if implement
+> >    hugetlbfs support, so an admin that doesn't want any directmap
+> >    splitting has this option available, otherwise it's done as a
+> >    best-effort.
+> > 
+> > b) Implement general support for restoring directmap as 2M even when
+> >    subpages might be in use by other kernel threads. This would be the
+> >    most flexible approach since it requires no special handling during
+> >    invalidations, but I think it's only possible if all the CPA
+> >    attributes for the 2M range are the same at the time the mapping is
+> >    restored/unsplit, so some potential locking issues there and still
+> >    chance for splitting directmap over time.
 > 
-> For SNP it's been discussed for quite some time, and either splitting or
-> removing private entries from directmap are the well-discussed way I'm
-> aware of to avoid RMP violations due to some other kernel process using
-> a 2MB mapping to access shared memory if there are private pages that
-> happen to be within that range.
+> I've been hoping that
 > 
-> In both cases the issue of how to restore directmap as 2M becomes a
-> problem.
-> 
-> I was also under the impression TDX had similar requirements. If so,
-> do you know what the plan is for handling this for TDX?
-> 
-> There are also 2 potential alternatives I'm aware of, but these haven't
-> been discussed in much detail AFAIK:
-> 
-> a) Ensure confidential guests are backed by 2MB pages. shmem has a way to
->    request 2MB THP pages, but I'm not sure how reliably we can guarantee
->    that enough THPs are available, so if we went that route we'd probably
->    be better off requiring the use of hugetlbfs as the backing store. But
->    obviously that's a bit limiting and it would be nice to have the option
->    of using normal pages as well. One nice thing with invalidation
->    scheme proposed here is that this would "Just Work" if implement
->    hugetlbfs support, so an admin that doesn't want any directmap
->    splitting has this option available, otherwise it's done as a
->    best-effort.
-> 
-> b) Implement general support for restoring directmap as 2M even when
->    subpages might be in use by other kernel threads. This would be the
->    most flexible approach since it requires no special handling during
->    invalidations, but I think it's only possible if all the CPA
->    attributes for the 2M range are the same at the time the mapping is
->    restored/unsplit, so some potential locking issues there and still
->    chance for splitting directmap over time.
+> c) using a mechanism such as [1] [2] where the goal is to group together
+> these small allocations that need to increase directmap granularity so
+> maximum number of large mappings are preserved.
 
-I've been hoping that
+As I mentioned in the other thread the restricted memfd can be backed by
+secretmem instead of plain memfd. It already handles directmap with care.
 
-c) using a mechanism such as [1] [2] where the goal is to group together
-these small allocations that need to increase directmap granularity so
-maximum number of large mappings are preserved. But I guess that means
-knowing at allocation time that this will happen. So I've been wondering how
-this would be possible to employ in the SNP/UPM case? I guess it depends on
-how we expect the private/shared conversions to happen in practice, and I
-don't know the details. I can imagine the following complications:
+But I don't think it has to be part of initial restricted memfd
+implementation. It is SEV-specific requirement and AMD folks can extend
+implementation as needed later.
 
-- a memfd_restricted region is created such that it's 2MB large/aligned,
-i.e. like case a) above, we can allocate it normally. Now, what if a 4k page
-in the middle is to be temporarily converted to shared for some
-communication between host and guest (can such thing happen?). With the
-punch hole approach, I wonder if we end up fragmenting directmap
-unnecessarily? IIUC the now shared page will become backed by some other
-page (as the memslot supports both private and shared pages simultaneously).
-But does it make sense to really split the direct mapping (and e.g. the
-shmem page?) We could leave the whole 2MB unmapped without splitting if we
-didn't free the private 4k subpage.
-
-- a restricted region is created that's below 2MB. If something like [1] is
-merged, it could be used for the backing pages to limit directmap
-fragmentation. But then in case it's eventually fallocated to become larger
-and gain one more more 2MB aligned ranges, the result is suboptimal. Unless
-in that case we migrate the existing pages to a THP-backed shmem, kinda like
-khugepaged collapses hugepages. But that would have to be coordinated with
-the guest, maybe not even possible?
-
-[1] https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org/
-[2] https://lwn.net/Articles/894557/
-
->> 
->> > 
->> >      Previously we were able to restore 2MB mappings to some degree
->> >      since both shared/restricted pages were all pinned, so anything
->> >      backed by a THP (or hugetlb page once that is implemented) at guest
->> >      teardown could be restored as 2MB direct mapping.
->> > 
->> >      Invalidation seems like the most logical time to have this happen,
->> 
->> Currently invalidation only happens at user-initiated fallocate(). It
->> does not cover the VM teardown case where the restoring might also be
->> expected to be handled.
-> 
-> Right, I forgot to add that in my proposed changes I added invalidations
-> for any still-allocated private pages present when the restricted memfd
-> notifier is unregistered. This was needed to avoid leaking pages back to
-> the kernel that still need directmap or RMP table fixups. I also added
-> similar invalidations for memfd->release(), since it seems possible that
-> userspace might close() it before shutting down guest, but maybe the
-> latter is not needed if KVM takes a reference on the FD during life of
-> the guest.
-> 
->> 
->> >      but whether or not to restore as 2MB requires the order to be 2MB
->> >      or larger, and for GPA range being invalidated to cover the entire
->> >      2MB (otherwise it means the page was potentially split and some
->> >      subpages free back to host already, in which case it can't be
->> >      restored as 2MB).
->> > 
->> >   2) Potentially less invalidations:
->> >       
->> >      If we pass the entire folio or compound_page as part of
->> >      invalidation, we only needed to issue 1 invalidation per folio.
->> 
->> I'm not sure I agree, the current invalidation covers the whole range
->> that passed from userspace and the invalidation is invoked only once for
->> each usrspace fallocate().
-> 
-> That's true, it only reduces invalidations if we decide to provide a
-> struct page/folio as part of the invalidation callbacks, which isn't
-> the case yet. Sorry for the confusion.
-> 
->> 
->> > 
->> >   3) Potentially useful for hugetlbfs support:
->> > 
->> >      One issue with hugetlbfs is that we don't support splitting the
->> >      hugepage in such cases, which was a big obstacle prior to UPM. Now
->> >      however, we may have the option of doing "lazy" invalidations where
->> >      fallocate(PUNCH_HOLE, ...) won't free a shmem-allocate page unless
->> >      all the subpages within the 2M range are either hole-punched, or the
->> >      guest is shut down, so in that way we never have to split it. Sean
->> >      was pondering something similar in another thread:
->> > 
->> >        https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-mm%2FYyGLXXkFCmxBfu5U%40google.com%2F&amp;data=05%7C01%7Cmichael.roth%40amd.com%7C3aba56bf7d574c749ea708dabbfe2224%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638028997419628807%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=c7gSLjJEAxuX8xmMiTDMUHNwUdQNKN00xqtAZAEeow8%3D&amp;reserved=0
->> > 
->> >      Issuing invalidations with folio-granularity ties in fairly well
->> >      with this sort of approach if we end up going that route.
->> 
->> There is semantics difference between the current one and the proposed
->> one: The invalidation range is exactly what userspace passed down to the
->> kernel (being fallocated) while the proposed one will be subset of that
->> (if userspace-provided addr/size is not aligned to power of two), I'm
->> not quite confident this difference has no side effect.
-> 
-> In theory userspace should not be allocating/hole-punching restricted
-> pages for GPA ranges that are already mapped as private in the xarray,
-> and KVM could potentially fail such requests (though it does currently).
-> 
-> But if we somehow enforced that, then we could rely on
-> KVM_MEMORY_ENCRYPT_REG_REGION to handle all the MMU invalidation stuff,
-> which would free up the restricted fd invalidation callbacks to be used
-> purely to handle doing things like RMP/directmap fixups prior to returning
-> restricted pages back to the host. So that was sort of my thinking why the
-> new semantics would still cover all the necessary cases.
-> 
-> -Mike
-> 
->> 
->> > 
->> > I need to rework things for v9, and we'll probably want to use struct
->> > folio instead of struct page now, but as a proof-of-concept of sorts this
->> > is what I'd added on top of v8 of your patchset to implement 1) and 2):
->> > 
->> >   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommit%2F127e5ea477c7bd5e4107fd44a04b9dc9e9b1af8b&amp;data=05%7C01%7Cmichael.roth%40amd.com%7C3aba56bf7d574c749ea708dabbfe2224%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638028997419628807%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=jOFT0iLmeU7rKniEkWOsTf2%2FPI13EAw4Qm7arI1q970%3D&amp;reserved=0
->> > 
->> > Does an approach like this seem reasonable? Should be work this into the
->> > base restricted memslot support?
->> 
->> If the above mentioned semantics difference is not a problem, I don't
->> have strong objection on this.
->> 
->> Sean, since you have much better understanding on this, what is your
->> take on this?
->> 
->> Chao
->> > 
->> > Thanks,
->> > 
->> > Mike
-
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
