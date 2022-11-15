@@ -2,42 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2653162A398
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Nov 2022 21:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A3162A3A4
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Nov 2022 22:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238326AbiKOU60 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Nov 2022 15:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S238723AbiKOVBB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Nov 2022 16:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238617AbiKOU6Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Nov 2022 15:58:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEA6B54;
-        Tue, 15 Nov 2022 12:58:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q5rdxs907sdfOJibt3487eeqjdxeEu/zZtRKkDI9L4Q=; b=vXGdDHWokyjEX2/wFIgOK248eJ
-        9F8TKrzmqOJJablCe1wdaoWurFEVSAHXDaTt/PyitrBKkzjx7ciZtdFeJfoIBkCW7qpihdIg39D/W
-        wBI2kIlnKcfkWo+OqeH5UKjpDMi1bLNGAcsptk3Xm4wlpS/bdryOmTbEUugKuAtuuRoEbyAd6oAr+
-        mWEuKaR8N68EoakoxzqfIRi9/EDyaPJQCIS7ukdc6kae7rKsO0yiNbpSNN3DsR5I4UHWqrMYVuoaw
-        DztkeU+44B4rjNMdhPuuqMP9OTkjbSSxhP6ervdk6YNswnxfGkwhfeM8rn11VYDBphrZqvxCGKtPp
-        ppcEzwtg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ov30Q-00GdoN-72; Tue, 15 Nov 2022 20:58:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A7359300209;
-        Tue, 15 Nov 2022 21:57:59 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9ABAB201646D4; Tue, 15 Nov 2022 21:57:59 +0100 (CET)
-Date:   Tue, 15 Nov 2022 21:57:59 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+        with ESMTP id S238704AbiKOVAv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Nov 2022 16:00:51 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6D82D1DB;
+        Tue, 15 Nov 2022 13:00:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668546050; x=1700082050;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xNXRQeFXYRAOm6+Xp0IR39SUwaBcxozLGg7herY21Uw=;
+  b=lsMLP5YEmDLIiClnND4hhrp8X142NLIRYPufiX9WA9b534Zf0UmGZN49
+   mIWgyOnz/rynybLDAqg6KzIXLUAnUJu/751Cj1c3uZlZtQ3ir7fczBcGN
+   Z2vRCvdzgh2/I83jzrLhza50Of149TTYWeeyowHqINPUDHWl7AHXH6fe9
+   W8SZf0TOCAhq1NFIaKdVDypN5IrdWrF01AgA7aQdxizIwcqGjqscU/wHR
+   YpUc9f6UaX9qhvmrBemYy0m0dGQK4fBgEGReKXOZ1Ky00GiXJk/7lrA3O
+   8p2Aoqt/lRdxCjlt1PWfAWd+di8q0WhHjaqaVbVKNteOeLXAr5tMG8sMr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314181085"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="314181085"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:00:42 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="813821204"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="813821204"
+Received: from dn-intelpc-071822.amr.corp.intel.com (HELO [10.212.229.216]) ([10.212.229.216])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:00:40 -0800
+Message-ID: <93029063-4a68-d275-b437-12930e119347@intel.com>
+Date:   Tue, 15 Nov 2022 13:00:40 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 36/37] x86/cet/shstk: Add ARCH_CET_UNLOCK
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
 Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
         "hpa@zytor.com" <hpa@zytor.com>,
         "Syromiatnikov, Eugene" <esyr@redhat.com>,
@@ -73,35 +81,38 @@ Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         "gorcunov@gmail.com" <gorcunov@gmail.com>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 36/37] x86/cet/shstk: Add ARCH_CET_UNLOCK
-Message-ID: <Y3P9V1c0ytuC2/3g@hirez.programming.kicks-ass.net>
 References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
  <20221104223604.29615-37-rick.p.edgecombe@intel.com>
  <Y3OmaSjhCtjht1nS@hirez.programming.kicks-ass.net>
  <4273232513cd178be303d817b15e442703bda637.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4273232513cd178be303d817b15e442703bda637.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <Y3P9V1c0ytuC2/3g@hirez.programming.kicks-ass.net>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <Y3P9V1c0ytuC2/3g@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:01:12PM +0000, Edgecombe, Rick P wrote:
-> > > +	if (task != current) {
-> > > +		if (option == ARCH_CET_UNLOCK &&
-> > > IS_ENABLED(CONFIG_CHECKPOINT_RESTORE)) {
-> > 
-> > Why make this conditional on CRIU at all?
-> 
-> Kees asked for it, I think he was worried about attackers using it to
-> unlock and disable shadow stack. So wanted to lock it down to the
-> maximum.
+On 11/15/22 12:57, Peter Zijlstra wrote:
+> On Tue, Nov 15, 2022 at 08:01:12PM +0000, Edgecombe, Rick P wrote:
+>>>> +	if (task != current) {
+>>>> +		if (option == ARCH_CET_UNLOCK &&
+>>>> IS_ENABLED(CONFIG_CHECKPOINT_RESTORE)) {
+>>> Why make this conditional on CRIU at all?
+>> Kees asked for it, I think he was worried about attackers using it to
+>> unlock and disable shadow stack. So wanted to lock it down to the
+>> maximum.
+> Well, distros will all have this stuff enabled no? So not much
+> protection in practise.
 
-Well, distros will all have this stuff enabled no? So not much
-protection in practise.
+Yeah, that's true for the distros.
+
+But, I would imagine that our more paranoid friends like the ChromeOS
+folks might appreciate this.
