@@ -2,79 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5A962CB68
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Nov 2022 21:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBD062CC5B
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Nov 2022 22:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbiKPUua (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Nov 2022 15:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S233192AbiKPVOZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Nov 2022 16:14:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233325AbiKPUu2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 15:50:28 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE741623AE
-        for <linux-arch@vger.kernel.org>; Wed, 16 Nov 2022 12:50:26 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id bq9-20020a056a000e0900b00571802a2eaaso9808642pfb.22
-        for <linux-arch@vger.kernel.org>; Wed, 16 Nov 2022 12:50:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vm8HknjbQpP5x1fHUQZ8Fa+JhrBUsKYRYb84Ljw06/8=;
-        b=BxC9ZIiQoKs8ZVqFtGoVwkhZjhvx+R8PRQB6GTtgA210grIKaMUfq2t0MWY3kI6kkp
-         Ri7QGvFmdcQHkk1hdrwKgiBlH7UL9kkXPXLqHdnAIp3PIrrDNkNKuXekVJ7+ZRLfdmPg
-         cQkuCip07OmxTzEL5JEZGej5dA3zvd1W4OtdIo2gBJqiIu2fJkfRqzbucnRGJGmvoaGQ
-         JeagXDUkI3LTmVilwN+XEnCxUy4kfrqeJ1CvBsbW5yvysO4wop2f/STxLeY9zAtDUUFw
-         n8gsLiJIOgQlD8T85gNo08kYyGRdhjrlcaafVDzmuk2vc2ElQCmnrFZnsbi5bwPjtr2C
-         xOpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vm8HknjbQpP5x1fHUQZ8Fa+JhrBUsKYRYb84Ljw06/8=;
-        b=Vq55jJMmPSDmf0+x394H/um1JX2kpVNCBvN5jsa3xpqS7yhuLzg+LLNxQOCfpvBnQQ
-         OXyR7MYHZL+Y6mbrHUE0vXBNRAvqXxNCqRaTrZZfHKEjBI0xGuka2Fiv25i1NQaIxLCS
-         yK4by2g3rI1NrpS3Nt2ynjLVddGTw5viWQArLmxYy+MHLTgwQtoF9XIs6HWZUhDFReya
-         +zFRNOR9/bYntn6K8ZFhGtFO3f/suVJ52qmJMbWQSO9SN5DU4sAQrQMjzDYco3qaoPof
-         30qaohCxin9ZgpMnsyk5taREgSgshlLsCnaZbWlIIksG6NjB6yhL9ab6p8Fnz9dLPkaU
-         GF6A==
-X-Gm-Message-State: ANoB5pm5KNW33tE+pcUp3fHPiDTT8NcZwQZwC4ipwoTycq1mUPpCVmLf
-        9jfYj+0VQizHPDYGZGeNS39qK/kP4dhAhJIyIQ==
-X-Google-Smtp-Source: AA0mqf41ZmTXB/mfU/GsYmUkRkGNKElgXElKSWsJxXMeA5xlBE38lutMTDBINT6VM1Rkky14pOwbEWAq8JgrwGlebg==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:aa7:9041:0:b0:572:9681:1018 with SMTP
- id n1-20020aa79041000000b0057296811018mr6472865pfo.39.1668631826322; Wed, 16
- Nov 2022 12:50:26 -0800 (PST)
-Date:   Wed, 16 Nov 2022 20:50:25 +0000
-In-Reply-To: <20221025151344.3784230-8-chao.p.peng@linux.intel.com>
-Mime-Version: 1.0
-References: <20221025151344.3784230-8-chao.p.peng@linux.intel.com>
-X-Mailer: git-send-email 2.38.1.584.g0f3c55d4c2-goog
-Message-ID: <20221116205025.1510291-1-ackerleytng@google.com>
-Subject: Re: [PATCH v9 7/8] KVM: Handle page fault for private memory
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     chao.p.peng@linux.intel.com
-Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        pbonzini@redhat.com, qemu-devel@nongnu.org, qperret@google.com,
-        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
-        songmuchun@bytedance.com, steven.price@arm.com, tabba@google.com,
-        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
-        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
-        x86@kernel.org, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        with ESMTP id S231734AbiKPVOY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 16:14:24 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E62F3F;
+        Wed, 16 Nov 2022 13:14:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KZDNLDrV3vIJhll8XjCIotmTR3HMnEZ5raROKkbfxVVVzaOc+I6VA/jRU/eqwhAxmGMfZ5gIg+iK0rK5lEaiWyJKlWZKBeY7CfOrMueyTU9TsrMLnwY70z/3scUTM8TEhwchL0gOpeknHx49aqvqFbSnNIEHTfsyayBjdZmCmGwzEJya1WUXWt6bomZP26Wa//wUokRSbspSkD5Q9ewL8j8Q7wapRVqf9WQhfpJv594txe2k0BSlCNLBgQTuC59CVaQnBDnm0JFhR7UQFdsD9UhHyHntMR64OHig7uOXVOuOMOrYfFjer+vP9wjHktKs6yPltZRh4u36+t/Nv4ZUbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uw7BmxV4dH8kfRSP6Gqsd8VEZ+xNkHW7CYxy+zyH3+Q=;
+ b=DbnKq/4rsAxPQJgBwhAWbroGmiVgtpW7jCTRphXeQvm6XUlElmt8B3SM5Y4Pq46zPyoYgWvuwJSFDhecrb8LivCXHGAVtPcjOXCDsOu45+7LI7WMNQkVroNQQRCCwchhd6U9WBgOMH3GPh2muNZRABlGIxgKIQTyUNDCzTgmuktVPOSR3Ewx/QTEHO5fV7YTRWFsEpZoaludT7hTS6ve/6IwSRZ08tovRBGzYzap9o14j+7qzJX42bjbzmCACZgqJ5VXvtUpqhtMiM5q+x7L7NI1Ey6PBBE+u0J25e8PM2oEgUxQrlj0mOTd2NNwFHPuw62BRNePEfmYcNqchOINKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uw7BmxV4dH8kfRSP6Gqsd8VEZ+xNkHW7CYxy+zyH3+Q=;
+ b=hwcyGO1b8OkmIe+OqSJYti8PS6ZkEjZJggr0ikG8yVDikk8qptrx4WDnbvUyeeOWyczWf4KWPZ5urXZzucssLxvKYmvi8+fPQ8b8B2KzKmyRItMDv+jQ6qxjBiQ0NsalUVLD/nytcqoeUQZg2lySNguAHAafyCrpd8ca+nQyj+c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM6PR12MB4941.namprd12.prod.outlook.com (2603:10b6:5:1b8::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Wed, 16 Nov
+ 2022 21:14:21 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::4da8:e3eb:20eb:f00]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::4da8:e3eb:20eb:f00%2]) with mapi id 15.20.5813.018; Wed, 16 Nov 2022
+ 21:14:21 +0000
+Message-ID: <b194eaa1-cc79-226f-b87b-3e58090ca08e@amd.com>
+Date:   Wed, 16 Nov 2022 15:14:17 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [Patch v3 06/14] init: Call mem_encrypt_init() after Hyper-V
+ hypercall init is done
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        brijesh.singh@amd.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
+ <1668624097-14884-7-git-send-email-mikelley@microsoft.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <1668624097-14884-7-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0P221CA0031.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:610:11d::13) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|DM6PR12MB4941:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0e9be25-e07b-485c-e229-08dac8178768
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C7MidTFs03QniomSFQsjpjHWoDT2PkiOEkxLDLcxaLLf0PVicpVhj3iGcLR2a+IqkG8I7WRmIUaek1tTvC5jqC8Zb3uS0G8OO5W7e4WkEDEaFo76+fpgF7KK1mQhyTIsTojlkgwZvtKAiMNSNpXVp96PxLWYVl+Nm0CBrHutfy0YGK5YPr/rLDkmEJ6xqYTbUj7eh+eCWzNKs57UuEzLkVRpnoN4St2C2YgoUXHEyqNZzPTGpV82KhW8b8V1U+puMUWsFADNWgKFg3410QiWaooi2Rzf+/m2HsFbuWUMjInK3+dra1wEZj4zC9kI8aFUhACnfNpjNWLOraYHWb4f5eeaAxeymBBadULxiwSrGvOwL1KEVaXlrtflMSIJB/c/FmcSo3NAthMhlQ6gvbxmxeUZ4UZjEz9kFh7MnzhY5r/LCWFohbjngfnplKn97DRrOynEQ9OH5smBh5Jb1W/mBlJYQgJyBvHQs8rrqEFPn0cpveem2zJvg6TPnB6uhysyEHMoyqjfmOXIlHHvl2/zYotGZ2H3ABfQA+EEtl6cHF4NtxXBpOF2jU3eymU0osZQ6xjLpcGqbzeTo7plniEPlhvQWcm8soi4u3HUtdBlKpbPLMheZfZueGA/2W3YcHQwp0vi7XagBQ38HUK4j2Vlg4WBDPa+Hf8I0srHD+GLk/xKW+FFLYnqJ01y+FBhsZ6QiaDnMQBvBWIUMnbb2SU3ddqoRGvD/c88gKwfm4NM/gNjlAJEA4lqq03Y02ZLfrZE9MbjZL3YAorTOYbLAbQYXjXKOHR/L5n+ftQQP0qks5WjF9/fbim35T9d75V5AyCs
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(376002)(39860400002)(366004)(136003)(451199015)(66556008)(6666004)(45080400002)(478600001)(31686004)(6486002)(31696002)(6506007)(8936002)(36756003)(7406005)(66476007)(7416002)(2616005)(41300700001)(2906002)(26005)(316002)(53546011)(66946007)(8676002)(6512007)(83380400001)(921005)(86362001)(186003)(5660300002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Mldhelg2US84MmhOMW9POTVNNnA0R3RwRU1aSk5kNXpwU2NnVE1aL1lBSjdI?=
+ =?utf-8?B?ZXRGSTNWamdzWm1JQkxNVUxtTjkvWGJiME1tV0lPbG00QVJPV0dGU0xnNmhj?=
+ =?utf-8?B?bTBiS3BFeDVUbVMwMzhCUU1qUldnTTZzL2hML0gybWRaM1VPZmtXQ0FONk5H?=
+ =?utf-8?B?ZytFY3IrUFJsb25hUVlpRWpCa3cyRHU3eUlGU0lZT3VPUjV3RzVsSENCMTIw?=
+ =?utf-8?B?eTlDa0tUakxMSmN1U1dpT3dWaVJsemYvbTVpZ29SRlBYTXo5M0NWaHZWKzRm?=
+ =?utf-8?B?V2tLYUpMdE95ZkJGcmZoL1p2QkJ1aDlVbSsvTC9tdVZ2V1VINVhDMjl5cFVD?=
+ =?utf-8?B?a3pDMVBGTktDRUJTWTV4NURna2tSNENFTmw1cGUxd3NjdEl4cDZYUDBNVHJY?=
+ =?utf-8?B?MzRFYzd0ei9tRDB3MUJpcUFoWTdwUUIxaHJFQ0UwcllpNHl0Q25UMjFKbFZo?=
+ =?utf-8?B?RzMwc3FZYmtTYWxvZldCRHpYUEkvb3lzd05RY095Wk9pN3JNTzNSY2RHdE9Q?=
+ =?utf-8?B?RWVlVXgzMTlaQnVFbXhkOVp0cXVOQllINVFCVW9mSk5XMlgzUWtVY0xnSTBT?=
+ =?utf-8?B?VVliaUVBN1lUdDVUVlFKNjVtTXc0MHZPMzFLUGF4OTNxVldvNm1aYnZSTEpN?=
+ =?utf-8?B?WVhmbW1vT1c4aVlaaFhzeDB2QnFyQWNiTDJNOG03QkhESmhiTnRwQ3Zydi9R?=
+ =?utf-8?B?aExRQkl1Szk1UjhocWVWRFFPQ0piQ1pSNCtsK1d1aDVsbUhmTVBwY29OVWI1?=
+ =?utf-8?B?b29EVTZVcm5uRytRSm03RythQU41NWZmVFRmaUtpMVNER2R4b2xzWGF5TkpD?=
+ =?utf-8?B?bjBOUGIreEtscmtpYmNtYS93UWkweEM1Vi9OeDZNcGMrK01CWERvemdpemk1?=
+ =?utf-8?B?dnQwNGpzOGpoQXUvT3EvZlA2ekpVREpaZzNjRElqbHdhYU5BcE82Ykl4Q3Jj?=
+ =?utf-8?B?MGo5amRkR1BpVnl3RTZRY1Y4Q2k4czMrUzRvb3k1Wnl6WDNwTS9GYi9HR1Y5?=
+ =?utf-8?B?TlZSWUFFbUFiT0NIWkhNTnpneUZZUkVEM0VEeWVWZ3RmTWs1bnFrM0ZNR3Fi?=
+ =?utf-8?B?RmVXRXVrNGduOExjZnp3NUM2ZWY2QTF0VHMxL0lMTnEvLy8xOEF4b241T0kv?=
+ =?utf-8?B?T2VxMXEzRWFmM2l0alhmYW42QXJhTyt0M29hOVpBTVFhbGpaWVNPaUpBMStr?=
+ =?utf-8?B?QS95MksvQlJaNVlpY3pJMmo4aWEwazZ2ejNJRHdNOFI5SjVubU9uU2c3cjNX?=
+ =?utf-8?B?enNtM01TY0RhWDM0VWxLNEJTeDhYMWpVVUpMVjdHMzBiaGRvR2ljZ3ZZa3VG?=
+ =?utf-8?B?d0NMQ0cvc3p2dmtaaUZTbE1mdVFzamE0K2xJTWtOOXRtdTRuVGppaFUwNTJU?=
+ =?utf-8?B?cjBidGhaRC9iQ3dtZ040azVyWWlVYTRybnlRc3lvUTJKRjdBY2RyVVg0K1Fj?=
+ =?utf-8?B?enlyMzlnTTJzR04xY0loRmp1UER2aTRxUSswanBKTG1HQ296QWlDVjEwQXlU?=
+ =?utf-8?B?WW42SlBoeEJKcEQ0dzhvL1ZlSHQ5VnRrZmV1YUpIUFl2c3paL24zem5hSXRw?=
+ =?utf-8?B?czVtUUxWVDF4aUR5YmFrQkE2aHFwa0FodktXRmZ1MW9CdWwrVU1JRXpZbWx6?=
+ =?utf-8?B?ellDOUxsa21rMmpvZlZTSWgzY1k4K1pXNkxNbmpxTXBweXhETDI5WDhTK3I2?=
+ =?utf-8?B?VURDb3RsZjloeVIrckV5OXVTbXFWYmpsRko5L21mMlpxaXdrR0ZpditMK3NY?=
+ =?utf-8?B?YXFOcmFQSzdpK3M5Tkkyb2xXeDBqOGwzVDdQREc3eVIySHZKSlpzaE9KL00z?=
+ =?utf-8?B?MkZZeHdmNHlQa0t3Z2I0TEhlaGpCSllSdFFnRjdxVG91dGhxSjc5YmM2S2hr?=
+ =?utf-8?B?R1dTcmNRVGNOcllwcHl5WFVRSkdVVllPOWpRaVltelU0RXc5aWcwZEF5YVdy?=
+ =?utf-8?B?UU1rd1RsNlZkd2xZclRPeEVFTC84Tjg0L3RzYlA3MWVONFAyQk9yRW1VQTdH?=
+ =?utf-8?B?RUpRMmF6bm4ydzUrYWZ2a3ppTmF5VDlLbzhRWlUwRjVIZWpCQkNmUDc3M2dJ?=
+ =?utf-8?B?RGhnckFyazR2cUk2dFFWcDNia21KMTZSMWNVNkU5UGVCQkpQd2UvdTdlcElp?=
+ =?utf-8?Q?JBYRctXFqGZ6d+BAoYWSQDZCA?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0e9be25-e07b-485c-e229-08dac8178768
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Nov 2022 21:14:20.9821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QrjI/nT8EmVK/6Wa1nFdh9Ra/YYjictTrpu1DvDc+6ACvNDfwLTrV4yxOGrZ2+4K9Hw/WCKu2SvgMu2z12WEEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4941
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,152 +139,63 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> A memslot with KVM_MEM_PRIVATE being set can include both fd-based
-> private memory and hva-based shared memory. Architecture code (like TDX
-> code) can tell whether the on-going fault is private or not. This patch
-> adds a 'is_private' field to kvm_page_fault to indicate this and
-> architecture code is expected to set it.
->
-> To handle page fault for such memslot, the handling logic is different
-> depending on whether the fault is private or shared. KVM checks if
-> 'is_private' matches the host's view of the page (maintained in
-> mem_attr_array).
->   - For a successful match, private pfn is obtained with
->     restrictedmem_get_page () from private fd and shared pfn is obtained
->     with existing get_user_pages().
->   - For a failed match, KVM causes a KVM_EXIT_MEMORY_FAULT exit to
->     userspace. Userspace then can convert memory between private/shared
->     in host's view and retry the fault.
->
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+On 11/16/22 12:41, Michael Kelley wrote:
+> Full Hyper-V initialization, including support for hypercalls, is done
+> as an apic_post_init callback via late_time_init().  mem_encrypt_init()
+> needs to make hypercalls when it marks swiotlb memory as decrypted.
+> But mem_encrypt_init() is currently called a few lines before
+> late_time_init(), so the hypercalls don't work.
+> 
+> Fix this by moving mem_encrypt_init() after late_time_init() and
+> related clock initializations. The intervening initializations don't
+> do any I/O that requires the swiotlb, so moving mem_encrypt_init()
+> slightly later has no impact.
+> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+
+Some quick testing with mem_encrypt_init() in the new location hasn't 
+shown any problems under SME/SEV.
+
+Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+
 > ---
->  arch/x86/kvm/mmu/mmu.c          | 56 +++++++++++++++++++++++++++++++--
->  arch/x86/kvm/mmu/mmu_internal.h | 14 ++++++++-
->  arch/x86/kvm/mmu/mmutrace.h     |  1 +
->  arch/x86/kvm/mmu/spte.h         |  6 ++++
->  arch/x86/kvm/mmu/tdp_mmu.c      |  3 +-
->  include/linux/kvm_host.h        | 28 +++++++++++++++++
->  6 files changed, 103 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 67a9823a8c35..10017a9f26ee 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3030,7 +3030,7 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
->
->  int kvm_mmu_max_mapping_level(struct kvm *kvm,
->  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> -			      int max_level)
-> +			      int max_level, bool is_private)
->  {
->  	struct kvm_lpage_info *linfo;
->  	int host_level;
-> @@ -3042,6 +3042,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
->  			break;
->  	}
->
-> +	if (is_private)
-> +		return max_level;
+>   init/main.c | 19 +++++++++++--------
+>   1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/init/main.c b/init/main.c
+> index e1c3911..5a7c466 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -1088,14 +1088,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>   	 */
+>   	locking_selftest();
+>   
+> -	/*
+> -	 * This needs to be called before any devices perform DMA
+> -	 * operations that might use the SWIOTLB bounce buffers. It will
+> -	 * mark the bounce buffers as decrypted so that their usage will
+> -	 * not cause "plain-text" data to be decrypted when accessed.
+> -	 */
+> -	mem_encrypt_init();
+> -
+>   #ifdef CONFIG_BLK_DEV_INITRD
+>   	if (initrd_start && !initrd_below_start_ok &&
+>   	    page_to_pfn(virt_to_page((void *)initrd_start)) < min_low_pfn) {
+> @@ -1112,6 +1104,17 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>   		late_time_init();
+>   	sched_clock_init();
+>   	calibrate_delay();
 > +
->  	if (max_level == PG_LEVEL_4K)
->  		return PG_LEVEL_4K;
->
-> @@ -3070,7 +3073,8 @@ void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->  	 * level, which will be used to do precise, accurate accounting.
->  	 */
->  	fault->req_level = kvm_mmu_max_mapping_level(vcpu->kvm, slot,
-> -						     fault->gfn, fault->max_level);
-> +						     fault->gfn, fault->max_level,
-> +						     fault->is_private);
->  	if (fault->req_level == PG_LEVEL_4K || fault->huge_page_disallowed)
->  		return;
->
-> @@ -4141,6 +4145,32 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
->  	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
->  }
->
-> +static inline u8 order_to_level(int order)
-> +{
-> +	BUILD_BUG_ON(KVM_MAX_HUGEPAGE_LEVEL > PG_LEVEL_1G);
+> +	/*
+> +	 * This needs to be called before any devices perform DMA
+> +	 * operations that might use the SWIOTLB bounce buffers. It will
+> +	 * mark the bounce buffers as decrypted so that their usage will
+> +	 * not cause "plain-text" data to be decrypted when accessed. It
+> +	 * must be called after late_time_init() so that Hyper-V x86/x64
+> +	 * hypercalls work when the SWIOTLB bounce buffers are decrypted.
+> +	 */
+> +	mem_encrypt_init();
 > +
-> +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_1G))
-> +		return PG_LEVEL_1G;
-> +
-> +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_2M))
-> +		return PG_LEVEL_2M;
-> +
-> +	return PG_LEVEL_4K;
-> +}
-> +
-> +static int kvm_faultin_pfn_private(struct kvm_page_fault *fault)
->  +{
->  +	int order;
->  +	struct kvm_memory_slot *slot = fault->slot;
->  +
->  +	if (kvm_restricted_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
->+		return RET_PF_RETRY;
->+
->+	fault->max_level = min(order_to_level(order), fault->max_level);
->+	fault->map_writable = !(slot->flags & KVM_MEM_READONLY);
->+	return RET_PF_CONTINUE;
->+}
->+
-> static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> {
-> 	struct kvm_memory_slot *slot = fault->slot;
->@@ -4173,6 +4203,22 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> 			return RET_PF_EMULATE;
-> 	}
->
->+	if (kvm_slot_can_be_private(slot) &&
->+	    fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn)) {
->+		vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
->+		if (fault->is_private)
->+			vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
->+		else
->+			vcpu->run->memory.flags = 0;
->+		vcpu->run->memory.padding = 0;
->+		vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
->+		vcpu->run->memory.size = PAGE_SIZE;
->+		return RET_PF_USER;
->+	}
->+
->+	if (fault->is_private)
->+		return kvm_faultin_pfn_private(fault);
->+
-
-Since each memslot may also not be backed by restricted memory, we
-should also check if the memslot has been set up for private memory
-with
-
-	if (fault->is_private && kvm_slot_can_be_private(slot))
-		return kvm_faultin_pfn_private(fault);
-
-Without this check, restrictedmem_get_page will get called with NULL
-in slot->restricted_file, which causes a NULL pointer dereference.
-
-> 	async = false;
-> 	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, &async,
-> 					  fault->write, &fault->map_writable,
->@@ -5557,6 +5603,9 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
-> 			return -EIO;
-> 	}
->
->+	if (r == RET_PF_USER)
->+		return 0;
->+
-> 	if (r < 0)
-> 		return r;
-> 	if (r != RET_PF_EMULATE)
->@@ -6408,7 +6457,8 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-> 		 */
-> 		if (sp->role.direct &&
-> 		    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
->-							       PG_LEVEL_NUM)) {
->+							       PG_LEVEL_NUM,
->+							       false)) {
-> 			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
->
-> 			if (kvm_available_flush_tlb_with_range())
+>   	pid_idr_init();
+>   	anon_vma_init();
+>   #ifdef CONFIG_X86
