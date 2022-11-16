@@ -2,233 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F1962B6F0
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Nov 2022 10:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3CC62B73A
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Nov 2022 11:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbiKPJx4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Nov 2022 04:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S232496AbiKPKK2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Nov 2022 05:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKPJxz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 04:53:55 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95285639E
-        for <linux-arch@vger.kernel.org>; Wed, 16 Nov 2022 01:53:52 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so2514631wmi.1
-        for <linux-arch@vger.kernel.org>; Wed, 16 Nov 2022 01:53:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zze9Wsxt3ysTHHvg5WBu0SQosVjbcwx2aPdUf6crt3Y=;
-        b=I2T59KEQLxIXM2pHNfvD9YeKkkSHE4ZyMd/bqV2bIhQhCd4r7G3BFqEMlifLl2/V3U
-         Ltzz2PryU6B8uAKFDvsVQ1vtZoIrK9vgSISfVLVmvC111IWlhiu150wSuOeQnJ6nS591
-         EbyyF/lv+oHj3JMgx+8zk0gz81qJBc38w/3AY8cHqHQDXz76GRaAPK34tu5ONO4yvzJi
-         2AZTRHZQV9qWmZROHiHvF+90nX6/MmF+WWmcZMOj7hNAIEiOmXfJs2/gtzUTPmnerT3Y
-         SDwEvPH6Zu2ekiEIvkl//9IDw/jJhHIejKcAMlZV7e7jFfc0EIr02UqMzf+azaJwFDJT
-         h21A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zze9Wsxt3ysTHHvg5WBu0SQosVjbcwx2aPdUf6crt3Y=;
-        b=eeu+BPQp0PpXu8OSWsJ2NbgL4+QNHwaqqmQa3qXNC5RYeyFr0WYa9zJOxlMO4cwp2O
-         acixemc4kgh9ILIIGvKVUFyi0oyVHeLqqHx2PSrH55Jai9z5wm06vSXxQB5e03ghsn9H
-         IRKUu81g0iEUuRV8s/6lA1Th2BIXtl8ZWFV5fYNfhln0BHcsd0ghr55yEhtuNP1LGxTv
-         5K1GjY/dxlUqbOLqxYKq9HYH3T+w115EHZofR+UxB12PExtnLtAFZzLx+I9pDyXP0aoh
-         h5U9oeli0l77zoGs5fohg8ISk0KXuNkyS/CZg9QPGHiDvKWYSM6ehyhaxlvJg1lINMju
-         Vv3Q==
-X-Gm-Message-State: ANoB5pkqLBPhnf2ZR16Uo/EzUbbFE9Z4NEXdlGH4GEt3FOzzp6WE6SCo
-        KrxyMr0mlI7yL1kioJAphJl1bA==
-X-Google-Smtp-Source: AA0mqf450k4KT3b612+SvZbSE765F/0XKp3AXD24C9sDIk/4dxF+lDjo+r4A3/pJpT3ovdAyPzm4jg==
-X-Received: by 2002:a7b:ca43:0:b0:3cf:ade4:d529 with SMTP id m3-20020a7bca43000000b003cfade4d529mr1563443wml.193.1668592431026;
-        Wed, 16 Nov 2022 01:53:51 -0800 (PST)
-Received: from zen.linaroharston ([185.81.254.11])
-        by smtp.gmail.com with ESMTPSA id l42-20020a05600c1d2a00b003cf4eac8e80sm2160083wms.23.2022.11.16.01.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 01:53:50 -0800 (PST)
-Received: from zen (localhost [127.0.0.1])
-        by zen.linaroharston (Postfix) with ESMTP id B067B1FFB7;
-        Wed, 16 Nov 2022 09:53:49 +0000 (GMT)
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <87k03xbvkt.fsf@linaro.org> <20221116050022.GC364614@chaop.bj.intel.com>
-User-agent: mu4e 1.9.2; emacs 28.2.50
-From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH v9 0/8] KVM: mm: fd-based approach for supporting KVM
-Date:   Wed, 16 Nov 2022 09:40:23 +0000
-In-reply-to: <20221116050022.GC364614@chaop.bj.intel.com>
-Message-ID: <87v8nf8bte.fsf@linaro.org>
+        with ESMTP id S231952AbiKPKK1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 05:10:27 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7D1A825;
+        Wed, 16 Nov 2022 02:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IP43t3hJu1Ut6R9gno8nfJ5M4E7h1wkQRd32HTSGUjo=; b=cwGxlcmqkrn87V+pOU9TIN5gsZ
+        k8k+ZoTpU4HiUzsqFp0EdEccYC9aLsFjSnFJKHVZkUssN+8m1CajV6ccnmwTQLTzAvE3fh0Eg9UWj
+        8Vjq2DE8gsMlpoe3bNrOPKMnoimSk4Hy4A1AembykPKeRTvnNsVwJrqZ5S5Rq1xy2QrGvR0VQpvzR
+        aqBiXKrgeyXbwJA2FSEv5araqwycTv9CHOUplwwq23PBbX+jaY3gKF6bBpvmm1ZwIvXGV37I2R7kL
+        9eUIxURMM9d6ZtfgZRR07+9oQGfYZUe+x5IjIJAFy3DxvvCkM9Tm7pQyMPG0BKjuL9SeQ5YQCqn1Q
+        srVTO45w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ovFMY-001GVE-G6; Wed, 16 Nov 2022 10:09:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E8DE730002E;
+        Wed, 16 Nov 2022 11:09:43 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8B0392B5E08EB; Wed, 16 Nov 2022 11:09:43 +0100 (CET)
+Date:   Wed, 16 Nov 2022 11:09:43 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 15/37] x86/mm: Check Shadow Stack page fault errors
+Message-ID: <Y3S258Vtj63/fBsI@hirez.programming.kicks-ass.net>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+ <20221104223604.29615-16-rick.p.edgecombe@intel.com>
+ <Y3N8Sn65TzyD6jwL@hirez.programming.kicks-ass.net>
+ <b89565c96a0330c27ae179d96be05d2fc006121c.camel@intel.com>
+ <Y3P/qltUOcCYsXoD@hirez.programming.kicks-ass.net>
+ <2766aedef0780f03b81ea7dfea42dffb328e21f1.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2766aedef0780f03b81ea7dfea42dffb328e21f1.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Nov 15, 2022 at 11:13:34PM +0000, Edgecombe, Rick P wrote:
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
+> When a page becomes COW it changes from a shadow stack permissioned
+> page (Write=0,Dirty=1) to (Write=0,Dirty=0,CoW=1), which is simply
+> read-only to the CPU. When shadow stack is enabled, a RET would
+> normally pop the shadow stack by reading it with a "shadow stack read"
+> access. However, in the COW case the shadow stack memory does not have
+> shadow stack permissions, it is read-only. So it will generate a fault.
+> 
+> For conventionally writable pages, a read can be serviced with a read
+> only PTE, and COW would not have to happen. But for shadow stack, there
+> isn't the concept of read-only shadow stack memory. If it is shadow
+> stack permissioned, it can be modified via CALL and RET instructions.
+> So COW needs to happen before any memory can be mapped with shadow
+> stack permissions.
+> 
+> Shadow stack accesses (read or write) need to be serviced with shadow
+> stack permissioned memory, so in the case of a shadow stack read
+> access, treat it as a WRITE fault so both COW will happen and the write
+> fault path will tickle maybe_mkwrite() and map the memory shadow stack.
 
-> On Mon, Nov 14, 2022 at 11:43:37AM +0000, Alex Benn=C3=A9e wrote:
->>=20
->> Chao Peng <chao.p.peng@linux.intel.com> writes:
->>=20
->> <snip>
->> > Introduction
->> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> > KVM userspace being able to crash the host is horrible. Under current
->> > KVM architecture, all guest memory is inherently accessible from KVM
->> > userspace and is exposed to the mentioned crash issue. The goal of this
->> > series is to provide a solution to align mm and KVM, on a userspace
->> > inaccessible approach of exposing guest memory.=20
->> >
->> > Normally, KVM populates secondary page table (e.g. EPT) by using a host
->> > virtual address (hva) from core mm page table (e.g. x86 userspace page
->> > table). This requires guest memory being mmaped into KVM userspace, but
->> > this is also the source where the mentioned crash issue can happen. In
->> > theory, apart from those 'shared' memory for device emulation etc, gue=
-st
->> > memory doesn't have to be mmaped into KVM userspace.
->> >
->> > This series introduces fd-based guest memory which will not be mmaped
->> > into KVM userspace. KVM populates secondary page table by using a
->> > fd/offset pair backed by a memory file system. The fd can be created
->> > from a supported memory filesystem like tmpfs/hugetlbfs and KVM can
->> > directly interact with them with newly introduced in-kernel interface,
->> > therefore remove the KVM userspace from the path of accessing/mmaping
->> > the guest memory.=20
->> >
->> > Kirill had a patch [2] to address the same issue in a different way. It
->> > tracks guest encrypted memory at the 'struct page' level and relies on
->> > HWPOISON to reject the userspace access. The patch has been discussed =
-in
->> > several online and offline threads and resulted in a design document [=
-3]
->> > which is also the original proposal for this series. Later this patch
->> > series evolved as more comments received in community but the major
->> > concepts in [3] still hold true so recommend reading.
->> >
->> > The patch series may also be useful for other usages, for example, pure
->> > software approach may use it to harden itself against unintentional
->> > access to guest memory. This series is designed with these usages in
->> > mind but doesn't have code directly support them and extension might be
->> > needed.
->>=20
->> There are a couple of additional use cases where having a consistent
->> memory interface with the kernel would be useful.
->
-> Thanks very much for the info. But I'm not so confident that the current
-> memfd_restricted() implementation can be useful for all these usages.=20
->
->>=20
->>   - Xen DomU guests providing other domains with VirtIO backends
->>=20
->>   Xen by default doesn't give other domains special access to a domains
->>   memory. The guest can grant access to regions of its memory to other
->>   domains for this purpose.=20
->
-> I'm trying to form my understanding on how this could work and what's
-> the benefit for a DomU guest to provide memory through memfd_restricted().
-> AFAICS, memfd_restricted() can help to hide the memory from DomU userspac=
-e,
-> but I assume VirtIO backends are still in DomU uerspace and need access
-> that memory, right?
-
-They need access to parts of the memory. At the moment you run your
-VirtIO domains in the Dom0 and give them access to the whole of a DomU's
-address space - however the Xen model is by default the guests memory is
-inaccessible to other domains on the system. The DomU guest uses the Xen
-grant model to expose portions of its address space to other domains -
-namely for the VirtIO queues themselves and any pages containing buffers
-involved in the VirtIO transaction. My thought was that looks like a
-guest memory interface which is mostly inaccessible (private) with some
-holes in it where memory is being explicitly shared with other domains.
-
-What I want to achieve is a common userspace API with defined semantics
-for what happens when private and shared regions are accessed. Because
-having each hypervisor/confidential computing architecture define its
-own special API for accessing this memory is just a recipe for
-fragmentation and makes sharing common VirtIO backends impossible.
-
->
->>=20
->>   - pKVM on ARM
->>=20
->>   Similar to Xen, pKVM moves the management of the page tables into the
->>   hypervisor and again doesn't allow those domains to share memory by
->>   default.
->
-> Right, we already had some discussions on this in the past versions.
->
->>=20
->>   - VirtIO loopback
->>=20
->>   This allows for VirtIO devices for the host kernel to be serviced by
->>   backends running in userspace. Obviously the memory userspace is
->>   allowed to access is strictly limited to the buffers and queues
->>   because giving userspace unrestricted access to the host kernel would
->>   have consequences.
->
-> Okay, but normal memfd_create() should work for it, right? And
-> memfd_restricted() instead may not work as it unmaps the memory from
-> userspace.
->
->>=20
->> All of these VirtIO backends work with vhost-user which uses memfds to
->> pass references to guest memory from the VMM to the backend
->> implementation.
->
-> Sounds to me these are the places where normal memfd_create() can act on.
-> VirtIO backends work on the mmap-ed memory which currently is not the
-> case for memfd_restricted(). memfd_restricted() has different design
-> purpose that unmaps the memory from userspace and employs some kernel
-> callbacks so other kernel modules can make use of the memory with these
-> callbacks instead of userspace virtual address.
-
-Maybe my understanding is backwards then. Are you saying a guest starts
-with all its memory exposed and then selectively unmaps the private
-regions? Is this driven by the VMM or the guest itself?
-
---=20
-Alex Benn=C3=A9e
+ACK.
