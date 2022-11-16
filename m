@@ -2,131 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C60162B793
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Nov 2022 11:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6740462BD56
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Nov 2022 13:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiKPKTM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Nov 2022 05:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
+        id S232881AbiKPMRj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Nov 2022 07:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiKPKTL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 05:19:11 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400CF12A9D;
-        Wed, 16 Nov 2022 02:19:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fPq7tV/2QrdcGUCtPsVdOGkEWJNB5jMtOAqK/xzSNP8=; b=mvTcBioZ2ydT6zOL0WsZpRiqLF
-        /wNmPcS0dCzbIc8xSMuf4oMHZxucJGQhaR/T9uhRjFOZCDLwEV0Zuq27CGInXJkU6AWm9+BEcAHwY
-        Z4e0QXqjjJ5nAPfZUU+p4EQna7WqevLJawCiETQtneHLHaIsH5e4Ni83er9A0DqZdmhfCvPgd2c30
-        SztwgIhn9KcuN7CHQErI6KbJD5wBii8MmqIp8lw30qV3OjCRZHKf+fBlqzkGLde5LQwQA4dIsx4Rt
-        elgCnfTFqNY26L82GW+9Ye5fCTCJHz+MMqlwt99lsBJbOT8AWUEK1nuizoTiWA1hSfnTnZNNw81BQ
-        Dx91JRnA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ovFVB-001GgG-63; Wed, 16 Nov 2022 10:18:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6A303300129;
-        Wed, 16 Nov 2022 11:18:40 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 50A762B5E019F; Wed, 16 Nov 2022 11:18:40 +0100 (CET)
-Date:   Wed, 16 Nov 2022 11:18:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 27/37] x86/shstk: Introduce routines modifying shstk
-Message-ID: <Y3S5AKhLaU+YuUpQ@hirez.programming.kicks-ass.net>
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
- <20221104223604.29615-28-rick.p.edgecombe@intel.com>
- <Y3OfsZI0jFRoUw02@hirez.programming.kicks-ass.net>
- <be65a66baf94cebf0bc8d726a704238787195837.camel@intel.com>
+        with ESMTP id S233064AbiKPMRX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 07:17:23 -0500
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247F6C74C;
+        Wed, 16 Nov 2022 04:12:44 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id p16so11755684wmc.3;
+        Wed, 16 Nov 2022 04:12:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VQ8ph4l1mfdEGV8CU7TCC1pqTufUaTfVC7K/h54NUVo=;
+        b=GkXy3Tyf2/z/m2mWc0e0gkV89UkARM1LvbRt/Y2HNpp72vQCcCcMcpDjwYAW1C+ysI
+         g7gm6sh6w6FlfQdT10RMM6qP1J9sWERkKySn/RaTN1LOp6Mx0n1J3+2utQz/to+C7lrW
+         YE+J91pv6kE6dfZG5kXx8VH8lSAZGnsVbyixVCYJPitLHNU4628Tux5di7+vT0vkt4kJ
+         ou9SS2vdvtWcnS7HOluJl7dlveYsH9Ma8YNRLKBHpE2E7Q1MTLEPmMtievnX9/DQ2LBb
+         QRo0n3e/D3/eDd4DN8OQ9iSuoGdiXM7z0R3b9dxerqTEKL7ytS0iObcjvin1TPfz/YR8
+         d8HA==
+X-Gm-Message-State: ANoB5pkiLN+ngSyNtRfyoZzL0j2WFiKuaUmuvx9SMLmizbBcYQzeELmp
+        56mxsZG6xpYf2jRItx7u0+8=
+X-Google-Smtp-Source: AA0mqf4vpEtJ4sOoJSvEEzkE1Y2F7445a0boMPzirN1EBS7h+W8a3SBsDoR+WxrUIqzY0ON6gpBTHg==
+X-Received: by 2002:a05:600c:3ba0:b0:3cf:a6e9:fad6 with SMTP id n32-20020a05600c3ba000b003cfa6e9fad6mr1857948wms.206.1668600762615;
+        Wed, 16 Nov 2022 04:12:42 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id bw24-20020a0560001f9800b00226dba960b4sm14891142wrb.3.2022.11.16.04.12.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 04:12:41 -0800 (PST)
+Date:   Wed, 16 Nov 2022 12:12:39 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>
+Cc:     jinankjain@microsoft.com, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: Re: [PATCH v3 0/5]  Add support running nested Microsoft Hypervisor
+Message-ID: <Y3TTt/mOe3pzDLZn@liuwe-devbox-debian-v2>
+References: <https://lore.kernel.org/linux-hyperv/cover.1667406350.git.jinankjain@linux.microsoft.com/T/#t>
+ <cover.1667480257.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <be65a66baf94cebf0bc8d726a704238787195837.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:42:46PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2022-11-15 at 15:18 +0100, Peter Zijlstra wrote:
-> > On Fri, Nov 04, 2022 at 03:35:54PM -0700, Rick Edgecombe wrote:
-> > 
-> > > +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> > > +static inline int write_user_shstk_64(u64 __user *addr, u64 val)
-> > > +{
-> > > +     asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
-> > > +                       _ASM_EXTABLE(1b, %l[fail])
-> > > +                       :: [addr] "r" (addr), [val] "r" (val)
-> > > +                       :: fail);
-> > > +     return 0;
-> > > +fail:
-> > > +     return -EFAULT;
-> > > +}
-> > > +#endif /* CONFIG_X86_USER_SHADOW_STACK */
-> > 
-> > Why isn't this modelled after put_user() ?
+On Thu, Nov 03, 2022 at 01:04:02PM +0000, Jinank Jain wrote:
+> This patch series plans to add support for running nested Microsoft
+> Hypervisor. In case of nested Microsoft Hypervisor there are few
+> privileged hypercalls which need to go L0 Hypervisor instead of L1
+> Hypervisor. This patches series basically identifies such hypercalls and
+> replace them with nested hypercalls.
 > 
-> You mean as far as supporting multiple sizes? It just isn't really
-> needed yet. We are only writing single frames. I suppose it might make
-> more sense with the alt shadow stack support, but that is dropped for
-> now.
-> 
-> The other difference here is that WRUSS is a weird instruction that is
-> treated as a user access even if it comes from the kernel mode. So it's
-> doesn't need to stac/clac.
-> 
-> > 
-> > Should you write a 64bit value even if the task receiving a signal is
-> > 32bit ?
-> 
-> 32 bit support was also dropped.
+> Jinank Jain (5):
+>   x86/hyperv: Add support for detecting nested hypervisor
 
-How? Task could start life as 64bit, frob LDT to set up 32bit code
-segment and jump into it and start doing 32bit syscalls, then what?
+I see `__weak hv_nested` in this patch.
 
-AFAICT those 32bit syscalls will end up doing SA_IA32_ABI sigframes.
+I guess this version has fixed ARM64 build?
+
+>   Drivers: hv: Setup synic registers in case of nested root partition
+>   x86/hyperv: Add an interface to do nested hypercalls
+>   Drivers: hv: Enable vmbus driver for nested root partition
+>   x86/hyperv: Change interrupt vector for nested root partition
+> 
+>  arch/x86/include/asm/hyperv-tlfs.h | 17 +++++++-
+>  arch/x86/include/asm/idtentry.h    |  2 +
+>  arch/x86/include/asm/irq_vectors.h |  6 +++
+>  arch/x86/include/asm/mshyperv.h    | 68 ++++++++++++++++++++++++++++--
+>  arch/x86/kernel/cpu/mshyperv.c     | 22 ++++++++++
+>  arch/x86/kernel/idt.c              |  9 ++++
+>  drivers/hv/hv.c                    | 18 +++++---
+>  drivers/hv/hv_common.c             |  7 ++-
+>  drivers/hv/vmbus_drv.c             |  5 ++-
+>  include/asm-generic/hyperv-tlfs.h  |  1 +
+>  10 files changed, 141 insertions(+), 14 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
