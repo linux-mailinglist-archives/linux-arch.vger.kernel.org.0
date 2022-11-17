@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52D362D1AB
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Nov 2022 04:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 957FD62D1AE
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Nov 2022 04:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239133AbiKQD2k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Nov 2022 22:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S239064AbiKQD2v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Nov 2022 22:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238944AbiKQD21 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 22:28:27 -0500
+        with ESMTP id S239065AbiKQD2a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 22:28:30 -0500
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 530EC6C720;
-        Wed, 16 Nov 2022 19:28:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1F5D6CA13;
+        Wed, 16 Nov 2022 19:28:22 -0800 (PST)
 Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id DD34320B83CB;
-        Wed, 16 Nov 2022 19:28:13 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DD34320B83CB
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8882E20B83DC;
+        Wed, 16 Nov 2022 19:28:18 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8882E20B83DC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1668655698;
-        bh=f2dvTfQMlab1T+fkqP76z4+nJ7JVeutcaW8C+Zjdq84=;
+        s=default; t=1668655702;
+        bh=D+EHMsRYcjPgM7FAsk56dOdUsC5Gb8WTyjClcLwda7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZqwMB3KZ1pF+7D8f+omoRdi8foZWdxhOBWWLyKx3e9ro+K9w5fN/yUJlvzT5OQAuP
-         2PcZZtsdnw0lR+gMhzfiSz6jWBtI7vXMQgE0bdd5cvhr9KanANgRL4JmuKGGTLO1KD
-         4Zl8rB/kvXoC449yNlnIn0BFBtT72jkHgqSuYFqk=
+        b=c3clnCf6MRyp4l/sEknCdLKvRtf2k2fjfuyRfdipLRzOoW7AYZks5bRQtUv7Q+u4n
+         djEaXC0D0N8l21mUaB4g+43kV5fJrqOho3gmXpWLVNWNdhNsWjWTcW/6DrVp8zA5Jz
+         vAn22oRoEPt+pezVLfLEwEhiZYrEyFfpQTO/o5XA=
 From:   Jinank Jain <jinankjain@linux.microsoft.com>
 To:     jinankjain@microsoft.com
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
@@ -37,9 +37,9 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
         mikelley@microsoft.com
-Subject: [PATCH v4 3/5] x86/hyperv: Add an interface to do nested hypercalls
-Date:   Thu, 17 Nov 2022 03:27:56 +0000
-Message-Id: <3a09f876982e14cea8883f03fa9260db1fe64857.1668618583.git.jinankjain@linux.microsoft.com>
+Subject: [PATCH v4 4/5] Drivers: hv: Enable vmbus driver for nested root partition
+Date:   Thu, 17 Nov 2022 03:27:57 +0000
+Message-Id: <034117b286fa4cd6fa491325679052f8b71a8c41.1668618583.git.jinankjain@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1668618583.git.jinankjain@linux.microsoft.com>
 References: <cover.1668618583.git.jinankjain@linux.microsoft.com>
@@ -55,116 +55,28 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-According to TLFS, in order to communicate to L0 hypervisor there needs
-to be an additional bit set in the control register. This communication
-is required to perform priviledged instructions which can only be
-performed by L0 hypervisor. An example of that could be setting up the
-VMBus infrastructure.
+Currently VMBus driver is not initialized for root partition but we need
+to enable the VMBus driver for nested root partition. This is required,
+so that L2 root can use the VMBus devices.
 
 Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 ---
- arch/x86/include/asm/hyperv-tlfs.h |  3 ++-
- arch/x86/include/asm/mshyperv.h    | 42 +++++++++++++++++++++++++++---
- include/asm-generic/hyperv-tlfs.h  |  1 +
- 3 files changed, 41 insertions(+), 5 deletions(-)
+ drivers/hv/vmbus_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index b5019becb618..7758c495541d 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -380,7 +380,8 @@ struct hv_nested_enlightenments_control {
- 		__u32 reserved:31;
- 	} features;
- 	struct {
--		__u32 reserved;
-+		__u32 inter_partition_comm:1;
-+		__u32 reserved:31;
- 	} hypercallControls;
- } __packed;
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index db00d20c726d..0937877eade9 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -2744,7 +2744,7 @@ static int __init hv_acpi_init(void)
+ 	if (!hv_is_hyperv_initialized())
+ 		return -ENODEV;
  
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 326d699b30d5..42e42cea0384 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -74,10 +74,16 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
- 	return hv_status;
- }
+-	if (hv_root_partition)
++	if (hv_root_partition && !hv_nested)
+ 		return 0;
  
-+/* Hypercall to the L0 hypervisor */
-+static inline u64 hv_do_nested_hypercall(u64 control, void *input, void *output)
-+{
-+	return hv_do_hypercall(control | HV_HYPERCALL_NESTED, input, output);
-+}
-+
- /* Fast hypercall with 8 bytes of input and no output */
--static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
-+static inline u64 _hv_do_fast_hypercall8(u64 control, u16 code, u64 input1)
- {
--	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+	u64 hv_status;
- 
- #ifdef CONFIG_X86_64
- 	{
-@@ -105,10 +111,24 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
- 		return hv_status;
- }
- 
-+static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+
-+	return _hv_do_fast_hypercall8(control, code, input1);
-+}
-+
-+static inline u64 hv_do_fast_nested_hypercall8(u16 code, u64 input1)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
-+
-+	return _hv_do_fast_hypercall8(control, code, input1);
-+}
-+
- /* Fast hypercall with 16 bytes of input */
--static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
-+static inline u64 _hv_do_fast_hypercall16(u64 control, u16 code, u64 input1, u64 input2)
- {
--	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+	u64 hv_status;
- 
- #ifdef CONFIG_X86_64
- 	{
-@@ -139,6 +159,20 @@ static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
- 	return hv_status;
- }
- 
-+static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+
-+	return _hv_do_fast_hypercall16(control, code, input1, input2);
-+}
-+
-+static inline u64 hv_do_fast_nested_hypercall16(u16 code, u64 input1, u64 input2)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
-+
-+	return _hv_do_fast_hypercall16(control, code, input1, input2);
-+}
-+
- extern struct hv_vp_assist_page **hv_vp_assist_page;
- 
- static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index b17c6eeb9afa..e61ee461c4fc 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -194,6 +194,7 @@ enum HV_GENERIC_SET_FORMAT {
- #define HV_HYPERCALL_VARHEAD_OFFSET	17
- #define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
- #define HV_HYPERCALL_RSVD0_MASK		GENMASK_ULL(31, 27)
-+#define HV_HYPERCALL_NESTED		BIT_ULL(31)
- #define HV_HYPERCALL_REP_COMP_OFFSET	32
- #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
- #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
+ 	/*
 -- 
 2.25.1
 
