@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957EF62D1A8
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Nov 2022 04:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52D362D1AB
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Nov 2022 04:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239029AbiKQD23 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Nov 2022 22:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S239133AbiKQD2k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Nov 2022 22:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237885AbiKQD2X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 22:28:23 -0500
+        with ESMTP id S238944AbiKQD21 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Nov 2022 22:28:27 -0500
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A793D6BDD6;
-        Wed, 16 Nov 2022 19:28:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 530EC6C720;
+        Wed, 16 Nov 2022 19:28:18 -0800 (PST)
 Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 3DF6220B83C5;
-        Wed, 16 Nov 2022 19:28:09 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3DF6220B83C5
+        by linux.microsoft.com (Postfix) with ESMTPSA id DD34320B83CB;
+        Wed, 16 Nov 2022 19:28:13 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DD34320B83CB
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1668655693;
-        bh=OfWgxvQeVht24a4E8EyqR7JJ0JMc9v0fQdY41479A3A=;
+        s=default; t=1668655698;
+        bh=f2dvTfQMlab1T+fkqP76z4+nJ7JVeutcaW8C+Zjdq84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IFyJlv11NEHo7sKffzv5fzLacrbBleCibV/j+OccNfR9kf/mIseJ8t93R/r1tFzsV
-         s9zd5V6iWIJVH+8STSLMLSJDRwb0GjWvD3IfCNOJlBT6XJwrsfSi/69WVVc5j9zkhl
-         hoLQQ5hoalMJsnRmphqAP3FNr7WkwDLCuyDF25Fk=
+        b=ZqwMB3KZ1pF+7D8f+omoRdi8foZWdxhOBWWLyKx3e9ro+K9w5fN/yUJlvzT5OQAuP
+         2PcZZtsdnw0lR+gMhzfiSz6jWBtI7vXMQgE0bdd5cvhr9KanANgRL4JmuKGGTLO1KD
+         4Zl8rB/kvXoC449yNlnIn0BFBtT72jkHgqSuYFqk=
 From:   Jinank Jain <jinankjain@linux.microsoft.com>
 To:     jinankjain@microsoft.com
 Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
@@ -37,9 +37,9 @@ Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
         mikelley@microsoft.com
-Subject: [PATCH v4 2/5] Drivers: hv: Setup synic registers in case of nested root partition
-Date:   Thu, 17 Nov 2022 03:27:55 +0000
-Message-Id: <11dda2c697781c5d12bbffd11052e6d6bb2ca705.1668618583.git.jinankjain@linux.microsoft.com>
+Subject: [PATCH v4 3/5] x86/hyperv: Add an interface to do nested hypercalls
+Date:   Thu, 17 Nov 2022 03:27:56 +0000
+Message-Id: <3a09f876982e14cea8883f03fa9260db1fe64857.1668618583.git.jinankjain@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1668618583.git.jinankjain@linux.microsoft.com>
 References: <cover.1668618583.git.jinankjain@linux.microsoft.com>
@@ -55,189 +55,116 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Child partitions are free to allocate SynIC message and event page but in
-case of root partition it must use the pages allocated by Microsoft
-Hypervisor (MSHV). Base address for these pages can be found using
-synthetic MSRs exposed by MSHV. There is a slight difference in those MSRs
-for nested vs non-nested root partition.
+According to TLFS, in order to communicate to L0 hypervisor there needs
+to be an additional bit set in the control register. This communication
+is required to perform priviledged instructions which can only be
+performed by L0 hypervisor. An example of that could be setting up the
+VMBus infrastructure.
 
 Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 ---
- arch/x86/include/asm/hyperv-tlfs.h | 11 +++++++
- arch/x86/include/asm/mshyperv.h    | 26 ++--------------
- arch/x86/kernel/cpu/mshyperv.c     | 49 ++++++++++++++++++++++++++++++
- drivers/hv/hv.c                    | 18 ++++++++---
- 4 files changed, 75 insertions(+), 29 deletions(-)
+ arch/x86/include/asm/hyperv-tlfs.h |  3 ++-
+ arch/x86/include/asm/mshyperv.h    | 42 +++++++++++++++++++++++++++---
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ 3 files changed, 41 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 58c03d18c235..b5019becb618 100644
+index b5019becb618..7758c495541d 100644
 --- a/arch/x86/include/asm/hyperv-tlfs.h
 +++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -225,6 +225,17 @@ enum hv_isolation_type {
- #define HV_REGISTER_SINT14			0x4000009E
- #define HV_REGISTER_SINT15			0x4000009F
+@@ -380,7 +380,8 @@ struct hv_nested_enlightenments_control {
+ 		__u32 reserved:31;
+ 	} features;
+ 	struct {
+-		__u32 reserved;
++		__u32 inter_partition_comm:1;
++		__u32 reserved:31;
+ 	} hypercallControls;
+ } __packed;
  
-+/*
-+ * Define synthetic interrupt controller model specific registers for
-+ * nested hypervisor.
-+ */
-+#define HV_REGISTER_NESTED_SCONTROL            0x40001080
-+#define HV_REGISTER_NESTED_SVERSION            0x40001081
-+#define HV_REGISTER_NESTED_SIEFP               0x40001082
-+#define HV_REGISTER_NESTED_SIMP                0x40001083
-+#define HV_REGISTER_NESTED_EOM                 0x40001084
-+#define HV_REGISTER_NESTED_SINT0               0x40001090
-+
- /*
-  * Synthetic Timer MSRs. Four timers per vcpu.
-  */
 diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 61f0c206bff0..326d699b30d5 100644
+index 326d699b30d5..42e42cea0384 100644
 --- a/arch/x86/include/asm/mshyperv.h
 +++ b/arch/x86/include/asm/mshyperv.h
-@@ -198,30 +198,8 @@ static inline bool hv_is_synic_reg(unsigned int reg)
- 	return false;
+@@ -74,10 +74,16 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+ 	return hv_status;
  }
  
--static inline u64 hv_get_register(unsigned int reg)
--{
--	u64 value;
--
--	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
--		hv_ghcb_msr_read(reg, &value);
--	else
--		rdmsrl(reg, value);
--	return value;
--}
--
--static inline void hv_set_register(unsigned int reg, u64 value)
--{
--	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
--		hv_ghcb_msr_write(reg, value);
--
--		/* Write proxy bit via wrmsl instruction */
--		if (reg >= HV_REGISTER_SINT0 &&
--		    reg <= HV_REGISTER_SINT15)
--			wrmsrl(reg, value | 1 << 20);
--	} else {
--		wrmsrl(reg, value);
--	}
--}
-+u64 hv_get_register(unsigned int reg);
-+void hv_set_register(unsigned int reg, u64 value);
- 
- #else /* CONFIG_HYPERV */
- static inline void hyperv_init(void) {}
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 9a4204139490..3e6711a6af6b 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -41,6 +41,55 @@ bool hv_root_partition;
- bool hv_nested;
- struct ms_hyperv_info ms_hyperv;
- 
-+static inline unsigned int hv_get_nested_reg(unsigned int reg)
++/* Hypercall to the L0 hypervisor */
++static inline u64 hv_do_nested_hypercall(u64 control, void *input, void *output)
 +{
-+	switch (reg) {
-+	case HV_REGISTER_SIMP:
-+		return HV_REGISTER_NESTED_SIMP;
-+	case HV_REGISTER_NESTED_SIEFP:
-+		return HV_REGISTER_SIEFP;
-+	case HV_REGISTER_SCONTROL:
-+		return HV_REGISTER_NESTED_SCONTROL;
-+	case HV_REGISTER_SINT0:
-+		return HV_REGISTER_NESTED_SINT0;
-+	case HV_REGISTER_EOM:
-+		return HV_REGISTER_NESTED_EOM;
-+	default:
-+		return reg;
-+	}
++	return hv_do_hypercall(control | HV_HYPERCALL_NESTED, input, output);
 +}
 +
-+inline u64 hv_get_register(unsigned int reg)
+ /* Fast hypercall with 8 bytes of input and no output */
+-static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
++static inline u64 _hv_do_fast_hypercall8(u64 control, u16 code, u64 input1)
+ {
+-	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
++	u64 hv_status;
+ 
+ #ifdef CONFIG_X86_64
+ 	{
+@@ -105,10 +111,24 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
+ 		return hv_status;
+ }
+ 
++static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
 +{
-+	u64 value;
++	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
 +
-+	if (hv_nested)
-+		reg = hv_get_nested_reg(reg);
-+
-+	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
-+		hv_ghcb_msr_read(reg, &value);
-+	else
-+		rdmsrl(reg, value);
-+	return value;
++	return _hv_do_fast_hypercall8(control, code, input1);
 +}
 +
-+inline void hv_set_register(unsigned int reg, u64 value)
++static inline u64 hv_do_fast_nested_hypercall8(u16 code, u64 input1)
 +{
-+	if (hv_nested)
-+		reg = hv_get_nested_reg(reg);
++	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
 +
-+	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
-+		hv_ghcb_msr_write(reg, value);
-+
-+		/* Write proxy bit via wrmsl instruction */
-+		if (reg >= HV_REGISTER_SINT0 &&
-+		    reg <= HV_REGISTER_SINT15)
-+			wrmsrl(reg, value | 1 << 20);
-+	} else {
-+		wrmsrl(reg, value);
-+	}
++	return _hv_do_fast_hypercall8(control, code, input1);
 +}
 +
- #if IS_ENABLED(CONFIG_HYPERV)
- static void (*vmbus_handler)(void);
- static void (*hv_stimer0_handler)(void);
-diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index 4d6480d57546..9e1eb50cc76f 100644
---- a/drivers/hv/hv.c
-+++ b/drivers/hv/hv.c
-@@ -147,7 +147,7 @@ int hv_synic_alloc(void)
- 		 * Synic message and event pages are allocated by paravisor.
- 		 * Skip these pages allocation here.
- 		 */
--		if (!hv_isolation_type_snp()) {
-+		if (!hv_isolation_type_snp() && !hv_root_partition) {
- 			hv_cpu->synic_message_page =
- 				(void *)get_zeroed_page(GFP_ATOMIC);
- 			if (hv_cpu->synic_message_page == NULL) {
-@@ -188,8 +188,16 @@ void hv_synic_free(void)
- 		struct hv_per_cpu_context *hv_cpu
- 			= per_cpu_ptr(hv_context.cpu_context, cpu);
+ /* Fast hypercall with 16 bytes of input */
+-static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
++static inline u64 _hv_do_fast_hypercall16(u64 control, u16 code, u64 input1, u64 input2)
+ {
+-	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
++	u64 hv_status;
  
--		free_page((unsigned long)hv_cpu->synic_event_page);
--		free_page((unsigned long)hv_cpu->synic_message_page);
-+		if (hv_root_partition) {
-+			if (hv_cpu->synic_event_page != NULL)
-+				memunmap(hv_cpu->synic_event_page);
+ #ifdef CONFIG_X86_64
+ 	{
+@@ -139,6 +159,20 @@ static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
+ 	return hv_status;
+ }
+ 
++static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
++{
++	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
 +
-+			if (hv_cpu->synic_message_page != NULL)
-+				memunmap(hv_cpu->synic_message_page);
-+		} else {
-+			free_page((unsigned long)hv_cpu->synic_event_page);
-+			free_page((unsigned long)hv_cpu->synic_message_page);
-+		}
- 		free_page((unsigned long)hv_cpu->post_msg_page);
- 	}
++	return _hv_do_fast_hypercall16(control, code, input1, input2);
++}
++
++static inline u64 hv_do_fast_nested_hypercall16(u16 code, u64 input1, u64 input2)
++{
++	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
++
++	return _hv_do_fast_hypercall16(control, code, input1, input2);
++}
++
+ extern struct hv_vp_assist_page **hv_vp_assist_page;
  
-@@ -216,7 +224,7 @@ void hv_synic_enable_regs(unsigned int cpu)
- 	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
- 	simp.simp_enabled = 1;
- 
--	if (hv_isolation_type_snp()) {
-+	if (hv_isolation_type_snp() || hv_root_partition) {
- 		hv_cpu->synic_message_page
- 			= memremap(simp.base_simp_gpa << HV_HYP_PAGE_SHIFT,
- 				   HV_HYP_PAGE_SIZE, MEMREMAP_WB);
-@@ -233,7 +241,7 @@ void hv_synic_enable_regs(unsigned int cpu)
- 	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
- 	siefp.siefp_enabled = 1;
- 
--	if (hv_isolation_type_snp()) {
-+	if (hv_isolation_type_snp() || hv_root_partition) {
- 		hv_cpu->synic_event_page =
- 			memremap(siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT,
- 				 HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+ static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
+diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+index b17c6eeb9afa..e61ee461c4fc 100644
+--- a/include/asm-generic/hyperv-tlfs.h
++++ b/include/asm-generic/hyperv-tlfs.h
+@@ -194,6 +194,7 @@ enum HV_GENERIC_SET_FORMAT {
+ #define HV_HYPERCALL_VARHEAD_OFFSET	17
+ #define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
+ #define HV_HYPERCALL_RSVD0_MASK		GENMASK_ULL(31, 27)
++#define HV_HYPERCALL_NESTED		BIT_ULL(31)
+ #define HV_HYPERCALL_REP_COMP_OFFSET	32
+ #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
+ #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
 -- 
 2.25.1
 
