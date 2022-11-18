@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B44562F939
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Nov 2022 16:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBB662F958
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Nov 2022 16:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbiKRPYd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Nov 2022 10:24:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S241666AbiKRPem (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Nov 2022 10:34:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbiKRPY3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Nov 2022 10:24:29 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11021023.outbound.protection.outlook.com [52.101.52.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE8F61B8A;
-        Fri, 18 Nov 2022 07:24:28 -0800 (PST)
+        with ESMTP id S234995AbiKRPel (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Nov 2022 10:34:41 -0500
+Received: from DM6PR05CU003-vft-obe.outbound.protection.outlook.com (mail-centralusazon11023015.outbound.protection.outlook.com [52.101.64.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF54F5A8;
+        Fri, 18 Nov 2022 07:34:40 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ilil6L7+KC4BI1YR98HT0ijEdt+o4oHsivDTzN4AGuzrox5xECQXKAqvirtyol+xfWry+lIfVG4KZsBYBm6WV3lwttykJjMwa5fr3orrj4XbCfUR04PAKdTUCOsl5RLmeCQ/6YLuEkjT1P7AoNKxdupQ2NWZFSrM0suLeJnI0TnkBw3fXGXS9hkjqOi3ChZdD8mnQVEoza229D0avZA7TbMJiNUyWK4sMS6U1aXN1mXfEa+1gjhAe6kmZGparYGo1QbddqIjm5L4KtuxbM0R00noj9dzECPIyKAyAQhslfWMrGK942fnPCHtjkX7uDciXFWNCom+by6oz9yHOrKM0g==
+ b=E5Ti+y7PNAQAOcbtU4HzeGwyLz3hzYErr6X1ySd2Fdb9aSBhAe2F0otWXDMMQb5yel4Yz5OEr7/CKDWw+N3tciF5kUAJn90Nn3Ip+QbfgxXWbP/f0+db9UdmPWB/QuFHCJDkO+VQ2lXhukx2WfH4xYUpdYAlnWOkxqBsGc5diMF1lTfyGgwnwocqR34GoeWBT7eN1jaugUI6ERRwlN1haUtAbArlQWS6pW8EcLmCm82ssWAdgL5ow4srbI/eGfCCvx1km0qRfrlTfu1SgzaVFcbAsrXB6jVXitH7P/+jKIDh+KwCrpVZJGUXjomn4GcMaHAVdTbDhJ9BlbRK3iOK2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TDlgSWA6/uA+gs5xRlU5H5sJXDO54H+ujgqwmSaDF0Q=;
- b=AsogAIp2e0bxQxq3Z7OJVK+PbEkhVagLC1ytYXm3bLxU1X1NAQLkXO6AP+zOG6tqddSxMOHqGPKQMQUTQsHhHByTWh1HkKJIGJMyx8EGRq5CKABUpE4GZmOk3e6YEwB1C1CBh6nhECiaUzEZ4+rapicdqRLfAgUoop1in0gABhg+G9+N+meVTUMrDygHpXbfXaTkRPzB0xhREcn3FX02YFBGa935jVAIK3DnQp60j1eFHLtJyx8C9Pc1s0uXC8hQAC8wp+GXwSSbicZwzPj7f7wN7HR+t8JEfvi6jTcIUH80SEcT+hXMXvXvBz+4Am0IfMu4wPOYwIgQU2EEwU0bWw==
+ bh=xp1YUJoLdjKLeu0fbsNY8F6EPDmg0u2tiTqlfm+WDI4=;
+ b=LpYGDzXMFQRSMgk7/f8Qt1BAMjq96IydJn2RgdH9d+V0UUyfVAlEyEA8zaSKclLhPRU9NOfyUtF4ivTPO/mebKVHMQkPFuEZboNvWgP43UsxpYdutU/mZt4Q+nDlbo4iT7RL/wLAHPLv7aV8atOyufLItfUq4jDim0UqKTCJKJGhhPPcDMi4gQJjdNrROtY/aDjYmiSBYn3EqEiU8o4HAZtYXZx0jhjf2lDDBYGjI8SyjXivN5FHAuJ1XFGqG9P+NZoE7++uB6UMqKRxn591wVUmWyGhs19bvsuWdEVZyGg/d253EmhEN3xVLYKlBwzTERL05fKN7bvUGlD5RUOl3A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TDlgSWA6/uA+gs5xRlU5H5sJXDO54H+ujgqwmSaDF0Q=;
- b=biwsZ7GBFXoyWb9LyiMeNWYeTR0rPkH/HpmKqEPsSAwWdmQiGP9nlDUcSbWfE750FAt2PRd8obrbBUCwFoW20wuYI+4Q4iuDVdYjrpNvaS6dzoSpjVgDOhlt51QuiGyJm0yprlhiJv8C9qpvjMvBE5gUmYR+Hfa8MYAhK5dAltA=
+ bh=xp1YUJoLdjKLeu0fbsNY8F6EPDmg0u2tiTqlfm+WDI4=;
+ b=DP45qkRU8pU6fbxuVbKKijUyyweox/5/9kPDtk4MOXOTiW2RzkKQYZFpA0VuIsq2Yr2EnCqzftkR9gtMlYECcst/mydqNJwe81b/WxfbHKHmhlD3jY134dr2HeH/CcTOg0wSG/22N3ConlAxEqj4AH9SVoYF3hFwFd9ygHwUCFg=
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MN0PR21MB3384.namprd21.prod.outlook.com (2603:10b6:208:380::21) with
+ by BL1PR21MB3331.namprd21.prod.outlook.com (2603:10b6:208:39c::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.8; Fri, 18 Nov
- 2022 15:24:25 +0000
+ 2022 15:34:35 +0000
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::1e50:78ec:6954:d6dd%4]) with mapi id 15.20.5857.008; Fri, 18 Nov 2022
- 15:24:25 +0000
+ 15:34:33 +0000
 From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 To:     Jinank Jain <jinankjain@linux.microsoft.com>,
         Jinank Jain <jinankjain@microsoft.com>
@@ -62,74 +62,74 @@ CC:     KY Srinivasan <kys@microsoft.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>
-Subject: RE: [PATCH v4 1/5] x86/hyperv: Add support for detecting nested
- hypervisor
-Thread-Topic: [PATCH v4 1/5] x86/hyperv: Add support for detecting nested
- hypervisor
-Thread-Index: AQHY+jSiLohpBYaVr0ORI5uxZASSFa5Eyuxw
-Date:   Fri, 18 Nov 2022 15:24:25 +0000
-Message-ID: <BYAPR21MB16889A73BB7BD863CE92820DD7099@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: RE: [PATCH v4 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+Thread-Topic: [PATCH v4 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+Thread-Index: AQHY+jShZZpJ1Yue3EG2WBJxHC1xl65Ez0mg
+Date:   Fri, 18 Nov 2022 15:34:33 +0000
+Message-ID: <BYAPR21MB1688F753417081A8186C177FD7099@BYAPR21MB1688.namprd21.prod.outlook.com>
 References: <cover.1668618583.git.jinankjain@linux.microsoft.com>
- <08ab7aede41f2feb1cd8ac21d0ddd17e25b1d070.1668618583.git.jinankjain@linux.microsoft.com>
-In-Reply-To: <08ab7aede41f2feb1cd8ac21d0ddd17e25b1d070.1668618583.git.jinankjain@linux.microsoft.com>
+ <11dda2c697781c5d12bbffd11052e6d6bb2ca705.1668618583.git.jinankjain@linux.microsoft.com>
+In-Reply-To: <11dda2c697781c5d12bbffd11052e6d6bb2ca705.1668618583.git.jinankjain@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=e1e12928-9525-4d73-8d29-09a15cc516d8;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-18T15:08:51Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=58172e4b-5867-42d4-be85-9a189bb8a208;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-18T15:24:28Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3384:EE_
-x-ms-office365-filtering-correlation-id: 1e51d224-311f-4b64-1342-08dac978fa17
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BL1PR21MB3331:EE_
+x-ms-office365-filtering-correlation-id: 648c4a22-88cb-4e41-fecf-08dac97a64b5
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: POt8G/vI+GEyMLbkrFzHSRfSrZS73jmnIIACF6EGOjz9/D2UdLCZxQ+/HPrOwfpYquFZtaK+xCGMd3q1VvLk6akIvs8N5TXyZl2AeMAGzd0iaxcsBBHhD/0F+AzxK4nf9Fn5zHmg8FEHWamggDD/Qtm3rWoS3cbR82A8HboLEXdI+4r/JlWen2QwaFilnP6uAR/VC4e+PnA0nSdBjrwRDrzi7nE8Ufdpe0NNvjreQKfZnMd+8/TEnEpyY1VDHnOtC2h3pDdaO1TSJ4hAm/iwPGhRP2Q7H/fQDJQDE+t9XWJCXz2/x4pQxnr0Xf094zALBZ3zwyAjx5g93IhBBhAHBijwUI4z31LIRYzOU7e1OePGemDRq4n66kc/WDgMUikmzOJafH0IUB2RuOF68/4XVNNZjqwMfkyKNX147oqz5nu7r0Y7raJNJ0qJ0zWF8S7bWljCjO70Es3l5tVu1Omp7I0C2cAe9NwA26KAvo5jn3vX98Tg11vD2D9g2VAVpt62tdIuakzzB11MOCz5uW+TN4EpF/63ttHrz/OK9N9R34s4slMgla2nyUX3KF5PAgUttVRbKNH0HBELA+zBD40llcdaXJ9fbhitgr/SZwtqR1erW0SvOF668KdOt/5/VnxnN3hzb1Bja+YOEFPqQpmVqVCTGIb1qeT1AMtKgBYwlmc3cePf3gc5aMfFkGTIxHyJVkDw0gR6IJ1Hl9omJCZ8he/9OcIWCmNgIRID2bFuqmOvHDFzF95OR/rnH6pEGOk4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(451199015)(8990500004)(2906002)(4326008)(8676002)(8936002)(7416002)(52536014)(5660300002)(41300700001)(76116006)(66556008)(64756008)(66946007)(66446008)(66476007)(122000001)(10290500003)(316002)(82950400001)(38070700005)(82960400001)(86362001)(54906003)(478600001)(7696005)(26005)(6506007)(71200400001)(110136005)(6636002)(55016003)(83380400001)(38100700002)(186003)(107886003)(33656002)(9686003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: lXKeOjsO1I0STKmPIrNqRT1bELkCH9eToAiSwHj3SpXFSaPgPV+rgAeFVPrIZhZuHwWjAP7NSBFDt8Gpd6f8InjSsLMs9V1dWYPTVHxZ05HUhw6/U9/iYiE4QBBy1mfnTKtz4eIv2Hxc1c7gxPI9PFkoIxk5Qpf+T1DQGlksbmxWkm+/Bi3DpwUawzdvv/DVn/paFAu0ddPb0qz3UR3hOQHid71iDGaL1ZeCDT40yGmsT0aUxtNh/OdQavFaRjVOe9uN5bWo4zgHIcM7bX8FmMgBhr9zQfU5hSLXgfZ9TFK0+aksBnrSWGvw+n2ivqnrXh+/LYw87LPZBfIA0harwXc/5clYd/LtmSPlVm3gVysdaRckQ6Io2U/m1SkPliNjr5YN+VI+MTupzZXQSttbyd06/HHQwS4OwhUfNuuFqCWsUYhuX/LxKMB3LigyHIz58XLKws5tTZstPe3BB5XZd76rjlqE1n+q95ifKJWNYNSlzcr59tUSY5XU1HykvPH8N6IAvHAZwvOU83j/2ttW/tpOgvSwIJaR+mSnqX17ffRpMimcu2mdSeOXvtDvE8Mv6NRJ+kr80NnuEB7i+9uhLapqOcdAE/teUDJaQxdU27H2+K+RdUtSi3xOxhXl+ab40VwPPFrUG0fEqUKBPz2Bc9vesU5ux0AfNSSSkTXpatuMycpHf/iCSf1/u4vBH1r9vurYOlv+IbihiFx/bN4noGRpg05C07MEB3tQmVRSA6LTocffz5KgyvIPjOH68eUF
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(366004)(451199015)(5660300002)(316002)(7416002)(122000001)(71200400001)(478600001)(8676002)(86362001)(64756008)(66946007)(76116006)(66556008)(66446008)(66476007)(4326008)(8990500004)(26005)(107886003)(41300700001)(55016003)(82960400001)(8936002)(82950400001)(38100700002)(110136005)(6636002)(38070700005)(54906003)(52536014)(10290500003)(33656002)(2906002)(186003)(7696005)(6506007)(9686003)(83380400001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6EOA9nBBJA7bT4xefGwRg/W07ZNXNVwxOzOMJp/Z9rCYcf7rtEoR7fEbL7S+?=
- =?us-ascii?Q?q/79Cvhc0wh+Ke8KbgxjvDWXu/rF9u0AVR1kD5yT49xIGfsvTMlLZiWhXDKo?=
- =?us-ascii?Q?AAjaRHJPukN9xYTatbHnDhjeBmwlBGJWB6a9p+5//J3InwFhBE7C40nER4DZ?=
- =?us-ascii?Q?/HJm62eyn70I2nXUCQpe24KR1XVSzQtKwOmfWEwVH7T7xj2zmcA7Y0QP3poO?=
- =?us-ascii?Q?TmDh3rJSRgDsSOKjUL8veg9devVEYrsC4CPGhrC+3khtvxqj/dxN/fPpKDKA?=
- =?us-ascii?Q?HaYplhoimddKvHQjgZLwT/XWP8KDO6fhTm1gz9TTcyxJ1rzxh9NVSrZ00ZVT?=
- =?us-ascii?Q?ldiBSlYUEBTBg94oult4MPuu/qqTHPiYvFFJJoF7pVB4KJTebAgAXw+5QjXY?=
- =?us-ascii?Q?kv//Qvh7V35HcS8tjq6JucXWVCoXAgLXFNhpJyVXk2VKfbpac780DcYAr0hA?=
- =?us-ascii?Q?zNg+9JFOvFy+bgjDUx8Is+O4pOD85tNeOoRdp1kNtbNlT7/s9km/vQ67eapq?=
- =?us-ascii?Q?4zlY5Ek+5SdxmJgV1jwy5ihABFs7JlvzoUwZZh1uNk0ce7cxnm89I9QUG2LP?=
- =?us-ascii?Q?Tigz7EWcjLR1tlr7kARtckqIQZfxWeAuTs4rigBcPIsMhjsLbHG/7NQ9UfL+?=
- =?us-ascii?Q?RGWJHmXqDfwCbaVKBbAF5oCcTA47ibla9eG+ipDaTBZvIx6cVjie6aYBh2aY?=
- =?us-ascii?Q?t9PonXOQ6m8cUiDiKbO0GOJGRHndeQ5FfUFoSXAQm5l6hPQL1yBOqsC9vPW5?=
- =?us-ascii?Q?frzdiDX0GPn9VH3WoKSo/pYVwqjt4MQdGu31ypTKYVpAbw2/7ih2OYTAGsHQ?=
- =?us-ascii?Q?KZkbvhau9HrOQpaCPZoKIACqPeKYUewKO2VknNHXt8R5Gm3MiKU9aG/eqLIv?=
- =?us-ascii?Q?nt3CUvRfzMVCvk8ZEWWacQMbST1FickAC6JoSyxFK65aO27Ik0WuMlLI9cwR?=
- =?us-ascii?Q?BKpeZyvR8oH2rgiV3tapdJ2yLER+fQMg0zLfUhkBTcir70f7u92kJqumN25r?=
- =?us-ascii?Q?vICvgK+/uge3iVyEXAsov2X6DtFt7EXc7lAbB0KFPiMiohi+1fdyGDRWqSIt?=
- =?us-ascii?Q?2Sc/EDE+haBFtmOPALT/jdNFX2sMjtZpX9l7ikfFH9oFtIGGf/646w4sy4U5?=
- =?us-ascii?Q?6Ws/9Hoja+V3A73RgvTMFA4rGqZjyaWT0yG7DNVx/RfrUos14IpoFBSAgaur?=
- =?us-ascii?Q?Y1eI05woqC97/Mvg7yQKjGs6c/Ni4u683VQ3D8pW0bAzc194Moot3XJkVz7U?=
- =?us-ascii?Q?z8pvGgJBAG7n5gacBK1w2VZ2FGyRtpb2AGr7ZoH0P/RWyty8KLj2q191V32x?=
- =?us-ascii?Q?1qSAPNLVcXVyaBHmur2p2v89H3yPC2XiEjr2Nyfu/lXkkPTD/2xHO+DXn/dC?=
- =?us-ascii?Q?QlY8YV+wT9xergAggYFZDlEw9i2KK9lm9MkH8ItI6n9AErta6oQsVq4xZjQl?=
- =?us-ascii?Q?bWIsEoTT4UE4RbJu3PNV/gKENCDZAEEKqnEDmIOa81/lSHmeFD3sWv1aH46y?=
- =?us-ascii?Q?w8/FRZumUXElBHcT8FLvY10RJ1pxAWNeoEwvwQuMCPsLxeot800qacTInJeY?=
- =?us-ascii?Q?uP1zfRiJ++HmVyU+5rq4lf3LemH0fzN9AG6Q2paIhrxG5QlHbWske/WFyCjA?=
- =?us-ascii?Q?qg=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?38cpJUMUBKzuE/eRiTSJ7tZU/6nkv1EDfj9aF/1cXddFB1Vv1WuQb3fjjpJC?=
+ =?us-ascii?Q?tPk5yuEMKrjz0jurDRg7/z7/RWQADL7uhwji4t03ygE2TValuV1Q4fbuZOo2?=
+ =?us-ascii?Q?KmCJxLluARRcQcZ51+qCBJgBIM09zYEuPVGkMTBhwwqAI1m59F46q5v3CzuH?=
+ =?us-ascii?Q?DVM1rkPGfgTXn4uzppZaueGBojpwsIaKPwxsoeTj+omFwWSpkqBZLEtkaQhz?=
+ =?us-ascii?Q?Fmdimokrkgz+9ljkVWv4fQN1bfqsdzu5q4zBuvPUwePw5HB/y+o+FXbxHTDD?=
+ =?us-ascii?Q?VUFGL0kTiWac6rUPAxg62cmS/A/ebv7xsgEsOdlDcW+MW3KOZkoJjFmYZYAb?=
+ =?us-ascii?Q?U1d5Ihf/94ktirIgCCViyiaIiovAvyVX3HjjY0gm1Q9f/FRzrDrFW/2MOc2C?=
+ =?us-ascii?Q?ousMPoKLW4QK67mswZb/4HYPBoNUbY/bEzn281NrbuSbikxMR8YNwJ971yPo?=
+ =?us-ascii?Q?Ika6ufkDBRlSGU/+6/O0obYvSun0EwCNXgLNpBo0jjjALtFBm2KxMLOOrbGI?=
+ =?us-ascii?Q?IcdylKA3bvF8cPDPgapohCc7MqmEtVe/qntRpg5cteNhPCmLnu/+frI8r7ee?=
+ =?us-ascii?Q?PEJUBVLv1SmkuX/zL/LRHwqTBHbnHSj793IHvWcqfrCePhFb1j8RHt6sVRjK?=
+ =?us-ascii?Q?Cn3DLOmFow1HpqWdLejjnGz5U8I84BAbiop4jQ/e9UlTkW9jeLKnOLgqXUXr?=
+ =?us-ascii?Q?RyZBa9tXgyRW2AvMHMsJlZuqDM2wNMwGKYVIsEpCg/+bA0xMO8KltLX/0QwN?=
+ =?us-ascii?Q?XAkvWQO45BnnYwTjxcG0zyZG59ByR1xZq9/a6nRYLdtmqLCIGS64Fvvga5wm?=
+ =?us-ascii?Q?IahLe6zuHbLHunMQYWgllLX/qIZQAuA7Yz8HHbnRimwBKh7gfLTwXKjuC6kB?=
+ =?us-ascii?Q?1MeiN55xdlm6HQ9i0kvrl5jJpXj/QU1ENTIJe4Csm4qNfeyMJOK0/dwoHjE4?=
+ =?us-ascii?Q?O1R7204wEWTAuDd9AexmMFjPmDklXZ24unIR7wUTvw7oc5Mnv6ACi/M9jlIR?=
+ =?us-ascii?Q?SR04NNZjxdDYytUxYSMLOhh3RxitmrPu15/SwATZ9e3D9GltLNWq6/VaWTDs?=
+ =?us-ascii?Q?uD9o4HVbsAHiMas+qTsTWvzmv6WRd4DhO28glHlXopvTaEOrnjRfzTmRvG0Q?=
+ =?us-ascii?Q?hHTK3gBZaWgHyYoFPngYiXEbu733mgSxA3Itqxt7zdDbkA0bihEnFgFmQ8td?=
+ =?us-ascii?Q?+m9SqDRZ9/0TsSt90hF6Rud5dEGuby79uzx/HDjZTdYbqEibs5fGVKn3o4JV?=
+ =?us-ascii?Q?YEchE+9sxpwVPYYuUG0QvXEDrQ1Z+akWMLFKPi/F/sfniRCbgyF6bJ+VXU/R?=
+ =?us-ascii?Q?xdKiXG3jvMNwho7qiKBPqxLdP0yflF1AvornWysHa5oqKICqIFJsU0IRhnFl?=
+ =?us-ascii?Q?sZVumCgZvtdVIJpfZ2DTc3prvGuvKd21MH7hhVbm1rAdi5ykNDm7n22e5RCl?=
+ =?us-ascii?Q?A7YTxwbnFm1lhvnP4Jq0clBZqGbIa7bWVstJr55zOkZDoAeBqelEhRk2eMf7?=
+ =?us-ascii?Q?aQeGuD7H0yhsgzTCS2CS5g2g+SfDvDcJSgky5p2VAmmxk/Z7hnR0yP+sW6Fz?=
+ =?us-ascii?Q?VhXlioAtqC8IOJWGwa4UeS+ZISoEONCj927u4KsdbuzFuXj2WC0Q7EfBUdd7?=
+ =?us-ascii?Q?VA=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e51d224-311f-4b64-1342-08dac978fa17
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 15:24:25.4796
+X-MS-Exchange-CrossTenant-Network-Message-Id: 648c4a22-88cb-4e41-fecf-08dac97a64b5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2022 15:34:33.8719
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zWfORV+2CedzHZBWN8r/IQ8DJOXQAsPGK8jPBj59LFG7lVSDsNQXyzkuwhRVB3L/YEitR7rZuB873FMpvA3KvxJQDNP2gG2jYP3QSZBTcLY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3384
+X-MS-Exchange-CrossTenant-userprincipalname: hUX6ZMu1vYFbWU20VGP08yz+qi+kLqZdu0NuEzX7w1nfUA/naSgKR+xf+Ti228wLEFUc1XHKD/MPx1h0sUJjXneSUW4yEZBP0jT8Ondt50o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR21MB3331
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
@@ -143,150 +143,203 @@ X-Mailing-List: linux-arch@vger.kernel.org
 From: Jinank Jain <jinankjain@linux.microsoft.com> Sent: Wednesday, Novembe=
 r 16, 2022 7:28 PM
 >=20
-> When Linux runs as a root partition for Microsoft Hypervisor. It is
-> possible to detect if it is running as nested hypervisor using
-> hints exposed by mshv. While at it expose a new variable called
-> hv_nested which can be used later for making decisions specific to
-> nested use case.
-
-Make the commit statement a bit more direct, and avoid equivocating
-words like "possible" and "can be" when there isn't anything that is
-doubtful.  Here is my suggestion:
-
-Detect if Linux is running as a nested hypervisor in the root partition
-for Microsoft Hypervisor, using flags provided by MSHV.  Expose a new
-variable hv_nested that is used later for decisions specific to the
-nested use case.
-
+> Child partitions are free to allocate SynIC message and event page but in
+> case of root partition it must use the pages allocated by Microsoft
+> Hypervisor (MSHV). Base address for these pages can be found using
+> synthetic MSRs exposed by MSHV. There is a slight difference in those MSR=
+s
+> for nested vs non-nested root partition.
 >=20
 > Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 > ---
->  arch/arm64/hyperv/mshyperv.c       | 6 ++++++
->  arch/x86/include/asm/hyperv-tlfs.h | 3 +++
->  arch/x86/kernel/cpu/mshyperv.c     | 7 +++++++
->  drivers/hv/hv_common.c             | 7 +++++--
->  include/asm-generic/mshyperv.h     | 1 +
->  5 files changed, 22 insertions(+), 2 deletions(-)
+>  arch/x86/include/asm/hyperv-tlfs.h | 11 +++++++
+>  arch/x86/include/asm/mshyperv.h    | 26 ++--------------
+>  arch/x86/kernel/cpu/mshyperv.c     | 49 ++++++++++++++++++++++++++++++
+>  drivers/hv/hv.c                    | 18 ++++++++---
+>  4 files changed, 75 insertions(+), 29 deletions(-)
 >=20
-> diff --git a/arch/arm64/hyperv/mshyperv.c b/arch/arm64/hyperv/mshyperv.c
-> index a406454578f0..2024b19dc514 100644
-> --- a/arch/arm64/hyperv/mshyperv.c
-> +++ b/arch/arm64/hyperv/mshyperv.c
-> @@ -19,6 +19,9 @@
->=20
->  static bool hyperv_initialized;
->=20
-> +/* Is Linux running on nested Microsoft Hypervisor */
-> +bool hv_nested;
-> +
->  static int __init hyperv_init(void)
->  {
->  	struct hv_get_vp_registers_output	result;
-> @@ -63,6 +66,9 @@ static int __init hyperv_init(void)
->  	pr_info("Hyper-V: Host Build %d.%d.%d.%d-%d-%d\n",
->  		b >> 16, b & 0xFFFF, a,	d & 0xFFFFFF, c, d >> 24);
->=20
-> +	/* ARM64 does not support nested virtualization */
-> +	hv_nested =3D false;
-> +
->  	ret =3D hv_common_init();
->  	if (ret)
->  		return ret;
-
-The above ARM64 additions aren't needed.  An architecture that works
-with the default value of "0" (i.e., "false") doesn't have to do anything
-as it uses the version in hv_common.c.   While explicitly coding it on
-the ARM64 side doesn't break anything, one of intentions of the __weak
-approach is that we don't have to update the ARM64 side every time
-we add something that is x86 only.  To avoid irrelevant clutter on the
-ARM64 side, the preference is to *not* add such code.  Similarly,
-you'll notice that the ARM64 code doesn't initialize hv_root_partition.
-
 > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hy=
 perv-tlfs.h
-> index 6d9368ea3701..58c03d18c235 100644
+> index 58c03d18c235..b5019becb618 100644
 > --- a/arch/x86/include/asm/hyperv-tlfs.h
 > +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -114,6 +114,9 @@
->  /* Recommend using the newer ExProcessorMasks interface */
->  #define HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED		BIT(11)
+> @@ -225,6 +225,17 @@ enum hv_isolation_type {
+>  #define HV_REGISTER_SINT14			0x4000009E
+>  #define HV_REGISTER_SINT15			0x4000009F
 >=20
-> +/* Indicates that the hypervisor is nested within a Hyper-V partition. *=
-/
-> +#define HV_X64_HYPERV_NESTED				BIT(12)
+> +/*
+> + * Define synthetic interrupt controller model specific registers for
+> + * nested hypervisor.
+> + */
+> +#define HV_REGISTER_NESTED_SCONTROL            0x40001080
+> +#define HV_REGISTER_NESTED_SVERSION            0x40001081
+> +#define HV_REGISTER_NESTED_SIEFP               0x40001082
+> +#define HV_REGISTER_NESTED_SIMP                0x40001083
+> +#define HV_REGISTER_NESTED_EOM                 0x40001084
+> +#define HV_REGISTER_NESTED_SINT0               0x40001090
 > +
->  /* Recommend using enlightened VMCS */
->  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+>  /*
+>   * Synthetic Timer MSRs. Four timers per vcpu.
+>   */
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
+erv.h
+> index 61f0c206bff0..326d699b30d5 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -198,30 +198,8 @@ static inline bool hv_is_synic_reg(unsigned int reg)
+>  	return false;
+>  }
 >=20
+> -static inline u64 hv_get_register(unsigned int reg)
+> -{
+> -	u64 value;
+> -
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> -		hv_ghcb_msr_read(reg, &value);
+> -	else
+> -		rdmsrl(reg, value);
+> -	return value;
+> -}
+> -
+> -static inline void hv_set_register(unsigned int reg, u64 value)
+> -{
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> -		hv_ghcb_msr_write(reg, value);
+> -
+> -		/* Write proxy bit via wrmsl instruction */
+> -		if (reg >=3D HV_REGISTER_SINT0 &&
+> -		    reg <=3D HV_REGISTER_SINT15)
+> -			wrmsrl(reg, value | 1 << 20);
+> -	} else {
+> -		wrmsrl(reg, value);
+> -	}
+> -}
+> +u64 hv_get_register(unsigned int reg);
+> +void hv_set_register(unsigned int reg, u64 value);
+>=20
+>  #else /* CONFIG_HYPERV */
+>  static inline void hyperv_init(void) {}
 > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
 v.c
-> index 831613959a92..9a4204139490 100644
+> index 9a4204139490..3e6711a6af6b 100644
 > --- a/arch/x86/kernel/cpu/mshyperv.c
 > +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -37,6 +37,8 @@
->=20
->  /* Is Linux running as the root partition? */
->  bool hv_root_partition;
-> +/* Is Linux running on nested Microsoft Hypervisor */
-> +bool hv_nested;
+> @@ -41,6 +41,55 @@ bool hv_root_partition;
+>  bool hv_nested;
 >  struct ms_hyperv_info ms_hyperv;
 >=20
+> +static inline unsigned int hv_get_nested_reg(unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case HV_REGISTER_SIMP:
+> +		return HV_REGISTER_NESTED_SIMP;
+> +	case HV_REGISTER_NESTED_SIEFP:
+> +		return HV_REGISTER_SIEFP;
+> +	case HV_REGISTER_SCONTROL:
+> +		return HV_REGISTER_NESTED_SCONTROL;
+> +	case HV_REGISTER_SINT0:
+> +		return HV_REGISTER_NESTED_SINT0;
+> +	case HV_REGISTER_EOM:
+> +		return HV_REGISTER_NESTED_EOM;
+> +	default:
+> +		return reg;
+> +	}
+> +}
+> +
+> +inline u64 hv_get_register(unsigned int reg)
+
+I don't think "inline" here does anything.  There aren't any invocations
+of hv_get_register() in this module.  Previously, when the code was in
+an include file, then "inline" would do something.
+
+But I'm not an expert in compilers/linkers, so maybe I'm wrong. :-)
+
+> +{
+> +	u64 value;
+> +
+> +	if (hv_nested)
+> +		reg =3D hv_get_nested_reg(reg);
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> +		hv_ghcb_msr_read(reg, &value);
+> +	else
+> +		rdmsrl(reg, value);
+> +	return value;
+> +}
+> +
+> +inline void hv_set_register(unsigned int reg, u64 value)
+
+Same here.
+
+> +{
+> +	if (hv_nested)
+> +		reg =3D hv_get_nested_reg(reg);
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> +		hv_ghcb_msr_write(reg, value);
+> +
+> +		/* Write proxy bit via wrmsl instruction */
+> +		if (reg >=3D HV_REGISTER_SINT0 &&
+> +		    reg <=3D HV_REGISTER_SINT15)
+> +			wrmsrl(reg, value | 1 << 20);
+> +	} else {
+> +		wrmsrl(reg, value);
+> +	}
+> +}
+> +
 >  #if IS_ENABLED(CONFIG_HYPERV)
-> @@ -301,6 +303,11 @@ static void __init ms_hyperv_init_platform(void)
->  		pr_info("Hyper-V: running as root partition\n");
+>  static void (*vmbus_handler)(void);
+>  static void (*hv_stimer0_handler)(void);
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index 4d6480d57546..9e1eb50cc76f 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -147,7 +147,7 @@ int hv_synic_alloc(void)
+>  		 * Synic message and event pages are allocated by paravisor.
+>  		 * Skip these pages allocation here.
+>  		 */
+> -		if (!hv_isolation_type_snp()) {
+> +		if (!hv_isolation_type_snp() && !hv_root_partition) {
+>  			hv_cpu->synic_message_page =3D
+>  				(void *)get_zeroed_page(GFP_ATOMIC);
+>  			if (hv_cpu->synic_message_page =3D=3D NULL) {
+> @@ -188,8 +188,16 @@ void hv_synic_free(void)
+>  		struct hv_per_cpu_context *hv_cpu
+>  			=3D per_cpu_ptr(hv_context.cpu_context, cpu);
+>=20
+> -		free_page((unsigned long)hv_cpu->synic_event_page);
+> -		free_page((unsigned long)hv_cpu->synic_message_page);
+> +		if (hv_root_partition) {
+> +			if (hv_cpu->synic_event_page !=3D NULL)
+> +				memunmap(hv_cpu->synic_event_page);
+> +
+> +			if (hv_cpu->synic_message_page !=3D NULL)
+> +				memunmap(hv_cpu->synic_message_page);
+> +		} else {
+> +			free_page((unsigned long)hv_cpu->synic_event_page);
+> +			free_page((unsigned long)hv_cpu->synic_message_page);
+> +		}
+>  		free_page((unsigned long)hv_cpu->post_msg_page);
 >  	}
 >=20
-> +	if (ms_hyperv.hints & HV_X64_HYPERV_NESTED) {
-> +		hv_nested =3D true;
-> +		pr_info("Hyper-V: running on a nested hypervisor\n");
-> +	}
-> +
->  	/*
->  	 * Extract host information.
->  	 */
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index ae68298c0dca..dcb336ce374f 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -25,8 +25,8 @@
->  #include <asm/mshyperv.h>
+> @@ -216,7 +224,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	simp.as_uint64 =3D hv_get_register(HV_REGISTER_SIMP);
+>  	simp.simp_enabled =3D 1;
 >=20
->  /*
-> - * hv_root_partition and ms_hyperv are defined here with other Hyper-V
-> - * specific globals so they are shared across all architectures and are
-> + * hv_root_partition, ms_hyperv and hv_nested are defined here with othe=
-r
-> + * Hyper-V specific globals so they are shared across all architectures =
-and are
->   * built only when CONFIG_HYPERV is defined.  But on x86,
->   * ms_hyperv_init_platform() is built even when CONFIG_HYPERV is not
->   * defined, and it uses these two variables.  So mark them as __weak
-
-s/two/three/  (since we now have three such variables)
-
-> @@ -36,6 +36,9 @@
->  bool __weak hv_root_partition;
->  EXPORT_SYMBOL_GPL(hv_root_partition);
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_message_page
+>  			=3D memremap(simp.base_simp_gpa << HV_HYP_PAGE_SHIFT,
+>  				   HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -233,7 +241,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	siefp.as_uint64 =3D hv_get_register(HV_REGISTER_SIEFP);
+>  	siefp.siefp_enabled =3D 1;
 >=20
-> +bool __weak hv_nested;
-> +EXPORT_SYMBOL_GPL(hv_nested);
-> +
->  struct ms_hyperv_info __weak ms_hyperv;
->  EXPORT_SYMBOL_GPL(ms_hyperv);
->=20
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index bfb9eb9d7215..5df6e944e6a9 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -164,6 +164,7 @@ extern int vmbus_interrupt;
->  extern int vmbus_irq;
->=20
->  extern bool hv_root_partition;
-> +extern bool hv_nested;
->=20
->  #if IS_ENABLED(CONFIG_HYPERV)
->  /*
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_event_page =3D
+>  			memremap(siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT,
+>  				 HV_HYP_PAGE_SIZE, MEMREMAP_WB);
 > --
 > 2.25.1
 
