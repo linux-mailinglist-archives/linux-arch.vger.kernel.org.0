@@ -2,180 +2,276 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709F462E9E3
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Nov 2022 00:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2C962EB1A
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Nov 2022 02:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235120AbiKQXxe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Nov 2022 18:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        id S241082AbiKRBhZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Nov 2022 20:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbiKQXxd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Nov 2022 18:53:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF4D532F7
-        for <linux-arch@vger.kernel.org>; Thu, 17 Nov 2022 15:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668729157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lZ9h0bt6Jo+9fCE5vQcx0pDwFY9OuShej95BgGTToEE=;
-        b=gnKqSiLTqAqyiFiRnMkXMYO1JQrcNQ8KlUR89DC3roQP3rZoYDVTbeDJqLGKkM0ph+Yl5X
-        ipWyoup+u/obRPpJipFVaYHt6OJlcaP5NO/ccAOUBxQW9trIJILNdDqxprQh2KapmBj9k0
-        cB/REaX2rm6Vca4m1lxZCyPEOAoAaU8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-332-KWOLNxNFMUKFB1U8qqTgmA-1; Thu, 17 Nov 2022 18:52:33 -0500
-X-MC-Unique: KWOLNxNFMUKFB1U8qqTgmA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3A72D1C0CE68;
-        Thu, 17 Nov 2022 23:52:32 +0000 (UTC)
-Received: from [10.22.16.250] (unknown [10.22.16.250])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BD8A42222;
-        Thu, 17 Nov 2022 23:52:31 +0000 (UTC)
-Message-ID: <eba841a8-d61a-b404-9e92-d310a0f805f6@redhat.com>
-Date:   Thu, 17 Nov 2022 18:52:28 -0500
+        with ESMTP id S241020AbiKRBgv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Nov 2022 20:36:51 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D232C85EE8;
+        Thu, 17 Nov 2022 17:36:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668735396; x=1700271396;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=PGqeIE9D9mQ0SzWgaCrOjd5GhXHcGRQuoepeW+csvHw=;
+  b=OvEsHXJp/IJA++hIQd40PAA+oJe8q1wn1c1psPicghdSzQDU123GgK0w
+   4Tw9ZkUKhzDrKdfZZmFdsGGUHmuaz/e1GHxTN/UVrWyfZ0ObyuBUrJ33m
+   UYQEfU3iez9Zqqb7eACxOpbFo544w1r/1FIlFMQXJlJimMsSpyUcQzWsy
+   4a+ulVGdo3pkuK63g7SaW1lqZwKTZQuUdDdp63twoEapizd1p6552NK6x
+   p4TXbaZHd7JHfj8s/B/w6t+ikPlWhBBdVp7+4oL3LzmFgoIP32Iyy+si6
+   vj9W9irfyx0VpMrDCri6BHUIRYECg0c51QoeJy+6k/6oDmSlEm/l0bUt1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="399311566"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="399311566"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2022 17:36:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10534"; a="703558926"
+X-IronPort-AV: E=Sophos;i="5.96,172,1665471600"; 
+   d="scan'208";a="703558926"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Nov 2022 17:36:26 -0800
+Date:   Fri, 18 Nov 2022 09:32:01 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Message-ID: <20221118013201.GA456562@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org>
+ <20221116031441.GA364614@chaop.bj.intel.com>
+ <87mt8q90rw.fsf@linaro.org>
+ <20221117134520.GD422408@chaop.bj.intel.com>
+ <87a64p8vof.fsf@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: Syzkaller found a bug: KASAN: null-ptr-deref Write in
- prepare_to_wait
-Content-Language: en-US
-To:     Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "glider@google.com" <glider@google.com>,
-        "elver@google.com" <elver@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>
-Cc:     "syzkaller@googlegroups.com" <syzkaller@googlegroups.com>,
-        Paul Gazzillo <Paul.Gazzillo@ucf.edu>
-References: <DM6PR07MB50680D00B48D4ED3C151A2A7AB069@DM6PR07MB5068.namprd07.prod.outlook.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <DM6PR07MB50680D00B48D4ED3C151A2A7AB069@DM6PR07MB5068.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87a64p8vof.fsf@linaro.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/17/22 17:17, Sanan Hasanov wrote:
-> Good day, dear maintainers,
->
-> We found a bug using a modified kernel configuration file used by syzbot.
->
-> We enhanced the coverage of the configuration file using our tool, klocalizer.
->
-> Kernel branch: linux-next 5.11.0+ (HEAD detached at 8310b77b48c5)
->
-> config file and c reproducer are attached.
->
-> Thank you!
->
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
-> BUG: KASAN: null-ptr-deref in atomic_try_cmpxchg_acquire include/asm-generic/atomic-instrumented.h:705 [inline]
-> BUG: KASAN: null-ptr-deref in queued_spin_lock include/asm-generic/qspinlock.h:82 [inline]
-> BUG: KASAN: null-ptr-deref in do_raw_spin_lock_flags include/linux/spinlock.h:195 [inline]
-> BUG: KASAN: null-ptr-deref in __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:119 [inline]
-> BUG: KASAN: null-ptr-deref in _raw_spin_lock_irqsave+0x6c/0xd0 kernel/locking/spinlock.c:159
-> Write of size 4 at addr 0000000000000010 by task syz-executor.3/1879
->
-> CPU: 1 PID: 1879 Comm: syz-executor.3 Not tainted 5.11.0+ #4
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-> Call Trace:
->   __dump_stack lib/dump_stack.c:79 [inline]
->   dump_stack+0xb0/0xf3 lib/dump_stack.c:120
->   __kasan_report mm/kasan/report.c:400 [inline]
->   kasan_report.cold+0x10c/0x10e mm/kasan/report.c:413
->   check_memory_region_inline mm/kasan/generic.c:179 [inline]
->   check_memory_region+0x17c/0x1e0 mm/kasan/generic.c:185
->   instrument_atomic_read_write include/linux/instrumented.h:101 [inline]
->   atomic_try_cmpxchg_acquire include/asm-generic/atomic-instrumented.h:705 [inline]
->   queued_spin_lock include/asm-generic/qspinlock.h:82 [inline]
->   do_raw_spin_lock_flags include/linux/spinlock.h:195 [inline]
->   __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:119 [inline]
->   _raw_spin_lock_irqsave+0x6c/0xd0 kernel/locking/spinlock.c:159
->   prepare_to_wait+0x79/0x3c0 kernel/sched/wait.c:259
->   io_uring_cancel_files fs/io_uring.c:9014 [inline]
->   io_uring_cancel_task_requests+0x986/0xfa0 fs/io_uring.c:9054
->   io_uring_flush+0x311/0x470 fs/io_uring.c:9236
->   filp_close+0xad/0x150 fs/open.c:1286
->   close_files fs/file.c:403 [inline]
->   put_files_struct fs/file.c:418 [inline]
->   put_files_struct+0x193/0x280 fs/file.c:415
->   exit_files+0xa4/0xd0 fs/file.c:435
->   do_exit+0xa35/0x27d0 kernel/exit.c:820
->   do_group_exit+0xee/0x310 kernel/exit.c:922
->   get_signal+0x3b5/0x1a60 kernel/signal.c:2773
->   arch_do_signal_or_restart+0x2eb/0x18e0 arch/x86/kernel/signal.c:811
->   handle_signal_work kernel/entry/common.c:147 [inline]
->   exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
->   exit_to_user_mode_prepare+0xba/0x130 kernel/entry/common.c:208
->   __syscall_exit_to_user_mode_work kernel/entry/common.c:290 [inline]
->   syscall_exit_to_user_mode+0x1d/0x40 kernel/entry/common.c:301
->   entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f06219f6dcd
-> Code: Unable to access opcode bytes at RIP 0x7f06219f6da3.
-> RSP: 002b:00007f0620b66c98 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-> RAX: fffffffffffffe00 RBX: 00007f0621b23f80 RCX: 00007f06219f6dcd
-> RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007f0621b23f88
-> RBP: 00007f0621b23f88 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f0621b23f8c
-> R13: 00007ffcf7101edf R14: 00007ffcf7102080 R15: 00007f0620b66d80
-> ==================================================================
-> BUG: kernel NULL pointer dereference, address: 0000000000000010
-> #PF: supervisor write access in kernel mode
-> #PF: error_code(0x0002) - not-present page
-> PGD 0 P4D 0
-> Oops: 0002 [#1] SMP KASAN NOPTI
+On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Benn�e wrote:
+> 
+> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> 
+> > On Wed, Nov 16, 2022 at 07:03:49PM +0000, Alex Benn�e wrote:
+> >> 
+> >> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> >> 
+> >> > On Tue, Nov 15, 2022 at 04:56:12PM +0000, Alex Benn�e wrote:
+> >> >> 
+> >> >> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> >> >> 
+> >> >> > This new KVM exit allows userspace to handle memory-related errors. It
+> >> >> > indicates an error happens in KVM at guest memory range [gpa, gpa+size).
+> >> >> > The flags includes additional information for userspace to handle the
+> >> >> > error. Currently bit 0 is defined as 'private memory' where '1'
+> >> >> > indicates error happens due to private memory access and '0' indicates
+> >> >> > error happens due to shared memory access.
+> >> >> >
+> >> >> > When private memory is enabled, this new exit will be used for KVM to
+> >> >> > exit to userspace for shared <-> private memory conversion in memory
+> >> >> > encryption usage. In such usage, typically there are two kind of memory
+> >> >> > conversions:
+> >> >> >   - explicit conversion: happens when guest explicitly calls into KVM
+> >> >> >     to map a range (as private or shared), KVM then exits to userspace
+> >> >> >     to perform the map/unmap operations.
+> >> >> >   - implicit conversion: happens in KVM page fault handler where KVM
+> >> >> >     exits to userspace for an implicit conversion when the page is in a
+> >> >> >     different state than requested (private or shared).
+> >> >> >
+> >> >> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> >> >> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> >> >> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> >> >> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> >> >> > ---
+> >> >> >  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
+> >> >> >  include/uapi/linux/kvm.h       |  9 +++++++++
+> >> >> >  2 files changed, 32 insertions(+)
+> >> >> >
+> >> >> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> >> >> > index f3fa75649a78..975688912b8c 100644
+> >> >> > --- a/Documentation/virt/kvm/api.rst
+> >> >> > +++ b/Documentation/virt/kvm/api.rst
+> >> >> > @@ -6537,6 +6537,29 @@ array field represents return values. The userspace should update the return
+> >> >> >  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
+> >> >> >  spec refer, https://github.com/riscv/riscv-sbi-doc.
+> >> >> >  
+> >> >> > +::
+> >> >> > +
+> >> >> > +		/* KVM_EXIT_MEMORY_FAULT */
+> >> >> > +		struct {
+> >> >> > +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+> >> >> > +			__u32 flags;
+> >> >> > +			__u32 padding;
+> >> >> > +			__u64 gpa;
+> >> >> > +			__u64 size;
+> >> >> > +		} memory;
+> >> >> > +
+> >> >> > +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
+> >> >> > +encountered a memory error which is not handled by KVM kernel module and
+> >> >> > +userspace may choose to handle it. The 'flags' field indicates the memory
+> >> >> > +properties of the exit.
+> >> >> > +
+> >> >> > + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
+> >> >> > +   private memory access when the bit is set. Otherwise the memory error is
+> >> >> > +   caused by shared memory access when the bit is clear.
+> >> >> 
+> >> >> What does a shared memory access failure entail?
+> >> >
+> >> > In the context of confidential computing usages, guest can issue a
+> >> > shared memory access while the memory is actually private from the host
+> >> > point of view. This exit with bit 0 cleared gives userspace a chance to
+> >> > convert the private memory to shared memory on host.
+> >> 
+> >> I think this should be explicit rather than implied by the absence of
+> >> another flag. Sean suggested you might want flags for RWX failures so
+> >> maybe something like:
+> >> 
+> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
+> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
+> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
+> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
+> >
+> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
+> > specific, private memory can also set them once introduced.
+> 
+> OK so how about:
+> 
+>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
+>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
+>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
+>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
+>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
 
-According to this kernel splat, the spinlock address is at 0x10.
+We don't actually need a new bit, the opposite side of private is
+shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
+'shared'.
 
-253 void
-254 prepare_to_wait(struct wait_queue_head *wq_head, struct 
-wait_queue_entry *wq_entry, int state)
-255 {
-256         unsigned long flags;
-257
-258         wq_entry->flags &= ~WQ_FLAG_EXCLUSIVE;
-259         spin_lock_irqsave(&wq_head->lock, flags);
-260         if (list_empty(&wq_entry->entry))
-261                 __add_wait_queue(wq_head, wq_entry);
-262         set_current_state(state);
-263         spin_unlock_irqrestore(&wq_head->lock, flags);
-264 }
-265 EXPORT_SYMBOL(prepare_to_wait);
-
-The first element of wait_queue_head structure is a spinlock. That means 
-wq_head has a value of 0x10 too. Since it is called by 
-io_uring_cancel_files(), I think the bug is in the io_uring code as it 
-passed the wrong value to prepare_to_wait(). I didn't try to go further 
-as I am not that familiar with the io_uring code.
-
-Cheers,
-Longman
-
+Chao
+> 
+> >
+> > Thanks,
+> > Chao
+> >> 
+> >> which would allow you to signal the various failure modes of the shared
+> >> region, or that you had accessed private memory.
+> >> 
+> >> >
+> >> >> 
+> >> >> If you envision any other failure modes it might be worth making it
+> >> >> explicit with additional flags.
+> >> >
+> >> > Sean mentioned some more usages[1][]2] other than the memory conversion
+> >> > for confidential usage. But I would leave those flags being added in the
+> >> > future after those usages being well discussed.
+> >> >
+> >> > [1] https://lkml.kernel.org/r/20200617230052.GB27751@linux.intel.com
+> >> > [2] https://lore.kernel.org/all/YKxJLcg%2FWomPE422@google.com
+> >> >
+> >> >> I also wonder if a bitmask makes sense if
+> >> >> there can only be one reason for a failure? Maybe all that is needed is
+> >> >> a reason enum?
+> >> >
+> >> > Tough we only have one reason right now but we still want to leave room
+> >> > for future extension. Enum can express a single value at once well but
+> >> > bitmask makes it possible to express multiple orthogonal flags.
+> >> 
+> >> I agree if multiple orthogonal failures can occur at once a bitmask is
+> >> the right choice.
+> >> 
+> >> >
+> >> > Chao
+> >> >> 
+> >> >> > +
+> >> >> > +'gpa' and 'size' indicate the memory range the error occurs at. The userspace
+> >> >> > +may handle the error and return to KVM to retry the previous memory access.
+> >> >> > +
+> >> >> >  ::
+> >> >> >  
+> >> >> >      /* KVM_EXIT_NOTIFY */
+> >> >> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> >> >> > index f1ae45c10c94..fa60b032a405 100644
+> >> >> > --- a/include/uapi/linux/kvm.h
+> >> >> > +++ b/include/uapi/linux/kvm.h
+> >> >> > @@ -300,6 +300,7 @@ struct kvm_xen_exit {
+> >> >> >  #define KVM_EXIT_RISCV_SBI        35
+> >> >> >  #define KVM_EXIT_RISCV_CSR        36
+> >> >> >  #define KVM_EXIT_NOTIFY           37
+> >> >> > +#define KVM_EXIT_MEMORY_FAULT     38
+> >> >> >  
+> >> >> >  /* For KVM_EXIT_INTERNAL_ERROR */
+> >> >> >  /* Emulate instruction failed. */
+> >> >> > @@ -538,6 +539,14 @@ struct kvm_run {
+> >> >> >  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
+> >> >> >  			__u32 flags;
+> >> >> >  		} notify;
+> >> >> > +		/* KVM_EXIT_MEMORY_FAULT */
+> >> >> > +		struct {
+> >> >> > +#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+> >> >> > +			__u32 flags;
+> >> >> > +			__u32 padding;
+> >> >> > +			__u64 gpa;
+> >> >> > +			__u64 size;
+> >> >> > +		} memory;
+> >> >> >  		/* Fix the size of the union. */
+> >> >> >  		char padding[256];
+> >> >> >  	};
+> >> >> 
+> >> >> 
+> >> >> -- 
+> >> >> Alex Benn�e
+> >> 
+> >> 
+> >> -- 
+> >> Alex Benn�e
+> 
+> 
+> -- 
+> Alex Benn�e
