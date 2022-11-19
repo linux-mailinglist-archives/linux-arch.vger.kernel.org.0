@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BD8630B6A
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Nov 2022 04:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2623B630B6C
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Nov 2022 04:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiKSDsD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Nov 2022 22:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S233191AbiKSDsE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Nov 2022 22:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbiKSDrG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Nov 2022 22:47:06 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB88BFF67;
-        Fri, 18 Nov 2022 19:46:54 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id m14so6119104pji.0;
-        Fri, 18 Nov 2022 19:46:54 -0800 (PST)
+        with ESMTP id S230118AbiKSDrH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Nov 2022 22:47:07 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF31BFF7B;
+        Fri, 18 Nov 2022 19:46:55 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id q9so6648336pfg.5;
+        Fri, 18 Nov 2022 19:46:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eHfQ2xg7TSoUMJoNFBa3Rt6P1l7onXyfXsIWqOdHwnM=;
-        b=p7wzlQcXuRaSIC6PeeE++lmR7XnrDFVT5YTYvnC4lth3AZIUOaMSkbgVGFQqOKOtz1
-         q/kfQynPzZLbZtNfW+R3Vs6Uprf/d1Ub4tp0hdsMRVMHNBNiXVVdoldrZN6vD7leJ46N
-         ks3cVYzKSAEozqNDHUx0mQZnacluhbffwbLvSF58+MQkXZO3xFecGg9/xhPTfMm9oBVh
-         lQHQ6zon6yB6Ve8DW352Gxi85rH6/MSzEdWS7rpv3BxYYvd5hbrFaGPGMSO24pUhqrLa
-         nzZGkTN9VwCi+nojCKLDkLlUsvyPaaZR3NfA0KCUsn/xkOyfgRvz2dLA4GS/mGffCLcb
-         fm7A==
+        bh=w0YgLiOl0S0PjO9RGU6dEILmddfdRljq1tR8KTSAHbs=;
+        b=cVPhlzU8eK/Pt3xDnHgsJ/EHF7L2/ZjJbr+pz3d5HqMIYeseRIZI1jgD6y0biQtosF
+         rtieszzeSK7hKuyl2HXeDG4Mrwi/qYTrDyrOpoRqjlJ9OCEO/gZ0t36hMi7G7I5Y6dTj
+         MoJ+c32mi1FDPxQdD/0+oaI+GcXzbze8q+bhg60VRpC0McbMEtP/RgOk0BNMhOeYLdsH
+         lDL7T8zBTE8mVFKGK7I00Nizec9pcy6C36Q4BMB/5vjKDUSS1pZfvjJFIHqc5/jGbP2e
+         trK5AoClykpbtJhpDVGaRNSyKMA0i4lSlX74HZwdOmswu+YOpcuTuJRZ5sQn+XZvNEKJ
+         DE0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eHfQ2xg7TSoUMJoNFBa3Rt6P1l7onXyfXsIWqOdHwnM=;
-        b=cay6VYGaXIabscLFgUGcnVM4RmP0AiKFKfXXC7InbUBAr8Z5TaTSxMJq5zEl3UbZWE
-         rzU8A7JltSZivoC/i391Y2a3VKz1wfun2LI30CgugS1wHp6vQ8i32WDM3fZBm5cGySGd
-         eGNCPBA8ELx97GUcjiksctWk6nuHHM2wCv3QthElGyKO4/vrdtyTzoHP1XyXcDL8hxjs
-         AygV52KgAmE42McMPh9i0DfmKZxNUA4pmEY/3dWQq2U7f5cqJoVVMb6UIgpOLG9aidCm
-         bWUl3+8XgUv/C7Nlpb2oj4bxAmMz7uTKizcpH08a1ndlqmbCVK1wTX2F1KS8xTNEq3BW
-         2/iQ==
-X-Gm-Message-State: ANoB5plTy0SW38+qQJTnbAPBNc5SuPazyfdTU6eFUS1zgnh6VtoZQ6fY
-        EAnSQs266Ufe/Z5UhEcZdIQ=
-X-Google-Smtp-Source: AA0mqf7Klwt7zuSS5Bc0Ck/gVlzg6wPps8ApHYVA792N13f9ScivIPhHN4zDt0S1CpfGCmrimlbxdw==
-X-Received: by 2002:a17:902:d88d:b0:186:cb27:4e01 with SMTP id b13-20020a170902d88d00b00186cb274e01mr2334256plz.139.1668829613896;
-        Fri, 18 Nov 2022 19:46:53 -0800 (PST)
+        bh=w0YgLiOl0S0PjO9RGU6dEILmddfdRljq1tR8KTSAHbs=;
+        b=47yInzjKn1nxI5LL8RFim1P4KZku5EwKLsUS683dhBrr5aqsqP01rGsAzOE7LgI8SI
+         0rwyAX5VPdsT6FKTmUO+0zA2fUuwiYQpAq1hMIAXuv9hXBd7RVSHKNlILheXA/Z2gekQ
+         pVZrswupKZt4sKmXVvhdoZ+ByxdfsVLWW1U6CBMuV/Oe7HZVj5XjkHWUnGpbWypj3+yz
+         xoK4OlU1aFP3N3QQbMTYr1TEv2zhlPWa+tQKyoINHG9dLSBfvmvjWd4LddTFsIqRL8qc
+         Mvtbqb0l9/Eu4Vzl78LaHY0+gt/+5xTD5m4sVvOeKZJR/KxGLhXZQhQGHm54G+fnEHI+
+         To9g==
+X-Gm-Message-State: ANoB5pkDNJvfuu/yJ16zOufayeRpiepujlKjn1WRc5jr9qXZgYpLx26T
+        OOBkUp19cyz1LE5dMajPJ8hGEb3YI1X3VA==
+X-Google-Smtp-Source: AA0mqf56dEhRWdRWvzLyGPnEqRp10609+I0je6wOhyvoa8UBAoHSVxZY65PfscIPqv8kvCLC9fZVMA==
+X-Received: by 2002:a63:4e4c:0:b0:46f:dc59:aab6 with SMTP id o12-20020a634e4c000000b0046fdc59aab6mr9347136pgl.35.1668829615127;
+        Fri, 18 Nov 2022 19:46:55 -0800 (PST)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:38:f087:1794:92c5:f8f0])
-        by smtp.gmail.com with ESMTPSA id e5-20020a056a0000c500b005360da6b26bsm3913892pfj.159.2022.11.18.19.46.52
+        by smtp.gmail.com with ESMTPSA id e5-20020a056a0000c500b005360da6b26bsm3913892pfj.159.2022.11.18.19.46.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 19:46:53 -0800 (PST)
+        Fri, 18 Nov 2022 19:46:54 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,9 +65,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [RFC PATCH V2 11/18] Drivers: hv: vmbus: Decrypt vmbus ring buffer
-Date:   Fri, 18 Nov 2022 22:46:25 -0500
-Message-Id: <20221119034633.1728632-12-ltykernel@gmail.com>
+Subject: [RFC PATCH V2 12/18] x86/hyperv: Initialize cpu and memory for sev-snp enlightened guest
+Date:   Fri, 18 Nov 2022 22:46:26 -0500
+Message-Id: <20221119034633.1728632-13-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221119034633.1728632-1-ltykernel@gmail.com>
 References: <20221119034633.1728632-1-ltykernel@gmail.com>
@@ -85,46 +85,121 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-The ring buffer is remapped in the hv_ringbuffer_init()
-and it should be with decrypt flag in order to share it
-with hypervisor in sev-snp enlightened guest.
+Read processor amd memory info from specific address which are
+populated by Hyper-V. Initialize smp cpu related ops, pvalidate
+system memory and add it into e820 table.
 
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
- drivers/hv/ring_buffer.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/kernel/cpu/mshyperv.c | 75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 59a4aa86d1f3..391995c76be7 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -18,6 +18,7 @@
- #include <linux/slab.h>
- #include <linux/prefetch.h>
- #include <linux/io.h>
-+#include <linux/set_memory.h>
- #include <asm/mshyperv.h>
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index 2ea4f21c6172..f0c97210c64a 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -34,6 +34,12 @@
+ #include <clocksource/hyperv_timer.h>
+ #include <asm/numa.h>
+ #include <asm/coco.h>
++#include <asm/io_apic.h>
++#include <asm/svm.h>
++#include <asm/sev.h>
++#include <asm/sev-snp.h>
++#include <asm/realmode.h>
++#include <asm/e820/api.h>
  
- #include "hyperv_vmbus.h"
-@@ -233,14 +234,18 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info *ring_info,
+ /* Is Linux running as the root partition? */
+ bool hv_root_partition;
+@@ -253,6 +259,33 @@ static void __init hv_smp_prepare_cpus(unsigned int max_cpus)
+ }
+ #endif
  
- 		ring_info->ring_buffer = (struct hv_ring_buffer *)
- 			vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
-+				hv_isolation_type_en_snp() ?
-+				pgprot_decrypted(PAGE_KERNEL_NOENC) :
- 				PAGE_KERNEL);
- 
-+		if (hv_isolation_type_en_snp())
-+			memset(ring_info->ring_buffer, 0x00, page_cnt * PAGE_SIZE);
++static __init int hv_snp_set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
++static __init void hv_snp_get_rtc_noop(struct timespec64 *now) { }
 +
- 		kfree(pages_wraparound);
- 		if (!ring_info->ring_buffer)
- 			return -ENOMEM;
- 	}
++static u32 processor_count;
++
++static __init void hv_snp_get_smp_config(unsigned int early)
++{
++	if (!early) {
++		while (num_processors < processor_count) {
++			early_per_cpu(x86_cpu_to_apicid, num_processors) = num_processors;
++			early_per_cpu(x86_bios_cpu_apicid, num_processors) = num_processors;
++			physid_set(num_processors, phys_cpu_present_map);
++			set_cpu_possible(num_processors, true);
++			set_cpu_present(num_processors, true);
++			num_processors++;
++		}
++	}
++}
++
++struct memory_map_entry {
++	u64 starting_gpn;
++	u64 numpages;
++	u16 type;
++	u16 flags;
++	u32 reserved;
++};
++
+ static void __init ms_hyperv_init_platform(void)
+ {
+ 	int hv_max_functions_eax;
+@@ -260,6 +293,11 @@ static void __init ms_hyperv_init_platform(void)
+ 	int hv_host_info_ebx;
+ 	int hv_host_info_ecx;
+ 	int hv_host_info_edx;
++	struct memory_map_entry *entry;
++	struct e820_entry *e820_entry;
++	u64 e820_end;
++	u64 ram_end;
++	u64 page;
  
--
- 	ring_info->ring_buffer->read_index =
- 		ring_info->ring_buffer->write_index = 0;
+ #ifdef CONFIG_PARAVIRT
+ 	pv_info.name = "Hyper-V";
+@@ -477,6 +515,43 @@ static void __init ms_hyperv_init_platform(void)
+ 	if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
+ 		mark_tsc_unstable("running on Hyper-V");
+ 
++	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
++		x86_platform.legacy.reserve_bios_regions = 0;
++		x86_platform.set_wallclock = hv_snp_set_rtc_noop;
++		x86_platform.get_wallclock = hv_snp_get_rtc_noop;
++		x86_init.resources.probe_roms = x86_init_noop;
++		x86_init.resources.reserve_resources = x86_init_noop;
++		x86_init.mpparse.find_smp_config = x86_init_noop;
++		x86_init.mpparse.get_smp_config = hv_snp_get_smp_config;
++
++		/*
++		 * Hyper-V SEV-SNP enlightened guest doesn't support ioapic
++		 * and legacy APIC page read/write. Switch to hv apic here.
++		 */
++		disable_ioapic_support();
++		hv_apic_init();
++
++		processor_count = *(u32 *)__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
++
++		entry = (struct memory_map_entry *)(__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR)
++				+ sizeof(struct memory_map_entry));
++
++		for (; entry->numpages != 0; entry++) {
++			e820_entry = &e820_table->entries[e820_table->nr_entries - 1];
++			e820_end = e820_entry->addr + e820_entry->size;
++			ram_end = (entry->starting_gpn + entry->numpages) * PAGE_SIZE;
++
++			if (e820_end < entry->starting_gpn * PAGE_SIZE)
++				e820_end = entry->starting_gpn * PAGE_SIZE;
++			if (e820_end < ram_end) {
++				pr_info("Hyper-V: add [mem %#018Lx-%#018Lx]\n", e820_end, ram_end - 1);
++				e820__range_add(e820_end, ram_end - e820_end, E820_TYPE_RAM);
++				for (page = e820_end; page < ram_end; page += PAGE_SIZE)
++					pvalidate((unsigned long)__va(page), RMP_PG_SIZE_4K, true);
++			}
++		}
++	}
++
+ 	hardlockup_detector_disable();
+ }
  
 -- 
 2.25.1
