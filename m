@@ -2,110 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E106309BB
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Nov 2022 03:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBE7630A0E
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Nov 2022 03:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbiKSCRQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Nov 2022 21:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
+        id S232868AbiKSCW4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Nov 2022 21:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbiKSCQz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Nov 2022 21:16:55 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C906D2DE;
-        Fri, 18 Nov 2022 18:13:29 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_7fHO3hj1cgIAA--.23153S3;
-        Sat, 19 Nov 2022 10:13:27 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPuLEO3hjLsEWAA--.59786S2;
-        Sat, 19 Nov 2022 10:13:24 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tools/memory-model: Use "grep -E" instead of "egrep"
-Date:   Sat, 19 Nov 2022 10:13:18 +0800
-Message-Id: <1668823998-28548-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxPuLEO3hjLsEWAA--.59786S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uFWUCFy3Kw4Dtw1DWw4kWFg_yoW8CFyUpF
-        Z8A345KwsIvFyUXF40kF4rZFnrKan3JFyxGrZIyan8XrnxGF4ayrySqF45AFnFqFWDXw4r
-        CFWqvFy7Ww45CaDanT9S1TB71UUUUjJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8JVW8Jr1ln4kS
-        14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2
-        AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_
-        Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235483AbiKSCVZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Nov 2022 21:21:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AC8BEB5D;
+        Fri, 18 Nov 2022 18:14:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4AA68B825B6;
+        Sat, 19 Nov 2022 02:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24B2C433D7;
+        Sat, 19 Nov 2022 02:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668824053;
+        bh=AtO9SezOINz3pi/r9ihqNEXOEzBncb2vaqfaJpfkuhA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=m2Ckk76uLW4pvlFtyOz8Ls/ElvoLAnO/DKqoHTy8eKGXYO9M7u8cw1A/C1Dp/zZio
+         iGQ+cI3YgKEBfRvjjlgXiFCd+mSgKEKfhZpHOcmUgqRQtBrGCenzOOnoAS9Zt5uD5u
+         xeTPnZfvkrxis1k08JvS/C/8ga8zN2wCdW1KNoeg7f6x4ghgKG6+jEfLC6i+xqBRO2
+         W52XLFosa+mNdzCI9dfxiG6ixMOiG2idZUb3vHanT2PMkwzgEEfXYRTMYG71ne+3yH
+         5XJPxFSeBUOt9zhcdPb/RFKMqb6bHDGjUlfcPeYvf0b5YKvDYrFev5/j0C9E9RSvdr
+         TMeBVx1OpDhQw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 09/27] clocksource/drivers/hyperv: add data structure for reference TSC MSR
+Date:   Fri, 18 Nov 2022 21:13:34 -0500
+Message-Id: <20221119021352.1774592-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221119021352.1774592-1-sashal@kernel.org>
+References: <20221119021352.1774592-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The latest version of grep claims the egrep is now obsolete so the build
-now contains warnings that look like:
-	egrep: warning: egrep is obsolescent; using grep -E
-fix this up by moving the related file to use "grep -E" instead.
+From: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
 
-  sed -i "s/egrep/grep -E/g" `grep egrep -rwl tools/memory-model`
+[ Upstream commit 4ad1aa571214e8d6468a1806794d987b374b5a08 ]
 
-Here are the steps to install the latest grep:
+Add a data structure to represent the reference TSC MSR similar to
+other MSRs. This simplifies the code for updating the MSR.
 
-  wget http://ftp.gnu.org/gnu/grep/grep-3.8.tar.gz
-  tar xf grep-3.8.tar.gz
-  cd grep-3.8 && ./configure && make
-  sudo make install
-  export PATH=/usr/local/bin:$PATH
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/20221027095729.1676394-2-anrayabh@linux.microsoft.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/memory-model/scripts/checkghlitmus.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clocksource/hyperv_timer.c | 29 +++++++++++++++--------------
+ include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
-diff --git a/tools/memory-model/scripts/checkghlitmus.sh b/tools/memory-model/scripts/checkghlitmus.sh
-index 6589fbb..f72816a 100755
---- a/tools/memory-model/scripts/checkghlitmus.sh
-+++ b/tools/memory-model/scripts/checkghlitmus.sh
-@@ -35,13 +35,13 @@ fi
- # Create a list of the C-language litmus tests previously run.
- ( cd $LKMM_DESTDIR; find litmus -name '*.litmus.out' -print ) |
- 	sed -e 's/\.out$//' |
--	xargs -r egrep -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' |
-+	xargs -r grep -E -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' |
- 	xargs -r grep -L "^P${LKMM_PROCS}"> $T/list-C-already
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index bb47610bbd1c..18de1f439ffd 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -21,6 +21,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/acpi.h>
++#include <linux/hyperv.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
+@@ -395,25 +396,25 @@ static u64 notrace read_hv_sched_clock_tsc(void)
  
- # Create a list of C-language litmus tests with "Result:" commands and
- # no more than the specified number of processes.
- find litmus -name '*.litmus' -exec grep -l -m 1 "^C " {} \; > $T/list-C
--xargs < $T/list-C -r egrep -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' > $T/list-C-result
-+xargs < $T/list-C -r grep -E -l '^ \* Result: (Never|Sometimes|Always|DEADLOCK)' > $T/list-C-result
- xargs < $T/list-C-result -r grep -L "^P${LKMM_PROCS}" > $T/list-C-result-short
+ static void suspend_hv_clock_tsc(struct clocksource *arg)
+ {
+-	u64 tsc_msr;
++	union hv_reference_tsc_msr tsc_msr;
  
- # Form list of tests without corresponding .litmus.out files
+ 	/* Disable the TSC page */
+-	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+-	tsc_msr &= ~BIT_ULL(0);
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
++	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.enable = 0;
++	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+ 
+ static void resume_hv_clock_tsc(struct clocksource *arg)
+ {
+ 	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
+-	u64 tsc_msr;
++	union hv_reference_tsc_msr tsc_msr;
+ 
+ 	/* Re-enable the TSC page */
+-	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+-	tsc_msr &= GENMASK_ULL(11, 0);
+-	tsc_msr |= BIT_ULL(0) | (u64)phys_addr;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
++	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.enable = 1;
++	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
++	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+ #ifdef HAVE_VDSO_CLOCKMODE_HVCLOCK
+@@ -495,7 +496,7 @@ static __always_inline void hv_setup_sched_clock(void *sched_clock) {}
+ 
+ static bool __init hv_init_tsc_clocksource(void)
+ {
+-	u64		tsc_msr;
++	union hv_reference_tsc_msr tsc_msr;
+ 	phys_addr_t	phys_addr;
+ 
+ 	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
+@@ -530,10 +531,10 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	 * (which already has at least the low 12 bits set to zero since
+ 	 * it is page aligned). Also set the "enable" bit, which is bit 0.
+ 	 */
+-	tsc_msr = hv_get_register(HV_REGISTER_REFERENCE_TSC);
+-	tsc_msr &= GENMASK_ULL(11, 0);
+-	tsc_msr = tsc_msr | 0x1 | (u64)phys_addr;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr);
++	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.enable = 1;
++	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
++	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+ 
+ 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+ 
+diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+index 56348a541c50..1f314389e2be 100644
+--- a/include/asm-generic/hyperv-tlfs.h
++++ b/include/asm-generic/hyperv-tlfs.h
+@@ -102,6 +102,15 @@ struct ms_hyperv_tsc_page {
+ 	volatile s64 tsc_offset;
+ } __packed;
+ 
++union hv_reference_tsc_msr {
++	u64 as_uint64;
++	struct {
++		u64 enable:1;
++		u64 reserved:11;
++		u64 pfn:52;
++	} __packed;
++};
++
+ /*
+  * The guest OS needs to register the guest ID with the hypervisor.
+  * The guest ID is a 64 bit entity and the structure of this ID is
 -- 
-2.1.0
+2.35.1
 
