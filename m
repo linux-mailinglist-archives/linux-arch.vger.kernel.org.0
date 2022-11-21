@@ -2,100 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780C2632BD8
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Nov 2022 19:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B38D2632D25
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Nov 2022 20:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiKUSQQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Nov 2022 13:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S229671AbiKUTpR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Nov 2022 14:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiKUSQP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Nov 2022 13:16:15 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F906C0514;
-        Mon, 21 Nov 2022 10:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669054575; x=1700590575;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=xX4/g0oio96LX1HY5otdCTZt6qmKzdQZbF++Ebk/k10=;
-  b=M99Ryvqhu+0BlN6oNZ/Zps6K3vdP3mZNFglZBqamyDtAJUqWye2GiQCI
-   3kVkyCGCDbUaj7yPoMZ20zmoND2y5vSlqonMGtDdQTD+mQWUSw6jEDXHF
-   vhxZWxHVKmxk9ZOWgjfYa6rUgX/Dr05cWyJ4Z7dlhm/Auu3mm6XGSCtel
-   rUn0O2wljt1upR7x7VYFqkyK2c/suNFDI7HfS6aOK530wdkm63Dn3YW+m
-   Q+oNegRoUHXRhhpZbedA2YZSkqYA4yj9JvrzbBNBnJHXbubo9Fl2Nv8M0
-   7TLGwHo/l1gBiABJgAvkswRVzKRXrIB62wf0JxP0of1/uK0vErmkEgz8C
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="293337899"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="293337899"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 10:14:39 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="709905335"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="709905335"
-Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 10:14:28 -0800
-Message-ID: <e5f9529f-955c-fc28-5d46-c77f23a71d04@intel.com>
-Date:   Mon, 21 Nov 2022 10:14:27 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
+        with ESMTP id S229501AbiKUTpQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Nov 2022 14:45:16 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D03C76A0;
+        Mon, 21 Nov 2022 11:45:15 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D7071EC03EA;
+        Mon, 21 Nov 2022 20:45:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669059914;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=P5b4SWEpwjdHbs/SaEnye+cahlzdG2kmJ0e9jMb+r2g=;
+        b=Hz5c9OWHGhKRkyTmVzuAfPJFyiaBTj+VZZ3OGJhdc9XkaxCu4vpc31EVCIYsCPfNZfVrYd
+        SFHZv45DG4dfpvL57diwCak69jxSyHAuAk0AaX0/cl+i/fym7Dc0ipCRSFWzl3qMwi/fY5
+        tnAdZjL9Js8BPlHA3bg7m21jURO6bQ0=
+Date:   Mon, 21 Nov 2022 20:45:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
 Subject: Re: [Patch v3 01/14] x86/ioremap: Fix page aligned size calculation
  in __ioremap_caller()
-Content-Language: en-US
-To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
+Message-ID: <Y3vVRnAZmDCyQ3Wo@zn.tnic>
 References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
  <1668624097-14884-2-git-send-email-mikelley@microsoft.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1668624097-14884-2-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <Y3t+BipyGPUV3q8F@zn.tnic>
+ <BYAPR21MB168871875A5D58698273E914D70A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB168871875A5D58698273E914D70A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/16/22 10:41, Michael Kelley wrote:
-> Current code re-calculates the size after aligning the starting and
-> ending physical addresses on a page boundary. But the re-calculation
-> also embeds the masking of high order bits that exceed the size of
-> the physical address space (via PHYSICAL_PAGE_MASK). If the masking
-> removes any high order bits, the size calculation results in a huge
-> value that is likely to immediately fail.
-> 
-> Fix this by re-calculating the page-aligned size first. Then mask any
-> high order bits using PHYSICAL_PAGE_MASK.
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+On Mon, Nov 21, 2022 at 04:40:16PM +0000, Michael Kelley (LINUX) wrote:
+> As discussed in a parallel thread [1], the incorrect code here doesn't have
+> any real impact in already released Linux kernels.  It only affects the
+> transition that my patch series implements to change the way vTOM
+> is handled.
 
-Looks good:
+Are you sure?
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+PHYSICAL_PAGE_MASK is controlled by __PHYSICAL_MASK which is determined
+by CONFIG_DYNAMIC_PHYSICAL_MASK and __PHYSICAL_MASK_SHIFT which all
+differ depending on configurations and also dynamic.
 
-Although I do agree with Boris that this superficially looks like
-something that's important to backport.  It would be best to either beef
-up the changelog to explain why that's not the case, or to treat this as
-an actual fix and submit separately.
+It is probably still ok, in probably all possible cases even though I
+wouldn't bet on it.
+
+And this fix is simple and all clear so lemme ask it differently: what
+would be any downsides in backporting it to stable, just in case?
+
+> I don't know what the tradeoffs are for backporting a fix that doesn't solve
+> a real problem vs. just letting it be.  Every backport carries some overhead
+> in the process
+
+Have you seen the deluge of stable fixes? :-)
+
+> and there's always a non-zero risk of breaking something.
+
+I don't see how this one would cause any breakage...
+
+> I've leaned away from adding the "Fixes:" tag in such cases. But if
+> it's better to go ahead and add the "Fixes:" tag for what's only a
+> theoretical problem, I'm OK with doing so.
+
+I think this is a good to have fix anyway as it is Obviously
+Correct(tm).
+
+Unless you have any reservations you haven't shared yet...
+
+> [1] https://lkml.org/lkml/2022/11/11/1348
+
+Btw, the proper way to reference to a mail message now is simply to do:
+
+https://lore.kernel.org/r/<Message-ID>
+
+as long as it has been posted on some ML which lore archives. And I
+think it archives all.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
