@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D3C6326AE
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Nov 2022 15:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EEF63270F
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Nov 2022 15:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiKUOsR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Nov 2022 09:48:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59442 "EHLO
+        id S229735AbiKUO4h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Nov 2022 09:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiKUOq6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Nov 2022 09:46:58 -0500
+        with ESMTP id S230417AbiKUO4G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Nov 2022 09:56:06 -0500
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D606D2884;
-        Mon, 21 Nov 2022 06:41:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A9ECDFD5;
+        Mon, 21 Nov 2022 06:46:27 -0800 (PST)
 Received: from zn.tnic (p200300ea9733e725329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e725:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0AD131EC071C;
-        Mon, 21 Nov 2022 15:40:20 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 728E61EC071C;
+        Mon, 21 Nov 2022 15:46:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669041620;
+        t=1669041985;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=nVucUSR5GH+aVD4prFamu5Vccjb3OajaJg/HmkV7Mj8=;
-        b=KbhkHJom/jPEXkOOB0ksRGlXRvaPN64pFM19VgqxWWS/I8T8+Wvwgb65IlH9gx86/7jqiy
-        JMeYBafODuLLjQmbvBN9VY+Fm4p50pWQfE1HtbiXqRbjOj7xStksIebcL2vX3AjMPskz1K
-        rnXFY9bEkIFAJlXDFQVDct0oZnFWDbU=
-Date:   Mon, 21 Nov 2022 15:40:19 +0100
+        bh=xCGd6hIfxBt7cfQnfEqxSw7FPCqLC4Ck4a/q2jKRpXs=;
+        b=LYt3r1VGYpjFq2eY/1Ig8EB3IqiCf4tNl8mN6dMAnrQpepWGDiaxtPiv4BXj0A6jaCD+Kg
+        K6ao66qLGGIogTA7O/cDGBLmoMgFJB0PO40fxjVY3RQwJbP6X4+tmXifRdjlV9jvmVnhxt
+        RisyrBR0wBFbkpZYBwrRyZoAITaTgGY=
+Date:   Mon, 21 Nov 2022 15:46:25 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     Michael Kelley <mikelley@microsoft.com>
 Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
@@ -47,15 +47,15 @@ Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
         linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
         iommu@lists.linux.dev
-Subject: Re: [Patch v3 05/14] x86/mm: Handle decryption/re-encryption of
- bss_decrypted consistently
-Message-ID: <Y3uN07qSlGqo0dNO@zn.tnic>
+Subject: Re: [Patch v3 06/14] init: Call mem_encrypt_init() after Hyper-V
+ hypercall init is done
+Message-ID: <Y3uPQTKDnD+/tv6g@zn.tnic>
 References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
- <1668624097-14884-6-git-send-email-mikelley@microsoft.com>
+ <1668624097-14884-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1668624097-14884-6-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1668624097-14884-7-git-send-email-mikelley@microsoft.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -65,30 +65,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 10:41:28AM -0800, Michael Kelley wrote:
-> Current code in sme_postprocess_startup() decrypts the bss_decrypted
-> section when sme_me_mask is non-zero.  But code in
-> mem_encrypt_free_decrytped_mem() re-encrypts the unused portion based
-			^^
+On Wed, Nov 16, 2022 at 10:41:29AM -0800, Michael Kelley wrote:
+> Fix this by moving mem_encrypt_init() after late_time_init() and
+> related clock initializations. The intervening initializations don't
+> do any I/O that requires the swiotlb, so moving mem_encrypt_init()
+> slightly later has no impact.
 
-letters flipped.
+I hope you're right. Our boot ordering is fragile as hell. But
+mem_encrypt_init() doesn't do a whole lot of important setup - that has
+happened a lot earlier already - so I'm not too worried.
 
-> @@ -513,10 +513,14 @@ void __init mem_encrypt_free_decrypted_mem(void)
->  	npages = (vaddr_end - vaddr) >> PAGE_SHIFT;
->  
->  	/*
-> -	 * The unused memory range was mapped decrypted, change the encryption
-> -	 * attribute from decrypted to encrypted before freeing it.
-> +	 * If the unused memory range was mapped decrypted, change the encryption
-> +	 * attribute from decrypted to encrypted before freeing it. Base the
-> +	 * re-encryption on the same condition used for the decryption in
-> +	 * sme_postprocess_startup(). Higher level abstractions, such as
-> +	 * CC_ATTR_MEM_ENCRYPT, aren't necessarily equivalent in a Hyper-V VM
-> +	 * using vTOM, where sme_me_mask is always zero.
-
-Good, an example why one needs to pay attention here.
-
-Thx.
+But we'll see what breaks in wider testing.
 
 -- 
 Regards/Gruss,
