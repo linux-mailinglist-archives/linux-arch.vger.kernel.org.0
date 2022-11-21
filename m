@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E652A632E51
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Nov 2022 22:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119B3632E55
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Nov 2022 22:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiKUVAz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Nov 2022 16:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S229750AbiKUVBv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Nov 2022 16:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiKUVAy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Nov 2022 16:00:54 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE18CE9DC;
-        Mon, 21 Nov 2022 13:00:53 -0800 (PST)
+        with ESMTP id S229460AbiKUVBu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Nov 2022 16:01:50 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDE1CE9DC;
+        Mon, 21 Nov 2022 13:01:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669064453; x=1700600453;
+  t=1669064509; x=1700600509;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=wjfARnG71fsJHl7savTpEsBWA10xYLnS3ZDT8xUWyJA=;
-  b=Os47vSkeOYjXAig5aprJanLsfmzkfg+YmYMzcwZg+WicLl+wYIBZymJ3
-   3wTiZDeH85ju7bsX7fmBpXpWrxY79TTy9DzVFNvcGIvALEFFW6uAuf0A/
-   RFlancpQEis+JpZkY+Ru19xlVFFstpyBS4L2HOmXJ+VFlpZWhS3QKs3pR
-   moIu7zpT7RkKX3rVQi029okiu0SrPvePZDIxftYvcRz1ymn0MwvfPbTyl
-   tnZE89MhW0gJSNpJeTeEWaUO+qf2OKWMAlISLNVYQXGyPP74bELt4Dfq5
-   XwC9Ivy/fX12JwNwg6F3Kel6n6+IQ5nBWLZW9EGKbeLY+x7m2nPfkypBU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="313690577"
+  bh=3t75xCbPOt53fS2xeDdBOCnLlbwj0UyTuVNUJMnvY48=;
+  b=MZ6dmgsP9YnH3p/foQOfYZBHY0shXtgYRtuBq/Q5OK8Cnt3tu0kqESRA
+   LK7o+LvEFp6i2hYcbW3FPubUYTUggf7mTQOX5JHB9MkUq7S6ipz6BKlQs
+   B0fpgs9lG53tebj6lYz+OKJdWpunqGESKDtL90CgS6gnPH7cYGdXTlysh
+   mkHKaoDHow+kuxQ/NFLZETy7flylnZRN/fhcyisJ0N0wwan2NaPl2wKw1
+   5NTgMZfAg1swOT6Sh3es/XXkuP7I+f/4hMRj8FFuYpvq46fyftXohsxDf
+   c/aWdq00zeadajQ/st89aTxgvsmsHUwUqh6mhUHx6JA8jKB7/2ZSMT2+p
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314810134"
 X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="313690577"
+   d="scan'208";a="314810134"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:00:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="766101463"
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:01:48 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="766101930"
 X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="766101463"
+   d="scan'208";a="766101930"
 Received: from ticela-or-327.amr.corp.intel.com (HELO [10.209.6.63]) ([10.209.6.63])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:00:36 -0800
-Message-ID: <8d3ac4ca-055a-5d54-602c-e378643ad9cd@intel.com>
-Date:   Mon, 21 Nov 2022 13:00:35 -0800
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 13:01:47 -0800
+Message-ID: <d5f95b6b-df7f-416f-14c0-b4e284125d2a@intel.com>
+Date:   Mon, 21 Nov 2022 13:01:45 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 3/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
+Subject: Re: [PATCH 4/6] x86/hyperv: Add hv_isolation_type_tdx() to detect TDX
+ guests
 Content-Language: en-US
 To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
         arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
@@ -57,15 +57,15 @@ To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
         wei.liu@kernel.org, x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org
 References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-4-decui@microsoft.com>
+ <20221121195151.21812-5-decui@microsoft.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20221121195151.21812-4-decui@microsoft.com>
+In-Reply-To: <20221121195151.21812-5-decui@microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,76 +73,17 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 11/21/22 11:51, Dexuan Cui wrote:
-> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-> +static bool tdx_enc_status_changed_for_contiguous_pages(unsigned long vaddr,
-> +							int numpages, bool enc)
-
-That naming is unfortunate.
-
-First, it's getting way too long.
-
-Second, you don't need two of these functions because it's contiguous or
-not.  It's because tdx_enc_status_changed() only works on the direct map.
-
->  {
->  	phys_addr_t start = __pa(vaddr);
->  	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-> @@ -798,6 +800,47 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->  	return true;
->  }
->  
-> +static bool tdx_enc_status_changed_for_vmalloc(unsigned long vaddr,
-> +					       int numpages, bool enc)
-> +{
-> +	void *start_va = (void *)vaddr;
-> +	void *end_va = start_va + numpages * PAGE_SIZE;
-> +	phys_addr_t pa;
+> +			switch (hv_get_isolation_type()) {
+> +			case HV_ISOLATION_TYPE_VBS:
+> +			case HV_ISOLATION_TYPE_SNP:
+>  				cc_set_vendor(CC_VENDOR_HYPERV);
+> +				break;
 > +
-> +	if (offset_in_page(vaddr) != 0)
-> +		return false;
-> +
-> +	while (start_va < end_va) {
-> +		pa = slow_virt_to_phys(start_va);
-> +		if (!enc)
-> +			pa |= cc_mkdec(0);
-> +
-> +		if (!tdx_map_gpa(pa, pa + PAGE_SIZE, enc))
-> +			return false;
-> +
-> +		/*
-> +		 * private->shared conversion requires only MapGPA call.
-> +		 *
-> +		 * For shared->private conversion, accept the page using
-> +		 * TDX_ACCEPT_PAGE TDX module call.
-> +		 */
-> +		if (enc && !try_accept_one(&pa, PAGE_SIZE, PG_LEVEL_4K))
-> +			return false;
+> +			case HV_ISOLATION_TYPE_TDX:
+> +				static_branch_enable(&isolation_type_tdx);
+> +				break;
 
-Don't we support large vmalloc() mappings these days?
+This makes zero logical sense to me.
 
-> +		start_va += PAGE_SIZE;
-> +	}
-> +
-> +	return true;
-> +}
-
-I really don't like the copy-and-paste fork here.
-
-I'd almost just rather have this *one* "vmalloc" copy that does
-slow_virt_to_phys() on direct map addresses than have two copies.
-
-Can you please look into making *one* function that works on either kind
-of mapping?
-
-> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-> +{
-> +	if (is_vmalloc_addr((void *)vaddr))
-> +		return tdx_enc_status_changed_for_vmalloc(vaddr, numpages, enc);
-> +
-> +	return tdx_enc_status_changed_for_contiguous_pages(vaddr, numpages, enc);
-> +}
-> +
->  void __init tdx_early_init(void)
->  {
->  	u64 cc_mask;
-
+Running on Hyper-V, a HV_ISOLATION_TYPE_SNP is CC_VENDOR_HYPERV, but a
+HV_ISOLATION_TYPE_TDX guest is *NOT* CC_VENDOR_HYPERV?
