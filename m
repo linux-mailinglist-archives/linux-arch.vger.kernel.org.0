@@ -2,149 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EF66338A3
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 10:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B45633915
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 10:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiKVJhE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Nov 2022 04:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S233364AbiKVJy6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Nov 2022 04:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiKVJhD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 04:37:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F05A4A055;
-        Tue, 22 Nov 2022 01:37:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDAD3615D7;
-        Tue, 22 Nov 2022 09:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68428C433D6;
-        Tue, 22 Nov 2022 09:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669109821;
-        bh=7wpu88Q6B2Kkm7KKjQcA0/8wvOjYoaetfEppOc8/LrQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tBY2vKikg0x96nQXt+AZQCh4q2OfzV+uadi3H6VV6L3w+cJ59JhcNem7fCPrHkIcN
-         E8JP1Y58itlhsaVm+Kq/CKnkSXLu263e4xIoFUlMaqKQh1/QO8RcbsGYjdjdtCwh0R
-         5OFrI5sKkBOQlC3X9n+nBLpT9LNQyG71hf9Bp1/BmPP3k3BPyslhYlTvmeaqUQE5AN
-         vG2RXMynurkwvAYVPn4hJwUPjELYfPXpxRSd14Ft6URqjU3hd+EN47CIIb5eWReXQk
-         0oa2UIVkMOcTUKDXxQMCQstO/5rMhb28sqTUy6o643p6EdsyPkLGx+LDBMTuYjVlzo
-         1vcd54Ioazxwg==
-Date:   Tue, 22 Nov 2022 11:36:39 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
-Message-ID: <Y3yYJzz2o95fyMnf@kernel.org>
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
- <20221104223604.29615-36-rick.p.edgecombe@intel.com>
- <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
- <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
- <CY4PR11MB2005AD47BA1D97BC1A96A769F9069@CY4PR11MB2005.namprd11.prod.outlook.com>
- <a2c2552fcdba1a0fce0d02aeb519d33cac83bfd2.camel@intel.com>
- <Y3srU89TAwMURoEj@kernel.org>
- <dcbf087fb8082be8ff9be14c440a0efaee95cf93.camel@intel.com>
+        with ESMTP id S232621AbiKVJy5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 04:54:57 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AAE183AC;
+        Tue, 22 Nov 2022 01:54:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669110896; x=1700646896;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=rJIOCd9N5PvCN1hTjd1er2T0b67rVXxGjK1ymZuckrA=;
+  b=b7vNNj68/Ax6Wu+zUkZ0SXMQh1/D6weUFJgdYBLzCTERYsopZyfn5lCS
+   AC5ecYKuoLjRaZJZIaCJyMYgtoLp+2hrSPIat/rojvvpMC4JUxNDKZvHs
+   eap8QuRh1CaW9CPTvZZXcUarJiOCcg++ZFyjPQcJtrQGojRB2+DkqJdLd
+   F47Tqt43uU6ADr8efBIq8G/OXHLz905oPtZ2kiJ6v4cWM4S04SVTi15D9
+   7Z5ZsqycGoIBpky9UGhIirnF4SffdLXYY34xzc7v6Qm8Hi3CpYd4P0vHX
+   10Kfn/yMCEM1UgspnjZAYFYYaXzhbEu16Wo3B0QiRxglJWxOqaKKGjwyZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="314927693"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="314927693"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2022 01:54:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635489296"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="635489296"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 22 Nov 2022 01:54:45 -0800
+Date:   Tue, 22 Nov 2022 17:50:22 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Alex =?utf-8?B?QmVubu+/vWU=?= <alex.bennee@linaro.org>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+Message-ID: <20221122095022.GA617784@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+ <87cz9o9mr8.fsf@linaro.org>
+ <20221116031441.GA364614@chaop.bj.intel.com>
+ <87mt8q90rw.fsf@linaro.org>
+ <20221117134520.GD422408@chaop.bj.intel.com>
+ <87a64p8vof.fsf@linaro.org>
+ <20221118013201.GA456562@chaop.bj.intel.com>
+ <87o7t475o7.fsf@linaro.org>
+ <Y3er0M5Rpf1X97W/@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dcbf087fb8082be8ff9be14c440a0efaee95cf93.camel@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3er0M5Rpf1X97W/@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 03:52:57PM +0000, Edgecombe, Rick P wrote:
-> On Mon, 2022-11-21 at 09:40 +0200, Mike Rapoport wrote:
-> > On Thu, Nov 17, 2022 at 07:57:59PM +0000, Edgecombe, Rick P wrote:
-> > > On Thu, 2022-11-17 at 12:25 +0000, Schimpe, Christina wrote:
-> > > > > Hmm, we definitely need to be able to set the SSP. Christina,
-> > > > > does
-> > > > > GDB need
-> > > > > anything else? I thought maybe toggling SHSTK_EN?
-> > > > 
-> > > > In addition to the SSP, we want to write the CET state. For
-> > > > instance
-> > > > for inferior calls,
-> > > > we want to reset the IBT bits.
-> > > > However, we won't write states that are disallowed by HW.
-> > > 
-> > > Sorry, I should have given more background. Peter is saying we
-> > > should
-> > > split the ptrace interface so that shadow stack and IBT are
-> > > separate. 
-> > > They would also no longer necessarily mirror the CET_U MSR format.
-> > > Instead the kernel would expose a kernel specific format that has
-> > > the
-> > > needed bits of shadow stack support. And a separate one later for
-> > > IBT.
-> > > 
-> > > So the question is what does shadow stack need to support for
-> > > ptrace
-> > > besides SSP? Is it only SSP? The other features are SHSTK_EN and
-> > > WRSS_EN. It might actually be nice to keep how these bits get
-> > > flipped
-> > > more controlled (remove them from ptrace). It looks like CRIU
-> > > didn't
-> > > need them.
+On Fri, Nov 18, 2022 at 03:59:12PM +0000, Sean Christopherson wrote:
+> On Fri, Nov 18, 2022, Alex Benn?e wrote:
 > > 
-> >  
-> > CRIU reads CET_U with ptrace(PTRACE_GETREGSET, NT_X86_CET). It's done
-> > before the injection of the parasite. The value of SHSTK_EN is used
-> > then to
-> > detect if shadow stack is enabled and to setup victim's shadow stack
-> > for
-> > sigreturn.
+> > Chao Peng <chao.p.peng@linux.intel.com> writes:
+> > 
+> > > On Thu, Nov 17, 2022 at 03:08:17PM +0000, Alex Benn?e wrote:
+> > >> >> I think this should be explicit rather than implied by the absence of
+> > >> >> another flag. Sean suggested you might want flags for RWX failures so
+> > >> >> maybe something like:
+> > >> >> 
+> > >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_READ	(1 << 0)
+> > >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_WRITE	(1 << 1)
+> > >> >> 	KVM_MEMORY_EXIT_SHARED_FLAG_EXECUTE	(1 << 2)
+> > >> >>         KVM_MEMORY_EXIT_FLAG_PRIVATE            (1 << 3)
+> > >> >
+> > >> > Yes, but I would not add 'SHARED' to RWX, they are not share memory
+> > >> > specific, private memory can also set them once introduced.
+> > >> 
+> > >> OK so how about:
+> > >> 
+> > >>  	KVM_MEMORY_EXIT_FLAG_READ	(1 << 0)
+> > >>  	KVM_MEMORY_EXIT_FLAG_WRITE	(1 << 1)
+> > >>  	KVM_MEMORY_EXIT_FLAG_EXECUTE	(1 << 2)
+> > >>         KVM_MEMORY_EXIT_FLAG_SHARED     (1 << 3)
+> > >>         KVM_MEMORY_EXIT_FLAG_PRIVATE    (1 << 4)
+> > >
+> > > We don't actually need a new bit, the opposite side of private is
+> > > shared, i.e. flags with KVM_MEMORY_EXIT_FLAG_PRIVATE cleared expresses
+> > > 'shared'.
+> > 
+> > If that is always true and we never expect a 3rd type of memory that is
+> > fine. But given we are leaving room for expansion having an explicit bit
+> > allows for that as well as making cases of forgetting to set the flags
+> > more obvious.
 > 
-> Hmm, can it read /proc/pid/status? It has some lines like this:
-> x86_Thread_features: shstk wrss
-> x86_Thread_features_locked: shstk wrss
+> Hrm, I'm on the fence.
+> 
+> A dedicated flag isn't strictly needed, e.g. even if we end up with 3+ types in
+> this category, the baseline could always be "private".
 
-It could, but that would be much more intrusive than GETREGSET because
-currently /proc parsing and parasite injection don't really interact.
-If anything, arch_prctl(ARCH_CET_GET) via ptrace would be much nicer than
-/proc. 
+The baseline for the current code is actually "shared".
 
--- 
-Sincerely yours,
-Mike.
+> 
+> I do like being explicit, and adding a PRIVATE flag costs KVM practically nothing
+> to implement and maintain, but evetually we'll up with flags that are paired with
+> an implicit state, e.g. see the many #PF error codes in x86.  In other words,
+> inevitably KVM will need to define the default/base state of the access, at which
+> point the base state for SHARED vs. PRIVATE is "undefined".  
+
+Current memory conversion for confidential usage is bi-directional so we
+already need both private and shared states and if we use one bit for
+both "shared" and "private" then we will have to define the default
+state, e.g, currently the default state is "shared" when we define
+
+	KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
+
+> 
+> The RWX bits are in the same boat, e.g. the READ flag isn't strictly necessary.
+> I was thinking more of the KVM_SET_MEMORY_ATTRIBUTES ioctl(), which does need
+> the full RWX gamut, when I typed out that response.
+
+For KVM_SET_MEMORY_ATTRIBUTES it's reasonable to add RWX bits and match
+that to the permission bits definition in EPT entry.
+
+> 
+> So I would say if we add an explicit READ flag, then we might as well add an explicit
+> PRIVATE flag too.  But if we omit PRIVATE, then we should omit READ too.
+
+Since we assume the default state is shared, so we actually only need a
+PRIVATE flag, e.g. there is no SHARED flag and will ignore the RWX for now.
+
+Chao
