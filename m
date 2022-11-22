@@ -2,69 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3472363374F
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 09:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9C063379B
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 09:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbiKVIlw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Nov 2022 03:41:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S229527AbiKVI4j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Nov 2022 03:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiKVIlv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 03:41:51 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A173429A4
-        for <linux-arch@vger.kernel.org>; Tue, 22 Nov 2022 00:41:48 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id t25-20020a1c7719000000b003cfa34ea516so550845wmi.1
-        for <linux-arch@vger.kernel.org>; Tue, 22 Nov 2022 00:41:48 -0800 (PST)
+        with ESMTP id S232926AbiKVI4h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 03:56:37 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AD32DD4;
+        Tue, 22 Nov 2022 00:56:35 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id j12so13004138plj.5;
+        Tue, 22 Nov 2022 00:56:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cT7TvPmXIjtGK6xCoCSuA3bUKEp8LGUDwYLIrTFVPuQ=;
-        b=MsYQOv9bn1C6g04flOIQP//SWP05czQKUUtIcAFiVWfTVEj8gbzEDjiU7Z7qDyxzYo
-         uyQDwC4eDl0eryE3DTJ0H3IVgWVbtoo45p2sKVVu73G3s+z20A/iylCR5ROWcZGFKT5t
-         0RFGkqw0YjcjgvosNyZai397Qg9f/e1m134l+91DDwQh5WaEuH55dNhU80ywUu1kau1b
-         jgRBI7gJ+fFbztSP740ZV9T5g1BACX5rhBImARJbBLuRa2HBrSzU4psE/4WtxlVgouXN
-         f79QGrt33sJXex0pLHCz2hmEaj82WAS2XEVrkAiptyg5IrrRPu3ZPxHyF7kqMdPafAJS
-         AnKQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sk/Dn7xHKmKp2o+NNCewHYP9nATRcafKjDQMDyVgrP4=;
+        b=kyxW0ErFxGaQ+PGS+255HRaNfHV2+DNJyaabnH+NtfYzGiT+x0pCrb7S8Twj4CV0aa
+         sy/g8tX//3ZZ8Gffq9svfAg7CeJSjgCtBy5Iinfj7g1OTWsEaDZDZ/XFAkyvujUyh0Cs
+         4436UT+g3qf93dWOXA+Waj6y8+8eZ0vn2ZRVObx4p2CH99hSATSmD6Uhf/GT0+yPlHBM
+         wboVsi1bZYx9ml+KawhF7GYuhknx9q5duu5r/pmMaOdrwq9cAoYJzdxyS0eqfSQK2hTl
+         0l9UZuPTKUQ/3++2yvevQv4B9KEFKOgLNocryrqn6bJ53BeJdlzXmnwdW6bYICtQd7Ko
+         iEYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cT7TvPmXIjtGK6xCoCSuA3bUKEp8LGUDwYLIrTFVPuQ=;
-        b=o4Gu+Kg0Y91zY3M15mgPZiLtHF/1KJ7gdm1u5085j5+CEJFjsl7Y0wqlq8XOnZdBGL
-         nMet2NFLmRlpW4DvB3+OsYJ5bO4RucflnryJzHBrRWbH4VgolYmDy9eqOq7m6S9gPVx2
-         5NYr2V9tP58WiRRuKund2nqapXkoX6ZrX+nv/jYNBFWFBDqTMtrv834SqGvXKKumF55f
-         z1Vu8HGpWhqPzSxy/ZIgaZRoL+sxMIEY3mJSkxCVj4RUS14HcOE38VS01sMhIaKdiXtC
-         zrUt2nmw30Isg1i9Rc7DsWb52VYS4vubeLnILuJqG4MTUqWcKmF2RFrXU7t1ooag02+N
-         jZQA==
-X-Gm-Message-State: ANoB5pm+9qRDTo/f75d6DvBokfzOewAuaz0d4Ot2sIJHwRE4B3Im26ki
-        wCwuNQOqT63buaOFzeKkPDR3SkDXGFkIcw==
-X-Google-Smtp-Source: AA0mqf4lfMYuZby/m5onZyrvXEhniPKcbQWFDOjaqewt8/sbCqC0ee8NEAHvVjB4UC3KPy2msU9IRQ==
-X-Received: by 2002:a05:600c:19d1:b0:3cf:cf89:90f with SMTP id u17-20020a05600c19d100b003cfcf89090fmr5078823wmq.186.1669106506896;
-        Tue, 22 Nov 2022 00:41:46 -0800 (PST)
-Received: from localhost.localdomain (lfbn-gre-1-201-46.w90-112.abo.wanadoo.fr. [90.112.163.46])
-        by smtp.gmail.com with ESMTPSA id a8-20020adffac8000000b00241b5af8697sm2156301wrs.85.2022.11.22.00.41.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 00:41:45 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Date:   Tue, 22 Nov 2022 09:41:41 +0100
-Message-Id: <20221122084141.1849421-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sk/Dn7xHKmKp2o+NNCewHYP9nATRcafKjDQMDyVgrP4=;
+        b=dkWwK0oIDPe9/gZlS4Mrks3NOs4AFOYR/eMh8yoEJ2hpWOz6AbcQDOlmlY9h7QtxfP
+         cDo7eNA+/I4MEEeZYBDIxJTa9BvFXdjMKBD60Cjqdu+Vk/ELe2WTkXHrfsIEnZ2+ts6q
+         C6ED9gEWG8tzef9nBW9rrTsO7SrekkHbQDfVwy0AoE6omHDWCUhH7VBCyKY5pL/Q/b2p
+         PhGlLm/JvUi1YxOk2GWO6WeLWZa7diRkS6Lu6EejUfgu7giavHpQEWAAuetibVVuAGKZ
+         xKrLsfyFOBaH9F36YRQPSdJ9j54ITkUCWjvryslRdw0hPvGYNLg9Wy5leFH3yO+5lANp
+         MoYA==
+X-Gm-Message-State: ANoB5plffT6jS2HxtpHVkvDM/DChANJ8rNDSgqyB54Qw+Mj1rhmsf+ip
+        T7yUK93YULckms0qN3k2mcQ=
+X-Google-Smtp-Source: AA0mqf4iQ/fVclRn62Ahu0ysHUN6zl2BvW8E6+zHu+Lf4YA0/zxtrd3r4fTmnVHkbR/sGjcNJ0Jm+w==
+X-Received: by 2002:a17:90a:67c1:b0:212:d484:b410 with SMTP id g1-20020a17090a67c100b00212d484b410mr31050259pjm.211.1669107394887;
+        Tue, 22 Nov 2022 00:56:34 -0800 (PST)
+Received: from [10.4.6.173] ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902710b00b00186bc66d2cbsm11284814pll.73.2022.11.22.00.56.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 00:56:34 -0800 (PST)
+Message-ID: <e625dce5-092f-21d4-bc1d-12dfcd729b84@gmail.com>
+Date:   Tue, 22 Nov 2022 16:56:06 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH V2 3/3] riscv: ftrace: Reduce the detour code size to half
+To:     guoren@kernel.org, arnd@arndb.de, palmer@rivosinc.com,
+        rostedt@goodmis.org, andy.chiu@sifive.com, greentime.hu@sifive.com,
+        zong.li@sifive.com, jrtc27@jrtc27.com, mingo@redhat.com,
+        palmer@dabbelt.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+References: <20220921034910.3142465-1-guoren@kernel.org>
+ <20220921034910.3142465-4-guoren@kernel.org>
+From:   Song Shuai <suagrfillet@gmail.com>
+In-Reply-To: <20220921034910.3142465-4-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,184 +77,430 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-During the early page table creation, we used to set the mapping for
-PAGE_OFFSET to the kernel load address: but the kernel load address is
-always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-PAGE_OFFSET is).
 
-But actually we don't have to establish this mapping (ie set va_pa_offset)
-that early in the boot process because:
 
-- first, setup_vm installs a temporary kernel mapping and among other
-  things, discovers the system memory,
-- then, setup_vm_final creates the final kernel mapping and takes
-  advantage of the discovered system memory to create the linear
-  mapping.
+在 2022/9/21 11:49, guoren@kernel.org 写道:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Use a temporary register to reduce the size of detour code from 16B
+> to 8B.
+> 
+> Before optimization (16 byte):
+> <func_prolog>:
+>   0: REG_S  ra, -SZREG(sp)
+>   4: auipc  ra, ?
+>   8: jalr   ?(ra)
+> 12: REG_L  ra, -SZREG(sp)
+>   (func_boddy)
+> 
+> The previous implementation is from afc76b8b8011 ("riscv: Using
+> PATCHABLE_FUNCTION_ENTRY instead of MCOUNT")
+> 
+> After optimization (8 byte):
+> <func_prolog>:
+>   0: auipc  t0, ?
+>   4: jalr   t0, ?(t0)
+>   (func_boddy)
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>   arch/riscv/Makefile             |  4 +-
+>   arch/riscv/include/asm/ftrace.h | 46 ++++++++++++++++++-----
+>   arch/riscv/kernel/ftrace.c      | 65 ++++++++++-----------------------
+>   arch/riscv/kernel/mcount-dyn.S  | 43 +++++++++-------------
+>   4 files changed, 74 insertions(+), 84 deletions(-)
+> 
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index f32844f545d6..7b9d4a7cd4bf 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -12,9 +12,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+>   	LDFLAGS_vmlinux := --no-relax
+>   	KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+>   ifeq ($(CONFIG_RISCV_ISA_C),y)
+> -	CC_FLAGS_FTRACE := -fpatchable-function-entry=8
+> -else
+>   	CC_FLAGS_FTRACE := -fpatchable-function-entry=4
+> +else
+> +	CC_FLAGS_FTRACE := -fpatchable-function-entry=2
+>   endif
+>   endif
+>   
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+> index 04dad3380041..34b0b523865a 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -42,6 +42,14 @@ struct dyn_arch_ftrace {
+>    * 2) jalr: setting low-12 offset to ra, jump to ra, and set ra to
+>    *          return address (original pc + 4)
+>    *
+> + *<ftrace enable>:
+> + * 0: auipc  t0/ra, 0x?
+> + * 4: jalr   t0/ra, ?(t0/ra)
+> + *
+> + *<ftrace disable>:
+> + * 0: nop
+> + * 4: nop
+> + *
+>    * Dynamic ftrace generates probes to call sites, so we must deal with
+>    * both auipc and jalr at the same time.
+>    */
+> @@ -52,25 +60,43 @@ struct dyn_arch_ftrace {
+>   #define AUIPC_OFFSET_MASK	(0xfffff000)
+>   #define AUIPC_PAD		(0x00001000)
+>   #define JALR_SHIFT		20
+> -#define JALR_BASIC		(0x000080e7)
+> -#define AUIPC_BASIC		(0x00000097)
+> +#define JALR_RA			(0x000080e7)
+> +#define AUIPC_RA		(0x00000097)
+> +#define JALR_T0			(0x000282e7)
+> +#define AUIPC_T0		(0x00000297)
+>   #define NOP4			(0x00000013)
+>   
+> -#define make_call(caller, callee, call)					\
+> +#define to_jalr_t0(offset)						\
+> +	(((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_T0)
+> +
+> +#define to_auipc_t0(offset)						\
+> +	((offset & JALR_SIGN_MASK) ?					\
+> +	(((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_T0) :	\
+> +	((offset & AUIPC_OFFSET_MASK) | AUIPC_T0))
+> +
+> +#define make_call_t0(caller, callee, call)				\
+>   do {									\
+> -	call[0] = to_auipc_insn((unsigned int)((unsigned long)callee -	\
+> +	call[0] = to_auipc_t0((unsigned int)((unsigned long)callee -	\
+>   				(unsigned long)caller));		\
+> -	call[1] = to_jalr_insn((unsigned int)((unsigned long)callee -	\
+> +	call[1] = to_jalr_t0((unsigned int)((unsigned long)callee -	\
+>   			       (unsigned long)caller));			\
+>   } while (0)
+>   
+> -#define to_jalr_insn(offset)						\
+> -	(((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_BASIC)
+> +#define to_jalr_ra(offset)						\
+> +	(((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_RA)
+>   
+> -#define to_auipc_insn(offset)						\
+> +#define to_auipc_ra(offset)					\
+>   	((offset & JALR_SIGN_MASK) ?					\
+> -	(((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_BASIC) :	\
+> -	((offset & AUIPC_OFFSET_MASK) | AUIPC_BASIC))
+> +	(((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_RA) :	\
+> +	((offset & AUIPC_OFFSET_MASK) | AUIPC_RA))
+> +
+> +#define make_call_ra(caller, callee, call)				\
+> +do {									\
+> +	call[0] = to_auipc_ra((unsigned int)((unsigned long)callee -	\
+> +				(unsigned long)caller));		\
+> +	call[1] = to_jalr_ra((unsigned int)((unsigned long)callee -	\
+> +			       (unsigned long)caller));			\
+> +} while (0)
+>   
+>   /*
+>    * Let auipc+jalr be the basic *mcount unit*, so we make it 8 bytes here.
+> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+> index 2086f6585773..8c77f236fc71 100644
+> --- a/arch/riscv/kernel/ftrace.c
+> +++ b/arch/riscv/kernel/ftrace.c
+> @@ -55,12 +55,15 @@ static int ftrace_check_current_call(unsigned long hook_pos,
+>   }
+>   
+>   static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+> -				bool enable)
+> +				bool enable, bool ra)
+>   {
+>   	unsigned int call[2];
+>   	unsigned int nops[2] = {NOP4, NOP4};
+>   
+> -	make_call(hook_pos, target, call);
+> +	if (ra)
+> +		make_call_ra(hook_pos, target, call);
+> +	else
+> +		make_call_t0(hook_pos, target, call);
+>   
+>   	/* Replace the auipc-jalr pair at once. Return -EPERM on write error. */
+>   	if (patch_text_nosync
+> @@ -70,42 +73,13 @@ static int __ftrace_modify_call(unsigned long hook_pos, unsigned long target,
+>   	return 0;
+>   }
+>   
+> -/*
+> - * Put 5 instructions with 16 bytes at the front of function within
+> - * patchable function entry nops' area.
+> - *
+> - * 0: REG_S  ra, -SZREG(sp)
+> - * 1: auipc  ra, 0x?
+> - * 2: jalr   -?(ra)
+> - * 3: REG_L  ra, -SZREG(sp)
+> - *
+> - * So the opcodes is:
+> - * 0: 0xfe113c23 (sd)/0xfe112e23 (sw)
+> - * 1: 0x???????? -> auipc
+> - * 2: 0x???????? -> jalr
+> - * 3: 0xff813083 (ld)/0xffc12083 (lw)
+> - */
+> -#if __riscv_xlen == 64
+> -#define INSN0	0xfe113c23
+> -#define INSN3	0xff813083
+> -#elif __riscv_xlen == 32
+> -#define INSN0	0xfe112e23
+> -#define INSN3	0xffc12083
+> -#endif
+> -
+> -#define FUNC_ENTRY_SIZE	16
+> -#define FUNC_ENTRY_JMP	4
+> -
+>   int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>   {
+> -	unsigned int call[4] = {INSN0, 0, 0, INSN3};
+> -	unsigned long target = addr;
+> -	unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
+> +	unsigned int call[2];
+>   
+> -	call[1] = to_auipc_insn((unsigned int)(target - caller));
+> -	call[2] = to_jalr_insn((unsigned int)(target - caller));
+> +	make_call_t0(rec->ip, addr, call);
+>   
+> -	if (patch_text_nosync((void *)rec->ip, call, FUNC_ENTRY_SIZE))
+> +	if (patch_text_nosync((void *)rec->ip, call, 8))
+>   		return -EPERM;
+>   
+>   	return 0;
+> @@ -114,15 +88,14 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>   int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>   		    unsigned long addr)
+>   {
+> -	unsigned int nops[4] = {NOP4, NOP4, NOP4, NOP4};
+> +	unsigned int nops[2] = {NOP4, NOP4};
+>   
+> -	if (patch_text_nosync((void *)rec->ip, nops, FUNC_ENTRY_SIZE))
+> +	if (patch_text_nosync((void *)rec->ip, nops, MCOUNT_INSN_SIZE))
+>   		return -EPERM;
+>   
+>   	return 0;
+>   }
+>   
+> -
+>   /*
+>    * This is called early on, and isn't wrapped by
+>    * ftrace_arch_code_modify_{prepare,post_process}() and therefor doesn't hold
+> @@ -144,10 +117,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+>   int ftrace_update_ftrace_func(ftrace_func_t func)
+>   {
+>   	int ret = __ftrace_modify_call((unsigned long)&ftrace_call,
+> -				       (unsigned long)func, true);
+> +				       (unsigned long)func, true, true);
+>   	if (!ret) {
+>   		ret = __ftrace_modify_call((unsigned long)&ftrace_regs_call,
+> -					   (unsigned long)func, true);
+> +					   (unsigned long)func, true, true);
+>   	}
+>   
+>   	return ret;
+> @@ -159,16 +132,16 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>   		       unsigned long addr)
+>   {
+>   	unsigned int call[2];
+> -	unsigned long caller = rec->ip + FUNC_ENTRY_JMP;
+> +	unsigned long caller = rec->ip + 4;
+The caller should be assigned by rec->ip directly to indicate the 
+function entry, otherwise ftrace bug will be triggered.
 
-During the first phase, we don't know the start of the system memory and
-then until the second phase is finished, we can't use the linear mapping at
-all and phys_to_virt/virt_to_phys translations must not be used because it
-would result in a different translation from the 'real' one once the final
-mapping is installed.
+You can refer to this patch for details:
 
-So here we simply delay the initialization of va_pa_offset to after the
-system memory discovery. But to make sure noone uses the linear mapping
-before, we add some guard in the DEBUG_VIRTUAL config.
+https://lore.kernel.org/linux-riscv/20221122075440.1165172-1-suagrfillet@gmail.com/
 
-Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-in a better TLB utilization.
+>   	int ret;
+>   
+> -	make_call(caller, old_addr, call);
+> +	make_call_t0(caller, old_addr, call);
+>   	ret = ftrace_check_current_call(caller, call);
+>   
+>   	if (ret)
+>   		return ret;
+>   
+> -	return __ftrace_modify_call(caller, addr, true);
+> +	return __ftrace_modify_call(caller, addr, true, false);
+>   }
+>   #endif
+>   
+> @@ -203,12 +176,12 @@ int ftrace_enable_ftrace_graph_caller(void)
+>   	int ret;
+>   
+>   	ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+> -				    (unsigned long)&prepare_ftrace_return, true);
+> +				    (unsigned long)&prepare_ftrace_return, true, true);
+>   	if (ret)
+>   		return ret;
+>   
+>   	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+> -				    (unsigned long)&prepare_ftrace_return, true);
+> +				    (unsigned long)&prepare_ftrace_return, true, true);
+>   }
+>   
+>   int ftrace_disable_ftrace_graph_caller(void)
+> @@ -216,12 +189,12 @@ int ftrace_disable_ftrace_graph_caller(void)
+>   	int ret;
+>   
+>   	ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
+> -				    (unsigned long)&prepare_ftrace_return, false);
+> +				    (unsigned long)&prepare_ftrace_return, false, true);
+>   	if (ret)
+>   		return ret;
+>   
+>   	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+> -				    (unsigned long)&prepare_ftrace_return, false);
+> +				    (unsigned long)&prepare_ftrace_return, false, true);
+>   }
+>   #endif /* CONFIG_DYNAMIC_FTRACE */
+>   #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+> index d171eca623b6..64bc79816f5e 100644
+> --- a/arch/riscv/kernel/mcount-dyn.S
+> +++ b/arch/riscv/kernel/mcount-dyn.S
+> @@ -13,8 +13,8 @@
+>   
+>   	.text
+>   
+> -#define FENTRY_RA_OFFSET	12
+> -#define ABI_SIZE_ON_STACK	72
+> +#define FENTRY_RA_OFFSET	8
+> +#define ABI_SIZE_ON_STACK	80
+>   #define ABI_A0			0
+>   #define ABI_A1			8
+>   #define ABI_A2			16
+> @@ -23,10 +23,10 @@
+>   #define ABI_A5			40
+>   #define ABI_A6			48
+>   #define ABI_A7			56
+> -#define ABI_RA			64
+> +#define ABI_T0			64
+> +#define ABI_RA			72
+>   
+>   	.macro SAVE_ABI
+> -	addi	sp, sp, -SZREG
+>   	addi	sp, sp, -ABI_SIZE_ON_STACK
+>   
+>   	REG_S	a0, ABI_A0(sp)
+> @@ -37,6 +37,7 @@
+>   	REG_S	a5, ABI_A5(sp)
+>   	REG_S	a6, ABI_A6(sp)
+>   	REG_S	a7, ABI_A7(sp)
+> +	REG_S	t0, ABI_T0(sp)
+>   	REG_S	ra, ABI_RA(sp)
+>   	.endm
+>   
+> @@ -49,24 +50,18 @@
+>   	REG_L	a5, ABI_A5(sp)
+>   	REG_L	a6, ABI_A6(sp)
+>   	REG_L	a7, ABI_A7(sp)
+> +	REG_L	t0, ABI_T0(sp)
+>   	REG_L	ra, ABI_RA(sp)
+>   
+>   	addi	sp, sp, ABI_SIZE_ON_STACK
+> -	addi	sp, sp, SZREG
+>   	.endm
+>   
+>   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>   	.macro SAVE_ALL
+> -	addi	sp, sp, -SZREG
+>   	addi	sp, sp, -PT_SIZE_ON_STACK
+>   
+> -	REG_S x1,  PT_EPC(sp)
+> -	addi	sp, sp, PT_SIZE_ON_STACK
+> -	REG_L x1,  (sp)
+> -	addi	sp, sp, -PT_SIZE_ON_STACK
+> +	REG_S t0,  PT_EPC(sp)
+>   	REG_S x1,  PT_RA(sp)
+> -	REG_L x1,  PT_EPC(sp)
+> -
+>   	REG_S x2,  PT_SP(sp)
+>   	REG_S x3,  PT_GP(sp)
+>   	REG_S x4,  PT_TP(sp)
+> @@ -100,11 +95,8 @@
+>   	.endm
+>   
+>   	.macro RESTORE_ALL
+> +	REG_L t0,  PT_EPC(sp)
+>   	REG_L x1,  PT_RA(sp)
+> -	addi	sp, sp, PT_SIZE_ON_STACK
+> -	REG_S x1,  (sp)
+> -	addi	sp, sp, -PT_SIZE_ON_STACK
+> -	REG_L x1,  PT_EPC(sp)
+>   	REG_L x2,  PT_SP(sp)
+>   	REG_L x3,  PT_GP(sp)
+>   	REG_L x4,  PT_TP(sp)
+> @@ -137,17 +129,16 @@
+>   	REG_L x31, PT_T6(sp)
+>   
+>   	addi	sp, sp, PT_SIZE_ON_STACK
+> -	addi	sp, sp, SZREG
+>   	.endm
+>   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>   
+>   ENTRY(ftrace_caller)
+>   	SAVE_ABI
+>   
+> -	addi	a0, ra, -FENTRY_RA_OFFSET
+> +	addi	a0, t0, -FENTRY_RA_OFFSET
+>   	la	a1, function_trace_op
+>   	REG_L	a2, 0(a1)
+> -	REG_L	a1, ABI_SIZE_ON_STACK(sp)
+> +	mv	a1, ra
+>   	mv	a3, sp
+>   
+>   ftrace_call:
+> @@ -155,8 +146,8 @@ ftrace_call:
+>   	call	ftrace_stub
+>   
+>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+> -	addi	a0, sp, ABI_SIZE_ON_STACK
+> -	REG_L	a1, ABI_RA(sp)
+> +	addi	a0, sp, ABI_RA
+> +	REG_L	a1, ABI_T0(sp)
+>   	addi	a1, a1, -FENTRY_RA_OFFSET
+>   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+>   	mv	a2, s0
+> @@ -166,17 +157,17 @@ ftrace_graph_call:
+>   	call	ftrace_stub
+>   #endif
+>   	RESTORE_ABI
+> -	ret
+> +	jr t0
+>   ENDPROC(ftrace_caller)
+>   
+>   #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>   ENTRY(ftrace_regs_caller)
+>   	SAVE_ALL
+>   
+> -	addi	a0, ra, -FENTRY_RA_OFFSET
+> +	addi	a0, t0, -FENTRY_RA_OFFSET
+>   	la	a1, function_trace_op
+>   	REG_L	a2, 0(a1)
+> -	REG_L	a1, PT_SIZE_ON_STACK(sp)
+> +	REG_L	a1, PT_RA(sp)
+>   	mv	a3, sp
+>   
+>   ftrace_regs_call:
+> @@ -185,7 +176,7 @@ ftrace_regs_call:
+>   
+>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>   	addi	a0, sp, PT_RA
+> -	REG_L	a1, PT_EPC(sp)
+> +	REG_L	a1, PT_T0(sp)
+>   	addi	a1, a1, -FENTRY_RA_OFFSET
+>   #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+>   	mv	a2, s0
+> @@ -196,6 +187,6 @@ ftrace_graph_regs_call:
+>   #endif
+>   
+>   	RESTORE_ALL
+> -	ret
+> +	jr t0
+>   ENDPROC(ftrace_regs_caller)
+>   #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
 
-Note that we rely on the firmware to protect itself using PMP.
-
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
-
-Note that this patch is rebased on top of:
-[PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
-
- arch/riscv/include/asm/page.h | 16 ++++++++++++++++
- arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
- arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
- drivers/of/fdt.c              |  5 ++++-
- 4 files changed, 55 insertions(+), 7 deletions(-)
-
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index ac70b0fd9a9a..f3af526a149f 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
- #define PTE_FMT "%08lx"
- #endif
- 
-+#ifdef CONFIG_64BIT
-+/*
-+ * We override this value as its generic definition uses __pa too early in
-+ * the boot process (before kernel_map.va_pa_offset is set).
-+ */
-+#define MIN_MEMBLOCK_ADDR      0
-+#endif
-+
- #ifdef CONFIG_MMU
- extern unsigned long riscv_pfn_base;
- #define ARCH_PFN_OFFSET		(riscv_pfn_base)
-@@ -122,7 +130,11 @@ extern phys_addr_t phys_ram_base;
- #define is_linear_mapping(x)	\
- 	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-+#else
-+void *linear_mapping_pa_to_va(unsigned long x);
-+#endif
- #define kernel_mapping_pa_to_va(y)	({						\
- 	unsigned long _y = y;								\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
-@@ -131,7 +143,11 @@ extern phys_addr_t phys_ram_base;
- 	})
- #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
-+#else
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x);
-+#endif
- #define kernel_mapping_va_to_pa(y) ({						\
- 	unsigned long _y = y;							\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 1b76d3fe4e26..58bcf395efdc 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
- 	phys_ram_end = memblock_end_of_DRAM();
- 	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
- 		phys_ram_base = memblock_start_of_DRAM();
-+
-+	/*
-+	 * Any use of __va/__pa before this point is wrong as we did not know the
-+	 * start of DRAM before.
-+	 */
-+	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
-+	riscv_pfn_base = PFN_DOWN(phys_ram_base);
-+
- 	/*
- 	 * memblock allocator is not aware of the fact that last 4K bytes of
- 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-@@ -672,9 +680,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
- 
- static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- {
--	/* Upgrade to PMD_SIZE mappings whenever possible */
--	base &= PMD_SIZE - 1;
--	if (!base && size >= PMD_SIZE)
-+	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
-+		return PGDIR_SIZE;
-+
-+	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
-+		return P4D_SIZE;
-+
-+	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
-+		return PUD_SIZE;
-+
-+	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
- 		return PMD_SIZE;
- 
- 	return PAGE_SIZE;
-@@ -983,11 +998,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	set_satp_mode();
- #endif
- 
--	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
-+	kernel_map.va_pa_offset = 0UL;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
- 
--	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
--
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
- 	 * kernel, whereas for 64-bit kernel, the end of the virtual address
-diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
-index 19cf25a74ee2..5ae4bd166e25 100644
---- a/arch/riscv/mm/physaddr.c
-+++ b/arch/riscv/mm/physaddr.c
-@@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
- 	return __va_to_pa_nodebug(x);
- }
- EXPORT_SYMBOL(__phys_addr_symbol);
-+
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((unsigned long)(x) - kernel_map.va_pa_offset);
-+}
-+EXPORT_SYMBOL(linear_mapping_va_to_pa);
-+
-+void *linear_mapping_pa_to_va(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
-+}
-+EXPORT_SYMBOL(linear_mapping_pa_to_va);
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 7b571a631639..04e3ecb51722 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -895,8 +895,11 @@ static void __early_init_dt_declare_initrd(unsigned long start,
- 	 * enabled since __va() is called too early. ARM64 does make use
- 	 * of phys_initrd_start/phys_initrd_size so we can skip this
- 	 * conversion.
-+	 * On RISCV64, the usage of __va() before the linear mapping exists
-+	 * is wrong.
- 	 */
--	if (!IS_ENABLED(CONFIG_ARM64)) {
-+	if (!IS_ENABLED(CONFIG_ARM64) &&
-+	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
- 		initrd_start = (unsigned long)__va(start);
- 		initrd_end = (unsigned long)__va(end);
- 		initrd_below_start_ok = 1;
--- 
-2.37.2
-
+Thanks,
+Song
