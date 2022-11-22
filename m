@@ -2,319 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D377E6340D3
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 17:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8D16342AB
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 18:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiKVQFR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Nov 2022 11:05:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39172 "EHLO
+        id S234304AbiKVRmZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Nov 2022 12:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbiKVQFP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 11:05:15 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37951DA53
-        for <linux-arch@vger.kernel.org>; Tue, 22 Nov 2022 08:05:10 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id q1so14426983pgl.11
-        for <linux-arch@vger.kernel.org>; Tue, 22 Nov 2022 08:05:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mKqixJN/8zapPMiYOY0ZA2E36N6vIQg16uLiOxlikFI=;
-        b=Sxgb7NdwQ/FjyYXzMQLr2Ufh8inWhewppyg2kEhKfSMa5+4xLhcDZFgBkLe+YVojYR
-         b1j/8R8eepdhz2QNEoN59UWxI0C8HtPNMN2hfsnJ2VXdsyzTbL+tlNksQKPnsWg/NtBp
-         chCgU4N95aPK2lbuS5RzKtW5ffOhO3rTLhquzizFSUU3p/ux1MbE2BMO0btBQyCrWeJK
-         WXzMJ1H0fbnItfONfrC7qjjeZVQUnHu7QZDLXM8ZsS1OkeorqU4Yt3+bnHeBb63EIVUM
-         ARM0B0wTMD/PlD/5zjrBQjmOnBQvgdxEwxF1FwYHEN8lHlbB5RkK/8WK1b4hFP6jFplD
-         FuDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mKqixJN/8zapPMiYOY0ZA2E36N6vIQg16uLiOxlikFI=;
-        b=5S/y5VVlE1cJVx7dbPT2EFTBLPsl6sjErW6FYr1unnjlihKNFeM99KuSnzuUS86Lna
-         RYTcGfIjXLQ9wBZS3wKkVBkcYIKrstewBA86nqRa8TGK5h240oJD4VxAYF2PpNYmo7w8
-         OiHjngeBhq3HjuejRTO6LjtpnZsGVWV+edO3XcPPsshLUKWTkEkerk4Ij3nHW0JhEpMh
-         iM1QMOK96dw3YGdkEeqViJJhCT5BdlV5CNKdQQVwyCEYC5hIOy60iR+JLXOnx5FnWw/2
-         NVpNKnf2ixHWO5gYz6yYfI8+DVol7ggpE8aWJJnQbSb98bWTdokjOqjGmlsl8fQRaRtQ
-         knsQ==
-X-Gm-Message-State: ANoB5pmkJSwpTJjtDrq02EEK/HkO24X5fumhjoydEL/waZEBFeQn5S+o
-        AIDqaxp66AGWEUgo4Dj+cTHtETLGKiEFWWzz+4JaVw==
-X-Google-Smtp-Source: AA0mqf6JSvaqlcRgOCqphXQ3MBWuxLvJ9cnb0DNFGeizoGOcIFvJAwjnOuz3SuqXXwFDZ3Z3O+rn4vXVPvsxTfgKOLE=
-X-Received: by 2002:a63:501c:0:b0:477:650a:c29a with SMTP id
- e28-20020a63501c000000b00477650ac29amr3900068pgb.541.1669133109958; Tue, 22
- Nov 2022 08:05:09 -0800 (PST)
+        with ESMTP id S234342AbiKVRmY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 12:42:24 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2097.outbound.protection.outlook.com [40.107.243.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397107C015;
+        Tue, 22 Nov 2022 09:42:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DtaTvrg7N3QlvCNMoKWXrLKo2glPv7j/nOPvMvWJKHfsXIgoyIEBFLomSpl0ynPG6LAnp3AAZK0EM81c0inzg/N0rrx/K/1iz9IYYsdlP2QuTCkH3KHH/a3UsmcewzBWqJ2u3y7A/ml36GeIMYUXFznVcrsB7fKN8mje/+4t+4nwrwRPU6qWwZCpS3URLJ0dNqVbslpbhwnvzK8pqu/SszLCaQyKXhU5aI7Rw7izAJ49NE6yazJJI17TbdcsfAHdWBGkdAoLY7cS2Hvk4WpPcd8DqQFc8By2TiZCPfeExL/3ZNXj/9s1VDK5Fx+ZT+4wKhF+vzJGlaUoq+H0Yj5OUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GF+ZspVrzWWFsb4Y1zyj4l5I6i2RQL4kbglTZ1rx4SI=;
+ b=UAYsMrNZEQRbs7c4KrvWPKeRtpmiQIEpHOPD5ORBHs20TS2ru0tQEe8xeqrGKe4hFtOXUhfbt8w9s3jiXzlSdDmmJulXHvrd2AtUzQvP5IoRoosUQajIHMGITgINS3dAwTw4jlxaPh7BLedrGV/W3eeu7trthdE0RR1J67fRPBMbWIYfky+jm/FUkpK65jzOiI6SwE9sH8vhAJA1Y4/BUlleJGI9VNo7uxO658bHnooCin6XDryEuEqEocg1K4umY+UschvSVSQN6nDhY4sFa6/oVOHdt5RcBmfXZ12vOkyR/DsO/rNBRX1ajikZwzH9o9kgd4X72K90DUu+GgcjAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GF+ZspVrzWWFsb4Y1zyj4l5I6i2RQL4kbglTZ1rx4SI=;
+ b=FofFUq2EDKgfGL0rYX9BBVggmlC+W21LlgSeNHxa/gmdH5tSdaoOtlkY/FdYQ9IhaWuF9suyrlQ/2Gpd5X/j15Uqo/qiMc/mHoStQpxkTYIlh6bVBFvZDrY5LhUzwaEoThtssvK8og99DUsfahi+0/gEBXCQbAoLMNJc90OLzxU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from BN8PR21MB1361.namprd21.prod.outlook.com (2603:10b6:408:a7::23)
+ by BL1PR21MB3379.namprd21.prod.outlook.com (2603:10b6:208:39f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.2; Tue, 22 Nov
+ 2022 17:42:09 +0000
+Received: from BN8PR21MB1361.namprd21.prod.outlook.com
+ ([fe80::a8a1:1319:9d94:77e7]) by BN8PR21MB1361.namprd21.prod.outlook.com
+ ([fe80::a8a1:1319:9d94:77e7%4]) with mapi id 15.20.5880.002; Tue, 22 Nov 2022
+ 17:42:07 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Cc:     mikelley@microsoft.com
+Subject: [PATCH v4 1/1] x86/ioremap: Fix page aligned size calculation in __ioremap_caller()
+Date:   Tue, 22 Nov 2022 09:40:42 -0800
+Message-Id: <1669138842-30100-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0059.namprd03.prod.outlook.com
+ (2603:10b6:303:8e::34) To BN8PR21MB1361.namprd21.prod.outlook.com
+ (2603:10b6:408:a7::23)
 MIME-Version: 1.0
-References: <20220919095939.761690562@infradead.org> <20220919101521.139727471@infradead.org>
- <CAPDyKFqTWd4W5Ofk76CtC4X43dxBTNHtmY9YzN355-vpviLsPw@mail.gmail.com> <Y3UBwYNY15ETUKy9@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y3UBwYNY15ETUKy9@hirez.programming.kicks-ass.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 22 Nov 2022 17:04:33 +0100
-Message-ID: <CAPDyKFqzmJdVVrcuJ6Hmr5nNgtpd9Oke_exmUKuTGZEb=PjvjQ@mail.gmail.com>
-Subject: Re: [PATCH v2 12/44] cpuidle,dt: Push RCU-idle into driver
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     juri.lelli@redhat.com, rafael@kernel.org, catalin.marinas@arm.com,
-        linus.walleij@linaro.org, bsegall@google.com, guoren@kernel.org,
-        pavel@ucw.cz, agordeev@linux.ibm.com, linux-arch@vger.kernel.org,
-        vincent.guittot@linaro.org, mpe@ellerman.id.au,
-        chenhuacai@kernel.org, christophe.leroy@csgroup.eu,
-        linux-acpi@vger.kernel.org, agross@kernel.org,
-        geert@linux-m68k.org, linux-imx@nxp.com, vgupta@kernel.org,
-        mattst88@gmail.com, mturquette@baylibre.com, sammy@sammy.net,
-        pmladek@suse.com, linux-pm@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-um@lists.infradead.org, npiggin@gmail.com,
-        tglx@linutronix.de, linux-omap@vger.kernel.org,
-        dietmar.eggemann@arm.com, andreyknvl@gmail.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, senozhatsky@chromium.org,
-        svens@linux.ibm.com, jolsa@kernel.org, tj@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        mark.rutland@arm.com, linux-ia64@vger.kernel.org,
-        dave.hansen@linux.intel.com,
-        virtualization@lists.linux-foundation.org,
-        James.Bottomley@hansenpartnership.com, jcmvbkbc@gmail.com,
-        thierry.reding@gmail.com, kernel@xen0n.name, cl@linux.com,
-        linux-s390@vger.kernel.org, vschneid@redhat.com,
-        john.ogness@linutronix.de, ysato@users.sourceforge.jp,
-        linux-sh@vger.kernel.org, festevam@gmail.com, deller@gmx.de,
-        daniel.lezcano@linaro.org, jonathanh@nvidia.com, dennis@kernel.org,
-        lenb@kernel.org, linux-xtensa@linux-xtensa.org,
-        kernel@pengutronix.de, gor@linux.ibm.com,
-        linux-arm-msm@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        shorne@gmail.com, chris@zankel.net, sboyd@kernel.org,
-        dinguyen@kernel.org, bristot@redhat.com,
-        alexander.shishkin@linux.intel.com, fweisbec@gmail.com,
-        lpieralisi@kernel.org, atishp@atishpatra.org,
-        linux@rasmusvillemoes.dk, kasan-dev@googlegroups.com,
-        will@kernel.org, boris.ostrovsky@oracle.com, khilman@kernel.org,
-        linux-csky@vger.kernel.org, pv-drivers@vmware.com,
-        linux-snps-arc@lists.infradead.org, mgorman@suse.de,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        ulli.kroll@googlemail.com, linux-clk@vger.kernel.org,
-        rostedt@goodmis.org, ink@jurassic.park.msu.ru, bcain@quicinc.com,
-        tsbogend@alpha.franken.de, linux-parisc@vger.kernel.org,
-        ryabinin.a.a@gmail.com, sudeep.holla@arm.com, shawnguo@kernel.org,
-        davem@davemloft.net, dalias@libc.org, tony@atomide.com,
-        amakhalov@vmware.com, konrad.dybcio@somainline.org,
-        bjorn.andersson@linaro.org, glider@google.com, hpa@zytor.com,
-        sparclinux@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-riscv@lists.infradead.org, vincenzo.frascino@arm.com,
-        anton.ivanov@cambridgegreys.com, jonas@southpole.se,
-        yury.norov@gmail.com, richard@nod.at, x86@kernel.org,
-        linux@armlinux.org.uk, mingo@redhat.com, aou@eecs.berkeley.edu,
-        hca@linux.ibm.com, richard.henderson@linaro.org,
-        stefan.kristiansson@saunalahti.fi, openrisc@lists.librecores.org,
-        acme@kernel.org, paul.walmsley@sifive.com,
-        linux-tegra@vger.kernel.org, namhyung@kernel.org,
-        andriy.shevchenko@linux.intel.com, jpoimboe@kernel.org,
-        dvyukov@google.com, jgross@suse.com, monstr@monstr.eu,
-        linux-mips@vger.kernel.org, palmer@dabbelt.com,
-        anup@brainfault.org, bp@alien8.de, johannes@sipsolutions.net,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR21MB1361:EE_|BL1PR21MB3379:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90f8cd86-1f20-42c6-016a-08daccb0e031
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nkIGM3HcKtGDPHNTsLgtvGhbqgUoacoB3gGQmojiIVL/KYw8M02OWdMjYzSIAKjy47/4dBO8OBtAPLU9gKcdIa9vvNTLj2NkHc8fU8oOCYoQi5sbS+ll1O+BxLIFhKns+hFiBhTOsr/DuS/1Oekle5sMgP7oV4qmTHzt91cvUwdh1f6O/meFbgzQ+Smazt7kfWTzYpJGgGEZmx/FzCuYrj5F8M3y9SAgxrTaFuEYCDIGf+hxQxDddVdAQ31w+Q2yaaxkJBjXEa96tzhhjga88GPJSR8uuDndOQevlvx27bOBkGNrBJdws2ntEryi8xmO0Y4AwoAWq1jq7RiUcpQ0OGS2Jms6AxOJ4FW2I5JTc7NTMDchHEVN0UOujerGMPe6gfs0ToblLwfSLbpJ7rw0GzXZObXNORaHHAuWPYQjxdGY1NlZ4fg3PN09EIwFh+4c7YyUB1oIJzqcohXf6emNrpuZClNF/Q1JZu52BFffxBA6kojPYXlaQU90Bx6lC7TGWYbIwlKn5qlr0zfL6nMBEI7Hxf3aAJM8Z/y4l577FG9WiccXsLAEkHWlzKI4uaIo2X7sUArDgzSQ9T8SL0VNPV8x5MiDTHDv9rKg8SKe2GQYh3sOUYIQsotI1+AeAATqn+KGioCxUIQsNMYku2CXePRW1QZrzxTutu3nMnkiLWxoMf96LU7RJEfQuCGUeYmnFbMRmYAdR+Y+dKxzTVcuyTtp6gskvKCj/eY/a2L+YpBhKtYqCDml2RUlI2tFbUuso6se55ZR/dZOZeszTknEFurrSwZNkprz0GIJSFqH3FI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR21MB1361.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(39860400002)(396003)(346002)(451199015)(36756003)(82960400001)(921005)(2906002)(8936002)(8676002)(7416002)(7406005)(82950400001)(83380400001)(86362001)(38100700002)(316002)(10290500003)(186003)(2616005)(966005)(6486002)(4326008)(478600001)(38350700002)(5660300002)(66946007)(66556008)(66476007)(41300700001)(52116002)(107886003)(6666004)(26005)(6506007)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YBSQ1HoozY0JR5zS2HUPqHoWvcil5nIgsFKE3D1S6vSm3XsM0+pFew9ECGco?=
+ =?us-ascii?Q?0TDA2RPcX44zSEkSbH8RDlwuts2e5bgEKzTUoeKmQxih1w3BSfrFrMUBupbQ?=
+ =?us-ascii?Q?yCcMEosGbyMkouxvEubXuQoDu4KvhiSLxVbmsCnO7nY7Wada/louJtoHMsPj?=
+ =?us-ascii?Q?/y+t8JAZeGAeWxDzec837seX0zOLLjNVtv8G+7mGkCUjePbIdIfXrQgB5zLU?=
+ =?us-ascii?Q?Q2FXjSRFQ90qV8nO9fw920ewUn0OCFCayMSiFn9Z+43BDWw4t22GIiUAG8VI?=
+ =?us-ascii?Q?tbpXXklcQuhwJQW52nPQRa3sQuTQIDoxqdwUumE0dnPY+/Jm3Aynn3YSyJuG?=
+ =?us-ascii?Q?Ko7jMknuh6xGJR1NSatjKvz2SzFUhe09OabAjnN4ZYWe0g10dYON3JCkApjd?=
+ =?us-ascii?Q?RTK1oxIICri7PRUeNzRBHdnp3nDC1F+CLavwsaNWfg/7VgpbgEvAufqZj7xZ?=
+ =?us-ascii?Q?RizP8BDiewdNfx0YCdbyPUwRbVIcDHANQtAi6od/ZXL7mGnuCNakAPZX4wHC?=
+ =?us-ascii?Q?FEVa2CZyqLPRFaqOkc73hsIZluy4c0La6J7UIIPxCzmSCE/jmQuTYYNGlo6e?=
+ =?us-ascii?Q?6rUXRJB1RA+DBH26+sD2slFxqEU/c/r6epvMn/ztI5WE25VXyHo3JEYn6Crv?=
+ =?us-ascii?Q?ki5X5ASn2RbTRBuLfwX+KL7gVZrhjp9Te8Qmmwa3Rr7QcgLUQS3+l8d2ozkr?=
+ =?us-ascii?Q?gMIj2NxZW0EheRDS8/aeANkcZGPovC/lEvLcGDQJYNTAfnuZ2pP1UmH3Wshi?=
+ =?us-ascii?Q?BR3bZrSpB2MBTbfkC9/OKnZ3wOTgm2YSDKpWnYhMKJvKj+DQg+0HR9+Dp4xB?=
+ =?us-ascii?Q?3EG6GH5OLC2O8qvYYwKRQpRti322htu+pqymnLGG3/NkBAJPV2XPiD2jGqo2?=
+ =?us-ascii?Q?AshE64d7x2AjWXK/Dv/SkSN1gJn+ZpAf+nvj5b7S8t9lmR3dZ01l/iGluJxT?=
+ =?us-ascii?Q?8C3lYjiKCFMISlr7KyDbff8NPOidQcYwfct/DFqTRV0xXvBkgAefFAej3YeP?=
+ =?us-ascii?Q?57OfDJbEUixw7Zh7fl+Fy//6YMfcPMU9OVc/f3k7scKT/ECrPX5g/bLvNLVd?=
+ =?us-ascii?Q?M18LM0SPzOHGt/veskukf6OASwjfnQsLeB73vo6PrWHkmxwRD1CjudfTDXu8?=
+ =?us-ascii?Q?D+Em3jEVxhOcPCbJIlZVd4Cuvp+EoCDhWihvICP8gC5xeJR9ftoH1YrZ1qO5?=
+ =?us-ascii?Q?OLReqt8DuvqavlZ5QNLguUx6Hol7HcWn29luAGKAhTW8JuzXEFfI5u4GdnSl?=
+ =?us-ascii?Q?E+ElrlWF//W9EQo3pb16xw4js4XuvtyUenaK03q0JuJ0kikhGciAjiLXSVNU?=
+ =?us-ascii?Q?GkSThlHl5fQI0iFt/SY+MCyLULmH5cyFq8TlXE4lf45Krdhf5lchm0ji11E4?=
+ =?us-ascii?Q?J1fCU1thYeHfKrLaSs9zxXAOgH1++flKSPSoPbBPW1pd5VDmXaamE64XYjYb?=
+ =?us-ascii?Q?ep7Wh1EOE8AasNjzPE9vSPenSOCcOmxlkpy12cuhhaflklNKtrSotyHKZGkg?=
+ =?us-ascii?Q?DLHvATesdo64gK1tugH1SVvIPBif+NySDHv06tX1szH2+1JzzW5HNj4D+wDw?=
+ =?us-ascii?Q?5UmJ+PRFYr9E/EQuwDDOR//ZcIJjdK/L3d71IKYE?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90f8cd86-1f20-42c6-016a-08daccb0e031
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR21MB1361.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2022 17:42:07.7078
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1NNRh5wz6j334e8LlGLGno8gkAOisPCfo96dyRiP9RHX0+zzVO1Mo2AUV8N0dEbHW5MbjlGhv3+Ln9RV3nD+iA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR21MB3379
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 16 Nov 2022 at 16:29, Peter Zijlstra <peterz@infradead.org> wrote:
->
->
-> Sorry; things keep getting in the way of finishing this :/
->
-> As such, I need a bit of time to get on-track again..
->
-> On Tue, Oct 04, 2022 at 01:03:57PM +0200, Ulf Hansson wrote:
->
-> > > --- a/drivers/acpi/processor_idle.c
-> > > +++ b/drivers/acpi/processor_idle.c
-> > > @@ -1200,6 +1200,8 @@ static int acpi_processor_setup_lpi_stat
-> > >                 state->target_residency = lpi->min_residency;
-> > >                 if (lpi->arch_flags)
-> > >                         state->flags |= CPUIDLE_FLAG_TIMER_STOP;
-> > > +               if (lpi->entry_method == ACPI_CSTATE_FFH)
-> > > +                       state->flags |= CPUIDLE_FLAG_RCU_IDLE;
-> >
-> > I assume the state index here will never be 0?
-> >
-> > If not, it may lead to that acpi_processor_ffh_lpi_enter() may trigger
-> > CPU_PM_CPU_IDLE_ENTER_PARAM() to call ct_cpuidle_enter|exit() for an
-> > idle-state that doesn't have the CPUIDLE_FLAG_RCU_IDLE bit set.
->
-> I'm not quite sure I see how. AFAICT this condition above implies
-> acpi_processor_ffh_lpi_enter() gets called, no?
->
-> Which in turn is an unconditional __CPU_PM_CPU_IDLE_ENTER() user, so
-> even if idx==0, it ends up in ct_idle_{enter,exit}().
+Current code re-calculates the size after aligning the starting and
+ending physical addresses on a page boundary. But the re-calculation
+also embeds the masking of high order bits that exceed the size of
+the physical address space (via PHYSICAL_PAGE_MASK). If the masking
+removes any high order bits, the size calculation results in a huge
+value that is likely to immediately fail.
 
-Seems like I was overlooking something here, you are right, this
-shouldn't really be a problem.
+Fix this by re-calculating the page-aligned size first. Then mask any
+high order bits using PHYSICAL_PAGE_MASK.
 
->
-> >
-> > >                 state->enter = acpi_idle_lpi_enter;
-> > >                 drv->safe_state_index = i;
-> > >         }
-> > > --- a/drivers/cpuidle/cpuidle-arm.c
-> > > +++ b/drivers/cpuidle/cpuidle-arm.c
-> > > @@ -53,6 +53,7 @@ static struct cpuidle_driver arm_idle_dr
-> > >          * handler for idle state index 0.
-> > >          */
-> > >         .states[0] = {
-> > > +               .flags                  = CPUIDLE_FLAG_RCU_IDLE,
-> >
-> > Comparing arm64 and arm32 idle-states/idle-drivers, the $subject
-> > series ends up setting the CPUIDLE_FLAG_RCU_IDLE for the ARM WFI idle
-> > state (state zero), but only for the arm64 and psci cases (mostly
-> > arm64). For arm32 we would need to update the ARM_CPUIDLE_WFI_STATE
-> > too, as that is what most arm32 idle-drivers are using. My point is,
-> > the code becomes a bit inconsistent.
->
-> True.
->
-> > Perhaps it's easier to avoid setting the CPUIDLE_FLAG_RCU_IDLE bit for
-> > all of the ARM WFI idle states, for both arm64 and arm32?
->
-> As per the below?
->
-> >
-> > >                 .enter                  = arm_enter_idle_state,
-> > >                 .exit_latency           = 1,
-> > >                 .target_residency       = 1,
->
-> > > --- a/include/linux/cpuidle.h
-> > > +++ b/include/linux/cpuidle.h
-> > > @@ -282,14 +282,18 @@ extern s64 cpuidle_governor_latency_req(
-> > >         int __ret = 0;                                                  \
-> > >                                                                         \
-> > >         if (!idx) {                                                     \
-> > > +               ct_idle_enter();                                        \
-> >
-> > According to my comment above, we should then drop these calls to
-> > ct_idle_enter and ct_idle_exit() here. Right?
->
-> Yes, if we ensure idx==0 never has RCU_IDLE set then these must be
-> removed.
->
-> > >                 cpu_do_idle();                                          \
-> > > +               ct_idle_exit();                                         \
-> > >                 return idx;                                             \
-> > >         }                                                               \
-> > >                                                                         \
-> > >         if (!is_retention)                                              \
-> > >                 __ret =  cpu_pm_enter();                                \
-> > >         if (!__ret) {                                                   \
-> > > +               ct_idle_enter();                                        \
-> > >                 __ret = low_level_idle_enter(state);                    \
-> > > +               ct_idle_exit();                                         \
-> > >                 if (!is_retention)                                      \
-> > >                         cpu_pm_exit();                                  \
-> > >         }                                                               \
-> > >
->
-> So the basic premise is that everything that needs RCU inside the idle
-> callback must set CPUIDLE_FLAG_RCU_IDLE and by doing that promise to
-> call ct_idle_{enter,exit}() themselves.
->
-> Setting RCU_IDLE is required when there is RCU usage, however even if
-> there is no RCU usage, setting RCU_IDLE is fine, as long as
-> ct_idle_{enter,exit}() then get called.
+Fixes: ffa71f33a820 ("x86, ioremap: Fix incorrect physical address handling in PAE mode")
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+---
 
-Right, I was thinking that it could make sense to shrink the window
-for users getting this wrong. In other words, we shouldn't set the
-CPUIDLE_FLAG_RCU_IDLE unless we really need to.
+This patch was previously Patch 1 of a larger series[1].  Breaking
+it out separately per discussion with Dave Hansen and Boris Petkov.
 
-And as I said, consistent behaviour is also nice to have.
+[1] https://lore.kernel.org/linux-hyperv/1668624097-14884-1-git-send-email-mikelley@microsoft.com/
 
->
->
-> So does the below (delta) look better to you?
+ arch/x86/mm/ioremap.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Yes, it does!
+diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+index 78c5bc6..6453fba 100644
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -217,9 +217,15 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
+ 	 * Mappings have to be page-aligned
+ 	 */
+ 	offset = phys_addr & ~PAGE_MASK;
+-	phys_addr &= PHYSICAL_PAGE_MASK;
++	phys_addr &= PAGE_MASK;
+ 	size = PAGE_ALIGN(last_addr+1) - phys_addr;
+ 
++	/*
++	 * Mask out any bits not part of the actual physical
++	 * address, like memory encryption bits.
++	 */
++	phys_addr &= PHYSICAL_PAGE_MASK;
++
+ 	retval = memtype_reserve(phys_addr, (u64)phys_addr + size,
+ 						pcm, &new_pcm);
+ 	if (retval) {
+-- 
+1.8.3.1
 
-Although, one minor comment below.
-
->
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -1218,7 +1218,7 @@ static int acpi_processor_setup_lpi_stat
->                 state->target_residency = lpi->min_residency;
->                 if (lpi->arch_flags)
->                         state->flags |= CPUIDLE_FLAG_TIMER_STOP;
-> -               if (lpi->entry_method == ACPI_CSTATE_FFH)
-> +               if (i != 0 && lpi->entry_method == ACPI_CSTATE_FFH)
->                         state->flags |= CPUIDLE_FLAG_RCU_IDLE;
->                 state->enter = acpi_idle_lpi_enter;
->                 drv->safe_state_index = i;
-> --- a/drivers/cpuidle/cpuidle-arm.c
-> +++ b/drivers/cpuidle/cpuidle-arm.c
-> @@ -53,7 +53,7 @@ static struct cpuidle_driver arm_idle_dr
->          * handler for idle state index 0.
->          */
->         .states[0] = {
-> -               .flags                  = CPUIDLE_FLAG_RCU_IDLE,
-> +               .flags                  = 0,
-
-Nitpick: I don't think we need to explicitly clear the flag, as it
-should already be zeroed by the compiler from its static declaration.
-Right?
-
->                 .enter                  = arm_enter_idle_state,
->                 .exit_latency           = 1,
->                 .target_residency       = 1,
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -357,7 +357,7 @@ static int psci_idle_init_cpu(struct dev
->          * PSCI idle states relies on architectural WFI to be represented as
->          * state index 0.
->          */
-> -       drv->states[0].flags = CPUIDLE_FLAG_RCU_IDLE;
-> +       drv->states[0].flags = 0;
->         drv->states[0].enter = psci_enter_idle_state;
->         drv->states[0].exit_latency = 1;
->         drv->states[0].target_residency = 1;
-> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
-> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-> @@ -72,7 +72,7 @@ static struct cpuidle_driver qcom_spm_id
->         .owner = THIS_MODULE,
->         .states[0] = {
->                 .enter                  = spm_enter_idle_state,
-> -               .flags                  = CPUIDLE_FLAG_RCU_IDLE,
-> +               .flags                  = 0,
->                 .exit_latency           = 1,
->                 .target_residency       = 1,
->                 .power_usage            = UINT_MAX,
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -337,7 +337,7 @@ static int sbi_cpuidle_init_cpu(struct d
->         drv->cpumask = (struct cpumask *)cpumask_of(cpu);
->
->         /* RISC-V architectural WFI to be represented as state index 0. */
-> -       drv->states[0].flags = CPUIDLE_FLAG_RCU_IDLE;
-> +       drv->states[0].flags = 0;
->         drv->states[0].enter = sbi_cpuidle_enter_state;
->         drv->states[0].exit_latency = 1;
->         drv->states[0].target_residency = 1;
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -282,9 +282,7 @@ extern s64 cpuidle_governor_latency_req(
->         int __ret = 0;                                                  \
->                                                                         \
->         if (!idx) {                                                     \
-> -               ct_idle_enter();                                        \
->                 cpu_do_idle();                                          \
-> -               ct_idle_exit();                                         \
->                 return idx;                                             \
->         }                                                               \
->                                                                         \
-
-Kind regards
-Uffe
