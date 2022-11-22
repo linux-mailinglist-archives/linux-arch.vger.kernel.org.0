@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300CF6344F0
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 20:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5077F6344F2
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Nov 2022 20:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbiKVTys (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Nov 2022 14:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
+        id S234375AbiKVTyt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Nov 2022 14:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234733AbiKVTyW (ORCPT
+        with ESMTP id S234739AbiKVTyW (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Nov 2022 14:54:22 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BFD87569;
-        Tue, 22 Nov 2022 11:54:19 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id s196so14970078pgs.3;
-        Tue, 22 Nov 2022 11:54:19 -0800 (PST)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C81A3403;
+        Tue, 22 Nov 2022 11:54:20 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id y10so13489262plp.3;
+        Tue, 22 Nov 2022 11:54:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nn7aMM2ad863pOwZNew/EvwCgnDwcAXHi2MWDQYfDjI=;
-        b=RWz8sQLTQNvwgI2df8iLxqTr+sEw2wL39ea4kS0x0CprI1Kazflsy25JZbcrvSVApe
-         /J8BU2BdqPBAPvrZwiFyTsF2oCcIaJupZWYCUmQpgc6w7Mci0k796A2l5q76RE9EdXTA
-         Y5Jj086CqiUiB+OQPu8JUCbvrxhw976thH2TDil0rbo40+rwg9yMA9TmoS6O7Ol5eP0M
-         d/kKVs7mx9Y2/nqKZ4BSB8geM9Ng39PiXZ7FjJWo1AqWLj4/Qm9gyHpiz7oo9Yj1tmpT
-         wKNk/r5X7uwX8DtW9DnIcUHEJ5XGFAzB8j7SPddwv5jfphWDzG5VNfg85Tbz35un/sdx
-         gXMw==
+        bh=2RI1x4addaxeSG0Ueh/t7m47u+roOJv2baaQ7rL2Moo=;
+        b=kc07iCXUBXT3CNeUNFgib2mQbobrmSlPnkO4hN7UDBjXdC593YuLhpAL+DvPmXFPHb
+         ffu3DQ6vyxfbPxVHXCSQm2IAXJFMQuRCUahdFTR9xRFILUYT373IjzHdYc2+AP+YbxU5
+         fX607CPAdRphk1/UEff3UfGp1v/Madb3BUV1xh+t8qys49zCgEOqZe3PbbBZRXXGyv+j
+         2dLRm6aPOlxoXIBXIGtJXS8/G2hOqqmL57XCoCY5hZ8Zv6LLflyp7vIMbXfNBD93QMi4
+         8eWzyhXMrbTTXHUV60Q9/OxTaQJOi+iEV1mFypFCLCZT89646tZ6q3b3DkpmRQ8LoYFx
+         2JwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nn7aMM2ad863pOwZNew/EvwCgnDwcAXHi2MWDQYfDjI=;
-        b=rBCVGZH+vZjRvVNdIIcBL63B0GxsmHq2dQjK5fuK9c3WxmEZZnyqnwOoCr9x4seHtW
-         uOtWENm/d63znGDAispuUNKP30KWQDX2d2VDJMH54KPido6TLKPcJI6zi/B0ts0hsTmu
-         KXZ3FrNE/qsMBvE4gE17hGD3oTpJjAOzzQYYyYUNv44Ktl4Ke3FqZm66XoSrCzY8Kcz0
-         Blvchhi8HRN22FUngzqLlcIAvi+Yw6S+no1pUOE0WGIi1Q0cXnany6tEVqQDHLyexRe2
-         NB2hHVaFsqmyE6kYKO+zC+z1DImUWe+9yypRPPOo/s0tF8hGkboFVctxtvG1dekQLbo/
-         qr1w==
-X-Gm-Message-State: ANoB5pnoLSzrpBEU6mH7kHnmp3Mq5XNqOC0VsfXpmiIOY3gHzv4A3c+d
-        esihhYK+gYfpPg9mY4Zv1qQ=
-X-Google-Smtp-Source: AA0mqf4xdDjkEQnqny8aCR9O4Z6MZfbB7hXn6Tt6gZf1irhsfXFQuaWdxi/hknugWvaiEseiVIEXXg==
-X-Received: by 2002:a63:cd09:0:b0:476:d44d:355 with SMTP id i9-20020a63cd09000000b00476d44d0355mr5437893pgg.289.1669146858593;
-        Tue, 22 Nov 2022 11:54:18 -0800 (PST)
+        bh=2RI1x4addaxeSG0Ueh/t7m47u+roOJv2baaQ7rL2Moo=;
+        b=a7g46kqkT5MnL2FfaNziZQR7ZgMTQILt/9dNvJJSxmmS4jMdDbUiYhEHju9NmjW7cx
+         Z+LXeawuFEEMW3ucDrLvmXEcuGYCsJe2FJCzzqsWBEE7F1uhD2Vvd9mbl7r1YQYM0ren
+         ady/s7lL883wJgSZmA1hkIJJ1FEdxMl/YdWiVFWu7F0N6Ua6F+udEipK9m7WeUZCA0EO
+         ljbrYChu4/mCrE2QJHUgWkVjmEt1iBEpn1oM7AxhR+2gkTfoVshIB6OYOtUDXdgAlek+
+         DE8Bb04SqwG2HO7BaxFWxm92yZcSxfyfL2UmRU0pWAhYT5OulIYXuwVpnoLveZ66pB89
+         kAKw==
+X-Gm-Message-State: ANoB5pnX2oVQbTE3T5FIIPUzu4n3qE0lVO94VT+g2wSkR7oP1PAZDVbx
+        YT8cBn5DHFqkyIeeMOQD1sY=
+X-Google-Smtp-Source: AA0mqf64VILhA5gP/coNKXRf4/fdbaKs5HD5f2gWeXuO6VasjLJvoWakA+MEzWWgzt/ZUovXPCAy/w==
+X-Received: by 2002:a17:902:ab4b:b0:186:7b95:f773 with SMTP id ij11-20020a170902ab4b00b001867b95f773mr6266579plb.152.1669146860203;
+        Tue, 22 Nov 2022 11:54:20 -0800 (PST)
 Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id a8-20020a63d408000000b00460fbe0d75esm9699252pgh.31.2022.11.22.11.54.17
+        by smtp.gmail.com with ESMTPSA id a8-20020a63d408000000b00460fbe0d75esm9699252pgh.31.2022.11.22.11.54.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 11:54:18 -0800 (PST)
+        Tue, 22 Nov 2022 11:54:19 -0800 (PST)
 From:   Nadav Amit <nadav.amit@gmail.com>
 X-Google-Original-From: Nadav Amit
 To:     Thomas Gleixner <tglx@linutronix.de>
@@ -63,11 +63,10 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Johannes Berg <johannes@sipsolutions.net>,
         Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <namit@vmware.com>,
-        Marcin Nowakowski <marcin.nowakowski@mips.com>
-Subject: [PATCH 1/3] kprobes: Mark descendents of core_kernel_text as notrace
-Date:   Tue, 22 Nov 2022 11:53:27 -0800
-Message-Id: <20221122195329.252654-2-namit@vmware.com>
+        Nadav Amit <namit@vmware.com>
+Subject: [PATCH 2/3] lib/usercopy: Allow traceing of usercopy, xarray, iov_iter
+Date:   Tue, 22 Nov 2022 11:53:28 -0800
+Message-Id: <20221122195329.252654-3-namit@vmware.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221122195329.252654-1-namit@vmware.com>
 References: <20221122195329.252654-1-namit@vmware.com>
@@ -84,148 +83,35 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Nadav Amit <namit@vmware.com>
 
-Commit c0d80ddab899 ("kernel/extable.c: mark core_kernel_text notrace")
-disabled the tracing of core_kernel_text to avoid recursive calls. For
-the same reasons, all the functions in the dynamic extents of
-core_kernel_text should be marked as notrace.
+There is no reason not to allow the use of ftrace for usercopy, xarray
+and iov_iter.  Enable tracing for these compilation unit.
 
-Cc: Marcin Nowakowski <marcin.nowakowski@mips.com>
 Signed-off-by: Nadav Amit <namit@vmware.com>
 ---
- arch/arm/kernel/process.c             | 2 +-
- arch/ia64/mm/init.c                   | 2 +-
- arch/x86/entry/vsyscall/vsyscall_64.c | 2 +-
- arch/x86/um/mem_32.c                  | 2 +-
- include/asm-generic/sections.h        | 6 +++---
- include/linux/kallsyms.h              | 6 +++---
- include/linux/mm.h                    | 2 +-
- 7 files changed, 11 insertions(+), 11 deletions(-)
+ lib/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
-index a2b31d91a1b6..a32ca8fcab5a 100644
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -331,7 +331,7 @@ int in_gate_area(struct mm_struct *mm, unsigned long addr)
- 	return (addr >= gate_vma.vm_start) && (addr < gate_vma.vm_end);
- }
+diff --git a/lib/Makefile b/lib/Makefile
+index 59bd7c2f793a..32766aa26670 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -27,6 +27,8 @@ KASAN_SANITIZE_string.o := n
+ CFLAGS_string.o += -fno-stack-protector
+ endif
  
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	return in_gate_area(NULL, addr);
- }
-diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-index fc4e4217e87f..e3d63d3d3e59 100644
---- a/arch/ia64/mm/init.c
-+++ b/arch/ia64/mm/init.c
-@@ -284,7 +284,7 @@ struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
- 	return &gate_vma;
- }
++CFLAGS_xarray.o += $(CC_FLAGS_FTRACE)
++CFLAGS_iov_iter.o += $(CC_FLAGS_FTRACE)
+ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+ 	 rbtree.o radix-tree.o timerqueue.o xarray.o \
+ 	 maple_tree.o idr.o extable.o irq_regs.o argv_split.o \
+@@ -42,6 +44,7 @@ lib-$(CONFIG_SMP) += cpumask.o
+ lib-y	+= kobject.o klist.o
+ obj-y	+= lockref.o
  
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	if ((addr >= FIXADDR_USER_START) && (addr < FIXADDR_USER_END))
- 		return 1;
-diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-index 4af81df133ee..68ebad6abd2b 100644
---- a/arch/x86/entry/vsyscall/vsyscall_64.c
-+++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-@@ -340,7 +340,7 @@ int in_gate_area(struct mm_struct *mm, unsigned long addr)
-  * context. It is less reliable than using a task's mm and may give
-  * false positives.
-  */
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	return vsyscall_mode != NONE && (addr & PAGE_MASK) == VSYSCALL_ADDR;
- }
-diff --git a/arch/x86/um/mem_32.c b/arch/x86/um/mem_32.c
-index cafd01f730da..cfec8b00b136 100644
---- a/arch/x86/um/mem_32.c
-+++ b/arch/x86/um/mem_32.c
-@@ -28,7 +28,7 @@ struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
- 	return FIXADDR_USER_START ? &gate_vma : NULL;
- }
- 
--int in_gate_area_no_mm(unsigned long addr)
-+notrace int in_gate_area_no_mm(unsigned long addr)
- {
- 	if (!FIXADDR_USER_START)
- 		return 0;
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index db13bb620f52..d519965b67bf 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -188,7 +188,7 @@ static inline bool is_kernel_rodata(unsigned long addr)
-  *
-  * Returns: true if the address is located in .init.text, false otherwise.
-  */
--static inline bool is_kernel_inittext(unsigned long addr)
-+static notrace inline bool is_kernel_inittext(unsigned long addr)
- {
- 	return addr >= (unsigned long)_sinittext &&
- 	       addr < (unsigned long)_einittext;
-@@ -203,7 +203,7 @@ static inline bool is_kernel_inittext(unsigned long addr)
-  * Returns: true if the address is located in .text, false otherwise.
-  * Note: an internal helper, only check the range of _stext to _etext.
-  */
--static inline bool __is_kernel_text(unsigned long addr)
-+static notrace inline bool __is_kernel_text(unsigned long addr)
- {
- 	return addr >= (unsigned long)_stext &&
- 	       addr < (unsigned long)_etext;
-@@ -219,7 +219,7 @@ static inline bool __is_kernel_text(unsigned long addr)
-  *       and range from __init_begin to __init_end, which can be outside
-  *       of the _stext to _end range.
-  */
--static inline bool __is_kernel(unsigned long addr)
-+static notrace inline bool __is_kernel(unsigned long addr)
- {
- 	return ((addr >= (unsigned long)_stext &&
- 	         addr < (unsigned long)_end) ||
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 649faac31ddb..7ee6a734b738 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -24,21 +24,21 @@
- struct cred;
- struct module;
- 
--static inline int is_kernel_text(unsigned long addr)
-+static notrace inline int is_kernel_text(unsigned long addr)
- {
- 	if (__is_kernel_text(addr))
- 		return 1;
- 	return in_gate_area_no_mm(addr);
- }
- 
--static inline int is_kernel(unsigned long addr)
-+static notrace inline int is_kernel(unsigned long addr)
- {
- 	if (__is_kernel(addr))
- 		return 1;
- 	return in_gate_area_no_mm(addr);
- }
- 
--static inline int is_ksym_addr(unsigned long addr)
-+static notrace inline int is_ksym_addr(unsigned long addr)
- {
- 	if (IS_ENABLED(CONFIG_KALLSYMS_ALL))
- 		return is_kernel(addr);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index bfac5a166cb8..36a938c10ede 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3186,7 +3186,7 @@ static inline struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
- {
- 	return NULL;
- }
--static inline int in_gate_area_no_mm(unsigned long addr) { return 0; }
-+static notrace inline int in_gate_area_no_mm(unsigned long addr) { return 0; }
- static inline int in_gate_area(struct mm_struct *mm, unsigned long addr)
- {
- 	return 0;
++CFLAGS_usercopy.o += $(CC_FLAGS_FTRACE)
+ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
+ 	 bust_spinlocks.o kasprintf.o bitmap.o scatterlist.o \
+ 	 list_sort.o uuid.o iov_iter.o clz_ctz.o \
 -- 
 2.25.1
 
