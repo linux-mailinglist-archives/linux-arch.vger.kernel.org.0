@@ -2,135 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA74636539
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 17:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF9A636541
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 17:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238031AbiKWQDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Nov 2022 11:03:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        id S238028AbiKWQEs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Nov 2022 11:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237793AbiKWQDh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 11:03:37 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD258BE0;
-        Wed, 23 Nov 2022 08:03:36 -0800 (PST)
+        with ESMTP id S237748AbiKWQEr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 11:04:47 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E175CD3D;
+        Wed, 23 Nov 2022 08:04:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669219416; x=1700755416;
+  t=1669219486; x=1700755486;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=RC/dJSMFGCQR6lU8cmnAoaGtXjo/0QLdlyY2gZJCtVM=;
-  b=JVPL1BNMfZ/pEW8CYSrUD1Wfdx8/qldoxg2wxw+WCQhzqGU5IAEfie26
-   GpDgbvnKM6m9zuu5XAgiTpBkEHzkdz0R6wqargqaHYNw3h99oNoQl/hyZ
-   6HSrxt/TrwqhQHqhnryXpjS1eQC7fHDkMpdzzt8iKRQTD4UMeQg20tfcF
-   H12BSerBtrgenUFpoSTFF76olbynK4E/VGpWcCxFot7VKczhQ2OX0HzvB
-   fpu2U3lXFTTU8mUGnc00QCLSEUuprPxN53Ga174Vr0XBUn28Pb8OV46O8
-   v0KcVBIE2oLpQIfBB58drPZifSKmLCKlIDeoxWrgBoUBxTxiUcpF+d38u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311728002"
+  bh=d55MEzSITgAIwoLWl00J4QxRdqUnar9DyNE6a8QVJQ0=;
+  b=Znm53c6MWiPwzYHOy1TpIp8EjH1JKaOxL556w0UdtP89P+qeneVclkTd
+   58sBTKvP7CQfW6R/LEdedNlt4x4k7B6DgM+TL2CpJLAcrjUEeRLamk1Zj
+   gWzGfIDyZVjWYvIT/g2+79Uf97ipWXdzq+vDvLub3BmRY7G8o/fCLClDs
+   ky8jx7YxzR1mTmgVKMR0h8OZJlpNuBWv5AbkaSM6KE4T6OZOc3L6hETZg
+   9Jtnt7YAxwmJtQYvDvHojawuSMHxoabAroDyHe3hJva+Q3E+mZG+tXLI5
+   WSRLnAruqbaDSwgGvEDu4j2YkHVdwNy/gEh4xxVzGHfbQ/w+ysLxx7ZAL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="297458549"
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="311728002"
+   d="scan'208";a="297458549"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:03:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="619664771"
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:04:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="619665323"
 X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="619664771"
+   d="scan'208";a="619665323"
 Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:03:34 -0800
-Message-ID: <1249f7d6-1a95-4268-366b-7da5ecec7b92@intel.com>
-Date:   Wed, 23 Nov 2022 08:03:33 -0800
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:04:44 -0800
+Message-ID: <7601f686-ed35-5329-a54d-0c5c38dbd518@intel.com>
+Date:   Wed, 23 Nov 2022 08:04:44 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
 Subject: Re: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on Hyper-V
 Content-Language: en-US
 To:     Dexuan Cui <decui@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "'ak@linux.intel.com'" <ak@linux.intel.com>,
+        "'arnd@arndb.de'" <arnd@arndb.de>, "'bp@alien8.de'" <bp@alien8.de>,
+        "'brijesh.singh@amd.com'" <brijesh.singh@amd.com>,
         "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "'dave.hansen@linux.intel.com'" <dave.hansen@linux.intel.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "'hpa@zytor.com'" <hpa@zytor.com>,
+        "'jane.chu@oracle.com'" <jane.chu@oracle.com>,
+        "'kirill.shutemov@linux.intel.com'" <kirill.shutemov@linux.intel.com>,
         KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        "'linux-arch@vger.kernel.org'" <linux-arch@vger.kernel.org>,
+        "'linux-hyperv@vger.kernel.org'" <linux-hyperv@vger.kernel.org>,
+        "'luto@kernel.org'" <luto@kernel.org>,
+        "'mingo@redhat.com'" <mingo@redhat.com>,
+        "'peterz@infradead.org'" <peterz@infradead.org>,
+        "'rostedt@goodmis.org'" <rostedt@goodmis.org>,
+        "'sathyanarayanan.kuppuswamy@linux.intel.com'" 
         <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        "'seanjc@google.com'" <seanjc@google.com>,
+        "'tglx@linutronix.de'" <tglx@linutronix.de>,
+        "'tony.luck@intel.com'" <tony.luck@intel.com>,
+        "'wei.liu@kernel.org'" <wei.liu@kernel.org>,
+        "'x86@kernel.org'" <x86@kernel.org>
+Cc:     "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>
 References: <20221121195151.21812-1-decui@microsoft.com>
  <20221121195151.21812-2-decui@microsoft.com>
  <18323d11-146f-c418-e8f0-addb2b8adb19@intel.com>
  <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <SA1PR21MB13350DB14A0D6EC943FEF78BBF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+In-Reply-To: <SA1PR21MB13350DB14A0D6EC943FEF78BBF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/22/22 17:37, Dexuan Cui wrote:
->> From: Dave Hansen <dave.hansen@intel.com>
->> Sent: Monday, November 21, 2022 12:39 PM
+On 11/22/22 17:56, Dexuan Cui wrote:
+>> From: Dexuan Cui
 >> [...]
->> On 11/21/22 11:51, Dexuan Cui wrote:
->>> __tdx_hypercall() doesn't work for a TDX guest running on Hyper-V,
->>> because Hyper-V uses a different calling convention, so add the
->>> new function __tdx_ms_hv_hypercall().
+>> The existing asm code for __tdx_hypercall() passes through R10~R15
+>> (see TDVMCALL_EXPOSE_REGS_MASK) to the (KVM) hypervisor.
 >>
->> Other than R10 being variable here and fixed for __tdx_hypercall(), this
->> looks *EXACTLY* the same as __tdx_hypercall(), or at least a strict
->> subset of what __tdx_hypercall() can do.
->>
->> Did I miss something?
-> 
-> The existing asm code for __tdx_hypercall() passes through R10~R15
-> (see TDVMCALL_EXPOSE_REGS_MASK) to the (KVM) hypervisor.
-> 
-> Unluckily, for Hyper-V, we need to pass through RDX, R8, R10 and R11
-> to Hyper-V, so I don't think I can use the existing __tdx_hypercall() ?
+>> Unluckily, for Hyper-V, we need to pass through RDX, R8, R10 and R11
+>> to Hyper-V, so I don't think I can use the existing __tdx_hypercall() ?
+> I'm checking with the Hyper-V team to see if it's possible for them
+> to not use RDX and R8, and use R12 and R13 instead. Will keep the
+> thread updated.
 
-What's to prevent you from adding RDX and R8?  You could make
-TDVMCALL_EXPOSE_REGS_MASK a macro argument.
-
-Look at 'has_erro_code', for instance in "idtentry_body"
-arch/x86/entry/entry_64.S.
-
->> Another way of saying this:  It seems like you could do this with a new
->> version of _tdx_hypercall() (and all in C) instead of a new
->> __tdx_hypercall().
-> 
-> I don't think the current TDVMCALL_EXPOSE_REGS_MASK allows me
-> to pass through RDX and R8 to Hyper-V.
-
-Right.  So pass it in.
-
-> PS, the comment before __tdx_hypercall() contains this line:
-> 
-> "* RBX, RBP, RDI, RSI  - Used to pass VMCALL sub function specific
-> arguments."
-> 
-> But it looks like currently RBX an RBP are not used at all in 
-> arch/x86/coco/tdx/tdcall.S ?
-
-Yeah, it looks like they are a part of the hypercall ABI but no existing
-hypercall is using them.  Patches to fix it accepted. :)
-
+That would be nice.  But, to be honest, I don't expect them to change
+the ABI for one OS.  It's not a big deal to just make the function a bit
+more flexible.
