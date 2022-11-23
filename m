@@ -2,199 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BE56363D7
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 16:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA74636539
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 17:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbiKWPg3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Nov 2022 10:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S238031AbiKWQDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Nov 2022 11:03:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236666AbiKWPg3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 10:36:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09741725C7;
-        Wed, 23 Nov 2022 07:36:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA0461DA0;
-        Wed, 23 Nov 2022 15:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78167C433D6;
-        Wed, 23 Nov 2022 15:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669217787;
-        bh=HZhzktOoDe/GEDqHDGyY18dESmqG5q+xXSAft4Q3o64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IBbNL7BwmqqR0QzV7oTARYzvN1gvt+4swSNBoNL1f4iLbmxaKN5y+LJVhmmix2mG1
-         b2kHDHcPpMf4/1+P+mep1JmxGuwQoyZU6l/wreh13C0Rs7sG/T6iXjX2htVPHQncIk
-         IMQhkA7HpSVEqX4W+A8y5gTy6Totma2gQp6b5oKAV8C+HhLB6En9M5/D9QG9aUv6VQ
-         JCYP//1Mq5gk7vgKahhC2VGx8YHFLIApBb9viPdzEmQncbUJ41s+8p4JJ5kMxv9yQw
-         SBlOQBTOJcNXuyse0/Ve52k20hX+mxQOF1uxY/HoFb83SBv74ldSa7+Gz0gveoyGEX
-         UG4JzM72Xjmmw==
-Date:   Wed, 23 Nov 2022 23:26:32 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH -next V8 00/14] riscv: Add GENERIC_ENTRY support and
- related features
-Message-ID: <Y347qONxftY4C+GB@xhacker>
-References: <20221103075047.1634923-1-guoren@kernel.org>
+        with ESMTP id S237793AbiKWQDh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 11:03:37 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD258BE0;
+        Wed, 23 Nov 2022 08:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669219416; x=1700755416;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RC/dJSMFGCQR6lU8cmnAoaGtXjo/0QLdlyY2gZJCtVM=;
+  b=JVPL1BNMfZ/pEW8CYSrUD1Wfdx8/qldoxg2wxw+WCQhzqGU5IAEfie26
+   GpDgbvnKM6m9zuu5XAgiTpBkEHzkdz0R6wqargqaHYNw3h99oNoQl/hyZ
+   6HSrxt/TrwqhQHqhnryXpjS1eQC7fHDkMpdzzt8iKRQTD4UMeQg20tfcF
+   H12BSerBtrgenUFpoSTFF76olbynK4E/VGpWcCxFot7VKczhQ2OX0HzvB
+   fpu2U3lXFTTU8mUGnc00QCLSEUuprPxN53Ga174Vr0XBUn28Pb8OV46O8
+   v0KcVBIE2oLpQIfBB58drPZifSKmLCKlIDeoxWrgBoUBxTxiUcpF+d38u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="311728002"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="311728002"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:03:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10540"; a="619664771"
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="619664771"
+Received: from vcbudden-mobl3.amr.corp.intel.com (HELO [10.212.129.67]) ([10.212.129.67])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 08:03:34 -0800
+Message-ID: <1249f7d6-1a95-4268-366b-7da5ecec7b92@intel.com>
+Date:   Wed, 23 Nov 2022 08:03:33 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221103075047.1634923-1-guoren@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on Hyper-V
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221121195151.21812-1-decui@microsoft.com>
+ <20221121195151.21812-2-decui@microsoft.com>
+ <18323d11-146f-c418-e8f0-addb2b8adb19@intel.com>
+ <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:50:33AM -0400, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On 11/22/22 17:37, Dexuan Cui wrote:
+>> From: Dave Hansen <dave.hansen@intel.com>
+>> Sent: Monday, November 21, 2022 12:39 PM
+>> [...]
+>> On 11/21/22 11:51, Dexuan Cui wrote:
+>>> __tdx_hypercall() doesn't work for a TDX guest running on Hyper-V,
+>>> because Hyper-V uses a different calling convention, so add the
+>>> new function __tdx_ms_hv_hypercall().
+>>
+>> Other than R10 being variable here and fixed for __tdx_hypercall(), this
+>> looks *EXACTLY* the same as __tdx_hypercall(), or at least a strict
+>> subset of what __tdx_hypercall() can do.
+>>
+>> Did I miss something?
 > 
-> The patches convert riscv to use the generic entry infrastructure from
-> kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
-> for percpu to prevent kernel stack overflows. Add generic_entry based
-> STACKLEAK support. Some optimization for entry.S with new .macro and
-> merge ret_from_kernel_thread into ret_from_fork.
+> The existing asm code for __tdx_hypercall() passes through R10~R15
+> (see TDVMCALL_EXPOSE_REGS_MASK) to the (KVM) hypervisor.
 > 
-> We have tested it with rv64, rv32, rv64 + 32rootfs, all are passed.
-> 
-> You can directly try it with:
-> [1] https://github.com/guoren83/linux/tree/generic_entry_v8
-> 
-> Any reviews and tests are helpful.
+> Unluckily, for Hyper-V, we need to pass through RDX, R8, R10 and R11
+> to Hyper-V, so I don't think I can use the existing __tdx_hypercall() ?
 
-Thanks for this series,
+What's to prevent you from adding RDX and R8?  You could make
+TDVMCALL_EXPOSE_REGS_MASK a macro argument.
 
-Tested-by: Jisheng Zhang <jszhang@kernel.org>
+Look at 'has_erro_code', for instance in "idtentry_body"
+arch/x86/entry/entry_64.S.
 
+>> Another way of saying this:  It seems like you could do this with a new
+>> version of _tdx_hypercall() (and all in C) instead of a new
+>> __tdx_hypercall().
 > 
-> v8:
->  - Rebase on palmer/for-next branch (20221102)
->  - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
->  - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
->  - Optimize __noinstr_section comment (JiangshanLai)
+> I don't think the current TDVMCALL_EXPOSE_REGS_MASK allows me
+> to pass through RDX and R8 to Hyper-V.
+
+Right.  So pass it in.
+
+> PS, the comment before __tdx_hypercall() contains this line:
 > 
-> v7:
-> https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
->  - Fixup regs_irqs_disabled with SR_PIE
->  - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
->    Rutland)
->  - Add BUG_ON(!irqs_disabled()) in trap handlers
->  - Using regs_irqs_disabled in __do_page_fault
->  - Remove unnecessary irq disable in ret_from_exception and add comment 
+> "* RBX, RBP, RDI, RSI  - Used to pass VMCALL sub function specific
+> arguments."
 > 
-> v6:
-> https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
->  - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
->  - Move call_on_stack to inline style (Thx Peter Zijlstra)
->  - Fixup fp chain broken (Thx Chen Zhongjin)
->  - Remove common entry modification, and fixup page_fault entry (Thx
->    Peter Zijlstra)
->  - Treat some traps as nmi entry (Thx Peter Zijlstra)
-> 
-> v5:
-> https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
->  - Add riscv own stackleak patch instead of generic entry modification
->    (by Mark Rutland)
->  - Add EXPERT dependency for THREAD_SIZE (by Arnd)
->  - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
->  - Corrected __trap_section (by Peter Zijlstra)
->  - Add Tested-by (Yipeng Zou)
->  - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
->  - Fixup systrace_enter compile error
->  - Fixup exit_to_user_mode_prepare preempt_disable warning
-> 
-> V4:
-> https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
->  - Fixup entry.S with "la" bug (by Conor.Dooley)
->  - Fixup missing noinstr bug (by Peter Zijlstra)
-> 
-> V3:
-> https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
->  - Fixup CONFIG_COMPAT=n compile error
->  - Add THREAD_SIZE_ORDER config
->  - Optimize elf_kexec.c warning fixup
->  - Add static to irq_stack_ptr definition
-> 
-> V2:
-> https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
->  - Fixup compile error by include "riscv: ptrace: Remove duplicate
->    operation"
->  - Fixup compile warning
->    Reported-by: kernel test robot <lkp@intel.com>
->  - Add test repo link in cover letter
-> 
-> V1:
-> https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
-> 
-> 
-> Dao Lu (1):
->   riscv: Add support for STACKLEAK gcc plugin
-> 
-> Guo Ren (9):
->   riscv: elf_kexec: Fixup compile warning
->   riscv: compat_syscall_table: Fixup compile warning
->   riscv: ptrace: Remove duplicate operation
->   riscv: traps: Add noinstr to prevent instrumentation inserted
->   riscv: convert to generic entry
->   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
->   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
->   riscv: Add config of thread stack size
->   riscv: Typo fixup for addi -> andi in comment
-> 
-> Jisheng Zhang (3):
->   riscv: remove extra level wrappers of trace_hardirqs_{on,off}
->   riscv: consolidate ret_from_kernel_thread into ret_from_fork
->   riscv: entry: consolidate general regs saving/restoring
-> 
-> Lai Jiangshan (1):
->   compiler_types.h: Add __noinstr_section() for noinstr
-> 
->  arch/riscv/Kconfig                    |  21 ++
->  arch/riscv/include/asm/asm.h          |  63 +++++
->  arch/riscv/include/asm/csr.h          |   1 -
->  arch/riscv/include/asm/entry-common.h |   8 +
->  arch/riscv/include/asm/ptrace.h       |  10 +-
->  arch/riscv/include/asm/stacktrace.h   |   5 +
->  arch/riscv/include/asm/syscall.h      |   6 +
->  arch/riscv/include/asm/thread_info.h  |  27 +--
->  arch/riscv/include/asm/vmap_stack.h   |  28 +++
->  arch/riscv/kernel/Makefile            |   3 +-
->  arch/riscv/kernel/elf_kexec.c         |   2 +-
->  arch/riscv/kernel/entry.S             | 327 +++-----------------------
->  arch/riscv/kernel/irq.c               | 110 +++++++++
->  arch/riscv/kernel/mcount-dyn.S        |  56 +----
->  arch/riscv/kernel/process.c           |   5 +-
->  arch/riscv/kernel/ptrace.c            |  44 ----
->  arch/riscv/kernel/signal.c            |  21 +-
->  arch/riscv/kernel/sys_riscv.c         |  27 +++
->  arch/riscv/kernel/trace_irq.c         |  27 ---
->  arch/riscv/kernel/trace_irq.h         |  11 -
->  arch/riscv/kernel/traps.c             |  74 ++++--
->  arch/riscv/mm/fault.c                 |  16 +-
->  drivers/firmware/efi/libstub/Makefile |   2 +-
->  include/linux/compiler_types.h        |  15 +-
->  24 files changed, 407 insertions(+), 502 deletions(-)
->  create mode 100644 arch/riscv/include/asm/entry-common.h
->  create mode 100644 arch/riscv/include/asm/vmap_stack.h
->  delete mode 100644 arch/riscv/kernel/trace_irq.c
->  delete mode 100644 arch/riscv/kernel/trace_irq.h
-> 
-> -- 
-> 2.36.1
-> 
+> But it looks like currently RBX an RBP are not used at all in 
+> arch/x86/coco/tdx/tdcall.S ?
+
+Yeah, it looks like they are a part of the hypercall ABI but no existing
+hypercall is using them.  Patches to fix it accepted. :)
+
