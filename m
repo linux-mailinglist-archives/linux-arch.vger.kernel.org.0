@@ -2,143 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D85636237
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 15:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BE56363D7
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 16:36:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiKWOrT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Nov 2022 09:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
+        id S236364AbiKWPg3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Nov 2022 10:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235979AbiKWOrS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 09:47:18 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DED5800F;
-        Wed, 23 Nov 2022 06:47:17 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id DE8845C017F;
-        Wed, 23 Nov 2022 09:47:16 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 23 Nov 2022 09:47:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1669214836; x=1669301236; bh=dk
-        lom4LU7h4zmmCS6kdcNAX+zdQlMXjZUyObz2F6gPk=; b=Xawxb54qJvyp523rXJ
-        Q829SsykOAL96QKi8ei5UXKubHm6dQgTgH327/QPDT/4GgDk6r0WiLRo3v/nuoNt
-        IrLBR/Hx5rFkS5isaocs3X1DuAzftGsHmP6SmdCRGIVu3cuAub+GQCrkoOjeTEuj
-        y8noLcLchKZLakCks9XLdeJQZz2RIJ6P9R8piM2UfZfK1v6UWt0x0gfp1Qe9ivIG
-        +F/cl5gn8Aej9Z2TrvnQFK0i1B0aTKuE069mOGiNeTuzs8NzGUlnBD62zPy3d5xQ
-        j/GutrBz1zcxoMwQ0rQW4GdFDp0cfSluNooXlfCbxQc5qUVwfhmryJRZTThpkiz1
-        sCBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1669214836; x=1669301236; bh=dklom4LU7h4zmmCS6kdcNAX+zdQl
-        MXjZUyObz2F6gPk=; b=MYi1zg+v0DiAScLMO1+MGIGV9+huuKFzbTAq8cGDqxho
-        w1pmg1/mLs6lJsHSWVV/RxXtUsA67QsH1TBZcmzys2R+9MQ83LUInV33+VtEmLf9
-        g4ErUPlZAYuLWuI0aBj6dxC9AuPNo+mNRfPQneSVw+58dhaRL2D6yAgoAIHY/xkg
-        9OvOOy2oizlPskwYLg1/HsFEkpeFMq2GMd6SWEScvjGVFxlRFhQZxVb+sIqohOhH
-        XDGocQO6azo51c6AcgUodKfsE2wbLAWHimmj0MlCOUtlkFEOWU6QhVSTq9L9G7lb
-        WC+PU2VNNUF+EGO60DKkm5829pT6eTeXKP7bNkNz/g==
-X-ME-Sender: <xms:dDJ-Y86lWReASnhfdEHjmHd__J8gL7rzL55cy22cdIoSX2ClX8uQbg>
-    <xme:dDJ-Y97IAEKcIdQDSp_r3ICUU44YDDc4Thmgd3y-lHrehYMhNAVCoS9vz4Z0hzczs
-    sA2L1-IBTPnNjw2bW0>
-X-ME-Received: <xmr:dDJ-Y7dS1Xbi3Z2cmbKEvwW4KSLN4k3S6e2QhLU4ETOz79Y-yMHtr5V1eNHabstwSAo5iA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedriedugdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:dDJ-YxIOvHhftdTDhPEo3ysgYrIHKVv9MyXG7Kmcjgn1K_Vbsoz-gw>
-    <xmx:dDJ-YwLukS21UfA3K8kvTXvVxYxeLc5vPwONpAZacz4lgEJx67fgkQ>
-    <xmx:dDJ-Yyy_timEfBU4CEcY2vzg4RUZ-z9ennuNv0tC5Ecp3-kmYm6FJg>
-    <xmx:dDJ-Y17cRs34nVmBf0PA-MLbhHKeob1ckmTRx8y3pLjnh6GtgoYddQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Nov 2022 09:47:16 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 9E9B9109687; Wed, 23 Nov 2022 17:47:14 +0300 (+03)
-Date:   Wed, 23 Nov 2022 17:47:14 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] x86/hyperv: Support hypercalls for TDX guests
-Message-ID: <20221123144714.vjp6alujwgzdjz5v@box.shutemov.name>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-6-decui@microsoft.com>
- <344c8b55-b5c3-85c4-72b3-4120e425201e@intel.com>
- <SA1PR21MB13359D878631F5C327DE8148BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+        with ESMTP id S236666AbiKWPg3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 10:36:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09741725C7;
+        Wed, 23 Nov 2022 07:36:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AA0461DA0;
+        Wed, 23 Nov 2022 15:36:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78167C433D6;
+        Wed, 23 Nov 2022 15:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669217787;
+        bh=HZhzktOoDe/GEDqHDGyY18dESmqG5q+xXSAft4Q3o64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IBbNL7BwmqqR0QzV7oTARYzvN1gvt+4swSNBoNL1f4iLbmxaKN5y+LJVhmmix2mG1
+         b2kHDHcPpMf4/1+P+mep1JmxGuwQoyZU6l/wreh13C0Rs7sG/T6iXjX2htVPHQncIk
+         IMQhkA7HpSVEqX4W+A8y5gTy6Totma2gQp6b5oKAV8C+HhLB6En9M5/D9QG9aUv6VQ
+         JCYP//1Mq5gk7vgKahhC2VGx8YHFLIApBb9viPdzEmQncbUJ41s+8p4JJ5kMxv9yQw
+         SBlOQBTOJcNXuyse0/Ve52k20hX+mxQOF1uxY/HoFb83SBv74ldSa7+Gz0gveoyGEX
+         UG4JzM72Xjmmw==
+Date:   Wed, 23 Nov 2022 23:26:32 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH -next V8 00/14] riscv: Add GENERIC_ENTRY support and
+ related features
+Message-ID: <Y347qONxftY4C+GB@xhacker>
+References: <20221103075047.1634923-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <SA1PR21MB13359D878631F5C327DE8148BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103075047.1634923-1-guoren@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 02:14:58AM +0000, Dexuan Cui wrote:
-> > From: Dave Hansen <dave.hansen@intel.com>
-> > Sent: Monday, November 21, 2022 12:05 PM
-> > [...]
-> > >  #ifdef CONFIG_X86_64
-> > > +#if CONFIG_INTEL_TDX_GUEST
-> > > +	if (hv_isolation_type_tdx()) {
-> > 
-> > >  #ifdef CONFIG_X86_64
-> > > +#if CONFIG_INTEL_TDX_GUEST
-> > > +	if (hv_isolation_type_tdx())
-> > 
-> > >  #ifdef CONFIG_X86_64
-> > > +#if CONFIG_INTEL_TDX_GUEST
-> > > +	if (hv_isolation_type_tdx())
-> > > +		return __tdx_ms_hv_hypercall(control, input2, input1);
-> > 
-> > See any common patterns there?
-> > 
-> > The "no #ifdef's in C files" rule would be good to apply here.  Please
-> > do one #ifdef in a header.
+On Thu, Nov 03, 2022 at 03:50:33AM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> Sorry, I should use #ifdef rather than #if. I'll fix it like the below.
+> The patches convert riscv to use the generic entry infrastructure from
+> kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
+> for percpu to prevent kernel stack overflows. Add generic_entry based
+> STACKLEAK support. Some optimization for entry.S with new .macro and
+> merge ret_from_kernel_thread into ret_from_fork.
+> 
+> We have tested it with rv64, rv32, rv64 + 32rootfs, all are passed.
+> 
+> You can directly try it with:
+> [1] https://github.com/guoren83/linux/tree/generic_entry_v8
+> 
+> Any reviews and tests are helpful.
 
-No, can we hide preprocessor hell inside hv_isolation_type_tdx()?
+Thanks for this series,
 
-Like make it return false for !CONFIG_INTEL_TDX_GUEST and avoid all
-#if/#ifdefs in C file.
+Tested-by: Jisheng Zhang <jszhang@kernel.org>
 
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> 
+> v8:
+>  - Rebase on palmer/for-next branch (20221102)
+>  - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
+>  - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
+>  - Optimize __noinstr_section comment (JiangshanLai)
+> 
+> v7:
+> https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
+>  - Fixup regs_irqs_disabled with SR_PIE
+>  - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+>    Rutland)
+>  - Add BUG_ON(!irqs_disabled()) in trap handlers
+>  - Using regs_irqs_disabled in __do_page_fault
+>  - Remove unnecessary irq disable in ret_from_exception and add comment 
+> 
+> v6:
+> https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+>  - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+>  - Move call_on_stack to inline style (Thx Peter Zijlstra)
+>  - Fixup fp chain broken (Thx Chen Zhongjin)
+>  - Remove common entry modification, and fixup page_fault entry (Thx
+>    Peter Zijlstra)
+>  - Treat some traps as nmi entry (Thx Peter Zijlstra)
+> 
+> v5:
+> https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+>  - Add riscv own stackleak patch instead of generic entry modification
+>    (by Mark Rutland)
+>  - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+>  - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+>  - Corrected __trap_section (by Peter Zijlstra)
+>  - Add Tested-by (Yipeng Zou)
+>  - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+>  - Fixup systrace_enter compile error
+>  - Fixup exit_to_user_mode_prepare preempt_disable warning
+> 
+> V4:
+> https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+>  - Fixup entry.S with "la" bug (by Conor.Dooley)
+>  - Fixup missing noinstr bug (by Peter Zijlstra)
+> 
+> V3:
+> https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+>  - Fixup CONFIG_COMPAT=n compile error
+>  - Add THREAD_SIZE_ORDER config
+>  - Optimize elf_kexec.c warning fixup
+>  - Add static to irq_stack_ptr definition
+> 
+> V2:
+> https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+>  - Fixup compile error by include "riscv: ptrace: Remove duplicate
+>    operation"
+>  - Fixup compile warning
+>    Reported-by: kernel test robot <lkp@intel.com>
+>  - Add test repo link in cover letter
+> 
+> V1:
+> https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+> 
+> 
+> Dao Lu (1):
+>   riscv: Add support for STACKLEAK gcc plugin
+> 
+> Guo Ren (9):
+>   riscv: elf_kexec: Fixup compile warning
+>   riscv: compat_syscall_table: Fixup compile warning
+>   riscv: ptrace: Remove duplicate operation
+>   riscv: traps: Add noinstr to prevent instrumentation inserted
+>   riscv: convert to generic entry
+>   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+>   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+>   riscv: Add config of thread stack size
+>   riscv: Typo fixup for addi -> andi in comment
+> 
+> Jisheng Zhang (3):
+>   riscv: remove extra level wrappers of trace_hardirqs_{on,off}
+>   riscv: consolidate ret_from_kernel_thread into ret_from_fork
+>   riscv: entry: consolidate general regs saving/restoring
+> 
+> Lai Jiangshan (1):
+>   compiler_types.h: Add __noinstr_section() for noinstr
+> 
+>  arch/riscv/Kconfig                    |  21 ++
+>  arch/riscv/include/asm/asm.h          |  63 +++++
+>  arch/riscv/include/asm/csr.h          |   1 -
+>  arch/riscv/include/asm/entry-common.h |   8 +
+>  arch/riscv/include/asm/ptrace.h       |  10 +-
+>  arch/riscv/include/asm/stacktrace.h   |   5 +
+>  arch/riscv/include/asm/syscall.h      |   6 +
+>  arch/riscv/include/asm/thread_info.h  |  27 +--
+>  arch/riscv/include/asm/vmap_stack.h   |  28 +++
+>  arch/riscv/kernel/Makefile            |   3 +-
+>  arch/riscv/kernel/elf_kexec.c         |   2 +-
+>  arch/riscv/kernel/entry.S             | 327 +++-----------------------
+>  arch/riscv/kernel/irq.c               | 110 +++++++++
+>  arch/riscv/kernel/mcount-dyn.S        |  56 +----
+>  arch/riscv/kernel/process.c           |   5 +-
+>  arch/riscv/kernel/ptrace.c            |  44 ----
+>  arch/riscv/kernel/signal.c            |  21 +-
+>  arch/riscv/kernel/sys_riscv.c         |  27 +++
+>  arch/riscv/kernel/trace_irq.c         |  27 ---
+>  arch/riscv/kernel/trace_irq.h         |  11 -
+>  arch/riscv/kernel/traps.c             |  74 ++++--
+>  arch/riscv/mm/fault.c                 |  16 +-
+>  drivers/firmware/efi/libstub/Makefile |   2 +-
+>  include/linux/compiler_types.h        |  15 +-
+>  24 files changed, 407 insertions(+), 502 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/entry-common.h
+>  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+>  delete mode 100644 arch/riscv/kernel/trace_irq.c
+>  delete mode 100644 arch/riscv/kernel/trace_irq.h
+> 
+> -- 
+> 2.36.1
+> 
