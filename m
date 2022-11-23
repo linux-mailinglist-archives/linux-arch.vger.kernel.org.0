@@ -2,46 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4CF636035
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 14:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A0F636205
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Nov 2022 15:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236378AbiKWNm3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Nov 2022 08:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S237645AbiKWOkx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Nov 2022 09:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238937AbiKWNmK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 08:42:10 -0500
-Received: from DM4PR02CU001-vft-obe.outbound.protection.outlook.com (mail-centralusazon11022025.outbound.protection.outlook.com [52.101.63.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5D26A6B7;
-        Wed, 23 Nov 2022 05:30:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hSqYARuXqXMYOMffju40kbba/KOvcTm4BNr7nz4u3PMJ1xdNRL1/Nfji98e4F6iLF+aYslkD9hbe+pthIS7W3Ykx4tqxw/f0uPezHfBf+zKG2aFJVipS/YZZu16AHwza4a6W9lJkvlTJLKTtMgB0wJJ9ueWaHl5DImR2PPZhXyf9tTLB1EVCnG4KtNx6mAqAQZ5f6JLjM5u+sVyleHkMTk3dD39HF3zuUIKsIPlGsDPoi8LWAH+IEQvwrMyUMmxqiTB6UnFJDljH00XFUHSkYyDt/0Thwfw2kdvAtwg3RxIaYRG0M3EghO/omyhbGtE55LUVhbkgfKge9eehT5iJPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YqRDPEjh5EphBxxdVegy38axHvZ7wwnggr+jflnkLJ4=;
- b=NxIZx7tNTwEpVl6+71NdCjqYs9PRrW6EQ2y9giK6XJxQctrU85NzxJpU+2fmBnldFDJVxJRl0Jd4pyWVWKCLpF7JI5fIy5bREucNuTrOZDJzzWszVI+9H8V/tqVF0NSbblCmA4GrjmNwSUDaSuq1rp55vHAyaaISvj1am7hqBWIYd6+sEnucTBa6EkhkHrXb4szPPE67ts/gJ13Vm9IJqxZpzZc8e/ECoUh5P+OxVKnwEQAL8K/F5KTmNUTge3eTvfpl7DLMXQMW8DzxGv5q/RC7Y2IlQ5B3dS7BZ4cVAmOWYdcBlmxiQlvjPr1QUWUO9XK91VrvwrcGveoxfBiOnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YqRDPEjh5EphBxxdVegy38axHvZ7wwnggr+jflnkLJ4=;
- b=hNt/OTNKU7b2YsQHdULiVqganh2W0Pc2OzEshKeo2iIDCuf46uoE1x6lxqcc1ufgDMX4yYHSImCbIMB8Zy2Mf17yQVtRZSmJvMkvXhSzh/cctDl7QcXUSJz/2cjQrtTRG3sxNsr274HkQBQipGqfSMcToCUfVAZQxfp92f77kaw=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by PH7PR21MB3238.namprd21.prod.outlook.com (2603:10b6:510:1da::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.2; Wed, 23 Nov
- 2022 13:30:23 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd%4]) with mapi id 15.20.5880.002; Wed, 23 Nov 2022
- 13:30:23 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Dexuan Cui <decui@microsoft.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
+        with ESMTP id S236669AbiKWOkw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Nov 2022 09:40:52 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1722D770;
+        Wed, 23 Nov 2022 06:40:50 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 30BCF5C019A;
+        Wed, 23 Nov 2022 09:40:48 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 23 Nov 2022 09:40:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1669214448; x=1669300848; bh=n1
+        WjqFYEXBYVwQe/Dpt+ETX0vIcSilwHRfofxgefvcg=; b=nOc6plIzkuhr6gXzSq
+        T0clKacxYiKM+aLWK0+KaeJVgKKqByy8hNK47gofFnjNg+xoG1jREIPwugJyR+Gj
+        jBQ3UzIQKGZVAtMktBE/eX32WiloIfVRPfnylerzhLmhWvSr1S6ttQ2bZRr0Hlw+
+        ZjozICBNTJPIZnGC7EMbyGmp+H/K4shMsRyzvbV1mshO9pudgrUyidX0ElYncXWb
+        Qoos2otcQXrqTwlh6Exm0INyEp2ntoUVDiblxVdGIFmmSLG3oaJx4PUbvQ+7tb9r
+        jDZUTloRN2EpljdezK/m5TldhosDxxXRqd5IfR7iinVL4hyPjwYOX+MKpI0W8o2P
+        aVpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1669214448; x=1669300848; bh=n1WjqFYEXBYVwQe/Dpt+ETX0vIcS
+        ilwHRfofxgefvcg=; b=ODjYSb5bi8cfFLPi6FPavL9wtWFLQJ43AtUNcK9RDN9+
+        /+HKSekgxVlpz8pIsjlGoSH0diisHGRoyfgLU9eioWZePnKP7Yo5twR4Y90qcYAc
+        mXSd/AlI9u7y9XbABB/1dNcE4iBbfvVFnHAYvUyStwljktpaebMflWipumDepRZy
+        ml7C4/A8//z+Mql+3HEgT/mUM9vHKBrLJgmS7HwXNQAtAiCIJ1x/JR/BnzWHZ0pW
+        DDBw0JXzdOtal8hpB4E5Q8jczpSjAPsxUhKtKzrgzo9yhstjPobPMyJmvpx0k7ny
+        OM8hNcXSsC4xHQ6kBixHQkkbsAdXpwVX+1jiWIsaEA==
+X-ME-Sender: <xms:7zB-Y9Lps2OnEh8gjdQZvkfNbGAtT5Z9ELZc2VjwkOMevQOLXEct0A>
+    <xme:7zB-Y5JWOwkD82mHPQxpKEATMijrkx6kQs7Al67iYBfukJNA9-R4OdDyrJbv0Lhdn
+    kOCPeRkx0sMR0iwk-8>
+X-ME-Received: <xmr:7zB-Y1tgA6B6WSjWXs74VkRXwDzMZQjZE0tf5n57US6sO7Wiem6Y1KPAD6wvl-QNsEkCxA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedriedugdeigecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
+    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
+    hmvgeqnecuggftrfgrthhtvghrnhephffgffeuteehheevteefhfeihfeuhedvgfejgedt
+    jeehhfdvieejkedvkeehjeefnecuffhomhgrihhnpehtuggtrghllhdrshgsnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehs
+    hhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:7zB-Y-Y0ySwOcNjAdXjKJC9oYVidvOw8UMQbkygA9h_t1vAxQTtE_g>
+    <xmx:7zB-Y0bufUu9keU0djuPKePG_HiZ30ICXk6yJKKXIErCreeSUNd5RA>
+    <xmx:7zB-YyD0Hybcn-wj8aOvbW9RypPaO9GMIT6NlDq0Yxe8kL6C9goScg>
+    <xmx:8DB-YwKMYC_8FXM8P-TymbYVp6xeRQY9mHUpdgB0JP4dJvUqJin09Q>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 23 Nov 2022 09:40:46 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id C2AFC109A41; Wed, 23 Nov 2022 17:40:43 +0300 (+03)
+Date:   Wed, 23 Nov 2022 17:40:43 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
         "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
         "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
         "Williams, Dan J" <dan.j.williams@intel.com>,
@@ -65,214 +92,256 @@ CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
         "wei.liu@kernel.org" <wei.liu@kernel.org>,
         "x86@kernel.org" <x86@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Thread-Topic: [PATCH 2/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Thread-Index: AQHY/eLxUC+R7dtU7k2iFNVaV12Qj65KDzwAgAHMAYCAAKUk0A==
-Date:   Wed, 23 Nov 2022 13:30:23 +0000
-Message-ID: <BYAPR21MB168849571A1FF2CD9BFD8579D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: Re: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on Hyper-V
+Message-ID: <20221123144043.ne34k5xw7dahzscq@box.shutemov.name>
 References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-3-decui@microsoft.com>
- <20221122000100.bizske6iltfgdwcu@box.shutemov.name>
- <SA1PR21MB133596B911C6A45142B83B52BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
-In-Reply-To: <SA1PR21MB133596B911C6A45142B83B52BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=14cc37f2-9a35-4b1e-9c6b-34c156199a7b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-23T02:56:11Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH7PR21MB3238:EE_
-x-ms-office365-filtering-correlation-id: 65bce53d-b5f0-4858-07f0-08dacd56dfd3
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3Zqvr5ObxQvLZJ3/eFQBuwgOQpuJtH1Ib8pmyCm7feZjWV3k6cWFnMBcbI2OjOQCqPvfcHDFYWzi7zX8+Q4a/OVF0PuSGIlXn7zagelOu2Sw6aepPsd8hrFcy61BbxqpCRzcbUpzeUBJTVWQs6C5paMVu3X6qAu0BcY2JCTxWyyse63nw3TQfZiuxz7lSFHP8zzYv9EvgSQS7Rbi/l1J0YjlpWm9mTffHpPRaXEsAl1EuHGbLz0XipiaJcP0Wjk9YILzpPoACuLa01L+UgLQWTlAOlOh8Cq//vY6qriUJkARJfMzrmcdboE8Jzba82DJ+S1NhWkgnFjgC5NUVlOft8kHKJ44cLKBLnBjtB3NHvepxNJWhIG6OdyRjLRrPghs96KaOhbD2p23UaaIlmkikbzPtTvzGgRRSfwAZOmRT26pzLrxyh6PtIg8ZhNRmNNPQkJuRXUU88rvWj+5CRLrkWMmxCD++CKk6S2GlAJ1njdE4EYiKJr1nnCc4MQaTXGoODqBgQY+pPuoJdfq9gy1tqmtv5BcWEE3Cyc1/J9LjQVw5lWgJnF4cTN5SvOsCjaGRNmfF+UrwyslcQeWMlizLH33pg41dKI849TAaLikaz6s+CHZ58+QdMPYLKDFFGfcD4SKa+cFbdQVqGJefAIBQqhwUZZUWwURxn3rOxZjAHC9EGoXYtcDsVEQnLBSmpz/pkaV9l5aGQEY5KkB+wzqCzlDV1fbIWvEQZ8J4AZUA7u3y8SKuTXI44obBOEs4Og4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(346002)(136003)(376002)(39860400002)(451199015)(2906002)(478600001)(8990500004)(83380400001)(86362001)(5660300002)(122000001)(71200400001)(7416002)(186003)(82950400001)(8936002)(82960400001)(52536014)(38100700002)(41300700001)(38070700005)(8676002)(64756008)(66946007)(76116006)(4326008)(66446008)(66556008)(9686003)(66476007)(110136005)(10290500003)(54906003)(55016003)(26005)(316002)(7696005)(6506007)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6jKA2HWiZiDNDsNciWcEBtHUdOx5NdHD4nUWMIB/pQpek4hGN+GXkiL+Wtg5?=
- =?us-ascii?Q?+0wkeIYNje86Exb+Dmn8jXCmN3cVCxUq0inwwv6rzCKbL8mb3s7ZBj6fCVjd?=
- =?us-ascii?Q?lgQCXtGw3TVlaK59mG6OXvQlzQ+hWpDxah8wU+Nm+DcQno5HLMczzAfBdkHF?=
- =?us-ascii?Q?UyxLeuP7GSgbNnw3qQKAIj8IpeLKkb9DCDYTEEVwlOMWFj4YPlptrzfJJjyl?=
- =?us-ascii?Q?YUDPa9vpr6iEjcmp13UxQnNCEdrHNgBUPzUE0RxBUBGON3mrOrtPfxUDINs/?=
- =?us-ascii?Q?B11LM5DKZhRS/8IDh8TVbg+Lb7pSCL+eeR3SnXZbBqgVatgWsIyLFDok/y/f?=
- =?us-ascii?Q?4O7BdHn3vEUT3rQVdxeQOIFhffruaOi01GQT1H5koACgo7/TMB+OiCOAK+8u?=
- =?us-ascii?Q?j9mxWDDazQ7QyTYDf86CKsQ5CUTJIiSHMZPSErNfdOXIQKFjPIdJ1lE8rTHB?=
- =?us-ascii?Q?Y4+dO4bPdgKlc4uFCQRcxbL0U3YUF5X/E4OZCUqQor0P/htZglHdikrxrQdT?=
- =?us-ascii?Q?H2KoopFVzHn+6mhqCQFwJvN+zXz1o0wtc0j2f3fjXw3t6HxujkW0uzCwZjAr?=
- =?us-ascii?Q?0x/GGkdBKrgePIdFEQwdzLZVLsfnOOL3lLO0vpVqooS3SGk1PwoYL/P/MIZX?=
- =?us-ascii?Q?/f7tUPgPjjVpNaQHrra4/NEAZXWx6QkP7uxrt38pDtrlW64vN5CcZ0x6UUmO?=
- =?us-ascii?Q?HFVA3x0YEtphZeOOFZckckie+tPhrrD6pRcl4AOd9qaAxnQTGg1bSYFHtA8N?=
- =?us-ascii?Q?G2csJsGpbtqunUK08yXnPkjmKY4N8InHcA5xa/n84GGyQwJH1KfgVoDP6v5m?=
- =?us-ascii?Q?ZOeD5e2SXZ96Uijq6MHuCPrm+jKikos2esOqFHfmlNVNuQcpDNdW1R3MsiNy?=
- =?us-ascii?Q?I7EPsvYay0SvicZY5u3Z/mGYAuY1QZythITeJgAml/cHef8cCqaX0cfmWuiD?=
- =?us-ascii?Q?M9ug/e7hNT0JosEkKwq74Ts3RK/yK72f2a4mGW+5XxKghBn0oB7kakaw96ZG?=
- =?us-ascii?Q?r7lZ26NaF/F2dLUv0C4TE/U3xltWI4X7V81KAV4KBPOemBCJjY8t/Mbesn7E?=
- =?us-ascii?Q?WzJQSMx5D2Mds/1TR4UWU1mg0JleujGB4HDi/nkesjb538Q3u7md8f58R5N4?=
- =?us-ascii?Q?/ofWHHcshx7+eInxSgCDNkt7+ctaW/iAYPTKmXzWZYN9OHFThEvjFf/fdJCt?=
- =?us-ascii?Q?im1+EveSMhHdz/Dxr0wgnjzlkYyHvJnZHIxrDVjG11Lk0dUY+Y9vgUlLRk9+?=
- =?us-ascii?Q?Ry3StVdcodnZmaXSSPBXfpxr8Am9+XuIdgEKvirxHsHDZ9A0VkxknDHuR0L9?=
- =?us-ascii?Q?LzY12rUzOo922ctt820SXhJqcx3Q/ki68Y/hXf9oEY/Hr5Y81hEk7vXt0yU6?=
- =?us-ascii?Q?gZBF5+vBiYPaj/vioI40UgacFZHWgKWqjxH+ZD0ZbiivjgwC3b8MVCLVjBpW?=
- =?us-ascii?Q?mAdJExHUE4MYjrR5oSIsPdGkgw0y+Omjd4ap9CRwmqhHEmDFPj0ClbuKQiQn?=
- =?us-ascii?Q?+FfGezjBKx6+9PBMZRBLtuZ2c6Cpe4/BJuFyj74M/TS9MdFmb3vH5VqfIkX2?=
- =?us-ascii?Q?vCLqYAjm9S43kWdzcMzP/BnsKGK9mSgatpudA3brxDNuvl4czwDhTJstqYC3?=
- =?us-ascii?Q?Rg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <20221121195151.21812-2-decui@microsoft.com>
+ <18323d11-146f-c418-e8f0-addb2b8adb19@intel.com>
+ <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65bce53d-b5f0-4858-07f0-08dacd56dfd3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Nov 2022 13:30:23.1752
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ruve6Ur4aM+mZkPBrgyOziptTPNteDgshuAKgCgU6WxfeILoaIZQSmvxQ3mwdbAnZwQnE6n6+Jfn4y2QIeFwWIwtI2gndG5WkbaGXQXpdIU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3238
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Dexuan Cui <decui@microsoft.com> Sent: Tuesday, November 22, 2022 7:2=
-7 PM
->=20
-> > From: Kirill A. Shutemov <kirill@shutemov.name>
-> > Sent: Monday, November 21, 2022 4:01 PM
+On Wed, Nov 23, 2022 at 01:37:26AM +0000, Dexuan Cui wrote:
+> > From: Dave Hansen <dave.hansen@intel.com>
+> > Sent: Monday, November 21, 2022 12:39 PM
 > > [...]
-> > On Mon, Nov 21, 2022 at 11:51:47AM -0800, Dexuan Cui wrote:
-> > [...]
-> > I'm not convinced it deserves a separate helper for one user.
-> > Does it look that ugly if tdx_map_gpa() uses __tdx_hypercall() directly=
-?
->=20
-> Will use __tdx_hypercall() directly.
->=20
-> > >  /* Called from __tdx_hypercall() for unrecoverable failure */
-> > >  void __tdx_hypercall_failed(void)
-> > >  {
-> > > @@ -691,6 +712,43 @@ static bool try_accept_one(phys_addr_t *start,
-> > unsigned long len,
-> > >  	return true;
-> > >  }
-> > >
-> > > +/*
-> > > + * Notify the VMM about page mapping conversion. More info about ABI
-> > > + * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> > > + * section "TDG.VP.VMCALL<MapGPA>"
-> > > + */
-> > > +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc=
-)
-> > > +{
-> > > +	u64 ret, r11;
-> > > +
-> > > +	while (1) {
-> >
-> > Endless? Maybe an upper limit if no progress?
->=20
-> I'll add a max count of 1000, which should be far more than enough.
->=20
-> > > +		ret =3D _tdx_hypercall_output_r11(TDVMCALL_MAP_GPA, start,
-> > > +						end - start, 0, 0, &r11);
-> > > +		if (!ret)
-> > > +			break;
-> > > +
-> > > +		if (ret !=3D TDVMCALL_STATUS_RETRY)
-> > > +			break;
-> > > +
-> > > +		/*
-> > > +		 * The guest must retry the operation for the pages in the
-> > > +		 * region starting at the GPA specified in R11. Make sure R11
-> > > +		 * contains a sane value.
-> > > +		 */
-> > > +		if ((r11 & ~cc_mkdec(0)) < (start & ~cc_mkdec(0)) ||
-> > > +		    (r11 & ~cc_mkdec(0)) >=3D (end  & ~cc_mkdec(0)))
-> > > +			return false;
-> >
-> > Emm. All of them suppose to have shared bit set, why not compare direct=
-ly
-> > without cc_mkdec() dance?
->=20
-> The above code is unnecessary and will be removed.
->=20
-> So, I'll use the below in v2:
->=20
-> /*
->  * Notify the VMM about page mapping conversion. More info about ABI
->  * can be found in TDX Guest-Host-Communication Interface (GHCI),
->  * section "TDG.VP.VMCALL<MapGPA>"
->  */
-> static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
-> {
->         int max_retry_cnt =3D 1000, retry_cnt =3D 0;
->         struct tdx_hypercall_args args;
->         u64 map_fail_paddr, ret;
->=20
->         while (1) {
->                 args.r10 =3D TDX_HYPERCALL_STANDARD;
->                 args.r11 =3D TDVMCALL_MAP_GPA;
->                 args.r12 =3D start;
->                 args.r13 =3D end - start;
->                 args.r14 =3D 0;
->                 args.r15 =3D 0;
->=20
->                 ret =3D __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
->                 if (!ret)
->                         break;
+> > On 11/21/22 11:51, Dexuan Cui wrote:
+> > > __tdx_hypercall() doesn't work for a TDX guest running on Hyper-V,
+> > > because Hyper-V uses a different calling convention, so add the
+> > > new function __tdx_ms_hv_hypercall().
+> > 
+> > Other than R10 being variable here and fixed for __tdx_hypercall(), this
+> > looks *EXACTLY* the same as __tdx_hypercall(), or at least a strict
+> > subset of what __tdx_hypercall() can do.
+> > 
+> > Did I miss something?
+> 
+> The existing asm code for __tdx_hypercall() passes through R10~R15
+> (see TDVMCALL_EXPOSE_REGS_MASK) to the (KVM) hypervisor.
+> 
+> Unluckily, for Hyper-V, we need to pass through RDX, R8, R10 and R11
+> to Hyper-V, so I don't think I can use the existing __tdx_hypercall() ?
+> 
+> > Another way of saying this:  It seems like you could do this with a new
+> > version of _tdx_hypercall() (and all in C) instead of a new
+> > __tdx_hypercall().
+> 
+> I don't think the current TDVMCALL_EXPOSE_REGS_MASK allows me
+> to pass through RDX and R8 to Hyper-V.
+> 
+> PS, the comment before __tdx_hypercall() contains this line:
+> 
+> "* RBX, RBP, RDI, RSI  - Used to pass VMCALL sub function specific
+> arguments."
+> 
+> But it looks like currently RBX an RBP are not used at all in 
+> arch/x86/coco/tdx/tdcall.S ?
 
-The above test is redundant and can be removed.  The "success" case is
-implicitly handled by the test below for !=3D TDVMCALL_STATUS_RETRY.
+I have plan to expand __tdx_hypercall() to cover more registers.
+See the patch below.
 
->=20
->                 if (ret !=3D TDVMCALL_STATUS_RETRY)
->                         break;
->                 /*
->                  * The guest must retry the operation for the pages in th=
-e
->                  * region starting at the GPA specified in R11. Make sure=
- R11
->                  * contains a sane value.
->                  */
->                 map_fail_paddr =3D args.r11 ;
->                 if (map_fail_paddr < start || map_fail_paddr >=3D end)
->                         return false;
->=20
->                 if (map_fail_paddr =3D=3D start) {
->                         retry_cnt++;
->                         if (retry_cnt > max_retry_cnt)
->                                 return false;
->                 } else {
->                         retry_cnt =3D 0;;
->                         start =3D map_fail_paddr;
+Is it enough for you?
 
-Just summarizing the code, we increment the retry count if the hypercall
-returns STATUS_RETRY but did nothing (i.e., map_fail_paddr =3D=3D start).  =
-But
-if the hypercall returns STATUS_RETRY after making at least some progress,
-then we reset the retry count.   So in the worst case, for example, if the
-hypercall processed only one page on each invocation, the loop will continu=
-e
-until completion, without hitting any retry limits.  That scenario seems
-plausible and within the spec.
+---
+ arch/x86/coco/tdx/tdcall.S        | 82 ++++++++++++++++++++++---------
+ arch/x86/include/asm/shared/tdx.h |  6 +++
+ arch/x86/kernel/asm-offsets.c     |  6 +++
+ 3 files changed, 70 insertions(+), 24 deletions(-)
 
-Do we have any indication about the likelihood of the "RETRY but did
-nothing" case?   The spec doesn't appear to disallow this case, but does
-Hyper-V actually do this?  It seems like a weird case.
-
-Michael
-
->                 }
->         }
->=20
->         return !ret;
-> }
+diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+index f9eb1134f22d..64e57739dc9d 100644
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -13,6 +13,12 @@
+ /*
+  * Bitmasks of exposed registers (with VMM).
+  */
++#define TDX_RDX		BIT(2)
++#define TDX_RBX		BIT(3)
++#define TDX_RSI		BIT(6)
++#define TDX_RDI		BIT(7)
++#define TDX_R8		BIT(8)
++#define TDX_R9		BIT(9)
+ #define TDX_R10		BIT(10)
+ #define TDX_R11		BIT(11)
+ #define TDX_R12		BIT(12)
+@@ -27,9 +33,9 @@
+  * details can be found in TDX GHCI specification, section
+  * titled "TDCALL [TDG.VP.VMCALL] leaf".
+  */
+-#define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
+-					  TDX_R12 | TDX_R13 | \
+-					  TDX_R14 | TDX_R15 )
++#define TDVMCALL_EXPOSE_REGS_MASK	\
++	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
++	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
+ 
+ /*
+  * __tdx_module_call()  - Used by TDX guests to request services from
+@@ -124,19 +130,32 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	push %r14
+ 	push %r13
+ 	push %r12
++	push %rbx
++	push %rbp
++
++	movq %rdi, %rax
++	movq %rsi, %rbp
++
++	/* Copy hypercall registers from arg struct: */
++	movq TDX_HYPERCALL_r8(%rax),  %r8
++	movq TDX_HYPERCALL_r9(%rax),  %r9
++	movq TDX_HYPERCALL_r10(%rax), %r10
++	movq TDX_HYPERCALL_r11(%rax), %r11
++	movq TDX_HYPERCALL_r12(%rax), %r12
++	movq TDX_HYPERCALL_r13(%rax), %r13
++	movq TDX_HYPERCALL_r14(%rax), %r14
++	movq TDX_HYPERCALL_r15(%rax), %r15
++	movq TDX_HYPERCALL_rdi(%rax), %rdi
++	movq TDX_HYPERCALL_rsi(%rax), %rsi
++	movq TDX_HYPERCALL_rbx(%rax), %rbx
++	movq TDX_HYPERCALL_rdx(%rax), %rdx
++
++	push %rax
+ 
+ 	/* Mangle function call ABI into TDCALL ABI: */
+ 	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
+ 	xor %eax, %eax
+ 
+-	/* Copy hypercall registers from arg struct: */
+-	movq TDX_HYPERCALL_r10(%rdi), %r10
+-	movq TDX_HYPERCALL_r11(%rdi), %r11
+-	movq TDX_HYPERCALL_r12(%rdi), %r12
+-	movq TDX_HYPERCALL_r13(%rdi), %r13
+-	movq TDX_HYPERCALL_r14(%rdi), %r14
+-	movq TDX_HYPERCALL_r15(%rdi), %r15
+-
+ 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
+ 
+ 	/*
+@@ -148,14 +167,14 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	 * HLT operation indefinitely. Since this is the not the desired
+ 	 * result, conditionally call STI before TDCALL.
+ 	 */
+-	testq $TDX_HCALL_ISSUE_STI, %rsi
++	testq $TDX_HCALL_ISSUE_STI, %rbp
+ 	jz .Lskip_sti
+ 	sti
+ .Lskip_sti:
+ 	tdcall
+ 
+ 	/*
+-	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
++	 * RAX!=0 indicates a failure of the TDVMCALL mechanism itself and that
+ 	 * something has gone horribly wrong with the TDX module.
+ 	 *
+ 	 * The return status of the hypercall operation is in a separate
+@@ -165,30 +184,45 @@ SYM_FUNC_START(__tdx_hypercall)
+ 	testq %rax, %rax
+ 	jne .Lpanic
+ 
+-	/* TDVMCALL leaf return code is in R10 */
+-	movq %r10, %rax
++	pop %rax
+ 
+ 	/* Copy hypercall result registers to arg struct if needed */
+-	testq $TDX_HCALL_HAS_OUTPUT, %rsi
++	testq $TDX_HCALL_HAS_OUTPUT, %rbp
+ 	jz .Lout
+ 
+-	movq %r10, TDX_HYPERCALL_r10(%rdi)
+-	movq %r11, TDX_HYPERCALL_r11(%rdi)
+-	movq %r12, TDX_HYPERCALL_r12(%rdi)
+-	movq %r13, TDX_HYPERCALL_r13(%rdi)
+-	movq %r14, TDX_HYPERCALL_r14(%rdi)
+-	movq %r15, TDX_HYPERCALL_r15(%rdi)
++	movq %r8,  TDX_HYPERCALL_r8(%rax)
++	movq %r9,  TDX_HYPERCALL_r9(%rax)
++	movq %r10, TDX_HYPERCALL_r10(%rax)
++	movq %r11, TDX_HYPERCALL_r11(%rax)
++	movq %r12, TDX_HYPERCALL_r12(%rax)
++	movq %r13, TDX_HYPERCALL_r13(%rax)
++	movq %r14, TDX_HYPERCALL_r14(%rax)
++	movq %r15, TDX_HYPERCALL_r15(%rax)
++	movq %rdi, TDX_HYPERCALL_rdi(%rax)
++	movq %rsi, TDX_HYPERCALL_rsi(%rax)
++	movq %rbx, TDX_HYPERCALL_rbx(%rax)
++	movq %rdx, TDX_HYPERCALL_rdx(%rax)
+ .Lout:
++	/* TDVMCALL leaf return code is in R10 */
++	movq %r10, %rax
++
+ 	/*
+ 	 * Zero out registers exposed to the VMM to avoid speculative execution
+ 	 * with VMM-controlled values. This needs to include all registers
+-	 * present in TDVMCALL_EXPOSE_REGS_MASK (except R12-R15). R12-R15
+-	 * context will be restored.
++	 * present in TDVMCALL_EXPOSE_REGS_MASK, except RBX, and R12-R15 which
++	 * will be restored.
+ 	 */
++	xor %r8d,  %r8d
++	xor %r9d,  %r9d
+ 	xor %r10d, %r10d
+ 	xor %r11d, %r11d
++	xor %rdi,  %rdi
++	xor %rsi,  %rsi
++	xor %rdx,  %rdx
+ 
+ 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
++	pop %rbp
++	pop %rbx
+ 	pop %r12
+ 	pop %r13
+ 	pop %r14
+diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+index e53f26228fbb..8068faa52de1 100644
+--- a/arch/x86/include/asm/shared/tdx.h
++++ b/arch/x86/include/asm/shared/tdx.h
+@@ -22,12 +22,18 @@
+  * This is a software only structure and not part of the TDX module/VMM ABI.
+  */
+ struct tdx_hypercall_args {
++	u64 r8;
++	u64 r9;
+ 	u64 r10;
+ 	u64 r11;
+ 	u64 r12;
+ 	u64 r13;
+ 	u64 r14;
+ 	u64 r15;
++	u64 rdi;
++	u64 rsi;
++	u64 rbx;
++	u64 rdx;
+ };
+ 
+ /* Used to request services from the VMM */
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 437308004ef2..cf819c5ed2de 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -81,6 +81,12 @@ static void __used common(void)
+ 	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
+ 	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
+ 	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
++	OFFSET(TDX_HYPERCALL_rbx, tdx_hypercall_args, rbx);
++	OFFSET(TDX_HYPERCALL_rdi, tdx_hypercall_args, rdi);
++	OFFSET(TDX_HYPERCALL_rsi, tdx_hypercall_args, rsi);
++	OFFSET(TDX_HYPERCALL_r8,  tdx_hypercall_args, r8);
++	OFFSET(TDX_HYPERCALL_r9,  tdx_hypercall_args, r9);
++	OFFSET(TDX_HYPERCALL_rdx, tdx_hypercall_args, rdx);
+ 
+ 	BLANK();
+ 	OFFSET(BP_scratch, boot_params, scratch);
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
