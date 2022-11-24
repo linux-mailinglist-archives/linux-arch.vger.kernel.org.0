@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED70637D42
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Nov 2022 16:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAE9637F81
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Nov 2022 20:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKXPvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Nov 2022 10:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S229760AbiKXTQe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Nov 2022 14:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiKXPvT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Nov 2022 10:51:19 -0500
+        with ESMTP id S229525AbiKXTQe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Nov 2022 14:16:34 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F9913C735;
-        Thu, 24 Nov 2022 07:51:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5790E87A78;
+        Thu, 24 Nov 2022 11:16:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 361AAB82870;
-        Thu, 24 Nov 2022 15:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DE7C433D6;
-        Thu, 24 Nov 2022 15:51:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E2D0B828CC;
+        Thu, 24 Nov 2022 19:16:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BBA8DC433D6;
+        Thu, 24 Nov 2022 19:16:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669305068;
-        bh=s+OXtssHmkAV/8o5aF5tW5Nh7Fk9Rc3WObTGHXe16+A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YA4gD3oKppDGX2Co0Q/Uy/hSzkCs8LcBN9zRrgTorOh9jjK8b0IZxUgwlhxyZUXrw
-         qsVUcWlospWJrpHYtDLxyIBGFgy2WcjgTU/kUD5mMLq1GiBV3u2IxQGBtcc/59k5sy
-         FYankUYfq1X1MtN1c0o1lWpIFJcO3xKveaoVi3mjQjmNmi+Zkkc2VUkBLiGf8DyzGy
-         WpkD3gVHMLD5xkw+qjMGbXGTtGz+EC0B/Ucyo7DYPUS5gUdp1hMv0VqfE9CnKy/wOP
-         b3eIYNxnpQCHBUd/S4mr6o1DyhP5NhVO7ICOjRXJt71ucKRFBi53APphtFygcPswKa
-         ORQQaABm6ymiA==
-Date:   Thu, 24 Nov 2022 10:51:06 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 6.0 13/44] clocksource/drivers/hyperv: add data
- structure for reference TSC MSR
-Message-ID: <Y3+S6j4GW0RrHgB2@sashalap>
-References: <20221119021124.1773699-1-sashal@kernel.org>
- <20221119021124.1773699-13-sashal@kernel.org>
- <SN6PR2101MB1693A83DF44A95B439532F9DD7089@SN6PR2101MB1693.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <SN6PR2101MB1693A83DF44A95B439532F9DD7089@SN6PR2101MB1693.namprd21.prod.outlook.com>
+        s=k20201202; t=1669317389;
+        bh=bAhsQsbumyLiUXdtQPY1//XoFduq0FSOMtUuRyCzq9s=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=j3aQIx96E6ciqrq+lhU0IOglTBVRrYwMWooB6WnANS9K4hHgX1jvYKMgtylcG/hw5
+         uof2JX2+r2+gSw8BYc9/VIKLj9I4P0mwJUj7uSO+XczyfbXwu4zq1t5seX7xEvBds3
+         4OVo6ouNIO3XE+IamGKTjB5/5Af7D9wyjrJCB9+R7RQDr7hZKsW/zHuGvbIYxVBO84
+         MH+lvhAGYoWoQ8yIXPOTC+meu6MSbmZZLPvyWwCcJUfQRmOQBidska+qnjMio8tQR8
+         b11VYR6LCWRB/3ugF+pbsdq3pFxkrNUOSC0FDxDtodxGFWtOa7XkmStdId2H0Mu9H+
+         vxSah3LtFiDAA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AA2B7E21EFD;
+        Thu, 24 Nov 2022 19:16:29 +0000 (UTC)
+Subject: Re: [GIT PULL] LoongArch fixes for v6.1-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221124095120.3116780-1-chenhuacai@loongson.cn>
+References: <20221124095120.3116780-1-chenhuacai@loongson.cn>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221124095120.3116780-1-chenhuacai@loongson.cn>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-2
+X-PR-Tracked-Commit-Id: fa0e381290b134da53e65fb421b65825f23221b4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3bfd8fcab548659e3a77000b2302c62a47ab2824
+Message-Id: <166931738968.15670.1849929994501511702.pr-tracker-bot@kernel.org>
+Date:   Thu, 24 Nov 2022 19:16:29 +0000
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,27 +64,15 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Nov 19, 2022 at 05:37:16AM +0000, Michael Kelley (LINUX) wrote:
->From: Sasha Levin <sashal@kernel.org> Sent: Friday, November 18, 2022 6:11 PM
->>
->> From: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
->>
->> [ Upstream commit 4ad1aa571214e8d6468a1806794d987b374b5a08 ]
->>
->> Add a data structure to represent the reference TSC MSR similar to
->> other MSRs. This simplifies the code for updating the MSR.
->>
->> Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
->> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
->> Link: https://lore.kernel.org/all/20221027095729.1676394-2-anrayabh@linux.microsoft.com/
->> Signed-off-by: Wei Liu <wei.liu@kernel.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->Sasha -- I don't think this patch needs to be backported to any stable versions.  Anirudh
->or Wei Liu, can you confirm?  The patch is more about enabling a new scenario than fixing a bug.
+The pull request you sent on Thu, 24 Nov 2022 17:51:20 +0800:
 
-Ack, I'll drop both of the patches you've pointed out. Thanks!
+> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3bfd8fcab548659e3a77000b2302c62a47ab2824
+
+Thank you!
 
 -- 
-Thanks,
-Sasha
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
