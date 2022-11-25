@@ -2,71 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F94638D51
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Nov 2022 16:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0551638D62
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Nov 2022 16:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiKYPNQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Nov 2022 10:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S229514AbiKYPTl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Nov 2022 10:19:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiKYPNC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Nov 2022 10:13:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB69E49098
-        for <linux-arch@vger.kernel.org>; Fri, 25 Nov 2022 07:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669389105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0umtC4MfgS1x7nfa252nsVL6T4vQ9S+hnM0ed4G85tw=;
-        b=MwoWwURMTyaSbO89V9Q5FVBvlcTiSOqID1Fax/sUUWMVW4kV8FJFeXANTAMZiNWecf5EGM
-        dji6p0BE8CUKVxVgkJipDA/6r8SgQE4N9XktKxAwZNhVmnCecqfvB+OAIHn5lOsYomNJsC
-        1pTfREKz04B30kwBOlihjdt8Kvj0lhw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-vEws9ExEPB-jeAgKMmfu0w-1; Fri, 25 Nov 2022 10:11:42 -0500
-X-MC-Unique: vEws9ExEPB-jeAgKMmfu0w-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D41E29AB3E0;
-        Fri, 25 Nov 2022 15:11:40 +0000 (UTC)
-Received: from ptitbras (unknown [10.39.193.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 150561121330;
-        Fri, 25 Nov 2022 15:11:33 +0000 (UTC)
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-17-ltykernel@gmail.com>
-User-agent: mu4e 1.8.0; emacs 28.2
-From:   Christophe de Dinechin <dinechin@redhat.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V2 16/18] x86/sev: Initialize #HV doorbell and
- handle interrupt requests
-Date:   Fri, 25 Nov 2022 12:49:33 +0100
-In-reply-to: <20221119034633.1728632-17-ltykernel@gmail.com>
-Message-ID: <m2ilj3kr19.fsf@redhat.com>
+        with ESMTP id S229480AbiKYPTl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Nov 2022 10:19:41 -0500
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0C6205C6;
+        Fri, 25 Nov 2022 07:19:40 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso3621761wmp.5;
+        Fri, 25 Nov 2022 07:19:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hZxVZyzuCq/7TKW0PGUA94kRptUFc8WRLxofFIt0CnI=;
+        b=Zf6ZF0JD8DwFBVe+6XbLpu/G4brufEOWj+Hp3UPXl5LlZjO1UBhWRFykiw1/WA1xZn
+         AjzoCzEPfmvdXJ3295yivvFhOx2I+RdU1Pa4PEORbnshwtTIRNsCiF9nkV/wAEkVRbsW
+         ybpjegAuJLJNzUouHqmSG0WZYcq6u+MVBbxk/w0LWLPQxlqyInJb2vlLICsPMhSF0rJv
+         HR+ZnT0aBOkge3s/uwXhtLvUATzKRBiNhgA/8U59GSEe2l7OZugVFRMLab2dcecFm0re
+         tf7wOImzxQfY/kfQ8s6eQHl0Py8upE0hL/s9ywEZ3Vqx8CxfHPEcnbCQsO7v+96hm8g6
+         9uhQ==
+X-Gm-Message-State: ANoB5pmdJaFHTOOO4uiKJos//ib5PfwCdkAzrWYgYptNN1EeJBWUHvNV
+        NwPvFf3ufBMFBda44K5Jnps=
+X-Google-Smtp-Source: AA0mqf6RdksmLN5860hkrp3lxt4PM3nDpnu7U9LFfaxxW9+solGQCcJhVDWAaW44mPX5LbxbF1jj8A==
+X-Received: by 2002:a05:600c:4b10:b0:3cf:eaf5:77c6 with SMTP id i16-20020a05600c4b1000b003cfeaf577c6mr27241123wmp.56.1669389578960;
+        Fri, 25 Nov 2022 07:19:38 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id v17-20020a05600c445100b003c64c186206sm6133436wmn.16.2022.11.25.07.19.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 07:19:38 -0800 (PST)
+Date:   Fri, 25 Nov 2022 15:19:36 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH v4 1/1] x86/ioremap: Fix page aligned size calculation in
+ __ioremap_caller()
+Message-ID: <Y4DdCD7555d2SpkZ@liuwe-devbox-debian-v2>
+References: <1669138842-30100-1-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1669138842-30100-1-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,664 +74,54 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Nov 22, 2022 at 09:40:42AM -0800, Michael Kelley wrote:
+> Current code re-calculates the size after aligning the starting and
+> ending physical addresses on a page boundary. But the re-calculation
+> also embeds the masking of high order bits that exceed the size of
+> the physical address space (via PHYSICAL_PAGE_MASK). If the masking
+> removes any high order bits, the size calculation results in a huge
+> value that is likely to immediately fail.
+> 
+> Fix this by re-calculating the page-aligned size first. Then mask any
+> high order bits using PHYSICAL_PAGE_MASK.
+> 
+> Fixes: ffa71f33a820 ("x86, ioremap: Fix incorrect physical address handling in PAE mode")
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-On 2022-11-18 at 22:46 -05, Tianyu Lan <ltykernel@gmail.com> wrote...
-> From: Tianyu Lan <tiala@microsoft.com>
->
-> Enable #HV exception to handle interrupt requests from hypervisor.
->
-> Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
-> Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
+
 > ---
->  arch/x86/entry/entry_64.S          |  18 ++
->  arch/x86/include/asm/irqflags.h    |  19 ++
->  arch/x86/include/asm/mem_encrypt.h |   2 +
->  arch/x86/include/asm/msr-index.h   |   6 +
->  arch/x86/include/uapi/asm/svm.h    |   4 +
->  arch/x86/kernel/sev.c              | 354 ++++++++++++++++++++++++-----
->  arch/x86/kernel/traps.c            |  50 ++++
->  7 files changed, 400 insertions(+), 53 deletions(-)
->
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index b2059df43c57..fe460cf44ab5 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -1058,6 +1058,15 @@ SYM_CODE_END(paranoid_entry)
->   * R15 - old SPEC_CTRL
->   */
->  SYM_CODE_START_LOCAL(paranoid_exit)
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/*
-> +	 * If a #HV was delivered during execution and interrupts were
-> +	 * disabled, then check if it can be handled before the iret
-> +	 * (which may re-enable interrupts).
-> +	 */
-> +	mov     %rsp, %rdi
-> +	call    check_hv_pending
-> +#endif
->  	UNWIND_HINT_REGS
->
->  	/*
-> @@ -1183,6 +1192,15 @@ SYM_CODE_START_LOCAL(error_entry)
->  SYM_CODE_END(error_entry)
->
->  SYM_CODE_START_LOCAL(error_return)
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/*
-> +	 * If a #HV was delivered during execution and interrupts were
-> +	 * disabled, then check if it can be handled before the iret
-> +	 * (which may re-enable interrupts).
-> +	 */
-> +	mov     %rsp, %rdi
-> +	call    check_hv_pending
-> +#endif
->  	UNWIND_HINT_REGS
->  	DEBUG_ENTRY_ASSERT_IRQS_OFF
->  	testb	$3, CS(%rsp)
-> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-> index 7793e52d6237..e0730d8bc0ac 100644
-> --- a/arch/x86/include/asm/irqflags.h
-> +++ b/arch/x86/include/asm/irqflags.h
-> @@ -14,6 +14,9 @@
->  /*
->   * Interrupt control:
->   */
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +void check_hv_pending(struct pt_regs *regs);
-> +#endif
->
->  /* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
->  extern inline unsigned long native_save_fl(void);
-> @@ -35,6 +38,19 @@ extern __always_inline unsigned long native_save_fl(void)
->  	return flags;
->  }
->
-> +extern inline void native_restore_fl(unsigned long flags)
-> +{
-> +	asm volatile("push %0 ; popf"
-> +		     : /* no output */
-> +		     : "g" (flags)
-> +		     : "memory", "cc");
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	if ((flags & X86_EFLAGS_IF)) {
-> +		check_hv_pending(NULL);
-> +	}
-> +#endif
-> +}
-> +
->  static __always_inline void native_irq_disable(void)
->  {
->  	asm volatile("cli": : :"memory");
-> @@ -43,6 +59,9 @@ static __always_inline void native_irq_disable(void)
->  static __always_inline void native_irq_enable(void)
->  {
->  	asm volatile("sti": : :"memory");
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	check_hv_pending(NULL);
-> +#endif
->  }
->
->  static inline __cpuidle void native_safe_halt(void)
-> diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-> index 72ca90552b6a..7264ca5f5b2d 100644
-> --- a/arch/x86/include/asm/mem_encrypt.h
-> +++ b/arch/x86/include/asm/mem_encrypt.h
-> @@ -50,6 +50,7 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
->  void __init mem_encrypt_free_decrypted_mem(void);
->
->  void __init sev_es_init_vc_handling(void);
-> +void __init sev_snp_init_hv_handling(void);
->
->  #define __bss_decrypted __section(".bss..decrypted")
->
-> @@ -72,6 +73,7 @@ static inline void __init sme_encrypt_kernel(struct boot_params *bp) { }
->  static inline void __init sme_enable(struct boot_params *bp) { }
->
->  static inline void sev_es_init_vc_handling(void) { }
-> +static inline void sev_snp_init_hv_handling(void) { }
->
->  static inline int __init
->  early_set_memory_decrypted(unsigned long vaddr, unsigned long size) { return 0; }
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 10ac52705892..6fe25a6e325f 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -562,10 +562,16 @@
->  #define MSR_AMD64_SEV_ENABLED_BIT	0
->  #define MSR_AMD64_SEV_ES_ENABLED_BIT	1
->  #define MSR_AMD64_SEV_SNP_ENABLED_BIT	2
-> +#define MSR_AMD64_SEV_REFLECTVC_ENABLED_BIT		4
-> +#define MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED_BIT	5
-> +#define MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED_BIT	6
->  #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
->  #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
->  #define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
->
-> +#define MSR_AMD64_SEV_REFLECTVC_ENABLED			BIT_ULL(MSR_AMD64_SEV_REFLECTVC_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED	BIT_ULL(MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED_BIT)
-> +#define MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED	BIT_ULL(MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED_BIT)
->  #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
->
->  /* AMD Collaborative Processor Performance Control MSRs */
-> diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-> index f69c168391aa..85d6882262e7 100644
-> --- a/arch/x86/include/uapi/asm/svm.h
-> +++ b/arch/x86/include/uapi/asm/svm.h
-> @@ -115,6 +115,10 @@
->  #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
->  #define SVM_VMGEXIT_AP_CREATE			1
->  #define SVM_VMGEXIT_AP_DESTROY			2
-> +#define SVM_VMGEXIT_HV_DOORBELL_PAGE		0x80000014
-> +#define SVM_VMGEXIT_GET_PREFERRED_HV_DOORBELL_PAGE	0
-> +#define SVM_VMGEXIT_SET_HV_DOORBELL_PAGE		1
-> +#define SVM_VMGEXIT_QUERY_HV_DOORBELL_PAGE		2
->  #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
->  #define SVM_VMGEXIT_UNSUPPORTED_EVENT		0x8000ffff
->
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index b54ee3ba37b0..23cd025f97dc 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -104,6 +104,12 @@ struct sev_es_runtime_data {
->  	 * is currently unsupported in SEV-ES guests.
+> 
+> This patch was previously Patch 1 of a larger series[1].  Breaking
+> it out separately per discussion with Dave Hansen and Boris Petkov.
+> 
+> [1] https://lore.kernel.org/linux-hyperv/1668624097-14884-1-git-send-email-mikelley@microsoft.com/
+> 
+>  arch/x86/mm/ioremap.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+> index 78c5bc6..6453fba 100644
+> --- a/arch/x86/mm/ioremap.c
+> +++ b/arch/x86/mm/ioremap.c
+> @@ -217,9 +217,15 @@ static void __ioremap_check_mem(resource_size_t addr, unsigned long size,
+>  	 * Mappings have to be page-aligned
 >  	 */
->  	unsigned long dr7;
+>  	offset = phys_addr & ~PAGE_MASK;
+> -	phys_addr &= PHYSICAL_PAGE_MASK;
+> +	phys_addr &= PAGE_MASK;
+>  	size = PAGE_ALIGN(last_addr+1) - phys_addr;
+>  
 > +	/*
-> +	 * SEV-SNP requires that the GHCB must be registered before using it.
-> +	 * The flag below will indicate whether the GHCB is registered, if its
-> +	 * not registered then sev_es_get_ghcb() will perform the registration.
+> +	 * Mask out any bits not part of the actual physical
+> +	 * address, like memory encryption bits.
 > +	 */
-> +	bool ghcb_registered;
->  };
->
->  struct ghcb_state {
-> @@ -122,6 +128,183 @@ struct sev_config {
->
->  static struct sev_config sev_cfg __read_mostly;
->
-> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state);
-> +static noinstr void __sev_put_ghcb(struct ghcb_state *state);
-> +static int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa);
-> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb);
+> +	phys_addr &= PHYSICAL_PAGE_MASK;
 > +
-> +union hv_pending_events {
-> +	u16 events;
-> +	struct {
-> +		u8 vector;
-> +		u8 nmi : 1;
-> +		u8 mc : 1;
-> +		u8 reserved1 : 5;
-> +		u8 no_further_signal : 1;
-> +	};
-> +};
-> +
-> +struct sev_hv_doorbell_page {
-> +	union hv_pending_events pending_events;
-> +	u8 no_eoi_required;
-> +	u8 reserved2[61];
-> +	u8 padding[4032];
-> +};
-> +
-> +struct sev_snp_runtime_data {
-> +	struct sev_hv_doorbell_page hv_doorbell_page;
-> +};
-> +
-> +static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-> +
-> +static inline u64 sev_es_rd_ghcb_msr(void)
-> +{
-> +	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-> +}
-> +
-> +static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-> +{
-> +	u32 low, high;
-> +
-> +	low  = (u32)(val);
-> +	high = (u32)(val >> 32);
-> +
-> +	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-> +}
-> +
-> +struct sev_hv_doorbell_page *sev_snp_current_doorbell_page(void)
-> +{
-> +	return &this_cpu_read(snp_runtime_data)->hv_doorbell_page;
-> +}
-> +
-> +static u8 sev_hv_pending(void)
-> +{
-> +	return sev_snp_current_doorbell_page()->pending_events.events;
-> +}
-> +
-> +static void hv_doorbell_apic_eoi_write(u32 reg, u32 val)
-> +{
-> +	if (xchg(&sev_snp_current_doorbell_page()->no_eoi_required, 0) & 0x1)
-> +		return;
-> +
-> +	BUG_ON(reg != APIC_EOI);
-> +	apic->write(reg, val);
-> +}
-> +
-> +static void do_exc_hv(struct pt_regs *regs)
-> +{
-> +	union hv_pending_events pending_events;
-> +	u8 vector;
-> +
-> +	while (sev_hv_pending()) {
-> +		asm volatile("cli" : : : "memory");
-> +
-> +		pending_events.events = xchg(
-> +			&sev_snp_current_doorbell_page()->pending_events.events,
-> +			0);
-> +
-> +		if (pending_events.nmi)
-> +			exc_nmi(regs);
-> +
-> +#ifdef CONFIG_X86_MCE
-> +		if (pending_events.mc)
-> +			exc_machine_check(regs);
-> +#endif
-> +
-> +		if (!pending_events.vector)
-> +			return;
-> +
-> +		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
-> +			/* Exception vectors */
-> +			WARN(1, "exception shouldn't happen\n");
-> +		} else if (pending_events.vector == FIRST_EXTERNAL_VECTOR) {
-> +			sysvec_irq_move_cleanup(regs);
-> +		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
-> +			WARN(1, "syscall shouldn't happen\n");
-> +		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
-> +			switch (pending_events.vector) {
-> +#if IS_ENABLED(CONFIG_HYPERV)
-> +			case HYPERV_STIMER0_VECTOR:
-> +				sysvec_hyperv_stimer0(regs);
-> +				break;
-> +			case HYPERVISOR_CALLBACK_VECTOR:
-> +				sysvec_hyperv_callback(regs);
-> +				break;
-> +#endif
-> +#ifdef CONFIG_SMP
-> +			case RESCHEDULE_VECTOR:
-> +				sysvec_reschedule_ipi(regs);
-> +				break;
-> +			case IRQ_MOVE_CLEANUP_VECTOR:
-> +				sysvec_irq_move_cleanup(regs);
-> +				break;
-> +			case REBOOT_VECTOR:
-> +				sysvec_reboot(regs);
-> +				break;
-> +			case CALL_FUNCTION_SINGLE_VECTOR:
-> +				sysvec_call_function_single(regs);
-> +				break;
-> +			case CALL_FUNCTION_VECTOR:
-> +				sysvec_call_function(regs);
-> +				break;
-> +#endif
-> +#ifdef CONFIG_X86_LOCAL_APIC
-> +			case ERROR_APIC_VECTOR:
-> +				sysvec_error_interrupt(regs);
-> +				break;
-> +			case SPURIOUS_APIC_VECTOR:
-> +				sysvec_spurious_apic_interrupt(regs);
-> +				break;
-> +			case LOCAL_TIMER_VECTOR:
-> +				sysvec_apic_timer_interrupt(regs);
-> +				break;
-> +			case X86_PLATFORM_IPI_VECTOR:
-> +				sysvec_x86_platform_ipi(regs);
-> +				break;
-> +#endif
-> +			case 0x0:
-> +				break;
-> +			default:
-> +				panic("Unexpected vector %d\n", vector);
-> +				unreachable();
-> +			}
-> +		} else {
-> +			common_interrupt(regs, pending_events.vector);
-> +		}
-> +
-> +		asm volatile("sti" : : : "memory");
-> +	}
-> +}
-> +
-> +void check_hv_pending(struct pt_regs *regs)
-
-This looks like two functions, one with regs == NULL and one with regs,
-different internal logic, different call sites. Would you consider splitting
-into two?
-
-> +{
-> +	struct pt_regs local_regs;
-> +
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> +		return;
-
-
-> +
-> +	if (regs) {
-> +		if ((regs->flags & X86_EFLAGS_IF) == 0)
-> +			return;
-> +
-> +		if (!sev_hv_pending())
-> +			return;
-> +
-> +		do_exc_hv(regs);
-> +	} else {
-> +		if (sev_hv_pending()) {
-> +			memset(&local_regs, 0, sizeof(struct pt_regs));
-> +			regs = &local_regs;
-> +			asm volatile("movl %%cs, %%eax;" : "=a" (regs->cs));
-> +			asm volatile("movl %%ss, %%eax;" : "=a" (regs->ss));
-> +			regs->orig_ax = 0xffffffff;
-> +			regs->flags = native_save_fl();
-> +			do_exc_hv(regs);
-> +		}
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(check_hv_pending);
-> +
->  static __always_inline bool on_vc_stack(struct pt_regs *regs)
->  {
->  	unsigned long sp = regs->sp;
-> @@ -193,68 +376,35 @@ void noinstr __sev_es_ist_exit(void)
->  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
->  }
->
-> -/*
-> - * Nothing shall interrupt this code path while holding the per-CPU
-> - * GHCB. The backup GHCB is only for NMIs interrupting this path.
-> - *
-> - * Callers must disable local interrupts around it.
-> - */
-> -static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-> +static bool sev_restricted_injection_enabled(void)
->  {
-> -	struct sev_es_runtime_data *data;
-> +	return sev_status & MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED;
-> +}
-> +
-> +void __init sev_snp_init_hv_handling(void)
-> +{
-> +	struct sev_snp_runtime_data *snp_data;
-> +	struct ghcb_state state;
->  	struct ghcb *ghcb;
-> +	unsigned long flags;
-> +	int cpu;
-> +	int err;
->
->  	WARN_ON(!irqs_disabled());
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP) || !sev_restricted_injection_enabled())
-> +		return;
->
-> -	data = this_cpu_read(runtime_data);
-> -	ghcb = &data->ghcb_page;
-> -
-> -	if (unlikely(data->ghcb_active)) {
-> -		/* GHCB is already in use - save its contents */
-> -
-> -		if (unlikely(data->backup_ghcb_active)) {
-> -			/*
-> -			 * Backup-GHCB is also already in use. There is no way
-> -			 * to continue here so just kill the machine. To make
-> -			 * panic() work, mark GHCBs inactive so that messages
-> -			 * can be printed out.
-> -			 */
-> -			data->ghcb_active        = false;
-> -			data->backup_ghcb_active = false;
-> -
-> -			instrumentation_begin();
-> -			panic("Unable to handle #VC exception! GHCB and Backup GHCB are already in use");
-> -			instrumentation_end();
-> -		}
-> -
-> -		/* Mark backup_ghcb active before writing to it */
-> -		data->backup_ghcb_active = true;
-> -
-> -		state->ghcb = &data->backup_ghcb;
-> -
-> -		/* Backup GHCB content */
-> -		*state->ghcb = *ghcb;
-> -	} else {
-> -		state->ghcb = NULL;
-> -		data->ghcb_active = true;
-> -	}
-> +	local_irq_save(flags);
->
-> -	return ghcb;
-> -}
-> +	ghcb = __sev_get_ghcb(&state);
->
-> -static inline u64 sev_es_rd_ghcb_msr(void)
-> -{
-> -	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-> -}
-> +	sev_snp_setup_hv_doorbell_page(ghcb);
->
-> -static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-> -{
-> -	u32 low, high;
-> +	__sev_put_ghcb(&state);
->
-> -	low  = (u32)(val);
-> -	high = (u32)(val >> 32);
-> +	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
->
-> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-> +	local_irq_restore(flags);
->  }
->
->  static int vc_fetch_insn_kernel(struct es_em_ctxt *ctxt,
-> @@ -515,6 +665,79 @@ static enum es_result vc_slow_virt_to_phys(struct ghcb *ghcb, struct es_em_ctxt
->  /* Include code shared with pre-decompression boot stage */
->  #include "sev-shared.c"
->
-> +/*
-> + * Nothing shall interrupt this code path while holding the per-CPU
-> + * GHCB. The backup GHCB is only for NMIs interrupting this path.
-> + *
-> + * Callers must disable local interrupts around it.
-> + */
-> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-> +{
-> +	struct sev_es_runtime_data *data;
-> +	struct ghcb *ghcb;
-> +
-> +	WARN_ON(!irqs_disabled());
-> +
-> +	data = this_cpu_read(runtime_data);
-> +	ghcb = &data->ghcb_page;
-> +
-> +	if (unlikely(data->ghcb_active)) {
-> +		/* GHCB is already in use - save its contents */
-> +
-> +		if (unlikely(data->backup_ghcb_active)) {
-> +			/*
-> +			 * Backup-GHCB is also already in use. There is no way
-> +			 * to continue here so just kill the machine. To make
-> +			 * panic() work, mark GHCBs inactive so that messages
-> +			 * can be printed out.
-> +			 */
-> +			data->ghcb_active        = false;
-> +			data->backup_ghcb_active = false;
-> +
-> +			instrumentation_begin();
-> +			panic("Unable to handle #VC exception! GHCB and Backup GHCB are already in use");
-> +			instrumentation_end();
-> +		}
-> +
-> +		/* Mark backup_ghcb active before writing to it */
-> +		data->backup_ghcb_active = true;
-> +
-> +		state->ghcb = &data->backup_ghcb;
-> +
-> +		/* Backup GHCB content */
-> +		*state->ghcb = *ghcb;
-> +	} else {
-> +		state->ghcb = NULL;
-> +		data->ghcb_active = true;
-> +	}
-> +
-> +	/* SEV-SNP guest requires that GHCB must be registered before using it. */
-> +	if (!data->ghcb_registered) {
-> +		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-> +			snp_register_ghcb_early(__pa(ghcb));
-> +			sev_snp_setup_hv_doorbell_page(ghcb);
-> +		} else {
-> +			sev_es_wr_ghcb_msr(__pa(ghcb));
-> +		}
-> +		data->ghcb_registered = true;
-> +	}
-> +
-> +	return ghcb;
-> +}
-> +
-> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb)
-> +{
-> +	u64 pa;
-> +	enum es_result ret;
-> +
-> +	pa = __pa(sev_snp_current_doorbell_page());
-> +	vc_ghcb_invalidate(ghcb);
-> +	ret = vmgexit_hv_doorbell_page(ghcb,
-> +			SVM_VMGEXIT_SET_HV_DOORBELL_PAGE, pa);
-> +	if (ret != ES_OK)
-> +		panic("SEV-SNP: failed to set up #HV doorbell page");
-> +}
-> +
->  static noinstr void __sev_put_ghcb(struct ghcb_state *state)
->  {
->  	struct sev_es_runtime_data *data;
-> @@ -1282,6 +1505,11 @@ void setup_ghcb(void)
->  		snp_register_ghcb_early(__pa(&boot_ghcb_page));
->  }
->
-> +int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa)
-> +{
-> +	return sev_es_ghcb_hv_call(ghcb, NULL, SVM_VMGEXIT_HV_DOORBELL_PAGE, op, pa);
-> +}
-> +
->  #ifdef CONFIG_HOTPLUG_CPU
->  static void sev_es_ap_hlt_loop(void)
->  {
-> @@ -1355,6 +1583,7 @@ static void __init alloc_runtime_data(int cpu)
->  static void __init init_ghcb(int cpu)
->  {
->  	struct sev_es_runtime_data *data;
-> +	struct sev_snp_runtime_data *snp_data;
->  	int err;
->
->  	data = per_cpu(runtime_data, cpu);
-> @@ -1366,8 +1595,22 @@ static void __init init_ghcb(int cpu)
->
->  	memset(&data->ghcb_page, 0, sizeof(data->ghcb_page));
->
-> +	snp_data = memblock_alloc(sizeof(*snp_data), PAGE_SIZE);
-> +	if (!snp_data)
-> +		panic("Can't allocate SEV-SNP runtime data");
-> +
-> +	err = early_set_memory_decrypted((unsigned long)&snp_data->hv_doorbell_page,
-> +					 sizeof(snp_data->hv_doorbell_page));
-> +	if (err)
-> +		panic("Can't map #HV doorbell pages unencrypted");
-> +
-> +	memset(&snp_data->hv_doorbell_page, 0, sizeof(snp_data->hv_doorbell_page));
-> +
-> +	per_cpu(snp_runtime_data, cpu) = snp_data;
-> +
->  	data->ghcb_active = false;
->  	data->backup_ghcb_active = false;
-> +	data->ghcb_registered = false;
->  }
->
->  void __init sev_es_init_vc_handling(void)
-> @@ -2006,7 +2249,12 @@ DEFINE_IDTENTRY_VC_USER(exc_vmm_communication)
->
->  static bool hv_raw_handle_exception(struct pt_regs *regs)
->  {
-> -	return false;
-> +	/* Clear the no_further_signal bit */
-> +	sev_snp_current_doorbell_page()->pending_events.events &= 0x7fff;
-> +
-> +	check_hv_pending(regs);
-> +
-> +	return true;
->  }
->
->  static __always_inline bool on_hv_fallback_stack(struct pt_regs *regs)
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 178015a820f0..af97e6610fbb 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -898,6 +898,53 @@ asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *r
->
->  	return regs_ret;
->  }
-> +
-> +asmlinkage __visible noinstr struct pt_regs *hv_switch_off_ist(struct pt_regs *regs)
-> +{
-> +	unsigned long sp, *stack;
-> +	struct stack_info info;
-> +	struct pt_regs *regs_ret;
-> +
-> +	/*
-> +	 * A malicious hypervisor can inject 2 HVs in a row, which will corrupt
-> +	 * the trap frame on our IST stack.  We add a defensive check here to
-> +	 * catch such behavior.
-> +	 */
-> +	BUG_ON(regs->sp >= __this_cpu_ist_bottom_va(HV) && regs->sp < __this_cpu_ist_top_va(HV));
-> +
-> +	/*
-> +	 * In the SYSCALL entry path the RSP value comes from user-space - don't
-> +	 * trust it and switch to the current kernel stack
-> +	 */
-> +	if (ip_within_syscall_gap(regs)) {
-> +		sp = this_cpu_read(cpu_current_top_of_stack);
-> +		goto sync;
-> +	}
-> +
-> +	/*
-> +	 * From here on the RSP value is trusted. Now check whether entry
-> +	 * happened from a safe stack. Not safe are the entry or unknown stacks,
-> +	 * use the fall-back stack instead in this case.
-> +	 */
-> +	sp    = regs->sp;
-> +	stack = (unsigned long *)sp;
-> +
-> +	if (!get_stack_info_noinstr(stack, current, &info) || info.type == STACK_TYPE_ENTRY ||
-> +	    info.type > STACK_TYPE_EXCEPTION_LAST)
-> +		sp = __this_cpu_ist_top_va(HV2);
-> +sync:
-> +	/*
-> +	 * Found a safe stack - switch to it as if the entry didn't happen via
-> +	 * IST stack. The code below only copies pt_regs, the real switch happens
-> +	 * in assembly code.
-> +	 */
-> +	sp = ALIGN_DOWN(sp, 8) - sizeof(*regs_ret);
-> +
-> +	regs_ret = (struct pt_regs *)sp;
-> +	*regs_ret = *regs;
-> +
-> +	return regs_ret;
-> +}
->  #endif
->
->  asmlinkage __visible noinstr struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs)
-> @@ -1457,4 +1504,7 @@ void __init trap_init(void)
->  	/* Setup traps as cpu_init() might #GP */
->  	idt_setup_traps();
->  	cpu_init();
-> +
-> +	/* Init #HV doorbell pages when running as an SEV-SNP guest */
-> +	sev_snp_init_hv_handling();
->  }
-
-
---
-Cheers,
-Christophe de Dinechin (https://c3d.github.io)
-Theory of Incomplete Measurements (https://c3d.github.io/TIM)
-
+>  	retval = memtype_reserve(phys_addr, (u64)phys_addr + size,
+>  						pcm, &new_pcm);
+>  	if (retval) {
+> -- 
+> 1.8.3.1
+> 
