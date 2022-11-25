@@ -2,107 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45C6638D91
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Nov 2022 16:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A2F639362
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Nov 2022 03:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiKYPj4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Nov 2022 10:39:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
+        id S229926AbiKZCaE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Nov 2022 21:30:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKYPjz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Nov 2022 10:39:55 -0500
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDE92CCBE;
-        Fri, 25 Nov 2022 07:39:54 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id 83-20020a1c0256000000b003d03017c6efso5791852wmc.4;
-        Fri, 25 Nov 2022 07:39:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+CLfEu0Ol4ZgCIM6GMFZLdKNFioBS7Wn2cy33xc4Fgk=;
-        b=fsTeudvekWBQDelGPR/HS2hagYcUfErYSLu65qns5/86uV9bvZlliWdS7fGlw+z43A
-         Dq1KrIv0S4jnoObW3KtIUxR9kvXXGsD0vsLadTZ1BZgcrTdFKfiDbA61h0663UJ9lJ/d
-         UXz05ESPGm8/KJySC7nxCPkK3ahpv1oRf9+YEp5RE5wE8ijiZ8EoJOONCNQqmEN975aQ
-         KJFnP1slpB63GwwhFTjuQjT1HXwvdG0s3/Yh0IIjFFvKguAPqQEZg86WR4XSObz3c4X/
-         AoX/Mq7MsM+gOv5bG24MsBwxX6cDsj+CeBLRPiVhj5vrGSEpN7NhtnWwSh3l7AZdz2Dq
-         lTXg==
-X-Gm-Message-State: ANoB5plNvvP4pzPfE9Y8wN5lQnY6h4sqQ9BeTiuAjy8TXoPrEUsTn2S+
-        1OYb+Q/PKY5ydmAu7CWxXuI=
-X-Google-Smtp-Source: AA0mqf5oTQD1Pkojn2mvb3FHJcD28lPaL2FsNVHWj3NUYllPAXUBdSn0nZJxW8R6VwYBEvIBNvH93A==
-X-Received: by 2002:a05:600c:5552:b0:3cf:9a16:456d with SMTP id iz18-20020a05600c555200b003cf9a16456dmr30671380wmb.100.1669390793238;
-        Fri, 25 Nov 2022 07:39:53 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id a12-20020adfe5cc000000b0022cc3e67fc5sm3868947wrn.65.2022.11.25.07.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Nov 2022 07:39:52 -0800 (PST)
-Date:   Fri, 25 Nov 2022 15:39:50 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH AUTOSEL 6.0 13/44] clocksource/drivers/hyperv: add data
- structure for reference TSC MSR
-Message-ID: <Y4DhxthMYGtYByX4@liuwe-devbox-debian-v2>
-References: <20221119021124.1773699-1-sashal@kernel.org>
- <20221119021124.1773699-13-sashal@kernel.org>
- <SN6PR2101MB1693A83DF44A95B439532F9DD7089@SN6PR2101MB1693.namprd21.prod.outlook.com>
- <Y3+S6j4GW0RrHgB2@sashalap>
+        with ESMTP id S229514AbiKZCaD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Nov 2022 21:30:03 -0500
+X-Greylist: delayed 1043 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Nov 2022 18:30:01 PST
+Received: from mail.rrk.ir (mail.rrk.ir [46.209.19.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE393136D;
+        Fri, 25 Nov 2022 18:30:01 -0800 (PST)
+Received: from localhost (mail.rrk.ir [127.0.0.1])
+        by mail.rrk.ir (Postfix) with ESMTP id EA9C439713E;
+        Sat, 26 Nov 2022 05:42:33 +0330 (+0330)
+X-Virus-Scanned: Debian amavisd-new at mail.rrk.ir
+Received: from mail.rrk.ir ([127.0.0.1])
+        by localhost (mail.rrk.ir [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IzeIoOj2fku4; Sat, 26 Nov 2022 05:42:24 +0330 (+0330)
+Content-Type: text/plain; charset="iso-8859-1"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=rrk.ir; s=rrk;
+        t=1669401265; bh=Tek/QbFshVvW3DxuEJIWlwCvxszEYuMod+HhVGwXvdw=;
+        h=Subject:To:From:Date:Reply-To:From;
+        b=XsaGpSI2+BPsPsnjXM4yFUsvvZtG2D3G4mu7WrXewlWGtdJtiw/lhxot1OPNVFGVf
+         KfOjnF6/wtoPXS4GV7gMJGL7wUBB61LKZzEz3ekcgyUmTkcWAb6+q2MbfNaI8W7y8D
+         FAhONqYUnRm167ahaXs6fewXFePk7acVbtylF5Z4=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3+S6j4GW0RrHgB2@sashalap>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: Liaison Officer Needed In Your State...  
+To:     Recipients <firewall@rrk.ir>
+From:   "Ms. Kelvin Lin " <firewall@rrk.ir>
+Date:   Fri, 25 Nov 2022 10:34:12 -0800
+Reply-To: mail@gukaimail.com
+Message-Id: <20221126021233.EA9C439713E@mail.rrk.ir>
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_99,BAYES_999,
+        DATE_IN_PAST_06_12,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  1.5 DATE_IN_PAST_06_12 Date: is 6 to 12 hours before Received: date
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 10:51:06AM -0500, Sasha Levin wrote:
-> On Sat, Nov 19, 2022 at 05:37:16AM +0000, Michael Kelley (LINUX) wrote:
-> > From: Sasha Levin <sashal@kernel.org> Sent: Friday, November 18, 2022 6:11 PM
-> > > 
-> > > From: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-> > > 
-> > > [ Upstream commit 4ad1aa571214e8d6468a1806794d987b374b5a08 ]
-> > > 
-> > > Add a data structure to represent the reference TSC MSR similar to
-> > > other MSRs. This simplifies the code for updating the MSR.
-> > > 
-> > > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-> > > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> > > Link: https://lore.kernel.org/all/20221027095729.1676394-2-anrayabh@linux.microsoft.com/
-> > > Signed-off-by: Wei Liu <wei.liu@kernel.org>
-> > > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > 
-> > Sasha -- I don't think this patch needs to be backported to any stable versions.  Anirudh
-> > or Wei Liu, can you confirm?  The patch is more about enabling a new scenario than fixing a bug.
-> 
-> Ack, I'll drop both of the patches you've pointed out. Thanks!
+Hello,
 
-Sorry for the late reply -- I think you should keep this patch and the
-other one. The other patch fixes a real issue while kexec'ing in the
-Linux root partition. This patch is a prerequisite for that.
 
-Thanks,
-Wei.
+A reputable pharmaceutical company from Vietnam is in need of a reliable in=
+dividual or corporate entity in your state to act as their Liaison; this wi=
+ll not affect your current job or business operations in anyway.  If intere=
+sted, reply for more information.
 
-> 
-> -- 
-> Thanks,
-> Sasha
+
+Sincerely,
+Ms. Kelvin Lin
+CC
