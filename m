@@ -2,85 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A6863A0D7
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Nov 2022 06:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764C663A129
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Nov 2022 07:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiK1FrP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Nov 2022 00:47:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S229730AbiK1GZw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Nov 2022 01:25:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiK1FrP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 00:47:15 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5693F65BA;
-        Sun, 27 Nov 2022 21:47:14 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 130so9424975pfu.8;
-        Sun, 27 Nov 2022 21:47:14 -0800 (PST)
+        with ESMTP id S229634AbiK1GZv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 01:25:51 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97013F69;
+        Sun, 27 Nov 2022 22:25:50 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id vp12so21980754ejc.8;
+        Sun, 27 Nov 2022 22:25:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=clF2yN6A6iGTuwA3DES6a8mecm0VV0tg9cwaWgrqg4Y=;
-        b=dE6HmyOP0M5nVfXXS24HyNDQ+y26F7nAFaBGZ9e2Mtvr2qwotgdHiYWpLAOzAEri+t
-         NLpORagnXvw930gYpb2fTmkAV+f51DEpPPHD7QPk/sZxY5Tk/ClQj637DKK08qggIDLW
-         dIuyVv0zLoXbGsumsr1CfdmiprN8sKSTxmFO/c1oRZXhN2pSYzZx5cmC+0402OtV48Em
-         bR4roYRvsKc6hruGl9LCAKfRCAC609uamf+eCybtl5HkC1wTUIA2fIx9kMEsNEc8trIr
-         cGbcP5d8OjWMIlIsv+npch1XkGGkycuUVrDefYHhauh84MwJ77lbbIIy7+DgyV4hmXPb
-         QXNw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pvyc/Y0je10m+7tKkRhVqd7F/6Fh4vGa48vpfH3+st0=;
+        b=SAZCqecAkk0r0Y7XYYioVUReAKI7cldklslyoKC2u3/eT+YgwS/UZ+yF+5XWNeGBBG
+         GK149C5V2arMKregXiTnTXUTFidEipqHeRYifxpO8SbJkBn/i7Z5J/Gwcel8pfPNYvRa
+         iRbeMlyT27y6hnPmOboeewmAT08sqKhZIHEAU/oTka6/vGeVSkUuPjjnx8aJc1snEDTh
+         tQt8NkbPIHl21DRLISyLuhz9qqP6FGG/SopDIljpzC4DNzRmJZbBMW2T07s99MRFjITm
+         sA3Z9lOXgNO4NDY+HyYcOr02OEyXTjHNlFC8vQMcik/2UFL8JoSJZU+YLPEw2qWLWc93
+         z2Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=clF2yN6A6iGTuwA3DES6a8mecm0VV0tg9cwaWgrqg4Y=;
-        b=e+fDNT39uGGX8ouhelbcnjY0dxKAQXqt2dZGgAbeLNYIRrvdUZJIJH6KLQSgjEZD1b
-         vexxYHqSpnT2/7hq8YpynNGiLsvLDmZf2vw21WexPm+RNDGnx80iG4nY776uQWtGohvj
-         VbDHHQYxepDdYaKS2o4DRcfXE6i/UWFbb2NYk36L1qWeOES3Cpv5MzJyeUGLOPitvt3z
-         LE7p642JKnsCTkqOk5Vzih0MV/s+t71wvWrG2IdC8TA1YN6FaQzjnXbAw8M4Dj8rCvN+
-         O5DJEYgJHVSy8Kpp8kVE8N6qZkvD3r8aL5tAjfq0I2NQF2QQNQvlr47gEf+/xdjdhtKu
-         4Fgw==
-X-Gm-Message-State: ANoB5pl9k1PeV6hrwiB/8+5YQBKpQ5/+xh6spahfj+jb9gFcTCowzC6M
-        ZyXydRDm6gZulnAWpszJ2Hc=
-X-Google-Smtp-Source: AA0mqf67ZMWERK2VwdcyNZwgNvK2LUVZ/GRAWUyruH0SAA/dcYbftyaPvpTc8uYdy1HcWJymWUh5/w==
-X-Received: by 2002:a63:d04f:0:b0:46e:c41c:e4bf with SMTP id s15-20020a63d04f000000b0046ec41ce4bfmr26257003pgi.123.1669614433613;
-        Sun, 27 Nov 2022 21:47:13 -0800 (PST)
-Received: from ?IPV6:2404:f801:10:463:955f:7dcb:f571:942c? ([2404:f801:9000:1a:9b8:7dcb:f571:942c])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090322d000b00186e34524e3sm7806256plg.136.2022.11.27.21.47.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Nov 2022 21:47:12 -0800 (PST)
-Message-ID: <0d928bdf-769f-8eca-2e3e-5d6e438ef048@gmail.com>
-Date:   Mon, 28 Nov 2022 13:47:02 +0800
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pvyc/Y0je10m+7tKkRhVqd7F/6Fh4vGa48vpfH3+st0=;
+        b=IgXEzIUjDt7dvy9AdYltXNCMhHQr6sHw9X4IBcYJQVh/UYIHaxua2KFOLluqYXsizP
+         6E3DQkWBPoNAv1F9TxG1gm9/eWNx2lBNJRdz10ZrXL8rNfi1FEc7FTYhi6aaFKDGDbhy
+         V7hnhI9/bVFfBcifGzNGZ3IXMBZhVQXHafKK/FeWSdBwt5M67cUT0x7iSVayY/8pvCu7
+         Qcte6CJS+lfS71oTfMEBIol5s8TfT6qaVnumViht8xLFXWgxTRRl17B5lus6N1tFWLA0
+         FSsIrnVzGKv2cDiCba/yrNZtTD7Es19TsrELmHyo2Um/gEDfaAHmVoDCDtxIeGsgPGo4
+         LbkQ==
+X-Gm-Message-State: ANoB5plK4mobtl3WQ8qobXySiorMAOoCa1pudhza6ibWBjilJGGH4HbB
+        y+i+sArojYSzNk1sb5RD8rvzLcTFis5mV92gq94=
+X-Google-Smtp-Source: AA0mqf6zot371VpUgBCAP8yNRVW1ahi1kcEA//7QaEtGvMJx3biCW7dxrRUBQ+M/DR3wb4e6UgTQSje1IdyE0y9/Tq8=
+X-Received: by 2002:a17:906:cc8f:b0:78b:8ce7:fe3c with SMTP id
+ oq15-20020a170906cc8f00b0078b8ce7fe3cmr41762439ejb.557.1669616748770; Sun, 27
+ Nov 2022 22:25:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH V2 16/18] x86/sev: Initialize #HV doorbell and handle
- interrupt requests
-Content-Language: en-US
-To:     Christophe de Dinechin <dinechin@redhat.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-17-ltykernel@gmail.com> <m2ilj3kr19.fsf@redhat.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <m2ilj3kr19.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220714084136.570176-1-chenhuacai@loongson.cn> <20220714084136.570176-3-chenhuacai@loongson.cn>
+In-Reply-To: <20220714084136.570176-3-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Mon, 28 Nov 2022 14:25:35 +0800
+Message-ID: <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
+Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,12 +73,63 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/25/2022 7:49 PM, Christophe de Dinechin wrote:
->> +void check_hv_pending(struct pt_regs *regs)
-> This looks like two functions, one with regs == NULL and one with regs,
-> different internal logic, different call sites. Would you consider splitting
-> into two?
+ping?
+
+On Thu, Jul 14, 2022 at 4:42 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
 >
-
-Good suggestion. Will update in the next version.
-
+> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+> cpu_max_bits_warn() generates a runtime warning similar as below while
+> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
+> instead of NR_CPUS to iterate CPUs.
+>
+> [    3.052463] ------------[ cut here ]------------
+> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
+> [    3.070072] Modules linked in: efivarfs autofs4
+> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
+> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
+> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
+> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
+> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
+> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
+> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
+> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
+> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
+> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
+> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
+> [    3.195868]         ...
+> [    3.199917] Call Trace:
+> [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
+> [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
+> [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
+> [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
+> [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
+> [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
+> [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
+> [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
+> [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
+> [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
+> [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
+> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
+>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/sh/kernel/cpu/proc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
+> index a306bcd6b341..5f6d0e827bae 100644
+> --- a/arch/sh/kernel/cpu/proc.c
+> +++ b/arch/sh/kernel/cpu/proc.c
+> @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>
+>  static void *c_start(struct seq_file *m, loff_t *pos)
+>  {
+> -       return *pos < NR_CPUS ? cpu_data + *pos : NULL;
+> +       return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
+>  }
+>  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+>  {
+> --
+> 2.31.1
+>
