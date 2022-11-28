@@ -2,140 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C723863A2AA
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Nov 2022 09:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B98363A65E
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Nov 2022 11:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiK1ITy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Nov 2022 03:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S230070AbiK1Kuw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Nov 2022 05:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiK1ITx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 03:19:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71C31180E;
-        Mon, 28 Nov 2022 00:18:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229805AbiK1Kuv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 05:50:51 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BF0BF9;
+        Mon, 28 Nov 2022 02:50:50 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e719329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e719:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8142460FE7;
-        Mon, 28 Nov 2022 08:18:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA40C43470;
-        Mon, 28 Nov 2022 08:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669623533;
-        bh=8fvSqyC5O7kIfnW0Kyq33j5dit6Z5CFYOeb+1myKFss=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jylfX3gRUDIRl78mcgXqXQ3hPGGqN6r0iGnar94bW6COLNIN6I5XdxgDk8oM0qrAx
-         Lnj4SrwhzfbRP8ECsTg4ZihP4FG0a+32QTIQkutFWb28sv9POIo3dh0oBr1P/SLeP4
-         bHtXKOfipeUdemaf8YGKIS4BGWaavB79/qMzHuZFH7TUUeEauWUAzs630Ti/k7BIUN
-         xia+PHCdapvTeDHldeCe2YRouwErxoTAB8/KUSPJ1VL+HzoIlzgKF/xMocoNCDCcKR
-         4wET1oBSGtjids0dhr7OEVaj/vzerKnjmZJGYwmXezKDBd2ezLEm60iNjRlSW4DTLj
-         Fki0XgEHYWcQA==
-Received: by mail-ej1-f54.google.com with SMTP id b2so7509576eja.7;
-        Mon, 28 Nov 2022 00:18:53 -0800 (PST)
-X-Gm-Message-State: ANoB5plSl4h59le3ccIgzzM8Hw0/JiEQoZzGrNrg968nUC/QFNS6PjQ5
-        y9ae2CAtbo2yaRASQO+2WuKU2AWVEge2je4ygkc=
-X-Google-Smtp-Source: AA0mqf4+1cmRwSticidoMDLfF2SOB4WXxmURJljOM3sqd+ULavDUaLn5tkZ9YGNeduJcF2Uo7T2lIG95LDpRA7MUUBA=
-X-Received: by 2002:a17:907:9856:b0:780:8144:a41f with SMTP id
- jj22-20020a170907985600b007808144a41fmr43519094ejc.189.1669623532033; Mon, 28
- Nov 2022 00:18:52 -0800 (PST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4BBF71EC059E;
+        Mon, 28 Nov 2022 11:50:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1669632649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ZCCj7bcQc75acbwO7FOWk4dJlCrWMoBIyYNAusQQi2U=;
+        b=oAEzJbYg5od8O3kDuXXte3PxpqRhYKSbKUONg0mq2ROUkTDdzrKVonBJnEQ5T41YGSsGOe
+        rIo1R8sUPfBlavzVlofbxLwQPbc7E4cGRNEl8iN2+/Tl/4mcYIfR+6Nj2qS2ynm1/KS7Hm
+        w4HnHBDdjRCvLu/emxxA1vwYAVRcccA=
+Date:   Mon, 28 Nov 2022 11:50:45 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: Re: [Patch v3 05/14] x86/mm: Handle decryption/re-encryption of
+ bss_decrypted consistently
+Message-ID: <Y4SShb6nMz3gqkwh@zn.tnic>
+References: <1668624097-14884-1-git-send-email-mikelley@microsoft.com>
+ <1668624097-14884-6-git-send-email-mikelley@microsoft.com>
+ <01d7c7cc-bd4e-ee9b-f5b2-73ea367e602f@linux.intel.com>
+ <BYAPR21MB1688A31ED795ED1B5ACB6D26D7099@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y3uNj0z26EjkHeCn@zn.tnic>
+ <6b5129cf-6986-bbb1-7e60-37849fc383fc@linux.intel.com>
+ <BYAPR21MB168873879B0EEF71DED3D460D70D9@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
- <20220714084136.570176-3-chenhuacai@loongson.cn> <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H7uF85UHfbS+-sMcXbB=q3UO0Z8rO=poNQbEtaipi4PHQ@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 28 Nov 2022 16:18:40 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT82uNmjfDcMrSodssZWsMSrN_476s03QCv__kmQH-6GQ@mail.gmail.com>
-Message-ID: <CAJF2gTT82uNmjfDcMrSodssZWsMSrN_476s03QCv__kmQH-6GQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/3] SH: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB168873879B0EEF71DED3D460D70D9@BYAPR21MB1688.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 28, 2022 at 2:25 PM Huacai Chen <chenhuacai@gmail.com> wrote:
->
-> ping?
-Who can test?
+On Tue, Nov 22, 2022 at 05:59:04PM +0000, Michael Kelley (LINUX) wrote:
+> Right.  But here's my point:  With current code and an image built with
+> CONFIG_AMD_MEM_ENCRYPT=y and running as a TDX guest,
+> sme_postprocess_startup() will not decrypt the bss_decrypted section.
+> Then later mem_encrypt_free_decrypted_mem() will run, see that
+> CC_ATTR_MEM_ENCRYPT is true, and try to re-encrypt the memory.
+> In other words, a TDX guest would break in the same way as a Hyper-V
+> vTOM guest would break.  This patch fixes the problem for both cases.
 
->
-> On Thu, Jul 14, 2022 at 4:42 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> > cpu_max_bits_warn() generates a runtime warning similar as below while
-> > we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> > instead of NR_CPUS to iterate CPUs.
-> >
-> > [    3.052463] ------------[ cut here ]------------
-> > [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> > [    3.070072] Modules linked in: efivarfs autofs4
-> > [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> > [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> > [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> > [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> > [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> > [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> > [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> > [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> > [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> > [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> > [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> > [    3.195868]         ...
-> > [    3.199917] Call Trace:
-> > [    3.203941] [<90000000002086d8>] show_stack+0x38/0x14c
-> > [    3.210666] [<9000000000cf846c>] dump_stack_lvl+0x60/0x88
-> > [    3.217625] [<900000000023d268>] __warn+0xd0/0x100
-> > [    3.223958] [<9000000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> > [    3.231150] [<9000000000210220>] show_cpuinfo+0x5e8/0x5f0
-> > [    3.238080] [<90000000004f578c>] seq_read_iter+0x354/0x4b4
-> > [    3.245098] [<90000000004c2e90>] new_sync_read+0x17c/0x1c4
-> > [    3.252114] [<90000000004c5174>] vfs_read+0x138/0x1d0
-> > [    3.258694] [<90000000004c55f8>] ksys_read+0x70/0x100
-> > [    3.265265] [<9000000000cfde9c>] do_syscall+0x7c/0x94
-> > [    3.271820] [<9000000000202fe4>] handle_syscall+0xc4/0x160
-> > [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  arch/sh/kernel/cpu/proc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/sh/kernel/cpu/proc.c b/arch/sh/kernel/cpu/proc.c
-> > index a306bcd6b341..5f6d0e827bae 100644
-> > --- a/arch/sh/kernel/cpu/proc.c
-> > +++ b/arch/sh/kernel/cpu/proc.c
-> > @@ -132,7 +132,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >
-> >  static void *c_start(struct seq_file *m, loff_t *pos)
-> >  {
-> > -       return *pos < NR_CPUS ? cpu_data + *pos : NULL;
-> > +       return *pos < nr_cpu_ids ? cpu_data + *pos : NULL;
-> >  }
-> >  static void *c_next(struct seq_file *m, void *v, loff_t *pos)
-> >  {
-> > --
-> > 2.31.1
-> >
+I guess making the check more concrete by checking sme_me_mask directly
+along with a comment makes sense.
 
-
+We need to be very careful here not to fragment the code too much for
+all the different guest types.
 
 -- 
-Best Regards
- Guo Ren
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
