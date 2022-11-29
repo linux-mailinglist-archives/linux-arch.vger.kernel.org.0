@@ -2,62 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866F563BC49
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 09:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B1EE63BD09
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 10:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiK2I5u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Nov 2022 03:57:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39430 "EHLO
+        id S230474AbiK2Jfl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Nov 2022 04:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiK2I5s (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Nov 2022 03:57:48 -0500
-X-Greylist: delayed 363 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 00:57:46 PST
-Received: from mail.lucidfour.pl (mail.lucidfour.pl [217.61.97.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8826A467
-        for <linux-arch@vger.kernel.org>; Tue, 29 Nov 2022 00:57:46 -0800 (PST)
-Received: by mail.lucidfour.pl (Postfix, from userid 1001)
-        id DE37C81C28; Tue, 29 Nov 2022 08:51:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucidfour.pl; s=mail;
-        t=1669711910; bh=CSKXLMgcdpWkXuTgJn5+jsCVobtU9JEF4vCnS5z6McM=;
-        h=Date:From:To:Subject:From;
-        b=28tZjeKl+il3lf6ShnTD2qGZ71x59yHaSC5msfO0JKKu5w7H4ax/yq0V1S2wAsWO9
-         /yTd3bOQ+YTDgrhqCBiZGmUKzKLBt7aEp+j8YWxNTWo5E0tXbeaeEPzP4Rtg4f+3Fz
-         FuGOJmTdTYnInvSos/OovW1n3p+ox1kLQ0j3fEvedltA1cT0bC9D4tRi72J+kPEFer
-         80S/KHRfzcVQe+niGfF1RHIisHziGX18UnbzaxyuWluqoJdfclJf182MttczO1yZha
-         8syJWb5vNkx3tZTPX5oYV/6CWrpUziUnl7ORzAvVq2RajXhxbs6oWJ9JKrRR62YehS
-         A2RRQdo2RZYJQ==
-Received: by mail.lucidfour.pl for <linux-arch@vger.kernel.org>; Tue, 29 Nov 2022 08:50:01 GMT
-Message-ID: <20221129074501-0.1.e.1gaq.0.q9sri9ljcc@lucidfour.pl>
-Date:   Tue, 29 Nov 2022 08:50:01 GMT
-From:   "Wiktor Nurek" <wiktor.nurek@lucidfour.pl>
-To:     <linux-arch@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.lucidfour.pl
+        with ESMTP id S229631AbiK2Jfl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Nov 2022 04:35:41 -0500
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DBA4B999;
+        Tue, 29 Nov 2022 01:35:39 -0800 (PST)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2AT9ZGvg004300;
+        Tue, 29 Nov 2022 18:35:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2AT9ZGvg004300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1669714517;
+        bh=Q7xi3f1N/meKASk0USS2l24LMBp1S+Lf4JZEEmqBqZ0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iu8wmfQ9D9rAAP7mWoxw8h2LRApApWINFKiihUGcgIGNK6jfBtoHWQSIZUwKwnOzw
+         irqBc87cUAgwfQsoXxDTNDKChTNvOgC2zN9AyEIG2+SrZMU6IrkURbPJduSqZzTB/o
+         oW8JeTFZM181JJ9lApleFQO0De+uRb+LMneWY270NsVUqAjcnskpvP4jwAYAFT5NaF
+         uqypyS06NXu8ZhU4bbr7J1fxnJ2CPjLsJSMa1Ap4zgT/D2YWQaLWFANo0VQWnS6zzv
+         yqsK0FhWsh2tC5qBcCTQnCOyb6/mZTH0S3p4pEc2qXLrPLa9h62jvbb1yBmqluoBHO
+         9oAa/hU17XPbg==
+X-Nifty-SrcIP: [209.85.160.46]
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1432a5f6468so16306544fac.12;
+        Tue, 29 Nov 2022 01:35:16 -0800 (PST)
+X-Gm-Message-State: ANoB5pmHVCvNIno/pewCzRQEttFs7J+F+I64adixn0BU6fkQ2GhmmQr5
+        fUACLT+3zeFst3kQNG/r4NOdFQDBBEKwFBIhvQU=
+X-Google-Smtp-Source: AA0mqf6J+oTxURdJK5Agpkp0/EJAXlORqpOujR9dCeA/lWt4niw0dV/3a7s/MpqS4A7v0PXydp7QwqhjqqWdkA57n28=
+X-Received: by 2002:a05:6870:ea8e:b0:13b:a31f:45fd with SMTP id
+ s14-20020a056870ea8e00b0013ba31f45fdmr33753310oap.194.1669714515803; Tue, 29
+ Nov 2022 01:35:15 -0800 (PST)
 MIME-Version: 1.0
+References: <20221126051002.123199-1-linux@weissschuh.net> <20221126051002.123199-2-linux@weissschuh.net>
+ <03859890-bf90-4ad0-1926-4b8cb8dbfa57@csgroup.eu> <8f8b12fd-2e25-49e4-a1fa-247f08f56454@t-8ch.de>
+ <87r0xoatrg.fsf@mpe.ellerman.id.au>
+In-Reply-To: <87r0xoatrg.fsf@mpe.ellerman.id.au>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 29 Nov 2022 18:34:39 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATjaVerkr8GFVFQwqGnjC1Jz23E+C5f9+0LTLhX4gNmZA@mail.gmail.com>
+Message-ID: <CAK7LNATjaVerkr8GFVFQwqGnjC1Jz23E+C5f9+0LTLhX4gNmZA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] powerpc/book3e: remove #include <generated/utsrelease.h>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Mon, Nov 28, 2022 at 7:59 AM Michael Ellerman <mpe@ellerman.id.au> wrote=
+:
+>
+> Thomas Wei=C3=9Fschuh <linux@weissschuh.net> writes:
+> > On 2022-11-26 07:36+0000, Christophe Leroy wrote:
+> >> Le 26/11/2022 =C3=A0 06:10, Thomas Wei=C3=9Fschuh a =C3=A9crit :
+> >>> Commit 7ad4bd887d27 ("powerpc/book3e: get rid of #include <generated/=
+compile.h>")
+> >>> removed the usage of the define UTS_VERSION but forgot to drop the
+> >>> include.
+> >>
+> >> What about:
+> >> arch/powerpc/platforms/52xx/efika.c
+> >> arch/powerpc/platforms/amigaone/setup.c
+> >> arch/powerpc/platforms/chrp/setup.c
+> >> arch/powerpc/platforms/powermac/bootx_init.c
+> >>
+> >> I believe you can do a lot more than what you did in your series.
+> >
+> > The commit messages are wrong.
+> > They should have said UTS_RELEASE instead of UTS_VERSION.
+> >
+> > Could the maintainers fix this up when applying?
+> > I also changed it locally so it will be fixed for v2.
+>
+> I'll take this patch, but not the others.
+>
+> cheers
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
 
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
-
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+Okay, I applied 1/3 and 3/3 to the kbuild tree.
 
 
-Pozdrawiam serdecznie,
-Wiktor Nurek
+
+
+--=20
+Best Regards
+Masahiro Yamada
