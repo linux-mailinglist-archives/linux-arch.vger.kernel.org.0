@@ -2,352 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3F663C077
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 13:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAED363C0ED
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 14:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiK2M47 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Nov 2022 07:56:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S232791AbiK2NWJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Nov 2022 08:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbiK2M4m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Nov 2022 07:56:42 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E6060E8C;
-        Tue, 29 Nov 2022 04:56:36 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E7D91EC06C0;
-        Tue, 29 Nov 2022 13:56:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1669726594;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=AWsLPok7ViQ+W8W5j5jc7Ny6BIbEl/sE7BAZHJqUMoI=;
-        b=BHCPPnysS0HVPQeJjNsZqqi9hT9kJDMWYdvBpAKwXf3E3MlbzG9wCwtk8GYdtXxbUa5pCR
-        3iQdDNApBu2nlKJv+V0QyD/1M0sMFzy/B317BmWQ0+M3NKDdom0X2Nmm3+nApLH3Zj09hm
-        OMpDe5wMH6a++coXw66oVTSqI8xofM0=
-Date:   Tue, 29 Nov 2022 13:56:30 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V2 01/18] x86/sev: Pvalidate memory gab for
- decompressing kernel
-Message-ID: <Y4YBfk3lyUJie4bR@zn.tnic>
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-2-ltykernel@gmail.com>
+        with ESMTP id S232598AbiK2NVk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Nov 2022 08:21:40 -0500
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2074.outbound.protection.outlook.com [40.92.52.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738756573;
+        Tue, 29 Nov 2022 05:21:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pearl6HtDHGRuUhp0Mcej4QZUdoSOuS0zdISN3GVOxnJfQYY9GUQhuYKNC7pf0uRReJTiqmdLrf9qlUGCgiifJalffvS0GOXxzjX9ymKAowCJF9yel4Os580Py5pJWSPtB/vCgUCTqF1kP1KWObcEpsM6QJu4cjqnXb9X847StrLMbznwxjaaz4n/8WcST0e+1MGw2d0xA7F75ZYQdGwUovf4oQVgklXFZljm41hxZGwrmatq4l351kyIH4/oxVViIMWnu1Q0Z1p5wvcuSMPw1riSYA2OEliCdvJFe1qgGt+CrU2/vxC2FHwNIn6A7C4E9T+ArXzn7Jc6QVFElcRGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NcHlZyHMmM1LeDIZrUe7hjj/IcsPstLhyYv1534gfn8=;
+ b=U4fHos3t/cxMrn+BwpEwIzSt79eZ2YvmMukZmFIQqTJGCNaVX3/yICOo5csX4qMneDUPaF9kF70wIAJL6a3Nl61VR7+9Rord2slS483SNShY8X4T13axaPokxPm90Uq3xtGcbI6wS4GuL+D52Xw9C6BOmNXm99KW2jq65SLa/WWc/hNT+X3BmBCA4QkoVP/EmFnFAbqvTqsvwlF50BilNZRb6WyyhYqBdRRl8K42N3rTcV/mGPEs85rH0YqNMxqY8EFZ5RSwPtOgdmnIiv4xiLUtkp6gTkeqEeVVsU79MSEY14olxKf9PrkCkH24opaMCB/BRKGBgeJIsA1VCMb9yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NcHlZyHMmM1LeDIZrUe7hjj/IcsPstLhyYv1534gfn8=;
+ b=mTMBxSF9fYKW9maWTQYjRxyo5zN7obgq56dl9XWrOhortjF0/Iws601nwn6LsZNLCykcS7pZCK/qX7vz8N+XmoOL6A64xqVXSCc4D6/YudEHJSkyE+3aiFL69qQrhl6x8AF9ni55Y9N9CxIwP1T7DwBwxVANPAC+xvAVstlbjeIeOhOtb44PTBnl3m3cWYNRW3ZzPRLjNff1v304oBLosjnoMikYOFQli5n+G0tO7AIu1SAiUYtoi1LlYn6S8TeH15vYoLYbJE8LayVlNq4aSHfLq6tFgZao7ok6kmUhefP92c2CCBsNcP9YXz6/NN/g9St/iG9/DNxhHYYrmvcMqA==
+Received: from SL2PR01MB2812.apcprd01.prod.exchangelabs.com
+ (2603:1096:100:52::18) by KL1PR01MB5229.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:d2::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.22; Tue, 29 Nov
+ 2022 13:21:31 +0000
+Received: from SL2PR01MB2812.apcprd01.prod.exchangelabs.com
+ ([fe80::993a:e6a2:ccfc:8cdd]) by SL2PR01MB2812.apcprd01.prod.exchangelabs.com
+ ([fe80::993a:e6a2:ccfc:8cdd%4]) with mapi id 15.20.5857.023; Tue, 29 Nov 2022
+ 13:21:31 +0000
+From:   Kushagra Verma <kushagra765@outlook.com>
+To:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH] Documentation: Fixed a typo in atomic_t.txt
+Date:   Tue, 29 Nov 2022 18:50:59 +0530
+Message-ID: <SL2PR01MB281219C24708CE54EC1FC610F8129@SL2PR01MB2812.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [yO4CLxu9Re5qYr6vmjXpx5ZZJhnW9V9SLlz4ihzXMVZl+z4BluHUGlF/glsfLNsO]
+X-ClientProxiedBy: BMXPR01CA0088.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b00:54::28) To SL2PR01MB2812.apcprd01.prod.exchangelabs.com
+ (2603:1096:100:52::18)
+X-Microsoft-Original-Message-ID: <20221129132059.7027-1-kushagra765@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221119034633.1728632-2-ltykernel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SL2PR01MB2812:EE_|KL1PR01MB5229:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7474d57d-6c13-44c4-7ac6-08dad20ca072
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mHAufLPWJ3RR4Mwqsa4c4EXMKTl0NUoaxM2EBaxcDDMXj/CcsZDifjSH9Mu6UYAweNWV1pHaVsoP8l4yuOis1erljAr85XeXduws50Sury7xK1bn/kpbGB36dPId4sGHy/Lplx0zZ2JGxECN95J2jJ7BDctjUwRMMQeaZOMWuF8at9SF1d4EFXIjMP6opyreKiWoFfYOATYrT6nuA3EOO/sZMtelcMTw5vdQL04Qv69RfP/aKZdEaf7qDfJdO1ZWWpv5sx0kboK0zxD8STwtc76gkLxSlRAZ1C03jNW1ZseL68WF9EYFfuc3JTz9m5LbTI5UFPv8qIB9aw/4HfH6YagJDpWCF9dIeBap6338V027Gm60/nYfv4MXYdxIlXu9/w2iVs6WE9/QntWU/y3B4LL1uBN7AY3G2qNwJq2wI/vOGeG1AQem96iLE0HbcQzwbBzp9cRmQGVz3ncs20QeHztvh4ZCD8ged42vTHRMRjUcCTIFIXw47tfm2hBgiwJrnUlOZKjIt/9vMxUb64nGjbbwAEowVZLfmYj2SDTcmfZXjNg7difSM6l7KfoeYX/aerrdM6tVuoDPD1GFMtaJ927x7ZRz2xNB8RpBh9d9azQ=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xRPI0Zd6X8/kxwPlLjYq2ZHXS88bcZg6kmYHaSxLARA/G9tct3Ehh3K3zMOt?=
+ =?us-ascii?Q?v+nSC5dl/XTLZp7lRQHl0mKSQdqF+qoAERXrJUvjyTzilUCUze2d0LdXGbW6?=
+ =?us-ascii?Q?S8YDh6gytz6vseMcOTZ7+subaWJWxhpHYc5rfl/jHLKTMQnXFNQoyogOCNGd?=
+ =?us-ascii?Q?ZcZDrAkvVY+mSFJzdb3kSbjPrUSLWdhvMaukMoM2CK1PhqDAv2m3wXoUYoIO?=
+ =?us-ascii?Q?HNOemxzxGym2odtyHKQEHR/q3u5pEgZJC//QWfwNSvYPLpbwo1HWDlOGpY03?=
+ =?us-ascii?Q?cPoZaDkppx+ZHyxQL23GXg219SV1bImZOa/R3HkivMb7e/k4ThJJUHWjaz3c?=
+ =?us-ascii?Q?GTi+9t8kJ16u35iBjrFXyQg3clvaVqz6psv909zaqedOCDgieJtyc+c9rW2E?=
+ =?us-ascii?Q?9Cwym7KCYJW86HISN0CMUBVa+xMkkrjusiBDERHWZBgKFeb706iTIi4LT4AQ?=
+ =?us-ascii?Q?y9F35XQ2nHmWB5uQBbeegyErjdH0+hVUVW/PpRVnHIvaSWOXUkeHp7ipVB89?=
+ =?us-ascii?Q?EUHPa2aFP5IufyLRFShDfHv6iswb12M6uE6q9QN5EOViAePflLvMC4jS7pWY?=
+ =?us-ascii?Q?csiclaBbtDlq6Tj3HzRL1g21H0e5QbPJDG654R5e5Thl5LVinf/mgUh7oqes?=
+ =?us-ascii?Q?XXQSe6iJs6AWllrqo9imE+KaS7TrD+AhaYooEGsSKEVVZP9v2Yg961hwyxPp?=
+ =?us-ascii?Q?CcY6ozBn9kTokCOsf2EpzneOH+d/tx/lhd1+SXmi81PZn93VQ9MeGXRRxQ8R?=
+ =?us-ascii?Q?NbtQuDMQTag27HpUE0CE3BCO4YFZlFGt4IRkcXRFUPq45mm/xe4JnATnZQGs?=
+ =?us-ascii?Q?KqofE+mpEsRdCrAdVF8YNaIoItmjdliDAR1eFJDxlg5NKqfxE4oMGLYZ/Ib9?=
+ =?us-ascii?Q?uQeoMFHKY8XPJ1odByg8x7hYUsj4Ka9enuuAO9k7kcOS3oy9I0yuohbGMUIn?=
+ =?us-ascii?Q?O61GPj6aAY7vnC64XQk0Csz8EPw4JrKId00cY68Nkgtfh5S7Ww414YOTC79I?=
+ =?us-ascii?Q?5g9B8AybLqLIkqMEqj1F8b6fTWCeE2Jk3yAPY2IGmCgsWIaeYjyo0LpXeqom?=
+ =?us-ascii?Q?HaKv6+Yz3g4cdMgB/y048DGkhIM/1k2jZ5LlROt+Rm4xXQa1f3v2+qU0whwI?=
+ =?us-ascii?Q?mhsHgIkMV+WuVdpktYy8O1SY7FYSlNNKBU1f8bSBG/WfbWyCgkLah0o4PSlR?=
+ =?us-ascii?Q?1xnFIOHHsDFJ4abhKlj7FZLUeuMy0bHOIJQw2aF/e7vHkei5bbSrW+FRtbuk?=
+ =?us-ascii?Q?58R9CgbYSDDR6xLAmN77OUl04cKx6rHssHkmdQ04xR0K1O5IP5HMJOY+BS0J?=
+ =?us-ascii?Q?H2P7xh4Oasoa8PvHmOwfoAyXVCEC/zTJXV37/kegN0I+eg=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7474d57d-6c13-44c4-7ac6-08dad20ca072
+X-MS-Exchange-CrossTenant-AuthSource: SL2PR01MB2812.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 13:21:30.7924
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR01MB5229
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 10:46:15PM -0500, Tianyu Lan wrote:
-> Subject: Re: [RFC PATCH V2 01/18] x86/sev: Pvalidate memory gab for decompressing kernel
+Fixed a typo in the word 'architecture'.
 
-"gab"?
+Signed-off-by: Kushagra Verma <kushagra765@outlook.com>
+---
+ Documentation/atomic_t.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As in gabber? :-)
-
-> From: Tianyu Lan <tiala@microsoft.com>
-> 
-> Pvalidate needed pages for decompressing kernel. The E820_TYPE_RAM
-
-"Validate" - let's not start inventing new words. We're barely handling
-the existing ones. :)
-
-> entry includes only validated memory. The kernel expects that the
-> RAM entry's addr is fixed while the entry size is to be extended
-
-"addr"?
-
-Commit message needs to be english - not a code/english hybrid. Pls be
-more diligent here. Commit messages are not write-only.
-
-> to cover addresses to the start of next entry. This patch increases
-
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
-
-Also, do
-
-$ git grep 'This patch' Documentation/process
-
-for more details.
-
-Pls check your whole set.
-
-Also, to the tone, from Documentation/process/submitting-patches.rst:
-
- "Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-  instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-  to do frotz", as if you are giving orders to the codebase to change
-  its behaviour."
-
-> the RAM entry size to cover all possilble memory addresses until
-
-Unknown word [possilble] in commit message.
-Suggestions: ['possible', 'possibly', 'passable', 'plausible', 'assailable', 'pliable', 'passably']
-
-Please introduce a spellchecker into your patch creation workflow.
-
-> init_size.
-
-This whole commit message doesn't tell me a whole lot. Please try
-structuring it this way:
-
-Problem is A.
-
-It happens because of B.
-
-Fix it by doing C.
-
-(Potentially do D).
-
-For more detailed info, see
-Documentation/process/submitting-patches.rst, Section "2) Describe your
-changes".
-
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  arch/x86/boot/compressed/head_64.S |  8 +++
->  arch/x86/boot/compressed/sev.c     | 84 ++++++++++++++++++++++++++++++
->  2 files changed, 92 insertions(+)
-> 
-> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> index d33f060900d2..818edaf5d0cf 100644
-> --- a/arch/x86/boot/compressed/head_64.S
-> +++ b/arch/x86/boot/compressed/head_64.S
-> @@ -348,6 +348,14 @@ SYM_CODE_START(startup_64)
->  	cld
->  	cli
->  
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/* pvalidate memory on demand if SNP is enabled. */
-
-So this is going to be executed unconditionally on *every* SNP guest - not
-only Hyper-V ones.
-
-Why is that ok?
-
-> +	pushq	%rsi
-> +	movq    %rsi, %rdi
-> +	call 	pvalidate_for_startup_64
-> +	popq	%rsi
-> +#endif
-> +
->  	/* Setup data segments. */
->  	xorl	%eax, %eax
->  	movl	%eax, %ds
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index 960968f8bf75..3a5a1ab16095 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -12,8 +12,10 @@
->   */
->  #include "misc.h"
->  
-> +#include <asm/msr-index.h>
->  #include <asm/pgtable_types.h>
->  #include <asm/sev.h>
-> +#include <asm/svm.h>
->  #include <asm/trapnr.h>
->  #include <asm/trap_pf.h>
->  #include <asm/msr-index.h>
-> @@ -21,6 +23,7 @@
->  #include <asm/ptrace.h>
->  #include <asm/svm.h>
->  #include <asm/cpuid.h>
-> +#include <asm/e820/types.h>
->  
->  #include "error.h"
->  #include "../msr.h"
-> @@ -117,6 +120,22 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
->  /* Include code for early handlers */
->  #include "../../kernel/sev-shared.c"
->  
-> +/* Check SEV-SNP via MSR */
-> +static bool sev_snp_runtime_check(void)
-
-Functions need to have a verb in the name.
-
-> +{
-> +	unsigned long low, high;
-> +	u64 val;
-> +
-> +	asm volatile("rdmsr\n" : "=a" (low), "=d" (high) :
-> +			"c" (MSR_AMD64_SEV));
-> +
-> +	val = (high << 32) | low;
-> +	if (val & MSR_AMD64_SEV_SNP_ENABLED)
-> +		return true;
-
-There already is a sev_snp_enabled() in that very same file. Did you not
-see it?
-
-Why are you even adding such a function?!
-
-> +	return false;
-> +}
-> +
->  static inline bool sev_snp_enabled(void)
->  {
->  	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
-> @@ -456,3 +475,68 @@ void sev_prep_identity_maps(unsigned long top_level_pgt)
->  
->  	sev_verify_cbit(top_level_pgt);
->  }
-> +
-> +static void extend_e820_on_demand(struct boot_e820_entry *e820_entry,
-> +				  u64 needed_ram_end)
-> +{
-> +	u64 end, paddr;
-> +	unsigned long eflags;
-> +	int rc;
-> +
-> +	if (!e820_entry)
-> +		return;
-> +
-> +	/* Validated memory must be aligned by PAGE_SIZE. */
-> +	end = ALIGN(e820_entry->addr + e820_entry->size, PAGE_SIZE);
-> +	if (needed_ram_end > end && e820_entry->type == E820_TYPE_RAM) {
-> +		for (paddr = end; paddr < needed_ram_end; paddr += PAGE_SIZE) {
-> +			rc = pvalidate(paddr, RMP_PG_SIZE_4K, true);
-> +			if (rc) {
-> +				error("Failed to validate address.n");
-> +				return;
-> +			}
-> +		}
-> +		e820_entry->size = needed_ram_end - e820_entry->addr;
-> +	}
-> +}
-> +
-> +/*
-> + * Explicitly pvalidate needed pages for decompressing the kernel.
-> + * The E820_TYPE_RAM entry includes only validated memory. The kernel
-> + * expects that the RAM entry's addr is fixed while the entry size is to be
-> + * extended to cover addresses to the start of next entry.
-> + * The function increases the RAM entry size to cover all possible memory
-
-Similar issue as above: you don't need to say "this function" above this
-function. IOW, it should say:
-
-"Increase the RAM entry size..."
-
-I.e., imperative mood above.
-
-> + * addresses until init_size.
-> + * For example,  init_end = 0x4000000,
-> + * [RAM: 0x0 - 0x0],                       M[RAM: 0x0 - 0xa0000]
-> + * [RSVD: 0xa0000 - 0x10000]                [RSVD: 0xa0000 - 0x10000]
-> + * [ACPI: 0x10000 - 0x20000]      ==>       [ACPI: 0x10000 - 0x20000]
-> + * [RSVD: 0x800000 - 0x900000]              [RSVD: 0x800000 - 0x900000]
-> + * [RAM: 0x1000000 - 0x2000000]            M[RAM: 0x1000000 - 0x2001000]
-> + * [RAM: 0x2001000 - 0x2007000]            M[RAM: 0x2001000 - 0x4000000]
-
-What is this trying to tell me?
-
-That the end range 0x2007000 gets raised to 0x4000000?
-
-Why?
-
-This all sounds like there is some requirement somewhere but nothing
-says what that requirement is and why.
-
-> + * Other RAM memory after init_end is pvalidated by ms_hyperv_init_platform
-> + */
-> +__visible void pvalidate_for_startup_64(struct boot_params *boot_params)
-
-This doesn't do any validation. And yet it has "pvalidate" in the name.
-
-> +{
-> +	struct boot_e820_entry *e820_entry;
-> +	u64 init_end =
-> +		boot_params->hdr.pref_address + boot_params->hdr.init_size;
-
-Nope, we never break lines like that.
-
-> +	u8 i, nr_entries = boot_params->e820_entries;
-> +	u64 needed_end;
-
-The tip-tree preferred ordering of variable declarations at the
-beginning of a function is reverse fir tree order::
-
-	struct long_struct_name *descriptive_name;
-	unsigned long foo, bar;
-	unsigned int tmp;
-	int ret;
-
-The above is faster to parse than the reverse ordering::
-
-	int ret;
-	unsigned int tmp;
-	unsigned long foo, bar;
-	struct long_struct_name *descriptive_name;
-
-And even more so than random ordering::
-
-	unsigned long foo, bar;
-	int ret;
-	struct long_struct_name *descriptive_name;
-	unsigned int tmp;
-
-> +	if (!sev_snp_runtime_check())
-> +		return;
-> +
-> +	for (i = 0; i < nr_entries; ++i) {
-> +		/* Pvalidate memory holes in e820 RAM entries. */
-> +		e820_entry = &boot_params->e820_table[i];
-> +		if (i < nr_entries - 1) {
-> +			needed_end = boot_params->e820_table[i + 1].addr;
-> +			if (needed_end < e820_entry->addr)
-> +				error("e820 table is not sorted.\n");
-> +		} else {
-> +			needed_end = init_end;
-> +		}
-> +		extend_e820_on_demand(e820_entry, needed_end);
-
-Now *this* function does call pvalidate() and yet it doesn't have
-"pvalidate" in the name. This all looks real confused.
-
-So first of all, you need to explain *why* you're doing this.
-
-It looks like it is because the guest needs to do the memory validation
-by itself because nobody else does that.
-
-If so, this needs to be explained in detail in the commit message.
-
-Also, why is that ok for SNP guests on other hypervisors which get the
-memory validated by the boot loader or firmware?
-
-And so on and so on.
-
-Thx.
-
+diff --git a/Documentation/atomic_t.txt b/Documentation/atomic_t.txt
+index 0f1ffa03db09..d7adc6d543db 100644
+--- a/Documentation/atomic_t.txt
++++ b/Documentation/atomic_t.txt
+@@ -324,7 +324,7 @@ atomic operations.
+ 
+ Specifically 'simple' cmpxchg() loops are expected to not starve one another
+ indefinitely. However, this is not evident on LL/SC architectures, because
+-while an LL/SC architecure 'can/should/must' provide forward progress
++while an LL/SC architecture 'can/should/must' provide forward progress
+ guarantees between competing LL/SC sections, such a guarantee does not
+ transfer to cmpxchg() implemented using LL/SC. Consider:
+ 
 -- 
-Regards/Gruss,
-    Boris.
+2.38.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
