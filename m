@@ -2,125 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D1463B6A6
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 01:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8713963B6F1
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 02:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234748AbiK2Ahr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Nov 2022 19:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
+        id S234967AbiK2BPp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Nov 2022 20:15:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234740AbiK2Ahq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 19:37:46 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6DC13F05;
-        Mon, 28 Nov 2022 16:37:44 -0800 (PST)
+        with ESMTP id S234609AbiK2BPo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 20:15:44 -0500
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11022018.outbound.protection.outlook.com [52.101.53.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DBA19006;
+        Mon, 28 Nov 2022 17:15:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nHEzYeYcEt7e8N47qbjzWamYRy5M6pqPjFCYmZ4g4j4YjkFuOTqQDYHqs/h5o8CjGJD0soqwDlNhmlAnNF0VLU6DLvmHKkjy+snS+A1id56fNsN3NQ/aWDmTAOcvA1dvBFipgDKtQ/1ihYKwQM7WC+mXW8mgks48/MGb3eOkT97Loi+sPNd7c5w8CAsf+V5AK5xYXdHwvGKaaHLALHiU0CzBCUD/MHs+qU7zifRQJLVFq3oHLW4SjNmVu3DLbx7QYs8fQOn5/rjr0dOgwAt3ZFrQNSzMMLASBt6EUiYdtRfeE0xRUAlUJ00sOw0vxF6AOIt3YE0dDdp7Yse+tO6iKQ==
+ b=BsVch565ZfMRcg0s1Dvk2+eLbM5DZ78ua1h9y2UNGw0ReDUQMO/HzsqD/Bmi+SG3m9OTfzqqAxcuNeEm9a7tguL6+eOTLxiaTwdiFoXo3DxEwlVove1lAQTVgCstwkffk8RkGvY0EQ05zfipnyKDsU+qr1ijaXnL+n2jtT0cbREYpLrtClKQzrSfFJRNoxTNjA7R1Rd6HPcEYqX68cfWAhGAGd0Kc9E7W9mhRRx3K3Zx/RBVlP/0uePOj3P+B9JrbYJdKNnyR7ZBupVhworkET9002KaXKMvkNbmYXQ4dSYqI7rdXDIJzTi6AagrenKpC95MRLMFro9lyH2YU9JEPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hjefGpLM6eJMXVqVNtuRjEFwMuEpVo1hfHWdK107+5g=;
- b=OdFq+nZKvXxAuHoyQqVvmTx1hpIRw9ckyFHa9Q385YFAIrGfdzV6MEDr5ayCsuo/QSlVsREkuaWVZSYW9eH/wCdXyag+LsvDLowNkfU9C5nkwnoScuqOw+MBKQAET0ndhsKeb8Hnz8tUNzEqHLbR6j0QW2+hyQgBh8mXy/E3SDLnqFb7St7CAD/8jlEwsWxeWmmtc33DETlj2eeB7daf8N+XKgHriYzQNg6UoIp9H0ZyCB1OR1qmZ5/rcSbxqEdYxA0nIsnTY3JLVwouT4isHM0KUfB9adypZXmfHIp46+HcGof085/zbt2BxgokV8svkXrx+vT1rg4231nWRkTs5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=4kMqFo0A4ijScl1Uw2KzvkPYIFhq6vsHjNx90U5ZWyc=;
+ b=Utfl3z0O1zTKHLqnn4zQwjjpIFWI2V5VIhuvQUlkw4mlzAlIwnyiMAC17RQpIsRSAFS47mJv6vguNsFNjST+TOFjYyDqRpurbKU+iLmbuDbERTX+OmQ/FMOVTatZzlrIVNcwFzp/WQ7ausWRLeq7KnhTjx3Cfbrkv7QYgvFQkmhizP0h8pUyszARrr9+JRCx410114XtxBXD25L/GRVvWKbPLxp6Cin+RtrYbpxrb7UpWabLmqhzUqui4pBMAMKVQKvSfdSNGDo382mzMK3aWcqYn7P1Jx2M3/vyqVgHqMI+bxqjV8W4V4pzV1sfFBo581ioH5L5kUfjunXWNCJyNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hjefGpLM6eJMXVqVNtuRjEFwMuEpVo1hfHWdK107+5g=;
- b=CRESrgLCTyig/z/dyOTsJLQCEl5SFw6tsw/ZDBElvpsPg37DvicknnlhaBIyKtS5hU8OY1dT4L/DLm8dIZKJUUQ0yry2SO13e05sMXtOoS51DXrbtWeDjmu48twy6RZvKXh8rx/hh6jmTZ0NC7uLUmBVlson/38KYNWpt/mDEdY=
-Received: from MW4PR03CA0248.namprd03.prod.outlook.com (2603:10b6:303:b4::13)
- by BN9PR12MB5365.namprd12.prod.outlook.com (2603:10b6:408:102::21) with
+ bh=4kMqFo0A4ijScl1Uw2KzvkPYIFhq6vsHjNx90U5ZWyc=;
+ b=IyeCFv0PI8IqCRw5DWMl+xGYgm5ypv7weJUV/zMyPxRNzYqCCKTMkA2raX1Qumhp08akCCLMyUaHMNycX5/Nk8KZPpY0EVib9DcEgOiatz89s9P+9auc6IzYHFtGnQ+yhNqQzP5vGGX2r2KgCCdgphRe2hUOj+oEKYWvfOP4A3s=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by DS7PR21MB3270.namprd21.prod.outlook.com (2603:10b6:8:7e::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 00:37:42 +0000
-Received: from CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b4:cafe::ef) by MW4PR03CA0248.outlook.office365.com
- (2603:10b6:303:b4::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Tue, 29 Nov 2022 00:37:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT069.mail.protection.outlook.com (10.13.174.129) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.18 via Frontend Transport; Tue, 29 Nov 2022 00:37:41 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
- 2022 18:37:41 -0600
-Date:   Mon, 28 Nov 2022 18:37:25 -0600
-From:   Michael Roth <michael.roth@amd.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-api@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <tabba@google.com>,
-        <mhocko@suse.com>, Muchun Song <songmuchun@bytedance.com>,
-        <wei.w.wang@intel.com>
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221129003725.l34qhx6n44mq2gtl@amd.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5901.4; Tue, 29 Nov
+ 2022 01:15:39 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%6]) with mapi id 15.20.5880.008; Tue, 29 Nov 2022
+ 01:15:39 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use standard
+ coco mechanisms
+Thread-Topic: [Patch v3 07/14] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Thread-Index: AQHY+es2O4adbWIH8UyWtCwRyUnUyq5JgOOAgAHDpcCAAEhFgIAAJ7oQgAjDHRCAACLagIAAALfwgAANigCAAAHQEIAAKJ+AgABUTmA=
+Date:   Tue, 29 Nov 2022 01:15:39 +0000
+Message-ID: <BYAPR21MB16886FF5A63334994476B6ADD7129@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1668624097-14884-8-git-send-email-mikelley@microsoft.com>
+ <Y3uTK3rBV6eXSJnC@zn.tnic>
+ <BYAPR21MB16886AF404739449CA467B1AD70D9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y31Kqacbp9R5A1PF@zn.tnic>
+ <BYAPR21MB16886FF8B35F51964A515CD5D70C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <BYAPR21MB1688AF2F106CDC14E4F97DB4D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Ti4UTBRGmbi0hD@zn.tnic>
+ <BYAPR21MB1688466C7766148C6B3B4684D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4Tu1tx6E1CfnrJi@zn.tnic>
+ <BYAPR21MB1688BCC5DF4636DBF4DEA525D7139@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <Y4USb2niHHicZLCY@zn.tnic>
+In-Reply-To: <Y4USb2niHHicZLCY@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5bf512c6-5269-4150-a3f2-e0407069d5bc;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-29T00:58:15Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DS7PR21MB3270:EE_
+x-ms-office365-filtering-correlation-id: 9f635404-094b-4a43-9b92-08dad1a73a20
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S+jXDRrHNDhZ5/gEpKUJCS0zcE5OJXfqTSTgRJ1osN53fl8irgAvREr7SUoWbSwgWAlrOu1Rh85fV2WpMMlHPjzW2w/Vse9B2GsiBkmzPMiLk3cKv/B+kvE7D69j28R5J6fk37XSgFXpwOADS07xsVse/YaOfu3mN0SHUEx0ZqHcBWbmh2yhGW18Z4XxZiZp9z7iq2KX8CDJspbsI+klH1B+SszPiNBh0ajQMJq0W319FgOzXSgHYqWY6xTW52Sq/O7gN46sInA3jJuhc6I+CCZYhvCvDTXyzGRkX3D6d39sSDWaO37FT3qXTP/11dBNyVHxxQAjOnJT5kHYdCTe84qGzHhU+DSXlbYF5QOwZkNF3fWisLUXgf4cFAXabUNVJ0L+UPd5sCIi2yAJxKTF4XE1T7eDiYBcn2Hmv6lkj4DAVItOLWnEnAi3gQfigsortc6lTLDSEHqUUEBySaVSpW2CSR/fdVjFiXgrgd6XV9/VZlACAgX73GD43HZvE4PVWSqIAt1Z1fwfiP7DGiGd8CfvFCMnb+bbpFEg5i79jN1reMYs1yQTL7uAs5MEmQ/33LhSpc6oRKwIWQamqEOZR66dUArNuWwD1jJLHrMqn4tOd6RpV/TvSYWem40Q1xJm9tZhv2+t9BKqntnq8rXpB0yn6EVNv9BzisaS607u6iXhe/ksHbmfbTz9OCrOlWgBGwr1hRex+lCse41T1E7Pii1tjukwCLcaQQdEUKq4F2T7lFPTN2fXG3Uiyd2y6EZDyq+74Oovkhn9ZTsGhctmpQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199015)(2906002)(38070700005)(8990500004)(33656002)(55016003)(86362001)(9686003)(26005)(7696005)(186003)(6506007)(38100700002)(71200400001)(66899015)(122000001)(83380400001)(82960400001)(76116006)(66556008)(66476007)(66946007)(64756008)(8936002)(66446008)(52536014)(7406005)(7416002)(4326008)(8676002)(5660300002)(41300700001)(966005)(10290500003)(82950400001)(478600001)(6916009)(316002)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?t26ESdBfjSMtkN2ovBpmQ6ZXbSXOXmCfTHPLFt5JobdecqNoaYVqc2hy+zbe?=
+ =?us-ascii?Q?xLFiY2WYx1Y2o2lWrZu4/m/+gjfFeT+ne3vUHHAT0ox3qGkeAs7Y7rB544Ne?=
+ =?us-ascii?Q?zEsilpEBgD97aDNu0xyv+jkiXsZ/tEBEtMAlSjvuOvmWCKg4yx9n5nRZT7UL?=
+ =?us-ascii?Q?v/L5YaDNcuTU2jNeEqg/p6lHgfosd9NdTcg+7iHrS8mypQ9x/wFrYlVCLdaG?=
+ =?us-ascii?Q?gLd8H6G9zNv1JCAKiXEwC5/JXBYYWWmiVOS/9uLNg8tH8K8qxivhGhP859ZG?=
+ =?us-ascii?Q?FuESRJSRyLl6cEcepUrj93eswVAiV0MG1nIXA+ICguvOBJFT3M/r1SltmwWU?=
+ =?us-ascii?Q?OeBLBU0Ga4WUWZQFUzzat/3BSYBRjBZXyNawYGYBWqEOjyi9LPTXyz2K3BNo?=
+ =?us-ascii?Q?mGNfIkis6SKl238P2UdAOS6YePFAeEVd8xLrSHMv4d1hyHHUYxWmAo0bQ6Se?=
+ =?us-ascii?Q?KQ2HFwIm6Q9mHPVnXcM4PYj2DO042IsTAuefSq78FozwPlAMFd2tTVNuzAJP?=
+ =?us-ascii?Q?wf4DfxJgfAzYkhVP54V6Rw+2K/3g/W3UZESE8RJ7LHfNc0hXBgazyn++o3MV?=
+ =?us-ascii?Q?dYzF1E/wYZYUTQo1pihOHK/lDT/iHDkBOljQb/lKGOBU0X7aIVulyhw0lA0O?=
+ =?us-ascii?Q?4TDP9+PvXQXqieN2eoc9MVT7SEah2buNnHLDRn7Lwj2M6KHlFDG3Dlx0m/+x?=
+ =?us-ascii?Q?iIFC8F/GETWpJuRbfprXhRCDRUgR3405BCeG8HuohibHiOdQdpZHZ1R8q5VC?=
+ =?us-ascii?Q?9jwbjLV7v9RE2mQ1xEiE8eHhopddUFRXEMcXJmRUZVPL7NXChBekbc05+Gn6?=
+ =?us-ascii?Q?Iue83wkf2+wqnxf5jeVaImsjA4HDmjzWYWpolA3GB9anJUXpreHqvlMPp8YC?=
+ =?us-ascii?Q?5Hml8aebz6V6g7O9Dr1sD2lzqrVQ9gi/m+rgDZ6qqdndvqUlOia9HBwZXpFv?=
+ =?us-ascii?Q?93S5EL87TKvKmu5DJYEj/fvOsY3YK/HCiezregVe6jU3y+yhVHEzPkxbgBsb?=
+ =?us-ascii?Q?7tLG1kOaQ88zBu5Q1BwK/YAb5IszhxEpUmDb9oZoO/X/ZMtytC8l21VRfMS8?=
+ =?us-ascii?Q?nnAVD2XOQiMLqsGB5vyfkMxrspL72QGMk/MrNfukSeRWbKBNxb60C/14okrs?=
+ =?us-ascii?Q?TmjqRWEAQ/Qug65lcfSve6dwNrQCHbhmpX84jN61bGeheTxPAe2OvJmV53Dx?=
+ =?us-ascii?Q?Kx3+ClrDiOW4PZZoBfx0t8mE9dyDXw5mEFpgU5uSScf28FejDYh7ANscifdT?=
+ =?us-ascii?Q?uNxhwJY1teSOilPSD/DP7ywSh4ugRn69gVv6a+uJbHBUj209rd6CVQT5aj+p?=
+ =?us-ascii?Q?tDNmywiJU7drsNbc/jSkeRHFRX2kJ+2NQbEs4yZWHvYNUDYoxZsKI+DBBm5Y?=
+ =?us-ascii?Q?8grqebId6YJhQUv6jXfoBz4UTZqyfb2ZxdF+X72uv57rCKwo2QYH56m+HpR1?=
+ =?us-ascii?Q?4sCajTSaPtIp38MKqWo6zN3MwT0qIWeUZMxkJNIbg6QDEwNYbTWKxJAMWwtF?=
+ =?us-ascii?Q?lVf5bBQu/mk6nYxXEf9GEzWpHFryfR2/L4KkXawJtUiwaYnMhfrVBuQATydO?=
+ =?us-ascii?Q?pvYX+RdyBfgh8qJSvu9dYI+UvFB65yr9LZUuDVrrnL747NN5zunLj4uLlTxG?=
+ =?us-ascii?Q?/A=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT069:EE_|BN9PR12MB5365:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7020e32d-c816-4706-ce34-08dad1a1ecd3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XlNydLW3CsbPuUF/x5xiQLgERHp9/KZKIR4bXSgQE/5IC1NnGg/TPnGudVmYI7ZiP49Y7KjjB6Pt2jeEpfjl3UwmeS4Mb2QEWgXUEFR3Ub2bMYQ+0betdArusckaz5+2cqYkvil8e5IBxiizY2HZbO0syZ6GxRHE/nAtrfBTe6/kVUD3mjyGDzykR2f8Z4Go+CvUB3zzcJkW+LYNSGTweowm0rO1LGsE2Lgc2HTfPmTc1t2rPNnfz83nTu0YZkpa/+thFxxQmrSkgmuTgZSt2mklTGos32leOaMhXazu3vZLZY1G67dyyRoOTYanwzW45sVsEPx9wGr6LnyaibaD9hi4IGP5I/2lStZjLNhKi4Bb8TDz5lQPSDQC6q6U2clXSx7kcpZnkh6uZs6WZH1LyKyCJBFRCwCRUqtpe8pnVO13V3FqRWgyE/QzQKr+C+5TZ7Sg+IrGB+/ULqBcQAE2Ai9NTbCamQOPubniJxmuBj+S2Udvmr4s3wMIh7OW7SWjTcIjy+Wzl7Wu3NHHore3QVumllHZI2bmx2OrKu8tpPqZobwjnBmPA7G4kGk96cq7L0SAmLGwk5X4mGajLq7UBjhRw8oxyDVm9z9PCwecLsbnnyzjtNbeI0idmhCXm4xAZ4mo89sRFn+lh43aMQvmA9S7+l1qP+xiZf2OA5stMYY1OVzJnyuFu1dA2TaeedUHVSR8z1A9DfD6ukfcEH1mOpeCaTtD4QoCaQJS8BuR7TTqJltRIhrvKuwkDowdH+7yGrujLU4zhSBUxqNKnWbGUg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(36756003)(8676002)(336012)(41300700001)(186003)(8936002)(70206006)(16526019)(70586007)(966005)(2616005)(6666004)(40460700003)(478600001)(316002)(4326008)(81166007)(356005)(86362001)(40480700001)(83380400001)(5660300002)(2906002)(426003)(47076005)(7416002)(7406005)(26005)(1076003)(36860700001)(54906003)(6916009)(44832011)(82740400003)(30864003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 00:37:41.7871
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f635404-094b-4a43-9b92-08dad1a73a20
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2022 01:15:39.0668
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7020e32d-c816-4706-ce34-08dad1a1ecd3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5365
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yFO5RHrZ+HoNZkZWBreqNnfJARMZYUnDwbfF//ruV/0JPzUmuZd3NPd0thjoIRJzchqTDkX0wCdwjaoSBziXYzH9LsK/kIZ93VWMbvGSsYs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3270
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,367 +167,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> 
-> Introduce 'memfd_restricted' system call with the ability to create
-> memory areas that are restricted from userspace access through ordinary
-> MMU operations (e.g. read/write/mmap). The memory content is expected to
-> be used through a new in-kernel interface by a third kernel module.
-> 
-> memfd_restricted() is useful for scenarios where a file descriptor(fd)
-> can be used as an interface into mm but want to restrict userspace's
-> ability on the fd. Initially it is designed to provide protections for
-> KVM encrypted guest memory.
-> 
-> Normally KVM uses memfd memory via mmapping the memfd into KVM userspace
-> (e.g. QEMU) and then using the mmaped virtual address to setup the
-> mapping in the KVM secondary page table (e.g. EPT). With confidential
-> computing technologies like Intel TDX, the memfd memory may be encrypted
-> with special key for special software domain (e.g. KVM guest) and is not
-> expected to be directly accessed by userspace. Precisely, userspace
-> access to such encrypted memory may lead to host crash so should be
-> prevented.
-> 
-> memfd_restricted() provides semantics required for KVM guest encrypted
-> memory support that a fd created with memfd_restricted() is going to be
-> used as the source of guest memory in confidential computing environment
-> and KVM can directly interact with core-mm without the need to expose
-> the memoy content into KVM userspace.
-> 
-> KVM userspace is still in charge of the lifecycle of the fd. It should
-> pass the created fd to KVM. KVM uses the new restrictedmem_get_page() to
-> obtain the physical memory page and then uses it to populate the KVM
-> secondary page table entries.
-> 
-> The userspace restricted memfd can be fallocate-ed or hole-punched
-> from userspace. When these operations happen, KVM can get notified
-> through restrictedmem_notifier, it then gets chance to remove any
-> mapped entries of the range in the secondary page tables.
-> 
-> memfd_restricted() itself is implemented as a shim layer on top of real
-> memory file systems (currently tmpfs). Pages in restrictedmem are marked
-> as unmovable and unevictable, this is required for current confidential
-> usage. But in future this might be changed.
-> 
-> By default memfd_restricted() prevents userspace read, write and mmap.
-> By defining new bit in the 'flags', it can be extended to support other
-> restricted semantics in the future.
-> 
-> The system call is currently wired up for x86 arch.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
->  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
->  include/linux/restrictedmem.h          |  62 ++++++
->  include/linux/syscalls.h               |   1 +
->  include/uapi/asm-generic/unistd.h      |   5 +-
->  include/uapi/linux/magic.h             |   1 +
->  kernel/sys_ni.c                        |   3 +
->  mm/Kconfig                             |   4 +
->  mm/Makefile                            |   1 +
->  mm/restrictedmem.c                     | 250 +++++++++++++++++++++++++
->  10 files changed, 328 insertions(+), 1 deletion(-)
->  create mode 100644 include/linux/restrictedmem.h
->  create mode 100644 mm/restrictedmem.c
-> 
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 320480a8db4f..dc70ba90247e 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -455,3 +455,4 @@
->  448	i386	process_mrelease	sys_process_mrelease
->  449	i386	futex_waitv		sys_futex_waitv
->  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	i386	memfd_restricted	sys_memfd_restricted
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index c84d12608cd2..06516abc8318 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -372,6 +372,7 @@
->  448	common	process_mrelease	sys_process_mrelease
->  449	common	futex_waitv		sys_futex_waitv
->  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
-> +451	common	memfd_restricted	sys_memfd_restricted
->  
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/include/linux/restrictedmem.h b/include/linux/restrictedmem.h
-> new file mode 100644
-> index 000000000000..9c37c3ea3180
-> --- /dev/null
-> +++ b/include/linux/restrictedmem.h
-> @@ -0,0 +1,62 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _LINUX_RESTRICTEDMEM_H
-> +
-> +#include <linux/file.h>
-> +#include <linux/magic.h>
-> +#include <linux/pfn_t.h>
-> +
-> +struct restrictedmem_notifier;
-> +
-> +struct restrictedmem_notifier_ops {
-> +	void (*invalidate_start)(struct restrictedmem_notifier *notifier,
-> +				 pgoff_t start, pgoff_t end);
-> +	void (*invalidate_end)(struct restrictedmem_notifier *notifier,
-> +			       pgoff_t start, pgoff_t end);
-> +};
-> +
-> +struct restrictedmem_notifier {
-> +	struct list_head list;
-> +	const struct restrictedmem_notifier_ops *ops;
-> +};
-> +
-> +#ifdef CONFIG_RESTRICTEDMEM
-> +
-> +void restrictedmem_register_notifier(struct file *file,
-> +				     struct restrictedmem_notifier *notifier);
-> +void restrictedmem_unregister_notifier(struct file *file,
-> +				       struct restrictedmem_notifier *notifier);
-> +
-> +int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> +			   struct page **pagep, int *order);
-> +
-> +static inline bool file_is_restrictedmem(struct file *file)
-> +{
-> +	return file->f_inode->i_sb->s_magic == RESTRICTEDMEM_MAGIC;
-> +}
-> +
-> +#else
-> +
-> +static inline void restrictedmem_register_notifier(struct file *file,
-> +				     struct restrictedmem_notifier *notifier)
-> +{
-> +}
-> +
-> +static inline void restrictedmem_unregister_notifier(struct file *file,
-> +				       struct restrictedmem_notifier *notifier)
-> +{
-> +}
-> +
-> +static inline int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> +					 struct page **pagep, int *order)
-> +{
-> +	return -1;
-> +}
-> +
-> +static inline bool file_is_restrictedmem(struct file *file)
-> +{
-> +	return false;
-> +}
-> +
-> +#endif /* CONFIG_RESTRICTEDMEM */
-> +
-> +#endif /* _LINUX_RESTRICTEDMEM_H */
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index a34b0f9a9972..f9e9e0c820c5 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1056,6 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->  					    unsigned long home_node,
->  					    unsigned long flags);
-> +asmlinkage long sys_memfd_restricted(unsigned int flags);
->  
->  /*
->   * Architecture-specific system calls
-> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> index 45fa180cc56a..e93cd35e46d0 100644
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -886,8 +886,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->  
-> +#define __NR_memfd_restricted 451
-> +__SYSCALL(__NR_memfd_restricted, sys_memfd_restricted)
-> +
->  #undef __NR_syscalls
-> -#define __NR_syscalls 451
-> +#define __NR_syscalls 452
->  
->  /*
->   * 32 bit systems traditionally used different
-> diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-> index 6325d1d0e90f..8aa38324b90a 100644
-> --- a/include/uapi/linux/magic.h
-> +++ b/include/uapi/linux/magic.h
-> @@ -101,5 +101,6 @@
->  #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
->  #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
->  #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
-> +#define RESTRICTEDMEM_MAGIC	0x5245534d	/* "RESM" */
->  
->  #endif /* __LINUX_MAGIC_H__ */
-> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
-> index 860b2dcf3ac4..7c4a32cbd2e7 100644
-> --- a/kernel/sys_ni.c
-> +++ b/kernel/sys_ni.c
-> @@ -360,6 +360,9 @@ COND_SYSCALL(pkey_free);
->  /* memfd_secret */
->  COND_SYSCALL(memfd_secret);
->  
-> +/* memfd_restricted */
-> +COND_SYSCALL(memfd_restricted);
-> +
->  /*
->   * Architecture specific weak syscall entries.
->   */
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 0331f1461f81..0177d53676c7 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1076,6 +1076,10 @@ config IO_MAPPING
->  config SECRETMEM
->  	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
->  
-> +config RESTRICTEDMEM
-> +	bool
-> +	depends on TMPFS
-> +
->  config ANON_VMA_NAME
->  	bool "Anonymous VMA name support"
->  	depends on PROC_FS && ADVISE_SYSCALLS && MMU
-> diff --git a/mm/Makefile b/mm/Makefile
-> index 9a564f836403..6cb6403ffd40 100644
-> --- a/mm/Makefile
-> +++ b/mm/Makefile
-> @@ -117,6 +117,7 @@ obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
->  obj-$(CONFIG_PAGE_TABLE_CHECK) += page_table_check.o
->  obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
->  obj-$(CONFIG_SECRETMEM) += secretmem.o
-> +obj-$(CONFIG_RESTRICTEDMEM) += restrictedmem.o
->  obj-$(CONFIG_CMA_SYSFS) += cma_sysfs.o
->  obj-$(CONFIG_USERFAULTFD) += userfaultfd.o
->  obj-$(CONFIG_IDLE_PAGE_TRACKING) += page_idle.o
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> new file mode 100644
-> index 000000000000..e5bf8907e0f8
-> --- /dev/null
-> +++ b/mm/restrictedmem.c
-> @@ -0,0 +1,250 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "linux/sbitmap.h"
-> +#include <linux/pagemap.h>
-> +#include <linux/pseudo_fs.h>
-> +#include <linux/shmem_fs.h>
-> +#include <linux/syscalls.h>
-> +#include <uapi/linux/falloc.h>
-> +#include <uapi/linux/magic.h>
-> +#include <linux/restrictedmem.h>
-> +
-> +struct restrictedmem_data {
-> +	struct mutex lock;
-> +	struct file *memfd;
-> +	struct list_head notifiers;
-> +};
-> +
-> +static void restrictedmem_notifier_invalidate(struct restrictedmem_data *data,
-> +				 pgoff_t start, pgoff_t end, bool notify_start)
-> +{
-> +	struct restrictedmem_notifier *notifier;
-> +
-> +	mutex_lock(&data->lock);
-> +	list_for_each_entry(notifier, &data->notifiers, list) {
-> +		if (notify_start)
-> +			notifier->ops->invalidate_start(notifier, start, end);
-> +		else
-> +			notifier->ops->invalidate_end(notifier, start, end);
-> +	}
-> +	mutex_unlock(&data->lock);
-> +}
-> +
-> +static int restrictedmem_release(struct inode *inode, struct file *file)
-> +{
-> +	struct restrictedmem_data *data = inode->i_mapping->private_data;
-> +
-> +	fput(data->memfd);
-> +	kfree(data);
-> +	return 0;
-> +}
-> +
-> +static long restrictedmem_fallocate(struct file *file, int mode,
-> +				    loff_t offset, loff_t len)
-> +{
-> +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> +	struct file *memfd = data->memfd;
-> +	int ret;
-> +
-> +	if (mode & FALLOC_FL_PUNCH_HOLE) {
-> +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-> +			return -EINVAL;
-> +	}
-> +
-> +	restrictedmem_notifier_invalidate(data, offset, offset + len, true);
+From: Borislav Petkov <bp@alien8.de> Sent: Monday, November 28, 2022 11:57 =
+AM
+>=20
+> On Mon, Nov 28, 2022 at 05:55:11PM +0000, Michael Kelley (LINUX) wrote:
+> > But vendor AMD effectively offers two different encryption schemes that
+> > could be seen by the guest VM.  The hypervisor chooses which scheme a
+> > particular guest will see.  Hyper-V has chosen to present the vTOM sche=
+me
+> > to guest VMs, including normal Linux and Windows guests, that have been
+> > modestly updated to understand vTOM.
+>=20
+> If this is a standard SNP guest then you can detect vTOM support using
+> SEV_FEATURES. See this thread here:
+>=20
+> https://lore.kernel.org/all/20221117044433.244656-1-nikunj@amd.com/
+>=20
+> Which then means, you don't need any special gunk except extending this
+> patch above to check SNP has vTOM support.
 
-The KVM restrictedmem ops seem to expect pgoff_t, but here we pass
-loff_t. For SNP we've made this strange as part of the following patch
-and it seems to produce the expected behavior:
+Yes, we could do that.  But this patch set is still needed to get the preli=
+minaries
+in place.  The initial code for supporting AMD vTOM that went upstream a
+year ago is too Hyper-V specific.  This patch set removes the Hyper-V speci=
+fic
+stuff, and integrates vTOM support into the overall confidential computing
+framework in arch/x86/coco/core.c.  The Hyper-V code was already somewhat
+there via CC_VENDOR_HYPERV, but that really should be named something
+else now.  So that's why I'm suggesting CC_VENDOR_AMD_VTOM.
+=20
+>=20
+> > In the future, Hyper-V may also choose to present original AMD C-bit sc=
+heme
+> > in some guest VMs, depending on the use case.  And it will present the =
+Intel
+> > TDX scheme when running on that hardware.
+>=20
+> And all those should JustWork(tm) because we already support such guests.
 
-  https://github.com/mdroth/linux/commit/d669c7d3003ff7a7a47e73e8c3b4eeadbd2c4eb6
+Agreed.  That's where we want to be.
 
-> +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> +	restrictedmem_notifier_invalidate(data, offset, offset + len, false);
-> +	return ret;
-> +}
-> +
+Of course, when you go from N=3D1 hypervisors (i.e., KVM) to N=3D2 (KVM
+and Hyper-V, you find some places where incorrect assumptions were made
+or some generalizations are needed.  Dexuan Cui's patch set for TDX support
+is fixing those places that he has encountered.  But with those fixes, the =
+TDX
+support will JustWork(tm) for Linux guests on Hyper-V.
 
-<snip>
+I haven't gone deeply into the situation with AMD C-bit support on Hyper-V.
+Tianyu Lan's set of patches for that support is a bit bigger, and I'm
+planning to look closely to understand whether it's also just fixing incorr=
+ect
+assumptions and such, or whether they really are some differences with
+Hyper-V.  If there are differences, I want to understand why.
 
-> +int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> +			   struct page **pagep, int *order)
-> +{
-> +	struct restrictedmem_data *data = file->f_mapping->private_data;
-> +	struct file *memfd = data->memfd;
-> +	struct page *page;
-> +	int ret;
-> +
-> +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
-
-This will result in KVM allocating pages that userspace hasn't necessary
-fallocate()'d. In the case of SNP we need to get the PFN so we can clean
-up the RMP entries when restrictedmem invalidations are issued for a GFN
-range.
-
-If the guest supports lazy-acceptance however, these pages may not have
-been faulted in yet, and if the VMM defers actually fallocate()'ing space
-until the guest actually tries to issue a shared->private for that GFN
-(to support lazy-pinning), then there may never be a need to allocate
-pages for these backends.
-
-However, the restrictedmem invalidations are for GFN ranges so there's
-no way to know inadvance whether it's been allocated yet or not. The
-xarray is one option but currently it defaults to 'private' so that
-doesn't help us here. It might if we introduced a 'uninitialized' state
-or something along that line instead of just the binary
-'shared'/'private' though...
-
-But for now we added a restrictedmem_get_page_noalloc() that uses
-SGP_NONE instead of SGP_WRITE to avoid accidentally allocating a bunch
-of memory as part of guest shutdown, and a
-kvm_restrictedmem_get_pfn_noalloc() variant to go along with that. But
-maybe a boolean param is better? Or maybe SGP_NOALLOC is the better
-default, and we just propagate an error to userspace if they didn't
-fallocate() in advance?
-
--Mike
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	*pagep = page;
-> +	if (order)
-> +		*order = thp_order(compound_head(page));
-> +
-> +	SetPageUptodate(page);
-> +	unlock_page(page);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(restrictedmem_get_page);
-> -- 
-> 2.25.1
-> 
+Michael
