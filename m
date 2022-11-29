@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3468063B65F
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 01:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D1463B6A6
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Nov 2022 01:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234967AbiK2AII (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Nov 2022 19:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S234748AbiK2Ahr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Nov 2022 19:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234969AbiK2AHI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 19:07:08 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2044.outbound.protection.outlook.com [40.107.212.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7423E0AA;
-        Mon, 28 Nov 2022 16:06:55 -0800 (PST)
+        with ESMTP id S234740AbiK2Ahq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Nov 2022 19:37:46 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2059.outbound.protection.outlook.com [40.107.220.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6DC13F05;
+        Mon, 28 Nov 2022 16:37:44 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Of0tBZqTlkAHR+gG7Fl7SbGxypLfbXGayQAK9p1tPwASOXXEQOE1A7BSex+XwxgAIQ8G2NaDS/0votsEuODEN/cdJ+12Zb6iXlCVxjn+Wx1VSENyErEW5MunFehFsWRv8Bl08d6YpairZSc9mAvk4Nd9W4zEgL6XpYVdYEH2yevCC9AzskWBort/23aXsxyy3iR2pdOx+q8Xy7VRZnSyrvzz6j5yF2CThhnCvFEyKz5N8jIm0ZIIp380yn9Ea7GVb2kHtygkkbPCWP9TqGP+RSByaMOvhDtf8y04IGA2J4Rna7aa9e8GFRKw1KrG0aERUxlM4VfxK4GfaVKjGK0Aow==
+ b=nHEzYeYcEt7e8N47qbjzWamYRy5M6pqPjFCYmZ4g4j4YjkFuOTqQDYHqs/h5o8CjGJD0soqwDlNhmlAnNF0VLU6DLvmHKkjy+snS+A1id56fNsN3NQ/aWDmTAOcvA1dvBFipgDKtQ/1ihYKwQM7WC+mXW8mgks48/MGb3eOkT97Loi+sPNd7c5w8CAsf+V5AK5xYXdHwvGKaaHLALHiU0CzBCUD/MHs+qU7zifRQJLVFq3oHLW4SjNmVu3DLbx7QYs8fQOn5/rjr0dOgwAt3ZFrQNSzMMLASBt6EUiYdtRfeE0xRUAlUJ00sOw0vxF6AOIt3YE0dDdp7Yse+tO6iKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xNd89Q66h7ZOO8SF9fKSc9FtR0XbLbDRMcdyQAyUqxg=;
- b=e3J7napzQwqI/6NApMbKw2kuqk60cizO2HOFNdRy87EYDzmCe8xmWjbxXSqxgPbo5owZajPGLW02Ga4rJ4ZAL0+awIq8QzdyXMhnqCddXgP8U5Y47aevItSUtD/YxUk7NT/v5CqPTDiqgB82qkTk5lyeHOgmkdk9ESMIMOgSJm8lhwoKDd3y88HZ9j7MnXHU47OpHyilQLYYYheI7hF25h9lhe6t/A1EOcTG8HkK6yeTokLP20OBiMQR2aE30+rVlPiZezdfO7HdpmBBg6j5lGrTSnq0buCRxF1CtjDx/GTmsYs1vOL/eZGp5GCOoygmmHDMlGE08e6ZfeROV6SQUQ==
+ bh=hjefGpLM6eJMXVqVNtuRjEFwMuEpVo1hfHWdK107+5g=;
+ b=OdFq+nZKvXxAuHoyQqVvmTx1hpIRw9ckyFHa9Q385YFAIrGfdzV6MEDr5ayCsuo/QSlVsREkuaWVZSYW9eH/wCdXyag+LsvDLowNkfU9C5nkwnoScuqOw+MBKQAET0ndhsKeb8Hnz8tUNzEqHLbR6j0QW2+hyQgBh8mXy/E3SDLnqFb7St7CAD/8jlEwsWxeWmmtc33DETlj2eeB7daf8N+XKgHriYzQNg6UoIp9H0ZyCB1OR1qmZ5/rcSbxqEdYxA0nIsnTY3JLVwouT4isHM0KUfB9adypZXmfHIp46+HcGof085/zbt2BxgokV8svkXrx+vT1rg4231nWRkTs5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xNd89Q66h7ZOO8SF9fKSc9FtR0XbLbDRMcdyQAyUqxg=;
- b=DbEIxiHPNuaHOZMboF7nOAOPwKoAmeMf08J4JJ8yK698ycUgCbEXDpT3gXcQf3ZdPQ83YfpgpfM5qQr4fhd9QGDwSKR2f8POETPCQMx3ahmIUUtXpsuQ3zcpQ1SL4muoJnGF9PfI3yM1oxqdAO1y+kwHy6U/r0faX/O4iZ8Q/b4=
-Received: from MW4PR03CA0233.namprd03.prod.outlook.com (2603:10b6:303:b9::28)
- by DM6PR12MB4864.namprd12.prod.outlook.com (2603:10b6:5:209::22) with
+ bh=hjefGpLM6eJMXVqVNtuRjEFwMuEpVo1hfHWdK107+5g=;
+ b=CRESrgLCTyig/z/dyOTsJLQCEl5SFw6tsw/ZDBElvpsPg37DvicknnlhaBIyKtS5hU8OY1dT4L/DLm8dIZKJUUQ0yry2SO13e05sMXtOoS51DXrbtWeDjmu48twy6RZvKXh8rx/hh6jmTZ0NC7uLUmBVlson/38KYNWpt/mDEdY=
+Received: from MW4PR03CA0248.namprd03.prod.outlook.com (2603:10b6:303:b4::13)
+ by BN9PR12MB5365.namprd12.prod.outlook.com (2603:10b6:408:102::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23; Tue, 29 Nov
- 2022 00:06:50 +0000
-Received: from CO1NAM11FT099.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b9:cafe::2) by MW4PR03CA0233.outlook.office365.com
- (2603:10b6:303:b9::28) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 00:37:42 +0000
+Received: from CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b4:cafe::ef) by MW4PR03CA0248.outlook.office365.com
+ (2603:10b6:303:b4::13) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.23 via Frontend
- Transport; Tue, 29 Nov 2022 00:06:50 +0000
+ Transport; Tue, 29 Nov 2022 00:37:42 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,14 +46,14 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT099.mail.protection.outlook.com (10.13.175.171) with Microsoft SMTP
+ CO1NAM11FT069.mail.protection.outlook.com (10.13.174.129) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5857.17 via Frontend Transport; Tue, 29 Nov 2022 00:06:50 +0000
+ 15.20.5857.18 via Frontend Transport; Tue, 29 Nov 2022 00:37:41 +0000
 Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 28 Nov
- 2022 18:06:48 -0600
-Date:   Mon, 28 Nov 2022 18:06:32 -0600
+ 2022 18:37:41 -0600
+Date:   Mon, 28 Nov 2022 18:37:25 -0600
 From:   Michael Roth <michael.roth@amd.com>
 To:     Chao Peng <chao.p.peng@linux.intel.com>
 CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -89,36 +89,35 @@ CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <wei.w.wang@intel.com>
 Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
  create restricted user memory
-Message-ID: <20221129000632.sz6pobh6p7teouiu@amd.com>
+Message-ID: <20221129003725.l34qhx6n44mq2gtl@amd.com>
 References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
  <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 In-Reply-To: <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
 X-Originating-IP: [10.180.168.240]
 X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT099:EE_|DM6PR12MB4864:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21a79ab7-be20-437b-bf06-08dad19d9d50
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT069:EE_|BN9PR12MB5365:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7020e32d-c816-4706-ce34-08dad1a1ecd3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pWZ/FK29m3a28AbYyuD8LMLpmWEx1JfoGtOQH2q9xHDYLZfLjXifX+Ap6ygllqG8O6n0BVf3QIcoieUJenqRstuU0J0ov/BbWLioNRgZZ7PDllYKdBBlArTHkTygHHnFyp9H+0F+yb3YXc9r5m+ctw4N7WunUDlHqLewf4PPzlZ3wQR8POL0UWxilnTQvuHAA9L9DQc2yozfSktSzRR1YbKXnFTu3Hx3ojFq6EtKaXYiYe7B1e0yeC6909vdZpNJxUfTAg4vymyAYtZAUZWjEREmQmKAlZAeNSIE8xgwMroAu865IF92z8aFzXCH2nccDDGa53QWHTLQu/SHDIMvqomLwnRz6bHuRC0kullNx18dOlaoifyk6RoWnUVExoKM+R2wqvfhwXlHrER0ctFEDNIWW+iF11/mcOpt3fS5sMm4FW53jYZqx2JMJ9AJ4lhpnMCtQoH3S1zUUByYMgqE6kepu9Ap26spMgGM96N9olt7uj2RJHy87RBTojqwNPhLQVp69FR3YULfKz8onz/T5CeJXw8lWUBs/BxYyaWA7tASNK1jnUq58TXBxenMsnz6rDP4qs+QZSxXV51bytOPXtzEKDRWJnvMPk66qSJvshoVAP8UmXAn1mIJ4ndtM/IyzKnVrfacZdVdDe45LPqDPfGiDNiAy4kYFPT06mb6TICv5yae6rpys0uZ3yM7XfpyMuLfgM+960aYuQPScL3t2+TVoWcRdVDHw9eptHxTVIg=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(346002)(396003)(451199015)(40470700004)(36840700001)(46966006)(356005)(40480700001)(81166007)(36756003)(2906002)(40460700003)(86362001)(7406005)(7416002)(6666004)(478600001)(44832011)(70586007)(316002)(70206006)(41300700001)(45080400002)(5660300002)(36860700001)(4326008)(8676002)(54906003)(26005)(8936002)(6916009)(82740400003)(1076003)(336012)(16526019)(83380400001)(186003)(2616005)(82310400005)(426003)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: XlNydLW3CsbPuUF/x5xiQLgERHp9/KZKIR4bXSgQE/5IC1NnGg/TPnGudVmYI7ZiP49Y7KjjB6Pt2jeEpfjl3UwmeS4Mb2QEWgXUEFR3Ub2bMYQ+0betdArusckaz5+2cqYkvil8e5IBxiizY2HZbO0syZ6GxRHE/nAtrfBTe6/kVUD3mjyGDzykR2f8Z4Go+CvUB3zzcJkW+LYNSGTweowm0rO1LGsE2Lgc2HTfPmTc1t2rPNnfz83nTu0YZkpa/+thFxxQmrSkgmuTgZSt2mklTGos32leOaMhXazu3vZLZY1G67dyyRoOTYanwzW45sVsEPx9wGr6LnyaibaD9hi4IGP5I/2lStZjLNhKi4Bb8TDz5lQPSDQC6q6U2clXSx7kcpZnkh6uZs6WZH1LyKyCJBFRCwCRUqtpe8pnVO13V3FqRWgyE/QzQKr+C+5TZ7Sg+IrGB+/ULqBcQAE2Ai9NTbCamQOPubniJxmuBj+S2Udvmr4s3wMIh7OW7SWjTcIjy+Wzl7Wu3NHHore3QVumllHZI2bmx2OrKu8tpPqZobwjnBmPA7G4kGk96cq7L0SAmLGwk5X4mGajLq7UBjhRw8oxyDVm9z9PCwecLsbnnyzjtNbeI0idmhCXm4xAZ4mo89sRFn+lh43aMQvmA9S7+l1qP+xiZf2OA5stMYY1OVzJnyuFu1dA2TaeedUHVSR8z1A9DfD6ukfcEH1mOpeCaTtD4QoCaQJS8BuR7TTqJltRIhrvKuwkDowdH+7yGrujLU4zhSBUxqNKnWbGUg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(36756003)(8676002)(336012)(41300700001)(186003)(8936002)(70206006)(16526019)(70586007)(966005)(2616005)(6666004)(40460700003)(478600001)(316002)(4326008)(81166007)(356005)(86362001)(40480700001)(83380400001)(5660300002)(2906002)(426003)(47076005)(7416002)(7406005)(26005)(1076003)(36860700001)(54906003)(6916009)(44832011)(82740400003)(30864003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 00:06:50.4325
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2022 00:37:41.7871
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21a79ab7-be20-437b-bf06-08dad19d9d50
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7020e32d-c816-4706-ce34-08dad1a1ecd3
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT099.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4864
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5365
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -131,212 +130,365 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
 > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
->=20
+> 
+> Introduce 'memfd_restricted' system call with the ability to create
+> memory areas that are restricted from userspace access through ordinary
+> MMU operations (e.g. read/write/mmap). The memory content is expected to
+> be used through a new in-kernel interface by a third kernel module.
+> 
+> memfd_restricted() is useful for scenarios where a file descriptor(fd)
+> can be used as an interface into mm but want to restrict userspace's
+> ability on the fd. Initially it is designed to provide protections for
+> KVM encrypted guest memory.
+> 
+> Normally KVM uses memfd memory via mmapping the memfd into KVM userspace
+> (e.g. QEMU) and then using the mmaped virtual address to setup the
+> mapping in the KVM secondary page table (e.g. EPT). With confidential
+> computing technologies like Intel TDX, the memfd memory may be encrypted
+> with special key for special software domain (e.g. KVM guest) and is not
+> expected to be directly accessed by userspace. Precisely, userspace
+> access to such encrypted memory may lead to host crash so should be
+> prevented.
+> 
+> memfd_restricted() provides semantics required for KVM guest encrypted
+> memory support that a fd created with memfd_restricted() is going to be
+> used as the source of guest memory in confidential computing environment
+> and KVM can directly interact with core-mm without the need to expose
+> the memoy content into KVM userspace.
+> 
+> KVM userspace is still in charge of the lifecycle of the fd. It should
+> pass the created fd to KVM. KVM uses the new restrictedmem_get_page() to
+> obtain the physical memory page and then uses it to populate the KVM
+> secondary page table entries.
+> 
+> The userspace restricted memfd can be fallocate-ed or hole-punched
+> from userspace. When these operations happen, KVM can get notified
+> through restrictedmem_notifier, it then gets chance to remove any
+> mapped entries of the range in the secondary page tables.
+> 
+> memfd_restricted() itself is implemented as a shim layer on top of real
+> memory file systems (currently tmpfs). Pages in restrictedmem are marked
+> as unmovable and unevictable, this is required for current confidential
+> usage. But in future this might be changed.
+> 
+> By default memfd_restricted() prevents userspace read, write and mmap.
+> By defining new bit in the 'flags', it can be extended to support other
+> restricted semantics in the future.
+> 
+> The system call is currently wired up for x86 arch.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+>  include/linux/restrictedmem.h          |  62 ++++++
+>  include/linux/syscalls.h               |   1 +
+>  include/uapi/asm-generic/unistd.h      |   5 +-
+>  include/uapi/linux/magic.h             |   1 +
+>  kernel/sys_ni.c                        |   3 +
+>  mm/Kconfig                             |   4 +
+>  mm/Makefile                            |   1 +
+>  mm/restrictedmem.c                     | 250 +++++++++++++++++++++++++
+>  10 files changed, 328 insertions(+), 1 deletion(-)
+>  create mode 100644 include/linux/restrictedmem.h
+>  create mode 100644 mm/restrictedmem.c
+> 
+> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+> index 320480a8db4f..dc70ba90247e 100644
+> --- a/arch/x86/entry/syscalls/syscall_32.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
+> @@ -455,3 +455,4 @@
+>  448	i386	process_mrelease	sys_process_mrelease
+>  449	i386	futex_waitv		sys_futex_waitv
+>  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
+> +451	i386	memfd_restricted	sys_memfd_restricted
+> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+> index c84d12608cd2..06516abc8318 100644
+> --- a/arch/x86/entry/syscalls/syscall_64.tbl
+> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
+> @@ -372,6 +372,7 @@
+>  448	common	process_mrelease	sys_process_mrelease
+>  449	common	futex_waitv		sys_futex_waitv
+>  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
+> +451	common	memfd_restricted	sys_memfd_restricted
+>  
+>  #
+>  # Due to a historical design error, certain syscalls are numbered differently
+> diff --git a/include/linux/restrictedmem.h b/include/linux/restrictedmem.h
+> new file mode 100644
+> index 000000000000..9c37c3ea3180
+> --- /dev/null
+> +++ b/include/linux/restrictedmem.h
+> @@ -0,0 +1,62 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _LINUX_RESTRICTEDMEM_H
+> +
+> +#include <linux/file.h>
+> +#include <linux/magic.h>
+> +#include <linux/pfn_t.h>
+> +
+> +struct restrictedmem_notifier;
+> +
+> +struct restrictedmem_notifier_ops {
+> +	void (*invalidate_start)(struct restrictedmem_notifier *notifier,
+> +				 pgoff_t start, pgoff_t end);
+> +	void (*invalidate_end)(struct restrictedmem_notifier *notifier,
+> +			       pgoff_t start, pgoff_t end);
+> +};
+> +
+> +struct restrictedmem_notifier {
+> +	struct list_head list;
+> +	const struct restrictedmem_notifier_ops *ops;
+> +};
+> +
+> +#ifdef CONFIG_RESTRICTEDMEM
+> +
+> +void restrictedmem_register_notifier(struct file *file,
+> +				     struct restrictedmem_notifier *notifier);
+> +void restrictedmem_unregister_notifier(struct file *file,
+> +				       struct restrictedmem_notifier *notifier);
+> +
+> +int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> +			   struct page **pagep, int *order);
+> +
+> +static inline bool file_is_restrictedmem(struct file *file)
+> +{
+> +	return file->f_inode->i_sb->s_magic == RESTRICTEDMEM_MAGIC;
+> +}
+> +
+> +#else
+> +
+> +static inline void restrictedmem_register_notifier(struct file *file,
+> +				     struct restrictedmem_notifier *notifier)
+> +{
+> +}
+> +
+> +static inline void restrictedmem_unregister_notifier(struct file *file,
+> +				       struct restrictedmem_notifier *notifier)
+> +{
+> +}
+> +
+> +static inline int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> +					 struct page **pagep, int *order)
+> +{
+> +	return -1;
+> +}
+> +
+> +static inline bool file_is_restrictedmem(struct file *file)
+> +{
+> +	return false;
+> +}
+> +
+> +#endif /* CONFIG_RESTRICTEDMEM */
+> +
+> +#endif /* _LINUX_RESTRICTEDMEM_H */
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index a34b0f9a9972..f9e9e0c820c5 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1056,6 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>  					    unsigned long home_node,
+>  					    unsigned long flags);
+> +asmlinkage long sys_memfd_restricted(unsigned int flags);
+>  
+>  /*
+>   * Architecture-specific system calls
+> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+> index 45fa180cc56a..e93cd35e46d0 100644
+> --- a/include/uapi/asm-generic/unistd.h
+> +++ b/include/uapi/asm-generic/unistd.h
+> @@ -886,8 +886,11 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+>  #define __NR_set_mempolicy_home_node 450
+>  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+>  
+> +#define __NR_memfd_restricted 451
+> +__SYSCALL(__NR_memfd_restricted, sys_memfd_restricted)
+> +
+>  #undef __NR_syscalls
+> -#define __NR_syscalls 451
+> +#define __NR_syscalls 452
+>  
+>  /*
+>   * 32 bit systems traditionally used different
+> diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+> index 6325d1d0e90f..8aa38324b90a 100644
+> --- a/include/uapi/linux/magic.h
+> +++ b/include/uapi/linux/magic.h
+> @@ -101,5 +101,6 @@
+>  #define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
+>  #define DEVMEM_MAGIC		0x454d444d	/* "DMEM" */
+>  #define SECRETMEM_MAGIC		0x5345434d	/* "SECM" */
+> +#define RESTRICTEDMEM_MAGIC	0x5245534d	/* "RESM" */
+>  
+>  #endif /* __LINUX_MAGIC_H__ */
+> diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+> index 860b2dcf3ac4..7c4a32cbd2e7 100644
+> --- a/kernel/sys_ni.c
+> +++ b/kernel/sys_ni.c
+> @@ -360,6 +360,9 @@ COND_SYSCALL(pkey_free);
+>  /* memfd_secret */
+>  COND_SYSCALL(memfd_secret);
+>  
+> +/* memfd_restricted */
+> +COND_SYSCALL(memfd_restricted);
+> +
+>  /*
+>   * Architecture specific weak syscall entries.
+>   */
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 0331f1461f81..0177d53676c7 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -1076,6 +1076,10 @@ config IO_MAPPING
+>  config SECRETMEM
+>  	def_bool ARCH_HAS_SET_DIRECT_MAP && !EMBEDDED
+>  
+> +config RESTRICTEDMEM
+> +	bool
+> +	depends on TMPFS
+> +
+>  config ANON_VMA_NAME
+>  	bool "Anonymous VMA name support"
+>  	depends on PROC_FS && ADVISE_SYSCALLS && MMU
+> diff --git a/mm/Makefile b/mm/Makefile
+> index 9a564f836403..6cb6403ffd40 100644
+> --- a/mm/Makefile
+> +++ b/mm/Makefile
+> @@ -117,6 +117,7 @@ obj-$(CONFIG_PAGE_EXTENSION) += page_ext.o
+>  obj-$(CONFIG_PAGE_TABLE_CHECK) += page_table_check.o
+>  obj-$(CONFIG_CMA_DEBUGFS) += cma_debug.o
+>  obj-$(CONFIG_SECRETMEM) += secretmem.o
+> +obj-$(CONFIG_RESTRICTEDMEM) += restrictedmem.o
+>  obj-$(CONFIG_CMA_SYSFS) += cma_sysfs.o
+>  obj-$(CONFIG_USERFAULTFD) += userfaultfd.o
+>  obj-$(CONFIG_IDLE_PAGE_TRACKING) += page_idle.o
+> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> new file mode 100644
+> index 000000000000..e5bf8907e0f8
+> --- /dev/null
+> +++ b/mm/restrictedmem.c
+> @@ -0,0 +1,250 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "linux/sbitmap.h"
+> +#include <linux/pagemap.h>
+> +#include <linux/pseudo_fs.h>
+> +#include <linux/shmem_fs.h>
+> +#include <linux/syscalls.h>
+> +#include <uapi/linux/falloc.h>
+> +#include <uapi/linux/magic.h>
+> +#include <linux/restrictedmem.h>
+> +
+> +struct restrictedmem_data {
+> +	struct mutex lock;
+> +	struct file *memfd;
+> +	struct list_head notifiers;
+> +};
+> +
+> +static void restrictedmem_notifier_invalidate(struct restrictedmem_data *data,
+> +				 pgoff_t start, pgoff_t end, bool notify_start)
+> +{
+> +	struct restrictedmem_notifier *notifier;
+> +
+> +	mutex_lock(&data->lock);
+> +	list_for_each_entry(notifier, &data->notifiers, list) {
+> +		if (notify_start)
+> +			notifier->ops->invalidate_start(notifier, start, end);
+> +		else
+> +			notifier->ops->invalidate_end(notifier, start, end);
+> +	}
+> +	mutex_unlock(&data->lock);
+> +}
+> +
+> +static int restrictedmem_release(struct inode *inode, struct file *file)
+> +{
+> +	struct restrictedmem_data *data = inode->i_mapping->private_data;
+> +
+> +	fput(data->memfd);
+> +	kfree(data);
+> +	return 0;
+> +}
+> +
+> +static long restrictedmem_fallocate(struct file *file, int mode,
+> +				    loff_t offset, loff_t len)
+> +{
+> +	struct restrictedmem_data *data = file->f_mapping->private_data;
+> +	struct file *memfd = data->memfd;
+> +	int ret;
+> +
+> +	if (mode & FALLOC_FL_PUNCH_HOLE) {
+> +		if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+> +			return -EINVAL;
+> +	}
+> +
+> +	restrictedmem_notifier_invalidate(data, offset, offset + len, true);
+
+The KVM restrictedmem ops seem to expect pgoff_t, but here we pass
+loff_t. For SNP we've made this strange as part of the following patch
+and it seems to produce the expected behavior:
+
+  https://github.com/mdroth/linux/commit/d669c7d3003ff7a7a47e73e8c3b4eeadbd2c4eb6
+
+> +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
+> +	restrictedmem_notifier_invalidate(data, offset, offset + len, false);
+> +	return ret;
+> +}
+> +
 
 <snip>
 
-> +static struct file *restrictedmem_file_create(struct file *memfd)
+> +int restrictedmem_get_page(struct file *file, pgoff_t offset,
+> +			   struct page **pagep, int *order)
 > +{
-> +	struct restrictedmem_data *data;
-> +	struct address_space *mapping;
-> +	struct inode *inode;
-> +	struct file *file;
+> +	struct restrictedmem_data *data = file->f_mapping->private_data;
+> +	struct file *memfd = data->memfd;
+> +	struct page *page;
+> +	int ret;
 > +
-> +	data =3D kzalloc(sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	data->memfd =3D memfd;
-> +	mutex_init(&data->lock);
-> +	INIT_LIST_HEAD(&data->notifiers);
-> +
-> +	inode =3D alloc_anon_inode(restrictedmem_mnt->mnt_sb);
-> +	if (IS_ERR(inode)) {
-> +		kfree(data);
-> +		return ERR_CAST(inode);
-> +	}
-> +
-> +	inode->i_mode |=3D S_IFREG;
-> +	inode->i_op =3D &restrictedmem_iops;
-> +	inode->i_mapping->private_data =3D data;
-> +
-> +	file =3D alloc_file_pseudo(inode, restrictedmem_mnt,
-> +				 "restrictedmem", O_RDWR,
-> +				 &restrictedmem_fops);
-> +	if (IS_ERR(file)) {
-> +		iput(inode);
-> +		kfree(data);
-> +		return ERR_CAST(file);
-> +	}
-> +
-> +	file->f_flags |=3D O_LARGEFILE;
-> +
-> +	mapping =3D memfd->f_mapping;
-> +	mapping_set_unevictable(mapping);
-> +	mapping_set_gfp_mask(mapping,
-> +			     mapping_gfp_mask(mapping) & ~__GFP_MOVABLE);
+> +	ret = shmem_getpage(file_inode(memfd), offset, &page, SGP_WRITE);
 
-Is this supposed to prevent migration of pages being used for
-restrictedmem/shmem backend?
+This will result in KVM allocating pages that userspace hasn't necessary
+fallocate()'d. In the case of SNP we need to get the PFN so we can clean
+up the RMP entries when restrictedmem invalidations are issued for a GFN
+range.
 
-In my case I've been testing SNP support based on UPM v9, and for
-large guests (128GB+), if I force 2M THPs via:
+If the guest supports lazy-acceptance however, these pages may not have
+been faulted in yet, and if the VMM defers actually fallocate()'ing space
+until the guest actually tries to issue a shared->private for that GFN
+(to support lazy-pinning), then there may never be a need to allocate
+pages for these backends.
 
-  echo always >/sys/kernel/mm/transparent_hugepages/shmem_enabled
+However, the restrictedmem invalidations are for GFN ranges so there's
+no way to know inadvance whether it's been allocated yet or not. The
+xarray is one option but currently it defaults to 'private' so that
+doesn't help us here. It might if we introduced a 'uninitialized' state
+or something along that line instead of just the binary
+'shared'/'private' though...
 
-it will in some cases trigger the below trace, which suggests that
-kcompactd is trying to call migrate_folio() on a PFN that was/is
-still allocated for guest private memory (and so has been removed from
-directmap as part of shared->private conversation via REG_REGION kvm
-ioctl, leading to the crash). This trace seems to occur during early
-OVMF boot while the guest is in the middle of pre-accepting on private
-memory (no lazy accept in this case).
-
-Is this expected behavior? What else needs to be done to ensure
-migrations aren't attempted in this case?
-
-Thanks!
+But for now we added a restrictedmem_get_page_noalloc() that uses
+SGP_NONE instead of SGP_WRITE to avoid accidentally allocating a bunch
+of memory as part of guest shutdown, and a
+kvm_restrictedmem_get_pfn_noalloc() variant to go along with that. But
+maybe a boolean param is better? Or maybe SGP_NOALLOC is the better
+default, and we just propagate an error to userspace if they didn't
+fallocate() in advance?
 
 -Mike
 
-
-# Host logs with debug info for crash during SNP boot
-
-=2E..
-[  904.373632] kvm_restricted_mem_get_pfn: GFN: 0x1caced1, PFN: 0x156b7f, p=
-age: ffffea0006b197b0, ref_count: 2
-[  904.373634] kvm_restricted_mem_get_pfn: GFN: 0x1caced2, PFN: 0x156840, p=
-age: ffffea0006b09400, ref_count: 2
-[  904.373637] kvm_restricted_mem_get_pfn: GFN: 0x1caced3, PFN: 0x156841, p=
-age: ffffea0006b09450, ref_count: 2
-[  904.373639] kvm_restricted_mem_get_pfn: GFN: 0x1caced4, PFN: 0x156842, p=
-age: ffffea0006b094a0, ref_count: 2
-[  904.373641] kvm_restricted_mem_get_pfn: GFN: 0x1caced5, PFN: 0x156843, p=
-age: ffffea0006b094f0, ref_count: 2
-[  904.373645] kvm_restricted_mem_get_pfn: GFN: 0x1caced6, PFN: 0x156844, p=
-age: ffffea0006b09540, ref_count: 2
-[  904.373647] kvm_restricted_mem_get_pfn: GFN: 0x1caced7, PFN: 0x156845, p=
-age: ffffea0006b09590, ref_count: 2
-[  904.373649] kvm_restricted_mem_get_pfn: GFN: 0x1caced8, PFN: 0x156846, p=
-age: ffffea0006b095e0, ref_count: 2
-[  904.373652] kvm_restricted_mem_get_pfn: GFN: 0x1caced9, PFN: 0x156847, p=
-age: ffffea0006b09630, ref_count: 2
-[  904.373654] kvm_restricted_mem_get_pfn: GFN: 0x1caceda, PFN: 0x156848, p=
-age: ffffea0006b09680, ref_count: 2
-[  904.373656] kvm_restricted_mem_get_pfn: GFN: 0x1cacedb, PFN: 0x156849, p=
-age: ffffea0006b096d0, ref_count: 2
-[  904.373661] kvm_restricted_mem_get_pfn: GFN: 0x1cacedc, PFN: 0x15684a, p=
-age: ffffea0006b09720, ref_count: 2
-[  904.373663] kvm_restricted_mem_get_pfn: GFN: 0x1cacedd, PFN: 0x15684b, p=
-age: ffffea0006b09770, ref_count: 2
-
-# PFN 0x15684c is allocated for guest private memory, will have been remove=
-d from directmap as part of RMP requirements
-
-[  904.373665] kvm_restricted_mem_get_pfn: GFN: 0x1cacede, PFN: 0x15684c, p=
-age: ffffea0006b097c0, ref_count: 2
-=2E..
-
-# kcompactd crashes trying to copy PFN 0x15684c to a new folio, crashes try=
-ing to access PFN via directmap
-
-[  904.470135] Migrating restricted page, SRC pfn: 0x15684c, folio_ref_coun=
-t: 2, folio_order: 0
-[  904.470154] BUG: unable to handle page fault for address: ffff88815684c0=
-00
-[  904.470314] kvm_restricted_mem_get_pfn: GFN: 0x1cafe00, PFN: 0x19f6d0, p=
-age: ffffea00081d2100, ref_count: 2
-[  904.477828] #PF: supervisor read access in kernel mode
-[  904.477831] #PF: error_code(0x0000) - not-present page
-[  904.477833] PGD 6601067 P4D 6601067 PUD 1569ad063 PMD 1569af063 PTE 800f=
-fffea97b3060
-[  904.508806] Oops: 0000 [#1] SMP NOPTI
-[  904.512892] CPU: 52 PID: 1563 Comm: kcompactd0 Tainted: G            E  =
-    6.0.0-rc7-hsnp-v7pfdv9d+ #10
-[  904.523473] Hardware name: AMD Corporation ETHANOL_X/ETHANOL_X, BIOS RXM=
-1006B 08/20/2021
-[  904.532499] RIP: 0010:copy_page+0x7/0x10
-[  904.536877] Code: 00 66 90 48 89 f8 48 89 d1 f3 a4 31 c0 c3 cc cc cc cc =
-48 89 c8 c3 cc cc cc cc cc cc cc cc cc cc cc cc cc 66 90 b9 00 02 00 00 <f3=
-> 48 a5 c3 cc cc cc cc 90 48 83 ec 10 48 89 1c 24 4c 89 64 24 08
-[  904.557831] RSP: 0018:ffffc900106dfb78 EFLAGS: 00010286
-[  904.563661] RAX: ffff888000000000 RBX: ffffea0006b09810 RCX: 00000000000=
-00200
-[  904.571622] RDX: ffffea0000000000 RSI: ffff88815684c000 RDI: ffff88816bc=
-5d000
-[  904.579581] RBP: ffffc900106dfba0 R08: 0000000000000001 R09: ffffea0006b=
-097c0
-[  904.587541] R10: 0000000000000002 R11: ffffc900106dfb38 R12: ffffea00071=
-add60
-[  904.595502] R13: cccccccccccccccd R14: ffffea0006b09810 R15: ffff888159c=
-1e0f8
-[  904.603462] FS:  0000000000000000(0000) GS:ffff88a04df00000(0000) knlGS:=
-0000000000000000
-[  904.612489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  904.618897] CR2: ffff88815684c000 CR3: 00000020eae16002 CR4: 00000000007=
-70ee0
-[  904.626855] PKRU: 55555554
-[  904.629870] Call Trace:
-[  904.632594]  <TASK>
-[  904.634928]  ? folio_copy+0x8c/0xe0
-[  904.638818]  migrate_folio+0x5b/0x110
-[  904.642901]  move_to_new_folio+0x5b/0x150
-[  904.647371]  migrate_pages+0x11bb/0x1830
-[  904.651743]  ? move_freelist_tail+0xc0/0xc0
-[  904.656406]  ? isolate_freepages_block+0x470/0x470
-[  904.661749]  compact_zone+0x681/0xda0
-[  904.665832]  kcompactd_do_work+0x1b3/0x2c0
-[  904.670400]  kcompactd+0x257/0x330
-[  904.674190]  ? prepare_to_wait_event+0x120/0x120
-[  904.679338]  ? kcompactd_do_work+0x2c0/0x2c0
-[  904.684098]  kthread+0xcf/0xf0
-[  904.687501]  ? kthread_complete_and_exit+0x20/0x20
-[  904.692844]  ret_from_fork+0x22/0x30
-[  904.696830]  </TASK>
-[  904.699262] Modules linked in: nf_conntrack_netlink(E) xfrm_user(E) xfrm=
-_algo(E) xt_addrtype(E) br_netfilter(E) xt_CHECKSUM(E) xt_MASQUERADE(E) xt_=
-conntrack(E) ipt_REJECT(E) nf_reject_ipv4(E) xt_tcpudp(E) ip6table_mangle(E=
-) ip6table_nat(E) iptable_mangle(E) iptable_nat(E) nf_nat(E) nf_conntrack(E=
-) nf_defrag_ipv6(E) nf_defrag_ipv4(E) nf_tables(E) nfnetlink(E) ip6table_fi=
-lter(E) ip6_tables(E) iptable_filter(E) bpfilter(E) intel_rapl_msr(E) intel=
-_rapl_common(E) amd64_edac(E) bridge(E) stp(E) llc(E) kvm_amd(E) overlay(E)=
- nls_iso8859_1(E) kvm(E) crct10dif_pclmul(E) ghash_clmulni_intel(E) aesni_i=
-ntel(E) crypto_simd(E) cryptd(E) rapl(E) ipmi_si(E) ipmi_devintf(E) wmi_bmo=
-f(E) ipmi_msghandler(E) efi_pstore(E) binfmt_misc(E) ast(E) drm_vram_helper=
-(E) joydev(E) drm_ttm_helper(E) ttm(E) drm_kms_helper(E) input_leds(E) i2c_=
-algo_bit(E) fb_sys_fops(E) syscopyarea(E) sysfillrect(E) sysimgblt(E) ccp(E=
-) k10temp(E) mac_hid(E) sch_fq_codel(E) parport_pc(E) ppdev(E) lp(E) parpor=
-t(E) drm(E) ip_tables(E)
-[  904.699316]  x_tables(E) autofs4(E) btrfs(E) blake2b_generic(E) zstd_com=
-press(E) raid10(E) raid456(E) async_raid6_recov(E) async_memcpy(E) async_pq=
-(E) async_xor(E) async_tx(E) xor(E) raid6_pq(E) libcrc32c(E) raid1(E) raid0=
-(E) multipath(E) linear(E) crc32_pclmul(E) hid_generic(E) usbhid(E) hid(E) =
-e1000e(E) i2c_piix4(E) wmi(E)
-[  904.828498] CR2: ffff88815684c000
-[  904.832193] ---[ end trace 0000000000000000 ]---
-[  904.937159] RIP: 0010:copy_page+0x7/0x10
-[  904.941524] Code: 00 66 90 48 89 f8 48 89 d1 f3 a4 31 c0 c3 cc cc cc cc =
-48 89 c8 c3 cc cc cc cc cc cc cc cc cc cc cc cc cc 66 90 b9 00 02 00 00 <f3=
-> 48 a5 c3 cc cc cc cc 90 48 83 ec 10 48 89 1c 24 4c 89 64 24 08
-[  904.962478] RSP: 0018:ffffc900106dfb78 EFLAGS: 00010286
-[  904.968305] RAX: ffff888000000000 RBX: ffffea0006b09810 RCX: 00000000000=
-00200
-[  904.976265] RDX: ffffea0000000000 RSI: ffff88815684c000 RDI: ffff88816bc=
-5d000
-[  904.984227] RBP: ffffc900106dfba0 R08: 0000000000000001 R09: ffffea0006b=
-097c0
-[  904.992187] R10: 0000000000000002 R11: ffffc900106dfb38 R12: ffffea00071=
-add60
-[  905.000145] R13: cccccccccccccccd R14: ffffea0006b09810 R15: ffff888159c=
-1e0f8
-[  905.008105] FS:  0000000000000000(0000) GS:ffff88a04df00000(0000) knlGS:=
-0000000000000000
-[  905.017132] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  905.023540] CR2: ffff88815684c000 CR3: 00000020eae16002 CR4: 00000000007=
-70ee0
-[  905.031501] PKRU: 55555554
-[  905.034558] kvm_restricted_mem_get_pfn: GFN: 0x1cafe01, PFN: 0x19f6d1, p=
-age: ffffea00081d2150, ref_count: 2
-[  905.045455] kvm_restricted_mem_get_pfn: GFN: 0x1cafe02, PFN: 0x19f6d2, p=
-age: ffffea00081d21a0, ref_count: 2
-=2E..
+> +	if (ret)
+> +		return ret;
+> +
+> +	*pagep = page;
+> +	if (order)
+> +		*order = thp_order(compound_head(page));
+> +
+> +	SetPageUptodate(page);
+> +	unlock_page(page);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(restrictedmem_get_page);
+> -- 
+> 2.25.1
+> 
