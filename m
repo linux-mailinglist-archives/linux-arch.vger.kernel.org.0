@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001B163CDEE
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Nov 2022 04:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BB363CDEF
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Nov 2022 04:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiK3DmF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Nov 2022 22:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
+        id S232950AbiK3DmG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Nov 2022 22:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbiK3Dl5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Nov 2022 22:41:57 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BADF74607;
-        Tue, 29 Nov 2022 19:41:56 -0800 (PST)
+        with ESMTP id S232555AbiK3DmF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Nov 2022 22:42:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6735473BBF;
+        Tue, 29 Nov 2022 19:42:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DC1E619E3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 046F8619F3;
+        Wed, 30 Nov 2022 03:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1CAC433D6;
         Wed, 30 Nov 2022 03:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52995C4347C;
-        Wed, 30 Nov 2022 03:41:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669779715;
-        bh=Rp2MUyQtxRgtLen/D9AxwqyQ4SMPFbQjQmCooVN6ibA=;
+        s=k20201202; t=1669779724;
+        bh=4mz/N8yAPFLk80/NEV+FvPrNk6b/1NsfivEh3wBgsKc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q+H0TCip7J/GdXqeJB3/PshKOWVSgdxej0Gx0aW2VMcgQtndJjKnrIARYQ7PL6j2/
-         Km7MiBuPgy3wDtdkLX85r0I4EQ3SyzZpwveP0fzBLjIXg3glGg6dl/X1odMOa7DRsU
-         i/9kk0MCt7V8/9Wwy5iIHWioXkMa3cNTn5CgeM0bBojBvzCEN0iKiL601f+dZx+Nbz
-         GZpBBTPZdAUvCNSWyz70pwmwgqcU12EUm4xhU57CLVb1K5uxs2wP/YugwDfwFzgLPj
-         rF1B6NfBALuzGXnBavYDi0MA8MN8qGZ9sqCG6TIEiZ/AG1BaagPJeziDunoll/tNP/
-         Qj7xpJxaaLhsQ==
+        b=YP3SVqsOXAHpUN6beAgjOZXBFt8w+pGUbf1fw8hmSKZInOMarG+xooawDPPCqfYyh
+         FAmIjl/xemkz65XVe9u1fhDVH0Vyo2h49aKXIuaHjexJbgpEeho2vA9/eQSNq86TjK
+         N213fmTaO0fx0bOKRYWk36J2WLJXtGzMp2qZp2JghyJALnnSghiRV89thhBpIj8SH0
+         NbILHB899P1ju6Y8XuxSuEFczSRcDmT8aPx/dL5mhW5rWLNUSIE1S1JpXM4FmeEb3G
+         anYzOQ1D8nW+ughOor2pXI6pCtvgbDTZd8WYBJJm9hUrrIzVKLxRRfQYH+Jy/TQrVQ
+         eM2vmpURaKPxg==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -43,14 +43,11 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH -next V9 01/14] compiler_types.h: Add __noinstr_section() for noinstr
-Date:   Tue, 29 Nov 2022 22:40:46 -0500
-Message-Id: <20221130034059.826599-2-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH -next V9 02/14] riscv: elf_kexec: Fixup compile warning
+Date:   Tue, 29 Nov 2022 22:40:47 -0500
+Message-Id: <20221130034059.826599-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221130034059.826599-1-guoren@kernel.org>
 References: <20221130034059.826599-1-guoren@kernel.org>
@@ -65,51 +62,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Lai Jiangshan <laijs@linux.alibaba.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-And it will be extended for C entry code.
+If CRYTPO or CRYPTO_SHA256 or KEXE_FILE is not enabled, then:
 
-Cc: Borislav Petkov <bp@alien8.de>
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1
+O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+
+../arch/riscv/kernel/elf_kexec.c: In function 'elf_kexec_load':
+../arch/riscv/kernel/elf_kexec.c:185:23: warning: variable
+'kernel_start' set but not used [-Wunused-but-set-variable]
+  185 |         unsigned long kernel_start;
+      |                       ^~~~~~~~~~~~
+
+Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Reported-by: kernel test robot <lkp@intel.com>
 Tested-by: Jisheng Zhang <jszhang@kernel.org>
-Tested-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 ---
- include/linux/compiler_types.h | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/riscv/kernel/elf_kexec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index eb0466236661..41e4faa4cd95 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -230,12 +230,19 @@ struct ftrace_likely_data {
- #define __no_sanitize_or_inline __always_inline
- #endif
+diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
+index 0cb94992c15b..4b9264340b78 100644
+--- a/arch/riscv/kernel/elf_kexec.c
++++ b/arch/riscv/kernel/elf_kexec.c
+@@ -198,7 +198,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
+ 	if (ret)
+ 		goto out;
+ 	kernel_start = image->start;
+-	pr_notice("The entry point of kernel at 0x%lx\n", image->start);
++	pr_notice("The entry point of kernel at 0x%lx\n", kernel_start);
  
--/* Section for code which can't be instrumented at all */
--#define noinstr								\
--	noinline notrace __attribute((__section__(".noinstr.text")))	\
--	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
-+/*
-+ * Using __noinstr_section() doesn't automatically disable all instrumentations
-+ * on the section.  Inhibition for some instrumentations requires extra code.
-+ * I.E. KPROBES explicitly avoids instrumenting on .noinstr.text.
-+ */
-+#define __noinstr_section(section)				\
-+	noinline notrace __section(section) __no_profile	\
-+	__no_kcsan __no_sanitize_address __no_sanitize_coverage	\
- 	__no_sanitize_memory
- 
-+/* Section for code which can't be instrumented at all */
-+#define noinstr __noinstr_section(".noinstr.text")
-+
- #endif /* __KERNEL__ */
- 
- #endif /* __ASSEMBLY__ */
+ 	/* Add the kernel binary to the image */
+ 	ret = riscv_kexec_elf_load(image, &ehdr, &elf_info,
 -- 
 2.36.1
 
