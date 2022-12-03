@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 057B464135F
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 03:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1B2641365
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 03:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbiLCC3J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 21:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S234270AbiLCCbQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 21:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234774AbiLCC3I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 21:29:08 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BEEE0760
-        for <linux-arch@vger.kernel.org>; Fri,  2 Dec 2022 18:29:07 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 62so5810293pgb.13
-        for <linux-arch@vger.kernel.org>; Fri, 02 Dec 2022 18:29:07 -0800 (PST)
+        with ESMTP id S234949AbiLCCbP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 21:31:15 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D82DE1197
+        for <linux-arch@vger.kernel.org>; Fri,  2 Dec 2022 18:31:14 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id o5-20020a17090a678500b00218cd5a21c9so6668490pjj.4
+        for <linux-arch@vger.kernel.org>; Fri, 02 Dec 2022 18:31:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7cAXYlQ5VaMQ5BLk1aXMB0oGCT+qSAsSmGT0reRflQc=;
-        b=Cw0UHv0K60H2AUe/OHjHGbe1/PIv2QHijwO47pCLQnR0Nr3P2+bbC8LJsVDbY+XouK
-         NFoPxlyc2jdU2VQ+juROPfFypj8Jq05Y+bxXUKPbXsSeUNyBt5F1Bsw9gKeXm4yh9imA
-         AV8acjj2rcjHaPGj3e4k1akRPlxsWHNY2D/M4=
+        bh=jNJdEKc96rBGuItANfeOJmqGPSpLhwEduadMg72X9+I=;
+        b=kXbx/zxPoqU2brUX0DUwi+fETzDpdoO6MchLW2gG+HaV3D/7RMyQboruFgqlHaf9l7
+         nKvHOB/M1V0b/np2bfytJHetMFVIxhQ/PsQdMLv1ulc+LQCiUetldzoa6QLpEPjA/FrA
+         HEUGEydrFepn5uv44DSxjg69QjmB/S+jEDqeI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7cAXYlQ5VaMQ5BLk1aXMB0oGCT+qSAsSmGT0reRflQc=;
-        b=RhN0O5gSdBj/ZH/NcYDctyCWwk2/4aVYzwEvMZNVZFci3m2nzBaNNOJWeG76O8AyUM
-         4lL3UNgrShJBBcQm5Z4YWqtHUxBgnT0AFHeOXrqgbDr8Wg7QBDPahW3wkua0vrC6VYw7
-         BvcO9PxHq9xvuHRZJoZBfawJw+4Dx2Fb34XLI8/U1bUtZmCEVHqejXdJVeui6duQAiV2
-         oqVggA7bHa5+LArRpwD2226GeFgh5A8Y3tNHGkbB/lwva8R/+AfdAnYGapTKNibyV+K6
-         nqO78iBDC7RMuxtwGcGd43w56fSdzataNltT9989sLfuS0amUP60kh4nT8vu8RymQuDr
-         9Y5w==
-X-Gm-Message-State: ANoB5pnZE+SX9iprpuWx1vA76ASfjfojvQyk9jjipkuvSOMrwYBkwlW2
-        z76LGlOoNYtJgQ3PqU0zNBAHEQ==
-X-Google-Smtp-Source: AA0mqf6/9F9eQhV2SemHnuT8JgDUMtDX9L2AtZ2rN4g6mPGyaYzfNzuVgwLmybGIQ8bH/RdTIzEP8g==
-X-Received: by 2002:a63:4908:0:b0:477:e0b4:3f5 with SMTP id w8-20020a634908000000b00477e0b403f5mr34621298pga.265.1670034547107;
-        Fri, 02 Dec 2022 18:29:07 -0800 (PST)
+        bh=jNJdEKc96rBGuItANfeOJmqGPSpLhwEduadMg72X9+I=;
+        b=JwnGw4dFD79kJdDYZ/MnSoCIc4nmGFlbmQtvW1vp/2J0RJ5aKG/BcwR5ANUjwN1dFg
+         Bd50Yd2354TF8oR9GqtH+TurDB8wEJBfjI4uN/dktDqJ4wEuA3/y6/aTMpKuyZs6orkg
+         qlRL5fmuJVd9VuQw7yoU765yScHb7vDGFkAMLG24zIuVhZ5Yxd+eRsdLvgZ823QZnr67
+         7iZWTZT9QckGjOHZdJ/eLlswdlf/oOL1Ku/o98ypgncCoIhxt1GCMyMSOAcqjTFZ2DLG
+         s5dBw0Ji7CTi04jITxS95d1J7XfxSyfbpVhARtmILbxL/xNnD/4PbMmCdCUwfkWLH42N
+         H0Dg==
+X-Gm-Message-State: ANoB5pnbDZSqEt4CTUWHqgYle/+xZzSGQ/51une+vHLRyQUhRLz0cfdO
+        to8XE+cMlQbHcH+l5cBMWNCNYA==
+X-Google-Smtp-Source: AA0mqf57wxPc/IcFFwXPdN4t6wwPtuIbaiBBr+XKGhmHjfx+eusyVOWa3AYDyygGChHHhwdagn5RJA==
+X-Received: by 2002:a17:90a:fb50:b0:219:5e9:f260 with SMTP id iq16-20020a17090afb5000b0021905e9f260mr42436295pjb.16.1670034674099;
+        Fri, 02 Dec 2022 18:31:14 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x27-20020aa7957b000000b0057534fcd895sm5716573pfq.108.2022.12.02.18.29.06
+        by smtp.gmail.com with ESMTPSA id x9-20020aa79a49000000b0056b9df2a15esm117188pfj.62.2022.12.02.18.31.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:29:06 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:29:05 -0800
+        Fri, 02 Dec 2022 18:31:13 -0800 (PST)
+Date:   Fri, 2 Dec 2022 18:31:12 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -74,16 +74,15 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v4 08/39] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
-Message-ID: <202212021829.6BC87357@keescook>
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v4 10/39] x86/mm: Introduce _PAGE_COW
+Message-ID: <202212021831.61BD0D9A5@keescook>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-9-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-11-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-9-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221203003606.6838-11-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -94,28 +93,59 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:35PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On Fri, Dec 02, 2022 at 04:35:37PM -0800, Rick Edgecombe wrote:
+> Some OSes have a greater dependence on software available bits in PTEs than
+> Linux. That left the hardware architects looking for a way to represent a
+> new memory type (shadow stack) within the existing bits. They chose to
+> repurpose a lightly-used state: Write=0,Dirty=1. So in order to support
+> shadow stack memory, Linux should avoid creating memory with this PTE bit
+> combination unless it intends for it to be shadow stack.
 > 
-> New processors that support Shadow Stack regard Write=0,Dirty=1 PTEs as
-> shadow stack pages.
+> The reason it's lightly used is that Dirty=1 is normally set by HW
+> _before_ a write. A write with a Write=0 PTE would typically only generate
+> a fault, not set Dirty=1. Hardware can (rarely) both set Dirty=1 *and*
+> generate the fault, resulting in a Write=0,Dirty=1 PTE. Hardware which
+> supports shadow stacks will no longer exhibit this oddity.
 > 
-> In normal cases, it can be helpful to create Write=1 PTEs as also Dirty=1
-> if HW dirty tracking is not needed, because if the Dirty bit is not already
-> set the CPU has to set Dirty=1 when it the memory gets written to. This
-> creates addiontal work for the CPU. So tradional wisdom was to simply set
-> the Dirty bit whenever you didn't care about it. However, it was never
-> really very helpful for read only kernel memory.
+> So that leaves Write=0,Dirty=1 PTEs created in software. To achieve this,
+> in places where Linux normally creates Write=0,Dirty=1, it can use the
+> software-defined _PAGE_COW in place of the hardware _PAGE_DIRTY. In other
+> words, whenever Linux needs to create Write=0,Dirty=1, it instead creates
+> Write=0,Cow=1 except for shadow stack, which is Write=0,Dirty=1.
+> Further differentiated by VMA flags, these PTE bit combinations would be
+> set as follows for various types of memory:
 > 
-> When CR4.CET=1 and IA32_S_CET.SH_STK_EN=1, some instructions can write to
-> such supervisor memory. The kernel does not set IA32_S_CET.SH_STK_EN, so
-> avoiding kernel Write=0,Dirty=1 memory is not strictly needed for any
-> functional reason. But having Write=0,Dirty=1 kernel memory doesn't have
-> any functional benefit either, so to reduce ambiguity between shadow stack
-> and regular Write=0 pages, removed Dirty=1 from any kernel Write=0 PTEs.
+> (Write=0,Cow=1,Dirty=0):
+>  - A modified, copy-on-write (COW) page. Previously when a typical
+>    anonymous writable mapping was made COW via fork(), the kernel would
+>    mark it Write=0,Dirty=1. Now it will instead use the Cow bit. This
+>    happens in copy_present_pte().
+>  - A R/O page that has been COW'ed. The user page is in a R/O VMA,
+>    and get_user_pages(FOLL_FORCE) needs a writable copy. The page fault
+>    handler creates a copy of the page and sets the new copy's PTE as
+>    Write=0 and Cow=1.
+>  - A shared shadow stack PTE. When a shadow stack page is being shared
+>    among processes (this happens at fork()), its PTE is made Dirty=0, so
+>    the next shadow stack access causes a fault, and the page is
+>    duplicated and Dirty=1 is set again. This is the COW equivalent for
+>    shadow stack pages, even though it's copy-on-access rather than
+>    copy-on-write.
+> 
+> (Write=0,Cow=0,Dirty=1):
+>  - A shadow stack PTE.
+>  - A Cow PTE created when a processor without shadow stack support set
+>    Dirty=1.
+> 
+> There are six bits left available to software in the 64-bit PTE after
+> consuming a bit for _PAGE_COW. No space is consumed in 32-bit kernels
+> because shadow stacks are not enabled there.
+> 
+> This is a prepratory patch. Changes to actually start marking _PAGE_COW
+> will follow once other pieces are in place.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
+> Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
