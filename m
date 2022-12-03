@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8270B641278
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D9B64127A
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235086AbiLCAl3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 19:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
+        id S235176AbiLCAlb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 19:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbiLCAkV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:40:21 -0500
+        with ESMTP id S235181AbiLCAkX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:40:23 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E2F2714D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78F432B82;
         Fri,  2 Dec 2022 16:38:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1670027885; x=1701563885;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=1B1fGdYaOUBrZLGly7/XqlrrigTtV2P34Ygy1ZAid0o=;
-  b=bqCzhTrLzuACW+fDTw40WUtiRqWIcKe1jxjbK2fzdHu7aOzyqvBoUIVD
-   UQkMU92E/N3xaky63L4zT+k4pPbqL0MJ1DPIjY5OePhnHac6iYRtbvyzr
-   BEai8dkhWPyfaZye8eb5Q7Uj9ccEooMESzVyhPiSB6uuyKlXNihoWoATS
-   ifBmVqRTCyCX+FqhPNbhaP344/K1SR3vDcd5AhkOkb2rIhpy0T1/1HW6w
-   EeHroZ1BaYZrMyUm/lm+GuYyTRKKK+2TRKrlxmBCqYJMg095tp3wkp4WQ
-   5OTcYjelcBnTuObEzpAjHaqNGXNHOI3swaZ9NRqiAfaKp0WTkfb8j07y1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313711220"
+  bh=MnAcuxZAV1b+bhHBPiW6hFp2ZyTZLf3Iug5aPuTPDEE=;
+  b=Ims0zhRTJtQkwiXYgS0+Fl6ionTwk7MpdB4v+Dn4kB9jk1lq1eqXyjCU
+   KDqfOZGqJxM3n4DnLu4DWILLd9qOYMVaSeSru6edadgaZ9UTnPuK/JvVh
+   ocFz+6oPLDZrijrcdsfb7bMQex2PrpkwCmDTK/78WuMffwxWlHV3XeXIJ
+   6v8gokTUAAhFa8ahatRvY2Wwh0yT8ovM4l3J4A1aUpC4Be7mR+N51Cid/
+   DKcQrFUyxgpUrqzKWntXh2DvXZ4vUZvvASOibXd3D0q+/lfxKon89y0pz
+   Q9prYyolLzspuvEMsyO8hhiRTeWv2XPQq03Mahh+kEGJZF3r/C7PTX5v0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313711249"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="313711220"
+   d="scan'208";a="313711249"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787479934"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787479940"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="787479934"
+   d="scan'208";a="787479940"
 Received: from bgordon1-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.211.211])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:22 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:23 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
 Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v4 23/39] mm: Don't allow write GUPs to shadow stack memory
-Date:   Fri,  2 Dec 2022 16:35:50 -0800
-Message-Id: <20221203003606.6838-24-rick.p.edgecombe@intel.com>
+Subject: [PATCH v4 24/39] mm: Warn on shadow stack memory in wrong vma
+Date:   Fri,  2 Dec 2022 16:35:51 -0800
+Message-Id: <20221203003606.6838-25-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
@@ -86,14 +86,19 @@ type of memory called shadow stack. This shadow stack memory has some
 unusual properties, which requires some core mm changes to function
 properly.
 
-Shadow stack memory is writable only in very specific, controlled ways.
-However, since it is writable, the kernel treats it as such. As a result
-there remain many ways for userspace to trigger the kernel to write to
-shadow stack's via get_user_pages(, FOLL_WRITE) operations. To make this a
-little less exposed, block writable GUPs for shadow stack VMAs.
+One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
+treated as shadow by the CPU, but this combination used to be created by
+the kernel on x86. Previous patches have changed the kernel to now avoid
+creating these PTEs unless they are for shadow stack memory. In case any
+missed corners of the kernel are still creating PTEs like this for
+non-shadow stack memory, and to catch any re-introductions of the logic,
+warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
+stack VMAs when they are being zapped. This won't catch transient cases
+but should have decent coverage. It will be compiled out when shadow
+stack is not configured.
 
-Still allow FOLL_FORCE to write through shadow stack protections, as it
-does for read-only protections.
+In order to check if a pte is shadow stack in core mm code, add default
+implmentations for pte_shstk() and pmd_shstk().
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
@@ -101,43 +106,85 @@ Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 ---
 
 v3:
- - Add comment in __pte_access_permitted() (Dave)
- - Remove unneeded shadow stack specific check in
-   __pte_access_permitted() (Jann)
+ - New patch
 
- arch/x86/include/asm/pgtable.h | 5 +++++
- mm/gup.c                       | 2 +-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/pgtable.h |  2 ++
+ include/linux/pgtable.h        | 14 ++++++++++++++
+ mm/huge_memory.c               |  2 ++
+ mm/memory.c                    |  2 ++
+ 4 files changed, 20 insertions(+)
 
 diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index a89dfa9174ae..945d58681a87 100644
+index 945d58681a87..519a266ace10 100644
 --- a/arch/x86/include/asm/pgtable.h
 +++ b/arch/x86/include/asm/pgtable.h
-@@ -1636,6 +1636,11 @@ static inline bool __pte_access_permitted(unsigned long pteval, bool write)
+@@ -129,6 +129,7 @@ static inline bool pte_dirty(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_DIRTY_BITS;
+ }
+ 
++#define pte_shstk pte_shstk
+ static inline bool pte_shstk(pte_t pte)
  {
- 	unsigned long need_pte_bits = _PAGE_PRESENT|_PAGE_USER;
+ 	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
+@@ -147,6 +148,7 @@ static inline bool pmd_dirty(pmd_t pmd)
+ 	return pmd_flags(pmd) & _PAGE_DIRTY_BITS;
+ }
  
-+	/*
-+	 * Write=0,Dirty=1 PTEs are shadow stack, which the kernel
-+	 * shouldn't generally allow access to, but since they
-+	 * are already Write=0, the below logic covers both cases.
-+	 */
- 	if (write)
- 		need_pte_bits |= _PAGE_RW;
++#define pmd_shstk pmd_shstk
+ static inline bool pmd_shstk(pmd_t pmd)
+ {
+ 	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index b4a9d9936463..34aa57941d57 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -531,6 +531,20 @@ static inline pte_t pte_mkwrite_shstk(pte_t pte)
+ }
+ #endif
  
-diff --git a/mm/gup.c b/mm/gup.c
-index cdff87343884..75e8d3853ff3 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1062,7 +1062,7 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- 		return -EFAULT;
- 
- 	if (write) {
--		if (!(vm_flags & VM_WRITE)) {
-+		if (!(vm_flags & VM_WRITE) || (vm_flags & VM_SHADOW_STACK)) {
- 			if (!(gup_flags & FOLL_FORCE))
- 				return -EFAULT;
- 			/*
++#ifndef pte_shstk
++static inline bool pte_shstk(pte_t pte)
++{
++	return false;
++}
++#endif
++
++#ifndef pmd_shstk
++static inline bool pmd_shstk(pmd_t pte)
++{
++	return false;
++}
++#endif
++
+ #ifndef pte_clear_savedwrite
+ #define pte_clear_savedwrite pte_wrprotect
+ #endif
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index b6294c4ad471..64d81aa97a61 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1656,6 +1656,8 @@ int zap_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	 */
+ 	orig_pmd = pmdp_huge_get_and_clear_full(vma, addr, pmd,
+ 						tlb->fullmm);
++	VM_WARN_ON_ONCE(!(vma->vm_flags & VM_SHADOW_STACK) &&
++			pmd_shstk(orig_pmd));
+ 	tlb_remove_pmd_tlb_entry(tlb, pmd, addr);
+ 	if (vma_is_special_huge(vma)) {
+ 		if (arch_needs_pgtable_deposit())
+diff --git a/mm/memory.c b/mm/memory.c
+index c02b6421241d..bae62b2d6696 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1437,6 +1437,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 				continue;
+ 			ptent = ptep_get_and_clear_full(mm, addr, pte,
+ 							tlb->fullmm);
++			VM_WARN_ON_ONCE(!(vma->vm_flags & VM_SHADOW_STACK) &&
++					pte_shstk(ptent));
+ 			tlb_remove_tlb_entry(tlb, pte, addr);
+ 			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
+ 						      ptent);
 -- 
 2.17.1
 
