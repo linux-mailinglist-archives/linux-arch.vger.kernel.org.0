@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E77641240
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA5A641244
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbiLCAig (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 19:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
+        id S235104AbiLCAis (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 19:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbiLCAhw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:37:52 -0500
+        with ESMTP id S235117AbiLCAhz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:37:55 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CE3FB896;
-        Fri,  2 Dec 2022 16:36:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06337FB8B7;
+        Fri,  2 Dec 2022 16:37:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670027818; x=1701563818;
+  t=1670027821; x=1701563821;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=VdMyMevhZAddtRomIPqld9oZXe9pcHrfJ+wDgFx8LIU=;
-  b=gjfbeWdtx1oNZa+0OtnjeIbaXPdUTg6OfgceMuLjfFP6LiLnEX9GMsFr
-   7GSxW+hLK3uyM6hR2vYcs+py6P9nyHkiEIFNhvfbdSTsIqn7N53tYtK46
-   XOvq9ToE7VpPwQrifs/89GRKDaP5Kmv9D2lMJN/doVjsPxCyCbk9tWPIF
-   DkYqr0VaLOUheF1MXC5+aOhGtC1N6neVWU8qaB8Hi7YRM0SQIdoooEW70
-   pvNUUYMpKzTDCSdT7KzddWDwLjMQPaKMfROWnmvSyzC2DYH+bJVD7TRJN
-   PAuOGQmZo8ZX4yH4lBbLf/IXxVy9hjyIPHxRYIBzBcNz9UqxAY2DsokjO
+  bh=mMUmCMQ2UpuIfMiP4n71ImLyKciupdTDYlrsPhVTKDs=;
+  b=amCcSKnCNnD9eKsl8dqaLnknkLm6WjS38RqDJqNyuKmuvZ7mvlcXtx+R
+   yG4l5Z20EWkQWPq5W86piPxsdzqj9JJ0DQmFKGpa9fBW2sSIS97xORznY
+   7HxIo5JF+Vv+wWxFqD7gfvhWm4FjY3KKCVvzaACb3dpAXvtu00TrFWl3i
+   U5pvNDdrQExZZLuM4rFXG7jdKjmcd4vtPuRCxbRxba17PPL1a/NQ732hn
+   XX0HiD/WLPcx71R37rq5+aLyfGh7S8DcDL3jf2HjmF+ju24lRNpLq1wNw
+   CuXgZz7sA5f8Su1dI3x4RTNl9xIiRt5nKVGoEoleCmFEpI15PQH1k4j20
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313710914"
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313710938"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="313710914"
+   d="scan'208";a="313710938"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:36:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787479818"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787479830"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="787479818"
+   d="scan'208";a="787479830"
 Received: from bgordon1-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.211.211])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:36:52 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:36:57 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v4 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Date:   Fri,  2 Dec 2022 16:35:38 -0800
-Message-Id: <20221203003606.6838-12-rick.p.edgecombe@intel.com>
+Subject: [PATCH v4 12/39] x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+Date:   Fri,  2 Dec 2022 16:35:39 -0800
+Message-Id: <20221203003606.6838-13-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
@@ -83,20 +83,31 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-The Write=0,Dirty=1 PTE has been used to indicate copy-on-write pages.
-However, newer x86 processors also regard a Write=0,Dirty=1 PTE as a
-shadow stack page. In order to separate the two, the software-defined
-_PAGE_DIRTY is changed to _PAGE_COW for the copy-on-write case, and
-pte_*() are updated to do this.
+When Shadow Stack is in use, Write=0,Dirty=1 PTE are reserved for shadow
+stack. Copy-on-write PTes then have Write=0,Cow=1.
 
-pte_modify() takes a "raw" pgprot_t which was not necessarily created
-with any of the existing PTE bit helpers. That means that it can return a
-pte_t with Write=0,Dirty=1, a shadow stack PTE, when it did not intend to
-create one.
+When a PTE goes from Write=1,Dirty=1 to Write=0,Cow=1, it could
+become a transient shadow stack PTE in two cases:
 
-However pte_modify() changes a PTE to 'newprot', but it doesn't use the
-pte_*(). Modify it to also move _PAGE_DIRTY to _PAGE_COW. Apply the same
-changes to pmd_modify().
+The first case is that some processors can start a write but end up seeing
+a Write=0 PTE by the time they get to the Dirty bit, creating a transient
+shadow stack PTE. However, this will not occur on processors supporting
+Shadow Stack, and a TLB flush is not necessary.
+
+The second case is that when _PAGE_DIRTY is replaced with _PAGE_COW non-
+atomically, a transient shadow stack PTE can be created as a result.
+Thus, prevent that with cmpxchg.
+
+In the case of pmdp_set_wrprotect(), for nopmd configs the ->pmd operated
+on does not exist and the logic would need to be different. Although the
+extra functionality will normally be optimized out when user shadow
+stacks are not configured, also exclude it in the preprocessor stage so
+that it will still compile. User shadow stack is not supported there by
+Linux anyway. Leave the cpu_feature_enabled() check so that the
+functionality also disables based on runtime detection of the feature.
+
+Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
+insights to the issue. Jann Horn provided the cmpxchg solution.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
@@ -105,84 +116,74 @@ Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 ---
 
-v4:
- - Fix an issue in soft-dirty test, where pte_modify() would detect
-   _PAGE_COW in pte_dirty() and set the soft dirty bit in pte_mkdirty().
+v3:
+ - Remove unnecessary #ifdef (Dave Hansen)
 
 v2:
- - Update commit log with text and suggestions from (Dave Hansen)
- - Drop fixup_dirty_pte() in favor of clearing the HW dirty bit along
-   with the _PAGE_CHG_MASK masking, then calling pte_mkdirty() (Dave
-   Hansen)
+ - Compile out some code due to clang build error
+ - Clarify commit log (dhansen)
+ - Normalize PTE bit descriptions between patches (dhansen)
+ - Update comment with text from (dhansen)
 
- arch/x86/include/asm/pgtable.h | 40 +++++++++++++++++++++++++++++-----
- 1 file changed, 34 insertions(+), 6 deletions(-)
+Yu-cheng v30:
+ - Replace (pmdval_t) cast with CONFIG_PGTABLE_LEVELES > 2 (Borislav Petkov).
+
+ arch/x86/include/asm/pgtable.h | 35 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
 diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index ee5fbdc2615f..67bd2627c293 100644
+index 67bd2627c293..b68428099932 100644
 --- a/arch/x86/include/asm/pgtable.h
 +++ b/arch/x86/include/asm/pgtable.h
-@@ -698,26 +698,54 @@ static inline u64 flip_protnone_guard(u64 oldval, u64 val, u64 mask);
- 
- static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+@@ -1195,6 +1195,21 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
+ static inline void ptep_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long addr, pte_t *ptep)
  {
-+	pteval_t _page_chg_mask_no_dirty = _PAGE_CHG_MASK & ~_PAGE_DIRTY;
- 	pteval_t val = pte_val(pte), oldval = val;
-+	pte_t pte_result;
- 
- 	/*
- 	 * Chop off the NX bit (if present), and add the NX portion of
- 	 * the newprot (if present):
- 	 */
--	val &= _PAGE_CHG_MASK;
--	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
-+	val &= _page_chg_mask_no_dirty;
-+	val |= check_pgprot(newprot) & ~_page_chg_mask_no_dirty;
- 	val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
--	return __pte(val);
-+
-+	pte_result = __pte(val);
-+
 +	/*
-+	 * Dirty bit is not preserved above so it can be done
-+	 * in a special way for the shadow stack case, where it
-+	 * needs to set _PAGE_COW. pte_mkcow() will do this in
-+	 * the case of shadow stack.
++	 * Avoid accidentally creating shadow stack PTEs
++	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
++	 * the hardware setting Dirty=1.
 +	 */
-+	if (pte_dirty(pte_result))
-+		pte_result = pte_mkcow(pte_result);
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK)) {
++		pte_t old_pte, new_pte;
 +
-+	return pte_result;
++		old_pte = READ_ONCE(*ptep);
++		do {
++			new_pte = pte_wrprotect(old_pte);
++		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
++
++		return;
++	}
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
  }
  
- static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+@@ -1247,6 +1262,26 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
+ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long addr, pmd_t *pmdp)
  {
-+	pteval_t _hpage_chg_mask_no_dirty = _HPAGE_CHG_MASK & ~_PAGE_DIRTY;
- 	pmdval_t val = pmd_val(pmd), oldval = val;
-+	pmd_t pmd_result;
- 
--	val &= _HPAGE_CHG_MASK;
--	val |= check_pgprot(newprot) & ~_HPAGE_CHG_MASK;
-+	val &= _hpage_chg_mask_no_dirty;
-+	val |= check_pgprot(newprot) & ~_hpage_chg_mask_no_dirty;
- 	val = flip_protnone_guard(oldval, val, PHYSICAL_PMD_PAGE_MASK);
--	return __pmd(val);
-+
-+	pmd_result = __pmd(val);
-+
++#ifdef CONFIG_X86_USER_SHADOW_STACK
 +	/*
-+	 * Dirty bit is not preserved above so it can be done
-+	 * in a special way for the shadow stack case, where it
-+	 * needs to set _PAGE_COW. pmd_mkcow() will do this in
-+	 * the case of shadow stack.
++	 * If Shadow Stack is enabled, pmd_wrprotect() moves _PAGE_DIRTY
++	 * to _PAGE_COW (see comments at pmd_wrprotect()).
++	 * When a thread reads a RW=1, Dirty=0 PMD and before changing it
++	 * to RW=0, Dirty=0, another thread could have written to the page
++	 * and the PMD is RW=1, Dirty=1 now.
 +	 */
-+	if (pmd_dirty(pmd_result))
-+		pmd_result = pmd_mkcow(pmd_result);
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK)) {
++		pmd_t old_pmd, new_pmd;
 +
-+	return pmd_result;
++		old_pmd = READ_ONCE(*pmdp);
++		do {
++			new_pmd = pmd_wrprotect(old_pmd);
++		} while (!try_cmpxchg(&pmdp->pmd, &old_pmd.pmd, new_pmd.pmd));
++
++		return;
++	}
++#endif
++
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
  }
  
- /*
 -- 
 2.17.1
 
