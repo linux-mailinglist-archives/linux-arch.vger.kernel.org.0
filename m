@@ -2,353 +2,258 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C773C64102F
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Dec 2022 22:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D04641213
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234567AbiLBVsE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 16:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S234944AbiLCAga (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 19:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiLBVrz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 16:47:55 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329031128;
-        Fri,  2 Dec 2022 13:47:51 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 4BC8B320091B;
-        Fri,  2 Dec 2022 16:47:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 02 Dec 2022 16:47:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670017666; x=1670104066; bh=JB
-        VDtu38LeFB5nSSjItviv90aFCAl1CdWcwU6/jpxG0=; b=LFj6Haobo0ntdgGce6
-        fcxZeLAIy8ADoYy71k8+4ZsT2PEPju8IuqEVdlGEolgkZKTN/3qqNI0VKLO65mmX
-        a9oOCr9Zpgzt6jjDFDdgpXyGtMFA27l8ZmUNWx3Nx+JMEcRNS/omGrw5Jh9z1Bjx
-        ppoAai0lW9TAhoKkgxYHvj597NloJVehLA0aR6kCJz2akvqotQha+Gkk9aGCyHoA
-        pFzioo+PmKLIaFL6sMk9Vd90ccoBExxdjQd0Plew5TST3tkzc8fANY09IJnwGVvs
-        Ojh+Itw+cI6xMhB0Usr06dr27hf3hWd9tO2+aDfynVKuSqtbvM2A4fpMHnPt6FNF
-        22Tw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670017666; x=1670104066; bh=JBVDtu38LeFB5nSSjItviv90aFCA
-        l1CdWcwU6/jpxG0=; b=jTi0A3ARIWABQTDm1XZ4c9i/gGhVacveUIB7xz6PvpGE
-        xfJDHsQOeSh90YweFgZDj0pnJRxa3MAg1j8sVKibKn9y3+hrbetZ7FQMV2tzg+6F
-        BZ93FxU7t8P8ZzgPtLLYbovypnLj0Z47u/K69nbobXL18ZKAOqOwVcS7onOYCVI8
-        otVgdGjnlCdoFXxrdOc0mUiOA+YRePODM+7Pma+yy/LMwihN5ajqGpr+4I4CMNFU
-        aVH845Ik0W1G0DPf+LYSLZU5mvuZCHoXbyZclaIjdYdh30U/+TgEcEGIX4EeB0RJ
-        4VZuc2j4lAWMo/s5XUzPfKHBPRNuQZBSwsXaoKe7EA==
-X-ME-Sender: <xms:gXKKYzO7NC0ViI7ylIIclOclJY7DRlGWsZZJ6njoEthHqqIw3wquDg>
-    <xme:gXKKY9-inbRzBqwRBLIKJOPjGQJIb7rE87S7NDOzIh7RpxeszQ-sgI5uahctQbiT8
-    deIynGWh2ss9h0Q78c>
-X-ME-Received: <xmr:gXKKYyQLZwbJHBXsiIY_TrH2F_dmeWyyTS-aLgQHD32c60327t-868le8RpD1ahtoIEwag>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrtdekgdduvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfddkmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvkddfuceokhhirhhilhhlsehshhhuthgvmhhovh
-    drnhgrmhgvqeenucggtffrrghtthgvrhhnpeevfeeltdfhffevfeeuveehkeffueelkeei
-    feegieekjedugedvudejiefgheffudenucffohhmrghinhepthgutggrlhhlrdhssgenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhl
-    lhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:gXKKY3uC9Q_TNvuJ5mM6TqEAY8kivsFSfIcnsY6NKsZOcRuK1J7LHg>
-    <xmx:gXKKY7fUao4dnX11KMFGnTwmMR5i-mTb7hFwnhjgrUoxF7tpXSPuVw>
-    <xmx:gXKKYz2YM-otuq_AYPHWZRFTwvHabkmT9iV1748dt63W-x0oLvxZaA>
-    <xmx:gnKKY0tPBkfI1jriP2HDby0ePLv4BmVpiU2PUJLXDAV8pIBc-4uGVw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 Dec 2022 16:47:45 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 0AA2A10975F; Sat,  3 Dec 2022 00:47:42 +0300 (+03)
-Date:   Sat, 3 Dec 2022 00:47:41 +0300
-From:   "'Kirill A. Shutemov'" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     'Dave Hansen' <dave.hansen@intel.com>,
-        "'ak@linux.intel.com'" <ak@linux.intel.com>,
-        "'arnd@arndb.de'" <arnd@arndb.de>, "'bp@alien8.de'" <bp@alien8.de>,
-        "'brijesh.singh@amd.com'" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "'dave.hansen@linux.intel.com'" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "'hpa@zytor.com'" <hpa@zytor.com>,
-        "'jane.chu@oracle.com'" <jane.chu@oracle.com>,
-        "'kirill.shutemov@linux.intel.com'" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "'linux-arch@vger.kernel.org'" <linux-arch@vger.kernel.org>,
-        "'linux-hyperv@vger.kernel.org'" <linux-hyperv@vger.kernel.org>,
-        "'luto@kernel.org'" <luto@kernel.org>,
-        "'mingo@redhat.com'" <mingo@redhat.com>,
-        "'peterz@infradead.org'" <peterz@infradead.org>,
-        "'rostedt@goodmis.org'" <rostedt@goodmis.org>,
-        "'sathyanarayanan.kuppuswamy@linux.intel.com'" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "'seanjc@google.com'" <seanjc@google.com>,
-        "'tglx@linutronix.de'" <tglx@linutronix.de>,
-        "'tony.luck@intel.com'" <tony.luck@intel.com>,
-        "'wei.liu@kernel.org'" <wei.liu@kernel.org>,
-        "'x86@kernel.org'" <x86@kernel.org>,
-        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/6] x86/tdx: Support hypercalls for TDX guests on Hyper-V
-Message-ID: <20221202214741.7vfmqgvgubxqffen@box.shutemov.name>
-References: <20221121195151.21812-1-decui@microsoft.com>
- <20221121195151.21812-2-decui@microsoft.com>
- <18323d11-146f-c418-e8f0-addb2b8adb19@intel.com>
- <SA1PR21MB13353C24B5BF2E7D6E8BCFA5BF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <20221123144043.ne34k5xw7dahzscq@box.shutemov.name>
- <SA1PR21MB1335EEEC1DE4CB42F6477A5EBF0C9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <SA1PR21MB133594060B7EB17CF1FDBD95BF159@SA1PR21MB1335.namprd21.prod.outlook.com>
+        with ESMTP id S233795AbiLCAg3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:36:29 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0655F4EA3;
+        Fri,  2 Dec 2022 16:36:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670027788; x=1701563788;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UExb0P455rgshLHt6GYI1t6rsa+B8lT8eGARn4e7l/I=;
+  b=C2bx68riARE++8vncPuCZ+2R8c9173dMLMzWoj//m2s+8P0lSHQG9mSR
+   c9b4/53UTfezYQZUiXcRDQgkP6Ln6E4kplUPPNT6VOfW6XWj22PK8gBXA
+   kysc5b+AkAbKREJf4DvShiNjZJj+mWFDzxvx/H5QRtMjlVWLH+lgqTXaK
+   FKLlz97bZdsgQCwXBzUt6Z9mC9qhHxuCqXy5Tljjv1FzvggALX04zm3Wv
+   9DCwXDWMbia6NSPz1gAly0Zq4Pzg9VNpUwvcGOGMwdh5tU8j1NJGPisJD
+   YYIiqcYZusWD+a6riwyrTlaIgtRu9htHK/pomW8mWcwd9D1/tlZ9jwjpA
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313710614"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="313710614"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:36:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787479735"
+X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
+   d="scan'208";a="787479735"
+Received: from bgordon1-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.211.211])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:36:26 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Cc:     rick.p.edgecombe@intel.com
+Subject: [PATCH v4 00/39] Shadow stacks for userspace
+Date:   Fri,  2 Dec 2022 16:35:27 -0800
+Message-Id: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SA1PR21MB133594060B7EB17CF1FDBD95BF159@SA1PR21MB1335.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 07:14:49PM +0000, Dexuan Cui wrote:
-> > From: Dexuan Cui
-> > Sent: Wednesday, November 23, 2022 10:55 AM
-> > To: Kirill A. Shutemov <kirill@shutemov.name>
-> > 
-> > > From: Kirill A. Shutemov <kirill@shutemov.name>
-> > > Sent: Wednesday, November 23, 2022 6:41 AM
-> > > [...]
-> > > I have plan to expand __tdx_hypercall() to cover more registers.
-> > > See the patch below.
-> > 
-> > Great! Thank you!
-> > 
-> > > Is it enough for you?
-> > Yes.
-> 
-> Hi Kirill, it would be great if you could post a formal patch so that
-> I can rebase my patchset accordingly.
+Hi,
 
-The patch doesn't make sense without a user. The use-case I wanted to use
-it for awaits update of GHCI. It make take time.
+This series implements Shadow Stacks for userspace using x86's Control-flow 
+Enforcement Technology (CET). CET consists of two related security features: 
+Shadow Stacks and Indirect Branch Tracking. This series implements just the 
+Shadow Stack part of this feature, and just for userspace.
 
-Below is proper patch. Feel free to include it into your patchset.
+The main use case for shadow stack is providing protection against return 
+oriented programming attacks. It works by maintaining a secondary (shadow) 
+stack using a special memory type that has protections against modification. 
+When executing a CALL instruction, the processor pushes the return address to 
+both the normal stack and to the special permissioned shadow stack. Upon RET, 
+the processor pops the shadow stack copy and compares it to the normal stack 
+copy. For more details, see the coverletter from v1 [0].
 
-From fdf892e8f84c98e4cb7f3f7a613f32c8da396bd7 Mon Sep 17 00:00:00 2001
-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Date: Wed, 23 Nov 2022 07:31:05 +0300
-Subject: [PATCH] x86/tdx: Expand __tdx_hypercall() to handle more arguments
 
-So far __tdx_hypercall() only handles six arguments for VMCALL.
-Expanding it to six more register would allow to cover more use-cases.
+I humbly think this is looking decent at this point, please consider applying.
 
-Using RDI and RSI as VMCALL arguments requires more register shuffling.
-RAX is used to hold tdx_hypercall_args pointer and RBP stores flags.
+Again there were some smaller changes (logged in the patches). The more
+noteworthy changes were:
+ - Separate Shadow stack from IBT in kernel APIs. This involves renaming the
+   arch_prctl()s. And changing the ptrace cet regset interface to only expose
+   the SSP, and not any IBT bits.
+ - Handle 32 bit case more completely. (see commit log of “x86: Prevent 32 bit
+   operations for 64 bit shstk tasks” for the details)
+ - Drop elf header bit filtering compatibility patch for now, per Linus. [1]
+ - Break apart _PAGE_COW patch for bisectability reasons.
 
-While there, fix typo in the comment on panic branch.
+I left the Tested-by tags that were already in place, testers please re-test.
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/coco/tdx/tdcall.S        | 82 ++++++++++++++++++++++---------
- arch/x86/include/asm/shared/tdx.h |  6 +++
- arch/x86/kernel/asm-offsets.c     |  6 +++
- 3 files changed, 70 insertions(+), 24 deletions(-)
+Previous version [2].
 
-diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-index f9eb1134f22d..64e57739dc9d 100644
---- a/arch/x86/coco/tdx/tdcall.S
-+++ b/arch/x86/coco/tdx/tdcall.S
-@@ -13,6 +13,12 @@
- /*
-  * Bitmasks of exposed registers (with VMM).
-  */
-+#define TDX_RDX		BIT(2)
-+#define TDX_RBX		BIT(3)
-+#define TDX_RSI		BIT(6)
-+#define TDX_RDI		BIT(7)
-+#define TDX_R8		BIT(8)
-+#define TDX_R9		BIT(9)
- #define TDX_R10		BIT(10)
- #define TDX_R11		BIT(11)
- #define TDX_R12		BIT(12)
-@@ -27,9 +33,9 @@
-  * details can be found in TDX GHCI specification, section
-  * titled "TDCALL [TDG.VP.VMCALL] leaf".
-  */
--#define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
--					  TDX_R12 | TDX_R13 | \
--					  TDX_R14 | TDX_R15 )
-+#define TDVMCALL_EXPOSE_REGS_MASK	\
-+	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
-+	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
- 
- /*
-  * __tdx_module_call()  - Used by TDX guests to request services from
-@@ -124,19 +130,32 @@ SYM_FUNC_START(__tdx_hypercall)
- 	push %r14
- 	push %r13
- 	push %r12
-+	push %rbx
-+	push %rbp
-+
-+	movq %rdi, %rax
-+	movq %rsi, %rbp
-+
-+	/* Copy hypercall registers from arg struct: */
-+	movq TDX_HYPERCALL_r8(%rax),  %r8
-+	movq TDX_HYPERCALL_r9(%rax),  %r9
-+	movq TDX_HYPERCALL_r10(%rax), %r10
-+	movq TDX_HYPERCALL_r11(%rax), %r11
-+	movq TDX_HYPERCALL_r12(%rax), %r12
-+	movq TDX_HYPERCALL_r13(%rax), %r13
-+	movq TDX_HYPERCALL_r14(%rax), %r14
-+	movq TDX_HYPERCALL_r15(%rax), %r15
-+	movq TDX_HYPERCALL_rdi(%rax), %rdi
-+	movq TDX_HYPERCALL_rsi(%rax), %rsi
-+	movq TDX_HYPERCALL_rbx(%rax), %rbx
-+	movq TDX_HYPERCALL_rdx(%rax), %rdx
-+
-+	push %rax
- 
- 	/* Mangle function call ABI into TDCALL ABI: */
- 	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
- 	xor %eax, %eax
- 
--	/* Copy hypercall registers from arg struct: */
--	movq TDX_HYPERCALL_r10(%rdi), %r10
--	movq TDX_HYPERCALL_r11(%rdi), %r11
--	movq TDX_HYPERCALL_r12(%rdi), %r12
--	movq TDX_HYPERCALL_r13(%rdi), %r13
--	movq TDX_HYPERCALL_r14(%rdi), %r14
--	movq TDX_HYPERCALL_r15(%rdi), %r15
--
- 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
- 
- 	/*
-@@ -148,14 +167,14 @@ SYM_FUNC_START(__tdx_hypercall)
- 	 * HLT operation indefinitely. Since this is the not the desired
- 	 * result, conditionally call STI before TDCALL.
- 	 */
--	testq $TDX_HCALL_ISSUE_STI, %rsi
-+	testq $TDX_HCALL_ISSUE_STI, %rbp
- 	jz .Lskip_sti
- 	sti
- .Lskip_sti:
- 	tdcall
- 
- 	/*
--	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
-+	 * RAX!=0 indicates a failure of the TDVMCALL mechanism itself and that
- 	 * something has gone horribly wrong with the TDX module.
- 	 *
- 	 * The return status of the hypercall operation is in a separate
-@@ -165,30 +184,45 @@ SYM_FUNC_START(__tdx_hypercall)
- 	testq %rax, %rax
- 	jne .Lpanic
- 
--	/* TDVMCALL leaf return code is in R10 */
--	movq %r10, %rax
-+	pop %rax
- 
- 	/* Copy hypercall result registers to arg struct if needed */
--	testq $TDX_HCALL_HAS_OUTPUT, %rsi
-+	testq $TDX_HCALL_HAS_OUTPUT, %rbp
- 	jz .Lout
- 
--	movq %r10, TDX_HYPERCALL_r10(%rdi)
--	movq %r11, TDX_HYPERCALL_r11(%rdi)
--	movq %r12, TDX_HYPERCALL_r12(%rdi)
--	movq %r13, TDX_HYPERCALL_r13(%rdi)
--	movq %r14, TDX_HYPERCALL_r14(%rdi)
--	movq %r15, TDX_HYPERCALL_r15(%rdi)
-+	movq %r8,  TDX_HYPERCALL_r8(%rax)
-+	movq %r9,  TDX_HYPERCALL_r9(%rax)
-+	movq %r10, TDX_HYPERCALL_r10(%rax)
-+	movq %r11, TDX_HYPERCALL_r11(%rax)
-+	movq %r12, TDX_HYPERCALL_r12(%rax)
-+	movq %r13, TDX_HYPERCALL_r13(%rax)
-+	movq %r14, TDX_HYPERCALL_r14(%rax)
-+	movq %r15, TDX_HYPERCALL_r15(%rax)
-+	movq %rdi, TDX_HYPERCALL_rdi(%rax)
-+	movq %rsi, TDX_HYPERCALL_rsi(%rax)
-+	movq %rbx, TDX_HYPERCALL_rbx(%rax)
-+	movq %rdx, TDX_HYPERCALL_rdx(%rax)
- .Lout:
-+	/* TDVMCALL leaf return code is in R10 */
-+	movq %r10, %rax
-+
- 	/*
- 	 * Zero out registers exposed to the VMM to avoid speculative execution
- 	 * with VMM-controlled values. This needs to include all registers
--	 * present in TDVMCALL_EXPOSE_REGS_MASK (except R12-R15). R12-R15
--	 * context will be restored.
-+	 * present in TDVMCALL_EXPOSE_REGS_MASK, except RBX, and R12-R15 which
-+	 * will be restored.
- 	 */
-+	xor %r8d,  %r8d
-+	xor %r9d,  %r9d
- 	xor %r10d, %r10d
- 	xor %r11d, %r11d
-+	xor %rdi,  %rdi
-+	xor %rsi,  %rsi
-+	xor %rdx,  %rdx
- 
- 	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
-+	pop %rbp
-+	pop %rbx
- 	pop %r12
- 	pop %r13
- 	pop %r14
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index e53f26228fbb..8068faa52de1 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -22,12 +22,18 @@
-  * This is a software only structure and not part of the TDX module/VMM ABI.
-  */
- struct tdx_hypercall_args {
-+	u64 r8;
-+	u64 r9;
- 	u64 r10;
- 	u64 r11;
- 	u64 r12;
- 	u64 r13;
- 	u64 r14;
- 	u64 r15;
-+	u64 rdi;
-+	u64 rsi;
-+	u64 rbx;
-+	u64 rdx;
- };
- 
- /* Used to request services from the VMM */
-diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-index 437308004ef2..9f09947495e2 100644
---- a/arch/x86/kernel/asm-offsets.c
-+++ b/arch/x86/kernel/asm-offsets.c
-@@ -75,12 +75,18 @@ static void __used common(void)
- 	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
- 
- 	BLANK();
-+	OFFSET(TDX_HYPERCALL_r8,  tdx_hypercall_args, r8);
-+	OFFSET(TDX_HYPERCALL_r9,  tdx_hypercall_args, r9);
- 	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
- 	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
- 	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
- 	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
- 	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
- 	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
-+	OFFSET(TDX_HYPERCALL_rdi, tdx_hypercall_args, rdi);
-+	OFFSET(TDX_HYPERCALL_rsi, tdx_hypercall_args, rsi);
-+	OFFSET(TDX_HYPERCALL_rbx, tdx_hypercall_args, rbx);
-+	OFFSET(TDX_HYPERCALL_rdx, tdx_hypercall_args, rdx);
- 
- 	BLANK();
- 	OFFSET(BP_scratch, boot_params, scratch);
+Thanks,
+
+Rick
+
+[0] https://lore.kernel.org/lkml/20220130211838.8382-1-rick.p.edgecombe@intel.com/
+[1] https://lore.kernel.org/lkml/CAHk-=wgP5mk3poVeejw16Asbid0ghDt4okHnWaWKLBkRhQntRA@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/20221104223604.29615-1-rick.p.edgecombe@intel.com/
+
+Kirill A. Shutemov (1):
+  x86: Introduce userspace API for shadow stack
+
+Mike Rapoport (1):
+  x86/shstk: Add ARCH_SHSTK_UNLOCK
+
+Rick Edgecombe (13):
+  x86/fpu: Add helper for modifying xstate
+  x86/mm: Introduce _PAGE_COW
+  x86/mm: Start actually marking _PAGE_COW
+  mm: Don't allow write GUPs to shadow stack memory
+  mm: Warn on shadow stack memory in wrong vma
+  x86/shstk: Introduce map_shadow_stack syscall
+  x86/shstk: Support wrss for userspace
+  x86: Expose thread features in /proc/$PID/status
+  x86: Prevent 32 bit operations for 64 bit shstk tasks
+  x86/shstk: Wire in shadow stack interface
+  selftests/x86: Add shadow stack test
+  x86/fpu: Add helper for initing features
+  x86/shstk: Add ARCH_SHSTK_STATUS
+
+Yu-cheng Yu (24):
+  Documentation/x86: Add CET shadow stack description
+  x86/shstk: Add Kconfig option for Shadow Stack
+  x86/cpufeatures: Add CPU feature flags for shadow stacks
+  x86/cpufeatures: Enable CET CR4 bit for shadow stack
+  x86/fpu/xstate: Introduce CET MSR and XSAVES supervisor states
+  x86: Add user control-protection fault handler
+  x86/mm: Remove _PAGE_DIRTY from kernel RO pages
+  x86/mm: Move pmd_write(), pud_write() up in the file
+  x86/mm: Update pte_modify for _PAGE_COW
+  x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for
+    transition from _PAGE_DIRTY to _PAGE_COW
+  mm: Move VM_UFFD_MINOR_BIT from 37 to 38
+  mm: Introduce VM_SHADOW_STACK for shadow stack memory
+  x86/mm: Check Shadow Stack page fault errors
+  x86/mm: Update maybe_mkwrite() for shadow stack
+  mm: Fixup places that call pte_mkwrite() directly
+  mm: Add guard pages around a shadow stack.
+  mm/mmap: Add shadow stack pages to memory accounting
+  mm/mprotect: Exclude shadow stack from preserve_write
+  mm: Re-introduce vm_flags to do_mmap()
+  x86/shstk: Add user-mode shadow stack support
+  x86/shstk: Handle thread shadow stack
+  x86/shstk: Introduce routines modifying shstk
+  x86/shstk: Handle signals for shadow stack
+  x86: Add PTRACE interface for shadow stack
+
+ Documentation/filesystems/proc.rst            |   1 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/shstk.rst                   | 172 +++++
+ arch/arm/kernel/signal.c                      |   2 +-
+ arch/arm64/kernel/signal.c                    |   2 +-
+ arch/arm64/kernel/signal32.c                  |   2 +-
+ arch/sparc/kernel/signal32.c                  |   2 +-
+ arch/sparc/kernel/signal_64.c                 |   2 +-
+ arch/x86/Kconfig                              |  24 +
+ arch/x86/Kconfig.assembler                    |   5 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/disabled-features.h      |  16 +-
+ arch/x86/include/asm/fpu/api.h                |   9 +
+ arch/x86/include/asm/fpu/regset.h             |   7 +-
+ arch/x86/include/asm/fpu/sched.h              |   3 +-
+ arch/x86/include/asm/fpu/types.h              |  14 +-
+ arch/x86/include/asm/fpu/xstate.h             |   6 +-
+ arch/x86/include/asm/idtentry.h               |   2 +-
+ arch/x86/include/asm/mmu_context.h            |   2 +
+ arch/x86/include/asm/msr.h                    |  11 +
+ arch/x86/include/asm/pgtable.h                | 320 +++++++-
+ arch/x86/include/asm/pgtable_types.h          |  65 +-
+ arch/x86/include/asm/processor.h              |   8 +
+ arch/x86/include/asm/shstk.h                  |  52 ++
+ arch/x86/include/asm/sighandling.h            |   1 +
+ arch/x86/include/asm/special_insns.h          |  13 +
+ arch/x86/include/asm/tlbflush.h               |   3 +-
+ arch/x86/include/asm/trap_pf.h                |   2 +
+ arch/x86/include/uapi/asm/mman.h              |   3 +
+ arch/x86/include/uapi/asm/prctl.h             |  12 +
+ arch/x86/kernel/Makefile                      |   2 +
+ arch/x86/kernel/cpu/common.c                  |  37 +-
+ arch/x86/kernel/cpu/cpuid-deps.c              |   1 +
+ arch/x86/kernel/cpu/proc.c                    |  23 +
+ arch/x86/kernel/fpu/core.c                    |  60 +-
+ arch/x86/kernel/fpu/regset.c                  |  87 +++
+ arch/x86/kernel/fpu/xstate.c                  | 148 ++--
+ arch/x86/kernel/fpu/xstate.h                  |   6 +
+ arch/x86/kernel/idt.c                         |   2 +-
+ arch/x86/kernel/process.c                     |  18 +-
+ arch/x86/kernel/process_64.c                  |   8 +
+ arch/x86/kernel/ptrace.c                      |  12 +
+ arch/x86/kernel/shstk.c                       | 495 +++++++++++++
+ arch/x86/kernel/signal.c                      |  21 +
+ arch/x86/kernel/signal_64.c                   |   6 +
+ arch/x86/kernel/signal_compat.c               |   7 +-
+ arch/x86/kernel/traps.c                       | 107 ++-
+ arch/x86/mm/fault.c                           |  38 +
+ arch/x86/mm/pat/set_memory.c                  |   2 +-
+ arch/x86/mm/pgtable.c                         |   6 +
+ arch/x86/xen/enlighten_pv.c                   |   2 +-
+ arch/x86/xen/xen-asm.S                        |   2 +-
+ fs/aio.c                                      |   2 +-
+ fs/proc/array.c                               |   6 +
+ fs/proc/task_mmu.c                            |   3 +
+ include/linux/mm.h                            |  57 +-
+ include/linux/pgtable.h                       |  35 +
+ include/linux/proc_fs.h                       |   2 +
+ include/linux/ptrace.h                        |   1 +
+ include/linux/syscalls.h                      |   1 +
+ include/uapi/asm-generic/siginfo.h            |   3 +-
+ include/uapi/asm-generic/unistd.h             |   2 +-
+ include/uapi/linux/elf.h                      |   2 +
+ ipc/shm.c                                     |   2 +-
+ kernel/signal.c                               |   8 +
+ kernel/sys_ni.c                               |   1 +
+ mm/gup.c                                      |   2 +-
+ mm/huge_memory.c                              |  20 +-
+ mm/memory.c                                   |   7 +-
+ mm/migrate_device.c                           |   4 +-
+ mm/mmap.c                                     |  12 +-
+ mm/mprotect.c                                 |   8 +
+ mm/nommu.c                                    |   4 +-
+ mm/userfaultfd.c                              |  10 +-
+ mm/util.c                                     |   2 +-
+ tools/testing/selftests/x86/Makefile          |   4 +-
+ .../testing/selftests/x86/test_shadow_stack.c | 685 ++++++++++++++++++
+ 78 files changed, 2560 insertions(+), 178 deletions(-)
+ create mode 100644 Documentation/x86/shstk.rst
+ create mode 100644 arch/x86/include/asm/shstk.h
+ create mode 100644 arch/x86/kernel/shstk.c
+ create mode 100644 tools/testing/selftests/x86/test_shadow_stack.c
+
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.17.1
+
