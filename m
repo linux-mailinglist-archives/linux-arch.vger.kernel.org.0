@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCDF6412A7
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244F76412B3
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 01:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbiLCAno (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 19:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
+        id S235345AbiLCAn6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 19:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235094AbiLCAmG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:42:06 -0500
+        with ESMTP id S235037AbiLCAmI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 19:42:08 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303B4FA44A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA54FA45E;
         Fri,  2 Dec 2022 16:38:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1670027915; x=1701563915;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Y8HP+6SI6A4E79h0YyqSt+wn/k0j51I/AMnEXqlWOFs=;
-  b=jBl/UXj5+Sgarm3jvEG5JfsuMBTkhPu3cbT20MlfLuo9PksxN9L3Uiey
-   o0VwtFiNfE8ZjJHR8CvLNEIveoUW+ogJTy2tREo108glLf+GFVFeANIjt
-   UBTxqwXa37QCT7tn8/ivH3YF46tTT5jDG3DLuF7VduE6fiQUyEe3Yt8Qe
-   Pd60jMyWTONGCYVFpN1OGm+Dx/7NVgk9iqRemsZ0Osq95c8RQmXaacGQ3
-   GzXwxkwVheZnTwgofK67YIX8f4UYsGj4sS1JENpvxdFbHqCtDiCpFMHhE
-   qr9luA5Hm/sQsJPAjBAl/Aw0utIIHuOeEJU2waA+ZMJDOnTc4zfZERQk9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313711600"
+  bh=itoYo5wz6A01y1aA288M7ulOG+VVmtemkgoBfCLG4/Q=;
+  b=l6Xe6GgowySAErGkAsv2AIeihi5cmdvpR/ZX3wO9sur+LOSOlWQUYHmO
+   RagR47LFB7ajMvndbZzmMCNULYIcUZqC6BZ1Jey2i2+oEU69Lwq11D3Mv
+   8cmHN6QPMdabqVehQLCilsBDpFFFO4ET83FkKq2IlN7p7yD4wiPG7Dfft
+   JSgBHw635rif34Rt5ESmN4gLMmDzaOVNQ6sDD37MFot3CqQER0M53CmYc
+   dMtR7F3w1Ed9ing4ttMdDNlZY7mTJnfHnx/HEu5+Zzmon6Es0KQYNQrZN
+   ejGj6N5dLQ+rbTXx5sJIKz2L6QrTjbWNMYW9PlJjF5ZC1QKlKyIrV+F8R
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313711629"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="313711600"
+   d="scan'208";a="313711629"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:50 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787480049"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="787480058"
 X-IronPort-AV: E=Sophos;i="5.96,213,1665471600"; 
-   d="scan'208";a="787480049"
+   d="scan'208";a="787480058"
 Received: from bgordon1-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.211.211])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:46 -0800
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2022 16:37:50 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,10 +65,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v4 36/39] x86/fpu: Add helper for initing features
-Date:   Fri,  2 Dec 2022 16:36:03 -0800
-Message-Id: <20221203003606.6838-37-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
+Date:   Fri,  2 Dec 2022 16:36:04 -0800
+Message-Id: <20221203003606.6838-38-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
@@ -81,133 +81,249 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-If an xfeature is saved in a buffer, the xfeature's bit will be set in
-xsave->header.xfeatures. The CPU may opt to not save the xfeature if it
-is in it's init state. In this case the xfeature buffer address cannot
-be retrieved with get_xsave_addr().
+From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Future patches will need to handle the case of writing to an xfeature
-that may not be saved. So provide helpers to init an xfeature in an
-xsave buffer.
+Some applications (like GDB) would like to tweak shadow stack state via
+ptrace. This allows for existing functionality to continue to work for
+seized shadow stack applications. Provide an regset interface for
+manipulating the shadow stack pointer (SSP).
 
-This could of course be done directly by reaching into the xsave buffer,
-however this would not be robust against future changes to optimize the
-xsave buffer by compacting it. In that case the xsave buffer would need
-to be re-arranged as well. So the logic properly belongs encapsulated
-in a helper where the logic can be unified.
+There is already ptrace functionality for accessing xstate, but this
+does not include supervisor xfeatures. So there is not a completely
+clear place for where to put the shadow stack state. Adding it to the
+user xfeatures regset would complicate that code, as it currently shares
+logic with signals which should not have supervisor features.
+
+Don't add a general supervisor xfeature regset like the user one,
+because it is better to maintain flexibility for other supervisor
+xfeatures to define their own interface. For example, an xfeature may
+decide not to expose all of it's state to userspace, as is actually the
+case for  shadow stack ptrace functionality. A lot of enum values remain
+to be used, so just put it in dedicated shadow stack regset.
+
+The only downside to not having a generic supervisor xfeature regset,
+is that apps need to be enlightened of any new supervisor xfeature
+exposed this way (i.e. they can't try to have generic save/restore
+logic). But maybe that is a good thing, because they have to think
+through each new xfeature instead of encountering issues when new a new
+supervisor xfeature was added.
+
+By adding a shadow stack regset, it also has the effect of including the
+shadow stack state in a core dump, which could be useful for debugging.
+
+The shadow stack specific xstate includes the SSP, and the shadow stack
+and WRSS enablement status. Enabling shadow stack or wrss in the kernel
+involves more than just flipping the bit. The kernel is made aware that
+it has to do extra things when cloning or handling signals. That logic
+is triggered off of separate feature enablement state kept in the task
+struct. So the flipping on HW shadow stack enforcement without notifying
+the kernel to change its behavior would severely limit what an application
+could do without crashing, and the results would depend on kernel
+internal implementation details. There is also no known use for controlling
+this state via prtace today. So only expose the SSP, which is something
+that userspace already has indirect control over.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
+Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 ---
 
+v4:
+ - Make shadow stack only. Reduce to only supporting SSP register, and
+   remove CET references (peterz)
+ - Add comment to not use 0x203, becuase binutils already looks for it in
+   coredumps. (Christina Schimpe)
+
+v3:
+ - Drop dependence on thread.shstk.size, and use thread.features bits
+ - Drop 32 bit support
+
 v2:
- - New patch
+ - Check alignment on ssp.
+ - Block IBT bits.
+ - Handle init states instead of returning error.
+ - Add verbose commit log justifying the design.
 
- arch/x86/kernel/fpu/xstate.c | 58 +++++++++++++++++++++++++++++-------
- arch/x86/kernel/fpu/xstate.h |  6 ++++
- 2 files changed, 53 insertions(+), 11 deletions(-)
+Yu-Cheng v12:
+ - Return -ENODEV when CET registers are in INIT state.
+ - Check reserved/non-support bits from user input.
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index 13a80521dd51..3ff80be0a441 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -934,6 +934,24 @@ static void *__raw_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
- 	return (void *)xsave + xfeature_get_offset(xcomp_bv, xfeature_nr);
+ arch/x86/include/asm/fpu/regset.h |  7 +--
+ arch/x86/kernel/fpu/regset.c      | 87 +++++++++++++++++++++++++++++++
+ arch/x86/kernel/ptrace.c          | 12 +++++
+ include/uapi/linux/elf.h          |  2 +
+ 4 files changed, 105 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/fpu/regset.h b/arch/x86/include/asm/fpu/regset.h
+index 4f928d6a367b..697b77e96025 100644
+--- a/arch/x86/include/asm/fpu/regset.h
++++ b/arch/x86/include/asm/fpu/regset.h
+@@ -7,11 +7,12 @@
+ 
+ #include <linux/regset.h>
+ 
+-extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active;
++extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active,
++				ssp_active;
+ extern user_regset_get2_fn fpregs_get, xfpregs_get, fpregs_soft_get,
+-				 xstateregs_get;
++				 xstateregs_get, ssp_get;
+ extern user_regset_set_fn fpregs_set, xfpregs_set, fpregs_soft_set,
+-				 xstateregs_set;
++				 xstateregs_set, ssp_set;
+ 
+ /*
+  * xstateregs_active == regset_fpregs_active. Please refer to the comment
+diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+index 6d056b68f4ed..00f3d5c9b682 100644
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -8,6 +8,7 @@
+ #include <asm/fpu/api.h>
+ #include <asm/fpu/signal.h>
+ #include <asm/fpu/regset.h>
++#include <asm/prctl.h>
+ 
+ #include "context.h"
+ #include "internal.h"
+@@ -174,6 +175,92 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+ 	return ret;
  }
  
-+static int xsave_buffer_access_checks(int xfeature_nr)
-+{
-+	/*
-+	 * Do we even *have* xsave state?
-+	 */
-+	if (!boot_cpu_has(X86_FEATURE_XSAVE))
-+		return 1;
 +
-+	/*
-+	 * We should not ever be requesting features that we
-+	 * have not enabled.
-+	 */
-+	if (WARN_ON_ONCE(!xfeature_enabled(xfeature_nr)))
-+		return 1;
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++int ssp_active(struct task_struct *target, const struct user_regset *regset)
++{
++	if (shstk_enabled())
++		return regset->n;
 +
 +	return 0;
 +}
 +
- /*
-  * Given the xsave area and a state inside, this function returns the
-  * address of the state.
-@@ -954,17 +972,7 @@ static void *__raw_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
-  */
- void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
- {
--	/*
--	 * Do we even *have* xsave state?
--	 */
--	if (!boot_cpu_has(X86_FEATURE_XSAVE))
--		return NULL;
--
--	/*
--	 * We should not ever be requesting features that we
--	 * have not enabled.
--	 */
--	if (WARN_ON_ONCE(!xfeature_enabled(xfeature_nr)))
-+	if (xsave_buffer_access_checks(xfeature_nr))
- 		return NULL;
- 
- 	/*
-@@ -984,6 +992,34 @@ void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr)
- 	return __raw_xsave_addr(xsave, xfeature_nr);
- }
- 
-+/*
-+ * Given the xsave area and a state inside, this function
-+ * initializes an xfeature in the buffer.
-+ *
-+ * get_xsave_addr() will return NULL if the feature bit is
-+ * not present in the header. This function will make it so
-+ * the xfeature buffer address is ready to be retrieved by
-+ * get_xsave_addr().
-+ *
-+ * Inputs:
-+ *	xstate: the thread's storage area for all FPU data
-+ *	xfeature_nr: state which is defined in xsave.h (e.g. XFEATURE_FP,
-+ *	XFEATURE_SSE, etc...)
-+ * Output:
-+ *	1 if the feature cannot be inited, 0 on success
-+ */
-+int init_xfeature(struct xregs_state *xsave, int xfeature_nr)
++int ssp_get(struct task_struct *target, const struct user_regset *regset,
++		struct membuf to)
 +{
-+	if (xsave_buffer_access_checks(xfeature_nr))
-+		return 1;
++	struct fpu *fpu = &target->thread.fpu;
++	struct cet_user_state *cetregs;
++
++	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK))
++		return -ENODEV;
++
++	sync_fpstate(fpu);
++	cetregs = get_xsave_addr(&fpu->fpstate->regs.xsave, XFEATURE_CET_USER);
++	if (!cetregs) {
++		/*
++		 * The registers are the in the init state. The init values for
++		 * these regs are zero, so just zero the output buffer.
++		 */
++		membuf_zero(&to, sizeof(cetregs->user_ssp));
++		return 0;
++	}
++
++	return membuf_write(&to, (unsigned long *)&cetregs->user_ssp,
++			    sizeof(cetregs->user_ssp));
++}
++
++int ssp_set(struct task_struct *target, const struct user_regset *regset,
++		  unsigned int pos, unsigned int count,
++		  const void *kbuf, const void __user *ubuf)
++{
++	struct fpu *fpu = &target->thread.fpu;
++	struct xregs_state *xsave = &fpu->fpstate->regs.xsave;
++	struct cet_user_state *cetregs;
++	unsigned long user_ssp;
++	int r;
++
++	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK) ||
++	    !ssp_active(target, regset))
++		return -ENODEV;
++
++	r = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_ssp, 0, -1);
++	if (r)
++		return r;
 +
 +	/*
-+	 * Mark the feature inited.
++	 * Some kernel instructions (IRET, etc) can cause exceptions in the case
++	 * of disallowed CET register values. Just prevent invalid values.
 +	 */
-+	xsave->header.xfeatures |= BIT_ULL(xfeature_nr);
++	if ((user_ssp >= TASK_SIZE_MAX) || !IS_ALIGNED(user_ssp, 8))
++		return -EINVAL;
++
++	fpu_force_restore(fpu);
++
++	/*
++	 * Don't want to init the xfeature until the kernel will definetely
++	 * overwrite it, otherwise if it inits and then fails out, it would
++	 * end up initing it to random data.
++	 */
++	if (!xfeature_saved(xsave, XFEATURE_CET_USER) &&
++	    WARN_ON(init_xfeature(xsave, XFEATURE_CET_USER)))
++		return -ENODEV;
++
++	cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
++	if (WARN_ON(!cetregs)) {
++		/*
++		 * This shouldn't ever be NULL because it was successfully
++		 * inited above if needed. The only scenario would be if an
++		 * xfeature was somehow saved in a buffer, but not enabled in
++		 * xsave.
++		 */
++		return -ENODEV;
++	}
++
++	cetregs->user_ssp = user_ssp;
 +	return 0;
 +}
++#endif /* CONFIG_X86_USER_SHADOW_STACK */
 +
- #ifdef CONFIG_ARCH_HAS_PKEYS
+ #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
  
  /*
-diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
-index a4ecb04d8d64..dc06f63063ee 100644
---- a/arch/x86/kernel/fpu/xstate.h
-+++ b/arch/x86/kernel/fpu/xstate.h
-@@ -54,6 +54,12 @@ extern void fpu__init_cpu_xstate(void);
- extern void fpu__init_system_xstate(unsigned int legacy_size);
+diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+index dfaa270a7cc9..095f04bdabdc 100644
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -58,6 +58,7 @@ enum x86_regset_64 {
+ 	REGSET64_FP,
+ 	REGSET64_IOPERM,
+ 	REGSET64_XSTATE,
++	REGSET64_SSP,
+ };
  
- extern void *get_xsave_addr(struct xregs_state *xsave, int xfeature_nr);
-+extern int init_xfeature(struct xregs_state *xsave, int xfeature_nr);
-+
-+static inline int xfeature_saved(struct xregs_state *xsave, int xfeature_nr)
-+{
-+	return xsave->header.xfeatures & BIT_ULL(xfeature_nr);
-+}
+ #define REGSET_GENERAL \
+@@ -1267,6 +1268,17 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
+ 		.active		= ioperm_active,
+ 		.regset_get	= ioperm_get
+ 	},
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++	[REGSET64_SSP] = {
++		.core_note_type	= NT_X86_SHSTK,
++		.n		= 1,
++		.size		= sizeof(u64),
++		.align		= sizeof(u64),
++		.active		= ssp_active,
++		.regset_get	= ssp_get,
++		.set		= ssp_set
++	},
++#endif
+ };
  
- static inline u64 xfeatures_mask_supervisor(void)
- {
+ static const struct user_regset_view user_x86_64_view = {
+diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+index c7b056af9ef0..e9283f0641c4 100644
+--- a/include/uapi/linux/elf.h
++++ b/include/uapi/linux/elf.h
+@@ -406,6 +406,8 @@ typedef struct elf64_shdr {
+ #define NT_386_TLS	0x200		/* i386 TLS slots (struct user_desc) */
+ #define NT_386_IOPERM	0x201		/* x86 io permission bitmap (1=deny) */
+ #define NT_X86_XSTATE	0x202		/* x86 extended state using xsave */
++/* Old binutils treats 0x203 as a CET state */
++#define NT_X86_SHSTK	0x204		/* x86 SHSTK state */
+ #define NT_S390_HIGH_GPRS	0x300	/* s390 upper register halves */
+ #define NT_S390_TIMER	0x301		/* s390 timer register */
+ #define NT_S390_TODCMP	0x302		/* s390 TOD clock comparator register */
 -- 
 2.17.1
 
