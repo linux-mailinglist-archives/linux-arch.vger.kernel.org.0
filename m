@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22EAA641397
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 03:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6438964139D
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 03:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbiLCCjz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 21:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S235155AbiLCCkH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 21:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiLCCjk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 21:39:40 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E72FB8AD
-        for <linux-arch@vger.kernel.org>; Fri,  2 Dec 2022 18:39:37 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id 4so6293245pli.0
-        for <linux-arch@vger.kernel.org>; Fri, 02 Dec 2022 18:39:37 -0800 (PST)
+        with ESMTP id S235230AbiLCCkE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 21:40:04 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2529FA44D
+        for <linux-arch@vger.kernel.org>; Fri,  2 Dec 2022 18:40:03 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id cm20so6555265pjb.1
+        for <linux-arch@vger.kernel.org>; Fri, 02 Dec 2022 18:40:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=puHWTnl4FttUivJr2fjCJ+XKoeeB18dHeiV6LUEyyFM=;
-        b=Zlq5Fnhl2chjzNVLRCXkgHfNkIE0tfHyjGOMS2CEMjgttw/3wjFdU35d78bA06NTwJ
-         r7yHGRy4iqmGmpEYp8tuRXboZ24+1jtm6m8MjiTOPK080wDEO7W6f5LU1UJx6Q81rxqi
-         DbM3puGe2/WxwE1s5DHvG5IQfc/FlVtfPm5PE=
+        bh=XLViDR2zcWqltZaMqOGe9UxH/Um8wO533PT9cRofQvA=;
+        b=T4HzE5jaCq8vZkmDtWPOboOLn6craU7f/b/P8EJ6uRQd8L1E2whKgn4WGwiBS1b7U6
+         c8zE9oXrXi/eg25YVdEdHOwAzyoEsHNE9+Rf7MSyNkzA0myb+7xNNtjPfTkKgGY2pyyN
+         cXtIAN+AegJpgeHjkS/87VgCfN9Su2eIhsrLw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=puHWTnl4FttUivJr2fjCJ+XKoeeB18dHeiV6LUEyyFM=;
-        b=DqrqhMinbjnfBe9o4d/JqfxKOQvWym87Jg7KPpRrrZhPUOjh1PrymApfRia8BckXZ9
-         WmKNaLSfTN00c96oxwZoP9ZirhzadIg7aJg+I1zOgGuHDzK9XB5NEGk9TW4GGwYiJ2Gt
-         z7VAvWyHP1XaTbt4EzAY1+fm9h79dBDA49i5LdhZ2Mv3A8CuntCUNoxExGwfN8oSyP/m
-         sucf+/lm0TqGduQrAiJi3sJ5dJVL/D0MrP8wn10pPJSuHBnKaWhjLXqa49oYuMfzXVDZ
-         eq084FDV5VdDuDxF6eSsWlRbnwMjvpEyiQWOo4ljLOQoaTB6P/OfrPC+S1OG6CnMdlEx
-         xZUA==
-X-Gm-Message-State: ANoB5pk5euQK83iBIc7M97JkbZALVdEKO+A/Gv4Q6JsKwhA1yRj/IHIJ
-        S4+WKybjGLaLalLYggIgWB9YAw==
-X-Google-Smtp-Source: AA0mqf4dQit9R82se8kWgKsx1FCknHa8rD7qiYgXLaoKAKcCKykz/uB+mYLnym6TuHUG0Vpre+iDAg==
-X-Received: by 2002:a17:90b:374f:b0:219:7bc8:f300 with SMTP id ne15-20020a17090b374f00b002197bc8f300mr10681194pjb.145.1670035177500;
-        Fri, 02 Dec 2022 18:39:37 -0800 (PST)
+        bh=XLViDR2zcWqltZaMqOGe9UxH/Um8wO533PT9cRofQvA=;
+        b=15XSyB4pHuA98UhCWB9WMoutnvDS5uhElvcp0mQpbtrBkVHy9Dn0lbXv3QILp9acge
+         ANbhmvcogLWd2l8+FTjv7vtd2SNK1qFWg1JF+SgnpBKJX8wobH5/H5JgnKUaM/BwxU0A
+         rOvlMfY7V3EyaKawED2ziN/Db7KqTQPpPUlhQQqLGqcOUAsTPyZev6fTyWOedd97mQKG
+         XfIbCn1lBRAvfuuR0yNbDhr4Cbv0NPMVDHvzDk5cx4GkYr0y9VUkd0qHkuIYGLE/03l5
+         eCeG/IOJEKM3sb1Y0l8FMZol0HKfMtYuYAKMxcEKQpWFiWLYn20a+ZKstc8anHOF1FB1
+         YAIA==
+X-Gm-Message-State: ANoB5pkb8phweHMGq4kQNi8YS7XFEOKQfCQtapjI1DyTPypX4MpJVNUK
+        /qpw3vUoyXphNpqRDlXiiNA1Tg==
+X-Google-Smtp-Source: AA0mqf5A/xJVhK8c81WSI6tm1qf38hEAd20DFdNPVcIcrs0OziQiD4xi28050EAgthHM5YFZZ45KCA==
+X-Received: by 2002:a17:903:555:b0:189:959a:84d8 with SMTP id jo21-20020a170903055500b00189959a84d8mr23315184plb.38.1670035203342;
+        Fri, 02 Dec 2022 18:40:03 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id p2-20020a622902000000b00575acb243besm5707003pfp.1.2022.12.02.18.39.36
+        by smtp.gmail.com with ESMTPSA id cx5-20020a17090afd8500b002135de3013fsm5351942pjb.32.2022.12.02.18.40.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:39:36 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:39:36 -0800
+        Fri, 02 Dec 2022 18:40:02 -0800 (PST)
+Date:   Fri, 2 Dec 2022 18:40:02 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -74,15 +74,14 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Subject: Re: [PATCH v4 23/39] mm: Don't allow write GUPs to shadow stack
- memory
-Message-ID: <202212021839.32C9B178@keescook>
+Subject: Re: [PATCH v4 24/39] mm: Warn on shadow stack memory in wrong vma
+Message-ID: <202212021840.D890531@keescook>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-24-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-25-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-24-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221203003606.6838-25-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -93,20 +92,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:50PM -0800, Rick Edgecombe wrote:
+On Fri, Dec 02, 2022 at 04:35:51PM -0800, Rick Edgecombe wrote:
 > The x86 Control-flow Enforcement Technology (CET) feature includes a new
 > type of memory called shadow stack. This shadow stack memory has some
 > unusual properties, which requires some core mm changes to function
 > properly.
 > 
-> Shadow stack memory is writable only in very specific, controlled ways.
-> However, since it is writable, the kernel treats it as such. As a result
-> there remain many ways for userspace to trigger the kernel to write to
-> shadow stack's via get_user_pages(, FOLL_WRITE) operations. To make this a
-> little less exposed, block writable GUPs for shadow stack VMAs.
+> One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
+> treated as shadow by the CPU, but this combination used to be created by
+> the kernel on x86. Previous patches have changed the kernel to now avoid
+> creating these PTEs unless they are for shadow stack memory. In case any
+> missed corners of the kernel are still creating PTEs like this for
+> non-shadow stack memory, and to catch any re-introductions of the logic,
+> warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
+> stack VMAs when they are being zapped. This won't catch transient cases
+> but should have decent coverage. It will be compiled out when shadow
+> stack is not configured.
 > 
-> Still allow FOLL_FORCE to write through shadow stack protections, as it
-> does for read-only protections.
+> In order to check if a pte is shadow stack in core mm code, add default
+> implmentations for pte_shstk() and pmd_shstk().
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
