@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B91641367
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 03:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A146964136C
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Dec 2022 03:32:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbiLCCbr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Dec 2022 21:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S234865AbiLCCcc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Dec 2022 21:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiLCCbp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 21:31:45 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E09E1192
-        for <linux-arch@vger.kernel.org>; Fri,  2 Dec 2022 18:31:45 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 136so5849582pga.1
-        for <linux-arch@vger.kernel.org>; Fri, 02 Dec 2022 18:31:45 -0800 (PST)
+        with ESMTP id S234893AbiLCCc3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Dec 2022 21:32:29 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3113EE368A
+        for <linux-arch@vger.kernel.org>; Fri,  2 Dec 2022 18:32:28 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id x13-20020a17090a46cd00b00218f611b6e9so6695777pjg.1
+        for <linux-arch@vger.kernel.org>; Fri, 02 Dec 2022 18:32:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sGqaY0xiVxHPg7cMRS547FM4Lr8dWUdA5dzrwiaKHuE=;
-        b=B5n0Iq7dEb+7UzBELfeGTVQdnAg0xgb38UHmaEjMy6ZmaexXPWrWjTcXsGGBFS7xK4
-         +NLs0EPjreK31tixZceDpn5Ri/yqjz2sbrRW1/V1C+q9m6/CZuUchOtiITC+dERTH4ls
-         RkTFsIgLPJ3ZZDSVerJJmGgyX35YrqVUWCBn0=
+        bh=O9Ihv9qw1XxpYrbScjLffw/alIz8VtCrsDRCV2Vt/fA=;
+        b=QXSoEg7SQKzpsbJ82DpCGUnwNJ0uFOfcySMzR7iXW98rnwNi8Lz2pFXPYWaLIwp3d9
+         Vnd7yKJVO8auIjJoI1uliImiekq1h5lMqHMZVGukoSmzMsUjdG3zvIMqHNFqn6HtH8Ru
+         nmMWN8u7hH4Q9kx+WC26+Tao4MmSqrxNlGKjQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sGqaY0xiVxHPg7cMRS547FM4Lr8dWUdA5dzrwiaKHuE=;
-        b=qAMke/0jHcYAqAcSvFpCm3EqdHE9jcwJjakn/hua/SlZhz7zdd8ii1LLwX/vy4WHSV
-         RfE42H1s6q+Ax61kJxfRzGFVn+7tEANJ2gseDW+5sS/UZjUyoWtCitPBfy5H9fa1C2E6
-         LJcjCXSvhtpVOecCTSWYBMpxRkEPEh+HM6t0j46Ei9ZEs7NJ4YvyC9KGrN19goybBuVW
-         KARB/czNp+ZO/vVcfzNYXf/T40VSBzUMTGyuiXPpb+TyCekE76XD/H2XTZXFcIn5Hk97
-         pAbHVOOIofLp24uXd625G7Wh+BO9rNASBdChHzvkXt6j29JGTPh5JI7pSd0zlFZw2PSj
-         zBBw==
-X-Gm-Message-State: ANoB5pmG8O+5JAkVOcowjYZvKVHZlOUqXHg3WQN1xCt8JRKkeXmofMuX
-        3S/VE+wrKvWFyX1PxncQJ0nfMw==
-X-Google-Smtp-Source: AA0mqf7Zg+kWzNeYUsEZY2iFjYDIgYVkwmEwlhE8SBhV/Dqsgul2/43ostusGBEacXblZx3cwuwd5w==
-X-Received: by 2002:a63:4e20:0:b0:46f:4d37:e95c with SMTP id c32-20020a634e20000000b0046f4d37e95cmr47482506pgb.354.1670034704847;
-        Fri, 02 Dec 2022 18:31:44 -0800 (PST)
+        bh=O9Ihv9qw1XxpYrbScjLffw/alIz8VtCrsDRCV2Vt/fA=;
+        b=NSqAB5bwr6ggxkBekaxRXSyqkLlu0/qmVco7gpbfDfbt/GW2zHT8a4DbGMiIYYCow4
+         YxCb9+1c9p8UYhiPri/ZM/xMqLpWn9N//gTr/ckvHNZRyWPG/ldX3hJ4anv9hCoNgfjK
+         JpAJQeIlWhY5Yt37AEBd317VZuqGCd13pRtd7YkOhKds5menqfRDVxKSk3SfaIg+lHbU
+         6hs85SeX98dl8NDFMBKqcW0XPbA/U5zPQFT5UwwHuFHu1GUzY0mkWPIPUScgeG7YKpWl
+         lRLoEIj+IfDV1GEevKO+Wfqdc07Pbl0C5GiGiMdaaACG36eY/CAc2Moss1C4fTdULN1a
+         jePA==
+X-Gm-Message-State: ANoB5plNySul9g4ln3Uwo1YqjCQF5qOe8bDRFPh1HPtjcEi9UNhibb5l
+        +DCP/e/4/znLR8j+ZCl8J36lbg==
+X-Google-Smtp-Source: AA0mqf7D8WXWZwGQab9G9ZWzQhwxxRNvvsY+VtafM+07J8d7KYaCB+Gh37BgeTMnrFp8WF2UfijGAg==
+X-Received: by 2002:a17:90b:609:b0:219:3ad9:64f5 with SMTP id gb9-20020a17090b060900b002193ad964f5mr29067100pjb.138.1670034747610;
+        Fri, 02 Dec 2022 18:32:27 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y14-20020a62640e000000b0056bb4bbfb9bsm2971706pfb.95.2022.12.02.18.31.44
+        by smtp.gmail.com with ESMTPSA id y187-20020a6264c4000000b0056ee49d6e95sm5715665pfb.86.2022.12.02.18.32.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 18:31:44 -0800 (PST)
-Date:   Fri, 2 Dec 2022 18:31:43 -0800
+        Fri, 02 Dec 2022 18:32:27 -0800 (PST)
+Date:   Fri, 2 Dec 2022 18:32:26 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -75,40 +75,53 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Message-ID: <202212021831.697AA89B7B@keescook>
+Subject: Re: [PATCH v4 12/39] x86/mm: Update ptep_set_wrprotect() and
+ pmdp_set_wrprotect() for transition from _PAGE_DIRTY to _PAGE_COW
+Message-ID: <202212021832.3793DA082C@keescook>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-12-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-13-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-12-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221203003606.6838-13-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:38PM -0800, Rick Edgecombe wrote:
+On Fri, Dec 02, 2022 at 04:35:39PM -0800, Rick Edgecombe wrote:
 > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > 
-> The Write=0,Dirty=1 PTE has been used to indicate copy-on-write pages.
-> However, newer x86 processors also regard a Write=0,Dirty=1 PTE as a
-> shadow stack page. In order to separate the two, the software-defined
-> _PAGE_DIRTY is changed to _PAGE_COW for the copy-on-write case, and
-> pte_*() are updated to do this.
+> When Shadow Stack is in use, Write=0,Dirty=1 PTE are reserved for shadow
+> stack. Copy-on-write PTes then have Write=0,Cow=1.
 > 
-> pte_modify() takes a "raw" pgprot_t which was not necessarily created
-> with any of the existing PTE bit helpers. That means that it can return a
-> pte_t with Write=0,Dirty=1, a shadow stack PTE, when it did not intend to
-> create one.
+> When a PTE goes from Write=1,Dirty=1 to Write=0,Cow=1, it could
+> become a transient shadow stack PTE in two cases:
 > 
-> However pte_modify() changes a PTE to 'newprot', but it doesn't use the
-> pte_*(). Modify it to also move _PAGE_DIRTY to _PAGE_COW. Apply the same
-> changes to pmd_modify().
+> The first case is that some processors can start a write but end up seeing
+> a Write=0 PTE by the time they get to the Dirty bit, creating a transient
+> shadow stack PTE. However, this will not occur on processors supporting
+> Shadow Stack, and a TLB flush is not necessary.
+> 
+> The second case is that when _PAGE_DIRTY is replaced with _PAGE_COW non-
+> atomically, a transient shadow stack PTE can be created as a result.
+> Thus, prevent that with cmpxchg.
+> 
+> In the case of pmdp_set_wrprotect(), for nopmd configs the ->pmd operated
+> on does not exist and the logic would need to be different. Although the
+> extra functionality will normally be optimized out when user shadow
+> stacks are not configured, also exclude it in the preprocessor stage so
+> that it will still compile. User shadow stack is not supported there by
+> Linux anyway. Leave the cpu_feature_enabled() check so that the
+> functionality also disables based on runtime detection of the feature.
+> 
+> Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
+> insights to the issue. Jann Horn provided the cmpxchg solution.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
