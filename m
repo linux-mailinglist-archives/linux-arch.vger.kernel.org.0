@@ -2,140 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E8B6426EF
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Dec 2022 11:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EAC642D8B
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Dec 2022 17:49:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiLEKtR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Dec 2022 05:49:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S230228AbiLEQt5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Dec 2022 11:49:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiLEKtQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Dec 2022 05:49:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F1E12AEC;
-        Mon,  5 Dec 2022 02:49:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AA23B80E9B;
-        Mon,  5 Dec 2022 10:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BCCC433D6;
-        Mon,  5 Dec 2022 10:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670237353;
-        bh=TM/r0k5u2Pt27z45OlKDLTYpA4Gk6ZH5Ef+T3t89ykk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Ti/4YSEDFaEqaGcI7l/+n+Qk5FdH8M8W/Jj6RMEljTcdEmrrWR98uFpjDzg0Xcu1U
-         BW5UgAChKM6rXv1Quq6kw/hbl+y5f4GF1D9h63WlOeMtiavJFNeBEJJYiLGH5RGokn
-         uzEcYDaVp/Z6xFP7BDs7MyTwZmuSrhyoKZ0Fn0JnRMeAo8XiKzFRPuWAiGSJF+RuUC
-         NH4ddmq1MdWbIbGwQHH6nLB0ZF6O3QN0nk/HUaZn0Pa4691idOiWwAUIzGYUnHnLvc
-         u3B94j9Bb7mOIVZQ6MtdNfy3kxOPkEDH8QrbAi/CAXeTEFC82GrYasvC2QgdOIym6H
-         ngMl6Uk0GYpbA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     guoren@kernel.org, arnd@arndb.de, guoren@kernel.org,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH -next V8 06/14] riscv: convert to generic entry
-In-Reply-To: <20221103075047.1634923-7-guoren@kernel.org>
-References: <20221103075047.1634923-1-guoren@kernel.org>
- <20221103075047.1634923-7-guoren@kernel.org>
-Date:   Mon, 05 Dec 2022 11:49:10 +0100
-Message-ID: <874jua9lcp.fsf@all.your.base.are.belong.to.us>
+        with ESMTP id S231191AbiLEQtk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Dec 2022 11:49:40 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D10D20F51
+        for <linux-arch@vger.kernel.org>; Mon,  5 Dec 2022 08:48:54 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id m7-20020a9d6447000000b0066da0504b5eso7587694otl.13
+        for <linux-arch@vger.kernel.org>; Mon, 05 Dec 2022 08:48:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=EvWmzEra/azIE+dhpMGnktmqmSoesb8PSCiM/05QKkVO5anMKEbRHSG7nojCSOyYWk
+         9IDI1UgS5rC+uB5j5uOW4no2X6seMos8u1Uby8q6RKzl1vCALcAn7vpiT6rpclAi8Jt0
+         gPKoEl0xikkT9S+7dg4LTBa5X4VHIsnKU2e6OrEO/j4h9xN1NPllzu29Dg0k3gFH+bOt
+         HMDW+rYw/YqhqvZ6y4oXgIeqTNVodnF9zHtiwgFo2Y0tEc6ReoK23o3+Epe6dWg/8ai1
+         Z4r7fWQ42rAk0Fys+lVH3VBvE+2FTvVvceopyfVxKS8DxJV3KaRTE9M5zTY24mYt1gIO
+         /rEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Ei/0HMnzEH/xiFhWY/NW5NlWUpKMXA4nro3/lYSo052a5c8BSsG9fVkIKEV5ey/Q6b
+         wVQB8w2Menk2xgViRmpQe1NIaJ1a/qgM9NilUw0unxIAYlGXoIg67dDxPxgC6oIoUHCo
+         3Nicj1Y2PkEvcCKLXvNsBFFqOapeN3seuLylhoBBgyUB+E6nUxsrdzXVTYpRbdSjya/b
+         ig0THf98vd75k384QNfG/h8oVRZhO0C5diY44qP7IGdC55kakwxXGhCVGF4ojzsF+3Vr
+         DT3Vjl4OKYPbJhWY4VN8dVywjrh3rqfuTQNMYTvqzL7a0inSKXF4iw2/kP+kz4K7b5Rx
+         ZfCA==
+X-Gm-Message-State: ANoB5pl9Pigs0+7770UrHEKMvbSLvu7hCOGPl2rxY2+WTgvTc6NLQ5cQ
+        xdXO+ORrW8BFK4eXCUAN+xLqnPhR/MuqZfqf8Z4=
+X-Google-Smtp-Source: AA0mqf6rJpockmAlPLGWb5IdXxyZXi5oeB/VlA7nQtTh5mH5GBjbP93nFRUHbmrw3A3v2AKvxeLYo6EVgAyGoUC2980=
+X-Received: by 2002:a05:6830:61ce:b0:66b:e4e2:8d25 with SMTP id
+ cc14-20020a05683061ce00b0066be4e28d25mr41635604otb.152.1670258933537; Mon, 05
+ Dec 2022 08:48:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Received: by 2002:a05:6358:7211:b0:dd:1fa2:ef73 with HTTP; Mon, 5 Dec 2022
+ 08:48:53 -0800 (PST)
+Reply-To: plml47@hotmail.com
+From:   Philip Manul <lometogo1999@gmail.com>
+Date:   Mon, 5 Dec 2022 08:48:53 -0800
+Message-ID: <CAFtqZGFXDNDSmyfAW1goTwuOjaKBWi=RMxR7avPMnWxdOUFKOg@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-guoren@kernel.org writes:
-
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> This patch converts riscv to use the generic entry infrastructure from
-> kernel/entry/*. The generic entry makes maintainers' work easier and
-> codes more elegant. Here are the changes than before:
->
->  - More clear entry.S with handle_exception and ret_from_exception
->  - Get rid of complex custom signal implementation
->  - More readable syscall procedure
->  - Little modification on ret_from_fork & ret_from_kernel_thread
->  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
->  - Use the standard preemption code instead of custom
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> ---
-
-[...]
-
-> diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_riscv.c
-> index 5d3f2fbeb33c..c86d0eafdf6a 100644
-> --- a/arch/riscv/kernel/sys_riscv.c
-> +++ b/arch/riscv/kernel/sys_riscv.c
-> @@ -5,8 +5,10 @@
->   * Copyright (C) 2017 SiFive
->   */
->=20=20
-> +#include <linux/entry-common.h>
->  #include <linux/syscalls.h>
->  #include <asm/unistd.h>
-> +#include <asm/syscall.h>
->  #include <asm/cacheflush.h>
->  #include <asm-generic/mman-common.h>
->=20=20
-> @@ -69,3 +71,28 @@ SYSCALL_DEFINE3(riscv_flush_icache, uintptr_t, start, =
-uintptr_t, end,
->=20=20
->  	return 0;
->  }
-> +
-> +typedef long (*syscall_t)(ulong, ulong, ulong, ulong, ulong, ulong, ulon=
-g);
-> +
-> +asmlinkage void do_sys_ecall_u(struct pt_regs *regs)
-> +{
-> +	syscall_t syscall;
-> +	ulong nr =3D regs->a7;
-> +
-> +	regs->epc +=3D 4;
-> +	regs->orig_a0 =3D regs->a0;
-> +	regs->a0 =3D -ENOSYS;
-> +
-> +	nr =3D syscall_enter_from_user_mode(regs, nr);
-> +#ifdef CONFIG_COMPAT
-> +	if ((regs->status & SR_UXL) =3D=3D SR_UXL_32)
-> +		syscall =3D compat_sys_call_table[nr];
-> +	else
-> +#endif
-> +		syscall =3D sys_call_table[nr];
-> +
-> +	if (nr < NR_syscalls)
-> +		regs->a0 =3D syscall(regs->orig_a0, regs->a1, regs->a2,
-> +				   regs->a3, regs->a4, regs->a5,
->  	regs->a6);
-
-Now that we're doing the "pt_regs to call" dance, it would make sense to
-introduce a syscall wrapper (like x86 and arm64) for riscv, so that we
-don't need to unwrap all regs for all syscalls (See __MAP() in
-include/linux/syscalls.h). That would be an optimization, so it could be
-done as a follow-up, and not part of the series.
-
-
-Bj=C3=B6rn
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
