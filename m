@@ -2,123 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948F5643CF4
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 07:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CE0643D06
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 07:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233571AbiLFGCF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Dec 2022 01:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S232501AbiLFGNN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Dec 2022 01:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233084AbiLFGCC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 01:02:02 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7519527157;
-        Mon,  5 Dec 2022 22:01:57 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.43:55518.1873184978
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-123.150.8.42 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 25246100302;
-        Tue,  6 Dec 2022 14:01:54 +0800 (CST)
-Received: from  ([123.150.8.42])
-        by gateway-153622-dep-6cffbd87dd-f7vjc with ESMTP id 5f66b60e48754f84901a8e6e8468e94a for arnd@arndb.de;
-        Tue, 06 Dec 2022 14:01:55 CST
-X-Transaction-ID: 5f66b60e48754f84901a8e6e8468e94a
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 123.150.8.42
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-Message-ID: <0903321f-e0cf-fd7b-bbdd-fc4fdc0f05a0@189.cn>
-Date:   Tue, 6 Dec 2022 14:01:53 +0800
+        with ESMTP id S229867AbiLFGNM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 01:13:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D82CE2D;
+        Mon,  5 Dec 2022 22:13:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63701B81211;
+        Tue,  6 Dec 2022 06:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26887C43470;
+        Tue,  6 Dec 2022 06:13:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670307188;
+        bh=th1V6+SkiuIfCPI17AmYfQBHSNCfb55wpqFcgPM9EAk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NeV48oS7O6faZtRUsQrOrRKSVEssKcQHHkq6wEL3h8Bz95BsmenU2jbMig1oOGJEm
+         k4XYw+LaaEu6oO1qsV7j4IGq1hHg6PO5h5ovFAfzelcxwgasgKhYTJN0Uj5epulRd7
+         p+lY5+ZlJoo+LyRGchxuuotHduvoEk31ue6o/Ik8e0JqeBqWPSx2ESBzX8Y3spZ+AL
+         jio3gsth7v5sVEZn6b2xhwA02E43cqhdizeaGqDjOWMuSuUQZrAxX/6J0aUSCjskXS
+         cOLpjxgi1yO4Ft81G/uZBaGwcR8r3MLxsMGZjmC9qrbyJ5JLtB6H0cBBeo8hZnCG/6
+         23HluqiB7ewOw==
+Received: by mail-ed1-f48.google.com with SMTP id c66so12572324edf.5;
+        Mon, 05 Dec 2022 22:13:08 -0800 (PST)
+X-Gm-Message-State: ANoB5pmPYe1GMWhLmzQ4KaOMnTyU6HbfGtCDlhmIDZcNdtNxi8fkobUK
+        sjtwTW+fDC6GKMsKAgtxjlqzlfHTTwJl8A4iiP8=
+X-Google-Smtp-Source: AA0mqf4Sdb09rPxgcsGDOHwTXPlNPlrB8zHFwXBW2+mnGaoopW1W/6+v9PyzrnVbfHcutZsp1vv3yvEtJaXjGdiuoz8=
+X-Received: by 2002:a05:6402:22db:b0:46c:c16b:b4c4 with SMTP id
+ dm27-20020a05640222db00b0046cc16bb4c4mr6428173edb.419.1670307186319; Mon, 05
+ Dec 2022 22:13:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 3/4] include/asm-generic/io.h: remove performing
- pointer arithmetic on a null pointer
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <1670229006-4063-1-git-send-email-chensong_2000@189.cn>
- <2a3d3359-a5fd-453b-81f1-35c7a35fc12d@app.fastmail.com>
-Content-Language: en-US
-From:   Song Chen <chensong_2000@189.cn>
-In-Reply-To: <2a3d3359-a5fd-453b-81f1-35c7a35fc12d@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221103075047.1634923-1-guoren@kernel.org> <877cz69o8f.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <877cz69o8f.fsf@all.your.base.are.belong.to.us>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 6 Dec 2022 14:12:54 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSgvKV3Oh6t2dpbJGnt3cDZU14Qk_CxKPMXmEmgvMg8-Q@mail.gmail.com>
+Message-ID: <CAJF2gTSgvKV3Oh6t2dpbJGnt3cDZU14Qk_CxKPMXmEmgvMg8-Q@mail.gmail.com>
+Subject: Re: [PATCH -next V8 00/14] riscv: Add GENERIC_ENTRY support and
+ related features
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Mon, Dec 5, 2022 at 5:46 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
+te:
+>
+> guoren@kernel.org writes:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The patches convert riscv to use the generic entry infrastructure from
+> > kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
+> > for percpu to prevent kernel stack overflows. Add generic_entry based
+> > STACKLEAK support. Some optimization for entry.S with new .macro and
+> > merge ret_from_kernel_thread into ret_from_fork.
+> >
+> > We have tested it with rv64, rv32, rv64 + 32rootfs, all are passed.
+> >
+> > You can directly try it with:
+> > [1] https://github.com/guoren83/linux/tree/generic_entry_v8
+>
+> Guo, this is a really nice work, and I'm looking forward having generic
+> entry support for RV. However, there are many patches in this series
+> that really shouldn't be part of the series.
+>
+> Patch 2, 3, 4, and 10 should defintely be pulled out.
+Okay.
 
-在 2022/12/5 18:04, Arnd Bergmann 写道:
-> On Mon, Dec 5, 2022, at 09:30, Song Chen wrote:
->> kernel test robot reports below warnings:
->>
->>     In file included from kernel/trace/trace_events_synth.c:18:
->>     In file included from include/linux/trace_events.h:9:
->>     In file included from include/linux/hardirq.h:11:
->>     In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->>     In file included from include/asm-generic/hardirq.h:17:
->>     In file included from include/linux/irq.h:20:
->>     In file included from include/linux/io.h:13:
->>     In file included from arch/hexagon/include/asm/io.h:334:
->>     include/asm-generic/io.h:547:31: warning: performing pointer arithmetic
->> 	on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->>             val = __raw_readb(PCI_IOBASE + addr);
->>                               ~~~~~~~~~~ ^
->>     include/asm-generic/io.h:560:61: warning: performing pointer arithmetic
->> 	on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->>             val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->>                                                             ~~~~~~~~~~ ^
->>     include/uapi/linux/byteorder/little_endian.h:37:51: note:
->> 		expanded from macro '__le16_to_cpu'
->>     #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->>
->> The reason could be constant literal zero converted to any pointer type decays
->> into the null pointer constant.
->>
->> I'm not sure why those warnings are only triggered when building hexagon instead
->> of x86 or arm, but anyway, i found a work around:
->>
->> 	void *pci_iobase = PCI_IOBASE;
->> 	val = __raw_readb(pci_iobase + addr);
->>
->> The pointer is not evaluated at compile time, so the warnings are removed.
->>
->> Signed-off-by: Song Chen <chensong_2000@189.cn>
->> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> The code is still wrong, you just hide the warning, so no, this is
-> not a correct fix. When PCI_IOBASE is NULL, any call to
-> inb() etc is a NULL pointer dereference that immediately crashes
-> the kernel, so the correct solution is to not allow building code
-> that uses port I/O on kernels that are configured not to
-> support port I/O.
-> 
-> We have discussed this bit multiple times, and Niklas Schnelle
-> last posted his series to fix this as an RFC in [1].
-> 
->        Arnd
-> 
-> [1] https://lore.kernel.org/lkml/20220429135108.2781579-1-schnelle@linux.ibm.com/
-> 
+>
+> I'm not sure 7, 8, and 9 belong to series, as it's really a separate
+> feature.
+The separate irq/softirq stack patches dpend on generic_entry tightly,
+so I recommand put them together.
 
-Trace triggers the warning accidentally by including io.h indirectly 
-because of the absence of PCI_IOBASE in hexagon. So what trace can do in 
-this case is either to suppress warning or just ignore it, the warning 
-will go away as long as hexagon has put PCI_IOBASE in place or 
-implemented its own inb() etc, i think they will do it sooner or later.
+>
+> Dito for patch 11, it just makes the series harder to review.
+The 11 is not so necessary as above, I would remove it from this
+series. And send it again after generic_entry merged.
 
-Introducing HAS_IOPORT to trace seems no necessary and too much impact.
+>
+> For GENERIC_ENTRY support only patch 1, 5, 6, 12, 13, and 14, really
+> required. The others are unrelated.
+Thx for the reminder; I will re-organize them.
 
-/Song
+>
+>
+> Thanks,
+> Bj=C3=B6rn
+
+
+
+--=20
+Best Regards
+ Guo Ren
