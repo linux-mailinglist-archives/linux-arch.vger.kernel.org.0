@@ -2,639 +2,205 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0640E644861
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 16:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C6264484D
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 16:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbiLFPvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Dec 2022 10:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S229780AbiLFPsU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Dec 2022 10:48:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235014AbiLFPu7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 10:50:59 -0500
-Received: from mailout.easymail.ca (mailout.easymail.ca [64.68.200.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56B925C7D;
-        Tue,  6 Dec 2022 07:50:57 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mailout.easymail.ca (Postfix) with ESMTP id 105C8670E6;
-        Tue,  6 Dec 2022 15:41:51 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at emo09-pco.easydns.vpn
-Received: from mailout.easymail.ca ([127.0.0.1])
-        by localhost (emo09-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TSw9xhU7nGDB; Tue,  6 Dec 2022 15:41:50 +0000 (UTC)
-Received: from mail.gonehiking.org (unknown [38.15.45.1])
-        by mailout.easymail.ca (Postfix) with ESMTPA id 2FE4E670B7;
-        Tue,  6 Dec 2022 15:41:50 +0000 (UTC)
-Received: from localhost.localdomain (internal [192.168.1.4])
-        by mail.gonehiking.org (Postfix) with ESMTP id 958013EF06;
-        Tue,  6 Dec 2022 08:41:48 -0700 (MST)
-From:   Khalid Aziz <khalid@gonehiking.org>
-To:     akpm@linux-foundation.org, willy@infradead.org, djwong@kernel.org,
-        markhemm@googlemail.com, viro@zeniv.linux.org.uk, david@redhat.com,
-        mike.kravetz@oracle.com
-Cc:     Khalid Aziz <khalid@gonehiking.org>, andreyknvl@gmail.com,
-        dave.hansen@intel.com, luto@kernel.org, 21cnbao@gmail.com,
-        arnd@arndb.de, ebiederm@xmission.com, elver@google.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
-        vasily.averin@linux.dev, Khalid Aziz <khalid.aziz@oracle.com>
-Subject: [RFC PATCH 2/2] mm/ptshare: Create a new mm for shared pagetables and add basic page table sharing support
-Date:   Tue,  6 Dec 2022 08:41:41 -0700
-Message-Id: <9b2679745f94c6bac875abb61e5093d462626a1f.1670287696.git.khalid.aziz@oracle.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1670287695.git.khalid.aziz@oracle.com>
-References: <cover.1670287695.git.khalid.aziz@oracle.com>
+        with ESMTP id S232444AbiLFPsB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 10:48:01 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25CAAE01A
+        for <linux-arch@vger.kernel.org>; Tue,  6 Dec 2022 07:47:59 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id x6so17672957lji.10
+        for <linux-arch@vger.kernel.org>; Tue, 06 Dec 2022 07:47:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=m1kCqWlRYfobNKnwTTmG2lD4ZIH0ubVAosfgV6W3Dk4=;
+        b=km4nt3h3SHb/kEB2LuEUazieUkF9KftHb5F5G6SyTF0tkPyKfN2VeOikiWxEBRycBp
+         HsbvpDP5MQFX5lKttQgca1p57UvCAGjzgI85ey19QT3BdjKfqI9Cvl6Wv6b4IRjUUGio
+         SNCBKhia8UVi2JEXoKNgW6LJLeJ34+7z8/13c3LqbFAKDJMO8Gy/+VyTLMrA7AhhENd1
+         TNOqx+MF6+0Q7sMMqfp/4fXIA6AYYQUMyiQMrZUKrOwSlFwEERF41f5MgnrniS4C+Zx7
+         aT0+T5Mh7IQLLskdVC1oVbKnMT2sukhYGiYH6rQJUVqDRrBUtxo2Y0A4TZ8KfOE3PyHH
+         RKTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m1kCqWlRYfobNKnwTTmG2lD4ZIH0ubVAosfgV6W3Dk4=;
+        b=eZFInbac6rwFWECl0YOEbbLJmfV9uRcaUrgJ2U8TBtTeEC+8vtDrEpKCSMmlCJXrVk
+         uDBWt/QebpYEsnm6hYXIXQAsQmR5xmK0xWKqVoLv1rhQCemKC/porMWUWBk237qcnTWo
+         G6k+TXh8AaqK+UTLbUmpowqfIVKFzafzQ66P177jJgG2zUJOMixVxkqwZfAQGIhYyaGE
+         1NAnENqfBcsrpLUscS96Jx8rKLbzX2Njr+L4KTWpHNEzJ5h2h+VMlUQK/incz/hSkibO
+         wCyZOs00egfQN33D4w1Q0HQjQ8iE+zlidZzVHMPs4iU1IwlgPe73gqO6+AalgXspk0Y8
+         v7sA==
+X-Gm-Message-State: ANoB5pni9TDxyK9wFVsDL+2pWY5IjcrOXHkBkGluAB9dzcCUpA33VfKG
+        pSEfT2jbltiSLLXHKEOEjRewdIoQI6QaysFCWFaHDw==
+X-Google-Smtp-Source: AA0mqf670rgKAoKyVamK5fGEwo/r7qIQAwktaBqfm7a0tY0XJdGyAcQGRLzmDTdXbe+6R04s2ufEeuo3JFvMsirw8Vc=
+X-Received: by 2002:a2e:a80d:0:b0:277:1295:31ca with SMTP id
+ l13-20020a2ea80d000000b00277129531camr27009331ljq.280.1670341677228; Tue, 06
+ Dec 2022 07:47:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com> <20221202061347.1070246-5-chao.p.peng@linux.intel.com>
+In-Reply-To: <20221202061347.1070246-5-chao.p.peng@linux.intel.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Tue, 6 Dec 2022 15:47:20 +0000
+Message-ID: <CA+EHjTyzZ2n8kQxH_Qx72aRq1k+dETJXTsoOM3tggPZAZkYbCA@mail.gmail.com>
+Subject: Re: [PATCH v10 4/9] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When a process mmaps a file with MAP_SHARED flag, it is possible
-that any other processes mmaping the same file with MAP_SHARED
-flag with same permissions could share the page table entries as
-well instead of creating duplicate entries. This patch introduces a
-new flag MAP_SHARED_PT which a process can use to hint that it can
-share page atbes with other processes using the same mapping. It
-creates a new mm struct to hold the shareable page table entries for
-the newly mapped region.  This new mm is not associated with a task.
-Its lifetime is until the last shared mapping is deleted.  It adds a
-new pointer "ptshare_data" to struct address_space which points to
-the data structure that will contain pointer to this newly created
-mm.
+Hi,
 
-Add support for creating a new set of shared page tables in a new
-mm_struct upon mmap of an region that can potentially share page
-tables. Add page fault handling for this now shared region. Modify
-free_pgtables path to make sure page tables in the shared regions
-are kept intact when a process using page table region exits and
-there are other mappers for the shared region. Clean up mm_struct
-holding shared page tables when the last process sharing the region
-exits.
+On Fri, Dec 2, 2022 at 6:19 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>
+> This new KVM exit allows userspace to handle memory-related errors. It
+> indicates an error happens in KVM at guest memory range [gpa, gpa+size).
+> The flags includes additional information for userspace to handle the
+> error. Currently bit 0 is defined as 'private memory' where '1'
+> indicates error happens due to private memory access and '0' indicates
+> error happens due to shared memory access.
+>
+> When private memory is enabled, this new exit will be used for KVM to
+> exit to userspace for shared <-> private memory conversion in memory
+> encryption usage. In such usage, typically there are two kind of memory
+> conversions:
+>   - explicit conversion: happens when guest explicitly calls into KVM
+>     to map a range (as private or shared), KVM then exits to userspace
+>     to perform the map/unmap operations.
+>   - implicit conversion: happens in KVM page fault handler where KVM
+>     exits to userspace for an implicit conversion when the page is in a
+>     different state than requested (private or shared).
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 22 ++++++++++++++++++++++
+>  include/uapi/linux/kvm.h       |  8 ++++++++
+>  2 files changed, 30 insertions(+)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 99352170c130..d9edb14ce30b 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6634,6 +6634,28 @@ array field represents return values. The userspace should update the return
+>  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
+>  spec refer, https://github.com/riscv/riscv-sbi-doc.
+>
+> +::
+> +
+> +               /* KVM_EXIT_MEMORY_FAULT */
+> +               struct {
+> +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE (1ULL << 0)
+> +                       __u64 flags;
 
-Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- include/linux/fs.h                     |   1 +
- include/uapi/asm-generic/mman-common.h |   1 +
- mm/Makefile                            |   2 +-
- mm/internal.h                          |  16 ++
- mm/memory.c                            |  52 ++++-
- mm/mmap.c                              |  87 ++++++++
- mm/ptshare.c                           | 262 +++++++++++++++++++++++++
- 7 files changed, 418 insertions(+), 3 deletions(-)
- create mode 100644 mm/ptshare.c
+I see you've removed the padding and increased the flag size.
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 59ae95ddb679..f940bf03303b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -441,6 +441,7 @@ struct address_space {
- 	spinlock_t		private_lock;
- 	struct list_head	private_list;
- 	void			*private_data;
-+	void			*ptshare_data;
- } __attribute__((aligned(sizeof(long)))) __randomize_layout;
- 	/*
- 	 * On most architectures that alignment is already the case; but
-diff --git a/include/uapi/asm-generic/mman-common.h b/include/uapi/asm-generic/mman-common.h
-index 6ce1f1ceb432..4d23456b5915 100644
---- a/include/uapi/asm-generic/mman-common.h
-+++ b/include/uapi/asm-generic/mman-common.h
-@@ -29,6 +29,7 @@
- #define MAP_HUGETLB		0x040000	/* create a huge page mapping */
- #define MAP_SYNC		0x080000 /* perform synchronous page faults for the mapping */
- #define MAP_FIXED_NOREPLACE	0x100000	/* MAP_FIXED which doesn't unmap underlying mapping */
-+#define MAP_SHARED_PT		0x200000	/* Shared page table mappings */
- 
- #define MAP_UNINITIALIZED 0x4000000	/* For anonymous mmap, memory could be
- 					 * uninitialized */
-diff --git a/mm/Makefile b/mm/Makefile
-index 8e105e5b3e29..d9bb14fdf220 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -40,7 +40,7 @@ mmu-y			:= nommu.o
- mmu-$(CONFIG_MMU)	:= highmem.o memory.o mincore.o \
- 			   mlock.o mmap.o mmu_gather.o mprotect.o mremap.o \
- 			   msync.o page_vma_mapped.o pagewalk.o \
--			   pgtable-generic.o rmap.o vmalloc.o
-+			   pgtable-generic.o rmap.o vmalloc.o ptshare.o
- 
- 
- ifdef CONFIG_CROSS_MEMORY_ATTACH
-diff --git a/mm/internal.h b/mm/internal.h
-index 16083eca720e..22cae2ff97fa 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -861,4 +861,20 @@ static inline bool vma_is_shared(const struct vm_area_struct *vma)
- 	return vma->vm_flags & VM_SHARED_PT;
- }
- 
-+/*
-+ * mm/ptshare.c
-+ */
-+struct mshare_data {
-+	struct mm_struct *mm;
-+	refcount_t refcnt;
-+	unsigned long start;
-+	unsigned long size;
-+	unsigned long mode;
-+};
-+int ptshare_new_mm(struct file *file, struct vm_area_struct *vma);
-+void ptshare_del_mm(struct vm_area_struct *vm);
-+int ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma);
-+extern vm_fault_t find_shared_vma(struct vm_area_struct **vmap,
-+				unsigned long *addrp, unsigned int flags);
-+
- #endif	/* __MM_INTERNAL_H */
-diff --git a/mm/memory.c b/mm/memory.c
-index 8a6d5c823f91..051c82e13627 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -416,15 +416,21 @@ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
- 		unlink_anon_vmas(vma);
- 		unlink_file_vma(vma);
- 
-+		/*
-+		 * If vma is sharing page tables through a host mm, do not
-+		 * free page tables for it. Those page tables wil be freed
-+		 * when host mm is released.
-+		 */
- 		if (is_vm_hugetlb_page(vma)) {
- 			hugetlb_free_pgd_range(tlb, addr, vma->vm_end,
- 				floor, next ? next->vm_start : ceiling);
--		} else {
-+		} else if (!vma_is_shared(vma)) {
- 			/*
- 			 * Optimization: gather nearby vmas into one call down
- 			 */
- 			while (next && next->vm_start <= vma->vm_end + PMD_SIZE
--			       && !is_vm_hugetlb_page(next)) {
-+			       && !is_vm_hugetlb_page(next)
-+			       && !vma_is_shared(next)) {
- 				vma = next;
- 				next = mas_find(&mas, ceiling - 1);
- 				unlink_anon_vmas(vma);
-@@ -5189,6 +5195,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 			   unsigned int flags, struct pt_regs *regs)
- {
- 	vm_fault_t ret;
-+	bool shared = false;
-+	struct mm_struct *orig_mm;
- 
- 	__set_current_state(TASK_RUNNING);
- 
-@@ -5198,6 +5206,16 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 	/* do counter updates before entering really critical section. */
- 	check_sync_rss_stat(current);
- 
-+	orig_mm = vma->vm_mm;
-+	if (unlikely(vma_is_shared(vma))) {
-+		ret = find_shared_vma(&vma, &address, flags);
-+		if (ret)
-+			return ret;
-+		if (!vma)
-+			return VM_FAULT_SIGSEGV;
-+		shared = true;
-+	}
-+
- 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
- 					    flags & FAULT_FLAG_INSTRUCTION,
- 					    flags & FAULT_FLAG_REMOTE))
-@@ -5219,6 +5237,36 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- 
- 	lru_gen_exit_fault();
- 
-+	/*
-+	 * Release the read lock on shared VMA's parent mm unless
-+	 * __handle_mm_fault released the lock already.
-+	 * __handle_mm_fault sets VM_FAULT_RETRY in return value if
-+	 * it released mmap lock. If lock was released, that implies
-+	 * the lock would have been released on task's original mm if
-+	 * this were not a shared PTE vma. To keep lock state consistent,
-+	 * make sure to release the lock on task's original mm
-+	 */
-+	if (shared) {
-+		int release_mmlock = 1;
-+
-+		if (!(ret & VM_FAULT_RETRY)) {
-+			mmap_read_unlock(vma->vm_mm);
-+			release_mmlock = 0;
-+		} else if ((flags & FAULT_FLAG_ALLOW_RETRY) &&
-+			(flags & FAULT_FLAG_RETRY_NOWAIT)) {
-+			mmap_read_unlock(vma->vm_mm);
-+			release_mmlock = 0;
-+		}
-+
-+		/*
-+		 * Reset guest vma pointers that were set up in
-+		 * find_shared_vma() to process this fault.
-+		 */
-+		vma->vm_mm = orig_mm;
-+		if (release_mmlock)
-+			mmap_read_unlock(orig_mm);
-+	}
-+
- 	if (flags & FAULT_FLAG_USER) {
- 		mem_cgroup_exit_user_fault();
- 		/*
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 74a84eb33b90..c1adb9d52f5d 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1245,6 +1245,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 	struct mm_struct *mm = current->mm;
- 	vm_flags_t vm_flags;
- 	int pkey = 0;
-+	int ptshare = 0;
- 
- 	validate_mm(mm);
- 	*populate = 0;
-@@ -1282,6 +1283,21 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 	if (mm->map_count > sysctl_max_map_count)
- 		return -ENOMEM;
- 
-+	/*
-+	 * If MAP_SHARED_PT is set, MAP_SHARED or MAP_SHARED_VALIDATE must
-+	 * be set as well
-+	 */
-+	if (flags & MAP_SHARED_PT) {
-+#if VM_SHARED_PT
-+		if (flags & (MAP_SHARED | MAP_SHARED_VALIDATE))
-+			ptshare = 1;
-+		else
-+			return -EINVAL;
-+#else
-+		return -EINVAL;
-+#endif
-+	}
-+
- 	/* Obtain the address to map to. we verify (or select) it and ensure
- 	 * that it represents a valid section of the address space.
- 	 */
-@@ -1414,6 +1430,60 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 	    ((vm_flags & VM_LOCKED) ||
- 	     (flags & (MAP_POPULATE | MAP_NONBLOCK)) == MAP_POPULATE))
- 		*populate = len;
-+
-+#if VM_SHARED_PT
-+	/*
-+	 * Check if this mapping is a candidate for page table sharing
-+	 * at PMD level. It is if following conditions hold:
-+	 *	- It is not anonymous mapping
-+	 *	- It is not hugetlbfs mapping (for now)
-+	 *	- flags conatins MAP_SHARED or MAP_SHARED_VALIDATE and
-+	 *	  MAP_SHARED_PT
-+	 *	- Start address is aligned to PMD size
-+	 *	- Mapping size is a multiple of PMD size
-+	 */
-+	if (ptshare && file && !is_file_hugepages(file)) {
-+		struct vm_area_struct *vma;
-+
-+		vma = find_vma(mm, addr);
-+		if (!((vma->vm_start | vma->vm_end) & (PMD_SIZE - 1))) {
-+			struct mshare_data *info = file->f_mapping->ptshare_data;
-+
-+			/*
-+			 * If this mapping has not been set up for page table
-+			 * sharing yet, do so by creating a new mm to hold the
-+			 * shared page tables for this mapping
-+			 */
-+			if (info == NULL) {
-+				int ret;
-+
-+				ret = ptshare_new_mm(file, vma);
-+				if (ret < 0)
-+					return ret;
-+				info = file->f_mapping->ptshare_data;
-+				ret = ptshare_insert_vma(info->mm, vma);
-+				if (ret < 0)
-+					addr = ret;
-+				else
-+					vma->vm_flags |= VM_SHARED_PT;
-+			} else {
-+				/*
-+				 * Page tables will be shared only if the
-+				 * file is mapped in with the same permissions
-+				 * across all mappers with same starting
-+				 * address and size
-+				 */
-+				if (((prot & info->mode) == info->mode) &&
-+					(addr == info->start) &&
-+					(len == info->size)) {
-+					vma->vm_flags |= VM_SHARED_PT;
-+					refcount_inc(&info->refcnt);
-+				}
-+			}
-+		}
-+	}
-+#endif
-+
- 	return addr;
- }
- 
-@@ -2491,6 +2561,21 @@ int do_mas_munmap(struct ma_state *mas, struct mm_struct *mm,
- 	if (end == start)
- 		return -EINVAL;
- 
-+	/*
-+	 * Check if this vma uses shared page tables
-+	 */
-+	vma = find_vma_intersection(mm, start, end);
-+	if (vma && unlikely(vma_is_shared(vma))) {
-+		struct mshare_data *info = NULL;
-+
-+		if (vma->vm_file && vma->vm_file->f_mapping)
-+			info = vma->vm_file->f_mapping->ptshare_data;
-+		/* Don't allow partial munmaps */
-+		if (info && ((start != info->start) || (len != info->size)))
-+			return -EINVAL;
-+		ptshare_del_mm(vma);
-+	}
-+
- 	 /* arch_unmap() might do unmaps itself.  */
- 	arch_unmap(mm, start, end);
- 
-@@ -2660,6 +2745,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
- 			}
- 		}
- 
-+		if (vm_flags & VM_SHARED_PT)
-+			vma->vm_flags |= VM_SHARED_PT;
- 		vm_flags = vma->vm_flags;
- 	} else if (vm_flags & VM_SHARED) {
- 		error = shmem_zero_setup(vma);
-diff --git a/mm/ptshare.c b/mm/ptshare.c
-new file mode 100644
-index 000000000000..97322f822233
---- /dev/null
-+++ b/mm/ptshare.c
-@@ -0,0 +1,262 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Share page table entries when possible to reduce the amount of extra
-+ * memory consumed by page tables
-+ *
-+ * Copyright (C) 2022 Oracle Corp. All rights reserved.
-+ * Authors:	Khalid Aziz <khalid.aziz@oracle.com>
-+ *		Matthew Wilcox <willy@infradead.org>
-+ */
-+
-+#include <linux/mm.h>
-+#include <linux/fs.h>
-+#include <asm/pgalloc.h>
-+#include "internal.h"
-+
-+/*
-+ */
-+static pmd_t
-+*get_pmd(struct mm_struct *mm, unsigned long addr)
-+{
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
-+	pmd_t *pmd;
-+
-+	pgd = pgd_offset(mm, addr);
-+	if (pgd_none(*pgd))
-+		return NULL;
-+
-+	p4d = p4d_offset(pgd, addr);
-+	if (p4d_none(*p4d)) {
-+		p4d = p4d_alloc(mm, pgd, addr);
-+		if (!p4d)
-+			return NULL;
-+	}
-+
-+	pud = pud_offset(p4d, addr);
-+	if (pud_none(*pud)) {
-+		pud = pud_alloc(mm, p4d, addr);
-+		if (!pud)
-+			return NULL;
-+	}
-+
-+	pmd = pmd_offset(pud, addr);
-+	if (pmd_none(*pmd)) {
-+		pmd = pmd_alloc(mm, pud, addr);
-+		if (!pmd)
-+			return NULL;
-+	}
-+
-+	return pmd;
-+}
-+
-+/*
-+ * Find the shared pmd entries in host mm struct and install them into
-+ * guest page tables.
-+ */
-+static int
-+ptshare_copy_pmd(struct mm_struct *host_mm, struct mm_struct *guest_mm,
-+			struct vm_area_struct *vma, unsigned long addr)
-+{
-+	pgd_t *pgd;
-+	p4d_t *p4d;
-+	pud_t *pud;
-+	pmd_t *host_pmd;
-+	spinlock_t *host_ptl, *guest_ptl;
-+
-+	pgd = pgd_offset(guest_mm, addr);
-+	p4d = p4d_offset(pgd, addr);
-+	if (p4d_none(*p4d)) {
-+		p4d = p4d_alloc(guest_mm, pgd, addr);
-+		if (!p4d)
-+			return 1;
-+	}
-+
-+	pud = pud_offset(p4d, addr);
-+	if (pud_none(*pud)) {
-+		host_pmd = get_pmd(host_mm, addr);
-+		if (!host_pmd)
-+			return 1;
-+
-+		get_page(virt_to_page(host_pmd));
-+		host_ptl = pmd_lockptr(host_mm, host_pmd);
-+		guest_ptl = pud_lockptr(guest_mm, pud);
-+		spin_lock(host_ptl);
-+		spin_lock(guest_ptl);
-+		pud_populate(guest_mm, pud,
-+			(pmd_t *)((unsigned long)host_pmd & PAGE_MASK));
-+		put_page(virt_to_page(host_pmd));
-+		spin_unlock(guest_ptl);
-+		spin_unlock(host_ptl);
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * Find the shared page tables in hosting mm struct and install those in
-+ * the guest mm struct
-+ */
-+vm_fault_t
-+find_shared_vma(struct vm_area_struct **vmap, unsigned long *addrp,
-+			unsigned int flags)
-+{
-+	struct mshare_data *info;
-+	struct mm_struct *host_mm;
-+	struct vm_area_struct *host_vma, *guest_vma = *vmap;
-+	unsigned long host_addr;
-+	pmd_t *guest_pmd, *host_pmd;
-+
-+	if ((!guest_vma->vm_file) || (!guest_vma->vm_file->f_mapping))
-+		return 0;
-+	info = guest_vma->vm_file->f_mapping->ptshare_data;
-+	if (!info) {
-+		pr_warn("VM_SHARED_PT vma with NULL ptshare_data");
-+		dump_stack_print_info(KERN_WARNING);
-+		return 0;
-+	}
-+	host_mm = info->mm;
-+
-+	mmap_read_lock(host_mm);
-+	host_addr = *addrp - guest_vma->vm_start + host_mm->mmap_base;
-+	host_pmd = get_pmd(host_mm, host_addr);
-+	guest_pmd = get_pmd(guest_vma->vm_mm, *addrp);
-+	if (!pmd_same(*guest_pmd, *host_pmd)) {
-+		set_pmd(guest_pmd, *host_pmd);
-+		mmap_read_unlock(host_mm);
-+		return VM_FAULT_NOPAGE;
-+	}
-+
-+	*addrp = host_addr;
-+	host_vma = find_vma(host_mm, host_addr);
-+	if (!host_vma)
-+		return VM_FAULT_SIGSEGV;
-+
-+	/*
-+	 * Point vm_mm for the faulting vma to the mm struct holding shared
-+	 * page tables so the fault handling will happen in the right
-+	 * shared context
-+	 */
-+	guest_vma->vm_mm = host_mm;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Create a new mm struct that will hold the shared PTEs. Pointer to
-+ * this new mm is stored in the data structure mshare_data which also
-+ * includes a refcount for any current references to PTEs in this new
-+ * mm. This refcount is used to determine when the mm struct for shared
-+ * PTEs can be deleted.
-+ */
-+int
-+ptshare_new_mm(struct file *file, struct vm_area_struct *vma)
-+{
-+	struct mm_struct *new_mm;
-+	struct mshare_data *info = NULL;
-+	int retval = 0;
-+	unsigned long start = vma->vm_start;
-+	unsigned long len = vma->vm_end - vma->vm_start;
-+
-+	new_mm = mm_alloc();
-+	if (!new_mm) {
-+		retval = -ENOMEM;
-+		goto err_free;
-+	}
-+	new_mm->mmap_base = start;
-+	new_mm->task_size = len;
-+	if (!new_mm->task_size)
-+		new_mm->task_size--;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info) {
-+		retval = -ENOMEM;
-+		goto err_free;
-+	}
-+	info->mm = new_mm;
-+	info->start = start;
-+	info->size = len;
-+	refcount_set(&info->refcnt, 1);
-+	file->f_mapping->ptshare_data = info;
-+
-+	return retval;
-+
-+err_free:
-+	if (new_mm)
-+		mmput(new_mm);
-+	kfree(info);
-+	return retval;
-+}
-+
-+/*
-+ * insert vma into mm holding shared page tables
-+ */
-+int
-+ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma)
-+{
-+	struct vm_area_struct *new_vma;
-+	int err = 0;
-+
-+	new_vma = vm_area_dup(vma);
-+	if (!new_vma)
-+		return -ENOMEM;
-+
-+	new_vma->vm_file = NULL;
-+	/*
-+	 * This new vma belongs to host mm, so clear the VM_SHARED_PT
-+	 * flag on this so we know this is the host vma when we clean
-+	 * up page tables. Do not use THP for page table shared regions
-+	 */
-+	new_vma->vm_flags &= ~(VM_SHARED | VM_SHARED_PT);
-+	new_vma->vm_flags |= VM_NOHUGEPAGE;
-+	new_vma->vm_mm = mm;
-+
-+	err = insert_vm_struct(mm, new_vma);
-+	if (err)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Copy the PMD entries from host mm to guest so they use the
-+	 * same PTEs
-+	 */
-+	err = ptshare_copy_pmd(mm, vma->vm_mm, vma, vma->vm_start);
-+
-+	return err;
-+}
-+
-+/*
-+ * Free the mm struct created to hold shared PTEs and associated data
-+ * structures
-+ */
-+static inline void
-+free_ptshare_mm(struct mshare_data *info)
-+{
-+	mmput(info->mm);
-+	kfree(info);
-+}
-+
-+/*
-+ * This function is called when a reference to the shared PTEs in mm
-+ * struct is dropped. It updates refcount and checks to see if last
-+ * reference to the mm struct holding shared PTEs has been dropped. If
-+ * so, it cleans up the mm struct and associated data structures
-+ */
-+void
-+ptshare_del_mm(struct vm_area_struct *vma)
-+{
-+	struct mshare_data *info;
-+	struct file *file = vma->vm_file;
-+
-+	if (!file || (!file->f_mapping))
-+		return;
-+	info = file->f_mapping->ptshare_data;
-+	WARN_ON(!info);
-+	if (!info)
-+		return;
-+
-+	if (refcount_dec_and_test(&info->refcnt)) {
-+		free_ptshare_mm(info);
-+		file->f_mapping->ptshare_data = NULL;
-+	}
-+}
--- 
-2.34.1
+Reviewed-by: Fuad Tabba <tabba@google.com>
+Tested-by: Fuad Tabba <tabba@google.com>
 
+Cheers,
+/fuad
+
+
+
+
+> +                       __u64 gpa;
+> +                       __u64 size;
+> +               } memory;
+> +
+> +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
+> +encountered a memory error which is not handled by KVM kernel module and
+> +userspace may choose to handle it. The 'flags' field indicates the memory
+> +properties of the exit.
+> +
+> + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
+> +   private memory access when the bit is set. Otherwise the memory error is
+> +   caused by shared memory access when the bit is clear.
+> +
+> +'gpa' and 'size' indicate the memory range the error occurs at. The userspace
+> +may handle the error and return to KVM to retry the previous memory access.
+> +
+>  ::
+>
+>      /* KVM_EXIT_NOTIFY */
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 13bff963b8b0..c7e9d375a902 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -300,6 +300,7 @@ struct kvm_xen_exit {
+>  #define KVM_EXIT_RISCV_SBI        35
+>  #define KVM_EXIT_RISCV_CSR        36
+>  #define KVM_EXIT_NOTIFY           37
+> +#define KVM_EXIT_MEMORY_FAULT     38
+>
+>  /* For KVM_EXIT_INTERNAL_ERROR */
+>  /* Emulate instruction failed. */
+> @@ -541,6 +542,13 @@ struct kvm_run {
+>  #define KVM_NOTIFY_CONTEXT_INVALID     (1 << 0)
+>                         __u32 flags;
+>                 } notify;
+> +               /* KVM_EXIT_MEMORY_FAULT */
+> +               struct {
+> +#define KVM_MEMORY_EXIT_FLAG_PRIVATE   (1ULL << 0)
+> +                       __u64 flags;
+> +                       __u64 gpa;
+> +                       __u64 size;
+> +               } memory;
+>                 /* Fix the size of the union. */
+>                 char padding[256];
+>         };
+> --
+> 2.25.1
+>
