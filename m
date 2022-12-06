@@ -2,48 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBE7644C7B
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 20:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5702B644C98
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 20:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiLFT1R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Dec 2022 14:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
+        id S229790AbiLFThr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Dec 2022 14:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiLFT1Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 14:27:16 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4657C28E33;
-        Tue,  6 Dec 2022 11:27:15 -0800 (PST)
+        with ESMTP id S229779AbiLFThq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 14:37:46 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96091B1C6;
+        Tue,  6 Dec 2022 11:37:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670354835; x=1701890835;
+  t=1670355464; x=1701891464;
   h=message-id:date:mime-version:subject:to:references:from:
    in-reply-to:content-transfer-encoding;
-  bh=YQoQoyLUM0xhlZ4+yB0EZnkDFWB3Rz3vmZvgjvLmZX8=;
-  b=Hqoh7VVjRz/9WEPA1zeeh8gFh/ThyVvsT+UFlxNBgy/u+baRzKLA/SRG
-   dGP4Pot/uMBHXKdwYuelGu9kKwoFVblUq0nOVgHvbE8lZPERUgrT0Ctcm
-   V+5jNjQ+5FcxnfSYath3znPcCym6iUuGeta68KaNcgG/3E6Y/9mMRSImT
-   pA/R0OVHqchfGkwUzwHbgC8cfl3PlcDlr9GAosL+LsnmeD8QLIMVsQpyP
-   Nn/MsfSpl+8ChXweKDHgij8xd0/O9uAqycxrZckKykEMMu6vG6YqPW/dU
-   eSS2vB2meoo/Zg4pIyCUjVWjn02qGS5l8ikLSzFNu5vW/WRqib0V636KU
+  bh=vN4lwqnsGyDLulqDpchOlpMKkxyM2VICPVBXfraX+Uk=;
+  b=JD+DLY4Y0mVx3afohGeWqirW8SmYFReP1HkXsK6XxDt6593rAN9M7EgN
+   zjgyiALKve9RA/RDjvQFXu1Z/kuUrbwtjoPLRAfFlE6wyLvoVjG85AHpA
+   UYHDxsjkimIthQCg7slPBO4eKiVKuDAENaXo8Fc35cpk5SZ354PiqoXh4
+   P/MNxguLT+ooavuF5roEKSRTNtDmt6rIngs0IJE51Pii7NjVtpVsUwQgP
+   BVnbvCSWwZYF3jb4wu0LWD70zPTE/Oap8LkKUCzVvTMVF9g+uv3ifqQOE
+   O6gOen7MiuOUiuF2TCq1UVXmwom827APHi5uRNOeF8rV3du3btQCBoEbT
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="316731509"
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="317853305"
 X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
-   d="scan'208";a="316731509"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 11:27:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="678863673"
+   d="scan'208";a="317853305"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 11:37:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="639989304"
 X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
-   d="scan'208";a="678863673"
+   d="scan'208";a="639989304"
 Received: from smaslov-mobl3.amr.corp.intel.com (HELO [10.251.23.186]) ([10.251.23.186])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 11:27:13 -0800
-Message-ID: <a531ff8a-79a2-f801-921b-0c83d3d44913@linux.intel.com>
-Date:   Tue, 6 Dec 2022 11:27:13 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 11:37:43 -0800
+Message-ID: <51fb66d6-f2e0-f11c-68a3-525723d56dd4@linux.intel.com>
+Date:   Tue, 6 Dec 2022 11:37:42 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [Patch v4 01/13] x86/ioapic: Gate decrypted mapping on
- cc_platform_has() attribute
+Subject: Re: [Patch v4 05/13] init: Call mem_encrypt_init() after Hyper-V
+ hypercall init is done
 Content-Language: en-US
 To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
@@ -62,15 +62,16 @@ To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
         iommu@lists.linux.dev
 References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
- <1669951831-4180-2-git-send-email-mikelley@microsoft.com>
+ <1669951831-4180-6-git-send-email-mikelley@microsoft.com>
 From:   Sathyanarayanan Kuppuswamy 
         <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <1669951831-4180-2-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1669951831-4180-6-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,64 +81,64 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 On 12/1/22 7:30 PM, Michael Kelley wrote:
-> Current code always maps the IO-APIC as shared (decrypted) in a
-> confidential VM. But Hyper-V guest VMs on AMD SEV-SNP with vTOM
-> enabled use a paravisor running in VMPL0 to emulate the IO-APIC.
-> In such a case, the IO-APIC must be accessed as private (encrypted).
+> Full Hyper-V initialization, including support for hypercalls, is done
+> as an apic_post_init callback via late_time_init().  mem_encrypt_init()
+> needs to make hypercalls when it marks swiotlb memory as decrypted.
+> But mem_encrypt_init() is currently called a few lines before
+> late_time_init(), so the hypercalls don't work.
+
+Did you consider moving hyper-v hypercall initialization before
+ mem_encrypt_init(). Is there any dependency issue?
+
 > 
-> Fix this by gating the IO-APIC decrypted mapping on a new
-> cc_platform_has() attribute that a subsequent patch in the series
-> will set only for guests using vTOM.
+> Fix this by moving mem_encrypt_init() after late_time_init() and
+> related clock initializations. The intervening initializations don't
+> do any I/O that requires the swiotlb, so moving mem_encrypt_init()
+> slightly later has no impact.
 > 
 > Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> Reviewed-by: Wei Liu <wei.liu@kernel.org>
+> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
 > ---
-
-Looks good to me.
-
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
->  arch/x86/kernel/apic/io_apic.c |  3 ++-
->  include/linux/cc_platform.h    | 12 ++++++++++++
->  2 files changed, 14 insertions(+), 1 deletion(-)
+>  init/main.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-> index a868b76..2b70e2e 100644
-> --- a/arch/x86/kernel/apic/io_apic.c
-> +++ b/arch/x86/kernel/apic/io_apic.c
-> @@ -2686,7 +2686,8 @@ static void io_apic_set_fixmap(enum fixed_addresses idx, phys_addr_t phys)
->  	 * Ensure fixmaps for IOAPIC MMIO respect memory encryption pgprot
->  	 * bits, just like normal ioremap():
+> diff --git a/init/main.c b/init/main.c
+> index e1c3911..5a7c466 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -1088,14 +1088,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
 >  	 */
-> -	flags = pgprot_decrypted(flags);
-> +	if (!cc_platform_has(CC_ATTR_ACCESS_IOAPIC_ENCRYPTED))
-> +		flags = pgprot_decrypted(flags);
+>  	locking_selftest();
 >  
->  	__set_fixmap(idx, phys, flags);
->  }
-> diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
-> index cb0d6cd..7b63a7d 100644
-> --- a/include/linux/cc_platform.h
-> +++ b/include/linux/cc_platform.h
-> @@ -90,6 +90,18 @@ enum cc_attr {
->  	 * Examples include TDX Guest.
->  	 */
->  	CC_ATTR_HOTPLUG_DISABLED,
+> -	/*
+> -	 * This needs to be called before any devices perform DMA
+> -	 * operations that might use the SWIOTLB bounce buffers. It will
+> -	 * mark the bounce buffers as decrypted so that their usage will
+> -	 * not cause "plain-text" data to be decrypted when accessed.
+> -	 */
+> -	mem_encrypt_init();
+> -
+>  #ifdef CONFIG_BLK_DEV_INITRD
+>  	if (initrd_start && !initrd_below_start_ok &&
+>  	    page_to_pfn(virt_to_page((void *)initrd_start)) < min_low_pfn) {
+> @@ -1112,6 +1104,17 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>  		late_time_init();
+>  	sched_clock_init();
+>  	calibrate_delay();
 > +
-> +	/**
-> +	 * @CC_ATTR_ACCESS_IOAPIC_ENCRYPTED: Guest VM IO-APIC is encrypted
-> +	 *
-> +	 * The platform/OS is running as a guest/virtual machine with
-> +	 * an IO-APIC that is emulated by a paravisor running in the
-> +	 * guest VM context. As such, the IO-APIC is accessed in the
-> +	 * encrypted portion of the guest physical address space.
-> +	 *
-> +	 * Examples include Hyper-V SEV-SNP guests using vTOM.
+> +	/*
+> +	 * This needs to be called before any devices perform DMA
+> +	 * operations that might use the SWIOTLB bounce buffers. It will
+> +	 * mark the bounce buffers as decrypted so that their usage will
+> +	 * not cause "plain-text" data to be decrypted when accessed. It
+> +	 * must be called after late_time_init() so that Hyper-V x86/x64
+> +	 * hypercalls work when the SWIOTLB bounce buffers are decrypted.
 > +	 */
-> +	CC_ATTR_ACCESS_IOAPIC_ENCRYPTED,
->  };
->  
->  #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+> +	mem_encrypt_init();
+> +
+>  	pid_idr_init();
+>  	anon_vma_init();
+>  #ifdef CONFIG_X86
 
 -- 
 Sathyanarayanan Kuppuswamy
