@@ -2,307 +2,460 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CF6643F97
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 10:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8336442CC
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Dec 2022 13:00:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234665AbiLFJRn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Dec 2022 04:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
+        id S235356AbiLFMAL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Dec 2022 07:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiLFJRK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 04:17:10 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2049.outbound.protection.outlook.com [40.107.223.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D412035F;
-        Tue,  6 Dec 2022 01:16:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m5eXlF9Vf+ViTHqCW5nsKeYDFrndwFjcTlRYGv/scOlkPUHTRBVCLWMnq8UCBlZmM+UCiu6jKT6hdGNla60WqIv9awTz4aHOoXjEjsp8dk/E53yrNuNWEKgr4joe7FOQ8osujvmAPlLKj92yKx1kcPIUl1pPLGwIoi6p+rT+0M6Ogzk8P0SScoUaevBL3edriXR1L9VO/zACXovO2to+xagxlpPffFzVXLUE9V8venyS9bZavzkW/wltpfwqueKk2tQG8kw5+65JUO2iqCqLVlwZXUn/8wBU1RRvsL5/cqn9HawptH6jTaDI6z4LjuTP0NqRTh5AZy6Lbha3jsownQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MvpqnxZGis698AM+D88I/aNwwNXnwmYvNdPGhflLO+4=;
- b=GhYAMTZWjyNlVcwb+D/SOqWEmvM48LREa5Gob1yi/cowWM7cQItuaFnfdv6Ze1DQZ20dPenaj7n6ZN4dGZu7tyQNlj68otKtqp7oxIvotTaw/8uULM3Vu9NnrTsTp82/iNFsPX1LB6aufA7412iU1lGj0TuY9iglP/TFobvnm3NHHs3j6I3qPsL82tWBL0UeXiZNPy0xkiAd4iD5ntayar8gjX/NxYacjgl5rwBxrtqgiOEwp4n36Eorr/D0+19KtAG1zad9o7YjGKFD044BXFN3POwmEzFHSOedItNH2dDGBATobYjhUT1TPxruKC9ArtUIF2G8AvTasF+Ur+GNJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MvpqnxZGis698AM+D88I/aNwwNXnwmYvNdPGhflLO+4=;
- b=k29z07pTG72RKjS22ndkGHA/fVzDQp+lPyp8RvBFbvu0K5j6DP8T/KdjjEI14ixuOI2T2tBcjCIdreMQYVjE1roGW17IMJyxNZFM0UvT6DbTL3FuVzlH6HRscuKfLo1QE8ih5gY9trDAkrwj5hqbJ9WVHpmB0/+ITtSvWQb159g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- SN7PR12MB7203.namprd12.prod.outlook.com (2603:10b6:806:2aa::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.13; Tue, 6 Dec 2022 09:16:27 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::8f76:f869:2e1f:331e]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::8f76:f869:2e1f:331e%6]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
- 09:16:27 +0000
-Message-ID: <eee97d32-09ea-b5d0-f45a-51c0e1d18d55@amd.com>
-Date:   Tue, 6 Dec 2022 10:16:03 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [RFC PATCH V2 01/18] x86/sev: Pvalidate memory gab for
- decompressing kernel
-Content-Language: en-US
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-2-ltykernel@gmail.com>
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20221119034633.1728632-2-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0072.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:99::19) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
+        with ESMTP id S235181AbiLFL70 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Dec 2022 06:59:26 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F362528E3F;
+        Tue,  6 Dec 2022 03:58:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670327910; x=1701863910;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=imlNdXA4iJKZ9kmncFn/vB9V/RKmf+zdzZLiNWUUJKA=;
+  b=ejjlZ6frlnUAEmgPBHO38FgM/BGY+JeYxrJSTTN9sktJOXdG9qQo+dVf
+   4sloBBrCnRWimyTR61ksikJozO0VDqAZvLX3MvCHB5pvFXDkm+n/SiQ8r
+   lBYv4BefbDuiSHClF6t+FLmgJR5fuNvR5pAW5bIANBlZzfe1vaR1zAu6N
+   UhoP+BjkvEgsb/eAQgJvTxPG8MNoKQtzrCj7BsbM6WspGp+3pLj0xCoVp
+   D+6ldX+qeGi44c6NiIf4+IA55VjYC5fsi5X8aNqIpIy3vdW5D4WAsxODW
+   OiiGXRwAk4c2YUdymRKYDjs6M3mYgmD1hp4YB+Xz1Xf1MvcMXz75J7Mty
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="317746876"
+X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
+   d="scan'208";a="317746876"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 03:58:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="639850271"
+X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
+   d="scan'208";a="639850271"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2022 03:58:16 -0800
+Date:   Tue, 6 Dec 2022 19:53:56 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20221206115356.GA1216605@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+ <CA+EHjTyuQSa9YKkGd1OqtEzobuf6Bcghwiz00aaL15ikz7J2Vw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SN7PR12MB7203:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3573a393-0a2e-4af9-42c0-08dad76a8dae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LxH8onUNZ1h/mL4s3kIUIfbG/plT+BWwHQkyOlfEsGybix4KUr7wDJTDtQ2i3Qm0H+za59QMm8kA2bcSYq+WiT866PsuuM875S6i5Wq8ZNYXlnCmETRnqMDMHtUvrq9BBTsI/9HszyD/XpnqbqWLktTkwL/7VV37985ytw21dZcYeAd6Xo+jkYKqZE80NGXYFipTEuKiEKnPOvfsOLqehVdMLBdIYtESRuzfv4W13XqpUGTM+7pQzSlYqqBprFZnxYBlxFLC0qsl9cYTWY3aLjRNAgy+I7cHBXvSfC2IOVUNp2hxdSJWsFRhVTA5dV8PoSjoEz5mOPtC9HW2Va+xmWu2WQeaRmtvSvf8cWD54UzmpSvJ/TxPiMXgVMQzpqa57qpBlqW58fv5f48UK6uAc20wz9yl5+scVSwr2xhnsNMrOE3l2WSWIP5v96yde2llWvh9NHxxaLx1A3345cvQtlkR+ygC8Z7vt/yhFHc7tbzVm9FqEQ+JdH5+9Wx7HoQsZJsYfh6mCXZtFruFXjAT0p1lgsPGrcEZDAbJnq+l7dEE4v30/AXBR85HGjUITc3+/Byb2LfV/LcWB3H5hu21qXgxEpfPh81Z2kZCyFha+H+zC2kXZQLtJh0sFgCSVqPZACul7NvAMKsvTw5mgOkIFdLL51pzbJ0bfsQ87qkRxn3hzqCICcSlEjzfED33orcb833hagcYDd2+3lOayVoiAeZxF3behv6HiFUj694eV6E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(451199015)(38100700002)(36756003)(921005)(31696002)(86362001)(6512007)(26005)(31686004)(316002)(6486002)(6666004)(478600001)(6506007)(45080400002)(7416002)(7406005)(5660300002)(66556008)(83380400001)(4326008)(8936002)(2906002)(8676002)(66476007)(66946007)(41300700001)(2616005)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V1F1UUgzSlNpcHVJeEhSQTVxbkZmWENTVlIyYnV1aDBmYnNqWmhqZ1B2R2kz?=
- =?utf-8?B?MzRHMkczdUt2cVJpN2xJbmJRVkNZa1NDNVJOendUT3NUQXA5UFFiZGV2aDFw?=
- =?utf-8?B?S2xKemp3V3k1dTlQbVRnWk5QaUtFQmNXd0NpV0gvN0ZsM2Y1ZVFGQ1o0SUIy?=
- =?utf-8?B?K3RhUW1wRitIcS92emh0OGZhYWMwUXA5Z1M3UGVEbFdMRGdISkdBWFV4NHFv?=
- =?utf-8?B?ZWUrSTFNQmlqYVZpWk1yWTlERTJQQW1RSnovS1Eva0xxdUVzTWdEUjU1bGpv?=
- =?utf-8?B?NGZlcERHZnZmaVJ3QWlYZjVLWEd6eEZOc3ZBUTNqNzU0UitzRldtYjNGMXVY?=
- =?utf-8?B?ZTBUV21mYTFOQ01MWmNMQ2IxTzJoRzY3YjRKUXJRL1ZjMi8zaGs2ZU9rdmJo?=
- =?utf-8?B?czNyR2ZxWDZ0eStucTg4MGRhbE5QRm8zUkhEanFHQkduNGhxMEplMlJNSjRO?=
- =?utf-8?B?bURES25pczh6enhCWURmcDV5azM1dUpsYUNuejZkYmwxaE5mQi91cURSSkMv?=
- =?utf-8?B?eUM5VUozSUEzMXU4SVN1N2pvM3ZacEJ4MlBGbGFxZHBxMEhSa1JSWmJoRkky?=
- =?utf-8?B?R0Q3T1NQSzdXWXU0NXRLekl5WVA5ajBMMlhqbjJ1d3IweHgxWk1sT2lYTXlP?=
- =?utf-8?B?NGl6Q01rMkcrRjZjZmVPcmUreTR5REZVVXJjdnJ1R1p5SUlxVmtsWVE4aDBp?=
- =?utf-8?B?a3M0RlgrSmpMWGsyQTMxNHJzdVVHSVYrelpMR1JUcld0ditzdk83eFZNVVVD?=
- =?utf-8?B?SVBNbnZ6SmZGSGdVWGcxTEUvcWtEK3p2THZ0VkdEVDdEeU5hazlWN1B4VVQz?=
- =?utf-8?B?cDB5aUhJeDRzSU9GWmpRSE9ZWXV5c0FORi9sZUJocFlwVURHTWI2aGRnZGYy?=
- =?utf-8?B?aVVuTXp3RWV4WUVWRUVRd2RQeFZuSFJlb05VcDNvbzhMelg5ODlITVhLQUFP?=
- =?utf-8?B?aWJ4b2FBT2dLVWpzanh1UmFnZ0grUlRCU0I2ZUFZaWdYYkY1bnlxS3ZHOXU3?=
- =?utf-8?B?ZDArNzRkMVhIeHA2cWdnWHQvMlhtRjdFUU4zQUV6dCtMcWxvUmRwdmlrK011?=
- =?utf-8?B?a2t2QkxTb3Zkd0E2NHRRQzJYblkwL3BPeituQ0dLZU15MldpMERiSjRwQm9w?=
- =?utf-8?B?R0lTYXpMSEhEREhDTDN6YThtM3puZml4NnZIQllCR2hZd0JOSXNmOGR4Y0hJ?=
- =?utf-8?B?cnlpQ25Xc3pYMFk1Sit5ZE02L3kyRmRnc2xveS9XTzJyeWNoOVZ1TWQyRHBR?=
- =?utf-8?B?VG9oeGZiUnJaQUozSktIbzM5amd5TVhUYVlML3FyYy9UN3ZOOTU2NmFESjY1?=
- =?utf-8?B?NVRDOHBxNmUwZHF5eFlsTzZuRzF3SEs3SWZBRnFmVlhXYzF3WEYzR2laUHlF?=
- =?utf-8?B?dnN0ckhNMlhOeG96dlhOTTlYUlZVaTBNZmVhOU4vRFhwM0VjYTdGdHJrcm92?=
- =?utf-8?B?R29EMlBINXlGcXlqTkpscDdEeWg2cDdiUzZaNU1Ycm50YXRsa00xaDlUSk5C?=
- =?utf-8?B?a0s3aU9ncmIwQkUwZFRnVWdRVmU1VWV6RXppL0RDSUZpWXAvc3V3K09MeDFv?=
- =?utf-8?B?NXBodGdCdGQ0RXVFdWVvSTBFQjhyTmFmWDd4Y0pheEIxL214L1ZoS2ZsMkpZ?=
- =?utf-8?B?M0RuWVZVZlhVTjNLeFRMbG1uZTBSWCtIdlBmVlloNUxrR0RhSUZXMjNINXB5?=
- =?utf-8?B?TTh5RE14VFBjbUFENlBpb1RwZEFaMG82VWNCL0U3OEN2cnM1YXdkY05Qait3?=
- =?utf-8?B?Y3czQWF3QVkzQUVuTlE5STRwTS9QU3FReEJoTzhWV3N2ME9sNnBuZ1JlVUcy?=
- =?utf-8?B?UW5mUjFUQW9xTkZxay9OYm12Z09MaUJZMW8wb3BOK1U1N2lvREEzS0ZZT0Zl?=
- =?utf-8?B?NGcrTkRCRXErZVZvRTdHWGxTNzR6T25IZ2x2SnVoNmxPU1d5S2hkU0ZrK0RN?=
- =?utf-8?B?OHBjTTFjRUdTTlFTOFVFOG05QUFjb3NvVjR6VXNVbXdSaVJxRlFwYzdkdzZS?=
- =?utf-8?B?cTV2TGlYcVk4YWQ0WHJRY3VBNU5YRXN6dm0xMVJxYnBVYWtGc2JLYnRhZisz?=
- =?utf-8?B?bmd1dW5VRi9QajVTaXJZQ0t3WGFxV0RUY04yeWdtVE85UVFDU2M1QmxrbWwv?=
- =?utf-8?Q?zwz4VDT2SpJAoZGpi3wEnl4Nq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3573a393-0a2e-4af9-42c0-08dad76a8dae
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 09:16:27.4702
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: b9Nohxrh5xXaoe6bnwZtkQurO/baqSUGdYWHJ+F4nH1cDrJnCOYZ6jvrd2rlJTIrCN17pEU5rVTaRBa+DdI1sA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7203
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=gb2312
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+EHjTyuQSa9YKkGd1OqtEzobuf6Bcghwiz00aaL15ikz7J2Vw@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Tianyu,
-
-Some minor nits below.
-
-> Pvalidate needed pages for decompressing kernel. The E820_TYPE_RAM
-> entry includes only validated memory. The kernel expects that the
-> RAM entry's addr is fixed while the entry size is to be extended
-> to cover addresses to the start of next entry. This patch increases
-> the RAM entry size to cover all possilble memory addresses until
-
-s/possilble/possible
-
-> init_size.
+On Mon, Dec 05, 2022 at 09:03:11AM +0000, Fuad Tabba wrote:
+> Hi Chao,
 > 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->   arch/x86/boot/compressed/head_64.S |  8 +++
->   arch/x86/boot/compressed/sev.c     | 84 ++++++++++++++++++++++++++++++
->   2 files changed, 92 insertions(+)
+> On Fri, Dec 2, 2022 at 6:18 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> >
+> > In memory encryption usage, guest memory may be encrypted with special
+> > key and can be accessed only by the guest itself. We call such memory
+> > private memory. It's valueless and sometimes can cause problem to allow
+> > userspace to access guest private memory. This new KVM memslot extension
+> > allows guest private memory being provided through a restrictedmem
+> > backed file descriptor(fd) and userspace is restricted to access the
+> > bookmarked memory in the fd.
+> >
+> > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> > additional KVM memslot fields restricted_fd/restricted_offset to allow
+> > userspace to instruct KVM to provide guest memory through restricted_fd.
+> > 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
+> > and the size is 'memory_size'.
+> >
+> > The extended memslot can still have the userspace_addr(hva). When use, a
+> > single memslot can maintain both private memory through restricted_fd
+> > and shared memory through userspace_addr. Whether the private or shared
+> > part is visible to guest is maintained by other KVM code.
+> >
+> > A restrictedmem_notifier field is also added to the memslot structure to
+> > allow the restricted_fd's backing store to notify KVM the memory change,
+> > KVM then can invalidate its page table entries or handle memory errors.
+> >
+> > Together with the change, a new config HAVE_KVM_RESTRICTED_MEM is added
+> > and right now it is selected on X86_64 only.
+> >
+> > To make future maintenance easy, internally use a binary compatible
+> > alias struct kvm_user_mem_region to handle both the normal and the
+> > '_ext' variants.
+> >
+> > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > Reviewed-by: Fuad Tabba <tabba@google.com>
+> > Tested-by: Fuad Tabba <tabba@google.com>
 > 
-> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> index d33f060900d2..818edaf5d0cf 100644
-> --- a/arch/x86/boot/compressed/head_64.S
-> +++ b/arch/x86/boot/compressed/head_64.S
-> @@ -348,6 +348,14 @@ SYM_CODE_START(startup_64)
->   	cld
->   	cli
->   
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/* pvalidate memory on demand if SNP is enabled. */
-> +	pushq	%rsi
-> +	movq    %rsi, %rdi
-> +	call 	pvalidate_for_startup_64
-> +	popq	%rsi
-> +#endif
-> +
->   	/* Setup data segments. */
->   	xorl	%eax, %eax
->   	movl	%eax, %ds
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index 960968f8bf75..3a5a1ab16095 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -12,8 +12,10 @@
->    */
->   #include "misc.h"
->   
-> +#include <asm/msr-index.h>
->   #include <asm/pgtable_types.h>
->   #include <asm/sev.h>
-> +#include <asm/svm.h>
->   #include <asm/trapnr.h>
->   #include <asm/trap_pf.h>
->   #include <asm/msr-index.h>
-> @@ -21,6 +23,7 @@
->   #include <asm/ptrace.h>
->   #include <asm/svm.h>
->   #include <asm/cpuid.h>
-> +#include <asm/e820/types.h>
->   
->   #include "error.h"
->   #include "../msr.h"
-> @@ -117,6 +120,22 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
->   /* Include code for early handlers */
->   #include "../../kernel/sev-shared.c"
->   
-> +/* Check SEV-SNP via MSR */
-> +static bool sev_snp_runtime_check(void)
-> +{
-> +	unsigned long low, high;
-> +	u64 val;
-> +
-> +	asm volatile("rdmsr\n" : "=a" (low), "=d" (high) :
-> +			"c" (MSR_AMD64_SEV));
-> +
-> +	val = (high << 32) | low;
-> +	if (val & MSR_AMD64_SEV_SNP_ENABLED)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->   static inline bool sev_snp_enabled(void)
->   {
->   	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
-> @@ -456,3 +475,68 @@ void sev_prep_identity_maps(unsigned long top_level_pgt)
->   
->   	sev_verify_cbit(top_level_pgt);
->   }
-> +
-> +static void extend_e820_on_demand(struct boot_e820_entry *e820_entry,
-> +				  u64 needed_ram_end)
-> +{
-> +	u64 end, paddr;
-> +	unsigned long eflags;
-> +	int rc;
-> +
-> +	if (!e820_entry)
-> +		return;
-> +
-> +	/* Validated memory must be aligned by PAGE_SIZE. */
-> +	end = ALIGN(e820_entry->addr + e820_entry->size, PAGE_SIZE);
-> +	if (needed_ram_end > end && e820_entry->type == E820_TYPE_RAM) {
+> V9 of this patch [*] had KVM_CAP_PRIVATE_MEM, but it's not in this
+> patch series anymore. Any reason you removed it, or is it just an
+> omission?
 
-maybe "if check" can be used to return from here, would read code better?
+We had some discussion in v9 [1] to add generic memory attributes ioctls
+and KVM_CAP_PRIVATE_MEM can be implemented as a new 
+KVM_MEMORY_ATTRIBUTE_PRIVATE flag via KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES()
+ioctl [2]. The api doc has been updated:
 
-> +		for (paddr = end; paddr < needed_ram_end; paddr += PAGE_SIZE) 
-Maybe we could reuse 'pvalidate_pages' here?
++- KVM_MEM_PRIVATE, if KVM_MEMORY_ATTRIBUTE_PRIVATE is supported (see
++  KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES ioctl) бн
 
-> +			rc = pvalidate(paddr, RMP_PG_SIZE_4K, true);
-> +			if (rc) {
-> +				error("Failed to validate address.n");
 
-Would it make sense to print the cause of failure here?
+[1] https://lore.kernel.org/linux-mm/Y2WB48kD0J4VGynX@google.com/
+[2]
+https://lore.kernel.org/linux-mm/20221202061347.1070246-3-chao.p.peng@linux.intel.com/
 
-> +				return;
-> +			}
-> +		}
-> +		e820_entry->size = needed_ram_end - e820_entry->addr;
-> +	}
-> +}
-> +
-> +/*
-> + * Explicitly pvalidate needed pages for decompressing the kernel.
-> + * The E820_TYPE_RAM entry includes only validated memory. The kernel
-> + * expects that the RAM entry's addr is fixed while the entry size is to be
-> + * extended to cover addresses to the start of next entry.
-> + * The function increases the RAM entry size to cover all possible memory
-> + * addresses until init_size.
-> + * For example,  init_end = 0x4000000,
-> + * [RAM: 0x0 - 0x0],                       M[RAM: 0x0 - 0xa0000]
-> + * [RSVD: 0xa0000 - 0x10000]                [RSVD: 0xa0000 - 0x10000]
-> + * [ACPI: 0x10000 - 0x20000]      ==>       [ACPI: 0x10000 - 0x20000]
-> + * [RSVD: 0x800000 - 0x900000]              [RSVD: 0x800000 - 0x900000]
-> + * [RAM: 0x1000000 - 0x2000000]            M[RAM: 0x1000000 - 0x2001000]
-> + * [RAM: 0x2001000 - 0x2007000]            M[RAM: 0x2001000 - 0x4000000]
-> + * Other RAM memory after init_end is pvalidated by ms_hyperv_init_platform
-> + */
-> +__visible void pvalidate_for_startup_64(struct boot_params *boot_params)
-> +{
-> +	struct boot_e820_entry *e820_entry;
-> +	u64 init_end =
-> +		boot_params->hdr.pref_address + boot_params->hdr.init_size;
-> +	u8 i, nr_entries = boot_params->e820_entries;
-> +	u64 needed_end;
-
-Could not very well interpret the name 'needed_end'.
-
-> +
-> +	if (!sev_snp_runtime_check())
-> +		return;
-> +
-> +	for (i = 0; i < nr_entries; ++i) {
-> +		/* Pvalidate memory holes in e820 RAM entries. */
-
-Pvalidate and pvalidate names are used interchangeably in comments.
-
-> +		e820_entry = &boot_params->e820_table[i];
-> +		if (i < nr_entries - 1) {
-> +			needed_end = boot_params->e820_table[i + 1].addr;
-> +			if (needed_end < e820_entry->addr)
-> +				error("e820 table is not sorted.\n");
-> +		} else {
-> +			needed_end = init_end;
-> +		}
-> +		extend_e820_on_demand(e820_entry, needed_end);
-> +	}
-> +}
-
+Thanks,
+Chao
+> 
+> [*] https://lore.kernel.org/linux-mm/20221025151344.3784230-3-chao.p.peng@linux.intel.com/
+> 
+> Thanks,
+> /fuad
+> 
+> > ---
+> >  Documentation/virt/kvm/api.rst | 40 ++++++++++++++++++++++-----
+> >  arch/x86/kvm/Kconfig           |  2 ++
+> >  arch/x86/kvm/x86.c             |  2 +-
+> >  include/linux/kvm_host.h       |  8 ++++--
+> >  include/uapi/linux/kvm.h       | 28 +++++++++++++++++++
+> >  virt/kvm/Kconfig               |  3 +++
+> >  virt/kvm/kvm_main.c            | 49 ++++++++++++++++++++++++++++------
+> >  7 files changed, 114 insertions(+), 18 deletions(-)
+> >
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index bb2f709c0900..99352170c130 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -1319,7 +1319,7 @@ yet and must be cleared on entry.
+> >  :Capability: KVM_CAP_USER_MEMORY
+> >  :Architectures: all
+> >  :Type: vm ioctl
+> > -:Parameters: struct kvm_userspace_memory_region (in)
+> > +:Parameters: struct kvm_userspace_memory_region(_ext) (in)
+> >  :Returns: 0 on success, -1 on error
+> >
+> >  ::
+> > @@ -1332,9 +1332,18 @@ yet and must be cleared on entry.
+> >         __u64 userspace_addr; /* start of the userspace allocated memory */
+> >    };
+> >
+> > +  struct kvm_userspace_memory_region_ext {
+> > +       struct kvm_userspace_memory_region region;
+> > +       __u64 restricted_offset;
+> > +       __u32 restricted_fd;
+> > +       __u32 pad1;
+> > +       __u64 pad2[14];
+> > +  };
+> > +
+> >    /* for kvm_memory_region::flags */
+> >    #define KVM_MEM_LOG_DIRTY_PAGES      (1UL << 0)
+> >    #define KVM_MEM_READONLY     (1UL << 1)
+> > +  #define KVM_MEM_PRIVATE              (1UL << 2)
+> >
+> >  This ioctl allows the user to create, modify or delete a guest physical
+> >  memory slot.  Bits 0-15 of "slot" specify the slot id and this value
+> > @@ -1365,12 +1374,29 @@ It is recommended that the lower 21 bits of guest_phys_addr and userspace_addr
+> >  be identical.  This allows large pages in the guest to be backed by large
+> >  pages in the host.
+> >
+> > -The flags field supports two flags: KVM_MEM_LOG_DIRTY_PAGES and
+> > -KVM_MEM_READONLY.  The former can be set to instruct KVM to keep track of
+> > -writes to memory within the slot.  See KVM_GET_DIRTY_LOG ioctl to know how to
+> > -use it.  The latter can be set, if KVM_CAP_READONLY_MEM capability allows it,
+> > -to make a new slot read-only.  In this case, writes to this memory will be
+> > -posted to userspace as KVM_EXIT_MMIO exits.
+> > +kvm_userspace_memory_region_ext struct includes all fields of
+> > +kvm_userspace_memory_region struct, while also adds additional fields for some
+> > +other features. See below description of flags field for more information.
+> > +It's recommended to use kvm_userspace_memory_region_ext in new userspace code.
+> > +
+> > +The flags field supports following flags:
+> > +
+> > +- KVM_MEM_LOG_DIRTY_PAGES to instruct KVM to keep track of writes to memory
+> > +  within the slot. For more details, see KVM_GET_DIRTY_LOG ioctl.
+> > +
+> > +- KVM_MEM_READONLY, if KVM_CAP_READONLY_MEM allows, to make a new slot
+> > +  read-only. In this case, writes to this memory will be posted to userspace as
+> > +  KVM_EXIT_MMIO exits.
+> > +
+> > +- KVM_MEM_PRIVATE, if KVM_MEMORY_ATTRIBUTE_PRIVATE is supported (see
+> > +  KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES ioctl), to indicate a new slot has private
+> > +  memory backed by a file descriptor(fd) and userspace access to the fd may be
+> > +  restricted. Userspace should use restricted_fd/restricted_offset in the
+> > +  kvm_userspace_memory_region_ext to instruct KVM to provide private memory
+> > +  to guest. Userspace should guarantee not to map the same host physical address
+> > +  indicated by restricted_fd/restricted_offset to different guest physical
+> > +  addresses within multiple memslots. Failed to do this may result undefined
+> > +  behavior.
+> >
+> >  When the KVM_CAP_SYNC_MMU capability is available, changes in the backing of
+> >  the memory region are automatically reflected into the guest.  For example, an
+> > diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> > index a8e379a3afee..690cb21010e7 100644
+> > --- a/arch/x86/kvm/Kconfig
+> > +++ b/arch/x86/kvm/Kconfig
+> > @@ -50,6 +50,8 @@ config KVM
+> >         select INTERVAL_TREE
+> >         select HAVE_KVM_PM_NOTIFIER if PM
+> >         select HAVE_KVM_MEMORY_ATTRIBUTES
+> > +       select HAVE_KVM_RESTRICTED_MEM if X86_64
+> > +       select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
+> >         help
+> >           Support hosting fully virtualized guest machines using hardware
+> >           virtualization extensions.  You will need a fairly recent
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 7f850dfb4086..9a07380f8d3c 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -12224,7 +12224,7 @@ void __user * __x86_set_memory_region(struct kvm *kvm, int id, gpa_t gpa,
+> >         }
+> >
+> >         for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
+> > -               struct kvm_userspace_memory_region m;
+> > +               struct kvm_user_mem_region m;
+> >
+> >                 m.slot = id | (i << 16);
+> >                 m.flags = 0;
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index a784e2b06625..02347e386ea2 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -44,6 +44,7 @@
+> >
+> >  #include <asm/kvm_host.h>
+> >  #include <linux/kvm_dirty_ring.h>
+> > +#include <linux/restrictedmem.h>
+> >
+> >  #ifndef KVM_MAX_VCPU_IDS
+> >  #define KVM_MAX_VCPU_IDS KVM_MAX_VCPUS
+> > @@ -585,6 +586,9 @@ struct kvm_memory_slot {
+> >         u32 flags;
+> >         short id;
+> >         u16 as_id;
+> > +       struct file *restricted_file;
+> > +       loff_t restricted_offset;
+> > +       struct restrictedmem_notifier notifier;
+> >  };
+> >
+> >  static inline bool kvm_slot_dirty_track_enabled(const struct kvm_memory_slot *slot)
+> > @@ -1123,9 +1127,9 @@ enum kvm_mr_change {
+> >  };
+> >
+> >  int kvm_set_memory_region(struct kvm *kvm,
+> > -                         const struct kvm_userspace_memory_region *mem);
+> > +                         const struct kvm_user_mem_region *mem);
+> >  int __kvm_set_memory_region(struct kvm *kvm,
+> > -                           const struct kvm_userspace_memory_region *mem);
+> > +                           const struct kvm_user_mem_region *mem);
+> >  void kvm_arch_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot);
+> >  void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen);
+> >  int kvm_arch_prepare_memory_region(struct kvm *kvm,
+> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> > index 5d0941acb5bb..13bff963b8b0 100644
+> > --- a/include/uapi/linux/kvm.h
+> > +++ b/include/uapi/linux/kvm.h
+> > @@ -103,6 +103,33 @@ struct kvm_userspace_memory_region {
+> >         __u64 userspace_addr; /* start of the userspace allocated memory */
+> >  };
+> >
+> > +struct kvm_userspace_memory_region_ext {
+> > +       struct kvm_userspace_memory_region region;
+> > +       __u64 restricted_offset;
+> > +       __u32 restricted_fd;
+> > +       __u32 pad1;
+> > +       __u64 pad2[14];
+> > +};
+> > +
+> > +#ifdef __KERNEL__
+> > +/*
+> > + * kvm_user_mem_region is a kernel-only alias of kvm_userspace_memory_region_ext
+> > + * that "unpacks" kvm_userspace_memory_region so that KVM can directly access
+> > + * all fields from the top-level "extended" region.
+> > + */
+> > +struct kvm_user_mem_region {
+> > +       __u32 slot;
+> > +       __u32 flags;
+> > +       __u64 guest_phys_addr;
+> > +       __u64 memory_size;
+> > +       __u64 userspace_addr;
+> > +       __u64 restricted_offset;
+> > +       __u32 restricted_fd;
+> > +       __u32 pad1;
+> > +       __u64 pad2[14];
+> > +};
+> > +#endif
+> > +
+> >  /*
+> >   * The bit 0 ~ bit 15 of kvm_memory_region::flags are visible for userspace,
+> >   * other bits are reserved for kvm internal use which are defined in
+> > @@ -110,6 +137,7 @@ struct kvm_userspace_memory_region {
+> >   */
+> >  #define KVM_MEM_LOG_DIRTY_PAGES        (1UL << 0)
+> >  #define KVM_MEM_READONLY       (1UL << 1)
+> > +#define KVM_MEM_PRIVATE                (1UL << 2)
+> >
+> >  /* for KVM_IRQ_LINE */
+> >  struct kvm_irq_level {
+> > diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> > index effdea5dd4f0..d605545d6dd1 100644
+> > --- a/virt/kvm/Kconfig
+> > +++ b/virt/kvm/Kconfig
+> > @@ -89,3 +89,6 @@ config KVM_XFER_TO_GUEST_WORK
+> >
+> >  config HAVE_KVM_PM_NOTIFIER
+> >         bool
+> > +
+> > +config HAVE_KVM_RESTRICTED_MEM
+> > +       bool
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 7f0f5e9f2406..b882eb2c76a2 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -1532,7 +1532,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+> >         }
+> >  }
+> >
+> > -static int check_memory_region_flags(const struct kvm_userspace_memory_region *mem)
+> > +static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
+> >  {
+> >         u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> >
+> > @@ -1934,7 +1934,7 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+> >   * Must be called holding kvm->slots_lock for write.
+> >   */
+> >  int __kvm_set_memory_region(struct kvm *kvm,
+> > -                           const struct kvm_userspace_memory_region *mem)
+> > +                           const struct kvm_user_mem_region *mem)
+> >  {
+> >         struct kvm_memory_slot *old, *new;
+> >         struct kvm_memslots *slots;
+> > @@ -2038,7 +2038,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
+> >
+> >  int kvm_set_memory_region(struct kvm *kvm,
+> > -                         const struct kvm_userspace_memory_region *mem)
+> > +                         const struct kvm_user_mem_region *mem)
+> >  {
+> >         int r;
+> >
+> > @@ -2050,7 +2050,7 @@ int kvm_set_memory_region(struct kvm *kvm,
+> >  EXPORT_SYMBOL_GPL(kvm_set_memory_region);
+> >
+> >  static int kvm_vm_ioctl_set_memory_region(struct kvm *kvm,
+> > -                                         struct kvm_userspace_memory_region *mem)
+> > +                                         struct kvm_user_mem_region *mem)
+> >  {
+> >         if ((u16)mem->slot >= KVM_USER_MEM_SLOTS)
+> >                 return -EINVAL;
+> > @@ -4698,6 +4698,33 @@ static int kvm_vm_ioctl_get_stats_fd(struct kvm *kvm)
+> >         return fd;
+> >  }
+> >
+> > +#define SANITY_CHECK_MEM_REGION_FIELD(field)                                   \
+> > +do {                                                                           \
+> > +       BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=             \
+> > +                    offsetof(struct kvm_userspace_memory_region, field));      \
+> > +       BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=         \
+> > +                    sizeof_field(struct kvm_userspace_memory_region, field));  \
+> > +} while (0)
+> > +
+> > +#define SANITY_CHECK_MEM_REGION_EXT_FIELD(field)                                       \
+> > +do {                                                                                   \
+> > +       BUILD_BUG_ON(offsetof(struct kvm_user_mem_region, field) !=                     \
+> > +                    offsetof(struct kvm_userspace_memory_region_ext, field));          \
+> > +       BUILD_BUG_ON(sizeof_field(struct kvm_user_mem_region, field) !=                 \
+> > +                    sizeof_field(struct kvm_userspace_memory_region_ext, field));      \
+> > +} while (0)
+> > +
+> > +static void kvm_sanity_check_user_mem_region_alias(void)
+> > +{
+> > +       SANITY_CHECK_MEM_REGION_FIELD(slot);
+> > +       SANITY_CHECK_MEM_REGION_FIELD(flags);
+> > +       SANITY_CHECK_MEM_REGION_FIELD(guest_phys_addr);
+> > +       SANITY_CHECK_MEM_REGION_FIELD(memory_size);
+> > +       SANITY_CHECK_MEM_REGION_FIELD(userspace_addr);
+> > +       SANITY_CHECK_MEM_REGION_EXT_FIELD(restricted_offset);
+> > +       SANITY_CHECK_MEM_REGION_EXT_FIELD(restricted_fd);
+> > +}
+> > +
+> >  static long kvm_vm_ioctl(struct file *filp,
+> >                            unsigned int ioctl, unsigned long arg)
+> >  {
+> > @@ -4721,14 +4748,20 @@ static long kvm_vm_ioctl(struct file *filp,
+> >                 break;
+> >         }
+> >         case KVM_SET_USER_MEMORY_REGION: {
+> > -               struct kvm_userspace_memory_region kvm_userspace_mem;
+> > +               struct kvm_user_mem_region mem;
+> > +               unsigned long size = sizeof(struct kvm_userspace_memory_region);
+> > +
+> > +               kvm_sanity_check_user_mem_region_alias();
+> >
+> >                 r = -EFAULT;
+> > -               if (copy_from_user(&kvm_userspace_mem, argp,
+> > -                                               sizeof(kvm_userspace_mem)))
+> > +               if (copy_from_user(&mem, argp, size))
+> > +                       goto out;
+> > +
+> > +               r = -EINVAL;
+> > +               if (mem.flags & KVM_MEM_PRIVATE)
+> >                         goto out;
+> >
+> > -               r = kvm_vm_ioctl_set_memory_region(kvm, &kvm_userspace_mem);
+> > +               r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
+> >                 break;
+> >         }
+> >         case KVM_GET_DIRTY_LOG: {
+> > --
+> > 2.25.1
+> >
