@@ -2,188 +2,302 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AED646245
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Dec 2022 21:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7426463EB
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Dec 2022 23:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiLGUSO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Dec 2022 15:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S229550AbiLGWOX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Dec 2022 17:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbiLGUSM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 15:18:12 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5C17B4DD
-        for <linux-arch@vger.kernel.org>; Wed,  7 Dec 2022 12:18:11 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id d13so13459212qvj.8
-        for <linux-arch@vger.kernel.org>; Wed, 07 Dec 2022 12:18:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R6C5DcFpFc2RC/VN4Pp8i/xOJBHO01e8lvht5r7K61c=;
-        b=FVHzc1Nzcubhpitnmdjp31Lnub/ZhDvqu9e/uatKzf2uR4QTQImhxX19EuI9u12moV
-         SnND9+i/xO3Qs9svwwOYGev/SiK9WlLtlv/fDmvMgO/bb4HlkDg395wk4qtdCI8kt3No
-         9SaHu15MEcqNpryN1CLzU0EmFES2C5ah8pCWo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R6C5DcFpFc2RC/VN4Pp8i/xOJBHO01e8lvht5r7K61c=;
-        b=VCmcD7WG5POpt/ganr4v3HUeX+I4UtsRB2mhEmutyz/CIONTNLO4PNl4w/d46RlPUc
-         md7v/XlzWPA6VjBjSxP8AwyPLNzhimAw8AxZfpH2NWK986k25jhk5wpse6r0ksaeZO4b
-         1+hCqZOgZcle/y+k8elbjca/Ul7wfLJJ3AtAnLC7pjkfj9MmVR8ftwF6NB2ECwIj+Xrh
-         ioDCXHVfTZyOcWtgD8GR9KYxSZqemp+42wStJ/6iej3tx0AI9q8s+9DXWqgGxBlacfFg
-         ZSwN0AwmheJoRNIWiQ0cbgm5lBZF7l0xVEZOvZbMJJNx66dzWKqocO6VNeZmo8sVyL0q
-         oGog==
-X-Gm-Message-State: ANoB5pntho3bVvBbXABOs8ouGNLhe/OhGE+XNpSn5KzZupEj29gaAY5j
-        r9n8lbptdrmbVTzHjqp2lQUBjhqxBTw8vnwc
-X-Google-Smtp-Source: AA0mqf4wr5olPYnb3t+PBWGLxofBzNeoz0ipJfO1mxkdI9oAutQ6JrgNICq9eK+O9gFat5Fs8NckDg==
-X-Received: by 2002:a05:6214:3513:b0:4c7:8c96:f474 with SMTP id nk19-20020a056214351300b004c78c96f474mr4758393qvb.131.1670444290305;
-        Wed, 07 Dec 2022 12:18:10 -0800 (PST)
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com. [209.85.160.181])
-        by smtp.gmail.com with ESMTPSA id bi6-20020a05620a318600b006fa16fe93bbsm17523580qkb.15.2022.12.07.12.18.04
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 12:18:06 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id fu10so8644694qtb.0
-        for <linux-arch@vger.kernel.org>; Wed, 07 Dec 2022 12:18:04 -0800 (PST)
-X-Received: by 2002:ac8:4992:0:b0:3a7:648d:23d4 with SMTP id
- f18-20020ac84992000000b003a7648d23d4mr15651002qtq.180.1670444283686; Wed, 07
- Dec 2022 12:18:03 -0800 (PST)
+        with ESMTP id S229523AbiLGWOV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 17:14:21 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E72E5C757;
+        Wed,  7 Dec 2022 14:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670451260; x=1701987260;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6Iw+b7sYxcigcPQIf71g5CO0STZk5hjAYSULaVteNXc=;
+  b=f7+rxxk3jn3zxJ7m+i4cUCQ1Etwn5pWR7N5QEwsnD8jiWZM3u94J+28C
+   a9ojJyAIt3PqPMxYmAI6LQXNL4tyqArLTEV3reCF4Ga2tZcAARqflET/I
+   kHi96yoJdOqFT5nWKyIjNaDoVFqWtB+QIKcyoCY1Bwp7QX5MIZyanhQ24
+   HWQLRBC5KGWA3EhC+/JGrGG8KP3Q3TyirzLr5PNpXxNRJGJiGVAPg8nMd
+   +hdCv3/3DgNRpcYfCRGtTqr1V8I9eG7Gu102WZtwCC3loaZX1f/s9nSj+
+   CWiB0WBXf2PEKhzLwzq6oMiQw6bBEpNLAFlSbBjfuH/pTvBcHSDW0POKu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="300433289"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="300433289"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 14:14:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="735552582"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="735552582"
+Received: from gjalliso-mobl.amr.corp.intel.com (HELO [10.212.135.231]) ([10.212.135.231])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 14:14:18 -0800
+Message-ID: <e6a4aeeb-382f-18cc-64da-7730101282c6@linux.intel.com>
+Date:   Wed, 7 Dec 2022 14:14:17 -0800
 MIME-Version: 1.0
-References: <202212051534.852804af-yujie.liu@intel.com> <CAHk-=wg330wAAxwSaJBPUtL5Rrn7PoQK3ksJw2OLvBxA0NGg+g@mail.gmail.com>
- <87ilipffws.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAHk-=wjDzVL+r6NmnU--tyEfDYhUB-5m=PQBZTQ2Es8bx7Mz+w@mail.gmail.com>
- <CAHk-=whjis-wTZKH20xoBW3=1qyygYoxJORxXx8ZpJbc6KtROw@mail.gmail.com> <878rjj22mz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <878rjj22mz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 7 Dec 2022 12:17:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whkL5aM1fR7kYUmhHQHBcMUc-bDoFP7EwYjTxy64DGtvw@mail.gmail.com>
-Message-ID: <CAHk-=whkL5aM1fR7kYUmhHQHBcMUc-bDoFP7EwYjTxy64DGtvw@mail.gmail.com>
-Subject: Re: [linux-next:master] [mm] 5df397dec7: will-it-scale.per_thread_ops
- -53.3% regression
-To:     "Huang, Ying" <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     kernel test robot <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-Content-Type: multipart/mixed; boundary="00000000000025d1ff05ef429ef6"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 4/6] x86/tdx: Expand __tdx_hypercall() to handle more
+ arguments
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, seanjc@google.com, tglx@linutronix.de,
+        tony.luck@intel.com, wei.liu@kernel.org, x86@kernel.org,
+        mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20221207003325.21503-1-decui@microsoft.com>
+ <20221207003325.21503-5-decui@microsoft.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20221207003325.21503-5-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---00000000000025d1ff05ef429ef6
-Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 6, 2022 at 9:41 PM Huang, Ying <ying.huang@intel.com> wrote:
->
-> I have tested the patch, it does fix the regression
 
-Thanks.
+On 12/6/22 4:33 PM, Dexuan Cui wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> 
+> So far __tdx_hypercall() only handles six arguments for VMCALL.
+> Expanding it to six more register would allow to cover more use-cases.
+> 
+> Using RDI and RSI as VMCALL arguments requires more register shuffling.
+> RAX is used to hold tdx_hypercall_args pointer and RBP stores flags.
+> 
+> While there, fix typo in the comment on panic branch.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Dexuan Cui <decui@microsoft.com>
+> Tested-by: Dexuan Cui <decui@microsoft.com>
+> ---
+> 
+> This patch is from Kirill. I'm posting the patch on behalf him:
+> https://lwn.net/ml/linux-kernel/20221202214741.7vfmqgvgubxqffen@box.shutemov.name/
+> 
+> This is actually v1, but let's use v2 in the Subject to be consistent
+> with the Subjects of the other patches.
+> 
+>  arch/x86/coco/tdx/tdcall.S        | 82 ++++++++++++++++++++++---------
+>  arch/x86/include/asm/shared/tdx.h |  6 +++
+>  arch/x86/kernel/asm-offsets.c     |  6 +++
+>  3 files changed, 70 insertions(+), 24 deletions(-)
+> 
+> diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
+> index f9eb1134f22d..64e57739dc9d 100644
+> --- a/arch/x86/coco/tdx/tdcall.S
+> +++ b/arch/x86/coco/tdx/tdcall.S
+> @@ -13,6 +13,12 @@
+>  /*
+>   * Bitmasks of exposed registers (with VMM).
+>   */
+> +#define TDX_RDX		BIT(2)
+> +#define TDX_RBX		BIT(3)
+> +#define TDX_RSI		BIT(6)
+> +#define TDX_RDI		BIT(7)
+> +#define TDX_R8		BIT(8)
+> +#define TDX_R9		BIT(9)
+>  #define TDX_R10		BIT(10)
+>  #define TDX_R11		BIT(11)
+>  #define TDX_R12		BIT(12)
+> @@ -27,9 +33,9 @@
+>   * details can be found in TDX GHCI specification, section
+>   * titled "TDCALL [TDG.VP.VMCALL] leaf".
+>   */
+> -#define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
+> -					  TDX_R12 | TDX_R13 | \
+> -					  TDX_R14 | TDX_R15 )
+> +#define TDVMCALL_EXPOSE_REGS_MASK	\
+> +	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
+> +	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
+>  
 
-Andrew, here's the patch with a proper commit message. Note that my
-commit message contains the SHA1 of the original patch both in the
-explanation and in a "Fixes:" line, which I think is fine for the
-"mm-stable" branch that the original patch is in.
+You seem to have expanded the list to include all VMCALL supported
+registers except RBP. Why not include it as well? That way, it will be
+a complete support.
 
-But if you end up rebasing that mm-stable branch, then I'd ask you to
-either remove/update those commit hashes, or just fold this fix into
-the original one. Ok?
+>  /*
+>   * __tdx_module_call()  - Used by TDX guests to request services from
+> @@ -124,19 +130,32 @@ SYM_FUNC_START(__tdx_hypercall)
+>  	push %r14
+>  	push %r13
+>  	push %r12
+> +	push %rbx
+> +	push %rbp
+> +
+> +	movq %rdi, %rax
+> +	movq %rsi, %rbp
+> +
+> +	/* Copy hypercall registers from arg struct: */
+> +	movq TDX_HYPERCALL_r8(%rax),  %r8
+> +	movq TDX_HYPERCALL_r9(%rax),  %r9
+> +	movq TDX_HYPERCALL_r10(%rax), %r10
+> +	movq TDX_HYPERCALL_r11(%rax), %r11
+> +	movq TDX_HYPERCALL_r12(%rax), %r12
+> +	movq TDX_HYPERCALL_r13(%rax), %r13
+> +	movq TDX_HYPERCALL_r14(%rax), %r14
+> +	movq TDX_HYPERCALL_r15(%rax), %r15
+> +	movq TDX_HYPERCALL_rdi(%rax), %rdi
+> +	movq TDX_HYPERCALL_rsi(%rax), %rsi
+> +	movq TDX_HYPERCALL_rbx(%rax), %rbx
+> +	movq TDX_HYPERCALL_rdx(%rax), %rdx
+> +
+> +	push %rax
+>  
+>  	/* Mangle function call ABI into TDCALL ABI: */
+>  	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
+>  	xor %eax, %eax
+>  
+> -	/* Copy hypercall registers from arg struct: */
+> -	movq TDX_HYPERCALL_r10(%rdi), %r10
+> -	movq TDX_HYPERCALL_r11(%rdi), %r11
+> -	movq TDX_HYPERCALL_r12(%rdi), %r12
+> -	movq TDX_HYPERCALL_r13(%rdi), %r13
+> -	movq TDX_HYPERCALL_r14(%rdi), %r14
+> -	movq TDX_HYPERCALL_r15(%rdi), %r15
+> -
+>  	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
+>  
+>  	/*
+> @@ -148,14 +167,14 @@ SYM_FUNC_START(__tdx_hypercall)
+>  	 * HLT operation indefinitely. Since this is the not the desired
+>  	 * result, conditionally call STI before TDCALL.
+>  	 */
+> -	testq $TDX_HCALL_ISSUE_STI, %rsi
+> +	testq $TDX_HCALL_ISSUE_STI, %rbp
+>  	jz .Lskip_sti
+>  	sti
+>  .Lskip_sti:
+>  	tdcall
+>  
+>  	/*
+> -	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
+> +	 * RAX!=0 indicates a failure of the TDVMCALL mechanism itself and that
+>  	 * something has gone horribly wrong with the TDX module.
+>  	 *
+>  	 * The return status of the hypercall operation is in a separate
+> @@ -165,30 +184,45 @@ SYM_FUNC_START(__tdx_hypercall)
+>  	testq %rax, %rax
+>  	jne .Lpanic
+>  
+> -	/* TDVMCALL leaf return code is in R10 */
+> -	movq %r10, %rax
+> +	pop %rax
+>  
+>  	/* Copy hypercall result registers to arg struct if needed */
+> -	testq $TDX_HCALL_HAS_OUTPUT, %rsi
+> +	testq $TDX_HCALL_HAS_OUTPUT, %rbp
+>  	jz .Lout
+>  
+> -	movq %r10, TDX_HYPERCALL_r10(%rdi)
+> -	movq %r11, TDX_HYPERCALL_r11(%rdi)
+> -	movq %r12, TDX_HYPERCALL_r12(%rdi)
+> -	movq %r13, TDX_HYPERCALL_r13(%rdi)
+> -	movq %r14, TDX_HYPERCALL_r14(%rdi)
+> -	movq %r15, TDX_HYPERCALL_r15(%rdi)
+> +	movq %r8,  TDX_HYPERCALL_r8(%rax)
+> +	movq %r9,  TDX_HYPERCALL_r9(%rax)
+> +	movq %r10, TDX_HYPERCALL_r10(%rax)
+> +	movq %r11, TDX_HYPERCALL_r11(%rax)
+> +	movq %r12, TDX_HYPERCALL_r12(%rax)
+> +	movq %r13, TDX_HYPERCALL_r13(%rax)
+> +	movq %r14, TDX_HYPERCALL_r14(%rax)
+> +	movq %r15, TDX_HYPERCALL_r15(%rax)
+> +	movq %rdi, TDX_HYPERCALL_rdi(%rax)
+> +	movq %rsi, TDX_HYPERCALL_rsi(%rax)
+> +	movq %rbx, TDX_HYPERCALL_rbx(%rax)
+> +	movq %rdx, TDX_HYPERCALL_rdx(%rax)
+>  .Lout:
+> +	/* TDVMCALL leaf return code is in R10 */
+> +	movq %r10, %rax
+> +
+>  	/*
+>  	 * Zero out registers exposed to the VMM to avoid speculative execution
+>  	 * with VMM-controlled values. This needs to include all registers
+> -	 * present in TDVMCALL_EXPOSE_REGS_MASK (except R12-R15). R12-R15
+> -	 * context will be restored.
+> +	 * present in TDVMCALL_EXPOSE_REGS_MASK, except RBX, and R12-R15 which
+> +	 * will be restored.
+>  	 */
+> +	xor %r8d,  %r8d
+> +	xor %r9d,  %r9d
+>  	xor %r10d, %r10d
+>  	xor %r11d, %r11d
+> +	xor %rdi,  %rdi
+> +	xor %rsi,  %rsi
+> +	xor %rdx,  %rdx
+>  
+>  	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
+> +	pop %rbp
+> +	pop %rbx
+>  	pop %r12
+>  	pop %r13
+>  	pop %r14
+> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+> index e53f26228fbb..8068faa52de1 100644
+> --- a/arch/x86/include/asm/shared/tdx.h
+> +++ b/arch/x86/include/asm/shared/tdx.h
+> @@ -22,12 +22,18 @@
+>   * This is a software only structure and not part of the TDX module/VMM ABI.
+>   */
+>  struct tdx_hypercall_args {
+> +	u64 r8;
+> +	u64 r9;
+>  	u64 r10;
+>  	u64 r11;
+>  	u64 r12;
+>  	u64 r13;
+>  	u64 r14;
+>  	u64 r15;
+> +	u64 rdi;
+> +	u64 rsi;
+> +	u64 rbx;
+> +	u64 rdx;
+>  };
+>  
+>  /* Used to request services from the VMM */
+> diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+> index 437308004ef2..9f09947495e2 100644
+> --- a/arch/x86/kernel/asm-offsets.c
+> +++ b/arch/x86/kernel/asm-offsets.c
+> @@ -75,12 +75,18 @@ static void __used common(void)
+>  	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
+>  
+>  	BLANK();
+> +	OFFSET(TDX_HYPERCALL_r8,  tdx_hypercall_args, r8);
+> +	OFFSET(TDX_HYPERCALL_r9,  tdx_hypercall_args, r9);
+>  	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
+>  	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
+>  	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
+>  	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
+>  	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
+>  	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
+> +	OFFSET(TDX_HYPERCALL_rdi, tdx_hypercall_args, rdi);
+> +	OFFSET(TDX_HYPERCALL_rsi, tdx_hypercall_args, rsi);
+> +	OFFSET(TDX_HYPERCALL_rbx, tdx_hypercall_args, rbx);
+> +	OFFSET(TDX_HYPERCALL_rdx, tdx_hypercall_args, rdx);
+>  
+>  	BLANK();
+>  	OFFSET(BP_scratch, boot_params, scratch);
 
-             Linus
-
---00000000000025d1ff05ef429ef6
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-mm-mmu_gather-allow-more-than-one-batch-of-delayed-r.patch"
-Content-Disposition: attachment; 
-	filename="0001-mm-mmu_gather-allow-more-than-one-batch-of-delayed-r.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lbe3dmb70>
-X-Attachment-Id: f_lbe3dmb70
-
-RnJvbSBkNjYwNWUyN2M5ZDlmZDU3ZjY3NzJkZTEyZjU0MDY1NTlmY2VkNmI3IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFR1ZSwgNiBEZWMgMjAyMiAxMToxNTowOSAtMDgwMApTdWJqZWN0OiBb
-UEFUQ0hdIG1tOiBtbXVfZ2F0aGVyOiBhbGxvdyBtb3JlIHRoYW4gb25lIGJhdGNoIG9mIGRlbGF5
-ZWQgcm1hcHMKCkNvbW1pdCA1ZGYzOTdkZWM3YzQgKCJtbTogZGVsYXkgcGFnZV9yZW1vdmVfcm1h
-cCgpIHVudGlsIGFmdGVyIHRoZSBUTEIKaGFzIGJlZW4gZmx1c2hlZCIpIGxpbWl0ZWQgdGhlIHBh
-Z2UgYmF0Y2hpbmcgZm9yIHRoZSBtbXUgZ2F0aGVyCm9wZXJhdGlvbiB3aGVuIGEgZGlydHkgc2hh
-cmVkIHBhZ2UgbmVlZGVkIHRvIGRlbGF5IHJtYXAgcmVtb3ZhbCB1bnRpbAphZnRlciB0aGUgVExC
-IGhhZCBiZWVuIGZsdXNoZWQuCgpJdCBkaWQgc28gYmVjYXVzZSBpdCBuZWVkcyB0byB3YWxrIHRo
-YXQgYXJyYXkgb2YgcGFnZXMgd2hpbGUgc3RpbGwKaG9sZGluZyB0aGUgcGFnZSB0YWJsZSBsb2Nr
-LCBhbmQgb3VyIG1tdV9nYXRoZXIgaW5mcmFzdHJ1Y3R1cmUgYWxsb3dzCmZvciBiYXRjaGluZyBx
-dWl0ZSBhIGxvdCBvZiBwYWdlcy4gIFdlIG1heSBoYXZlIHRob3VzYW5kcyBvbiBwYWdlcwpxdWV1
-ZWQgdXAgZm9yIGZyZWVpbmcsIGFuZCB3ZSB3YW50ZWQgdG8gd2FsayBvbmx5IHRoZSBsYXN0IGJh
-dGNoIGlmIHdlCnRoZW4gYWRkZWQgYSBkaXJ0eSBwYWdlIHRvIHRoZSBxdWV1ZS4KCkhvd2V2ZXIs
-IHdoZW4gSSBsaW1pdGVkIGl0IHRvIG9uZSBiYXRjaCwgSSBkaWRuJ3QgdGhpbmsgb2YgdGhlCmRl
-Z2VuZXJhdGUgY2FzZSBvZiB0aGUgc3BlY2lhbCBmaXJzdCBiYXRjaCB0aGF0IGlzIGVtYmVkZGVk
-IG9uLXN0YWNrIGluCnRoZSBtbXVfZ2F0aGVyIHN0cnVjdHVyZSAoY2FsbGVkICJsb2NhbCIpIGFu
-ZCB0aGF0IG9ubHkgaGFzIGVpZ2h0CmVudHJpZXMuCgpTbyB3aXRoIHRoZSByaWdodCBwYXR0ZXJu
-LCB0aGF0ICJsaW1pdCBkZWxheWVkIHJtYXAgdG8ganVzdCBvbmUgYmF0Y2giCndpbGwgdHJpZ2dl
-ciBvdmVyIGFuZCBvdmVyIGluIHRoYXQgZmlyc3Qgc21hbGwgYmF0Y2gsIGFuZCB3ZSdsbCB3YXN0
-ZSBhCmxvdCBvZiB0aW1lIGZsdXNoaW5nIFRMQidzIGV2ZXJ5IGVpZ2h0IHBhZ2VzLgoKQW5kIHRo
-b3NlIHJpZ2h0IHBhdHRlcm5zIGFyZSB0cml2aWFsbHkgdHJpZ2dlcmVkIGJ5IGp1c3QgaGF2aW5n
-IGEgc2hhcmVkCm1hcHBpbmdzIHdpdGggbG90cyBvZiBhZGphY2VudCBkaXJ0eSBwYWdlcy4gIExp
-a2UgdGhlICdwYWdlX2ZhdWx0MycKc3VidGVzdCBvZiB0aGUgJ3dpbGwtaXQtc2NhbGUnIGJlbmNo
-bWFyaywgdGhhdCBqdXN0IG1hcHMgYSBzaGFyZWQgYXJlYSwKZGlydGllcyBhbGwgcGFnZXMsIGFu
-ZCB1bm1hcHMgaXQuICBSaW5zZSBhbmQgcmVwZWF0LgoKV2Ugc3RpbGwgd2FudCB0byBsaW1pdCB0
-aGUgYmF0Y2hpbmcsIGJ1dCB0byBmaXggdGhpcyAoZWFzaWx5IHRyaWdnZXJlZCkKZGVnZW5lcmF0
-ZSBjYXNlLCBqdXN0IGV4cGFuZCB0aGUgIm9ubHkgb25lIGJhdGNoIiBsb2dpYyB0byBpbnN0ZWFk
-IGJlCiJvbmx5IG9uZSBiYXRjaCB0aGF0IGlzbid0IHRoZSBzcGVjaWFsIGZpcnN0IG9uLXN0YWNr
-ICgnbG9jYWwnKSBiYXRjaCIuCgpUaGF0IHdheSwgd2hlbiB3ZSBuZWVkIHRvIGZsdXNoIHRoZSBk
-ZWxheWVkIHJtYXBzLCB3ZSBjYW4gc3RpbGwgbGltaXQKb3VyIHdhbGsgdG8ganVzdCB0aGUgbGFz
-dCBiYXRjaCAtIGFuZCB0aGF0IGZpcnN0IHNtYWxsIG9uZS4KCkZpeGVzOiA1ZGYzOTdkZWM3YzQg
-KCJtbTogZGVsYXkgcGFnZV9yZW1vdmVfcm1hcCgpIHVudGlsIGFmdGVyIHRoZSBUTEIgaGFzIGJl
-ZW4gZmx1c2hlZCIpClJlcG9ydGVkLWJ5OiBrZXJuZWwgdGVzdCByb2JvdCA8eXVqaWUubGl1QGlu
-dGVsLmNvbT4KTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvb2UtbGtwLzIwMjIxMjA1MTUz
-NC44NTI4MDRhZi15dWppZS5saXVAaW50ZWwuY29tClRlc3RlZC1ieTogSHVhbmcsIFlpbmcgPHlp
-bmcuaHVhbmdAaW50ZWwuY29tPgpUZXN0ZWQtYnk6IEh1Z2ggRGlja2lucyA8aHVnaGRAZ29vZ2xl
-LmNvbT4KU2lnbmVkLW9mZi1ieTogTGludXMgVG9ydmFsZHMgPHRvcnZhbGRzQGxpbnV4LWZvdW5k
-YXRpb24ub3JnPgotLS0KIG1tL21tdV9nYXRoZXIuYyB8IDM2ICsrKysrKysrKysrKysrKysrKysr
-LS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDIwIGluc2VydGlvbnMoKyksIDE2IGRl
-bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL21tL21tdV9nYXRoZXIuYyBiL21tL21tdV9nYXRoZXIu
-YwppbmRleCA4MjQ3NTUzYTY5YzIuLjJiOTNjZjZhYzlhZSAxMDA2NDQKLS0tIGEvbW0vbW11X2dh
-dGhlci5jCisrKyBiL21tL21tdV9nYXRoZXIuYwpAQCAtMTksOCArMTksOCBAQCBzdGF0aWMgYm9v
-bCB0bGJfbmV4dF9iYXRjaChzdHJ1Y3QgbW11X2dhdGhlciAqdGxiKQogewogCXN0cnVjdCBtbXVf
-Z2F0aGVyX2JhdGNoICpiYXRjaDsKIAotCS8qIE5vIG1vcmUgYmF0Y2hpbmcgaWYgd2UgaGF2ZSBk
-ZWxheWVkIHJtYXBzIHBlbmRpbmcgKi8KLQlpZiAodGxiLT5kZWxheWVkX3JtYXApCisJLyogTGlt
-aXQgYmF0Y2hpbmcgaWYgd2UgaGF2ZSBkZWxheWVkIHJtYXBzIHBlbmRpbmcgKi8KKwlpZiAodGxi
-LT5kZWxheWVkX3JtYXAgJiYgdGxiLT5hY3RpdmUgIT0gJnRsYi0+bG9jYWwpCiAJCXJldHVybiBm
-YWxzZTsKIAogCWJhdGNoID0gdGxiLT5hY3RpdmU7CkBAIC00OCwzMSArNDgsMzUgQEAgc3RhdGlj
-IGJvb2wgdGxiX25leHRfYmF0Y2goc3RydWN0IG1tdV9nYXRoZXIgKnRsYikKIH0KIAogI2lmZGVm
-IENPTkZJR19TTVAKK3N0YXRpYyB2b2lkIHRsYl9mbHVzaF9ybWFwX2JhdGNoKHN0cnVjdCBtbXVf
-Z2F0aGVyX2JhdGNoICpiYXRjaCwgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEpCit7CisJZm9y
-IChpbnQgaSA9IDA7IGkgPCBiYXRjaC0+bnI7IGkrKykgeworCQlzdHJ1Y3QgZW5jb2RlZF9wYWdl
-ICplbmMgPSBiYXRjaC0+ZW5jb2RlZF9wYWdlc1tpXTsKKworCQlpZiAoZW5jb2RlZF9wYWdlX2Zs
-YWdzKGVuYykpIHsKKwkJCXN0cnVjdCBwYWdlICpwYWdlID0gZW5jb2RlZF9wYWdlX3B0cihlbmMp
-OworCQkJcGFnZV9yZW1vdmVfcm1hcChwYWdlLCB2bWEsIGZhbHNlKTsKKwkJfQorCX0KK30KKwog
-LyoqCiAgKiB0bGJfZmx1c2hfcm1hcHMgLSBkbyBwZW5kaW5nIHJtYXAgcmVtb3ZhbHMgYWZ0ZXIg
-d2UgaGF2ZSBmbHVzaGVkIHRoZSBUTEIKICAqIEB0bGI6IHRoZSBjdXJyZW50IG1tdV9nYXRoZXIK
-ICAqCiAgKiBOb3RlIHRoYXQgYmVjYXVzZSBvZiBob3cgdGxiX25leHRfYmF0Y2goKSBhYm92ZSB3
-b3Jrcywgd2Ugd2lsbAotICogbmV2ZXIgc3RhcnQgbmV3IGJhdGNoZXMgd2l0aCBwZW5kaW5nIGRl
-bGF5ZWQgcm1hcHMsIHNvIHdlIG9ubHkKLSAqIG5lZWQgdG8gd2FsayB0aHJvdWdoIHRoZSBjdXJy
-ZW50IGFjdGl2ZSBiYXRjaC4KKyAqIG5ldmVyIHN0YXJ0IG11bHRpcGxlIG5ldyBiYXRjaGVzIHdp
-dGggcGVuZGluZyBkZWxheWVkIHJtYXBzLCBzbworICogd2Ugb25seSBuZWVkIHRvIHdhbGsgdGhy
-b3VnaCB0aGUgY3VycmVudCBhY3RpdmUgYmF0Y2ggYW5kIHRoZQorICogb3JpZ2luYWwgbG9jYWwg
-b25lLgogICovCiB2b2lkIHRsYl9mbHVzaF9ybWFwcyhzdHJ1Y3QgbW11X2dhdGhlciAqdGxiLCBz
-dHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSkKIHsKLQlzdHJ1Y3QgbW11X2dhdGhlcl9iYXRjaCAq
-YmF0Y2g7Ci0KIAlpZiAoIXRsYi0+ZGVsYXllZF9ybWFwKQogCQlyZXR1cm47CiAKLQliYXRjaCA9
-IHRsYi0+YWN0aXZlOwotCWZvciAoaW50IGkgPSAwOyBpIDwgYmF0Y2gtPm5yOyBpKyspIHsKLQkJ
-c3RydWN0IGVuY29kZWRfcGFnZSAqZW5jID0gYmF0Y2gtPmVuY29kZWRfcGFnZXNbaV07Ci0KLQkJ
-aWYgKGVuY29kZWRfcGFnZV9mbGFncyhlbmMpKSB7Ci0JCQlzdHJ1Y3QgcGFnZSAqcGFnZSA9IGVu
-Y29kZWRfcGFnZV9wdHIoZW5jKTsKLQkJCXBhZ2VfcmVtb3ZlX3JtYXAocGFnZSwgdm1hLCBmYWxz
-ZSk7Ci0JCX0KLQl9Ci0KKwl0bGJfZmx1c2hfcm1hcF9iYXRjaCgmdGxiLT5sb2NhbCwgdm1hKTsK
-KwlpZiAodGxiLT5hY3RpdmUgIT0gJnRsYi0+bG9jYWwpCisJCXRsYl9mbHVzaF9ybWFwX2JhdGNo
-KHRsYi0+YWN0aXZlLCB2bWEpOwogCXRsYi0+ZGVsYXllZF9ybWFwID0gMDsKIH0KICNlbmRpZgot
-LSAKMi4zOC4xLjI4NC5nZmQ5NDY4ZDc4NwoK
---00000000000025d1ff05ef429ef6--
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
