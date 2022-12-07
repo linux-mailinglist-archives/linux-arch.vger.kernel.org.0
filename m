@@ -2,77 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511C16453BD
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Dec 2022 06:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F299864540C
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Dec 2022 07:34:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiLGFzS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Dec 2022 00:55:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229559AbiLGGeQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Dec 2022 01:34:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiLGFyl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 00:54:41 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E7D59142
-        for <linux-arch@vger.kernel.org>; Tue,  6 Dec 2022 21:54:36 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id q186so19597634oia.9
-        for <linux-arch@vger.kernel.org>; Tue, 06 Dec 2022 21:54:36 -0800 (PST)
+        with ESMTP id S229452AbiLGGeP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 01:34:15 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA34B532F9;
+        Tue,  6 Dec 2022 22:34:14 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so598173pjd.5;
+        Tue, 06 Dec 2022 22:34:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBYgV1mZFl4MlIUpWq//PTUJy0AvbU34Ve81xSxprtQ=;
-        b=jrMcMWNXmDtoPJaOjBj5Nd7lpZZsSVWGDFC1bkW4DdQtU/HsR3lje24Pn3vTXZxk8W
-         KEl4VjGaT/Ihy4rgyPWGoR1rdQ5CQW+uoaoM/6kK91989SsKLKfWyRKOfHZnwa+k/BO/
-         wP5CPVtIdafh9JvV8ugNuYlaoEmenSWftJvqq2wZ2eF/XTdwBnCtx6MIPmlXysUUOi5g
-         9RXcjytVNPz1Ztb6P4nCoKVQpKpAxqO9IaND46q2mrPhxrdkOF9zXo28inihqtG0A94P
-         lI8/h5wWZ1RsLKY3I6z7RfJlA+gCva9ODcIfHc3s/rdl/FVs28snheDaFTpIuq7QMRSa
-         N0UQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C15cHp35UgTVcGwyWVF0FgqoGcE+bZVU/5tK1HiVhGg=;
+        b=CKqZ/l9PnwBZEtXNtp4aPBttpJeA89ZaQxsLN+jKw3eUVeg9N70IqMgdpBhfmoMdRN
+         wnNcjMkoLzHDq6uSVjjvzsYnerZjG1HIAwRJ1o5QS5Yp8oNstErg28aAus8PdaoLeqx3
+         f2++jCdgHb8lDQ6ETyzyDMSqpkHcnxdDTU7zRBcFo3QBH9uNzewTIfvJ1efH8a1UHYv+
+         dz6o9xbAOwTWr7xaQjDIg+nKseYPUY71PlOmzpnNJTkqlzgQvjmD1yQTL6sJfRdqQoUC
+         XKpDVo69w4cJKZZVhcBHWOWsfC+8Xh7NT3VFznBfTVfB1ab0ptONygi3M5nMJitgBbY6
+         fyNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WBYgV1mZFl4MlIUpWq//PTUJy0AvbU34Ve81xSxprtQ=;
-        b=8A8anFptiEtMZS86oozYkaPvM0ISNRtraaxzKwUyUOrcuD+o3g2m0VJV6hwJprvWgG
-         eCCgHf3kgxNqj122qOz6khjdC5SNuW065Hvk1zVJjXKlkwqFlgDKwBzVSLP+vwtlhTtz
-         t+/6hRNpXOM/1uM9WfNU5YI6NYL9F6NdIoeqrlfOKAZQ5Obyte85PGf4fr2EIzJYLYf0
-         ysddaW3xIS3FD2bXGv/wuI1vuuedbSKJlghB/0XeSmHHWny/xdyYB6ibqaTFHHlcjT9h
-         VLQGIBSzzmZlXb9a67aF9yVsw8ZepflCnHLFER+XeEkCdnl+4od+4B0OPNI/qiwJKpdZ
-         FG7w==
-X-Gm-Message-State: ANoB5pkj9rbMCqkBkV8f3HUkMarkhqtymb4OwKoPKyG8BsMfjexK48qd
-        yQoi11IZdDg/opET5Vprs6pXgQ==
-X-Google-Smtp-Source: AA0mqf7L8b2MBbL62F/T16YRGt5DKfU0aM6bsDE5BREKFfDVa2s9WMxzIVQlQt4nDeCne0xVzxmY7g==
-X-Received: by 2002:a05:6808:1ab4:b0:35a:6f68:5fdd with SMTP id bm52-20020a0568081ab400b0035a6f685fddmr33494042oib.91.1670392476227;
-        Tue, 06 Dec 2022 21:54:36 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id fo12-20020a0568709a0c00b001431bf4e5a0sm11837268oab.38.2022.12.06.21.54.34
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C15cHp35UgTVcGwyWVF0FgqoGcE+bZVU/5tK1HiVhGg=;
+        b=2Ek8fGIey6iriKjVEhl0pi73rfM2kp/BVpFOJbNUiFJF6OwsXAyLIusb5D0TO9CsTR
+         q97ZGmrrAP85ulnVE0XL8G+7vyPDMCq8lggDHkYKQfeciE+QivCJuk2RbjDU9ZNn+eKA
+         hp5zPByqrCxrApDEs0T0AibL9eWpUgr7roF+9KvxN6Be5TOr2lHOxhPRSmAmOAZJQfFV
+         mCR3Wt1YVPttwVQJklgcf5npVxSx2AeGQL69dIPgy6/MiyyKnyJqjfX+TxHjiRXr0JuJ
+         P+PRrGhNtW+/eTCEAcE9+BARt+ZxeheocYty391Y4aD912PYuodInZ0Vx0lCgZYMxIuI
+         FElg==
+X-Gm-Message-State: ANoB5pll+U0ThoCRxfPTtUeuDt2Y9Oq4ZAuCoRTzHDFegSNEWJLkqGyT
+        LRNttswfmWNzBU1RqEdyiJ4=
+X-Google-Smtp-Source: AA0mqf7ST4xuwmjyV+Fg/LkYpzDRbEp/+IDjSth6MZo3us+POloNmlOnA05Cq/8ntpMh4DvZF8JHuw==
+X-Received: by 2002:a17:90a:9313:b0:213:2168:1c78 with SMTP id p19-20020a17090a931300b0021321681c78mr99342910pjo.72.1670394853895;
+        Tue, 06 Dec 2022 22:34:13 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id x6-20020a623106000000b005745eb7eccasm12686643pfx.112.2022.12.06.22.34.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 21:54:35 -0800 (PST)
-Date:   Tue, 6 Dec 2022 21:54:27 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     "Huang, Ying" <ying.huang@intel.com>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kernel test robot <yujie.liu@intel.com>,
-        oe-lkp@lists.linux.dev, lkp@intel.com,
+        Tue, 06 Dec 2022 22:34:12 -0800 (PST)
+Date:   Tue, 6 Dec 2022 22:34:11 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Fuad Tabba <tabba@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hugh Dickins <hughd@google.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-Subject: Re: [linux-next:master] [mm] 5df397dec7: will-it-scale.per_thread_ops
- -53.3% regression
-In-Reply-To: <878rjj22mz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Message-ID: <75d9bc6-f43f-5169-29af-b3cd5653a77d@google.com>
-References: <202212051534.852804af-yujie.liu@intel.com> <CAHk-=wg330wAAxwSaJBPUtL5Rrn7PoQK3ksJw2OLvBxA0NGg+g@mail.gmail.com> <87ilipffws.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAHk-=wjDzVL+r6NmnU--tyEfDYhUB-5m=PQBZTQ2Es8bx7Mz+w@mail.gmail.com>
- <CAHk-=whjis-wTZKH20xoBW3=1qyygYoxJORxXx8ZpJbc6KtROw@mail.gmail.com> <878rjj22mz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com, isaku.yamahata@gmail.com
+Subject: Re: [PATCH v10 5/9] KVM: Use gfn instead of hva for
+ mmu_notifier_retry
+Message-ID: <20221207063411.GB3632095@ls.amr.corp.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-6-chao.p.peng@linux.intel.com>
+ <CA+EHjTy5+Ke_7Uh72p--H9kGcE-PK4EVmp7ym6Q1-PO28u6CCQ@mail.gmail.com>
+ <20221206115623.GB1216605@chaop.bj.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463760895-1086260698-1670392475=:5515"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221206115623.GB1216605@chaop.bj.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,42 +105,32 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Tue, Dec 06, 2022 at 07:56:23PM +0800,
+Chao Peng <chao.p.peng@linux.intel.com> wrote:
 
----1463760895-1086260698-1670392475=:5515
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+> > > -       if (unlikely(kvm->mmu_invalidate_in_progress) &&
+> > > -           hva >= kvm->mmu_invalidate_range_start &&
+> > > -           hva < kvm->mmu_invalidate_range_end)
+> > > -               return 1;
+> > > +       if (unlikely(kvm->mmu_invalidate_in_progress)) {
+> > > +               /*
+> > > +                * Dropping mmu_lock after bumping mmu_invalidate_in_progress
+> > > +                * but before updating the range is a KVM bug.
+> > > +                */
+> > > +               if (WARN_ON_ONCE(kvm->mmu_invalidate_range_start == INVALID_GPA ||
+> > > +                                kvm->mmu_invalidate_range_end == INVALID_GPA))
+> > 
+> > INVALID_GPA is an x86-specific define in
+> > arch/x86/include/asm/kvm_host.h, so this doesn't build on other
+> > architectures. The obvious fix is to move it to
+> > include/linux/kvm_host.h.
+> 
+> Hmm, INVALID_GPA is defined as ZERO for x86, not 100% confident this is
+> correct choice for other architectures, but after search it has not been
+> used for other architectures, so should be safe to make it common.
 
-On Wed, 7 Dec 2022, Huang, Ying wrote:
-> Linus Torvalds <torvalds@linux-foundation.org> writes:
-> >
-> > Does this fix the regression?
->=20
-> I have tested the patch, it does fix the regression, the test result is
-> as follows,
->=20
-> 5df397dec7c4c08c 7cc8f9c7146a5c2dad6e71653c4 7763ba2bb16804313aa52bc78ae=
-=20
-> ---------------- --------------------------- ---------------------------=
-=20
->          %stddev     %change         %stddev     %change         %stddev
->              \          |                \          |                \ =
-=20
->    2256919 =C2=B1  5%    +114.2%    4833919 =C2=B1  2%    +116.6%    4889=
-199        will-it-scale.16.threads
->       8.17 =C2=B1  6%      -8.2        0.00            -8.2        0.00  =
-      perf-profile.calltrace.cycles-pp.native_flush_tlb_one_user.flush_tlb_=
-func.__flush_smp_call_function_queue.__sysvec_call_function.sysvec_call_fun=
-ction
->=20
-> Where 5df397dec7c4c08c is first bad commit, 7cc8f9c7146a5c2dad6e71653c4
-> is its parent commit, and 7763ba2bb16804313aa52bc78ae is the fix
-> commit.  The benchmark score recovered and CPU cycles for tlb flushing
-> recovered too.
+INVALID_GPA is defined as all bit 1.  Please notice "~" (tilde).
 
-I didn't study the patch.diff at all, but slipped it into my testing of
-Johannes's no-lock_page_memcg-in-rmap: no ill effect seen in 9 hours load.
-
-Hugh
----1463760895-1086260698-1670392475=:5515--
+#define INVALID_GPA (~(gpa_t)0)
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
