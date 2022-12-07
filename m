@@ -2,413 +2,215 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB97C645FF1
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Dec 2022 18:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B15BA64613B
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Dec 2022 19:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiLGRSN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Dec 2022 12:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
+        id S229662AbiLGSkl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Dec 2022 13:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiLGRRo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 12:17:44 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C5369A86
-        for <linux-arch@vger.kernel.org>; Wed,  7 Dec 2022 09:17:12 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b3so29716174lfv.2
-        for <linux-arch@vger.kernel.org>; Wed, 07 Dec 2022 09:17:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KOvIV73YgnEG59cUZf5Ci+GOdoXUPasVeUFnMPAdLwM=;
-        b=htG26Fer6Pxq8JTaoQ5v/dHBa5s5MmKyXHrJZjHvyjfixvrwz1XQB39yAuduHohAHu
-         Vph6fvk22IPPPQBksZiyiaPt/Wezn0I16HY0yeZms+dOb+OPaSercM3yB9tDRNJUGnWr
-         biwvuGc4m/EW6HOuTuNB04E9KE9+f+ZIWpjDcYGcWjq1Sx2IhvqdxhGytEybiS64YF7C
-         5PU2s0H31mQK/0DGoGl7GpJGJDzQsMKjuCfeqHyRgC5z78ZBPtKNgmI9r6XfpZCRZ9+L
-         gAkr097mPTp1LmBnj7uGSb3JWq6d2b5ck+VaIjm6ALX0+hKNwITUlhuVSRI+rqmcpj+n
-         NRpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KOvIV73YgnEG59cUZf5Ci+GOdoXUPasVeUFnMPAdLwM=;
-        b=WlkXfOSsmbnzovLIIq6tvvSCqwKPRSmNgVLUdpzGgkxeM1Jj7FDFkdkmW05E7OgauF
-         QsiP/dfRiEYFnZ5nXtkadRMfqe8fN4IfkGa2pcyRozomt8q05SWP18La7R/1azAHWIjK
-         NDjho5jP/OBdcgY6UwgBebcGGAl0aeM90PauwFOIUJLHIGtmxPOjdQqYpYxRxUZkwi/x
-         913sljVVfYi1b3dV1TSMD5737G4Y831l6cR4RdaFeFNxjqiPfBmkN+F8X2kt/RjYd4Jo
-         uiOQnR6U8VOOZGczJoh0BUTY8qSr9kATCvMwwMpUhbca3ZrZqJ2qRW6plLlncD9B04FT
-         p4+Q==
-X-Gm-Message-State: ANoB5pnMcTWNRi2RIUlOgV5U+DEtn2H3f+/h8V1TU3e5Qwz2dEw66LXD
-        nMBlL+V49oDbEY09RCop6XsIMyKSAt9ADFetZBZaPw==
-X-Google-Smtp-Source: AA0mqf7XJjVD1zzSSchYDQKkSsZlg5aPfGQxCBPJwi0Mel7MS0RZkYnek7XAkRieowSHQgdZ2IuMBsfBg7rRBbW39EI=
-X-Received: by 2002:ac2:5628:0:b0:4b5:2958:bd06 with SMTP id
- b8-20020ac25628000000b004b52958bd06mr11920460lff.26.1670433431057; Wed, 07
- Dec 2022 09:17:11 -0800 (PST)
+        with ESMTP id S229456AbiLGSkk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 13:40:40 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D4F47328;
+        Wed,  7 Dec 2022 10:40:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670438439; x=1701974439;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=e4MzkD7LHQANHvOvPh20BEg1/YxUGJURzP+3Ql7rIuE=;
+  b=R4oaeTxCNscmjkge4v6HJKDQQXVO00BfrjxQIfagd48bDxd0ldkVv1iS
+   X4laVsF1kx5uwXGJSnTstYQx5Pjxof/6wMiUkWlFKYvFcvDTIyxChBuO9
+   koUUkQZEtU2SbCIrP5xtpa+U1jSL87WO0bbzcarlU2r/7xjiD8k7my/zf
+   TAo0HAh7AxdCr9l6s0P6IlW/9r+UBUFf7E812sWhSFrJeqYwKMrdCKdf7
+   xOIAh1zSIZ2rAo+brMXIfG9XQ7xr/WDFU1IpyGBEDS/wP/XcVNhYnLmwH
+   WWrdu+HaYURB+at9Gh19hspN5fEceuvp0vg46L7Ew556GQfA7Ut7L8+hh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="318108490"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="318108490"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 10:35:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="891908285"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="891908285"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Dec 2022 10:35:59 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 7 Dec 2022 10:35:59 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 7 Dec 2022 10:35:58 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 7 Dec 2022 10:35:58 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 7 Dec 2022 10:35:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Eh38phflzg5aQUA/SO//jkBWL9EVSMazWk/VnWLKeWNkNus7TQxCCx8q7P8h1W45G8hA15BF7U8ps/vhNxFaOOX2Hq7dS4c9fF+j+E4U7EVO6uXcLYNYljH3hQ5KTgZJVSCRghzz7VrTRJq9t0N9HHay2uNv/nT1kK5mrAdYktq6zwsu40esmcvnxsMKspaLVQk8jSAa4225tTDihD5lqvIVq64veZ9CozP4qPTe3o41hBQG9UqdRAhlbyQ+qtXUaGyXdGTgqsBdOnnIUoIix+4oe8wsKTLrYH+ufLKM03OPnctzFtfUCEdV5clm3G9NPnR4sHKhho7+6V8AfCrF5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e4MzkD7LHQANHvOvPh20BEg1/YxUGJURzP+3Ql7rIuE=;
+ b=Z/+RJ2M5fioieDRls5GvBm+iY1vVa0YNBP7gAvB9LXkU9hxo/hTBDTYuJt8esLEgyDe+zGdP+AJPryg4TUEdyYOXpiyzqArIkYLqCkank2YuaC44SjRFod9tarXNsXwKO0TpRf+3SHrlueQzyc1rbtCspW/lxs246TXrZ3v/1DHbSjUUICmxMCPS+KA+owhvn0TWRedhw6vDgb29Ncl4zZ4I4dTPQqoJNEwfaS2p+k27bKoI0GrYaWmdFk3wms7D6Z3WK4eXv4dvY/XSkS1EbUGjZYBSX324w1ErPKiMW1d3U2XaFxrKx4P4+HuB3eFS40zOHQxzTSeZQRpP++73cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by BN9PR11MB5340.namprd11.prod.outlook.com (2603:10b6:408:119::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 18:35:54 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::7ed5:a749:7b4f:ceff]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::7ed5:a749:7b4f:ceff%5]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 18:35:54 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "bp@alien8.de" <bp@alien8.de>
+CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v4 04/39] x86/cpufeatures: Enable CET CR4 bit for shadow
+ stack
+Thread-Topic: [PATCH v4 04/39] x86/cpufeatures: Enable CET CR4 bit for shadow
+ stack
+Thread-Index: AQHZBq9QDPkAeUH43EeLOh1jRkjVO65iZ12AgABgvYA=
+Date:   Wed, 7 Dec 2022 18:35:54 +0000
+Message-ID: <7dcfa8e55b226853d5a34482fb9f83f6e226f75f.camel@intel.com>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+         <20221203003606.6838-5-rick.p.edgecombe@intel.com>
+         <Y5CL4ySPtcTLVrrM@zn.tnic>
+In-Reply-To: <Y5CL4ySPtcTLVrrM@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|BN9PR11MB5340:EE_
+x-ms-office365-filtering-correlation-id: 181d5a73-c157-47af-a07b-08dad881dfc2
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XmMev6CizsP8AGVzEO/zFj9pkZG6xruzaRzt9yTarjSKMYmrosH5WFa6Z0yS46T8NDk696efZmC0pvfpEc7e0Z4783qNbsCPAEWVW2Zi4Uw3mNBuf4gV+NMvzcWA1upy3rqM6q9TDRpylJ38BNESmIPUylcmUE1UaygTHG1n8eac9hXvZT+InG0pVG+V8vHlQ2cNhiCiSogIAj49zfxDeZUODn65/SsHAM12iHke1bK+KhwlWV/HazCiSOFU754zboeznpdc/G8dBheYbmCz2U2IJGRejJR/Fm6Y852scwDVfVev5tz89todMZciFVHw3VJyIRcWmadNt2vC84W828uUKuVdzpsIU40DoDuxx6i9rQwHwun0W/ih6Gin5nmvmitxkmcyOWNgqEW4/lPhk0+2U6KhNrwwNbwvo54g8qe6pFAD+cTIJZjvkACOGDk+02zyfzZSnOm9OBBp99P18fX2rZUYlRY62+Jk4R2mj6ezcMwz5VQkNiYyXRfPZOF+HDtMI1188v9BI2lSAuJl0fl3qmmKJUTvjVZKR7lKwLMjdXsYxwHoONHg+h6m80BI3APcRDqSqzTJsdiTT24zlGBydzN6Ds7ckHWNUF/bgKyeEronW4kLoiCMHLsAAyCqoBBue/Y7/4bzPBr8z4t9bEccRaCJ/q1rCsoUWPzOkSlt5bgMX7dw3IZzWxG7enaZD2eRi/AAuJ5GC8WRxKQqPDw1OTYOEjEmmfcz7Hx1+/4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(39860400002)(346002)(396003)(376002)(451199015)(83380400001)(8676002)(66556008)(86362001)(38100700002)(5660300002)(38070700005)(2906002)(7406005)(4744005)(66476007)(41300700001)(122000001)(4326008)(82960400001)(8936002)(7416002)(6486002)(66446008)(64756008)(6512007)(6506007)(186003)(26005)(316002)(2616005)(54906003)(91956017)(6916009)(66946007)(76116006)(71200400001)(478600001)(36756003)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QlBKbFhsbnU3UU43UytrbWdxckgzVGxkQUtaNHJFUnBUQk9BTzVMa0N5eGVU?=
+ =?utf-8?B?R21Kdkl6ajV0ZDBab2doZUFnMUhGTXMwajk5ZWZvWkZPQnFvMHRSbjdMZFF2?=
+ =?utf-8?B?ZFBvU2Z4OGxONjhualcrcFZjdEp5SnlUSWpON2hQdk5NMGpxL1dUOEtjb0Vu?=
+ =?utf-8?B?djc3eGRtODBIYWVNZmJaN0hPU0ljSjdCOC9remNaMDIxN2prbVRYajEwSGN0?=
+ =?utf-8?B?dmgzOEtoOXJMdWFZUUNSU3NVT3hscXFnZFRubXBtbnRzdGNlekl1cmtEWDFa?=
+ =?utf-8?B?M3lzQ1RnOTk2cjVRek9NdGNCWC8xVnJESjlDUnJ3aThHQ2hMRloxbTBmSFJ4?=
+ =?utf-8?B?cktQY1VFYVk4d1hDZ3VRMjM2YlJLV3NNc1p4UHZFelRxNzRZUkF0R1QvdFIx?=
+ =?utf-8?B?aTcybEZSN3VUamFzY09aWEhGUzZ0Q1crYXI1dkJXUmZrNXBxTHc3RmpLV1No?=
+ =?utf-8?B?UC9OMFdRMVRpaWZjdmV6b1ArY29vK0oyTStZMHhoNk0vNlB2amtKR1hESDZT?=
+ =?utf-8?B?ZURoNEdFK3ArNWJ4ZFU5M3JsMzdqZ2h0NGUyTWlTZlVHaFR4ZTBiQTBobWdo?=
+ =?utf-8?B?QStvMkFaQ1B6TFg2Yk44S0RYOWYxaUZRSEY1L2dCV3o5czV6ZzExanVNRVIz?=
+ =?utf-8?B?V3dFU0RLZ0pUclhmWDRxa2l3ZW9GUGZYZGVmQmlnRkdZSHFQS2tJc3NXWDBO?=
+ =?utf-8?B?MDNWR1pwbWE3QmlSQWlCam9LMm00Rzl5NHhrK0YxYmtKZG1rY3pUNHd6cFZ4?=
+ =?utf-8?B?SGNOYUxSdEVKQnMxQjlXbVU5eGFsYzdSREJRM0hJQVdOZVBrNjhRb3lFcC9q?=
+ =?utf-8?B?UFQ4cDlpb0gzcDNRSzBCSFZmemRRM2RwTFpGZGFpMUY3Kzg2RG95VGlHWlhV?=
+ =?utf-8?B?cVFBNCtYc2xxUTRwMnU3MS9nMW0xYXQ5Z0JxZ0ttU2FkZHhsK0l5Q2NBZEhx?=
+ =?utf-8?B?bUhjNlRYYVAyaDM5VkZNUEdKZEJMOEJzSGE2alVhL1BJMnpkdFYyTW4rTlFZ?=
+ =?utf-8?B?T3hQZCs2em5HUFdaZ0xLZHRwRjZnZjNCSnVjQXcyTVhwM2s2YXd1RU5aODJY?=
+ =?utf-8?B?Q2pCSFY3cS9RVzIzbVJyQnJlZ0tSdWU0SmFDTmYzU0Z5VEpnVWxlMVZSVldi?=
+ =?utf-8?B?UjZGZzBlMjBMMGhiNm5MdDVHU0NlV2NPQ25zdWNSK2tGL29ZVm5uUTA5QWpr?=
+ =?utf-8?B?T2xvL2ZweXFua0lmNWVITUkvUEpkSVhBSUl4TmI1bGxvN0VhTzdYUmx0dzJS?=
+ =?utf-8?B?TnAwMXo4eWJDVENWc0EvYnI3dGpDYm83clZ1OE1XazRZZ2NjbHpJMWQxRUR5?=
+ =?utf-8?B?RzFzMEJCWmpPbWZTTkFyQkcwNnM2RzZoVExKdk8wckUwTkhLM2dSdU9TZ3Zo?=
+ =?utf-8?B?Q2FoWDRhZHlqb3J4cHdhQ01UaVplQ3J0UDRJMkk1K2V3RlZPeGRaZm9uNEZO?=
+ =?utf-8?B?WWhlL0VsTU40cWJ3bUF0UFVidzdHUXkzRXhWQi9zV2hzQVVVMjFDRkhBRUV3?=
+ =?utf-8?B?Tys0dDJFTjFPUzdrU0tXQWU2RmtISzFmeVAzUFl0TnVoRWRud0hOTVphY3hS?=
+ =?utf-8?B?c2Mwcm40ZnFHWjEyakdHdEI1MmJ0aXNuT2JEVGtXVi81eVBjeEd4dUZBRXA5?=
+ =?utf-8?B?ZFNLRlBrMDZISGI4S0thaTdPZnRWMEpOYW85REsyU3Bpam9kcGYvd1ZjNG1R?=
+ =?utf-8?B?NThhaElzeWRqMEl5cUZaelQvRVlnY05iREdhbExwcS9JU2hVQkpLaTZnU2Fy?=
+ =?utf-8?B?RTI2b3ZmYXdRMDZqemlWdkJXOFl5YmEvWmNaN2orM0Q0R0pPbUliRGlLV09W?=
+ =?utf-8?B?OTh4VkxtSkp2ODZjakdTM01rd284Yk9uK1dQbGE2bE1HZ0hNelYzTHVOamkz?=
+ =?utf-8?B?MUhwdlgzQlJycVh5TFp6Z21WL1NhZ2k4V1ljRXUrYnRjOFBkU2N1bmkrSEgy?=
+ =?utf-8?B?N1RueGVmZG9rUEpFcVd4Y2VtSjhTQms3QzAxZjJielVkSmlLeksrQ281WDhr?=
+ =?utf-8?B?UmwxT3hVZk9Gb3hJTmN1clc2RkVqbjdVd2o5bmZ5SWhxU2dSdEM4NzU4MHIv?=
+ =?utf-8?B?dEMzM2dySVpIdFUybmpmMFhFY3FVdjd1WnZmVkJ2NCtKRVpaUWd5WVY1RE1K?=
+ =?utf-8?B?L245ZEJSWG9yb3NMTC9YRlM0YW1GM1FTSFdBOWFhZ3NFMk5QVGw5SWhsMGY5?=
+ =?utf-8?Q?BVLd8TH6PtNZoMe6jX65prA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2364185934FF4447AEE0F05CA6D52D7F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com> <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
-In-Reply-To: <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Wed, 7 Dec 2022 17:16:34 +0000
-Message-ID: <CA+EHjTxwxsAPGYGgBGqDnNvecKNztrBY4j9a9FHmSTJG3Senpg@mail.gmail.com>
-Subject: Re: [PATCH v10 6/9] KVM: Unmap existing mappings when change the
- memory attributes
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 181d5a73-c157-47af-a07b-08dad881dfc2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2022 18:35:54.2645
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Tx+WMWl/oZaIh4CrYT7g33knaWKk6CH5YXRNxSd5Atwseuf2q6LzvOv8beuA/MjLAAMcU16pg+COY4u+2rAdiBG8VSCYp3ZXI9EGAiZ/CBs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5340
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On Fri, Dec 2, 2022 at 6:19 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> Unmap the existing guest mappings when memory attribute is changed
-> between shared and private. This is needed because shared pages and
-> private pages are from different backends, unmapping existing ones
-> gives a chance for page fault handler to re-populate the mappings
-> according to the new attribute.
->
-> Only architecture has private memory support needs this and the
-> supported architecture is expected to rewrite the weak
-> kvm_arch_has_private_mem().
-
-This kind of ties into the discussion of being able to share memory in
-place. For pKVM for example, shared and private memory would have the
-same backend, and the unmapping wouldn't be needed.
-
-So I guess that, instead of kvm_arch_has_private_mem(), can the check
-be done differently, e.g., with a different function, say
-kvm_arch_private_notify_attribute_change() (but maybe with a more
-friendly name than what I suggested :) )?
-
-Thanks,
-/fuad
-
->
-> Also, during memory attribute changing and the unmapping time frame,
-> page fault handler may happen in the same memory range and can cause
-> incorrect page state, invoke kvm_mmu_invalidate_* helpers to let the
-> page fault handler retry during this time frame.
->
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  include/linux/kvm_host.h |   7 +-
->  virt/kvm/kvm_main.c      | 168 ++++++++++++++++++++++++++-------------
->  2 files changed, 116 insertions(+), 59 deletions(-)
->
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 3d69484d2704..3331c0c92838 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -255,7 +255,6 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->  #endif
->
-> -#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
->  struct kvm_gfn_range {
->         struct kvm_memory_slot *slot;
->         gfn_t start;
-> @@ -264,6 +263,8 @@ struct kvm_gfn_range {
->         bool may_block;
->  };
->  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
-> +
-> +#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
->  bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
->  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-> @@ -785,11 +786,12 @@ struct kvm {
->
->  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
->         struct mmu_notifier mmu_notifier;
-> +#endif
->         unsigned long mmu_invalidate_seq;
->         long mmu_invalidate_in_progress;
->         gfn_t mmu_invalidate_range_start;
->         gfn_t mmu_invalidate_range_end;
-> -#endif
-> +
->         struct list_head devices;
->         u64 manual_dirty_log_protect;
->         struct dentry *debugfs_dentry;
-> @@ -1480,6 +1482,7 @@ bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
->  int kvm_arch_post_init_vm(struct kvm *kvm);
->  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
->  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
-> +bool kvm_arch_has_private_mem(struct kvm *kvm);
->
->  #ifndef __KVM_HAVE_ARCH_VM_ALLOC
->  /*
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index ad55dfbc75d7..4e1e1e113bf0 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -520,6 +520,62 @@ void kvm_destroy_vcpus(struct kvm *kvm)
->  }
->  EXPORT_SYMBOL_GPL(kvm_destroy_vcpus);
->
-> +void kvm_mmu_invalidate_begin(struct kvm *kvm)
-> +{
-> +       /*
-> +        * The count increase must become visible at unlock time as no
-> +        * spte can be established without taking the mmu_lock and
-> +        * count is also read inside the mmu_lock critical section.
-> +        */
-> +       kvm->mmu_invalidate_in_progress++;
-> +
-> +       if (likely(kvm->mmu_invalidate_in_progress == 1)) {
-> +               kvm->mmu_invalidate_range_start = INVALID_GPA;
-> +               kvm->mmu_invalidate_range_end = INVALID_GPA;
-> +       }
-> +}
-> +
-> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
-> +{
-> +       WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
-> +
-> +       if (likely(kvm->mmu_invalidate_in_progress == 1)) {
-> +               kvm->mmu_invalidate_range_start = start;
-> +               kvm->mmu_invalidate_range_end = end;
-> +       } else {
-> +               /*
-> +                * Fully tracking multiple concurrent ranges has diminishing
-> +                * returns. Keep things simple and just find the minimal range
-> +                * which includes the current and new ranges. As there won't be
-> +                * enough information to subtract a range after its invalidate
-> +                * completes, any ranges invalidated concurrently will
-> +                * accumulate and persist until all outstanding invalidates
-> +                * complete.
-> +                */
-> +               kvm->mmu_invalidate_range_start =
-> +                       min(kvm->mmu_invalidate_range_start, start);
-> +               kvm->mmu_invalidate_range_end =
-> +                       max(kvm->mmu_invalidate_range_end, end);
-> +       }
-> +}
-> +
-> +void kvm_mmu_invalidate_end(struct kvm *kvm)
-> +{
-> +       /*
-> +        * This sequence increase will notify the kvm page fault that
-> +        * the page that is going to be mapped in the spte could have
-> +        * been freed.
-> +        */
-> +       kvm->mmu_invalidate_seq++;
-> +       smp_wmb();
-> +       /*
-> +        * The above sequence increase must be visible before the
-> +        * below count decrease, which is ensured by the smp_wmb above
-> +        * in conjunction with the smp_rmb in mmu_invalidate_retry().
-> +        */
-> +       kvm->mmu_invalidate_in_progress--;
-> +}
-> +
->  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
->  static inline struct kvm *mmu_notifier_to_kvm(struct mmu_notifier *mn)
->  {
-> @@ -714,45 +770,6 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
->         kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
->  }
->
-> -void kvm_mmu_invalidate_begin(struct kvm *kvm)
-> -{
-> -       /*
-> -        * The count increase must become visible at unlock time as no
-> -        * spte can be established without taking the mmu_lock and
-> -        * count is also read inside the mmu_lock critical section.
-> -        */
-> -       kvm->mmu_invalidate_in_progress++;
-> -
-> -       if (likely(kvm->mmu_invalidate_in_progress == 1)) {
-> -               kvm->mmu_invalidate_range_start = INVALID_GPA;
-> -               kvm->mmu_invalidate_range_end = INVALID_GPA;
-> -       }
-> -}
-> -
-> -void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
-> -{
-> -       WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
-> -
-> -       if (likely(kvm->mmu_invalidate_in_progress == 1)) {
-> -               kvm->mmu_invalidate_range_start = start;
-> -               kvm->mmu_invalidate_range_end = end;
-> -       } else {
-> -               /*
-> -                * Fully tracking multiple concurrent ranges has diminishing
-> -                * returns. Keep things simple and just find the minimal range
-> -                * which includes the current and new ranges. As there won't be
-> -                * enough information to subtract a range after its invalidate
-> -                * completes, any ranges invalidated concurrently will
-> -                * accumulate and persist until all outstanding invalidates
-> -                * complete.
-> -                */
-> -               kvm->mmu_invalidate_range_start =
-> -                       min(kvm->mmu_invalidate_range_start, start);
-> -               kvm->mmu_invalidate_range_end =
-> -                       max(kvm->mmu_invalidate_range_end, end);
-> -       }
-> -}
-> -
->  static bool kvm_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
->  {
->         kvm_mmu_invalidate_range_add(kvm, range->start, range->end);
-> @@ -806,23 +823,6 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->         return 0;
->  }
->
-> -void kvm_mmu_invalidate_end(struct kvm *kvm)
-> -{
-> -       /*
-> -        * This sequence increase will notify the kvm page fault that
-> -        * the page that is going to be mapped in the spte could have
-> -        * been freed.
-> -        */
-> -       kvm->mmu_invalidate_seq++;
-> -       smp_wmb();
-> -       /*
-> -        * The above sequence increase must be visible before the
-> -        * below count decrease, which is ensured by the smp_wmb above
-> -        * in conjunction with the smp_rmb in mmu_invalidate_retry().
-> -        */
-> -       kvm->mmu_invalidate_in_progress--;
-> -}
-> -
->  static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
->                                         const struct mmu_notifier_range *range)
->  {
-> @@ -1140,6 +1140,11 @@ int __weak kvm_arch_create_vm_debugfs(struct kvm *kvm)
->         return 0;
->  }
->
-> +bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
-> +{
-> +       return false;
-> +}
-> +
->  static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
->  {
->         struct kvm *kvm = kvm_arch_alloc_vm();
-> @@ -2349,15 +2354,47 @@ static u64 kvm_supported_mem_attributes(struct kvm *kvm)
->         return 0;
->  }
->
-> +static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
-> +{
-> +       struct kvm_gfn_range gfn_range;
-> +       struct kvm_memory_slot *slot;
-> +       struct kvm_memslots *slots;
-> +       struct kvm_memslot_iter iter;
-> +       int i;
-> +       int r = 0;
-> +
-> +       gfn_range.pte = __pte(0);
-> +       gfn_range.may_block = true;
-> +
-> +       for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> +               slots = __kvm_memslots(kvm, i);
-> +
-> +               kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-> +                       slot = iter.slot;
-> +                       gfn_range.start = max(start, slot->base_gfn);
-> +                       gfn_range.end = min(end, slot->base_gfn + slot->npages);
-> +                       if (gfn_range.start >= gfn_range.end)
-> +                               continue;
-> +                       gfn_range.slot = slot;
-> +
-> +                       r |= kvm_unmap_gfn_range(kvm, &gfn_range);
-> +               }
-> +       }
-> +
-> +       if (r)
-> +               kvm_flush_remote_tlbs(kvm);
-> +}
-> +
->  static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->                                            struct kvm_memory_attributes *attrs)
->  {
->         gfn_t start, end;
->         unsigned long i;
->         void *entry;
-> +       int idx;
->         u64 supported_attrs = kvm_supported_mem_attributes(kvm);
->
-> -       /* flags is currently not used. */
-> +       /* 'flags' is currently not used. */
->         if (attrs->flags)
->                 return -EINVAL;
->         if (attrs->attributes & ~supported_attrs)
-> @@ -2372,6 +2409,13 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->
->         entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
->
-> +       if (kvm_arch_has_private_mem(kvm)) {
-> +               KVM_MMU_LOCK(kvm);
-> +               kvm_mmu_invalidate_begin(kvm);
-> +               kvm_mmu_invalidate_range_add(kvm, start, end);
-> +               KVM_MMU_UNLOCK(kvm);
-> +       }
-> +
->         mutex_lock(&kvm->lock);
->         for (i = start; i < end; i++)
->                 if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
-> @@ -2379,6 +2423,16 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
->                         break;
->         mutex_unlock(&kvm->lock);
->
-> +       if (kvm_arch_has_private_mem(kvm)) {
-> +               idx = srcu_read_lock(&kvm->srcu);
-> +               KVM_MMU_LOCK(kvm);
-> +               if (i > start)
-> +                       kvm_unmap_mem_range(kvm, start, i);
-> +               kvm_mmu_invalidate_end(kvm);
-> +               KVM_MMU_UNLOCK(kvm);
-> +               srcu_read_unlock(&kvm->srcu, idx);
-> +       }
-> +
->         attrs->address = i << PAGE_SHIFT;
->         attrs->size = (end - i) << PAGE_SHIFT;
->
-> --
-> 2.25.1
->
+T24gV2VkLCAyMDIyLTEyLTA3IGF0IDEzOjQ5ICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
+DQo+IE9uIEZyaSwgRGVjIDAyLCAyMDIyIGF0IDA0OjM1OjMxUE0gLTA4MDAsIFJpY2sgRWRnZWNv
+bWJlIHdyb3RlOg0KPiA+IEZyb206IFl1LWNoZW5nIFl1IDx5dS1jaGVuZy55dUBpbnRlbC5jb20+
+DQo+ID4gDQo+ID4gU2V0dGluZyBDUjQuQ0VUIGlzIGEgcHJlcmVxdWlzaXRlIGZvciB1dGlsaXpp
+bmcgYW55IENFVCBmZWF0dXJlcywNCj4gPiBtb3N0IG9mDQo+ID4gd2hpY2ggYWxzbyByZXF1aXJl
+IHNldHRpbmcgTVNScy4NCj4gDQo+IC4uLg0KPiANCj4gPiAgIGFyY2gveDg2L2tlcm5lbC9jcHUv
+Y29tbW9uLmMgfCAzNyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKystDQo+ID4gLS0tLS0N
+Cj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAzMSBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQ0K
+PiANCj4gTG9va3MgYmV0dGVyLg0KPiANCj4gTGV0J3MgZ2V0IHJpZCBvZiB0aGUgaWZkZWZmZXJ5
+IGFuZCBzaW1wbGlmeSBpdCBldmVuIG1vcmUuIERpZmYgb250b3A6DQoNClN1cmUsIHRoYW5rcyEN
+Cg==
