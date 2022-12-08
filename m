@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41860646763
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 04:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B17DD646768
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 04:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiLHDAW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Dec 2022 22:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S230000AbiLHDAg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Dec 2022 22:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiLHC7w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 21:59:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFDC9895C;
-        Wed,  7 Dec 2022 18:59:42 -0800 (PST)
+        with ESMTP id S229998AbiLHDAC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 22:00:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643988C69A;
+        Wed,  7 Dec 2022 18:59:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED0CDB8212E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 009B761D4E;
+        Thu,  8 Dec 2022 02:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72467C43470;
         Thu,  8 Dec 2022 02:59:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF69C433B5;
-        Thu,  8 Dec 2022 02:59:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670468379;
-        bh=Zi0aBQOkYUdBrhHpOkYnD+7KCKBmgxXlfX4d5h6Hcrc=;
+        s=k20201202; t=1670468389;
+        bh=umRGPR1A2QmR7y4OP0ZFPkrv0cgKCxoX2M+AvQSNKwo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wxsq7w59aczmMaHM1F7voOmXHmNonHvTRWJC/v/haCKNSKQZ3BNC22j/pHjrEthZO
-         MdwO+gmHCbH23MmOOoYxH0HCBrKD2M3Ld1a0ejhoN2CFhIijgsLUQWpSeNA8ohcywY
-         +jK0OWPJYjkTQ++9I+eoGIGTfJIrWKcDHom18AoWG0fCqAQQNujVt6eSLB8p6D3nhA
-         ci5zHeagmqtpuWQcaWBxyWwvtrenu+4D5KEOJeosn1qMC4v6VWZQQvgHEYPWQUD+6M
-         y24vDAGp/IQgWAjRGJ3jlPIVctcd4EitcWdwVJHxPORTDBfaQzTLi+42TixFVDX6A/
-         eMET4D9tK3s8w==
+        b=df3ii1Tr5RDQn2Jb+teQCjKX2HDaRnMvuoB04A0A6Vmi+rwUWualu9ZTNEMlRaEh+
+         UoDgm3LmrklqWnmccBAIYYkRtfJS7TCAUtkCPUYGbnt99ICZ/KOaFWgZSpzfySzYPX
+         vUmZkw/IqvZL0Dq60XIU2XAE+ee3LjLUAvn0L7b7VJDMPQu8hIPl7uN/tkz11WPea9
+         hKXMP/4tvbetfj1G1O1By10oeXsfNTHp3s6tYFFdoQIZzWAZNIcCCx83T3TKW24g6U
+         q5orWsBqxdOLSLbU4uqyWO6CmBhqKMjXuNKGuURDudj6HkCl3aQkHrlAZK+ldEYckz
+         VnqqK4fU6Gxyg==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -43,10 +43,10 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
         bjorn@kernel.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH -next V10 07/10] riscv: entry: Consolidate general regs saving/restoring
-Date:   Wed,  7 Dec 2022 21:58:13 -0500
-Message-Id: <20221208025816.138712-8-guoren@kernel.org>
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V10 08/10] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+Date:   Wed,  7 Dec 2022 21:58:14 -0500
+Message-Id: <20221208025816.138712-9-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221208025816.138712-1-guoren@kernel.org>
 References: <20221208025816.138712-1-guoren@kernel.org>
@@ -61,287 +61,187 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Consolidate the saving/restoring GPs(except zero, ra, sp, gp and
-tp) into save_from_x5_to_x31/restore_from_x5_to_x31 macros.
+Add independent irq stacks for percpu to prevent kernel stack overflows.
+It is also compatible with VMAP_STACK by implementing
+arch_alloc_vmap_stack.  Many architectures have supported
+HAVE_IRQ_EXIT_ON_IRQ_STACK, riscv should follow up.
 
-No functional change intended.
-
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Tested-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Tested-by: Jisheng Zhang <jszhang@kernel.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/asm.h   | 63 +++++++++++++++++++++++++
- arch/riscv/kernel/entry.S      | 84 ++--------------------------------
- arch/riscv/kernel/mcount-dyn.S | 56 +----------------------
- 3 files changed, 68 insertions(+), 135 deletions(-)
+ arch/riscv/Kconfig                   |  8 ++++
+ arch/riscv/include/asm/thread_info.h |  2 +
+ arch/riscv/include/asm/vmap_stack.h  | 28 ++++++++++++
+ arch/riscv/kernel/irq.c              | 66 +++++++++++++++++++++++++++-
+ 4 files changed, 102 insertions(+), 2 deletions(-)
+ create mode 100644 arch/riscv/include/asm/vmap_stack.h
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 1b471ff73178..bf5247aa317d 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -68,6 +68,7 @@
- #endif
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 518e8523d41d..0a9d4bdc0338 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -446,6 +446,14 @@ config FPU
  
- #ifdef __ASSEMBLY__
-+#include <asm/asm-offsets.h>
+ 	  If you don't know what to do here, say Y.
  
- /* Common assembly source macros */
- 
-@@ -80,6 +81,68 @@
- 	.endr
- .endm
- 
-+	/* save all GPs except zero, ra, sp, gp and tp */
-+	.macro save_from_x5_to_x31
-+	REG_S x5,  PT_T0(sp)
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
-+	REG_S x10, PT_A0(sp)
-+	REG_S x11, PT_A1(sp)
-+	REG_S x12, PT_A2(sp)
-+	REG_S x13, PT_A3(sp)
-+	REG_S x14, PT_A4(sp)
-+	REG_S x15, PT_A5(sp)
-+	REG_S x16, PT_A6(sp)
-+	REG_S x17, PT_A7(sp)
-+	REG_S x18, PT_S2(sp)
-+	REG_S x19, PT_S3(sp)
-+	REG_S x20, PT_S4(sp)
-+	REG_S x21, PT_S5(sp)
-+	REG_S x22, PT_S6(sp)
-+	REG_S x23, PT_S7(sp)
-+	REG_S x24, PT_S8(sp)
-+	REG_S x25, PT_S9(sp)
-+	REG_S x26, PT_S10(sp)
-+	REG_S x27, PT_S11(sp)
-+	REG_S x28, PT_T3(sp)
-+	REG_S x29, PT_T4(sp)
-+	REG_S x30, PT_T5(sp)
-+	REG_S x31, PT_T6(sp)
-+	.endm
++config IRQ_STACKS
++	bool "Independent irq stacks" if EXPERT
++	default y
++	select HAVE_IRQ_EXIT_ON_IRQ_STACK
++	help
++	  Add independent irq stacks for percpu to prevent kernel stack overflows.
++	  We may save some memory footprint by disabling IRQ_STACKS.
 +
-+	/* restore all GPs except zero, ra, sp, gp and tp */
-+	.macro restore_from_x5_to_x31
-+	REG_L x5,  PT_T0(sp)
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
-+	REG_L x10, PT_A0(sp)
-+	REG_L x11, PT_A1(sp)
-+	REG_L x12, PT_A2(sp)
-+	REG_L x13, PT_A3(sp)
-+	REG_L x14, PT_A4(sp)
-+	REG_L x15, PT_A5(sp)
-+	REG_L x16, PT_A6(sp)
-+	REG_L x17, PT_A7(sp)
-+	REG_L x18, PT_S2(sp)
-+	REG_L x19, PT_S3(sp)
-+	REG_L x20, PT_S4(sp)
-+	REG_L x21, PT_S5(sp)
-+	REG_L x22, PT_S6(sp)
-+	REG_L x23, PT_S7(sp)
-+	REG_L x24, PT_S8(sp)
-+	REG_L x25, PT_S9(sp)
-+	REG_L x26, PT_S10(sp)
-+	REG_L x27, PT_S11(sp)
-+	REG_L x28, PT_T3(sp)
-+	REG_L x29, PT_T4(sp)
-+	REG_L x30, PT_T5(sp)
-+	REG_L x31, PT_T6(sp)
-+	.endm
+ endmenu # "Platform type"
+ 
+ menu "Kernel features"
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 7de4fb96f0b5..043da8ccc7e6 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -40,6 +40,8 @@
+ #define OVERFLOW_STACK_SIZE     SZ_4K
+ #define SHADOW_OVERFLOW_STACK_SIZE (1024)
+ 
++#define IRQ_STACK_SIZE		THREAD_SIZE
 +
- #endif /* __ASSEMBLY__ */
+ #ifndef __ASSEMBLY__
  
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index e4a9140a5b99..c85f5197af1b 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -41,33 +41,7 @@ _save_context:
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
+ extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+diff --git a/arch/riscv/include/asm/vmap_stack.h b/arch/riscv/include/asm/vmap_stack.h
+new file mode 100644
+index 000000000000..3fbf481abf4f
+--- /dev/null
++++ b/arch/riscv/include/asm/vmap_stack.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++// Copied from arch/arm64/include/asm/vmap_stack.h.
++#ifndef _ASM_RISCV_VMAP_STACK_H
++#define _ASM_RISCV_VMAP_STACK_H
++
++#include <linux/bug.h>
++#include <linux/gfp.h>
++#include <linux/kconfig.h>
++#include <linux/vmalloc.h>
++#include <linux/pgtable.h>
++#include <asm/thread_info.h>
++
++/*
++ * To ensure that VMAP'd stack overflow detection works correctly, all VMAP'd
++ * stacks need to have the same alignment.
++ */
++static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, int node)
++{
++	void *p;
++
++	BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
++
++	p = __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, node,
++			__builtin_return_address(0));
++	return kasan_reset_tag(p);
++}
++
++#endif /* _ASM_RISCV_VMAP_STACK_H */
+diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+index 24c2e1bd756a..5d77f692b198 100644
+--- a/arch/riscv/kernel/irq.c
++++ b/arch/riscv/kernel/irq.c
+@@ -10,6 +10,37 @@
+ #include <linux/irqchip.h>
+ #include <linux/seq_file.h>
+ #include <asm/smp.h>
++#include <asm/vmap_stack.h>
++
++#ifdef CONFIG_IRQ_STACKS
++static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
++
++#ifdef CONFIG_VMAP_STACK
++static void init_irq_stacks(void)
++{
++	int cpu;
++	ulong *p;
++
++	for_each_possible_cpu(cpu) {
++		p = arch_alloc_vmap_stack(IRQ_STACK_SIZE, cpu_to_node(cpu));
++		per_cpu(irq_stack_ptr, cpu) = p;
++	}
++}
++#else
++/* irq stack only needs to be 16 byte aligned - not IRQ_STACK_SIZE aligned. */
++DEFINE_PER_CPU_ALIGNED(ulong [IRQ_STACK_SIZE/sizeof(ulong)], irq_stack);
++
++static void init_irq_stacks(void)
++{
++	int cpu;
++
++	for_each_possible_cpu(cpu)
++		per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
++}
++#endif /* CONFIG_VMAP_STACK */
++#else
++static void init_irq_stacks(void) {}
++#endif /* CONFIG_IRQ_STACKS */
  
- 	/*
- 	 * Disable user-mode memory access as it should only be set in the
-@@ -183,33 +157,7 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
- 	REG_L x1,  PT_RA(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x5_to_x31
+ int arch_show_interrupts(struct seq_file *p, int prec)
+ {
+@@ -19,21 +50,52 @@ int arch_show_interrupts(struct seq_file *p, int prec)
  
- 	REG_L x2,  PT_SP(sp)
+ void __init init_IRQ(void)
+ {
++	init_irq_stacks();
+ 	irqchip_init();
+ 	if (!handle_arch_irq)
+ 		panic("No interrupt controller found.");
+ }
  
-@@ -275,33 +223,7 @@ restore_caller_reg:
- 	//save context to overflow stack
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
+-asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
++static void noinstr handle_riscv_irq(struct pt_regs *regs)
+ {
+ 	struct pt_regs *old_regs;
+-	irqentry_state_t state = irqentry_enter(regs);
  
- 	REG_L s0, TASK_TI_KERNEL_SP(tp)
- 	csrr s1, CSR_STATUS
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index d171eca623b6..040d098279a9 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -70,33 +70,7 @@
- 	REG_S x2,  PT_SP(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x4,  PT_TP(sp)
--	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x5_to_x31
- 	.endm
+ 	irq_enter_rcu();
+ 	old_regs = set_irq_regs(regs);
+ 	handle_arch_irq(regs);
+ 	set_irq_regs(old_regs);
+ 	irq_exit_rcu();
++}
++
++asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
++{
++	irqentry_state_t state = irqentry_enter(regs);
++#ifdef CONFIG_IRQ_STACKS
++	if (on_thread_stack()) {
++		ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id())
++					+ IRQ_STACK_SIZE/sizeof(ulong);
++		__asm__ __volatile(
++		"addi	sp, sp, -"RISCV_SZPTR  "\n"
++		REG_S"  ra, (sp)		\n"
++		"addi	sp, sp, -"RISCV_SZPTR  "\n"
++		REG_S"  s0, (sp)		\n"
++		"addi	s0, sp, 2*"RISCV_SZPTR "\n"
++		"move	sp, %[sp]		\n"
++		"move	a0, %[regs]		\n"
++		"call	handle_riscv_irq	\n"
++		"addi	sp, s0, -2*"RISCV_SZPTR"\n"
++		REG_L"  s0, (sp)		\n"
++		"addi	sp, sp, "RISCV_SZPTR   "\n"
++		REG_L"  ra, (sp)		\n"
++		"addi	sp, sp, "RISCV_SZPTR   "\n"
++		:
++		: [sp] "r" (sp), [regs] "r" (regs)
++		: "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
++		  "t0", "t1", "t2", "t3", "t4", "t5", "t6",
++		  "memory");
++	} else
++#endif
++		handle_riscv_irq(regs);
  
- 	.macro RESTORE_ALL
-@@ -108,33 +82,7 @@
- 	REG_L x2,  PT_SP(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x5_to_x31
- 
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	addi	sp, sp, SZREG
+ 	irqentry_exit(regs, state);
+ }
 -- 
 2.36.1
 
