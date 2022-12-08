@@ -2,80 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D65646C7D
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 11:13:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041E8646E21
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 12:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiLHKM7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Dec 2022 05:12:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S229907AbiLHLLR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Dec 2022 06:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLHKMv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 05:12:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E000111471;
-        Thu,  8 Dec 2022 02:12:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229524AbiLHLLA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 06:11:00 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EF47F8BC;
+        Thu,  8 Dec 2022 03:10:11 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e73d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e73d:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C29EB822E4;
-        Thu,  8 Dec 2022 10:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A527C433D6;
-        Thu,  8 Dec 2022 10:12:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670494360;
-        bh=+BDuaUMsMhaz0oaPEpxgB70uzBkS/ncSmhvf9tLxCTo=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=BnJ+HS0FkG1a966j7Zf5Q5oxTwnQe7sYJgm3VmPScoexQgnid0pk0craNWT7D3vbG
-         cJ4kXR/2dAxTtJmxItm2OIlazI5ghZrrdbLTwPTHh6GwE1sE/vCssCZHNiu7xu/4jm
-         BfkQOeRaOXH5K3FbBVqWwu14X97RKSDmH1oBEvl0I8fsL9eRUj4ChpIgvaHZPtFyca
-         jk86uHY5w+y5toa5eeUHXVjeZt3Zk5tu8TIc06jGUSoCk6C414axKnlzkXfoHbsZug
-         YEZRREFSrtN/McpAHsIDb3zAk/AX9SynJ0XVZtfJ5FJEZjpHVCprsDtDPaVH5konQe
-         cxo2H0ERZCd8Q==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     guoren@kernel.org, arnd@arndb.de, guoren@kernel.org,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH -next V10 10/10] riscv: stack: Add config of thread
- stack size
-In-Reply-To: <20221208025816.138712-11-guoren@kernel.org>
-References: <20221208025816.138712-1-guoren@kernel.org>
- <20221208025816.138712-11-guoren@kernel.org>
-Date:   Thu, 08 Dec 2022 11:12:38 +0100
-Message-ID: <87mt7yw6eh.fsf@all.your.base.are.belong.to.us>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 74ABC1EC0674;
+        Thu,  8 Dec 2022 12:10:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670497810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Y/dlSQlwaW6qqeNkhgJdMiH59ouL4apa5gZVhWMRT4s=;
+        b=OIZbB3qKghdj4LPSM4aWEbdKWePHGUg9m/dkgnuGHHorlGvJt/6A/5MtjRDEkp/BYrnBwK
+        dhLIwBIRMimV1yafWmfJkl9EYOniXpgobWwReEQMDC2Zc7YirkrfR2w1WA/PGqhrg8VcMP
+        BCBqUTPb9r3BSNwJ+is8NjGnKjKjctw=
+Date:   Thu, 8 Dec 2022 12:10:10 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v4 03/39] x86/cpufeatures: Add CPU feature flags for
+ shadow stacks
+Message-ID: <Y5HGEtM6H/9svtFt@zn.tnic>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-4-rick.p.edgecombe@intel.com>
+ <Y5ByYmOZ/x5BbS9o@zn.tnic>
+ <63ea77f5d14739f8184ea51a4df939a58b4764ab.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <63ea77f5d14739f8184ea51a4df939a58b4764ab.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-guoren@kernel.org writes:
+On Wed, Dec 07, 2022 at 10:35:59PM +0000, Edgecombe, Rick P wrote:
+> Yes, the suggestion was to have one for kernel and one for user. But I
+> was also thinking about how KVM could hypothetically support shadow
+> stack in guests in the non !CONFIG_X86_USER_SHADOW_STACK case (it only
+> needs CET_U xsave support). So that configuration wouldn't expose
+> user_shstk and since KVM's guest feature support is retrieved
+> programmatically, it could be nice to have some hint for KVM users that
+> they could try. Maybe it's simpler to just tie KVM and host support
+> together though. I'll remove "shstk".
 
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> 0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
+Hmm, I don't have a clear idea how guest shstk support should do so
+maybe this is all way off but yeah, if the host supports CET - the
+*hardware* feature - then you can use the same logic to support that in
+a VM.
 
-checkpatch complains here: Use "commit SHA...".
+I.e., if the guest sees CET - i.e., HV has advertized it - then guest
+kernel behaves exactly the same as on the host.
 
-> thread size mandatory, but some scenarios, such as D1 with a small
-> memory footprint, would suffer from that. After independent irq stack
-> support, let's give users a choice to determine their custom stack size.
+But it is likely I'm missing something more involved...
 
-...and again, my "why is this in the generic entry" series rant. :-)
+Thx.
 
+-- 
+Regards/Gruss,
+    Boris.
 
-Bj=C3=B6rn
+https://people.kernel.org/tglx/notes-about-netiquette
