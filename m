@@ -2,98 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE316467D5
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 04:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55423646AA7
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 09:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiLHDdw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Dec 2022 22:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S229719AbiLHIhZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Dec 2022 03:37:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiLHDdj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 22:33:39 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59596F0D3;
-        Wed,  7 Dec 2022 19:32:43 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id a7-20020a056830008700b0066c82848060so193904oto.4;
-        Wed, 07 Dec 2022 19:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4HTuNTxF4T5sFlA1YwDZji6f9t/e5vLCSOfTCspGHiA=;
-        b=EeR4ZKyzHaDvus3JUMmUEeOvKpaGh/3wXhK/gAsQXyuTo8K3Qgo6cVs2qZewn7wfTX
-         6EuvNyQkJoDgk1L1b2hea45kv0gwJILfSQZyPOm4jqOOjJWWK6dJkrZAA1o1dWFBJ6MR
-         igNa1GwUQN9DQtIFIgVFLQyFpwYIk0pNMupmrVXHOPmxuTJxW8Yh8l7XO/uqZUEYBYwM
-         qoIhriDzPw/CI4RpE8PWJYJlTIMW2anQksyj+vs66mdM/BQcCnOSphivuYKosSZny7OX
-         0nxAzkfMo9QWcTYAPv9KtUDmncjIsSXNIMBQ/BL7BCGKps2dRyZq7YzqD24HUjWj+2m5
-         mLaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4HTuNTxF4T5sFlA1YwDZji6f9t/e5vLCSOfTCspGHiA=;
-        b=YDpDSChtZLQks/jrrOFJZQh9nSoZYOGdSDXVEE1AqN9NJv5OktL+VWeYxoqhLSBL1o
-         G0XDUIJ6UuLUS0HcU1V9i5Bjcbpec3Icqwo3g6MnFy9gHsmXh+c9iLHDcMbrtg+n7D5y
-         x2qLgoOn1+iJ5LPsLOVw3Zz5zY+mFjfx1qkZ9BUnOEH0mcOY3bBMuH0lBkAiIwDfgEMe
-         nexU7z2NUzarIOzU80vyTyEk2QSwUesRQOX5ydckup8h615iqK9eLWKGG1DepczfbT7L
-         Lazs8zm0+X6RjgmALNjdMyJDMO7Kctv0/kheo7GHxKfI4ZWGmwFqTdorWhG8w7HnFvde
-         /vyQ==
-X-Gm-Message-State: ANoB5pmHS+nVGwLN21Gq/2cCd5WBdqyZ9AeVJhZQEikIPaCmv5skJw9E
-        Ek75+GuxO3xNb7cwUc3ELienxiIzHcM=
-X-Google-Smtp-Source: AA0mqf4hRJo3sPYD1mV+I8RCbLFLuFr1qA1/4rHYQBaziil637uteQJVFBlRlXDetjHLvFB+i1FcfA==
-X-Received: by 2002:a9d:6c4f:0:b0:661:dfeb:f88b with SMTP id g15-20020a9d6c4f000000b00661dfebf88bmr548422otq.18.1670470362882;
-        Wed, 07 Dec 2022 19:32:42 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id cr5-20020a056830670500b006619533d1ddsm11005430otb.76.2022.12.07.19.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 19:32:42 -0800 (PST)
-Date:   Wed, 7 Dec 2022 19:32:40 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH 0/3] bitmap: optimize small_const path for
-Message-ID: <Y5Fa2BXvO+dpUqf0@yury-laptop>
-References: <20221027043810.350460-1-yury.norov@gmail.com>
- <Y2Mi7PYO4ihnA+Pb@yury-laptop>
+        with ESMTP id S229786AbiLHIhT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 03:37:19 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3078761BB1;
+        Thu,  8 Dec 2022 00:37:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670488637; x=1702024637;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mp8wMDnH+XvlgDi27JmuMhnOonriOi5aQPBcwc8cBlo=;
+  b=kyIWeA5d58X7lbTcAwJtGqHsBLOoZv9LE5uk8KxHQNSnwxkMX0mxh/ff
+   Yxgbcg5kkP7sauuW6C+MHGKS324V6YPNcTePd04X2r+n320xfaQOQn5RW
+   tNewBKzhh13nIlRV4d1LhnI5Z41ATrWqcFS67qTAlWdSPM4R9m0wTG/hZ
+   xrqumd5GzgH8GLnql7asl63xHU0OTqXUOXoSasRuO0HXNpEeexm0HzZsS
+   xQHz8gMCF1EgHwabZOk4avgZgE8+H6kPC+vTBRFKmjOsbcPsXsOVZbEF5
+   LZQtbn4FUqBCN1+vdorKtagDwRx4+MLHyeGNZIrtgms3h9dpBUKAQ42kI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="296808118"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="296808118"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 00:37:16 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="710381311"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="710381311"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.177]) ([10.249.174.177])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 00:37:05 -0800
+Message-ID: <cd950a78-5c5b-16ef-d0a6-ad2878af067e@intel.com>
+Date:   Thu, 8 Dec 2022 16:37:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Mi7PYO4ihnA+Pb@yury-laptop>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ping again
+On 12/2/2022 2:13 PM, Chao Peng wrote:
 
-On Wed, Nov 02, 2022 at 07:09:49PM -0700, Yury Norov wrote:
-> Ping?
+..
+
+> Together with the change, a new config HAVE_KVM_RESTRICTED_MEM is added
+> and right now it is selected on X86_64 only.
 > 
-> On Wed, Oct 26, 2022 at 09:38:07PM -0700, Yury Norov wrote:
-> > Make all inline bitmap functions __always_inline to ensure that
-> > small_const optimization is always possible, and improve on it for
-> > find_next_bit() and friends.
-> > 
-> > Yury Norov (3):
-> >   bitmap: switch from inline to __always_inline
-> >   bitmap: improve small_const case for find_next() functions
-> >   bitmap: add tests for find_next_bit()
-> > 
-> >  include/asm-generic/bitsperlong.h |  12 +++
-> >  include/linux/bitmap.h            |  46 +++++-----
-> >  include/linux/cpumask.h           | 144 +++++++++++++++---------------
-> >  include/linux/find.h              |  85 ++++++++----------
-> >  include/linux/nodemask.h          |  86 +++++++++---------
-> >  lib/test_bitmap.c                 |  23 ++++-
-> >  6 files changed, 208 insertions(+), 188 deletions(-)
-> > 
-> > -- 
-> > 2.34.1
+
+ From the patch implementation, I have no idea why 
+HAVE_KVM_RESTRICTED_MEM is needed.
+
