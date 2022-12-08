@@ -2,127 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E7E64676F
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 04:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE316467D5
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Dec 2022 04:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiLHDB3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Dec 2022 22:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S230116AbiLHDdw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Dec 2022 22:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiLHDAX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 22:00:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F77D98973;
-        Wed,  7 Dec 2022 19:00:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5628B82204;
-        Thu,  8 Dec 2022 03:00:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B407EC433D7;
-        Thu,  8 Dec 2022 02:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670468408;
-        bh=gadY8OsNJ4C2VcA97+/Vkul7uDTqq5k2F2atJx1sXvg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YFAi76HGyGTdi7lktBkHSY1g6SZf+ann7tXwZVW6yd82aeQmn+xz/Agxr7oSXTaAa
-         k4JmHfN/a/sLVt3trtEt+14jyfSDZ6l/aLd6iYPEkCSR8eOqzyggFaXqTfCx7hRAPm
-         f4Ibe11TAfHHVuUDPcEmsmqECyDdP4Q/xDwbKQ+/jHK0T59GDNvE+ehGBfHJJyD+hO
-         JJnt2kb3Y8Xa/yIidadbT5XuobtF/A3WyLkFz58sQHv56xrZS+Kznn1el9h/R7NaNC
-         Iu5pHxhH5j7xLJ2SL097aIpOYhQ00J4xZrCXfhgThkk2gE1ikOnybb9eSRP7QQQu5m
-         WYUhvGJklYRLg==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
-        bjorn@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH -next V10 10/10] riscv: stack: Add config of thread stack size
-Date:   Wed,  7 Dec 2022 21:58:16 -0500
-Message-Id: <20221208025816.138712-11-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221208025816.138712-1-guoren@kernel.org>
-References: <20221208025816.138712-1-guoren@kernel.org>
+        with ESMTP id S230064AbiLHDdj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Dec 2022 22:33:39 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59596F0D3;
+        Wed,  7 Dec 2022 19:32:43 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id a7-20020a056830008700b0066c82848060so193904oto.4;
+        Wed, 07 Dec 2022 19:32:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4HTuNTxF4T5sFlA1YwDZji6f9t/e5vLCSOfTCspGHiA=;
+        b=EeR4ZKyzHaDvus3JUMmUEeOvKpaGh/3wXhK/gAsQXyuTo8K3Qgo6cVs2qZewn7wfTX
+         6EuvNyQkJoDgk1L1b2hea45kv0gwJILfSQZyPOm4jqOOjJWWK6dJkrZAA1o1dWFBJ6MR
+         igNa1GwUQN9DQtIFIgVFLQyFpwYIk0pNMupmrVXHOPmxuTJxW8Yh8l7XO/uqZUEYBYwM
+         qoIhriDzPw/CI4RpE8PWJYJlTIMW2anQksyj+vs66mdM/BQcCnOSphivuYKosSZny7OX
+         0nxAzkfMo9QWcTYAPv9KtUDmncjIsSXNIMBQ/BL7BCGKps2dRyZq7YzqD24HUjWj+2m5
+         mLaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4HTuNTxF4T5sFlA1YwDZji6f9t/e5vLCSOfTCspGHiA=;
+        b=YDpDSChtZLQks/jrrOFJZQh9nSoZYOGdSDXVEE1AqN9NJv5OktL+VWeYxoqhLSBL1o
+         G0XDUIJ6UuLUS0HcU1V9i5Bjcbpec3Icqwo3g6MnFy9gHsmXh+c9iLHDcMbrtg+n7D5y
+         x2qLgoOn1+iJ5LPsLOVw3Zz5zY+mFjfx1qkZ9BUnOEH0mcOY3bBMuH0lBkAiIwDfgEMe
+         nexU7z2NUzarIOzU80vyTyEk2QSwUesRQOX5ydckup8h615iqK9eLWKGG1DepczfbT7L
+         Lazs8zm0+X6RjgmALNjdMyJDMO7Kctv0/kheo7GHxKfI4ZWGmwFqTdorWhG8w7HnFvde
+         /vyQ==
+X-Gm-Message-State: ANoB5pmHS+nVGwLN21Gq/2cCd5WBdqyZ9AeVJhZQEikIPaCmv5skJw9E
+        Ek75+GuxO3xNb7cwUc3ELienxiIzHcM=
+X-Google-Smtp-Source: AA0mqf4hRJo3sPYD1mV+I8RCbLFLuFr1qA1/4rHYQBaziil637uteQJVFBlRlXDetjHLvFB+i1FcfA==
+X-Received: by 2002:a9d:6c4f:0:b0:661:dfeb:f88b with SMTP id g15-20020a9d6c4f000000b00661dfebf88bmr548422otq.18.1670470362882;
+        Wed, 07 Dec 2022 19:32:42 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id cr5-20020a056830670500b006619533d1ddsm11005430otb.76.2022.12.07.19.32.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 19:32:42 -0800 (PST)
+Date:   Wed, 7 Dec 2022 19:32:40 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH 0/3] bitmap: optimize small_const path for
+Message-ID: <Y5Fa2BXvO+dpUqf0@yury-laptop>
+References: <20221027043810.350460-1-yury.norov@gmail.com>
+ <Y2Mi7PYO4ihnA+Pb@yury-laptop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2Mi7PYO4ihnA+Pb@yury-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+ping again
 
-0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
-thread size mandatory, but some scenarios, such as D1 with a small
-memory footprint, would suffer from that. After independent irq stack
-support, let's give users a choice to determine their custom stack size.
-
-Link: https://lore.kernel.org/linux-riscv/5f6e6c39-b846-4392-b468-02202404de28@www.fastmail.com/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Tested-by: Jisheng Zhang <jszhang@kernel.org>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/Kconfig                   | 10 ++++++++++
- arch/riscv/include/asm/thread_info.h | 12 +-----------
- 2 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index bd4c4ae4cdc9..60202cd5c5ae 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -455,6 +455,16 @@ config IRQ_STACKS
- 	  Add independent irq & softirq stacks for percpu to prevent kernel stack
- 	  overflows. We may save some memory footprint by disabling IRQ_STACKS.
- 
-+config THREAD_SIZE_ORDER
-+	int "Kernel stack size (in power-of-two numbers of page size)" if VMAP_STACK && EXPERT
-+	range 0 4
-+	default 1 if 32BIT && !KASAN
-+	default 3 if 64BIT && KASAN
-+	default 2
-+	help
-+	  Specify the Pages of thread stack size (from 4KB to 64KB), which also
-+	  affects irq stack size, which is equal to thread stack size.
-+
- endmenu # "Platform type"
- 
- menu "Kernel features"
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 043da8ccc7e6..c970d41dc4c6 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -11,18 +11,8 @@
- #include <asm/page.h>
- #include <linux/const.h>
- 
--#ifdef CONFIG_KASAN
--#define KASAN_STACK_ORDER 1
--#else
--#define KASAN_STACK_ORDER 0
--#endif
--
- /* thread information allocation */
--#ifdef CONFIG_64BIT
--#define THREAD_SIZE_ORDER	(2 + KASAN_STACK_ORDER)
--#else
--#define THREAD_SIZE_ORDER	(1 + KASAN_STACK_ORDER)
--#endif
-+#define THREAD_SIZE_ORDER	CONFIG_THREAD_SIZE_ORDER
- #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
- 
- /*
--- 
-2.36.1
-
+On Wed, Nov 02, 2022 at 07:09:49PM -0700, Yury Norov wrote:
+> Ping?
+> 
+> On Wed, Oct 26, 2022 at 09:38:07PM -0700, Yury Norov wrote:
+> > Make all inline bitmap functions __always_inline to ensure that
+> > small_const optimization is always possible, and improve on it for
+> > find_next_bit() and friends.
+> > 
+> > Yury Norov (3):
+> >   bitmap: switch from inline to __always_inline
+> >   bitmap: improve small_const case for find_next() functions
+> >   bitmap: add tests for find_next_bit()
+> > 
+> >  include/asm-generic/bitsperlong.h |  12 +++
+> >  include/linux/bitmap.h            |  46 +++++-----
+> >  include/linux/cpumask.h           | 144 +++++++++++++++---------------
+> >  include/linux/find.h              |  85 ++++++++----------
+> >  include/linux/nodemask.h          |  86 +++++++++---------
+> >  lib/test_bitmap.c                 |  23 ++++-
+> >  6 files changed, 208 insertions(+), 188 deletions(-)
+> > 
+> > -- 
+> > 2.34.1
