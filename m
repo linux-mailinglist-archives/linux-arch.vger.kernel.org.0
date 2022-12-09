@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50CB647BC8
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 03:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9332B647BCE
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 03:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiLICBj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Dec 2022 21:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S229950AbiLICCQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Dec 2022 21:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLICBi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 21:01:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7678D23151;
-        Thu,  8 Dec 2022 18:01:37 -0800 (PST)
+        with ESMTP id S230148AbiLICCI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 21:02:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E476FF22;
+        Thu,  8 Dec 2022 18:02:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E882B82706;
-        Fri,  9 Dec 2022 02:01:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C269C433A0;
-        Fri,  9 Dec 2022 02:01:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E697862109;
+        Fri,  9 Dec 2022 02:02:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D0AC433A8;
+        Fri,  9 Dec 2022 02:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670551295;
-        bh=SkG0VIqWAQWylgRHfoMeG8lBjjuRZ9GmA+y0TH1J3fc=;
+        s=k20201202; t=1670551326;
+        bh=TCJA0NUGNPVahhQQ1Hh45pVrzy/SBPNYQTr7lJlPvZA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OxMFuJAK3rAc1PnY53u3QDUfFVttYZYZfiGw5pEgn96yEXMo5CdKl/qc9/Z9zNAky
-         6LzbsRUJUFl4GYnKPVebOode5qURJq0CSVwyXn2fzTE4Mx9k0GSkYLNEgUR/VrKJyv
-         tY6fWQcabY2yJne/YtnclSXOvvSEjAOMHMlSPqu/OS25aqQzoh12B9H3MXOj41noHN
-         DeMX43aEcG5OTZfQ8BR3aVvhMJ2AuiaGp1XXNST6RFRLjxyEboOTW67+afB3ccvwUz
-         9ItzqMp00KcoZRr5vm2icwLDoq6QroF5C26+Cvi2qR7GffV150QmVfRH8MkiiqqbvN
-         zqIFww+131gmg==
-Received: by mail-ed1-f49.google.com with SMTP id i15so1325300edf.2;
-        Thu, 08 Dec 2022 18:01:34 -0800 (PST)
-X-Gm-Message-State: ANoB5pkFEzt78cfKEg2Hmt220NG4xB1bjbgoSj4wRuLkEdFVA6xsj4KH
-        zKrw6lGvBhMQetxTFvtPJwVqZdqzRfrW3glpkGU=
-X-Google-Smtp-Source: AA0mqf5C/3tfEMZ0PsbumjXajBPqoEmuMmeihHRWIZKLRicqq0E/oDxh0zU8cL/o0mSjqj7e5LlTwvlQ3cMBhv+JcfE=
-X-Received: by 2002:a05:6402:538a:b0:458:fbd9:e3b1 with SMTP id
- ew10-20020a056402538a00b00458fbd9e3b1mr28452851edb.6.1670551292956; Thu, 08
- Dec 2022 18:01:32 -0800 (PST)
+        b=AOt6nXINrFhD3l3S8AGeEWGjJdu/iDcqC7dw6pvW9uNXlKU9+xIAWyKn4Udpa9lGu
+         tz23+Orysyyd7QCnMfAMmTRdIab5J2u5iFfwBH7SDRC2cjTlpeEy0W/UQVFCWvhTE/
+         BND8LOG+YndCLHuyUZHcSDf0qNfb7d+J5YtXfZjhAv35OdXxypIdxGCxrwN2ZBAruR
+         1QbdsIE7poNWNMJ+rqODLHdTTglEXEnrAEwEu3mEbFSDo9zei6lwpXt+3noXm3np9n
+         yZQ4L8Z5aH6Cb3O4d4QBuqh7fmN1IvANZQOzw7nSV93uF1PVoKjUWeYIl/z2Pn79k7
+         glwY4NMinObgw==
+Received: by mail-ej1-f51.google.com with SMTP id kw15so8249048ejc.10;
+        Thu, 08 Dec 2022 18:02:06 -0800 (PST)
+X-Gm-Message-State: ANoB5plhqQ1XbwcbTxIi6wQ02D68XmLj4c2gLaT0F7fZrjlq9aBAB7M9
+        n28GZWhFgsP0vqQNEo3XnV/nBXY5CMEQhWUyarI=
+X-Google-Smtp-Source: AA0mqf7rwovsaAf13UZfyBGYG5BIBX9Qugpw3448wzFAmjiIot+YK5dKORtA+wYq7D7grCvkr7hneMnboU5JC+nuyIE=
+X-Received: by 2002:a17:906:ee2:b0:78d:3f96:b7aa with SMTP id
+ x2-20020a1709060ee200b0078d3f96b7aamr64216935eji.74.1670551324505; Thu, 08
+ Dec 2022 18:02:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-6-guoren@kernel.org>
- <87sfhqw6ge.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87sfhqw6ge.fsf@all.your.base.are.belong.to.us>
+References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-7-guoren@kernel.org>
+ <87r0xaw6fh.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87r0xaw6fh.fsf@all.your.base.are.belong.to.us>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 9 Dec 2022 10:01:21 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR3Eebw7juPiW4zA122qQKJjw4+7eC54vHgTDpctqJopA@mail.gmail.com>
-Message-ID: <CAJF2gTR3Eebw7juPiW4zA122qQKJjw4+7eC54vHgTDpctqJopA@mail.gmail.com>
-Subject: Re: [PATCH -next V10 05/10] riscv: entry: Remove extra level wrappers
- of trace_hardirqs_{on,off}
+Date:   Fri, 9 Dec 2022 10:01:52 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR+7phq0uaQOH_xtAju-q59BFDy2Nwf4MB=n3ZzV4W6Jg@mail.gmail.com>
+Message-ID: <CAJF2gTR+7phq0uaQOH_xtAju-q59BFDy2Nwf4MB=n3ZzV4W6Jg@mail.gmail.com>
+Subject: Re: [PATCH -next V10 06/10] riscv: entry: Consolidate
+ ret_from_kernel_thread into ret_from_fork
 To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
         peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
@@ -72,24 +72,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 6:11 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
+On Thu, Dec 8, 2022 at 6:12 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
 te:
 >
 > guoren@kernel.org writes:
 >
 > > From: Jisheng Zhang <jszhang@kernel.org>
 > >
-> > Since riscv is converted to generic entry, there's no need for the
-> > extra wrappers of trace_hardirqs_{on,off}.
-> >
-> > Tested with llvm + irqsoff.
+> > The ret_from_kernel_thread() behaves similarly with ret_from_fork(),
+> > the only difference is whether call the fn(arg) or not, this can be
+> > achieved by testing fn is NULL or not, I.E s0 is 0 or not. Many
+> > architectures have done the same thing, it make entry.S more clean.
 >
-> What does this mean?
-It's just a tested environment description. This is covered by the
-generic entry. This patch removes unused code.
-
-I would remove the "Tested with llvm + irqsoff." sentence; it's unnecessary=
-.
+> Nit: "it makes".
+Okay.
 
 >
 >
