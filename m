@@ -2,475 +2,337 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245D4647FE8
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 10:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C481064873E
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 18:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiLIJLs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Dec 2022 04:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        id S229954AbiLIRHE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Dec 2022 12:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLIJLq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 04:11:46 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 305C06175F
-        for <linux-arch@vger.kernel.org>; Fri,  9 Dec 2022 01:11:42 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id f16so4284544ljc.8
-        for <linux-arch@vger.kernel.org>; Fri, 09 Dec 2022 01:11:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vVAuT2VAl8HSgBtmMoMcytfxocfU7OG7x60P/5jbFLQ=;
-        b=lX5M+N/6bU4HIzuFDOOcutTJ/4Q4wYmGYE0aQSCJkT10nXdgln59BJXRkFyQvVtBfg
-         5Tt+ADEuHwxHmYWoo9Avr1LCUAQ5cSF6A5zf8gI72s0fRtfnyf0vQUj3x8E1c2LjBzl0
-         K60I9PxS15NPK0uquHBFD5VtNOw1H8O5dA3eHgkkIqlotUc7/39VG5f6pIvM2eG2i+CJ
-         Lr4rd6idF3siurTwh8bixJsQbd3BYTtBz8sUkkIHej2slw5AjryLd9hFM3bIdZ78kB7W
-         BwJe/q5Ph/mjCbzcRQAJJ2lfymeFTl0Bi7WPJQrQSAHK+WUOloI+x5ts/ZdjZovT9WRV
-         q9vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vVAuT2VAl8HSgBtmMoMcytfxocfU7OG7x60P/5jbFLQ=;
-        b=Wj3LnsdfEOj8lbCuX7Hu3oE7mtjLixZ0V8+F+AQ1R4nst6gRlZgK8DowsJtr/ex0wj
-         zunn7CbOowz0iuZDyLKl7cT864DE9FERmNlfkYzkzS867SRT4M+eH/1fgaixNZYARsgh
-         Jab4flw+bQb/8amSjwjAbQno2oyBvTm2+X/O2fWY9NwNGyZ2iio9YevXMs6RPT9iC8r5
-         PEWnGIfbu0GaJEUDihEZs6vwahwKKpqTzaVXiZ6pizKnYHtqREtjffLGdFcVLTvnYdUG
-         u1iVCrM08Gmm3VM/VRuXMbbI0YFHuHlraMMtro0i/4AgS3KNiAZ0gtH0DcqkbXNdwiqO
-         LyIw==
-X-Gm-Message-State: ANoB5pn7MW6r4/6bqzOvxzURFgLX8b5/SXnoDZPQV2IIuTVhBigKM3Ua
-        U86ty3Bw5bJKmm9FjalUBChUiMm4KwP6JN2N5rhThg==
-X-Google-Smtp-Source: AA0mqf7/rRxOZLXii+aeI9/qslxKjks6CQQi1s3lmRhVVbbNRaVxNPLR7lYmarjHgoPvJiZijDv4+WHvZ/AMjr/iK5c=
-X-Received: by 2002:a2e:9256:0:b0:279:823d:77c7 with SMTP id
- v22-20020a2e9256000000b00279823d77c7mr18932642ljg.92.1670577100923; Fri, 09
- Dec 2022 01:11:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com> <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
-In-Reply-To: <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Fri, 9 Dec 2022 09:11:04 +0000
-Message-ID: <CA+EHjTzN1QGSnmT=JJuHwvrgBsD+Nev8+Db4DPPQoU-8k_432g@mail.gmail.com>
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        with ESMTP id S230022AbiLIRGo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 12:06:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9700FACB;
+        Fri,  9 Dec 2022 09:04:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FECF622C9;
+        Fri,  9 Dec 2022 17:04:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9986C433EF;
+        Fri,  9 Dec 2022 17:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670605487;
+        bh=gQXA+j2g4oXs6RnRNrCZ0AkHANYxi91gTp0MorfjTGI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ICmW33ahP9H3MfZN7R7k0WrqPoeMU3QossaBBbInxc9p29nNkyqIKVKZKPN3wvnMA
+         H4gGLoeNiu/SJ4nUCF+01yi89YfqqGZmaH4ykfsg7Zakdisjl7y0+YWjRRsv09cwSZ
+         ysEMrqXZRcUCLdgxLP/y9QD0LU+r4mCFQnC1kslVdO6ok3RSwflZiTSquCHlvQyAdZ
+         2K1K7BBbqbV01VjBT8Rt2u9ffacu/fJ46WI51h0DhQfQt4/fmI+/QixriXEana3qRj
+         pa2KH0kR3m8xVYpjPl/j8R5voWGbnqrpqQTUyBaQPS7no8zEIEskmkPOSSlIWC+l1y
+         L5UxNWbAnZrYQ==
+Date:   Fri, 9 Dec 2022 19:04:24 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
+Message-ID: <Y5NqmLqXfXpowoSM@kernel.org>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-38-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221203003606.6838-38-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Hi Rick,
 
-On Fri, Dec 2, 2022 at 6:20 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> Register/unregister private memslot to fd-based memory backing store
-> restrictedmem and implement the callbacks for restrictedmem_notifier:
->   - invalidate_start()/invalidate_end() to zap the existing memory
->     mappings in the KVM page table.
->   - error() to request KVM_REQ_MEMORY_MCE and later exit to userspace
->     with KVM_EXIT_SHUTDOWN.
->
-> Expose KVM_MEM_PRIVATE for memslot and KVM_MEMORY_ATTRIBUTE_PRIVATE for
-> KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to userspace but either are
-> controlled by kvm_arch_has_private_mem() which should be rewritten by
-> architecture code.
->
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-
-With the code to port it to pKVM/arm64:
-Tested-by: Fuad Tabba <tabba@google.com>
-
-Cheers,
-/fuad
-
-
+On Fri, Dec 02, 2022 at 04:36:04PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> Some applications (like GDB) would like to tweak shadow stack state via
+> ptrace. This allows for existing functionality to continue to work for
+> seized shadow stack applications. Provide an regset interface for
+> manipulating the shadow stack pointer (SSP).
+> 
+> There is already ptrace functionality for accessing xstate, but this
+> does not include supervisor xfeatures. So there is not a completely
+> clear place for where to put the shadow stack state. Adding it to the
+> user xfeatures regset would complicate that code, as it currently shares
+> logic with signals which should not have supervisor features.
+> 
+> Don't add a general supervisor xfeature regset like the user one,
+> because it is better to maintain flexibility for other supervisor
+> xfeatures to define their own interface. For example, an xfeature may
+> decide not to expose all of it's state to userspace, as is actually the
+> case for  shadow stack ptrace functionality. A lot of enum values remain
+> to be used, so just put it in dedicated shadow stack regset.
+> 
+> The only downside to not having a generic supervisor xfeature regset,
+> is that apps need to be enlightened of any new supervisor xfeature
+> exposed this way (i.e. they can't try to have generic save/restore
+> logic). But maybe that is a good thing, because they have to think
+> through each new xfeature instead of encountering issues when new a new
+> supervisor xfeature was added.
+> 
+> By adding a shadow stack regset, it also has the effect of including the
+> shadow stack state in a core dump, which could be useful for debugging.
+> 
+> The shadow stack specific xstate includes the SSP, and the shadow stack
+> and WRSS enablement status. Enabling shadow stack or wrss in the kernel
+> involves more than just flipping the bit. The kernel is made aware that
+> it has to do extra things when cloning or handling signals. That logic
+> is triggered off of separate feature enablement state kept in the task
+> struct. So the flipping on HW shadow stack enforcement without notifying
+> the kernel to change its behavior would severely limit what an application
+> could do without crashing, and the results would depend on kernel
+> internal implementation details. There is also no known use for controlling
+> this state via prtace today. So only expose the SSP, which is something
+> that userspace already has indirect control over.
+> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > ---
->  arch/x86/include/asm/kvm_host.h |   1 +
->  arch/x86/kvm/x86.c              |  13 +++
->  include/linux/kvm_host.h        |   3 +
->  virt/kvm/kvm_main.c             | 179 +++++++++++++++++++++++++++++++-
->  4 files changed, 191 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 7772ab37ac89..27ef31133352 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -114,6 +114,7 @@
->         KVM_ARCH_REQ_FLAGS(31, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
->  #define KVM_REQ_HV_TLB_FLUSH \
->         KVM_ARCH_REQ_FLAGS(32, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
-> +#define KVM_REQ_MEMORY_MCE             KVM_ARCH_REQ(33)
->
->  #define CR0_RESERVED_BITS                                               \
->         (~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM | X86_CR0_TS \
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5aefcff614d2..c67e22f3e2ee 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -6587,6 +6587,13 @@ int kvm_arch_pm_notifier(struct kvm *kvm, unsigned long state)
+> 
+> v4:
+>  - Make shadow stack only. Reduce to only supporting SSP register, and
+>    remove CET references (peterz)
+>  - Add comment to not use 0x203, becuase binutils already looks for it in
+>    coredumps. (Christina Schimpe)
+> 
+> v3:
+>  - Drop dependence on thread.shstk.size, and use thread.features bits
+>  - Drop 32 bit support
+> 
+> v2:
+>  - Check alignment on ssp.
+>  - Block IBT bits.
+>  - Handle init states instead of returning error.
+>  - Add verbose commit log justifying the design.
+> 
+> Yu-Cheng v12:
+>  - Return -ENODEV when CET registers are in INIT state.
+>  - Check reserved/non-support bits from user input.
+> 
+>  arch/x86/include/asm/fpu/regset.h |  7 +--
+>  arch/x86/kernel/fpu/regset.c      | 87 +++++++++++++++++++++++++++++++
+>  arch/x86/kernel/ptrace.c          | 12 +++++
+>  include/uapi/linux/elf.h          |  2 +
+>  4 files changed, 105 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/fpu/regset.h b/arch/x86/include/asm/fpu/regset.h
+> index 4f928d6a367b..697b77e96025 100644
+> --- a/arch/x86/include/asm/fpu/regset.h
+> +++ b/arch/x86/include/asm/fpu/regset.h
+> @@ -7,11 +7,12 @@
+>  
+>  #include <linux/regset.h>
+>  
+> -extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active;
+> +extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active,
+> +				ssp_active;
+>  extern user_regset_get2_fn fpregs_get, xfpregs_get, fpregs_soft_get,
+> -				 xstateregs_get;
+> +				 xstateregs_get, ssp_get;
+>  extern user_regset_set_fn fpregs_set, xfpregs_set, fpregs_soft_set,
+> -				 xstateregs_set;
+> +				 xstateregs_set, ssp_set;
+>  
+>  /*
+>   * xstateregs_active == regset_fpregs_active. Please refer to the comment
+> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> index 6d056b68f4ed..00f3d5c9b682 100644
+> --- a/arch/x86/kernel/fpu/regset.c
+> +++ b/arch/x86/kernel/fpu/regset.c
+> @@ -8,6 +8,7 @@
+>  #include <asm/fpu/api.h>
+>  #include <asm/fpu/signal.h>
+>  #include <asm/fpu/regset.h>
+> +#include <asm/prctl.h>
+>  
+>  #include "context.h"
+>  #include "internal.h"
+> @@ -174,6 +175,92 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+>  	return ret;
 >  }
->  #endif /* CONFIG_HAVE_KVM_PM_NOTIFIER */
->
-> +#ifdef CONFIG_HAVE_KVM_RESTRICTED_MEM
-> +void kvm_arch_memory_mce(struct kvm *kvm)
+>  
+> +
+> +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +int ssp_active(struct task_struct *target, const struct user_regset *regset)
 > +{
-> +       kvm_make_all_cpus_request(kvm, KVM_REQ_MEMORY_MCE);
+> +	if (shstk_enabled())
+
+This is not going to work with ptrace as shstk_enabled() checks current
+rather than target.
+
+> +		return regset->n;
+> +
+> +	return 0;
 > +}
-> +#endif
 > +
->  static int kvm_vm_ioctl_get_clock(struct kvm *kvm, void __user *argp)
->  {
->         struct kvm_clock_data data = { 0 };
-> @@ -10357,6 +10364,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->
->                 if (kvm_check_request(KVM_REQ_UPDATE_CPU_DIRTY_LOGGING, vcpu))
->                         static_call(kvm_x86_update_cpu_dirty_logging)(vcpu);
+> +int ssp_get(struct task_struct *target, const struct user_regset *regset,
+> +		struct membuf to)
+> +{
+> +	struct fpu *fpu = &target->thread.fpu;
+> +	struct cet_user_state *cetregs;
 > +
-> +               if (kvm_check_request(KVM_REQ_MEMORY_MCE, vcpu)) {
-> +                       vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
-> +                       r = 0;
-> +                       goto out;
-> +               }
->         }
->
->         if (kvm_check_request(KVM_REQ_EVENT, vcpu) || req_int_win ||
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 153842bb33df..f032d878e034 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -590,6 +590,7 @@ struct kvm_memory_slot {
->         struct file *restricted_file;
->         loff_t restricted_offset;
->         struct restrictedmem_notifier notifier;
-> +       struct kvm *kvm;
+> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK))
+> +		return -ENODEV;
+> +
+> +	sync_fpstate(fpu);
+> +	cetregs = get_xsave_addr(&fpu->fpstate->regs.xsave, XFEATURE_CET_USER);
+> +	if (!cetregs) {
+> +		/*
+> +		 * The registers are the in the init state. The init values for
+> +		 * these regs are zero, so just zero the output buffer.
+> +		 */
+> +		membuf_zero(&to, sizeof(cetregs->user_ssp));
+> +		return 0;
+> +	}
+> +
+> +	return membuf_write(&to, (unsigned long *)&cetregs->user_ssp,
+> +			    sizeof(cetregs->user_ssp));
+> +}
+> +
+> +int ssp_set(struct task_struct *target, const struct user_regset *regset,
+> +		  unsigned int pos, unsigned int count,
+> +		  const void *kbuf, const void __user *ubuf)
+> +{
+> +	struct fpu *fpu = &target->thread.fpu;
+> +	struct xregs_state *xsave = &fpu->fpstate->regs.xsave;
+> +	struct cet_user_state *cetregs;
+> +	unsigned long user_ssp;
+> +	int r;
+> +
+> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK) ||
+> +	    !ssp_active(target, regset))
+> +		return -ENODEV;
+> +
+> +	r = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_ssp, 0, -1);
+> +	if (r)
+> +		return r;
+> +
+> +	/*
+> +	 * Some kernel instructions (IRET, etc) can cause exceptions in the case
+> +	 * of disallowed CET register values. Just prevent invalid values.
+> +	 */
+> +	if ((user_ssp >= TASK_SIZE_MAX) || !IS_ALIGNED(user_ssp, 8))
+> +		return -EINVAL;
+> +
+> +	fpu_force_restore(fpu);
+> +
+> +	/*
+> +	 * Don't want to init the xfeature until the kernel will definetely
+> +	 * overwrite it, otherwise if it inits and then fails out, it would
+> +	 * end up initing it to random data.
+> +	 */
+> +	if (!xfeature_saved(xsave, XFEATURE_CET_USER) &&
+> +	    WARN_ON(init_xfeature(xsave, XFEATURE_CET_USER)))
+> +		return -ENODEV;
+> +
+> +	cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
+> +	if (WARN_ON(!cetregs)) {
+> +		/*
+> +		 * This shouldn't ever be NULL because it was successfully
+> +		 * inited above if needed. The only scenario would be if an
+> +		 * xfeature was somehow saved in a buffer, but not enabled in
+> +		 * xsave.
+> +		 */
+> +		return -ENODEV;
+> +	}
+> +
+> +	cetregs->user_ssp = user_ssp;
+> +	return 0;
+> +}
+> +#endif /* CONFIG_X86_USER_SHADOW_STACK */
+> +
+>  #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
+>  
+>  /*
+> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+> index dfaa270a7cc9..095f04bdabdc 100644
+> --- a/arch/x86/kernel/ptrace.c
+> +++ b/arch/x86/kernel/ptrace.c
+> @@ -58,6 +58,7 @@ enum x86_regset_64 {
+>  	REGSET64_FP,
+>  	REGSET64_IOPERM,
+>  	REGSET64_XSTATE,
+> +	REGSET64_SSP,
 >  };
->
->  static inline bool kvm_slot_can_be_private(const struct kvm_memory_slot *slot)
-> @@ -2363,6 +2364,8 @@ static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
->         *pfn = page_to_pfn(page);
->         return ret;
->  }
-> +
-> +void kvm_arch_memory_mce(struct kvm *kvm);
->  #endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
->
->  #endif
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index e107afea32f0..ac835fc77273 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -936,6 +936,121 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
->
->  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
->
-> +#ifdef CONFIG_HAVE_KVM_RESTRICTED_MEM
-> +static bool restrictedmem_range_is_valid(struct kvm_memory_slot *slot,
-> +                                        pgoff_t start, pgoff_t end,
-> +                                        gfn_t *gfn_start, gfn_t *gfn_end)
-> +{
-> +       unsigned long base_pgoff = slot->restricted_offset >> PAGE_SHIFT;
-> +
-> +       if (start > base_pgoff)
-> +               *gfn_start = slot->base_gfn + start - base_pgoff;
-> +       else
-> +               *gfn_start = slot->base_gfn;
-> +
-> +       if (end < base_pgoff + slot->npages)
-> +               *gfn_end = slot->base_gfn + end - base_pgoff;
-> +       else
-> +               *gfn_end = slot->base_gfn + slot->npages;
-> +
-> +       if (*gfn_start >= *gfn_end)
-> +               return false;
-> +
-> +       return true;
-> +}
-> +
-> +static void kvm_restrictedmem_invalidate_begin(struct restrictedmem_notifier *notifier,
-> +                                              pgoff_t start, pgoff_t end)
-> +{
-> +       struct kvm_memory_slot *slot = container_of(notifier,
-> +                                                   struct kvm_memory_slot,
-> +                                                   notifier);
-> +       struct kvm *kvm = slot->kvm;
-> +       gfn_t gfn_start, gfn_end;
-> +       struct kvm_gfn_range gfn_range;
-> +       int idx;
-> +
-> +       if (!restrictedmem_range_is_valid(slot, start, end,
-> +                                         &gfn_start, &gfn_end))
-> +               return;
-> +
-> +       gfn_range.start = gfn_start;
-> +       gfn_range.end = gfn_end;
-> +       gfn_range.slot = slot;
-> +       gfn_range.pte = __pte(0);
-> +       gfn_range.may_block = true;
-> +
-> +       idx = srcu_read_lock(&kvm->srcu);
-> +       KVM_MMU_LOCK(kvm);
-> +
-> +       kvm_mmu_invalidate_begin(kvm);
-> +       kvm_mmu_invalidate_range_add(kvm, gfn_start, gfn_end);
-> +       if (kvm_unmap_gfn_range(kvm, &gfn_range))
-> +               kvm_flush_remote_tlbs(kvm);
-> +
-> +       KVM_MMU_UNLOCK(kvm);
-> +       srcu_read_unlock(&kvm->srcu, idx);
-> +}
-> +
-> +static void kvm_restrictedmem_invalidate_end(struct restrictedmem_notifier *notifier,
-> +                                            pgoff_t start, pgoff_t end)
-> +{
-> +       struct kvm_memory_slot *slot = container_of(notifier,
-> +                                                   struct kvm_memory_slot,
-> +                                                   notifier);
-> +       struct kvm *kvm = slot->kvm;
-> +       gfn_t gfn_start, gfn_end;
-> +
-> +       if (!restrictedmem_range_is_valid(slot, start, end,
-> +                                         &gfn_start, &gfn_end))
-> +               return;
-> +
-> +       KVM_MMU_LOCK(kvm);
-> +       kvm_mmu_invalidate_end(kvm);
-> +       KVM_MMU_UNLOCK(kvm);
-> +}
-> +
-> +static void kvm_restrictedmem_error(struct restrictedmem_notifier *notifier,
-> +                                   pgoff_t start, pgoff_t end)
-> +{
-> +       struct kvm_memory_slot *slot = container_of(notifier,
-> +                                                   struct kvm_memory_slot,
-> +                                                   notifier);
-> +       kvm_arch_memory_mce(slot->kvm);
-> +}
-> +
-> +static struct restrictedmem_notifier_ops kvm_restrictedmem_notifier_ops = {
-> +       .invalidate_start = kvm_restrictedmem_invalidate_begin,
-> +       .invalidate_end = kvm_restrictedmem_invalidate_end,
-> +       .error = kvm_restrictedmem_error,
-> +};
-> +
-> +static inline void kvm_restrictedmem_register(struct kvm_memory_slot *slot)
-> +{
-> +       slot->notifier.ops = &kvm_restrictedmem_notifier_ops;
-> +       restrictedmem_register_notifier(slot->restricted_file, &slot->notifier);
-> +}
-> +
-> +static inline void kvm_restrictedmem_unregister(struct kvm_memory_slot *slot)
-> +{
-> +       restrictedmem_unregister_notifier(slot->restricted_file,
-> +                                         &slot->notifier);
-> +}
-> +
-> +#else /* !CONFIG_HAVE_KVM_RESTRICTED_MEM */
-> +
-> +static inline void kvm_restrictedmem_register(struct kvm_memory_slot *slot)
-> +{
-> +       WARN_ON_ONCE(1);
-> +}
-> +
-> +static inline void kvm_restrictedmem_unregister(struct kvm_memory_slot *slot)
-> +{
-> +       WARN_ON_ONCE(1);
-> +}
-> +
-> +#endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
-> +
->  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
->  static int kvm_pm_notifier_call(struct notifier_block *bl,
->                                 unsigned long state,
-> @@ -980,6 +1095,11 @@ static void kvm_destroy_dirty_bitmap(struct kvm_memory_slot *memslot)
->  /* This does not remove the slot from struct kvm_memslots data structures */
->  static void kvm_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
->  {
-> +       if (slot->flags & KVM_MEM_PRIVATE) {
-> +               kvm_restrictedmem_unregister(slot);
-> +               fput(slot->restricted_file);
-> +       }
-> +
->         kvm_destroy_dirty_bitmap(slot);
->
->         kvm_arch_free_memslot(kvm, slot);
-> @@ -1551,10 +1671,14 @@ static void kvm_replace_memslot(struct kvm *kvm,
->         }
->  }
->
-> -static int check_memory_region_flags(const struct kvm_user_mem_region *mem)
-> +static int check_memory_region_flags(struct kvm *kvm,
-> +                                    const struct kvm_user_mem_region *mem)
->  {
->         u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
->
-> +       if (kvm_arch_has_private_mem(kvm))
-> +               valid_flags |= KVM_MEM_PRIVATE;
-> +
->  #ifdef __KVM_HAVE_READONLY_MEM
->         valid_flags |= KVM_MEM_READONLY;
->  #endif
-> @@ -1630,6 +1754,9 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
->  {
->         int r;
->
-> +       if (change == KVM_MR_CREATE && new->flags & KVM_MEM_PRIVATE)
-> +               kvm_restrictedmem_register(new);
-> +
->         /*
->          * If dirty logging is disabled, nullify the bitmap; the old bitmap
->          * will be freed on "commit".  If logging is enabled in both old and
-> @@ -1658,6 +1785,9 @@ static int kvm_prepare_memory_region(struct kvm *kvm,
->         if (r && new && new->dirty_bitmap && (!old || !old->dirty_bitmap))
->                 kvm_destroy_dirty_bitmap(new);
->
-> +       if (r && change == KVM_MR_CREATE && new->flags & KVM_MEM_PRIVATE)
-> +               kvm_restrictedmem_unregister(new);
-> +
->         return r;
->  }
->
-> @@ -1963,7 +2093,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
->         int as_id, id;
->         int r;
->
-> -       r = check_memory_region_flags(mem);
-> +       r = check_memory_region_flags(kvm, mem);
->         if (r)
->                 return r;
->
-> @@ -1982,6 +2112,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
->              !access_ok((void __user *)(unsigned long)mem->userspace_addr,
->                         mem->memory_size))
->                 return -EINVAL;
-> +       if (mem->flags & KVM_MEM_PRIVATE &&
-> +               (mem->restricted_offset & (PAGE_SIZE - 1) ||
-> +                mem->restricted_offset > U64_MAX - mem->memory_size))
-> +               return -EINVAL;
->         if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
->                 return -EINVAL;
->         if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
-> @@ -2020,6 +2154,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
->                 if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
->                         return -EINVAL;
->         } else { /* Modify an existing slot. */
-> +               /* Private memslots are immutable, they can only be deleted. */
-> +               if (mem->flags & KVM_MEM_PRIVATE)
-> +                       return -EINVAL;
->                 if ((mem->userspace_addr != old->userspace_addr) ||
->                     (npages != old->npages) ||
->                     ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
-> @@ -2048,10 +2185,28 @@ int __kvm_set_memory_region(struct kvm *kvm,
->         new->npages = npages;
->         new->flags = mem->flags;
->         new->userspace_addr = mem->userspace_addr;
-> +       if (mem->flags & KVM_MEM_PRIVATE) {
-> +               new->restricted_file = fget(mem->restricted_fd);
-> +               if (!new->restricted_file ||
-> +                   !file_is_restrictedmem(new->restricted_file)) {
-> +                       r = -EINVAL;
-> +                       goto out;
-> +               }
-> +               new->restricted_offset = mem->restricted_offset;
-> +       }
-> +
-> +       new->kvm = kvm;
->
->         r = kvm_set_memslot(kvm, old, new, change);
->         if (r)
-> -               kfree(new);
-> +               goto out;
-> +
-> +       return 0;
-> +
-> +out:
-> +       if (new->restricted_file)
-> +               fput(new->restricted_file);
-> +       kfree(new);
->         return r;
->  }
->  EXPORT_SYMBOL_GPL(__kvm_set_memory_region);
-> @@ -2351,6 +2506,8 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
->  #ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
->  static u64 kvm_supported_mem_attributes(struct kvm *kvm)
->  {
-> +       if (kvm_arch_has_private_mem(kvm))
-> +               return KVM_MEMORY_ATTRIBUTE_PRIVATE;
->         return 0;
->  }
->
-> @@ -4822,16 +4979,28 @@ static long kvm_vm_ioctl(struct file *filp,
->         }
->         case KVM_SET_USER_MEMORY_REGION: {
->                 struct kvm_user_mem_region mem;
-> -               unsigned long size = sizeof(struct kvm_userspace_memory_region);
-> +               unsigned int flags_offset = offsetof(typeof(mem), flags);
-> +               unsigned long size;
-> +               u32 flags;
->
->                 kvm_sanity_check_user_mem_region_alias();
->
-> +               memset(&mem, 0, sizeof(mem));
-> +
->                 r = -EFAULT;
-> +               if (get_user(flags, (u32 __user *)(argp + flags_offset)))
-> +                       goto out;
-> +
-> +               if (flags & KVM_MEM_PRIVATE)
-> +                       size = sizeof(struct kvm_userspace_memory_region_ext);
-> +               else
-> +                       size = sizeof(struct kvm_userspace_memory_region);
-> +
->                 if (copy_from_user(&mem, argp, size))
->                         goto out;
->
->                 r = -EINVAL;
-> -               if (mem.flags & KVM_MEM_PRIVATE)
-> +               if ((flags ^ mem.flags) & KVM_MEM_PRIVATE)
->                         goto out;
->
->                 r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
-> --
-> 2.25.1
->
+>  
+>  #define REGSET_GENERAL \
+> @@ -1267,6 +1268,17 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
+>  		.active		= ioperm_active,
+>  		.regset_get	= ioperm_get
+>  	},
+> +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +	[REGSET64_SSP] = {
+> +		.core_note_type	= NT_X86_SHSTK,
+> +		.n		= 1,
+> +		.size		= sizeof(u64),
+> +		.align		= sizeof(u64),
+> +		.active		= ssp_active,
+> +		.regset_get	= ssp_get,
+> +		.set		= ssp_set
+> +	},
+> +#endif
+>  };
+>  
+>  static const struct user_regset_view user_x86_64_view = {
+> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+> index c7b056af9ef0..e9283f0641c4 100644
+> --- a/include/uapi/linux/elf.h
+> +++ b/include/uapi/linux/elf.h
+> @@ -406,6 +406,8 @@ typedef struct elf64_shdr {
+>  #define NT_386_TLS	0x200		/* i386 TLS slots (struct user_desc) */
+>  #define NT_386_IOPERM	0x201		/* x86 io permission bitmap (1=deny) */
+>  #define NT_X86_XSTATE	0x202		/* x86 extended state using xsave */
+> +/* Old binutils treats 0x203 as a CET state */
+> +#define NT_X86_SHSTK	0x204		/* x86 SHSTK state */
+>  #define NT_S390_HIGH_GPRS	0x300	/* s390 upper register halves */
+>  #define NT_S390_TIMER	0x301		/* s390 timer register */
+>  #define NT_S390_TODCMP	0x302		/* s390 TOD clock comparator register */
+> -- 
+> 2.17.1
+> 
+
+-- 
+Sincerely yours,
+Mike.
