@@ -2,337 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C481064873E
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 18:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 134B6648779
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 18:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiLIRHE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Dec 2022 12:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S230166AbiLIROF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Dec 2022 12:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbiLIRGo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 12:06:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9700FACB;
-        Fri,  9 Dec 2022 09:04:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FECF622C9;
-        Fri,  9 Dec 2022 17:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9986C433EF;
-        Fri,  9 Dec 2022 17:04:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670605487;
-        bh=gQXA+j2g4oXs6RnRNrCZ0AkHANYxi91gTp0MorfjTGI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ICmW33ahP9H3MfZN7R7k0WrqPoeMU3QossaBBbInxc9p29nNkyqIKVKZKPN3wvnMA
-         H4gGLoeNiu/SJ4nUCF+01yi89YfqqGZmaH4ykfsg7Zakdisjl7y0+YWjRRsv09cwSZ
-         ysEMrqXZRcUCLdgxLP/y9QD0LU+r4mCFQnC1kslVdO6ok3RSwflZiTSquCHlvQyAdZ
-         2K1K7BBbqbV01VjBT8Rt2u9ffacu/fJ46WI51h0DhQfQt4/fmI+/QixriXEana3qRj
-         pa2KH0kR3m8xVYpjPl/j8R5voWGbnqrpqQTUyBaQPS7no8zEIEskmkPOSSlIWC+l1y
-         L5UxNWbAnZrYQ==
-Date:   Fri, 9 Dec 2022 19:04:24 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
+        with ESMTP id S230120AbiLIRNp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 12:13:45 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A91F4EC0B;
+        Fri,  9 Dec 2022 09:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670606013; x=1702142013;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=yoeWqQUC9hNaOqVWiGaAPxhG1gocXAJzCIpY4DOduvw=;
+  b=X07LoaO2EZMc/AuBC+A0HEMiDjjZO2ILdLV2l12QHrxlDwRhrSwH4Ytv
+   AyFPX1KHf+9TyZ9cgbIQrPeLcEfaSLYrf5n47G9QIGCmgBYntYyHf9Tpb
+   GXoj8wpjDVJrtAlbNjTKT47vDNQ6CYpuim8Aj2KKO6Z219uUmGfDk+XVI
+   ps0n1qFfrvelFfZkSkacFZFLBO63+lTUrfziuUoGPB9yuRqPptO+UE+2i
+   O8BAkpanowG80mqQuYA1ktHJ4lB2pNAsWnIfbwCCni3ELXFbfiBGmbdzI
+   FVekilbd9mbW2zo71E/bbjYSQaj/fCJ1qlc81XGkqiOtl52YYRZ2RIBl5
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="344540609"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="344540609"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 09:08:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="789776100"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="789776100"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Dec 2022 09:08:29 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 9 Dec 2022 09:08:23 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Fri, 9 Dec 2022 09:08:23 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Fri, 9 Dec 2022 09:08:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XxbwbJ6heEoA5ZG0DZwfio7Le8o+t0OcqE4cPn2nxWD9oTHrsCsG/j/CKXDsukLyhLK46JXdGTrIjWDNOhv5KR/JAOYj5UIJu4Qxfm4Y2CJzwiig68rK1KB3AC7FBJSkKUcmkIWqaBzHNjhcq4IUUxaCfT8VI2IRYujQQuVZsguzIXk0zVbEjETMn18qy4NDLQbEj5PO4Jul9WnoSCc660i5asFN0BlUBuuUWELc++VCjJBg3cjVbua62UNdodgQbkkZF4lN9EKrsnxFDZIYBJ+sayGwyYR7yfQPG0XGlmaHlffIHC3nowgI+iBmSW0K5HByqp139CPDiioBe4456g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yoeWqQUC9hNaOqVWiGaAPxhG1gocXAJzCIpY4DOduvw=;
+ b=BSUS4zooREOPnk/UGuV/HzanSr/7qtoJeHmYe3jH9GrZ+JkHI28RRmxfAMSmV0vRk9rO0qCJTNs7gEAkokKZUimFd9GlmtImaIpHo3ffTsi1SMg8Ef8ujIp7FzYJxahaOsRB6l6yBVolxLVy8XyMO5ri7Rua4HDY3vt9F1AKvrcidbBJGokcSvSC6+fBf5R01q6M8iXkKkGVkRdF6uqG6CwB/S6dPeZf3R2zNj00if4dt/fkpKNb34QtrbLlFQJqiP2fKS5h0nbCGBBrfwdH2Z6CRPoyocIvVxgQOLINHB2xjXTEEXB+cVWWR4/KMhvD8ErDxEBjITLODVbl2FY8aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by PH0PR11MB4854.namprd11.prod.outlook.com (2603:10b6:510:35::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
+ 2022 17:08:21 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::7ed5:a749:7b4f:ceff]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::7ed5:a749:7b4f:ceff%5]) with mapi id 15.20.5880.016; Fri, 9 Dec 2022
+ 17:08:20 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "rppt@kernel.org" <rppt@kernel.org>
+CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
 Subject: Re: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
-Message-ID: <Y5NqmLqXfXpowoSM@kernel.org>
+Thread-Topic: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
+Thread-Index: AQHZBq9/FzxBTfcuS0GSoDQuHiOx0a5l0zQAgAABGIA=
+Date:   Fri, 9 Dec 2022 17:08:20 +0000
+Message-ID: <a34d766dc3bf09e445320e0f94fb8d8e6301c7b5.camel@intel.com>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-38-rick.p.edgecombe@intel.com>
+         <20221203003606.6838-38-rick.p.edgecombe@intel.com>
+         <Y5NqmLqXfXpowoSM@kernel.org>
+In-Reply-To: <Y5NqmLqXfXpowoSM@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|PH0PR11MB4854:EE_
+x-ms-office365-filtering-correlation-id: 8a927fe2-91d7-4e4b-8eba-08dada07f931
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: P5JwdStVSgyjSUrKZIiXXLN47TfX1xCIY7u5BYP4DYceLJxYRhvRUpPKKpLrDoduRLWUz0oh5aNIeIOE5KwHyq3wRNWkBYqDMEwRobLzWGglr+17F27BJszG9qFp6Um/4Kz4kDzNtZAwtFusRIeFupnwL/qPQH1qxkR+mv8pJDJ8pywsXKrUc3+bbbVsbSdgLn8uMITIiJyVIdS94Slk3VqICR7yTDofvZ5YdBlOGGDOqT84tebGBHBhsZja7fiGCbgZm5DdcjSs4VI9xKV3DRS3n3u0DQtfg+BgmqFh3AHNdRzv64VFw8ZiIV22MVAjgjMnvmjflrc4TDbzLQb/Oeuk8dgcCL5pKnp4/+OJ4R0+rn3Vtai5eBMMMVNySgMzEJM8KXT1IbQpHaSr9Ht+vR2fW2gb5HfBO9x3pGhAhI/b2kYDkYWCsMrMfaFXz0hmjinp3WfRPBafmxP+AEAAVdzpChyCqz00FHKf1v3SUgD2Yh6aT2oxqdNwYXtrH99lMgfyJ/nmFYhNOos3NB4LkcSRV35dckBPnXqOImgXBRm0kdBjyWsC5PdNFkwLrwjvkDdGZ1Q9mGrXYcS1aJoobSwv8Rn2WWJcAIZ0CBda5xU7eBAIevTteYx9G1xEsn4oSRW3KCHD2S6t0g3caSFeqEqKC/Zz6KsFUji+Bpxedslpeer5eSL/uERCAGR+Jr139vtmyfLpn00AbEpwCY+v2zVK9UZdGLz9EsMYKiwk/Ms=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(346002)(39860400002)(136003)(366004)(451199015)(82960400001)(38100700002)(122000001)(38070700005)(86362001)(2616005)(6916009)(8676002)(316002)(54906003)(186003)(478600001)(6512007)(6506007)(26005)(71200400001)(6486002)(7406005)(2906002)(7416002)(4744005)(5660300002)(76116006)(66476007)(4326008)(36756003)(91956017)(64756008)(66556008)(66446008)(66946007)(8936002)(41300700001)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b0lNejdtVVNlanMyWUc2dDJqdTc5WFhIajZDS2dHNmxQTVErU1d0am9Vdm0r?=
+ =?utf-8?B?RWR1SkNEQ3ZZdkZaZTFLKzZyS2lNZGJvbHlqaHY5K2VkOEY1cmR2MjdQY3RM?=
+ =?utf-8?B?RDVkNzFESURhVjBHYitzRGR4SzVNTmNFcUZNMlpiSEZacVF5YXdJR251TW1o?=
+ =?utf-8?B?UGROU1RxdCtsUWs0K2JWbTYzYnNzc2VLdjhGWE5mOHV4L2QzbVhPeVhtM2lW?=
+ =?utf-8?B?a2ZBdGNMNFF5WmtlejVzSVpxVUVpekJUYjBUUnVrM0Fsd0gzWi9oT1plbmpu?=
+ =?utf-8?B?SmVheXlRdG9xZkdkaitLMDFBZFd1NDhCK2hHZkh1UzFjSGdIcXhDRVk5UURN?=
+ =?utf-8?B?YWNhY0pQSmpRZGJPd2hsOVg1QWxhWFhyWTJpb0g4TWo2Vy9VYjc0d0FlMWlU?=
+ =?utf-8?B?Qi9kc21KZEMyRWtwZ1JpQllERlpiRFc4SEp5dlZLQ04rb0poMEdtSDZsOEhm?=
+ =?utf-8?B?b01KdlZvVjB5NGV3QzhVVWk2bnJLT1FOZk9PKzhONlF2NE5HaEZvOGpEUVk0?=
+ =?utf-8?B?TGF2VGlKNlh6cEk5dXBRenhqeGtKNHJianduR0NjRjFqdmV3U1o2N2dCRWF0?=
+ =?utf-8?B?by9IaDJyVjMxNlZPMkZva0hJc2FML2d2NitDMlFJT3lBMWRBVUZ3end1YThY?=
+ =?utf-8?B?bEdVY1pMQTdieWJoSGdZa0hWWVR5Y0h2VlI5QldEWGJHYitoRmpIdFFQckR4?=
+ =?utf-8?B?SmNTT0FxTEhBT3E3dG1oZHhCQlB0dGhNREF1T1AvZ2RDNTd6dm1RVEl5STdt?=
+ =?utf-8?B?Vnh4MEhBOUk5MG9Qb1Y1aVFrcmxOZWlWWnZwM1JkWVM4bXNsaTR0RkdtMU9P?=
+ =?utf-8?B?OVUrOXlaS3FCenVBQndkTjVJZEFNUjlzcFYrYkRYazg2bnJxVEYvcks2cEhY?=
+ =?utf-8?B?bWhMN3c5QTcyOWI1UTl1VDhaN3BOUXV5ckwzaUN4MXZvSHUwK1Rkc1VJWDhM?=
+ =?utf-8?B?TkNwNDRuREVMQlBaSHZaRWlueEI0SVFSbDB0UFcyOThTL0tRMDFvbm85elps?=
+ =?utf-8?B?UHlKNnFOY2VhVXJGanIzaTNlVUd0VUJpRk0xdzJxSDlhb0hta1NBV0JlT1Jp?=
+ =?utf-8?B?SFFKbEtWMyt2SEtSUHpDYUFOcjJ0eVY1M1B2aXZOSDk1Tk9wVFFmOStOYllR?=
+ =?utf-8?B?dldpNEhaUUNGSGpKQ011UEc3VUdQWWNISm9DVjJmN2JaN0x1L2RsQWNRSVRv?=
+ =?utf-8?B?Q3doSUFuRXZEVG5zWjRuMUd4Ym4xenRwYlY0di9OTWNlNmdjUkVEajd5eVRY?=
+ =?utf-8?B?a3drc3diZXl2Nk5BKzhxaTJKWjVFWFdmcWtDc1Z6R1Z0ajNlR1o0cTY1RWM4?=
+ =?utf-8?B?QzNMMEVHekx1d0prdTBwL09Sb25keTdtdHNMQUNIN3FvY0QxdEkydmpBMWdG?=
+ =?utf-8?B?Ull3RmpRUU9EeHR1R01OR1VLSEZZdzdjMlVSY2tJelB5dS8rZTJUR2FleFQ2?=
+ =?utf-8?B?UlFudzk5TVNFWXFib0VhUHhybTg3TDljb3N4UzJ1VTZBUGM3ODA5NjVrWDhk?=
+ =?utf-8?B?ZWIwNVlxcnc1UDNCSm9ONUlqQzhZRDFSQWQ4dTFnczA3U01FY0lSOHB4UUp1?=
+ =?utf-8?B?YjRhbzF0eXNKV2p0Vmc2cUcweW82eEgzd3I1WFlJZ3RFOUpPVEMybEFLb3Vm?=
+ =?utf-8?B?dkVDdDFGaHJ4OTZ6ZVZqZWpPbW5Xdk1lc3ZlTTJOUTdndE5QMnRPVzVnQzRx?=
+ =?utf-8?B?S29WWGkzNy8xZGZuOHZwOXdtalp2NUYvQktYUHhpRzEwL3c0OHYwci84S2VS?=
+ =?utf-8?B?Y3N5eDZOYVRGOEg3MW1sRFZudnRZMXRUQU9nUndCdFYwV1JKMjc4VU1kbFg4?=
+ =?utf-8?B?MU9UMHhRUGpiQkVwT3Y0b3lHaVk3bHRmMERjOWRRTkVnRWlBdXRCMGZOYlp1?=
+ =?utf-8?B?T3ErZE8zSzlBSWxXZ2FkZTg5SC9oVS85WGdsbU9iNlhGNC9lc2hHbFVFVndU?=
+ =?utf-8?B?T2FJNUxKcVF6bmJKbEFXSnh3NUhBcThGVGZicjlnMjZIZmZyTE51Yi9zSlEr?=
+ =?utf-8?B?QkNhWlFoelNPUzBCMjRGSXdMU3NLa3JGeXBJTjE0UDBEeC80Z1ZwVnZCbENG?=
+ =?utf-8?B?Z2dKcTlEK1ZmbEFPenJvMFozdGJXSkRGWjhFMjR6TTJlRnVla3ZNTGQxZmxH?=
+ =?utf-8?B?SXNQdFAzRUV5OGdDbHBLbVpQRncyNDBRTnovNWk1OFJTYkNqYlNZMHF5NXpL?=
+ =?utf-8?Q?oD6jWlL2BI4xqSq7bvCjA9Y=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <569840192EA7494C8D556A26ED0B8DFC@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-38-rick.p.edgecombe@intel.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a927fe2-91d7-4e4b-8eba-08dada07f931
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2022 17:08:20.6591
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cxdLyadHriMNKq2239kflfyTHxaxJxqH48g5PNTNPm1VzuiVti/BD4wzmB0LYAyH9uI63Ebc0UGGtKd2J4X5JcN5hWcdfYb4kA+FOEzMypA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4854
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Rick,
-
-On Fri, Dec 02, 2022 at 04:36:04PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> Some applications (like GDB) would like to tweak shadow stack state via
-> ptrace. This allows for existing functionality to continue to work for
-> seized shadow stack applications. Provide an regset interface for
-> manipulating the shadow stack pointer (SSP).
-> 
-> There is already ptrace functionality for accessing xstate, but this
-> does not include supervisor xfeatures. So there is not a completely
-> clear place for where to put the shadow stack state. Adding it to the
-> user xfeatures regset would complicate that code, as it currently shares
-> logic with signals which should not have supervisor features.
-> 
-> Don't add a general supervisor xfeature regset like the user one,
-> because it is better to maintain flexibility for other supervisor
-> xfeatures to define their own interface. For example, an xfeature may
-> decide not to expose all of it's state to userspace, as is actually the
-> case for  shadow stack ptrace functionality. A lot of enum values remain
-> to be used, so just put it in dedicated shadow stack regset.
-> 
-> The only downside to not having a generic supervisor xfeature regset,
-> is that apps need to be enlightened of any new supervisor xfeature
-> exposed this way (i.e. they can't try to have generic save/restore
-> logic). But maybe that is a good thing, because they have to think
-> through each new xfeature instead of encountering issues when new a new
-> supervisor xfeature was added.
-> 
-> By adding a shadow stack regset, it also has the effect of including the
-> shadow stack state in a core dump, which could be useful for debugging.
-> 
-> The shadow stack specific xstate includes the SSP, and the shadow stack
-> and WRSS enablement status. Enabling shadow stack or wrss in the kernel
-> involves more than just flipping the bit. The kernel is made aware that
-> it has to do extra things when cloning or handling signals. That logic
-> is triggered off of separate feature enablement state kept in the task
-> struct. So the flipping on HW shadow stack enforcement without notifying
-> the kernel to change its behavior would severely limit what an application
-> could do without crashing, and the results would depend on kernel
-> internal implementation details. There is also no known use for controlling
-> this state via prtace today. So only expose the SSP, which is something
-> that userspace already has indirect control over.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> ---
-> 
-> v4:
->  - Make shadow stack only. Reduce to only supporting SSP register, and
->    remove CET references (peterz)
->  - Add comment to not use 0x203, becuase binutils already looks for it in
->    coredumps. (Christina Schimpe)
-> 
-> v3:
->  - Drop dependence on thread.shstk.size, and use thread.features bits
->  - Drop 32 bit support
-> 
-> v2:
->  - Check alignment on ssp.
->  - Block IBT bits.
->  - Handle init states instead of returning error.
->  - Add verbose commit log justifying the design.
-> 
-> Yu-Cheng v12:
->  - Return -ENODEV when CET registers are in INIT state.
->  - Check reserved/non-support bits from user input.
-> 
->  arch/x86/include/asm/fpu/regset.h |  7 +--
->  arch/x86/kernel/fpu/regset.c      | 87 +++++++++++++++++++++++++++++++
->  arch/x86/kernel/ptrace.c          | 12 +++++
->  include/uapi/linux/elf.h          |  2 +
->  4 files changed, 105 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/fpu/regset.h b/arch/x86/include/asm/fpu/regset.h
-> index 4f928d6a367b..697b77e96025 100644
-> --- a/arch/x86/include/asm/fpu/regset.h
-> +++ b/arch/x86/include/asm/fpu/regset.h
-> @@ -7,11 +7,12 @@
->  
->  #include <linux/regset.h>
->  
-> -extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active;
-> +extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active,
-> +				ssp_active;
->  extern user_regset_get2_fn fpregs_get, xfpregs_get, fpregs_soft_get,
-> -				 xstateregs_get;
-> +				 xstateregs_get, ssp_get;
->  extern user_regset_set_fn fpregs_set, xfpregs_set, fpregs_soft_set,
-> -				 xstateregs_set;
-> +				 xstateregs_set, ssp_set;
->  
->  /*
->   * xstateregs_active == regset_fpregs_active. Please refer to the comment
-> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-> index 6d056b68f4ed..00f3d5c9b682 100644
-> --- a/arch/x86/kernel/fpu/regset.c
-> +++ b/arch/x86/kernel/fpu/regset.c
-> @@ -8,6 +8,7 @@
->  #include <asm/fpu/api.h>
->  #include <asm/fpu/signal.h>
->  #include <asm/fpu/regset.h>
-> +#include <asm/prctl.h>
->  
->  #include "context.h"
->  #include "internal.h"
-> @@ -174,6 +175,92 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
->  	return ret;
->  }
->  
-> +
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +int ssp_active(struct task_struct *target, const struct user_regset *regset)
-> +{
-> +	if (shstk_enabled())
-
-This is not going to work with ptrace as shstk_enabled() checks current
-rather than target.
-
-> +		return regset->n;
-> +
-> +	return 0;
-> +}
-> +
-> +int ssp_get(struct task_struct *target, const struct user_regset *regset,
-> +		struct membuf to)
-> +{
-> +	struct fpu *fpu = &target->thread.fpu;
-> +	struct cet_user_state *cetregs;
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK))
-> +		return -ENODEV;
-> +
-> +	sync_fpstate(fpu);
-> +	cetregs = get_xsave_addr(&fpu->fpstate->regs.xsave, XFEATURE_CET_USER);
-> +	if (!cetregs) {
-> +		/*
-> +		 * The registers are the in the init state. The init values for
-> +		 * these regs are zero, so just zero the output buffer.
-> +		 */
-> +		membuf_zero(&to, sizeof(cetregs->user_ssp));
-> +		return 0;
-> +	}
-> +
-> +	return membuf_write(&to, (unsigned long *)&cetregs->user_ssp,
-> +			    sizeof(cetregs->user_ssp));
-> +}
-> +
-> +int ssp_set(struct task_struct *target, const struct user_regset *regset,
-> +		  unsigned int pos, unsigned int count,
-> +		  const void *kbuf, const void __user *ubuf)
-> +{
-> +	struct fpu *fpu = &target->thread.fpu;
-> +	struct xregs_state *xsave = &fpu->fpstate->regs.xsave;
-> +	struct cet_user_state *cetregs;
-> +	unsigned long user_ssp;
-> +	int r;
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK) ||
-> +	    !ssp_active(target, regset))
-> +		return -ENODEV;
-> +
-> +	r = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_ssp, 0, -1);
-> +	if (r)
-> +		return r;
-> +
-> +	/*
-> +	 * Some kernel instructions (IRET, etc) can cause exceptions in the case
-> +	 * of disallowed CET register values. Just prevent invalid values.
-> +	 */
-> +	if ((user_ssp >= TASK_SIZE_MAX) || !IS_ALIGNED(user_ssp, 8))
-> +		return -EINVAL;
-> +
-> +	fpu_force_restore(fpu);
-> +
-> +	/*
-> +	 * Don't want to init the xfeature until the kernel will definetely
-> +	 * overwrite it, otherwise if it inits and then fails out, it would
-> +	 * end up initing it to random data.
-> +	 */
-> +	if (!xfeature_saved(xsave, XFEATURE_CET_USER) &&
-> +	    WARN_ON(init_xfeature(xsave, XFEATURE_CET_USER)))
-> +		return -ENODEV;
-> +
-> +	cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
-> +	if (WARN_ON(!cetregs)) {
-> +		/*
-> +		 * This shouldn't ever be NULL because it was successfully
-> +		 * inited above if needed. The only scenario would be if an
-> +		 * xfeature was somehow saved in a buffer, but not enabled in
-> +		 * xsave.
-> +		 */
-> +		return -ENODEV;
-> +	}
-> +
-> +	cetregs->user_ssp = user_ssp;
-> +	return 0;
-> +}
-> +#endif /* CONFIG_X86_USER_SHADOW_STACK */
-> +
->  #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
->  
->  /*
-> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
-> index dfaa270a7cc9..095f04bdabdc 100644
-> --- a/arch/x86/kernel/ptrace.c
-> +++ b/arch/x86/kernel/ptrace.c
-> @@ -58,6 +58,7 @@ enum x86_regset_64 {
->  	REGSET64_FP,
->  	REGSET64_IOPERM,
->  	REGSET64_XSTATE,
-> +	REGSET64_SSP,
->  };
->  
->  #define REGSET_GENERAL \
-> @@ -1267,6 +1268,17 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
->  		.active		= ioperm_active,
->  		.regset_get	= ioperm_get
->  	},
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +	[REGSET64_SSP] = {
-> +		.core_note_type	= NT_X86_SHSTK,
-> +		.n		= 1,
-> +		.size		= sizeof(u64),
-> +		.align		= sizeof(u64),
-> +		.active		= ssp_active,
-> +		.regset_get	= ssp_get,
-> +		.set		= ssp_set
-> +	},
-> +#endif
->  };
->  
->  static const struct user_regset_view user_x86_64_view = {
-> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-> index c7b056af9ef0..e9283f0641c4 100644
-> --- a/include/uapi/linux/elf.h
-> +++ b/include/uapi/linux/elf.h
-> @@ -406,6 +406,8 @@ typedef struct elf64_shdr {
->  #define NT_386_TLS	0x200		/* i386 TLS slots (struct user_desc) */
->  #define NT_386_IOPERM	0x201		/* x86 io permission bitmap (1=deny) */
->  #define NT_X86_XSTATE	0x202		/* x86 extended state using xsave */
-> +/* Old binutils treats 0x203 as a CET state */
-> +#define NT_X86_SHSTK	0x204		/* x86 SHSTK state */
->  #define NT_S390_HIGH_GPRS	0x300	/* s390 upper register halves */
->  #define NT_S390_TIMER	0x301		/* s390 timer register */
->  #define NT_S390_TODCMP	0x302		/* s390 TOD clock comparator register */
-> -- 
-> 2.17.1
-> 
-
--- 
-Sincerely yours,
-Mike.
+T24gRnJpLCAyMDIyLTEyLTA5IGF0IDE5OjA0ICswMjAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
+PiA+ICAgLyoNCj4gPiAgICAqIHhzdGF0ZXJlZ3NfYWN0aXZlID09IHJlZ3NldF9mcHJlZ3NfYWN0
+aXZlLiBQbGVhc2UgcmVmZXIgdG8gdGhlDQo+ID4gY29tbWVudA0KPiA+IGRpZmYgLS1naXQgYS9h
+cmNoL3g4Ni9rZXJuZWwvZnB1L3JlZ3NldC5jDQo+ID4gYi9hcmNoL3g4Ni9rZXJuZWwvZnB1L3Jl
+Z3NldC5jDQo+ID4gaW5kZXggNmQwNTZiNjhmNGVkLi4wMGYzZDVjOWI2ODIgMTAwNjQ0DQo+ID4g
+LS0tIGEvYXJjaC94ODYva2VybmVsL2ZwdS9yZWdzZXQuYw0KPiA+ICsrKyBiL2FyY2gveDg2L2tl
+cm5lbC9mcHUvcmVnc2V0LmMNCj4gPiBAQCAtOCw2ICs4LDcgQEANCj4gPiAgICNpbmNsdWRlIDxh
+c20vZnB1L2FwaS5oPg0KPiA+ICAgI2luY2x1ZGUgPGFzbS9mcHUvc2lnbmFsLmg+DQo+ID4gICAj
+aW5jbHVkZSA8YXNtL2ZwdS9yZWdzZXQuaD4NCj4gPiArI2luY2x1ZGUgPGFzbS9wcmN0bC5oPg0K
+PiA+ICAgDQo+ID4gICAjaW5jbHVkZSAiY29udGV4dC5oIg0KPiA+ICAgI2luY2x1ZGUgImludGVy
+bmFsLmgiDQo+ID4gQEAgLTE3NCw2ICsxNzUsOTIgQEAgaW50IHhzdGF0ZXJlZ3Nfc2V0KHN0cnVj
+dCB0YXNrX3N0cnVjdCAqdGFyZ2V0LA0KPiA+IGNvbnN0IHN0cnVjdCB1c2VyX3JlZ3NldCAqcmVn
+c2V0LA0KPiA+ICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICAgfQ0KPiA+ICAgDQo+ID4gKw0KPiA+
+ICsjaWZkZWYgQ09ORklHX1g4Nl9VU0VSX1NIQURPV19TVEFDSw0KPiA+ICtpbnQgc3NwX2FjdGl2
+ZShzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRhcmdldCwgY29uc3Qgc3RydWN0DQo+ID4gdXNlcl9yZWdz
+ZXQgKnJlZ3NldCkNCj4gPiArew0KPiA+ICsgICAgIGlmIChzaHN0a19lbmFibGVkKCkpDQo+IA0K
+PiBUaGlzIGlzIG5vdCBnb2luZyB0byB3b3JrIHdpdGggcHRyYWNlIGFzIHNoc3RrX2VuYWJsZWQo
+KSBjaGVja3MNCj4gY3VycmVudA0KPiByYXRoZXIgdGhhbiB0YXJnZXQuDQoNCk9oIHJpZ2h0LCB0
+aGFua3MuIEkgY2FuIGNoYW5nZSBzaHN0a19lbmFibGVkKCkgdG8gdGFrZSBhIHRhc2tfc3RydWN0
+Lg0K
