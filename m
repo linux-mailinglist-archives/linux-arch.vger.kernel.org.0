@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67427647C01
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 03:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B3A647C0E
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 03:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiLICKG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Dec 2022 21:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40654 "EHLO
+        id S229662AbiLICMM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Dec 2022 21:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLICKF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 21:10:05 -0500
+        with ESMTP id S230119AbiLICML (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Dec 2022 21:12:11 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710A464EC;
-        Thu,  8 Dec 2022 18:10:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466551F63B;
+        Thu,  8 Dec 2022 18:12:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFB2762119;
-        Fri,  9 Dec 2022 02:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A56FC433B4;
-        Fri,  9 Dec 2022 02:10:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9FEA62119;
+        Fri,  9 Dec 2022 02:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46481C4339C;
+        Fri,  9 Dec 2022 02:12:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670551803;
-        bh=Ia3V72Uk7M4KXmgjLjEt+8wDzqEqpUXfSTB4GcRrC0s=;
+        s=k20201202; t=1670551930;
+        bh=rVgKlffiEF2OtdlS00jROW43FCHOBRtxFF76SiaLxlA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=D9c2U83ObEmD3eWcNvD9nAYLfsSKLqytAljVRtOqFbLravBvSJh76EWTTYjb3xbSD
-         2A4mfWTkFJNHkKEdXkdov4ZXzkq570D2LIl/2YhhUcSE4rD1XDeasAAKlzr/ZYw1Ms
-         xcNjmDJrnGmdrsHMbKmlTLOfbQ2f8sbDDAzgnC+lLRFMAg9q+wEEKnQfci5bK2vsg1
-         ZvB04ge3qN5XyTZQK/KH1t8Me+SZH6fp734MAeqIM7ifIrRxL2oh2/iAc5/uwEqqxo
-         eyLLaRIp3GCjx0Us81ZS2VOuIL1z+/NYvrQvY/751t73Pj36ZAZ4CODEzak6BIjFOf
-         8MrjDP+tfFSxg==
-Received: by mail-ej1-f50.google.com with SMTP id b2so8289676eja.7;
-        Thu, 08 Dec 2022 18:10:03 -0800 (PST)
-X-Gm-Message-State: ANoB5plaHusUJ9tYxSSQVf4kgrgIZao4wlaSHA5LDRUajYjr920HvBOU
-        Gxqiue0zCAsOeTOuI1vejvvh+RZHwX5MUkyzFSY=
-X-Google-Smtp-Source: AA0mqf7vJJcYsX9o1C4cJqIT0SLKDAkYd+pPh2biTTTXnkbzmntY1yMQBnusQEQqyuAYUACSW7hpi16d7JAo34sLwQg=
-X-Received: by 2002:a17:906:8309:b0:7c0:dab0:d722 with SMTP id
- j9-20020a170906830900b007c0dab0d722mr17095382ejx.353.1670551801415; Thu, 08
- Dec 2022 18:10:01 -0800 (PST)
+        b=g9JvhGCrD0QapB7/ih8KC+9k5a69NF+gOr+Se463cyRY4QYyHoyPgaRv8aYKN0IMO
+         z3aiHQzln/a3AheZHGQMewXtpYtA82iDMnMmrmNyrn3GIkfxPAW//jB+pK1/ywgCZR
+         SHuFZywKDCWGMUxEItiKGzzpore1Ijf3Nsq2rC8dRXjA9F1BKaUAkzJ56lq9FrPuAe
+         rBfwhNjBmAOWxUCL/G5qwimFUaS8OKJZK1092uYej+zzVEmGeQDjrgkDDsBhvbWuQy
+         JDsJkohC2NOQX5nmwGxBkJp3ljlhZWOLbByYSPp4Eo8GWWlKPbFcJAeyrLQXguBro9
+         zRSgmmV+KMl+A==
+Received: by mail-ej1-f51.google.com with SMTP id n21so8292270ejb.9;
+        Thu, 08 Dec 2022 18:12:10 -0800 (PST)
+X-Gm-Message-State: ANoB5pklWSONcYwSOl3hc8XULtfxZytqEvOzJOOJmlaGycaxPrIE5n9L
+        0eAkildMdjRF6xwMAsw0kFqQ76JPo1n9Y4agoDY=
+X-Google-Smtp-Source: AA0mqf6qZESy7WGR2SxFc18ZJVgTfGA4tBgU5tArg1J1Ui4W5i5IwgHDF/9ZnULCqfySS6hAFP7XNiojuRKfKUdCQUc=
+X-Received: by 2002:a17:906:b213:b0:7c0:f7af:7c5e with SMTP id
+ p19-20020a170906b21300b007c0f7af7c5emr13505347ejz.406.1670551928446; Thu, 08
+ Dec 2022 18:12:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-10-guoren@kernel.org>
- <87o7sew6ey.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87o7sew6ey.fsf@all.your.base.are.belong.to.us>
+References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-11-guoren@kernel.org>
+ <87mt7yw6eh.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87mt7yw6eh.fsf@all.your.base.are.belong.to.us>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 9 Dec 2022 10:09:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTT1YNubBG_RMzwsWVXk0X0nwQvTM2r5NjRvVN+1x1RHMw@mail.gmail.com>
-Message-ID: <CAJF2gTT1YNubBG_RMzwsWVXk0X0nwQvTM2r5NjRvVN+1x1RHMw@mail.gmail.com>
-Subject: Re: [PATCH -next V10 09/10] riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
+Date:   Fri, 9 Dec 2022 10:11:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR+zbuJDQuW+=wEmQjF7xEsMokBW+yvTxXff38VYwSSKA@mail.gmail.com>
+Message-ID: <CAJF2gTR+zbuJDQuW+=wEmQjF7xEsMokBW+yvTxXff38VYwSSKA@mail.gmail.com>
+Subject: Re: [PATCH -next V10 10/10] riscv: stack: Add config of thread stack size
 To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
         peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
@@ -78,99 +78,19 @@ te:
 >
 > > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > Add the HAVE_SOFTIRQ_ON_OWN_STACK feature for the IRQ_STACKS config. Th=
-e
-> > irq and softirq use the same independent irq_stack of percpu by time
-> > division multiplexing.
-> >
-> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > ---
-> >  arch/riscv/Kconfig      |  7 ++++---
-> >  arch/riscv/kernel/irq.c | 33 +++++++++++++++++++++++++++++++++
-> >  2 files changed, 37 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 0a9d4bdc0338..bd4c4ae4cdc9 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -447,12 +447,13 @@ config FPU
-> >         If you don't know what to do here, say Y.
-> >
-> >  config IRQ_STACKS
-> > -     bool "Independent irq stacks" if EXPERT
-> > +     bool "Independent irq & softirq stacks" if EXPERT
-> >       default y
-> >       select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> > +     select HAVE_SOFTIRQ_ON_OWN_STACK
+> > 0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
 >
-> HAVE_IRQ_EXIT_ON_IRQ_STACK is used by softirq.c Shouldn't that be
-> selected introduced in this patch, instead of the previous one?
-This patch depends on the previous one. And the previous one could
-work separately.
+> checkpatch complains here: Use "commit SHA...".
+Okay, I would check that.
 
 >
-> >       help
-> > -       Add independent irq stacks for percpu to prevent kernel stack o=
-verflows.
-> > -       We may save some memory footprint by disabling IRQ_STACKS.
-> > +       Add independent irq & softirq stacks for percpu to prevent kern=
-el stack
-> > +       overflows. We may save some memory footprint by disabling IRQ_S=
-TACKS.
+> > thread size mandatory, but some scenarios, such as D1 with a small
+> > memory footprint, would suffer from that. After independent irq stack
+> > support, let's give users a choice to determine their custom stack size=
+.
 >
-> Same comment from previous patch. Please use the same wording/config as
-> other archs.
->
-> >  endmenu # "Platform type"
-> >
-> > diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-> > index 5d77f692b198..a6406da34937 100644
-> > --- a/arch/riscv/kernel/irq.c
-> > +++ b/arch/riscv/kernel/irq.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/seq_file.h>
-> >  #include <asm/smp.h>
-> >  #include <asm/vmap_stack.h>
-> > +#include <asm/softirq_stack.h>
-> >
-> >  #ifdef CONFIG_IRQ_STACKS
-> >  static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
-> > @@ -38,6 +39,38 @@ static void init_irq_stacks(void)
-> >               per_cpu(irq_stack_ptr, cpu) =3D per_cpu(irq_stack, cpu);
-> >  }
-> >  #endif /* CONFIG_VMAP_STACK */
-> > +
-> > +#ifdef CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK
-> > +void do_softirq_own_stack(void)
-> > +{
-> > +#ifdef CONFIG_IRQ_STACKS
-> > +     if (on_thread_stack()) {
-> > +             ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
-> > +                                     + IRQ_STACK_SIZE/sizeof(ulong);
-> > +             __asm__ __volatile(
-> > +             "addi   sp, sp, -"RISCV_SZPTR  "\n"
-> > +             REG_S"  ra, (sp)                \n"
-> > +             "addi   sp, sp, -"RISCV_SZPTR  "\n"
-> > +             REG_S"  s0, (sp)                \n"
-> > +             "addi   s0, sp, 2*"RISCV_SZPTR "\n"
-> > +             "move   sp, %[sp]               \n"
-> > +             "call   __do_softirq            \n"
-> > +             "addi   sp, s0, -2*"RISCV_SZPTR"\n"
-> > +             REG_L"  s0, (sp)                \n"
-> > +             "addi   sp, sp, "RISCV_SZPTR   "\n"
-> > +             REG_L"  ra, (sp)                \n"
-> > +             "addi   sp, sp, "RISCV_SZPTR   "\n"
-> > +             :
-> > +             : [sp] "r" (sp)
-> > +             : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
-> > +               "t0", "t1", "t2", "t3", "t4", "t5", "t6",
-> > +               "memory");
->
-> Same as previous patch. Please avoid C&P and have a look at how
-> call_on_stack is done on x86.
-Okay.
+> ...and again, my "why is this in the generic entry" series rant. :-)
+I would remove it from the generic entry series.
 
 >
 >
