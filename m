@@ -2,45 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF094647D6A
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 06:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 712DF647DC4
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 07:29:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiLIFpc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Dec 2022 00:45:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33004 "EHLO
+        id S229845AbiLIG3J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Dec 2022 01:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLIFpb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 00:45:31 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B088A1FCE9;
-        Thu,  8 Dec 2022 21:45:29 -0800 (PST)
+        with ESMTP id S229843AbiLIG3E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 01:29:04 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFBE31ECD;
+        Thu,  8 Dec 2022 22:29:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670564729; x=1702100729;
-  h=date:from:to:cc:subject:message-id:references:
+  t=1670567343; x=1702103343;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
    mime-version:in-reply-to;
-  bh=bZyUarVu5cC9rT3cKg1cvVFj+lccGuAW9FbqD11ds+I=;
-  b=gfFjkSIKEfWi7MAhdWCayEWjriLubZPtNfeh0/dDcfkHxFSKc6ND//9t
-   RxU8YNK9yiAWSyU+NHvO61cVD817SeAO1Y11jcT6L5etdfQW0eLJxxcM9
-   t8FicbIHK6j+Y9R8nlz7OBaN/eeNXaUKMKp4FzCe7H1aaKylUhwoZJ+Xn
-   NgfY27Mm9iKKUn6HWBMvOoLrV7GLG4sM1o76H68lUb5SeQL17kexyvfaD
-   1tKfX1PbFn8iepigVk68JO4JelJ3fqsxkCK1zvrmWBSpkdBJSgTJvoEsR
-   ghZq/gkgW3KCWHljkPCSrOkD4hVBNiiO6N3qZoIQwgSaOliUJmk4h5XbW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="297738640"
+  bh=Tlu8CMGwsT7F5T0zdAfMh3PoUym3LStYGuVUhIigsRU=;
+  b=aQOG6/F969qELkXHXCbi41savMuReoe3Vy4uoM/gqnYAHPOvqG5xFs96
+   A13SWnBP312KbpEudvbyNrHEri4IxukurScQm0H/nlvBsem0Nn/zvnER1
+   bjtIYRaoJejDzMpRYzMmHzl4ksw1KKSeXigHYixB3s8+aL/Fbr6D9wX9T
+   FrN20yJwTgOLhOndL++rNmYCkrnWf5U8WEKUm3A5HNQ2ymX3+ck+qFLw3
+   2//5fFL0ItCLGokCmpacAylsOdeJNVqlkqVh9a4aujdrYjWbZdErl4a9s
+   F4dM0HZ+/1OzV6U2Qza4SZcjiRdNnSnqy1WO4QjbMOzb9uEK5b+BfFeTQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="403646400"
 X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="297738640"
+   d="scan'208";a="403646400"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 21:45:28 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 22:29:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="640911691"
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="640921316"
 X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="640911691"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2022 21:45:18 -0800
-Date:   Fri, 9 Dec 2022 13:45:17 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
+   d="scan'208";a="640921316"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2022 22:28:50 -0800
+Date:   Fri, 9 Dec 2022 14:24:31 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fuad Tabba <tabba@google.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
@@ -71,20 +71,22 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
         ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
         ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Quentin Perret <qperret@google.com>,
         Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
         wei.w.wang@intel.com
-Subject: Re: [PATCH v10 8/9] KVM: Handle page fault for private memory
-Message-ID: <20221209054517.okw2epqx5s3yjnfp@yy-desk-7060>
+Subject: Re: [PATCH v10 5/9] KVM: Use gfn instead of hva for
+ mmu_notifier_retry
+Message-ID: <20221209062431.GA1342934@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
 References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-9-chao.p.peng@linux.intel.com>
- <20221208022918.fbddl3bflsip4ivg@yy-desk-7060>
- <20221208112346.GD1304936@chaop.bj.intel.com>
+ <20221202061347.1070246-6-chao.p.peng@linux.intel.com>
+ <CA+EHjTy5+Ke_7Uh72p--H9kGcE-PK4EVmp7ym6Q1-PO28u6CCQ@mail.gmail.com>
+ <20221206115623.GB1216605@chaop.bj.intel.com>
+ <CA+EHjTx3_Vkh9Jb_ZJNi5Xx=O24eM-jpF0gR+UGf9W0ORgNyhQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221208112346.GD1304936@chaop.bj.intel.com>
-User-Agent: NeoMutt/20171215
+In-Reply-To: <CA+EHjTx3_Vkh9Jb_ZJNi5Xx=O24eM-jpF0gR+UGf9W0ORgNyhQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -94,284 +96,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 07:23:46PM +0800, Chao Peng wrote:
-> On Thu, Dec 08, 2022 at 10:29:18AM +0800, Yuan Yao wrote:
-> > On Fri, Dec 02, 2022 at 02:13:46PM +0800, Chao Peng wrote:
-> > > A KVM_MEM_PRIVATE memslot can include both fd-based private memory and
-> > > hva-based shared memory. Architecture code (like TDX code) can tell
-> > > whether the on-going fault is private or not. This patch adds a
-> > > 'is_private' field to kvm_page_fault to indicate this and architecture
-> > > code is expected to set it.
+On Tue, Dec 06, 2022 at 03:48:50PM +0000, Fuad Tabba wrote:
+...
+ > >
+> > > >          */
+> > > > -       if (unlikely(kvm->mmu_invalidate_in_progress) &&
+> > > > -           hva >= kvm->mmu_invalidate_range_start &&
+> > > > -           hva < kvm->mmu_invalidate_range_end)
+> > > > -               return 1;
+> > > > +       if (unlikely(kvm->mmu_invalidate_in_progress)) {
+> > > > +               /*
+> > > > +                * Dropping mmu_lock after bumping mmu_invalidate_in_progress
+> > > > +                * but before updating the range is a KVM bug.
+> > > > +                */
+> > > > +               if (WARN_ON_ONCE(kvm->mmu_invalidate_range_start == INVALID_GPA ||
+> > > > +                                kvm->mmu_invalidate_range_end == INVALID_GPA))
 > > >
-> > > To handle page fault for such memslot, the handling logic is different
-> > > depending on whether the fault is private or shared. KVM checks if
-> > > 'is_private' matches the host's view of the page (maintained in
-> > > mem_attr_array).
-> > >   - For a successful match, private pfn is obtained with
-> > >     restrictedmem_get_page() and shared pfn is obtained with existing
-> > >     get_user_pages().
-> > >   - For a failed match, KVM causes a KVM_EXIT_MEMORY_FAULT exit to
-> > >     userspace. Userspace then can convert memory between private/shared
-> > >     in host's view and retry the fault.
-> > >
-> > > Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > > ---
-> > >  arch/x86/kvm/mmu/mmu.c          | 63 +++++++++++++++++++++++++++++++--
-> > >  arch/x86/kvm/mmu/mmu_internal.h | 14 +++++++-
-> > >  arch/x86/kvm/mmu/mmutrace.h     |  1 +
-> > >  arch/x86/kvm/mmu/tdp_mmu.c      |  2 +-
-> > >  include/linux/kvm_host.h        | 30 ++++++++++++++++
-> > >  5 files changed, 105 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > > index 2190fd8c95c0..b1953ebc012e 100644
-> > > --- a/arch/x86/kvm/mmu/mmu.c
-> > > +++ b/arch/x86/kvm/mmu/mmu.c
-> > > @@ -3058,7 +3058,7 @@ static int host_pfn_mapping_level(struct kvm *kvm, gfn_t gfn,
-> > >
-> > >  int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> > > -			      int max_level)
-> > > +			      int max_level, bool is_private)
-> > >  {
-> > >  	struct kvm_lpage_info *linfo;
-> > >  	int host_level;
-> > > @@ -3070,6 +3070,9 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  			break;
-> > >  	}
-> > >
-> > > +	if (is_private)
-> > > +		return max_level;
+> > > INVALID_GPA is an x86-specific define in
+> > > arch/x86/include/asm/kvm_host.h, so this doesn't build on other
+> > > architectures. The obvious fix is to move it to
+> > > include/linux/kvm_host.h.
 > >
-> > lpage mixed information already saved, so is that possible
-> > to query info->disallow_lpage without care 'is_private' ?
->
-> Actually we already queried info->disallow_lpage just before this
-> sentence. The check is needed because later in the function we call
-> host_pfn_mapping_level() which is shared memory specific.
+> > Hmm, INVALID_GPA is defined as ZERO for x86, not 100% confident this is
+> > correct choice for other architectures, but after search it has not been
+> > used for other architectures, so should be safe to make it common.
 
-You're right. We can't get mapping level info for private page from
-host_pfn_mapping_level().
+As Yu posted a patch:
+https://lore.kernel.org/all/20221209023622.274715-1-yu.c.zhang@linux.intel.com/
 
->
-> Thanks,
-> Chao
-> >
-> > > +
-> > >  	if (max_level == PG_LEVEL_4K)
-> > >  		return PG_LEVEL_4K;
-> > >
-> > > @@ -3098,7 +3101,8 @@ void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
-> > >  	 * level, which will be used to do precise, accurate accounting.
-> > >  	 */
-> > >  	fault->req_level = kvm_mmu_max_mapping_level(vcpu->kvm, slot,
-> > > -						     fault->gfn, fault->max_level);
-> > > +						     fault->gfn, fault->max_level,
-> > > +						     fault->is_private);
-> > >  	if (fault->req_level == PG_LEVEL_4K || fault->huge_page_disallowed)
-> > >  		return;
-> > >
-> > > @@ -4178,6 +4182,49 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
-> > >  	kvm_mmu_do_page_fault(vcpu, work->cr2_or_gpa, 0, true);
-> > >  }
-> > >
-> > > +static inline u8 order_to_level(int order)
-> > > +{
-> > > +	BUILD_BUG_ON(KVM_MAX_HUGEPAGE_LEVEL > PG_LEVEL_1G);
-> > > +
-> > > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_1G))
-> > > +		return PG_LEVEL_1G;
-> > > +
-> > > +	if (order >= KVM_HPAGE_GFN_SHIFT(PG_LEVEL_2M))
-> > > +		return PG_LEVEL_2M;
-> > > +
-> > > +	return PG_LEVEL_4K;
-> > > +}
-> > > +
-> > > +static int kvm_do_memory_fault_exit(struct kvm_vcpu *vcpu,
-> > > +				    struct kvm_page_fault *fault)
-> > > +{
-> > > +	vcpu->run->exit_reason = KVM_EXIT_MEMORY_FAULT;
-> > > +	if (fault->is_private)
-> > > +		vcpu->run->memory.flags = KVM_MEMORY_EXIT_FLAG_PRIVATE;
-> > > +	else
-> > > +		vcpu->run->memory.flags = 0;
-> > > +	vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
-> > > +	vcpu->run->memory.size = PAGE_SIZE;
-> > > +	return RET_PF_USER;
-> > > +}
-> > > +
-> > > +static int kvm_faultin_pfn_private(struct kvm_vcpu *vcpu,
-> > > +				   struct kvm_page_fault *fault)
-> > > +{
-> > > +	int order;
-> > > +	struct kvm_memory_slot *slot = fault->slot;
-> > > +
-> > > +	if (!kvm_slot_can_be_private(slot))
-> > > +		return kvm_do_memory_fault_exit(vcpu, fault);
-> > > +
-> > > +	if (kvm_restricted_mem_get_pfn(slot, fault->gfn, &fault->pfn, &order))
-> > > +		return RET_PF_RETRY;
-> > > +
-> > > +	fault->max_level = min(order_to_level(order), fault->max_level);
-> > > +	fault->map_writable = !(slot->flags & KVM_MEM_READONLY);
-> > > +	return RET_PF_CONTINUE;
-> > > +}
-> > > +
-> > >  static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > >  {
-> > >  	struct kvm_memory_slot *slot = fault->slot;
-> > > @@ -4210,6 +4257,12 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> > >  			return RET_PF_EMULATE;
-> > >  	}
-> > >
-> > > +	if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn))
-> > > +		return kvm_do_memory_fault_exit(vcpu, fault);
-> > > +
-> > > +	if (fault->is_private)
-> > > +		return kvm_faultin_pfn_private(vcpu, fault);
-> > > +
-> > >  	async = false;
-> > >  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, false, &async,
-> > >  					  fault->write, &fault->map_writable,
-> > > @@ -5599,6 +5652,9 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
-> > >  			return -EIO;
-> > >  	}
-> > >
-> > > +	if (r == RET_PF_USER)
-> > > +		return 0;
-> > > +
-> > >  	if (r < 0)
-> > >  		return r;
-> > >  	if (r != RET_PF_EMULATE)
-> > > @@ -6452,7 +6508,8 @@ static bool kvm_mmu_zap_collapsible_spte(struct kvm *kvm,
-> > >  		 */
-> > >  		if (sp->role.direct &&
-> > >  		    sp->role.level < kvm_mmu_max_mapping_level(kvm, slot, sp->gfn,
-> > > -							       PG_LEVEL_NUM)) {
-> > > +							       PG_LEVEL_NUM,
-> > > +							       false)) {
-> > >  			kvm_zap_one_rmap_spte(kvm, rmap_head, sptep);
-> > >
-> > >  			if (kvm_available_flush_tlb_with_range())
-> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > > index dbaf6755c5a7..5ccf08183b00 100644
-> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > @@ -189,6 +189,7 @@ struct kvm_page_fault {
-> > >
-> > >  	/* Derived from mmu and global state.  */
-> > >  	const bool is_tdp;
-> > > +	const bool is_private;
-> > >  	const bool nx_huge_page_workaround_enabled;
-> > >
-> > >  	/*
-> > > @@ -237,6 +238,7 @@ int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> > >   * RET_PF_RETRY: let CPU fault again on the address.
-> > >   * RET_PF_EMULATE: mmio page fault, emulate the instruction directly.
-> > >   * RET_PF_INVALID: the spte is invalid, let the real page fault path update it.
-> > > + * RET_PF_USER: need to exit to userspace to handle this fault.
-> > >   * RET_PF_FIXED: The faulting entry has been fixed.
-> > >   * RET_PF_SPURIOUS: The faulting entry was already fixed, e.g. by another vCPU.
-> > >   *
-> > > @@ -253,6 +255,7 @@ enum {
-> > >  	RET_PF_RETRY,
-> > >  	RET_PF_EMULATE,
-> > >  	RET_PF_INVALID,
-> > > +	RET_PF_USER,
-> > >  	RET_PF_FIXED,
-> > >  	RET_PF_SPURIOUS,
-> > >  };
-> > > @@ -310,7 +313,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> > >
-> > >  int kvm_mmu_max_mapping_level(struct kvm *kvm,
-> > >  			      const struct kvm_memory_slot *slot, gfn_t gfn,
-> > > -			      int max_level);
-> > > +			      int max_level, bool is_private);
-> > >  void kvm_mmu_hugepage_adjust(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> > >  void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_level);
-> > >
-> > > @@ -319,4 +322,13 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> > >  void track_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > >  void untrack_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > >
-> > > +#ifndef CONFIG_HAVE_KVM_RESTRICTED_MEM
-> > > +static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
-> > > +					gfn_t gfn, kvm_pfn_t *pfn, int *order)
-> > > +{
-> > > +	WARN_ON_ONCE(1);
-> > > +	return -EOPNOTSUPP;
-> > > +}
-> > > +#endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
-> > > +
-> > >  #endif /* __KVM_X86_MMU_INTERNAL_H */
-> > > diff --git a/arch/x86/kvm/mmu/mmutrace.h b/arch/x86/kvm/mmu/mmutrace.h
-> > > index ae86820cef69..2d7555381955 100644
-> > > --- a/arch/x86/kvm/mmu/mmutrace.h
-> > > +++ b/arch/x86/kvm/mmu/mmutrace.h
-> > > @@ -58,6 +58,7 @@ TRACE_DEFINE_ENUM(RET_PF_CONTINUE);
-> > >  TRACE_DEFINE_ENUM(RET_PF_RETRY);
-> > >  TRACE_DEFINE_ENUM(RET_PF_EMULATE);
-> > >  TRACE_DEFINE_ENUM(RET_PF_INVALID);
-> > > +TRACE_DEFINE_ENUM(RET_PF_USER);
-> > >  TRACE_DEFINE_ENUM(RET_PF_FIXED);
-> > >  TRACE_DEFINE_ENUM(RET_PF_SPURIOUS);
-> > >
-> > > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > index 771210ce5181..8ba1a4afc546 100644
-> > > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > > @@ -1768,7 +1768,7 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
-> > >  			continue;
-> > >
-> > >  		max_mapping_level = kvm_mmu_max_mapping_level(kvm, slot,
-> > > -							      iter.gfn, PG_LEVEL_NUM);
-> > > +						iter.gfn, PG_LEVEL_NUM, false);
-> > >  		if (max_mapping_level < iter.level)
-> > >  			continue;
-> > >
-> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > index 25099c94e770..153842bb33df 100644
-> > > --- a/include/linux/kvm_host.h
-> > > +++ b/include/linux/kvm_host.h
-> > > @@ -2335,4 +2335,34 @@ static inline void kvm_arch_set_memory_attributes(struct kvm *kvm,
-> > >  }
-> > >  #endif /* __KVM_HAVE_ARCH_SET_MEMORY_ATTRIBUTES */
-> > >
-> > > +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
-> > > +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> > > +{
-> > > +	return xa_to_value(xa_load(&kvm->mem_attr_array, gfn)) &
-> > > +	       KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> > > +}
-> > > +#else
-> > > +static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> > > +{
-> > > +	return false;
-> > > +}
-> > > +
-> > > +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
-> > > +
-> > > +#ifdef CONFIG_HAVE_KVM_RESTRICTED_MEM
-> > > +static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
-> > > +					gfn_t gfn, kvm_pfn_t *pfn, int *order)
-> > > +{
-> > > +	int ret;
-> > > +	struct page *page;
-> > > +	pgoff_t index = gfn - slot->base_gfn +
-> > > +			(slot->restricted_offset >> PAGE_SHIFT);
-> > > +
-> > > +	ret = restrictedmem_get_page(slot->restricted_file, index,
-> > > +				     &page, order);
-> > > +	*pfn = page_to_pfn(page);
-> > > +	return ret;
-> > > +}
-> > > +#endif /* CONFIG_HAVE_KVM_RESTRICTED_MEM */
-> > > +
-> > >  #endif
-> > > --
-> > > 2.25.1
-> > >
-> > >
+There is a GPA_INVALID in include/linux/kvm_types.h and I see ARM has already
+been using it so sounds that is exactly what I need.
+
+Chao
+> 
+> With this fixed,
+> 
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> And the necessary work to port to arm64 (on qemu/arm64):
+> Tested-by: Fuad Tabba <tabba@google.com>
+> 
+> Cheers,
+> /fuad
