@@ -2,138 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 712DF647DC4
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 07:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F00BC647EC3
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 08:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiLIG3J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Dec 2022 01:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53662 "EHLO
+        id S229709AbiLIHuC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Dec 2022 02:50:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiLIG3E (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 01:29:04 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFBE31ECD;
-        Thu,  8 Dec 2022 22:29:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670567343; x=1702103343;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=Tlu8CMGwsT7F5T0zdAfMh3PoUym3LStYGuVUhIigsRU=;
-  b=aQOG6/F969qELkXHXCbi41savMuReoe3Vy4uoM/gqnYAHPOvqG5xFs96
-   A13SWnBP312KbpEudvbyNrHEri4IxukurScQm0H/nlvBsem0Nn/zvnER1
-   bjtIYRaoJejDzMpRYzMmHzl4ksw1KKSeXigHYixB3s8+aL/Fbr6D9wX9T
-   FrN20yJwTgOLhOndL++rNmYCkrnWf5U8WEKUm3A5HNQ2ymX3+ck+qFLw3
-   2//5fFL0ItCLGokCmpacAylsOdeJNVqlkqVh9a4aujdrYjWbZdErl4a9s
-   F4dM0HZ+/1OzV6U2Qza4SZcjiRdNnSnqy1WO4QjbMOzb9uEK5b+BfFeTQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="403646400"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="403646400"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 22:29:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="640921316"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="640921316"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2022 22:28:50 -0800
-Date:   Fri, 9 Dec 2022 14:24:31 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Fuad Tabba <tabba@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 5/9] KVM: Use gfn instead of hva for
- mmu_notifier_retry
-Message-ID: <20221209062431.GA1342934@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-6-chao.p.peng@linux.intel.com>
- <CA+EHjTy5+Ke_7Uh72p--H9kGcE-PK4EVmp7ym6Q1-PO28u6CCQ@mail.gmail.com>
- <20221206115623.GB1216605@chaop.bj.intel.com>
- <CA+EHjTx3_Vkh9Jb_ZJNi5Xx=O24eM-jpF0gR+UGf9W0ORgNyhQ@mail.gmail.com>
+        with ESMTP id S229676AbiLIHuB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 02:50:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3CDD4FF9D;
+        Thu,  8 Dec 2022 23:50:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE9062190;
+        Fri,  9 Dec 2022 07:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009B2C433EF;
+        Fri,  9 Dec 2022 07:49:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670572199;
+        bh=mgXmxfO0nJsJ5FTTISHf8DIRyMlAKW/tgC3rR79NvVc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=joLlxUe/NXeFxsP8LAZtung2Dnt3UjWGVOHPVdp5J6eogC97HfpJy8yeNgmMAhYVn
+         RRtD4csXTHtUAo/gw/kXOCjeZp/rbq33WtVnuo+dZhNxHRhuQyycVLgu14ekGq23Io
+         8jYa2qN7H9BMaQRe7REvhlg5EW5dM/4kZZ1HFEXU90zfOubP557Hp5VsqeM7RCll09
+         GAOZVYo/cPc/phJ4D6XiKayCyH5H82RHEK4Ba8Y4NTliz6yiySHl6qhJ7rp6Md5yNt
+         cVx2XCgvEHUCHN0JUx5IbIVE5NM5u7eDrbQ8Zv4dxhC7q+VvwHFgdIBieE615/xWp6
+         9f6coiEY925AA==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH -next V10 09/10] riscv: stack: Support
+ HAVE_SOFTIRQ_ON_OWN_STACK
+In-Reply-To: <CAJF2gTT1YNubBG_RMzwsWVXk0X0nwQvTM2r5NjRvVN+1x1RHMw@mail.gmail.com>
+References: <20221208025816.138712-1-guoren@kernel.org>
+ <20221208025816.138712-10-guoren@kernel.org>
+ <87o7sew6ey.fsf@all.your.base.are.belong.to.us>
+ <CAJF2gTT1YNubBG_RMzwsWVXk0X0nwQvTM2r5NjRvVN+1x1RHMw@mail.gmail.com>
+Date:   Fri, 09 Dec 2022 08:49:52 +0100
+Message-ID: <874ju59ftr.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTx3_Vkh9Jb_ZJNi5Xx=O24eM-jpF0gR+UGf9W0ORgNyhQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 03:48:50PM +0000, Fuad Tabba wrote:
-...
- > >
-> > > >          */
-> > > > -       if (unlikely(kvm->mmu_invalidate_in_progress) &&
-> > > > -           hva >= kvm->mmu_invalidate_range_start &&
-> > > > -           hva < kvm->mmu_invalidate_range_end)
-> > > > -               return 1;
-> > > > +       if (unlikely(kvm->mmu_invalidate_in_progress)) {
-> > > > +               /*
-> > > > +                * Dropping mmu_lock after bumping mmu_invalidate_in_progress
-> > > > +                * but before updating the range is a KVM bug.
-> > > > +                */
-> > > > +               if (WARN_ON_ONCE(kvm->mmu_invalidate_range_start == INVALID_GPA ||
-> > > > +                                kvm->mmu_invalidate_range_end == INVALID_GPA))
-> > >
-> > > INVALID_GPA is an x86-specific define in
-> > > arch/x86/include/asm/kvm_host.h, so this doesn't build on other
-> > > architectures. The obvious fix is to move it to
-> > > include/linux/kvm_host.h.
-> >
-> > Hmm, INVALID_GPA is defined as ZERO for x86, not 100% confident this is
-> > correct choice for other architectures, but after search it has not been
-> > used for other architectures, so should be safe to make it common.
+Guo Ren <guoren@kernel.org> writes:
 
-As Yu posted a patch:
-https://lore.kernel.org/all/20221209023622.274715-1-yu.c.zhang@linux.intel.com/
+> On Thu, Dec 8, 2022 at 6:12 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> w=
+rote:
+>>
+>> guoren@kernel.org writes:
+>>
+>> > From: Guo Ren <guoren@linux.alibaba.com>
+>> >
+>> > Add the HAVE_SOFTIRQ_ON_OWN_STACK feature for the IRQ_STACKS config. T=
+he
+>> > irq and softirq use the same independent irq_stack of percpu by time
+>> > division multiplexing.
+>> >
+>> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+>> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+>> > Signed-off-by: Guo Ren <guoren@kernel.org>
+>> > ---
+>> >  arch/riscv/Kconfig      |  7 ++++---
+>> >  arch/riscv/kernel/irq.c | 33 +++++++++++++++++++++++++++++++++
+>> >  2 files changed, 37 insertions(+), 3 deletions(-)
+>> >
+>> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> > index 0a9d4bdc0338..bd4c4ae4cdc9 100644
+>> > --- a/arch/riscv/Kconfig
+>> > +++ b/arch/riscv/Kconfig
+>> > @@ -447,12 +447,13 @@ config FPU
+>> >         If you don't know what to do here, say Y.
+>> >
+>> >  config IRQ_STACKS
+>> > -     bool "Independent irq stacks" if EXPERT
+>> > +     bool "Independent irq & softirq stacks" if EXPERT
+>> >       default y
+>> >       select HAVE_IRQ_EXIT_ON_IRQ_STACK
+>> > +     select HAVE_SOFTIRQ_ON_OWN_STACK
+>>
+>> HAVE_IRQ_EXIT_ON_IRQ_STACK is used by softirq.c Shouldn't that be
+>> selected introduced in this patch, instead of the previous one?
+> This patch depends on the previous one. And the previous one could
+> work separately.
 
-There is a GPA_INVALID in include/linux/kvm_types.h and I see ARM has already
-been using it so sounds that is exactly what I need.
+Let me try to be more clear: IRQ_STACKS should be introduced in the
+previous patch, which adds per-cpu stacks to hardirq. This patch adds
+per-cpu stacks for softirq, and the softirq related selects:
 
-Chao
-> 
-> With this fixed,
-> 
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> And the necessary work to port to arm64 (on qemu/arm64):
-> Tested-by: Fuad Tabba <tabba@google.com>
-> 
-> Cheers,
-> /fuad
+ select HAVE_IRQ_EXIT_ON_IRQ_STACK
+ select HAVE_SOFTIRQ_ON_OWN_STACK
+
+Hence, the "HAVE_IRQ_EXIT_ON_IRQ_STACK" select should be part of *this*
+patch, not the previous.
+
+Or am I missing something?
+
+
+Bj=C3=B6rn
