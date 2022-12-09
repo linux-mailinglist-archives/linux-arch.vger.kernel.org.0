@@ -2,218 +2,445 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134B6648779
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 18:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CCA648806
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Dec 2022 18:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiLIROF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Dec 2022 12:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S229573AbiLIR4m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Dec 2022 12:56:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiLIRNp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 12:13:45 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A91F4EC0B;
-        Fri,  9 Dec 2022 09:13:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670606013; x=1702142013;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=yoeWqQUC9hNaOqVWiGaAPxhG1gocXAJzCIpY4DOduvw=;
-  b=X07LoaO2EZMc/AuBC+A0HEMiDjjZO2ILdLV2l12QHrxlDwRhrSwH4Ytv
-   AyFPX1KHf+9TyZ9cgbIQrPeLcEfaSLYrf5n47G9QIGCmgBYntYyHf9Tpb
-   GXoj8wpjDVJrtAlbNjTKT47vDNQ6CYpuim8Aj2KKO6Z219uUmGfDk+XVI
-   ps0n1qFfrvelFfZkSkacFZFLBO63+lTUrfziuUoGPB9yuRqPptO+UE+2i
-   O8BAkpanowG80mqQuYA1ktHJ4lB2pNAsWnIfbwCCni3ELXFbfiBGmbdzI
-   FVekilbd9mbW2zo71E/bbjYSQaj/fCJ1qlc81XGkqiOtl52YYRZ2RIBl5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="344540609"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="344540609"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 09:08:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="789776100"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="789776100"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Dec 2022 09:08:29 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 9 Dec 2022 09:08:23 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 9 Dec 2022 09:08:23 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 9 Dec 2022 09:08:22 -0800
+        with ESMTP id S229631AbiLIR4l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Dec 2022 12:56:41 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2095.outbound.protection.outlook.com [40.107.94.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C05122296;
+        Fri,  9 Dec 2022 09:56:40 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XxbwbJ6heEoA5ZG0DZwfio7Le8o+t0OcqE4cPn2nxWD9oTHrsCsG/j/CKXDsukLyhLK46JXdGTrIjWDNOhv5KR/JAOYj5UIJu4Qxfm4Y2CJzwiig68rK1KB3AC7FBJSkKUcmkIWqaBzHNjhcq4IUUxaCfT8VI2IRYujQQuVZsguzIXk0zVbEjETMn18qy4NDLQbEj5PO4Jul9WnoSCc660i5asFN0BlUBuuUWELc++VCjJBg3cjVbua62UNdodgQbkkZF4lN9EKrsnxFDZIYBJ+sayGwyYR7yfQPG0XGlmaHlffIHC3nowgI+iBmSW0K5HByqp139CPDiioBe4456g==
+ b=W7ptky4nUenNNzRF57jHxkSV+IP5RaUqBRwaaPjjHU5AdbUqA8ctl/6XAOhNFnh3sY0Mx557+KsLwQqaTV8pwSO4dtUcpcnlu42+fEXuqprdxkRLpvs8lFLb4Gk9u4Uz1hKLzQ4liggixRU6Ao+5vfDY4ML8U8o0Wz+XjfmYZxPEwlOiQ3X44eiAHOBiXivEeX2x+mVwpjJzMxui25h+wZsuRJlqzK5GTHAFwxAOltmZ6MaCiKmw/Vbz126mbt76rvqKB+UMyCU3l1BmZ54r4HeCacIuziiqWxDzEQjJmNoZXarcGHll/YBhqyn8IBYN3APSbHUTiNv8zNC4scwnBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yoeWqQUC9hNaOqVWiGaAPxhG1gocXAJzCIpY4DOduvw=;
- b=BSUS4zooREOPnk/UGuV/HzanSr/7qtoJeHmYe3jH9GrZ+JkHI28RRmxfAMSmV0vRk9rO0qCJTNs7gEAkokKZUimFd9GlmtImaIpHo3ffTsi1SMg8Ef8ujIp7FzYJxahaOsRB6l6yBVolxLVy8XyMO5ri7Rua4HDY3vt9F1AKvrcidbBJGokcSvSC6+fBf5R01q6M8iXkKkGVkRdF6uqG6CwB/S6dPeZf3R2zNj00if4dt/fkpKNb34QtrbLlFQJqiP2fKS5h0nbCGBBrfwdH2Z6CRPoyocIvVxgQOLINHB2xjXTEEXB+cVWWR4/KMhvD8ErDxEBjITLODVbl2FY8aw==
+ bh=E+FlZCquWGOqtVKcmYZ7ae0PZsu7oPkd4e+8NTq0Pkk=;
+ b=U1OYVJg/KWA2gkbfo2i87faDXg7LeQ7VdWSybqZt0mzqyrzTRabQxGe4l3yrTO8axkEgzPxfGootYadIKyec1oDayG7s0jNroi9p8l2+tL59RS3mIyXfOm+1o2eEy4zqIpEq7O9ru350PJn8RjF0CDGmhmTAarg0OHxMwpI0HSlnv3WC7yzNzLAaNMV4v9qVohkGZkh4cUXdoPx7eEq9dJ1u2h4I7FwIPlgLRw7nHNws4Yh4IyptRO04vnk9th2R7pesYAtdtbJ5wieoUvmwRRXhB5D8QYv2MsmeFfEEqcn743VGvZjE/bYP1cNx3RKXcS0d32fU7MT8yxdnahN/2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by PH0PR11MB4854.namprd11.prod.outlook.com (2603:10b6:510:35::18) with
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E+FlZCquWGOqtVKcmYZ7ae0PZsu7oPkd4e+8NTq0Pkk=;
+ b=gIM38vV6pKyPi34gk5bTJOJFR2UA/bd+uKlIJi3eggdr7lN5anYiPBbC3/gFSA+OHO7h0rfWOzfniW9WX25tMSbGjEYa4cVFi0HSI0ZI8cVN6SjVOIN8/naWalKH2nLpR+PULKTESoOpZYRD0G9KJn/AAaSxPlEcHGqd3W90VzE=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BY5PR21MB1506.namprd21.prod.outlook.com (2603:10b6:a03:23d::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 17:08:21 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff%5]) with mapi id 15.20.5880.016; Fri, 9 Dec 2022
- 17:08:20 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "rppt@kernel.org" <rppt@kernel.org>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.4; Fri, 9 Dec
+ 2022 17:56:35 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%5]) with mapi id 15.20.5924.004; Fri, 9 Dec 2022
+ 17:56:35 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>,
+        Jinank Jain <jinankjain@microsoft.com>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
         "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
-Thread-Topic: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
-Thread-Index: AQHZBq9/FzxBTfcuS0GSoDQuHiOx0a5l0zQAgAABGIA=
-Date:   Fri, 9 Dec 2022 17:08:20 +0000
-Message-ID: <a34d766dc3bf09e445320e0f94fb8d8e6301c7b5.camel@intel.com>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
-         <20221203003606.6838-38-rick.p.edgecombe@intel.com>
-         <Y5NqmLqXfXpowoSM@kernel.org>
-In-Reply-To: <Y5NqmLqXfXpowoSM@kernel.org>
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "anrayabh@linux.microsoft.com" <anrayabh@linux.microsoft.com>
+Subject: RE: [PATCH v8 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+Thread-Topic: [PATCH v8 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+Thread-Index: AQHZC4+wa+5FZueAE0+b/KaDIWYs065l1Dqg
+Date:   Fri, 9 Dec 2022 17:56:34 +0000
+Message-ID: <BYAPR21MB1688B8F2C619A1BB29AA0DBCD71C9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <cover.1670561320.git.jinankjain@linux.microsoft.com>
+ <9a6bcedcc7dab00982eae5c8b2622b46ee27d07e.1670561320.git.jinankjain@linux.microsoft.com>
+In-Reply-To: <9a6bcedcc7dab00982eae5c8b2622b46ee27d07e.1670561320.git.jinankjain@linux.microsoft.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=b452afbe-d44c-4c54-9677-b397e991b753;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-09T17:42:57Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|PH0PR11MB4854:EE_
-x-ms-office365-filtering-correlation-id: 8a927fe2-91d7-4e4b-8eba-08dada07f931
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY5PR21MB1506:EE_
+x-ms-office365-filtering-correlation-id: 1e7744a1-1c03-4530-f159-08dada0eb64c
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: P5JwdStVSgyjSUrKZIiXXLN47TfX1xCIY7u5BYP4DYceLJxYRhvRUpPKKpLrDoduRLWUz0oh5aNIeIOE5KwHyq3wRNWkBYqDMEwRobLzWGglr+17F27BJszG9qFp6Um/4Kz4kDzNtZAwtFusRIeFupnwL/qPQH1qxkR+mv8pJDJ8pywsXKrUc3+bbbVsbSdgLn8uMITIiJyVIdS94Slk3VqICR7yTDofvZ5YdBlOGGDOqT84tebGBHBhsZja7fiGCbgZm5DdcjSs4VI9xKV3DRS3n3u0DQtfg+BgmqFh3AHNdRzv64VFw8ZiIV22MVAjgjMnvmjflrc4TDbzLQb/Oeuk8dgcCL5pKnp4/+OJ4R0+rn3Vtai5eBMMMVNySgMzEJM8KXT1IbQpHaSr9Ht+vR2fW2gb5HfBO9x3pGhAhI/b2kYDkYWCsMrMfaFXz0hmjinp3WfRPBafmxP+AEAAVdzpChyCqz00FHKf1v3SUgD2Yh6aT2oxqdNwYXtrH99lMgfyJ/nmFYhNOos3NB4LkcSRV35dckBPnXqOImgXBRm0kdBjyWsC5PdNFkwLrwjvkDdGZ1Q9mGrXYcS1aJoobSwv8Rn2WWJcAIZ0CBda5xU7eBAIevTteYx9G1xEsn4oSRW3KCHD2S6t0g3caSFeqEqKC/Zz6KsFUji+Bpxedslpeer5eSL/uERCAGR+Jr139vtmyfLpn00AbEpwCY+v2zVK9UZdGLz9EsMYKiwk/Ms=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(346002)(39860400002)(136003)(366004)(451199015)(82960400001)(38100700002)(122000001)(38070700005)(86362001)(2616005)(6916009)(8676002)(316002)(54906003)(186003)(478600001)(6512007)(6506007)(26005)(71200400001)(6486002)(7406005)(2906002)(7416002)(4744005)(5660300002)(76116006)(66476007)(4326008)(36756003)(91956017)(64756008)(66556008)(66446008)(66946007)(8936002)(41300700001)(99106002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: pnyVjc4rkQGWa0IdBib1TP21S/SIq578ct4FaynyjqLMrYlVKLEA1wJ/DMR+6gcd4mww1RaeF/QYsqEKykZ+KB/mUtM7dMlMGRZaJhfcajjXFdGTT+FITJR4/JqOAv1k1jGx4alIAsznSW5WDP0NXg8WBMcRT0DnQxr0RXuRi2GJ3XKjfRRnpZaPu1iH0bGO+UhqQr73BqUrU6d1csiAnv92ZtHwZXwOst5rOyZfP88wFsZ5ngDnDs7ADmX71aRAlG3wRJy9v+DWAIjj9cGQrcpDjVCwo2VNsSswtTFCBvhs09td1I1M07aW06p6Bk6MCkx6SNT3Qtepq3kfH4zlvcSs8troFGtfPsxk7GQOgKlDgqJoLZ46MBiJNBX2pSyluL7K3govVOiCgE7kx867d2oSrKhruTnBGx3XMaSNYXnpjal+Cnh6Z3nDkZoGPquGOqLmdwrvPFz4NKAvzrzK1xTY47vQUX6odkpdwXRiMav0rNKjW3EcoOwyxjtsF88bup4oe7d4Yq+VocdQeNa3jZLWW4heGWo3M9845Kfetp+g313l00YcypTdnwbUL/kzbN3bgw8DsI89rMr3pdG3wau07daVslqrl+fQVUpm5MqfzFXqCnIOp13Az5EAy8gaY+tDD4nsXhZAkS11syvwC+PW5lYVheV7+aedkISeBSZa2K5e1M2DrKWPN8jMAwBmRgOFUp2YZXJz5KgEgDV+eaKFNGc9Onk97UrKy6j7laAEPDMax+hI/XBPUUa1Dxxk
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(64756008)(82950400001)(82960400001)(52536014)(38100700002)(122000001)(41300700001)(110136005)(66946007)(478600001)(66446008)(2906002)(7416002)(83380400001)(8990500004)(71200400001)(86362001)(10290500003)(186003)(8676002)(55016003)(5660300002)(9686003)(26005)(107886003)(6506007)(7696005)(8936002)(33656002)(4326008)(316002)(66476007)(38070700005)(76116006)(6636002)(54906003)(66556008);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b0lNejdtVVNlanMyWUc2dDJqdTc5WFhIajZDS2dHNmxQTVErU1d0am9Vdm0r?=
- =?utf-8?B?RWR1SkNEQ3ZZdkZaZTFLKzZyS2lNZGJvbHlqaHY5K2VkOEY1cmR2MjdQY3RM?=
- =?utf-8?B?RDVkNzFESURhVjBHYitzRGR4SzVNTmNFcUZNMlpiSEZacVF5YXdJR251TW1o?=
- =?utf-8?B?UGROU1RxdCtsUWs0K2JWbTYzYnNzc2VLdjhGWE5mOHV4L2QzbVhPeVhtM2lW?=
- =?utf-8?B?a2ZBdGNMNFF5WmtlejVzSVpxVUVpekJUYjBUUnVrM0Fsd0gzWi9oT1plbmpu?=
- =?utf-8?B?SmVheXlRdG9xZkdkaitLMDFBZFd1NDhCK2hHZkh1UzFjSGdIcXhDRVk5UURN?=
- =?utf-8?B?YWNhY0pQSmpRZGJPd2hsOVg1QWxhWFhyWTJpb0g4TWo2Vy9VYjc0d0FlMWlU?=
- =?utf-8?B?Qi9kc21KZEMyRWtwZ1JpQllERlpiRFc4SEp5dlZLQ04rb0poMEdtSDZsOEhm?=
- =?utf-8?B?b01KdlZvVjB5NGV3QzhVVWk2bnJLT1FOZk9PKzhONlF2NE5HaEZvOGpEUVk0?=
- =?utf-8?B?TGF2VGlKNlh6cEk5dXBRenhqeGtKNHJianduR0NjRjFqdmV3U1o2N2dCRWF0?=
- =?utf-8?B?by9IaDJyVjMxNlZPMkZva0hJc2FML2d2NitDMlFJT3lBMWRBVUZ3end1YThY?=
- =?utf-8?B?bEdVY1pMQTdieWJoSGdZa0hWWVR5Y0h2VlI5QldEWGJHYitoRmpIdFFQckR4?=
- =?utf-8?B?SmNTT0FxTEhBT3E3dG1oZHhCQlB0dGhNREF1T1AvZ2RDNTd6dm1RVEl5STdt?=
- =?utf-8?B?Vnh4MEhBOUk5MG9Qb1Y1aVFrcmxOZWlWWnZwM1JkWVM4bXNsaTR0RkdtMU9P?=
- =?utf-8?B?OVUrOXlaS3FCenVBQndkTjVJZEFNUjlzcFYrYkRYazg2bnJxVEYvcks2cEhY?=
- =?utf-8?B?bWhMN3c5QTcyOWI1UTl1VDhaN3BOUXV5ckwzaUN4MXZvSHUwK1Rkc1VJWDhM?=
- =?utf-8?B?TkNwNDRuREVMQlBaSHZaRWlueEI0SVFSbDB0UFcyOThTL0tRMDFvbm85elps?=
- =?utf-8?B?UHlKNnFOY2VhVXJGanIzaTNlVUd0VUJpRk0xdzJxSDlhb0hta1NBV0JlT1Jp?=
- =?utf-8?B?SFFKbEtWMyt2SEtSUHpDYUFOcjJ0eVY1M1B2aXZOSDk1Tk9wVFFmOStOYllR?=
- =?utf-8?B?dldpNEhaUUNGSGpKQ011UEc3VUdQWWNISm9DVjJmN2JaN0x1L2RsQWNRSVRv?=
- =?utf-8?B?Q3doSUFuRXZEVG5zWjRuMUd4Ym4xenRwYlY0di9OTWNlNmdjUkVEajd5eVRY?=
- =?utf-8?B?a3drc3diZXl2Nk5BKzhxaTJKWjVFWFdmcWtDc1Z6R1Z0ajNlR1o0cTY1RWM4?=
- =?utf-8?B?QzNMMEVHekx1d0prdTBwL09Sb25keTdtdHNMQUNIN3FvY0QxdEkydmpBMWdG?=
- =?utf-8?B?Ull3RmpRUU9EeHR1R01OR1VLSEZZdzdjMlVSY2tJelB5dS8rZTJUR2FleFQ2?=
- =?utf-8?B?UlFudzk5TVNFWXFib0VhUHhybTg3TDljb3N4UzJ1VTZBUGM3ODA5NjVrWDhk?=
- =?utf-8?B?ZWIwNVlxcnc1UDNCSm9ONUlqQzhZRDFSQWQ4dTFnczA3U01FY0lSOHB4UUp1?=
- =?utf-8?B?YjRhbzF0eXNKV2p0Vmc2cUcweW82eEgzd3I1WFlJZ3RFOUpPVEMybEFLb3Vm?=
- =?utf-8?B?dkVDdDFGaHJ4OTZ6ZVZqZWpPbW5Xdk1lc3ZlTTJOUTdndE5QMnRPVzVnQzRx?=
- =?utf-8?B?S29WWGkzNy8xZGZuOHZwOXdtalp2NUYvQktYUHhpRzEwL3c0OHYwci84S2VS?=
- =?utf-8?B?Y3N5eDZOYVRGOEg3MW1sRFZudnRZMXRUQU9nUndCdFYwV1JKMjc4VU1kbFg4?=
- =?utf-8?B?MU9UMHhRUGpiQkVwT3Y0b3lHaVk3bHRmMERjOWRRTkVnRWlBdXRCMGZOYlp1?=
- =?utf-8?B?T3ErZE8zSzlBSWxXZ2FkZTg5SC9oVS85WGdsbU9iNlhGNC9lc2hHbFVFVndU?=
- =?utf-8?B?T2FJNUxKcVF6bmJKbEFXSnh3NUhBcThGVGZicjlnMjZIZmZyTE51Yi9zSlEr?=
- =?utf-8?B?QkNhWlFoelNPUzBCMjRGSXdMU3NLa3JGeXBJTjE0UDBEeC80Z1ZwVnZCbENG?=
- =?utf-8?B?Z2dKcTlEK1ZmbEFPenJvMFozdGJXSkRGWjhFMjR6TTJlRnVla3ZNTGQxZmxH?=
- =?utf-8?B?SXNQdFAzRUV5OGdDbHBLbVpQRncyNDBRTnovNWk1OFJTYkNqYlNZMHF5NXpL?=
- =?utf-8?Q?oD6jWlL2BI4xqSq7bvCjA9Y=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <569840192EA7494C8D556A26ED0B8DFC@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0zQWK/M3hmh83mWj01eEV/+qyWBqQRggvK9HjAeZYe4lGqDJ3fp3sItcxgaS?=
+ =?us-ascii?Q?p4U54xmq0hfg30C8P4IXIScN/SMyLZ3tHjqkUNeERF+9ecIqnawK5UXcN9IJ?=
+ =?us-ascii?Q?ys1+7jVgdBZX8SMEpLeP6oqC5iJJ1FEVef31jb6q70h/EOUegccv2EKeRPFM?=
+ =?us-ascii?Q?wGzy+qhc5n5qrqoBywkifW4IaBapAXywzBFFVhz88i/DQZaNj1oQwdcBmUEF?=
+ =?us-ascii?Q?cnqlxhP4jdFtrjnUcww6PcxbGkPwQ+Xjoqdrtiwc6piH+cI8OEf61+uIq4Fy?=
+ =?us-ascii?Q?ekojb5roKlC8/ScweDB0EqvgSG7gXrvxI/rjXh1JdeKWkHt3hRLsT+HSIcRP?=
+ =?us-ascii?Q?pyUO/rltfsVON5SWhsD15gbfxc1O/o50Wkdj+ju1V0Hdhs6vS/Q0itd8ycnF?=
+ =?us-ascii?Q?IcHFVOQzzWi6tSSVasduAaeFZLa7UGu6BZEkcfs5TcgQt7bqVMew/Trqt26z?=
+ =?us-ascii?Q?QpiRKEuj+kj0byCAAYrb7J88rkZ0mF6l+Vj6i5Up1lykjE5zcptCVLnyAEws?=
+ =?us-ascii?Q?6bXsfwBBfKtS+3sB5liaUPklbGqrFeQTU345G96aD04O9A2sqEh2sZjlpDK1?=
+ =?us-ascii?Q?BUuK+k+02FdwIrKB80csF2dP5kxhYln2NoJmyzDJCgIx7fMuDBTdoQoXzKVZ?=
+ =?us-ascii?Q?KBDsOYqTiHocw3xl5fB8XqBUgCX6M39DjKFKkm1tKowVfbW0r6+So4ZEpqv1?=
+ =?us-ascii?Q?AZXw0j24sCVj2qpRa4MQwgHQrQoP0duMImIBvl++IhHhUW4/Kzr8pXd2VQf1?=
+ =?us-ascii?Q?8dk+vOXOHhPpbbW1p0xF6BxJx3qEyd6JnJVQ5sPbjATcMsEp762nFqA5Sf6f?=
+ =?us-ascii?Q?SqTFW+vAU95ZEN4jFrcoBoWL4MkfbPxM89QvNvUtHvGqrg4iyoObb7hFvGFj?=
+ =?us-ascii?Q?arW+Weed3JgaYDpzOWraeVwFP52PywqJcY8xagbb5RfD4z/+Xto/sMX0dYUI?=
+ =?us-ascii?Q?WmfIMTovHRLJ3HjGIDX3wl2+h5G3+RlGq1VcMXOAnpAqnYWZfjKrPZclP9Xf?=
+ =?us-ascii?Q?akcRRtpp2tMPejgJ6zuNzTmQdbyA0qvltxhErKZyTrMZUaT5R7h0oafyaMiX?=
+ =?us-ascii?Q?TipfClhjLps2pW202r4GDC67PrEYGL2T3kBfi8CBiWelUXYlIGqhahFsy8Bo?=
+ =?us-ascii?Q?rzxi8avGT6uSvkSyZ7Ipq8PC8Z/BK6UHfBbakq96yldQ8ZyUd+NyYUakq2z0?=
+ =?us-ascii?Q?PukS7EAxUy+R0/9YWgMxkESvifQ9YSWmiMP3IqzE77dXZJOtEysw/D2LTs3+?=
+ =?us-ascii?Q?R2YdAk8J9WC5HxfuxdMDZJ44bzK4Vezey/l3bPkbgsyePjURaoeiErDhBpfG?=
+ =?us-ascii?Q?uq9sdskf26ZOJBdeRkEKrDFoqXsqq6Xp6ISReDs1P0EIeIS4AojnaX4HWPWH?=
+ =?us-ascii?Q?rPi3XrzahFslvEJj9UAEq3y9BamAr74/HjMOp8ZJoWHuTzjgTX1o7Q/TCBE4?=
+ =?us-ascii?Q?a6f/ndMBjYUZ3SOjLnKuFxjsje2Vu8oyhtBtoWzvDVXiIv35pr4QYZ42zLtG?=
+ =?us-ascii?Q?kkRAszKNnZ3SZmRgU6w11oEuE+8dJVoQNPxayKxXAhEzmiBQEpK4T1dr3gzG?=
+ =?us-ascii?Q?u/M8Xdctsofu0h4Dz8yEVt/hC0mXOL/8M7yFWjpdcpiz3CQv+fm/r7B/sBWB?=
+ =?us-ascii?Q?Zw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a927fe2-91d7-4e4b-8eba-08dada07f931
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2022 17:08:20.6591
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e7744a1-1c03-4530-f159-08dada0eb64c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2022 17:56:34.8927
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cxdLyadHriMNKq2239kflfyTHxaxJxqH48g5PNTNPm1VzuiVti/BD4wzmB0LYAyH9uI63Ebc0UGGtKd2J4X5JcN5hWcdfYb4kA+FOEzMypA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4854
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: G5s4kVoKazQO+LO3qx0fM7Pu4oxgKBfUE/6XISPmoIzO5Bcp3ainvWe5kltJb/3KAMKxxjPutbju6ZtSjml40e2TDoFboF2bPjKXV5OlQTs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1506
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTEyLTA5IGF0IDE5OjA0ICswMjAwLCBNaWtlIFJhcG9wb3J0IHdyb3RlOg0K
-PiA+ICAgLyoNCj4gPiAgICAqIHhzdGF0ZXJlZ3NfYWN0aXZlID09IHJlZ3NldF9mcHJlZ3NfYWN0
-aXZlLiBQbGVhc2UgcmVmZXIgdG8gdGhlDQo+ID4gY29tbWVudA0KPiA+IGRpZmYgLS1naXQgYS9h
-cmNoL3g4Ni9rZXJuZWwvZnB1L3JlZ3NldC5jDQo+ID4gYi9hcmNoL3g4Ni9rZXJuZWwvZnB1L3Jl
-Z3NldC5jDQo+ID4gaW5kZXggNmQwNTZiNjhmNGVkLi4wMGYzZDVjOWI2ODIgMTAwNjQ0DQo+ID4g
-LS0tIGEvYXJjaC94ODYva2VybmVsL2ZwdS9yZWdzZXQuYw0KPiA+ICsrKyBiL2FyY2gveDg2L2tl
-cm5lbC9mcHUvcmVnc2V0LmMNCj4gPiBAQCAtOCw2ICs4LDcgQEANCj4gPiAgICNpbmNsdWRlIDxh
-c20vZnB1L2FwaS5oPg0KPiA+ICAgI2luY2x1ZGUgPGFzbS9mcHUvc2lnbmFsLmg+DQo+ID4gICAj
-aW5jbHVkZSA8YXNtL2ZwdS9yZWdzZXQuaD4NCj4gPiArI2luY2x1ZGUgPGFzbS9wcmN0bC5oPg0K
-PiA+ICAgDQo+ID4gICAjaW5jbHVkZSAiY29udGV4dC5oIg0KPiA+ICAgI2luY2x1ZGUgImludGVy
-bmFsLmgiDQo+ID4gQEAgLTE3NCw2ICsxNzUsOTIgQEAgaW50IHhzdGF0ZXJlZ3Nfc2V0KHN0cnVj
-dCB0YXNrX3N0cnVjdCAqdGFyZ2V0LA0KPiA+IGNvbnN0IHN0cnVjdCB1c2VyX3JlZ3NldCAqcmVn
-c2V0LA0KPiA+ICAgICAgICByZXR1cm4gcmV0Ow0KPiA+ICAgfQ0KPiA+ICAgDQo+ID4gKw0KPiA+
-ICsjaWZkZWYgQ09ORklHX1g4Nl9VU0VSX1NIQURPV19TVEFDSw0KPiA+ICtpbnQgc3NwX2FjdGl2
-ZShzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRhcmdldCwgY29uc3Qgc3RydWN0DQo+ID4gdXNlcl9yZWdz
-ZXQgKnJlZ3NldCkNCj4gPiArew0KPiA+ICsgICAgIGlmIChzaHN0a19lbmFibGVkKCkpDQo+IA0K
-PiBUaGlzIGlzIG5vdCBnb2luZyB0byB3b3JrIHdpdGggcHRyYWNlIGFzIHNoc3RrX2VuYWJsZWQo
-KSBjaGVja3MNCj4gY3VycmVudA0KPiByYXRoZXIgdGhhbiB0YXJnZXQuDQoNCk9oIHJpZ2h0LCB0
-aGFua3MuIEkgY2FuIGNoYW5nZSBzaHN0a19lbmFibGVkKCkgdG8gdGFrZSBhIHRhc2tfc3RydWN0
-Lg0K
+From: Jinank Jain <jinankjain@linux.microsoft.com> Sent: Thursday, December=
+ 8, 2022 9:32 PM
+>=20
+> Child partitions are free to allocate SynIC message and event page but in
+> case of root partition it must use the pages allocated by Microsoft
+> Hypervisor (MSHV). Base address for these pages can be found using
+> synthetic MSRs exposed by MSHV. There is a slight difference in those MSR=
+s
+> for nested vs non-nested root partition.
+>=20
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h | 11 ++++++
+>  arch/x86/include/asm/mshyperv.h    | 30 +++------------
+>  arch/x86/kernel/cpu/mshyperv.c     | 61 ++++++++++++++++++++++++++++++
+>  drivers/hv/hv.c                    | 32 ++++++++++------
+>  4 files changed, 99 insertions(+), 35 deletions(-)
+>=20
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hy=
+perv-tlfs.h
+> index 58c03d18c235..b5019becb618 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -225,6 +225,17 @@ enum hv_isolation_type {
+>  #define HV_REGISTER_SINT14			0x4000009E
+>  #define HV_REGISTER_SINT15			0x4000009F
+>=20
+> +/*
+> + * Define synthetic interrupt controller model specific registers for
+> + * nested hypervisor.
+> + */
+> +#define HV_REGISTER_NESTED_SCONTROL            0x40001080
+> +#define HV_REGISTER_NESTED_SVERSION            0x40001081
+> +#define HV_REGISTER_NESTED_SIEFP               0x40001082
+> +#define HV_REGISTER_NESTED_SIMP                0x40001083
+> +#define HV_REGISTER_NESTED_EOM                 0x40001084
+> +#define HV_REGISTER_NESTED_SINT0               0x40001090
+> +
+>  /*
+>   * Synthetic Timer MSRs. Four timers per vcpu.
+>   */
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
+erv.h
+> index 61f0c206bff0..c38e4c66a3ac 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -198,30 +198,10 @@ static inline bool hv_is_synic_reg(unsigned int reg=
+)
+>  	return false;
+>  }
+>=20
+> -static inline u64 hv_get_register(unsigned int reg)
+> -{
+> -	u64 value;
+> -
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> -		hv_ghcb_msr_read(reg, &value);
+> -	else
+> -		rdmsrl(reg, value);
+> -	return value;
+> -}
+> -
+> -static inline void hv_set_register(unsigned int reg, u64 value)
+> -{
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> -		hv_ghcb_msr_write(reg, value);
+> -
+> -		/* Write proxy bit via wrmsl instruction */
+> -		if (reg >=3D HV_REGISTER_SINT0 &&
+> -		    reg <=3D HV_REGISTER_SINT15)
+> -			wrmsrl(reg, value | 1 << 20);
+> -	} else {
+> -		wrmsrl(reg, value);
+> -	}
+> -}
+> +u64 hv_get_register(unsigned int reg);
+> +void hv_set_register(unsigned int reg, u64 value);
+> +u64 hv_get_non_nested_register(unsigned int reg);
+> +void hv_set_non_nested_register(unsigned int reg, u64 value);
+>=20
+>  #else /* CONFIG_HYPERV */
+>  static inline void hyperv_init(void) {}
+> @@ -241,6 +221,8 @@ static inline int hyperv_flush_guest_mapping_range(u6=
+4 as,
+>  }
+>  static inline void hv_set_register(unsigned int reg, u64 value) { }
+>  static inline u64 hv_get_register(unsigned int reg) { return 0; }
+> +static inline void hv_set_non_nested_register(unsigned int reg, u64 valu=
+e) { }
+> +static inline u64 hv_get_non_nested_register(unsigned int reg) { return =
+0; }
+>  static inline int hv_set_mem_host_visibility(unsigned long addr, int num=
+pages,
+>  					     bool visible)
+>  {
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
+v.c
+> index f9b78d4829e3..47ffec5de9b8 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -41,7 +41,68 @@ bool hv_root_partition;
+>  bool hv_nested;
+>  struct ms_hyperv_info ms_hyperv;
+>=20
+> +static inline unsigned int hv_get_nested_reg(unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case HV_REGISTER_SIMP:
+> +		return HV_REGISTER_NESTED_SIMP;
+> +	case HV_REGISTER_SIEFP:
+> +		return HV_REGISTER_NESTED_SIEFP;
+> +	case HV_REGISTER_SVERSION:
+> +		return HV_REGISTER_NESTED_SVERSION;
+> +	case HV_REGISTER_SCONTROL:
+> +		return HV_REGISTER_NESTED_SCONTROL;
+> +	case HV_REGISTER_SINT0:
+> +		return HV_REGISTER_NESTED_SINT0;
+> +	case HV_REGISTER_EOM:
+> +		return HV_REGISTER_NESTED_EOM;
+> +	default:
+> +		return reg;
+> +	}
+> +}
+> +
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> +u64 hv_get_non_nested_register(unsigned int reg)
+> +{
+> +	u64 value;
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> +		hv_ghcb_msr_read(reg, &value);
+> +	else
+> +		rdmsrl(reg, value);
+> +	return value;
+> +}
+> +
+> +void hv_set_non_nested_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> +		hv_ghcb_msr_write(reg, value);
+> +
+> +		/* Write proxy bit via wrmsl instruction */
+> +		if (reg >=3D HV_REGISTER_SINT0 &&
+> +		    reg <=3D HV_REGISTER_SINT15)
+> +			wrmsrl(reg, value | 1 << 20);
+> +	} else {
+> +		wrmsrl(reg, value);
+> +	}
+> +}
+> +
+> +u64 hv_get_register(unsigned int reg)
+> +{
+> +	if (hv_nested)
+> +		reg =3D hv_get_nested_reg(reg);
+> +
+> +	return hv_get_non_nested_register(reg);
+> +}
+> +
+> +void hv_set_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_nested)
+> +		reg =3D hv_get_nested_reg(reg);
+> +
+> +	hv_set_non_nested_register(reg, value);
+> +}
+> +
+
+This refactoring looks good.  But there's still one tweak needed.
+These four functions must be marked as exported because they
+are used in code in drivers/hv that is part of the Hyper-V module.
+If CONFIG_HYPERV=3Dm, you'll get a link error if these functions
+aren't exported.  By "exported", I mean adding
+
+EXPORT_SYMBOL_GPL(<func_name>);
+
+after each of the above four functions.  A good test is to build
+with CONFIG_HYPERV=3Dm instead of CONFIG_HYPERV=3Dy.
+
+>  static void (*vmbus_handler)(void);
+>  static void (*hv_stimer0_handler)(void);
+>  static void (*hv_kexec_handler)(void);
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index 4d6480d57546..a422cb7b18d3 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -147,7 +147,7 @@ int hv_synic_alloc(void)
+>  		 * Synic message and event pages are allocated by paravisor.
+>  		 * Skip these pages allocation here.
+>  		 */
+> -		if (!hv_isolation_type_snp()) {
+> +		if (!hv_isolation_type_snp() && !hv_root_partition) {
+>  			hv_cpu->synic_message_page =3D
+>  				(void *)get_zeroed_page(GFP_ATOMIC);
+>  			if (hv_cpu->synic_message_page =3D=3D NULL) {
+> @@ -188,8 +188,16 @@ void hv_synic_free(void)
+>  		struct hv_per_cpu_context *hv_cpu
+>  			=3D per_cpu_ptr(hv_context.cpu_context, cpu);
+>=20
+> -		free_page((unsigned long)hv_cpu->synic_event_page);
+> -		free_page((unsigned long)hv_cpu->synic_message_page);
+> +		if (hv_root_partition) {
+> +			if (hv_cpu->synic_event_page !=3D NULL)
+> +				memunmap(hv_cpu->synic_event_page);
+> +
+> +			if (hv_cpu->synic_message_page !=3D NULL)
+> +				memunmap(hv_cpu->synic_message_page);
+> +		} else {
+> +			free_page((unsigned long)hv_cpu->synic_event_page);
+> +			free_page((unsigned long)hv_cpu->synic_message_page);
+> +		}
+>  		free_page((unsigned long)hv_cpu->post_msg_page);
+>  	}
+>=20
+> @@ -214,9 +222,10 @@ void hv_synic_enable_regs(unsigned int cpu)
+>=20
+>  	/* Setup the Synic's message page */
+>  	simp.as_uint64 =3D hv_get_register(HV_REGISTER_SIMP);
+> +
+
+This additional blank line is a spurious/gratuitous whitespace change, whic=
+h
+should be avoided.  Especially when a patch has gone through several revisi=
+ons,
+it's likely that you'll end up with some whitespace changes like this.  But=
+ it's
+important to go back and remove them so that the patch isn't cluttered with
+changes that don't add any value.  Such gratuitous changes make it harder
+to review the patch, and are unnecessary code churn.
+
+
+>  	simp.simp_enabled =3D 1;
+>=20
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_message_page
+>  			=3D memremap(simp.base_simp_gpa << HV_HYP_PAGE_SHIFT,
+>  				   HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -233,7 +242,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	siefp.as_uint64 =3D hv_get_register(HV_REGISTER_SIEFP);
+>  	siefp.siefp_enabled =3D 1;
+>=20
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_event_page =3D
+>  			memremap(siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT,
+>  				 HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -250,8 +259,8 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	/* Setup the shared SINT. */
+>  	if (vmbus_irq !=3D -1)
+>  		enable_percpu_irq(vmbus_irq, 0);
+> -	shared_sint.as_uint64 =3D hv_get_register(HV_REGISTER_SINT0 +
+> -					VMBUS_MESSAGE_SINT);
+> +	shared_sint.as_uint64 =3D
+> +		hv_get_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT);
+
+The above change, and all the changes from here down in this patch, are
+spurious/gratuitous whitespace changes that should be removed.  Go back
+to the original code and formatting.  Doing so will make the patch a lot
+shorter. :-)
+
+Michael
+
+>=20
+>  	shared_sint.vector =3D vmbus_interrupt;
+>  	shared_sint.masked =3D false;
+> @@ -267,7 +276,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	shared_sint.auto_eoi =3D 0;
+>  #endif
+>  	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
+> -				shared_sint.as_uint64);
+> +			shared_sint.as_uint64);
+>=20
+>  	/* Enable the global synic bit */
+>  	sctrl.as_uint64 =3D hv_get_register(HV_REGISTER_SCONTROL);
+> @@ -297,15 +306,15 @@ void hv_synic_disable_regs(unsigned int cpu)
+>  	union hv_synic_siefp siefp;
+>  	union hv_synic_scontrol sctrl;
+>=20
+> -	shared_sint.as_uint64 =3D hv_get_register(HV_REGISTER_SINT0 +
+> -					VMBUS_MESSAGE_SINT);
+> +	shared_sint.as_uint64 =3D
+> +		hv_get_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT);
+>=20
+>  	shared_sint.masked =3D 1;
+>=20
+>  	/* Need to correctly cleanup in the case of SMP!!! */
+>  	/* Disable the interrupt */
+>  	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
+> -				shared_sint.as_uint64);
+> +			shared_sint.as_uint64);
+>=20
+>  	simp.as_uint64 =3D hv_get_register(HV_REGISTER_SIMP);
+>  	/*
+> @@ -335,6 +344,7 @@ void hv_synic_disable_regs(unsigned int cpu)
+>  	/* Disable the global synic bit */
+>  	sctrl.as_uint64 =3D hv_get_register(HV_REGISTER_SCONTROL);
+>  	sctrl.enable =3D 0;
+> +
+>  	hv_set_register(HV_REGISTER_SCONTROL, sctrl.as_uint64);
+>=20
+>  	if (vmbus_irq !=3D -1)
+> --
+> 2.25.1
+
