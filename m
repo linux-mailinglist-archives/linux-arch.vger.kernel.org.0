@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BE5648FE8
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Dec 2022 18:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EE0648FEA
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Dec 2022 18:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbiLJRMw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 10 Dec 2022 12:12:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S229956AbiLJRNL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 10 Dec 2022 12:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiLJRMo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Dec 2022 12:12:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5153889;
-        Sat, 10 Dec 2022 09:12:40 -0800 (PST)
+        with ESMTP id S229896AbiLJRMw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Dec 2022 12:12:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89696FAC1;
+        Sat, 10 Dec 2022 09:12:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C085B808C6;
-        Sat, 10 Dec 2022 17:12:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E732C43396;
-        Sat, 10 Dec 2022 17:12:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26040B808C6;
+        Sat, 10 Dec 2022 17:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A98C433EF;
+        Sat, 10 Dec 2022 17:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670692357;
-        bh=1to8Eya97xsCd5dpg3aZEbjSh8C5DhuW3JXbIva7/JI=;
+        s=k20201202; t=1670692365;
+        bh=m/A9xb4bgo9ywaAF/nOHCziALkNLqcaygAT8lXBG3nc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WcSN0R5KTFMTuh4feBb46yNzhgAbOwPAhNJawqOQ4DpfS7GvrMAjtrntpeTcrsFyZ
-         vOsPGSCK9uiGV3Q5fs9qtaWI9/HUOUsq47mqqnpwUKsQKLWZHywFXJn8YA7rR7R0Tf
-         I/oFox92QgjgfUgkcW/QYVg3dqQfbogbuB4viOY/iSCvShxzaiyzWS8d7WeSDw+TzY
-         6w4qLbHMCMLBLNrYoSCB+fl+LU5rUizoccvFToLDtiRdwtClNjZJlEGk8qe4nmJrL+
-         R5B/D6BW2BCWin5n1uV4QSEh4ZJaer4e9lFrblKEc7Bc+XmWYN8qUlFfwYV3RJ7oDx
-         Sxt3vn1i3YcMA==
+        b=VeeNJhEbXHCd22P0FaF7aDDoNNpMS0T9bUbALYV/NEJUscxOPCCx6JPhA0HWNkjjy
+         HGNgm7atV6l+x915q+3DSCeZVRe7az9IC4YroX0CpiQ0+5N9mmiPlrA8j6DlqtZKE1
+         BpEzTsH28wSUmGvyZACDdkfNCpUEMEUgXvx9p2EKUbisPbh1LRB8eSgHrAZPRfGJaX
+         643TQM1YhHt2W+mSeM5M7ISR2+XQupJMGnCmgvLcU4t7LZiOcVGAZMxI7fuCNdIrXL
+         33123H+jHIJ+TUMU0MkkJ3Ff6UaMkSRpfPB1ntB5T46SaaGmLNZ0DXD74X37lvzsWu
+         v24Jm6+Jda67g==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -41,12 +41,10 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
         bjorn@kernel.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: [PATCH -next V11 2/7] riscv: ptrace: Remove duplicate operation
-Date:   Sat, 10 Dec 2022 12:11:36 -0500
-Message-Id: <20221210171141.1120123-3-guoren@kernel.org>
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V11 3/7] riscv: entry: Add noinstr to prevent instrumentation inserted
+Date:   Sat, 10 Dec 2022 12:11:37 -0500
+Message-Id: <20221210171141.1120123-4-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221210171141.1120123-1-guoren@kernel.org>
 References: <20221210171141.1120123-1-guoren@kernel.org>
@@ -63,30 +61,50 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The TIF_SYSCALL_TRACE is controlled by a common code, see
-kernel/ptrace.c and include/linux/thread_info.h.
+Without noinstr the compiler is free to insert instrumentation (think
+all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
+yet ready to run this early in the entry path, for instance it could
+rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
 
-clear_task_syscall_work(child, SYSCALL_TRACE);
-
+Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Tested-by: Jisheng Zhang <jszhang@kernel.org>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 ---
- arch/riscv/kernel/ptrace.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/riscv/kernel/traps.c | 4 ++--
+ arch/riscv/mm/fault.c     | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 2ae8280ae475..44f4b1ca315d 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -212,7 +212,6 @@ unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
- 
- void ptrace_disable(struct task_struct *child)
- {
--	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index f3e96d60a2ff..f7fa973558bc 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -95,9 +95,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
  }
  
- long arch_ptrace(struct task_struct *child, long request,
+ #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
+-#define __trap_section		__section(".xip.traps")
++#define __trap_section __noinstr_section(".xip.traps")
+ #else
+-#define __trap_section
++#define __trap_section noinstr
+ #endif
+ #define DO_ERROR_INFO(name, signo, code, str)				\
+ asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
+diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+index d86f7cebd4a7..b26f68eac61c 100644
+--- a/arch/riscv/mm/fault.c
++++ b/arch/riscv/mm/fault.c
+@@ -204,7 +204,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
+  * This routine handles page faults.  It determines the address and the
+  * problem, and then passes it off to one of the appropriate routines.
+  */
+-asmlinkage void do_page_fault(struct pt_regs *regs)
++asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+ {
+ 	struct task_struct *tsk;
+ 	struct vm_area_struct *vma;
 -- 
 2.36.1
 
