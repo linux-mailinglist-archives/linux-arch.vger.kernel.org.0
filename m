@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69236492D6
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Dec 2022 07:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA15E6492D1
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Dec 2022 07:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiLKGUE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 11 Dec 2022 01:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S230241AbiLKGTs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 11 Dec 2022 01:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiLKGTL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Dec 2022 01:19:11 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A43B13CEB
-        for <linux-arch@vger.kernel.org>; Sat, 10 Dec 2022 22:17:53 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id 124so6491649pfy.0
-        for <linux-arch@vger.kernel.org>; Sat, 10 Dec 2022 22:17:53 -0800 (PST)
+        with ESMTP id S230127AbiLKGS5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 11 Dec 2022 01:18:57 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AC612AB6
+        for <linux-arch@vger.kernel.org>; Sat, 10 Dec 2022 22:17:49 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id n65-20020a17090a2cc700b0021bc5ef7a14so9069666pjd.0
+        for <linux-arch@vger.kernel.org>; Sat, 10 Dec 2022 22:17:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hcrVxRUisDCIwNUwMSeJHwgn9tju9KUjMVhyouaiuRc=;
-        b=lFe8X3Tz/J5t4ZHMzra4B7R2AyFJRzD9vb+SS/KtJhAHRX9zmlLEG+QdjJyku6Komw
-         QHWzr2V1Q8I6gxOJXRb0iSO2xfUMEgNMJ3GkMHRnvCF7beM2HkY8dXwHGYdNucscAqQG
-         jn0pg3sojLsW8LwNejFzV81kIewZIukI8OGMdX0aVV+L8/ZcxHhOlOGkYtD347dxkNzG
-         dWUqCwPqe0IzmFXSZChwshXrHSbqpPHeYYwRL9+N92cWygqCZlYraUywikihIxzA8G/X
-         vi+YM5eRyRA3HiTxORFlgBnsIN/EAjp9iu6NMiy+22gsour1B+rUZRnV1K6TglO1RHuP
-         85Vw==
+        bh=evugQiRispLf16VkYPAqnei/2K7knVLqFrhAqq/IOXw=;
+        b=EMGipoYTR7UYcizis4dgMknwj9E2ULscbLpm/NnpTiMvALK649R4gbUoDIUuBFJ2zh
+         NVpLXGeweTFuOXteArGGMmDbGWDYnK8C/NgByEhD0k76s/t+S4kMUUbPNDKBsCMV0q80
+         16aw4iTWZZdh5s9dHHmARyF9tR+JPmE2tiYQnKoivVvoHrfKJLpab9UNrHTBLluQqehX
+         bAd1+U9Aa9NswMef1sM0GrUi8yB1mFu9lAtbWp48Gm1Sr9QVT2+kbBoD12hWYLZesQcS
+         gvPFMChjihlbAd/ErdcuJ0kSqTbyt/wR3BmD/0IHyn/NITuOKdCPzFbeJqFMKCUzmjJX
+         tB/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:cc:content-transfer-encoding:mime-version:references
          :in-reply-to:message-id:date:subject:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hcrVxRUisDCIwNUwMSeJHwgn9tju9KUjMVhyouaiuRc=;
-        b=mQ1MjQJyO2HmgE4IgdpRGI2dbz2UQfZGi07Vc3pJGlGgKllbVeWq6K398VkVxkgrGM
-         mtRiddi9b/OvKTPlRZjUKMhxEE6SYJJCpknRbEiR1Z+QKWvtCwZdGQ7IoJV9Z1ywBhkJ
-         K93QiuQ5DME/yNk6aKOJq4L52/HNHp3o4WaH/NvjOZtkQ8urQBkOUHbYvuSvIxS2D8cj
-         QXUSAKQG05gRCyuvopvtN9gZ8hLf3AJ0VYfgeP99BoWJ4LL4ZU4F3veFU3bbSW0qgPWg
-         fxn9qOHbpcELW7NLfIoYjeEqY+TLc+ZNluzpzCWre/iq/XKwBPaHaLQmYABvLxjWIJ3l
-         jeTQ==
-X-Gm-Message-State: ANoB5pluzXKBJEpr9iSV+UopmI6IhFPxDg7KPZmJB84+GkORuVYJpYNA
-        CnOXxkEcEUPlIgpi6B/KRBLGcp7pVBkqDw0B
-X-Google-Smtp-Source: AA0mqf74kmm5QQ2t78EJYN+bbtPv6hSc3ZtlGYw3pqKaGbCI12kuNClxdaTI8S9NHEr0n5VHqw8R/Q==
-X-Received: by 2002:a05:6a00:18a0:b0:577:3523:bd1f with SMTP id x32-20020a056a0018a000b005773523bd1fmr13542228pfh.14.1670739467794;
-        Sat, 10 Dec 2022 22:17:47 -0800 (PST)
+        bh=evugQiRispLf16VkYPAqnei/2K7knVLqFrhAqq/IOXw=;
+        b=yE5gUGb8SZcwGWL7PezS4Mo93J5tZRAkcKebv6V+p9uxHiZqY/cU0pvjNP06Zeu4UY
+         /NGnHOKLcBGirgH767CcUL/Ghp13ZUXomPxU8GIyvlpaZD1T5PEY/5pHfPnak/wvzJ8+
+         XkwEAlLrZ7cTf+dZ6qx+j4JFPgvYaNtIWkl4HxwAlWDuQmAIkhLlMiybvZtu4BHVvZ2O
+         kVMaVXfVFguEM79WxIS/9DZYQpzO8WJSJqMAVkmZuUXeK5aMKoOL3IaAUTKFzrtr+ciJ
+         R8BHxg3pGWrZCZy8tcYQLiHduFZmum9FQexkLEgJ0+sLTEWfbv8HrA0fXYocCfwYyovO
+         hpyA==
+X-Gm-Message-State: ANoB5pmQr6HPFTALk644nagI87T4Dm6FY4RpEp+eooR7OPUGTQKup5Iy
+        Ck1Lmt8pYTqSz+hHNWygoT94gg==
+X-Google-Smtp-Source: AA0mqf7BU4VduoIUcW6NS1AHsOeBKupR6Ivt8o0C8HQAosZ81xC7q9zLf5iRwrOiaKuLdfQfthjFEA==
+X-Received: by 2002:a05:6a21:c08a:b0:a7:ce31:95f7 with SMTP id bn10-20020a056a21c08a00b000a7ce3195f7mr14161392pzc.27.1670739468891;
+        Sat, 10 Dec 2022 22:17:48 -0800 (PST)
 Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id c8-20020a624e08000000b0056c2e497b02sm3621357pfb.173.2022.12.10.22.17.47
+        by smtp.gmail.com with ESMTPSA id bt28-20020a63291c000000b0043b565cb57csm3088631pgb.73.2022.12.10.22.17.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Dec 2022 22:17:47 -0800 (PST)
-Subject: [PATCH v2 15/24] arm64: Remove empty <uapi/asm/setup.h>
-Date:   Sat, 10 Dec 2022 22:13:49 -0800
-Message-Id: <20221211061358.28035-16-palmer@rivosinc.com>
+        Sat, 10 Dec 2022 22:17:48 -0800 (PST)
+Subject: [PATCH v2 16/24] m68k: Remove empty <uapi/asm/setup.h>
+Date:   Sat, 10 Dec 2022 22:13:50 -0800
+Message-Id: <20221211061358.28035-17-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221211061358.28035-1-palmer@rivosinc.com>
 References: <20221211061358.28035-1-palmer@rivosinc.com>
@@ -72,41 +72,31 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/arm64/include/uapi/asm/setup.h | 25 -------------------------
- 1 file changed, 25 deletions(-)
- delete mode 100644 arch/arm64/include/uapi/asm/setup.h
+ arch/m68k/include/uapi/asm/setup.h | 15 ---------------
+ 1 file changed, 15 deletions(-)
+ delete mode 100644 arch/m68k/include/uapi/asm/setup.h
 
-diff --git a/arch/arm64/include/uapi/asm/setup.h b/arch/arm64/include/uapi/asm/setup.h
+diff --git a/arch/m68k/include/uapi/asm/setup.h b/arch/m68k/include/uapi/asm/setup.h
 deleted file mode 100644
-index f9f51e5925aa..000000000000
---- a/arch/arm64/include/uapi/asm/setup.h
+index 005593acc7d8..000000000000
+--- a/arch/m68k/include/uapi/asm/setup.h
 +++ /dev/null
-@@ -1,25 +0,0 @@
+@@ -1,15 +0,0 @@
 -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
 -/*
-- * Based on arch/arm/include/asm/setup.h
-- *
-- * Copyright (C) 1997-1999 Russell King
-- * Copyright (C) 2012 ARM Ltd.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-- */
--#ifndef __ASM_SETUP_H
--#define __ASM_SETUP_H
+-** asm/setup.h -- Definition of the Linux/m68k setup information
+-**
+-** Copyright 1992 by Greg Harp
+-**
+-** This file is subject to the terms and conditions of the GNU General Public
+-** License.  See the file COPYING in the main directory of this archive
+-** for more details.
+-*/
 -
--#include <linux/types.h>
+-#ifndef _UAPI_M68K_SETUP_H
+-#define _UAPI_M68K_SETUP_H
 -
--#endif
+-#endif /* _UAPI_M68K_SETUP_H */
 -- 
 2.38.1
 
