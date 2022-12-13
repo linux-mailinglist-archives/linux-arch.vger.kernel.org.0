@@ -2,132 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DBD64B067
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 08:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E7264B078
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 08:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234461AbiLMH35 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Dec 2022 02:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S234656AbiLMHh5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Dec 2022 02:37:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233740AbiLMH3z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 02:29:55 -0500
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2040.outbound.protection.outlook.com [40.107.12.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70BF1A804;
-        Mon, 12 Dec 2022 23:29:53 -0800 (PST)
+        with ESMTP id S234488AbiLMHh4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 02:37:56 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060.outbound.protection.outlook.com [40.107.93.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD251B9D8;
+        Mon, 12 Dec 2022 23:37:54 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BXPe17iqcxzBk8FFauCRd/Wo/pexBuqw/+ek/Gyo0MziqPk5rJtA1Wv7myWDSGxDdrbsF4uADZ0+kzgvDRRQAPceetMLcUnxwdLUzOpiWuWrp9E3s4HWNF0Dyx2sdbwQ31ZAf0u5IWyRw9amb/kMwjpeFj0LCU4pkdlmRgUNTDeKT7jjTlTuZrZJrl4wJsbUnVWgcB+8FsDy9q5zD9sOHukOe0vsJWLUXK1/Ki/zkVY0sOBA8qSqQ++RuYrevdGnPjzTpaS61ZOceY+LyQsUI53yQyCIeGlhG1hRsCbgg2Mlc4yUZiCiBPwt2V56bs3J5poAO4dqnsXgQtmz5KWlxQ==
+ b=fF9D6Ns1KxC3Dxeu5muFhgfkR6BqQg5FC7tpvx3zb0L2SOYgj004aN9b/piJ/04C6bllhw/+KmTQ5f3KF2ce6ZyICTM0KUh8MzF8BjdtDcxGdt+rnxAvAJaho4zvoTF+YslZPd0U49dXOpyA8EIm+4r9OtloeLYCU3l1jh4rtI1W2067RC8rsanaJni9iHFk7M6vbg31Cv0KnYy38J4b8+54iZSaQNIIyU1tMItYtEL0HHaily7k7v+4jlpC0fnhxNYfdEwzNwjkjNNaA7zUXNIro6zHNnZFIttr/ySnPN+GNnCRTOhrWorElKGys1YY8Zi2fEGmDaMBopsZA6eLBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0lwTymY4FgaNaJBs4HjjqwQ+NZ/XQr+B6URCQKmN8Gg=;
- b=RQkw9oXam+N4SOX8dflLlimZ80IOm6PRDJcIGTzAFeRCA0ZqL6K/42x3HsP0KSXYk5Cke/7ZX/imcfrCdTVOskylZsoQBfSR1ASAfOFCNMXOSJrw6d75YA0NqI18hUb85Zo88vUL+c2JUP2InE6c55VTEvyZpXhVEowacroEOopDOf7+vC4ra7fxidzvRzb11Z+2BU6A/D9Ft6G791IbT6TaipKhtjrCe7p0+Tzj9JYTRJEVVU9QDbab/LojwxOyaHM7E3bmY4Fomoj7FqFiV0IlhPPZSGOO0LgKdPzyTrVFZ7DuPH3ak9oLReubLkK0HhugrN5L0UJsuv7LB/d2IA==
+ bh=+0viQ2dPRq3x2BkZRAtkKB6ohN3ihipvwMl5DxLb5zg=;
+ b=F0xNkf6/pmjVViY4lxr9SgZW+Dyp6hHbhftfBXVXIg2ETHFMQ+bcWB5l4afIHHyohUx3nKDGLhOwBr7TXWG/0F9VFafuHYYXwstgxDAJUjnT1olpa6U8bKzPiQcoNfuuRUGJvVx4fVAVP3rVajl2PS4Zhwbg/ftAHYPEyNhrfvPXxsWSDZV0aeECnuM/xAm8JGtelSc+SSVRBameSdoTDEndFtb0x7Nr44Ri9VNsW+sCTo7A9kzYwsu+g4JO8gppAUI3N1rrz5GHHYO/lJrZZJ7zHeWKw8PP6TcEb2veXxvUsv6GYpLwEIhL5d6uSiPgrXzZ1tnJsl9b4R3kRfLNcQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0lwTymY4FgaNaJBs4HjjqwQ+NZ/XQr+B6URCQKmN8Gg=;
- b=gD0KM3gw9On1MqJ7mZFCeIkPEBfvbcbZT+HlVkuVZVhv5AXIvPmx8BLd7djNmG3cLcO8W613d82WrbAkEal65baHXx3fDC9jvk8TaxeN3hj/hpKaPUcPLVV7yXMXCIQGCz7ynL6qLLgjMer+lnNqE+NQ9nHXs3Ke3oR7Y5oABoWy/T6fCvNYj6aq6tNQUtZeiGtUkcQk40jCfoHOtTsZKlmgFhAo8O2MptBNBl458l0oIQVy8mwr8LPhHXcUm6ZcsZnxXsrs7HnmyWp/I3fIo0ZPnmMdXIN4CYio2eeR1xq9MNtAxusUxcYuLkkHKeF/wUbZ3bOnHYC4Hj1jNbR/Bw==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2048.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b3::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
- 2022 07:29:50 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
- 07:29:50 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Jeanson <mjeanson@efficios.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>
-Subject: Re: [RFC PATCH] Syscall tracing on PPC64_ELF_ABI_V1 without
- KALLSYMS_ALL
-Thread-Topic: [RFC PATCH] Syscall tracing on PPC64_ELF_ABI_V1 without
- KALLSYMS_ALL
-Thread-Index: AQHZDm/UBtWhlvS25UGRWg8dV8YpkK5rbH2A
-Date:   Tue, 13 Dec 2022 07:29:50 +0000
-Message-ID: <39c53bd1-432f-15f6-4cbd-b8551fc261cf@csgroup.eu>
-References: <20221212212159.3435046-1-mjeanson@efficios.com>
-In-Reply-To: <20221212212159.3435046-1-mjeanson@efficios.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2048:EE_
-x-ms-office365-filtering-correlation-id: a2cb3caf-e66e-4517-257a-08dadcdbd202
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: A1cvJSstesvowLSJKwKpWgDg2Q8v4AJzdPktK2lsqEYZYxHQL8kglsdWx0ev4ED5wjynLX1FaW/Ty+GmBJUlVEKVW69tCBAxLdVYF59IiQz+WhN/l6BmLN+td9hcdQXNQI6jyIS9H/z1LeOhb5qTa5yTi5y5gW5EnMro7cgmT+1jmtqPagwDvBDsSvWH5DbWm1n/b+geytleK3zCH9pwA/ojzbdf47wo4z4zw7IWzUH8mMniW6elbGtQFU8Ki/wrscYD2yLWHNWZZT3tr1iMxgiD2HWnjYkWOyUn/TMV5P6DzE6plwniIj9q6/0D3T3IEIwWhOjaRyIKLQm5IijFBe5ZXhbOcgblyXkGCm2dczV4px7JeFJ7J3uEN6XC6AI2IUdE7VliBZ7fi1C5BEzpNKghvfbqu1Cjy+/rhjivdscwdg9N4t/V11P45j9OD/tmZhRP6vet3kzwhryh4UIiXN4PjIi3JYVl2T//CFpPJ/2eYnHDC4/ktNzSGGvH2ZxQ8Eyr0H6YmSYmKJ1D3u2vXn+xbVktJQQzxzqj1DYhmY+op34HiwId2hsE9dHhjZRIO6x7qFsPEdXYX3Pv6TjMyY3HSPgzFB8lNplGUM/rVWVN/VrAMg5oClnqjzqn/bWMERU7neOEk1gtsb8LZkpZTOsAQumY5b15G5LZ9Y7W6tk0ssPGZDt1sThv9bat8WvuQNrpCWhzrSLzvNXfdzlyPZvLKzn3KLSAih1sp30pW62OajVgyvmXlHjEBlNezpzmp/l3+dmF8nnFXO0XUWb/FA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39850400004)(451199015)(38100700002)(122000001)(2906002)(4326008)(86362001)(31696002)(66556008)(66946007)(316002)(66446008)(54906003)(91956017)(38070700005)(76116006)(64756008)(8676002)(41300700001)(110136005)(66476007)(44832011)(2616005)(5660300002)(7416002)(8936002)(478600001)(186003)(71200400001)(6512007)(26005)(6506007)(31686004)(6486002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MldRdFVML3UrRlZuUno2NnlaUTNEM25neEhLeHJFM3VGS2FObHZ2eWF4ajVK?=
- =?utf-8?B?blpzV2tlTmN0MG5sZ1QyL3lmSzhZWFFUY29UUnpocVp1bXljbzN1VElqU1RI?=
- =?utf-8?B?NzNUcmRlK2RSQmloZGdwbzlkV0FFaFk0dld6TGpBNmtCQnVYZE4yeG5DaVdy?=
- =?utf-8?B?MS84cjliT0hWZjJiM2FXdVE4ZUlVL1ByaUtXS1hSVU80THl0OFNBcTRBRVRC?=
- =?utf-8?B?Z2FJQnd0SnhiTnZrL3NGeEl0bnBhY3d3aHR5aVZVSFZsZExTcTg4eWJGd1lz?=
- =?utf-8?B?dzVBZHJzVzhKenBXNmNnTU5qeHhWa05OM2Znc1docHFKL2kxdmNlck1iSk5Y?=
- =?utf-8?B?ZVlxZjdlblFST1FvYitZK0p3dy8waGFYOUxxMzVQVERxaEFwVE92M3d1UHpO?=
- =?utf-8?B?WHZRQnZmZitNenluVERpWUFjMUhvR3FKZmZkeFYraHozRDlUY2NzYlRqa0ZI?=
- =?utf-8?B?cVByRTJjd1EyOHFWeEk1L0pzOTlsOGkxdG1ycWJQQzdwSFQ3LzhxcnpjMmlx?=
- =?utf-8?B?NUVKMUowTXJTZ1p2RVdMRFNrcEFxN3RFNWl3b1ZqTU44Y25IanZ4VE45T2xX?=
- =?utf-8?B?WFdueENaRHhsRmtJQzMwTkdyTWhuc2l5TFRjN0llN0tLTXpBczJVdEpqbFl1?=
- =?utf-8?B?UjNCc2FuZGI5Vzg3WDB6NEFZMnUySlIrRy9iWTRTL3IzOVJDWHUzcml0REdU?=
- =?utf-8?B?WEhJV2ZjK3l6NGFTLytQY0NCZWlPVEJ5TDJDZ1lQL3VnMFg3akZsTXZCOTFU?=
- =?utf-8?B?VXJxQUM3eFljZG5CMllVUGNPSGpCeDdFdGQ3UCtBQThwVFczNjFGTXFuZnlU?=
- =?utf-8?B?ams1ZG1BYVJRK2VLdXArU3BaV1FnVlBidmp4ZjFmTkwzTVRrSkdLMW9CRWNr?=
- =?utf-8?B?QmZFdEpHb0t6Z0cyTzlFcUpRb2Y1VEFDODBuWXNWZkJhTVVSMXZOU01TSCty?=
- =?utf-8?B?dGRMKytPWHNwdldaeE1xa3RTQ3RlQ0JTYThBbkxxaDdpdTZHNk9JZFg5SWpO?=
- =?utf-8?B?K05RZGdoK2VOT09DY1M5NHpwVVlZTlYyTUhpV0RwelhYYkkyTzVPZnY3UUdp?=
- =?utf-8?B?ZVRUK0tmMVh4K1FRb3BlL0MycTFPZ00wUzFnK2g1VEplelQ0TjFoclQ5UHps?=
- =?utf-8?B?Smd4RFZCZlk2bEh2VGw0QXVUalFvaUV5K09mbHdMTjVJU20wR1dweEk0bmpo?=
- =?utf-8?B?c2wrQklEdTFHR3RBb2t0LzFvZ2RReGFITkNBMmlJR3dUbHMrU0ZtNlN2OVBH?=
- =?utf-8?B?Mld1Q2M0LzdMaGtVM1plb2dmWFdyV1A2YU1pZStJV1hCSjhjMDFJSG5Bc3Zj?=
- =?utf-8?B?UldWRDhWa3FQMTNzdjR0V2c3SDlWcTl0YjQ5MzZvZTZscnpGWUVweWtlZy9t?=
- =?utf-8?B?T1RxY0haUUZzT3lFY1ZnVVcrZStHd1VvNUZWbE8vNVgxTVRXVGFBbkppbG5X?=
- =?utf-8?B?eUZsRlRuSmIrUGVoL1ptWm54L28yRkxXNTFCU2dmMlQxY0F5THZLaEp1c0Y4?=
- =?utf-8?B?eG9WN3EzK3Vkc1lJM21RWVlxL1k3RnR5ellZWXRkL0lUUmxLUVd2Ukw4dmlY?=
- =?utf-8?B?aUNBMzYwaGNOYlNIdWlabWgrTGpHeG53UXdxUFg5SzgyRCsvUGtyWXVHakFD?=
- =?utf-8?B?SmhRWkp1aFVCQlovN3ZnajFpVHlBSjNDTHhHSUV3UFRSd3VvZ05FSU11UGZa?=
- =?utf-8?B?c1g3bXFDdE9CUWZaRk1YZEMyT0kwYXFsODAwUm1JMTl0eTVJS3pFTDlKTzJI?=
- =?utf-8?B?Qlh1elc3bitmWUl1R1Q4cVhrejBiTHdacXJhMEdzd0ZNRjBaUEI2SzBoaDJM?=
- =?utf-8?B?YnBkWmdLR1NGOGEyZCtKMXpRNlgrbEF1TU9XR3ZTdG9zbEhWSE51OUE1ZUhH?=
- =?utf-8?B?R2xjNi9qY3FZUmlZSWo1ZCt5OExDa095NHBTU2lmbEN4ZFd3c1Y3RXUrY2ll?=
- =?utf-8?B?cmFZNEMxMFZwWTVnL2xiYVVNamxOc3hiVU9nRXpoeHVKVTNXUTEyckVPUTlu?=
- =?utf-8?B?SEJBbnJER2ZNMUdha004UUhOSHlZL3ZOd3U4RU13bGVmK1dva2l1SWFwRS9K?=
- =?utf-8?B?clJLRytXZCswdEZRbTcvMTRWOGtTSEI3dlA1bGZSQ0Z3VHRRU0dXRHJMWTFl?=
- =?utf-8?B?QzlNR0pGN0hENndEUFRKSVpIbzhSekJEVWp6a3g3UlN2T0JUNFlOMjhWekdF?=
- =?utf-8?B?dFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0703909A6910204C967AE69FA5A968BF@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+ bh=+0viQ2dPRq3x2BkZRAtkKB6ohN3ihipvwMl5DxLb5zg=;
+ b=r+aIpLOMXuYjQzuqoRZ5L739G7mfx+B6DXrdrtmUdoOxgPUUrTAvJ/aCJqR1LYOeYiV+/nZipD6B2oDjwDAQZQiwewl9Gjducqb5DnMxdNgAKJZY1TC4JiGeB3HSGTsm1BNN+e89ht4WfhLAsAyYe/rgLN2jNGtyea7E/8AHcUk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
+ PH0PR12MB7078.namprd12.prod.outlook.com (2603:10b6:510:21d::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.19; Tue, 13 Dec 2022 07:37:52 +0000
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::8f76:f869:2e1f:331e]) by DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::8f76:f869:2e1f:331e%6]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 07:37:51 +0000
+Message-ID: <29c7aac6-3995-0a9f-929d-a2865aededb5@amd.com>
+Date:   Tue, 13 Dec 2022 08:37:26 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH V2 18/18] x86/sev: Fix interrupt exit code paths from
+ #HV exception
+Content-Language: en-US
+To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-19-ltykernel@gmail.com>
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <20221119034633.1728632-19-ltykernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0142.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::27) To DM6PR12MB2810.namprd12.prod.outlook.com
+ (2603:10b6:5:41::21)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|PH0PR12MB7078:EE_
+X-MS-Office365-Filtering-Correlation-Id: a29cf212-718b-4e72-b2ee-08dadcdcf08c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CcO4+cFWOt1n+NWBEyPidxW7wCkszCKOgV8b6crgvGNPbA2+M4n1j3RImkoDxQYHNvWo/Y75oLE4ochmzQdeH2SEpd1QnnVfT4ICnMpiXJo8Zi8mUB0MY+aOKQ1GuHWpGTw/TGmzcI+rR16/TJQ7NZVfTAWCnoVEgpoNjMGi+Zm4CeTtqXnyr6Bu1hv3Uey8OBGiq8oExc9tDtSZS62By9TPXxrFpxTPmSMzbvl5diPyLEM0mpxjMX4sUqyWV+4Xkv/k915uxFPJb0yGnjLHTcKry55gPMuigj7eJ8iIQF63URRyadRS+f+6uzC+qeg+aGNXAITBBxVFRx/vQOsu/+EK3aJ1Guiw38BJqirB/TiJqakULILrRcSejt0SVzi2YyZrM+HH/rw76NdbDky1OPlhPhweY3VJWvc1mAZMWWn2480NoRqewHkh4ig2CbankGRK3QjEYCUB2KLEKs2ahUORJwIb/fDAsKR9O2gL6mxhu0e9t3rEZ3l7UOjbxgqQwlrzTg6j00I+4QMdfMG3Rm3KyJVSeQqgExV3i6ak3ncmTdVr5Wi8tr06E54Km1N9ykBz045mplnmgc74sKh5norcVvbq/YfURyepBKXLF3fIUV7/iSrn0PdwTqMJGuaYbJYCUgltkeVffwyCm0O+H9RlQ9+Z1RaZFczGZSznOJC+SUE6VfRBC0HjUsRhIDwcMT5Qg8rW0JiatU/JF6AWjTT7HjYE/MJL+GrE6g4J/op6vtlIqded4ABVgO8vB8h7
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199015)(31696002)(86362001)(4326008)(41300700001)(7406005)(66556008)(8676002)(66476007)(8936002)(2616005)(36756003)(7416002)(316002)(66946007)(921005)(6666004)(38100700002)(26005)(186003)(5660300002)(6486002)(478600001)(6506007)(6512007)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SVd3QlRiUGNrRjE2a3U4NVcwc0c5ZXVzZlhrMGtZN3FUZHZKbEo1M1VOSGVN?=
+ =?utf-8?B?d0RMSzVKZXBpcHRYMHU1a0l3YlRvRFQyaVlEMXZJOURmclBEOStLSlp3WDk5?=
+ =?utf-8?B?QmgrVDBtZ2hVU0xvUUN0aDFsbmQ3LzJRb1V0ekZxdGQ1QWVhTWJ1a3l6TWNp?=
+ =?utf-8?B?SDY1cDlmQnlhdzBKMXh0MGFQN0I2MmFiemxkRHRqdjVBdzNySFZEcDNIY1pJ?=
+ =?utf-8?B?aVhTZFVzQW12NjJaYXVSNUx2UU54dFVHTjZtMnFlMXRuTGNHM3I3MGZ6RGFQ?=
+ =?utf-8?B?OHlTZHpoSU1oMDRNOTBoNjhoeWFnMU8wLzZZeDB1TDJPaWhnbnEwWkFCM29E?=
+ =?utf-8?B?eE4yRFczckdjKzZlVUlidnJFTy84ajNuUjBjOThkNFFycjdUbnl1cXFyRmNI?=
+ =?utf-8?B?TFlla3RoYThHVElwOHVBbS9ldFQ0YUswZXRJUGZYaVBORVpuSXFZV2h3d0xp?=
+ =?utf-8?B?Mk9JR2w3THIxU3M1NnlpZEJveHByaCt1RlA0Tnh5RUZTeDNnM1JmY3BIUFR1?=
+ =?utf-8?B?dHAzODBxaVVSc21NR200eUQrSi93VEtrY0liWjNoaHZ2VFY1d2tLOU51NEdK?=
+ =?utf-8?B?YS85Y1lvK1ppR09OUzhLOVdGd2laWWZvZER2REJZQlc2bVpPV2JqYUorWEtX?=
+ =?utf-8?B?Zlo1K1F3dEYvcWUxUVlDNFNzMjZvODlRUFdmdmh1YnJWR3k0QVgzTjhVRmIy?=
+ =?utf-8?B?d2FRa2xJT2s5YzNRYm96anNXMGNLZjFrdlZ2bzZMTzhzQkxqWjFSRTBLeFVr?=
+ =?utf-8?B?ZldYZ3h0VkszbzNzVEpjTTlhS2laR0xoV1FKcm5tcGxQaWJBRE1ISVNhV1ln?=
+ =?utf-8?B?Ky9YQWd4YmQ3bmNhZVI0ekRBeExwYmtjRUxSVGhoMG1TSld5VTMzcXhiQzRG?=
+ =?utf-8?B?UlJKM0xsUjEvcUtJM2lMK0lKOC9ERWZSczhLMGF1YzZHekI4N01NNkQyK1ZD?=
+ =?utf-8?B?Q0FxOFlrVmJ6MlNnZmRDMzVGemsxaHFka3RwYXlrSnRZSGgwWndVQVFDSjho?=
+ =?utf-8?B?MHRTZ1V6RklQUWt0d0h5VXZrMTl6OUk3amk5UEl6NVF5enpWbHZsWGVKTGlM?=
+ =?utf-8?B?Y0EwSyt0emxjUnhmWUlJZld1YjFpTDRIMTQxVThXTFJDaVpRT3FKQWh1VjlZ?=
+ =?utf-8?B?KzlzanZZNUtEcHVzeWhzd2xxWTY4Uy9Zb21Gems0YkdsZFJScFFpeEZWbzdF?=
+ =?utf-8?B?K2NFZmtvcGpmNUNwaE4vTTdHUDdpSDYycTc0T0NEdDNxc0pyak5tVDlyeWky?=
+ =?utf-8?B?ZFZrRERoWXRJRzJ6UFFtZGRCVDUyZGpzejlnNGZzN3Y1MGZrT3cvNGdqTkdU?=
+ =?utf-8?B?cURyQ3FmTE95MzVoY1FmNXJydmM2MWQ5Q2d0S29PR3k3MTUwVEZqenM0Q2hs?=
+ =?utf-8?B?OC9vcTZGYnpGVS9BWXo0Z0dJKzF6YTdhV1hMbVlyVUc2MGNzNFRSd0Q1Y0dZ?=
+ =?utf-8?B?bVd3UEM2ZmdkQS9FSnNXcFV2TFA1UnlCZnlHcE1QQTBCUFNHVllnL3dPck56?=
+ =?utf-8?B?d2pNK3pDSkIzbnQ1VGtkRGNxY09rai9RbC9aelZwQlZqOXFsc1ErODAwZWVC?=
+ =?utf-8?B?T2w4TkdBblVJS0hXcWFidWN1VXIrSnU2QVNudWtJV1l3V3lTeDhrQTBGSW92?=
+ =?utf-8?B?UklBcVRxSjZ6ZmM1UFA4ck9xeHJMcjFuZjk4RmVXcFBiNVB1Q1FGcGtMTGVj?=
+ =?utf-8?B?enRYZDNXVzZFWm1oa3hHSzRkbERBOTlKNnZmb2VNbDMyNTNRNHJvbDBzSzFh?=
+ =?utf-8?B?N0pFQk1OWjFCTEc4L0twZWltc1JsY25XVERVbU9pdnN6bU85VUFHbmFiRGoy?=
+ =?utf-8?B?MWJ5Y1R0Rk1CbG1TclA2V0F4eWttenQxOUkwWlV4YzV4RUREb281eDJTbDgv?=
+ =?utf-8?B?Vnl6MU4zMzkreWd3bmFJcmQzZldZMEFPVmJtRU9ZZkNTUG5DVEx4VjVOWTMw?=
+ =?utf-8?B?T3FVWXk4ZzlwNVJuQThTUWlYaWVaajJGaHlDTmhJS3BBR09PSEVseUw5dVIv?=
+ =?utf-8?B?S0g0YzJCU09obENDa24wejVXS3ZCam9nNC9uNEF3TXdKV200Sk5tY3pabDB3?=
+ =?utf-8?B?ZXA3Yk1LWUw0MkxqMStMaTlmUXBueTlMYzltbEY4SWwzUXJHTkZUWFlkY3ZT?=
+ =?utf-8?Q?IjoXRqr0Ww8Ew5HcjQeBMQZae?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a29cf212-718b-4e72-b2ee-08dadcdcf08c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: a2cb3caf-e66e-4517-257a-08dadcdbd202
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2022 07:29:50.5494
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2022 07:37:51.8014
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xgdFUj7EusPXQzJwMT1mSWI7KZt4JP3vsSrQuRvWp9kTSO6t9iyYeIaR+mwMa9qB11viS2KTKXaBsCsE5W/tv5lmRB+oVAQtUZ2SosGV2Hs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2048
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: meeFIjfNuvFLoW92QXhfi8J46UPnn7ahCMp76WkLvXmD3Hw0ZPkm/iATfGRQYb49dr7WfHy0dgVIdUOckf1jOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7078
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -138,84 +137,201 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-VGhlIGNoYW5nZXMgYXJlIGFic29sdXRlbHkgbm90IHNwZWNpZmljIHRvIHBvd2VycGMuIFlvdSBz
-aG91bGQgYWRqdXN0IA0KdGhlIHN1YmplY3QgYWNjb3JkaW5nbHksIGFuZCBjb3B5IGxpbnV4LWFy
-Y2ggYW5kIHRyYWNpbmcgYW5kIHByb2JhYmx5IA0KYWxzbyBpYTY0IGFuZCBwYXJpc2MuDQoNCkxl
-IDEyLzEyLzIwMjIgw6AgMjI6MjEsIE1pY2hhZWwgSmVhbnNvbiBhIMOpY3JpdMKgOg0KPiBJbiBh
-ZDA1MGQyMzkwZmNjYjIyYWEzZTZmNjVlMTE3NTdjZTdhNWE3Y2E1IHdlIGZpeGVkIGZ0cmFjZSBz
-eXNjYWxsDQo+IHRyYWNpbmcgb24gUFBDNjRfRUxGX0FCSV9WMSBieSBsb29raW5nIGZvciB0aGUg
-bm9uLWRvdCBwcmVmaXhlZCBzeW1ib2wNCj4gb2YgYSBzeXNjYWxsLg0KDQpTaG91bGQgYmUgd3Jp
-dHRlbiBhczoNCg0KQ29tbWl0IGFkMDUwZDIzOTBmYyAoInBvd2VycGMvZnRyYWNlOiBmaXggc3lz
-Y2FsbCB0cmFjaW5nIG9uIA0KUFBDNjRfRUxGX0FCSV9WMSIpIGZpeGVkIC4uLi4NCg0KDQo+IA0K
-PiBGdHJhY2UgdXNlcyBrYWxsc3ltcyB0byBsb2NhdGUgc3lzY2FsbCBzeW1ib2xzIGFuZCB0aG9z
-ZSBub24tZG90DQo+IHByZWZpeGVkIHN5bWJvbHMgcmVzaWRlIGluIGEgc2VwYXJhdGUgJy5vcGQn
-IHNlY3Rpb24gd2hpY2ggaXMgbm90DQo+IGluY2x1ZGVkIGJ5IGthbGxzeW1zLg0KPiANCj4gU28g
-d2UgZWl0aGVyIG5lZWQgdG8gaGF2ZSBGVFJBQ0VfU1lTQ0FMTFMgc2VsZWN0IEtBTExTWU1TX0FM
-TCBvbg0KPiBQUEM2NF9FTEZfQUJJX1YxIG9yIGFkZCB0aGUgJy5vcGQnIHNlY3Rpb24gc3ltYm9s
-cyB0byBrYWxsc3ltcy4NCj4gDQo+IFRoaXMgcGF0Y2ggZG9lcyB0aGUgbWluaW11bSB0byBhY2hp
-ZXZlIHRoZSBsYXR0ZXIsIGl0J3MgdGVzdGVkIG9uIGENCj4gY29yZW5ldDY0X3NtcF9kZWZjb25m
-aWcgd2l0aCBLQUxMU1lNU19BTEwgdHVybmVkIG9mZi4NCj4gDQo+IEknbSB1bnN1cmUgd2hpY2gg
-b2YgdGhlIGFsdGVybmF0aXZlcyB3b3VsZCBiZSBiZXR0ZXIuDQo+IA0KPiAtLS0NCj4gSW4gJ2tl
-cm5lbC9tb2R1bGUva2FsbHN5bXMuYycgdGhlICdpc19jb3JlX3N5bWJvbCcgZnVuY3Rpb24gbWln
-aHQgYWxzbw0KPiByZXF1aXJlIHNvbWUgdHdlYWtpbmcgdG8gbWFrZSBhbGwgb3BkIHN5bWJvbHMg
-YXZhaWxhYmxlIHRvIGthbGxzeW1zIGJ1dA0KPiB0aGF0IGRvZXNuJ3QgaW1wYWN0IGZ0cmFjZSBz
-eXNjYWxsIHRyYWNpbmcuDQo+IA0KPiBDYzogTWljaGFlbCBFbGxlcm1hbiA8bXBlQGVsbGVybWFu
-LmlkLmF1Pg0KPiBDYzogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3Vw
-LmV1Pg0KPiBDYzogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9z
-LmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lv
-cy5jb20+DQo+IC0tLQ0KPiAgIGluY2x1ZGUvYXNtLWdlbmVyaWMvc2VjdGlvbnMuaCB8IDE0ICsr
-KysrKysrKysrKysrDQo+ICAgaW5jbHVkZS9saW51eC9rYWxsc3ltcy5oICAgICAgIHwgIDMgKysr
-DQo+ICAga2VybmVsL2thbGxzeW1zLmMgICAgICAgICAgICAgIHwgIDIgKysNCj4gICBzY3JpcHRz
-L2thbGxzeW1zLmMgICAgICAgICAgICAgfCAgMSArDQo+ICAgNCBmaWxlcyBjaGFuZ2VkLCAyMCBp
-bnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9zZWN0
-aW9ucy5oIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy9zZWN0aW9ucy5oDQo+IGluZGV4IGRiMTNiYjYy
-MGY1Mi4uMTQxMDU2Njk1N2U1IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2FzbS1nZW5lcmljL3Nl
-Y3Rpb25zLmgNCj4gKysrIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy9zZWN0aW9ucy5oDQo+IEBAIC0x
-ODAsNiArMTgwLDIwIEBAIHN0YXRpYyBpbmxpbmUgYm9vbCBpc19rZXJuZWxfcm9kYXRhKHVuc2ln
-bmVkIGxvbmcgYWRkcikNCj4gICAJICAgICAgIGFkZHIgPCAodW5zaWduZWQgbG9uZylfX2VuZF9y
-b2RhdGE7DQo+ICAgfQ0KPiAgIA0KPiArLyoqDQo+ICsgKiBpc19rZXJuZWxfb3BkIC0gY2hlY2tz
-IGlmIHRoZSBwb2ludGVyIGFkZHJlc3MgaXMgbG9jYXRlZCBpbiB0aGUNCj4gKyAqICAgICAgICAg
-ICAgICAgICAub3BkIHNlY3Rpb24NCj4gKyAqDQo+ICsgKiBAYWRkcjogYWRkcmVzcyB0byBjaGVj
-aw0KPiArICoNCj4gKyAqIFJldHVybnM6IHRydWUgaWYgdGhlIGFkZHJlc3MgaXMgbG9jYXRlZCBp
-biAub3BkLCBmYWxzZSBvdGhlcndpc2UuDQo+ICsgKi8NCj4gK3N0YXRpYyBpbmxpbmUgYm9vbCBp
-c19rZXJuZWxfb3BkKHVuc2lnbmVkIGxvbmcgYWRkcikNCj4gK3sNCg0KSSB3b3VsZCBhZGQgYSBj
-aGVjayBvZiBDT05GSUdfSEFWRV9GVU5DVElPTl9ERVNDUklQVE9SUzoNCg0KCWlmICghSVNfRU5B
-QkxFRChDT05GSUdfSEFWRV9GVU5DVElPTl9ERVNDUklQVE9SUykpDQoJCXJldHVybiBmYWxzZTsN
-Cg0KPiArCXJldHVybiBhZGRyID49ICh1bnNpZ25lZCBsb25nKV9fc3RhcnRfb3BkICYmDQo+ICsJ
-ICAgICAgIGFkZHIgPCAodW5zaWduZWQgbG9uZylfX2VuZF9vcGQ7DQo+ICt9DQo+ICsNCj4gICAv
-KioNCj4gICAgKiBpc19rZXJuZWxfaW5pdHRleHQgLSBjaGVja3MgaWYgdGhlIHBvaW50ZXIgYWRk
-cmVzcyBpcyBsb2NhdGVkIGluIHRoZQ0KPiAgICAqICAgICAgICAgICAgICAgICAgICAgIC5pbml0
-LnRleHQgc2VjdGlvbg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9rYWxsc3ltcy5oIGIv
-aW5jbHVkZS9saW51eC9rYWxsc3ltcy5oDQo+IGluZGV4IDY0OWZhYWMzMWRkYi4uOWJmYjRkOGQ0
-MWE1IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L2thbGxzeW1zLmgNCj4gKysrIGIvaW5j
-bHVkZS9saW51eC9rYWxsc3ltcy5oDQo+IEBAIC00Myw2ICs0Myw5IEBAIHN0YXRpYyBpbmxpbmUg
-aW50IGlzX2tzeW1fYWRkcih1bnNpZ25lZCBsb25nIGFkZHIpDQo+ICAgCWlmIChJU19FTkFCTEVE
-KENPTkZJR19LQUxMU1lNU19BTEwpKQ0KPiAgIAkJcmV0dXJuIGlzX2tlcm5lbChhZGRyKTsNCj4g
-ICANCj4gKwlpZiAoSVNfRU5BQkxFRChDT05GSUdfSEFWRV9GVU5DVElPTl9ERVNDUklQVE9SUykp
-DQo+ICsJCXJldHVybiBpc19rZXJuZWxfdGV4dChhZGRyKSB8fCBpc19rZXJuZWxfaW5pdHRleHQo
-YWRkcikgfHwgaXNfa2VybmVsX29wZChhZGRyKTsNCj4gKw0KDQpXaXRoIHRoZSBjaGVjayBpbnNp
-ZGUgaXNfa2VybmVsX29wZCgpLCB5b3UgY2FuIG1ha2UgaXQgc2ltcGxlcjoNCg0KCXJldHVybiBp
-c19rZXJuZWxfdGV4dChhZGRyKSB8fCBpc19rZXJuZWxfaW5pdHRleHQoYWRkcikgfHwgDQppc19r
-ZXJuZWxfb3BkKGFkZHIpOw0KDQo+ICAgCXJldHVybiBpc19rZXJuZWxfdGV4dChhZGRyKSB8fCBp
-c19rZXJuZWxfaW5pdHRleHQoYWRkcik7DQo+ICAgfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEva2Vy
-bmVsL2thbGxzeW1zLmMgYi9rZXJuZWwva2FsbHN5bXMuYw0KPiBpbmRleCA2MGMyMGYzMDFhNmIu
-LjAwOWIxY2EyMTYxOCAxMDA2NDQNCj4gLS0tIGEva2VybmVsL2thbGxzeW1zLmMNCj4gKysrIGIv
-a2VybmVsL2thbGxzeW1zLmMNCj4gQEAgLTI4MSw2ICsyODEsOCBAQCBzdGF0aWMgdW5zaWduZWQg
-bG9uZyBnZXRfc3ltYm9sX3Bvcyh1bnNpZ25lZCBsb25nIGFkZHIsDQo+ICAgCQkJc3ltYm9sX2Vu
-ZCA9ICh1bnNpZ25lZCBsb25nKV9laW5pdHRleHQ7DQo+ICAgCQllbHNlIGlmIChJU19FTkFCTEVE
-KENPTkZJR19LQUxMU1lNU19BTEwpKQ0KPiAgIAkJCXN5bWJvbF9lbmQgPSAodW5zaWduZWQgbG9u
-ZylfZW5kOw0KPiArCQllbHNlIGlmIChJU19FTkFCTEVEKENPTkZJR19IQVZFX0ZVTkNUSU9OX0RF
-U0NSSVBUT1JTKSAmJiBpc19rZXJuZWxfb3BkKGFkZHIpKQ0KPiArCQkJc3ltYm9sX2VuZCA9ICh1
-bnNpZ25lZCBsb25nKV9fZW5kX29wZDsNCg0KU2FtZSwgd2l0aCB0aGUgY2hlY2sgaW5jbHVkZWQg
-aW5zaWRlIGlzX2tlcm5lbF9vcGQoKSB5b3UgZG9uJ3QgbmVlZCB0aGUgDQpJU19FTkFCTEVEKENP
-TkZJR19IQVZFX0ZVTkNUSU9OX0RFU0NSSVBUT1JTKSBoZXJlLg0KDQo+ICAgCQllbHNlDQo+ICAg
-CQkJc3ltYm9sX2VuZCA9ICh1bnNpZ25lZCBsb25nKV9ldGV4dDsNCj4gICAJfQ0KPiBkaWZmIC0t
-Z2l0IGEvc2NyaXB0cy9rYWxsc3ltcy5jIGIvc2NyaXB0cy9rYWxsc3ltcy5jDQo+IGluZGV4IDAz
-ZmEwN2FkNDVkOS4uZGVjZjMxYzQ5N2Y1IDEwMDY0NA0KPiAtLS0gYS9zY3JpcHRzL2thbGxzeW1z
-LmMNCj4gKysrIGIvc2NyaXB0cy9rYWxsc3ltcy5jDQo+IEBAIC02NCw2ICs2NCw3IEBAIHN0YXRp
-YyB1bnNpZ25lZCBsb25nIGxvbmcgcmVsYXRpdmVfYmFzZTsNCj4gICBzdGF0aWMgc3RydWN0IGFk
-ZHJfcmFuZ2UgdGV4dF9yYW5nZXNbXSA9IHsNCj4gICAJeyAiX3N0ZXh0IiwgICAgICJfZXRleHQi
-ICAgICB9LA0KPiAgIAl7ICJfc2luaXR0ZXh0IiwgIl9laW5pdHRleHQiIH0sDQo+ICsJeyAiX19z
-dGFydF9vcGQiLCAiX19lbmRfb3BkIiB9LA0KPiAgIH07DQo+ICAgI2RlZmluZSB0ZXh0X3Jhbmdl
-X3RleHQgICAgICgmdGV4dF9yYW5nZXNbMF0pDQo+ICAgI2RlZmluZSB0ZXh0X3JhbmdlX2luaXR0
-ZXh0ICgmdGV4dF9yYW5nZXNbMV0pDQo=
+
+> Add checks in interrupt exit code paths in case of returns
+> to user mode to check if currently executing the #HV handler
+> then don't follow the irqentry_exit_to_user_mode path as
+> that can potentially cause the #HV handler to be
+> preempted and rescheduled on another CPU. Rescheduled #HV
+> handler on another cpu will cause interrupts to be handled
+> on a different cpu than the injected one, causing
+> invalid EOIs and missed/lost guest interrupts and
+> corresponding hangs and/or per-cpu IRQs handled on
+> non-intended cpu.
+> 
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> ---
+>   arch/x86/include/asm/idtentry.h | 66 +++++++++++++++++++++++++++++++++
+>   arch/x86/kernel/sev.c           | 30 +++++++++++++++
+>   2 files changed, 96 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index 652fea10d377..45b47132be7c 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -13,6 +13,10 @@
+>   
+>   #include <asm/irq_stack.h>
+>   
+> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
+
+For linux host, CONFIG_AMD_MEM_ENCRYPT also gets enabled at host side 
+(for SME) and 'irqentry_exit_hv_cond' gets called. So, we need to handle 
+the below cases even when host CONFIG_AMD_MEM_ENCRYPT is enabled?
+
+Thanks,
+Pankaj
+
+> +#endif
+> +
+>   /**
+>    * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+>    *		      No error code pushed by hardware
+> @@ -176,6 +180,7 @@ __visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
+>   #define DECLARE_IDTENTRY_IRQ(vector, func)				\
+>   	DECLARE_IDTENTRY_ERRORCODE(vector, func)
+>   
+> +#ifndef CONFIG_AMD_MEM_ENCRYPT
+>   /**
+>    * DEFINE_IDTENTRY_IRQ - Emit code for device interrupt IDT entry points
+>    * @func:	Function name of the entry point
+> @@ -205,6 +210,26 @@ __visible noinstr void func(struct pt_regs *regs,			\
+>   }									\
+>   									\
+>   static noinline void __##func(struct pt_regs *regs, u32 vector)
+> +#else
+> +
+> +#define DEFINE_IDTENTRY_IRQ(func)					\
+> +static void __##func(struct pt_regs *regs, u32 vector);		\
+> +									\
+> +__visible noinstr void func(struct pt_regs *regs,			\
+> +			    unsigned long error_code)			\
+> +{									\
+> +	irqentry_state_t state = irqentry_enter(regs);			\
+> +	u32 vector = (u32)(u8)error_code;				\
+> +									\
+> +	instrumentation_begin();					\
+> +	kvm_set_cpu_l1tf_flush_l1d();					\
+> +	run_irq_on_irqstack_cond(__##func, regs, vector);		\
+> +	instrumentation_end();						\
+> +	irqentry_exit_hv_cond(regs, state);				\
+> +}									\
+> +									\
+> +static noinline void __##func(struct pt_regs *regs, u32 vector)
+> +#endif
+>   
+>   /**
+>    * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
+> @@ -221,6 +246,7 @@ static noinline void __##func(struct pt_regs *regs, u32 vector)
+>   #define DECLARE_IDTENTRY_SYSVEC(vector, func)				\
+>   	DECLARE_IDTENTRY(vector, func)
+>   
+> +#ifndef CONFIG_AMD_MEM_ENCRYPT
+>   /**
+>    * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
+>    * @func:	Function name of the entry point
+> @@ -245,6 +271,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
+>   }									\
+>   									\
+>   static noinline void __##func(struct pt_regs *regs)
+> +#else
+> +
+> +#define DEFINE_IDTENTRY_SYSVEC(func)					\
+> +static void __##func(struct pt_regs *regs);				\
+> +									\
+> +__visible noinstr void func(struct pt_regs *regs)			\
+> +{									\
+> +	irqentry_state_t state = irqentry_enter(regs);			\
+> +									\
+> +	instrumentation_begin();					\
+> +	kvm_set_cpu_l1tf_flush_l1d();					\
+> +	run_sysvec_on_irqstack_cond(__##func, regs);			\
+> +	instrumentation_end();						\
+> +	irqentry_exit_hv_cond(regs, state);				\
+> +}									\
+> +									\
+> +static noinline void __##func(struct pt_regs *regs)
+> +#endif
+> +
+> +#ifndef CONFIG_AMD_MEM_ENCRYPT
+>   
+>   /**
+>    * DEFINE_IDTENTRY_SYSVEC_SIMPLE - Emit code for simple system vector IDT
+> @@ -274,6 +320,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
+>   }									\
+>   									\
+>   static __always_inline void __##func(struct pt_regs *regs)
+> +#else
+> +
+> +#define DEFINE_IDTENTRY_SYSVEC_SIMPLE(func)				\
+> +static __always_inline void __##func(struct pt_regs *regs);		\
+> +									\
+> +__visible noinstr void func(struct pt_regs *regs)			\
+> +{									\
+> +	irqentry_state_t state = irqentry_enter(regs);			\
+> +									\
+> +	instrumentation_begin();					\
+> +	__irq_enter_raw();						\
+> +	kvm_set_cpu_l1tf_flush_l1d();					\
+> +	__##func(regs);						\
+> +	__irq_exit_raw();						\
+> +	instrumentation_end();						\
+> +	irqentry_exit_hv_cond(regs, state);				\
+> +}									\
+> +									\
+> +static __always_inline void __##func(struct pt_regs *regs)
+> +#endif
+>   
+>   /**
+>    * DECLARE_IDTENTRY_XENCB - Declare functions for XEN HV callback entry point
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 5a2f59022c98..ef6a123c50fe 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -153,6 +153,10 @@ struct sev_hv_doorbell_page {
+>   
+>   struct sev_snp_runtime_data {
+>   	struct sev_hv_doorbell_page hv_doorbell_page;
+> +	/*
+> +	 * Indication that we are currently handling #HV events.
+> +	 */
+> +	bool hv_handling_events;
+>   };
+>   
+>   static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
+> @@ -206,6 +210,8 @@ static void do_exc_hv(struct pt_regs *regs)
+>   	union hv_pending_events pending_events;
+>   	u8 vector;
+>   
+> +	this_cpu_read(snp_runtime_data)->hv_handling_events = true;
+> +
+>   	while (sev_hv_pending()) {
+>   		asm volatile("cli" : : : "memory");
+>   
+> @@ -244,6 +250,8 @@ static void do_exc_hv(struct pt_regs *regs)
+>   
+>   		asm volatile("sti" : : : "memory");
+>   	}
+> +
+> +	this_cpu_read(snp_runtime_data)->hv_handling_events = false;
+>   }
+>   
+>   void check_hv_pending(struct pt_regs *regs)
+> @@ -2541,3 +2549,25 @@ static int __init snp_init_platform_device(void)
+>   	return 0;
+>   }
+>   device_initcall(snp_init_platform_device);
+> +
+> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state)
+> +{
+> +	/*
+> +	 * Check whether this returns to user mode, if so and if
+> +	 * we are currently executing the #HV handler then we don't
+> +	 * want to follow the irqentry_exit_to_user_mode path as
+> +	 * that can potentially cause the #HV handler to be
+> +	 * preempted and rescheduled on another CPU. Rescheduled #HV
+> +	 * handler on another cpu will cause interrupts to be handled
+> +	 * on a different cpu than the injected one, causing
+> +	 * invalid EOIs and missed/lost guest interrupts and
+> +	 * corresponding hangs and/or per-cpu IRQs handled on
+> +	 * non-intended cpu.
+> +	 */
+> +	if (user_mode(regs) &&
+> +	    this_cpu_read(snp_runtime_data)->hv_handling_events)
+> +		return;
+> +
+> +	/* follow normal interrupt return/exit path */
+> +	irqentry_exit(regs, state);
+> +}
+
