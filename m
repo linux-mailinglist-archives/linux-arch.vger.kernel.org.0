@@ -2,79 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C6D64BB31
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 18:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4253564BB35
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 18:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbiLMRjw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Dec 2022 12:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S235884AbiLMRk0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Dec 2022 12:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbiLMRjv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 12:39:51 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF6FBE0B
-        for <linux-arch@vger.kernel.org>; Tue, 13 Dec 2022 09:39:50 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id m4so551862pls.4
-        for <linux-arch@vger.kernel.org>; Tue, 13 Dec 2022 09:39:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=22ObQGxg+tFUaeC+8ZZZyuwT6ARH/aXdjVJKbHdOy44=;
-        b=URZsnF5wMVvtSu7sYKk1PLkEIeFVIi7BWgYDjhE1LUeEL67l0ur1pafnT7b4yE0N/t
-         +KpU+8OBbftjRfDvLYMCXqJDGeBssIpZo10KsrzjRQoXFQOya0NMF+LD2j8AMrUJrzW/
-         ve/E+3HjTFyawNdVDvfRf8XGe0v4CZtV8GRgIgCg1zlZWHfEFlVgEsX7Pct5C6a5wwJ4
-         bxomtJD/zLE7AFdWuRPg9oVZr36WsZJxXWFabR1xK0iWqmnqh/wZHCYbxbl1CnHgdQJU
-         /X6a8hruLn3TxDjh6tEFVWnqP0doCZD7VCopFnvA93Elx/4jGDdLCMCp3gTd/MfiaGBX
-         6/Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
-         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=22ObQGxg+tFUaeC+8ZZZyuwT6ARH/aXdjVJKbHdOy44=;
-        b=txoNb7daBE6Hbwc1bdcPHo10i5lgiCsTzxhuxnuNrIuB5/wvzdrpcQ7J1rAhXYy3Ct
-         IHNjpRYTNfrE3ZVHfqrRDt7ejTehHK6a5gaPCsovucWNMSPdK7rIeijLDB0doqcqmney
-         EU7JFuxc13C2eEDgY99XOYC5UEhoz/E/HPPsdCM0vIhNT4WPcUOQgrMgFiSJQfP/O1+G
-         MWxpuCe5cYxa+DaH+8TiVwBrmZFpoOBATCTN3lTOb4admNJWg3JAxG/k2osbg0+aUDET
-         p6RRUXms+ku9jBesZISXeColqasEQcizbobt2cfAw1yJ28MGMXng178TQxyaxwAHWB0P
-         4tBA==
-X-Gm-Message-State: ANoB5pl0P91oXIaiHyNyKkh3xHa4W8ankbvhNQ2UY40SjWMhyG3OJ587
-        9dyVRdguwlju4CqsRMJ4ZfLt2Q==
-X-Google-Smtp-Source: AA0mqf5To8as2YcpcxnoSETfteJYs1LY13fx/hUL7Wn1CurlZTVGERzkFiFuTf8kp3UXKidYBcf8dQ==
-X-Received: by 2002:a05:6a20:549e:b0:a3:218a:c761 with SMTP id i30-20020a056a20549e00b000a3218ac761mr31611098pzk.5.1670953190283;
-        Tue, 13 Dec 2022 09:39:50 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id l5-20020a639845000000b004767bc37e03sm7100779pgo.39.2022.12.13.09.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Dec 2022 09:39:49 -0800 (PST)
-In-Reply-To: <20221207091112.2258674-1-guoren@kernel.org>
-References: <20221207091112.2258674-1-guoren@kernel.org>
-Subject: Re: [PATCH] riscv: Fixup compile error with !MMU
-Message-Id: <167095316650.17956.4201047992243402866.b4-ty@rivosinc.com>
-Date:   Tue, 13 Dec 2022 09:39:26 -0800
-MIME-Version: 1.0
+        with ESMTP id S236113AbiLMRkX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 12:40:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BDF1F9E7;
+        Tue, 13 Dec 2022 09:40:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12E01B8154D;
+        Tue, 13 Dec 2022 17:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 86EACC433D2;
+        Tue, 13 Dec 2022 17:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670953217;
+        bh=X8gCjHqeNZe9a2MlXtFDCd8a5lhsjje1sO7jDqfY058=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bX8jVzlNMeinU3ZVwz0J6CYvme1pvo1CRTvr2DhD9F6o+NwZh4zCKKN4ygfW9My8f
+         4s19eRCqor7bnGPeyjyNOJGa4UoZjU6gL3uF89wq5wrvex9V0aaswbBYWM4uL+gJPy
+         m+HBjeV/oS2Q3Y9TMOUigm5EI1cTmF0F9zYTSE8CVyJCPMAKJde90ntg8M0osh8/eI
+         9gDSasM72nHM+tQOfLk8nWVUhGsYf9BimpofPqSro69TMZ6w7LiVYhysnVy5i97n5K
+         o4NdiPg2VSOEsb6wXSAw/Q3zGpqsjLwysgARUy3lWLebgVJn3twj9TAguMU5Cufo/j
+         IM++L3cSAjRGg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6AFFAE4D02A;
+        Tue, 13 Dec 2022 17:40:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-e660e
-Cc:     Conor Dooley <conor@kernel.org>, linux-arch@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Conor Dooley <conor.dooley@microchip.com>, guoren@kernel.org,
-        lizhengyu3@huawei.com, liaochang1@huawei.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] riscv: Fixup compile error with !MMU
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167095321743.5951.3619740095349418774.git-patchwork-notify@kernel.org>
+Date:   Tue, 13 Dec 2022 17:40:17 +0000
+References: <20221207091112.2258674-1-guoren@kernel.org>
+In-Reply-To: <20221207091112.2258674-1-guoren@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, liaochang1@huawei.com,
+        lizhengyu3@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com,
+        conor@kernel.org, lkp@intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 7 Dec 2022 04:11:12 -0500, guoren@kernel.org wrote:
+Hello:
+
+This patch was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
+
+On Wed,  7 Dec 2022 04:11:12 -0500 you wrote:
 > From: Guo Ren <guoren@linux.alibaba.com>
 > 
 > Current nommu_virt_defconfig can't compile:
@@ -90,11 +79,13 @@ On Wed, 7 Dec 2022 04:11:12 -0500, guoren@kernel.org wrote:
 > 
 > [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - riscv: Fixup compile error with !MMU
+    https://git.kernel.org/riscv/c/c528ef0888b7
 
-[1/1] riscv: Fixup compile error with !MMU
-      https://git.kernel.org/palmer/c/c528ef0888b7
-
-Best regards,
+You are awesome, thank you!
 -- 
-Palmer Dabbelt <palmer@rivosinc.com>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
