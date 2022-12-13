@@ -2,62 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE2264B50E
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 13:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E5864B849
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 16:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbiLMMWY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Dec 2022 07:22:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S236119AbiLMPV7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Dec 2022 10:21:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235605AbiLMMWX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 07:22:23 -0500
-X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 13 Dec 2022 04:22:21 PST
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAFCBB4;
-        Tue, 13 Dec 2022 04:22:21 -0800 (PST)
-Received: from conssluserg-04.nifty.com ([10.126.8.83])by condef-07.nifty.com with ESMTP id 2BDCDaMo002832;
-        Tue, 13 Dec 2022 21:13:36 +0900
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2BDCDLx9026781;
-        Tue, 13 Dec 2022 21:13:21 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2BDCDLx9026781
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1670933602;
-        bh=jPEostDy9/vEakl3XTQVCX9XEz9FU/Jk6r+V9qKfjuM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XkNtsEc2kUycZSbesW77QvhHxPLP+HrgS5y2pZh2Fd3AVApyqQByCoNUJx8cQ8pIW
-         Z8FsuqyhbWCQjsP22d50IQ04MeKJrSmGXO5fc01qf8sFSfZ6jK0MbeOSCcW6b152oS
-         CWPREXqmPpXeWbq/NEgQZoQra0IJyqECITY0PtI0Gc3MOx/zzoRBUPr8CMUqJ6fKHE
-         UJSXMs2+9AHdB3oq4f6ZrhZmTWr2NPl2BvFR1aZh1Jy54JCSE391pPYAFD/lhEixUZ
-         EiP/b7/FiQycEvqIXuwLvzoGvOBPZLHdqjtfX0kPUX09g3eWcNl4Akq/z77q0D9WSd
-         +8FTc86AocKBw==
-X-Nifty-SrcIP: [209.85.210.54]
-Received: by mail-ot1-f54.google.com with SMTP id v19-20020a9d5a13000000b0066e82a3872dso9131256oth.5;
-        Tue, 13 Dec 2022 04:13:21 -0800 (PST)
-X-Gm-Message-State: ANoB5plwf/ZKM7javm3u8024Q22wmGipfjajHGrY83RI3R+AJVS78lrt
-        gvFkGsYSmiUucq3XC80ewGCdeDZ1PMadai1Wwc4=
-X-Google-Smtp-Source: AA0mqf49GboRoHKfWueMtOx43I//pF5NCXtfCT1dwFlEom7xK6kmRBG/C/T/6hUEeQlY1UGliE3yoMjpLOmtuyXm0eo=
-X-Received: by 2002:a9d:6748:0:b0:670:64b2:ae66 with SMTP id
- w8-20020a9d6748000000b0067064b2ae66mr4036347otm.225.1670933600853; Tue, 13
- Dec 2022 04:13:20 -0800 (PST)
+        with ESMTP id S236115AbiLMPV6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 10:21:58 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CA41FCE0;
+        Tue, 13 Dec 2022 07:21:58 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id t2so95837ply.2;
+        Tue, 13 Dec 2022 07:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s2bzNobqTDC+2ln3lq46cpDNMRgqzeQWlFrXg9gpkHE=;
+        b=elwZ8ZqQPKPIu2pGCJ1ddzh8cMQmQoqZyWDuplOGmpuHdT9TcrWwzcCyZpsAP4KbV2
+         xoqQcI5vH6Dzd7KMdxRD/FFDVIOz53fwclF/1VXlNMdMJk4F0blY7rj0ipAMDVf1lv1r
+         Qw8WxZGzxE1/X+teSfqQypjWucAAfCO6wzN89z7WOZTZ/JjcVXqlD36qyL6xQFCD8+gv
+         AlYG9LIJjdpT9ZC10zx1XPT1OoyoNaF1w0+huNXAa7nd2Q2RVYtexcCm9PlzZXd3Cbxk
+         IX3czu79QguQaKYpCWySTWxlsvC7ywfDvvKjGwwdk0DvLgr5A2w1DDHRT4Hu0DW/2qXR
+         bBDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=s2bzNobqTDC+2ln3lq46cpDNMRgqzeQWlFrXg9gpkHE=;
+        b=K2WBdKgcgRFWRY0TiDfreC0x9TtTKHyvJqVu0NHOu+zVSnhzgDByY/bjD5zXrVeJr5
+         afCr+e5tE2DEadgfmfx7oIjVIlkOg2hM4I5YKSCJ3kedbxQ+YJsSo5wfYFxxilGsBpe3
+         mrwUwQde0owObKHs8MBjPMMJKavFILyU/bvlj0wC/y7I1GAgmSad/ut6h9lq51J54Cpj
+         7tXtiN0hdHkXtDjGzUNjOihL4oWnZxfiWyDmluHMHIP0IXFD5joszP33CyeTKsSolhsB
+         k3iv7Z9OWjzNkrR9nchjdIKhvAJjxbeZfN14RuGL4O435lSLJWjg0wIjTgHRmjKdGINg
+         HdZQ==
+X-Gm-Message-State: ANoB5pl880DQleQf0gYYpXXV1K5ubj5L5Ac6GW5oAwPqwDqu22Dgjr6i
+        CGt7PPoiHZj85Z1Os+X90Js=
+X-Google-Smtp-Source: AA0mqf5tq4O3CcoL0oIjaJ+XsNY+Qf7TD3uAZwCxGlHlox0S7+V/N4TeVYVowERB+SW4+/lWJ2jGWQ==
+X-Received: by 2002:a17:902:9696:b0:189:cfce:529e with SMTP id n22-20020a170902969600b00189cfce529emr21586868plp.62.1670944917641;
+        Tue, 13 Dec 2022 07:21:57 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b001788ccecbf5sm40426plh.31.2022.12.13.07.21.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 07:21:57 -0800 (PST)
+Message-ID: <407ab4f1-eac2-21ce-95d7-e861a1da73c8@gmail.com>
+Date:   Tue, 13 Dec 2022 23:21:44 +0800
 MIME-Version: 1.0
-References: <20221012181841.333325-1-masahiroy@kernel.org>
-In-Reply-To: <20221012181841.333325-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 13 Dec 2022 21:12:44 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATncU_o3JDi4k-F4ALOb3LbVZbSmA4X6kfkHf2fb1omUg@mail.gmail.com>
-Message-ID: <CAK7LNATncU_o3JDi4k-F4ALOb3LbVZbSmA4X6kfkHf2fb1omUg@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: raise minimum supported version of
- binutils to 2.25
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH V2 04/18] x86/hyperv: Decrypt hv vp assist page in
+ sev-snp enlightened guest
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-5-ltykernel@gmail.com>
+ <BYAPR21MB168851BAABC0BEA0790C5A4BD7E29@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB168851BAABC0BEA0790C5A4BD7E29@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,80 +112,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 3:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Binutils 2.23 was released in 2012. Almost 10 years old.
->
-> We already require GCC 5.1, released in 2015.
->
-> Bump the binutils version to 2.25, which was released one year before
-> GCC 5.1.
->
-> With this applied, some subsystems can start to clean up code.
-> Examples:
->   arch/arm/Kconfig.assembler
->   arch/mips/vdso/Kconfig
->   arch/powerpc/Makefile
->   arch/x86/Kconfig.assembler
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On 12/13/2022 3:41 AM, Michael Kelley (LINUX) wrote:
+>> @@ -228,6 +234,12 @@ static int hv_cpu_die(unsigned int cpu)
+>>
+>>   	if (hv_vp_assist_page && hv_vp_assist_page[cpu]) {
+>>   		union hv_vp_assist_msr_contents msr = { 0 };
+>> +
+>> +		if (hv_isolation_type_en_snp())
+>> +			WARN_ON_ONCE(set_memory_encrypted(
+>> +				    (unsigned long)hv_vp_assist_page[cpu],
+>> +				    1) != 0);
+>> +
+> The re-encryption should not be done here (or anywhere else, for
+> that matter) since the VP assist pages are never freed.   The Hyper-V
+> synthetic MSR pointing to the page gets cleared, but the memory isn't
+> freed.  If the CPU should come back online later, the previously allocated
+> VP assist page is reused.   The decryption in hv_cpu_init() is done only
+> when a new page is allocated to use as a VP assist page.  So just leave
+> the page decrypted here, and it will get reused in its decrypted state.
+> 
+> This handling of the VP assist page is admittedly a bit weird.  But
+> it is needed.  See discussion with Vitaly Kuznetsov here:
+> https://lore.kernel.org/linux-hyperv/878rkqr7ku.fsf@ovpn-192-136.brq.redhat.com/
+> 
+Agree. Good point. Will update in the next version.
 
+Thanks.
 
-
-I will pick this up to the kbuild tree
-because it got Linus' ack.
-
-
-
-
-
-
-> ---
->
->  Documentation/process/changes.rst | 4 ++--
->  scripts/min-tool-version.sh       | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-> index 9844ca3a71a6..ef540865ad22 100644
-> --- a/Documentation/process/changes.rst
-> +++ b/Documentation/process/changes.rst
-> @@ -35,7 +35,7 @@ Rust (optional)        1.62.0           rustc --version
->  bindgen (optional)     0.56.0           bindgen --version
->  GNU make               3.82             make --version
->  bash                   4.2              bash --version
-> -binutils               2.23             ld -v
-> +binutils               2.25             ld -v
->  flex                   2.5.35           flex --version
->  bison                  2.0              bison --version
->  pahole                 1.16             pahole --version
-> @@ -119,7 +119,7 @@ Bash 4.2 or newer is needed.
->  Binutils
->  --------
->
-> -Binutils 2.23 or newer is needed to build the kernel.
-> +Binutils 2.25 or newer is needed to build the kernel.
->
->  pkg-config
->  ----------
-> diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-> index 8766e248ffbb..4e5b45d9b526 100755
-> --- a/scripts/min-tool-version.sh
-> +++ b/scripts/min-tool-version.sh
-> @@ -14,7 +14,7 @@ fi
->
->  case "$1" in
->  binutils)
-> -       echo 2.23.0
-> +       echo 2.25.0
->         ;;
->  gcc)
->         echo 5.1.0
-> --
-> 2.34.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
