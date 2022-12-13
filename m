@@ -2,69 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C569C64AF90
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 07:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DBD64B067
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 08:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiLMGCM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Dec 2022 01:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S234461AbiLMH35 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Dec 2022 02:29:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbiLMGCK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 01:02:10 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A3B1263D
-        for <linux-arch@vger.kernel.org>; Mon, 12 Dec 2022 22:02:08 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id n9-20020a05600c3b8900b003d0944dba41so7128952wms.4
-        for <linux-arch@vger.kernel.org>; Mon, 12 Dec 2022 22:02:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fbEvbmFCq+IcCrEe9RLTvmhbg/l2JnxZHhCgf7rj0ps=;
-        b=vc8g3zNJxla5Lu/ywNXhJjUsY9bXfhfc8KpUh13qP29TW4YJ5dQGPv5FrUJxxPQG1v
-         MboByqV0lgAf3XJyYdhtDWlqw61zAsWwA2WT+63dchCj9Br5c7aximvszctGPDUbOeNL
-         MyPgO//PoJss6rf1JaUmGr3ObCBAj1fkCnvx+5U6cETGGcC/J+WcICg0pH1mVSBk+wRa
-         M/EdOR71AMuD/yU4+XCBJ55k9r7JC2TBbr/vhPhvR9fs6VV7vfewwT6d7c3kaj+X2FQT
-         3qckEJ47EFitMhTB8zi/+X8IgNJgzBUrZVGm9pAseoMjGs2XZRN6YXrx0z+02h5/uaRF
-         CWZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fbEvbmFCq+IcCrEe9RLTvmhbg/l2JnxZHhCgf7rj0ps=;
-        b=uGsXOBI2wZiIaHTJ/HbJ7cTcrURRR0S8hcdKaq+q8vO8+fhuwkXdp7WQP60P1fWgPN
-         4cdsWIjYoux6+jbjaUP+hT7MMgYEW4/YYYU/dEHf2gnF367kY94ztYo4EE5QKPTqZWK1
-         fYbyKV8gJxXX//TLAZGacDvtpO/wA6u0HMyqYhW4SkpnQCnW6ivUzOHFXZjUt1uSNQGZ
-         qQK6MNIAF2186lwkDbsfpReLbsPt8lG6m71l+TEZfgMVIZ5Vzdlkb9a4cfkvEOs738tc
-         VrcTNxG+79RGFymJFQEtmXa3vQc6+1reFgycKQd6Dqh6N20mMSCxNzJnQBlujzXoR/Wu
-         vikw==
-X-Gm-Message-State: ANoB5pnnkl594FJtZBp2OsWer2ZIH3NJkyQYc2Fa+73XFVco8zPi66LM
-        AI/Q+Z3huXiu5IJXpPZ4rLErJQ==
-X-Google-Smtp-Source: AA0mqf5Ry0vlp2BK7V379Xx5gkMXHrMs/RTW3fKIYILszorgAJaEo6oj6pK+bCwVFcMzRaV2QP1hqA==
-X-Received: by 2002:a05:600c:2101:b0:3cf:e850:4451 with SMTP id u1-20020a05600c210100b003cfe8504451mr14455165wml.9.1670911326540;
-        Mon, 12 Dec 2022 22:02:06 -0800 (PST)
-Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
-        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003b47ff307e1sm12611234wms.31.2022.12.12.22.02.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Dec 2022 22:02:06 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v3] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Date:   Tue, 13 Dec 2022 07:02:04 +0100
-Message-Id: <20221213060204.27286-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
+        with ESMTP id S233740AbiLMH3z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 02:29:55 -0500
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2040.outbound.protection.outlook.com [40.107.12.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70BF1A804;
+        Mon, 12 Dec 2022 23:29:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BXPe17iqcxzBk8FFauCRd/Wo/pexBuqw/+ek/Gyo0MziqPk5rJtA1Wv7myWDSGxDdrbsF4uADZ0+kzgvDRRQAPceetMLcUnxwdLUzOpiWuWrp9E3s4HWNF0Dyx2sdbwQ31ZAf0u5IWyRw9amb/kMwjpeFj0LCU4pkdlmRgUNTDeKT7jjTlTuZrZJrl4wJsbUnVWgcB+8FsDy9q5zD9sOHukOe0vsJWLUXK1/Ki/zkVY0sOBA8qSqQ++RuYrevdGnPjzTpaS61ZOceY+LyQsUI53yQyCIeGlhG1hRsCbgg2Mlc4yUZiCiBPwt2V56bs3J5poAO4dqnsXgQtmz5KWlxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0lwTymY4FgaNaJBs4HjjqwQ+NZ/XQr+B6URCQKmN8Gg=;
+ b=RQkw9oXam+N4SOX8dflLlimZ80IOm6PRDJcIGTzAFeRCA0ZqL6K/42x3HsP0KSXYk5Cke/7ZX/imcfrCdTVOskylZsoQBfSR1ASAfOFCNMXOSJrw6d75YA0NqI18hUb85Zo88vUL+c2JUP2InE6c55VTEvyZpXhVEowacroEOopDOf7+vC4ra7fxidzvRzb11Z+2BU6A/D9Ft6G791IbT6TaipKhtjrCe7p0+Tzj9JYTRJEVVU9QDbab/LojwxOyaHM7E3bmY4Fomoj7FqFiV0IlhPPZSGOO0LgKdPzyTrVFZ7DuPH3ak9oLReubLkK0HhugrN5L0UJsuv7LB/d2IA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0lwTymY4FgaNaJBs4HjjqwQ+NZ/XQr+B6URCQKmN8Gg=;
+ b=gD0KM3gw9On1MqJ7mZFCeIkPEBfvbcbZT+HlVkuVZVhv5AXIvPmx8BLd7djNmG3cLcO8W613d82WrbAkEal65baHXx3fDC9jvk8TaxeN3hj/hpKaPUcPLVV7yXMXCIQGCz7ynL6qLLgjMer+lnNqE+NQ9nHXs3Ke3oR7Y5oABoWy/T6fCvNYj6aq6tNQUtZeiGtUkcQk40jCfoHOtTsZKlmgFhAo8O2MptBNBl458l0oIQVy8mwr8LPhHXcUm6ZcsZnxXsrs7HnmyWp/I3fIo0ZPnmMdXIN4CYio2eeR1xq9MNtAxusUxcYuLkkHKeF/wUbZ3bOnHYC4Hj1jNbR/Bw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2048.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b3::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Tue, 13 Dec
+ 2022 07:29:50 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5880.019; Tue, 13 Dec 2022
+ 07:29:50 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Jeanson <mjeanson@efficios.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     Michael Ellerman <mpe@ellerman.id.au>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>
+Subject: Re: [RFC PATCH] Syscall tracing on PPC64_ELF_ABI_V1 without
+ KALLSYMS_ALL
+Thread-Topic: [RFC PATCH] Syscall tracing on PPC64_ELF_ABI_V1 without
+ KALLSYMS_ALL
+Thread-Index: AQHZDm/UBtWhlvS25UGRWg8dV8YpkK5rbH2A
+Date:   Tue, 13 Dec 2022 07:29:50 +0000
+Message-ID: <39c53bd1-432f-15f6-4cbd-b8551fc261cf@csgroup.eu>
+References: <20221212212159.3435046-1-mjeanson@efficios.com>
+In-Reply-To: <20221212212159.3435046-1-mjeanson@efficios.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB2048:EE_
+x-ms-office365-filtering-correlation-id: a2cb3caf-e66e-4517-257a-08dadcdbd202
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: A1cvJSstesvowLSJKwKpWgDg2Q8v4AJzdPktK2lsqEYZYxHQL8kglsdWx0ev4ED5wjynLX1FaW/Ty+GmBJUlVEKVW69tCBAxLdVYF59IiQz+WhN/l6BmLN+td9hcdQXNQI6jyIS9H/z1LeOhb5qTa5yTi5y5gW5EnMro7cgmT+1jmtqPagwDvBDsSvWH5DbWm1n/b+geytleK3zCH9pwA/ojzbdf47wo4z4zw7IWzUH8mMniW6elbGtQFU8Ki/wrscYD2yLWHNWZZT3tr1iMxgiD2HWnjYkWOyUn/TMV5P6DzE6plwniIj9q6/0D3T3IEIwWhOjaRyIKLQm5IijFBe5ZXhbOcgblyXkGCm2dczV4px7JeFJ7J3uEN6XC6AI2IUdE7VliBZ7fi1C5BEzpNKghvfbqu1Cjy+/rhjivdscwdg9N4t/V11P45j9OD/tmZhRP6vet3kzwhryh4UIiXN4PjIi3JYVl2T//CFpPJ/2eYnHDC4/ktNzSGGvH2ZxQ8Eyr0H6YmSYmKJ1D3u2vXn+xbVktJQQzxzqj1DYhmY+op34HiwId2hsE9dHhjZRIO6x7qFsPEdXYX3Pv6TjMyY3HSPgzFB8lNplGUM/rVWVN/VrAMg5oClnqjzqn/bWMERU7neOEk1gtsb8LZkpZTOsAQumY5b15G5LZ9Y7W6tk0ssPGZDt1sThv9bat8WvuQNrpCWhzrSLzvNXfdzlyPZvLKzn3KLSAih1sp30pW62OajVgyvmXlHjEBlNezpzmp/l3+dmF8nnFXO0XUWb/FA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(366004)(39850400004)(451199015)(38100700002)(122000001)(2906002)(4326008)(86362001)(31696002)(66556008)(66946007)(316002)(66446008)(54906003)(91956017)(38070700005)(76116006)(64756008)(8676002)(41300700001)(110136005)(66476007)(44832011)(2616005)(5660300002)(7416002)(8936002)(478600001)(186003)(71200400001)(6512007)(26005)(6506007)(31686004)(6486002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MldRdFVML3UrRlZuUno2NnlaUTNEM25neEhLeHJFM3VGS2FObHZ2eWF4ajVK?=
+ =?utf-8?B?blpzV2tlTmN0MG5sZ1QyL3lmSzhZWFFUY29UUnpocVp1bXljbzN1VElqU1RI?=
+ =?utf-8?B?NzNUcmRlK2RSQmloZGdwbzlkV0FFaFk0dld6TGpBNmtCQnVYZE4yeG5DaVdy?=
+ =?utf-8?B?MS84cjliT0hWZjJiM2FXdVE4ZUlVL1ByaUtXS1hSVU80THl0OFNBcTRBRVRC?=
+ =?utf-8?B?Z2FJQnd0SnhiTnZrL3NGeEl0bnBhY3d3aHR5aVZVSFZsZExTcTg4eWJGd1lz?=
+ =?utf-8?B?dzVBZHJzVzhKenBXNmNnTU5qeHhWa05OM2Znc1docHFKL2kxdmNlck1iSk5Y?=
+ =?utf-8?B?ZVlxZjdlblFST1FvYitZK0p3dy8waGFYOUxxMzVQVERxaEFwVE92M3d1UHpO?=
+ =?utf-8?B?WHZRQnZmZitNenluVERpWUFjMUhvR3FKZmZkeFYraHozRDlUY2NzYlRqa0ZI?=
+ =?utf-8?B?cVByRTJjd1EyOHFWeEk1L0pzOTlsOGkxdG1ycWJQQzdwSFQ3LzhxcnpjMmlx?=
+ =?utf-8?B?NUVKMUowTXJTZ1p2RVdMRFNrcEFxN3RFNWl3b1ZqTU44Y25IanZ4VE45T2xX?=
+ =?utf-8?B?WFdueENaRHhsRmtJQzMwTkdyTWhuc2l5TFRjN0llN0tLTXpBczJVdEpqbFl1?=
+ =?utf-8?B?UjNCc2FuZGI5Vzg3WDB6NEFZMnUySlIrRy9iWTRTL3IzOVJDWHUzcml0REdU?=
+ =?utf-8?B?WEhJV2ZjK3l6NGFTLytQY0NCZWlPVEJ5TDJDZ1lQL3VnMFg3akZsTXZCOTFU?=
+ =?utf-8?B?VXJxQUM3eFljZG5CMllVUGNPSGpCeDdFdGQ3UCtBQThwVFczNjFGTXFuZnlU?=
+ =?utf-8?B?ams1ZG1BYVJRK2VLdXArU3BaV1FnVlBidmp4ZjFmTkwzTVRrSkdLMW9CRWNr?=
+ =?utf-8?B?QmZFdEpHb0t6Z0cyTzlFcUpRb2Y1VEFDODBuWXNWZkJhTVVSMXZOU01TSCty?=
+ =?utf-8?B?dGRMKytPWHNwdldaeE1xa3RTQ3RlQ0JTYThBbkxxaDdpdTZHNk9JZFg5SWpO?=
+ =?utf-8?B?K05RZGdoK2VOT09DY1M5NHpwVVlZTlYyTUhpV0RwelhYYkkyTzVPZnY3UUdp?=
+ =?utf-8?B?ZVRUK0tmMVh4K1FRb3BlL0MycTFPZ00wUzFnK2g1VEplelQ0TjFoclQ5UHps?=
+ =?utf-8?B?Smd4RFZCZlk2bEh2VGw0QXVUalFvaUV5K09mbHdMTjVJU20wR1dweEk0bmpo?=
+ =?utf-8?B?c2wrQklEdTFHR3RBb2t0LzFvZ2RReGFITkNBMmlJR3dUbHMrU0ZtNlN2OVBH?=
+ =?utf-8?B?Mld1Q2M0LzdMaGtVM1plb2dmWFdyV1A2YU1pZStJV1hCSjhjMDFJSG5Bc3Zj?=
+ =?utf-8?B?UldWRDhWa3FQMTNzdjR0V2c3SDlWcTl0YjQ5MzZvZTZscnpGWUVweWtlZy9t?=
+ =?utf-8?B?T1RxY0haUUZzT3lFY1ZnVVcrZStHd1VvNUZWbE8vNVgxTVRXVGFBbkppbG5X?=
+ =?utf-8?B?eUZsRlRuSmIrUGVoL1ptWm54L28yRkxXNTFCU2dmMlQxY0F5THZLaEp1c0Y4?=
+ =?utf-8?B?eG9WN3EzK3Vkc1lJM21RWVlxL1k3RnR5ellZWXRkL0lUUmxLUVd2Ukw4dmlY?=
+ =?utf-8?B?aUNBMzYwaGNOYlNIdWlabWgrTGpHeG53UXdxUFg5SzgyRCsvUGtyWXVHakFD?=
+ =?utf-8?B?SmhRWkp1aFVCQlovN3ZnajFpVHlBSjNDTHhHSUV3UFRSd3VvZ05FSU11UGZa?=
+ =?utf-8?B?c1g3bXFDdE9CUWZaRk1YZEMyT0kwYXFsODAwUm1JMTl0eTVJS3pFTDlKTzJI?=
+ =?utf-8?B?Qlh1elc3bitmWUl1R1Q4cVhrejBiTHdacXJhMEdzd0ZNRjBaUEI2SzBoaDJM?=
+ =?utf-8?B?YnBkWmdLR1NGOGEyZCtKMXpRNlgrbEF1TU9XR3ZTdG9zbEhWSE51OUE1ZUhH?=
+ =?utf-8?B?R2xjNi9qY3FZUmlZSWo1ZCt5OExDa095NHBTU2lmbEN4ZFd3c1Y3RXUrY2ll?=
+ =?utf-8?B?cmFZNEMxMFZwWTVnL2xiYVVNamxOc3hiVU9nRXpoeHVKVTNXUTEyckVPUTlu?=
+ =?utf-8?B?SEJBbnJER2ZNMUdha004UUhOSHlZL3ZOd3U4RU13bGVmK1dva2l1SWFwRS9K?=
+ =?utf-8?B?clJLRytXZCswdEZRbTcvMTRWOGtTSEI3dlA1bGZSQ0Z3VHRRU0dXRHJMWTFl?=
+ =?utf-8?B?QzlNR0pGN0hENndEUFRKSVpIbzhSekJEVWp6a3g3UlN2T0JUNFlOMjhWekdF?=
+ =?utf-8?B?dFE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0703909A6910204C967AE69FA5A968BF@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2cb3caf-e66e-4517-257a-08dadcdbd202
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2022 07:29:50.5494
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xgdFUj7EusPXQzJwMT1mSWI7KZt4JP3vsSrQuRvWp9kTSO6t9iyYeIaR+mwMa9qB11viS2KTKXaBsCsE5W/tv5lmRB+oVAQtUZ2SosGV2Hs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2048
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,199 +138,84 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-During the early page table creation, we used to set the mapping for
-PAGE_OFFSET to the kernel load address: but the kernel load address is
-always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
-pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
-PAGE_OFFSET is).
-
-But actually we don't have to establish this mapping (ie set va_pa_offset)
-that early in the boot process because:
-
-- first, setup_vm installs a temporary kernel mapping and among other
-  things, discovers the system memory,
-- then, setup_vm_final creates the final kernel mapping and takes
-  advantage of the discovered system memory to create the linear
-  mapping.
-
-During the first phase, we don't know the start of the system memory and
-then until the second phase is finished, we can't use the linear mapping at
-all and phys_to_virt/virt_to_phys translations must not be used because it
-would result in a different translation from the 'real' one once the final
-mapping is installed.
-
-So here we simply delay the initialization of va_pa_offset to after the
-system memory discovery. But to make sure noone uses the linear mapping
-before, we add some guard in the DEBUG_VIRTUAL config.
-
-Finally we can use PUD/P4D/PGD hugepages when possible, which will result
-in a better TLB utilization.
-
-Note that we rely on the firmware to protect itself using PMP.
-
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
-
-v3:
-- Change the comment about initrd_start VA conversion so that it fits
-  ARM64 and RISCV64 (and others in the future if needed), as suggested
-  by Rob
-
-v2:
-- Add a comment on why RISCV64 does not need to set initrd_start/end that
-  early in the boot process, as asked by Rob
-
-Note that this patch is rebased on top of:
-[PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
-
- arch/riscv/include/asm/page.h | 16 ++++++++++++++++
- arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
- arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
- drivers/of/fdt.c              | 11 ++++++-----
- 4 files changed, 57 insertions(+), 11 deletions(-)
-
-diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-index ac70b0fd9a9a..f3af526a149f 100644
---- a/arch/riscv/include/asm/page.h
-+++ b/arch/riscv/include/asm/page.h
-@@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
- #define PTE_FMT "%08lx"
- #endif
- 
-+#ifdef CONFIG_64BIT
-+/*
-+ * We override this value as its generic definition uses __pa too early in
-+ * the boot process (before kernel_map.va_pa_offset is set).
-+ */
-+#define MIN_MEMBLOCK_ADDR      0
-+#endif
-+
- #ifdef CONFIG_MMU
- extern unsigned long riscv_pfn_base;
- #define ARCH_PFN_OFFSET		(riscv_pfn_base)
-@@ -122,7 +130,11 @@ extern phys_addr_t phys_ram_base;
- #define is_linear_mapping(x)	\
- 	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
-+#else
-+void *linear_mapping_pa_to_va(unsigned long x);
-+#endif
- #define kernel_mapping_pa_to_va(y)	({						\
- 	unsigned long _y = y;								\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
-@@ -131,7 +143,11 @@ extern phys_addr_t phys_ram_base;
- 	})
- #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
- 
-+#ifndef CONFIG_DEBUG_VIRTUAL
- #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
-+#else
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x);
-+#endif
- #define kernel_mapping_va_to_pa(y) ({						\
- 	unsigned long _y = y;							\
- 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 1b76d3fe4e26..58bcf395efdc 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
- 	phys_ram_end = memblock_end_of_DRAM();
- 	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
- 		phys_ram_base = memblock_start_of_DRAM();
-+
-+	/*
-+	 * Any use of __va/__pa before this point is wrong as we did not know the
-+	 * start of DRAM before.
-+	 */
-+	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
-+	riscv_pfn_base = PFN_DOWN(phys_ram_base);
-+
- 	/*
- 	 * memblock allocator is not aware of the fact that last 4K bytes of
- 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
-@@ -672,9 +680,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
- 
- static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
- {
--	/* Upgrade to PMD_SIZE mappings whenever possible */
--	base &= PMD_SIZE - 1;
--	if (!base && size >= PMD_SIZE)
-+	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
-+		return PGDIR_SIZE;
-+
-+	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
-+		return P4D_SIZE;
-+
-+	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
-+		return PUD_SIZE;
-+
-+	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
- 		return PMD_SIZE;
- 
- 	return PAGE_SIZE;
-@@ -983,11 +998,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
- 	set_satp_mode();
- #endif
- 
--	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
-+	kernel_map.va_pa_offset = 0UL;
- 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
- 
--	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
--
- 	/*
- 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
- 	 * kernel, whereas for 64-bit kernel, the end of the virtual address
-diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
-index 19cf25a74ee2..5ae4bd166e25 100644
---- a/arch/riscv/mm/physaddr.c
-+++ b/arch/riscv/mm/physaddr.c
-@@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
- 	return __va_to_pa_nodebug(x);
- }
- EXPORT_SYMBOL(__phys_addr_symbol);
-+
-+phys_addr_t linear_mapping_va_to_pa(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((unsigned long)(x) - kernel_map.va_pa_offset);
-+}
-+EXPORT_SYMBOL(linear_mapping_va_to_pa);
-+
-+void *linear_mapping_pa_to_va(unsigned long x)
-+{
-+	BUG_ON(!kernel_map.va_pa_offset);
-+
-+	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
-+}
-+EXPORT_SYMBOL(linear_mapping_pa_to_va);
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index 7b571a631639..c45aaa3458a7 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
- static void __early_init_dt_declare_initrd(unsigned long start,
- 					   unsigned long end)
- {
--	/* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
--	 * enabled since __va() is called too early. ARM64 does make use
--	 * of phys_initrd_start/phys_initrd_size so we can skip this
--	 * conversion.
-+	/*
-+	 * __va() is not yet available this early on some platforms. In that
-+	 * case, the platform uses phys_initrd_start/phys_initrd_size instead
-+	 * and does the VA conversion itself.
- 	 */
--	if (!IS_ENABLED(CONFIG_ARM64)) {
-+	if (!IS_ENABLED(CONFIG_ARM64) &&
-+	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
- 		initrd_start = (unsigned long)__va(start);
- 		initrd_end = (unsigned long)__va(end);
- 		initrd_below_start_ok = 1;
--- 
-2.37.2
-
+VGhlIGNoYW5nZXMgYXJlIGFic29sdXRlbHkgbm90IHNwZWNpZmljIHRvIHBvd2VycGMuIFlvdSBz
+aG91bGQgYWRqdXN0IA0KdGhlIHN1YmplY3QgYWNjb3JkaW5nbHksIGFuZCBjb3B5IGxpbnV4LWFy
+Y2ggYW5kIHRyYWNpbmcgYW5kIHByb2JhYmx5IA0KYWxzbyBpYTY0IGFuZCBwYXJpc2MuDQoNCkxl
+IDEyLzEyLzIwMjIgw6AgMjI6MjEsIE1pY2hhZWwgSmVhbnNvbiBhIMOpY3JpdMKgOg0KPiBJbiBh
+ZDA1MGQyMzkwZmNjYjIyYWEzZTZmNjVlMTE3NTdjZTdhNWE3Y2E1IHdlIGZpeGVkIGZ0cmFjZSBz
+eXNjYWxsDQo+IHRyYWNpbmcgb24gUFBDNjRfRUxGX0FCSV9WMSBieSBsb29raW5nIGZvciB0aGUg
+bm9uLWRvdCBwcmVmaXhlZCBzeW1ib2wNCj4gb2YgYSBzeXNjYWxsLg0KDQpTaG91bGQgYmUgd3Jp
+dHRlbiBhczoNCg0KQ29tbWl0IGFkMDUwZDIzOTBmYyAoInBvd2VycGMvZnRyYWNlOiBmaXggc3lz
+Y2FsbCB0cmFjaW5nIG9uIA0KUFBDNjRfRUxGX0FCSV9WMSIpIGZpeGVkIC4uLi4NCg0KDQo+IA0K
+PiBGdHJhY2UgdXNlcyBrYWxsc3ltcyB0byBsb2NhdGUgc3lzY2FsbCBzeW1ib2xzIGFuZCB0aG9z
+ZSBub24tZG90DQo+IHByZWZpeGVkIHN5bWJvbHMgcmVzaWRlIGluIGEgc2VwYXJhdGUgJy5vcGQn
+IHNlY3Rpb24gd2hpY2ggaXMgbm90DQo+IGluY2x1ZGVkIGJ5IGthbGxzeW1zLg0KPiANCj4gU28g
+d2UgZWl0aGVyIG5lZWQgdG8gaGF2ZSBGVFJBQ0VfU1lTQ0FMTFMgc2VsZWN0IEtBTExTWU1TX0FM
+TCBvbg0KPiBQUEM2NF9FTEZfQUJJX1YxIG9yIGFkZCB0aGUgJy5vcGQnIHNlY3Rpb24gc3ltYm9s
+cyB0byBrYWxsc3ltcy4NCj4gDQo+IFRoaXMgcGF0Y2ggZG9lcyB0aGUgbWluaW11bSB0byBhY2hp
+ZXZlIHRoZSBsYXR0ZXIsIGl0J3MgdGVzdGVkIG9uIGENCj4gY29yZW5ldDY0X3NtcF9kZWZjb25m
+aWcgd2l0aCBLQUxMU1lNU19BTEwgdHVybmVkIG9mZi4NCj4gDQo+IEknbSB1bnN1cmUgd2hpY2gg
+b2YgdGhlIGFsdGVybmF0aXZlcyB3b3VsZCBiZSBiZXR0ZXIuDQo+IA0KPiAtLS0NCj4gSW4gJ2tl
+cm5lbC9tb2R1bGUva2FsbHN5bXMuYycgdGhlICdpc19jb3JlX3N5bWJvbCcgZnVuY3Rpb24gbWln
+aHQgYWxzbw0KPiByZXF1aXJlIHNvbWUgdHdlYWtpbmcgdG8gbWFrZSBhbGwgb3BkIHN5bWJvbHMg
+YXZhaWxhYmxlIHRvIGthbGxzeW1zIGJ1dA0KPiB0aGF0IGRvZXNuJ3QgaW1wYWN0IGZ0cmFjZSBz
+eXNjYWxsIHRyYWNpbmcuDQo+IA0KPiBDYzogTWljaGFlbCBFbGxlcm1hbiA8bXBlQGVsbGVybWFu
+LmlkLmF1Pg0KPiBDYzogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3Vw
+LmV1Pg0KPiBDYzogTWF0aGlldSBEZXNub3llcnMgPG1hdGhpZXUuZGVzbm95ZXJzQGVmZmljaW9z
+LmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBKZWFuc29uIDxtamVhbnNvbkBlZmZpY2lv
+cy5jb20+DQo+IC0tLQ0KPiAgIGluY2x1ZGUvYXNtLWdlbmVyaWMvc2VjdGlvbnMuaCB8IDE0ICsr
+KysrKysrKysrKysrDQo+ICAgaW5jbHVkZS9saW51eC9rYWxsc3ltcy5oICAgICAgIHwgIDMgKysr
+DQo+ICAga2VybmVsL2thbGxzeW1zLmMgICAgICAgICAgICAgIHwgIDIgKysNCj4gICBzY3JpcHRz
+L2thbGxzeW1zLmMgICAgICAgICAgICAgfCAgMSArDQo+ICAgNCBmaWxlcyBjaGFuZ2VkLCAyMCBp
+bnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9hc20tZ2VuZXJpYy9zZWN0
+aW9ucy5oIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy9zZWN0aW9ucy5oDQo+IGluZGV4IGRiMTNiYjYy
+MGY1Mi4uMTQxMDU2Njk1N2U1IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2FzbS1nZW5lcmljL3Nl
+Y3Rpb25zLmgNCj4gKysrIGIvaW5jbHVkZS9hc20tZ2VuZXJpYy9zZWN0aW9ucy5oDQo+IEBAIC0x
+ODAsNiArMTgwLDIwIEBAIHN0YXRpYyBpbmxpbmUgYm9vbCBpc19rZXJuZWxfcm9kYXRhKHVuc2ln
+bmVkIGxvbmcgYWRkcikNCj4gICAJICAgICAgIGFkZHIgPCAodW5zaWduZWQgbG9uZylfX2VuZF9y
+b2RhdGE7DQo+ICAgfQ0KPiAgIA0KPiArLyoqDQo+ICsgKiBpc19rZXJuZWxfb3BkIC0gY2hlY2tz
+IGlmIHRoZSBwb2ludGVyIGFkZHJlc3MgaXMgbG9jYXRlZCBpbiB0aGUNCj4gKyAqICAgICAgICAg
+ICAgICAgICAub3BkIHNlY3Rpb24NCj4gKyAqDQo+ICsgKiBAYWRkcjogYWRkcmVzcyB0byBjaGVj
+aw0KPiArICoNCj4gKyAqIFJldHVybnM6IHRydWUgaWYgdGhlIGFkZHJlc3MgaXMgbG9jYXRlZCBp
+biAub3BkLCBmYWxzZSBvdGhlcndpc2UuDQo+ICsgKi8NCj4gK3N0YXRpYyBpbmxpbmUgYm9vbCBp
+c19rZXJuZWxfb3BkKHVuc2lnbmVkIGxvbmcgYWRkcikNCj4gK3sNCg0KSSB3b3VsZCBhZGQgYSBj
+aGVjayBvZiBDT05GSUdfSEFWRV9GVU5DVElPTl9ERVNDUklQVE9SUzoNCg0KCWlmICghSVNfRU5B
+QkxFRChDT05GSUdfSEFWRV9GVU5DVElPTl9ERVNDUklQVE9SUykpDQoJCXJldHVybiBmYWxzZTsN
+Cg0KPiArCXJldHVybiBhZGRyID49ICh1bnNpZ25lZCBsb25nKV9fc3RhcnRfb3BkICYmDQo+ICsJ
+ICAgICAgIGFkZHIgPCAodW5zaWduZWQgbG9uZylfX2VuZF9vcGQ7DQo+ICt9DQo+ICsNCj4gICAv
+KioNCj4gICAgKiBpc19rZXJuZWxfaW5pdHRleHQgLSBjaGVja3MgaWYgdGhlIHBvaW50ZXIgYWRk
+cmVzcyBpcyBsb2NhdGVkIGluIHRoZQ0KPiAgICAqICAgICAgICAgICAgICAgICAgICAgIC5pbml0
+LnRleHQgc2VjdGlvbg0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9rYWxsc3ltcy5oIGIv
+aW5jbHVkZS9saW51eC9rYWxsc3ltcy5oDQo+IGluZGV4IDY0OWZhYWMzMWRkYi4uOWJmYjRkOGQ0
+MWE1IDEwMDY0NA0KPiAtLS0gYS9pbmNsdWRlL2xpbnV4L2thbGxzeW1zLmgNCj4gKysrIGIvaW5j
+bHVkZS9saW51eC9rYWxsc3ltcy5oDQo+IEBAIC00Myw2ICs0Myw5IEBAIHN0YXRpYyBpbmxpbmUg
+aW50IGlzX2tzeW1fYWRkcih1bnNpZ25lZCBsb25nIGFkZHIpDQo+ICAgCWlmIChJU19FTkFCTEVE
+KENPTkZJR19LQUxMU1lNU19BTEwpKQ0KPiAgIAkJcmV0dXJuIGlzX2tlcm5lbChhZGRyKTsNCj4g
+ICANCj4gKwlpZiAoSVNfRU5BQkxFRChDT05GSUdfSEFWRV9GVU5DVElPTl9ERVNDUklQVE9SUykp
+DQo+ICsJCXJldHVybiBpc19rZXJuZWxfdGV4dChhZGRyKSB8fCBpc19rZXJuZWxfaW5pdHRleHQo
+YWRkcikgfHwgaXNfa2VybmVsX29wZChhZGRyKTsNCj4gKw0KDQpXaXRoIHRoZSBjaGVjayBpbnNp
+ZGUgaXNfa2VybmVsX29wZCgpLCB5b3UgY2FuIG1ha2UgaXQgc2ltcGxlcjoNCg0KCXJldHVybiBp
+c19rZXJuZWxfdGV4dChhZGRyKSB8fCBpc19rZXJuZWxfaW5pdHRleHQoYWRkcikgfHwgDQppc19r
+ZXJuZWxfb3BkKGFkZHIpOw0KDQo+ICAgCXJldHVybiBpc19rZXJuZWxfdGV4dChhZGRyKSB8fCBp
+c19rZXJuZWxfaW5pdHRleHQoYWRkcik7DQo+ICAgfQ0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEva2Vy
+bmVsL2thbGxzeW1zLmMgYi9rZXJuZWwva2FsbHN5bXMuYw0KPiBpbmRleCA2MGMyMGYzMDFhNmIu
+LjAwOWIxY2EyMTYxOCAxMDA2NDQNCj4gLS0tIGEva2VybmVsL2thbGxzeW1zLmMNCj4gKysrIGIv
+a2VybmVsL2thbGxzeW1zLmMNCj4gQEAgLTI4MSw2ICsyODEsOCBAQCBzdGF0aWMgdW5zaWduZWQg
+bG9uZyBnZXRfc3ltYm9sX3Bvcyh1bnNpZ25lZCBsb25nIGFkZHIsDQo+ICAgCQkJc3ltYm9sX2Vu
+ZCA9ICh1bnNpZ25lZCBsb25nKV9laW5pdHRleHQ7DQo+ICAgCQllbHNlIGlmIChJU19FTkFCTEVE
+KENPTkZJR19LQUxMU1lNU19BTEwpKQ0KPiAgIAkJCXN5bWJvbF9lbmQgPSAodW5zaWduZWQgbG9u
+ZylfZW5kOw0KPiArCQllbHNlIGlmIChJU19FTkFCTEVEKENPTkZJR19IQVZFX0ZVTkNUSU9OX0RF
+U0NSSVBUT1JTKSAmJiBpc19rZXJuZWxfb3BkKGFkZHIpKQ0KPiArCQkJc3ltYm9sX2VuZCA9ICh1
+bnNpZ25lZCBsb25nKV9fZW5kX29wZDsNCg0KU2FtZSwgd2l0aCB0aGUgY2hlY2sgaW5jbHVkZWQg
+aW5zaWRlIGlzX2tlcm5lbF9vcGQoKSB5b3UgZG9uJ3QgbmVlZCB0aGUgDQpJU19FTkFCTEVEKENP
+TkZJR19IQVZFX0ZVTkNUSU9OX0RFU0NSSVBUT1JTKSBoZXJlLg0KDQo+ICAgCQllbHNlDQo+ICAg
+CQkJc3ltYm9sX2VuZCA9ICh1bnNpZ25lZCBsb25nKV9ldGV4dDsNCj4gICAJfQ0KPiBkaWZmIC0t
+Z2l0IGEvc2NyaXB0cy9rYWxsc3ltcy5jIGIvc2NyaXB0cy9rYWxsc3ltcy5jDQo+IGluZGV4IDAz
+ZmEwN2FkNDVkOS4uZGVjZjMxYzQ5N2Y1IDEwMDY0NA0KPiAtLS0gYS9zY3JpcHRzL2thbGxzeW1z
+LmMNCj4gKysrIGIvc2NyaXB0cy9rYWxsc3ltcy5jDQo+IEBAIC02NCw2ICs2NCw3IEBAIHN0YXRp
+YyB1bnNpZ25lZCBsb25nIGxvbmcgcmVsYXRpdmVfYmFzZTsNCj4gICBzdGF0aWMgc3RydWN0IGFk
+ZHJfcmFuZ2UgdGV4dF9yYW5nZXNbXSA9IHsNCj4gICAJeyAiX3N0ZXh0IiwgICAgICJfZXRleHQi
+ICAgICB9LA0KPiAgIAl7ICJfc2luaXR0ZXh0IiwgIl9laW5pdHRleHQiIH0sDQo+ICsJeyAiX19z
+dGFydF9vcGQiLCAiX19lbmRfb3BkIiB9LA0KPiAgIH07DQo+ICAgI2RlZmluZSB0ZXh0X3Jhbmdl
+X3RleHQgICAgICgmdGV4dF9yYW5nZXNbMF0pDQo+ICAgI2RlZmluZSB0ZXh0X3JhbmdlX2luaXR0
+ZXh0ICgmdGV4dF9yYW5nZXNbMV0pDQo=
