@@ -2,312 +2,269 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A998264ABA5
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 00:41:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C569C64AF90
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Dec 2022 07:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233918AbiLLXla (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Dec 2022 18:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S234319AbiLMGCM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Dec 2022 01:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiLLXl3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Dec 2022 18:41:29 -0500
-Received: from CO1PR02CU001-vft-obe.outbound.protection.outlook.com (mail-westus2azon11021023.outbound.protection.outlook.com [52.101.47.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98B21AA01;
-        Mon, 12 Dec 2022 15:41:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jT2p9PvydCdVk773U7PyuDEU2/oWBNClS74opL4YN3NV6NT8x6kfod4HuMCJ54hu4osYpDce5oStk2ZkD5Urgz1FjV2+Zjda29Svcc+LPqxh+q6Pn2oCsN7x3ivQLdjj5m5ECcEh6ZqY4jCCHrAfJFze8J95HXXddS3mQtK36CGASnEXJac14yp2aXeKPTK6eZLihP3hTdxXWCBCuWoNdLiuOhCPVAPKpz6DKxI4SgFmzbL5nKxK8YcEIWyuJSrLONLY6tlyFeJI7zYGtJvotMrYfoB5u4y0A8s3Wun+8jf0tj4ztJOv4nJxhmQxUrwYtqegj6zHyd8wX+wABqh3oQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dg/H7kmk9bFsF9Li6AqwcD05i/dRdV5pttlbfEZf52w=;
- b=aBki50cl9MMvELiuAcL0tnEj+secmHdgbQo1UtLlLFtWhu9eZ3a4kCpwEeCkHt+DltWqDbLOs1WnMAfEHEJ1Sh8CrNdIbkpqMex7Y6fH8oM8OPbi8nf/iWKX6ILmdfvwvSohEoKOsed7vC+OC58mqFdwm61EtayTw6PHqNJAc8/XLgT0l3JEy/kv+i2Fi7sXAdcWWHfIprW4zFYlKzT6pogr3ho/G+4re00iMX8Iy9Vame+hx80wI0+xa112BhzXdkyCmESM1htzO0OVTb3zu78mjzKD6b5WC6/XUhFVn1xv8McW5/4+ce5rVzL3IACy2MgS+CVrzfGz/4ZfavxXUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dg/H7kmk9bFsF9Li6AqwcD05i/dRdV5pttlbfEZf52w=;
- b=BwH6ODwsrTyMYEA/aNYh0evYKmdgBGuj4fF8yPpfFmyusowL1zrzKF+qNPWJ+8S2Lo+d7O+niyYtzArOHMEiAP4lJMQNd/XS0bysaNaxyEvnF7lf9jRuvpx6eW9R342m9zlU04QPdRZKKVwxYft+iNkGjtronZ9xJk3BqTLBtSg=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by PH0PR21MB1909.namprd21.prod.outlook.com (2603:10b6:510:1a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.1; Mon, 12 Dec
- 2022 23:41:22 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::1e50:78ec:6954:d6dd%8]) with mapi id 15.20.5944.002; Mon, 12 Dec 2022
- 23:41:22 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Tianyu Lan <ltykernel@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V2 05/18] x86/hyperv: Get Virtual Trust Level via
- hvcall
-Thread-Topic: [RFC PATCH V2 05/18] x86/hyperv: Get Virtual Trust Level via
- hvcall
-Thread-Index: AQHY+8njFYnmYWgVVUSo8TRftAUpqa5rCOyg
-Date:   Mon, 12 Dec 2022 23:41:22 +0000
-Message-ID: <BYAPR21MB1688987551ECAB717D62D301D7E29@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-6-ltykernel@gmail.com>
-In-Reply-To: <20221119034633.1728632-6-ltykernel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=41cae89b-9d32-4136-a637-94d4f974f653;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-12T23:19:57Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH0PR21MB1909:EE_
-x-ms-office365-filtering-correlation-id: 19fbe7f3-9f1a-4cf2-5bab-08dadc9a6077
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4gG6irClOtsffuW4f7hkpMPPtm6gRSQEWK4mR1u97VJcIxyX5Zpfpd3PvMeohlYB6HiuA1rsFbk/FYnvfFOB0TbLHarAPNV8mabA0cT/30uViEdhTENfssnRzMwMCftuqSQDwPU/fRUinbfjB0SsPrtckIVbmy0O+SETlQwiWVnyDhxnKAXGr5Y4poGI6RbI0G7bSVLSSjN/yZUHQdhjoYl52JIQfvsmbwq1C2zflFSb7LVrdV+n0pBbVaT/+3898o9/iLo5zUnaueerNEs/2oY/uAwcO5VyXQUhB1j2INVnrxmZsYgCt3c+joxNLf/toczqt0kS1NFuNJXxwTauI4N5NdhiyezVZZb/6VZtj4ZStsWQy12ah4RmEeMbCQhJmOP4n+eXQCg50omA1j+SXxqJp1/Dkg06uAkxlMOK9quM6l6PB1/NIuN9kJJ7NpXtoZWd31RC2QrSw5WOUbh8kNbF/j6kH6uLWmUjcG4rakG2m8cyruuXKTXfJFUUXGIgOPc71J4C/FFIO88fGBKlZBQxB+rJA3TO59/YBR3WlLFlJcShsjfji6XsMK5Jrkgz+eiBQJwwNQX3zW3QpcWNQ4XlGFgmESvWXBQwxQIErQtrHH4nEHYFjqaVIZP2Dut5r3n1qtdXArMCvTGYnvibUKssLKIkUcp9b/z3Wxnmga//h2znNWbdlS+hAUAmYoz3MTMd+ue7dlrV88VuBCx9KH9pcMy56qrvwRtETrzBYNGD3+dJ7BtM+nVXFKCAWsm3EIRVTBqHpriqM0niBTJI0w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(39860400002)(366004)(451199015)(52536014)(41300700001)(7416002)(8936002)(7406005)(10290500003)(110136005)(54906003)(38070700005)(8676002)(66476007)(4326008)(66946007)(76116006)(86362001)(66556008)(64756008)(66446008)(316002)(2906002)(8990500004)(478600001)(33656002)(83380400001)(55016003)(921005)(38100700002)(82960400001)(82950400001)(71200400001)(7696005)(9686003)(6506007)(122000001)(26005)(5660300002)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?RdedEWVsnYvwxgXe5tUaUhU62/uiMNbHXLOGWJaiGerAymNrLOCZrLPtB7mA?=
- =?us-ascii?Q?iHhmg9NIG47WbpDT2t1bimIRgJ3kXYPapqKz0wpVMMl3Vpxe3mtZbUg503L4?=
- =?us-ascii?Q?wuMQABJ7QpL1e+7QJDN2QzbTrgLHvYcVYQzH4fUn+oPQw4KDP4yHw/6YVsjk?=
- =?us-ascii?Q?QOmUXbzz0Qhln03PjqHzD6DElQ4+EPPoXCxySx/QM/j26niARXONTc6khZIU?=
- =?us-ascii?Q?9ObWjK8JDJ12WEdHHn0udUPIxKECH6sD4qy3mG3xNmr9yFHMA9+DT7aP05GM?=
- =?us-ascii?Q?qyv3AETW58j6vipZ3x2nzqSA1VteE58an6PN9nwBaehDe+PVp4oeQLVoiFTg?=
- =?us-ascii?Q?SV7rfA4fHkrds0RPxK1ueft/y1m5lfpQnhbzqgi1VM/M5AGDkLOIVVCiT90i?=
- =?us-ascii?Q?dMwdvzVine46ahyFBr2JgLfYh6D6Z1hsMGs6nMMaK0cKKBS74Y3qSvSYMHcC?=
- =?us-ascii?Q?H9rA505RcmAiNhMx4uRkpxGkhTQKfHZ5DdDpTn4wHdqUZZ5XbHl7Pol/b2hi?=
- =?us-ascii?Q?xuFcCEb9872XaU7dSwyU+lxnnD+a/mww07XZeIdJf2DfuQDWbdX6CwbT2d99?=
- =?us-ascii?Q?z3S6UsT1NY3z4+TrKA2vEe0k2kxCHe9dVkxPclgt5/7dOxwii+SrfFO33fx0?=
- =?us-ascii?Q?Qsj88bzpGsRr3vETYw7Om5KhLaADpnMS475HXAQufnIoJ0brQXvvEapKTI60?=
- =?us-ascii?Q?5wgzo6/tLVCsblnq2D8keJSpHkD4jqrPwOlUacQrJTzTf6nmReMowUSl5as+?=
- =?us-ascii?Q?MXDtBu81V2CNlXQkvNRrLoveCNRjD8gliErpx933VcSy+RzN0fyyfaqacjYd?=
- =?us-ascii?Q?xmTHz/ezWtPq1YTOm8DgJhPj1UZlKhd26Tv0ACORHJ3e/BqBXdAxM01jMash?=
- =?us-ascii?Q?xuhxOGTji+Q4Z6VccqLsbvN9f7jERC2YOLZAPrnl+9wzoqzungUyj19UsE9v?=
- =?us-ascii?Q?r53euAbR7jMNdGCCELVujICcKnKCKhqq3iOUh6ZzOotdMN635yFnxkyZMRT9?=
- =?us-ascii?Q?B+ThSRzx3iQVLNEA6RP480WUy8jy/gmzytl36KgNkgtUGbUsPnfFR1VQCuLg?=
- =?us-ascii?Q?5ouCGYTXGMW5bBUJTKqSzKOMaZe6JpXX73cc1oWhaZBfggluzrDmOoY/Kat3?=
- =?us-ascii?Q?9bE+n5K7jvBsmbyKp+WbTr5wXb+4Up2/++6KLw8igwsXmwkda6N7pERK3XnH?=
- =?us-ascii?Q?HoQdIPSBT9JAtOj6jkr/cSz0h8Toirai0Gu4gruKgY9GLkU04NM4OvKXMPAT?=
- =?us-ascii?Q?LnYf7XFFvC1UdCQknlHOUVN5v0O2EDSYOGM/R2duFP7/Deb1rTfBc6f50csy?=
- =?us-ascii?Q?OpDIB9LMk350Bx51RWQMivS88wCDXxAIS+X1i4oEfWOE6YqbjssLJiD7Tnm5?=
- =?us-ascii?Q?fVwfVIJ/PSCKp9+/pGXPBJmBRwgjJLGUmAxhJ/1VBFyM0HQnOO2dfLQV7TOl?=
- =?us-ascii?Q?SCTsTvoB1gAOrWO1u0hqo8jHRWHip8B9fr+mZq4OvQT8atjpdKrl8P541IrL?=
- =?us-ascii?Q?ntn43f9DesNoJ4MtCnHJSXGThfKWzhZcgGXPishr7+MwdN7JWcWDQy008yGE?=
- =?us-ascii?Q?w1Mnt/9x5eQGYn1X3kDrn4zW68l6/Dsy2oN394JS3uu89K/F31cuzq55+nx9?=
- =?us-ascii?Q?/g=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229884AbiLMGCK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Dec 2022 01:02:10 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A3B1263D
+        for <linux-arch@vger.kernel.org>; Mon, 12 Dec 2022 22:02:08 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id n9-20020a05600c3b8900b003d0944dba41so7128952wms.4
+        for <linux-arch@vger.kernel.org>; Mon, 12 Dec 2022 22:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fbEvbmFCq+IcCrEe9RLTvmhbg/l2JnxZHhCgf7rj0ps=;
+        b=vc8g3zNJxla5Lu/ywNXhJjUsY9bXfhfc8KpUh13qP29TW4YJ5dQGPv5FrUJxxPQG1v
+         MboByqV0lgAf3XJyYdhtDWlqw61zAsWwA2WT+63dchCj9Br5c7aximvszctGPDUbOeNL
+         MyPgO//PoJss6rf1JaUmGr3ObCBAj1fkCnvx+5U6cETGGcC/J+WcICg0pH1mVSBk+wRa
+         M/EdOR71AMuD/yU4+XCBJ55k9r7JC2TBbr/vhPhvR9fs6VV7vfewwT6d7c3kaj+X2FQT
+         3qckEJ47EFitMhTB8zi/+X8IgNJgzBUrZVGm9pAseoMjGs2XZRN6YXrx0z+02h5/uaRF
+         CWZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fbEvbmFCq+IcCrEe9RLTvmhbg/l2JnxZHhCgf7rj0ps=;
+        b=uGsXOBI2wZiIaHTJ/HbJ7cTcrURRR0S8hcdKaq+q8vO8+fhuwkXdp7WQP60P1fWgPN
+         4cdsWIjYoux6+jbjaUP+hT7MMgYEW4/YYYU/dEHf2gnF367kY94ztYo4EE5QKPTqZWK1
+         fYbyKV8gJxXX//TLAZGacDvtpO/wA6u0HMyqYhW4SkpnQCnW6ivUzOHFXZjUt1uSNQGZ
+         qQK6MNIAF2186lwkDbsfpReLbsPt8lG6m71l+TEZfgMVIZ5Vzdlkb9a4cfkvEOs738tc
+         VrcTNxG+79RGFymJFQEtmXa3vQc6+1reFgycKQd6Dqh6N20mMSCxNzJnQBlujzXoR/Wu
+         vikw==
+X-Gm-Message-State: ANoB5pnnkl594FJtZBp2OsWer2ZIH3NJkyQYc2Fa+73XFVco8zPi66LM
+        AI/Q+Z3huXiu5IJXpPZ4rLErJQ==
+X-Google-Smtp-Source: AA0mqf5Ry0vlp2BK7V379Xx5gkMXHrMs/RTW3fKIYILszorgAJaEo6oj6pK+bCwVFcMzRaV2QP1hqA==
+X-Received: by 2002:a05:600c:2101:b0:3cf:e850:4451 with SMTP id u1-20020a05600c210100b003cfe8504451mr14455165wml.9.1670911326540;
+        Mon, 12 Dec 2022 22:02:06 -0800 (PST)
+Received: from alex-rivos.home (lfbn-lyo-1-450-160.w2-7.abo.wanadoo.fr. [2.7.42.160])
+        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003b47ff307e1sm12611234wms.31.2022.12.12.22.02.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 22:02:06 -0800 (PST)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v3] riscv: Use PUD/P4D/PGD pages for the linear mapping
+Date:   Tue, 13 Dec 2022 07:02:04 +0100
+Message-Id: <20221213060204.27286-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19fbe7f3-9f1a-4cf2-5bab-08dadc9a6077
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2022 23:41:22.7387
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6Yp004L3pLtQstj0gUAQqW2TWs5BLmRYdsj1S6lFPg5POzIiRsi5piAagdx0zSPPDmEM54TEhc3I+6fJ6rF1/qSTyL8CL7IWkstj0Og5GTk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1909
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <ltykernel@gmail.com> Sent: Friday, November 18, 2022 7:46=
- PM
->=20
-> sev-snp guest provides vtl(Virtual Trust Level) and get it from
-> hyperv hvcall via HVCALL_GET_VP_REGISTERS.
+During the early page table creation, we used to set the mapping for
+PAGE_OFFSET to the kernel load address: but the kernel load address is
+always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+PAGE_OFFSET is).
 
-Two general comments:
+But actually we don't have to establish this mapping (ie set va_pa_offset)
+that early in the boot process because:
 
-1) Could this patch be combined with Patch 9 of the series?  It seems
-like they go together since Patch 9 is the consumer of the VTL.
+- first, setup_vm installs a temporary kernel mapping and among other
+  things, discovers the system memory,
+- then, setup_vm_final creates the final kernel mapping and takes
+  advantage of the discovered system memory to create the linear
+  mapping.
 
-2) What is the bigger picture motivation for this patch and Patch 9
-being part of the patch series for support fully enlightened SEV-SNP
-guests?  Won't the VTL always be 0 in such a guest?  The code currently
-assumes VTL 0, so it seems like this patch doesn't change anything.  Or
-maybe there's a scenario that I'm not aware of where the VTL is
-other than 0.
+During the first phase, we don't know the start of the system memory and
+then until the second phase is finished, we can't use the linear mapping at
+all and phys_to_virt/virt_to_phys translations must not be used because it
+would result in a different translation from the 'real' one once the final
+mapping is installed.
 
->=20
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->  arch/x86/hyperv/hv_init.c      | 35 ++++++++++++++++++++++++++++++++++
->  include/asm-generic/mshyperv.h |  2 ++
->  2 files changed, 37 insertions(+)
->=20
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 4600c5941957..5b919d4d24c0 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -390,6 +390,39 @@ static void __init hv_get_partition_id(void)
->  	local_irq_restore(flags);
->  }
->=20
-> +static u8 __init get_current_vtl(void)
+So here we simply delay the initialization of va_pa_offset to after the
+system memory discovery. But to make sure noone uses the linear mapping
+before, we add some guard in the DEBUG_VIRTUAL config.
 
-The name get_current_vtl() seems to imply that there might be a
-"previous" VTL, or that the VTL might change over time.  I'm not aware
-that either is the case.  Couldn't this just be get_vtl()?
+Finally we can use PUD/P4D/PGD hugepages when possible, which will result
+in a better TLB utilization.
 
-> +{
-> +	u64 control =3D ((u64)1 << HV_HYPERCALL_REP_COMP_OFFSET) | HVCALL_GET_V=
-P_REGISTERS;
+Note that we rely on the firmware to protect itself using PMP.
 
-Simplify by using HV_HYPERCALL_REP_COMP_1.
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
 
-> +	struct hv_get_vp_registers_input *input =3D NULL;
-> +	struct hv_get_vp_registers_output *output =3D NULL;
+v3:
+- Change the comment about initrd_start VA conversion so that it fits
+  ARM64 and RISCV64 (and others in the future if needed), as suggested
+  by Rob
 
-It doesn't seem like the above two initializations to NULL are needed.
+v2:
+- Add a comment on why RISCV64 does not need to set initrd_start/end that
+  early in the boot process, as asked by Rob
 
-> +	u8 vtl =3D 0;
-> +	int ret;
+Note that this patch is rebased on top of:
+[PATCH v1 1/1] riscv: mm: call best_map_size many times during linear-mapping
 
-The result of hv_do_hypercall() should always be a u64.
+ arch/riscv/include/asm/page.h | 16 ++++++++++++++++
+ arch/riscv/mm/init.c          | 25 +++++++++++++++++++------
+ arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
+ drivers/of/fdt.c              | 11 ++++++-----
+ 4 files changed, 57 insertions(+), 11 deletions(-)
 
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	input =3D *(struct hv_get_vp_registers_input **)this_cpu_ptr(hyperv_pcp=
-u_input_arg);
-> +	output =3D (struct hv_get_vp_registers_output *)input;
-> +	if (!input || !output) {
-
-Don't need to check both values since one is assigned from the other. :-)
-
-> +		pr_err("Hyper-V: cannot allocate a shared page!");
-
-Error message text isn't correct.
-
-> +		goto done;
-
-Need to do local_irq_restore() before goto done.
-
-> +	}
-> +
-> +	memset(input, 0, sizeof(*input) + sizeof(input->element[0]));
-> +	input->header.partitionid =3D HV_PARTITION_ID_SELF;
-> +	input->header.inputvtl =3D 0;
-> +	input->element[0].name0 =3D 0x000D0003;
-
-This constant should go in one of the hyperv-tlfs.h header files.  If I
-recall correctly, we're currently treating VTLs as x86-specific, so should
-go in arch/x86/include/asm/hyperv-tlfs.h.
-
-> +
-> +	ret =3D hv_do_hypercall(control, input, output);
-> +	if (ret =3D=3D 0)
-
-Use hv_result_success(ret).
-
-> +		vtl =3D output->as64.low & 0xf;
-
-The 0xF mask should be defined in the hyperv-tlfs.h per
-above.
-
-> +	else
-> +		pr_err("Hyper-V: failed to get the current VTL!");
-
-Again, drop the word "current".  And the exclamation mark isn't needed. :-)
-
-> +	local_irq_restore(flags);
-> +
-> +done:
-> +	return vtl;
-> +}
-> +
->  /*
->   * This function is to be invoked early in the boot sequence after the
->   * hypervisor has been detected.
-> @@ -527,6 +560,8 @@ void __init hyperv_init(void)
->  	if (hv_is_isolation_supported())
->  		swiotlb_update_mem_attributes();
->  #endif
-> +	/* Find the current VTL */
-> +	ms_hyperv.vtl =3D get_current_vtl();
-
-Drop "current" in the comment and function name.
-
->=20
->  	return;
->=20
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index bfb9eb9d7215..68133de044ec 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -46,6 +46,7 @@ struct ms_hyperv_info {
->  		};
->  	};
->  	u64 shared_gpa_boundary;
-> +	u8 vtl;
->  };
->  extern struct ms_hyperv_info ms_hyperv;
->=20
-> @@ -55,6 +56,7 @@ extern void * __percpu *hyperv_pcpu_output_arg;
->  extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputadd=
-r);
->  extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
->  extern bool hv_isolation_type_snp(void);
-> +extern bool hv_isolation_type_en_snp(void);
-
-This declaration of hv_isolation_type_en_snp() shouldn't be needed here
-as it has already been added to arch/x86/include/asm/mshyperv.h.
-
-The declaration of hv_isolation_type_snp() occurs both places, but I
-think that's some sloppiness from the past that could be fixed.  In fact,
-hv_isolation_type_snp() occurs *twice* in include/asm-generic/mshyperv.h.
-
->=20
->  /* Helper functions that provide a consistent pattern for checking Hyper=
--V hypercall
-> status. */
->  static inline int hv_result(u64 status)
-> --
-> 2.25.1
+diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
+index ac70b0fd9a9a..f3af526a149f 100644
+--- a/arch/riscv/include/asm/page.h
++++ b/arch/riscv/include/asm/page.h
+@@ -90,6 +90,14 @@ typedef struct page *pgtable_t;
+ #define PTE_FMT "%08lx"
+ #endif
+ 
++#ifdef CONFIG_64BIT
++/*
++ * We override this value as its generic definition uses __pa too early in
++ * the boot process (before kernel_map.va_pa_offset is set).
++ */
++#define MIN_MEMBLOCK_ADDR      0
++#endif
++
+ #ifdef CONFIG_MMU
+ extern unsigned long riscv_pfn_base;
+ #define ARCH_PFN_OFFSET		(riscv_pfn_base)
+@@ -122,7 +130,11 @@ extern phys_addr_t phys_ram_base;
+ #define is_linear_mapping(x)	\
+ 	((x) >= PAGE_OFFSET && (!IS_ENABLED(CONFIG_64BIT) || (x) < PAGE_OFFSET + KERN_VIRT_SIZE))
+ 
++#ifndef CONFIG_DEBUG_VIRTUAL
+ #define linear_mapping_pa_to_va(x)	((void *)((unsigned long)(x) + kernel_map.va_pa_offset))
++#else
++void *linear_mapping_pa_to_va(unsigned long x);
++#endif
+ #define kernel_mapping_pa_to_va(y)	({						\
+ 	unsigned long _y = y;								\
+ 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < phys_ram_base) ?					\
+@@ -131,7 +143,11 @@ extern phys_addr_t phys_ram_base;
+ 	})
+ #define __pa_to_va_nodebug(x)		linear_mapping_pa_to_va(x)
+ 
++#ifndef CONFIG_DEBUG_VIRTUAL
+ #define linear_mapping_va_to_pa(x)	((unsigned long)(x) - kernel_map.va_pa_offset)
++#else
++phys_addr_t linear_mapping_va_to_pa(unsigned long x);
++#endif
+ #define kernel_mapping_va_to_pa(y) ({						\
+ 	unsigned long _y = y;							\
+ 	(IS_ENABLED(CONFIG_XIP_KERNEL) && _y < kernel_map.virt_addr + XIP_OFFSET) ?	\
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 1b76d3fe4e26..58bcf395efdc 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -213,6 +213,14 @@ static void __init setup_bootmem(void)
+ 	phys_ram_end = memblock_end_of_DRAM();
+ 	if (!IS_ENABLED(CONFIG_XIP_KERNEL))
+ 		phys_ram_base = memblock_start_of_DRAM();
++
++	/*
++	 * Any use of __va/__pa before this point is wrong as we did not know the
++	 * start of DRAM before.
++	 */
++	kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
++	riscv_pfn_base = PFN_DOWN(phys_ram_base);
++
+ 	/*
+ 	 * memblock allocator is not aware of the fact that last 4K bytes of
+ 	 * the addressable memory can not be mapped because of IS_ERR_VALUE
+@@ -672,9 +680,16 @@ void __init create_pgd_mapping(pgd_t *pgdp,
+ 
+ static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
+ {
+-	/* Upgrade to PMD_SIZE mappings whenever possible */
+-	base &= PMD_SIZE - 1;
+-	if (!base && size >= PMD_SIZE)
++	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
++		return PGDIR_SIZE;
++
++	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
++		return P4D_SIZE;
++
++	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
++		return PUD_SIZE;
++
++	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
+ 		return PMD_SIZE;
+ 
+ 	return PAGE_SIZE;
+@@ -983,11 +998,9 @@ asmlinkage void __init setup_vm(uintptr_t dtb_pa)
+ 	set_satp_mode();
+ #endif
+ 
+-	kernel_map.va_pa_offset = PAGE_OFFSET - kernel_map.phys_addr;
++	kernel_map.va_pa_offset = 0UL;
+ 	kernel_map.va_kernel_pa_offset = kernel_map.virt_addr - kernel_map.phys_addr;
+ 
+-	riscv_pfn_base = PFN_DOWN(kernel_map.phys_addr);
+-
+ 	/*
+ 	 * The default maximal physical memory size is KERN_VIRT_SIZE for 32-bit
+ 	 * kernel, whereas for 64-bit kernel, the end of the virtual address
+diff --git a/arch/riscv/mm/physaddr.c b/arch/riscv/mm/physaddr.c
+index 19cf25a74ee2..5ae4bd166e25 100644
+--- a/arch/riscv/mm/physaddr.c
++++ b/arch/riscv/mm/physaddr.c
+@@ -33,3 +33,19 @@ phys_addr_t __phys_addr_symbol(unsigned long x)
+ 	return __va_to_pa_nodebug(x);
+ }
+ EXPORT_SYMBOL(__phys_addr_symbol);
++
++phys_addr_t linear_mapping_va_to_pa(unsigned long x)
++{
++	BUG_ON(!kernel_map.va_pa_offset);
++
++	return ((unsigned long)(x) - kernel_map.va_pa_offset);
++}
++EXPORT_SYMBOL(linear_mapping_va_to_pa);
++
++void *linear_mapping_pa_to_va(unsigned long x)
++{
++	BUG_ON(!kernel_map.va_pa_offset);
++
++	return ((void *)((unsigned long)(x) + kernel_map.va_pa_offset));
++}
++EXPORT_SYMBOL(linear_mapping_pa_to_va);
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index 7b571a631639..c45aaa3458a7 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
+ static void __early_init_dt_declare_initrd(unsigned long start,
+ 					   unsigned long end)
+ {
+-	/* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+-	 * enabled since __va() is called too early. ARM64 does make use
+-	 * of phys_initrd_start/phys_initrd_size so we can skip this
+-	 * conversion.
++	/*
++	 * __va() is not yet available this early on some platforms. In that
++	 * case, the platform uses phys_initrd_start/phys_initrd_size instead
++	 * and does the VA conversion itself.
+ 	 */
+-	if (!IS_ENABLED(CONFIG_ARM64)) {
++	if (!IS_ENABLED(CONFIG_ARM64) &&
++	    !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+ 		initrd_start = (unsigned long)__va(start);
+ 		initrd_end = (unsigned long)__va(end);
+ 		initrd_below_start_ok = 1;
+-- 
+2.37.2
 
