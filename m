@@ -2,79 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5560164E127
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Dec 2022 19:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B224764ED95
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Dec 2022 16:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLOSnt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Dec 2022 13:43:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        id S231337AbiLPPJT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Dec 2022 10:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiLOSnh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Dec 2022 13:43:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235FB286E9;
-        Thu, 15 Dec 2022 10:43:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S231324AbiLPPJS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Dec 2022 10:09:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA9C26C1;
+        Fri, 16 Dec 2022 07:09:15 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAE20B81C29;
-        Thu, 15 Dec 2022 18:43:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD585C433EF;
-        Thu, 15 Dec 2022 18:43:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="flZq12FL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1671129810;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2B7FE1EC0531;
+        Fri, 16 Dec 2022 16:09:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671203353;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U2wIk9Iy3lO0eyDurNiRd13Y8NnkLNZtrzeTYAQ5/0k=;
-        b=flZq12FLtve8AI4p3IkuE70hLdYvdwU6KPaOtMYG8Oa7VX5Ve9o7hw2Q/fWm5t7a/Oe0Lm
-        B8jsGuyyAA7hix9P5en6ZZ+FBzZ+NHQaiqECHkCWJ0DZ8XGNqxr+0KaOs8Nbf9ACUPSaCr
-        ArNMjYAx2KHNdymTBvZC9C1/jP9/pEQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c972e1f6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 15 Dec 2022 18:43:30 +0000 (UTC)
-Date:   Thu, 15 Dec 2022 11:43:28 -0700
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-m68k@lists.linux-m68k.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] m68k: string: Make char intermediate in strcmp() signed
-Message-ID: <Y5tq0OSjTvADFnEZ@zx2c4.com>
-References: <bce014e60d7b1a3d1c60009fc3572e2f72591f21.1671110959.git.geert@linux-m68k.org>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UYUFaRAc3D5wjF6DgpP0Zv3fb8T3UMwaMYtFae36jGc=;
+        b=IVJeYsxJhJ+EljMkKQYYhHLmpc5TYxmee4QMzKYpJ87goENHZ6o/rEb7PJs7cY5ipeU8dK
+        v/Z239POYhUiSkqxCv0e27k5ZMdgC/ORng2oVzY7MT8hd12ggKG0P5nYl2qk23afy9Ga1D
+        aWIlv35enrQ3/XXQoTgx3VDLZaxpJ8A=
+Date:   Fri, 16 Dec 2022 16:09:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <Y5yKEpwCzZpNoBrp@zn.tnic>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <bce014e60d7b1a3d1c60009fc3572e2f72591f21.1671110959.git.geert@linux-m68k.org>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 02:30:04PM +0100, Geert Uytterhoeven wrote:
-> Since char became unsigned, strcmp() always returns a positive number.
-> 
-> "res" is used to store a byte difference, so it should be signed.
-> 
-> Fixes: 3bc753c06dd02a35 ("kbuild: treat char as always unsigned")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
-> See "Re: [PATCH v9] kallsyms: Add self-test facility"
-> https://lore.kernel.org/r/CAMuHMdWM6+pC3yUqy+hHRrAf1BCz2sz1KQv2zxS+Wz-639X-aA@mail.gmail.com
-> 
-> I'm wondering how many surprises like this are still hidden...
+On Fri, Dec 02, 2022 at 02:13:40PM +0800, Chao Peng wrote:
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 1782c4555d94..7f0f5e9f2406 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1150,6 +1150,9 @@ static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+>  	spin_lock_init(&kvm->mn_invalidate_lock);
+>  	rcuwait_init(&kvm->mn_memslots_update_rcuwait);
+>  	xa_init(&kvm->vcpu_array);
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	xa_init(&kvm->mem_attr_array);
+> +#endif
 
-OOOOOOOOOOFFFFF! Not sure how I missed this one. Perhaps the ASM alluded
-the coccinelle scripts. Anyway, thanks for catching it, sorry for the
-bug, and here's my:
+	if (IS_ENABLED(CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES))
+		...
 
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+would at least remove the ugly ifdeffery.
 
-I assume you'll send this out for the next tranche of m68k fixes.
+Or you could create wrapper functions for that xa_init() and
+xa_destroy() and put the ifdeffery in there.
 
-Jason
+> @@ -2323,6 +2329,49 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
+>  }
+>  #endif /* CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT */
+>  
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +static u64 kvm_supported_mem_attributes(struct kvm *kvm)
+
+I guess that function should have a verb in the name:
+
+kvm_get_supported_mem_attributes()
+
+> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> +					   struct kvm_memory_attributes *attrs)
+> +{
+> +	gfn_t start, end;
+> +	unsigned long i;
+> +	void *entry;
+> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> +
+> +	/* flags is currently not used. */
+> +	if (attrs->flags)
+> +		return -EINVAL;
+> +	if (attrs->attributes & ~supported_attrs)
+> +		return -EINVAL;
+> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> +		return -EINVAL;
+
+Dunno, shouldn't those issue some sort of an error message so that the
+caller knows where it failed? Or at least return different retvals which
+signal what the problem is?
+
+> +	start = attrs->address >> PAGE_SHIFT;
+> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> +
+> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> +
+> +	mutex_lock(&kvm->lock);
+> +	for (i = start; i < end; i++)
+> +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> +				    GFP_KERNEL_ACCOUNT)))
+> +			break;
+> +	mutex_unlock(&kvm->lock);
+> +
+> +	attrs->address = i << PAGE_SHIFT;
+> +	attrs->size = (end - i) << PAGE_SHIFT;
+> +
+> +	return 0;
+> +}
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
