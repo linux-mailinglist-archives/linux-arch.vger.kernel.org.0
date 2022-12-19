@@ -2,117 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E5E6513EA
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 21:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE2F65158B
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 23:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiLSU3U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Dec 2022 15:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
+        id S232361AbiLSW1i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Dec 2022 17:27:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbiLSU3R (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 15:29:17 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0CD6599;
-        Mon, 19 Dec 2022 12:29:16 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2BDCA5C0120;
-        Mon, 19 Dec 2022 15:29:16 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 19 Dec 2022 15:29:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1671481756; x=1671568156; bh=pfkagIuhE7CfwQL8bON3iNU6to3dC/ZAaMg
-        aVhzAzk8=; b=pqBRIDz82N44U8PO+/wzIHFE0rKim54Zsp+QZ6euvHd+WLNiP6y
-        8+V4Cy1k6t2qlyPG0xxtVsSUyu00lvGw7syrXZ7JDnIqk0kr7+0mIJUhPxFRecd1
-        EvNJcs+PEUOnUF+zdczaCKPVpzlLeov/lOZR/J9kdsspzDrGGSjng5n84V8v6hGn
-        kcGHVP01vcdNaJjgQMU55FDZOtT3UfJAGf59HJJG+GOGP/dySMQXwKgta6XGR8sj
-        S+lbYlySHn5eBUsok+t+BvcowMm+RSsd856amCXOBqDavjBtR62yLgSwvDpjr3wF
-        l0Pa/cCLtpas1uxeqGnxG1rK6XlqCjmVdxw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671481756; x=
-        1671568156; bh=pfkagIuhE7CfwQL8bON3iNU6to3dC/ZAaMgaVhzAzk8=; b=q
-        mInxkw0FT7n564cu6pyhx6mR9AXpoaXMo6arUjoevn0z1hwvEvCGbErYljk5+x2c
-        WqYYNr0PL1+DH7Ck7aS/+xhdG0XLQLaM/8yWWsuOdxSOTeR1aixWUk6VgrciytCv
-        DZQyUUUcQrZjegENnXveBizRaWv5IAN4S4eVAqBfceQPtxUZGQ9//GnO+ejtRmWA
-        vH/0I1jzy4KTbemYid3IZp0bkTyUgqTCNGEj/tWperCrN3CBWf5EFt2Jt5Fb3Qbs
-        NwiIHrclZq1ZVFC0BbpIJbvvuGL9K7+EsuHJRGx5Paykvy1/QJSogO+bTxqTWnvF
-        9elrljqRQjqvz8vgwG5Nw==
-X-ME-Sender: <xms:nMmgY5Ca97AY8VILImRKzfjMVtjHN2X9FA7AagL9OLPfyGWRA2YHXw>
-    <xme:nMmgY3hLAHNKXWR5zi7bUJeKiH4qMgF_yKna4UrpzoxodiXiVkE5Uq-S0dMjZ4gzh
-    yJKYaO84PgrVSdSjtA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgdduudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:nMmgY0lK7tR1ZqUQwaNh2wMQJk5uBUePihilqf4VyegKoU5EvxTq9A>
-    <xmx:nMmgYzyjYs4R7layYNS9nOFVn0ilvyg-kg_TB2bLt23z9mLgRij30w>
-    <xmx:nMmgY-QsOz6xw4asOr-81Af1UmthZjEggOBT6X-mtfsmmrElvqzORg>
-    <xmx:nMmgY34Hta4tlSBLgHsyodNrUOs-ELzLINqz8M6CTlMUBlq00b_Giw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0B7D8B60086; Mon, 19 Dec 2022 15:29:16 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <0b37729c-535f-4864-aa2e-4f6088f8e63e@app.fastmail.com>
-Date:   Mon, 19 Dec 2022 21:28:54 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+        with ESMTP id S231860AbiLSW1h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 17:27:37 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D4D12745
+        for <linux-arch@vger.kernel.org>; Mon, 19 Dec 2022 14:27:36 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id c7so9579223qtw.8
+        for <linux-arch@vger.kernel.org>; Mon, 19 Dec 2022 14:27:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZrwtJ99mPIdpn902Yl38nd5oEw4ClksCy0+9+58YOqk=;
+        b=UxBXVJKdoZanEEmT4XKAQM87Fh/57YuHSQEYg1wo90BnAGQGnB/Ad1wbxqkLVpoHgL
+         esx1oQJsxI+i7FnsC7+M248zlv2RvHmMvMQgHmLAMP2bd1xf2qw+HG3ywTkikv8pyk73
+         pQGD2dslClLgSdx8JKeggnTAWU+Ne2E3P31Gk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZrwtJ99mPIdpn902Yl38nd5oEw4ClksCy0+9+58YOqk=;
+        b=zHbSkGhx9MNN7ww5VZR/GEmVxDSCbORG8WAtzUT8yUgXgD6eSs8PL/h+qlzHAVQvXa
+         19OMgw2+ktnN2o+3KDe9eO5PRKKIkWR/wJL77f+qlt3CRl/5ok08mNIJj5ml3NdiOS0W
+         PrVhoZbGhmV/dszfyrd8sbso0NQVlyTok1IbNWZurUnjL+I4PXyczKFVP/O/2jra1lQk
+         G6b6p47rUqTP9fJ5Pz4P91HEIvHwtO3B5b8nv/pi8XDeWy+vcwsPgtZ3UoeJbDJepZ6d
+         CoLKtd+wCTqs+t8LheE6z2B2WNBq3sV9yr1Ijuhq/D/lLsQWOu0H+PtUWZ+/zuQvY6nC
+         m0VA==
+X-Gm-Message-State: AFqh2kpR2c0eSBzmVeAg3Nbk85lDoQdSuPcpAXpmlibhcP9yF4hoIjRP
+        QRJT2lTLx+SR8jjIhAgpgdF8CvkgbxruExrS
+X-Google-Smtp-Source: AMrXdXvAw2o8h9b889IxwwcyuIqVxzCnecVukiqbrsHbw9r66VD3pwTECMDoA8MDv3q7+4mD1X3YSA==
+X-Received: by 2002:ac8:5511:0:b0:3a7:eb78:2833 with SMTP id j17-20020ac85511000000b003a7eb782833mr239024qtq.53.1671488855324;
+        Mon, 19 Dec 2022 14:27:35 -0800 (PST)
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com. [209.85.219.52])
+        by smtp.gmail.com with ESMTPSA id bq17-20020a05622a1c1100b00397e97baa96sm6693529qtb.0.2022.12.19.14.27.34
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Dec 2022 14:27:34 -0800 (PST)
+Received: by mail-qv1-f52.google.com with SMTP id i12so7199953qvs.2
+        for <linux-arch@vger.kernel.org>; Mon, 19 Dec 2022 14:27:34 -0800 (PST)
+X-Received: by 2002:a0c:c690:0:b0:4f0:656b:c275 with SMTP id
+ d16-20020a0cc690000000b004f0656bc275mr1406822qvj.129.1671488854458; Mon, 19
+ Dec 2022 14:27:34 -0800 (PST)
+MIME-Version: 1.0
+References: <0b37729c-535f-4864-aa2e-4f6088f8e63e@app.fastmail.com>
+In-Reply-To: <0b37729c-535f-4864-aa2e-4f6088f8e63e@app.fastmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 19 Dec 2022 16:27:18 -0600
+X-Gmail-Original-Message-ID: <CAHk-=whBeiVWAWUrPj__03MPBpQRF313-Mw05jo08Lxvx2zGcw@mail.gmail.com>
+Message-ID: <CAHk-=whBeiVWAWUrPj__03MPBpQRF313-Mw05jo08Lxvx2zGcw@mail.gmail.com>
+Subject: Re: [GIT PULL] asm-generic bits for 6.2
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-kernel@vger.kernel.org,
         Linux-Arch <linux-arch@vger.kernel.org>
-Subject: [GIT PULL] asm-generic bits for 6.2
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
+On Mon, Dec 19, 2022 at 2:29 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> are available in the Git repository at:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git asm-generic-6.2-1
 
-  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+Nope.
 
-are available in the Git repository at:
+That's not the right repository.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git asm-generic-6.2-1
+And the right repo doesn't have that tag.
 
-for you to fetch changes up to 32975c491ee410598b33201344c123fcc81a7c33:
+Re-do, please?
 
-  uapi: Add missing _UAPI prefix to <asm-generic/types.h> include guard (2022-12-01 16:22:06 +0100)
-
-----------------------------------------------------------------
-asm-generic bits for 6.2
-
-There are only three fairly simple patches. The #include
-change to linux/swab.h addresses a userspace build issue,
-and the change to the mmio tracing logic helps provide
-more useful traces.
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      uapi: Add missing _UAPI prefix to <asm-generic/types.h> include guard
-
-Matt Redfearn (1):
-      include/uapi/linux/swab: Fix potentially missing __always_inline
-
-Sai Prakash Ranjan (1):
-      asm-generic/io: Add _RET_IP_ to MMIO trace for more accurate debug info
-
- include/asm-generic/io.h         | 80 ++++++++++++++++++++--------------------
- include/trace/events/rwmmio.h    | 43 +++++++++++++--------
- include/uapi/asm-generic/types.h |  6 +--
- include/uapi/linux/swab.h        |  2 +-
- lib/trace_readwrite.c            | 16 ++++----
- 5 files changed, 79 insertions(+), 68 deletions(-)
+         Linus
