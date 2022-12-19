@@ -2,142 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCD8650D73
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 15:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A1A650EFD
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 16:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbiLSOhV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Dec 2022 09:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
+        id S232659AbiLSPp7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Dec 2022 10:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232548AbiLSOgz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 09:36:55 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB46712090;
-        Mon, 19 Dec 2022 06:36:34 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ECC051EC06BD;
-        Mon, 19 Dec 2022 15:36:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671460593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Nr0Z4OvkPMBKiUgwrvy1b0JeJ5CuH4u8cdycIbF3VTo=;
-        b=g4O8WnDjjWmrtbFmMTY4G0yltCqzIeXhWywY3xwLBgdFTN9TCYZMZhAq9By4cTHHjnVkHt
-        354idtEXaLQwUDtNstFC6rPiAS1iw8va+w5OrbtVNCuvMSntL0hbmQcddYbRIVl0pEcCkP
-        SG+jpLF4Ne/7gzC4KSRDGyQn3EtYD1Q=
-Date:   Mon, 19 Dec 2022 15:36:28 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <Y6B27MpZO8o1Asfe@zn.tnic>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232611AbiLSPpa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 10:45:30 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D5313D61;
+        Mon, 19 Dec 2022 07:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=fH7vUY5IU4m1cKDzFBDt+eq6lohLTkHTMZiIE4ke4VY=; b=hmTPYkhC/7+cqNJUN5N9enIC/k
+        RI5NBONX3QLG7mKq+yLzWmmPG8HTz/NW05/q2t+NIC08Ns9r4JZ2UscvuMGis6p5aIV98rt+d5PYB
+        nAJujak0DMGsy0jBuXm6mns7IRswwY028uKylH5d6HEyxKa0v7TWHR4V7NhweEQZexadjXP2cENfB
+        PN0CBN/Z4zLKueR3qNhwICGa49xaayJGmuojh1b1Ti3KDYK/3ICqowGwv0pFcI9xUFdbcrZ+0iIxu
+        Ge/5HFB3a3AtlZL/G1E9c/b18BhPteeNkIwbOO3E2lBnqhM7d/CMFvm6DhrYuPEd5j261z2I8GL8m
+        +sBcpybw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7IIS-000qwa-OK; Mon, 19 Dec 2022 15:43:20 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9B358300193;
+        Mon, 19 Dec 2022 16:43:06 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 6037520A1AB9F; Mon, 19 Dec 2022 16:43:06 +0100 (CET)
+Message-ID: <20221219153525.632521981@infradead.org>
+User-Agent: quilt/0.66
+Date:   Mon, 19 Dec 2022 16:35:25 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org
+Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: [RFC][PATCH 00/12] Introduce cmpxchg128() -- aka. the demise of cmpxchg_double()
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
-> In memory encryption usage, guest memory may be encrypted with special
-> key and can be accessed only by the guest itself. We call such memory
-> private memory. It's valueless and sometimes can cause problem to allow
+Hi,
 
-valueless?
+Since Linus hated on cmpxchg_double(), a few patches to get rid of it, as proposed here:
 
-I can't parse that.
+  https://lkml.kernel.org/r/Y2U3WdU61FvYlpUh@hirez.programming.kicks-ass.net
 
-> userspace to access guest private memory. This new KVM memslot extension
-> allows guest private memory being provided through a restrictedmem
-> backed file descriptor(fd) and userspace is restricted to access the
-> bookmarked memory in the fd.
+based on tip/master because Linus' tree is moving a wee bit fast at the moment.
 
-bookmarked?
+0day robot is all green for building, very limited testing on arm64/s390
+for obvious raisins -- I tried to get the asm right, but please, double
+check.
 
-> This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
-> additional KVM memslot fields restricted_fd/restricted_offset to allow
-> userspace to instruct KVM to provide guest memory through restricted_fd.
-> 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
-> and the size is 'memory_size'.
-> 
-> The extended memslot can still have the userspace_addr(hva). When use, a
-
-"When un use, ..."
-
-...
-
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index a8e379a3afee..690cb21010e7 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -50,6 +50,8 @@ config KVM
->  	select INTERVAL_TREE
->  	select HAVE_KVM_PM_NOTIFIER if PM
->  	select HAVE_KVM_MEMORY_ATTRIBUTES
-> +	select HAVE_KVM_RESTRICTED_MEM if X86_64
-> +	select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
-
-Those deps here look weird.
-
-RESTRICTEDMEM should be selected by TDX_GUEST as it can't live without
-it.
-
-Then you don't have to select HAVE_KVM_RESTRICTED_MEM simply because of
-X86_64 - you need that functionality when the respective guest support
-is enabled in KVM.
-
-Then, looking forward into your patchset, I'm not sure you even
-need HAVE_KVM_RESTRICTED_MEM - you could make it all depend on
-CONFIG_RESTRICTEDMEM. But that's KVM folks call - I'd always aim for
-less Kconfig items because we have waay too many.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
