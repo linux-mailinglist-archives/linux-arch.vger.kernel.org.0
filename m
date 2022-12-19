@@ -2,73 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0665650D45
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 15:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCD8650D73
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 15:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232335AbiLSOaW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Dec 2022 09:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S232475AbiLSOhV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Dec 2022 09:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiLSOaI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 09:30:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DE8D69;
-        Mon, 19 Dec 2022 06:30:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S232548AbiLSOgz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 09:36:55 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB46712090;
+        Mon, 19 Dec 2022 06:36:34 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71D1560FC0;
-        Mon, 19 Dec 2022 14:30:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CAC54C433EF;
-        Mon, 19 Dec 2022 14:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671460206;
-        bh=gjP6aIuedBoZUIpNXYOWVdccmxrx4lMpM2o7U6E+q5c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=FGLSJn1N+RdNTv0B+qDExOcVdo1FUDdU60Z38IOXrkaah1wzP77vqVOFZjg0b6DW3
-         LIqf2GIIHKGIX5vnPBej/eqmodDLCd6lePMlUXjsMSqHOBOKapJiLGySFbDjyuh5k2
-         jVWRT9yf9STS+WlTIIfy09FJV/OMe+g3PZmdxOxdRY/aOwtLfazhAWQhNpaimMBNEq
-         SImXHSa1FFhW/m9HQwJO2hrCcWLnyxIf9jeEh2WE5fxDk9qw2MCBmIX7R7mqSBZrR6
-         4yPAlrJxhHY9kwsI3AFD7Y/NxmaE+QQxtsE1Z/M+ho4mgeEaq5YQ1t9JlAqBVoOEuV
-         c3HjR75TOG6rA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9D84C00445;
-        Mon, 19 Dec 2022 14:30:06 +0000 (UTC)
-Subject: Re: [GIT PULL] csky changes for v6.2-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221219042622.2621881-1-guoren@kernel.org>
-References: <20221219042622.2621881-1-guoren@kernel.org>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221219042622.2621881-1-guoren@kernel.org>
-X-PR-Tracked-Remote: https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.2-rc1
-X-PR-Tracked-Commit-Id: 7e2004906fb52257772be0ef262fba2d5eb1653b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 96bab5b926e4c2d970f70495f4554f905babd09d
-Message-Id: <167146020675.28969.13535307199675455403.pr-tracker-bot@kernel.org>
-Date:   Mon, 19 Dec 2022 14:30:06 +0000
-To:     guoren@kernel.org
-Cc:     torvalds@linux-foundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-csky@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ECC051EC06BD;
+        Mon, 19 Dec 2022 15:36:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671460593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Nr0Z4OvkPMBKiUgwrvy1b0JeJ5CuH4u8cdycIbF3VTo=;
+        b=g4O8WnDjjWmrtbFmMTY4G0yltCqzIeXhWywY3xwLBgdFTN9TCYZMZhAq9By4cTHHjnVkHt
+        354idtEXaLQwUDtNstFC6rPiAS1iw8va+w5OrbtVNCuvMSntL0hbmQcddYbRIVl0pEcCkP
+        SG+jpLF4Ne/7gzC4KSRDGyQn3EtYD1Q=
+Date:   Mon, 19 Dec 2022 15:36:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <Y6B27MpZO8o1Asfe@zn.tnic>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Sun, 18 Dec 2022 23:26:22 -0500:
+On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
+> In memory encryption usage, guest memory may be encrypted with special
+> key and can be accessed only by the guest itself. We call such memory
+> private memory. It's valueless and sometimes can cause problem to allow
 
-> https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.2-rc1
+valueless?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/96bab5b926e4c2d970f70495f4554f905babd09d
+I can't parse that.
 
-Thank you!
+> userspace to access guest private memory. This new KVM memslot extension
+> allows guest private memory being provided through a restrictedmem
+> backed file descriptor(fd) and userspace is restricted to access the
+> bookmarked memory in the fd.
+
+bookmarked?
+
+> This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> additional KVM memslot fields restricted_fd/restricted_offset to allow
+> userspace to instruct KVM to provide guest memory through restricted_fd.
+> 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
+> and the size is 'memory_size'.
+> 
+> The extended memslot can still have the userspace_addr(hva). When use, a
+
+"When un use, ..."
+
+...
+
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index a8e379a3afee..690cb21010e7 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -50,6 +50,8 @@ config KVM
+>  	select INTERVAL_TREE
+>  	select HAVE_KVM_PM_NOTIFIER if PM
+>  	select HAVE_KVM_MEMORY_ATTRIBUTES
+> +	select HAVE_KVM_RESTRICTED_MEM if X86_64
+> +	select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
+
+Those deps here look weird.
+
+RESTRICTEDMEM should be selected by TDX_GUEST as it can't live without
+it.
+
+Then you don't have to select HAVE_KVM_RESTRICTED_MEM simply because of
+X86_64 - you need that functionality when the respective guest support
+is enabled in KVM.
+
+Then, looking forward into your patchset, I'm not sure you even
+need HAVE_KVM_RESTRICTED_MEM - you could make it all depend on
+CONFIG_RESTRICTEDMEM. But that's KVM folks call - I'd always aim for
+less Kconfig items because we have waay too many.
+
+Thx.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
