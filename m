@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EE0650F03
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 16:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E987B650F1E
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Dec 2022 16:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232686AbiLSPqB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Dec 2022 10:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S232769AbiLSPqJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Dec 2022 10:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232603AbiLSPpa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 10:45:30 -0500
+        with ESMTP id S232562AbiLSPpd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Dec 2022 10:45:33 -0500
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7460813D3A;
-        Mon, 19 Dec 2022 07:44:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA2013F46;
+        Mon, 19 Dec 2022 07:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=ltmheXPbH9IMNFHZ4P8NvOysWa92wKwMkpxaGeG832Q=; b=BNNdcWplbia7Tdo9e9JhzPu744
-        gXUhVeJe6clEEF36/xkbfr3un7XfcOJP5RsPH/+K3YTh4jfl8/W0cviflURH82EDqZNU17198QH36
-        WtXvDaQ8shWg9Et9rZ0rynw5UAUIMvXqis8/K09oIZJGjXakQ2lD7xEJXx8DLdeYSyAUKUsAqn+gq
-        wbwi6dU6OmKxe5dkQmHBEh1gsn+cqhS4KPU/uyspZ1uxqYCK58Od/ZX2TDOHMHLuybHLL61GBnq+1
-        2JKJPz5M+mHygNluwA1CvVZiz5OnHN0oZnOivqqc8Z5SwIEE2uc3zf2UtwWj74ZvPOIqz2jboZeLx
-        U+GXIYdA==;
+        bh=HwKpSq8Syzt9wYk5/qyQZy9JqJElqdY1XVTNG2HpXaA=; b=C89SVOTN4frRfghMH72mO24iYJ
+        pVkZGAAkMqRxVkuH3fpqA8/0D1aFHW6y76H1YnF8kEDFDm33E8UubQcUKhJKpWZG8jDggtq8uBBzW
+        U+SxkTxM4g0Q4uVrYdyNJqtyBLrQ5J7iHfduxeojqYnxDrzaSPCi7ttbP4Dg/mEyo3g341YNDQ5Bj
+        8CplCFReZ3n2JbDGVtP5MXOFW56RblTJKRv8Kcn9PDdv6XD/jCDzjQgWk8Jwq7PfTGyAOmvYLBOrd
+        tix3uV9D5+yfntLLV6oTkPEC51xWm3pii6k4b1Pg03G6ocA15Z1RIniFBXvpIunHhG6jU70qH5Akn
+        jgEqG5Xw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p7III-00CeDn-27;
+        id 1p7III-00CeDm-27;
         Mon, 19 Dec 2022 15:43:11 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A44BA302E0D;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A20AD302DA8;
         Mon, 19 Dec 2022 16:43:06 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 6839D20114B73; Mon, 19 Dec 2022 16:43:06 +0100 (CET)
-Message-ID: <20221219154118.955831880@infradead.org>
+        id 6BFEC20B0F89A; Mon, 19 Dec 2022 16:43:06 +0100 (CET)
+Message-ID: <20221219154119.022180444@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 19 Dec 2022 16:35:27 +0100
+Date:   Mon, 19 Dec 2022 16:35:28 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     torvalds@linux-foundation.org
 Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
@@ -59,7 +59,7 @@ Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
         linux-mm@kvack.org, linux-s390@vger.kernel.org,
         linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
         linux-arch@vger.kernel.org
-Subject: [RFC][PATCH 02/12] crypto/ghash-clmulni: Use (struct) be128
+Subject: [RFC][PATCH 03/12] cyrpto/b128ops: Remove struct u128
 References: <20221219153525.632521981@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,60 +72,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Even though x86 is firmly little endian, use be128 because le128 is in
-fact the wrong way around :/ The actual code is already using be128 in
-ghash_setkey() so this shouldn't be more confusing.
-
-This frees up the u128 name for a real u128 type.
+Per git-grep u128_xor() and its related struct u128 are unused except
+to implement {be,le}128_xor(). Remove them to free up the namespace.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/crypto/ghash-clmulni-intel_asm.S  |    4 ++--
- arch/x86/crypto/ghash-clmulni-intel_glue.c |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ include/crypto/b128ops.h |   14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
---- a/arch/x86/crypto/ghash-clmulni-intel_asm.S
-+++ b/arch/x86/crypto/ghash-clmulni-intel_asm.S
-@@ -88,7 +88,7 @@ SYM_FUNC_START_LOCAL(__clmul_gf128mul_bl
- 	RET
- SYM_FUNC_END(__clmul_gf128mul_ble)
+--- a/include/crypto/b128ops.h
++++ b/include/crypto/b128ops.h
+@@ -50,10 +50,6 @@
+ #include <linux/types.h>
  
--/* void clmul_ghash_mul(char *dst, const u128 *shash) */
-+/* void clmul_ghash_mul(char *dst, const le128 *shash) */
- SYM_FUNC_START(clmul_ghash_mul)
- 	FRAME_BEGIN
- 	movups (%rdi), DATA
-@@ -104,7 +104,7 @@ SYM_FUNC_END(clmul_ghash_mul)
+ typedef struct {
+-	u64 a, b;
+-} u128;
+-
+-typedef struct {
+ 	__be64 a, b;
+ } be128;
  
- /*
-  * void clmul_ghash_update(char *dst, const char *src, unsigned int srclen,
-- *			   const u128 *shash);
-+ *			   const le128 *shash);
-  */
- SYM_FUNC_START(clmul_ghash_update)
- 	FRAME_BEGIN
---- a/arch/x86/crypto/ghash-clmulni-intel_glue.c
-+++ b/arch/x86/crypto/ghash-clmulni-intel_glue.c
-@@ -23,17 +23,17 @@
- #define GHASH_BLOCK_SIZE	16
- #define GHASH_DIGEST_SIZE	16
+@@ -61,20 +57,16 @@ typedef struct {
+ 	__le64 b, a;
+ } le128;
  
--void clmul_ghash_mul(char *dst, const u128 *shash);
-+void clmul_ghash_mul(char *dst, const be128 *shash);
+-static inline void u128_xor(u128 *r, const u128 *p, const u128 *q)
++static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
+ {
+ 	r->a = p->a ^ q->a;
+ 	r->b = p->b ^ q->b;
+ }
  
- void clmul_ghash_update(char *dst, const char *src, unsigned int srclen,
--			const u128 *shash);
-+			const be128 *shash);
+-static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
+-{
+-	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
+-}
+-
+ static inline void le128_xor(le128 *r, const le128 *p, const le128 *q)
+ {
+-	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
++	r->a = p->a ^ q->a;
++	r->b = p->b ^ q->b;
+ }
  
- struct ghash_async_ctx {
- 	struct cryptd_ahash *cryptd_tfm;
- };
- 
- struct ghash_ctx {
--	u128 shash;
-+	be128 shash;
- };
- 
- struct ghash_desc_ctx {
+ #endif /* _CRYPTO_B128OPS_H */
 
 
