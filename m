@@ -2,132 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA85651F6E
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 12:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8A0651FBF
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 12:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233492AbiLTLJW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Dec 2022 06:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S233470AbiLTLdK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Dec 2022 06:33:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiLTLJV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 06:09:21 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425AB12766;
-        Tue, 20 Dec 2022 03:09:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WnDr2T6Lz6o8EGXfFOLVGTm1EwVLYgoHb8GLpQHXt1M=; b=IagLEV2UTnOH/1oiatZU2t3fd9
-        wIPIif+7ieQr0xntpK0GaWRRyiwDimnm1M6YG2G9sgsXB6FHTn576bYXZ2XsZQu0X8SVskwk0RdED
-        sUugD1rIZDNEonT+Wrqt9z6gKuYGTXksjAvjtBZde5JzbCpvKPzWPD1B3Cr1mg/gBpkJd++WwKlHn
-        CyrczxUMFGQp9teEMndrfFHW1fsEnOaw7HKW7iIuwSjcBQVnSoFpre5ReinrnsDbQ5HAqkui68Umh
-        mhCAarnFYTE260WL9Igxo03K9hMfZoyNoHum8h5NGIXp5g8yzrlrLDnscp3XKQ468GvNz5tPnXOvK
-        5BahRGCw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p7aTs-00Cy6n-0d;
-        Tue, 20 Dec 2022 11:08:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E507F300023;
-        Tue, 20 Dec 2022 12:08:16 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 767AE201D1375; Tue, 20 Dec 2022 12:08:16 +0100 (CET)
-Date:   Tue, 20 Dec 2022 12:08:16 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce
- arch_{,try_}_cmpxchg128{,_local}()
-Message-ID: <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org>
- <Y6DEfQXymYVgL3oJ@boqun-archlinux>
+        with ESMTP id S233462AbiLTLcz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 06:32:55 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F08FF9;
+        Tue, 20 Dec 2022 03:32:53 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 668B91EC01A9;
+        Tue, 20 Dec 2022 12:32:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1671535972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=wyzmMh12AaSVV79EeqKy/Z7fsafEU9gQ+LmCE+KG+KU=;
+        b=MUUCsxZak/9lH5l9wDluLn9SmGkROwMkDwX3t4XZYsW4yGHs7sY5xxcLNaBSR/QO6CKBys
+        1m3UJXRwOfgyfkAFC9fu+/kMPByCRcw84M1Tpp2/aiDzEsEcHMmC2lYe6KO7hDMBFHmVc0
+        jWNp3LKRIz3whhea1YxwNJ96pGT5f+0=
+Date:   Tue, 20 Dec 2022 12:32:46 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v4 05/39] x86/fpu/xstate: Introduce CET MSR and XSAVES
+ supervisor states
+Message-ID: <Y6GdXvj2woHqG4qa@zn.tnic>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-6-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y6DEfQXymYVgL3oJ@boqun-archlinux>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221203003606.6838-6-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:07:25PM -0800, Boqun Feng wrote:
-> On Mon, Dec 19, 2022 at 04:35:30PM +0100, Peter Zijlstra wrote:
-> > For all architectures that currently support cmpxchg_double()
-> > implement the cmpxchg128() family of functions that is basically the
-> > same but with a saner interface.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  arch/arm64/include/asm/atomic_ll_sc.h |   38 +++++++++++++++++++++++
-> >  arch/arm64/include/asm/atomic_lse.h   |   33 +++++++++++++++++++-
-> >  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
-> >  arch/s390/include/asm/cmpxchg.h       |   33 ++++++++++++++++++++
-> >  arch/x86/include/asm/cmpxchg_32.h     |    3 +
-> >  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
-> >  6 files changed, 185 insertions(+), 3 deletions(-)
-> > 
-> > --- a/arch/arm64/include/asm/atomic_ll_sc.h
-> > +++ b/arch/arm64/include/asm/atomic_ll_sc.h
-> > @@ -326,6 +326,44 @@ __CMPXCHG_DBL(   ,        ,  ,         )
-> >  __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
-> >  
-> >  #undef __CMPXCHG_DBL
-> > +
-> > +union __u128_halves {
-> > +	u128 full;
-> > +	struct {
-> > +		u64 low, high;
-> > +	};
-> > +};
-> > +
-> > +#define __CMPXCHG128(name, mb, rel, cl)					\
-> > +static __always_inline u128						\
-> > +__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
-> > +{									\
-> > +	union __u128_halves r, o = { .full = (old) },			\
-> > +			       n = { .full = (new) };			\
-> > +									\
-> > +	asm volatile("// __cmpxchg128" #name "\n"			\
-> > +	"	prfm	pstl1strm, %2\n"				\
-> > +	"1:	ldxp	%0, %1, %2\n"					\
-> > +	"	eor	%3, %0, %3\n"					\
-> > +	"	eor	%4, %1, %4\n"					\
-> > +	"	orr	%3, %4, %3\n"					\
-> > +	"	cbnz	%3, 2f\n"					\
-> > +	"	st" #rel "xp	%w3, %5, %6, %2\n"			\
-> > +	"	cbnz	%w3, 1b\n"					\
-> > +	"	" #mb "\n"						\
-> > +	"2:"								\
-> > +	: "=&r" (r.low), "=&r" (r.high), "+Q" (*(unsigned long *)ptr)	\
-> 
-> I wonder whether we should use "(*(u128 *)ptr)" instead of "(*(unsigned
-> long *) ptr)"? Because compilers may think only 64bit value pointed by
-> "ptr" gets modified, and they are allowed to do "useful" optimization.
+On Fri, Dec 02, 2022 at 04:35:32PM -0800, Rick Edgecombe wrote:
+> @@ -252,6 +254,14 @@ struct pkru_state {
+>  	u32				pad;
+>  } __packed;
+>  
+> +/*
+> + * State component 11 is Control-flow Enforcement user states
+> + */
+> +struct cet_user_state {
+> +	u64 user_cet;			/* user control-flow settings */
+> +	u64 user_ssp;			/* user shadow stack pointer */
 
-In this I've copied the existing cmpxchg_double() code; I'll have to let
-the arch folks speak here, I've no clue.
+Please put those side comments over the members, like struct fpstate
+does it in that same file.
+
+Rest looks good.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
