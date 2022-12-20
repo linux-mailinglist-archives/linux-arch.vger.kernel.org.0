@@ -2,84 +2,178 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA3E651A6D
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 06:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D77651B57
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 08:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbiLTFwJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Dec 2022 00:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S233494AbiLTHOY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Dec 2022 02:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbiLTFwI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 00:52:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01D5140FD;
-        Mon, 19 Dec 2022 21:52:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68A8FB80B4A;
-        Tue, 20 Dec 2022 05:52:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98797C433D2;
-        Tue, 20 Dec 2022 05:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671515523;
-        bh=k6yHixLVE3U9pNLPDWoHZ8KCCDWLbUAFeGls6uMNDVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b4qNxFEfAoICReXUu76kgpqClyhio4C1oWONukCsmPCtnJMTXqLKY/m0Zs8UuFTZM
-         g5pDbnx7DvNBykzHCq4TlDro7TQyNy/534mmFbSOTdvL5jKkLzTnUTjBSJNabIwgiJ
-         exdOfYcQMkl9Y+BJ0s6BqbBOupPanLr5iAAi4rQcTU9beGwI7FspZO42Jj/YleWHxQ
-         lHx6k8EG785snbOE8YixAvsAeO3IOEGbbEHiouhdS5KAa9YYOuVFPAaBGcVx/Mr+ux
-         qnboVZ01KM2R7CpAc6cboF8ArJaT18WLDGgLa66+eDIzC8ifHTQpDxOMBXFAmlYv00
-         qpNuFncUWMCBQ==
-Date:   Mon, 19 Dec 2022 21:52:00 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 03/12] cyrpto/b128ops: Remove struct u128
-Message-ID: <Y6FNgNQ8/I9uqYwc@sol.localdomain>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.022180444@infradead.org>
+        with ESMTP id S233565AbiLTHOA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 02:14:00 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F618B3D;
+        Mon, 19 Dec 2022 23:07:22 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id js9so11525185pjb.2;
+        Mon, 19 Dec 2022 23:07:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AwGJvi0Hqvv9JsuJy6Gv715wZTJNC2wfNDuRpG/Z03c=;
+        b=eMolG9vHTtOXK18ugSCIT0pCtnwCyoEsJeJ5PFZQGlEJEv8sGasn8k+mDNhl13PHtY
+         KxdPALt6iNv1ZxEOScug4CjFT4yCtXaPilRS4KpEie5J9Y8SLqmppp5JrDNEKt+UxiZk
+         eqBpTCNCaf/7o148rNd27ULe/kJ9Xn6dxiP231e6ygEywzOKaGrwUesy9DXrmQask2mJ
+         QivmeB3xkmUMw8175037K8srGanPjwIp2+itZCK6uHl1Delon502RC/BOMncaixcxKaP
+         c0p0fyUNurBXLQPHDAAE3x9UdnNFTS36u+ZdnOICTnOxYQF2w5zemVtMudmeT7rOIbzN
+         0jbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AwGJvi0Hqvv9JsuJy6Gv715wZTJNC2wfNDuRpG/Z03c=;
+        b=gPquulXJNuhOIpoQuDEhq2z6kNRJrpGx9JLcx908mWGEILxmKGXsb/AboKNo7Gx2U0
+         Rti3PIQ/t4YxeCV40Ab7Dnyk063etWWJzTXtEI7tZIhiUPKQISrrYwkucxwXxOBD73Ox
+         5NyGghyD9i7YwigRYXuqAKmwszra49lpriFNNOtoU/o0z72xyvZRcAIUDjCSMx9k1qWk
+         7hQD4t7RZ0+x/fGhbPRxDzPk5zOX+YXFMnVBbxxbY4HdJvtfRtR1R/x6Fs+rVD+ysRw3
+         4j58p5rX/UiscZ26sQs5GEvbK4+MOsTE2EjXzdgXu9gSeLyC6f4L4mh0fIUujFwE7Qoo
+         mz2g==
+X-Gm-Message-State: ANoB5pn4/4XKsNAQ9vPbeX5KET5xaY7DRcb0iXFDdfv4UF90BPC/llUq
+        PVJvv0AhtkTGsjji7qN3fRIvkdUOryZVIg==
+X-Google-Smtp-Source: AA0mqf4iLIizbzTJRsINqgiMybAadqDLhEvMnVzW3qXyXFfY1t4pTIN5jFY0V6pdOozi2j7p8S7Jsg==
+X-Received: by 2002:a17:90b:1916:b0:21a:4bf:eeb0 with SMTP id mp22-20020a17090b191600b0021a04bfeeb0mr46812820pjb.28.1671520041576;
+        Mon, 19 Dec 2022 23:07:21 -0800 (PST)
+Received: from bobo.ozlabs.ibm.com (203-219-149-28.tpgi.com.au. [203.219.149.28])
+        by smtp.gmail.com with ESMTPSA id f10-20020a17090ace0a00b00219220edf0dsm7074232pju.48.2022.12.19.23.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 23:07:20 -0800 (PST)
+From:   Nicholas Piggin <npiggin@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rik van Riel <riel@surriel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org
+Subject: [PATCH] cputime: remove cputime_to_nsecs fallback
+Date:   Tue, 20 Dec 2022 17:07:05 +1000
+Message-Id: <20221220070705.2958959-1-npiggin@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221219154119.022180444@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 04:35:28PM +0100, Peter Zijlstra wrote:
-> cyrpto/b128ops: Remove struct u128
+The archs that use cputime_to_nsecs() internally provide their own
+definition and don't need the fallback. cputime_to_usecs() unused except
+in this fallback, and is not defined anywhere.
 
-cyrpto => crypto
+This removes the final remnant of the cputime_t code from the kernel.
 
-> Per git-grep u128_xor() and its related struct u128 are unused except
-> to implement {be,le}128_xor(). Remove them to free up the namespace.
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Rik van Riel <riel@surriel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Frederic Weisbecker <fweisbec@gmail.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+This required a couple of tweaks to s390 includes so we're not pulling
+asm/cputime.h into the core header unnecessarily. In that case maybe
+this can go via s390 tree because the patch should be otherwise quite
+trivial. Could it get an ack or two from a core maintainer to support
+that?
 
-There's still a reference to u128 in drivers/crypto/vmx/ghash.c.  But, it's only
-dereferenced by assembly code, so it should keep working even if u128 gets
-redefined to a native int.  I don't speak PowerPC, so I'm not sure what the
-"correct" type is there.
+Thanks,
+Nick
 
-- Eric
+ arch/s390/kernel/idle.c       | 2 +-
+ arch/s390/kernel/vtime.c      | 2 +-
+ include/linux/sched/cputime.h | 9 ---------
+ kernel/sched/cputime.c        | 4 ++++
+ 4 files changed, 6 insertions(+), 11 deletions(-)
+
+diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
+index 4bf1ee293f2b..a6bbceaf7616 100644
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -12,9 +12,9 @@
+ #include <linux/notifier.h>
+ #include <linux/init.h>
+ #include <linux/cpu.h>
+-#include <linux/sched/cputime.h>
+ #include <trace/events/power.h>
+ #include <asm/cpu_mf.h>
++#include <asm/cputime.h>
+ #include <asm/nmi.h>
+ #include <asm/smp.h>
+ #include "entry.h"
+diff --git a/arch/s390/kernel/vtime.c b/arch/s390/kernel/vtime.c
+index 9436f3053b88..e0a88dcaf5cb 100644
+--- a/arch/s390/kernel/vtime.c
++++ b/arch/s390/kernel/vtime.c
+@@ -7,13 +7,13 @@
+  */
+ 
+ #include <linux/kernel_stat.h>
+-#include <linux/sched/cputime.h>
+ #include <linux/export.h>
+ #include <linux/kernel.h>
+ #include <linux/timex.h>
+ #include <linux/types.h>
+ #include <linux/time.h>
+ #include <asm/alternative.h>
++#include <asm/cputime.h>
+ #include <asm/vtimer.h>
+ #include <asm/vtime.h>
+ #include <asm/cpu_mf.h>
+diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
+index ce3c58286062..5f8fd5b24a2e 100644
+--- a/include/linux/sched/cputime.h
++++ b/include/linux/sched/cputime.h
+@@ -8,15 +8,6 @@
+  * cputime accounting APIs:
+  */
+ 
+-#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
+-#include <asm/cputime.h>
+-
+-#ifndef cputime_to_nsecs
+-# define cputime_to_nsecs(__ct)	\
+-	(cputime_to_usecs(__ct) * NSEC_PER_USEC)
+-#endif
+-#endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
+-
+ #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
+ extern bool task_cputime(struct task_struct *t,
+ 			 u64 *utime, u64 *stime);
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 95fc77853743..af7952f12e6c 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -3,6 +3,10 @@
+  * Simple CPU accounting cgroup controller
+  */
+ 
++#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
++ #include <asm/cputime.h>
++#endif
++
+ #ifdef CONFIG_IRQ_TIME_ACCOUNTING
+ 
+ /*
+-- 
+2.37.2
+
