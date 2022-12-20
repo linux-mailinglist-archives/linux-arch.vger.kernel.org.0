@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8F3651A55
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 06:42:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC820651A51
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 06:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiLTFmE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Dec 2022 00:42:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S232995AbiLTFmD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Dec 2022 00:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiLTFmC (ORCPT
+        with ESMTP id S232853AbiLTFmC (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 00:42:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3592595BC;
-        Mon, 19 Dec 2022 21:42:00 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701AA10B56;
+        Mon, 19 Dec 2022 21:42:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A14FB811AB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 099F561284;
+        Tue, 20 Dec 2022 05:42:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3059AC433A0;
         Tue, 20 Dec 2022 05:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8630C433D2;
-        Tue, 20 Dec 2022 05:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671514919;
-        bh=r7CcLqy65ywV0RdmBdnF4gvrkE0V7pqcwnuVzqA286k=;
+        s=k20201202; t=1671514920;
+        bh=dsBT80rMbHb7evBtDRzv5PT3ZA7g7MTpg/OO26ExzF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b4QPIeBDySeIw45tMI1nPwu6/LnNHxYWm2KdE0KmbJJA+QQ5NSMnGSgSTskJe068B
-         a4O19R9sThYWaWHTRdN875o8NAIGdCht29RqD8fd3R9QJl5M5nPP2k0Qz/J13j+q9R
-         szrJdxF/p54c3WPQPSOPRTgNaRp3zI0yGR3/pWPy5cZrzPmvfYUoTj8vlTrc+KfrLo
-         r90Npm4NnbnGF2uk5qR5byeWzPI4ZzJhJp+zuPusgSYrt/dkFyuwP14LiGBH1ZF6YB
-         FY0+pzVMYYmqqbGAPXLoFNY7XaYJRvV9podM+CJY4nTz7ktpEaNJDoh1F1ookspoH4
-         H6ZBz8YDu0PEw==
+        b=jYOojsuBCSLHGr8TW6ECUwgWw+LEvw+PHi3nql2vBWzBzEq7MyKtVOLJ/b2Kiu4gS
+         oMG/dlg3OnMmVJmrdSv2oL97DF/CUUglF7nDPoQjrR1EUjWMzPIKMXZdHUPv8l8Sjd
+         UXS+WUfMJ0NGEcylNFSYCWZt2yo1UQq4aV3vPbfVoQuD+Qp8TbeWtUxBsxReFPOxlA
+         zfs32JevZlz+K+Uv5duClJslwi2mYsu29ttlLiM4znIDXOp4GXmEIq6usK1oiCT/rX
+         LwdwbARx6KolYJUmb/r6mqXzDaBmbWq87tBtJKhhILBQJc9wo5CJtT/46YobC23TXN
+         w7YoOtqqwQbVA==
 From:   Eric Biggers <ebiggers@kernel.org>
 To:     linux-crypto@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
@@ -50,9 +50,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, linux-s390@vger.kernel.org,
         iommu@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: [PATCH 2/3] crypto: x86/ghash - use le128 instead of u128
-Date:   Mon, 19 Dec 2022 21:40:41 -0800
-Message-Id: <20221220054042.188537-3-ebiggers@kernel.org>
+Subject: [PATCH 3/3] crypto: x86/ghash - add comment and fix broken link
+Date:   Mon, 19 Dec 2022 21:40:42 -0800
+Message-Id: <20221220054042.188537-4-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221220054042.188537-1-ebiggers@kernel.org>
 References: <20221220054042.188537-1-ebiggers@kernel.org>
@@ -69,78 +69,72 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Eric Biggers <ebiggers@google.com>
 
-The u128 struct type is going away, so make ghash-clmulni-intel use
-le128 instead.  Note that the field names a and b swapped, as they were
-backwards with u128.  (a is meant to be high-order and b low-order.)
+Add a comment that explains what ghash_setkey() is doing, as it's hard
+to understand otherwise.  Also fix a broken hyperlink.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/x86/crypto/ghash-clmulni-intel_asm.S  |  4 ++--
- arch/x86/crypto/ghash-clmulni-intel_glue.c | 12 ++++++------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ arch/x86/crypto/ghash-clmulni-intel_asm.S  |  2 +-
+ arch/x86/crypto/ghash-clmulni-intel_glue.c | 27 ++++++++++++++++++----
+ 2 files changed, 24 insertions(+), 5 deletions(-)
 
 diff --git a/arch/x86/crypto/ghash-clmulni-intel_asm.S b/arch/x86/crypto/ghash-clmulni-intel_asm.S
-index 2bf871899920..9dfeb4d31b92 100644
+index 9dfeb4d31b92..257ed9446f3e 100644
 --- a/arch/x86/crypto/ghash-clmulni-intel_asm.S
 +++ b/arch/x86/crypto/ghash-clmulni-intel_asm.S
-@@ -88,7 +88,7 @@ SYM_FUNC_START_LOCAL(__clmul_gf128mul_ble)
- 	RET
- SYM_FUNC_END(__clmul_gf128mul_ble)
- 
--/* void clmul_ghash_mul(char *dst, const u128 *shash) */
-+/* void clmul_ghash_mul(char *dst, const le128 *shash) */
- SYM_FUNC_START(clmul_ghash_mul)
- 	FRAME_BEGIN
- 	movups (%rdi), DATA
-@@ -104,7 +104,7 @@ SYM_FUNC_END(clmul_ghash_mul)
- 
- /*
-  * void clmul_ghash_update(char *dst, const char *src, unsigned int srclen,
-- *			   const u128 *shash);
-+ *			   const le128 *shash);
-  */
- SYM_FUNC_START(clmul_ghash_update)
- 	FRAME_BEGIN
+@@ -4,7 +4,7 @@
+  * instructions. This file contains accelerated part of ghash
+  * implementation. More information about PCLMULQDQ can be found at:
+  *
+- * http://software.intel.com/en-us/articles/carry-less-multiplication-and-its-usage-for-computing-the-gcm-mode/
++ * https://www.intel.com/content/dam/develop/external/us/en/documents/clmul-wp-rev-2-02-2014-04-20.pdf
+  *
+  * Copyright (c) 2009 Intel Corp.
+  *   Author: Huang Ying <ying.huang@intel.com>
 diff --git a/arch/x86/crypto/ghash-clmulni-intel_glue.c b/arch/x86/crypto/ghash-clmulni-intel_glue.c
-index c0ab0ff4af65..9453b094bb3b 100644
+index 9453b094bb3b..700ecaee9a08 100644
 --- a/arch/x86/crypto/ghash-clmulni-intel_glue.c
 +++ b/arch/x86/crypto/ghash-clmulni-intel_glue.c
-@@ -24,17 +24,17 @@
- #define GHASH_BLOCK_SIZE	16
- #define GHASH_DIGEST_SIZE	16
+@@ -60,16 +60,35 @@ static int ghash_setkey(struct crypto_shash *tfm,
+ 	if (keylen != GHASH_BLOCK_SIZE)
+ 		return -EINVAL;
  
--void clmul_ghash_mul(char *dst, const u128 *shash);
-+void clmul_ghash_mul(char *dst, const le128 *shash);
- 
- void clmul_ghash_update(char *dst, const char *src, unsigned int srclen,
--			const u128 *shash);
-+			const le128 *shash);
- 
- struct ghash_async_ctx {
- 	struct cryptd_ahash *cryptd_tfm;
- };
- 
- struct ghash_ctx {
--	u128 shash;
-+	le128 shash;
- };
- 
- struct ghash_desc_ctx {
-@@ -64,11 +64,11 @@ static int ghash_setkey(struct crypto_shash *tfm,
+-	/* perform multiplication by 'x' in GF(2^128) */
++	/*
++	 * GHASH maps bits to polynomial coefficients backwards, which makes it
++	 * hard to implement.  But it can be shown that the GHASH multiplication
++	 *
++	 *	D * K (mod x^128 + x^7 + x^2 + x + 1)
++	 *
++	 * (where D is a data block and K is the key) is equivalent to:
++	 *
++	 *	bitreflect(D) * bitreflect(K) * x^(-127)
++	 *		(mod x^128 + x^127 + x^126 + x^121 + 1)
++	 *
++	 * So, the code below precomputes:
++	 *
++	 *	bitreflect(K) * x^(-127) (mod x^128 + x^127 + x^126 + x^121 + 1)
++	 *
++	 * ... but in Montgomery form (so that Montgomery multiplication can be
++	 * used), i.e. with an extra x^128 factor, which means actually:
++	 *
++	 *	bitreflect(K) * x (mod x^128 + x^127 + x^126 + x^121 + 1)
++	 *
++	 * The within-a-byte part of bitreflect() cancels out GHASH's built-in
++	 * reflection, and thus bitreflect() is actually a byteswap.
++	 */
  	a = get_unaligned_be64(key);
  	b = get_unaligned_be64(key + 8);
- 
--	ctx->shash.a = (b << 1) | (a >> 63);
--	ctx->shash.b = (a << 1) | (b >> 63);
-+	ctx->shash.a = cpu_to_le64((a << 1) | (b >> 63));
-+	ctx->shash.b = cpu_to_le64((b << 1) | (a >> 63));
- 
+-
+ 	ctx->shash.a = cpu_to_le64((a << 1) | (b >> 63));
+ 	ctx->shash.b = cpu_to_le64((b << 1) | (a >> 63));
+-
  	if (a >> 63)
--		ctx->shash.b ^= ((u64)0xc2) << 56;
-+		ctx->shash.a ^= cpu_to_le64((u64)0xc2 << 56);
- 
+ 		ctx->shash.a ^= cpu_to_le64((u64)0xc2 << 56);
+-
  	return 0;
  }
+ 
 -- 
 2.39.0
 
