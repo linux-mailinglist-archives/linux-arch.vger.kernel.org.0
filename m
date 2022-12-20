@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C865B651BB1
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 08:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7451C651BF1
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 08:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233754AbiLTHaM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Dec 2022 02:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S232839AbiLTHrv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Dec 2022 02:47:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233677AbiLTH3o (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 02:29:44 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E9417059;
-        Mon, 19 Dec 2022 23:29:15 -0800 (PST)
+        with ESMTP id S229556AbiLTHrt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 02:47:49 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD2A106;
+        Mon, 19 Dec 2022 23:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671521355; x=1703057355;
+  t=1671522468; x=1703058468;
   h=date:from:to:cc:subject:message-id:reply-to:references:
    mime-version:in-reply-to;
-  bh=fjNSa0+921I8s8ST66iQKKAKKNcHFJo2C7vp0DyF6bU=;
-  b=btMmDhriNUXIYE3RDC/D+VlLnxqJpYdVAtCnKG6Y00TuZKg18RKtoen/
-   ncKwhvbRaEWA1yueeu/7jrTKZZOoQBLg26c0Jt3b66l28RtiMKqyl9/ZK
-   BgHqrpZBvLVYRk05frWTi7WjlYd3SqywoATxQxUttzwFkOdyx0XW+LztN
-   CT8l4frasDPosl1OcaAHaow6ysNwW+VRk+KO1MvSkc8CdXfQLlS84LxHt
-   PsQDsqnKCjOamEfvwz7swdwU6fxTOAEc4xaYAcKCHBhwLzFWG5Ik71Oci
-   VCft7PHZkTWzSaxoNXv3sAK88Okxl6FcOPm9twU7H/ESpoxPiFwvgzL6V
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307230620"
+  bh=18JY1Rv+JmD8fqHB1Zwfy2CyVc6av0CO+XzWDU5pLU8=;
+  b=cvT3hrCnlih0FOk9rqv+UWjL3sEjGz0Y7aaLsz37QwUFtTyPcNKqcYFE
+   p4HFw9mVsrCDLGtvZFb65MKGgey0+vZ5rHKCU6Khc15qVY3oZp3HnvqTI
+   RcPpA+cy9HNUSBNNWdo63xMW1LG3Iu5YtiuinDx0oJbXVeR/qn/k5+GHp
+   Fx2Bt8MCL/zjLBAlv+6Y19rX0NPzDFLz+qpvt/9uj5rJ0CDvzOfxs827I
+   s7bvoHeI1wcA5LJb5xYGllAOWxAFKIO958eWZEXm0unBG29D4aM2V3/Oe
+   8kPqSp3/Yy7YbJfbHC3t1ie9PykQtP6HYnngfkP7IsuILxbCmk0BJpzMz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="317187844"
 X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="307230620"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:29:14 -0800
+   d="scan'208";a="317187844"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 23:47:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="775191645"
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="896319288"
 X-IronPort-AV: E=Sophos;i="5.96,258,1665471600"; 
-   d="scan'208";a="775191645"
+   d="scan'208";a="896319288"
 Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 23:29:03 -0800
-Date:   Tue, 20 Dec 2022 15:24:46 +0800
+  by fmsmga006.fm.intel.com with ESMTP; 19 Dec 2022 23:47:34 -0800
+Date:   Tue, 20 Dec 2022 15:43:18 +0800
 From:   Chao Peng <chao.p.peng@linux.intel.com>
 To:     Borislav Petkov <bp@alien8.de>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -73,56 +73,106 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Quentin Perret <qperret@google.com>, tabba@google.com,
         Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
         wei.w.wang@intel.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-Message-ID: <20221220072446.GB1724933@chaop.bj.intel.com>
+Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20221220074318.GC1724933@chaop.bj.intel.com>
 Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
 References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
- <Y5yKEpwCzZpNoBrp@zn.tnic>
- <20221219081532.GD1691829@chaop.bj.intel.com>
- <Y6A6MkFjckQ18fFH@zn.tnic>
+ <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
+ <Y6B27MpZO8o1Asfe@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y6A6MkFjckQ18fFH@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y6B27MpZO8o1Asfe@zn.tnic>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 11:17:22AM +0100, Borislav Petkov wrote:
-> On Mon, Dec 19, 2022 at 04:15:32PM +0800, Chao Peng wrote:
-> > Tamping down with error number a bit:
-> > 
-> >         if (attrs->flags)
-> >                 return -ENXIO;
-> >         if (attrs->attributes & ~supported_attrs)
-> >                 return -EOPNOTSUPP;
-> >         if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size) ||
-> >             attrs->size == 0)
-> >                 return -EINVAL;
-> >         if (attrs->address + attrs->size < attrs->address)
-> >                 return -E2BIG;
+On Mon, Dec 19, 2022 at 03:36:28PM +0100, Borislav Petkov wrote:
+> On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
+> > In memory encryption usage, guest memory may be encrypted with special
+> > key and can be accessed only by the guest itself. We call such memory
+> > private memory. It's valueless and sometimes can cause problem to allow
 > 
-> Yap, better.
+> valueless?
 > 
-> I guess you should add those to the documentation of the ioctl too
-> so that people can find out why it fails. Or, well, they can look
-> at the code directly too but still... imagine some blurb about
-> user-friendliness here...
+> I can't parse that.
 
-Thanks for reminding. Yes KVM api doc is the right place to put these
-documentation in.
+It's unnecessary and ...
+
+> 
+> > userspace to access guest private memory. This new KVM memslot extension
+> > allows guest private memory being provided through a restrictedmem
+> > backed file descriptor(fd) and userspace is restricted to access the
+> > bookmarked memory in the fd.
+> 
+> bookmarked?
+
+userspace is restricted to access the memory content in the fd.
+
+> 
+> > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
+> > additional KVM memslot fields restricted_fd/restricted_offset to allow
+> > userspace to instruct KVM to provide guest memory through restricted_fd.
+> > 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
+> > and the size is 'memory_size'.
+> > 
+> > The extended memslot can still have the userspace_addr(hva). When use, a
+> 
+> "When un use, ..."
+
+When both userspace_addr and restricted_fd/offset were used, ...
+
+> 
+> ...
+> 
+> > diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> > index a8e379a3afee..690cb21010e7 100644
+> > --- a/arch/x86/kvm/Kconfig
+> > +++ b/arch/x86/kvm/Kconfig
+> > @@ -50,6 +50,8 @@ config KVM
+> >  	select INTERVAL_TREE
+> >  	select HAVE_KVM_PM_NOTIFIER if PM
+> >  	select HAVE_KVM_MEMORY_ATTRIBUTES
+> > +	select HAVE_KVM_RESTRICTED_MEM if X86_64
+> > +	select RESTRICTEDMEM if HAVE_KVM_RESTRICTED_MEM
+> 
+> Those deps here look weird.
+> 
+> RESTRICTEDMEM should be selected by TDX_GUEST as it can't live without
+> it.
+
+RESTRICTEDMEM is needed by TDX_HOST, not TDX_GUEST.
+
+> 
+> Then you don't have to select HAVE_KVM_RESTRICTED_MEM simply because of
+> X86_64 - you need that functionality when the respective guest support
+> is enabled in KVM.
+
+Letting the actual feature(e.g. TDX or pKVM) select it or add dependency
+sounds a viable and clearer solution. Sean, let me know your opinion.
+
+> 
+> Then, looking forward into your patchset, I'm not sure you even
+> need HAVE_KVM_RESTRICTED_MEM - you could make it all depend on
+> CONFIG_RESTRICTEDMEM. But that's KVM folks call - I'd always aim for
+> less Kconfig items because we have waay too many.
+
+The only reason to add another HAVE_KVM_RESTRICTED_MEM is some code only
+works for 64bit[*] and CONFIG_RESTRICTEDMEM is not sufficient to enforce
+that.
+
+[*] https://lore.kernel.org/all/YkJLFu98hZOvTSrL@google.com/
 
 Thanks,
 Chao
 > 
-> :-)
+> Thx.
 > 
 > -- 
 > Regards/Gruss,
