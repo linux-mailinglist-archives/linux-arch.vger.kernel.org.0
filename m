@@ -2,178 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D77651B57
-	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 08:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489C6651B6B
+	for <lists+linux-arch@lfdr.de>; Tue, 20 Dec 2022 08:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbiLTHOY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 20 Dec 2022 02:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S232442AbiLTHS4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 20 Dec 2022 02:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiLTHOA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 02:14:00 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F618B3D;
-        Mon, 19 Dec 2022 23:07:22 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id js9so11525185pjb.2;
-        Mon, 19 Dec 2022 23:07:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AwGJvi0Hqvv9JsuJy6Gv715wZTJNC2wfNDuRpG/Z03c=;
-        b=eMolG9vHTtOXK18ugSCIT0pCtnwCyoEsJeJ5PFZQGlEJEv8sGasn8k+mDNhl13PHtY
-         KxdPALt6iNv1ZxEOScug4CjFT4yCtXaPilRS4KpEie5J9Y8SLqmppp5JrDNEKt+UxiZk
-         eqBpTCNCaf/7o148rNd27ULe/kJ9Xn6dxiP231e6ygEywzOKaGrwUesy9DXrmQask2mJ
-         QivmeB3xkmUMw8175037K8srGanPjwIp2+itZCK6uHl1Delon502RC/BOMncaixcxKaP
-         c0p0fyUNurBXLQPHDAAE3x9UdnNFTS36u+ZdnOICTnOxYQF2w5zemVtMudmeT7rOIbzN
-         0jbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AwGJvi0Hqvv9JsuJy6Gv715wZTJNC2wfNDuRpG/Z03c=;
-        b=gPquulXJNuhOIpoQuDEhq2z6kNRJrpGx9JLcx908mWGEILxmKGXsb/AboKNo7Gx2U0
-         Rti3PIQ/t4YxeCV40Ab7Dnyk063etWWJzTXtEI7tZIhiUPKQISrrYwkucxwXxOBD73Ox
-         5NyGghyD9i7YwigRYXuqAKmwszra49lpriFNNOtoU/o0z72xyvZRcAIUDjCSMx9k1qWk
-         7hQD4t7RZ0+x/fGhbPRxDzPk5zOX+YXFMnVBbxxbY4HdJvtfRtR1R/x6Fs+rVD+ysRw3
-         4j58p5rX/UiscZ26sQs5GEvbK4+MOsTE2EjXzdgXu9gSeLyC6f4L4mh0fIUujFwE7Qoo
-         mz2g==
-X-Gm-Message-State: ANoB5pn4/4XKsNAQ9vPbeX5KET5xaY7DRcb0iXFDdfv4UF90BPC/llUq
-        PVJvv0AhtkTGsjji7qN3fRIvkdUOryZVIg==
-X-Google-Smtp-Source: AA0mqf4iLIizbzTJRsINqgiMybAadqDLhEvMnVzW3qXyXFfY1t4pTIN5jFY0V6pdOozi2j7p8S7Jsg==
-X-Received: by 2002:a17:90b:1916:b0:21a:4bf:eeb0 with SMTP id mp22-20020a17090b191600b0021a04bfeeb0mr46812820pjb.28.1671520041576;
-        Mon, 19 Dec 2022 23:07:21 -0800 (PST)
-Received: from bobo.ozlabs.ibm.com (203-219-149-28.tpgi.com.au. [203.219.149.28])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090ace0a00b00219220edf0dsm7074232pju.48.2022.12.19.23.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 23:07:20 -0800 (PST)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rik van Riel <riel@surriel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org
-Subject: [PATCH] cputime: remove cputime_to_nsecs fallback
-Date:   Tue, 20 Dec 2022 17:07:05 +1000
-Message-Id: <20221220070705.2958959-1-npiggin@gmail.com>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233215AbiLTHSS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 20 Dec 2022 02:18:18 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1970311F;
+        Mon, 19 Dec 2022 23:18:07 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 901993200984;
+        Tue, 20 Dec 2022 02:18:05 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 20 Dec 2022 02:18:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1671520685; x=1671607085; bh=K3K6NVaUa+62P6XLkRs/A2J6as2Tpe1jcJ3
+        LQAubuOk=; b=vNVm1rx90pQteNf+kc1Kx4JBHKD5AOFQgpRuvJ2L/0Uy8crpRv4
+        bvi3A8vUOHtsD6v2ip4j1HL+GzUtshECiGMuZarIJgCLfwPCofjaG831/InQYZjU
+        2AfiNlHULO9gnk0gGyTg3dxZpCEQwmYOsP6I8PAuJVVHyhlRUghWEesaJH/VPtiv
+        Ioe+CZwiCxqQdRMWnFzUIGZP9Jg/bk3zfSr5iVRemje2cAB14sdLwF/O03l8DLpW
+        tnjWwencHsPCZsZ00iNoP9k7Wn70NBlA0KV52mTaHBT6UQ/xRzfqjC9OPKZCu7l0
+        jewcWXEAzJiXldABAHgIhunPAgYWKP1BfAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1671520685; x=
+        1671607085; bh=K3K6NVaUa+62P6XLkRs/A2J6as2Tpe1jcJ3LQAubuOk=; b=o
+        L1YU2esUidJhggFGhSyxLcVkhSnM3qStkMFgXnGtCVX7Fc/vNH4dOQYnfqeqkHgX
+        zTd41a4YBG2OfDZrKAunQVHU5fBnS2zokbxVWaE10RadULzYGvj2T0VPe2puMdBd
+        4GSIDpm5lOSAop1lixUsaI2kIzkV8JHG6HVR5C7gXgyLgzIwl4CQpswaUtMgj4tZ
+        m/8Tj0qv/0sc4O9BdWSdhaL50rGrpWgSuwP/c8xYpuWBd+4Ev03X9rPrAcK1s1JP
+        /N/M5SPZBxxBy9VeGAWus4zns72o5ShtMIgGRWe4Q9mQKY+GTMZHdKJ3S4C6Fyf9
+        xWYzWZjdnqYzX74LA8SIA==
+X-ME-Sender: <xms:rGGhYxEYSDX-m6Uk9O0Fa3DUjSenCQXHM7705xu-k-Zn1au9JQofZg>
+    <xme:rGGhY2Wh86pzP62Icta6fHCSzNgUQK0VU1BIwWOG2dzUugnf_q7oD_xpWjDEKxoCo
+    2_qcfEP1GXQOwd0xz8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeggddutdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:rWGhYzLOOAPK-rb3Pq7CYgCua8hRMyctSBzZgSpi1I8SvdEDJoaiBQ>
+    <xmx:rWGhY3EjbB8x_cJmfYkJUCjPLs6vRXci3Jk7IGZnmjsuFVQyfpXDUw>
+    <xmx:rWGhY3VhUm_jXk0rzuRgr-1Cw4oBnFFtTLePjoWuP3zcDMSvGk7i8Q>
+    <xmx:rWGhY4e_6rWKSLaEcc84-zDuQovp3THisQg6byZcmL0DuEaWLIV8Qg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E154FB60086; Tue, 20 Dec 2022 02:18:04 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <1b6fcf4b-41b5-49d8-be6b-9259b2f35cd8@app.fastmail.com>
+Date:   Tue, 20 Dec 2022 08:16:45 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL, v2] asm-generic bits for 6.2
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The archs that use cputime_to_nsecs() internally provide their own
-definition and don't need the fallback. cputime_to_usecs() unused except
-in this fallback, and is not defined anywhere.
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-This removes the final remnant of the cputime_t code from the kernel.
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rik van Riel <riel@surriel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Frederic Weisbecker <fweisbec@gmail.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-s390@vger.kernel.org
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-6.2-1
+
+for you to fetch changes up to 32975c491ee410598b33201344c123fcc81a7c33:
+
+  uapi: Add missing _UAPI prefix to <asm-generic/types.h> include guard (2022-12-01 16:22:06 +0100)
+
+----------------------------------------------------------------
+asm-generic bits for 6.2
+
+There are only three fairly simple patches. The #include
+change to linux/swab.h addresses a userspace build issue,
+and the change to the mmio tracing logic helps provide
+more useful traces.
 ---
-This required a couple of tweaks to s390 includes so we're not pulling
-asm/cputime.h into the core header unnecessarily. In that case maybe
-this can go via s390 tree because the patch should be otherwise quite
-trivial. Could it get an ack or two from a core maintainer to support
-that?
+v2: correct git URL
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      uapi: Add missing _UAPI prefix to <asm-generic/types.h> include guard
 
-Thanks,
-Nick
+Matt Redfearn (1):
+      include/uapi/linux/swab: Fix potentially missing __always_inline
 
- arch/s390/kernel/idle.c       | 2 +-
- arch/s390/kernel/vtime.c      | 2 +-
- include/linux/sched/cputime.h | 9 ---------
- kernel/sched/cputime.c        | 4 ++++
- 4 files changed, 6 insertions(+), 11 deletions(-)
+Sai Prakash Ranjan (1):
+      asm-generic/io: Add _RET_IP_ to MMIO trace for more accurate debug info
 
-diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
-index 4bf1ee293f2b..a6bbceaf7616 100644
---- a/arch/s390/kernel/idle.c
-+++ b/arch/s390/kernel/idle.c
-@@ -12,9 +12,9 @@
- #include <linux/notifier.h>
- #include <linux/init.h>
- #include <linux/cpu.h>
--#include <linux/sched/cputime.h>
- #include <trace/events/power.h>
- #include <asm/cpu_mf.h>
-+#include <asm/cputime.h>
- #include <asm/nmi.h>
- #include <asm/smp.h>
- #include "entry.h"
-diff --git a/arch/s390/kernel/vtime.c b/arch/s390/kernel/vtime.c
-index 9436f3053b88..e0a88dcaf5cb 100644
---- a/arch/s390/kernel/vtime.c
-+++ b/arch/s390/kernel/vtime.c
-@@ -7,13 +7,13 @@
-  */
- 
- #include <linux/kernel_stat.h>
--#include <linux/sched/cputime.h>
- #include <linux/export.h>
- #include <linux/kernel.h>
- #include <linux/timex.h>
- #include <linux/types.h>
- #include <linux/time.h>
- #include <asm/alternative.h>
-+#include <asm/cputime.h>
- #include <asm/vtimer.h>
- #include <asm/vtime.h>
- #include <asm/cpu_mf.h>
-diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
-index ce3c58286062..5f8fd5b24a2e 100644
---- a/include/linux/sched/cputime.h
-+++ b/include/linux/sched/cputime.h
-@@ -8,15 +8,6 @@
-  * cputime accounting APIs:
-  */
- 
--#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
--#include <asm/cputime.h>
--
--#ifndef cputime_to_nsecs
--# define cputime_to_nsecs(__ct)	\
--	(cputime_to_usecs(__ct) * NSEC_PER_USEC)
--#endif
--#endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
--
- #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
- extern bool task_cputime(struct task_struct *t,
- 			 u64 *utime, u64 *stime);
-diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 95fc77853743..af7952f12e6c 100644
---- a/kernel/sched/cputime.c
-+++ b/kernel/sched/cputime.c
-@@ -3,6 +3,10 @@
-  * Simple CPU accounting cgroup controller
-  */
- 
-+#ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
-+ #include <asm/cputime.h>
-+#endif
-+
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
- 
- /*
--- 
-2.37.2
-
+ include/asm-generic/io.h         | 80 ++++++++++++++++++++--------------------
+ include/trace/events/rwmmio.h    | 43 +++++++++++++--------
+ include/uapi/asm-generic/types.h |  6 +--
+ include/uapi/linux/swab.h        |  2 +-
+ lib/trace_readwrite.c            | 16 ++++----
+ 5 files changed, 79 insertions(+), 68 deletions(-)
