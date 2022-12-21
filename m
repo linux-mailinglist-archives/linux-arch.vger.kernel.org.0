@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68F1652F8D
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Dec 2022 11:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704E1652FB9
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Dec 2022 11:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234579AbiLUKcm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Dec 2022 05:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S234511AbiLUKmH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Dec 2022 05:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiLUKbX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Dec 2022 05:31:23 -0500
+        with ESMTP id S232647AbiLUKmE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Dec 2022 05:42:04 -0500
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F72B84E;
-        Wed, 21 Dec 2022 02:31:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB070B19;
+        Wed, 21 Dec 2022 02:42:03 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ADDC91EC0138;
-        Wed, 21 Dec 2022 11:31:18 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6336C1EC02DD;
+        Wed, 21 Dec 2022 11:42:02 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1671618678;
+        t=1671619322;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0vyAl/OQNsmvYQ1ViGqGwGbOz44puDCSVKs7c/3SWxc=;
-        b=QIo/rrF3Ka6GKTShQGfQKUvHgifveAu92v6IJDHp7kcB+NontSnz7wDG9zFSWWBZvzwp00
-        x0yntA5waUK4ttybjtzJLtajp22Ca28lx1D6ydp/OwRIf87/FdyBu1/c6gp0LwmGnE1BuM
-        VhjJBZyviH8kSLLtz1BGKlgnG7WHQoY=
-Date:   Wed, 21 Dec 2022 11:31:14 +0100
+        bh=7CkPGRhXt3C7bFJAAfAquxjwR0jOGrK7nYvDtt66hu0=;
+        b=GRapVaWDu6lZKfhjZkiYhoCHcSPH+kXJtn6xjHiQKh9E52C2tgrmD9oM27Qi8Fx3F0TQnp
+        Tx+E5Ly5kbjJqyLrEbKUFVUEN4r5ZwOENt65wDkoyUzNgSL74aL+jBj194kl+VeDrmtZV6
+        s0lwbodldKDf8V+pdOweza6DxQ4DwwY=
+Date:   Wed, 21 Dec 2022 11:41:58 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
 Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
@@ -57,9 +57,11 @@ Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "fweimer@redhat.com" <fweimer@redhat.com>,
         "keescook@chromium.org" <keescook@chromium.org>,
         "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
         "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
         "hpa@zytor.com" <hpa@zytor.com>,
         "mingo@redhat.com" <mingo@redhat.com>,
+        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
         "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "Syromiatnikov, Eugene" <esyr@redhat.com>,
@@ -67,16 +69,16 @@ Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
         "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v4 06/39] x86/fpu: Add helper for modifying xstate
-Message-ID: <Y6Lgcs4PaKLB7eT7@zn.tnic>
+Subject: Re: [PATCH v4 07/39] x86: Add user control-protection fault handler
+Message-ID: <Y6Li9oIl/tK96KUf@zn.tnic>
 References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-7-rick.p.edgecombe@intel.com>
- <Y6Gk1CcK/dHWqaVA@zn.tnic>
- <25b0158a998a280b508200fa50995aad657ef520.camel@intel.com>
+ <20221203003606.6838-8-rick.p.edgecombe@intel.com>
+ <Y6HglBhrccduDTQA@zn.tnic>
+ <3aaf1b0d67492415acb9b3d06bb97e916cb7b77a.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <25b0158a998a280b508200fa50995aad657ef520.camel@intel.com>
+In-Reply-To: <3aaf1b0d67492415acb9b3d06bb97e916cb7b77a.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -86,19 +88,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 21, 2022 at 12:03:39AM +0000, Edgecombe, Rick P wrote:
-> Sorry about this and the others. I get spelling errors in checkpatch,
-> so I must have dictionary issues or something.
+On Wed, Dec 21, 2022 at 12:37:51AM +0000, Edgecombe, Rick P wrote:
+> You mean having separate paths for kernel IBT and user shadow stack
+> that compile out? I guess it could just all be in place if
+> CONFIG_X86_CET is in place.
+> 
+> I don't know, I thought it was relatively clean, but I can remove it.
 
-No worries, happens to everyone.
+Yeah, I'm wondering if we really need the ifdeffery. I always question
+ifdeffery because it is a) ugly, b) a mess to deal with and having it is
+not really worth it. Yeah, we save a couple of KBs, big deal.
 
-> Yes, the KVM series needed it. Part of the reasoning here was to
-> provide some helpers to avoid mistakes in modifying xstate, so the
-> general idea was that it should be available. I suppose that series
-> could add the export though?
+What would practically happen is, shadow stack will be default-enabled
+on the majority of kernels out there - distro ones - so it will be
+enabled practically everywhere.
 
-Yeah, you do have a point. Preemptive exposure of functionality is not
-really needed, so yeah, let's add it when actually really needed.
+And it'll be off only in some self-built kernels which are the very
+small minority.
+
+And how much are the space savings with the whole set applied, with and
+without the Kconfig item enabled? Probably only a couple of KBs.
+
+And if so, I'm thinking we could at least make the traps.c stuff
+unconditional - it'll be there but won't run. Unless we get some weird
+#CP but it'll be caught by do_unexpected_cp().
+
+And you have feature tests everywhere so it's not like it'll get
+"misused".
+
+And when you do that, you'll have everything a lot simpler, a lot less
+Kconfig items to build-test and all good.
+
+Right?
+
+Or am I completely way off into the weeds here and am missing an
+important aspect...?
 
 Thx.
 
