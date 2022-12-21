@@ -2,176 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57858653473
-	for <lists+linux-arch@lfdr.de>; Wed, 21 Dec 2022 17:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691D865348E
+	for <lists+linux-arch@lfdr.de>; Wed, 21 Dec 2022 18:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232763AbiLUQ52 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 21 Dec 2022 11:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S229729AbiLURHD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 21 Dec 2022 12:07:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLUQ51 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Dec 2022 11:57:27 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEF5108;
-        Wed, 21 Dec 2022 08:57:25 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id u10so10711449qvp.4;
-        Wed, 21 Dec 2022 08:57:25 -0800 (PST)
+        with ESMTP id S234666AbiLURHC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 21 Dec 2022 12:07:02 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7DC19000
+        for <linux-arch@vger.kernel.org>; Wed, 21 Dec 2022 09:07:01 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id a16so14113575qtw.10
+        for <linux-arch@vger.kernel.org>; Wed, 21 Dec 2022 09:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SYOKcpVH/CwZxAmDD07aAMcukw6jGJ7fZk2tWZQJ5Co=;
+        b=EmYCuGZi1aBhi0+7PLOQjdb/1nrr3I38sgxXNpnj2Ob5gPWVW+wHeaOB0rT2rW9ia1
+         2eC+kMDfVwn1Aw6vUx9l+Y+mROuW36ElXsnZxVtkTOtX3gWfd+EaTqrQgaKdEDoFyGkW
+         RPvMC8bGtPA+mM+/6Yrg5RydYu4wMK+vVcANc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JoTtGMDsWdhoDasCfRf0mfD1bZkJ5FH2D/JtOhme8+M=;
-        b=IZFbaP0Yp+O1xom7BinCoKENWhFqesOCL5efyxG+mQDoFVPLpver6wgzXxur0ouCsI
-         JxLMSXkzKr0MOWmFErixcWqNTbv31AzcR7BtHMSw69ind4kmb+TfPwwWdc2V/4Z11xun
-         5huGtcLXsUAbIBNebX/CYSnq4tLo2r4v40VA6YEfX/xF+i2OBmWOv+OdTKWyJhbg1dV8
-         VXBEkWvvzWeT3GdxA09ishcrj9y+G0Ee90Fvy31guQi12bF2NYIHEQqDursbby15KkVz
-         fFEdUC7MRvcYbq/049KcZJ48KmLjY79CuTK1OnAYUTBqcgO65ocJkgNgmZJ3grWQMkHw
-         9frg==
-X-Gm-Message-State: AFqh2kpsvq6l7igLDIp2tWeIBJOFoD7ivWXDiZV39KSkdDqpi/j82daa
-        cgc2XCs1BOaHXYzIhzDewBb8tzDs+iexHw==
-X-Google-Smtp-Source: AMrXdXtbNBnIQwYhqMihVNE0MbHGsR8L1Cbu7ZRipnl+ds0XQrWsLjeD5Ld4pSCEkQKzGlLvmWTa2A==
-X-Received: by 2002:a0c:f941:0:b0:4c7:7878:e54a with SMTP id i1-20020a0cf941000000b004c77878e54amr3355130qvo.24.1671641843990;
-        Wed, 21 Dec 2022 08:57:23 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05620a430500b006ff8ac9acfdsm11262138qko.49.2022.12.21.08.57.23
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SYOKcpVH/CwZxAmDD07aAMcukw6jGJ7fZk2tWZQJ5Co=;
+        b=YQF3Lv0zhy+e99FAU0XTLbaqcGRin5WwUUi6a24osuQ6g9tiaAVhvpsnP74PznPo6O
+         OLx4mJJcA961Jl5mXEEtPIMlsaH6LkNwfWJr5IX7qGwfAzuFE5hMa/zaOnysgUv9IpGO
+         VBnw4ZJGdBH2SOBRHFVKrWy0HJrN6qTp4nlnoXED2yM9jHiBKCjVtLgCpJ/EOMYr+K0d
+         /6wG6E51YjXAMDN5qOj+wp8swmbrKePNFJ6c8WaBhwCGNmteXitnueNX+7nc/lH93Bh4
+         bZrfa9oi/hjy1LjaagIK3vFktuYo2xpHL/zKkpuJbjaL5qSpp5FdrBswtUKYGQ4F9BeC
+         JuHg==
+X-Gm-Message-State: AFqh2kp+dji2HF20/LLg08S2aEicM7IXouLT+OMmUmro2cNUFWvQE9rE
+        OyuzSjRcnpMVoAdsFyDjY6gbSHAiG60Pw0tA
+X-Google-Smtp-Source: AMrXdXs+wVpyRnMNJ9s2LgrYZ4P+zwFJxkpECfBuYLXdssuqPN3mrocm+iXPAvBuOTl5RbQpWwIpPg==
+X-Received: by 2002:ac8:6999:0:b0:3a7:ee15:d94c with SMTP id o25-20020ac86999000000b003a7ee15d94cmr2671694qtq.47.1671642420815;
+        Wed, 21 Dec 2022 09:07:00 -0800 (PST)
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com. [209.85.222.179])
+        by smtp.gmail.com with ESMTPSA id w7-20020ac843c7000000b003a8163c1c96sm9310938qtn.14.2022.12.21.09.06.58
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 08:57:23 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3b48b139b46so218897917b3.12;
-        Wed, 21 Dec 2022 08:57:23 -0800 (PST)
-X-Received: by 2002:a81:a101:0:b0:3e5:f2ca:7be8 with SMTP id
- y1-20020a81a101000000b003e5f2ca7be8mr295673ywg.358.1671641843155; Wed, 21 Dec
- 2022 08:57:23 -0800 (PST)
+        Wed, 21 Dec 2022 09:06:58 -0800 (PST)
+Received: by mail-qk1-f179.google.com with SMTP id k3so7063937qki.13
+        for <linux-arch@vger.kernel.org>; Wed, 21 Dec 2022 09:06:58 -0800 (PST)
+X-Received: by 2002:ae9:ef49:0:b0:6fe:d4a6:dcef with SMTP id
+ d70-20020ae9ef49000000b006fed4a6dcefmr84873qkg.594.1671642417917; Wed, 21 Dec
+ 2022 09:06:57 -0800 (PST)
 MIME-Version: 1.0
 References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
  <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
- <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
-In-Reply-To: <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 21 Dec 2022 17:57:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU7-01YhJ2H=7rmWvUjcnW_piy1p0ciYeaKTX8wDCW5Lg@mail.gmail.com>
-Message-ID: <CAMuHMdU7-01YhJ2H=7rmWvUjcnW_piy1p0ciYeaKTX8wDCW5Lg@mail.gmail.com>
+ <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk> <20221221155641.GB2468105@roeck-us.net>
+In-Reply-To: <20221221155641.GB2468105@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 21 Dec 2022 09:06:41 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+Message-ID: <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
 Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-m68k@lists.linux-m68k.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Rasmus,
-
-On Wed, Dec 21, 2022 at 4:29 PM Rasmus Villemoes
-<rasmus.villemoes@prevas.dk> wrote:
-> On 21/12/2022 16.05, Geert Uytterhoeven wrote:
-> > On Wed, Dec 21, 2022 at 3:54 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >> On Wed, Oct 19, 2022 at 02:30:34PM -0600, Jason A. Donenfeld wrote:
-> >>> Recently, some compile-time checking I added to the clamp_t family of
-> >>> functions triggered a build error when a poorly written driver was
-> >>> compiled on ARM, because the driver assumed that the naked `char` type
-> >>> is signed, but ARM treats it as unsigned, and the C standard says it's
-> >>> architecture-dependent.
-> >>>
-> >>> I doubt this particular driver is the only instance in which
-> >>> unsuspecting authors make assumptions about `char` with no `signed` or
-> >>> `unsigned` specifier. We were lucky enough this time that that driver
-> >>> used `clamp_t(char, negative_value, positive_value)`, so the new
-> >>> checking code found it, and I've sent a patch to fix it, but there are
-> >>> likely other places lurking that won't be so easily unearthed.
-> >>>
-> >>> So let's just eliminate this particular variety of heisensign bugs
-> >>> entirely. Set `-funsigned-char` globally, so that gcc makes the type
-> >>> unsigned on all architectures.
-> >>>
-> >>> This will break things in some places and fix things in others, so this
-> >>> will likely cause a bit of churn while reconciling the type misuse.
-> >>>
-> >>
-> >> There is an interesting fallout: When running the m68k:q800 qemu emulation,
-> >> there are lots of warning backtraces.
-> >>
-> >> WARNING: CPU: 0 PID: 23 at crypto/testmgr.c:5724 alg_test.part.0+0x7c/0x326
-> >> testmgr: alg_test_descs entries in wrong order: 'adiantum(xchacha12,aes)' before 'adiantum(xchacha20,aes)'
-> >> ------------[ cut here ]------------
-> >> WARNING: CPU: 0 PID: 23 at crypto/testmgr.c:5724 alg_test.part.0+0x7c/0x326
-> >> testmgr: alg_test_descs entries in wrong order: 'adiantum(xchacha20,aes)' before 'aegis128'
-> >>
-> >> and so on for pretty much every entry in the alg_test_descs[] array.
-> >>
-> >> Bisect points to this patch, and reverting it fixes the problem.
-> >>
-> >> It looks like the problem is that arch/m68k/include/asm/string.h
-> >> uses "char res" to store the result of strcmp(), and char is now
-> >> unsigned - meaning strcmp() will now never return a value < 0.
-> >> Effectively that means that strcmp() is broken on m68k if
-> >> CONFIG_COLDFIRE=n.
-> >>
-> >> The fix is probably quite simple.
-> >>
-> >> diff --git a/arch/m68k/include/asm/string.h b/arch/m68k/include/asm/string.h
-> >> index f759d944c449..b8f4ae19e8f6 100644
-> >> --- a/arch/m68k/include/asm/string.h
-> >> +++ b/arch/m68k/include/asm/string.h
-> >> @@ -42,7 +42,7 @@ static inline char *strncpy(char *dest, const char *src, size_t n)
-> >>  #define __HAVE_ARCH_STRCMP
-> >>  static inline int strcmp(const char *cs, const char *ct)
-> >>  {
-> >> -       char res;
-> >> +       signed char res;
-> >>
-> >>         asm ("\n"
-> >>                 "1:     move.b  (%0)+,%2\n"     /* get *cs */
-> >>
-> >> Does that make sense ? If so I can send a patch.
-> >
-> > Thanks, been there, done that
-> > https://lore.kernel.org/all/bce014e60d7b1a3d1c60009fc3572e2f72591f21.1671110959.git.geert@linux-m68k.org
+On Wed, Dec 21, 2022 at 7:56 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> Well, looks like that would still leave strcmp() buggy, you can't
-> represent all possible differences between two char values (signed or
-> not) in an 8-bit quantity. So any implementation based on returning the
-> first non-zero value of *a - *b must store that intermediate value in
-> something wider. Otherwise you'll get -128 from strcmp("\x40", "\xc0"),
-> but _also_ -128 when you do strcmp("\xc0", "\x40"), which is obviously
-> bogus.
+> The above assumes an unsigned char as input to strcmp(). I consider that
+> a hypothetical problem because "comparing" strings with upper bits
+> set doesn't really make sense in practice (How does one compare G=C3=BCnt=
+er
+> against Gunter ? And how about G=C7=96nter ?). On the other side, the pro=
+blem
+> observed here is real and immediate.
 
-So we have https://lore.kernel.org/all/87bko3ia88.fsf@igel.home ;-)
+POSIX does actually specify "G=C3=BCnter" vs "Gunter".
 
-And the other issue is m68k strcmp() calls being dropped by the
-optimizer, cfr. the discussion in
-https://lore.kernel.org/all/b673f98db7d14d53a6e1a1957ef81741@AcuMS.aculab.com
+The way strcmp is supposed to work is to return the sign of the
+difference between the byte values ("unsigned char").
 
-> I recently fixed that long-standing bug in U-Boot's strcmp() and a
-> similar one in nolibc in the linux tree. I wonder how many more
-> instances exist.
+But that sign has to be computed in 'int', not in 'signed char'.
 
-Thanks, commit fb63362c63c7aeac ("lib: fix buggy strcmp and strncmp") in
-v2023.01-rc1, which is not yet in a released version.
-(and in plain C, not in asm ;-)
+So yes, the m68k implementation is broken regardless, but with a
+signed char it just happened to work for the US-ASCII case that the
+crypto case tested.
 
-Gr{oetje,eeting}s,
+I think the real fix is to just remove that broken implementation
+entirely, and rely on the generic one.
 
-                        Geert
+I'll commit that, and see what happens.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+               Linus
