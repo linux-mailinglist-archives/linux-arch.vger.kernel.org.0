@@ -2,112 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1788C65417F
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Dec 2022 14:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4983D65418E
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Dec 2022 14:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbiLVNFq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Dec 2022 08:05:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S235328AbiLVNR2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Dec 2022 08:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbiLVNFn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Dec 2022 08:05:43 -0500
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479553AA;
-        Thu, 22 Dec 2022 05:05:41 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-45ef306bd74so26219397b3.2;
-        Thu, 22 Dec 2022 05:05:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MLCFjw9XIBAbu93dkTI6RLAmkXvVW4axCY2krlbo1Ww=;
-        b=AkgVq2KBYpb4dUz0BEny9VGKMx98sCEpomruDdErtQTfod0SDz1QtGYEm+OIDWZNIO
-         vlQLLC1fLfHsGwkEMryIAhStNEw19kGCriTIwXdKo95+rHg27uqTDoD6QrDwgrjhAgBv
-         5OeSsvpqWZOhT0hvQccLl9BV1fCCIImERWNC1N9nam8oaJUg1FQIZ6s63aMqMTkhZU9B
-         Nhmoxqt6o1fxNucfYYoBZ3BShgbfc0DN6a0xFeFUrsGyLrsrvRdSYCDDHEsCTSl3p8Ev
-         WPKEvWt8gavBdlzigJ0+ZZnAsFQc7zDLvD122e7t4/offEodIPmuNFBZ0mp9AtbYgERN
-         cO6A==
-X-Gm-Message-State: AFqh2kpLkKL29cnfwWmnCpz/b074K+GOwYpImBNnzYyFXgJZEq8laVWx
-        Md3ffQKeQVsohYzvrIFmq39t0Ljs9iEWBQ==
-X-Google-Smtp-Source: AMrXdXv+fd3oxdp37Kj0lM82VJ47EaSdU2higWi9k+R5qohKiq7HGGEAXGMRjmfGmAOqmoIqZFfDxg==
-X-Received: by 2002:a05:7500:5c05:b0:ea:6682:469c with SMTP id fd5-20020a0575005c0500b000ea6682469cmr392958gab.12.1671714340243;
-        Thu, 22 Dec 2022 05:05:40 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id w26-20020a05620a095a00b006fc6529abaesm231627qkw.101.2022.12.22.05.05.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 05:05:39 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-45c11d1bfc8so25845717b3.9;
-        Thu, 22 Dec 2022 05:05:39 -0800 (PST)
-X-Received: by 2002:a05:690c:d84:b0:437:febc:6583 with SMTP id
- da4-20020a05690c0d8400b00437febc6583mr536308ywb.384.1671714339227; Thu, 22
- Dec 2022 05:05:39 -0800 (PST)
+        with ESMTP id S235372AbiLVNR1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Dec 2022 08:17:27 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CA72B247;
+        Thu, 22 Dec 2022 05:17:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2XcHZF1PZLR2wIWpbwHYxjPC+APViKRD8vA3VUxcIvg=; b=KCXj9vIla9OYqKdFn9cR8kvNM7
+        aFCQeC8riSg8V400TR89vezYQDYLiis4eNRLNs8TpTaXaw65hlSoAk1r6vPtZd+exgqLf0ix1mWk/
+        7mD3VAmxpBkRslmasRJRs+fKtYpKnU1ADefum9T6WSCkywkO5VAsLjiapOTmMfHm3hWA+ZnPwbN/x
+        w/QRGrx3Tff9U3N5qrWzRNVImBPIIWUH62fHNh4gOn/lh1uA85Bq4VekD+WTPjngLVS9jAhxdeZUl
+        IsMAPZLgwBX86nVypWOAboNnZASXp2L/Ju1gXccS53q3KAKJFdUiOmNk/uvedjpjQbE+kHWV+JJwu
+        O+7WKnuA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1p8LR1-00Dq0t-2q;
+        Thu, 22 Dec 2022 13:16:32 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D4E3C30006D;
+        Thu, 22 Dec 2022 14:16:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5D8FC2CEAF0FB; Thu, 22 Dec 2022 14:16:28 +0100 (CET)
+Date:   Thu, 22 Dec 2022 14:16:28 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 05/12] arch: Introduce
+ arch_{,try_}_cmpxchg128{,_local}()
+Message-ID: <Y6RYrHV3PK+FwW2p@hirez.programming.kicks-ass.net>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.154045458@infradead.org>
+ <Y6OyAL2epKPHj+tr@boqun-archlinux>
 MIME-Version: 1.0
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
- <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
- <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk> <20221221155641.GB2468105@roeck-us.net>
- <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
- <20221221171922.GA2470607@roeck-us.net> <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
-In-Reply-To: <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 22 Dec 2022 14:05:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWwNv-xzrsckMab_eAtZZ-ybDFPyxG9f9ndHBgXjLAayQ@mail.gmail.com>
-Message-ID: <CAMuHMdWwNv-xzrsckMab_eAtZZ-ybDFPyxG9f9ndHBgXjLAayQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y6OyAL2epKPHj+tr@boqun-archlinux>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+On Wed, Dec 21, 2022 at 05:25:20PM -0800, Boqun Feng wrote:
 
-On Wed, Dec 21, 2022 at 7:46 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Wed, Dec 21, 2022 at 9:19 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On Wed, Dec 21, 2022 at 09:06:41AM -0800, Linus Torvalds wrote:
-> > > I think the real fix is to just remove that broken implementation
-> > > entirely, and rely on the generic one.
-> >
-> > Perfectly fine with me.
->
-> That got pushed out as commit 7c0846125358 ("m68k: remove broken
-> strcmp implementation") but it's obviously entirely untested. I don't
-> do m68k cross-compiles, much less boot tests.
->
-> Just FYI for everybody - I may have screwed something up for some very
-> non-obvious reason.
->
-> But it looked very obvious indeed, and I hate having buggy code that
-> is architecture-specific when we have generic code that isn't buggy.
+> > +#define __CMPXCHG128(name, mb, cl...)					\
+> > +static __always_inline u128						\
+> > +__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
+> > +{									\
+> > +	union __u128_halves r, o = { .full = (old) },			\
+> > +			       n = { .full = (new) };			\
+> > +	register unsigned long x0 asm ("x0") = o.low;			\
+> > +	register unsigned long x1 asm ("x1") = o.high;			\
+> > +	register unsigned long x2 asm ("x2") = n.low;			\
+> > +	register unsigned long x3 asm ("x3") = n.high;			\
+> > +	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
+> > +									\
+> > +	asm volatile(							\
+> > +	__LSE_PREAMBLE							\
+> > +	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
+> > +	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
+> > +	  [v] "+Q" (*(unsigned long *)ptr)				\
+> > +	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
+> 
+> Issue #1: the line below can be removed, otherwise..
+> 
+> > +	  [oldval1] "r" (r.low), [oldval2] "r" (r.high)			\
+> 
+> warning:
+> 
+> 	./arch/arm64/include/asm/atomic_lse.h: In function '__lse__cmpxchg128_mb':
+> 	./arch/arm64/include/asm/atomic_lse.h:309:27: warning: 'r.<U97b8>.low' is used uninitialized [-Wuninitialized]
+> 	  309 |           [oldval1] "r" (r.low), [oldval2] "r" (r.high)
+> 
+> 
+> > +	: cl);								\
+> > +									\
+> > +	r.low = x0; r.high = x1;					\
+> > +									\
+> > +	return r.full;							\
+> > +}
+> > +
+> > +__CMPXCHG128(   ,   )
+> > +__CMPXCHG128(_mb, al, "memory")
+> > +
+> > +#undef __CMPXCHG128
+> > +
+> >  #endif	/* __ASM_ATOMIC_LSE_H */
+> > --- a/arch/arm64/include/asm/cmpxchg.h
+> > +++ b/arch/arm64/include/asm/cmpxchg.h
+> > @@ -147,6 +147,19 @@ __CMPXCHG_DBL(_mb)
+> >  
+> >  #undef __CMPXCHG_DBL
+> >  
+> > +#define __CMPXCHG128(name)						\
+> > +static inline long __cmpxchg128##name(volatile u128 *ptr,		\
+> 
+> Issue #2: this should be
+> 
+> static inline u128 __cmpxchg128##name(..)
+> 
+> because cmpxchg* needs to return the old value.
 
-Thank you for being proactive!
-It works fine (and slightly reduced kernel size, too ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Duh.. fixed both. Pushed out to queue/core/wip-u128. I'll probably
+continue all this in two weeks (yay xmas break!).
