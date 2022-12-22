@@ -2,179 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813AC654096
-	for <lists+linux-arch@lfdr.de>; Thu, 22 Dec 2022 13:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1788C65417F
+	for <lists+linux-arch@lfdr.de>; Thu, 22 Dec 2022 14:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbiLVMBg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 22 Dec 2022 07:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S235415AbiLVNFq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 22 Dec 2022 08:05:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235870AbiLVMBQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Dec 2022 07:01:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C6E33CF4;
-        Thu, 22 Dec 2022 03:53:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E18FB81D30;
-        Thu, 22 Dec 2022 11:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9314C433F2;
-        Thu, 22 Dec 2022 11:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671710016;
-        bh=dwRgGhvkMsp229h+rO5gqtrhdXxrFhA631KDq6GCycY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WifJDlvxmHu39qI6F+fDSJ5b1cObtwXpINE6FUABMBEy0GM/b8I4BYqJKUOvrl/Ws
-         SpRbSnqddfHC9RohYxVrBf2oZ9WyphQhtOb0T+h3nYNZm4/SNZEYTm31Xkak0N5kIr
-         WTvYcPiVEaufsYUtmZj2LiyCI1Q5setZj6fTkkjBcIxfmkmvEu0qH/mwrx1wR/kg3k
-         v+I7niKR0Iwa1jrd03hAzn6pCnLFZHrk3eELuFxwOam/vXZRhWSY1ckDQWqZdLyaMP
-         XYtZns5zGWWcIkQthsXtJb5UKcGdymf10jv1nxZDn00mvP+wg0v9kPSsFobNVRfaw3
-         xdK/9aOin6M1g==
-Received: by mail-lf1-f46.google.com with SMTP id z26so2366639lfu.8;
-        Thu, 22 Dec 2022 03:53:36 -0800 (PST)
-X-Gm-Message-State: AFqh2kqXAvfO2rQtRdg8RrjNzaPGeu1Xf8khoMGgY0bAZ5mTznuXLjRG
-        pa4v6DbgJfZVhjhkj2UVQJhXDYltSFdZEqE1XeQ=
-X-Google-Smtp-Source: AMrXdXvrt9G9hSeWg+GElY+cYYoH6hbx0Lc+3N6i5piAcI92l/HeoPS1Z81DFG39t0aA0cn/00XO87rpCaoY9xDesuQ=
-X-Received: by 2002:a05:6512:15a3:b0:4bc:bdf5:f163 with SMTP id
- bp35-20020a05651215a300b004bcbdf5f163mr310195lfb.583.1671710014879; Thu, 22
- Dec 2022 03:53:34 -0800 (PST)
+        with ESMTP id S235159AbiLVNFn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 22 Dec 2022 08:05:43 -0500
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479553AA;
+        Thu, 22 Dec 2022 05:05:41 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-45ef306bd74so26219397b3.2;
+        Thu, 22 Dec 2022 05:05:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MLCFjw9XIBAbu93dkTI6RLAmkXvVW4axCY2krlbo1Ww=;
+        b=AkgVq2KBYpb4dUz0BEny9VGKMx98sCEpomruDdErtQTfod0SDz1QtGYEm+OIDWZNIO
+         vlQLLC1fLfHsGwkEMryIAhStNEw19kGCriTIwXdKo95+rHg27uqTDoD6QrDwgrjhAgBv
+         5OeSsvpqWZOhT0hvQccLl9BV1fCCIImERWNC1N9nam8oaJUg1FQIZ6s63aMqMTkhZU9B
+         Nhmoxqt6o1fxNucfYYoBZ3BShgbfc0DN6a0xFeFUrsGyLrsrvRdSYCDDHEsCTSl3p8Ev
+         WPKEvWt8gavBdlzigJ0+ZZnAsFQc7zDLvD122e7t4/offEodIPmuNFBZ0mp9AtbYgERN
+         cO6A==
+X-Gm-Message-State: AFqh2kpLkKL29cnfwWmnCpz/b074K+GOwYpImBNnzYyFXgJZEq8laVWx
+        Md3ffQKeQVsohYzvrIFmq39t0Ljs9iEWBQ==
+X-Google-Smtp-Source: AMrXdXv+fd3oxdp37Kj0lM82VJ47EaSdU2higWi9k+R5qohKiq7HGGEAXGMRjmfGmAOqmoIqZFfDxg==
+X-Received: by 2002:a05:7500:5c05:b0:ea:6682:469c with SMTP id fd5-20020a0575005c0500b000ea6682469cmr392958gab.12.1671714340243;
+        Thu, 22 Dec 2022 05:05:40 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id w26-20020a05620a095a00b006fc6529abaesm231627qkw.101.2022.12.22.05.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Dec 2022 05:05:39 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-45c11d1bfc8so25845717b3.9;
+        Thu, 22 Dec 2022 05:05:39 -0800 (PST)
+X-Received: by 2002:a05:690c:d84:b0:437:febc:6583 with SMTP id
+ da4-20020a05690c0d8400b00437febc6583mr536308ywb.384.1671714339227; Thu, 22
+ Dec 2022 05:05:39 -0800 (PST)
 MIME-Version: 1.0
-References: <CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com>
- <26bd2928-9d62-32b3-4f9f-9dd9293cefeb@leemhuis.info> <CAK7LNAQ5VVRdrewtxrBdw561LL=yY8fdr=i1e7pp4DRht=r_Ww@mail.gmail.com>
- <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info>
-In-Reply-To: <0ab93345-18e1-15c9-a4a3-066ea1cd862b@leemhuis.info>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 22 Dec 2022 12:53:23 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
-Message-ID: <CAMj1kXE+LBOBavOre1O8LTGPCmB8m58fbfo92Sx4WukyNAur-A@mail.gmail.com>
-Subject: Re: BUG: arm64: missing build-id from vmlinux
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org, Dennis Gilmore <dennis@ausil.us>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
+ <20221221145332.GA2399037@roeck-us.net> <CAMuHMdUAaQSXq=4rO9soCGGnH8HZrSS0PjWELqGzXoym4dOqnQ@mail.gmail.com>
+ <1a27385c-cca6-888b-1125-d6383e48c0f5@prevas.dk> <20221221155641.GB2468105@roeck-us.net>
+ <CAHk-=wj7FMFLr9AOW9Aa9ZMt1-Lu01_X8vLiaKosPyF2H-+ujA@mail.gmail.com>
+ <20221221171922.GA2470607@roeck-us.net> <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+In-Reply-To: <CAHk-=wjOcqWxpUUrWKLKznRg-HXxRn1AXLW9B6SPq-ioLObdjw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 22 Dec 2022 14:05:26 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWwNv-xzrsckMab_eAtZZ-ybDFPyxG9f9ndHBgXjLAayQ@mail.gmail.com>
+Message-ID: <CAMuHMdWwNv-xzrsckMab_eAtZZ-ybDFPyxG9f9ndHBgXjLAayQ@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-m68k@lists.linux-m68k.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 21 Dec 2022 at 17:29, Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> On 21.12.22 16:39, Masahiro Yamada wrote:
-> > On Wed, Dec 21, 2022 at 5:23 PM Thorsten Leemhuis
-> > <regressions@leemhuis.info> wrote:
-> >>
-> >> Hi, this is your Linux kernel regression tracker. CCing the regression
-> >> mailing list, as it should be in the loop for all regressions:
-> >> https://docs.kernel.org/admin-guide/reporting-regressions.html
-> >>
-> >> On 18.12.22 21:51, Dennis Gilmore wrote:
-> >>> The changes in https://lore.kernel.org/linux-arm-kernel/166783716442.=
-32724.935158280857906499.b4-ty@kernel.org/T/
-> >>> result in vmlinux no longer having a build-id.
-> >>
-> >> FWIW, that's 994b7ac1697b ("arm64: remove special treatment for the li=
-nk
-> >> order of head.o") from Masahiro merged through Will this cycle.
-> >>
-> >>> At the least, this
-> >>> causes rpm builds to fail. Reverting the patch does bring back a
-> >>> build-id, but there may be a different way to fix the regression
-> >>
-> >> Makes me wonder if other distros or CIs relying on the build-id are
-> >> broken, too.
-> >>
-> >> Anyway, the holiday season is upon us, hence I also wonder if it would
-> >> be best to revert above change quickly and leave further debugging for=
- 2023.
-> >>
-> >> Masahiro, Will, what's your option on this?
->
-> Masahiro, many thx for looking into this.
->
-> > I do not understand why you rush into the revert so quickly.
-> > We are before -rc1.
-> > We have 7 weeks before the 6.2 release
-> > (assuming we will have up to -rc7).
+Hi Linus,
+
+On Wed, Dec 21, 2022 at 7:46 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Wed, Dec 21, 2022 at 9:19 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > On Wed, Dec 21, 2022 at 09:06:41AM -0800, Linus Torvalds wrote:
+> > > I think the real fix is to just remove that broken implementation
+> > > entirely, and rely on the generic one.
 > >
-> > If we get -rc6 or -rc7 and we still do not
-> > solve the issue, we should consider reverting it.
+> > Perfectly fine with me.
 >
-> Because it looked like a regression that makes it harder for people and
-> CI systems to build and test mainline. To quote
-> Documentation/process/handling-regressions.rst (
-> https://docs.kernel.org/process/handling-regressions.html ):
+> That got pushed out as commit 7c0846125358 ("m68k: remove broken
+> strcmp implementation") but it's obviously entirely untested. I don't
+> do m68k cross-compiles, much less boot tests.
 >
-> """
->  * Fix regressions within two or three days, if they are critical for
-> some reason =E2=80=93 for example, if the issue is likely to affect many =
-users
-> of the kernel series in question on all or certain architectures. Note,
-> this includes mainline, as issues like compile errors otherwise might
-> prevent many testers or continuous integration systems from testing the
-> series.
-> """
+> Just FYI for everybody - I may have screwed something up for some very
+> non-obvious reason.
 >
-> I suspect that other distros rely on the build-id as well. Maybe I'm
-> wrong with that, but even if only Fedora and derivatives are effected it
-> will annoy some people. Sure, each can apply the revert, but before that
-> everyone affected will spend time debugging the issue first. A quick
-> revert in mainline (with a reapply later together with a fix) thus IMHO
-> is the most efficient approach afaics.
->
+> But it looked very obvious indeed, and I hate having buggy code that
+> is architecture-specific when we have generic code that isn't buggy.
 
-Agree with Masahiro here.
+Thank you for being proactive!
+It works fine (and slightly reduced kernel size, too ;-)
 
-The issue seems to be caused by the fact that whichever object gets
-linked first gets to decide the type of a section, and so the .notes
-section will be of type NOTE if head.o gets linked first, or PROGBITS
-otherwise. The latter PROGBITS type seems to be the result of the
-compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
+Gr{oetje,eeting}s,
 
-The hunk below fixes it for me, by avoiding notes emitted as PROGBITS.
-I'll leave it to Masahiro to decide whether this should be fixed for
-arm64 only or for all architectures, but I suspect the latter would be
-most appropriate.
+                        Geert
 
-Note that the kernel's rpm-pkg and binrpm-pkg targets seem to be
-unaffected by this.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-diff --git a/arch/arm64/include/asm/assembler.h
-b/arch/arm64/include/asm/assembler.h
-index 376a980f2bad08bb..10a172601fe7f53f 100644
---- a/arch/arm64/include/asm/assembler.h
-+++ b/arch/arm64/include/asm/assembler.h
-@@ -818,7 +818,7 @@ alternative_endif
-
- #ifdef GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT
- .macro emit_aarch64_feature_1_and, feat=3DGNU_PROPERTY_AARCH64_FEATURE_1_D=
-EFAULT
--       .pushsection .note.gnu.property, "a"
-+       .pushsection .note.gnu.property, "a", %note
-        .align  3
-        .long   2f - 1f
-        .long   6f - 3f
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.ld=
-s.S
-index 4c13dafc98b8400f..8a8044dea71b0609 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -160,6 +160,7 @@ SECTIONS
-        /DISCARD/ : {
-                *(.interp .dynamic)
-                *(.dynsym .dynstr .hash .gnu.hash)
-+               *(.note.GNU-stack) # emitted as PROGBITS
-        }
-
-        . =3D KIMAGE_VADDR;
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
