@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3ECF6560C3
-	for <lists+linux-arch@lfdr.de>; Mon, 26 Dec 2022 08:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636056560FE
+	for <lists+linux-arch@lfdr.de>; Mon, 26 Dec 2022 09:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiLZH0m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 26 Dec 2022 02:26:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S231788AbiLZIAI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 26 Dec 2022 03:00:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiLZH0m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Dec 2022 02:26:42 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF54CE5;
-        Sun, 25 Dec 2022 23:26:41 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 7so6798283pga.1;
-        Sun, 25 Dec 2022 23:26:41 -0800 (PST)
+        with ESMTP id S231585AbiLZIAF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 26 Dec 2022 03:00:05 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F44B115E;
+        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id 17so10227159pll.0;
+        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5BP28ThNDrV2+rj7tyFrglRNo5Mo/dZrYmPpGBSiwqg=;
-        b=J9xkOrFjRuPH/wQYbTXZd86iNKUmAZCtUK8mRWuXKGimVW+cix1U7UmdkbEelLbyqA
-         udrffEjJy6YF+oHuN94bvwxsO1PRXL3UesBT752P6lgGBxHBestN3hu3yg2aET+DEdah
-         MHlVZw5qDx8oeM/9k8RlcRdWrjr/SCfj6n8SKRRc2MBwaM+CuUkxXvEBsfW3u4ZeZdbp
-         iuP1e+aVAXTCVMTrZOh2IPJ4WBbRNH4b+HgWWbgymuGAq3VhMMdjgc9mWjsr+BWHvE9c
-         sihA3I2RdPuZJMpxWLNLhU8JT4hHjHcK17GySMtrDK5hJ79PTdurllIqiltLzjboyyoy
-         ppSw==
+        bh=snF9FgPM3QZjb6wYG/8ShchxVTbs8eu54AlMx41SJXI=;
+        b=I9kpb2beBVnPOjsLJGcv0RYiBxwiJwxcOTw40CumIZc1EnhS/GQAT4QRDqEBM5sSYf
+         Wd0CZdozC+zvNZ7cefd7AMsfQMn8aUnwQfQ/uf7n6zSgQA1Ebim0kWEsrEKkU4KiHbf5
+         CTAKlSW3/BWnXqb8ZO7yZcTq22RASfUWsBbIgpvirQGHePw9rpt4KRdY3+r+VSGYlaL6
+         J6oyvXqwS5xVcMVIHNV/tuuCBQMpa2kDLG7bIuzQRnXNP65cDWBWSS8XymH/O7pfjYzN
+         Cf09qjoM18+lqqsA9DjGW8bHSTBHxh79FnzS3q9y4D1zUfjg9aGHptcrwmvICxm1/7BI
+         kZlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5BP28ThNDrV2+rj7tyFrglRNo5Mo/dZrYmPpGBSiwqg=;
-        b=b0/BbMFbLrFjEAAX4/svR+t/rNQDRzC9ylXXDVzfytvQXkMRK71m+EVWXeNUcXLMbD
-         xZEkU951VzwEnUM6it/Z13ws4GHr7MJAfKQNtqcLzU1l9z9bHZ4YrTCr89z1jnim77vY
-         2qgGFAPPh7zulM2hTQGjo8sBv7pcMsfa4aceCPG3zs5SaPIvLcBlwFBcV/ZBDNRcequf
-         EP/ZABMi/IQpDZZZLVi3GszDUtfO4X4s9pdfl964mKo3kofwlfzbRkN0/d/bj+zOFj/V
-         2Vl2iyJlV1OaDj47REtRYEWsgQ9Zjb6isPDWDSmznaE+PtCm/ci/tv2zd6WN8JqMC92s
-         fMsw==
-X-Gm-Message-State: AFqh2kqafDJwGcdeIWbHetHMlnj3KDVRciCMdVELugBDANb9jQboQz8w
-        uroIez8IeB0oS6AnBhBPbsw=
-X-Google-Smtp-Source: AMrXdXuyr5O0DLExCO9wALqIc5t/+SNGh1usm32pp45Z+S6V5/Is/1z5fyykemBBcsB1O66woqdJUQ==
-X-Received: by 2002:a62:4e93:0:b0:57f:ef11:acf9 with SMTP id c141-20020a624e93000000b0057fef11acf9mr18045290pfb.10.1672039600680;
-        Sun, 25 Dec 2022 23:26:40 -0800 (PST)
+        bh=snF9FgPM3QZjb6wYG/8ShchxVTbs8eu54AlMx41SJXI=;
+        b=NFzv5Plj9UpRLa47HCk05zMKxlGP3/OcBKtET8od6IqMVC+imTQ0ZRjqot+sEUxhvf
+         //ZGyoAPsmzendWsHheiSKV2L2f81VEfrScVQGNQtonOfpynytBi/3lvsboxvoYzSoG+
+         rVdiG5eOg50Od/KwAbx3oFovYdhDAVKSzcHGxbDQGWs0D7q4pDL4yEKCMZYaIjM5fZae
+         1nOSqhk3O57pW8tzQil5JmSCGZ03MnVffezABl7ESk9GKwYYBLonKeWUT2/tamyEzduD
+         vv4Arlj79DrTjI6+rWfr5I2edKahEs8VW5ZPcmk1TLLSfkP/y8Q8ygOR0EZ22FtxxHv5
+         HQGA==
+X-Gm-Message-State: AFqh2kp+6dldAtf1XuokYcuc6k5U1kUiAD5NdD9yuNJ+rBT1xkcl9apT
+        VGgYU0GSPOHydExemnVsIwg=
+X-Google-Smtp-Source: AMrXdXsYDTq8QKHNt6PaId85nRz+73j5VQZcvOKpuC70WJG4kZTU8GY496g9fIp6s4h43XrC3tqXlg==
+X-Received: by 2002:a17:902:7e03:b0:192:70f1:b34 with SMTP id b3-20020a1709027e0300b0019270f10b34mr6048820plm.19.1672041603032;
+        Mon, 26 Dec 2022 00:00:03 -0800 (PST)
 Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id a7-20020aa795a7000000b0056cea9530b6sm1845037pfk.202.2022.12.25.23.26.30
+        by smtp.gmail.com with ESMTPSA id s19-20020a170903201300b00187197c4999sm6447717pla.167.2022.12.25.23.59.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Dec 2022 23:26:40 -0800 (PST)
-Message-ID: <a42f1d1a-3eda-83dc-7806-7ea2c9e7656a@gmail.com>
-Date:   Mon, 26 Dec 2022 15:26:30 +0800
+        Mon, 26 Dec 2022 00:00:02 -0800 (PST)
+Message-ID: <ee43a3ce-2b66-f660-39cc-32cdc0cf6587@gmail.com>
+Date:   Mon, 26 Dec 2022 15:59:52 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V2 10/18] drivers: hv: Decrypt percpu hvcall input arg
- page in sev-snp enlightened guest
+Subject: Re: [RFC PATCH V2 11/18] Drivers: hv: vmbus: Decrypt vmbus ring
+ buffer
 Content-Language: en-US
 To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         "luto@kernel.org" <luto@kernel.org>,
@@ -96,10 +96,10 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
 References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-11-ltykernel@gmail.com>
- <BYAPR21MB168878729E4A76AFC9B3E053D7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20221119034633.1728632-12-ltykernel@gmail.com>
+ <BYAPR21MB1688329AFB42391E92051E9CD7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
 From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB168878729E4A76AFC9B3E053D7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB1688329AFB42391E92051E9CD7E09@BYAPR21MB1688.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -112,18 +112,13 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/15/2022 2:16 AM, Michael Kelley (LINUX) wrote:
->> @@ -134,6 +136,16 @@ int hv_common_cpu_init(unsigned int cpu)
->>   	if (!(*inputarg))
->>   		return -ENOMEM;
->>
->> +	if (hv_isolation_type_en_snp()) {
->> +		ret = set_memory_decrypted((unsigned long)*inputarg, 1);
->> +		if (ret) {
->> +			kfree(*inputarg);
-> After the kfree(), set *inputarg back to NULL.  There's other code that
-> tests the value of *inputarg to know if the per-CPU hypercall page has
-> been successfully allocated.
+On 12/15/2022 2:25 AM, Michael Kelley (LINUX) wrote:
+> From: Tianyu Lan<ltykernel@gmail.com>  Sent: Friday, November 18, 2022 7:46 PM
+>> The ring buffer is remapped in the hv_ringbuffer_init()
+>> and it should be with decrypt flag in order to share it
+>> with hypervisor in sev-snp enlightened guest.
+> FWIW, the change in this patch is included in Patch 9
+> in my vTOM-related patch series.
 > 
 
-Good point! Will add in the next version.
+I will rebase next version on your series. Thanks for reminder.
