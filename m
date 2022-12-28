@@ -2,203 +2,182 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D4165740A
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Dec 2022 09:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FC6657F86
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Dec 2022 17:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiL1IlV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Dec 2022 03:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
+        id S234367AbiL1QFt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Dec 2022 11:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232680AbiL1IlA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Dec 2022 03:41:00 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2063.outbound.protection.outlook.com [40.107.244.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2438DFE0;
-        Wed, 28 Dec 2022 00:40:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fkf5j7l8W1I0G+yANME1v6wQ98VFY4eUVPU/sqOxyAo95ZhB/kzMfK+Hl2nIINq3i+nUXQl7L028dNBodegIlt5a4CQZhuIMLwmVMtSc30mK37oh907lBzH92Fp6amOQPK/6fRP87TwbQSZbDmz2MiBuwcGzq1UCve71M02wFIGnGQQvlcVx+aKSDK1/9vQ2ZGgdhuVMFnPid4k/P1sA2w0QSeI8ptdAGIMC1teii3yP924F0N6bsih7m6cgXB7SmL7KaoyhTy0qq9sYpL6mdIF3zIlrG19QMJlkpTaZXmXRBLN/CkV7cbdu2eLFPLrLsHmoUd92yY8ii2wo2XOGhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RwZValWt4+KqfdFptlpYaq/Ag9shX1Qa6HFjpwh3SLA=;
- b=O2QtZO00miKkdhOe2SZNCm+xUVi989xtLoGk8Y69gy45wVtThH28gsEqC6+oJMzP7n6e6XcO9BEYcbGJ4cQwoXq7mVibDOTtH8Gai7iCFbqRu65DA4JM7X5i/Ej9TVHpDUILQf7NFkQ4jKY5b5MODgVhJJHuEx+2Q5dI9SXS/2n8+EKKjI6LFR4P3AQh7qFvLx74M78UE/OZyKuNeoTh6FakbfzZX9+WZfpUvwAU80+Zqtn+Gd4xjQgPVYjzBdNMXbMvAVStl2rOdXKNe0QAqpylGT1RNvU/C7W4HUTC0RJltH3ptLLPD9MMIU79sh2VoBqsVQOlzkkTGFv0ztAYJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RwZValWt4+KqfdFptlpYaq/Ag9shX1Qa6HFjpwh3SLA=;
- b=iuGEfRxCAMTcNmvpzSW1Wm93eiuc2+Z0KWX4rDVJItuLiJINT3TfcwH0Xfr0BWwuJ8chMWINV7kp3c0hzwao90ThDxWOqQJotCX9GF7dFYLUAJdL3tIDDLk7JKhSTE5NNY7RPPNTmzMizIgg8rOvhhJMvP6D440yxolcPsL6oHA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
- SN7PR12MB7225.namprd12.prod.outlook.com (2603:10b6:806:2a8::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Wed, 28 Dec
- 2022 08:40:52 +0000
-Received: from DS7PR12MB6048.namprd12.prod.outlook.com
- ([fe80::4014:79ea:392b:b4f6]) by DS7PR12MB6048.namprd12.prod.outlook.com
- ([fe80::4014:79ea:392b:b4f6%5]) with mapi id 15.20.5944.016; Wed, 28 Dec 2022
- 08:40:52 +0000
-Message-ID: <cb1b1042-6bc5-d294-4fa7-26534b921e42@amd.com>
-Date:   Wed, 28 Dec 2022 14:10:30 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC][PATCH 09/12] x86,amd_iommu: Replace cmpxchg_double()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.419176389@infradead.org>
-From:   Vasant Hegde <vasant.hegde@amd.com>
-In-Reply-To: <20221219154119.419176389@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN0PR01CA0007.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:4f::12) To DS7PR12MB6048.namprd12.prod.outlook.com
- (2603:10b6:8:9f::5)
+        with ESMTP id S234356AbiL1QFl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Dec 2022 11:05:41 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7D193ED
+        for <linux-arch@vger.kernel.org>; Wed, 28 Dec 2022 08:05:39 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id ja17so11494643wmb.3
+        for <linux-arch@vger.kernel.org>; Wed, 28 Dec 2022 08:05:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ixsystems.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PU9635POemxwDKmm5VBJNB22BtO90u5rPxeWqV5JJQM=;
+        b=WFUoe+tyv2U/PyZBuUklrh1xgR9Rjo5FJBU6KjkrFuofVZgDqrPMdmmGaDsuCFQdbo
+         fsSyXIsPFJ4ZNK7Dd365O8QbMWmRkYBmKxP9HxJnGK/GIdWjEqKDKaM7Safkp28mmDc5
+         bfPgGa4dvMMQgUZEzWGX1gJH29ds9KfJK0CBPDt5q+j0VsKOdPWsd9pbMX2r7hmznDtN
+         Wn1dzlZXz3bQNQUyfzT9dQOw6n/8eQgrh2ATVMBLK5EX/Afd+5DZ0rdjgCd0tUXlcXck
+         GRGIkz+GTpL1ZN9EYaS/vlvDimosr9GRWsMaGY7IczC5G3hwxVnjntJ9j8p8+rwJvcKx
+         Y9Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PU9635POemxwDKmm5VBJNB22BtO90u5rPxeWqV5JJQM=;
+        b=bpmH71ROTSweXYhxhVYRYr9DUU/56Iq/68oPrOqo5ZxQHRUGCDf//BtdgBH19SUYdk
+         4uClguXIX51FecP+/WNr1LntR/1f4oxZkz4JfXicuDnXJx/wZ244fZrpVy5cBPn52tMJ
+         VM23/wd4hc6V+PvftzUDWaMGcg/vHONQPTFgpmW7ZimT7on0scETRjkEXTSbpmuHuAjF
+         SK2ZBQNNZRg/xOn2FKv4ByuDDGDxOyusPtk6uzenXifafe2JWNyqiw6aSPRloXQWwQ3p
+         8ahg9w9VP836hSBktDwOxr1uqikbngU34r6Wg9p7IhRmqFAtRFkaKoeBkBf8GzkhQWT/
+         S0Ww==
+X-Gm-Message-State: AFqh2kqxZ1Gk9w+yKL+CfjjsNz76Lflt6I0MJ/qgt7Osfj2AF2rJRssO
+        ZtiaoSPTq6WJie+e0rLk5J75ZA==
+X-Google-Smtp-Source: AMrXdXsiCpYBueXRJXFRX5Npqbo8GYiSXFBdZ7NEkiKJe6SGRWdI1eLl7vTMaNi/wuqjd3b8KHIOOw==
+X-Received: by 2002:a1c:4b04:0:b0:3c6:f0b8:74e6 with SMTP id y4-20020a1c4b04000000b003c6f0b874e6mr18597235wma.4.1672243537543;
+        Wed, 28 Dec 2022 08:05:37 -0800 (PST)
+Received: from localhost.localdomain ([2400:adc1:158:c700:5f84:8415:6e5a:7fea])
+        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm40491463wms.2.2022.12.28.08.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Dec 2022 08:05:36 -0800 (PST)
+From:   Ameer Hamza <ahamza@ixsystems.com>
+To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
+        awalker@ixsystems.com
+Subject: [PATCH] Add new open(2) flag - O_EMPTY_PATH
+Date:   Wed, 28 Dec 2022 21:02:49 +0500
+Message-Id: <20221228160249.428399-1-ahamza@ixsystems.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|SN7PR12MB7225:EE_
-X-MS-Office365-Filtering-Correlation-Id: 948b8e80-ce92-4cdd-4538-08dae8af3a18
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H7DyXmXM+zorboNo0B/jwMtwF+V1ntV9GwnAi8JMb+RJ33sE72lIyLRATFsj5moL/7KdY9V7MQZCGBlsLbKXBGkpuEgZFaAvZQb4WR6JQiFgOoGigF62ArjDmuW4E3RrCKcRXcNrAJIli4X9UHKeVHNJTWQGiv45ou0s4EBmZOHxtbuJNIsa3WKcBZE/ymgLODlvusJHhLxNHrkx1WJn8+9UAJLplcoKWjt71c7syY4zkz5PxcN+eu+rj8ldAiUIA59Z1AeU0ASwObqsAifsSigzWmv7XnAKJyYlNizwwGvqKuDSmAJgt8mXFRrhLcwVVQHDvn/baTLKib244vE8GgHMRVIKLZMldpp14StUcTfj23B0hbxnoS85Al+IGouOVYcpwvReWz4sf4YHXX+4kNZDj96lvz1F9mJDSAzBMo4Hn0U8vim9kkuG0C95P2RSZtcIvcnp7Lq2rVYYnHn7QV8DYhVXwPtFB62hdLkHzMG1WZYOOiINFpFnmRyfuHMwJNwdymNll4vhm7n/SygD6qV2TMqOEbvtSnKpvg+firqU+7x1OaaernVagiOIzsn7DVP0tIt5qZ4LBYz1S4vItOpwcypQTjYdaJJlXYwlNsLh1TqtydsLj3q+aVEY8bdrPeEcgfN61hBiPcwyqyTawIwUUmCfKbNstSNy/qNvD7L+Gq7CU5FcwQOl8XRs8B5BjRddOTsZGCU10eT9wifC3qBw0tEIo1WCxf40iKTnGXI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(376002)(346002)(366004)(451199015)(8676002)(4326008)(66946007)(66476007)(66556008)(8936002)(6512007)(44832011)(5660300002)(31686004)(7416002)(7406005)(41300700001)(83380400001)(2906002)(54906003)(36756003)(6486002)(478600001)(316002)(6666004)(31696002)(6506007)(53546011)(26005)(2616005)(186003)(38100700002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RkJGUHVhME1wNENTem54VXAydWZ2OWRVdGhUOHp5RGdiMjhUa1NLelc1VFA0?=
- =?utf-8?B?R1I5MFA3OFErVjNCSi9nUi8yWkg0U2RPTGdrdWQ2ZHhhaW8vYk9xUzJPSGkv?=
- =?utf-8?B?WHlOcW5ueTBMdVFGSWgrazZTZ0dwc2sxWGVicXY5YS9FVHZNZm9xUEg2STZl?=
- =?utf-8?B?NVY4dzhXdmRUbEkyQmNIV0RrOXhSblNFK28yMXRIQVYxQVFxdzZPNlVzWExk?=
- =?utf-8?B?dzlmL3lqT0lBU2E3aXN5UzhSUXRna3dqMGlUaTV1cE0zOG1vM2xBRFp6WW45?=
- =?utf-8?B?YXBqMXpSV0pCOWZDaFN5VWFBZmVwZnJDSGo3MmsvNGtSVlZrWnNIZ1E5MUZz?=
- =?utf-8?B?emlHbTVXU3VxRUlGZks3QVorclYrTW9tTGQ0Y1cwbVY5dXl3aUJQOGlBaHI5?=
- =?utf-8?B?YThZbVErV1JFQnpXV0VBazRNMnBNQkhJN2M1RUJ4eFBrYW9tVjRyczNkL3dD?=
- =?utf-8?B?cFljOGY2OXAzY29pLythUlpzbjVWZmcrKythOE5GYVh4RW12QnFIeVk5Z3lo?=
- =?utf-8?B?SG50S1IwOGF5SzdhaUVUWmo5YVpyRjBlblZPNFlNK0RQWVArVTcvQ01CU1dJ?=
- =?utf-8?B?SVJ1d2hHNEh6bUpUa3lEUTcwMHoreEpaR0VNVVdFY0Q3Y05VY05JZG1GNjJJ?=
- =?utf-8?B?RFdEUytzVi9lcmdLd2NRbElnNzh5MkJzZnFQQ1JwTUdPMytLb2xHVjR0Uml3?=
- =?utf-8?B?MzZCcGFEaTlrcDJyaDkrTlRuR01UOWlLKzc1ODd5Q0hPRVF3QncvQUs3YWp1?=
- =?utf-8?B?bG1EOUg1d3gwS29lN01RM3BHOVNXcnRrNk1CMmFxbU1Ud1BLOXRhd0RTVmEx?=
- =?utf-8?B?RDhjb042RjNVZEpSQ2ZxZ3hOSFBvU3NLMUIwaFNVaHZIUG1mblVhbjVRSm5x?=
- =?utf-8?B?aUhoa3RXbldrRlFRc2w4REQ1cXJDbDN5U0pxTGx4VVprbzVzQlNvUEtpK1NB?=
- =?utf-8?B?dVJTNXlxVU9UVzJHSmdQVUgrWE9kWGxpbm9hZXR3RWJCZmJlUDN2U2M1ZEdW?=
- =?utf-8?B?aWVCM3lheEpjN0VaclVHSVNJbXVnT3VvYjhkY25jSng0MlpBUmVLdjJweVBs?=
- =?utf-8?B?cUNVdTNCb1FTTVFuUGJyWUFLeUFuTnlrYnYvM3BDWEZEdGVWcmp3eFVDN0M0?=
- =?utf-8?B?UGdaOXZzU1RaRVRtdG4wT25nYldWY2xBVGdya0puUXJ4U3dzQjhLTVpua1Ja?=
- =?utf-8?B?WkNQVnVkakRQbm5tMWFhL3d2Z2pYNDNwUkZieUNPZGxUZzBHL2FRWXBkQjkv?=
- =?utf-8?B?S1NycEw3MFVVcm9kelZLei9DZktuRXY0MDg4THZsdHdGelh3OUkrQTZ4OGl1?=
- =?utf-8?B?UndrYWYyaGhKN2paMXJ2WCtHYS9UVnRGZ1RDVDY1aFJzSm5pV0trNzUzUHhk?=
- =?utf-8?B?QVhBTHF3ZW1vQU1jQkdGTHhCVHVqdE9IV0RpMytESUJZbG0vWElnTHhZUHQ3?=
- =?utf-8?B?bG5sSWs0NFVqbVFHdlhyNlNtRUFqYVJqYUE4eDNXOFJRMnUwd2lDMWxDZ1p3?=
- =?utf-8?B?WHFlQ2JIbkNsdFJ5MEFIS2Nhb3g5bmwzNy91UHhZK1ZjcDdxMkt3MFhEYnJl?=
- =?utf-8?B?TERmemVYMGh2WmlRcmh2TTlGUURRT3FuUkY1aFhUM0ZHT3JkK1QwTEJ1MVpH?=
- =?utf-8?B?VHZCSExKUW1hNHFraTZIQ2ttNEhONjZnNm5HTStXUHU1SHFlL0l2aldOMEE1?=
- =?utf-8?B?WUNhTEVQa1FRejBYeE5ONjZSUWFpKy9rTW1Dc0pyNjNzMTRqYmoyU3J5UjZk?=
- =?utf-8?B?TmZRTlQ5L0pmeTZmV1ZhTVloUFdhNG9hdnZhb2VzUncveVM0eW9wL3lSV2Jq?=
- =?utf-8?B?c3VYbjc4UFl5MityRWY2NzI5K2trZG5DTzg1MnRTbDZaSElCZXpmZWU1a2VX?=
- =?utf-8?B?QWZKdmI5UE0vSFdMd2RTd1kveGtJMVM1V0R4cFpqYkhtMGg2WmxTNmI0OHJs?=
- =?utf-8?B?UDBQdWVFY3dnUzVFRVpDTUltTzJ1WlZDcUlCTmZYQ25UQ0FpakhYd3NyM1hV?=
- =?utf-8?B?VVE4cXdwYUd4c0l1S1FrNUFWeHNra0tHWEhadUJXVWx4OTRaY0RwMHRReHI3?=
- =?utf-8?B?cUZCa2FOaVZPUXovd2svVlJoSExwdTI2ekhNclJtQU9idm5naVg2Y1FpeStq?=
- =?utf-8?Q?VG+s2Vu+/ZUUM78I1rIS87Tte?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 948b8e80-ce92-4cdd-4538-08dae8af3a18
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2022 08:40:52.2166
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Eq0kKngDfuE+f/qGhiLucn+/+yKhlB5YnkRnBjzWVG4iXQt248Dc+s0ExIBdaw5xzhybdwpwq/SsIIJtMqmWEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7225
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/19/2022 9:05 PM, Peter Zijlstra wrote:
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  drivers/iommu/amd/amd_iommu_types.h |    9 +++++++--
->  drivers/iommu/amd/iommu.c           |   10 ++++------
->  2 files changed, 11 insertions(+), 8 deletions(-)
-> 
-> --- a/drivers/iommu/amd/amd_iommu_types.h
-> +++ b/drivers/iommu/amd/amd_iommu_types.h
-> @@ -979,8 +979,13 @@ union irte_ga_hi {
->  };
->  
->  struct irte_ga {
-> -	union irte_ga_lo lo;
-> -	union irte_ga_hi hi;
-> +	union {
-> +		struct {
-> +			union irte_ga_lo lo;
-> +			union irte_ga_hi hi;
-> +		};
-> +		u128 irte;
-> +	};
->  };
->  
->  struct irq_2_irte {
-> --- a/drivers/iommu/amd/iommu.c
-> +++ b/drivers/iommu/amd/iommu.c
-> @@ -2992,10 +2992,10 @@ static int alloc_irq_index(struct amd_io
->  static int modify_irte_ga(struct amd_iommu *iommu, u16 devid, int index,
->  			  struct irte_ga *irte, struct amd_ir_data *data)
->  {
-> -	bool ret;
->  	struct irq_remap_table *table;
-> -	unsigned long flags;
->  	struct irte_ga *entry;
-> +	unsigned long flags;
-> +	u128 old;
->  
->  	table = get_irq_table(iommu, devid);
->  	if (!table)
-> @@ -3006,16 +3006,14 @@ static int modify_irte_ga(struct amd_iom
->  	entry = (struct irte_ga *)table->table;
->  	entry = &entry[index];
->  
-> -	ret = cmpxchg_double(&entry->lo.val, &entry->hi.val,
-> -			     entry->lo.val, entry->hi.val,
-> -			     irte->lo.val, irte->hi.val);
->  	/*
->  	 * We use cmpxchg16 to atomically update the 128-bit IRTE,
->  	 * and it cannot be updated by the hardware or other processors
->  	 * behind us, so the return value of cmpxchg16 should be the
->  	 * same as the old value.
->  	 */
-> -	WARN_ON(!ret);
-> +	old = entry->irte;
-> +	WARN_ON(!try_cmpxchg128(&entry->irte, &old, irte->irte));
+This patch adds a new flag O_EMPTY_PATH that allows openat and open
+system calls to open a file referenced by fd if the path is empty,
+and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+beneficial in some cases since it would avoid having to grant /proc
+access to things like samba containers for reopening files to change
+flags in a race-free way.
 
-Changes looks good to me. I have tested it on AMD system and it works fine.
+Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+---
+ fs/fcntl.c                             | 2 +-
+ fs/namei.c                             | 4 ++--
+ fs/open.c                              | 2 +-
+ include/linux/fcntl.h                  | 2 +-
+ include/uapi/asm-generic/fcntl.h       | 4 ++++
+ tools/include/uapi/asm-generic/fcntl.h | 4 ++++
+ 6 files changed, 13 insertions(+), 5 deletions(-)
 
--Vasant
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 146c9ab0cd4b..7aac650e16e2 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
+ 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+ 	 * is defined as O_NONBLOCK on some platforms and not on others.
+ 	 */
+-	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
++	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+ 		HWEIGHT32(
+ 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+ 			__FMODE_EXEC | __FMODE_NONOTIFY));
+diff --git a/fs/namei.c b/fs/namei.c
+index 309ae6fc8c99..2b2735af6d03 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
+ 	if (unlikely(!len)) {
+ 		if (empty)
+ 			*empty = 1;
+-		if (!(flags & LOOKUP_EMPTY)) {
++		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
+ 			putname(result);
+ 			return ERR_PTR(-ENOENT);
+ 		}
+@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+ 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
+ 		return ERR_PTR(-EAGAIN);
+ 
+-	if (!*s)
++	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
+ 		flags &= ~LOOKUP_RCU;
+ 	if (flags & LOOKUP_RCU)
+ 		rcu_read_lock();
+diff --git a/fs/open.c b/fs/open.c
+index 82c1a28b3308..b4ec054a418f 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
+ 	if (fd)
+ 		return fd;
+ 
+-	tmp = getname(filename);
++	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
+ 
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index a332e79b3207..bf8467bb0bd2 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -10,7 +10,7 @@
+ 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
+ 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+-	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
++	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
+ 
+ /* List of all valid flags for the how->resolve argument: */
+ #define VALID_RESOLVE_FLAGS \
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 1ecdb911add8..a03f4275517b 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index b02c8e0f4057..f32a81604296 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+-- 
+2.25.1
 
