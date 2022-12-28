@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E6D658518
-	for <lists+linux-arch@lfdr.de>; Wed, 28 Dec 2022 18:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C83E65858D
+	for <lists+linux-arch@lfdr.de>; Wed, 28 Dec 2022 19:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbiL1RJF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 28 Dec 2022 12:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59838 "EHLO
+        id S233372AbiL1SPG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 28 Dec 2022 13:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbiL1RIm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Dec 2022 12:08:42 -0500
-Received: from CY4PR02CU008-vft-obe.outbound.protection.outlook.com (mail-westcentralusazon11022023.outbound.protection.outlook.com [40.93.200.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1027ADDE;
-        Wed, 28 Dec 2022 09:07:57 -0800 (PST)
+        with ESMTP id S232778AbiL1SOf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 28 Dec 2022 13:14:35 -0500
+Received: from CY4PR02CU008-vft-obe.outbound.protection.outlook.com (mail-westcentralusazon11022020.outbound.protection.outlook.com [40.93.200.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963451740B;
+        Wed, 28 Dec 2022 10:14:33 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AgwrHrSgU8ttWlUqAcfZy4wdx+d08Lenej+Dzon0E29n5raIKGbH7OJP35g1YLMuGOmfqrwysFievJgYQ14SztNLo/AX/ec7ZtJcAvAOzbF8zjrvT5VdfAUbNsS1IGUzVvyhMIEd3mVs9U06+tHikz6GoPudSN3OocVelfj1TdxbhJ0IRpbPPswqywT0T1afDOxa+xdp/wOc4JcxeLkLSE5qntJWGBLZgRRNWgUd3uOGgdtj9y58cAPbYkkEyEo9OcfT9WdEedH2gqjxTcRuzg4kzhr4oaqtARHSeKaUmTnm0oOhymXznw91kmRWPLo37JK8a083vJ1fRAnxU3QLcg==
+ b=lmZbZlch/qWkoGyjNG6PL1iAd2WXs7KI1NJU+6xnQT/yc7QZnN9kftNGCHoIHYioLbtYYx0nckju9eGyQdVsBvIZewXP+ZroC47tnAWul+shU5PRFx4wWtKZXYNVE4c8oNPxg/fK2j7bchi0KRvHiaYSFDwltAYCV/rPq/BB+8INH4Pvz8dJBBX3UcG/qaxQi828fKOZpUD7e6HBRnLefr9Yt6waNChdfiv7hRcd1qd/iTe5GsSaz1u12lKKJvmneZz+ctma9j0uWRq2WakQTeU1sVNmtxPox938oQcW8/StT9m4l/V0N4VBsqlfzr/hJOBbiZWPKEZVB41RWrrsAg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=azhso2aaHy5shM/YK5f6s/YgFUa0cE7Xb6NU8XWfb3Q=;
- b=U3/JHkk233QaPYXT+ZKNjYKzw6SatnlAHvIyK2ZO+m5oh6vioZvge9LNL3KaO3GuwJ3O4WLSHKQv/NqMNSN+hgTNaqLtqK7ZjYox2bVkzJMHlZaHnPVlBqesIXUWOvLfeTrVLJtwiHTFfFiibLBzybLyHoOaosjQyoWBI4jay6RygNSsioHZEeFq+LlRl7n8qf3z/MxqknW8jRG9KtkQFLn2RCuwRGKfQd/rmnCvWbsiRkHofI53ckvy1q0jy6qmz9MRd72pBVbF68rkoYWm+D1BH4uIudi+SkxwvSlMiO/bqFtWBOVDYpcW2Hz+AmLgh3XQ15VjqlZHV0NHeWrpVw==
+ bh=OX5MgqDQHibVX6IFp0UYon6YakShHeMzzV08DLg0xD4=;
+ b=a1rvuKQsRU61R7xUosa9irzjZf1YzpF2MZYolQsF0QBOzIVlfz4VrBGGivwJQEcT4Zp+hMtKMtjsuzLNyOqEukbW3b+raLx+/L0Sry+D/RunmUSOhxGDc1vtgW1PKNz572r8jFEH26qr0zeP2rgvP8sPJtwOb1nG+e9apheiZzR71KzBPgpEpEXTBnXI80r5B5XrBQz/Pd8ovxoKCt4DTTnrJxb2ESpPzSRudgH36jw+C97mlady3GvIGfHTLLW4JpgsUzlG4BSoczY4kQPpFdj7w50h2IvifwItLafb8g4fg+QVrgR6YMOnzP6AHPMbdWAw7glYD4jKJGaB0lcVbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=azhso2aaHy5shM/YK5f6s/YgFUa0cE7Xb6NU8XWfb3Q=;
- b=Hq4QRDnx5od1JemNps62M1KqJE2sBfwvzIR9VW4HTvO72ToZsNJz2plCbVgoGtXpsap3ipmUlpWxAc0oqoImOvL2vgxpZBf4+vz5SNelCy+NwFxWaQeRadgjszavr8Qd3B8w1wPansVe3v7MucK0q6WHTnqpBOEIviNpjYZpkpg=
+ bh=OX5MgqDQHibVX6IFp0UYon6YakShHeMzzV08DLg0xD4=;
+ b=VwfT/gg5zCdiSS/ZwnsL2M87kcpf8FvmyNC5amVNfJgphZAyWBy14Nyn+7HjxTVlNdhKfR49MjmoX/UZsss2o5SKJ2XrAjI9tvteImQBT7v6DSgbFb7wyBgNhKadjz5L+N/wtM+IZrbpUnZoOcetRANyavwvDpMaHv/Mmf+PxRA=
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MN0PR21MB3048.namprd21.prod.outlook.com (2603:10b6:208:370::11) with
+ by CO1PR21MB1314.namprd21.prod.outlook.com (2603:10b6:303:151::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5966.17; Wed, 28 Dec
- 2022 17:07:46 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.6; Wed, 28 Dec
+ 2022 18:14:28 +0000
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::db1a:4e71:c688:b7b1]) by BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::db1a:4e71:c688:b7b1%7]) with mapi id 15.20.5986.007; Wed, 28 Dec 2022
- 17:07:46 +0000
+ 18:14:27 +0000
 From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         "luto@kernel.org" <luto@kernel.org>,
@@ -77,74 +77,74 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V2 12/18] x86/hyperv: Initialize cpu and memory for
- sev-snp enlightened guest
-Thread-Topic: [RFC PATCH V2 12/18] x86/hyperv: Initialize cpu and memory for
- sev-snp enlightened guest
-Thread-Index: AQHY+8niZ1Wgu656XEGB8vTldI/t8K6DuUnw
-Date:   Wed, 28 Dec 2022 17:07:45 +0000
-Message-ID: <BYAPR21MB1688F90B70C95A08DD019FB5D7F29@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: RE: [RFC PATCH V2 13/18] x86/hyperv: Add smp support for sev-snp
+ guest
+Thread-Topic: [RFC PATCH V2 13/18] x86/hyperv: Add smp support for sev-snp
+ guest
+Thread-Index: AQHY+8nhYPfPzHVb50aJgQd/QGobaK6DyQlg
+Date:   Wed, 28 Dec 2022 18:14:27 +0000
+Message-ID: <BYAPR21MB16880F8B27E5BE8D5A2EB884D7F29@BYAPR21MB1688.namprd21.prod.outlook.com>
 References: <20221119034633.1728632-1-ltykernel@gmail.com>
- <20221119034633.1728632-13-ltykernel@gmail.com>
-In-Reply-To: <20221119034633.1728632-13-ltykernel@gmail.com>
+ <20221119034633.1728632-14-ltykernel@gmail.com>
+In-Reply-To: <20221119034633.1728632-14-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=af6a1684-61d8-4b18-b0a1-6b6ae15c49a6;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-28T16:21:25Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=77d1214b-a7bf-4579-bd3b-1bcae01c8a75;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-28T17:17:47Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3048:EE_
-x-ms-office365-filtering-correlation-id: 857c18dc-7210-4f2a-0f46-08dae8f60a61
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CO1PR21MB1314:EE_
+x-ms-office365-filtering-correlation-id: e82954dc-214a-4ff6-1cc3-08dae8ff5b9b
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mkJgfEJSYV07O8SP6eMEDJLpaUnSIfVM/OM9QBaHsSjLOhpttf8eUFpQkYBNVWhtHparDEcDT5hpsRJ0ACArLlHFiqdRcrA+UwvkMDZu/3Sjhnmgcqsn7Ir+ytY+kS74ZXtvyv2uJTgq78KTyro4C+vM4yoAXVYcfp8w/bfAOjovShK5yITKpKQIe59jc3iOALVUCj2Xlq5IatDHzg/gVy8LFnXiQ0JW8J7E1SV6HOWPkiCyRv0I8LKqnIjttI1pxkJGDq45aDpLk2AsCrl3MC39t4sa4tOmCFgPfpb0Hwa4JQQSeKjpcVri5OSOOFgwmx6JVQt6xzUqPGLY9r0Jbls8mnNEEJb8mG2Iq4V33VOxo42luHsY405HuuF1U/QvzhZ9td0dblkeKU1zi3/CuKBl1JgKHkBLoE7CzcxMGUw9cHAryf/X1+fhXGTOA34wLcv4lfWEBxk3D/El2P8zZsd/amcZJ/rr52BMrPayHXLrFoXn5osyTdKdp10GPyzk+a7jmBMql5n1noMe1NYI/psq5wePy5J7UT2nhTI/7KqNhnPeZ+YS1DkKhszZWOUf2jaOiWU9/UUAIIPO2X3yGNq1LPoWtmX35gXtDeGGLGWistEt7LU9Dettz7cKZmkMFUNiy23DxOvIEA8CuCOAqcx6fnOnJ3JBzPZW6LJRK5QK7T0VGOjanipHZdZJ80VFW1cEdBsvmeiuAWCbcHEPxPv1y0dNlVYrazLjoxIYrxWJ6466Fj0NEoBbUqQMWURFtnEjO047gZj+flia9GQDQg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199015)(921005)(6506007)(9686003)(478600001)(71200400001)(110136005)(55016003)(33656002)(26005)(186003)(54906003)(316002)(86362001)(38070700005)(41300700001)(10290500003)(8936002)(2906002)(7696005)(52536014)(5660300002)(83380400001)(122000001)(7406005)(82950400001)(66476007)(4326008)(64756008)(66446008)(76116006)(66946007)(8676002)(82960400001)(66556008)(7416002)(38100700002)(8990500004);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: 4voCSqaX1xZONCesZOdiN8P9w77isBCcRqHnRkddQsk53zUy7bEtkK2i/KlB+8aMUNXs4S4X3kzpZSRrYX5nOiIbnJAQK0atswUwmJ2y5iFI5DqKiry82vKKwKhqHw07gLZHcjTrLh+5Ca4U8syQ54dsO9owzQtYZ7VE4Zs9EBfL7stDfBruZl7KlyhEIYPPEEucP1tYsF43RPcAY1eyTlZ3omVA4/149Gb3WxgVVkQPtUYJTYEyoRrPHT4tSlqfneeOGdCp2fh8rvXXFmKWqn4Ojj+5ZhYA2ybob8JbAEA+0fIs9N6CdsFeO+OtePZmpc9SF0Uv+NCEzMz/l5hTCdiFd1tgD1D4at1Z/Cyza3AnmWPICyex4X4rw9ljDfgcOuGA+iCRakm6xH0d1sWV1Rx//GAttp+68Ls85eWvX7r+Uv6jI7G4iqKSfDBhzMKAHhCrxmyDarADwEiIuUY/07xscDV/fAoptyBNkw3NXTCLsGV3CedaEsxRVIFliNfU1Ps45ksv2TBKYnsbTjyvYdavbSmd2GbpQXVgmT5JVZfvOO77INr2Hbcl2ovl9xeiDx6XwNL9EK6VR9pRyZ3GIRUsCgDlUJJhTjOf67yTcm/AVVCO+1JzxFVbyw6YjiQw+S3ykFGajk6Z2A1UWP1wi6liLxlJheJEwqF9iMMdjgVb5qFOLGkDpEqYrCz4mnSdEjk1cXRCZp73pWGJqFV8WvdjBxZhozeTj8MlmBNgJ8Y3YtNBO0xLvJp9fK71QBDqHvVdeIzr6WfMwHkbg8EBEg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(376002)(346002)(396003)(136003)(451199015)(83380400001)(86362001)(82950400001)(5660300002)(122000001)(38070700005)(41300700001)(2906002)(8936002)(921005)(8990500004)(38100700002)(82960400001)(30864003)(52536014)(7406005)(7416002)(7696005)(6506007)(26005)(186003)(316002)(4326008)(9686003)(8676002)(478600001)(71200400001)(110136005)(64756008)(66446008)(54906003)(10290500003)(66946007)(76116006)(66476007)(66556008)(55016003)(33656002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?E043tI2qIzzjuw+wfYNU7i6NjLEiT1br3wuhKoB3mnJ0oO3TLFIRcnXz8ZHU?=
- =?us-ascii?Q?NsEMnA/eGpVKwvyEa30L5azGDVE7pnMwl1P/6rX4Aib6zX70K//GBr/n6eZZ?=
- =?us-ascii?Q?c7udOFfn7IliKz3JPYUBalji4Ng1fBXHIekjB1gMcyLBnhjKmPrjm8kK3zGG?=
- =?us-ascii?Q?qjHgM94O8sg+kO11RvNGymSfiWOvz9Sk9goP7FHqbQ+uB5iHKo3rlGeEXaZM?=
- =?us-ascii?Q?FI6dsCbQYOqQx9Zf/r4Vpmo/X3ksiWrhgcPCmKQ3V2E41uGUKq3eW8is3CIK?=
- =?us-ascii?Q?4u0e/1jQJmyI2lJ99Bjd2nKaYPRIBH8SX+dPz6gwCEXQ2CTB9/Z9be0A3j1Z?=
- =?us-ascii?Q?RkrcyN7dj6owlhnfuXKqZPulU8ROJR2KSh2XvsD3Qf3BT9MRLwm/lL34o4YN?=
- =?us-ascii?Q?uf9OFCvfh4UJgAJQPxPTwS6wjbAfMXniDwk9Ush1kBeBLE2dw+BF3F+hhj+M?=
- =?us-ascii?Q?A7aU0It9IENsS468i1p7Uu9lF09HNeBJUyYOFIAHEE1r4wrLxHiT+J7IXoqd?=
- =?us-ascii?Q?71Kxe3FvoXsK2jgNYeOh/vnu4doVhawoMgr06ooj0+B7sh7IhcsMwqxE2sud?=
- =?us-ascii?Q?V/7SVSpvDZsUqKjSxFyayemsHpmwNeEMYtegeweYCFRJwXj4K+OuQOW5F7hh?=
- =?us-ascii?Q?AKHVODhwhFUN/C8tDWpirqG1TbTRyU3+gTf+ZHZvk0/XwykxRR5+dc1j+iab?=
- =?us-ascii?Q?vuqIB6aCX6/X7OrdyWLOB0dhdYutVUi4ocmcWQ86sLakrgS3hypSktuaoaP2?=
- =?us-ascii?Q?7K3AS4ePQr/ZH74yjY9TTKn+rNvXy9lTb7ex9QK63gZPh0r27LwCXw3L3TQ9?=
- =?us-ascii?Q?sl7SrZqUSBkkGAJ8gfhC6lyGpHUXX1xO5ikJSYlS9TGLv/70EJn0rJzDWvdF?=
- =?us-ascii?Q?c7BqlOvvOeZ5rkCsoCBlMJ1uBa/ghoFKl9EKUxlbT1RcWq7o5KBkbFPQRehT?=
- =?us-ascii?Q?19eR/Xpbxa3/jxKtZsRPgkyGlpr+Wk3+l9uP9M+5OmuJ1+JbFrL5oZE+KVBZ?=
- =?us-ascii?Q?Whr/SWuBgkyixNMzNac9l1ike0G93s/+wSmAhNC6zGqciO6rZn8IiCDVXVbz?=
- =?us-ascii?Q?/xTeWuWmZjcuTNE1U3ODXC3cQDvgFarnyDTS3tzES3Sy8U3WMXACOAFZhXTJ?=
- =?us-ascii?Q?JEbn7yzZWlqDsyyuRIPWqQDrP7vcchAAzX2hmKhlW/5ZGAAzekTJghaliVwH?=
- =?us-ascii?Q?9BwmpRrHxIDuKycFRP3rlJFruOZB3gzv7Yt3IqY5D6rl4rDjX0ywtvwzDyCm?=
- =?us-ascii?Q?3PrgEal30AgImgmtiNDmBhwxekM53Pkg6rsf7p/V74PthpR9SiOa5eo8qGF5?=
- =?us-ascii?Q?+Z60M8XLYaTSvtKTadJUlAQxwlKn42KcgT5ddivDMDqkQTMWQ0aiPPMpWd2t?=
- =?us-ascii?Q?PE6DDi6h/bjZNfwY32fhwFj9OOMniZ2ORgVwkqDo9wtv90dwc2mwgrGp5cZ0?=
- =?us-ascii?Q?IgTCyNAE1QuxQxEEJwRYif7h8wK8TEvaiRQ8dAcHQTiMKGZqftk5/yKpa05X?=
- =?us-ascii?Q?1YL2u6utF07vk4YO+tIoJhHKQKl6ZmnlX/TfZb4wU+GsFC0z56e3Tk9sNQLG?=
- =?us-ascii?Q?bcRCTzKXqsVwSoS9liyI6e0eLeeSSb1o43Xu64KZf7hYbsKGDKwwh4+QrpY+?=
- =?us-ascii?Q?EA=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?DlVpTQBIg5bOTnwAyHBCaRCEnZpVTLU6bc+qtlkljR580x/pRqi97zkxYQr2?=
+ =?us-ascii?Q?7f9Uz/O7RXJUdGK3QEs5/WYLWAp9gOVvm6eWdxbV5/1wgSscGiTWIJ+P8BwW?=
+ =?us-ascii?Q?BAVDwBAwvsFcCkdxJTShP+ewMHUWTTCkUaJt6po0oeGrLmhk/HC2sH5im7Dx?=
+ =?us-ascii?Q?oyjVk5iVNTlxgXczz9QgyDDL6gzCoGZg1ETZz42yzsQPHjVp+yqBlzoE4XEY?=
+ =?us-ascii?Q?2AmDIoAlk2IXvO+c1Av7Q70VLSJD5Y5fiuY3jfulrpByAQulGIy8u8XPww5F?=
+ =?us-ascii?Q?DFLbTAWsQdrrck5ad2l0dRlJ48NwxcaEoozfXwIT2Xjp09HhwQN74nj84HMu?=
+ =?us-ascii?Q?u4tZ4GBu0JGL3BghVWh/oPB8+Ql51EGAK+rDM1B4wVstwvwUmXY2ZsrIPGcj?=
+ =?us-ascii?Q?AN5QDhl6xRQcGyahFICY1OApVO4CaGTYj85pSHlJmvAATiNAB2UhI+5KuUR7?=
+ =?us-ascii?Q?RgOC2xcLNtJftI88g0Ujhq/mWPYmZ7fULZXwipDkkxGNDLBR0k31m2L4F7AQ?=
+ =?us-ascii?Q?fjNZHxpfpWj4pvOKHmuyIflWvXjMgLm+EJdMb/BLAiZ714qLWp/5o31Hg4Mt?=
+ =?us-ascii?Q?qkmzwQLwR2orWbtrY8zgjeLsAjZeEiuXoKDDQD4wAu6aKJEato20w5ghlfWW?=
+ =?us-ascii?Q?//TCqyPeMhiXtP2IPfJ6ZbwbjUSTVPMJG59tU0pMUBh5jtzTY6ZkbGvkIM0G?=
+ =?us-ascii?Q?mZhF+4tIYx7OvgsELj11RbtQCf5LXfikuNgsSe0r9mmg9jTfGv3E0RYMHyEv?=
+ =?us-ascii?Q?mTR/4ONWzaPWymGUVQB//nKJPig+SH6ttMrX6mjzIihLJJSKqk6qUIqQ79fR?=
+ =?us-ascii?Q?4PRMoeI6YvwjmbGIfJ1VEzhGZakeDrdz5VVafKGamdc7Lu6a2+QGzWxkq2jK?=
+ =?us-ascii?Q?8YJbICV2NIAfNPbzIbzaEhOHg/RS/eHGIDDP4xqLvjhBt9AJ5qeom0rQvsnP?=
+ =?us-ascii?Q?c2E64DZuzKCU1yES4nIFG9oVreSAaoefJiXUExYJvrG65MYGXsSGj8HBNyvk?=
+ =?us-ascii?Q?j6GT/eF6ZBoZpYFQEO/SFZM/REe1tIdhXx89+J1F0Vz5K5UkiuuxRY9vDygD?=
+ =?us-ascii?Q?U0U7D4wJIYR2V5CgLtD2CLfuud0H+LTiIwX+RETbFQTdSeB5T16mc8ilLsWh?=
+ =?us-ascii?Q?7YnrIMyER7NIAbAS5ghtJhFmi5gc1STzimOw1e7z2C6xQylPoV0ov1K0NdZn?=
+ =?us-ascii?Q?5DHu6UOooN/lhG3dIgBvf8jlug4WyMbDHIjSFDHIDNuR0euC53KqM06QZ9T2?=
+ =?us-ascii?Q?g2hLex+YZV3Du2fpF7qNneMJw6Qw6KYomUQzfC9NItIrn4q8JLJHjgAEv4D2?=
+ =?us-ascii?Q?QZH1NghYKGPPV7HajjTVgPA4yseQsraCbvGuUa3uod6Q9KGxNz3X+hnIGs/L?=
+ =?us-ascii?Q?4CGMn0sGY6IT4x9PRaGdwaSe6AVlekDasPFYDmlgheTMj4c4nQejr6Q1Rd6Q?=
+ =?us-ascii?Q?+AZHj6qf4621p30T3teWhAIPS1sUgNURw5i0oT6X1f7eQzK03a/HIxUPqDA8?=
+ =?us-ascii?Q?KT1JE9tEZgG57AxuzYFbRLeTHKV6sh2+kKiv5igHFWlwsvuvqMp7KAkdb9ae?=
+ =?us-ascii?Q?dsluQKsM3R756akuSDbSYSnKkMIDmSxwhD1I+EBDk3oeEl8K1r0hRV69jr50?=
+ =?us-ascii?Q?QQ=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 857c18dc-7210-4f2a-0f46-08dae8f60a61
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Dec 2022 17:07:45.9765
+X-MS-Exchange-CrossTenant-Network-Message-Id: e82954dc-214a-4ff6-1cc3-08dae8ff5b9b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Dec 2022 18:14:27.7386
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NIgOZ20dtPhijK6Bg11jpU7RllGVVF+Xn4FPvGjEx5Aw7J4rQVTO+XXydactMuzLqGWFCdMmEEAOar17pC3ma7CYTZYPU92o6iLSGcXaorw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3048
+X-MS-Exchange-CrossTenant-userprincipalname: BzgFSFh3f+obqevYRxBVNJAE8Ww0tywrcCPtWkSvJDZ5ZTmPr3H+gC6ipTQD5TUOlqN4F1faXcbS1E+qxOG6eSKEjNqBehYnjd3Wc2hTD6o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR21MB1314
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -158,188 +158,413 @@ X-Mailing-List: linux-arch@vger.kernel.org
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Friday, November 18, 2022 7:46=
  PM
 >=20
-> Read processor amd memory info from specific address which are
-> populated by Hyper-V. Initialize smp cpu related ops, pvalidate
-> system memory and add it into e820 table.
+> The wakeup_secondary_cpu callback was populated with wakeup_
+> cpu_via_vmgexit() which doesn't work for Hyper-V. Override it
+> with Hyper-V specific hook which uses HVCALL_START_VIRTUAL_
+> PROCESSOR hvcall to start AP with vmsa data structure.
 >=20
 > Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 > ---
->  arch/x86/kernel/cpu/mshyperv.c | 75 ++++++++++++++++++++++++++++++++++
->  1 file changed, 75 insertions(+)
+>  arch/x86/include/asm/sev.h        |  13 +++
+>  arch/x86/include/asm/svm.h        |  55 ++++++++++-
+>  arch/x86/kernel/cpu/mshyperv.c    | 147 +++++++++++++++++++++++++++++-
+>  include/asm-generic/hyperv-tlfs.h |  18 ++++
+>  4 files changed, 230 insertions(+), 3 deletions(-)
 >=20
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index 2ea4f21c6172..f0c97210c64a 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -34,6 +34,12 @@
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/numa.h>
->  #include <asm/coco.h>
-> +#include <asm/io_apic.h>
-> +#include <asm/svm.h>
-> +#include <asm/sev.h>
-> +#include <asm/sev-snp.h>
-> +#include <asm/realmode.h>
-> +#include <asm/e820/api.h>
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index ebc271bb6d8e..e34aaf730220 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -86,6 +86,19 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
 >=20
->  /* Is Linux running as the root partition? */
->  bool hv_root_partition;
-> @@ -253,6 +259,33 @@ static void __init hv_smp_prepare_cpus(unsigned int =
-max_cpus)
->  }
->  #endif
+>  #define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
 >=20
-> +static __init int hv_snp_set_rtc_noop(const struct timespec64 *now) { re=
-turn -EINVAL; }
-> +static __init void hv_snp_get_rtc_noop(struct timespec64 *now) { }
-
-These two functions duplicate set_rtc_noop() and get_rtc_noop() in x86_init=
-.c.  Couldn't
-the "static" be removed from these two, and just use them, like with x86_in=
-it_noop()?
-You'd also need to add extern statements in x86_init.h.   But making them l=
-ike the
-other *_init_noop() functions seems better than duplicating them.
-
-Also, it looks like these two functions might be called well after Linux is=
- booted, so
-having them marked as "__init" seems problematic.  The same is true for set=
-_rtc_noop()
-and get_rtc_noop().
-
-I'd suggesting breaking out this RTC handling into a separate patch in the =
-series.
-
-> +
-> +static u32 processor_count;
-> +
-> +static __init void hv_snp_get_smp_config(unsigned int early)
-> +{
-> +	if (!early) {
-> +		while (num_processors < processor_count) {
-> +			early_per_cpu(x86_cpu_to_apicid, num_processors) =3D num_processors;
-> +			early_per_cpu(x86_bios_cpu_apicid, num_processors) =3D num_processors=
-;
-> +			physid_set(num_processors, phys_cpu_present_map);
-> +			set_cpu_possible(num_processors, true);
-> +			set_cpu_present(num_processors, true);
-> +			num_processors++;
-> +		}
-> +	}
-> +}
-> +
-> +struct memory_map_entry {
-> +	u64 starting_gpn;
-> +	u64 numpages;
-> +	u16 type;
-> +	u16 flags;
-> +	u32 reserved;
+> +union sev_rmp_adjust {
+> +	u64 as_uint64;
+> +	struct {
+> +		unsigned long target_vmpl : 8;
+> +		unsigned long enable_read : 1;
+> +		unsigned long enable_write : 1;
+> +		unsigned long enable_user_execute : 1;
+> +		unsigned long enable_kernel_execute : 1;
+> +		unsigned long reserved1 : 4;
+> +		unsigned long vmsa : 1;
+> +	};
 > +};
 > +
->  static void __init ms_hyperv_init_platform(void)
->  {
->  	int hv_max_functions_eax;
-> @@ -260,6 +293,11 @@ static void __init ms_hyperv_init_platform(void)
->  	int hv_host_info_ebx;
->  	int hv_host_info_ecx;
->  	int hv_host_info_edx;
-> +	struct memory_map_entry *entry;
-> +	struct e820_entry *e820_entry;
-> +	u64 e820_end;
-> +	u64 ram_end;
-> +	u64 page;
+>  /* SNP Guest message request */
+>  struct snp_req_data {
+>  	unsigned long req_gpa;
+> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+> index 0361626841bc..fc54d3e7f817 100644
+> --- a/arch/x86/include/asm/svm.h
+> +++ b/arch/x86/include/asm/svm.h
+> @@ -328,8 +328,61 @@ struct vmcb_save_area {
+>  	u64 br_to;
+>  	u64 last_excp_from;
+>  	u64 last_excp_to;
+> -	u8 reserved_6[72];
+> +
+> +	/*
+> +	 * The following part of the save area is valid only for
+> +	 * SEV-ES guests when referenced through the GHCB or for
+> +	 * saving to the host save area.
+> +	 */
+
+It seems unexpected to add these SEV-ES specific fields to a structure
+with a comment that says for legacy and SEV-MEM guests. There's already
+a struct sev_es_save_area  with a comment that says for SEV-ES and
+SEV_SNP guests, and that struct seems to have most or all of what is being
+added here.  Hopefully there's a way to use struct sev_es_save_area,
+perhaps with some minor tweaks if necessary.
+
+> +	u8 reserved_7[72];
+>  	u32 spec_ctrl;		/* Guest version of SPEC_CTRL at 0x2E0 */
+> +	u8 reserved_7b[4];
+> +	u32 pkru;
+> +	u8 reserved_7a[20];
+> +	u64 reserved_8;		/* rax already available at 0x01f8 */
+> +	u64 rcx;
+> +	u64 rdx;
+> +	u64 rbx;
+> +	u64 reserved_9;		/* rsp already available at 0x01d8 */
+> +	u64 rbp;
+> +	u64 rsi;
+> +	u64 rdi;
+> +	u64 r8;
+> +	u64 r9;
+> +	u64 r10;
+> +	u64 r11;
+> +	u64 r12;
+> +	u64 r13;
+> +	u64 r14;
+> +	u64 r15;
+> +	u8 reserved_10[16];
+> +	u64 sw_exit_code;
+> +	u64 sw_exit_info_1;
+> +	u64 sw_exit_info_2;
+> +	u64 sw_scratch;
+> +	union {
+> +		u64 sev_features;
+> +		struct {
+> +			u64 sev_feature_snp			: 1;
+> +			u64 sev_feature_vtom			: 1;
+> +			u64 sev_feature_reflectvc		: 1;
+> +			u64 sev_feature_restrict_injection	: 1;
+> +			u64 sev_feature_alternate_injection	: 1;
+> +			u64 sev_feature_full_debug		: 1;
+> +			u64 sev_feature_reserved1		: 1;
+> +			u64 sev_feature_snpbtb_isolation	: 1;
+> +			u64 sev_feature_resrved2		: 56;
+> +		};
+> +	};
+> +	u64 vintr_ctrl;
+> +	u64 guest_error_code;
+> +	u64 virtual_tom;
+> +	u64 tlb_id;
+> +	u64 pcpu_id;
+> +	u64 event_inject;
+> +	u64 xcr0;
+> +	u8 valid_bitmap[16];
+> +	u64 x87_state_gpa;
+>  } __packed;
 >=20
->  #ifdef CONFIG_PARAVIRT
->  	pv_info.name =3D "Hyper-V";
-> @@ -477,6 +515,43 @@ static void __init ms_hyperv_init_platform(void)
->  	if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
->  		mark_tsc_unstable("running on Hyper-V");
+>  /* Save area definition for SEV-ES and SEV-SNP guests */
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
+v.c
+> index f0c97210c64a..b266f648e5cd 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -41,6 +41,10 @@
+>  #include <asm/realmode.h>
+>  #include <asm/e820/api.h>
 >=20
-> +	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-> +		x86_platform.legacy.reserve_bios_regions =3D 0;
-> +		x86_platform.set_wallclock =3D hv_snp_set_rtc_noop;
-> +		x86_platform.get_wallclock =3D hv_snp_get_rtc_noop;
+> +#define EN_SEV_SNP_PROCESSOR_INFO_ADDR	 0x802000
+> +#define HV_AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
+> +#define HV_AP_SEGMENT_LIMIT		0xffffffff
 
-Should x86_platform.legacy.rtc be set to 0 as well so that add_rtc_cmos()
-does not try to register the RTC as a platform device?
-
-> +		x86_init.resources.probe_roms =3D x86_init_noop;
-> +		x86_init.resources.reserve_resources =3D x86_init_noop;
-
-reserve_bios_regions, probe_roms, and reserve_resources are all being
-set to 0 or NULL.  Seems like there should be a comment or text in the
-commit message saying why.  I can work with you offline to write a concise
-message.
-
-> +		x86_init.mpparse.find_smp_config =3D x86_init_noop;
-> +		x86_init.mpparse.get_smp_config =3D hv_snp_get_smp_config;
-> +
-> +		/*
-> +		 * Hyper-V SEV-SNP enlightened guest doesn't support ioapic
-> +		 * and legacy APIC page read/write. Switch to hv apic here.
-> +		 */
-> +		disable_ioapic_support();
-> +		hv_apic_init();
-> +
-> +		processor_count =3D *(u32 *)__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
-
-EN_SEV_SNP_PROCESSOR_INFO_ADDR is not defined until Patch 13 of this series=
-.
+The above three definitions would benefit from some comments explaining
+what they are.
 
 > +
-> +		entry =3D (struct memory_map_entry *)(__va(EN_SEV_SNP_PROCESSOR_INFO_A=
-DDR)
-> +				+ sizeof(struct memory_map_entry));
+>  /* Is Linux running as the root partition? */
+>  bool hv_root_partition;
+>  struct ms_hyperv_info ms_hyperv;
+> @@ -232,6 +236,136 @@ static void __init hv_smp_prepare_boot_cpu(void)
+>  #endif
+>  }
+>=20
+> +static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted __aligned(PAGE_S=
+IZE);
+> +static u8 ap_start_stack[PAGE_SIZE] __aligned(PAGE_SIZE);
+> +
+> +int hv_snp_boot_ap(int cpu, unsigned long start_ip)
+> +{
+> +	struct vmcb_save_area *vmsa =3D (struct vmcb_save_area *)
+> +		__get_free_page(GFP_KERNEL | __GFP_ZERO);
+> +	struct desc_ptr gdtr;
+> +	u64 ret, retry =3D 5;
+> +	struct hv_enable_vp_vtl_input *enable_vtl_input;
+> +	struct hv_start_virtual_processor_input *start_vp_input;
+> +	union sev_rmp_adjust rmp_adjust;
+> +	void **arg;
+> +	unsigned long flags;
+> +
+> +	*(void **)per_cpu_ptr(hyperv_pcpu_input_arg, cpu) =3D ap_start_input_ar=
+g;
 
-This calculation isn't what I expected.  A brief summary of the layout of t=
-he memory
-at this fixed address would be helpful.  Evidently, the first 32 bits is th=
-e processor count,
-and then there are multiple memory map entries.  But why skip over an entir=
-e memory
-map entry to account for the 32-bit processor_count?
-
-Maybe the definition of struct memory_map_entry and EN_SEV_SNP_PROCESSOR_IN=
-FO_ADDR
-should go in arch/x86/include/asm/mshyperv.h, along with some explanatory c=
-omments.
+I don't understand the above.  It seems like the hyperv_pcpu_input_arg is b=
+eing
+set to the same static location for all APs.  The static location gets over=
+written in
+hv_common_cpu_init(), so maybe everything works.  But it seems like
+ap_start_input_arg can just be used directly in this function without havin=
+g to
+update hyperv_pcpu_input_arg.
 
 > +
-> +		for (; entry->numpages !=3D 0; entry++) {
-> +			e820_entry =3D &e820_table->entries[e820_table->nr_entries - 1];
-> +			e820_end =3D e820_entry->addr + e820_entry->size;
-> +			ram_end =3D (entry->starting_gpn + entry->numpages) * PAGE_SIZE;
+> +	hv_vp_index[cpu] =3D cpu;
+
+The hv_vp_index[cpu] is also updated in hv_common_cpu_init().  Is there a
+reason to initialize the value here?  This code also assumes that Linux CPU
+numbers and Hyper-V VP indices are the same.  I've always observed that the=
+y
+are indeed the same, but Hyper-V doesn't guarantee that.  Hence we set the
+value in hv_common_cpu_init() based on reading the per-CPU synthetic
+register that contains the VP index.
+
 > +
-> +			if (e820_end < entry->starting_gpn * PAGE_SIZE)
-> +				e820_end =3D entry->starting_gpn * PAGE_SIZE;
-> +			if (e820_end < ram_end) {
+> +	/* Prevent APs from entering busy calibration loop */
+> +	preset_lpj =3D lpj_fine;
 
-I'm curious about any gaps or overlaps with the existing e820 map entries. =
- What
-is expected?  Or is this code just trying to be defensive?
+I wonder if this is really needed.  In a SEV-SNP guest that isn't running o=
+n
+Hyper-V, how is this handled?
 
-> +				pr_info("Hyper-V: add [mem %#018Lx-%#018Lx]\n", e820_end, ram_end - =
-1);
+> +
+> +	/* Replace the provided real-mode start_ip */
+> +	start_ip =3D (unsigned long)secondary_startup_64_no_verify;
 
-Seems like the above message should include "e820" to make clear this is an=
- update
-to the e820 map.
+Any reason to update this global value?  The starting IP is passed to Hyper=
+-V
+via the VMSA, so it doesn't seem like a global update is needed.
 
-> +				e820__range_add(e820_end, ram_end - e820_end, E820_TYPE_RAM);
-> +				for (page =3D e820_end; page < ram_end; page +=3D PAGE_SIZE)
-> +					pvalidate((unsigned long)__va(page), RMP_PG_SIZE_4K, true);
-> +			}
-> +		}
+> +
+> +	native_store_gdt(&gdtr);
+> +
+> +	vmsa->gdtr.base =3D gdtr.address;
+> +	vmsa->gdtr.limit =3D gdtr.size;
+> +
+> +	asm volatile("movl %%es, %%eax;" : "=3Da" (vmsa->es.selector));
+> +	if (vmsa->es.selector) {
+> +		vmsa->es.base =3D 0;
+> +		vmsa->es.limit =3D HV_AP_SEGMENT_LIMIT;
+> +		vmsa->es.attrib =3D *(u16 *)(vmsa->gdtr.base + vmsa->es.selector + 5);
+> +		vmsa->es.attrib =3D (vmsa->es.attrib & 0xFF) | ((vmsa->es.attrib >> 4)=
+ & 0xF00);
+> +	}
 
-Does e820__update_table() need to be called once any range adds are complet=
-e?
-I don't know, so I'm just asking.
+The above "if" statement is repeated four times with different registers.  =
+Seems=20
+like a helper function could easily encapsulate it, though not the "asm vol=
+atile"
+statement.
 
+> +
+> +	asm volatile("movl %%cs, %%eax;" : "=3Da" (vmsa->cs.selector));
+> +	if (vmsa->cs.selector) {
+> +		vmsa->cs.base =3D 0;
+> +		vmsa->cs.limit =3D HV_AP_SEGMENT_LIMIT;
+> +		vmsa->cs.attrib =3D *(u16 *)(vmsa->gdtr.base + vmsa->cs.selector + 5);
+> +		vmsa->cs.attrib =3D (vmsa->cs.attrib & 0xFF) | ((vmsa->cs.attrib >> 4)=
+ & 0xF00);
 > +	}
 > +
->  	hardlockup_detector_disable();
->  }
+> +	asm volatile("movl %%ss, %%eax;" : "=3Da" (vmsa->ss.selector));
+> +	if (vmsa->ss.selector) {
+> +		vmsa->ss.base =3D 0;
+> +		vmsa->ss.limit =3D HV_AP_SEGMENT_LIMIT;
+> +		vmsa->ss.attrib =3D *(u16 *)(vmsa->gdtr.base + vmsa->ss.selector + 5);
+> +		vmsa->ss.attrib =3D (vmsa->ss.attrib & 0xFF) | ((vmsa->ss.attrib >> 4)=
+ & 0xF00);
+> +	}
+> +
+> +	asm volatile("movl %%ds, %%eax;" : "=3Da" (vmsa->ds.selector));
+> +	if (vmsa->ds.selector) {
+> +		vmsa->ds.base =3D 0;
+> +		vmsa->ds.limit =3D HV_AP_SEGMENT_LIMIT;
+> +		vmsa->ds.attrib =3D *(u16 *)(vmsa->gdtr.base + vmsa->ds.selector + 5);
+> +		vmsa->ds.attrib =3D (vmsa->ds.attrib & 0xFF) | ((vmsa->ds.attrib >> 4)=
+ & 0xF00);
+> +	}
+> +
+> +	vmsa->efer =3D native_read_msr(MSR_EFER);
+> +
+> +	asm volatile("movq %%cr4, %%rax;" : "=3Da" (vmsa->cr4));
+> +	asm volatile("movq %%cr3, %%rax;" : "=3Da" (vmsa->cr3));
+> +	asm volatile("movq %%cr0, %%rax;" : "=3Da" (vmsa->cr0));
+> +
+> +	vmsa->xcr0 =3D 1;
+> +	vmsa->g_pat =3D HV_AP_INIT_GPAT_DEFAULT;
+> +	vmsa->rip =3D (u64)start_ip;
+> +	vmsa->rsp =3D (u64)&ap_start_stack[PAGE_SIZE];
+> +
+> +	vmsa->sev_feature_snp =3D 1;
+> +	vmsa->sev_feature_restrict_injection =3D 1;
+> +
+> +	rmp_adjust.as_uint64 =3D 0;
+> +	rmp_adjust.target_vmpl =3D 1;
+> +	rmp_adjust.vmsa =3D 1;
+> +	ret =3D rmpadjust((unsigned long)vmsa, RMP_PG_SIZE_4K,
+> +			rmp_adjust.as_uint64);
+> +	if (ret !=3D 0) {
+> +		pr_err("RMPADJUST(%llx) failed: %llx\n", (u64)vmsa, ret);
+> +		return ret;
+> +	}
+> +
+> +	local_irq_save(flags);
+> +	arg =3D (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	if (unlikely(!*arg)) {
+> +		ret =3D -ENOMEM;
+> +		goto done;
+> +	}
+
+This code seems unnecessary.  Just use ap_start_input_arg directly.
+No need to disable interrupts.
+
+> +
+> +	if (ms_hyperv.vtl !=3D 0) {
+> +		enable_vtl_input =3D (struct hv_enable_vp_vtl_input *)*arg;
+> +		memset(enable_vtl_input, 0, sizeof(*enable_vtl_input));
+> +		enable_vtl_input->partitionid =3D -1;
+> +		enable_vtl_input->vpindex =3D cpu;
+> +		enable_vtl_input->targetvtl =3D ms_hyperv.vtl;
+> +		*(u64 *)&enable_vtl_input->context[0] =3D __pa(vmsa) | 1;
+> +
+> +		ret =3D hv_do_hypercall(HVCALL_ENABLE_VP_VTL, enable_vtl_input, NULL);
+> +		if (ret !=3D 0) {
+
+Use hv_result_success() to test the hypercall result.
+
+> +			pr_err("HvCallEnableVpVtl failed: %llx\n", ret);
+> +			goto done;
+> +		}
+> +	}
+> +
+> +	start_vp_input =3D (struct hv_start_virtual_processor_input *)*arg;
+> +	memset(start_vp_input, 0, sizeof(*start_vp_input));
+> +	start_vp_input->partitionid =3D -1;
+> +	start_vp_input->vpindex =3D cpu;
+> +	start_vp_input->targetvtl =3D ms_hyperv.vtl;
+> +	*(u64 *)&start_vp_input->context[0] =3D __pa(vmsa) | 1;
+> +
+> +	do {
+> +		ret =3D hv_do_hypercall(HVCALL_START_VIRTUAL_PROCESSOR,
+> +				      start_vp_input, NULL);
+> +	} while (ret =3D=3D HV_STATUS_TIME_OUT && retry--);
+
+Use hv_result() to check for HV_STATUS_TIME_OUT.
+
+> +
+> +	if (ret !=3D 0) {
+
+Use hv_result_success().
+
+> +		pr_err("HvCallStartVirtualProcessor failed: %llx\n", ret);
+> +		goto done;
+> +	}
+> +
+> +done:
+> +	local_irq_restore(flags);
+
+The entry to this function allocates a page for the VMSA. Does
+that page ever get freed?
+
+> +	return ret;
+> +}
+> +
+>  static void __init hv_smp_prepare_cpus(unsigned int max_cpus)
+>  {
+>  #ifdef CONFIG_X86_64
+> @@ -241,6 +375,16 @@ static void __init hv_smp_prepare_cpus(unsigned int =
+max_cpus)
+>=20
+>  	native_smp_prepare_cpus(max_cpus);
+>=20
+> +	/*
+> +	 *  Override wakeup_secondary_cpu callback for SEV-SNP
+> +	 *  enlightened guest.
+> +	 */
+> +	if (hv_isolation_type_en_snp())
+> +		apic->wakeup_secondary_cpu =3D hv_snp_boot_ap;
+> +
+> +	if (!hv_root_partition)
+> +		return;
+> +
+>  #ifdef CONFIG_X86_64
+>  	for_each_present_cpu(i) {
+>  		if (i =3D=3D 0)
+> @@ -489,8 +633,7 @@ static void __init ms_hyperv_init_platform(void)
+>=20
+>  # ifdef CONFIG_SMP
+>  	smp_ops.smp_prepare_boot_cpu =3D hv_smp_prepare_boot_cpu;
+> -	if (hv_root_partition)
+> -		smp_ops.smp_prepare_cpus =3D hv_smp_prepare_cpus;
+> +	smp_ops.smp_prepare_cpus =3D hv_smp_prepare_cpus;
+>  # endif
+>=20
+>  	/*
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
+rv-tlfs.h
+> index 6e2a090e2649..7072adbf5540 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -139,6 +139,7 @@ struct ms_hyperv_tsc_page {
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
+>  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+>  #define HVCALL_SEND_IPI				0x000b
+> +#define HVCALL_ENABLE_VP_VTL			0x000f
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX	0x0014
+>  #define HVCALL_SEND_IPI_EX			0x0015
+> @@ -156,6 +157,7 @@ struct ms_hyperv_tsc_page {
+>  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
+>  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+>  #define HVCALL_RETARGET_INTERRUPT		0x007e
+> +#define HVCALL_START_VIRTUAL_PROCESSOR		0x0099
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+>  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> @@ -763,6 +765,22 @@ struct hv_input_unmap_device_interrupt {
+>  	struct hv_interrupt_entry interrupt_entry;
+>  } __packed;
+>=20
+> +struct hv_enable_vp_vtl_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8 targetvtl;
+> +	u8 padding[3];
+> +	u8 context[0xe0];
+
+It looks like the 0xe0 comes from the Hyper-V TLFS, but your
+code is doing something different -- it's setting the VMSA address
+instead of putting the context values inline. =20
+
+> +} __packed;
+> +
+> +struct hv_start_virtual_processor_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8 targetvtl;
+> +	u8 padding[3];
+> +	u8 context[0xe0];
+
+Same here.
+
+> +} __packed;
+> +
+>  #define HV_SOURCE_SHADOW_NONE               0x0
+>  #define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
 >=20
 > --
 > 2.25.1
