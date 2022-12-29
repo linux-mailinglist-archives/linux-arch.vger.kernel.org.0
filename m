@@ -2,116 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0E5658C9F
-	for <lists+linux-arch@lfdr.de>; Thu, 29 Dec 2022 13:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C427658D91
+	for <lists+linux-arch@lfdr.de>; Thu, 29 Dec 2022 14:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiL2MSB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 29 Dec 2022 07:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
+        id S233573AbiL2Nkf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 29 Dec 2022 08:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiL2MSA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Dec 2022 07:18:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F9710B5B;
-        Thu, 29 Dec 2022 04:18:00 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 891F11EC034B;
-        Thu, 29 Dec 2022 13:17:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672316278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=wSRpswI9u60JfI6sWY2yfCWEP9K0fmolgwn8Wp8wVro=;
-        b=nUijUjCO3f0F3lKDnwUjShJLuzg8Te08KQWeSK1O8CYkaoOv4H1WdTTd60grAJwdH3ybYk
-        7d1+JxrHlDav78/VwKPK5g7hOs5SwfviZ7tTlbVb67rQZCREhd2nfhpmXX/gQBidKGyasA
-        T0pJccZK9EcweKSTC+UPU6YntjU/RDQ=
-Date:   Thu, 29 Dec 2022 13:17:48 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [Patch v4 04/13] x86/mm: Handle decryption/re-encryption of
- bss_decrypted consistently
-Message-ID: <Y62FbJ1rZ6TVUgml@zn.tnic>
-References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
- <1669951831-4180-5-git-send-email-mikelley@microsoft.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1669951831-4180-5-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233578AbiL2NkI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 29 Dec 2022 08:40:08 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B73517073;
+        Thu, 29 Dec 2022 05:37:37 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D47B95818EC;
+        Thu, 29 Dec 2022 08:36:54 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Dec 2022 08:36:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1672321014; x=1672328214; bh=lvF0202SLO
+        TzT8hbWZsF0xJL4uK7PlwT0Y7oJgXZa8M=; b=nLBnuo5MB8ib40z9s0xLWilN6X
+        /WXV1Zqm3SxWb/ruB/kuFnhd7wdVmFZDNY+gYekuqiDs/3zSKTYpDCWeSGomp00d
+        RPXAAm15lH7k/HckP7H41S1nTIssGFqnGEUCiAueXZhfqHbgvsgt2V/PjS5+24eK
+        AZrmaFdvUCvnyYqeGiXNjFNJi0Nt+kY19b5QAViPegESXxc5lkw5/x38rzXBkE3E
+        iMI/LuxJaJhu/PzxHG/w2bIL1OevR4DRQqXzZhgnnNrL6JlGZ2hfawrGtcjmfT5j
+        4NFrf2y4B2F4odzFC/4UEfyR9o8m6Tb2OX8h3xaP+cQbWCLPHyzz+PMCgWqQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672321014; x=1672328214; bh=lvF0202SLOTzT8hbWZsF0xJL4uK7
+        PlwT0Y7oJgXZa8M=; b=Jr7RZJ443Rh8Qo+omI31KtzhJxzRr/gmnxzyHbaByHQ4
+        STqt+Vc4cv+k0j8Dn73jUOrcx91eQtuXMzjq9aHKcghW7M7CCsGYLd01CHiSCaAJ
+        imgUtF7DvNdZzdYbFAKU118qzhWZ45FFNkuq01JO3G44O8dNsNM026hoPloISUUK
+        uLAuPol2cYeE+H6rlz4SUHqOMhoDdaT6jlH1aTcg49YvTbDlhhD5kYpLI5s8bJxE
+        VEdpvdUeBr2HOtE5jiNe1JbI9qe+BqGW8ENvyet3ESOPsDs6y7wveuue+TeGQ6OF
+        63+RmCQO5AYjeEdbwbZySMWQsDDFqh1CfW/rw6fbgQ==
+X-ME-Sender: <xms:9JetY317jGDP8GU6R9s5P3feYX4b7JYnXuYW9oxrPtX4neZSlQhn_g>
+    <xme:9JetY2H-9Ndmta7egwtoh9Qd7iKWQAb1a1Gysv2bD9db8yknC1mA_eZz9GoINFs1O
+    mxmkGXxxIrZhDgI32M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrieeggdehgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:9JetY37Np6b49AaL3STy0ZgjFyhCS7H5vsUZxB6VrMJPnKFk2gWG_Q>
+    <xmx:9JetY80eHbEBLheoSTsnWIIch3xp-KorU8P9-48XP3Ihye8VysyR4g>
+    <xmx:9JetY6EPUvpUXO4ud7kX_WBGQ-K_e16zVv9iLREEkWdF5C8vmD3ZiA>
+    <xmx:9petY6ndaNDL17h1d1VwhHZdsw1NSQgvJDADFPi05YBImlRtM5t8dA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 640B9B60086; Thu, 29 Dec 2022 08:36:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <1d88ba9f-5541-4b67-9cc8-a361eef36547@app.fastmail.com>
+In-Reply-To: <20221219154119.286760562@infradead.org>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.286760562@infradead.org>
+Date:   Thu, 29 Dec 2022 14:36:32 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
+        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com,
+        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [RFC][PATCH 07/12] percpu: Wire up cmpxchg128
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 07:30:22PM -0800, Michael Kelley wrote:
-> Current code in sme_postprocess_startup() decrypts the bss_decrypted
-> section when sme_me_mask is non-zero.  But code in
-> mem_encrypt_free_decrypted_mem() re-encrypts the unused portion based
-> on CC_ATTR_MEM_ENCRYPT.  In a Hyper-V guest VM using vTOM, these
-> conditions are not equivalent as sme_me_mask is always zero when
-> using vTOM.  Consequently, mem_encrypt_free_decrypted_mem() attempts
-> to re-encrypt memory that was never decrypted.
-> 
-> Fix this in mem_encrypt_free_decrypted_mem() by conditioning the
-> re-encryption on the same test for non-zero sme_me_mask.  Hyper-V
-> guests using vTOM don't need the bss_decrypted section to be
-> decrypted, so skipping the decryption/re-encryption doesn't cause
-> a problem.
+On Mon, Dec 19, 2022, at 16:35, Peter Zijlstra wrote:
+> In order to replace cmpxchg_double() with the newly minted
+> cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Lemme simplify the formulations a bit:
+Does this work on x86 chips without X86_FEATURE_CX16?
 
-"sme_postprocess_startup() decrypts the bss_decrypted ection when me_mask
-sme_is non-zero.
+As far as I can tell, the new percpu_cmpxchg128_op uses
+the cmpxchg16b instruction unconditionally without checking
+for the feature bit first, and is now used by this_cpu_cmpxchg()
+unconditionally as well.
 
-mem_encrypt_free_decrypted_mem() re-encrypts the unused portion based on
-CC_ATTR_MEM_ENCRYPT.
+This is fine for the moment if the only user is mm/slub.c
+and that retains the system_has_cmpxchg128() runtime check,
+but I think a better interface would be to guarantee that
+this_cpu_cmpxchg() always ends up either in a working
+inline asm or the generic fallback but not an invalid
+opcode.
 
-In a Hyper-V guest VM using vTOM, these conditions are not equivalent
-as sme_me_mask is always zero when using vTOM. Consequently,
-mem_encrypt_free_decrypted_mem() attempts to re-encrypt memory that was
-never decrypted.
+For consistency, I would also suggest this_cpu_cmpxchg() to
+take the same argument types as cmpxchg(): at most 'unsigned
+long' sized, with additional this_cpu_cmpxchg64() and
+this_cpu_cmpxchg128() macros that take fixed-size arguments.
+I have an older patch set that additionally converts all
+8-bit and 16-bit cmpxchg()/xchg() calls to cmpxchg_8()/
+xchg_8()/cmpxchg_16()/xchg_16() and and leaves only the
+fixed-32bit and variable typed 'unsigned long' sized
+callers for the weakly typed variant.
 
-So check sme_me_mask in mem_encrypt_free_decrypted_mem() too.
-
-Hyper-V guests using vTOM don't need the bss_decrypted section to be
-decrypted, so skipping the decryption/re-encryption doesn't cause a
-problem."
-
-> Fixes: e9d1d2bb75b2 ("treewide: Replace the use of mem_encrypt_active() with cc_platform_has()")
-
-So when you say Fixes - this is an issue only for vTOM-using VMs and
-before yours, there were none. And yours needs more enablement than just
-this patch.
-
-So does this one really need to be backported to stable@?
-
-I'm asking because there's AI which will pick it up based on this Fixes
-tag up but that AI is still not that smart to replace us all. :-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+       Arnd
