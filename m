@@ -2,223 +2,234 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A795A659AFD
-	for <lists+linux-arch@lfdr.de>; Fri, 30 Dec 2022 18:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FAA65A85E
+	for <lists+linux-arch@lfdr.de>; Sun,  1 Jan 2023 00:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbiL3R2f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 30 Dec 2022 12:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S235930AbiLaX6C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 31 Dec 2022 18:58:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235373AbiL3R2a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 30 Dec 2022 12:28:30 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CD81B9C2
-        for <linux-arch@vger.kernel.org>; Fri, 30 Dec 2022 09:28:27 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-45c11d1bfc8so304992667b3.9
-        for <linux-arch@vger.kernel.org>; Fri, 30 Dec 2022 09:28:27 -0800 (PST)
+        with ESMTP id S232533AbiLaX6B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 31 Dec 2022 18:58:01 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A341BF4A
+        for <linux-arch@vger.kernel.org>; Sat, 31 Dec 2022 15:57:59 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id ay40so17914886wmb.2
+        for <linux-arch@vger.kernel.org>; Sat, 31 Dec 2022 15:57:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G2Y6VcRBq2XXvYnNn6INIfCSNd6mGuYL6n4tFOfibLE=;
-        b=J4R3kOCa2nmQ1mcI7UP0KPzc+uR4rfqcj46l0ZlYzec7gofqlhuRV/+dwlZNp2dR9Z
-         hS7tVNvzP3SqyqR3Op6ztopBjvt9JS8oDK+QUkIwH2O5pWTwX/r12eCoWF+oqsprzo3q
-         Jo8ynpJl3ewcV8B5lirYViGFG47ImJIl5u2C4DIotDR8IQnxxBji7VlBZyuA4ibXXLPk
-         wfmqY9phaoP1u3U5fvwK6ZBKZcpZetDTYNrx09M3wAuIEWazIGy9xIfp+PRY7A1r99Jm
-         BXkujVCWkw/ksNI+hfLA+fJ6LfZywbO1ZJSz1O54Xu9rDEc8EeBbJ7LGo/c3JewY/t2U
-         8iXw==
+        d=ixsystems.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WccIxo2DJfoEJ5YBwAHVUk30lKwL/NF6q/shqTsMJ/g=;
+        b=PYD6Et/bUEgVTRKONHNLIX7Br1SoQK0HjrzczFsh/b64dhdRb+RXa2lfP3U09MVjh+
+         8QvH+g41Y2eOOAKAHLMfJ+0olZNzOtxWFnihyy1LZLSoYKVhClQRxA52aiPbQ27h192s
+         QBfqv4MetVxeBXsMm8vag5d/5f/MJqZP7H5aDFsTYgX5YJ/wQLScyVt2wkejd1j8LntM
+         RZFxnBqLX9DNcuZv3h+buaEphFbigGVSzE3/CMre5MTrICibRgCwDYsXcuINNxPWnZ83
+         Fvh3siYDtPPUe9Uh8YVHebdfiqSQruf8lAjV5jEU4PTxkGytB4uw5H/eO+ns1vWfe9Sb
+         xhDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G2Y6VcRBq2XXvYnNn6INIfCSNd6mGuYL6n4tFOfibLE=;
-        b=ofmAF4arM1lHquxqgWys0iW7+hSydpxLZ6mrNHvRNC1keUs9NcD709kNU7RpjPGSm5
-         qXYzUdCUtfNQPyT7Fwx2tbQj2keO8rCkbkjDJHag//ZRQ+BB01P3RZ2EdPT8lfbdQPLb
-         TWMwkkR4KJqC5mry9+agp2syDzJ65LcfejsVUtrQoxSgPwGzERkIcTic37PS+1rAjK9v
-         qhOxLfVNgQqg9CQdtLYl4TiMigcVIjb1AuaUOV+CVFLzfq4k0W/Lr7vKSkrliKXdNvRR
-         Qi5woUzrQs1BAEDBX6ZwG/10JcFwNho5nm/noDclukCmlkClPeN5vjxjzmHwKCrfELp/
-         CYaw==
-X-Gm-Message-State: AFqh2kpQBW0DNMA7YGUOlY64RiPjTJhcXJVxw3OtZojhIIqSbuKJsprW
-        N2CmPivKo9r+fPNOhD2YXPI2WaOrV0oCEIbh05U=
-X-Google-Smtp-Source: AMrXdXuiPQBzfkTubHuQ8Tlf9KyF7Ob2NmqvYsVv8ruhV5MDMhz/8q53qrM6rj6eUjfa1McDDka9iaYVNl/nrMDnA1Y=
-X-Received: by 2002:a81:1401:0:b0:3d0:c950:c581 with SMTP id
- 1-20020a811401000000b003d0c950c581mr2974411ywu.304.1672421306411; Fri, 30 Dec
- 2022 09:28:26 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WccIxo2DJfoEJ5YBwAHVUk30lKwL/NF6q/shqTsMJ/g=;
+        b=s4kKC8h7U2ja5SZwYIxsGIHVWv9PXhofLaBeQv4F6XFCsh0mYCF3idsAN08h8+3GNs
+         MYrMwNw9jzWgkaSip6wyOOymbeAO2qJufYZtsD5ZVIVx4Eis5zwXrbOwJOYv/M8CGh+Q
+         Y0qMX4SGFXu+Ck94YLVgAvAhchmo3ckX2T0cwZmsSxGUDZ6V6DPXwheucPcvz0rsnMQR
+         3/fT8MzySLXNQp24ZWFYFW4PFSOO94fXzVo+x4mPXAWCNLxQdf7e6oC+r1wt4VaA6ziW
+         aYD9lmWK5zwHRtnYJ7dNSnMGXbUMHITU3YA6XLNCDkMUTg168I/G23+73ncEkk0UhiAK
+         sv1w==
+X-Gm-Message-State: AFqh2kpWi0jgY7Yj6Guk433+y+hgbguwAzvbhCXeo9cp1xZQ8U4XREBz
+        hoW49IRYTHRyOXRqpCW04Q7+6A==
+X-Google-Smtp-Source: AMrXdXtRNBDndHkFdZDBELgeq2/SNgFiLZ/gcwKGh8wlH1+fUQyak3Pd1DeT6ZQr37/CBJzorwy7xA==
+X-Received: by 2002:a05:600c:3509:b0:3cf:ae53:9193 with SMTP id h9-20020a05600c350900b003cfae539193mr25892482wmq.39.1672531078140;
+        Sat, 31 Dec 2022 15:57:58 -0800 (PST)
+Received: from localhost.localdomain ([2400:adc1:158:c700:fcdc:d674:179b:c287])
+        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm56066592wms.2.2022.12.31.15.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Dec 2022 15:57:57 -0800 (PST)
+From:   Ameer Hamza <ahamza@ixsystems.com>
+To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
+        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
+        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, davem@davemloft.net
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
+        awalker@ixsystems.com, sparclinux@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org
+Subject: [PATCH v2] Add new open(2) flag - O_EMPTY_PATH
+Date:   Sun,  1 Jan 2023 04:56:18 +0500
+Message-Id: <20221231235618.117201-1-ahamza@ixsystems.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <202212310842.ysbymPHY-lkp@intel.com>
+References: <202212310842.ysbymPHY-lkp@intel.com>
 MIME-Version: 1.0
-References: <Y6S1/kROC0p5CboA@curiosity> <CA+V-a8u0qUF81RUTF9+4T4F1GxW3=4P7RMTTjjsaMq4MiiQSMQ@mail.gmail.com>
- <Y6TIywUWZ3nrPeon@curiosity> <CA+V-a8tMQ-RaaXD5209HxT77VoiOanvjdbFCPsdWpDYswuY+ZQ@mail.gmail.com>
- <Y6TYNBgqgWuxhhHJ@curiosity> <CA+V-a8tDi79M8cS7rVoby3sopQ4AwXXcNggfHYXW-W2wtEgQ4g@mail.gmail.com>
- <Y6Xjwg1dDYnwRbni@curiosity> <CA+V-a8uwmwriyoSZ1ftVQ1L1_uTL3k=VSs7Cid7++XEshq1RsQ@mail.gmail.com>
- <Y6bm8KIsHhFq1RFR@curiosity> <CA+V-a8scDWmqqAXp1hOUYFcn-4Zaj3MBqeQs7QZy5WBwyXPjxQ@mail.gmail.com>
- <Y68XeN4zJdmMP8NC@curiosity>
-In-Reply-To: <Y68XeN4zJdmMP8NC@curiosity>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 30 Dec 2022 17:28:00 +0000
-Message-ID: <CA+V-a8vx8yxnaqDumvy_EwNBBgi03QCAu6Gw+t8DNQpWKgcsew@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] riscv: mm: notify remote harts about mmu cache updates
-To:     Sergey Matyukevich <geomatsi@gmail.com>
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Guo Ren <guoren@kernel.org>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <Conor.Dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Sergey,
+This patch adds a new flag O_EMPTY_PATH that allows openat and open
+system calls to open a file referenced by fd if the path is empty,
+and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
+beneficial in some cases since it would avoid having to grant /proc
+access to things like samba containers for reopening files to change
+flags in a race-free way.
 
-On Fri, Dec 30, 2022 at 4:53 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
->
-> Hi Prabhakar,
->
-> > Hi Sergey,
-> >
-> > On Sat, Dec 24, 2022 at 11:48 AM Sergey Matyukevich <geomatsi@gmail.com> wrote:
-> > >
-<snip>
-> > > > > > > > > Thanks for the script and config. Could you please also share the
-> > > > > > > > > following information:
-> > > > > > > > > - how many cores your system has
-> > > > > > > > The Renesas RZ/Five SoC has a single Andes AX45MP core.
-> > > > > > > >
-> > > > > > > > > - does your system support ASID
-> > > > > > > > >
-> > > > > > > > With a quick look at [0] It does support ASID, unless there is a way
-> > > > > > > > to disable it.
-> > > > > > > >
-> > > > > > > > [0] http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-> > > > > > >
-> > > > > > > So you have a single-core system, but your kernel configuration enables
-> > > > > > > CONFIG_SMP. Additional 'deferred TLB flush' logic is dropped at build
-> > > > > > > time if CONFIG_SMP is disabled. On the other hand, system should not
-> > > > > > > fail that way even if SMP is enabled.
-> > > > > > >
-> > > > > > I enabled CONFIG_SMP while doing some testing of PMA code and indeed
-> > > > > > enabling this config should not introduce a failure.
-> > > > > >
-> > > > > > > Let me double-check if anything can go wrong if cpumasks may have only
-> > > > > > > a single cpu. Another suspect is a change in update_mmu_cache: probably
-> > > > > > > making it asid-specific (and thus more granular) was a bad idea.
-> > > > > > >
-> > > > > > Thanks.
-> > > > > >
-> > > > > > BTW I tested the patch [0] which you pointed out and that fixes the
-> > > > > > issues seen earlier.
-> > > > > >
-> > > > > > [0] https://patchwork.kernel.org/project/linux-riscv/patch/20221111075902.798571-1-guoren@kernel.org/
-> > > > >
-> > > > > All looks good with cpumasks in the single-core case. So deferred TLB
-> > > > > flush logic is not even executed in your case. So the root cause
-> > > > > should be in update_mmu_cache change.
-> > > > >
-> > > > > May I ask you to repeat the original emmc test on your platform from
-> > > > > for-next (i.e. with [0] and without [1]) with the following partial revert:
-> > > > >
-> > > > > : diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > > > > : index ec6fb83349ce..92ec2d9d7273 100644
-> > > > > : --- a/arch/riscv/include/asm/pgtable.h
-> > > > > : +++ b/arch/riscv/include/asm/pgtable.h
-> > > > > : @@ -415,7 +415,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
-> > > > > :        * Relying on flush_tlb_fix_spurious_fault would suffice, but
-> > > > > :        * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
-> > > > > :        */
-> > > > > : -     flush_tlb_page(vma, address);
-> > > > > : +     local_flush_tlb_page(address);
-> > > > > :  }
-> > > > > :
-> > > > > :  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
-> > > > >
-> > > > I tested your above proposed changes and I am no longer seeing an
-> > > > issue on my platform.
-> > >
-> > > Great. I will send a fixup after I double-check on several other
-> > > hardware platforms. Thanks for testing !
-> > >
-> > Actuall, I did hit an issue now with your proposed changes with bonnie++ again!
-> >
-> > [ 1873.355279] EXT4-fs (sda1): mounted filesystem
-> > 050ad3b9-b571-4b4c-9500-db56feed01ab with ordered data mode. Quota
-> > mode: disabled.
-> > Using uid:0, gid:0.
-> > Writing with putc()...done
-> > Writing intelligently...done
-> > Rewriting...done
-> > Reading with getc()...[ 2682.180114] sd-resolve[126]: unhandled signal
-> > 11 code 0x1 at 0x0000000000000000 in libc-2.28.so[3fbe503000+ff000]
-> > [ 2682.190552] CPU: 0 PID: 126 Comm: sd-resolve Not tainted
-> > 6.2.0-rc1-00111-g7bcd7d932cf6 #189
-> > [ 2682.198917] Hardware name: Renesas SMARC EVK based on r9a07g043f01 (DT)
-> > [ 2682.205536] epc : 0000003fbe568004 ra : 0000003fbe569440 sp :
-> > 0000003fbe417b10
-> > [ 2682.212770]  gp : 0000002ab8d18b88 tp : 0000003fbe41e810 t0 :
-> > 0000000000000022
-> > [ 2682.219987]  t1 : 0000003fbdbf1e4c t2 : 0000003fbe417290 s0 :
-> > 00000000000000e0
-> > [ 2682.227219]  s1 : 0000000000000000 a0 : 0000000000000000 a1 :
-> > 8080808080808080
-> > [ 2682.234433]  a2 : 0000003fb80019f0 a3 : 0000003fbe41e8f0 a4 :
-> > 0000000000000008
-> > [ 2682.241648]  a5 : 0000000000000000 a6 : fefefefefefefeff a7 :
-> > 0000000000000039
-> > [ 2682.248863]  s2 : 0000003fbe417b37 s3 : 0000003fbe417e48 s4 :
-> > 0000000000000001
-> > [ 2682.256082]  s5 : 0000003fbe417eb0 s6 : 00000000000000e0 s7 :
-> > 0000003fbdbf2f2a
-> > [ 2682.263297]  s8 : ffffffffffffffff s9 : fffffffffffffffd s10:
-> > ffffffffffffffff
-> > [ 2682.270511]  s11: fffffffffffffffe t3 : 0000000000000000 t4 :
-> > 000000077ce2ea37
-> > [ 2682.277733]  t5 : 000000000000003f t6 : 0000000000000000
-> > [ 2682.283046] status: 0000000200004020 badaddr: 0000000000000000
-> > cause: 000000000000000d
-> > [ 2682.441183] audit: type=1701 audit(1671222620.403:17):
-> > auid=4294967295 uid=995 gid=994 ses=4294967295 pid=124
-> > comm="sd-resolve" exe="/lib/systemd/systemd-timesyncd" sig=11 res=1
-> > done
-> > Reading intelligently...done
-> >
-> > Let me know if you want me to share my branch.
->
-> Hmmm... I assume you hit the issue after you applied suggested partial
-> revert for the update_mmu_cache function. If so, then your issue is not
-> related to the the remaining part (deferred local_flush_tlb_all_asid)
-> of the commit 4bd1d80efb5a. This is because that flush is not executed
-> on a single-core system, even if CONFIG_SMP is enabled.
->
-Yes this issue was seen after the partial revert [0] as per your suggestion.
+Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
 
-> Could you please run your tests for a while on your branch with reverted
-> commit 4bd1d80efb5a ("riscv: mm: notify remote harts about mmu cache
-> updates"). It looks like the change in the function update_mmu_cache
-> from the commit 4bd1d80efb5a increases the probability of crash, but
-> there is also something else in the new kernel that bites your system.
->
-Sure, I'll re-run the tests with the complete revert of 4bd1d80efb5a
-and check the status of it.
+---
+Change in v2:
+add nonconflicting values for O_EMPTY_PATH on architectures
+where default conflicts with existing flags.
+---
+---
+ arch/alpha/include/uapi/asm/fcntl.h    | 1 +
+ arch/parisc/include/uapi/asm/fcntl.h   | 1 +
+ arch/sparc/include/uapi/asm/fcntl.h    | 1 +
+ fs/fcntl.c                             | 2 +-
+ fs/namei.c                             | 4 ++--
+ fs/open.c                              | 2 +-
+ include/linux/fcntl.h                  | 2 +-
+ include/uapi/asm-generic/fcntl.h       | 4 ++++
+ tools/include/uapi/asm-generic/fcntl.h | 4 ++++
+ 9 files changed, 16 insertions(+), 5 deletions(-)
 
-> Yes, could you please share your branch. I will take a look and run
-> some tests on different boards that I have at hand.
->
-Sure, I have pushed a branch [1] for you to have a look.
+diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
+index 50bdc8e8a271..ea08341bb9fe 100644
+--- a/arch/alpha/include/uapi/asm/fcntl.h
++++ b/arch/alpha/include/uapi/asm/fcntl.h
+@@ -34,6 +34,7 @@
+ 
+ #define O_PATH		040000000
+ #define __O_TMPFILE	0100000000
++#define O_EMPTY_PATH	0200000000
+ 
+ #define F_GETLK		7
+ #define F_SETLK		8
+diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/uapi/asm/fcntl.h
+index 03dee816cb13..e6144823ee5b 100644
+--- a/arch/parisc/include/uapi/asm/fcntl.h
++++ b/arch/parisc/include/uapi/asm/fcntl.h
+@@ -19,6 +19,7 @@
+ 
+ #define O_PATH		020000000
+ #define __O_TMPFILE	040000000
++#define O_EMPTY_PATH	0100000000
+ 
+ #define F_GETLK64	8
+ #define F_SETLK64	9
+diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
+index 67dae75e5274..08aed1e2b32d 100644
+--- a/arch/sparc/include/uapi/asm/fcntl.h
++++ b/arch/sparc/include/uapi/asm/fcntl.h
+@@ -37,6 +37,7 @@
+ 
+ #define O_PATH		0x1000000
+ #define __O_TMPFILE	0x2000000
++#define O_EMPTY_PATH	0x4000000
+ 
+ #define F_GETOWN	5	/*  for sockets. */
+ #define F_SETOWN	6	/*  for sockets. */
+diff --git a/fs/fcntl.c b/fs/fcntl.c
+index 146c9ab0cd4b..7aac650e16e2 100644
+--- a/fs/fcntl.c
++++ b/fs/fcntl.c
+@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
+ 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
+ 	 * is defined as O_NONBLOCK on some platforms and not on others.
+ 	 */
+-	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
++	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
+ 		HWEIGHT32(
+ 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
+ 			__FMODE_EXEC | __FMODE_NONOTIFY));
+diff --git a/fs/namei.c b/fs/namei.c
+index 309ae6fc8c99..2b2735af6d03 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
+ 	if (unlikely(!len)) {
+ 		if (empty)
+ 			*empty = 1;
+-		if (!(flags & LOOKUP_EMPTY)) {
++		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
+ 			putname(result);
+ 			return ERR_PTR(-ENOENT);
+ 		}
+@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
+ 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
+ 		return ERR_PTR(-EAGAIN);
+ 
+-	if (!*s)
++	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
+ 		flags &= ~LOOKUP_RCU;
+ 	if (flags & LOOKUP_RCU)
+ 		rcu_read_lock();
+diff --git a/fs/open.c b/fs/open.c
+index 82c1a28b3308..b4ec054a418f 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
+ 	if (fd)
+ 		return fd;
+ 
+-	tmp = getname(filename);
++	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
+ 	if (IS_ERR(tmp))
+ 		return PTR_ERR(tmp);
+ 
+diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+index a332e79b3207..bf8467bb0bd2 100644
+--- a/include/linux/fcntl.h
++++ b/include/linux/fcntl.h
+@@ -10,7 +10,7 @@
+ 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
+ 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
+ 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
+-	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
++	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
+ 
+ /* List of all valid flags for the how->resolve argument: */
+ #define VALID_RESOLVE_FLAGS \
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 1ecdb911add8..a03f4275517b 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index b02c8e0f4057..f32a81604296 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -89,6 +89,10 @@
+ #define __O_TMPFILE	020000000
+ #endif
+ 
++#ifndef O_EMPTY_PATH
++#define O_EMPTY_PATH	040000000
++#endif
++
+ /* a horrid kludge trying to make sure that this will fail on old kernels */
+ #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
+ #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
+-- 
+2.25.1
 
-[0] https://github.com/prabhakarlad/linux/commit/58f0c079b2f839e635a77ded5505de5b7de05dbc
-[1] https://github.com/prabhakarlad/linux/commits/rzfive-cmo-bisect
-
-Cheers,
-Prabhakar
