@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FAA65A85E
-	for <lists+linux-arch@lfdr.de>; Sun,  1 Jan 2023 00:58:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F5065AA62
+	for <lists+linux-arch@lfdr.de>; Sun,  1 Jan 2023 16:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235930AbiLaX6C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 31 Dec 2022 18:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S229542AbjAAPia (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 1 Jan 2023 10:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbiLaX6B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 31 Dec 2022 18:58:01 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A341BF4A
-        for <linux-arch@vger.kernel.org>; Sat, 31 Dec 2022 15:57:59 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id ay40so17914886wmb.2
-        for <linux-arch@vger.kernel.org>; Sat, 31 Dec 2022 15:57:59 -0800 (PST)
+        with ESMTP id S231450AbjAAPi2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 Jan 2023 10:38:28 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD51558F
+        for <linux-arch@vger.kernel.org>; Sun,  1 Jan 2023 07:38:25 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so13323138wmk.4
+        for <linux-arch@vger.kernel.org>; Sun, 01 Jan 2023 07:38:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ixsystems.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WccIxo2DJfoEJ5YBwAHVUk30lKwL/NF6q/shqTsMJ/g=;
-        b=PYD6Et/bUEgVTRKONHNLIX7Br1SoQK0HjrzczFsh/b64dhdRb+RXa2lfP3U09MVjh+
-         8QvH+g41Y2eOOAKAHLMfJ+0olZNzOtxWFnihyy1LZLSoYKVhClQRxA52aiPbQ27h192s
-         QBfqv4MetVxeBXsMm8vag5d/5f/MJqZP7H5aDFsTYgX5YJ/wQLScyVt2wkejd1j8LntM
-         RZFxnBqLX9DNcuZv3h+buaEphFbigGVSzE3/CMre5MTrICibRgCwDYsXcuINNxPWnZ83
-         Fvh3siYDtPPUe9Uh8YVHebdfiqSQruf8lAjV5jEU4PTxkGytB4uw5H/eO+ns1vWfe9Sb
-         xhDQ==
+        bh=4e5rsOVvoPsB8/0IGCnvHUCFwzCz86SgBX4arQD6Bsk=;
+        b=iIz+0dD+Xqd9D7Aclt4WbtMz7FB/uNMAN19vTh+6DwoOScIf+jA5tIb6pl1sZbrOaW
+         XlLYQHnQ/0PyPvz0qvTAbzXKi09qSjTBYmGSnxvzBbdFRVbIvsgwji7HfzL/dg1Gk0Y+
+         V3CYrx7vxebfUhVMmDvLcttZh71xYJ2bXwn2IQvA2brc4xEH/FpvfiNOKwmIE+3+/3a3
+         aGxfOrAg6fPjQzN7n5StTR3W7Zq9HRIvBP9hKK/qbFPVmelZ5Bqrz5fO21NfQtRIVsHM
+         2C27VpRX929Xk3Bf3fEht9dzD2A4sp2tATdthjFDTt8SQ6Z6iV058eZOPa8Nj3UL5qEA
+         EvOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WccIxo2DJfoEJ5YBwAHVUk30lKwL/NF6q/shqTsMJ/g=;
-        b=s4kKC8h7U2ja5SZwYIxsGIHVWv9PXhofLaBeQv4F6XFCsh0mYCF3idsAN08h8+3GNs
-         MYrMwNw9jzWgkaSip6wyOOymbeAO2qJufYZtsD5ZVIVx4Eis5zwXrbOwJOYv/M8CGh+Q
-         Y0qMX4SGFXu+Ck94YLVgAvAhchmo3ckX2T0cwZmsSxGUDZ6V6DPXwheucPcvz0rsnMQR
-         3/fT8MzySLXNQp24ZWFYFW4PFSOO94fXzVo+x4mPXAWCNLxQdf7e6oC+r1wt4VaA6ziW
-         aYD9lmWK5zwHRtnYJ7dNSnMGXbUMHITU3YA6XLNCDkMUTg168I/G23+73ncEkk0UhiAK
-         sv1w==
-X-Gm-Message-State: AFqh2kpWi0jgY7Yj6Guk433+y+hgbguwAzvbhCXeo9cp1xZQ8U4XREBz
-        hoW49IRYTHRyOXRqpCW04Q7+6A==
-X-Google-Smtp-Source: AMrXdXtRNBDndHkFdZDBELgeq2/SNgFiLZ/gcwKGh8wlH1+fUQyak3Pd1DeT6ZQr37/CBJzorwy7xA==
-X-Received: by 2002:a05:600c:3509:b0:3cf:ae53:9193 with SMTP id h9-20020a05600c350900b003cfae539193mr25892482wmq.39.1672531078140;
-        Sat, 31 Dec 2022 15:57:58 -0800 (PST)
-Received: from localhost.localdomain ([2400:adc1:158:c700:fcdc:d674:179b:c287])
-        by smtp.googlemail.com with ESMTPSA id l42-20020a05600c1d2a00b003cfbbd54178sm56066592wms.2.2022.12.31.15.57.53
+        bh=4e5rsOVvoPsB8/0IGCnvHUCFwzCz86SgBX4arQD6Bsk=;
+        b=WGMAABvSx3xmeOE4r/KV8u7t1AdeWsdDsxAET50EeImu0dcMCcmEC5Mqb/tsCDtt4+
+         NFOhHgCZCJDSPLmsUO6SSEAnAwxiLZSVp5XzqmcRF7eIxbcuxJmbRprH9ut6T/kDnVCC
+         Zcy5dbHZMmvg61pT3jHLwbC8KeKoU8c3aRnMEmpBAqYwZH08ZB2upstopPNUphrbnDcZ
+         cCLlWHzJvoNstgfgVQPcU9GEA2298qkEk88nKQwZvlmVUpefXwAmyUt+sCwWDyOg30T9
+         +OxtnYVQexOMMF6fRT7EcBXWJh9eiBL6ASwwP0v6XgAa3NBDUTN/6lq+RY4izhSN7p9s
+         2WtA==
+X-Gm-Message-State: AFqh2kqFlo5YPGMJ0O+/nvEVtfXORicEvQ6p/jyUvPFV9gTeqHcCA4rb
+        C2BJkdXwDcdLoNIaiQmjoDGQ4Q==
+X-Google-Smtp-Source: AMrXdXvmgsB9mkhQhPLutjUrJsEcNZBj3ZzRuTx0yHaXlM7F4s4uXk1dMC6Vuz5WxgOhV0eMYtO5Qw==
+X-Received: by 2002:a05:600c:4998:b0:3cf:68d3:3047 with SMTP id h24-20020a05600c499800b003cf68d33047mr26779179wmp.41.1672587503834;
+        Sun, 01 Jan 2023 07:38:23 -0800 (PST)
+Received: from localhost.localdomain ([2400:adc1:158:c700:ab52:9bd1:ee17:5669])
+        by smtp.googlemail.com with ESMTPSA id c4-20020a05600c0a4400b003cf75213bb9sm46153975wmq.8.2023.01.01.07.38.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Dec 2022 15:57:57 -0800 (PST)
+        Sun, 01 Jan 2023 07:38:23 -0800 (PST)
 From:   Ameer Hamza <ahamza@ixsystems.com>
 To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
         chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
@@ -60,17 +60,18 @@ Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, ahamza@ixsystems.com,
         awalker@ixsystems.com, sparclinux@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org
-Subject: [PATCH v2] Add new open(2) flag - O_EMPTY_PATH
-Date:   Sun,  1 Jan 2023 04:56:18 +0500
-Message-Id: <20221231235618.117201-1-ahamza@ixsystems.com>
+Subject: [PATCH v3] Add new open(2) flag - O_EMPTY_PATH
+Date:   Sun,  1 Jan 2023 20:37:52 +0500
+Message-Id: <20230101153752.20165-1-ahamza@ixsystems.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202212310842.ysbymPHY-lkp@intel.com>
-References: <202212310842.ysbymPHY-lkp@intel.com>
+In-Reply-To: <202301011901.GyiYVRyd-lkp@intel.com>
+References: <202301011901.GyiYVRyd-lkp@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,6 +88,9 @@ flags in a race-free way.
 Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
 
 ---
+Change in v3:
+resolve O_EMPTY_PATH conflict with __FMODE_NONOTIFY for sparc.
+
 Change in v2:
 add nonconflicting values for O_EMPTY_PATH on architectures
 where default conflicts with existing flags.
@@ -128,14 +132,14 @@ index 03dee816cb13..e6144823ee5b 100644
  #define F_GETLK64	8
  #define F_SETLK64	9
 diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
-index 67dae75e5274..08aed1e2b32d 100644
+index 67dae75e5274..ed99e4e4a717 100644
 --- a/arch/sparc/include/uapi/asm/fcntl.h
 +++ b/arch/sparc/include/uapi/asm/fcntl.h
 @@ -37,6 +37,7 @@
  
  #define O_PATH		0x1000000
  #define __O_TMPFILE	0x2000000
-+#define O_EMPTY_PATH	0x4000000
++#define O_EMPTY_PATH	0x8000000
  
  #define F_GETOWN	5	/*  for sockets. */
  #define F_SETOWN	6	/*  for sockets. */
