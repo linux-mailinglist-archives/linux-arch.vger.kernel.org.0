@@ -2,238 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F5065AA62
-	for <lists+linux-arch@lfdr.de>; Sun,  1 Jan 2023 16:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8E565AD06
+	for <lists+linux-arch@lfdr.de>; Mon,  2 Jan 2023 05:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjAAPia (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 1 Jan 2023 10:38:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S229830AbjABEQa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 1 Jan 2023 23:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjAAPi2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 Jan 2023 10:38:28 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD51558F
-        for <linux-arch@vger.kernel.org>; Sun,  1 Jan 2023 07:38:25 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so13323138wmk.4
-        for <linux-arch@vger.kernel.org>; Sun, 01 Jan 2023 07:38:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ixsystems.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4e5rsOVvoPsB8/0IGCnvHUCFwzCz86SgBX4arQD6Bsk=;
-        b=iIz+0dD+Xqd9D7Aclt4WbtMz7FB/uNMAN19vTh+6DwoOScIf+jA5tIb6pl1sZbrOaW
-         XlLYQHnQ/0PyPvz0qvTAbzXKi09qSjTBYmGSnxvzBbdFRVbIvsgwji7HfzL/dg1Gk0Y+
-         V3CYrx7vxebfUhVMmDvLcttZh71xYJ2bXwn2IQvA2brc4xEH/FpvfiNOKwmIE+3+/3a3
-         aGxfOrAg6fPjQzN7n5StTR3W7Zq9HRIvBP9hKK/qbFPVmelZ5Bqrz5fO21NfQtRIVsHM
-         2C27VpRX929Xk3Bf3fEht9dzD2A4sp2tATdthjFDTt8SQ6Z6iV058eZOPa8Nj3UL5qEA
-         EvOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4e5rsOVvoPsB8/0IGCnvHUCFwzCz86SgBX4arQD6Bsk=;
-        b=WGMAABvSx3xmeOE4r/KV8u7t1AdeWsdDsxAET50EeImu0dcMCcmEC5Mqb/tsCDtt4+
-         NFOhHgCZCJDSPLmsUO6SSEAnAwxiLZSVp5XzqmcRF7eIxbcuxJmbRprH9ut6T/kDnVCC
-         Zcy5dbHZMmvg61pT3jHLwbC8KeKoU8c3aRnMEmpBAqYwZH08ZB2upstopPNUphrbnDcZ
-         cCLlWHzJvoNstgfgVQPcU9GEA2298qkEk88nKQwZvlmVUpefXwAmyUt+sCwWDyOg30T9
-         +OxtnYVQexOMMF6fRT7EcBXWJh9eiBL6ASwwP0v6XgAa3NBDUTN/6lq+RY4izhSN7p9s
-         2WtA==
-X-Gm-Message-State: AFqh2kqFlo5YPGMJ0O+/nvEVtfXORicEvQ6p/jyUvPFV9gTeqHcCA4rb
-        C2BJkdXwDcdLoNIaiQmjoDGQ4Q==
-X-Google-Smtp-Source: AMrXdXvmgsB9mkhQhPLutjUrJsEcNZBj3ZzRuTx0yHaXlM7F4s4uXk1dMC6Vuz5WxgOhV0eMYtO5Qw==
-X-Received: by 2002:a05:600c:4998:b0:3cf:68d3:3047 with SMTP id h24-20020a05600c499800b003cf68d33047mr26779179wmp.41.1672587503834;
-        Sun, 01 Jan 2023 07:38:23 -0800 (PST)
-Received: from localhost.localdomain ([2400:adc1:158:c700:ab52:9bd1:ee17:5669])
-        by smtp.googlemail.com with ESMTPSA id c4-20020a05600c0a4400b003cf75213bb9sm46153975wmq.8.2023.01.01.07.38.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Jan 2023 07:38:23 -0800 (PST)
-From:   Ameer Hamza <ahamza@ixsystems.com>
-To:     viro@zeniv.linux.org.uk, jlayton@kernel.org,
-        chuck.lever@oracle.com, arnd@arndb.de, guoren@kernel.org,
-        palmer@rivosinc.com, f.fainelli@gmail.com, slark_xiao@163.com,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, davem@davemloft.net
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, ahamza@ixsystems.com,
-        awalker@ixsystems.com, sparclinux@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org
-Subject: [PATCH v3] Add new open(2) flag - O_EMPTY_PATH
-Date:   Sun,  1 Jan 2023 20:37:52 +0500
-Message-Id: <20230101153752.20165-1-ahamza@ixsystems.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202301011901.GyiYVRyd-lkp@intel.com>
-References: <202301011901.GyiYVRyd-lkp@intel.com>
+        with ESMTP id S229447AbjABEQ3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 Jan 2023 23:16:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964E9EAE;
+        Sun,  1 Jan 2023 20:16:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2237860DEF;
+        Mon,  2 Jan 2023 04:16:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B4FC433D2;
+        Mon,  2 Jan 2023 04:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672632986;
+        bh=PbOa+zgeHMYDcl2ey0zsaINIrw5jd8rI1I/q7iKwxok=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H12XXjoUpq7h6gyIHassmpAQU/kHiPF6Q9Z8JFur0P+G4+fRpPXSomZQJGvw8zOr2
+         0FbfjlbD+mYcNErHjCQBIfLnpn5BiOHbFCNX6SDxp4MHG/bshA610Nxrld5X6Xkgx9
+         +phkkTt2c0jlch2f2Um0OYyNqrXTgIkeybWZlMIPMKsIrj8rfjvfuYbVGfS/kngHrd
+         HQlyFYRQ7nbtKoOHHpJv9GrDOsXdNBHw6gEn+NGFBgQcHBBJ4Pm6GjwGPhifLl88Qx
+         PdaI67ZWgCURdaIbgoyZwscf6edoPRuCJ4FhJ5X03S2k56Eqbr/nHucl8SjjVbmkoP
+         Z0S1E145fqr8w==
+Date:   Sun, 1 Jan 2023 21:16:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Dennis Gilmore <dennis@ausil.us>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] arch: fix broken BuildID for arm64 and riscv
+Message-ID: <Y7Jal56f6UBh1abE@dev-arch.thelio-3990X>
+References: <20221226184537.744960-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221226184537.744960-1-masahiroy@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds a new flag O_EMPTY_PATH that allows openat and open
-system calls to open a file referenced by fd if the path is empty,
-and it is very similar to the FreeBSD O_EMPTY_PATH flag. This can be
-beneficial in some cases since it would avoid having to grant /proc
-access to things like samba containers for reopening files to change
-flags in a race-free way.
+Hi Masahiro,
 
-Signed-off-by: Ameer Hamza <ahamza@ixsystems.com>
+On Tue, Dec 27, 2022 at 03:45:37AM +0900, Masahiro Yamada wrote:
+> Dennis Gilmore reports that the BuildID is missing in the arm64 vmlinux
+> since commit 994b7ac1697b ("arm64: remove special treatment for the
+> link order of head.o").
+> 
+> The issue is that the type of .notes section, which contains the BuildID,
+> changed from NOTES to PROGBITS.
+> 
+> Ard Biesheuvel figured out that whichever object gets linked first gets
+> to decide the type of a section. The PROGBITS type is the result of the
+> compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
+> 
+> While Ard provided a fix for arm64, I want to fix this globally because
+> the same issue is happening on riscv since commit 2348e6bf4421 ("riscv:
+> remove special treatment for the link order of head.o"). This problem
+> will happen in general for other architectures if they start to drop
+> unneeded entries from scripts/head-object-list.txt.
+> 
+> Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
+> 
+> Link: https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
+> Fixes: 994b7ac1697b ("arm64: remove special treatment for the link order of head.o")
+> Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link order of head.o")
+> Reported-by: Dennis Gilmore <dennis@ausil.us>
+> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+> 
+> Changes in v2:
+>   - discard .note.GNU-stack before .notes because many architectures
+>     call DISCARDS at the end of their linker scripts
+> 
+>  include/asm-generic/vmlinux.lds.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index a94219e9916f..659bf3b31c91 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -891,7 +891,12 @@
+>  #define PRINTK_INDEX
+>  #endif
+>  
+> +/*
+> + * Discard .note.GNU-stack, which is emitted as PROGBITS by the compiler.
+> + * Otherwise, the type of .notes section would become PROGBITS instead of NOTES.
+> + */
+>  #define NOTES								\
+> +	/DISCARD/ : { *(.note.GNU-stack) }				\
+>  	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
+>  		BOUNDED_SECTION_BY(.note.*, _notes)			\
+>  	} NOTES_HEADERS							\
+> -- 
+> 2.34.1
+> 
+> 
 
----
-Change in v3:
-resolve O_EMPTY_PATH conflict with __FMODE_NONOTIFY for sparc.
+I just bisected this change as the cause of a few link failures that we
+now see in CI with Debian's binutils (2.35.2):
 
-Change in v2:
-add nonconflicting values for O_EMPTY_PATH on architectures
-where default conflicts with existing flags.
----
----
- arch/alpha/include/uapi/asm/fcntl.h    | 1 +
- arch/parisc/include/uapi/asm/fcntl.h   | 1 +
- arch/sparc/include/uapi/asm/fcntl.h    | 1 +
- fs/fcntl.c                             | 2 +-
- fs/namei.c                             | 4 ++--
- fs/open.c                              | 2 +-
- include/linux/fcntl.h                  | 2 +-
- include/uapi/asm-generic/fcntl.h       | 4 ++++
- tools/include/uapi/asm-generic/fcntl.h | 4 ++++
- 9 files changed, 16 insertions(+), 5 deletions(-)
+https://storage.tuxsuite.com/public/clangbuiltlinux/continuous-integration2/builds/2Jjl88DXc3YRi2RtvXAzlS8NQ4p/build.log
 
-diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
-index 50bdc8e8a271..ea08341bb9fe 100644
---- a/arch/alpha/include/uapi/asm/fcntl.h
-+++ b/arch/alpha/include/uapi/asm/fcntl.h
-@@ -34,6 +34,7 @@
- 
- #define O_PATH		040000000
- #define __O_TMPFILE	0100000000
-+#define O_EMPTY_PATH	0200000000
- 
- #define F_GETLK		7
- #define F_SETLK		8
-diff --git a/arch/parisc/include/uapi/asm/fcntl.h b/arch/parisc/include/uapi/asm/fcntl.h
-index 03dee816cb13..e6144823ee5b 100644
---- a/arch/parisc/include/uapi/asm/fcntl.h
-+++ b/arch/parisc/include/uapi/asm/fcntl.h
-@@ -19,6 +19,7 @@
- 
- #define O_PATH		020000000
- #define __O_TMPFILE	040000000
-+#define O_EMPTY_PATH	0100000000
- 
- #define F_GETLK64	8
- #define F_SETLK64	9
-diff --git a/arch/sparc/include/uapi/asm/fcntl.h b/arch/sparc/include/uapi/asm/fcntl.h
-index 67dae75e5274..ed99e4e4a717 100644
---- a/arch/sparc/include/uapi/asm/fcntl.h
-+++ b/arch/sparc/include/uapi/asm/fcntl.h
-@@ -37,6 +37,7 @@
- 
- #define O_PATH		0x1000000
- #define __O_TMPFILE	0x2000000
-+#define O_EMPTY_PATH	0x8000000
- 
- #define F_GETOWN	5	/*  for sockets. */
- #define F_SETOWN	6	/*  for sockets. */
-diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 146c9ab0cd4b..7aac650e16e2 100644
---- a/fs/fcntl.c
-+++ b/fs/fcntl.c
-@@ -1027,7 +1027,7 @@ static int __init fcntl_init(void)
- 	 * Exceptions: O_NONBLOCK is a two bit define on parisc; O_NDELAY
- 	 * is defined as O_NONBLOCK on some platforms and not on others.
- 	 */
--	BUILD_BUG_ON(21 - 1 /* for O_RDONLY being 0 */ !=
-+	BUILD_BUG_ON(22 - 1 /* for O_RDONLY being 0 */ !=
- 		HWEIGHT32(
- 			(VALID_OPEN_FLAGS & ~(O_NONBLOCK | O_NDELAY)) |
- 			__FMODE_EXEC | __FMODE_NONOTIFY));
-diff --git a/fs/namei.c b/fs/namei.c
-index 309ae6fc8c99..2b2735af6d03 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -192,7 +192,7 @@ getname_flags(const char __user *filename, int flags, int *empty)
- 	if (unlikely(!len)) {
- 		if (empty)
- 			*empty = 1;
--		if (!(flags & LOOKUP_EMPTY)) {
-+		if (!(flags & (LOOKUP_EMPTY | O_EMPTY_PATH))) {
- 			putname(result);
- 			return ERR_PTR(-ENOENT);
- 		}
-@@ -2347,7 +2347,7 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
- 	if ((flags & (LOOKUP_RCU | LOOKUP_CACHED)) == LOOKUP_CACHED)
- 		return ERR_PTR(-EAGAIN);
- 
--	if (!*s)
-+	if (!*s && unlikely(!(flags & O_EMPTY_PATH)))
- 		flags &= ~LOOKUP_RCU;
- 	if (flags & LOOKUP_RCU)
- 		rcu_read_lock();
-diff --git a/fs/open.c b/fs/open.c
-index 82c1a28b3308..b4ec054a418f 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1301,7 +1301,7 @@ static long do_sys_openat2(int dfd, const char __user *filename,
- 	if (fd)
- 		return fd;
- 
--	tmp = getname(filename);
-+	tmp = getname_flags(filename, how->flags & O_EMPTY_PATH, NULL);
- 	if (IS_ERR(tmp))
- 		return PTR_ERR(tmp);
- 
-diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
-index a332e79b3207..bf8467bb0bd2 100644
---- a/include/linux/fcntl.h
-+++ b/include/linux/fcntl.h
-@@ -10,7 +10,7 @@
- 	(O_RDONLY | O_WRONLY | O_RDWR | O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | \
- 	 O_APPEND | O_NDELAY | O_NONBLOCK | __O_SYNC | O_DSYNC | \
- 	 FASYNC	| O_DIRECT | O_LARGEFILE | O_DIRECTORY | O_NOFOLLOW | \
--	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE)
-+	 O_NOATIME | O_CLOEXEC | O_PATH | __O_TMPFILE | O_EMPTY_PATH)
- 
- /* List of all valid flags for the how->resolve argument: */
- #define VALID_RESOLVE_FLAGS \
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index 1ecdb911add8..a03f4275517b 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -89,6 +89,10 @@
- #define __O_TMPFILE	020000000
- #endif
- 
-+#ifndef O_EMPTY_PATH
-+#define O_EMPTY_PATH	040000000
-+#endif
-+
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
- #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
-diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
-index b02c8e0f4057..f32a81604296 100644
---- a/tools/include/uapi/asm-generic/fcntl.h
-+++ b/tools/include/uapi/asm-generic/fcntl.h
-@@ -89,6 +89,10 @@
- #define __O_TMPFILE	020000000
- #endif
- 
-+#ifndef O_EMPTY_PATH
-+#define O_EMPTY_PATH	040000000
-+#endif
-+
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
- #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
--- 
-2.25.1
+This does not appear to be related to clang/LLVM because I can easily
+reproduce it with Debian's s390x GCC and binutils building defconfig:
 
+$ s390x-linux-gnu-gcc --version | head -1
+s390x-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110
+
+$ s390x-linux-gnu-ld --version | head -1
+GNU ld (GNU Binutils for Debian) 2.35.2
+
+$ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- O=build mrproper defconfig all
+...
+`.exit.text' referenced in section `.s390_return_reg' of fs/jbd2/journal.o: defined in discarded section `.exit.text' of fs/jbd2/journal.o
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o: defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `__jump_table' of fs/fuse/inode.o: defined in discarded section `.exit.text' of fs/fuse/inode.o
+`.exit.text' referenced in section `.s390_indirect_call' of fs/btrfs/super.o: defined in discarded section `.exit.text' of fs/btrfs/super.o
+`.exit.text' referenced in section `.s390_return_mem' of fs/btrfs/super.o: defined in discarded section `.exit.text' of fs/btrfs/super.o
+`.exit.text' referenced in section `.s390_return_mem' of fs/btrfs/volumes.o: defined in discarded section `.exit.text' of fs/btrfs/volumes.o
+`.exit.text' referenced in section `.s390_return_mem' of fs/btrfs/volumes.o: defined in discarded section `.exit.text' of fs/btrfs/volumes.o
+`.exit.text' referenced in section `__bug_table' of crypto/algboss.o: defined in discarded section `.exit.text' of crypto/algboss.o
+`.exit.text' referenced in section `.s390_return_mem' of crypto/algboss.o: defined in discarded section `.exit.text' of crypto/algboss.o
+`.exit.text' referenced in section `.s390_return_reg' of crypto/xor.o: defined in discarded section `.exit.text' of crypto/xor.o
+`.exit.text' referenced in section `.s390_return_reg' of lib/atomic64_test.o: defined in discarded section `.exit.text' of lib/atomic64_test.o
+`.exit.text' referenced in section `.s390_return_mem' of drivers/char/tpm/tpm-dev-common.o: defined in discarded section `.exit.text' of drivers/char/tpm/tpm-dev-common.o
+`.exit.text' referenced in section `.s390_return_mem' of drivers/char/tpm/tpm-dev-common.o: defined in discarded section `.exit.text' of drivers/char/tpm/tpm-dev-common.o
+`.exit.text' referenced in section `.s390_return_mem' of drivers/scsi/sd.o: defined in discarded section `.exit.text' of drivers/scsi/sd.o
+`.exit.text' referenced in section `.altinstructions' of drivers/md/md.o: defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `.altinstructions' of drivers/md/md.o: defined in discarded section `.exit.text' of drivers/md/md.o
+`.exit.text' referenced in section `.s390_indirect_call' of drivers/md/dm.o: defined in discarded section `.exit.text' of drivers/md/dm.o
+`.exit.text' referenced in section `.s390_return_reg' of net/802/psnap.o: defined in discarded section `.exit.text' of net/802/psnap.o
+`.exit.text' referenced in section `.altinstructions' of net/iucv/iucv.o: defined in discarded section `.exit.text' of net/iucv/iucv.o
+`.exit.text' referenced in section `__bug_table' of drivers/s390/cio/qdio_thinint.o: defined in discarded section `.exit.text' of drivers/s390/cio/qdio_thinint.o
+`.exit.text' referenced in section `.s390_return_mem' of drivers/s390/block/dasd_diag.o: defined in discarded section `.exit.text' of drivers/s390/block/dasd_diag.o
+`.exit.text' referenced in section `.s390_return_mem' of drivers/s390/char/tty3270.o: defined in discarded section `.exit.text' of drivers/s390/char/tty3270.o
+`.exit.text' referenced in section `__bug_table' of drivers/s390/net/qeth_l3_main.o: defined in discarded section `.exit.text' of drivers/s390/net/qeth_l3_main.o
+`.exit.text' referenced in section `__bug_table' of drivers/s390/net/qeth_l3_main.o: defined in discarded section `.exit.text' of drivers/s390/net/qeth_l3_main.o
+s390x-linux-gnu-ld: BFD (GNU Binutils for Debian) 2.35.2 assertion fail ../../bfd/elf64-s390.c:3349
+...
+
+I ended up bisecting binutils for the fix, as I could not reproduce it
+with 2.36+. My bisect landed on commit 21401fc7bf6 ("Duplicate output
+sections in scripts"):
+
+https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=21401fc7bf67dbf73f4a3eda4bcfc58fa4211584
+
+Unfortunately, I cannot immediately grok why this commit cause the above
+issue nor why the binutils commit resolves it so I figured I would
+immediately report it for public investigation's sake and quicker
+resolution.
+
+Cheers,
+Nathan
