@@ -2,215 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C5965C871
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Jan 2023 21:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0448E65CA29
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Jan 2023 00:06:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbjACUxB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Jan 2023 15:53:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S233905AbjACXGo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Jan 2023 18:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbjACUw6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Jan 2023 15:52:58 -0500
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78EDFFC;
-        Tue,  3 Jan 2023 12:52:57 -0800 (PST)
-Received: by mail-il1-f171.google.com with SMTP id a9so6321030ilk.6;
-        Tue, 03 Jan 2023 12:52:57 -0800 (PST)
+        with ESMTP id S233670AbjACXGn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Jan 2023 18:06:43 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6EC140F7
+        for <linux-arch@vger.kernel.org>; Tue,  3 Jan 2023 15:06:41 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id p24so11709892plw.11
+        for <linux-arch@vger.kernel.org>; Tue, 03 Jan 2023 15:06:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wms9vJRG39Hnpaj8L9AdTUEiKoOujl8Zc1PlfJpuAvc=;
+        b=h9725tfa5hdVaq1HRKMg38pT3bnSdsZu1gYJxnR5d5+gbg52PuYQIv5wBFlDJhO9bS
+         mI84Q+hhI20dHQcSkgxSkQf4wP4qmQP1LNIFkAq/VomPx4jdE8OPYacqy/eeBE+fylf/
+         swL/aH5bYQ07AmejSAYJHcZh07QDgP5xrRt6bm8Q1etUwfrKAFos+bdLOE5+JE6PBi3U
+         sFDQ9Dps9Lxs/yyXs3jQijpfnjXJqK66rKL3UJSPZwrJDKJketPNn4qX/18FtXZzHbno
+         RPLBoKWopziiN34rcQN0qmYINuJwWj5jMTrSB3yTnXpqqbcBJ6htLtlQbhw4piMR+QeH
+         MFPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TcjxuWhsew0S4JMMZ0LVIr9mYr0ZItiOrBsIyKBjzxA=;
-        b=2NToks0C7J1Ro1UvG/6kt01FVvqSE9HR9qVAMAfaZb06yTAwrVLN65XEVXoYdk2sb/
-         FMDH86QOTkf1wdMlMR0dleIvp+iKloeh8GdzK1VfMzIR5mKBmjC5nnJFQD8eXF3nkv2c
-         dY7pzjpWv1OB2HULmgz9jZIO8vW435au8tXaxTXsClyEWgoz1g9qzlEG3Rvr13+3bRd2
-         sVlR2JmEJsANGr6A5u4z8LXD9rOrFNBNl2fwYhTpwN6SRkp5lS/7jyhfQVKayBh/JXLn
-         MlcxThMHg4KRVQgojY41+30qpXSL/0YXGHsHVLY34H6PJw+HYfF8wXBSBQUNQjTOidrU
-         gmMw==
-X-Gm-Message-State: AFqh2kqZ2tsPOgwVUCwTSoEgDRfiW27l+kCz1xXxrsewl87pch2FncLQ
-        Id3nHQnTweBl/NWr7CvSoQ==
-X-Google-Smtp-Source: AMrXdXs7CLCkBhA2bAs8+otIJJ87HLmOu2iBxk7dmL/ZdUhdNLgBmJbpCAkIQKJL5QLEGLa5kGxn6A==
-X-Received: by 2002:a05:6e02:549:b0:306:d1b4:f3c7 with SMTP id i9-20020a056e02054900b00306d1b4f3c7mr25689876ils.20.1672779176867;
-        Tue, 03 Jan 2023 12:52:56 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c24-20020a023b18000000b00388b6508ec8sm9836486jaa.115.2023.01.03.12.52.51
+        bh=wms9vJRG39Hnpaj8L9AdTUEiKoOujl8Zc1PlfJpuAvc=;
+        b=tBmin8O6Xl0OV/MvchJtKzLCWjSrqFsFTPzdkRDnrEq5SADEvLmCfbtjqd13FIFiPM
+         U4OlueUh0b2Je+4AWOI4MmKzvSU/OyUCAFh5e81g+QMdrmFcA7WW2cjeVygezOO3tJRT
+         teWD3YHQqbbzc0v4d+63pmCncMbcTWKbm8DI0PeCz+dXt2VLu1IsdO0ZKL2pghgqd0+u
+         157pO22W2w0sx8nFMKYPlE5dEUGY6Ec5g7Al1+8pRLAlLJ/wZGUcD+586aqUi1HUy+vg
+         AKH3ZN1AUDSPrJZPXN8vE9ou27ngdl/HMn0mL2KcbQbhrEXN6wopLV1MIAbFWUWV4NQT
+         lOxg==
+X-Gm-Message-State: AFqh2kqTofLibzGZbOu/+Urbm1mPN59+CQU2FX59CSUi+eqN3VEQWuCj
+        GyEtsZeH8P8WHaM/h0puplt/xA==
+X-Google-Smtp-Source: AMrXdXv0hPqADj10or2SDVYag+quux5jra8KVSiEDlbg50PLMvdP+6Y7KrZdfBMvhypOkMi3Sz3H1g==
+X-Received: by 2002:a05:6a20:2a9f:b0:a4:efde:2ed8 with SMTP id v31-20020a056a202a9f00b000a4efde2ed8mr5044243pzh.0.1672787201272;
+        Tue, 03 Jan 2023 15:06:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b27-20020aa7951b000000b00580c8a15d13sm19479380pfp.11.2023.01.03.15.06.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 12:52:56 -0800 (PST)
-Received: (nullmailer pid 3961459 invoked by uid 1000);
-        Tue, 03 Jan 2023 20:52:50 -0000
-Date:   Tue, 3 Jan 2023 14:52:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Tue, 03 Jan 2023 15:06:40 -0800 (PST)
+Date:   Tue, 3 Jan 2023 23:06:37 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        "Qiang, Chenyi" <chenyi.qiang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "qemu-devel@nongnu.org" <qemu-devel@nongnu.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-Message-ID: <20230103205250.GB3942221-robh@kernel.org>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "aarcange@redhat.com" <aarcange@redhat.com>,
+        "ddutile@redhat.com" <ddutile@redhat.com>,
+        "dhildenb@redhat.com" <dhildenb@redhat.com>,
+        Quentin Perret <qperret@google.com>,
+        "tabba@google.com" <tabba@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        "Hocko, Michal" <mhocko@suse.com>
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <Y7S0/VYsy4aWjfQ+@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+ <1c9bbaa5-eea3-351e-d6a0-cfbc32115c82@intel.com>
+ <20230103013948.GA2178318@chaop.bj.intel.com>
+ <DS0PR11MB63738AE206ADE5EB00D8838BDCF49@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <DS0PR11MB63738AE206ADE5EB00D8838BDCF49@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 05:43:34PM +0100, Yann Sionneau wrote:
-> This patch series adds support for the kv3-1 CPU architecture of the kvx family
-> found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+On Tue, Jan 03, 2023, Wang, Wei W wrote:
+> On Tuesday, January 3, 2023 9:40 AM, Chao Peng wrote:
+> > > Because guest memory defaults to private, and now this patch stores
+> > > the attributes with KVM_MEMORY_ATTRIBUTE_PRIVATE instead of
+> > _SHARED,
+> > > it would bring more KVM_EXIT_MEMORY_FAULT exits at the beginning of
+> > > boot time. Maybe it can be optimized somehow in other places? e.g. set
+> > > mem attr in advance.
+> > 
+> > KVM defaults to 'shared' because this ioctl can also be potentially used by
+> > normal VMs and 'shared' sounds a value meaningful for both normal VMs and
+> > confidential VMs. 
 > 
-> This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
-> therefore this patch series cannot be merged into Linux for now.
-> 
-> The goal is to have preliminary reviews and to fix problems early.
-> 
-> The Kalray VLIW processor family (kvx) has the following features:
-> * 32/64 bits execution mode
-> * 6-issue VLIW architecture
-> * 64 x 64bits general purpose registers
-> * SIMD instructions
-> * little-endian
-> * deep learning co-processor
-> 
-> Kalray kv3-1 core which is the third of the kvx family is embedded in Kalray
-> Coolidge SoC currently used on K200 and K200-LP boards.
-> 
-> The Coolidge SoC contains 5 clusters each of which is made of:
-> * 4MiB of on-chip memory (SMEM)
-> * 1 dedicated safety/security core (kv3-1 core).
-> * 16 PEs (Processing Elements) (kv3-1 cores).
-> * 16 Co-processors (one per PE)
-> * 2 Crypto accelerators
-> 
-> The Coolidge SoC contains the following features:
-> * 5 Clusters
-> * 2 100G Ethernet controllers
-> * 8 PCIe GEN4 controllers (Root Complex and Endpoint capable)
-> * 2 USB 2.0 controllers
-> * 1 Octal SPI-NOR flash controller
-> * 1 eMMC controller
-> * 3 Quad SPI controllers
-> * 6 UART
-> * 5 I2C controllers (3 of which are SMBus capable)
-> * 4 CAN controllers
-> * 1 OTP memory
-> 
-> A kvx toolchain can be built using:
-> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
-> $ git clone https://github.com/kalray/build-scripts
-> $ cd build-scripts
-> $ source last.refs
-> $ ./build-kvx-xgcc.sh output
-> 
-> The kvx toolchain will be installed in the "output" directory.
-> 
-> A buildroot image (kernel+rootfs) and toolchain can be built using:
-> $ git clone -b coolidge-for-upstream https://github.com/kalray/buildroot
-> $ cd buildroot
-> $ make O=build_kvx kvx_defconfig
-> $ make O=build_kvx
-> 
-> The vmlinux image can be found in buildroot/build_kvx/images/vmlinux.
-> 
-> If you are just interested in building the Linux kernel with no rootfs you can
-> just do this with the kvx-elf- toolchain:
-> $ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- default_defconfig
-> $ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- -j$(($(nproc) + 1))
-> 
-> The vmlinux ELF can be run with qemu by doing:
-> # install dependencies: ninja pkg-config libglib-2.0-dev cmake libfdt-dev libpixman-1-dev zlib1g-dev
-> $ git clone https://github.com/kalray/qemu-builder
-> $ cd qemu-builder
-> $ git submodule update --init
-> $ make -j$(($(nproc) + 1))
-> $ ./qemu-system-kvx -m 1024 -nographic -kernel <path/to/vmlinux>
-> 
-> Yann Sionneau (25):
->   Documentation: kvx: Add basic documentation
->   kvx: Add ELF-related definitions
->   kvx: Add build infrastructure
->   kvx: Add CPU definition headers
->   kvx: Add atomic/locking headers
->   kvx: Add other common headers
->   kvx: Add boot and setup routines
->   kvx: Add exception/interrupt handling
->   kvx: irqchip: Add support for irq controllers
->   kvx: Add process management
->   kvx: Add memory management
->   kvx: Add system call support
->   kvx: Add signal handling support
->   kvx: Add ELF relocations and module support
->   kvx: Add misc common routines
->   kvx: Add some library functions
->   kvx: Add multi-processor (SMP) support
->   kvx: Add kvx default config file
->   kvx: power: scall poweroff driver
->   kvx: gdb: add kvx related gdb helpers
->   kvx: Add support for ftrace
->   kvx: Add support for jump labels
->   kvx: Add debugging related support
->   kvx: Add support for CPU Perf Monitors
->   kvx: Add support for cpuinfo
+> Do you mean a normal VM could have pages marked private? What's the usage?
+> (If all the pages are just marked shared for normal VMs, then why do we need it)
 
-You should strip this series down to just what's needed to boot. You 
-don't need the last 7 patches at least.
+No, there are potential use cases for per-page attribute/permissions, e.g. to
+make select pages read-only, exec-only, no-exec, etc...
 
-Rob
+> > As for more KVM_EXIT_MEMORY_FAULT exits during the
+> > booting time, yes, setting all memory to 'private' for confidential VMs through
+> > this ioctl in userspace before guest launch is an approach for KVM userspace to
+> > 'override' the KVM default and reduce the number of implicit conversions.
+> 
+> Most pages of a confidential VM are likely to be private pages. It seems more efficient
+> (and not difficult to check vm_type) to have KVM defaults to "private" for confidential VMs
+> and defaults to "shared" for normal VMs.
+
+If done right, the default shouldn't matter all that much for efficiency.  KVM
+needs to be able to effeciently track large ranges regardless of the default,
+otherwise the memory overhead and the presumably cost of lookups will be painful.
+E.g. converting a 1GiB chunk to shared should ideally require one entry, not 256k
+entries.
+
+Looks like that behavior was changed in v8 in response to feedback[*] that doing
+xa_store_range() on a subset of an existing range (entry) would overwrite the
+entire existing range (entry), not just the smaller subset.  xa_store_range() does
+appear to be too simplistic for this use case, but looking at __filemap_add_folio(),
+splitting an existing entry isn't super complex.
+
+Using xa_store() for the very initial implementation is ok, and probably a good
+idea since it's more obviously correct and will give us a bisection point.  But
+we definitely want a more performant implementation sooner than later.  The hardest
+part will likely be merging existing entries, but that can be done separately too,
+and is probably lower priority.
+
+E.g. (1) use xa_store() and always track at 4KiB granularity, (2) support storing
+metadata in multi-index entries, and finally (3) support merging adjacent entries
+with identical values.
+
+[*] https://lore.kernel.org/all/CAGtprH9xyw6bt4=RBWF6-v2CSpabOCpKq5rPz+e-9co7EisoVQ@mail.gmail.com
