@@ -2,254 +2,262 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE3965C0DD
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Jan 2023 14:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 379EF65C167
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Jan 2023 15:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjACNcM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Jan 2023 08:32:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S237764AbjACOEJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Jan 2023 09:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbjACNcL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Jan 2023 08:32:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F781116E;
-        Tue,  3 Jan 2023 05:32:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CE78B80EB9;
-        Tue,  3 Jan 2023 13:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14181C433EF;
-        Tue,  3 Jan 2023 13:32:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672752726;
-        bh=a+pqWavNwn38zL63kZf70hmufM1E3jaoRa7Gg7LODZ4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NUAlL/ByCwvg5RBPxXgnZJVRBdEk9iWOY/Q3d0kcYa1yj+4qBkRQJzLrv776DAkaq
-         sXkye3Ap4r02M7aH6KKXNPHsPDrZIHULCa/d26STzTkN6+pfnLi8eHf7hPLhYae5c1
-         pMU83Ub86u4q288P4P2f4yLot4s2nc+KFQgNBM7MS4OzM41pjCRLyHZxNiShnY8sts
-         BoRzuRMfegS0Vj2UFYie3/l9AwkLoHiwlI9rQUcWRBn9uFF2hJf6shW8PVijdtEFMt
-         dsaKDCUTTfPkfV3b5Z/d7JaQtt+OhuOJhLYSHn5ntzRuDd8KrZmOvOK5qIFHcuAhuB
-         axWrqVtKZc2/w==
-Date:   Tue, 3 Jan 2023 22:32:02 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Song Chen <chensong_2000@189.cn>
-Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] kernel/trace: extract common part in
- process_fetch_insn
-Message-Id: <20230103223202.7963bfb62b4ae5827e51ee30@kernel.org>
-In-Reply-To: <1672382033-18390-1-git-send-email-chensong_2000@189.cn>
-References: <1672382033-18390-1-git-send-email-chensong_2000@189.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S236918AbjACOEF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Jan 2023 09:04:05 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3B3510B6C;
+        Tue,  3 Jan 2023 06:03:57 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B1831595;
+        Tue,  3 Jan 2023 06:04:39 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.37.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9306B3F587;
+        Tue,  3 Jan 2023 06:03:51 -0800 (PST)
+Date:   Tue, 3 Jan 2023 14:03:37 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, torvalds@linux-foundation.org,
+        corbet@lwn.net, will@kernel.org, catalin.marinas@arm.com,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 05/12] arch: Introduce
+ arch_{,try_}_cmpxchg128{,_local}()
+Message-ID: <Y7Q1uexv6DrxCASB@FVFF77S0Q05N>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.154045458@infradead.org>
+ <Y6DEfQXymYVgL3oJ@boqun-archlinux>
+ <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
+ <Y7QszyTEG2+WiI/C@FVFF77S0Q05N>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y7QszyTEG2+WiI/C@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 30 Dec 2022 14:33:53 +0800
-Song Chen <chensong_2000@189.cn> wrote:
-
-> Each probe has an instance of process_fetch_insn respectively,
-> but they have something in common.
+On Tue, Jan 03, 2023 at 01:25:35PM +0000, Mark Rutland wrote:
+> On Tue, Dec 20, 2022 at 12:08:16PM +0100, Peter Zijlstra wrote:
+> > On Mon, Dec 19, 2022 at 12:07:25PM -0800, Boqun Feng wrote:
+> > > On Mon, Dec 19, 2022 at 04:35:30PM +0100, Peter Zijlstra wrote:
+> > > > For all architectures that currently support cmpxchg_double()
+> > > > implement the cmpxchg128() family of functions that is basically the
+> > > > same but with a saner interface.
+> > > > 
+> > > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > > ---
+> > > >  arch/arm64/include/asm/atomic_ll_sc.h |   38 +++++++++++++++++++++++
+> > > >  arch/arm64/include/asm/atomic_lse.h   |   33 +++++++++++++++++++-
+> > > >  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
+> > > >  arch/s390/include/asm/cmpxchg.h       |   33 ++++++++++++++++++++
+> > > >  arch/x86/include/asm/cmpxchg_32.h     |    3 +
+> > > >  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
+> > > >  6 files changed, 185 insertions(+), 3 deletions(-)
+> > > > 
+> > > > --- a/arch/arm64/include/asm/atomic_ll_sc.h
+> > > > +++ b/arch/arm64/include/asm/atomic_ll_sc.h
+> > > > @@ -326,6 +326,44 @@ __CMPXCHG_DBL(   ,        ,  ,         )
+> > > >  __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
+> > > >  
+> > > >  #undef __CMPXCHG_DBL
+> > > > +
+> > > > +union __u128_halves {
+> > > > +	u128 full;
+> > > > +	struct {
+> > > > +		u64 low, high;
+> > > > +	};
+> > > > +};
+> > > > +
+> > > > +#define __CMPXCHG128(name, mb, rel, cl)					\
+> > > > +static __always_inline u128						\
+> > > > +__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
+> > > > +{									\
+> > > > +	union __u128_halves r, o = { .full = (old) },			\
+> > > > +			       n = { .full = (new) };			\
+> > > > +									\
+> > > > +	asm volatile("// __cmpxchg128" #name "\n"			\
+> > > > +	"	prfm	pstl1strm, %2\n"				\
+> > > > +	"1:	ldxp	%0, %1, %2\n"					\
+> > > > +	"	eor	%3, %0, %3\n"					\
+> > > > +	"	eor	%4, %1, %4\n"					\
+> > > > +	"	orr	%3, %4, %3\n"					\
+> > > > +	"	cbnz	%3, 2f\n"					\
+> > > > +	"	st" #rel "xp	%w3, %5, %6, %2\n"			\
+> > > > +	"	cbnz	%w3, 1b\n"					\
+> > > > +	"	" #mb "\n"						\
+> > > > +	"2:"								\
+> > > > +	: "=&r" (r.low), "=&r" (r.high), "+Q" (*(unsigned long *)ptr)	\
+> > > 
+> > > I wonder whether we should use "(*(u128 *)ptr)" instead of "(*(unsigned
+> > > long *) ptr)"? Because compilers may think only 64bit value pointed by
+> > > "ptr" gets modified, and they are allowed to do "useful" optimization.
+> > 
+> > In this I've copied the existing cmpxchg_double() code; I'll have to let
+> > the arch folks speak here, I've no clue.
 > 
-> This patch aims to extract the common part into
-> process_common_fetch_insn which can be shared by each probe,
-> and they only need to focus on their special cases.
+> We definitely need to ensure the compiler sees we poke the whole thing, or it
+> can get this horribly wrong, so that is a latent bug.
 > 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
-> Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thanks!
-
-
-> ---
->  kernel/trace/trace_eprobe.c     | 26 ++++++--------------------
->  kernel/trace/trace_kprobe.c     | 14 ++++----------
->  kernel/trace/trace_probe_tmpl.h | 20 ++++++++++++++++++++
->  kernel/trace/trace_uprobe.c     | 11 ++++-------
->  4 files changed, 34 insertions(+), 37 deletions(-)
+> See commit:
 > 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index ca5d097eec4f..bff0f48f4b44 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -395,20 +395,12 @@ static int get_eprobe_size(struct trace_probe *tp, void *rec)
->  			case FETCH_OP_TP_ARG:
->  				val = get_event_field(code, rec);
->  				break;
-> -			case FETCH_OP_IMM:
-> -				val = code->immediate;
-> -				break;
-> -			case FETCH_OP_COMM:
-> -				val = (unsigned long)current->comm;
-> -				break;
-> -			case FETCH_OP_DATA:
-> -				val = (unsigned long)code->data;
-> -				break;
->  			case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
->  				code++;
->  				goto retry;
->  			default:
-> -				continue;
-> +				if (process_common_fetch_insn(code, &val) < 0)
-> +					continue;
->  			}
->  			code++;
->  			len = process_fetch_insn_bottom(code, val, NULL, NULL);
-> @@ -428,26 +420,20 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  		   void *base)
->  {
->  	unsigned long val;
-> +	int ret;
->  
->   retry:
->  	switch (code->op) {
->  	case FETCH_OP_TP_ARG:
->  		val = get_event_field(code, rec);
->  		break;
-> -	case FETCH_OP_IMM:
-> -		val = code->immediate;
-> -		break;
-> -	case FETCH_OP_COMM:
-> -		val = (unsigned long)current->comm;
-> -		break;
-> -	case FETCH_OP_DATA:
-> -		val = (unsigned long)code->data;
-> -		break;
->  	case FETCH_NOP_SYMBOL:	/* Ignore a place holder */
->  		code++;
->  		goto retry;
->  	default:
-> -		return -EILSEQ;
-> +		ret = process_common_fetch_insn(code, &val);
-> +		if (ret < 0)
-> +			return ret;
->  	}
->  	code++;
->  	return process_fetch_insn_bottom(code, val, dest, base);
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index 714fe9c04eb6..af8b2023a76b 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -1225,6 +1225,7 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  {
->  	struct pt_regs *regs = rec;
->  	unsigned long val;
-> +	int ret;
->  
->  retry:
->  	/* 1st stage: get value from context */
-> @@ -1241,15 +1242,6 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  	case FETCH_OP_RETVAL:
->  		val = regs_return_value(regs);
->  		break;
-> -	case FETCH_OP_IMM:
-> -		val = code->immediate;
-> -		break;
-> -	case FETCH_OP_COMM:
-> -		val = (unsigned long)current->comm;
-> -		break;
-> -	case FETCH_OP_DATA:
-> -		val = (unsigned long)code->data;
-> -		break;
->  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
->  	case FETCH_OP_ARG:
->  		val = regs_get_kernel_argument(regs, code->param);
-> @@ -1259,7 +1251,9 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  		code++;
->  		goto retry;
->  	default:
-> -		return -EILSEQ;
-> +		ret = process_common_fetch_insn(code, &val);
-> +		if (ret < 0)
-> +			return ret;
->  	}
->  	code++;
->  
-> diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
-> index 1b57420857e1..17258eca0125 100644
-> --- a/kernel/trace/trace_probe_tmpl.h
-> +++ b/kernel/trace/trace_probe_tmpl.h
-> @@ -67,6 +67,26 @@ probe_mem_read(void *dest, void *src, size_t size);
->  static nokprobe_inline int
->  probe_mem_read_user(void *dest, void *src, size_t size);
->  
-> +/* common part of process_fetch_insn*/
-> +static nokprobe_inline int
-> +process_common_fetch_insn(struct fetch_insn *code, unsigned long *val)
-> +{
-> +	switch (code->op) {
-> +	case FETCH_OP_IMM:
-> +		*val = code->immediate;
-> +		break;
-> +	case FETCH_OP_COMM:
-> +		*val = (unsigned long)current->comm;
-> +		break;
-> +	case FETCH_OP_DATA:
-> +		*val = (unsigned long)code->data;
-> +		break;
-> +	default:
-> +		return -EILSEQ;
-> +	}
-> +	return 0;
-> +}
-> +
->  /* From the 2nd stage, routine is same */
->  static nokprobe_inline int
->  process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index 1ff8f87211a6..c53b0752533f 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -220,6 +220,7 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  {
->  	struct pt_regs *regs = rec;
->  	unsigned long val;
-> +	int ret;
->  
->  	/* 1st stage: get value from context */
->  	switch (code->op) {
-> @@ -235,20 +236,16 @@ process_fetch_insn(struct fetch_insn *code, void *rec, void *dest,
->  	case FETCH_OP_RETVAL:
->  		val = regs_return_value(regs);
->  		break;
-> -	case FETCH_OP_IMM:
-> -		val = code->immediate;
-> -		break;
->  	case FETCH_OP_COMM:
->  		val = FETCH_TOKEN_COMM;
->  		break;
-> -	case FETCH_OP_DATA:
-> -		val = (unsigned long)code->data;
-> -		break;
->  	case FETCH_OP_FOFFS:
->  		val = translate_user_vaddr(code->immediate);
->  		break;
->  	default:
-> -		return -EILSEQ;
-> +		ret = process_common_fetch_insn(code, &val);
-> +		if (ret < 0)
-> +			return ret;
->  	}
->  	code++;
->  
-> -- 
-> 2.25.1
+>   fee960bed5e857eb ("arm64: xchg: hazard against entire exchange variable")
 > 
+> ... for examples of GCC being clever, where I overlooked the *_double() cases.
 
+Ugh; with GCC 12.1.0, arm64 defconfig, and the following:
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+| struct big {
+|         u64 lo, hi;
+| } __aligned(128);
+| 
+| unsigned long foo(struct big *b)
+| {
+|         u64 hi_old, hi_new;
+| 
+|         hi_old = b->hi;
+| 
+|         cmpxchg_double_local(&b->lo, &b->hi, 0x12, 0x34, 0x56, 0x78);
+| 
+|         hi_new = b->hi;
+| 
+|         return hi_old ^ hi_new;
+| }
+
+GCC clearly figures out the high half isn't modified, and constant folds hi_old
+^ hi_new down to zero, regardless of whether we use LL/SC or LSE:
+
+<foo>:
+   0:   d503233f        paciasp
+   4:   aa0003e4        mov     x4, x0
+   8:   1400000e        b       40 <foo+0x40>
+   c:   d2800240        mov     x0, #0x12                       // #18
+  10:   d2800681        mov     x1, #0x34                       // #52
+  14:   aa0003e5        mov     x5, x0
+  18:   aa0103e6        mov     x6, x1
+  1c:   d2800ac2        mov     x2, #0x56                       // #86
+  20:   d2800f03        mov     x3, #0x78                       // #120
+  24:   48207c82        casp    x0, x1, x2, x3, [x4]
+  28:   ca050000        eor     x0, x0, x5
+  2c:   ca060021        eor     x1, x1, x6
+  30:   aa010000        orr     x0, x0, x1
+  34:   d2800000        mov     x0, #0x0                        // #0    <--- BANG
+  38:   d50323bf        autiasp
+  3c:   d65f03c0        ret
+  40:   d2800240        mov     x0, #0x12                       // #18
+  44:   d2800681        mov     x1, #0x34                       // #52
+  48:   d2800ac2        mov     x2, #0x56                       // #86
+  4c:   d2800f03        mov     x3, #0x78                       // #120
+  50:   f9800091        prfm    pstl1strm, [x4]
+  54:   c87f1885        ldxp    x5, x6, [x4]
+  58:   ca0000a5        eor     x5, x5, x0
+  5c:   ca0100c6        eor     x6, x6, x1
+  60:   aa0600a6        orr     x6, x5, x6
+  64:   b5000066        cbnz    x6, 70 <foo+0x70>
+  68:   c8250c82        stxp    w5, x2, x3, [x4]
+  6c:   35ffff45        cbnz    w5, 54 <foo+0x54>
+  70:   d2800000        mov     x0, #0x0                        // #0     <--- BANG
+  74:   d50323bf        autiasp
+  78:   d65f03c0        ret
+  7c:   d503201f        nop
+
+... so we *definitely* need to fix that.
+
+Using __uint128_t instead, e.g.
+
+diff --git a/arch/arm64/include/asm/atomic_ll_sc.h b/arch/arm64/include/asm/atomic_ll_sc.h
+index 0890e4f568fb7..cbb3d961123b1 100644
+--- a/arch/arm64/include/asm/atomic_ll_sc.h
++++ b/arch/arm64/include/asm/atomic_ll_sc.h
+@@ -315,7 +315,7 @@ __ll_sc__cmpxchg_double##name(unsigned long old1,                   \
+        "       cbnz    %w0, 1b\n"                                      \
+        "       " #mb "\n"                                              \
+        "2:"                                                            \
+-       : "=&r" (tmp), "=&r" (ret), "+Q" (*(unsigned long *)ptr)        \
++       : "=&r" (tmp), "=&r" (ret), "+Q" (*(__uint128_t *)ptr)          \
+        : "r" (old1), "r" (old2), "r" (new1), "r" (new2)                \
+        : cl);                                                          \
+                                                                        \
+diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
+index 52075e93de6c0..a94d6dacc0292 100644
+--- a/arch/arm64/include/asm/atomic_lse.h
++++ b/arch/arm64/include/asm/atomic_lse.h
+@@ -311,7 +311,7 @@ __lse__cmpxchg_double##name(unsigned long old1,                             \
+        "       eor     %[old2], %[old2], %[oldval2]\n"                 \
+        "       orr     %[old1], %[old1], %[old2]"                      \
+        : [old1] "+&r" (x0), [old2] "+&r" (x1),                         \
+-         [v] "+Q" (*(unsigned long *)ptr)                              \
++         [v] "+Q" (*(__uint128_t *)ptr)                                \
+        : [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),             \
+          [oldval1] "r" (oldval1), [oldval2] "r" (oldval2)              \
+        : cl);                                                          \
+
+... makes GCC much happier:
+
+<foo>:
+   0:   f9400407        ldr     x7, [x0, #8]
+   4:   d503233f        paciasp
+   8:   aa0003e4        mov     x4, x0
+   c:   1400000f        b       48 <foo+0x48>
+  10:   d2800240        mov     x0, #0x12                       // #18
+  14:   d2800681        mov     x1, #0x34                       // #52
+  18:   aa0003e5        mov     x5, x0
+  1c:   aa0103e6        mov     x6, x1
+  20:   d2800ac2        mov     x2, #0x56                       // #86
+  24:   d2800f03        mov     x3, #0x78                       // #120
+  28:   48207c82        casp    x0, x1, x2, x3, [x4]
+  2c:   ca050000        eor     x0, x0, x5
+  30:   ca060021        eor     x1, x1, x6
+  34:   aa010000        orr     x0, x0, x1
+  38:   f9400480        ldr     x0, [x4, #8]
+  3c:   d50323bf        autiasp
+  40:   ca0000e0        eor     x0, x7, x0
+  44:   d65f03c0        ret
+  48:   d2800240        mov     x0, #0x12                       // #18
+  4c:   d2800681        mov     x1, #0x34                       // #52
+  50:   d2800ac2        mov     x2, #0x56                       // #86
+  54:   d2800f03        mov     x3, #0x78                       // #120
+  58:   f9800091        prfm    pstl1strm, [x4]
+  5c:   c87f1885        ldxp    x5, x6, [x4]
+  60:   ca0000a5        eor     x5, x5, x0
+  64:   ca0100c6        eor     x6, x6, x1
+  68:   aa0600a6        orr     x6, x5, x6
+  6c:   b5000066        cbnz    x6, 78 <foo+0x78>
+  70:   c8250c82        stxp    w5, x2, x3, [x4]
+  74:   35ffff45        cbnz    w5, 5c <foo+0x5c>
+  78:   f9400480        ldr     x0, [x4, #8]
+  7c:   d50323bf        autiasp
+  80:   ca0000e0        eor     x0, x7, x0
+  84:   d65f03c0        ret
+  88:   d503201f        nop
+  8c:   d503201f        nop
+
+... I'll go check whether clang is happy with that, and how far back that can
+go, otherwise we'll need to blat the high half with a separate constaint that
+(ideally) doesn't end up allocating a pointless address register.
+
+Mark.
