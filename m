@@ -2,132 +2,221 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B9365C0C2
-	for <lists+linux-arch@lfdr.de>; Tue,  3 Jan 2023 14:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EBC65C0D6
+	for <lists+linux-arch@lfdr.de>; Tue,  3 Jan 2023 14:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbjACNZu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 Jan 2023 08:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S230488AbjACNbD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 Jan 2023 08:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237372AbjACNZt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Jan 2023 08:25:49 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 047D6CD;
-        Tue,  3 Jan 2023 05:25:47 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4809B2F4;
-        Tue,  3 Jan 2023 05:26:28 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.37.13])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA5683F587;
-        Tue,  3 Jan 2023 05:25:40 -0800 (PST)
-Date:   Tue, 3 Jan 2023 13:25:35 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, torvalds@linux-foundation.org,
-        corbet@lwn.net, will@kernel.org, catalin.marinas@arm.com,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC][PATCH 05/12] arch: Introduce
- arch_{,try_}_cmpxchg128{,_local}()
-Message-ID: <Y7QszyTEG2+WiI/C@FVFF77S0Q05N>
-References: <20221219153525.632521981@infradead.org>
- <20221219154119.154045458@infradead.org>
- <Y6DEfQXymYVgL3oJ@boqun-archlinux>
- <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6GXoO4qmH9OIZ5Q@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S237551AbjACNbA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 Jan 2023 08:31:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73A211171;
+        Tue,  3 Jan 2023 05:30:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5876A61290;
+        Tue,  3 Jan 2023 13:30:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F7BC433EF;
+        Tue,  3 Jan 2023 13:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672752657;
+        bh=hUoNU0K1jiu0AMzzYChvK5UBNb0NQ1eLI3M81OvWO/4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eV7VpVOjSClYpf8kOi4dmjkSwDan0oZidPtMjIwlY7kVcD7ilt+mpUsrvd5EqEdMT
+         cn2teqOXRLwiFmQtlDR07c+FuWc7Ke4j4rvh/vEfu8etSU0GE2NW5Y9P8TYLEz67qw
+         JstWf7b9TBJwFb1G1q3vi0CVYqNrtDZqaoYa1lG44CY2EWieDtgi+tOfLTi8H6NHyp
+         MhKJ6UpE3LXVhsOrY7LudmKrcFrbYxTWRKKjT0BcAY7E0LZuzCYIOqctaKn6kpvXT9
+         2huL0DnUtjEMxxqDtg+QJbpyAi2VPZnAH8wWf79ifm/bF63nFbeewRJGSJFBGeuJPO
+         L5fceN2F+vmsw==
+Date:   Tue, 3 Jan 2023 22:30:53 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     rostedt@goodmis.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] kernel/trace: Introduce trace_probe_print_args
+ and use it in *probes
+Message-Id: <20230103223053.d82c08125d8bcb83761b65ea@kernel.org>
+In-Reply-To: <1672382000-18304-1-git-send-email-chensong_2000@189.cn>
+References: <1672382000-18304-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 20, 2022 at 12:08:16PM +0100, Peter Zijlstra wrote:
-> On Mon, Dec 19, 2022 at 12:07:25PM -0800, Boqun Feng wrote:
-> > On Mon, Dec 19, 2022 at 04:35:30PM +0100, Peter Zijlstra wrote:
-> > > For all architectures that currently support cmpxchg_double()
-> > > implement the cmpxchg128() family of functions that is basically the
-> > > same but with a saner interface.
-> > > 
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > ---
-> > >  arch/arm64/include/asm/atomic_ll_sc.h |   38 +++++++++++++++++++++++
-> > >  arch/arm64/include/asm/atomic_lse.h   |   33 +++++++++++++++++++-
-> > >  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
-> > >  arch/s390/include/asm/cmpxchg.h       |   33 ++++++++++++++++++++
-> > >  arch/x86/include/asm/cmpxchg_32.h     |    3 +
-> > >  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
-> > >  6 files changed, 185 insertions(+), 3 deletions(-)
-> > > 
-> > > --- a/arch/arm64/include/asm/atomic_ll_sc.h
-> > > +++ b/arch/arm64/include/asm/atomic_ll_sc.h
-> > > @@ -326,6 +326,44 @@ __CMPXCHG_DBL(   ,        ,  ,         )
-> > >  __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
-> > >  
-> > >  #undef __CMPXCHG_DBL
-> > > +
-> > > +union __u128_halves {
-> > > +	u128 full;
-> > > +	struct {
-> > > +		u64 low, high;
-> > > +	};
-> > > +};
-> > > +
-> > > +#define __CMPXCHG128(name, mb, rel, cl)					\
-> > > +static __always_inline u128						\
-> > > +__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
-> > > +{									\
-> > > +	union __u128_halves r, o = { .full = (old) },			\
-> > > +			       n = { .full = (new) };			\
-> > > +									\
-> > > +	asm volatile("// __cmpxchg128" #name "\n"			\
-> > > +	"	prfm	pstl1strm, %2\n"				\
-> > > +	"1:	ldxp	%0, %1, %2\n"					\
-> > > +	"	eor	%3, %0, %3\n"					\
-> > > +	"	eor	%4, %1, %4\n"					\
-> > > +	"	orr	%3, %4, %3\n"					\
-> > > +	"	cbnz	%3, 2f\n"					\
-> > > +	"	st" #rel "xp	%w3, %5, %6, %2\n"			\
-> > > +	"	cbnz	%w3, 1b\n"					\
-> > > +	"	" #mb "\n"						\
-> > > +	"2:"								\
-> > > +	: "=&r" (r.low), "=&r" (r.high), "+Q" (*(unsigned long *)ptr)	\
-> > 
-> > I wonder whether we should use "(*(u128 *)ptr)" instead of "(*(unsigned
-> > long *) ptr)"? Because compilers may think only 64bit value pointed by
-> > "ptr" gets modified, and they are allowed to do "useful" optimization.
+On Fri, 30 Dec 2022 14:33:19 +0800
+Song Chen <chensong_2000@189.cn> wrote:
+
+> print_probe_args is currently inplemented in trace_probe_tmpl.h and
+> included by *probes, as a result, each probe has an identical copy.
 > 
-> In this I've copied the existing cmpxchg_double() code; I'll have to let
-> the arch folks speak here, I've no clue.
+> This patch will move it to trace_probe.c as an new API, each probe
+> calls it to print their args in trace file.
+> 
 
-We definitely need to ensure the compiler sees we poke the whole thing, or it
-can get this horribly wrong, so that is a latent bug.
+This looks good to me.
 
-See commit:
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-  fee960bed5e857eb ("arm64: xchg: hazard against entire exchange variable")
+Thanks!
 
-... for examples of GCC being clever, where I overlooked the *_double() cases.
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> ---
+>  kernel/trace/trace_eprobe.c     |  2 +-
+>  kernel/trace/trace_kprobe.c     |  4 ++--
+>  kernel/trace/trace_probe.c      | 27 +++++++++++++++++++++++++++
+>  kernel/trace/trace_probe.h      |  2 ++
+>  kernel/trace/trace_probe_tmpl.h | 28 ----------------------------
+>  kernel/trace/trace_uprobe.c     |  2 +-
+>  6 files changed, 33 insertions(+), 32 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 5dd0617e5df6..bdb26eee7a0c 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -310,7 +310,7 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+>  
+>  	trace_seq_putc(s, ')');
+>  
+> -	if (print_probe_args(s, tp->args, tp->nr_args,
+> +	if (trace_probe_print_args(s, tp->args, tp->nr_args,
+>  			     (u8 *)&field[1], field) < 0)
+>  		goto out;
+>  
+> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> index 5a75b039e586..a4ffa864dbb7 100644
+> --- a/kernel/trace/trace_kprobe.c
+> +++ b/kernel/trace/trace_kprobe.c
+> @@ -1426,7 +1426,7 @@ print_kprobe_event(struct trace_iterator *iter, int flags,
+>  
+>  	trace_seq_putc(s, ')');
+>  
+> -	if (print_probe_args(s, tp->args, tp->nr_args,
+> +	if (trace_probe_print_args(s, tp->args, tp->nr_args,
+>  			     (u8 *)&field[1], field) < 0)
+>  		goto out;
+>  
+> @@ -1461,7 +1461,7 @@ print_kretprobe_event(struct trace_iterator *iter, int flags,
+>  
+>  	trace_seq_putc(s, ')');
+>  
+> -	if (print_probe_args(s, tp->args, tp->nr_args,
+> +	if (trace_probe_print_args(s, tp->args, tp->nr_args,
+>  			     (u8 *)&field[1], field) < 0)
+>  		goto out;
+>  
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 36dff277de46..ae13b6b2d5da 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -1218,3 +1218,30 @@ int trace_probe_create(const char *raw_command, int (*createfn)(int, const char
+>  
+>  	return ret;
+>  }
+> +
+> +int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
+> +		 u8 *data, void *field)
+> +{
+> +	void *p;
+> +	int i, j;
+> +
+> +	for (i = 0; i < nr_args; i++) {
+> +		struct probe_arg *a = args + i;
+> +
+> +		trace_seq_printf(s, " %s=", a->name);
+> +		if (likely(!a->count)) {
+> +			if (!a->type->print(s, data + a->offset, field))
+> +				return -ENOMEM;
+> +			continue;
+> +		}
+> +		trace_seq_putc(s, '{');
+> +		p = data + a->offset;
+> +		for (j = 0; j < a->count; j++) {
+> +			if (!a->type->print(s, p, field))
+> +				return -ENOMEM;
+> +			trace_seq_putc(s, j == a->count - 1 ? '}' : ',');
+> +			p += a->type->size;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index de38f1c03776..cfef198013af 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -343,6 +343,8 @@ int trace_probe_compare_arg_type(struct trace_probe *a, struct trace_probe *b);
+>  bool trace_probe_match_command_args(struct trace_probe *tp,
+>  				    int argc, const char **argv);
+>  int trace_probe_create(const char *raw_command, int (*createfn)(int, const char **));
+> +int trace_probe_print_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
+> +		 u8 *data, void *field);
+>  
+>  #define trace_probe_for_each_link(pos, tp)	\
+>  	list_for_each_entry(pos, &(tp)->event->files, list)
+> diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+> index b3bdb8ddb862..1b57420857e1 100644
+> --- a/kernel/trace/trace_probe_tmpl.h
+> +++ b/kernel/trace/trace_probe_tmpl.h
+> @@ -212,31 +212,3 @@ store_trace_args(void *data, struct trace_probe *tp, void *rec,
+>  		}
+>  	}
+>  }
+> -
+> -static inline int
+> -print_probe_args(struct trace_seq *s, struct probe_arg *args, int nr_args,
+> -		 u8 *data, void *field)
+> -{
+> -	void *p;
+> -	int i, j;
+> -
+> -	for (i = 0; i < nr_args; i++) {
+> -		struct probe_arg *a = args + i;
+> -
+> -		trace_seq_printf(s, " %s=", a->name);
+> -		if (likely(!a->count)) {
+> -			if (!a->type->print(s, data + a->offset, field))
+> -				return -ENOMEM;
+> -			continue;
+> -		}
+> -		trace_seq_putc(s, '{');
+> -		p = data + a->offset;
+> -		for (j = 0; j < a->count; j++) {
+> -			if (!a->type->print(s, p, field))
+> -				return -ENOMEM;
+> -			trace_seq_putc(s, j == a->count - 1 ? '}' : ',');
+> -			p += a->type->size;
+> -		}
+> -	}
+> -	return 0;
+> -}
+> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> index fb58e86dd117..1ff8f87211a6 100644
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -1041,7 +1041,7 @@ print_uprobe_event(struct trace_iterator *iter, int flags, struct trace_event *e
+>  		data = DATAOF_TRACE_ENTRY(entry, false);
+>  	}
+>  
+> -	if (print_probe_args(s, tu->tp.args, tu->tp.nr_args, data, entry) < 0)
+> +	if (trace_probe_print_args(s, tu->tp.args, tu->tp.nr_args, data, entry) < 0)
+>  		goto out;
+>  
+>  	trace_seq_putc(s, '\n');
+> -- 
+> 2.25.1
+> 
 
-I'll go spin a quick fix for that so that we can have something go to stable
-before we rejig the API.
 
-Mark.
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
