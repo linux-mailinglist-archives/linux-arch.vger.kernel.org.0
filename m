@@ -2,72 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6053365D5B3
-	for <lists+linux-arch@lfdr.de>; Wed,  4 Jan 2023 15:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D2A65D7B7
+	for <lists+linux-arch@lfdr.de>; Wed,  4 Jan 2023 16:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239317AbjADOc1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 Jan 2023 09:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
+        id S239750AbjADP7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 Jan 2023 10:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239561AbjADOcT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Jan 2023 09:32:19 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA4E373B3;
-        Wed,  4 Jan 2023 06:32:12 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 978331EC02FE;
-        Wed,  4 Jan 2023 15:32:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1672842730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=mGAc1hvVkdgwx67qTNes4TeLVQF5ZYZruSeDLPAGn0s=;
-        b=Xqn4rhA3RQh8ReQBXtLkJ3CyiJPGmS7JH7ngZ6z4RhyyGaedtIU5vIfqqUqEt+qN4f+VeA
-        twAtwhN7jpXEV0mQK0MXBLdAmOgBzoF1mCclxLj1W1dKo++TdeWBftWfJvVf3quvS4uX0e
-        +c2sc3vVioheJW4dMkIh2G6zpdom/tE=
-Date:   Wed, 4 Jan 2023 15:32:05 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 16/39] x86/mm: Check Shadow Stack page fault errors
-Message-ID: <Y7WN5WxENBrhkJXU@zn.tnic>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-17-rick.p.edgecombe@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-17-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        with ESMTP id S239739AbjADP6t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 Jan 2023 10:58:49 -0500
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A551413F6B;
+        Wed,  4 Jan 2023 07:58:47 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 284635C00D1;
+        Wed,  4 Jan 2023 10:58:45 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 04 Jan 2023 10:58:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1672847925; x=1672934325; bh=H0UTR4kJze
+        AkAZivC7ap8DwhEwb/MXnY4XPO+uy9kKc=; b=U8pU6dYSVrl/CVJUPPEqx1R9Aq
+        lRxcqMgYm/TyRX26ZRhyXa5uD+cs/yqjcy+nxmXyUIG+GTv181nQJi14UJAOIAjf
+        9og92IBPb31uZ6dMCyYRlMnZEfzQ6xvntOWmT3FWGrbwUq5HC7doLJZu6KqzASKI
+        hx0t/iE+7VsGIErLSpVMU0gFj5/H+ZQaKAZypwzKqJpGCyYDp223hOv+Zz4SLqW0
+        aap4i0c2yXuHQ0fuFazE/+lmbeVPJ9sjpKCGtqT+ziNxFO9URfDlN8d6S8yyG2Kc
+        gfoSMJGJPpNha+B3JWXggdUNoTtSLSxTxQuqa+jy3h74M4/4siNT+25L+AnA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1672847925; x=1672934325; bh=H0UTR4kJzeAkAZivC7ap8DwhEwb/
+        MXnY4XPO+uy9kKc=; b=HgaFI40sC8yMY8VOy7QQ2F4//wyS3hYp0LPxGg03HAWk
+        qEtLjRM+JzoyCdjTkYPOh/vyRMocCgEQJJqgRHD5+URJ6Ih4+/PWfKLiNnp0SZ5c
+        2eVHhYC4JvCfKwLmmEFnjnFQRQl/X6q87HzGKYozVQvf+hOjcXLbChRn7u4v6rVv
+        A7h6PsV/16E/QY06UxPPdbXrMJQ3AXHk2Coz61RWuHtjaXz5GAT/CtwzH0J/hC6Z
+        8GBNd2fU1eV3VheOX6SEI3N2hK9df+iJYKLxk619yg08GulRxfRBLXa5HcZVP0mX
+        atQsepbklOuSYA/wRkqz2dILaWkGdP1/uzO37OwLPg==
+X-ME-Sender: <xms:NKK1Y48HslmbYS4XfyvkV25JDSKz4gqEZbPhEXvALJOvcqVVorgYrQ>
+    <xme:NKK1YwvOYWU86IT641Xjgz28D53RJaLRPWwjvOCq1FuTvXSRIj9DM-9LxgP0a6zpv
+    RWXh9d7Rchms20DgzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrjeeigdekvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:NKK1Y-D0Rn03uTnG6oMJtNULtppKVKQLRwrnCdfDvZq1rkRA1aAVAg>
+    <xmx:NKK1Y4fvmlqny8-TiW5EIb1Km8tOPFA7Fqn4qJNuwbm4wf6rLLbgkw>
+    <xmx:NKK1Y9MK4-XTCquhXJiLE_n3OfFxMW22ddTI_UZsemVu5efG4lpnyQ>
+    <xmx:NaK1YztseASQahJ66RWxLZYnhH-1ueAQdizsGnk9d2-oLHJ_jMdhJw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 43F24B6008D; Wed,  4 Jan 2023 10:58:44 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
+Mime-Version: 1.0
+Message-Id: <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
+In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+Date:   Wed, 04 Jan 2023 16:58:25 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Yann Sionneau" <ysionneau@kalray.eu>
+Cc:     "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        "Christian Brauner" <brauner@kernel.org>,
+        devicetree@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Eric Paris" <eparis@redhat.com>, "Ingo Molnar" <mingo@redhat.com>,
+        "Jan Kiszka" <jan.kiszka@siemens.com>,
+        "Jason Baron" <jbaron@akamai.com>, "Jiri Olsa" <jolsa@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Kieran Bingham" <kbingham@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-audit@redhat.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Namhyung Kim" <namhyung@kernel.org>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Paul Moore" <paul@paul-moore.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Sebastian Reichel" <sre@kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Waiman Long" <longman@redhat.com>,
+        "Will Deacon" <will@kernel.org>, "Alex Michon" <amichon@kalray.eu>,
+        "Ashley Lesdalons" <alesdalons@kalray.eu>,
+        "Benjamin Mugnier" <mugnier.benjamin@gmail.com>,
+        "Clement Leger" <clement.leger@bootlin.com>,
+        "Guillaume Missonnier" <gmissonnier@kalray.eu>,
+        "Guillaume Thouvenin" <gthouvenin@kalray.eu>,
+        "Jean-Christophe Pince" <jcpince@gmail.com>,
+        "Jonathan Borne" <jborne@kalray.eu>,
+        "Jules Maselbas" <jmaselbas@kalray.eu>,
+        "Julian Vetter" <jvetter@kalray.eu>,
+        "Julien Hascoet" <jhascoet@kalray.eu>,
+        "Julien Villette" <jvillette@kalray.eu>,
+        "Louis Morhet" <lmorhet@kalray.eu>,
+        "Luc Michel" <lmichel@kalray.eu>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        "Marius Gligor" <mgligor@kalray.eu>,
+        "Samuel Jones" <sjones@kalray.eu>,
+        "Thomas Costis" <tcostis@kalray.eu>,
+        "Vincent Chardon" <vincent.chardon@elsys-design.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,83 +137,76 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:43PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> The CPU performs "shadow stack accesses" when it expects to encounter
-> shadow stack mappings. These accesses can be implicit (via CALL/RET
-> instructions) or explicit (instructions like WRSS).
-> 
-> Shadow stacks accesses to shadow-stack mappings can see faults in normal,
-> valid operation just like regular accesses to regular mappings. Shadow
-> stacks need some of the same features like delayed allocation, swap and
-> copy-on-write. The kernel needs to use faults to implement those features.
-> 
-> The architecture has concepts of both shadow stack reads and shadow stack
-> writes. Any shadow stack access to non-shadow stack memory will generate
-> a fault with the shadow stack error code bit set.
+On Tue, Jan 3, 2023, at 17:43, Yann Sionneau wrote:
+> This patch series adds support for the kv3-1 CPU architecture of the kvx family
+> found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+>
+> This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
+> therefore this patch series cannot be merged into Linux for now.
+>
+> The goal is to have preliminary reviews and to fix problems early.
+>
+> The Kalray VLIW processor family (kvx) has the following features:
+> * 32/64 bits execution mode
+> * 6-issue VLIW architecture
+> * 64 x 64bits general purpose registers
+> * SIMD instructions
+> * little-endian
+> * deep learning co-processor
 
-You lost me here: by "shadow stack access to non-shadow stack memory" you mean
-the explicit one using WRU*SS?
+Thanks for posting these, I had been wondering about the
+state of the port. Overall this looks really nice, I can
+see that you and the team have looked at other ports
+and generally made the right decisions.
 
-> This means that, unlike normal write protection, the fault handler needs
-> to create a type of memory that can be written to (with instructions that
-> generate shadow stack writes), even to fulfill a read access. So in the
-> case of COW memory, the COW needs to take place even with a shadow stack
-> read.
+I commented on the syscall patch directly, I think it's
+important to stop using the deprecated syscalls as soon
+as possible to avoid having dependencies in too many
+libc binaries. Almost everything else can be changed
+easily as you get closer to upstream inclusion.
 
-I guess I'm missing an example here: are we talking here about a user process
-getting its shadow stack pages allocated and them being COW first and on the
-first shstk operation, it would generate that fault?
+I did not receive most of the other patches as I'm
+not subscribed to all the mainline lists. For future 
+submissions, can you add the linux-arch list to Cc for
+all patches?
 
-> @@ -1331,6 +1345,30 @@ void do_user_addr_fault(struct pt_regs *regs,
->  
->  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
->  
-> +	/*
-> +	 * When a page becomes COW it changes from a shadow stack permissioned
+Reading the rest of the series through lore.kernel.org,
+most of the comments I have are for improvements that
+you may find valuable rather than serious mistakes:
 
-Unknown word [permissioned] in comment.
+- the {copy_to,copy_from,clear}_user functions are
+  well worth optimizing better than the byte-at-a-time
+  version you have, even just a C version built around
+  your __get_user/__put_user inline asm should help, and
+  could be added to lib/usercopy.c.
 
-> +	 * page (Write=0,Dirty=1) to (Write=0,Dirty=0,CoW=1), which is simply
-> +	 * read-only to the CPU. When shadow stack is enabled, a RET would
-> +	 * normally pop the shadow stack by reading it with a "shadow stack
-> +	 * read" access. However, in the COW case the shadow stack memory does
-> +	 * not have shadow stack permissions, it is read-only. So it will
-> +	 * generate a fault.
-> +	 *
-> +	 * For conventionally writable pages, a read can be serviced with a
-> +	 * read only PTE, and COW would not have to happen. But for shadow
-> +	 * stack, there isn't the concept of read-only shadow stack memory.
-> +	 * If it is shadow stack permissioned, it can be modified via CALL and
+- The __raw_{read,write}{b,w,l,q} helpers should
+  normally be defined as inline asm instead of
+  volatile pointer dereferences, I've seen cases where
+  the compiler ends up splitting the access or does
+  other things you may not want on MMIO areas.
 
-Ditto.
+- I would recomment implementing HAVE_ARCH_VMAP_STACK
+  as well as IRQ stacks, both of these help to
+  avoid data corruption from stack overflow that you
+  will eventually run into.
 
-> +	 * RET instructions. So COW needs to happen before any memory can be
-> +	 * mapped with shadow stack permissions.
-> +	 *
-> +	 * Shadow stack accesses (read or write) need to be serviced with
-> +	 * shadow stack permissioned memory, so in the case of a shadow stack
+- You use qspinlock as the only available spinlock
+  implementation, but only support running on a
+  single cluster of 16 cores. It may help to use
+  the generic ticket spinlock instead, or leave it
+  as a Kconfig option, in particular since you only
+  have the emulated xchg16() atomic for qspinlock.
 
-Is this some new formulation I haven't heard about yet?
+- Your defconfig file enables CONFIG_EMBEDDED, which
+  in turn enables CONFIG_EXPERT. This is probably
+  not what you want, so better turn off both of these.
 
-"Permissioned <something>"?
+- The GENERIC_CALIBRATE_DELAY should not be necessary
+  since you have a get_cycles() based delay loop.
+  Just set loops_per_jiffy to the correct value based
+  on the frequency of the cycle counter, to save
+  a little time during boot and get a more accurate
+  delay loop.
 
-> +	 * read access, treat it as a WRITE fault so both COW will happen and
-> +	 * the write fault path will tickle maybe_mkwrite() and map the memory
-> +	 * shadow stack.
-> +	 */
-> +	if (error_code & X86_PF_SHSTK)
-> +		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_WRITE)
->  		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_INSTR)
-> -- 
-> 2.17.1
-> 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+    Arnd
