@@ -2,90 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7026465ECE2
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Jan 2023 14:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 280DC65EDE4
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Jan 2023 14:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232547AbjAENYT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Jan 2023 08:24:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S234016AbjAENyW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Jan 2023 08:54:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjAENYR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Jan 2023 08:24:17 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5195E0EB;
-        Thu,  5 Jan 2023 05:24:15 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S234623AbjAENxk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Jan 2023 08:53:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F5E60CD8;
+        Thu,  5 Jan 2023 05:50:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NnnHc0FDqz4y0B;
-        Fri,  6 Jan 2023 00:24:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1672925052;
-        bh=OSrLexRH0yAsb5qST90MoTX51vfdeiMji+XTnquxx4E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VcSOFdnfJkqg973Yj8od+KLuNgioMrbMpfYqEmAbOzD9d9Oe3WTzxXzx0gJJZuALw
-         9ABoRfTgnZKTpsNjtk62xNu+80BKfXOl/0ACARfQLR326UjPiA/CHJ5+1k9jtdLnwi
-         ZOIE+LyejRC2XvTqF39E2vsgIfijxviU2y3aanMsaNceXVo1k9LAUWDIx8tv98NvoW
-         /2V2YR/Rk67IkSGdD4deik6oDJBXVl3ok3nIq5FuSFoAcVgYqs5cFSaJaugXAD0UMd
-         4/LuMfDSMwhW2QCJyAmqlKLFCjWIr4aNfYbCaMK/m/lifGd2tjR4DdZRr1b4kHVFtz
-         hgJ0f0Etdbwiw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     <linuxppc-dev@lists.ozlabs.org>
-Cc:     <masahiroy@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <schwab@linux-m68k.org>,
-        ardb@kernel.org, <nathan@kernel.org>
-Subject: [PATCH 3/3] powerpc/vmlinux.lds: Don't discard .comment
-Date:   Fri,  6 Jan 2023 00:23:49 +1100
-Message-Id: <20230105132349.384666-3-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105132349.384666-1-mpe@ellerman.id.au>
-References: <20230105132349.384666-1-mpe@ellerman.id.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA53461A8B;
+        Thu,  5 Jan 2023 13:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 475A3C433D2;
+        Thu,  5 Jan 2023 13:50:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672926623;
+        bh=9rsuUbz5CFNU3FwjG7vhE4crM2pZKjhb8A7QPVly1mA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sMNHJLA1AOuvHY4rKQLB05My6d9puPX+E16ZcLmQYery0xzrUtkasYGUUvZSw/2Gq
+         iP8FseZ8M+ZTiyBokv3MfF+UUnVR6GdBzMg1R+wIqcwCqhWdc9pqu7YKFhmuxUM/uI
+         RfZ9f8U4Vt07XRsdueVEO7W4zf0Uc781pkqLmYk/W+bQgZ/5XZs938GEhXCk3UXKSQ
+         RptMX4nmwUyj0pZdhCir3ZuMs3E7r5NrwqQ3TqAGGmsvLYlFtLTBrxYLPTdbYXMtL0
+         17Oi+YHcFv4pATeaiVhmhiUW/nZF4uAPDfc8ojr1giiRRAc6OlytnhbZOQSEp/Lk4C
+         615SVG6DEl1DQ==
+Received: by mail-oi1-f176.google.com with SMTP id s187so31964215oie.10;
+        Thu, 05 Jan 2023 05:50:23 -0800 (PST)
+X-Gm-Message-State: AFqh2koiiTAylMQFAL9v9q/GWFSz5bQLHFhjn5Sv55bnyPFap6KhxxY3
+        At1J0xlc8H00o47hsJbW7fMoxj6s7ayaN12kBN8=
+X-Google-Smtp-Source: AMrXdXsQ8eHuE5T9wbS/TSFR1VCmUEYQReFWODFWTDVkrBErc+HlOKeIJraKJb0jPNiJNVbMRBUU85Biyah+tr4UtiE=
+X-Received: by 2002:aca:3755:0:b0:35e:7c55:b015 with SMTP id
+ e82-20020aca3755000000b0035e7c55b015mr2913154oia.287.1672926622568; Thu, 05
+ Jan 2023 05:50:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221226184537.744960-1-masahiroy@kernel.org> <Y7Jal56f6UBh1abE@dev-arch.thelio-3990X>
+ <CAK7LNAQ-MWhbiTX=phy3uzmNn+6ABZmi49D6d1n1-k-jxcQzgA@mail.gmail.com>
+ <87fscp2v7k.fsf@igel.home> <CAMj1kXGD3wQUPsRhvD7bO9xBJ6NR=Z+y8wXmKSCs57Oeh3MzGw@mail.gmail.com>
+In-Reply-To: <CAMj1kXGD3wQUPsRhvD7bO9xBJ6NR=Z+y8wXmKSCs57Oeh3MzGw@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 5 Jan 2023 22:49:46 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASX4oJO+ciA6RRW35qDgD+39iWDVhW0LX_eQne+PDBVgA@mail.gmail.com>
+Message-ID: <CAK7LNASX4oJO+ciA6RRW35qDgD+39iWDVhW0LX_eQne+PDBVgA@mail.gmail.com>
+Subject: Re: [PATCH v2] arch: fix broken BuildID for arm64 and riscv
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andreas Schwab <schwab@linux-m68k.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Dennis Gilmore <dennis@ausil.us>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Although the powerpc linker script mentions .comment in the DISCARD
-section, that has never actually caused it to be discarded, because the
-earlier ELF_DETAILS macro (previously STABS_DEBUG) explicitly includes
-.comment.
+On Thu, Jan 5, 2023 at 6:27 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Thu, 5 Jan 2023 at 10:21, Andreas Schwab <schwab@linux-m68k.org> wrote:
+> >
+> > On Jan 05 2023, Masahiro Yamada wrote:
+> >
+> > > I do not understand why 99cb0d917ffa affected this.
+> > >
+> > >
+> > > I submitted a fix to shoot the error message "discarded section .exit.text"
+> > >
+> > > https://lore.kernel.org/all/20230105031306.1455409-1-masahiroy@kernel.org/T/#u
+> > >
+> > > I do not understand the binutils commit either,
+> > > but it might have made something good
+> > > because EXIT_TEXT appears twice, in .exit.text, and /DISCARD/.
+> >
+> > I think the issue is that the introdution of a second /DISCARD/
+> > directive early in script changes the order of evaluation of the other
+> > /DISCARD/ directive when binutils < 2.36 is used, so that the missing
+> > RUNTIME_DISCARD_EXIT started to become relevant.  As long as /DISCARD/
+> > only appears last, the effect of EXIT_TEXT inside it is always
+> > overridden by its occurence in the .exit.exit output section directive.
+> > When another /DISCARD/ occurs early (and binutils < 2.36 is used) the
+> > effect of EXIT_TEXT inside the second /DISCARD/ (when merged with the
+> > first) overrides its occurence in the .exit.text directive.  The
+> > binutils commit changed that because the new /DISCARD/ directive no
+> > longer affects the order of evaluation of the rest of the directives.
+> >
+>
+> Exactly. The binutils change mentions output section merging, which
+> apparently applies to the /DISCARD/ pseudo section as well.
+>
+> However, powerpc was also affected by this, and I suggested another
+> fix in the thread below
+>
+> https://lore.kernel.org/all/20230103014535.GA313835@roeck-us.net/
 
-However commit 99cb0d917ffa ("arch: fix broken BuildID for arm64 and
-riscv") introduced an earlier use of DISCARD as part of the RO_DATA
-macro. With binutils < 2.36 that causes the DISCARD directives later in
-the script to be applied earlier, causing .comment to actually be
-discarded.
 
-It's confusing to explicitly include and discard .comment, and even more
-so if the behaviour depends on the toolchain version. So don't discard
-.comment in order to maintain the existing behaviour in all cases.
+Thanks for the pointer.
 
-Fixes: 83a092cf95f2 ("powerpc: Link warning for orphan sections")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- arch/powerpc/kernel/vmlinux.lds.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+(and sorry, I did not notice that thread, and missed to reply promptly)
 
-diff --git a/arch/powerpc/kernel/vmlinux.lds.S b/arch/powerpc/kernel/vmlinux.lds.S
-index a4c6efadc90c..958e77a24f85 100644
---- a/arch/powerpc/kernel/vmlinux.lds.S
-+++ b/arch/powerpc/kernel/vmlinux.lds.S
-@@ -411,7 +411,7 @@ SECTIONS
- 	DISCARDS
- 	/DISCARD/ : {
- 		*(*.EMB.apuinfo)
--		*(.glink .iplt .plt .comment)
-+		*(.glink .iplt .plt)
- 		*(.gnu.version*)
- 		*(.gnu.attributes)
- 		*(.eh_frame)
+
+Your fix will work globally.
+I left some comments in that thread.
+
+
+
+
 -- 
-2.39.0
-
+Best Regards
+Masahiro Yamada
