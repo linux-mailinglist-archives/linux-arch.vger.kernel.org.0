@@ -2,235 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF6665E81D
-	for <lists+linux-arch@lfdr.de>; Thu,  5 Jan 2023 10:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E137665E965
+	for <lists+linux-arch@lfdr.de>; Thu,  5 Jan 2023 11:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjAEJon (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 Jan 2023 04:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S232698AbjAEKzP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 Jan 2023 05:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjAEJom (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Jan 2023 04:44:42 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A63A479F5;
-        Thu,  5 Jan 2023 01:44:41 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bt23so37673118lfb.5;
-        Thu, 05 Jan 2023 01:44:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tMfPMqVihaiTJlT1Abj1PYS+2gSL2oaYpar/GBI9FMc=;
-        b=nBnJF5CP3mfII46U2YiJsG+dbQOu1GeS3wO8pLQuug4Eu7IzE+o4YwWGH3gZsDbY9N
-         GlqXGNoKI3shcLNwShp01YS8wcqA/WvHHaf8Gd5zeGhA0/Pzym31fyH7tG4LH0Ys8vhR
-         Q+ViAzHnImWSeZee76o7q9xZRR6c6qdDmlxsiVBKO1SnasNEj24YNALLCTpR5RUm1n7I
-         +YD9639wlLlTRJKUJDBSM7VA9hhRFnV+ytvp3DKla3jlP5eb/kZ2JaKks0qG1Th/7w/6
-         0KwrC61GDy/CJ07gVBtpnLYuELsRbuQtPJ/InI9+zEHuCodD2fJ8ZAqoY7Dw9/HfI1Va
-         qIKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tMfPMqVihaiTJlT1Abj1PYS+2gSL2oaYpar/GBI9FMc=;
-        b=vLlN1xbtHvhijXKZyt7Ga+ayj1wsPjWg1vTEYupWJDQPg7Ofc4/vJy5/uI7H9Glt1O
-         piVLT7SpEasYaXLDKcWyG0F650KwlCZTJjKBWdG8EI4eXNQDdP6dMQ+aZ7Fk9MCI+4qd
-         dEodg1Jp8fYA87o/RUhLzjN4WTAi4kKPrdiywAG+6j/eFmgc0O/ffiorp2xsM4LICGP0
-         sKPi3iUVLnzB8aXAJJq0i0wFtzq5VQpeIq9jYV1v3OD8QvkEDsUAQ9kAfRloOdfH+wOX
-         3f3cWN7vk2RW82n2yGAGQNziIKS8WvYHRBFysnd9kG4KtFVe/3rM3gxgZGYELhiLmrQ4
-         dZlA==
-X-Gm-Message-State: AFqh2krJuRAT0yQRIytJLriZLDwZCO8w5eu6bEd236IF/4kUaCWq0U8C
-        4JRHU7QdtU5YNwoFoA08v24=
-X-Google-Smtp-Source: AMrXdXvfoW6rNC1yIfxetONNLyRdkEsgAM5TYbPLdpGhhnZ6p9YMvu0A+9bMpQADT7R4Jc7NiJBPQQ==
-X-Received: by 2002:a19:f609:0:b0:4b5:7672:57ef with SMTP id x9-20020a19f609000000b004b5767257efmr3125936lfe.2.1672911879248;
-        Thu, 05 Jan 2023 01:44:39 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id i8-20020a196d08000000b004b523766c23sm5466608lfc.202.2023.01.05.01.44.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 01:44:39 -0800 (PST)
-Date:   Thu, 5 Jan 2023 11:44:35 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, zhi.a.wang@intel.com
-Subject: Re: [PATCH v2 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Message-ID: <20230105114435.000078e4@gmail.com>
-In-Reply-To: <20221207003325.21503-3-decui@microsoft.com>
-References: <20221207003325.21503-1-decui@microsoft.com>
-        <20221207003325.21503-3-decui@microsoft.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S232949AbjAEKzG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 Jan 2023 05:55:06 -0500
+X-Greylist: delayed 881 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 02:55:04 PST
+Received: from fx308.security-mail.net (smtpout30.security-mail.net [85.31.212.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEBE50174
+        for <linux-arch@vger.kernel.org>; Thu,  5 Jan 2023 02:55:04 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id 8894275B18D
+        for <linux-arch@vger.kernel.org>; Thu,  5 Jan 2023 11:40:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1672915221;
+        bh=HozEVKpsnPTz1W+OmWAJHb2nflwGQpHJX/pPziyjbkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=z8nnqsOPLAZ31pVTrEaSU8Vi1jwkux3kRJ9jir01BPlgH3Vm0rvu0GKLTqA8QcOvp
+         kLczG4JPQ06aIFlsEnPWzgHdo4KICmI9A0K7HrUsCBAfrXYX+XrUXZNvGHj/AcXF+p
+         bTvO3vB+RrFhkrZgRrmVTSG9wbJg55lN4Wsmg9nc=
+Received: from fx308 (localhost [127.0.0.1]) by fx308.security-mail.net
+ (Postfix) with ESMTP id 6DB4A75AF9C; Thu,  5 Jan 2023 11:40:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx308.security-mail.net (Postfix) with ESMTPS id 0F44375AB2B; Thu,  5 Jan
+ 2023 11:40:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id D52FF27E0373; Thu,  5 Jan 2023
+ 11:40:20 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id B47A227E02E4; Thu,  5 Jan 2023 11:40:20 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ h9vZft-QceM0; Thu,  5 Jan 2023 11:40:20 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 5854D27E02AC; Thu,  5 Jan 2023
+ 11:40:20 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <141b8.63b6a915.e31d.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu B47A227E02E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672915220;
+ bh=rBdSTEj4sEHV5aOdgiMVbZa0c1+4vHmKGKt/utxqTFU=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=pKs+CePZ3R3W41fZHlmw/owOk940TBb9jGKa8X1N/B6at/r5t/99lcM7BYNSm1sbm
+ GgU4FIb/vUiDD0dGYY0QwPK6QJVEAcqdlcP4MzXTRQlqlJaTfeeQw469yNJ0IyFuvr
+ H4nRIuARzCz4d0RA5Dr/HYW0RULCkMt83j3YDunc=
+Date:   Thu, 5 Jan 2023 11:40:19 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-audit@redhat.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Message-ID: <20230105104019.GA7446@tellis.lin.mbt.kalray.eu>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue,  6 Dec 2022 16:33:21 -0800
-Dexuan Cui <decui@microsoft.com> wrote:
+Hi,
 
-> When a TDX guest runs on Hyper-V, the hv_netvsc driver's
-> netvsc_init_buf() allocates buffers using vzalloc(), and needs to share
-> the buffers with the host OS by calling set_memory_decrypted(), which is
-> not working for vmalloc() yet. Add the support by handling the pages one
-> by one.
+On Wed, Jan 04, 2023 at 04:58:25PM +0100, Arnd Bergmann wrote:
+> On Tue, Jan 3, 2023, at 17:43, Yann Sionneau wrote:
+> > This patch series adds support for the kv3-1 CPU architecture of the kvx family
+> > found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+> >
+> > This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
+> > therefore this patch series cannot be merged into Linux for now.
+> >
+> > The goal is to have preliminary reviews and to fix problems early.
+> >
+> > The Kalray VLIW processor family (kvx) has the following features:
+> > * 32/64 bits execution mode
+> > * 6-issue VLIW architecture
+> > * 64 x 64bits general purpose registers
+> > * SIMD instructions
+> > * little-endian
+> > * deep learning co-processor
 > 
+> Thanks for posting these, I had been wondering about the
+> state of the port. Overall this looks really nice, I can
+> see that you and the team have looked at other ports
+> and generally made the right decisions.
 
-It seems calling set_memory_decrypted() in netvsc_init_buf() is missing in
-this patch series. I guess there should be another one extra patch to cover
-that.
+Thank you and all for the reviews. We are currently going
+through every remarks and we are trying to do our best to
+send a new patch series with everything addressed.
 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> I commented on the syscall patch directly, I think it's
+> important to stop using the deprecated syscalls as soon
+> as possible to avoid having dependencies in too many
+> libc binaries. Almost everything else can be changed
+> easily as you get closer to upstream inclusion.
 > 
-> ---
+> I did not receive most of the other patches as I'm
+> not subscribed to all the mainline lists. For future 
+> submissions, can you add the linux-arch list to Cc for
+> all patches?
+
+We misused get_maintainers.pl, running it on each patch instead
+of using it on the whole series. next time every one will be in
+copy of every patch in the series and including linux-arch.
+
+> Reading the rest of the series through lore.kernel.org,
+> most of the comments I have are for improvements that
+> you may find valuable rather than serious mistakes:
 > 
-> Changes in v2:
->   Changed tdx_enc_status_changed() in place.
->   
-> Hi, Dave, I checked the huge vmalloc mapping code, but still don't know
-> how to get the underlying huge page info (if huge page is in use) and
-> try to use PG_LEVEL_2M/1G in try_accept_page() for vmalloc: I checked
-> is_vm_area_hugepages() and  __vfree() -> __vunmap(), and I think the
-> underlying page allocation info is internal to the mm code, and there
-> is no mm API to for me get the info in tdx_enc_status_changed().
+> - the {copy_to,copy_from,clear}_user functions are
+>   well worth optimizing better than the byte-at-a-time
+>   version you have, even just a C version built around
+>   your __get_user/__put_user inline asm should help, and
+>   could be added to lib/usercopy.c.
+
+right, we are using memcpy for {copy_to,copy_from}_user_page
+which has a simple optimized version introduced in
+(kvx: Add some library functions).
+I wonder if it is possible to do the same for copy_*_user functions.
+
+> - The __raw_{read,write}{b,w,l,q} helpers should
+>   normally be defined as inline asm instead of
+>   volatile pointer dereferences, I've seen cases where
+>   the compiler ends up splitting the access or does
+>   other things you may not want on MMIO areas.
+>
+> - I would recomment implementing HAVE_ARCH_VMAP_STACK
+>   as well as IRQ stacks, both of these help to
+>   avoid data corruption from stack overflow that you
+>   will eventually run into.
 > 
-> Hi, Kirill, the load_unaligned_zeropad() issue is not addressed in
-> this patch. The issue looks like a generic issue that also happens to
-> AMD SNP vTOM mode and C-bit mode. Will need to figure out how to
-> address the issue. If we decide to adjust direct mapping to have the
-> shared bit set, it lools like we need to do the below for each
-> 'start_va' vmalloc page:
->   pa = slow_virt_to_phys(start_va);
->   set_memory_decrypted(phys_to_virt(pa), 1); -- this line calls
-> tdx_enc_status_changed() the second time for the page, which is bad.
-> It looks like we need to find a way to reuse the cpa_flush() related
-> code in __set_memory_enc_pgtable() and make sure we call
-> tdx_enc_status_changed() only once for a vmalloc page?
+> - You use qspinlock as the only available spinlock
+>   implementation, but only support running on a
+>   single cluster of 16 cores. It may help to use
+>   the generic ticket spinlock instead, or leave it
+>   as a Kconfig option, in particular since you only
+>   have the emulated xchg16() atomic for qspinlock.
 > 
->   
->  arch/x86/coco/tdx/tdx.c | 69 ++++++++++++++++++++++++++---------------
->  1 file changed, 44 insertions(+), 25 deletions(-)
+> - Your defconfig file enables CONFIG_EMBEDDED, which
+>   in turn enables CONFIG_EXPERT. This is probably
+>   not what you want, so better turn off both of these.
 > 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index cdeda698d308..795ac56f06b8 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -5,6 +5,7 @@
->  #define pr_fmt(fmt)     "tdx: " fmt
->  
->  #include <linux/cpufeature.h>
-> +#include <linux/mm.h>
->  #include <asm/coco.h>
->  #include <asm/tdx.h>
->  #include <asm/vmx.h>
-> @@ -693,6 +694,34 @@ static bool try_accept_one(phys_addr_t *start,
-> unsigned long len, return true;
->  }
->  
-> +static bool try_accept_page(phys_addr_t start, phys_addr_t end)
-> +{
-> +	/*
-> +	 * For shared->private conversion, accept the page using
-> +	 * TDX_ACCEPT_PAGE TDX module call.
-> +	 */
-> +	while (start < end) {
-> +		unsigned long len = end - start;
-> +
-> +		/*
-> +		 * Try larger accepts first. It gives chance to VMM to
-> keep
-> +		 * 1G/2M SEPT entries where possible and speeds up
-> process by
-> +		 * cutting number of hypercalls (if successful).
-> +		 */
-> +
-> +		if (try_accept_one(&start, len, PG_LEVEL_1G))
-> +			continue;
-> +
-> +		if (try_accept_one(&start, len, PG_LEVEL_2M))
-> +			continue;
-> +
-> +		if (!try_accept_one(&start, len, PG_LEVEL_4K))
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
->  /*
->   * Notify the VMM about page mapping conversion. More info about ABI
->   * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> @@ -749,37 +778,27 @@ static bool tdx_map_gpa(phys_addr_t start,
-> phys_addr_t end, bool enc) */
->  static bool tdx_enc_status_changed(unsigned long vaddr, int numpages,
-> bool enc) {
-> -	phys_addr_t start = __pa(vaddr);
-> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-> +	bool is_vmalloc = is_vmalloc_addr((void *)vaddr);
-> +	unsigned long len = numpages * PAGE_SIZE;
-> +	void *start_va = (void *)vaddr, *end_va = start_va + len;
-> +	phys_addr_t start_pa, end_pa;
->  
-> -	if (!tdx_map_gpa(start, end, enc))
-> +	if (offset_in_page(start_va) != 0)
->  		return false;
->  
-> -	/* private->shared conversion  requires only MapGPA call */
-> -	if (!enc)
-> -		return true;
-> -
-> -	/*
-> -	 * For shared->private conversion, accept the page using
-> -	 * TDX_ACCEPT_PAGE TDX module call.
-> -	 */
-> -	while (start < end) {
-> -		unsigned long len = end - start;
-> -
-> -		/*
-> -		 * Try larger accepts first. It gives chance to VMM to
-> keep
-> -		 * 1G/2M SEPT entries where possible and speeds up
-> process by
-> -		 * cutting number of hypercalls (if successful).
-> -		 */
-> -
-> -		if (try_accept_one(&start, len, PG_LEVEL_1G))
-> -			continue;
-> +	while (start_va < end_va) {
-> +		start_pa = is_vmalloc ? slow_virt_to_phys(start_va) :
-> +					__pa(start_va);
-> +		end_pa = start_pa + (is_vmalloc ? PAGE_SIZE : len);
->  
-> -		if (try_accept_one(&start, len, PG_LEVEL_2M))
-> -			continue;
-> +		if (!tdx_map_gpa(start_pa, end_pa, enc))
-> +			return false;
->  
-> -		if (!try_accept_one(&start, len, PG_LEVEL_4K))
-> +		/* private->shared conversion requires only MapGPA call
-> */
-> +		if (enc && !try_accept_page(start_pa, end_pa))
->  			return false;
-> +
-> +		start_va += is_vmalloc ? PAGE_SIZE : len;
->  	}
->  
->  	return true;
+> - The GENERIC_CALIBRATE_DELAY should not be necessary
+>   since you have a get_cycles() based delay loop.
+>   Just set loops_per_jiffy to the correct value based
+>   on the frequency of the cycle counter, to save
+>   a little time during boot and get a more accurate
+>   delay loop.
+>
+Ack !
+
+   Jules
+
+
+
 
