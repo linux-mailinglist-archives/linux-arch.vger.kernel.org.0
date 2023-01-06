@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F78865FF43
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Jan 2023 12:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D9E65FF7B
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Jan 2023 12:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjAFLAg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Jan 2023 06:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S232518AbjAFLYA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Jan 2023 06:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbjAFLA2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Jan 2023 06:00:28 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07CB6E404;
-        Fri,  6 Jan 2023 03:00:25 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id g13so1480805lfv.7;
-        Fri, 06 Jan 2023 03:00:25 -0800 (PST)
+        with ESMTP id S232291AbjAFLX7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Jan 2023 06:23:59 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F09687AF;
+        Fri,  6 Jan 2023 03:23:57 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id bx6so1193332ljb.3;
+        Fri, 06 Jan 2023 03:23:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SW/9INdwr3DrYb2M+rAGHTyplFx8OBOFvhB2p2FQ81g=;
-        b=YGZG6HLlJTM1TzVguVykMUMISCXM7q+UjvSMdJu/JFbstAbEhmX9zl00Ot/vdYlHuH
-         mrJUYxN9aUmEEleOI9XqYREcIYdFSO+LLDNEgVyPSxP7xyAoM7nLyz91bZytDg2ipyc5
-         rtwFPcccNTAwDlleo1/tNnRxRxQJcbPhO/EUY+utFjnaQ5G8YUsUQo+EpNvx0N56BSfU
-         XiFwyB5XuIA2W0aoSt6ge2GPqrLvOg8Ro6OjBbkqaZ19kQgwc9WqvXOKIy2YVsOC2Srd
-         r+XSOeF5ZBhhIERbaAJKzzW3e04msgG05KCqpE2MatkdcMGTsxLYC8Lyhr6yqn+HuSE6
-         sA6A==
+        bh=lc6AJeA6QH8mH/qpz0YFPtwqEUXIOgf8yzugvC3dW1M=;
+        b=TL/k8lUwg40VBfY5xPwGsh7yQUs9JhuonEOjFKQ7yUsZQwRzpIRSX2F8WW1ol4qFIF
+         c06M9xkEjFjd3JG9Yz3v7wFD6aPMFhe0szw1IcseCQlzCKKvdPr8hGa4OR4KJrAQoikx
+         aU+nIgwirHt2VF+1GTkELwZzhO/7wAehSRK+kPoFEDqpTu02GpSiMxuXvEOQxzJi9fZH
+         qH1jSmZwKFW9C2VrOnBdEM0CO9ZsKHIYMdasBS72MB6RpuQ+wS9sNn1C1WSmJUDKZOIY
+         WMFS3FGE2Kp9hWKr737blph/WrWRpl90aw/drA8wa0kkf2Zqnv21KiPlVwBHxkwVJLvC
+         5+oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SW/9INdwr3DrYb2M+rAGHTyplFx8OBOFvhB2p2FQ81g=;
-        b=MigHEXRsipuFD/cs9fYuHxSNtZn5RqAgW3N5JXWboly4BEIK4H6t3eI0EMpEXd95Jo
-         n7t9N8a2UldLecsUDxGmIyniZ9A3vezqEHdK/nPR1af0r0rAP1Sv0auODLYUd7S5nDRs
-         VWEMvap8Cmw/9wHWMiYAYTUjPbjxNmrAX5NMdAxS3OWNcIWVXCWyfQos8HVXBdyV4rsc
-         45EPYteeA5wu4NwnKiXNfrX4fpdW56SgrFQBRU6O+mtcYgYYlbSWs7hdZ4d2AwPBTxga
-         9i1RiLGgEPnBarqw65eIIYefW97gY1LQXuCtWD8ovmfhiWvAtREHOmEL7Rl9/46hQ79/
-         Diwg==
-X-Gm-Message-State: AFqh2kqEeEpoiYGdjaCsUvKHzVUmyHOQtjRqZKFgkJQTONoydLZ0g9K1
-        b/r9dXNSspGoWj+n7jyPAic=
-X-Google-Smtp-Source: AMrXdXtDMayUSEW9gWTi7+nisJn78bTVn/CPWxx9tXKewtHzILbf4J0iJs41oTm9pCVVia9rc5OSIg==
-X-Received: by 2002:a19:f513:0:b0:4b5:731f:935a with SMTP id j19-20020a19f513000000b004b5731f935amr3441875lfb.0.1673002823960;
-        Fri, 06 Jan 2023 03:00:23 -0800 (PST)
+        bh=lc6AJeA6QH8mH/qpz0YFPtwqEUXIOgf8yzugvC3dW1M=;
+        b=LWIbtYUh22UVEksVS/QE0n5w9BOcwjyW7r17uc407WwnT90CuUsW8WKyfKKikiBOFp
+         Xphxxw2qwXzJCqKucU0/CsuOW8q9nHLwxDtUc2bq+2AQdc/HCf36FiDzEbFTLrNrF6ry
+         JTEV72ojBFxLEPd0XSYYTPH7+6B4PXSUz1CMb/mHhrj8IvrzCq5KVZzp5Nzcsyyho9gA
+         V00UJWw/u2XobmzEAoM+gvIfDaL5rR8q0FZ4nPwWo4P+rmg4hxTWJwuYDRJeiz7P42cd
+         078fqVDgaYsobLcbQ3z2vuEAKuAv0OFeFKByhhQE8LQKyA9IWaIkIHIbS0TRefOL8HQv
+         jyIA==
+X-Gm-Message-State: AFqh2krJ/yucGWdIbLdFJAQijxJzZFsOAhcp+n3SwOvtOzzysznYMRZO
+        PuOS4B3pG9OmuMi6pQnq3Vo=
+X-Google-Smtp-Source: AMrXdXupMQrYymXm+dRDk5s3STVi7rk0UMKV2owVopFZee24BcTmuiHyE03l74DEwyLcde5ykSmoyg==
+X-Received: by 2002:a2e:3306:0:b0:27f:b476:c05 with SMTP id d6-20020a2e3306000000b0027fb4760c05mr2923474ljc.5.1673004235939;
+        Fri, 06 Jan 2023 03:23:55 -0800 (PST)
 Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id a22-20020a2e9816000000b0027fc54f8bf0sm69016ljj.35.2023.01.06.03.00.23
+        by smtp.gmail.com with ESMTPSA id t21-20020a2e8e75000000b0027b54ff90c0sm74690ljk.139.2023.01.06.03.23.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Jan 2023 03:00:23 -0800 (PST)
-Date:   Fri, 6 Jan 2023 13:00:21 +0200
+        Fri, 06 Jan 2023 03:23:55 -0800 (PST)
+Date:   Fri, 6 Jan 2023 13:23:54 +0200
 From:   Zhi Wang <zhi.wang.linux@gmail.com>
 To:     Dexuan Cui <decui@microsoft.com>
 Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
@@ -61,12 +61,13 @@ Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
         peterz@infradead.org, rostedt@goodmis.org,
         sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
         tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] Drivers: hv: vmbus: Support TDX guests
-Message-ID: <20230106130021.00006c94@gmail.com>
-In-Reply-To: <20221121195151.21812-7-decui@microsoft.com>
-References: <20221121195151.21812-1-decui@microsoft.com>
-        <20221121195151.21812-7-decui@microsoft.com>
+        x86@kernel.org, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] x86/hyperv: Support hypercalls for TDX guests
+Message-ID: <20230106132354.00007af3@gmail.com>
+In-Reply-To: <20221207003325.21503-6-decui@microsoft.com>
+References: <20221207003325.21503-1-decui@microsoft.com>
+        <20221207003325.21503-6-decui@microsoft.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -81,256 +82,168 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 21 Nov 2022 11:51:51 -0800
+On Tue,  6 Dec 2022 16:33:24 -0800
 Dexuan Cui <decui@microsoft.com> wrote:
 
-> Intel folks added the generic code to support a TDX guest in April, 2022.
-> This commit and some earlier commits from me add the Hyper-V specific
-> code so that a TDX guest can run on Hyper-V.
+> A TDX guest uses the GHCI call rather than hv_hypercall_pg.
+> 
+> In hv_do_hypercall(), Hyper-V requires that the input/output addresses
+> must have the cc_mask.
 > 
 > Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> 
 > ---
->  arch/x86/hyperv/hv_init.c      | 19 +++++++++++++++----
->  arch/x86/kernel/cpu/mshyperv.c | 10 ++++++++++
->  arch/x86/mm/pat/set_memory.c   |  2 +-
->  drivers/hv/connection.c        |  4 +++-
->  drivers/hv/hv.c                | 25 +++++++++++++++++++++++++
->  drivers/hv/ring_buffer.c       |  2 +-
->  6 files changed, 55 insertions(+), 7 deletions(-)
+> 
+> Changes in v2:
+>   Implemented hv_tdx_hypercall() in C rather than in assembly code.
+>   Renamed the parameter names of hv_tdx_hypercall().
+>   Used cc_mkdec() directly in hv_do_hypercall().
+> 
+>  arch/x86/hyperv/hv_init.c       |  8 ++++++++
+>  arch/x86/hyperv/ivm.c           | 14 ++++++++++++++
+>  arch/x86/include/asm/mshyperv.h | 17 +++++++++++++++++
+>  3 files changed, 39 insertions(+)
 > 
 > diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 05682c4e327f..694f7fb04e5d 100644
+> index a823fde1ad7f..c0ba53ad8b8e 100644
 > --- a/arch/x86/hyperv/hv_init.c
 > +++ b/arch/x86/hyperv/hv_init.c
-> @@ -77,7 +77,7 @@ static int hyperv_init_ghcb(void)
->  static int hv_cpu_init(unsigned int cpu)
->  {
->  	union hv_vp_assist_msr_contents msr = { 0 };
-> -	struct hv_vp_assist_page **hvp =
-> &hv_vp_assist_page[smp_processor_id()];
-> +	struct hv_vp_assist_page **hvp;
->  	int ret;
+> @@ -430,6 +430,10 @@ void __init hyperv_init(void)
+>  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+>  	hv_ghcb_msr_write(HV_X64_MSR_GUEST_OS_ID, guest_id);
 >  
->  	ret = hv_common_cpu_init(cpu);
-> @@ -87,6 +87,7 @@ static int hv_cpu_init(unsigned int cpu)
->  	if (!hv_vp_assist_page)
->  		return 0;
->  
-> +	hvp = &hv_vp_assist_page[smp_processor_id()];
->  	if (!*hvp) {
->  		if (hv_root_partition) {
->  			/*
-> @@ -398,11 +399,21 @@ void __init hyperv_init(void)
->  	if (hv_common_init())
->  		return;
->  
-> -	hv_vp_assist_page = kcalloc(num_possible_cpus(),
-> -				    sizeof(*hv_vp_assist_page),
-> GFP_KERNEL);
-> +	/*
-> +	 * The VP assist page is useless to a TDX guest: the only use we
-> +	 * would have for it is lazy EOI, which can not be used with
-> TDX.
-> +	 */
-> +	if (hv_isolation_type_tdx())
-> +		hv_vp_assist_page = NULL;
-> +	else
-> +		hv_vp_assist_page = kcalloc(num_possible_cpus(),
-> +					    sizeof(*hv_vp_assist_page),
-> +					    GFP_KERNEL);
->  	if (!hv_vp_assist_page) {
->  		ms_hyperv.hints &= ~HV_X64_ENLIGHTENED_VMCS_RECOMMENDED;
-> -		goto common_free;
-> +
-> +		if (!hv_isolation_type_tdx())
-> +			goto common_free;
->  	}
->  
->  	if (hv_isolation_type_snp()) {
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c
-> b/arch/x86/kernel/cpu/mshyperv.c index dddccdbc5526..6f597b23ad3e 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -350,7 +350,17 @@ static void __init ms_hyperv_init_platform(void)
->  			case HV_ISOLATION_TYPE_TDX:
->  				static_branch_enable(&isolation_type_tdx);
->  
-> +				cc_set_vendor(CC_VENDOR_INTEL);
-> +
->  				ms_hyperv.shared_gpa_boundary =
-> cc_mkdec(0); +
-> +				/* Don't use the unsafe Hyper-V TSC
-> page */
-> +				ms_hyperv.features &=
-> +					~HV_MSR_REFERENCE_TSC_AVAILABLE;
-> +
-> +				/* HV_REGISTER_CRASH_CTL is unsupported
+> +	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg.
 > */
-> +				ms_hyperv.misc_features &=
+> +	if (hv_isolation_type_tdx())
+> +		goto skip_hypercall_pg_init;
 > +
-> ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE; break;
+>  	hv_hypercall_pg = __vmalloc_node_range(PAGE_SIZE, 1,
+> VMALLOC_START, VMALLOC_END, GFP_KERNEL, PAGE_KERNEL_ROX,
+>  			VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+> @@ -469,6 +473,7 @@ void __init hyperv_init(void)
+>  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+>  	}
 >  
->  			default:
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 2e5a045731de..bb44aaddb230 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -2120,7 +2120,7 @@ static int __set_memory_enc_pgtable(unsigned long
-> addr, int numpages, bool enc) 
->  static int __set_memory_enc_dec(unsigned long addr, int numpages, bool
-> enc) {
-> -	if (hv_is_isolation_supported())
-> +	if (hv_is_isolation_supported() && !hv_isolation_type_tdx())
->  		return hv_set_mem_host_visibility(addr, numpages, !enc);
->  
->  	if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
-
-Let's say there will be four cases:
-
-----
-case a. SEV-SNP guest with paravisor
-
-In the code, this case is represented by:
-
-hv_is_isolation_supported() && hv_isolation_type_snp()
-hv_is_isolation_supported() && !hv_isolation_type_tdx()
-
-case b. TDX guest with paravisor
-?
-
-case c. SEV-SNP guest *without* paravisor
-?
-
-case d. TDX guest *without* paravisor
-
-In the code, this case is represented by:
-
-hv_is_isolation_supported() && hv_isolation_type_tdx()
-----
-
-1. It would be better to use "hv_is_isolation_supported() &&
-hv_isolation_type_snp()" to represent case a to avoid confusion in the
-above patch.
-
-2. For now, hv_is_isolation_supported() only shows if the guest is a CC
-guest or not. hv_isolation_type_*() only represent SNP or TDX but
-not "w/ or w/o paravisor".
-
-How are you going to represent case b and c in __set_memory_enc_dec()?
-
-I think you are looking for something to show if the guest is running
-with a paravisor or not here:
-
-if (hv_is_isolation_supported() && hv_is_isolation_with_paravisor())
-...
-
-Thanks,
-Zhi.
-
-
-> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index 9dc27e5d367a..1ecc3c29e3f7 100644
-> --- a/drivers/hv/connection.c
-> +++ b/drivers/hv/connection.c
-> @@ -250,12 +250,14 @@ int vmbus_connect(void)
->  		 * Isolation VM with AMD SNP needs to access monitor
-> page via
->  		 * address space above shared gpa boundary.
->  		 */
-> -		if (hv_isolation_type_snp()) {
-> +		if (hv_isolation_type_snp() || hv_isolation_type_tdx())
-> { vmbus_connection.monitor_pages_pa[0] +=
->  				ms_hyperv.shared_gpa_boundary;
->  			vmbus_connection.monitor_pages_pa[1] +=
->  				ms_hyperv.shared_gpa_boundary;
-> +		}
->  
-> +		if (hv_isolation_type_snp()) {
->  			vmbus_connection.monitor_pages[0]
->  				=
-> memremap(vmbus_connection.monitor_pages_pa[0], HV_HYP_PAGE_SIZE,
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 4d6480d57546..03b3257bc1ab 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -18,6 +18,7 @@
->  #include <linux/clockchips.h>
->  #include <linux/delay.h>
->  #include <linux/interrupt.h>
-> +#include <linux/set_memory.h>
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/mshyperv.h>
->  #include "hyperv_vmbus.h"
-> @@ -119,6 +120,7 @@ int hv_synic_alloc(void)
->  {
->  	int cpu;
->  	struct hv_per_cpu_context *hv_cpu;
-> +	int ret;
->  
+> +skip_hypercall_pg_init:
 >  	/*
->  	 * First, zero all per-cpu memory areas so hv_synic_free() can
-> @@ -168,6 +170,21 @@ int hv_synic_alloc(void)
->  			pr_err("Unable to allocate post msg page\n");
->  			goto err;
->  		}
-> +
-> +
-> +		if (hv_isolation_type_tdx()) {
-> +			ret = set_memory_decrypted(
-> +				(unsigned
-> long)hv_cpu->synic_message_page, 1);
-> +			BUG_ON(ret);
-> +
-> +			ret = set_memory_decrypted(
-> +				(unsigned
-> long)hv_cpu->synic_event_page, 1);
-> +			BUG_ON(ret);
-> +
-> +			ret = set_memory_decrypted(
-> +				(unsigned long)hv_cpu->post_msg_page,
-> 1);
-> +			BUG_ON(ret);
-> +		}
->  	}
+>  	 * hyperv_init() is called before LAPIC is initialized: see
+>  	 * apic_intr_mode_init() -> x86_platform.apic_post_init() and
+> @@ -604,6 +609,9 @@ bool hv_is_hyperv_initialized(void)
+>  	if (x86_hyper_type != X86_HYPER_MS_HYPERV)
+>  		return false;
 >  
->  	return 0;
-> @@ -225,6 +242,10 @@ void hv_synic_enable_regs(unsigned int cpu)
->  	} else {
->  		simp.base_simp_gpa =
-> virt_to_phys(hv_cpu->synic_message_page)
->  			>> HV_HYP_PAGE_SHIFT;
+> +	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg.
+> */
+> +	if (hv_isolation_type_tdx())
+> +		return true;
+>  	/*
+>  	 * Verify that earlier initialization succeeded by checking
+>  	 * that the hypercall page is setup
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+> index 13ccb52eecd7..07e4253b5809 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -276,6 +276,20 @@ bool hv_isolation_type_tdx(void)
+>  {
+>  	return static_branch_unlikely(&isolation_type_tdx);
+>  }
 > +
-> +		if (hv_isolation_type_tdx())
-> +			simp.base_simp_gpa +=
-> ms_hyperv.shared_gpa_boundary
-> +				>> HV_HYP_PAGE_SHIFT;
->  	}
->  
->  	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
-> @@ -243,6 +264,10 @@ void hv_synic_enable_regs(unsigned int cpu)
->  	} else {
->  		siefp.base_siefp_gpa =
-> virt_to_phys(hv_cpu->synic_event_page)
->  			>> HV_HYP_PAGE_SHIFT;
+> +u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
+> +{
+> +	struct tdx_hypercall_args args = { };
 > +
-> +		if (hv_isolation_type_tdx())
-> +			siefp.base_siefp_gpa +=
-> ms_hyperv.shared_gpa_boundary
-> +				>> HV_HYP_PAGE_SHIFT;
->  	}
+> +	args.r10 = control;
+> +	args.rdx = param1;
+> +	args.r8  = param2;
+> +
+> +	(void)__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
+> +
+> +	return args.r11;
+> +}
+> +EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
+>  #endif
 >  
->  	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
-> diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-> index c6692fd5ab15..a51da82316ce 100644
-> --- a/drivers/hv/ring_buffer.c
-> +++ b/drivers/hv/ring_buffer.c
-> @@ -233,7 +233,7 @@ int hv_ringbuffer_init(struct hv_ring_buffer_info
-> *ring_info, 
->  		ring_info->ring_buffer = (struct hv_ring_buffer *)
->  			vmap(pages_wraparound, page_cnt * 2 - 1, VM_MAP,
-> -				PAGE_KERNEL);
-> +				pgprot_decrypted(PAGE_KERNEL_NOENC));
+>  /*
+> diff --git a/arch/x86/include/asm/mshyperv.h
+> b/arch/x86/include/asm/mshyperv.h index 8a2cafec4675..a4d665472d9e 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -10,6 +10,7 @@
+>  #include <asm/nospec-branch.h>
+>  #include <asm/paravirt.h>
+>  #include <asm/mshyperv.h>
+> +#include <asm/coco.h>
 >  
->  		kfree(pages_wraparound);
->  		if (!ring_info->ring_buffer)
+>  union hv_ghcb;
+>  
+> @@ -39,6 +40,12 @@ int hv_call_deposit_pages(int node, u64 partition_id,
+> u32 num_pages); int hv_call_add_logical_proc(int node, u32 lp_index, u32
+> acpi_id); int hv_call_create_vp(int node, u64 partition_id, u32
+> vp_index, u32 flags); 
+> +u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2);
+> +
+> +/*
+> + * If the hypercall involves no input or output parameters, the
+> hypervisor
+> + * ignores the corresponding GPA pointer.
+> + */
+>  static inline u64 hv_do_hypercall(u64 control, void *input, void
+> *output) {
+>  	u64 input_address = input ? virt_to_phys(input) : 0;
+> @@ -46,6 +53,10 @@ static inline u64 hv_do_hypercall(u64 control, void
+> *input, void *output) u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+> +	if (hv_isolation_type_tdx())
+> +		return hv_tdx_hypercall(control,
+> +					cc_mkdec(input_address),
+> +					cc_mkdec(output_address));
+>  	if (!hv_hypercall_pg)
+>  		return U64_MAX;
+>  
+
+> @@ -83,6 +94,9 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64
+> input1) u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
+>  
+>  #ifdef CONFIG_X86_64
+> +	if (hv_isolation_type_tdx())
+> +		return hv_tdx_hypercall(control, input1, 0);
+> +
+>  	{
+>  		__asm__ __volatile__(CALL_NOSPEC
+>  				     : "=a" (hv_status),
+> ASM_CALL_CONSTRAINT, @@ -114,6 +128,9 @@ static inline u64
+> hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2) u64 hv_status,
+> control = (u64)code | HV_HYPERCALL_FAST_BIT; 
+>  #ifdef CONFIG_X86_64
+> +	if (hv_isolation_type_tdx())
+> +		return hv_tdx_hypercall(control, input1, input2);
+> +
+In some paths, for example vmbus_set_event(), choosing the SNP-based or
+generic hypercall happens in the caller, while now TDX-based hypercall is
+embraced in the generic hypercall path, e.g. hv_do_fast_hypercall8(). Which
+style will be chosen in the future? Seems the coding structure needs to be
+aligned.
+
+void vmbus_set_event(struct vmbus_channel *channel)
+{
+        u32 child_relid = channel->offermsg.child_relid;
+
+        if (!channel->is_dedicated_interrupt)
+                vmbus_send_interrupt(child_relid);
+
+        ++channel->sig_events;
+
+        if (hv_isolation_type_snp())
+                hv_ghcb_hypercall(HVCALL_SIGNAL_EVENT, &channel->sig_event,
+                                NULL, sizeof(channel->sig_event));
+        else
+                hv_do_fast_hypercall8(HVCALL_SIGNAL_EVENT,
+        channel->sig_event);
+}
+
+
+>  	{
+>  		__asm__ __volatile__("mov %4, %%r8\n"
+>  				     CALL_NOSPEC
 
