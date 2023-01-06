@@ -2,144 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8334965FE3B
-	for <lists+linux-arch@lfdr.de>; Fri,  6 Jan 2023 10:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CC965FE8B
+	for <lists+linux-arch@lfdr.de>; Fri,  6 Jan 2023 11:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbjAFJqd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 Jan 2023 04:46:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39614 "EHLO
+        id S232202AbjAFKLQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 Jan 2023 05:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232986AbjAFJqO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Jan 2023 04:46:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C3A625DC;
-        Fri,  6 Jan 2023 01:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672998265; x=1704534265;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=fhXY6C/6U5im9JnhiBqmPE5GvqslI6HKlZc88plC8HU=;
-  b=LCw2qM+/WlOf86kBXpCK6162AEhGv7KRqM1qPg0uofFdNn20fjPQJwKO
-   V6aYMzKzdtlnEh1Z5C7X54efd3WfmAW37qDCUDsspLCXBGZoloyjJU2U4
-   9bgMJjXrdcNUx9ilcP9N7LnBZ20ANVWcuwB/Kl9uqJYF7TjF9XkoPsJRU
-   UyqlpEaJ03UIT2QJ0sBOxSljSyyZpNnzkoxZ0cH7KfjzdXvdk/0/32H39
-   vY7hM2ZeyHuwy3FNmJxfjbQL6ssl62qAnLO8bLgZKGA6I7iKkP8VWdqpk
-   YnM5LjRrXip4R0EhqPG+fBxHenJu/jdm3l/O7q6RMr2D3o7yWqefhmMw0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="320148916"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="320148916"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2023 01:44:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10581"; a="901237278"
-X-IronPort-AV: E=Sophos;i="5.96,304,1665471600"; 
-   d="scan'208";a="901237278"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Jan 2023 01:44:12 -0800
-Date:   Fri, 6 Jan 2023 17:40:00 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20230106094000.GA2297836@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <Y7azFdnnGAdGPqmv@kernel.org>
+        with ESMTP id S232936AbjAFKLD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 Jan 2023 05:11:03 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BB514017;
+        Fri,  6 Jan 2023 02:10:51 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bt23so1339183lfb.5;
+        Fri, 06 Jan 2023 02:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2AvodmV6r1uh3+mDTSjqcwni55KL3aLeYcKEIfJZqDE=;
+        b=IvCRei3g8gBwnMnOIOO1U/i1B8SBHsNbA7DI3GAyTm99zaDXuZAKH8v3RguWkiM2VN
+         O8Dsh9usI3T/yE2EkNqqugvx8jvjzobjO/nB7gnEdHx/yu5aRGQcdD0AeSNUIp/aSDen
+         9vumCnR7edk7ikFu/hN2Hh+FvUPRe1pyuErsY5RCsXrGChotXhedMRQvs40JUYlaraZ5
+         F9XScVaUmh0fYe/+3a4CXqV9oq3/xYRRKXt2fmx4Q1VwzfaVBxzOQqjHcWWu02UHLlk9
+         PiAy2iok3RqStX08WdMtoSC1p48s/Vbk8P4x1piGjzI1XmdTJfeikh1S9akIUxF6/AQR
+         Dzpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2AvodmV6r1uh3+mDTSjqcwni55KL3aLeYcKEIfJZqDE=;
+        b=aofra8EjPB8YCbxHLuSL5CQXb+128JZD+L8yHqRkHokrKYyBgu/9w/VF1VjBurY4lv
+         iEbJ2foHouzx/9T7d2n5lQVRJUaW52aQcfr4CdkOHzpPWKNR0i+scxsBgE2sO+RTu1Lm
+         UtrP4d8F8166QoBEJU4ZYwgc51Nwgc7D7xTlXHGyZotGXNoudpc4ZRActvO/Az0768KK
+         8HfGt8ivS9N+v4UD96F0QkJA5rsJKM5t69Xf1nDoREFiDTQ2HsNfJWJs9qrWy+BVr2pQ
+         QA91j2Tny7AT54brhgGZWb9RNfIkDnjUJ3uUjPlIhWeMh4hrMBnYytUDi/LRJcDcQzOg
+         qMkQ==
+X-Gm-Message-State: AFqh2kpAOt2sGDcDkV4+O0zkqfOOZ7SNIoLTsXm3VKgmsy33zmdxDMQZ
+        zROUQiSXrMyoX9d7FaYYtVo=
+X-Google-Smtp-Source: AMrXdXtj04V3806l2QPVJaWXM7VUg6xGiaQKAUFgAllga04EF7x+JJXdvpI0wO3L/6yA0drrLYtVXA==
+X-Received: by 2002:a19:f513:0:b0:4b5:731f:935a with SMTP id j19-20020a19f513000000b004b5731f935amr3431318lfb.0.1672999849781;
+        Fri, 06 Jan 2023 02:10:49 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id c10-20020a056512324a00b004b5adb59ed5sm100351lfr.297.2023.01.06.02.10.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Jan 2023 02:10:49 -0800 (PST)
+Date:   Fri, 6 Jan 2023 12:10:47 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zhi.a.wang@intel.com" <zhi.a.wang@intel.com>
+Subject: Re: [PATCH v2 2/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Message-ID: <20230106121047.00003048@gmail.com>
+In-Reply-To: <SA1PR21MB133576523E55BBC7300DE2B1BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20221207003325.21503-1-decui@microsoft.com>
+        <20221207003325.21503-3-decui@microsoft.com>
+        <20230105114435.000078e4@gmail.com>
+        <SA1PR21MB133560538DDD7006CCB36E30BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
+        <20230105201024.00001ea0@gmail.com>
+        <SA1PR21MB133576523E55BBC7300DE2B1BFFA9@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7azFdnnGAdGPqmv@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 05, 2023 at 11:23:01AM +0000, Jarkko Sakkinen wrote:
-> On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
-> > In memory encryption usage, guest memory may be encrypted with special
-> > key and can be accessed only by the guest itself. We call such memory
-> > private memory. It's valueless and sometimes can cause problem to allow
-> > userspace to access guest private memory. This new KVM memslot extension
-> > allows guest private memory being provided through a restrictedmem
-> > backed file descriptor(fd) and userspace is restricted to access the
-> > bookmarked memory in the fd.
-> > 
-> > This new extension, indicated by the new flag KVM_MEM_PRIVATE, adds two
-> > additional KVM memslot fields restricted_fd/restricted_offset to allow
-> > userspace to instruct KVM to provide guest memory through restricted_fd.
-> > 'guest_phys_addr' is mapped at the restricted_offset of restricted_fd
-> > and the size is 'memory_size'.
-> > 
-> > The extended memslot can still have the userspace_addr(hva). When use, a
-> > single memslot can maintain both private memory through restricted_fd
-> > and shared memory through userspace_addr. Whether the private or shared
-> > part is visible to guest is maintained by other KVM code.
-> > 
-> > A restrictedmem_notifier field is also added to the memslot structure to
-> > allow the restricted_fd's backing store to notify KVM the memory change,
-> > KVM then can invalidate its page table entries or handle memory errors.
-> > 
-> > Together with the change, a new config HAVE_KVM_RESTRICTED_MEM is added
-> > and right now it is selected on X86_64 only.
-> > 
-> > To make future maintenance easy, internally use a binary compatible
-> > alias struct kvm_user_mem_region to handle both the normal and the
-> > '_ext' variants.
-> 
-> Feels bit hacky IMHO, and more like a completely new feature than
-> an extension.
-> 
-> Why not just add a new ioctl? The commit message does not address
-> the most essential design here.
+On Thu, 5 Jan 2023 20:29:25 +0000
+Dexuan Cui <decui@microsoft.com> wrote:
 
-Yes, people can always choose to add a new ioctl for this kind of change
-and the balance point here is we want to also avoid 'too many ioctls' if
-the functionalities are similar.  The '_ext' variant reuses all the
-existing fields in the 'normal' variant and most importantly KVM
-internally can reuse most of the code. I certainly can add some words in
-the commit message to explain this design choice.
+> > From: Zhi Wang <zhi.wang.linux@gmail.com>
+> > Sent: Thursday, January 5, 2023 10:10 AM
+> > [...]
+> > I see. Then do we still need the hv_map_memory()in the following
+> > code piece in netvsc.c after {set_memoery_encrypted, decrypted}()
+> > supporting memory from vmalloc()?
+> 
+> For SNP, set_memory_decrypted() is already able to support memory
+> from vmalloc().
+> 
+> For TDX, currently set_memory_decrypted()() is unable to support
+> memory from vmalloc().
+> 
+I guess we both agree that memory conversion in HV should be done through
+coco so the hv_map_memory can be removed (even the extra does not hurt
+currently)
+
+The memory conversion in current HV code is done by different approaches.
+Some are going through the coco, some are not, which ends up
+with if(hv_isolation_type_snp()) in memory allocation path. It can be
+confusing. I suppose a reasonable purpose of hv_isolation_type_snp()
+should cover the AMD SEV-SNP specific parts which haven't been (or are
+not going to be) covered by coco. For example the GHCB stuff. 
 
 Thanks,
-Chao
+Zhi.
+
+> >         /* set_memory_decrypted() is called here. */
+> >         ret = vmbus_establish_gpadl(device->channel,
+> > net_device->recv_buf, buf_size, 
+> > &net_device->recv_buf_gpadl_handle);
+> >         if (ret != 0) {
+> >                 netdev_err(ndev,
+> >                         "unable to establish receive buffer's
+> > gpadl\n"); goto cleanup;
+> >         }
+> > 
+> >         /* Should we remove this? */
 > 
-> BR, Jarkko
+> The below block of code is for SNP rather than TDX, so it has nothing to
+> do with the patch here. BTW, the code is ineeded removed in Michael's
+> patchset, which is for device assignment support for SNP guests on
+> Hyper-V:
+> https://lwn.net/ml/linux-kernel/1669951831-4180-11-git-send-email-mikelley@microsoft.com/
+
+So happy to see this. :)
+
+> and I'm happy with the removal of the code.
+> 
+> >         if (hv_isolation_type_snp()) {
+> >                 vaddr = hv_map_memory(net_device->recv_buf, buf_size);
+> >                 if (!vaddr) {
+> >                         ret = -ENOMEM;
+> >                         goto cleanup;
+> >                 }
+> > 
+> >                 net_device->recv_original_buf = net_device->recv_buf;
+> >                 net_device->recv_buf = vaddr;
+> >         }
+> > 
+> > I assume that we need an VA mapped to a shared GPA here.
+> 
+> Yes.
+> 
+> > The VA(net_device->recv_buf) has been associated with a shared GPA in
+> > set_memory_decrypted() by adjusting the kernel page table.
+> 
+> For a SNP guest with pavavisor on Hyper-V, this is not true in the
+> current mainline kernel: see set_memory_decrypted() ->
+> __set_memory_enc_dec():
+> 
+> static int __set_memory_enc_dec(unsigned long addr, int numpages, bool
+> enc) {
+> 		//Dexuan: For a SNP guest with paravisor on Hyper-V,
+> currently we // only call hv_set_mem_host_visibility(), i.e. the page
+> tabe is not // updated. This is being changed by Michael's patchset,
+> e.g.,
+> https://lwn.net/ml/linux-kernel/1669951831-4180-7-git-send-email-mikelley@microsoft.com/ 
+>         if (hv_is_isolation_supported())
+>                 return hv_set_mem_host_visibility(addr, numpages, !enc);
+> 
+>         if (cc_platform_has(CC_ATTR_MEM_ENCRYPT))
+>                 return __set_memory_enc_pgtable(addr, numpages, enc);
+> 
+>         return 0;
+> }
+> 
+> > hv_map_memory()
+> > is with similar purpose but just a different way:
+> > 
+> > void *hv_map_memory(void *addr, unsigned long size)
+> > {
+> >         unsigned long *pfns = kcalloc(size / PAGE_SIZE,
+> >                                       sizeof(unsigned long),
+> > GFP_KERNEL);
+> >         void *vaddr;
+> >         int i;
+> > 
+> >         if (!pfns)
+> >                 return NULL;
+> > 
+> >         for (i = 0; i < size / PAGE_SIZE; i++)
+> >                 pfns[i] = vmalloc_to_pfn(addr + i * PAGE_SIZE) +
+> >                         (ms_hyperv.shared_gpa_boundary >>
+> > PAGE_SHIFT);
+> > 
+> >         vaddr = vmap_pfn(pfns, size / PAGE_SIZE, PAGE_KERNEL_IO);
+> >         kfree(pfns);
+> > 
+> >         return vaddr;
+> > }
+
