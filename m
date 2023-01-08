@@ -2,203 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93058660F51
-	for <lists+linux-arch@lfdr.de>; Sat,  7 Jan 2023 15:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67066614B8
+	for <lists+linux-arch@lfdr.de>; Sun,  8 Jan 2023 12:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjAGOHT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 7 Jan 2023 09:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S233223AbjAHL3n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 Jan 2023 06:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjAGOHS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 7 Jan 2023 09:07:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E4A1DA;
-        Sat,  7 Jan 2023 06:07:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A980FB810B3;
-        Sat,  7 Jan 2023 14:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619F9C433F0;
-        Sat,  7 Jan 2023 14:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673100433;
-        bh=F1hP8g2fzdDqRR2w8HNEctZh13x2gOYdrnKuo+tRbq8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J7onqgmwPR0ivFaP4KIaTdgxxD1J/fTSy6XVPr87B9Ez0lH6Nv4DgP2Cf6sn09+Kf
-         RBZj2BkvO7U8RLZKLmP3u/j9m1YsMn112RwB55VVawGHsunj+2/moF9wQkWJyzddpi
-         TT6ytGRVPNP7iXm2gbL83qbUlLaNMmuVcaeIkyCjFl2PBMFuBfgKDUHZyARczqEBLY
-         zAf6m6UHpd6Uja9iovde5nFi3DT+HYjYulUdp6QNwaWhMdypNxoosz+RVzfpZ0JyXs
-         4Mx9azyG7AkbfOLNmVMrf311WAMd9YVazgKuN+uKQ+xyA92AqZpsqOsTCk4p0BAtbq
-         ZisA6IdPjLbbA==
-Received: by mail-ed1-f54.google.com with SMTP id v30so5944424edb.9;
-        Sat, 07 Jan 2023 06:07:13 -0800 (PST)
-X-Gm-Message-State: AFqh2krm19acHfZzxOx5xu523UCQv47S8V0joud6tNV8J3eqIgzbqZw7
-        wAGwhMaQcRkMoV4OlTKvX2zvJljnGJLXkoQodOs=
-X-Google-Smtp-Source: AMrXdXu3fbi11GqZl1RyUp6JPcz+JbDhnHRVbhhN+VoBiGErX7+96Vu5wFXrEMs6Pf/5erfI8shRQKZnuF1zeRVZ0hM=
-X-Received: by 2002:a50:cc0a:0:b0:470:44ed:aff2 with SMTP id
- m10-20020a50cc0a000000b0047044edaff2mr6824154edi.103.1673100431593; Sat, 07
- Jan 2023 06:07:11 -0800 (PST)
+        with ESMTP id S232946AbjAHL3l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 Jan 2023 06:29:41 -0500
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A130FD2C4
+        for <linux-arch@vger.kernel.org>; Sun,  8 Jan 2023 03:29:40 -0800 (PST)
+Received: by mail-ej1-x641.google.com with SMTP id fc4so13458771ejc.12
+        for <linux-arch@vger.kernel.org>; Sun, 08 Jan 2023 03:29:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=qKooUu0cR0Q6Kb35Lml+i1nctcRKDXBFIEuTWecR2oAg5gpt8iWCWrVTzR/d0ltIz+
+         N3v4mI+Id5n22IQcOsRNrs3LfLqdT/HvxkxuThnBBMHey7FRBoM71zAIiDMTHnSgpN5Z
+         x3kiNifkBHa67aksnuVhN0ViIH4omkoEA1V/MRsaIxBjjHuMlU8Etutr9d/g3k0VBqS+
+         Gvcs1w6Oyb+6hjEoSfAoX0iu6yv8bOv93HJHe2b0EXqway2L9PMP8z4v5codhy5CVb8Z
+         gUWDwMgHqJCe7GMUzyDwpcS2znrsiSd/kh+kobYvXrnptX2TmVNEgI44vAZpnc1lh6J9
+         XwZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HcpM41K3Tg/Gq2Sy2fOw39ukTQf5X/VzmfsS+yU67xU=;
+        b=Xu12TWvCgLY/ikj/PJECF9xV/h5jEPv8ArQMILYfRsEny9LbvTy21uFgtWwPLO95hs
+         o0dj3rJ0OkYY+SeWYCQsVYWg42+NfgunAjA3/HMx38E7q2BIEQ6D+3blmL4XRFW/S9hB
+         y74FfLISX0MVKFyTup+xABEMVAKCAkYP9n/ZZdSp1n2y3YIdxd+LhSC+dewFUTTFL7Br
+         JIm7vrBMbKuFX6ZfYBfUfZwGIXtDU1nY0acfQr58UEeXRwIF4ejTKvY0kmS/JFkAbygU
+         ZOq0Yo9DDUTJNed9afSM8jMbUP0WzuorwXN4OsQRQ70ZJOLVbqwIKKdfNySqclT/1tl3
+         YueA==
+X-Gm-Message-State: AFqh2kqjZh1a87X7LGQ9sW7u60VGvGmPSFOWRRwCnb5QpIyvXyQigVa3
+        E4/cEY74Pcs8oBEek9aYMlHBp7dSgXgvkyAa1uc=
+X-Google-Smtp-Source: AMrXdXv8qNP079N8Ljgdg1YxgYDV453aDSNxK9LIR74YsJCiaWn938eOuW+3voCWEBes5so6o/csZ9cDSEO/Bl+oL2k=
+X-Received: by 2002:a17:906:8381:b0:7c1:57e7:e45a with SMTP id
+ p1-20020a170906838100b007c157e7e45amr3219427ejx.548.1673177379128; Sun, 08
+ Jan 2023 03:29:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20230107113838.3969149-5-guoren@kernel.org> <202301072027.oxrCrTTy-lkp@intel.com>
-In-Reply-To: <202301072027.oxrCrTTy-lkp@intel.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 7 Jan 2023 22:07:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQDQgWuj4fUTXMdqoLzJD7=pMFkGtqDSdr2e4ss6BxvNg@mail.gmail.com>
-Message-ID: <CAJF2gTQDQgWuj4fUTXMdqoLzJD7=pMFkGtqDSdr2e4ss6BxvNg@mail.gmail.com>
-Subject: Re: [PATCH -next V13 4/7] riscv: entry: Convert to generic entry
-To:     kernel test robot <lkp@intel.com>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, oe-kbuild-all@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
+Received: by 2002:a17:906:eca7:b0:7c0:dfb2:c37b with HTTP; Sun, 8 Jan 2023
+ 03:29:38 -0800 (PST)
+Reply-To: muhammadabdulrahma999@gmail.com
+From:   muhammad <nnannacollins2019@gmail.com>
+Date:   Sun, 8 Jan 2023 03:29:38 -0800
+Message-ID: <CAPQqOC03wuphQb6NMCpfv7tZrur=MdFAiO_zctdzRwH0PfHa1Q@mail.gmail.com>
+Subject: Re:Re:Inquiry about your products.!!
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,DEAR_SOMETHING,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:641 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5129]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [nnannacollins2019[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [nnannacollins2019[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [muhammadabdulrahma999[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.0 DEAR_SOMETHING BODY: Contains 'Dear (something)'
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Yes, these are caused by W=1, and I would wait a while to update the
-next version of the patchset.
+Dear Sir/Madam,
 
-Here is the fix:
+An open Tender for the supply of your company products to (Doha,
+Qatar). Urgently furnish us in full details about the standard of your
+product. We will appreciate it more if you give us with Details:
+Specification and Catalogs or Price list via Email.To avoid making a
+wrong choice of products before placing an order for it.
 
-diff --git a/arch/riscv/include/asm/asm-prototypes.h
-b/arch/riscv/include/asm/asm-prototypes.h
-index ef386fcf3939..61ba8ed43d8f 100644
---- a/arch/riscv/include/asm/asm-prototypes.h
-+++ b/arch/riscv/include/asm/asm-prototypes.h
-@@ -27,5 +27,7 @@ DECLARE_DO_ERROR_INFO(do_trap_break);
+Terms of payment:An upfront payment of 80% (T/T) will be made to your
+account for production,While 20% will be paid before shipment.
 
- asmlinkage unsigned long get_overflow_stack(void);
- asmlinkage void handle_bad_stack(struct pt_regs *regs);
-+asmlinkage void do_page_fault(struct pt_regs *regs);
-+asmlinkage void do_irq(struct pt_regs *regs);
-
- #endif /* _ASM_RISCV_PROTOTYPES_H */
-diff --git a/arch/riscv/include/asm/entry-common.h
-b/arch/riscv/include/asm/entry-common.h
-index 994ed48e8eb8..6e4dee49d84b 100644
---- a/arch/riscv/include/asm/entry-common.h
-+++ b/arch/riscv/include/asm/entry-common.h
-@@ -5,6 +5,7 @@
-
- #include <asm/stacktrace.h>
-
--extern void handle_page_fault(struct pt_regs *regs);
-+void handle_page_fault(struct pt_regs *regs);
-+void handle_break(struct pt_regs *regs);
-
- #endif /* _ASM_RISCV_ENTRY_COMMON_H */
-diff --git a/arch/riscv/kernel/head.h b/arch/riscv/kernel/head.h
-index 726731ada534..a556fdaafed9 100644
---- a/arch/riscv/kernel/head.h
-+++ b/arch/riscv/kernel/head.h
-@@ -10,7 +10,6 @@
-
- extern atomic_t hart_lottery;
-
--asmlinkage void do_page_fault(struct pt_regs *regs);
- asmlinkage void __init setup_vm(uintptr_t dtb_pa);
- #ifdef CONFIG_XIP_KERNEL
- asmlinkage void __init __copy_data(void);
-diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-index a7b6bd0df497..2e365084417e 100644
---- a/arch/riscv/kernel/signal.c
-+++ b/arch/riscv/kernel/signal.c
-@@ -12,6 +12,7 @@
- #include <linux/syscalls.h>
- #include <linux/resume_user_mode.h>
- #include <linux/linkage.h>
-+#include <linux/entry-common.h>
-
- #include <asm/ucontext.h>
- #include <asm/vdso.h>
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index e04593c6cfe3..a44e7d15311c 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -15,6 +15,7 @@
- #include <linux/uaccess.h>
- #include <linux/kprobes.h>
- #include <linux/kfence.h>
-+#include <linux/entry-common.h>
-
- #include <asm/ptrace.h>
- #include <asm/tlbflush.h>
-~
-
-On Sat, Jan 7, 2023 at 8:58 PM kernel test robot <lkp@intel.com> wrote:
->
-> Hi,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on next-20230106]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/compiler_types-h-Add-__noinstr_section-for-noinstr/20230107-194127
-> patch link:    https://lore.kernel.org/r/20230107113838.3969149-5-guoren%40kernel.org
-> patch subject: [PATCH -next V13 4/7] riscv: entry: Convert to generic entry
-> config: riscv-allyesconfig
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/82d3616db033b052abe2dc3b1481ef5ce474b7ab
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review guoren-kernel-org/compiler_types-h-Add-__noinstr_section-for-noinstr/20230107-194127
->         git checkout 82d3616db033b052abe2dc3b1481ef5ce474b7ab
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ arch/riscv/mm/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> arch/riscv/kernel/signal.c:277:6: warning: no previous prototype for 'arch_do_signal_or_restart' [-Wmissing-prototypes]
->      277 | void arch_do_signal_or_restart(struct pt_regs *regs)
->          |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> --
-> >> arch/riscv/kernel/traps.c:196:6: warning: no previous prototype for 'handle_break' [-Wmissing-prototypes]
->      196 | void handle_break(struct pt_regs *regs)
->          |      ^~~~~~~~~~~~
->    arch/riscv/kernel/traps.c:264:35: warning: no previous prototype for 'do_page_fault' [-Wmissing-prototypes]
->      264 | asmlinkage __visible noinstr void do_page_fault(struct pt_regs *regs)
->          |                                   ^~~~~~~~~~~~~
->    arch/riscv/kernel/traps.c:275:35: warning: no previous prototype for 'do_irq' [-Wmissing-prototypes]
->      275 | asmlinkage __visible noinstr void do_irq(struct pt_regs *regs)
->          |                                   ^~~~~~
-> --
-> >> arch/riscv/mm/fault.c:207:6: warning: no previous prototype for 'handle_page_fault' [-Wmissing-prototypes]
->      207 | void handle_page_fault(struct pt_regs *regs)
->          |      ^~~~~~~~~~~~~~~~~
->
->
-> vim +/arch_do_signal_or_restart +277 arch/riscv/kernel/signal.c
->
->    276
->  > 277  void arch_do_signal_or_restart(struct pt_regs *regs)
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests
-
-
-
--- 
-Best Regards
- Guo Ren
+Thanks and Regards
