@@ -2,99 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A86F66222C
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 10:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E59B662362
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 11:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233902AbjAIJxT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Jan 2023 04:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S236903AbjAIKlz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Jan 2023 05:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236769AbjAIJwx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 04:52:53 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4B4DBE
-        for <linux-arch@vger.kernel.org>; Mon,  9 Jan 2023 01:52:08 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-476e643d1d5so106327637b3.1
-        for <linux-arch@vger.kernel.org>; Mon, 09 Jan 2023 01:52:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HAQX3MqHqmIeeOrJpELRmG+wNnU+MpmXY1sRh1DUmgw=;
-        b=DVfCyJ6P3zydmckWF8seSRRw/mz6qUyyH0LrKVrsvYJAZ/YNG6Mq5wFaD140cl5+Ib
-         KiwpsqJymIId+h5o6qdfMB7wX7OXUI2ziy601EpVhnGbLTKmKyVlreUcACXdSKp2UX1X
-         OEsiE8fMyPqTic7T67qLgNRVijQzlvX36bNwYY6KadKvfTzd04RqtNTnUybSKV0q0opJ
-         AyOtbJ0FhWJZOqZK9RWfIz6xTGeFVie2Br5pGFEwBS2NK3FWOS897lhpxVuX91WtQmTt
-         uABX3Qfc1ng4EIsFPSNo2PrSp4Lu0ObHJmsT0hTGTqxBNz1sN2YYnL5uU+/N+w1QdPZW
-         tL9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HAQX3MqHqmIeeOrJpELRmG+wNnU+MpmXY1sRh1DUmgw=;
-        b=MtkdW0B0Xks84Zo+peMCvtQMYeNsTA4UoVEktUMRg+suhrUuBhb+WR6RdA6xmwq8Mv
-         LIglNTZBNUlc4D24ItfNV1sAiqVcx55N/lGcB9hYIHediFstMXTlvfFOxA4wZWYAqRW+
-         E0Nzz2/HqhzooHoN8nnH+IFknQaoXqqdv5hJrWt1Yh2NZ+kWJu4Y1Zp92IyQWcf1d3m8
-         5xP9h51QQE6Pect6C3QB4A5hWUsUSACtQGTYq9Nd53rnyHrYINeVbwgGEdOyxxUA42gH
-         UPTB7On9k0ABQfuFjb8Y5l+Ll8Z/tLFmqF58rDhZOz+4uv2Y3DyShUwLAuQEPayMTf8s
-         8LsQ==
-X-Gm-Message-State: AFqh2krIeMjaIYeQxROckslOmzWnnZ4uHPlQ527krFyHWhtbljeun3mP
-        Cf3b0MPjUEok8YLQwIbtVvnM1t4nzsZ25h5Ss0+rGw==
-X-Google-Smtp-Source: AMrXdXuGvJK/Z2GNIYTIcilU/lRPpom25Exjk2m/eTsYGxQGzPycGsZ6tbA4IcBTD/gP8jy9E/3DFgSf/xXGY41i0OE=
-X-Received: by 2002:a0d:f084:0:b0:4c2:51b:796c with SMTP id
- z126-20020a0df084000000b004c2051b796cmr993316ywe.144.1673257927353; Mon, 09
- Jan 2023 01:52:07 -0800 (PST)
+        with ESMTP id S237036AbjAIKld (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 05:41:33 -0500
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2080.outbound.protection.outlook.com [40.107.13.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E916411;
+        Mon,  9 Jan 2023 02:41:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PDWPQPm1cPrAFsiCKcYoOkQn1Z2V7OudRDSflmQpck9DbzDmlQTC3JNnFwfPeEymwQmLMz03QXnKP9rCMkBGvctmBlc63J40BiU+sFYTu+g9WviZZexMiawvi1mfUvCDyP75uowEfuGchwRSlE0qGretvKKp4DJv7FQ6VM+SU3uA3NMHXPZfGzr9llS7j2IjFW+1c5UODQql7ngBmzIx/vyJFFJgFQxhhsRhXxpm7Q/PUwLPVmzzEFwAMUQQr9lLJhz7/JatsuLU0cVw0/Vi5CkyO4g+WGiLVwGTyGqmuFjjg7UA5id6A4Gl9sqmuAGMQz+/494iQnb/OAyitEIK/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fSkUEURUw2iF1o/81Vy7MF2iUb8d/dmw4SGiJ2j7+4s=;
+ b=iMtndr2LncNXQcpfgHcwX6xF+V4iGKeesguIR7aK2fHklJCl5IhMeimWPOOTv8jiNzh9FZq/j0FqCKkhZt27T8J7gnXHRj39oMs6RZRzSt/H1jiAFxGStjEX8pvFAh/njuVlEudeKej/JlT9iCHCka2pzLCPl6kDF1Nf8krummURsY2ghBf6VzcNAhz+IZxQJRdkpeOLF0n1sUigC3ik1GrzHuv5rprZJ3Jm2WX9BGHzVN/BvbWsjZXHiXFVbDIuGfbj2lgZwUq2bosna7Grip1T7hQg8/0zFjxd5qQGoXnD8mDCkWW/xPKcy67WjWDK1Sv5KcxmvtynNBFBa0pHsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fSkUEURUw2iF1o/81Vy7MF2iUb8d/dmw4SGiJ2j7+4s=;
+ b=mASl9yH9kqPyZAG7GO+NvY2Q6pxKcwIa4AhGIIgZz5prEk7EgIrwhyPGpB2hMNTN0N9o+7PPaCpT+48nMMFyQekyTb8P9hqKzOpcJqBglzsxTHSWGcr8sG8teeYFEYHtSxxmUF1+CdAgM8YknJroNxwRWBIW21HkIv08y83RLJY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by PA4PR04MB9567.eurprd04.prod.outlook.com (2603:10a6:102:26d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 10:40:58 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 10:40:58 +0000
+Date:   Mon, 9 Jan 2023 12:40:54 +0200
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Sparse warning when using ioread64() from include/asm-generic/io.h
+Message-ID: <20230109104054.gabdvjxyawdfbqii@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-ClientProxiedBy: BE0P281CA0028.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:14::15) To VI1PR04MB5136.eurprd04.prod.outlook.com
+ (2603:10a6:803:55::19)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com> <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 9 Jan 2023 10:51:30 +0100
-Message-ID: <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB9567:EE_
+X-MS-Office365-Filtering-Correlation-Id: f787dbc7-d253-43a1-3a56-08daf22dfe4c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EC8D37CR2wsKYtKSK0Lkw/cAn67YWF6rXry7HeD8u2Y47UBBvm/u1yKWaZJ6uI4XwNDEeeZByovTl5dVNj0meRIs/vqJKD8HRz0gEDPjhBxkIskp36CoaZhB5x7WkBBe+ktqkitsLn2tm2q2RVWsMQmIHxdzDZyDfje6109APXFFH5CMSONHvfa+eZwOeEtLl6t1Z5oxNy2/EkuKZ0KPWVomSnqu8NGZvfd/dt0UFWcE+WS27z9GKMos18071pZyYNTwSRuzPuVTXwDM/Bi6cLdnjWvnpijzP9BVOvoP72nikbe9Cruajp6hvdx/VkDylHrbXZeu8BSK963QbhR1SEssdDrsmaZ84BULX0OaF9CMotmC3xcQwDWpaGs4Vj4ViUXQBnVUnAai0g2tdROolR2rDYBeHBLwyDTqEd3Zxdr8I29voSMuB4Res2Dcohd1XXivz0gjAH8QLVGgO96Ger98sgVb4KR9JKxozOR014EYVLU6T41R8QTJKuO+ylQQ49JIPQrl+TWxUR6SeIYMxz8XLC8U3D3eBQs5OZVisEfZLlCdSbz8TVQ7zhzhi+Z8CN5BVUs9YmUmFmW1ek8JiySKXvhdNV1BlWlc0PfpkzOZ4AyafzuTxV5Ta9iWHSysPbxTocaXUUEK/4Hd2g/WK3HKGdy/ZMHWOikY0U4Ki8ktWgXswNAinzsqZDJj6f3y
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(366004)(346002)(39860400002)(136003)(396003)(376002)(451199015)(9686003)(6506007)(6512007)(186003)(33716001)(1076003)(6666004)(86362001)(4744005)(66556008)(66946007)(8676002)(66476007)(38100700002)(5660300002)(4326008)(478600001)(6916009)(44832011)(2906002)(26005)(3716004)(316002)(8936002)(41300700001)(83380400001)(6486002)(41533002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+QYzPILJeA9VVzH2Md0k9elPMBvArn5+P7zD5GPe3LvdgqNxMTxJDyG2nEV6?=
+ =?us-ascii?Q?/xrd5NCPgg0woXntvASGupjQGJU+8simR4JwTcRpiWPMDxWZC92knp+P8PZS?=
+ =?us-ascii?Q?KX9Rmxf3eg9Q+n48Egm+wpL4uZvLM2XWLOpLwdzOCqvuL+AomzuBUphTeFkY?=
+ =?us-ascii?Q?kavipxJRSkqjTb2dnpcK74s5jLdokzndpKMS4xXE/RmwglFpzN1W5h2GekPP?=
+ =?us-ascii?Q?BGZOCTCsRAweNSIYFpPNZ5TZdZitYVvVKAK0XDkOcpYs3dSVGe81olPzJQ+1?=
+ =?us-ascii?Q?98R6HFT3iVGcPMxWEOH72bozJdOmLvW3/z5QjfrXgaT8xeYHIUfFwFF9BmZS?=
+ =?us-ascii?Q?oNYQZNY1lCfoziVANAy7Kj4LCSAyEHSAAmqtHgYicBd2cgCkpmpOeBD6bkiJ?=
+ =?us-ascii?Q?CWbSUPqesZMOdYM1uaRxnQs+kBXw1IUIyrLk5LrRtVQFqYnvNU8PjgVrknDy?=
+ =?us-ascii?Q?56qQigXgFHSBZgruSnaiBEsU+rMICkr3rZiRgkbkS4NBra9uXAzRvDFdtNi1?=
+ =?us-ascii?Q?a9b5FpR2u4DSuFlpZyQu5qvm7+d42V4yLkggGVs+SQF7Kc/D9mskRmx96BXa?=
+ =?us-ascii?Q?TTi8KozDBeZ5R8Y0vllN/JsINHO8ODV4hz2Za/hi07dnd5FkMMDg78sN1sho?=
+ =?us-ascii?Q?0Dp2pqDTsa2bHt5IBEiXvJrdP7DbLonr709s1mYsMGuyAhmQNIGHMcl4UCsZ?=
+ =?us-ascii?Q?myK2JkjJUd+eL6fR69G/oDwxyaCC1zOSYRrYBETbqdkx1xXVsoS0ZoDUBijF?=
+ =?us-ascii?Q?iQ7CgL/KlnNctps7zkJ6LdSFqSa7bUO/mzToLVgoEHM0+PrW2x3Nn6OI4Z4k?=
+ =?us-ascii?Q?o7admloOU/u1aPL8/mkfo9FaAudl7fEAHFJm/IIBBasyJlvESIb1Q8Bebwla?=
+ =?us-ascii?Q?aBSnRtVlK50QKoAUJIQA8GRWEkP1Nwu9JLh2ICRvv5QPrAtK0xo2UGSqJGQU?=
+ =?us-ascii?Q?Y+MziK6jF3hGP46syMR8+W1WhaV8upGBRstm1SChRb2cI0tuM9pEs6xuCXzZ?=
+ =?us-ascii?Q?FsGmecw+N6KoJSixeZytNESyJOZ4Im0lz7ClpCb/2m6q9o5Ls8Fb0EJppAnm?=
+ =?us-ascii?Q?wJ3pEN8iTmKR+5b4xVM17yi818lUbZDtAZyYyb2Szsti7sHcbbExSmFMNEJl?=
+ =?us-ascii?Q?zf6iLqMNU+33vJ4ewelUYaKqXC9M5z8XuIls76Q/a0bQ8LYMPLpGBmTRF8GG?=
+ =?us-ascii?Q?4wC8P+qOzYcn4mKPNrjJOry1ldD9rKCMhb4lEw91rOSAXjdQSzO/CuQC8Oh/?=
+ =?us-ascii?Q?IMn7FtTuiD7SH4qo+6gd3EFJ0ENwAwtO88eSkmlzNvJ0pJGdqqhe7ygFKbdI?=
+ =?us-ascii?Q?casnMhfEgAMPscmMncubt1oYW2ZdJ1uhsAZx8pTV9HR32PQTmjNdKk/K1rkB?=
+ =?us-ascii?Q?o5rj51XYf7FxCj2mPMiZIZPe0ZfuYMcS3fhxyCLMix8lRj8EPGoDWg19N2ik?=
+ =?us-ascii?Q?G35BKV7O6ya+jD3daPqKoH+pJQDo3VoGWXrk2SFhS9YjbgMvFa5eRjFqZg9X?=
+ =?us-ascii?Q?gowl4Lbd9YSdJCnemp1oHk9dX2ZQjg2ou+zqALqe/kjqColVyth1XdUYHJ+9?=
+ =?us-ascii?Q?HvAHU5HTiLnm4lMRE6Q52wzWA9TwUwYes9P2R2Pfjl7dcuyCurD9nw9qA7pA?=
+ =?us-ascii?Q?lg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f787dbc7-d253-43a1-3a56-08daf22dfe4c
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 10:40:58.2548
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rvYo5KIStzFCw6jGkDomfjyq12y6sSx7pc/tSqtCrrF8p2DBTLFF+7HqtUXj24g8BRJ32PimK0EPl7f4Pqi8Jw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9567
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,84 +109,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wro=
-te:
->
-> Alexander Potapenko wrote:
-> > (+ Dan Williams)
-> > (resending with patch context included)
-> >
-> > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
-> > >
-> > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> =
-wrote:
-> > > >
-> > > > KMSAN adds extra metadata fields to struct page, so it does not fit=
- into
-> > > > 64 bytes anymore.
-> > >
-> > > Does this somehow cause extra space being used in all kernel configs?
-> > > If not, it would be good to note this in the commit message.
-> > >
-> > I actually couldn't verify this on QEMU, because the driver never got l=
-oaded.
-> > Looks like this increases the amount of memory used by the nvdimm
-> > driver in all kernel configs that enable it (including those that
-> > don't use KMSAN), but I am not sure how much is that.
-> >
-> > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
->
-> Apologies I missed this several months ago. The answer is that this
-> causes everyone creating PMEM namespaces on v6.1+ to lose double the
-> capacity of their namespace even when not using KMSAN which is too
-> wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
-> increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
-> something like:
->
-> diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> index 79d93126453d..5693869b720b 100644
-> --- a/drivers/nvdimm/Kconfig
-> +++ b/drivers/nvdimm/Kconfig
-> @@ -63,6 +63,7 @@ config NVDIMM_PFN
->         bool "PFN: Map persistent (device) memory"
->         default LIBNVDIMM
->         depends on ZONE_DEVICE
-> +       depends on !KMSAN
->         select ND_CLAIM
->         help
->           Map persistent memory, i.e. advertise it to the memory
->
->
-> ...otherwise, what was the rationale for increasing this value? Were you
-> actually trying to use KMSAN for DAX pages?
+Hi,
 
-I was just building the kernel with nvdimm driver and KMSAN enabled.
-Because KMSAN adds extra data to every struct page, it immediately hit
-the following assert:
+I would like to get rid of the following sparse error in the enetc
+driver (for arm64), which uses ioread64().
 
-drivers/nvdimm/pfn_devs.c:796:3: error: call to
-__compiletime_assert_330 declared with 'error' attribute: BUILD_BUG_ON
-fE
-                BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
+../drivers/net/ethernet/freescale/enetc/enetc_ethtool.c: note: in included file
+	(through ../arch/arm64/include/asm/io.h, ../include/linux/io.h,
+	../include/linux/irq.h, ../include/asm-generic/hardirq.h,
+	../arch/arm64/include/asm/hardirq.h, ...):
+../include/asm-generic/io.h:239:15: warning: cast to restricted __le64
 
-The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struct
-page size independent of kernel config", but maybe we can afford
-making it dependent on CONFIG_KMSAN (and possibly other config options
-that increase struct page size)?
+The trouble is I don't understand why the casts to __le64 and use of
+__le64_to_cpu() are even needed, when everything seems to be native
+endianness. I've seen commit c1d55d50139b ("asm-generic/io.h: Fix sparse
+warnings on big-endian architectures"), but that doesn't claim to fix
+anything for little endian (and doesn't touch the 64 accessors, for some
+reason).
 
-I don't mind disabling the driver under KMSAN, but having an extra
-ifdef to keep KMSAN support sounds reasonable, WDYT?
+Could you please help?
 
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Thanks,
+Vladimir
