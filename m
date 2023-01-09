@@ -2,137 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9AC661F33
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 08:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A86F66222C
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 10:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233629AbjAIH17 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Jan 2023 02:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
+        id S233902AbjAIJxT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Jan 2023 04:53:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbjAIH16 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 02:27:58 -0500
-Received: from MW2PR02CU002-vft-obe.outbound.protection.outlook.com (mail-westus2azon11023019.outbound.protection.outlook.com [52.101.49.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DAF398;
-        Sun,  8 Jan 2023 23:27:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n7OBPIG2C+AAzwj4sN/knZ2ip16nUxlt6S1xjN0JhAPwkgMCEcyvEn2mDc6IanjxTsYAN/7KXW5Y/yPb+m75jKZK7Iosv9QspoaIVSpMzY2KDyPCAxtv33gW02yq+qpGLF+D+QXs5JUDSaebQ4mX9z3B9Igfsie8vlV3O0sighXM0msIHApoCNmelMqvR2f3sZXHx9291TqT6+oWopNVe59UrGJv3qooH7QQtaVisntXM7Zv1Phou/jhrCkEJXuZTP3y8/l/VLaLOMj1ApYGg5xEy5FL6RDDIQk1ZTOjiqap+E61n5ESyBGXDZgfFNVU8jE1wH4ZsgDftplm0hub+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UN8OwAd60ZR0dxTimrCkda9HyeFr7ckV9/LfCK5NhrA=;
- b=UvsMCmzpUgDH+YyhNtq0W2EgVJaVzRgiDUaY/zsH1X7UW9oZTpO+MZL3lePrH57c7StQYPuayfwTNTNFykGH5/MJZ0qErZnaBlMQy7MNDxGEK2Cv31spKnjnvh6JiWXKXox0ix4j5fz39BrlRjdG4rzeRSY06ofWcYq6qjS+PIJtFPZkVCfGQafmmA1uI3utopwWN5eOHaqEpYNuWgwi3jpeW/Ba8sYMP5xhYBMjn/5xT3pRzDEsTqGDw8j7vCwOlGcrcB1N5ZIG2Nv66InA/KfPM5dZGjLs6nVF5BumU5+kx6Y99g11V3uB9Fr+YtezlXAiHfxlMpdBr1vqLxzJsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UN8OwAd60ZR0dxTimrCkda9HyeFr7ckV9/LfCK5NhrA=;
- b=YMBFRKJf4XdE4L7tyvtrpbfTFaAFPxmVYW1i9uUARh4Cos50/1hy8Ln/wOTrX6QdD/aEVZyTbLSAKjZnPXrZaP81yikBGHz0mU79ywudCLBLNpFVvSjGLGKDh/bx0naxxteTlwvDlPGguakhLK94Uj6C4cWAD4HShsbQDr3BnFs=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by DM4PR21MB3107.namprd21.prod.outlook.com (2603:10b6:8:63::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.2; Mon, 9 Jan 2023 07:27:54 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c14e:c8f3:c27a:af3d]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c14e:c8f3:c27a:af3d%5]) with mapi id 15.20.6023.003; Mon, 9 Jan 2023
- 07:27:54 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-CC:     "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 5/6] x86/hyperv: Support hypercalls for TDX guests
-Thread-Topic: [PATCH v2 5/6] x86/hyperv: Support hypercalls for TDX guests
-Thread-Index: AQHZIcFboF6MXqWJVEq1rq5J7Jhdia6VrgHA
-Date:   Mon, 9 Jan 2023 07:27:54 +0000
-Message-ID: <SA1PR21MB133549756FCE0834498000CCBFFE9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20221207003325.21503-1-decui@microsoft.com>
-        <20221207003325.21503-6-decui@microsoft.com>
- <20230106132354.00007af3@gmail.com>
-In-Reply-To: <20230106132354.00007af3@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=076c7075-2f26-4262-be97-acebee8566c4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-09T07:05:30Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DM4PR21MB3107:EE_
-x-ms-office365-filtering-correlation-id: 195551db-477c-4bac-fa0b-08daf21305f9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qzRPvpElR3sVISD1/UQHjw4MNMrn/bUBGyya4z8Ki7QP5L7E+OqqdkvUz/5vR9sGQ6as1yc7Z/rgz2P6tEiTawY2bqDuITPBt0lAhZ4C9eymc38VocYxtH6nUtQ1BzmGSIZAYTd9AU9rcPiziLNFxoTXRtXohLVNaiBKFV5z231lGosmV0TW4wBjykRalk5uHdrfQpwtaOOM7tsHWJN6tNltc2kBdnYWASzDMVFKkHZJfG/WqpuyRHE099EGEDr17CjK3HCeb1LqNbezH+xbQt3DwXGGC2B3XyxPe4+LqQ1ugNQ1bTalG8i8gqvqwCOB6e1NZPfFpsUGRDeuxtickUcWnEioR4TyIUg/+Wqn+V8mCz+UZ5hLyiNi1VSEVkzRvUyzqeTKoZa6Axy3BLmh0Fw4i8v0LokhR+lVwAHD7oO8cgye7OsFffo9GlhGA6MBmU4e06JHdGP95lJuC7ipEh2qw/WP1LNuTaxFwObhHjtjLrS7He6PLOsSryC7f+srJsdPVngajmU1LtbRTkBzIGdh/IGV+AAyKYGiTQiKeu0t0n+QApJTA/R30vw6sQprBQ8kYZ6wcHfCTW4NmvZn+3VIWMtFmcJElDK+J8sGLp9nvQzeRrEwe50IfbMAu6UZOarz6hFz2GaTJdwgJdbKz4qWmLty8yQGnH4rha0K7pi0vN2mqvvjxT995PjU63NPQtbpe3httEZ+/PqbChC999PCqIwaOOB6GlNO3LaVZYksL1U4siZJQJr1Ei9cP1Ul
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(366004)(346002)(396003)(451199015)(10290500003)(82960400001)(38100700002)(82950400001)(66556008)(54906003)(66946007)(38070700005)(64756008)(33656002)(41300700001)(122000001)(8676002)(4326008)(478600001)(66446008)(186003)(76116006)(6916009)(66476007)(52536014)(9686003)(316002)(83380400001)(5660300002)(8990500004)(7416002)(6506007)(2906002)(71200400001)(7696005)(26005)(86362001)(8936002)(55016003)(66899015);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lCEg7yW6EfEl3bteIXG/pBnRMb/awaOGQHVMNXhRS+q8WKbjLE75X19MQOKc?=
- =?us-ascii?Q?ZPv7+jtFMHGWA0dQBbczNMIKxp+7nvbgyN1deOru1mvzGdEVcqc5q4fdllBV?=
- =?us-ascii?Q?knKlBkYEUDsKOaZ2YYHWSGaU544uJhZziRHag6aMuoCVPNyNAvSWWQs4O9VW?=
- =?us-ascii?Q?BGCBNNIlFAuiYjpvRtZkXGNlpVgQL4Y1ConQKXAIZF21/bXwtBRSrgLHJ0Wb?=
- =?us-ascii?Q?Lx7sTN+tTfffEgXbCs6QoNG2S1qRnISnxkth8o26/xMCjwTqb/86x8uaPxJd?=
- =?us-ascii?Q?Car5pT4aLsEMr5mBzoyNdT+MlYIlHQTWUeMJKhQTLQ5t0Kb/36uWdErJzplR?=
- =?us-ascii?Q?qXDLRnRDFlkPALRFZGt1kH/cH3JR3TEky3ORjlhi9TeYSxvnRLMM8k157kRS?=
- =?us-ascii?Q?yAcIhGR6Kmqd4PiykiQHC+SfFEbf9c81rwC8q5rrCq8psLEEzrm7XriwnOyR?=
- =?us-ascii?Q?Uq3MVJUl0H/lujzzXnOfvRZltOBZzwjYFAdA3LFfrg6ym5q5niZw1VWdTtwn?=
- =?us-ascii?Q?chtIzTfLNFPwG9nY5/66VHsypGw42TIRgh4FGqeCb+8gj+TVUXvCV6fXDCWZ?=
- =?us-ascii?Q?FsWag6VqgAMTadH19tbXvkyNc72TQSbj2g80XxZn6y/8SfsQwKO1dO2vZGfG?=
- =?us-ascii?Q?6IGTrA/pybaBpUnT3BK2D7KyWYeBOsI4y04GKLxeheh5P/JI47lUiCwvXs/R?=
- =?us-ascii?Q?ZExWNxLbLFs6A0WfNT2PBAuJnCH48i9D+LQLdAUVGalaCK3prPVztVFsTxeU?=
- =?us-ascii?Q?QUiJWXpwdlBuTvGjC/7uxsGauURYV6JbzthgiFulhFsfGMnSh8+k1w/Hsyso?=
- =?us-ascii?Q?DJl373NaSpGPZto5Q2W3KfA43tLbgBwOJKt33H3PAEL2+NxfZt4VqgwO+0UA?=
- =?us-ascii?Q?TBvcSNWzQfLwIjlahlrb5HJ9EvXnB4aQ6FrLNHII0S/6+MA5qGOIGGqs9v75?=
- =?us-ascii?Q?ohf/7Ti+lC9ojwzfgIg6CJ2j6hlL9zKIeKtvv2objn1dnok7UPLP5oSBChzS?=
- =?us-ascii?Q?fAbByW3XJV7QiQyKJTVzxflVKVHFNn0HGiXqmJbO+lf4+YzwN2ojpQfaTxNg?=
- =?us-ascii?Q?6z7/zmoeGnvlZQlR0xVJGK+ugtsDApbMfoz9gf4YijqR9MMlHrW4l5JOKFcl?=
- =?us-ascii?Q?dBrpBgPA4LPJiivm4ahnYEwx59CCOct0s8N23J4VCpmu6Py7KtE8KQ8d+tBf?=
- =?us-ascii?Q?raSvT4akjnTp9Vnlr9fDIdIyO+ShWvO8BoEPkbjNCooyyC3ivB8wTAYhaKSl?=
- =?us-ascii?Q?t6GpWN6EzoZ7EI7OFSTXDzphxD0gXULqNyCciJsuH+CQoOGKtXYDwrZy7LWo?=
- =?us-ascii?Q?XkYPGCzMq1gaqTX27X9DYkcRdxDKfUqSxgXtYG18aNGAvAirFv0q7AMz6al+?=
- =?us-ascii?Q?dWL5PwS5Fe8scJE3EDG2EsE0skOqoPjHk+y/TSUJjO0uBlIbqJI/u8psVTcL?=
- =?us-ascii?Q?JsTumDk/tkZrjCuXF4KmOctXSvYKI7L698Oows6UijH7YdqX77482+tbr+WG?=
- =?us-ascii?Q?efEkTvBs7DGeEjOuzDaFSJSW4VPkJU3mK6AX/Aj8+hvZ/xDO9Zo6SlkVHa6C?=
- =?us-ascii?Q?a3lDxZEq+TFQcKfILhZJ7uI5x7olnhd7iMKL1La5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S236769AbjAIJwx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 04:52:53 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4B4DBE
+        for <linux-arch@vger.kernel.org>; Mon,  9 Jan 2023 01:52:08 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-476e643d1d5so106327637b3.1
+        for <linux-arch@vger.kernel.org>; Mon, 09 Jan 2023 01:52:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HAQX3MqHqmIeeOrJpELRmG+wNnU+MpmXY1sRh1DUmgw=;
+        b=DVfCyJ6P3zydmckWF8seSRRw/mz6qUyyH0LrKVrsvYJAZ/YNG6Mq5wFaD140cl5+Ib
+         KiwpsqJymIId+h5o6qdfMB7wX7OXUI2ziy601EpVhnGbLTKmKyVlreUcACXdSKp2UX1X
+         OEsiE8fMyPqTic7T67qLgNRVijQzlvX36bNwYY6KadKvfTzd04RqtNTnUybSKV0q0opJ
+         AyOtbJ0FhWJZOqZK9RWfIz6xTGeFVie2Br5pGFEwBS2NK3FWOS897lhpxVuX91WtQmTt
+         uABX3Qfc1ng4EIsFPSNo2PrSp4Lu0ObHJmsT0hTGTqxBNz1sN2YYnL5uU+/N+w1QdPZW
+         tL9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HAQX3MqHqmIeeOrJpELRmG+wNnU+MpmXY1sRh1DUmgw=;
+        b=MtkdW0B0Xks84Zo+peMCvtQMYeNsTA4UoVEktUMRg+suhrUuBhb+WR6RdA6xmwq8Mv
+         LIglNTZBNUlc4D24ItfNV1sAiqVcx55N/lGcB9hYIHediFstMXTlvfFOxA4wZWYAqRW+
+         E0Nzz2/HqhzooHoN8nnH+IFknQaoXqqdv5hJrWt1Yh2NZ+kWJu4Y1Zp92IyQWcf1d3m8
+         5xP9h51QQE6Pect6C3QB4A5hWUsUSACtQGTYq9Nd53rnyHrYINeVbwgGEdOyxxUA42gH
+         UPTB7On9k0ABQfuFjb8Y5l+Ll8Z/tLFmqF58rDhZOz+4uv2Y3DyShUwLAuQEPayMTf8s
+         8LsQ==
+X-Gm-Message-State: AFqh2krIeMjaIYeQxROckslOmzWnnZ4uHPlQ527krFyHWhtbljeun3mP
+        Cf3b0MPjUEok8YLQwIbtVvnM1t4nzsZ25h5Ss0+rGw==
+X-Google-Smtp-Source: AMrXdXuGvJK/Z2GNIYTIcilU/lRPpom25Exjk2m/eTsYGxQGzPycGsZ6tbA4IcBTD/gP8jy9E/3DFgSf/xXGY41i0OE=
+X-Received: by 2002:a0d:f084:0:b0:4c2:51b:796c with SMTP id
+ z126-20020a0df084000000b004c2051b796cmr993316ywe.144.1673257927353; Mon, 09
+ Jan 2023 01:52:07 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 195551db-477c-4bac-fa0b-08daf21305f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2023 07:27:54.4446
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Zgb3WNOeprGxTXVruwLufg/TSQjoO2y7/Fwj5cZ2bXuWGCUFSG3FDIEuU33pksax0vn8QLgeRrSnnv/El4z1CQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3107
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
+ <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+ <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com> <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 9 Jan 2023 10:51:30 +0100
+Message-ID: <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
+Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Marco Elver <elver@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -140,71 +102,84 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: Zhi Wang <zhi.wang.linux@gmail.com>
-> Sent: Friday, January 6, 2023 3:24 AM
-> > @@ -83,6 +94,9 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64
-> > input1) u64 hv_status, control =3D (u64)code | HV_HYPERCALL_FAST_BIT;
+On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wro=
+te:
+>
+> Alexander Potapenko wrote:
+> > (+ Dan Williams)
+> > (resending with patch context included)
 > >
-> >  #ifdef CONFIG_X86_64
-> > +	if (hv_isolation_type_tdx())
-> > +		return hv_tdx_hypercall(control, input1, 0);
-> > +
-> >  	{
-> >  		__asm__ __volatile__(CALL_NOSPEC
-> >  				     : "=3Da" (hv_status),
-> > ASM_CALL_CONSTRAINT, @@ -114,6 +128,9 @@ static inline u64
-> > hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2) u64 hv_status,
-> > control =3D (u64)code | HV_HYPERCALL_FAST_BIT;
-> >  #ifdef CONFIG_X86_64
-> > +	if (hv_isolation_type_tdx())
-> > +		return hv_tdx_hypercall(control, input1, input2);
-> > +
-> In some paths, for example vmbus_set_event(), choosing the SNP-based or
+> > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
+> > >
+> > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> =
+wrote:
+> > > >
+> > > > KMSAN adds extra metadata fields to struct page, so it does not fit=
+ into
+> > > > 64 bytes anymore.
+> > >
+> > > Does this somehow cause extra space being used in all kernel configs?
+> > > If not, it would be good to note this in the commit message.
+> > >
+> > I actually couldn't verify this on QEMU, because the driver never got l=
+oaded.
+> > Looks like this increases the amount of memory used by the nvdimm
+> > driver in all kernel configs that enable it (including those that
+> > don't use KMSAN), but I am not sure how much is that.
+> >
+> > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
+>
+> Apologies I missed this several months ago. The answer is that this
+> causes everyone creating PMEM namespaces on v6.1+ to lose double the
+> capacity of their namespace even when not using KMSAN which is too
+> wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
+> increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
+> something like:
+>
+> diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
+> index 79d93126453d..5693869b720b 100644
+> --- a/drivers/nvdimm/Kconfig
+> +++ b/drivers/nvdimm/Kconfig
+> @@ -63,6 +63,7 @@ config NVDIMM_PFN
+>         bool "PFN: Map persistent (device) memory"
+>         default LIBNVDIMM
+>         depends on ZONE_DEVICE
+> +       depends on !KMSAN
+>         select ND_CLAIM
+>         help
+>           Map persistent memory, i.e. advertise it to the memory
+>
+>
+> ...otherwise, what was the rationale for increasing this value? Were you
+> actually trying to use KMSAN for DAX pages?
 
-In a SNP guest with pavavisor on Hyper-V, hv_ghcb_hypercall() is called in
-only two places: vmbus_set_event() and hv_post_message(), where the
-hypercalls, which are done via GHCB, need to be handled by the Hyper-V
-hypervisor directly; in other places, the hypercalls, which are done via th=
-e
-hypercall page, need to be handled by the pavavisor. That's to say, there
-are 2 different kinds of hypercalls for a SNP guest with pavavisor on Hyper=
--V,
-and hence we have to use 2 styles.
+I was just building the kernel with nvdimm driver and KMSAN enabled.
+Because KMSAN adds extra data to every struct page, it immediately hit
+the following assert:
 
-> generic hypercall happens in the caller, while now TDX-based hypercall is
-> embraced in the generic hypercall path, e.g. hv_do_fast_hypercall8(). Whi=
-ch
-> style will be chosen in the future? Seems the coding structure needs to b=
-e
-> aligned.
+drivers/nvdimm/pfn_devs.c:796:3: error: call to
+__compiletime_assert_330 declared with 'error' attribute: BUILD_BUG_ON
+fE
+                BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
 
-For a TDX guest without pavavisor on Hyper-V, there is only one style of
-hypercalls, so I make the change in hv_do_hypercall() and
-hv_do_fast_hypercall*() directly.=20
+The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struct
+page size independent of kernel config", but maybe we can afford
+making it dependent on CONFIG_KMSAN (and possibly other config options
+that increase struct page size)?
 
-I don't think we can make any clean-up changes right now. When we
-support the TDX guest with pavavisor on Hyper-V, we'll figure out if we
-can make any improvement.
+I don't mind disabling the driver under KMSAN, but having an extra
+ifdef to keep KMSAN support sounds reasonable, WDYT?
 
-> void vmbus_set_event(struct vmbus_channel *channel)
-> {
->         u32 child_relid =3D channel->offermsg.child_relid;
->=20
->         if (!channel->is_dedicated_interrupt)
->                 vmbus_send_interrupt(child_relid);
->=20
->         ++channel->sig_events;
->=20
->         if (hv_isolation_type_snp())
->                 hv_ghcb_hypercall(HVCALL_SIGNAL_EVENT,
-> &channel->sig_event,
->                                 NULL, sizeof(channel->sig_event));
->         else
->                 hv_do_fast_hypercall8(HVCALL_SIGNAL_EVENT,
->         channel->sig_event);
-> }
->=20
->=20
-> >  	{
-> >  		__asm__ __volatile__("mov %4, %%r8\n"
-> >  				     CALL_NOSPEC
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
