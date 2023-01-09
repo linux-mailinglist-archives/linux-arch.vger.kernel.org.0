@@ -2,178 +2,286 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C84C2662B5F
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 17:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091C5662C1B
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 18:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjAIQip (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Jan 2023 11:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35564 "EHLO
+        id S230115AbjAIRE7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Jan 2023 12:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbjAIQin (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 11:38:43 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44311649A;
-        Mon,  9 Jan 2023 08:38:42 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 190A41EC0104;
-        Mon,  9 Jan 2023 17:38:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1673282321;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=VUS6E1kTGTyemsfzfDqBXzhlr7jEukuBikzhrrd6xvM=;
-        b=Qz2DjSz9JIXdYW/k4q2ntmvFXAyjTyzOsL7PHKUlXR2z1WdVdr2mSARwV5cs7weWdpWH0v
-        lQUgEwCRqE5GGMeONmDT4Jz/Of3fTORO5ee/Cerm9gqRJ6+AsyRNHr0Yv03wcP20WFbXdP
-        1NyOsABbKcWFqOwVPPg4B46fXe8ZjN8=
-Date:   Mon, 9 Jan 2023 17:38:36 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [Patch v4 06/13] x86/hyperv: Change vTOM handling to use
- standard coco mechanisms
-Message-ID: <Y7xDDNMIDyHKLicG@zn.tnic>
-References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
- <1669951831-4180-7-git-send-email-mikelley@microsoft.com>
+        with ESMTP id S233994AbjAIREf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 12:04:35 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84EE2B4AF;
+        Mon,  9 Jan 2023 09:03:32 -0800 (PST)
+Received: from [192.168.0.5] (75-172-37-193.tukw.qwest.net [75.172.37.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 0416820B92A8;
+        Mon,  9 Jan 2023 09:03:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0416820B92A8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1673283812;
+        bh=reGvUKkOQRe1DdF3MA29LaS413i2/fZZ7X1lw4HXNiU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MCv/z84SFZGRfOstaa0KBSI7/DxyBUSmCSE0qa3rqEmrXm55EiIAWP7ObJAcGqSgQ
+         duJOBPur8xzaRVfgjceSBacMEiaPlQfJ90iHI8gmdaNX+vS710Fyrw4UgyCYI/8XNY
+         8qdndGjQ8y/zVBDtSeHCfRJhf7ZEjSt1uqFlN9x0=
+Message-ID: <5bb525c3-cc6d-f526-aeb8-4b7ef1a3eb55@linux.microsoft.com>
+Date:   Mon, 9 Jan 2023 09:03:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1669951831-4180-7-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 2/5] Drivers: hv: Setup synic registers in case of
+ nested root partition
+To:     Jinank Jain <jinankjain@linux.microsoft.com>,
+        jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, seanjc@google.com,
+        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+References: <cover.1672639707.git.jinankjain@linux.microsoft.com>
+ <cb951fb1ad6814996fc54f4a255c5841a20a151f.1672639707.git.jinankjain@linux.microsoft.com>
+Content-Language: en-US
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+In-Reply-To: <cb951fb1ad6814996fc54f4a255c5841a20a151f.1672639707.git.jinankjain@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 07:30:24PM -0800, Michael Kelley wrote:
-> Hyper-V guests on AMD SEV-SNP hardware have the option of using the
-> "virtual Top Of Memory" (vTOM) feature specified by the SEV-SNP
-> architecture. With vTOM, shared vs. private memory accesses are
-> controlled by splitting the guest physical address space into two
-> halves.  vTOM is the dividing line where the uppermost bit of the
-> physical address space is set; e.g., with 47 bits of guest physical
-> address space, vTOM is 0x400000000000 (bit 46 is set).  Guest physical
-> memory is accessible at two parallel physical addresses -- one below
-> vTOM and one above vTOM.  Accesses below vTOM are private (encrypted)
-> while accesses above vTOM are shared (decrypted). In this sense, vTOM
-> is like the GPA.SHARED bit in Intel TDX.
+On 1/1/2023 11:12 PM, Jinank Jain wrote:
+> Child partitions are free to allocate SynIC message and event page but in
+> case of root partition it must use the pages allocated by Microsoft
+> Hypervisor (MSHV). Base address for these pages can be found using
+> synthetic MSRs exposed by MSHV. There is a slight difference in those MSRs
+> for nested vs non-nested root partition.
 > 
-> Support for Hyper-V guests using vTOM was added to the Linux kernel in
-> two patch sets[1][2]. This support treats the vTOM bit as part of
-> the physical address. For accessing shared (decrypted) memory, these
-> patch sets create a second kernel virtual mapping that maps to physical
-> addresses above vTOM.
-> 
-> A better approach is to treat the vTOM bit as a protection flag, not
-> as part of the physical address. This new approach is like the approach
-> for the GPA.SHARED bit in Intel TDX. Rather than creating a second kernel
-> virtual mapping, the existing mapping is updated using recently added
-> coco mechanisms.  When memory is changed between private and shared using
-> set_memory_decrypted() and set_memory_encrypted(), the PTEs for the
-> existing kernel mapping are changed to add or remove the vTOM bit
-> in the guest physical address, just as with TDX. The hypercalls to
-> change the memory status on the host side are made using the existing
-> callback mechanism. Everything just works, with a minor tweak to map
-> the IO-APIC to use private accesses.
-> 
-> To accomplish the switch in approach, the following must be done in
-> this single patch:
-
-s/in this single patch//
-
-> * Update Hyper-V initialization to set the cc_mask based on vTOM
->   and do other coco initialization.
-> 
-> * Update physical_mask so the vTOM bit is no longer treated as part
->   of the physical address
-> 
-> * Remove CC_VENDOR_HYPERV and merge the associated vTOM functionality
->   under CC_VENDOR_AMD. Update cc_mkenc() and cc_mkdec() to set/clear
->   the vTOM bit as a protection flag.
-> 
-> * Code already exists to make hypercalls to inform Hyper-V about pages
->   changing between shared and private.  Update this code to run as a
->   callback from __set_memory_enc_pgtable().
-> 
-> * Remove the Hyper-V special case from __set_memory_enc_dec()
-> 
-> * Remove the Hyper-V specific call to swiotlb_update_mem_attributes()
->   since mem_encrypt_init() will now do it.
-> 
-> [1] https://lore.kernel.org/all/20211025122116.264793-1-ltykernel@gmail.com/
-> [2] https://lore.kernel.org/all/20211213071407.314309-1-ltykernel@gmail.com/
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
 > ---
->  arch/x86/coco/core.c             | 37 ++++++++++++++++++++--------
->  arch/x86/hyperv/hv_init.c        | 11 ---------
->  arch/x86/hyperv/ivm.c            | 52 +++++++++++++++++++++++++++++++---------
->  arch/x86/include/asm/coco.h      |  1 -
->  arch/x86/include/asm/mshyperv.h  |  8 ++-----
->  arch/x86/include/asm/msr-index.h |  1 +
->  arch/x86/kernel/cpu/mshyperv.c   | 15 ++++++------
->  arch/x86/mm/pat/set_memory.c     |  3 ---
->  8 files changed, 78 insertions(+), 50 deletions(-)
+>  arch/x86/include/asm/hyperv-tlfs.h | 11 +++++
+>  arch/x86/include/asm/mshyperv.h    | 30 +++-----------
+>  arch/x86/kernel/cpu/mshyperv.c     | 65 ++++++++++++++++++++++++++++++
+>  drivers/hv/hv.c                    | 18 +++++----
+>  4 files changed, 93 insertions(+), 31 deletions(-)
 > 
-> diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> index 49b44f8..c361c52 100644
-> --- a/arch/x86/coco/core.c
-> +++ b/arch/x86/coco/core.c
-> @@ -44,6 +44,24 @@ static bool intel_cc_platform_has(enum cc_attr attr)
->  static bool amd_cc_platform_has(enum cc_attr attr)
->  {
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 58c03d18c235..b5019becb618 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -225,6 +225,17 @@ enum hv_isolation_type {
+>  #define HV_REGISTER_SINT14			0x4000009E
+>  #define HV_REGISTER_SINT15			0x4000009F
+>  
+> +/*
+> + * Define synthetic interrupt controller model specific registers for
+> + * nested hypervisor.
+> + */
+> +#define HV_REGISTER_NESTED_SCONTROL            0x40001080
+> +#define HV_REGISTER_NESTED_SVERSION            0x40001081
+> +#define HV_REGISTER_NESTED_SIEFP               0x40001082
+> +#define HV_REGISTER_NESTED_SIMP                0x40001083
+> +#define HV_REGISTER_NESTED_EOM                 0x40001084
+> +#define HV_REGISTER_NESTED_SINT0               0x40001090
 > +
-> +	/*
-> +	 * Handle the SEV-SNP vTOM case where sme_me_mask must be zero,
-> +	 * and the other levels of SME/SEV functionality, including C-bit
-> +	 * based SEV-SNP, must not be enabled.
-> +	 */
-> +	if (sev_status & MSR_AMD64_SNP_VTOM_ENABLED) {
-
-		return amd_cc_platform_vtom();
-
-or so and then stick that switch in there.
-
-This way it looks kinda grafted in front and with a function call with a telling
-name it says it is a special case...
-
-> +		switch (attr) {
-> +		case CC_ATTR_GUEST_MEM_ENCRYPT:
-> +		case CC_ATTR_MEM_ENCRYPT:
-> +		case CC_ATTR_ACCESS_IOAPIC_ENCRYPTED:
-> +			return true;
-> +		default:
-> +			return false;
-> +		}
+>  /*
+>   * Synthetic Timer MSRs. Four timers per vcpu.
+>   */
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 61f0c206bff0..c38e4c66a3ac 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -198,30 +198,10 @@ static inline bool hv_is_synic_reg(unsigned int reg)
+>  	return false;
+>  }
+>  
+> -static inline u64 hv_get_register(unsigned int reg)
+> -{
+> -	u64 value;
+> -
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> -		hv_ghcb_msr_read(reg, &value);
+> -	else
+> -		rdmsrl(reg, value);
+> -	return value;
+> -}
+> -
+> -static inline void hv_set_register(unsigned int reg, u64 value)
+> -{
+> -	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> -		hv_ghcb_msr_write(reg, value);
+> -
+> -		/* Write proxy bit via wrmsl instruction */
+> -		if (reg >= HV_REGISTER_SINT0 &&
+> -		    reg <= HV_REGISTER_SINT15)
+> -			wrmsrl(reg, value | 1 << 20);
+> -	} else {
+> -		wrmsrl(reg, value);
+> -	}
+> -}
+> +u64 hv_get_register(unsigned int reg);
+> +void hv_set_register(unsigned int reg, u64 value);
+> +u64 hv_get_non_nested_register(unsigned int reg);
+> +void hv_set_non_nested_register(unsigned int reg, u64 value);
+>  
+>  #else /* CONFIG_HYPERV */
+>  static inline void hyperv_init(void) {}
+> @@ -241,6 +221,8 @@ static inline int hyperv_flush_guest_mapping_range(u64 as,
+>  }
+>  static inline void hv_set_register(unsigned int reg, u64 value) { }
+>  static inline u64 hv_get_register(unsigned int reg) { return 0; }
+> +static inline void hv_set_non_nested_register(unsigned int reg, u64 value) { }
+> +static inline u64 hv_get_non_nested_register(unsigned int reg) { return 0; }
+>  static inline int hv_set_mem_host_visibility(unsigned long addr, int numpages,
+>  					     bool visible)
+>  {
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index f9b78d4829e3..938fc82edf05 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -41,7 +41,72 @@ bool hv_root_partition;
+>  bool hv_nested;
+>  struct ms_hyperv_info ms_hyperv;
+>  
+> +static inline unsigned int hv_get_nested_reg(unsigned int reg)
+> +{
+> +	switch (reg) {
+> +	case HV_REGISTER_SIMP:
+> +		return HV_REGISTER_NESTED_SIMP;
+> +	case HV_REGISTER_SIEFP:
+> +		return HV_REGISTER_NESTED_SIEFP;
+> +	case HV_REGISTER_SVERSION:
+> +		return HV_REGISTER_NESTED_SVERSION;
+> +	case HV_REGISTER_SCONTROL:
+> +		return HV_REGISTER_NESTED_SCONTROL;
+> +	case HV_REGISTER_SINT0:
+> +		return HV_REGISTER_NESTED_SINT0;
+> +	case HV_REGISTER_EOM:
+> +		return HV_REGISTER_NESTED_EOM;
+> +	default:
+> +		return reg;
 > +	}
+> +}
+> +
+>  #if IS_ENABLED(CONFIG_HYPERV)
+> +u64 hv_get_non_nested_register(unsigned int reg)
+> +{
+> +	u64 value;
+> +
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
+> +		hv_ghcb_msr_read(reg, &value);
+> +	else
+> +		rdmsrl(reg, value);
+> +	return value;
+> +}
+> +EXPORT_SYMBOL_GPL(hv_get_non_nested_register);
+> +
+> +void hv_set_non_nested_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
+> +		hv_ghcb_msr_write(reg, value);
+> +
+> +		/* Write proxy bit via wrmsl instruction */
+> +		if (reg >= HV_REGISTER_SINT0 &&
+> +		    reg <= HV_REGISTER_SINT15)
+> +			wrmsrl(reg, value | 1 << 20);
+> +	} else {
+> +		wrmsrl(reg, value);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(hv_set_non_nested_register);
+> +
+> +u64 hv_get_register(unsigned int reg)
+> +{
+> +	if (hv_nested)
+> +		reg = hv_get_nested_reg(reg);
+> +
+> +	return hv_get_non_nested_register(reg);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_get_register);
+> +
+> +void hv_set_register(unsigned int reg, u64 value)
+> +{
+> +	if (hv_nested)
+> +		reg = hv_get_nested_reg(reg);
+> +
+> +	hv_set_non_nested_register(reg, value);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_set_register);
+> +
+>  static void (*vmbus_handler)(void);
+>  static void (*hv_stimer0_handler)(void);
+>  static void (*hv_kexec_handler)(void);
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index 4d6480d57546..8b0dd8e5244d 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -147,7 +147,7 @@ int hv_synic_alloc(void)
+>  		 * Synic message and event pages are allocated by paravisor.
+>  		 * Skip these pages allocation here.
+>  		 */
+> -		if (!hv_isolation_type_snp()) {
+> +		if (!hv_isolation_type_snp() && !hv_root_partition) {
+>  			hv_cpu->synic_message_page =
+>  				(void *)get_zeroed_page(GFP_ATOMIC);
+>  			if (hv_cpu->synic_message_page == NULL) {
+> @@ -216,7 +216,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
+>  	simp.simp_enabled = 1;
+>  
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_message_page
+>  			= memremap(simp.base_simp_gpa << HV_HYP_PAGE_SHIFT,
+>  				   HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -233,7 +233,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
+>  	siefp.siefp_enabled = 1;
+>  
+> -	if (hv_isolation_type_snp()) {
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		hv_cpu->synic_event_page =
+>  			memremap(siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT,
+>  				 HV_HYP_PAGE_SIZE, MEMREMAP_WB);
+> @@ -315,20 +315,24 @@ void hv_synic_disable_regs(unsigned int cpu)
+>  	 * addresses.
+>  	 */
+>  	simp.simp_enabled = 0;
+> -	if (hv_isolation_type_snp())
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		memunmap(hv_cpu->synic_message_page);
+> -	else
+> +		hv_cpu->synic_message_page = NULL;
+> +	} else {
+>  		simp.base_simp_gpa = 0;
+> +	}
+>  
+>  	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
+>  
+>  	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
+>  	siefp.siefp_enabled = 0;
+>  
+> -	if (hv_isolation_type_snp())
+> +	if (hv_isolation_type_snp() || hv_root_partition) {
+>  		memunmap(hv_cpu->synic_event_page);
+> -	else
+> +		hv_cpu->synic_event_page = NULL;
+> +	} else {
+>  		siefp.base_siefp_gpa = 0;
+> +	}
+>  
+>  	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
+>  
 
-The rest looks kinda nice, I gotta say. I can't complain. :)
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
