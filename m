@@ -2,108 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FE4662462
-	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 12:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 007C7662699
+	for <lists+linux-arch@lfdr.de>; Mon,  9 Jan 2023 14:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjAILk2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 Jan 2023 06:40:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S233339AbjAINMP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 Jan 2023 08:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237054AbjAILkX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 06:40:23 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD531F1;
-        Mon,  9 Jan 2023 03:40:22 -0800 (PST)
+        with ESMTP id S234483AbjAINMK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 Jan 2023 08:12:10 -0500
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2071.outbound.protection.outlook.com [40.107.247.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9E6CD6;
+        Mon,  9 Jan 2023 05:12:08 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Taid3Rw6DjtWA48MgtDcD+bUhA9USIjBKJlpbJExUwyWxPOBBD1vrBLA+S+CMY2Mz67Oe1Chlij/AjBmL3fRuvuTOeBE605KJTbgZcCAMM2iszV/VB1HbVzZS1OKgyPdFkZVUZ53omR2qKb5D73A1tXC4yXQcY2kRq6Z7OM1E1mZUs67SIN7SyyLlU226V59rTppFjTHemKz3E+3zbkNYRjCRfDRU2vuqOzzY9D9ITzBop8ZFWUASW/loR4G15fvfZq7KldZJ/PGLumK2mmBdUFhkI3wO4Ok6JY/Prh3zDQOry9LthD+nEiXY5NEon15dyReD+N/a9JdvVMkj2qCOg==
+ b=JB3JzWCxlgloFNNyH7L6wLiOOcKzQliFshKW46nz8XNl375p20j1W4JDR7OfbnZxbWKRwROgrmbAuXe/IoSyfyDcszbLO+wtZ53v8/6VLiIpEzbWiOTxfhrkFgtIzLYo6fI17ifX73wccpeVJy3TlA+EH4zeutECtMgbUXb46OTPFPiHGM9ZiK7CdHiZXFQrUBC1eT7KTaj3q7Os3/2eR50MpYq796Mrd86AqrpOuwKZFqniE2wyzPJ88LkW/9sgMnflYt2xScgsvznw3JS/J0C0zg+sRWYWNLHUhZp/sVj5yDS+/nFrpNeonEu7KcoFzEB5pMN/rvrfFlq8EDLxYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LtsGF99Xzr4uqDBj2kDgx7Vo+UbdtLaqx9hP0XKFK9o=;
- b=JocZUTJvwUsP/jF1NlfkNLxqsLQPIOWzQycYGarTRlLxHLIsTamdGdbTz1wGeOrP7rS9zCinmlr+vlp2q4jOOlgodveW1O0p1lmeGeMkuwjsS56gxQzpwYl77VcgJqt2kD+zrRpmEX0jXY1St8+0V8isvFPwsi6GE572rpLFX3wERlNuflG5AXn5QZHlJcy1f0e2LP8/YVszFWkQE/cVodjHVw1Pqtb/meKzN9UXjso9k6+bzGj2Zc9BlKjOfJrGB7N8iD96smsr41jt47T3MyCWGu6T2MCf4zkPShbC9959mmnvBiaNhA06a8ao6gyPC8XdWemOGBMvnGkAfL126g==
+ bh=LR56DzMllJI/Ux2S7RnEyg77ZM1RzFADhxp+m8xrjRs=;
+ b=VQpiO7Qmgl1ZIZhBNqHThAFsuoJF8CmZ5XgHwiE9/ABdn2WANfsTK9CVouv6y2d5p2CZjPHN3IEphin3B1gGhpaJhh/aa5Z9CmJFPa7qcKOSHmXXgd4NBGLID5R7P9H2fw8bDCHgZiGRrImfoJn+nJQvdDBECF/WHXWb8QPPDaxBx/ROaCd7f+k/XzAQ4MA76RI7KlmkxbaQM/wJcJRLenPZn4SAv15V3wm08fceSEif/4t/Lp5ggrxmrHGBz0jng4aXuVnZrq1l3EkDloBf7NaAS604D7Ltp3sazUS9RoUu3GCisYDuXNlPOgQQ4DltmfNg6gWeQjdSIVQnC/jsfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LtsGF99Xzr4uqDBj2kDgx7Vo+UbdtLaqx9hP0XKFK9o=;
- b=OhseKkbLuIzA1D7NR+gcoA3nXuHdw5LKvp7eN3Gt4vYkgXruNYA4+S0t7wxSYf6/kkxTT0PMS4H7X81yn/Zt1lxsynbWMrou5aFDuFafRBCA6hnt6N7geW02iP+GYPHXLJ9/GrsyG8XudxMFag95fRZH8RPg8iB/UNVofTM0eRg=
+ bh=LR56DzMllJI/Ux2S7RnEyg77ZM1RzFADhxp+m8xrjRs=;
+ b=CNSBuyz+6J9hceThh1VEDi0g4GloKQ+TuF0bCEubOUQPwHx6D81N0wfiNX2hSee0k8bN9cmeY0ugjZDRsbUjHsWuaZ9KCfm3B/a5bHpc66ZZNyPa3Nb578I7NILDnS+SIC6RBNE1OWjdyCEzeU8tzk+XrMxVGKt2OUQrmQrI2ck=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
- by DU2PR04MB8903.eurprd04.prod.outlook.com (2603:10a6:10:2e2::9) with
+ by PA4PR04MB9638.eurprd04.prod.outlook.com (2603:10a6:102:273::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
- 2023 11:40:20 +0000
+ 2023 13:12:06 +0000
 Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
  ([fe80::3cfb:3ae7:1686:a68b]) by VI1PR04MB5136.eurprd04.prod.outlook.com
  ([fe80::3cfb:3ae7:1686:a68b%4]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
- 11:40:19 +0000
-Date:   Mon, 9 Jan 2023 13:40:16 +0200
+ 13:12:06 +0000
 From:   Vladimir Oltean <vladimir.oltean@nxp.com>
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Sparse warning when using ioread64() from
- include/asm-generic/io.h
-Message-ID: <20230109114016.z6qowgppuh7uoj75@skbuf>
-References: <20230109104054.gabdvjxyawdfbqii@skbuf>
- <9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com>
-X-ClientProxiedBy: FR2P281CA0025.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:14::12) To VI1PR04MB5136.eurprd04.prod.outlook.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] asm-generic/io.h: suppress endianness warnings for readq() and writeq()
+Date:   Mon,  9 Jan 2023 15:11:52 +0200
+Message-Id: <20230109131153.991322-1-vladimir.oltean@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BE1P281CA0120.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:7b::7) To VI1PR04MB5136.eurprd04.prod.outlook.com
  (2603:10a6:803:55::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|DU2PR04MB8903:EE_
-X-MS-Office365-Filtering-Correlation-Id: 341ada09-5cb0-4d2b-6262-08daf2364941
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5136:EE_|PA4PR04MB9638:EE_
+X-MS-Office365-Filtering-Correlation-Id: 80113943-9b70-4108-674b-08daf2431b2e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tO/cFYfFgbFB6+pYh2vMbyomzp8mBfNJJoD6o32sj4QXC1nkM/tdUVcUzghd+qvOVZQbXKJM83OqYIN5YYH2QXP+X8RstkzL6rDg9XBpvO9KAty/IETS8O2tPzGNLK/03Ax9Ix+XBzxTYaCuOzjFpmcDTRDICt+Nub+Xi6ER7vxVURtlyL66Oh8/LufoOUwOLOzDdyvNLnYYQbc5z9wS8ytgcWZDhsxIFK54r0IBGGSwPc7HDy17oEV5Nd5wQcCQN3/TpzBYq/QuAtm2ZMJ0Sc2i/LskjyKVi2/2TRnMqHILVk5QiFoyU1/ZoaurT5jqSZil2u+5bTDM/G6jriENMm29cGhWaAuR5pAIkrXV9ZvglfHkyb7+uPFQQMkcMyRtJezl6Lx4PI6Cx39vjwJ2EemFZLtAbXF6yGFQqoIsS/eh+/f3pVTI+/2NTzgmd0qR/7TBFVltr4y8hweI5m6hx1qUBTgstKHrDfJYXj9RQRmu3rMlqU7hxxOysd928Bnbp0iHs0XI/rnrqOqtvMuGiewMrV7HANLfKebHrQxds6ReRc2Eaw5sjYWOxRtKrD2/MDOmgjy/Ct+8iVglL51/WsKDBXDwj3x/U3I6N3+Rp4TahorKPYgiCF7cjlLgQ5fGx7NUJkA+dhKeN4Oa1ZqoM0KlFHfXhKT/hg1WXJrHZz6VAkck7NN9PKEBb0M6G6Cj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(376002)(136003)(39860400002)(366004)(396003)(346002)(451199015)(8676002)(4326008)(6916009)(316002)(66946007)(66556008)(66476007)(44832011)(2906002)(5660300002)(8936002)(41300700001)(86362001)(83380400001)(6666004)(6506007)(6486002)(478600001)(38100700002)(1076003)(9686003)(186003)(26005)(6512007)(33716001)(41533002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UciY55pYLLfqx9A4YHAvvbJcr0XHWYwOkZQ+1xuyg2rH/xcz9wkNK2SR4VUm8L63vGOlpQDu4XJF7SfobBpUGXfuoQzANq4k0gfqK/OxI76EDRfcdIkYgp64cHhrlrkurSDETWCwCBn00R5gwO49cMwZUpaqTaxXOC5yDxvhz6alx14UzIhsrpG7r3jMgho0ggtjROkF/u4uIf5TCmIsiHyfXKad+GBdXTdtTWNPIuOj1ipnDXroOZaeqQHEN5ZIz+QcrdwaqHLuOQH3hbrSHXC2VKVhNJUjYMH9Tr7AXPxnDKdWkeVNzhb3PxuyH0GtwUCvD7ztmEHYy/nQ/+CyhVtaVhHzJNV7f5IKB4+EaE6UyPGEBNOnryoRqeDEeNYlWzA9QVsc2yTTYVqHYEiaNmWBTXp4SIsBlhE3mXjybXxiGIN0gGlVik/T7tlfG/Lsubt61k4mADiclAXKcRaYI1LfGUADChXEn3gHo6DP8AL9RJ2n5FjRt1wvQqpQbg5h2/mi3KJIB3yLd5UUmXsh/kBbLwScaR2EXjyPGDlUfohRLC6VQ3DwCuXeSQc30MCKsFaeYsQMxOEDrHiVsD0VZHAZXREPxXeOKBZPGLHwm80fux83Gd0CYgwoblqgufFRAd3S4zUMRz3A95NGkP1qW0ZRqC0LoWFsmPaARaN1J+JPZZM5JHPSBbNesVOnhBSRAxFvoxPeZ6xg1jZhtkb3IWoy38UBQf7nRbJ0sJ23cM58ekbdWJYsZlDrCQWJt8OY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(136003)(346002)(366004)(451199015)(2906002)(44832011)(83380400001)(1076003)(2616005)(66476007)(66556008)(52116002)(5660300002)(66946007)(6666004)(26005)(186003)(36756003)(8936002)(6506007)(6512007)(478600001)(38100700002)(38350700002)(8676002)(41300700001)(6486002)(86362001)(966005)(6916009)(4326008)(316002)(41533002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1WmIq2LABxuX1xzlMhxux2Eta/w5/i56iFOjGkeWxwyxeR4jj9Dx29SzPzn/?=
- =?us-ascii?Q?d2aPudtiFbG9X5JVq/lVFjlLPCfbT92exSVGwNdt1ZSav2JZh/KkW+V5zKdZ?=
- =?us-ascii?Q?QDmD5zlGBcsUS8jmiO16TIiEOYrKQkXtpPWiUbHmIYyRGIhaOVw8Z6AEmrDh?=
- =?us-ascii?Q?YsD2VB6JL7gBWPMTz955MW/sveOjuHdQ1EWWlirI9FdJXdf7QcXkUmucybgY?=
- =?us-ascii?Q?Be+PdH8tf//TmKnADTj5ZltfoiatsKaBszmYn6Fr+EHGKbkRdrPBHIFxocgh?=
- =?us-ascii?Q?rZ9jdrdKvCWxnxZj2WJg7mKh5M1k+IwIyqD0jF5RUNdeSYbjG8ZtC0kQJ/VT?=
- =?us-ascii?Q?4Lm74/G5BIL1kOGz60Mc3y3GJp6j4DWKhdc/MgdgizTkagr78y0GL/S/7kkE?=
- =?us-ascii?Q?4kY6G9fQMTDhJ3bs2tDBUQ6d23T3Uy9vjGgUCY4ESQK2cd/I+lrzO2lZjKH+?=
- =?us-ascii?Q?g8onOL8OQZsN57LYrZWUxtO+pUS/XwWJs+rwa0600zLzxdBS34suHRi6+B8D?=
- =?us-ascii?Q?U3Ox5Tf5DfTugwan0HnjF9thbQaCF2Gg7iC0e9driRQdlXIO2EyPebkXQvMq?=
- =?us-ascii?Q?q1f36cBK84sY8lQ5iH+4OYQ4QdRkMZHKX86AH+hK3KQ6tQqpPa9gaJdA3A7K?=
- =?us-ascii?Q?Co6DTUPBp1WjBOQT4MnsgGhl7+VnzJcXtK8gindLzLZSKDR2PRMwto/ODlcz?=
- =?us-ascii?Q?XSV5CCOrQh1Xo850HXgzm1i3viBFxgibfjJH1X2/ZStTDj+SUyOjAGjU951L?=
- =?us-ascii?Q?JVyio4aWLOQ46a3QSCnULntWcuAbaFoOpe0ZRNLECCb5a7gARPHVaIAqpzYY?=
- =?us-ascii?Q?E3xRxUxznR+zQbuD41LtjsuJTBsoDdhrk8xnnSOnDag5C4QJKM7C1WwhjlxR?=
- =?us-ascii?Q?LsDDB1rRAyC/fj2FskNJlkLirE48vAYbiCib9Nsc9p3SSjg95mWA62mzziof?=
- =?us-ascii?Q?mtQ+xpgknCR2plHti70XPa10P87SQut2IcFtH5FAVzE8LRgKxHKCEhoSTHgk?=
- =?us-ascii?Q?eJfE8BXcm7yNGRiATt2HncTWdKf/eAb4EnjzWgJt4tjhfjyOM6OjLuPGswP3?=
- =?us-ascii?Q?jROnYrcCrSxhojT40zqC8dS2BoF+853oUNGUnASH9vAX6gc5mFjbj9gmlzr1?=
- =?us-ascii?Q?D5rL7cV1Vm4Z5Q4ArDUcueg7aXiPjzbiAOFxfeXQ7lWBxFEGRDBIyjppEH2z?=
- =?us-ascii?Q?Tu9H8jwtC1QFppUrsERv56NOoiF/HB8H7ydTdHKvFpWnE/NNKLdvuQN7B+4c?=
- =?us-ascii?Q?HD964RLLufSS42EhRAgXsk1tll5Qq6CkxEETNcK7xUGO18BHgIFCEwkrikxW?=
- =?us-ascii?Q?HRd+xCIuh4o1Y4K0HPM7BDNEeovbAiyw1feSo2yX/zawmq2MDHL3RJB7t8P+?=
- =?us-ascii?Q?jGh1N6BNVtUb7juyclmm9qm9AFx+a5Be239BGX6iIy14V8DW248hG0QjYd/Z?=
- =?us-ascii?Q?YuXLAdmJ2GWIA84p2GlyB7sjKYEByWTO4w4R0ngoiZ6E6/EdzHbi+8l2EuLH?=
- =?us-ascii?Q?3MGM0WuAsxJ6oZqzFlrRZL187dM9uXwP/5HrT1vD6kPqmb9uYsCX+ThSPWh4?=
- =?us-ascii?Q?bEmliXQhMENwzGXjZIE0bCPWi/io9BkLCTNlYf3ThPN+PORHtCU95wO2KZ6X?=
- =?us-ascii?Q?Sg=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nFjY3OwJvPfJcOVsRF4utLy7g1nPE6jbSGyF8FsR/ksbbINJw7D/AKMVmwbq?=
+ =?us-ascii?Q?q/yBGZs/PRGLkPtWtVmqjci4Qpz4kQl7zkfutvFRYggEdHXoWRGDeqv1U2XE?=
+ =?us-ascii?Q?Ld9TuRHIBGIKOpti5p0tfvZgsLcXB9OcLq3Qce/H5jC7Dl0w9GCmOPEPug6r?=
+ =?us-ascii?Q?xmxdbCEvQ9lH3tLa1GCd8NwDeESg/RiBoFo1pWXf3ctb+/mu6DaOPQbySi4C?=
+ =?us-ascii?Q?9oj1iTHAG54utjqcVmqmlz1Db2a1iI0vjBjLlf80ghDTSsSaMC6BNRVIonzh?=
+ =?us-ascii?Q?nKlxWHeqJoUgvJPL20u3+u/jxA/XKkVtWdblBmcKK+FKNVTDAtTsVny7XssC?=
+ =?us-ascii?Q?daTiW9Hp0iSJJHY9s8l9W9Q2l6jbM0zSW7uiw1OevHLY0fTobTv8pxh1w9Dv?=
+ =?us-ascii?Q?OuaDr2akLcr1dq9o3OjHCUdfE4efRv3kz5o3jD4VSuYHjSIoJjckTWSP11o4?=
+ =?us-ascii?Q?xaWD0xhylBHBFIEyt4PRDdIvHZzd+Cw5XTaTMZ0l7RGcIZZjB76GZIgWWt9V?=
+ =?us-ascii?Q?sEin3IrNN26joJOO9qhDJoI5o/5BB8W5/lDLKMcDVu8Va29uyhmCdNebx0Rr?=
+ =?us-ascii?Q?Jq/CGQyLkUAj32XnjgOItW5aW/LkYYmUkc0nCVNPHBIAgq+mfYpIXWsVQSsX?=
+ =?us-ascii?Q?C6pkcoVyV4iHS6iNuOqek7Tt0+nHXFbYPFWo1AkrdQTQdIwZ9fIuPf6kiyvI?=
+ =?us-ascii?Q?eijQyTfR1/Ewkz6JYVoDXGFy4XX1YkIHgTxGgXZulgBKElPFAOSzumo2qShT?=
+ =?us-ascii?Q?u93uOvVpCUofUVDFt4n6gBn9wZ3XWCBuZBjnm6sJiKG2iYtpxnFvklfMy3Ds?=
+ =?us-ascii?Q?vf98smDD9aBfJmgR9SbE3EEwySuuUdy+L3NFwposRbIOC2PIMR9iYaFi3C3J?=
+ =?us-ascii?Q?TLmY4hFAlHZrn7RNLa/2hkVi05sgbN2g3N65lGUcebFSAUxHWr+Xrk3gamxL?=
+ =?us-ascii?Q?mQCuDdNFwtjgvr+rQNp8Fu/d8Z6kFXC3pYdvCz8nTvqKeuzYc25kOQQgzUmO?=
+ =?us-ascii?Q?oA3Pj+BsgFEVaf9dp1V+QHBfPME8wm9FNmSoMKq8lDI6DflziJp9qB4fR/1U?=
+ =?us-ascii?Q?upmvSxeBUuV0U/HO94+pwHhrV8GMVDt0sMb9pMbocd20drlyKkEqoGrNJIko?=
+ =?us-ascii?Q?Flp7Va0ifRVnybMUyZzmDT2slZKdoj3sduM4zLeymGwneMy1oD5dWekH8JZM?=
+ =?us-ascii?Q?/WnFVLMNa75S2CW/+tvQU4/gs+HG5dmL8c95LUyR1ZwQzrN9ynU3IZhelO/0?=
+ =?us-ascii?Q?zU6WxLEePvPkr0C+7s6Ytw7V1n+Ab3CTMSzVJmAIJdCXE3bxSKK3lOimV2ct?=
+ =?us-ascii?Q?oaIhKYlKV/RCEhO8uUTJusqYMbyZpRWouKg29SJjtI9at9XtrjZ8/ePRAw9F?=
+ =?us-ascii?Q?+bP/hB0evBXNVYVIaNuKZ1t3V1Z6y5j9xUNUezUEAfM/k9w+eK7eyusT6SQQ?=
+ =?us-ascii?Q?yoSvR4V9y6ekh9RghzR7TBMUR3JyCobFaA5MKKb3oxJSNNV0CnV8zxKzFpI6?=
+ =?us-ascii?Q?Tz+7UINi8jXye7iKOEFZvOwIcVlMb/Znr/1oI842NqF11D7hUDls7sHDkPhE?=
+ =?us-ascii?Q?f7v8NzwaV8ubDSfB9x2xvrzmaJJKxELCp52vzigCXHaiii0bIOfIfXhC0SAV?=
+ =?us-ascii?Q?Tw=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 341ada09-5cb0-4d2b-6262-08daf2364941
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80113943-9b70-4108-674b-08daf2431b2e
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 11:40:19.9242
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 13:12:06.1602
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zwWpXZsxwP7+wDCtGP9w3SGI1R+hBfqs54miLpXt2j9zO+k7B5R29Vg2miHFDB+B1uGq2kn4u1AAXEZxF/N4OQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8903
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y4h+lLeacRMSeURrOk/0mcr3mm17st8Bg0d480aA5tKTkSSzHkAwgY7LHxhjr8rcFGfcSXWwK0Kv+H4HHw8QZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9638
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -114,42 +110,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 12:33:31PM +0100, Arnd Bergmann wrote:
-> On Mon, Jan 9, 2023, at 11:40, Vladimir Oltean wrote:
-> > Hi,
-> >
-> > I would like to get rid of the following sparse error in the enetc
-> > driver (for arm64), which uses ioread64().
-> >
-> > ../drivers/net/ethernet/freescale/enetc/enetc_ethtool.c: note: in included file
-> > 	(through ../arch/arm64/include/asm/io.h, ../include/linux/io.h,
-> > 	../include/linux/irq.h, ../include/asm-generic/hardirq.h,
-> > 	../arch/arm64/include/asm/hardirq.h, ...):
-> > ../include/asm-generic/io.h:239:15: warning: cast to restricted __le64
-> >
-> > The trouble is I don't understand why the casts to __le64 and use of
-> > __le64_to_cpu() are even needed, when everything seems to be native
-> > endianness. I've seen commit c1d55d50139b ("asm-generic/io.h: Fix sparse
-> > warnings on big-endian architectures"), but that doesn't claim to fix
-> > anything for little endian (and doesn't touch the 64 accessors, for some
-> > reason).
-> >
-> > Could you please help?
-> 
-> From what I can tell, the fix for openrisc was described as
-> a big-endian warning fix, but the warning is actually the same
-> on both. The difference is that on little-endian kernels,
-> the __le64_to_cpu() conversion only changes the type but not
-> the value, while on big-endian machines, the value would
-> be wrong without the conversion: __raw_readl() is defined
-> to never byteswap the data, while readl() must byteswap
-> little-endian MMIO registers into big-endian CPU registers
-> when CONFIG_CPU_BIG_ENDIAN is set.
-> 
-> Since Stafford only tested on 32-bit OpenRISC, he missed the
-> readq()/writeq() accessors that need the same warning fix.
-> 
->      Arnd
+Commit c1d55d50139b ("asm-generic/io.h: Fix sparse warnings on
+big-endian architectures") missed fixing the 64-bit accessors.
 
-Hmm, ok, didn't know that difference between __raw_readq() and readq().
-With this information, I guess I can submit a patch. Thanks!
+Arnd explains in the attached link why the casts are necessary, even if
+__raw_readq() and __raw_writeq() do not take endian-specific types.
+
+Link: https://lore.kernel.org/lkml/9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com/
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ include/asm-generic/io.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index 4c44a29b5e8e..d78c3056c98f 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -236,7 +236,7 @@ static inline u64 readq(const volatile void __iomem *addr)
+ 
+ 	log_read_mmio(64, addr, _THIS_IP_, _RET_IP_);
+ 	__io_br();
+-	val = __le64_to_cpu(__raw_readq(addr));
++	val = __le64_to_cpu((__le64 __force)__raw_readq(addr));
+ 	__io_ar(val);
+ 	log_post_read_mmio(val, 64, addr, _THIS_IP_, _RET_IP_);
+ 	return val;
+@@ -287,7 +287,7 @@ static inline void writeq(u64 value, volatile void __iomem *addr)
+ {
+ 	log_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
+ 	__io_bw();
+-	__raw_writeq(__cpu_to_le64(value), addr);
++	__raw_writeq((u64 __force)__cpu_to_le64(value), addr);
+ 	__io_aw();
+ 	log_post_write_mmio(value, 64, addr, _THIS_IP_, _RET_IP_);
+ }
+-- 
+2.34.1
+
