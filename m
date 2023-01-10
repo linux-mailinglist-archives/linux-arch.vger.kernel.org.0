@@ -2,351 +2,474 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF54A663993
-	for <lists+linux-arch@lfdr.de>; Tue, 10 Jan 2023 07:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2066639DD
+	for <lists+linux-arch@lfdr.de>; Tue, 10 Jan 2023 08:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjAJG4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 Jan 2023 01:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S230446AbjAJHYj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 Jan 2023 02:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237219AbjAJGzy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Jan 2023 01:55:54 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465362A0;
-        Mon,  9 Jan 2023 22:55:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673333750; x=1704869750;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=hmfhjsQlj7udYi6d+7bjeWvlM1wFc+RS7Mf6Hj9PsLQ=;
-  b=CXbYL+yGiib+nukvQLi7jq6A6fWXmKnXf5OhAmWUamRtDcvPd+pI9M8p
-   r4llIbKNndhH8dy1b1guNoy12bP6hyvfbrsUbMIFe66zvL4uG/HclOQGH
-   mNkJjFZkAeiSUZDzveF8DstUEIsj3Y1z9RuRfrZZbMBa8j1lNeC9ZlJ6c
-   yTLolIkI0pKUGROxYxj0wJsnhOhEQNG/23lUDBruk88lvEJD1eE85yZnb
-   mNDau1NExcdH3oM1rzCNWOjqe8USoWVX5P2wRROqkbIMj91W776XyKEQl
-   Gc4e6+h9/uw2F7s6j/kaxv5Eszx+Y9hh+p1sjwjPwsFabFsdEOhABXaOS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="321778083"
-X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
-   d="scan'208";a="321778083"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 22:55:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="650270038"
-X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
-   d="scan'208";a="650270038"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 09 Jan 2023 22:55:48 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 9 Jan 2023 22:55:48 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Mon, 9 Jan 2023 22:55:47 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Mon, 9 Jan 2023 22:55:47 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.104)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Mon, 9 Jan 2023 22:55:47 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b9zME3Nut8uVO6edv6rzuMJKGzcIum6yGlL2+9KEi+BPIoj24aY52PaAGWTw8MnRE3o+pwfH+pEI/OHO1EBxGIL86R7fd7E/ADlbyeMVyqW1SV0VuzEBJ1MXCUYsUeHDi4sv/m2aJUfa5qAvp+gh5Mfu1zMqwuY/FBCIb7x5pkQmak32k6HNEsNtcUgPbw6Ql9ufnU4TsIbZ4YBFkTrRoNnLz8b6I1y8Kq/Yll2rshv5f94uHAiSJ5cxWJdoy0gMOnoUjbNXs/HqHFhX//UNSJUj5XLWe8/Y2Y1AyonVBavDfbP65pqW9c1FZZIzC8IVluUOJnVm1XCPyj9821HgVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NnI0r66BeG3It/Dhen49KHYI3Sx0Ca/xILD5O28lqsM=;
- b=CgpBjZzw6gvXKW16syIr0DkrYWfK9dCB8UOVq8NfT/2bpyrF6fiAKY2y3jXKNoVKsHpCxlJUP/CF/V9B0UG7tXL4aGWcqFfgUapihpApD/UcjRbclxHenXbmmQWtU0tjW4Ml7rq3RQXIJi6E0LXREu6jSS/hlGR3ybg1ZaoBGM8YLMZWSp5C34VsEMsEMwOCAcMH02wLERlUIQwY0zYCnxXTDadpdNtNxhz4wVOCDrU8o4LgiV9LWhDPLQxaeyBBTGRQm+z1whvAv940MNQDXt685+6sTI3AZQurV+1bLrYf/qJn9FftB42dRQmeN14qho4evofYLQg2GWu6qW4esg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by CO1PR11MB4834.namprd11.prod.outlook.com
- (2603:10b6:303:90::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 06:55:41 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::8dee:cc20:8c44:42dd]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::8dee:cc20:8c44:42dd%5]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
- 06:55:40 +0000
-Date:   Mon, 9 Jan 2023 22:55:36 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Ilya Leoshkevich" <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-Message-ID: <63bd0be8945a0_5178e29414@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20220701142310.2188015-1-glider@google.com>
- <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
- <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com>
- <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
- <CAG_fn=WjrzaHLfgw7ByFvguHA8z0MA-ZB3Kd0d6CYwmZWVEgjA@mail.gmail.com>
- <63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch>
- <Y7z99mf1M5edxV4A@kroah.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y7z99mf1M5edxV4A@kroah.com>
-X-ClientProxiedBy: SJ0PR03CA0030.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::35) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        with ESMTP id S230177AbjAJHYh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 Jan 2023 02:24:37 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98C416599;
+        Mon,  9 Jan 2023 23:24:22 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A66mZ0030413;
+        Tue, 10 Jan 2023 07:23:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=NfSJKtmJ/N//lw1SnvX9BZU/tgOxxYMY8GXVjTj3oDE=;
+ b=kLuCFnnnPB8rxjoULEisozdv5tJ7JOV4xgcld0SfaxGeBynIQ+oe+rfpTq7CaifmPkSB
+ E8AjFEHzXSPrVkAHMO9taaa03/cIJpasRswmn3b4U76kBow8oTSaitwUkwAh9oUqp+Hy
+ V4ZAjUBoWmsDNfFMBDzl5P7qMRghwqto8t7IgeBEO5hUqEIHh1HFmlB/pC/Vj8TsYxGT
+ orAbR36f8nozMwkfgizBGjg//QbxyZ6/ceWKZksHZyh4EDN2rD2ybHojGp5vtxvFeKKh
+ Mk6lIMejPRqSaD58ir4alCRKFKp1hsGPJz+wD2lNpQYEzJYOQLhHzYKzvIRJfvb8ve/F ew== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n12fd9mxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 07:23:17 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30A68uLc007590;
+        Tue, 10 Jan 2023 07:23:16 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3n12fd9mwg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 07:23:16 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 309MdohC029885;
+        Tue, 10 Jan 2023 07:23:13 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3my00fk4nd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 10 Jan 2023 07:23:13 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30A7N9Pf20579062
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 10 Jan 2023 07:23:09 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A50820043;
+        Tue, 10 Jan 2023 07:23:09 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4D1F220040;
+        Tue, 10 Jan 2023 07:23:07 +0000 (GMT)
+Received: from osiris (unknown [9.171.82.113])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue, 10 Jan 2023 07:23:07 +0000 (GMT)
+Date:   Tue, 10 Jan 2023 08:23:05 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Richter <tmricht@linux.ibm.com>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC][PATCH 08/12] s390: Replace cmpxchg_double() with
+ cmpxchg128()
+Message-ID: <Y70SWXHDmOc3RhMd@osiris>
+References: <20221219153525.632521981@infradead.org>
+ <20221219154119.352918965@infradead.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|CO1PR11MB4834:EE_
-X-MS-Office365-Filtering-Correlation-Id: f05eecbb-8672-4d8b-23f1-08daf2d7af72
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nh++SFBKeftvQ2/FnnWi7mpR1bpkJgcEejVvLIJ7mcqDbX3UuPNlrsR17QRWwA2HMEDg92QSB2QlXZBrcbP/hoSacqxzzm9xYsKw3Thbsf/TLF465WKnoBBsH42Z9i7JyzPe1fxltlN9MjzIZCw65oU6tllMX4a11X/f7l8w06Q1VOqL0dWyiTpxgLKbNhx9I30/YvdNCVdb1ewoD7WUMC1vwxob7yLRGC9Ij8sQaTMlwmrrJXTlapW0LkcxEaz7V9Pa3ki/cYEkbNBtu34TSCOYfVNOMf25WpwC74z1/Elouszc14K/XkpV0jLbmk24FPdkafcsiUJ2hpVLgxilIcDXdrw6Gpnf2ZVwf1Gq1KeriCbuJxE5PCIPQ6H1ptoZbHLrLaHZ80a3SXs/fAu2XXCbsk5VmYQ6/IOZe723gAo2Ha5k7ymuzeodXxw8X75hAjBAaL4mApAe3WwQ60Pzt/lZJU+H233qZd9CKio2Xe6/6shdNOT0mLe55H3ydfHMo09aDc5q8fVdfk3EU7tapylzfclVLuF4pi9ieKzUSb2z9hsvUgsRy9KvHlV5vGklueS34UX9EAZgQKXCy8Iot7XqV8tapWJKMgFJuvafy9c/h1bLukYLeJ3+P/YAaS5wbVf9ycjvL/tuMD9DN729fQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(136003)(39860400002)(396003)(451199015)(8936002)(2906002)(7406005)(5660300002)(41300700001)(7416002)(4326008)(8676002)(66556008)(316002)(66946007)(66476007)(54906003)(110136005)(26005)(9686003)(6512007)(38100700002)(86362001)(186003)(83380400001)(82960400001)(478600001)(6506007)(6486002)(53546011)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iLeFWFhn3OlEz8eeCdKwFfSLgjocwh0KyLNzKsKhLSSW/CyMEg2fU4uI2JwN?=
- =?us-ascii?Q?UpS74KEyFOptuwkLjoESuzx/Wr0cgMjvZiqAyI7zayj5f1Ua3p/YRCyERzHx?=
- =?us-ascii?Q?K17cyQcX9OTLd+uxxYBjH1kdw0rwB2A84qCgStz6e63HuHchVDzZZU/FBfNG?=
- =?us-ascii?Q?8+46B6doq6rlpz+f1qA0cnRlsWkKWVq/JH7CR1xUfR90wEVBOOVGRLcNNgle?=
- =?us-ascii?Q?nL+sh6IRxxS1Tl5KAtI4hqVWbqqr1lwwz76AsAUy0ynpiqWpjd46ASko5dOT?=
- =?us-ascii?Q?aFrIj5cKWjH6G5JhMqIZzpEV18+8lC1fdJ0cyTpQ0RNF+gaZtjb6Mon2HrvM?=
- =?us-ascii?Q?IG1YLrfjkXKH8DNosGmZukPLFICvkOy+6VfKRn6k21hTICbBn5+KYDuXbxpa?=
- =?us-ascii?Q?vS6PNYSeezZkXczzwA2Rk2lWyTng9mh8XwQ7axkNjd+0bKHXSCegKxVtWcRR?=
- =?us-ascii?Q?HRTP/Xf/W4/g1ukwOaxzpYKnM7cuc9BWhxEZK6qFrkbFhcNu7hja+dNT/6rQ?=
- =?us-ascii?Q?B9NvHu9sPHX//aqVIV2Sst2GhUs6wEpDup1AeVPA5ljwcfuxqqChUp6IcKnF?=
- =?us-ascii?Q?eH3VplxQsw8GNFy3+rl1BxpG8TTByO6T34LjxTqibuGwkdV6M9kDBsRYt26W?=
- =?us-ascii?Q?Ml4lw4B99Og3Q6tB2DnABvmSBadJHSBp9WTIqEHvPGmOU+oJWpVXOYVMVYOL?=
- =?us-ascii?Q?W/qwPdqMsY5PBNnYXX3TFF2DfM/LRVI1AQwkr2PtGRYqNCmR2sM4BxkbdrOG?=
- =?us-ascii?Q?ulY0kwUEuXtciyPNolDlkQ81aR9pmjqvK2CXsnLI2QjdMHUUr77F+CMR+BYK?=
- =?us-ascii?Q?U4fhNf3qCiaPM6Ip3omqrOdgOX0o8BWrA6qDo6b5+wGvguswCqM2aTs0zwhD?=
- =?us-ascii?Q?X0Z3uNrl0arhLMh8+GUkPzYQwYDWzraH4pHEvjFSoOXcods3VmlP4nZmONN3?=
- =?us-ascii?Q?BXI1EEp0NirCmejoI5ekz+ObAemd1xTz1xiopXrJ3uodyqtuPfd4ZtMZeEEn?=
- =?us-ascii?Q?aXLuZspEx+5GH6qZ3x7dIlV+MhU4dbGkwy7mROyjY+GLH41UvxJZMUe2Om6y?=
- =?us-ascii?Q?CfGpZflae5AVlyrR+D3vlYD6j1LinG+QYdBunv1073xiZjz/+kTYlRgwZWjT?=
- =?us-ascii?Q?U1tFTwRIpN3AN+Xw1HFbdkjMGJzTk9oS/tcStrvDU+S6f0r0zCUNlhaHqvSp?=
- =?us-ascii?Q?mL1ZKnzvkAMiGncscjui3Ic43/JiHbvEJodTjCcwO4ZlLHBZbhIwyNFsLEfc?=
- =?us-ascii?Q?eqznAvABD7o71DcU/m1FzafdvCmauXK58J18vyxDvmWjfllqFqMdYIyWrxWr?=
- =?us-ascii?Q?o9tgUTTvb7ZuhZKStxzYN4FCb+24QU7UQ/b+qHQpgPEIhKFC7hmf9gdzaX/A?=
- =?us-ascii?Q?Wfl2018IXoNK0TmazpZXPWJh6H0JkbcMME/O4Yi47UTkhv5E/NbDEUG9x2BI?=
- =?us-ascii?Q?yolVRVhnibTNbQj+QuuWb2Y41lCIZ6Y4GbOR07HZqhXCXWTpVY53hbZVd1C6?=
- =?us-ascii?Q?ZwPG0p83Kb6qRqZ1OGwYz5wzJW48WlVdt0U0Aux96Ch9c8wvvgWueCIwekOS?=
- =?us-ascii?Q?ojVn8ostYP0RXVMYm4bpzp5hF+bFUy+U5YUyzmJr3hoFfmWT++BNb3vbnOSe?=
- =?us-ascii?Q?Vg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f05eecbb-8672-4d8b-23f1-08daf2d7af72
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 06:55:40.4698
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qtuDJa5a91CsPNClp9Lq5uQQf0lbI8cxoifLNJgmyR+Vist7ywkIub+uL46qYUdpe7Z8FukZPpZVY8b4GerqayZ17v6mW4KiQyAxL+BH69g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4834
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221219154119.352918965@infradead.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iyy8uYrJaamIEdMg0S5w71K9ZUmpLv48
+X-Proofpoint-ORIG-GUID: fT3s9TmjDYKNI3QqB4jYLEfG_nFXVVJh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-10_02,2023-01-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ adultscore=0 impostorscore=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2301100046
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Greg Kroah-Hartman wrote:
-> On Mon, Jan 09, 2023 at 02:06:36PM -0800, Dan Williams wrote:
-> > Alexander Potapenko wrote:
-> > > On Thu, Jan 5, 2023 at 11:09 PM Dan Williams <dan.j.williams@intel.com> wrote:
-> > > >
-> > > > Alexander Potapenko wrote:
-> > > > > (+ Dan Williams)
-> > > > > (resending with patch context included)
-> > > > >
-> > > > > On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
-> > > > > >
-> > > > > > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
-> > > > > > >
-> > > > > > > KMSAN adds extra metadata fields to struct page, so it does not fit into
-> > > > > > > 64 bytes anymore.
-> > > > > >
-> > > > > > Does this somehow cause extra space being used in all kernel configs?
-> > > > > > If not, it would be good to note this in the commit message.
-> > > > > >
-> > > > > I actually couldn't verify this on QEMU, because the driver never got loaded.
-> > > > > Looks like this increases the amount of memory used by the nvdimm
-> > > > > driver in all kernel configs that enable it (including those that
-> > > > > don't use KMSAN), but I am not sure how much is that.
-> > > > >
-> > > > > Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
-> > > >
-> > > > Apologies I missed this several months ago. The answer is that this
-> > > > causes everyone creating PMEM namespaces on v6.1+ to lose double the
-> > > > capacity of their namespace even when not using KMSAN which is too
-> > > > wasteful to tolerate. So, I think "6e9f05dc66f9 libnvdimm/pfn_dev:
-> > > > increase MAX_STRUCT_PAGE_SIZE" needs to be reverted and replaced with
-> > > > something like:
-> > > >
-> > > > diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-> > > > index 79d93126453d..5693869b720b 100644
-> > > > --- a/drivers/nvdimm/Kconfig
-> > > > +++ b/drivers/nvdimm/Kconfig
-> > > > @@ -63,6 +63,7 @@ config NVDIMM_PFN
-> > > >         bool "PFN: Map persistent (device) memory"
-> > > >         default LIBNVDIMM
-> > > >         depends on ZONE_DEVICE
-> > > > +       depends on !KMSAN
-> > > >         select ND_CLAIM
-> > > >         help
-> > > >           Map persistent memory, i.e. advertise it to the memory
-> > > >
-> > > >
-> > > > ...otherwise, what was the rationale for increasing this value? Were you
-> > > > actually trying to use KMSAN for DAX pages?
-> > > 
-> > > I was just building the kernel with nvdimm driver and KMSAN enabled.
-> > > Because KMSAN adds extra data to every struct page, it immediately hit
-> > > the following assert:
-> > > 
-> > > drivers/nvdimm/pfn_devs.c:796:3: error: call to
-> > > __compiletime_assert_330 declared with 'error' attribute: BUILD_BUG_ON
-> > > fE
-> > >                 BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
-> > > 
-> > > The comment before MAX_STRUCT_PAGE_SIZE declaration says "max struct
-> > > page size independent of kernel config", but maybe we can afford
-> > > making it dependent on CONFIG_KMSAN (and possibly other config options
-> > > that increase struct page size)?
-> > > 
-> > > I don't mind disabling the driver under KMSAN, but having an extra
-> > > ifdef to keep KMSAN support sounds reasonable, WDYT?
-> > 
-> > How about a module parameter to opt-in to the increased permanent
-> > capacity loss?
+On Mon, Dec 19, 2022 at 04:35:33PM +0100, Peter Zijlstra wrote:
+> In order to depricate cmpxchg_double(), replace all its usage with
+> cmpxchg128().
 > 
-> Please no, this isn't the 1990's, we should never force users to keep
-> track of new module parameters that you then have to support for
-> forever.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/s390/include/asm/cpu_mf.h  |   29 ++++++++++++-----
+>  arch/s390/kernel/perf_cpum_sf.c |   65 +++++++++++++++++++++++++---------------
+>  2 files changed, 63 insertions(+), 31 deletions(-)
 
-Fair enough, premature enabling. If someone really wants this they can
-find this thread in the archives and ask for another solution like
-compile time override.
+So, Alexander Gordeev reported that this code was already prior to your
+changes potentially broken with respect to missing READ_ONCE() within the
+cmpxchg_double() loops.
 
-> 
-> 
-> > 
-> > -- >8 --
-> > >From 693563817dea3fd8f293f9b69ec78066ab1d96d2 Mon Sep 17 00:00:00 2001
-> > From: Dan Williams <dan.j.williams@intel.com>
-> > Date: Thu, 5 Jan 2023 13:27:34 -0800
-> > Subject: [PATCH] nvdimm: Support sizeof(struct page) > MAX_STRUCT_PAGE_SIZE
-> > 
-> > Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-> > 
-> > ...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-> > potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
-> > doubles the amount of capacity stolen from user addressable capacity for
-> > everyone, regardless of whether they are using the debug option. Revert
-> > that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-> > allow for debug scenarios to proceed with creating debug sized page maps
-> > with a new 'libnvdimm.page_struct_override' module parameter.
-> > 
-> > Note that this only applies to cases where the page map is permanent,
-> > i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
-> > create-namespace" terms). For the "--map=mem" case, since the allocation
-> > is ephemeral for the lifespan of the namespace, there are no explicit
-> > restriction. However, the implicit restriction, of having enough
-> > available "System RAM" to store the page map for the typically large
-> > pmem, still applies.
-> > 
-> > Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-> > Cc: <stable@vger.kernel.org>
-> > Cc: Alexander Potapenko <glider@google.com>
-> > Cc: Marco Elver <elver@google.com>
-> > Reported-by: Jeff Moyer <jmoyer@redhat.com>
-> > ---
-> >  drivers/nvdimm/nd.h       |  2 +-
-> >  drivers/nvdimm/pfn_devs.c | 45 ++++++++++++++++++++++++++-------------
-> >  2 files changed, 31 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-> > index 85ca5b4da3cf..ec5219680092 100644
-> > --- a/drivers/nvdimm/nd.h
-> > +++ b/drivers/nvdimm/nd.h
-> > @@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
-> >  		struct nd_namespace_common *ndns);
-> >  #if IS_ENABLED(CONFIG_ND_CLAIM)
-> >  /* max struct page size independent of kernel config */
-> > -#define MAX_STRUCT_PAGE_SIZE 128
-> > +#define MAX_STRUCT_PAGE_SIZE 64
-> >  int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
-> >  #else
-> >  static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-> > diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> > index 61af072ac98f..978d63559c0e 100644
-> > --- a/drivers/nvdimm/pfn_devs.c
-> > +++ b/drivers/nvdimm/pfn_devs.c
-> > @@ -13,6 +13,11 @@
-> >  #include "pfn.h"
-> >  #include "nd.h"
-> >  
-> > +static bool page_struct_override;
-> > +module_param(page_struct_override, bool, 0644);
-> > +MODULE_PARM_DESC(page_struct_override,
-> > +		 "Force namespace creation in the presence of mm-debug.");
-> 
-> I can't figure out from this description what this is for so perhaps it
-> should be either removed and made dynamic (if you know you want to debug
-> the mm core, why not turn it on then?) or made more obvious what is
-> happening?
+In order to fix that and have a patch that can be backported I would go
+with something like the patch below, which I would also plan to send for
+-rc4, unless there are objections.
 
-I'll kill it and update the KMSAN Documentation that KMSAN has
-interactions with the NVDIMM subsystem that may cause some namespaces to
-fail to enable. That Documentation needs to be a part of this patch
-regardless as that would be the default behavior of this module
-parameter.
+This can then easily be converted to the new cmpxchg128() later.
 
-Unfortunately, it can not be dynamically enabled because the size of
-'struct page' is unfortunately recorded in the metadata of the device.
-Recall this is for supporting platform configurations where the capacity
-of the persistent memory exceeds or consumes too much of System RAM.
-Consider 4TB of PMEM consumes 64GB of space just for 'struct page'. So,
-NVDIMM subsystem has a mode to store that page array in a reservation on
-the PMEM device itself.
 
-KMSAN mandates either that all namespaces all the time reserve the extra
-capacity, or that those namespace cannot be mapped while KMSAN is
-enabled.
+From 7b271f42946b306620a748c0da5f07f8c786888d Mon Sep 17 00:00:00 2001
+From: Heiko Carstens <hca@linux.ibm.com>
+Date: Thu, 5 Jan 2023 15:44:20 +0100
+Subject: [PATCH] s390/cpum_sf: add READ_ONCE() semantics to compare and swap
+ loops
+
+The current cmpxchg_double() loops within the perf hw sampling code do not
+have READ_ONCE() semantics to read the old value from memory. This allows
+the compiler to generate code which reads the "old" value several times
+from memory, which again allows for inconsistencies.
+
+For example:
+
+        /* Reset trailer (using compare-double-and-swap) */
+        do {
+                te_flags = te->flags & ~SDB_TE_BUFFER_FULL_MASK;
+                te_flags |= SDB_TE_ALERT_REQ_MASK;
+        } while (!cmpxchg_double(&te->flags, &te->overflow,
+                 te->flags, te->overflow,
+                 te_flags, 0ULL));
+
+The compiler could generate code where te->flags used within the
+cmpxchg_double() call may be refetched from memory and which is not
+necessarily identical to the previous read version which was used to
+generate te_flags. Which in turn means that an incorrect update could
+happen.
+
+Fix this by adding READ_ONCE() semantics to all cmpxchg_double()
+loops. Given that READ_ONCE() cannot generate code on s390 which atomically
+reads 16 bytes, use a private compare-and-swap-double implementation to
+achieve that.
+
+Also replace cmpxchg_double() with the private implementation to be able to
+re-use the old value within the loops.
+
+As a side effect this converts the whole code to only use bit fields
+to read and modify bits within the hws trailer header.
+
+Reported-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Acked-by: Hendrik Brueckner <brueckner@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ arch/s390/include/asm/cpu_mf.h  |  31 +++++-----
+ arch/s390/kernel/perf_cpum_sf.c | 101 ++++++++++++++++++++------------
+ 2 files changed, 77 insertions(+), 55 deletions(-)
+
+diff --git a/arch/s390/include/asm/cpu_mf.h b/arch/s390/include/asm/cpu_mf.h
+index feaba12dbecb..efa103b52a1a 100644
+--- a/arch/s390/include/asm/cpu_mf.h
++++ b/arch/s390/include/asm/cpu_mf.h
+@@ -131,19 +131,21 @@ struct hws_combined_entry {
+ 	struct hws_diag_entry	diag;	/* Diagnostic-sampling data entry */
+ } __packed;
+ 
+-struct hws_trailer_entry {
+-	union {
+-		struct {
+-			unsigned int f:1;	/* 0 - Block Full Indicator   */
+-			unsigned int a:1;	/* 1 - Alert request control  */
+-			unsigned int t:1;	/* 2 - Timestamp format	      */
+-			unsigned int :29;	/* 3 - 31: Reserved	      */
+-			unsigned int bsdes:16;	/* 32-47: size of basic SDE   */
+-			unsigned int dsdes:16;	/* 48-63: size of diagnostic SDE */
+-		};
+-		unsigned long long flags;	/* 0 - 63: All indicators     */
++union hws_trailer_header {
++	struct {
++		unsigned int f:1;	/* 0 - Block Full Indicator   */
++		unsigned int a:1;	/* 1 - Alert request control  */
++		unsigned int t:1;	/* 2 - Timestamp format	      */
++		unsigned int :29;	/* 3 - 31: Reserved	      */
++		unsigned int bsdes:16;	/* 32-47: size of basic SDE   */
++		unsigned int dsdes:16;	/* 48-63: size of diagnostic SDE */
++		unsigned long long overflow; /* 64 - Overflow Count   */
+ 	};
+-	unsigned long long overflow;	 /* 64 - sample Overflow count	      */
++	__uint128_t val;
++};
++
++struct hws_trailer_entry {
++	union hws_trailer_header header; /* 0 - 15 Flags + Overflow Count     */
+ 	unsigned char timestamp[16];	 /* 16 - 31 timestamp		      */
+ 	unsigned long long reserved1;	 /* 32 -Reserved		      */
+ 	unsigned long long reserved2;	 /*				      */
+@@ -290,14 +292,11 @@ static inline unsigned long sample_rate_to_freq(struct hws_qsi_info_block *qsi,
+ 	return USEC_PER_SEC * qsi->cpu_speed / rate;
+ }
+ 
+-#define SDB_TE_ALERT_REQ_MASK	0x4000000000000000UL
+-#define SDB_TE_BUFFER_FULL_MASK 0x8000000000000000UL
+-
+ /* Return TOD timestamp contained in an trailer entry */
+ static inline unsigned long long trailer_timestamp(struct hws_trailer_entry *te)
+ {
+ 	/* TOD in STCKE format */
+-	if (te->t)
++	if (te->header.t)
+ 		return *((unsigned long long *) &te->timestamp[1]);
+ 
+ 	/* TOD in STCK format */
+diff --git a/arch/s390/kernel/perf_cpum_sf.c b/arch/s390/kernel/perf_cpum_sf.c
+index 332a49965130..ce886a03545a 100644
+--- a/arch/s390/kernel/perf_cpum_sf.c
++++ b/arch/s390/kernel/perf_cpum_sf.c
+@@ -163,14 +163,15 @@ static void free_sampling_buffer(struct sf_buffer *sfb)
+ 
+ static int alloc_sample_data_block(unsigned long *sdbt, gfp_t gfp_flags)
+ {
+-	unsigned long sdb, *trailer;
++	struct hws_trailer_entry *te;
++	unsigned long sdb;
+ 
+ 	/* Allocate and initialize sample-data-block */
+ 	sdb = get_zeroed_page(gfp_flags);
+ 	if (!sdb)
+ 		return -ENOMEM;
+-	trailer = trailer_entry_ptr(sdb);
+-	*trailer = SDB_TE_ALERT_REQ_MASK;
++	te = (struct hws_trailer_entry *)trailer_entry_ptr(sdb);
++	te->header.a = 1;
+ 
+ 	/* Link SDB into the sample-data-block-table */
+ 	*sdbt = sdb;
+@@ -1206,7 +1207,7 @@ static void hw_collect_samples(struct perf_event *event, unsigned long *sdbt,
+ 					    "%s: Found unknown"
+ 					    " sampling data entry: te->f %i"
+ 					    " basic.def %#4x (%p)\n", __func__,
+-					    te->f, sample->def, sample);
++					    te->header.f, sample->def, sample);
+ 			/* Sample slot is not yet written or other record.
+ 			 *
+ 			 * This condition can occur if the buffer was reused
+@@ -1217,7 +1218,7 @@ static void hw_collect_samples(struct perf_event *event, unsigned long *sdbt,
+ 			 * that are not full.  Stop processing if the first
+ 			 * invalid format was detected.
+ 			 */
+-			if (!te->f)
++			if (!te->header.f)
+ 				break;
+ 		}
+ 
+@@ -1227,6 +1228,16 @@ static void hw_collect_samples(struct perf_event *event, unsigned long *sdbt,
+ 	}
+ }
+ 
++static inline __uint128_t __cdsg(__uint128_t *ptr, __uint128_t old, __uint128_t new)
++{
++	asm volatile(
++		"	cdsg	%[old],%[new],%[ptr]\n"
++		: [old] "+d" (old), [ptr] "+QS" (*ptr)
++		: [new] "d" (new)
++		: "memory", "cc");
++	return old;
++}
++
+ /* hw_perf_event_update() - Process sampling buffer
+  * @event:	The perf event
+  * @flush_all:	Flag to also flush partially filled sample-data-blocks
+@@ -1243,10 +1254,11 @@ static void hw_collect_samples(struct perf_event *event, unsigned long *sdbt,
+  */
+ static void hw_perf_event_update(struct perf_event *event, int flush_all)
+ {
++	unsigned long long event_overflow, sampl_overflow, num_sdb;
++	union hws_trailer_header old, prev, new;
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	struct hws_trailer_entry *te;
+ 	unsigned long *sdbt;
+-	unsigned long long event_overflow, sampl_overflow, num_sdb, te_flags;
+ 	int done;
+ 
+ 	/*
+@@ -1266,25 +1278,25 @@ static void hw_perf_event_update(struct perf_event *event, int flush_all)
+ 		te = (struct hws_trailer_entry *) trailer_entry_ptr(*sdbt);
+ 
+ 		/* Leave loop if no more work to do (block full indicator) */
+-		if (!te->f) {
++		if (!te->header.f) {
+ 			done = 1;
+ 			if (!flush_all)
+ 				break;
+ 		}
+ 
+ 		/* Check the sample overflow count */
+-		if (te->overflow)
++		if (te->header.overflow)
+ 			/* Account sample overflows and, if a particular limit
+ 			 * is reached, extend the sampling buffer.
+ 			 * For details, see sfb_account_overflows().
+ 			 */
+-			sampl_overflow += te->overflow;
++			sampl_overflow += te->header.overflow;
+ 
+ 		/* Timestamps are valid for full sample-data-blocks only */
+ 		debug_sprintf_event(sfdbg, 6, "%s: sdbt %#lx "
+ 				    "overflow %llu timestamp %#llx\n",
+-				    __func__, (unsigned long)sdbt, te->overflow,
+-				    (te->f) ? trailer_timestamp(te) : 0ULL);
++				    __func__, (unsigned long)sdbt, te->header.overflow,
++				    (te->header.f) ? trailer_timestamp(te) : 0ULL);
+ 
+ 		/* Collect all samples from a single sample-data-block and
+ 		 * flag if an (perf) event overflow happened.  If so, the PMU
+@@ -1294,12 +1306,16 @@ static void hw_perf_event_update(struct perf_event *event, int flush_all)
+ 		num_sdb++;
+ 
+ 		/* Reset trailer (using compare-double-and-swap) */
++		/* READ_ONCE() 16 byte header */
++		prev.val = __cdsg(&te->header.val, 0, 0);
+ 		do {
+-			te_flags = te->flags & ~SDB_TE_BUFFER_FULL_MASK;
+-			te_flags |= SDB_TE_ALERT_REQ_MASK;
+-		} while (!cmpxchg_double(&te->flags, &te->overflow,
+-					 te->flags, te->overflow,
+-					 te_flags, 0ULL));
++			old.val = prev.val;
++			new.val = prev.val;
++			new.f = 0;
++			new.a = 1;
++			new.overflow = 0;
++			prev.val = __cdsg(&te->header.val, old.val, new.val);
++		} while (prev.val != old.val);
+ 
+ 		/* Advance to next sample-data-block */
+ 		sdbt++;
+@@ -1384,7 +1400,7 @@ static void aux_output_end(struct perf_output_handle *handle)
+ 	range_scan = AUX_SDB_NUM_ALERT(aux);
+ 	for (i = 0, idx = aux->head; i < range_scan; i++, idx++) {
+ 		te = aux_sdb_trailer(aux, idx);
+-		if (!(te->flags & SDB_TE_BUFFER_FULL_MASK))
++		if (!te->header.f)
+ 			break;
+ 	}
+ 	/* i is num of SDBs which are full */
+@@ -1392,7 +1408,7 @@ static void aux_output_end(struct perf_output_handle *handle)
+ 
+ 	/* Remove alert indicators in the buffer */
+ 	te = aux_sdb_trailer(aux, aux->alert_mark);
+-	te->flags &= ~SDB_TE_ALERT_REQ_MASK;
++	te->header.a = 0;
+ 
+ 	debug_sprintf_event(sfdbg, 6, "%s: SDBs %ld range %ld head %ld\n",
+ 			    __func__, i, range_scan, aux->head);
+@@ -1437,9 +1453,9 @@ static int aux_output_begin(struct perf_output_handle *handle,
+ 		idx = aux->empty_mark + 1;
+ 		for (i = 0; i < range_scan; i++, idx++) {
+ 			te = aux_sdb_trailer(aux, idx);
+-			te->flags &= ~(SDB_TE_BUFFER_FULL_MASK |
+-				       SDB_TE_ALERT_REQ_MASK);
+-			te->overflow = 0;
++			te->header.f = 0;
++			te->header.a = 0;
++			te->header.overflow = 0;
+ 		}
+ 		/* Save the position of empty SDBs */
+ 		aux->empty_mark = aux->head + range - 1;
+@@ -1448,7 +1464,7 @@ static int aux_output_begin(struct perf_output_handle *handle,
+ 	/* Set alert indicator */
+ 	aux->alert_mark = aux->head + range/2 - 1;
+ 	te = aux_sdb_trailer(aux, aux->alert_mark);
+-	te->flags = te->flags | SDB_TE_ALERT_REQ_MASK;
++	te->header.a = 1;
+ 
+ 	/* Reset hardware buffer head */
+ 	head = AUX_SDB_INDEX(aux, aux->head);
+@@ -1475,14 +1491,17 @@ static int aux_output_begin(struct perf_output_handle *handle,
+ static bool aux_set_alert(struct aux_buffer *aux, unsigned long alert_index,
+ 			  unsigned long long *overflow)
+ {
+-	unsigned long long orig_overflow, orig_flags, new_flags;
++	union hws_trailer_header old, prev, new;
+ 	struct hws_trailer_entry *te;
+ 
+ 	te = aux_sdb_trailer(aux, alert_index);
++	/* READ_ONCE() 16 byte header */
++	prev.val = __cdsg(&te->header.val, 0, 0);
+ 	do {
+-		orig_flags = te->flags;
+-		*overflow = orig_overflow = te->overflow;
+-		if (orig_flags & SDB_TE_BUFFER_FULL_MASK) {
++		old.val = prev.val;
++		new.val = prev.val;
++		*overflow = old.overflow;
++		if (old.f) {
+ 			/*
+ 			 * SDB is already set by hardware.
+ 			 * Abort and try to set somewhere
+@@ -1490,10 +1509,10 @@ static bool aux_set_alert(struct aux_buffer *aux, unsigned long alert_index,
+ 			 */
+ 			return false;
+ 		}
+-		new_flags = orig_flags | SDB_TE_ALERT_REQ_MASK;
+-	} while (!cmpxchg_double(&te->flags, &te->overflow,
+-				 orig_flags, orig_overflow,
+-				 new_flags, 0ULL));
++		new.a = 1;
++		new.overflow = 0;
++		prev.val = __cdsg(&te->header.val, old.val, new.val);
++	} while (prev.val != old.val);
+ 	return true;
+ }
+ 
+@@ -1522,8 +1541,9 @@ static bool aux_set_alert(struct aux_buffer *aux, unsigned long alert_index,
+ static bool aux_reset_buffer(struct aux_buffer *aux, unsigned long range,
+ 			     unsigned long long *overflow)
+ {
+-	unsigned long long orig_overflow, orig_flags, new_flags;
+ 	unsigned long i, range_scan, idx, idx_old;
++	union hws_trailer_header old, prev, new;
++	unsigned long long orig_overflow;
+ 	struct hws_trailer_entry *te;
+ 
+ 	debug_sprintf_event(sfdbg, 6, "%s: range %ld head %ld alert %ld "
+@@ -1554,17 +1574,20 @@ static bool aux_reset_buffer(struct aux_buffer *aux, unsigned long range,
+ 	idx_old = idx = aux->empty_mark + 1;
+ 	for (i = 0; i < range_scan; i++, idx++) {
+ 		te = aux_sdb_trailer(aux, idx);
++		/* READ_ONCE() 16 byte header */
++		prev.val = __cdsg(&te->header.val, 0, 0);
+ 		do {
+-			orig_flags = te->flags;
+-			orig_overflow = te->overflow;
+-			new_flags = orig_flags & ~SDB_TE_BUFFER_FULL_MASK;
++			old.val = prev.val;
++			new.val = prev.val;
++			orig_overflow = old.overflow;
++			new.f = 0;
++			new.overflow = 0;
+ 			if (idx == aux->alert_mark)
+-				new_flags |= SDB_TE_ALERT_REQ_MASK;
++				new.a = 1;
+ 			else
+-				new_flags &= ~SDB_TE_ALERT_REQ_MASK;
+-		} while (!cmpxchg_double(&te->flags, &te->overflow,
+-					 orig_flags, orig_overflow,
+-					 new_flags, 0ULL));
++				new.a = 0;
++			prev.val = __cdsg(&te->header.val, old.val, new.val);
++		} while (prev.val != old.val);
+ 		*overflow += orig_overflow;
+ 	}
+ 
+-- 
+2.34.1
+
