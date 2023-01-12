@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0821C668086
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Jan 2023 20:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC607668022
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Jan 2023 20:59:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240331AbjALT7k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Jan 2023 14:59:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
+        id S232618AbjALT7O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Jan 2023 14:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbjALT7R (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Jan 2023 14:59:17 -0500
+        with ESMTP id S229475AbjALT6Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Jan 2023 14:58:25 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFCB21A1;
-        Thu, 12 Jan 2023 11:58:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C9613A;
+        Thu, 12 Jan 2023 11:57:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=KLAmYUkc5o4iaLgWEzyq0DD4W34Vw8wzkDDZ9nw8rNA=; b=ATY8kiKnvovNgLEm6qSQ1EQvbq
-        whhVrHfsY0Boal85ZRoFmxTUxBK5B9bIvgSX8kVgT6BcX1L66jwQCdPl/BWOSqcQGl2XmwgaBL4PW
-        OKdsLfeNG0cKIyK4qLBg5dTibPOilkbVEo3W2vYUVl/MzGrlgC59H1LNDjakisaklXFACDQXCVqgH
-        X3HA2n0rfn3BN7gYs5ZEmCkrHIhhMF7I5lLP2nRilVRm9iYl7qlU43ypHe2kjKrxVavesmViWu98M
-        YhMWMygFonCR9p+h3EzH9ve+5v/3v/1iCRvb+1bzQnO8SY3rlhjeY9n904kFy8Lg9quCma5so/ETV
-        SIrS144Q==;
+        bh=FFPKfQhi1RR6oz0II4O36iNGEMWuMWROzeT05TgEQqM=; b=JZ+QI/RgQjUauwaL2ksV7XDvtk
+        yXgw34Pwm4B9g69COt8t52jvPLD8U5NyLWiRRdKM0FY0qJYUt8ZjMjtE7aR8HRf0YmvAk8o6Nry9C
+        ktxg9uWrn+qRmjWZEq849FVFIY0Wppotwo5JZHAauhqHswoXTB3xuJSkiBBLU92D8FnAUssXxaenr
+        NBjl4elGJPpmwVTGhA5jOAu3Ry5fSaixgKNobBdT2B9UdsxlA6/SoWVOQuJ48xLL5ml3/BmLOy54p
+        ZFeD5cdqc/fGsKQMi3CEpVYrZI3Z4TMs2mv6iHxGU7lNHeP+l+bf+faqkQrIWcrPhX0xx++NJZ3vY
+        xGHbDDvQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pG3he-005Oge-L9; Thu, 12 Jan 2023 19:57:34 +0000
+        id 1pG3hf-005OhY-8x; Thu, 12 Jan 2023 19:57:35 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DFF0E30345A;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6CB6301D8A;
         Thu, 12 Jan 2023 20:57:13 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 3DD3A2CCFB77A; Thu, 12 Jan 2023 20:57:08 +0100 (CET)
-Message-ID: <20230112195541.538053457@infradead.org>
+        id 41DA72CD01200; Thu, 12 Jan 2023 20:57:08 +0100 (CET)
+Message-ID: <20230112195541.599561742@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 12 Jan 2023 20:43:50 +0100
+Date:   Thu, 12 Jan 2023 20:43:51 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -104,47 +104,107 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v3 36/51] cpuidle,omap3: Use WFI for omap3_pm_idle()
+Subject: [PATCH v3 37/51] cpuidle,omap3: Push RCU-idle into omap_sram_idle()
 References: <20230112194314.845371875@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-arch_cpu_idle() is a very simple idle interface and exposes only a
-single idle state and is expected to not require RCU and not do any
-tracing/instrumentation.
+OMAP3 uses full SoC suspend modes as idle states, as such it needs the
+whole power-domain and clock-domain code from the idle path.
 
-As such, omap_sram_idle() is not a valid implementation. Replace it
-with the simple (shallow) omap3_do_wfi() call. Leaving the more
-complicated idle states for the cpuidle driver.
+All that code is not suitable to run with RCU disabled, as such push
+RCU-idle deeper still.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Tony Lindgren <tony@atomide.com>
+Reviewed-by: Tony Lindgren <tony@atomide.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Acked-by: Frederic Weisbecker <frederic@kernel.org>
 Tested-by: Tony Lindgren <tony@atomide.com>
 Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- arch/arm/mach-omap2/pm34xx.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-omap2/cpuidle34xx.c |    4 +---
+ arch/arm/mach-omap2/pm.h          |    2 +-
+ arch/arm/mach-omap2/pm34xx.c      |   12 ++++++++++--
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
+--- a/arch/arm/mach-omap2/cpuidle34xx.c
++++ b/arch/arm/mach-omap2/cpuidle34xx.c
+@@ -133,9 +133,7 @@ static int omap3_enter_idle(struct cpuid
+ 	}
+ 
+ 	/* Execute ARM wfi */
+-	ct_cpuidle_enter();
+-	omap_sram_idle();
+-	ct_cpuidle_exit();
++	omap_sram_idle(true);
+ 
+ 	/*
+ 	 * Call idle CPU PM enter notifier chain to restore
+--- a/arch/arm/mach-omap2/pm.h
++++ b/arch/arm/mach-omap2/pm.h
+@@ -29,7 +29,7 @@ static inline int omap4_idle_init(void)
+ 
+ extern void *omap3_secure_ram_storage;
+ extern void omap3_pm_off_mode_enable(int);
+-extern void omap_sram_idle(void);
++extern void omap_sram_idle(bool rcuidle);
+ extern int omap_pm_clkdms_setup(struct clockdomain *clkdm, void *unused);
+ 
+ #if defined(CONFIG_PM_OPP)
 --- a/arch/arm/mach-omap2/pm34xx.c
 +++ b/arch/arm/mach-omap2/pm34xx.c
-@@ -294,7 +294,7 @@ static void omap3_pm_idle(void)
- 	if (omap_irq_pending())
- 		return;
+@@ -26,6 +26,7 @@
+ #include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
++#include <linux/cpuidle.h>
  
--	omap_sram_idle();
-+	omap3_do_wfi();
+ #include <trace/events/power.h>
+ 
+@@ -174,7 +175,7 @@ static int omap34xx_do_sram_idle(unsigne
+ 	return 0;
  }
  
- #ifdef CONFIG_SUSPEND
+-void omap_sram_idle(void)
++void omap_sram_idle(bool rcuidle)
+ {
+ 	/* Variable to tell what needs to be saved and restored
+ 	 * in omap_sram_idle*/
+@@ -254,11 +255,18 @@ void omap_sram_idle(void)
+ 	 */
+ 	if (save_state)
+ 		omap34xx_save_context(omap3_arm_context);
++
++	if (rcuidle)
++		ct_cpuidle_enter();
++
+ 	if (save_state == 1 || save_state == 3)
+ 		cpu_suspend(save_state, omap34xx_do_sram_idle);
+ 	else
+ 		omap34xx_do_sram_idle(save_state);
+ 
++	if (rcuidle)
++		ct_cpuidle_exit();
++
+ 	/* Restore normal SDRC POWER settings */
+ 	if (cpu_is_omap3430() && omap_rev() >= OMAP3430_REV_ES3_0 &&
+ 	    (omap_type() == OMAP2_DEVICE_TYPE_EMU ||
+@@ -316,7 +324,7 @@ static int omap3_pm_suspend(void)
+ 
+ 	omap3_intc_suspend();
+ 
+-	omap_sram_idle();
++	omap_sram_idle(false);
+ 
+ restore:
+ 	/* Restore next_pwrsts */
 
 
