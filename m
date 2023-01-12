@@ -2,67 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65021667973
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Jan 2023 16:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF66667C93
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Jan 2023 18:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbjALPg5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Jan 2023 10:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S231969AbjALRdw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Jan 2023 12:33:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240451AbjALPf4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Jan 2023 10:35:56 -0500
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372303AB06;
-        Thu, 12 Jan 2023 07:27:06 -0800 (PST)
-Received: by mail-wm1-f51.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so4262362wml.0;
-        Thu, 12 Jan 2023 07:27:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RUAlS4xgLT+q07oikxtXjHfsLxbnxwYffAIH6pi3rgg=;
-        b=WkZEQMr4gO69yvSyT9RS4DuTEmdKb1tiy/3bb4jmWhD/vC1yXVkHCTxU1lGMIcSO/i
-         FKqHWsvLP0kaUvkVNNPw5nlDQPWyX/N54hnyVntI0xl8LdF9Nd6AdlV5V+nQLOnifFNb
-         UkiDNhRGqcW634bAeNMNHa3TaRu0RSfWuwQC5gkKhHrZhztSj45rrB5T0lN2GCrVm1Sz
-         RogDBZrIOtJaal6oLgLDtOpg9s4txc4fdf8UdM7izVvVpwuQ1lofbPMIxexHvUCPCfEd
-         zHZAT2qfCcoNG/vwIkDN/WmMWdEyCD78LNrFwlp84aO/E2eI/ijSDgkoHDQNzoQfikK7
-         l2qw==
-X-Gm-Message-State: AFqh2kotStfWW7ViUXaRA0t8buofTpO7TzQVy07e47lZSudCvSsGOtOc
-        jlXVkFV1qP9QD+eqMO5ZMew=
-X-Google-Smtp-Source: AMrXdXt6Yb9atDnwfn4DCLxeXNTFRLZ2KSTrWEJF6cTR6nJ7FM3fMnCzprIygcdoPxtJM01Pd96AzQ==
-X-Received: by 2002:a05:600c:1d98:b0:3d3:48f4:7a69 with SMTP id p24-20020a05600c1d9800b003d348f47a69mr66277177wms.17.1673537224581;
-        Thu, 12 Jan 2023 07:27:04 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id q6-20020a05600c46c600b003d1f3e9df3csm28746893wmo.7.2023.01.12.07.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 07:27:04 -0800 (PST)
-Date:   Thu, 12 Jan 2023 15:27:02 +0000
-From:   Wei Liu <wei.liu@kernel.org>
+        with ESMTP id S231200AbjALRdT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Jan 2023 12:33:19 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C571669B21;
+        Thu, 12 Jan 2023 08:56:55 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9D6BD1EC064D;
+        Thu, 12 Jan 2023 17:48:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1673542081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=fWLixZfsSchjFbcCFffZRLC8clKaznVXLrwohAMTYUE=;
+        b=JlC5CkuWVfA3Nbv9OZsp2q57S4fDlbnO9lWnOlQl3sUvPQCuFuL3gLQFD2GYqSVJC6Y6od
+        MrungAaDu3mtxeXWt+Rer4rkpCH5GpRSk/ZZlGxZT7UfsRoAdcbLcXGnpE1g5t/LEWTKAx
+        SAdwPKPnS/Zftj6TH4PZIwWjadFGQ7c=
+Date:   Thu, 12 Jan 2023 17:47:57 +0100
+From:   Borislav Petkov <bp@alien8.de>
 To:     Jinank Jain <jinankjain@linux.microsoft.com>
 Cc:     jinankjain@microsoft.com, kys@microsoft.com,
         haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        arnd@arndb.de, peterz@infradead.org, jpoimboe@kernel.org,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, seanjc@google.com,
+        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
         mikelley@microsoft.com
 Subject: Re: [PATCH v10 5/5] x86/hyperv: Change interrupt vector for nested
  root partition
-Message-ID: <Y8Amxh/FZITobj51@liuwe-devbox-debian-v2>
+Message-ID: <Y8A5vXKBq1T+JXfo@zn.tnic>
 References: <cover.1672639707.git.jinankjain@linux.microsoft.com>
  <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 In-Reply-To: <021f748f15870f3e41f417511aa88607627ec327.1672639707.git.jinankjain@linux.microsoft.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,20 +61,28 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Mon, Jan 02, 2023 at 07:12:55AM +0000, Jinank Jain wrote:
 > Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
+
+Who's "we"?
+
+Please use passive voice in your commit message: no "we" or "I", etc,
+and describe your changes in imperative mood.
+
+Also, pls read section "2) Describe your changes" in
+Documentation/process/submitting-patches.rst for more details.
+
+Also, see section "Changelog" in
+Documentation/process/maintainer-tip.rst
+
+Bottom line is: personal pronouns are ambiguous in text, especially with
+so many parties/companies/etc developing the kernel so let's avoid them
+please.
+
 > the VMBus interrupt. But this does not work in case of nested
 > hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
 > vector range for VMBus and thus we have to use one of the vectors from
 > that range and setup the IDT accordingly.
 > 
 > Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-
-I've applied all but this patch to hyperv-next.
-
-This patch still needs an ack or nack from x86 maintainers to proceed.
-
-Thanks,
-Wei.
-
 > ---
 >  arch/x86/include/asm/idtentry.h    |  2 ++
 >  arch/x86/include/asm/irq_vectors.h |  6 ++++++
@@ -116,7 +114,14 @@ Wei.
 >  #define HYPERV_STIMER0_VECTOR		0xed
 > +/*
 > + * FIXME: Change this, once Microsoft Hypervisor changes its assumption
+      ^^^^^^
+
+This patch looks like it is not ready to go anywhere yet...
+
 > + * around VMBus interrupt vector allocation for nested root partition.
+
+When is that going to happen? If at all...
+
 > + * Or provides a better interface to detect this instead of hardcoding.
 > + */
 > +#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
@@ -163,27 +168,21 @@ Wei.
 > +	 * via alloc_intr_gate as it does not allow interrupt vector less
 > +	 * than FIRST_SYSTEM_VECTORS. And hyperv does not want anything other
 > +	 * than 0x31-0x34 as the interrupt vector for vmbus interrupt in case
-> +	 * of nested setup.
-> +	 */
-> +	INTG(HYPERV_INTR_NESTED_VMBUS_VECTOR, asm_sysvec_hyperv_nested_vmbus_intr),
-> +#endif
->  #endif
->  };
->  
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 6324e01d5eec..740878367426 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -2768,7 +2768,8 @@ static int __init hv_acpi_init(void)
->  	 * normal Linux IRQ mechanism is not used in this case.
->  	 */
->  #ifdef HYPERVISOR_CALLBACK_VECTOR
-> -	vmbus_interrupt = HYPERVISOR_CALLBACK_VECTOR;
-> +	vmbus_interrupt = hv_nested ? HYPERV_INTR_NESTED_VMBUS_VECTOR :
-> +				      HYPERVISOR_CALLBACK_VECTOR;
->  	vmbus_irq = -1;
->  #endif
->  
-> -- 
-> 2.25.1
-> 
+
+Well:
+
+/*
+ * IDT vectors usable for external interrupt sources start at 0x20.
+ * (0x80 is the syscall vector, 0x30-0x3f are for ISA)
+				^^^^^^^^^^^^^^^^^^^^^^
+
+ */
+#define FIRST_EXTERNAL_VECTOR		0x20
+
+I guess HyperV decided to reuse those...?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
