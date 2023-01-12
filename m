@@ -2,43 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6A06680E3
-	for <lists+linux-arch@lfdr.de>; Thu, 12 Jan 2023 21:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BD86680A7
+	for <lists+linux-arch@lfdr.de>; Thu, 12 Jan 2023 21:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240626AbjALUAF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 12 Jan 2023 15:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S240425AbjALT7t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 12 Jan 2023 14:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbjALT7S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Jan 2023 14:59:18 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5AA25C6;
-        Thu, 12 Jan 2023 11:58:07 -0800 (PST)
+        with ESMTP id S232194AbjALT7T (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 12 Jan 2023 14:59:19 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3522623;
+        Thu, 12 Jan 2023 11:58:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=ChWtbTrciVV3G1vvtlVpdXBjaP89UEdojcC0eA3JIzQ=; b=Vj4eR6v5IoSn1Hvo9PnZs3VYg5
-        eCtKCQxf19hmgPBwVt3doBtLDpDlt4hjme9JB10fLus2EOyEcLm2dNpOEYe/PmSAdVs7NKtQ4fB1v
-        DnFTTEYueH7h9Riue4J6yfqqrMyfRORHiXutY4ckZ+kBvMDSdhMCqAoAmttvT26yNoBWvLr1FZZrL
-        1DanzDdymR2YOb904r+gKaveM3+uzXav2hQukVClXZdyDHyZbZ9hc93EXFjMMHuhL3ivWMdhFuTCN
-        5nIF57b/9qtsGLX+BjH6aaUs/Y+TqdlqlYJFBnaB8gMFzKZfOp7aBI23toJnxEwScgbbHTsJa+dtf
-        RhM5EDRg==;
+        bh=xUXFMmNjQb3UrGtSZK0a2nhjQSuKqnZvrBUrV/kGZ/M=; b=azd0lEFhtyA7/aLM4gfZG1Cdp3
+        7NU3r969okzjxqcSyuA1vE+R2WnLvkbW43aMYTQl8A+OMQs4BGyVUe/mdDDkYK4sq5GuqaMDdK3nQ
+        mF4/8WjcxS6GyrdwizZfZHi98CgxEnfqDyYYUuh6dsDEfNM6pZY3bv79cj1EUtiafbAvbGi3Zoodv
+        q3oyyOIbvVtD0Z25JQmgF9Yy3twtU782/WTN1SiAuh8rW47DB3F8jKxk6GeMuzzcUytvUZ3k5qQN2
+        xwJHT13n8NNxGibRxm8fKw3yFq3ZFyd8yvfAHp0jp7adZU6B9GTx3x5QVwVeGWFHBoGHyIY8F3WG5
+        EkCNyHWg==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pG3hK-0045pc-1a;
-        Thu, 12 Jan 2023 19:57:25 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pG3hg-005OjH-AW; Thu, 12 Jan 2023 19:57:36 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E8C9430345F;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDBC9303462;
         Thu, 12 Jan 2023 20:57:13 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 45C182CD01216; Thu, 12 Jan 2023 20:57:08 +0100 (CET)
-Message-ID: <20230112195541.660272394@infradead.org>
+        id 49A802CD0121F; Thu, 12 Jan 2023 20:57:08 +0100 (CET)
+Message-ID: <20230112195541.721697850@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 12 Jan 2023 20:43:52 +0100
+Date:   Thu, 12 Jan 2023 20:43:53 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -105,143 +104,110 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v3 38/51] cpuidle,omap4: Push RCU-idle into omap4_enter_lowpower()
+Subject: [PATCH v3 39/51] arm,omap2: Use WFI for omap2_pm_idle()
 References: <20230112194314.845371875@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+arch_cpu_idle() is a very simple idle interface and exposes only a
+single idle state and is expected to not require RCU and not do any
+tracing/instrumentation.
 
-OMAP4 uses full SoC suspend modes as idle states, as such it needs the
-whole power-domain and clock-domain code from the idle path.
+As such, omap2_pm_idle() is not a valid implementation. Replace it
+with a simple (shallow) omap2_do_wfi() call.
 
-All that code is not suitable to run with RCU disabled, as such push
-RCU-idle deeper still.
+Omap2 doesn't have a cpuidle driver; but adding one would be the
+recourse to (re)gain the other idle states.
 
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Suggested-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Acked-by: Frederic Weisbecker <frederic@kernel.org>
 Tested-by: Tony Lindgren <tony@atomide.com>
 Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lkml.kernel.org/r/Yqcv6crSNKuSWoTu@atomide.com
 ---
- arch/arm/mach-omap2/common.h              |    6 ++++--
- arch/arm/mach-omap2/cpuidle44xx.c         |    8 ++------
- arch/arm/mach-omap2/omap-mpuss-lowpower.c |   12 +++++++++++-
- arch/arm/mach-omap2/pm44xx.c              |    2 +-
- 4 files changed, 18 insertions(+), 10 deletions(-)
+ arch/arm/mach-omap2/pm24xx.c |   51 +------------------------------------------
+ 1 file changed, 2 insertions(+), 49 deletions(-)
 
---- a/arch/arm/mach-omap2/common.h
-+++ b/arch/arm/mach-omap2/common.h
-@@ -284,11 +284,13 @@ extern u32 omap4_get_cpu1_ns_pa_addr(voi
+--- a/arch/arm/mach-omap2/pm24xx.c
++++ b/arch/arm/mach-omap2/pm24xx.c
+@@ -116,50 +116,12 @@ static int omap2_enter_full_retention(vo
  
- #if defined(CONFIG_SMP) && defined(CONFIG_PM)
- extern int omap4_mpuss_init(void);
--extern int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state);
-+extern int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state,
-+				bool rcuidle);
- extern int omap4_hotplug_cpu(unsigned int cpu, unsigned int power_state);
- #else
- static inline int omap4_enter_lowpower(unsigned int cpu,
--					unsigned int power_state)
-+					unsigned int power_state,
-+					bool rcuidle)
+ static int sti_console_enabled;
+ 
+-static int omap2_allow_mpu_retention(void)
+-{
+-	if (!omap2xxx_cm_mpu_retention_allowed())
+-		return 0;
+-	if (sti_console_enabled)
+-		return 0;
+-
+-	return 1;
+-}
+-
+-static void omap2_enter_mpu_retention(void)
++static void omap2_do_wfi(void)
  {
- 	cpu_do_idle();
- 	return 0;
---- a/arch/arm/mach-omap2/cpuidle44xx.c
-+++ b/arch/arm/mach-omap2/cpuidle44xx.c
-@@ -105,9 +105,7 @@ static int omap_enter_idle_smp(struct cp
- 	}
- 	raw_spin_unlock_irqrestore(&mpu_lock, flag);
+ 	const int zero = 0;
  
--	ct_cpuidle_enter();
--	omap4_enter_lowpower(dev->cpu, cx->cpu_state);
--	ct_cpuidle_exit();
-+	omap4_enter_lowpower(dev->cpu, cx->cpu_state, true);
+-	/* The peripherals seem not to be able to wake up the MPU when
+-	 * it is in retention mode. */
+-	if (omap2_allow_mpu_retention()) {
+-		/* REVISIT: These write to reserved bits? */
+-		omap_prm_clear_mod_irqs(CORE_MOD, PM_WKST1, ~0);
+-		omap_prm_clear_mod_irqs(CORE_MOD, OMAP24XX_PM_WKST2, ~0);
+-		omap_prm_clear_mod_irqs(WKUP_MOD, PM_WKST, ~0);
+-
+-		/* Try to enter MPU retention */
+-		pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_RET);
+-
+-	} else {
+-		/* Block MPU retention */
+-		pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_ON);
+-	}
+-
+ 	/* WFI */
+ 	asm("mcr p15, 0, %0, c7, c0, 4" : : "r" (zero) : "memory", "cc");
+-
+-	pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_ON);
+-}
+-
+-static int omap2_can_sleep(void)
+-{
+-	if (omap2xxx_cm_fclks_active())
+-		return 0;
+-	if (__clk_is_enabled(osc_ck))
+-		return 0;
+-
+-	return 1;
+ }
  
- 	raw_spin_lock_irqsave(&mpu_lock, flag);
- 	if (cx->mpu_state_vote == num_online_cpus())
-@@ -186,10 +184,8 @@ static int omap_enter_idle_coupled(struc
- 		}
- 	}
+ static void omap2_pm_idle(void)
+@@ -169,16 +131,7 @@ static void omap2_pm_idle(void)
+ 	if (omap_irq_pending())
+ 		return;
  
--	ct_cpuidle_enter();
--	omap4_enter_lowpower(dev->cpu, cx->cpu_state);
-+	omap4_enter_lowpower(dev->cpu, cx->cpu_state, true);
- 	cpu_done[dev->cpu] = true;
--	ct_cpuidle_exit();
+-	error = cpu_cluster_pm_enter();
+-	if (error || !omap2_can_sleep()) {
+-		omap2_enter_mpu_retention();
+-		goto out_cpu_cluster_pm;
+-	}
+-
+-	omap2_enter_full_retention();
+-
+-out_cpu_cluster_pm:
+-	cpu_cluster_pm_exit();
++	omap2_do_wfi();
+ }
  
- 	/* Wakeup CPU1 only if it is not offlined */
- 	if (dev->cpu == 0 && cpumask_test_cpu(1, cpu_online_mask)) {
---- a/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-+++ b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-@@ -33,6 +33,7 @@
-  * and first to wake-up when MPUSS low power states are excercised
-  */
- 
-+#include <linux/cpuidle.h>
- #include <linux/kernel.h>
- #include <linux/io.h>
- #include <linux/errno.h>
-@@ -214,6 +215,7 @@ static void __init save_l2x0_context(voi
-  * of OMAP4 MPUSS subsystem
-  * @cpu : CPU ID
-  * @power_state: Low power state.
-+ * @rcuidle: RCU needs to be idled
-  *
-  * MPUSS states for the context save:
-  * save_state =
-@@ -222,7 +224,8 @@ static void __init save_l2x0_context(voi
-  *	2 - CPUx L1 and logic lost + GIC lost: MPUSS OSWR
-  *	3 - CPUx L1 and logic lost + GIC + L2 lost: DEVICE OFF
-  */
--int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state)
-+int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state,
-+			 bool rcuidle)
- {
- 	struct omap4_cpu_pm_info *pm_info = &per_cpu(omap4_pm_info, cpu);
- 	unsigned int save_state = 0, cpu_logic_state = PWRDM_POWER_RET;
-@@ -268,6 +271,10 @@ int omap4_enter_lowpower(unsigned int cp
- 	cpu_clear_prev_logic_pwrst(cpu);
- 	pwrdm_set_next_pwrst(pm_info->pwrdm, power_state);
- 	pwrdm_set_logic_retst(pm_info->pwrdm, cpu_logic_state);
-+
-+	if (rcuidle)
-+		ct_cpuidle_enter();
-+
- 	set_cpu_wakeup_addr(cpu, __pa_symbol(omap_pm_ops.resume));
- 	omap_pm_ops.scu_prepare(cpu, power_state);
- 	l2x0_pwrst_prepare(cpu, save_state);
-@@ -283,6 +290,9 @@ int omap4_enter_lowpower(unsigned int cp
- 	if (IS_PM44XX_ERRATUM(PM_OMAP4_ROM_SMP_BOOT_ERRATUM_GICD) && cpu)
- 		gic_dist_enable();
- 
-+	if (rcuidle)
-+		ct_cpuidle_exit();
-+
- 	/*
- 	 * Restore the CPUx power state to ON otherwise CPUx
- 	 * power domain can transitions to programmed low power
---- a/arch/arm/mach-omap2/pm44xx.c
-+++ b/arch/arm/mach-omap2/pm44xx.c
-@@ -76,7 +76,7 @@ static int omap4_pm_suspend(void)
- 	 * domain CSWR is not supported by hardware.
- 	 * More details can be found in OMAP4430 TRM section 4.3.4.2.
- 	 */
--	omap4_enter_lowpower(cpu_id, cpu_suspend_state);
-+	omap4_enter_lowpower(cpu_id, cpu_suspend_state, false);
- 
- 	/* Restore next powerdomain state */
- 	list_for_each_entry(pwrst, &pwrst_list, node) {
+ static void __init prcm_setup_regs(void)
 
 
