@@ -2,105 +2,171 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECD7669412
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 11:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D436695CB
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 12:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241069AbjAMKZb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 05:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S241219AbjAMLkA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 06:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbjAMKYv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 05:24:51 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9261D76EC5;
-        Fri, 13 Jan 2023 02:24:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=43nvZBmwF6Qr7XsH1Yo0nO4bX86Vu4LJvgWe0kE/8zg=; b=oHlQZGuI+g1+745A8mnKSGv0Ip
-        ArshDCSE9wETafPSA1owBRlBpYnq7N63PUC2bOIlNWCfzOcvg0baIddP9aWaqirXFy++TQxH6O55d
-        6Ht7LAqrr9nfXLFRKCENIm2kB+U2INdOVCnod3dPJE1kgx7YCVu9BA1fpFAowI2d7nJU8WslTyIMn
-        M5iGi3KUooTTakfSADotxIBNQ4JuVmDVdcohxLmYwXtuVupgup5E1Q0jfVADtwBZSwhOC6aHhMFij
-        iVxfEAWRRf4m/fxKAAwH6mQegB+PpPs3VziQCzLcYwGhtn3/vplyg93tOLR7qP8wxF8frSpjDtM4c
-        i9tMbXiA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGHEA-006068-0t; Fri, 13 Jan 2023 10:24:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 75F8E300094;
-        Fri, 13 Jan 2023 11:23:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5006D20B16472; Fri, 13 Jan 2023 11:23:45 +0100 (CET)
-Date:   Fri, 13 Jan 2023 11:23:45 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mateusz Guzik <mjguzik@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        Jan Glauber <jan.glauber@gmail.com>, tony.luck@intel.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: lockref scalability on x86-64 vs cpu_relax
-Message-ID: <Y8ExMQaevecjWjg5@hirez.programming.kicks-ass.net>
-References: <CAGudoHHx0Nqg6DE70zAVA75eV-HXfWyhVMWZ-aSeOofkA_=WdA@mail.gmail.com>
- <CAHk-=wjthxgrLEvgZBUwd35e_mk=dCWKMUEURC6YsX5nWom8kQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjthxgrLEvgZBUwd35e_mk=dCWKMUEURC6YsX5nWom8kQ@mail.gmail.com>
+        with ESMTP id S240229AbjAMLjK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 06:39:10 -0500
+X-Greylist: delayed 601 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 Jan 2023 03:30:14 PST
+Received: from postout2.mail.lrz.de (postout2.mail.lrz.de [IPv6:2001:4ca0:0:103::81bb:ff8a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345843E874;
+        Fri, 13 Jan 2023 03:30:12 -0800 (PST)
+Received: from lxmhs52.srv.lrz.de (localhost [127.0.0.1])
+        by postout2.mail.lrz.de (Postfix) with ESMTP id 4Ntdyl3jpFzyTf;
+        Fri, 13 Jan 2023 12:11:27 +0100 (CET)
+Authentication-Results: postout.lrz.de (amavisd-new); dkim=pass (2048-bit key)
+        reason="pass (just generated, assumed good)" header.d=tum.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tum.de; h=
+        content-type:content-type:mime-version:references:in-reply-to
+        :message-id:x-mailer:date:date:subject:subject:from:from
+        :received:received; s=tu-postout21; t=1673608287; bh=P8InxNefme9
+        obWDMap1ZRiAF5zKZ+lI2Q+l+08SR/j8=; b=d/gCb3D/iWS2JQAQLM36NnJKENo
+        8k1Qwb6s3U69BRqpL6Q6wydpBYEvG522owGIO+FgY/BMmT0zagJn+iqlHuGiraIz
+        yhEaT2LXxaRw6qVPxaJA7JB9p82JmX8OIsmE4gwGra9khENOa00TDywyzQYrmq81
+        AU1Lpr+Z3T5SsLmR19nK2wsE6DEESVkKGGhCySGshl4D/rGhP67CjylOC/+ZWBlk
+        K1ExXy9FfBBcFWWZWLVeLuQ1Hf0DWxnCDUwaw6KkHY74sJ7thwvhun1eDtPWouOC
+        o42ACwa+2orM1pUmVSBAaTBVNSUttZCiyY3WAWBtacyCSV33Cwgla3mLUiQ==
+X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs52.srv.lrz.de
+X-Spam-Score: -2.876
+X-Spam-Level: 
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from postout2.mail.lrz.de ([127.0.0.1])
+        by lxmhs52.srv.lrz.de (lxmhs52.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
+        with LMTP id twqBvrLsvW7L; Fri, 13 Jan 2023 12:11:27 +0100 (CET)
+Received: from [131.159.38.35] (unknown [IPv6:2a09:80c0:192:0:ed85:b6c:e76c:b9f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by postout2.mail.lrz.de (Postfix) with ESMTPSA id 4Ntdyk2rYBzySS;
+        Fri, 13 Jan 2023 12:11:26 +0100 (CET)
+From:   =?utf-8?q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@tum.de>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Date:   Fri, 13 Jan 2023 12:11:25 +0100
+X-Mailer: MailMate (1.14r5918)
+Message-ID: <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+In-Reply-To: <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+ <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 06:13:16PM -0600, Linus Torvalds wrote:
-> On Thu, Jan 12, 2023 at 5:36 PM Mateusz Guzik <mjguzik@gmail.com> wrote:
-> >
-> > To my understanding on said architecture failed cmpxchg still grants you
-> > exclusive access to the cacheline, making immediate retry preferable
-> > when trying to inc/dec unless a certain value is found.
-> 
-> I actually suspect that is _always_ the case - this is not like a
-> contended spinlock where we want to pause because we're waiting for
-> the value to change and become unlocked, this cmpxchg loop is likely
-> always better off just retrying with the new value.
-> 
-> That said, the "likely always better off" is purely about performance.
-> 
-> So I have this suspicion that the reason Tony added the cpu_relax()
-> was simply not about performance, but about other issues, like
-> fairness in SMT situations.
-> 
-> That said, evern from a fairness perspective the cpu_relax() sounds a
-> bit odd and unlikely - we're literally yielding when we lost a race,
-> so it hurts the _loser_, not the winner, and thus might make fairness
-> worse too.
+Hi all,
 
-I've been writing cmpxchg loops that have strict termination conditions
-without cpu_relax() in them for a while now.
+FWIW, here are two more broken address dependencies, both very similar to the
+one discussed in this thread. From what I can tell, both are protected by a
+lock, so, again, nothing to worry about right now? Would you agree?
 
-For example, the x86 atomic_fetch_and() implementation looks like so:
+Comments marked with "AD:" were added by me for readability.
 
-static __always_inline int arch_atomic_fetch_and(int i, atomic_t *v)
-{
-	int val = arch_atomic_read(v);
+1. drivers/hwtracing/stm/core.c::1050 - 1085
 
-	do { } while (!arch_atomic_try_cmpxchg(v, &val, val & i));
+        /**
+         * __stm_source_link_drop() - detach stm_source from an stm device
+         * @src:	stm_source device
+         * @stm:	stm device
+         *
+         * If @stm is @src::link, disconnect them from one another and put the
+         * reference on the @stm device.
+         *
+         * Caller must hold stm::link_mutex.
+         */
+        static int __stm_source_link_drop(struct stm_source_device *src,
+                                          struct stm_device *stm)
+        {
+                struct stm_device *link;
+                int ret = 0;
 
-	return val;
-}
+                lockdep_assert_held(&stm->link_mutex);
 
-And I did that because of the exact same argument you had above, it
-needs to do the op anyway, waiting between failed attempts will only
-increase the chance it will fail again.
+                /* for stm::link_list modification, we hold both mutex and spinlock */
+                spin_lock(&stm->link_lock);
+                spin_lock(&src->link_lock);
+
+                /* AD: Beginning of the address dependency. */
+                link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
+
+                /*
+                 * The linked device may have changed since we last looked, because
+                 * we weren't holding the src::link_lock back then; if this is the
+                 * case, tell the caller to retry.
+                 */
+                if (link != stm) {
+                        ret = -EAGAIN;
+                        goto unlock;
+                }
+
+                /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
+                stm_output_free(link, &src->output); list_del_init(&src->link_entry);
+
+                /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
+                pm_runtime_mark_last_busy(&link->dev);
+
+2. kernel/locking/lockdep.c::6319 - 6348
+
+        /*
+         * Unregister a dynamically allocated key.
+         *
+         * Unlike lockdep_register_key(), a search is always done to find a matching
+         * key irrespective of debug_locks to avoid potential invalid access to freed
+         * memory in lock_class entry.
+         */
+        void lockdep_unregister_key(struct lock_class_key *key)
+        {
+                struct hlist_head *hash_head = keyhashentry(key);
+                struct lock_class_key *k;
+                struct pending_free *pf;
+                unsigned long flags;
+                bool found = false;
+
+                might_sleep();
+
+                if (WARN_ON_ONCE(static_obj(key)))
+                        return;
+
+                raw_local_irq_save(flags);
+                lockdep_lock();
+
+                /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
+                hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
+                        /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
+                        if (k == key) {
+                                /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
+                                hlist_del_rcu(&k->hash_entry);
+                                found = true;
+                                break;
+                        }
+                }
+
+Many thanks,
+Paul
