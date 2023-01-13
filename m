@@ -2,1326 +2,302 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F352669DAF
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 17:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E47B66A1B7
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 19:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjAMQZB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 11:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S231176AbjAMSQQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 13:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjAMQYY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 11:24:24 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B108CBFE;
-        Fri, 13 Jan 2023 08:18:10 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S230088AbjAMSPi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 13:15:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D0E6DB8A;
+        Fri, 13 Jan 2023 10:06:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D7FAA205E9;
-        Fri, 13 Jan 2023 16:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1673626687; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a/nz9PZsEaBw6Xbmoaigr0ESYOUM4RXAWJqCR7TosNA=;
-        b=PZa7MN6B0TX1t2MV5bO3TQUnO1W/RMuD6TzA4bmww20D4ZC+Zqu8qAFXbkNYw/g3uGUGfk
-        3F3W68dXVORZM19SNNJYQN2GTuzCXthgRGJL/EcPsPuFIIy8tWoGUk41quZVkkDLVwRILt
-        xnipFG37mhmzUW8eReh49yojGPEUta0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1673626687;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a/nz9PZsEaBw6Xbmoaigr0ESYOUM4RXAWJqCR7TosNA=;
-        b=BUqkDlLEy0AlMFsez1mlH98ym1R8AaNXFsDn+cm8Nxzq4yt8F+qekncNhaZlkp2wI9epxl
-        jROS08SoPU4BRJDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5389A1358A;
-        Fri, 13 Jan 2023 16:18:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xDesEz+EwWMxUQAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 13 Jan 2023 16:18:07 +0000
-Date:   Fri, 13 Jan 2023 17:18:06 +0100
-Message-ID: <87zgam1k8x.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fbdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-sh@vger.kernel.org, alsa-devel@alsa-project.org,
-        dri-devel@lists.freedesktop.org, linux-mtd@lists.infradead.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-arch@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 04/22] sound: remove sound/sh
-In-Reply-To: <20230113062339.1909087-5-hch@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de>
-        <20230113062339.1909087-5-hch@lst.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by sin.source.kernel.org (Postfix) with ESMTPS id 555DACE2122;
+        Fri, 13 Jan 2023 18:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD93C433F1;
+        Fri, 13 Jan 2023 18:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673633197;
+        bh=9JM2l3wQvAeTEYaZAWr5I3gZoNrgDAq2iaamsrQXne0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=d/TyPrfu3TMN3RDQxpqP5fajACgLxUzrO1o0lviquPae0CCREqyfMhbNaFpmIDnAD
+         gc9rcn8tXi7SZ4Sa6feTIN2Ae1ZeCBFbV5dmTzybf+txFmSo/tzOIYxAQ5C/w8Dqvn
+         lUFscWLbHB7PxSvBS0qnt6QQanZXshhTtjgmZdd4dd7UYrIROlbOAFQjGgiw28eaXg
+         ZWAP2DT2ukYPCwIGpUnzoCfZFD2NIBDmWoE7vSQ2LoozWiuoZLz82Zhhis8k4Jr+Bj
+         yNgUqYimkNr/a2hjrvrPsnsWtLyOCrg7bz13Vy3HC3zIgb+UrU6VBUs4Zs2yFiDWYy
+         hI2RWs0YaghDg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D78905C06D0; Fri, 13 Jan 2023 10:06:36 -0800 (PST)
+Date:   Fri, 13 Jan 2023 10:06:36 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, frederic@kernel.org,
+        pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ryabinin.a.a@gmail.com, glider@google.com,
+        andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
+Message-ID: <20230113180636.GA4028633@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230112194314.845371875@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112194314.845371875@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 13 Jan 2023 07:23:21 +0100,
-Christoph Hellwig wrote:
+On Thu, Jan 12, 2023 at 08:43:14PM +0100, Peter Zijlstra wrote:
+> Hi All!
 > 
-> Now that arch/sh is removed these drivers are dead code.
+> The (hopefully) final respin of cpuidle vs rcu cleanup patches. Barring any
+> objections I'll be queueing these patches in tip/sched/core in the next few
+> days.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> v2: https://lkml.kernel.org/r/20220919095939.761690562@infradead.org
+> 
+> These here patches clean up the mess that is cpuidle vs rcuidle.
+> 
+> At the end of the ride there's only on RCU_NONIDLE user left:
+> 
+>   arch/arm64/kernel/suspend.c:            RCU_NONIDLE(__cpu_suspend_exit());
+> 
+> And I know Mark has been prodding that with something sharp.
+> 
+> The last version was tested by a number of people and I'm hoping to not have
+> broken anything in the meantime ;-)
+> 
+> 
+> Changes since v2:
 
-Supposed you take in your tree:
+150 rcutorture hours on each of the default scenarios passed.  This
+is qemu/KVM on x86:
 
-Acked-by: Takashi Iwai <tiwai@suse.de>
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
 
-
-thanks,
-
-Takashi
-
+>  - rebased to v6.2-rc3; as available at:
+>      git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+> 
+>  - folded: https://lkml.kernel.org/r/Y3UBwYNY15ETUKy9@hirez.programming.kicks-ass.net
+>    which makes the ARM cpuidle index 0 consistently not use
+>    CPUIDLE_FLAG_RCU_IDLE, as requested by Ulf.
+> 
+>  - added a few more __always_inline to empty stub functions as found by the
+>    robot.
+> 
+>  - Used _RET_IP_ instead of _THIS_IP_ in a few placed because of:
+>    https://github.com/ClangBuiltLinux/linux/issues/263
+> 
+>  - Added new patches to address various robot reports:
+> 
+>      #35:  trace,hardirq: No moar _rcuidle() tracing
+>      #47:  cpuidle: Ensure ct_cpuidle_enter() is always called from noinstr/__cpuidle
+>      #48:  cpuidle,arch: Mark all ct_cpuidle_enter() callers __cpuidle
+>      #49:  cpuidle,arch: Mark all regular cpuidle_state::enter methods __cpuidle
+>      #50:  cpuidle: Comments about noinstr/__cpuidle
+>      #51:  context_tracking: Fix noinstr vs KASAN
+> 
+> 
 > ---
->  sound/Kconfig           |   2 -
->  sound/Makefile          |   2 +-
->  sound/sh/Kconfig        |  32 --
->  sound/sh/Makefile       |  11 -
->  sound/sh/aica.c         | 628 ----------------------------------------
->  sound/sh/aica.h         |  68 -----
->  sound/sh/sh_dac_audio.c | 412 --------------------------
->  7 files changed, 1 insertion(+), 1154 deletions(-)
->  delete mode 100644 sound/sh/Kconfig
->  delete mode 100644 sound/sh/Makefile
->  delete mode 100644 sound/sh/aica.c
->  delete mode 100644 sound/sh/aica.h
->  delete mode 100644 sound/sh/sh_dac_audio.c
-> 
-> diff --git a/sound/Kconfig b/sound/Kconfig
-> index e56d96d2b11cae..14361bb428baa1 100644
-> --- a/sound/Kconfig
-> +++ b/sound/Kconfig
-> @@ -75,8 +75,6 @@ source "sound/spi/Kconfig"
->  
->  source "sound/mips/Kconfig"
->  
-> -source "sound/sh/Kconfig"
-> -
->  # the following will depend on the order of config.
->  # here assuming USB is defined before ALSA
->  source "sound/usb/Kconfig"
-> diff --git a/sound/Makefile b/sound/Makefile
-> index 04ef04b1168f39..bb4b8806321c67 100644
-> --- a/sound/Makefile
-> +++ b/sound/Makefile
-> @@ -4,7 +4,7 @@
->  
->  obj-$(CONFIG_SOUND) += soundcore.o
->  obj-$(CONFIG_DMASOUND) += oss/dmasound/
-> -obj-$(CONFIG_SND) += core/ i2c/ drivers/ isa/ pci/ ppc/ arm/ sh/ synth/ usb/ \
-> +obj-$(CONFIG_SND) += core/ i2c/ drivers/ isa/ pci/ ppc/ arm/ synth/ usb/ \
->  	firewire/ sparc/ spi/ parisc/ pcmcia/ mips/ soc/ atmel/ hda/ x86/ xen/ \
->  	virtio/
->  obj-$(CONFIG_SND_AOA) += aoa/
-> diff --git a/sound/sh/Kconfig b/sound/sh/Kconfig
-> deleted file mode 100644
-> index b75fbb3236a7b9..00000000000000
-> --- a/sound/sh/Kconfig
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0-only
-> -# ALSA SH drivers
-> -
-> -menuconfig SND_SUPERH
-> -	bool "SUPERH sound devices"
-> -	depends on SUPERH
-> -	default y
-> -	help
-> -	  Support for sound devices specific to SUPERH architectures.
-> -	  Drivers that are implemented on ASoC can be found in
-> -	  "ALSA for SoC audio support" section.
-> -
-> -if SND_SUPERH
-> -
-> -config SND_AICA
-> -	tristate "Dreamcast Yamaha AICA sound"
-> -	depends on SH_DREAMCAST
-> -	select SND_PCM
-> -	select G2_DMA
-> -	help
-> -	  ALSA Sound driver for the SEGA Dreamcast console.
-> -
-> -config SND_SH_DAC_AUDIO
-> -	tristate "SuperH DAC audio support"
-> -	depends on SND
-> -	depends on CPU_SH3 && HIGH_RES_TIMERS
-> -	select SND_PCM
-> -	help
-> -	  Say Y here to include support for the on-chip DAC.
-> -
-> -endif	# SND_SUPERH
-> -
-> diff --git a/sound/sh/Makefile b/sound/sh/Makefile
-> deleted file mode 100644
-> index c0bbc500c17c73..00000000000000
-> --- a/sound/sh/Makefile
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0-only
-> -#
-> -# Makefile for ALSA
-> -#
-> -
-> -snd-aica-objs := aica.o
-> -snd-sh_dac_audio-objs := sh_dac_audio.o
-> -
-> -# Toplevel Module Dependency
-> -obj-$(CONFIG_SND_AICA) += snd-aica.o
-> -obj-$(CONFIG_SND_SH_DAC_AUDIO) += snd-sh_dac_audio.o
-> diff --git a/sound/sh/aica.c b/sound/sh/aica.c
-> deleted file mode 100644
-> index 6e9d6bd67369af..00000000000000
-> --- a/sound/sh/aica.c
-> +++ /dev/null
-> @@ -1,628 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
-> -/*
-> -*
-> -* Copyright Adrian McMenamin 2005, 2006, 2007
-> -* <adrian@mcmen.demon.co.uk>
-> -* Requires firmware (BSD licenced) available from:
-> -* http://linuxdc.cvs.sourceforge.net/linuxdc/linux-sh-dc/sound/oss/aica/firmware/
-> -* or the maintainer
-> -*/
-> -
-> -#include <linux/init.h>
-> -#include <linux/jiffies.h>
-> -#include <linux/slab.h>
-> -#include <linux/time.h>
-> -#include <linux/wait.h>
-> -#include <linux/module.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/firmware.h>
-> -#include <linux/timer.h>
-> -#include <linux/delay.h>
-> -#include <linux/workqueue.h>
-> -#include <linux/io.h>
-> -#include <sound/core.h>
-> -#include <sound/control.h>
-> -#include <sound/pcm.h>
-> -#include <sound/initval.h>
-> -#include <sound/info.h>
-> -#include <asm/dma.h>
-> -#include <mach/sysasic.h>
-> -#include "aica.h"
-> -
-> -MODULE_AUTHOR("Adrian McMenamin <adrian@mcmen.demon.co.uk>");
-> -MODULE_DESCRIPTION("Dreamcast AICA sound (pcm) driver");
-> -MODULE_LICENSE("GPL");
-> -MODULE_FIRMWARE("aica_firmware.bin");
-> -
-> -/* module parameters */
-> -#define CARD_NAME "AICA"
-> -static int index = -1;
-> -static char *id;
-> -static bool enable = 1;
-> -module_param(index, int, 0444);
-> -MODULE_PARM_DESC(index, "Index value for " CARD_NAME " soundcard.");
-> -module_param(id, charp, 0444);
-> -MODULE_PARM_DESC(id, "ID string for " CARD_NAME " soundcard.");
-> -module_param(enable, bool, 0644);
-> -MODULE_PARM_DESC(enable, "Enable " CARD_NAME " soundcard.");
-> -
-> -/* Simple platform device */
-> -static struct platform_device *pd;
-> -static struct resource aica_memory_space[2] = {
-> -	{
-> -	 .name = "AICA ARM CONTROL",
-> -	 .start = ARM_RESET_REGISTER,
-> -	 .flags = IORESOURCE_MEM,
-> -	 .end = ARM_RESET_REGISTER + 3,
-> -	 },
-> -	{
-> -	 .name = "AICA Sound RAM",
-> -	 .start = SPU_MEMORY_BASE,
-> -	 .flags = IORESOURCE_MEM,
-> -	 .end = SPU_MEMORY_BASE + 0x200000 - 1,
-> -	 },
-> -};
-> -
-> -/* SPU specific functions */
-> -/* spu_write_wait - wait for G2-SH FIFO to clear */
-> -static void spu_write_wait(void)
-> -{
-> -	int time_count;
-> -	time_count = 0;
-> -	while (1) {
-> -		if (!(readl(G2_FIFO) & 0x11))
-> -			break;
-> -		/* To ensure hardware failure doesn't wedge kernel */
-> -		time_count++;
-> -		if (time_count > 0x10000) {
-> -			snd_printk
-> -			    ("WARNING: G2 FIFO appears to be blocked.\n");
-> -			break;
-> -		}
-> -	}
-> -}
-> -
-> -/* spu_memset - write to memory in SPU address space */
-> -static void spu_memset(u32 toi, u32 what, int length)
-> -{
-> -	int i;
-> -	unsigned long flags;
-> -	if (snd_BUG_ON(length % 4))
-> -		return;
-> -	for (i = 0; i < length; i++) {
-> -		if (!(i % 8))
-> -			spu_write_wait();
-> -		local_irq_save(flags);
-> -		writel(what, toi + SPU_MEMORY_BASE);
-> -		local_irq_restore(flags);
-> -		toi++;
-> -	}
-> -}
-> -
-> -/* spu_memload - write to SPU address space */
-> -static void spu_memload(u32 toi, const void *from, int length)
-> -{
-> -	unsigned long flags;
-> -	const u32 *froml = from;
-> -	u32 __iomem *to = (u32 __iomem *) (SPU_MEMORY_BASE + toi);
-> -	int i;
-> -	u32 val;
-> -	length = DIV_ROUND_UP(length, 4);
-> -	spu_write_wait();
-> -	for (i = 0; i < length; i++) {
-> -		if (!(i % 8))
-> -			spu_write_wait();
-> -		val = *froml;
-> -		local_irq_save(flags);
-> -		writel(val, to);
-> -		local_irq_restore(flags);
-> -		froml++;
-> -		to++;
-> -	}
-> -}
-> -
-> -/* spu_disable - set spu registers to stop sound output */
-> -static void spu_disable(void)
-> -{
-> -	int i;
-> -	unsigned long flags;
-> -	u32 regval;
-> -	spu_write_wait();
-> -	regval = readl(ARM_RESET_REGISTER);
-> -	regval |= 1;
-> -	spu_write_wait();
-> -	local_irq_save(flags);
-> -	writel(regval, ARM_RESET_REGISTER);
-> -	local_irq_restore(flags);
-> -	for (i = 0; i < 64; i++) {
-> -		spu_write_wait();
-> -		regval = readl(SPU_REGISTER_BASE + (i * 0x80));
-> -		regval = (regval & ~0x4000) | 0x8000;
-> -		spu_write_wait();
-> -		local_irq_save(flags);
-> -		writel(regval, SPU_REGISTER_BASE + (i * 0x80));
-> -		local_irq_restore(flags);
-> -	}
-> -}
-> -
-> -/* spu_enable - set spu registers to enable sound output */
-> -static void spu_enable(void)
-> -{
-> -	unsigned long flags;
-> -	u32 regval = readl(ARM_RESET_REGISTER);
-> -	regval &= ~1;
-> -	spu_write_wait();
-> -	local_irq_save(flags);
-> -	writel(regval, ARM_RESET_REGISTER);
-> -	local_irq_restore(flags);
-> -}
-> -
-> -/* 
-> - * Halt the sound processor, clear the memory,
-> - * load some default ARM7 code, and then restart ARM7
-> -*/
-> -static void spu_reset(void)
-> -{
-> -	unsigned long flags;
-> -	spu_disable();
-> -	spu_memset(0, 0, 0x200000 / 4);
-> -	/* Put ARM7 in endless loop */
-> -	local_irq_save(flags);
-> -	__raw_writel(0xea000002, SPU_MEMORY_BASE);
-> -	local_irq_restore(flags);
-> -	spu_enable();
-> -}
-> -
-> -/* aica_chn_start - write to spu to start playback */
-> -static void aica_chn_start(void)
-> -{
-> -	unsigned long flags;
-> -	spu_write_wait();
-> -	local_irq_save(flags);
-> -	writel(AICA_CMD_KICK | AICA_CMD_START, (u32 *) AICA_CONTROL_POINT);
-> -	local_irq_restore(flags);
-> -}
-> -
-> -/* aica_chn_halt - write to spu to halt playback */
-> -static void aica_chn_halt(void)
-> -{
-> -	unsigned long flags;
-> -	spu_write_wait();
-> -	local_irq_save(flags);
-> -	writel(AICA_CMD_KICK | AICA_CMD_STOP, (u32 *) AICA_CONTROL_POINT);
-> -	local_irq_restore(flags);
-> -}
-> -
-> -/* ALSA code below */
-> -static const struct snd_pcm_hardware snd_pcm_aica_playback_hw = {
-> -	.info = (SNDRV_PCM_INFO_NONINTERLEAVED),
-> -	.formats =
-> -	    (SNDRV_PCM_FMTBIT_S8 | SNDRV_PCM_FMTBIT_S16_LE |
-> -	     SNDRV_PCM_FMTBIT_IMA_ADPCM),
-> -	.rates = SNDRV_PCM_RATE_8000_48000,
-> -	.rate_min = 8000,
-> -	.rate_max = 48000,
-> -	.channels_min = 1,
-> -	.channels_max = 2,
-> -	.buffer_bytes_max = AICA_BUFFER_SIZE,
-> -	.period_bytes_min = AICA_PERIOD_SIZE,
-> -	.period_bytes_max = AICA_PERIOD_SIZE,
-> -	.periods_min = AICA_PERIOD_NUMBER,
-> -	.periods_max = AICA_PERIOD_NUMBER,
-> -};
-> -
-> -static int aica_dma_transfer(int channels, int buffer_size,
-> -			     struct snd_pcm_substream *substream)
-> -{
-> -	int q, err, period_offset;
-> -	struct snd_card_aica *dreamcastcard;
-> -	struct snd_pcm_runtime *runtime;
-> -	unsigned long flags;
-> -	err = 0;
-> -	dreamcastcard = substream->pcm->private_data;
-> -	period_offset = dreamcastcard->clicks;
-> -	period_offset %= (AICA_PERIOD_NUMBER / channels);
-> -	runtime = substream->runtime;
-> -	for (q = 0; q < channels; q++) {
-> -		local_irq_save(flags);
-> -		err = dma_xfer(AICA_DMA_CHANNEL,
-> -			       (unsigned long) (runtime->dma_area +
-> -						(AICA_BUFFER_SIZE * q) /
-> -						channels +
-> -						AICA_PERIOD_SIZE *
-> -						period_offset),
-> -			       AICA_CHANNEL0_OFFSET + q * CHANNEL_OFFSET +
-> -			       AICA_PERIOD_SIZE * period_offset,
-> -			       buffer_size / channels, AICA_DMA_MODE);
-> -		if (unlikely(err < 0)) {
-> -			local_irq_restore(flags);
-> -			break;
-> -		}
-> -		dma_wait_for_completion(AICA_DMA_CHANNEL);
-> -		local_irq_restore(flags);
-> -	}
-> -	return err;
-> -}
-> -
-> -static void startup_aica(struct snd_card_aica *dreamcastcard)
-> -{
-> -	spu_memload(AICA_CHANNEL0_CONTROL_OFFSET,
-> -		    dreamcastcard->channel, sizeof(struct aica_channel));
-> -	aica_chn_start();
-> -}
-> -
-> -static void run_spu_dma(struct work_struct *work)
-> -{
-> -	int buffer_size;
-> -	struct snd_pcm_runtime *runtime;
-> -	struct snd_card_aica *dreamcastcard;
-> -	dreamcastcard =
-> -	    container_of(work, struct snd_card_aica, spu_dma_work);
-> -	runtime = dreamcastcard->substream->runtime;
-> -	if (unlikely(dreamcastcard->dma_check == 0)) {
-> -		buffer_size =
-> -		    frames_to_bytes(runtime, runtime->buffer_size);
-> -		if (runtime->channels > 1)
-> -			dreamcastcard->channel->flags |= 0x01;
-> -		aica_dma_transfer(runtime->channels, buffer_size,
-> -				  dreamcastcard->substream);
-> -		startup_aica(dreamcastcard);
-> -		dreamcastcard->clicks =
-> -		    buffer_size / (AICA_PERIOD_SIZE * runtime->channels);
-> -		return;
-> -	} else {
-> -		aica_dma_transfer(runtime->channels,
-> -				  AICA_PERIOD_SIZE * runtime->channels,
-> -				  dreamcastcard->substream);
-> -		snd_pcm_period_elapsed(dreamcastcard->substream);
-> -		dreamcastcard->clicks++;
-> -		if (unlikely(dreamcastcard->clicks >= AICA_PERIOD_NUMBER))
-> -			dreamcastcard->clicks %= AICA_PERIOD_NUMBER;
-> -		mod_timer(&dreamcastcard->timer, jiffies + 1);
-> -	}
-> -}
-> -
-> -static void aica_period_elapsed(struct timer_list *t)
-> -{
-> -	struct snd_card_aica *dreamcastcard = from_timer(dreamcastcard,
-> -							      t, timer);
-> -	struct snd_pcm_substream *substream = dreamcastcard->substream;
-> -	/*timer function - so cannot sleep */
-> -	int play_period;
-> -	struct snd_pcm_runtime *runtime;
-> -	runtime = substream->runtime;
-> -	dreamcastcard = substream->pcm->private_data;
-> -	/* Have we played out an additional period? */
-> -	play_period =
-> -	    frames_to_bytes(runtime,
-> -			    readl
-> -			    (AICA_CONTROL_CHANNEL_SAMPLE_NUMBER)) /
-> -	    AICA_PERIOD_SIZE;
-> -	if (play_period == dreamcastcard->current_period) {
-> -		/* reschedule the timer */
-> -		mod_timer(&(dreamcastcard->timer), jiffies + 1);
-> -		return;
-> -	}
-> -	if (runtime->channels > 1)
-> -		dreamcastcard->current_period = play_period;
-> -	if (unlikely(dreamcastcard->dma_check == 0))
-> -		dreamcastcard->dma_check = 1;
-> -	schedule_work(&(dreamcastcard->spu_dma_work));
-> -}
-> -
-> -static void spu_begin_dma(struct snd_pcm_substream *substream)
-> -{
-> -	struct snd_card_aica *dreamcastcard;
-> -	struct snd_pcm_runtime *runtime;
-> -	runtime = substream->runtime;
-> -	dreamcastcard = substream->pcm->private_data;
-> -	/*get the queue to do the work */
-> -	schedule_work(&(dreamcastcard->spu_dma_work));
-> -	mod_timer(&dreamcastcard->timer, jiffies + 4);
-> -}
-> -
-> -static int snd_aicapcm_pcm_open(struct snd_pcm_substream
-> -				*substream)
-> -{
-> -	struct snd_pcm_runtime *runtime;
-> -	struct aica_channel *channel;
-> -	struct snd_card_aica *dreamcastcard;
-> -	if (!enable)
-> -		return -ENOENT;
-> -	dreamcastcard = substream->pcm->private_data;
-> -	channel = kmalloc(sizeof(struct aica_channel), GFP_KERNEL);
-> -	if (!channel)
-> -		return -ENOMEM;
-> -	/* set defaults for channel */
-> -	channel->sfmt = SM_8BIT;
-> -	channel->cmd = AICA_CMD_START;
-> -	channel->vol = dreamcastcard->master_volume;
-> -	channel->pan = 0x80;
-> -	channel->pos = 0;
-> -	channel->flags = 0;	/* default to mono */
-> -	dreamcastcard->channel = channel;
-> -	runtime = substream->runtime;
-> -	runtime->hw = snd_pcm_aica_playback_hw;
-> -	spu_enable();
-> -	dreamcastcard->clicks = 0;
-> -	dreamcastcard->current_period = 0;
-> -	dreamcastcard->dma_check = 0;
-> -	return 0;
-> -}
-> -
-> -static int snd_aicapcm_pcm_close(struct snd_pcm_substream
-> -				 *substream)
-> -{
-> -	struct snd_card_aica *dreamcastcard = substream->pcm->private_data;
-> -	flush_work(&(dreamcastcard->spu_dma_work));
-> -	del_timer(&dreamcastcard->timer);
-> -	dreamcastcard->substream = NULL;
-> -	kfree(dreamcastcard->channel);
-> -	spu_disable();
-> -	return 0;
-> -}
-> -
-> -static int snd_aicapcm_pcm_prepare(struct snd_pcm_substream
-> -				   *substream)
-> -{
-> -	struct snd_card_aica *dreamcastcard = substream->pcm->private_data;
-> -	if ((substream->runtime)->format == SNDRV_PCM_FORMAT_S16_LE)
-> -		dreamcastcard->channel->sfmt = SM_16BIT;
-> -	dreamcastcard->channel->freq = substream->runtime->rate;
-> -	dreamcastcard->substream = substream;
-> -	return 0;
-> -}
-> -
-> -static int snd_aicapcm_pcm_trigger(struct snd_pcm_substream
-> -				   *substream, int cmd)
-> -{
-> -	switch (cmd) {
-> -	case SNDRV_PCM_TRIGGER_START:
-> -		spu_begin_dma(substream);
-> -		break;
-> -	case SNDRV_PCM_TRIGGER_STOP:
-> -		aica_chn_halt();
-> -		break;
-> -	default:
-> -		return -EINVAL;
-> -	}
-> -	return 0;
-> -}
-> -
-> -static unsigned long snd_aicapcm_pcm_pointer(struct snd_pcm_substream
-> -					     *substream)
-> -{
-> -	return readl(AICA_CONTROL_CHANNEL_SAMPLE_NUMBER);
-> -}
-> -
-> -static const struct snd_pcm_ops snd_aicapcm_playback_ops = {
-> -	.open = snd_aicapcm_pcm_open,
-> -	.close = snd_aicapcm_pcm_close,
-> -	.prepare = snd_aicapcm_pcm_prepare,
-> -	.trigger = snd_aicapcm_pcm_trigger,
-> -	.pointer = snd_aicapcm_pcm_pointer,
-> -};
-> -
-> -/* TO DO: set up to handle more than one pcm instance */
-> -static int __init snd_aicapcmchip(struct snd_card_aica
-> -				  *dreamcastcard, int pcm_index)
-> -{
-> -	struct snd_pcm *pcm;
-> -	int err;
-> -	/* AICA has no capture ability */
-> -	err =
-> -	    snd_pcm_new(dreamcastcard->card, "AICA PCM", pcm_index, 1, 0,
-> -			&pcm);
-> -	if (unlikely(err < 0))
-> -		return err;
-> -	pcm->private_data = dreamcastcard;
-> -	strcpy(pcm->name, "AICA PCM");
-> -	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
-> -			&snd_aicapcm_playback_ops);
-> -	/* Allocate the DMA buffers */
-> -	snd_pcm_set_managed_buffer_all(pcm,
-> -				       SNDRV_DMA_TYPE_CONTINUOUS,
-> -				       NULL,
-> -				       AICA_BUFFER_SIZE,
-> -				       AICA_BUFFER_SIZE);
-> -	return 0;
-> -}
-> -
-> -/* Mixer controls */
-> -#define aica_pcmswitch_info		snd_ctl_boolean_mono_info
-> -
-> -static int aica_pcmswitch_get(struct snd_kcontrol *kcontrol,
-> -			      struct snd_ctl_elem_value *ucontrol)
-> -{
-> -	ucontrol->value.integer.value[0] = 1;	/* TO DO: Fix me */
-> -	return 0;
-> -}
-> -
-> -static int aica_pcmswitch_put(struct snd_kcontrol *kcontrol,
-> -			      struct snd_ctl_elem_value *ucontrol)
-> -{
-> -	if (ucontrol->value.integer.value[0] == 1)
-> -		return 0;	/* TO DO: Fix me */
-> -	else
-> -		aica_chn_halt();
-> -	return 0;
-> -}
-> -
-> -static int aica_pcmvolume_info(struct snd_kcontrol *kcontrol,
-> -			       struct snd_ctl_elem_info *uinfo)
-> -{
-> -	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-> -	uinfo->count = 1;
-> -	uinfo->value.integer.min = 0;
-> -	uinfo->value.integer.max = 0xFF;
-> -	return 0;
-> -}
-> -
-> -static int aica_pcmvolume_get(struct snd_kcontrol *kcontrol,
-> -			      struct snd_ctl_elem_value *ucontrol)
-> -{
-> -	struct snd_card_aica *dreamcastcard;
-> -	dreamcastcard = kcontrol->private_data;
-> -	if (unlikely(!dreamcastcard->channel))
-> -		return -ETXTBSY;	/* we've not yet been set up */
-> -	ucontrol->value.integer.value[0] = dreamcastcard->channel->vol;
-> -	return 0;
-> -}
-> -
-> -static int aica_pcmvolume_put(struct snd_kcontrol *kcontrol,
-> -			      struct snd_ctl_elem_value *ucontrol)
-> -{
-> -	struct snd_card_aica *dreamcastcard;
-> -	unsigned int vol;
-> -	dreamcastcard = kcontrol->private_data;
-> -	if (unlikely(!dreamcastcard->channel))
-> -		return -ETXTBSY;
-> -	vol = ucontrol->value.integer.value[0];
-> -	if (vol > 0xff)
-> -		return -EINVAL;
-> -	if (unlikely(dreamcastcard->channel->vol == vol))
-> -		return 0;
-> -	dreamcastcard->channel->vol = ucontrol->value.integer.value[0];
-> -	dreamcastcard->master_volume = ucontrol->value.integer.value[0];
-> -	spu_memload(AICA_CHANNEL0_CONTROL_OFFSET,
-> -		    dreamcastcard->channel, sizeof(struct aica_channel));
-> -	return 1;
-> -}
-> -
-> -static const struct snd_kcontrol_new snd_aica_pcmswitch_control = {
-> -	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
-> -	.name = "PCM Playback Switch",
-> -	.index = 0,
-> -	.info = aica_pcmswitch_info,
-> -	.get = aica_pcmswitch_get,
-> -	.put = aica_pcmswitch_put
-> -};
-> -
-> -static const struct snd_kcontrol_new snd_aica_pcmvolume_control = {
-> -	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
-> -	.name = "PCM Playback Volume",
-> -	.index = 0,
-> -	.info = aica_pcmvolume_info,
-> -	.get = aica_pcmvolume_get,
-> -	.put = aica_pcmvolume_put
-> -};
-> -
-> -static int load_aica_firmware(void)
-> -{
-> -	int err;
-> -	const struct firmware *fw_entry;
-> -	spu_reset();
-> -	err = request_firmware(&fw_entry, "aica_firmware.bin", &pd->dev);
-> -	if (unlikely(err))
-> -		return err;
-> -	/* write firmware into memory */
-> -	spu_disable();
-> -	spu_memload(0, fw_entry->data, fw_entry->size);
-> -	spu_enable();
-> -	release_firmware(fw_entry);
-> -	return err;
-> -}
-> -
-> -static int add_aicamixer_controls(struct snd_card_aica *dreamcastcard)
-> -{
-> -	int err;
-> -	err = snd_ctl_add
-> -	    (dreamcastcard->card,
-> -	     snd_ctl_new1(&snd_aica_pcmvolume_control, dreamcastcard));
-> -	if (unlikely(err < 0))
-> -		return err;
-> -	err = snd_ctl_add
-> -	    (dreamcastcard->card,
-> -	     snd_ctl_new1(&snd_aica_pcmswitch_control, dreamcastcard));
-> -	if (unlikely(err < 0))
-> -		return err;
-> -	return 0;
-> -}
-> -
-> -static int snd_aica_remove(struct platform_device *devptr)
-> -{
-> -	struct snd_card_aica *dreamcastcard;
-> -	dreamcastcard = platform_get_drvdata(devptr);
-> -	if (unlikely(!dreamcastcard))
-> -		return -ENODEV;
-> -	snd_card_free(dreamcastcard->card);
-> -	kfree(dreamcastcard);
-> -	return 0;
-> -}
-> -
-> -static int snd_aica_probe(struct platform_device *devptr)
-> -{
-> -	int err;
-> -	struct snd_card_aica *dreamcastcard;
-> -	dreamcastcard = kzalloc(sizeof(struct snd_card_aica), GFP_KERNEL);
-> -	if (unlikely(!dreamcastcard))
-> -		return -ENOMEM;
-> -	err = snd_card_new(&devptr->dev, index, SND_AICA_DRIVER,
-> -			   THIS_MODULE, 0, &dreamcastcard->card);
-> -	if (unlikely(err < 0)) {
-> -		kfree(dreamcastcard);
-> -		return err;
-> -	}
-> -	strcpy(dreamcastcard->card->driver, "snd_aica");
-> -	strcpy(dreamcastcard->card->shortname, SND_AICA_DRIVER);
-> -	strcpy(dreamcastcard->card->longname,
-> -	       "Yamaha AICA Super Intelligent Sound Processor for SEGA Dreamcast");
-> -	/* Prepare to use the queue */
-> -	INIT_WORK(&(dreamcastcard->spu_dma_work), run_spu_dma);
-> -	timer_setup(&dreamcastcard->timer, aica_period_elapsed, 0);
-> -	/* Load the PCM 'chip' */
-> -	err = snd_aicapcmchip(dreamcastcard, 0);
-> -	if (unlikely(err < 0))
-> -		goto freedreamcast;
-> -	/* Add basic controls */
-> -	err = add_aicamixer_controls(dreamcastcard);
-> -	if (unlikely(err < 0))
-> -		goto freedreamcast;
-> -	/* Register the card with ALSA subsystem */
-> -	err = snd_card_register(dreamcastcard->card);
-> -	if (unlikely(err < 0))
-> -		goto freedreamcast;
-> -	platform_set_drvdata(devptr, dreamcastcard);
-> -	snd_printk
-> -	    ("ALSA Driver for Yamaha AICA Super Intelligent Sound Processor\n");
-> -	return 0;
-> -      freedreamcast:
-> -	snd_card_free(dreamcastcard->card);
-> -	kfree(dreamcastcard);
-> -	return err;
-> -}
-> -
-> -static struct platform_driver snd_aica_driver = {
-> -	.probe = snd_aica_probe,
-> -	.remove = snd_aica_remove,
-> -	.driver = {
-> -		.name = SND_AICA_DRIVER,
-> -	},
-> -};
-> -
-> -static int __init aica_init(void)
-> -{
-> -	int err;
-> -	err = platform_driver_register(&snd_aica_driver);
-> -	if (unlikely(err < 0))
-> -		return err;
-> -	pd = platform_device_register_simple(SND_AICA_DRIVER, -1,
-> -					     aica_memory_space, 2);
-> -	if (IS_ERR(pd)) {
-> -		platform_driver_unregister(&snd_aica_driver);
-> -		return PTR_ERR(pd);
-> -	}
-> -	/* Load the firmware */
-> -	return load_aica_firmware();
-> -}
-> -
-> -static void __exit aica_exit(void)
-> -{
-> -	platform_device_unregister(pd);
-> -	platform_driver_unregister(&snd_aica_driver);
-> -	/* Kill any sound still playing and reset ARM7 to safe state */
-> -	spu_reset();
-> -}
-> -
-> -module_init(aica_init);
-> -module_exit(aica_exit);
-> diff --git a/sound/sh/aica.h b/sound/sh/aica.h
-> deleted file mode 100644
-> index 021b132e088e82..00000000000000
-> --- a/sound/sh/aica.h
-> +++ /dev/null
-> @@ -1,68 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0-only */
-> -/* aica.h
-> - * Header file for ALSA driver for
-> - * Sega Dreamcast Yamaha AICA sound
-> - * Copyright Adrian McMenamin
-> - * <adrian@mcmen.demon.co.uk>
-> - * 2006
-> - */
-> -
-> -/* SPU memory and register constants etc */
-> -#define G2_FIFO 0xa05f688c
-> -#define SPU_MEMORY_BASE 0xA0800000
-> -#define ARM_RESET_REGISTER 0xA0702C00
-> -#define SPU_REGISTER_BASE 0xA0700000
-> -
-> -/* AICA channels stuff */
-> -#define AICA_CONTROL_POINT 0xA0810000
-> -#define AICA_CONTROL_CHANNEL_SAMPLE_NUMBER 0xA0810008
-> -#define AICA_CHANNEL0_CONTROL_OFFSET 0x10004
-> -
-> -/* Command values */
-> -#define AICA_CMD_KICK 0x80000000
-> -#define AICA_CMD_NONE 0
-> -#define AICA_CMD_START 1
-> -#define AICA_CMD_STOP 2
-> -#define AICA_CMD_VOL 3
-> -
-> -/* Sound modes */
-> -#define SM_8BIT		1
-> -#define SM_16BIT	0
-> -#define SM_ADPCM	2
-> -
-> -/* Buffer and period size */
-> -#define AICA_BUFFER_SIZE 0x8000
-> -#define AICA_PERIOD_SIZE 0x800
-> -#define AICA_PERIOD_NUMBER 16
-> -
-> -#define AICA_CHANNEL0_OFFSET 0x11000
-> -#define AICA_CHANNEL1_OFFSET 0x21000
-> -#define CHANNEL_OFFSET 0x10000
-> -
-> -#define AICA_DMA_CHANNEL 5
-> -#define AICA_DMA_MODE 5
-> -
-> -#define SND_AICA_DRIVER "AICA"
-> -
-> -struct aica_channel {
-> -	uint32_t cmd;		/* Command ID           */
-> -	uint32_t pos;		/* Sample position      */
-> -	uint32_t length;	/* Sample length        */
-> -	uint32_t freq;		/* Frequency            */
-> -	uint32_t vol;		/* Volume 0-255         */
-> -	uint32_t pan;		/* Pan 0-255            */
-> -	uint32_t sfmt;		/* Sound format         */
-> -	uint32_t flags;		/* Bit flags            */
-> -};
-> -
-> -struct snd_card_aica {
-> -	struct work_struct spu_dma_work;
-> -	struct snd_card *card;
-> -	struct aica_channel *channel;
-> -	struct snd_pcm_substream *substream;
-> -	int clicks;
-> -	int current_period;
-> -	struct timer_list timer;
-> -	int master_volume;
-> -	int dma_check;
-> -};
-> diff --git a/sound/sh/sh_dac_audio.c b/sound/sh/sh_dac_audio.c
-> deleted file mode 100644
-> index 8ebd972846acb5..00000000000000
-> --- a/sound/sh/sh_dac_audio.c
-> +++ /dev/null
-> @@ -1,412 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-or-later
-> -/*
-> - * sh_dac_audio.c - SuperH DAC audio driver for ALSA
-> - *
-> - * Copyright (c) 2009 by Rafael Ignacio Zurita <rizurita@yahoo.com>
-> - *
-> - * Based on sh_dac_audio.c (Copyright (C) 2004, 2005 by Andriy Skulysh)
-> - */
-> -
-> -#include <linux/hrtimer.h>
-> -#include <linux/interrupt.h>
-> -#include <linux/io.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/slab.h>
-> -#include <linux/module.h>
-> -#include <sound/core.h>
-> -#include <sound/initval.h>
-> -#include <sound/pcm.h>
-> -#include <sound/sh_dac_audio.h>
-> -#include <asm/clock.h>
-> -#include <asm/hd64461.h>
-> -#include <mach/hp6xx.h>
-> -#include <cpu/dac.h>
-> -
-> -MODULE_AUTHOR("Rafael Ignacio Zurita <rizurita@yahoo.com>");
-> -MODULE_DESCRIPTION("SuperH DAC audio driver");
-> -MODULE_LICENSE("GPL");
-> -
-> -/* Module Parameters */
-> -static int index = SNDRV_DEFAULT_IDX1;
-> -static char *id = SNDRV_DEFAULT_STR1;
-> -module_param(index, int, 0444);
-> -MODULE_PARM_DESC(index, "Index value for SuperH DAC audio.");
-> -module_param(id, charp, 0444);
-> -MODULE_PARM_DESC(id, "ID string for SuperH DAC audio.");
-> -
-> -/* main struct */
-> -struct snd_sh_dac {
-> -	struct snd_card *card;
-> -	struct snd_pcm_substream *substream;
-> -	struct hrtimer hrtimer;
-> -	ktime_t wakeups_per_second;
-> -
-> -	int rate;
-> -	int empty;
-> -	char *data_buffer, *buffer_begin, *buffer_end;
-> -	int processed; /* bytes proccesed, to compare with period_size */
-> -	int buffer_size;
-> -	struct dac_audio_pdata *pdata;
-> -};
-> -
-> -
-> -static void dac_audio_start_timer(struct snd_sh_dac *chip)
-> -{
-> -	hrtimer_start(&chip->hrtimer, chip->wakeups_per_second,
-> -		      HRTIMER_MODE_REL);
-> -}
-> -
-> -static void dac_audio_stop_timer(struct snd_sh_dac *chip)
-> -{
-> -	hrtimer_cancel(&chip->hrtimer);
-> -}
-> -
-> -static void dac_audio_reset(struct snd_sh_dac *chip)
-> -{
-> -	dac_audio_stop_timer(chip);
-> -	chip->buffer_begin = chip->buffer_end = chip->data_buffer;
-> -	chip->processed = 0;
-> -	chip->empty = 1;
-> -}
-> -
-> -static void dac_audio_set_rate(struct snd_sh_dac *chip)
-> -{
-> -	chip->wakeups_per_second = 1000000000 / chip->rate;
-> -}
-> -
-> -
-> -/* PCM INTERFACE */
-> -
-> -static const struct snd_pcm_hardware snd_sh_dac_pcm_hw = {
-> -	.info			= (SNDRV_PCM_INFO_MMAP |
-> -					SNDRV_PCM_INFO_MMAP_VALID |
-> -					SNDRV_PCM_INFO_INTERLEAVED |
-> -					SNDRV_PCM_INFO_HALF_DUPLEX),
-> -	.formats		= SNDRV_PCM_FMTBIT_U8,
-> -	.rates			= SNDRV_PCM_RATE_8000,
-> -	.rate_min		= 8000,
-> -	.rate_max		= 8000,
-> -	.channels_min		= 1,
-> -	.channels_max		= 1,
-> -	.buffer_bytes_max	= (48*1024),
-> -	.period_bytes_min	= 1,
-> -	.period_bytes_max	= (48*1024),
-> -	.periods_min		= 1,
-> -	.periods_max		= 1024,
-> -};
-> -
-> -static int snd_sh_dac_pcm_open(struct snd_pcm_substream *substream)
-> -{
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -	struct snd_pcm_runtime *runtime = substream->runtime;
-> -
-> -	runtime->hw = snd_sh_dac_pcm_hw;
-> -
-> -	chip->substream = substream;
-> -	chip->buffer_begin = chip->buffer_end = chip->data_buffer;
-> -	chip->processed = 0;
-> -	chip->empty = 1;
-> -
-> -	chip->pdata->start(chip->pdata);
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_pcm_close(struct snd_pcm_substream *substream)
-> -{
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -
-> -	chip->substream = NULL;
-> -
-> -	dac_audio_stop_timer(chip);
-> -	chip->pdata->stop(chip->pdata);
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_pcm_prepare(struct snd_pcm_substream *substream)
-> -{
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -	struct snd_pcm_runtime *runtime = chip->substream->runtime;
-> -
-> -	chip->buffer_size = runtime->buffer_size;
-> -	memset(chip->data_buffer, 0, chip->pdata->buffer_size);
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
-> -{
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -
-> -	switch (cmd) {
-> -	case SNDRV_PCM_TRIGGER_START:
-> -		dac_audio_start_timer(chip);
-> -		break;
-> -	case SNDRV_PCM_TRIGGER_STOP:
-> -		chip->buffer_begin = chip->buffer_end = chip->data_buffer;
-> -		chip->processed = 0;
-> -		chip->empty = 1;
-> -		dac_audio_stop_timer(chip);
-> -		break;
-> -	default:
-> -		 return -EINVAL;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_pcm_copy(struct snd_pcm_substream *substream,
-> -			       int channel, unsigned long pos,
-> -			       void __user *src, unsigned long count)
-> -{
-> -	/* channel is not used (interleaved data) */
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -
-> -	if (copy_from_user_toio(chip->data_buffer + pos, src, count))
-> -		return -EFAULT;
-> -	chip->buffer_end = chip->data_buffer + pos + count;
-> -
-> -	if (chip->empty) {
-> -		chip->empty = 0;
-> -		dac_audio_start_timer(chip);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_pcm_copy_kernel(struct snd_pcm_substream *substream,
-> -				      int channel, unsigned long pos,
-> -				      void *src, unsigned long count)
-> -{
-> -	/* channel is not used (interleaved data) */
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -
-> -	memcpy_toio(chip->data_buffer + pos, src, count);
-> -	chip->buffer_end = chip->data_buffer + pos + count;
-> -
-> -	if (chip->empty) {
-> -		chip->empty = 0;
-> -		dac_audio_start_timer(chip);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_pcm_silence(struct snd_pcm_substream *substream,
-> -				  int channel, unsigned long pos,
-> -				  unsigned long count)
-> -{
-> -	/* channel is not used (interleaved data) */
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -
-> -	memset_io(chip->data_buffer + pos, 0, count);
-> -	chip->buffer_end = chip->data_buffer + pos + count;
-> -
-> -	if (chip->empty) {
-> -		chip->empty = 0;
-> -		dac_audio_start_timer(chip);
-> -	}
-> -
-> -	return 0;
-> -}
-> -
-> -static
-> -snd_pcm_uframes_t snd_sh_dac_pcm_pointer(struct snd_pcm_substream *substream)
-> -{
-> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
-> -	int pointer = chip->buffer_begin - chip->data_buffer;
-> -
-> -	return pointer;
-> -}
-> -
-> -/* pcm ops */
-> -static const struct snd_pcm_ops snd_sh_dac_pcm_ops = {
-> -	.open		= snd_sh_dac_pcm_open,
-> -	.close		= snd_sh_dac_pcm_close,
-> -	.prepare	= snd_sh_dac_pcm_prepare,
-> -	.trigger	= snd_sh_dac_pcm_trigger,
-> -	.pointer	= snd_sh_dac_pcm_pointer,
-> -	.copy_user	= snd_sh_dac_pcm_copy,
-> -	.copy_kernel	= snd_sh_dac_pcm_copy_kernel,
-> -	.fill_silence	= snd_sh_dac_pcm_silence,
-> -	.mmap		= snd_pcm_lib_mmap_iomem,
-> -};
-> -
-> -static int snd_sh_dac_pcm(struct snd_sh_dac *chip, int device)
-> -{
-> -	int err;
-> -	struct snd_pcm *pcm;
-> -
-> -	/* device should be always 0 for us */
-> -	err = snd_pcm_new(chip->card, "SH_DAC PCM", device, 1, 0, &pcm);
-> -	if (err < 0)
-> -		return err;
-> -
-> -	pcm->private_data = chip;
-> -	strcpy(pcm->name, "SH_DAC PCM");
-> -	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_sh_dac_pcm_ops);
-> -
-> -	/* buffer size=48K */
-> -	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
-> -				       NULL, 48 * 1024, 48 * 1024);
-> -
-> -	return 0;
-> -}
-> -/* END OF PCM INTERFACE */
-> -
-> -
-> -/* driver .remove  --  destructor */
-> -static int snd_sh_dac_remove(struct platform_device *devptr)
-> -{
-> -	snd_card_free(platform_get_drvdata(devptr));
-> -	return 0;
-> -}
-> -
-> -/* free -- it has been defined by create */
-> -static int snd_sh_dac_free(struct snd_sh_dac *chip)
-> -{
-> -	/* release the data */
-> -	kfree(chip->data_buffer);
-> -	kfree(chip);
-> -
-> -	return 0;
-> -}
-> -
-> -static int snd_sh_dac_dev_free(struct snd_device *device)
-> -{
-> -	struct snd_sh_dac *chip = device->device_data;
-> -
-> -	return snd_sh_dac_free(chip);
-> -}
-> -
-> -static enum hrtimer_restart sh_dac_audio_timer(struct hrtimer *handle)
-> -{
-> -	struct snd_sh_dac *chip = container_of(handle, struct snd_sh_dac,
-> -					       hrtimer);
-> -	struct snd_pcm_runtime *runtime = chip->substream->runtime;
-> -	ssize_t b_ps = frames_to_bytes(runtime, runtime->period_size);
-> -
-> -	if (!chip->empty) {
-> -		sh_dac_output(*chip->buffer_begin, chip->pdata->channel);
-> -		chip->buffer_begin++;
-> -
-> -		chip->processed++;
-> -		if (chip->processed >= b_ps) {
-> -			chip->processed -= b_ps;
-> -			snd_pcm_period_elapsed(chip->substream);
-> -		}
-> -
-> -		if (chip->buffer_begin == (chip->data_buffer +
-> -					   chip->buffer_size - 1))
-> -			chip->buffer_begin = chip->data_buffer;
-> -
-> -		if (chip->buffer_begin == chip->buffer_end)
-> -			chip->empty = 1;
-> -
-> -	}
-> -
-> -	if (!chip->empty)
-> -		hrtimer_start(&chip->hrtimer, chip->wakeups_per_second,
-> -			      HRTIMER_MODE_REL);
-> -
-> -	return HRTIMER_NORESTART;
-> -}
-> -
-> -/* create  --  chip-specific constructor for the cards components */
-> -static int snd_sh_dac_create(struct snd_card *card,
-> -			     struct platform_device *devptr,
-> -			     struct snd_sh_dac **rchip)
-> -{
-> -	struct snd_sh_dac *chip;
-> -	int err;
-> -
-> -	static const struct snd_device_ops ops = {
-> -		   .dev_free = snd_sh_dac_dev_free,
-> -	};
-> -
-> -	*rchip = NULL;
-> -
-> -	chip = kzalloc(sizeof(*chip), GFP_KERNEL);
-> -	if (chip == NULL)
-> -		return -ENOMEM;
-> -
-> -	chip->card = card;
-> -
-> -	hrtimer_init(&chip->hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> -	chip->hrtimer.function = sh_dac_audio_timer;
-> -
-> -	dac_audio_reset(chip);
-> -	chip->rate = 8000;
-> -	dac_audio_set_rate(chip);
-> -
-> -	chip->pdata = devptr->dev.platform_data;
-> -
-> -	chip->data_buffer = kmalloc(chip->pdata->buffer_size, GFP_KERNEL);
-> -	if (chip->data_buffer == NULL) {
-> -		kfree(chip);
-> -		return -ENOMEM;
-> -	}
-> -
-> -	err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, chip, &ops);
-> -	if (err < 0) {
-> -		snd_sh_dac_free(chip);
-> -		return err;
-> -	}
-> -
-> -	*rchip = chip;
-> -
-> -	return 0;
-> -}
-> -
-> -/* driver .probe  --  constructor */
-> -static int snd_sh_dac_probe(struct platform_device *devptr)
-> -{
-> -	struct snd_sh_dac *chip;
-> -	struct snd_card *card;
-> -	int err;
-> -
-> -	err = snd_card_new(&devptr->dev, index, id, THIS_MODULE, 0, &card);
-> -	if (err < 0) {
-> -			snd_printk(KERN_ERR "cannot allocate the card\n");
-> -			return err;
-> -	}
-> -
-> -	err = snd_sh_dac_create(card, devptr, &chip);
-> -	if (err < 0)
-> -		goto probe_error;
-> -
-> -	err = snd_sh_dac_pcm(chip, 0);
-> -	if (err < 0)
-> -		goto probe_error;
-> -
-> -	strcpy(card->driver, "snd_sh_dac");
-> -	strcpy(card->shortname, "SuperH DAC audio driver");
-> -	printk(KERN_INFO "%s %s", card->longname, card->shortname);
-> -
-> -	err = snd_card_register(card);
-> -	if (err < 0)
-> -		goto probe_error;
-> -
-> -	snd_printk(KERN_INFO "ALSA driver for SuperH DAC audio");
-> -
-> -	platform_set_drvdata(devptr, card);
-> -	return 0;
-> -
-> -probe_error:
-> -	snd_card_free(card);
-> -	return err;
-> -}
-> -
-> -/*
-> - * "driver" definition
-> - */
-> -static struct platform_driver sh_dac_driver = {
-> -	.probe	= snd_sh_dac_probe,
-> -	.remove = snd_sh_dac_remove,
-> -	.driver = {
-> -		.name = "dac_audio",
-> -	},
-> -};
-> -
-> -module_platform_driver(sh_dac_driver);
-> -- 
-> 2.39.0
+>  arch/alpha/kernel/process.c               |  1 -
+>  arch/alpha/kernel/vmlinux.lds.S           |  1 -
+>  arch/arc/kernel/process.c                 |  3 ++
+>  arch/arc/kernel/vmlinux.lds.S             |  1 -
+>  arch/arm/include/asm/vmlinux.lds.h        |  1 -
+>  arch/arm/kernel/cpuidle.c                 |  4 +-
+>  arch/arm/kernel/process.c                 |  1 -
+>  arch/arm/kernel/smp.c                     |  6 +--
+>  arch/arm/mach-davinci/cpuidle.c           |  4 +-
+>  arch/arm/mach-gemini/board-dt.c           |  3 +-
+>  arch/arm/mach-imx/cpuidle-imx5.c          |  4 +-
+>  arch/arm/mach-imx/cpuidle-imx6q.c         |  8 ++--
+>  arch/arm/mach-imx/cpuidle-imx6sl.c        |  4 +-
+>  arch/arm/mach-imx/cpuidle-imx6sx.c        |  9 ++--
+>  arch/arm/mach-imx/cpuidle-imx7ulp.c       |  4 +-
+>  arch/arm/mach-omap2/common.h              |  6 ++-
+>  arch/arm/mach-omap2/cpuidle34xx.c         | 16 ++++++-
+>  arch/arm/mach-omap2/cpuidle44xx.c         | 29 +++++++------
+>  arch/arm/mach-omap2/omap-mpuss-lowpower.c | 12 +++++-
+>  arch/arm/mach-omap2/pm.h                  |  2 +-
+>  arch/arm/mach-omap2/pm24xx.c              | 51 +---------------------
+>  arch/arm/mach-omap2/pm34xx.c              | 14 +++++--
+>  arch/arm/mach-omap2/pm44xx.c              |  2 +-
+>  arch/arm/mach-omap2/powerdomain.c         | 10 ++---
+>  arch/arm/mach-s3c/cpuidle-s3c64xx.c       |  5 +--
+>  arch/arm64/kernel/cpuidle.c               |  2 +-
+>  arch/arm64/kernel/idle.c                  |  1 -
+>  arch/arm64/kernel/smp.c                   |  4 +-
+>  arch/arm64/kernel/vmlinux.lds.S           |  1 -
+>  arch/csky/kernel/process.c                |  1 -
+>  arch/csky/kernel/smp.c                    |  2 +-
+>  arch/csky/kernel/vmlinux.lds.S            |  1 -
+>  arch/hexagon/kernel/process.c             |  1 -
+>  arch/hexagon/kernel/vmlinux.lds.S         |  1 -
+>  arch/ia64/kernel/process.c                |  1 +
+>  arch/ia64/kernel/vmlinux.lds.S            |  1 -
+>  arch/loongarch/kernel/idle.c              |  1 +
+>  arch/loongarch/kernel/vmlinux.lds.S       |  1 -
+>  arch/m68k/kernel/vmlinux-nommu.lds        |  1 -
+>  arch/m68k/kernel/vmlinux-std.lds          |  1 -
+>  arch/m68k/kernel/vmlinux-sun3.lds         |  1 -
+>  arch/microblaze/kernel/process.c          |  1 -
+>  arch/microblaze/kernel/vmlinux.lds.S      |  1 -
+>  arch/mips/kernel/idle.c                   | 14 +++----
+>  arch/mips/kernel/vmlinux.lds.S            |  1 -
+>  arch/nios2/kernel/process.c               |  1 -
+>  arch/nios2/kernel/vmlinux.lds.S           |  1 -
+>  arch/openrisc/kernel/process.c            |  1 +
+>  arch/openrisc/kernel/vmlinux.lds.S        |  1 -
+>  arch/parisc/kernel/process.c              |  2 -
+>  arch/parisc/kernel/vmlinux.lds.S          |  1 -
+>  arch/powerpc/kernel/idle.c                |  5 +--
+>  arch/powerpc/kernel/vmlinux.lds.S         |  1 -
+>  arch/riscv/kernel/process.c               |  1 -
+>  arch/riscv/kernel/vmlinux-xip.lds.S       |  1 -
+>  arch/riscv/kernel/vmlinux.lds.S           |  1 -
+>  arch/s390/kernel/idle.c                   |  1 -
+>  arch/s390/kernel/vmlinux.lds.S            |  1 -
+>  arch/sh/kernel/idle.c                     |  1 +
+>  arch/sh/kernel/vmlinux.lds.S              |  1 -
+>  arch/sparc/kernel/leon_pmc.c              |  4 ++
+>  arch/sparc/kernel/process_32.c            |  1 -
+>  arch/sparc/kernel/process_64.c            |  3 +-
+>  arch/sparc/kernel/vmlinux.lds.S           |  1 -
+>  arch/um/kernel/dyn.lds.S                  |  1 -
+>  arch/um/kernel/process.c                  |  1 -
+>  arch/um/kernel/uml.lds.S                  |  1 -
+>  arch/x86/boot/compressed/vmlinux.lds.S    |  1 +
+>  arch/x86/coco/tdx/tdcall.S                | 15 +------
+>  arch/x86/coco/tdx/tdx.c                   | 25 ++++-------
+>  arch/x86/events/amd/brs.c                 | 13 +++---
+>  arch/x86/include/asm/fpu/xcr.h            |  4 +-
+>  arch/x86/include/asm/irqflags.h           | 11 ++---
+>  arch/x86/include/asm/mwait.h              | 14 +++----
+>  arch/x86/include/asm/nospec-branch.h      |  2 +-
+>  arch/x86/include/asm/paravirt.h           |  6 ++-
+>  arch/x86/include/asm/perf_event.h         |  2 +-
+>  arch/x86/include/asm/shared/io.h          |  4 +-
+>  arch/x86/include/asm/shared/tdx.h         |  1 -
+>  arch/x86/include/asm/special_insns.h      |  8 ++--
+>  arch/x86/include/asm/xen/hypercall.h      |  2 +-
+>  arch/x86/kernel/cpu/bugs.c                |  2 +-
+>  arch/x86/kernel/fpu/core.c                |  4 +-
+>  arch/x86/kernel/paravirt.c                | 14 ++++++-
+>  arch/x86/kernel/process.c                 | 65 ++++++++++++++--------------
+>  arch/x86/kernel/vmlinux.lds.S             |  1 -
+>  arch/x86/lib/memcpy_64.S                  |  5 +--
+>  arch/x86/lib/memmove_64.S                 |  4 +-
+>  arch/x86/lib/memset_64.S                  |  4 +-
+>  arch/x86/xen/enlighten_pv.c               |  2 +-
+>  arch/x86/xen/irq.c                        |  2 +-
+>  arch/xtensa/kernel/process.c              |  1 +
+>  arch/xtensa/kernel/vmlinux.lds.S          |  1 -
+>  drivers/acpi/processor_idle.c             | 28 ++++++++-----
+>  drivers/base/power/runtime.c              | 24 +++++------
+>  drivers/clk/clk.c                         |  8 ++--
+>  drivers/cpuidle/cpuidle-arm.c             |  4 +-
+>  drivers/cpuidle/cpuidle-big_little.c      | 12 ++++--
+>  drivers/cpuidle/cpuidle-mvebu-v7.c        | 13 ++++--
+>  drivers/cpuidle/cpuidle-psci.c            | 26 +++++-------
+>  drivers/cpuidle/cpuidle-qcom-spm.c        |  4 +-
+>  drivers/cpuidle/cpuidle-riscv-sbi.c       | 19 +++++----
+>  drivers/cpuidle/cpuidle-tegra.c           | 31 +++++++++-----
+>  drivers/cpuidle/cpuidle.c                 | 70 ++++++++++++++++++++++---------
+>  drivers/cpuidle/dt_idle_states.c          |  2 +-
+>  drivers/cpuidle/poll_state.c              | 10 ++++-
+>  drivers/idle/intel_idle.c                 | 19 ++++-----
+>  drivers/perf/arm_pmu.c                    | 11 +----
+>  drivers/perf/riscv_pmu_sbi.c              |  8 +---
+>  include/asm-generic/vmlinux.lds.h         |  9 ++--
+>  include/linux/clockchips.h                |  4 +-
+>  include/linux/compiler_types.h            | 18 +++++++-
+>  include/linux/cpu.h                       |  3 --
+>  include/linux/cpuidle.h                   | 32 ++++++++++++++
+>  include/linux/cpumask.h                   |  4 +-
+>  include/linux/percpu-defs.h               |  2 +-
+>  include/linux/sched/idle.h                | 40 +++++++++++++-----
+>  include/linux/thread_info.h               | 18 +++++++-
+>  include/linux/tracepoint.h                | 15 ++++++-
+>  kernel/context_tracking.c                 | 12 +++---
+>  kernel/cpu_pm.c                           |  9 ----
+>  kernel/printk/printk.c                    |  2 +-
+>  kernel/sched/idle.c                       | 47 ++++++---------------
+>  kernel/time/tick-broadcast-hrtimer.c      | 29 ++++++-------
+>  kernel/time/tick-broadcast.c              |  6 ++-
+>  kernel/trace/trace.c                      |  3 ++
+>  kernel/trace/trace_preemptirq.c           | 50 ++++++----------------
+>  lib/ubsan.c                               |  5 ++-
+>  mm/kasan/kasan.h                          |  4 ++
+>  mm/kasan/shadow.c                         | 38 +++++++++++++++++
+>  tools/objtool/check.c                     | 17 ++++++++
+>  131 files changed, 617 insertions(+), 523 deletions(-)
 > 
