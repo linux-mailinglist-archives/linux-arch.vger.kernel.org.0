@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC5D66A577
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 22:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EB066A599
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 23:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjAMVy4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 16:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
+        id S231406AbjAMWCf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 17:02:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjAMVyr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 16:54:47 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613C68A211
-        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 13:54:46 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id y1so24771298plb.2
-        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 13:54:46 -0800 (PST)
+        with ESMTP id S231342AbjAMWCb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 17:02:31 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563CD74665
+        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 14:02:16 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id d9so24757391pll.9
+        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 14:02:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hhpii7kCapxhB0DJlYGUjw51omeyUMoY3UIeTjTnFe8=;
-        b=ZS8LNlcnnRbTeDNfK2GnjCI2FQe2seYywb27tQYC3rATL6nUcWgzHk9l/X49WuLcR7
-         MxufLxr4v5JyxI8Fk1Rsy+L0v3HCs2Ec8RosxfNd68idcjN8NrAd5lDB2yRN59zB7jGz
-         6llde0y8FGi0l0gklzTrCW0fHKCLbzGY3eEZyTr4IC7nOy4rj8dmCUa/Wmt4RvJB6d00
-         xnrtlDsZLljAn2dP16/btJGNbyLLNxO0CqLkw/NAE7vznaQRmtr0IXKeX+0obFYouInv
-         MbvsZmtjBoLbl3xae92pVeR0xrb1+kiQFuFIG6fid2t+s7JP6kK3JdHZJblcxSDNzPmx
-         SOng==
+        bh=z7l9vd6TJMxdcmrmIlHi+1aamG6yNr9jBZqHMxmbVBg=;
+        b=BR3tUqUT1wdTPEhuyI88J1yG4yZUf5PuICve+KLW/6jG7Wb1v6McPHOp0JH41FPvHo
+         cA2xNTdp4kP3XHFHgUTLdE2qj40XKo3fIu/xNDgFentclcLH8D4+aqHtGytwQRH7EFT0
+         SvW3dkQzsILPvPKa4Is4mjjYyZmLU2ZjXaSMTILUI2Ql4PmYTWFYg91PuBLsgKKGoru5
+         2kNrKIxXaIvBTzLY81Ye3wChF7mPYngBYjfHrPWew9lZluOUDNoM3QdVM4dxlS9vgJCj
+         1PCCo9ULYh3HxSCxalWt2dPVhw7cT4s2LG6uTB7ArEkfMypRVuMINSetLuB5egod0Oa5
+         0CYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Hhpii7kCapxhB0DJlYGUjw51omeyUMoY3UIeTjTnFe8=;
-        b=JinREIZaTGkWdkpbMACUDaZ+hklfPimfWQ3iBcLJ5SxZCBxCQhW4K9GjXJ9RA/phMT
-         +Qrrga5MCT8H9nkJbeAv8f6bEVm3SJwmq4efvhBuYN5mHztqi+JaqhhpCe/w8/si0FSJ
-         aqmdXIh0yxPsGUWYrjczaIqy93RygzP947RlrtDktxlVI8h3ElEAzxJ2NAxX1oQOHQ1e
-         9Hc0POAh+OO3RBMez6kBLp4MIcUb12tPtLEfYN+Pt3nI+WOf/CuU9JnALUsp4Gv7UICC
-         UHQNf/Jer5ZqYSCK0+ryClx1FjqYkZhCOdo3S0jxYJx1/qljcc9Voyfh+J5DLYaNBxqr
-         UVCA==
-X-Gm-Message-State: AFqh2kp8t04OESRjbxfaUF2PFXrkb5rWCTcbZUEQ5xU8m6Wb0u/wqW11
-        aDG68S0iotFUhpCqw3NSqR6NjQ==
-X-Google-Smtp-Source: AMrXdXsrn0ksTbbdabw7JkYj7sG3I4DjLXmCZyLSNxH83QGpSuMFYShcdh0M4wmFmbDmEREMamklwA==
-X-Received: by 2002:a17:90b:274b:b0:219:f970:5119 with SMTP id qi11-20020a17090b274b00b00219f9705119mr1438871pjb.1.1673646885581;
-        Fri, 13 Jan 2023 13:54:45 -0800 (PST)
+        bh=z7l9vd6TJMxdcmrmIlHi+1aamG6yNr9jBZqHMxmbVBg=;
+        b=qRx7r1r/yrQDNF2m/erRfQydPwAqwVYXvJRdf+RLArHjXHUFO6EJkzwpwPaXMtkGQL
+         64WoOTbWnfHqYwxF3fBbfHk8o0biA9+3qrrDMI7nyux6LFzny+PXAgb9xnYCuTY61MEQ
+         NbVOKZ/FPgzmogUgozM6tUYWPmBZICKFAgQ/zqRE+TxlXR0MSlVczbYLwtSUc8vifstQ
+         +4bZDWJjGBSMaWgxQDjsa9ropiFI/6bvFjNaAbvnOcozZ0eVeWIK/pkwVIMITMugO6eJ
+         u2axwYJZWIvUHQSde9b/vyY/o0X49+Z+mCAQQmXMx1ITz8r8uJwuE9LEfGi1GHqBuQTQ
+         Jtsg==
+X-Gm-Message-State: AFqh2kpm9wq9zGK3OVjwTwBAYSD+6Po1+flg7bv0w3mh0rHeD0FeyDtX
+        XSXKLjIFaRVjSXZ+0hxZUQhvvwwZJpsX8V2p
+X-Google-Smtp-Source: AMrXdXttju4or509XUsZuP2ElabXRLq+UGu6WNhuAKj6QmwsUs3kftnSPzMWDd6fhBAAvxes/xEs1A==
+X-Received: by 2002:a05:6a20:47de:b0:b3:66b7:24ff with SMTP id ey30-20020a056a2047de00b000b366b724ffmr1359880pzb.1.1673647335304;
+        Fri, 13 Jan 2023 14:02:15 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r2-20020a17090a0ac200b002139459e121sm10013579pje.27.2023.01.13.13.54.44
+        by smtp.gmail.com with ESMTPSA id k36-20020a635a64000000b0048988ed9e4bsm11687157pgm.19.2023.01.13.14.02.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 13:54:45 -0800 (PST)
-Date:   Fri, 13 Jan 2023 21:54:41 +0000
+        Fri, 13 Jan 2023 14:02:14 -0800 (PST)
+Date:   Fri, 13 Jan 2023 22:02:11 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Chao Peng <chao.p.peng@linux.intel.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -83,19 +83,18 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Quentin Perret <qperret@google.com>, tabba@google.com,
         Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
         wei.w.wang@intel.com
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <Y8HTITl1+Oe0H7Gd@google.com>
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <Y8HU45aISOPwX76D@google.com>
 References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
+In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,252 +103,75 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, Dec 02, 2022, Chao Peng wrote:
-> The system call is currently wired up for x86 arch.
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index fbeaa9ddef59..a8e379a3afee 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -49,6 +49,7 @@ config KVM
+>  	select SRCU
+>  	select INTERVAL_TREE
+>  	select HAVE_KVM_PM_NOTIFIER if PM
+> +	select HAVE_KVM_MEMORY_ATTRIBUTES
 
-Building on other architectures (except for arm64 for some reason) yields:
+I would prefer to call this KVM_GENERIC_MEMORY_ATTRIBUTES.  Similar to
+KVM_GENERIC_HARDWARE_ENABLING, ARM does need/have hardware enabling, it just
+doesn't want KVM's generic implementation.  In this case, pKVM does support memory
+attributes, but uses stage-2 tables to track ownership and doesn't need/want the
+overhead of the generic implementation.
 
-  CALL    /.../scripts/checksyscalls.sh
-  <stdin>:1565:2: warning: #warning syscall memfd_restricted not implemented [-Wcpp]
-
-Do we care?  It's the only such warning, which makes me think we either need to
-wire this up for all architectures, or explicitly document that it's unsupported.
-
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
-
-...
-
-> diff --git a/include/linux/restrictedmem.h b/include/linux/restrictedmem.h
-> new file mode 100644
-> index 000000000000..c2700c5daa43
-> --- /dev/null
-> +++ b/include/linux/restrictedmem.h
-> @@ -0,0 +1,71 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _LINUX_RESTRICTEDMEM_H
-
-Missing
-
- #define _LINUX_RESTRICTEDMEM_H
-
-which causes fireworks if restrictedmem.h is included more than once.
-
-> +#include <linux/file.h>
-> +#include <linux/magic.h>
-> +#include <linux/pfn_t.h>
+>  	help
 
 ...
 
-> +static inline int restrictedmem_get_page(struct file *file, pgoff_t offset,
-> +					 struct page **pagep, int *order)
+> +#define KVM_MEMORY_ATTRIBUTE_READ              (1ULL << 0)
+> +#define KVM_MEMORY_ATTRIBUTE_WRITE             (1ULL << 1)
+> +#define KVM_MEMORY_ATTRIBUTE_EXECUTE           (1ULL << 2)
+> +#define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+
+I think we should carve out bits 0-2 for RWX, but I don't think we should actually
+define them until they're actually accepted by KVM.
+
+> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> +					   struct kvm_memory_attributes *attrs)
 > +{
-> +	return -1;
-
-This should be a proper -errno, though in the current incarnation of things it's
-a moot point because no stub is needed.  KVM can (and should) easily provide its
-own stub for this one.
-
-> +}
+> +	gfn_t start, end;
+> +	unsigned long i;
+> +	void *entry;
+> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
 > +
-> +static inline bool file_is_restrictedmem(struct file *file)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline void restrictedmem_error_page(struct page *page,
-> +					    struct address_space *mapping)
-> +{
-> +}
-> +
-> +#endif /* CONFIG_RESTRICTEDMEM */
-> +
-> +#endif /* _LINUX_RESTRICTEDMEM_H */
+> +	/* flags is currently not used. */
+> +	if (attrs->flags)
+> +		return -EINVAL;
+> +	if (attrs->attributes & ~supported_attrs)
 
-...
+Nit, no need for "supported_attrs", just consume kvm_supported_mem_attributes()
+directly.
 
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> new file mode 100644
-> index 000000000000..56953c204e5c
-> --- /dev/null
-> +++ b/mm/restrictedmem.c
-> @@ -0,0 +1,318 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "linux/sbitmap.h"
-> +#include <linux/pagemap.h>
-> +#include <linux/pseudo_fs.h>
-> +#include <linux/shmem_fs.h>
-> +#include <linux/syscalls.h>
-> +#include <uapi/linux/falloc.h>
-> +#include <uapi/linux/magic.h>
-> +#include <linux/restrictedmem.h>
-> +
-> +struct restrictedmem_data {
-
-Any objection to simply calling this "restrictedmem"?  And then using either "rm"
-or "rmem" for local variable names?  I kept reading "data" as the underyling data
-being written to the page, as opposed to the metadata describing the restrictedmem
-instance.
-
-> +	struct mutex lock;
-> +	struct file *memfd;
-> +	struct list_head notifiers;
-> +};
-> +
-> +static void restrictedmem_invalidate_start(struct restrictedmem_data *data,
-> +					   pgoff_t start, pgoff_t end)
-> +{
-> +	struct restrictedmem_notifier *notifier;
-> +
-> +	mutex_lock(&data->lock);
-
-This can be a r/w semaphore instead of a mutex, that way punching holes at multiple
-points in the file can at least run the notifiers in parallel.  The actual allocation
-by shmem will still be serialized, but I think it's worth the simple optimization
-since zapping and flushing in KVM may be somewhat slow.
-
-> +	list_for_each_entry(notifier, &data->notifiers, list) {
-> +		notifier->ops->invalidate_start(notifier, start, end);
-
-Two major design issues that we overlooked long ago:
-
-  1. Blindly invoking notifiers will not scale.  E.g. if userspace configures a
-     VM with a large number of convertible memslots that are all backed by a
-     single large restrictedmem instance, then converting a single page will
-     result in a linear walk through all memslots.  I don't expect anyone to
-     actually do something silly like that, but I also never expected there to be
-     a legitimate usecase for thousands of memslots.
-
-  2. This approach fails to provide the ability for KVM to ensure a guest has
-     exclusive access to a page.  As discussed in the past, the kernel can rely
-     on hardware (and maybe ARM's pKVM implementation?) for those guarantees, but
-     only for SNP and TDX VMs.  For VMs where userspace is trusted to some extent,
-     e.g. SEV, there is value in ensuring a 1:1 association.
-
-     And probably more importantly, relying on hardware for SNP and TDX yields a
-     poor ABI and complicates KVM's internals.  If the kernel doesn't guarantee a
-     page is exclusive to a guest, i.e. if userspace can hand out the same page
-     from a restrictedmem instance to multiple VMs, then failure will occur only
-     when KVM tries to assign the page to the second VM.  That will happen deep
-     in KVM, which means KVM needs to gracefully handle such errors, and it means
-     that KVM's ABI effectively allows plumbing garbage into its memslots.
-
-Rather than use a simple list of notifiers, this appears to be yet another
-opportunity to use an xarray.  Supporting sharing of restrictedmem will be
-non-trivial, but IMO we should punt that to the future since it's still unclear
-exactly how sharing will work.
-
-An xarray will solve #1 by notifying only the consumers (memslots) that are bound
-to the affected range.
-
-And for #2, it's relatively straightforward (knock wood) to detect existing
-entries, i.e. if the user wants exclusive access to memory, then the bind operation
-can be reject if there's an existing entry.
-
-VERY lightly tested code snippet at the bottom (will provide link to fully worked
-code in cover letter).
-
-
-> +static long restrictedmem_punch_hole(struct restrictedmem_data *data, int mode,
-> +				     loff_t offset, loff_t len)
-> +{
-> +	int ret;
-> +	pgoff_t start, end;
-> +	struct file *memfd = data->memfd;
-> +
-> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
+> +		return -EINVAL;
+> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
 > +		return -EINVAL;
 > +
-> +	start = offset >> PAGE_SHIFT;
-> +	end = (offset + len) >> PAGE_SHIFT;
+> +	start = attrs->address >> PAGE_SHIFT;
+> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
 > +
-> +	restrictedmem_invalidate_start(data, start, end);
-> +	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-> +	restrictedmem_invalidate_end(data, start, end);
-
-The lock needs to be end for the entire duration of the hole punch, i.e. needs to
-be taken before invalidate_start() and released after invalidate_end().  If a user
-(un)binds/(un)registers after invalidate_state(), it will see an unpaired notification,
-e.g. could leave KVM with incorrect notifier counts.
-
+> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
 > +
-> +	return ret;
-> +}
+> +	mutex_lock(&kvm->lock);
 
-What I ended up with for an xarray-based implementation.  I'm very flexible on
-names and whatnot, these are just what made sense to me.
+Peeking forward multiple patches, this needs to take kvm->slots_lock, not kvm->lock.
+There's a bug in the lpage_disallowed patch that I believe can most easily be
+solved by making this mutually exclusive with memslot changes.
 
-static long restrictedmem_punch_hole(struct restrictedmem *rm, int mode,
-				     loff_t offset, loff_t len)
-{
-	struct restrictedmem_notifier *notifier;
-	struct file *memfd = rm->memfd;
-	unsigned long index;
-	pgoff_t start, end;
-	int ret;
+When a memslot is created, KVM needs to walk through the attributes to detect
+whether or not the attributes are identical for the entire slot.  To avoid races,
+that means taking slots_lock.
 
-	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
-		return -EINVAL;
+The alternative would be to query the attributes when adjusting the hugepage level
+and avoid lpage_disallowed entirely, but in the (very brief) time I've thought
+about this I haven't come up with a way to do that in a performant manner.
 
-	start = offset >> PAGE_SHIFT;
-	end = (offset + len) >> PAGE_SHIFT;
+> +	for (i = start; i < end; i++)
 
-	/*
-	 * Bindings must stable across invalidation to ensure the start+end
-	 * are balanced.
-	 */
-	down_read(&rm->lock);
-
-	xa_for_each_range(&rm->bindings, index, notifier, start, end)
-		notifier->ops->invalidate_start(notifier, start, end);
-
-	ret = memfd->f_op->fallocate(memfd, mode, offset, len);
-
-	xa_for_each_range(&rm->bindings, index, notifier, start, end)
-		notifier->ops->invalidate_end(notifier, start, end);
-
-	up_read(&rm->lock);
-
-	return ret;
-}
-
-int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
-		       struct restrictedmem_notifier *notifier, bool exclusive)
-{
-	struct restrictedmem *rm = file->f_mapping->private_data;
-	int ret = -EINVAL;
-
-	down_write(&rm->lock);
-
-	/* Non-exclusive mappings are not yet implemented. */
-	if (!exclusive)
-		goto out_unlock;
-
-	if (!xa_empty(&rm->bindings)) {
-		if (exclusive != rm->exclusive)
-			goto out_unlock;
-
-		if (exclusive && xa_find(&rm->bindings, &start, end, XA_PRESENT))
-			goto out_unlock;
-	}
-
-	xa_store_range(&rm->bindings, start, end, notifier, GFP_KERNEL);
-	rm->exclusive = exclusive;
-	ret = 0;
-out_unlock:
-	up_write(&rm->lock);
-	return ret;
-}
-EXPORT_SYMBOL_GPL(restrictedmem_bind);
-
-void restrictedmem_unbind(struct file *file, pgoff_t start, pgoff_t end,
-			  struct restrictedmem_notifier *notifier)
-{
-	struct restrictedmem *rm = file->f_mapping->private_data;
-
-	down_write(&rm->lock);
-	xa_store_range(&rm->bindings, start, end, NULL, GFP_KERNEL);
-	synchronize_rcu();
-	up_write(&rm->lock);
-}
-EXPORT_SYMBOL_GPL(restrictedmem_unbind);
+Curly braces needed on the for-loop.
