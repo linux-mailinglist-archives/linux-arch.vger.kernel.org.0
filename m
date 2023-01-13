@@ -2,95 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FF9669262
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 10:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF496692F1
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 10:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240992AbjAMJKg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 04:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
+        id S236680AbjAMJ3r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 04:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241102AbjAMJI2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 04:08:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698B895B2;
-        Fri, 13 Jan 2023 01:06:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92488B820D0;
-        Fri, 13 Jan 2023 09:06:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E4C4C433D2;
-        Fri, 13 Jan 2023 09:05:55 +0000 (UTC)
-Message-ID: <649a45a5-1680-dd71-ed74-df16d4353638@xs4all.nl>
-Date:   Fri, 13 Jan 2023 10:05:54 +0100
+        with ESMTP id S239903AbjAMJ1z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 04:27:55 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB61938A1;
+        Fri, 13 Jan 2023 01:23:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1673601824; x=1705137824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/xAKBZhyJ8HlMGnG8R+tnMoMY4Yw1acK1pUdd5RRh4A=;
+  b=aL9IGJlM/FkVtktAgqFV5JNzy5wCIqDOo4aDTMbZIJRQPSTeNlHZLGe3
+   su6VOUdi5auzDPcSeXwX45tyW43lYRtzzAaFSpciTQBpauXEmQCy38X/c
+   /AeHgl0WgJg1Ffn16psXZpj3r1ykEM5Fev7VdCMjGBbcRrGu0Rrpow77M
+   uMrUREkVI1OSY8BFCl3OTkRQ8DvM9vBUr3JVRAyAZ0zYqfSMzsEFm3nXa
+   VcHs2JkSP/121k57/dlTcxVtt7OPpqYDrTCe4tJjRlGXLhZ+JymAnIvGZ
+   kWCO7uPUWcm4rFwROd2jLNq609jqqZcXzACl3MpNC16L4+n/VwJCwxFl+
+   A==;
+X-IronPort-AV: E=Sophos;i="5.97,213,1669100400"; 
+   d="asc'?scan'208";a="195624611"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jan 2023 02:23:40 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 13 Jan 2023 02:23:40 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Fri, 13 Jan 2023 02:23:36 -0700
+Date:   Fri, 13 Jan 2023 09:23:14 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <guoren@kernel.org>
+CC:     <arnd@arndb.de>, <palmer@rivosinc.com>, <tglx@linutronix.de>,
+        <peterz@infradead.org>, <luto@kernel.org>, <heiko@sntech.de>,
+        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
+        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
+        <atishp@atishpatra.org>, <mark.rutland@arm.com>,
+        <ben@decadent.org.uk>, <bjorn@kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>
+Subject: Re: [PATCH -next V14 4/7] riscv: entry: Convert to generic entry
+Message-ID: <Y8EjAt3DC4WC062n@wendy>
+References: <20230112095848.1464404-1-guoren@kernel.org>
+ <20230112095848.1464404-5-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 20/22] media: remove sh_vou
-Content-Language: en-US
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <20230113062339.1909087-21-hch@lst.de>
- <Y8EPvllOwhODRUiP@pendragon.ideasonboard.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <Y8EPvllOwhODRUiP@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Tn016RnVhEUTOGe2"
+Content-Disposition: inline
+In-Reply-To: <20230112095848.1464404-5-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 13/01/2023 09:01, Laurent Pinchart wrote:
-> Hi Christoph,
-> 
-> Thank you for the patch.
-> 
-> On Fri, Jan 13, 2023 at 07:23:37AM +0100, Christoph Hellwig wrote:
->> Now that arch/sh is removed this driver is dead code.
->>
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->> ---
->>  drivers/media/platform/renesas/Kconfig  |    9 -
->>  drivers/media/platform/renesas/Makefile |    1 -
->>  drivers/media/platform/renesas/sh_vou.c | 1375 -----------------------
-> 
-> You can also emove include/media/drv-intf/sh_vou.sh. With that, and the
-> corresponding MAINTAINERS entry dropped,
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+--Tn016RnVhEUTOGe2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-And with that you can also add my Ack:
+Hey Guo Ren,
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+On Thu, Jan 12, 2023 at 04:58:45AM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> This patch converts riscv to use the generic entry infrastructure from
+> kernel/entry/*. The generic entry makes maintainers' work easier and
+> codes more elegant. Here are the changes:
+>=20
+>  - More clear entry.S with handle_exception and ret_from_exception
+>  - Get rid of complex custom signal implementation
+>  - Move syscall procedure from assembly to C, which is much more
+>    readable.
+>  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+>  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+>  - Use the standard preemption code instead of custom
+>=20
+> Suggested-by: Huacai Chen <chenhuacai@kernel.org>
+> Reviewed-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+> Tested-by: Yipeng Zou <zouyipeng@huawei.com>
+> Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Ben Hutchings <ben@decadent.org.uk>
 
-Regards,
+Unfortunately from this patch onwards, the !MMU build is broken.
+Should be able to reproduce it with nommu_virt_defconfig.
 
-	Hans
+Thanks,
+Conor.
 
-> 
->>  3 files changed, 1385 deletions(-)
->>  delete mode 100644 drivers/media/platform/renesas/sh_vou.c
-> 
 
+--Tn016RnVhEUTOGe2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY8Ei5AAKCRB4tDGHoIJi
+0hgHAP4zxYtVsZMV6BCEppbmfxRxpMW9oFKnWUOgUmHwNcSrhwD9Ff6CTDLxoiy3
+sCNkTcezQudksEUbdB5Noc0qY6RioA0=
+=OVvh
+-----END PGP SIGNATURE-----
+
+--Tn016RnVhEUTOGe2--
