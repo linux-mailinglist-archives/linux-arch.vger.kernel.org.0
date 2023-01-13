@@ -2,61 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC61C669097
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 09:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B07D6690BD
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 09:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjAMIWy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 03:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
+        id S232730AbjAMI1N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 03:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240858AbjAMIWg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 03:22:36 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9D22022;
-        Fri, 13 Jan 2023 00:19:48 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id j15so13047252qtv.4;
-        Fri, 13 Jan 2023 00:19:48 -0800 (PST)
+        with ESMTP id S236408AbjAMI0j (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 03:26:39 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469C354720;
+        Fri, 13 Jan 2023 00:26:38 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id fa5so13160786qtb.11;
+        Fri, 13 Jan 2023 00:26:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MowQaQp0G9uX2jhG1rQLtIGSPC7S+MJhKLN+g9WmpVM=;
-        b=el2XoDs9Rx15fpn1LkUmpizUAlrQktSLBbXWFPUan3PrdWaITXGPK4gXy5odfK/be2
-         xYV5v/6RF3GbIz0QDmX8Hgl+dZExurKd0xQT+/IbvMyJ0qrxL3A+RpLtldiM9OLgR1cq
-         hvrdRRJBDQGAFrdmpCh+KDMSxmG0GhIBYXUPC4EiQPkAoDDOldcNKRgPNvaGewXZLWmk
-         9gFrnL6/WRbWFSHEIm/Ixj4xPZ4NsQnTgbwP/XdEElRtYEam4hlECmj/dIL99tgFaZme
-         DCGS+eJh10LKslT207MZuVAQGBCvh7fqEa/DrZOh4UQ109fS4DcYVI97RuRPa/buQoSV
-         IiMw==
-X-Gm-Message-State: AFqh2krWXEOYU1LKIBgksuqgpuGjN2QdZrxD9D4EfoSlrRUgYTGPUd3o
-        ssVr/XINvnR/maM1Enm0TJcmL2Po8Z6EbA==
-X-Google-Smtp-Source: AMrXdXt2A3y0C7fYLdtAO5xHmkf9XuWzBkFjZ07LasgooqTk66dX7n7EUkumqmFKc7fjlBxZxWui1g==
-X-Received: by 2002:ac8:4a97:0:b0:3a8:1ca1:b489 with SMTP id l23-20020ac84a97000000b003a81ca1b489mr94322090qtq.60.1673597987448;
-        Fri, 13 Jan 2023 00:19:47 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id bq25-20020a05622a1c1900b003a57a317c17sm10211765qtb.74.2023.01.13.00.19.46
+        bh=IGwwX1FWc34aVprY9nV8lSjSaarIXrtB/QPl3dMA44o=;
+        b=OrBkA4O+sdQHPVGLv9QcAtvIvznY+EGGznQc5W0bTyWkp2OTvaHsKpMVX3qGW1Km4p
+         crT+1gToCalQ+RmJ17XDjzdGCnkT9AuEtGdp0JrKhUStjt6T8EDF0JR0rHmr4Ku/WCcE
+         hiYBtq/ITL/Y55K3wLv2rkn1jwa4LTpg12581d135NToqljp/txHTkooefmrpq7k5zLl
+         h+tdhx/1GBdIY+9jsDej0vggdV9Txf8DMRyoSnYz6SaH7vDu/ksyrH3ROEoZB0x0wmOQ
+         DTwptN0akfuakj9tMxAuIge1aIfeIBGXuz8Vy/IxhhJltxwo7t0Yh4DlZKU5xuGHq5f9
+         KkaA==
+X-Gm-Message-State: AFqh2kp8n91rm+VJ8dh441RedMH1e7dl5ItueXtgIuHk9v/S4wHqpuxV
+        9ZO/uqGXlJVi8l3uW0/ysTqR81QUolPfHg==
+X-Google-Smtp-Source: AMrXdXsI1f7si/IK4pBGwX1g5ZCcbE0uL3G3n+rXVsKaK42NeEsUXSU8qYMrQi2bt3777QW8XztbPA==
+X-Received: by 2002:a05:622a:6011:b0:3a9:8561:429a with SMTP id he17-20020a05622a601100b003a98561429amr17639336qtb.26.1673598396801;
+        Fri, 13 Jan 2023 00:26:36 -0800 (PST)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id bk25-20020a05620a1a1900b006ff8ac9acfdsm12401133qkb.49.2023.01.13.00.26.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 00:19:46 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-4c24993965eso268088687b3.12;
-        Fri, 13 Jan 2023 00:19:46 -0800 (PST)
-X-Received: by 2002:a05:690c:313:b0:37e:6806:a5f9 with SMTP id
- bg19-20020a05690c031300b0037e6806a5f9mr3489142ywb.47.1673597985912; Fri, 13
- Jan 2023 00:19:45 -0800 (PST)
+        Fri, 13 Jan 2023 00:26:35 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id g4so21534409ybg.7;
+        Fri, 13 Jan 2023 00:26:35 -0800 (PST)
+X-Received: by 2002:a25:7:0:b0:7c1:b2e9:7e71 with SMTP id 7-20020a250007000000b007c1b2e97e71mr830819yba.604.1673598394939;
+ Fri, 13 Jan 2023 00:26:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <20230113062339.1909087-2-hch@lst.de>
- <Y8EMZ0GI5rtor9xr@pendragon.ideasonboard.com> <Y8EOWGVmwEElKGE4@pendragon.ideasonboard.com>
-In-Reply-To: <Y8EOWGVmwEElKGE4@pendragon.ideasonboard.com>
+References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+In-Reply-To: <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 13 Jan 2023 09:19:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXRkUu3AuLs7X30ki1votAQfBU3HWvWB6qMQJBSUEr6WA@mail.gmail.com>
-Message-ID: <CAMuHMdXRkUu3AuLs7X30ki1votAQfBU3HWvWB6qMQJBSUEr6WA@mail.gmail.com>
-Subject: Re: [PATCH 01/22] gpu/drm: remove the shmobile drm driver
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Date:   Fri, 13 Jan 2023 09:26:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
+Message-ID: <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
+Subject: Re: remove arch/sh
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Cc:     Christoph Hellwig <hch@lst.de>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
         dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -79,51 +79,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 8:55 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
-> On Fri, Jan 13, 2023 at 09:46:49AM +0200, Laurent Pinchart wrote:
-> > On Fri, Jan 13, 2023 at 07:23:18AM +0100, Christoph Hellwig wrote:
-> > > This driver depends on ARM && ARCH_SHMOBILE, but ARCH_SHMOBILE can only be
-> > > set for each/sh, making the driver dead code except for the COMPILE_TEST
-> > > case.
-> > >
-> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+On Fri, Jan 13, 2023 at 9:10 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On 1/13/23 07:23, Christoph Hellwig wrote:
+> > arch/sh has been a long drag because it supports a lot of SOCs, and most
+> > of them haven't even been converted to device tree infrastructure.  These
+> > SOCs are generally obsolete as well, and all of the support has been barely
+> > maintained for almost 10 years, and not at all for more than 1 year.
 > >
-> > No objection from me.
-> >
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Drop arch/sh and everything that depends on it.
 >
-> To expand a little bit on this, ARCH_SHMOBILE used to be set for the
-> ARM-based shmobile SoCs too, until
+> I'm still maintaining and using this port in Debian.
 >
-> commit 08e735233ea29b17bfec8e4cb302e799d9f920b8
-> Author: Geert Uytterhoeven <geert+renesas@glider.be>
-> Date:   Tue Aug 28 17:10:10 2018 +0200
->
->     ARM: shmobile: Remove the ARCH_SHMOBILE Kconfig symbol
->
->     All drivers for Renesas ARM SoCs have gained proper ARCH_RENESAS
->     platform dependencies.  Hence finish the conversion from ARCH_SHMOBILE
->     to ARCH_RENESAS for Renesas 32-bit ARM SoCs, as started by commit
->     9b5ba0df4ea4f940 ("ARM: shmobile: Introduce ARCH_RENESAS").
->
->     Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->     Acked-by: Arnd Bergmann <arnd@arndb.de>
->     Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
->
-> merged in v4.20. The DRM shmobile driver's Kconfig entry wasn't updated,
-> making it dead code indeed.
+> It's a bit disappointing that people keep hammering on it. It works fine for me.
 
-Note that it wasn't updated because this driver was not used on Renesas
-ARM platforms, due to the lack of DT bindings and DT support, so it
-didn't make sense to make it selectable.
+Indeed.  The main issue is not the lack of people sending patches and
+fixes, but those patches never being applied by the maintainers.
+Perhaps someone is willing to stand up to take over maintainership?
 
-> I haven't tested this driver in ages, hence my lack of objection, but
-> someone may want to keep it for the pre-R-Car ARM SoCs.
-
-Indeed, this driver should work with the R-Mobile A1 (which made it
-into orbit, so we could call it the first member of R-Space ;-) and
-SH-Mobile AG5 SoCs.  The major blocker is the lack of DT bindings.
+Thanks!
 
 Gr{oetje,eeting}s,
 
