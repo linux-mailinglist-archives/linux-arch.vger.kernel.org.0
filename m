@@ -2,266 +2,1326 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05D9669D91
-	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 17:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F352669DAF
+	for <lists+linux-arch@lfdr.de>; Fri, 13 Jan 2023 17:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjAMQXZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 11:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
+        id S230403AbjAMQZB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 11:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjAMQW7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 11:22:59 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B57AC766;
-        Fri, 13 Jan 2023 08:17:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673626643; x=1705162643;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jBW+I8EsYE54hgXsNe1Dpvah0FuHXXQaTVNS0wina14=;
-  b=ibx0jtPjJ5HCfLSl1ZTG0fDwh9rAWozs6V2vfaFTwM8xrpW6eGC0LnAS
-   2dg7R7+dJ8RpYm8Cb33VFeUW75K2sgRJ+ocreXUC1NQlhKyo4WXksAwZX
-   gU32jMWAL6De+3J7tUYbvxVUEwI3i7yBLse8fQzr0NaTr+ujQZ+PtXH4J
-   WIY/gs/kw9a5pNa44qe69XyQ7TuZZCYs7P56KJgAC1NtwJEtpAvbay8dZ
-   m4iFNqdGlCugM70Y/OqL+yvb/7uT2M5+wdyi+F55S+Ab5tNgggpHEbWHu
-   EtH4cUKMcc2t8QrFA+lTKNNCBCUzeg9Ope38grKBi8nMuzD24uJNmz1XY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="303723294"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="303723294"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2023 08:17:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="987040341"
-X-IronPort-AV: E=Sophos;i="5.97,214,1669104000"; 
-   d="scan'208";a="987040341"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Jan 2023 08:17:22 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 13 Jan 2023 08:17:22 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Fri, 13 Jan 2023 08:17:21 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Fri, 13 Jan 2023 08:17:21 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Fri, 13 Jan 2023 08:17:20 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AvrNAilhTxo0YnsY5wrVvro2PERCcX1LXjMkAm3wmcXWo+11WYY1rQERg7MO3AJBIVAbIRgFBOr7qyDUPmBNPkkawKd6D317Fs5e6hYac4XFKbCEhLMtOVoLAJxbLpde/x8XC6mR9oPAYjjlSrQSYdQYJ3X3mNBQCL0ZPnQ/3WUoHykegm4F0Yd3LfvSq4yzqAG2JNjhau2fNcmN3DPCPX8R1mftcmBrPOEKcM3uwJ76mwt0qxY12FkuT/BBTfOvj06ZqfsRrakVWAtTLaOGUOB4gUTBoHWik32/s8bEiJp3VAkZYmFBkn8c8zF4CAZVRDU/06IYzAG0D0V/uoNHVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jBW+I8EsYE54hgXsNe1Dpvah0FuHXXQaTVNS0wina14=;
- b=BYNlV2xQk/4ymqtHGxHwv/hUHuAv5DwW7Z9CbbCUCtc1NaEn7nNzRQiN3z74EyZuYs5r8okssJ81MlkhaHsqWaXzP+L2q2aDg1gj1Uzq6gwYNQR5+tZIC23Nruf/iNwn+JyllydmSAzoiE52THfybwn6HmUEvYb9FPQe81CQr+w1YhIMYJFNUW2K50O/RVOjBdNG9Ta96vZxn53LPzFzuoIDWJyOD2KukdveQrrfnpiEHiKiXj7yXLKEYw3RY/zzRani6dL0RoGeYErx/84h5SVHeuNu5jHtCSxIGO6MwBKx/BftEXCOwJgnLeijlFtVGPm5iLW3Hlw3pSj+wMZhXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by SA0PR11MB4655.namprd11.prod.outlook.com (2603:10b6:806:9d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Fri, 13 Jan
- 2023 16:17:18 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::3c14:aeca:37e2:c679]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::3c14:aeca:37e2:c679%6]) with mapi id 15.20.5986.018; Fri, 13 Jan 2023
- 16:17:17 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        Mateusz Guzik <mjguzik@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        Jan Glauber <jan.glauber@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: RE: ia64 removal (was: Re: lockref scalability on x86-64 vs
- cpu_relax)
-Thread-Topic: ia64 removal (was: Re: lockref scalability on x86-64 vs
- cpu_relax)
-Thread-Index: AQHZJyR/hg4pL/N6e0ad2k2xs4MPaK6cg1cw
-Date:   Fri, 13 Jan 2023 16:17:17 +0000
-Message-ID: <SJ1PR11MB6083CA763F3510B45C6F5779FCC29@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <CAGudoHHx0Nqg6DE70zAVA75eV-HXfWyhVMWZ-aSeOofkA_=WdA@mail.gmail.com>
- <CAHk-=wjthxgrLEvgZBUwd35e_mk=dCWKMUEURC6YsX5nWom8kQ@mail.gmail.com>
- <SJ1PR11MB6083368BCA43E5B0D2822FD3FCC29@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <CAMj1kXEqbMEcrKYzz2-huLPMnotPoxFY8adyH=Xb4Ex8o98x-w@mail.gmail.com>
-In-Reply-To: <CAMj1kXEqbMEcrKYzz2-huLPMnotPoxFY8adyH=Xb4Ex8o98x-w@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SA0PR11MB4655:EE_
-x-ms-office365-filtering-correlation-id: c24ddb1b-325f-43b3-685d-08daf581a3dc
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hVoFOY1DnhFIcv/aRzIXCf2BK2Y9AxXfUxrDJODkYSVCVdjQtMW4BMDZNXIZK4XOCli2zz4B89fclIV/SFifrtYw8aaRV7ojCXKGbrgRryCGJeYkniUsnOFsEBjZjlltQ2mBbn9BB3ARsjGHX+fcNnWMewgI89LbgmNxpo1Q/iOsIzpIIMrzHYjgyyxXZiazh8oqPAXA9fKOH9P+jo3l3uFRpUiOC7oN9ZzqkKnDsMFaca5Yoq4B/wEoyHnaZXGE9zvRfC4i38qL2IO4pghGeZumNcKg6JdmmCxCObbKki1FN5/krhbLncL9AggwTihamc7BpOIaSilFbZr85tfICTR9F5gZQfLDCOh4J+qXzOSONbTJNnXRUWIPn7yIy3OkO58NumXlPCDHRHumCfze/V+WvIDJWxySVCIRMyCuOb8hQ2tw4ET1G4AIhsBx3d30bphqvlCneH0+wX4sKr/Na6OunwDiqIo/QJkgww2vMegjsjM9a18KwNqihaONpe4ivj2clnPYdTK/YIS7L/nCThUqGyxle2Glk9sPMBsQVxN/iqwEBrRgpzcEf7qyhF3Q9Q4AfnwoHwNN8//3IBCOrf8fdxsOH+ZbdI1wiE9SDohP183Gh//bNkeu6sbK0xLVjxh9aAyD+/JvLZq4tUjCqo4A16dtgMexGg1UNA6DIFLk1PQE5h4HUxkObG1gEra64RJpihQxrHU4vp+i55URj8p+AgwUAC+psaUqsp6UfFU=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(366004)(39860400002)(136003)(346002)(451199015)(82960400001)(122000001)(38100700002)(86362001)(38070700005)(2906002)(41300700001)(52536014)(7416002)(5660300002)(8936002)(55016003)(478600001)(6506007)(9686003)(186003)(26005)(316002)(66556008)(8676002)(6916009)(4326008)(66446008)(66476007)(76116006)(66946007)(64756008)(7696005)(71200400001)(54906003)(66899015)(966005)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TnZ2MGRnekxqNDZ1U1RRbHZtL0JsQ1RyZzdLK0RrOHR2aWprS0h4UjJWeE9K?=
- =?utf-8?B?ODZja1o1SC9ZMUNUTUVRbXFjTktMWVl4SGlyMStzMHZCckN0S3BaWVJETE5S?=
- =?utf-8?B?dUNydkw4dklTaUgwZHJQV3ZqVkZseTRuMjZSbWJ1WktUaTR0czhVRFRmZUpU?=
- =?utf-8?B?a1RGTTB3NzJpSFlscXdjeGlCUEZaM1RZVWJWaEM3Rkc5QmhFZEdYa1Q4cFF0?=
- =?utf-8?B?emJ1N0Vxb0ZkS1V3RDZtcndDd2o3RjRjN214dS9lekF1UFZncEo5dnZGTzMr?=
- =?utf-8?B?bk9KYlV5K05rdkVSRUJ2SnhidmRaeXZjR0pDb0MyVkZWSzVvMG84Y1dOaGgz?=
- =?utf-8?B?WWRqMmtyL1RVYldMc0hmYllyQStxcFZsb1ZUQ21CRjAxS2tnTVNNMHNpL2tr?=
- =?utf-8?B?VTBrbDFhRHBnTUs4VGlHTzdaUnpSeWVQdmErWmlXWHlTZkpCbWU2a1dtcUhl?=
- =?utf-8?B?QW5KRzFrdTN5QmRzS0xuNStzQTRlTzNjdDhZMkJVS2VhbXRIZTRiK25xck5y?=
- =?utf-8?B?cWEwbS8rVVFaR2VRZC9QT1N2djlza3IxOG9tWU1OVkhTU3k3ZUFoU0tPSVl6?=
- =?utf-8?B?MDBQTTkrb2Qya3Z3U2RLUXVBdUQ3V29Jd3NTQ0NwWSt1YXVJcDVwQkd6SkhT?=
- =?utf-8?B?YUdzNXNSendRemlibGdWL2xHMm1TbE1rOStRQ1pnYklKM1dxdE1ucCtQVnB6?=
- =?utf-8?B?eEJUYXBZMHdWaFY2YkFRZDhHa2JtWHh0aTJmcG1ZMjk0Ti9QTm5LQzQyblBP?=
- =?utf-8?B?Rk5adTZPTXhxT0c2YklYbU03WFllYXZBbGNqd0c4dEN5S0Y0ckZEbkgxMW8w?=
- =?utf-8?B?YzRFTVBBVUpheUg1QS9lZzVpVW0zVXpaWTNRb3M5aXJwQlFrVzhEWGtIRVRj?=
- =?utf-8?B?WkxMM2piakZNM0JGSW1GemdPUjZJQWpaYjNkM083eVNYQ3BCUWpqNndUOTlD?=
- =?utf-8?B?eTN2ck1UNG90TFhwamhzMVd1cFVOZjFTREwyRUZlcllZODFvZ2YwR1BnUVRZ?=
- =?utf-8?B?c25wVzB1TmNtVmg3c01RZGQwcEhMMUlObndsMlFLaEpIQVVtc1FsRVU1YzdM?=
- =?utf-8?B?Mll0UGhyRmMyR3NvMjl6STBCZUtwQWxhRmF3VDA0dGRJZ3Q2ZHpDR25pYW1q?=
- =?utf-8?B?STdzejNONWp1WjVSanhrSEZaay94OWlReEtsc2tvMVBTYmRGSmdJSWU3Mytx?=
- =?utf-8?B?VTFQRGI1c3pBaWVPNUpKU2RqalZNUVZHdE51SVczOXFsYnFmWnorYlA1L0JX?=
- =?utf-8?B?eGRZcW5odUNncTUvbjVxUTVuRTdUWXlaV1MveGNUYjhRODNVZzJIbENmSkZa?=
- =?utf-8?B?MFBSaEMwUjBFOUxZTG9qL2hiZHZoSWJBYVpFa0d3L25lVVNXZUxCdDY0YVhx?=
- =?utf-8?B?YWxNczcyMVkwY0EwUlRyZ3hpTjM0Z1VuSmJBY2xIaHNPQ3Z6Q1lJZkVGNVRI?=
- =?utf-8?B?amV5akFOYWdUb1R0UEpITVE4Mlk2V3ZzM2RYMERkS0NCOW5Da3VzSUNHbWIr?=
- =?utf-8?B?dVVDRDZsbHJwSkVEenVJQWVpZHIycVJvK3BOUlBNSmlDTUFNS1JCMHo5cEhx?=
- =?utf-8?B?TEd6aFowUzJxVG94SCtMWE92TEZ1dUJBeWdvR1hiVldoQS9rTXNrdGhmdG53?=
- =?utf-8?B?TitxYXpSTzhZTDNNaXVXU1ArSVJuQWdrbnppejUrQXZYb2N2VzJ5VjcvS3M2?=
- =?utf-8?B?dWVrVGZDdW9aOEFHSk1kbTk5NDVSQ1d4QUJXbXNVK2dLbW9PL2tEZmh3eUNm?=
- =?utf-8?B?QVNMQjEwdHlSRVNwL0cvdUwzZ2hjaHpjRGpkOUFWTWVVdUorR1dsWFkrMXJn?=
- =?utf-8?B?VzRHb0U3RmVJQnB5N2Z4dWljeGhmM20zb3FXY1FCZklvaTBsRVYySXAza2NT?=
- =?utf-8?B?bHZtZ3ljMnpxcDVYeVYzR3dMZ1ZxSU1jZFEzcytDVERIaGc5aHppSEpLMTJj?=
- =?utf-8?B?QlVjNXJjeVN3LzF1eW5hSm1Tb2hhZkgrdWd4WXp1Uy9haFB2N0tqUnNoQ3BZ?=
- =?utf-8?B?eldtS1VNenRlN0ZwVHp2bCtOZjJpU3h5cW9oSEFORHM0SkpMbktRU3ZnSjRL?=
- =?utf-8?B?YkxET1RhWGQ1RFBSeVZxajBoWlptRjc1Yk9hTXd0UnVKQjdUNG8wSEVtams1?=
- =?utf-8?Q?WLFIjmtPU/Cff6UYzpJTDoK6J?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c24ddb1b-325f-43b3-685d-08daf581a3dc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jan 2023 16:17:17.4751
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I8BmX2diP3xgBc7SfKXcg6A3MOANgVdQBubY8UyED4RWw7wluRxrjRGhER39adCYVjevAEu76KK5sODJwUce3A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4655
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229694AbjAMQYY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 11:24:24 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B108CBFE;
+        Fri, 13 Jan 2023 08:18:10 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D7FAA205E9;
+        Fri, 13 Jan 2023 16:18:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1673626687; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a/nz9PZsEaBw6Xbmoaigr0ESYOUM4RXAWJqCR7TosNA=;
+        b=PZa7MN6B0TX1t2MV5bO3TQUnO1W/RMuD6TzA4bmww20D4ZC+Zqu8qAFXbkNYw/g3uGUGfk
+        3F3W68dXVORZM19SNNJYQN2GTuzCXthgRGJL/EcPsPuFIIy8tWoGUk41quZVkkDLVwRILt
+        xnipFG37mhmzUW8eReh49yojGPEUta0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1673626687;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a/nz9PZsEaBw6Xbmoaigr0ESYOUM4RXAWJqCR7TosNA=;
+        b=BUqkDlLEy0AlMFsez1mlH98ym1R8AaNXFsDn+cm8Nxzq4yt8F+qekncNhaZlkp2wI9epxl
+        jROS08SoPU4BRJDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5389A1358A;
+        Fri, 13 Jan 2023 16:18:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xDesEz+EwWMxUQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 13 Jan 2023 16:18:07 +0000
+Date:   Fri, 13 Jan 2023 17:18:06 +0100
+Message-ID: <87zgam1k8x.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fbdev@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-sh@vger.kernel.org, alsa-devel@alsa-project.org,
+        dri-devel@lists.freedesktop.org, linux-mtd@lists.infradead.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-arch@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 04/22] sound: remove sound/sh
+In-Reply-To: <20230113062339.1909087-5-hch@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+        <20230113062339.1909087-5-hch@lst.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Pj4gSXMgaXQgdGltZSB5ZXQgZm9yOg0KPj4NCj4+ICQgZ2l0IHJtIC1yIGFyY2gvaWE2NA0KPj4N
-Cg0KPiBDYW4gSSB0YWtlIHRoYXQgYXMgYW4gYWNrIG9uIFswXT8gVGhlIEVGSSBzdWJzeXN0ZW0g
-aGFzIGV2b2x2ZWQNCj4gc3Vic3RhbnRpYWxseSBvdmVyIHRoZSB5ZWFycywgYW5kIHRoZXJlIGlz
-IHJlYWxseSBubyB3YXkgdG8gZG8gYW55DQo+IElBNjQgdGVzdGluZyBiZXlvbmQgYnVpbGQgdGVz
-dGluZywgc28gZnJvbSB0aGF0IHBlcnNwZWN0aXZlLCBkcm9wcGluZw0KPiBpdCBlbnRpcmVseSB3
-b3VsZCBiZSB3ZWxjb21lZC4NCj4NCj4gVGhhbmtzLA0KPiBBcmQuDQo+DQo+DQo+DQo+IFswXSBo
-dHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9hcmRiL2xpbnV4
-LmdpdC9jb21taXQvP2g9cmVtb3ZlLWlhNjQNCg0KWWVzLiBFRkkgaXNuJ3QgdGhlIG9ubHkgaXNz
-dWUuIEEgYnVuY2ggb2YgZm9sa3NbMV0gaGF2ZSBzcGVudCB0aW1lIGZpeGluZyBpYTY0DQpmb3Ig
-KGluIG1vc3QgY2FzZXMpIHNvbWUgdHJlZS13aWRlIHBhdGNoZXMgdGhhdCB0aGV5IG5lZWRlZC4g
-VGhlaXIgdGltZSBtaWdodA0KaGF2ZSBiZWVuIG1vcmUgcHJvZHVjdGl2ZWx5IHNwZW50IGZpeGlu
-ZyB0aGluZ3MgdGhhdCBhY3R1YWxseSBtYXR0ZXIgaW4gbW9kZXJuIHRpbWVzLg0KDQpBY2tlZC1i
-eTogVG9ueSBMdWNrIDx0b255Lmx1Y2tAaW50ZWwuY29tPg0KDQotVG9ueQ0KDQpbMV0gZ2l0IGxv
-ZyAtLW5vLW1lcmdlcyAtLXNpbmNlPTJ5ZWFyIC0tIGFyY2gvaWE2NCB8IGdyZXAgQXV0aG9yOiB8
-IHNvcnQgfCB1bmlxIC1jIHwgc29ydCAtcm4NCiAgICAgMTkgQXV0aG9yOiBNYXNhaGlybyBZYW1h
-ZGEgPG1hc2FoaXJveUBrZXJuZWwub3JnPg0KICAgICAxMSBBdXRob3I6IFNlcmdlaSBUcm9maW1v
-dmljaCA8c2x5Zm94QGdlbnRvby5vcmc+DQogICAgICA5IEF1dGhvcjogRXJpYyBXLiBCaWVkZXJt
-YW4gPGViaWVkZXJtQHhtaXNzaW9uLmNvbT4NCiAgICAgIDggQXV0aG9yOiBBcm5kIEJlcmdtYW5u
-IDxhcm5kQGFybmRiLmRlPg0KICAgICAgNiBBdXRob3I6IFJhbmR5IER1bmxhcCA8cmR1bmxhcEBp
-bmZyYWRlYWQub3JnPg0KICAgICAgNiBBdXRob3I6IEtlZmVuZyBXYW5nIDx3YW5na2VmZW5nLndh
-bmdAaHVhd2VpLmNvbT4NCiAgICAgIDYgQXV0aG9yOiBBbnNodW1hbiBLaGFuZHVhbCA8YW5zaHVt
-YW4ua2hhbmR1YWxAYXJtLmNvbT4NCiAgICAgIDUgQXV0aG9yOiBNYXNhbWkgSGlyYW1hdHN1IDxt
-aGlyYW1hdEBrZXJuZWwub3JnPg0KICAgICAgNSBBdXRob3I6IEFsIFZpcm8gPHZpcm9AemVuaXYu
-bGludXgub3JnLnVrPg0KICAgICAgNCBBdXRob3I6IFBldGVyIFppamxzdHJhIDxwZXRlcnpAaW5m
-cmFkZWFkLm9yZz4NCiAgICAgIDQgQXV0aG9yOiBNaWtlIFJhcG9wb3J0IDxycHB0QGtlcm5lbC5v
-cmc+DQogICAgICA0IEF1dGhvcjogRGF2aWQgSGlsZGVuYnJhbmQgPGRhdmlkQHJlZGhhdC5jb20+
-DQogICAgICA0IEF1dGhvcjogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dy
-b3VwLmV1Pg0KICAgICAgMyBBdXRob3I6IFl1cnkgTm9yb3YgPHl1cnkubm9yb3ZAZ21haWwuY29t
-Pg0KICAgICAgMyBBdXRob3I6IE1pY2hhbCBIb2NrbyA8bWhvY2tvQHN1c2UuY29tPg0KICAgICAg
-MyBBdXRob3I6IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnQrcmVuZXNhc0BnbGlkZXIuYmU+DQog
-ICAgICAzIEF1dGhvcjogQmhhc2thciBDaG93ZGh1cnkgPHVuaXhiaGFza2FyQGdtYWlsLmNvbT4N
-CiAgICAgIDMgQXV0aG9yOiBCYW9xdWFuIEhlIDxiaGVAcmVkaGF0LmNvbT4NCiAgICAgIDMgQXV0
-aG9yOiBBcmQgQmllc2hldXZlbCA8YXJkYkBrZXJuZWwub3JnPg0KICAgICAgMyBBdXRob3I6IEFu
-ZWVzaCBLdW1hciBLLlYgPGFuZWVzaC5rdW1hckBsaW51eC5pYm0uY29tPg0KICAgICAgMiBBdXRo
-b3I6IFlhbmcgR3VhbmcgPHlhbmcuZ3Vhbmc1QHp0ZS5jb20uY24+DQogICAgICAyIEF1dGhvcjog
-V2lsbCBEZWFjb24gPHdpbGxAa2VybmVsLm9yZz4NCiAgICAgIDIgQXV0aG9yOiBWaXJlc2ggS3Vt
-YXIgPHZpcmVzaC5rdW1hckBsaW5hcm8ub3JnPg0KICAgICAgMiBBdXRob3I6IFZhbGVudGluIFNj
-aG5laWRlciA8dnNjaG5laWRAcmVkaGF0LmNvbT4NCiAgICAgIDIgQXV0aG9yOiBTdGFmZm9yZCBI
-b3JuZSA8c2hvcm5lQGdtYWlsLmNvbT4NCiAgICAgIDIgQXV0aG9yOiBTZWJhc3RpYW4gQW5kcnpl
-aiBTaWV3aW9yIDxiaWdlYXN5QGxpbnV0cm9uaXguZGU+DQogICAgICAyIEF1dGhvcjogUmljaGFy
-ZCBHdXkgQnJpZ2dzIDxyZ2JAcmVkaGF0LmNvbT4NCiAgICAgIDIgQXV0aG9yOiBQZXRlciBYdSA8
-cGV0ZXJ4QHJlZGhhdC5jb20+DQogICAgICAyIEF1dGhvcjogUGV0ZXIgQ29sbGluZ2JvdXJuZSA8
-cGNjQGdvb2dsZS5jb20+DQogICAgICAyIEF1dGhvcjogTWFyayBSdXRsYW5kIDxtYXJrLnJ1dGxh
-bmRAYXJtLmNvbT4NCiAgICAgIDIgQXV0aG9yOiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhu
-QGdtYWlsLmNvbT4NCiAgICAgIDIgQXV0aG9yOiBKdWxpYSBMYXdhbGwgPEp1bGlhLkxhd2FsbEBp
-bnJpYS5mcj4NCiAgICAgIDIgQXV0aG9yOiBKZW5zIEF4Ym9lIDxheGJvZUBrZXJuZWwuZGs+DQog
-ICAgICAyIEF1dGhvcjogSmFzb24gV2FuZyA8d2FuZ2Jvcm9uZ0BjZGpybGMuY29tPg0KICAgICAg
-MiBBdXRob3I6IEphbiBLYXJhIDxqYWNrQHN1c2UuY3o+DQogICAgICAyIEF1dGhvcjogQ2hyaXN0
-b3BoIEhlbGx3aWcgPGhjaEBsc3QuZGU+DQogICAgICAyIEF1dGhvcjogQmpvcm4gSGVsZ2FhcyA8
-YmhlbGdhYXNAZ29vZ2xlLmNvbT4NCiAgICAgIDIgQXV0aG9yOiBBbGV4YW5kZXIgTG9iYWtpbiA8
-YWxleGFuZHIubG9iYWtpbkBpbnRlbC5jb20+DQogICAgICAxIEF1dGhvcjogWmkgWWFuIDx6aXlA
-bnZpZGlhLmNvbT4NCiAgICAgIDEgQXV0aG9yOiBaaGFuZyBZdW5rYWkgPHpoYW5nLnl1bmthaUB6
-dGUuY29tLmNuPg0KICAgICAgMSBBdXRob3I6IHllIHhpbmdjaGVuIDx5ZS54aW5nY2hlbkB6dGUu
-Y29tLmNuPg0KICAgICAgMSBBdXRob3I6IHh1IHhpbiA8eHUueGluMTZAenRlLmNvbS5jbj4NCiAg
-ICAgIDEgQXV0aG9yOiBXb2xmcmFtIFNhbmcgPHdzYStyZW5lc2FzQHNhbmctZW5naW5lZXJpbmcu
-Y29tPg0KICAgICAgMSBBdXRob3I6IFdlaXpoYW8gT3V5YW5nIDxvNDUxNjg2ODkyQGdtYWlsLmNv
-bT4NCiAgICAgIDEgQXV0aG9yOiBTdXJlbiBCYWdoZGFzYXJ5YW4gPHN1cmVuYkBnb29nbGUuY29t
-Pg0KICAgICAgMSBBdXRob3I6IFNvdXB0aWNrIEpvYXJkZXIgKEhQRSkgPGpyZHIubGludXhAZ21h
-aWwuY29tPg0KICAgICAgMSBBdXRob3I6IFNlcmdleSBTaHR5bHlvdiA8cy5zaHR5bHlvdkBvbXAu
-cnU+DQogICAgICAxIEF1dGhvcjogU2VyZ2VpIFRyb2ZpbW92aWNoIDxzbHlpY2hAZ21haWwuY29t
-Pg0KICAgICAgMSBBdXRob3I6IFNhc2NoYSBIYXVlciA8cy5oYXVlckBwZW5ndXRyb25peC5kZT4N
-CiAgICAgIDEgQXV0aG9yOiBTYW11ZWwgSG9sbGFuZCA8c2FtdWVsQHNob2xsYW5kLm9yZz4NCiAg
-ICAgIDEgQXV0aG9yOiBRaSBaaGVuZyA8emhlbmdxaS5hcmNoQGJ5dGVkYW5jZS5jb20+DQogICAg
-ICAxIEF1dGhvcjogUGVuZyBMaXUgPGxpdXBlbmcyNTZAaHVhd2VpLmNvbT4NCiAgICAgIDEgQXV0
-aG9yOiBOYXZlZW4gTi4gUmFvIDxuYXZlZW4ubi5yYW9AbGludXgudm5ldC5pYm0uY29tPg0KICAg
-ICAgMSBBdXRob3I6IE11Y2h1biBTb25nIDxtdWNodW4uc29uZ0BsaW51eC5kZXY+DQogICAgICAx
-IEF1dGhvcjogTWlrdWxhcyBQYXRvY2thIDxtcGF0b2NrYUByZWRoYXQuY29tPg0KICAgICAgMSBB
-dXRob3I6IE1pa2UgS3JhdmV0eiA8bWlrZS5rcmF2ZXR6QG9yYWNsZS5jb20+DQogICAgICAxIEF1
-dGhvcjogTWlja2HDq2wgU2FsYcO8biA8bWljQGxpbnV4Lm1pY3Jvc29mdC5jb20+DQogICAgICAx
-IEF1dGhvcjogTWF0dGhldyBXaWxjb3ggKE9yYWNsZSkgPHdpbGx5QGluZnJhZGVhZC5vcmc+DQog
-ICAgICAxIEF1dGhvcjogTWFydGluIE9saXZlaXJhIDxtYXJ0aW4ub2xpdmVpcmFAZWlkZXRpY29t
-LmNvbT4NCiAgICAgIDEgQXV0aG9yOiBMdWMgVmFuIE9vc3RlbnJ5Y2sgPGx1Yy52YW5vb3N0ZW5y
-eWNrQGdtYWlsLmNvbT4NCiAgICAgIDEgQXV0aG9yOiBLZWVzIENvb2sgPGtlZXNjb29rQGNocm9t
-aXVtLm9yZz4NCiAgICAgIDEgQXV0aG9yOiBKYXNvbiBBLiBEb25lbmZlbGQgPEphc29uQHp4MmM0
-LmNvbT4NCiAgICAgIDEgQXV0aG9yOiBJbHBvIErDpHJ2aW5lbiA8aWxwby5qYXJ2aW5lbkBsaW51
-eC5pbnRlbC5jb20+DQogICAgICAxIEF1dGhvcjogSGFvd2VuIEJhaSA8YmFpaGFvd2VuQG1laXp1
-LmNvbT4NCiAgICAgIDEgQXV0aG9yOiBHdXN0YXZvIEEuIFIuIFNpbHZhIDxndXN0YXZvYXJzQGtl
-cm5lbC5vcmc+DQogICAgICAxIEF1dGhvcjogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGlu
-dXhmb3VuZGF0aW9uLm9yZz4NCiAgICAgIDEgQXV0aG9yOiBHYW9zaGVuZyBDdWkgPGN1aWdhb3No
-ZW5nMUBodWF3ZWkuY29tPg0KICAgICAgMSBBdXRob3I6IERtaXRyeSBPc2lwZW5rbyA8ZG1pdHJ5
-Lm9zaXBlbmtvQGNvbGxhYm9yYS5jb20+DQogICAgICAxIEF1dGhvcjogRGF3ZWkgTGkgPHNldF9w
-dGVfYXRAb3V0bG9vay5jb20+DQogICAgICAxIEF1dGhvcjogQ2h1Y2sgTGV2ZXIgPGNodWNrLmxl
-dmVyQG9yYWNsZS5jb20+DQogICAgICAxIEF1dGhvcjogQ2hyaXN0aWFuIEJyYXVuZXIgPGJyYXVu
-ZXJAa2VybmVsLm9yZz4NCiAgICAgIDEgQXV0aG9yOiBDaHJpcyBEb3duIDxjaHJpc0BjaHJpc2Rv
-d24ubmFtZT4NCiAgICAgIDEgQXV0aG9yOiBDaGVuIExpIDxjaGVubGlAdW5pb250ZWNoLmNvbT4N
-CiAgICAgIDEgQXV0aG9yOiBDYXRhbGluIE1hcmluYXMgPGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29t
-Pg0KICAgICAgMSBBdXRob3I6IEJlbmphbWluIFN0w7xyeiA8YmVubmlAc3R1ZXJ6Lnh5ej4NCiAg
-ICAgIDEgQXV0aG9yOiBCZW4gRG9va3MgPGJlbi1saW51eEBmbHVmZi5vcmc+DQogICAgICAxIEF1
-dGhvcjogQmFvbGluIFdhbmcgPGJhb2xpbi53YW5nQGxpbnV4LmFsaWJhYmEuY29tPg0KICAgICAg
-MSBBdXRob3I6IEFuZHkgU2hldmNoZW5rbyA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwu
-Y29tPg0KICAgICAgMSBBdXRob3I6IEFuZHLDqSBBbG1laWRhIDxhbmRyZWFsbWVpZEBpZ2FsaWEu
-Y29tPg0K
+On Fri, 13 Jan 2023 07:23:21 +0100,
+Christoph Hellwig wrote:
+> 
+> Now that arch/sh is removed these drivers are dead code.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+Supposed you take in your tree:
+
+Acked-by: Takashi Iwai <tiwai@suse.de>
+
+
+thanks,
+
+Takashi
+
+> ---
+>  sound/Kconfig           |   2 -
+>  sound/Makefile          |   2 +-
+>  sound/sh/Kconfig        |  32 --
+>  sound/sh/Makefile       |  11 -
+>  sound/sh/aica.c         | 628 ----------------------------------------
+>  sound/sh/aica.h         |  68 -----
+>  sound/sh/sh_dac_audio.c | 412 --------------------------
+>  7 files changed, 1 insertion(+), 1154 deletions(-)
+>  delete mode 100644 sound/sh/Kconfig
+>  delete mode 100644 sound/sh/Makefile
+>  delete mode 100644 sound/sh/aica.c
+>  delete mode 100644 sound/sh/aica.h
+>  delete mode 100644 sound/sh/sh_dac_audio.c
+> 
+> diff --git a/sound/Kconfig b/sound/Kconfig
+> index e56d96d2b11cae..14361bb428baa1 100644
+> --- a/sound/Kconfig
+> +++ b/sound/Kconfig
+> @@ -75,8 +75,6 @@ source "sound/spi/Kconfig"
+>  
+>  source "sound/mips/Kconfig"
+>  
+> -source "sound/sh/Kconfig"
+> -
+>  # the following will depend on the order of config.
+>  # here assuming USB is defined before ALSA
+>  source "sound/usb/Kconfig"
+> diff --git a/sound/Makefile b/sound/Makefile
+> index 04ef04b1168f39..bb4b8806321c67 100644
+> --- a/sound/Makefile
+> +++ b/sound/Makefile
+> @@ -4,7 +4,7 @@
+>  
+>  obj-$(CONFIG_SOUND) += soundcore.o
+>  obj-$(CONFIG_DMASOUND) += oss/dmasound/
+> -obj-$(CONFIG_SND) += core/ i2c/ drivers/ isa/ pci/ ppc/ arm/ sh/ synth/ usb/ \
+> +obj-$(CONFIG_SND) += core/ i2c/ drivers/ isa/ pci/ ppc/ arm/ synth/ usb/ \
+>  	firewire/ sparc/ spi/ parisc/ pcmcia/ mips/ soc/ atmel/ hda/ x86/ xen/ \
+>  	virtio/
+>  obj-$(CONFIG_SND_AOA) += aoa/
+> diff --git a/sound/sh/Kconfig b/sound/sh/Kconfig
+> deleted file mode 100644
+> index b75fbb3236a7b9..00000000000000
+> --- a/sound/sh/Kconfig
+> +++ /dev/null
+> @@ -1,32 +0,0 @@
+> -# SPDX-License-Identifier: GPL-2.0-only
+> -# ALSA SH drivers
+> -
+> -menuconfig SND_SUPERH
+> -	bool "SUPERH sound devices"
+> -	depends on SUPERH
+> -	default y
+> -	help
+> -	  Support for sound devices specific to SUPERH architectures.
+> -	  Drivers that are implemented on ASoC can be found in
+> -	  "ALSA for SoC audio support" section.
+> -
+> -if SND_SUPERH
+> -
+> -config SND_AICA
+> -	tristate "Dreamcast Yamaha AICA sound"
+> -	depends on SH_DREAMCAST
+> -	select SND_PCM
+> -	select G2_DMA
+> -	help
+> -	  ALSA Sound driver for the SEGA Dreamcast console.
+> -
+> -config SND_SH_DAC_AUDIO
+> -	tristate "SuperH DAC audio support"
+> -	depends on SND
+> -	depends on CPU_SH3 && HIGH_RES_TIMERS
+> -	select SND_PCM
+> -	help
+> -	  Say Y here to include support for the on-chip DAC.
+> -
+> -endif	# SND_SUPERH
+> -
+> diff --git a/sound/sh/Makefile b/sound/sh/Makefile
+> deleted file mode 100644
+> index c0bbc500c17c73..00000000000000
+> --- a/sound/sh/Makefile
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -# SPDX-License-Identifier: GPL-2.0-only
+> -#
+> -# Makefile for ALSA
+> -#
+> -
+> -snd-aica-objs := aica.o
+> -snd-sh_dac_audio-objs := sh_dac_audio.o
+> -
+> -# Toplevel Module Dependency
+> -obj-$(CONFIG_SND_AICA) += snd-aica.o
+> -obj-$(CONFIG_SND_SH_DAC_AUDIO) += snd-sh_dac_audio.o
+> diff --git a/sound/sh/aica.c b/sound/sh/aica.c
+> deleted file mode 100644
+> index 6e9d6bd67369af..00000000000000
+> --- a/sound/sh/aica.c
+> +++ /dev/null
+> @@ -1,628 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> -*
+> -* Copyright Adrian McMenamin 2005, 2006, 2007
+> -* <adrian@mcmen.demon.co.uk>
+> -* Requires firmware (BSD licenced) available from:
+> -* http://linuxdc.cvs.sourceforge.net/linuxdc/linux-sh-dc/sound/oss/aica/firmware/
+> -* or the maintainer
+> -*/
+> -
+> -#include <linux/init.h>
+> -#include <linux/jiffies.h>
+> -#include <linux/slab.h>
+> -#include <linux/time.h>
+> -#include <linux/wait.h>
+> -#include <linux/module.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/firmware.h>
+> -#include <linux/timer.h>
+> -#include <linux/delay.h>
+> -#include <linux/workqueue.h>
+> -#include <linux/io.h>
+> -#include <sound/core.h>
+> -#include <sound/control.h>
+> -#include <sound/pcm.h>
+> -#include <sound/initval.h>
+> -#include <sound/info.h>
+> -#include <asm/dma.h>
+> -#include <mach/sysasic.h>
+> -#include "aica.h"
+> -
+> -MODULE_AUTHOR("Adrian McMenamin <adrian@mcmen.demon.co.uk>");
+> -MODULE_DESCRIPTION("Dreamcast AICA sound (pcm) driver");
+> -MODULE_LICENSE("GPL");
+> -MODULE_FIRMWARE("aica_firmware.bin");
+> -
+> -/* module parameters */
+> -#define CARD_NAME "AICA"
+> -static int index = -1;
+> -static char *id;
+> -static bool enable = 1;
+> -module_param(index, int, 0444);
+> -MODULE_PARM_DESC(index, "Index value for " CARD_NAME " soundcard.");
+> -module_param(id, charp, 0444);
+> -MODULE_PARM_DESC(id, "ID string for " CARD_NAME " soundcard.");
+> -module_param(enable, bool, 0644);
+> -MODULE_PARM_DESC(enable, "Enable " CARD_NAME " soundcard.");
+> -
+> -/* Simple platform device */
+> -static struct platform_device *pd;
+> -static struct resource aica_memory_space[2] = {
+> -	{
+> -	 .name = "AICA ARM CONTROL",
+> -	 .start = ARM_RESET_REGISTER,
+> -	 .flags = IORESOURCE_MEM,
+> -	 .end = ARM_RESET_REGISTER + 3,
+> -	 },
+> -	{
+> -	 .name = "AICA Sound RAM",
+> -	 .start = SPU_MEMORY_BASE,
+> -	 .flags = IORESOURCE_MEM,
+> -	 .end = SPU_MEMORY_BASE + 0x200000 - 1,
+> -	 },
+> -};
+> -
+> -/* SPU specific functions */
+> -/* spu_write_wait - wait for G2-SH FIFO to clear */
+> -static void spu_write_wait(void)
+> -{
+> -	int time_count;
+> -	time_count = 0;
+> -	while (1) {
+> -		if (!(readl(G2_FIFO) & 0x11))
+> -			break;
+> -		/* To ensure hardware failure doesn't wedge kernel */
+> -		time_count++;
+> -		if (time_count > 0x10000) {
+> -			snd_printk
+> -			    ("WARNING: G2 FIFO appears to be blocked.\n");
+> -			break;
+> -		}
+> -	}
+> -}
+> -
+> -/* spu_memset - write to memory in SPU address space */
+> -static void spu_memset(u32 toi, u32 what, int length)
+> -{
+> -	int i;
+> -	unsigned long flags;
+> -	if (snd_BUG_ON(length % 4))
+> -		return;
+> -	for (i = 0; i < length; i++) {
+> -		if (!(i % 8))
+> -			spu_write_wait();
+> -		local_irq_save(flags);
+> -		writel(what, toi + SPU_MEMORY_BASE);
+> -		local_irq_restore(flags);
+> -		toi++;
+> -	}
+> -}
+> -
+> -/* spu_memload - write to SPU address space */
+> -static void spu_memload(u32 toi, const void *from, int length)
+> -{
+> -	unsigned long flags;
+> -	const u32 *froml = from;
+> -	u32 __iomem *to = (u32 __iomem *) (SPU_MEMORY_BASE + toi);
+> -	int i;
+> -	u32 val;
+> -	length = DIV_ROUND_UP(length, 4);
+> -	spu_write_wait();
+> -	for (i = 0; i < length; i++) {
+> -		if (!(i % 8))
+> -			spu_write_wait();
+> -		val = *froml;
+> -		local_irq_save(flags);
+> -		writel(val, to);
+> -		local_irq_restore(flags);
+> -		froml++;
+> -		to++;
+> -	}
+> -}
+> -
+> -/* spu_disable - set spu registers to stop sound output */
+> -static void spu_disable(void)
+> -{
+> -	int i;
+> -	unsigned long flags;
+> -	u32 regval;
+> -	spu_write_wait();
+> -	regval = readl(ARM_RESET_REGISTER);
+> -	regval |= 1;
+> -	spu_write_wait();
+> -	local_irq_save(flags);
+> -	writel(regval, ARM_RESET_REGISTER);
+> -	local_irq_restore(flags);
+> -	for (i = 0; i < 64; i++) {
+> -		spu_write_wait();
+> -		regval = readl(SPU_REGISTER_BASE + (i * 0x80));
+> -		regval = (regval & ~0x4000) | 0x8000;
+> -		spu_write_wait();
+> -		local_irq_save(flags);
+> -		writel(regval, SPU_REGISTER_BASE + (i * 0x80));
+> -		local_irq_restore(flags);
+> -	}
+> -}
+> -
+> -/* spu_enable - set spu registers to enable sound output */
+> -static void spu_enable(void)
+> -{
+> -	unsigned long flags;
+> -	u32 regval = readl(ARM_RESET_REGISTER);
+> -	regval &= ~1;
+> -	spu_write_wait();
+> -	local_irq_save(flags);
+> -	writel(regval, ARM_RESET_REGISTER);
+> -	local_irq_restore(flags);
+> -}
+> -
+> -/* 
+> - * Halt the sound processor, clear the memory,
+> - * load some default ARM7 code, and then restart ARM7
+> -*/
+> -static void spu_reset(void)
+> -{
+> -	unsigned long flags;
+> -	spu_disable();
+> -	spu_memset(0, 0, 0x200000 / 4);
+> -	/* Put ARM7 in endless loop */
+> -	local_irq_save(flags);
+> -	__raw_writel(0xea000002, SPU_MEMORY_BASE);
+> -	local_irq_restore(flags);
+> -	spu_enable();
+> -}
+> -
+> -/* aica_chn_start - write to spu to start playback */
+> -static void aica_chn_start(void)
+> -{
+> -	unsigned long flags;
+> -	spu_write_wait();
+> -	local_irq_save(flags);
+> -	writel(AICA_CMD_KICK | AICA_CMD_START, (u32 *) AICA_CONTROL_POINT);
+> -	local_irq_restore(flags);
+> -}
+> -
+> -/* aica_chn_halt - write to spu to halt playback */
+> -static void aica_chn_halt(void)
+> -{
+> -	unsigned long flags;
+> -	spu_write_wait();
+> -	local_irq_save(flags);
+> -	writel(AICA_CMD_KICK | AICA_CMD_STOP, (u32 *) AICA_CONTROL_POINT);
+> -	local_irq_restore(flags);
+> -}
+> -
+> -/* ALSA code below */
+> -static const struct snd_pcm_hardware snd_pcm_aica_playback_hw = {
+> -	.info = (SNDRV_PCM_INFO_NONINTERLEAVED),
+> -	.formats =
+> -	    (SNDRV_PCM_FMTBIT_S8 | SNDRV_PCM_FMTBIT_S16_LE |
+> -	     SNDRV_PCM_FMTBIT_IMA_ADPCM),
+> -	.rates = SNDRV_PCM_RATE_8000_48000,
+> -	.rate_min = 8000,
+> -	.rate_max = 48000,
+> -	.channels_min = 1,
+> -	.channels_max = 2,
+> -	.buffer_bytes_max = AICA_BUFFER_SIZE,
+> -	.period_bytes_min = AICA_PERIOD_SIZE,
+> -	.period_bytes_max = AICA_PERIOD_SIZE,
+> -	.periods_min = AICA_PERIOD_NUMBER,
+> -	.periods_max = AICA_PERIOD_NUMBER,
+> -};
+> -
+> -static int aica_dma_transfer(int channels, int buffer_size,
+> -			     struct snd_pcm_substream *substream)
+> -{
+> -	int q, err, period_offset;
+> -	struct snd_card_aica *dreamcastcard;
+> -	struct snd_pcm_runtime *runtime;
+> -	unsigned long flags;
+> -	err = 0;
+> -	dreamcastcard = substream->pcm->private_data;
+> -	period_offset = dreamcastcard->clicks;
+> -	period_offset %= (AICA_PERIOD_NUMBER / channels);
+> -	runtime = substream->runtime;
+> -	for (q = 0; q < channels; q++) {
+> -		local_irq_save(flags);
+> -		err = dma_xfer(AICA_DMA_CHANNEL,
+> -			       (unsigned long) (runtime->dma_area +
+> -						(AICA_BUFFER_SIZE * q) /
+> -						channels +
+> -						AICA_PERIOD_SIZE *
+> -						period_offset),
+> -			       AICA_CHANNEL0_OFFSET + q * CHANNEL_OFFSET +
+> -			       AICA_PERIOD_SIZE * period_offset,
+> -			       buffer_size / channels, AICA_DMA_MODE);
+> -		if (unlikely(err < 0)) {
+> -			local_irq_restore(flags);
+> -			break;
+> -		}
+> -		dma_wait_for_completion(AICA_DMA_CHANNEL);
+> -		local_irq_restore(flags);
+> -	}
+> -	return err;
+> -}
+> -
+> -static void startup_aica(struct snd_card_aica *dreamcastcard)
+> -{
+> -	spu_memload(AICA_CHANNEL0_CONTROL_OFFSET,
+> -		    dreamcastcard->channel, sizeof(struct aica_channel));
+> -	aica_chn_start();
+> -}
+> -
+> -static void run_spu_dma(struct work_struct *work)
+> -{
+> -	int buffer_size;
+> -	struct snd_pcm_runtime *runtime;
+> -	struct snd_card_aica *dreamcastcard;
+> -	dreamcastcard =
+> -	    container_of(work, struct snd_card_aica, spu_dma_work);
+> -	runtime = dreamcastcard->substream->runtime;
+> -	if (unlikely(dreamcastcard->dma_check == 0)) {
+> -		buffer_size =
+> -		    frames_to_bytes(runtime, runtime->buffer_size);
+> -		if (runtime->channels > 1)
+> -			dreamcastcard->channel->flags |= 0x01;
+> -		aica_dma_transfer(runtime->channels, buffer_size,
+> -				  dreamcastcard->substream);
+> -		startup_aica(dreamcastcard);
+> -		dreamcastcard->clicks =
+> -		    buffer_size / (AICA_PERIOD_SIZE * runtime->channels);
+> -		return;
+> -	} else {
+> -		aica_dma_transfer(runtime->channels,
+> -				  AICA_PERIOD_SIZE * runtime->channels,
+> -				  dreamcastcard->substream);
+> -		snd_pcm_period_elapsed(dreamcastcard->substream);
+> -		dreamcastcard->clicks++;
+> -		if (unlikely(dreamcastcard->clicks >= AICA_PERIOD_NUMBER))
+> -			dreamcastcard->clicks %= AICA_PERIOD_NUMBER;
+> -		mod_timer(&dreamcastcard->timer, jiffies + 1);
+> -	}
+> -}
+> -
+> -static void aica_period_elapsed(struct timer_list *t)
+> -{
+> -	struct snd_card_aica *dreamcastcard = from_timer(dreamcastcard,
+> -							      t, timer);
+> -	struct snd_pcm_substream *substream = dreamcastcard->substream;
+> -	/*timer function - so cannot sleep */
+> -	int play_period;
+> -	struct snd_pcm_runtime *runtime;
+> -	runtime = substream->runtime;
+> -	dreamcastcard = substream->pcm->private_data;
+> -	/* Have we played out an additional period? */
+> -	play_period =
+> -	    frames_to_bytes(runtime,
+> -			    readl
+> -			    (AICA_CONTROL_CHANNEL_SAMPLE_NUMBER)) /
+> -	    AICA_PERIOD_SIZE;
+> -	if (play_period == dreamcastcard->current_period) {
+> -		/* reschedule the timer */
+> -		mod_timer(&(dreamcastcard->timer), jiffies + 1);
+> -		return;
+> -	}
+> -	if (runtime->channels > 1)
+> -		dreamcastcard->current_period = play_period;
+> -	if (unlikely(dreamcastcard->dma_check == 0))
+> -		dreamcastcard->dma_check = 1;
+> -	schedule_work(&(dreamcastcard->spu_dma_work));
+> -}
+> -
+> -static void spu_begin_dma(struct snd_pcm_substream *substream)
+> -{
+> -	struct snd_card_aica *dreamcastcard;
+> -	struct snd_pcm_runtime *runtime;
+> -	runtime = substream->runtime;
+> -	dreamcastcard = substream->pcm->private_data;
+> -	/*get the queue to do the work */
+> -	schedule_work(&(dreamcastcard->spu_dma_work));
+> -	mod_timer(&dreamcastcard->timer, jiffies + 4);
+> -}
+> -
+> -static int snd_aicapcm_pcm_open(struct snd_pcm_substream
+> -				*substream)
+> -{
+> -	struct snd_pcm_runtime *runtime;
+> -	struct aica_channel *channel;
+> -	struct snd_card_aica *dreamcastcard;
+> -	if (!enable)
+> -		return -ENOENT;
+> -	dreamcastcard = substream->pcm->private_data;
+> -	channel = kmalloc(sizeof(struct aica_channel), GFP_KERNEL);
+> -	if (!channel)
+> -		return -ENOMEM;
+> -	/* set defaults for channel */
+> -	channel->sfmt = SM_8BIT;
+> -	channel->cmd = AICA_CMD_START;
+> -	channel->vol = dreamcastcard->master_volume;
+> -	channel->pan = 0x80;
+> -	channel->pos = 0;
+> -	channel->flags = 0;	/* default to mono */
+> -	dreamcastcard->channel = channel;
+> -	runtime = substream->runtime;
+> -	runtime->hw = snd_pcm_aica_playback_hw;
+> -	spu_enable();
+> -	dreamcastcard->clicks = 0;
+> -	dreamcastcard->current_period = 0;
+> -	dreamcastcard->dma_check = 0;
+> -	return 0;
+> -}
+> -
+> -static int snd_aicapcm_pcm_close(struct snd_pcm_substream
+> -				 *substream)
+> -{
+> -	struct snd_card_aica *dreamcastcard = substream->pcm->private_data;
+> -	flush_work(&(dreamcastcard->spu_dma_work));
+> -	del_timer(&dreamcastcard->timer);
+> -	dreamcastcard->substream = NULL;
+> -	kfree(dreamcastcard->channel);
+> -	spu_disable();
+> -	return 0;
+> -}
+> -
+> -static int snd_aicapcm_pcm_prepare(struct snd_pcm_substream
+> -				   *substream)
+> -{
+> -	struct snd_card_aica *dreamcastcard = substream->pcm->private_data;
+> -	if ((substream->runtime)->format == SNDRV_PCM_FORMAT_S16_LE)
+> -		dreamcastcard->channel->sfmt = SM_16BIT;
+> -	dreamcastcard->channel->freq = substream->runtime->rate;
+> -	dreamcastcard->substream = substream;
+> -	return 0;
+> -}
+> -
+> -static int snd_aicapcm_pcm_trigger(struct snd_pcm_substream
+> -				   *substream, int cmd)
+> -{
+> -	switch (cmd) {
+> -	case SNDRV_PCM_TRIGGER_START:
+> -		spu_begin_dma(substream);
+> -		break;
+> -	case SNDRV_PCM_TRIGGER_STOP:
+> -		aica_chn_halt();
+> -		break;
+> -	default:
+> -		return -EINVAL;
+> -	}
+> -	return 0;
+> -}
+> -
+> -static unsigned long snd_aicapcm_pcm_pointer(struct snd_pcm_substream
+> -					     *substream)
+> -{
+> -	return readl(AICA_CONTROL_CHANNEL_SAMPLE_NUMBER);
+> -}
+> -
+> -static const struct snd_pcm_ops snd_aicapcm_playback_ops = {
+> -	.open = snd_aicapcm_pcm_open,
+> -	.close = snd_aicapcm_pcm_close,
+> -	.prepare = snd_aicapcm_pcm_prepare,
+> -	.trigger = snd_aicapcm_pcm_trigger,
+> -	.pointer = snd_aicapcm_pcm_pointer,
+> -};
+> -
+> -/* TO DO: set up to handle more than one pcm instance */
+> -static int __init snd_aicapcmchip(struct snd_card_aica
+> -				  *dreamcastcard, int pcm_index)
+> -{
+> -	struct snd_pcm *pcm;
+> -	int err;
+> -	/* AICA has no capture ability */
+> -	err =
+> -	    snd_pcm_new(dreamcastcard->card, "AICA PCM", pcm_index, 1, 0,
+> -			&pcm);
+> -	if (unlikely(err < 0))
+> -		return err;
+> -	pcm->private_data = dreamcastcard;
+> -	strcpy(pcm->name, "AICA PCM");
+> -	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK,
+> -			&snd_aicapcm_playback_ops);
+> -	/* Allocate the DMA buffers */
+> -	snd_pcm_set_managed_buffer_all(pcm,
+> -				       SNDRV_DMA_TYPE_CONTINUOUS,
+> -				       NULL,
+> -				       AICA_BUFFER_SIZE,
+> -				       AICA_BUFFER_SIZE);
+> -	return 0;
+> -}
+> -
+> -/* Mixer controls */
+> -#define aica_pcmswitch_info		snd_ctl_boolean_mono_info
+> -
+> -static int aica_pcmswitch_get(struct snd_kcontrol *kcontrol,
+> -			      struct snd_ctl_elem_value *ucontrol)
+> -{
+> -	ucontrol->value.integer.value[0] = 1;	/* TO DO: Fix me */
+> -	return 0;
+> -}
+> -
+> -static int aica_pcmswitch_put(struct snd_kcontrol *kcontrol,
+> -			      struct snd_ctl_elem_value *ucontrol)
+> -{
+> -	if (ucontrol->value.integer.value[0] == 1)
+> -		return 0;	/* TO DO: Fix me */
+> -	else
+> -		aica_chn_halt();
+> -	return 0;
+> -}
+> -
+> -static int aica_pcmvolume_info(struct snd_kcontrol *kcontrol,
+> -			       struct snd_ctl_elem_info *uinfo)
+> -{
+> -	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+> -	uinfo->count = 1;
+> -	uinfo->value.integer.min = 0;
+> -	uinfo->value.integer.max = 0xFF;
+> -	return 0;
+> -}
+> -
+> -static int aica_pcmvolume_get(struct snd_kcontrol *kcontrol,
+> -			      struct snd_ctl_elem_value *ucontrol)
+> -{
+> -	struct snd_card_aica *dreamcastcard;
+> -	dreamcastcard = kcontrol->private_data;
+> -	if (unlikely(!dreamcastcard->channel))
+> -		return -ETXTBSY;	/* we've not yet been set up */
+> -	ucontrol->value.integer.value[0] = dreamcastcard->channel->vol;
+> -	return 0;
+> -}
+> -
+> -static int aica_pcmvolume_put(struct snd_kcontrol *kcontrol,
+> -			      struct snd_ctl_elem_value *ucontrol)
+> -{
+> -	struct snd_card_aica *dreamcastcard;
+> -	unsigned int vol;
+> -	dreamcastcard = kcontrol->private_data;
+> -	if (unlikely(!dreamcastcard->channel))
+> -		return -ETXTBSY;
+> -	vol = ucontrol->value.integer.value[0];
+> -	if (vol > 0xff)
+> -		return -EINVAL;
+> -	if (unlikely(dreamcastcard->channel->vol == vol))
+> -		return 0;
+> -	dreamcastcard->channel->vol = ucontrol->value.integer.value[0];
+> -	dreamcastcard->master_volume = ucontrol->value.integer.value[0];
+> -	spu_memload(AICA_CHANNEL0_CONTROL_OFFSET,
+> -		    dreamcastcard->channel, sizeof(struct aica_channel));
+> -	return 1;
+> -}
+> -
+> -static const struct snd_kcontrol_new snd_aica_pcmswitch_control = {
+> -	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> -	.name = "PCM Playback Switch",
+> -	.index = 0,
+> -	.info = aica_pcmswitch_info,
+> -	.get = aica_pcmswitch_get,
+> -	.put = aica_pcmswitch_put
+> -};
+> -
+> -static const struct snd_kcontrol_new snd_aica_pcmvolume_control = {
+> -	.iface = SNDRV_CTL_ELEM_IFACE_MIXER,
+> -	.name = "PCM Playback Volume",
+> -	.index = 0,
+> -	.info = aica_pcmvolume_info,
+> -	.get = aica_pcmvolume_get,
+> -	.put = aica_pcmvolume_put
+> -};
+> -
+> -static int load_aica_firmware(void)
+> -{
+> -	int err;
+> -	const struct firmware *fw_entry;
+> -	spu_reset();
+> -	err = request_firmware(&fw_entry, "aica_firmware.bin", &pd->dev);
+> -	if (unlikely(err))
+> -		return err;
+> -	/* write firmware into memory */
+> -	spu_disable();
+> -	spu_memload(0, fw_entry->data, fw_entry->size);
+> -	spu_enable();
+> -	release_firmware(fw_entry);
+> -	return err;
+> -}
+> -
+> -static int add_aicamixer_controls(struct snd_card_aica *dreamcastcard)
+> -{
+> -	int err;
+> -	err = snd_ctl_add
+> -	    (dreamcastcard->card,
+> -	     snd_ctl_new1(&snd_aica_pcmvolume_control, dreamcastcard));
+> -	if (unlikely(err < 0))
+> -		return err;
+> -	err = snd_ctl_add
+> -	    (dreamcastcard->card,
+> -	     snd_ctl_new1(&snd_aica_pcmswitch_control, dreamcastcard));
+> -	if (unlikely(err < 0))
+> -		return err;
+> -	return 0;
+> -}
+> -
+> -static int snd_aica_remove(struct platform_device *devptr)
+> -{
+> -	struct snd_card_aica *dreamcastcard;
+> -	dreamcastcard = platform_get_drvdata(devptr);
+> -	if (unlikely(!dreamcastcard))
+> -		return -ENODEV;
+> -	snd_card_free(dreamcastcard->card);
+> -	kfree(dreamcastcard);
+> -	return 0;
+> -}
+> -
+> -static int snd_aica_probe(struct platform_device *devptr)
+> -{
+> -	int err;
+> -	struct snd_card_aica *dreamcastcard;
+> -	dreamcastcard = kzalloc(sizeof(struct snd_card_aica), GFP_KERNEL);
+> -	if (unlikely(!dreamcastcard))
+> -		return -ENOMEM;
+> -	err = snd_card_new(&devptr->dev, index, SND_AICA_DRIVER,
+> -			   THIS_MODULE, 0, &dreamcastcard->card);
+> -	if (unlikely(err < 0)) {
+> -		kfree(dreamcastcard);
+> -		return err;
+> -	}
+> -	strcpy(dreamcastcard->card->driver, "snd_aica");
+> -	strcpy(dreamcastcard->card->shortname, SND_AICA_DRIVER);
+> -	strcpy(dreamcastcard->card->longname,
+> -	       "Yamaha AICA Super Intelligent Sound Processor for SEGA Dreamcast");
+> -	/* Prepare to use the queue */
+> -	INIT_WORK(&(dreamcastcard->spu_dma_work), run_spu_dma);
+> -	timer_setup(&dreamcastcard->timer, aica_period_elapsed, 0);
+> -	/* Load the PCM 'chip' */
+> -	err = snd_aicapcmchip(dreamcastcard, 0);
+> -	if (unlikely(err < 0))
+> -		goto freedreamcast;
+> -	/* Add basic controls */
+> -	err = add_aicamixer_controls(dreamcastcard);
+> -	if (unlikely(err < 0))
+> -		goto freedreamcast;
+> -	/* Register the card with ALSA subsystem */
+> -	err = snd_card_register(dreamcastcard->card);
+> -	if (unlikely(err < 0))
+> -		goto freedreamcast;
+> -	platform_set_drvdata(devptr, dreamcastcard);
+> -	snd_printk
+> -	    ("ALSA Driver for Yamaha AICA Super Intelligent Sound Processor\n");
+> -	return 0;
+> -      freedreamcast:
+> -	snd_card_free(dreamcastcard->card);
+> -	kfree(dreamcastcard);
+> -	return err;
+> -}
+> -
+> -static struct platform_driver snd_aica_driver = {
+> -	.probe = snd_aica_probe,
+> -	.remove = snd_aica_remove,
+> -	.driver = {
+> -		.name = SND_AICA_DRIVER,
+> -	},
+> -};
+> -
+> -static int __init aica_init(void)
+> -{
+> -	int err;
+> -	err = platform_driver_register(&snd_aica_driver);
+> -	if (unlikely(err < 0))
+> -		return err;
+> -	pd = platform_device_register_simple(SND_AICA_DRIVER, -1,
+> -					     aica_memory_space, 2);
+> -	if (IS_ERR(pd)) {
+> -		platform_driver_unregister(&snd_aica_driver);
+> -		return PTR_ERR(pd);
+> -	}
+> -	/* Load the firmware */
+> -	return load_aica_firmware();
+> -}
+> -
+> -static void __exit aica_exit(void)
+> -{
+> -	platform_device_unregister(pd);
+> -	platform_driver_unregister(&snd_aica_driver);
+> -	/* Kill any sound still playing and reset ARM7 to safe state */
+> -	spu_reset();
+> -}
+> -
+> -module_init(aica_init);
+> -module_exit(aica_exit);
+> diff --git a/sound/sh/aica.h b/sound/sh/aica.h
+> deleted file mode 100644
+> index 021b132e088e82..00000000000000
+> --- a/sound/sh/aica.h
+> +++ /dev/null
+> @@ -1,68 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/* aica.h
+> - * Header file for ALSA driver for
+> - * Sega Dreamcast Yamaha AICA sound
+> - * Copyright Adrian McMenamin
+> - * <adrian@mcmen.demon.co.uk>
+> - * 2006
+> - */
+> -
+> -/* SPU memory and register constants etc */
+> -#define G2_FIFO 0xa05f688c
+> -#define SPU_MEMORY_BASE 0xA0800000
+> -#define ARM_RESET_REGISTER 0xA0702C00
+> -#define SPU_REGISTER_BASE 0xA0700000
+> -
+> -/* AICA channels stuff */
+> -#define AICA_CONTROL_POINT 0xA0810000
+> -#define AICA_CONTROL_CHANNEL_SAMPLE_NUMBER 0xA0810008
+> -#define AICA_CHANNEL0_CONTROL_OFFSET 0x10004
+> -
+> -/* Command values */
+> -#define AICA_CMD_KICK 0x80000000
+> -#define AICA_CMD_NONE 0
+> -#define AICA_CMD_START 1
+> -#define AICA_CMD_STOP 2
+> -#define AICA_CMD_VOL 3
+> -
+> -/* Sound modes */
+> -#define SM_8BIT		1
+> -#define SM_16BIT	0
+> -#define SM_ADPCM	2
+> -
+> -/* Buffer and period size */
+> -#define AICA_BUFFER_SIZE 0x8000
+> -#define AICA_PERIOD_SIZE 0x800
+> -#define AICA_PERIOD_NUMBER 16
+> -
+> -#define AICA_CHANNEL0_OFFSET 0x11000
+> -#define AICA_CHANNEL1_OFFSET 0x21000
+> -#define CHANNEL_OFFSET 0x10000
+> -
+> -#define AICA_DMA_CHANNEL 5
+> -#define AICA_DMA_MODE 5
+> -
+> -#define SND_AICA_DRIVER "AICA"
+> -
+> -struct aica_channel {
+> -	uint32_t cmd;		/* Command ID           */
+> -	uint32_t pos;		/* Sample position      */
+> -	uint32_t length;	/* Sample length        */
+> -	uint32_t freq;		/* Frequency            */
+> -	uint32_t vol;		/* Volume 0-255         */
+> -	uint32_t pan;		/* Pan 0-255            */
+> -	uint32_t sfmt;		/* Sound format         */
+> -	uint32_t flags;		/* Bit flags            */
+> -};
+> -
+> -struct snd_card_aica {
+> -	struct work_struct spu_dma_work;
+> -	struct snd_card *card;
+> -	struct aica_channel *channel;
+> -	struct snd_pcm_substream *substream;
+> -	int clicks;
+> -	int current_period;
+> -	struct timer_list timer;
+> -	int master_volume;
+> -	int dma_check;
+> -};
+> diff --git a/sound/sh/sh_dac_audio.c b/sound/sh/sh_dac_audio.c
+> deleted file mode 100644
+> index 8ebd972846acb5..00000000000000
+> --- a/sound/sh/sh_dac_audio.c
+> +++ /dev/null
+> @@ -1,412 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-or-later
+> -/*
+> - * sh_dac_audio.c - SuperH DAC audio driver for ALSA
+> - *
+> - * Copyright (c) 2009 by Rafael Ignacio Zurita <rizurita@yahoo.com>
+> - *
+> - * Based on sh_dac_audio.c (Copyright (C) 2004, 2005 by Andriy Skulysh)
+> - */
+> -
+> -#include <linux/hrtimer.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/io.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/slab.h>
+> -#include <linux/module.h>
+> -#include <sound/core.h>
+> -#include <sound/initval.h>
+> -#include <sound/pcm.h>
+> -#include <sound/sh_dac_audio.h>
+> -#include <asm/clock.h>
+> -#include <asm/hd64461.h>
+> -#include <mach/hp6xx.h>
+> -#include <cpu/dac.h>
+> -
+> -MODULE_AUTHOR("Rafael Ignacio Zurita <rizurita@yahoo.com>");
+> -MODULE_DESCRIPTION("SuperH DAC audio driver");
+> -MODULE_LICENSE("GPL");
+> -
+> -/* Module Parameters */
+> -static int index = SNDRV_DEFAULT_IDX1;
+> -static char *id = SNDRV_DEFAULT_STR1;
+> -module_param(index, int, 0444);
+> -MODULE_PARM_DESC(index, "Index value for SuperH DAC audio.");
+> -module_param(id, charp, 0444);
+> -MODULE_PARM_DESC(id, "ID string for SuperH DAC audio.");
+> -
+> -/* main struct */
+> -struct snd_sh_dac {
+> -	struct snd_card *card;
+> -	struct snd_pcm_substream *substream;
+> -	struct hrtimer hrtimer;
+> -	ktime_t wakeups_per_second;
+> -
+> -	int rate;
+> -	int empty;
+> -	char *data_buffer, *buffer_begin, *buffer_end;
+> -	int processed; /* bytes proccesed, to compare with period_size */
+> -	int buffer_size;
+> -	struct dac_audio_pdata *pdata;
+> -};
+> -
+> -
+> -static void dac_audio_start_timer(struct snd_sh_dac *chip)
+> -{
+> -	hrtimer_start(&chip->hrtimer, chip->wakeups_per_second,
+> -		      HRTIMER_MODE_REL);
+> -}
+> -
+> -static void dac_audio_stop_timer(struct snd_sh_dac *chip)
+> -{
+> -	hrtimer_cancel(&chip->hrtimer);
+> -}
+> -
+> -static void dac_audio_reset(struct snd_sh_dac *chip)
+> -{
+> -	dac_audio_stop_timer(chip);
+> -	chip->buffer_begin = chip->buffer_end = chip->data_buffer;
+> -	chip->processed = 0;
+> -	chip->empty = 1;
+> -}
+> -
+> -static void dac_audio_set_rate(struct snd_sh_dac *chip)
+> -{
+> -	chip->wakeups_per_second = 1000000000 / chip->rate;
+> -}
+> -
+> -
+> -/* PCM INTERFACE */
+> -
+> -static const struct snd_pcm_hardware snd_sh_dac_pcm_hw = {
+> -	.info			= (SNDRV_PCM_INFO_MMAP |
+> -					SNDRV_PCM_INFO_MMAP_VALID |
+> -					SNDRV_PCM_INFO_INTERLEAVED |
+> -					SNDRV_PCM_INFO_HALF_DUPLEX),
+> -	.formats		= SNDRV_PCM_FMTBIT_U8,
+> -	.rates			= SNDRV_PCM_RATE_8000,
+> -	.rate_min		= 8000,
+> -	.rate_max		= 8000,
+> -	.channels_min		= 1,
+> -	.channels_max		= 1,
+> -	.buffer_bytes_max	= (48*1024),
+> -	.period_bytes_min	= 1,
+> -	.period_bytes_max	= (48*1024),
+> -	.periods_min		= 1,
+> -	.periods_max		= 1024,
+> -};
+> -
+> -static int snd_sh_dac_pcm_open(struct snd_pcm_substream *substream)
+> -{
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -	struct snd_pcm_runtime *runtime = substream->runtime;
+> -
+> -	runtime->hw = snd_sh_dac_pcm_hw;
+> -
+> -	chip->substream = substream;
+> -	chip->buffer_begin = chip->buffer_end = chip->data_buffer;
+> -	chip->processed = 0;
+> -	chip->empty = 1;
+> -
+> -	chip->pdata->start(chip->pdata);
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_pcm_close(struct snd_pcm_substream *substream)
+> -{
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -
+> -	chip->substream = NULL;
+> -
+> -	dac_audio_stop_timer(chip);
+> -	chip->pdata->stop(chip->pdata);
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_pcm_prepare(struct snd_pcm_substream *substream)
+> -{
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -	struct snd_pcm_runtime *runtime = chip->substream->runtime;
+> -
+> -	chip->buffer_size = runtime->buffer_size;
+> -	memset(chip->data_buffer, 0, chip->pdata->buffer_size);
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
+> -{
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -
+> -	switch (cmd) {
+> -	case SNDRV_PCM_TRIGGER_START:
+> -		dac_audio_start_timer(chip);
+> -		break;
+> -	case SNDRV_PCM_TRIGGER_STOP:
+> -		chip->buffer_begin = chip->buffer_end = chip->data_buffer;
+> -		chip->processed = 0;
+> -		chip->empty = 1;
+> -		dac_audio_stop_timer(chip);
+> -		break;
+> -	default:
+> -		 return -EINVAL;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_pcm_copy(struct snd_pcm_substream *substream,
+> -			       int channel, unsigned long pos,
+> -			       void __user *src, unsigned long count)
+> -{
+> -	/* channel is not used (interleaved data) */
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -
+> -	if (copy_from_user_toio(chip->data_buffer + pos, src, count))
+> -		return -EFAULT;
+> -	chip->buffer_end = chip->data_buffer + pos + count;
+> -
+> -	if (chip->empty) {
+> -		chip->empty = 0;
+> -		dac_audio_start_timer(chip);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_pcm_copy_kernel(struct snd_pcm_substream *substream,
+> -				      int channel, unsigned long pos,
+> -				      void *src, unsigned long count)
+> -{
+> -	/* channel is not used (interleaved data) */
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -
+> -	memcpy_toio(chip->data_buffer + pos, src, count);
+> -	chip->buffer_end = chip->data_buffer + pos + count;
+> -
+> -	if (chip->empty) {
+> -		chip->empty = 0;
+> -		dac_audio_start_timer(chip);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_pcm_silence(struct snd_pcm_substream *substream,
+> -				  int channel, unsigned long pos,
+> -				  unsigned long count)
+> -{
+> -	/* channel is not used (interleaved data) */
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -
+> -	memset_io(chip->data_buffer + pos, 0, count);
+> -	chip->buffer_end = chip->data_buffer + pos + count;
+> -
+> -	if (chip->empty) {
+> -		chip->empty = 0;
+> -		dac_audio_start_timer(chip);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static
+> -snd_pcm_uframes_t snd_sh_dac_pcm_pointer(struct snd_pcm_substream *substream)
+> -{
+> -	struct snd_sh_dac *chip = snd_pcm_substream_chip(substream);
+> -	int pointer = chip->buffer_begin - chip->data_buffer;
+> -
+> -	return pointer;
+> -}
+> -
+> -/* pcm ops */
+> -static const struct snd_pcm_ops snd_sh_dac_pcm_ops = {
+> -	.open		= snd_sh_dac_pcm_open,
+> -	.close		= snd_sh_dac_pcm_close,
+> -	.prepare	= snd_sh_dac_pcm_prepare,
+> -	.trigger	= snd_sh_dac_pcm_trigger,
+> -	.pointer	= snd_sh_dac_pcm_pointer,
+> -	.copy_user	= snd_sh_dac_pcm_copy,
+> -	.copy_kernel	= snd_sh_dac_pcm_copy_kernel,
+> -	.fill_silence	= snd_sh_dac_pcm_silence,
+> -	.mmap		= snd_pcm_lib_mmap_iomem,
+> -};
+> -
+> -static int snd_sh_dac_pcm(struct snd_sh_dac *chip, int device)
+> -{
+> -	int err;
+> -	struct snd_pcm *pcm;
+> -
+> -	/* device should be always 0 for us */
+> -	err = snd_pcm_new(chip->card, "SH_DAC PCM", device, 1, 0, &pcm);
+> -	if (err < 0)
+> -		return err;
+> -
+> -	pcm->private_data = chip;
+> -	strcpy(pcm->name, "SH_DAC PCM");
+> -	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &snd_sh_dac_pcm_ops);
+> -
+> -	/* buffer size=48K */
+> -	snd_pcm_set_managed_buffer_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
+> -				       NULL, 48 * 1024, 48 * 1024);
+> -
+> -	return 0;
+> -}
+> -/* END OF PCM INTERFACE */
+> -
+> -
+> -/* driver .remove  --  destructor */
+> -static int snd_sh_dac_remove(struct platform_device *devptr)
+> -{
+> -	snd_card_free(platform_get_drvdata(devptr));
+> -	return 0;
+> -}
+> -
+> -/* free -- it has been defined by create */
+> -static int snd_sh_dac_free(struct snd_sh_dac *chip)
+> -{
+> -	/* release the data */
+> -	kfree(chip->data_buffer);
+> -	kfree(chip);
+> -
+> -	return 0;
+> -}
+> -
+> -static int snd_sh_dac_dev_free(struct snd_device *device)
+> -{
+> -	struct snd_sh_dac *chip = device->device_data;
+> -
+> -	return snd_sh_dac_free(chip);
+> -}
+> -
+> -static enum hrtimer_restart sh_dac_audio_timer(struct hrtimer *handle)
+> -{
+> -	struct snd_sh_dac *chip = container_of(handle, struct snd_sh_dac,
+> -					       hrtimer);
+> -	struct snd_pcm_runtime *runtime = chip->substream->runtime;
+> -	ssize_t b_ps = frames_to_bytes(runtime, runtime->period_size);
+> -
+> -	if (!chip->empty) {
+> -		sh_dac_output(*chip->buffer_begin, chip->pdata->channel);
+> -		chip->buffer_begin++;
+> -
+> -		chip->processed++;
+> -		if (chip->processed >= b_ps) {
+> -			chip->processed -= b_ps;
+> -			snd_pcm_period_elapsed(chip->substream);
+> -		}
+> -
+> -		if (chip->buffer_begin == (chip->data_buffer +
+> -					   chip->buffer_size - 1))
+> -			chip->buffer_begin = chip->data_buffer;
+> -
+> -		if (chip->buffer_begin == chip->buffer_end)
+> -			chip->empty = 1;
+> -
+> -	}
+> -
+> -	if (!chip->empty)
+> -		hrtimer_start(&chip->hrtimer, chip->wakeups_per_second,
+> -			      HRTIMER_MODE_REL);
+> -
+> -	return HRTIMER_NORESTART;
+> -}
+> -
+> -/* create  --  chip-specific constructor for the cards components */
+> -static int snd_sh_dac_create(struct snd_card *card,
+> -			     struct platform_device *devptr,
+> -			     struct snd_sh_dac **rchip)
+> -{
+> -	struct snd_sh_dac *chip;
+> -	int err;
+> -
+> -	static const struct snd_device_ops ops = {
+> -		   .dev_free = snd_sh_dac_dev_free,
+> -	};
+> -
+> -	*rchip = NULL;
+> -
+> -	chip = kzalloc(sizeof(*chip), GFP_KERNEL);
+> -	if (chip == NULL)
+> -		return -ENOMEM;
+> -
+> -	chip->card = card;
+> -
+> -	hrtimer_init(&chip->hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> -	chip->hrtimer.function = sh_dac_audio_timer;
+> -
+> -	dac_audio_reset(chip);
+> -	chip->rate = 8000;
+> -	dac_audio_set_rate(chip);
+> -
+> -	chip->pdata = devptr->dev.platform_data;
+> -
+> -	chip->data_buffer = kmalloc(chip->pdata->buffer_size, GFP_KERNEL);
+> -	if (chip->data_buffer == NULL) {
+> -		kfree(chip);
+> -		return -ENOMEM;
+> -	}
+> -
+> -	err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, chip, &ops);
+> -	if (err < 0) {
+> -		snd_sh_dac_free(chip);
+> -		return err;
+> -	}
+> -
+> -	*rchip = chip;
+> -
+> -	return 0;
+> -}
+> -
+> -/* driver .probe  --  constructor */
+> -static int snd_sh_dac_probe(struct platform_device *devptr)
+> -{
+> -	struct snd_sh_dac *chip;
+> -	struct snd_card *card;
+> -	int err;
+> -
+> -	err = snd_card_new(&devptr->dev, index, id, THIS_MODULE, 0, &card);
+> -	if (err < 0) {
+> -			snd_printk(KERN_ERR "cannot allocate the card\n");
+> -			return err;
+> -	}
+> -
+> -	err = snd_sh_dac_create(card, devptr, &chip);
+> -	if (err < 0)
+> -		goto probe_error;
+> -
+> -	err = snd_sh_dac_pcm(chip, 0);
+> -	if (err < 0)
+> -		goto probe_error;
+> -
+> -	strcpy(card->driver, "snd_sh_dac");
+> -	strcpy(card->shortname, "SuperH DAC audio driver");
+> -	printk(KERN_INFO "%s %s", card->longname, card->shortname);
+> -
+> -	err = snd_card_register(card);
+> -	if (err < 0)
+> -		goto probe_error;
+> -
+> -	snd_printk(KERN_INFO "ALSA driver for SuperH DAC audio");
+> -
+> -	platform_set_drvdata(devptr, card);
+> -	return 0;
+> -
+> -probe_error:
+> -	snd_card_free(card);
+> -	return err;
+> -}
+> -
+> -/*
+> - * "driver" definition
+> - */
+> -static struct platform_driver sh_dac_driver = {
+> -	.probe	= snd_sh_dac_probe,
+> -	.remove = snd_sh_dac_remove,
+> -	.driver = {
+> -		.name = "dac_audio",
+> -	},
+> -};
+> -
+> -module_platform_driver(sh_dac_driver);
+> -- 
+> 2.39.0
+> 
