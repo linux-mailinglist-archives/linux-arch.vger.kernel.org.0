@@ -2,98 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B12966A7C0
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Jan 2023 01:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0561266AB29
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Jan 2023 12:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjANAm7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 19:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43404 "EHLO
+        id S229457AbjANLY4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 14 Jan 2023 06:24:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjANAmj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 19:42:39 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AD28F8DA
-        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 16:38:21 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id q23-20020a17090a065700b002290913a521so6321521pje.5
-        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 16:38:21 -0800 (PST)
+        with ESMTP id S229748AbjANLYz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 14 Jan 2023 06:24:55 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B54B6EBF;
+        Sat, 14 Jan 2023 03:24:54 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id y19so3680421ljq.7;
+        Sat, 14 Jan 2023 03:24:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MgBnQ26ItOkyYKiu1oV6JX0ska5GpfEn/0b8SeFBGOs=;
-        b=fZz4bsSG6rplxu+/+bbAGu03TpfBRqzSERj11fI9gPC3YiJL/UeAPW98CKZYKTN7Ws
-         j53XSFyQZNUTcXaOijVfFvsqXEfJGx6cLcfKMLjiLO/bW7eqi7LulykqxZENOBL1WwJN
-         RayxBQjRABfgAcBUTV5MtEdBlwhGdejOfhp+6x1ylwnSaQw5/5CItg/TVLAvnSFoGFQD
-         lbGhWsb6A9IEcn0SbTi5gMac6RtBt94MErdTeqH8q/FrYZ43WZq9AALzNfaHFxf2mxJm
-         5DgARQXIRLPhEsnlbzOh8dlw4D9+iPLKzKCIvdG2Ml019sB1Ej5N2/v0hQswCEcOzBeL
-         65NA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=92D3na9XjC2tldOP8eaUtjmrOr8geOvULba7RpkEF88=;
+        b=oidpd6NUevEcdWU5GrYwYjY0qsOZxddfFi5dyyzNnJ2Wgr8bLbb6jFeXbexF5bVlBD
+         PXpzRt0GCF3SKbrBAt6JcOgnQyJS9Gr0og+Dq+e9RHjuhJfbI2s2ALH/mtBrvyZW1LTS
+         Bv4KqI5LtMUaD17F2xefn4AkiYi6n3yX4JjXnaeZ8bd7U3+2ZBr1TcTguii17qBWOduq
+         wgQDH6irGJNASX2cY3h8oOec1dD9pes6xRuyBDYvCRqxqDqzZEeeGYYp3oXDH4iI/8/x
+         BTBtmkQpNaDg/wgSuNZgaLvHpGsqW+tW35fA9t3r/86JnTcc87pd3hEVPt/mRBX2UBdv
+         bZuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MgBnQ26ItOkyYKiu1oV6JX0ska5GpfEn/0b8SeFBGOs=;
-        b=JfrpbYGdgbJmyrpcGmdmpDLkyJENCUkbCoVJFzA30wXyx3QG/TdypMwwPWAsUkboxV
-         0Bl+BeH5NLLu4m5rmbAb25D1tjYcqrwFFfOHju1Bq/Igs3me24ZCtykOKPjmoMXnE8Vo
-         XadoMl/5x9MKKRHhxEYE3DC6QUnEwTg85C4GGG8pMexyrHZcHHn9VR2o0RwTC/J08nux
-         ddWqdpil2hArKCRPSrm9I3ujaGS+xEiHSgmhdaDjltbRjOKrnUkEAijAILvQLt3fPWoL
-         gMZRSPw2jHEOU/8bTPlxyFr65PSPphWbRSic4+oeUkdyc2eI4bpTZSRQpPdahqQRGsbK
-         b+YA==
-X-Gm-Message-State: AFqh2kro684HtH0qpndxkQozRYHxrzgUTx4JHfMwakS7rvlcPm1zTE7n
-        gNQ2SrcxAmvhjXUH2gL1UtratX7mas9bnGqm
-X-Google-Smtp-Source: AMrXdXvO5lr0leGyzGM7js7Dp/RGVdcEkNK6lyE8EJsgzKqjTO8ro2/W2YgLE7h5m81d74tyNSIgGA==
-X-Received: by 2002:a05:6a20:1394:b0:b5:a970:8d5a with SMTP id w20-20020a056a20139400b000b5a9708d5amr2026776pzh.0.1673656683660;
-        Fri, 13 Jan 2023 16:38:03 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d12-20020a634f0c000000b0047829d1b8eesm9871303pgb.31.2023.01.13.16.38.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jan 2023 16:38:03 -0800 (PST)
-Date:   Sat, 14 Jan 2023 00:37:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-Message-ID: <Y8H5Z3e4hZkFxAVS@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=92D3na9XjC2tldOP8eaUtjmrOr8geOvULba7RpkEF88=;
+        b=qdbJZrrHv0Tzr7u2LVZE2v8T98/LgRrEF76HQkpWzzdBlluh+htLROb4fvB2c4Z/Ew
+         0c7lRRCi+xac2W2uXjRRxZzUsbLVoSfFO4biaI0P8RWYFdBqtrz/4sdVoMAu3nr0xffX
+         1TEIDosYJ1IcnbV6h/VbKNmRhOADUznEe+3gLl/UpX/P8iEI+49S7aNK3XDkrYm2oi/H
+         0c44r/1bz/tn0Uo0sRWd/OaAKgK/2VP6witxAl9ITD97jtaCY9ODWNZE46WoKWqoMimn
+         WgcrrnWSdUyj/evQWHmExEAxZDNmMwKlBoi9Amu4MjYyB0bIc83Op/7WiNhHnNeb1Ajn
+         Yctg==
+X-Gm-Message-State: AFqh2ko42BkD31T3fO+RwTzcrWGSj6rlWnoYwoE+knRcUf9O92IWb9Xv
+        uK/KFMPgayf1Uz4HA78ZSIXLiWfUDJiwQyBnlBg=
+X-Google-Smtp-Source: AMrXdXuXj5p/ZuIpLf8gZ0GX/uM1VbdJtfoIXhmfKLwfHsiq2B3mV92A8IuI5WlG+MIrW6qcUOUw1/TEF4ro/BOWkZM=
+X-Received: by 2002:a2e:8e3b:0:b0:280:4f2:700a with SMTP id
+ r27-20020a2e8e3b000000b0028004f2700amr3108966ljk.364.1673695492487; Sat, 14
+ Jan 2023 03:24:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <CAMj1kXEqbMEcrKYzz2-huLPMnotPoxFY8adyH=Xb4Ex8o98x-w@mail.gmail.com>
+ <db6937a1-e817-2d7b-0062-9aff012bb3e8@physik.fu-berlin.de> <CAMj1kXEtTuaNFiKWn3cJngR0J2vr0G07HR6+5PBodtr1b7vNxg@mail.gmail.com>
+In-Reply-To: <CAMj1kXEtTuaNFiKWn3cJngR0J2vr0G07HR6+5PBodtr1b7vNxg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Sat, 14 Jan 2023 12:24:13 +0100
+Message-ID: <CA+icZUXEz7ZxmkV5bw5O2ORjF4bwDXBMyj3Wk_HST98gMPt97g@mail.gmail.com>
+Subject: Re: ia64 removal (was: Re: lockref scalability on x86-64 vs cpu_relax)
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        Mateusz Guzik <mjguzik@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        Jan Glauber <jan.glauber@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,53 +79,120 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022, Chao Peng wrote:
-> This patch series implements KVM guest private memory for confidential
-> computing scenarios like Intel TDX[1]. If a TDX host accesses
-> TDX-protected guest memory, machine check can happen which can further
-> crash the running host system, this is terrible for multi-tenant
-> configurations. The host accesses include those from KVM userspace like
-> QEMU. This series addresses KVM userspace induced crash by introducing
-> new mm and KVM interfaces so KVM userspace can still manage guest memory
-> via a fd-based approach, but it can never access the guest memory
-> content.
-> 
-> The patch series touches both core mm and KVM code. I appreciate
-> Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> reviews are always welcome.
->   - 01: mm change, target for mm tree
->   - 02-09: KVM change, target for KVM tree
+On Sat, Jan 14, 2023 at 12:43 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Fri, 13 Jan 2023 at 22:06, John Paul Adrian Glaubitz
+> <glaubitz@physik.fu-berlin.de> wrote:
+> >
+> > Hello Ard!
+> >
+> > > Can I take that as an ack on [0]? The EFI subsystem has evolved
+> > > substantially over the years, and there is really no way to do any
+> > > IA64 testing beyond build testing, so from that perspective, dropping
+> > > it entirely would be welcomed.
+> >
+> > ia64 is regularly tested in Debian and Gentoo [1][2].
+> >
+> > Debian's ia64 porterbox yttrium runs a recent kernel without issues:
+> >
+> > root@yttrium:~# uname -a
+> > Linux yttrium 5.19.0-2-mckinley #1 SMP Debian 5.19.11-1 (2022-09-24) ia64 GNU/Linux
+> > root@yttrium:~#
+> >
+> > root@yttrium:~# journalctl -b|head -n10
+> > Nov 14 14:46:10 yttrium kernel: Linux version 5.19.0-2-mckinley (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.3.0-6) 11.3.0, GNU ld (GNU Binutils for Debian) 2.39) #1 SMP Debian 5.19.11-1 (2022-09-24)
+> > Nov 14 14:46:10 yttrium kernel: efi: EFI v2.10 by HP
+> > Nov 14 14:46:10 yttrium kernel: efi: SALsystab=0xdfdd63a18 ESI=0xdfdd63f18 ACPI 2.0=0x3d3c4014 HCDP=0xdffff8798 SMBIOS=0x3d368000
+> > Nov 14 14:46:10 yttrium kernel: PCDP: v3 at 0xdffff8798
+> > Nov 14 14:46:10 yttrium kernel: earlycon: uart8250 at I/O port 0x4000 (options '115200n8')
+> > Nov 14 14:46:10 yttrium kernel: printk: bootconsole [uart8250] enabled
+> > Nov 14 14:46:10 yttrium kernel: ACPI: Early table checksum verification disabled
+> > Nov 14 14:46:10 yttrium kernel: ACPI: RSDP 0x000000003D3C4014 000024 (v02 HP    )
+> > Nov 14 14:46:10 yttrium kernel: ACPI: XSDT 0x000000003D3C4580 000124 (v01 HP     RX2800-2 00000001      01000013)
+> > Nov 14 14:46:10 yttrium kernel: ACPI: FACP 0x000000003D3BE000 0000F4 (v03 HP     RX2800-2 00000001 HP   00000001)
+> > root@yttrium:~#
+> >
+> > Same applies to the buildds:
+> >
+> > root@lifshitz:~# uname -a
+> > Linux lifshitz 6.0.0-4-mckinley #1 SMP Debian 6.0.8-1 (2022-11-11) ia64 GNU/Linux
+> > root@lifshitz:~#
+> >
+> > root@lenz:~# uname -a
+> > Linux lenz 6.0.0-4-mckinley #1 SMP Debian 6.0.8-1 (2022-11-11) ia64 GNU/Linux
+> > root@lenz:~#
+> >
+> > EFI works fine as well using the latest version of GRUB2.
+> >
+> > Thanks,
+> > Adrian
+> >
+> > > [1] https://cdimage.debian.org/cdimage/ports/snapshots/
+> > > [2] https://mirror.yandex.ru/gentoo-distfiles//releases/ia64/autobuilds/
+>
+> Thanks for reporting back. I (mis)read the debian ports page [3],
+> which mentions Debian 7 as the highest Debian version that supports
+> IA64, and so I assumed that support had been dropped from Debian.
+>
+> However, if only a handful of people want to keep this port alive for
+> reasons of nostalgia, it is obviously obsolete, and we should ask
+> ourselves whether it is reasonable to expect Linux contributors to
+> keep spending time on this.
+>
+> Does the Debian ia64 port have any users? Or is the system that builds
+> the packages the only one that consumes them?
+>
+>
+> [3] https://www.debian.org/ports/ia64/
 
-A version with all of my feedback, plus reworked versions of Vishal's selftest,
-is available here:
+I have no IA64 hardware or be a user of it or have any strong feelings
+to keep this arch in the Linux-kernel.
 
-  git@github.com:sean-jc/linux.git x86/upm_base_support
+But I am a Debianist (Debian/unstable AMD64 user).
 
-It compiles and passes the selftest, but it's otherwise barely tested.  There are
-a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-a WIP.
+Best is to ask the Debian release-team or (if there exist) maintainers
+or responsibles for the IA64 port - which is an ***unofficial*** port.
 
-As for next steps, can you (handwaving all of the TDX folks) take a look at what
-I pushed and see if there's anything horrifically broken, and that it still works
-for TDX?
+What I found... on <cdimage.debian.org>:
 
-Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
-(and I mean that).
+https://cdimage.debian.org/cdimage/ > Ports
 
-On my side, the two things on my mind are (a) tests and (b) downstream dependencies
-(SEV and TDX).  For tests, I want to build a lists of tests that are required for
-merging so that the criteria for merging are clear, and so that if the list is large
-(haven't thought much yet), the work of writing and running tests can be distributed.
+https://cdimage.debian.org/cdimage/ports/current/
 
-Regarding downstream dependencies, before this lands, I want to pull in all the
-TDX and SNP series and see how everything fits together.  Specifically, I want to
-make sure that we don't end up with a uAPI that necessitates ugly code, and that we
-don't miss an opportunity to make things simpler.  The patches in the SNP series to
-add "legacy" SEV support for UPM in particular made me slightly rethink some minor
-details.  Nothing remotely major, but something that needs attention since it'll
-be uAPI.
+https://cdimage.debian.org/cdimage/ports/current-debian-installer/ia64/debian-installer-images_20211020_ia64.tar.gz
+^^ Last modified: 2021-10-20 22:52
 
-I'm off Monday, so it'll be at least Tuesday before I make any more progress on
-my side.
+https://cdimage.debian.org/cdimage/ports/current/debian-11.0.0-ia64-NETINST-1.iso
+^^ Last modofied: 2022-03-28 14:18
 
-Thanks!
+With a net-install image you should be able to setup and explore the
+IA64 Debian cosmos.
+
+Example #1: binutils packages
+
+Checking available binutils package for Debian/unstable IA64 (version:
+2.39.90.20230110-1):
+
+https://packages.debian.org/sid/binutils <--- Clearly states IA64 as
+"unofficial port"
+https://packages.debian.org/sid/ia64/binutils/filelist
+
+Example #2: linux-image packages
+
+Cannot say what this means...
+
+https://packages.debian.org/search?arch=amd64&keywords=linux-image
+(AMD64 - matches)
+
+https://packages.debian.org/search?arch=ia64&keywords=linux-image
+(IA64 - no matches)
+
+https://packages.debian.org/search?arch=ia64&keywords=linux (IA64 -
+matches - but no linux-image which ships normally a bootable
+Linux-kernel)
+
+As stated I have no expertise in Debian whatever release for IA64 arch.
+
+Hope that helps.
+
+-Sedat-
