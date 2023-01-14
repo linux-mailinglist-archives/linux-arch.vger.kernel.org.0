@@ -2,134 +2,177 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F4866A6F3
-	for <lists+linux-arch@lfdr.de>; Sat, 14 Jan 2023 00:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C7A66A74D
+	for <lists+linux-arch@lfdr.de>; Sat, 14 Jan 2023 01:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjAMXUW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 Jan 2023 18:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
+        id S230038AbjANABJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 Jan 2023 19:01:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbjAMXUS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 18:20:18 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D6B8CBF9
-        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 15:20:12 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-142b72a728fso23904438fac.9
-        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 15:20:12 -0800 (PST)
+        with ESMTP id S229854AbjANABH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 Jan 2023 19:01:07 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4078CD2C
+        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 16:01:06 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id o18so2765936pji.1
+        for <linux-arch@vger.kernel.org>; Fri, 13 Jan 2023 16:01:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TQ9PrP3iNHpghVpkywhiMHcSFTwXN8kLEUSP7zNfGWk=;
-        b=HEeiDnUeOlaMmzrHg6LtTWNe2KIF6Q5d6PASMOjvpBnFNwlXnpxtBoyLsjdUSiFic5
-         Zy4GrupmECG1CN3m99XRInimzLkAyFlnAC1yFwr9ZV5WqZ8Mxia0axE41+SyDlpGZHOF
-         b9/hPmk9ZzrDZTerjRuPw9aOBuwmuFZgGCgGCyi5DNv5BOgrp6hpzWbx8PiSSS3PCS6S
-         UoJjpLq7r0mXx6nv8CL2PCVxH6W+Fc0fSdqCoguiOJxRwovXLajxMhMVOFQITRvWQd2L
-         +x8hdq/wHJdMhQD25h3cEnBEwX4srdIbxyBywCRXQlXO+4KVbgaam+X20emmeoxJCckb
-         5wPw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pnZMr3msysr3F7hQXLH7AQBYvEUMLHsk9nNkCMpDY14=;
+        b=AKE7gl1eiHLqGoN0SnyVqNEPplEIwVO+riNAN02PwmozMjE2L10QCVf4rXYqWYXwrc
+         nM+dfsbEmjg4aU4wDbXk81gsNGcxDwcFMrhjKV0dxv5tgPv5HRD69rmvva17U2MwBylu
+         ox8qjH1cD99q2HmCdnSQ0OAN2PKSiP6XIZtUS7wpznd/WxqipSgn4SXTj5GoK28DsB/h
+         /h+/U8gm5nSazzO1cze9VAQXTqkUirpJW7NcMgscsM2IWWic/84oK1838Dl2K3mrzzcM
+         +5+ItvAPTnRvsTbhTQfUPMUE3qPaOrcvkhrQopsnh/lwNWCnC0CJndMiYCyxUMoXegK5
+         gjIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TQ9PrP3iNHpghVpkywhiMHcSFTwXN8kLEUSP7zNfGWk=;
-        b=2IORnM+m6eSS4ladKpPtX8iiQm0YtJ3WdRijy34LY0MeGNQGeSXc2fX55dHc/k72+b
-         Bf0Sx0QvM1lHjvIbZnlbfMOCKpJR6eWgn+ogD/I6tvgpOERrrNiomsis87pfTHrBz/VF
-         SRbtMYOfUW+aR2NggI3+SW1NT1LHlOcvNM+IyzFSj6LYrUMdxeUuXc6CA3NcXtHmyO2D
-         FfjBXMacXF43gc3psrFCYvyvCkqnf6QJPkfBMkFI+omPaT4Qq2wE56hJvR8NSTpeKSdv
-         OaOGZbXvy2FU7qDlprOcDkVRz2YiktgmueJ6JODIJ3bMj0j+ed0NhabZ5su/mUK7sjyA
-         djAQ==
-X-Gm-Message-State: AFqh2kowcPUD1fyEdiWHH6k4X52Zn2xvTcEdXAnNq9YByFwjSVjy0JQs
-        8DfTCChu0RYKQeLUO5KwDGjxrw==
-X-Google-Smtp-Source: AMrXdXu9HHEo/oiUtz2RMFCVU9bzsQZjZJ6cJq7QQE+EgrBS53y1RWYqF/4GpGuzhXIiUysKwMTRjQ==
-X-Received: by 2002:a05:6871:4090:b0:155:cb39:7325 with SMTP id kz16-20020a056871409000b00155cb397325mr16579350oab.6.1673652012126;
-        Fri, 13 Jan 2023 15:20:12 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056870738d00b0013ae39d0575sm11411907oam.15.2023.01.13.15.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 15:20:11 -0800 (PST)
-Message-ID: <38200b53-c743-4396-6603-7274f4a29c86@landley.net>
-Date:   Fri, 13 Jan 2023 17:32:20 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pnZMr3msysr3F7hQXLH7AQBYvEUMLHsk9nNkCMpDY14=;
+        b=ILZ9rgLhpJyreUW/6AFIcVjukGimIpQ/TF39kPTfOE0dkye4s0V8szubQ0rMrd5HFf
+         d9BZ2f/BQAJxlYQA1wizB8dtWAa8FRhqufz9LHcd4BiQMuAGLHd4hagCCOYc6NDSipln
+         +5JuE8nGO2TzUbyYvuaERKAPMp567BvOI0Uq1atlBsmI70N+g0FEyQHHPGV4rSw3WKAk
+         l7rDF5L7gfjPzMbo0hDkY/kIZbReiDbaoVbqDB9FKhlI/qavnEvboPqYhSWNwIPrXtsA
+         G7CoqcQC4m0Ujp3Q3flcpn5aUU+s8ZDymJFVC1OmGzMkrTKkMb6GYjs1pvTWlD1WWzEo
+         nnBw==
+X-Gm-Message-State: AFqh2krMZ5rNLbVk3bVBUUOTdxv/GK8v7rZlcTLTTxVUORueJgd+vVFb
+        QFsiGckCDVM1duBNS1MHyPxPcg==
+X-Google-Smtp-Source: AMrXdXvNkNwg47euRwsow9ZzGgWEDAGEi69lwgz85sCYleqYo1kdNQOKNRaLha4U2UlUoVuWv9B/fQ==
+X-Received: by 2002:a17:902:c409:b0:194:6d3c:38a5 with SMTP id k9-20020a170902c40900b001946d3c38a5mr516748plk.1.1673654465280;
+        Fri, 13 Jan 2023 16:01:05 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k7-20020a170902760700b00192bf7eaf28sm14649057pll.286.2023.01.13.16.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 16:01:04 -0800 (PST)
+Date:   Sat, 14 Jan 2023 00:01:01 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+Message-ID: <Y8HwvTik/2avrCOU@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <CAMuHMdUcnP6a9Ch5=_CMPq-io-YWK5pshkOT2nZmP1hvNcwBAg@mail.gmail.com>
- <142532fb-5997-bdc1-0811-a80ae33f4ba4@physik.fu-berlin.de>
- <6891afb6-4190-6a52-0319-745b3f138d97@landley.net>
- <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <fe09d811-e290-821d-ec8b-75936b6583c2@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/13/23 13:05, John Paul Adrian Glaubitz wrote:
-> Hi Rob!
-> 
-> On 1/13/23 20:11, Rob Landley wrote:
->> There is definitely interest in this architecture. I'm aware Rich hasn't been
->> the most responsive maintainer. (I'm told he's on vacation with his family at
->> the moment, according to the text I got about this issue from the J-core
->> hardware guys in Japan.)
-> 
-> Well, maybe we can just give it a try together ...
+On Fri, Dec 02, 2022, Chao Peng wrote:
+> @@ -10357,6 +10364,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  
+>  		if (kvm_check_request(KVM_REQ_UPDATE_CPU_DIRTY_LOGGING, vcpu))
+>  			static_call(kvm_x86_update_cpu_dirty_logging)(vcpu);
+> +
+> +		if (kvm_check_request(KVM_REQ_MEMORY_MCE, vcpu)) {
+> +			vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
 
-Jeff Dionne said he'd make himself available to answer hardware questions. (He
-said he maintained some Linux ports 20 years ago, but isn't current with Linux
-plumbing. Last month he was digging through the guts of vxworks, and the project
-before that was some sort of BSD I think?)
+Synthesizing triple fault shutdown is not the right approach.  Even with TDX's
+MCE "architecture" (heavy sarcasm), it's possible that host userspace and the
+guest have a paravirt interface for handling memory errors without killing the
+host.
 
-I _do_ maintain Linux patches, I just generally don't bother to repost them
-endlessly. Here's my "on top of 6.1" stack for example, each of which links to
-at least one time it was posted to linux-kernel:
+> +			r = 0;
+> +			goto out;
+> +		}
+>  	}
 
-https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/linux-patches/
 
->> The main reason we haven't converted everything to device tree is we only have
->> access to test hardware for a subset of the boards. Pruning the list of
->> supported boards and converting the rest to device tree might make sense. We can
->> always add/convert boards back later...
-> 
-> There is a patch by Yoshinori Sato which adds device tree support to SH. Maybe we
-> can revive it.
+> @@ -1982,6 +2112,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>  	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
+>  			mem->memory_size))
+>  		return -EINVAL;
+> +	if (mem->flags & KVM_MEM_PRIVATE &&
+> +		(mem->restricted_offset & (PAGE_SIZE - 1) ||
 
-The turtle board is device tree and has been since it was merged. The
-infrastructure is there, the question is converting over boards and testing
-them, or deciding to prune them. Did Sato-san convert many boards? (I'm not
-finding his patch via google...)
+Align indentation.
 
-> Adrian
+> +		 mem->restricted_offset > U64_MAX - mem->memory_size))
 
-Rob
+Strongly prefer to use similar logic to existing code that detects wraps:
+
+		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+
+This is also where I'd like to add the "gfn is aligned to offset" check, though
+my brain is too fried to figure that out right now.
+
+> +		return -EINVAL;
+>  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
+>  		return -EINVAL;
+>  	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+> @@ -2020,6 +2154,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>  		if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
+>  			return -EINVAL;
+>  	} else { /* Modify an existing slot. */
+> +		/* Private memslots are immutable, they can only be deleted. */
+
+I'm 99% certain I suggested this, but if we're going to make these memslots
+immutable, then we should straight up disallow dirty logging, otherwise we'll
+end up with a bizarre uAPI.
+
+> +		if (mem->flags & KVM_MEM_PRIVATE)
+> +			return -EINVAL;
+>  		if ((mem->userspace_addr != old->userspace_addr) ||
+>  		    (npages != old->npages) ||
+>  		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
+> @@ -2048,10 +2185,28 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>  	new->npages = npages;
+>  	new->flags = mem->flags;
+>  	new->userspace_addr = mem->userspace_addr;
+> +	if (mem->flags & KVM_MEM_PRIVATE) {
+> +		new->restricted_file = fget(mem->restricted_fd);
+> +		if (!new->restricted_file ||
+> +		    !file_is_restrictedmem(new->restricted_file)) {
+> +			r = -EINVAL;
+> +			goto out;
+> +		}
+> +		new->restricted_offset = mem->restricted_offset;
+> +	}
+> +
+> +	new->kvm = kvm;
+
+Set this above, just so that the code flows better.
