@@ -2,85 +2,180 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085A266BFC3
-	for <lists+linux-arch@lfdr.de>; Mon, 16 Jan 2023 14:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C34A66C070
+	for <lists+linux-arch@lfdr.de>; Mon, 16 Jan 2023 14:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjAPN2T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 Jan 2023 08:28:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S231324AbjAPN6U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 Jan 2023 08:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjAPN2S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Jan 2023 08:28:18 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C951717C;
-        Mon, 16 Jan 2023 05:28:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3WX91qejGpsVe+BTTVWqlDspV1ielBR/ADdhl0/AtKo=; b=QzG7PjWcPxLw4/tmqmezWk8aBn
-        pBJ4EqKrNT6uJNUcYnxh13ieXCiKeGn7/6oT8qRxi5gNIltu9KYa0EsL8lo/uoeL226HnX1u9BPmE
-        A74YKueRDxUG8xipGk0ujcWtymHeOkvaDEXSw0KCzlPwXphLfxtR5kGV6WW8ZTy3WUC1omfXTtl7t
-        7tO/FwR0rPIqBMmHRgAp77kOBQJYyfVU+Bi5q1qGMEosK3P7fgJq/xrxEbwJB+bM1HjK32vtkZ/TP
-        h9CvuMt48vuRHdsI7bedqah2Z8cCA1R8ehXjISVSKIzdy7H5M5KZQFD+WLQEfDsoHyt7b/Ucafaon
-        rNQRBiAg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pHPX1-008ln6-MQ; Mon, 16 Jan 2023 13:28:11 +0000
-Date:   Mon, 16 Jan 2023 13:28:11 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Sedat Dilek <sedat.dilek@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        Mateusz Guzik <mjguzik@gmail.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        Jan Glauber <jan.glauber@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: ia64 removal (was: Re: lockref scalability on x86-64 vs
- cpu_relax)
-Message-ID: <Y8VQ612fm0Wi4j4w@casper.infradead.org>
-References: <CAMj1kXEqbMEcrKYzz2-huLPMnotPoxFY8adyH=Xb4Ex8o98x-w@mail.gmail.com>
- <db6937a1-e817-2d7b-0062-9aff012bb3e8@physik.fu-berlin.de>
- <CAMj1kXEtTuaNFiKWn3cJngR0J2vr0G07HR6+5PBodtr1b7vNxg@mail.gmail.com>
- <CA+icZUXEz7ZxmkV5bw5O2ORjF4bwDXBMyj3Wk_HST98gMPt97g@mail.gmail.com>
- <CA+icZUUhY7-F5Bpw-jxofhw4nMP3nzyfpt9huzeSWwUguguNsA@mail.gmail.com>
- <Y8NIYSMqAk7BhSv5@casper.infradead.org>
- <a6dda4b2-1124-7189-ecd8-9cf85c1b790d@physik.fu-berlin.de>
+        with ESMTP id S231343AbjAPN5q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 Jan 2023 08:57:46 -0500
+X-Greylist: delayed 416 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 16 Jan 2023 05:55:50 PST
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D2A21A09;
+        Mon, 16 Jan 2023 05:55:50 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 53BD12B067C9;
+        Mon, 16 Jan 2023 08:48:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 16 Jan 2023 08:48:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1673876929; x=1673884129; bh=LV
+        IuqcNr+BEv3OVovuvPG4rkUA8Se79qo5nrRkoOk/4=; b=hzqSbnXXHX1g+A0/Ds
+        g4Hdrbl+duGXBSNIacSKQ5cZs2CG5PwGXwtiLLZN/D1xVeIKrrYvQPopYIBziUJH
+        gPXBXhBUjHNeNMXfFIzjHp9Pa1dA8lHudIk2RRGqQyo5jwy1ShZ4AnyiC5tk/r40
+        2tP/6afRYdUyPyv6NJCiu8ZeWYIveuXlAhsIdCZ8VNMSLGsrMkWlNB0yWBFfdsq6
+        D0/u+OuX/k+7NZQW0WeGyV4H/UWm1LOPuec8xME1t0TXJ/AZQz1MvhmIEgnm+7EF
+        HgksJGu3O2yE/ei+qxkLuy8wmzA3Nh8veigRKWprNSGQ1Et7bGymXkWwi85bBVe8
+        FFYg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1673876929; x=1673884129; bh=LVIuqcNr+BEv3OVovuvPG4rkUA8S
+        e79qo5nrRkoOk/4=; b=bO+dUcGv+jEMy/lCF06LmFFcOFpJPrpvFNPqUv8hbFss
+        wijIsi3XbIRQOiPx3CYSoIfNJ+kMvVXBvkEcXHbu1ioBlsHUVUcnCfsu0WNhjbCw
+        g3xs8nJHkgJ8jePTUFPUALiOCs0E7rFIZKG2Hl749XrYY5YejpkedmN4Ug2y+F/5
+        UHyZFHbQatARsDjhWIKNsnEOUPbI+YhNeGdQ3px8ojanRDzOkO73gtJ9xxLgQ8hu
+        um9K6q4z+hqC80ODYxw9kWYok0RENuF6rPlsUfzn13P45Peo7LfMmqClWZ6ejfXk
+        f2bHJYrO6/QBvd8rDNTeGDZ9OJ4iL6BoykAGpaRgpw==
+X-ME-Sender: <xms:v1XFY8yLZJzPRKyHnwQL_FJgKaTbKqv-N_O6nu2jz8ifd771a6fyKw>
+    <xme:v1XFYwTqbvz09EIDgf_GuyW5XD82H6IQoSkDyKH7_8YTfJVbomZ8uc7dDjRyZlo5n
+    doZ4X-PSAOWYvogkJw>
+X-ME-Received: <xmr:v1XFY-WTiUwzYZ7NxRzNy44NRpoNKITddppclahQMJaSNJKW0wzVBJZHc91kQIVONmJFfQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddtgedgheeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:v1XFY6gic2M9Pzyndm04VV1xQRBxde6OVFDFcyBRxOb3rjvvtTtXCA>
+    <xmx:v1XFY-B1TKgHRHRV1sisOhg5fm8GczU6f9FE6jwSH4_J4JzxwEAPmw>
+    <xmx:v1XFY7IM3MVsig37x5YeGF4QCi0BKrQP0E6iOgeW5J0tq_D9jUtaYA>
+    <xmx:wVXFY8pmuU6BstNTCPoiKUslSX2k9Xgz3r8eQqfxFEh-u3NMNdCd8i2rHAo>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Jan 2023 08:48:46 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3ECD8109792; Mon, 16 Jan 2023 16:48:45 +0300 (+03)
+Date:   Mon, 16 Jan 2023 16:48:45 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230116134845.vboraky2nd56szos@box.shutemov.name>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a6dda4b2-1124-7189-ecd8-9cf85c1b790d@physik.fu-berlin.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8H5Z3e4hZkFxAVS@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 10:41:14AM +0100, John Paul Adrian Glaubitz wrote:
-> On 1/15/23 01:27, Matthew Wilcox wrote:
-> > More useful perhaps is to look at https://popcon.debian.org/
+On Sat, Jan 14, 2023 at 12:37:59AM +0000, Sean Christopherson wrote:
+> On Fri, Dec 02, 2022, Chao Peng wrote:
+> > This patch series implements KVM guest private memory for confidential
+> > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > TDX-protected guest memory, machine check can happen which can further
+> > crash the running host system, this is terrible for multi-tenant
+> > configurations. The host accesses include those from KVM userspace like
+> > QEMU. This series addresses KVM userspace induced crash by introducing
+> > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > via a fd-based approach, but it can never access the guest memory
+> > content.
 > > 
-> > There are three machines reporting popcon results.  It's dead.
+> > The patch series touches both core mm and KVM code. I appreciate
+> > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > reviews are always welcome.
+> >   - 01: mm change, target for mm tree
+> >   - 02-09: KVM change, target for KVM tree
 > 
-> It's an opt-in mechanism that reports 190,000 machines running Debian
-> on x86_64. Do you think that there are only 190,000 servers world-wide
-> running Debian?
+> A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> is available here:
+> 
+>   git@github.com:sean-jc/linux.git x86/upm_base_support
+> 
+> It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> a WIP.
+> 
+> As for next steps, can you (handwaving all of the TDX folks) take a look at what
+> I pushed and see if there's anything horrifically broken, and that it still works
+> for TDX?
 
-No.  I think there are so few ia64 machines still in operation that the
-effort required to continue to support them is now too high relative
-to the benefits.  We've dropped support for hardware that still exists
-before, and we'll do it again.  The only question is when.
+Minor build fix:
 
-I still have two ia64 machines in my basement.  I've turned one of them
-on once since 2009.  And that was because I had a bug I needed to track
-down and fix (2018, commits 4b664e739f77 and 2879b65f9de8).
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 6eb5336ccc65..4a9e9fa2552a 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -7211,8 +7211,8 @@ void kvm_arch_set_memory_attributes(struct kvm *kvm,
+ 	int level;
+ 	bool mixed;
+ 
+-	lockdep_assert_held_write(kvm->mmu_lock);
+-	lockdep_assert_held(kvm->slots_lock);
++	lockdep_assert_held_write(&kvm->mmu_lock);
++	lockdep_assert_held(&kvm->slots_lock);
+ 
+ 	/*
+ 	 * KVM x86 currently only supports KVM_MEMORY_ATTRIBUTE_PRIVATE, skip
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 467916943c73..4ef60ba7eb1d 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -2304,7 +2304,7 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
+ #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+ static inline unsigned long kvm_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
+ {
+-	lockdep_assert_held(kvm->mmu_lock);
++	lockdep_assert_held(&kvm->mmu_lock);
+ 
+ 	return xa_to_value(xa_load(&kvm->mem_attr_array, gfn));
+ }
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
