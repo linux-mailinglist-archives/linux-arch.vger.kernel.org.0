@@ -2,150 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9200966E4E4
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 18:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D23366E773
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 21:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbjAQR1U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Jan 2023 12:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S234711AbjAQUJj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Jan 2023 15:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235289AbjAQRZm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 12:25:42 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC5B49015
-        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 09:25:21 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id y3-20020a17090a390300b00229add7bb36so1740257pjb.4
-        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 09:25:21 -0800 (PST)
+        with ESMTP id S234646AbjAQUHS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 15:07:18 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA17F4521E
+        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-142b72a728fso32972915fac.9
+        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 11:01:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oPCKpcym2RW5d35rmFIPP7PcNPID9DHF3zaB9zUqfc0=;
-        b=fcIljTThBG4xJap5TcGlXLzzw36TVvznNFdH4K5cV1wgP0TBEN+a0DD1GCYhRROsCO
-         QvjnEf/w+v2arlNJbI9HWsv3aQkGE66ZYpTq2jVV7H8jTKB+jcivNkBG1DLGh2COfKTX
-         pweZYAuWKUG+YbRSPiUyMiUsIhMoDelNa4TCm0Xonr0YcRslVr+wkYXPREIFWc5njYN5
-         hleDjpP/fD2PR+Pk217/hDlyN417xQoAuBfDpMCd7cMkK5+rXFZvrG6QdKzfXmWAaGuZ
-         MtZaFsL+TjIMHfkIcKjhxx6/QR2rCC95vb8NVwOqOTD6jTRuiCKfm4a07+k8PrsQ0gnu
-         +dNA==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=7UFMvbpKkJyjWVLlq6ctk0nXiLL3RrLgvGqk+/g8pD0wAzMEFNodkoMNXxSPAzvJye
+         T4nqVDpRCF5Pkw4fe0ROrd1BjE8DZbycDcUSRlgnihtqJaZkkqELJ7TzEZYyPHojRNxM
+         MBh6YZCgcmJgLXwboxe3bvrjmez4qHhfCRIxGuc2G0+QOOJ/eKT38XBZ7MfSSmNLVm7z
+         gDt6C3Ymsnj+eKLcMZ0dj5q2KFKnZutgcY/1C6+IgeLmT5DwAU4QsUhG6TCQdnlD6nEb
+         fYtWfawIuB6wYahQA/cq89ISwAR2GZXbrrCFpCVxRJqHc9Mn337ID3jg/QgfKjbyHIu6
+         BObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oPCKpcym2RW5d35rmFIPP7PcNPID9DHF3zaB9zUqfc0=;
-        b=OFD+DaMV+miE+IQeZGe5Axqd4mv19RrRlAD8bbf5L7r+OipkC0ssvY2+2moVfprleR
-         svG1zIf8XREMrC1BjCRV1gj0apJSg2Wxwz1fZmHBRs0frTdAcODMP0gZsUOcGEgjzljY
-         1EfbP4VxI1rKJhFXO23m14e8fK8ffqAdAHRQDZnd/vBCaIxXoTOy3q46qqR1SWwL9pdv
-         CV5Ua/mZv8rBfrQ758X2j2Q+QKwgLCtHS25fvPQ2iuQHxv6owWci8b/29noE9AyrX/gt
-         5mUE5Q/Fu8JrJg5ypEJ4x2e+TNFrTAtr0OpKeVi0WrHQulJvDOEq/vfOrnymoWbKfq4D
-         l+FQ==
-X-Gm-Message-State: AFqh2krbFPXyL7Gu+ADQXllib8V208BrCdUPGl6hYL1+ITtJslLplFYr
-        hFk6iSvnMSumk2v7CC0bUwawAQ==
-X-Google-Smtp-Source: AMrXdXvUnfK+nwEzio3X173A3OOI+axnR8EWU2P/trlYbT/Eyg2+Qv0Pg0jRmQ5K8mkAb8pmdGJXpw==
-X-Received: by 2002:a05:6a20:8f02:b0:b8:c646:b0e2 with SMTP id b2-20020a056a208f0200b000b8c646b0e2mr385151pzk.3.1673976320986;
-        Tue, 17 Jan 2023 09:25:20 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y3-20020a17090a390300b0022960d00017sm4505994pjb.22.2023.01.17.09.25.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 09:25:20 -0800 (PST)
-Date:   Tue, 17 Jan 2023 17:25:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Binbin Wu <binbin.wu@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-Message-ID: <Y8bZ/J98V5i3wG/v@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
- <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
- <20230117133015.GE273037@chaop.bj.intel.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgaymgAXi9Z6g6pYwBOzM02/P477EqWitgDVTE3LFbU=;
+        b=e1FxEmy5BUp2EdX/66o+CIIRaLZUkIhMApNcMNWXA920+aaqSmwhmu7wlw2PI/kezi
+         qR6ipr6+cZOLvjYhEtJ3Z/B0Si1szNl3yv8RVrQGv9A5OPp6vBlJtDQW6d5hdXQ4xJmY
+         9q5MBmWph4xaJOBVxEJHsAaI+OZo1IahT7NeVYlgDDUUbGB1m4Vg3JlQqLwHZdsBXgP8
+         2qKZfmTP94raV60n2oBBrtuBgdkJif3qSJ/2UPA0bV+32Tm0Bur8TlFxAHkN/g9DsSot
+         dsoR3AaaszXdAgwNk5aQF4ni99+wxxy86zcZ8F23ccyjJyDSSJDwZsRtinFEcU+0gtDE
+         voVw==
+X-Gm-Message-State: AFqh2koh5JoVXj9BSHTWV0gJljZuGN5YtO2doMEP+sbgC+sf5W97IK8r
+        c7EES8/rlD1yFRAMpWIZ8O2mWg==
+X-Google-Smtp-Source: AMrXdXsgzCxMhqm+bb3il7EsJjEv0NbGPCzT1qf9VREFYRxVllxrk/YEzaFAyrBdtefAaDgGfnk/UQ==
+X-Received: by 2002:a05:6870:c190:b0:15e:cfca:b312 with SMTP id h16-20020a056870c19000b0015ecfcab312mr2807015oad.52.1673982083592;
+        Tue, 17 Jan 2023 11:01:23 -0800 (PST)
+Received: from [192.168.86.224] ([136.62.38.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05687080d200b0012763819bcasm16664335oab.50.2023.01.17.11.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 11:01:22 -0800 (PST)
+Message-ID: <9325a949-8d19-435a-50bd-9ebe0a432012@landley.net>
+Date:   Tue, 17 Jan 2023 13:13:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117133015.GE273037@chaop.bj.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: remove arch/sh
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+References: <20230113062339.1909087-1-hch@lst.de>
+ <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+ <20230116071306.GA15848@lst.de>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <20230116071306.GA15848@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 17, 2023, Chao Peng wrote:
-> On Tue, Jan 17, 2023 at 11:21:10AM +0800, Binbin Wu wrote:
-> > 
-> > On 12/2/2022 2:13 PM, Chao Peng wrote:
-> > > In confidential computing usages, whether a page is private or shared is
-> > > necessary information for KVM to perform operations like page fault
-> > > handling, page zapping etc. There are other potential use cases for
-> > > per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> > > or exec-only, etc.) without having to modify memslots.
-> > > 
-> > > Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> > > userspace to operate on the per-page memory attributes.
-> > >    - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
-> > >      a guest memory range.
-> > >    - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
-> > >      memory attributes.
-> > > 
-> > > KVM internally uses xarray to store the per-page memory attributes.
-> > > 
-> > > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > > Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
-> > > ---
-> > >   Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
-> > >   arch/x86/kvm/Kconfig           |  1 +
-> > >   include/linux/kvm_host.h       |  3 ++
-> > >   include/uapi/linux/kvm.h       | 17 ++++++++
-> > 
-> > Should the changes introduced in this file also need to be added in
-> > tools/include/uapi/linux/kvm.h ?
+On 1/16/23 01:13, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 09:09:52AM +0100, John Paul Adrian Glaubitz wrote:
+>> I'm still maintaining and using this port in Debian.
+>>
+>> It's a bit disappointing that people keep hammering on it. It works fine for me.
 > 
-> Yes I think.
+> What platforms do you (or your users) use it on?
 
-I'm not sure how Paolo or others feel, but my preference is to never update KVM's
-uapi headers in tools/ in KVM's tree.  Nothing KVM-related in tools/ actually
-relies on the headers being copied into tools/, e.g. KVM selftests pulls KVM's
-headers from the .../usr/include/ directory that's populated by `make headers_install`.
+3 j-core boards, two sh4 boards (the sh7760 one I patched the kernel of), and an
+sh4 emulator.
 
-Perf's tooling is what actually "needs" the headers to be copied into tools/, so
-my preference is to let the tools/perf maintainers deal with the headache of keeping
-everything up-to-date.
+I have multiple j-core systems (sh2 compatible with extensions, nommu, 3
+different kinds of boards running it here). There's an existing mmu version of
+j-core that's sh3 flavored but they want to redo it so it hasn't been publicly
+released yet, I have yet to get that to run Linux because the mmu code would
+need adapting, but the most recent customer projects were on the existing nommu
+SOC, as was last year's ASIC work via sky130.
 
-> But I'm hesitate to include in this patch or not. I see many commits sync
-> kernel kvm.h to tools's copy. Looks that is done periodically and with a
-> 'pull' model.
+My physical sh4 boards are a Johnson Controls N40 (sh7760 chipset) and the
+little blue one is... sh4a I think? (It can run the same userspace, I haven't
+replaced that board's kernel since I got it, I think it's the type Glaubitz is
+using? It's mostly in case he had an issue I couldn't reproduce on different
+hardware, or if I spill something on my N40.)
+
+I also have a physical sh2 board on the shelf which I haven't touched in years
+(used to comparison test during j2 development, and then the j2 boards replaced it).
+
+I'm lazy and mostly test each new sh4 build under qemu -M r2d because it's
+really convenient: neither of my physical boards boot from SD card so replacing
+the kernel requires reflashing soldered in flash. (They'll net mount userspace
+but I haven't gotten either bootloader to net-boot a kernel.)
+
+I include sh4 in the my mkroot builds each toybox release, I have a ~300 line
+bash script that builds bootable toybox systems for a dozen-ish architectures,
+including building a kernel configured to run under qemu:
+
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+
+And I ship the resulting bootable system images, most recent release is at:
+
+  https://landley.net/toybox/downloads/binaries/mkroot/0.8.9/
+
+As described at:
+
+  http://landley.net/toybox/faq.html#mkroot
+
+Various people in Japan have more hardware, but I haven't made it physically
+back there since 2020. (My residency card expired during the pandemic.)
+
+Rob
