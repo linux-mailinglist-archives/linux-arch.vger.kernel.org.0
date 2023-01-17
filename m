@@ -2,129 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E30F66DEF9
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 14:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E55266E064
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 15:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjAQNim (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Jan 2023 08:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
+        id S232305AbjAQOYB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Jan 2023 09:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjAQNie (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 08:38:34 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477EB59C6;
-        Tue, 17 Jan 2023 05:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673962713; x=1705498713;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=1YxIhrDQKE2lDqlUyO/ARVgD5QjeSGAHzdlrkVl5mCo=;
-  b=FVs309qlXE78B/GssbtiD3lcrLHRsXs0LWTpSX3bPI1VX5MnhjUqEIyK
-   QJP44sF2pnZSLspTukaj9oFzkmWPYZs3egj9PjEHMp9FwXrtSlaw6bh0R
-   zuaJ0c0tz0Wpy8vbZwPYZi7J/IEz7OIRGv23X16xlv9gHmII35eDXs09H
-   AA6G/MZqhrLlu1MmC1ZWljcI0i6v3EuwGGflRY8N5YV8TjTfiXQxShVxj
-   VswTR/Vo1DTBFZubbZyH7zsITbqoxlUgBG8I2rgZ+/L6Y6YZtzz36AwK1
-   gyxy9TC4vkKGuug6kKK9iG3tV8jjTys5v09lApvjGZ24gjyZ//07LfFWg
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="324748849"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="324748849"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 05:38:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="783240137"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="783240137"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by orsmga004.jf.intel.com with ESMTP; 17 Jan 2023 05:38:03 -0800
-Date:   Tue, 17 Jan 2023 21:30:15 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-Message-ID: <20230117133015.GE273037@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
- <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
+        with ESMTP id S232609AbjAQOXe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 09:23:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48AEE3E617;
+        Tue, 17 Jan 2023 06:22:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7277412FC;
+        Tue, 17 Jan 2023 06:22:41 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B3A83F67D;
+        Tue, 17 Jan 2023 06:21:43 -0800 (PST)
+Date:   Tue, 17 Jan 2023 14:21:40 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        frederic@kernel.org, paulmck@kernel.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ryabinin.a.a@gmail.com,
+        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
+Message-ID: <20230117142140.g423hxisv7djudof@bogus>
+References: <20230112194314.845371875@infradead.org>
+ <Y8WCWAuQSHN651dA@FVFF77S0Q05N.cambridge.arm.com>
+ <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
+ <Y8afpbHtDOqAHq9M@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8afpbHtDOqAHq9M@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 11:21:10AM +0800, Binbin Wu wrote:
+On Tue, Jan 17, 2023 at 01:16:21PM +0000, Mark Rutland wrote:
+> On Tue, Jan 17, 2023 at 11:26:29AM +0100, Peter Zijlstra wrote:
+> > On Mon, Jan 16, 2023 at 04:59:04PM +0000, Mark Rutland wrote:
+> > 
+> > > I'm sorry to have to bear some bad news on that front. :(
+> > 
+> > Moo, something had to give..
+> > 
+> > 
+> > > IIUC what's happenign here is the PSCI cpuidle driver has entered idle and RCU
+> > > is no longer watching when arm64's cpu_suspend() manipulates DAIF. Our
+> > > local_daif_*() helpers poke lockdep and tracing, hence the call to
+> > > trace_hardirqs_off() and the RCU usage.
+> > 
+> > Right, strictly speaking not needed at this point, IRQs should have been
+> > traced off a long time ago.
 > 
-> On 12/2/2022 2:13 PM, Chao Peng wrote:
-> > In confidential computing usages, whether a page is private or shared is
-> > necessary information for KVM to perform operations like page fault
-> > handling, page zapping etc. There are other potential use cases for
-> > per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> > or exec-only, etc.) without having to modify memslots.
-> > 
-> > Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> > userspace to operate on the per-page memory attributes.
-> >    - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
-> >      a guest memory range.
-> >    - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
-> >      memory attributes.
-> > 
-> > KVM internally uses xarray to store the per-page memory attributes.
-> > 
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
-> > ---
-> >   Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
-> >   arch/x86/kvm/Kconfig           |  1 +
-> >   include/linux/kvm_host.h       |  3 ++
-> >   include/uapi/linux/kvm.h       | 17 ++++++++
+> True, but there are some other calls around here that *might* end up invoking
+> RCU stuff (e.g. the MTE code).
 > 
-> Should the changes introduced in this file also need to be added in
-> tools/include/uapi/linux/kvm.h ?
+> That all needs a noinstr cleanup too, which I'll sort out as a follow-up.
+> 
+> > > I think we need RCU to be watching all the way down to cpu_suspend(), and it's
+> > > cpu_suspend() that should actually enter/exit idle context. That and we need to
+> > > make cpu_suspend() and the low-level PSCI invocation noinstr.
+> > > 
+> > > I'm not sure whether 32-bit will have a similar issue or not.
+> > 
+> > I'm not seeing 32bit or Risc-V have similar issues here, but who knows,
+> > maybe I missed somsething.
+> 
+> I reckon if they do, the core changes here give us the infrastructure to fix
+> them if/when we get reports.
+> 
+> > In any case, the below ought to cure the ARM64 case and remove that last
+> > known RCU_NONIDLE() user as a bonus.
+> 
+> The below works for me testing on a Juno R1 board with PSCI, using defconfig +
+> CONFIG_PROVE_LOCKING=y + CONFIG_DEBUG_LOCKDEP=y + CONFIG_DEBUG_ATOMIC_SLEEP=y.
+> I'm not sure how to test the LPI / FFH part, but it looks good to me.
+> 
+> FWIW:
+> 
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> Tested-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Sudeep, would you be able to give the LPI/FFH side a spin with the kconfig
+> options above?
+> 
 
-Yes I think. But I'm hesitate to include in this patch or not. I see
-many commits sync kernel kvm.h to tools's copy. Looks that is done
-periodically and with a 'pull' model.
+Not sure if I have messed up something in my mail setup, but I did reply
+earlier. I did test both DT/cpuidle-psci driver and  ACPI/LPI+FFH driver
+with the fix Peter sent. I was seeing same splat as you in both DT and
+ACPI boot which the patch fixed it. I used the same config as described by
+you above.
 
-Chao
+-- 
+Regards,
+Sudeep
