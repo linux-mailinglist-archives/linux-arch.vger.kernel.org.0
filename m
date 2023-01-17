@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81ACA66DE1C
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 13:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EA566DEAA
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 14:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237000AbjAQMv3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Jan 2023 07:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S237026AbjAQNUz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Jan 2023 08:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236998AbjAQMui (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 07:50:38 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530FF10E7;
-        Tue, 17 Jan 2023 04:50:15 -0800 (PST)
+        with ESMTP id S237012AbjAQNUx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 08:20:53 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC3439BA0;
+        Tue, 17 Jan 2023 05:20:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673959815; x=1705495815;
+  t=1673961653; x=1705497653;
   h=date:from:to:cc:subject:message-id:reply-to:references:
    mime-version:in-reply-to;
-  bh=ymQ/JZoVFvqCeW/jz/ISyD5XcjWYygq7yVQJBCOqdNM=;
-  b=j91g/xLgfMmOaOIBv18DcJdFvFkQCh8/o8WaQc16LDCL95PIrIp4Wdtt
-   C2kfB4zYiMfZ2C2Lh3X0hLs4umqjcCp4lKPZ0Y3NQZj0Qo6FwrZ7qAZpC
-   tsi9sN/FV93Ys3QmuHs5+gJOxzgziKjPtC2c0GF8muOdrS5bcQXGeoXQN
-   yvLRDvW1zO99FKjAutzWezDEpicuQHVbYyTt4hKw/PFU4yhbf0vjd82pW
-   KdVtnqRMWawHZ0uLjJ8Xz5tnb07VABpGddqk427v8YCPKDO8zSqD1h50a
-   1GG3t+tZb54ksPxS7ACUnjWL39WCsS5MklGaMzORtFHif/sQE7H59fEZR
+  bh=ydzl4pu/BnSzLPZ1RlJR0Y9KESs9mzMw8rQlYf4Kzvo=;
+  b=Wa1lDjtgpSU4uygKkHIz1Dsj/E2ZHLW/CrnpG91ieGgCT0zvuxJQAYrm
+   vp7y+IQ70RsSj6ArReb10U+53BXVsw95KCrBJ+YsOOC2mpHB0uQRXE57S
+   2zMR+fAhwQUWwOKViE41UUL4EeKgWn4ZB214VWlwiDajl0WibgXPzK00P
+   PCdx/qV8X7kAPsNxnxx98C8F/lrLeSIpHZgHMDHKgEZXe/ghiDSXDLjos
+   s9xQMBGwkomNSbhpjWGeguhCQCsLjT7cG1KK+B+ppPntvBmbp+iAGuyXV
+   GYO1uWKPbN6iHsjNy4fj9BUXIDp/MXS9HL70CkVpMPDmhCmcqKmHubRCk
    Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="322374485"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="322374485"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 04:50:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="305067244"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="305067244"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 05:20:51 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="691571557"
-X-IronPort-AV: E=Sophos;i="5.97,222,1669104000"; 
-   d="scan'208";a="691571557"
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="689797088"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="689797088"
 Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by orsmga001.jf.intel.com with ESMTP; 17 Jan 2023 04:50:02 -0800
-Date:   Tue, 17 Jan 2023 20:42:14 +0800
+  by orsmga008.jf.intel.com with ESMTP; 17 Jan 2023 05:20:39 -0800
+Date:   Tue, 17 Jan 2023 21:12:51 +0800
 From:   Chao Peng <chao.p.peng@linux.intel.com>
 To:     Sean Christopherson <seanjc@google.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
@@ -73,21 +73,16 @@ Cc:     Jarkko Sakkinen <jarkko@kernel.org>, kvm@vger.kernel.org,
         Quentin Perret <qperret@google.com>, tabba@google.com,
         Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
         wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20230117124214.GB273037@chaop.bj.intel.com>
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+Message-ID: <20230117131251.GC273037@chaop.bj.intel.com>
 Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
 References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <Y7azFdnnGAdGPqmv@kernel.org>
- <20230106094000.GA2297836@chaop.bj.intel.com>
- <Y7xrtf9FCuYRYm1q@google.com>
- <20230110091432.GA2441264@chaop.bj.intel.com>
- <Y8HdMzlNFhFwlkGS@google.com>
+ <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
+ <Y8HwvTik/2avrCOU@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8HdMzlNFhFwlkGS@google.com>
+In-Reply-To: <Y8HwvTik/2avrCOU@google.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -97,48 +92,136 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 10:37:39PM +0000, Sean Christopherson wrote:
-> On Tue, Jan 10, 2023, Chao Peng wrote:
-> > On Mon, Jan 09, 2023 at 07:32:05PM +0000, Sean Christopherson wrote:
-> > > On Fri, Jan 06, 2023, Chao Peng wrote:
-> > > > On Thu, Jan 05, 2023 at 11:23:01AM +0000, Jarkko Sakkinen wrote:
-> > > > > On Fri, Dec 02, 2022 at 02:13:41PM +0800, Chao Peng wrote:
-> > > > > > To make future maintenance easy, internally use a binary compatible
-> > > > > > alias struct kvm_user_mem_region to handle both the normal and the
-> > > > > > '_ext' variants.
-> > > > > 
-> > > > > Feels bit hacky IMHO, and more like a completely new feature than
-> > > > > an extension.
-> > > > > 
-> > > > > Why not just add a new ioctl? The commit message does not address
-> > > > > the most essential design here.
-> > > > 
-> > > > Yes, people can always choose to add a new ioctl for this kind of change
-> > > > and the balance point here is we want to also avoid 'too many ioctls' if
-> > > > the functionalities are similar.  The '_ext' variant reuses all the
-> > > > existing fields in the 'normal' variant and most importantly KVM
-> > > > internally can reuse most of the code. I certainly can add some words in
-> > > > the commit message to explain this design choice.
-> > > 
-> > > After seeing the userspace side of this, I agree with Jarkko; overloading
-> > > KVM_SET_USER_MEMORY_REGION is a hack.  E.g. the size validation ends up being
-> > > bogus, and userspace ends up abusing unions or implementing kvm_user_mem_region
-> > > itself.
-> > 
-> > How is the size validation being bogus? I don't quite follow.
+On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
+> On Fri, Dec 02, 2022, Chao Peng wrote:
+> > @@ -10357,6 +10364,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+> >  
+> >  		if (kvm_check_request(KVM_REQ_UPDATE_CPU_DIRTY_LOGGING, vcpu))
+> >  			static_call(kvm_x86_update_cpu_dirty_logging)(vcpu);
+> > +
+> > +		if (kvm_check_request(KVM_REQ_MEMORY_MCE, vcpu)) {
+> > +			vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
 > 
-> The ioctl() magic embeds the size of the payload (struct kvm_userspace_memory_region
-> in this case) in the ioctl() number, and that information is visible to userspace
-> via _IOCTL_SIZE().  Attempting to take a larger size can mess up sanity checks,
-> e.g. KVM selftests get tripped up on this assert if KVM_SET_USER_MEMORY_REGION is
-> passed an "extended" struct.
-> 
-> 	#define kvm_do_ioctl(fd, cmd, arg)						\
-> 	({										\
-> 		kvm_static_assert(!_IOC_SIZE(cmd) || sizeof(*arg) == _IOC_SIZE(cmd));	\
-> 		ioctl(fd, cmd, arg);							\
-> 	})
+> Synthesizing triple fault shutdown is not the right approach.  Even with TDX's
+> MCE "architecture" (heavy sarcasm), it's possible that host userspace and the
+> guest have a paravirt interface for handling memory errors without killing the
+> host.
 
-Got it. Thanks for the explanation.
+Agree shutdown is not the correct choice. I see you made below change:
+
+send_sig_mceerr(BUS_MCEERR_AR, (void __user *)hva, PAGE_SHIFT, current)
+
+The MCE may happen in any thread than KVM thread, sending siginal to
+'current' thread may not be the expected behavior. Also how userspace
+can tell is the MCE on the shared page or private page? Do we care?
+
+> 
+> > +			r = 0;
+> > +			goto out;
+> > +		}
+> >  	}
+> 
+> 
+> > @@ -1982,6 +2112,10 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
+> >  			mem->memory_size))
+> >  		return -EINVAL;
+> > +	if (mem->flags & KVM_MEM_PRIVATE &&
+> > +		(mem->restricted_offset & (PAGE_SIZE - 1) ||
+> 
+> Align indentation.
+> 
+> > +		 mem->restricted_offset > U64_MAX - mem->memory_size))
+> 
+> Strongly prefer to use similar logic to existing code that detects wraps:
+> 
+> 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+> 
+> This is also where I'd like to add the "gfn is aligned to offset" check, though
+> my brain is too fried to figure that out right now.
+> 
+> > +		return -EINVAL;
+> >  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
+> >  		return -EINVAL;
+> >  	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
+> > @@ -2020,6 +2154,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  		if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
+> >  			return -EINVAL;
+> >  	} else { /* Modify an existing slot. */
+> > +		/* Private memslots are immutable, they can only be deleted. */
+> 
+> I'm 99% certain I suggested this, but if we're going to make these memslots
+> immutable, then we should straight up disallow dirty logging, otherwise we'll
+> end up with a bizarre uAPI.
+
+But in my mind dirty logging will be needed in the very short time, when
+live migration gets supported?
+
+> 
+> > +		if (mem->flags & KVM_MEM_PRIVATE)
+> > +			return -EINVAL;
+> >  		if ((mem->userspace_addr != old->userspace_addr) ||
+> >  		    (npages != old->npages) ||
+> >  		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
+> > @@ -2048,10 +2185,28 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  	new->npages = npages;
+> >  	new->flags = mem->flags;
+> >  	new->userspace_addr = mem->userspace_addr;
+> > +	if (mem->flags & KVM_MEM_PRIVATE) {
+> > +		new->restricted_file = fget(mem->restricted_fd);
+> > +		if (!new->restricted_file ||
+> > +		    !file_is_restrictedmem(new->restricted_file)) {
+> > +			r = -EINVAL;
+> > +			goto out;
+> > +		}
+> > +		new->restricted_offset = mem->restricted_offset;
+
+I see you changed slot->restricted_offset type from loff_t to gfn_t and
+used pgoff_t when doing the restrictedmem_bind/unbind(). Using page
+index is reasonable KVM internally and sounds simpler than loff_t. But
+we also need initialize it to page index here as well as changes in
+another two cases. This is needed when restricted_offset != 0.
+
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 547b92215002..49e375e78f30 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -2364,8 +2364,7 @@ static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
+                                             gfn_t gfn, kvm_pfn_t *pfn,
+                                             int *order)
+ {
+-       pgoff_t index = gfn - slot->base_gfn +
+-                       (slot->restricted_offset >> PAGE_SHIFT);
++       pgoff_t index = gfn - slot->base_gfn + slot->restricted_offset;
+        struct page *page;
+        int ret;
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 01db35ddd5b3..7439bdcb0d04 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -935,7 +935,7 @@ static bool restrictedmem_range_is_valid(struct kvm_memory_slot *slot,
+                                         pgoff_t start, pgoff_t end,
+                                         gfn_t *gfn_start, gfn_t *gfn_end)
+ {
+-       unsigned long base_pgoff = slot->restricted_offset >> PAGE_SHIFT;
++       unsigned long base_pgoff = slot->restricted_offset;
+ 
+        if (start > base_pgoff)
+                *gfn_start = slot->base_gfn + start - base_pgoff;
+@@ -2275,7 +2275,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+                        r = -EINVAL;
+                        goto out;
+                }
+-               new->restricted_offset = mem->restricted_offset;
++               new->restricted_offset = mem->restricted_offset >> PAGE_SHIFT;
+        }
+ 
+        r = kvm_set_memslot(kvm, old, new, change);
 
 Chao
+> > +	}
+> > +
+> > +	new->kvm = kvm;
+> 
+> Set this above, just so that the code flows better.
