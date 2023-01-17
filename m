@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A7B66E3A0
-	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 17:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9200966E4E4
+	for <lists+linux-arch@lfdr.de>; Tue, 17 Jan 2023 18:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjAQQeY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 17 Jan 2023 11:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S235293AbjAQR1U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 17 Jan 2023 12:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjAQQeW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 11:34:22 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B6F40BCC
-        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 08:34:20 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id c6so34111930pls.4
-        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 08:34:20 -0800 (PST)
+        with ESMTP id S235289AbjAQRZm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 17 Jan 2023 12:25:42 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC5B49015
+        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 09:25:21 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id y3-20020a17090a390300b00229add7bb36so1740257pjb.4
+        for <linux-arch@vger.kernel.org>; Tue, 17 Jan 2023 09:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RlZqHzGUK9sPKKEmcxJQVC8fJtWdk0oagrgJ42/FWUo=;
-        b=GagBZ/fJ0HIkXHzRy0CbCmfPpWlzsJy94tpCQ8EM447gdtHwUNdr+/0ms8CyEKLf1H
-         87BAPR3m4cGTNmHhS8FQWCA3jItdgTfg2O1y324ETrJm9wif/kqBuR0HABESY8b/QAXW
-         IdA3nGsd/k2ZqRgAvcYxZeCzmgBjDiOyukOBmUMFSdxgtarQPCrC3WBhG1hEtHyio7lz
-         MzrrcIHf6oGoCuyNiTRgvEzRwP444dif738YtJUGeanCHpbfef03LW6AovbhF8dvV0XM
-         1zN6puNvHyQtXK+RTTCXdAlDnDwIGobsKZXyE9Dho+bA5WDucJ5i+fSls2V2hPVXYH+n
-         HUjg==
+        bh=oPCKpcym2RW5d35rmFIPP7PcNPID9DHF3zaB9zUqfc0=;
+        b=fcIljTThBG4xJap5TcGlXLzzw36TVvznNFdH4K5cV1wgP0TBEN+a0DD1GCYhRROsCO
+         QvjnEf/w+v2arlNJbI9HWsv3aQkGE66ZYpTq2jVV7H8jTKB+jcivNkBG1DLGh2COfKTX
+         pweZYAuWKUG+YbRSPiUyMiUsIhMoDelNa4TCm0Xonr0YcRslVr+wkYXPREIFWc5njYN5
+         hleDjpP/fD2PR+Pk217/hDlyN417xQoAuBfDpMCd7cMkK5+rXFZvrG6QdKzfXmWAaGuZ
+         MtZaFsL+TjIMHfkIcKjhxx6/QR2rCC95vb8NVwOqOTD6jTRuiCKfm4a07+k8PrsQ0gnu
+         +dNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RlZqHzGUK9sPKKEmcxJQVC8fJtWdk0oagrgJ42/FWUo=;
-        b=Krv7tyuVijmTxFAPriU1Nmyo0TOQrWfKsD7vypNQr8HK9PWiC/SpWD1QfCGdQU7YUS
-         1rUf+1p64c7L2q7xUUM+EA1egVEYbNXosuYKSJGcmBmOVyX4Qj8gsbb+SuwK1h4wCgGF
-         j2N3d1Y33//KahA8E28VgiYJ3REkTboxVF6PqCu1R0px6VZSm4COQcBedOMKpo3qQZaX
-         J7fmUzmE40E0X+qFFU8n5c78TvEHJ0CEvXGdlAy+5i1aauiYhcBxcg+uLj6QNYbhHkCx
-         16A2ZA28TGEOHuSNqZmIlRv4Y4P/DqqNs6q7LulBTuBk6keoySJzBSdZ+VYMeIZtqwF1
-         dV/w==
-X-Gm-Message-State: AFqh2kqGfxBS2jh3IS13mVCUd+Ng6MWrssmgRywYNLRzpLV01y0x9VQM
-        6OGkkUOKeQYeU4lfKy7DGyNcBw==
-X-Google-Smtp-Source: AMrXdXsfdieWfN0MIWgnbSJR6LpHJOm0kOFvhc/mphSIUbDTi7tsqX9OyAWcQeZT7PRkx/BuaGfRaQ==
-X-Received: by 2002:a17:90a:9503:b0:227:679:17df with SMTP id t3-20020a17090a950300b00227067917dfmr2436705pjo.0.1673973259775;
-        Tue, 17 Jan 2023 08:34:19 -0800 (PST)
+        bh=oPCKpcym2RW5d35rmFIPP7PcNPID9DHF3zaB9zUqfc0=;
+        b=OFD+DaMV+miE+IQeZGe5Axqd4mv19RrRlAD8bbf5L7r+OipkC0ssvY2+2moVfprleR
+         svG1zIf8XREMrC1BjCRV1gj0apJSg2Wxwz1fZmHBRs0frTdAcODMP0gZsUOcGEgjzljY
+         1EfbP4VxI1rKJhFXO23m14e8fK8ffqAdAHRQDZnd/vBCaIxXoTOy3q46qqR1SWwL9pdv
+         CV5Ua/mZv8rBfrQ758X2j2Q+QKwgLCtHS25fvPQ2iuQHxv6owWci8b/29noE9AyrX/gt
+         5mUE5Q/Fu8JrJg5ypEJ4x2e+TNFrTAtr0OpKeVi0WrHQulJvDOEq/vfOrnymoWbKfq4D
+         l+FQ==
+X-Gm-Message-State: AFqh2krbFPXyL7Gu+ADQXllib8V208BrCdUPGl6hYL1+ITtJslLplFYr
+        hFk6iSvnMSumk2v7CC0bUwawAQ==
+X-Google-Smtp-Source: AMrXdXvUnfK+nwEzio3X173A3OOI+axnR8EWU2P/trlYbT/Eyg2+Qv0Pg0jRmQ5K8mkAb8pmdGJXpw==
+X-Received: by 2002:a05:6a20:8f02:b0:b8:c646:b0e2 with SMTP id b2-20020a056a208f0200b000b8c646b0e2mr385151pzk.3.1673976320986;
+        Tue, 17 Jan 2023 09:25:20 -0800 (PST)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y7-20020a17090a474700b00219463262desm18118727pjg.39.2023.01.17.08.34.18
+        by smtp.gmail.com with ESMTPSA id y3-20020a17090a390300b0022960d00017sm4505994pjb.22.2023.01.17.09.25.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 08:34:19 -0800 (PST)
-Date:   Tue, 17 Jan 2023 16:34:15 +0000
+        Tue, 17 Jan 2023 09:25:20 -0800 (PST)
+Date:   Tue, 17 Jan 2023 17:25:16 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
+Cc:     Binbin Wu <binbin.wu@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
@@ -83,17 +83,16 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Quentin Perret <qperret@google.com>, tabba@google.com,
         Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
         wei.w.wang@intel.com
-Subject: Re: [PATCH v10 1/9] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <Y8bOB7VuVIsxoMcn@google.com>
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <Y8bZ/J98V5i3wG/v@google.com>
 References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-2-chao.p.peng@linux.intel.com>
- <Y8HTITl1+Oe0H7Gd@google.com>
- <20230117124107.GA273037@chaop.bj.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+ <c25f1f8c-f7c0-6a96-cd67-260df47f79a9@linux.intel.com>
+ <20230117133015.GE273037@chaop.bj.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117124107.GA273037@chaop.bj.intel.com>
+In-Reply-To: <20230117133015.GE273037@chaop.bj.intel.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -106,88 +105,47 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Jan 17, 2023, Chao Peng wrote:
-> On Fri, Jan 13, 2023 at 09:54:41PM +0000, Sean Christopherson wrote:
-> > > +	list_for_each_entry(notifier, &data->notifiers, list) {
-> > > +		notifier->ops->invalidate_start(notifier, start, end);
+> On Tue, Jan 17, 2023 at 11:21:10AM +0800, Binbin Wu wrote:
 > > 
-> > Two major design issues that we overlooked long ago:
+> > On 12/2/2022 2:13 PM, Chao Peng wrote:
+> > > In confidential computing usages, whether a page is private or shared is
+> > > necessary information for KVM to perform operations like page fault
+> > > handling, page zapping etc. There are other potential use cases for
+> > > per-page memory attributes, e.g. to make memory read-only (or no-exec,
+> > > or exec-only, etc.) without having to modify memslots.
+> > > 
+> > > Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
+> > > userspace to operate on the per-page memory attributes.
+> > >    - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
+> > >      a guest memory range.
+> > >    - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
+> > >      memory attributes.
+> > > 
+> > > KVM internally uses xarray to store the per-page memory attributes.
+> > > 
+> > > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
+> > > ---
+> > >   Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
+> > >   arch/x86/kvm/Kconfig           |  1 +
+> > >   include/linux/kvm_host.h       |  3 ++
+> > >   include/uapi/linux/kvm.h       | 17 ++++++++
 > > 
-> >   1. Blindly invoking notifiers will not scale.  E.g. if userspace configures a
-> >      VM with a large number of convertible memslots that are all backed by a
-> >      single large restrictedmem instance, then converting a single page will
-> >      result in a linear walk through all memslots.  I don't expect anyone to
-> >      actually do something silly like that, but I also never expected there to be
-> >      a legitimate usecase for thousands of memslots.
-> > 
-> >   2. This approach fails to provide the ability for KVM to ensure a guest has
-> >      exclusive access to a page.  As discussed in the past, the kernel can rely
-> >      on hardware (and maybe ARM's pKVM implementation?) for those guarantees, but
-> >      only for SNP and TDX VMs.  For VMs where userspace is trusted to some extent,
-> >      e.g. SEV, there is value in ensuring a 1:1 association.
-> > 
-> >      And probably more importantly, relying on hardware for SNP and TDX yields a
-> >      poor ABI and complicates KVM's internals.  If the kernel doesn't guarantee a
-> >      page is exclusive to a guest, i.e. if userspace can hand out the same page
-> >      from a restrictedmem instance to multiple VMs, then failure will occur only
-> >      when KVM tries to assign the page to the second VM.  That will happen deep
-> >      in KVM, which means KVM needs to gracefully handle such errors, and it means
-> >      that KVM's ABI effectively allows plumbing garbage into its memslots.
+> > Should the changes introduced in this file also need to be added in
+> > tools/include/uapi/linux/kvm.h ?
 > 
-> It may not be a valid usage, but in my TDX environment I do meet below
-> issue.
-> 
-> kvm_set_user_memory AddrSpace#0 Slot#0 flags=0x4 gpa=0x0 size=0x80000000 ua=0x7fe1ebfff000 ret=0
-> kvm_set_user_memory AddrSpace#0 Slot#1 flags=0x4 gpa=0xffc00000 size=0x400000 ua=0x7fe271579000 ret=0
-> kvm_set_user_memory AddrSpace#0 Slot#2 flags=0x4 gpa=0xfeda0000 size=0x20000 ua=0x7fe1ec09f000 ret=-22
-> 
-> Slot#2('SMRAM') is actually an alias into system memory(Slot#0) in QEMU
-> and slot#2 fails due to below exclusive check.
-> 
-> Currently I changed QEMU code to mark these alias slots as shared
-> instead of private but I'm not 100% confident this is correct fix.
+> Yes I think.
 
-That's a QEMU bug of sorts.  SMM is mutually exclusive with TDX, QEMU shouldn't
-be configuring SMRAM (or any SMM memslots for that matter) for TDX guests.
+I'm not sure how Paolo or others feel, but my preference is to never update KVM's
+uapi headers in tools/ in KVM's tree.  Nothing KVM-related in tools/ actually
+relies on the headers being copied into tools/, e.g. KVM selftests pulls KVM's
+headers from the .../usr/include/ directory that's populated by `make headers_install`.
 
-Actually, KVM should enforce that by disallowing SMM memslots for TDX guests.
-Ditto for SNP guests and UPM-backed SEV and SEV-ES guests.  I think it probably
-even makes sense to introduce that restriction in the base UPM support, e.g.
-something like the below.  That would unnecessarily prevent emulating SMM for
-KVM_X86_PROTECTED_VM types that aren't encrypted, but IMO that's an acceptable
-limitation until there's an actual use case for KVM_X86_PROTECTED_VM guests beyond
-SEV (my thought is that KVM_X86_PROTECTED_VM will mostly be a vehicle for selftests
-and UPM-based SEV and SEV-ES guests).
+Perf's tooling is what actually "needs" the headers to be copied into tools/, so
+my preference is to let the tools/perf maintainers deal with the headache of keeping
+everything up-to-date.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 48b7bdad1e0a..0a8aac821cb0 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4357,6 +4357,14 @@ bool kvm_arch_has_private_mem(struct kvm *kvm)
-        return kvm->arch.vm_type != KVM_X86_DEFAULT_VM;
- }
- 
-+bool kvm_arch_nr_address_spaces(struct kvm *kvm)
-+{
-+       if (kvm->arch.vm_type != KVM_X86_DEFAULT_VM)
-+               return 1;
-+
-+       return KVM_ADDRESS_SPACE_NUM;
-+}
-+
- static bool kvm_is_vm_type_supported(unsigned long type)
- {
-        return type == KVM_X86_DEFAULT_VM ||
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 97801d81ee42..e0a3fc819fe5 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -2126,7 +2126,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
-             mem->restricted_offset + mem->memory_size < mem->restricted_offset ||
-             0 /* TODO: require gfn be aligned with restricted offset */))
-                return -EINVAL;
--       if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
-+       if (as_id >= kvm_arch_nr_address_spaces(vm) || id >= KVM_MEM_SLOTS_NUM)
-                return -EINVAL;
-        if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
-                return -EINVAL;
-
+> But I'm hesitate to include in this patch or not. I see many commits sync
+> kernel kvm.h to tools's copy. Looks that is done periodically and with a
+> 'pull' model.
