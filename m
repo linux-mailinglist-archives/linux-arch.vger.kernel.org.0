@@ -2,189 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F1667265B
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 19:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BD3672B38
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 23:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjARSKN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Jan 2023 13:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S229591AbjARWWW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Jan 2023 17:22:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjARSJx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 13:09:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F0B4ED0C;
-        Wed, 18 Jan 2023 10:09:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A0FCB81E13;
-        Wed, 18 Jan 2023 18:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9721C433D2;
-        Wed, 18 Jan 2023 18:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674065369;
-        bh=5pgmP1P8QMML9UWJonanxl6exLIq+UTuWfh1kpgwlMQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OYJ/6BjV5zvb3qTyeNhOmHfwQEXdWLGHzwnfS9uTfzzqTptvGNfo7WXHAaQVBYczW
-         lTluE8eWeI5V3JV9WEn6mLFmuEAdIKv7yD7/V7bF1bVDsiWJBMgiwK1BLUj94QVmdV
-         9QzrR67GHiLb3jyNbKFFPi/ivxkIZMwkHd/LnxSZbyDbWsBGQRHHNWWkdEaQ8U94FL
-         zF/DG0VokbF9ptUlghNLUf3JbtjdlOZo3efFXBvdHAIHVtfJnCIcOj0FA9Ute0eRj2
-         nAnA0iOmt6Cm0eNMLy91jiUfC5A3k/5UHIiNYOBXdrn5Tz8h3c9HKuZlaGH4gz+QJK
-         GPfoqMneLxP7g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3FF0B5C0920; Wed, 18 Jan 2023 10:09:29 -0800 (PST)
-Date:   Wed, 18 Jan 2023 10:09:29 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
-Message-ID: <20230118180929.GE2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
- <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
- <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
- <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
- <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
- <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
- <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229446AbjARWWV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 17:22:21 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C825D7EB
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 14:22:20 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gz9-20020a17090b0ec900b002290bda1b07so2703862pjb.1
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 14:22:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O0ldSOk59OSUgQEm352Q1IAMDrBH9zEdmVsSi4rhzHs=;
+        b=d2qNB+Xf95ts7qkj9ZiaPnBajtLu/iVQiBTSgC7UnMvkJQfDG3lM4n6iSmLIyl4v3s
+         3rmfStEJ3hoCz/N6NCboYVr8sGHYbUaDBZ3riuhEADQvr4DF2XEVHeWld8Td+GJ5fmjE
+         EVyonHor1Yeb/PODxfsRmDbI1c3LrbUxKulzi1mF8cBSG67LMY3hCTMFiwdjHpWfJK2d
+         shgzG2mHfNhl/hyynoWMxuolQGRmbCAJDNJTHOL4tRjYe6lN8vDWeKVoJyb7gns8eUTM
+         cwDr4PdGMWl+hDydjkIigOM2lQ3ewGntx3K0JC4HnXQdlZNDHs32qYzhlq/8roY3Snpe
+         mQ9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O0ldSOk59OSUgQEm352Q1IAMDrBH9zEdmVsSi4rhzHs=;
+        b=WuDulQGou95molob33BC+lswI5IWafa7zBn8+Lh2hS+riE+6HhXzzX7DiNdWK+NoAt
+         IRkDtG7wj1S53oyYOiB0MksR+x4XDCvFIjukbaBwNM/9U+MxQOxCfb103E2358HoC+V7
+         olji0eZGtY2dadzPPc5V90GzjDWqwauGDGHHKBnvqM9gC28l8WGVPvkrlijgk1N5bGv9
+         +7V5w7vSvBBjHaaNzXkYf2yQ1DjD7D0M5gLm9dZdKy+uRoKRQX0dcbDBYFKy+RbQz4SH
+         /rwjRJYG9Hi5sOeNlqJ/9FTIVWM9j7phhYCGrTR18wFUcSP0BfHYRAIvfSSyyh8s413E
+         XW+w==
+X-Gm-Message-State: AFqh2kr/gplc7naFU4mWXllkls1fr8VyiSByCwn7ozYvtlI8BX7eNsxP
+        RrNIWtqHurm6PdiFyBAULV9R2amPoeJFyUFV
+X-Google-Smtp-Source: AMrXdXvRavXFFRYE14blzdZLuVmL27/NTESzDN8xeMK+lNpE66Enb5Ky51V+R/46yv36y/vDYHNI+A==
+X-Received: by 2002:a17:90b:368f:b0:229:1607:c830 with SMTP id mj15-20020a17090b368f00b002291607c830mr9173236pjb.25.1674080539376;
+        Wed, 18 Jan 2023 14:22:19 -0800 (PST)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id dw13-20020a17090b094d00b00226f49eca92sm1840043pjb.28.2023.01.18.14.22.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 18 Jan 2023 14:22:18 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.300.101.1.3\))
+Subject: Re: [PATCH v6 3/5] lazy tlb: shoot lazies, non-refcounting lazy tlb
+ mm reference handling scheme
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <20230118080011.2258375-4-npiggin@gmail.com>
+Date:   Wed, 18 Jan 2023 14:22:07 -0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, linuxppc-dev@lists.ozlabs.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5F3590B8-3F25-4EFB-BE3A-D32AAAC0B2F4@gmail.com>
+References: <20230118080011.2258375-1-npiggin@gmail.com>
+ <20230118080011.2258375-4-npiggin@gmail.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+X-Mailer: Apple Mail (2.3731.300.101.1.3)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:42:23AM +0100, Paul Heidekrüger wrote:
-> On 13 Jan 2023, at 16:22, Alan Stern wrote:
-> 
-> > On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
-> >> Hi all,
-> >>
-> >> FWIW, here are two more broken address dependencies, both very similar to the
-> >> one discussed in this thread. From what I can tell, both are protected by a
-> >> lock, so, again, nothing to worry about right now? Would you agree?
-> >
-> > FWIW, my opinion is that in both cases the broken dependency can be
-> > removed entirely.
-> >
-> >> Comments marked with "AD:" were added by me for readability.
-> >>
-> >> 1. drivers/hwtracing/stm/core.c::1050 - 1085
-> >>
-> >>         /**
-> >>          * __stm_source_link_drop() - detach stm_source from an stm device
-> >>          * @src:	stm_source device
-> >>          * @stm:	stm device
-> >>          *
-> >>          * If @stm is @src::link, disconnect them from one another and put the
-> >>          * reference on the @stm device.
-> >>          *
-> >>          * Caller must hold stm::link_mutex.
-> >>          */
-> >>         static int __stm_source_link_drop(struct stm_source_device *src,
-> >>                                           struct stm_device *stm)
-> >>         {
-> >>                 struct stm_device *link;
-> >>                 int ret = 0;
-> >>
-> >>                 lockdep_assert_held(&stm->link_mutex);
-> >>
-> >>                 /* for stm::link_list modification, we hold both mutex and spinlock */
-> >>                 spin_lock(&stm->link_lock);
-> >>                 spin_lock(&src->link_lock);
-> >>
-> >>                 /* AD: Beginning of the address dependency. */
-> >>                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
-> >>
-> >>                 /*
-> >>                  * The linked device may have changed since we last looked, because
-> >>                  * we weren't holding the src::link_lock back then; if this is the
-> >>                  * case, tell the caller to retry.
-> >>                  */
-> >>                 if (link != stm) {
-> >>                         ret = -EAGAIN;
-> >>                         goto unlock;
-> >>                 }
-> >>
-> >>                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
-> >>                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
-> >>
-> >>                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
-> >>                 pm_runtime_mark_last_busy(&link->dev);
-> >
-> > In both of these statements, link can safely be replaced by stm.
-> >
-> > (There's also a control dependency which the LKMM isn't aware of.  This
-> > makes it all the more safe.)
-> >
-> >> 2. kernel/locking/lockdep.c::6319 - 6348
-> >>
-> >>         /*
-> >>          * Unregister a dynamically allocated key.
-> >>          *
-> >>          * Unlike lockdep_register_key(), a search is always done to find a matching
-> >>          * key irrespective of debug_locks to avoid potential invalid access to freed
-> >>          * memory in lock_class entry.
-> >>          */
-> >>         void lockdep_unregister_key(struct lock_class_key *key)
-> >>         {
-> >>                 struct hlist_head *hash_head = keyhashentry(key);
-> >>                 struct lock_class_key *k;
-> >>                 struct pending_free *pf;
-> >>                 unsigned long flags;
-> >>                 bool found = false;
-> >>
-> >>                 might_sleep();
-> >>
-> >>                 if (WARN_ON_ONCE(static_obj(key)))
-> >>                         return;
-> >>
-> >>                 raw_local_irq_save(flags);
-> >>                 lockdep_lock();
-> >>
-> >>                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
-> >>                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
-> >>                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
-> >>                         if (k == key) {
-> >>                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
-> >>                                 hlist_del_rcu(&k->hash_entry);
-> >
-> > And here k could safely be replaced with key.  (And again there is a
-> > control dependency, but this is one that the LKMM would detect.)
-> 
-> Ha, I didn't even notice the control dependencies - of course! In that case,
-> this doesn't warrant a patch though, given that nothing is really breaking?
 
-Up to the maintainers, but if any of the code that I maintain was relying
-on a control dependency, I would want that code commented.  But in this
-case, lockdep_unregister_key() isn't called very often, correct?  If so,
-and if this control dependency really is relied on, perhaps some stronger
-and less fragile ordering should be used.
 
-But again, maintainers' choice!
+> On Jan 18, 2023, at 12:00 AM, Nicholas Piggin <npiggin@gmail.com> =
+wrote:
+>=20
+> +static void do_shoot_lazy_tlb(void *arg)
+> +{
+> +	struct mm_struct *mm =3D arg;
+> +
+> + 	if (current->active_mm =3D=3D mm) {
+> + 		WARN_ON_ONCE(current->mm);
+> + 		current->active_mm =3D &init_mm;
+> + 		switch_mm(mm, &init_mm, current);
+> + 	}
+> +}
 
-							Thanx, Paul
+I might be out of touch - doesn=E2=80=99t a flush already take place =
+when we free
+the page-tables, at least on common cases on x86?
+
+IIUC exit_mmap() would free page-tables, and whenever page-tables are
+freed, on x86, we do shootdown regardless to whether the target CPU TLB =
+state
+marks is_lazy. Then, flush_tlb_func() should call switch_mm_irqs_off() =
+and
+everything should be fine, no?
+
+[ I understand you care about powerpc, just wondering on the effect on =
+x86 ]
+
