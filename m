@@ -2,295 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B975671734
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 10:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB5E671780
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 10:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjARJOr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Jan 2023 04:14:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S229888AbjARJYm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Jan 2023 04:24:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjARJO0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 04:14:26 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2562070C71;
-        Wed, 18 Jan 2023 00:31:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674030683; x=1705566683;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=IaruPOH1D3wCRj1gFgYkLc0hyR2BZ5VY51Nzyl07GbA=;
-  b=bicnT9dSKfznsK+9kivTrellVqdU4ZNR8kKwQH2GsZuyppCkTLSGwbCf
-   NPVTVswhi7W9+tPgessgMUAOOGgMn3RFl24h0BSXDKWodXD/C7kwQVIz6
-   0+pVx+fB398WN92i7lQe4aRfsHkhmw4L36Zh4dyHezz+dChauyDJEURYJ
-   CF9SzyEyyW3gyRGZhUMaiZzKWUSQxEXaxfdT+G0gs2jrQGqRiU7fCkS9+
-   7VsM2LTaYIvfsvJftYHORgtg/zl8ZS4pWCAMCIzMMzIS6q09ZNmKQzcdJ
-   NB4+1CzLqTnNYPBFWaWUIZrUFuvAOOEdycBUpLaYpg7p5lvb7Ip1jEvRV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="304612190"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="304612190"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 00:31:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10593"; a="661627035"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="661627035"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by fmsmga007.fm.intel.com with ESMTP; 18 Jan 2023 00:30:56 -0800
-Date:   Wed, 18 Jan 2023 16:23:09 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-Message-ID: <20230118082309.GB303785@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-10-chao.p.peng@linux.intel.com>
- <Y8HwvTik/2avrCOU@google.com>
- <20230117131251.GC273037@chaop.bj.intel.com>
- <Y8b4nsMJm+4Hr/e0@google.com>
+        with ESMTP id S230173AbjARJVP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 04:21:15 -0500
+Received: from mail.bostmarktrun.com (mail.bostmarktrun.com [135.125.238.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A585D7DD
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 00:45:52 -0800 (PST)
+Received: by mail.bostmarktrun.com (Postfix, from userid 1002)
+        id 4818AA2868; Wed, 18 Jan 2023 08:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bostmarktrun.com;
+        s=mail; t=1674031551;
+        bh=gfWmJwOZk+B/IN1TMPg7emKhIvoExrJdUiyEL8yd2Jk=;
+        h=Date:From:To:Subject:From;
+        b=JRghxbCeuy0CRNBJJQxM4IJih9hjLwBzIOTh/V3pdtjV+RxlqatLxbhj1Zc6L0I2P
+         FMg6aKirTB8oNbpPEcFt/UxphAZXls5A3cua89rmrA6PuXGRC8YwA6D822v+vAKsgF
+         ZQyV46c50V7rfAgFuMGDnbTo0vzzEaZvL11VazK8l9egmtwCz47B0e3Vjz4dtkT3lp
+         AVTQuBrbWuw4dNQ749VBeeEg18qaAfowkBNVLY+FZ7zwybzF7dqKKJaS6JJXBDqdzy
+         hV7LqDo44fMP6dpZxDx9xgiyx1BXQfMuLJylB0TIb7nr1HGwcDlsi1fa4admm+ZK+w
+         DaYjNDdw2KnWA==
+Received: by mail.bostmarktrun.com for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 08:45:33 GMT
+Message-ID: <20230118074500-0.1.4p.wr8n.0.14x6qki0kb@bostmarktrun.com>
+Date:   Wed, 18 Jan 2023 08:45:33 GMT
+From:   "Corey Webb" <corey.webb@bostmarktrun.com>
+To:     <linux-arch@vger.kernel.org>
+Subject: Custom Software Development
+X-Mailer: mail.bostmarktrun.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8b4nsMJm+4Hr/e0@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: bostmarktrun.com]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [135.125.238.46 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: bostmarktrun.com]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 07:35:58PM +0000, Sean Christopherson wrote:
-> On Tue, Jan 17, 2023, Chao Peng wrote:
-> > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
-> > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > > > @@ -10357,6 +10364,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-> > > >  
-> > > >  		if (kvm_check_request(KVM_REQ_UPDATE_CPU_DIRTY_LOGGING, vcpu))
-> > > >  			static_call(kvm_x86_update_cpu_dirty_logging)(vcpu);
-> > > > +
-> > > > +		if (kvm_check_request(KVM_REQ_MEMORY_MCE, vcpu)) {
-> > > > +			vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
-> > > 
-> > > Synthesizing triple fault shutdown is not the right approach.  Even with TDX's
-> > > MCE "architecture" (heavy sarcasm), it's possible that host userspace and the
-> > > guest have a paravirt interface for handling memory errors without killing the
-> > > host.
-> > 
-> > Agree shutdown is not the correct choice. I see you made below change:
-> > 
-> > send_sig_mceerr(BUS_MCEERR_AR, (void __user *)hva, PAGE_SHIFT, current)
-> > 
-> > The MCE may happen in any thread than KVM thread, sending siginal to
-> > 'current' thread may not be the expected behavior.
-> 
-> This is already true today, e.g. a #MC in memory that is mapped into the guest can
-> be triggered by a host access.  Hrm, but in this case we actually have a KVM
-> instance, and we know that the #MC is relevant to the KVM instance, so I agree
-> that signaling 'current' is kludgy.
-> 
-> >  Also how userspace can tell is the MCE on the shared page or private page?
-> >  Do we care?
-> 
-> We care.  I was originally thinking we could require userspace to keep track of
-> things, but that's quite prescriptive and flawed, e.g. could race with conversions.
-> 
-> One option would be to KVM_EXIT_MEMORY_FAULT, and then wire up a generic (not x86
-> specific) KVM request to exit to userspace, e.g.
-> 
-> 		/* KVM_EXIT_MEMORY_FAULT */
-> 		struct {
-> #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1ULL << 3)
-> #define KVM_MEMORY_EXIT_FLAG_HW_ERROR	(1ULL << 4)
-> 			__u64 flags;
-> 			__u64 gpa;
-> 			__u64 size;
-> 		} memory;
-> 
-> But I'm not sure that's the correct approach.  It kinda feels like we're reinventing
-> the wheel.  It seems like restrictedmem_get_page() _must_ be able to reject attempts
-> to get a poisoned page, i.e. restrictedmem_get_page() should yield KVM_PFN_ERR_HWPOISON.
+Hi,=20
 
-Yes, I see there is -EHWPOISON handling for hva_to_pfn() for shared
-memory. It makes sense doing similar for private page.
+I would like to reach the person responsible for the implementation of yo=
+ur company's goals, vision and mission or the decision-maker in the devel=
+opment of your technology strategy.
 
-> Assuming that's the case, then I believe KVM simply needs to zap SPTEs in response
-> to an error notification in order to force vCPUs to fault on the poisoned page.
+I represent provider of lucrative IT solutions that remove the barriers t=
+o process development resulting from limited access to appropriate IT res=
+ources.
 
-Agree, this is waht we should do anyway.
+We guarantee you access to the knowledge and experience of outstanding 3,=
+000 software developers from Poland and 500 professional consultants and =
+senior developers in the United States and other Western countries. =20
 
-> 
-> > > > +		return -EINVAL;
-> > > >  	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
-> > > >  		return -EINVAL;
-> > > >  	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
-> > > > @@ -2020,6 +2154,9 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> > > >  		if ((kvm->nr_memslot_pages + npages) < kvm->nr_memslot_pages)
-> > > >  			return -EINVAL;
-> > > >  	} else { /* Modify an existing slot. */
-> > > > +		/* Private memslots are immutable, they can only be deleted. */
-> > > 
-> > > I'm 99% certain I suggested this, but if we're going to make these memslots
-> > > immutable, then we should straight up disallow dirty logging, otherwise we'll
-> > > end up with a bizarre uAPI.
-> > 
-> > But in my mind dirty logging will be needed in the very short time, when
-> > live migration gets supported?
-> 
-> Ya, but if/when live migration support is added, private memslots will no longer
-> be immutable as userspace will want to enable dirty logging only when a VM is
-> being migrated, i.e. something will need to change.
-> 
-> Given that it looks like we have clear line of sight to SEV+UPM guests, my
-> preference would be to allow toggling dirty logging from the get-go.  It doesn't
-> necessarily have to be in the first patch, e.g. KVM could initially reject
-> KVM_MEM_LOG_DIRTY_PAGES + KVM_MEM_PRIVATE and then add support separately to make
-> the series easier to review, test, and bisect.
-> 
-> static int check_memory_region_flags(struct kvm *kvm,
-> 				     const struct kvm_userspace_memory_region2 *mem)
-> {
-> 	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
-> 
-> 	if (kvm_arch_has_private_mem(kvm) &&
-> 	    ~(mem->flags & KVM_MEM_LOG_DIRTY_PAGES))
-> 		valid_flags |= KVM_MEM_PRIVATE;
+We respond to a variety of needs, ranging from expanding your project tea=
+m with specialists with specific skills to supporting project managers, e=
+xperienced innovation teams to creating a Minimum Viable Project (MVP).
 
-Adding this limitation is OK to me. It's not too hard to remove it when
-live migration gets added.
+The comprehensiveness of our services guarantees you dynamic software dev=
+elopment including creation, testing and implementation systems that are =
+the backbone of effective management of the entire organization.
 
-> 
-> 
-> 	...
-> }
-> 
-> > > > +		if (mem->flags & KVM_MEM_PRIVATE)
-> > > > +			return -EINVAL;
-> > > >  		if ((mem->userspace_addr != old->userspace_addr) ||
-> > > >  		    (npages != old->npages) ||
-> > > >  		    ((mem->flags ^ old->flags) & KVM_MEM_READONLY))
-> > > > @@ -2048,10 +2185,28 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> > > >  	new->npages = npages;
-> > > >  	new->flags = mem->flags;
-> > > >  	new->userspace_addr = mem->userspace_addr;
-> > > > +	if (mem->flags & KVM_MEM_PRIVATE) {
-> > > > +		new->restricted_file = fget(mem->restricted_fd);
-> > > > +		if (!new->restricted_file ||
-> > > > +		    !file_is_restrictedmem(new->restricted_file)) {
-> > > > +			r = -EINVAL;
-> > > > +			goto out;
-> > > > +		}
-> > > > +		new->restricted_offset = mem->restricted_offset;
-> > 
-> > I see you changed slot->restricted_offset type from loff_t to gfn_t and
-> > used pgoff_t when doing the restrictedmem_bind/unbind(). Using page
-> > index is reasonable KVM internally and sounds simpler than loff_t. But
-> > we also need initialize it to page index here as well as changes in
-> > another two cases. This is needed when restricted_offset != 0.
-> 
-> Oof.  I'm pretty sure I completely missed that loff_t is used for byte offsets,
-> whereas pgoff_t is a frame index. 
-> 
-> Given that the restrictmem APIs take pgoff_t, I definitely think it makes sense
-> to the index, but I'm very tempted to store pgoff_t instead of gfn_t, and name
-> the field "index" to help connect the dots to the rest of kernel, where "pgoff_t index"
-> is quite common.
-> 
-> And looking at those bits again, we should wrap all of the restrictedmem fields
-> with CONFIG_KVM_PRIVATE_MEM.  It'll require minor tweaks to __kvm_set_memory_region(),
-> but I think will yield cleaner code (and internal APIs) overall.
-> 
-> And wrap the three fields in an anonymous struct?  E.g. this is a little more
-> versbose (restrictedmem instead restricted), but at first glance it doesn't seem
-> to cause widespared line length issues.
-> 
-> #ifdef CONFIG_KVM_PRIVATE_MEM
-> 	struct {
-> 		struct file *file;
-> 		pgoff_t index;
-> 		struct restrictedmem_notifier notifier;
-> 	} restrictedmem;
-> #endif
+A partnership that lasts for years is the best proof that our clients mee=
+t their unique requirements within a specific timeframe, introduce new op=
+portunities and grow their business while we solve their problems.
 
-Looks better.
+Are you available for a brief call? I will be looking forward to hearing =
+from you.
 
-Thanks,
-Chao
-> 
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 547b92215002..49e375e78f30 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -2364,8 +2364,7 @@ static inline int kvm_restricted_mem_get_pfn(struct kvm_memory_slot *slot,
-> >                                              gfn_t gfn, kvm_pfn_t *pfn,
-> >                                              int *order)
-> >  {
-> > -       pgoff_t index = gfn - slot->base_gfn +
-> > -                       (slot->restricted_offset >> PAGE_SHIFT);
-> > +       pgoff_t index = gfn - slot->base_gfn + slot->restricted_offset;
-> >         struct page *page;
-> >         int ret;
-> >  
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 01db35ddd5b3..7439bdcb0d04 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -935,7 +935,7 @@ static bool restrictedmem_range_is_valid(struct kvm_memory_slot *slot,
-> >                                          pgoff_t start, pgoff_t end,
-> >                                          gfn_t *gfn_start, gfn_t *gfn_end)
-> >  {
-> > -       unsigned long base_pgoff = slot->restricted_offset >> PAGE_SHIFT;
-> > +       unsigned long base_pgoff = slot->restricted_offset;
-> >  
-> >         if (start > base_pgoff)
-> >                 *gfn_start = slot->base_gfn + start - base_pgoff;
-> > @@ -2275,7 +2275,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> >                         r = -EINVAL;
-> >                         goto out;
-> >                 }
-> > -               new->restricted_offset = mem->restricted_offset;
-> > +               new->restricted_offset = mem->restricted_offset >> PAGE_SHIFT;
-> >         }
-> >  
-> >         r = kvm_set_memslot(kvm, old, new, change);
-> > 
-> > Chao
-> > > > +	}
-> > > > +
-> > > > +	new->kvm = kvm;
-> > > 
-> > > Set this above, just so that the code flows better.
+
+Best regards
+Corey Webb
