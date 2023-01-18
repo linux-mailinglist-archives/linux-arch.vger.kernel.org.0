@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D94F671678
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 09:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2180671674
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 09:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjARIrv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Jan 2023 03:47:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S229473AbjARIqR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Jan 2023 03:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjARIpm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 03:45:42 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2D290875
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 00:00:38 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id k18so12073000pll.5
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 00:00:38 -0800 (PST)
+        with ESMTP id S230387AbjARIpa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 03:45:30 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACEE90869
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 00:00:44 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id q64so34968745pjq.4
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 00:00:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CrPiR9IjSMnA6UKTOp8OkTYk/Ghbyk4227JxOnG3eIc=;
-        b=i4bw46JJNHRCls6t57srDxlnFl9Ixtn2MdZ/C1ywWOJAZ6c4MzBYu4pOZeTJcb/q7N
-         UsxGeUe0RQcuI8CsYp+iwUQSUUwXzJJH/aoZLqbs8vXZiAVTsoNPzhMrgcJ56rVs7UyC
-         3wO94DAvEHxcY8Wc7kErGUl9QIJzkStrhbVKKsW0tMVDhEBg0wBmovNzmHyWbXyE6NdP
-         TYBWmk/p0jbSH5WF00hnqcEwOS109b2suq6lAXft0IQlzKGzp7MmKdgJLgQioXXYUHz4
-         D6ia+/6u4/Dws5LDHKM6NQv/orJW01MoD44qPN/ZLK3HdidkLzBV8lr0dSmdnyYamY+9
-         Kkpw==
+        bh=cadyF8CD/E3oK1yfSJSphX1/cZjS+kj7x9tW6+ar6sc=;
+        b=WcdwzEYpRynxGJWgQlKjA9zr5Ugl+tLrV/aeoKmaEyWm5I+eofmuFjC8v+O5CZJC8w
+         tOZB+tAJR4+wiFQ1iaQWMCDXko5KxSau59i0CeKJSVmyvX/0i6O5Zr39SstJW0Z3rE1B
+         Fyu5ijjz/jR31RZrsNZLyh0clWoOshZNgMIiETyrsUXvb3eq/iyNx1mkClYVLAY7+64k
+         zYOIM7lzO4YVQSlFFkESwH80wBohrcEE2EqtboWnWa9tbyNk7GkZ4n+1ZHeUM7FQ71rU
+         UAR97RL8R4zHQ490YhXWXkQbBJPh185TldI1Fz1/+yE5zazmCzPESNz0kF9nXmNoebc3
+         uPoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CrPiR9IjSMnA6UKTOp8OkTYk/Ghbyk4227JxOnG3eIc=;
-        b=b89aQoUAzIn7C5yJkQQF1OTfhR9lHPmjEKoWooPvl1awtCGuIqz4S/JDW0UmuryCqQ
-         r4UpCdRd/DWqUkqlVYjlpR0jh95uQpDz2WaYke33IPzL6VA6LzqHNuBFpo9oX7leDu6Q
-         Zk1PIVOe77whXOeJwUFrWRZf+8VCF1Lwz5EViaMNcsG0akBUz0QA8OIPO96FvpbYLhDi
-         2XsLB19Qms0f2gV3V33ET0m+jVEzc2J6qvnU0ZH6btnx8YcYOHxwf5jombI54lXWps9G
-         jOqlSsGvx24r9MoGKdjF6HN2lOK2BlSxUv01CB5FCtZpNIZz/7yNMVe7g786iOZE95Hq
-         OWpQ==
-X-Gm-Message-State: AFqh2kpy9nuVdohyK3n5MjFhKNks9vSj2Y/HwfRNt1jOOjEQHfiOt24B
-        1OgBr1TXRpdii9NC1j58ZyM=
-X-Google-Smtp-Source: AMrXdXtTl64G4cCab9NpNyGKytSh9JoZppnQQfip0s76mKtZrzwRQdlnqZiCFVAJ79+Rk/NIj37VRw==
-X-Received: by 2002:a17:90a:e543:b0:229:a2:a265 with SMTP id ei3-20020a17090ae54300b0022900a2a265mr6031348pjb.3.1674028838309;
-        Wed, 18 Jan 2023 00:00:38 -0800 (PST)
+        bh=cadyF8CD/E3oK1yfSJSphX1/cZjS+kj7x9tW6+ar6sc=;
+        b=WSLkZtk1qLumWFkdDj/vFiQaUiCKgxmKtpQb4lwWEBVwi+yJbGr+Ost5Ta75f+Lq9T
+         f44FjOG6Rsebpl+HINOpMMeIIrHEb7c4swiLNg79P+/dUt+6QaemsFDCLwIaEIkOOrKa
+         y2GfJruffbHpp+idiElw+pzqzzUHfIF9eS0cyTsunLft01T89Fj/jb/wiEer+4moJjEf
+         lv+39jRec2HWNkldNg6QGOtpstYbU0OQdpX7Eymwzg8P+wiHUag3OxvbL5jpZXN0K4jr
+         Z1gCX6bsJPZeSsqcBqTYbS+fJ4eMywQRnv4AvO4zbUb/nTtKr6xMI/0xJ//3gpHETnMj
+         qCTA==
+X-Gm-Message-State: AFqh2koDKRY3bFvDk7q/yuK/wauLbBEitCN3WZIbsj2Wru1Tww4D+G/I
+        4hfhwy9N0eitEQG6m1CGduM=
+X-Google-Smtp-Source: AMrXdXvru18rhSMREurCixBPKsRCor9uxoV61Ex5rHoJVQ7gmSRE7YHzcemWD4ARplQOcaVlqvp+VQ==
+X-Received: by 2002:a17:90a:3fca:b0:227:161a:6318 with SMTP id u10-20020a17090a3fca00b00227161a6318mr6162197pjm.47.1674028842208;
+        Wed, 18 Jan 2023 00:00:42 -0800 (PST)
 Received: from bobo.ibm.com (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id y2-20020a17090a16c200b002272616d3e1sm738462pje.40.2023.01.18.00.00.34
+        by smtp.gmail.com with ESMTPSA id y2-20020a17090a16c200b002272616d3e1sm738462pje.40.2023.01.18.00.00.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 00:00:37 -0800 (PST)
+        Wed, 18 Jan 2023 00:00:41 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
@@ -56,9 +56,9 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-mm <linux-mm@kvack.org>, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v6 4/5] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
-Date:   Wed, 18 Jan 2023 18:00:10 +1000
-Message-Id: <20230118080011.2258375-5-npiggin@gmail.com>
+Subject: [PATCH v6 5/5] powerpc/64s/radix: combine final TLB flush and lazy tlb mm shootdown IPIs
+Date:   Wed, 18 Jan 2023 18:00:11 +1000
+Message-Id: <20230118080011.2258375-6-npiggin@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230118080011.2258375-1-npiggin@gmail.com>
 References: <20230118080011.2258375-1-npiggin@gmail.com>
@@ -74,35 +74,72 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On a 16-socket 192-core POWER8 system, a context switching benchmark
-with as many software threads as CPUs (so each switch will go in and
-out of idle), upstream can achieve a rate of about 1 million context
-switches per second, due to contention on the mm refcount.
+** Not for merge **
 
-64s meets the prerequisites for CONFIG_MMU_LAZY_TLB_SHOOTDOWN, so enable
-the option. This increases the above benchmark to 118 million context
-switches per second.
+CONFIG_MMU_LAZY_TLB_SHOOTDOWN that requires IPIs to clear the "lazy tlb"
+references to an mm that is being freed. With the radix MMU, the final
+userspace exit TLB flush can be performed with IPIs, and those IPIs can
+also clear lazy tlb mm references, which mostly eliminates the final
+IPIs required by MMU_LAZY_TLB_SHOOTDOWN.
 
-This generates 314 additional IPI interrupts on a 144 CPU system doing
-a kernel compile, which is in the noise in terms of kernel cycles.
+This does mean the final TLB flush is not done with TLBIE, which can be
+faster than IPI+TLBIEL, but we would have to do those IPIs for lazy
+shootdown so using TLBIEL should be a win.
 
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+The final cpumask test and possible IPIs are still needed to clean up
+some rare race cases. We could prevent those entirely (e.g., prevent new
+lazy tlb mm references if userspace has gone away, or move the final
+TLB flush later), but I'd have to see actual numbers that matter before
+adding any more complexity for it. I can't imagine it would ever be
+worthwhile.
+
+This takes lazy tlb mm shootdown IPI interrupts from 314 to 3 on a 144
+CPU system doing a kernel compile. It also takes care of the one
+potential problem workload which is a short-lived process with multiple
+CPU-bound threads that want to be spread to other CPUs, because the mm
+exit happens after the process is back to single-threaded.
+
 ---
- arch/powerpc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/mm/book3s64/radix_tlb.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b8c4ac56bddc..600ace5a7f1a 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -265,6 +265,7 @@ config PPC
- 	select MMU_GATHER_PAGE_SIZE
- 	select MMU_GATHER_RCU_TABLE_FREE
- 	select MMU_GATHER_MERGE_VMAS
-+	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
- 	select MODULES_USE_ELF_RELA
- 	select NEED_DMA_MAP_STATE		if PPC64 || NOT_COHERENT_CACHE
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK	if PPC64
+diff --git a/arch/powerpc/mm/book3s64/radix_tlb.c b/arch/powerpc/mm/book3s64/radix_tlb.c
+index 282359ab525b..f34b78cb4c7d 100644
+--- a/arch/powerpc/mm/book3s64/radix_tlb.c
++++ b/arch/powerpc/mm/book3s64/radix_tlb.c
+@@ -1303,7 +1303,31 @@ void radix__tlb_flush(struct mmu_gather *tlb)
+ 	 * See the comment for radix in arch_exit_mmap().
+ 	 */
+ 	if (tlb->fullmm || tlb->need_flush_all) {
+-		__flush_all_mm(mm, true);
++		if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_SHOOTDOWN)) {
++			/*
++			 * Shootdown based lazy tlb mm refcounting means we
++			 * have to IPI everyone in the mm_cpumask anyway soon
++			 * when the mm goes away, so might as well do it as
++			 * part of the final flush now.
++			 *
++			 * If lazy shootdown was improved to reduce IPIs (e.g.,
++			 * by batching), then it may end up being better to use
++			 * tlbies here instead.
++			 */
++			smp_mb(); /* see radix__flush_tlb_mm */
++			exit_flush_lazy_tlbs(mm);
++			_tlbiel_pid(mm->context.id, RIC_FLUSH_ALL);
++
++			/*
++			 * It should not be possible to have coprocessors still
++			 * attached here.
++			 */
++			if (WARN_ON_ONCE(atomic_read(&mm->context.copros) > 0))
++				__flush_all_mm(mm, true);
++		} else {
++			__flush_all_mm(mm, true);
++		}
++
+ 	} else if ( (psize = radix_get_mmu_psize(page_size)) == -1) {
+ 		if (!tlb->freed_tables)
+ 			radix__flush_tlb_mm(mm);
 -- 
 2.37.2
 
