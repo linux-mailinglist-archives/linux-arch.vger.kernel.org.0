@@ -2,128 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94146724F4
-	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 18:31:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F1667265B
+	for <lists+linux-arch@lfdr.de>; Wed, 18 Jan 2023 19:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjARRbT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Jan 2023 12:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57910 "EHLO
+        id S230190AbjARSKN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Jan 2023 13:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjARRbA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 12:31:00 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E175599B7
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 09:30:42 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id g9so15739710qtu.2
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 09:30:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=45VTI8G2wI4nS2eH3K9pAMjugnugZ8TVFHXhCaZ9BN4=;
-        b=KHKCIU14OK3pQZodreyf7cATu0CnBQ6Qp/eyFOrDD7AtFbqgOhemxuzdFJljGaeQVx
-         fFRqwtRDmL31BGjxA2umkxBS2bzIUxJXG7wccQXsOU1uKFkErI9PWKf3gKBRSCN1cRFu
-         fZ7h59H1HqHCAQh4z6y/0HqZ7cCPYHBKbh2DM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=45VTI8G2wI4nS2eH3K9pAMjugnugZ8TVFHXhCaZ9BN4=;
-        b=zLOAV9GqW9ib+97Z0EF8iyiI/DGJv57thQ1IBKoiM2uKL0lAXzPn+sYwFR0AVMClSB
-         KMjqWLrUUqqP1tAunTp3z/muLUc4FIpOCqNPJO9317gH48AkZYBN5H/L0rIizUm/rcJ4
-         DKHrk6JNLNNZBhNyDDC0AlxAkpLTFY3Qa3gVQ6/DDNpiUBrG1qx3c6u/K5iAaugHO8F9
-         fx+FgdJMdbPTE88bAOEHKncq44YnjbH0YiyMVF9M/sYF5yln14B9rbwaO4EogojiCod3
-         8tnhWGaI40KDm+1XiOyxzkn1zc9vGtoDEcCs40fGIVgMc4WiiCequlS/T/8mvvkwCRax
-         8lSg==
-X-Gm-Message-State: AFqh2kpFa8NNvwMvj/u9wT/KxGBUzsDc+dpdES0eF5VszF+FTlczKykI
-        PoKWVOqQva67D78Acp7c4SBXCJqW63+zTf38
-X-Google-Smtp-Source: AMrXdXvpv0XIEto8fmEFE49zFnDdJhIW6zytorOrLDvNTdsTVWMvf+Tssm7iu3hZ1h41FHbuiIR7mQ==
-X-Received: by 2002:ac8:5358:0:b0:3b6:6d85:8812 with SMTP id d24-20020ac85358000000b003b66d858812mr5205123qto.40.1674063039636;
-        Wed, 18 Jan 2023 09:30:39 -0800 (PST)
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com. [209.85.222.177])
-        by smtp.gmail.com with ESMTPSA id d25-20020ac85459000000b003b630456b8fsm4889487qtq.89.2023.01.18.09.30.39
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 09:30:39 -0800 (PST)
-Received: by mail-qk1-f177.google.com with SMTP id pj1so18343239qkn.3
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 09:30:39 -0800 (PST)
-X-Received: by 2002:ae9:efd8:0:b0:706:e593:2598 with SMTP id
- d207-20020ae9efd8000000b00706e5932598mr50927qkg.216.1674063038833; Wed, 18
- Jan 2023 09:30:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20230118080011.2258375-1-npiggin@gmail.com> <20230118080011.2258375-5-npiggin@gmail.com>
-In-Reply-To: <20230118080011.2258375-5-npiggin@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 18 Jan 2023 09:30:22 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiLaY7K6N4VF=wgS+AVsFi298fMA3Tx6rzbbP7xT+1Dqg@mail.gmail.com>
-Message-ID: <CAHk-=wiLaY7K6N4VF=wgS+AVsFi298fMA3Tx6rzbbP7xT+1Dqg@mail.gmail.com>
-Subject: Re: [PATCH v6 4/5] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        with ESMTP id S231393AbjARSJx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 13:09:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F0B4ED0C;
+        Wed, 18 Jan 2023 10:09:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A0FCB81E13;
+        Wed, 18 Jan 2023 18:09:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9721C433D2;
+        Wed, 18 Jan 2023 18:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674065369;
+        bh=5pgmP1P8QMML9UWJonanxl6exLIq+UTuWfh1kpgwlMQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=OYJ/6BjV5zvb3qTyeNhOmHfwQEXdWLGHzwnfS9uTfzzqTptvGNfo7WXHAaQVBYczW
+         lTluE8eWeI5V3JV9WEn6mLFmuEAdIKv7yD7/V7bF1bVDsiWJBMgiwK1BLUj94QVmdV
+         9QzrR67GHiLb3jyNbKFFPi/ivxkIZMwkHd/LnxSZbyDbWsBGQRHHNWWkdEaQ8U94FL
+         zF/DG0VokbF9ptUlghNLUf3JbtjdlOZo3efFXBvdHAIHVtfJnCIcOj0FA9Ute0eRj2
+         nAnA0iOmt6Cm0eNMLy91jiUfC5A3k/5UHIiNYOBXdrn5Tz8h3c9HKuZlaGH4gz+QJK
+         GPfoqMneLxP7g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3FF0B5C0920; Wed, 18 Jan 2023 10:09:29 -0800 (PST)
+Date:   Wed, 18 Jan 2023 10:09:29 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <20230118180929.GE2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+ <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+ <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+ <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
+ <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[ Adding a few more x86 and arm64 maintainers - while linux-arch is
-the right mailing list, I'm not convinced people actually follow it
-all that closely ]
+On Wed, Jan 18, 2023 at 11:42:23AM +0100, Paul Heidekrüger wrote:
+> On 13 Jan 2023, at 16:22, Alan Stern wrote:
+> 
+> > On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
+> >> Hi all,
+> >>
+> >> FWIW, here are two more broken address dependencies, both very similar to the
+> >> one discussed in this thread. From what I can tell, both are protected by a
+> >> lock, so, again, nothing to worry about right now? Would you agree?
+> >
+> > FWIW, my opinion is that in both cases the broken dependency can be
+> > removed entirely.
+> >
+> >> Comments marked with "AD:" were added by me for readability.
+> >>
+> >> 1. drivers/hwtracing/stm/core.c::1050 - 1085
+> >>
+> >>         /**
+> >>          * __stm_source_link_drop() - detach stm_source from an stm device
+> >>          * @src:	stm_source device
+> >>          * @stm:	stm device
+> >>          *
+> >>          * If @stm is @src::link, disconnect them from one another and put the
+> >>          * reference on the @stm device.
+> >>          *
+> >>          * Caller must hold stm::link_mutex.
+> >>          */
+> >>         static int __stm_source_link_drop(struct stm_source_device *src,
+> >>                                           struct stm_device *stm)
+> >>         {
+> >>                 struct stm_device *link;
+> >>                 int ret = 0;
+> >>
+> >>                 lockdep_assert_held(&stm->link_mutex);
+> >>
+> >>                 /* for stm::link_list modification, we hold both mutex and spinlock */
+> >>                 spin_lock(&stm->link_lock);
+> >>                 spin_lock(&src->link_lock);
+> >>
+> >>                 /* AD: Beginning of the address dependency. */
+> >>                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
+> >>
+> >>                 /*
+> >>                  * The linked device may have changed since we last looked, because
+> >>                  * we weren't holding the src::link_lock back then; if this is the
+> >>                  * case, tell the caller to retry.
+> >>                  */
+> >>                 if (link != stm) {
+> >>                         ret = -EAGAIN;
+> >>                         goto unlock;
+> >>                 }
+> >>
+> >>                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
+> >>                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
+> >>
+> >>                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
+> >>                 pm_runtime_mark_last_busy(&link->dev);
+> >
+> > In both of these statements, link can safely be replaced by stm.
+> >
+> > (There's also a control dependency which the LKMM isn't aware of.  This
+> > makes it all the more safe.)
+> >
+> >> 2. kernel/locking/lockdep.c::6319 - 6348
+> >>
+> >>         /*
+> >>          * Unregister a dynamically allocated key.
+> >>          *
+> >>          * Unlike lockdep_register_key(), a search is always done to find a matching
+> >>          * key irrespective of debug_locks to avoid potential invalid access to freed
+> >>          * memory in lock_class entry.
+> >>          */
+> >>         void lockdep_unregister_key(struct lock_class_key *key)
+> >>         {
+> >>                 struct hlist_head *hash_head = keyhashentry(key);
+> >>                 struct lock_class_key *k;
+> >>                 struct pending_free *pf;
+> >>                 unsigned long flags;
+> >>                 bool found = false;
+> >>
+> >>                 might_sleep();
+> >>
+> >>                 if (WARN_ON_ONCE(static_obj(key)))
+> >>                         return;
+> >>
+> >>                 raw_local_irq_save(flags);
+> >>                 lockdep_lock();
+> >>
+> >>                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
+> >>                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
+> >>                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
+> >>                         if (k == key) {
+> >>                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
+> >>                                 hlist_del_rcu(&k->hash_entry);
+> >
+> > And here k could safely be replaced with key.  (And again there is a
+> > control dependency, but this is one that the LKMM would detect.)
+> 
+> Ha, I didn't even notice the control dependencies - of course! In that case,
+> this doesn't warrant a patch though, given that nothing is really breaking?
 
-On Wed, Jan 18, 2023 at 12:00 AM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> On a 16-socket 192-core POWER8 system, a context switching benchmark
-> with as many software threads as CPUs (so each switch will go in and
-> out of idle), upstream can achieve a rate of about 1 million context
-> switches per second, due to contention on the mm refcount.
->
-> 64s meets the prerequisites for CONFIG_MMU_LAZY_TLB_SHOOTDOWN, so enable
-> the option. This increases the above benchmark to 118 million context
-> switches per second.
+Up to the maintainers, but if any of the code that I maintain was relying
+on a control dependency, I would want that code commented.  But in this
+case, lockdep_unregister_key() isn't called very often, correct?  If so,
+and if this control dependency really is relied on, perhaps some stronger
+and less fragile ordering should be used.
 
-Well, the 1M -> 118M change does seem like a good reason for this series.
+But again, maintainers' choice!
 
-The patches certainly don't look offensive to me, so Ack as far as I'm
-concerned, but honestly, it's been some time since I've personally
-been active on the idle and lazy TLB code, so that ack is probably
-largely worthless.
-
-If anything, my main reaction to this all is to wonder whether the
-config option is a good idea - maybe we could do this unconditionally,
-and make the source code (and logic) simpler to follow when you don't
-have to worry about the CONFIG_MMU_LAZY_TLB_REFCOUNT option.
-
-I wouldn't be surprised to hear that x86 can have the same issue where
-the mm_struct refcount is a bigger issue than the possibility of an
-extra TLB shootdown at the final exit time.
-
-But having the config options as a way to switch people over gradually
-(and perhaps then removing it later) doesn't sound wrong to me either.
-
-And I personally find the argument in patch 3/5 fairly convincing:
-
-  Shootdown IPIs cost could be an issue, but they have not been observed
-  to be a serious problem with this scheme, because short-lived processes
-  tend not to migrate CPUs much, therefore they don't get much chance to
-  leave lazy tlb mm references on remote CPUs.
-
-Andy? PeterZ? Catalin?
-
-Nick - it might be good to link to the actual benchmark, and let
-people who have access to big machines perhaps just try it out on
-non-powerpc platforms...
-
-                   Linus
+							Thanx, Paul
