@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90F8674467
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 22:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A32A674476
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 22:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjASVbg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Jan 2023 16:31:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S230378AbjASVb4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Jan 2023 16:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjASVar (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Jan 2023 16:30:47 -0500
+        with ESMTP id S231127AbjASVax (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Jan 2023 16:30:53 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39881A7914;
-        Thu, 19 Jan 2023 13:25:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C05EA7919;
+        Thu, 19 Jan 2023 13:25:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674163509; x=1705699509;
+  t=1674163513; x=1705699513;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=AD5tXA8hUee5SZ1Pd+Ll3tDzu/Wr8phq95vUnNoKkT8=;
-  b=CU4D+mLB7mIoLlEv8ME3Sg6ThixyUMvysX59m+nItF2n7lFvLiCdsEES
-   dHYLyQaCni72Uwvflj2ees3kSSvdzO7xRg3whl8etMdJU5qN8hPVObSrG
-   KC+H+r+UM13KCbgDdEugVWA6Epr8VUfcZbTllZt3bRrvarsykPrl/r7gO
-   3VyIi2tajAM9Uti60NkBpVq2HJAWX24ur8B/JZ5EPmq21b+jFq+HDbfTy
-   5LzLBXz98v24PPQLltyjDzinS8+zUT51ku/KWSqpA/yUqYbulpu2i71M6
-   gZKRMfbqmXK12RrXZvPTxjFblkNcQ3vRhgDOiCPTD6v267AVG5M5n8m0q
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323119291"
+  bh=PzST9NKmNucCPEHUcN1NhrjLFoRDDlEf869nc/warJQ=;
+  b=OtXfLuNdP+s5ABXvTSA6h3JcsJJ74kB46UQkIE55VBfg+4EvfX8ahcX+
+   Q9TK1f8noc1YveWVtuuaCCsFYiG/xqq/ftyG/fRz6+/TgppUtmXHy4rPd
+   tZHAOqiqVRzBfQ3IxMYCnnCzeA582pY3Av5rGCiCAAP0lOqEvsTTiVCP9
+   i/9NtZHBWdtkTIOCWLodVMmO9b3a4+3Z5tLsQGyyIGc886E7dwckLZlhd
+   33LX4DTmAt0kfKkTTCDHzFR5AjlC5/NmUDcvNsBZpxKStDll3rACVkkqi
+   Gvlhah6hq8Y8tGkEdAbrGCWsHzS1OM/egyN1sKDv73f/lCzRKYi0JDnwW
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323119314"
 X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="323119291"
+   d="scan'208";a="323119314"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:23:34 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="989139011"
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:23:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="989139017"
 X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="989139011"
+   d="scan'208";a="989139017"
 Received: from hossain3-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.252.128.187])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:23:32 -0800
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:23:34 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -65,10 +65,11 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v5 06/39] x86/fpu: Add helper for modifying xstate
-Date:   Thu, 19 Jan 2023 13:22:44 -0800
-Message-Id: <20230119212317.8324-7-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Subject: [PATCH v5 07/39] x86: Add user control-protection fault handler
+Date:   Thu, 19 Jan 2023 13:22:45 -0800
+Message-Id: <20230119212317.8324-8-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
 References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
@@ -81,104 +82,569 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Just like user xfeatures, supervisor xfeatures can be active in the
-registers or present in the task FPU buffer. If the registers are
-active, the registers can be modified directly. If the registers are
-not active, the modification must be performed on the task FPU buffer.
+From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-When the state is not active, the kernel could perform modifications
-directly to the buffer. But in order for it to do that, it needs
-to know where in the buffer the specific state it wants to modify is
-located. Doing this is not robust against optimizations that compact
-the FPU buffer, as each access would require computing where in the
-buffer it is.
+A control-protection fault is triggered when a control-flow transfer
+attempt violates Shadow Stack or Indirect Branch Tracking constraints.
+For example, the return address for a RET instruction differs from the copy
+on the shadow stack.
 
-The easiest way to modify supervisor xfeature data is to force restore
-the registers and write directly to the MSRs. Often times this is just fine
-anyway as the registers need to be restored before returning to userspace.
-Do this for now, leaving buffer writing optimizations for the future.
+There already exists a control-protection fault handler for handling kernel
+IBT faults. Refactor this fault handler into separate user and kernel
+handlers, like the page fault handler. Add a control-protection handler
+for usermode. To avoid ifdeffery, put them both in a new file cet.c, which
+is compiled in the case of either of the two CET features supported in the
+kernel: kernel IBT or user mode shadow stack. Move some static inline
+functions from traps.c into a header so they can be used in cet.c.
 
-Add a new function fpregs_lock_and_load() that can simultaneously call
-fpregs_lock() and do this restore. Also perform some extra sanity
-checks in this function since this will be used in non-fpu focused code.
+Opportunistically fix a comment in the kernel IBT part of the fault
+handler that is on the end of the line instead of preceding it.
+
+Keep the same behavior for the kernel side of the fault handler, except for
+converting a BUG to a WARN in the case of a #CP happening when the feature
+is missing. This unifies the behavior with the new shadow stack code, and
+also prevents the kernel from crashing under this situation which is
+potentially recoverable.
+
+The control-protection fault handler works in a similar way as the general
+protection fault handler. It provides the si_code SEGV_CPERR to the signal
+handler.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Michael Kerrisk <mtk.manpages@gmail.com>
 ---
 
 v5:
- - Fix spelling error (Boris)
- - Don't export fpregs_lock_and_load() (Boris)
+ - Move to separate file to advoid ifdeffery (Boris)
+ - Improvements to commit log (Boris)
+ - Rename control_protection_err (Boris)
+ - Move comment from end of line in IBT fault handler (Boris)
 
 v3:
- - Rename to fpregs_lock_and_load() to match the unlocking
-   fpregs_unlock(). (Kees)
- - Elaborate in comment about helper. (Dave)
+ - Shorten user/kernel #CP handler function names (peterz)
+ - Restore CP_ENDBR check to kernel handler (peterz)
+ - Utilize CONFIG_X86_CET (Kees)
+ - Unify "unexpected" warnings (Andrew Cooper)
+ - Use 2d array for error code chars (Andrew Cooper)
+ - Add comment about why to read SSP MSR before enabling interrupts
 
 v2:
- - Drop optimization of writing directly the buffer, and change API
-   accordingly.
- - fpregs_lock_and_load() suggested by tglx
- - Some commit log verbiage from dhansen
+ - Integrate with kernel IBT fault handler
+ - Update printed messages. (Dave)
+ - Remove array_index_nospec() usage. (Dave)
+ - Remove IBT messages. (Dave)
+ - Add enclave error code bit processing it case it can get triggered
+   somehow.
+ - Add extra "unknown" in control_protection_err.
 
 v1:
- - New patch.
+ - Update static asserts for NSIGSEGV
 
- arch/x86/include/asm/fpu/api.h |  9 +++++++++
- arch/x86/kernel/fpu/core.c     | 18 ++++++++++++++++++
- 2 files changed, 27 insertions(+)
+ arch/arm/kernel/signal.c                 |   2 +-
+ arch/arm64/kernel/signal.c               |   2 +-
+ arch/arm64/kernel/signal32.c             |   2 +-
+ arch/sparc/kernel/signal32.c             |   2 +-
+ arch/sparc/kernel/signal_64.c            |   2 +-
+ arch/x86/include/asm/disabled-features.h |   8 +-
+ arch/x86/include/asm/idtentry.h          |   2 +-
+ arch/x86/include/asm/traps.h             |  12 ++
+ arch/x86/kernel/Makefile                 |   2 +
+ arch/x86/kernel/cet.c                    | 152 +++++++++++++++++++++++
+ arch/x86/kernel/idt.c                    |   2 +-
+ arch/x86/kernel/signal_32.c              |   2 +-
+ arch/x86/kernel/signal_64.c              |   2 +-
+ arch/x86/kernel/traps.c                  |  87 -------------
+ arch/x86/xen/enlighten_pv.c              |   2 +-
+ arch/x86/xen/xen-asm.S                   |   2 +-
+ include/uapi/asm-generic/siginfo.h       |   3 +-
+ 17 files changed, 186 insertions(+), 100 deletions(-)
+ create mode 100644 arch/x86/kernel/cet.c
 
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 503a577814b2..aadc6893dcaa 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -82,6 +82,15 @@ static inline void fpregs_unlock(void)
- 		preempt_enable();
- }
+diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
+index e07f359254c3..9a3c9de5ac5e 100644
+--- a/arch/arm/kernel/signal.c
++++ b/arch/arm/kernel/signal.c
+@@ -681,7 +681,7 @@ asmlinkage void do_rseq_syscall(struct pt_regs *regs)
+  */
+ static_assert(NSIGILL	== 11);
+ static_assert(NSIGFPE	== 15);
+-static_assert(NSIGSEGV	== 9);
++static_assert(NSIGSEGV	== 10);
+ static_assert(NSIGBUS	== 5);
+ static_assert(NSIGTRAP	== 6);
+ static_assert(NSIGCHLD	== 6);
+diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+index be279fd48248..4bced22213d5 100644
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -1176,7 +1176,7 @@ void __init minsigstksz_setup(void)
+  */
+ static_assert(NSIGILL	== 11);
+ static_assert(NSIGFPE	== 15);
+-static_assert(NSIGSEGV	== 9);
++static_assert(NSIGSEGV	== 10);
+ static_assert(NSIGBUS	== 5);
+ static_assert(NSIGTRAP	== 6);
+ static_assert(NSIGCHLD	== 6);
+diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
+index 4700f8522d27..bbd542704730 100644
+--- a/arch/arm64/kernel/signal32.c
++++ b/arch/arm64/kernel/signal32.c
+@@ -460,7 +460,7 @@ void compat_setup_restart_syscall(struct pt_regs *regs)
+  */
+ static_assert(NSIGILL	== 11);
+ static_assert(NSIGFPE	== 15);
+-static_assert(NSIGSEGV	== 9);
++static_assert(NSIGSEGV	== 10);
+ static_assert(NSIGBUS	== 5);
+ static_assert(NSIGTRAP	== 6);
+ static_assert(NSIGCHLD	== 6);
+diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
+index dad38960d1a8..82da8a2d769d 100644
+--- a/arch/sparc/kernel/signal32.c
++++ b/arch/sparc/kernel/signal32.c
+@@ -751,7 +751,7 @@ asmlinkage int do_sys32_sigstack(u32 u_ssptr, u32 u_ossptr, unsigned long sp)
+  */
+ static_assert(NSIGILL	== 11);
+ static_assert(NSIGFPE	== 15);
+-static_assert(NSIGSEGV	== 9);
++static_assert(NSIGSEGV	== 10);
+ static_assert(NSIGBUS	== 5);
+ static_assert(NSIGTRAP	== 6);
+ static_assert(NSIGCHLD	== 6);
+diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
+index 570e43e6fda5..b4e410976e0d 100644
+--- a/arch/sparc/kernel/signal_64.c
++++ b/arch/sparc/kernel/signal_64.c
+@@ -562,7 +562,7 @@ void do_notify_resume(struct pt_regs *regs, unsigned long orig_i0, unsigned long
+  */
+ static_assert(NSIGILL	== 11);
+ static_assert(NSIGFPE	== 15);
+-static_assert(NSIGSEGV	== 9);
++static_assert(NSIGSEGV	== 10);
+ static_assert(NSIGBUS	== 5);
+ static_assert(NSIGTRAP	== 6);
+ static_assert(NSIGCHLD	== 6);
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 505f78ddca82..652e366b68a0 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -105,6 +105,12 @@
+ #define DISABLE_USER_SHSTK	(1 << (X86_FEATURE_USER_SHSTK & 31))
+ #endif
  
-+/*
-+ * FPU state gets lazily restored before returning to userspace. So when in the
-+ * kernel, the valid FPU state may be kept in the buffer. This function will force
-+ * restore all the fpu state to the registers early if needed, and lock them from
-+ * being automatically saved/restored. Then FPU state can be modified safely in the
-+ * registers, before unlocking with fpregs_unlock().
-+ */
-+void fpregs_lock_and_load(void);
++#ifdef CONFIG_X86_KERNEL_IBT
++#define DISABLE_IBT	0
++#else
++#define DISABLE_IBT	(1 << (X86_FEATURE_IBT & 31))
++#endif
 +
- #ifdef CONFIG_X86_DEBUG_FPU
- extern void fpregs_assert_state_consistent(void);
- #else
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index dccce58201b7..7317bfd5ea36 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -753,6 +753,24 @@ void switch_fpu_return(void)
- }
- EXPORT_SYMBOL_GPL(switch_fpu_return);
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -128,7 +134,7 @@
+ #define DISABLED_MASK16	(DISABLE_PKU|DISABLE_OSPKE|DISABLE_LA57|DISABLE_UMIP| \
+ 			 DISABLE_ENQCMD)
+ #define DISABLED_MASK17	0
+-#define DISABLED_MASK18	0
++#define DISABLED_MASK18	(DISABLE_IBT)
+ #define DISABLED_MASK19	0
+ #define DISABLED_MASK20	0
+ #define DISABLED_MASK_CHECK BUILD_BUG_ON_ZERO(NCAPINTS != 21)
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 72184b0b2219..69e26f48d027 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -618,7 +618,7 @@ DECLARE_IDTENTRY_RAW_ERRORCODE(X86_TRAP_DF,	xenpv_exc_double_fault);
+ #endif
  
-+void fpregs_lock_and_load(void)
+ /* #CP */
+-#ifdef CONFIG_X86_KERNEL_IBT
++#ifdef CONFIG_X86_CET
+ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP,	exc_control_protection);
+ #endif
+ 
+diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
+index 47ecfff2c83d..75e0dabf0c45 100644
+--- a/arch/x86/include/asm/traps.h
++++ b/arch/x86/include/asm/traps.h
+@@ -47,4 +47,16 @@ void __noreturn handle_stack_overflow(struct pt_regs *regs,
+ 				      struct stack_info *info);
+ #endif
+ 
++static inline void cond_local_irq_enable(struct pt_regs *regs)
 +{
-+	/*
-+	 * fpregs_lock() only disables preemption (mostly). So modifying state
-+	 * in an interrupt could screw up some in progress fpregs operation,
-+	 * but appear to work. Warn about it.
-+	 */
-+	WARN_ON_ONCE(!irq_fpu_usable());
-+	WARN_ON_ONCE(current->flags & PF_KTHREAD);
-+
-+	fpregs_lock();
-+
-+	fpregs_assert_state_consistent();
-+
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD))
-+		fpregs_restore_userregs();
++	if (regs->flags & X86_EFLAGS_IF)
++		local_irq_enable();
 +}
 +
- #ifdef CONFIG_X86_DEBUG_FPU
++static inline void cond_local_irq_disable(struct pt_regs *regs)
++{
++	if (regs->flags & X86_EFLAGS_IF)
++		local_irq_disable();
++}
++
+ #endif /* _ASM_X86_TRAPS_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index dd61752f4c96..92446f1dedd7 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -144,6 +144,8 @@ obj-$(CONFIG_CFI_CLANG)			+= cfi.o
+ 
+ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
++obj-$(CONFIG_X86_CET)			+= cet.o
++
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/cet.c b/arch/x86/kernel/cet.c
+new file mode 100644
+index 000000000000..33d7d119be26
+--- /dev/null
++++ b/arch/x86/kernel/cet.c
+@@ -0,0 +1,152 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/ptrace.h>
++#include <asm/bugs.h>
++#include <asm/traps.h>
++
++enum cp_error_code {
++	CP_EC        = (1 << 15) - 1,
++
++	CP_RET       = 1,
++	CP_IRET      = 2,
++	CP_ENDBR     = 3,
++	CP_RSTRORSSP = 4,
++	CP_SETSSBSY  = 5,
++
++	CP_ENCL	     = 1 << 15,
++};
++
++static const char cp_err[][10] = {
++	[0] = "unknown",
++	[1] = "near ret",
++	[2] = "far/iret",
++	[3] = "endbranch",
++	[4] = "rstorssp",
++	[5] = "setssbsy",
++};
++
++static const char *cp_err_string(unsigned long error_code)
++{
++	unsigned int cpec = error_code & CP_EC;
++
++	if (cpec >= ARRAY_SIZE(cp_err))
++		cpec = 0;
++	return cp_err[cpec];
++}
++
++static void do_unexpected_cp(struct pt_regs *regs, unsigned long error_code)
++{
++	WARN_ONCE(1, "Unexpected %s #CP, error_code: %s\n",
++		     user_mode(regs) ? "user mode" : "kernel mode",
++		     cp_err_string(error_code));
++}
++
++static DEFINE_RATELIMIT_STATE(cpf_rate, DEFAULT_RATELIMIT_INTERVAL,
++			      DEFAULT_RATELIMIT_BURST);
++
++static void do_user_cp_fault(struct pt_regs *regs, unsigned long error_code)
++{
++	struct task_struct *tsk;
++	unsigned long ssp;
++
++	/*
++	 * An exception was just taken from userspace. Since interrupts are disabled
++	 * here, no scheduling should have messed with the registers yet and they
++	 * will be whatever is live in userspace. So read the SSP before enabling
++	 * interrupts so locking the fpregs to do it later is not required.
++	 */
++	rdmsrl(MSR_IA32_PL3_SSP, ssp);
++
++	cond_local_irq_enable(regs);
++
++	tsk = current;
++	tsk->thread.error_code = error_code;
++	tsk->thread.trap_nr = X86_TRAP_CP;
++
++	/* Ratelimit to prevent log spamming. */
++	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
++	    __ratelimit(&cpf_rate)) {
++		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)%s",
++			 tsk->comm, task_pid_nr(tsk),
++			 regs->ip, regs->sp, ssp, error_code,
++			 cp_err_string(error_code),
++			 error_code & CP_ENCL ? " in enclave" : "");
++		print_vma_addr(KERN_CONT " in ", regs->ip);
++		pr_cont("\n");
++	}
++
++	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
++	cond_local_irq_disable(regs);
++}
++
++static __ro_after_init bool ibt_fatal = true;
++
++/* code label defined in asm below */
++extern void ibt_selftest_ip(void);
++
++static void do_kernel_cp_fault(struct pt_regs *regs, unsigned long error_code)
++{
++	if ((error_code & CP_EC) != CP_ENDBR) {
++		do_unexpected_cp(regs, error_code);
++		return;
++	}
++
++	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
++		regs->ax = 0;
++		return;
++	}
++
++	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
++	if (!ibt_fatal) {
++		printk(KERN_DEFAULT CUT_HERE);
++		__warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
++		return;
++	}
++	BUG();
++}
++
++/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
++noinline bool ibt_selftest(void)
++{
++	unsigned long ret;
++
++	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
++	     ANNOTATE_RETPOLINE_SAFE
++	     "	jmp *%%rax\n\t"
++	     "ibt_selftest_ip:\n\t"
++	     UNWIND_HINT_FUNC
++	     ANNOTATE_NOENDBR
++	     "	nop\n\t"
++
++	     : "=a" (ret) : : "memory");
++
++	return !ret;
++}
++
++static int __init ibt_setup(char *str)
++{
++	if (!strcmp(str, "off"))
++		setup_clear_cpu_cap(X86_FEATURE_IBT);
++
++	if (!strcmp(str, "warn"))
++		ibt_fatal = false;
++
++	return 1;
++}
++
++__setup("ibt=", ibt_setup);
++
++DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
++{
++	if (user_mode(regs)) {
++		if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++			do_user_cp_fault(regs, error_code);
++		else
++			do_unexpected_cp(regs, error_code);
++	} else {
++		if (cpu_feature_enabled(X86_FEATURE_IBT))
++			do_kernel_cp_fault(regs, error_code);
++		else
++			do_unexpected_cp(regs, error_code);
++	}
++}
+diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+index a58c6bc1cd68..5074b8420359 100644
+--- a/arch/x86/kernel/idt.c
++++ b/arch/x86/kernel/idt.c
+@@ -107,7 +107,7 @@ static const __initconst struct idt_data def_idts[] = {
+ 	ISTG(X86_TRAP_MC,		asm_exc_machine_check, IST_INDEX_MCE),
+ #endif
+ 
+-#ifdef CONFIG_X86_KERNEL_IBT
++#ifdef CONFIG_X86_CET
+ 	INTG(X86_TRAP_CP,		asm_exc_control_protection),
+ #endif
+ 
+diff --git a/arch/x86/kernel/signal_32.c b/arch/x86/kernel/signal_32.c
+index 9027fc088f97..c12624bc82a3 100644
+--- a/arch/x86/kernel/signal_32.c
++++ b/arch/x86/kernel/signal_32.c
+@@ -402,7 +402,7 @@ int ia32_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ */
+ static_assert(NSIGILL  == 11);
+ static_assert(NSIGFPE  == 15);
+-static_assert(NSIGSEGV == 9);
++static_assert(NSIGSEGV == 10);
+ static_assert(NSIGBUS  == 5);
+ static_assert(NSIGTRAP == 6);
+ static_assert(NSIGCHLD == 6);
+diff --git a/arch/x86/kernel/signal_64.c b/arch/x86/kernel/signal_64.c
+index 13a1e6083837..0e808c72bf7e 100644
+--- a/arch/x86/kernel/signal_64.c
++++ b/arch/x86/kernel/signal_64.c
+@@ -403,7 +403,7 @@ void sigaction_compat_abi(struct k_sigaction *act, struct k_sigaction *oact)
+ */
+ static_assert(NSIGILL  == 11);
+ static_assert(NSIGFPE  == 15);
+-static_assert(NSIGSEGV == 9);
++static_assert(NSIGSEGV == 10);
+ static_assert(NSIGBUS  == 5);
+ static_assert(NSIGTRAP == 6);
+ static_assert(NSIGCHLD == 6);
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index d317dc3d06a3..18fb9d620824 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -77,18 +77,6 @@
+ 
+ DECLARE_BITMAP(system_vectors, NR_VECTORS);
+ 
+-static inline void cond_local_irq_enable(struct pt_regs *regs)
+-{
+-	if (regs->flags & X86_EFLAGS_IF)
+-		local_irq_enable();
+-}
+-
+-static inline void cond_local_irq_disable(struct pt_regs *regs)
+-{
+-	if (regs->flags & X86_EFLAGS_IF)
+-		local_irq_disable();
+-}
+-
+ __always_inline int is_valid_bugaddr(unsigned long addr)
+ {
+ 	if (addr < TASK_SIZE_MAX)
+@@ -213,81 +201,6 @@ DEFINE_IDTENTRY(exc_overflow)
+ 	do_error_trap(regs, 0, "overflow", X86_TRAP_OF, SIGSEGV, 0, NULL);
+ }
+ 
+-#ifdef CONFIG_X86_KERNEL_IBT
+-
+-static __ro_after_init bool ibt_fatal = true;
+-
+-extern void ibt_selftest_ip(void); /* code label defined in asm below */
+-
+-enum cp_error_code {
+-	CP_EC        = (1 << 15) - 1,
+-
+-	CP_RET       = 1,
+-	CP_IRET      = 2,
+-	CP_ENDBR     = 3,
+-	CP_RSTRORSSP = 4,
+-	CP_SETSSBSY  = 5,
+-
+-	CP_ENCL	     = 1 << 15,
+-};
+-
+-DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+-{
+-	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
+-		pr_err("Unexpected #CP\n");
+-		BUG();
+-	}
+-
+-	if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
+-		return;
+-
+-	if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
+-		regs->ax = 0;
+-		return;
+-	}
+-
+-	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
+-	if (!ibt_fatal) {
+-		printk(KERN_DEFAULT CUT_HERE);
+-		__warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
+-		return;
+-	}
+-	BUG();
+-}
+-
+-/* Must be noinline to ensure uniqueness of ibt_selftest_ip. */
+-noinline bool ibt_selftest(void)
+-{
+-	unsigned long ret;
+-
+-	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
+-	     ANNOTATE_RETPOLINE_SAFE
+-	     "	jmp *%%rax\n\t"
+-	     "ibt_selftest_ip:\n\t"
+-	     UNWIND_HINT_FUNC
+-	     ANNOTATE_NOENDBR
+-	     "	nop\n\t"
+-
+-	     : "=a" (ret) : : "memory");
+-
+-	return !ret;
+-}
+-
+-static int __init ibt_setup(char *str)
+-{
+-	if (!strcmp(str, "off"))
+-		setup_clear_cpu_cap(X86_FEATURE_IBT);
+-
+-	if (!strcmp(str, "warn"))
+-		ibt_fatal = false;
+-
+-	return 1;
+-}
+-
+-__setup("ibt=", ibt_setup);
+-
+-#endif /* CONFIG_X86_KERNEL_IBT */
+-
+ #ifdef CONFIG_X86_F00F_BUG
+ void handle_invalid_op(struct pt_regs *regs)
+ #else
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index bb59cc6ddb2d..9c29cd5393cc 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -640,7 +640,7 @@ static struct trap_array_entry trap_array[] = {
+ 	TRAP_ENTRY(exc_coprocessor_error,		false ),
+ 	TRAP_ENTRY(exc_alignment_check,			false ),
+ 	TRAP_ENTRY(exc_simd_coprocessor_error,		false ),
+-#ifdef CONFIG_X86_KERNEL_IBT
++#ifdef CONFIG_X86_CET
+ 	TRAP_ENTRY(exc_control_protection,		false ),
+ #endif
+ };
+diff --git a/arch/x86/xen/xen-asm.S b/arch/x86/xen/xen-asm.S
+index 4a184f6e4e4d..7cdcb4ce6976 100644
+--- a/arch/x86/xen/xen-asm.S
++++ b/arch/x86/xen/xen-asm.S
+@@ -148,7 +148,7 @@ xen_pv_trap asm_exc_page_fault
+ xen_pv_trap asm_exc_spurious_interrupt_bug
+ xen_pv_trap asm_exc_coprocessor_error
+ xen_pv_trap asm_exc_alignment_check
+-#ifdef CONFIG_X86_KERNEL_IBT
++#ifdef CONFIG_X86_CET
+ xen_pv_trap asm_exc_control_protection
+ #endif
+ #ifdef CONFIG_X86_MCE
+diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+index ffbe4cec9f32..0f52d0ac47c5 100644
+--- a/include/uapi/asm-generic/siginfo.h
++++ b/include/uapi/asm-generic/siginfo.h
+@@ -242,7 +242,8 @@ typedef struct siginfo {
+ #define SEGV_ADIPERR	7	/* Precise MCD exception */
+ #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
+ #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
+-#define NSIGSEGV	9
++#define SEGV_CPERR	10	/* Control protection fault */
++#define NSIGSEGV	10
+ 
  /*
-  * If current FPU state according to its tracking (loaded FPU context on this
+  * SIGBUS si_codes
 -- 
 2.17.1
 
