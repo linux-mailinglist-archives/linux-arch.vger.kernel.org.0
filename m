@@ -2,201 +2,198 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A086744FA
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 22:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB58967466B
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 23:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjASVly (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Jan 2023 16:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
+        id S230309AbjASWzO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Jan 2023 17:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjASViy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Jan 2023 16:38:54 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0FF7C875;
-        Thu, 19 Jan 2023 13:28:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674163680; x=1705699680;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=Q/roafiLg5FWGNhLb00ov8wc44ATIJKREdVQC5GYlS4=;
-  b=ipgO3ufEFgEAo7SYyiJvYCPkVOXpWCDkMo3S8b3DAyLtfV57O8wkMZuo
-   siVy1P5kxgXiI7i4DcMjfiji+smZpsdlh8QUtoyAiTp0OKuH7ZAoJ3n6F
-   nUPRDX9oBvR6AjuXgphJQSPSWUzYXZamr7mg9rfaS7H4hNvfeCT85ZABu
-   RMC/5FZWgxKrzcjUOLXrhITPQZQhI1VrQjp8SlQTpQpgA/kicoyEELClg
-   q5iYS2D21V7wMttoEvG1uO8RuSLgb9QbJp/RzD8mgFqTbTqYXOYiivSIe
-   P4QQ2rzlsD+9fUzvsNFeKxNq1/G4jaU0SkLuHdEz5Xa1lrDCvt9jekpgA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323120102"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="323120102"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:24:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="989139201"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="989139201"
-Received: from hossain3-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.252.128.187])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:24:25 -0800
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        with ESMTP id S229807AbjASWyd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Jan 2023 17:54:33 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459635895D;
+        Thu, 19 Jan 2023 14:37:07 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id f3so2768049pgc.2;
+        Thu, 19 Jan 2023 14:37:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c3/xglDrs4GgAM40Pjq1vzK1v2T7qf4JcCCRFWl6k4g=;
+        b=NSYj639Mp9v5ap+wI0hCjvD0/JJIjDFxjIAk8s0W6QQZeGagLHTMYL5/dvvI2DPi4B
+         +aGueObJ+RXaUVDn4NiXYFIhEcPYWxInkxzarthRsu1sZZ256/vMx7XvGmJtSYSWRLwB
+         vl6fpplWJgAyhnKrjElYHYhD8OeiwcbmHLjIG5BiksGBX7KJzcLCywEenDObbw+Mxjwr
+         pmu+l0l6CF6xX7jvLuX0TRIXSYOrvw5purr8S55V7TS8hL4NzHy8DcBRiXHfgymzDvFg
+         PvZjALLBOjVmU5MNA64b0nuXlR2yYuFwQaHv+ETJElDhkdksrjTql7nEvp7HQxv7QCn3
+         HOLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c3/xglDrs4GgAM40Pjq1vzK1v2T7qf4JcCCRFWl6k4g=;
+        b=OpVuXW90GREJ8IPsBgaqU3tmELFOp4W+5eWlo+Q4wj0EQvohSimiv5iIP/nbKMBSDl
+         +QgbbhwKsf2aXFQ+yWDH62NAvqLscYAkolUtMrSzIA+U8gZJ3CBuYgUlDQVWFOkgHmQm
+         Z8EB1vbArrSTFv/3geeyzgVVJQ67U1Z3wslOnP0+oDDO5qU//mfNbAJ9104Y7HN7IIP+
+         zcjXcxunpwpwa/kJ4MoteHh2xf45+xrYrP9IfH9oS9j3rLCGFMEXeWZOOSk+p1x815Ry
+         SsGhayfVldf9dr8TwS/QcO2bs5T/IS/yy54lYdPsy4KkftCwkmPe2h5Bm0tlrKBTZcL2
+         2Ilg==
+X-Gm-Message-State: AFqh2ko9jBOMzyZ/8bInYMczvJo1WTEnXDMpYXwlreoiix5J3ddKEY5O
+        YiIgHEDFbkTDmlDqffsrRII=
+X-Google-Smtp-Source: AMrXdXtheeUgW/ehdT20D8crA3E+xLX19dRj8kq2j9cAtxWEF6/jTGrekTIsjKUTNo8D+nlbVHnJHA==
+X-Received: by 2002:a62:ab0b:0:b0:58b:46c9:a6b1 with SMTP id p11-20020a62ab0b000000b0058b46c9a6b1mr13080521pff.33.1674167826597;
+        Thu, 19 Jan 2023 14:37:06 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id c202-20020a621cd3000000b0058dc1d54db1sm6563910pfc.206.2023.01.19.14.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 14:37:05 -0800 (PST)
+Date:   Thu, 19 Jan 2023 14:37:04 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v5 39/39] x86/shstk: Add ARCH_SHSTK_STATUS
-Date:   Thu, 19 Jan 2023 13:23:17 -0800
-Message-Id: <20230119212317.8324-40-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <20230119223704.GD2976263@ls.amr.corp.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
+ <20230119111308.GC2976263@ls.amr.corp.intel.com>
+ <Y8lg1G2lRIrI/hld@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y8lg1G2lRIrI/hld@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CRIU and GDB need to get the current shadow stack and WRSS enablement
-status. This information is already available via /proc/pid/status, but
-this is inconvenient for CRIU because it involves parsing the text output
-in an area of the code where this is difficult. Provide a status
-arch_prctl(), ARCH_SHSTK_STATUS for retrieving the status. Have arg2 be a
-userspace address, and make the new arch_prctl simply copy the features
-out to userspace.
+On Thu, Jan 19, 2023 at 03:25:08PM +0000,
+Sean Christopherson <seanjc@google.com> wrote:
 
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
----
+> On Thu, Jan 19, 2023, Isaku Yamahata wrote:
+> > On Sat, Jan 14, 2023 at 12:37:59AM +0000,
+> > Sean Christopherson <seanjc@google.com> wrote:
+> > 
+> > > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > > > This patch series implements KVM guest private memory for confidential
+> > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > > > TDX-protected guest memory, machine check can happen which can further
+> > > > crash the running host system, this is terrible for multi-tenant
+> > > > configurations. The host accesses include those from KVM userspace like
+> > > > QEMU. This series addresses KVM userspace induced crash by introducing
+> > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > > > via a fd-based approach, but it can never access the guest memory
+> > > > content.
+> > > > 
+> > > > The patch series touches both core mm and KVM code. I appreciate
+> > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > > > reviews are always welcome.
+> > > >   - 01: mm change, target for mm tree
+> > > >   - 02-09: KVM change, target for KVM tree
+> > > 
+> > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> > > is available here:
+> > > 
+> > >   git@github.com:sean-jc/linux.git x86/upm_base_support
+> > > 
+> > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> > > a WIP.
+> > > 
+> > > As for next steps, can you (handwaving all of the TDX folks) take a look at what
+> > > I pushed and see if there's anything horrifically broken, and that it still works
+> > > for TDX?
+> > > 
+> > > Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
+> > > (and I mean that).
+> > > 
+> > > On my side, the two things on my mind are (a) tests and (b) downstream dependencies
+> > > (SEV and TDX).  For tests, I want to build a lists of tests that are required for
+> > > merging so that the criteria for merging are clear, and so that if the list is large
+> > > (haven't thought much yet), the work of writing and running tests can be distributed.
+> > > 
+> > > Regarding downstream dependencies, before this lands, I want to pull in all the
+> > > TDX and SNP series and see how everything fits together.  Specifically, I want to
+> > > make sure that we don't end up with a uAPI that necessitates ugly code, and that we
+> > > don't miss an opportunity to make things simpler.  The patches in the SNP series to
+> > > add "legacy" SEV support for UPM in particular made me slightly rethink some minor
+> > > details.  Nothing remotely major, but something that needs attention since it'll
+> > > be uAPI.
+> > 
+> > Although I'm still debuging with TDX KVM, I needed the following.
+> > kvm_faultin_pfn() is called without mmu_lock held.  the race to change
+> > private/shared is handled by mmu_seq.  Maybe dedicated function only for
+> > kvm_faultin_pfn().
+> 
+> Gah, you're not on the other thread where this was discussed[*].  Simply deleting
+> the lockdep assertion is safe, for guest types that rely on the attributes to
+> define shared vs. private, KVM rechecks the attributes under the protection of
+> mmu_seq.
+> 
+> I'll get a fixed version pushed out today.
+> 
+> [*] https://lore.kernel.org/all/Y8gpl+LwSuSgBFks@google.com
 
-v5:
- - Fix typo in commit log
+Now I have tdx kvm working. I've uploaded at the followings.
+It's rebased to v6.2-rc3.
+        git@github.com:yamahata/linux.git tdx/upm
+        git@github.com:yamahata/qemu.git tdx/upm
 
-v4:
- - New patch
+kvm_mmu_do_page_fault() needs the following change.
+kvm_mem_is_private() queries mem_attr_array.  kvm_faultin_pfn() also uses
+kvm_mem_is_private(). So the shared-private check in kvm_faultin_pfn() doesn't
+make sense. This change would belong to TDX KVM patches, though.
 
- Documentation/x86/shstk.rst       | 6 ++++++
- arch/x86/include/asm/shstk.h      | 4 ++--
- arch/x86/include/uapi/asm/prctl.h | 1 +
- arch/x86/kernel/process_64.c      | 1 +
- arch/x86/kernel/shstk.c           | 8 +++++++-
- 5 files changed, 17 insertions(+), 3 deletions(-)
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index 72b0da8e27e0..f45ac438bbf4 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -430,7 +430,7 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+                .max_level = vcpu->kvm->arch.tdp_max_page_level,
+                .req_level = PG_LEVEL_4K,
+                .goal_level = PG_LEVEL_4K,
+-               .is_private = kvm_mem_is_private(vcpu->kvm, cr2_or_gpa >> PAGE_SHIFT),
++               .is_private = kvm_is_private_gpa(vcpu->kvm, cr2_or_gpa),
+        };
+        int r;
 
-diff --git a/Documentation/x86/shstk.rst b/Documentation/x86/shstk.rst
-index e8ed5fc0f7ae..7f4af798794e 100644
---- a/Documentation/x86/shstk.rst
-+++ b/Documentation/x86/shstk.rst
-@@ -77,6 +77,11 @@ arch_prctl(ARCH_SHSTK_UNLOCK, unsigned long features)
-     Unlock features. 'features' is a mask of all features to unlock. All
-     bits set are processed, unset bits are ignored. Only works via ptrace.
- 
-+arch_prctl(ARCH_SHSTK_STATUS, unsigned long addr)
-+    Copy the currently enabled features to the address passed in addr. The
-+    features are described using the bits passed into the others in
-+    'features'.
-+
- The return values are as follows. On success, return 0. On error, errno can
- be::
- 
-@@ -84,6 +89,7 @@ be::
-         -ENOTSUPP if the feature is not supported by the hardware or
-          kernel.
-         -EINVAL arguments (non existing feature, etc)
-+        -EFAULT if could not copy information back to userspace
- 
- The feature's bits supported are::
- 
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index 746c040f7cb6..73de995f55ca 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -14,7 +14,7 @@ struct thread_shstk {
- 	u64	size;
- };
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
- void reset_thread_features(void);
- int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
- 			     unsigned long stack_size,
-@@ -24,7 +24,7 @@ int setup_signal_shadow_stack(struct ksignal *ksig);
- int restore_signal_shadow_stack(void);
- #else
- static inline long shstk_prctl(struct task_struct *task, int option,
--			     unsigned long features) { return -EINVAL; }
-+			     unsigned long arg2) { return -EINVAL; }
- static inline void reset_thread_features(void) {}
- static inline int shstk_alloc_thread_stack(struct task_struct *p,
- 					   unsigned long clone_flags,
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 200efbbe5809..1b85bc876c2d 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -26,6 +26,7 @@
- #define ARCH_SHSTK_DISABLE		0x5002
- #define ARCH_SHSTK_LOCK			0x5003
- #define ARCH_SHSTK_UNLOCK		0x5004
-+#define ARCH_SHSTK_STATUS		0x5005
- 
- /* ARCH_SHSTK_ features bits */
- #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index d368854fa9c4..dde43caf196e 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -836,6 +836,7 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_SHSTK_DISABLE:
- 	case ARCH_SHSTK_LOCK:
- 	case ARCH_SHSTK_UNLOCK:
-+	case ARCH_SHSTK_STATUS:
- 		return shstk_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index a639119a21c5..3b1433bd63c7 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -445,8 +445,14 @@ SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsi
- 	return alloc_shstk(addr, aligned_size, size, set_tok);
- }
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
- {
-+	unsigned long features = arg2;
-+
-+	if (option == ARCH_SHSTK_STATUS) {
-+		return put_user(task->thread.features, (unsigned long __user *)arg2);
-+	}
-+
- 	if (option == ARCH_SHSTK_LOCK) {
- 		task->thread.features_locked |= features;
- 		return 0;
+
 -- 
-2.17.1
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
