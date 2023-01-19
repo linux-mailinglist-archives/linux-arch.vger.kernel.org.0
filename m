@@ -2,194 +2,269 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0516674063
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 18:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C6E674452
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 22:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjASR6O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 Jan 2023 12:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S229961AbjASVbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 Jan 2023 16:31:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjASR6K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Jan 2023 12:58:10 -0500
-Received: from DM6FTOPR00CU001-vft-obe.outbound.protection.outlook.com (mail-cusazon11020025.outbound.protection.outlook.com [52.101.61.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2315D90845;
-        Thu, 19 Jan 2023 09:58:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mhWvpi1LogqDdiQkwPQ0C2ws/kTi/Y6GoVgrKFPWXsx0f6jeNTeaopbsPbhs2grdebweqPGTflGy+vH8T5nGgLsyVMmE9eBIDKzpqrM5xDU6BOzXzpNEVqdCx7BTiyT7wV8IQnCYoYL0EO4WoRjC+xldmRsKoqwG8fVyK/wQEqHKkfbADcvtLSVSNanfKGx5AXEhkS+6/yj69oIOiHZDTz4JC+XapvcGtE1CpLG3eEFe64BqxJSOLyuNdw4xIbyNWYkEE8WmwmFz/+wf7vGpcDFdgzw2n+95XFFFTxYRAYTQMLakCqM/b2B379r5jEkLErTyEJlcS0Xtz/rLvuOdpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qh3rgYYm5wrfvbeCfMfz2kTKIwu/ZzgJqo5/ap+J8KE=;
- b=au3R/pcv+zjsp0dUJ1TkVRfGuh8kTiAxfskTeX2wIsFdunFdsfYyxjkohwVHTLlSDisRqQo/WiH8NMOMmb4qG5cRvF8m9l1twAksq/otAr4NyMI5d5xfAid6yldb/5r4U0gRaHBeJnkvsA0CB59fn4dBO2FEr/iThWyxSi7GwxGvldHxtnJaARtWWIHItkvNb0lOHE770lAeDFsVMwY0WHLJ8gpsf7U735vOmB/KaRcv2XhKS9DwK+AInOfZCjAn1oBCDiweDYP8H20UTKJbiafmPLTvmLEX35jkUWe85Bvjg7NUfsmuhOIYuz/s9d8aK66nkl7WboGsS7+0hiNxnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qh3rgYYm5wrfvbeCfMfz2kTKIwu/ZzgJqo5/ap+J8KE=;
- b=jtC6vQLFU+VeysdHCnOvj0HKXL1UtlTs2MAQsWDbg2Auzjuzj7qyE+ytLBHkMdGslOhHBXMIAJ6kZtv5z07J6yNRY0k1JIYJsi6fesJgOceADnqOvuNHGUXj3pajOfVTuRvhaFP26fUcgvJPE1V8h8Z83QBpVxO8ZBdgbc0MWGM=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by PH0PR21MB1307.namprd21.prod.outlook.com (2603:10b6:510:10f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.6; Thu, 19 Jan
- 2023 17:58:04 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c14e:c8f3:c27a:af3d]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c14e:c8f3:c27a:af3d%5]) with mapi id 15.20.6043.006; Thu, 19 Jan 2023
- 17:58:04 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>, Borislav Petkov <bp@alien8.de>
-CC:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
- Confidential VMs
-Thread-Topic: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
- Confidential VMs
-Thread-Index: AQHZJo6ylykThdLA10Cb0ddOjSIUP66mEVyA
-Date:   Thu, 19 Jan 2023 17:58:04 +0000
-Message-ID: <SA1PR21MB1335741F74F96320304708ABBFC49@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
- <Y7xhLCgCq0MOsqxH@zn.tnic> <Y8ATN9mPCx6P4vB6@liuwe-devbox-debian-v2>
-In-Reply-To: <Y8ATN9mPCx6P4vB6@liuwe-devbox-debian-v2>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fc23ee3d-dbbd-4be7-a57e-3d8eafff84ee;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-19T17:55:37Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|PH0PR21MB1307:EE_
-x-ms-office365-filtering-correlation-id: 9de61f5c-8972-4658-cc19-08dafa46b677
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FZHi9QmgPin/xFR71mhCHN7Oj9nbl5XBbalBuzSWAgNK3Wiw0wYiNC7O0X7LfUczsnW6n0j/soQ5lmAt60TCobwIsAZCMW4jIrWtM33vBdatfyy2nt+X3gSwMOY75KTQQ4f2qb3ju1yDe+LdCA75D5uAQ8Udep/Hs+qoxTa8KftmyMACt5EhV/ZCIiR4ITPWbiVwq/5KIX0VH5T65StuVWuKPY1timAJRIfSq2CuAgTs/xbYktBYsvjT//KRp4uetJGzEi+XZXk+1dZ86Cp1d3hdFLa4f6CHE276qMLM5nS026sdS53a6zu2wi7WD8MxsfEhToXi3AxjRmIf37y0TiVxM/erVy7OzkMLr3uk3hcnGyEQr3DHbj3EciHJGz1aYArJ1+e81G+hzgaiXck5k5XXon5PqZ03ac+OS47pjhkmd0shcIAI9rDAnwKHOPxj5fGb8Nw3tM7ykTXYy6gA2e9IMS4WF87FOf4tO84T1pifWbflQW6XNbST3Usyvy0sCm3OUhT1+PNwyrRHjaoY+Jek8Iuk/4xcCssI9FMICWTE6TFisSUTihmakot2A6BgM2feQPEr3OS6rmNFc+6syRo/0Hu1bpDU+Lb/MJ67t59ioDi738JnNZMrAOM1y6tSrUfzWjFJADo2UbrGtljIxEWqKsv3/1epZRtVOVM5SF1YmNaHaefLWNLaHt97zpBAj/RKg3Ff4x2aLjDR17faelrCtZoooJwtziN8ItnGYolIbg4O7VeWMH9/FLDE5ZfS
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(451199015)(76116006)(86362001)(53546011)(8990500004)(6506007)(478600001)(7696005)(71200400001)(316002)(33656002)(122000001)(8936002)(52536014)(5660300002)(82960400001)(26005)(7406005)(66476007)(66556008)(66946007)(7416002)(38100700002)(82950400001)(66446008)(8676002)(64756008)(4326008)(41300700001)(9686003)(186003)(10290500003)(38070700005)(55016003)(2906002)(54906003)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Y+XGiOEGgGLcg4yLuPNnY3wiYEFYJSe8JJIhAdyGPt4dcTabFb+WI8hMdZFX?=
- =?us-ascii?Q?jqvaOlOJCMTiOamYBO55+sEFOb6BeARSVZgpHbaQK19Y/IIHuZvBf4aNNt3Z?=
- =?us-ascii?Q?KMvXQpQ+Dr3VFf89brcp5m3gSVUg0SbCZqXJktNhvce+OXqPi7su0kr9JxeX?=
- =?us-ascii?Q?FW1seyy4Op9FZeJwhRiUspJYTEspaNC0WFCmzKVVKk89xw7kzIex9Nty3rCx?=
- =?us-ascii?Q?xmtK6MzKQj+pQ7hO8107SGjsiHmLgnDHFg1KkpgII7Ms4fkerYKAUw9ScfhO?=
- =?us-ascii?Q?flR1lkRYW2UmXVsDJD4HS+24yVzIfcqqejzMwX7S+pRs1eI1xQ0TGei9czyf?=
- =?us-ascii?Q?T7R2tHEqFuwrc1HpavVUMmyqle2N0NQsTWoJBjtrkDF3l4ht+P8BUczwOdOu?=
- =?us-ascii?Q?7c1B92hN8edOYcxEZOxQ6s99PBoqXJLRvr0GQBO+BWbcztOrgt9VIwpHCKPL?=
- =?us-ascii?Q?T3R/4x6DaP4sUQpB8j6G33B8ItVp7BBYNO3EN7SDqZ3V9pyzyR0aA+F8oJOV?=
- =?us-ascii?Q?DUMVsl7gXSoUZTc9wkZIbAaKgz5kW8DP7tH2t6ACZaa0YGgOrOPjhTMSC3CL?=
- =?us-ascii?Q?qO2H00wgf5bhWR2BScv7FFwnlecaqKX7E8Bs5DjKwrYh7GJmvQOg3AhBJqJX?=
- =?us-ascii?Q?AcX75zyyiBg0yJdvxmsbxywZPeAm3ppkqFtf/65d6cHNtFinLwgRhus0oiQB?=
- =?us-ascii?Q?6PRV9NN0EzljxA26HZGSxehVGqaigJOnmwDWHb4c/cDftCrHYBZjSWfVzjNF?=
- =?us-ascii?Q?LtnbPFuB5KcaXgGug8yBcaW/bzVOM17YNmQ8CCQ07TuqB4L5wO84rFSdjM8u?=
- =?us-ascii?Q?Sg/S0/TgxrsV+33OQ1Me0KjM0xGISpoLx2cBIeOVybfhH6AQfhrqZS78Ed71?=
- =?us-ascii?Q?DTh9nGktp5vJJsKk+TzAtkElpfqRTg+RO/S/T4yPVxK5jNOG3RlBQi25VI9q?=
- =?us-ascii?Q?w0N9kPdlPrV0RsW/SCTPC5K3N4iHd4XftTxKV52m5JgQknoS3VOYEVyZXm4p?=
- =?us-ascii?Q?OTI+AynhX5gSvvBiCzspTHcaOgsh6egygBYrQmjV6vkCu7Rk7y/cC/kpXvkC?=
- =?us-ascii?Q?kj27/EwbnX1hd3LIpx5Rnh6K1QUwi0EnPMuqaUwPxQ6fFDFfCJx3fLNjdA9N?=
- =?us-ascii?Q?xpsHIreC8z+Y5c8/b8Yvo6Q/j0oR8EGQDuuwBHQUeJLerQ+5QUQCr6RTtLfn?=
- =?us-ascii?Q?k+yBm/9OABRbDLpVADatozWlDTwrrEBrHzZPmCsZbA23px9ZF5y9A4EAS9xq?=
- =?us-ascii?Q?47cW0b9tr9nZYvCP4Mh50Hk123Abf3YKeuzikG4uVqqvKTKni9cGo8HOX4HU?=
- =?us-ascii?Q?keKVqJLQfthYb3y0DS1LH7OnCRmskOL42g7zolMuY3ViHein54aLAHPBy5jy?=
- =?us-ascii?Q?qTccVhgA9Lg61SK96TTMYHEgP/xrzK/NDU8DGrz0FXNqTUxNE0mm5wbudcxd?=
- =?us-ascii?Q?4kvNIbiXIM9OKVmj5YeAErGMTsTr5U6zUJTgAkn9bKM0X8JcJktMh2GIuwM+?=
- =?us-ascii?Q?oQYW8OVhhNrbf7OQzQ6xvRYC9z8ABUClGy1TRMAquSRULWC1d+VbkBZ6ZUZ7?=
- =?us-ascii?Q?seveoEHx67CUH6SXVO8EVKgd2IgXvMPm27dLyjJJ?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9de61f5c-8972-4658-cc19-08dafa46b677
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jan 2023 17:58:04.1836
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fwK6BMLa+gCDHAcC3b7RjEjtCcuVZtH2eYxGDagbANUsOdWRWzBa6kjigsVBV3Oczg5+vPBqYF2lMaoXF2xPAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1307
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229712AbjASV3Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 Jan 2023 16:29:16 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436CEA5CFE;
+        Thu, 19 Jan 2023 13:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674163449; x=1705699449;
+  h=from:to:cc:subject:date:message-id;
+  bh=KeghPjHYUOp2vxEfBJ4+MNk/QB9fTnQp/kAL+jxFnkc=;
+  b=EG+G0Oq99FhhN5UGqQPnEoxm3iXKvDFP3RugfPsi+Se0V9ktIzJHNAAS
+   gZyICg6WYA5ExYU7rzSJR0+bDQ5j8Zhkd72Lhz0r2v1sRfipRe54/ekOr
+   0l+IDcdBFEqYWoSF+nQOIJ++eBBy8TfywodNXqAsu2LKi9D8Vm+MBEyz0
+   sSPZgDdtereIsRGDmV56B20yoIfYeM/+WrRrd/BmXlNBfV+1Ef5xug16Z
+   cdYhVvjECBVQKD2jx+IIWZ3MB/dzrIRE7qDIvcKarguT6JDloa6fRObWG
+   /csQIwGHI5TGdg1R/lAFXDJLZNd4InXjBuqVhfoBaoaVtgtbmfc9ldDoi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="323119137"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="323119137"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:23:24 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="989138978"
+X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
+   d="scan'208";a="989138978"
+Received: from hossain3-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.252.128.187])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 13:23:23 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com
+Cc:     rick.p.edgecombe@intel.com
+Subject: [PATCH v5 00/39] Shadow stacks for userspace
+Date:   Thu, 19 Jan 2023 13:22:38 -0800
+Message-Id: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: Wei Liu <wei.liu@kernel.org>
-> Sent: Thursday, January 12, 2023 6:04 AM
-> To: Borislav Petkov <bp@alien8.de>
-> [...]
-> On Mon, Jan 09, 2023 at 07:47:08PM +0100, Borislav Petkov wrote:
-> > On Thu, Dec 01, 2022 at 07:30:18PM -0800, Michael Kelley wrote:
-> > > This patch series adds support for PCI pass-thru devices to Hyper-V
-> > > Confidential VMs (also called "Isolation VMs"). But in preparation, i=
-t
-> > > first changes how private (encrypted) vs. shared (decrypted) memory i=
-s
-> > > handled in Hyper-V SEV-SNP guest VMs. The new approach builds on the
-> > > confidential computing (coco) mechanisms introduced in the 5.19 kerne=
-l
-> > > for TDX support and significantly reduces the amount of Hyper-V speci=
-fic
-> > > code. Furthermore, with this new approach a proposed RFC patch set fo=
-r
-> > > generic DMA layer functionality[1] is no longer necessary.
-> >
-> > In any case, this is starting to get ready - how do we merge this?
-> >
-> > I apply the x86 bits and give Wei an immutable branch to add the rest o=
-f the
-> > HyperV stuff ontop?
->=20
-> I can take all the patches if that's easier for you. I don't think
-> anyone else is depending on the x86 patches in this series.
->=20
-> Giving me an immutable branch works too.
->=20
-> Thanks,
-> Wei.
-> > --
-> > Regards/Gruss,
-> >     Boris.
+Hi,
 
-Hi Boris, Wei, any news on this?
+This series implements Shadow Stacks for userspace using x86's Control-flow 
+Enforcement Technology (CET). CET consists of two related security features: 
+shadow stacks and indirect branch tracking. This series implements just the 
+shadow stack part of this feature, and just for userspace.
+
+The main use case for shadow stack is providing protection against return 
+oriented programming attacks. It works by maintaining a secondary (shadow) 
+stack using a special memory type that has protections against modification. 
+When executing a CALL instruction, the processor pushes the return address to 
+both the normal stack and to the special permission shadow stack. Upon RET, 
+the processor pops the shadow stack copy and compares it to the normal stack 
+copy. For more details, see the coverletter from v1 [0].
+
+The main change in this version is the removal of the attempt to prevent 32 bit 
+signals from being registered with shadow stack enabled. Peterz originally 
+raised the issue that shadow stack support in 32 bit signals was in a half 
+working state. The reason for that was 32 bit signals are not easy to support 
+for shadow stack, and also there is not a huge demand for shadow stack support 
+in 32 bit apps using 32 bit emulation on 64 bit kernels. At that point the 
+solution was to prevent shadow stack from being enabled on 32 bit processes. 
+But Peterz pointed that 64 bit apps can transition to 32 bit outside of kernel
+interaction by making a far call to a 32 bit segment.
+
+So the next solution was to prevent 32 bit signals from being registered when
+shadow stack was enabled. This turned out to be hard to do, due to signals
+being per-process and shadow stack being per task.
+
+But it turns out this far call scenario was already mostly not possible due to 
+the HW not supporting shadow stacks located outside of the 32 bit address space 
+when in 32 bit mode. During the transition to 32 bit mode with an SSP pointing 
+outside of the 32 bit address space, HW generates a #GP which in turn triggers 
+a segfault. So basically there is already a barrier in place for this far call 
+scenario for the most part. Creation of shadow stack memory is tightly 
+controlled, so the solution in this version is just to *ensure* that shadow 
+stacks can never be allocated in the 32 bit address space. For more information 
+see the new patch: "x86/mm: Introduce MAP_ABOVE4G", and the documentation in 
+patch 1.
+
+Additionally:
+ - A smattering of small changes from Boris and Kees
+ - Fixed my spellcheck setup and then fixed a bunch of spelling issues in the
+   commit logs.
+ - An update to the pte_modify() PAGE_COW solution
+ 
+I left tested-by tags in place per discussion with testers. Testers, please
+retest.
+
+Previous version [1].
+
+[0] https://lore.kernel.org/lkml/20220130211838.8382-1-rick.p.edgecombe@intel.com/
+[1] https://lore.kernel.org/lkml/20221203003606.6838-1-rick.p.edgecombe@intel.com/
+
+Kirill A. Shutemov (1):
+  x86: Introduce userspace API for shadow stack
+
+Mike Rapoport (1):
+  x86/shstk: Add ARCH_SHSTK_UNLOCK
+
+Rick Edgecombe (14):
+  x86/fpu: Add helper for modifying xstate
+  x86/mm: Introduce _PAGE_COW
+  x86/mm: Start actually marking _PAGE_COW
+  mm: Handle faultless write upgrades for shstk
+  mm: Don't allow write GUPs to shadow stack memory
+  x86/mm: Introduce MAP_ABOVE4G
+  mm: Warn on shadow stack memory in wrong vma
+  x86/shstk: Introduce map_shadow_stack syscall
+  x86/shstk: Support WRSS for userspace
+  x86: Expose thread features in /proc/$PID/status
+  x86/shstk: Wire in shadow stack interface
+  selftests/x86: Add shadow stack test
+  x86/fpu: Add helper for initing features
+  x86/shstk: Add ARCH_SHSTK_STATUS
+
+Yu-cheng Yu (23):
+  Documentation/x86: Add CET shadow stack description
+  x86/shstk: Add Kconfig option for shadow stack
+  x86/cpufeatures: Add CPU feature flags for shadow stacks
+  x86/cpufeatures: Enable CET CR4 bit for shadow stack
+  x86/fpu/xstate: Introduce CET MSR and XSAVES supervisor states
+  x86: Add user control-protection fault handler
+  x86/mm: Remove _PAGE_DIRTY from kernel RO pages
+  x86/mm: Move pmd_write(), pud_write() up in the file
+  x86/mm: Update pte_modify for _PAGE_COW
+  x86/mm: Update ptep_set_wrprotect() and pmdp_set_wrprotect() for
+    transition from _PAGE_DIRTY to _PAGE_COW
+  mm: Move VM_UFFD_MINOR_BIT from 37 to 38
+  mm: Introduce VM_SHADOW_STACK for shadow stack memory
+  x86/mm: Check shadow stack page fault errors
+  x86/mm: Update maybe_mkwrite() for shadow stack
+  mm: Fixup places that call pte_mkwrite() directly
+  mm: Add guard pages around a shadow stack.
+  mm/mmap: Add shadow stack pages to memory accounting
+  mm: Re-introduce vm_flags to do_mmap()
+  x86/shstk: Add user-mode shadow stack support
+  x86/shstk: Handle thread shadow stack
+  x86/shstk: Introduce routines modifying shstk
+  x86/shstk: Handle signals for shadow stack
+  x86: Add PTRACE interface for shadow stack
+
+ Documentation/filesystems/proc.rst            |   1 +
+ Documentation/x86/index.rst                   |   1 +
+ Documentation/x86/shstk.rst                   | 176 +++++
+ arch/arm/kernel/signal.c                      |   2 +-
+ arch/arm64/kernel/signal.c                    |   2 +-
+ arch/arm64/kernel/signal32.c                  |   2 +-
+ arch/sparc/kernel/signal32.c                  |   2 +-
+ arch/sparc/kernel/signal_64.c                 |   2 +-
+ arch/x86/Kconfig                              |  24 +
+ arch/x86/Kconfig.assembler                    |   5 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/x86/include/asm/cpufeatures.h            |   2 +
+ arch/x86/include/asm/disabled-features.h      |  16 +-
+ arch/x86/include/asm/fpu/api.h                |   9 +
+ arch/x86/include/asm/fpu/regset.h             |   7 +-
+ arch/x86/include/asm/fpu/sched.h              |   3 +-
+ arch/x86/include/asm/fpu/types.h              |  16 +-
+ arch/x86/include/asm/fpu/xstate.h             |   6 +-
+ arch/x86/include/asm/idtentry.h               |   2 +-
+ arch/x86/include/asm/mmu_context.h            |   2 +
+ arch/x86/include/asm/msr.h                    |  11 +
+ arch/x86/include/asm/pgtable.h                | 338 ++++++++-
+ arch/x86/include/asm/pgtable_types.h          |  65 +-
+ arch/x86/include/asm/processor.h              |   8 +
+ arch/x86/include/asm/shstk.h                  |  40 ++
+ arch/x86/include/asm/special_insns.h          |  13 +
+ arch/x86/include/asm/tlbflush.h               |   3 +-
+ arch/x86/include/asm/trap_pf.h                |   2 +
+ arch/x86/include/asm/traps.h                  |  12 +
+ arch/x86/include/uapi/asm/mman.h              |   4 +
+ arch/x86/include/uapi/asm/prctl.h             |  12 +
+ arch/x86/kernel/Makefile                      |   4 +
+ arch/x86/kernel/cet.c                         | 152 ++++
+ arch/x86/kernel/cpu/common.c                  |  35 +-
+ arch/x86/kernel/cpu/cpuid-deps.c              |   1 +
+ arch/x86/kernel/cpu/proc.c                    |  23 +
+ arch/x86/kernel/fpu/core.c                    |  59 +-
+ arch/x86/kernel/fpu/regset.c                  |  87 +++
+ arch/x86/kernel/fpu/xstate.c                  | 148 ++--
+ arch/x86/kernel/fpu/xstate.h                  |   6 +
+ arch/x86/kernel/idt.c                         |   2 +-
+ arch/x86/kernel/process.c                     |  18 +-
+ arch/x86/kernel/process_64.c                  |   9 +-
+ arch/x86/kernel/ptrace.c                      |  12 +
+ arch/x86/kernel/shstk.c                       | 492 +++++++++++++
+ arch/x86/kernel/signal.c                      |   1 +
+ arch/x86/kernel/signal_32.c                   |   2 +-
+ arch/x86/kernel/signal_64.c                   |   8 +-
+ arch/x86/kernel/sys_x86_64.c                  |   6 +-
+ arch/x86/kernel/traps.c                       |  87 ---
+ arch/x86/mm/fault.c                           |  38 +
+ arch/x86/mm/pat/set_memory.c                  |   2 +-
+ arch/x86/mm/pgtable.c                         |   6 +
+ arch/x86/xen/enlighten_pv.c                   |   2 +-
+ arch/x86/xen/xen-asm.S                        |   2 +-
+ fs/aio.c                                      |   2 +-
+ fs/proc/array.c                               |   6 +
+ fs/proc/task_mmu.c                            |   3 +
+ include/linux/mm.h                            |  59 +-
+ include/linux/mman.h                          |   4 +
+ include/linux/pgtable.h                       |  35 +
+ include/linux/proc_fs.h                       |   2 +
+ include/linux/syscalls.h                      |   1 +
+ include/uapi/asm-generic/siginfo.h            |   3 +-
+ include/uapi/asm-generic/unistd.h             |   2 +-
+ include/uapi/linux/elf.h                      |   2 +
+ ipc/shm.c                                     |   2 +-
+ kernel/sys_ni.c                               |   1 +
+ mm/gup.c                                      |   2 +-
+ mm/huge_memory.c                              |  12 +-
+ mm/memory.c                                   |   7 +-
+ mm/migrate_device.c                           |   4 +-
+ mm/mmap.c                                     |  12 +-
+ mm/nommu.c                                    |   4 +-
+ mm/userfaultfd.c                              |  10 +-
+ mm/util.c                                     |   2 +-
+ tools/testing/selftests/x86/Makefile          |   4 +-
+ .../testing/selftests/x86/test_shadow_stack.c | 667 ++++++++++++++++++
+ 78 files changed, 2578 insertions(+), 259 deletions(-)
+ create mode 100644 Documentation/x86/shstk.rst
+ create mode 100644 arch/x86/include/asm/shstk.h
+ create mode 100644 arch/x86/kernel/cet.c
+ create mode 100644 arch/x86/kernel/shstk.c
+ create mode 100644 tools/testing/selftests/x86/test_shadow_stack.c
+
+-- 
+2.17.1
+
