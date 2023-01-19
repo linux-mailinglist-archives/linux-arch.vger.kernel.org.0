@@ -2,72 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CF8672DB3
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 01:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E207B672E6A
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 02:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjASAxS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Jan 2023 19:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S229898AbjASBsT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Jan 2023 20:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbjASAxQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 19:53:16 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5481A4CE6C
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 16:53:15 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id q64so796836pjq.4
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 16:53:15 -0800 (PST)
+        with ESMTP id S230047AbjASBps (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 20:45:48 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C1A5A817;
+        Wed, 18 Jan 2023 17:42:08 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id r18so339369pgr.12;
+        Wed, 18 Jan 2023 17:42:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O5OwSqaa3k71xkT8WUUyBE4GL1c8ehjEm+lG2U3+ww8=;
-        b=VxMM+n7ZQ7ySdPZJagy+lvodZf7Ei6K4cGhxVW6vhCAISwMhETO4P0zAg5TL04X9mG
-         so7hd1FvWPuhpb3FnNogypnG+GUvTjMyf29uuxUgkEKMKiKhjWFKZgy7XM+7zlRGbnLM
-         XW8EB337vH9O7EDDbXqKRjCsTOjUSBIJYzj9n3ydNn7NDvys/PCYZU4rv+3ZH8698zjJ
-         gjaog8MASkt1QYEddmOc4pZ/1fHtFmV0/EHae6jjaC9Tlr2Juoi/5SjXD2FC4l1tgw5X
-         xSssM+NTSqUR/rVW3gPshuPqCCXxtCjGCfmoxOxkxaKFRfl3litjPnUrhQfV2nwMz9q0
-         bytw==
+        bh=1jTlfNksJalEp/A5sUIxTgRksg/f/RnRMjUOcu8kx0c=;
+        b=HhQ0xvQYH31klAmXtATKS3umnYmXZLm1jhsZWhY3zxBGOzV5UvC5+HOPQ74rr4IVdi
+         viO/Y5h6rjpyVuXjVmkMpid4adWtXK4TcpYhNdh+uqU61rqAA1IX1TTxWrgFsu0nAjYv
+         pEHPxHYljLtPQJXN+O6urbgXNUpZIUh/KPHt2pNpVujsQKrpObeQwaVMOXNVtZ2ZTmgG
+         mCabkxYu51M5Et0B+06U98ut2+y9rh+wqmiT9RAjZd/7Qpxgy2qIxFHyXRB0ecZzXka8
+         35bnEcCT49LzCAgRfD16Hw63IDP1lVjOfzJsgtTU1yLw/mkfQipeMdguETXNW4GFO4kl
+         JyXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=O5OwSqaa3k71xkT8WUUyBE4GL1c8ehjEm+lG2U3+ww8=;
-        b=CN7OMG4vB+lufilpm6L4c5jfg4D7Xi694z7fgNIkdSdfdNCSL20dGsDpXkpJdqMSNK
-         Y/ABg31qp5NHYkp/DLcohg8Qf/E1MoKICXIgBOydSAXGDy990wgdL6GnST1yp3IHJJqb
-         b4IIkTpjO1GMjIz3fiZTZ8YxcPL9TwOoAjpQvSoBqCxJmH8nioT7YebOv8MCvMN1ETKo
-         qzWaq24U9S2QhUOsAlhgvfORUXBgMBRlT7mKBCGujhsDGAM/gZAECypki2P9GfjTS7OF
-         dUtLEdbF57v0uiT4u1vYg93thCviq1NYX313PKiDLnaTBgltjpgPaBwpjhTrSS1786od
-         jXTw==
-X-Gm-Message-State: AFqh2kpNWiLMo4xrTmXZy+uHRebHokd8E/p+kKd/dAPUs3qwYnCcT4S6
-        BEj36zyxDG2a19LCl+fIMio=
-X-Google-Smtp-Source: AMrXdXsMSS9dcXgYVyvRoV4FT2tnzvT0wkiLbe+rSWN6jjYwj9dD2M9R08hcXMB91pi0HSAg9oFG6g==
-X-Received: by 2002:a17:90a:5a45:b0:229:2bbb:261f with SMTP id m5-20020a17090a5a4500b002292bbb261fmr9919226pji.8.1674089594735;
-        Wed, 18 Jan 2023 16:53:14 -0800 (PST)
+        bh=1jTlfNksJalEp/A5sUIxTgRksg/f/RnRMjUOcu8kx0c=;
+        b=hj/c/uBBgfRr0zc4GwkK1M1A6B3nJ1YDJPkxZH1Hej1Z6uiTKarUwx4IycScUhLcEN
+         LRBYRYD83/JSg+5trOTMp2rp0zhbtXVf3kbV/cE5x1Z1oaPJrxEog0G+Ype/dchRhKIv
+         /25bF1gUUQGwcgqg3OWbJW/Uqf52vzg87QVCpjwefNHh05BnyXvmaFKIRilTID4UE70N
+         LcxJ+PTYEG7TTO9+vgWFvbams2zusxVP0+JLlV1zYz2Kk1qveqhh9GVJgE88OelYVzva
+         16CE4QEhNrawAE0Z4S5zvK7TSu3nmys7/ZGjgiBGNfvRxWhiIy4Q8FaYIDS8Du9Tgkyi
+         7y4Q==
+X-Gm-Message-State: AFqh2kp8K6XAbpvyRWHBDAwBoJZ8y1ltY7VV+MgmQGtjZQlSAbiim4Rn
+        +sLtuTR04yNg43E7QBL0s2Y=
+X-Google-Smtp-Source: AMrXdXvV7ofDOm4aFHya2EIoCDpKJMrm+bHqraoK2hS0COfWYM90GBxg+hCw2OE54Bb8LzJ88DhU0g==
+X-Received: by 2002:a62:ab02:0:b0:58d:982a:f1ed with SMTP id p2-20020a62ab02000000b0058d982af1edmr8724476pff.27.1674092528248;
+        Wed, 18 Jan 2023 17:42:08 -0800 (PST)
 Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id o11-20020a17090a420b00b002296312adcesm1888963pjg.56.2023.01.18.16.53.11
+        by smtp.gmail.com with ESMTPSA id z13-20020aa79e4d000000b0058bc1a13ffcsm9337947pfq.25.2023.01.18.17.41.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 16:53:13 -0800 (PST)
+        Wed, 18 Jan 2023 17:42:07 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 10:53:08 +1000
-Message-Id: <CPVR8BY8XFWE.BF91Z0FOZWH8@bobo>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "linux-arch" <linux-arch@vger.kernel.org>,
-        "linux-mm" <linux-mm@kvack.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v6 3/5] lazy tlb: shoot lazies, non-refcounting lazy tlb
- mm reference handling scheme
+Date:   Thu, 19 Jan 2023 11:41:57 +1000
+Message-Id: <CPVS9PAXZRPK.3HFH2LTB662XP@bobo>
+Subject: Re: Memory transaction instructions
 From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Nadav Amit" <nadav.amit@gmail.com>
+To:     "David Howells" <dhowells@redhat.com>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Mateusz Guzik" <mjguzik@gmail.com>,
+        "linux-arch" <linux-arch@vger.kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>, <tony.luck@intel.com>,
+        <viro@zeniv.linux.org.uk>, <linux-fsdevel@vger.kernel.org>,
+        "Jan Glauber" <jan.glauber@gmail.com>,
+        "linuxppc-dev" <linuxppc-dev@lists.ozlabs.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>
 X-Mailer: aerc 0.13.0
-References: <20230118080011.2258375-1-npiggin@gmail.com>
- <20230118080011.2258375-4-npiggin@gmail.com>
- <5F3590B8-3F25-4EFB-BE3A-D32AAAC0B2F4@gmail.com>
-In-Reply-To: <5F3590B8-3F25-4EFB-BE3A-D32AAAC0B2F4@gmail.com>
+References: <CAHk-=whjFwzEq0u04=n=t7-kNJdX0HkAOjAMjmLXDDycJ+j9yQ@mail.gmail.com> <CAGudoHHx0Nqg6DE70zAVA75eV-HXfWyhVMWZ-aSeOofkA_=WdA@mail.gmail.com> <CAHk-=wjthxgrLEvgZBUwd35e_mk=dCWKMUEURC6YsX5nWom8kQ@mail.gmail.com> <CPQQLU1ISBIJ.2SHU1BOMNO7TY@bobo> <CAHk-=wiRm+Z613bHt2d=N1yWJAiDiQVXkh0dN8z02yA_JS-rew@mail.gmail.com> <1966767.1673878095@warthog.procyon.org.uk> <2496131.1674032743@warthog.procyon.org.uk>
+In-Reply-To: <2496131.1674032743@warthog.procyon.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -78,48 +80,32 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu Jan 19, 2023 at 8:22 AM AEST, Nadav Amit wrote:
+On Wed Jan 18, 2023 at 7:05 PM AEST, David Howells wrote:
+> Linus Torvalds <torvalds@linux-foundation.org> wrote:
 >
+> > And for the kernel, where we don't have bad locking, and where we
+> > actually use fine-grained locks that are _near_ the data that we are
+> > locking (the lockref of the dcache is obviously one example of that,
+> > but the skbuff queue you mention is almost certainly exactly the same
+> > situation): the lock is right by the data that the lock protects, and
+> > the "shared lock cacheline" model simply does not work. You'll bounce
+> > the data, and most likely you'll also touch the same lock cacheline
+> > too.
 >
-> > On Jan 18, 2023, at 12:00 AM, Nicholas Piggin <npiggin@gmail.com> wrote=
-:
-> >=20
-> > +static void do_shoot_lazy_tlb(void *arg)
-> > +{
-> > +	struct mm_struct *mm =3D arg;
-> > +
-> > + 	if (current->active_mm =3D=3D mm) {
-> > + 		WARN_ON_ONCE(current->mm);
-> > + 		current->active_mm =3D &init_mm;
-> > + 		switch_mm(mm, &init_mm, current);
-> > + 	}
-> > +}
->
-> I might be out of touch - doesn=E2=80=99t a flush already take place when=
- we free
-> the page-tables, at least on common cases on x86?
->
-> IIUC exit_mmap() would free page-tables, and whenever page-tables are
-> freed, on x86, we do shootdown regardless to whether the target CPU TLB s=
-tate
-> marks is_lazy. Then, flush_tlb_func() should call switch_mm_irqs_off() an=
-d
-> everything should be fine, no?
->
-> [ I understand you care about powerpc, just wondering on the effect on x8=
-6 ]
+> Yeah.  The reason I was actually wondering about them was if it would be
+> possible to avoid the requirement to disable interrupts/softirqs to, say,
+> modify the skbuff queue.  On some arches actually disabling irqs is quite=
+ a
+> heavy operation (I think this is/was true on ppc64, for example; it certa=
+inly
+> was on frv) and it was necessary to "emulate" the disablement.
 
-If you can easily piggyback on IPI work you already do in exit_mmap then
-that's likely to be preferable. I don't know the details of x86 these
-days but there is some discussion about it in last year's thread, it
-sounded quite feasible.
-
-This is stil required at final __mmdrop() time because it's still
-possible that lazy mm refs will need to be cleaned. exit_mmap() itself
-explicitly creates one, so if the __mmdrop() runs on a different CPU,
-then there's one. kthreads using the mm could create others. If that
-part of it is unclear or under-commented, I can try improve it.
+Not too bad on modern ppc64. Changing MSR in general has to flush the
+pipe and even re-fetch, because it can alter memory translation among
+other things, so it was heavy. Everything we support has a lightweight
+MSR change that just modifies the interrupt enable bit and only needs
+minor serialisation (although we still have that software-irq-disable
+thing which avoids the heavy MSR problem on old CPUs).
 
 Thanks,
 Nick
-
