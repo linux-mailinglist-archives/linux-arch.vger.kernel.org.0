@@ -2,74 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E295672F5D
-	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 04:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3206D673069
+	for <lists+linux-arch@lfdr.de>; Thu, 19 Jan 2023 05:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjASDE7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 Jan 2023 22:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S230298AbjASEhC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 Jan 2023 23:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjASDE5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 22:04:57 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E442842DD9
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 19:04:51 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id s13-20020a17090a6e4d00b0022900843652so4541593pjm.1
-        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 19:04:51 -0800 (PST)
+        with ESMTP id S230327AbjASEgm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 Jan 2023 23:36:42 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DC970C57
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 20:33:17 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id 7so592457pga.1
+        for <linux-arch@vger.kernel.org>; Wed, 18 Jan 2023 20:33:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=c/gHZEBJUqbXfG5JX1H5lnam0IN6TNXNjBZYcdLB8wc=;
-        b=bhWSFtHFWzg3KaP6hdKmTWRc+V9Fox21VYwUq0wTkIBSKY3ClnhvXUqHrGuuAvBhkz
-         WCDVAI3Rzb79DGG3/FspTjpuS3o0BQV8+iwZDwbwkFhojO8Am0TFeO2AS4AJ/1Vpl/bu
-         QOPOLbW6JtRWSdr3FGbSfDZEMf3D6AB4c9WZEho6CHb9N37dU4DdY5qfoaNQJkQZpR9+
-         TZAo0/OD8U9HQka/hBfHIubzNBRsd14gwDKc0p+jI9ZVwweOmb7ZbrHA1AclDU2wwKPH
-         9T1TQWRHh9PyQ0Qm/E2ioM7u0ztci3DrxDuMlwc1oQAKgRjh871aYDRUEITBu2ZxqsDS
-         wMHw==
+        bh=c1J7vuOigOymY1Zk38Z4JeTgNz+j/oREHGhmGUsHx/8=;
+        b=WZDUjfOLPsSuFKt/G39tLSbM/WFTPs7WukHsli7BbMY9RzqZl6rMnrLDVXibgONhry
+         djMp0q12Qm8cDRHYTlSDHiDDtOR2lrDlAybOJVmnJks/ZHqOQL9VXE2eBoJZAahlTbvs
+         rusBqUT/CMizS3EaWLfbxmgu6Po0I2w05ZQAN4eqq3IbKLykiU/5zWkQSbb1p1hYj7TQ
+         La8n5Z+SvnWryMnobOTU3UQV+wCiyvvyK2cdyGBxONGIULOFdREjZVVrqQLCFU1F3lsr
+         n/QHvaimR4CBSjxB7TJuT5hwcRhRaBKXp2zrSJV6m4yE+KnjyNP/AYt80HWDtVt+zOB2
+         fa1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=c/gHZEBJUqbXfG5JX1H5lnam0IN6TNXNjBZYcdLB8wc=;
-        b=URi+ibXknqj1Yb18oF+LHjL9oMquGd/mecVurEVFbiOw0iI8t/HuDa/mNvQDg3SkFv
-         nzPlOfL1j144DFj3bKRumQU/b1TYSQvHXx1atblMyY8TgdaUIMaIEkBqOW1i1KoyOtkv
-         KhNcsO+1gtv/xw7aRhEgnOWrL7RS5aTy3su2W8nFIEaYjhZwkaH/ASOvF+gNEuzQ9xai
-         Y3fRjaIQApGMkhMJvpv+8LDw2Zhc0n2apx2nFnV9JuK6bIqC9U61TkrbKWF+FbznsY+9
-         jyxxN835X7o7SHQuiVk9vViFNcB3/YYaLZl+UcPiuWFzDuzXi44Uoxwn+b+v+Zu6ZlhS
-         EG2g==
-X-Gm-Message-State: AFqh2kqI+vzLocFJwN6vyNbjgcVWFI6g9hdJLHhkvsaVU4bFReMOqFU9
-        Y73RlEDNcC0YRQNe2E77muU=
-X-Google-Smtp-Source: AMrXdXvH7nWDObatVJJJ0rFrPx7ePH/E+zXu/f0VqlxwbgvnLGgalRPIiDu/+GlHLmvdgYcf9hqo9Q==
-X-Received: by 2002:a17:902:8a8a:b0:194:480d:6afc with SMTP id p10-20020a1709028a8a00b00194480d6afcmr8663252plo.48.1674097491373;
-        Wed, 18 Jan 2023 19:04:51 -0800 (PST)
+        bh=c1J7vuOigOymY1Zk38Z4JeTgNz+j/oREHGhmGUsHx/8=;
+        b=imE6NVg30NSoKvhavMDe6jNw8fxZm0ArIgYhufOLFrGFD2ysNYYas3jQ06buG5Zz45
+         pypvgpBk8TWq2JhEk2Amw/z04P/XPSdEROHbaTYsa3qp/Xe7gY+sQcHDbZnBlzym395M
+         aPOuLzt/TY2pxI2MfUmKy1OadE0C6NT//oDUtv2NXOY1dl+EE+sxg8U8qoXHXfpjimrG
+         yiw0Fypd4M9ZrXDcn7hVcEtMNy2nNjbYVo8Im9yuJJGqgE1HxOECSWwq1jDU1pRV5uWW
+         VEOboJRTioE7tf1kKRRddl0PLA/rGRZ8gt86cZsy2VzR/+LMV3X7Rqvm536SY84bnLMt
+         pmxA==
+X-Gm-Message-State: AFqh2kr7EREUyCSRfOOZeBRL05i0RRxVUrnE+NSw+p8v+bqv2TyqHpWJ
+        IV2BPmZTrloCxU/JDbaYzlYTnmWn8j4=
+X-Google-Smtp-Source: AMrXdXuKZidOPo/a2pzghQNLOHD10FYNqkFh/Sf6FufPl/1jnSobgpJ6H0O40d0XuF6uZUnDLidggw==
+X-Received: by 2002:a05:6a20:7a83:b0:b8:eaee:54cc with SMTP id u3-20020a056a207a8300b000b8eaee54ccmr6174042pzh.54.1674102256049;
+        Wed, 18 Jan 2023 20:24:16 -0800 (PST)
 Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902b49400b00194caf3e975sm227479plr.208.2023.01.18.19.04.46
+        by smtp.gmail.com with ESMTPSA id a82-20020a621a55000000b00587c11bc925sm19655163pfa.168.2023.01.18.20.22.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 19:04:50 -0800 (PST)
+        Wed, 18 Jan 2023 20:24:15 -0800 (PST)
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 19 Jan 2023 13:04:44 +1000
-Message-Id: <CPVU13AC1206.2SHGMTJDZK6H8@bobo>
+Date:   Thu, 19 Jan 2023 14:22:52 +1000
+Message-Id: <CPVVOWQ6SE2S.NQ3R9R77MFKI@bobo>
 Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
         "linux-arch" <linux-arch@vger.kernel.org>,
         "linux-mm" <linux-mm@kvack.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v6 4/5] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
+Subject: Re: [PATCH v6 3/5] lazy tlb: shoot lazies, non-refcounting lazy tlb
+ mm reference handling scheme
 From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>
+To:     "Nadav Amit" <nadav.amit@gmail.com>
 X-Mailer: aerc 0.13.0
 References: <20230118080011.2258375-1-npiggin@gmail.com>
- <20230118080011.2258375-5-npiggin@gmail.com>
- <CAHk-=wiLaY7K6N4VF=wgS+AVsFi298fMA3Tx6rzbbP7xT+1Dqg@mail.gmail.com>
-In-Reply-To: <CAHk-=wiLaY7K6N4VF=wgS+AVsFi298fMA3Tx6rzbbP7xT+1Dqg@mail.gmail.com>
+ <20230118080011.2258375-4-npiggin@gmail.com>
+ <5F3590B8-3F25-4EFB-BE3A-D32AAAC0B2F4@gmail.com>
+In-Reply-To: <5F3590B8-3F25-4EFB-BE3A-D32AAAC0B2F4@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,85 +78,45 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu Jan 19, 2023 at 3:30 AM AEST, Linus Torvalds wrote:
-> [ Adding a few more x86 and arm64 maintainers - while linux-arch is
-> the right mailing list, I'm not convinced people actually follow it
-> all that closely ]
+On Thu Jan 19, 2023 at 8:22 AM AEST, Nadav Amit wrote:
 >
-> On Wed, Jan 18, 2023 at 12:00 AM Nicholas Piggin <npiggin@gmail.com> wrot=
-e:
-> >
-> > On a 16-socket 192-core POWER8 system, a context switching benchmark
-> > with as many software threads as CPUs (so each switch will go in and
-> > out of idle), upstream can achieve a rate of about 1 million context
-> > switches per second, due to contention on the mm refcount.
-> >
-> > 64s meets the prerequisites for CONFIG_MMU_LAZY_TLB_SHOOTDOWN, so enabl=
-e
-> > the option. This increases the above benchmark to 118 million context
-> > switches per second.
 >
-> Well, the 1M -> 118M change does seem like a good reason for this series.
-
-It was an artificial corner case, mind you. I don't think it's a reason
-to panic and likely smaller systems with faster atomics will care far
-less than our big 2-hop systems.
-
-Benchmark is will-it-scale:
-
-  ./context_switch1_threads -t 768
-  min:2174 max:2690 total:1827952
-
-    33.52%  [k] finish_task_switch
-    27.26%  [k] interrupt_return
-    22.66%  [k] __schedule
-     2.30%  [k] _raw_spin_trylock
-
-  ./context_switch1_threads -t 1536
-  min:103000 max:120100 total:177201906
-
-The top case has 1/2 the switching pairs to available CPU, which makes
-them all switch the same mm between real and lazy. Bottom case is
-just switching between user threads so that doesn't hit the lazy
-refcount.
-
-> The patches certainly don't look offensive to me, so Ack as far as I'm
-> concerned, but honestly, it's been some time since I've personally
-> been active on the idle and lazy TLB code, so that ack is probably
-> largely worthless.
+> > On Jan 18, 2023, at 12:00 AM, Nicholas Piggin <npiggin@gmail.com> wrote=
+:
+> >=20
+> > +static void do_shoot_lazy_tlb(void *arg)
+> > +{
+> > +	struct mm_struct *mm =3D arg;
+> > +
+> > + 	if (current->active_mm =3D=3D mm) {
+> > + 		WARN_ON_ONCE(current->mm);
+> > + 		current->active_mm =3D &init_mm;
+> > + 		switch_mm(mm, &init_mm, current);
+> > + 	}
+> > +}
 >
-> If anything, my main reaction to this all is to wonder whether the
-> config option is a good idea - maybe we could do this unconditionally,
-> and make the source code (and logic) simpler to follow when you don't
-> have to worry about the CONFIG_MMU_LAZY_TLB_REFCOUNT option.
+> I might be out of touch - doesn=E2=80=99t a flush already take place when=
+ we free
+> the page-tables, at least on common cases on x86?
 >
-> I wouldn't be surprised to hear that x86 can have the same issue where
-> the mm_struct refcount is a bigger issue than the possibility of an
-> extra TLB shootdown at the final exit time.
+> IIUC exit_mmap() would free page-tables, and whenever page-tables are
+> freed, on x86, we do shootdown regardless to whether the target CPU TLB s=
+tate
+> marks is_lazy. Then, flush_tlb_func() should call switch_mm_irqs_off() an=
+d
+> everything should be fine, no?
 >
-> But having the config options as a way to switch people over gradually
-> (and perhaps then removing it later) doesn't sound wrong to me either.
+> [ I understand you care about powerpc, just wondering on the effect on x8=
+6 ]
 
-IMO it's trivial enough that we could carry both, but everything's a
-straw on the camel's back so if we can consolidate it would always be
-preferebale. Let's see how it plays out for a few releases.
+Now I come to think of it, Rik had done this for x86 a while back.
 
-> And I personally find the argument in patch 3/5 fairly convincing:
->
->   Shootdown IPIs cost could be an issue, but they have not been observed
->   to be a serious problem with this scheme, because short-lived processes
->   tend not to migrate CPUs much, therefore they don't get much chance to
->   leave lazy tlb mm references on remote CPUs.
->
-> Andy? PeterZ? Catalin?
->
-> Nick - it might be good to link to the actual benchmark, and let
-> people who have access to big machines perhaps just try it out on
-> non-powerpc platforms...
+https://lore.kernel.org/all/20180728215357.3249-10-riel@surriel.com/
 
-Yep good point, I'll put it in the changelog. I might submit another
-round to Andrew in a bit with acks and any minor tweaks and minus the
-last patch, assuming no major changes or objections.
+I didn't know about it when I wrote this, so I never dug into why it
+didn't get merged. It might have missed the final __mmdrop races but
+I'm not not sure, x86 lazy tlb mode is too complicated to know at a
+glance. I would check with him though.
 
 Thanks,
 Nick
