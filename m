@@ -2,55 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC0D675749
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 15:35:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C94675754
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 15:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjATOfR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Jan 2023 09:35:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S231220AbjATOfw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Jan 2023 09:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjATOfP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 09:35:15 -0500
-Received: from fx601.security-mail.net (smtpout140.security-mail.net [85.31.212.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC58879EB6
-        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 06:35:03 -0800 (PST)
-Received: from localhost (fx601.security-mail.net [127.0.0.1])
-        by fx601.security-mail.net (Postfix) with ESMTP id BE4C7349867
-        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 15:20:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674224445;
-        bh=ZFm4jn2qVc3XxQ8bbXqM98MO1bH7PPorSUVJmGe9zIQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=NRRvyDRZ5VwOwVQfZDqU+46NQRlyLDL0W3bsNHuZTtmWfvdYPbnL8A8JWp8oPd0br
-         xkajvWR64O8gXlZ1cyBHGFf5LFUuYo1EbpRau8jt+s5Y6qvQmdt2CzKHwmAwdyUODQ
-         QR27+dNxyo6iaIgN6wpI2ZaqsOcbK47b8FxkLvYg=
-Received: from fx601 (fx601.security-mail.net [127.0.0.1]) by
- fx601.security-mail.net (Postfix) with ESMTP id 3138A3497F3; Fri, 20 Jan
+        with ESMTP id S229540AbjATOfV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 09:35:21 -0500
+Received: from fx306.security-mail.net (smtpout30.security-mail.net [85.31.212.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5669B80B95
+        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 06:35:04 -0800 (PST)
+Received: from localhost (fx306.security-mail.net [127.0.0.1])
+        by fx306.security-mail.net (Postfix) with ESMTP id 4022335CEE9
+        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 15:20:46 +0100 (CET)
+Received: from fx306 (fx306.security-mail.net [127.0.0.1]) by
+ fx306.security-mail.net (Postfix) with ESMTP id 9D66535CD8E; Fri, 20 Jan
  2023 15:20:45 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx601.security-mail.net (Postfix) with ESMTPS id 33F923496B9; Fri, 20 Jan
- 2023 15:20:44 +0100 (CET)
+ fx306.security-mail.net (Postfix) with ESMTPS id 1B27135CCDC; Fri, 20 Jan
+ 2023 15:20:45 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 74EE327E045E; Fri, 20 Jan 2023
+ zimbra2.kalray.eu (Postfix) with ESMTPS id EF33327E047D; Fri, 20 Jan 2023
  15:10:38 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 5882427E0463; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
+ (Postfix) with ESMTP id D247E27E047C; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- D11lu3OG-umz; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
+ N5fxZltrUQUh; Fri, 20 Jan 2023 15:10:38 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id DE5A427E0458; Fri, 20 Jan 2023
- 15:10:37 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 5595327E0470; Fri, 20 Jan 2023
+ 15:10:38 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <62f4.63caa33c.3169e.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 5882427E0463
+Secumail-id: <2818.63caa33d.1a14f.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu D247E27E047C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
  s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223838;
- bh=r0jAYvZMgDHNmtYPIBemAGb6cgybEgHcmW3NkzN/0Bc=;
+ bh=Ulssifik/xqyxmseDcDCHWF7GqQfVZORENj6s4m7VYQ=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=JKNRyzm7+8sxXJUhLzONaUXzidzmY7QHybfABV02MMeEolEK1l0P/zyCPivr0qi3X
- cMk6eiWHc8wcM/3mwaZc92PFr6HmcHLhtp6SGUL9n/464kv1zJak07VGMurb1BFNSB
- JEfwZjhbgtlfk55C9aauCac0b4/oyWiVvpTX7xMY=
+ b=c8htp1BmJN/ZqK2lC0okl9ZdmRBJrjLE0Xevwykd2j/+m7QLb63Zikx4OnmEIuo/W
+ Di1UTV3iLdZyWQAIqMw8TerInA0DmSfQOa9dBTr2kbyPxrpdc6nurhUYWTcgOQZdlP
+ MXGfL9njI9tpJ5KB86FGEG7jmsXmQo3UTpfRPdc0=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -114,9 +107,9 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         devicetree@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [RFC PATCH v2 29/31] kvx: Add support for cpuinfo
-Date:   Fri, 20 Jan 2023 15:10:00 +0100
-Message-ID: <20230120141002.2442-30-ysionneau@kalray.eu>
+Subject: [RFC PATCH v2 30/31] kvx: Add power controller driver
+Date:   Fri, 20 Jan 2023 15:10:01 +0100
+Message-ID: <20230120141002.2442-31-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230120141002.2442-1-ysionneau@kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
@@ -124,136 +117,203 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset=utf-8
 X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add support for cpuinfo on kvx arch.
+From: Jules Maselbas <jmaselbas@kalray.eu>
+
+The Power Controller (pwr-ctrl) control cores reset and wake-up
+procedure.
 
 Co-developed-by: Clement Leger <clement@clement-leger.fr>
 Signed-off-by: Clement Leger <clement@clement-leger.fr>
-Co-developed-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
-Signed-off-by: Guillaume Thouvenin <gthouvenin@kalray.eu>
 Co-developed-by: Julian Vetter <jvetter@kalray.eu>
 Signed-off-by: Julian Vetter <jvetter@kalray.eu>
+Co-developed-by: Louis Morhet <lmorhet@kalray.eu>
+Signed-off-by: Louis Morhet <lmorhet@kalray.eu>
+Co-developed-by: Marius Gligor <mgligor@kalray.eu>
+Signed-off-by: Marius Gligor <mgligor@kalray.eu>
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 ---
 
 Notes:
-    V1 -> V2: no changes
+    V1 -> V2: new patch
 
- arch/kvx/kernel/cpuinfo.c | 96 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
- create mode 100644 arch/kvx/kernel/cpuinfo.c
+ arch/kvx/include/asm/pwr_ctrl.h | 45 ++++++++++++++++
+ arch/kvx/platform/Makefile      |  6 +++
+ arch/kvx/platform/pwr_ctrl.c    | 91 +++++++++++++++++++++++++++++++++
+ 3 files changed, 142 insertions(+)
+ create mode 100644 arch/kvx/include/asm/pwr_ctrl.h
+ create mode 100644 arch/kvx/platform/Makefile
+ create mode 100644 arch/kvx/platform/pwr_ctrl.c
 
-diff --git a/arch/kvx/kernel/cpuinfo.c b/arch/kvx/kernel/cpuinfo.c
+diff --git a/arch/kvx/include/asm/pwr_ctrl.h b/arch/kvx/include/asm/pwr_ctrl.h
 new file mode 100644
-index 000000000000..f44c46c1e4ba
+index 000000000000..25f403ba935a
 --- /dev/null
-+++ b/arch/kvx/kernel/cpuinfo.c
-@@ -0,0 +1,96 @@
++++ b/arch/kvx/include/asm/pwr_ctrl.h
+@@ -0,0 +1,45 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2017-2023 Kalray Inc.
++ * Author(s): Clement Leger
++ *            Marius Gligor
++ */
++
++#ifndef _ASM_KVX_PWR_CTRL_H
++#define _ASM_KVX_PWR_CTRL_H
++
++#ifndef __ASSEMBLY__
++
++int kvx_pwr_ctrl_probe(void);
++
++void kvx_pwr_ctrl_cpu_poweron(unsigned int cpu);
++
++#endif
++
++/* Power controller vector register definitions */
++#define KVX_PWR_CTRL_VEC_OFFSET 0x1000
++#define KVX_PWR_CTRL_VEC_WUP_SET_OFFSET     0x10
++#define KVX_PWR_CTRL_VEC_WUP_CLEAR_OFFSET     0x20
++
++/* Power controller PE reset PC register definitions */
++#define KVX_PWR_CTRL_RESET_PC_OFFSET               0x2000
++
++/* Power controller global register definitions */
++#define KVX_PWR_CTRL_GLOBAL_OFFSET 0x4040
++
++#define KVX_PWR_CTRL_GLOBAL_SET_OFFSET     0x10
++#define KVX_PWR_CTRL_GLOBAL_SET_PE_EN_SHIFT           0x1
++
++#define PWR_CTRL_WUP_SET_OFFSET  \
++		(KVX_PWR_CTRL_VEC_OFFSET + \
++		 KVX_PWR_CTRL_VEC_WUP_SET_OFFSET)
++
++#define PWR_CTRL_WUP_CLEAR_OFFSET  \
++		(KVX_PWR_CTRL_VEC_OFFSET + \
++		 KVX_PWR_CTRL_VEC_WUP_CLEAR_OFFSET)
++
++#define PWR_CTRL_GLOBAL_CONFIG_OFFSET \
++		(KVX_PWR_CTRL_GLOBAL_OFFSET + \
++		 KVX_PWR_CTRL_GLOBAL_SET_OFFSET)
++
++#endif /* _ASM_KVX_PWR_CTRL_H */
+diff --git a/arch/kvx/platform/Makefile b/arch/kvx/platform/Makefile
+new file mode 100644
+index 000000000000..c7d0abb15c27
+--- /dev/null
++++ b/arch/kvx/platform/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Copyright (C) 2018-2023 Kalray Inc.
++#
++
++obj-$(CONFIG_SMP) += pwr_ctrl.o
+diff --git a/arch/kvx/platform/pwr_ctrl.c b/arch/kvx/platform/pwr_ctrl.c
+new file mode 100644
+index 000000000000..ee35d04845ae
+--- /dev/null
++++ b/arch/kvx/platform/pwr_ctrl.c
+@@ -0,0 +1,91 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2017-2023 Kalray Inc.
 + * Author(s): Clement Leger
-+ *            Guillaume Thouvenin
 + */
 +
-+#include <linux/seq_file.h>
-+#include <linux/delay.h>
-+#include <linux/clk.h>
-+#include <linux/cpu.h>
-+#include <linux/of.h>
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+unsigned long elf_hwcap __read_mostly;
++#include <linux/io.h>
++#include <linux/slab.h>
++#include <linux/types.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/of_platform.h>
 +
-+static int show_cpuinfo(struct seq_file *m, void *v)
-+{
-+	int cpu_num = *(unsigned int *)v;
-+	struct cpuinfo_kvx *n = per_cpu_ptr(&cpu_info, cpu_num);
++#include <asm/pwr_ctrl.h>
++#include <asm/symbols.h>
 +
-+	seq_printf(m, "processor\t: %d\nvendor_id\t: Kalray\n", cpu_num);
-+
-+	seq_printf(m,
-+		   "copro enabled\t: %s\n"
-+		   "arch revision\t: %d\n"
-+		   "uarch revision\t: %d\n",
-+		   n->copro_enable ? "yes" : "no",
-+		   n->arch_rev,
-+		   n->uarch_rev);
-+
-+	seq_printf(m,
-+		   "bogomips\t: %lu.%02lu\n"
-+		   "cpu MHz\t\t: %llu.%03llu\n\n",
-+		   (loops_per_jiffy * HZ) / 500000,
-+		   ((loops_per_jiffy * HZ) / 5000) % 100,
-+		   n->freq / 1000000, (n->freq / 10000) % 100);
-+
-+	return 0;
-+}
-+
-+static void *c_start(struct seq_file *m, loff_t *pos)
-+{
-+	if (*pos == 0)
-+		*pos = cpumask_first(cpu_online_mask);
-+	if (*pos >= num_online_cpus())
-+		return NULL;
-+
-+	return pos;
-+}
-+
-+static void *c_next(struct seq_file *m, void *v, loff_t *pos)
-+{
-+	*pos = cpumask_next(*pos, cpu_online_mask);
-+
-+	return c_start(m, pos);
-+}
-+
-+static void c_stop(struct seq_file *m, void *v)
-+{
-+}
-+
-+const struct seq_operations cpuinfo_op = {
-+	.start = c_start,
-+	.next = c_next,
-+	.stop = c_stop,
-+	.show = show_cpuinfo,
++struct kvx_pwr_ctrl {
++	void __iomem *regs;
 +};
 +
-+static int __init setup_cpuinfo(void)
-+{
-+	int cpu;
-+	struct clk *clk;
-+	unsigned long cpu_freq = 1000000000;
-+	struct device_node *node = of_get_cpu_node(0, NULL);
++static struct kvx_pwr_ctrl kvx_pwr_controller;
 +
-+	clk = of_clk_get(node, 0);
-+	if (IS_ERR(clk)) {
-+		printk(KERN_WARNING
-+		       "Device tree missing CPU 'clock' parameter. Assuming frequency is 1GHZ");
-+		goto setup_cpu_freq;
++/**
++ * kvx_pwr_ctrl_cpu_poweron() - Wakeup a cpu
++ * @cpu: cpu to wakeup
++ */
++void kvx_pwr_ctrl_cpu_poweron(unsigned int cpu)
++{
++	/* Set PE boot address */
++	writeq((unsigned long long)kvx_start,
++			kvx_pwr_controller.regs + KVX_PWR_CTRL_RESET_PC_OFFSET);
++	/* Wake up processor ! */
++	writeq(1ULL << cpu,
++	       kvx_pwr_controller.regs + PWR_CTRL_WUP_SET_OFFSET);
++	/* Then clear wakeup to allow processor to sleep */
++	writeq(1ULL << cpu,
++	       kvx_pwr_controller.regs + PWR_CTRL_WUP_CLEAR_OFFSET);
++}
++
++static struct device_node * __init get_pwr_ctrl_node(void)
++{
++	const phandle *ph;
++	struct device_node *cpu;
++	struct device_node *node;
++
++	cpu = of_get_cpu_node(raw_smp_processor_id(), NULL);
++	if (!cpu) {
++		pr_err("Failed to get CPU node\n");
++		return NULL;
 +	}
 +
-+	cpu_freq = clk_get_rate(clk);
++	ph = of_get_property(cpu, "power-controller", NULL);
++	if (!ph) {
++		pr_err("Failed to get power-controller phandle\n");
++		return NULL;
++	}
 +
-+	clk_put(clk);
++	node = of_find_node_by_phandle(be32_to_cpup(ph));
++	if (!node) {
++		pr_err("Failed to get power-controller node\n");
++		return NULL;
++	}
 +
-+setup_cpu_freq:
-+	of_node_put(node);
++	return node;
++}
 +
-+	for_each_possible_cpu(cpu)
-+		per_cpu_ptr(&cpu_info, cpu)->freq = cpu_freq;
++int __init kvx_pwr_ctrl_probe(void)
++{
++	struct device_node *ctrl;
++
++	ctrl = get_pwr_ctrl_node();
++	if (!ctrl) {
++		pr_err("Failed to get power controller node\n");
++		return -EINVAL;
++	}
++
++	if (!of_device_is_compatible(ctrl, "kalray,kvx-pwr-ctrl")) {
++		pr_err("Failed to get power controller node\n");
++		return -EINVAL;
++	}
++
++	kvx_pwr_controller.regs = of_iomap(ctrl, 0);
++	if (!kvx_pwr_controller.regs) {
++		pr_err("Failed ioremap\n");
++		return -EINVAL;
++	}
 +
 +	return 0;
 +}
-+
-+late_initcall(setup_cpuinfo);
 -- 
 2.37.2
 
