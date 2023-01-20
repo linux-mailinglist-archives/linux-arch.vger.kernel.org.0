@@ -2,48 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C876756A8
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 15:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2106675672
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 15:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjATOM3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Jan 2023 09:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S230197AbjATOLE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Jan 2023 09:11:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjATOLq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 09:11:46 -0500
-Received: from fx306.security-mail.net (smtpout30.security-mail.net [85.31.212.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC846C79D0
-        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 06:11:00 -0800 (PST)
-Received: from localhost (fx306.security-mail.net [127.0.0.1])
-        by fx306.security-mail.net (Postfix) with ESMTP id BB98A35CF57
-        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 15:10:28 +0100 (CET)
-Received: from fx306 (fx306.security-mail.net [127.0.0.1]) by
- fx306.security-mail.net (Postfix) with ESMTP id 8144F35CEFC; Fri, 20 Jan
- 2023 15:10:28 +0100 (CET)
+        with ESMTP id S230213AbjATOLD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 09:11:03 -0500
+Received: from fx304.security-mail.net (smtpout30.security-mail.net [85.31.212.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB45C639C
+        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 06:10:31 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx304.security-mail.net (Postfix) with ESMTP id 8E30E9D0CB
+        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 15:10:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674223829;
+        bh=GCb+aZyhHGWJx4uFQ9PWJOzxH5FwUHqDkAret4C+DiA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=cTJKwCdk2zOE4eqETytFbqd3i85IUsiNVJk9ff75Yc3gmCsCn/VF3JNOrqz44ImWR
+         WJWwfKkreBYnHE86cXSRyUtuwv5EqLnop+Yw399B1LB0qrk83uUXGLO+aNwLAWxy6M
+         ZtnoF15TGZCyNo2hl2QSWZCIkNzmuTUjFFQpunNM=
+Received: from fx304 (localhost [127.0.0.1]) by fx304.security-mail.net
+ (Postfix) with ESMTP id 1F2879D075; Fri, 20 Jan 2023 15:10:29 +0100 (CET)
 Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx306.security-mail.net (Postfix) with ESMTPS id D69B735CF42; Fri, 20 Jan
- 2023 15:10:27 +0100 (CET)
+ fx304.security-mail.net (Postfix) with ESMTPS id 5784C9D04D; Fri, 20 Jan
+ 2023 15:10:28 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id A1E9327E043D; Fri, 20 Jan 2023
- 15:10:27 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 2855527E043D; Fri, 20 Jan 2023
+ 15:10:28 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 7762E27E0430; Fri, 20 Jan 2023 15:10:27 +0100 (CET)
+ (Postfix) with ESMTP id D8A7627E0439; Fri, 20 Jan 2023 15:10:27 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
  (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- JyeDd67fLWzC; Fri, 20 Jan 2023 15:10:27 +0100 (CET)
+ pxiL3-7zmQbs; Fri, 20 Jan 2023 15:10:27 +0100 (CET)
 Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id E4DF627E0439; Fri, 20 Jan 2023
- 15:10:26 +0100 (CET)
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 5AD1127E043E; Fri, 20 Jan 2023
+ 15:10:27 +0100 (CET)
 X-Virus-Scanned: E-securemail
-Secumail-id: <ea9e.63caa0d3.d4f6b.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 7762E27E0430
+Secumail-id: <6ff5.63caa0d4.56592.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu D8A7627E0439
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223827;
- bh=pa4ScTG872xOzuRt8GX8Xf9/eL9W3gZxwoN/kQBQFss=;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674223828;
+ bh=8uCtiqDjPzOcwhlHBsakO1CoaBAI9UncGRE7J9HRCd8=;
  h=From:To:Date:Message-Id:MIME-Version;
- b=mCuKc4/UeROfSPy0qESb6bWw6haYw2yj/Thuaz88gp4Xo6fY7v11akHAnwnsq/SE/
- l71YYm+MloYSX37ktexP6Ugc0NvI9sQziU77LnSg76PpXxXYDYmYnCLgz0FFptdvhN
- uCVOH2np8u2uDy77i3yNVSUCOsRcLW4hLIHMTeNw=
+ b=fgJsxrw8FZvAT6LZnY+JkVSYSXWd7ACWehLxcYh/S5JZU136kC9QWyY4QSnfgA5u5
+ Wk0vKyjoxIlLyuLXEBNZBi6OIR4DzL0KuNqlbHwCoM8WlaSs9d3t8vMr80S8wrF5wF
+ qyJEcuXe25rOij+wlHaC/cdMXKDfNceRZ81JV0dA=
 From:   Yann Sionneau <ysionneau@kalray.eu>
 To:     Arnd Bergmann <arnd@arndb.de>, Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -107,10 +113,10 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         devicetree@vger.kernel.org, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: [RFC PATCH v2 06/31] Documentation: Add binding for
- kalray,kv3-1-ipi-ctrl
-Date:   Fri, 20 Jan 2023 15:09:37 +0100
-Message-ID: <20230120141002.2442-7-ysionneau@kalray.eu>
+Subject: [RFC PATCH v2 07/31] Documentation: Add binding for
+ kalray,kv3-1-pwr-ctrl
+Date:   Fri, 20 Jan 2023 15:09:38 +0100
+Message-ID: <20230120141002.2442-8-ysionneau@kalray.eu>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230120141002.2442-1-ysionneau@kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
@@ -118,8 +124,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset=utf-8
 X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,7 +135,7 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Jules Maselbas <jmaselbas@kalray.eu>
 
-Add documentation for `kalray,kv3-1-ipi-ctrl` binding.
+Add documentation for `kalray,kv3-1-pwr-ctrl` binding.
 
 Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
 Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
@@ -139,57 +145,42 @@ Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
 Notes:
     V1 -> V2: new patch
 
- .../kalray/kalray,kv3-1-ipi-ctrl.yaml         | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/kalray/kalray,kv3-1-ipi-ctrl.yaml
+ .../kalray/kalray,kv3-1-pwr-ctrl.yaml         | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
 
-diff --git a/Documentation/devicetree/bindings/kalray/kalray,kv3-1-ipi-ctrl.yaml b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-ipi-ctrl.yaml
+diff --git a/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
 new file mode 100644
-index 000000000000..dc8026b12905
+index 000000000000..968674bb0c63
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-ipi-ctrl.yaml
-@@ -0,0 +1,44 @@
++++ b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
+@@ -0,0 +1,29 @@
 +# SPDX-License-Identifier: GPL-2.0
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/kalray/kalray,kv3-1-ipi-ctrl#
++$id: http://devicetree.org/schemas/kalray/kalray,kv3-1-pwr-ctrl#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Kalray kv3-1 Inter-Processor Interrupt Controller (IPI)
++title: Kalray cluster Power Controller (pwr-ctrl)
 +
 +description: |
-+  The Inter-Processor Interrupt Controller (IPI) provides a fast synchronization
-+  mechanism to the software. It exposes eight independent set of registers that
-+  can be use to notify each processor in the cluster.
-+  A set of registers contains two 32-bit registers:
-+    - 17-bit interrupt control, one bit per core, raise an interrupt on write
-+    - 17-bit mask, one per core, to enable interrupts
-+
-+  Bit at offsets 0 to 15 selects cores in the cluster, respectively PE0 to PE15,
-+  while bit at offset 16 is for the cluster Resource Manager (RM) core.
-+
-+  The eight output interrupts are connected to each processor core interrupt
-+  controller (intc).
++  The Power Controller (pwr-ctrl) control cores reset and wake-up procedure.
 +
 +properties:
 +  compatible:
-+    const: kalray,kv3-1-ipi-ctrl
++    const: kalray,kv3-1-pwr-ctrl
 +  reg:
 +    maxItems: 1
 +
 +required:
 +  - compatible
 +  - reg
-+  - interrupt-parent
-+  - interrupts
 +
 +examples:
 +  - |
-+    ipi: inter-processor-interrupt@ad0000 {
-+        compatible = "kalray,kv3-1-ipi-ctrl";
-+        reg = <0x00 0xad0000 0x00 0x1000>;
-+        interrupt-parent = <&intc>;
-+        interrupts = <24>;
++    pwr_ctrl: power-controller@a40000 {
++        compatible = "kalray,kv3-1-pwr-ctrl";
++        reg = <0x00 0xa40000 0x00 0x4158>;
 +    };
 +
 +...
