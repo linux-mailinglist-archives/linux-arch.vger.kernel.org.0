@@ -2,36 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC9D6753FA
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 12:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F466754D2
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 13:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjATL6i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Jan 2023 06:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S229653AbjATMmo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Jan 2023 07:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjATL6f (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 06:58:35 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9925FA6C49;
-        Fri, 20 Jan 2023 03:58:34 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 32E491EC04DA;
-        Fri, 20 Jan 2023 12:58:33 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1674215913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=5sRgTMv+ImX0RHcEs9fymhJia2CIfblYcntDjPRHUWE=;
-        b=E/n8jPTElF3/IUDz38TCo4i4iuS3yqWh+E8bFIsd/mmdqN0/oOImwTweHtLWYcepufJDte
-        6PbiavIjYpDXgD+XrLl8Psjxm8wnXKG+ieevXzsdua3qXDfU4iUasrODH+afXOzBRu6iY9
-        muTGoo6GBbrfl7WO8EdfMnrBocSFgfU=
-Date:   Fri, 20 Jan 2023 12:58:29 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        with ESMTP id S229937AbjATMmi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 07:42:38 -0500
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627AA7288;
+        Fri, 20 Jan 2023 04:42:34 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id q8so3936096wmo.5;
+        Fri, 20 Jan 2023 04:42:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mKZyysgUPNvqWFopfSE1dHJ7iNOImONyPzrcMggiuJc=;
+        b=tnOeJ2/ST7bc4RmpFTsgHhiIxq4RD3I6TypU7FzaMP2DV1gIg1hWiXqfkfNrSpFK4t
+         pF+BBVDEC6fEAiNNFaJRRFgaPsoccOt4gJhy2OEE9ONkf9yeN4sZww/jsLtRy+JxMWyD
+         vpi0c1MagYGkTBLg1tW+hi2IvgLWPrfk8I0YTCnpRLPhDrxR+5VJwOCpuV+AsJSb9WzP
+         mOvvH9OOuL8K65j7cr0EXStIRQBBZM/J++pJ+KV/obFr5ddmPYw8XbaEVT6nGGCCsqCe
+         lZyQDChxmKXz5NT90tPv3m4U5bvjA0kqOc771fD7Ahg3gqD+13kHgKhEHd2ZSmb5UAJf
+         dNmw==
+X-Gm-Message-State: AFqh2koWTs6RoQP8QFKZl2PSD6/aAZcgaTgozd5cmuvCD7lDrUlF4DSX
+        DMjguKwA5uzJsAq748CZwNo=
+X-Google-Smtp-Source: AMrXdXtpf1blAKy5JSCCwoqiLvsfdaYzkSWfJUxJBySB4u4LThpB6hdiWSZsrCuSgL8RYE2tZGj5Ww==
+X-Received: by 2002:a1c:f317:0:b0:3d0:480b:ac53 with SMTP id q23-20020a1cf317000000b003d0480bac53mr14349205wmq.12.1674218552698;
+        Fri, 20 Jan 2023 04:42:32 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id n16-20020a05600c181000b003d1de805de5sm2032908wmp.16.2023.01.20.04.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 04:42:32 -0800 (PST)
+Date:   Fri, 20 Jan 2023 12:42:30 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
         luto@kernel.org, peterz@infradead.org, davem@davemloft.net,
         edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
@@ -50,37 +60,36 @@ Cc:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
         iommu@lists.linux.dev
 Subject: Re: [Patch v4 00/13] Add PCI pass-thru support to Hyper-V
  Confidential VMs
-Message-ID: <Y8qB5ZN5Czj9lQVK@zn.tnic>
+Message-ID: <Y8qMNhrhfN1JX4uA@liuwe-devbox-debian-v2>
 References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
  <Y7xhLCgCq0MOsqxH@zn.tnic>
  <Y8ATN9mPCx6P4vB6@liuwe-devbox-debian-v2>
+ <Y8qB5ZN5Czj9lQVK@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y8ATN9mPCx6P4vB6@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8qB5ZN5Czj9lQVK@zn.tnic>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 02:03:35PM +0000, Wei Liu wrote:
-> I can take all the patches if that's easier for you. I don't think
-> anyone else is depending on the x86 patches in this series.
+On Fri, Jan 20, 2023 at 12:58:29PM +0100, Borislav Petkov wrote:
+> On Thu, Jan 12, 2023 at 02:03:35PM +0000, Wei Liu wrote:
+> > I can take all the patches if that's easier for you. I don't think
+> > anyone else is depending on the x86 patches in this series.
+> 
+> But we have a bunch of changes in tip so I'd prefer if all were in one place.
+> 
+> > Giving me an immutable branch works too.
+> 
+> Yap, lemme do that after applying.
+> 
+Ack. Thanks!
 
-But we have a bunch of changes in tip so I'd prefer if all were in one place.
-
-> Giving me an immutable branch works too.
-
-Yap, lemme do that after applying.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Wei.
