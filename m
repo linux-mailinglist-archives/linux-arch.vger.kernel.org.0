@@ -2,186 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3CD675BF5
-	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 18:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E7A675DD8
+	for <lists+linux-arch@lfdr.de>; Fri, 20 Jan 2023 20:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjATRsy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 Jan 2023 12:48:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S229778AbjATTUT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 Jan 2023 14:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbjATRst (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 12:48:49 -0500
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCA86FD10;
-        Fri, 20 Jan 2023 09:48:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dbFUiC49x/OJ30zYJ7iq2zM5H0+0xysg2Hv+KixjHQQVtc95vdYyKyCfgUFbDnBFqsvd54WPyzxwEDSZe+JSVg+9vMaewr1JWcCEwEcaYavN1pya69y3ppeHX2axsaSy77oZTY/lXfIUI1de/YTGEci+SUOFwiP3buR+eveotGvDbbeJpqyXwHzgGV+oVVCXRFeTbwNwqNqH5RAsZuKiosRtBO0cnnTzABG0cZbi6vepqVz894TaM7l1uq7lWbOIwPGmqMA1iQ8rs3Qv72O/J8251BeIk1plMUpEfeNi/CH/sGeaXwC34ffwt9eHZNSwLndfQDtKXBNXE8CwqGH0nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DezuBQ3WveODtuy7UruZjCHwcuP6jyUKWJu6mpJaBFg=;
- b=ZrVV4WbDJLc6txYhSsqMbfKx2HX6a6DmJRwEn5txDnZPVoXapD/N9MciWaiiT8ZAHltUoponuxvOHod0A8TDHbcWVn4/bDJBdVqxWjGmureptlL9bgf1ZbFviStAuhYYURFfmh2SjNzCClARNpPLrVoPFMLz30dbwVG5cHtUjcxbrzppHSD5uwnHf0AeMsdt+QyV3r6p5PHtrj0RSE7+KaGByzRQDTZP1M8sYzjKspd62Me0bByWU8E1i/dTbEUNUCBXxUGdRrzG1AletCYUD24bJh9pqtvq2YxH54XcQ+0V8lN7GlXHtlrv4qokNTXEzYeIzKcnjMqxea1ab+NGdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DezuBQ3WveODtuy7UruZjCHwcuP6jyUKWJu6mpJaBFg=;
- b=D6yGKeFgb6p23OJLZzLG9WOcVQAqxNkkkRuO7LKWeu9Fw1GNGqebslP4UHXt53YqMqhCZUkCwxL+xS64cRh/gicb2Sz3E+JdOvbEaiUssehtVgkxjA/CxlOU1oBTXHHiuQcvMyo8nxRNYrtuZ6xuA5ZU4N9V69alFOizjkFaIHo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20)
- by PH7PR12MB8108.namprd12.prod.outlook.com (2603:10b6:510:2bc::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.25; Fri, 20 Jan
- 2023 17:48:33 +0000
-Received: from BL1PR12MB5995.namprd12.prod.outlook.com
- ([fe80::cb0c:2b31:6f3f:12a6]) by BL1PR12MB5995.namprd12.prod.outlook.com
- ([fe80::cb0c:2b31:6f3f:12a6%8]) with mapi id 15.20.6002.027; Fri, 20 Jan 2023
- 17:48:33 +0000
-Message-ID: <eeb060d5-4a90-ee92-91c3-af94a57a2859@amd.com>
-Date:   Fri, 20 Jan 2023 11:48:25 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
+        with ESMTP id S229471AbjATTUS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 Jan 2023 14:20:18 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B2F29438
+        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 11:20:17 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id g205so4722910pfb.6
+        for <linux-arch@vger.kernel.org>; Fri, 20 Jan 2023 11:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jGyt6CUdmtm2ioRKnF8I31iR5Kv2QPHBMLPFSaYDNiY=;
+        b=Uu5CA7ojWufnZge0bmJujGF0GkpDKBVBcpU8xWM4Q0rxz/aT0RAyOpA1DHBDMPbVFN
+         tqUjNMfa3Aif+GgOpT8Q+nf25/sXFy7XS5A1bpe7NXC9AG09PWDFNgVwd3N4AL4mEvjv
+         uK6rJDTix7y5/wRAdoMLSZqftlfVqyVo6OkYU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGyt6CUdmtm2ioRKnF8I31iR5Kv2QPHBMLPFSaYDNiY=;
+        b=I2kogmasszU/pNsJBxVZRxBXELMlxrx72rxDB9aTIJEQIwLIzTwc1s/W2hHOtzzgER
+         73fIXVgzXHH6dWqYyqjYZ6YQpdFfTBsiSsmZjYyuGfTPQjgxnMCUEXSbtM4li+fF7ttG
+         KR2IFe/s7ViLIU1WCwH+DCAFfzQxfa0YryBXheumXTFSgwrtBhZRJGkN51tJBYdnhm1P
+         2pWNoa4I5BJNvUhO+eCesFgGDZF455hCAHYZwiQMDrP9MEqaJlcMC2LlwvF4HLWKr3RG
+         dHfF1ZghmK95Odza+aj/n9k06tZhMrfZ8XIqtTJp2dAJt5xc1mhGz1AgRon76+oqyZpN
+         Qjag==
+X-Gm-Message-State: AFqh2krpIycIOgSQa/9hiDon1puZjAl3keyX/tDaYqMQqyGB0Emlv1dL
+        Zs7nj4FQzvC/8s6b6JMl2VKtMA==
+X-Google-Smtp-Source: AMrXdXuyTIAN7HmAtV4HD1P3My5ps1sTBJQbBVFpT8W/R685exOGUTBZBi+w0yjPJR+F6KcbCZ6lsg==
+X-Received: by 2002:a05:6a00:3025:b0:58d:a683:bb2f with SMTP id ay37-20020a056a00302500b0058da683bb2fmr18456253pfb.23.1674242417297;
+        Fri, 20 Jan 2023 11:20:17 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 3-20020a621503000000b00581c741f95csm24490646pfv.46.2023.01.20.11.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 11:19:50 -0800 (PST)
+Date:   Fri, 20 Jan 2023 11:19:36 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
 Subject: Re: [PATCH v5 00/39] Shadow stacks for userspace
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        kcc@google.com, eranian@google.com, rppt@kernel.org,
-        jamorris@linux.microsoft.com, dethoma@microsoft.com,
-        akpm@linux-foundation.org, Andrew.Cooper3@citrix.com,
-        christina.schimpe@intel.com
+Message-ID: <202301201118.6A55DE336@keescook>
 References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
-Content-Language: en-US
-From:   John Allen <john.allen@amd.com>
-In-Reply-To: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0005.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::25) To BL1PR12MB5995.namprd12.prod.outlook.com
- (2603:10b6:208:39b::20)
+ <20230119142602.97b24f3cdba75f20f97786d3@linux-foundation.org>
+ <b6d88208b987c9cbbdb194b344d2a537dbd76914.camel@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5995:EE_|PH7PR12MB8108:EE_
-X-MS-Office365-Filtering-Correlation-Id: b8465f3c-eb16-42c7-ac34-08dafb0e8c8b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /k5sLPtKY0EFFl0idm0QzkYOFFJxQ8vJ55SrthoULcPGHMkorOi0bD+dIOFzyaV4aAPk0+M1P5zAy2IyEJVgJYw1NWuXVZNudDL8Bg4np1idrUdwS1dPZVmYQF6EfBAdUXRBLyp3EqcKU7HDFpj9MAF4TKaVQXu5bGciSI57zq51dBXxKnYQ22xnNc6ytrzl69vlh/q5amE3yj4Cg/SC4bw3LVw7G/AcVTgf+EsVLr9C5z7xRBq1eAtK0jeVhNaebhMm1WLE6euLhhC2y8QsGpm+imqg6/6/kbEUV6JlAq+nMSN/+gVfIG1VD9RTV2ZoFIgnwyfxlafG3xybo5E2jDjAm0pTJVnagJVKNQzk3iG9xKZxWL6RlsGxPT6AOieoFV2AGhq38LDjvMandofDDahevJwZ9PpEIQ1ul7W+9NqaZdXke5P7OKqPGkLZaWjaCyM1YFHlVrI75OAXSU0cOyzbwNdR/8ZIe1Dzl87IjmSizbsmE1RIZf3rmRv7DeEzwDfz+S0V+06cnqoitGETyFMT/RxZP4J5m7Qa00TTpTNSobHLtBxu9X1WVA/yEPYYbJspgb43ZwcZcdQTx76qyfE3EODddUXvpkB0/fN6hrR5qVvSzC4naGUVS6uvIJQ0nkYvEh8xLJ8UMahTOe4XCmJ99JSbKL+KoTsgMUXpW513Gdr+3xF9Ip9V5bwlg9vAChTkvEHQ10Q1HyDELIrlk8LLaSrM9e8RqeQFJEzxmoOYCCyVtXl8U+q/xt1GATCsondKx+WpgdAZ/EW4OTC93MsNQb/xD1OOUObikBskVEc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5995.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(451199015)(186003)(6666004)(6512007)(31686004)(478600001)(26005)(38100700002)(110136005)(2616005)(6506007)(316002)(8676002)(966005)(6486002)(53546011)(66476007)(66946007)(66556008)(41300700001)(8936002)(83380400001)(2906002)(5660300002)(7406005)(44832011)(7416002)(36756003)(86362001)(31696002)(921005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDNaVXhNaWtmYnZTVUtXN2R5L1lyWEpHTVRkcFBpMmNMRlRWL09HUUx2RlFm?=
- =?utf-8?B?bFNwTisweUUrdWFDSGVjQnhTN0UvTjBLSnIvdWVXWlg2RXBxUThzUEdIMDNZ?=
- =?utf-8?B?MkNObzV2TjgxdTVLYjNIT3FOeUlzQ2dZTEk4L2ZaOEMrYkVCY2d0MlI1azh3?=
- =?utf-8?B?MjRDcTJvN2NwN0tmWERqY0x3Ykk1R3BzRFloYmxKMFdMZXNWcGFzbm1EMDZp?=
- =?utf-8?B?UStxNU1FT2k5a212bVhhQ2FoNk5mS0swR2IxeVVtRUpjb1FmU29BTHdWaVhV?=
- =?utf-8?B?Nk1HeWhqTUVNNVgreVhwemY1SUh5QVpkb0Y4V0FlUk5LUzMzdHlRcWtIRGk2?=
- =?utf-8?B?amdJejBXREFNTkJkMWNtVWNqR0oyMjJnV2VWMEZWa2MxS004Yml4MkxDMEM0?=
- =?utf-8?B?MVlzM3hqdVVKQUhRcGplZE54bUROUzZpa01VWFlZNHIwRGI2UmJZWGZXMFZi?=
- =?utf-8?B?N3oxbFRqRFdPeWU5emJBLzZtSEU4cDZZS09uU3hNcWltSHFYSmtmRkhTZkJk?=
- =?utf-8?B?eDVlaStxSVlMa3BXTnFVcVNHVDBmcHdqL1U4VXc4b0xObHFibGtNdDVlR2Iv?=
- =?utf-8?B?Wm9Ta0IxNk1jZ0ZhUFlzMnBHR0ZqNDRLaXIwcVJPZWJEV01EUUtrWURUZ2dO?=
- =?utf-8?B?THhFYW1ZR0ZiSXg4akxnVkxTZlV5U0xVZUZUd2x5NTl3MHE1ajJuUHdCalRS?=
- =?utf-8?B?QnBJenpUUnJWTUpxakQwdk40QVdJbk0xQnlrSG5wd2VlUUVIL3hGZDljK2tw?=
- =?utf-8?B?eTExZW5pWjRpbWk4SVU2d3dzSndFVFd6WGRUQXNmQjRJdjRmaG5MeUlzYVE4?=
- =?utf-8?B?MjR2TkN3YXI4ZHk2Yk5SZU1KNjhrN01ZZHhLVjI2bjEwNWVFWWRiQ0NyRExz?=
- =?utf-8?B?cmtxYmNtWGUvVXRBWmtkR0pCVG1kZWtCb2o5cmVBM3ZhMWJraGJUQW1ydmlB?=
- =?utf-8?B?S0VLd0luQUFpMUNKSThHUWRzekNsS1dxU3lVVFhWT3lzRTRLUmdBbS95RmVN?=
- =?utf-8?B?Q2xOQkxVVE1EWitqZFdCYXcvckZ0TFhtWnlubUlGbEE2aTJ6TjlFT1ZXZ0dz?=
- =?utf-8?B?ei9JMnZ3b1hMbm1lTzFyZU1ET2xFaDNjeXlCWm4vVDBENWtiREN2YUtzZzM3?=
- =?utf-8?B?ZU9nc2RBZ3BOQnpYL0NoYTd4ZWJ1dENlYmlaNThFeElpNWVxVytaSFEvTnNW?=
- =?utf-8?B?SGJDWmduaDlMZ0tSNnhGdkNiNWVGQ1VUeSt3eTF0QmJFV3JkQTFSV0hXSzRz?=
- =?utf-8?B?a0lxRk1WTU5BYVQ4cmExR3ZhR1pUU2ltYTI5TG5haFBSblZnTE9KemJyYmVW?=
- =?utf-8?B?OVUxZEM1SS9UUXpnYnZha28weGk1ellab1BmSXl4OHlMNFJ6cTU2K3ExM3hE?=
- =?utf-8?B?dEQwaVBpRU0zRVQ2MisyNnkxbUtrR2lzc2krRnVmMEJDLzFWYWhvN1d0Y080?=
- =?utf-8?B?WnpjVGpqZXBPMWJEZ1h2Z0FBOFI4TmYrRmt4T0hvL2o1UHY3WmwxaG5NeGZP?=
- =?utf-8?B?bHJrSjd2S2RnTkJiSVVxV3VCSjBmeExkcGJvK2xnQXpSSWl4U0FZdVFRaEt3?=
- =?utf-8?B?eGg2Q2FMMjJ5MFpCNE9kZVZFWlAwaURYRUdCNTFrTUNNcTNoSE44b1VwV09B?=
- =?utf-8?B?eXgrTXJCazhIdmozYVlxNmxHcFFyYWZ6b1JrcStaellQS2pGTHltWmc1WTlt?=
- =?utf-8?B?TzM0VU04OEN6ZHo4YXl0Ky9ZVVFzNjltcjNNSFNiRVJ4dHU5blBaQmFIZEVO?=
- =?utf-8?B?dWtHQ0VaRkpzOFl0LzdQY1Y3RGl5ZVRlczY4eTlMdG5iWkpKS09ia1JPSGl1?=
- =?utf-8?B?ekltT3diUERWeWpIZjZGRnp4R2paRWJWOFpQb0ttNlI2MHJYbmVMWFJJbWlF?=
- =?utf-8?B?ajdPemRvc3o2eCtKdzZyZC91Wko3ZytPU1A1YXlESytzYWVMWlVjbkRRVFZu?=
- =?utf-8?B?SUVvbTVaQlBDZ244TXZhUGkva2p5M01md3JXYUdUUnV1RkFpcVRlbThTUVpx?=
- =?utf-8?B?dVVMWUFQTXQzTTR2WVlZWmJiY0dONldmSkFHVzBhL1hacUpkSGhzeFZuKy8r?=
- =?utf-8?B?WHlBamhOZ2QzRHZpRmpxdndlVGViU3g3TU5sTEJtaktoZzBENzRBZEd5ekZh?=
- =?utf-8?Q?JF00rPd5FiPCocWcYhqMmd1th?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b8465f3c-eb16-42c7-ac34-08dafb0e8c8b
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5995.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 17:48:33.5079
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OxzbH0TSmJQ7uHZFw9DcWzpTfUEIvCTVjzR5ZWJJMCFmL2qGwyq/1FGGmSdnh8PxZvrldF32HXMYG2Bqz+6ZGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8108
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6d88208b987c9cbbdb194b344d2a537dbd76914.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/19/23 3:22 PM, Rick Edgecombe wrote:
-> I left tested-by tags in place per discussion with testers. Testers, please
-> retest.
+On Fri, Jan 20, 2023 at 05:27:30PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2023-01-19 at 14:26 -0800, Andrew Morton wrote:
+> > On Thu, 19 Jan 2023 13:22:38 -0800 Rick Edgecombe <
+> > rick.p.edgecombe@intel.com> wrote:
+> > 
+> > > SHSTK
+> > 
+> > Sounds like me trying to swear in Russian while drunk.
+> > 
+> > Is there any chance of s/shstk/shadow_stack/g?
+> 
+> I'm fine with the name change. I think shstk got debated and picked
+> early in the history of the series before I got involved. "shstk" is
+> nice and short, but it's not completely clear what it is unless you
+> already know about shadow stack. So there is a tradeoff of clarity and
+> line length/wrapping. Does anyone else have any strong opinions?
 
-Re-tested on my AMD system (Dell PowerEdge R6515 w/ EPYC 7713) and it looks
-like everything is still working properly.
+I prefer SHSTK because it specifically means x86's hardware shadow
+stack from CET. Lots of things can (and have) implemented things called
+"shadow stack".
 
-The selftests seem to run cleanly:
-
-[INFO]	new_ssp = 7ff19be0dff8, *new_ssp = 7ff19be0e001
-[INFO]	changing ssp from 7ff19c7f1ff0 to 7ff19be0dff8
-[INFO]	ssp is now 7ff19be0e000
-[OK]	Shadow stack pivot
-[OK]	Shadow stack faults
-[INFO]	Corrupting shadow stack
-[INFO]	Generated shadow stack violation successfully
-[OK]	Shadow stack violation test
-[INFO]	Gup read -> shstk access success
-[INFO]	Gup write -> shstk access success
-[INFO]	Violation from normal write
-[INFO]	Gup read -> write access success
-[INFO]	Violation from normal write
-[INFO]	Gup write -> write access success
-[INFO]	Cow gup write -> write access success
-[OK]	Shadow gup test
-[INFO]	Violation from shstk access
-[OK]	mprotect() test
-[OK]	Userfaultfd test
-[OK]	32 bit test
-
-Additionally, I could see the control protection messages in dmesg when
-running the shstk violation test from here:
-https://gitlab.com/cet-software/cet-smoke-test
-
-ld-linux-x86-64[99764] control protection ip:401139 sp:7fff025507d8 ssp:7f186e017fd8 error:1(near ret) in shstk1[401000+1000]
-
-Tested-by: John Allen <john.allen@amd.com>
+-- 
+Kees Cook
