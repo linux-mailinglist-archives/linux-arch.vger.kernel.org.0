@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962C8676ADE
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DEA676AE1
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjAVCrp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Jan 2023 21:47:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
+        id S230111AbjAVCr5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Jan 2023 21:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjAVCrR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:47:17 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00E42749B;
-        Sat, 21 Jan 2023 18:46:36 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id c26so6557242pfp.10;
-        Sat, 21 Jan 2023 18:46:36 -0800 (PST)
+        with ESMTP id S229920AbjAVCrW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:47:22 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8543A24481;
+        Sat, 21 Jan 2023 18:46:42 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso3944605pjp.3;
+        Sat, 21 Jan 2023 18:46:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wODZ6fOzHez3jHxCs8MJHpbqBvrocCyrdLunVVUGFi8=;
-        b=DDHiqioEMRd5nxl35OooG8feH4vQ5xT6qiE++UTqOVQnvKtHouuZyf1o8/NNyvhRiU
-         2vub87khRfyYMFsNoHnWLHZV2LuzfukssKnOExRUnC6j0AuvseCdlpvjD2E2lvFASxFl
-         WkMW6ctC0bth7J5ZICaQf6mlgt9fk2l1XyQ9apbCKp+jkiwq0+PoCiXOE+FFGkl0SB6R
-         ABZ9vNkVfrl9kWXbPz0Box6mx8R3DwZIhJTnNN4P0oh9v/ujNbVNoEcm8yhqb6jU4Gv2
-         H61iQO8d0lH/E32DWuA6PlYZWYjohEHcxrlxEU5TB/ue928BU/48EruyKJk/xB40PU18
-         SKVg==
+        bh=HfzaNmMXTvYjZaqBx5BRGh5/YKdqJuGZMdeNixaODzI=;
+        b=CftyTjTfQaZlq6X+W/d9ddvb3E7GIsvuW56grnwYN/kjL2hPuns+Lv2zmf17h+Bz80
+         gbHbRV1L8cabmqUYsjDWnLabuuY3Fs2fdwyNow7dZX5lYjA7hJmqoT1VL4JTMZwgf/iP
+         xRTEsQOgqV0xsq+8+EjD22xPS0quK+jPa6L/Sy1KHJjQ+yHsp92f12rKF4U9gBbT2b9r
+         gxvd53MiamSbL1spRy4c3k01MsHuL/cZQKZ8cO5DUN7B2AZQQFJ3RUYYXXw9gx4VS7mW
+         BZA9YUfo9CWDXAMW8z4+5ZBTnla0ngLZLEzfeZ02prI0eganSll9A3Z4+ob8VlwpmvTp
+         d6hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wODZ6fOzHez3jHxCs8MJHpbqBvrocCyrdLunVVUGFi8=;
-        b=t1CLzzE/W6tEw4hP6GbhdfZh7VBda/sDYijw/6K4L0FcruLPVcAH3K+nBdwsZO26hU
-         xb9Vy+wYqYi2G9eBsclpQRu5IBVaEZiTQ/eeqMIdAWwA8bz1QU56V06Gjx5WpmEW52NR
-         Sts1nKR75u8kbpzrLCtEGoDOYomVJrnqhs7FiLGdrvKi9YupcouWEw8Pv3YjGTwgkeAs
-         3YaO2csB9BRcjFAULt3MOdX9hX2/IGiY+28eG8o6Xgt85FfK8HrfM+9Mn6yEizEvp3Eu
-         zo/Aa6+cMylN8U0WXosYEP2sVSgTLrj3sPYaArcrkBJXL+ZcwsfF32Frm6QU9+r5jdG8
-         +T3Q==
-X-Gm-Message-State: AFqh2kp5caPZ6Hvk5E0MUNeRC5Ayhl7Sa+JLW9BN6wXx7OIhfZgsGNMX
-        lIr6I0it98tCKlvLCK+o1LE=
-X-Google-Smtp-Source: AMrXdXuhFBuxX2dsiIUyhaydLmKqTtx4FxXA0dRxvx34XUXiI6xBvdoM9FiAhKDM2mhFPL3a1VR48g==
-X-Received: by 2002:a05:6a00:4088:b0:58d:9ad6:6ae7 with SMTP id bw8-20020a056a00408800b0058d9ad66ae7mr22763945pfb.19.1674355591027;
-        Sat, 21 Jan 2023 18:46:31 -0800 (PST)
+        bh=HfzaNmMXTvYjZaqBx5BRGh5/YKdqJuGZMdeNixaODzI=;
+        b=sysE2oWkeupsYkoczfiePeBYTgchXDICspFd8cEqnveBs5iYg43/k7L+G1RHymQu21
+         DvpzhDpi8b6n1rdcwMJUomqssvDGvOYAtZJPeAais7jQdCfOkpv7bRcWAQxeHNw33+f+
+         +ONHlsfTIl7JA5sfsORG4/GlzijmUpYAtWctk1pnDlMghJCckNj0Z1PXmVU+KUx3KDVa
+         yvy3JTwfFaMG9NFuRifvMDWUmVS78K/0sLk1up23ua/FMgQ2dHsqu/KyRcXIWuRxVo5f
+         vs5vaO6BijxxAL9Dg4NbgIQA+0YTnVBdV//DvHxQ6BbYL04syxPAOZhN0Pc+VDHwDSNw
+         fzhQ==
+X-Gm-Message-State: AFqh2koMMVk6CeTfb4Zk4uZ1K3lrjodqjlVeF1/Dipuz3GnTnIdQhJbN
+        HUOeBKR40ZldSWT4SODa6sQ=
+X-Google-Smtp-Source: AMrXdXueHgf+64MbPOvUl3iPQC56zhsQqJoJWPq4Yf/nM88fQTLxW966nL9hfBqm61ZqY3d5YnD66Q==
+X-Received: by 2002:a05:6a21:1646:b0:ac:29b4:11bc with SMTP id no6-20020a056a21164600b000ac29b411bcmr19655447pzb.21.1674355592364;
+        Sat, 21 Jan 2023 18:46:32 -0800 (PST)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:36:d4:8b9d:a9e7:109b])
-        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.29
+        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 18:46:30 -0800 (PST)
+        Sat, 21 Jan 2023 18:46:31 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,9 +65,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [RFC PATCH V3 14/16] x86/sev: Initialize #HV doorbell and handle interrupt requests
-Date:   Sat, 21 Jan 2023 21:46:04 -0500
-Message-Id: <20230122024607.788454-15-ltykernel@gmail.com>
+Subject: [RFC PATCH V3 15/16] x86/sev: optimize system vector processing invoked from #HV exception
+Date:   Sat, 21 Jan 2023 21:46:05 -0500
+Message-Id: <20230122024607.788454-16-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230122024607.788454-1-ltykernel@gmail.com>
 References: <20230122024607.788454-1-ltykernel@gmail.com>
@@ -83,501 +83,157 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <tiala@microsoft.com>
+From: Ashish Kalra <ashish.kalra@amd.com>
 
-Enable #HV exception to handle interrupt requests from hypervisor.
+Construct system vector table and dispatch system vector exceptions through
+sysvec_table from #HV exception handler instead of explicitly calling each
+system vector. The system vector table is created dynamically and is placed
+in a new named ELF section.
 
-Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
-Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
-Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
 ---
- arch/x86/include/asm/mem_encrypt.h |   2 +
- arch/x86/include/asm/msr-index.h   |   6 +
- arch/x86/include/asm/svm.h         |  12 +-
- arch/x86/include/uapi/asm/svm.h    |   4 +
- arch/x86/kernel/sev.c              | 307 +++++++++++++++++++++++------
- arch/x86/kernel/traps.c            |   2 +
- 6 files changed, 272 insertions(+), 61 deletions(-)
+ arch/x86/entry/entry_64.S     |  6 +++
+ arch/x86/kernel/sev.c         | 70 +++++++++++++----------------------
+ arch/x86/kernel/vmlinux.lds.S |  7 ++++
+ 3 files changed, 38 insertions(+), 45 deletions(-)
 
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index 72ca90552b6a..7264ca5f5b2d 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -50,6 +50,7 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
- void __init mem_encrypt_free_decrypted_mem(void);
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index aec8dc4443d1..03af871f08e9 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -412,6 +412,12 @@ SYM_CODE_START(\asmsym)
  
- void __init sev_es_init_vc_handling(void);
-+void __init sev_snp_init_hv_handling(void);
+ _ASM_NOKPROBE(\asmsym)
+ SYM_CODE_END(\asmsym)
++	.if \vector >= FIRST_SYSTEM_VECTOR && \vector < NR_VECTORS
++		.section .system_vectors, "aw"
++		.byte \vector
++		.quad \cfunc
++		.previous
++	.endif
+ .endm
  
- #define __bss_decrypted __section(".bss..decrypted")
- 
-@@ -72,6 +73,7 @@ static inline void __init sme_encrypt_kernel(struct boot_params *bp) { }
- static inline void __init sme_enable(struct boot_params *bp) { }
- 
- static inline void sev_es_init_vc_handling(void) { }
-+static inline void sev_snp_init_hv_handling(void) { }
- 
- static inline int __init
- early_set_memory_decrypted(unsigned long vaddr, unsigned long size) { return 0; }
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 6a6e70e792a4..70af0ce5f2c4 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -562,11 +562,17 @@
- #define MSR_AMD64_SEV_ENABLED_BIT	0
- #define MSR_AMD64_SEV_ES_ENABLED_BIT	1
- #define MSR_AMD64_SEV_SNP_ENABLED_BIT	2
-+#define MSR_AMD64_SEV_REFLECTVC_ENABLED_BIT		4
-+#define MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED_BIT	5
-+#define MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED_BIT	6
- #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
- #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
- #define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
- #define MSR_AMD64_SNP_VTOM_ENABLED	BIT_ULL(3)
- 
-+#define MSR_AMD64_SEV_REFLECTVC_ENABLED			BIT_ULL(MSR_AMD64_SEV_REFLECTVC_ENABLED_BIT)
-+#define MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED	BIT_ULL(MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED_BIT)
-+#define MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED	BIT_ULL(MSR_AMD64_SEV_ALTERNATE_INJECTION_ENABLED_BIT)
- #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
- 
- /* AMD Collaborative Processor Performance Control MSRs */
-diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-index f8b321a11ee4..911c991fec78 100644
---- a/arch/x86/include/asm/svm.h
-+++ b/arch/x86/include/asm/svm.h
-@@ -568,12 +568,12 @@ static inline void __unused_size_checks(void)
- 
- 	/* Check offsets of reserved fields */
- 
--	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xa0);
--	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xcc);
--	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xd8);
--	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x180);
--	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x248);
--	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x298);
-+//	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xa0);
-+//	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xcc);
-+//	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xd8);
-+//	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x180);
-+//	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x248);
-+//	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x298);
- 
- 	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0xc8);
- 	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0xcc);
-diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-index f69c168391aa..85d6882262e7 100644
---- a/arch/x86/include/uapi/asm/svm.h
-+++ b/arch/x86/include/uapi/asm/svm.h
-@@ -115,6 +115,10 @@
- #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
- #define SVM_VMGEXIT_AP_CREATE			1
- #define SVM_VMGEXIT_AP_DESTROY			2
-+#define SVM_VMGEXIT_HV_DOORBELL_PAGE		0x80000014
-+#define SVM_VMGEXIT_GET_PREFERRED_HV_DOORBELL_PAGE	0
-+#define SVM_VMGEXIT_SET_HV_DOORBELL_PAGE		1
-+#define SVM_VMGEXIT_QUERY_HV_DOORBELL_PAGE		2
- #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
- #define SVM_VMGEXIT_UNSUPPORTED_EVENT		0x8000ffff
- 
+ /*
 diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index fe5e5e41433d..03d99fad9e76 100644
+index 03d99fad9e76..b1a98c2a52f8 100644
 --- a/arch/x86/kernel/sev.c
 +++ b/arch/x86/kernel/sev.c
-@@ -122,6 +122,150 @@ struct sev_config {
+@@ -151,6 +151,16 @@ struct sev_snp_runtime_data {
  
- static struct sev_config sev_cfg __read_mostly;
+ static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
  
-+static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state);
-+static noinstr void __sev_put_ghcb(struct ghcb_state *state);
-+static int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa);
-+static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb);
++static void (*sysvec_table[NR_VECTORS - FIRST_SYSTEM_VECTOR])
++		(struct pt_regs *regs) __ro_after_init;
 +
-+union hv_pending_events {
-+	u16 events;
-+	struct {
-+		u8 vector;
-+		u8 nmi : 1;
-+		u8 mc : 1;
-+		u8 reserved1 : 5;
-+		u8 no_further_signal : 1;
-+	};
-+};
++struct sysvec_entry {
++	unsigned char vector;
++	void (*sysvec_func)(struct pt_regs *regs);
++} __packed;
 +
-+struct sev_hv_doorbell_page {
-+	union hv_pending_events pending_events;
-+	u8 no_eoi_required;
-+	u8 reserved2[61];
-+	u8 padding[4032];
-+};
++extern struct sysvec_entry __system_vectors[], __system_vectors_end[];
 +
-+struct sev_snp_runtime_data {
-+	struct sev_hv_doorbell_page hv_doorbell_page;
-+};
-+
-+static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-+
-+static inline u64 sev_es_rd_ghcb_msr(void)
-+{
-+	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-+}
-+
-+static __always_inline void sev_es_wr_ghcb_msr(u64 val)
-+{
-+	u32 low, high;
-+
-+	low  = (u32)(val);
-+	high = (u32)(val >> 32);
-+
-+	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-+}
-+
-+struct sev_hv_doorbell_page *sev_snp_current_doorbell_page(void)
-+{
-+	return &this_cpu_read(snp_runtime_data)->hv_doorbell_page;
-+}
-+
-+static u8 sev_hv_pending(void)
-+{
-+	return sev_snp_current_doorbell_page()->pending_events.events;
-+}
-+
-+static void hv_doorbell_apic_eoi_write(u32 reg, u32 val)
-+{
-+	if (xchg(&sev_snp_current_doorbell_page()->no_eoi_required, 0) & 0x1)
-+		return;
-+
-+	BUG_ON(reg != APIC_EOI);
-+	apic->write(reg, val);
-+}
-+
-+static void do_exc_hv(struct pt_regs *regs)
-+{
-+	union hv_pending_events pending_events;
-+	u8 vector;
-+
-+	while (sev_hv_pending()) {
-+		pending_events.events = xchg(
-+			&sev_snp_current_doorbell_page()->pending_events.events,
-+			0);
-+
-+		if (pending_events.nmi)
-+			exc_nmi(regs);
-+
-+#ifdef CONFIG_X86_MCE
-+		if (pending_events.mc)
-+			exc_machine_check(regs);
-+#endif
-+
-+		if (!pending_events.vector)
-+			return;
-+
-+		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
-+			/* Exception vectors */
-+			WARN(1, "exception shouldn't happen\n");
-+		} else if (pending_events.vector == FIRST_EXTERNAL_VECTOR) {
-+			sysvec_irq_move_cleanup(regs);
-+		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
-+			WARN(1, "syscall shouldn't happen\n");
-+		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
-+			switch (pending_events.vector) {
-+#if IS_ENABLED(CONFIG_HYPERV)
-+			case HYPERV_STIMER0_VECTOR:
-+				sysvec_hyperv_stimer0(regs);
-+				break;
-+			case HYPERVISOR_CALLBACK_VECTOR:
-+				sysvec_hyperv_callback(regs);
-+				break;
-+#endif
-+#ifdef CONFIG_SMP
-+			case RESCHEDULE_VECTOR:
-+				sysvec_reschedule_ipi(regs);
-+				break;
-+			case IRQ_MOVE_CLEANUP_VECTOR:
-+				sysvec_irq_move_cleanup(regs);
-+				break;
-+			case REBOOT_VECTOR:
-+				sysvec_reboot(regs);
-+				break;
-+			case CALL_FUNCTION_SINGLE_VECTOR:
-+				sysvec_call_function_single(regs);
-+				break;
-+			case CALL_FUNCTION_VECTOR:
-+				sysvec_call_function(regs);
-+				break;
-+#endif
-+#ifdef CONFIG_X86_LOCAL_APIC
-+			case ERROR_APIC_VECTOR:
-+				sysvec_error_interrupt(regs);
-+				break;
-+			case SPURIOUS_APIC_VECTOR:
-+				sysvec_spurious_apic_interrupt(regs);
-+				break;
-+			case LOCAL_TIMER_VECTOR:
-+				sysvec_apic_timer_interrupt(regs);
-+				break;
-+			case X86_PLATFORM_IPI_VECTOR:
-+				sysvec_x86_platform_ipi(regs);
-+				break;
-+#endif
-+			case 0x0:
-+				break;
-+			default:
-+				panic("Unexpected vector %d\n", vector);
-+				unreachable();
-+			}
-+		} else {
-+			common_interrupt(regs, pending_events.vector);
-+		}
-+	}
-+}
-+
- static __always_inline bool on_vc_stack(struct pt_regs *regs)
+ static inline u64 sev_es_rd_ghcb_msr(void)
  {
- 	unsigned long sp = regs->sp;
-@@ -179,11 +323,6 @@ void noinstr __sev_es_ist_enter(struct pt_regs *regs)
- 	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], new_ist);
+ 	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
+@@ -214,51 +224,11 @@ static void do_exc_hv(struct pt_regs *regs)
+ 		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
+ 			WARN(1, "syscall shouldn't happen\n");
+ 		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
+-			switch (pending_events.vector) {
+-#if IS_ENABLED(CONFIG_HYPERV)
+-			case HYPERV_STIMER0_VECTOR:
+-				sysvec_hyperv_stimer0(regs);
+-				break;
+-			case HYPERVISOR_CALLBACK_VECTOR:
+-				sysvec_hyperv_callback(regs);
+-				break;
+-#endif
+-#ifdef CONFIG_SMP
+-			case RESCHEDULE_VECTOR:
+-				sysvec_reschedule_ipi(regs);
+-				break;
+-			case IRQ_MOVE_CLEANUP_VECTOR:
+-				sysvec_irq_move_cleanup(regs);
+-				break;
+-			case REBOOT_VECTOR:
+-				sysvec_reboot(regs);
+-				break;
+-			case CALL_FUNCTION_SINGLE_VECTOR:
+-				sysvec_call_function_single(regs);
+-				break;
+-			case CALL_FUNCTION_VECTOR:
+-				sysvec_call_function(regs);
+-				break;
+-#endif
+-#ifdef CONFIG_X86_LOCAL_APIC
+-			case ERROR_APIC_VECTOR:
+-				sysvec_error_interrupt(regs);
+-				break;
+-			case SPURIOUS_APIC_VECTOR:
+-				sysvec_spurious_apic_interrupt(regs);
+-				break;
+-			case LOCAL_TIMER_VECTOR:
+-				sysvec_apic_timer_interrupt(regs);
+-				break;
+-			case X86_PLATFORM_IPI_VECTOR:
+-				sysvec_x86_platform_ipi(regs);
+-				break;
+-#endif
+-			case 0x0:
+-				break;
+-			default:
+-				panic("Unexpected vector %d\n", vector);
+-				unreachable();
++			if (!(sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])) {
++				WARN(1, "system vector entry 0x%x is NULL\n",
++				     pending_events.vector);
++			} else {
++				(*sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])(regs);
+ 			}
+ 		} else {
+ 			common_interrupt(regs, pending_events.vector);
+@@ -376,6 +346,14 @@ static bool sev_restricted_injection_enabled(void)
+ 	return sev_status & MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED;
  }
  
--static void do_exc_hv(struct pt_regs *regs)
--{
--	/* Handle #HV exception. */
--}
--
- void check_hv_pending(struct pt_regs *regs)
- {
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-@@ -232,68 +371,38 @@ void noinstr __sev_es_ist_exit(void)
- 	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
- }
- 
--/*
-- * Nothing shall interrupt this code path while holding the per-CPU
-- * GHCB. The backup GHCB is only for NMIs interrupting this path.
-- *
-- * Callers must disable local interrupts around it.
-- */
--static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-+static bool sev_restricted_injection_enabled(void)
++static void __init construct_sysvec_table(void)
 +{
-+	return sev_status & MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED;
++	struct sysvec_entry *p;
++
++	for (p = __system_vectors; p < __system_vectors_end; p++)
++		sysvec_table[p->vector - FIRST_SYSTEM_VECTOR] = p->sysvec_func;
 +}
 +
-+void __init sev_snp_init_hv_handling(void)
+ void __init sev_snp_init_hv_handling(void)
  {
-+	struct sev_snp_runtime_data *snp_data;
- 	struct sev_es_runtime_data *data;
-+	struct ghcb_state state;
- 	struct ghcb *ghcb;
-+	unsigned long flags;
-+	int cpu;
-+	int err;
+ 	struct sev_snp_runtime_data *snp_data;
+@@ -403,6 +381,8 @@ void __init sev_snp_init_hv_handling(void)
+ 	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
  
- 	WARN_ON(!irqs_disabled());
-+	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP) || !sev_restricted_injection_enabled())
-+		return;
- 
- 	data = this_cpu_read(runtime_data);
--	ghcb = &data->ghcb_page;
- 
--	if (unlikely(data->ghcb_active)) {
--		/* GHCB is already in use - save its contents */
--
--		if (unlikely(data->backup_ghcb_active)) {
--			/*
--			 * Backup-GHCB is also already in use. There is no way
--			 * to continue here so just kill the machine. To make
--			 * panic() work, mark GHCBs inactive so that messages
--			 * can be printed out.
--			 */
--			data->ghcb_active        = false;
--			data->backup_ghcb_active = false;
--
--			instrumentation_begin();
--			panic("Unable to handle #VC exception! GHCB and Backup GHCB are already in use");
--			instrumentation_end();
--		}
--
--		/* Mark backup_ghcb active before writing to it */
--		data->backup_ghcb_active = true;
--
--		state->ghcb = &data->backup_ghcb;
-+	local_irq_save(flags);
- 
--		/* Backup GHCB content */
--		*state->ghcb = *ghcb;
--	} else {
--		state->ghcb = NULL;
--		data->ghcb_active = true;
--	}
-+	ghcb = __sev_get_ghcb(&state);
- 
--	return ghcb;
--}
-+	sev_snp_setup_hv_doorbell_page(ghcb);
- 
--static inline u64 sev_es_rd_ghcb_msr(void)
--{
--	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
--}
--
--static __always_inline void sev_es_wr_ghcb_msr(u64 val)
--{
--	u32 low, high;
-+	__sev_put_ghcb(&state);
- 
--	low  = (u32)(val);
--	high = (u32)(val >> 32);
-+	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
- 
--	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
-+	local_irq_restore(flags);
+ 	local_irq_restore(flags);
++
++	construct_sysvec_table();
  }
  
  static int vc_fetch_insn_kernel(struct es_em_ctxt *ctxt,
-@@ -554,6 +663,69 @@ static enum es_result vc_slow_virt_to_phys(struct ghcb *ghcb, struct es_em_ctxt
- /* Include code shared with pre-decompression boot stage */
- #include "sev-shared.c"
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 2e0ee14229bf..aeadb4754b00 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -339,6 +339,13 @@ SECTIONS
+ 		*(.altinstr_replacement)
+ 	}
  
-+/*
-+ * Nothing shall interrupt this code path while holding the per-CPU
-+ * GHCB. The backup GHCB is only for NMIs interrupting this path.
-+ *
-+ * Callers must disable local interrupts around it.
-+ */
-+static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
-+{
-+	struct sev_es_runtime_data *data;
-+	struct ghcb *ghcb;
-+
-+	WARN_ON(!irqs_disabled());
-+
-+	data = this_cpu_read(runtime_data);
-+	ghcb = &data->ghcb_page;
-+
-+	if (unlikely(data->ghcb_active)) {
-+		/* GHCB is already in use - save its contents */
-+
-+		if (unlikely(data->backup_ghcb_active)) {
-+			/*
-+			 * Backup-GHCB is also already in use. There is no way
-+			 * to continue here so just kill the machine. To make
-+			 * panic() work, mark GHCBs inactive so that messages
-+			 * can be printed out.
-+			 */
-+			data->ghcb_active        = false;
-+			data->backup_ghcb_active = false;
-+
-+			instrumentation_begin();
-+			panic("Unable to handle #VC exception! GHCB and Backup GHCB are already in use");
-+			instrumentation_end();
-+		}
-+
-+		/* Mark backup_ghcb active before writing to it */
-+		data->backup_ghcb_active = true;
-+
-+		state->ghcb = &data->backup_ghcb;
-+
-+		/* Backup GHCB content */
-+		*state->ghcb = *ghcb;
-+	} else {
-+		state->ghcb = NULL;
-+		data->ghcb_active = true;
++	. = ALIGN(8);
++	.system_vectors : AT(ADDR(.system_vectors) - LOAD_OFFSET) {
++		__system_vectors = .;
++		*(.system_vectors)
++		__system_vectors_end = .;
 +	}
 +
-+	return ghcb;
-+}
-+
-+static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb)
-+{
-+	u64 pa;
-+	enum es_result ret;
-+
-+	pa = __pa(sev_snp_current_doorbell_page());
-+	vc_ghcb_invalidate(ghcb);
-+	ret = vmgexit_hv_doorbell_page(ghcb,
-+				       SVM_VMGEXIT_SET_HV_DOORBELL_PAGE,
-+				       pa);
-+	if (ret != ES_OK)
-+		panic("SEV-SNP: failed to set up #HV doorbell page");
-+}
-+
- static noinstr void __sev_put_ghcb(struct ghcb_state *state)
- {
- 	struct sev_es_runtime_data *data;
-@@ -1282,6 +1454,7 @@ static void snp_register_per_cpu_ghcb(void)
- 	ghcb = &data->ghcb_page;
- 
- 	snp_register_ghcb_early(__pa(ghcb));
-+	sev_snp_setup_hv_doorbell_page(ghcb);
- }
- 
- void setup_ghcb(void)
-@@ -1321,6 +1494,11 @@ void setup_ghcb(void)
- 		snp_register_ghcb_early(__pa(&boot_ghcb_page));
- }
- 
-+int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa)
-+{
-+	return sev_es_ghcb_hv_call(ghcb, NULL, SVM_VMGEXIT_HV_DOORBELL_PAGE, op, pa);
-+}
-+
- #ifdef CONFIG_HOTPLUG_CPU
- static void sev_es_ap_hlt_loop(void)
- {
-@@ -1394,6 +1572,7 @@ static void __init alloc_runtime_data(int cpu)
- static void __init init_ghcb(int cpu)
- {
- 	struct sev_es_runtime_data *data;
-+	struct sev_snp_runtime_data *snp_data;
- 	int err;
- 
- 	data = per_cpu(runtime_data, cpu);
-@@ -1405,6 +1584,19 @@ static void __init init_ghcb(int cpu)
- 
- 	memset(&data->ghcb_page, 0, sizeof(data->ghcb_page));
- 
-+	snp_data = memblock_alloc(sizeof(*snp_data), PAGE_SIZE);
-+	if (!snp_data)
-+		panic("Can't allocate SEV-SNP runtime data");
-+
-+	err = early_set_memory_decrypted((unsigned long)&snp_data->hv_doorbell_page,
-+					 sizeof(snp_data->hv_doorbell_page));
-+	if (err)
-+		panic("Can't map #HV doorbell pages unencrypted");
-+
-+	memset(&snp_data->hv_doorbell_page, 0, sizeof(snp_data->hv_doorbell_page));
-+
-+	per_cpu(snp_runtime_data, cpu) = snp_data;
-+
- 	data->ghcb_active = false;
- 	data->backup_ghcb_active = false;
- }
-@@ -2045,7 +2237,12 @@ DEFINE_IDTENTRY_VC_USER(exc_vmm_communication)
- 
- static bool hv_raw_handle_exception(struct pt_regs *regs)
- {
--	return false;
-+	/* Clear the no_further_signal bit */
-+	sev_snp_current_doorbell_page()->pending_events.events &= 0x7fff;
-+
-+	check_hv_pending(regs);
-+
-+	return true;
- }
- 
- static __always_inline bool on_hv_fallback_stack(struct pt_regs *regs)
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index d29debec8134..1aa6cab2394b 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -1503,5 +1503,7 @@ void __init trap_init(void)
- 	cpu_init_exception_handling();
- 	/* Setup traps as cpu_init() might #GP */
- 	idt_setup_traps();
-+	sev_snp_init_hv_handling();
-+
- 	cpu_init();
- }
+ 	. = ALIGN(8);
+ 	.apicdrivers : AT(ADDR(.apicdrivers) - LOAD_OFFSET) {
+ 		__apicdrivers = .;
 -- 
 2.25.1
 
