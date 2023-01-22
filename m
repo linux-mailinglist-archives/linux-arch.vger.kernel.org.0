@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974E1676ABC
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29B3676AC2
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjAVCq1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Jan 2023 21:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S229949AbjAVCqf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Jan 2023 21:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjAVCqV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:46:21 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DC8241C5;
-        Sat, 21 Jan 2023 18:46:20 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id 20so6544918pfu.13;
-        Sat, 21 Jan 2023 18:46:20 -0800 (PST)
+        with ESMTP id S229864AbjAVCq0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:46:26 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF8241F4;
+        Sat, 21 Jan 2023 18:46:22 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id i65so6604920pfc.0;
+        Sat, 21 Jan 2023 18:46:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ypt8rOlpcZ57Jgj8tjQGhQ8hwNv0NioxEBqSRz1HFqM=;
-        b=D+cfF0+q0ri2SJ63SThdYX9OYn9naocQhZotGE3aFblCXcxPKG6rdt+MWm4RfQtDTN
-         BnjVFkRrD8OOHbYI5SQgtEYgqCVSfoyfZuI12ofbmulZ753D6dx05uvRJc02KMICe6yB
-         7tjsD1HkoRDwvg2JKlt8FZz7MMpySG2KmtYz9pZO70OlOq6Vbhr+Sjw8lxPq2e6ygIFO
-         x/1BYjtx2ASEEu1341hfQTG1EOkNOThpI+RXCgdovQhTSF1MyAwgzgNYeI9nysaDsySE
-         PYYJc0mvdF4PWYGIrw5DQyr1ryOkQWn38IhSiC0STq/v7QfapptwrGsZXo2QWwV/8PJG
-         /Nnw==
+        bh=MSuNKkMXWHSa3J60m4rY4F79SY/10La9kbhfpfz9TzE=;
+        b=VkVetbyCcGyNR+peKjvZmq1rh+GYQboKSEMpmfmYtRDt/XA1pMxwyIH1YOWmzj56ew
+         DxryIxyvCP56FAfTMIkq47XAFpHM6ZkikVrfys80CqKN2kK5c6kFDpmEc5Z3ojxLe+Gx
+         vbqH68TcpXINebpFsBdBNH4GVh/CFA798XBLWBmYsS/NAxT00p/TJIEXtJM5PKX6MoZX
+         hd3eeoPaN1FxN76h3I/QsAfLcMPxOr6L7N5bqoOpd60MvIjWvwmpexN3qFCeXdej+A1H
+         Sa8H2CQZt2cgQf2eFW5AkEGck0xbvc3rBMKKmqRb4mmY2NO0tJ0YZXqZlwacOJsQ2b9K
+         RLMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ypt8rOlpcZ57Jgj8tjQGhQ8hwNv0NioxEBqSRz1HFqM=;
-        b=bnUomJ/1u477QjxdeXd9lnmW35ggyDN2YktA9qVtS/nKBm4sR0P5jt6qorBNbzybtT
-         b8sejJzS7KNb+TUXoAEwYxFFWc1fADTZA+Awbrb27nWm7kWcY2G3aZAf57iGIBjV/uVq
-         M6WudQHmoqZYMejjQgkSjcNEpnCdua6GSwa40aGVLD5MgiQ47okjVAMbxsnYx/qsckim
-         pv1Tb80BFyNi8zwp9+/+qXmftvjHIE4NOF0WrgUlX4kSOsj1lXetXFaZJRKPYhnLyU5J
-         cdwBF0jPBphibXJ0KN3GapxE3m8F5lcM1cPFwc9x638TIT+o86TYNmcaIhhuAvnJA7//
-         cC2w==
-X-Gm-Message-State: AFqh2kqfLG/TagM07Z3KT4vW7/sDymETEpV6jqZVWFb3gk4o27Tv9Kan
-        7yARnFf71o5AyO3zaw6cwOg=
-X-Google-Smtp-Source: AMrXdXuZ/N8ZLDYZyqEoDk0CIevFERWDutOFClkUDxLpyb18/F0PowncaQPo+LPD1tiyrNCTEDgt4g==
-X-Received: by 2002:a05:6a00:4519:b0:58d:f047:53b7 with SMTP id cw25-20020a056a00451900b0058df04753b7mr14257689pfb.3.1674355580161;
-        Sat, 21 Jan 2023 18:46:20 -0800 (PST)
+        bh=MSuNKkMXWHSa3J60m4rY4F79SY/10La9kbhfpfz9TzE=;
+        b=PegM51jYgPsvcmcByz58py8QyRD4vTae3b9BXGy5u27oyF8MUt2jUXISaIDCken1J+
+         nxdt2Va3gQ23tHY17xjImzq3FW4v7Uc06C6Y+o6SCnM75ZEAFGk3GsDP0DHsro23Qf1b
+         8P//sHRKHrdW4bpUl9PjYbx4zqLA/uMG2cIh8YgPi3I9NmZPMgyZOPYnmX8ZWUtbuWgG
+         smQvsGq50RJdGeSU55sQLutLufg3B8NGkeCpWNe4XP0MtxQZYggb5VOG1GdgE8Vf+N1B
+         hQwhvDHVFcfYJSi69OKy4HnEkTK7OwaZJBNUle38I1np1w70x/YZOMCq4hjqSvQUKTdF
+         e03w==
+X-Gm-Message-State: AFqh2kpgpljVrP/Tyxd86h88yw7k/1Lvu8srrInQh9LVmuqPE9G1ScXM
+        vOxO2svo3vJpy6aGq+m4LDc=
+X-Google-Smtp-Source: AMrXdXvE9Bcml9Mo/WbAKLd9q68UcwTXJOz+R5uCgaC7ad7djllW2ZKCNYXMprZSEPVIjI1oAT1q0w==
+X-Received: by 2002:a62:79d2:0:b0:582:b089:d9be with SMTP id u201-20020a6279d2000000b00582b089d9bemr21737321pfc.13.1674355581499;
+        Sat, 21 Jan 2023 18:46:21 -0800 (PST)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:36:d4:8b9d:a9e7:109b])
-        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.18
+        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 18:46:19 -0800 (PST)
+        Sat, 21 Jan 2023 18:46:21 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,9 +65,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [RFC PATCH V3 06/16] x86/hyperv: decrypt vmbus pages for sev-snp enlightened guest
-Date:   Sat, 21 Jan 2023 21:45:56 -0500
-Message-Id: <20230122024607.788454-7-ltykernel@gmail.com>
+Subject: [RFC PATCH V3 07/16] drivers: hv: Decrypt percpu hvcall input arg page in sev-snp enlightened guest
+Date:   Sat, 21 Jan 2023 21:45:57 -0500
+Message-Id: <20230122024607.788454-8-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230122024607.788454-1-ltykernel@gmail.com>
 References: <20230122024607.788454-1-ltykernel@gmail.com>
@@ -85,79 +85,70 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-Vmbus post msg, synic event and message pages are shared
-with hypervisor and so decrypt these pages in the sev-snp guest.
+Hypervisor needs to access iput arg page and guest should decrypt
+the page.
 
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
 Change since RFC V2:
-       * Fix error in the error code path and encrypt
-       	 pages correctly when decryption failure happens.
+	* Set inputarg to be zero after kfree()
+	* Not free mem when fail to encrypt mem in the hv_common_cpu_die().
 ---
- drivers/hv/hv.c | 33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+ drivers/hv/hv_common.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-index 410e6c4e80d3..52edc54c8172 100644
---- a/drivers/hv/hv.c
-+++ b/drivers/hv/hv.c
-@@ -20,6 +20,7 @@
- #include <linux/interrupt.h>
- #include <clocksource/hyperv_timer.h>
- #include <asm/mshyperv.h>
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index f788c64de0bd..205b6380d794 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -21,6 +21,7 @@
+ #include <linux/ptrace.h>
+ #include <linux/slab.h>
+ #include <linux/dma-map-ops.h>
 +#include <linux/set_memory.h>
- #include "hyperv_vmbus.h"
+ #include <asm/hyperv-tlfs.h>
+ #include <asm/mshyperv.h>
  
- /* The one and only */
-@@ -117,7 +118,7 @@ int hv_post_message(union hv_connection_id connection_id,
+@@ -125,6 +126,7 @@ int hv_common_cpu_init(unsigned int cpu)
+ 	u64 msr_vp_index;
+ 	gfp_t flags;
+ 	int pgcount = hv_root_partition ? 2 : 1;
++	int ret;
  
- int hv_synic_alloc(void)
- {
--	int cpu;
-+	int cpu, ret;
- 	struct hv_per_cpu_context *hv_cpu;
+ 	/* hv_cpu_init() can be called with IRQs disabled from hv_resume() */
+ 	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
+@@ -134,6 +136,17 @@ int hv_common_cpu_init(unsigned int cpu)
+ 	if (!(*inputarg))
+ 		return -ENOMEM;
  
- 	/*
-@@ -168,9 +169,39 @@ int hv_synic_alloc(void)
- 			pr_err("Unable to allocate post msg page\n");
- 			goto err;
- 		}
-+
-+		if (hv_isolation_type_en_snp()) {
-+			ret = set_memory_decrypted((unsigned long)
-+				hv_cpu->synic_message_page, 1);
-+			if (ret)
-+				goto err;
-+
-+			ret = set_memory_decrypted((unsigned long)
-+				hv_cpu->synic_event_page, 1);
-+			if (ret)
-+				goto err_decrypt_event_page;
-+
-+			ret = set_memory_decrypted((unsigned long)
-+				hv_cpu->post_msg_page, 1);
-+			if (ret)
-+				goto err_decrypt_msg_page;
-+
-+			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
-+			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
-+			memset(hv_cpu->post_msg_page, 0, PAGE_SIZE);
++	if (hv_isolation_type_en_snp()) {
++		ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
++		if (ret) {
++			kfree(*inputarg);
++			*inputarg = NULL;
++			return ret;
 +		}
- 	}
++
++		memset(*inputarg, 0x00, PAGE_SIZE);
++	}
++
+ 	if (hv_root_partition) {
+ 		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+ 		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+@@ -168,7 +181,12 @@ int hv_common_cpu_die(unsigned int cpu)
+ 
+ 	local_irq_restore(flags);
+ 
+-	kfree(mem);
++	if (hv_isolation_type_en_snp()) {
++		if (!set_memory_encrypted((unsigned long)mem, 1))
++			kfree(mem);
++	} else {
++		kfree(mem);
++	}
  
  	return 0;
-+
-+err_decrypt_msg_page:
-+	set_memory_encrypted((unsigned long)
-+		hv_cpu->synic_event_page, 1);
-+
-+err_decrypt_event_page:
-+	set_memory_encrypted((unsigned long)
-+		hv_cpu->synic_message_page, 1);
-+
- err:
- 	/*
- 	 * Any memory allocations that succeeded will be freed when
+ }
 -- 
 2.25.1
 
