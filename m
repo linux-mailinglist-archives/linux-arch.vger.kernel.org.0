@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD21676AA9
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AF9676AAD
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjAVCqQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 Jan 2023 21:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S229463AbjAVCqT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 Jan 2023 21:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjAVCqP (ORCPT
+        with ESMTP id S229673AbjAVCqP (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:46:15 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0C01DBB6;
-        Sat, 21 Jan 2023 18:46:13 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 207so6565101pfv.5;
-        Sat, 21 Jan 2023 18:46:13 -0800 (PST)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1591A4BA;
+        Sat, 21 Jan 2023 18:46:14 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id c85so6559344pfc.8;
+        Sat, 21 Jan 2023 18:46:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qnMOwh1aaG72cY9v6pTmJyXRUzMRdcZVVSSO8Ajg0yo=;
-        b=FQ3sW+3iS7GYYQEkCf5a/r3NDEp3gPy7T8saFKhEb2tXnD+h994YomEHYGYXawDzrL
-         nXJ9hicOApE0AJJppKLg0GuyC1ymhvtoQSPKQQyX82hpYYMqNGfq7mE4WEu69ShLJw2F
-         0hK8mhDtw10qMaHU+KYvdhUr2kcA4MSvZPll03ZpptoNGLbGy8lSZh0HwTSvPqJzj4dF
-         +BgpWYihPncFDGhUeobzc3NQrBUp+q5beBHuRicbQlKXlk12qd2/WluLo8CNKNrZphH2
-         ZUXl19NMMc2hCnHTNN1lB2IHTg8usgpeka0yt788gpRgd9m+5Fec4RBXkr9kfFmu6kz1
-         2omQ==
+        bh=DHCUEHp3mAbHZmlWLmQQYc0YJzSL3HZXdvwddGnkOCc=;
+        b=ohzh5KtUBaY5tBTL+iy3zzV3Jw0Gc067IZMqxSpBcDwUUoamvPjeqJX7+DhPgS9gsr
+         PxZqXNuOygoKSMFAJ7tXrYgBE/r8EUKAipdf7+sF8OmnfH5vKzuu2daJxduQKjjos3My
+         a+fKiwyATUWJ/L5sd1SwuD5Jk6T3TYIM3juQXqEC043X9K/A7q0iahQOuFqbKYeA3mZH
+         y8sgr7OK70Bdf7y8U17G8H5+ATQeegdhvJLjNpuKJz7y/Xlh79uiEjcZbVmeWtnFkJlG
+         kFXWoFH76dpch3aSKiUvrE8bPgE18YgLRKdsq+YQo4Boda33rWYi59ou4gvp0MZOYABR
+         +r5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qnMOwh1aaG72cY9v6pTmJyXRUzMRdcZVVSSO8Ajg0yo=;
-        b=zc2UlSCeYgklmeXkxJ7XhafP24PpvzwssxrRzawfFP1V4pIwDYOzTPR1bU95I9n7cm
-         CggB3uE25MPdofBar64bitxKKf7MUnom/pfEDmj1Qw3wBLt/M/B5szLamgZvZxNC5Leu
-         g9guoWmGTPXViAE37PcMVWUixPFwOZSXPGr+FcIFkFbNldp2FFcaGCpcALOA6yvI7QYt
-         Nz3YM3W3jH8BBVk8wmiSn6lL2pnk4b1qWksDPil1x7SyLIVTj77urmtyqEHiCcVJJvyV
-         EGuCxRLvtAjOGa/kd3HVk37TIeq8VUf7x6ykkfKGitU4DehFql2XK3Wj3mJ1tc6rxCEY
-         FUdQ==
-X-Gm-Message-State: AFqh2kohZ93jhGI3Y+AtG1Ga3FCncZyYXqzcAtv7V41hFvSwj3QrWZAz
-        d0I7V6VCNg3Ext5PQkBLCo0=
-X-Google-Smtp-Source: AMrXdXt5B+SQx0uDJ6a6sa7NLc7FmMWqUKla0LOC4gIATGo3yNnCZNwXzVdegW5IM9lXwjvzBBlFoA==
-X-Received: by 2002:a62:384e:0:b0:58b:c66e:1ca8 with SMTP id f75-20020a62384e000000b0058bc66e1ca8mr20006146pfa.11.1674355573052;
-        Sat, 21 Jan 2023 18:46:13 -0800 (PST)
+        bh=DHCUEHp3mAbHZmlWLmQQYc0YJzSL3HZXdvwddGnkOCc=;
+        b=CtjLkkuTFifA9KCBvYK0lI0yolzPssxiQLP2S5DQZBVYLyKAuOmc6OGzlD/Sg8box/
+         EsuPNbrEP6ruGnZ0RuI/mUwHd/Z2IFPo2HHOr34ec3KUNhWiCvwPgUg5PHgStWF9tqHK
+         20Pb5eLVGf54CD4bbmPxflWBpALMFEwWd+XA0nC/TJuCK3DgKLfGUDNKGOIe44iW3JYL
+         YZCioNVg/fvtA/WRRViPkJPspp47swqGMyPBCOAioYCMleXrAOmA87wZCPvtXu64gp/O
+         +EE1+JRT7HiJ0wT395Gdm8IymsR5xrnTHswILAZrVjwlyZyx80hRyxHSc9TMKMshJ/A0
+         OCHw==
+X-Gm-Message-State: AFqh2kolqCiKyj5xEX1bnMjBcZeSVis4UnutsIILw/dzzSSpyrwMaIRe
+        RnjC/KlEsZHy3UC8gVvnB8M=
+X-Google-Smtp-Source: AMrXdXto4cGvkFjx1YrN8a/m/MPWHwwzaLBtA1y93TPlRa3ZQX+QImrNF8XYtHA+bXpHs8tzvME18g==
+X-Received: by 2002:a62:7b11:0:b0:586:e399:9cd4 with SMTP id w17-20020a627b11000000b00586e3999cd4mr40488569pfc.25.1674355574415;
+        Sat, 21 Jan 2023 18:46:14 -0800 (PST)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:36:d4:8b9d:a9e7:109b])
-        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.11
+        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 18:46:12 -0800 (PST)
+        Sat, 21 Jan 2023 18:46:14 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,9 +65,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [RFC PATCH V3 01/16] x86/hyperv: Add sev-snp enlightened guest specific config
-Date:   Sat, 21 Jan 2023 21:45:51 -0500
-Message-Id: <20230122024607.788454-2-ltykernel@gmail.com>
+Subject: [RFC PATCH V3 02/16] x86/hyperv: Decrypt hv vp assist page in sev-snp enlightened guest
+Date:   Sat, 21 Jan 2023 21:45:52 -0500
+Message-Id: <20230122024607.788454-3-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230122024607.788454-1-ltykernel@gmail.com>
 References: <20230122024607.788454-1-ltykernel@gmail.com>
@@ -85,111 +85,38 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-Introduce static key isolation_type_en_snp for enlightened
-guest check and add some specific options in ms_hyperv_init_
-platform().
+hv vp assist page is shared between sev snp guest and hyperv. Decrypt
+the page when use it.
 
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
- arch/x86/hyperv/ivm.c           | 10 ++++++++++
- arch/x86/include/asm/mshyperv.h |  3 +++
- arch/x86/kernel/cpu/mshyperv.c  | 16 +++++++++++++++-
- drivers/hv/hv_common.c          |  6 ++++++
- 4 files changed, 34 insertions(+), 1 deletion(-)
+ arch/x86/hyperv/hv_init.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index abca9431d068..8c5dd8e4eb1e 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -386,6 +386,16 @@ bool hv_is_isolation_supported(void)
- }
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index a5f9474f08e1..24154c1ee12b 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -29,6 +29,7 @@
+ #include <linux/syscore_ops.h>
+ #include <clocksource/hyperv_timer.h>
+ #include <linux/highmem.h>
++#include <linux/set_memory.h>
  
- DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
-+DEFINE_STATIC_KEY_FALSE(isolation_type_en_snp);
-+
-+/*
-+ * hv_isolation_type_en_snp - Check system runs in the AMD SEV-SNP based
-+ * isolation enlightened VM.
-+ */
-+bool hv_isolation_type_en_snp(void)
-+{
-+	return static_branch_unlikely(&isolation_type_en_snp);
-+}
+ int hyperv_init_cpuhp;
+ u64 hv_current_partition_id = ~0ull;
+@@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
  
- /*
-  * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 010768d40155..285df71150e4 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -14,6 +14,7 @@
- union hv_ghcb;
- 
- DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-+DECLARE_STATIC_KEY_FALSE(isolation_type_en_snp);
- 
- typedef int (*hyperv_fill_flush_list_func)(
- 		struct hv_guest_mapping_flush_list *flush,
-@@ -28,6 +29,8 @@ extern void *hv_hypercall_pg;
- 
- extern u64 hv_current_partition_id;
- 
-+extern bool hv_isolation_type_en_snp(void);
-+
- extern union hv_ghcb * __percpu *hv_ghcb_pg;
- 
- int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 8f83ceec45dc..ace5901ba0fc 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -273,6 +273,18 @@ static void __init ms_hyperv_init_platform(void)
- 
- 	hv_max_functions_eax = cpuid_eax(HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS);
- 
-+	/*
-+	 * Add custom configuration for SEV-SNP Enlightened guest
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-+		ms_hyperv.features |= HV_ACCESS_FREQUENCY_MSRS;
-+		ms_hyperv.misc_features |= HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
-+		ms_hyperv.misc_features &= ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
-+		ms_hyperv.hints |= HV_DEPRECATING_AEOI_RECOMMENDED;
-+		ms_hyperv.hints |= HV_X64_APIC_ACCESS_RECOMMENDED;
-+		ms_hyperv.hints |= HV_X64_CLUSTER_IPI_RECOMMENDED;
-+	}
-+
- 	pr_info("Hyper-V: privilege flags low 0x%x, high 0x%x, hints 0x%x, misc 0x%x\n",
- 		ms_hyperv.features, ms_hyperv.priv_high, ms_hyperv.hints,
- 		ms_hyperv.misc_features);
-@@ -331,7 +343,9 @@ static void __init ms_hyperv_init_platform(void)
- 		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
- 			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
- 
--		if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP)
-+		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+			static_branch_enable(&isolation_type_en_snp);
-+		else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP)
- 			static_branch_enable(&isolation_type_snp);
  	}
- 
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 566735f35c28..f788c64de0bd 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -268,6 +268,12 @@ bool __weak hv_isolation_type_snp(void)
- }
- EXPORT_SYMBOL_GPL(hv_isolation_type_snp);
- 
-+bool __weak hv_isolation_type_en_snp(void)
-+{
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(hv_isolation_type_en_snp);
+ 	if (!WARN_ON(!(*hvp))) {
++		if (hv_isolation_type_en_snp()) {
++			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
++			memset(*hvp, 0, PAGE_SIZE);
++		}
 +
- void __weak hv_setup_vmbus_handler(void (*handler)(void))
- {
- }
+ 		msr.enable = 1;
+ 		wrmsrl(HV_X64_MSR_VP_ASSIST_PAGE, msr.as_uint64);
+ 	}
 -- 
 2.25.1
 
