@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DEA676AE1
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04545676AE4
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 03:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjAVCr5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S229924AbjAVCr5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Sat, 21 Jan 2023 21:47:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjAVCrW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:47:22 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8543A24481;
-        Sat, 21 Jan 2023 18:46:42 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso3944605pjp.3;
-        Sat, 21 Jan 2023 18:46:42 -0800 (PST)
+        with ESMTP id S229938AbjAVCrX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 Jan 2023 21:47:23 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A2E2686F;
+        Sat, 21 Jan 2023 18:46:43 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 7so6765601pga.1;
+        Sat, 21 Jan 2023 18:46:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HfzaNmMXTvYjZaqBx5BRGh5/YKdqJuGZMdeNixaODzI=;
-        b=CftyTjTfQaZlq6X+W/d9ddvb3E7GIsvuW56grnwYN/kjL2hPuns+Lv2zmf17h+Bz80
-         gbHbRV1L8cabmqUYsjDWnLabuuY3Fs2fdwyNow7dZX5lYjA7hJmqoT1VL4JTMZwgf/iP
-         xRTEsQOgqV0xsq+8+EjD22xPS0quK+jPa6L/Sy1KHJjQ+yHsp92f12rKF4U9gBbT2b9r
-         gxvd53MiamSbL1spRy4c3k01MsHuL/cZQKZ8cO5DUN7B2AZQQFJ3RUYYXXw9gx4VS7mW
-         BZA9YUfo9CWDXAMW8z4+5ZBTnla0ngLZLEzfeZ02prI0eganSll9A3Z4+ob8VlwpmvTp
-         d6hg==
+        bh=07U05LP61qajW1mCV1qXcQXICcjAVDSkBvwRtl3T56g=;
+        b=V7DXN5ymQIHHKZ2ZJ3l3N5dh4HYfRbSVgt8QS1agUUpwF+FxfquraJIp1mYpBZedVM
+         DxiDY042U8tFeg1swMsbpfjJemHKS8wI+ECwSBfse9saZVKNmNQottgOdv5PZpGEJjmS
+         Kf4A/LS2CorUcT4ENXjr5IXFfEWTDcJiSvYgFSocPYKic2P7Im8QXDH2TEDVWIzwojxk
+         lanwAYS4Jca+KAnDO81zz4me1GNVZ0MmB7z7GGn+u0YouPCv/+VDt3IgtSEoyfSiv4ES
+         oI8McYlmu+7Q5rFMN17hYIwv8lz4WDyFG4z7MqA/3IeVarch+imIUIiwcr/QwdZFJqv6
+         dd+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HfzaNmMXTvYjZaqBx5BRGh5/YKdqJuGZMdeNixaODzI=;
-        b=sysE2oWkeupsYkoczfiePeBYTgchXDICspFd8cEqnveBs5iYg43/k7L+G1RHymQu21
-         DvpzhDpi8b6n1rdcwMJUomqssvDGvOYAtZJPeAais7jQdCfOkpv7bRcWAQxeHNw33+f+
-         +ONHlsfTIl7JA5sfsORG4/GlzijmUpYAtWctk1pnDlMghJCckNj0Z1PXmVU+KUx3KDVa
-         yvy3JTwfFaMG9NFuRifvMDWUmVS78K/0sLk1up23ua/FMgQ2dHsqu/KyRcXIWuRxVo5f
-         vs5vaO6BijxxAL9Dg4NbgIQA+0YTnVBdV//DvHxQ6BbYL04syxPAOZhN0Pc+VDHwDSNw
-         fzhQ==
-X-Gm-Message-State: AFqh2koMMVk6CeTfb4Zk4uZ1K3lrjodqjlVeF1/Dipuz3GnTnIdQhJbN
-        HUOeBKR40ZldSWT4SODa6sQ=
-X-Google-Smtp-Source: AMrXdXueHgf+64MbPOvUl3iPQC56zhsQqJoJWPq4Yf/nM88fQTLxW966nL9hfBqm61ZqY3d5YnD66Q==
-X-Received: by 2002:a05:6a21:1646:b0:ac:29b4:11bc with SMTP id no6-20020a056a21164600b000ac29b411bcmr19655447pzb.21.1674355592364;
-        Sat, 21 Jan 2023 18:46:32 -0800 (PST)
+        bh=07U05LP61qajW1mCV1qXcQXICcjAVDSkBvwRtl3T56g=;
+        b=FQiikwTR4A7DZPqWfL0Jitsrx7PQXSFWORtA+vm1f5zpwlSCiFG/GhELNOOvLS5mRv
+         Q9RM/yleXhv6PfucJWhL7OrYrfRlzyXGjeHqH1wMjl43CeweKyjVoRXNGTlNyaxs80on
+         Vz+1Imu5n/vH2Kr7SNypVmbYszaYwNa+eZTjZCjzU9wa2Syw3xjaMH6CbG97MTBtjBvm
+         ijK8xPswpGaMBfqc4jUQc/mhBunzYlQ1J47gbopZFgx0Y8bouFzYHN+zOLlPtNU7k+Tn
+         FFYQulwdF3I45r2npUWOsYMNbnhxYbCulMU1TOth0T+imlI5itbI1oRmmiErr1K43IGp
+         jndg==
+X-Gm-Message-State: AFqh2kqZ5Xiz5tNO91lhSUfKNHmLz70gSvRkqYnDVdqBFutLIc1oElsx
+        33pJ64s9xIrAohBw+PSL4Pg=
+X-Google-Smtp-Source: AMrXdXvc2yzHSWu2VtDmL+U/RJIWgvymkJP05/rKvZqbzcDQIhnWOItfc+0kLq7FxnPXJ2esXHHLHw==
+X-Received: by 2002:a05:6a00:b53:b0:574:a541:574a with SMTP id p19-20020a056a000b5300b00574a541574amr28185403pfo.0.1674355593767;
+        Sat, 21 Jan 2023 18:46:33 -0800 (PST)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:36:d4:8b9d:a9e7:109b])
-        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.31
+        by smtp.gmail.com with ESMTPSA id b75-20020a621b4e000000b0058ba53aaa75sm18523094pfb.99.2023.01.21.18.46.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Jan 2023 18:46:31 -0800 (PST)
+        Sat, 21 Jan 2023 18:46:33 -0800 (PST)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -65,9 +65,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [RFC PATCH V3 15/16] x86/sev: optimize system vector processing invoked from #HV exception
-Date:   Sat, 21 Jan 2023 21:46:05 -0500
-Message-Id: <20230122024607.788454-16-ltykernel@gmail.com>
+Subject: [RFC PATCH V3 16/16] x86/sev: Fix interrupt exit code paths from #HV exception
+Date:   Sat, 21 Jan 2023 21:46:06 -0500
+Message-Id: <20230122024607.788454-17-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230122024607.788454-1-ltykernel@gmail.com>
 References: <20230122024607.788454-1-ltykernel@gmail.com>
@@ -85,155 +85,194 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Ashish Kalra <ashish.kalra@amd.com>
 
-Construct system vector table and dispatch system vector exceptions through
-sysvec_table from #HV exception handler instead of explicitly calling each
-system vector. The system vector table is created dynamically and is placed
-in a new named ELF section.
+Add checks in interrupt exit code paths in case of returns
+to user mode to check if currently executing the #HV handler
+then don't follow the irqentry_exit_to_user_mode path as
+that can potentially cause the #HV handler to be
+preempted and rescheduled on another CPU. Rescheduled #HV
+handler on another cpu will cause interrupts to be handled
+on a different cpu than the injected one, causing
+invalid EOIs and missed/lost guest interrupts and
+corresponding hangs and/or per-cpu IRQs handled on
+non-intended cpu.
 
 Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
 ---
- arch/x86/entry/entry_64.S     |  6 +++
- arch/x86/kernel/sev.c         | 70 +++++++++++++----------------------
- arch/x86/kernel/vmlinux.lds.S |  7 ++++
- 3 files changed, 38 insertions(+), 45 deletions(-)
+ arch/x86/include/asm/idtentry.h | 66 +++++++++++++++++++++++++++++++++
+ arch/x86/kernel/sev.c           | 30 +++++++++++++++
+ 2 files changed, 96 insertions(+)
 
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index aec8dc4443d1..03af871f08e9 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -412,6 +412,12 @@ SYM_CODE_START(\asmsym)
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 652fea10d377..45b47132be7c 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -13,6 +13,10 @@
  
- _ASM_NOKPROBE(\asmsym)
- SYM_CODE_END(\asmsym)
-+	.if \vector >= FIRST_SYSTEM_VECTOR && \vector < NR_VECTORS
-+		.section .system_vectors, "aw"
-+		.byte \vector
-+		.quad \cfunc
-+		.previous
-+	.endif
- .endm
+ #include <asm/irq_stack.h>
  
- /*
++#ifdef CONFIG_AMD_MEM_ENCRYPT
++noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
++#endif
++
+ /**
+  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+  *		      No error code pushed by hardware
+@@ -176,6 +180,7 @@ __visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
+ #define DECLARE_IDTENTRY_IRQ(vector, func)				\
+ 	DECLARE_IDTENTRY_ERRORCODE(vector, func)
+ 
++#ifndef CONFIG_AMD_MEM_ENCRYPT
+ /**
+  * DEFINE_IDTENTRY_IRQ - Emit code for device interrupt IDT entry points
+  * @func:	Function name of the entry point
+@@ -205,6 +210,26 @@ __visible noinstr void func(struct pt_regs *regs,			\
+ }									\
+ 									\
+ static noinline void __##func(struct pt_regs *regs, u32 vector)
++#else
++
++#define DEFINE_IDTENTRY_IRQ(func)					\
++static void __##func(struct pt_regs *regs, u32 vector);		\
++									\
++__visible noinstr void func(struct pt_regs *regs,			\
++			    unsigned long error_code)			\
++{									\
++	irqentry_state_t state = irqentry_enter(regs);			\
++	u32 vector = (u32)(u8)error_code;				\
++									\
++	instrumentation_begin();					\
++	kvm_set_cpu_l1tf_flush_l1d();					\
++	run_irq_on_irqstack_cond(__##func, regs, vector);		\
++	instrumentation_end();						\
++	irqentry_exit_hv_cond(regs, state);				\
++}									\
++									\
++static noinline void __##func(struct pt_regs *regs, u32 vector)
++#endif
+ 
+ /**
+  * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
+@@ -221,6 +246,7 @@ static noinline void __##func(struct pt_regs *regs, u32 vector)
+ #define DECLARE_IDTENTRY_SYSVEC(vector, func)				\
+ 	DECLARE_IDTENTRY(vector, func)
+ 
++#ifndef CONFIG_AMD_MEM_ENCRYPT
+ /**
+  * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
+  * @func:	Function name of the entry point
+@@ -245,6 +271,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
+ }									\
+ 									\
+ static noinline void __##func(struct pt_regs *regs)
++#else
++
++#define DEFINE_IDTENTRY_SYSVEC(func)					\
++static void __##func(struct pt_regs *regs);				\
++									\
++__visible noinstr void func(struct pt_regs *regs)			\
++{									\
++	irqentry_state_t state = irqentry_enter(regs);			\
++									\
++	instrumentation_begin();					\
++	kvm_set_cpu_l1tf_flush_l1d();					\
++	run_sysvec_on_irqstack_cond(__##func, regs);			\
++	instrumentation_end();						\
++	irqentry_exit_hv_cond(regs, state);				\
++}									\
++									\
++static noinline void __##func(struct pt_regs *regs)
++#endif
++
++#ifndef CONFIG_AMD_MEM_ENCRYPT
+ 
+ /**
+  * DEFINE_IDTENTRY_SYSVEC_SIMPLE - Emit code for simple system vector IDT
+@@ -274,6 +320,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
+ }									\
+ 									\
+ static __always_inline void __##func(struct pt_regs *regs)
++#else
++
++#define DEFINE_IDTENTRY_SYSVEC_SIMPLE(func)				\
++static __always_inline void __##func(struct pt_regs *regs);		\
++									\
++__visible noinstr void func(struct pt_regs *regs)			\
++{									\
++	irqentry_state_t state = irqentry_enter(regs);			\
++									\
++	instrumentation_begin();					\
++	__irq_enter_raw();						\
++	kvm_set_cpu_l1tf_flush_l1d();					\
++	__##func(regs);						\
++	__irq_exit_raw();						\
++	instrumentation_end();						\
++	irqentry_exit_hv_cond(regs, state);				\
++}									\
++									\
++static __always_inline void __##func(struct pt_regs *regs)
++#endif
+ 
+ /**
+  * DECLARE_IDTENTRY_XENCB - Declare functions for XEN HV callback entry point
 diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 03d99fad9e76..b1a98c2a52f8 100644
+index b1a98c2a52f8..23f15e95838b 100644
 --- a/arch/x86/kernel/sev.c
 +++ b/arch/x86/kernel/sev.c
-@@ -151,6 +151,16 @@ struct sev_snp_runtime_data {
+@@ -147,6 +147,10 @@ struct sev_hv_doorbell_page {
+ 
+ struct sev_snp_runtime_data {
+ 	struct sev_hv_doorbell_page hv_doorbell_page;
++	/*
++	 * Indication that we are currently handling #HV events.
++	 */
++	bool hv_handling_events;
+ };
  
  static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
+@@ -200,6 +204,8 @@ static void do_exc_hv(struct pt_regs *regs)
+ 	union hv_pending_events pending_events;
+ 	u8 vector;
  
-+static void (*sysvec_table[NR_VECTORS - FIRST_SYSTEM_VECTOR])
-+		(struct pt_regs *regs) __ro_after_init;
++	this_cpu_read(snp_runtime_data)->hv_handling_events = true;
 +
-+struct sysvec_entry {
-+	unsigned char vector;
-+	void (*sysvec_func)(struct pt_regs *regs);
-+} __packed;
-+
-+extern struct sysvec_entry __system_vectors[], __system_vectors_end[];
-+
- static inline u64 sev_es_rd_ghcb_msr(void)
- {
- 	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
-@@ -214,51 +224,11 @@ static void do_exc_hv(struct pt_regs *regs)
- 		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
- 			WARN(1, "syscall shouldn't happen\n");
- 		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
--			switch (pending_events.vector) {
--#if IS_ENABLED(CONFIG_HYPERV)
--			case HYPERV_STIMER0_VECTOR:
--				sysvec_hyperv_stimer0(regs);
--				break;
--			case HYPERVISOR_CALLBACK_VECTOR:
--				sysvec_hyperv_callback(regs);
--				break;
--#endif
--#ifdef CONFIG_SMP
--			case RESCHEDULE_VECTOR:
--				sysvec_reschedule_ipi(regs);
--				break;
--			case IRQ_MOVE_CLEANUP_VECTOR:
--				sysvec_irq_move_cleanup(regs);
--				break;
--			case REBOOT_VECTOR:
--				sysvec_reboot(regs);
--				break;
--			case CALL_FUNCTION_SINGLE_VECTOR:
--				sysvec_call_function_single(regs);
--				break;
--			case CALL_FUNCTION_VECTOR:
--				sysvec_call_function(regs);
--				break;
--#endif
--#ifdef CONFIG_X86_LOCAL_APIC
--			case ERROR_APIC_VECTOR:
--				sysvec_error_interrupt(regs);
--				break;
--			case SPURIOUS_APIC_VECTOR:
--				sysvec_spurious_apic_interrupt(regs);
--				break;
--			case LOCAL_TIMER_VECTOR:
--				sysvec_apic_timer_interrupt(regs);
--				break;
--			case X86_PLATFORM_IPI_VECTOR:
--				sysvec_x86_platform_ipi(regs);
--				break;
--#endif
--			case 0x0:
--				break;
--			default:
--				panic("Unexpected vector %d\n", vector);
--				unreachable();
-+			if (!(sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])) {
-+				WARN(1, "system vector entry 0x%x is NULL\n",
-+				     pending_events.vector);
-+			} else {
-+				(*sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])(regs);
- 			}
- 		} else {
+ 	while (sev_hv_pending()) {
+ 		pending_events.events = xchg(
+ 			&sev_snp_current_doorbell_page()->pending_events.events,
+@@ -234,6 +240,8 @@ static void do_exc_hv(struct pt_regs *regs)
  			common_interrupt(regs, pending_events.vector);
-@@ -376,6 +346,14 @@ static bool sev_restricted_injection_enabled(void)
- 	return sev_status & MSR_AMD64_SEV_RESTRICTED_INJECTION_ENABLED;
- }
- 
-+static void __init construct_sysvec_table(void)
-+{
-+	struct sysvec_entry *p;
-+
-+	for (p = __system_vectors; p < __system_vectors_end; p++)
-+		sysvec_table[p->vector - FIRST_SYSTEM_VECTOR] = p->sysvec_func;
-+}
-+
- void __init sev_snp_init_hv_handling(void)
- {
- 	struct sev_snp_runtime_data *snp_data;
-@@ -403,6 +381,8 @@ void __init sev_snp_init_hv_handling(void)
- 	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
- 
- 	local_irq_restore(flags);
-+
-+	construct_sysvec_table();
- }
- 
- static int vc_fetch_insn_kernel(struct es_em_ctxt *ctxt,
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 2e0ee14229bf..aeadb4754b00 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -339,6 +339,13 @@ SECTIONS
- 		*(.altinstr_replacement)
+ 		}
  	}
- 
-+	. = ALIGN(8);
-+	.system_vectors : AT(ADDR(.system_vectors) - LOAD_OFFSET) {
-+		__system_vectors = .;
-+		*(.system_vectors)
-+		__system_vectors_end = .;
-+	}
 +
- 	. = ALIGN(8);
- 	.apicdrivers : AT(ADDR(.apicdrivers) - LOAD_OFFSET) {
- 		__apicdrivers = .;
++	this_cpu_read(snp_runtime_data)->hv_handling_events = false;
+ }
+ 
+ static __always_inline bool on_vc_stack(struct pt_regs *regs)
+@@ -2529,3 +2537,25 @@ static int __init snp_init_platform_device(void)
+ 	return 0;
+ }
+ device_initcall(snp_init_platform_device);
++
++noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state)
++{
++	/*
++	 * Check whether this returns to user mode, if so and if
++	 * we are currently executing the #HV handler then we don't
++	 * want to follow the irqentry_exit_to_user_mode path as
++	 * that can potentially cause the #HV handler to be
++	 * preempted and rescheduled on another CPU. Rescheduled #HV
++	 * handler on another cpu will cause interrupts to be handled
++	 * on a different cpu than the injected one, causing
++	 * invalid EOIs and missed/lost guest interrupts and
++	 * corresponding hangs and/or per-cpu IRQs handled on
++	 * non-intended cpu.
++	 */
++	if (user_mode(regs) &&
++	    this_cpu_read(snp_runtime_data)->hv_handling_events)
++		return;
++
++	/* follow normal interrupt return/exit path */
++	irqentry_exit(regs, state);
++}
 -- 
 2.25.1
 
