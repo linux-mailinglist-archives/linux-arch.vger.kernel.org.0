@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24754676C7E
-	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 12:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72643676C84
+	for <lists+linux-arch@lfdr.de>; Sun, 22 Jan 2023 12:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjAVLu1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 22 Jan 2023 06:50:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44986 "EHLO
+        id S230031AbjAVLvr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 22 Jan 2023 06:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjAVLuZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Jan 2023 06:50:25 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40BA1CF47
-        for <linux-arch@vger.kernel.org>; Sun, 22 Jan 2023 03:50:23 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id q8so7079387wmo.5
-        for <linux-arch@vger.kernel.org>; Sun, 22 Jan 2023 03:50:23 -0800 (PST)
+        with ESMTP id S230006AbjAVLvn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 22 Jan 2023 06:51:43 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246431F5DE
+        for <linux-arch@vger.kernel.org>; Sun, 22 Jan 2023 03:51:40 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bk16so8444073wrb.11
+        for <linux-arch@vger.kernel.org>; Sun, 22 Jan 2023 03:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0EpkB2BBdVigwr5Td9P+HmXwToYi435KgLDWMOa4EE8=;
-        b=g350tC/bvusAYh/X3+8GDAjg5idkp9I5MV0amVsIN+5wug1msuq8w/VaT+8oH/vGyA
-         4GKFOPjFL6Ac2+9nSGiuNg6F8TtWQEHJ6j2E5oNAoHWpKeFa1UQ52Rxbmr+yB+CK9A2v
-         PTOsLCIlrvzztSp1ssFX2TTRMIrIVBnISwsh6HZjXrtQyQyVs2P92QfGFSnTIXIUcjPM
-         Vg1+Ns354Zd7kGDqMhGBeyFnPVa4Q9LqfUuI2Jp7Oi/kHDY2YnyL8OuqO0vtgvny/AML
-         EGNTAES6cDIR7Eocc01jfD3eD28k5YFfFC7FgvglqRRNifg67r929gnlJe0i4Hh3guqd
-         JJ/A==
+        bh=QW4gcfTBDAxCEJmp81ra89ieKaIa7EaBAPXtJreoq+w=;
+        b=P/0Gb1PCZZIXYu0NV1Ove+/unx34oDiuMeeBcuZho836SMBMbqREXW49kGJekeeYeP
+         fzP+MyKIYe2eiBQ7rukcC1sC5RGH0lkRTyftvfk7x8nkdmK2b31SghHLBEmZzx4NBpCj
+         ggDUwzAEC9l9h8CA8lfbAlDSU5T0XYkDKHhlfhfERi9QxU9HQhyxryOH1cbFhtWNtsiP
+         k2z2Kh4W04yGAltLW5C0VK+2W2aIXIipP3jMn0F9n1UToYwxL/bNIkx8LTwm1LCYrHf+
+         MFUwUoTz9F7H8+vCFHV6UacV3C7BlRYLfN5vIHptYZ9r+5wxB7SAjdxVuc7IX5uB+nMX
+         QP4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0EpkB2BBdVigwr5Td9P+HmXwToYi435KgLDWMOa4EE8=;
-        b=NbX1E6t4yCktQSncWyBwtY/2GF/LtwbBdhPoZUfyUZH76b5RwqkzIvW4Oksco2p/SR
-         7kzfbDKuQZCj+JpTDiuNVg5Vo3xTmWa+Zkk+e5HbtgyHuYj16WV3LZtj6Ssx/ka0bMtu
-         xIdM0HGFtvyPyQCz7PWPPf7veU8tNNekYksev1irH8w5/uwUt7waQSYACpAzgRJ5PtcN
-         IFpCC+PoX138pmbMC54NeRywgKUiWKbVjbXr4WI2dvAO8AetlE8LqFcUKncEY9cUbBTH
-         16MMb+XlOCYfgAF4htgrnntWozywGc99A8BfYW1UHO0bVN8BbOwavm5p5cFnY/8GpQ0u
-         ppgw==
-X-Gm-Message-State: AFqh2krQXVxycpA1b3jIo1t+bb2WgOBKfbKsAm0COqNW2mxyPRQq/LUT
-        jzKl1H1xF3/xiXrwcH1cc3YX5w==
-X-Google-Smtp-Source: AMrXdXvaWQ3NiM1uiaHGSPzJg1g++T4pemcHh7xrDRxj9Aer0pOjcC8iWTUXjRv5iTAL5OdTQdwkyw==
-X-Received: by 2002:a05:600c:2284:b0:3d3:5c21:dd9d with SMTP id 4-20020a05600c228400b003d35c21dd9dmr20563566wmf.19.1674388222395;
-        Sun, 22 Jan 2023 03:50:22 -0800 (PST)
+        bh=QW4gcfTBDAxCEJmp81ra89ieKaIa7EaBAPXtJreoq+w=;
+        b=n04dyldIvaJhPKv6hFfEt6bSNpgiVjNu4evN6K78UGeFI8dkyM4W9UvLwhy3A8qnJH
+         M62DTUmkzJ2OHZ2bF/GhAQXDySv4igbtrYNpeSOq9klPVcSf1iRbsrCs84CaC9Duhp+m
+         1Js9h6HijgivwOLLAd4p3jD63dxyzPNBdnUQ7X7lB7ByzqaIbI0d5pQpLpC9eD28pMph
+         JHtqWwBARIMvV86ESa2DT6XZyQyQ8HmV3oKyxPsI88E6fJSywUg3P4SSALOqJC92jtgL
+         mDFh4sfc6oVNUmwWDD19/lRdk2eQ20WqwIi2m+IrqR8QIcDqfdcJ0Ig+dt8B1kXmBJ/W
+         EyoA==
+X-Gm-Message-State: AFqh2kr7FlZOAnwH4MiQvbGUvONjM1iji1ZOExq9k8qCzY11a7mGLF3U
+        qv7LFZM9Dot0V3UmYQOBgFMaLA==
+X-Google-Smtp-Source: AMrXdXu3komgmJz3v4UQ6DFMLR2KXaq2N92Bqckcvh43HhbdmlU07p0tmzT8+sQ+olcM02A9d6D9gA==
+X-Received: by 2002:adf:f501:0:b0:2ba:dce5:ee28 with SMTP id q1-20020adff501000000b002badce5ee28mr17537961wro.18.1674388299288;
+        Sun, 22 Jan 2023 03:51:39 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id c40-20020a05600c4a2800b003db16770bc5sm7460685wmp.6.2023.01.22.03.50.18
+        by smtp.gmail.com with ESMTPSA id v7-20020a5d6787000000b0025e86026866sm3554309wru.0.2023.01.22.03.51.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 Jan 2023 03:50:21 -0800 (PST)
-Message-ID: <57fa51fd-fd3a-f08e-d3de-06a24d1b6ea1@linaro.org>
-Date:   Sun, 22 Jan 2023 12:50:17 +0100
+        Sun, 22 Jan 2023 03:51:38 -0800 (PST)
+Message-ID: <d02b81ab-fa72-6005-79e9-249225483364@linaro.org>
+Date:   Sun, 22 Jan 2023 12:51:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [RFC PATCH v2 06/31] Documentation: Add binding for
- kalray,kv3-1-ipi-ctrl
+Subject: Re: [RFC PATCH v2 07/31] Documentation: Add binding for
+ kalray,kv3-1-pwr-ctrl
 Content-Language: en-US
 To:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -120,9 +120,9 @@ Cc:     Benjamin Mugnier <mugnier.benjamin@gmail.com>,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-7-ysionneau@kalray.eu>
+ <20230120141002.2442-8-ysionneau@kalray.eu>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230120141002.2442-7-ysionneau@kalray.eu>
+In-Reply-To: <20230120141002.2442-8-ysionneau@kalray.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -138,7 +138,7 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On 20/01/2023 15:09, Yann Sionneau wrote:
 > From: Jules Maselbas <jmaselbas@kalray.eu>
 > 
-> Add documentation for `kalray,kv3-1-ipi-ctrl` binding.
+> Add documentation for `kalray,kv3-1-pwr-ctrl` binding.
 > 
 > Co-developed-by: Jules Maselbas <jmaselbas@kalray.eu>
 > Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
@@ -148,11 +148,50 @@ On 20/01/2023 15:09, Yann Sionneau wrote:
 > Notes:
 >     V1 -> V2: new patch
 > 
->  .../kalray/kalray,kv3-1-ipi-ctrl.yaml         | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/kalray/kalray,kv3-1-ipi-ctrl.yaml
+>  .../kalray/kalray,kv3-1-pwr-ctrl.yaml         | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
 
-Wrong directory. Interrupt controllers go to respective subsystem directory.
+All the usual comments plus - wrong directory. Power controllers go to
+respective power directory.
+
+> 
+> diff --git a/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
+> new file mode 100644
+> index 000000000000..968674bb0c63
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/kalray/kalray,kv3-1-pwr-ctrl.yaml
+> @@ -0,0 +1,29 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/kalray/kalray,kv3-1-pwr-ctrl#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Kalray cluster Power Controller (pwr-ctrl)
+> +
+> +description: |
+> +  The Power Controller (pwr-ctrl) control cores reset and wake-up procedure.
+> +
+> +properties:
+> +  compatible:
+> +    const: kalray,kv3-1-pwr-ctrl
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +examples:
+> +  - |
+> +    pwr_ctrl: power-controller@a40000 {
+> +        compatible = "kalray,kv3-1-pwr-ctrl";
+> +        reg = <0x00 0xa40000 0x00 0x4158>;
+
+I really doubt that you tested it... Examples are not run with address
+cells 2.
+
 
 Best regards,
 Krzysztof
