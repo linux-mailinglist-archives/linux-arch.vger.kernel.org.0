@@ -2,102 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAAD678D6A
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Jan 2023 02:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446D0678E3C
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Jan 2023 03:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbjAXB17 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Jan 2023 20:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S229989AbjAXC3s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Jan 2023 21:29:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbjAXB15 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Jan 2023 20:27:57 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404E813502
-        for <linux-arch@vger.kernel.org>; Mon, 23 Jan 2023 17:27:55 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i65so10243448pfc.0
-        for <linux-arch@vger.kernel.org>; Mon, 23 Jan 2023 17:27:55 -0800 (PST)
+        with ESMTP id S229603AbjAXC3r (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Jan 2023 21:29:47 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F67A25A
+        for <linux-arch@vger.kernel.org>; Mon, 23 Jan 2023 18:29:45 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 36so10403698pgp.10
+        for <linux-arch@vger.kernel.org>; Mon, 23 Jan 2023 18:29:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8F6hRIomZ2nfgoOl9vt+Mda6mTJjuiQ/nB/OzAXwDSI=;
-        b=H0wzig6HSgCdkJfbnchvpXtWngdQg2CyHZkhgdpFw+HuZ2/LaO4BJx1ZZJ+RRoILq8
-         GuT7pIND31DaoY+FiJSBILYhipQMPqJ7CZUOuz7x71s515bfTFYymuOqj76dpZGGPe0R
-         roYrZDSWF8NxOve8Pxp7cvCd6BZ0axXo2A8t3B8iw98G/r8Tkcv0kcruglI/OT22oEey
-         j/0uWp0hdocKI/BmP7HVj2M7QFhthg3W7d8Q1vm0Us4lX+kWe4jn02BGZ4yej5UdNIiy
-         ekteTmqXj33t26Jyf+JF3RUpU48Qj5o/y07idXkF5Ho4kjJsXeyVErd+MUZWegqHYXVp
-         q16Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6EL33MbyBAeFj7W1ec+AuUrU/yhgkc3rBnt2BlC4w5M=;
+        b=j4Co2CjFtUbQlY3aCX8ZaGPTa3bq/5mD2naMb3jg8EmNIah3y15FrWh/iDBJe8/mav
+         3GWNT5fYif/IJNrSpvSxdRPB9dMBK/9iicboI5JbqCfSgQY0gF4g4daxhY/KxiwUWkma
+         800yWr6LlupKIQRude2UxapBJLr1Oy/TbVhBWjgE9zONONrVzCUlBdkanBr3/c92sf/u
+         zuUZw6bo5UqX35TYTDMPbkee/FuRVqkvyXO3S/HUIrnFYK30bzFbuQVvr0jVsegOh86M
+         qtB235Tds0eSjSpFc+nNCn6URsIfJRxl7yZxH15S1Aqi++IxUOjAItYI/sP8MAZONqVw
+         spGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8F6hRIomZ2nfgoOl9vt+Mda6mTJjuiQ/nB/OzAXwDSI=;
-        b=Y7j+xK7loBHBjVzmMCVf05lTmoRxa4qdQ1F7ls6wiEY0Bulyb67wKsU8OcjztjrOhc
-         keQiKuDf35lWckBMUpAfcNusfvsqXcRV0Gq5NqW+7ZVsm6wlYMiLJe+tuGLnuU526Xfg
-         /LiYri6ZHlcDi8eWRIQqIb09cMIp+EAB3cWb+KeC2LivjTOX8wTP0bHZdE80rPbE4DI/
-         m1dJNInGWr602k2RqjEY+0jBvSQ2rYQw6azOWbOxrhnT3gkuS1IfHbWNvYyuLGnRDCLD
-         rtaxj7v/fADaMxiKgeig5UtOBVgDWZRlZSOuOphkIrxNGFGpCKHQfqE7alALxXNvpDMd
-         i3hA==
-X-Gm-Message-State: AO0yUKWJR11aThSs7RxzNKn+Mv1wiSTnQ1uaq56kHl5ZPJkSzyDvCmVn
-        qwj6czFEYgw4qMVUW3vQVKfJXA==
-X-Google-Smtp-Source: AK7set8oWHW5as5U3Q0r97O5m1dlnRFyFLOsa36pUh2yIP/6nFcX7lH+DqOSXyUNOJ1I4yEcn6HIvg==
-X-Received: by 2002:a05:6a00:b55:b0:576:9252:d06 with SMTP id p21-20020a056a000b5500b0057692520d06mr19319pfo.0.1674523674434;
-        Mon, 23 Jan 2023 17:27:54 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a28-20020aa78e9c000000b00582bdaab584sm238831pfr.81.2023.01.23.17.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 17:27:53 -0800 (PST)
-Date:   Tue, 24 Jan 2023 01:27:50 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-Message-ID: <Y880FiYF7YCtsw/i@google.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com>
- <20230119111308.GC2976263@ls.amr.corp.intel.com>
- <Y8lg1G2lRIrI/hld@google.com>
- <20230119223704.GD2976263@ls.amr.corp.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230119223704.GD2976263@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6EL33MbyBAeFj7W1ec+AuUrU/yhgkc3rBnt2BlC4w5M=;
+        b=mFlMRad2pELboIpejL6feWHqOMQD1BZaSWaBVJ4EvhTf75A3SksuOZoVDJ+2heK92P
+         kn0839LH4pT9GqFyHzoVCob1jZPBaemw8iSSZ/ZBCgqdYXHlpaAPdtpYYa2Psaq5BSC/
+         0AHZ2Y0HBk1qq9q4I+IWfmlxAsGp91JK7avDwIedmttsRTSV9W7ghLWO1hrvmVFDc7VS
+         xiWMgC4eODo4Kkxhs6Q7yJp1wiCfeFNBsabR0MMm5uuioVDrfgejV2tw2ak3P82XVZTW
+         Dc3TaAHGEeKsT18VtNzcBFg+CQBPfVdG0AQTzmy43PK15MIUtBQSKsoQVrTBIU+uvcrG
+         s5JA==
+X-Gm-Message-State: AFqh2kpZBrD9p1ZDbLhj9yiZIizaaoq7w1njU4OMpkZPPbTjz1Mzf3yt
+        SjwHTKjCGq3qeqIBFys2tc8fI241N5k=
+X-Google-Smtp-Source: AMrXdXsgWBdkF5aJcEXfGt3E1+MiooI3g5UFcMgOiKWWV2GlTsc9rdrcqnSd7HVwvPKPTbVy+5n6nw==
+X-Received: by 2002:aa7:8bdd:0:b0:58d:be65:f781 with SMTP id s29-20020aa78bdd000000b0058dbe65f781mr27427114pfd.5.1674527385193;
+        Mon, 23 Jan 2023 18:29:45 -0800 (PST)
+Received: from localhost (193-116-102-45.tpgi.com.au. [193.116.102.45])
+        by smtp.gmail.com with ESMTPSA id x12-20020aa793ac000000b005898fcb7c2bsm290307pff.170.2023.01.23.18.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 18:29:44 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 24 Jan 2023 12:29:38 +1000
+Message-Id: <CQ02EXZ5THB8.4S19LP5ZFUM9@bobo>
+Cc:     "Andy Lutomirski" <luto@kernel.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "linux-arch" <linux-arch@vger.kernel.org>,
+        "linux-mm" <linux-mm@kvack.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v6 2/5] lazy tlb: allow lazy tlb mm refcounting to be
+ configurable
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Nadav Amit" <nadav.amit@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+X-Mailer: aerc 0.13.0
+References: <20230118080011.2258375-1-npiggin@gmail.com>
+ <20230118080011.2258375-3-npiggin@gmail.com>
+ <ee3844c0-b342-edc6-77cf-4cdc78e30a18@gmail.com>
+ <4d26df97-3725-182b-6312-fa5cd8e9f85d@gmail.com>
+In-Reply-To: <4d26df97-3725-182b-6312-fa5cd8e9f85d@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,91 +79,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 19, 2023, Isaku Yamahata wrote:
-> On Thu, Jan 19, 2023 at 03:25:08PM +0000,
-> Sean Christopherson <seanjc@google.com> wrote:
-> 
-> > On Thu, Jan 19, 2023, Isaku Yamahata wrote:
-> > > On Sat, Jan 14, 2023 at 12:37:59AM +0000,
-> > > Sean Christopherson <seanjc@google.com> wrote:
-> > > 
-> > > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > > > > This patch series implements KVM guest private memory for confidential
-> > > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
-> > > > > TDX-protected guest memory, machine check can happen which can further
-> > > > > crash the running host system, this is terrible for multi-tenant
-> > > > > configurations. The host accesses include those from KVM userspace like
-> > > > > QEMU. This series addresses KVM userspace induced crash by introducing
-> > > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
-> > > > > via a fd-based approach, but it can never access the guest memory
-> > > > > content.
-> > > > > 
-> > > > > The patch series touches both core mm and KVM code. I appreciate
-> > > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> > > > > reviews are always welcome.
-> > > > >   - 01: mm change, target for mm tree
-> > > > >   - 02-09: KVM change, target for KVM tree
-> > > > 
-> > > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
-> > > > is available here:
-> > > > 
-> > > >   git@github.com:sean-jc/linux.git x86/upm_base_support
-> > > > 
-> > > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
-> > > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-> > > > a WIP.
-> > > > 
-> > > > As for next steps, can you (handwaving all of the TDX folks) take a look at what
-> > > > I pushed and see if there's anything horrifically broken, and that it still works
-> > > > for TDX?
-> > > > 
-> > > > Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
-> > > > (and I mean that).
-> > > > 
-> > > > On my side, the two things on my mind are (a) tests and (b) downstream dependencies
-> > > > (SEV and TDX).  For tests, I want to build a lists of tests that are required for
-> > > > merging so that the criteria for merging are clear, and so that if the list is large
-> > > > (haven't thought much yet), the work of writing and running tests can be distributed.
-> > > > 
-> > > > Regarding downstream dependencies, before this lands, I want to pull in all the
-> > > > TDX and SNP series and see how everything fits together.  Specifically, I want to
-> > > > make sure that we don't end up with a uAPI that necessitates ugly code, and that we
-> > > > don't miss an opportunity to make things simpler.  The patches in the SNP series to
-> > > > add "legacy" SEV support for UPM in particular made me slightly rethink some minor
-> > > > details.  Nothing remotely major, but something that needs attention since it'll
-> > > > be uAPI.
-> > > 
-> > > Although I'm still debuging with TDX KVM, I needed the following.
-> > > kvm_faultin_pfn() is called without mmu_lock held.  the race to change
-> > > private/shared is handled by mmu_seq.  Maybe dedicated function only for
-> > > kvm_faultin_pfn().
-> > 
-> > Gah, you're not on the other thread where this was discussed[*].  Simply deleting
-> > the lockdep assertion is safe, for guest types that rely on the attributes to
-> > define shared vs. private, KVM rechecks the attributes under the protection of
-> > mmu_seq.
-> > 
-> > I'll get a fixed version pushed out today.
-> > 
-> > [*] https://lore.kernel.org/all/Y8gpl+LwSuSgBFks@google.com
-> 
-> Now I have tdx kvm working. I've uploaded at the followings.
-> It's rebased to v6.2-rc3.
->         git@github.com:yamahata/linux.git tdx/upm
->         git@github.com:yamahata/qemu.git tdx/upm
+On Mon Jan 23, 2023 at 6:02 PM AEST, Nadav Amit wrote:
+>
+>
+> On 1/23/23 9:35 AM, Nadav Amit wrote:
+> >> +=C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_MMU_LAZY_TLB_REFCOUNT)) {
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mmdrop(mm);
+> >> +=C2=A0=C2=A0=C2=A0 } else {
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * mmdrop_lazy_tlb mu=
+st provide a full memory barrier, see the
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * membarrier comment=
+ finish_task_switch which relies on this.
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 smp_mb();
+> >> +=C2=A0=C2=A0=C2=A0 }
+> >> =C2=A0 }
+> >=20
+> > Considering the fact that mmdrop_lazy_tlb() replaced mmdrop() in variou=
+s=20
+> > locations in which smp_mb() was not required, this comment might be=20
+> > confusing. IOW, for the cases in most cases where mmdrop_lazy_tlb()=20
+> > replaced mmdrop(), this comment was irrelevant, and therefore it now=20
+> > becomes confusing.
+> >=20
+> > I am not sure the include the smp_mb() here instead of "open-coding" it=
+=20
+> > helps.
+> I think that I now understand why you do need the smp_mb() here, so=20
+> ignore my comment.
 
-And I finally got a working, building version updated and pushed out (again to):
+For the moment it's basically a convenience thing so the caller does not
+have to care what option is configured. Possibly we could weaken it and
+do necessary barriers in callers if we consolidated to one option, but
+I'd have to be convinced it'd be worthwhile, because it would still make
+it deviate from mmdrop(), and we'd probably at least need a release
+barrier to drop the reference.
 
-  git@github.com:sean-jc/linux.git x86/upm_base_support
-
-Took longer than expected to get the memslot restrictions sussed out.  I'm done
-working on the code for now, my plan is to come back to it+TDX+SNP in 2-3 weeks
-to resolves any remaining todos (that no one else tackles) and to do the whole
-"merge the world" excersise.
-
-> kvm_mmu_do_page_fault() needs the following change.
-> kvm_mem_is_private() queries mem_attr_array.  kvm_faultin_pfn() also uses
-> kvm_mem_is_private(). So the shared-private check in kvm_faultin_pfn() doesn't
-> make sense. This change would belong to TDX KVM patches, though.
-
-Yeah, SNP needs similar treatment.  Sorting that out is high up on the todo list.
+Thanks,
+Nick
