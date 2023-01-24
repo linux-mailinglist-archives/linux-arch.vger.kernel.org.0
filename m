@@ -2,210 +2,194 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357DC678CB4
-	for <lists+linux-arch@lfdr.de>; Tue, 24 Jan 2023 01:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAAD678D6A
+	for <lists+linux-arch@lfdr.de>; Tue, 24 Jan 2023 02:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjAXATf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 23 Jan 2023 19:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S231749AbjAXB17 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 23 Jan 2023 20:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjAXATe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Jan 2023 19:19:34 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C16367E8;
-        Mon, 23 Jan 2023 16:19:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674519573; x=1706055573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8akBJZSgOwqaCeNwd9vSz30jHqCfVyn9vginXj4vLpw=;
-  b=Ensul0UXra+ZapjO0CDJTf2MDhIiIolb/7r7HANSCSlNwGOLO8bFrvzW
-   Fl4w+FoxgsvkZa+w7YwJlqlZl5EznpUsvebENK+J97lPJbxuC9JC3FJH1
-   XM76qLA80N4tE30dOXG3qbuw9q+tL1pXp6kxYyyV1ZXGAdHbzMsV61hvI
-   QY47LWmWlT7rY4Z7iQdmrnCu0pgLylgXWv0/mqOQ38E2WXWNofEIMxb9G
-   oUlKfqNbAFW5EWE4gkQJALg5uQ0Gu9xYTnm/dGqxz5vxjTLQ+Qe6JdTgB
-   BUnbZ3ncAmhSd0fUDDC0w0AODSJ2uc8ofzdP8W5MGdYNAlz1a/XPpSHUE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="353468216"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="353468216"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 16:19:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="694143856"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="694143856"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Jan 2023 16:19:29 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pK728-0005yW-0V;
-        Tue, 24 Jan 2023 00:19:28 +0000
-Date:   Tue, 24 Jan 2023 08:19:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Message-ID: <202301240847.k2H9qZVL-lkp@intel.com>
-References: <20230123112803.817534-1-alexghiti@rivosinc.com>
+        with ESMTP id S231787AbjAXB15 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 23 Jan 2023 20:27:57 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404E813502
+        for <linux-arch@vger.kernel.org>; Mon, 23 Jan 2023 17:27:55 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id i65so10243448pfc.0
+        for <linux-arch@vger.kernel.org>; Mon, 23 Jan 2023 17:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8F6hRIomZ2nfgoOl9vt+Mda6mTJjuiQ/nB/OzAXwDSI=;
+        b=H0wzig6HSgCdkJfbnchvpXtWngdQg2CyHZkhgdpFw+HuZ2/LaO4BJx1ZZJ+RRoILq8
+         GuT7pIND31DaoY+FiJSBILYhipQMPqJ7CZUOuz7x71s515bfTFYymuOqj76dpZGGPe0R
+         roYrZDSWF8NxOve8Pxp7cvCd6BZ0axXo2A8t3B8iw98G/r8Tkcv0kcruglI/OT22oEey
+         j/0uWp0hdocKI/BmP7HVj2M7QFhthg3W7d8Q1vm0Us4lX+kWe4jn02BGZ4yej5UdNIiy
+         ekteTmqXj33t26Jyf+JF3RUpU48Qj5o/y07idXkF5Ho4kjJsXeyVErd+MUZWegqHYXVp
+         q16Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8F6hRIomZ2nfgoOl9vt+Mda6mTJjuiQ/nB/OzAXwDSI=;
+        b=Y7j+xK7loBHBjVzmMCVf05lTmoRxa4qdQ1F7ls6wiEY0Bulyb67wKsU8OcjztjrOhc
+         keQiKuDf35lWckBMUpAfcNusfvsqXcRV0Gq5NqW+7ZVsm6wlYMiLJe+tuGLnuU526Xfg
+         /LiYri6ZHlcDi8eWRIQqIb09cMIp+EAB3cWb+KeC2LivjTOX8wTP0bHZdE80rPbE4DI/
+         m1dJNInGWr602k2RqjEY+0jBvSQ2rYQw6azOWbOxrhnT3gkuS1IfHbWNvYyuLGnRDCLD
+         rtaxj7v/fADaMxiKgeig5UtOBVgDWZRlZSOuOphkIrxNGFGpCKHQfqE7alALxXNvpDMd
+         i3hA==
+X-Gm-Message-State: AO0yUKWJR11aThSs7RxzNKn+Mv1wiSTnQ1uaq56kHl5ZPJkSzyDvCmVn
+        qwj6czFEYgw4qMVUW3vQVKfJXA==
+X-Google-Smtp-Source: AK7set8oWHW5as5U3Q0r97O5m1dlnRFyFLOsa36pUh2yIP/6nFcX7lH+DqOSXyUNOJ1I4yEcn6HIvg==
+X-Received: by 2002:a05:6a00:b55:b0:576:9252:d06 with SMTP id p21-20020a056a000b5500b0057692520d06mr19319pfo.0.1674523674434;
+        Mon, 23 Jan 2023 17:27:54 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a28-20020aa78e9c000000b00582bdaab584sm238831pfr.81.2023.01.23.17.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 17:27:53 -0800 (PST)
+Date:   Tue, 24 Jan 2023 01:27:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
+Message-ID: <Y880FiYF7YCtsw/i@google.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y8H5Z3e4hZkFxAVS@google.com>
+ <20230119111308.GC2976263@ls.amr.corp.intel.com>
+ <Y8lg1G2lRIrI/hld@google.com>
+ <20230119223704.GD2976263@ls.amr.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230123112803.817534-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230119223704.GD2976263@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Alexandre,
+On Thu, Jan 19, 2023, Isaku Yamahata wrote:
+> On Thu, Jan 19, 2023 at 03:25:08PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Thu, Jan 19, 2023, Isaku Yamahata wrote:
+> > > On Sat, Jan 14, 2023 at 12:37:59AM +0000,
+> > > Sean Christopherson <seanjc@google.com> wrote:
+> > > 
+> > > > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > > > > This patch series implements KVM guest private memory for confidential
+> > > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
+> > > > > TDX-protected guest memory, machine check can happen which can further
+> > > > > crash the running host system, this is terrible for multi-tenant
+> > > > > configurations. The host accesses include those from KVM userspace like
+> > > > > QEMU. This series addresses KVM userspace induced crash by introducing
+> > > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
+> > > > > via a fd-based approach, but it can never access the guest memory
+> > > > > content.
+> > > > > 
+> > > > > The patch series touches both core mm and KVM code. I appreciate
+> > > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+> > > > > reviews are always welcome.
+> > > > >   - 01: mm change, target for mm tree
+> > > > >   - 02-09: KVM change, target for KVM tree
+> > > > 
+> > > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
+> > > > is available here:
+> > > > 
+> > > >   git@github.com:sean-jc/linux.git x86/upm_base_support
+> > > > 
+> > > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
+> > > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
+> > > > a WIP.
+> > > > 
+> > > > As for next steps, can you (handwaving all of the TDX folks) take a look at what
+> > > > I pushed and see if there's anything horrifically broken, and that it still works
+> > > > for TDX?
+> > > > 
+> > > > Fuad (and pKVM folks) same ask for you with respect to pKVM.  Absolutely no rush
+> > > > (and I mean that).
+> > > > 
+> > > > On my side, the two things on my mind are (a) tests and (b) downstream dependencies
+> > > > (SEV and TDX).  For tests, I want to build a lists of tests that are required for
+> > > > merging so that the criteria for merging are clear, and so that if the list is large
+> > > > (haven't thought much yet), the work of writing and running tests can be distributed.
+> > > > 
+> > > > Regarding downstream dependencies, before this lands, I want to pull in all the
+> > > > TDX and SNP series and see how everything fits together.  Specifically, I want to
+> > > > make sure that we don't end up with a uAPI that necessitates ugly code, and that we
+> > > > don't miss an opportunity to make things simpler.  The patches in the SNP series to
+> > > > add "legacy" SEV support for UPM in particular made me slightly rethink some minor
+> > > > details.  Nothing remotely major, but something that needs attention since it'll
+> > > > be uAPI.
+> > > 
+> > > Although I'm still debuging with TDX KVM, I needed the following.
+> > > kvm_faultin_pfn() is called without mmu_lock held.  the race to change
+> > > private/shared is handled by mmu_seq.  Maybe dedicated function only for
+> > > kvm_faultin_pfn().
+> > 
+> > Gah, you're not on the other thread where this was discussed[*].  Simply deleting
+> > the lockdep assertion is safe, for guest types that rely on the attributes to
+> > define shared vs. private, KVM rechecks the attributes under the protection of
+> > mmu_seq.
+> > 
+> > I'll get a fixed version pushed out today.
+> > 
+> > [*] https://lore.kernel.org/all/Y8gpl+LwSuSgBFks@google.com
+> 
+> Now I have tdx kvm working. I've uploaded at the followings.
+> It's rebased to v6.2-rc3.
+>         git@github.com:yamahata/linux.git tdx/upm
+>         git@github.com:yamahata/qemu.git tdx/upm
 
-Thank you for the patch! Yet something to improve:
+And I finally got a working, building version updated and pushed out (again to):
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.2-rc5 next-20230123]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  git@github.com:sean-jc/linux.git x86/upm_base_support
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Use-PUD-P4D-PGD-pages-for-the-linear-mapping/20230123-192952
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230123112803.817534-1-alexghiti%40rivosinc.com
-patch subject: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20230124/202301240847.k2H9qZVL-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b0cdf20b21efcc85ec67bffa6a10894dedd0d12e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Use-PUD-P4D-PGD-pages-for-the-linear-mapping/20230123-192952
-        git checkout b0cdf20b21efcc85ec67bffa6a10894dedd0d12e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+Took longer than expected to get the memslot restrictions sussed out.  I'm done
+working on the code for now, my plan is to come back to it+TDX+SNP in 2-3 weeks
+to resolves any remaining todos (that no one else tackles) and to do the whole
+"merge the world" excersise.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
+> kvm_mmu_do_page_fault() needs the following change.
+> kvm_mem_is_private() queries mem_attr_array.  kvm_faultin_pfn() also uses
+> kvm_mem_is_private(). So the shared-private check in kvm_faultin_pfn() doesn't
+> make sense. This change would belong to TDX KVM patches, though.
 
-All errors (new ones prefixed by >>):
-
-   arch/riscv/mm/init.c: In function 'setup_bootmem':
->> arch/riscv/mm/init.c:222:9: error: 'riscv_pfn_base' undeclared (first use in this function)
-     222 |         riscv_pfn_base = PFN_DOWN(phys_ram_base);
-         |         ^~~~~~~~~~~~~~
-   arch/riscv/mm/init.c:222:9: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/riscv_pfn_base +222 arch/riscv/mm/init.c
-
-   187	
-   188	static void __init setup_bootmem(void)
-   189	{
-   190		phys_addr_t vmlinux_end = __pa_symbol(&_end);
-   191		phys_addr_t max_mapped_addr;
-   192		phys_addr_t phys_ram_end, vmlinux_start;
-   193	
-   194		if (IS_ENABLED(CONFIG_XIP_KERNEL))
-   195			vmlinux_start = __pa_symbol(&_sdata);
-   196		else
-   197			vmlinux_start = __pa_symbol(&_start);
-   198	
-   199		memblock_enforce_memory_limit(memory_limit);
-   200	
-   201		/*
-   202		 * Make sure we align the reservation on PMD_SIZE since we will
-   203		 * map the kernel in the linear mapping as read-only: we do not want
-   204		 * any allocation to happen between _end and the next pmd aligned page.
-   205		 */
-   206		if (IS_ENABLED(CONFIG_64BIT) && IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-   207			vmlinux_end = (vmlinux_end + PMD_SIZE - 1) & PMD_MASK;
-   208		/*
-   209		 * Reserve from the start of the kernel to the end of the kernel
-   210		 */
-   211		memblock_reserve(vmlinux_start, vmlinux_end - vmlinux_start);
-   212	
-   213		phys_ram_end = memblock_end_of_DRAM();
-   214		if (!IS_ENABLED(CONFIG_XIP_KERNEL))
-   215			phys_ram_base = memblock_start_of_DRAM();
-   216	
-   217		/*
-   218		 * Any use of __va/__pa before this point is wrong as we did not know the
-   219		 * start of DRAM before.
-   220		 */
-   221		kernel_map.va_pa_offset = PAGE_OFFSET - phys_ram_base;
- > 222		riscv_pfn_base = PFN_DOWN(phys_ram_base);
-   223	
-   224		/*
-   225		 * memblock allocator is not aware of the fact that last 4K bytes of
-   226		 * the addressable memory can not be mapped because of IS_ERR_VALUE
-   227		 * macro. Make sure that last 4k bytes are not usable by memblock
-   228		 * if end of dram is equal to maximum addressable memory.  For 64-bit
-   229		 * kernel, this problem can't happen here as the end of the virtual
-   230		 * address space is occupied by the kernel mapping then this check must
-   231		 * be done as soon as the kernel mapping base address is determined.
-   232		 */
-   233		if (!IS_ENABLED(CONFIG_64BIT)) {
-   234			max_mapped_addr = __pa(~(ulong)0);
-   235			if (max_mapped_addr == (phys_ram_end - 1))
-   236				memblock_set_current_limit(max_mapped_addr - 4096);
-   237		}
-   238	
-   239		min_low_pfn = PFN_UP(phys_ram_base);
-   240		max_low_pfn = max_pfn = PFN_DOWN(phys_ram_end);
-   241		high_memory = (void *)(__va(PFN_PHYS(max_low_pfn)));
-   242	
-   243		dma32_phys_limit = min(4UL * SZ_1G, (unsigned long)PFN_PHYS(max_low_pfn));
-   244		set_max_mapnr(max_low_pfn - ARCH_PFN_OFFSET);
-   245	
-   246		reserve_initrd_mem();
-   247		/*
-   248		 * If DTB is built in, no need to reserve its memblock.
-   249		 * Otherwise, do reserve it but avoid using
-   250		 * early_init_fdt_reserve_self() since __pa() does
-   251		 * not work for DTB pointers that are fixmap addresses
-   252		 */
-   253		if (!IS_ENABLED(CONFIG_BUILTIN_DTB)) {
-   254			/*
-   255			 * In case the DTB is not located in a memory region we won't
-   256			 * be able to locate it later on via the linear mapping and
-   257			 * get a segfault when accessing it via __va(dtb_early_pa).
-   258			 * To avoid this situation copy DTB to a memory region.
-   259			 * Note that memblock_phys_alloc will also reserve DTB region.
-   260			 */
-   261			if (!memblock_is_memory(dtb_early_pa)) {
-   262				size_t fdt_size = fdt_totalsize(dtb_early_va);
-   263				phys_addr_t new_dtb_early_pa = memblock_phys_alloc(fdt_size, PAGE_SIZE);
-   264				void *new_dtb_early_va = early_memremap(new_dtb_early_pa, fdt_size);
-   265	
-   266				memcpy(new_dtb_early_va, dtb_early_va, fdt_size);
-   267				early_memunmap(new_dtb_early_va, fdt_size);
-   268				_dtb_early_pa = new_dtb_early_pa;
-   269			} else
-   270				memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-   271		}
-   272	
-   273		dma_contiguous_reserve(dma32_phys_limit);
-   274		if (IS_ENABLED(CONFIG_64BIT))
-   275			hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
-   276		memblock_allow_resize();
-   277	}
-   278	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Yeah, SNP needs similar treatment.  Sorting that out is high up on the todo list.
