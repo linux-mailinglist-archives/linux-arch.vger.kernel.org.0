@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFCA67ADF3
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 10:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A2E67AE23
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 10:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbjAYJbQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Jan 2023 04:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
+        id S235068AbjAYJi5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Jan 2023 04:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbjAYJbK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 04:31:10 -0500
+        with ESMTP id S233619AbjAYJi5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 04:38:57 -0500
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F139953B1A;
-        Wed, 25 Jan 2023 01:30:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9E30DF;
+        Wed, 25 Jan 2023 01:38:56 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C6E0521C79;
-        Wed, 25 Jan 2023 09:30:54 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8ADEB21C7D;
+        Wed, 25 Jan 2023 09:38:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1674639054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1674639534; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jognpwZWDP/caNk47/2I5pB+VrjaxgWmcyaDbH1onsg=;
-        b=Pij8ssoJlw6k6tQr48jFXJyevDWch308vx0CLomRDmV84uEdMgTC6NhqR8VCkgI74II7DW
-        anm6YuwD0GfDOi17b+9Zs5S20/ilyumOWkOAGicsthADYQDP18s2AfYp6RzP5d5hjTOUwm
-        W4uNWFQcSkUDrOF5p/6xahiK2Zzyzto=
+        bh=rlC3v8G7Qltb7/sMWGykfElAbj3RZvreU88MtZ+OLHM=;
+        b=r0FIat4kOE8WovOTP3LWhacl5M3EjQXhF3aBT5cBj3FuQ5I+yJMTY0cq7QTmO7SFPDQv6O
+        tRrm4BhOZHjZFNfq3BxFKWYU7SqtAc8zTE0tqhcCiP6BOgQ+ipP6+yjGZBzFWwz4Mee2C0
+        GFF6IKS/BdrV8Bwlj7T9ur543veHKvk=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 684E91358F;
-        Wed, 25 Jan 2023 09:30:54 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 446411358F;
+        Wed, 25 Jan 2023 09:38:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id yJRSGc720GMeHAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 09:30:54 +0000
-Date:   Wed, 25 Jan 2023 10:30:53 +0100
+        id jLUjEK740GMsIAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 09:38:54 +0000
+Date:   Wed, 25 Jan 2023 10:38:53 +0100
 From:   Michal Hocko <mhocko@suse.com>
 To:     Suren Baghdasaryan <surenb@google.com>
 Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
@@ -111,15 +111,15 @@ Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
         linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
         selinux@vger.kernel.org, alsa-devel@alsa-project.org,
         kernel-team@android.com
-Subject: Re: [PATCH v2 3/6] mm: replace vma->vm_flags direct modifications
- with modifier calls
-Message-ID: <Y9D2zXpy+9iyZNun@dhcp22.suse.cz>
+Subject: Re: [PATCH v2 4/6] mm: replace vma->vm_flags indirect modification
+ in ksm_madvise
+Message-ID: <Y9D4rWEsajV/WfNx@dhcp22.suse.cz>
 References: <20230125083851.27759-1-surenb@google.com>
- <20230125083851.27759-4-surenb@google.com>
+ <20230125083851.27759-5-surenb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125083851.27759-4-surenb@google.com>
+In-Reply-To: <20230125083851.27759-5-surenb@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
@@ -129,23 +129,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed 25-01-23 00:38:48, Suren Baghdasaryan wrote:
-> Replace direct modifications to vma->vm_flags with calls to modifier
+On Wed 25-01-23 00:38:49, Suren Baghdasaryan wrote:
+> Replace indirect modifications to vma->vm_flags with calls to modifier
 > functions to be able to track flag changes and to keep vma locking
-> correctness.
+> correctness. Add a BUG_ON check in ksm_madvise() to catch indirect
+> vm_flags modification attempts.
 
-Is this a manual (git grep) based work or have you used Coccinele for
-the patch generation?
+Those BUG_ONs scream to much IMHO. KSM is an MM internal code so I
+gueess we should be willing to trust it.
 
-My potentially incomplete check
-$ git grep ">[[:space:]]*vm_flags[[:space:]]*[&|^]="
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-shows that nothing should be left after this. There is still quite a lot
-of direct checks of the flags (more than 600). Maybe it would be good to
-make flags accessible only via accessors which would also prevent any
-future direct setting of those flags in uncontrolled way as well.
-
-Anyway
 Acked-by: Michal Hocko <mhocko@suse.com>
 -- 
 Michal Hocko
