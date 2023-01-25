@@ -2,290 +2,223 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EEB67BC5E
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 21:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E3767BC7B
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 21:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbjAYUMH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Jan 2023 15:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S234138AbjAYUXw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Jan 2023 15:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236353AbjAYUMD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 15:12:03 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C795D90F;
-        Wed, 25 Jan 2023 12:11:34 -0800 (PST)
+        with ESMTP id S236328AbjAYUXv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 15:23:51 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7059545235;
+        Wed, 25 Jan 2023 12:23:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674677495; x=1706213495;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=o+ZGOHz8ijK9H+L7WtFqSqHxlRgWx6avT4sRFNpRp9Y=;
-  b=RYWrCao/9Oq9LHh3AJg9okif5Lrotr0WovidRrbRkOce7OtQiGQ4jC/5
-   G3GZnikn7iSLe9bUfkY/It2CspXOLSg31uvWr3Tyv177gjb9qQ11wb2WG
-   nQdHbNsJllmVSJy0Evu1hCjVOJpxHGSYc89FQAXqIafDt63rSHedTzdJi
-   lDkZ+cfWypyJo1AD1sakfsJAENOVzjtM9EqFKpZPlKyt1/wjBQ3FZTB72
-   9QwF5gTp6UvY8ybwRERvzJOBif/sWto5Kr45BiFQncB2X0sSJY8R6z9HT
-   l19YpCXWo7pDTnjdxTDPnVnzTHRcmaomcDdVQ/4+vlkPsFIqiRV4fZH9f
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="326694799"
+  t=1674678227; x=1706214227;
+  h=subject:from:to:cc:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oW1gyLbFzR4XGy/nrIoXw/90pgAFQddwJ8dJi52PPsQ=;
+  b=SGXPFsYa+dIjFfbkNiuZzcVTLy/MV+kgQSeB21IFLntKpZoXA2ekWVW0
+   YgiBlbhzBgtiC7+NAhpn2+gKkQ9CfPe3JlyHKDTwr4CjkitNO1AosdXc4
+   kMg4mCLfHygkJASAPWANGY+CMYNP0z5J0BrMT4f6CX6TJ50UqeQKW0GE0
+   OqXXLVZZhtyN6ydeRyCitnzZ153qRuD2o5GNMwCTJ7ZggUPGP0NrK94zu
+   KVlylhwT+hdQ+MFgB2zeRqVm0TB9iArINGeyFRut9GUNSeiNC3GRun/Id
+   vAmebaPd/PDEblZ4mTqyKq43wASgc1FckrmIfYBMAQA0N35aGLFVbNo4x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="307011730"
 X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="326694799"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:09:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="770871663"
+   d="scan'208";a="307011730"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:23:47 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="805126312"
 X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="770871663"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 25 Jan 2023 12:09:52 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 57E9636E; Wed, 25 Jan 2023 22:10:25 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v1 5/5] gpio: Clean up headers
-Date:   Wed, 25 Jan 2023 22:10:20 +0200
-Message-Id: <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="805126312"
+Received: from lwlu-mobl.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.17.213])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:23:46 -0800
+Subject: [PATCH v2] nvdimm: Support sizeof(struct page) >
+ MAX_STRUCT_PAGE_SIZE
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     nvdimm@lists.linux.dev
+Cc:     stable@vger.kernel.org, Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, Jeff Moyer <jmoyer@redhat.com>,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Date:   Wed, 25 Jan 2023 12:23:46 -0800
+Message-ID: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
+User-Agent: StGit/0.18-3-g996c
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-There is a few things done:
-- include only the headers we are direct user of
-- when pointer is in use, provide a forward declaration
-- add missing headers
-- group generic headers and subsystem headers
-- sort each group alphabetically
+Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
+potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
+doubles the amount of capacity stolen from user addressable capacity for
+everyone, regardless of whether they are using the debug option. Revert
+that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
+allow for debug scenarios to proceed with creating debug sized page maps
+with a compile option to support debug scenarios.
+
+Note that this only applies to cases where the page map is permanent,
+i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
+create-namespace" terms). For the "--map=mem" case, since the allocation
+is ephemeral for the lifespan of the namespace, there are no explicit
+restriction. However, the implicit restriction, of having enough
+available "System RAM" to store the page map for the typically large
+pmem, still applies.
+
+Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
+Cc: <stable@vger.kernel.org>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Marco Elver <elver@google.com>
+Reported-by: Jeff Moyer <jmoyer@redhat.com>
 ---
- include/asm-generic/gpio.h    |  8 --------
- include/linux/gpio.h          |  9 +++------
- include/linux/gpio/consumer.h | 14 ++++++++++----
- include/linux/gpio/driver.h   | 34 ++++++++++++++++++++++++----------
- 4 files changed, 37 insertions(+), 28 deletions(-)
+Changes since v1 [1]:
+* Replace the module option with a compile option and a description of
+  the tradeoffs to consider when running with KMSAN enabled in the
+  presence of NVDIMM namespaces and their local reservation of capacity
+  for a 'struct page' memmap array. (Greg)
 
-diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
-index 22cb8c9efc1d..5d4d3529324c 100644
---- a/include/asm-generic/gpio.h
-+++ b/include/asm-generic/gpio.h
-@@ -3,11 +3,9 @@
- #define _ASM_GENERIC_GPIO_H
+[1]: https://lore.kernel.org/all/63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch/
+
+ drivers/nvdimm/Kconfig    |   19 +++++++++++++++++++
+ drivers/nvdimm/nd.h       |    2 +-
+ drivers/nvdimm/pfn_devs.c |   42 +++++++++++++++++++++++++++---------------
+ 3 files changed, 47 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
+index 79d93126453d..77b06d54cc62 100644
+--- a/drivers/nvdimm/Kconfig
++++ b/drivers/nvdimm/Kconfig
+@@ -102,6 +102,25 @@ config NVDIMM_KEYS
+ 	depends on ENCRYPTED_KEYS
+ 	depends on (LIBNVDIMM=ENCRYPTED_KEYS) || LIBNVDIMM=m
  
- #include <linux/types.h>
--#include <linux/errno.h>
- 
- #ifdef CONFIG_GPIOLIB
- 
--#include <linux/compiler.h>
- #include <linux/gpio/driver.h>
- #include <linux/gpio/consumer.h>
- 
-@@ -24,12 +22,7 @@
-  */
- #define GPIO_DYNAMIC_BASE	512
- 
--struct device;
- struct gpio;
--struct seq_file;
--struct module;
--struct device_node;
--struct gpio_desc;
- 
- /* Always use the library code for GPIO management calls,
-  * or when sleeping may be involved.
-@@ -60,7 +53,6 @@ static inline void gpio_set_value_cansleep(unsigned gpio, int value)
- 	return gpiod_set_raw_value_cansleep(gpio_to_desc(gpio), value);
- }
- 
--
- /* A platform's <asm/gpio.h> code may want to inline the I/O calls when
-  * the GPIO is constant and refers to some always-present controller,
-  * giving direct access to chip registers and tight bitbanging loops.
-diff --git a/include/linux/gpio.h b/include/linux/gpio.h
-index 85beb236c925..cc28c8d5e93c 100644
---- a/include/linux/gpio.h
-+++ b/include/linux/gpio.h
-@@ -12,7 +12,7 @@
- #ifndef __LINUX_GPIO_H
- #define __LINUX_GPIO_H
- 
--#include <linux/errno.h>
-+struct device;
- 
- /* see Documentation/driver-api/gpio/legacy.rst */
- 
-@@ -85,20 +85,17 @@ static inline int gpio_to_irq(unsigned int gpio)
- 
- /* CONFIG_GPIOLIB: bindings for managed devices that want to request gpios */
- 
--struct device;
--
- int devm_gpio_request(struct device *dev, unsigned gpio, const char *label);
- int devm_gpio_request_one(struct device *dev, unsigned gpio,
- 			  unsigned long flags, const char *label);
- 
- #else /* ! CONFIG_GPIOLIB */
- 
--#include <linux/bug.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- 
--struct device;
--struct gpio_chip;
-+#include <asm/bug.h>
-+#include <asm/errno.h>
- 
- static inline bool gpio_is_valid(int number)
- {
-diff --git a/include/linux/gpio/consumer.h b/include/linux/gpio/consumer.h
-index 5432e5d5fbfb..1c4385a00f88 100644
---- a/include/linux/gpio/consumer.h
-+++ b/include/linux/gpio/consumer.h
-@@ -3,15 +3,14 @@
- #define __LINUX_GPIO_CONSUMER_H
- 
- #include <linux/bits.h>
--#include <linux/bug.h>
--#include <linux/compiler_types.h>
--#include <linux/err.h>
-+#include <linux/types.h>
- 
- struct acpi_device;
- struct device;
- struct fwnode_handle;
--struct gpio_desc;
++config NVDIMM_KMSAN
++	bool
++	depends on KMSAN
++	help
++	  KMSAN, and other memory debug facilities, increase the size of
++	  'struct page' to contain extra metadata. This collides with
++	  the NVDIMM capability to store a potentially
++	  larger-than-"System RAM" size 'struct page' array in a
++	  reservation of persistent memory rather than limited /
++	  precious DRAM. However, that reservation needs to persist for
++	  the life of the given NVDIMM namespace. If you are using KMSAN
++	  to debug an issue unrelated to NVDIMMs or DAX then say N to this
++	  option. Otherwise, say Y but understand that any namespaces
++	  (with the page array stored pmem) created with this build of
++	  the kernel will permanently reserve and strand excess
++	  capacity compared to the CONFIG_KMSAN=n case.
 +
- struct gpio_array;
-+struct gpio_desc;
- 
- /**
-  * struct gpio_descs - Struct containing an array of descriptors that can be
-@@ -185,8 +184,11 @@ struct gpio_desc *devm_fwnode_gpiod_get_index(struct device *dev,
- 
- #else /* CONFIG_GPIOLIB */
- 
-+#include <linux/err.h>
- #include <linux/kernel.h>
- 
-+#include <asm/bug.h>
++	  Select N if unsure.
 +
- static inline int gpiod_count(struct device *dev, const char *con_id)
- {
- 	return 0;
-@@ -616,6 +618,8 @@ struct gpio_desc *acpi_get_and_request_gpiod(char *path, unsigned int pin, char
- 
- #else  /* CONFIG_GPIOLIB && CONFIG_ACPI */
- 
-+#include <linux/err.h>
-+
- static inline int acpi_dev_add_driver_gpios(struct acpi_device *adev,
- 			      const struct acpi_gpio_mapping *gpios)
- {
-@@ -647,6 +651,8 @@ void gpiod_unexport(struct gpio_desc *desc);
- 
- #else  /* CONFIG_GPIOLIB && CONFIG_GPIO_SYSFS */
- 
-+#include <asm/errno.h>
-+
- static inline int gpiod_export(struct gpio_desc *desc,
- 			       bool direction_may_change)
- {
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index caf2376dd98b..208c7cfeadb2 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -2,26 +2,29 @@
- #ifndef __LINUX_GPIO_DRIVER_H
- #define __LINUX_GPIO_DRIVER_H
- 
--#include <linux/device.h>
--#include <linux/irq.h>
--#include <linux/irqchip/chained_irq.h>
-+#include <linux/bits.h>
- #include <linux/irqdomain.h>
-+#include <linux/irqhandler.h>
- #include <linux/lockdep.h>
--#include <linux/pinctrl/pinconf-generic.h>
- #include <linux/pinctrl/pinctrl.h>
- #include <linux/property.h>
-+#include <linux/spinlock_types.h>
- #include <linux/types.h>
- 
-+#ifdef CONFIG_GENERIC_MSI_IRQ
- #include <asm/msi.h>
-+#endif
- 
--struct gpio_desc;
-+struct device;
-+struct irq_chip;
-+struct irq_data;
-+struct module;
- struct of_phandle_args;
-+struct pinctrl_dev;
- struct seq_file;
--struct gpio_device;
--struct module;
--enum gpiod_flags;
--enum gpio_lookup_flags;
- 
-+struct gpio_desc;
-+struct gpio_device;
- struct gpio_chip;
- 
- union gpio_irq_fwspec {
-@@ -691,6 +694,10 @@ bool gpiochip_irqchip_irq_valid(const struct gpio_chip *gc,
- int gpiochip_irqchip_add_domain(struct gpio_chip *gc,
- 				struct irq_domain *domain);
+ config NVDIMM_TEST_BUILD
+ 	tristate "Build the unit test core"
+ 	depends on m
+diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+index 85ca5b4da3cf..ec5219680092 100644
+--- a/drivers/nvdimm/nd.h
++++ b/drivers/nvdimm/nd.h
+@@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
+ 		struct nd_namespace_common *ndns);
+ #if IS_ENABLED(CONFIG_ND_CLAIM)
+ /* max struct page size independent of kernel config */
+-#define MAX_STRUCT_PAGE_SIZE 128
++#define MAX_STRUCT_PAGE_SIZE 64
+ int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
  #else
+ static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
+diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
+index 61af072ac98f..c7655a1fe38c 100644
+--- a/drivers/nvdimm/pfn_devs.c
++++ b/drivers/nvdimm/pfn_devs.c
+@@ -13,6 +13,8 @@
+ #include "pfn.h"
+ #include "nd.h"
+ 
++const static bool page_struct_override = IS_ENABLED(CONFIG_NVDIMM_KMSAN);
 +
-+#include <asm/bug.h>
-+#include <asm/errno.h>
-+
- static inline int gpiochip_irqchip_add_domain(struct gpio_chip *gc,
- 					      struct irq_domain *domain)
+ static void nd_pfn_release(struct device *dev)
  {
-@@ -752,6 +759,9 @@ gpiochip_remove_pin_ranges(struct gpio_chip *gc)
+ 	struct nd_region *nd_region = to_nd_region(dev->parent);
+@@ -758,12 +760,6 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 		return -ENXIO;
+ 	}
  
- #ifdef CONFIG_GPIOLIB
- 
-+enum gpiod_flags;
-+enum gpio_lookup_flags;
+-	/*
+-	 * Note, we use 64 here for the standard size of struct page,
+-	 * debugging options may cause it to be larger in which case the
+-	 * implementation will limit the pfns advertised through
+-	 * ->direct_access() to those that are included in the memmap.
+-	 */
+ 	start = nsio->res.start;
+ 	size = resource_size(&nsio->res);
+ 	npfns = PHYS_PFN(size - SZ_8K);
+@@ -782,20 +778,33 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 	}
+ 	end_trunc = start + size - ALIGN_DOWN(start + size, align);
+ 	if (nd_pfn->mode == PFN_MODE_PMEM) {
++		unsigned long page_map_size = MAX_STRUCT_PAGE_SIZE * npfns;
 +
- struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
- 					    unsigned int hwnum,
- 					    const char *label,
-@@ -768,8 +778,12 @@ struct gpio_chip *gpiod_to_chip(const struct gpio_desc *desc);
- 
- #else /* CONFIG_GPIOLIB */
- 
--#include <linux/gpio/machine.h>
-+#include <linux/err.h>
-+
-+#include <asm/bug.h>
-+
- #include <linux/gpio/consumer.h>
-+#include <linux/gpio/machine.h>
- 
- static inline struct gpio_desc *gpiochip_request_own_desc(struct gpio_chip *gc,
- 					    unsigned int hwnum,
--- 
-2.39.0
+ 		/*
+ 		 * The altmap should be padded out to the block size used
+ 		 * when populating the vmemmap. This *should* be equal to
+ 		 * PMD_SIZE for most architectures.
+ 		 *
+-		 * Also make sure size of struct page is less than 128. We
+-		 * want to make sure we use large enough size here so that
+-		 * we don't have a dynamic reserve space depending on
+-		 * struct page size. But we also want to make sure we notice
+-		 * when we end up adding new elements to struct page.
++		 * Also make sure size of struct page is less than
++		 * MAX_STRUCT_PAGE_SIZE. The goal here is compatibility in the
++		 * face of production kernel configurations that reduce the
++		 * 'struct page' size below MAX_STRUCT_PAGE_SIZE. For debug
++		 * kernel configurations that increase the 'struct page' size
++		 * above MAX_STRUCT_PAGE_SIZE, the page_struct_override allows
++		 * for continuing with the capacity that will be wasted when
++		 * reverting to a production kernel configuration. Otherwise,
++		 * those configurations are blocked by default.
+ 		 */
+-		BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
+-		offset = ALIGN(start + SZ_8K + MAX_STRUCT_PAGE_SIZE * npfns, align)
+-			- start;
++		if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE) {
++			if (page_struct_override)
++				page_map_size = sizeof(struct page) * npfns;
++			else {
++				dev_err(&nd_pfn->dev,
++					"Memory debug options prevent using pmem for the page map\n");
++				return -EINVAL;
++			}
++		}
++		offset = ALIGN(start + SZ_8K + page_map_size, align) - start;
+ 	} else if (nd_pfn->mode == PFN_MODE_RAM)
+ 		offset = ALIGN(start + SZ_8K, align) - start;
+ 	else
+@@ -818,7 +827,10 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 	pfn_sb->version_minor = cpu_to_le16(4);
+ 	pfn_sb->end_trunc = cpu_to_le32(end_trunc);
+ 	pfn_sb->align = cpu_to_le32(nd_pfn->align);
+-	pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
++	if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE && page_struct_override)
++		pfn_sb->page_struct_size = cpu_to_le16(sizeof(struct page));
++	else
++		pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
+ 	pfn_sb->page_size = cpu_to_le32(PAGE_SIZE);
+ 	checksum = nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
+ 	pfn_sb->checksum = cpu_to_le64(checksum);
 
