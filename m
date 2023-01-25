@@ -2,164 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4289567ADDD
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 10:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFCA67ADF3
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 10:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbjAYJaX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Jan 2023 04:30:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S235285AbjAYJbQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Jan 2023 04:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbjAYJaS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 04:30:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8F11448F
-        for <linux-arch@vger.kernel.org>; Wed, 25 Jan 2023 01:29:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674638975;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        with ESMTP id S234759AbjAYJbK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 04:31:10 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F139953B1A;
+        Wed, 25 Jan 2023 01:30:56 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C6E0521C79;
+        Wed, 25 Jan 2023 09:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1674639054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=TjE3MFK73jMeqX5iFxpax2sxTvtsTUXIevN9S/ssTM8=;
-        b=GxcZ9WaXjRHC1KhxiZrbJ1B42qtElt9hMu/7b6mP832hvgL+EsABKu0935kzPwpIyujXyo
-        wP1JRVloqHqWmEdo+RLO+t45Y2BgpeVXcLHUx6kuO6mB9L+KwyfxdRTSS1sygDP4OoYLgM
-        ZPkHFYsu6KursgAZDkOfVEY6B/ppi0E=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-627-3Ui6bLHRPbqLxNudk_lSbw-1; Wed, 25 Jan 2023 04:29:24 -0500
-X-MC-Unique: 3Ui6bLHRPbqLxNudk_lSbw-1
-Received: by mail-wr1-f69.google.com with SMTP id e37-20020a5d5965000000b002bfb4cab735so536232wri.5
-        for <linux-arch@vger.kernel.org>; Wed, 25 Jan 2023 01:29:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TjE3MFK73jMeqX5iFxpax2sxTvtsTUXIevN9S/ssTM8=;
-        b=rPiSri3jopVmmVrJDGnpXuL5Pmcb/hncL8b6pktRmdf532oxA6WdHCDpVRBnubXMXH
-         WnhmCFUvrTvEgfWf3Jrhg93J4iUJuNnWxmea0/4fz7nTjjIOSm8tIhYwJmiywtyOQQTB
-         raJKptYS472HidsRXfy8Z/uyaoppR0sWylgpo3y6i8T3ZzieQOjDrVHs8uho6lSz2lbj
-         Tp4faS/EBt86LfaMdQtS4brxOxCFZZRVtDLSLQhe3MivI4vLMG4Vgm2neyDotpMecVeN
-         onU8+HqJwqyyo/RoZ6skybtnIflmexlBbyDgRUWCPVTEzeikX46FzY1S9fCNvyht+wc3
-         5n+g==
-X-Gm-Message-State: AFqh2komVVIvqBtcEn1GK12hbgd+FNDGdRnpZMFe4GJxxuoZ5mpf7371
-        6a1yEr1P5zmjgC8v7ela1WjNlARxXx5RbzRy1mzhhn9meJanqplxbFhJ2cBiR5OxNNvJdG7O2d8
-        JlhPZyDrF9tBHOtp7Lu7+ew==
-X-Received: by 2002:adf:fb86:0:b0:2b6:7876:3cd4 with SMTP id a6-20020adffb86000000b002b678763cd4mr25258745wrr.16.1674638963417;
-        Wed, 25 Jan 2023 01:29:23 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsLivmPABRiZvHHfGmnyR69nY5+HViCF4rvX0glv7Y5M6gJXrX848D3l9+TwkCsYm87blrEGw==
-X-Received: by 2002:adf:fb86:0:b0:2b6:7876:3cd4 with SMTP id a6-20020adffb86000000b002b678763cd4mr25258727wrr.16.1674638963093;
-        Wed, 25 Jan 2023 01:29:23 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:4c00:486:38e2:8ff8:a135? (p200300cbc7054c00048638e28ff8a135.dip0.t-ipconnect.de. [2003:cb:c705:4c00:486:38e2:8ff8:a135])
-        by smtp.gmail.com with ESMTPSA id d9-20020adff2c9000000b002be34f87a34sm4166170wrp.1.2023.01.25.01.29.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 01:29:22 -0800 (PST)
-Message-ID: <716d9e97-b08f-eb0f-101a-be6eaf36f184@redhat.com>
-Date:   Wed, 25 Jan 2023 10:29:20 +0100
+        bh=jognpwZWDP/caNk47/2I5pB+VrjaxgWmcyaDbH1onsg=;
+        b=Pij8ssoJlw6k6tQr48jFXJyevDWch308vx0CLomRDmV84uEdMgTC6NhqR8VCkgI74II7DW
+        anm6YuwD0GfDOi17b+9Zs5S20/ilyumOWkOAGicsthADYQDP18s2AfYp6RzP5d5hjTOUwm
+        W4uNWFQcSkUDrOF5p/6xahiK2Zzyzto=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 684E91358F;
+        Wed, 25 Jan 2023 09:30:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yJRSGc720GMeHAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 25 Jan 2023 09:30:54 +0000
+Date:   Wed, 25 Jan 2023 10:30:53 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 3/6] mm: replace vma->vm_flags direct modifications
+ with modifier calls
+Message-ID: <Y9D2zXpy+9iyZNun@dhcp22.suse.cz>
+References: <20230125083851.27759-1-surenb@google.com>
+ <20230125083851.27759-4-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 23/39] mm: Don't allow write GUPs to shadow stack
- memory
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "kees@kernel.org" <kees@kernel.org>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-24-rick.p.edgecombe@intel.com>
- <aa973c0f-5d90-36df-01b2-db9d9182910e@redhat.com>
- <87fsc1il73.fsf@oldenburg.str.redhat.com>
- <c6dc94eb193634fa27e1715ab2978a3ce4b6c544.camel@intel.com>
- <fd741ac9-8214-a375-00b2-a652a7ef27ea@redhat.com>
- <6adfa0b5c38a9362f819fcc364e02c37d99a7f4a.camel@intel.com>
- <5B29D7A0-385A-41E8-AA56-EF726E6906BF@kernel.org>
- <19ff6ea3b96d027defb548fb6b7f89de17905a4b.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <19ff6ea3b96d027defb548fb6b7f89de17905a4b.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125083851.27759-4-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 25.01.23 00:41, Edgecombe, Rick P wrote:
-> On Tue, 2023-01-24 at 15:08 -0800, Kees Cook wrote:
->>> GDB support for shadow stack is queued up for whenever the kernel
->>> interface settles. I believe it just uses ptrace, and not this
->>> proc.
->>> But yea ptrace poke will still need to use FOLL_FORCE and be able
->>> to
->>> write through shadow stacks.
->>
->> I'd prefer to avoid adding more FOLL_FORCE if we can. If gdb can do
->> stack manipulations through a ptrace interface then let's leave off
->> FOLL_FORCE.
-> 
-> Ptrace and /proc/self/mem both use FOLL_FORCE. I think ptrace will
-> always need it or something like it for debugging.
-> 
-> To jog your memory, this series doesn't change what uses FOLL_FORCE. It
-> just sets the shadow stack rules to be the same as read-only memory. So
-> even though shadow stack memory is sort of writable, it's a bit more
-> locked down and FOLL_FORCE is required to write to it with GUP.
-> 
-> If we just remove FOLL_FORCE from /proc/self/mem, something will
-> probably break right? How do we do this? Some sort of opt-in?
+On Wed 25-01-23 00:38:48, Suren Baghdasaryan wrote:
+> Replace direct modifications to vma->vm_flags with calls to modifier
+> functions to be able to track flag changes and to keep vma locking
+> correctness.
 
-I don't think removing that is an option. It's another debug interface 
-that has been allowing such access for ever ...
+Is this a manual (git grep) based work or have you used Coccinele for
+the patch generation?
 
-Blocking /proc/self/mem access completely for selected processes might 
-be the better alternative.
+My potentially incomplete check
+$ git grep ">[[:space:]]*vm_flags[[:space:]]*[&|^]="
 
+shows that nothing should be left after this. There is still quite a lot
+of direct checks of the flags (more than 600). Maybe it would be good to
+make flags accessible only via accessors which would also prevent any
+future direct setting of those flags in uncontrolled way as well.
+
+Anyway
+Acked-by: Michal Hocko <mhocko@suse.com>
 -- 
-Thanks,
-
-David / dhildenb
-
+Michal Hocko
+SUSE Labs
