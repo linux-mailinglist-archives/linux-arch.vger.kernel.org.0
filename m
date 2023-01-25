@@ -2,223 +2,245 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E3767BC7B
-	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 21:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF4867BD18
+	for <lists+linux-arch@lfdr.de>; Wed, 25 Jan 2023 21:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234138AbjAYUXw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Jan 2023 15:23:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S236287AbjAYUk7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 Jan 2023 15:40:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236328AbjAYUXv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 15:23:51 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7059545235;
-        Wed, 25 Jan 2023 12:23:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674678227; x=1706214227;
-  h=subject:from:to:cc:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oW1gyLbFzR4XGy/nrIoXw/90pgAFQddwJ8dJi52PPsQ=;
-  b=SGXPFsYa+dIjFfbkNiuZzcVTLy/MV+kgQSeB21IFLntKpZoXA2ekWVW0
-   YgiBlbhzBgtiC7+NAhpn2+gKkQ9CfPe3JlyHKDTwr4CjkitNO1AosdXc4
-   kMg4mCLfHygkJASAPWANGY+CMYNP0z5J0BrMT4f6CX6TJ50UqeQKW0GE0
-   OqXXLVZZhtyN6ydeRyCitnzZ153qRuD2o5GNMwCTJ7ZggUPGP0NrK94zu
-   KVlylhwT+hdQ+MFgB2zeRqVm0TB9iArINGeyFRut9GUNSeiNC3GRun/Id
-   vAmebaPd/PDEblZ4mTqyKq43wASgc1FckrmIfYBMAQA0N35aGLFVbNo4x
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="307011730"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="307011730"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:23:47 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10601"; a="805126312"
-X-IronPort-AV: E=Sophos;i="5.97,246,1669104000"; 
-   d="scan'208";a="805126312"
-Received: from lwlu-mobl.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.17.213])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 12:23:46 -0800
-Subject: [PATCH v2] nvdimm: Support sizeof(struct page) >
- MAX_STRUCT_PAGE_SIZE
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     nvdimm@lists.linux.dev
-Cc:     stable@vger.kernel.org, Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, Jeff Moyer <jmoyer@redhat.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Date:   Wed, 25 Jan 2023 12:23:46 -0800
-Message-ID: <167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com>
-User-Agent: StGit/0.18-3-g996c
+        with ESMTP id S236461AbjAYUks (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 15:40:48 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BDA5DC1F;
+        Wed, 25 Jan 2023 12:40:23 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id x5so17117269qti.3;
+        Wed, 25 Jan 2023 12:40:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TbYtMBxWJl7HpH4aniDM9ZTHtsKnBM7hjRN8LJEWG5U=;
+        b=SkX9TEr3sg3dy87SAvWq8DIz54ZpEt00ln13tm3rnhMcBSkDncjNjyjopwu55pkOkW
+         wB/A5QfPb+K/SfXxLsM+zITxPTeERnRpAZqKDxNCbQTYKQ3fqdckGXVhU6xzy4Ttq32n
+         EbEFtmNq921vBglrens74rrOpNelQGwVidJGqKutmnVPTHP3+QHkRUJesYNTvPlAAlNf
+         whrlP5ijRbEuN5F7vInqOcBvgJ07xH/d/FY1sY4ve+VTERMoGH7dlC+unRv/rHeRC6Sd
+         jjA2SUXivg3KJTQ1ppahckzJbOJZtGRN+a4usNCdBBJMfr723331Ii/Th9Ssr+T9mf8p
+         R2Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TbYtMBxWJl7HpH4aniDM9ZTHtsKnBM7hjRN8LJEWG5U=;
+        b=l+Eo3o5p4DwClxqVWZ9A17wqkulMZqm47bADuU8i9vM9RStwejeD1T0PE/qRL2B6nR
+         GANs681Kp/7AUzLRLPZtVbhV7BlJeQD9Uumngtac5irZFnFLkUu1dfxDbstiVw7IX+aR
+         1rTvwSvhId6wE7o/4IipIeUrZEO6Kh4xoaQ5lO5nyzDqGj5IPRezAjn/JPkdhpOLjMjb
+         kbj0Etj46MUNZGEwEQKgy4OHHWffnXDsvA+CFUO1ISzMSFsjHX5DAUfO8NIx4ltXWGsY
+         z6qaKbYK/tbMhghplTicQRdO9HCMpDcUCtVPhzi1nDv/jAILqP6OVJjugQdj38VFCJJK
+         x+cQ==
+X-Gm-Message-State: AFqh2krSpW8ecKutnBEOsi8ngXqK3exKauTeijKfNieKgNQ3qRM2mqyv
+        25cLYiC+f+3pztuy/3+ov2XBnjzD7oQ=
+X-Google-Smtp-Source: AMrXdXuFfJ7DtS0nw+1SzLJ987RhPcov55CYCRP5qlLRxSV17/tCRMv6yE0Nt0iKhUpCqmPZyh/ZFw==
+X-Received: by 2002:ac8:41c7:0:b0:3b6:3042:277a with SMTP id o7-20020ac841c7000000b003b63042277amr42953916qtm.12.1674679214078;
+        Wed, 25 Jan 2023 12:40:14 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id x11-20020a05620a098b00b007055dce4cecsm4100016qkx.97.2023.01.25.12.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 12:40:13 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id AF8AE27C005B;
+        Wed, 25 Jan 2023 15:40:12 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 25 Jan 2023 15:40:12 -0500
+X-ME-Sender: <xms:q5PRY_l7JY8FvysGIoGGWKO4YIxkXtYzy3JqA5l5veQtCPiUc7c07A>
+    <xme:q5PRYy2b2R-B0UVxLWQSmSmPkwYd3n6ftAyXXlyoFLDa8BtMzmH-8k6pR9_tYOCt2
+    ZJOscQPLHmrVdfGsQ>
+X-ME-Received: <xmr:q5PRY1rY7RuzcvgR7s-tw13iY_ZXp8o7L0ASdkhOxVNGAj1VypqS_S9esXc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddgudegudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepueho
+    qhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtf
+    frrghtthgvrhhnpedtgeehleevffdujeffgedvlefghffhleekieeifeegveetjedvgeev
+    ueffieehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeeh
+    tdeigedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmse
+    hfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:q5PRY3lmgViXOGsu1v2Ci0XXvrwExFGeDK-TmilSZjBlcXv3lOaKiQ>
+    <xmx:q5PRY90b-ZL8cnKz4m8yxUYF2U97SCf47Dfvhra2UQyn8EnxKb_a6Q>
+    <xmx:q5PRY2sHvDnQT3I_uTPl48iN5hsfovfsXolY-zIfNI_Kr66_-d2a6A>
+    <xmx:rJPRY-ecmjsMiy3M6GeV2MTcdjWkVgZ8Lm3wrmqCkSGmiAXe5rbJjg>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 Jan 2023 15:40:11 -0500 (EST)
+Date:   Wed, 25 Jan 2023 12:39:29 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <Y9GTgdMnGu6OxUZC@boqun-archlinux>
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+ <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+ <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+ <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
+ <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Commit 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
+Hi,
 
-...updated MAX_STRUCT_PAGE_SIZE to account for sizeof(struct page)
-potentially doubling in the case of CONFIG_KMSAN=y. Unfortunately this
-doubles the amount of capacity stolen from user addressable capacity for
-everyone, regardless of whether they are using the debug option. Revert
-that change, mandate that MAX_STRUCT_PAGE_SIZE never exceed 64, but
-allow for debug scenarios to proceed with creating debug sized page maps
-with a compile option to support debug scenarios.
+[Cc Rust-for-Linux folks]
 
-Note that this only applies to cases where the page map is permanent,
-i.e. stored in a reservation of the pmem itself ("--map=dev" in "ndctl
-create-namespace" terms). For the "--map=mem" case, since the allocation
-is ephemeral for the lifespan of the namespace, there are no explicit
-restriction. However, the implicit restriction, of having enough
-available "System RAM" to store the page map for the typically large
-pmem, still applies.
+No hurries but is your tool avaiable somewhere so that we can have a
+try.
 
-Fixes: 6e9f05dc66f9 ("libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE")
-Cc: <stable@vger.kernel.org>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Marco Elver <elver@google.com>
-Reported-by: Jeff Moyer <jmoyer@redhat.com>
----
-Changes since v1 [1]:
-* Replace the module option with a compile option and a description of
-  the tradeoffs to consider when running with KMSAN enabled in the
-  presence of NVDIMM namespaces and their local reservation of capacity
-  for a 'struct page' memmap array. (Greg)
+Although Rust doesn't support dependencies ordering, but it's good to
+know which dependency is reserved after optimization. 
 
-[1]: https://lore.kernel.org/all/63bc8fec4744a_5178e29467@dwillia2-xfh.jf.intel.com.notmuch/
+Regards,
+Boqun
 
- drivers/nvdimm/Kconfig    |   19 +++++++++++++++++++
- drivers/nvdimm/nd.h       |    2 +-
- drivers/nvdimm/pfn_devs.c |   42 +++++++++++++++++++++++++++---------------
- 3 files changed, 47 insertions(+), 16 deletions(-)
+On Wed, Jan 18, 2023 at 11:42:23AM +0100, Paul Heidekrüger wrote:
+> On 13 Jan 2023, at 16:22, Alan Stern wrote:
+> 
+> > On Fri, Jan 13, 2023 at 12:11:25PM +0100, Paul Heidekrüger wrote:
+> >> Hi all,
+> >>
+> >> FWIW, here are two more broken address dependencies, both very similar to the
+> >> one discussed in this thread. From what I can tell, both are protected by a
+> >> lock, so, again, nothing to worry about right now? Would you agree?
+> >
+> > FWIW, my opinion is that in both cases the broken dependency can be
+> > removed entirely.
+> >
+> >> Comments marked with "AD:" were added by me for readability.
+> >>
+> >> 1. drivers/hwtracing/stm/core.c::1050 - 1085
+> >>
+> >>         /**
+> >>          * __stm_source_link_drop() - detach stm_source from an stm device
+> >>          * @src:	stm_source device
+> >>          * @stm:	stm device
+> >>          *
+> >>          * If @stm is @src::link, disconnect them from one another and put the
+> >>          * reference on the @stm device.
+> >>          *
+> >>          * Caller must hold stm::link_mutex.
+> >>          */
+> >>         static int __stm_source_link_drop(struct stm_source_device *src,
+> >>                                           struct stm_device *stm)
+> >>         {
+> >>                 struct stm_device *link;
+> >>                 int ret = 0;
+> >>
+> >>                 lockdep_assert_held(&stm->link_mutex);
+> >>
+> >>                 /* for stm::link_list modification, we hold both mutex and spinlock */
+> >>                 spin_lock(&stm->link_lock);
+> >>                 spin_lock(&src->link_lock);
+> >>
+> >>                 /* AD: Beginning of the address dependency. */
+> >>                 link = srcu_dereference_check(src->link, &stm_source_srcu, 1);
+> >>
+> >>                 /*
+> >>                  * The linked device may have changed since we last looked, because
+> >>                  * we weren't holding the src::link_lock back then; if this is the
+> >>                  * case, tell the caller to retry.
+> >>                  */
+> >>                 if (link != stm) {
+> >>                         ret = -EAGAIN;
+> >>                         goto unlock;
+> >>                 }
+> >>
+> >>                 /* AD: Compiler deduces that "link" and "stm" are exchangeable at this point. */
+> >>                 stm_output_free(link, &src->output); list_del_init(&src->link_entry);
+> >>
+> >>                 /* AD: Leads to WRITE_ONCE() to (&link->dev)->power.last_busy. */
+> >>                 pm_runtime_mark_last_busy(&link->dev);
+> >
+> > In both of these statements, link can safely be replaced by stm.
+> >
+> > (There's also a control dependency which the LKMM isn't aware of.  This
+> > makes it all the more safe.)
+> >
+> >> 2. kernel/locking/lockdep.c::6319 - 6348
+> >>
+> >>         /*
+> >>          * Unregister a dynamically allocated key.
+> >>          *
+> >>          * Unlike lockdep_register_key(), a search is always done to find a matching
+> >>          * key irrespective of debug_locks to avoid potential invalid access to freed
+> >>          * memory in lock_class entry.
+> >>          */
+> >>         void lockdep_unregister_key(struct lock_class_key *key)
+> >>         {
+> >>                 struct hlist_head *hash_head = keyhashentry(key);
+> >>                 struct lock_class_key *k;
+> >>                 struct pending_free *pf;
+> >>                 unsigned long flags;
+> >>                 bool found = false;
+> >>
+> >>                 might_sleep();
+> >>
+> >>                 if (WARN_ON_ONCE(static_obj(key)))
+> >>                         return;
+> >>
+> >>                 raw_local_irq_save(flags);
+> >>                 lockdep_lock();
+> >>
+> >>                 /* AD: Address dependency begins here with an rcu_dereference_raw() into k. */
+> >>                 hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
+> >>                         /* AD: Compiler deduces that k and key are exchangable iff the if condition evaluates to true.
+> >>                         if (k == key) {
+> >>                                 /* AD: Leads to WRITE_ONCE() to (&k->hash_entry)->pprev. */
+> >>                                 hlist_del_rcu(&k->hash_entry);
+> >
+> > And here k could safely be replaced with key.  (And again there is a
+> > control dependency, but this is one that the LKMM would detect.)
+> 
+> Ha, I didn't even notice the control dependencies - of course! In that case,
+> this doesn't warrant a patch though, given that nothing is really breaking?
+> 
+> Many thanks,
+> Paul
 
-diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
-index 79d93126453d..77b06d54cc62 100644
---- a/drivers/nvdimm/Kconfig
-+++ b/drivers/nvdimm/Kconfig
-@@ -102,6 +102,25 @@ config NVDIMM_KEYS
- 	depends on ENCRYPTED_KEYS
- 	depends on (LIBNVDIMM=ENCRYPTED_KEYS) || LIBNVDIMM=m
- 
-+config NVDIMM_KMSAN
-+	bool
-+	depends on KMSAN
-+	help
-+	  KMSAN, and other memory debug facilities, increase the size of
-+	  'struct page' to contain extra metadata. This collides with
-+	  the NVDIMM capability to store a potentially
-+	  larger-than-"System RAM" size 'struct page' array in a
-+	  reservation of persistent memory rather than limited /
-+	  precious DRAM. However, that reservation needs to persist for
-+	  the life of the given NVDIMM namespace. If you are using KMSAN
-+	  to debug an issue unrelated to NVDIMMs or DAX then say N to this
-+	  option. Otherwise, say Y but understand that any namespaces
-+	  (with the page array stored pmem) created with this build of
-+	  the kernel will permanently reserve and strand excess
-+	  capacity compared to the CONFIG_KMSAN=n case.
-+
-+	  Select N if unsure.
-+
- config NVDIMM_TEST_BUILD
- 	tristate "Build the unit test core"
- 	depends on m
-diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-index 85ca5b4da3cf..ec5219680092 100644
---- a/drivers/nvdimm/nd.h
-+++ b/drivers/nvdimm/nd.h
-@@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
- 		struct nd_namespace_common *ndns);
- #if IS_ENABLED(CONFIG_ND_CLAIM)
- /* max struct page size independent of kernel config */
--#define MAX_STRUCT_PAGE_SIZE 128
-+#define MAX_STRUCT_PAGE_SIZE 64
- int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
- #else
- static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-index 61af072ac98f..c7655a1fe38c 100644
---- a/drivers/nvdimm/pfn_devs.c
-+++ b/drivers/nvdimm/pfn_devs.c
-@@ -13,6 +13,8 @@
- #include "pfn.h"
- #include "nd.h"
- 
-+const static bool page_struct_override = IS_ENABLED(CONFIG_NVDIMM_KMSAN);
-+
- static void nd_pfn_release(struct device *dev)
- {
- 	struct nd_region *nd_region = to_nd_region(dev->parent);
-@@ -758,12 +760,6 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
- 		return -ENXIO;
- 	}
- 
--	/*
--	 * Note, we use 64 here for the standard size of struct page,
--	 * debugging options may cause it to be larger in which case the
--	 * implementation will limit the pfns advertised through
--	 * ->direct_access() to those that are included in the memmap.
--	 */
- 	start = nsio->res.start;
- 	size = resource_size(&nsio->res);
- 	npfns = PHYS_PFN(size - SZ_8K);
-@@ -782,20 +778,33 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
- 	}
- 	end_trunc = start + size - ALIGN_DOWN(start + size, align);
- 	if (nd_pfn->mode == PFN_MODE_PMEM) {
-+		unsigned long page_map_size = MAX_STRUCT_PAGE_SIZE * npfns;
-+
- 		/*
- 		 * The altmap should be padded out to the block size used
- 		 * when populating the vmemmap. This *should* be equal to
- 		 * PMD_SIZE for most architectures.
- 		 *
--		 * Also make sure size of struct page is less than 128. We
--		 * want to make sure we use large enough size here so that
--		 * we don't have a dynamic reserve space depending on
--		 * struct page size. But we also want to make sure we notice
--		 * when we end up adding new elements to struct page.
-+		 * Also make sure size of struct page is less than
-+		 * MAX_STRUCT_PAGE_SIZE. The goal here is compatibility in the
-+		 * face of production kernel configurations that reduce the
-+		 * 'struct page' size below MAX_STRUCT_PAGE_SIZE. For debug
-+		 * kernel configurations that increase the 'struct page' size
-+		 * above MAX_STRUCT_PAGE_SIZE, the page_struct_override allows
-+		 * for continuing with the capacity that will be wasted when
-+		 * reverting to a production kernel configuration. Otherwise,
-+		 * those configurations are blocked by default.
- 		 */
--		BUILD_BUG_ON(sizeof(struct page) > MAX_STRUCT_PAGE_SIZE);
--		offset = ALIGN(start + SZ_8K + MAX_STRUCT_PAGE_SIZE * npfns, align)
--			- start;
-+		if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE) {
-+			if (page_struct_override)
-+				page_map_size = sizeof(struct page) * npfns;
-+			else {
-+				dev_err(&nd_pfn->dev,
-+					"Memory debug options prevent using pmem for the page map\n");
-+				return -EINVAL;
-+			}
-+		}
-+		offset = ALIGN(start + SZ_8K + page_map_size, align) - start;
- 	} else if (nd_pfn->mode == PFN_MODE_RAM)
- 		offset = ALIGN(start + SZ_8K, align) - start;
- 	else
-@@ -818,7 +827,10 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
- 	pfn_sb->version_minor = cpu_to_le16(4);
- 	pfn_sb->end_trunc = cpu_to_le32(end_trunc);
- 	pfn_sb->align = cpu_to_le32(nd_pfn->align);
--	pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
-+	if (sizeof(struct page) > MAX_STRUCT_PAGE_SIZE && page_struct_override)
-+		pfn_sb->page_struct_size = cpu_to_le16(sizeof(struct page));
-+	else
-+		pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
- 	pfn_sb->page_size = cpu_to_le32(PAGE_SIZE);
- 	checksum = nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
- 	pfn_sb->checksum = cpu_to_le64(checksum);
 
