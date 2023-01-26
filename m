@@ -2,115 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B5D67C622
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 09:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF87C67C62D
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 09:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236504AbjAZInD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 03:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S236123AbjAZIrN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 03:47:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236483AbjAZInA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 03:43:00 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752B824491;
-        Thu, 26 Jan 2023 00:42:53 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4C8385C00BF;
-        Thu, 26 Jan 2023 03:42:52 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 03:42:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674722572; x=1674808972; bh=nO+L+3JIww
-        M86tiUtG5AIEeFVrH8ls6dxU+K7+QHLI4=; b=l9M+Gxf/8h1qzORPNJ7YcsmCp3
-        OstcJLTj5DIsu347LkcLXTLEvjcLc9K+O+zpedlRfIIzRWT05TPrOKG0lXs8cu22
-        4hWoU2xTfEsgdPWjb+4O/uEFaYoa/XTYdSqY2jWsThGejM436dZmiOXP1gfJFObX
-        PYG67cBLHUXl8NtYwtvfCXElyhkSx/kRzm4z8Jt4OrMpLEc/KbMnFZXc8p0ilh3x
-        2794c0TS1Slnp9OpY1SLI2rJj71hxcLIfuk9LBgq0jpD2KgX+5kfwkCYUQQT/oyN
-        ibHj5mRNu4Ii3ftj9M/IGDJ2Og1iOqlXzG8fXN5/JFRypXEYDrVIRO+irb0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674722572; x=1674808972; bh=nO+L+3JIwwM86tiUtG5AIEeFVrH8
-        ls6dxU+K7+QHLI4=; b=L1+9fQt//P0FLmgvzgGv1+uTArB3sXDjL9s22qZdi63D
-        Kb0kzukmtqJwgRhU1FtVb7JMMThaJJTgdpFjfeFV2w9WN6Z+HQNIKxljJ4uKMNTo
-        oVOj6+6hl+zr58I5C8Td026QN+jqpESCCuJ/gGEV1XU6LLXaiKIfjmzJxEFdSYN2
-        7vGd06EqWYeswOr6Ud1W3OpIDNtDtlAceB3ii2tYZXy8c3dMzJjOafMs7qcPKAWM
-        edCQFP4WKXKD9/emhanO0GWrdaTvTEGX8RzN0wZuoI77MGfk3NfE6VLfJk49d4nX
-        4fP0GezCjlRzfMYWcYbd3BkPj7JYTWjsjoKbiuG+Cw==
-X-ME-Sender: <xms:DD3SY_Y3pPxQDd9beYitRETBBplj3tulHSyo8Mh15kOBYzyLCAsBAA>
-    <xme:DD3SY-bz8E5Wu7FSh9T6b33m1zPnpOkFol0uq3iuiQN4w8JRHUPd3mD0zY6_JJDFr
-    4vixELAkqop0qNxT8E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:DD3SYx_VIFvQ5UyXU6pH4PvnF2vVUi3ZLnNHhx6bwQWBz3Ul3BuEFA>
-    <xmx:DD3SY1oE7OsbFSmQEjCEj1w3uNSTIUEP3Nevbjj6QlUSBcpoNrIheg>
-    <xmx:DD3SY6p6osrobRnUYr7R1lal3X5pM6ZEOTqK9nrEwDvQvO3MOQFndQ>
-    <xmx:DD3SY7eGB7Wcba07282fDBsDwWPELL4-hrIpt4Kj4_7N5KFCLb4BHQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 06FDFB60086; Thu, 26 Jan 2023 03:42:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <8454db45-a967-4542-8f16-538043542e14@app.fastmail.com>
-In-Reply-To: <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
-Date:   Thu, 26 Jan 2023 09:42:32 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>
-Subject: Re: [PATCH v1 5/5] gpio: Clean up headers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235570AbjAZIrL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 03:47:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B788A273
+        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 00:46:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674722784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2UJoQG8XqIV2gdZ5V2M7MUTXNJ4+fqx8kSeoZEHtCyE=;
+        b=UWeGjmL6q0Sj4pkM0pHuVYZ8wDN2nuIObNTZUVp+gosFV0gHeo8IkPya9vtrqt4SqHTk0k
+        fOdQjiaLdMAOhlOsW+M0n/VZqL/mGiApf7lLqabvGuC3fNPiWK2J3vfiAN5oVxxBIGWd2s
+        EUn31rvMU3kiL13cwbMHLVqHYin+3DE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-249-XO7I0VIlOVKz7pCpPrnfWg-1; Thu, 26 Jan 2023 03:46:23 -0500
+X-MC-Unique: XO7I0VIlOVKz7pCpPrnfWg-1
+Received: by mail-wm1-f70.google.com with SMTP id z22-20020a05600c0a1600b003db00dc4b69so2510026wmp.5
+        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 00:46:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2UJoQG8XqIV2gdZ5V2M7MUTXNJ4+fqx8kSeoZEHtCyE=;
+        b=bC5Qcrp8RxDkqd1he8wbOR26SH78hvel3zu0xXEU9ZcxmfaLY49ExIB2KzAIojm4cR
+         o4+3v0dXqcF3bdsgc9WguWNzBSYGAXNqc08KOFMfzHnI7qXV3H1EpdxP0LCAFKt0tXLZ
+         FcRMcmqeizw8icyaN8DNWgogwrjmhRIEbLqkx2MOmeNDIIvJkAPWdIArp5yA/riRJZ2u
+         aEVthlnwvqPEFKm087NqNnNkSAAF1PKw1mBSOqfSEftJWyYvqrXyi4q5TWDiRlzdSIbN
+         HJG1xkGPkRyN6L04Zi/5AxxdGJxAKKTk/+o1Sh7a34L7BUb8w96ywbHRSfVbe0LOYDi8
+         1/YQ==
+X-Gm-Message-State: AFqh2kowzk04qoIZ1hIuZiJwSO3Lr3ds8bvSyDlEQ835L90/Qs8ld6nR
+        0DMBgfo3+y/SW6HPGAj9WySxtgYoGtQ8Adn9eMpV0H4F7PV3WeyKlZ9JXJh8xr6x673DMH3c/UI
+        +X46YU5hvH9RF5jWQWQJPWA==
+X-Received: by 2002:a05:600c:714:b0:3d9:ed30:79d with SMTP id i20-20020a05600c071400b003d9ed30079dmr34687539wmn.18.1674722781970;
+        Thu, 26 Jan 2023 00:46:21 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtafnDCs+MxdtjVDkOlNHLIvv1Gu+xFfV8rFc8O/8mrsHf9iNdy6mNIXFzLYO+oSkffev3lmA==
+X-Received: by 2002:a05:600c:714:b0:3d9:ed30:79d with SMTP id i20-20020a05600c071400b003d9ed30079dmr34687520wmn.18.1674722781631;
+        Thu, 26 Jan 2023 00:46:21 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id p20-20020a05600c2e9400b003d9862ec435sm824806wmn.20.2023.01.26.00.46.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Jan 2023 00:46:21 -0800 (PST)
+Message-ID: <ad7d94dd-f0aa-bf21-38c3-58ef1e9e46dc@redhat.com>
+Date:   Thu, 26 Jan 2023 09:46:19 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
+Content-Language: en-US
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-19-rick.p.edgecombe@intel.com>
+ <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
+ <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
+ <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
+ <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
+ <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
+ <dd06b54291ad5721da392a42f2d8e5636301ffef.camel@intel.com>
+ <899d8f3baaf45b896cf335dec2143cd0969a2d8a.camel@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <899d8f3baaf45b896cf335dec2143cd0969a2d8a.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 25, 2023, at 21:10, Andy Shevchenko wrote:
-> There is a few things done:
-> - include only the headers we are direct user of
-> - when pointer is in use, provide a forward declaration
-> - add missing headers
-> - group generic headers and subsystem headers
-> - sort each group alphabetically
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  include/asm-generic/gpio.h    |  8 --------
->  include/linux/gpio.h          |  9 +++------
->  include/linux/gpio/consumer.h | 14 ++++++++++----
->  include/linux/gpio/driver.h   | 34 ++++++++++++++++++++++++----------
->  4 files changed, 37 insertions(+), 28 deletions(-)
+On 26.01.23 01:59, Edgecombe, Rick P wrote:
+> On Wed, 2023-01-25 at 10:43 -0800, Rick Edgecombe wrote:
+>> Thanks for your comments and ideas here, I'll give the:
+>> pte_t pte_mkwrite(struct vm_area_struct *vma, pte_t pte)
+>> ...solution a try.
+> 
+> Well, it turns out there are some pte_mkwrite() callers in other arch's
+> that operate on kernel memory and don't have a VMA. So it needed a new
 
-This change looks fine, but it conflicts with a slightly
-broader cleanup that I meant to have already submitted,
-folding include/asm-generic/gpio.h into linux/gpio.h and
-removing the driver-side interface from that.
+Why not pass in NULL as VMA then and document the semantics? The less 
+similarly named but slightly different functions, the better :)
 
-Let me try to dig out my series again, we should be able to
-either use my version, or merge parts of this patch into it.
+-- 
+Thanks,
 
-     Arnd
+David / dhildenb
+
