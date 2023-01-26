@@ -2,189 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574C167D345
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 18:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF6267D52E
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 20:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjAZReU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 12:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S229802AbjAZTOd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 14:14:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbjAZReS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 12:34:18 -0500
-Received: from fx308.security-mail.net (smtpout30.security-mail.net [85.31.212.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7607A3D92A
-        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 09:34:12 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by fx308.security-mail.net (Postfix) with ESMTP id 8AD30457484
-        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 18:34:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674754450;
-        bh=mGAe5MCFM5+e6dUpTYJXSSXGH2Bt68QabcQ78M+qQYQ=;
-        h=From:To:Cc:Subject:Date;
-        b=vTfMSvxoYa1Cg/D2X1TNRbe440M/3WCUm4P6C1MzxDUYVymZcwlBggjXaIAeSyPqi
-         r4/H1V2ON777iMEsZdkTYNzGvjRwWHWOPnJwHiVe3b9xytDDMrskvyxrVu9oLE4oZl
-         6p7eJijjXWlg2XlzvpFNtjLiXpkLTh8VQ6NO4xCM=
-Received: from fx308 (localhost [127.0.0.1])
-        by fx308.security-mail.net (Postfix) with ESMTP id 774A6456566;
-        Thu, 26 Jan 2023 18:34:10 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <32f4.63d2b992.2c2d.0>
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
-        by fx308.security-mail.net (Postfix) with ESMTPS id 039CF456FAE;
-        Thu, 26 Jan 2023 18:34:10 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTPS id D205A27E0374;
-        Thu, 26 Jan 2023 18:34:09 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id B77B627E0431;
-        Thu, 26 Jan 2023 18:34:09 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu B77B627E0431
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674754449;
-        bh=6N8vM8DHSvacPzNZe/Rjhi7+TG2mJlRN/Z5xbOptOPI=;
-        h=From:To:Date:Message-Id;
-        b=P7Pi8SAGDJAi/Ins6G/QTtc9JUNlUeN/hfMI37CSoCTqbl0zOgfxkQj17//v6OMiw
-         CRN9/MGbOWM3is/WFOeCldnj2mG25dPTFECTM/yKVVGYKCGIDdNTxcBq6c11sLxHn1
-         z3qJh8iYBXaS92XcnTEd3bT832jQEqm69meGRPPU=
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Oy0211sE8ER1; Thu, 26 Jan 2023 18:34:09 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 9469727E0374;
-        Thu, 26 Jan 2023 18:34:09 +0100 (CET)
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jules Maselbas <jmaselbas@kalray.eu>
-Subject: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in generic atomic ops
-Date:   Thu, 26 Jan 2023 18:33:54 +0100
-Message-Id: <20230126173354.13250-1-jmaselbas@kalray.eu>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229650AbjAZTOc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 14:14:32 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9292720;
+        Thu, 26 Jan 2023 11:14:31 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-4c24993965eso36487737b3.12;
+        Thu, 26 Jan 2023 11:14:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MBaflCYw2m4ZpSYc/L1jwPBbC18VWFzN42/SpYCj2js=;
+        b=bHAnbg1qrvnjFDBq4rDAEAtuPzYtSeM884V5t/BDJUvSPa4oE6QHpUQrdKHepinthY
+         0pb7G2bSubps2A+l0PMZ+helB6y0qtS2IUwGvbHoWxgGhKqhpEzG42wRh512unI5VHt/
+         AmIdu3Eoan6D3ezRzU66gub3AuwNvPhWL+ByBPZCawbS5o2k0XZf/oubwhyIZku8mW2u
+         pwQDz5oLoUzBvnFb+nUf3TBrt1+mS+4OmzMTGO1PMbxOrA+cfQguoHSHhIjo7BvZTjii
+         DC4BmYixGumZlYPOa6RX8hlmusN8cR/YkFINMUfQt92/el5jqRaRU01nOG/RazAz0LbP
+         pMAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MBaflCYw2m4ZpSYc/L1jwPBbC18VWFzN42/SpYCj2js=;
+        b=VOfM8o5eH/aOo6NAkCoElLr8lt1itswUWDlCwzLKxl2Ay7i29PfYsFQ3r257Ks+QT3
+         zvcy1hcLnfstJnLhPTh3UAuukVfJ0Sd8cpj8YItm3WPjBQlgEsiA647mTWT4VOQh4tAM
+         rjiMATeL3ljPWdFoDfogiNpdw03bJZMvNKx9jzJ995r+VMGTWVtdfuhKgs91l+YZJOzR
+         ENua/SO/2AJo0fq+hmBk+Xq0SZLYm4Z4UVDTFpQqZWPCWGpHXZ16iwiWQ7BbWYZOZSrf
+         fpQx1+VWc09EnKqn6KbBY5gfjBWLzxwE8Ct6vXN815u3uy850bdJaSdw5fDUxAoxb+wE
+         XQUA==
+X-Gm-Message-State: AFqh2kpB/tixc+MnV5xxOdrIyJ9x7+LXLYvs068U5DUms08dbrxK4fLc
+        amYBsOH9ogr+DyPUfFQHOj6GrfTu+5KiWNq5KL4=
+X-Google-Smtp-Source: AMrXdXupcW0FnUSj2qcKDJ+i5BekGrYWsKP2NEjPHQ96FZBN7tvseY5dVT/oMmNzyu5LA/vU+un2CYi0wXZ5jEg6QOU=
+X-Received: by 2002:a81:5402:0:b0:3d8:8c0e:6d48 with SMTP id
+ i2-20020a815402000000b003d88c0e6d48mr3099310ywb.462.1674760471019; Thu, 26
+ Jan 2023 11:14:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20230126172516.1580058-1-guoren@kernel.org> <20230126172516.1580058-2-guoren@kernel.org>
+In-Reply-To: <20230126172516.1580058-2-guoren@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 26 Jan 2023 20:14:19 +0100
+Message-ID: <CANiq72=Srm7aBu7Stz8-t1PkhFsPXUyoxaLJCLJHG9b6mVc8sQ@mail.gmail.com>
+Subject: Re: [PATCH -next V15 1/7] compiler_types.h: Add __noinstr_section()
+ for noinstr
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Reading and setting the atomic counter should be done through
-arch_atomic_{read,set} macros, which respectively uses {READ,WRITE}_ONCE
-macros.
+On Thu, Jan 26, 2023 at 6:25 PM <guoren@kernel.org> wrote:
+>
+> From: Lai Jiangshan <laijs@linux.alibaba.com>
+>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
 
-This is to avoid the compiler from potentially replay the read access.
+If Lai is the author, but you are submitting it, shouldn't your
+`Signed-off-by` be after his? Or are you co-authors? (but then it
+would need a Co-developed-by tag)
 
-Suggested-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
----
- include/asm-generic/atomic.h | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/include/asm-generic/atomic.h b/include/asm-generic/atomic.h
-index 04b8be9f1a77..711e408af581 100644
---- a/include/asm-generic/atomic.h
-+++ b/include/asm-generic/atomic.h
-@@ -12,6 +12,9 @@
- #include <asm/cmpxchg.h>
- #include <asm/barrier.h>
- 
-+#define arch_atomic_read(v)			READ_ONCE((v)->counter)
-+#define arch_atomic_set(v, i)			WRITE_ONCE(((v)->counter), (i))
-+
- #ifdef CONFIG_SMP
- 
- /* we can build all atomic primitives from cmpxchg */
-@@ -21,7 +24,7 @@ static inline void generic_atomic_##op(int i, atomic_t *v)		\
- {									\
- 	int c, old;							\
- 									\
--	c = v->counter;							\
-+	c = arch_atomic_read(v);					\
- 	while ((old = arch_cmpxchg(&v->counter, c, c c_op i)) != c)	\
- 		c = old;						\
- }
-@@ -31,7 +34,7 @@ static inline int generic_atomic_##op##_return(int i, atomic_t *v)	\
- {									\
- 	int c, old;							\
- 									\
--	c = v->counter;							\
-+	c = arch_atomic_read(v);					\
- 	while ((old = arch_cmpxchg(&v->counter, c, c c_op i)) != c)	\
- 		c = old;						\
- 									\
-@@ -43,7 +46,7 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
- {									\
- 	int c, old;							\
- 									\
--	c = v->counter;							\
-+	c = arch_atomic_read(v);					\
- 	while ((old = arch_cmpxchg(&v->counter, c, c c_op i)) != c)	\
- 		c = old;						\
- 									\
-@@ -58,9 +61,11 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
- static inline void generic_atomic_##op(int i, atomic_t *v)		\
- {									\
- 	unsigned long flags;						\
-+	int c;								\
- 									\
- 	raw_local_irq_save(flags);					\
--	v->counter = v->counter c_op i;					\
-+	c = arch_atomic_read(v);					\
-+	arch_atomic_set(v, c c_op i);					\
- 	raw_local_irq_restore(flags);					\
- }
- 
-@@ -68,27 +73,28 @@ static inline void generic_atomic_##op(int i, atomic_t *v)		\
- static inline int generic_atomic_##op##_return(int i, atomic_t *v)	\
- {									\
- 	unsigned long flags;						\
--	int ret;							\
-+	int c;								\
- 									\
- 	raw_local_irq_save(flags);					\
--	ret = (v->counter = v->counter c_op i);				\
-+	c = arch_atomic_read(v);					\
-+	arch_atomic_set(v, c c_op i);					\
- 	raw_local_irq_restore(flags);					\
- 									\
--	return ret;							\
-+	return c c_op i;						\
- }
- 
- #define ATOMIC_FETCH_OP(op, c_op)					\
- static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
- {									\
- 	unsigned long flags;						\
--	int ret;							\
-+	int c;								\
- 									\
- 	raw_local_irq_save(flags);					\
--	ret = v->counter;						\
--	v->counter = v->counter c_op i;					\
-+	c = arch_atomic_read(v);					\
-+	arch_atomic_set(v, c c_op i);					\
- 	raw_local_irq_restore(flags);					\
- 									\
--	return ret;							\
-+	return c;							\
- }
- 
- #endif /* CONFIG_SMP */
-@@ -127,9 +133,6 @@ ATOMIC_OP(xor, ^)
- #define arch_atomic_or				generic_atomic_or
- #define arch_atomic_xor				generic_atomic_xor
- 
--#define arch_atomic_read(v)			READ_ONCE((v)->counter)
--#define arch_atomic_set(v, i)			WRITE_ONCE(((v)->counter), (i))
--
- #define arch_atomic_xchg(ptr, v)		(arch_xchg(&(ptr)->counter, (v)))
- #define arch_atomic_cmpxchg(v, old, new)	(arch_cmpxchg(&((v)->counter), (old), (new)))
- 
--- 
-2.17.1
-
+Cheers,
+Miguel
