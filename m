@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DAA67D302
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 18:25:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1DB67D304
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 18:25:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbjAZRZq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 12:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S231535AbjAZRZx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 12:25:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjAZRZo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 12:25:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84915D11C;
-        Thu, 26 Jan 2023 09:25:41 -0800 (PST)
+        with ESMTP id S231656AbjAZRZv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 12:25:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587206A732;
+        Thu, 26 Jan 2023 09:25:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 771D661904;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E87DA6187E;
+        Thu, 26 Jan 2023 17:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA97C4339B;
         Thu, 26 Jan 2023 17:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3822DC433B4;
-        Thu, 26 Jan 2023 17:25:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674753940;
-        bh=lEoTBcehc8n4upJA5LC+k+yiIJ7hxcNhFuHkvMT2WVY=;
+        s=k20201202; t=1674753948;
+        bh=DNY322/iimzurqg2rAQmkk32JHcSLTVqr6N5got/hZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VVYfNAnITdk+h/XCgrVAnqxWrI4TwMqCqEfV+BmOS7L2eCkMIcszxEzU+XFjbSocL
-         9KhXDfL/GdSOT4+PEPe9m46anHArz5ptw6Iz6RJP7BeoJDRLY+vvbmiqlpS6Ykob2i
-         WSgISfj4Kvvom3EIwAS+ZQ29TACfOW1one51oQZgLM9cxFeZ5GY2laePVJB09byeKq
-         NENZXefsIoFZlcryjUAbAoHHKjSxdLcJV0M0YMkokkb5msKTvVYUua8+uA3BUXY8CJ
-         ouU3jNI5Y0IINCZZeX66thibWENgEKBPbAAiud1Mdf/K2Y5MMQ2GCkmuhmm6O9subv
-         zPr50c4ZU7eqQ==
+        b=LBYm0SICw9FAXa+VBtN3eixi1dGhdbI9x+fSiqCd41ynJjBaO3mtszt31bCrGvE0j
+         VgIRDwCo1aHd6VyRdut69X9Qi1MV0p4o3mqbQvLiH398DJgba332QZHoP8bo9AzUrV
+         CrhF9XH45VE2sJ8FL526PzWm/FEpRKeJdhgL2Nv+OqXrRKhGBfZQEWQH5y7EMbOq2I
+         VVXQjRHScFSB9c2ygtB6L37YiaKfmJXr1SyjJHcEaNpavTLjSyGEW778M7Vj4rT3tV
+         wsNGRe7DPaq4n6cI7AW8XAaNTwCKbjWcEUtzwkLdlKSx7yFwzQdTAEMPTCnqPHjS5x
+         4HlMc5xuapmrQ==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -40,15 +40,12 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         mark.rutland@arm.com, ben@decadent.org.uk, bjorn@kernel.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH -next V15 1/7] compiler_types.h: Add __noinstr_section() for noinstr
-Date:   Thu, 26 Jan 2023 12:25:10 -0500
-Message-Id: <20230126172516.1580058-2-guoren@kernel.org>
+        Guo Ren <guoren@linux.alibaba.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>
+Subject: [PATCH -next V15 2/7] riscv: ptrace: Remove duplicate operation
+Date:   Thu, 26 Jan 2023 12:25:11 -0500
+Message-Id: <20230126172516.1580058-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230126172516.1580058-1-guoren@kernel.org>
 References: <20230126172516.1580058-1-guoren@kernel.org>
@@ -64,55 +61,33 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Lai Jiangshan <laijs@linux.alibaba.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Using __noinstr_section() doesn't automatically disable all
-instrumentations on the section. Inhibition for some
-instrumentations requires extra code. I.E. KPROBES explicitly
-avoids instrumenting on .noinstr.text.
+The TIF_SYSCALL_TRACE is controlled by a common code, see
+kernel/ptrace.c and include/linux/thread_info.h.
 
-Cc: Borislav Petkov <bp@alien8.de>
-Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Tested-by: Jisheng Zhang <jszhang@kernel.org>
-Tested-by: Guo Ren <guoren@kernel.org>
+clear_task_syscall_work(child, SYSCALL_TRACE);
+
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
 ---
- include/linux/compiler_types.h | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/riscv/kernel/ptrace.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 7c1afe0f4129..0a2ca5755be7 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -231,12 +231,19 @@ struct ftrace_likely_data {
- #define __no_sanitize_or_inline __always_inline
- #endif
+diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+index 2ae8280ae475..44f4b1ca315d 100644
+--- a/arch/riscv/kernel/ptrace.c
++++ b/arch/riscv/kernel/ptrace.c
+@@ -212,7 +212,6 @@ unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
  
--/* Section for code which can't be instrumented at all */
--#define noinstr								\
--	noinline notrace __attribute((__section__(".noinstr.text")))	\
--	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
-+/*
-+ * Using __noinstr_section() doesn't automatically disable all instrumentations
-+ * on the section.  Inhibition for some instrumentations requires extra code.
-+ * I.E. KPROBES explicitly avoids instrumenting on .noinstr.text.
-+ */
-+#define __noinstr_section(section)				\
-+	noinline notrace __section(section) __no_profile	\
-+	__no_kcsan __no_sanitize_address __no_sanitize_coverage	\
- 	__no_sanitize_memory
+ void ptrace_disable(struct task_struct *child)
+ {
+-	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+ }
  
-+/* Section for code which can't be instrumented at all */
-+#define noinstr __noinstr_section(".noinstr.text")
-+
- #endif /* __KERNEL__ */
- 
- #endif /* __ASSEMBLY__ */
+ long arch_ptrace(struct task_struct *child, long request,
 -- 
 2.36.1
 
