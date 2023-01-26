@@ -2,181 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB0767C2C8
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 03:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 397F367C4D0
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 08:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjAZCX6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 25 Jan 2023 21:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
+        id S229633AbjAZHWm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 02:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjAZCX5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 Jan 2023 21:23:57 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF79D5AB72;
-        Wed, 25 Jan 2023 18:23:54 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id k18so713718pll.5;
-        Wed, 25 Jan 2023 18:23:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YdzDiMhd5Z4Kbptw7LbpvnJl2K3L0BK+iFAqX7khznk=;
-        b=cWKQ3LoRkq2yJUejFpLnrkED2LKr3msUYmGPeKxn1zz9oXsR2Q5y+uBNeQcluKW+Hb
-         t3RYOIc3ExQTYLpI6hzcuYBj/SWWdUhatpoaAZ1lhjyniEeSuRQsANu6geJhcoezuexn
-         2p4A6kFID76IX/8Y0c6UDG+PgC275wJuLtxBwwzp0N9TIvOMGwDZt1yO+zWAr6VRegI4
-         Q+v50gsZDo6AJTpm1LmXUDfg/+diQibnpxpLW84XH+nCkK6Du1urF3rgBfcAwQdqN/aI
-         3mBdOgOt2SPx8npCj1G242UNu68EiGAJQ5Ss3rfAVKGpu98B2MekgUQYevlSzX65x4h2
-         M5tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YdzDiMhd5Z4Kbptw7LbpvnJl2K3L0BK+iFAqX7khznk=;
-        b=1LLJGuGGU7V55SR3OpCapJYeSOZf7Yq6lMLmKrowklW14+lry/JVPLqUNk25XGf8nu
-         jOCcXErI2fiNK8W6SOODXGNJINILtBFZHoP5Pg90zFC3PQ75bt17rE4ITlq2qnN4MLnV
-         EURqlPOfb+8Tbe/6c5AY3kxU6+sLgAePl7QkFR6nT2QmKfQQcQnYgZCUbwbp4rwSCuzO
-         9cIQleMkEEPU1ZvwbGNNThYa1zcDlETWMS+m34CZU4e+8ebg2s/Ud4HqrMG6yWEPNfTb
-         eYVOmoGlaYnHQY75gCSM9s8PrRqLrlSwI5/3v4AcR4LA0M8s6zkGjKBODoyh4LP7tJew
-         y1JA==
-X-Gm-Message-State: AO0yUKWbbE5DGrd6yAtrm1cKM1Rs3BlxjAFoVgLYExLZK0aZJ9YIxHA2
-        1nxM4q6wFJnzDyrqhlXwKTE=
-X-Google-Smtp-Source: AK7set928mFCsBjzluN+Hn1fMUpkX7L+xOL83MZOoHVwK3h3Rnfl0pQuSPbhnC4JnUGrnGbjsxX7hA==
-X-Received: by 2002:a17:902:6b89:b0:193:6520:739a with SMTP id p9-20020a1709026b8900b001936520739amr171911plk.46.1674699834095;
-        Wed, 25 Jan 2023 18:23:54 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-79.three.co.id. [180.214.232.79])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170902d48800b001960706141fsm72958plg.149.2023.01.25.18.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 18:23:53 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 8EE9110544A; Thu, 26 Jan 2023 09:23:50 +0700 (WIB)
-Date:   Thu, 26 Jan 2023 09:23:50 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Clement Leger <clement@clement-leger.fr>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>,
-        Marc =?utf-8?B?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Alex Michon <amichon@kalray.eu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-audit@redhat.com,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/31] Documentation: kvx: Add basic documentation
-Message-ID: <Y9HkNpD7iQG9WErv@debian.me>
-References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-2-ysionneau@kalray.eu>
- <Y8z7v53A/UDKFd7j@debian.me>
- <20230125182820.GD5952@tellis.lin.mbt.kalray.eu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zOhV12uQumLCQ78f"
-Content-Disposition: inline
-In-Reply-To: <20230125182820.GD5952@tellis.lin.mbt.kalray.eu>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229674AbjAZHWl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 02:22:41 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4913611D9;
+        Wed, 25 Jan 2023 23:22:39 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 84E2258287B;
+        Thu, 26 Jan 2023 02:22:36 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 02:22:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674717756; x=1674724956; bh=E33V4yTgr/
+        ebT73Eum3QUd1t2W82YQcLJ50MWaQWWA8=; b=GiLb/skMhyZcQ01dO+WmZTL0hL
+        fZ2ikfEbw6M+0GfWoi9BCHFyTrzd/xw84UaBaAMBNbekfpfzAvn0+3OyIl7DpZIk
+        AscfaN2jhi+H4+HQPHW6kdeYv0wuJbvXO+Nmf3robmrH9p5Eaz+pTFIh+gw7OUdr
+        GHaCtnvyFflXRN840zxE0TueOxb7X1UKgvjA9BbNkN54rpLAR1FBHefwPtJLfO63
+        HU5voKjovLZNYSTASSTneRk9lhMeYYIxU5ah7ERIB1I+Tlqz6Sh6cL1quV9LIBsu
+        LJGaa2P7uDg6V7dGWcg5+AdhatDXLV001yKTEzZw6AETD2Ctpr5noVgk6LyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674717756; x=1674724956; bh=E33V4yTgr/ebT73Eum3QUd1t2W82
+        YQcLJ50MWaQWWA8=; b=i56wP0aRGUynM8c34e7C84YjtNs5ESnKIS4Qk9sa0afa
+        hZ6EA3tyzNwBZXGsbGt4dL3J7JuIzcSWHi3zNRP0iTUuzQE6/UwhR5FhRpLn/ouY
+        xt6qq+vPBvkzpCHoSxo03igHd1P6lM5xa5cKrF0kUrwg7q2T50CTjxmrDjS0magc
+        ZxGVHrCofyRHgqO1ckZj1XRFm2MlqCsUcWY5ZDdbx7SuYVnKPtd0L9F879LdS+aK
+        Dn7zgQYu29nT9qh2c89O8Dw8mgobJhwQ28spFTbeCvY5iq0cHOI93ldlBxi2zZYx
+        hCfhfAJXQq9sSPCh3KQtBHwxvY8+uaUayqJxJdu1iQ==
+X-ME-Sender: <xms:OirSY0UrLGgYH3i-5TBnXx5kCGsN2YicrY23OHL1XQjg0oxapCF8GQ>
+    <xme:OirSY4mGQAtxHP9bCv1xlHPGN64L04ZTpqbp3Zo_GJISeoNzutpf4eILgOt_wG15N
+    1B3TnHPfXPQ5aq8ZzA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedguddtiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:OirSY4a2BI8A8n6QHmfRNwvlyjZb0oHPUIh8AqkYJFN6HEjTyNF3mg>
+    <xmx:OirSYzWHad1gVQ1pUnGhOP8BKq_-7XwGF62Qeq8f9YbfS8PPn3iaCw>
+    <xmx:OirSY-nzh-yZLlxChEUc50uhXtONqG_p56LYIjKU8LygqILAOsLvJw>
+    <xmx:PCrSY4uHnBHnmZDNTb4kWTrj5YTK-XYwojaMEFC5m6krF7i9k40zBQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7FEEBB60089; Thu, 26 Jan 2023 02:22:34 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <03605ec4-3e31-475e-8acf-2c342436aa24@app.fastmail.com>
+In-Reply-To: <20230125190757.22555-4-rppt@kernel.org>
+References: <20230125190757.22555-1-rppt@kernel.org>
+ <20230125190757.22555-4-rppt@kernel.org>
+Date:   Thu, 26 Jan 2023 08:22:15 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Mike Rapoport" <rppt@kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     "Brian Cain" <bcain@quicinc.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Greg Ungerer" <gerg@linux-m68k.org>, guoren <guoren@kernel.org>,
+        "Helge Deller" <deller@gmx.de>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Rich Felker" <dalias@libc.org>,
+        "Richard Weinberger" <richard@nod.at>,
+        "Stafford Horne" <shorne@gmail.com>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux--csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 3/3] mm, arch: add generic implementation of pfn_valid() for
+ FLATMEM
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Wed, Jan 25, 2023, at 20:07, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+>
+> Every architecture that supports FLATMEM memory model defines its own
+> version of pfn_valid() that essentially compares a pfn to max_mapnr.
+>
+> Use mips/powerpc version implemented as static inline as a generic
+> implementation of pfn_valid() and drop its per-architecture definitions
+>
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
---zOhV12uQumLCQ78f
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-On Wed, Jan 25, 2023 at 07:28:20PM +0100, Jules Maselbas wrote:
-> Hi Bagas,
->=20
-> Thanks for taking your time and effort to improve the documentation.
-> We not only need to clean the documention syntax and wording but also
-> its content. I am tempted to apply all your proposed changes first and
-> then work on improving and correcting the documentation.
->=20
-> However I am not very sure on how to integrate your changes and give
-> proper contribution attributions. Any insights on this would be greatly
-> appreciated.
->=20
+I assume this can best go through the mm tree, let me know if I should
+pick it up in the asm-generic tree instead.
 
-Hi Jules,
-
-The reword diff can be squashed into the doc patch (here, [01/31]).
-
-For the attribution, since the reword is significant,
-
-Co-developed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---zOhV12uQumLCQ78f
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY9HkLwAKCRD2uYlJVVFO
-ownGAQCyX0e5qWZ8KCgW6jQ0b0lEDmtwh+WnXNpCfwV6NxpnGgD+ISGQ0LnDB1sd
-Rr3pPueL92j0yk6OhCDekI4gR23BOwo=
-=1//R
------END PGP SIGNATURE-----
-
---zOhV12uQumLCQ78f--
+     Arnd
