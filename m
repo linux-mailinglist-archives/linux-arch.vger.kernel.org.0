@@ -2,91 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BEA67CB6A
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 13:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E9267CBAC
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 14:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236515AbjAZM46 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 07:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39754 "EHLO
+        id S230347AbjAZNIu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 08:08:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236001AbjAZM4y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 07:56:54 -0500
+        with ESMTP id S229657AbjAZNIu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 08:08:50 -0500
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197254C2B;
-        Thu, 26 Jan 2023 04:56:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263F55CFDC;
+        Thu, 26 Jan 2023 05:08:48 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id D6B4B320055E;
-        Thu, 26 Jan 2023 07:56:45 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 9698B3200925;
+        Thu, 26 Jan 2023 08:08:44 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 07:56:46 -0500
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 08:08:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674737805; x=
-        1674824205; bh=mrN9AP1x+KQ6HQiktOIDZMEyE5DQCiPIxxOHlND0nYQ=; b=K
-        Uiws7OYeDGsTb5d+zzWZkNiBAS9Y5l1RixhynOEHXxGKPn+L/YZ5rigXKjOuNGx2
-        YPu5RR4JbIxPO2ybBXnV3+B7PV58yjvpoDk26uOwSJgJ4VQlomdJE3d/t1rIOBVK
-        ovJwYqFekGKAz0ubGQj+jkAazL3EHkQ/ppr8J2mpSXZ4tEvIZN+bFXcxt9Pf4Ptl
-        mDCmZRKe0+6jcxMX/xsQxn0XR5u41p92+CH/6x5e3dQ9VztMW99EzsXUUCjs3hlr
-        ee9Y4hytoKbay6KjgUadEhZhmqwEr2rBN3LKvS7ztavkKFdoItNOVg6ITI9l6n9S
-        KMTqDx5DloE5dNj7mVJZw==
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1674738524; x=1674824924; bh=9QQlQ8OR3l
+        Q7ANbnLGJzCKzUzxNH3SO1M63tzLmReU8=; b=bGOQSJQrebxBgNQkKOnJyI53Qd
+        UZ2y68yn0j1iPnKrhB1p4iTeRNa0TbvDq8V5784vAgvgMy4AjqeYAT61c/YPGsKk
+        vDi/TI8H9iRnNE/LgVgoWg8NZgcxcusM6E/qDptd+0DR/KNtVxtVjHfqwWomMRar
+        E7UG0CcDLI8y/j9UZ74KGsK06fPgfA54DN0A/4UMtcLi3MP6tooX/n8zG9OZ3hqr
+        ZrN1a3oyiyOkylfz3Zk28WMIZhKAxOq5m/ueBks4uGsK9DBgi5+qFq3y/8V3gWhk
+        /AOBmUJ0ebp4W1+PYMfiTSP7nFIwo94UeqpaWDpV6rasggW1jp/nh0wWta6w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674737805; x=
-        1674824205; bh=mrN9AP1x+KQ6HQiktOIDZMEyE5DQCiPIxxOHlND0nYQ=; b=A
-        Cpa6gHV6+muZ0G6UI9xQufkiIGJ3o9dm7ChBHF83nMBkVsyxT1ZKVYpQ8kW+reDA
-        bNHY1fz0RG+1/z8G2ZWItZEZXDg9qB61apbg2wj/M924dz6SNdImIzxUD6J2JaO9
-        D8VpTS9Im0mct7J59Lat6uuWNAEZq0L/doIeFJt7s+O6NMlRUwsIRUc2mTAavDgq
-        F6bS0kGrh8bDAY2+oNX20hLqZ7JsSfMms/89JRJBrdgfYiScswR+8/gddcrhxwji
-        lC5TbTQYLHvl70ZeISPL3bF0qvxdyBeOrQHCVZ4nbN1rKzNP6ZUdMbfkq29c+GVt
-        DLlbv8jQ68GE1CqxvQivg==
-X-ME-Sender: <xms:jHjSYxJFJ2TYxpRbh7cqixsL9N900bxuxtZ_znmc6-M1elJSjLZr1A>
-    <xme:jHjSY9KwVH1Vj08rIQvHs-oKr7m1dj4L0CNa2M3q_j0ytNt_DoErdY6ZMBNtDhrqe
-    PjOae8RlfhOXFe5his>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedggeeiucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1674738524; x=1674824924; bh=9QQlQ8OR3lQ7ANbnLGJzCKzUzxNH
+        3SO1M63tzLmReU8=; b=UkVFsbQIWdvMgbEoTghnOBCiu1fmZLk7QAD1cfSqOfDS
+        LnFUhh7BssziNnPEjsu1EwUzdFOfIvUnfCLY5UL8yg61kq4INZo7GLjg3a/UFBZQ
+        zFX1dxiXV7tNS4TLSusDJ0wsBkrTfzaD0UouiwnqEdQvTk/ci1LAuLVbkiA9fUUD
+        Ov8kGqiez0CCtCkdK/GoulEmjRzsWMIanORPbTRDcdWtjrmCIm57SE4oevc9OCOZ
+        rY40NHxBl5ietfDDqNGDjniOaESah5BKyx+7Wx29tiTlg61zpA96au7vTZztgZOT
+        qU5azHgEtJVTJB1XRpD8tUJDOWFhbVZ7iQh33nJd9w==
+X-ME-Sender: <xms:W3vSYzWrUIpSamA3Lgs7TjY-QO_jw778A3EhUghurJGroUoeIZAuww>
+    <xme:W3vSY7mf_HDQ3fkDP7wqUtg50JVvUKzv8ZQGL39EzE9kqckfFVkqilu77JJMVRJI_
+    Itkh990UOdy5_mWARc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedggeekucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:jHjSY5tN5IiSmuyXHT3-n2dWC9_ByDx9V8gqkc_tJM23FfWFDN2WXA>
-    <xmx:jHjSYya5taBJMNhNYf4N15E9OOd764aT9OLt-LlP-diEIemrK3y8rg>
-    <xmx:jHjSY4a9A5H-RQZtMpLADCuGU1INNIZqIFDwW5N_VKduk15zZ2xDcg>
-    <xmx:jXjSY-PSfQwF-F3iXCz5zZ2LaGaXPVsnNYDg9l481uxBXx39KGAR9g>
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:W3vSY_aP_LaflpUUI2nRqCjCc7I86tzdoVWbvAeQYJeDFnMCLl0IpA>
+    <xmx:W3vSY-W7iyIrPcHRTcUxAATF3WM3Z22xFrRN6_dZEOd0Z6bcXHVCww>
+    <xmx:W3vSY9mCrkmh7C0TblhQP24w0nWUakSfmSoKRtggg9bRSyJav3KTfg>
+    <xmx:XHvSY7ZHQ99m8KMWgfx8xwYuXKbsezBX7xt1Usod_OdaOYf7PFbrLA>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B956CB60086; Thu, 26 Jan 2023 07:56:44 -0500 (EST)
+        id 523F9B60086; Thu, 26 Jan 2023 08:08:43 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
 Mime-Version: 1.0
-Message-Id: <a9ec7f46-dd07-40e7-ae48-a1e48d2101c5@app.fastmail.com>
-In-Reply-To: <7b7df1f7-4f47-d19a-02ff-91984b25ba98@csgroup.eu>
+Message-Id: <38bfface-43a0-4538-afb3-b94e998f2f81@app.fastmail.com>
+In-Reply-To: <Y9JS8HEPMu+/zEFb@smile.fi.intel.com>
 References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-2-andriy.shevchenko@linux.intel.com>
- <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
- <Y9JTo1RkxT2jORPE@smile.fi.intel.com>
- <7b7df1f7-4f47-d19a-02ff-91984b25ba98@csgroup.eu>
-Date:   Thu, 26 Jan 2023 13:56:26 +0100
+ <20230125201020.10948-6-andriy.shevchenko@linux.intel.com>
+ <8454db45-a967-4542-8f16-538043542e14@app.fastmail.com>
+ <Y9JS8HEPMu+/zEFb@smile.fi.intel.com>
+Date:   Thu, 26 Jan 2023 14:08:24 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+To:     "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
 Cc:     "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
         "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
         "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Pierluigi Passaro" <pierluigi.p@variscite.com>,
-        "kernel test robot" <lkp@intel.com>
-Subject: Re: [PATCH v1 1/5] gpiolib: fix linker errors when GPIOLIB is disabled
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        "Bartosz Golaszewski" <brgl@bgdev.pl>
+Subject: Re: [PATCH v1 5/5] gpio: Clean up headers
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -96,51 +90,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 13:44, Christophe Leroy wrote:
-> Le 26/01/2023 =C3=A0 11:19, Andy Shevchenko a =C3=A9crit=C2=A0:
->> On Thu, Jan 26, 2023 at 08:14:49AM +0000, Christophe Leroy wrote:
->>> Le 25/01/2023 =C3=A0 21:10, Andy Shevchenko a =C3=A9crit=C2=A0:
->>>> From: Pierluigi Passaro <pierluigi.p@variscite.com>
->>>>
->>>> Both the functions gpiochip_request_own_desc and
->>>> gpiochip_free_own_desc are exported from
->>>>       drivers/gpio/gpiolib.c
->>>> but this file is compiled only when CONFIG_GPIOLIB is enabled.
->>>> Move the prototypes under "#ifdef CONFIG_GPIOLIB" and provide
->>>> reasonable definitions and includes in the "#else" branch.
->>>
->>> Can you give more details on when and why link fails ?
->>>
->>> You are adding a WARN(), I understand it mean the function should ne=
-ver
->>> ever be called. Shouldn't it be dropped completely by the compiler ?=
- In
->>> that case, no call to gpiochip_request_own_desc() should be emitted =
-and
->>> so link should be ok.
->>>
->>> If link fails, it means we still have unexpected calls to
->>> gpiochip_request_own_desc() or gpiochip_free_own_desc(), and we shou=
-ld
->>> fix the root cause instead of hiding it with a WARN().
->>=20
->> I agree, but what do you suggest exactly? I think the calls to that f=
-unctions
->> shouldn't be in the some drivers as it's layering violation (they are=
- not a
->> GPIO chips to begin with). Simply adding a dependency not better than=
- this one.
->>=20
+On Thu, Jan 26, 2023, at 11:16, Andy Shevchenko wrote:
+> On Thu, Jan 26, 2023 at 09:42:32AM +0100, Arnd Bergmann wrote:
+>> On Wed, Jan 25, 2023, at 21:10, Andy Shevchenko wrote:
+>> > There is a few things done:
+>> > - include only the headers we are direct user of
+>> > - when pointer is in use, provide a forward declaration
+>> > - add missing headers
+>> > - group generic headers and subsystem headers
+>> > - sort each group alphabetically
+>> >
+>> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> > ---
+>> >  include/asm-generic/gpio.h    |  8 --------
+>> >  include/linux/gpio.h          |  9 +++------
+>> >  include/linux/gpio/consumer.h | 14 ++++++++++----
+>> >  include/linux/gpio/driver.h   | 34 ++++++++++++++++++++++++----------
+>> >  4 files changed, 37 insertions(+), 28 deletions(-)
+>> 
+>> This change looks fine, but it conflicts with a slightly
+>> broader cleanup that I meant to have already submitted,
+>> folding include/asm-generic/gpio.h into linux/gpio.h and
+>> removing the driver-side interface from that.
+>> 
+>> Let me try to dig out my series again, we should be able to
+>> either use my version, or merge parts of this patch into it.
 >
-> My suggestion is to go step by step. First step is to explicitely list=20
-> drivers that call those functions without selecting GPIOLIB.
+> Can you share your patches, so I will rebase mine on top and see what's left?
+>
 
-I tried that and sent the list of the drivers that call these functions,
-but as I wrote, all of them already require GPIOLIB to be set.
+See the top patches of my randconfig branch at
 
-This means either I made a mistake in my search, or the problem
-has already been fixed. Either way, I think Andy should provide
-the exact build failure he observed so we know what caller caused
-the issue.
+https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=randconfig-6.3-next
 
-     Arnd
+There are eight cleanup patches for gpiolib, plus another seven
+patches for individual drivers. I just rebased the tree on top of
+linux-next, fixed previous build regression, and will send the
+gpiolib patches later on if there are no new problems with it.
+
+   Arnd
