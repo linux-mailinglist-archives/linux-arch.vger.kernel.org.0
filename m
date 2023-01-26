@@ -2,170 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C8D67C9A5
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 12:20:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECACD67CA78
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 13:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237242AbjAZLUG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 06:20:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S237060AbjAZMEa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 07:04:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237167AbjAZLUE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 06:20:04 -0500
-Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020689013
-        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 03:20:02 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by fx403.security-mail.net (Postfix) with ESMTP id E6A5F5A2D92
-        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 12:20:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1674732001;
-        bh=OqCvIwTp55CF55aZkBqjkzrzT0JUeA+LZlEPOgMrjUs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ItVfUK/SWpZBayLQn9djlHKarvWPtxRbO0LpCIVMyK7PXCdF2oBhm/4CN0E36dJqn
-         Dw+eu+lUqiTEdEMd0mCELfXG+QU46EsibHLGn5jb0aFfz9e/4ex6kocJBkTBGikY9u
-         CgNNWf0E4QSvqVW5rfvJqqQdL5LgNy6EYYM7SrO4=
-Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
- (Postfix) with ESMTP id 953765A26D0; Thu, 26 Jan 2023 12:20:00 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx403.security-mail.net (Postfix) with ESMTPS id 61FD45A2C93; Thu, 26 Jan
- 2023 12:19:59 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 14ABE27E0494; Thu, 26 Jan 2023
- 12:19:59 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id DF47D27E0492; Thu, 26 Jan 2023 12:19:58 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- pfciJ45Q2s0p; Thu, 26 Jan 2023 12:19:58 +0100 (CET)
-Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 54C0E27E0491; Thu, 26 Jan 2023
- 12:19:58 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <15758.63d261df.603f0.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu DF47D27E0492
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674731999;
- bh=WZmMAU5oDXdE8nH21Z9/oEYDB4aJcVI+BZJZRijscoE=;
- h=Date:From:To:Message-ID:MIME-Version;
- b=j1vE3RefRWU+Edbs1N0iE0tzWyYjxl/gZtHYHoLg28itdNE33MgiN2bfdUzmsCNIf
- fGvnQLCt1UYpe9OwO6IsOgMVMGeyfjhuKTk/jBo/Rj9J9XlDnsZIL2Y/krX965mtdP
- 7zbosDMpwSortwRdjow6i9u+UCMvgvCsEuTSJU/k=
-Date:   Thu, 26 Jan 2023 12:19:57 +0100
-From:   Jules Maselbas <jmaselbas@kalray.eu>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Waiman Long <longman@redhat.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Clement Leger <clement@clement-leger.fr>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Alex Michon <amichon@kalray.eu>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Bharat Bhushan <bbhushan2@marvell.com>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Atish Patra <atishp@atishpatra.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Qi Liu <liuqi115@huawei.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-audit@redhat.com,
-        linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH v2 11/31] kvx: Add atomic/locking headers
-Message-ID: <20230126111957.GG5952@tellis.lin.mbt.kalray.eu>
-References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-12-ysionneau@kalray.eu> <Y8qw2MaCJZzu3Ows@FVFF77S0Q05N>
- <20230126095720.GF5952@tellis.lin.mbt.kalray.eu>
+        with ESMTP id S236821AbjAZME3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 07:04:29 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D23E8688;
+        Thu, 26 Jan 2023 04:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VOYYOFluZ3iiE3C4UV5w2zwSbmkrX31OvmObcOHb8QY=; b=a4Dxr3QUr9TtmHfliGOtcckkzx
+        BrP5GWkLqc27yiUm4kwh19HaOVWBXahjBqw/wPDcEhVzPchelLHiGctMWCq8KVERaxBV+MzPRs7YD
+        s7xFIhhUHFTBcr0IBv19oaJvydg7OHzPC9cZD3k9h8yXi9iumBnFnHKj7fbxel0aGk6MTYEI8n7rz
+        VJWfPck6gySngS1vUKbLJbhJsn7dmxZonWOTlYAnzhCXODc79DpGm0cv4Ct/FtpQKWmz2xi7E/5Y5
+        mgtej+AQW8D2kRVq+Ru0p5qzcwJ9vdCP54+cxPk9OJYRNIX6YKokDu1hmNfkpTOHL5hQ4w8qDBU6c
+        ml/cqMcw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pL0yo-006hzg-Em; Thu, 26 Jan 2023 12:03:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CDDFC3002BF;
+        Thu, 26 Jan 2023 13:03:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 96DF92082E0E1; Thu, 26 Jan 2023 13:03:44 +0100 (CET)
+Date:   Thu, 26 Jan 2023 13:03:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH resend] iopoll: Call cpu_relax() in busy loops
+Message-ID: <Y9JsIJat3sZU2rl1@hirez.programming.kicks-ass.net>
+References: <8d492ee4a391bd089a01c218b0b4e05cf8ea593c.1674729407.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230126095720.GF5952@tellis.lin.mbt.kalray.eu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <8d492ee4a391bd089a01c218b0b4e05cf8ea593c.1674729407.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 26, 2023 at 10:57:20AM +0100, Jules Maselbas wrote:
-> Hi Mark,
-...
+On Thu, Jan 26, 2023 at 11:45:37AM +0100, Geert Uytterhoeven wrote:
+> It is considered good practice to call cpu_relax() in busy loops, see
+> Documentation/process/volatile-considered-harmful.rst.  This can not
+> only lower CPU power consumption or yield to a hyperthreaded twin
+> processor, but also allows an architecture to mitigate hardware issues
+> (e.g. ARM Erratum 754327 for Cortex-A9 prior to r2p0) in the
+> architecture-specific cpu_relax() implementation.
+> 
+> As the iopoll helpers lack calls to cpu_relax(), people are sometimes
+> reluctant to use them, and may fall back to open-coded polling loops
+> (including cpu_relax() calls) instead.
+> 
+> Fix this by adding calls to cpu_relax() to the iopoll helpers:
+>   - For the non-atomic case, it is sufficient to call cpu_relax() in
+>     case of a zero sleep-between-reads value, as a call to
+>     usleep_range() is a safe barrier otherwise.
+>   - For the atomic case, cpu_relax() must be called regardless of the
+>     sleep-between-reads value, as there is no guarantee all
+>     architecture-specific implementations of udelay() handle this.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> > > +static inline int arch_atomic_add_return(int i, atomic_t *v)
-> > > +{
-> > > +	int new, old, ret;
-> > > +
-> > > +	do {
-> > > +		old = v->counter;
-> > 
-> > Likewise, arch_atomic64_read(v) here.
-> ack, this will bt arch_atomic_read(v) here since this is not atomic64_t
-> here.
-I took a second look at this and I think we are not doing the right
-thing, we do not need to defined arch_atomic_add_return at all since
-we are including the generic atomic right after, which will define
-the macro arch_atomic_add_return as generic_atomic_add_return
+In addition to these dodgy architecture fails, cpu_relax() is also a
+compiler barrier, it is not immediately obvious that the @op argument
+'function' will result in an actual function call (inlining ftw).
 
-> 
-> Thanks
-> -- Jules
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
+Where a function call is a C sequence point, this is lost on inlining.
+Therefore, with agressive enough optimization it might be possible for
+the compiler to hoist the:
 
+	(val) = op(args);
 
+'load' out of the loop because it doesn't see the value changing. The
+addition of cpu_relax() will inhibit this.
 
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
+> ---
+> Resent with a larger audience due to lack of comments.
+> 
+> This has been discussed before, but I am not aware of any patches moving
+> forward:
+>   - "Re: [PATCH 6/7] clk: renesas: rcar-gen3: Add custom clock for PLLs"
+>     https://lore.kernel.org/all/CAMuHMdWUEhs=nwP+a0vO2jOzkq-7FEOqcJ+SsxAGNXX1PQ2KMA@mail.gmail.com/
+>   - "Re: [PATCH v2] clk: samsung: Prevent potential endless loop in the PLL set_rate ops"
+>     https://lore.kernel.org/all/20200811164628.GA7958@kozik-lap
+> ---
+>  include/linux/iopoll.h | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
+> index 2c8860e406bd8cae..73132721d1891a2e 100644
+> --- a/include/linux/iopoll.h
+> +++ b/include/linux/iopoll.h
+> @@ -53,6 +53,8 @@
+>  		} \
+>  		if (__sleep_us) \
+>  			usleep_range((__sleep_us >> 2) + 1, __sleep_us); \
+> +		else \
+> +			cpu_relax(); \
+
+There's a simplicitly argument to be had for making it unconditional
+here too I suppose. usleep() is 'slow' anyway.
+
+>  	} \
+>  	(cond) ? 0 : -ETIMEDOUT; \
+>  })
+> @@ -95,6 +97,7 @@
+>  		} \
+>  		if (__delay_us) \
+>  			udelay(__delay_us); \
+> +		cpu_relax(); \
+>  	} \
+>  	(cond) ? 0 : -ETIMEDOUT; \
+>  })
+> -- 
+> 2.34.1
+> 
