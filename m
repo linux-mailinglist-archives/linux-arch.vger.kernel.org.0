@@ -2,92 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C88567D404
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 19:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574C167D345
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 18:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbjAZSXg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 13:23:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
+        id S231726AbjAZReU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 12:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbjAZSXf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 13:23:35 -0500
-X-Greylist: delayed 2670 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Jan 2023 10:23:26 PST
-Received: from sp14.canonet.ne.jp (sp14.canonet.ne.jp [210.134.168.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA79A611EF;
-        Thu, 26 Jan 2023 10:23:26 -0800 (PST)
-Received: from csp14.canonet.ne.jp (unknown [172.21.160.134])
-        by sp14.canonet.ne.jp (Postfix) with ESMTP id 293561E03D6;
-        Fri, 27 Jan 2023 02:27:42 +0900 (JST)
-Received: from echeck14.canonet.ne.jp ([172.21.160.124])
-        by csp4 with ESMTP
-        id L62IpIR5IVjWJL62Ip2dLE; Fri, 27 Jan 2023 02:27:42 +0900
-X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=WsmVjfTv c=1 sm=1 tr=0
- ts=63d2b80e cx=g_jp:t_eml p=jICtXCb1Bd4A:10 p=QA8zHFxAwLBQ4A9MkZgA:9
- p=WKcvGfCz9DfGexK3dBCb:22 a=puqJfqqrwnhV2n3dwg+kWg==:117
- a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
- a=RvmDmJFTN0MA:10 a=x7bEGLp0ZPQA:10 a=CjuIK1q_8ugA:10 a=0iaRBTTaEecA:10
- a=xo5jKAKm-U-Zyk2_beg_:22"
-X-CNT-CMCheck-Score: 100.00
-Received: from echeck14.canonet.ne.jp (localhost [127.0.0.1])
-        by esets.canonet.ne.jp (Postfix) with ESMTP id D706F1C025B;
-        Fri, 27 Jan 2023 02:27:41 +0900 (JST)
-X-Virus-Scanner: This message was checked by ESET Mail Security
-        for Linux/BSD. For more information on ESET Mail Security,
-        please, visit our website: http://www.eset.com/.
-Received: from smtp14.canonet.ne.jp (unknown [172.21.160.104])
-        by echeck14.canonet.ne.jp (Postfix) with ESMTP id ABB9C1C0251;
-        Fri, 27 Jan 2023 02:27:41 +0900 (JST)
-Received: from daime.co.jp (webmail.canonet.ne.jp [210.134.169.250])
-        by smtp14.canonet.ne.jp (Postfix) with ESMTPA id CC03315F967;
-        Fri, 27 Jan 2023 02:27:40 +0900 (JST)
-MIME-Version: 1.0
-Message-ID: <20230126172740.00004405.0310@daime.co.jp>
-Date:   Fri, 27 Jan 2023 02:27:40 +0900
-From:   "Mrs Alice Walton" <daime@daime.co.jp>
-To:     <INQUIRY@daime.co.jp>
-Reply-To: <alicewaltton1@gmail.com>
-Subject: INQUIRY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-ORGANIZATION: Mrs Alice Walton
-X-MAILER: Active! mail
-X-EsetResult: clean, %VIRUSNAME%
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1674754062;VERSION=7944;MC=3885191053;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
-X-I-ESET-AS: RN=0;RNP=
-X-ESET-Antispam: OK
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        LOCALPART_IN_SUBJECT,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_MR_MRS,
-        UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5123]
-        *  1.1 LOCALPART_IN_SUBJECT Local part of To: address appears in
-        *      Subject
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [alicewaltton1[at]gmail.com]
-        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 T_HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
-X-Spam-Level: ******
+        with ESMTP id S231672AbjAZReS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 12:34:18 -0500
+Received: from fx308.security-mail.net (smtpout30.security-mail.net [85.31.212.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7607A3D92A
+        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 09:34:12 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id 8AD30457484
+        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 18:34:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674754450;
+        bh=mGAe5MCFM5+e6dUpTYJXSSXGH2Bt68QabcQ78M+qQYQ=;
+        h=From:To:Cc:Subject:Date;
+        b=vTfMSvxoYa1Cg/D2X1TNRbe440M/3WCUm4P6C1MzxDUYVymZcwlBggjXaIAeSyPqi
+         r4/H1V2ON777iMEsZdkTYNzGvjRwWHWOPnJwHiVe3b9xytDDMrskvyxrVu9oLE4oZl
+         6p7eJijjXWlg2XlzvpFNtjLiXpkLTh8VQ6NO4xCM=
+Received: from fx308 (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id 774A6456566;
+        Thu, 26 Jan 2023 18:34:10 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <32f4.63d2b992.2c2d.0>
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53])
+        by fx308.security-mail.net (Postfix) with ESMTPS id 039CF456FAE;
+        Thu, 26 Jan 2023 18:34:10 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTPS id D205A27E0374;
+        Thu, 26 Jan 2023 18:34:09 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id B77B627E0431;
+        Thu, 26 Jan 2023 18:34:09 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu B77B627E0431
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674754449;
+        bh=6N8vM8DHSvacPzNZe/Rjhi7+TG2mJlRN/Z5xbOptOPI=;
+        h=From:To:Date:Message-Id;
+        b=P7Pi8SAGDJAi/Ins6G/QTtc9JUNlUeN/hfMI37CSoCTqbl0zOgfxkQj17//v6OMiw
+         CRN9/MGbOWM3is/WFOeCldnj2mG25dPTFECTM/yKVVGYKCGIDdNTxcBq6c11sLxHn1
+         z3qJh8iYBXaS92XcnTEd3bT832jQEqm69meGRPPU=
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Oy0211sE8ER1; Thu, 26 Jan 2023 18:34:09 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 9469727E0374;
+        Thu, 26 Jan 2023 18:34:09 +0100 (CET)
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jules Maselbas <jmaselbas@kalray.eu>
+Subject: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in generic atomic ops
+Date:   Thu, 26 Jan 2023 18:33:54 +0100
+Message-Id: <20230126173354.13250-1-jmaselbas@kalray.eu>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Reading and setting the atomic counter should be done through
+arch_atomic_{read,set} macros, which respectively uses {READ,WRITE}_ONCE
+macros.
 
-Greetings,
+This is to avoid the compiler from potentially replay the read access.
 
-I trust you are well. I sent you an email yesterday, I just want to confirm if you received it.
-Please let me know as soon as possible,
+Suggested-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+---
+ include/asm-generic/atomic.h | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
-Regard
-Mrs Alice Walton
-
+diff --git a/include/asm-generic/atomic.h b/include/asm-generic/atomic.h
+index 04b8be9f1a77..711e408af581 100644
+--- a/include/asm-generic/atomic.h
++++ b/include/asm-generic/atomic.h
+@@ -12,6 +12,9 @@
+ #include <asm/cmpxchg.h>
+ #include <asm/barrier.h>
+ 
++#define arch_atomic_read(v)			READ_ONCE((v)->counter)
++#define arch_atomic_set(v, i)			WRITE_ONCE(((v)->counter), (i))
++
+ #ifdef CONFIG_SMP
+ 
+ /* we can build all atomic primitives from cmpxchg */
+@@ -21,7 +24,7 @@ static inline void generic_atomic_##op(int i, atomic_t *v)		\
+ {									\
+ 	int c, old;							\
+ 									\
+-	c = v->counter;							\
++	c = arch_atomic_read(v);					\
+ 	while ((old = arch_cmpxchg(&v->counter, c, c c_op i)) != c)	\
+ 		c = old;						\
+ }
+@@ -31,7 +34,7 @@ static inline int generic_atomic_##op##_return(int i, atomic_t *v)	\
+ {									\
+ 	int c, old;							\
+ 									\
+-	c = v->counter;							\
++	c = arch_atomic_read(v);					\
+ 	while ((old = arch_cmpxchg(&v->counter, c, c c_op i)) != c)	\
+ 		c = old;						\
+ 									\
+@@ -43,7 +46,7 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
+ {									\
+ 	int c, old;							\
+ 									\
+-	c = v->counter;							\
++	c = arch_atomic_read(v);					\
+ 	while ((old = arch_cmpxchg(&v->counter, c, c c_op i)) != c)	\
+ 		c = old;						\
+ 									\
+@@ -58,9 +61,11 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
+ static inline void generic_atomic_##op(int i, atomic_t *v)		\
+ {									\
+ 	unsigned long flags;						\
++	int c;								\
+ 									\
+ 	raw_local_irq_save(flags);					\
+-	v->counter = v->counter c_op i;					\
++	c = arch_atomic_read(v);					\
++	arch_atomic_set(v, c c_op i);					\
+ 	raw_local_irq_restore(flags);					\
+ }
+ 
+@@ -68,27 +73,28 @@ static inline void generic_atomic_##op(int i, atomic_t *v)		\
+ static inline int generic_atomic_##op##_return(int i, atomic_t *v)	\
+ {									\
+ 	unsigned long flags;						\
+-	int ret;							\
++	int c;								\
+ 									\
+ 	raw_local_irq_save(flags);					\
+-	ret = (v->counter = v->counter c_op i);				\
++	c = arch_atomic_read(v);					\
++	arch_atomic_set(v, c c_op i);					\
+ 	raw_local_irq_restore(flags);					\
+ 									\
+-	return ret;							\
++	return c c_op i;						\
+ }
+ 
+ #define ATOMIC_FETCH_OP(op, c_op)					\
+ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
+ {									\
+ 	unsigned long flags;						\
+-	int ret;							\
++	int c;								\
+ 									\
+ 	raw_local_irq_save(flags);					\
+-	ret = v->counter;						\
+-	v->counter = v->counter c_op i;					\
++	c = arch_atomic_read(v);					\
++	arch_atomic_set(v, c c_op i);					\
+ 	raw_local_irq_restore(flags);					\
+ 									\
+-	return ret;							\
++	return c;							\
+ }
+ 
+ #endif /* CONFIG_SMP */
+@@ -127,9 +133,6 @@ ATOMIC_OP(xor, ^)
+ #define arch_atomic_or				generic_atomic_or
+ #define arch_atomic_xor				generic_atomic_xor
+ 
+-#define arch_atomic_read(v)			READ_ONCE((v)->counter)
+-#define arch_atomic_set(v, i)			WRITE_ONCE(((v)->counter), (i))
+-
+ #define arch_atomic_xchg(ptr, v)		(arch_xchg(&(ptr)->counter, (v)))
+ #define arch_atomic_cmpxchg(v, old, new)	(arch_cmpxchg(&((v)->counter), (old), (new)))
+ 
+-- 
+2.17.1
 
