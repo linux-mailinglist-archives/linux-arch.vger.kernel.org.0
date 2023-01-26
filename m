@@ -2,27 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C54C67C98C
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 12:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C8D67C9A5
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 12:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237214AbjAZLPw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 06:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S237242AbjAZLUG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 06:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236972AbjAZLPv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 06:15:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E6E410CD;
-        Thu, 26 Jan 2023 03:15:50 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33988C14;
-        Thu, 26 Jan 2023 03:16:31 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.10.122])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 402733F71E;
-        Thu, 26 Jan 2023 03:15:40 -0800 (PST)
-Date:   Thu, 26 Jan 2023 11:15:37 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
+        with ESMTP id S237167AbjAZLUE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 06:20:04 -0500
+Received: from fx403.security-mail.net (smtpout140.security-mail.net [85.31.212.143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020689013
+        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 03:20:02 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx403.security-mail.net (Postfix) with ESMTP id E6A5F5A2D92
+        for <linux-arch@vger.kernel.org>; Thu, 26 Jan 2023 12:20:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1674732001;
+        bh=OqCvIwTp55CF55aZkBqjkzrzT0JUeA+LZlEPOgMrjUs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ItVfUK/SWpZBayLQn9djlHKarvWPtxRbO0LpCIVMyK7PXCdF2oBhm/4CN0E36dJqn
+         Dw+eu+lUqiTEdEMd0mCELfXG+QU46EsibHLGn5jb0aFfz9e/4ex6kocJBkTBGikY9u
+         CgNNWf0E4QSvqVW5rfvJqqQdL5LgNy6EYYM7SrO4=
+Received: from fx403 (localhost [127.0.0.1]) by fx403.security-mail.net
+ (Postfix) with ESMTP id 953765A26D0; Thu, 26 Jan 2023 12:20:00 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx403.security-mail.net (Postfix) with ESMTPS id 61FD45A2C93; Thu, 26 Jan
+ 2023 12:19:59 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id 14ABE27E0494; Thu, 26 Jan 2023
+ 12:19:59 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id DF47D27E0492; Thu, 26 Jan 2023 12:19:58 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ pfciJ45Q2s0p; Thu, 26 Jan 2023 12:19:58 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 54C0E27E0491; Thu, 26 Jan 2023
+ 12:19:58 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <15758.63d261df.603f0.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu DF47D27E0492
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1674731999;
+ bh=WZmMAU5oDXdE8nH21Z9/oEYDB4aJcVI+BZJZRijscoE=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=j1vE3RefRWU+Edbs1N0iE0tzWyYjxl/gZtHYHoLg28itdNE33MgiN2bfdUzmsCNIf
+ fGvnQLCt1UYpe9OwO6IsOgMVMGeyfjhuKTk/jBo/Rj9J9XlDnsZIL2Y/krX965mtdP
+ 7zbosDMpwSortwRdjow6i9u+UCMvgvCsEuTSJU/k=
+Date:   Thu, 26 Jan 2023 12:19:57 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Mark Rutland <mark.rutland@arm.com>
 Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         Jonathan Corbet <corbet@lwn.net>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -49,7 +79,7 @@ Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         Guillaume Thouvenin <gthouvenin@kalray.eu>,
         Clement Leger <clement@clement-leger.fr>,
         Vincent Chardon <vincent.chardon@elsys-design.com>,
-        Marc =?utf-8?B?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
         Julian Vetter <jvetter@kalray.eu>,
         Samuel Jones <sjones@kalray.eu>,
         Ashley Lesdalons <alesdalons@kalray.eu>,
@@ -84,56 +114,29 @@ Cc:     Yann Sionneau <ysionneau@kalray.eu>, Arnd Bergmann <arnd@arndb.de>,
         linux-arch@vger.kernel.org, linux-audit@redhat.com,
         linux-riscv@lists.infradead.org, bpf@vger.kernel.org
 Subject: Re: [RFC PATCH v2 11/31] kvx: Add atomic/locking headers
-Message-ID: <Y9Jg2QkbLUoYhimB@FVFF77S0Q05N>
+Message-ID: <20230126111957.GG5952@tellis.lin.mbt.kalray.eu>
 References: <20230120141002.2442-1-ysionneau@kalray.eu>
- <20230120141002.2442-12-ysionneau@kalray.eu>
- <Y8qw2MaCJZzu3Ows@FVFF77S0Q05N>
+ <20230120141002.2442-12-ysionneau@kalray.eu> <Y8qw2MaCJZzu3Ows@FVFF77S0Q05N>
  <20230126095720.GF5952@tellis.lin.mbt.kalray.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230126095720.GF5952@tellis.lin.mbt.kalray.eu>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Jules,
-
 On Thu, Jan 26, 2023 at 10:57:20AM +0100, Jules Maselbas wrote:
 > Hi Mark,
-> 
-> On Fri, Jan 20, 2023 at 03:18:48PM +0000, Mark Rutland wrote:
-> > On Fri, Jan 20, 2023 at 03:09:42PM +0100, Yann Sionneau wrote:
-> > > +#define ATOMIC64_RETURN_OP(op, c_op)					\
-> > > +static inline long arch_atomic64_##op##_return(long i, atomic64_t *v)	\
-> > > +{									\
-> > > +	long new, old, ret;						\
-> > > +									\
-> > > +	do {								\
-> > > +		old = v->counter;					\
-> > 
-> > This should be arch_atomic64_read(v), in order to avoid the potential for the
-> > compiler to replay the access and introduce ABA races and other such problems.
-> Thanks for the suggestion, this will be into v3.
-> 
-> > For details, see:
-> > 
-> >   https://lore.kernel.org/lkml/Y70SWXHDmOc3RhMd@osiris/
-> >   https://lore.kernel.org/lkml/Y71LoCIl+IFdy9D8@FVFF77S0Q05N/
-> > 
-> > I see that the generic 32-bit atomic code suffers from that issue, and we
-> > should fix it.
-> I took a look at the generic 32-bit atomic, but I am unsure if this
-> needs to be done for both the SMP and non-SMP implementations. But I
-> can send a first patch and we can discuss from there.
-
-Sounds good to me; thanks!
-
-[...]
+...
 
 > > > +static inline int arch_atomic_add_return(int i, atomic_t *v)
 > > > +{
@@ -145,8 +148,24 @@ Sounds good to me; thanks!
 > > Likewise, arch_atomic64_read(v) here.
 > ack, this will bt arch_atomic_read(v) here since this is not atomic64_t
 > here.
+I took a second look at this and I think we are not doing the right
+thing, we do not need to defined arch_atomic_add_return at all since
+we are including the generic atomic right after, which will define
+the macro arch_atomic_add_return as generic_atomic_add_return
 
-Ah, yes, my bad!
+> 
+> Thanks
+> -- Jules
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
 
-Thanks,
-Mark.
+
+
+
