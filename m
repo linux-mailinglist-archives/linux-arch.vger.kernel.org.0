@@ -2,117 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5482E67C5A3
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 09:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DC867C60E
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 09:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbjAZIUu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 03:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S236470AbjAZIku (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 03:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234999AbjAZIUt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 03:20:49 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FE8677AE;
-        Thu, 26 Jan 2023 00:20:47 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id m26so714749qtp.9;
-        Thu, 26 Jan 2023 00:20:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iTLUhLqiktW0lQYPPHgLpL0hyET/yRv7DDBqjk/47Fc=;
-        b=7+LRcWEznPa5uKoHJ1Tg+ykZpb6vX6VLjWaJRa9B+MZdl41zBVlhXNmcLBu8/LUrg1
-         b/PuJyIy0Go3MjWrP+uM+5ME6ZLSe/zJDVU4m59cO7ZEVB51LFdSIrQlkNvgDMvH1Bp4
-         vd3r5h+J62icDFbVCxbtIBGfueDAQj+m/QqeXwmUvdf+3rSRofIeuJjqi2Btl0OD+x0K
-         ZOapxF9oOIPgJ+L5/tnB58FNcDky642b8KN7p8Z2dWDXo4bO6mNY4LXjjltYuA6wCQek
-         rG9qEf5wjq2aeEoNT84Hz3anvC/N3bl9OCfchWFjpQX5heUAZVgczyC3qXS+4uD6gvgl
-         vkrw==
-X-Gm-Message-State: AFqh2kruT9tJ1lepFIJ4Uk3IEXFGV/RZynrSdpRh7l+J0GMAGyhE8Glr
-        wcUXsqO7TsxZr+7kUuQezqoL/R15SSZuUg==
-X-Google-Smtp-Source: AMrXdXvRhGAyW/N9yjvNqC9twGwSug95UgGB/kyWFjQYeOXDpVBNU3zAq9YlPOJJttgil+RQ3F/R6Q==
-X-Received: by 2002:ac8:71d1:0:b0:3b6:2f3f:2710 with SMTP id i17-20020ac871d1000000b003b62f3f2710mr47444404qtp.11.1674721246569;
-        Thu, 26 Jan 2023 00:20:46 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id l16-20020ac84cd0000000b003b630456b8fsm324448qtv.89.2023.01.26.00.20.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 00:20:45 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id h5so1101996ybj.8;
-        Thu, 26 Jan 2023 00:20:45 -0800 (PST)
-X-Received: by 2002:a25:9ac1:0:b0:7b4:6a33:d89f with SMTP id
- t1-20020a259ac1000000b007b46a33d89fmr2761883ybo.543.1674721245117; Thu, 26
- Jan 2023 00:20:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20230125190757.22555-1-rppt@kernel.org> <20230125190757.22555-2-rppt@kernel.org>
-In-Reply-To: <20230125190757.22555-2-rppt@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 26 Jan 2023 09:20:33 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUeuPgkWVjpZ=OM4ofnoYyv2nY1_FGo0JUZCFXYX=K2vw@mail.gmail.com>
-Message-ID: <CAMuHMdUeuPgkWVjpZ=OM4ofnoYyv2nY1_FGo0JUZCFXYX=K2vw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] m68k: use asm-generic/memory_model.h for both MMU and !MMU
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux--csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S236266AbjAZIkn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 03:40:43 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351629757;
+        Thu, 26 Jan 2023 00:40:40 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 6F66A5C0447;
+        Thu, 26 Jan 2023 03:40:38 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 26 Jan 2023 03:40:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1674722438; x=
+        1674808838; bh=38uolB1vu5XeoWuDZOwJpjEX8L1LM6DR5gOOaFH+JRY=; b=P
+        W9Qq3+ikzD50MnIhGp+6w7yxU7DCMwbcLpXaMcSTXgjwMlxnaEWqt6+NqkuC5eoD
+        nYW3rXul89VG3BidL4Hd2NLs7VU62p1xU3hi2RdQTBN8MoPO8gbqignWCysAhaTv
+        JANZj87X8y6kV4WuPWYEDs1iSQnbyLOmobOqBeEQkQByit56C+8E9fj/XVUywduA
+        KXChSJbCOYkgaDa8IQmzQuZOubJH/mxGFDHYZoIPUwP/X1m1ij/4AJvFjBD9C3s9
+        Q39ZCRzuw509DNBAqxgpU1qwN86GuRKKHJhEr0obsd/bTwt3DvOTUsJ1q0HGxoWE
+        RWVERBJRevoXSTwPBfnWw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1674722438; x=
+        1674808838; bh=38uolB1vu5XeoWuDZOwJpjEX8L1LM6DR5gOOaFH+JRY=; b=g
+        OL2S3NaCdUeLQQ3zdm66oO+fVjYFAvSezYBOypuB9ZG4UgR8f6TPi0utD256JH7G
+        /hZboE+aj7pgrT1PwEbK635qwUeSX3DArPzMhapzHpwGEV4eTJBfgU6LdE23/aoW
+        CCflKZ2Kb1Uyhj9A/mgE/ny/8ZJkmDsECuMY6DROtPXAFStOW9kH5teQr52KaaBm
+        uoXh40xYdUwLF9TmnFt6NBq80aV2M9yWC/eKr9IjT8HtUDcxvu0QWcn3/zwlaYr/
+        cOvpAjW58J6gl2DnDOBJSv/ZMZtpl/c+HVy7E4M4wkjs+PPWmIuxuzSPMNLzkCYL
+        1DP6C4OkdylIXFxbhSh4A==
+X-ME-Sender: <xms:hTzSY0PlCbpEW3h6nZG8wInC-pGYuuks1FtcXxqHM9gGR0oHrltPpg>
+    <xme:hTzSY6_r6tWlMjcQvkSmGFwJaHaPJfasAgVHOna0OHmncWRFuwAluQUqEtTNb0qoB
+    pi-uGUU6E4b9WwjYQk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvfedguddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:hTzSY7TreSNU8U_mEJw_a6a65ls3Re6gVeJWnFV5ZsJku8_VAss46g>
+    <xmx:hTzSY8t_gEu-ehMEcv2MPNG2wwBGZwK-aEiqJNy0rMAxPed9rB6Xzg>
+    <xmx:hTzSY8eP7q1vxz9jr1RYMXQx8JxYCiiEh37wAPPq9eRnZROxq1L-_A>
+    <xmx:hjzSYzwpC3vfHuKtTQlh_I4cdLdfien7Q1gMLWai5uII-xjEXtmEeQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DC027B60086; Thu, 26 Jan 2023 03:40:37 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
+Mime-Version: 1.0
+Message-Id: <05d32a58-c119-4abb-8e62-9d79bd95324f@app.fastmail.com>
+In-Reply-To: <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
+References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
+ <20230125201020.10948-2-andriy.shevchenko@linux.intel.com>
+ <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
+Date:   Thu, 26 Jan 2023 09:40:18 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Pierluigi Passaro" <pierluigi.p@variscite.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: Re: [PATCH v1 1/5] gpiolib: fix linker errors when GPIOLIB is disabled
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 8:08 PM Mike Rapoport <rppt@kernel.org> wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Thu, Jan 26, 2023, at 09:14, Christophe Leroy wrote:
+> Le 25/01/2023 =C3=A0 21:10, Andy Shevchenko a =C3=A9crit=C2=A0:
+>> From: Pierluigi Passaro <pierluigi.p@variscite.com>
+>>=20
+>> Both the functions gpiochip_request_own_desc and
+>> gpiochip_free_own_desc are exported from
+>>      drivers/gpio/gpiolib.c
+>> but this file is compiled only when CONFIG_GPIOLIB is enabled.
+>> Move the prototypes under "#ifdef CONFIG_GPIOLIB" and provide
+>> reasonable definitions and includes in the "#else" branch.
 >
-> The MMU variant uses generic definitions of page_to_pfn() and
-> pfn_to_page(), but !MMU defines them in include/asm/page_no.h for no
-> good reason.
+> Can you give more details on when and why link fails ?
 >
-> Include asm-generic/memory_model.h in the common include/asm/page.h and
-> drop redundant definitions.
+> You are adding a WARN(), I understand it mean the function should neve=
+r=20
+> ever be called. Shouldn't it be dropped completely by the compiler ? I=
+n=20
+> that case, no call to gpiochip_request_own_desc() should be emitted an=
+d=20
+> so link should be ok.
 >
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> If link fails, it means we still have unexpected calls to=20
+> gpiochip_request_own_desc() or gpiochip_free_own_desc(), and we should=20
+> fix the root cause instead of hiding it with a WARN().
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+There are only a handful of files calling these functions:
 
-Gr{oetje,eeting}s,
+$ git grep -l gpiochip_request_own_desc
+Documentation/driver-api/gpio/driver.rst
+arch/arm/mach-omap1/ams-delta-fiq.c
+arch/arm/mach-omap1/board-ams-delta.c
+drivers/gpio/gpio-mvebu.c
+drivers/gpio/gpiolib-acpi.c
+drivers/gpio/gpiolib.c
+drivers/hid/hid-cp2112.c
+drivers/memory/omap-gpmc.c
+drivers/net/wireless/broadcom/brcm80211/brcmsmac/led.c
+drivers/power/supply/collie_battery.c
+drivers/spi/spi-bcm2835.c
+include/linux/gpio/driver.h
 
-                        Geert
+All of these should already prevent the link failure through
+a Kconfig 'depends on GPIOLIB' for the driver, or 'select GPIOLIB'
+for the platform code. I checked all of the above and they seem fine.
+If anything else calls the function, I'd add the same dependency
+there.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+      Arnd
