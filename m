@@ -2,130 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E8167CD48
-	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 15:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB33E67CEBC
+	for <lists+linux-arch@lfdr.de>; Thu, 26 Jan 2023 15:48:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjAZOKz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 Jan 2023 09:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S229639AbjAZOs4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 Jan 2023 09:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjAZOKo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 09:10:44 -0500
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E038B305E1;
-        Thu, 26 Jan 2023 06:10:42 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id E6C5C320092D;
-        Thu, 26 Jan 2023 09:10:38 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 26 Jan 2023 09:10:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1674742238; x=1674828638; bh=U4/r5dEQVW
-        x3dUhx1q619GsM2gBX67/2IbFa62g79pQ=; b=VitC5m5ZKrj9aJkwfsqhl6rrIn
-        rjpjHYk/JpdBSO5g0k5d+PB+lq2VIjK+ltomiwQSHBtrjlX1ShUCsHNRBmV5r7aN
-        PZ0DrhSVfr0VTf7ddlN2E0XBIDEAHNej5R2ERaZTnnddhPmNktYbGcFLbu3vGTAa
-        NTUfJeAYaOl4aielSpvUVHiJv1K8zr2GgcIe78zDFEcadLOWkttOE39+jcyMRROZ
-        Spv/e1mWqedhBGzjJCkVt9sopiXSVqT21spwpbCCwlXR2noNBJyDbKXlVdMgZZxQ
-        gY/TY5Zao/EzwPzfh2wo+nJk/VPYAhyRWFxTgdHyXPgECb66i9kQrLJnjjJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1674742238; x=1674828638; bh=U4/r5dEQVWx3dUhx1q619GsM2gBX
-        67/2IbFa62g79pQ=; b=pBezrvZ/KoJB+oazpPSXQZ3v3cJlcHYnqq6FHLUAxTmn
-        c964WuSj3qfPVYSjkfqlaW93yOc67osErakfjU3Ss2dzc+QkaIcbvSal8NixuhL9
-        3ouLKpqQaoLmM5xvHNTsMVHl9xmtkitErObvj2NFZWoBKxfsrCWxjqdN7hyiRWXr
-        iFBJQnFY4fe3ylcBH3XujVleb2bPWkaWDKIj/Yp6agnqQXGFgpAAq/inQSsFYSea
-        6KuElIczYZ2J0YnXQJoB1BO5ViOSb7ajeLBDVgDvBFegQnoYIu5GydmFTx+KwVmZ
-        0rPVcK2G9dM1zpgjBu1A6RzejPsONUcNYR70LW4MKA==
-X-ME-Sender: <xms:3onSY5fJPBNTTNiylmZt8cNbON9Jw-zelUwrjOLHX5jJz_PCdbJ7eg>
-    <xme:3onSY3ObKd9fwitNqm_T3ilq23stf6VYf080DksGmFwHLDX5kXbTsOBWIR_ajSPx0
-    pyCVD3IPpj7C6Utf7U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedruddvgedgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:3onSYyjaxGX_ZYMg9ARyB6sq6zv96P-J2j0b1r-EorDASu-0dCUUAA>
-    <xmx:3onSYy8_lEInyTOBJtNttgOfc7f-kWn1CKItZstHIScLm7MZU6xwaQ>
-    <xmx:3onSY1vlesccpBnbd_xi30VjwoH31dt03YCvJLQyT3ZJ9vIBqTO05g>
-    <xmx:3onSY7CcfnICaCVecYgHBHkpDwWtD9ioCdh3VRpm4FlHKsc_77glYg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F1222B60086; Thu, 26 Jan 2023 09:10:37 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-85-gd6d859e0cf-fm-20230116.001-gd6d859e0
-Mime-Version: 1.0
-Message-Id: <5d11eea7-0dd4-44d5-be09-27ae18492916@app.fastmail.com>
-In-Reply-To: <AM6PR08MB4376030EDCFAD7F5FD5313D2FFCF9@AM6PR08MB4376.eurprd08.prod.outlook.com>
-References: <20230125201020.10948-1-andriy.shevchenko@linux.intel.com>
- <20230125201020.10948-2-andriy.shevchenko@linux.intel.com>
- <ca399c86-5bfc-057b-6f9f-50614b91a9b9@csgroup.eu>
- <Y9JTo1RkxT2jORPE@smile.fi.intel.com>
- <7b7df1f7-4f47-d19a-02ff-91984b25ba98@csgroup.eu>
- <a9ec7f46-dd07-40e7-ae48-a1e48d2101c5@app.fastmail.com>
- <Y9KAPge5zy0cIqi8@smile.fi.intel.com>
- <AM6PR08MB4376030EDCFAD7F5FD5313D2FFCF9@AM6PR08MB4376.eurprd08.prod.outlook.com>
-Date:   Thu, 26 Jan 2023 15:10:18 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Pierluigi Passaro" <pierluigi.p@variscite.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Bartosz Golaszewski" <bartosz.golaszewski@linaro.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "kernel test robot" <lkp@intel.com>
-Subject: Re: [PATCH v1 1/5] gpiolib: fix linker errors when GPIOLIB is disabled
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229473AbjAZOsz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 Jan 2023 09:48:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606A94489;
+        Thu, 26 Jan 2023 06:48:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE0DA61856;
+        Thu, 26 Jan 2023 14:48:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05241C4339B;
+        Thu, 26 Jan 2023 14:48:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674744532;
+        bh=WNohoknU9nLfbwIXeO77neZ4yMyv64MASZK2UIAfOfc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OyaVsT5ePzTFS76R1FH5KLxOUgzscan6sLv55lgf+totKkalpj5P4hTJ0CFzpg2nB
+         FjnAcEI6WBL0tfwF/TTw8b+wwY6a9pfQDEoFaNDhDzv4Bx4E//TKL2HIis05iqFTqA
+         6cWnwUhcKJagQmydnhE9MWdKN98RZA7QH0/g2op6Qc+WX5kkWc6P8AxP1IQok4d4Iv
+         rC+rDq5bfpCpp87TX2zmlNbavkxhh4pjEZT5VQ1/5GQQQR5j3P3SiDxYUla0TLmDmY
+         tHoanGw9DWG+oAt/RnrhsxsQ7gltrsJN75kvWssUX4MOKayClNcjWM9UluK5fqquNs
+         P9OGQuC06AeFQ==
+Date:   Thu, 26 Jan 2023 16:48:04 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, luto@kernel.org,
+        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
+        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
+        kent.overstreet@linux.dev, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, peterjung1337@gmail.com, rientjes@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        jannh@google.com, shakeelb@google.com, tatashin@google.com,
+        edumazet@google.com, gthelen@google.com, gurua@google.com,
+        arjunroy@google.com, soheil@google.com, hughlynch@google.com,
+        leewalsh@google.com, posk@google.com, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        chenhuacai@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        qianweili@huawei.com, wangzhou1@hisilicon.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, l.stach@pengutronix.de,
+        krzysztof.kozlowski@linaro.org, patrik.r.jakobsson@gmail.com,
+        matthias.bgg@gmail.com, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        tomba@kernel.org, hjc@rock-chips.com, heiko@sntech.de,
+        ray.huang@amd.com, kraxel@redhat.com, sre@kernel.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        dimitri.sivanich@hpe.com, zhangfei.gao@linaro.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        dgilbert@interlog.com, hdegoede@redhat.com, mst@redhat.com,
+        jasowang@redhat.com, alex.williamson@redhat.com, deller@gmx.de,
+        jayalk@intworks.biz, viro@zeniv.linux.org.uk, nico@fluxnic.net,
+        xiang@kernel.org, chao@kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, miklos@szeredi.hu,
+        mike.kravetz@oracle.com, muchun.song@linux.dev, bhe@redhat.com,
+        andrii@kernel.org, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, pabeni@redhat.com, perex@perex.cz, tiwai@suse.com,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-graphics-maintainer@vmware.com,
+        linux-ia64@vger.kernel.org, linux-arch@vger.kernel.org,
+        loongarch@lists.linux.dev, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, nvdimm@lists.linux.dev,
+        dmaengine@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
+        linux-samsung-soc@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        target-devel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        devel@lists.orangefs.org, kexec@lists.infradead.org,
+        linux-xfs@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kasan-dev@googlegroups.com,
+        selinux@vger.kernel.org, alsa-devel@alsa-project.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 6/6] mm: export dump_mm()
+Message-ID: <Y9KSpNJ4y0GMwkrW@kernel.org>
+References: <20230125083851.27759-1-surenb@google.com>
+ <20230125083851.27759-7-surenb@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230125083851.27759-7-surenb@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 26, 2023, at 14:41, Pierluigi Passaro wrote:
-> On Thu, Jan 26, 2023 at 02:29PM +0100, Arnd Bergmann wrote:
->> > >>>
->> > >>> If link fails, it means we still have unexpected calls to
->> > >>> gpiochip_request_own_desc() or gpiochip_free_own_desc(), and we should
->> > >>> fix the root cause instead of hiding it with a WARN().
+On Wed, Jan 25, 2023 at 12:38:51AM -0800, Suren Baghdasaryan wrote:
+> mmap_assert_write_locked() is used in vm_flags modifiers. Because
+> mmap_assert_write_locked() uses dump_mm() and vm_flags are sometimes
+> modified from from inside a module, it's necessary to export
+> dump_mm() function.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
->> > This means either I made a mistake in my search, or the problem
->> > has already been fixed. Either way, I think Andy should provide
->> > the exact build failure he observed so we know what caller caused
->> > the issue.
->> 
->> I believe it's not me, who first reported it. So, Pierluigi, can you point
->> out to the LKP message that reported the issue?
->> 
->> P.S> LKP sometimes finds a really twisted configurations to probe on.
->> 
->> 
-> I've received the following messages:
-> - https://lore.kernel.org/all/202301240409.tZdm0o0a-lkp@intel.com/
-> - https://lore.kernel.org/all/202301240439.wYz6uU0k-lkp@intel.com/
-> - https://lore.kernel.org/all/20230124075600.649bd7bb@canb.auug.org.au/
-> Please let me know if you need further details.
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-I think these three are all regressions that are caused by the patch
-in this thread, rather than the original problem that it was trying
-to fix.
-
-The one we're looking for is a randconfig bug that showed up
-as a link failure when referencing gpiochip_request_own_desc
-or gpiochip_free_own_desc.
-
-      Arnd
+> ---
+>  mm/debug.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/mm/debug.c b/mm/debug.c
+> index 9d3d893dc7f4..96d594e16292 100644
+> --- a/mm/debug.c
+> +++ b/mm/debug.c
+> @@ -215,6 +215,7 @@ void dump_mm(const struct mm_struct *mm)
+>  		mm->def_flags, &mm->def_flags
+>  	);
+>  }
+> +EXPORT_SYMBOL(dump_mm);
+>  
+>  static bool page_init_poisoning __read_mostly = true;
+>  
+> -- 
+> 2.39.1
+> 
