@@ -2,106 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE1D67E859
-	for <lists+linux-arch@lfdr.de>; Fri, 27 Jan 2023 15:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830D367E8C5
+	for <lists+linux-arch@lfdr.de>; Fri, 27 Jan 2023 16:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbjA0Oev (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 27 Jan 2023 09:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S231582AbjA0O77 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 27 Jan 2023 09:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbjA0Oeu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Jan 2023 09:34:50 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DCF10AAB;
-        Fri, 27 Jan 2023 06:34:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jLg0NgtndXwOK1xM/a9LLndkpSy2IRQYcolcesnToSM=; b=ZFKG54wRPyqDX3DCGqtaENHPh4
-        nNgrk8iAQL2ZlkGDS+qKr73pk4309yNZ0YT4/jNw5F5Ef+QyX2n1mXToZfq0cnb/ACOequ4aHD6og
-        YzdkXqxrK2Lu8TJ/fWPHvWhg6cpMdVR4400Z5ShH/oGkgPDWfNtI0DKot/BcroDaSbQrggL+xSfGW
-        lSmYdpdSnUGpWV3BSn76jxS6h3h6t6yScwNZXrZhJoCfwFQY5qtmkjaatY+xeXq1HNMbvKYmbrk4s
-        RtyPwkntEbvBAjvrkI16gTWyNKfQPvpiBAfjVXPCzwLjGVKL/1LP7tHN+LN3nVBQF+s8VFnyyKRVL
-        UEtWHs5Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pLPnn-002sdj-2O;
-        Fri, 27 Jan 2023 14:34:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 26F8D300137;
-        Fri, 27 Jan 2023 15:34:34 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0FBBF20A79E8B; Fri, 27 Jan 2023 15:34:34 +0100 (CET)
-Date:   Fri, 27 Jan 2023 15:34:33 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-Cc:     Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-Message-ID: <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
- <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
+        with ESMTP id S229447AbjA0O76 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 27 Jan 2023 09:59:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BF46184;
+        Fri, 27 Jan 2023 06:59:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5E2661CC5;
+        Fri, 27 Jan 2023 14:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C7FDC4339B;
+        Fri, 27 Jan 2023 14:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674831597;
+        bh=6A3bg177CZCGpr4mKIGL57gyFua0Tc3JibyHOd77gOk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=YUGFTY+79tYm0nI1wWJvWX5NArv7J756eUPQwJIiCFEMmfEM0LIHeIDeO27RnvYrx
+         rkFbnHwt7aLgMZzeFLniDr09wPSixi+N9Plw+VK36aCysIhwZ2CVlGafOKINJnF4vk
+         eJQ9k60tEYT98ks+7DbsfcJSXPBlkjSB1IW0DYILhu+Pb2/AJVw2dhVPdPDzCGeTpF
+         CSeNdxd1ZEUs7uoy7lTddtHZ61uWJY+/wZmVOjsgdbsMjuyg5toS61xAe+MjU5g2oZ
+         uuy6k8GdcBKOXMu3+a8ScSdKSM+00ijPWpCRiPYwTTCh9ezlVbGjYvdqzWPvilArv4
+         O4e84N14Lv4fw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B09A55C010C; Fri, 27 Jan 2023 06:59:56 -0800 (PST)
+Date:   Fri, 27 Jan 2023 06:59:56 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        linux-arch@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH 15/35] Documentation: litmus-tests: correct spelling
+Message-ID: <20230127145956.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230127064005.1558-16-rdunlap@infradead.org>
+ <20230127064005.1558-1-rdunlap@infradead.org>
+ <2919161.1674802748@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2919161.1674802748@warthog.procyon.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 02:49:46PM +0100, Jules Maselbas wrote:
-> Hi Peter,
+On Fri, Jan 27, 2023 at 06:59:08AM +0000, David Howells wrote:
+> Randy Dunlap <rdunlap@infradead.org> wrote:
 > 
-> On Fri, Jan 27, 2023 at 12:18:13PM +0100, Peter Zijlstra wrote:
-> > On Thu, Jan 26, 2023 at 06:33:54PM +0100, Jules Maselbas wrote:
+> > Correct spelling problems for Documentation/litmus-tests/ as reported
+> > by codespell.
 > > 
-> > > @@ -58,9 +61,11 @@ static inline int generic_atomic_fetch_##op(int i, atomic_t *v)		\
-> > >  static inline void generic_atomic_##op(int i, atomic_t *v)		\
-> > >  {									\
-> > >  	unsigned long flags;						\
-> > > +	int c;								\
-> > >  									\
-> > >  	raw_local_irq_save(flags);					\
-> > > -	v->counter = v->counter c_op i;					\
-> > > +	c = arch_atomic_read(v);					\
-> > > +	arch_atomic_set(v, c c_op i);					\
-> > >  	raw_local_irq_restore(flags);					\
-> > >  }
-> > 
-> > This and the others like it are a bit sad, it explicitly dis-allows the
-> > compiler from using memops and forces a load-store.
-> Good point, I don't know much about atomic memops but this is indeed a
-> bit sad to prevent such instructions to be used.
-
-Depends on the platform, x86,s390 etc. have then, RISC like things
-typically don't.
-
-> > The alternative is writing it like:
-> > 
-> > 	*(volatile int *)&v->counter c_op i;
-> I wonder if it could be possible to write something like:
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Andrea Parri <parri.andrea@gmail.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > Cc: Nicholas Piggin <npiggin@gmail.com>
+> > Cc: David Howells <dhowells@redhat.com>
+> > Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+> > Cc: Luc Maranget <luc.maranget@inria.fr>
+> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: Jonathan Corbet <corbet@lwn.net>
+> > Cc: linux-doc@vger.kernel.org
 > 
->         *(volatile int *)&v->counter += i;
+> Reviewed-by: David Howells <dhowells@redhat.com>
 
-Should work, but give it a try, see what it does :-)
+Queued for v6.4, thank you both!
 
-> I also noticed that GCC has some builtin/extension to do such things,
-> __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
-> can be used in the kernel.
-
-On a per-architecture basis only, the C/C++ memory model does not match
-the Linux Kernel memory model so using the compiler to generate the
-atomic ops is somewhat tricky and needs architecture audits.
+							Thanx, Paul
