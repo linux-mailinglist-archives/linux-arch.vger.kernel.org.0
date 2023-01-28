@@ -2,154 +2,230 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BBF67F6F7
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Jan 2023 11:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D9F67F859
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Jan 2023 15:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbjA1KNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Jan 2023 05:13:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S234622AbjA1OC7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Jan 2023 09:02:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbjA1KNX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Jan 2023 05:13:23 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E83633478
-        for <linux-arch@vger.kernel.org>; Sat, 28 Jan 2023 02:13:21 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u21so6794444edv.3
-        for <linux-arch@vger.kernel.org>; Sat, 28 Jan 2023 02:13:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFlpJNoGBOazM9CU1KCnJW9Pwymj7pBp6JXDNmhBuT8=;
-        b=m9tOjpSpKEb5QibVEue38Iap0SxF/gAOKE3vqNe4CJxeZhtNcrgxnvCjmkRVcanIn7
-         JQyYFKW8n30551zAdA1noAvagUG9gVRT8vEI3Bzl/EdeTSiD9H88NrnAmDv42iE7Knfs
-         cltndUPYkBZffCA+y+ZFekfjKGv0C9+HBH7491Xee9Uh6hgjWTv15jsjxAa3Ses9NnqS
-         a3gU14supwACH3ccwf1zGunLSmMYcSVoQebCgjJsTv7dHHoTFOMVrLJGX5jxZB+yWA8d
-         uBmsUEheDLNHH6IA1XSBYkAK9uhBvxI5Itr67YYu0wRbXDbhwD0cRTwAXqR/YSHvZrEU
-         jA/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sFlpJNoGBOazM9CU1KCnJW9Pwymj7pBp6JXDNmhBuT8=;
-        b=xsZRmlSBlHTXnfDDVYMB/n9iO0aXqgDSD4ye5YJp8qWg+GE2TcScIMLAploX3O1+sy
-         C1YaFGOX0WQIUMxCxUTrElLtWhahVYo2NJu+jDbFQDuxVzLmP/boE8mIX2Fc1TO6xoCV
-         8jfk8FhMlje2JRgla8brBzgBusv11jy4omdkSMGsSi9jB45r6A1UVHs+GfEdPocoSrwJ
-         IVfrgGepflBkyJCiTCkobm66no86ts/5UjtGGE7utEPAbvR2o4sU0WJ+GBDgY5TtEVNt
-         EkFX6fY26UKGhPWIZbPy7YCTLOFKYROJNrN7D/airOgnfsfgZ9NPIdD1F547z+BVavJy
-         jhZw==
-X-Gm-Message-State: AFqh2kpHCU3rQFKIUNZp6cFWSQ6T9VMEZucZ+olmtHb3M6WIHn5yilu/
-        OJ1/VjxgWg8AJAL3mqAP8FiCcw==
-X-Google-Smtp-Source: AMrXdXvvQykJl27DpI4dLKKbE4Gp6VgcIMfC9wpU5tWMTKXRTAjAQE6FyENclEpnl7Ei24HEknMf5Q==
-X-Received: by 2002:a05:6402:1009:b0:479:8313:3008 with SMTP id c9-20020a056402100900b0047983133008mr42841481edu.0.1674900799926;
-        Sat, 28 Jan 2023 02:13:19 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id y11-20020a50eb0b000000b00467481df198sm3689493edp.48.2023.01.28.02.13.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 02:13:19 -0800 (PST)
-Date:   Sat, 28 Jan 2023 11:13:17 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
-Message-ID: <20230128101317.6zc3r5eh7hqe5q6y@orel>
-References: <20230123112803.817534-1-alexghiti@rivosinc.com>
- <20230123142554.f22ajf6upfk2ybxk@orel>
- <20230125104102.2thvourt3lx2p36a@orel>
- <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
- <20230125151041.ijhjqswqiwmrzljd@orel>
- <CAHVXubjR8AsZhMz59goxfmf8LmA4bjePKUx=AkvmbqoF42tzmA@mail.gmail.com>
- <20230127085803.ruj624323wxeyllx@orel>
+        with ESMTP id S230175AbjA1OC6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Jan 2023 09:02:58 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C461043C;
+        Sat, 28 Jan 2023 06:02:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674914572; x=1706450572;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=Kc8vJ3FvU/EJ0EkuHD1xOBQzKplcG7pKfCLj/xSsBkU=;
+  b=mU20VRy12R8p2Lt0ta8VNz+LnWUNK2FkIyxLprxPBA3d4vo8URlkdFZ+
+   gUhbk2/CXe59rcoya2dmV/buQZXq5aWiY87KoNDRyVD2DLrSuRzfRmgJD
+   zoP/PFkKup/HYA4Ro27UMS/kQG/t1cSvfFkeQGN9FE/4NAzGnadpc4bAJ
+   XzbViP9oOB6fZgfYB3wDpv7RMgI0jVLLAR/S6iQuwFkgKrDzTDiGh5gFB
+   yr5NHivuhuc0UhPx/3AG7B43BLaFJ8H9zXvdYodOB7SuAPffcD70kTJdQ
+   cqRt2V8F+iYhqcdQlnsHT9B4YhHgj6SBhPZKZeTe4nOT7lW2f9pTrDIYa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="391846258"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="391846258"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2023 06:02:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10604"; a="908979126"
+X-IronPort-AV: E=Sophos;i="5.97,254,1669104000"; 
+   d="scan'208";a="908979126"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Jan 2023 06:02:39 -0800
+Date:   Sat, 28 Jan 2023 21:54:54 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 7/9] KVM: Update lpage info when private/shared
+ memory are mixed
+Message-ID: <20230128135454.GA700688@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-8-chao.p.peng@linux.intel.com>
+ <Y8HmS2iE4u0Gfkrn@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230127085803.ruj624323wxeyllx@orel>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y8HmS2iE4u0Gfkrn@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jan 27, 2023 at 09:58:03AM +0100, Andrew Jones wrote:
-> On Fri, Jan 27, 2023 at 09:45:21AM +0100, Alexandre Ghiti wrote:
-> ...
-> > > > > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> > > > > > > index f08b25195ae7..58107bd56f8f 100644
-> > > > > > > --- a/drivers/of/fdt.c
-> > > > > > > +++ b/drivers/of/fdt.c
-> > > > > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
-> > > > > > >  static void __early_init_dt_declare_initrd(unsigned long start,
-> > > > > > >                                        unsigned long end)
-> > > > > > >  {
-> > > > > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
-> > > > > > > -    * enabled since __va() is called too early. ARM64 does make use
-> > > > > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
-> > > > > > > -    * conversion.
-> > > > > > > +   /*
-> > > > > > > +    * __va() is not yet available this early on some platforms. In that
-> > > > > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
-> > > > > > > +    * and does the VA conversion itself.
-> > > > > > >      */
-> > > > > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
-> > > > > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
-> > > > > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
-> > > > > >
-> > > > > > There are now two architectures, so maybe it's time for a new config
-> > > > > > symbol which would be selected by arm64 and riscv64 and then used here,
-> > > > > > e.g.
-> > > > > >
-> > > > > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
-> > > > >
-> > > > > I see v5 left this as it was. Any comment on this suggestion?
-> > > >
-> > > > Introducing a config for this only use case sounds excessive to me,
-> > > > but I'll let Rob decide what he wants to see here.
-> > >
-> > > To me, the suggestion is less about trying to tidy up DT code and more
-> > > about bringing this comment about arm64 and riscv64 not being able to
-> > > use the linear map as early as other architectures up out of the
-> > > depths of DT code. Seeing an architecture select something like
-> > > NO_EARLY_LINEAR_MAP, which has a paragraph explaining what that
-> > > means, may help avoid other early uses of __va() which may or may
-> > > not fail quickly and cleanly with a BUG.
-> > >
-> > 
-> > You're right, do you have some bandwidth for doing that?
-> >
+On Fri, Jan 13, 2023 at 11:16:27PM +0000, Sean Christopherson wrote:
+> On Fri, Dec 02, 2022, Chao Peng wrote:
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 9a07380f8d3c..5aefcff614d2 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -12362,6 +12362,8 @@ static int kvm_alloc_memslot_metadata(struct kvm *kvm,
+> >  		if ((slot->base_gfn + npages) & (KVM_PAGES_PER_HPAGE(level) - 1))
+> >  			linfo[lpages - 1].disallow_lpage = 1;
+> >  		ugfn = slot->userspace_addr >> PAGE_SHIFT;
+> > +		if (kvm_slot_can_be_private(slot))
+> > +			ugfn |= slot->restricted_offset >> PAGE_SHIFT;
+> >  		/*
+> >  		 * If the gfn and userspace address are not aligned wrt each
+> >  		 * other, disable large page support for this slot.
 > 
-> Sure, I'll post something today.
->
+> Forgot to talk about the bug.  This code needs to handle the scenario where a
+> memslot is created with existing, non-uniform attributes.  It might be a bit ugly
+> (I didn't even try to write the code), but it's definitely possible, and since
+> memslot updates are already slow I think it's best to handle things here.
+> 
+> In the meantime, I added this so we don't forget to fix it before merging.
+> 
+> #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+> 	pr_crit_once("FIXME: Walk the memory attributes of the slot and set the mixed status appropriately");
+> #endif
 
-Hi Alex,
+Here is the code to fix (based on your latest github repo).
 
-So on second thought, and after a bunch of grepping, I don't think we need
-to try and give architectures a way to declare that they have incomplete
-early linear maps. It would actually be difficult to determine when and
-why it should be selected, and, afaict, this is currently the one and
-only place it would be helpful. So, rather than pulling this comment about
-early __va() all the way up to the Kconfig level, I think pulling it into
-arch-specific code should be sufficient, and actually better.
-
-The situation we have here is that OF code is providing a convenience
-by doing early setup of initrd_start and initrd_end, which is nice for the
-large majority of architectures, but, as we see, it can't be used by all.
-My new suggestion is that we expose this initrd setup function as a weak
-function which architectures may override if needed. If those
-architectures want to prepare a mapping in their function, they can, or,
-if they know it's safe to defer the setup until later, then they can just
-provide a stub. I've drafted a patch where arm64 just provides a stub.
-I'll post it soon.
-
-Thanks,
-drew
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index e552374f2357..609ff1cba9c5 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -2195,4 +2195,9 @@ int memslot_rmap_alloc(struct kvm_memory_slot *slot, unsigned long npages);
+ 	 KVM_X86_QUIRK_FIX_HYPERCALL_INSN |	\
+ 	 KVM_X86_QUIRK_MWAIT_NEVER_UD_FAULTS)
+ 
++#ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
++void kvm_memory_attributes_create_memslot(struct kvm *kvm,
++					  struct kvm_memory_slot *slot);
++#endif
++
+ #endif /* _ASM_X86_KVM_HOST_H */
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index eda615f3951c..8833d7201e41 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -7201,10 +7201,11 @@ static bool has_mixed_attrs(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 	return false;
+ }
+ 
+-void kvm_arch_set_memory_attributes(struct kvm *kvm,
+-				    struct kvm_memory_slot *slot,
+-				    unsigned long attrs,
+-				    gfn_t start, gfn_t end)
++static void kvm_update_lpage_mixed_flag(struct kvm *kvm,
++					struct kvm_memory_slot *slot,
++					bool set_attrs,
++					unsigned long attrs,
++					gfn_t start, gfn_t end)
+ {
+ 	unsigned long pages, mask;
+ 	gfn_t gfn, gfn_end, first, last;
+@@ -7231,25 +7232,53 @@ void kvm_arch_set_memory_attributes(struct kvm *kvm,
+ 		first = start & mask;
+ 		last = (end - 1) & mask;
+ 
+-		/*
+-		 * We only need to scan the head and tail page, for middle pages
+-		 * we know they will not be mixed.
+-		 */
++		/* head page */
+ 		gfn = max(first, slot->base_gfn);
+ 		gfn_end = min(first + pages, slot->base_gfn + slot->npages);
++		if(!set_attrs)
++			attrs = kvm_get_memory_attributes(kvm, gfn);
+ 		mixed = has_mixed_attrs(kvm, slot, level, attrs, gfn, gfn_end);
+ 		linfo_update_mixed(gfn, slot, level, mixed);
+ 
+ 		if (first == last)
+ 			return;
+ 
+-		for (gfn = first + pages; gfn < last; gfn += pages)
+-			linfo_update_mixed(gfn, slot, level, false);
++		/* middle pages */
++		for (gfn = first + pages; gfn < last; gfn += pages) {
++			if (set_attrs) {
++				mixed = false;
++			} else {
++				gfn_end = gfn + pages;
++				attrs = kvm_get_memory_attributes(kvm, gfn);
++				mixed = has_mixed_attrs(kvm, slot, level, attrs,
++							gfn, gfn_end);
++			}
++			linfo_update_mixed(gfn, slot, level, mixed);
++		}
+ 
++		/* tail page */
+ 		gfn = last;
+ 		gfn_end = min(last + pages, slot->base_gfn + slot->npages);
++		if(!set_attrs)
++			attrs = kvm_get_memory_attributes(kvm, gfn);
+ 		mixed = has_mixed_attrs(kvm, slot, level, attrs, gfn, gfn_end);
+ 		linfo_update_mixed(gfn, slot, level, mixed);
+ 	}
+ }
++
++void kvm_arch_set_memory_attributes(struct kvm *kvm,
++				    struct kvm_memory_slot *slot,
++				    unsigned long attrs,
++				    gfn_t start, gfn_t end)
++{
++	kvm_update_lpage_mixed_flag(kvm, slot, true, attrs, start, end);
++}
++
++void kvm_memory_attributes_create_memslot(struct kvm *kvm,
++					  struct kvm_memory_slot *slot)
++{
++
++	kvm_update_lpage_mixed_flag(kvm, slot, false, 0, slot->base_gfn,
++				    slot->base_gfn + slot->npages);
++}
+ #endif
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 268c3d16894d..c1074aecf2d0 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -12443,7 +12443,7 @@ static int kvm_alloc_memslot_metadata(struct kvm *kvm,
+ 	}
+ 
+ #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+-	pr_crit_once("FIXME: Walk the memory attributes of the slot and set the mixed status appropriately");
++	kvm_memory_attributes_create_memslot(kvm, slot);
+ #endif
+ 
+ 	if (kvm_page_track_create_memslot(kvm, slot, npages))
