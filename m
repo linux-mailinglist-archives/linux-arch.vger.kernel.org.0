@@ -2,152 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E57C67F68A
-	for <lists+linux-arch@lfdr.de>; Sat, 28 Jan 2023 10:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BBF67F6F7
+	for <lists+linux-arch@lfdr.de>; Sat, 28 Jan 2023 11:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbjA1JCU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 28 Jan 2023 04:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
+        id S233560AbjA1KNZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 28 Jan 2023 05:13:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233575AbjA1JCT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Jan 2023 04:02:19 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38EA6DFCF;
-        Sat, 28 Jan 2023 01:02:16 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id j32-20020a05600c1c2000b003dc4fd6e61dso47524wms.5;
-        Sat, 28 Jan 2023 01:02:16 -0800 (PST)
+        with ESMTP id S233379AbjA1KNX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 28 Jan 2023 05:13:23 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E83633478
+        for <linux-arch@vger.kernel.org>; Sat, 28 Jan 2023 02:13:21 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id u21so6794444edv.3
+        for <linux-arch@vger.kernel.org>; Sat, 28 Jan 2023 02:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ventanamicro.com; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v7ARCz3cVaBFOjYkC77qL/HBEniL1qdQHS5E6K6GFOY=;
-        b=aqbRojTHRCVjzGUAj7OwNNFidQtZRaRDHHmAjBWeAFhAl4EP6lU/HQ+DT3lz3ORLRs
-         krDbFNMyaAoPDNNbr2Us4LfdqxvtQoKw/VqPFwWdtmeZaX2Yr/xMNSAvUp0bHiLiSOj3
-         SN1iYBMZrJW6Tuoe05d5ixjoXDQyxOx+hHgkYRdk2YredIT5D868vyI7+JtGnCIwsINP
-         AC8gyFLqm6XouHJKilNfBj6iNxK7cGu1Nhc9VlLOm0nqQCpyycdmijDtgityKjfCFibc
-         kBECjMNCFbqcxj8dsEQrghcf75B90yP81hRDkvCSROQeKfuHc3hus0w8nNDlJyMcHou/
-         rQVg==
+        bh=sFlpJNoGBOazM9CU1KCnJW9Pwymj7pBp6JXDNmhBuT8=;
+        b=m9tOjpSpKEb5QibVEue38Iap0SxF/gAOKE3vqNe4CJxeZhtNcrgxnvCjmkRVcanIn7
+         JQyYFKW8n30551zAdA1noAvagUG9gVRT8vEI3Bzl/EdeTSiD9H88NrnAmDv42iE7Knfs
+         cltndUPYkBZffCA+y+ZFekfjKGv0C9+HBH7491Xee9Uh6hgjWTv15jsjxAa3Ses9NnqS
+         a3gU14supwACH3ccwf1zGunLSmMYcSVoQebCgjJsTv7dHHoTFOMVrLJGX5jxZB+yWA8d
+         uBmsUEheDLNHH6IA1XSBYkAK9uhBvxI5Itr67YYu0wRbXDbhwD0cRTwAXqR/YSHvZrEU
+         jA/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v7ARCz3cVaBFOjYkC77qL/HBEniL1qdQHS5E6K6GFOY=;
-        b=K/g0NVKqOEQIrhvafWdRvrjURipII3R7wZsomoncfvYxOaVsjxBB4GDtgjn1rX1MtO
-         KnY0l5JrvoLJvI7FX5LmggUrjXSISAK7DhqusGl6ORvy1tgnHzaBtrzy/+5DLIG3uF8P
-         lef2XfYvHcPw/UhMCNXBZF/FmVKfSZujzuKe+DvSSWACEhbvMhK9klK7GEp0ph2XKBUP
-         FSRIeXTua9Fs6dy+8P49dTlLlb3I+Hlxpk5CylXLBf14ePJ7EAXAfsx3dOTsbkqT13W6
-         135KB/lW487LBZjy5pAqw4JyLZ1S2JICUGNRKrM2DbK6tzk5uKReWuLp3qwHAX0Xuqwz
-         L8mg==
-X-Gm-Message-State: AFqh2koU+Pl3pQgtBSHxJ3WksDASjXOPbguqlLD3Odb34RoxJ7wn82bA
-        xeVo3OD529xv6CQsEwfTAho=
-X-Google-Smtp-Source: AMrXdXshtli+OqZ9VwFCdRpOAvHTMs/09zG9TMwa0gaZMZJ8uG1JiJOtVlF/BhmQxoXBbhlR7WJAkg==
-X-Received: by 2002:a05:600c:5116:b0:3db:1a8:c041 with SMTP id o22-20020a05600c511600b003db01a8c041mr42453030wms.17.1674896535134;
-        Sat, 28 Jan 2023 01:02:15 -0800 (PST)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id f28-20020a5d58fc000000b002be5401ef5fsm6212824wrd.39.2023.01.28.01.02.14
+        bh=sFlpJNoGBOazM9CU1KCnJW9Pwymj7pBp6JXDNmhBuT8=;
+        b=xsZRmlSBlHTXnfDDVYMB/n9iO0aXqgDSD4ye5YJp8qWg+GE2TcScIMLAploX3O1+sy
+         C1YaFGOX0WQIUMxCxUTrElLtWhahVYo2NJu+jDbFQDuxVzLmP/boE8mIX2Fc1TO6xoCV
+         8jfk8FhMlje2JRgla8brBzgBusv11jy4omdkSMGsSi9jB45r6A1UVHs+GfEdPocoSrwJ
+         IVfrgGepflBkyJCiTCkobm66no86ts/5UjtGGE7utEPAbvR2o4sU0WJ+GBDgY5TtEVNt
+         EkFX6fY26UKGhPWIZbPy7YCTLOFKYROJNrN7D/airOgnfsfgZ9NPIdD1F547z+BVavJy
+         jhZw==
+X-Gm-Message-State: AFqh2kpHCU3rQFKIUNZp6cFWSQ6T9VMEZucZ+olmtHb3M6WIHn5yilu/
+        OJ1/VjxgWg8AJAL3mqAP8FiCcw==
+X-Google-Smtp-Source: AMrXdXvvQykJl27DpI4dLKKbE4Gp6VgcIMfC9wpU5tWMTKXRTAjAQE6FyENclEpnl7Ei24HEknMf5Q==
+X-Received: by 2002:a05:6402:1009:b0:479:8313:3008 with SMTP id c9-20020a056402100900b0047983133008mr42841481edu.0.1674900799926;
+        Sat, 28 Jan 2023 02:13:19 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id y11-20020a50eb0b000000b00467481df198sm3689493edp.48.2023.01.28.02.13.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Jan 2023 01:02:14 -0800 (PST)
-Date:   Sat, 28 Jan 2023 18:02:13 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
+        Sat, 28 Jan 2023 02:13:19 -0800 (PST)
+Date:   Sat, 28 Jan 2023 11:13:17 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux--csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 3/3] mm, arch: add generic implementation of pfn_valid()
- for FLATMEM
-Message-ID: <Y9TklS4v8oHCvCu2@antec>
-References: <20230125190757.22555-1-rppt@kernel.org>
- <20230125190757.22555-4-rppt@kernel.org>
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+Message-ID: <20230128101317.6zc3r5eh7hqe5q6y@orel>
+References: <20230123112803.817534-1-alexghiti@rivosinc.com>
+ <20230123142554.f22ajf6upfk2ybxk@orel>
+ <20230125104102.2thvourt3lx2p36a@orel>
+ <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
+ <20230125151041.ijhjqswqiwmrzljd@orel>
+ <CAHVXubjR8AsZhMz59goxfmf8LmA4bjePKUx=AkvmbqoF42tzmA@mail.gmail.com>
+ <20230127085803.ruj624323wxeyllx@orel>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230125190757.22555-4-rppt@kernel.org>
+In-Reply-To: <20230127085803.ruj624323wxeyllx@orel>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 09:07:57PM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Fri, Jan 27, 2023 at 09:58:03AM +0100, Andrew Jones wrote:
+> On Fri, Jan 27, 2023 at 09:45:21AM +0100, Alexandre Ghiti wrote:
+> ...
+> > > > > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > > > > > > index f08b25195ae7..58107bd56f8f 100644
+> > > > > > > --- a/drivers/of/fdt.c
+> > > > > > > +++ b/drivers/of/fdt.c
+> > > > > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
+> > > > > > >  static void __early_init_dt_declare_initrd(unsigned long start,
+> > > > > > >                                        unsigned long end)
+> > > > > > >  {
+> > > > > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+> > > > > > > -    * enabled since __va() is called too early. ARM64 does make use
+> > > > > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
+> > > > > > > -    * conversion.
+> > > > > > > +   /*
+> > > > > > > +    * __va() is not yet available this early on some platforms. In that
+> > > > > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
+> > > > > > > +    * and does the VA conversion itself.
+> > > > > > >      */
+> > > > > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
+> > > > > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
+> > > > > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+> > > > > >
+> > > > > > There are now two architectures, so maybe it's time for a new config
+> > > > > > symbol which would be selected by arm64 and riscv64 and then used here,
+> > > > > > e.g.
+> > > > > >
+> > > > > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
+> > > > >
+> > > > > I see v5 left this as it was. Any comment on this suggestion?
+> > > >
+> > > > Introducing a config for this only use case sounds excessive to me,
+> > > > but I'll let Rob decide what he wants to see here.
+> > >
+> > > To me, the suggestion is less about trying to tidy up DT code and more
+> > > about bringing this comment about arm64 and riscv64 not being able to
+> > > use the linear map as early as other architectures up out of the
+> > > depths of DT code. Seeing an architecture select something like
+> > > NO_EARLY_LINEAR_MAP, which has a paragraph explaining what that
+> > > means, may help avoid other early uses of __va() which may or may
+> > > not fail quickly and cleanly with a BUG.
+> > >
+> > 
+> > You're right, do you have some bandwidth for doing that?
+> >
 > 
-> Every architecture that supports FLATMEM memory model defines its own
-> version of pfn_valid() that essentially compares a pfn to max_mapnr.
-> 
-> Use mips/powerpc version implemented as static inline as a generic
-> implementation of pfn_valid() and drop its per-architecture definitions
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/alpha/include/asm/page.h      |  4 ----
->  arch/arc/include/asm/page.h        |  1 -
->  arch/csky/include/asm/page.h       |  1 -
->  arch/hexagon/include/asm/page.h    |  1 -
->  arch/ia64/include/asm/page.h       |  4 ----
->  arch/loongarch/include/asm/page.h  | 13 -------------
->  arch/m68k/include/asm/page_no.h    |  2 --
->  arch/microblaze/include/asm/page.h |  1 -
->  arch/mips/include/asm/page.h       | 13 -------------
->  arch/nios2/include/asm/page.h      |  9 ---------
->  arch/openrisc/include/asm/page.h   |  2 --
->  arch/parisc/include/asm/page.h     |  4 ----
->  arch/powerpc/include/asm/page.h    |  9 ---------
->  arch/riscv/include/asm/page.h      |  5 -----
->  arch/sh/include/asm/page.h         |  3 ---
->  arch/sparc/include/asm/page_32.h   |  1 -
->  arch/um/include/asm/page.h         |  1 -
->  arch/x86/include/asm/page_32.h     |  4 ----
->  arch/x86/include/asm/page_64.h     |  4 ----
->  arch/xtensa/include/asm/page.h     |  2 --
->  include/asm-generic/memory_model.h | 12 ++++++++++++
->  include/asm-generic/page.h         |  2 --
->  22 files changed, 12 insertions(+), 86 deletions(-)
-> 
-[...] 
-> diff --git a/arch/openrisc/include/asm/page.h b/arch/openrisc/include/asm/page.h
-> index aab6e64d6db4..52b0d7e76446 100644
-> --- a/arch/openrisc/include/asm/page.h
-> +++ b/arch/openrisc/include/asm/page.h
-> @@ -80,8 +80,6 @@ typedef struct page *pgtable_t;
->  
->  #define page_to_phys(page)      ((dma_addr_t)page_to_pfn(page) << PAGE_SHIFT)
->  
-> -#define pfn_valid(pfn)          ((pfn) < max_mapnr)
-> -
->  #define virt_addr_valid(kaddr)	(pfn_valid(virt_to_pfn(kaddr)))
->  
->  #endif /* __ASSEMBLY__ */
+> Sure, I'll post something today.
+>
 
-For OpenRISC
+Hi Alex,
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+So on second thought, and after a bunch of grepping, I don't think we need
+to try and give architectures a way to declare that they have incomplete
+early linear maps. It would actually be difficult to determine when and
+why it should be selected, and, afaict, this is currently the one and
+only place it would be helpful. So, rather than pulling this comment about
+early __va() all the way up to the Kconfig level, I think pulling it into
+arch-specific code should be sufficient, and actually better.
+
+The situation we have here is that OF code is providing a convenience
+by doing early setup of initrd_start and initrd_end, which is nice for the
+large majority of architectures, but, as we see, it can't be used by all.
+My new suggestion is that we expose this initrd setup function as a weak
+function which architectures may override if needed. If those
+architectures want to prepare a mapping in their function, they can, or,
+if they know it's safe to defer the setup until later, then they can just
+provide a stub. I've drafted a patch where arm64 just provides a stub.
+I'll post it soon.
+
+Thanks,
+drew
