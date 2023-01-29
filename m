@@ -2,115 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6890680094
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Jan 2023 18:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB74B680173
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Jan 2023 22:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjA2RvX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 29 Jan 2023 12:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S235065AbjA2VSa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 29 Jan 2023 16:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjA2RvX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 29 Jan 2023 12:51:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3493819F00;
-        Sun, 29 Jan 2023 09:51:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4E1160CEF;
-        Sun, 29 Jan 2023 17:51:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E301C433EF;
-        Sun, 29 Jan 2023 17:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675014681;
-        bh=l4hEyZpO2oJZa+cpND05u71/0f47fJcK1SCdHu0VA6A=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=jaY2H0zphpAB/4y7WSq+gtS9dUOd9004iuBraqeUUdS7K39qXPEO7c0ogJ0V5MNaz
-         q6TOEZ4J7JIwSpICLrpyWLQakrxLISOtFvkvrSL0i46UCmDxIMqWX7G+irkc38fj/W
-         TjVaTeG/FGk97WdWzeG7c78znCRAsCmd3LlKmf/mEp412371U20ZVmESE68osZSq8u
-         T3ngCFrBa/cZmAj85wzAZbw6IPEB8yfktgg16gPec+//ftW13cgoZdXCojbmdHB/8m
-         UactsGRGBq0eDHA+nHXgX9ySz09KoX2I+4jPlZ39jBZjJk8/9D+x4hwTzw049oFxt8
-         Z6bPGXkw0O0aw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AB7E75C08B3; Sun, 29 Jan 2023 09:51:20 -0800 (PST)
-Date:   Sun, 29 Jan 2023 09:51:20 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com
-Subject: [PATCH memory-model] Add smp_mb__after_srcu_read_unlock()
-Message-ID: <20230129175120.GA1109244@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        with ESMTP id S229549AbjA2VS3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 29 Jan 2023 16:18:29 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0B27DB4
+        for <linux-arch@vger.kernel.org>; Sun, 29 Jan 2023 13:18:28 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x7so6008846edr.0
+        for <linux-arch@vger.kernel.org>; Sun, 29 Jan 2023 13:18:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+h+DwgC8kZ0XHiwjlH5j80VONawqLGbgf1k0XhI3HtA=;
+        b=d2zBLtX4Ok999XFthxBlaBoWXcErjB9PFTYs/5wEai3i5t/qDPilG6Ump2Du/KJQcr
+         kKmzsz8JnCNNIw8cqAOXaeFIpbPQRZ6E4hWW/PyvuVsPgDY+OWiyZcnT+Eb9DOtSrzTf
+         2f9IoYnmGEHI9N3bqYGa226swI/EeoaZ/BQHblLSGcVtVTfj2sfj4jNdUMN+8C1ofHHe
+         jtQ6tKS4/adIGV7VFCyq/0HN6cWpL4D5gDL9Lhhs2KOF023MEkGNNGyo7xawD+SPo5IF
+         +AHbPIFSnI3PvvoY8YOsCZkzR9Sso4Hc/Til/qwDqa/TzKb084c+nG35SuLxE6xwP1C7
+         AHZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+h+DwgC8kZ0XHiwjlH5j80VONawqLGbgf1k0XhI3HtA=;
+        b=YFQ0XSnnNY0KJaPLYhZQ7iUNaF0PapHKjyyINU+qJ+5tju3dYgVuKxa7nacZ1/r5WR
+         /VyVvyJJD+LuT2ulkWds96+y7YWNaItLn+sK26rO9ovxqEIlZ3qrbmPzisi4u6JxTZym
+         GMKH21xulX/4KqV0a2e+u74+Be+TSz6ruWP4tg2anR7uuCKiwxN8hS8BOYmimV0ex0bZ
+         7bxMPQeOtWwGLDYuqmjql4ljEqIfqXIyyQPA3+vxA6iiBowfg33NXruB+IROW5vf6VUk
+         GdsB8F+WsCXLisyjsYRtRxrE0ZEQQOLOBbFTdnmKMnc+iDp5jcITops0UAVQXEtFRNiz
+         nWXg==
+X-Gm-Message-State: AO0yUKVpPoCr8pXnELq9PQeHyyYDyw8/nTuv3tYvLZ4lRmAlA2pFkgEI
+        oQIPo9ppc0MTKUPWQvcYv4o=
+X-Google-Smtp-Source: AK7set/fjghCd6aQ47dcrbqhpVv6288Z8r+fI4E2Ox6BW/liWZcys3t01wTHRsqhbilvWAcyyCxJ9w==
+X-Received: by 2002:a05:6402:24a0:b0:4a0:8f4e:52dd with SMTP id q32-20020a05640224a000b004a08f4e52ddmr24043009eda.17.1675027106821;
+        Sun, 29 Jan 2023 13:18:26 -0800 (PST)
+Received: from localhost.localdomain ([80.211.22.60])
+        by smtp.googlemail.com with ESMTPSA id g12-20020a056402114c00b004a216fa259esm3754491edw.60.2023.01.29.13.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Jan 2023 13:18:25 -0800 (PST)
+From:   Sergey Matyukevich <geomatsi@gmail.com>
+To:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
+Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sergey Matyukevich <sergey.matyukevich@syntacore.com>
+Subject: [PATCH] riscv: mm: fix regression due to update_mmu_cache change
+Date:   Mon, 30 Jan 2023 00:18:18 +0300
+Message-Id: <20230129211818.686557-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This commit adds support for smp_mb__after_srcu_read_unlock(), which,
-when combined with a prior srcu_read_unlock(), implies a full memory
-barrier.  No ordering is guaranteed to accesses between the two, and
-placing accesses between is bad practice in any case.
+From: Sergey Matyukevich <sergey.matyukevich@syntacore.com>
 
-Tests may be found at https://github.com/paulmckrcu/litmus in files
-matching manual/kernel/C-srcu-mb-*.litmus.
+This is a partial revert of the commit 4bd1d80efb5a ("riscv: mm: notify
+remote harts about mmu cache updates"). Original commit included two
+loosely related changes serving the same purpose of fixing stale TLB
+entries causing user-space application crash:
+- introduce deferred per-ASID TLB flush for CPUs not running the task
+- switch to per-ASID TLB flush on all CPUs running the task in update_mmu_cache
 
-If we really do figure a way to weaken srcu_read_unlock() to release
-semantics, this functionality might play a greater role.
+According to report and discussion in [1], the second part caused a
+regression on Renesas RZ/Five SoC. For now restore the old behavior
+of the update_mmu_cache.
 
-It can be argued that smp_mb__after_srcu_read_unlock() should instead
-be smp_mb__before_srcu_read_unlock() to make it more clear that the full
-memory barrier precedes the end of any ongoing grace period.  There are
-not that many uses of smp_mb__after_srcu_read_unlock(), so...
+[1] https://lore.kernel.org/linux-riscv/20220829205219.283543-1-geomatsi@gmail.com/
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Fixes: 4bd1d80efb5a ("riscv: mm: notify remote harts about mmu cache updates")
+Reported-by: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Signed-off-by: Sergey Matyukevich <sergey.matyukevich@syntacore.com>
+---
+ arch/riscv/include/asm/pgtable.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-index dc464854d28a4..b92fdf7f6eeb1 100644
---- a/tools/memory-model/linux-kernel.bell
-+++ b/tools/memory-model/linux-kernel.bell
-@@ -31,7 +31,8 @@ enum Barriers = 'wmb (*smp_wmb*) ||
- 		'before-atomic (*smp_mb__before_atomic*) ||
- 		'after-atomic (*smp_mb__after_atomic*) ||
- 		'after-spinlock (*smp_mb__after_spinlock*) ||
--		'after-unlock-lock (*smp_mb__after_unlock_lock*)
-+		'after-unlock-lock (*smp_mb__after_unlock_lock*) ||
-+		'after-srcu-read-unlock (*smp_mb__after_srcu_read_unlock*)
- instructions F[Barriers]
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 4eba9a98d0e3..4c3c130ee328 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -415,7 +415,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+ 	 * Relying on flush_tlb_fix_spurious_fault would suffice, but
+ 	 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
+ 	 */
+-	flush_tlb_page(vma, address);
++	local_flush_tlb_page(address);
+ }
  
- (* SRCU *)
-diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-index 6e531457bb738..3a4d3b49e85cb 100644
---- a/tools/memory-model/linux-kernel.cat
-+++ b/tools/memory-model/linux-kernel.cat
-@@ -49,7 +49,8 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
-  * also affected by the fence.
-  *)
- 	([M] ; po-unlock-lock-po ;
--		[After-unlock-lock] ; po ; [M])
-+		[After-unlock-lock] ; po ; [M]) |
-+	([M] ; po? ; [Srcu-unlock] ; fencerel(After-srcu-read-unlock) ; [M])
- let gp = po ; [Sync-rcu | Sync-srcu] ; po?
- let strong-fence = mb | gp
- 
-diff --git a/tools/memory-model/linux-kernel.def b/tools/memory-model/linux-kernel.def
-index ef0f3c1850dee..a6b6fbc9d0b24 100644
---- a/tools/memory-model/linux-kernel.def
-+++ b/tools/memory-model/linux-kernel.def
-@@ -24,6 +24,7 @@ smp_mb__before_atomic() { __fence{before-atomic}; }
- smp_mb__after_atomic() { __fence{after-atomic}; }
- smp_mb__after_spinlock() { __fence{after-spinlock}; }
- smp_mb__after_unlock_lock() { __fence{after-unlock-lock}; }
-+smp_mb__after_srcu_read_unlock() { __fence{after-srcu-read-unlock}; }
- barrier() { __fence{barrier}; }
- 
- // Exchange
+ #define __HAVE_ARCH_UPDATE_MMU_TLB
+-- 
+2.39.0
+
