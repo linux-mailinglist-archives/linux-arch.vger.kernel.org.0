@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A8367FEFD
-	for <lists+linux-arch@lfdr.de>; Sun, 29 Jan 2023 13:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DC267FF07
+	for <lists+linux-arch@lfdr.de>; Sun, 29 Jan 2023 13:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234924AbjA2MnL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 29 Jan 2023 07:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S234941AbjA2MnN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 29 Jan 2023 07:43:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbjA2MnK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 29 Jan 2023 07:43:10 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8620125A7;
-        Sun, 29 Jan 2023 04:43:08 -0800 (PST)
+        with ESMTP id S234954AbjA2MnM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 29 Jan 2023 07:43:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEAB125A7;
+        Sun, 29 Jan 2023 04:43:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C17B2CE09E5;
-        Sun, 29 Jan 2023 12:43:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E716EC433D2;
-        Sun, 29 Jan 2023 12:42:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 980EAB80C2C;
+        Sun, 29 Jan 2023 12:43:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C73C433A7;
+        Sun, 29 Jan 2023 12:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674996176;
-        bh=8RQZps3hA/u1mdRRQGYSzSx3iKFm4iTs/37kan3EXRs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nZUZmSKw7/syf9RrBIFurd/O3AkMNzmfegfK+1AS6FvCaH0OhJOzBAu3UXC6av8P5
-         uY9AOa46F/d5yj77Ho8Ndgvw8xxJHw4nNHTmwjtslAXWyegt5vS1IKaYW+Stnwyuiy
-         2a+kHtcUtcTQ5Rqh9d7F2WecpHec0CXwi5TSyt1qClHpJLOA2sydJTb6OF8VZPCNps
-         3fd8EBQ67Wgcl+xTfrf7oQnKtinBQv8tebZZGSc5tamZZbBvwb6yYhdPyn1uALV1nu
-         d2H6gUYCo1lWTN9F7fs+AKTM2279BJ7XhGhJhYj0+jZo3axy2AgunU1xbS8ZdbQ6oz
-         oCSDE8gtPikyw==
+        s=k20201202; t=1674996188;
+        bh=cgWDMwNotrvgtwLOXkxr022OhYpC4uBm5qKZZMTCdc4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=UOlDKwso6wRfZVylh618GS0Ouplr5vx0EbZPPHD3xUb+8QoPpiFEHadR57onqorCd
+         YVV0X4T7n8gLAlDCcDoHkjHy+WzsJoiwhi5dfYlZ0/SJbhBTB4CLpq8O6xDe8ABdAj
+         ibLF/6hCOLr13VOj/azi035hOFFfeFmuDXjRvCo9nQzUAZ1DneDknyLVqg+z3u91Hb
+         JSM0yS+mjSe2REo/FRs3DbdIX7npqpWYBVELIqlPxuJWRXDIEj2eP/ud0TKhe2R7e/
+         shdVeHbLA/9GwBZjKAbCX1zbNI+chUKkqGr1E/I9bnpduDb0l68n12sXR48UTQjqrn
+         2HPElfopuZj9Q==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
@@ -64,10 +64,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
         linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
         openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
         x86@kernel.org, "Mike Rapoport (IBM)" <rppt@kernel.org>
-Subject: [PATCH v2 0/4] mm, arch: add generic implementation of pfn_valid() for FLATMEM
-Date:   Sun, 29 Jan 2023 14:42:31 +0200
-Message-Id: <20230129124235.209895-1-rppt@kernel.org>
+Subject: [PATCH v2 1/4] arm: include asm-generic/memory_model.h from page.h rather than memory.h
+Date:   Sun, 29 Jan 2023 14:42:32 +0200
+Message-Id: <20230129124235.209895-2-rppt@kernel.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230129124235.209895-1-rppt@kernel.org>
+References: <20230129124235.209895-1-rppt@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -82,57 +84,46 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 
-Hi,
+Makes it consistent with other architectures and allows for generic
+definition of pfn_valid() in asm-generic/memory_model.h with clear override
+in arch/arm/include/asm/page.h
 
-Every architecture that supports FLATMEM memory model defines its own
-version of pfn_valid() that essentially compares a pfn to max_mapnr.
+Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+---
+ arch/arm/include/asm/memory.h | 2 --
+ arch/arm/include/asm/page.h   | 2 ++
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Use mips/powerpc version implemented as static inline as a generic
-implementation of pfn_valid() and drop its per-architecture definitions
-
-v2:
-* fix build on ARM and xtensa
-* add Acked- and Reviewed-by, thanks everybody
-
-v1: https://lore.kernel.org/all/20230125190757.22555-1-rppt@kernel.org
-
-Mike Rapoport (IBM) (4):
-  arm: include asm-generic/memory_model.h from page.h rather than
-    memory.h
-  m68k: use asm-generic/memory_model.h for both MMU and !MMU
-  mips: drop definition of pfn_valid() for DISCONTIGMEM
-  mm, arch: add generic implementation of pfn_valid() for FLATMEM
-
- arch/alpha/include/asm/page.h      |  4 ----
- arch/arc/include/asm/page.h        |  1 -
- arch/arm/include/asm/memory.h      |  2 --
- arch/arm/include/asm/page.h        |  2 ++
- arch/csky/include/asm/page.h       |  1 -
- arch/hexagon/include/asm/page.h    |  1 -
- arch/ia64/include/asm/page.h       |  4 ----
- arch/loongarch/include/asm/page.h  | 13 -------------
- arch/m68k/include/asm/page.h       |  6 +-----
- arch/m68k/include/asm/page_mm.h    |  1 -
- arch/m68k/include/asm/page_no.h    |  4 ----
- arch/microblaze/include/asm/page.h |  1 -
- arch/mips/include/asm/page.h       | 28 ----------------------------
- arch/nios2/include/asm/page.h      |  9 ---------
- arch/openrisc/include/asm/page.h   |  2 --
- arch/parisc/include/asm/page.h     |  4 ----
- arch/powerpc/include/asm/page.h    |  9 ---------
- arch/riscv/include/asm/page.h      |  5 -----
- arch/sh/include/asm/page.h         |  3 ---
- arch/sparc/include/asm/page_32.h   |  1 -
- arch/um/include/asm/page.h         |  1 -
- arch/x86/include/asm/page_32.h     |  4 ----
- arch/x86/include/asm/page_64.h     |  4 ----
- arch/xtensa/include/asm/page.h     |  4 ++--
- include/asm-generic/memory_model.h | 12 ++++++++++++
- include/asm-generic/page.h         |  2 --
- 26 files changed, 17 insertions(+), 111 deletions(-)
-
-
-base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+diff --git a/arch/arm/include/asm/memory.h b/arch/arm/include/asm/memory.h
+index d8eef4bd8c71..62e9df024445 100644
+--- a/arch/arm/include/asm/memory.h
++++ b/arch/arm/include/asm/memory.h
+@@ -386,6 +386,4 @@ static inline unsigned long __virt_to_idmap(unsigned long x)
+ 
+ #endif
+ 
+-#include <asm-generic/memory_model.h>
+-
+ #endif
+diff --git a/arch/arm/include/asm/page.h b/arch/arm/include/asm/page.h
+index 5fcc8a600e36..74bb5947b387 100644
+--- a/arch/arm/include/asm/page.h
++++ b/arch/arm/include/asm/page.h
+@@ -158,6 +158,7 @@ typedef struct page *pgtable_t;
+ 
+ #ifdef CONFIG_HAVE_ARCH_PFN_VALID
+ extern int pfn_valid(unsigned long);
++#define pfn_valid pfn_valid
+ #endif
+ 
+ #include <asm/memory.h>
+@@ -167,5 +168,6 @@ extern int pfn_valid(unsigned long);
+ #define VM_DATA_DEFAULT_FLAGS	VM_DATA_FLAGS_TSK_EXEC
+ 
+ #include <asm-generic/getorder.h>
++#include <asm-generic/memory_model.h>
+ 
+ #endif
 -- 
 2.35.1
 
