@@ -2,293 +2,221 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7E9681980
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Jan 2023 19:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEC36819BA
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Jan 2023 19:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbjA3Sj6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Jan 2023 13:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S235634AbjA3S5t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Jan 2023 13:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238256AbjA3Sji (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Jan 2023 13:39:38 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9679714212;
-        Mon, 30 Jan 2023 10:39:06 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id j9so11029437qtv.4;
-        Mon, 30 Jan 2023 10:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1w+tbBWEaA0E2RmuugzUMyNc2sljY7KRsFQbXG9DuEY=;
-        b=Zc/g1ZDm0jtFAYTeTbkjvU+lEAgWm79NKe3IDDJp+FYozoxjHpxfHUDVNTijMA8Sgi
-         LCQoAAV1oXxRTFsF8NMROne0DHf1wmKdKPlJvOqry6aNTkROGn34Cbe4Vj/0hC+ZdSus
-         ZTcJl9/tUVcDg7nvkioI1NBl5fDNjvQeJIAwiRBZM/FCafiJOvzSWs+PPdeisXFRZFQ7
-         FIhup5g8Fs3HiHuE2FkgCgOzcp4Im3TE0+HweoV9hI+csba0TZTWjIhNLCH/+doAVi33
-         hRFZhTL/41yUCS7ZXacoqNQ1HBFP6F+eN7W50Rsejz7INRCjCEvAgJ1j+7UKwOfciCYp
-         PN4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1w+tbBWEaA0E2RmuugzUMyNc2sljY7KRsFQbXG9DuEY=;
-        b=pPdThLBWsT8lV/koiyWK+GZofCEi50pwrJYq+hp0ZvyE+7eHlrLz9Ib8qCsaQx3yJS
-         ITbuzxqKn6vWVTDSax/VCkrXDM3ng+s4MavJsQAJdlgPIGxCTrYqwcECglDnEwpq4n8i
-         v1MMr0TNl6CCuclCBOada/gfavIdigDWPcSXLytB3lKEa/R1OFsMXhB7ZeZ1bIkwDZZv
-         ZeQBZDZjjNmkb6Aiyu1K2X5o5MofPMFRnwCV/NTdYhRP6fZ66ZxsjQCFiQGESoRvheqc
-         4JqPjdOjeE1Exb6v2hyagQtOMiQES8VvMotjdPLJ/3l7r6Ui/1JXNsFH5miKaeFkqmFc
-         PO5w==
-X-Gm-Message-State: AFqh2kpbkkdpZExgBoi8aOHmAuHekyVFeQtzftOpl3z1w6fB+8xpZeNG
-        63/IqFXbMsFXv8XQtpeNprwI85+Xdoc=
-X-Google-Smtp-Source: AMrXdXsaFlF4Z/8mfUnxqPOn6QGTEg1RtZFEBW6V5bpVS4uopngy3sXy1dd/ilvC4WwuW4ece/ZeOQ==
-X-Received: by 2002:ac8:454e:0:b0:3a8:fdf:8ff8 with SMTP id z14-20020ac8454e000000b003a80fdf8ff8mr68979799qtn.36.1675103945541;
-        Mon, 30 Jan 2023 10:39:05 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id t9-20020a05620a034900b007194ea5c715sm6287166qkm.77.2023.01.30.10.39.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jan 2023 10:39:04 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id AC2D827C0054;
-        Mon, 30 Jan 2023 13:39:03 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 30 Jan 2023 13:39:03 -0500
-X-ME-Sender: <xms:xg7YYwUJIhe2a_K64a9c4TTrwqY2SmTRM-4yW8QJzBVkVfCXFrm_Xg>
-    <xme:xg7YY0lxKlw9bVgwDq8LzWPYxl5908dx4zhCCLOuHPnu4LWf63kc4h3GAPN3eXrTH
-    j9X_VymMbPMAnsPLQ>
-X-ME-Received: <xmr:xg7YY0YqhhRtdPR3P2GNbRGPvMwU8ePuxBDJZY3nhZ5mW6yuJXFtWV5JlJ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefvddguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthekredttddtudenucfhrhhomhepueho
-    qhhunhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtf
-    frrghtthgvrhhnpeeftddvudetgfettdevfeekgfevleetjeduhffgleefhfdtheeuueet
-    jeehhfdtfeenucffohhmrghinhepohhpvghnqdhsthgurdhorhhgpdhgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegs
-    ohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeige
-    dqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihig
-    mhgvrdhnrghmvg
-X-ME-Proxy: <xmx:xw7YY_VPhjjnLEAQATj1T39g61JWVIF_k9_YcKw-mBxE5Rc20XYA8Q>
-    <xmx:xw7YY6ntJSX8TNltxvNfYPjc8Xno3kUbj7kBKCygzovhUHq_KL9GBQ>
-    <xmx:xw7YY0ejXgsW4TDqKvPZULKCRpbey6KI5H9p7g4Lwga4GuZgjIUzMQ>
-    <xmx:xw7YY2P0HYBkuKiD4t_1nAWAE1zjdyTtlNFJmHudnmUQXLl5-gG0lw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 30 Jan 2023 13:39:02 -0500 (EST)
-Date:   Mon, 30 Jan 2023 10:38:07 -0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Will Deacon <will@kernel.org>,
+        with ESMTP id S230444AbjA3S5s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Jan 2023 13:57:48 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1719E6582;
+        Mon, 30 Jan 2023 10:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1675105067; x=1706641067;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=+9o4krvsE42kFPopZPHlm090hKzXz250QCPWtirXZy8=;
+  b=EgQjrR/Lm/Xu4NzXgOAMiWFiB+qVm3sBli4WfussQw2XrGf8FbLMs1s7
+   UoT+h0y6LiOk1sz7tfjE6EIUuO5/ADMOskysjQ9IQF/QqBF659lRZGUj/
+   uraHEGqM0oKfXsgfXfhnAmcoMz7cyeyZX2XDEKb5yagp87VbUE+wYAFhl
+   Y+uGJFmXexk2fEMXQCI7mU3SZ8M3TplqBUsXK9t+jqWrXTo81vpCWp9oH
+   YcWc/xMSQFpwlvGPFV5ixrdk3NlEhP4dDEKuLXgfohXhNqQg8J1t53COb
+   M9vgs0xxodph0LbHXyfJ8YJhgkOkbwP7OYqy/yCYk7+Oku9jzDmAM/94x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="390009012"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="390009012"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2023 10:57:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10606"; a="732802654"
+X-IronPort-AV: E=Sophos;i="5.97,258,1669104000"; 
+   d="scan'208";a="732802654"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Jan 2023 10:57:36 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 30 Jan 2023 10:57:28 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 30 Jan 2023 10:57:28 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 30 Jan 2023 10:57:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T7u2UgG9xXHB55z0kmHvAR48xd3hSkuIVyH1S+Qj0AQEvnqZQ1eZvFdwxvnwC3tBIfyV+f09mi4rycT4Lwy9jEAcr93Zz0MVEo14S+AGuV+9bcdJnTzjboQsqC3rp4wilYAUSAFL9BXcy3kRdzo8Llohvmrtq413T1+V7VcgEPD9HBBWn991qv8fzcfWbCzRabdVfH/5cb69hI5BFbtjavz0dVkyk0tVlOzYcbDDuFo640YQ2QStt4MFhj58Iuw/rsiPYBGzE7JlYeFD2xhm6Kx69O3PuwIZINySfrj34+QpooMxwlt2T8NSDHfnVVBdrTNh4Yt7iNT9dywMW4G43Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=03HohyCV8hbOh/3uzXBvYlhWwLl3VC7jMMxfvoy3cTg=;
+ b=oNKEjWnOJ7Mgd+rUs03HNb5Mia7AsgbnElUoCLlS7JdMoBKXVdH44UUhnxKY8XaQiP5zJhUMa18jfgAvFt5Zw9jmDcybY0W71whXltOnUrYrPXYlx7b24Akwqz2hWS+yzAHJTdej5dR6suCLsb/bAcdnu3jV9FpaH43/q0HfO3TN3fWUgrx8gX/JM6n7XT/1bpuguxEOMmr/OcyaN1swoGu03PJRaoAMoWhuoORF6MH8FAjhuKTe5Yv2yy6TaklHnRF8LXlltyfjMfmmqhp8fviCkNNZYa2g+qlK1SJ3yUgVwv0P7dGHW9A1+CaGHWr0K/FE0zX/72VbHcgWHtTe7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by DM4PR11MB7352.namprd11.prod.outlook.com (2603:10b6:8:103::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6043.36; Mon, 30 Jan
+ 2023 18:57:20 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::421b:865b:f356:7dfc%5]) with mapi id 15.20.6043.022; Mon, 30 Jan 2023
+ 18:57:20 +0000
+Date:   Mon, 30 Jan 2023 10:57:16 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Alexander Potapenko <glider@google.com>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     Marco Elver <elver@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        "Andy Lutomirski" <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Borislav Petkov <bp@alien8.de>, Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Ilya Leoshkevich" <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-Message-ID: <Y9gOjzGaWy2hIAmu@boqun-archlinux>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
- <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
- <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
- <Y9RLpYGmzW1KPksE@boqun-archlinux>
- <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+Message-ID: <63d8130c30bb5_ea22229489@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-11-glider@google.com>
+ <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+ <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com>
+ <63b74a6e6a909_c81f0294a5@dwillia2-xfh.jf.intel.com.notmuch>
+ <CAG_fn=XNfrpTxWYYLnG5L-ogKmxvWvLGTzgqbT7sWxnFgnu7_w@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAG_fn=XNfrpTxWYYLnG5L-ogKmxvWvLGTzgqbT7sWxnFgnu7_w@mail.gmail.com>
+X-ClientProxiedBy: BYAPR02CA0059.namprd02.prod.outlook.com
+ (2603:10b6:a03:54::36) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|DM4PR11MB7352:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b2b3d86-5b06-44e6-a420-08db02f3d055
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tHMFwM2XPpBZ2VG2G5R34Qyl9vHPF74psISEZEopU/VmdUfppuZhYqv6ir35ZqAvAX/ducgcDFrp/yPyeS9HBu6JbP0uj0JJLGCiZPHRpFM+hMfp4X9X08aFi/aM1ZrPspvWDK3vR7MYBNmD1fo5ZM8jHyhLLnVa/8YqU/lL4JfkM3LciKsToDALJk+9XE+mgLJB+IblL/8UZO3/zXpiAhjgtJsRTZ1ADldRA1yTeyMjHnyDi8Tz3GNL3Y2fkhCHi4ga94XLVRNy1eatfexMpeHkHfQzLXezjpooGqm5RZdui6lmVjQZL1oY0K+6iscKMF7Tg0Og1kNX1iLVJ9wh3zhHGwfhNZWxyWU2ECnnHQWnv6BHHmzQlDKfnRd6YH+DJz1ToSa90NImJapsRDmXCGX3L7xB7EirxpU62uZX79gFyb8bWE8FWCnF9w/QM7IG0rS6D/xJ/t+/NFvknzEaaqxnpk8MHD3fYH5rqhWMRFZq2JPxGOO+mz+5nJzHbZh7EbWFs9QgPGI/nolm75nPR5criDRCgEnV15/rY4ebvwR//QqRqXeYl0NmhOAxspv5oLzcz2kOleWgSIijc9yErv8lO73xxUw7UGJ1oILxnVgVktrvRv3YdxYAy8zYp7gpuA9yVDn4tCYJK/J5hq+7XS/P8wJ7NWtdRRdj45XpjLw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(376002)(39860400002)(396003)(366004)(451199018)(66556008)(41300700001)(66946007)(66476007)(8676002)(4326008)(8936002)(316002)(54906003)(2906002)(5660300002)(7406005)(966005)(6486002)(478600001)(186003)(26005)(6512007)(9686003)(6666004)(6506007)(83380400001)(7416002)(110136005)(38100700002)(86362001)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vCxdsbNwRYyZ/6y7OuiE0xg3w0jk81CDNXgDBA+rCIHF8hco3+dmKUa0PQGZ?=
+ =?us-ascii?Q?IWbLDePv7SAr5IyaDbI9tUtd0lCJelon0OyRCODxRLJqsXv/vNvbehHCcQNA?=
+ =?us-ascii?Q?DL9ECOp3hG5sY+SIGK6lXjQ+/js0dSH7X8SCGt4QAP+TioAxSXS9hntbEOYz?=
+ =?us-ascii?Q?G4xiFzTctMPdIEVas20z4hgj/tZG8Y/I2yTTGJCoj1iFLMaVkUpwOrv+1aNh?=
+ =?us-ascii?Q?rFGpBSHzfZEllh4CHD/TivUxOH7yC3OjngoJ3VYbz2UN+rzntObBlIv6kPNz?=
+ =?us-ascii?Q?rDpQ2j/68l1DRTdim6VBcJBY3+dX1N4Q3avc0ZoIbV3gCWkC//tFWCNKWM+S?=
+ =?us-ascii?Q?RlIK+O7mmHGBS56FMjnhALYzmLTfVliSN/WHN+CO0Uk6TFYnciWMcacNKNlg?=
+ =?us-ascii?Q?9T1ktQNGD4rn/5NGJG53vACQYr0Cc4GIO1hqklJ/g3eHdhDeJHGwYYEEqdU0?=
+ =?us-ascii?Q?+mN1nJifQhMEN0r1M9CZAlmz11SddxTdsWLZTLcMl165K8sTJcmWDiQ3uqrw?=
+ =?us-ascii?Q?8tjAoYPJOzb6u1QsK9XyO32OGFIKrCpp3qNa7QQaXwGXgqGoAE4E5e4P3lzd?=
+ =?us-ascii?Q?Nu2XYZyE+U/6fBU/FRkXGVDYXsEBSczs1g8IS8E2OUbwgmO99GNp3vbehwUB?=
+ =?us-ascii?Q?zmPybUUmUzfZRVhiicL+9WSC0JLAMN2AtBligDzDn26jrMQ5nVHiz78Bw167?=
+ =?us-ascii?Q?Q+iO/bD/zKsFLPY6TSwqy8OIeCs0EwcoYCgjEPiaj4+INYCbl/Dk2/XHmq9B?=
+ =?us-ascii?Q?xH6rAKqS8sA9M2Aq/k2AJ0uCHt/F4+vXarIS1nezrINUM8coHGakjnqg7jA2?=
+ =?us-ascii?Q?3uqM3H7ulQTjLdVvDOn0w/qJbrykQV8pn7VM9HKfRzShiTvcf80jkFLm6wgy?=
+ =?us-ascii?Q?Rb8gY21rmP8Hcv4Ju6tew/7HU4rUUCW5xvFwxxu3L508xNivKjqYh9lJtPT5?=
+ =?us-ascii?Q?/SqptRQ1hcDpoi2+Pqdk5C4OaSCI0zVoCmrPmEB0m2mBmwFB3A6hBx3Hpoaj?=
+ =?us-ascii?Q?ULqyks9JRgtU+p5T14Stn78SW3V8btWHL1h5oRvXrA5X/uGPz7O6o5F5gumU?=
+ =?us-ascii?Q?XLPFxEsGjGit50jcXEd35tL1ETkYjf6ePRmzEerVaIsXOGX/wX8O8uXK5spP?=
+ =?us-ascii?Q?J0GafqYz3+i8m71AKljebKGBR4bExjHlfN7Hp8fnaxYIk4E3DNrD+hr91HLG?=
+ =?us-ascii?Q?xEZNbWT1uL56ksYW8GFhhdYfdQo58Hdl/Bqst5EPUEDFxQ45dx1j0VhVQo1o?=
+ =?us-ascii?Q?rm7ibEvGSRkDssWJy7+2LgtWxfbNK2MPfwa64uwzzcFAX3DkcVqMSIveiAbs?=
+ =?us-ascii?Q?Vo30JDPr7So22l8LEz1Ams7MSHpM0MmLedU+bya11WjQMkhhUrq/26PFK+CV?=
+ =?us-ascii?Q?sx4isC0ZmPlaB/Vl5UjNaPGqYCSiUFCfsMZPhepIGosa+eY83fFrHF80Zc0g?=
+ =?us-ascii?Q?liRCQcQ53bEZm1WOAjCPL2SpJ9xrTJ4y7Z7yKnX0I6WG0SDqMClQhZAEBITe?=
+ =?us-ascii?Q?Dse92oZdvtZnKGs9oSfOCeuApc1QGWs3Tu9UmO7MW4YkfeeTI6H6NMKR7LdS?=
+ =?us-ascii?Q?qIgI5E2AZl4aU0DYTyrEwPWsiLtdtFnr5aSp7ucbwrH+8d8QjPJRWrVEJyPt?=
+ =?us-ascii?Q?1A=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2b3d86-5b06-44e6-a420-08db02f3d055
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2023 18:57:20.1139
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: o6gOwz72dDyVMQ8aUnJS56hxIuduqrNAiYfNUomfdWJw0YTPRvm3YI24aVLmJ0s3wbp4jjAv3wvzrDw2T1mxiS2zS5ttxmxWqdzm1TiWjwc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7352
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 30, 2023 at 01:23:28PM +0100, Jonas Oberhauser wrote:
+Alexander Potapenko wrote:
+[..]
+> >
+> > diff --git a/drivers/nvdimm/Kconfig b/drivers/nvdimm/Kconfig
+> > index 79d93126453d..5693869b720b 100644
+> > --- a/drivers/nvdimm/Kconfig
+> > +++ b/drivers/nvdimm/Kconfig
+> > @@ -63,6 +63,7 @@ config NVDIMM_PFN
+> >         bool "PFN: Map persistent (device) memory"
+> >         default LIBNVDIMM
+> >         depends on ZONE_DEVICE
+> > +       depends on !KMSAN
+> >         select ND_CLAIM
+> >         help
+> >           Map persistent memory, i.e. advertise it to the memory
+> >
 > 
+> Looks like we still don't have a resolution for this problem.
+> I have the following options in mind:
 > 
-> On 1/27/2023 11:09 PM, Boqun Feng wrote:
-> > On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
-> > > > I also noticed that GCC has some builtin/extension to do such things,
-> > > > __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
-> > > > can be used in the kernel.
-> > > On a per-architecture basis only, the C/C++ memory model does not match
-> > > the Linux Kernel memory model so using the compiler to generate the
-> > > atomic ops is somewhat tricky and needs architecture audits.
-> > Hijack this thread a little bit, but while we are at it, do you think it
-> > makes sense that we have a config option that allows archs to
-> > implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
-> > between two memory models, but the option is only for fallback/generic
-> > implementation so we can put extra barriers/orderings to make things
-> > guaranteed to work.
-> > 
-> > It'll be a code version of this document:
-> > 
-> > 	https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
-> > 
-> > (although I realise there may be a few mistakes in that doc since I
-> > wasn't familiar with C11 memory model when I wrote part of the doc, but
-> > these can be fixed)
-> > 
-> > Another reason I ask is that since Rust is coming, we need to provide
-> > our LKMM atomics in Rust so that C code and Rust code can talk via same
-> > atomic variables, since both sides need to use the same memory model.
-> > My choices are:
-> > 
-> > 1.	Using FFI to call Linux atomic APIs: not inline therefore not
-> > 	efficient.
-> > 
-> > 2.	Implementing Rust LKMM atomics in asm: much more work although
-> > 	I'm OK if we have to do it.
-> > 
-> > 3.	Implementing Rust LKMM atomics with standard atomics (i.e. C/C++
-> > 	atomics):
-> > 
-> > 	*	Requires Rust has "volatile" atomics, which is WIP but
-> > 		looks promising
-> > 	
-> > 	*	Less efficient compared to choice #2 but more efficient
-> > 		compared to choice #1
-> > 
-> > Ideally, choice #2 is the best option for all architectures, however, if
-> > we have the generic implementation based on choice #3, for some archs it
-> > may be good enough.
-> > 
-> > Thoughts?
+> 1. Set MAX_STRUCT_PAGE_SIZE to 80 (i.e. increase it by 2*sizeof(struct
+> page *) added by KMSAN) instead of 128.
+> 2. Disable storing of struct pages on device for KMSAN builds.
 > 
-> Thanks for adding me to the discussion!
+> , but if those are infeasible, we can always go for:
 > 
-> One reason not to rely on C11 is that old compilers don't support it, and
-> there may be application scenarios in which new compilers haven't been
-> certified.
-> I don't know if this is something that affects linux, but linux is so big
-> and versatile I'd be surprised if that's irrelevant.
-> 
+> 3. Disable KMSAN for NVDIMM and reflect it in Documentation. I am
+> happy to send the patch if we decide this is the best option.
 
-We are gnu11 since last year:
+I copied you on the new proposal here:
 
-	e8c07082a810 ("Kbuild: move to -std=gnu11")
+https://lore.kernel.org/nvdimm/167467815773.463042.7022545814443036382.stgit@dwillia2-xfh.jf.intel.com/
 
-, so at least for mainline I don't see a problem to use c11 atomics.
+It disables PMEM namespace creation with page-array reservations when
+sizeof(struct page) > 64.
 
-> Another is that the C11 model is more about atomic locations than atomic
-> accesses, and there are several places in the kernel where a location is
-> accessed both atomically and non-atomically. This API mismatch is more
-> severe than the semantic differences in my opinion, since you don't have
-> guarantees of what the layout of atomics is going to be.
-> 
-
-True, but the same problem for our asm implemented atomics, right? My
-plan is to do (volatile atomic_int *) casts on these locations.
-
-> Perhaps you could instead rely on the compiler builtins? Note that this may
-
-These are less formal/defined to me, and not much research on them I
-assume, I'd rather not use them.
-
-> invalidate some progress properties, e.g., ticket locks become unfair if the
-> increment (for taking a ticket) is implemented with a CAS loop (because a
-> thread can fail forever to get a ticket if the ticket counter is contended,
-> and thus starve). There may be some linux atomics that don't map to any
-> compiler builtins and need to implemented with such CAS loops, potentially
-> leading to such problems.
-> 
-> I'm also curious whether link time optimization can resolve the inlining
-> issue?
-> 
-
-For Rust case, cross-language LTO is needed I think, and last time I
-tried, it didn't work.
-
-> I think another big question for me is to which extent it makes sense
-> anyways to have shared memory concurrency between the Rust code and the C
-> code. It seems all the bad concurrency stuff from the C world would flow
-> into the Rust world, right?
-
-What do you mean by "bad" ;-) ;-) ;-)
-
-> If you can live without shared Rust & C concurrency, then perhaps you can
-> get away without using LKMM in Rust at all, and just rely on its (C11-like)
-> memory model internally and talk to the C code through synchronous, safer
-> ways.
-> 
-
-First I don't think I can avoid using LKMM in Rust, besides the
-communication from two sides, what if kernel developers just want to
-use the memory model they learn and understand (i.e. LKMM) in a new Rust
-driver? They probably already have a working parallel algorithm based on
-LKMM.
-
-Further, let's say we make C and Rust talk without shared memory
-concurrency, what would that be? Will it more defined/formal the LKMM?
-How's the cost if we use synchronous ways? I personally think there are
-places in core kernel where Rust can be tried, whatever the mechanism is
-used, it cannot sarcrifed.
-
-> I'm not against having a fallback builtin-based implementation of LKMM, and
-> I don't think that it really needs architecture audits. What it needs is
-
-Fun fact, there exist some "optimizations" that don't generate the asm
-code as you want:
-
-	https://github.com/llvm/llvm-project/issues/56450
-
-Needless to say, they are bugs, and will be fixed, besides making atomic
-volatile seems to avoid these "optimizations"
-
-> some additional compiler barriers and memory barriers, to ensure that the
-> arguments about dependencies and non-atomics still hold. E.g., a release
-> store may not just be "builtin release store" but may need to have a
-> compiler barrier to prevent the release store being moved in program order.
-> And a "full barrier" exchange may need an mb() infront of the operation to
-> avoid "roach motel ordering" (i.e.,  x=1 ; "full barrier exchange"; y = 1
-> allows y=1 to execute before x=1 in the compiler builtins as far as I
-> remember). And there may be some other cases like this.
-> 
-
-Agreed. And this is another reason I want to do it: I'm curious about
-how far C11 memory model and LKMM are different, and whether there is a
-way to implement one by another, what are the gaps (theorical and
-pratical), whether the ordering we have in LKMM can be implemented by
-compilers (mostly dependencies). More importantly, we could improve both
-to get something better? With the ability to exactly express the
-programmers' intention yet still allow optimization by the compilers.
-
-> But I currently don't see that this implementation would be noticeably
-> faster than paying the overhead of lack of inline.
-> 
-
-You are not wrong, surely we will need to real benchmark to know. But my
-rationale is 1) in theory this is faster, 2) we also get a chance to try
-out code based on LKMM with C11 atomics to see where it hurts. Therefore
-I asked ;-)
-
-Regards,
-Boqun
-
-> Best wishes, jonas
-> 
+Note, it was pre-existing behavior for PMEM namespaces with too small of
+a reservation to fail to enable. That gives me confidence that the
+restriction to lose some PMEM namespace access with these memory debug
+facilities is acceptable.
