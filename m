@@ -2,192 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3723D680DEF
-	for <lists+linux-arch@lfdr.de>; Mon, 30 Jan 2023 13:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D722680F43
+	for <lists+linux-arch@lfdr.de>; Mon, 30 Jan 2023 14:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236233AbjA3Mly (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 Jan 2023 07:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S235330AbjA3NsX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 Jan 2023 08:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235583AbjA3Mlx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Jan 2023 07:41:53 -0500
-X-Greylist: delayed 1047 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 Jan 2023 04:41:52 PST
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C72526D;
-        Mon, 30 Jan 2023 04:41:52 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4P56bk1kf1z9v7Zc;
-        Mon, 30 Jan 2023 20:16:18 +0800 (CST)
-Received: from [10.206.134.221] (unknown [10.206.134.221])
-        by APP1 (Coremail) with SMTP id LxC2BwBHw_7Cttdj8WfcAA--.8512S2;
-        Mon, 30 Jan 2023 13:23:47 +0100 (CET)
-Message-ID: <2f4717b3-268f-8db3-e380-4af0a5479901@huaweicloud.com>
-Date:   Mon, 30 Jan 2023 13:23:28 +0100
+        with ESMTP id S235232AbjA3NsW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 Jan 2023 08:48:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517D12941D;
+        Mon, 30 Jan 2023 05:48:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C1105B81116;
+        Mon, 30 Jan 2023 13:48:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E29C4339E;
+        Mon, 30 Jan 2023 13:48:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675086497;
+        bh=+iz7/0m+hEIPyBQg3I/82VjHc01NMeldbSQt2dqGcSg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R9sDP955tHpJ1QqsR0L3i+gv+cjOVpaU84PSIDDhw30Zfl75NL7qlIA2Ek9QCOvOs
+         f+80E8rQ53TD2AN3Y/fjhXCl/P394lhf7L+pmSgNTulhP9LTLp6wF6rENXVPR99t4q
+         P7PT9uexAhtg0aTWMcOYFA3CSWm9/gLd1V6rPdGhjNkwjeN/4nwM9wJRlxmuhyahod
+         oB/uATlvf3mMQn1UmbUNCfzcUWCJKUY9gGnL/RqnIJP6gJ9vUwQcc9VGeaLhCHOMJe
+         qUvl/iPosG3dy0T8Zw5/MXdW5+nM7hxAjDtIxxYz/Dkt76O6zY7CAxhzYf6xfll6wU
+         3fXZBoZjE6a5g==
+Received: by mail-vs1-f44.google.com with SMTP id s24so5118292vsi.12;
+        Mon, 30 Jan 2023 05:48:17 -0800 (PST)
+X-Gm-Message-State: AFqh2kr+v+o3ek47rwjxnLP3xhK7Lxq54kmW6KFPxT6FOBhAl32Qur7i
+        FQndBs0XLHw5FxhNwniM85ZYZR829H23CPw2Bg==
+X-Google-Smtp-Source: AMrXdXvWFxwf7o8XYdZZzxKLXqR1OblZ1Jf42fyF9cWbecmrBhoaNv2NX636Gi1FINWWYnmBotKarycuGbTuFd70diw=
+X-Received: by 2002:a05:6102:5490:b0:3b5:1fe4:f1c2 with SMTP id
+ bk16-20020a056102549000b003b51fe4f1c2mr6746365vsb.0.1675086496230; Mon, 30
+ Jan 2023 05:48:16 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] locking/atomic: atomic: Use arch_atomic_{read,set} in
- generic atomic ops
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Jules Maselbas <jmaselbas@kalray.eu>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Hernan Ponce de Leon <hernan.poncedeleon@huaweicloud.com>,
-        =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
-        Marco Elver <elver@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-References: <20230126173354.13250-1-jmaselbas@kalray.eu>
- <Y9Oy9ZAj/DQ7O+6e@hirez.programming.kicks-ass.net>
- <20230127134946.GJ5952@tellis.lin.mbt.kalray.eu>
- <Y9Pg+aNM9f48SY5Z@hirez.programming.kicks-ass.net>
- <Y9RLpYGmzW1KPksE@boqun-archlinux>
-From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-In-Reply-To: <Y9RLpYGmzW1KPksE@boqun-archlinux>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwBHw_7Cttdj8WfcAA--.8512S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw47WF45ZFWrWryDtFy5urg_yoWruFy8pF
-        WSka13GF4DXF1Sq34kJa1xu3WFyw40y3y5Jr95KrykuF1Y9ryftr4xtr4YgFy7Cws7trW2
-        qr1DK34DCa45ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUojjgUUUUU
-X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230123112803.817534-1-alexghiti@rivosinc.com>
+ <20230123142554.f22ajf6upfk2ybxk@orel> <20230125104102.2thvourt3lx2p36a@orel> <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
+In-Reply-To: <CAHVXubjUCmk6xGTCPzMujYqKUwE0bhQBqd8A+=yq7ijQZtBObg@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 30 Jan 2023 07:48:04 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ8JtkOBLpdf3hU9JWcdRTFr3Ss1Hd+yFpMqs7ujUiyCQ@mail.gmail.com>
+Message-ID: <CAL_JsqJ8JtkOBLpdf3hU9JWcdRTFr3Ss1Hd+yFpMqs7ujUiyCQ@mail.gmail.com>
+Subject: Re: [PATCH v4] riscv: Use PUD/P4D/PGD pages for the linear mapping
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Andrew Jones <ajones@ventanamicro.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 1/27/2023 11:09 PM, Boqun Feng wrote:
-> On Fri, Jan 27, 2023 at 03:34:33PM +0100, Peter Zijlstra wrote:
->>> I also noticed that GCC has some builtin/extension to do such things,
->>> __atomic_OP_fetch and __atomic_fetch_OP, but I do not know if this
->>> can be used in the kernel.
->> On a per-architecture basis only, the C/C++ memory model does not match
->> the Linux Kernel memory model so using the compiler to generate the
->> atomic ops is somewhat tricky and needs architecture audits.
-> Hijack this thread a little bit, but while we are at it, do you think it
-> makes sense that we have a config option that allows archs to
-> implement LKMM atomics via C11 (volatile) atomics? I know there are gaps
-> between two memory models, but the option is only for fallback/generic
-> implementation so we can put extra barriers/orderings to make things
-> guaranteed to work.
+On Wed, Jan 25, 2023 at 6:13 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
 >
-> It'll be a code version of this document:
+> On Wed, Jan 25, 2023 at 11:41 AM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Mon, Jan 23, 2023 at 03:25:54PM +0100, Andrew Jones wrote:
+> > > On Mon, Jan 23, 2023 at 12:28:02PM +0100, Alexandre Ghiti wrote:
+> > > > During the early page table creation, we used to set the mapping for
+> > > > PAGE_OFFSET to the kernel load address: but the kernel load address is
+> > > > always offseted by PMD_SIZE which makes it impossible to use PUD/P4D/PGD
+> > > > pages as this physical address is not aligned on PUD/P4D/PGD size (whereas
+> > > > PAGE_OFFSET is).
+
+[...]
+
+> > > > diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> > > > index f08b25195ae7..58107bd56f8f 100644
+> > > > --- a/drivers/of/fdt.c
+> > > > +++ b/drivers/of/fdt.c
+> > > > @@ -891,12 +891,13 @@ const void * __init of_flat_dt_match_machine(const void *default_match,
+> > > >  static void __early_init_dt_declare_initrd(unsigned long start,
+> > > >                                        unsigned long end)
+> > > >  {
+> > > > -   /* ARM64 would cause a BUG to occur here when CONFIG_DEBUG_VM is
+> > > > -    * enabled since __va() is called too early. ARM64 does make use
+> > > > -    * of phys_initrd_start/phys_initrd_size so we can skip this
+> > > > -    * conversion.
+> > > > +   /*
+> > > > +    * __va() is not yet available this early on some platforms. In that
+> > > > +    * case, the platform uses phys_initrd_start/phys_initrd_size instead
+> > > > +    * and does the VA conversion itself.
+> > > >      */
+> > > > -   if (!IS_ENABLED(CONFIG_ARM64)) {
+> > > > +   if (!IS_ENABLED(CONFIG_ARM64) &&
+> > > > +       !(IS_ENABLED(CONFIG_RISCV) && IS_ENABLED(CONFIG_64BIT))) {
+> > >
+> > > There are now two architectures, so maybe it's time for a new config
+> > > symbol which would be selected by arm64 and riscv64 and then used here,
+> > > e.g.
+> > >
+> > >   if (!IS_ENABLED(CONFIG_NO_EARLY_LINEAR_MAP)) {
+> >
+> > I see v5 left this as it was. Any comment on this suggestion?
 >
-> 	https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0124r7.html
->
-> (although I realise there may be a few mistakes in that doc since I
-> wasn't familiar with C11 memory model when I wrote part of the doc, but
-> these can be fixed)
->
-> Another reason I ask is that since Rust is coming, we need to provide
-> our LKMM atomics in Rust so that C code and Rust code can talk via same
-> atomic variables, since both sides need to use the same memory model.
-> My choices are:
->
-> 1.	Using FFI to call Linux atomic APIs: not inline therefore not
-> 	efficient.
->
-> 2.	Implementing Rust LKMM atomics in asm: much more work although
-> 	I'm OK if we have to do it.
->
-> 3.	Implementing Rust LKMM atomics with standard atomics (i.e. C/C++
-> 	atomics):
->
-> 	*	Requires Rust has "volatile" atomics, which is WIP but
-> 		looks promising
-> 	
-> 	*	Less efficient compared to choice #2 but more efficient
-> 		compared to choice #1
->
-> Ideally, choice #2 is the best option for all architectures, however, if
-> we have the generic implementation based on choice #3, for some archs it
-> may be good enough.
->
-> Thoughts?
+> Introducing a config for this only use case sounds excessive to me,
+> but I'll let Rob decide what he wants to see here.
 
-Thanks for adding me to the discussion!
+Agreed. Can we just keep it as is here.
 
-One reason not to rely on C11 is that old compilers don't support it, 
-and there may be application scenarios in which new compilers haven't 
-been certified.
-I don't know if this is something that affects linux, but linux is so 
-big and versatile I'd be surprised if that's irrelevant.
+> > > >             initrd_start = (unsigned long)__va(start);
+> > > >             initrd_end = (unsigned long)__va(end);
 
-Another is that the C11 model is more about atomic locations than atomic 
-accesses, and there are several places in the kernel where a location is 
-accessed both atomically and non-atomically. This API mismatch is more 
-severe than the semantic differences in my opinion, since you don't have 
-guarantees of what the layout of atomics is going to be.
+I think long term, we should just get rid of needing to do this part
+in the DT code and let the initrd code do this.
 
-Perhaps you could instead rely on the compiler builtins? Note that this 
-may invalidate some progress properties, e.g., ticket locks become 
-unfair if the increment (for taking a ticket) is implemented with a CAS 
-loop (because a thread can fail forever to get a ticket if the ticket 
-counter is contended, and thus starve). There may be some linux atomics 
-that don't map to any compiler builtins and need to implemented with 
-such CAS loops, potentially leading to such problems.
-
-I'm also curious whether link time optimization can resolve the inlining 
-issue?
-
-I think another big question for me is to which extent it makes sense 
-anyways to have shared memory concurrency between the Rust code and the 
-C code. It seems all the bad concurrency stuff from the C world would 
-flow into the Rust world, right?
-If you can live without shared Rust & C concurrency, then perhaps you 
-can get away without using LKMM in Rust at all, and just rely on its 
-(C11-like) memory model internally and talk to the C code through 
-synchronous, safer ways.
-
-I'm not against having a fallback builtin-based implementation of LKMM, 
-and I don't think that it really needs architecture audits. What it 
-needs is some additional compiler barriers and memory barriers, to 
-ensure that the arguments about dependencies and non-atomics still hold. 
-E.g., a release store may not just be "builtin release store" but may 
-need to have a compiler barrier to prevent the release store being moved 
-in program order. And a "full barrier" exchange may need an mb() infront 
-of the operation to avoid "roach motel ordering" (i.e.,  x=1 ; "full 
-barrier exchange"; y = 1 allows y=1 to execute before x=1 in the 
-compiler builtins as far as I remember). And there may be some other 
-cases like this.
-
-But I currently don't see that this implementation would be noticeably 
-faster than paying the overhead of lack of inline.
-
-Best wishes, jonas
-
+Rob
