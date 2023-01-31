@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CF5683704
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Jan 2023 21:03:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E836668370C
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Jan 2023 21:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjAaUDb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 Jan 2023 15:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
+        id S231689AbjAaUEC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Jan 2023 15:04:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjAaUDa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Jan 2023 15:03:30 -0500
+        with ESMTP id S229946AbjAaUEB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Jan 2023 15:04:01 -0500
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DA047408;
-        Tue, 31 Jan 2023 12:03:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7A05BA4;
+        Tue, 31 Jan 2023 12:04:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ED6R08GbccKYIIX9kXT549IPtW4L7cqF2AXMvdmRFj4=; b=iNM2NyBX9qKzLnSjicxOotEmdb
-        mPwBfHxw1JcxbXjAmuQzkUPkY076SeFW9sb+OEtR3wdxggD/OHl7HF+zCRhEDKyPAy7wtUQ04tVp3
-        8nBqtkHhKsi9Xm58VZesKGNtjv7L3mh0zN0MWsZfar40SOh3yGMBypMpwAVllpvQK7XvGiD07RbVx
-        KLUSciQqkdXkPxJs6MuDmfTwzuqJz2o2Ds1f0vjiLr7dRyMt1d7fXghuodLsn7lPVjZV7vudP5qG0
-        Z6gCcHCEbZ5W/gjbvjr/2oKDctHKl/D8ra0DVYtaeptbIhqPn6qSCGk3NWvfxTtqe3xyyb6FoIWpa
-        Zk9x+jrw==;
+        bh=NiUEF1IXJzgFv+aygXF4aq+5ipqUNm7thH541I6WfmM=; b=qrX5aIC933LH7FY3NYNDGqcac3
+        J4RLy9ITM/ESnjrkRtt+ZQZJOfvq0nIQwfvgMBcOTyfnzTmsJv84XzPORhXETQTOoOLXXWaMPU11g
+        wWvVQAG9vO2sKKmMVQG8WX8stYodaZrmsCPGFrGtLUFejEjbL5wY0E4oFziMjX/2m0AbZQSq8/0uo
+        hwlfhKenawZVF2SiZJ4iM3vie9sd4lhkhYK7rAPK7z2zUPYejBHQbpjvBB2tcRo3dqkR/nIhuM5/c
+        9ssUOIlT1HzcYif+UgzMVS3T5gmkNtW3FdxCDLxJ0wrOJVILV80fadrELvoH7vDx8WyS7SD6axv1Z
+        hQer2gQA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pMwqm-005IlR-0f;
-        Tue, 31 Jan 2023 20:03:28 +0000
-Date:   Tue, 31 Jan 2023 20:03:28 +0000
+        id 1pMwrH-005Ilf-1l;
+        Tue, 31 Jan 2023 20:03:59 +0000
+Date:   Tue, 31 Jan 2023 20:03:59 +0000
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     linux-arch@vger.kernel.org
 Cc:     linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
@@ -37,8 +37,8 @@ Cc:     linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
         openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
         linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 01/10] alpha: fix livelock in uaccess
-Message-ID: <Y9l0EDRr9DpNb5Pb@ZenIV>
+Subject: [PATCH 02/10] hexagon: fix livelock in uaccess
+Message-ID: <Y9l0LyAA3zAGeT51@ZenIV>
 References: <Y9lz6yk113LmC9SI@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -54,7 +54,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-alpha equivalent of 26178ec11ef3 "x86: mm: consolidate VM_FAULT_RETRY handling"
+hexagon equivalent of 26178ec11ef3 "x86: mm: consolidate VM_FAULT_RETRY handling"
 If e.g. get_user() triggers a page fault and a fatal signal is caught, we might
 end up with handle_mm_fault() returning VM_FAULT_RETRY and not doing anything
 to page tables.  In such case we must *not* return to the faulting insn -
@@ -63,15 +63,15 @@ instead is to treat that as failed (user) memory access.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/alpha/mm/fault.c | 5 ++++-
+ arch/hexagon/mm/vm_fault.c | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/alpha/mm/fault.c b/arch/alpha/mm/fault.c
-index ef427a6bdd1a..7b01ae4f3bc6 100644
---- a/arch/alpha/mm/fault.c
-+++ b/arch/alpha/mm/fault.c
-@@ -152,8 +152,11 @@ do_page_fault(unsigned long address, unsigned long mmcsr,
- 	   the fault.  */
+diff --git a/arch/hexagon/mm/vm_fault.c b/arch/hexagon/mm/vm_fault.c
+index f73c7cbfe326..4b578d02fd01 100644
+--- a/arch/hexagon/mm/vm_fault.c
++++ b/arch/hexagon/mm/vm_fault.c
+@@ -93,8 +93,11 @@ void do_page_fault(unsigned long address, long cause, struct pt_regs *regs)
+ 
  	fault = handle_mm_fault(vma, address, flags, regs);
  
 -	if (fault_signal_pending(fault, regs))
