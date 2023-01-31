@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27E768346C
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Jan 2023 18:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C9D68348C
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Jan 2023 19:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjAaR7D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 Jan 2023 12:59:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S229969AbjAaSCR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Jan 2023 13:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjAaR7B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Jan 2023 12:59:01 -0500
-Received: from DM6FTOPR00CU001-vft-obe.outbound.protection.outlook.com (mail-cusazon11020020.outbound.protection.outlook.com [52.101.61.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCDC4221;
-        Tue, 31 Jan 2023 09:59:00 -0800 (PST)
+        with ESMTP id S231557AbjAaSCJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Jan 2023 13:02:09 -0500
+Received: from DM6FTOPR00CU001-vft-obe.outbound.protection.outlook.com (mail-cusazon11020019.outbound.protection.outlook.com [52.101.61.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AE91F5DF;
+        Tue, 31 Jan 2023 10:02:08 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M7bkEnWuDCJUlq148+GH35+SjDiXPxSWti8wZdus5Tg3AUqHnFJdNTRqFiuh1yIHUFeuttwaymo6y1s7oXl3KJEZUL3qHYrR1Ip/3s0thtAMbBy9qk5Yi5y4uoVRyZiz5gTkIgOWoVqjrenj6P+NHEpUs/jntPmZOuK4/qTuLZOrjoJM+UtfuOxBskNLyZt0xvvMBPdsSwV/PFh+O4dw6ZaJkxeifFdMqcY0Jt11BvPb4Kw34pRbF/hPXnBAehaoYQTUO7VsLv6G/FnMFu9s2tU2knO0a3nv3ZXzZzq4mXOjomGrqYQWwSXBwd9PXPGCMXwENo5R+OPqeR1/U4HC3Q==
+ b=Snh2oRUHXXgVjlE2ReRkpI2NSR0CI9lx/d5k1QR1Yq89rDwGOhTVX4aDRGeZoV1fnYuUof8ULT7wbGfGYvYN45kHr4N9w7buEijuzn/u09liQOW3acT2j/PXavQC7QyxfM/FesV7fOiGNrffDG9Xr9tYGgon1BPUpE60N1MuXBeEqKSOdIUg5186V3ziC6Z4+XMBQFzsRwnrTkEKXbxFl96FGeK6Nu4ZYJ7vgnECgUaWA9GvvAgp0IP63pT6D78qljKXRDeRqP15CYVhdIz+I2G/ko9eSfknvDyi7aFCblkat4YaaHoLOvUvbPMgxjC1d7xjyW7IioT3r6iSy+s8oA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5sNJcK8x1aOfmj8qX117wn78ZmhY2iHhBZSqEO7cKBE=;
- b=Fszo31NRwtDYChzxsyp0bQcBZjf+SJ4j9coHj6SMvvXA+DtaVyZi5OA2eDg2Nkkcl1jnLB66JF0HUfYRa94MAjjrWqeqLbeiOny8rczWwuHzqnMjEy1xAVjOpUB8NDgwsguR22RZonckY7ABlvBOXpiVZ4gHd6+9eUW8rzg34cwr2UuJP3oATeTBROMfyF9M4c1vOHkChroP8ZHDwouW6VVCpWcmn7qriES3Xzb+bWuy1/UpSX8YrJGBkXlLTBUyhd+VLDBhQSoC0Y6O1fYoFW1ZA/mLqoHCyc6L2CC0S7H+IqyAawq8iKyDe2gXFtBZyxVq8uly+DEUOJyhMdba8A==
+ bh=LSQTdQo0jay1/ptPzCLU6vOiEHihmvvozvG9SrqeFvI=;
+ b=lOalTIn/WkFU3uR4JB18q3/R17umS4WcSlGFG9WlS5akelsNaAh+M5Ma7B7cHQOuB8dte87WzmpfdFiAibDFRinoaHiRpXnp9+Xn1vkk0yDEKQgeWTZfyqACQPYdMMEeLpCgmmg3vCRZAFJEtPLKo03nOJKyxE6nUus5E0eXvD68fUFZsIYiQfD8WHGLUT62C6bhKXvXH0ZxNKs7khmrjDi1WdApKrRmhjznRDLqUmi/ahD7yCk2xjuNkPV3lrTSKGMOsouZAPVq0DMa/hR9iyri8enSyzn74RnAYjcDtBvUSTc2OMTJlSlgCotW4MH0cS1khsraiAZF9K/49P+R4w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5sNJcK8x1aOfmj8qX117wn78ZmhY2iHhBZSqEO7cKBE=;
- b=J5zckjfh3dZV0S/HUaIdon6LS2ISSUt5WiRmAcQd9z3d1wIBopGIjRq/8+gH8XDzKpZhZ0ovbDCTbaPZOkDXSLzT4re6fNN43AvrNK7KPg/VQG5qArM1QDypEBszMlqSGVzQ3Lx1hAN6oJCgT+N1axYc8heDVgBIwg0N2rDHzpQ=
+ bh=LSQTdQo0jay1/ptPzCLU6vOiEHihmvvozvG9SrqeFvI=;
+ b=fp9cEV2zoMxwFh+H8YehVoMmPXKHXGTxsw5p+UZUH8T2e+GXXcTa6PpS9n8AQNI3PdDG31//fEKjR+V+GBi2n0ofOBhcei7V/nF43QX9aLJsOsxpQoZLlq5ig9gwiA6B6oEPEmQ6DMyLQuR6Juv6ekdbyB6uMZzUov6gpW8d8IM=
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
  by MW4PR21MB1954.namprd21.prod.outlook.com (2603:10b6:303:7d::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.4; Tue, 31 Jan
- 2023 17:58:52 +0000
+ 2023 18:02:00 +0000
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::9a9e:c614:a89f:396e]) by BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::9a9e:c614:a89f:396e%8]) with mapi id 15.20.6086.005; Tue, 31 Jan 2023
- 17:58:52 +0000
+ 18:02:00 +0000
 From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         "luto@kernel.org" <luto@kernel.org>,
@@ -77,73 +77,73 @@ CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V3 06/16] x86/hyperv: decrypt vmbus pages for sev-snp
- enlightened guest
-Thread-Topic: [RFC PATCH V3 06/16] x86/hyperv: decrypt vmbus pages for sev-snp
- enlightened guest
-Thread-Index: AQHZLgvDjQTVlI9XV0mK0gWfj4TPQq643k8g
-Date:   Tue, 31 Jan 2023 17:58:52 +0000
-Message-ID: <BYAPR21MB16882851012198FD7ADB5CD1D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: RE: [RFC PATCH V3 07/16] drivers: hv: Decrypt percpu hvcall input arg
+ page in sev-snp enlightened guest
+Thread-Topic: [RFC PATCH V3 07/16] drivers: hv: Decrypt percpu hvcall input
+ arg page in sev-snp enlightened guest
+Thread-Index: AQHZLgvEgycEZ2x4pEuyt/dy5bzs3a6430tQ
+Date:   Tue, 31 Jan 2023 18:02:00 +0000
+Message-ID: <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
 References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-7-ltykernel@gmail.com>
-In-Reply-To: <20230122024607.788454-7-ltykernel@gmail.com>
+ <20230122024607.788454-8-ltykernel@gmail.com>
+In-Reply-To: <20230122024607.788454-8-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=2074d3c4-9a80-40a0-8d1c-6476c4f28a54;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-31T17:55:27Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=1e3810b9-ccbb-4cef-bb4f-e415031d4df9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-31T17:58:58Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MW4PR21MB1954:EE_
-x-ms-office365-filtering-correlation-id: aaa113a5-5ed4-48d7-18ae-08db03b4d02f
+x-ms-office365-filtering-correlation-id: 012b88cc-8703-4bb4-4fe6-08db03b5402f
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uwfXCL73JXb8ZMo/wyZMeuhfYXwHgP0CwiZn9cstEdxNeezxs/MEfcu5Hvuq/ipBPEuZhXWV2HrN3Tp/fPwBMWRHOlWlOAVxiEr2um2EdL3YiPjM5BpzDYkwOPO8j/EQ7tdm+hM4gaJa+UtYudpl3eNelQUrdddByYOjdDz+QOrn5waFSuBuSAPTuws0T8tGzrkl3w7xKewASiYfUy4akOBp3ElYt/nhZjmBQ42qSvznIPw+bUdFmHc2GV7R40c/DXyxfZl/mfA7DJfOseDSCs+mbQqlbAHKxuIeOIYCWRuvIFeDw/yIyqeFV3gTrJVcAoFyKYVvQs9K5dpy0brk66ok7RmDh3Awvbs8bHWznQMay5VJkJgTXiRNKQtdtyGdmyFMfJR2QyMOVw/fBPR2rt4MgIZaKlqnyQKWG3r7yPQUW1W5SbhCOSNye4rDkDqge45H+yXSZBQPD27t6n74AYeLDGip9tzrGyhBIzhi7OOrtiMFOkIsoQNiHasMrA3SB4pSWfF6U79sx67eLtlxOTTRuV1qUBANdRWDG7UsXvR4vUm853uzbwr8pNItfWo/vNky2zqerVr41/pzNdZrqJWMrdU7j82bHmiUq/cFpBmCuIVtkIMSPvNzmCowzR00LTSU0tGZ0OZkBWF9FxQREZQ3T+ry4DoHBIUMoJ5D8Svay9VTWwl9EO1hnDDCmwgMczzEFkAn2eZg5TcXsp6nJwiobg4ydEi3HfxmkK+m5z8jzW3iQhBMKx6aTkIVQJnWfMQfN6T5f9SEjom/zC2AJg==
+x-microsoft-antispam-message-info: LYuOZNyAT4AOsWK5yonYNsLadB7AFGrz6ATeDYTjwWdHvZJ0hBWZjBFsbRWEPS6M8+FOwDNKhvlxskwbrfGLmsNMsPSX6Gq9OPNroaVEWLoWJBvF6ppH61fOFp4A56hARCclq4sGINiZIs8keXKrg5rZf/eRiqoTK+rdz9JK7k1CWnRVgUeZpA8Mz6LM0Nvq1l9abgvUMl6cA5qkOmIIU3lxRFSd08y4WnWecfhZQxrGSqJa2iY/pZvZ5uDedS+w0JLpd4le7g8s6K2GO/cU/MScJwuwYXoMg+VflYRhw7gt5NYntdO4un89g/IMcZpz2Ez92XuzsQjY7QVJpH2u1hqn3VgLSEOxcK/kTNcGL9kwXMpmdiDUzV/BUBH8baKuXNV3eTCVj6Bd5fikt4ObxmpNuSaBUgB+MJ+vNvBAH9ax4wzMZXCsY4VfC1b+al6dvKCGvUtEM2zbKJB9O3UBh26oAInHNsaNACwGfOqqb8aRgNEjo/mZ+dMSjUg0mWgUQcZ3XF0wtt4Y1AUyY49prUp0/+UVzLh/EfYt54QvHqh757/Hp2jAKG73f61b1/PriP9Y28qWy8K2SeR1+Qb/GhAkoPbJGxHWxFsB6MY1NIoeLmreMFFKPMS83Et5E5lzytrLBNyWHCWYyLm8ctT8NxrlahPnGYmV3wpiibl5vLKhKX/PyooOGC4zmUggKVv88Qcu5atmcy5vFsZ4g1iAZV3eaftf6FlQin8aHX3/+q0Ub9qRJ19i0eUccgVv8YIksoRAFVHQsiwnfi6UXzKh9A==
 x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(366004)(346002)(136003)(451199018)(8990500004)(83380400001)(38070700005)(2906002)(7416002)(7406005)(5660300002)(64756008)(7696005)(26005)(71200400001)(66446008)(76116006)(86362001)(8936002)(6506007)(4326008)(52536014)(66946007)(66476007)(8676002)(66556008)(478600001)(9686003)(10290500003)(38100700002)(82960400001)(186003)(921005)(55016003)(122000001)(316002)(41300700001)(110136005)(54906003)(82950400001)(33656002);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0gvO5y85+0jrnPTK0T1FkY028Gf9PaqhmNGNjRofnx7e8SLb5Abi0hsKx0q1?=
- =?us-ascii?Q?i8fpRtykl4euYYydCH8iviJUgjk8te/aTxK/dBTuQgxtOH+PwG/cK3TsEgoW?=
- =?us-ascii?Q?XJQ/5pjkwehbj3TbevonPJWUcAZaWyXWockJYDmBd5agNSPDYef8QX3ERlod?=
- =?us-ascii?Q?Jy3iRtH37sLQCOy+TeIP8V0a01ksdMiRgb6I+xxg/o5wxPLXWHoYHN+8a0df?=
- =?us-ascii?Q?SF6CYTdvP/m7TlSHbtMf65siyUHp6HExXWcyLIf31pLV5EMKhVmrOunhTgTB?=
- =?us-ascii?Q?KR0awB5akAQHEZkiW9jyE4/TdUoq8OgOIZa35HcgGpHZPNqyUJ1chXPL+Rx4?=
- =?us-ascii?Q?sEK4FrWUWWhbc2KwxLNWTGrtIcMNpVy8GJx/x4oFZt9cDB8aX8B3AR7U/RcH?=
- =?us-ascii?Q?9RSpVcPBI+0mqvMWBRX6LInHpLW2kDbmMckr2nuU6uFbvw5IJJZp5je7zOGF?=
- =?us-ascii?Q?hmxd7pV44LxiPFCV5WzgO8cnMBjgbcHYATWR/vL0BVK63RKJseqzOxUjnTsD?=
- =?us-ascii?Q?F2ozTNqwsFZ/62o/BXqeQQsb995xGZ/5VX37VvRFwLtsi2MWV+5IWPnXFVGl?=
- =?us-ascii?Q?KMqxth4qYhj6XsHXE5PUIhGDeP1sn/hl/LUUiKonR5bZC8R5WDv49QNDaX5N?=
- =?us-ascii?Q?ndbzRLCaya46GjpqvuuamB8rohX4yji/bDA7hHi4ejeW3FZN+5PJMSbrNWSe?=
- =?us-ascii?Q?MUCMzuYZ9MojlQ8Y7zu0iQYuGEi09hdXchtTMIHJBU90hAMyP8RI1DLcm1X4?=
- =?us-ascii?Q?qlhv+MKG0fashWqmIWEND4kECbJTrl2P2/7BB+VmIXqko7PLGPmLdJo1s4xa?=
- =?us-ascii?Q?G8Ko1LCR8Tht0u+yNbRWx3qDVRrd5RLaNvXMQw/Jnqq1EzNuOtdR8oZ3NGpZ?=
- =?us-ascii?Q?b82OUhxqXKRTWEnx46ErNRKjx07Buq17QS9T/fvVLrPdwNl5B11Cvv386caA?=
- =?us-ascii?Q?BaSO5aL5m0R5qGkA8Pw4iCHjTKL4AQ21H7/fXtnN5cFjAefmCr8e6gc10wWD?=
- =?us-ascii?Q?vz+/ZfASk/X/G+Sf0csbsUh03YodKfGUSujy/kg6UTPdzcyhkY4+vcqwQ5n2?=
- =?us-ascii?Q?E9Gd/fna4yilRkP9ePUiEb8em+3StvkEhqHLCBOpCL6NqQXLMj43ePfWkmSD?=
- =?us-ascii?Q?A+7QQaj9iL70L/EMQ9jFxhGHkMevXY97/jzR+AJaahulP+4ZavMQFJJsoyY5?=
- =?us-ascii?Q?Xpaumbat5sWm8ZyhskJIcMbmQmMeM9O1s7BKIIJk36HJRuKCcBclv637ALLG?=
- =?us-ascii?Q?VwX68OGghhj/g4mc3wuSGY5swKFVlDq2mrDHIj9V1sm1KFMwLNUUg//xx5te?=
- =?us-ascii?Q?bp9/kafWhtycsPvtC0zYuXXqMXKJOlLF62AHM+qzXYJB1ZI3vyhgkevoM2Lk?=
- =?us-ascii?Q?cbGG/Y7g2m9xlF5wB0aOv6xW//rEONGzRrxGc9SX/vbhajFhZ39gq3cuNpcJ?=
- =?us-ascii?Q?fI4+Nuq5WcVX7csvwKFI/r0MS+e1glUgAFG5sKnB/s5XLVwfJAqzO0LNaByj?=
- =?us-ascii?Q?j8yk1YINghehm5q8zYr78uuA2qNiSc3uEMa+nru0H1XoIp4eirhK4JGCN4VF?=
- =?us-ascii?Q?MdsFl5TUc5JfXFX8yx3H3kSJTWtMZeDtiktyy4jCSSfqD53Ey5KNndQgT4Ub?=
- =?us-ascii?Q?tg=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?g8T2EY/evH3LfbiX6YVI3OmIw9b8qoiCQWAw4CCvHVs1G8aMlmQBYSICl8tA?=
+ =?us-ascii?Q?zmdapWRyUwDWMw2LV2Z85/+Xv2wwsnUXUHLCxAAf2Yb5VavF2YCfKZQXiT8O?=
+ =?us-ascii?Q?E5fxaFAdoKeWEZerBTzoSbNExNoB2Je5tvoTe5/1er9sTTU/3znWoonHjzVJ?=
+ =?us-ascii?Q?MNctVM+1jG3T4M7acZA0gddnYOWj1QF4PzOfnDZvEJVxLV70RFQZ4Tw4mi6T?=
+ =?us-ascii?Q?xjDGsWH7QnEX3mn7jX4yKHbE7ffwIw8edCHtN8vKArPEQI/gtM1RfRuTwfjD?=
+ =?us-ascii?Q?0YlH9/i/iZY3uxwkTcWt7E+teWpl8298pv9FUra80AvjjcGsrwnB9VTUuBT6?=
+ =?us-ascii?Q?U4d5bNNmXtPP4ZQ5gE5hbZ1eT06sWKARknPeRNYDwjdrYyiwFMHSeRnZq7HJ?=
+ =?us-ascii?Q?JsC9l5nRssZw5Rs8rMl9dzOSUwK33SdD1p0L51Q9Z5BcfqIUp4d3F6ay9KfT?=
+ =?us-ascii?Q?POOBBOLh8owielwt4SACqW8oNI4aJvMrvm53FIyK7zsTpug3OLm6E2lbZ8My?=
+ =?us-ascii?Q?AGXGf9gp7xKzSPbLa8gCpnKDSXU8l9bZwAmYuIrsiDMRgOOJoiCNBCS34UGO?=
+ =?us-ascii?Q?1f6sf7aDTULO8E1GvpNLnSRkfv1YleFq8OdzCDuHVD3ji2+mm/8BV6wVhFvn?=
+ =?us-ascii?Q?Abj6e4Tsl2Tif8Cj1LcO0WCsT21k2d8C9Us92peRkIkxmOJufUrqrIq74mU4?=
+ =?us-ascii?Q?ZX1jvGjjLgH3BRB+L/2CGNFLWhB0byrF+gL0Ry1y7buKWrG4y+crg+2GA9Vd?=
+ =?us-ascii?Q?UGfiNIkMaOAC2EwyVQHH84Y6U/zn38uSg5EA6/Yl1dxFXVa0A5NYTkdHiEqP?=
+ =?us-ascii?Q?xY+9QsXy647SdN8EebXlXFtB2RvOu2WsvKfFUI9bcPq07U9m3egJ/RJ28eAq?=
+ =?us-ascii?Q?d+qGwYyj5QemKg+o+08PKVBskWM2qln78HilyKMPokOVNSadFp19xlO3KLDP?=
+ =?us-ascii?Q?bsgXkkRfzdtPuaISTQj2g35Ow4LJNiei+jUyTtJ62NeI20pzOdy9kqHOtwOn?=
+ =?us-ascii?Q?XtmyR77Pp2fZIyY8/2b/Qse93MADrD5CsyKXpYWwokHmOVlkmZH9zdUBLLHm?=
+ =?us-ascii?Q?NSqFxxx2oMans7f4W/gRJtYTT6rs90O9BwhwI95/gTwDPT9RqlQxEFIXziuK?=
+ =?us-ascii?Q?MIqoTC3lgGlOrUhieg+rDGtT+jPMnulQoE60OziVSTo0lcVTolxUv7DLVGml?=
+ =?us-ascii?Q?EMmzKJel+r83ITTh8uKHgCycaaicp4m8Z78+Bqj34fZnUEEm9fcGDusW8Q/i?=
+ =?us-ascii?Q?q+KPU6GshNs9gDPdnRn5mq8SH82GdzX8XckiUUIU6XpecPwCZVGR30Et8xSn?=
+ =?us-ascii?Q?EW2pEwVKGeCd2+7S6AAXKQMuek/uN97A2Sny/MZHKos0aO+U0wEMLbLtOkJS?=
+ =?us-ascii?Q?FFBtSLI8edkObUhB4X8QvlpzKzpwsYovXGHe3H2LhFrtqCDzs6MqTF5DQTgA?=
+ =?us-ascii?Q?eL2d4N1FDLREQQLlRrXY1CuCkaUcd3fD0S/9Q5zlx6cT0y0O9lN6gj5SZkCU?=
+ =?us-ascii?Q?RJI2e1+XdqyP4SxEyow7jpCvCzSaAlpQ705t5H17CxdGf0CQFC6pX12+ntXC?=
+ =?us-ascii?Q?LvB4lWdozd56vFSYMpKqbUO1UbyEgXKOr2lV3wjsQWTA/ek/EfMDp3+IOiwQ?=
+ =?us-ascii?Q?6w=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aaa113a5-5ed4-48d7-18ae-08db03b4d02f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2023 17:58:52.4644
+X-MS-Exchange-CrossTenant-Network-Message-Id: 012b88cc-8703-4bb4-4fe6-08db03b5402f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2023 18:02:00.3551
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sq3cFjebLcQy7Cozf6WbyT+YC/4dX33Sdv6nNNnxVnE3y/aiIFjO2YW5lM7RO8MEPTM1vGW9yzUtc+DjxC/RHHtR1W+bONVbk4SY3fTEsX0=
+X-MS-Exchange-CrossTenant-userprincipalname: Qb1cWE7ZXLDMP6ZjlVdPZPI8nb25stB6RbIwLwEsVR3NdMKK/sYEIfPBBFNW968wVlm/DiLPYfE0SMdQx2qVsM62XGsKbYwRhZ2KMgBXXpE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1954
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -158,94 +158,78 @@ X-Mailing-List: linux-arch@vger.kernel.org
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Saturday, January 21, 2023 6:4=
 6 PM
 >=20
-
-As I comment on v2 of this patch, the Subject prefix should be
-"Drivers: hv: vmbus:"
-
-> Vmbus post msg, synic event and message pages are shared
-
-s/Vmbus/VMBus/
-
-We're trying to be consistent about the capitalization of "VMBus"
-in comments and other text. :-)
-
-> with hypervisor and so decrypt these pages in the sev-snp guest.
+> Hypervisor needs to access iput arg page and guest should decrypt
+> the page.
 >=20
 > Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 > ---
 > Change since RFC V2:
->        * Fix error in the error code path and encrypt
->        	 pages correctly when decryption failure happens.
+> 	* Set inputarg to be zero after kfree()
+> 	* Not free mem when fail to encrypt mem in the hv_common_cpu_die().
 > ---
->  drivers/hv/hv.c | 33 ++++++++++++++++++++++++++++++++-
->  1 file changed, 32 insertions(+), 1 deletion(-)
+>  drivers/hv/hv_common.c | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 410e6c4e80d3..52edc54c8172 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -20,6 +20,7 @@
->  #include <linux/interrupt.h>
->  #include <clocksource/hyperv_timer.h>
->  #include <asm/mshyperv.h>
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index f788c64de0bd..205b6380d794 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/ptrace.h>
+>  #include <linux/slab.h>
+>  #include <linux/dma-map-ops.h>
 > +#include <linux/set_memory.h>
->  #include "hyperv_vmbus.h"
+>  #include <asm/hyperv-tlfs.h>
+>  #include <asm/mshyperv.h>
 >=20
->  /* The one and only */
-> @@ -117,7 +118,7 @@ int hv_post_message(union hv_connection_id connection=
-_id,
+> @@ -125,6 +126,7 @@ int hv_common_cpu_init(unsigned int cpu)
+>  	u64 msr_vp_index;
+>  	gfp_t flags;
+>  	int pgcount =3D hv_root_partition ? 2 : 1;
+> +	int ret;
 >=20
->  int hv_synic_alloc(void)
->  {
-> -	int cpu;
-> +	int cpu, ret;
->  	struct hv_per_cpu_context *hv_cpu;
+>  	/* hv_cpu_init() can be called with IRQs disabled from hv_resume() */
+>  	flags =3D irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
+> @@ -134,6 +136,17 @@ int hv_common_cpu_init(unsigned int cpu)
+>  	if (!(*inputarg))
+>  		return -ENOMEM;
 >=20
->  	/*
-> @@ -168,9 +169,39 @@ int hv_synic_alloc(void)
->  			pr_err("Unable to allocate post msg page\n");
->  			goto err;
->  		}
-> +
-> +		if (hv_isolation_type_en_snp()) {
-> +			ret =3D set_memory_decrypted((unsigned long)
-> +				hv_cpu->synic_message_page, 1);
-> +			if (ret)
-> +				goto err;
-> +
-> +			ret =3D set_memory_decrypted((unsigned long)
-> +				hv_cpu->synic_event_page, 1);
-> +			if (ret)
-> +				goto err_decrypt_event_page;
-> +
-> +			ret =3D set_memory_decrypted((unsigned long)
-> +				hv_cpu->post_msg_page, 1);
-> +			if (ret)
-> +				goto err_decrypt_msg_page;
-> +
-> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
-> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
-> +			memset(hv_cpu->post_msg_page, 0, PAGE_SIZE);
+> +	if (hv_isolation_type_en_snp()) {
+> +		ret =3D set_memory_decrypted((unsigned long)*inputarg, pgcount);
+
+You used "pgcount" here in response to a comment on v2 of the
+patch.  But the corresponding re-encryption in hv_common_cpu_die()
+uses a fixed value of "1".   The two cases should be consistent.  Either
+assert that hv_root_partition will never be true in an SNP VM, in which
+case hard coding "1" is OK.  Or properly calculate the number of pages
+in both cases so they are consistent.
+
+> +		if (ret) {
+> +			kfree(*inputarg);
+> +			*inputarg =3D NULL;
+> +			return ret;
 > +		}
-
-Having decrypted the pages here in hv_synic_alloc(), shouldn't
-there be corresponding re-encryption in hv_synic_free()?
-
->  	}
+> +
+> +		memset(*inputarg, 0x00, PAGE_SIZE);
+> +	}
+> +
+>  	if (hv_root_partition) {
+>  		outputarg =3D (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+>  		*outputarg =3D (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+> @@ -168,7 +181,12 @@ int hv_common_cpu_die(unsigned int cpu)
+>=20
+>  	local_irq_restore(flags);
+>=20
+> -	kfree(mem);
+> +	if (hv_isolation_type_en_snp()) {
+> +		if (!set_memory_encrypted((unsigned long)mem, 1))
+> +			kfree(mem);
+> +	} else {
+> +		kfree(mem);
+> +	}
 >=20
 >  	return 0;
-> +
-> +err_decrypt_msg_page:
-> +	set_memory_encrypted((unsigned long)
-> +		hv_cpu->synic_event_page, 1);
-> +
-> +err_decrypt_event_page:
-> +	set_memory_encrypted((unsigned long)
-> +		hv_cpu->synic_message_page, 1);
-> +
->  err:
->  	/*
->  	 * Any memory allocations that succeeded will be freed when
+>  }
 > --
 > 2.25.1
 
