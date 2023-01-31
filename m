@@ -2,506 +2,345 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD2368356F
-	for <lists+linux-arch@lfdr.de>; Tue, 31 Jan 2023 19:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164DA683580
+	for <lists+linux-arch@lfdr.de>; Tue, 31 Jan 2023 19:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbjAaSfF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 Jan 2023 13:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        id S230427AbjAaSmU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 Jan 2023 13:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjAaSet (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Jan 2023 13:34:49 -0500
-Received: from DM6FTOPR00CU001-vft-obe.outbound.protection.outlook.com (mail-cusazlp170100000.outbound.protection.outlook.com [IPv6:2a01:111:f403:c111::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834E459747;
-        Tue, 31 Jan 2023 10:34:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gutKq6xlQuQrDQBzGd6CdUaAc4qKyR1SJC9/FhoF7nCx7BUuMqHuOoO769/oY7azovkH9WcKrP+pRj8xuK/T7Wixka3KLmJwcR7MBWjwv0KEBTrKCY0iMgwPIqZZxYognVTeEItR8nKb2o8QzkA9sC8G/KLiwTJ2DomT9W0jUbvfdxXITJUsVCSu0Ixtt1BxBMlQN8C6OShw1ZtHNyeo+j6KEYLOGLKGvk5M8FsziVySWPA+eiDDPTauuwDkN9d8NacWjZ4Y3XRHMpTw6IGDPmcrdow8uAiEp9llI9KG5OFa/rPpma9nTkTDnnPhWNHt7WhdtX2idPS0onShevrGAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r466BidaAyYzgDhZqIhX4AFoQVnLFgeETuiSgJRGvRk=;
- b=jx22JGPcZVfv3w54lLLAMfoM+wolcjO7Gqu1k0B/6Yax7niTWNgAtnbSDlqMYSrE/0Ynumou4q0cRuZ0oQdwR9vX/HFieqXIUkzy1Baxo0tDEhuIz6ZFB8DmWxAG2zCaJ+qjA/VNLQJ6/JB48aALcA2RbdHgOhHpeszmJgcmPaQzTtDj9i8O+VIWLgz5H3nqKb1xCd8fYgYd3SKe6uiU5iQi90q9S44BqTWvehKS5SkFuv6A22TObJtF6kkmWdO7fMtycmoJPu59oR5lWarAuUzoYJS0GYqLTCjPIIjI27wKiJAOxmalJ480BQZ5+E3vNVK3fqzTls5Xfcxa5h2mYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r466BidaAyYzgDhZqIhX4AFoQVnLFgeETuiSgJRGvRk=;
- b=M054JD7dK9WSL+1IvpFU61OLcTMMWrk6BhX9a68TY7+BmRN4a6l7ATAXkULkM0VfDtE6WzGSPBChgVgyCQCon13/c3qTxXHLpHth7py8+V25Hk4hLXUEKHb/ls7sVnGTBxqxeHi/bCfGt2TWr3ixki6qDmwEDhbaNKkK9sohPv8=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by BY1PR21MB3917.namprd21.prod.outlook.com (2603:10b6:a03:527::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.4; Tue, 31 Jan
- 2023 18:34:07 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::9a9e:c614:a89f:396e]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::9a9e:c614:a89f:396e%8]) with mapi id 15.20.6086.005; Tue, 31 Jan 2023
- 18:34:07 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Tianyu Lan <ltykernel@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V3 10/16] x86/hyperv: Add smp support for sev-snp
- guest
-Thread-Topic: [RFC PATCH V3 10/16] x86/hyperv: Add smp support for sev-snp
- guest
-Thread-Index: AQHZLgv5p74INTs2e0yVsqB8bihqMa645jAQ
-Date:   Tue, 31 Jan 2023 18:34:07 +0000
-Message-ID: <BYAPR21MB16886B496845962DFBFB112DD7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-11-ltykernel@gmail.com>
-In-Reply-To: <20230122024607.788454-11-ltykernel@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=991018ca-b8f8-4f53-8fc8-acf09c8286fb;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-31T18:23:39Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY1PR21MB3917:EE_
-x-ms-office365-filtering-correlation-id: 9e78c053-16fb-427c-4839-08db03b9bccf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: y06ZqI9vqZX8IQngxU3r6oHA6VXedeV+IBnUizjFHjGK06A9h8vIVjDVt34Mz2yGlvA9y0XuCdJvV2SYRlt0m1ladbHWlmKSjUKX26VqOseA0b89JvFWW8ybC/qm9/rl/9IToTkVCfJA91eB4hTuejhnrDkcRmNex5r8Uftsu/wpi7yD3FoY2CwaXFjFjK+2ehiafUw3N7wNBZY1aotbOJgZ0WsUDkcV89/p05b4yDbCj+4InX9uj9kTJ2I+E28l/kI82zMhDQA08nQbq6eOu6KmDmASt8H3YFtlUSus2dX03Z43ku1eB+Nln0V5YpaICf22E4wifC9Xx8UUXC5YEHABgpEnI+Lm4bXqRd1uYhE+3TTfCC2/2sGq8WoY5W8BgksW/JNL3ChvC0MFPuTAm9ffosHi/TSFuBwlwpJGvAqV1IKmGpJLQBsP+tpWuN0nOgxD1sUFKohLxyIHlPSM27SqjC9dCQEfXgwBML8xUwG/GbHDgVI/1o57+ltBddOV8j1i6/4AlWaskyZwn525JCD5O5HEbj/meCBcXsPD5/Bnyq5fgJhyII+sCAS+VgfoG6PPwlLaolP2kUAx4A9Te2veJQ5YeNup7q/Gk38mrZOwYHXGw0DXO6u9rRC+rIHeQdAtITs2IwDEn0iP3MHvPH3Taj/T+T0XnE3Ucpt9JIJfrczFKj4/wUl4KprFN6RZKOT3d9apK9LT6Wn97E3MQ65/sP2oV0Hg9Evl/hqSbqxuVRHUptxU5uikDWKUpzhBDPBtP3n4Tn/XUi+ccuywmA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(39860400002)(376002)(366004)(451199018)(7406005)(5660300002)(7416002)(30864003)(8936002)(83380400001)(52536014)(2906002)(66556008)(66446008)(8990500004)(8676002)(4326008)(66476007)(41300700001)(76116006)(186003)(9686003)(33656002)(7696005)(64756008)(26005)(66946007)(86362001)(316002)(55016003)(6506007)(38070700005)(921005)(71200400001)(10290500003)(110136005)(82950400001)(38100700002)(122000001)(82960400001)(478600001)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OIvV4CQWVDKCWRDoaVhsSUVofI4zpjjVE2r9sg6hp+q/HRqeSaAjSkKvYiiD?=
- =?us-ascii?Q?ElBCL2JEF101N+ZoCR+Qqh+kBi2sQPvgYL7olgutfahuViNvrBeQqt+auUhA?=
- =?us-ascii?Q?QiEd9zYUWerjDiKj6HO0XCVf76EohLfY8xYpATUHS4g8nEPnP/h19Qg/Dq2J?=
- =?us-ascii?Q?OvCCrEiMO7Ax3C6E9W3ZJHSJZUC/ca/zAVMsoi7kRNX2YdA/1RCme/A/Wgdh?=
- =?us-ascii?Q?s/ROad5LTCTlJgilHXH8IxvWd3b5Isfayp+DBo2nbL+khSbzlVY6/2b5r+or?=
- =?us-ascii?Q?b/nBVvslS6wEet7BwhOCv5IEllku65mEMPrQTYEE6vpRCoYZBLYElbL5IvDi?=
- =?us-ascii?Q?SieF6usfOwZxEM1EJBdQsofHKvg2yqliRLgMsb8ZsV26K/FIuwzE6CgUx1Pp?=
- =?us-ascii?Q?uPs1Ja0uLQVZX74aDWvdIwOl/EdOegZYM6gUIUFfTBMDQLKCBv0PBMGd7Jp6?=
- =?us-ascii?Q?K7VtyH5Qr7JKwT6iLxx/TWGLu10hhVQjVlBxoYojbPR1cwmpLXKni/SXsj7U?=
- =?us-ascii?Q?md75E+jDHwAzhGbUIM/5sLgnvTvRm1L2OeeCmgtXn2v7V1jQrQTpi7R1v9Sa?=
- =?us-ascii?Q?M9OR/a/ephDSv4kQkksuoM7Po+CA4uNhUlUPuwGT8wAJwDplWsfj17chlpqa?=
- =?us-ascii?Q?l1NeUMtJS9/nKiXAXLSsrlXXG/KV/EYnro3j0vEJfnK46r3bSdzo+hFIZ2Uy?=
- =?us-ascii?Q?XDv1eEUG00o6aq6Q1FhoyhkcpM/iaBr2791BOPDgBuW6gDL4GQQ7FRnJBHLd?=
- =?us-ascii?Q?u35GHrhkiRCLo5jJ8lXkDk5H8Gha5L+TXPWtD3XqkLG83wG3dJbjoruVv6H9?=
- =?us-ascii?Q?7ap2mb28cUu11b6nMkFYOFzF1cDkPcrzMdgVdKrQV52zJmrHQh7IDh1f8Lkz?=
- =?us-ascii?Q?56OQq6Hk8db7qqomkEMDe1QfxcLzuCzxGenyzni2n2jW7CZLBJqTJVeaHsHF?=
- =?us-ascii?Q?VPi00QSXwCqsaGkA7Rluu1uL2z3khpL02CBiEi+ROksTQZMR7KFuJrlLxEnp?=
- =?us-ascii?Q?AlwZEA+SrZIverRHY1vt9Ctml32uzuyWb4cnK7WHt40eRaq2UdavaxB1pgjr?=
- =?us-ascii?Q?hmWALSYZnkI/dD3g5k4fWOKicxIc7ioocJ+949taE3jIZydo58lp+CJHjLc9?=
- =?us-ascii?Q?J79WNwy4Q3RSlw3L2O/p91AV4yJr9NMCEjC1vPWwPSaHeHM+Ys9rZN9D3Z46?=
- =?us-ascii?Q?2D+/8yjIbScIR1q18Yl2RdkboFGqncgEGe0yYqrTbCyyyowx92z7KKEBFDUX?=
- =?us-ascii?Q?px+fMT169/fvBs+cOuUOET5egqPaZxixtBscl72a821O4gnV/bjFB0tt/jMC?=
- =?us-ascii?Q?gdtUba9mjfdiwsr4koKcgHj3Wtrzcer7KoOH9gPDHfxQBhdzeih4C2YU+c5+?=
- =?us-ascii?Q?wFf6tXCpr/4DGOyEtumprri2RvBthVH2632nEtpaCGrSJhnJ55DYWIvBnwa0?=
- =?us-ascii?Q?I2Hl2kMBDqxrhVxmuWH5HbsNa8SKo+0UAKEsVzhNXYJIVNjpskc8AkRxZHXW?=
- =?us-ascii?Q?EK6Z2HIt13rt7ydTVvxv23YnIj82Ijg684NFEbzUs5OX+Jc5OeG99hOxOk3S?=
- =?us-ascii?Q?2gP3HAYz4E+K7Go+TPGf3ItCwoSNVnnsE9n0ZBuKilTryVDgNW8Xrt1/DuQQ?=
- =?us-ascii?Q?8Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S230098AbjAaSmP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 Jan 2023 13:42:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA1D4A224;
+        Tue, 31 Jan 2023 10:42:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8234B81E4F;
+        Tue, 31 Jan 2023 18:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30F9C433EF;
+        Tue, 31 Jan 2023 18:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675190530;
+        bh=pS/chI2/rakXgBVrzdQADDAe17OwBMmv3jHZHJTM4Gk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JjgW2ZoHbmd1HhHMB7Ar9oA08dV8bgpWypshlV4FMUcDUyDgxoytKHFZcqul3WA3W
+         JLGyiX5KQnhMF5Bzsnj5erlNr+5ijljFf2BhwAZSUh7kYY44cU8mAZ63ys3eGhxtOD
+         vuxpopWZcevqCAV9FiPSKc4VKZNp79XLUeOEc6uUH2wuDq1ZHdvcGb0xW5TZZbVbjy
+         IUKfJBS1CVOVe4Ecq+ipdrD3c1o0nmYM6QIEfizQY8R2HA7dkqdDZWeQfcAy+qKBZO
+         geX7t2Afj3Jjw8IvuK68oMHEKlrQsRTpAiAD5kZFaBkVpvTU8mKj3tnrN5rbdqJjJA
+         A/70e8iX1j3Yg==
+Date:   Tue, 31 Jan 2023 20:41:49 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Simek <monstr@monstr.eu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Russell King <linux@armlinux.org.uk>,
+        Stafford Horne <shorne@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vineet Gupta <vgupta@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
+        x86@kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v2 4/4] mm, arch: add generic implementation of
+ pfn_valid() for FLATMEM
+Message-ID: <Y9lg7R1Yd931C+y5@kernel.org>
+References: <20230129124235.209895-1-rppt@kernel.org>
+ <20230129124235.209895-5-rppt@kernel.org>
+ <Y9lULIIOneBUFE/E@spud>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e78c053-16fb-427c-4839-08db03b9bccf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2023 18:34:07.3966
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YBYzXgU5eIJ2WpkttCJozUJeSMK87zf+eUuIw4YhxKLd9MyIdhdg4+O4vue1gUHs07oPalkqAcwRgtK1S9rfBs4RmlqfOFfA3EfoAsmKW9c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR21MB3917
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9lULIIOneBUFE/E@spud>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <ltykernel@gmail.com> Sent: Saturday, January 21, 2023 6:4=
-6 PM
->=20
-> The wakeup_secondary_cpu callback was populated with wakeup_
-> cpu_via_vmgexit() which doesn't work for Hyper-V. Override it
-> with Hyper-V specific hook which uses HVCALL_START_VIRTUAL_
-> PROCESSOR hvcall to start AP with vmsa data structure.
->=20
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
-> Change since RFC v2:
->        * Add helper function to initialize segment
->        * Fix some coding style
-> ---
->  arch/x86/include/asm/mshyperv.h   |   2 +
->  arch/x86/include/asm/sev.h        |  13 ++++
->  arch/x86/include/asm/svm.h        |  47 +++++++++++++
->  arch/x86/kernel/cpu/mshyperv.c    | 112 ++++++++++++++++++++++++++++--
->  include/asm-generic/hyperv-tlfs.h |  19 +++++
->  5 files changed, 189 insertions(+), 4 deletions(-)
->=20
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
-erv.h
-> index 7266d71d30d6..c69051eec0e1 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -203,6 +203,8 @@ struct irq_domain *hv_create_pci_msi_domain(void);
->  int hv_map_ioapic_interrupt(int ioapic_id, bool level, int vcpu, int vec=
-tor,
->  		struct hv_interrupt_entry *entry);
->  int hv_unmap_ioapic_interrupt(int ioapic_id, struct hv_interrupt_entry *=
-entry);
-> +int hv_set_mem_host_visibility(unsigned long addr, int numpages, bool vi=
-sible);
-> +int hv_snp_boot_ap(int cpu, unsigned long start_ip);
->=20
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
->  void hv_ghcb_msr_write(u64 msr, u64 value);
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index ebc271bb6d8e..e34aaf730220 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -86,6 +86,19 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
->=20
->  #define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
->=20
-> +union sev_rmp_adjust {
-> +	u64 as_uint64;
-> +	struct {
-> +		unsigned long target_vmpl : 8;
-> +		unsigned long enable_read : 1;
-> +		unsigned long enable_write : 1;
-> +		unsigned long enable_user_execute : 1;
-> +		unsigned long enable_kernel_execute : 1;
-> +		unsigned long reserved1 : 4;
-> +		unsigned long vmsa : 1;
-> +	};
-> +};
-> +
->  /* SNP Guest message request */
->  struct snp_req_data {
->  	unsigned long req_gpa;
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index cb1ee53ad3b1..f8b321a11ee4 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -336,6 +336,53 @@ struct vmcb_save_area {
->  	u64 last_excp_to;
->  	u8 reserved_0x298[72];
->  	u32 spec_ctrl;		/* Guest version of SPEC_CTRL at 0x2E0 */
-> +	u8 reserved_7b[4];
-> +	u32 pkru;
-> +	u8 reserved_7a[20];
-> +	u64 reserved_8;		/* rax already available at 0x01f8 */
-> +	u64 rcx;
-> +	u64 rdx;
-> +	u64 rbx;
-> +	u64 reserved_9;		/* rsp already available at 0x01d8 */
-> +	u64 rbp;
-> +	u64 rsi;
-> +	u64 rdi;
-> +	u64 r8;
-> +	u64 r9;
-> +	u64 r10;
-> +	u64 r11;
-> +	u64 r12;
-> +	u64 r13;
-> +	u64 r14;
-> +	u64 r15;
-> +	u8 reserved_10[16];
-> +	u64 sw_exit_code;
-> +	u64 sw_exit_info_1;
-> +	u64 sw_exit_info_2;
-> +	u64 sw_scratch;
-> +	union {
-> +		u64 sev_features;
-> +		struct {
-> +			u64 sev_feature_snp			: 1;
-> +			u64 sev_feature_vtom			: 1;
-> +			u64 sev_feature_reflectvc		: 1;
-> +			u64 sev_feature_restrict_injection	: 1;
-> +			u64 sev_feature_alternate_injection	: 1;
-> +			u64 sev_feature_full_debug		: 1;
-> +			u64 sev_feature_reserved1		: 1;
-> +			u64 sev_feature_snpbtb_isolation	: 1;
-> +			u64 sev_feature_resrved2		: 56;
-> +		};
-> +	};
-> +	u64 vintr_ctrl;
-> +	u64 guest_error_code;
-> +	u64 virtual_tom;
-> +	u64 tlb_id;
-> +	u64 pcpu_id;
-> +	u64 event_inject;
-> +	u64 xcr0;
-> +	u8 valid_bitmap[16];
-> +	u64 x87_state_gpa;
->  } __packed;
->=20
->  /* Save area definition for SEV-ES and SEV-SNP guests */
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index 197c8f2ec4eb..9d547751a1a7 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -39,6 +39,13 @@
->  #include <asm/realmode.h>
->  #include <asm/e820/api.h>
->=20
-> +/*
-> + * DEFAULT INIT GPAT and SEGMENT LIMIT value in struct VMSA
-> + * to start AP in enlightened SEV guest.
-> + */
-> +#define HV_AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
-> +#define HV_AP_SEGMENT_LIMIT		0xffffffff
+Hi Conor,
 
-If these values are defined by Hyper-V, they should probably go in
-hyperv-tlfs.h.
+On Tue, Jan 31, 2023 at 05:47:24PM +0000, Conor Dooley wrote:
+> Hey Mike,
+> 
+> On Sun, Jan 29, 2023 at 02:42:35PM +0200, Mike Rapoport wrote:
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > Every architecture that supports FLATMEM memory model defines its own
+> > version of pfn_valid() that essentially compares a pfn to max_mapnr.
+> > 
+> > Use mips/powerpc version implemented as static inline as a generic
+> > implementation of pfn_valid() and drop its per-architecture definitions.
+> > 
+> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > Acked-by: Guo Ren <guoren@kernel.org>		# csky
+> > Acked-by: Huacai Chen <chenhuacai@loongson.cn>	# LoongArch
+> > Acked-by: Stafford Horne <shorne@gmail.com>	# OpenRISC
+> 
+> Hmm, so this landed in linux-next today and I bisected a boot failure in
+> my CI to it. However, I am not really sure if it is a real issue worth
+> worrying about as the platform it triggered on is supposed to be using
+> SPARSEMEM, but isn't.
+> I had thought that my CI was using a config with SPARSEMEM since that
+> became required for riscv defconfig builds to boot in v6.1-rc1, but I
+> must have just forgotten to add it to my $platform_defconfig builds too.
+> However, those $platform_defconfig builds continued booting without
+> SPARSEMEM enabled until today.
 
-> +
->  /* Is Linux running as the root partition? */
->  bool hv_root_partition;
->  struct ms_hyperv_info ms_hyperv;
-> @@ -230,6 +237,94 @@ static void __init hv_smp_prepare_boot_cpu(void)
->  #endif
->  }
->=20
-> +static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted __aligned(PAGE_S=
-IZE);
-> +static u8 ap_start_stack[PAGE_SIZE] __aligned(PAGE_SIZE);
-> +
-> +#define hv_populate_vmcb_seg(seg, gdtr_base)			\
-> +do {								\
-> +	if (seg.selector) {					\
-> +		seg.base =3D 0;					\
-> +		seg.limit =3D HV_AP_SEGMENT_LIMIT;		\
-> +		seg.attrib =3D *(u16 *)(gdtr_base + seg.selector + 5);	\
-> +		seg.attrib =3D (seg.attrib & 0xFF) | ((seg.attrib >> 4) & 0xF00); \
-> +	}							\
-> +} while (0)							\
-> +
-> +int hv_snp_boot_ap(int cpu, unsigned long start_ip)
-> +{
-> +	struct vmcb_save_area *vmsa =3D (struct vmcb_save_area *)
-> +		__get_free_page(GFP_KERNEL | __GFP_ZERO);
-> +	struct desc_ptr gdtr;
-> +	u64 ret, retry =3D 5;
-> +	struct hv_start_virtual_processor_input *start_vp_input;
-> +	union sev_rmp_adjust rmp_adjust;
-> +	unsigned long flags;
-> +
-> +	native_store_gdt(&gdtr);
-> +
-> +	vmsa->gdtr.base =3D gdtr.address;
-> +	vmsa->gdtr.limit =3D gdtr.size;
-> +
-> +	asm volatile("movl %%es, %%eax;" : "=3Da" (vmsa->es.selector));
-> +	hv_populate_vmcb_seg(vmsa->es, vmsa->gdtr.base);
-> +
-> +	asm volatile("movl %%cs, %%eax;" : "=3Da" (vmsa->cs.selector));
-> +	hv_populate_vmcb_seg(vmsa->cs, vmsa->gdtr.base);
-> +
-> +	asm volatile("movl %%ss, %%eax;" : "=3Da" (vmsa->ss.selector));
-> +	hv_populate_vmcb_seg(vmsa->ss, vmsa->gdtr.base);
-> +
-> +	asm volatile("movl %%ds, %%eax;" : "=3Da" (vmsa->ds.selector));
-> +	hv_populate_vmcb_seg(vmsa->ds, vmsa->gdtr.base);
-> +
-> +	vmsa->efer =3D native_read_msr(MSR_EFER);
-> +
-> +	asm volatile("movq %%cr4, %%rax;" : "=3Da" (vmsa->cr4));
-> +	asm volatile("movq %%cr3, %%rax;" : "=3Da" (vmsa->cr3));
-> +	asm volatile("movq %%cr0, %%rax;" : "=3Da" (vmsa->cr0));
-> +
-> +	vmsa->xcr0 =3D 1;
-> +	vmsa->g_pat =3D HV_AP_INIT_GPAT_DEFAULT;
-> +	vmsa->rip =3D (u64)secondary_startup_64_no_verify;
-> +	vmsa->rsp =3D (u64)&ap_start_stack[PAGE_SIZE];
-> +
-> +	vmsa->sev_feature_snp =3D 1;
-> +	vmsa->sev_feature_restrict_injection =3D 1;
-> +
-> +	rmp_adjust.as_uint64 =3D 0;
-> +	rmp_adjust.target_vmpl =3D 1;
-> +	rmp_adjust.vmsa =3D 1;
-> +	ret =3D rmpadjust((unsigned long)vmsa, RMP_PG_SIZE_4K,
-> +			rmp_adjust.as_uint64);
-> +	if (ret !=3D 0) {
-> +		pr_err("RMPADJUST(%llx) failed: %llx\n", (u64)vmsa, ret);
-> +		return ret;
-> +	}
-> +
-> +	local_irq_save(flags);
-> +	start_vp_input =3D
-> +		(struct hv_start_virtual_processor_input *)ap_start_input_arg;
-> +	memset(start_vp_input, 0, sizeof(*start_vp_input));
-> +	start_vp_input->partitionid =3D -1;
-> +	start_vp_input->vpindex =3D cpu;
-> +	start_vp_input->targetvtl =3D ms_hyperv.vtl;
-> +	*(u64 *)&start_vp_input->context[0] =3D __pa(vmsa) | 1;
-> +
-> +	do {
-> +		ret =3D hv_do_hypercall(HVCALL_START_VIRTUAL_PROCESSOR,
-> +				      start_vp_input, NULL);
-> +	} while (hv_result(ret) =3D=3D HV_STATUS_TIME_OUT && retry--);
-> +
-> +	if (!hv_result_success(ret)) {
-> +		pr_err("HvCallStartVirtualProcessor failed: %llx\n", ret);
-> +		goto done;
-> +	}
-> +
-> +done:
-> +	local_irq_restore(flags);
-> +	return ret;
-> +}
-> +
+The issue seems to be that the generic pfn_valid() does not take into
+account pfn_offset when it compares it with max_mapnr.
+Can you please test with the patch below?
 
-Like a comment in an earlier patch, I'm wondering if the bulk of
-this code could move to ivm.c, to avoid overloading mshyperv.c.
+diff --git a/include/asm-generic/memory_model.h b/include/asm-generic/memory_model.h
+index 13d2a844d928..6796abe1900e 100644
+--- a/include/asm-generic/memory_model.h
++++ b/include/asm-generic/memory_model.h
+@@ -26,7 +26,7 @@ static inline int pfn_valid(unsigned long pfn)
+ 	extern unsigned long max_mapnr;
+ 	unsigned long pfn_offset = ARCH_PFN_OFFSET;
+ 
+-	return pfn >= pfn_offset && pfn < max_mapnr;
++	return pfn >= pfn_offset && (pfn - pfn_offset) < max_mapnr;
+ }
+ #define pfn_valid pfn_valid
+ #endif
 
->  static void __init hv_smp_prepare_cpus(unsigned int max_cpus)
->  {
->  #ifdef CONFIG_X86_64
-> @@ -239,6 +334,16 @@ static void __init hv_smp_prepare_cpus(unsigned int =
-max_cpus)
->=20
->  	native_smp_prepare_cpus(max_cpus);
->=20
-> +	/*
-> +	 *  Override wakeup_secondary_cpu callback for SEV-SNP
-> +	 *  enlightened guest.
-> +	 */
-> +	if (hv_isolation_type_en_snp())
-> +		apic->wakeup_secondary_cpu =3D hv_snp_boot_ap;
-> +
-> +	if (!hv_root_partition)
-> +		return;
-> +
->  #ifdef CONFIG_X86_64
->  	for_each_present_cpu(i) {
->  		if (i =3D=3D 0)
-> @@ -475,8 +580,7 @@ static void __init ms_hyperv_init_platform(void)
->=20
->  # ifdef CONFIG_SMP
->  	smp_ops.smp_prepare_boot_cpu =3D hv_smp_prepare_boot_cpu;
-> -	if (hv_root_partition)
-> -		smp_ops.smp_prepare_cpus =3D hv_smp_prepare_cpus;
-> +	smp_ops.smp_prepare_cpus =3D hv_smp_prepare_cpus;
->  # endif
->=20
->  	/*
-> @@ -501,7 +605,7 @@ static void __init ms_hyperv_init_platform(void)
->  	if (!(ms_hyperv.features & HV_ACCESS_TSC_INVARIANT))
->  		mark_tsc_unstable("running on Hyper-V");
->=20
-> -	if (isolation_type_en_snp()) {
-> +	if (hv_isolation_type_en_snp()) {
+> for $platform_defconfig builds I now see the following, which is in turn
+> followed by an opps. The full output is at the bottom of this mail.
+> 
+> 	WARNING: CPU: 0 PID: 0 at mm/vmalloc.c:479 __vmap_pages_range_noflush+0x2d4/0x4c8
+> 	Modules linked in:
+> 	CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.2.0-rc4-00538-g6e265f6be0c8 #1
+> 	Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+> 	epc : __vmap_pages_range_noflush+0x2d4/0x4c8
+> 	 ra : __vmap_pages_range_noflush+0x3e0/0x4c8
+> 	epc : ffffffff801461e4 ra : ffffffff801462f0 sp : ffffffff81203b90
+> 	 gp : ffffffff812e9fe0 tp : ffffffff8120fa80 t0 : ffffffe7bfe57000
+> 	 t1 : ffffffffffff8000 t2 : 00000000000001a7 s0 : ffffffff81203c50
+> 	 s1 : ffffffe7bfe56040 a0 : 0000000000000000 a1 : ffffffe7c7df2840
+> 	 a2 : ffffffff812ebae8 a3 : 0000000000001000 a4 : 0000000000080200
+> 	 a5 : 0000000000fffe00 a6 : 0000000001040056 a7 : ffffffffffffffff
+> 	 s2 : 0000000001040024 s3 : ffffffff80de1118 s4 : ffffffc80400c000
+> 	 s5 : ffffffc80400c000 s6 : 00000000000000e7 s7 : 0000000000000000
+> 	 s8 : ffffffc80400bfff s9 : 00fffffffffff000 s10: ffffffc804008000
+> 	 s11: ffffffe7bfe0d100 t3 : 0000000000000000 t4 : fffffffffff00000
+> 	 t5 : 00000000000f0000 t6 : ffffffe7bfe22ac4
+> 	status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
+> 	[<ffffffff8014762a>] __vmalloc_node_range+0x392/0x52e
+> 	[<ffffffff8000dfc4>] copy_process+0x636/0x1196
+> 	[<ffffffff8000ec42>] kernel_clone+0x4a/0x2f4
+> 	[<ffffffff8000f15e>] user_mode_thread+0x7c/0x9a
+> 	[<ffffffff8077056e>] rest_init+0x28/0xea
+> 	[<ffffffff80800670>] arch_post_acpi_subsys_init+0x0/0x18
+> 	[<ffffffff80800de4>] start_kernel+0x72c/0x75c
+> 
+> In my mind, there's a kernel misconfiguration issue, but it's not the
+> same splat as I used to get when using FLATMEM in this configuration:
+> 	OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+> 	Machine model: Microchip PolarFire-SoC Icicle Kit
+> 	earlycon: ns16550a0 at MMIO32 0x0000000020100000 (options '115200n8')
+> 	printk: bootconsole [ns16550a0] enabled
+> 	printk: debug: skip boot console de-registration.
+> 	efi: UEFI not found.
+> 	Zone ranges:
+> 	  DMA32    [mem 0x0000000080200000-0x00000000ffffffff]
+> 	  Normal   [mem 0x0000000100000000-0x000000107fffffff]
+> 	Movable zone start for each node
+> 	Early memory node ranges
+> 	  node   0: [mem 0x0000000080200000-0x00000000bfbfffff]
+> 	  node   0: [mem 0x00000000bfc00000-0x00000000bfffffff]
+> 	  node   0: [mem 0x0000001040000000-0x000000107fffffff]
+> 	Initmem setup node 0 [mem 0x0000000080200000-0x000000107fffffff]
+> 	Kernel panic - not syncing: Failed to allocate 1073741824 bytes for node 0 memory map
+> 	CPU: 0 PID: 0 Comm: swapper Not tainted 5.19.0-dirty #1
+> 	Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+> 	Call Trace:
+> 	[<ffffffff800057f0>] show_stack+0x30/0x3c
+> 	[<ffffffff807d5802>] dump_stack_lvl+0x4a/0x66
+> 	[<ffffffff807d5836>] dump_stack+0x18/0x20
+> 	[<ffffffff807d1ae8>] panic+0x124/0x2c6
+> 	[<ffffffff80814064>] free_area_init_core+0x0/0x11e
+> 	[<ffffffff80813720>] free_area_init_node+0xc2/0xf6
+> 	[<ffffffff8081331e>] free_area_init+0x222/0x260
+> 	[<ffffffff808064d6>] misc_mem_init+0x62/0x9a
+> 	[<ffffffff80803cb2>] setup_arch+0xb0/0xea
+> 	[<ffffffff8080039a>] start_kernel+0x88/0x4ee
+> 
+> Turning on SPARSEMEM fixes both problems, but I'm just not sure if there
+> is some underlying issue here that I don't know enough about the area to
+> understand.
+> 
+> Thanks,
+> Conor.
+> 
+> [    0.000000] Linux version 6.2.0-rc4-00538-g6e265f6be0c8 (conor@wendy) (riscv64-unknown-linux-gnu-gcc (g5964b5cd727)
+>  11.1.0, GNU ld (GNU Binutils) 2.37) #1 SMP PREEMPT @7
+> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+> [    0.000000] Machine model: Microchip PolarFire-SoC Icicle Kit
+> [    0.000000] earlycon: ns16550a0 at MMIO32 0x0000000020100000 (options '115200n8')
+> [    0.000000] printk: bootconsole [ns16550a0] enabled
+> [    0.000000] printk: debug: skip boot console de-registration.
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA32    [mem 0x0000000080200000-0x00000000ffffffff]
+> [    0.000000]   Normal   [mem 0x0000000100000000-0x000000107fffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000080200000-0x00000000bfbfffff]
+> [    0.000000]   node   0: [mem 0x00000000bfc00000-0x00000000bfffffff]
+> [    0.000000]   node   0: [mem 0x0000001040000000-0x000000107fffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x000000107fffffff]
+> [    0.000000] On node 0, zone Normal: 15990272 pages in unavailable ranges
+> [    0.000000] SBI specification v0.3 detected
+> [    0.000000] SBI implementation ID=0x1 Version=0x10000
+> [    0.000000] SBI TIME extension detected
+> [    0.000000] SBI IPI extension detected
+> [    0.000000] SBI RFENCE extension detected
+> [    0.000000] SBI SRST extension detected
+> [    0.000000] SBI HSM extension detected
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] riscv: base ISA extensions acdfim
+> [    0.000000] riscv: ELF capabilities acdfim
+> [    0.000000] percpu: Embedded 19 pages/cpu s37048 r8192 d32584 u77824
+> [    0.000000] CPU node for /cpus/cpu@0 exist but the possible cpu range is :0-3
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 294407
+> [    0.000000] Kernel command line: earlycon keep_bootcon reboot=cold
+> [    0.000000] Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] software IO TLB: area num 4.
+> [    0.000000] software IO TLB: mapped [mem 0x00000000bbc00000-0x00000000bfc00000] (64MB)
+> [    0.000000] Virtual kernel memory layout:
+> [    0.000000]       fixmap : 0xffffffc6fee00000 - 0xffffffc6ff000000   (2048 kB)
+> [    0.000000]       pci io : 0xffffffc6ff000000 - 0xffffffc700000000   (  16 MB)
+> [    0.000000]      vmemmap : 0xffffffc700000000 - 0xffffffc800000000   (4096 MB)
+> [    0.000000]      vmalloc : 0xffffffc800000000 - 0xffffffd800000000   (  64 GB)
+> [    0.000000]      modules : 0xffffffff01352000 - 0xffffffff80000000   (2028 MB)
+> [    0.000000]       lowmem : 0xffffffd800000000 - 0xffffffe7ffe00000   (  63 GB)
+> [    0.000000]       kernel : 0xffffffff80000000 - 0xffffffffffffffff   (2047 MB)
+> [    0.000000] Memory: 1067600K/2095104K available (7639K kernel code, 4898K rwdata, 4096K rodata, 2183K init, 410K bss, 1027504K reserved, 0K cma-reserved)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+> [    0.000000] rcu: Preemptible hierarchical RCU implementation.
+> [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=64 to nr_cpu_ids=4.
+> [    0.000000] rcu:     RCU debug extended QS entry/exit.
+> [    0.000000]  Trampoline variant of Tasks RCU enabled.
+> [    0.000000]  Tracing variant of Tasks RCU enabled.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] CPU with hartid=0 is not available
+> [    0.000000] riscv-intc: unable to find hart id for /cpus/cpu@0/interrupt-controller
+> [    0.000000] riscv-intc: 64 local interrupts mapped
+> [    0.000000] plic: interrupt-controller@c000000: mapped 186 interrupts with 4 handlers for 9 contexts.
+> [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> [    0.000000] riscv-timer: riscv_timer_init_dt: Registering clocksource cpuid [0] hartid [1]
+> [    0.000000] clocksource: riscv_clocksource: mask: 0xffffffffffffffff max_cycles: 0x1d854df40, max_idle_ns: 3526361616960 ns
+> [    0.000004] sched_clock: 64 bits at 1000kHz, resolution 1000ns, wraps every 2199023255500ns
+> [    0.009687] Console: colour dummy device 80x25
+> [    0.014654] printk: console [tty0] enabled
+> [    0.019313] Calibrating delay loop (skipped), value calculated using timer frequency.. 2.00 BogoMIPS (lpj=4000)
+> [    0.030490] pid_max: default: 32768 minimum: 301
+> [    0.036094] Mount-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+> [    0.044458] Mountpoint-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+> [    0.055493] ------------[ cut here ]------------
+> [    0.060606] WARNING: CPU: 0 PID: 0 at mm/vmalloc.c:479 __vmap_pages_range_noflush+0x2d4/0x4c8
+> [    0.070040] Modules linked in:
+> [    0.073421] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.2.0-rc4-00538-g6e265f6be0c8 #1
+> [    0.082157] Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+> [    0.088972] epc : __vmap_pages_range_noflush+0x2d4/0x4c8
+> [    0.094838]  ra : __vmap_pages_range_noflush+0x3e0/0x4c8
+> [    0.100707] epc : ffffffff801461e4 ra : ffffffff801462f0 sp : ffffffff81203b90
+> [    0.108674]  gp : ffffffff812e9fe0 tp : ffffffff8120fa80 t0 : ffffffe7bfe57000
+> [    0.116643]  t1 : ffffffffffff8000 t2 : 00000000000001a7 s0 : ffffffff81203c50
+> [    0.124611]  s1 : ffffffe7bfe56040 a0 : 0000000000000000 a1 : ffffffe7c7df2840
+> [    0.132588]  a2 : ffffffff812ebae8 a3 : 0000000000001000 a4 : 0000000000080200
+> [    0.140564]  a5 : 0000000000fffe00 a6 : 0000000001040056 a7 : ffffffffffffffff
+> [    0.148541]  s2 : 0000000001040024 s3 : ffffffff80de1118 s4 : ffffffc80400c000
+> [    0.156518]  s5 : ffffffc80400c000 s6 : 00000000000000e7 s7 : 0000000000000000
+> [    0.164495]  s8 : ffffffc80400bfff s9 : 00fffffffffff000 s10: ffffffc804008000
+> [    0.172472]  s11: ffffffe7bfe0d100 t3 : 0000000000000000 t4 : fffffffffff00000
+> [    0.180449]  t5 : 00000000000f0000 t6 : ffffffe7bfe22ac4
+> [    0.186317] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
+> [    0.195060] [<ffffffff8014762a>] __vmalloc_node_range+0x392/0x52e
+> [    0.201802] [<ffffffff8000dfc4>] copy_process+0x636/0x1196
+> [    0.207878] [<ffffffff8000ec42>] kernel_clone+0x4a/0x2f4
+> [    0.213755] [<ffffffff8000f15e>] user_mode_thread+0x7c/0x9a
+> [    0.219918] [<ffffffff8077056e>] rest_init+0x28/0xea
+> [    0.225429] [<ffffffff80800670>] arch_post_acpi_subsys_init+0x0/0x18
+> [    0.232460] [<ffffffff80800de4>] start_kernel+0x72c/0x75c
+> [    0.238434] ---[ end trace 0000000000000000 ]---
+> n):0kB isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:0kB shmem_thp: 0kB shmem_pmdmapped: 0kB anon_thp: 0kB writeback_tmp:0kB kernel_stack:0kB pagetables:4kB sec_pagetables:0kB all_unreclaimable? no
+> [    0.423801] DMA32 free:940780kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:1046528kB managed:940780kB mlocked:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+> [    0.452034] lowmem_reserve[]: 0 0 0
+> [    0.455919] Normal free:126248kB boost:0kB min:0kB low:0kB high:0kB reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:0kB unevictable:0kB writepending:0kB present:1048576kB managed:126820kB mlocked:0kB bounce:0kB free_pcp:156kB local_pcp:156kB free_cma:0kB
+> [    0.484652] lowmem_reserve[]: 0 0 0
+> [    0.488538] DMA32: 1*4kB (M) 1*8kB (M) 0*16kB 1*32kB (M) 1*64kB (M) 1*128kB (M) 0*256kB 1*512kB (M) 0*1024kB 1*2048kB (M) 229*4096kB (M) = 940780kB
+> [    0.503367] Normal: 2*4kB (ME) 0*8kB 2*16kB (UE) 2*32kB (ME) 3*64kB (UME) 0*128kB 2*256kB (ME) 3*512kB (UME) 3*1024kB (UME) 3*2048kB (UME) 28*4096kB (M) = 126248kB
+> [    0.519722] 0 total pagecache pages
+> [    0.523579] 0 pages in swap cache
+> [    0.527264] Free swap  = 0kB
+> [    0.530445] Total swap = 0kB
+> [    0.533652] 523776 pages RAM
+> [    0.536833] 0 pages HighMem/MovableOnly
+> [    0.541090] 256876 pages reserved
+> [    0.544833] Unable to handle kernel NULL pointer dereference at virtual address 000000000000003c
+> [    0.554576] Oops [#1]
+> [    0.557092] Modules linked in:
+> [    0.560470] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W          6.2.0-rc4-00538-g6e265f6be0c8 #1
+> [    0.570841] Hardware name: Microchip PolarFire-SoC Icicle Kit (DT)
+> [    0.577664] epc : rest_init+0x44/0xea
+> [    0.581726]  ra : rest_init+0x44/0xea
+> [    0.585788] epc : ffffffff8077058a ra : ffffffff8077058a sp : ffffffff81203f70
+> [    0.593764]  gp : ffffffff812e9fe0 tp : ffffffff8120fa80 t0 : 0000000000000000
+> [    0.601741]  t1 : 0000000000000000 t2 : 0000000000000040 s0 : ffffffff81203f90
+> [    0.609718]  s1 : fffffffffffffff4 a0 : 0000000000000000 a1 : fffffffffffffff4
+> [    0.617695]  a2 : 0000000000000000 a3 : 0000000000000000 a4 : 0000000000000000
+> [    0.625672]  a5 : 0000000000000000 a6 : 0000000001212dec a7 : ffffffffd8bc86ae
+> [    0.633649]  s2 : ffffffff80de0bf0 s3 : ffffffe7c7de7700 s4 : 0000000000000000
+> [    0.641626]  s5 : ffffffff812eb018 s6 : ffffffff80a00008 s7 : 0000000000000000
+> [    0.649603]  s8 : 00000000bfb85036 s9 : 0000000000000000 s10: 0000000000000000
+> [    0.657580]  s11: 0000000000000000 t3 : 0000000000000002 t4 : 0000000000000402
+> [    0.665557]  t5 : ffffffff812158a8 t6 : 0000000000000000
+> [    0.671416] status: 0000000200000120 badaddr: 000000000000003c cause: 000000000000000d
+> [    0.680157] [<ffffffff80800670>] arch_post_acpi_subsys_init+0x0/0x18
+> [    0.687188] [<ffffffff80800de4>] start_kernel+0x72c/0x75c
+> [    0.693195] ---[ end trace 0000000000000000 ]---
+> [    0.698325] Kernel panic - not syncing: Attempted to kill the idle task!
+> [    0.705729] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
 
-Also a bug fix to an earlier patch in this series.
 
->  		/*
->  		 * Hyper-V enlightened snp guest boots kernel
->  		 * directly without bootloader and so roms,
-> @@ -511,7 +615,7 @@ static void __init ms_hyperv_init_platform(void)
->  		x86_platform.legacy.rtc =3D 0;
->  		x86_platform.set_wallclock =3D set_rtc_noop;
->  		x86_platform.get_wallclock =3D get_rtc_noop;
-> -		x86_platform.legacy.reserve_bios_regions =3D x86_init_noop;
-> +		x86_platform.legacy.reserve_bios_regions =3D 0;
 
-This looks like a bug fix to Patch 8 of the series.  It should be fixed
-in patch 8.
-
->  		x86_init.resources.probe_roms =3D x86_init_noop;
->  		x86_init.resources.reserve_resources =3D x86_init_noop;
->  		x86_init.mpparse.find_smp_config =3D x86_init_noop;
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
-rv-tlfs.h
-> index c1cc3ec36ad5..3d7c67be9f56 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -148,6 +148,7 @@ union hv_reference_tsc_msr {
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
->  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
->  #define HVCALL_SEND_IPI				0x000b
-> +#define HVCALL_ENABLE_VP_VTL			0x000f
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX	0x0014
->  #define HVCALL_SEND_IPI_EX			0x0015
-> @@ -165,6 +166,7 @@ union hv_reference_tsc_msr {
->  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
->  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
->  #define HVCALL_RETARGET_INTERRUPT		0x007e
-> +#define HVCALL_START_VIRTUAL_PROCESSOR		0x0099
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
->  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
-> @@ -219,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
->  #define HV_STATUS_INVALID_PORT_ID		17
->  #define HV_STATUS_INVALID_CONNECTION_ID		18
->  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
-> +#define HV_STATUS_TIME_OUT                     0x78
->=20
->  /*
->   * The Hyper-V TimeRefCount register and the TSC
-> @@ -778,6 +781,22 @@ struct hv_input_unmap_device_interrupt {
->  	struct hv_interrupt_entry interrupt_entry;
->  } __packed;
->=20
-> +struct hv_enable_vp_vtl_input {
-> +	u64 partitionid;
-> +	u32 vpindex;
-> +	u8 targetvtl;
-> +	u8 padding[3];
-> +	u8 context[0xe0];
-> +} __packed;
-> +
-> +struct hv_start_virtual_processor_input {
-> +	u64 partitionid;
-> +	u32 vpindex;
-> +	u8 targetvtl;
-> +	u8 padding[3];
-> +	u8 context[0xe0];
-> +} __packed;
-> +
->  #define HV_SOURCE_SHADOW_NONE               0x0
->  #define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
->=20
-> --
-> 2.25.1
-
+-- 
+Sincerely yours,
+Mike.
