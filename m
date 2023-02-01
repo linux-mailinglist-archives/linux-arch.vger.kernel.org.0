@@ -2,117 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4AE686E43
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Feb 2023 19:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71712686F39
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Feb 2023 20:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjBASkY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Feb 2023 13:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        id S231486AbjBATtV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Feb 2023 14:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbjBASkR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Feb 2023 13:40:17 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0315EF9A
-        for <linux-arch@vger.kernel.org>; Wed,  1 Feb 2023 10:39:59 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 7so13178606pga.1
-        for <linux-arch@vger.kernel.org>; Wed, 01 Feb 2023 10:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1bheOv+RMKsLccw364mds17HOO0bJItYyH4Drs1sYdU=;
-        b=jMwdNnyeAncNolb8weAVUSEgRK9/0nmbRFJNgQmN9mMPSeUebPlB9TqqZpZHT9wWxe
-         Vl7R/xpSk9DBsVswONwOZLpCl/uJ/X/6e3UcOEAJg6ah25SHNlEB88qrzHXFk4QRKQ7C
-         7aKvLRrpp8VShSED5q8sQYBsyKoLWXYf9vFpm4wAxmgm81LkQJLIXBxLvwvLx80PppKb
-         bkEwsK5gr/aiz/7OW/YEDesYKQ4CSSKj/9yVGKZtoIE0wjRaiobXcnRLwNTjA1aDilPs
-         kB8klU3HaJcTd9i+HXdoUjVRASTWuE1whgoyEhW6bU5BQ3JoWjed2fr8Puzj/iz9ef58
-         uBgw==
+        with ESMTP id S231660AbjBATtM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Feb 2023 14:49:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83762739
+        for <linux-arch@vger.kernel.org>; Wed,  1 Feb 2023 11:48:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675280907;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+c79xB9zEm9gbVZK1/vCc0nmGWw5K68MnzSgOcRJD38=;
+        b=JcRQbMHJYmeymltSUOs2n1NR6P8Hsh1ihvegc+xryf7yv9qmSoxhY/nFzVk0m/KR1ssE+h
+        RGui/0Z+yN3ne3KCRWAegC4GBFXkMQ8/g4bseIolNYfO+JheLSLfbDi4zHwWfsQgKdOkUd
+        siqFVch9zwjvuQBKKalMm8T0biUFMnE=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-484-yCGiEjrRMniD2cErnmMf7A-1; Wed, 01 Feb 2023 14:48:25 -0500
+X-MC-Unique: yCGiEjrRMniD2cErnmMf7A-1
+Received: by mail-qk1-f199.google.com with SMTP id s7-20020ae9f707000000b007294677a6e8so1764817qkg.17
+        for <linux-arch@vger.kernel.org>; Wed, 01 Feb 2023 11:48:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:cc:date:message-id:subject:mime-version
-         :content-transfer-encoding:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1bheOv+RMKsLccw364mds17HOO0bJItYyH4Drs1sYdU=;
-        b=sdSVpaPDHPbamK4OrV/e7aQ5cIOeYfILDgiRzAVxQB8wgf/9m0jf7OXzcxQUB7THam
-         P74Vg08YEBqyVh2+NJKdKpahdGbN11oDpsPBW8bGIP36mNdgP+3MH5OGnFl7ZK9bDhwA
-         5HoJt84/giXEnAWyLbwukZCB7csa4EgJVSphObUb1/RI0ok5zs8005dtn6TyyL8TNqpX
-         E5zPXePqxXtZNVFdoNmc50dZmTzTX1sd9fyG30svpJwBf/PMYmvQTz3YZG/g2GFSykDa
-         uVtLlTHt3jeusVDXaCxaw7+l34BVkYWbgnvkAsyEP8upPRcKskUenfWKu8Z/tSCfV81r
-         ucAg==
-X-Gm-Message-State: AO0yUKXfqKkwGe5QhJghAyuhDfnIEMbCoyhyqsdn3mrpEc2P9MKZkiuq
-        FAoeDhxWrawKDWo86TFnVAsbgA==
-X-Google-Smtp-Source: AK7set+QBqSRHAUKmIFDrFVmv4riYVpG6AHQn0FUNOQJ/lawfEfaqiRxrWELEe0uPX4Ux8PpgKmxfg==
-X-Received: by 2002:aa7:9af1:0:b0:57a:7140:84ae with SMTP id y17-20020aa79af1000000b0057a714084aemr3328095pfp.9.1675276791927;
-        Wed, 01 Feb 2023 10:39:51 -0800 (PST)
-Received: from smtpclient.apple ([51.52.155.79])
-        by smtp.gmail.com with ESMTPSA id y84-20020a626457000000b00582579cb0e0sm11741320pfb.129.2023.02.01.10.39.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Feb 2023 10:39:51 -0800 (PST)
-From:   Matt Evans <mev@rivosinc.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: [PATCH] locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare
- against zero-extended 'old' value
-Message-Id: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
-Date:   Wed, 1 Feb 2023 18:39:48 +0000
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+c79xB9zEm9gbVZK1/vCc0nmGWw5K68MnzSgOcRJD38=;
+        b=ugsHw+XC5fzY3CCB1GYg4y1f/hS/imLXoGN49fY9NHutHxceXcXUzkNpwZu5doIc0x
+         8OJ/wC4lUsqxaZiveTJDDzT7WK0ZxNM4e9g2D/I2g2DKhJ4JfsrkOXYD/rciyi3YGjOc
+         3ko1m5PRGikY2nB7uvaJlQQhesSgexULJkBfegMxlm2E6pZUQ4yTgbLZ69rZ/iyUQ0Yh
+         5Jl3E8CyrZOjs62HEvQBL9CXhz/DiazhvynaentEaOEuOH8w/LXk6lV/NojWpiqQIp/3
+         ESiyC6HsLP13WXeCoPYPl4Gsx403bOWsGuq4ngN8L1fwHfJ4mkFR4E5lh2QmdIp5TrT2
+         Xepg==
+X-Gm-Message-State: AO0yUKV0uhZJ4GQ9ShgmBSAGqfvi1sKJcKFBrKsMkYxkv1vwoHCCDsbq
+        w1aChn63W9biiV1i4uNCcDu/VBFF469iFTIaJMfcTqZqsEwd62giM6Q/Cx7YtZ/vdYiwENxu43A
+        bXI5QUWxttVvxRc4AiRLZcw==
+X-Received: by 2002:ac8:4b79:0:b0:3b9:b801:8744 with SMTP id g25-20020ac84b79000000b003b9b8018744mr4668661qts.4.1675280905102;
+        Wed, 01 Feb 2023 11:48:25 -0800 (PST)
+X-Google-Smtp-Source: AK7set+aCjVIaFs+qYlZN/COXif7CSKdOwvIaVTtsTOFsLRWV42aeSjrEadyR6ifeMCBEfyQD+z4OA==
+X-Received: by 2002:ac8:4b79:0:b0:3b9:b801:8744 with SMTP id g25-20020ac84b79000000b003b9b8018744mr4668639qts.4.1675280904733;
+        Wed, 01 Feb 2023 11:48:24 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id a3-20020a05620a16c300b0070495934152sm4421885qkn.48.2023.02.01.11.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Feb 2023 11:48:24 -0800 (PST)
+Date:   Wed, 1 Feb 2023 14:48:22 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        Michal Simek <monstr@monstr.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org
+Subject: Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
+Message-ID: <Y9rCBqwbLlLf1fHe@x1n>
+References: <Y9lz6yk113LmC9SI@ZenIV>
+ <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
+ <Y9mD1qp/6zm+jOME@ZenIV>
+ <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
+ <Y9mM5wiEhepjJcN0@ZenIV>
+ <CAHk-=wjNwwnBckTo8HLSdsd1ndoAR=5RBoZhdOyzhsnDAYWL9g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjNwwnBckTo8HLSdsd1ndoAR=5RBoZhdOyzhsnDAYWL9g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-__generic_cmpxchg_local takes unsigned long old/new arguments which
-might end up being up-cast from smaller signed types (which will
-sign-extend).  The loaded compare value must be compared against a
-truncated smaller type, so down-cast appropriately for each size.
+On Tue, Jan 31, 2023 at 04:00:22PM -0800, Linus Torvalds wrote:
+> So most of the time it's probably not going to matter all that much
+> which signal gets sent in practice.
 
-The issue is apparent on 64-bit machines with code, such as
-atomic_dec_unless_positive(), that sign-extends from int.
+I do also see a common pattern of the possibility to have a generic fault
+handler like generic_page_fault().
 
-64-bit machines generally don't use the generic cmpxchg but
-development/early ports might make use of it, so make it correct.
+It probably should start with taking the mmap_sem until providing some
+retval that is much easier to digest further by the arch-dependent code, so
+it can directly do something rather than parsing the bitmask in a
+duplicated way (hence the new retval should hopefully not a bitmask anymore
+but a "what to do").
 
-Signed-off-by: Matt Evans <mev@rivosinc.com>
----
- include/asm-generic/cmpxchg-local.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Maybe it can be something like:
 
-diff --git a/include/asm-generic/cmpxchg-local.h =
-b/include/asm-generic/cmpxchg-local.h
-index 380cdc824e4b..c3e7315b7c1d 100644
---- a/include/asm-generic/cmpxchg-local.h
-+++ b/include/asm-generic/cmpxchg-local.h
-@@ -26,15 +26,15 @@ static inline unsigned long =
-__generic_cmpxchg_local(volatile void *ptr,
- 	raw_local_irq_save(flags);
- 	switch (size) {
- 	case 1: prev =3D *(u8 *)ptr;
--		if (prev =3D=3D old)
-+		if (prev =3D=3D (u8)old)
- 			*(u8 *)ptr =3D (u8)new;
- 		break;
- 	case 2: prev =3D *(u16 *)ptr;
--		if (prev =3D=3D old)
-+		if (prev =3D=3D (u16)old)
- 			*(u16 *)ptr =3D (u16)new;
- 		break;
- 	case 4: prev =3D *(u32 *)ptr;
--		if (prev =3D=3D old)
-+		if (prev =3D=3D (u32)old)
- 			*(u32 *)ptr =3D (u32)new;
- 		break;
- 	case 8: prev =3D *(u64 *)ptr;
---=20
-2.30.2
+/**
+ * enum page_fault_retval - Higher level fault retval, generalized from
+ * vm_fault_reason above that is only used by hardware page fault handlers.
+ * It generalizes the bitmask-versioned retval into something that the arch
+ * dependent code should react upon.
+ *
+ * @PF_RET_COMPLETED:		The page fault is completed successfully
+ * @PF_RET_BAD_AREA:		The page fault address falls in a bad area
+ *				(e.g., vma not found, expand_stack() fails..)
+ * @PF_RET_ACCESS_ERR:		The page fault has access errors
+ *				(e.g., write fault on !VM_WRITE vmas)
+ * @PF_RET_KERN_FIXUP:		The page fault requires kernel fixups
+ *				(e.g., during copy_to_user() but fault failed?)
+ * @PF_RET_HWPOISON:		The page fault encountered poisoned pages
+ * @PF_RET_SIGNAL:		The page fault encountered poisoned pages
+ * ...
+ */
+enum page_fault_retval {
+	PF_RET_DONE = 0,
+	PF_RET_BAD_AREA,
+	PF_RET_ACCESS_ERR,
+	PF_RET_KERN_FIXUP,
+        PF_RET_HWPOISON,
+        PF_RET_SIGNAL,
+	...
+};
 
+As a start we may still want to return some more information (perhaps still
+the vm_fault_t alongside?  Or another union that will provide different
+information based on different PF_RET_*).  One major thing is I see how we
+handle VM_FAULT_HWPOISON and also the fact that we encode something more
+into the bitmask on page sizes (VM_FAULT_HINDEX_MASK).
+
+So the generic helper could, hopefully, hide the complexity of:
+
+  - Taking and releasing of mmap lock
+  - find_vma(), and also relevant checks on access or stack handling
+  - handle_mm_fault() itself (of course...)
+  - detect signals
+  - handle page fault retries (so, in the new layer of retval there should
+    have nothing telling it to retry; it should always be the ultimate result)
+  - parse different errors into "what the arch code should do", and
+    generalize the common ones, e.g.
+    - OOM, do pagefault_out_of_memory() for user-mode
+    - VM_FAULT_SIGSEGV, which should be able to merge into PF_RET_BAD_AREA?
+    - ...
+
+It'll simplify things if we can unify some small details like whether the
+-EFAULT above should contain a sigbus.
+
+A trivial detail I found when I was looking at this is, x86_64 passes in
+different signals to kernelmode_fixup_or_oops() - in do_user_addr_fault()
+there're three call sites and each of them pass over a differerent signal.
+IIUC that will only make a difference if there's a nested page fault during
+the vsyscall emulation (but I may be wrong too because I'm new to this
+code), and I have no idea when it'll happen and whether that needs to be
+strictly followed.
+
+Thanks,
+
+-- 
+Peter Xu
 
