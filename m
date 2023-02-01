@@ -2,182 +2,202 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C8E686250
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Feb 2023 10:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A9E686252
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Feb 2023 10:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjBAJE2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Feb 2023 04:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
+        id S231540AbjBAJE7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Feb 2023 04:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjBAJE1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Feb 2023 04:04:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40EA301AC
-        for <linux-arch@vger.kernel.org>; Wed,  1 Feb 2023 01:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675242227;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=a8vyRUGLmPZw1cx7uiPTXStMX6sS7pJs7SRmtCoOPQ0=;
-        b=Lu0QIVDo5qsP/nuVjpMPt/krULE24S0OroVcm69Eo5hwxB9pQDLLXlOI5IAxUFN1TXWhw4
-        7b3Pik5hfqucQOzr8+q+odo3oJuXs2D5becMXAkE4ekWV2qR8Uny2bdYTXRBTOTdtkLPrL
-        X6gb8yW3bfQPWweD1zs7/WOYJCKcEhg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-397-fKx8ILZeN9Cj7hqdK0Yvfw-1; Wed, 01 Feb 2023 04:03:43 -0500
-X-MC-Unique: fKx8ILZeN9Cj7hqdK0Yvfw-1
-Received: by mail-wm1-f70.google.com with SMTP id l5-20020a1ced05000000b003db300f2e1cso694240wmh.0
-        for <linux-arch@vger.kernel.org>; Wed, 01 Feb 2023 01:03:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8vyRUGLmPZw1cx7uiPTXStMX6sS7pJs7SRmtCoOPQ0=;
-        b=AmBbG0necai3TGc0V9bzwJepb8T+e4PDM8SbrS8MTNbnrb3/rdcBFchNDdcp+MgCfs
-         SrTHvk79E8KrqY3YijVhhQLAYRBLwjHSkLnS2jue9rEYism6ZNQ/A6uRKGgf1fb+pL7S
-         vd2WmQbRyFLHXw6fU+ialkpIasy2XIAEBXRCHQUXJSlMzEAJoELcXBRBSh7PiYURQGVV
-         StsP9PT0Koy19tYU1Aq92MPn8uqK43b37sFz6UdEVdvABuIib9z774AT4bsWz1ZqExXV
-         J3QiNZAa/uMGmrG4a+kVWAowrtYL1G7pfoiGNqywreWqEUO0UIVpSwsuykE5N6J/6psI
-         jx7g==
-X-Gm-Message-State: AO0yUKVKaCG3hbl5SD75Rb8BMWJPyDFGB1W3NL+mrbKJgLxjG0BCBsNP
-        aAoVLeF4/pv/DlWXKWAU1ejsmzRmwsMS4jNe/gvmYVfqfhWYoN1m9BVv2bglj7ZNN8ReWTSrQYN
-        siw6bmtts0V8Mwwc8DpQgYA==
-X-Received: by 2002:a05:600c:3b9d:b0:3d2:3be4:2d9a with SMTP id n29-20020a05600c3b9d00b003d23be42d9amr1322213wms.20.1675242222433;
-        Wed, 01 Feb 2023 01:03:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set/gMluqZSQ5LKXrgZW/yePv93crC07VbTZ6hjsNCTASxrv++pCMxw86gG10oZFOIcmNhL6zeQ==
-X-Received: by 2002:a05:600c:3b9d:b0:3d2:3be4:2d9a with SMTP id n29-20020a05600c3b9d00b003d23be42d9amr1322185wms.20.1675242222113;
-        Wed, 01 Feb 2023 01:03:42 -0800 (PST)
-Received: from ?IPV6:2003:cb:c705:3100:e20e:4ace:6f25:6a79? (p200300cbc7053100e20e4ace6f256a79.dip0.t-ipconnect.de. [2003:cb:c705:3100:e20e:4ace:6f25:6a79])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c469000b003a84375d0d1sm1100168wmo.44.2023.02.01.01.03.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Feb 2023 01:03:41 -0800 (PST)
-Message-ID: <a4857ccd-1d5f-2169-40bc-e7a75a0c896f@redhat.com>
-Date:   Wed, 1 Feb 2023 10:03:39 +0100
+        with ESMTP id S231535AbjBAJE6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Feb 2023 04:04:58 -0500
+Received: from postout2.mail.lrz.de (postout2.mail.lrz.de [IPv6:2001:4ca0:0:103::81bb:ff8a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCAED2ED7B;
+        Wed,  1 Feb 2023 01:04:54 -0800 (PST)
+Received: from lxmhs52.srv.lrz.de (localhost [127.0.0.1])
+        by postout2.mail.lrz.de (Postfix) with ESMTP id 4P6GFs3y5ZzyVT;
+        Wed,  1 Feb 2023 10:04:49 +0100 (CET)
+Authentication-Results: postout.lrz.de (amavisd-new); dkim=pass (2048-bit key)
+        reason="pass (just generated, assumed good)" header.d=tum.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tum.de; h=
+        content-type:content-type:mime-version:references:in-reply-to
+        :message-id:x-mailer:date:date:subject:subject:from:from
+        :received:received; s=tu-postout21; t=1675242289; bh=jvilWdNH19P
+        cGhtkD0HTJSTk+P4PDTOwZA4u5wt/Blw=; b=W5mjd0t2iYbWFsqJQ2npccTcXEm
+        FIsc0TF578yRlrf6TEHFEBFg3B7c5LolAmhbrDP0AAuNZ+FnsA/hEN0+A4q3PjE0
+        uVTeCWgjhS8lhfpEJhMxkTNBpUdHsyjIwYRZGK3bGjuUjO0L1DuVXKZoL3M+Mxqc
+        hLtQZfgan9toF6YWyXyOinIkLMDj3raIVvBS6as6ygrkHEysRJLVFhfgMw8iR9kO
+        VPdTKglUr8ZrFpmEeNqibI4a6OSJRJxYT9Tf5ICkuyq4iaTnms7j3J3LvC4ELYi5
+        wXBfPsfByCxdN3LGaSITM0axfcLtWz6BNjgO4SvbgZ+sCbt8xqHkX4nktDg==
+X-Virus-Scanned: by amavisd-new at lrz.de in lxmhs52.srv.lrz.de
+X-Spam-Score: -2.874
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from postout2.mail.lrz.de ([127.0.0.1])
+        by lxmhs52.srv.lrz.de (lxmhs52.srv.lrz.de [127.0.0.1]) (amavisd-new, port 20024)
+        with LMTP id fvTKPvXBuJxo; Wed,  1 Feb 2023 10:04:49 +0100 (CET)
+Received: from [192.168.178.35] (unknown [IPv6:2001:a61:24bf:bb01:2558:6d24:d4e4:8fe4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by postout2.mail.lrz.de (Postfix) with ESMTPSA id 4P6GFq68dJzyR1;
+        Wed,  1 Feb 2023 10:04:47 +0100 (CET)
+From:   =?utf-8?q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@tum.de>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Subject: Re: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Date:   Wed, 01 Feb 2023 10:04:42 +0100
+X-Mailer: MailMate (1.14r5918)
+Message-ID: <C5955FFB-B2DB-48C7-BA82-B81ACF24F94D@tum.de>
+In-Reply-To: <Y9GTgdMnGu6OxUZC@boqun-archlinux>
+References: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
+ <20220426203254.GJ4285@paulmck-ThinkPad-P17-Gen-1>
+ <YpYAQLi296UFEdTH@ethstick13.dse.in.tum.de>
+ <20220531150312.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+ <0EC00B0E-554A-4BF3-B012-ED1E36B12FD1@tum.de>
+ <Y8F3LMlTnT5ZtVTq@rowland.harvard.edu>
+ <9E7A62DD-D5DC-4B9C-A592-1A626482563B@tum.de>
+ <Y9GTgdMnGu6OxUZC@boqun-archlinux>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 18/39] mm: Handle faultless write upgrades for shstk
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-19-rick.p.edgecombe@intel.com>
- <7f63d13d-7940-afb6-8b25-26fdf3804e00@redhat.com>
- <50cf64932507ba60639eca28692e7df285bcc0a7.camel@intel.com>
- <1327c608-1473-af4f-d962-c24f04f3952c@redhat.com>
- <8c3820ae1448de4baffe7c476b4b5d9ba0a309ff.camel@intel.com>
- <4d224020-f26f-60a4-c7ab-721a024c7a6d@redhat.com>
- <dd06b54291ad5721da392a42f2d8e5636301ffef.camel@intel.com>
- <899d8f3baaf45b896cf335dec2143cd0969a2d8a.camel@intel.com>
- <ad7d94dd-f0aa-bf21-38c3-58ef1e9e46dc@redhat.com>
- <27b141c06c37da78afca7214ec7efeaf730162d9.camel@intel.com>
- <f4b62ed9-21a9-4b23-567e-51b339a643ac@redhat.com>
- <6a38779c1539c2bcfeb6bc8251ed04aa9b06802e.camel@intel.com>
- <0e29a2d0-08d8-bcd6-ff26-4bea0e4037b0@redhat.com>
- <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <f337d3b0e401c210b67a6465bf35f66f6a46fc3d.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed;
+ boundary="=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_="; micalg=sha-256;
+ protocol="application/pkcs7-signature"
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 01.02.23 00:33, Edgecombe, Rick P wrote:
-> On Tue, 2023-01-31 at 09:46 +0100, David Hildenbrand wrote:
->> Sure ...
->>
->> but I reconsidered :)
->>
->> Maybe there is a cleaner way to do it and avoid the "NULL" argument.
->>
->> What about having (while you're going over everything already):
->>
->> pte_mkwrite(pte, vma)
->> pte_mkwrite_kernel(pte)
->>
->> The latter would only be used in that arch code where we're working
->> on
->> kernel pgtables. We already have pte_offset_kernel() and
->> pte_alloc_kernel_track(), so it's not too weird.
-> 
-> Hmm, one downside is the "mk" part might lead people to guess
-> pte_mkwrite_kernel() would make it writable AND a kernel page (like
-> U/S=0 on x86). Instead of being a mkwrite() that's useful for setting
-> on kernel PTEs.
+This is an S/MIME signed message (RFC 5652 and 8551).
 
-At least I wouldn't worry about that too much. We handle nowhere in 
-common code user vs. supervisor access that way explicitly (e.g., 
-mkkernel), and it wouldn't even apply on architectures where we cannot 
-make such a decision on a per-PTE basis.
+--=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=
+Content-Type: text/plain
 
-> 
-> The other problem is that one of NULL passers is not for kernel memory.
-> huge_pte_mkwrite() calls pte_mkwrite(). Shadow stack memory can't be
-> created with MAP_HUGETLB, so it is not needed. Using
-> pte_mkwrite_kernel() would look weird in this case, but making
-> huge_pte_mkwrite() take a VMA would be for no reason. Maybe making
-> huge_pte_mkwrite() take a VMA is the better of those two options. Or
-> keep the NULL semantics...  Any thoughts?
+Hi Boqun,
 
-Well, the reason would be consistency. From a core-mm point of view it 
-makes sense to handle this all consistency, even if the single user 
-(x86) wouldn't strictly require it right now.
+On 25 Jan 2023, at 21:39, Boqun Feng wrote:
 
-I'd just pass in the VMA and call it a day :)
+> Hi,
+>
+> [Cc Rust-for-Linux folks]
+>
+> No hurries but is your tool avaiable somewhere so that we can have a
+> try.
 
--- 
-Thanks,
+Not ready just yet, but very much on it! Hope to be have something to share very
+soon :-)
 
-David / dhildenb
+> Although Rust doesn't support dependencies ordering, but it's good to
+> know which dependency is reserved after optimization.
 
+Sure!
+
+Paul
+
+--=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=
+Content-Description: S/MIME digital signature
+Content-Disposition: attachment; filename=smime.p7s
+Content-Type: application/pkcs7-signature; name=smime.p7s
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCDjMw
+ggbmMIIEzqADAgECAhAxAnDUNb6bJJr4VtDh4oVJMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0yMDAyMTgwMDAwMDBaFw0zMzA1MDEyMzU5NTlaMEYxCzAJBgNVBAYT
+Ak5MMRkwFwYDVQQKExBHRUFOVCBWZXJlbmlnaW5nMRwwGgYDVQQDExNHRUFOVCBQZXJzb25hbCBD
+QSA0MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAs0riIl4nW+kEWxQENTIgFK600jFA
+xs1QwB6hRMqvnkphfy2Q3mKbM2otpELKlgE8/3AQPYBo7p7yeORuPMnAuA+oMGRb2wbeSaLcZbpw
+XgfCvnKxmq97/kQkOFX706F9O7/h0yehHhDjUdyMyT0zMs4AMBDRrAFn/b2vR3j0BSYgoQs16oSq
+adM3p+d0vvH/YrRMtOhkvGpLuzL8m+LTAQWvQJ92NwCyKiHspoP4mLPJvVpEpDMnpDbRUQdftSpZ
+zVKTNORvPrGPRLnJ0EEVCHR82LL6oz915WkrgeCY9ImuulBn4uVsd9ZpubCgM/EXvVBlViKqusCh
+SsZEn7juIsGIiDyaIhhLsd3amm8BS3bgK6AxdSMROND6hiHT182Lmf8C+gRHxQG9McvG35uUvRu8
+v7bPZiJRaT7ZC2f50P4lTlnbLvWpXv5yv7hheO8bMXltiyLweLB+VNvg+GnfL6TW3Aq1yF1yrZAZ
+zR4MbpjTWdEdSLKvz8+0wCwscQ81nbDOwDt9vyZ+0eJXbRkWZiqScnwAg5/B1NUD4TrYlrI4n6zF
+p2pyYUOiuzP+as/AZnz63GvjFK69WODR2W/TK4D7VikEMhg18vhuRf4hxnWZOy0vhfDR/g3aJbds
+Gac+diahjEwzyB+UKJOCyzvecG8bZ/u/U8PsEMZg07iIPi8CAwEAAaOCAYswggGHMB8GA1UdIwQY
+MBaAFFN5v1qqK0rPVIDh2JvAnfKyA2bLMB0GA1UdDgQWBBRpAKHHIVj44MUbILAK3adRvxPZ5DAO
+BgNVHQ8BAf8EBAMCAYYwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHSUEFjAUBggrBgEFBQcDAgYI
+KwYBBQUHAwQwOAYDVR0gBDEwLzAtBgRVHSAAMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFAGA1UdHwRJMEcwRaBDoEGGP2h0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9VU0VS
+VHJ1c3RSU0FDZXJ0aWZpY2F0aW9uQXV0aG9yaXR5LmNybDB2BggrBgEFBQcBAQRqMGgwPwYIKwYB
+BQUHMAKGM2h0dHA6Ly9jcnQudXNlcnRydXN0LmNvbS9VU0VSVHJ1c3RSU0FBZGRUcnVzdENBLmNy
+dDAlBggrBgEFBQcwAYYZaHR0cDovL29jc3AudXNlcnRydXN0LmNvbTANBgkqhkiG9w0BAQwFAAOC
+AgEACgVOew2PHxM5AP1v7GLGw+3tF6rjAcx43D9Hl110Q+BABABglkrPkES/VyMZsfuds8fcDGvG
+E3o5UfjSno4sij0xdKut8zMazv8/4VMKPCA3EUS0tDUoL01ugDdqwlyXuYizeXyH2ICAQfXMtS+r
+az7mf741CZvO50OxMUMxqljeRfVPDJQJNHOYi2pxuxgjKDYx4hdZ9G2o+oLlHhu5+anMDkE8g0tf
+fjRKn8I1D1BmrDdWR/IdbBOj6870abYvqys1qYlPotv5N5dm+XxQ8vlrvY7+kfQaAYeO3rP1DM8B
+GdpEqyFVa+I0rpJPhaZkeWW7cImDQFerHW9bKzBrCC815a3WrEhNpxh72ZJZNs1HYJ+29NTB6uu4
+NJjaMxpk+g2puNSm4b9uVjBbPO9V6sFSG+IBqE9ckX/1XjzJtY8Grqoo4SiRb6zcHhp3mxj3oqWi
+8SKNohAOKnUc7RIP6ss1hqIFyv0xXZor4N9tnzD0Fo0JDIURjDPEgo5WTdti/MdGTmKFQNqxyZuT
+9uSI2Xvhz8p+4pCYkiZqpahZlHqMFxdw9XRZQgrP+cgtOkWEaiNkRBbvtvLdp7MCL2OsQhQEdEbU
+vDM9slzZXdI7NjJokVBq3O4pls3VD2z3L/bHVBe0rBERjyM2C/HSIh84rfmAqBgklzIOqXhd+4Rz
+adUwggdFMIIFLaADAgECAhEAk3vdiLswPyIHaa7gbRmgujANBgkqhkiG9w0BAQwFADBGMQswCQYD
+VQQGEwJOTDEZMBcGA1UEChMQR0VBTlQgVmVyZW5pZ2luZzEcMBoGA1UEAxMTR0VBTlQgUGVyc29u
+YWwgQ0EgNDAeFw0yMjExMTAwMDAwMDBaFw0yMzExMTAyMzU5NTlaMIGyMQ4wDAYDVQQREwU4MDMz
+MzEpMCcGA1UEChMgVGVjaG5pc2NoZSBVbml2ZXJzaXRhZXQgTXVlbmNoZW4xGDAWBgNVBAkMD0Fy
+Y2lzc3RyYcOfZSAyMTEPMA0GA1UECBMGQmF5ZXJuMQswCQYDVQQGEwJERTEaMBgGA1UEAxMRUGF1
+bCBIZWlkZWtydWVnZXIxITAfBgkqhkiG9w0BCQEWEmhlaWRla3JwQGluLnR1bS5kZTCCAaIwDQYJ
+KoZIhvcNAQEBBQADggGPADCCAYoCggGBAMa35V6bAKqaFCEcfVMsBMW5hdegZmzIy1qHgdX4SHo0
+2DPMinoi8M//hF5+SQNODMPAwkMGM2JLV6jq51ZvNV5AMmyp1cPuNUyX6ZcZsz9l67Q93D+TkQ8P
+cO9zc1RBdQdRhpQDLe+m+psN/ABjGnp7tmcG/gyQmQOlcoAdtO/FJeHwdewNgi/Lbo3CnoseUYFF
+j1KiVnR4BxzTELFg+VNBbQ71LtbqhG2mO9p6o/1iD5ImKDB/cdNDVEikVpxVIsHYWnzr6a8jc+iK
+H52aVhMXlq3us1ENrRJ4n45an9h6TMgDZHoASo3nXTnj2GSgxOps5utr+Xbxq9OTxr1YocI7sPeg
+mK2/Jl99WXLjGWmjpjq+3wGP6YWvk9DjyhWZinBuqaXhOKEzb62rmWw+K5oiI3DNXB95RhywYVO8
+j7JwU8MrSOLFVgHRD4JfUZr9B7rrEnOW9IbOBFPN7QfNz3j28EnTAS5jcIhxtZV0vySjnhC3XUvH
+MWghCJx8h0h7JQIDAQABo4ICPzCCAjswHwYDVR0jBBgwFoAUaQChxyFY+ODFGyCwCt2nUb8T2eQw
+HQYDVR0OBBYEFEGvRvAmg05NopUV9pH7SMbFiVwTMA4GA1UdDwEB/wQEAwIFoDAMBgNVHRMBAf8E
+AjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjA/BgNVHSAEODA2MDQGCysGAQQBsjEB
+AgJPMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMEIGA1UdHwQ7MDkwN6A1
+oDOGMWh0dHA6Ly9HRUFOVC5jcmwuc2VjdGlnby5jb20vR0VBTlRQZXJzb25hbENBNC5jcmwweAYI
+KwYBBQUHAQEEbDBqMD0GCCsGAQUFBzAChjFodHRwOi8vR0VBTlQuY3J0LnNlY3RpZ28uY29tL0dF
+QU5UUGVyc29uYWxDQTQuY3J0MCkGCCsGAQUFBzABhh1odHRwOi8vR0VBTlQub2NzcC5zZWN0aWdv
+LmNvbTCBvAYDVR0RBIG0MIGxgRtQYXVsLkhlaWRla3J1ZWdlckBpbi50dW0uZGWBE2hlaWRla3Jw
+QGNpdC50dW0uZGWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNpdC50dW0uZGWBE2hlaWRla3JwQGNzLnR1
+bS5lZHWBHFBhdWwuSGVpZGVrcnVlZ2VyQGNzLnR1bS5lZHWBGHBhdWwuaGVpZGVrcnVlZ2VyQHR1
+bS5kZYESaGVpZGVrcnBAaW4udHVtLmRlMA0GCSqGSIb3DQEBDAUAA4ICAQB0h9s7S7zb3sZpe67K
+Q8Ko0pkM9WbMO6X/6fscdWHZNiQQfn6X+9A7IPT+bGx9mC3vRO1TOR7FfmgAKs8xpqW2PAC4taIz
+EdXhrKCJuIzqzdhqQBMhfoP9giurXsQxaYAWeuEklmw1cIEoG6guVOo7Re+Vqx74rHOf6gDgukUz
+J1uhto0FVhPLZqzjdGBfPNhXc+9W7ow4Fu8w37lKdDi9DRCkFO+Wq+jzApzIEIInT1lhDt7Y81wJ
+UTqcYn2tOLSpwB38Hd798RDkeY5f3EO/+pLNpEhnwXSpAif/cpZCKXf2LrZRSdH3wbxefj/HLu/w
+tuZ+lQsRXKEMJbBeXw8DEKP8771chCGyLl8AHhJRHrcokhX/PPJu/y0t5ArvMNeumFjGtxtczyHU
+ieT3EcE8oG5aMyD0Ly+Lwc0L90DqcXUvU1xbHL9GxMOTPZGz0Qr0qZDBv60oTUbIXIMIyyoY0rsO
+NtncPyZKMkLaRUBwrWXF+BuxM5hfDytIbSKtO/Q6woFihf6xyKHVqAhoyV6y19WAYIEb78ce+zOg
+xyOOYPiVNiKlwP8gJq72mrfUvUggpyPVwjEkhye/+d98NrylwyWokJI6PWM1YsOmdG1s+4fiU7KU
+9+PEIW/YMpUiGYViXzt0RZfuKNixCk1Jh+JtGU44/cuz+Oki3ooAIqaRKTGCAo4wggKKAgEBMFsw
+RjELMAkGA1UEBhMCTkwxGTAXBgNVBAoTEEdFQU5UIFZlcmVuaWdpbmcxHDAaBgNVBAMTE0dFQU5U
+IFBlcnNvbmFsIENBIDQCEQCTe92IuzA/IgdpruBtGaC6MA0GCWCGSAFlAwQCAQUAoIGFMBgGCSqG
+SIb3DQEJAzELBgkqhkiG9w0BBwEwLwYJKoZIhvcNAQkEMSIEIDHM3pc9jImPH19F1z1+IUTIzcM2
+G5aes9CDYtDThT97MDgGCSqGSIb3DQEJDzErMCkwCwYJYIZIAWUDBAECMAoGCCqGSIb3DQMHMA4G
+CCqGSIb3DQMCAgIAgDANBgkqhkiG9w0BAQsFAASCAYAMMClDI35QDAcUGrNzHKeLCAUgT8AKnkwa
+9VTLbPhUL0TCc8rDEG5HCPybO3+JP2O5JSG8GTBLsM1rRanfz1qfLj6CAPMgOypYPern9l9UoadE
+GHeIJgnWFcPhgj41VSTNC2edxB0+Nd5iYu/tf7qyGhu9soMpV4SjqR3CVOOunel5/uYLRvBWmjy2
+t/Dk+BEcez1nxsAUu2Z7kR8QLicQUUaUfxUqbnMYjZICJyhg4Lw1wWmRkbP9fKPEh5PY5mVh+UlZ
+ZBUkR85p/kyJRB6Dz5A2z4OZEtyVRZCVNm8tPqa3CNsrLrNkrSW01U2qTqZRGFUQhQzlyTKD+18q
+NRxoNkpBVF2yZKfsV0qS4mllViBZB5+pEI5z7SpKjUaoOndGl0HMLOyPbEA8bHit1ajFbBOc7NXm
+rLXYbnXcruRk8RwfMLYIJdo3cjOPgSqQS4Whb584F9IESmOzcLlq+XmfwQ9c2iysQr0/AYwp5REN
++5JbHdif8ZmdxBzIip6PNBIAAAAAAAA=
+--=_MailMate_35611828-E93B-49F2-83FD-5A909F9E4636_=--
