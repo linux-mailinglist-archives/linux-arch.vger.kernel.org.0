@@ -2,166 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D79688257
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 16:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C9768819F
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 16:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbjBBPbZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 10:31:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S231345AbjBBPUq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Feb 2023 10:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbjBBPbR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 10:31:17 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396E03ABB;
-        Thu,  2 Feb 2023 07:30:40 -0800 (PST)
+        with ESMTP id S230047AbjBBPUp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 10:20:45 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55CDE;
+        Thu,  2 Feb 2023 07:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=LNTskqo5roGsovH+JFQKAebOFNRW3Kky7MgwbIWmzaM=; b=SutQsn5HCDPd7RqYYJOqaRBAAw
-        ghza+gVMb7VvZ8S5mXEBYv9fP8q8Y9wXALUK5q0pzocuZuyXrPepuT1+wCOd/OzB+ntZth6DaMT6B
-        S8zOdGU0FmbWx9fMkVMCos7RUSpLps4sna/LO0IsKeshnyabCK7cNceYm4e+4Fmn11Z+jL+MTpNzN
-        I6xv1Uhkv4ss9oJhXYo64MzEkqJxVqSn1hWToVBJlsAr9MjKCkQ2hdLEGzmvnX+l4DLFC6cT1hP4d
-        2/1/3QPc9YolaFPwoZcHS+Sn+GoiEBzfYylecr9r98dtv7EMTfckM+5a0Ow5UAFEBYeCLaBAG2mQU
-        PcOP0H6w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNbW4-00DV2e-2G; Thu, 02 Feb 2023 15:28:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4121B302E1F;
-        Thu,  2 Feb 2023 16:28:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AB09623F326C1; Thu,  2 Feb 2023 16:28:40 +0100 (CET)
-Message-ID: <20230202152655.805747571@infradead.org>
-User-Agent: quilt/0.66
-Date:   Thu, 02 Feb 2023 15:50:40 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     torvalds@linux-foundation.org
-Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH v2 10/10] s390/cpum_sf: Convert to cmpxchg128()
-References: <20230202145030.223740842@infradead.org>
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To:Cc:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=52m5mti20bb1OZLxO6wwYxyifJ4LEDbWkK8xz9+LlMw=; b=XOmXz3ouDmVQq9BlQe0AlJaMo2
+        A35itIkK0LoLUc1uaM0nEllwe6kNwQNQHnqgxGqCWNeOi1SvdbLmd9XeIAfgVUkTPsSjzQx/k1g2k
+        URAeeUBw7RmLahyN9cKwp2mt8QaBYUPjrU6uBTyl6J1yvqSC46ATRGwONG1hkHcb/2xugpNYdUlVY
+        mB2NyUAKt99aO4sl2zV51s4g6rdIk7YIYoct6u+k7LrRVViCFqVY50YSNtXjgezivb3/clg3/mSmM
+        9u2dkZkZrpJnxPO8Jw7gR0WpTvxI8b/s/505TV+rasykLJa712oLUXlQYyJKVjNRNkf8QKQvzy0aR
+        ESySNoYw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pNbO9-005ilY-1z;
+        Thu, 02 Feb 2023 15:20:37 +0000
+Date:   Thu, 2 Feb 2023 15:20:37 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Michael Cree <mcree@orcon.net.nz>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>
+Subject: Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
+Message-ID: <Y9vUxXEHRb07bh3J@ZenIV>
+References: <Y9lz6yk113LmC9SI@ZenIV>
+ <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
+ <Y9mD1qp/6zm+jOME@ZenIV>
+ <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
+ <Y9te+4n4ajSF++Ex@ZenIV>
+ <Y9t6Swqt+A9noVIf@creeky>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9t6Swqt+A9noVIf@creeky>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now that there is a cross arch u128 and cmpxchg128(), use those
-instead of the custom CDSG helper.
+On Thu, Feb 02, 2023 at 09:54:35PM +1300, Michael Cree wrote:
+> On Thu, Feb 02, 2023 at 06:58:03AM +0000, Al Viro wrote:
+> > Other bugs in the same area:
+> > 	* we ought to compare address with VMALLOC_START,
+> > not TASK_SIZE.
+> > 	* we ought to do that *before* checking for
+> > kernel threads/pagefault_disable() being in effect.
+> > 
+> > Wait a minute - pgd_present() on alpha has become constant 1
+> > since a73c948952cc "alpha: use pgtable-nopud instead of 4level-fixup"
+> > 
+> > So that thing had been completely broken for 3 years and nobody
+> > had noticed.  
+> 
+> I have never noticed because I haven't been able to run a 5.9 or
+> newer kernel on Alpha reliably so have been running a 5.8 kernel
+> for quite some time.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/s390/include/asm/cpu_mf.h  |    2 +-
- arch/s390/kernel/perf_cpum_sf.c |   22 ++++++----------------
- 2 files changed, 7 insertions(+), 17 deletions(-)
+Er...  For one thing, commit in question went into 5.5; for another
+you would only have noticed if you had CONFIG_ALPHA_LARGE_VMALLOC
+in your .config, so I rather doubt it's the same problem.
 
---- a/arch/s390/include/asm/cpu_mf.h
-+++ b/arch/s390/include/asm/cpu_mf.h
-@@ -141,7 +141,7 @@ union hws_trailer_header {
- 		unsigned int dsdes:16;	/* 48-63: size of diagnostic SDE */
- 		unsigned long long overflow; /* 64 - Overflow Count   */
- 	};
--	__uint128_t val;
-+	u128 val;
- };
- 
- struct hws_trailer_entry {
---- a/arch/s390/kernel/perf_cpum_sf.c
-+++ b/arch/s390/kernel/perf_cpum_sf.c
-@@ -1228,16 +1228,6 @@ static void hw_collect_samples(struct pe
- 	}
- }
- 
--static inline __uint128_t __cdsg(__uint128_t *ptr, __uint128_t old, __uint128_t new)
--{
--	asm volatile(
--		"	cdsg	%[old],%[new],%[ptr]\n"
--		: [old] "+d" (old), [ptr] "+QS" (*ptr)
--		: [new] "d" (new)
--		: "memory", "cc");
--	return old;
--}
--
- /* hw_perf_event_update() - Process sampling buffer
-  * @event:	The perf event
-  * @flush_all:	Flag to also flush partially filled sample-data-blocks
-@@ -1307,14 +1297,14 @@ static void hw_perf_event_update(struct
- 
- 		/* Reset trailer (using compare-double-and-swap) */
- 		/* READ_ONCE() 16 byte header */
--		prev.val = __cdsg(&te->header.val, 0, 0);
-+		prev.val = cmpxchg128(&te->header.val, 0, 0);
- 		do {
- 			old.val = prev.val;
- 			new.val = prev.val;
- 			new.f = 0;
- 			new.a = 1;
- 			new.overflow = 0;
--			prev.val = __cdsg(&te->header.val, old.val, new.val);
-+			prev.val = cmpxchg128(&te->header.val, old.val, new.val);
- 		} while (prev.val != old.val);
- 
- 		/* Advance to next sample-data-block */
-@@ -1496,7 +1486,7 @@ static bool aux_set_alert(struct aux_buf
- 
- 	te = aux_sdb_trailer(aux, alert_index);
- 	/* READ_ONCE() 16 byte header */
--	prev.val = __cdsg(&te->header.val, 0, 0);
-+	prev.val = cmpxchg128(&te->header.val, 0, 0);
- 	do {
- 		old.val = prev.val;
- 		new.val = prev.val;
-@@ -1511,7 +1501,7 @@ static bool aux_set_alert(struct aux_buf
- 		}
- 		new.a = 1;
- 		new.overflow = 0;
--		prev.val = __cdsg(&te->header.val, old.val, new.val);
-+		prev.val = cmpxchg128(&te->header.val, old.val, new.val);
- 	} while (prev.val != old.val);
- 	return true;
- }
-@@ -1575,7 +1565,7 @@ static bool aux_reset_buffer(struct aux_
- 	for (i = 0; i < range_scan; i++, idx++) {
- 		te = aux_sdb_trailer(aux, idx);
- 		/* READ_ONCE() 16 byte header */
--		prev.val = __cdsg(&te->header.val, 0, 0);
-+		prev.val = cmpxchg128(&te->header.val, 0, 0);
- 		do {
- 			old.val = prev.val;
- 			new.val = prev.val;
-@@ -1586,7 +1576,7 @@ static bool aux_reset_buffer(struct aux_
- 				new.a = 1;
- 			else
- 				new.a = 0;
--			prev.val = __cdsg(&te->header.val, old.val, new.val);
-+			prev.val = cmpxchg128(&te->header.val, old.val, new.val);
- 		} while (prev.val != old.val);
- 		*overflow += orig_overflow;
- 	}
+Normally alpha has one PGDIR_SIZE worth of vmalloc space, and it's shared
+between all processes - that one slot in top-level table is filled before
+we spawn any threads so all of them end up sharing the reference to
+the same middle-level table, which is where vmalloc stuff gets mapped.
 
+So normally we have 8Gb of vmalloc space and, as usual for 64bit
+boxen, no need to play with vmalloc handling on page faults.  The trouble
+is with a kludge that tries to give more than 8Gb; it gives just under
+2Tb (2Tb-8Gb, actually - 255 slots out 1024 in top-level table).  That
+does need assistance from #PF handler, and that assistance (ifdefed
+under CONFIG_ALPHA_LARGE_VMALLOC) what I'd been refering to.
 
+To quote Kconfig,
+====
+# LARGE_VMALLOC is racy, if you *really* need it then fix it first
+config ALPHA_LARGE_VMALLOC
+        bool
+        help
+          Process creation and other aspects of virtual memory management can
+          be streamlined if we restrict the kernel to one PGD for all vmalloc
+          allocations.  This equates to about 8GB.
+
+          Under normal circumstances, this is so far and above what is needed
+          as to be laughable.  However, there are certain applications (such
+          as benchmark-grade in-kernel web serving) that can make use of as
+          much vmalloc space as is available.
+
+          Say N unless you know you need gobs and gobs of vmalloc space.
+====
+"Racy" probably had been about something along the lines of the scenario
+I'd mentioned just upthread, but in 5.5 that "racy" escalated to "does not
+work at all" - if you ever hit a vmalloc-related fault, you are going
+to get an oops.  You still get 8Gb, but beyond that it's broken.
+
+And it's almost certainly not the problem you are seeing...
