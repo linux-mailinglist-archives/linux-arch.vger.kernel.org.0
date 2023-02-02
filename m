@@ -2,140 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729F8687619
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 07:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F396877B8
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 09:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjBBG6K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 01:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S230366AbjBBImn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Feb 2023 03:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjBBG6J (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 01:58:09 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8C92E830;
-        Wed,  1 Feb 2023 22:58:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=xHDCflHvP6Vsb8iQkaJ1+V05YDZQb/GMrDePu4s4/fs=; b=YP4y5oSBqhQxpIk890Tn5B0XiU
-        906vtqTdJtPgbKrfl6tyf7pCNYE6w7elg9JiRc/EzltxKPc3hIaKJgUSTQziC7VO1Lx9+154wpYW0
-        x/KUM4lXK0nNU9yx80bWF8bSJ1cfmZfX1sFYYeOKvNeGD4Qrqu6/KLGm+ZL2FFiyYsDtfE5yv+LFY
-        /a46D6x7m2ZpTwwsBFHxzvwo/Q++Tas9h8ms1dm8pT6E4i9ZS/QOnmwYZ3LMcFysVm1LGJa7Yh2yd
-        FariQY4GNHfM7v2bRqm59uMu7mrNwBfZ0ran3nECU2LxSdE1R9lnKqc6bR1q/1S3ZGCept7QaBTPE
-        IoIlnT6g==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pNTXn-005cyS-2G;
-        Thu, 02 Feb 2023 06:58:03 +0000
-Date:   Thu, 2 Feb 2023 06:58:03 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>
-Subject: Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
-Message-ID: <Y9te+4n4ajSF++Ex@ZenIV>
-References: <Y9lz6yk113LmC9SI@ZenIV>
- <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
- <Y9mD1qp/6zm+jOME@ZenIV>
- <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
+        with ESMTP id S229851AbjBBImm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 03:42:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FA37DBF1;
+        Thu,  2 Feb 2023 00:42:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4BE2B8253F;
+        Thu,  2 Feb 2023 08:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B26C433D2;
+        Thu,  2 Feb 2023 08:42:35 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Make -mstrict-align be configurable
+Date:   Thu,  2 Feb 2023 16:42:38 +0800
+Message-Id: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 01:19:59PM -0800, Linus Torvalds wrote:
-> On Tue, Jan 31, 2023 at 1:10 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Umm...  What about the semantics of get_user() of unmapped address?
-> > Some architectures do quiet EFAULT; some (including alpha) hit
-> > the sucker with SIGBUS, no matter what.
-> 
-> I think we should strive to just make this all common.
-> 
-> The reason alpha is different is almost certainly not intentional, but
-> a combination of "pure accident" and "nobody actually cares".
+Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
+configurable.
 
-BTW, speaking of alpha page faults - maybe I'm misreading the manual,
-but it seems to imply that interrupts are *not* disabled when entering
-page fault handler:
+Not all LoongArch cores support h/w unaligned access, we can use the
+-mstrict-align build parameter to prevent unaligned accesses.
 
-Table 24–2 Entry Point Address Registers
-Entry Point Value in a0             Value in a1   Value in a2         PS<IPL>
-entArith    Exception summary       Register mask UNPREDICTABLE       Unchanged
-entIF       Fault or trap type code UNPREDICTABLE UNPREDICTABLE       Unchanged
-entInt      Interrupt type          Vector        Interrupt parameter Priority of interrupt
-entMM       VA                      MMCSR         Cause               Unchanged
-entSys      p0                      p1            p2                  Unchanged
-entUna      VA                      Opcode        Src/Dst             Unchanged
+This option is disabled by default to optimise for performance, but you
+can enabled it manually if you want to run kernel on systems without h/w
+unaligned access support.
 
-So there's nothing to prevent an interrupt hitting just as we reach
-entMM, with interrupt handler stepping on a vmalloc'ed area and
-triggering another page fault.
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/Kconfig  | 10 ++++++++++
+ arch/loongarch/Makefile |  2 ++
+ 2 files changed, 12 insertions(+)
 
-If that is correct, this
-                /* Synchronize this task's top level page-table
-                   with the "reference" page table from init.  */
-                long index = pgd_index(address);
-                pgd_t *pgd, *pgd_k;
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 9cc8b84f7eb0..7470dcfb32f0 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -441,6 +441,16 @@ config ARCH_IOREMAP
+ 	  protection support. However, you can enable LoongArch DMW-based
+ 	  ioremap() for better performance.
+ 
++config ARCH_STRICT_ALIGN
++	bool "Enable -mstrict-align to prevent unaligned accesses"
++	help
++	  Not all LoongArch cores support h/w unaligned access, we can use
++	  -mstrict-align build parameter to prevent unaligned accesses.
++
++	  This is disabled by default to optimise for performance, you can
++	  enabled it manually if you want to run kernel on systems without
++	  h/w unaligned access support.
++
+ config KEXEC
+ 	bool "Kexec system call"
+ 	select KEXEC_CORE
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index 4402387d2755..ccfb52700237 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -91,10 +91,12 @@ KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
+ # instead of .eh_frame so we don't discard them.
+ KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
+ 
++ifdef CONFIG_ARCH_STRICT_ALIGN
+ # Don't emit unaligned accesses.
+ # Not all LoongArch cores support unaligned access, and as kernel we can't
+ # rely on others to provide emulation for these accesses.
+ KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
++endif
+ 
+ KBUILD_CFLAGS += -isystem $(shell $(CC) -print-file-name=include)
+ 
+-- 
+2.39.0
 
-                pgd = current->active_mm->pgd + index;
-                pgd_k = swapper_pg_dir + index;
-                if (!pgd_present(*pgd) && pgd_present(*pgd_k)) {
-                        pgd_val(*pgd) = pgd_val(*pgd_k);
-                        return;
-                }
-                goto no_context;
-is not just missing local_irq_save()/local_irq_restore() around that
-fragment - if it finds pgd already present, it needs to check pte
-before deciding to proceed to no_context.
-
-Suppose we access vmalloc area and corresponding pgd is not
-present in current->active_mm.  Just as we get to entMM,
-an interrupt arrives and proceeds to access something
-covered by the same pgd.  OK, current->active_mm is still
-not present, we get another page fault and do_page_fault()
-gets to the quoted code.  pgd is copied from the swapper_pg_dir,
-do_page_fault() returns and we get back to the instruction in
-interrupt handler that had triggered the second #PF.  This
-time around it succeeds.  Once the interrupt handler completes
-we are back to entMM.  Once *that* gets to do_page_fault()
-we hit the quoted code again.  Only this time around pgd
-*is* present and instead of returning we get to no_context.
-And since it's been a normal access to vmalloc'ed memory,
-there's nothing to be found in exception table.  Oops...
-
-	AFAICS, one way to deal with that is to treat
-(unlikely) pgd_present(*pgd) as "get to pte, return if
-it looks legitimate, proceed to no_context if it isn't".
-
-Other bugs in the same area:
-	* we ought to compare address with VMALLOC_START,
-not TASK_SIZE.
-	* we ought to do that *before* checking for
-kernel threads/pagefault_disable() being in effect.
-
-Wait a minute - pgd_present() on alpha has become constant 1
-since a73c948952cc "alpha: use pgtable-nopud instead of 4level-fixup"
-
-So that thing had been completely broken for 3 years and nobody
-had noticed.  And that's really completely broken - it stopped
-copying top-level entries since that commit.
-
-That's also not hard to fix, but...
-	* CONFIG_ALPHA_LARGE_VMALLOC had been racy all along
-	* it had very limited use (need for >8Gb of vmalloc
-space)
-	* it had stopped working in late 2019 and nobody cared.
-
-How about removing that kludge?  Richard?
