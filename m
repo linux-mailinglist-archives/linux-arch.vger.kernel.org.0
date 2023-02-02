@@ -2,53 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C9768819F
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 16:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641C1688510
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 18:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjBBPUq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 10:20:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S229721AbjBBRGK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Feb 2023 12:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjBBPUp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 10:20:45 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55CDE;
-        Thu,  2 Feb 2023 07:20:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:To:From:Date:Reply-To:Cc:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=52m5mti20bb1OZLxO6wwYxyifJ4LEDbWkK8xz9+LlMw=; b=XOmXz3ouDmVQq9BlQe0AlJaMo2
-        A35itIkK0LoLUc1uaM0nEllwe6kNwQNQHnqgxGqCWNeOi1SvdbLmd9XeIAfgVUkTPsSjzQx/k1g2k
-        URAeeUBw7RmLahyN9cKwp2mt8QaBYUPjrU6uBTyl6J1yvqSC46ATRGwONG1hkHcb/2xugpNYdUlVY
-        mB2NyUAKt99aO4sl2zV51s4g6rdIk7YIYoct6u+k7LrRVViCFqVY50YSNtXjgezivb3/clg3/mSmM
-        9u2dkZkZrpJnxPO8Jw7gR0WpTvxI8b/s/505TV+rasykLJa712oLUXlQYyJKVjNRNkf8QKQvzy0aR
-        ESySNoYw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pNbO9-005ilY-1z;
-        Thu, 02 Feb 2023 15:20:37 +0000
-Date:   Thu, 2 Feb 2023 15:20:37 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Michael Cree <mcree@orcon.net.nz>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>
-Subject: Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
-Message-ID: <Y9vUxXEHRb07bh3J@ZenIV>
-References: <Y9lz6yk113LmC9SI@ZenIV>
- <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
- <Y9mD1qp/6zm+jOME@ZenIV>
- <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
- <Y9te+4n4ajSF++Ex@ZenIV>
- <Y9t6Swqt+A9noVIf@creeky>
+        with ESMTP id S229602AbjBBRGJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 12:06:09 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E1C3EFCA;
+        Thu,  2 Feb 2023 09:06:08 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 312G70iv014674;
+        Thu, 2 Feb 2023 17:04:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=THmzzCVcKPPGZMPEbQflXm3IvB3LKRlax4gS3uPm2Cg=;
+ b=TrxNGHtP3zuDTiRB+QF5ll3EWkcYVujoAKXghE8rtaJu26XV8VJ/t7M8gt4vHbGaYr6u
+ wS0iwPRgWM3SvjC4k2ucaS6INccYjuM1SqIYAyfTLjka1cjjbprLkNXGU9yn9qD87yZd
+ mO+v2TqIqrACv71/CvbH1BuWsZYlNhkw3s4sCX4/TuV04c0BWj2sWALiK6jyXghQAG/0
+ fMXfZQRBe/fL4TwbDwbdDhB1om9qeKNpkpiGyKVaBD3Cy9+QkrRtBW2jt7DjwVbJCSG2
+ 1CKRQyOhVuQ/THAusffCDfNOC8uLwuMCLDjNr9nxNpYrebHbJGQ+eCQiDa5/Yo5lhYPc GQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nge3bwf46-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 17:04:55 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 312G79gm016181;
+        Thu, 2 Feb 2023 17:04:54 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nge3bwf2k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 17:04:54 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 312C25cu026867;
+        Thu, 2 Feb 2023 17:04:50 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3ncvs7pf5n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Feb 2023 17:04:50 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 312H4kMv22217088
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Feb 2023 17:04:47 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D43692004B;
+        Thu,  2 Feb 2023 17:04:46 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 05CC320043;
+        Thu,  2 Feb 2023 17:04:45 +0000 (GMT)
+Received: from osiris (unknown [9.171.31.155])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu,  2 Feb 2023 17:04:44 +0000 (GMT)
+Date:   Thu, 2 Feb 2023 18:04:43 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, joro@8bytes.org,
+        suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
+        dwmw2@infradead.org, baolu.lu@linux.intel.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] arch: Introduce
+ arch_{,try_}_cmpxchg128{,_local}()
+Message-ID: <Y9vtK1voirb1wUfW@osiris>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.373335780@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9t6Swqt+A9noVIf@creeky>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <20230202152655.373335780@infradead.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: FHdsPEaqsFg45qSGo90As5Aep1zo1_oE
+X-Proofpoint-GUID: hpauW67JMPa2pJxw-_S6KStoX2TLt-s_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-02-02_10,2023-02-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ phishscore=0 spamscore=0 adultscore=0 suspectscore=0 mlxlogscore=383
+ mlxscore=0 clxscore=1011 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2302020148
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +106,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 09:54:35PM +1300, Michael Cree wrote:
-> On Thu, Feb 02, 2023 at 06:58:03AM +0000, Al Viro wrote:
-> > Other bugs in the same area:
-> > 	* we ought to compare address with VMALLOC_START,
-> > not TASK_SIZE.
-> > 	* we ought to do that *before* checking for
-> > kernel threads/pagefault_disable() being in effect.
-> > 
-> > Wait a minute - pgd_present() on alpha has become constant 1
-> > since a73c948952cc "alpha: use pgtable-nopud instead of 4level-fixup"
-> > 
-> > So that thing had been completely broken for 3 years and nobody
-> > had noticed.  
+On Thu, Feb 02, 2023 at 03:50:33PM +0100, Peter Zijlstra wrote:
+> For all architectures that currently support cmpxchg_double()
+> implement the cmpxchg128() family of functions that is basically the
+> same but with a saner interface.
 > 
-> I have never noticed because I haven't been able to run a 5.9 or
-> newer kernel on Alpha reliably so have been running a 5.8 kernel
-> for quite some time.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/arm64/include/asm/atomic_ll_sc.h |   41 +++++++++++++++++++++++++
+>  arch/arm64/include/asm/atomic_lse.h   |   31 +++++++++++++++++++
+>  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
+>  arch/s390/include/asm/cmpxchg.h       |   14 ++++++++
+>  arch/x86/include/asm/cmpxchg_32.h     |    3 +
+>  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
+>  6 files changed, 168 insertions(+), 2 deletions(-)
 
-Er...  For one thing, commit in question went into 5.5; for another
-you would only have noticed if you had CONFIG_ALPHA_LARGE_VMALLOC
-in your .config, so I rather doubt it's the same problem.
-
-Normally alpha has one PGDIR_SIZE worth of vmalloc space, and it's shared
-between all processes - that one slot in top-level table is filled before
-we spawn any threads so all of them end up sharing the reference to
-the same middle-level table, which is where vmalloc stuff gets mapped.
-
-So normally we have 8Gb of vmalloc space and, as usual for 64bit
-boxen, no need to play with vmalloc handling on page faults.  The trouble
-is with a kludge that tries to give more than 8Gb; it gives just under
-2Tb (2Tb-8Gb, actually - 255 slots out 1024 in top-level table).  That
-does need assistance from #PF handler, and that assistance (ifdefed
-under CONFIG_ALPHA_LARGE_VMALLOC) what I'd been refering to.
-
-To quote Kconfig,
-====
-# LARGE_VMALLOC is racy, if you *really* need it then fix it first
-config ALPHA_LARGE_VMALLOC
-        bool
-        help
-          Process creation and other aspects of virtual memory management can
-          be streamlined if we restrict the kernel to one PGD for all vmalloc
-          allocations.  This equates to about 8GB.
-
-          Under normal circumstances, this is so far and above what is needed
-          as to be laughable.  However, there are certain applications (such
-          as benchmark-grade in-kernel web serving) that can make use of as
-          much vmalloc space as is available.
-
-          Say N unless you know you need gobs and gobs of vmalloc space.
-====
-"Racy" probably had been about something along the lines of the scenario
-I'd mentioned just upthread, but in 5.5 that "racy" escalated to "does not
-work at all" - if you ever hit a vmalloc-related fault, you are going
-to get an oops.  You still get 8Gb, but beyond that it's broken.
-
-And it's almost certainly not the problem you are seeing...
+For s390:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
