@@ -2,111 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B986875B0
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 07:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 729F8687619
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Feb 2023 07:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjBBGR2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 01:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S229974AbjBBG6K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Feb 2023 01:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjBBGR2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 01:17:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9266FD06;
-        Wed,  1 Feb 2023 22:17:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE208B824DA;
-        Thu,  2 Feb 2023 06:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CCE6C4339C;
-        Thu,  2 Feb 2023 06:17:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675318644;
-        bh=lIQRjELp3Php5uFWPaHMcz+Z9q+Ruw90XMNIKquPkpA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hMg2QgjSlJHN6UgkTHxwek55KSFcYKIZXn/yLjbghQ/yuVx/6E0gorCohXkQh8oo8
-         J6kGoUBMHa+B5tAP3/OkFKXN3KZ5ukeYohzMac82JV6lRk1OdPvby5gedY7UPtH1YU
-         KpYitBxiKM/KRVnLv2nr9gQRgBi9dLo+Mfor8837SV2of7tFX8ztVbkHYpu3JG9nXU
-         CvWTR1GGPYbwyEHU7AOY2qpO83q/nbEZdE97jJr3ZqiuR19Luk+SHsa8lp29S4YoMp
-         wGZO3/6GfWDp/3VwmxDY2pGtt5mTG6tyddknSXjL2flHY0wYvepqdotMLTbZP7vsmj
-         Su5HH0sM2WDtQ==
-Received: by mail-ed1-f49.google.com with SMTP id z11so959271ede.1;
-        Wed, 01 Feb 2023 22:17:24 -0800 (PST)
-X-Gm-Message-State: AO0yUKW1ySA4OcF44rQxnKHHbpDY+qPZMTRFt63sP5tbHmRQ3YRLjD5d
-        PVb7xZkzC8m3YEJH17SQdWg3eSQVwA/dnj9pmKU=
-X-Google-Smtp-Source: AK7set+hvsuF+zcV0/OBsBn6/jJeEBczdyeQe9Yr+Fmtrt5m6gEqIeWjIa+VQ5b2Wh5DOkGM/8mrGt7hwGn/wOknxfs=
-X-Received: by 2002:aa7:c585:0:b0:4a0:e29d:18c9 with SMTP id
- g5-20020aa7c585000000b004a0e29d18c9mr1520324edq.69.1675318642913; Wed, 01 Feb
- 2023 22:17:22 -0800 (PST)
+        with ESMTP id S230404AbjBBG6J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 01:58:09 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8C92E830;
+        Wed,  1 Feb 2023 22:58:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=xHDCflHvP6Vsb8iQkaJ1+V05YDZQb/GMrDePu4s4/fs=; b=YP4y5oSBqhQxpIk890Tn5B0XiU
+        906vtqTdJtPgbKrfl6tyf7pCNYE6w7elg9JiRc/EzltxKPc3hIaKJgUSTQziC7VO1Lx9+154wpYW0
+        x/KUM4lXK0nNU9yx80bWF8bSJ1cfmZfX1sFYYeOKvNeGD4Qrqu6/KLGm+ZL2FFiyYsDtfE5yv+LFY
+        /a46D6x7m2ZpTwwsBFHxzvwo/Q++Tas9h8ms1dm8pT6E4i9ZS/QOnmwYZ3LMcFysVm1LGJa7Yh2yd
+        FariQY4GNHfM7v2bRqm59uMu7mrNwBfZ0ran3nECU2LxSdE1R9lnKqc6bR1q/1S3ZGCept7QaBTPE
+        IoIlnT6g==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pNTXn-005cyS-2G;
+        Thu, 02 Feb 2023 06:58:03 +0000
+Date:   Thu, 2 Feb 2023 06:58:03 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>
+Subject: Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
+Message-ID: <Y9te+4n4ajSF++Ex@ZenIV>
+References: <Y9lz6yk113LmC9SI@ZenIV>
+ <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
+ <Y9mD1qp/6zm+jOME@ZenIV>
+ <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230201064608.3486136-1-guoren@kernel.org> <87tu05pvur.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87tu05pvur.fsf@all.your.base.are.belong.to.us>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 2 Feb 2023 14:17:10 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
-Message-ID: <CAJF2gTSj12E9+peMF0rNY_psGDyEG5BbMY6V-s4dK0FpkCC9Yw@mail.gmail.com>
-Subject: Re: [PATCH] riscv: kprobe: Fixup misaligned load text
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     palmer@rivosinc.com, conor.dooley@microchip.com,
-        liaochang1@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Bjorn Topel <bjorn.topel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 1, 2023 at 5:40 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
-te:
->
-> guoren@kernel.org writes:
->
-> > From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, Jan 31, 2023 at 01:19:59PM -0800, Linus Torvalds wrote:
+> On Tue, Jan 31, 2023 at 1:10 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 > >
-> > The current kprobe would cause a misaligned load for the probe point.
-> > This patch fixup it with two half-word loads instead.
-> >
-> > Fixes: c22b0bcb1dd0 ("riscv: Add kprobes supported")
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Link: https://lore.kernel.org/linux-riscv/878rhig9zj.fsf@all.your.base.=
-are.belong.to.us/
-> > Reported-by: Bjorn Topel <bjorn.topel@gmail.com>
-> > ---
-> >  arch/riscv/kernel/probes/kprobes.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/pro=
-bes/kprobes.c
-> > index 41c7481afde3..c1160629cef4 100644
-> > --- a/arch/riscv/kernel/probes/kprobes.c
-> > +++ b/arch/riscv/kernel/probes/kprobes.c
-> > @@ -74,7 +74,9 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
-> >               return -EILSEQ;
-> >
-> >       /* copy instruction */
-> > -     p->opcode =3D *p->addr;
-> > +     p->opcode =3D (kprobe_opcode_t)(*(u16 *)probe_addr);
-> > +     if (GET_INSN_LENGTH(p->opcode) =3D=3D 4)
-> > +             p->opcode |=3D (kprobe_opcode_t)(*(u16 *)(probe_addr + 2)=
-)
-> >       << 16;
->
-> Ugh, those casts. :-( What about the memcpy variant you had in the other
-> thread?
-The memcpy version would force load probe_addr + 2. This one would
-save an lh operation. The code text guarantees half-word alignment. No
-misaligned load happened. Second, kprobe wouldn't write the last half
-of 32b instruction.
+> > Umm...  What about the semantics of get_user() of unmapped address?
+> > Some architectures do quiet EFAULT; some (including alpha) hit
+> > the sucker with SIGBUS, no matter what.
+> 
+> I think we should strive to just make this all common.
+> 
+> The reason alpha is different is almost certainly not intentional, but
+> a combination of "pure accident" and "nobody actually cares".
 
---=20
-Best Regards
- Guo Ren
+BTW, speaking of alpha page faults - maybe I'm misreading the manual,
+but it seems to imply that interrupts are *not* disabled when entering
+page fault handler:
+
+Table 24–2 Entry Point Address Registers
+Entry Point Value in a0             Value in a1   Value in a2         PS<IPL>
+entArith    Exception summary       Register mask UNPREDICTABLE       Unchanged
+entIF       Fault or trap type code UNPREDICTABLE UNPREDICTABLE       Unchanged
+entInt      Interrupt type          Vector        Interrupt parameter Priority of interrupt
+entMM       VA                      MMCSR         Cause               Unchanged
+entSys      p0                      p1            p2                  Unchanged
+entUna      VA                      Opcode        Src/Dst             Unchanged
+
+So there's nothing to prevent an interrupt hitting just as we reach
+entMM, with interrupt handler stepping on a vmalloc'ed area and
+triggering another page fault.
+
+If that is correct, this
+                /* Synchronize this task's top level page-table
+                   with the "reference" page table from init.  */
+                long index = pgd_index(address);
+                pgd_t *pgd, *pgd_k;
+
+                pgd = current->active_mm->pgd + index;
+                pgd_k = swapper_pg_dir + index;
+                if (!pgd_present(*pgd) && pgd_present(*pgd_k)) {
+                        pgd_val(*pgd) = pgd_val(*pgd_k);
+                        return;
+                }
+                goto no_context;
+is not just missing local_irq_save()/local_irq_restore() around that
+fragment - if it finds pgd already present, it needs to check pte
+before deciding to proceed to no_context.
+
+Suppose we access vmalloc area and corresponding pgd is not
+present in current->active_mm.  Just as we get to entMM,
+an interrupt arrives and proceeds to access something
+covered by the same pgd.  OK, current->active_mm is still
+not present, we get another page fault and do_page_fault()
+gets to the quoted code.  pgd is copied from the swapper_pg_dir,
+do_page_fault() returns and we get back to the instruction in
+interrupt handler that had triggered the second #PF.  This
+time around it succeeds.  Once the interrupt handler completes
+we are back to entMM.  Once *that* gets to do_page_fault()
+we hit the quoted code again.  Only this time around pgd
+*is* present and instead of returning we get to no_context.
+And since it's been a normal access to vmalloc'ed memory,
+there's nothing to be found in exception table.  Oops...
+
+	AFAICS, one way to deal with that is to treat
+(unlikely) pgd_present(*pgd) as "get to pte, return if
+it looks legitimate, proceed to no_context if it isn't".
+
+Other bugs in the same area:
+	* we ought to compare address with VMALLOC_START,
+not TASK_SIZE.
+	* we ought to do that *before* checking for
+kernel threads/pagefault_disable() being in effect.
+
+Wait a minute - pgd_present() on alpha has become constant 1
+since a73c948952cc "alpha: use pgtable-nopud instead of 4level-fixup"
+
+So that thing had been completely broken for 3 years and nobody
+had noticed.  And that's really completely broken - it stopped
+copying top-level entries since that commit.
+
+That's also not hard to fix, but...
+	* CONFIG_ALPHA_LARGE_VMALLOC had been racy all along
+	* it had very limited use (need for >8Gb of vmalloc
+space)
+	* it had stopped working in late 2019 and nobody cared.
+
+How about removing that kludge?  Richard?
