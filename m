@@ -2,286 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99734688AA9
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 00:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1713688ACE
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 00:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233079AbjBBXUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 18:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S231679AbjBBX2y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Feb 2023 18:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbjBBXUk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 18:20:40 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3099523DA5;
-        Thu,  2 Feb 2023 15:20:39 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id y2so1389651iot.4;
-        Thu, 02 Feb 2023 15:20:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7dfZ4v62pjQj0TuluE13IPjxtTM0Id6gJo0ci9KxdmA=;
-        b=mSk0WkhttHo5ynuQo5kFJSowJQ+4JgBBaP2qbuZrj070IUC1ar1kFEl70ZXWbI/rp2
-         6d0cNjTNJIBYikgZhn5XyykI6n1e+X3Dg2lfYdnvfypdg8i6CVoaqIpGsLRU9sMnNT7l
-         Lw/zHxulzuh3AeNos+brLrRVGelJ/Ako8UUXe8DPFcdy1j9PR+uT4Vg0DFCdu6aAzORv
-         /nELtxspW7/DcHOMJIEq0d/yWWEDJuJow2YHaKT5T4D86YpEuH5NuQJ0YWRlIbMYWZbR
-         gTZlVUhNF3NZLisgn8FfcARXFGThmTMTJh0+S0ZL9BOHN/Yq0/IZmaxHVbNa5K5kRUBY
-         LUwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7dfZ4v62pjQj0TuluE13IPjxtTM0Id6gJo0ci9KxdmA=;
-        b=xdjwkEJDXfqRmeD1GiF/MBjWrfu7z3LtCTY3+9DxyJVNSvhs56E6yqgBAmIgnmH1PE
-         fAiSlzL39FMYoqy7CDSTIovTgSedchwt39L755Z2dWucuM//1lxlOVDrlLsOM23SmRQK
-         DwB/d+haKd3GKl+G+Pf/C6VPennRCaWG4HGkKTg0Cpz+I1mWl44tJ7ppf9ecySoH7lOH
-         zS5M/VF2Fo19d4kRoXVLFJ84GjudpS9Dq3WpjfNK5fPHJjalcDexEPrK9ZR2al8eaoBX
-         X2nHH1tKJw0h5KBQLfADQ6yWfJMcPpcC+FserPb3J0Ct0yg7cHnXH+7r9FmxV7FuBn6i
-         lJiQ==
-X-Gm-Message-State: AO0yUKWU9wMc8Sj153Fc13PaKCWtulA8AJC3IexkoWYec8Fte5ukMAe+
-        vL9Bq6HTYTn1HpEq1DY/0Eo=
-X-Google-Smtp-Source: AK7set9H9yqaImbLa7wPdJqvlZ7WUQMNTDNrQ+nC8EOkHAJw8RFd+BdL//vXJb4KrkqYkr/kfyUeMQ==
-X-Received: by 2002:a5e:aa01:0:b0:722:b5a6:bde9 with SMTP id s1-20020a5eaa01000000b00722b5a6bde9mr4451598ioe.0.1675380038382;
-        Thu, 02 Feb 2023 15:20:38 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id x8-20020a6bd008000000b0071732d8a444sm281794ioa.48.2023.02.02.15.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 15:20:38 -0800 (PST)
-Date:   Fri, 3 Feb 2023 01:20:28 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V3 16/16] x86/sev: Fix interrupt exit code paths
- from #HV exception
-Message-ID: <20230203012028.00005ff3@gmail.com>
-In-Reply-To: <20230122024607.788454-17-ltykernel@gmail.com>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
-        <20230122024607.788454-17-ltykernel@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S233181AbjBBX2s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 18:28:48 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CE42B0BB
+        for <linux-arch@vger.kernel.org>; Thu,  2 Feb 2023 15:28:19 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 347215C006D;
+        Thu,  2 Feb 2023 18:27:55 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 02 Feb 2023 18:27:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1675380475; x=1675466875; bh=yb
+        AOl0im+zyVAqNQleQtVluip4OoVhxd17oXs8vM8R8=; b=WIDjweNWaBkEKh36iY
+        Bs/bvDg32HW6CVt2rk0He3XdsUEiXaXAqXX4oQjAgowAyl7drdGCzzq0C9zCiaCx
+        ki2OauPFdPtz/t21AinsLfper8c8zZ3LRx54nBtmPIRYUqpQd/utpGHzFkq5n0E3
+        zCjhiRmObI87vurwr+Lxxtj6+Q6EWXq2rnl8TJMl3h0AHqnieSw2BJMfQD0o4q+9
+        v16pkcEkBQq6PR+SSFa011DCwNd3KOVaPPO8boD0fpRhfII9I4E/yDaXqn4vBCAY
+        4jmhPmDGPtPqy9f3thXJokpBvOISDIVSqP56JIdlnGhVXWTK3Hrh2d/Hzrf3nt+7
+        hFDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675380475; x=1675466875; bh=ybAOl0im+zyVAqNQleQtVluip4Oo
+        Vhxd17oXs8vM8R8=; b=ShMKKYThevm6xA3F+MaiDv1wU8njjVTm4afr6jlU7EDm
+        bGhwYsF9CcCiOAQ8Man/yZAPZZ7AW+XbTMZ7LoMu7mKMl/dOEHWs3/36qU4RkyjA
+        WJ82QLrgh9g7R4YLVXrps9hL3WtzaQMNYB9RmSJJhv3tSiUUjq3HBYayyMAPdxx1
+        WBp6yDD9nJbG2Nsn8zb82GFwpNffc2fsNPIKyoIlj3ygRShOlrBhYcNIJGjLnYWK
+        K1dFJDmZFoLNjwTUn0RW1dj0mz+OhFqEARHsayZrUUXmOAXAi5H3cJ7ga1jwmW69
+        7h99o1VySFyRC5jjcry3fziYRAtaWXBwQv0qQ7q/4w==
+X-ME-Sender: <xms:-0bcY7bAXwyD--y2_CIxUfd8Ln23IriqgKZML9XbXHeIbklcWuCrrg>
+    <xme:-0bcY6atpg8c3MmPF4sbQpx2I6f9d5rGJ1C_u9qzI3u05wllJ9VS34WuQx0FVJHTe
+    VgAOKelicYUwXo-LTc>
+X-ME-Received: <xmr:-0bcY99rY2rslJ4JybZby3XKVk0Dn80RpHBtmJyizq14Ze9rF3HgOUKPlX63Y5SQ14XvZA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudefledgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
+    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:-0bcYxq0trc7v8GWBtLy4_YyxBdtwE9q1ASHB9oVcYjWGgDNBbag5A>
+    <xmx:-0bcY2rP1S6DLvsdJ63bxPecykQ9iLS0tGBaMfPNqhQmCOpaePUklw>
+    <xmx:-0bcY3QoAawzoi21rD-cmsQ2qmzkKv6HLkVIWPXzSxo9ynLFwuk79w>
+    <xmx:-0bcY92ff2L4TD2R7BMZ_ldwHJhBMNsEV7bHWH9WHIMiPIhnBZmFjw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Feb 2023 18:27:54 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id C14DA10E388; Fri,  3 Feb 2023 02:27:51 +0300 (+03)
+Date:   Fri, 3 Feb 2023 02:27:51 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, Yin Fengwei <fengwei.yin@intel.com>,
+        linux-mm@kvack.org
+Subject: Re: API for setting multiple PTEs at once
+Message-ID: <20230202232751.q4qfm2qrauwtz5bs@box.shutemov.name>
+References: <Y9wnr8SGfGGbi/bk@casper.infradead.org>
+ <20230202214858.btrzrcevzxjfk6wg@box.shutemov.name>
+ <Y9w+AppNv+i1o/o3@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9w+AppNv+i1o/o3@casper.infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 21 Jan 2023 21:46:06 -0500
-Tianyu Lan <ltykernel@gmail.com> wrote:
-
-> From: Ashish Kalra <ashish.kalra@amd.com>
+On Thu, Feb 02, 2023 at 10:49:38PM +0000, Matthew Wilcox wrote:
+> On Fri, Feb 03, 2023 at 12:48:58AM +0300, Kirill A. Shutemov wrote:
+> > On Thu, Feb 02, 2023 at 09:14:23PM +0000, Matthew Wilcox wrote:
+> > > For those of you not subscribed, linux-mm is currently discussing
+> > > how best to handle page faults on large folios.  I simply made it work
+> > > when adding large folio support.  Now Yin Fengwei is working on
+> > > making it fast.
+> > > 
+> > > https://lore.kernel.org/linux-mm/Y9qjn0Y+1ir787nc@casper.infradead.org/
+> > > is perhaps the best place to start as it pertains to what the
+> > > architecture will see.
+> > > 
+> > > At the bottom of that function, I propose
+> > > 
+> > > +       for (i = 0; i < nr; i++) {
+> > > +               set_pte_at(vma->vm_mm, addr, vmf->pte + i, entry);
+> > > +               /* no need to invalidate: a not-present page won't be cached */
+> > > +               update_mmu_cache(vma, addr, vmf->pte + i);
+> > > +               addr += PAGE_SIZE;
+> > > +		entry = pte_next(entry);
+> > > +	}
+> > > 
+> > > (or I would have, had I not forgotten that pte_t isn't an integral type)
+> > > 
+> > > But I think that some architectures want to mark PTEs specially for
+> > > "This is part of a contiguous range" -- ARM, perhaps?  So would you like
+> > > an API like:
+> > > 
+> > > 	arch_set_ptes(mm, addr, vmf->pte, entry, nr);
+> > 
+> > Maybe just set_ptes(). arch_ doesn't contribute much.
 > 
-> Add checks in interrupt exit code paths in case of returns
-> to user mode to check if currently executing the #HV handler
-> then don't follow the irqentry_exit_to_user_mode path as
-> that can potentially cause the #HV handler to be
-> preempted and rescheduled on another CPU. Rescheduled #HV
-> handler on another cpu will cause interrupts to be handled
-> on a different cpu than the injected one, causing
-> invalid EOIs and missed/lost guest interrupts and
-> corresponding hangs and/or per-cpu IRQs handled on
-> non-intended cpu.
+> Sure.
 > 
-
-Why doesn't this problem happen in #VC handler? As #VC handler doesn't have
-this special handling.
-
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> ---
->  arch/x86/include/asm/idtentry.h | 66 +++++++++++++++++++++++++++++++++
->  arch/x86/kernel/sev.c           | 30 +++++++++++++++
->  2 files changed, 96 insertions(+)
+> > > 	update_mmu_cache_range(vma, addr, vmf->pte, nr);
+> > > 
+> > > There are some challenges here.  For example, folios may be mapped
+> > > askew (ie not naturally aligned).  Another problem is that folios may
+> > > be unmapped in part (eg mmap(), fault, followed by munmap() of one of
+> > > the pages in the folio), and I presume you'd need to go and unmark the
+> > > other PTEs in that case.  So it's not as simple as just checking whether
+> > > 'addr' and 'nr' are in some way compatible.
+> > 
+> > I think the key question is who is responsible for 'nr' being safe. Like
+> > is it caller or set_ptes() need to check that it belong to the same PTE
+> > page table, folio, VMA, etc.
+> > 
+> > I think it has to be done by caller and set_pte() has to be as simple as
+> > possible.
 > 
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index 652fea10d377..45b47132be7c 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -13,6 +13,10 @@
->  
->  #include <asm/irq_stack.h>
->  
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
-> +#endif
-> +
->  /**
->   * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
->   *		      No error code pushed by hardware
-> @@ -176,6 +180,7 @@ __visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
->  #define DECLARE_IDTENTRY_IRQ(vector, func)				\
->  	DECLARE_IDTENTRY_ERRORCODE(vector, func)
->  
-> +#ifndef CONFIG_AMD_MEM_ENCRYPT
->  /**
->   * DEFINE_IDTENTRY_IRQ - Emit code for device interrupt IDT entry points
->   * @func:	Function name of the entry point
-> @@ -205,6 +210,26 @@ __visible noinstr void func(struct pt_regs *regs,			\
->  }									\
->  									\
->  static noinline void __##func(struct pt_regs *regs, u32 vector)
-> +#else
-> +
-> +#define DEFINE_IDTENTRY_IRQ(func)					\
-> +static void __##func(struct pt_regs *regs, u32 vector);		\
-> +									\
-> +__visible noinstr void func(struct pt_regs *regs,			\
-> +			    unsigned long error_code)			\
-> +{									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
-> +	u32 vector = (u32)(u8)error_code;				\
-> +									\
-> +	instrumentation_begin();					\
-> +	kvm_set_cpu_l1tf_flush_l1d();					\
-> +	run_irq_on_irqstack_cond(__##func, regs, vector);		\
-> +	instrumentation_end();						\
-> +	irqentry_exit_hv_cond(regs, state);				\
-> +}									\
-> +									\
-> +static noinline void __##func(struct pt_regs *regs, u32 vector)
-> +#endif
->  
->  /**
->   * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
-> @@ -221,6 +246,7 @@ static noinline void __##func(struct pt_regs *regs, u32 vector)
->  #define DECLARE_IDTENTRY_SYSVEC(vector, func)				\
->  	DECLARE_IDTENTRY(vector, func)
->  
-> +#ifndef CONFIG_AMD_MEM_ENCRYPT
->  /**
->   * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
->   * @func:	Function name of the entry point
-> @@ -245,6 +271,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
->  }									\
->  									\
->  static noinline void __##func(struct pt_regs *regs)
-> +#else
-> +
-> +#define DEFINE_IDTENTRY_SYSVEC(func)					\
-> +static void __##func(struct pt_regs *regs);				\
-> +									\
-> +__visible noinstr void func(struct pt_regs *regs)			\
-> +{									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
-> +									\
-> +	instrumentation_begin();					\
-> +	kvm_set_cpu_l1tf_flush_l1d();					\
-> +	run_sysvec_on_irqstack_cond(__##func, regs);			\
-> +	instrumentation_end();						\
-> +	irqentry_exit_hv_cond(regs, state);				\
-> +}									\
-> +									\
-> +static noinline void __##func(struct pt_regs *regs)
-> +#endif
-> +
-> +#ifndef CONFIG_AMD_MEM_ENCRYPT
->  
->  /**
->   * DEFINE_IDTENTRY_SYSVEC_SIMPLE - Emit code for simple system vector IDT
-> @@ -274,6 +320,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
->  }									\
->  									\
->  static __always_inline void __##func(struct pt_regs *regs)
-> +#else
-> +
-> +#define DEFINE_IDTENTRY_SYSVEC_SIMPLE(func)				\
-> +static __always_inline void __##func(struct pt_regs *regs);		\
-> +									\
-> +__visible noinstr void func(struct pt_regs *regs)			\
-> +{									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
-> +									\
-> +	instrumentation_begin();					\
-> +	__irq_enter_raw();						\
-> +	kvm_set_cpu_l1tf_flush_l1d();					\
-> +	__##func(regs);						\
-> +	__irq_exit_raw();						\
-> +	instrumentation_end();						\
-> +	irqentry_exit_hv_cond(regs, state);				\
-> +}									\
-> +									\
-> +static __always_inline void __##func(struct pt_regs *regs)
-> +#endif
->  
->  /**
->   * DECLARE_IDTENTRY_XENCB - Declare functions for XEN HV callback entry point
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index b1a98c2a52f8..23f15e95838b 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -147,6 +147,10 @@ struct sev_hv_doorbell_page {
->  
->  struct sev_snp_runtime_data {
->  	struct sev_hv_doorbell_page hv_doorbell_page;
-> +	/*
-> +	 * Indication that we are currently handling #HV events.
-> +	 */
-> +	bool hv_handling_events;
->  };
->  
->  static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-> @@ -200,6 +204,8 @@ static void do_exc_hv(struct pt_regs *regs)
->  	union hv_pending_events pending_events;
->  	u8 vector;
->  
-> +	this_cpu_read(snp_runtime_data)->hv_handling_events = true;
-> +
->  	while (sev_hv_pending()) {
->  		pending_events.events = xchg(
->  			&sev_snp_current_doorbell_page()->pending_events.events,
-> @@ -234,6 +240,8 @@ static void do_exc_hv(struct pt_regs *regs)
->  			common_interrupt(regs, pending_events.vector);
->  		}
->  	}
-> +
-> +	this_cpu_read(snp_runtime_data)->hv_handling_events = false;
->  }
->  
->  static __always_inline bool on_vc_stack(struct pt_regs *regs)
-> @@ -2529,3 +2537,25 @@ static int __init snp_init_platform_device(void)
->  	return 0;
->  }
->  device_initcall(snp_init_platform_device);
-> +
-> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state)
-> +{
-> +	/*
-> +	 * Check whether this returns to user mode, if so and if
-> +	 * we are currently executing the #HV handler then we don't
-> +	 * want to follow the irqentry_exit_to_user_mode path as
-> +	 * that can potentially cause the #HV handler to be
-> +	 * preempted and rescheduled on another CPU. Rescheduled #HV
-> +	 * handler on another cpu will cause interrupts to be handled
-> +	 * on a different cpu than the injected one, causing
-> +	 * invalid EOIs and missed/lost guest interrupts and
-> +	 * corresponding hangs and/or per-cpu IRQs handled on
-> +	 * non-intended cpu.
-> +	 */
-> +	if (user_mode(regs) &&
-> +	    this_cpu_read(snp_runtime_data)->hv_handling_events)
-> +		return;
-> +
-> +	/* follow normal interrupt return/exit path */
-> +	irqentry_exit(regs, state);
-> +}
+> Caller guarantees that 'nr' is bounded by all of (vma, PMD table, folio).
 
+Also caller is responsible for taking all relevant locks.
+
+> We don't currently allocate folios larger than PMD size, but perhaps we
+> should prepare for that and as part of this same exercise define
+> 
+> 	set_pmds(mm, addr, vmf->pmd, entry, nr);
+> 
+> ... where 'nr' is the number of PMDs to set, not number of pages.
+
+Sounds good to me.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
