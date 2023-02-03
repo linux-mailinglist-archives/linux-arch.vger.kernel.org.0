@@ -2,52 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B79C6890A0
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 08:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AFD6890A3
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 08:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbjBCHTA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 02:19:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        id S231764AbjBCHTR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 02:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjBCHS7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 02:18:59 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC2D921A6
-        for <linux-arch@vger.kernel.org>; Thu,  2 Feb 2023 23:18:55 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id mi9so4184353pjb.4
-        for <linux-arch@vger.kernel.org>; Thu, 02 Feb 2023 23:18:55 -0800 (PST)
+        with ESMTP id S231510AbjBCHTQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 02:19:16 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DBA76AF
+        for <linux-arch@vger.kernel.org>; Thu,  2 Feb 2023 23:19:00 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b5so4415728plz.5
+        for <linux-arch@vger.kernel.org>; Thu, 02 Feb 2023 23:19:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FLYNxN+89Z9I2MvycqY9goYhkfwarRJMT/94Xq9kdE4=;
-        b=fknWjk6dL5edxfKxDS5Rs5o8++Qprn0+hg/MmDkKE/a3jok8QnDK4GXiRe2ULmBeBb
-         r3AuZ/P9LO8LzKC9NfLKoesrb9aZHs64mLBnC24H1Czlpx7VypPdpfU0qNMI+lIwPDma
-         8leU9efusRQrRNFqgL0/9ES/Oktaei06ROJx9nOPXjjV8ygBOXdXf68QcQBQFGNZQoxx
-         zL5/x4XAHO6NyoNRy7qX8L/1OtMC5tu/lQ3zY7P0RnL8Sa0/pIWrHTFCLfhYx+gp3SQC
-         r4sCVpiPX5GoJ6flZz5XYEM23RAQ6PCuB/FhPZS8G0B/9Lv4MihQxroiH169o+4gRXxU
-         Y1uw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XnlBvkqnb+l7IeUx8vg7gSpE5ieSkYXmCCbewvNAOcI=;
+        b=AHiRLfcf8eUNQBnlAsruaF06DgmSEYeMrWMiRHEZ9X5oCS8EFKY0D1+uSzk001rKHG
+         wM6Q2U10Pn14JQyW+l0O/c8z+fkwxIm/NPitBdfs40sfGlyXsENjatpI1RZhPk232lvA
+         zDdUzhnba9x94swlHDb7UkVrJFnMqWpYzmGo4TPTsGtXHfXv9sfrWlf3syDxwLR5ipEX
+         dFRmiJAgq8XvaTNIFp5Qu+WClm6+oFC9LekqRQUzG9QfdZgJPNJtJkIdPe1uHKJYpQRj
+         YyJEeIrYiO6SEa4xtr2WXCweUe8cAWZ/KQ4ykObFGtMcv3jpBg0TZs/m6RR8iSh/nfe2
+         i5Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FLYNxN+89Z9I2MvycqY9goYhkfwarRJMT/94Xq9kdE4=;
-        b=ixyjoN0WKzQIY5BXnCKWrlh/vjxGN4Ka3jT8VA4H4tHpMx6ZCQ+RTO56osDjTxg2sF
-         i5HRaIJ0LGqs3RBPTCKVgdWeAkp1LSkzpaCGcpJW3PL/W5Ln253970AWwX6tIZEQlOdH
-         lrfWJfxREKMoG5sxEocHv0FnugRRJVyKjsp+vTwu5e4/6Hn81k8OAOke8qQ4fqAsCWhp
-         BxfrxSEkvU/SNu0lxMp9XCGL9DfJ8PJ489YZohY3sxIbMPqsxgnoM+ozWYo2DUZSWAZV
-         r5e20AxWNUZm9kNOjURY/U8lL6H4W/CcD1ltD1o2R9savSv0+BhQVmPr7Vx7hvuqcinR
-         reLA==
-X-Gm-Message-State: AO0yUKUTxlKzSjsO67Em/iIw/Qpk6qrTMLLTkULjs2dxiYFo2bOyf3r7
-        eryEccqlbrwASECsrRmOxLY=
-X-Google-Smtp-Source: AK7set8UmQdNB4VaSy6Fxb5wxUcSBgBrZDhP2Lw7G1Jnu8w+a6SsBl4amQbJ+dEOBbUxVNaibU8ezg==
-X-Received: by 2002:a05:6a20:548c:b0:be:a082:670f with SMTP id i12-20020a056a20548c00b000bea082670fmr4974581pzk.28.1675408734548;
-        Thu, 02 Feb 2023 23:18:54 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XnlBvkqnb+l7IeUx8vg7gSpE5ieSkYXmCCbewvNAOcI=;
+        b=c24A0LhldfNSL1oAA9N/JetNd7n+et9AqCNINYgOTfARtY/HI0I3lMdzXxj45dJExv
+         rjkpYpfEKRuhgfKvPpnY5qgFuDQRFY9txAJXLQ4n3+pL5otrKgRC9aRL/QKl6rhKMvGe
+         kqeSCYp59D9jhnmhFNlJm5IuxRFEcm18qKFgndGI9rZk2iI4xa7g4LDA4OMuxd5Mgf30
+         j+PQ+GNUH1sYSvbA7x8ijkVzuM/O8zchGkXneSDH+kOTQXHDYL4x0ateMyVIL9D/othx
+         s+NSBpfI7wHLiwJQEOl14W3ClWQpeuWg4fuMuhJtJpJm/hF7BPMF05/yke1IYotX0ZwA
+         cFxA==
+X-Gm-Message-State: AO0yUKVD86InmYvQ37WQkRcM/+EMePdu8STig3sVFvvU2OwH5QAG1W0c
+        D0UQP38uYixOEfeIlj8c9O8=
+X-Google-Smtp-Source: AK7set9/19Ishv+YbUs//IpJgvi84ti72zlNw3k1E7pi36wh6xfDzDjNIuz8qP6WMzuLeNCLPjc4Ag==
+X-Received: by 2002:a05:6a20:4413:b0:be:cd2f:1951 with SMTP id ce19-20020a056a20441300b000becd2f1951mr12089686pzb.41.1675408740099;
+        Thu, 02 Feb 2023 23:19:00 -0800 (PST)
 Received: from bobo.ibm.com (193-116-117-77.tpgi.com.au. [193.116.117.77])
-        by smtp.gmail.com with ESMTPSA id f20-20020a637554000000b004df4ba1ebfesm877558pgn.66.2023.02.02.23.18.49
+        by smtp.gmail.com with ESMTPSA id f20-20020a637554000000b004df4ba1ebfesm877558pgn.66.2023.02.02.23.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 23:18:54 -0800 (PST)
+        Thu, 02 Feb 2023 23:18:59 -0800 (PST)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
@@ -60,10 +61,12 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Will Deacon <will@kernel.org>, Rik van Riel <riel@redhat.com>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v7 0/5] shoot lazy tlbs (lazy tlb refcount scalability improvement)
-Date:   Fri,  3 Feb 2023 17:18:32 +1000
-Message-Id: <20230203071837.1136453-1-npiggin@gmail.com>
+Subject: [PATCH v7 1/5] kthread: simplify kthread_use_mm refcounting
+Date:   Fri,  3 Feb 2023 17:18:33 +1000
+Message-Id: <20230203071837.1136453-2-npiggin@gmail.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230203071837.1136453-1-npiggin@gmail.com>
+References: <20230203071837.1136453-1-npiggin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,63 +79,54 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-(Sorry about the double send)
+Remove the special case avoiding refcounting when the mm to be used is
+the same as the kernel thread's active (lazy tlb) mm. kthread_use_mm()
+should not be such a performance critical path that this matters much.
+This simplifies a later change to lazy tlb mm refcounting.
 
-Hi Andrew,
+Acked-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+---
+ kernel/kthread.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-This series improves scalability of context switching between user and
-kernel threads on large systems with a threaded process spread across a
-lot of CPUs.
-
-Please consider these patches for mm. Discussion of v6 here:
-
-https://lore.kernel.org/linux-mm/20230118080011.2258375-1-npiggin@gmail.com/
-
-No objections so far, Linus think they look okay in principle but has
-not reviewed in detail.
-
-With the exception of patch 1, there should be no functional change
-on non-powerpc archs with this series.
-
-Changes since v6:
-- Dropped the final patch to optimise powerpc more, as mentioned this
-  will be taken through the powerpc tree after the base series is
-  upstream.
-- Split the first patch into patch 1 and 2 in this series so the
-  functional change is isolated to minimal patch.
-- Removed ifdefs and churn from sched/core.c that were not required
-  because ifdefs in .h refcount functions do the same job.
-- Split DEBUG_VM option out to its own sub-option because it IPIs all
-  CPUs on on every process exit which is pretty heavy.
-- Changed comment style as noted by Nadav.
-- Added description about how to test it, requested by Linus.
-- Added link and credit to Rik's earlier work in the same vein.
-- Did a pass over comments and changelogs to improve readability.
-
-Nicholas Piggin (5):
-  kthread: simplify kthread_use_mm refcounting
-  lazy tlb: introduce lazy tlb mm refcount helper functions
-  lazy tlb: allow lazy tlb mm refcounting to be configurable
-  lazy tlb: shoot lazies, non-refcounting lazy tlb mm reference handling
-    scheme
-  powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
-
- Documentation/mm/active_mm.rst       |  6 +++
- arch/Kconfig                         | 32 ++++++++++++++
- arch/arm/mach-rpc/ecard.c            |  2 +-
- arch/powerpc/Kconfig                 |  1 +
- arch/powerpc/kernel/smp.c            |  2 +-
- arch/powerpc/mm/book3s64/radix_tlb.c |  4 +-
- fs/exec.c                            |  2 +-
- include/linux/sched/mm.h             | 28 ++++++++++++
- kernel/cpu.c                         |  2 +-
- kernel/exit.c                        |  2 +-
- kernel/fork.c                        | 65 ++++++++++++++++++++++++++++
- kernel/kthread.c                     | 22 ++++++----
- kernel/sched/core.c                  | 15 ++++---
- lib/Kconfig.debug                    | 10 +++++
- 14 files changed, 170 insertions(+), 23 deletions(-)
-
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index f97fd01a2932..7424a1839e9a 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -1410,14 +1410,13 @@ void kthread_use_mm(struct mm_struct *mm)
+ 	WARN_ON_ONCE(!(tsk->flags & PF_KTHREAD));
+ 	WARN_ON_ONCE(tsk->mm);
+ 
++	mmgrab(mm);
++
+ 	task_lock(tsk);
+ 	/* Hold off tlb flush IPIs while switching mm's */
+ 	local_irq_disable();
+ 	active_mm = tsk->active_mm;
+-	if (active_mm != mm) {
+-		mmgrab(mm);
+-		tsk->active_mm = mm;
+-	}
++	tsk->active_mm = mm;
+ 	tsk->mm = mm;
+ 	membarrier_update_current_mm(mm);
+ 	switch_mm_irqs_off(active_mm, mm, tsk);
+@@ -1434,12 +1433,9 @@ void kthread_use_mm(struct mm_struct *mm)
+ 	 * memory barrier after storing to tsk->mm, before accessing
+ 	 * user-space memory. A full memory barrier for membarrier
+ 	 * {PRIVATE,GLOBAL}_EXPEDITED is implicitly provided by
+-	 * mmdrop(), or explicitly with smp_mb().
++	 * mmdrop().
+ 	 */
+-	if (active_mm != mm)
+-		mmdrop(active_mm);
+-	else
+-		smp_mb();
++	mmdrop(active_mm);
+ }
+ EXPORT_SYMBOL_GPL(kthread_use_mm);
+ 
 -- 
 2.37.2
 
