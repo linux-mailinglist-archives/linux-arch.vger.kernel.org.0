@@ -2,124 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2981668A331
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 20:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A832C68A37B
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 21:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjBCTo1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 14:44:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S233002AbjBCUTk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 15:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjBCTo0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 14:44:26 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B39DCB3;
-        Fri,  3 Feb 2023 11:44:25 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 30CE51EC050B;
-        Fri,  3 Feb 2023 20:44:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675453464;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Aawd1Ae416cyoOlyUnwX/vsr0DPMmD0L5HLCQmlorYw=;
-        b=Yw/nyWbPDsXI1pcZe7prJu7pg191XIQbuN4noeqgHgrl7hN4Y0WSj41wuH1q0Nf72djV/U
-        3JCyy3RBcRldDMC8zylW4+u6JZRWwSl56OG6QmFQMZjMxbeVXD2+VY8n5AZoHpQinTiHHI
-        Hr0nGS0ONG4GHznX84tW9AA6HshKxIA=
-Date:   Fri, 3 Feb 2023 20:44:20 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mtk.manpages@gmail.com" <mtk.manpages@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v5 07/39] x86: Add user control-protection fault handler
-Message-ID: <Y91kFGVFe6QlHKmi@zn.tnic>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-8-rick.p.edgecombe@intel.com>
- <Y91b2x8pSFtmB+w6@zn.tnic>
- <393a03d063dee5831af93ca67636df75a76481c3.camel@intel.com>
+        with ESMTP id S232875AbjBCUTj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 15:19:39 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531716CC87
+        for <linux-arch@vger.kernel.org>; Fri,  3 Feb 2023 12:19:38 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id g7so6828510qto.11
+        for <linux-arch@vger.kernel.org>; Fri, 03 Feb 2023 12:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PlO+7yJUL6nZz6lWyKAteQU74Ju3H8abrNP72ihWCAM=;
+        b=Kmqgxr98A8rmlt1eG1Qvlry8R2htsdd8gpZ6xlaKDfwShmcldtpeNwAwBl+zru4UHO
+         EjSIuyi/1gvQIqauWKxF1u9onlcTqDp2tfx7qNRK4/Y3nKJ9VCvqtvFoKH9iEkIm9TtH
+         lMJWMucq5G4qzkWScRZDtPT9ns3GVif+j0OXs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PlO+7yJUL6nZz6lWyKAteQU74Ju3H8abrNP72ihWCAM=;
+        b=BlRetosUTInxlugHRyTGf0vVWp5EewIaUUYo/hNqEwGLyxbLjj/tazgBpIqsH+Z75t
+         uHLQ2rHcdggFzixQC3lI517Flmy4l+InRfYuSURCioGJ2HI36UWkiWdpGxQpbK2HyQT1
+         1T8p/K5gUlNOyTIclXet3wxzXP2uO25X+qyiMZmladMiPIHnKIKCYkgEPSExaWw25h9J
+         ks8uHEqDKZY32n9BL3SF8w3AVjbWlfNAou3W7y9bQO6LxZS/Lc9L9MiBOKNPsDoEhdG6
+         3/B3eZgoVSk9tIM+SDYB7LTWF6BmZZIlvKNUmLqk37229PVpYPpv+tc3pG4dQA3FryQA
+         HTUA==
+X-Gm-Message-State: AO0yUKUPnrpzr/oG+miP4CshbKKHpcDpPK8zLH8roE23AeOCPTINwTKX
+        qib43YPQsY9xkQTRjweP7DrPXOKRom8ZYdLS
+X-Google-Smtp-Source: AK7set9nC+TUlWirAN+jtujA8yCUlYb0urmBCrtJgYrW0olrJKhCm4nX/TVN2h+LCT26hzgcod7jnQ==
+X-Received: by 2002:ac8:7e86:0:b0:3b9:a641:aa66 with SMTP id w6-20020ac87e86000000b003b9a641aa66mr21897622qtj.15.1675455577457;
+        Fri, 03 Feb 2023 12:19:37 -0800 (PST)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id g17-20020ae9e111000000b006ce580c2663sm2457424qkm.35.2023.02.03.12.19.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Feb 2023 12:19:36 -0800 (PST)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH RFC] tools/memory-model: Restrict to-r to read-read address dependency
+Date:   Fri,  3 Feb 2023 20:19:13 +0000
+Message-Id: <20230203201913.2555494-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <393a03d063dee5831af93ca67636df75a76481c3.camel@intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 03, 2023 at 07:24:08PM +0000, Edgecombe, Rick P wrote:
-> The name seems better, but this is actually from the existing kernel
-> IBT control protection exception code. So it seems like an separate
-> change. Would you like to see it snuck into the user shadow stack
-> handler, or could we leave this for future cleanups?
-> 
-> Kees pointed out that adding to the handler and moving it in the same
-> patch makes it difficult to see where the changes are. I'm splitting
-> this one into two patches for the next version.
+During a code-reading exercise of linux-kernel.cat CAT file, I generated
+a graph to show the to-r relations. While likely not problematic for the
+model, I found it confusing that a read-write address dependency would
+show as a to-r edge on the graph.
 
-Yap, that's the right way to do it.
+This patch therefore restricts the to-r links derived from addr to only
+read-read address dependencies, so that read-write address dependencies don't
+show as to-r in the graphs. This should also prevent future users of to-r from
+deriving incorrect relations. Note that a read-write address dep, obviously,
+still ends up in the ppo relation via the to-w relation.
 
-> I think we have to read it before we enable interrupts or use
-> fpregs_lock(). So reading it before saves disabling preemption later.
+I verified that a read-read address dependency still shows up as a to-r
+link in the graph, as it did before.
 
-So I'm a bit confused - there's that cond_local_irq_enable() which will
-enable interrupts if they were enabled before.
+For reference, the problematic graph was generated with the following
+command:
+herd7 -conf linux-kernel.cfg \
+   -doshow dep -doshow to-r -doshow to-w ./foo.litmus -show all -o OUT/
 
-So if they were enabled before and you reenable them here, then that
-current could be the wrong one if we schedule in between, right?
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ tools/memory-model/linux-kernel.cat | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-IOW, shouldn't those two lines be swapped so that it says:
-
-        tsk = current;
-
-        cond_local_irq_enable(regs);
-
-and you can be sure that tsk is always the right current which caused
-the #CP? Or am I way off again?
-
+diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+index d70315fddef6..26e6f0968143 100644
+--- a/tools/memory-model/linux-kernel.cat
++++ b/tools/memory-model/linux-kernel.cat
+@@ -69,7 +69,7 @@ let dep = addr | data
+ let rwdep = (dep | ctrl) ; [W]
+ let overwrite = co | fr
+ let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+-let to-r = addr | (dep ; [Marked] ; rfi)
++let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+ let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+ 
+ (* Propagation: Ordering from release operations and strong fences. *)
 -- 
-Regards/Gruss,
-    Boris.
+2.39.1.519.gcb327c4b5f-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette
