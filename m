@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A89B689B23
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 15:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D417689AB6
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 14:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbjBCOIk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 09:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S233660AbjBCN4k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 08:56:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbjBCOI0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 09:08:26 -0500
+        with ESMTP id S233272AbjBCN4H (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 08:56:07 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E129A87AC;
-        Fri,  3 Feb 2023 06:06:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4924A77AD;
+        Fri,  3 Feb 2023 05:54:00 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43788175A;
-        Fri,  3 Feb 2023 05:54:29 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 790DF175D;
+        Fri,  3 Feb 2023 05:54:33 -0800 (PST)
 Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74A2E3F71E;
-        Fri,  3 Feb 2023 05:53:43 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB7923F71E;
+        Fri,  3 Feb 2023 05:53:47 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         kvmarm@lists.linux.dev, kvm@vger.kernel.org,
@@ -45,9 +45,9 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [RFC PATCH 26/32] irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs
-Date:   Fri,  3 Feb 2023 13:50:37 +0000
-Message-Id: <20230203135043.409192-27-james.morse@arm.com>
+Subject: [RFC PATCH 27/32] arm64: psci: Ignore DENIED CPUs
+Date:   Fri,  3 Feb 2023 13:50:38 +0000
+Message-Id: <20230203135043.409192-28-james.morse@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
 References: <20230203135043.409192-1-james.morse@arm.com>
@@ -61,85 +61,65 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-To support virtual CPU hotplug, ACPI has added an 'online capable' bit
-to the MADT GICC entries. This indicates a disabled CPU entry may not
-be possible to online via PSCI until firmware has set enabled bit in
-_STA.
+From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-What about the redistributor in the GICC entry? ACPI doesn't want to say.
-Assume the worst: When a redistributor is described in the GICC entry,
-but the entry is marked as disabled at boot, assume the redistributor
-is inaccessible.
+When a CPU is marked as disabled, but online capable in the MADT, PSCI
+applies some firmware policy to control when it can be brought online.
+PSCI returns DENIED to a CPU_ON request if this is not currently
+permitted. The OS can learn the current policy from the _STA enabled bit.
 
-The GICv3 driver doesn't support late online of redistributors, so this
-means the corresponding CPU can't be brought online either. Clear the
-possible and present bits.
+Handle the PSCI DENIED return code gracefully instead of printing an
+error.
 
-Systems that want CPU hotplug in a VM can ensure their redistributors
-are always-on, and describe them that way with a GICR entry in the MADT.
-
-When mapping redistributors found via GICC entries, handle the case
-where the arch code believes the CPU is present and possible, but it
-does not have an accessible redistributor. Print a warning and clear
-the present and possible bits.
-
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+[ morse: Rewrote commit message ]
 Signed-off-by: James Morse <james.morse@arm.com>
-----
-Disabled but online-capable CPUs cause this message to be printed
-if their redistributors are described via GICC:
-| GICv3: CPU 3's redistributor is inaccessible: this CPU can't be brought online
-
-If ACPI's _STA tries to make the cpu present later, this message is printed:
-| Changing CPU present bit is not supported
 ---
- drivers/irqchip/irq-gic-v3.c | 14 ++++++++++++++
- include/linux/acpi.h         |  3 ++-
- 2 files changed, 16 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/psci.c     | 2 +-
+ arch/arm64/kernel/smp.c      | 3 ++-
+ drivers/firmware/psci/psci.c | 2 ++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index a8b969d652b6..8c1ea3df0094 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -2187,11 +2187,25 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
- 				(struct acpi_madt_generic_interrupt *)header;
- 	u32 reg = readl_relaxed(acpi_data.dist_base + GICD_PIDR2) & GIC_PIDR2_ARCH_MASK;
- 	u32 size = reg == GIC_PIDR2_ARCH_GICv4 ? SZ_64K * 4 : SZ_64K * 2;
-+	int cpu = get_cpu_for_acpi_id(gicc->uid);
- 	void __iomem *redist_base;
- 
- 	if (!acpi_gicc_is_usable(gicc))
- 		return 0;
- 
-+	/*
-+	 * Capable but disabled CPUs can be brought online later. What about
-+	 * the redistributor? ACPI doesn't want to say!
-+	 * Virtual hotplug systems can use the MADT's "always-on" GICR entries.
-+	 * Otherwise, prevent such CPUs from being brought online.
-+	 */
-+	if (!(gicc->flags & ACPI_MADT_ENABLED)) {
-+		pr_warn_once("CPU %u's redistributor is inaccessible: this CPU can't be brought online\n", cpu);
-+		set_cpu_present(cpu, false);
-+		set_cpu_possible(cpu, false);
-+		return 0;
-+	}
-+
- 	redist_base = ioremap(gicc->gicr_base_address, size);
- 	if (!redist_base)
- 		return -ENOMEM;
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index d8e59953a27f..c1b74ebd5774 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -269,7 +269,8 @@ void acpi_table_print_madt_entry (struct acpi_subtable_header *madt);
- 
- static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
+diff --git a/arch/arm64/kernel/psci.c b/arch/arm64/kernel/psci.c
+index 29a8e444db83..4fcc0cdd757b 100644
+--- a/arch/arm64/kernel/psci.c
++++ b/arch/arm64/kernel/psci.c
+@@ -40,7 +40,7 @@ static int cpu_psci_cpu_boot(unsigned int cpu)
  {
--	return (gicc->flags & ACPI_MADT_ENABLED);
-+	return ((gicc->flags & ACPI_MADT_ENABLED ||
-+		 gicc->flags & ACPI_MADT_GICC_CPU_CAPABLE));
+ 	phys_addr_t pa_secondary_entry = __pa_symbol(secondary_entry);
+ 	int err = psci_ops.cpu_on(cpu_logical_map(cpu), pa_secondary_entry);
+-	if (err)
++	if (err && err != -EPROBE_DEFER)
+ 		pr_err("failed to boot CPU%d (%d)\n", cpu, err);
+ 
+ 	return err;
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 5669b013c2b7..ea031641545d 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -125,7 +125,8 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
+ 	/* Now bring the CPU into our world */
+ 	ret = boot_secondary(cpu, idle);
+ 	if (ret) {
+-		pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
++		if (ret != -EPROBE_DEFER)
++			pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
+ 		return ret;
+ 	}
+ 
+diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+index e7bcfca4159f..3389c913b2ea 100644
+--- a/drivers/firmware/psci/psci.c
++++ b/drivers/firmware/psci/psci.c
+@@ -212,6 +212,8 @@ static int __psci_cpu_on(u32 fn, unsigned long cpuid, unsigned long entry_point)
+ 	int err;
+ 
+ 	err = invoke_psci_fn(fn, cpuid, entry_point, 0);
++	if (err == PSCI_RET_DENIED)
++		return -EPROBE_DEFER;
+ 	return psci_to_linux_errno(err);
  }
  
- /* the following numa functions are architecture-dependent */
 -- 
 2.30.2
 
