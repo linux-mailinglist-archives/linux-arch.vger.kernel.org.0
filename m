@@ -2,110 +2,307 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7978689ED0
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 17:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F800689FB3
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 17:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232835AbjBCQFJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 11:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
+        id S233387AbjBCQxQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 11:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjBCQFG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 11:05:06 -0500
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F866A2A4C;
-        Fri,  3 Feb 2023 08:05:03 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-51ba4b1b9feso73909487b3.11;
-        Fri, 03 Feb 2023 08:05:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7wIYdPVdo9w8wJeFawgcWpGlCHgpXqP0aU2proD/z4A=;
-        b=h7Y+KCF7rYYuzKa23/XVH7EqKMk5LTZnVw2PqeMnOFM+xWLo9NJHdhJ7VXQEzh/jEQ
-         43USwhMjApuBXpP8uDT4/9ZWtcfiac4as5JkOYvgtFByz33C36/DfwkQOIfY4SCuqGDK
-         Hv9r2B8MXFnnKurrI2YIIpkW+iLxoK+7IxwMN41GkLxe5SYkAMuhmyEdUiIf3h+NbtlV
-         Vjrsgdy/0uWZlA6GCyhPVQQLTybtIXlZAYgovWjXFPEmbkXmJ1R6oNLeW1Q9wjp7INOt
-         dpYwOYdzkRdvH3M1sRrIE5bOaaFyPkuU4ojNBjyPoq103GnN5D0iyOl6ib+Yx3KeeBsY
-         CkPA==
-X-Gm-Message-State: AO0yUKUt0cK5Wr875sm9z9U0bJzP+91+5+O4ghRPfaBfRmU8ORcDIFi3
-        96J/1/Ux8eteagW4UXGq2OK0nBZCNN5sEw==
-X-Google-Smtp-Source: AK7set/a/Eq2gP6R7fciPiamzKQR29gjZ+vbzZcYT0ptMjiTbNLQIWRvobf0piyfY0iq11BERjizRw==
-X-Received: by 2002:a0d:d648:0:b0:506:4342:1a2d with SMTP id y69-20020a0dd648000000b0050643421a2dmr7042060ywd.12.1675440302426;
-        Fri, 03 Feb 2023 08:05:02 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id r195-20020a37a8cc000000b0071ddbe8fe23sm2101905qke.24.2023.02.03.08.05.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 08:05:02 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id 74so6528236ybl.12;
-        Fri, 03 Feb 2023 08:05:01 -0800 (PST)
-X-Received: by 2002:a5b:941:0:b0:865:e214:f4e3 with SMTP id
- x1-20020a5b0941000000b00865e214f4e3mr352487ybq.604.1675440301482; Fri, 03 Feb
- 2023 08:05:01 -0800 (PST)
+        with ESMTP id S233020AbjBCQxP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 11:53:15 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5332768B;
+        Fri,  3 Feb 2023 08:53:13 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CD93C14;
+        Fri,  3 Feb 2023 08:53:55 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.90.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF3D43F71E;
+        Fri,  3 Feb 2023 08:53:06 -0800 (PST)
+Date:   Fri, 3 Feb 2023 16:52:59 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
+        boqun.feng@gmail.com, catalin.marinas@arm.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 03/10] arch: Introduce
+ arch_{,try_}_cmpxchg128{,_local}()
+Message-ID: <Y90763uF/cHqiOYN@FVFF77S0Q05N>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.373335780@infradead.org>
 MIME-Version: 1.0
-References: <20230113062339.1909087-1-hch@lst.de> <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de> <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de> <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
- <20230203083037.GA30738@lst.de> <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
- <CAMuHMdUitVfW088YOmqYm4kwbKwkwb22fAakHcu6boxv7dXDfQ@mail.gmail.com> <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
-In-Reply-To: <f6a60193-a5d1-c42c-158a-4b0bfe9c7538@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 3 Feb 2023 17:04:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWJ3XOBewDoU8umAHc6b83hJQge5xjY3Cxx03AvoiR7iQ@mail.gmail.com>
-Message-ID: <CAMuHMdWJ3XOBewDoU8umAHc6b83hJQge5xjY3Cxx03AvoiR7iQ@mail.gmail.com>
-Subject: Re: remove arch/sh
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230202152655.373335780@infradead.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Randy,
+On Thu, Feb 02, 2023 at 03:50:33PM +0100, Peter Zijlstra wrote:
+> For all architectures that currently support cmpxchg_double()
+> implement the cmpxchg128() family of functions that is basically the
+> same but with a saner interface.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-On Fri, Feb 3, 2023 at 4:57 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> Is this "sh64" still accurate and applicable? from Documentation/kbuild/kbuild.rst:
->
-> But some architectures such as x86 and sparc have aliases.
->
-> - x86: i386 for 32 bit, x86_64 for 64 bit
-> - sh: sh for 32 bit, sh64 for 64 bit <<<<<<<<<<<<<<<
-> - sparc: sparc32 for 32 bit, sparc64 for 64 bit
+For arm64:
 
-No, support for sh64 was removed in commit 37744feebc086908
-("sh: remove sh5 support") in v5.8.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-Gr{oetje,eeting}s,
+Mark.
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  arch/arm64/include/asm/atomic_ll_sc.h |   41 +++++++++++++++++++++++++
+>  arch/arm64/include/asm/atomic_lse.h   |   31 +++++++++++++++++++
+>  arch/arm64/include/asm/cmpxchg.h      |   26 ++++++++++++++++
+>  arch/s390/include/asm/cmpxchg.h       |   14 ++++++++
+>  arch/x86/include/asm/cmpxchg_32.h     |    3 +
+>  arch/x86/include/asm/cmpxchg_64.h     |   55 +++++++++++++++++++++++++++++++++-
+>  6 files changed, 168 insertions(+), 2 deletions(-)
+> 
+> --- a/arch/arm64/include/asm/atomic_ll_sc.h
+> +++ b/arch/arm64/include/asm/atomic_ll_sc.h
+> @@ -326,6 +326,47 @@ __CMPXCHG_DBL(   ,        ,  ,         )
+>  __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
+>  
+>  #undef __CMPXCHG_DBL
+> +
+> +union __u128_halves {
+> +	u128 full;
+> +	struct {
+> +		u64 low, high;
+> +	};
+> +};
+> +
+> +#define __CMPXCHG128(name, mb, rel, cl...)                             \
+> +static __always_inline u128						\
+> +__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
+> +{									\
+> +	union __u128_halves r, o = { .full = (old) },			\
+> +			       n = { .full = (new) };			\
+> +       unsigned int tmp;                                               \
+> +									\
+> +	asm volatile("// __cmpxchg128" #name "\n"			\
+> +       "       prfm    pstl1strm, %[v]\n"                              \
+> +       "1:     ldxp    %[rl], %[rh], %[v]\n"                           \
+> +       "       cmp     %[rl], %[ol]\n"                                 \
+> +       "       ccmp    %[rh], %[oh], 0, eq\n"                          \
+> +       "       b.ne    2f\n"                                           \
+> +       "       st" #rel "xp    %w[tmp], %[nl], %[nh], %[v]\n"          \
+> +       "       cbnz    %w[tmp], 1b\n"                                  \
+> +	"	" #mb "\n"						\
+> +	"2:"								\
+> +       : [v] "+Q" (*(u128 *)ptr),                                      \
+> +         [rl] "=&r" (r.low), [rh] "=&r" (r.high),                      \
+> +         [tmp] "=&r" (tmp)                                             \
+> +       : [ol] "r" (o.low), [oh] "r" (o.high),                          \
+> +         [nl] "r" (n.low), [nh] "r" (n.high)                           \
+> +       : "cc", ##cl);                                                  \
+> +									\
+> +	return r.full;							\
+> +}
+> +
+> +__CMPXCHG128(   ,        ,  )
+> +__CMPXCHG128(_mb, dmb ish, l, "memory")
+> +
+> +#undef __CMPXCHG128
+> +
+>  #undef K
+>  
+>  #endif	/* __ASM_ATOMIC_LL_SC_H */
+> --- a/arch/arm64/include/asm/atomic_lse.h
+> +++ b/arch/arm64/include/asm/atomic_lse.h
+> @@ -324,4 +324,35 @@ __CMPXCHG_DBL(_mb, al, "memory")
+>  
+>  #undef __CMPXCHG_DBL
+>  
+> +#define __CMPXCHG128(name, mb, cl...)					\
+> +static __always_inline u128						\
+> +__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
+> +{									\
+> +	union __u128_halves r, o = { .full = (old) },			\
+> +			       n = { .full = (new) };			\
+> +	register unsigned long x0 asm ("x0") = o.low;			\
+> +	register unsigned long x1 asm ("x1") = o.high;			\
+> +	register unsigned long x2 asm ("x2") = n.low;			\
+> +	register unsigned long x3 asm ("x3") = n.high;			\
+> +	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
+> +									\
+> +	asm volatile(							\
+> +	__LSE_PREAMBLE							\
+> +	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
+> +	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
+> +	  [v] "+Q" (*(u128 *)ptr)					\
+> +	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
+> +	  [oldval1] "r" (o.low), [oldval2] "r" (o.high)			\
+> +	: cl);								\
+> +									\
+> +	r.low = x0; r.high = x1;					\
+> +									\
+> +	return r.full;							\
+> +}
+> +
+> +__CMPXCHG128(   ,   )
+> +__CMPXCHG128(_mb, al, "memory")
+> +
+> +#undef __CMPXCHG128
+> +
+>  #endif	/* __ASM_ATOMIC_LSE_H */
+> --- a/arch/arm64/include/asm/cmpxchg.h
+> +++ b/arch/arm64/include/asm/cmpxchg.h
+> @@ -147,6 +147,19 @@ __CMPXCHG_DBL(_mb)
+>  
+>  #undef __CMPXCHG_DBL
+>  
+> +#define __CMPXCHG128(name)						\
+> +static inline u128 __cmpxchg128##name(volatile u128 *ptr,		\
+> +				      u128 old, u128 new)		\
+> +{									\
+> +	return __lse_ll_sc_body(_cmpxchg128##name,			\
+> +				ptr, old, new);				\
+> +}
+> +
+> +__CMPXCHG128(   )
+> +__CMPXCHG128(_mb)
+> +
+> +#undef __CMPXCHG128
+> +
+>  #define __CMPXCHG_GEN(sfx)						\
+>  static __always_inline unsigned long __cmpxchg##sfx(volatile void *ptr,	\
+>  					   unsigned long old,		\
+> @@ -229,6 +242,19 @@ __CMPXCHG_GEN(_mb)
+>  	__ret;									\
+>  })
+>  
+> +/* cmpxchg128 */
+> +#define system_has_cmpxchg128()		1
+> +
+> +#define arch_cmpxchg128(ptr, o, n)						\
+> +({										\
+> +	__cmpxchg128_mb((ptr), (o), (n));					\
+> +})
+> +
+> +#define arch_cmpxchg128_local(ptr, o, n)					\
+> +({										\
+> +	__cmpxchg128((ptr), (o), (n));						\
+> +})
+> +
+>  #define __CMPWAIT_CASE(w, sfx, sz)					\
+>  static inline void __cmpwait_case_##sz(volatile void *ptr,		\
+>  				       unsigned long val)		\
+> --- a/arch/s390/include/asm/cmpxchg.h
+> +++ b/arch/s390/include/asm/cmpxchg.h
+> @@ -201,4 +201,18 @@ static __always_inline int __cmpxchg_dou
+>  			 (unsigned long)(n1), (unsigned long)(n2));	\
+>  })
+>  
+> +#define system_has_cmpxchg128()		1
+> +
+> +static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
+> +{
+> +	asm volatile(
+> +		"	cdsg	%[old],%[new],%[ptr]\n"
+> +		: [old] "+d" (old), [ptr] "+QS" (*ptr)
+> +		: [new] "d" (new)
+> +		: "memory", "cc");
+> +	return old;
+> +}
+> +
+> +#define arch_cmpxchg128		arch_cmpxchg128
+> +
+>  #endif /* __ASM_CMPXCHG_H */
+> --- a/arch/x86/include/asm/cmpxchg_32.h
+> +++ b/arch/x86/include/asm/cmpxchg_32.h
+> @@ -103,6 +103,7 @@ static inline bool __try_cmpxchg64(volat
+>  
+>  #endif
+>  
+> -#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX8)
+> +#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX8)
+> +#define system_has_cmpxchg64()		boot_cpu_has(X86_FEATURE_CX8)
+>  
+>  #endif /* _ASM_X86_CMPXCHG_32_H */
+> --- a/arch/x86/include/asm/cmpxchg_64.h
+> +++ b/arch/x86/include/asm/cmpxchg_64.h
+> @@ -20,6 +20,59 @@
+>  	arch_try_cmpxchg((ptr), (po), (n));				\
+>  })
+>  
+> -#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
+> +union __u128_halves {
+> +	u128 full;
+> +	struct {
+> +		u64 low, high;
+> +	};
+> +};
+> +
+> +static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
+> +{
+> +	union __u128_halves o = { .full = old, }, n = { .full = new, };
+> +
+> +	asm volatile(LOCK_PREFIX "cmpxchg16b %[ptr]"
+> +		     : [ptr] "+m" (*ptr),
+> +		       "+a" (o.low), "+d" (o.high)
+> +		     : "b" (n.low), "c" (n.high)
+> +		     : "memory");
+> +
+> +	return o.full;
+> +}
+> +
+> +static __always_inline u128 arch_cmpxchg128_local(volatile u128 *ptr, u128 old, u128 new)
+> +{
+> +	union __u128_halves o = { .full = old, }, n = { .full = new, };
+> +
+> +	asm volatile("cmpxchg16b %[ptr]"
+> +		     : [ptr] "+m" (*ptr),
+> +		       "+a" (o.low), "+d" (o.high)
+> +		     : "b" (n.low), "c" (n.high)
+> +		     : "memory");
+> +
+> +	return o.full;
+> +}
+> +
+> +static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *old, u128 new)
+> +{
+> +	union __u128_halves o = { .full = *old, }, n = { .full = new, };
+> +	bool ret;
+> +
+> +	asm volatile(LOCK_PREFIX "cmpxchg16b %[ptr]"
+> +		     CC_SET(e)
+> +		     : CC_OUT(e) (ret),
+> +		       [ptr] "+m" (*ptr),
+> +		       "+a" (o.low), "+d" (o.high)
+> +		     : "b" (n.low), "c" (n.high)
+> +		     : "memory");
+> +
+> +	if (unlikely(!ret))
+> +		*old = o.full;
+> +
+> +	return likely(ret);
+> +}
+> +
+> +#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX16)
+> +#define system_has_cmpxchg128()		boot_cpu_has(X86_FEATURE_CX16)
+>  
+>  #endif /* _ASM_X86_CMPXCHG_64_H */
+> 
+> 
