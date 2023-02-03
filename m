@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D417689AB6
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 14:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B07689B05
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 15:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbjBCN4k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 08:56:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S232835AbjBCOEg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 09:04:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbjBCN4H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 08:56:07 -0500
+        with ESMTP id S233327AbjBCOEJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 09:04:09 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C4924A77AD;
-        Fri,  3 Feb 2023 05:54:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A733A58C2;
+        Fri,  3 Feb 2023 06:01:58 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 790DF175D;
-        Fri,  3 Feb 2023 05:54:33 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7B731763;
+        Fri,  3 Feb 2023 05:54:37 -0800 (PST)
 Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB7923F71E;
-        Fri,  3 Feb 2023 05:53:47 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA7AA3F71E;
+        Fri,  3 Feb 2023 05:53:51 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         kvmarm@lists.linux.dev, kvm@vger.kernel.org,
@@ -45,9 +45,9 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [RFC PATCH 27/32] arm64: psci: Ignore DENIED CPUs
-Date:   Fri,  3 Feb 2023 13:50:38 +0000
-Message-Id: <20230203135043.409192-28-james.morse@arm.com>
+Subject: [RFC PATCH 28/32] ACPI: add support to register CPUs based on the _STA enabled bit
+Date:   Fri,  3 Feb 2023 13:50:39 +0000
+Message-Id: <20230203135043.409192-29-james.morse@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
 References: <20230203135043.409192-1-james.morse@arm.com>
@@ -61,65 +61,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+acpi_processor_get_info() registers all present CPUs. Registering a
+CPU is what creates the sysfs entries and triggers the udev
+notifications.
 
-When a CPU is marked as disabled, but online capable in the MADT, PSCI
-applies some firmware policy to control when it can be brought online.
-PSCI returns DENIED to a CPU_ON request if this is not currently
-permitted. The OS can learn the current policy from the _STA enabled bit.
+arm64 virtual machines that support 'virtual cpu hotplug' use the
+enabled bit to indicate whether the CPU can be brought online, as
+the existing ACPI tables require all hardware to be described and
+present.
 
-Handle the PSCI DENIED return code gracefully instead of printing an
-error.
+If firmware describes a CPU as present, but disabled, skip the
+registration. Such CPUs are present, but can't be brought online for
+whatever reason. (e.g. firmware/hypervisor policy).
 
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-[ morse: Rewrote commit message ]
+Once firmware sets the enabled bit, the CPU can be registered and
+brought online by user-space. Online CPUs, or CPUs that are missing
+an _STA method must always be registered.
+
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- arch/arm64/kernel/psci.c     | 2 +-
- arch/arm64/kernel/smp.c      | 3 ++-
- drivers/firmware/psci/psci.c | 2 ++
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ drivers/acpi/acpi_processor.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/psci.c b/arch/arm64/kernel/psci.c
-index 29a8e444db83..4fcc0cdd757b 100644
---- a/arch/arm64/kernel/psci.c
-+++ b/arch/arm64/kernel/psci.c
-@@ -40,7 +40,7 @@ static int cpu_psci_cpu_boot(unsigned int cpu)
- {
- 	phys_addr_t pa_secondary_entry = __pa_symbol(secondary_entry);
- 	int err = psci_ops.cpu_on(cpu_logical_map(cpu), pa_secondary_entry);
--	if (err)
-+	if (err && err != -EPROBE_DEFER)
- 		pr_err("failed to boot CPU%d (%d)\n", cpu, err);
- 
- 	return err;
-diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
-index 5669b013c2b7..ea031641545d 100644
---- a/arch/arm64/kernel/smp.c
-+++ b/arch/arm64/kernel/smp.c
-@@ -125,7 +125,8 @@ int __cpu_up(unsigned int cpu, struct task_struct *idle)
- 	/* Now bring the CPU into our world */
- 	ret = boot_secondary(cpu, idle);
- 	if (ret) {
--		pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
-+		if (ret != -EPROBE_DEFER)
-+			pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
- 		return ret;
- 	}
- 
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index e7bcfca4159f..3389c913b2ea 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -212,6 +212,8 @@ static int __psci_cpu_on(u32 fn, unsigned long cpuid, unsigned long entry_point)
- 	int err;
- 
- 	err = invoke_psci_fn(fn, cpuid, entry_point, 0);
-+	if (err == PSCI_RET_DENIED)
-+		return -EPROBE_DEFER;
- 	return psci_to_linux_errno(err);
+diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+index 572a12672c0e..20e810a066da 100644
+--- a/drivers/acpi/acpi_processor.c
++++ b/drivers/acpi/acpi_processor.c
+@@ -194,6 +194,35 @@ static int acpi_processor_make_present(struct acpi_processor *pr)
+ 	return ret;
  }
  
++static int acpi_processor_make_enabled(struct acpi_processor *pr)
++{
++	unsigned long long sta;
++	acpi_status status;
++	bool present, enabled;
++
++	if (!acpi_has_method(pr->handle, "_STA"))
++		return arch_register_cpu(pr->id);
++
++	status = acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
++	if (ACPI_FAILURE(status))
++		return -ENODEV;
++
++	present = sta & ACPI_STA_DEVICE_PRESENT;
++	enabled = sta & ACPI_STA_DEVICE_ENABLED;
++
++	if (cpu_online(pr->id) && (!present || !enabled)) {
++		pr_err_once(FW_BUG "CPU %u is online, but described as not present or disabled!\n", pr->id);
++		add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
++	} else if (!present || !enabled) {
++		return -ENODEV;
++	}
++
++	if (get_cpu_device(pr->id))
++		return -EEXIST;
++
++	return arch_register_cpu(pr->id);
++}
++
+ static int acpi_processor_get_info(struct acpi_device *device)
+ {
+ 	union acpi_object object = { 0 };
+@@ -271,7 +300,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
+ 	}
+ 
+ 	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id)) {
+-		int ret = arch_register_cpu(pr->id);
++		int ret = acpi_processor_make_enabled(pr);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -478,6 +507,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
+ 		acpi_processor_make_not_present(device);
+ 		return;
+ 	}
++
++	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
++		arch_unregister_cpu(pr->id);
+ }
+ 
+ #ifdef CONFIG_X86
 -- 
 2.30.2
 
