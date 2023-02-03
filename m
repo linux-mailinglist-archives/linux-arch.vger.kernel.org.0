@@ -2,113 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B836890AE
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 08:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2A96890D5
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 08:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjBCHTl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 02:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S232111AbjBCHZW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 02:25:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbjBCHTd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 02:19:33 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE6E719A8
-        for <linux-arch@vger.kernel.org>; Thu,  2 Feb 2023 23:19:22 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id d3so4393896plr.10
-        for <linux-arch@vger.kernel.org>; Thu, 02 Feb 2023 23:19:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x14kRrZZe2kdSbgJ1PJqUMQQfgWflSMZWL5LFkwvByE=;
-        b=h7nAnXYffJkXAeKtJ4+Pb47ZmdkwzoIxpzRgCBuRqFSEuDy+TP7MF7IO/iVxeE9h3P
-         aG7Esd2gb18pAjYT42bsVp7oBg2AItWYJWILKrT1Rv1wljyPlzKVe3HEajToWCRcZVtL
-         zy4qIqHGZ3aoBW3DgCSA/Vp7o+H66URuFiIddPmq0wydnig1tvUkwDog28Na9VCQmXCY
-         VaSnJ2jOszZ6JD6S3Lt/kqQ/A4667tSOoYJbLAZ3Dg/8Mt+fnJ7poqcB8fdgDCdZgr9h
-         DFZ/UDXahTH+Bf05/C7Y+Y3gm5kj6MbI54iJLvql0E7GMYErZm9nVGNUKj5tyaG4S5jq
-         3YEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x14kRrZZe2kdSbgJ1PJqUMQQfgWflSMZWL5LFkwvByE=;
-        b=HVHPJwXOb02PbJNy7HJU9k0e3f7TTNHQdeZt6DFUjLQ8p0nTk+KjFgYiOEgqYGrugY
-         9uMVEKvhOKTLXSMHJEqaAtsO44GflbivhCXP6ItNZseP3aULpzizZLovX/MkJ2fblj6Q
-         b8Z6JxgVtQk1FASOqIyaFYRps+7f0RFdW/MFrbU2R6n1S1MTL2BTXEHVIX1cfhDx9GsW
-         Johf73cRnlwow9+7yJns4S3rhaSlKetGYDmhrAb0S4v7bIXVTgV12/78506eflvus2Fc
-         IoJSbmqKBr+IJ5SxUrHoEcz1kUc1t7BM6PpJQ5sUVv0r9kUr0Qx1XzD9RftGHgxz+XS5
-         FPDg==
-X-Gm-Message-State: AO0yUKUyAnKGvhCmWSRtOuzDzZd8khWcbKAGHQSket5ukeAZW3GWVgsH
-        RuPyH6ykUp1Lc/hQmmDReh4=
-X-Google-Smtp-Source: AK7set/pN1qkE5vW6sEUJPLmtT3NU/AerHL7q01jFwtmVHRhEkUBx1PKvOIigiSi96c+JcvQpUaLgA==
-X-Received: by 2002:a17:90a:11:b0:22c:8dfe:d6a6 with SMTP id 17-20020a17090a001100b0022c8dfed6a6mr9294792pja.4.1675408762194;
-        Thu, 02 Feb 2023 23:19:22 -0800 (PST)
-Received: from bobo.ibm.com (193-116-117-77.tpgi.com.au. [193.116.117.77])
-        by smtp.gmail.com with ESMTPSA id f20-20020a637554000000b004df4ba1ebfesm877558pgn.66.2023.02.02.23.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Feb 2023 23:19:21 -0800 (PST)
-From:   Nicholas Piggin <npiggin@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Rik van Riel <riel@redhat.com>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v7 5/5] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
-Date:   Fri,  3 Feb 2023 17:18:37 +1000
-Message-Id: <20230203071837.1136453-6-npiggin@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230203071837.1136453-1-npiggin@gmail.com>
-References: <20230203071837.1136453-1-npiggin@gmail.com>
+        with ESMTP id S232056AbjBCHZV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 02:25:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ABA8C1E8;
+        Thu,  2 Feb 2023 23:25:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B4BE61DB8;
+        Fri,  3 Feb 2023 07:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9EAC433D2;
+        Fri,  3 Feb 2023 07:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1675409118;
+        bh=w/73Uc/n5KxsufzX5CddSnsJWhi8Tl5rHcWOUj980gE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KvD8eTpjLOtWB+UEaur78gdbkDk2uNg4iTyG7EduGBBQeFYYfDMJR0zI5M46iGXgI
+         B/g60xlZj15BQnrefnVhdWcwV0eYwBhVI1fWaHKJRFJ022Eb8m0gihPo6B9goL/ROM
+         S4BKuWCyK0zSKt6MO3m0b0jgs8LUO3Xke14ThSpk=
+Date:   Fri, 3 Feb 2023 08:25:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: [PATCH 02/22] usb: remove the dead USB_OHCI_SH option
+Message-ID: <Y9y221RalpLWJE0S@kroah.com>
+References: <20230113062339.1909087-1-hch@lst.de>
+ <20230113062339.1909087-3-hch@lst.de>
+ <Y8EEbCP6PRMzWP5y@kroah.com>
+ <20230203071542.GC24833@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203071542.GC24833@lst.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On a 16-socket 192-core POWER8 system, the context_switch1_threads
-benchmark from will-it-scale (see earlier changelog), upstream can
-achieve a rate of about 1 million context switches per second, due to
-contention on the mm refcount.
+On Fri, Feb 03, 2023 at 08:15:42AM +0100, Christoph Hellwig wrote:
+> On Fri, Jan 13, 2023 at 08:12:44AM +0100, Greg Kroah-Hartman wrote:
+> > Do you want all of these to go through a single tree, or can they go
+> > through the different driver subsystem trees?
+> 
+> Looks like the big removal isn't going in for this merge winodw,
+> so can you queue this patch up after all Greg?
 
-64s meets the prerequisites for CONFIG_MMU_LAZY_TLB_SHOOTDOWN, so enable
-the option. This increases the above benchmark to 118 million context
-switches per second.
+Sure, I'll go apply it right now, thanks.
 
-This generates 314 additional IPI interrupts on a 144 CPU system doing
-a kernel compile, which is in the noise in terms of kernel cycles.
-
-Acked-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
----
- arch/powerpc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b8c4ac56bddc..600ace5a7f1a 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -265,6 +265,7 @@ config PPC
- 	select MMU_GATHER_PAGE_SIZE
- 	select MMU_GATHER_RCU_TABLE_FREE
- 	select MMU_GATHER_MERGE_VMAS
-+	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
- 	select MODULES_USE_ELF_RELA
- 	select NEED_DMA_MAP_STATE		if PPC64 || NOT_COHERENT_CACHE
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK	if PPC64
--- 
-2.37.2
-
+greg k-h
