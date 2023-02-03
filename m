@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404E6688E74
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 05:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A070D688EEA
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 06:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjBCELq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 23:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
+        id S231660AbjBCFXT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 00:23:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjBCELp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 23:11:45 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79AE5889B5;
-        Thu,  2 Feb 2023 20:11:44 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id nm12-20020a17090b19cc00b0022c2155cc0bso3811021pjb.4;
-        Thu, 02 Feb 2023 20:11:44 -0800 (PST)
+        with ESMTP id S231185AbjBCFXS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 00:23:18 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC353C2B0;
+        Thu,  2 Feb 2023 21:23:16 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so3952048pjb.1;
+        Thu, 02 Feb 2023 21:23:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o6SutkkPN90XD99Vz5rZcOuOIBT6F073Izv3cfX4L6Y=;
-        b=LR+uushjFX5Yl32iRIfbrakVGmfD4q44AT0eKuy7DOqNEC9Bx2dJMbfs81NvcayfKk
-         OHC/qz/dpCJHl4W5ZrbZbJ0sCi7vonP+Zpk0zn1Bbey3rNhQcTIrPJ6Tj2PGsmH9ruR/
-         RelLFwe8neUWQ68jK0bIzxHC00h4Oon/nCjuQHb8bh6LE71XJozSrX6OMUe5MYn0f8xB
-         dD3a7JhIJDaXujzdh3B2u5bqTfwMPYDf6MewPhgMfEivY5OHmx5zNiQ2zdEFUgTqx96l
-         38N1R2IBlR0HAc7x0eZXUJMA2zfSWisF3hsZH/TXDwvwroVZOKfvW/HyFUk3t+KC3Okb
-         0Glw==
+        bh=R9Al5IgfTAXRchBvFsd8KHoDxMsWlvFtFMC8MfqxpJs=;
+        b=CVpzx6OeNkGU3rRXC6PcXEzYF0Lmo5pQHI8yZobfDC2+War/IUoq4rplgc54ROqSnz
+         qAcBdMqdl5JH2BFeaEda3mX9cx9eQW8pZWWNU7OFtrs5pe2pePnNDivyI+C38IRJ6GTq
+         EKe54v+qakVRUEgGDlomkDb3xXHYXfO8ElaEUmB1kFYmGgDeuj2BkfEaCE4slfXwB9Xb
+         6P9KXM6mJBe8s0jIpMn0RtnuiQeoVyZ1PGKqjU3/GwCrAKC3+FYJxfeUJCXfZtphgNAU
+         mmOjv+VFkuN6q73gKUclGeQa+5vxkwdFqxm0dTUvPKuoF4j6EmrdflOeUJHJkXYUj6TI
+         6nkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
          :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=o6SutkkPN90XD99Vz5rZcOuOIBT6F073Izv3cfX4L6Y=;
-        b=XuA2gmuNBDEVm+SBpMEdcgAg+Z/W5Oln1UeW5gT+DCqv7/BVNqFFoO42NmHKfStTuH
-         +UI5UGxWY66Bn01F/J47lhd7o0MLl3/I+n7so6R7RYbqcSzL8sCwpNYvfPPIsNmBe8cP
-         NmQNFMBLwLczngslQ6es7Q2ey+6vAVRPNswh5pk7Sk9JNdX7HiqfjWcbeK3+Up9fDpWM
-         whQ//ok0g3VKKOYzyjy2HWvmv/rXQihE6mcH1Fayf2LFSoscLCYmL8jKHnFmxln46WPY
-         5XQm/f0OGaSf/SfbyNJE3xXI8BGWb7S0Qsab2moZ8ObDXL0eimiBmk7aDhoOQgog3Q9G
-         voqw==
-X-Gm-Message-State: AO0yUKV8CxHF8f7thjFYaD6qdozEx0PmZ3Z0yauax/lY0t+Fwv8Ukn/h
-        DJx4DUkwj/rmOw6jqy1dagU=
-X-Google-Smtp-Source: AK7set/ZCPGn5k2O6fvqA++fmfJfTUdpOPqgHayHUBGBgYGncgLTWQZkMXfmvlwKFCrilHS72RI9XA==
-X-Received: by 2002:a17:90b:4d10:b0:229:ee75:5d09 with SMTP id mw16-20020a17090b4d1000b00229ee755d09mr8904607pjb.40.1675397503892;
-        Thu, 02 Feb 2023 20:11:43 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id a17-20020a17090a481100b00218a7808ec9sm461899pjh.8.2023.02.02.20.11.34
+        bh=R9Al5IgfTAXRchBvFsd8KHoDxMsWlvFtFMC8MfqxpJs=;
+        b=R9C0BkKsd1+xqzQ7pcHWu111nFEcsMyPHIeCv9xT6cn1L4gt/PLtZM/2S/+kvnacWK
+         TYghYayYZA2kTaNq9yPdfZRbdU8QVDIf4Ss83BYYNDXYnDeIZAQ+j2Hkt05TvtpNd/jB
+         pxnByJAjibMm8iKXwqxw9ILloKITPEhTfSjZ7JicqyJTd+SuKUTgdGYB2877eof+ry9c
+         lMG73O4VAgO8EwTRq7RB/YpRwpzY6JpEVtDTaQPqeYKbFkd0tEu4JqUkGNXPkdTghiV9
+         naD877eOKgumUpmN2nfnCYhboQ+gXa4HiZJybNR6iNB8AzTO4aR/l6TYDLEif0B94SOW
+         ZcmQ==
+X-Gm-Message-State: AO0yUKVSm+qAKs2onyz0yEE4d2uEXohV1wLZGE7uGHdvx/vsANVWLYtc
+        xEa27r4kO7O6lKtJ3HSZn9o=
+X-Google-Smtp-Source: AK7set+zd9ZiKwFgx4hfM+/7+UOyxzIAR1hNtMF9N4dpoUga9mKgwiwr09Ho5r/ItUxOnCv7AexCNQ==
+X-Received: by 2002:a17:90b:4d12:b0:22c:9912:39e with SMTP id mw18-20020a17090b4d1200b0022c9912039emr3842185pjb.36.1675401796098;
+        Thu, 02 Feb 2023 21:23:16 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id r6-20020a17090a4dc600b002271b43e528sm4025076pjl.33.2023.02.02.21.23.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Feb 2023 20:11:43 -0800 (PST)
-Message-ID: <0aea3782-b494-4c1b-1c74-2337bcdae3ef@gmail.com>
-Date:   Fri, 3 Feb 2023 12:11:31 +0800
+        Thu, 02 Feb 2023 21:23:15 -0800 (PST)
+Message-ID: <3bfbbaa1-69f8-0f33-a4dc-5a10758e603a@gmail.com>
+Date:   Fri, 3 Feb 2023 13:23:02 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [RFC PATCH V3 06/16] x86/hyperv: decrypt vmbus pages for sev-snp
- enlightened guest
+Subject: Re: [RFC PATCH V3 07/16] drivers: hv: Decrypt percpu hvcall input arg
+ page in sev-snp enlightened guest
 To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         "luto@kernel.org" <luto@kernel.org>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
@@ -95,10 +95,10 @@ Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
 References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-7-ltykernel@gmail.com>
- <BYAPR21MB16882851012198FD7ADB5CD1D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230122024607.788454-8-ltykernel@gmail.com>
+ <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
 From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB16882851012198FD7ADB5CD1D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB16880F982D51474B0911D528D7D09@BYAPR21MB1688.namprd21.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -111,21 +111,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/1/2023 1:58 AM, Michael Kelley (LINUX) wrote:
->> +
->> +			ret = set_memory_decrypted((unsigned long)
->> +				hv_cpu->post_msg_page, 1);
->> +			if (ret)
->> +				goto err_decrypt_msg_page;
->> +
->> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
->> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
->> +			memset(hv_cpu->post_msg_page, 0, PAGE_SIZE);
->> +		}
-> Having decrypted the pages here in hv_synic_alloc(), shouldn't
-> there be corresponding re-encryption in hv_synic_free()?
+On 2/1/2023 2:02 AM, Michael Kelley (LINUX) wrote:
+>> @@ -134,6 +136,17 @@ int hv_common_cpu_init(unsigned int cpu)
+>>   	if (!(*inputarg))
+>>   		return -ENOMEM;
+>>
+>> +	if (hv_isolation_type_en_snp()) {
+>> +		ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
+> You used "pgcount" here in response to a comment on v2 of the
+> patch.  But the corresponding re-encryption in hv_common_cpu_die()
+> uses a fixed value of "1".   The two cases should be consistent.  Either
+> assert that hv_root_partition will never be true in an SNP VM, in which
+> case hard coding "1" is OK.  Or properly calculate the number of pages
+> in both cases so they are consistent.
 > 
 
-Yes, I ignore in this version and will fix it.
-
-Thanks.
+Agree. We should keep the logic in both hv_common_cpu_init() and 
+hv_common_cpu_die(). Will fix it.
