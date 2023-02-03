@@ -2,77 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D81688CD6
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 03:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE0E688CE9
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 03:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjBCCBI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Feb 2023 21:01:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S231953AbjBCCI6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Feb 2023 21:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbjBCCBH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 21:01:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCE85A370;
-        Thu,  2 Feb 2023 18:00:55 -0800 (PST)
+        with ESMTP id S229469AbjBCCI5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Feb 2023 21:08:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396AD68114;
+        Thu,  2 Feb 2023 18:08:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B49F61D48;
-        Fri,  3 Feb 2023 02:00:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD0AC4339B;
-        Fri,  3 Feb 2023 02:00:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9390861D63;
+        Fri,  3 Feb 2023 02:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E557FC4339B;
+        Fri,  3 Feb 2023 02:08:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675389654;
-        bh=Ppnrlr2Of62m9p9RCJwEmdFH/cKYlwUfnbwHcwZolP8=;
+        s=k20201202; t=1675390134;
+        bh=9SFVMDLXP6rCxw0koy5AsHtvGYm4KS5eagd3gakC66Q=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Y3tztUIxT4B76/0oHhSOvJJhzu5QowRhwKdvd9v1jVQACxzk/G3qqdsTyn2VEGAHt
-         nxiBkLwfKdOxnwP+vNigkQ+0V+MFbDEzlJoGxVGh9zzFzCNhyy8yLr3tP82wKBQ0SE
-         RsCk/Fx9hM4fWhE783wYHe5kMcBDplLsnxg+CgLh3tMcgQ9bwqh6rujH6iV99U6H66
-         seGJsR7bQGKZ6ceSHc3FoCwjv9dl6gOjMoiv5Y080V2uqq90AyREVtNobJ5u3vAdoW
-         gHNQ/zIVwCwmyn99Cpp+9VOZIDM8pkO4cWLGFIClOYfRxeL1P7jMQYdxwFMyWyix10
-         s34JeM5rKM64A==
-Received: by mail-ed1-f52.google.com with SMTP id cw4so3840511edb.13;
-        Thu, 02 Feb 2023 18:00:54 -0800 (PST)
-X-Gm-Message-State: AO0yUKWRtqppTKMFGwrzLM3TM80c8kOcl0SGgmq7zy8FGv8Z0Q1rgsZI
-        lg63B9qSDoRVjTMQdvxX24nsFNjdZ2r12M48OEk=
-X-Google-Smtp-Source: AK7set8/irv84ZiakV0771/M/EefHiXbhcsZ2NjT5di96kWUpYycaQxPCjZtVXZLod9FoZdvXzwJuK8NZ8pwwfnQ9+E=
-X-Received: by 2002:a05:6402:557:b0:4a2:45e7:ee63 with SMTP id
- i23-20020a056402055700b004a245e7ee63mr2554310edx.38.1675389652903; Thu, 02
- Feb 2023 18:00:52 -0800 (PST)
+        b=h2naxLKy2Uss1KEo2gbiTB7Jr985m1oWr3pC7QD/Qky7TZICT+6Wb1+kinNfll89a
+         35TkDelMkbayRnL+GGsK+o2r4zaRESh6FYjhJKj88Ka2MqFPOgtdjywUywk6W7dXtW
+         x3g2jSbN0U/qq9aEl6B4L/xUlWn7d3vkE4ve0kvMJPRI8mZ2Yb9gzlZI5BWkDqQQod
+         qE3+9WoIb++WfibqIaHxwnQLiP/CvAtlpD0vlzSkFXTVf6cQQ0POJgVIU9qykH1Qb8
+         5NuFF0623cgffWWwd6sXw95AqpldiG2BFu0ppu+xF6T1kSlG9twjw2kB78yP5NWyuH
+         CF5RIMTM2REkw==
+Received: by mail-ej1-f42.google.com with SMTP id hx15so11468718ejc.11;
+        Thu, 02 Feb 2023 18:08:54 -0800 (PST)
+X-Gm-Message-State: AO0yUKU+DdEIlK50fRB2DK1IXcx2XOpTNJVPda8iedc/rbTR/MaSO+T0
+        +37jmIz8Nlqw28/XvufJIMcC0Cjhau9tkbeucEQ=
+X-Google-Smtp-Source: AK7set/ydpY+oP3Z+t+NArVdALXiqzOsn4rcGlM7loxkZ8n+4hJG8dOtM1ETH3IvToN2WCewRC5xSUJ3FVILiorZwGg=
+X-Received: by 2002:a17:906:338d:b0:879:b98d:eb0b with SMTP id
+ v13-20020a170906338d00b00879b98deb0bmr2023573eja.88.1675390133191; Thu, 02
+ Feb 2023 18:08:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn> <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
-In-Reply-To: <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn> <ccf74ebd-ccc1-4de5-a425-dcde4ac39a8d@app.fastmail.com>
+In-Reply-To: <ccf74ebd-ccc1-4de5-a425-dcde4ac39a8d@app.fastmail.com>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 3 Feb 2023 10:00:42 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
-Message-ID: <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
+Date:   Fri, 3 Feb 2023 10:08:42 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6kuzfjw5i8-6L_68c50nsXzFipHY5hxtbShuv16bqRbg@mail.gmail.com>
+Message-ID: <CAAhV-H6kuzfjw5i8-6L_68c50nsXzFipHY5hxtbShuv16bqRbg@mail.gmail.com>
 Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, David,
+Hi, Arnd,
 
-On Thu, Feb 2, 2023 at 5:01 PM David Laight <David.Laight@aculab.com> wrote:
+On Thu, Feb 2, 2023 at 5:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> From: Huacai Chen
-> > Sent: 02 February 2023 08:43
-> >
+> On Thu, Feb 2, 2023, at 09:42, Huacai Chen wrote:
 > > Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
 > > configurable.
 > >
@@ -82,27 +78,41 @@ On Thu, Feb 2, 2023 at 5:01 PM David Laight <David.Laight@aculab.com> wrote:
 > > This option is disabled by default to optimise for performance, but you
 > > can enabled it manually if you want to run kernel on systems without h/w
 > > unaligned access support.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 >
-> Should there be an associated run-time check during kernel initialisation
-> that a kernel compiled without -mstrict-align isn't being run on hardware
-> that doesn't support unaligned accesses.
+> This feels like it's a way too low-level option, I would not expect
+> users to be able to answer this correctly.
 >
-> It can be quite a while before you get a compiler-generated misaligned accesses.
-If we don't use -mstrict-align, the kernel cannot be run on hardware
-that doesn't support unaligned accesses, so I think the run-time check
-is useless, and it has no chance to run the checking.
-
->
-> Also isn't there a HAVE_EFFICIENT_MISALIGNED_ACCESS define that would
-> also need to be set correctly??
-Yes, HAVE_EFFICIENT_MISALIGNED_ACCESS should be kept consistency with
-ARCH_STRICT_ALIGN, thank you.
+> What I would do instead is to have Kconfig options for specific
+> CPU implementations and derive the alignment requirements from
+> that.
+You mean provide something like CONFIG_CPU_XXXX as MIPS do?  That
+seems not a good idea, too. If there are more than 3 CONFIG_CPU_XXXX,
+the complexity is more than CONFIG_ARCH_STRICT_ALIGN. Then users are
+also unable to do a correct selection. On the other hand, we can add
+more words under CONFIG_ARCH_STRICT_ALIGN to describe which processors
+support hardware unaligned accesses.
 
 Huacai
+
 >
->         David
+> > +config ARCH_STRICT_ALIGN
+> > +     bool "Enable -mstrict-align to prevent unaligned accesses"
+> > +     help
+> > +       Not all LoongArch cores support h/w unaligned access, we can use
+> > +       -mstrict-align build parameter to prevent unaligned accesses.
+> > +
+> > +       This is disabled by default to optimise for performance, you can
+> > +       enabled it manually if you want to run kernel on systems without
+> > +       h/w unaligned access support.
+> > +
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
 >
+> There is already a global CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+> option, I think you should use that one instead of adding another
+> one. Setting HAVE_EFFICIENT_UNALIGNED_ACCESS for CPUs that can
+> do unaligned access will enable some important optimizations in
+> the network stack and a few other places.
+>
+>     Arnd
