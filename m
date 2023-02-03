@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA8E689AB3
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 14:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6776689AB7
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 14:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbjBCNzv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 08:55:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S233627AbjBCN4F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 08:56:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjBCNzF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 08:55:05 -0500
+        with ESMTP id S233149AbjBCNzL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 08:55:11 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BB73A7EEC;
-        Fri,  3 Feb 2023 05:53:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F2EAA7EF7;
+        Fri,  3 Feb 2023 05:53:35 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FBC11650;
-        Fri,  3 Feb 2023 05:53:42 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2529515DB;
+        Fri,  3 Feb 2023 05:53:47 -0800 (PST)
 Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D29A43F71E;
-        Fri,  3 Feb 2023 05:52:56 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53CE93F71E;
+        Fri,  3 Feb 2023 05:53:01 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         kvmarm@lists.linux.dev, kvm@vger.kernel.org,
@@ -45,9 +45,9 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [RFC PATCH 16/32] ACPI: Rename acpi_processor_hotadd_init and remove pre-processor guards
-Date:   Fri,  3 Feb 2023 13:50:27 +0000
-Message-Id: <20230203135043.409192-17-james.morse@arm.com>
+Subject: [RFC PATCH 17/32] ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+Date:   Fri,  3 Feb 2023 13:50:28 +0000
+Message-Id: <20230203135043.409192-18-james.morse@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
 References: <20230203135043.409192-1-james.morse@arm.com>
@@ -61,89 +61,170 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-acpi_processor_hotadd_init() will make a CPU present by mapping it
-based on its hardware id.
+struct acpi_scan_handler has a detach callback that is used to remove
+a driver when a bus is changed. When interacting with an eject-request,
+the detach callback is called before _EJ0.
 
-'hotadd_init' is ambiguous once there are two different behaviours
-for cpu hotplug. This is for toggling the _STA present bit. Subsequent
-patches will add support for toggling the _STA enabled bit, named
-acpi_processor_make_enabled().
+This means the ACPI processor driver can't use _STA to determine if a
+CPU has been made not-present, or some of the other _STA bits have been
+changed. acpi_processor_remove() needs to know the value of _STA after
+_EJ0 has been called.
 
-Rename it acpi_processor_make_present() to make it clear this is
-for CPUs that were not previously present.
-
-Expose the function prototypes it uses to allow the preprocessor
-guards to be removed. The IS_ENABLED() check will let the compiler
-dead-code elimination pass remove this if it isn't going to be
-used.
+Add a post_eject callback to struct acpi_scan_handler. This is called
+after acpi_scan_hot_remove() has successfully called _EJ0. Because
+acpi_bus_trim_one() also clears the handler pointer, it needs to be
+told if the caller will go on to call acpi_bus_post_eject(), so
+that acpi_device_clear_enumerated() and clearing the handler pointer
+can be deferred. The existing not-used pointer is used for this.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- drivers/acpi/acpi_processor.c | 14 +++++---------
- include/linux/acpi.h          |  2 --
- 2 files changed, 5 insertions(+), 11 deletions(-)
+ drivers/acpi/acpi_processor.c |  4 +--
+ drivers/acpi/scan.c           | 52 ++++++++++++++++++++++++++++++-----
+ include/acpi/acpi_bus.h       |  1 +
+ 3 files changed, 48 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 682721594820..6ab55f109417 100644
+index 6ab55f109417..ab0f80b83773 100644
 --- a/drivers/acpi/acpi_processor.c
 +++ b/drivers/acpi/acpi_processor.c
-@@ -149,13 +149,15 @@ static int acpi_processor_errata(void)
+@@ -411,7 +411,7 @@ static int acpi_processor_add(struct acpi_device *device,
+ 
+ #ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+ /* Removal */
+-static void acpi_processor_remove(struct acpi_device *device)
++static void acpi_processor_post_eject(struct acpi_device *device)
+ {
+ 	struct acpi_processor *pr;
+ 
+@@ -523,7 +523,7 @@ static struct acpi_scan_handler processor_handler = {
+ 	.ids = processor_device_ids,
+ 	.attach = acpi_processor_add,
+ #ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
+-	.detach = acpi_processor_remove,
++	.post_eject = acpi_processor_post_eject,
+ #endif
+ 	.hotplug = {
+ 		.enabled = true,
+diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+index cecf94192771..cd9bedb54393 100644
+--- a/drivers/acpi/scan.c
++++ b/drivers/acpi/scan.c
+@@ -245,18 +245,28 @@ static int acpi_scan_try_to_offline(struct acpi_device *device)
+ 	return 0;
  }
  
- /* Initialization */
--#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
--static int acpi_processor_hotadd_init(struct acpi_processor *pr)
-+static int acpi_processor_make_present(struct acpi_processor *pr)
+-static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
++/**
++ * acpi_bus_trim_one() - Detach scan handlers and drivers from ACPI device
++ *                       objects.
++ * @adev:       Root of the ACPI namespace scope to walk.
++ * @eject:      Pointer to a bool that indicates if this was due to an
++ *              eject-request.
++ *
++ * Must be called under acpi_scan_lock.
++ * If @eject points to true, clearing the device enumeration is deferred until
++ * acpi_bus_post_eject() is called.
++ */
++static int acpi_bus_trim_one(struct acpi_device *adev, void *eject)
  {
+ 	struct acpi_scan_handler *handler = adev->handler;
++	bool is_eject = *(bool *)eject;
+ 
+-	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, NULL);
++	acpi_dev_for_each_child_reverse(adev, acpi_bus_trim_one, eject);
+ 
+ 	adev->flags.match_driver = false;
+ 	if (handler) {
+ 		if (handler->detach)
+ 			handler->detach(adev);
+-
+-		adev->handler = NULL;
+ 	} else {
+ 		device_release_driver(&adev->dev);
+ 	}
+@@ -266,7 +276,12 @@ static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+ 	 */
+ 	acpi_device_set_power(adev, ACPI_STATE_D3_COLD);
+ 	adev->flags.initialized = false;
+-	acpi_device_clear_enumerated(adev);
++
++	/* For eject this is deferred to acpi_bus_post_eject() */
++	if (!is_eject) {
++		adev->handler = NULL;
++		acpi_device_clear_enumerated(adev);
++	}
+ 
+ 	return 0;
+ }
+@@ -279,15 +294,36 @@ static int acpi_bus_trim_one(struct acpi_device *adev, void *not_used)
+  */
+ void acpi_bus_trim(struct acpi_device *adev)
+ {
+-	acpi_bus_trim_one(adev, NULL);
++	bool eject = false;
++
++	acpi_bus_trim_one(adev, &eject);
+ }
+ EXPORT_SYMBOL_GPL(acpi_bus_trim);
+ 
++static int acpi_bus_post_eject(struct acpi_device *adev, void *not_used)
++{
++	struct acpi_scan_handler *handler = adev->handler;
++
++	acpi_dev_for_each_child_reverse(adev, acpi_bus_post_eject, NULL);
++
++	if (handler) {
++		if (handler->post_eject)
++			handler->post_eject(adev);
++
++		adev->handler = NULL;
++	}
++
++	acpi_device_clear_enumerated(adev);
++
++	return 0;
++}
++
+ static int acpi_scan_hot_remove(struct acpi_device *device)
+ {
+ 	acpi_handle handle = device->handle;
  	unsigned long long sta;
  	acpi_status status;
- 	int ret;
++	bool eject = true;
  
-+	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
-+		return -ENODEV;
-+
- 	if (invalid_phys_cpuid(pr->phys_id))
- 		return -ENODEV;
+ 	if (device->handler && device->handler->hotplug.demand_offline) {
+ 		if (!acpi_scan_is_offline(device, true))
+@@ -300,7 +336,7 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
  
-@@ -189,12 +191,6 @@ static int acpi_processor_hotadd_init(struct acpi_processor *pr)
- 	cpu_maps_update_done();
- 	return ret;
- }
--#else
--static inline int acpi_processor_hotadd_init(struct acpi_processor *pr)
--{
--	return -ENODEV;
--}
--#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
+ 	acpi_handle_debug(handle, "Ejecting\n");
  
- static int acpi_processor_get_info(struct acpi_device *device)
- {
-@@ -287,7 +283,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
- 	 *  because cpuid <-> apicid mapping is persistent now.
- 	 */
- 	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
--		int ret = acpi_processor_hotadd_init(pr);
-+		int ret = acpi_processor_make_present(pr);
+-	acpi_bus_trim(device);
++	acpi_bus_trim_one(device, &eject);
  
- 		if (ret)
- 			return ret;
-diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-index 0bc1eacd0dfc..a59bca4dbcd5 100644
---- a/include/linux/acpi.h
-+++ b/include/linux/acpi.h
-@@ -327,12 +327,10 @@ static inline int acpi_processor_evaluate_cst(acpi_handle handle, u32 cpu,
- }
- #endif
+ 	acpi_evaluate_lck(handle, 0);
+ 	/*
+@@ -323,6 +359,8 @@ static int acpi_scan_hot_remove(struct acpi_device *device)
+ 	} else if (sta & ACPI_STA_DEVICE_ENABLED) {
+ 		acpi_handle_warn(handle,
+ 			"Eject incomplete - status 0x%llx\n", sta);
++	} else {
++		acpi_bus_post_eject(device, NULL);
+ 	}
  
--#ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU
- /* Arch dependent functions for cpu hotplug support */
- int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id,
- 		 int *pcpu);
- int acpi_unmap_cpu(int cpu);
--#endif /* CONFIG_ACPI_HOTPLUG_PRESENT_CPU */
- 
- #ifdef CONFIG_ACPI_HOTPLUG_IOAPIC
- int acpi_get_ioapic_id(acpi_handle handle, u32 gsi_base, u64 *phys_addr);
+ 	return 0;
+diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+index cd3b75e08ec3..dc4028cafd33 100644
+--- a/include/acpi/acpi_bus.h
++++ b/include/acpi/acpi_bus.h
+@@ -126,6 +126,7 @@ struct acpi_scan_handler {
+ 	bool (*match)(const char *idstr, const struct acpi_device_id **matchid);
+ 	int (*attach)(struct acpi_device *dev, const struct acpi_device_id *id);
+ 	void (*detach)(struct acpi_device *dev);
++	void (*post_eject)(struct acpi_device *dev);
+ 	void (*bind)(struct device *phys_dev);
+ 	void (*unbind)(struct device *phys_dev);
+ 	struct acpi_hotplug_profile hotplug;
 -- 
 2.30.2
 
