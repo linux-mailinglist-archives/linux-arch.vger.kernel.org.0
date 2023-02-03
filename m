@@ -2,116 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A832C68A37B
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 21:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A7768A479
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 22:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbjBCUTk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 15:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S231320AbjBCVRF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 16:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbjBCUTj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 15:19:39 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531716CC87
-        for <linux-arch@vger.kernel.org>; Fri,  3 Feb 2023 12:19:38 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id g7so6828510qto.11
-        for <linux-arch@vger.kernel.org>; Fri, 03 Feb 2023 12:19:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PlO+7yJUL6nZz6lWyKAteQU74Ju3H8abrNP72ihWCAM=;
-        b=Kmqgxr98A8rmlt1eG1Qvlry8R2htsdd8gpZ6xlaKDfwShmcldtpeNwAwBl+zru4UHO
-         EjSIuyi/1gvQIqauWKxF1u9onlcTqDp2tfx7qNRK4/Y3nKJ9VCvqtvFoKH9iEkIm9TtH
-         lMJWMucq5G4qzkWScRZDtPT9ns3GVif+j0OXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PlO+7yJUL6nZz6lWyKAteQU74Ju3H8abrNP72ihWCAM=;
-        b=BlRetosUTInxlugHRyTGf0vVWp5EewIaUUYo/hNqEwGLyxbLjj/tazgBpIqsH+Z75t
-         uHLQ2rHcdggFzixQC3lI517Flmy4l+InRfYuSURCioGJ2HI36UWkiWdpGxQpbK2HyQT1
-         1T8p/K5gUlNOyTIclXet3wxzXP2uO25X+qyiMZmladMiPIHnKIKCYkgEPSExaWw25h9J
-         ks8uHEqDKZY32n9BL3SF8w3AVjbWlfNAou3W7y9bQO6LxZS/Lc9L9MiBOKNPsDoEhdG6
-         3/B3eZgoVSk9tIM+SDYB7LTWF6BmZZIlvKNUmLqk37229PVpYPpv+tc3pG4dQA3FryQA
-         HTUA==
-X-Gm-Message-State: AO0yUKUPnrpzr/oG+miP4CshbKKHpcDpPK8zLH8roE23AeOCPTINwTKX
-        qib43YPQsY9xkQTRjweP7DrPXOKRom8ZYdLS
-X-Google-Smtp-Source: AK7set9nC+TUlWirAN+jtujA8yCUlYb0urmBCrtJgYrW0olrJKhCm4nX/TVN2h+LCT26hzgcod7jnQ==
-X-Received: by 2002:ac8:7e86:0:b0:3b9:a641:aa66 with SMTP id w6-20020ac87e86000000b003b9a641aa66mr21897622qtj.15.1675455577457;
-        Fri, 03 Feb 2023 12:19:37 -0800 (PST)
-Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id g17-20020ae9e111000000b006ce580c2663sm2457424qkm.35.2023.02.03.12.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Feb 2023 12:19:36 -0800 (PST)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>, linux-arch@vger.kernel.org,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH RFC] tools/memory-model: Restrict to-r to read-read address dependency
-Date:   Fri,  3 Feb 2023 20:19:13 +0000
-Message-Id: <20230203201913.2555494-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.39.1.519.gcb327c4b5f-goog
+        with ESMTP id S232778AbjBCVRE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 16:17:04 -0500
+X-Greylist: delayed 489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 03 Feb 2023 13:16:26 PST
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [IPv6:2001:41d0:203:375::b9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28829D046
+        for <linux-arch@vger.kernel.org>; Fri,  3 Feb 2023 13:16:26 -0800 (PST)
+Date:   Fri, 3 Feb 2023 21:08:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1675458492;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zF794bsssBgYs01gtLHUkS28EIicNc0l0YnvFt/94YI=;
+        b=gF+Ot9L7bvkYWgstVlN3IGR5gepXbOhnLUW+ryxf0GGE8OvgoAe8gh4332GPCHIBnUEDfl
+        OstQTXxU52klLCCbGsxtBPABUoe9zoYwljDknwyOPX3XqLcs69d34u9p3+onFADs6Ko7Qx
+        oTbdNErPix3LGrijaxdz/cn1jgoVGFY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+Message-ID: <Y913sIqWxmf4O5oG@google.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230203135043.409192-30-james.morse@arm.com>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-During a code-reading exercise of linux-kernel.cat CAT file, I generated
-a graph to show the to-r relations. While likely not problematic for the
-model, I found it confusing that a read-write address dependency would
-show as a to-r edge on the graph.
+Hi James,
 
-This patch therefore restricts the to-r links derived from addr to only
-read-read address dependencies, so that read-write address dependencies don't
-show as to-r in the graphs. This should also prevent future users of to-r from
-deriving incorrect relations. Note that a read-write address dep, obviously,
-still ends up in the ppo relation via the to-w relation.
+On Fri, Feb 03, 2023 at 01:50:40PM +0000, James Morse wrote:
+> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> 
+> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+> request to handle all hypercalls that aren't handled by KVM.
 
-I verified that a read-read address dependency still shows up as a to-r
-link in the graph, as it did before.
+I would very much prefer we not go down this route. This capability
+effectively constructs an ABI out of what KVM presently does not
+implement. What would happen if KVM decides to implement a new set
+of hypercalls later down the road that were previously forwarded to
+userspace?
 
-For reference, the problematic graph was generated with the following
-command:
-herd7 -conf linux-kernel.cfg \
-   -doshow dep -doshow to-r -doshow to-w ./foo.litmus -show all -o OUT/
+Instead of a catch-all I think we should take the approach of having
+userspace explicitly request which hypercalls should be forwarded to
+userspace. I proposed something similar [1], but never got around to
+respinning it (oops).
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/memory-model/linux-kernel.cat | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Let me dust those patches off and align with Marc's suggestions.
 
-diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-index d70315fddef6..26e6f0968143 100644
---- a/tools/memory-model/linux-kernel.cat
-+++ b/tools/memory-model/linux-kernel.cat
-@@ -69,7 +69,7 @@ let dep = addr | data
- let rwdep = (dep | ctrl) ; [W]
- let overwrite = co | fr
- let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
--let to-r = addr | (dep ; [Marked] ; rfi)
-+let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
- let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
- 
- (* Propagation: Ordering from release operations and strong fences. *)
--- 
-2.39.1.519.gcb327c4b5f-goog
+[1]: https://lore.kernel.org/kvmarm/20221110015327.3389351-1-oliver.upton@linux.dev/
 
+--
+Thanks,
+Oliver
