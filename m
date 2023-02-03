@@ -2,132 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45EC689BD7
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 15:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0C1689BD3
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 15:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233858AbjBCOdJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 09:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
+        id S233790AbjBCOdB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 09:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbjBCOcz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 09:32:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D263EA2A49
-        for <linux-arch@vger.kernel.org>; Fri,  3 Feb 2023 06:31:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675434698;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/decAsXzWzOr1Fn5getBDCGr7TKXQO+f4q0N0MxWErI=;
-        b=FN9TAsxOKcK+N/WrLynTxPqRzyZ7ZRNHuqft9mJ0O7QKTw0/sg1jI+oMEp3FpT9C12A0X/
-        tYDCgKP4uvL7po41MunDlFfim7JhA522dXj1HiRikdi43cH6obdzeIw9BP6nWINLN6U7xO
-        6FmAm7tVEOpVf9O4l7euWf+L1SjVvrU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-601-N5jGnV0GOrS9KqcJXmj8vA-1; Fri, 03 Feb 2023 09:31:36 -0500
-X-MC-Unique: N5jGnV0GOrS9KqcJXmj8vA-1
-Received: by mail-wr1-f72.google.com with SMTP id u10-20020a5d6daa000000b002bfc2f61048so713828wrs.23
-        for <linux-arch@vger.kernel.org>; Fri, 03 Feb 2023 06:31:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/decAsXzWzOr1Fn5getBDCGr7TKXQO+f4q0N0MxWErI=;
-        b=WLWFc/vUfciBCq8RcFCPOrordZlMDIl6mSB2MNeOGKXhUfZhMOklKQZ1ikZWuY9/NN
-         67SlPLDm9Z9Vz6mAd+BFofu/LBSuJ8YgScrk0B+/VhtwnB4oHXm2DnEs8iGoWgzaNoYk
-         thwvIKBn5gAA//cxpxouLamNnFJlQQ/vsITQaDghJiE5O3z4tmeYDPVsw+gjuyK3CAiI
-         t7GGOh7+UsWa3mlWlZNHrpj/kHM7xgQlUJLjlNEgimXcoac5XbbqsoimS7qKCh8ZbN93
-         0wgimlwg5ONaYcEZ1HRJEDgVdvrgihY+9RGc5+vpKkLGcr07PAp/TAfQLRc1eOoPFrmQ
-         vKaw==
-X-Gm-Message-State: AO0yUKXaiPmwP55USECE8iYchQpbepqStZE58g0i6M5JxJTdvzct/SzY
-        c2k4UkOrV/ccuZEGSvDFtvzx/830eUMcyfdvZ8q4+9K9uJLqHWF1h6+zC63PMPPIiw7Z1DFTsrQ
-        FlILpnNYVN6MMYCTvJXzmww==
-X-Received: by 2002:a05:600c:4747:b0:3df:e549:bd27 with SMTP id w7-20020a05600c474700b003dfe549bd27mr3635004wmo.6.1675434695227;
-        Fri, 03 Feb 2023 06:31:35 -0800 (PST)
-X-Google-Smtp-Source: AK7set/qkaMfF+TBCgvbwgP2CGu2sIJoLRpl09HLMUmy0eiiBTILy4lbS6cT+HBgr82lyryc+pIpNQ==
-X-Received: by 2002:a05:600c:4747:b0:3df:e549:bd27 with SMTP id w7-20020a05600c474700b003dfe549bd27mr3634941wmo.6.1675434694897;
-        Fri, 03 Feb 2023 06:31:34 -0800 (PST)
-Received: from [192.168.3.108] (p5b0c6376.dip0.t-ipconnect.de. [91.12.99.118])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1ce909000000b003dc34edacf8sm7704293wmc.31.2023.02.03.06.31.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Feb 2023 06:31:34 -0800 (PST)
-Message-ID: <1d13abeb-ea4b-6314-2fd2-1b86b8f4d6c5@redhat.com>
-Date:   Fri, 3 Feb 2023 15:31:32 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 3/4] mips: drop definition of pfn_valid() for
- DISCONTIGMEM
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <monstr@monstr.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Rich Felker <dalias@libc.org>,
-        Richard Weinberger <richard@nod.at>,
-        Russell King <linux@armlinux.org.uk>,
-        Stafford Horne <shorne@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vineet Gupta <vgupta@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-mm@kvack.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        openrisc@lists.librecores.org, sparclinux@vger.kernel.org,
-        x86@kernel.org
-References: <20230129124235.209895-1-rppt@kernel.org>
- <20230129124235.209895-4-rppt@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230129124235.209895-4-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S233573AbjBCOcx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 09:32:53 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71849A81D;
+        Fri,  3 Feb 2023 06:32:50 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1A4A85C012D;
+        Fri,  3 Feb 2023 09:32:48 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 03 Feb 2023 09:32:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675434768; x=1675521168; bh=FALddAaYGF
+        gcZ9rzGoq/Hl0U4sB28CXCpLkKlDzWrcc=; b=ImCPonV//aJmPtqPlGZhwlANPu
+        91sIQWxvF5XKSi+wUqebKPHfTdT+6YwMbkPMNc8yiTUpX6flki7+ET8CC4fJx21+
+        64oNWJmZRnfhOKIt1ilrrWnoHfH3nR1dYD3NpmZgjauUIT/RqUX/btwVEn1pcrLL
+        o5s/SQ8t34eXcsieq5fhynfd3gsrEXekQ+UCJLdtIBMCzT6sDiPhtP5kBs5+VtjZ
+        W1sqqJXbfYbnc8VASUlfz2VZEL+Bl5F5h/5XDqWZCPRbRVyykOUEplvVVLo+HjZK
+        +A5VUCNxTNyZZRINTAnSbP0XS8zzRAnEc3KmwwLYXalQxwzPCMPVMefcaQ2Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675434768; x=1675521168; bh=FALddAaYGFgcZ9rzGoq/Hl0U4sB2
+        8CXCpLkKlDzWrcc=; b=PirNOKqmbyM+NttfTfonhcvv1Hxev/Xgj75l6at0P5Az
+        C+XPWBxRtOaixIsFcL3A9ZVndSBcS4piHn7MOyuMlYNwmPewhtqryNZVtDxBrDn4
+        qPhvK3tf+WC2EfXoXMOIHcYcsrvLo6+sA/ODXg8ipYptBHQ9802+3cwewOYe1xAa
+        Z/p96mcmC8obrDrBQxtClIw2RBHHjLRXXGLTEcmzUhpLfFp+iFYommwfMgUDJHyi
+        425rUzepDaxi/w2iS8xaiAQDjAs33prSlRttTXK0Hxa+BqzXsle6GaXE+2PqcLWc
+        YFXhHb2T/ruaj4ASoU/+OXUO8WCLHxas1VnMSWA2jQ==
+X-ME-Sender: <xms:DxvdYy8Q4CgdiT1mETyUIm7EbLrVHOSH5J2jgNHoHIOqm_PFY-Cc3g>
+    <xme:DxvdYys6O6sk1bfDXCBfYP7Jf_6-3pxfgKwvxjC-1c_U_93IBDwZrF8eyYIuBDS4Z
+    6Eu02pEflOWxMVqkrg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegtddgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:DxvdY4C-fv8ppXi9Lfee9yyz81cFTopC9fj1bq65wnj-WQ-OyIM--w>
+    <xmx:DxvdY6eIAYvN-JP-wQVtfcsrWWLW1YrVVycIInqqPTPnLWINmWE_lw>
+    <xmx:DxvdY3P9pJid1K3oB7cQm9qDtneeUwloVRYKL6oUsbIcRc0gucmPEA>
+    <xmx:EBvdY91hjHPeBEO2Jr1Gq_e9h_uNvoeSrrf_ZeyDLMHth4IgjYq4Mg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A5F98B6044F; Fri,  3 Feb 2023 09:32:47 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-107-g82c3c54364-fm-20230131.002-g82c3c543
+Mime-Version: 1.0
+Message-Id: <a55d3d15-d89d-43c4-85e7-c6d18a57a32f@app.fastmail.com>
+In-Reply-To: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
+References: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
+Date:   Fri, 03 Feb 2023 15:32:28 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Matt Evans" <mev@rivosinc.com>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>
+Subject: Re: [PATCH] locking/atomic: cmpxchg: Make __generic_cmpxchg_local compare
+ against zero-extended 'old' value
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 29.01.23 13:42, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> There is stale definition of pfn_valid() for DISCONTINGMEM memory model
-> guarded !FLATMEM && !SPARSEMEM && NUMA ifdefery.
-> 
-> Remove everything but definition of pfn_valid() for FLATMEM.
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+On Wed, Feb 1, 2023, at 19:39, Matt Evans wrote:
+> __generic_cmpxchg_local takes unsigned long old/new arguments which
+> might end up being up-cast from smaller signed types (which will
+> sign-extend).  The loaded compare value must be compared against a
+> truncated smaller type, so down-cast appropriately for each size.
+>
+> The issue is apparent on 64-bit machines with code, such as
+> atomic_dec_unless_positive(), that sign-extends from int.
+>
+> 64-bit machines generally don't use the generic cmpxchg but
+> development/early ports might make use of it, so make it correct.
+>
+> Signed-off-by: Matt Evans <mev@rivosinc.com>
+> ---
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Applied to the asm-generic tree for 6.3, thanks
 
--- 
-Thanks,
-
-David / dhildenb
-
+    Arnd
