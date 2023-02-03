@@ -2,96 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FFF689288
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 09:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565A96896A8
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 11:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjBCIqb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 03:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
+        id S233722AbjBCKbY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Fri, 3 Feb 2023 05:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231905AbjBCIqa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 03:46:30 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA8079237
-        for <linux-arch@vger.kernel.org>; Fri,  3 Feb 2023 00:46:28 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-314-hQ5rIG0kMFGt6l0xOnfJhw-1; Fri, 03 Feb 2023 08:46:26 +0000
-X-MC-Unique: hQ5rIG0kMFGt6l0xOnfJhw-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.45; Fri, 3 Feb
- 2023 08:46:25 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.045; Fri, 3 Feb 2023 08:46:25 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Huacai Chen' <chenhuacai@kernel.org>
-CC:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] LoongArch: Make -mstrict-align be configurable
-Thread-Topic: [PATCH] LoongArch: Make -mstrict-align be configurable
-Thread-Index: AQHZNuKTZOpLs+GXMEuRBwFbIvBWLq67WwCQgAEd3gCAAG+cUA==
-Date:   Fri, 3 Feb 2023 08:46:25 +0000
-Message-ID: <9936da8f577842b8b5edafcdc69dc2d1@AcuMS.aculab.com>
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
- <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
- <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
-In-Reply-To: <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S233738AbjBCKa3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 05:30:29 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBF6A07D7;
+        Fri,  3 Feb 2023 02:29:38 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pNtJx-0002fq-Hz; Fri, 03 Feb 2023 11:29:29 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pNtJx-000PVD-9p; Fri, 03 Feb 2023 11:29:29 +0100
+Message-ID: <d10fe31b2af6cf4e03618f38ca9d3ca5c72601ed.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Fri, 03 Feb 2023 11:29:27 +0100
+In-Reply-To: <20230203083037.GA30738@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+         <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+         <20230203083037.GA30738@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogSHVhY2FpIENoZW4NCj4gU2VudDogMDMgRmVicnVhcnkgMjAyMyAwMjowMQ0KPiANCj4g
-SGksIERhdmlkLA0KPiANCj4gT24gVGh1LCBGZWIgMiwgMjAyMyBhdCA1OjAxIFBNIERhdmlkIExh
-aWdodCA8RGF2aWQuTGFpZ2h0QGFjdWxhYi5jb20+IHdyb3RlOg0KPiA+DQo+ID4gRnJvbTogSHVh
-Y2FpIENoZW4NCj4gPiA+IFNlbnQ6IDAyIEZlYnJ1YXJ5IDIwMjMgMDg6NDMNCj4gPiA+DQo+ID4g
-PiBJbnRyb2R1Y2UgS2NvbmZpZyBvcHRpb24gQVJDSF9TVFJJQ1RfQUxJR04gdG8gbWFrZSAtbXN0
-cmljdC1hbGlnbiBiZQ0KPiA+ID4gY29uZmlndXJhYmxlLg0KPiA+ID4NCj4gPiA+IE5vdCBhbGwg
-TG9vbmdBcmNoIGNvcmVzIHN1cHBvcnQgaC93IHVuYWxpZ25lZCBhY2Nlc3MsIHdlIGNhbiB1c2Ug
-dGhlDQo+ID4gPiAtbXN0cmljdC1hbGlnbiBidWlsZCBwYXJhbWV0ZXIgdG8gcHJldmVudCB1bmFs
-aWduZWQgYWNjZXNzZXMuDQo+ID4gPg0KPiA+ID4gVGhpcyBvcHRpb24gaXMgZGlzYWJsZWQgYnkg
-ZGVmYXVsdCB0byBvcHRpbWlzZSBmb3IgcGVyZm9ybWFuY2UsIGJ1dCB5b3UNCj4gPiA+IGNhbiBl
-bmFibGVkIGl0IG1hbnVhbGx5IGlmIHlvdSB3YW50IHRvIHJ1biBrZXJuZWwgb24gc3lzdGVtcyB3
-aXRob3V0IGgvdw0KPiA+ID4gdW5hbGlnbmVkIGFjY2VzcyBzdXBwb3J0Lg0KPiA+DQo+ID4gU2hv
-dWxkIHRoZXJlIGJlIGFuIGFzc29jaWF0ZWQgcnVuLXRpbWUgY2hlY2sgZHVyaW5nIGtlcm5lbCBp
-bml0aWFsaXNhdGlvbg0KPiA+IHRoYXQgYSBrZXJuZWwgY29tcGlsZWQgd2l0aG91dCAtbXN0cmlj
-dC1hbGlnbiBpc24ndCBiZWluZyBydW4gb24gaGFyZHdhcmUNCj4gPiB0aGF0IGRvZXNuJ3Qgc3Vw
-cG9ydCB1bmFsaWduZWQgYWNjZXNzZXMuDQo+ID4NCj4gPiBJdCBjYW4gYmUgcXVpdGUgYSB3aGls
-ZSBiZWZvcmUgeW91IGdldCBhIGNvbXBpbGVyLWdlbmVyYXRlZCBtaXNhbGlnbmVkIGFjY2Vzc2Vz
-Lg0KPg0KPiBJZiB3ZSBkb24ndCB1c2UgLW1zdHJpY3QtYWxpZ24sIHRoZSBrZXJuZWwgY2Fubm90
-IGJlIHJ1biBvbiBoYXJkd2FyZQ0KPiB0aGF0IGRvZXNuJ3Qgc3VwcG9ydCB1bmFsaWduZWQgYWNj
-ZXNzZXMsIHNvIEkgdGhpbmsgdGhlIHJ1bi10aW1lIGNoZWNrDQo+IGlzIHVzZWxlc3MsIGFuZCBp
-dCBoYXMgbm8gY2hhbmNlIHRvIHJ1biB0aGUgY2hlY2tpbmcuDQoNCklmIHlvdSBkb24ndCBhZGQg
-dGhlIGNoZWNrIGFuZCBzb21lb25lIGJvb3RzIHRoZSB3cm9uZyB0eXBlIG9mIGtlcm5lbA0KdGhl
-biB0aGV5J2xsIHByb2JhYmx5IGdldCBhIHBhbmljIHdlbGwgYWZ0ZXIgYm9vdGluZy4NCllvdSBy
-ZWFsbHkgZG8gd2FudCBhIGNoZWNrIGluIHRoZSBib3QgY29kZS4NCg0KVGhlcmUgaXMgYWxzbyB0
-aGUgcXVlc3Rpb24gb2YgaG93IHVzZXJzcGFjZSBpcyBjb21waWxlZC4NCllvdSBwcmV0dHkgbXVj
-aCBkb24ndCB3YW50IHRvIGJlIHRha2luZyB0cmFwcyB0byBmaXh1cCBtaXNhbGlnbmVkIGFjY2Vz
-c2VzLg0KU28gdGhlIGRlZmF1bHQgY29tcGlsZXIgb3B0aW9ucyBiZXR0ZXIgaW5jbHVkZSAtbXN0
-cmljdC1hbGlnbi4NCg0KWW91IHNob3VsZCBsb29rIGF0IC1tbm8tc3RyaWN0LWFsaWduIGJlaW5n
-IGEgcGVyZm9ybWFuY2Ugb3B0aW9uIHdoZW4NCnJ1bm5pbmcgb24ga25vd24gaGFyZHdhcmUsIG5v
-dCBhIGRlZmF1bHQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUs
-IEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJl
-Z2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Hi Christoph!
 
+On Fri, 2023-02-03 at 09:30 +0100, Christoph Hellwig wrote:
+> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+> > Since this is my very first time stepping up as a kernel maintainer, I was hoping
+> > to get some pointers on what to do to make this happen.
+> > 
+> > So far, we have set up a new kernel tree and I have set up a local development and
+> > test environment for SH kernels using my SH7785LCR board as the target platform.
+> > 
+> > Do I just need to send a patch asking to change the corresponding entry in the
+> > MAINTAINERS file?
+> 
+> I'm not sure a there is a document, but:
+> 
+>  - add the MAINTAINERS change to your tree
+>  - ask Stephen to get your tree included in linux-next
+> 
+> then eventually send a pull request to Linus with all of that.  Make
+> sure it's been in linux-next for a while.
+
+OK, thanks for the pointers! Will try to get this done by next week.
+
+We're still discussing among SuperH developer community whether there will be a second
+maintainer, so please bear with us a few more days. I will collect patches in the
+meantime.
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
