@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43543689A6A
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 14:55:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4A6689A62
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Feb 2023 14:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232327AbjBCNx3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 08:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S233378AbjBCNxn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 08:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbjBCNwh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 08:52:37 -0500
+        with ESMTP id S233234AbjBCNwv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 08:52:51 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9E2EA147C;
-        Fri,  3 Feb 2023 05:52:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 295AAA2A48;
+        Fri,  3 Feb 2023 05:52:27 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B326A15A1;
-        Fri,  3 Feb 2023 05:53:04 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0A091596;
+        Fri,  3 Feb 2023 05:53:08 -0800 (PST)
 Received: from eglon.cambridge.arm.com (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E0DB03F71E;
-        Fri,  3 Feb 2023 05:52:18 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F4423F71E;
+        Fri,  3 Feb 2023 05:52:23 -0800 (PST)
 From:   James Morse <james.morse@arm.com>
 To:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
         kvmarm@lists.linux.dev, kvm@vger.kernel.org,
@@ -45,9 +45,9 @@ Cc:     Marc Zyngier <maz@kernel.org>,
         Salil Mehta <salil.mehta@huawei.com>,
         Russell King <linux@armlinux.org.uk>,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [RFC PATCH 07/32] ia64/topology: Switch over to GENERIC_CPU_DEVICES
-Date:   Fri,  3 Feb 2023 13:50:18 +0000
-Message-Id: <20230203135043.409192-8-james.morse@arm.com>
+Subject: [RFC PATCH 08/32] x86/topology: Switch over to GENERIC_CPU_DEVICES
+Date:   Fri,  3 Feb 2023 13:50:19 +0000
+Message-Id: <20230203135043.409192-9-james.morse@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
 References: <20230203135043.409192-1-james.morse@arm.com>
@@ -61,128 +61,97 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ia64 has its own arch specific data structure for cpus: struct ia64_cpu.
-This has one member, making ia64's cpu_devices the same as that
-provided be GENERIC_CPU_DEVICES.
-ia64 craetes a percpu struct ia64_cpu called cpu_devices, which has no
-users. Instead it uses the struct ia64_cpu named sysfs_cpus allocated at
-boot.
+Now that GENERIC_CPU_DEVICES calls arch_register_cpu(), which can be
+overridden by the arch code, switch over to this to allow common code
+to choose when the register_cpu() call is made.
 
-Remove the arch specific structure allocation and initialisation.
-ia64's arch_register_cpu() now overrides the weak version from
-GENERIC_CPU_DEVICES, and uses the percpu cpu_devices defined by
-core code.
-
-All uses of sysfs_cpus are changed to use the percpu cpu_devices.
+x86's struct cpus come from struct x86_cpu, which has no other members
+or users. Remove this and use the version defined by common code.
 
 This is an intermediate step to the logic being moved to drivers/acpi,
 where GENERIC_CPU_DEVICES will do the work when booting with acpi=off.
 
 Signed-off-by: James Morse <james.morse@arm.com>
 ---
- arch/ia64/Kconfig           |  1 +
- arch/ia64/include/asm/cpu.h |  6 ------
- arch/ia64/kernel/topology.c | 35 +++++------------------------------
- 3 files changed, 6 insertions(+), 36 deletions(-)
+ arch/x86/Kconfig           |  1 +
+ arch/x86/include/asm/cpu.h |  4 ----
+ arch/x86/kernel/topology.c | 19 +++----------------
+ 3 files changed, 4 insertions(+), 20 deletions(-)
 
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index deabb8843aea..146a2226e2a3 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -40,6 +40,7 @@ config IA64
- 	select HAVE_FUNCTION_DESCRIPTORS
- 	select HAVE_VIRT_CPU_ACCOUNTING
- 	select HUGETLB_PAGE_SIZE_VARIABLE if HUGETLB_PAGE
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6a520c22c3eb..e1aaee2f8412 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -144,6 +144,7 @@ config X86
+ 	select GENERIC_CLOCKEVENTS_MIN_ADJUST
+ 	select GENERIC_CMOS_UPDATE
+ 	select GENERIC_CPU_AUTOPROBE
 +	select GENERIC_CPU_DEVICES
- 	select GENERIC_IRQ_PROBE
- 	select GENERIC_PENDING_IRQ if SMP
- 	select GENERIC_IRQ_SHOW
-diff --git a/arch/ia64/include/asm/cpu.h b/arch/ia64/include/asm/cpu.h
-index a3e690e685e5..6e9786c6ec98 100644
---- a/arch/ia64/include/asm/cpu.h
-+++ b/arch/ia64/include/asm/cpu.h
-@@ -7,12 +7,6 @@
- #include <linux/topology.h>
- #include <linux/percpu.h>
+ 	select GENERIC_CPU_VULNERABILITIES
+ 	select GENERIC_EARLY_IOREMAP
+ 	select GENERIC_ENTRY
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index a0a62ac00e88..2955541abebb 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -23,10 +23,6 @@ static inline void prefill_possible_map(void) {}
  
--struct ia64_cpu {
+ #endif /* CONFIG_SMP */
+ 
+-struct x86_cpu {
 -	struct cpu cpu;
 -};
 -
--DECLARE_PER_CPU(struct ia64_cpu, cpu_devices);
--
- DECLARE_PER_CPU(int, cpu_state);
- 
  #ifdef CONFIG_HOTPLUG_CPU
-diff --git a/arch/ia64/kernel/topology.c b/arch/ia64/kernel/topology.c
-index 94a848b06f15..8f5cafde2bc9 100644
---- a/arch/ia64/kernel/topology.c
-+++ b/arch/ia64/kernel/topology.c
-@@ -26,8 +26,6 @@
- #include <asm/numa.h>
+ extern void arch_unregister_cpu(int);
+ extern void start_cpu0(void);
+diff --git a/arch/x86/kernel/topology.c b/arch/x86/kernel/topology.c
+index 1b83377274b8..2275e22dfc8b 100644
+--- a/arch/x86/kernel/topology.c
++++ b/arch/x86/kernel/topology.c
+@@ -35,8 +35,6 @@
+ #include <asm/io_apic.h>
  #include <asm/cpu.h>
  
--static struct ia64_cpu *sysfs_cpus;
+-static DEFINE_PER_CPU(struct x86_cpu, cpu_devices);
 -
- void arch_fix_phys_package_id(int num, u32 slot)
- {
- #ifdef CONFIG_SMP
-@@ -41,50 +39,27 @@ EXPORT_SYMBOL_GPL(arch_fix_phys_package_id);
  #ifdef CONFIG_HOTPLUG_CPU
- int __ref arch_register_cpu(int num)
- {
-+	struct cpu *cpu = &per_cpu(cpu_devices, num);
-+
- 	/*
- 	 * If CPEI can be re-targeted or if this is not
- 	 * CPEI target, then it is hotpluggable
- 	 */
- 	if (can_cpei_retarget() || !is_cpu_cpei_target(num))
--		sysfs_cpus[num].cpu.hotpluggable = 1;
-+		cpu->hotpluggable = 1;
- 	map_cpu_to_node(num, node_cpuid[num].nid);
--	return register_cpu(&sysfs_cpus[num].cpu, num);
-+	return register_cpu(cpu, num);
+ 
+ #ifdef CONFIG_BOOTPARAM_HOTPLUG_CPU0
+@@ -131,15 +129,15 @@ int arch_register_cpu(int num)
+ 		}
+ 	}
+ 	if (num || cpu0_hotpluggable)
+-		per_cpu(cpu_devices, num).cpu.hotpluggable = 1;
++		per_cpu(cpu_devices, num).hotpluggable = 1;
+ 
+-	return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
++	return register_cpu(&per_cpu(cpu_devices, num), num);
  }
  EXPORT_SYMBOL(arch_register_cpu);
  
- void __ref arch_unregister_cpu(int num)
+ void arch_unregister_cpu(int num)
  {
--	unregister_cpu(&sysfs_cpus[num].cpu);
+-	unregister_cpu(&per_cpu(cpu_devices, num).cpu);
 +	unregister_cpu(&per_cpu(cpu_devices, num));
- 	unmap_cpu_from_node(num, cpu_to_node(num));
  }
  EXPORT_SYMBOL(arch_unregister_cpu);
--#else
--static int __init arch_register_cpu(int num)
--{
--	return register_cpu(&sysfs_cpus[num].cpu, num);
--}
- #endif /*CONFIG_HOTPLUG_CPU*/
- 
+ #else /* CONFIG_HOTPLUG_CPU */
+@@ -149,14 +147,3 @@ static int __init arch_register_cpu(int num)
+ 	return register_cpu(&per_cpu(cpu_devices, num).cpu, num);
+ }
+ #endif /* CONFIG_HOTPLUG_CPU */
 -
 -static int __init topology_init(void)
 -{
--	int i, err = 0;
+-	int i;
 -
--	sysfs_cpus = kcalloc(NR_CPUS, sizeof(struct ia64_cpu), GFP_KERNEL);
--	if (!sysfs_cpus)
--		panic("kzalloc in topology_init failed - NR_CPUS too big?");
+-	for_each_present_cpu(i)
+-		arch_register_cpu(i);
 -
--	for_each_present_cpu(i) {
--		if((err = arch_register_cpu(i)))
--			goto out;
--	}
--out:
--	return err;
+-	return 0;
 -}
--
 -subsys_initcall(topology_init);
--
--
- /*
-  * Export cpu cache information through sysfs
-  */
 -- 
 2.30.2
 
