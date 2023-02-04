@@ -2,102 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A1468A74C
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Feb 2023 01:48:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A2A68A74F
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Feb 2023 01:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjBDAsG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Feb 2023 19:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
+        id S232416AbjBDAsv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Feb 2023 19:48:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbjBDAsG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 19:48:06 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E50659E7
-        for <linux-arch@vger.kernel.org>; Fri,  3 Feb 2023 16:48:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JmVQD8jromSnDUBUYgPiaayJmQ/MzQF4zRX6jlvWPUg=; b=eOybbCNSuQ/HA42sISi4q2xx/q
-        fnlGBUUEin5jHcuHAUe9MBk0rRBjVeKlVXteLhKOu62OmSos0oKjwmGXOgZqnqlIsq/OAgqnbH2D2
-        jJ8TaTcAnvQ/fQS8fq3rTYELw2ehz8AMMwIT6mRKIvmsSRDF3rYqQFQcjD0VMhzuGKdPNR76OVgSV
-        6lrlwYCa6KOlava394+pHhl+Q3eb796m5a28hKQYCWPZcX3DYyFzDl6wtAO8JadAm/+l7OvNU0DJa
-        ZenD97acn+FF9sRqCb3DGONEDhJHoyVOQaavDXm1okMQaQdsQ7C/hSJcEmkmJpy8bBiJBHdVv8Tst
-        uiwfWcIg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pO6ij-0064SA-09;
-        Sat, 04 Feb 2023 00:47:57 +0000
-Date:   Sat, 4 Feb 2023 00:47:57 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Xu <peterx@redhat.com>, linux-arch@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>
-Subject: [loongarch oddities] Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
-Message-ID: <Y92rPZRqdxPb/dlu@ZenIV>
-References: <Y9lz6yk113LmC9SI@ZenIV>
- <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
- <Y9mD1qp/6zm+jOME@ZenIV>
- <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
- <Y9mM5wiEhepjJcN0@ZenIV>
+        with ESMTP id S232237AbjBDAss (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Feb 2023 19:48:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE595A6C12;
+        Fri,  3 Feb 2023 16:48:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42EBBB82B67;
+        Sat,  4 Feb 2023 00:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAF3C433D2;
+        Sat,  4 Feb 2023 00:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1675471723;
+        bh=kLZT0ktDIqHrvbR1Q4leufjyhZrsbBm0llBRKZGRRu8=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=GH87hbn9/uT6AMKgTWTt+V+3TBPeEik2srqTaasdIuCAlXuu98eAKIrCuAhJKPAWQ
+         91XUJO99BtQO6B0/53bmhgZ/1+yNnomX0/6/xokoCsquSNttLJ5aGg9EhwTpbHCv6t
+         G6JG3hESqWS5DTARkSKK18fzg4zC18J4H9dIJXbTK0SSKMLOgkxbaA5NcRhOYjCVm1
+         TjxzyI7B21VxXZBTPL1YtF16KXCsMc9FQO4kHNAyWWi95q1w5h2YphXe58vZ+rYqNt
+         6E2nHGMvYDCfde3YjsQINGkv4QKOHrqdyRdOKw6rT75o/QNmYM8XypRDKIj2N0PMPX
+         IO3U+1NL4LrRQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 804BF5C08EB; Fri,  3 Feb 2023 16:48:43 -0800 (PST)
+Date:   Fri, 3 Feb 2023 16:48:43 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com
+Subject: Current LKMM patch disposition
+Message-ID: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y9mM5wiEhepjJcN0@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-	Speaking of really weird stuff, on loongarch we have
-this:
-        /*
-         * We fault-in kernel-space virtual memory on-demand. The  
-         * 'reference' page table is init_mm.pgd.
-         *
-         * NOTE! We MUST NOT take any locks for this case. We may
-         * be in an interrupt or a critical region, and should
-         * only copy the information from the master page table,
-         * nothing more.
-         */
-        if (address & __UA_LIMIT) {
-                if (!user_mode(regs))
-                        no_context(regs, address);
-                else   
-                        do_sigsegv(regs, write, address, si_code);
-                return;
-        }
+Hello!
 
-That looks as if it had started off as usual vmalloc page tables
-propagation in #PF, but... it obviously does nothing of that sort.
-What's going on there and why do we even bother?  After all,
-we'd better have no vma above that address, so the normal logics
-would seem to be fine with that case...
+Here is what I currently have for LKMM patches:
 
-Another really weird part there is
-        /*
-         * If we're in an interrupt or have no user
-         * context, we must not take the fault..
-         */
-        if (faulthandler_disabled() || !mm) {
-                do_sigsegv(regs, write, address, si_code);
-                return;
-        }
-There should be no way to have this condition for userland
-page fault and do_sigsegv() is starting with
-        /* Kernel mode? Handle exceptions or die */
-        if (!user_mode(regs)) {
-                no_context(regs, address);  
-                return;
-        }
-	<force SIGSEGV>
-What's wrong with just
-        if (faulthandler_disabled() || !mm) {
-		no_context(regs, address);
-		return;
-	}
-Am I missing something subtle here?
+289e1c89217d4 ("locking/memory-barriers.txt: Improve documentation for writel() example")
+ebd50e2947de9 ("tools: memory-model: Add rmw-sequences to the LKMM")
+aae0c8a50d6d3 ("Documentation: Fixed a typo in atomic_t.txt")
+9ba7d3b3b826e ("tools: memory-model: Make plain accesses carry dependencies")
+
+	Queued for the upcoming (v6.3) merge window.
+
+c7637e2a8a27 ("tools/memory-model: Update some warning labels")
+7862199d4df2 ("tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-")
+
+	Are ready for the next (v6.4) merge window.  If there is some
+	reason that they should instead go into v6.3, please let us
+	all know.
+
+a6cd5214b5ba ("tools/memory-model: Document LKMM test procedure")
+
+	This goes onto the lkmm-dev pile because it is documenting how
+	to use those scripts.
+
+https://lore.kernel.org/lkml/Y9GPVnK6lQbY6vCK@rowland.harvard.edu/
+https://lore.kernel.org/lkml/20230126134604.2160-3-jonas.oberhauser@huaweicloud.com
+https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
+5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
+
+	These need review and perhaps further adjustment.
+
+So, am I missing any?  Are there any that need to be redirected?
+
+						Thanx, Paul
