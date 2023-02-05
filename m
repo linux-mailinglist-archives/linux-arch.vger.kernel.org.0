@@ -2,76 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32FA68B1A8
-	for <lists+linux-arch@lfdr.de>; Sun,  5 Feb 2023 21:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031DD68B2A2
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 00:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjBEUlx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Feb 2023 15:41:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S229576AbjBEXJI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Feb 2023 18:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjBEUlr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Feb 2023 15:41:47 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D051C5B6
-        for <linux-arch@vger.kernel.org>; Sun,  5 Feb 2023 12:41:39 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id p26so28860639ejx.13
-        for <linux-arch@vger.kernel.org>; Sun, 05 Feb 2023 12:41:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nA/a76A+HUu/p3q1j/ksBjPXLniSmCFkRwLsRUtoauc=;
-        b=RAXg4fKD/6SPLwBhZz74xHccwCI6WZIYpGpGHWQ9ObJeCvGoohTSAtwCqfiD+ZaDQ1
-         aIRLI8OL+avYEEBlM4uINCdq7A3GKoZhraxTCpB9pYCimwQ4kIElEWhkml7G/7PEKTT6
-         Vy21ly1st4HkkM+1bI4kXV+bK57J6A6HvWAas=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nA/a76A+HUu/p3q1j/ksBjPXLniSmCFkRwLsRUtoauc=;
-        b=bkPJxe44BLZAyw1Y6wuEonXc21OENcvbchHTwsCyiD6ZrnHfueN9MDNQaPTHaNWhzj
-         W+2ewI/RKRjIWc6mzChF3JGLTpRxWarkybBuwF1JdUTvMaYTE3FnhrjU7CdnT+nYRU7U
-         XLLwzOZU8ZOub8VxAXrzFG1QatkFkFf5ycYfbSbFHGip3MkuGtm73O14ICXrTSY1uimQ
-         c3Z2aWSUpwaeyIz2ca/oQbTmXmnwmIPB/pdMbXm/vblEY5D1TsQCmoT7GIUcqdaYLJbn
-         G4TecRiJqT23gh2PR/6XOdtMzORh/bmqV/FrMWNjjmHkLOZheje8NX+68A4QwStb0R+A
-         1Z6g==
-X-Gm-Message-State: AO0yUKV+GsehGb/WgCL8kL9vf0rJivXRdwJ01QKkH4CWflyUmT6rBAmB
-        1t9VNy/OzKKzNT6vQ5ioUFRwFErSpDRjkuplxJo=
-X-Google-Smtp-Source: AK7set/xp6nrp46cwW+UUhA3HahIxr1i/mjpJzNwFJgJL75d2R/TWX7TqHiD1lo4VVpLZS9ot7UnwQ==
-X-Received: by 2002:a17:906:c7da:b0:878:4d11:f868 with SMTP id dc26-20020a170906c7da00b008784d11f868mr14915135ejb.2.1675629697390;
-        Sun, 05 Feb 2023 12:41:37 -0800 (PST)
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com. [209.85.218.48])
-        by smtp.gmail.com with ESMTPSA id f6-20020a17090660c600b0088ad82a8de4sm4500178ejk.34.2023.02.05.12.41.35
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Feb 2023 12:41:36 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id ml19so29136878ejb.0
-        for <linux-arch@vger.kernel.org>; Sun, 05 Feb 2023 12:41:35 -0800 (PST)
-X-Received: by 2002:a17:906:892:b0:87a:7098:ca09 with SMTP id
- n18-20020a170906089200b0087a7098ca09mr4402604eje.78.1675629695651; Sun, 05
- Feb 2023 12:41:35 -0800 (PST)
+        with ESMTP id S229478AbjBEXJH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Feb 2023 18:09:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1062F17CF5;
+        Sun,  5 Feb 2023 15:09:05 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4P94p10kzhz4x1f;
+        Mon,  6 Feb 2023 10:08:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1675638543;
+        bh=pNXUawnaU3qfDTxBKpmXsJPpQ4kMgE5LZAjUfYaVNaQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZnYADCx5yiYMn3pkGOedm0t/sNMIjkMYLf/dBTxabGoodLOZTSPJETPuFDge/Cde4
+         aIRPsac6jVpl6zYzM5s0sf9qZ8PH7w9zSC17MHdHR3/1Prai5iUUUHvsKOEj2nhHO3
+         Cblnv6/K2AhBj4YkTU2WIyVtn11Iyu9muX3ILcAHxEldyx9xBhSO4GKxKXmaTccHeU
+         yYw5esGxcNGOWPs8dnxojmNjd9fFKZA9h2nPmfY09YsEtc/xrY2g/H5zDiLVhBoJXQ
+         OF2qL+X7Qm4pEDL2kEKjgtpjAAAz7yUq4t9yOAfwzn4aDqbJ6ZpjiHa3qtmhjT39nt
+         0JnygHWxXhFVw==
+Date:   Mon, 6 Feb 2023 10:08:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Subject: Re: remove arch/sh
+Message-ID: <20230206100856.603a0f8f@canb.auug.org.au>
+In-Reply-To: <20230203083037.GA30738@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+        <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+        <20230116071306.GA15848@lst.de>
+        <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+        <20230203071423.GA24833@lst.de>
+        <afd056a95d21944db1dc0c9708f692dd1f7bb757.camel@physik.fu-berlin.de>
+        <20230203083037.GA30738@lst.de>
 MIME-Version: 1.0
-References: <Y9lz6yk113LmC9SI@ZenIV> <Y9l0aBPUEpf1bci9@ZenIV>
- <92a4aa45-0a7c-a389-798a-2f3e3cfa516f@linux-m68k.org> <Y+AUEJpWYdUzW0OD@ZenIV>
-In-Reply-To: <Y+AUEJpWYdUzW0OD@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 5 Feb 2023 12:41:18 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh8+LsDDd8AFMwaYHAA+eLT8O2ziEJfpoeo_H6MCg2NKg@mail.gmail.com>
-Message-ID: <CAHk-=wh8+LsDDd8AFMwaYHAA+eLT8O2ziEJfpoeo_H6MCg2NKg@mail.gmail.com>
-Subject: Re: [PATCH 04/10] m68k: fix livelock in uaccess
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Finn Thain <fthain@linux-m68k.org>, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        Michal Simek <monstr@monstr.eu>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/signed; boundary="Sig_/9=gZIOzZKIZz.T3XwOWz_99";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,15 +73,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 5, 2023 at 12:39 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+--Sig_/9=gZIOzZKIZz.T3XwOWz_99
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Fri, 3 Feb 2023 09:30:37 +0100 Christoph Hellwig <hch@lst.de> wrote:
 >
-> BTW, since these patches would be much easier to backport than any unification
-> work, I think the right thing to do would be to have further unification done on
-> top of them.
+> On Fri, Feb 03, 2023 at 09:24:46AM +0100, John Paul Adrian Glaubitz wrote:
+> > Since this is my very first time stepping up as a kernel maintainer, I =
+was hoping
+> > to get some pointers on what to do to make this happen.
+> >=20
+> > So far, we have set up a new kernel tree and I have set up a local deve=
+lopment and
+> > test environment for SH kernels using my SH7785LCR board as the target =
+platform.
+> >=20
+> > Do I just need to send a patch asking to change the corresponding entry=
+ in the
+> > MAINTAINERS file? =20
+>=20
+> I'm not sure a there is a document, but:
+>=20
+>  - add the MAINTAINERS change to your tree
+>  - ask Stephen to get your tree included in linux-next
 
-Ack. I'm not NAKing the patches, I was just hoping that we also have
-some way forward.
+And by "Stephen", Christoph means me.  When you are ready, please send
+me a request to include your tree/branch in linux-next (usually the
+branch is called something like "for-next" or just "next") telling me
+the git URL, and the contacts I should send email to if there are
+conflicts/build issues with the branch.  I will then fetch the branch
+every time I create a new linux-next release (most work days), so all
+you need to do is update that branch each time you are ready to publish
+more commits.
 
-So "fix the issues, then unify" sounds like the right thing to do to me.
+--=20
+Cheers,
+Stephen Rothwell
 
-               Linus
+--Sig_/9=gZIOzZKIZz.T3XwOWz_99
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmPgNwgACgkQAVBC80lX
+0GzQVAgAjy+Ruo0rndMBlq3LUsn3e3WM6k7+dwjW7y5KrWBUtO9yrheMEypNr12O
+byLw07yy1/H56vz7bZJN3IaFDMrx7kFxU2Rfi4K2lkrd5y7hRGFHFbyG9KACdTVo
+d4yMastrzpa4sqz6druszU7GDQnWEFS8+bdy18sKOXOIF2A4/bCfyPcwbu6WcX9U
+PWBzYOIqYThwk1BW+po7wuq+KMZW0337iVEob5zS9qRotE98YCs2zc5AjSg1XQx3
+SWMIA+zrNKOlxUJ9BUoeDAQUoe6UJjekpz9o0j9q/w1DDNKl9mXQ5q+JvpuzrtGj
+5u71j4opYj+PidkCy3HMoXj2z0tlFw==
+=TRVa
+-----END PGP SIGNATURE-----
+
+--Sig_/9=gZIOzZKIZz.T3XwOWz_99--
