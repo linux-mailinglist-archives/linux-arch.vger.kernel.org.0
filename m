@@ -2,117 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC03368ACDA
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Feb 2023 23:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3DC568AE64
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Feb 2023 06:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjBDWYQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 4 Feb 2023 17:24:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
+        id S229541AbjBEFKc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Feb 2023 00:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjBDWYP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Feb 2023 17:24:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D12F61EFE6;
-        Sat,  4 Feb 2023 14:24:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81C8FB80B69;
-        Sat,  4 Feb 2023 22:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B8BC433D2;
-        Sat,  4 Feb 2023 22:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1675549452;
-        bh=Sm2d8k9RPZVo8JdWBw80YfFCn+If9x6+NZFYNIfLeM0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IBOjNPdhP2dyX5fKdIBLJitAyqa9AMQHi4g+eDC5O5mfcxedWxOgS0ijLx1RRSQAI
-         Fn6pR5/w4P30wbvdNAPjCLtdxly0DuETY0TIW4yWQsMYmfQTX0H8LWcYWgxtl/mpht
-         LOawar/1wpaRVG8WaKOgfi6aWvdKKEEyymxCjV7V2Kj8uPHDLGAtqyW1mq+JArsjDe
-         QidmaKMN9XBNS6IfYtrvPhAHIAuQixf8S75nrbEW9wojaHzrmpbdnHR/LuQ4dlNttD
-         5UeJKXDG7b4yQRSDTsiUqUx3fRI0M9cvNE4WJegu73kLv9X3MYSFivEUKEiEWlc25J
-         LMHlV2jBzHFpw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A699C5C06AB; Sat,  4 Feb 2023 14:24:11 -0800 (PST)
-Date:   Sat, 4 Feb 2023 14:24:11 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu>
- <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+        with ESMTP id S229447AbjBEFKb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Feb 2023 00:10:31 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E548111153;
+        Sat,  4 Feb 2023 21:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Tr6hHp8aMuyix7W8MPsJcy4qd0T+bfV4ku4SlFkeikM=; b=IPFSEa3/kiVAIcszhJNII+WRya
+        neT68DS6Txm3V+3RoFqVcUT8ACqt2krppBrR0nE0MhgP5v5mx5J+FkCtxLK4NuL44MCdybBXJ3tiE
+        BCK8F3NrQgjudmCQN5DOg8ilOhP8rpQA4KGJCr/zYnDwePVNc7hXeYxhSu01Hl/Whg14RPN+t+Qjn
+        FFeEglPsiR3VQu2OUXAVKINJi5E1JXxnZ627BUZs2iReC5LcTJ5xUmA3LYosBCGyMtMSiIolQQlFF
+        qmHMDBAt2OmyN2m/y5BLyEfjGG8PEi8Syc5yKEtFHYC8gaQDfjK0zoT96DVm80gtbJv84vXLTwm54
+        +Fpb4OAg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pOXID-006IcI-2c;
+        Sun, 05 Feb 2023 05:10:21 +0000
+Date:   Sun, 5 Feb 2023 05:10:21 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org
+Subject: Re: [RFC][PATCHSET] VM_FAULT_RETRY fixes
+Message-ID: <Y986PWjDy9YbHBEw@ZenIV>
+References: <Y9lz6yk113LmC9SI@ZenIV>
+ <CAHk-=whf73Vm2U3jyTva95ihZzefQbThZZxqZuKAF-Xjwq=G4Q@mail.gmail.com>
+ <Y9mD1qp/6zm+jOME@ZenIV>
+ <CAHk-=wjiwFzEGd_60H3nbgVB=R_8KTcfUJmXy=hSXCvLrXQRFA@mail.gmail.com>
+ <Y9mM5wiEhepjJcN0@ZenIV>
+ <CAHk-=wjNwwnBckTo8HLSdsd1ndoAR=5RBoZhdOyzhsnDAYWL9g@mail.gmail.com>
+ <Y9rCBqwbLlLf1fHe@x1n>
+ <Y9rlI6d5J2Y/YNQ+@ZenIV>
+ <Y9w/lrL6g4yauXz4@x1n>
+ <Y92mP1GT28KfnPEQ@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y92mP1GT28KfnPEQ@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 09:58:12AM -0500, Alan Stern wrote:
-> On Fri, Feb 03, 2023 at 05:49:41PM -0800, Paul E. McKenney wrote:
-> > On Fri, Feb 03, 2023 at 08:28:35PM -0500, Alan Stern wrote:
-> > > On Fri, Feb 03, 2023 at 04:48:43PM -0800, Paul E. McKenney wrote:
-> > > > Hello!
-> > > > 
-> > > > Here is what I currently have for LKMM patches:
-> > > > 
-> > > > 289e1c89217d4 ("locking/memory-barriers.txt: Improve documentation for writel() example")
-> > > > ebd50e2947de9 ("tools: memory-model: Add rmw-sequences to the LKMM")
-> > > > aae0c8a50d6d3 ("Documentation: Fixed a typo in atomic_t.txt")
-> > > > 9ba7d3b3b826e ("tools: memory-model: Make plain accesses carry dependencies")
-> > > > 
-> > > > 	Queued for the upcoming (v6.3) merge window.
-> > > > 
-> > > > c7637e2a8a27 ("tools/memory-model: Update some warning labels")
-> > > > 7862199d4df2 ("tools/memory-model: Unify UNLOCK+LOCK pairings to po-unlock-lock-")
-> > > > 
-> > > > 	Are ready for the next (v6.4) merge window.  If there is some
-> > > > 	reason that they should instead go into v6.3, please let us
-> > > > 	all know.
-> > > > 
-> > > > a6cd5214b5ba ("tools/memory-model: Document LKMM test procedure")
-> > > > 
-> > > > 	This goes onto the lkmm-dev pile because it is documenting how
-> > > > 	to use those scripts.
-> > > > 
-> > > > https://lore.kernel.org/lkml/Y9GPVnK6lQbY6vCK@rowland.harvard.edu/
-> > > > https://lore.kernel.org/lkml/20230126134604.2160-3-jonas.oberhauser@huaweicloud.com
-> > > > https://lore.kernel.org/lkml/20230203201913.2555494-1-joel@joelfernandes.org/
-> > > > 5d871b280e7f ("tools/memory-model: Add smp_mb__after_srcu_read_unlock()")
-> > > > 
-> > > > 	These need review and perhaps further adjustment.
-> > > > 
-> > > > So, am I missing any?  Are there any that need to be redirected?
-> > > 
-> > > The "Provide exact semantics for SRCU" patch should have:
-> > > 
-> > > 	Portions suggested by Boqun Feng and Jonas Oberhauser.
-> > > 
-> > > added at the end, together with your Reported-by: tag.  With that, I 
-> > > think it can be queued for 6.4.
-> > 
-> > Thank you!  Does the patch shown below work for you?
-> > 
-> > (I have tentatively queued this, but can easily adjust or replace it.)
+On Sat, Feb 04, 2023 at 12:26:39AM +0000, Al Viro wrote:
+> On Thu, Feb 02, 2023 at 05:56:22PM -0500, Peter Xu wrote:
 > 
-> It looks fine.
+> > IMHO it'll be merely impossible to merge things across most (if not to say,
+> > all) archs.  It will need to be start from one or at least a few that still
+> > shares a major common base - I would still rely on x86 as a start - then we
+> > try to use the helper in as much archs as possible.
+> > 
+> > Even on x86, I do also see challenges so I'm not sure whether a common
+> > enough routine can be abstracted indeed.  But I believe there's a way to do
+> > this because obviously we still see tons of duplicated logics falling
+> > around.  It may definitely need time to think out where's the best spot to
+> > start, and how to gradually move towards covering more archs starting from
+> > one.
+> 
+> FWIW, after going through everything from alpha to loongarch (in alphabetic
+> order, skipping the itanic) the following seems to be suitable for all of
+> them:
+> 
+> generic_fault(address, flags, vm_flags, regs)
+[snip]
 
-Very good, thank you for looking it over!  I pushed it out on branch
-stern.2023.02.04a.
+After looking through other architectures: that needs changes.
 
-Would anyone like to ack/review/whatever this one?
+AFAICS, the right approach would be to add a pointer to (uninitialized)
+kernel_siginfo.  And let it pass the signal number, etc. through that.
+That way all "we want to raise a signal" return values fold together.
+*IF* the page fault wants to do something extra on SIGSEGV, but not on
+SIGBUS (we have several such), it can key that upon info.si_signo.
 
-							Thanx, Paul
+Speaking of SIGSEGV, there's a fun situation with VM_FAULT_SIGSEGV:
+
+1) Only x86 and ppc generate VM_FAULT_SIGSEGV in handle_mm_fault()
+without hitting WARN_ON_ONCE().  And neither actually returns it
+to page fault handler - the conditions that would've led to that
+return value (pkey stuff) are checked in the page fault handler
+and handle_mm_fault() is not called in such cases.
+
+2) on alpha, hexagon, itanic, loongarch, microblaze, mips, nios2,
+openrisc, sparc, um and xtensa #PF handler would end up with SEGV_ACCERR
+if it saw VM_FAULT_SIGNAL.
+
+3) on arm, arm64, arc, m68k, powerpc, s390, sh and x86 - SEGV_MAPERR
+(except that neither x86 nor powerpc #PF ever see it)
+
+4) on csky and riscv it would end up with BUG()
+
+5) on parisc it's complicated^Wbroken - it tries to decide which
+one to use after having unlocked mmap and looking at vma in process.
+
+As it is, VM_FAULT_SIGSEGV had ended up as "we need to report some
+error to get_user_pages() and similar callers in cases when
+page fault handler would've detected pkey problem and refused
+to call handle_mm_fault()", with several places where it's
+"we had been called with bogus arguments; printk and return
+something to indicate the things had gone wrong".  It used to
+have other uses, but this is what it had become now - grep and
+you'll see.
+
+AFAICS, all checks for it in page fault handlers are pretty much
+dead code...
