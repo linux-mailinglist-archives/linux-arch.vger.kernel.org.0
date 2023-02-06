@@ -2,93 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEA668BC72
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 13:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8EC68BC91
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 13:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjBFMKG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Feb 2023 07:10:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S229556AbjBFMPR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Feb 2023 07:15:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjBFMKC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Feb 2023 07:10:02 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B0422DEC;
-        Mon,  6 Feb 2023 04:09:38 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id x10so5418889qtr.2;
-        Mon, 06 Feb 2023 04:09:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7SQkBcRxxCrTEFDwcET99BwrKIGZJp4wu6h4t2bWjyk=;
-        b=RyJeKtkupo3JkR7X29Tx3qWo/Mp9JnEuOfWtphPI76vT1Yhy5a502iSbB/k3dnj0z+
-         HIwUP7iqtkO1XdjOQuz7IEQNaHo5BoKZ5v2kmT8H40+o65nVhLQf6TN0VqgP7T08brbM
-         lympZeW3fUSapkhnC+/EM0EZtglXmyKqt3BLcY9fGS/CaynazeHcvCxPSHEseVQY2PJm
-         AfYmnlxNp45dsdJjhC/n0u0hpTVIfMYBhxBi11Fe2Wyi7NAQiSz4WWnMOpW31Ru6yMEV
-         uA3IyoclQ2XvrQsSYVjkPyKDh0LnFo871aqJbUyKlg6fSv87tk6/b8C3574beu2YgP2c
-         1kdg==
-X-Gm-Message-State: AO0yUKW9nhjxQVVae4wepvzEWOy3uAqyNVGrlrRmlW1ogAJFRGPgCnph
-        Uysw7X2zYynLdlBHDbRuVpBSxdc18iK9XA==
-X-Google-Smtp-Source: AK7set8UMMjEL+OFiNrgy+UFFYC5k1rwGZRxHoq3fuhMTBpS3WBD12gUXdW7rGZ2ZuZLjBe/OINO2w==
-X-Received: by 2002:ac8:5e13:0:b0:3ba:123d:aba0 with SMTP id h19-20020ac85e13000000b003ba123daba0mr11075378qtx.17.1675685352255;
-        Mon, 06 Feb 2023 04:09:12 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id s25-20020a05620a16b900b0072ed644bb0dsm6440695qkj.97.2023.02.06.04.09.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Feb 2023 04:09:11 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-526f0b3d8d9so86465317b3.3;
-        Mon, 06 Feb 2023 04:09:11 -0800 (PST)
-X-Received: by 2002:a81:89c1:0:b0:52a:7537:98a6 with SMTP id
- z184-20020a8189c1000000b0052a753798a6mr259978ywf.384.1675685351335; Mon, 06
- Feb 2023 04:09:11 -0800 (PST)
+        with ESMTP id S229865AbjBFMPQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Feb 2023 07:15:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E0C12051;
+        Mon,  6 Feb 2023 04:15:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RSckQc2Emh9jJfvS33gHYGvM8sjY/00hI0zuLioFFNM=; b=ntuP4M7dSK2zsWVQTbDs9Ox2Ac
+        V4r4EFjkZ99kyYLqdozZ6xzE+QxqYHoG0WCIaMJeVBoR6Y2BbtLPsYb3i01D2x0modrsfxSX57f8v
+        DF30B1tNGD0ZtMzW6GNbWnE/bcmDfjWi9O6PWHEH/Si4SWWexelyntk5L1wIG2NbBH0WlqmGoT5WP
+        AyMxq8eNX+N/jJLzOfoUuQe06/8Jp7hZdjmobg06aJY4TkJlY21aHVxYTE2KfbswHeSGde/+OdjK2
+        Dlior1hUsskbO4lX904cgjfDDm8i9Mg06fGrnhOO3gfkmEmyQ166CbjhPt5EUYYdvgrPaRfUt5YvB
+        rcxZk8pQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pP0OE-00GkH1-Ik; Mon, 06 Feb 2023 12:14:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6EA2030030F;
+        Mon,  6 Feb 2023 13:14:28 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 084DE207A0B88; Mon,  6 Feb 2023 13:14:27 +0100 (CET)
+Date:   Mon, 6 Feb 2023 13:14:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, dennis@kernel.org,
+        Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux.com>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com, Robin Murphy <robin.murphy@arm.com>,
+        dwmw2@infradead.org, Baolu Lu <baolu.lu@linux.intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+Message-ID: <Y+DvI7ai/wuovjER@hirez.programming.kicks-ass.net>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.494373332@infradead.org>
+ <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
+ <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <Y9lz6yk113LmC9SI@ZenIV> <Y9l0aBPUEpf1bci9@ZenIV>
-In-Reply-To: <Y9l0aBPUEpf1bci9@ZenIV>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Feb 2023 13:08:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWcNcn7R6MMeg51SUkmpZZ+HpdsMtiOE55EbQ1coc10AQ@mail.gmail.com>
-Message-ID: <CAMuHMdWcNcn7R6MMeg51SUkmpZZ+HpdsMtiOE55EbQ1coc10AQ@mail.gmail.com>
-Subject: Re: [PATCH 04/10] m68k: fix livelock in uaccess
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 31, 2023 at 9:06 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> m68k equivalent of 26178ec11ef3 "x86: mm: consolidate VM_FAULT_RETRY handling"
-> If e.g. get_user() triggers a page fault and a fatal signal is caught, we might
-> end up with handle_mm_fault() returning VM_FAULT_RETRY and not doing anything
-> to page tables.  In such case we must *not* return to the faulting insn -
-> that would repeat the entire thing without making any progress; what we need
-> instead is to treat that as failed (user) memory access.
->
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+On Mon, Feb 06, 2023 at 12:24:00PM +0100, Peter Zijlstra wrote:
 
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Unless I have misunderstood what you are doing, my concerns are
+> > still the same:
+> > 
+> > >  #define this_cpu_cmpxchg(pcp, oval, nval) \
+> > > -	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> > > +	__pcpu_size16_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> > >  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, 
+> > > nval2) \
+> > >  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, 
+> > > oval1, oval2, nval1, nval2)
+> > 
+> > Having a variable-length this_cpu_cmpxchg() that turns into cmpxchg128()
+> > and cmpxchg64() even on CPUs where this traps (!X86_FEATURE_CX16) seems
+> > like a bad design to me.
+> > 
+> > I would much prefer fixed-length this_cpu_cmpxchg64()/this_cpu_cmpxchg128()
+> > calls that never trap but fall back to the generic version on CPUs that
+> > are lacking the atomics.
+> 
+> You're thinking acidental usage etc..? Lemme see what I can do.
 
-Gr{oetje,eeting}s,
+So lookng at this I remember why I did it like this, currently 32bit
+archs silently fall back to the generics for most/all 64bit ops.
 
-                        Geert
+And personally I would just as soon drop support for the
+!X86_FEATURE_CX* cpus... :/ Those are some serious museum pieces.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+One problem with silent downgrades like this is that semantics vs NMI
+change, which makes for subtle bugs on said museum pieces.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Basically, using 64bit percpu ops on 32bit is already somewhat dangerous
+-- wiring up native cmpxchg64 support in that case seemed an
+improvement.
+
+Anyway... let me get on with doing explicit
+{raw,this}_cpu_cmpxchg{64,128}() thingies.
+
