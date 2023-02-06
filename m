@@ -2,107 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D24F68BD8F
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 14:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FFB68BE2C
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 14:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjBFNN1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Feb 2023 08:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S229614AbjBFNbC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Feb 2023 08:31:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjBFNN0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Feb 2023 08:13:26 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9715DDBEC;
-        Mon,  6 Feb 2023 05:13:24 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.155])
-        by gateway (Coremail) with SMTP id _____8CxOury_OBjyCsPAA--.29586S3;
-        Mon, 06 Feb 2023 21:13:22 +0800 (CST)
-Received: from [10.20.42.155] (unknown [10.20.42.155])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxyr3y_OBjieMqAA--.17090S3;
-        Mon, 06 Feb 2023 21:13:22 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-To:     Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
- <5fc85453-1e2c-1f00-7879-1b5fa318c78a@xen0n.name>
- <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
- <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
-Date:   Mon, 6 Feb 2023 21:13:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxyr3y_OBjieMqAA--.17090S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tw18Cw4DJry3Xw45AFyfXrb_yoW8Wr4xpa
-        ya9rnFkF1DAr18Cay8t348XFWavw1UKw15Ca40q3s5uFyjqF92qFWaq3yruFW3Kw1Ik3Wj
-        vFy0q34xuw4qyaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8CksDUUUUU==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229571AbjBFNa6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Feb 2023 08:30:58 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52120A5C5;
+        Mon,  6 Feb 2023 05:30:48 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 47B8E581FCA;
+        Mon,  6 Feb 2023 08:20:27 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 06 Feb 2023 08:20:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675689627; x=1675696827; bh=YEEKxWvDaU
+        UtEFigpSanl+1o6NoqA2MTTLwchnDt7mc=; b=JJZuuSyMXi8+7dbMJeo+D5x90Q
+        QSbmGMLSv82Wox3Is7pYL6nhbEWJBfC0wbE6oSvPTHqWQlE4S2v1bVxYTpkKfNnK
+        y8m5HTeGnuwwsAD7ZZ/Q5cz/1UGExNYutXiIkce2Je9GS2BfYijaO1nPMpyEnLWr
+        e1MxJrchORh3tiGvi4noN95wywfSBXFN8OHGqnJ+ZaCd4RHMwutetH/6Sbd12cji
+        2SXSakWZMLrIogUEFOmJzEZa7IigmbvUSyaMF7rDnUNQDshLq7sV/QJTa+Bm/lbD
+        AYSybO0NjenKBsowbzxVsgQxpoJxGppz/CNhM9yfZz9cvm68/YozcNpmfl6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675689627; x=1675696827; bh=YEEKxWvDaUUtEFigpSanl+1o6Noq
+        A2MTTLwchnDt7mc=; b=KRQjthpW7gLPW560Bl7atCLRmIn2E7b44jydvggP3nts
+        V9EQyO1jI7xhj/PaB6Fw7rijYTBROEnM7JBkgAxTMlEK/nvofQ6gCC9o0toDI1mK
+        1e34kfAUyoBC8rCDYv4yKTzg3Rs83/ceaAksG7AaJcQ5CudvZhUJNzpFFGnNtFUs
+        oTmdC/2MFKSomfaBaN/1og55RxtXWQBUxpKWjd+g4OPFIO3Cy8cCm5T3mYnswIpa
+        +7jyNRgX0ExN4Wdu3h6A3lqGV4Hsikw4md/C7hMVJAALwT7aZZYlvy8sDNefeghT
+        P0bAjLowOlA3PmNDGQnzD87RWuAk2krAFZokgXES2Q==
+X-ME-Sender: <xms:mf7gY3foy0vdkEfg6nDAo-B7hqZwkLBctiTaAbFv7FRBT1mOsdtWCw>
+    <xme:mf7gY9MAV0AzwLHZ58z5Gsc5pDW1kC76uT6ALWEjNsFllcVehpPeP9y2OiWwGwrIL
+    B5dUScsbPfqBDdBtsc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegiedggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:mf7gYwhErUMLiE8ckBfrt1leyzv5fLxQUxR0yy-vfBSj3VPXrlrf_A>
+    <xmx:mf7gY4-TKGg2qSpA-Ql4Q76CcYHKsKWfJx2ltb6rViaRwX2xpB9wKA>
+    <xmx:mf7gYzsS8RMxI7v2oEYaAkRyWFamtuSzaJQEDtWi58FRx7SVZ_MvFA>
+    <xmx:m_7gY5vB_pxzNaeJp31Wk1pS-jfDAK-fntPE2o5v-Ht24Fv0S-HWQg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 35F87B60086; Mon,  6 Feb 2023 08:20:25 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-108-ge995779fee-fm-20230203.001-ge995779f
+Mime-Version: 1.0
+Message-Id: <86c8ba70-2a2f-4c5b-8e74-20e3823e2db3@app.fastmail.com>
+In-Reply-To: <Y+D3F2pg7X4XFT4r@hirez.programming.kicks-ass.net>
+References: <20230202145030.223740842@infradead.org>
+ <20230202152655.494373332@infradead.org>
+ <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
+ <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
+ <Y+DvI7ai/wuovjER@hirez.programming.kicks-ass.net>
+ <Y+D3F2pg7X4XFT4r@hirez.programming.kicks-ass.net>
+Date:   Mon, 06 Feb 2023 14:20:06 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Peter Zijlstra" <peterz@infradead.org>
+Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
+        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
+        suravee.suthikulpanit@amd.com,
+        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
+        "Baolu Lu" <baolu.lu@linux.intel.com>,
+        "Herbert Xu" <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Feb 6, 2023, at 13:48, Peter Zijlstra wrote:
+> On Mon, Feb 06, 2023 at 01:14:28PM +0100, Peter Zijlstra wrote:
+>> On Mon, Feb 06, 2023 at 12:24:00PM +0100, Peter Zijlstra wrote:
+>> Basically, using 64bit percpu ops on 32bit is already somewhat dangerous
+>> -- wiring up native cmpxchg64 support in that case seemed an
+>> improvement.
+>> 
+>> Anyway... let me get on with doing explicit
+>> {raw,this}_cpu_cmpxchg{64,128}() thingies.
+>
+> I only converted x86 and didn't do the automagic downgrade...
+>
+> Opinions?
 
+I think that's much better, it keeps the interface symmetric
+between cmpxchg and this_cpu_cmp_cmpxchg, and makes it harder
+to run into the subtle corner case on old x86 CPUs.
 
-On 2023/2/6 下午7:18, Xi Ruoyao wrote:
-> On Mon, 2023-02-06 at 18:24 +0800, Jianmin Lv wrote:
->> Hi, Xuerui
->>
->> I think the kernels produced with and without -mstrict-align have mainly
->> following differences:
->> - Diffirent size. I build two kernls (vmlinux), size of kernel with
->> -mstrict-align is 26533376 bytes and size of kernel without
->> -mstrict-align is 26123280 bytes.
->> - Diffirent performance. For example, in kernel function jhash(), the
->> assemble code slices with and without -mstrict-align are following:
-> 
-> But there are still questions remaining:
-> 
-> (1) Is the difference contributed by a bad code generation of GCC?  If
-> true, it's better to improve GCC before someone starts to build a distro
-> for LA264 as it would benefit the user space as well.
-> 
-AFAIK, GCC builds to produce unaligned-access-enabled target binary by 
-default (without -mstrict-align) for improving user space performance 
-(small size and runtime high performance), which is also based the fact 
-that the vast majority of LoongArch CPUs support unaligned-access.
+For the M486/M586/MK8/MPSC/MATOM/MCORE2 configs, I would
+probably want to go with a compile-time check and have most
+distro kernels build with at least M586TSC for 32-bit or
+an upgraded CONFIG_GENERIC_CPU for x86_64 that assumes cmpxchg16b
+(nehalem, second-geneneration k8, silverthorne, ...) in
+order to turn system_has_cmpxchg* into a constant value on
+all architectures. That can be a separate discussion though
+and shouldn't block your series as you just keep the current
+state.
 
-> (2) Is there some "big bad unaligned access loop" on a hot spot in the
-> kernel code?  If true, it may be better to just refactor the C code
-> because doing so will benefit all ports, not only LoongArch.  Otherwise,
-> it may be unworthy to optimize for some cold paths.
-> 
-Frankly, I'm not sure if there is this kind of hot code in kernel, I 
-just see the difference from different kernel size and different 
-assemble code slice. And I'm afraid that it may be difficult to judge 
-whether it is reasonable hot code or not if exists.
+> -#ifdef system_has_freelist_aba
+> +#ifdef syste_has_freelist_aba
 
+Typo
+
+    Arnd
