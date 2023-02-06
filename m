@@ -2,109 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FFB68BE2C
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 14:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB0A68BE0E
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Feb 2023 14:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjBFNbC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Feb 2023 08:31:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S229759AbjBFNXg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Feb 2023 08:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjBFNa6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Feb 2023 08:30:58 -0500
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52120A5C5;
-        Mon,  6 Feb 2023 05:30:48 -0800 (PST)
+        with ESMTP id S230126AbjBFNX1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Feb 2023 08:23:27 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 058751DBB8;
+        Mon,  6 Feb 2023 05:22:59 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 47B8E581FCA;
-        Mon,  6 Feb 2023 08:20:27 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id 9DDAD5C00AE;
+        Mon,  6 Feb 2023 08:22:36 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 06 Feb 2023 08:20:27 -0500
+  by compute6.internal (MEProxy); Mon, 06 Feb 2023 08:22:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1675689627; x=1675696827; bh=YEEKxWvDaU
-        UtEFigpSanl+1o6NoqA2MTTLwchnDt7mc=; b=JJZuuSyMXi8+7dbMJeo+D5x90Q
-        QSbmGMLSv82Wox3Is7pYL6nhbEWJBfC0wbE6oSvPTHqWQlE4S2v1bVxYTpkKfNnK
-        y8m5HTeGnuwwsAD7ZZ/Q5cz/1UGExNYutXiIkce2Je9GS2BfYijaO1nPMpyEnLWr
-        e1MxJrchORh3tiGvi4noN95wywfSBXFN8OHGqnJ+ZaCd4RHMwutetH/6Sbd12cji
-        2SXSakWZMLrIogUEFOmJzEZa7IigmbvUSyaMF7rDnUNQDshLq7sV/QJTa+Bm/lbD
-        AYSybO0NjenKBsowbzxVsgQxpoJxGppz/CNhM9yfZz9cvm68/YozcNpmfl6A==
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1675689756; x=
+        1675776156; bh=RT1G3uIp5WZZ3c8eEMivJSXV4ld8jAT2lpHuPYCrzvA=; b=E
+        ey8y1Ldnem1AngMxOeHSyi4dSAP2lnz5qtF8chI7CyMo8YFp5i95QNrNFeTgkBPU
+        D//IBkdN50DjBqIrmWTqcHWYKzVbs6KDAlx0XNpnA/2Uvmbocjk8ildrYizPncyr
+        21TYV9ogvt+sTgQOwsrzmDfBj30QR0LNmPVygzdax7pdVMptnEUEe7mtU0MRecRh
+        jUV4birOAV6QgyyOt6xBVy8ElKcyb3srKy5/zt/c+GMTnO8n7UwXvia6O18aOGTm
+        M2UjLSWad2/afvulhYUfuUloGA0745m/QUqZpJnz7MV0GvmFijGLqito53TzoLTb
+        ruWUw8hLtxLAztEr8OKQw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1675689627; x=1675696827; bh=YEEKxWvDaUUtEFigpSanl+1o6Noq
-        A2MTTLwchnDt7mc=; b=KRQjthpW7gLPW560Bl7atCLRmIn2E7b44jydvggP3nts
-        V9EQyO1jI7xhj/PaB6Fw7rijYTBROEnM7JBkgAxTMlEK/nvofQ6gCC9o0toDI1mK
-        1e34kfAUyoBC8rCDYv4yKTzg3Rs83/ceaAksG7AaJcQ5CudvZhUJNzpFFGnNtFUs
-        oTmdC/2MFKSomfaBaN/1og55RxtXWQBUxpKWjd+g4OPFIO3Cy8cCm5T3mYnswIpa
-        +7jyNRgX0ExN4Wdu3h6A3lqGV4Hsikw4md/C7hMVJAALwT7aZZYlvy8sDNefeghT
-        P0bAjLowOlA3PmNDGQnzD87RWuAk2krAFZokgXES2Q==
-X-ME-Sender: <xms:mf7gY3foy0vdkEfg6nDAo-B7hqZwkLBctiTaAbFv7FRBT1mOsdtWCw>
-    <xme:mf7gY9MAV0AzwLHZ58z5Gsc5pDW1kC76uT6ALWEjNsFllcVehpPeP9y2OiWwGwrIL
-    B5dUScsbPfqBDdBtsc>
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1675689756; x=
+        1675776156; bh=RT1G3uIp5WZZ3c8eEMivJSXV4ld8jAT2lpHuPYCrzvA=; b=j
+        4r98C3i1WmULw0L0g+wmUCsidf83oXiBUi1yr9K/wgFiKaTfMNQ7oyaaOPjwlnL0
+        QQCCadkI8iocypZKzuGGoxU2VEQw5/oD8N96pHLH1pB0eUlF/Rdhcjze7s97nYST
+        dXPpE7pdTZcjbv6SGdHZeNY+vtaDAtAOzzmiUVo65bgHROa+fF3R1UxV6ulxHwY6
+        a5YqrETyQ8L2CMlLEHeseoBCCsPWAwXINEuMgEt3JNBO6TPdnfENXrKmtFL3kNCF
+        kJnIxibrJzP0pgFzyKIpvMo5lsFRm1GtPrPjOZRrMpI+PHYsFzulpM37iwBGGP1O
+        szLZKd/rLEdXdtk2XPk2A==
+X-ME-Sender: <xms:G__gY7kepHaVZmhwJbl_pi_h4KNpircvueKm20Vfdhw25XynZHtgLg>
+    <xme:G__gY-1m_f_l8KRdAqceFakERZjFSGfKPIS4Gr0XNYepXZGfHiFkwAca8et60MOcp
+    H9AlRmK4Kpo-fXOo6c>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegiedggeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mf7gYwhErUMLiE8ckBfrt1leyzv5fLxQUxR0yy-vfBSj3VPXrlrf_A>
-    <xmx:mf7gY4-TKGg2qSpA-Ql4Q76CcYHKsKWfJx2ltb6rViaRwX2xpB9wKA>
-    <xmx:mf7gYzsS8RMxI7v2oEYaAkRyWFamtuSzaJQEDtWi58FRx7SVZ_MvFA>
-    <xmx:m_7gY5vB_pxzNaeJp31Wk1pS-jfDAK-fntPE2o5v-Ht24Fv0S-HWQg>
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:G__gYxoZOgn6y5foUs8RA9cVCEGPdpaz1jiMmnlnrE6eJUJNZf4z_Q>
+    <xmx:G__gYzl4JRVRRCG99nshqA1J2fym1-y14S0jyeY12G0JrVnxucQ_aw>
+    <xmx:G__gY50qxylxuNFDlYKVrkuke9iTS9duDzQHWObkD0uR7GKsqF70Ow>
+    <xmx:HP_gYyJ8aSPCd5ZF9PeiKKVON05H1_CDkIgfhm5Q063a0Dk8pBhpew>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 35F87B60086; Mon,  6 Feb 2023 08:20:25 -0500 (EST)
+        id CD84AB60086; Mon,  6 Feb 2023 08:22:35 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-108-ge995779fee-fm-20230203.001-ge995779f
 Mime-Version: 1.0
-Message-Id: <86c8ba70-2a2f-4c5b-8e74-20e3823e2db3@app.fastmail.com>
-In-Reply-To: <Y+D3F2pg7X4XFT4r@hirez.programming.kicks-ass.net>
-References: <20230202145030.223740842@infradead.org>
- <20230202152655.494373332@infradead.org>
- <24007667-1ff3-4c86-9c17-a361c3f9f072@app.fastmail.com>
- <Y+DjULnIxcPU/rtp@hirez.programming.kicks-ass.net>
- <Y+DvI7ai/wuovjER@hirez.programming.kicks-ass.net>
- <Y+D3F2pg7X4XFT4r@hirez.programming.kicks-ass.net>
-Date:   Mon, 06 Feb 2023 14:20:06 +0100
+Message-Id: <b9f274ad-591b-40b5-9441-a45fe67b5b8d@app.fastmail.com>
+In-Reply-To: <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+ <5fc85453-1e2c-1f00-7879-1b5fa318c78a@xen0n.name>
+ <5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn>
+ <b1809500e4d55564a1084a3014fb9603ba3d1438.camel@xry111.site>
+ <3b17d229-bad4-e6a0-9055-c585dd5a62e4@loongson.cn>
+Date:   Mon, 06 Feb 2023 14:22:17 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Peter Zijlstra" <peterz@infradead.org>
-Cc:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Will Deacon" <will@kernel.org>,
-        "Boqun Feng" <boqun.feng@gmail.com>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>, dennis@kernel.org,
-        "Tejun Heo" <tj@kernel.org>, "Christoph Lameter" <cl@linux.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, "Joerg Roedel" <joro@8bytes.org>,
-        suravee.suthikulpanit@amd.com,
-        "Robin Murphy" <robin.murphy@arm.com>, dwmw2@infradead.org,
-        "Baolu Lu" <baolu.lu@linux.intel.com>,
-        "Herbert Xu" <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Pekka Enberg" <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org, iommu@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] percpu: Wire up cmpxchg128
-Content-Type: text/plain
+To:     "Jianmin Lv" <lvjianmin@loongson.cn>,
+        "Xi Ruoyao" <xry111@xry111.site>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -114,37 +94,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 6, 2023, at 13:48, Peter Zijlstra wrote:
-> On Mon, Feb 06, 2023 at 01:14:28PM +0100, Peter Zijlstra wrote:
->> On Mon, Feb 06, 2023 at 12:24:00PM +0100, Peter Zijlstra wrote:
->> Basically, using 64bit percpu ops on 32bit is already somewhat dangerous
->> -- wiring up native cmpxchg64 support in that case seemed an
->> improvement.
->> 
->> Anyway... let me get on with doing explicit
->> {raw,this}_cpu_cmpxchg{64,128}() thingies.
+On Mon, Feb 6, 2023, at 14:13, Jianmin Lv wrote:
+> On 2023/2/6 =E4=B8=8B=E5=8D=887:18, Xi Ruoyao wrote:
+>> On Mon, 2023-02-06 at 18:24 +0800, Jianmin Lv wrote:
+>>> Hi, Xuerui
+>>>
+>>> I think the kernels produced with and without -mstrict-align have ma=
+inly
+>>> following differences:
+>>> - Diffirent size. I build two kernls (vmlinux), size of kernel with
+>>> -mstrict-align is 26533376 bytes and size of kernel without
+>>> -mstrict-align is 26123280 bytes.
+>>> - Diffirent performance. For example, in kernel function jhash(), the
+>>> assemble code slices with and without -mstrict-align are following:
+>>=20
+>> But there are still questions remaining:
+>>=20
+>> (1) Is the difference contributed by a bad code generation of GCC?  If
+>> true, it's better to improve GCC before someone starts to build a dis=
+tro
+>> for LA264 as it would benefit the user space as well.
+>>=20
+> AFAIK, GCC builds to produce unaligned-access-enabled target binary by=20
+> default (without -mstrict-align) for improving user space performance=20
+> (small size and runtime high performance), which is also based the fac=
+t=20
+> that the vast majority of LoongArch CPUs support unaligned-access.
 >
-> I only converted x86 and didn't do the automagic downgrade...
->
-> Opinions?
+>> (2) Is there some "big bad unaligned access loop" on a hot spot in the
+>> kernel code?  If true, it may be better to just refactor the C code
+>> because doing so will benefit all ports, not only LoongArch.  Otherwi=
+se,
+>> it may be unworthy to optimize for some cold paths.
+>>=20
+> Frankly, I'm not sure if there is this kind of hot code in kernel, I=20
+> just see the difference from different kernel size and different=20
+> assemble code slice. And I'm afraid that it may be difficult to judge=20
+> whether it is reasonable hot code or not if exists.
 
-I think that's much better, it keeps the interface symmetric
-between cmpxchg and this_cpu_cmp_cmpxchg, and makes it harder
-to run into the subtle corner case on old x86 CPUs.
+Just look for CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS, this will
+show you code locations that use different implementations based on
+whether the kernel should run on CPUs without unaligned access or
+not.
 
-For the M486/M586/MK8/MPSC/MATOM/MCORE2 configs, I would
-probably want to go with a compile-time check and have most
-distro kernels build with at least M586TSC for 32-bit or
-an upgraded CONFIG_GENERIC_CPU for x86_64 that assumes cmpxchg16b
-(nehalem, second-geneneration k8, silverthorne, ...) in
-order to turn system_has_cmpxchg* into a constant value on
-all architectures. That can be a separate discussion though
-and shouldn't block your series as you just keep the current
-state.
-
-> -#ifdef system_has_freelist_aba
-> +#ifdef syste_has_freelist_aba
-
-Typo
-
-    Arnd
+      Arnd
