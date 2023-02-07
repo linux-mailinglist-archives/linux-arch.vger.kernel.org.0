@@ -2,130 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703C468D6FD
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 13:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4ACA68D71B
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 13:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjBGMlf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Feb 2023 07:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
+        id S231666AbjBGMrD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Feb 2023 07:47:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjBGMle (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 07:41:34 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C85EFB2;
-        Tue,  7 Feb 2023 04:41:33 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 014511EC0589;
-        Tue,  7 Feb 2023 13:41:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1675773692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+krXHkOwaQ2CA6MBr//FoiRxxZ4nkc4bLu0Pn6fd5JQ=;
-        b=VzbT+beWx6gdcXo8RwgQy7OJCkExOCPf3pCJZ44jIA0nMadh93X6k2+oKL32X6ZrtoBNsJ
-        QwT3xSdG6H4wfEqL4g6Ft6qDG5GfZst4KuuFau2C8/I5O4xGjnpj5xFGzGevrr0Rt8PlPH
-        wRbcGTMmXZuj/u24y0qZCB/3MkezfZk=
-Date:   Tue, 7 Feb 2023 13:41:27 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y+JG9+zdSwZlz6FU@zn.tnic>
-References: <1673559753-94403-1-git-send-email-mikelley@microsoft.com>
- <1673559753-94403-7-git-send-email-mikelley@microsoft.com>
- <Y8r2TjW/R3jymmqT@zn.tnic>
- <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y9FC7Dpzr5Uge/Mi@zn.tnic>
- <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
+        with ESMTP id S231528AbjBGMrC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 07:47:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5207611E9B;
+        Tue,  7 Feb 2023 04:47:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F4C6106F;
+        Tue,  7 Feb 2023 04:47:43 -0800 (PST)
+Received: from [10.57.75.57] (unknown [10.57.75.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4589B3F71E;
+        Tue,  7 Feb 2023 04:46:56 -0800 (PST)
+Message-ID: <7a88cefe-c817-3bca-f3e1-88254a144e3e@arm.com>
+Date:   Tue, 7 Feb 2023 12:46:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
+ <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com> <86wn4vynyr.wl-maz@kernel.org>
+ <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com> <86sffhzpkz.wl-maz@kernel.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <86sffhzpkz.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 02, 2023 at 05:49:44AM +0000, Michael Kelley (LINUX) wrote:
-> I could do:
-> 1.  CC_ATTR_PARAVISOR_SPLIT_ADDRESS_SPACE, which is similar to
->     what I had for v1 & v2.   At the time, somebody commented that
->     this might be a bit too general.
-> 2.  Keep CC_ATTR_ACCESS_IOAPIC_ENCRYPTED and add
->     CC_ATTR_ACCESS_TPM_ENCRYPTED, which would decouple them
-> 3.  CC_ATTR_ACCESS_IOAPIC_AND_TPM_ENCRYPTED, which is very
->     narrow and specific.
+On 07/02/2023 11:23, Marc Zyngier wrote:
+> On Tue, 07 Feb 2023 09:41:54 +0000,
+> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>
+>> Hi Marc,
+>>
+>> On 06/02/2023 12:31, Marc Zyngier wrote:
+>>> On Mon, 06 Feb 2023 10:10:41 +0000,
+>>> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>>>
+>>>> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+>>>> not supported. So using an explicit passing down of the args is
+>>>> preferrable.
+>>>
+>>> What is the blocker for CCA to use GET_ONE_REG? The value obviously
+>>> exists and is made available to the host. pKVM is perfectly able to
+>>> use GET_ONE_REG and gets a bunch of zeroes for things that the
+>>> hypervisor has decided to hide from the host.
+>>>
+>>
+>> It is not impossible. On a "HOST CALL" (explicit calls to the Host
+>> from Realm), the GPRs are made available to the host and can be
+>> stashed into the vcpu reg state and the request can be
+>> serviced. However, it is a bit odd, to make this exception - "the
+>> GET_ONE_REG is valid now", while in almost all other cases it is
+>> invalid (exception of MMIO).
 > 
-> I have weak preference for #1 above, but I could go with any of them.
-> What's your preference?
-
-Either 1. but a shorter name or something which works with the TDX side
-too.
-
-Or are there no similar TDX solutions planned where the guest runs
-unmodified and under a paravisor?
-
-> For v6 of the patch series, I've coded devm_ioremap_resource_enc() to call
-> __devm_ioremap(), which then calls ioremap_encrypted().  I've updated the
-> TPM driver to use cc_platform_has() with whatever attribute name we agree
-> on to decide between devm_ioremap_resource_enc() and
-> devm_ioremap_resource().
+> But that's an RMM decision. If the RMM decides to forward the
+> hypercall to the host (irrespective of the potential forwarding to
+> userspace), it makes the GPRs available.
 > 
-> If this approach is OK with the TPM driver maintainers, I'm good with it.
-> More robust handling of a mix of encrypted and decrypted devices can get
-> sorted out later.
+> If the hypercall is forwarded to userspace, then the host is
+> responsible to check with the RMM that it will be willing to provide
+> the required information (passed as GPRs or not).
 
-Makes sense to me...
+Just to be clear, on a hypercall, all the arguments are provided to
+the host. And it is always possible for the host to sync the vcpu
+GPR state with those arguments and make them available via the 
+GET_ONE_REG call.
 
-Thx.
+> 
+>> Of course we could always return what is stashed in the vcpu state,
+>> which is may be invalid/ 0. But given the construct of "host doesn't
+>> have access to the register state", it may be a good idea to say,
+>> request always fails, to indicate that the Host is probably doing
+>> something wrong, than silently passing on incorrect information.
+> 
+> I disagree. Either you fail at the delegation point, or you don't. On
+> getting a hypercall exit to userspace, you are guaranteed that the
+> GPRs are valid.
 
--- 
-Regards/Gruss,
-    Boris.
+This is possible, as I mentioned below, the question is bug vs feature.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+>>> Of course, it requires that the hypervisor (the RMM in your case)
+>>> knows about the semantics of the hypercall, but that's obviously
+>>
+>> RMM doesn't care about the semantics of hypercall, other than
+>> considering it just like an SMCCC compliant call. The hypercall
+>> arguments/results are passed down/up by the Realm in a separate
+>> structure.
+> 
+> That's because the RMM doesn't use registers to pass the data. But at
+> the end of the day, this is the same thing. The host gets the data
+> from the RMM, stashes it in the GPRs, and exit to userspace.
+
+True.
+
+> 
+> The important thing here is that GET_ONE_REG is valid in the context
+> where it matters. If the VMM tries to use it outside of the context of
+> a hypercall, it gets junk. It's not a bug, it's a feature.
+
+This is what I was concerned about.  As long as this "For any exit
+other than hypercall (at least for now), you get junk values when using
+GET_ONE_REG for confidential guests" is an acceptable feature, that 
+should be alright.
+
+Thanks
+Suzuki
+
+> 
+> Thanks,
+> 
+> 	M.
+> 
+
