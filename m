@@ -2,173 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F3668CED9
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 06:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B2D68D20F
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 10:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjBGFYj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Feb 2023 00:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S231370AbjBGJHM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 7 Feb 2023 04:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjBGFYc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 00:24:32 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0F123C76;
-        Mon,  6 Feb 2023 21:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1675747458; bh=iufufAo2L+w2AZs187YrZy2mIt/7pr1wc5OIX9c+eLA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Nxbm9xAoO0HD639dptyUxWu1Ap3/aG58G3WZ43qz/6MZb47k9IblyPYb2jjOZG/2/
-         +q+TaFo+gE0j6gGyXk/JAWPLxMZkgAj2W15TVOFEdzrwyZh4w+4hJ6j+y7PT5EPLWe
-         rcKJEk6R4/x4OfFrTjw1+PaGSU9yJakGmYMZYP88=
-Received: from [192.168.43.185] (unknown [49.78.239.15])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2C5BF60106;
-        Tue,  7 Feb 2023 13:24:17 +0800 (CST)
-Message-ID: <379bcb55-f75d-02ce-a51b-467e21ade5a3@xen0n.name>
-Date:   Tue, 7 Feb 2023 13:24:15 +0800
+        with ESMTP id S229690AbjBGJHM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 04:07:12 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68931234DF;
+        Tue,  7 Feb 2023 01:07:08 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pPJwG-001RJZ-JC; Tue, 07 Feb 2023 10:06:56 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pPJwE-000mCw-Hc; Tue, 07 Feb 2023 10:06:56 +0100
+Message-ID: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Tue, 07 Feb 2023 10:06:53 +0100
+In-Reply-To: <20230203071423.GA24833@lst.de>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0)
- Gecko/20100101 Firefox/111.0 Thunderbird/111.0a1
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        David Laight <David.Laight@ACULAB.COM>,
-        'Huacai Chen' <chenhuacai@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
- <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
- <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
- <9936da8f577842b8b5edafcdc69dc2d1@AcuMS.aculab.com>
- <560d73a8-2f2a-4844-44ff-afffad9c8694@loongson.cn>
-Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <560d73a8-2f2a-4844-44ff-afffad9c8694@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2023/2/6 18:28, Jianmin Lv wrote:
+Hello Christoph!
+
+On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
+> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
+> > We have had a discussion between multiple people invested in the SuperH port and
+> > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
+> > when he isn't available.
 > 
-> 
-> On 2023/2/3 下午4:46, David Laight wrote:
->> From: Huacai Chen
->>> Sent: 03 February 2023 02:01
->>>
->>> Hi, David,
->>>
->>> On Thu, Feb 2, 2023 at 5:01 PM David Laight <David.Laight@aculab.com> 
->>> wrote:
->>>>
->>>> From: Huacai Chen
->>>>> Sent: 02 February 2023 08:43
->>>>>
->>>>> Introduce Kconfig option ARCH_STRICT_ALIGN to make -mstrict-align be
->>>>> configurable.
->>>>>
->>>>> Not all LoongArch cores support h/w unaligned access, we can use the
->>>>> -mstrict-align build parameter to prevent unaligned accesses.
->>>>>
->>>>> This option is disabled by default to optimise for performance, but 
->>>>> you
->>>>> can enabled it manually if you want to run kernel on systems 
->>>>> without h/w
->>>>> unaligned access support.
->>>>
->>>> Should there be an associated run-time check during kernel 
->>>> initialisation
->>>> that a kernel compiled without -mstrict-align isn't being run on 
->>>> hardware
->>>> that doesn't support unaligned accesses.
->>>>
->>>> It can be quite a while before you get a compiler-generated 
->>>> misaligned accesses.
->>>
->>> If we don't use -mstrict-align, the kernel cannot be run on hardware
->>> that doesn't support unaligned accesses, so I think the run-time check
->>> is useless, and it has no chance to run the checking.
->>
->> If you don't add the check and someone boots the wrong type of kernel
->> then they'll probably get a panic well after booting.
->> You really do want a check in the bot code.
->>
-> Agree, maybe it's reasonable to check it at the beginning of cpu probe 
-> stuff.
+> So, this still isn't reflected in MAINTAINERS in linux-next.  When
+> do you plan to take over?  What platforms will remain supported and
+> what can we start dropping due to being unused and unmaintained?
 
-Yeah I think just performing a deliberate unaligned access very early 
-would be enough to stop "weaker" CPUs from continuing in this case.
+I'm getting everything ready now with Geert's help and I have a probably dumb
+question regarding the MAINTAINERS file change: Shall I just add myself as an
+additional maintainer first or shall I also drop Yoshinori Sato?
 
-> 
->> There is also the question of how userspace is compiled.
->> You pretty much don't want to be taking traps to fixup misaligned 
->> accesses.
->> So the default compiler options better include -mstrict-align.
->>
->> You should look at -mno-strict-align being a performance option when
->> running on known hardware, not a default.
->>
->>     David
->>
-> I think the key point of the patch is providing users with a high 
-> performance kernel for existed and future unaligned-access-supported 
-> Loongson CPUs (mainly for destop and server system, also called *big* 
-> CPU), which are dominant compared with unaligned-access-unsupported CPUs 
-> (mainly for customized embedded system, also called *small* CPU). By 
-> this way, we just want to provide *the vast majority of big CPU users* 
-> (desktop and server OS) with convenience to directly use high 
-> performance kernel without any extra compile option.
+Also, is it desirable to add a "T:" entry for the kernel tree?
 
-Market share and general availability may matter, but again, if you're 
-considering end users that most likely don't compile their own kernels, 
-Kconfig default or defconfig may not matter after all: distributions 
-invariably maintain their own Kconfig. And I think we should follow the 
-general principle of "least surprises" -- just make the default value 
-most universal. It's not like those comparatively small number of power 
-users / developers are not paying attention to the "Emit unaligned 
-accesses in kernel for performance" config option.
-
-(Yes I've partially changed my mind after seeing Arnd's suggestion that 
-indeed some optimized codepaths can be enabled if we can know the CPU's 
-unaligned capability at config time. Now I'm in support of making this 
-codegen aspect tunable, but I still think keeping the default as-is 
-would be a better idea. It won't regress or surprise anyone and embedded 
-people's convenience wouldn't get sacrificed.)
-
-> Instead, for customized embedded system, we have to support them with an extra 
-> compile option. So, it seems that we have to reconcile default compile 
-> option between small CPU and big CPU, and sacrifice the convenience of 
-> small CPU.
-> 
-> For some specific diffirences with and without -mstrict-align, see:
-> https://lore.kernel.org/all/5303aeda-5c66-ede6-b3ac-7d8ebd73ec70@loongson.cn/
-
-As someone who's dabbled with compilers I definitely agree the codegen 
-impact and/or performance benefit could be sizable, after all every 
-potentially unaligned access must be split into two guaranteed-aligned 
-insns if we can't rely on the hardware. But again microbenchmarks could 
-at times translate into real-world gains surprisingly poorly, so I still 
-think concrete use cases would make a better argument.
-
-But again, since some other known-good optimizations can only be turned 
-on at config time, like in the network stack, arguably you don't have to 
-come up with this concrete number any more ;)
+Thanks,
+Adrian
 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
