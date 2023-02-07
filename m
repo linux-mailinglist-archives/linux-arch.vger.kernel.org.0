@@ -2,96 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B2D68D20F
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 10:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A832568D313
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 10:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjBGJHM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 7 Feb 2023 04:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
+        id S231143AbjBGJmC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Feb 2023 04:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjBGJHM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 04:07:12 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68931234DF;
-        Tue,  7 Feb 2023 01:07:08 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pPJwG-001RJZ-JC; Tue, 07 Feb 2023 10:06:56 +0100
-Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pPJwE-000mCw-Hc; Tue, 07 Feb 2023 10:06:56 +0100
-Message-ID: <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
-Subject: Re: remove arch/sh
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-Date:   Tue, 07 Feb 2023 10:06:53 +0100
-In-Reply-To: <20230203071423.GA24833@lst.de>
-References: <20230113062339.1909087-1-hch@lst.de>
-         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
-         <20230116071306.GA15848@lst.de>
-         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
-         <20230203071423.GA24833@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.3 
+        with ESMTP id S230149AbjBGJmC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 04:42:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE7CC8A54;
+        Tue,  7 Feb 2023 01:42:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E327911FB;
+        Tue,  7 Feb 2023 01:42:42 -0800 (PST)
+Received: from [10.57.75.57] (unknown [10.57.75.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B7BF3F71E;
+        Tue,  7 Feb 2023 01:41:56 -0800 (PST)
+Message-ID: <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com>
+Date:   Tue, 7 Feb 2023 09:41:54 +0000
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.100
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
+        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
+ <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com> <86wn4vynyr.wl-maz@kernel.org>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <86wn4vynyr.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Christoph!
+Hi Marc,
 
-On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
-> On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
-> > We have had a discussion between multiple people invested in the SuperH port and
-> > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
-> > when he isn't available.
+On 06/02/2023 12:31, Marc Zyngier wrote:
+> On Mon, 06 Feb 2023 10:10:41 +0000,
+> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>>
+>> Hi,
+>>
+>> A few cents from the Realm support point of view.
+>>
+>> On 05/02/2023 10:12, Marc Zyngier wrote:
+>>> On Fri, 03 Feb 2023 13:50:40 +0000,
+>>> James Morse <james.morse@arm.com> wrote:
+>>>>
+>>>> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>>>
+>>>> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
+>>>> request to handle all hypercalls that aren't handled by KVM. With the
+>>>> help of another capability, this will allow userspace to handle PSCI
+>>>> calls.
+>>>>
+>>>> Suggested-by: James Morse <james.morse@arm.com>
+>>>> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+>>>> Signed-off-by: James Morse <james.morse@arm.com>
+>>>>
+>>>> ---
+>>>>
+>>>
+>>> On top of Oliver's ask not to make this a blanket "steal everything",
+>>> but instead to have an actual request for ranges of forwarded
+>>> hypercalls:
+>>>
+>>>> Notes on this implementation:
+>>>>
+>>>> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
+>>>>     generalizes the idea to all hypercalls, since that was suggested on
+>>>>     the list [2, 3].
+>>>>
+>>>> * We're reusing kvm_run.hypercall. I copied x0-x5 into
+>>>>     kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
+>>>>     this, because:
+>>>>     - Most user handlers will need to write results back into the
+>>>>       registers (x0-x3 for SMCCC), so if we keep this shortcut we should
+>>>>       go all the way and read them back on return to kernel.
+>>>>     - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
+>>>>       handling the call.
+>>
+>> This may not be always possible, e.g., for Realms. GET_ONE_REG is
+>> not supported. So using an explicit passing down of the args is
+>> preferrable.
 > 
-> So, this still isn't reflected in MAINTAINERS in linux-next.  When
-> do you plan to take over?  What platforms will remain supported and
-> what can we start dropping due to being unused and unmaintained?
+> What is the blocker for CCA to use GET_ONE_REG? The value obviously
+> exists and is made available to the host. pKVM is perfectly able to
+> use GET_ONE_REG and gets a bunch of zeroes for things that the
+> hypervisor has decided to hide from the host.
+> 
 
-I'm getting everything ready now with Geert's help and I have a probably dumb
-question regarding the MAINTAINERS file change: Shall I just add myself as an
-additional maintainer first or shall I also drop Yoshinori Sato?
+It is not impossible. On a "HOST CALL" (explicit calls to the Host from
+Realm), the GPRs are made available to the host and can be stashed into 
+the vcpu reg state and the request can be serviced. However, it is a bit
+odd, to make this exception - "the GET_ONE_REG is valid now", while in 
+almost all other cases it is invalid (exception of MMIO).
 
-Also, is it desirable to add a "T:" entry for the kernel tree?
+Of course we could always return what is stashed in the vcpu state,
+which is may be invalid/ 0. But given the construct of "host doesn't
+have access to the register state", it may be a good idea to say, 
+request always fails, to indicate that the Host is probably doing 
+something wrong, than silently passing on incorrect information.
 
-Thanks,
-Adrian
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+> Of course, it requires that the hypervisor (the RMM in your case)
+> knows about the semantics of the hypercall, but that's obviously
+
+RMM doesn't care about the semantics of hypercall, other than
+considering it just like an SMCCC compliant call. The hypercall
+arguments/results are passed down/up by the Realm in a separate structure.
+
+> already a requirement (or you wouldn't be able to use PSCI at all).
+
+Realm PSCI calls are always serviced by the RMM. RMM may request
+the Hyp for specific information in certain cases, but that doesn't
+need to go down to the VMM.
+
+Thanks
+Suzuki
+
+
+> 
+> Thanks,
+> 
+> 	M.
+> 
+
