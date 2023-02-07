@@ -2,72 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD07E68DC9F
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 16:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D28C68DDA9
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 17:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjBGPMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Feb 2023 10:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S232136AbjBGQMY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Feb 2023 11:12:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbjBGPLf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 10:11:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100FDB479
-        for <linux-arch@vger.kernel.org>; Tue,  7 Feb 2023 07:10:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1675782586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GxBfoqI0PHHne7Q8icH0M4s0J6nFlvJqJYlQUhkLb0g=;
-        b=Kt7bhXca8xb0DFvVs49f6hS2TtmNday8bx2a6e1exMzoFIYmHoG8AMQm4PuErlySipQHJW
-        lb7AWdgzYb8DUJtzazRtWjVjRkjs5z/GpDweeyrHq1y5ETMWMcCdaoFaPC+OKwjA3m6Gin
-        c13WgVMFNWM08BvQsFzcambwNy7STLA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-538-25NjHeWuOEiRldTs_uNVyA-1; Tue, 07 Feb 2023 10:09:42 -0500
-X-MC-Unique: 25NjHeWuOEiRldTs_uNVyA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A09D180D0F2;
-        Tue,  7 Feb 2023 15:09:41 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 72BBE1121314;
-        Tue,  7 Feb 2023 15:09:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <0000000000003a78a905f4049614@google.com>
-References: <0000000000003a78a905f4049614@google.com>
-To:     syzbot <syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, akpm@linux-foundation.org,
-        aneesh.kumar@linux.ibm.com, bpf@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, hch@lst.de,
-        jhubbard@nvidia.com, kuba@kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, npiggin@gmail.com, pabeni@redhat.com,
-        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
-        will@kernel.org
-Subject: Re: [syzbot] kernel BUG in process_one_work
+        with ESMTP id S232688AbjBGQMI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 11:12:08 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B794E056;
+        Tue,  7 Feb 2023 08:11:55 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id c2so17246490qtw.5;
+        Tue, 07 Feb 2023 08:11:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IKpFmPELNxMbbdNEgrdFiGaCVQckx4xSvoILv5TiVp4=;
+        b=zUbLIzpwACjD4TI60pRcwCL0xg9USvn8eHQV371WhQdZhlZHWeo3WlShjLsF3tgud+
+         wqlouuAcEj34p/N65XAvWyhJ3KmXbU7B4A8sDgxORoHU2W7GEElG4IS1LHTJc+OG7E60
+         NTRSUt+ENcYpl60UjlkB9k8etiFUuuizxs6YgGn89IGlPRhAf7ZgWt3eMtnf7BeqO+zn
+         SdS9o+jrzb83yURgIk/LFymYM/KSKldkU8Aq+zkbxj+U+68WJ0tDw3/Osx7VdZ71Olfy
+         3b7ZFNBiOt6Vjj6NsePoByu/wxG9IUHXJkWv4YkpNjQev3RVhnQkzDpaG5stVWtDR5su
+         ZHMw==
+X-Gm-Message-State: AO0yUKWFvPh9HDhLtCqOy15jVHIhwY5LxAOYYvt/caNHiJp8F7WqQPCN
+        QfwDnYoT1RsZinqmDDTZ8FkegYFz49MDiQ==
+X-Google-Smtp-Source: AK7set8aKxLwZwlyl1iNj3yvD+11ovSLP8b1YJ8Dz8j785mko9MntkgmA+ZkfFrSwJrZz9vBkXhfGg==
+X-Received: by 2002:a05:622a:1804:b0:3b1:4a8:4665 with SMTP id t4-20020a05622a180400b003b104a84665mr6093586qtc.62.1675786314242;
+        Tue, 07 Feb 2023 08:11:54 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id bi15-20020a05620a318f00b006e99290e83fsm9721333qkb.107.2023.02.07.08.11.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 08:11:53 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-4b718cab0e4so201604057b3.9;
+        Tue, 07 Feb 2023 08:11:53 -0800 (PST)
+X-Received: by 2002:a0d:f444:0:b0:526:78ad:bb15 with SMTP id
+ d65-20020a0df444000000b0052678adbb15mr382260ywf.47.1675786312866; Tue, 07 Feb
+ 2023 08:11:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3416442.1675782578.1@warthog.procyon.org.uk>
-Date:   Tue, 07 Feb 2023 15:09:38 +0000
-Message-ID: <3416443.1675782578@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <Y9lz6yk113LmC9SI@ZenIV> <Y9l02DvS6CYThTEG@ZenIV>
+In-Reply-To: <Y9l02DvS6CYThTEG@ZenIV>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Feb 2023 17:11:40 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVQusKr_W4dnQzVSWbav7vooCHbiyOQHbnraJCL16bsDQ@mail.gmail.com>
+Message-ID: <CAMuHMdVQusKr_W4dnQzVSWbav7vooCHbiyOQHbnraJCL16bsDQ@mail.gmail.com>
+Subject: Re: [PATCH 09/10] riscv: fix livelock in uaccess
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-arch@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, Michal Simek <monstr@monstr.eu>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-#syz dup: [syzbot] general protection fault in skb_dequeue (3)
+On Tue, Jan 31, 2023 at 9:07 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> riscv equivalent of 26178ec11ef3 "x86: mm: consolidate VM_FAULT_RETRY handling"
+> If e.g. get_user() triggers a page fault and a fatal signal is caught, we might
+> end up with handle_mm_fault() returning VM_FAULT_RETRY and not doing anything
+> to page tables.  In such case we must *not* return to the faulting insn -
+> that would repeat the entire thing without making any progress; what we need
+> instead is to treat that as failed (user) memory access.
+>
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
