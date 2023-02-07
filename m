@@ -2,91 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07A368D949
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 14:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CACD68D9A5
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 14:50:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjBGN2q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Feb 2023 08:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S230153AbjBGNuB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Feb 2023 08:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230361AbjBGN2p (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 08:28:45 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F081E21942;
-        Tue,  7 Feb 2023 05:28:43 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.155])
-        by gateway (Coremail) with SMTP id _____8Dxh+kKUuJjy4oPAA--.25697S3;
-        Tue, 07 Feb 2023 21:28:42 +0800 (CST)
-Received: from [10.20.42.155] (unknown [10.20.42.155])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxjb4JUuJjVXQrAA--.21977S3;
-        Tue, 07 Feb 2023 21:28:41 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
-To:     Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
- <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
- <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
- <9936da8f577842b8b5edafcdc69dc2d1@AcuMS.aculab.com>
- <560d73a8-2f2a-4844-44ff-afffad9c8694@loongson.cn>
- <379bcb55-f75d-02ce-a51b-467e21ade5a3@xen0n.name>
- <dcd17646-4b8d-447b-bd85-c66c4a7b2cf4@app.fastmail.com>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <924aa802-410d-a85c-b623-7ca30d15c637@loongson.cn>
-Date:   Tue, 7 Feb 2023 21:28:41 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S231206AbjBGNuA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 08:50:00 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFF56193;
+        Tue,  7 Feb 2023 05:50:00 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id on9-20020a17090b1d0900b002300a96b358so14999622pjb.1;
+        Tue, 07 Feb 2023 05:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M0r46ppL6ozLVP3QrORxnEYkrjxwfEwInowE8qS44Mo=;
+        b=g8ZHyDoYN04FkE2feK0I4E7S2f42QjvQyHvrqsplBAorVioUuL/Wncowih2hU++e+n
+         71MwnpwSW4FmhAcXC6B3QjfUqkm5Fo2SqRv0QeafOmCUu2iaA/gPgxuB6nSehs2R5gfl
+         DhJi12Y2VPzNpyyOc7vG71jUuLSOGFg+9qh8nDEU0R1wOCDP1Q9RvMId1YsKVeltNF/W
+         X0b12MDvj9UBpauirRSmFwwcgTvVR/C5zJaqPdTngrAI7dJEXvNfDD7jDnmx0E7Spf9f
+         I+8/aqKadoQJ7WXnl1+kzCKOL9FQgU36uko9n4U5oq7+3/PodpV8O4odqYNlAK3xEC/L
+         JlHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=M0r46ppL6ozLVP3QrORxnEYkrjxwfEwInowE8qS44Mo=;
+        b=Z5yn1SlaHdxfYsaSY9Yh7Hx+gjRTMZoBciINWKh0R51ly4ul6x3H5Sm7UhbalHag5e
+         r17yJe3sX53n26EfArNTJwqWXKZruyLJT3h6PRs2ufKSmuuRsC/k98FRUzzjdJ4XF+p3
+         KavFQflQkH0in/5cmLz1uXVdTI13D6wikqc3Yk1SD89Nr/Y/ws4se9DTRMq99XOzbNzN
+         IhorsacuwCpHoKm1CwDjLN2DX1L1f/XcbH4uIVyTj7TJbSa5KwrN5onvKX8PfbYt2TmC
+         JoGDr7PixIzjin2vbmIufkBefRHIlWMzM7NSzCTsAR7yeR6ll36P1ZUy3utkde1yp7n8
+         SOfA==
+X-Gm-Message-State: AO0yUKUtalwQ+v7spNFwv6iJNsBA4MS9HYuAWj7hmO61IE01B855yU4G
+        dpgOFV3I0ErDzwvHaigO6jg=
+X-Google-Smtp-Source: AK7set9XJjLcHW4lgrQJY51r8GSMNbC83fh8jRN6zJKCAwc4w4SJJFkjxiuyZdAiWcEYYy1PAyX1Nw==
+X-Received: by 2002:a05:6a21:3298:b0:c0:c429:cbbd with SMTP id yt24-20020a056a21329800b000c0c429cbbdmr4371483pzb.6.1675777799669;
+        Tue, 07 Feb 2023 05:49:59 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id x3-20020aa79183000000b005769b23260fsm9529424pfa.18.2023.02.07.05.49.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Feb 2023 05:49:59 -0800 (PST)
+Message-ID: <45e6a0b5-77fa-6ca2-f3a3-9cf61fdb56a6@gmail.com>
+Date:   Tue, 7 Feb 2023 21:49:48 +0800
 MIME-Version: 1.0
-In-Reply-To: <dcd17646-4b8d-447b-bd85-c66c4a7b2cf4@app.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH V3 10/16] x86/hyperv: Add smp support for sev-snp
+ guest
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, jgross@suse.com, tiala@microsoft.com,
+        kirill@shutemov.name, jiangshan.ljs@antgroup.com,
+        peterz@infradead.org, ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20230122024607.788454-1-ltykernel@gmail.com>
+ <20230122024607.788454-11-ltykernel@gmail.com>
+ <62ffd8b2-3d88-499e-ba13-1da26f664c6f@amd.com>
+ <ce9b4a79-b877-211d-aee8-bbc02e6805b5@gmail.com> <Y+Fe390kWFnAh6gC@zn.tnic>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <Y+Fe390kWFnAh6gC@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxjb4JUuJjVXQrAA--.21977S3
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrtF15Xry8KF15uFWUtF4kCrg_yoW3WrX_ZF
-        93G34fu34kAayxWwsFqa98CrySqr12k3yUAF48Xw4aq3W7JFZ3ursxXr4avryDKayIqrZ3
-        AFW5Gr1xC3s2yjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        A7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
-        1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
-        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
-        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8X_-PUUUUU==
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 2023/2/7 下午6:32, Arnd Bergmann wrote:
-> I agree the default should always be to have a kernel that works on
-> every machine that has been produced, but this also depends on which
-> models specifically lack the unaligned access. If it's just about
-> pre-production silicon that is now all but scrapped, things are different
-> from a situation where users may actually use them for normal workloads.
+On 2/7/2023 4:11 AM, Borislav Petkov wrote:
+> On Fri, Feb 03, 2023 at 03:00:44PM +0800, Tianyu Lan wrote:
+>>> For the bits definition, use:
+>>>
+>>>               u64 sev_feature_snp            : 1,
+>>>                   sev_feature_vtom            : 1,
+>>>                   sev_feature_reflectvc        : 1,
+>>>                   ...
+>>>
+>>
+>> Good suggestion. Thanks.
 > 
-> Is there an overview of the available loongarch CPU cores that have
-> been produced so far, and which ones support unaligned access?
+> Actually, I'd prefer if you used a named union and drop all this
+> "sev_feature_" prefixes everywhere:
+> 
+>          union {
+>                  struct {
+>                          u64 snp                     : 1;
+>                          u64 vtom                    : 1;
+>                          u64 reflectvc               : 1;
+>                          u64 restrict_injection      : 1;
+>                          u64 alternate_injection     : 1;
+>                          u64 full_debug              : 1;
+>                          u64 reserved1               : 1;
+>                          u64 snpbtb_isolation        : 1;
+>                          u64 resrved2                : 56;
+>                  };
+>                  u64 val;
+>          } sev_features;
+> 
+> 
+> 
+> so that you can do in code:
+> 
+> 	struct sev_es_save_area *sev;
+> 
+> 	...
+> 
+> 	sev->sev_features.snp = ...
+> 
+> and so on.
 
-So far, produced CPUs based LoongArch include 3A5000, 3B5000, 3C5000L, 
-3C5000, 2K2000, 2K1000LA and 2K0500, where 2K1000LA and 2K0500 are 
-unaligned-access-unsupported, and others are unaligned-access-supported.
-
+Hi Boris:
+	Thanks a lot for your suggestion. Will update.
