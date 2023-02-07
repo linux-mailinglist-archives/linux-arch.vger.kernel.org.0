@@ -2,61 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A832568D313
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 10:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0015268D451
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 11:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjBGJmC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Feb 2023 04:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S231400AbjBGKdj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Feb 2023 05:33:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjBGJmC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 04:42:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE7CC8A54;
-        Tue,  7 Feb 2023 01:42:00 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E327911FB;
-        Tue,  7 Feb 2023 01:42:42 -0800 (PST)
-Received: from [10.57.75.57] (unknown [10.57.75.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B7BF3F71E;
-        Tue,  7 Feb 2023 01:41:56 -0800 (PST)
-Message-ID: <985abd9c-b3f9-3f9d-eec7-df1f26733762@arm.com>
-Date:   Tue, 7 Feb 2023 09:41:54 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 29/32] KVM: arm64: Pass hypercalls to userspace
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <20230203135043.409192-30-james.morse@arm.com> <865ycg1kv2.wl-maz@kernel.org>
- <cffde8a1-74e4-9b61-1eea-544ba3405ed4@arm.com> <86wn4vynyr.wl-maz@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <86wn4vynyr.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        with ESMTP id S231215AbjBGKdi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 05:33:38 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB5C2E81D;
+        Tue,  7 Feb 2023 02:33:24 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id BC1685C00AC;
+        Tue,  7 Feb 2023 05:33:14 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Feb 2023 05:33:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1675765994; x=1675852394; bh=z58s3tlmYT
+        du/UcxWCsndVijZJpk5Ys9RAEY6puhIII=; b=pjRvaaWe7VbSIaKMXOhsl14NTK
+        DTj49AYdV8RW27oy/CBQ60Mvo3reQ+tJXY6R9JMvDAVJFpVBWhADM3w8kqwp8ycj
+        biD19/+OZQEyAMTAdUrjslttS15dHl2bZcD8IZ94eW2dL9DnBRsdCHBoX7xmx03X
+        cyWuGwOP3Mdcr1SwMmBOADeVPriWNZPiJ2AQbPd0HZl8F3a9qj932I8m4ZGjtbWR
+        93WSZS8MHk1u/Hk0U0+TKdCg89o4FNPWC2sJVDDAqx7RAw+IUBL7QXb54CmPNuAN
+        0RlhSyijyX3c9dGqghXS1jYzNgq4Nylb05VQbvbsbbG99PzhQBTFciFdNFJQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1675765994; x=1675852394; bh=z58s3tlmYTdu/UcxWCsndVijZJpk
+        5Ys9RAEY6puhIII=; b=XNeb286ist6v9OTQZNUUCDI9MaSTgpyOli6yl0MEaYiT
+        J0kUPJyo+yx+Rd8AYFHHZwhdOt/F+GroZqQksMKZf6UwVELxglSKgPgRSdybP+xi
+        6hR/KOlHUFXf+0yyV+geVu/4cWdLIueTGVBlTLMeYuFWr7y0pXUyQbqnzfRLOVm1
+        5WjKdgbLpd3rnTMxs0v/XuiT4uTD8Nbr3PiNzwqkQE3mYRouyzkjG7zDBt/iGVjS
+        bB+1TS4TKEX51i8zRaSZgFBdo+isX/QXwz7BwsW3c234H5CBBSvLArmcoKx62iSS
+        v0/uS3K4CB+grkrpeV1D6duwp4eG33Xp4m7Z0NQAFg==
+X-ME-Sender: <xms:6SjiY7Y4bpk4LdHTBwVkI1hF29_G4Vxv7RlViXlIt15-JoIMl__Ydg>
+    <xme:6SjiY6bFn75IkjLqjU2pTSns4pzZxbycq2YfOsD7KuAXTUG-8FaCq3hHEIgW1hLpP
+    Z7F_9HtxLEs2KMMbaE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudegkedgudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:6SjiY9-jAtaO-crySt3zntrQPhfzRgGGFXeixPtRSjsoutV1-ARqGg>
+    <xmx:6SjiYxqM0TZ8qUp-iWa4cHu8CSl_z04FkpO9fxmjsbABn7Es4eD8og>
+    <xmx:6SjiY2rHU4tX21q6Tm-jyCjjjC8msdrmjQuUhMITUgSTefEoGyLg2w>
+    <xmx:6ijiYydCrnSvu2H37oaL9b8Gq8EaGIS7qOcq8cahW32_sXWmt-eRQw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id CF7D0B60086; Tue,  7 Feb 2023 05:33:13 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <dcd17646-4b8d-447b-bd85-c66c4a7b2cf4@app.fastmail.com>
+In-Reply-To: <379bcb55-f75d-02ce-a51b-467e21ade5a3@xen0n.name>
+References: <20230202084238.2408516-1-chenhuacai@loongson.cn>
+ <363cd09a5dcb4deab21f58c19025254f@AcuMS.aculab.com>
+ <CAAhV-H7Mz1Z5Bo59tq5VRSUx-N39axeiG7xZs2Szn6nuOxgZfQ@mail.gmail.com>
+ <9936da8f577842b8b5edafcdc69dc2d1@AcuMS.aculab.com>
+ <560d73a8-2f2a-4844-44ff-afffad9c8694@loongson.cn>
+ <379bcb55-f75d-02ce-a51b-467e21ade5a3@xen0n.name>
+Date:   Tue, 07 Feb 2023 11:32:55 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "WANG Xuerui" <kernel@xen0n.name>,
+        "Jianmin Lv" <lvjianmin@loongson.cn>,
+        "David Laight" <David.Laight@ACULAB.COM>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Cc:     "Huacai Chen" <chenhuacai@loongson.cn>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] LoongArch: Make -mstrict-align be configurable
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,96 +94,22 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Marc,
+On Tue, Feb 7, 2023, at 06:24, WANG Xuerui wrote:
 
-On 06/02/2023 12:31, Marc Zyngier wrote:
-> On Mon, 06 Feb 2023 10:10:41 +0000,
-> Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
->>
->> Hi,
->>
->> A few cents from the Realm support point of view.
->>
->> On 05/02/2023 10:12, Marc Zyngier wrote:
->>> On Fri, 03 Feb 2023 13:50:40 +0000,
->>> James Morse <james.morse@arm.com> wrote:
->>>>
->>>> From: Jean-Philippe Brucker <jean-philippe@linaro.org>
->>>>
->>>> When capability KVM_CAP_ARM_HVC_TO_USER is available, userspace can
->>>> request to handle all hypercalls that aren't handled by KVM. With the
->>>> help of another capability, this will allow userspace to handle PSCI
->>>> calls.
->>>>
->>>> Suggested-by: James Morse <james.morse@arm.com>
->>>> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
->>>> Signed-off-by: James Morse <james.morse@arm.com>
->>>>
->>>> ---
->>>>
->>>
->>> On top of Oliver's ask not to make this a blanket "steal everything",
->>> but instead to have an actual request for ranges of forwarded
->>> hypercalls:
->>>
->>>> Notes on this implementation:
->>>>
->>>> * A similar mechanism was proposed for SDEI some time ago [1]. This RFC
->>>>     generalizes the idea to all hypercalls, since that was suggested on
->>>>     the list [2, 3].
->>>>
->>>> * We're reusing kvm_run.hypercall. I copied x0-x5 into
->>>>     kvm_run.hypercall.args[] to help userspace but I'm tempted to remove
->>>>     this, because:
->>>>     - Most user handlers will need to write results back into the
->>>>       registers (x0-x3 for SMCCC), so if we keep this shortcut we should
->>>>       go all the way and read them back on return to kernel.
->>>>     - QEMU doesn't care about this shortcut, it pulls all vcpu regs before
->>>>       handling the call.
->>
->> This may not be always possible, e.g., for Realms. GET_ONE_REG is
->> not supported. So using an explicit passing down of the args is
->> preferrable.
-> 
-> What is the blocker for CCA to use GET_ONE_REG? The value obviously
-> exists and is made available to the host. pKVM is perfectly able to
-> use GET_ONE_REG and gets a bunch of zeroes for things that the
-> hypervisor has decided to hide from the host.
-> 
+> (Yes I've partially changed my mind after seeing Arnd's suggestion that 
+> indeed some optimized codepaths can be enabled if we can know the CPU's 
+> unaligned capability at config time. Now I'm in support of making this 
+> codegen aspect tunable, but I still think keeping the default as-is 
+> would be a better idea. It won't regress or surprise anyone and embedded 
+> people's convenience wouldn't get sacrificed.)
 
-It is not impossible. On a "HOST CALL" (explicit calls to the Host from
-Realm), the GPRs are made available to the host and can be stashed into 
-the vcpu reg state and the request can be serviced. However, it is a bit
-odd, to make this exception - "the GET_ONE_REG is valid now", while in 
-almost all other cases it is invalid (exception of MMIO).
+I agree the default should always be to have a kernel that works on
+every machine that has been produced, but this also depends on which
+models specifically lack the unaligned access. If it's just about
+pre-production silicon that is now all but scrapped, things are different
+from a situation where users may actually use them for normal workloads.
 
-Of course we could always return what is stashed in the vcpu state,
-which is may be invalid/ 0. But given the construct of "host doesn't
-have access to the register state", it may be a good idea to say, 
-request always fails, to indicate that the Host is probably doing 
-something wrong, than silently passing on incorrect information.
+Is there an overview of the available loongarch CPU cores that have
+been produced so far, and which ones support unaligned access?
 
-
-> Of course, it requires that the hypervisor (the RMM in your case)
-> knows about the semantics of the hypercall, but that's obviously
-
-RMM doesn't care about the semantics of hypercall, other than
-considering it just like an SMCCC compliant call. The hypercall
-arguments/results are passed down/up by the Realm in a separate structure.
-
-> already a requirement (or you wouldn't be able to use PSCI at all).
-
-Realm PSCI calls are always serviced by the RMM. RMM may request
-the Hyp for specific information in certain cases, but that doesn't
-need to go down to the VMM.
-
-Thanks
-Suzuki
-
-
-> 
-> Thanks,
-> 
-> 	M.
-> 
-
+     Arnd
