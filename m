@@ -2,172 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA2668DC37
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 15:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD07E68DC9F
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Feb 2023 16:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbjBGOzm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Feb 2023 09:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S232034AbjBGPMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Feb 2023 10:12:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbjBGOzj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 09:55:39 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54101EF89
-        for <linux-arch@vger.kernel.org>; Tue,  7 Feb 2023 06:55:36 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id x4so18873335ybp.1
-        for <linux-arch@vger.kernel.org>; Tue, 07 Feb 2023 06:55:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpS3HgKPmEogc2Gw9AlFJQlCzGdEEgzV3gaAp0/AV2s=;
-        b=waPM8nbRluE35gGhrnOOlYCVoqMbSzXI/bIeppE9bSuFFI+RZAzc6Kl5AasZ9otGI4
-         OBcaMb89VmJlQA1BqQM9ko3ab0J+4Uob3evLCOBCdMRAvfPWqBlGowOBUJ6rCj1/Vw5l
-         XsdeMKH6QAcOLrAjl8BW/dfg2o5OtyicTpibLycC02L1REZwkd+Y7rbkJkOqOlSQv3La
-         cTVllcV5wizPEPJZkmwzpovhOVse1MS8EUFEA5YXboPA/Yu4/bznLdms8azWGLg7n+wf
-         jmU54a3NqzhTvcksWe8Tw1hVTpGGhzzkCQdkP6PiJjo5P+u9SwIiWyDKskkWkkK6MrhL
-         sNOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kpS3HgKPmEogc2Gw9AlFJQlCzGdEEgzV3gaAp0/AV2s=;
-        b=NDzN3HIykU+gh3A/ngeHFRBA8sIqIuCus3X3LhEN9gj+hzo39kZD82ofSoyL0ESYDx
-         iSvHf0+3+TONHIVyPHN4xxrNR0hmqQ2Cw4va3sEr+zB692/FAip3wom6bpAjN2jisswY
-         m7S7Hy+YD0J4nxU9+tf8aHaJtKHRnE60dZRzCv16+eCIHZbOFan9nNpvg7yOyx4w96WU
-         lXx0PgJvAFlkqp3A5ksHa9tKkT+iMwcLg0yXOnalDW4G+o17EmBgza0BmphmbDQpe7I5
-         knPovWRPoz3R31EXeA12PYxZawwqSQp2yPBXMInvTHZ7HJYpyVVdthMUIJJb4x9vdPJA
-         I/Bw==
-X-Gm-Message-State: AO0yUKUW3Ou/tM3K90nlGj/IN4CYaq9325VEIAS3LFxOMAPG/Nj/ZhtX
-        3KCYAxvadfcZWdD1RpHQJzTxIIBMYBL3puf1Aw8D6A==
-X-Google-Smtp-Source: AK7set+FPiZG8Q0bqmAM+3oI4VA9/UkIXmLGvn2kwzKpYMs61nqxRIkPG0TtYZXh9iAdflkTtIBPO8Shde99ziPoa9c=
-X-Received: by 2002:a5b:150:0:b0:88f:92ec:4292 with SMTP id
- c16-20020a5b0150000000b0088f92ec4292mr401234ybp.460.1675781735294; Tue, 07
- Feb 2023 06:55:35 -0800 (PST)
+        with ESMTP id S232591AbjBGPLf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Feb 2023 10:11:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100FDB479
+        for <linux-arch@vger.kernel.org>; Tue,  7 Feb 2023 07:10:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1675782586;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GxBfoqI0PHHne7Q8icH0M4s0J6nFlvJqJYlQUhkLb0g=;
+        b=Kt7bhXca8xb0DFvVs49f6hS2TtmNday8bx2a6e1exMzoFIYmHoG8AMQm4PuErlySipQHJW
+        lb7AWdgzYb8DUJtzazRtWjVjRkjs5z/GpDweeyrHq1y5ETMWMcCdaoFaPC+OKwjA3m6Gin
+        c13WgVMFNWM08BvQsFzcambwNy7STLA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-25NjHeWuOEiRldTs_uNVyA-1; Tue, 07 Feb 2023 10:09:42 -0500
+X-MC-Unique: 25NjHeWuOEiRldTs_uNVyA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A09D180D0F2;
+        Tue,  7 Feb 2023 15:09:41 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.97])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 72BBE1121314;
+        Tue,  7 Feb 2023 15:09:39 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <0000000000003a78a905f4049614@google.com>
+References: <0000000000003a78a905f4049614@google.com>
+To:     syzbot <syzbot+c0998868487c1f7e05e5@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, akpm@linux-foundation.org,
+        aneesh.kumar@linux.ibm.com, bpf@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, hch@lst.de,
+        jhubbard@nvidia.com, kuba@kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, npiggin@gmail.com, pabeni@redhat.com,
+        peterz@infradead.org, syzkaller-bugs@googlegroups.com,
+        will@kernel.org
+Subject: Re: [syzbot] kernel BUG in process_one_work
 MIME-Version: 1.0
-References: <20230207142952.51844-1-andriy.shevchenko@linux.intel.com> <20230207142952.51844-7-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230207142952.51844-7-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Feb 2023 15:55:23 +0100
-Message-ID: <CACRpkdaPgjDijPjCdinWy5_Rd8g3idv-8K=YPTv5iTfJKFuJfw@mail.gmail.com>
-Subject: Re: [PATCH v3 06/12] gpiolib: split linux/gpio/driver.h out of linux/gpio.h
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-wpan@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, linux-arch@vger.kernel.org,
-        devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Russell King <linux@armlinux.org.uk>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Mun Yew Tham <mun.yew.tham@intel.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3416442.1675782578.1@warthog.procyon.org.uk>
+Date:   Tue, 07 Feb 2023 15:09:38 +0000
+Message-ID: <3416443.1675782578@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 7, 2023 at 3:29 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+#syz dup: [syzbot] general protection fault in skb_dequeue (3)
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Almost all gpio drivers include linux/gpio/driver.h, and other
-> files should not rely on includes from this header.
->
-> Remove the indirect include from here and include the correct
-> headers directly from where they are used.
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Make sure you push this to the kernel.org build servers (zeroday builds),
-I think this patch needs to hit some more files, in my tests with a similar
-patch at least these:
-
-diff --git a/drivers/hte/hte-tegra194-test.c b/drivers/hte/hte-tegra194-test.c
-index 5d776a185bd6..79eb866558d3 100644
---- a/drivers/hte/hte-tegra194-test.c
-+++ b/drivers/hte/hte-tegra194-test.c
-@@ -6,10 +6,11 @@
-  */
-
- #include <linux/err.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/interrupt.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/timer.h>
- #include <linux/platform_device.h>
- #include <linux/workqueue.h>
-
-
-diff --git a/arch/arm/mach-pxa/viper-pcmcia.c b/arch/arm/mach-pxa/viper-pcmcia.c
-index 26599dcc49b3..2c7af4ed57d5 100644
---- a/arch/arm/mach-pxa/viper-pcmcia.c
-+++ b/arch/arm/mach-pxa/viper-pcmcia.c
-@@ -19,6 +19,7 @@
- #include <linux/errno.h>
- #include <linux/interrupt.h>
- #include <linux/platform_device.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/gpio.h>
-
- #include <pcmcia/ss.h>
-
-Yours,
-Linus Walleij
