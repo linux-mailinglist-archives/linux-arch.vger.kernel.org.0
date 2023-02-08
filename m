@@ -2,50 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474E268F5EC
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Feb 2023 18:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273BE68F683
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Feb 2023 19:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjBHRqD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Feb 2023 12:46:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
+        id S231532AbjBHSDW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Feb 2023 13:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjBHRp1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Feb 2023 12:45:27 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7653E57;
-        Wed,  8 Feb 2023 09:44:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1675878265; x=1707414265;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+jF3CDzzwW6yo4ozmXcRNVjpZY0lFCu8o1UhbMtHcsA=;
-  b=SYv0btPLcrot+UChAMRwARHn3CXimT7f/2LR3lF5GgIxtopUnSNGqEI/
-   uCTmvB0GZF9OqmVbxMCAIlSxRScx+CW8gjL/tefQ4BMP3h+CaBfMbxIFz
-   09T0WqyEU2mjZQ7rjiREme6729OTk3Pqa4K2OEJ8YW9gzCSXwyqJP6C7j
-   dHqmktyB04/L9tZOFWfh87uMZIqFHeuqdNqN+ueZnAp5NZD5Az5wdJ01O
-   akfrxkdozAi2/fcnjpUQDrxNF7UEjRK1RKsAivYGpe6k6mZbO2XX/OWJ+
-   gi3flI2++/RwwFEImMNj0SL6gXM/jo/Fd35odPzX8tiy2HfEO19vbhvup
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="317876336"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="317876336"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2023 09:43:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10615"; a="996219805"
-X-IronPort-AV: E=Sophos;i="5.97,281,1669104000"; 
-   d="scan'208";a="996219805"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Feb 2023 09:43:09 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pPoTH-004EYe-0x;
-        Wed, 08 Feb 2023 19:43:03 +0200
-Date:   Wed, 8 Feb 2023 19:43:02 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S231929AbjBHSC4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Feb 2023 13:02:56 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CED530D2
+        for <linux-arch@vger.kernel.org>; Wed,  8 Feb 2023 10:02:18 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id m16-20020a05600c3b1000b003dc4050c94aso2113439wms.4
+        for <linux-arch@vger.kernel.org>; Wed, 08 Feb 2023 10:02:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M5KNVHSrC7/cdAAppvSovX1BQYH1mlKeTzSZkndabzI=;
+        b=lhYn0UKt1gI8oDRgPLyn7ikFvTDGwf2Vq24dv2LgPHiV8ihqRT2k7qLxUMyUBPC8iL
+         1kjRzv0p5FOr/OPZoPqTsOomSmdtG6dRIDCmM2zWnykN/NsN+pnvQRcekBxPpLb+7dnJ
+         WMII8V513jFjWV6EbLbZAVMg7+7MzRwZc69Es0ZafU8E7dTwE8PemItdaGxExyYCNWB8
+         VicfQ5HP97OFsOvy5HtV54Dl9qvPAh4xrxJ0Tfty7jVCL1BqJCUFOP0rvw4UZintMu+r
+         YcjZHNEqmas9yN+Xvh+FoJd90tCEohAYODXdGcG3sjItNhs8JWgRGQ4Vm8tIfLxbUBbk
+         X96A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M5KNVHSrC7/cdAAppvSovX1BQYH1mlKeTzSZkndabzI=;
+        b=dEGf6ggbfFFJHknjYI/jdyG7HJXCy9pbpK/o9wv9aJldRKoJwPRqfo2MZbKJirHVKr
+         ox7J8MBL1b/YEPMZ7rSGNxOYkLTF0RDM158Ge/3nSPZgi5QKjyGEDUjhlRVMeFObUTxs
+         f05lEPDRqjiE7KNYvKnUmsIPxx8J2/UVuQH8f6U64USDIV9pXMs1qNHTa6SZsVWTpnoy
+         IEGl8QYhrQZE9mTmtbUQBsmzpVo+dw6gssD0s7ieM+nC7P67Z5yeKLqb5BhaEBcHfM4k
+         RmP2IkRcyCD1ojVO9dmdKDU3HAXt7OYu9Cm6iJSBg+GOJtPcIrFoMgdM/uNWf5EYJx9g
+         jeCw==
+X-Gm-Message-State: AO0yUKU6d3SPtTuatVx5nCO4p/gQdRVpfjTRDyAuTl077R8Ib8Z+fTpq
+        DVx1Ib4zfpoAh0kqeUxBSAV9Kg==
+X-Google-Smtp-Source: AK7set/N7X08/6/zDIwTs2SW3WqzqwHVir4In+cx7rhLGQNf+mB7g+wx8kSFQo+gWqS8ovXbhXrHVg==
+X-Received: by 2002:a05:600c:9a2:b0:3dd:393c:20b5 with SMTP id w34-20020a05600c09a200b003dd393c20b5mr7247364wmp.35.1675879326639;
+        Wed, 08 Feb 2023 10:02:06 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id j40-20020a05600c1c2800b003dc4480df80sm3034104wms.34.2023.02.08.10.02.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Feb 2023 10:02:06 -0800 (PST)
+Message-ID: <80f5271e-6fe6-df5a-beff-f3723110edf7@linaro.org>
+Date:   Wed, 8 Feb 2023 19:02:01 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 02/18] ARM: s3c24xx: Use the right include
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         Tony Lindgren <tony@atomide.com>,
@@ -73,7 +85,8 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-wireless@vger.kernel.org,
         brcm80211-dev-list.pdl@broadcom.com,
         SHA-cyfmac-dev-list@infineon.com, linux-arch@vger.kernel.org,
-        devicetree@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        devicetree@vger.kernel.org
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
         Hu Haowen <src.res@email.cn>,
@@ -104,38 +117,35 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v4 02/18] ARM: s3c24xx: Use the right include
-Message-ID: <Y+PfJr4l4U3DYpWT@smile.fi.intel.com>
 References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com>
  <20230208173343.37582-3-andriy.shevchenko@linux.intel.com>
- <30234963-33e5-e2d7-a6ef-112e89efbdd0@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30234963-33e5-e2d7-a6ef-112e89efbdd0@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230208173343.37582-3-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 08, 2023 at 06:39:12PM +0100, Krzysztof Kozlowski wrote:
-> On 08/02/2023 18:33, Andy Shevchenko wrote:
+On 08/02/2023 18:33, Andy Shevchenko wrote:
+> From: Linus Walleij <linus.walleij@linaro.org>
+> 
+> The file s3c64xx.c is including <linux/gpio.h> despite using no
+> symbols from the file, however it needs it to implicitly bring in
+> of_have_populated_dt() so include <linux/of.h> explicitly instead.
+> 
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-...
 
-> It's not s3c24xx anymore, so subject prefix:
-> ARM: s3c64xx:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Fixed locally, thanks.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Krzysztof
 
