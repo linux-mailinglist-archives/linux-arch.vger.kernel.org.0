@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3121A690547
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Feb 2023 11:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011F0690559
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Feb 2023 11:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjBIKne (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Feb 2023 05:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S229588AbjBIKoB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Feb 2023 05:44:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjBIKnK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Feb 2023 05:43:10 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068D63FF0C
-        for <linux-arch@vger.kernel.org>; Thu,  9 Feb 2023 02:43:03 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-52bf58b417fso19467147b3.6
-        for <linux-arch@vger.kernel.org>; Thu, 09 Feb 2023 02:43:02 -0800 (PST)
+        with ESMTP id S229923AbjBIKnp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Feb 2023 05:43:45 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE2F5DC07
+        for <linux-arch@vger.kernel.org>; Thu,  9 Feb 2023 02:43:25 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id x71so920418ybg.6
+        for <linux-arch@vger.kernel.org>; Thu, 09 Feb 2023 02:43:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Dfnv6QTzazTlsxHac3XWatpVo8TGduuTbtSvglXVvU=;
-        b=EDs5k/W16zn0Ewb4Av+rMGdR5etMeYUDSOnhWymGYKcLYthti1GYfA2TP5e5t/ERNh
-         MKbbieo53E8kpeB0Yyv2NvHUk0yfrE/gvmFC1NYjTeJDTe1h+OdhU5+m3DFeFdI2TB7T
-         p17dPLZa8O46uE7nuWG/UhXPfYyFM5D148s8bTaU+meKYR6c/RyiM9fXtLSdxRl8iuwD
-         C9fro1Hx0Q5jEuplvrdGWMyNelcJTVf+a5N4QugPxawAs41AoO9OZIKCubn/wPeMvXNA
-         /bZx2ceCuEj/De9Vb4bWeaLRk4MMHC2KK2V4YS0PUdsK3mqNfcVg1olMoECAbSvgLbOn
-         l2fA==
+        bh=O7bf9Uq485R2NtxZEe67divp+n6UAi9uTuUydnCWVSg=;
+        b=GLwl7Q7S+sW3h6atJzFjD9AilOcYqsPpQ3N3GeZ/D1Q88eJFYLRx7SByx2MKR3Tbg6
+         QubdUMrA1FyWuDBqNGk/KYgKHj88NCbcdHz0TdxzXQlWldCFmt+T88T3OTKYV4CWPws+
+         UJNXxHkfOucmMuvDGUcoQO0SeUM/g0ki7Fy81zLeWxa8HJRrq0tPaCgVq8mtC+dl1KTG
+         v1A/7RHpawAeO/VgRA2to2txj8hRpIw2aZGHWCGR5He7S8Yx5BD5smCOGAdYNCvajG6I
+         Ri7bl0JjbLdIsGg97InNpJ8AnGnu5MYrxD0Ms9oC/qKIpgK736+hK9g4RDJvTDvM1KLX
+         Z9KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1Dfnv6QTzazTlsxHac3XWatpVo8TGduuTbtSvglXVvU=;
-        b=cmXoqiTo+NVoiNdwEzjFomhX4l6VCRGjpY5FlvAH+tEbSBfuKHQxChq5BMZ6h+m1xa
-         E5vQizymq6+MumUmhJihHS8yeOcV0IVMKzgS6aigMIPR7qjMGXvC2BADSdAlov47+jXU
-         Ik/KMJ86bFYpqZjeA5lVgvFBaUHqc2BUA7a6CIxmBu0ejDVyxlcijAMT1vpTwdF+MSbQ
-         ugXaKjHV3yUYMV6QUKJm1DEFib/u6kXYgvN8ZVuDM1COkC3lIiLPsfKik5u2mkptbWnw
-         wx+ynRz7jNCY2sG7bDJtTZhSjt/hCaUVfEMm0Bll8bh6a3CBVzgPZZYncWbMrgEIJvDu
-         4pBw==
-X-Gm-Message-State: AO0yUKWEYIKBsPK3jhSZFHiJTiIJvAv9s7s5faJwkKf7NOtn08g9XZKI
-        EoRL7yJo/oBX4NkdruFk8zJxqNfWS+fL/vILdOq9lQ==
-X-Google-Smtp-Source: AK7set9QMguoIjGfWWwpFvhgz/Kg7HslLMdKNBORB2dldIzFQhQQTBP68JgHz09/otq/c2jQJlbDIxPqVcPmUJJPotc=
-X-Received: by 2002:a81:d509:0:b0:4f3:8d0e:edce with SMTP id
- i9-20020a81d509000000b004f38d0eedcemr1154619ywj.185.1675939382102; Thu, 09
- Feb 2023 02:43:02 -0800 (PST)
+        bh=O7bf9Uq485R2NtxZEe67divp+n6UAi9uTuUydnCWVSg=;
+        b=Y+BbeHJDqhuFeC55w3ku2JZzOVOMF6gwxCxoUEmZyBGX6LaQdpeOe+Wfe6Gl8GVOVX
+         q92JOi+GALo79FKVyEUFnwF5EvAzp/uRr0hJ6tdBeanpwvLN8gO8lOh2p3yW5UBxg7O9
+         kY003DygvSSSJVHqz44nAXIBBob6fQvDM8yKlfw7FIoomH6A1BTLEKa1B6nVVSrNSA0D
+         mQnZOd/MlPmU1ZOWJ41jZPwLqiItxeyW3vzuc09oph6k1PWFK60TaC0V+KCm4ASR6BW6
+         QIIEm2viCZs97VzGDjRjO3R6y5/Lg/sd1rrrY+KiU7y9fjPnRf+9mRgy+9xKyxU/h+yC
+         m8Sg==
+X-Gm-Message-State: AO0yUKU+PQLMDr1P1vW52f1CDDuTh3jqoqGxlJxTVeXxHz9lKTY6mCFK
+        y1S9TqS9l2VP3VpM8ahh3zNq/WQoewcAPCZaV0aPPg==
+X-Google-Smtp-Source: AK7set+gn4TRcnw/Px4w/IuFAMVTVJyu4IvoJ/vrCRoCZs1e5OwtzAnC5LkZeezUkZu5vWtv8zRWrBwhSzP2jQpPPmI=
+X-Received: by 2002:a5b:150:0:b0:88f:92ec:4292 with SMTP id
+ c16-20020a5b0150000000b0088f92ec4292mr1180607ybp.460.1675939405127; Thu, 09
+ Feb 2023 02:43:25 -0800 (PST)
 MIME-Version: 1.0
-References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com> <20230208173343.37582-18-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230208173343.37582-18-andriy.shevchenko@linux.intel.com>
+References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com> <20230208173343.37582-13-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230208173343.37582-13-andriy.shevchenko@linux.intel.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Feb 2023 11:42:50 +0100
-Message-ID: <CACRpkdY6rc3hBoY=Cf4nTmMu=VA-d+VUveG6PsU6bvRKAgnxxA@mail.gmail.com>
-Subject: Re: [PATCH v4 17/18] gpiolib: Group forward declarations in consumer.h
+Date:   Thu, 9 Feb 2023 11:43:13 +0100
+Message-ID: <CACRpkdaTvKhRi2_szWCPv+NrXAzsT7ROKv-OJDh5NgLJznDzCQ@mail.gmail.com>
+Subject: Re: [PATCH v4 12/18] gpio: aggregator: Add missing header(s)
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
@@ -111,7 +111,8 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Hante Meuleman <hante.meuleman@broadcom.com>,
         Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -126,9 +127,14 @@ X-Mailing-List: linux-arch@vger.kernel.org
 On Wed, Feb 8, 2023 at 6:34 PM Andy Shevchenko
 <andriy.shevchenko@linux.intel.com> wrote:
 
-> For better maintenance group the forward declarations together.
+> Do not imply that some of the generic headers may be always included.
+> Instead, include explicitly what we are direct user of.
+>
+> While at it, drop unused linux/gpio.h and split out the GPIO group of
+> headers.
 >
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
