@@ -2,167 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9BE690137
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Feb 2023 08:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DC869030F
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Feb 2023 10:16:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjBIHZw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Feb 2023 02:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        id S229882AbjBIJQN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 9 Feb 2023 04:16:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjBIHZv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Feb 2023 02:25:51 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2397B4A1E7;
-        Wed,  8 Feb 2023 23:25:34 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so1510230pjp.0;
-        Wed, 08 Feb 2023 23:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rmVDDhkBD33dRebxUB6WkABikP1v8rHGLOz9oy+lzOw=;
-        b=Qqsr8VuFj/cb61lWwBfIJiwftaSsXtTbIODDj9kMRlVfS2CUTcXAcnkVENwaHeFXCc
-         eXeZ9Y66+6ildCk3obb8k3r83H0DWVz4TJzYVPAXagF7GXjgZ3GxGOCw/EF1i0/rp5IN
-         pgGJSBfHppwSSxlu/WOaFOQm7D96GzMtKBjclGwqHDQYZ8V5NNbTw5oahMvkY62J4Bcv
-         xvuULTn8M1jB7ooQLdS2tItxTCRS2SNix0Lv5msweEF06EcK/+YQoovw+ALLc950AbCO
-         dNuYMGg/puoIQ39KxeNIBvRe2lqaJj+1rlej0C5Dhe4aDgkWXgpDufZzv1pwpPPiB1NX
-         cjLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rmVDDhkBD33dRebxUB6WkABikP1v8rHGLOz9oy+lzOw=;
-        b=fHXlptSQsRUIKjFOT0E54fTp1M+fvo+LmopMDezQsQHAn6O3yItgPd6wha0MAtwNfJ
-         x/l9YYNkKXSuGmCE1RZSsBDBnXOFT7kAkZNsqbk43WbGeCRz253O+M9bb/xW1tnENivI
-         1HJOwn1i9ZX9vT8fPO2T/SKFiS5sYLBB4RkHOT9V2HW5ECBZKOgWxzpAhOKhjnLxHROL
-         epm5IGwUv518/FakgSCJEESeUhecWtzSVn3pNHy9sAToKeK4G5uO97NFvWcfYJGi0YuD
-         E6kcc7GHWGPqUmDTtJThXgq+XjZcVvAtFlErpICSAhSXRgYwqBhh8BsHE+tuaBNz1bow
-         dumQ==
-X-Gm-Message-State: AO0yUKXgkW/Sozgb++k19n79YWzZq5yPISWh2L0SC+g1QeRJGC6rpyod
-        BE1Cw23FZZKuorxonuRCDl4=
-X-Google-Smtp-Source: AK7set81TKZAFzmOrFzSNHYZptbc1qRIgjmsCDass4PkbAdTYVS+WfbfkwETMnLWvQHYBCaWiFrNHA==
-X-Received: by 2002:a17:902:f2c9:b0:19a:6098:103a with SMTP id h9-20020a170902f2c900b0019a6098103amr325179plc.23.1675927531617;
-        Wed, 08 Feb 2023 23:25:31 -0800 (PST)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id n20-20020a170902d0d400b0019948184c33sm664782pln.243.2023.02.08.23.25.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 23:25:30 -0800 (PST)
-Date:   Wed, 8 Feb 2023 23:25:29 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-Message-ID: <20230209072529.GB4175971@ls.amr.corp.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+        with ESMTP id S229567AbjBIJQM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Feb 2023 04:16:12 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558EB5B92;
+        Thu,  9 Feb 2023 01:16:10 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pQ323-003ncL-Bt; Thu, 09 Feb 2023 10:15:55 +0100
+Received: from p57bd9464.dip0.t-ipconnect.de ([87.189.148.100] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pQ323-0012H8-3k; Thu, 09 Feb 2023 10:15:55 +0100
+Message-ID: <ed4a36508c3d047f9e9a882475388be18b790b76.camel@physik.fu-berlin.de>
+Subject: Re: remove arch/sh
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Rob Landley <rob@landley.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-sh@vger.kernel.org
+Date:   Thu, 09 Feb 2023 10:15:52 +0100
+In-Reply-To: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
+References: <20230113062339.1909087-1-hch@lst.de>
+         <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
+         <20230116071306.GA15848@lst.de>
+         <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
+         <20230203071423.GA24833@lst.de>
+         <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
+         <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
+         <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
+         <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.100
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 02:13:40PM +0800,
-Chao Peng <chao.p.peng@linux.intel.com> wrote:
+On Wed, 2023-02-08 at 21:09 -0600, Rob Landley wrote:
+> > Geert has suggested to wait with adding a tree source to the entry until I get my
+> > own kernel.org account. I have enough GPG signatures from multiple kernel developers
+> > on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
+> 
+> So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
+> but push to kernel.org and ask Linus to pull from there?
 
-> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
-> +					   struct kvm_memory_attributes *attrs)
-> +{
-> +	gfn_t start, end;
-> +	unsigned long i;
-> +	void *entry;
-> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
-> +
-> +	/* flags is currently not used. */
-> +	if (attrs->flags)
-> +		return -EINVAL;
-> +	if (attrs->attributes & ~supported_attrs)
-> +		return -EINVAL;
-> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
-> +		return -EINVAL;
-> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
-> +		return -EINVAL;
-> +
-> +	start = attrs->address >> PAGE_SHIFT;
-> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
-> +
-> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
-> +
-> +	mutex_lock(&kvm->lock);
-> +	for (i = start; i < end; i++)
-> +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
-> +				    GFP_KERNEL_ACCOUNT)))
-> +			break;
-> +	mutex_unlock(&kvm->lock);
-> +
-> +	attrs->address = i << PAGE_SHIFT;
-> +	attrs->size = (end - i) << PAGE_SHIFT;
-> +
-> +	return 0;
-> +}
-> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
-> +
+Yes, that's what Geert recommended.
 
-If memslot isn't private, it should return error if private attribute is set.
-Something like following check is needed.
-
-+       if (attrs->flags & KVM_MEM_PRIVATE) {
-+               /* non-private memory slot doesn't allow KVM_MEM_PRIVATE */
-+               for (i = 0; i < kvm_arch_nr_memslot_as_ids(kvm); i++) {
-+                       struct kvm_memslot_iter iter;
-+                       struct kvm_memslots *slots;
-+
-+                       slots = __kvm_memslots(kvm, i);
-+                       kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-+                               if (!kvm_slot_can_be_private(iter.slot)) {
-+                                       mutex_unlock(&kvm->slots_lock);
-+                                       return -EINVAL;
-+                               }
-+                       }
-+               }
-+       }
-+
-
+Adrian
 
 -- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
