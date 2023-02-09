@@ -2,134 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AAA68FD9F
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Feb 2023 04:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9BE690137
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Feb 2023 08:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjBIDBF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Feb 2023 22:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S229698AbjBIHZw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Feb 2023 02:25:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbjBIC7K (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Feb 2023 21:59:10 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D591448C
-        for <linux-arch@vger.kernel.org>; Wed,  8 Feb 2023 18:56:37 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id c29-20020a4ad21d000000b00517a55a78d4so92167oos.12
-        for <linux-arch@vger.kernel.org>; Wed, 08 Feb 2023 18:56:37 -0800 (PST)
+        with ESMTP id S229664AbjBIHZv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Feb 2023 02:25:51 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2397B4A1E7;
+        Wed,  8 Feb 2023 23:25:34 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id f16-20020a17090a9b1000b0023058bbd7b2so1510230pjp.0;
+        Wed, 08 Feb 2023 23:25:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=cpXzCzr+cz0YwMg8OioZbOdFT6x6Xm6HxQuCqdoPsmS9hedulw1eO6Kk/3hEebcpma
-         XmVmNXfmMApG2N79Si3uHiYwQf3pkrY8yoF8TXhNqwM63RW+rXEAr2c9GvCwLnpdMizZ
-         /i8XL5yNmB4lLP5zpVm7le3plURiLI5xI0pF39yvS1te1cCGkPno0+9YUYvh8/jIQets
-         PkfeCX7kq7oaaZINx71/ntTci+5+uSn1VJ3kfEYljJIBKf1cp8PDE/LSANc9+WdWamP2
-         UdiemMHM1/q9NSBnjYTg3Wlj/GIvYnBRMQxV2QKkM2GCOhCzUuRGyTbkMr557hPEVKAp
-         8+Cw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rmVDDhkBD33dRebxUB6WkABikP1v8rHGLOz9oy+lzOw=;
+        b=Qqsr8VuFj/cb61lWwBfIJiwftaSsXtTbIODDj9kMRlVfS2CUTcXAcnkVENwaHeFXCc
+         eXeZ9Y66+6ildCk3obb8k3r83H0DWVz4TJzYVPAXagF7GXjgZ3GxGOCw/EF1i0/rp5IN
+         pgGJSBfHppwSSxlu/WOaFOQm7D96GzMtKBjclGwqHDQYZ8V5NNbTw5oahMvkY62J4Bcv
+         xvuULTn8M1jB7ooQLdS2tItxTCRS2SNix0Lv5msweEF06EcK/+YQoovw+ALLc950AbCO
+         dNuYMGg/puoIQ39KxeNIBvRe2lqaJj+1rlej0C5Dhe4aDgkWXgpDufZzv1pwpPPiB1NX
+         cjLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MeuDR87mT5oZz0xYPlgMzWTRgnSVFdT+RIi9fTOHK48=;
-        b=tUncIBPE/GAA7UIAK9xvoatZQybl7/TWybgLIXI8oVNv5UOeWcBjzWl1QpywW8fS6R
-         zbxy9acXPGeavjhoZwLhPaUqYA4NPDgjjE6uPpIlOBqVgUInByK1HD7IyIQRGYeD9i7/
-         54arZzXqGCy40xmiTn54TFAn9kL+a9UTHV5hjOL13P7NDdeEd5CDGwXjRExvBPTg3x5R
-         tpC8xIy+rBJdXxYmMwaLvmz2yDfyL8UxTw2m6As5lvUaQrR5jTNzAZGS/pKFnMcC1PEw
-         AjV3ULN8uAB5UeBalsIPt05miK+MJ6I7DIgd5MBEvJUxVv+BOhllh5Vdz6t+91kmMbBa
-         C9RQ==
-X-Gm-Message-State: AO0yUKW1qwyG2AGVXo72BoJvoywCEYmFEdE8eyz2S8lQc+nQnz8DiT2P
-        tPTcXW45ka7XVoDvXn0uBFtimw==
-X-Google-Smtp-Source: AK7set/z8RwoK5zLi99e0gYyO0saoOIvr4Qi+M0w1VEg8sxij2tCPL/DbU7DENRObgoCAx8yBLGhmQ==
-X-Received: by 2002:a4a:9b8e:0:b0:51a:48f4:75de with SMTP id x14-20020a4a9b8e000000b0051a48f475demr241022ooj.0.1675911397288;
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Received: from [192.168.86.224] ([136.62.38.22])
-        by smtp.gmail.com with ESMTPSA id bm9-20020a056820188900b004f8cf5f45e9sm133765oob.22.2023.02.08.18.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Feb 2023 18:56:37 -0800 (PST)
-Message-ID: <1c6e7a19-a650-1852-6f74-ca5547db44c4@landley.net>
-Date:   Wed, 8 Feb 2023 21:09:35 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rmVDDhkBD33dRebxUB6WkABikP1v8rHGLOz9oy+lzOw=;
+        b=fHXlptSQsRUIKjFOT0E54fTp1M+fvo+LmopMDezQsQHAn6O3yItgPd6wha0MAtwNfJ
+         x/l9YYNkKXSuGmCE1RZSsBDBnXOFT7kAkZNsqbk43WbGeCRz253O+M9bb/xW1tnENivI
+         1HJOwn1i9ZX9vT8fPO2T/SKFiS5sYLBB4RkHOT9V2HW5ECBZKOgWxzpAhOKhjnLxHROL
+         epm5IGwUv518/FakgSCJEESeUhecWtzSVn3pNHy9sAToKeK4G5uO97NFvWcfYJGi0YuD
+         E6kcc7GHWGPqUmDTtJThXgq+XjZcVvAtFlErpICSAhSXRgYwqBhh8BsHE+tuaBNz1bow
+         dumQ==
+X-Gm-Message-State: AO0yUKXgkW/Sozgb++k19n79YWzZq5yPISWh2L0SC+g1QeRJGC6rpyod
+        BE1Cw23FZZKuorxonuRCDl4=
+X-Google-Smtp-Source: AK7set81TKZAFzmOrFzSNHYZptbc1qRIgjmsCDass4PkbAdTYVS+WfbfkwETMnLWvQHYBCaWiFrNHA==
+X-Received: by 2002:a17:902:f2c9:b0:19a:6098:103a with SMTP id h9-20020a170902f2c900b0019a6098103amr325179plc.23.1675927531617;
+        Wed, 08 Feb 2023 23:25:31 -0800 (PST)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170902d0d400b0019948184c33sm664782pln.243.2023.02.08.23.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Feb 2023 23:25:30 -0800 (PST)
+Date:   Wed, 8 Feb 2023 23:25:29 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com, isaku.yamahata@gmail.com
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <20230209072529.GB4175971@ls.amr.corp.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: remove arch/sh
-Content-Language: en-US
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-sh@vger.kernel.org
-References: <20230113062339.1909087-1-hch@lst.de>
- <11e2e0a8-eabe-2d8c-d612-9cdd4bcc3648@physik.fu-berlin.de>
- <20230116071306.GA15848@lst.de>
- <40dc1bc1-d9cd-d9be-188e-5167ebae235c@physik.fu-berlin.de>
- <20230203071423.GA24833@lst.de>
- <60ed320c8f5286e8dbbf71be29b760339fd25069.camel@physik.fu-berlin.de>
- <0e26bf17-864e-eb22-0d07-5b91af4fde92@infradead.org>
- <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <f6317e9073362b13b10df57de23e63945becea32.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/8/23 06:13, John Paul Adrian Glaubitz wrote:
-> Hi Randy!
-> 
-> On Tue, 2023-02-07 at 17:31 -0800, Randy Dunlap wrote:
->> 
->> On 2/7/23 01:06, John Paul Adrian Glaubitz wrote:
->> > Hello Christoph!
->> > 
->> > On Fri, 2023-02-03 at 08:14 +0100, Christoph Hellwig wrote:
->> > > On Mon, Jan 16, 2023 at 09:52:10AM +0100, John Paul Adrian Glaubitz wrote:
->> > > > We have had a discussion between multiple people invested in the SuperH port and
->> > > > I have decided to volunteer as a co-maintainer of the port to support Rich Felker
->> > > > when he isn't available.
->> > > 
->> > > So, this still isn't reflected in MAINTAINERS in linux-next.  When
->> > > do you plan to take over?  What platforms will remain supported and
->> > > what can we start dropping due to being unused and unmaintained?
->> > 
->> > I'm getting everything ready now with Geert's help and I have a probably dumb
->> > question regarding the MAINTAINERS file change: Shall I just add myself as an
->> > additional maintainer first or shall I also drop Yoshinori Sato?
->> > 
->> > Also, is it desirable to add a "T:" entry for the kernel tree?
->> 
->> Yes, definitely.
-> 
-> Geert has suggested to wait with adding a tree source to the entry until I get my
-> own kernel.org account. I have enough GPG signatures from multiple kernel developers
-> on my GPG key, so I think it shouldn't be too difficult to qualify for an account.
+On Fri, Dec 02, 2022 at 02:13:40PM +0800,
+Chao Peng <chao.p.peng@linux.intel.com> wrote:
 
-So you're not planning to use https://lk.j-core.org/J-Core-Developers/sh-linux
-but push to kernel.org and ask Linus to pull from there?
+> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> +					   struct kvm_memory_attributes *attrs)
+> +{
+> +	gfn_t start, end;
+> +	unsigned long i;
+> +	void *entry;
+> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> +
+> +	/* flags is currently not used. */
+> +	if (attrs->flags)
+> +		return -EINVAL;
+> +	if (attrs->attributes & ~supported_attrs)
+> +		return -EINVAL;
+> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> +		return -EINVAL;
+> +
+> +	start = attrs->address >> PAGE_SHIFT;
+> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> +
+> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> +
+> +	mutex_lock(&kvm->lock);
+> +	for (i = start; i < end; i++)
+> +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> +				    GFP_KERNEL_ACCOUNT)))
+> +			break;
+> +	mutex_unlock(&kvm->lock);
+> +
+> +	attrs->address = i << PAGE_SHIFT;
+> +	attrs->size = (end - i) << PAGE_SHIFT;
+> +
+> +	return 0;
+> +}
+> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> +
 
-> Adrian
+If memslot isn't private, it should return error if private attribute is set.
+Something like following check is needed.
 
-Rob
++       if (attrs->flags & KVM_MEM_PRIVATE) {
++               /* non-private memory slot doesn't allow KVM_MEM_PRIVATE */
++               for (i = 0; i < kvm_arch_nr_memslot_as_ids(kvm); i++) {
++                       struct kvm_memslot_iter iter;
++                       struct kvm_memslots *slots;
++
++                       slots = __kvm_memslots(kvm, i);
++                       kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
++                               if (!kvm_slot_can_be_private(iter.slot)) {
++                                       mutex_unlock(&kvm->slots_lock);
++                                       return -EINVAL;
++                               }
++                       }
++               }
++       }
++
+
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
