@@ -2,152 +2,206 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81428692253
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Feb 2023 16:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E21E3692209
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Feb 2023 16:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjBJPfv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Feb 2023 10:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S232705AbjBJPXw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Feb 2023 10:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232664AbjBJPfu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Feb 2023 10:35:50 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42A0526CC4;
-        Fri, 10 Feb 2023 07:35:49 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DEAF7581F63;
-        Fri, 10 Feb 2023 10:10:36 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 10 Feb 2023 10:10:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1676041836; x=1676049036; bh=mnmCFBnaIP
-        +vBLu9FDqlvqV872F6Sk8/lQSQWnrc9vM=; b=D9Szpp77tFpcX+nFzNso9fAK0G
-        RKEY2e2MPcUw+e0HRg7S8ntVkkidfPRiVKiD9NnN/v5CGK69+T3Jead5T43+elxp
-        vdEvp0H3wpqmSvLp/EsSqJCUQp8vrbFlGhuwOBExHvxH/ijlvcebCIxq0GFKALZn
-        /KTXa55Xl1Nu1lYEE3YUdxKlBRHd9g6snyVPVw7lBXBFuN6X5R9KweBbGyws612U
-        HSSwAquhkWClD1qjztFmKSXMeUBJTYaykthTjsQv9cEQMLG0X1HQBvbnyPaoEUzh
-        c2j/S3bzXdpbQJtLfGhIn6moBc6uAsb7y1NxF05WugoRrHamBqi8vnM8+LIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1676041836; x=1676049036; bh=mnmCFBnaIP+vBLu9FDqlvqV872F6
-        Sk8/lQSQWnrc9vM=; b=RHZtaJBO44uX2MARKJxLjffrlpmpVpqRWXHbD0f++4hp
-        qcrXlaKY1EA4C+ei9VBulYS+Pr1PaCMRoCiXza+fjmuBbIl7iAHJIIs/u5u04ZwR
-        un7ChSUzuQGzTl3Hzcn3+ASNHPbKVMq2pMRwmYsQFsty5c0tZWbMgH4X111G4rXx
-        xrYr3PGq6SNbkC1K18wAFFhEzQ4/Mu6MdjeZ0isXHr9XDxecB4/Wj99dyzjdUByn
-        eT3ZTxOyQt5xhBlFYcZRRNcG22TQLymxVnFTJ3lR0b/zX8cKrE9YnBJWzellYQHC
-        EsEl6lMz3XBzK0jy4OMsMTgRDCrxfrIC1I9MkjiqHw==
-X-ME-Sender: <xms:a17mY3P--ZnY9B0YNPVJei5M1XSljO-TrXiC-otvZu9e2Ux-mUMuYw>
-    <xme:a17mYx_FBr6stanlZSHdjEh_Yiizs7DAQDRo8eLwZjm4itklqm-Us_lyX4UcEEqKV
-    lc2GJafFQdTJPXBJdE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehhedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:a17mY2Qg8I9CgxEscmfW_KVeyAfpnzZW3vSqA_Kax6WR9loxG21lZw>
-    <xmx:a17mY7sOa99lDqlxfSrIsA34dub4d_dg1GrUC46fm4OCcg0OSUjgZQ>
-    <xmx:a17mY_cLeUpfTHmXPpf5NVLlLOlkwFqtmEf2CkzJAFgsXIq3rY2cJw>
-    <xmx:bF7mYzlxhpbpL2dPNp2_IA_FqJ-2rZBBDGc_SPVtMY4KfbLAmmmu4A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2C9A9B60086; Fri, 10 Feb 2023 10:10:35 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
-Mime-Version: 1.0
-Message-Id: <7493f543-bf02-4bfe-90bd-a01d3c52cb52@app.fastmail.com>
-In-Reply-To: <2344ac16-781e-8bfa-ec75-e71df0f3ed28@redhat.com>
-References: <1446579994-9937-1-git-send-email-palmer@dabbelt.com>
- <1447119071-19392-1-git-send-email-palmer@dabbelt.com>
- <1447119071-19392-4-git-send-email-palmer@dabbelt.com>
- <2344ac16-781e-8bfa-ec75-e71df0f3ed28@redhat.com>
-Date:   Fri, 10 Feb 2023 16:10:16 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Huth" <thuth@redhat.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>
-Cc:     "Alexander Viro" <viro@zeniv.linux.org.uk>,
-        aishchuk@linux.vnet.ibm.com, aarcange@redhat.com,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "Baoquan He" <bhe@redhat.com>, 3chas3@gmail.com, chris@zankel.net,
-        dave@sr71.net, dyoung@redhat.com, drysdale@google.com,
-        "Eric W. Biederman" <ebiederm@xmission.com>, geoff@infradead.org,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@kernel.org>,
-        iulia.manda21@gmail.com, plagnioj@jcrosoft.com, jikos@kernel.org,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        "Max Filippov" <jcmvbkbc@gmail.com>, paulmck@linux.vnet.ibm.com,
-        a.p.zijlstra@chello.nl, "Thomas Gleixner" <tglx@linutronix.de>,
-        vgoyal@redhat.com, x86@kernel.org,
-        "David Howells" <dhowells@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Netdev <netdev@vger.kernel.org>
-Subject: Re: [PATCH 03/14] Move COMPAT_ATM_ADDPARTY to net/atm/svc.c
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232663AbjBJPXu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Feb 2023 10:23:50 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5192CFC1;
+        Fri, 10 Feb 2023 07:23:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1676042611; x=1707578611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Pkhd7L0Rr6+g1/WEDjw/dHyNxQqeeIwIMB2XHYXKnw=;
+  b=QEHH4nNF/g5izVs+HTrPWq7mQzr46GqaZ0S7iWuJIz6sb1sGOxiNiIGm
+   nXTlLuF1oLk/wz6Nbg8MuH21RCCpqLZoDhAF/Cocuykctbv+hw9/wD86b
+   jLjqJFifV50Ame2aY0kgIvrMmQ/eJ6ECCK0ci016suxeqnV8X5EsGgtjS
+   3SfuuhGP1YtU+jneavBYcgAMQXQtVEmRYX4554MTztR6kr7g2VvKXa28t
+   M31ScJSwebedaGvvc6FiS2zRf+JwmcJrmmGBasY3w0yokM+hDYDKHDa6y
+   4GMGRINGqDIWAGrlQ6iQX27AMtYYdkoMESF4FeFX2pNI/YWa4jQeQtbPV
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.97,287,1669100400"; 
+   d="asc'?scan'208";a="136572823"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Feb 2023 08:23:28 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Fri, 10 Feb 2023 08:23:27 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16 via Frontend
+ Transport; Fri, 10 Feb 2023 08:23:23 -0700
+Date:   Fri, 10 Feb 2023 15:22:58 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Conor Dooley <conor@kernel.org>, Guo Ren <guoren@kernel.org>
+CC:     Guo Ren <guoren@kernel.org>, <arnd@arndb.de>,
+        <palmer@rivosinc.com>, <tglx@linutronix.de>,
+        <peterz@infradead.org>, <luto@kernel.org>, <heiko@sntech.de>,
+        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
+        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
+        <atishp@atishpatra.org>, <mark.rutland@arm.com>,
+        <ben@decadent.org.uk>, <bjorn@kernel.org>,
+        <miguel.ojeda.sandonis@gmail.com>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>
+Subject: Re: [PATCH -next V16 4/7] riscv: entry: Convert to generic entry
+Message-ID: <Y+ZhUuCKm21FiuWc@wendy>
+References: <20230204070213.753369-1-guoren@kernel.org>
+ <20230204070213.753369-5-guoren@kernel.org>
+ <D6D12456-3A6F-4AD2-B5D8-4DD83C8D0DE6@kernel.org>
+ <CAJF2gTTFb+h-tzTiwj=SBjEqjRwbsRvCn=vpvdW26aEaqc_Z3A@mail.gmail.com>
+ <A1D7112B-5738-4DF5-906B-76535647EF28@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="AJFLSkFu3rFIM/YT"
+Content-Disposition: inline
+In-Reply-To: <A1D7112B-5738-4DF5-906B-76535647EF28@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 10, 2023, at 15:55, Thomas Huth wrote:
-> On 10/11/2015 02.31, Palmer Dabbelt wrote:
->> This used to be behind an #ifdef COMPAT_COMPAT, so most of userspace
->> wouldn't have seen the definition before.  Unfortunately this header
->> file became visible to userspace, so the definition has instead been
->> moved to net/atm/svc.c (the only user).
->> 
->> Signed-off-by: Palmer Dabbelt <palmer@dabbelt.com>
->> Reviewed-by: Andrew Waterman <waterman@eecs.berkeley.edu>
->> Reviewed-by: Albert Ou <aou@eecs.berkeley.edu>
+--AJFLSkFu3rFIM/YT
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Hey!
 
-It took me a bit to figure out why there is a separate command
-code but no special handler for the compat structure, aside from
-being in the wrong file it does look correct.
+On Sun, Feb 05, 2023 at 03:04:37PM +0100, Conor Dooley wrote:
+> On 5 February 2023 14:56:01 GMT+01:00, Guo Ren <guoren@kernel.org> wrote:
+> >On Sun, Feb 5, 2023 at 6:43 PM Conor Dooley <conor@kernel.org> wrote:
+> >> On 4 February 2023 08:02:10 GMT+01:00, guoren@kernel.org wrote:
+> >> >From: Guo Ren <guoren@linux.alibaba.com>
+> >> >
+> >> >This patch converts riscv to use the generic entry infrastructure from
+> >> >kernel/entry/*. The generic entry makes maintainers' work easier and
+> >> >codes more elegant. Here are the changes:
+> >> >
+> >> > - More clear entry.S with handle_exception and ret_from_exception
+> >> > - Get rid of complex custom signal implementation
+> >> > - Move syscall procedure from assembly to C, which is much more
+> >> >   readable.
+> >> > - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+> >> > - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+> >> > - Use the standard preemption code instead of custom
+> >> >
+> >> >Suggested-by: Huacai Chen <chenhuacai@kernel.org>
+> >> >Reviewed-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+> >> >Tested-by: Yipeng Zou <zouyipeng@huawei.com>
+> >> >Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> >> >Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> >> >Signed-off-by: Guo Ren <guoren@kernel.org>
+> >> >Cc: Ben Hutchings <ben@decadent.org.uk>
+> >> >---
+> >>
+> >> Got some new errors added by this patch:
+> >> https://gist.github.com/conor-pwbot/3b300050a7a4a197bca809935584d809
+> >>
+> >> Unfortunately I'm away from a computer at FOSDEM, so I haven't done an=
+y investigation
+> >> of the warnings.
+> >> Should be reproduceable with gcc-12 allmodconfig.
+> >Thx for report, but:
+> >The spin_shadow_stack is from '7e1864332fbc ("riscv: fix race when
+> >vmap stack overflow")'. Not this patch.
+> >
+> >New errors added:
+> >--- /tmp/tmp.nyMxgc6CGx 2023-02-05 05:12:59.949595120 +0000
+> >+++ /tmp/tmp.5td5fIdaHX 2023-02-05 05:12:59.961595119 +0000
+> >@@ -10 +10 @@
+> >- 1 ../arch/riscv/kernel/traps.c:231:15: warning: symbol
+> >'spin_shadow_stack' was not declared. Should it be static?
+> >+ 1 ../arch/riscv/kernel/traps.c:335:15: warning: symbol
+> >'spin_shadow_stack' was not declared. Should it be static?
+> >@@ -9109 +9109 @@
+> >- 37 ../include/linux/fortify-string.h:522:25: warning: call to
+> >'__read_overflow2_field' declared with attribute warning: detected
+> >read beyond size of field (2nd parameter); maybe use struct_group()?
+> >[-Wattribute-warning]
+> >+ 38 ../include/linux/fortify-string.h:522:25: warning: call to
+> >'__read_overflow2_field' declared with attribute warning: detected
+> >read beyond size of field (2nd parameter); maybe use struct_group()?
+> >[-Wattribute-warning]
+> >Per-file breakdown
+> >--- /tmp/tmp.bHiHUVMzmZ 2023-02-05 05:13:00.109595117 +0000
+> >+++ /tmp/tmp.kUkOd6TrGj 2023-02-05 05:13:00.257595114 +0000
+> >@@ -1197 +1197 @@
+> >- 65 ../include/linux/fortify-string.h
+> >+ 66 ../include/linux/fortify-string.h
+> >
+> >Seems the line number change would cause your script to report old
+> >errors as new. So it would be best to improve the check script, such
+> >as ignoring the first column line number :)
+>=20
+> I thought it already did!
+> I might've messed up in a refactoring of the script.
+> I'll fix it up when I get home so, sorry for the noise!
 
->> +#ifdef CONFIG_COMPAT
->> +/* It actually takes struct sockaddr_atmsvc, not struct atm_iobuf */
->> +#define COMPAT_ATM_ADDPARTY _IOW('a', ATMIOC_SPECIAL+4, struct compat_atm_iobuf)
->> +#endif
+So I finally got around to trying to sort this out.
 
-We could actually drop the #ifdef here as well, or moving into
-the existing #ifdef.
+>- 1 ../arch/riscv/kernel/traps.c:231:15: warning: symbol
+>'spin_shadow_stack' was not declared. Should it be static?
+>+ 1 ../arch/riscv/kernel/traps.c:335:15: warning: symbol
+>'spin_shadow_stack' was not declared. Should it be static?
 
->> +
->>   static int svc_create(struct net *net, struct socket *sock, int protocol,
->>   		      int kern);
->
-> The CONFIG_* switch is still there in the atmdev.h uapi header ... could 
-> somebody please pick this patch up to fix it?
+As you pointed out, this one is just the movement of an existing error
+but isn't why the automation complained about the patch.
+That said, should probably be fixed by declaring it in thread-info.h
+alongside shadow_stack?
 
-It should get merged through the netdev tree, as Chas does not have
-a separate git tree for drivers/atm.
+>- 37 ../include/linux/fortify-string.h:522:25: warning: call to
+>'__read_overflow2_field' declared with attribute warning: detected
+>read beyond size of field (2nd parameter); maybe use struct_group()?
+>[-Wattribute-warning]
+>+ 38 ../include/linux/fortify-string.h:522:25: warning: call to
+>'__read_overflow2_field' declared with attribute warning: detected
+>read beyond size of field (2nd parameter); maybe use struct_group()?
+>[-Wattribute-warning]
 
-I don't know what happened to the rest of the series, but if there are
-additional patches that got lost, merging them all through either the
-asm-generic or the mm tree would work as well.
+The 37 and 38 here is the source of the complaint though, this series
+added an extra one of these warnings, so I don't think the automation
+has done anything wrong here.
 
-Any chance you or Palmer could rebase the series to 6.2-rc and
-see what remains?
+The number comes from the output of:
+grep "\(warning\|error\):" $tmpfile_n | sort | uniq -c > $tmpfile_errors_now
 
-    Arnd
+And that appears to be correctly reflected in the report:
+build_rv64_gcc_allmodconfig	fail	Errors and warnings before: 17343 this pat=
+ch: 17344
+
+However, I should probably go and do something to display the LoC that
+caused the issue, since knowing it came from fortify-string.h doesn't do
+all that much to help you know which change caused it to appear.
+
+Thanks,
+Conor.
+
+
+--AJFLSkFu3rFIM/YT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY+ZhRAAKCRB4tDGHoIJi
+0g0JAP0b4fo/nTYSwqwmMxxca6d11n7La9RaH0WmjVkgHg44dwEA6m309zaBWEfZ
+APV1TVTzKmLZyFvvmewSEdHfcFUfVQM=
+=fAgh
+-----END PGP SIGNATURE-----
+
+--AJFLSkFu3rFIM/YT--
