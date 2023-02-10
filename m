@@ -2,152 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E1E692051
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Feb 2023 14:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE53469211C
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Feb 2023 15:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjBJN5X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Feb 2023 08:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S231517AbjBJOqw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Feb 2023 09:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbjBJN5L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Feb 2023 08:57:11 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87475AB07;
-        Fri, 10 Feb 2023 05:57:09 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 17A0E1EC0745;
-        Fri, 10 Feb 2023 14:57:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676037428;
+        with ESMTP id S231970AbjBJOqv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Feb 2023 09:46:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0BC20558
+        for <linux-arch@vger.kernel.org>; Fri, 10 Feb 2023 06:45:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676040325;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=6j9AGvbK6QZWswMMubEra1MMawrAyneStMphrQrJwmw=;
-        b=O4uH+MLv7Ria1BC4GVqbfWA4aby5n4GH2XEDD5iM4lZ7HO0vP4Q3rJEaUQl8i3CUuiSh+8
-        6SCz9zFm3WgmTyaPZc1ZXwfHK/2vVZaklhrkdPJzRWJi6uaMFjrZs0psEHPsFX+e5vjN3m
-        /KqBzgzV3KubqqXyj0vPv7Q8Y05f240=
-Date:   Fri, 10 Feb 2023 14:57:03 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v5 11/39] x86/mm: Update pte_modify for _PAGE_COW
-Message-ID: <Y+ZNL4o57lCrmwpb@zn.tnic>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-12-rick.p.edgecombe@intel.com>
- <Y+T+ZxydCZS1Yjmz@zn.tnic>
- <49d20fcd197e85e8475f5170db78780f06396cc0.camel@intel.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zels36cVrx0AVFMqsJG4hmmNwOppGbD1Lpolz/Rld+4=;
+        b=EYgWc6yDGpORH2yaZvX5GmMTEWZhNjBAmU4pAX2fE4GqZzzgeolTDbaA7CD4s0Y1WT9Q2i
+        wxvU57HkxlKmK4aWd3kNc9zxpGqeNTFAOZEGSQjhI3P3hGIK2oE3ldF59I2JOHpmd0eck3
+        AK4sQrBoy1FnB2rrBQKeetMaHlVf0ts=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-427-MatuKoVzNdur3ZLL-NQLxQ-1; Fri, 10 Feb 2023 09:45:18 -0500
+X-MC-Unique: MatuKoVzNdur3ZLL-NQLxQ-1
+Received: by mail-qk1-f197.google.com with SMTP id a6-20020a05620a102600b00729952b4c73so3361765qkk.6
+        for <linux-arch@vger.kernel.org>; Fri, 10 Feb 2023 06:45:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zels36cVrx0AVFMqsJG4hmmNwOppGbD1Lpolz/Rld+4=;
+        b=sy7M+JTo/l3gpiWswjRGnrOtSs6Jly9Upd2yuuOcG2vN3J3/vxtFZyMb3P2hPtQ50l
+         CdOBbU3VjkwUaVd8UNqZZQA+igV7CPEopoZqzIc8+hzbcPRNwEdS4AETCo73EJNuE1RN
+         itaLDqlh54ysiKE2zuKzRnS6nkUJjUyb6w+ifIiEX0HKCl3ADW4E7GMWGuF/FrorgABo
+         WFZdCGbm2QpPwQzyjSXd+l3rG2dRbPU3te8c80UfsP4XOhaYqg2g3QLdWWYTsshKXJXv
+         XEu0BAf/z4QjScVZW79doIry/MpfDTD/MpUlAtja/bI4h9m4LSCWw+40EJlnJb8UFrMG
+         xKng==
+X-Gm-Message-State: AO0yUKWsQHnLopu3YCRKLz+ChLNBmsENMX3C0cfgxUn/8nz+Tt+egE1q
+        LpameZTD9MQCMYjHYX1zZvW4qwRuoo/VBo5ZAHBzwAyvotN2/IvDSbEHOQDuFGXrGPI58eXnhj1
+        4dQmq+dP6cIaLHT/PpZCMDg==
+X-Received: by 2002:ac8:5c0a:0:b0:3bb:7649:bd89 with SMTP id i10-20020ac85c0a000000b003bb7649bd89mr18509373qti.61.1676040317868;
+        Fri, 10 Feb 2023 06:45:17 -0800 (PST)
+X-Google-Smtp-Source: AK7set8j6r+I/zR1st20DSGpi8GFEhTd8duAK2l2ncty4viLpSrZrC5sxsAnnWknNcPFzWGzPi/hcg==
+X-Received: by 2002:ac8:5c0a:0:b0:3bb:7649:bd89 with SMTP id i10-20020ac85c0a000000b003bb7649bd89mr18509304qti.61.1676040317541;
+        Fri, 10 Feb 2023 06:45:17 -0800 (PST)
+Received: from [192.168.0.2] (ip-109-43-178-85.web.vodafone.de. [109.43.178.85])
+        by smtp.gmail.com with ESMTPSA id n12-20020ac81e0c000000b003b82cb8748dsm3382607qtl.96.2023.02.10.06.45.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Feb 2023 06:45:17 -0800 (PST)
+Message-ID: <3b9c5496-6631-37ad-9c3d-f0f06fa1308e@redhat.com>
+Date:   Fri, 10 Feb 2023 15:45:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <49d20fcd197e85e8475f5170db78780f06396cc0.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 06/14] Move ep_take_care_of_epollwakeup() to
+ fs/eventpoll.c
+Content-Language: en-US
+To:     Palmer Dabbelt <palmer@dabbelt.com>, viro@zeniv.linux.org.uk,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ast@plumgrid.com, aishchuk@linux.vnet.ibm.com, aarcange@redhat.com,
+        akpm@linux-foundation.org, luto@kernel.org, acme@kernel.org,
+        bhe@redhat.com, 3chas3@gmail.com, chris@zankel.net, dave@sr71.net,
+        dyoung@redhat.com, drysdale@google.com, ebiederm@xmission.com,
+        geoff@infradead.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        mingo@kernel.org, iulia.manda21@gmail.com, plagnioj@jcrosoft.com,
+        jikos@kernel.org, josh@joshtriplett.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        mathieu.desnoyers@efficios.com, jcmvbkbc@gmail.com,
+        paulmck@linux.vnet.ibm.com, a.p.zijlstra@chello.nl,
+        tglx@linutronix.de, tomi.valkeinen@ti.com, vgoyal@redhat.com,
+        x86@kernel.org, arnd@arndb.de, dhowells@redhat.com,
+        peterz@infradead.org, Jens Axboe <axboe@kernel.dk>
+References: <1446579994-9937-1-git-send-email-palmer@dabbelt.com>
+ <1447119071-19392-1-git-send-email-palmer@dabbelt.com>
+ <1447119071-19392-7-git-send-email-palmer@dabbelt.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <1447119071-19392-7-git-send-email-palmer@dabbelt.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 09, 2023 at 05:09:15PM +0000, Edgecombe, Rick P wrote:
-> What do you think, can we leave it or give it a new name? Maybe
-> pte_set_dirty() to be more like the x86-only pte_set_flags() family of
-> functions?
+On 10/11/2015 02.31, Palmer Dabbelt wrote:
+> This doesn't make any sense to expose to userspace, so it's been moved
+> to the one user.  This was introduced by commit 95f19f658ce1 ("epoll:
+> drop EPOLLWAKEUP if PM_SLEEP is disabled").
+> 
+> Signed-off-by: Palmer Dabbelt <palmer@dabbelt.com>
+> Reviewed-by: Andrew Waterman <waterman@eecs.berkeley.edu>
+> Reviewed-by: Albert Ou <aou@eecs.berkeley.edu>
+> ---
+>   fs/eventpoll.c                 | 13 +++++++++++++
+>   include/uapi/linux/eventpoll.h | 12 ------------
+>   2 files changed, 13 insertions(+), 12 deletions(-)
+> 
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index 1e009ca..aadee3d 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -1812,6 +1812,19 @@ SYSCALL_DEFINE1(epoll_create, int, size)
+>   	return sys_epoll_create1(0);
+>   }
+>   
+> +#ifdef CONFIG_PM_SLEEP
+> +static inline void ep_take_care_of_epollwakeup(struct epoll_event *epev)
+> +{
+> +	if ((epev->events & EPOLLWAKEUP) && !capable(CAP_BLOCK_SUSPEND))
+> +		epev->events &= ~EPOLLWAKEUP;
+> +}
+> +#else
+> +static inline void ep_take_care_of_epollwakeup(struct epoll_event *epev)
+> +{
+> +	epev->events &= ~EPOLLWAKEUP;
+> +}
+> +#endif
+> +
+>   /*
+>    * The following function implements the controller interface for
+>    * the eventpoll file that enables the insertion/removal/change of
+> diff --git a/include/uapi/linux/eventpoll.h b/include/uapi/linux/eventpoll.h
+> index bc81fb2..7850373 100644
+> --- a/include/uapi/linux/eventpoll.h
+> +++ b/include/uapi/linux/eventpoll.h
+> @@ -61,16 +61,4 @@ struct epoll_event {
+>   	__u64 data;
+>   } EPOLL_PACKED;
+>   
+> -#ifdef CONFIG_PM_SLEEP
+> -static inline void ep_take_care_of_epollwakeup(struct epoll_event *epev)
+> -{
+> -	if ((epev->events & EPOLLWAKEUP) && !capable(CAP_BLOCK_SUSPEND))
+> -		epev->events &= ~EPOLLWAKEUP;
+> -}
+> -#else
+> -static inline void ep_take_care_of_epollwakeup(struct epoll_event *epev)
+> -{
+> -	epev->events &= ~EPOLLWAKEUP;
+> -}
+> -#endif
+>   #endif /* _UAPI_LINUX_EVENTPOLL_H */
 
-I'd do this (ontop of yours, not built, not tested, etc). It is short
-and sweet:
+  Hi!
 
-pte_mkdirty() set both dirty flags
-pte_modifl() sets only _PAGE_DIRTY
+Looks like this patch has never been merged? ... I just came across this 
+"#ifdef CONFIG_..." in the uapi directory, and it also seems wrong to me to 
+check CONFIG_* switches here, so could somebody maybe pick this patch up now 
+and merge it?
 
-No special helpers to lookup what they do, no nothing. Plain and simple.
+  Thanks,
+   Thomas
 
----
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 7942eff2af50..8ba37380966c 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -392,19 +392,10 @@ static inline pte_t pte_mkexec(pte_t pte)
- 	return pte_clear_flags(pte, _PAGE_NX);
- }
- 
--static inline pte_t __pte_mkdirty(pte_t pte, bool soft)
--{
--	pteval_t dirty = _PAGE_DIRTY;
--
--	if (soft)
--		dirty |= _PAGE_SOFT_DIRTY;
--
--	return pte_set_flags(pte, dirty);
--}
--
-+/* Set _PAGE_SOFT_DIRTY for shadow stack pages. */
- static inline pte_t pte_mkdirty(pte_t pte)
- {
--	return __pte_mkdirty(pte, true);
-+	return pte_set_flags(pte, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
- }
- 
- static inline pte_t pte_mkyoung(pte_t pte)
-@@ -749,14 +740,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- 
- 	pte_result = __pte(val);
- 
--	/*
--	 * Dirty bit is not preserved above so it can be done
--	 * in a special way for the shadow stack case, where it
--	 * may need to set _PAGE_COW. __pte_mkdirty() will do this in
--	 * the case of shadow stack.
--	 */
- 	if (pte_dirty(pte))
--		pte_result = __pte_mkdirty(pte_result, false);
-+		pte_result = pte_set_flags(pte_result, _PAGE_DIRTY);
- 
- 	return pte_result;
- }
-
-
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
