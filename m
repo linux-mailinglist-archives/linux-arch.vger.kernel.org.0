@@ -2,93 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A870D69267E
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Feb 2023 20:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FFE692765
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Feb 2023 20:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232057AbjBJTgz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Feb 2023 14:36:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S233460AbjBJTsq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Feb 2023 14:48:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjBJTgw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Feb 2023 14:36:52 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0542C30DF;
-        Fri, 10 Feb 2023 11:36:50 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8DDB11EC050D;
-        Fri, 10 Feb 2023 20:36:48 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676057808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MCUnDKhNZsvKrZ9QNPESgINSnYhmEBzZTjPQK8LCLnU=;
-        b=i+NQevbA7LtkcbzT2PGrHbq2DIT6X25Rbd3CXV09Dc8ZWcx1vQup1zkH2Wpg/6volIOuly
-        w90ABVMsvyrZ3owzfQHkr/9UmrAgXII6VE6w3OMVsa2PMGUtxuNxfGs3vztWu4Sd2Go3gP
-        +Ir4ttC/7lxJLRG0dghM2/nPfHpGz+I=
-Date:   Fri, 10 Feb 2023 20:36:44 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y+aczIbbQm/ZNunZ@zn.tnic>
-References: <Y8r2TjW/R3jymmqT@zn.tnic>
- <BYAPR21MB168897DBA98E91B72B4087E1D7CA9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y9FC7Dpzr5Uge/Mi@zn.tnic>
- <BYAPR21MB16883BB6178DDEEA10FD1F1CD7D69@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+JG9+zdSwZlz6FU@zn.tnic>
- <4216dea6-d899-aecb-2207-caa2ae7db0e3@intel.com>
- <BYAPR21MB16886D92828BA2CA8D47FEA4D7D99@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aP8rHr6H3LIf/c@google.com>
- <Y+aVFxrE6a6b37XN@zn.tnic>
- <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        with ESMTP id S233429AbjBJTsp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Feb 2023 14:48:45 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E8E6E83;
+        Fri, 10 Feb 2023 11:47:54 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D172B5C00E1;
+        Fri, 10 Feb 2023 14:37:55 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 10 Feb 2023 14:37:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676057875; x=1676144275; bh=Ydx8Dguf65
+        l39MqCMPUJ81N1jZJppemIQIkyMXa3wXY=; b=HaIJzFysHzEFZKQXI+1gSTcDEp
+        mrD37uL26BFl8vHmFjApm9rJj/2tJTIh3UoBysO8zaDx+K4fmncJlHITzceSuI5b
+        O1QLnAJOxxUrhd6KIfP3PV8O6bsZxC+O0UThmzd8l3XlhV2eQffqIBj5zOngLyNi
+        c+WulbQkzFt67X/gadTzaY01qubxRU5N0nE2FA18KyyA3E2c+wnHr1WuauWRbfcc
+        tZnu81INMiBW8KgJVzpnVj1J/lso+7JEDYlfXPXFybM5z+WhmZziDq4B4FXU8RoH
+        o7GJpCAnr6UEkNYrbL5Es0dxsQkihQmn9A7Mi93HiHRwJamahcH/0sbcOrvQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676057875; x=1676144275; bh=Ydx8Dguf65l39MqCMPUJ81N1jZJp
+        pemIQIkyMXa3wXY=; b=kGqJv2xDymeuL8EHXPZ58xuLJq+eILH+Z+UlMkPv0GCP
+        6/n8QIHYR3SzkNZXaY3FAlQtrlm+6rajqkRnzR259ubxi2fjMHZu0lpa9cJR6X0S
+        5APRVDq0Lh4Q2YVVlR898naLU95xXul9uSYzibnkTerICGCwx7XLCXa7S66zLNb8
+        KUVIElndFB1R0dq+YvokOm+qqc/THMbwrMJmiJi951C1YwhY55rg/8b5xLLx3EAc
+        GcEuAOrhB5i6Nqs3JauAxA5IuGEvNfj8ZkHjNsLhXOdRmF/Nbw3J0wgF95Zie39z
+        l03N50ePCFzElvra7sWQsjgMnjEqPx0O1U/3LPmMLw==
+X-ME-Sender: <xms:E53mY0HxjrhhDxOAS5HJPkGBzduyE0dAk6v7xD8ahh3VCDyIUXmRtg>
+    <xme:E53mY9U6fw9_-YFNb-T_kLVt86Wd-M-yuGRw82QyjoBdCahY8F5j1jDgqwi3P3dMw
+    MDkd_FD-OUmpBPX6YE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehhedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepgedvueffledvhfduvdeghefggfehvedutdeigeejtedtieeigfdtvdfgveef
+    iedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:E53mY-LCw9Gfjg2uqH0KH8Y2Bk6RixX6B5wjgaM-xsAF0uqm_7HUCw>
+    <xmx:E53mY2FyrBrnumc80ZkjYTVrgs98Hh0QgicSzJH5yAXgRHFHC_5ofg>
+    <xmx:E53mY6Wd3xU6pV5Ge2VvNsZrj9LHJFfbF7jO4--QgEruQ9QqkVI2EA>
+    <xmx:E53mY9cIoW21XYZLHnUT6cUwAtdFgmE661hCi_JfXK9cEG_pemkfog>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 6915EB60086; Fri, 10 Feb 2023 14:37:55 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <aa40847d-1814-4a20-821e-650c8f1f7cad@app.fastmail.com>
+In-Reply-To: <639b020c-7419-cbda-64c4-caffd8683131@ghiti.fr>
+References: <20221211061358.28035-1-palmer@rivosinc.com>
+ <639b020c-7419-cbda-64c4-caffd8683131@ghiti.fr>
+Date:   Fri, 10 Feb 2023 20:37:37 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Alexandre Ghiti" <alex@ghiti.fr>,
+        "Palmer Dabbelt" <palmer@rivosinc.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/24] Remove COMMAND_LINE_SIZE from uapi
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,55 +84,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 07:15:41PM +0000, Michael Kelley (LINUX) wrote:
-> FWIW, I don't think the list of devices to be accessed encrypted is likely
-> to grow significantly.  Is one or two more possible?  Perhaps.  Does it
-> become a list of ten?  I doubt it.
+On Fri, Feb 10, 2023, at 18:10, Alexandre Ghiti wrote:
+> On 12/11/22 07:13, Palmer Dabbelt wrote:
+>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+>> maximum length of /proc/cmdline and userspace could staticly rely on
+>> that to be correct.
+>>
+>> Usually I wouldn't mess around with changing this sort of thing, but
+>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+>> increasing, but they're from before the UAPI split so I'm not quite sure
+>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+>> asm-generic/setup.h.").
+>>
+>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+>> part of the uapi to begin with, and userspace should be able to handle
+>> /proc/cmdline of whatever length it turns out to be.  I don't see any
+>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+>> search, but that's not really enough to consider it unused on my end.
+>>
+>> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+>> shouldn't be part of uapi, so this now touches all the ports.  I've
+>> tried to split this all out and leave it bisectable, but I haven't
+>> tested it all that aggressively.
+>>
+>> Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-palmer@dabbelt.com/>:
+>> * Touches every arch.
+>>
+>>
+>
+> The command line size is still an issue on riscv, any comment on this so 
+> we can make progress?
 
-What happens if the next silly HV guest scheme comes along and they do
-need more and different ones?
+I think this makes sense overall, but I see there were a couple
+of architecture specific regressions introduced in v2 that should
+be resolved, see
 
-Do I say, but but, Michael said that he doubted at the time that that
-list would grow... ;-\
+https://lore.kernel.org/all/20221211061358.28035-1-palmer@rivosinc.com/
 
-And then all our paths are sprinkled with
+for the archive of this thread.
 
-	if (cc_platform_has())
-
-and we can't change sh*t anymore out of fear that some weird guest type
-will break.
-
-> One approach is to go with the individual device attributes for now.
-> If the list does grow significantly, there will probably be patterns
-> or groupings that we can't discern now.  We could restructure into
-> larger buckets at that point based on those patterns/groupings.
-
-There's a reason the word "platform" is in cc_platform_has(). Initially
-we wanted to distinguish attributes of the different platforms. So even
-if y'all don't like CC_ATTR_PARAVISOR, that is what distinguishes this
-platform and it *is* one platform.
-
-So call it CC_ATTR_SEV_VTOM as it uses that technology or whatever. But
-call it like the platform, not to mean "I need this functionality".
-
-And yes, we could do the regroupings later because, yeah, those things
-are not exposed to userspace so it's not like they're cast in stone but
-I fear that we will do regroupings and we will break guests.
-
-Now if you had CC_ATTR_<PLATFORM_TYPE> then you break (or not) only that
-platform.
-
-Oh, and then there's the thing that this is kernel proper - that code
-still runs on real hardware, for now, and is not only guests. And not
-everything is a damn cloud.
-
-So I don't want a zoo here and we'd have to agree to distinguish by
-platform and not by different functionality required.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+     Arnd
