@@ -2,146 +2,576 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225AF694D39
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Feb 2023 17:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602B86952A2
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Feb 2023 22:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjBMQsP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Feb 2023 11:48:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S229785AbjBMVFH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Feb 2023 16:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjBMQsO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Feb 2023 11:48:14 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0E15ACDCE
-        for <linux-arch@vger.kernel.org>; Mon, 13 Feb 2023 08:48:12 -0800 (PST)
-Received: (qmail 913444 invoked by uid 1000); 13 Feb 2023 11:48:12 -0500
-Date:   Mon, 13 Feb 2023 11:48:12 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Subject: Re: Current LKMM patch disposition
-Message-ID: <Y+ppzKlvzQIE18Hu@rowland.harvard.edu>
-References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
- <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com>
- <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com>
- <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
- <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
- <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
+        with ESMTP id S229916AbjBMVFB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Feb 2023 16:05:01 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941282200B
+        for <linux-arch@vger.kernel.org>; Mon, 13 Feb 2023 13:04:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=yWyL/onOElWDHijW4djTiGP97JWQeErYkUipJyKjzEQ=; b=IL0XssrDcnf+NTdLTOd8BofAV1
+        vCULFF3T4lI4clh+BHd+cg2JTQa2+ZAL+HnU4AirgJWxKpJdtvwKOze9p2medXAAu8JcqAOIfIk7Z
+        mXO7+6qNMv6ZUM7jG5bsdTKDrwHQWT3GHoYjGSekvq7nUnOp3tLe1kyNoT+w3NioSnecqW7Krb2XZ
+        Ubu5SbFdEelsdtxSbPHB5GmKL0ppqPwJ8jPytu26VTkrPWjckNWtFmAUlx1w7nNQs2Cak30gYdfmC
+        GdcIFVujDoc+0inZGJkiNxbMde+7XeHvyyPirtnCX+N9Qw6IyT3mE1X1FuNTqeaBNoyK6Dhi9T3oB
+        9hwZ7enQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pRfzn-00660C-9x; Mon, 13 Feb 2023 21:04:19 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: [PATCH 8/7] arm: Implement the new page table range API
+Date:   Mon, 13 Feb 2023 21:04:07 +0000
+Message-Id: <20230213210407.1452946-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230211033948.891959-1-willy@infradead.org>
+References: <20230211033948.891959-1-willy@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEXW_YQUOgYxYUNkQ9W6PS-JPwPSOFU5B=COV7Vf+qNF1jFC7g@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 12, 2023 at 07:54:15PM -0500, Joel Fernandes wrote:
-> On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> [...]
-> > > is kind of why I want to understand the CAT, because for me
-> > > explanation.txt is too much at a higher level to get a proper
-> > > understanding of the memory model.. I tried re-reading explanation.txt
-> > > many times.. then I realized I am just rewriting my own condensed set
-> > > of notes every few months.
-> >
-> > Would you like to post a few examples showing some of the most difficult
-> > points you encountered?  Maybe explanation.txt can be improved.
-> 
-> Just to list 2 of the pain points:
-> 
-> 1. I think it is hard to reason this section
-> "PROPAGATION ORDER RELATION: cumul-fence"
-> 
-> All store-related fences should affect propagation order, even the
-> smp_wmb() which is not A-cumulative should do so (po-earlier stores
-> appearing before po-later). I think expanding this section with some
-> examples would make sense to understand what makes "cumul-fence"
-> different from any other store-related fence.
+Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio() and
+flush_icache_pages().
 
-Adding some examples is a good idea.  That section is pretty terse.
+The PG_dcache_clear flag changes from being a per-page bit to being a
+per-folio bit, which makes __dma_page_dev_to_cpu() a bit more exciting.
+It also makes sense to add flush_cache_pages(), even though this isn't
+used by generic code (yet?)
 
-> 2. This part is confusing and has always confused me " The
-> happens-before relation (hb) links memory accesses that have to
-> execute in a certain order"
-> 
-> It is not memory accesses that execute, it is instructions that
-> execute. Can we separate out "memory access" from "instruction
-> execution" in this description?
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ arch/arm/include/asm/cacheflush.h |  24 ++++---
+ arch/arm/include/asm/pgtable.h    |   5 +-
+ arch/arm/include/asm/tlbflush.h   |  13 ++--
+ arch/arm/mm/copypage-v4mc.c       |   5 +-
+ arch/arm/mm/copypage-v6.c         |   5 +-
+ arch/arm/mm/copypage-xscale.c     |   5 +-
+ arch/arm/mm/dma-mapping.c         |  24 +++----
+ arch/arm/mm/fault-armv.c          |  14 ++---
+ arch/arm/mm/flush.c               | 101 ++++++++++++++++++------------
+ arch/arm/mm/mm.h                  |   2 +-
+ arch/arm/mm/mmu.c                 |  14 +++--
+ 11 files changed, 127 insertions(+), 85 deletions(-)
 
-The memory model doesn't really talk about instruction execution; it 
-thinks about everything in terms of events rather than instructions.  
-However, I agree that the document isn't very precise about the 
-distinction between instructions and events.
+diff --git a/arch/arm/include/asm/cacheflush.h b/arch/arm/include/asm/cacheflush.h
+index a094f964c869..841e268d2374 100644
+--- a/arch/arm/include/asm/cacheflush.h
++++ b/arch/arm/include/asm/cacheflush.h
+@@ -231,14 +231,15 @@ vivt_flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
+ 					vma->vm_flags);
+ }
+ 
+-static inline void
+-vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn)
++static inline void vivt_flush_cache_pages(struct vm_area_struct *vma,
++		unsigned long user_addr, unsigned long pfn, unsigned int nr)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+ 
+ 	if (!mm || cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm))) {
+ 		unsigned long addr = user_addr & PAGE_MASK;
+-		__cpuc_flush_user_range(addr, addr + PAGE_SIZE, vma->vm_flags);
++		__cpuc_flush_user_range(addr, addr + nr * PAGE_SIZE,
++				vma->vm_flags);
+ 	}
+ }
+ 
+@@ -247,15 +248,17 @@ vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsig
+ 		vivt_flush_cache_mm(mm)
+ #define flush_cache_range(vma,start,end) \
+ 		vivt_flush_cache_range(vma,start,end)
+-#define flush_cache_page(vma,addr,pfn) \
+-		vivt_flush_cache_page(vma,addr,pfn)
++#define flush_cache_pages(vma, addr, pfn, nr) \
++		vivt_flush_cache_pages(vma, addr, pfn, nr)
+ #else
+-extern void flush_cache_mm(struct mm_struct *mm);
+-extern void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
+-extern void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn);
++void flush_cache_mm(struct mm_struct *mm);
++void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
++void flush_cache_pages(struct vm_area_struct *vma, unsigned long user_addr,
++		unsigned long pfn, unsigned int nr);
+ #endif
+ 
+ #define flush_cache_dup_mm(mm) flush_cache_mm(mm)
++#define flush_cache_page(vma, addr, pfn) flush_cache_pages(vma, addr, pfn, 1)
+ 
+ /*
+  * flush_icache_user_range is used when we want to ensure that the
+@@ -289,7 +292,9 @@ extern void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr
+  * See update_mmu_cache for the user space part.
+  */
+ #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+-extern void flush_dcache_page(struct page *);
++void flush_dcache_page(struct page *);
++void flush_dcache_folio(struct folio *folio);
++#define flush_dcache_folio flush_dcache_folio
+ 
+ #define ARCH_IMPLEMENTS_FLUSH_KERNEL_VMAP_RANGE 1
+ static inline void flush_kernel_vmap_range(void *addr, int size)
+@@ -321,6 +326,7 @@ static inline void flush_anon_page(struct vm_area_struct *vma,
+  * duplicate cache flushing elsewhere performed by flush_dcache_page().
+  */
+ #define flush_icache_page(vma,page)	do { } while (0)
++#define flush_icache_pages(vma, page, nr)	do { } while (0)
+ 
+ /*
+  * flush_cache_vmap() is used when creating mappings (eg, via vmap,
+diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
+index a58ccbb406ad..6525ac82bd50 100644
+--- a/arch/arm/include/asm/pgtable.h
++++ b/arch/arm/include/asm/pgtable.h
+@@ -207,8 +207,9 @@ static inline void __sync_icache_dcache(pte_t pteval)
+ extern void __sync_icache_dcache(pte_t pteval);
+ #endif
+ 
+-void set_pte_at(struct mm_struct *mm, unsigned long addr,
+-		      pte_t *ptep, pte_t pteval);
++void set_ptes(struct mm_struct *mm, unsigned long addr,
++		      pte_t *ptep, pte_t pteval, unsigned int nr);
++#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
+ 
+ static inline pte_t clear_pte_bit(pte_t pte, pgprot_t prot)
+ {
+diff --git a/arch/arm/include/asm/tlbflush.h b/arch/arm/include/asm/tlbflush.h
+index 0ccc985b90af..7d792e485f4f 100644
+--- a/arch/arm/include/asm/tlbflush.h
++++ b/arch/arm/include/asm/tlbflush.h
+@@ -619,18 +619,21 @@ extern void flush_bp_all(void);
+  * If PG_dcache_clean is not set for the page, we need to ensure that any
+  * cache entries for the kernels virtual memory range are written
+  * back to the page. On ARMv6 and later, the cache coherency is handled via
+- * the set_pte_at() function.
++ * the set_ptes() function.
+  */
+ #if __LINUX_ARM_ARCH__ < 6
+-extern void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+-	pte_t *ptep);
++void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
++		pte_t *ptep, unsigned int nr);
+ #else
+-static inline void update_mmu_cache(struct vm_area_struct *vma,
+-				    unsigned long addr, pte_t *ptep)
++static inline void update_mmu_cache_range(struct vm_area_struct *vma,
++		unsigned long addr, pte_t *ptep, unsigned int nr)
+ {
+ }
+ #endif
+ 
++#define update_mmu_cache(vma, addr, ptep) \
++	update_mmu_cache_range(vma, addr, ptep, 1)
++
+ #define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
+ 
+ #endif
+diff --git a/arch/arm/mm/copypage-v4mc.c b/arch/arm/mm/copypage-v4mc.c
+index f1da3b439b96..7ddd82b9fe8b 100644
+--- a/arch/arm/mm/copypage-v4mc.c
++++ b/arch/arm/mm/copypage-v4mc.c
+@@ -64,10 +64,11 @@ static void mc_copy_user_page(void *from, void *to)
+ void v4_mc_copy_user_highpage(struct page *to, struct page *from,
+ 	unsigned long vaddr, struct vm_area_struct *vma)
+ {
++	struct folio *src = page_folio(from);
+ 	void *kto = kmap_atomic(to);
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
+-		__flush_dcache_page(page_mapping_file(from), from);
++	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
++		__flush_dcache_folio(folio_flush_mapping(src), src);
+ 
+ 	raw_spin_lock(&minicache_lock);
+ 
+diff --git a/arch/arm/mm/copypage-v6.c b/arch/arm/mm/copypage-v6.c
+index d8a115de5507..a1a71f36d850 100644
+--- a/arch/arm/mm/copypage-v6.c
++++ b/arch/arm/mm/copypage-v6.c
+@@ -69,11 +69,12 @@ static void discard_old_kernel_data(void *kto)
+ static void v6_copy_user_highpage_aliasing(struct page *to,
+ 	struct page *from, unsigned long vaddr, struct vm_area_struct *vma)
+ {
++	struct folio *src = page_folio(from);
+ 	unsigned int offset = CACHE_COLOUR(vaddr);
+ 	unsigned long kfrom, kto;
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
+-		__flush_dcache_page(page_mapping_file(from), from);
++	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
++		__flush_dcache_folio(folio_flush_mapping(src), src);
+ 
+ 	/* FIXME: not highmem safe */
+ 	discard_old_kernel_data(page_address(to));
+diff --git a/arch/arm/mm/copypage-xscale.c b/arch/arm/mm/copypage-xscale.c
+index bcb485620a05..f1e29d3e8193 100644
+--- a/arch/arm/mm/copypage-xscale.c
++++ b/arch/arm/mm/copypage-xscale.c
+@@ -84,10 +84,11 @@ static void mc_copy_user_page(void *from, void *to)
+ void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
+ 	unsigned long vaddr, struct vm_area_struct *vma)
+ {
++	struct folio *src = page_folio(from);
+ 	void *kto = kmap_atomic(to);
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
+-		__flush_dcache_page(page_mapping_file(from), from);
++	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
++		__flush_dcache_folio(folio_flush_mapping(src), src);
+ 
+ 	raw_spin_lock(&minicache_lock);
+ 
+diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+index 8bc01071474a..5ecfde41d70a 100644
+--- a/arch/arm/mm/dma-mapping.c
++++ b/arch/arm/mm/dma-mapping.c
+@@ -693,6 +693,7 @@ static void __dma_page_cpu_to_dev(struct page *page, unsigned long off,
+ static void __dma_page_dev_to_cpu(struct page *page, unsigned long off,
+ 	size_t size, enum dma_data_direction dir)
+ {
++	struct folio *folio = page_folio(page);
+ 	phys_addr_t paddr = page_to_phys(page) + off;
+ 
+ 	/* FIXME: non-speculating: not required */
+@@ -707,19 +708,18 @@ static void __dma_page_dev_to_cpu(struct page *page, unsigned long off,
+ 	 * Mark the D-cache clean for these pages to avoid extra flushing.
+ 	 */
+ 	if (dir != DMA_TO_DEVICE && size >= PAGE_SIZE) {
+-		unsigned long pfn;
+-		size_t left = size;
+-
+-		pfn = page_to_pfn(page) + off / PAGE_SIZE;
+-		off %= PAGE_SIZE;
+-		if (off) {
+-			pfn++;
+-			left -= PAGE_SIZE - off;
++		ssize_t left = size;
++		size_t offset = offset_in_folio(folio, paddr);
++
++		if (offset) {
++			left -= folio_size(folio) - offset;
++			folio = folio_next(folio);
+ 		}
+-		while (left >= PAGE_SIZE) {
+-			page = pfn_to_page(pfn++);
+-			set_bit(PG_dcache_clean, &page->flags);
+-			left -= PAGE_SIZE;
++
++		while (left >= (ssize_t)folio_size(folio)) {
++			set_bit(PG_dcache_clean, &folio->flags);
++			left -= folio_size(folio);
++			folio = folio_next(folio);
+ 		}
+ 	}
+ }
+diff --git a/arch/arm/mm/fault-armv.c b/arch/arm/mm/fault-armv.c
+index 0e49154454a6..e2c869b8f012 100644
+--- a/arch/arm/mm/fault-armv.c
++++ b/arch/arm/mm/fault-armv.c
+@@ -178,8 +178,8 @@ make_coherent(struct address_space *mapping, struct vm_area_struct *vma,
+  *
+  * Note that the pte lock will be held.
+  */
+-void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+-	pte_t *ptep)
++void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
++		pte_t *ptep, unsigned int nr)
+ {
+ 	unsigned long pfn = pte_pfn(*ptep);
+ 	struct address_space *mapping;
+@@ -192,13 +192,13 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
+ 	 * The zero page is never written to, so never has any dirty
+ 	 * cache lines, and therefore never needs to be flushed.
+ 	 */
+-	page = pfn_to_page(pfn);
+-	if (page == ZERO_PAGE(0))
++	if (is_zero_pfn(pfn))
+ 		return;
+ 
+-	mapping = page_mapping_file(page);
+-	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+-		__flush_dcache_page(mapping, page);
++	folio = page_folio(pfn_to_page(pfn));
++	mapping = folio_flush_mapping(page);
++	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
++		__flush_dcache_folio(mapping, folio);
+ 	if (mapping) {
+ 		if (cache_is_vivt())
+ 			make_coherent(mapping, vma, addr, ptep, pfn);
+diff --git a/arch/arm/mm/flush.c b/arch/arm/mm/flush.c
+index 7ff9feea13a6..b56a65626798 100644
+--- a/arch/arm/mm/flush.c
++++ b/arch/arm/mm/flush.c
+@@ -95,10 +95,10 @@ void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
+ 		__flush_icache_all();
+ }
+ 
+-void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn)
++void flush_cache_pages(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn, unsigned int nr)
+ {
+ 	if (cache_is_vivt()) {
+-		vivt_flush_cache_page(vma, user_addr, pfn);
++		vivt_flush_cache_pages(vma, user_addr, pfn, nr);
+ 		return;
+ 	}
+ 
+@@ -196,29 +196,31 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
+ #endif
+ }
+ 
+-void __flush_dcache_page(struct address_space *mapping, struct page *page)
++void __flush_dcache_folio(struct address_space *mapping, struct folio *folio)
+ {
+ 	/*
+ 	 * Writeback any data associated with the kernel mapping of this
+ 	 * page.  This ensures that data in the physical page is mutually
+ 	 * coherent with the kernels mapping.
+ 	 */
+-	if (!PageHighMem(page)) {
+-		__cpuc_flush_dcache_area(page_address(page), page_size(page));
++	if (!folio_test_highmem(folio)) {
++		__cpuc_flush_dcache_area(folio_address(folio),
++					folio_size(folio));
+ 	} else {
+ 		unsigned long i;
+ 		if (cache_is_vipt_nonaliasing()) {
+-			for (i = 0; i < compound_nr(page); i++) {
+-				void *addr = kmap_atomic(page + i);
++			for (i = 0; i < folio_nr_pages(folio); i++) {
++				void *addr = kmap_local_folio(folio,
++								i * PAGE_SIZE);
+ 				__cpuc_flush_dcache_area(addr, PAGE_SIZE);
+-				kunmap_atomic(addr);
++				kunmap_local(addr);
+ 			}
+ 		} else {
+-			for (i = 0; i < compound_nr(page); i++) {
+-				void *addr = kmap_high_get(page + i);
++			for (i = 0; i < folio_nr_pages(folio); i++) {
++				void *addr = kmap_high_get(folio_page(folio, i));
+ 				if (addr) {
+ 					__cpuc_flush_dcache_area(addr, PAGE_SIZE);
+-					kunmap_high(page + i);
++					kunmap_high(folio_page(folio, i));
+ 				}
+ 			}
+ 		}
+@@ -230,15 +232,14 @@ void __flush_dcache_page(struct address_space *mapping, struct page *page)
+ 	 * userspace colour, which is congruent with page->index.
+ 	 */
+ 	if (mapping && cache_is_vipt_aliasing())
+-		flush_pfn_alias(page_to_pfn(page),
+-				page->index << PAGE_SHIFT);
++		flush_pfn_alias(folio_pfn(folio), folio_pos(folio));
+ }
+ 
+-static void __flush_dcache_aliases(struct address_space *mapping, struct page *page)
++static void __flush_dcache_aliases(struct address_space *mapping, struct folio *folio)
+ {
+ 	struct mm_struct *mm = current->active_mm;
+-	struct vm_area_struct *mpnt;
+-	pgoff_t pgoff;
++	struct vm_area_struct *vma;
++	pgoff_t pgoff, pgoff_end;
+ 
+ 	/*
+ 	 * There are possible user space mappings of this page:
+@@ -246,21 +247,38 @@ static void __flush_dcache_aliases(struct address_space *mapping, struct page *p
+ 	 *   data in the current VM view associated with this page.
+ 	 * - aliasing VIPT: we only need to find one mapping of this page.
+ 	 */
+-	pgoff = page->index;
++	pgoff = folio->index;
++	pgoff_end = pgoff + folio_nr_pages(folio) - 1;
+ 
+ 	flush_dcache_mmap_lock(mapping);
+-	vma_interval_tree_foreach(mpnt, &mapping->i_mmap, pgoff, pgoff) {
+-		unsigned long offset;
++	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff_end) {
++		long offset;
++		unsigned long start, pfn;
++		unsigned int nr;
+ 
+ 		/*
+ 		 * If this VMA is not in our MM, we can ignore it.
+ 		 */
+-		if (mpnt->vm_mm != mm)
++		if (vma->vm_mm != mm)
+ 			continue;
+-		if (!(mpnt->vm_flags & VM_MAYSHARE))
++		if (!(vma->vm_flags & VM_MAYSHARE))
+ 			continue;
+-		offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
+-		flush_cache_page(mpnt, mpnt->vm_start + offset, page_to_pfn(page));
++
++		start = vma->vm_start;
++		pfn = folio_pfn(folio);
++		nr = folio_nr_pages(folio);
++		offset = pgoff - vma->vm_pgoff;
++		if (offset < 0) {
++			pfn -= offset;
++			nr += offset;
++			start -= offset * PAGE_SIZE;
++		} else {
++			start += offset * PAGE_SIZE;
++		}
++		if (start + nr * PAGE_SIZE > vma->vm_end)
++			nr = (vma->vm_end - start) / PAGE_SIZE;
++
++		flush_cache_pages(vma, start, pfn, nr);
+ 	}
+ 	flush_dcache_mmap_unlock(mapping);
+ }
+@@ -269,7 +287,7 @@ static void __flush_dcache_aliases(struct address_space *mapping, struct page *p
+ void __sync_icache_dcache(pte_t pteval)
+ {
+ 	unsigned long pfn;
+-	struct page *page;
++	struct folio *folio;
+ 	struct address_space *mapping;
+ 
+ 	if (cache_is_vipt_nonaliasing() && !pte_exec(pteval))
+@@ -279,14 +297,14 @@ void __sync_icache_dcache(pte_t pteval)
+ 	if (!pfn_valid(pfn))
+ 		return;
+ 
+-	page = pfn_to_page(pfn);
++	folio = page_folio(pfn_to_page(pfn));
+ 	if (cache_is_vipt_aliasing())
+-		mapping = page_mapping_file(page);
++		mapping = folio_flush_mapping(folio);
+ 	else
+ 		mapping = NULL;
+ 
+-	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
+-		__flush_dcache_page(mapping, page);
++	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
++		__flush_dcache_folio(mapping, folio);
+ 
+ 	if (pte_exec(pteval))
+ 		__flush_icache_all();
+@@ -312,7 +330,7 @@ void __sync_icache_dcache(pte_t pteval)
+  * Note that we disable the lazy flush for SMP configurations where
+  * the cache maintenance operations are not automatically broadcasted.
+  */
+-void flush_dcache_page(struct page *page)
++void flush_dcache_folio(struct folio *folio)
+ {
+ 	struct address_space *mapping;
+ 
+@@ -320,31 +338,36 @@ void flush_dcache_page(struct page *page)
+ 	 * The zero page is never written to, so never has any dirty
+ 	 * cache lines, and therefore never needs to be flushed.
+ 	 */
+-	if (page == ZERO_PAGE(0))
++	if (is_zero_pfn(folio_pfn(folio)))
+ 		return;
+ 
+ 	if (!cache_ops_need_broadcast() && cache_is_vipt_nonaliasing()) {
+-		if (test_bit(PG_dcache_clean, &page->flags))
+-			clear_bit(PG_dcache_clean, &page->flags);
++		if (test_bit(PG_dcache_clean, &folio->flags))
++			clear_bit(PG_dcache_clean, &folio->flags);
+ 		return;
+ 	}
+ 
+-	mapping = page_mapping_file(page);
++	mapping = folio_flush_mapping(folio);
+ 
+ 	if (!cache_ops_need_broadcast() &&
+-	    mapping && !page_mapcount(page))
+-		clear_bit(PG_dcache_clean, &page->flags);
++	    mapping && !folio_mapped(folio))
++		clear_bit(PG_dcache_clean, &folio->flags);
+ 	else {
+-		__flush_dcache_page(mapping, page);
++		__flush_dcache_folio(mapping, folio);
+ 		if (mapping && cache_is_vivt())
+-			__flush_dcache_aliases(mapping, page);
++			__flush_dcache_aliases(mapping, folio);
+ 		else if (mapping)
+ 			__flush_icache_all();
+-		set_bit(PG_dcache_clean, &page->flags);
++		set_bit(PG_dcache_clean, &folio->flags);
+ 	}
+ }
+-EXPORT_SYMBOL(flush_dcache_page);
++EXPORT_SYMBOL(flush_dcache_folio);
+ 
++void flush_dcache_page(struct page *page)
++{
++	flush_dcache_folio(page_folio(page));
++}
++EXPORT_SYMBOL(flush_dcache_page);
+ /*
+  * Flush an anonymous page so that users of get_user_pages()
+  * can safely access the data.  The expected sequence is:
+diff --git a/arch/arm/mm/mm.h b/arch/arm/mm/mm.h
+index d7ffccb7fea7..419316316711 100644
+--- a/arch/arm/mm/mm.h
++++ b/arch/arm/mm/mm.h
+@@ -45,7 +45,7 @@ struct mem_type {
+ 
+ const struct mem_type *get_mem_type(unsigned int type);
+ 
+-extern void __flush_dcache_page(struct address_space *mapping, struct page *page);
++void __flush_dcache_folio(struct address_space *mapping, struct folio *folio);
+ 
+ /*
+  * ARM specific vm_struct->flags bits.
+diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+index 463fc2a8448f..9947bbc32b04 100644
+--- a/arch/arm/mm/mmu.c
++++ b/arch/arm/mm/mmu.c
+@@ -1788,7 +1788,7 @@ void __init paging_init(const struct machine_desc *mdesc)
+ 	bootmem_init();
+ 
+ 	empty_zero_page = virt_to_page(zero_page);
+-	__flush_dcache_page(NULL, empty_zero_page);
++	__flush_dcache_folio(NULL, page_folio(empty_zero_page));
+ }
+ 
+ void __init early_mm_init(const struct machine_desc *mdesc)
+@@ -1797,8 +1797,8 @@ void __init early_mm_init(const struct machine_desc *mdesc)
+ 	early_paging_init(mdesc);
+ }
+ 
+-void set_pte_at(struct mm_struct *mm, unsigned long addr,
+-			      pte_t *ptep, pte_t pteval)
++void set_ptes(struct mm_struct *mm, unsigned long addr,
++			      pte_t *ptep, pte_t pteval, unsigned int nr)
+ {
+ 	unsigned long ext = 0;
+ 
+@@ -1808,5 +1808,11 @@ void set_pte_at(struct mm_struct *mm, unsigned long addr,
+ 		ext |= PTE_EXT_NG;
+ 	}
+ 
+-	set_pte_ext(ptep, pteval, ext);
++	for (;;) {
++		set_pte_ext(ptep, pteval, ext);
++		if (--nr == 0)
++			break;
++		ptep++;
++		pte_val(pteval) += PAGE_SIZE;
++	}
+ }
+-- 
+2.39.1
 
-> I think ->hb tries to say that A ->hb B means, memory access A
-> happened before memory access B exactly in its associated
-> instruction's execution order (time order), but to be specific --
-> should that be instruction issue order, or instruction retiring order?
-
-The model isn't that specific.  It doesn't recognize that instructions 
-take a nonzero amount of time to execute; it thinks of events as 
-happening instantaneously.  (With exceptions perhaps for 
-synchronize_rcu() and synchronize_srcu().)
-
-If you want to relate the memory model to actual hardware, it's probably 
-best to think in terms of instruction retiring.  But even that isn't 
-exactly right.
-
-For example, real CPUs can satisfy loads speculatively, possibly 
-multiple times, before retiring them -- you should think of a load as 
-executing at the _last_ time it is satisfied.  This generally is after 
-the instruction has been issued and before it is retired.  You can think 
-of a store as executing at the time the CPU commits to it.
-
-> AFAICS ->hb maps instruction execution order to memory access order.
-
-That's not the right way to think about it.  In the model, a memory 
-access occurs when the corresponding event executes.  So saying that two 
-events (or instructions) execute in a certain order is the same as 
-saying that their two memory accesses execute in that order.  There's no 
-mapping involved.
-
-> Not all ->po does  fall into that category because of out-of-order
-> hardware execution. As does not ->co because the memory subsystem may
-> have writes to the same variable to be resolved out of order. It would
-> be nice to call out that ->po is instruction issue order, which is
-> different from execution/retiring and that's why it cannot be ->hb.
-
-Okay, that would be a worthwhile addition.
-
-> ->rf does because of data flow causality, ->ppo does because of
-> program structure, so that makes sense to be ->hb.
-> 
-> IMHO, ->rfi should as well, because it is embodying a flow of data, so
-> that is a bit confusing. It would be great to clarify more perhaps
-> with an example about why ->rfi cannot be ->hb, in the
-> "happens-before" section.
-
-Maybe.  We do talk about store forwarding, and in fact the ppo section 
-already says:
-
-------------------------------------------------------------------------
-        R ->dep W ->rfi R',
-
-where the dep link can be either an address or a data dependency.  In
-this situation we know it is possible for the CPU to execute R' before
-W, because it can forward the value that W will store to R'.
-------------------------------------------------------------------------
-
-I suppose this could be reiterated in the hb section.
-
-Alan
