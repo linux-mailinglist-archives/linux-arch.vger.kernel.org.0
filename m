@@ -2,106 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA966958D8
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 07:10:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1C78695933
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 07:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjBNGKO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Feb 2023 01:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S229655AbjBNGcY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Feb 2023 01:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjBNGKN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 01:10:13 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465556A5F
-        for <linux-arch@vger.kernel.org>; Mon, 13 Feb 2023 22:10:11 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id ct17so3913830pfb.12
-        for <linux-arch@vger.kernel.org>; Mon, 13 Feb 2023 22:10:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NG4gcbUUK30ZHhhVbfm4gzBvWsoUmaEF9T4G8HFC5DU=;
-        b=imc+WDA64o/oCZFfk+tk7K24NCVK59euUCIFuRoHhcwxXrhR58u+VydiYPBt1jdoh9
-         xxrvRYiFQdB8N2yDX7rHkHANnRRm7US53h7EUC9hRO7lo6NFDLRuvPuAlVIhTQujpsUL
-         IyQegsZbYlKPSQ/3ou44CTHTppHMiqCF5SPPOJ7SKpnzHt8cai6tQiwEj3fH4PPetk2E
-         Kf3fskCHTb7bOfDHQsne4YBol5eN0j6zYx/9QcD4hmoWAtmhyZBZIpF4M2GhnPPsVN9p
-         QbK9CDDCh9V3V9jyIpCl/n+053EEAvLW5DP8VdA9eoa+gkdE5WLOXLTKz1m2B3NFvj04
-         clCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NG4gcbUUK30ZHhhVbfm4gzBvWsoUmaEF9T4G8HFC5DU=;
-        b=pb20/1qCH7uoevMNxi1VYFyDsdrMoTc1GcTxWW+O9GR9B4w8PT3Up+scXZMA+6BQOE
-         k2fXW9JP2YY4ccT0jlgWjErhW74dyVPVQKSCzwAwFWBJAFADmjl06IAje2aAMrVdfHFO
-         L1s+SBAVgXBzjc+7hDKwKE/lw3n0hZmDdiBwIa4aXlkfoZ4SpQzFyEBdTd8aZEu5IXjz
-         RdTHWLsi5jGIK+jPEFqC9XTrAw4BAstYm80bBtH0uHKo3UcM3rzEQFJncx8Jl/vONTFl
-         l/SrIZNIEc3tmQcI/HjrNRVpSKLgTrRsxYaZZOggRi+QDppgUUBOisnekGoOAc/rAT14
-         1cLA==
-X-Gm-Message-State: AO0yUKW6d1EP8skGyK4MhOLvr4U5BbvWuT1ao53zZ8nX3Ebz21o8DY5I
-        MNFVwpEYXlqLdw0v6f3Nfnya9A==
-X-Google-Smtp-Source: AK7set8EpHinXKztvT8UlqHA6mo7YSo/ZczyCzuoRhPTml/zlOTu5lm33Qc63djl+IVA2FPiFzFkpA==
-X-Received: by 2002:a62:1b47:0:b0:5a8:b1bc:4ac4 with SMTP id b68-20020a621b47000000b005a8b1bc4ac4mr1173950pfb.4.1676355010515;
-        Mon, 13 Feb 2023 22:10:10 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id w3-20020aa78583000000b0058e24050648sm9222236pfn.12.2023.02.13.22.10.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Feb 2023 22:10:09 -0800 (PST)
-Date:   Mon, 13 Feb 2023 22:10:07 -0800
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v5 19/39] mm: Fixup places that call pte_mkwrite()
- directly
-Message-ID: <20230214061007.GC4016181@debug.ba.rivosinc.com>
-References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
- <20230119212317.8324-20-rick.p.edgecombe@intel.com>
- <20230214000947.GB4016181@debug.ba.rivosinc.com>
- <1dd1c61c69739fde6db445df79ebbbbec0efe8cd.camel@intel.com>
+        with ESMTP id S229647AbjBNGcX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 01:32:23 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4511B548
+        for <linux-arch@vger.kernel.org>; Mon, 13 Feb 2023 22:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676356342; x=1707892342;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=PXKlDew+3N2cyCSI824XniJQpN0UHfAB+Pddf0v382M=;
+  b=AE5hG5nr2jN+JFibuqSoTPuJ7xetnbxHg1FFMaUEucLqORtPIr7ZHPGu
+   uhV94mzMbngcevouJRig+3Xs2sPRSoiHX5RiFvfms5fSsFXOll71ym7jY
+   MUVM8bI2zmJu5RqGNNZqDoBM2wddcEUBDYyFfWR3QTBUskG9bGk2/wmC7
+   OhPEXW6tYgq7D3goEWy7cJrDrBzA6cg7YX0lPR8kVRNVklu7fKN3/3Ggz
+   MPDBO5HURIXTAsbz4zYMVYDMWXsuaA73v6YPWZ56LumfGWkAIyv1eMC65
+   PtSt5cSGkOW3eZijBhUjMyrs/UP1ksz/jajZYykWTAMXH4GcFGff1vZ6t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="310723657"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="310723657"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2023 22:32:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10620"; a="757875383"
+X-IronPort-AV: E=Sophos;i="5.97,294,1669104000"; 
+   d="scan'208";a="757875383"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Feb 2023 22:32:18 -0800
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 22:32:17 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 13 Feb 2023 22:32:17 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 13 Feb 2023 22:32:17 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 13 Feb 2023 22:32:16 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WgvOQxks0dGNNGoDX4GI56JTq1KMXdCpuTLg5aYgiSF7BrEj4x0zgJMfU6VThC0aHbqoT8quEyvzx9bIFl8ClxQBGIYpCCImjdYY4BJshUytjWNvYJNaw0ef3W2zQOG+MK9kU0Nw1Zq6yhrZUtXn+MwQI18Lb2+iDRGT0c/fbaq8XD2z9OHg3p+KKbp9eHwwSKevpueLJe2wGA4p75TEYBXAIDw8/4/JKVOIAHGNXzWxgOz8mtAI6ZMtfsxWqd3dxecq6UYqXblPiTwa8wgb87vhiQcaVDBEw3eslvfMdCIgyYUTcB4Ux2zWfiBX8YiDWIUakGAGCwMNQ7f57BY8Nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GWCwv6enuYJKn57NVtSHh14XPegfTbSanCD5+NJYKAw=;
+ b=IZ1UCIB65JJWewJiYDPNW0DJBlz2ezxdqIZWCy0n/sBDUq7cfmb0G3v/tQFsEYiHewf1bC86H+jigACmI96qraoi0xR2ohdVrD9oEMh6DQvL4+dU98gwLfP+AxHokrDCSWyRbp7UN6TgQoywjKJvptqek3RCGQsNgVeKChcQBIP9nJ1DfHVlcZloCg5LqEwpeOxE9jwrZr9AsXKuO+ClkDfg3P5uuSHR8VCNzCzoUDnkhJLcfG9dmFgTsCwnvTT9tXvmPuAHRsPcMlHsLKL1sd/Ym/STa23RXNvq/xULQ6CPOiff0FKyHe43LaHZdcS0r2+WPCpAcC95G0/L4/A8pQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
+ by MW5PR11MB5785.namprd11.prod.outlook.com (2603:10b6:303:197::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.24; Tue, 14 Feb
+ 2023 06:32:15 +0000
+Received: from CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::1531:707:dec4:68b4]) by CO1PR11MB4820.namprd11.prod.outlook.com
+ ([fe80::1531:707:dec4:68b4%7]) with mapi id 15.20.6086.026; Tue, 14 Feb 2023
+ 06:32:15 +0000
+Message-ID: <a2d6ba93-a42c-479e-57f4-7664deb9a7d4@intel.com>
+Date:   Tue, 14 Feb 2023 14:32:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH 6/7] arc: Implement the new page table range API
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230211033948.891959-1-willy@infradead.org>
+ <20230211033948.891959-7-willy@infradead.org>
+ <8a84172a5007b568392b2040e889780da198e20f.camel@intel.com>
+ <Y+pUOVc4DFPX6119@casper.infradead.org>
+Content-Language: en-US
+From:   "Yin, Fengwei" <fengwei.yin@intel.com>
+In-Reply-To: <Y+pUOVc4DFPX6119@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2P153CA0051.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::20)
+ To CO1PR11MB4820.namprd11.prod.outlook.com (2603:10b6:303:6f::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <1dd1c61c69739fde6db445df79ebbbbec0efe8cd.camel@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB4820:EE_|MW5PR11MB5785:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebdbcc65-c288-4c59-f142-08db0e5536a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E4A39Ks/bCLDa6vkmaqpQb3IVXn1jG7MxK1JGL//w7dl5siH8IUrFBMH4wNUP+olpLDkY4uYnD2PC9u6astpbLKXkyLvoPL8qaH81JyQ2gQ5bbklZL7sr/6H2w4/9c7WsFuWFX0TFO1xRqySiCPhhUxiXyAkuBzdeWyp9y8VMWJVZH3G7ob+7smZfPHBWXxfV1XYrqkYnY3eQUeDPmOBIg0foy1v1K3Ftbchdc9PNI/D2VfhxUu+N50CEebnZOB12c9innWnR7+tnMBzycnk2UnFmoVNm5SLE9S0uJ8AxmT4ebYMn8SiUMCNm1GvmeF/SDYh22n3RQLKiKalkPLWPcKehau4HbMeq9BgKde87nYsOVJX1N7vsFOcuRbVcHnKomLjyftUa1mP8ctx+nWY3c1WtVHy8YThZ1xVWaB1xGf5Vm4Mv5Njwaa8FghSEzw1gOzUksJ+f21c9qqlyIplhQhoNSD6YXyacTlrTu9CIrPesBmPm0lzY2njDopmbBOYsDuotnkghHuzpU7Ci0wOrj29ITYFWSIWT+0VoNdbZxPOxvf8W8mhrnsdmeptdWZ8tXRETiLWAJ5hpjLM8iVxuGSluQUoolAwMlU/FQJbpP6FrmMrzlG5Edtg9yDvylHLY5ktionRWyjT9N7FRb9UTMU9haTBSyCZEvU8W3Lrcm2k+OF8a0khLnibiEqvDZSe7KR4A95umFGiybYf/R2aEmsOc8QJ8ZOeNG+8BIBNnw4=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4820.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199018)(5660300002)(2906002)(83380400001)(36756003)(54906003)(31686004)(316002)(8936002)(66946007)(6916009)(186003)(41300700001)(4326008)(8676002)(66556008)(53546011)(31696002)(6512007)(38100700002)(66476007)(86362001)(82960400001)(478600001)(2616005)(6506007)(26005)(6486002)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFhKbmRxRER5aUpRNGpjR3dkSDRGV0xSby92cUVQcDVZYnZtbmViZlZiRTFZ?=
+ =?utf-8?B?aGVDa0Rxek1HUVNWaGllbk5WeFNtOWNWVFVORGZXMHZYeVFUNm1WSDlmZHBo?=
+ =?utf-8?B?bGl2VlhZeWd4VEpqUEdHRko0ODZYU3Q3QWNQSTRpaTQvWGFvOXRpOHd3alVt?=
+ =?utf-8?B?RHVjNXJUOVVjVnhFUWlKK1lDcnBqRGU1NCtIZHh5OTM2NUM4OWg0RkNvUGc1?=
+ =?utf-8?B?ckovL2tieFBZMXdabmlxcEtiRTVoaUtFV21LQ2EvcGI3ZnVraUVmRWNvYVdV?=
+ =?utf-8?B?TlRwckFodDkzZ1BzQjRPZHYxZi85ODNFUEVTcFZqYUlKd1UySWpDL3A2TG5k?=
+ =?utf-8?B?MjErZ0R0eGx0YUZiTDZwNFBhM1poRnhFZnFsRHFtc1lWZ241T0ZoY3IyYkhX?=
+ =?utf-8?B?ZmowUzJVQTNnWlc1V3VQUzFEU0dSbG1EV1ZXRWVTL25GbVNpWHhzUngvUkM1?=
+ =?utf-8?B?eVFyeklJbCtobU5RMy9CZ1JYYW40WUt3Q1JOa3ZjYTBpekUwWk5RMWNadStx?=
+ =?utf-8?B?RHhUT3Q3MUVNVkdlTHZZVUlLTldmbzdNMDV4OG9kUUtlU3NNeUVkZyt5YStZ?=
+ =?utf-8?B?TjQ1bFFFbllTVDlnT0p1WVhrNFoxbmZjT2s2TEpIYUtKb3lWSHdUTm1Nbmpl?=
+ =?utf-8?B?VWJJQ2p5Ykk0TFNNL0I0MUdoM3MzdWJ2VHF5TkhzRkZRZmtpRUFiSjNGOXdW?=
+ =?utf-8?B?TkNBaEJPaW9YOEhhMGJvallKL0ZsR0xvL3pvb29PYjFKbDRpL0E5VWpDemox?=
+ =?utf-8?B?TjRSTlIrMDlzWU1vT2NPU1BCaFdabld1WU5LY3ZSY3hqbzE2TlJjeTZuYXha?=
+ =?utf-8?B?bVVyQi9PWkVEZU5CYmlZK2ZKZVkwTHh2aFZZMDZ4UkRRTUdkY085QkpwSHIw?=
+ =?utf-8?B?WXZOVGxSNkp4NnZnMG9iVTl4ZmpENWJxOHFtOGYzWVpRMFJGdDNCSWt0Wjg1?=
+ =?utf-8?B?eVhhOXhwWCs1ZEdGNTdzNmMvTktlTVRReVlyckdDWUFlLy9telVVWlR3OUNE?=
+ =?utf-8?B?OEo2cmIrTDVZRGZPYk1aeDRObk5XeHppSGNRMGhuSFpyb0tPL2o3TzE5Wk94?=
+ =?utf-8?B?ZDRkaXB6K05oQ0ZVZ3Y1aUhPUzZqRThMVm4reVc4eEZ4NXhKOE1BM05NQity?=
+ =?utf-8?B?RlRxemZkb2RyMjVSb2oxODZNV05IenVqSmplYjFrc1Jaa2hxRnRSb0V0aTV2?=
+ =?utf-8?B?ODdkdk5CU2hqS2g2eXZ5MmFOOVpzTzdyS1RaaWFSQkpnTnJOQUJGZDdHTjNB?=
+ =?utf-8?B?aHJlSzN3N1ZqZ0FsVkpxTHJhZU15VFgwZmQrYnRVSTJ2c3lsK1ZNM1M3VlNW?=
+ =?utf-8?B?emVMMGNPSGJSbW5vK0pNck9hOTZIL3hqSUpKeEQrNFJrY3V2U2tpYUhNMzFF?=
+ =?utf-8?B?MXkxZk1Xb3FtZGhnbDkrL3JqaDl2Yld4VC9jZVRvWlBpcEwrQXNMVitNVzZy?=
+ =?utf-8?B?ZHdGRGxzQ1M2a01MWGlmZ3NDbUs5MjFzVTJxdXQ5VFFBU09qa3hhOEZZVjZr?=
+ =?utf-8?B?WCs2VXRBb0x1dGhvQXU3M0lBQkswbmhNUXFxZHc3QnRJVG5aT1dzUFNmMFIx?=
+ =?utf-8?B?K2dvN1hBYmlwTXBpbURka2dWUFVSY2ZTemxsSFcyc3B5SWRIR3NhSk1SM1Vt?=
+ =?utf-8?B?RGVZelltTjFlRmtnNjNZK1NjcUtyRk1oa2dVZUltKzVmckdKeE9yanVGOFNH?=
+ =?utf-8?B?UzVoOUNjZ1cvSXBiMndYc05tcVJRekh3UTl5cEhqL3lFOHM5cnVLaDJIMkc4?=
+ =?utf-8?B?eDlqQmxTYUpjZXZJcStGUE9SQm5ZSTRqVUZOSWQraXhpbmNtdjZzalNLTTNB?=
+ =?utf-8?B?NWNjdDRReVUydGpOdVZJUXk0Z1BtRzZObU0yUzdLaUZDektMMFF5bWUxczUx?=
+ =?utf-8?B?UnJaOHJWR1p4RnFjcEkyNlpCQlkyVjVlU2x3SjcxUENLS1NXRlJrdFpxcDZY?=
+ =?utf-8?B?c1JiOWNEYTU5S2NYeGxveU1Yc1JQVWxBNjAxeHZxNVczZ2w0cks2akxxU3Q4?=
+ =?utf-8?B?WUMyQ3JaUVFQNmdKb1U3WXFnSUxmZnZzMFhOQTBFZHRnN3ZHR2xnREtEd0Vz?=
+ =?utf-8?B?blI1S3haSXdBKzFrSHBSVzVBTjVxaGVnYllZSEY2bzR2MlVTRy83ODlKS0Vm?=
+ =?utf-8?B?anJYWndvWldyWjVmYkR3eXUycVVCUjVYNGVCMnlkcG9IbFNsbUFGQy92MlhM?=
+ =?utf-8?B?TkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebdbcc65-c288-4c59-f142-08db0e5536a2
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4820.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2023 06:32:15.6432
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vWpDkCCvfFioWuh8zBDph9FOtL7zdrtvE0Jf0HTReZ5DMf+vtg/EmhelJykgO3yyRjYsr1AiexeEAhpINquj+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5785
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,358 +162,70 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:07:24AM +0000, Edgecombe, Rick P wrote:
->On Mon, 2023-02-13 at 16:09 -0800, Deepak Gupta wrote:
->> Since I've a general question on outcome of discussion of how to
->> handle
->> `pte_mkwrite`, so I am top posting.
->>
->> I have posted patches yesterday targeting riscv zisslpcfi extension.
->>
->https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
->>
->> Since there're similarities in extension(s), patches have similarity
->> too.
->> One of the similarity was updating `maybe_mkwrite`. I was asked (by
->> dhildenb
->> on my patch #11) to look at x86 approach on how to approach this so
->> that
->> core-mm approach fits multiple architectures along with the need to
->> update `pte_mkwrite` to consume vma flags.
->> In x86 CET patch series, I see that locations where `pte_mkwrite` is
->> invoked are updated to check for shadow stack vma and not necessarily
->> `pte_mkwrite` itself is updated to consume vma flags. Let me know if
->> my
->> understanding is correct and that's the current direction (to update
->> call sites for vma check where `pte_mkwrite` is invoked)
->>
->> Being said that as I've mentioned in my patch series that there're
->> similarities between x86, arm and now riscv for implementing shadow
->> stack
->> and indirect branch tracking, overall it'll be a good thing if we can
->> collaborate and come up with common bits.
->
->Oh interesting. I've made the changes to have pte_mkwrite() take a VMA.
->It seems to work pretty well with the core MM code, but I'm letting 0-
->day chew on it for a bit because it touched so many arch's. I'll
->include you when I send it out, hopefully later this week.
 
-Thanks.
->
->From just a quick look, I see some design aspects that have been
->problematic on the x86 implementation.
->
->There was something like PROT_SHADOW_STACK before, but there were two
->problems:
->1. Writable windows while provisioning restore tokens (maybe this is
->just an x86 thing)
->2. Adding guard pages when a shadow stack was mprotect()ed to change it
->from writable to shadow stack. Again this might be an x86 need, since
->it needed to have it writable to add a restore token, and the guard
->pages help with security.
 
-I've not seen your earlier patch but I am assuming when you say window you
-mean that shadow stack was open to regular stores (or I may be missing
-something here)
+On 2/13/2023 11:16 PM, Matthew Wilcox wrote:
+> On Mon, Feb 13, 2023 at 03:09:37AM +0000, Yin, Fengwei wrote:
+>>> +++ b/arch/arc/include/asm/cacheflush.h
+>>> @@ -25,17 +25,20 @@
+>>>   * in update_mmu_cache()
+>>>   */
+>>>  #define flush_icache_page(vma, page)
+>>> +#define flush_icache_pages(vma, page, nr)
+>> Maybe just remove these two definitions because general
+>> implementation is just no-op?
+> 
+> Then arc would have to include asm-generic/cacheflush.h and I don't
+> particularly want to debug any issues that might cause.  This is
+> easier.
+> 
+> Long term, asm-generic/cacheflush.h's contents should be moved into
+> linux/cacheflush.h, but I've lacked the time to do that work.
+> 
+> To answer your question from the other email, the documentation says:
+> 
+>   ``void flush_icache_page(struct vm_area_struct *vma, struct page *page)``
+> 
+>         All the functionality of flush_icache_page can be implemented in
+>         flush_dcache_page and update_mmu_cache_range. In the future, the hope
+>         is to remove this interface completely.
+> 
+> I'm not planning on doing that to an architecture that I'm not set up
+> to test ...
+Thanks a lot for the detail explanation.
 
-I am wondering if mapping it as shadow stack (instead of having temporary
-writeable mapping) and using `wruss` was an option to put the token or
-you wanted to avoid it?
+> 
+>>> +void flush_dcache_page(struct page *page)
+>>> +{
+>>> +       return flush_dcache_folio(page_folio(page));
+>>> +}
+>> I am wondering whether we should add flush_dcache_folio_range()
+>> because it's possible just part of folio needs be flush. Thanks.
+> 
+> We could.  I think it's up to the maintainers of architectures that
+> need their caches flushing to let us know what would be good for them.
+> Since I primarily work on x86, I have no personal desire to do this ;-)
+> 
+> One of the things that I've always found a little weird about
+> flush_dcache_page() (and now flush_dcache_folio()) is that it's used both
+> for flushing userspace writes (eg in filemap_read()) and for flushing
+> kernel writes (eg in __iomap_write_end()).  Probably it was designed for
+> an architecture that flushes by physical address rather than by virtual.
+I noticed the copy_page_from_iter_atomic() is using kmap_atomic(page) as
+access address. So even if it's VIVT, if there is no highmem, it should
+work with flush_dcace_page/folio(). arm is VIVT and seems no complain
+about this. It may be very rare that it has no highmem?
 
-And yes on riscv, architecture itself doesn't define token or its format.
-Since it's RISC, software can define the token format and thus can use
-either `sspush` or `ssamoswap` to put a token on `shadow stack` virtual
-memory.
+> 
+> Anyway, if we do have a flush_dcache_folio_kernel(), I'd like it
+> to take byte offsets.  That would work well for __iomap_write_end();
+> it could be:
+> 
+> 	flush_dcache_folio_kernel(folio, offset_in_folio(folio, pos), len);
+> 
+> But I'm not volunteering to do this work.
+I'd like to give it a try. :).
 
->
->So instead this series creates a map_shadow_stack syscall that maps a
->shadow stack and writes the token from the kernel side. Then mprotect()
->is prevented from making shadow stack's conventionally writable.
->
->another difference is enabling shadow stack based on elf header bits
->instead of the arch_prctl()s. See the history and reasoning here
->(section "Switch Enabling Interface"):
->
->https://lore.kernel.org/lkml/20220130211838.8382-1-rick.p.edgecombe@intel.com/
->
->Not sure if those two issues would be problems on riscv or not.
 
-Apart from mapping and window issue that you mentioned, I couldn't
-understand on why elf header bit is an issue only in this case for x86
-shadow stack and not an issue for let's say aarch64. I can see that
-aarch64 pretty much uses elf header bit for BTI. Eventually indirect
-branch tracking also needs to be enabled which is analogous to BTI.
-
-BTW eventually riscv binaries plan to use `.riscv.attributes` section
-in riscv elf binary instead of `.gnu.note.property`. So I am hoping that
-part will go into arch specific code of elf parsing for riscv and will be
-contained.
-
->
->For sharing the prctl() interface. The other thing is that x86 also has
->this "wrss" instruction that can be enabled with shadow stack. The
->current arch_prctl() interface supports both. I'm thinking it's
->probably a pretty arch-specific thing.
-
-yes ability to perform writes on shadow stack absolutely are prevented on
-x86. So enabling that should be a arch specific prctl.
-
->
->ABI-wise, are you planning to automatically allocate shadow stacks for
->new tasks? If the ABI is completely different it might be best to not
->share user interfaces. But also, I wonder why is it different.
-
-Yes as of now planning both:
-- allocate shadow stack for new task based on elf header
-- task can create them using `prctls` (from glibc)
-
-And yes `fork` will get the all cfi properties (shdow stack and branch tracking)
-from parent.
->
->>
->>
->> Rest inline.
->>
->>
->> On Thu, Jan 19, 2023 at 01:22:57PM -0800, Rick Edgecombe wrote:
->> > From: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> >
->> > The x86 Control-flow Enforcement Technology (CET) feature includes
->> > a new
->> > type of memory called shadow stack. This shadow stack memory has
->> > some
->> > unusual properties, which requires some core mm changes to function
->> > properly.
->> >
->> > With the introduction of shadow stack memory there are two ways a
->> > pte can
->> > be writable: regular writable memory and shadow stack memory.
->> >
->> > In past patches, maybe_mkwrite() has been updated to apply
->> > pte_mkwrite()
->> > or pte_mkwrite_shstk() depending on the VMA flag. This covers most
->> > cases
->> > where a PTE is made writable. However, there are places where
->> > pte_mkwrite()
->> > is called directly and the logic should now also create a shadow
->> > stack PTE
->> > in the case of a shadow stack VMA.
->> >
->> > - do_anonymous_page() and migrate_vma_insert_page() check VM_WRITE
->> >  directly and call pte_mkwrite(). Teach it about
->> > pte_mkwrite_shstk()
->> >
->> > - When userfaultfd is creating a PTE after userspace handles the
->> > fault
->> >  it calls pte_mkwrite() directly. Teach it about
->> > pte_mkwrite_shstk()
->> >
->> > To make the code cleaner, introduce is_shstk_write() which
->> > simplifies
->> > checking for VM_WRITE | VM_SHADOW_STACK together.
->> >
->> > In other cases where pte_mkwrite() is called directly, the VMA will
->> > not
->> > be VM_SHADOW_STACK, and so shadow stack memory should not be
->> > created.
->> > - In the case of pte_savedwrite(), shadow stack VMA's are excluded.
->> > - In the case of the "dirty_accountable" optimization in
->> > mprotect(),
->> >   shadow stack VMA's won't be VM_SHARED, so it is not necessary.
->> >
->> > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
->> > Tested-by: John Allen <john.allen@amd.com>
->> > Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
->> > Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
->> > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
->> > Cc: Kees Cook <keescook@chromium.org>
->> > ---
->> >
->> > v5:
->> > - Fix typo in commit log
->> >
->> > v3:
->> > - Restore do_anonymous_page() that accidetally moved commits
->> > (Kirill)
->> > - Open code maybe_mkwrite() cases from v2, so the behavior doesn't
->> > change
->> >   to mark that non-writable PTEs dirty. (Nadav)
->> >
->> > v2:
->> > - Updated commit log with comment's from Dave Hansen
->> > - Dave also suggested (I understood) to maybe tweak
->> > vm_get_page_prot()
->> >   to avoid having to call maybe_mkwrite(). After playing around
->> > with
->> >   this I opted to *not* do this. Shadow stack memory memory is
->> >   effectively writable, so having the default permissions be
->> > writable
->> >   ended up mapping the zero page as writable and other surprises.
->> > So
->> >   creating shadow stack memory needs to be done with manual logic
->> >   like pte_mkwrite().
->> > - Drop change in change_pte_range() because it couldn't actually
->> > trigger
->> >   for shadow stack VMAs.
->> > - Clarify reasoning for skipped cases of pte_mkwrite().
->> >
->> > Yu-cheng v25:
->> > - Apply same changes to do_huge_pmd_numa_page() as to
->> > do_numa_page().
->> >
->> > arch/x86/include/asm/pgtable.h |  3 +++
->> > arch/x86/mm/pgtable.c          |  6 ++++++
->> > include/linux/pgtable.h        |  7 +++++++
->> > mm/memory.c                    |  5 ++++-
->> > mm/migrate_device.c            |  4 +++-
->> > mm/userfaultfd.c               | 10 +++++++---
->> > 6 files changed, 30 insertions(+), 5 deletions(-)
->> >
->> > diff --git a/arch/x86/include/asm/pgtable.h
->> > b/arch/x86/include/asm/pgtable.h
->> > index 45b1a8f058fe..87d3068734ec 100644
->> > --- a/arch/x86/include/asm/pgtable.h
->> > +++ b/arch/x86/include/asm/pgtable.h
->> > @@ -951,6 +951,9 @@ static inline pgd_t pti_set_user_pgtbl(pgd_t
->> > *pgdp, pgd_t pgd)
->> > }
->> > #endif  /* CONFIG_PAGE_TABLE_ISOLATION */
->> >
->> > +#define is_shstk_write is_shstk_write
->> > +extern bool is_shstk_write(unsigned long vm_flags);
->> > +
->> > #endif	/* __ASSEMBLY__ */
->> >
->> >
->> > diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
->> > index e4f499eb0f29..d103945ba502 100644
->> > --- a/arch/x86/mm/pgtable.c
->> > +++ b/arch/x86/mm/pgtable.c
->> > @@ -880,3 +880,9 @@ int pmd_free_pte_page(pmd_t *pmd, unsigned long
->> > addr)
->> >
->> > #endif /* CONFIG_X86_64 */
->> > #endif	/* CONFIG_HAVE_ARCH_HUGE_VMAP */
->> > +
->> > +bool is_shstk_write(unsigned long vm_flags)
->> > +{
->> > +	return (vm_flags & (VM_SHADOW_STACK | VM_WRITE)) ==
->> > +	       (VM_SHADOW_STACK | VM_WRITE);
->> > +}
->>
->> Can we call this function something along the lines
->> `is_shadow_stack_vma`?
->> Reason being, we're actually checking for vma property here.
->>
->> Also can we move this into common code? Common code can then further
->> call
->> `arch_is_shadow_stack_vma`. Respective arch can implement their own
->> shadow
->> stack encoding. I see that x86 is using one of the arch bit. Current
->> riscv
->> implementation uses presence of only `VM_WRITE` as shadow stack
->> encoding.
->
->In the next version I've successfully moved all of the shadow stack
->bits out of core MM. It doesn't need is_shstk_write() after the
->pte_mkwrite() change, and changing this other one:
->
->https://lore.kernel.org/lkml/20230119212317.8324-26-rick.p.edgecombe@intel.com/
->For that I added an arch_check_zapped_pte() which an arch can use to
->add warnings.
->
->So I wonder if riscv won't need anything either?
->
->>
->> Please see patch #11 and #12 in the series I posted (URL at the top
->> of
->> this e-mail).
->>
->>
->> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
->> > index 14a820a45a37..49ce1f055242 100644
->> > --- a/include/linux/pgtable.h
->> > +++ b/include/linux/pgtable.h
->> > @@ -1578,6 +1578,13 @@ static inline bool
->> > arch_has_pfn_modify_check(void)
->> > }
->> > #endif /* !_HAVE_ARCH_PFN_MODIFY_ALLOWED */
->> >
->> > +#ifndef is_shstk_write
->> > +static inline bool is_shstk_write(unsigned long vm_flags)
->> > +{
->> > +	return false;
->> > +}
->> > +#endif
->> > +
->> > /*
->> >  * Architecture PAGE_KERNEL_* fallbacks
->> >  *
->> > diff --git a/mm/memory.c b/mm/memory.c
->> > index aad226daf41b..5e5107232a26 100644
->> > --- a/mm/memory.c
->> > +++ b/mm/memory.c
->> > @@ -4088,7 +4088,10 @@ static vm_fault_t do_anonymous_page(struct
->> > vm_fault *vmf)
->> >
->> > 	entry = mk_pte(page, vma->vm_page_prot);
->> > 	entry = pte_sw_mkyoung(entry);
->> > -	if (vma->vm_flags & VM_WRITE)
->> > +
->> > +	if (is_shstk_write(vma->vm_flags))
->> > +		entry = pte_mkwrite_shstk(pte_mkdirty(entry));
->> > +	else if (vma->vm_flags & VM_WRITE)
->> > 		entry = pte_mkwrite(pte_mkdirty(entry));
->> >
->> > 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf-
->> > >address,
->> > diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->> > index 721b2365dbca..53d417683e01 100644
->> > --- a/mm/migrate_device.c
->> > +++ b/mm/migrate_device.c
->> > @@ -645,7 +645,9 @@ static void migrate_vma_insert_page(struct
->> > migrate_vma *migrate,
->> > 			goto abort;
->> > 		}
->> > 		entry = mk_pte(page, vma->vm_page_prot);
->> > -		if (vma->vm_flags & VM_WRITE)
->> > +		if (is_shstk_write(vma->vm_flags))
->> > +			entry = pte_mkwrite_shstk(pte_mkdirty(entry));
->> > +		else if (vma->vm_flags & VM_WRITE)
->> > 			entry = pte_mkwrite(pte_mkdirty(entry));
->> > 	}
->> >
->> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
->> > index 0499907b6f1a..832f0250ca61 100644
->> > --- a/mm/userfaultfd.c
->> > +++ b/mm/userfaultfd.c
->> > @@ -63,6 +63,7 @@ int mfill_atomic_install_pte(struct mm_struct
->> > *dst_mm, pmd_t *dst_pmd,
->> > 	int ret;
->> > 	pte_t _dst_pte, *dst_pte;
->> > 	bool writable = dst_vma->vm_flags & VM_WRITE;
->> > +	bool shstk = dst_vma->vm_flags & VM_SHADOW_STACK;
->> > 	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
->> > 	bool page_in_cache = page_mapping(page);
->> > 	spinlock_t *ptl;
->> > @@ -84,9 +85,12 @@ int mfill_atomic_install_pte(struct mm_struct
->> > *dst_mm, pmd_t *dst_pmd,
->> > 		writable = false;
->> > 	}
->> >
->> > -	if (writable)
->> > -		_dst_pte = pte_mkwrite(_dst_pte);
->> > -	else
->> > +	if (writable) {
->> > +		if (shstk)
->> > +			_dst_pte = pte_mkwrite_shstk(_dst_pte);
->> > +		else
->> > +			_dst_pte = pte_mkwrite(_dst_pte);
->> > +	} else
->> > 		/*
->> > 		 * We need this to make sure write bit removed; as
->> > mk_pte()
->> > 		 * could return a pte with write bit set.
->> > --
->> > 2.17.1
->> >
+Regards
+Yin, Fengwei
