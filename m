@@ -2,56 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E894695DFB
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 10:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE954696088
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 11:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjBNJEy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Feb 2023 04:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S229795AbjBNKRn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Feb 2023 05:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjBNJEd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 04:04:33 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201C223DA8;
-        Tue, 14 Feb 2023 01:03:48 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id a3so4334896ejb.3;
-        Tue, 14 Feb 2023 01:03:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UXpQWLOfRB0cj7wBmiF/GaVLxY5OIU6uD4JxDn3mdPQ=;
-        b=bv6SyqSt2ZAR9e4z+Xqs/vAo36xnkeAf5IfoRtXPIhtqTZNrf1R1bw6YlwFQ4JSye3
-         wkh98QGI5Xu3SIzHQIfkB4AnPiy6OlbU4KuVDMA+aWVg42IPfRcTD12M9yF58AvUM5qD
-         Gey7yBHL+ITL2YYBsP2yoP9Qok1qlICoWm3f9EVoWM5qoJ2EkndbmUfroZC/Ku6n4MJo
-         EB/g02yNHTBkIY3xOiwkesMoWO61zd+f4ne35flzVZkev1c/4GBUHlu1wzb1sTBsSWl4
-         mRZCbUhXxgsP/XKHcJOIGwhNGVVldTc5u9VgCvfwoLa8NaRavqegYvC1xp5tKCWFxq3N
-         0DIw==
-X-Gm-Message-State: AO0yUKWXeIbA5+99iVEE3Avnhwr4eK1n+kroqquBaCgdXlA5BOKEyY9f
-        bTxVA8qrLOcBoP6G80ctppWLUz+0EuY5sehU
-X-Google-Smtp-Source: AK7set8M+bIJlsf0efmGm4s8T7WdSb8sFmIkwjlMS3n/JJaAbw6h3ovvYG8xrWBRs+SSpaWAE+sd+Q==
-X-Received: by 2002:a17:906:ad8e:b0:877:ef84:c7de with SMTP id la14-20020a170906ad8e00b00877ef84c7demr2012147ejb.61.1676365425263;
-        Tue, 14 Feb 2023 01:03:45 -0800 (PST)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id n8-20020a1709065e0800b0087fa83790d8sm8073233eju.13.2023.02.14.01.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Feb 2023 01:03:45 -0800 (PST)
-Received: by mail-ed1-f51.google.com with SMTP id c1so12534200edt.4;
-        Tue, 14 Feb 2023 01:03:45 -0800 (PST)
-X-Received: by 2002:a05:651c:4ca:b0:28e:54f:b187 with SMTP id
- e10-20020a05651c04ca00b0028e054fb187mr203743lji.5.1676365112291; Tue, 14 Feb
- 2023 00:58:32 -0800 (PST)
+        with ESMTP id S229609AbjBNKRm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 05:17:42 -0500
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FDF31E5D0;
+        Tue, 14 Feb 2023 02:17:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1676365191; bh=i0XIzR1Y5NYJLkaxQFngDX1j91Olf/QjeHaXDd3DD/c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AhilTiebsZniB4h/3TCzhrMAQ0m1fI8D/hKY2T+4ArseJ+m3Ze12b64a7BZ4L0BhC
+         Cbii2w7OdAf8LC8paKh0dS4uxyxEGslyDxyzPafGMqQIX/0BH2c+SoMYy+3DyDz8fs
+         BbZrEFqt55X8c4cMx2sqOxvYHoYE3tKQfpxZHtYc=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id B491D600F8;
+        Tue, 14 Feb 2023 16:59:47 +0800 (CST)
+Message-ID: <f3db61bb-5c89-2724-769f-9d606f587f92@xen0n.name>
+Date:   Tue, 14 Feb 2023 16:59:46 +0800
 MIME-Version: 1.0
-References: <20230214074925.228106-1-alexghiti@rivosinc.com> <Y+tIl07KOOrGZ2Et@osiris>
-In-Reply-To: <Y+tIl07KOOrGZ2Et@osiris>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Feb 2023 09:58:17 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVG4=UmKDa17dys9e3iGM75u4+13nQVyjMHK--aD6WKfw@mail.gmail.com>
-Message-ID: <CAMuHMdVG4=UmKDa17dys9e3iGM75u4+13nQVyjMHK--aD6WKfw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [PATCH v3 10/24] sparc: Remove COMMAND_LINE_SIZE from uapi
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Richard Henderson <richard.henderson@linaro.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
@@ -61,10 +43,10 @@ Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -72,6 +54,7 @@ Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -94,61 +77,61 @@ Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>
+References: <20230214074925.228106-1-alexghiti@rivosinc.com>
+ <20230214074925.228106-11-alexghiti@rivosinc.com>
+ <017f0b40-8021-8b3b-24d2-c70661b6b292@omp.ru>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <017f0b40-8021-8b3b-24d2-c70661b6b292@omp.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Heiko,
+On 2023/2/14 16:50, Sergey Shtylyov wrote:
+> On 2/14/23 10:49 AM, Alexandre Ghiti wrote:
+> 
+>> From: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> As far as I can tell this is not used by userspace and thus should not
+>> be part of the user-visible API.
+>>
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> ---
+>>   arch/sparc/include/asm/setup.h      | 6 +++++-
+>>   arch/sparc/include/uapi/asm/setup.h | 7 -------
+>>   2 files changed, 5 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/sparc/include/asm/setup.h b/arch/sparc/include/asm/setup.h
+>> index 72205684e51e..d1384ed92547 100644
+>> --- a/arch/sparc/include/asm/setup.h
+>> +++ b/arch/sparc/include/asm/setup.h
+>> @@ -7,7 +7,11 @@
+>>   
+>>   #include <linux/interrupt.h>
+>>   
+>> -#include <uapi/asm/setup.h>
+>> +#if defined(__sparc__) && defined(__arch64__)
+> 
+>     Mhm, I don't think these two can be #define'd simulaneously...
 
-On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux.ibm.com> wrote:
-> On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
-> > This all came up in the context of increasing COMMAND_LINE_SIZE in the
-> > RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-> > maximum length of /proc/cmdline and userspace could staticly rely on
-> > that to be correct.
-> >
-> > Usually I wouldn't mess around with changing this sort of thing, but
-> > PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-> > to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-> > increasing, but they're from before the UAPI split so I'm not quite sure
-> > what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-> > asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-> > boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-> > and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> > asm-generic/setup.h.").
-> >
-> > It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-> > part of the uapi to begin with, and userspace should be able to handle
-> > /proc/cmdline of whatever length it turns out to be.  I don't see any
-> > references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-> > search, but that's not really enough to consider it unused on my end.
-> >
-> > The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
-> > shouldn't be part of uapi, so this now touches all the ports.  I've
-> > tried to split this all out and leave it bisectable, but I haven't
-> > tested it all that aggressively.
->
-> Just to confirm this assumption a bit more: that's actually the same
-> conclusion that we ended up with when commit 3da0243f906a ("s390: make
-> command line configurable") went upstream.
+I believe it's just a SPARC-ism [1] [2] that may look strange and be 
+easily confused for __aarch64__ (notice the extra 'a')...
 
-Commit 622021cd6c560ce7 ("s390: make command line configurable"),
-I assume?
-
-Gr{oetje,eeting}s,
-
-                        Geert
+[1]: 
+https://github.com/gcc-mirror/gcc/blob/basepoints/gcc-12/gcc/config/sparc/sparc.h#L301
+[2]: 
+https://github.com/llvm/llvm-project/blob/llvmorg-17-init/clang/lib/Basic/Targets/Sparc.cpp#L241
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+WANG "xen0n" Xuerui
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
