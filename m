@@ -2,156 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66FA6967D6
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 16:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB775696C63
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 19:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbjBNPT3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Feb 2023 10:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38902 "EHLO
+        id S233312AbjBNSHv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Feb 2023 13:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjBNPT3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 10:19:29 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEB826CEC
-        for <linux-arch@vger.kernel.org>; Tue, 14 Feb 2023 07:19:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676387968; x=1707923968;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XKqfAQMI3x5kNfjXMY/btUxpzoRLHFs7pum4DrUXbyY=;
-  b=YKT7jnFMhElabCpq4tLs08sZX/dQ2xo3LKkbRb0uOqrNUguOohtwxeL/
-   xdt+3xXfOygy8MCeMJTvacyMpMCwEojOUh1/BjijuPGJhBUls2pyW/x93
-   BzRBC37cyMpYXwehYmutCY+TvB5xCBWz4cZ70dqKCccTVjuOKU78U9ypP
-   4pfk2LCdVozBJxbxRY2b9DfPfsfRHn4aJVKNrQxLfRWi+NDlIyP+u3chx
-   +xhKJMoLwk/UnIUqqEwmF1ZAZXlzXFZBJ7J/f3O3fSEuA2swmBZBJAURd
-   VG4zMqLi8TQsGiXvEuG+TM/LI8ok8Lnyvi/LvAb06DLoh2cu3wQ+3gOZ1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="332494107"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="332494107"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2023 07:19:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10621"; a="778374220"
-X-IronPort-AV: E=Sophos;i="5.97,296,1669104000"; 
-   d="scan'208";a="778374220"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Feb 2023 07:19:14 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pRx5N-0008af-0B;
-        Tue, 14 Feb 2023 15:19:13 +0000
-Date:   Tue, 14 Feb 2023 23:18:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- a13408c205260716e925a734ef399899d69182ba
-Message-ID: <63eba654.aRIbFyeSBVXu13g1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233286AbjBNSHu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 13:07:50 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800DC2FCFA
+        for <linux-arch@vger.kernel.org>; Tue, 14 Feb 2023 10:07:30 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-52ec696664fso149306687b3.17
+        for <linux-arch@vger.kernel.org>; Tue, 14 Feb 2023 10:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wX05IVkHj3QBCA1mIon81shk3MJEJQ/4hz193u4oHCc=;
+        b=Dt+QCXEL/j2OVlYZG+8qwoo88m8d8gSqPp1DJoQ+IGJpPuoZGZ7SYYDdYB8+yJ3eDl
+         jeP6IZHDHerpXSU/A3lwaLOqhRFKoFsgEci4P2KArqSNVmooBA2C7+kM9EYWXXJTyLae
+         Xg1dZ+EziJ8yGcFploTgi9FMPrPslHsMYXReHQVo9CBAaIj0P6zc7wVMCM6iWLSQwSfv
+         rIpX9OdI9ocknhGSMghX+77PCRzZY4cpQYWxW05GrdrgU5xkG+PmVmF6RvgPoyIDvsRh
+         kG8ONtGxcufDvuzLkSW/HaWjLqmZO3eUfiS87W6x7qkvY49eByyFST1j571DlgUotIiS
+         /nZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wX05IVkHj3QBCA1mIon81shk3MJEJQ/4hz193u4oHCc=;
+        b=g9+7rcC9GVyjVOAoTmxNV/2R0WBl6BjRoghq9U9BIs5FfDVFH8TFzpWxdjGyekz1DK
+         4oJzJIHcEuBsQQ7q3IbUxq+6LhRdG8gZni7J3Z+oWcgOTBOVrRtlR+/grgWaoYlcnviO
+         wALO7Ng8eHUREz96BHT1y/hmUcc9xMDRxJ86gV3Z+j+80+dsAohXWteC1qeiB2qafDvr
+         2DLCSRkpR8aVUFIPRJhw7MyFvGvUWOUitI1tvZZAoJ8oHSlzk5VXITZjqwRVhCGrD8ju
+         k41nH59vb1509D/tLJIErWDetO36vpg/tc9KQQB3cz5xPj1gC11Up2BfMXOfhlMVEBvp
+         e7QQ==
+X-Gm-Message-State: AO0yUKXOYQF5yny4Mk2KTlXIE0ThH2PnRlnp4Tk4RNloQ+VvgrmooKZf
+        4BE3Hh3xj/9s3/YclszhGo1YGMvXRrU=
+X-Google-Smtp-Source: AK7set+EI7pNBbm5Gukj5zYQbLZVnpf4V0D4zMPyPaLWe/aBZALXoW94wxCwwjPKImE/Ubi3qEmpRmHjMf0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:dd0a:0:b0:52a:9490:4f66 with SMTP id
+ e10-20020a81dd0a000000b0052a94904f66mr350779ywn.56.1676398049608; Tue, 14 Feb
+ 2023 10:07:29 -0800 (PST)
+Date:   Tue, 14 Feb 2023 10:07:28 -0800
+In-Reply-To: <20230213235343.GC4175971@ls.amr.corp.intel.com>
+Mime-Version: 1.0
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com> <20230209072529.GB4175971@ls.amr.corp.intel.com>
+ <Y+WRUriIoan/XChx@google.com> <20230213235343.GC4175971@ls.amr.corp.intel.com>
+Message-ID: <Y+vN4L3N6f3fFlgA@google.com>
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: a13408c205260716e925a734ef399899d69182ba  char/agp: introduce asm-generic/agp.h
+On Mon, Feb 13, 2023, Isaku Yamahata wrote:
+> On Fri, Feb 10, 2023 at 12:35:30AM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Wed, Feb 08, 2023, Isaku Yamahata wrote:
+> > > On Fri, Dec 02, 2022 at 02:13:40PM +0800,
+> > > Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > > 
+> > > > +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> > > > +					   struct kvm_memory_attributes *attrs)
+> > > > +{
+> > > > +	gfn_t start, end;
+> > > > +	unsigned long i;
+> > > > +	void *entry;
+> > > > +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> > > > +
+> > > > +	/* flags is currently not used. */
+> > > > +	if (attrs->flags)
+> > > > +		return -EINVAL;
+> > > > +	if (attrs->attributes & ~supported_attrs)
+> > > > +		return -EINVAL;
+> > > > +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> > > > +		return -EINVAL;
+> > > > +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> > > > +		return -EINVAL;
+> > > > +
+> > > > +	start = attrs->address >> PAGE_SHIFT;
+> > > > +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> > > > +
+> > > > +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> > > > +
+> > > > +	mutex_lock(&kvm->lock);
+> > > > +	for (i = start; i < end; i++)
+> > > > +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> > > > +				    GFP_KERNEL_ACCOUNT)))
+> > > > +			break;
+> > > > +	mutex_unlock(&kvm->lock);
+> > > > +
+> > > > +	attrs->address = i << PAGE_SHIFT;
+> > > > +	attrs->size = (end - i) << PAGE_SHIFT;
+> > > > +
+> > > > +	return 0;
+> > > > +}
+> > > > +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> > > > +
+> > > 
+> > > If memslot isn't private, it should return error if private attribute is set.
+> > 
+> > Why?  I'd rather keep the two things separate.  If we enforce this sort of thing
+> > at KVM_SET_MEMORY_ATTRIBUTES, then we also have to enforce it at
+> > KVM_SET_USER_MEMORY_REGION.
+> 
+> For device assignment via shared GPA, non-private memory slot needs to be
+> allowed.
 
-elapsed time: 1083m
-
-configs tested: 73
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                               allnoconfig
-arc                              allyesconfig
-arc                                 defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm                           corgi_defconfig
-arm                                 defconfig
-arm                        oxnas_v6_defconfig
-arm                            qcom_defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                          randconfig-c001
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                 randconfig-c004-20230212
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-sh                               allmodconfig
-sh                             espt_defconfig
-sh                     sh7710voipgw_defconfig
-sparc                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-arm                  colibri_pxa300_defconfig
-arm                           spitz_defconfig
-i386                 randconfig-a001-20230213
-i386                 randconfig-a002-20230213
-i386                 randconfig-a003-20230213
-i386                 randconfig-a004-20230213
-i386                 randconfig-a005-20230213
-i386                 randconfig-a006-20230213
-mips                           mtx1_defconfig
-powerpc                     akebono_defconfig
-powerpc                     ksi8560_defconfig
-x86_64                           allyesconfig
-x86_64               randconfig-a001-20230213
-x86_64               randconfig-a002-20230213
-x86_64               randconfig-a003-20230213
-x86_64               randconfig-a004-20230213
-x86_64               randconfig-a005-20230213
-x86_64               randconfig-a006-20230213
-x86_64                        randconfig-k001
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+That doesn't say anything about why setting attributes needs to poke into the
+memslot.  The page fault path already kicks out to userspace if there's a
+discrepancy between the attributes and the memslot, why is that insufficient?
