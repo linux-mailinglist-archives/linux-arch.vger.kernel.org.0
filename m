@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72461695F8F
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 10:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B74BB695F99
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Feb 2023 10:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjBNJp2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Feb 2023 04:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54780 "EHLO
+        id S232171AbjBNJqG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Feb 2023 04:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjBNJp1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 04:45:27 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117BA10267;
-        Tue, 14 Feb 2023 01:45:24 -0800 (PST)
+        with ESMTP id S232545AbjBNJpz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Feb 2023 04:45:55 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443A723328;
+        Tue, 14 Feb 2023 01:45:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1676367828; bh=bQoG1+qM5Y71xKKNzZAaZKaP54c9/SNL37IJdDcFtMo=;
+        t=1676367870; bh=ERFp+UKx/iNbj6Y6kJUSMmT/xdPleSppwgENqVxf/VM=;
         h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=hihBALAdzJyyuZETKMDTwWBNqyHXT30m1W4+AhNia2aTQ0LGuEudgVjxHBOHc2O/1
-         UjuZRvBAir2lTKIaMXuW6l0Jw91yPNhbGpel182Mf/orVb0S6hbISDciYTF54Wy0Zw
-         wKM8GKPXEv0aT0K01aIbMc2I219r5PhnIgwwHqOrDmQNcp8nxxBkNf4BBrtdpN/N7Z
-         59rGu8CnZqH+X/PEx5ZjDiRwnWNihqf8TyIZs4ozwDLocxhsUitLIrPfomEmdZ19Fu
-         jPeCxrDIg0fC138zUyXarDYIQDPoI7A4vyTzEHVqChiz/r0Bk56Uo8AseQSt7S8yL1
-         B3Eipy4Ux8oWA==
+        b=Za6u4dReX/HTRyphBPafGiLsxCJ+KKmFXzBp1N3wK/BdK0FrKi1Znyq7KSHyqIyd/
+         kgfg1K7p6XNdoVzNndtK42V0pk1FbtgyitZSCQWfWujqXuBYwphv2YLUpu/j4syKSL
+         9RAZMIGf3dW2anwxyU5UMo1EVcbifIrk3T62A2sIhCPMYdsaAzhIY5t2nwHlg40Zt7
+         HtazUlk5mlSfLPOR/KKhdC1Dq5qLUvlQDvzaYGy2cDXLDVpukIxIWr8q4OHqWuB3tT
+         6cx52IlEbcB5iPGAwJpjsjaFv5wT4dz6E7YwfLhROeby+gu9v1sPXxrdEBwhQ+jslK
+         7mKSZA/LRAQdg==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.155.167]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mo6qp-1olPAN2FEh-00pbOn; Tue, 14
- Feb 2023 10:43:48 +0100
-Message-ID: <dd3f45ec-9578-420b-f1b8-5657fe4d3243@gmx.de>
-Date:   Tue, 14 Feb 2023 10:43:32 +0100
+Received: from [192.168.20.60] ([92.116.155.167]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mr9Bu-1ooy3k2CyE-00oHk0; Tue, 14
+ Feb 2023 10:44:30 +0100
+Message-ID: <32c2584a-8777-26b9-ae29-80df9dfa7833@gmx.de>
+Date:   Tue, 14 Feb 2023 10:44:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v3 08/24] parisc: Remove COMMAND_LINE_SIZE from uapi
+Subject: Re: [PATCH v3 19/24] parisc: Remove empty <uapi/asm/setup.h>
 Content-Language: en-US
 To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
         Alexandre Ghiti <alexghiti@rivosinc.com>,
@@ -81,31 +81,31 @@ To:     =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
         linux-arch@vger.kernel.org
 Cc:     Palmer Dabbelt <palmer@rivosinc.com>
 References: <20230214074925.228106-1-alexghiti@rivosinc.com>
- <20230214074925.228106-9-alexghiti@rivosinc.com>
- <f327ff48-cd50-4caa-1bea-f9906994e998@linaro.org>
+ <20230214074925.228106-20-alexghiti@rivosinc.com>
+ <6f9c7a6b-4f6b-dead-2d9b-14b405f18397@linaro.org>
 From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <f327ff48-cd50-4caa-1bea-f9906994e998@linaro.org>
+In-Reply-To: <6f9c7a6b-4f6b-dead-2d9b-14b405f18397@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:9Li8qIWZi+mvM820GG2clzFMNjBrqaWKtjHwHuJ3DICcz81Fm4U
- 2RmO3PI+i3+wTXVGnrbheX/pLAWTgvn/yTBVQw0fLroxnm5K1IoQdsZqRZENGN3ATbehT4q
- LYJbtkfgHvqXKQS4gXQhgNMMzAzKtJiyxwXWla7+a/b/HmF4fSRj8M4VAnavnpLBfZrNVAE
- KFiLIhh+7vq2/cG5n7DgQ==
-UI-OutboundReport: notjunk:1;M01:P0:IMRPuKVDPJE=;F//SqmPJNB5y4+cZpiTQkcdojtN
- LJal9PAv1QZdKB5D9CqOG4kDONZWyrNPKkN5b2mOfjhxupMdRrK75ginsDTsmoS6GxkXsawSe
- Ixb8/z/qWuT1XvHLvnObIyu9+CDwBFSLnvfS3oUCwO+McbEoaOIu3JOluz1CKIea/++hZAXXr
- 5C/TDqeO2eW5Jj3zZR6/N6R7AbpRepoOcQKEjh1MMZly5ruuMMBXB13XwuZnCOPKbuWQD+P7U
- u5tjrVNOGUNXNhr0d3ai5DZSZ1P8Nv1752gGfUFNLirvADBmHUDdcgrG+Gm61GdfigPYbqqb/
- 1PkUPKxRFBpZ1Cx4NSNOEnyeyZwSSXJKUgjkOkH22I1GXJ97YYM62oMo0vh5OYLWx0+hsk/8n
- HQhgMxbA10mk0n61Oj1blXGd+3vMYjFQuoEHgmidB0ldTYGVNyoXaO/SaCdFfxjJsn59BdGTL
- BZkhFpt3GJCd/AnG1wSvWUqOtXgAztE05KU+svPlIGXtnFeCOF2OU2N0ju8TFPdKrWa9brAZn
- sGjDk9UmZcbxwEt172brI7gtjbfvg29z7hHouTLGUEF9EqngZWh7EYp7gkVmQI/hozbgBsgoz
- eeLkzBY9tFrPxWifcvWfEMtpsICAIZXlFRN9dU+6mSkBeP0uz+co3OyUT2lGEettUPgMaBMWt
- hOeJ6wwHJ9pcHumJqm8AgV1qyLG95d6wlp0B94e3M4XQozlyXIMUOfx6LF870WFYysGHABOcC
- oOK9ypcj7sSBG/v7UPkRI/eACrxmZcVd3CnqbnnNKSbQk5qLhC+LBre/2RfSAQNenKWKT/xM6
- x2YRcaR4vPXIiPvzgV67iGQiTV1DY0D+hOgX7A2y/rweS243V0Bg1zHwIp9mRRsPiVM9+jgWo
- 5yCcZvbHQGpOV5nnMvCxSj7isEJhJpd8xyktSgL+sUclmpfCvHbx8GkA7VJGN8RClkxcIL70E
- lxVNlTmcU+VpaSQbimIQeIbIpXk=
+X-Provags-ID: V03:K1:6i9MLH1uyN4UjvbKa9qFgGzxyogAl9vzFG+CnYpeJmhfg1aCjEo
+ fgPVjxDy4iWSOp0fQduaCkCLS49XMnxFV3Cebj1wXgxrmR7Mk+7ALLo+bEOtaCQ7LtdzxdY
+ sCyP+X8u7wZGNhDO2HoSYGEmEl3/72yEi0kFbG3gxrNGYWo22p1QITkOnVbWjeRtGq3QAhO
+ 81HzmD9N+fT9Dd0qQJFHw==
+UI-OutboundReport: notjunk:1;M01:P0:/sXWrTs+GHs=;mOBmE8xN1RO7T/4g1DSsoRwJcwg
+ 9UZR9rEyA6LxshPy2Pz3oePTMgiIj4+AJ5S/kMjQzK+6c4x3H5hr27yLtzKfDT5PmjzMBJ+Of
+ 3zfIEJQlV54kh1Ta/E2FfIdf+80zKMSI52rgvhwMkMmCjI3cvExJnD5nlbysiqstKtT+wFzv2
+ Z260NQ1Y6j9s9OOAoLni9UrAct6Rzpr/LUuWUMgXKKuXfF7kU52/jKJgDV1uBFAO6e5+U9ium
+ VU7bbslf79RWKAUFAz+cqTgWfg2fuGDImyE9L+3DmCjQMG4Je3gjyU6QTxHzjARx67lC7Pl/p
+ bedRk356yNR+IaCi4+oVkCwy2AY9dZJ/arcneDsIauL5AATahoUIulBRN7BP8SDlfJek6s/Jl
+ DdbP1C/VuGwfRMSoxHG8JGSkxMV5vKemlpgKIjZBdDtJFI77SS55OS105zLh5z4ZUEQAw5+iD
+ gVWGMHv/5YX1gJCtlIOQqpAHCfa/KUliQGzWaNumDuHSbS1WfcGa+yV5bTGOpiX0VvFOGSRQB
+ U8RMxnOZrwFy8bBzFJhabD91opgpUnM1Drax9wp+qCBQVYPpwhhcgl6on9cy9pH9R+aFk3mO1
+ nccDm7RKozeMO0SgmShqcIoAo/MMXzhU+k4jUwmlvTNKux7KYJMrIZ3ji9OPa5aewlpMHOTna
+ SozD4wCdOT6JL2dhqNqhu36n4+0Z9IWZgWgaFVcSdY0J6JSMrCZl1PwuiDm7p3APkGs2WM/5J
+ r7eIJOkBYD6bzCYdI23czK+lvIluKLxeFS4fLTCAb1WjYXxNnV13KwV1j8Yk4Fb+FVUt28ZT4
+ 0LWoGNHs7csGcm5b93meJrBGDiIruUcZg9DNckv8YppQk7vzTqpr/lTUzz0R/0FKX3/+tbfQa
+ Xa6y4Nti/opEugZMRO7Vpm0AV2+BhhBkSR95zi7OPWYYGnYk/coI5tYGHEiard+vIs75wAtJz
+ L71IAbhumB1qAsU4XQRHfRtAGXM=
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -120,20 +120,14 @@ On 2/14/23 10:08, Philippe Mathieu-Daud=C3=A9 wrote:
 > On 14/2/23 08:49, Alexandre Ghiti wrote:
 >> From: Palmer Dabbelt <palmer@rivosinc.com>
 >>
->> As far as I can tell this is not used by userspace and thus should not
->> be part of the user-visible API.
->>
 >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 >> ---
->> =C2=A0 arch/parisc/include/asm/setup.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | =
-7 +++++++
->> =C2=A0 arch/parisc/include/uapi/asm/setup.h | 2 --
->> =C2=A0 2 files changed, 7 insertions(+), 2 deletions(-)
->> =C2=A0 create mode 100644 arch/parisc/include/asm/setup.h
+>> =C2=A0 arch/parisc/include/uapi/asm/setup.h | 5 -----
+>> =C2=A0 1 file changed, 5 deletions(-)
+>> =C2=A0 delete mode 100644 arch/parisc/include/uapi/asm/setup.h
 >
 > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
 
 Acked-by: Helge Deller <deller@gmx.de>
-
 
 
