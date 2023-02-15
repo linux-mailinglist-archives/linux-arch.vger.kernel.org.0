@@ -2,40 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3F0698546
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Feb 2023 21:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95EF698544
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Feb 2023 21:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjBOUJh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Feb 2023 15:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S229505AbjBOUJf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Feb 2023 15:09:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjBOUJe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Feb 2023 15:09:34 -0500
+        with ESMTP id S229631AbjBOUJd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Feb 2023 15:09:33 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1742724C98;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17270244AC;
         Wed, 15 Feb 2023 12:09:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=rO9DpJQQWF0SyEucyLTZyrAzjeodDlsM2btoEWRp7WU=; b=vGfYtOSzjDXVBKdUpt5Ko4JWG+
-        y6gE2yNUNg+f8lkuv0YSdhHYTNlAJnLynIAQgbO4ZtYEe7FRBuG98ubV+a2KILxUrhZMnVzStr5h6
-        XDspcBrrLtpGCXXBblT/MxYtEY0VCKwp2H2y3xh41PQ9UDK6mL1BroF9kFQUUO7dDPcoV5rSlwswq
-        r3jGbzlqdnuGMpvdSkiaY95Y72lmnlUuMc6Cn25QSWhoPdtvnZGWkXMkdOxbDsQV8VP07aEmMmped
-        93oHezjWeBlePl6VBPBpp3UaLLCsyqmNVJuCpSKaf14YbwZXpG0Xf3hZptWg3mo0kAEaLXJzJkR0h
-        uB5H0EYA==;
+        bh=WK7WV98DmqNoEol8pKIPxUYYZ9kR5i0EUBhp91OqSig=; b=i50W5RLoKp2u9dkh3sbtVQHYCW
+        y4vps7i5Zjb9gRIuKQkcVxkB2ZDAJibcvJZTosxgjyG3hUAKblPrrtsj9vVrGxMJYZ72zUaQQqJ4g
+        82FddwyDg7YViumA8bA3rznbcKchmb7M6R9D0M85AF7H1oJI2+FO5QeKbxtDFjDrDyQsxU11jnDtt
+        64SCigt+cFtVdBTeqE2xGyWT82tDeJXTKPIHugptpPVoCpe5spakHXlKVf8K/jEPOWv8M7bRUBA4k
+        ZEyndIZz9oMorsB32W9pFxCKwVpaXe+b/dXV6+hykrTOgSI0z5P26m7L9DqJm4/IO/S1d/sKWIXoH
+        /zTE9Kgw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pSO5m-007lAL-OL; Wed, 15 Feb 2023 20:09:26 +0000
+        id 1pSO5m-007lAU-Rl; Wed, 15 Feb 2023 20:09:26 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-mm@kvack.org, linux-ia64@vger.kernel.org,
+To:     linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-arch@vger.kernel.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 14/17] ia64: Implement the new page table range API
-Date:   Wed, 15 Feb 2023 20:09:17 +0000
-Message-Id: <20230215200920.1849567-1-willy@infradead.org>
+Subject: [PATCH 15/17] m68k: Implement the new page table range API
+Date:   Wed, 15 Feb 2023 20:09:18 +0000
+Message-Id: <20230215200920.1849567-2-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230215000446.1655635-1-willy@infradead.org>
+In-Reply-To: <20230215200920.1849567-1-willy@infradead.org>
 References: <20230215000446.1655635-1-willy@infradead.org>
+ <20230215200920.1849567-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -47,95 +49,64 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
-PG_arch_1 (aka PG_dcache_clean) becomes a per-folio flag instead of
-per-page, which makes arch_dma_mark_clean() and mark_clean() a little
-more exciting.
+Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
+flush_dcache_folio().  I'm not entirely certain that the 040/060 case
+in __flush_pages_to_ram() is correct.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- arch/ia64/hp/common/sba_iommu.c    | 26 +++++++++++++++-----------
- arch/ia64/include/asm/cacheflush.h | 14 ++++++++++----
- arch/ia64/include/asm/pgtable.h    | 14 +++++++++++++-
- arch/ia64/mm/init.c                | 29 +++++++++++++++++++----------
- 4 files changed, 57 insertions(+), 26 deletions(-)
+ arch/m68k/include/asm/cacheflush_mm.h | 12 ++++++++----
+ arch/m68k/include/asm/pgtable_mm.h    | 21 ++++++++++++++++++---
+ arch/m68k/mm/motorola.c               |  2 +-
+ 3 files changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/arch/ia64/hp/common/sba_iommu.c b/arch/ia64/hp/common/sba_iommu.c
-index 8ad6946521d8..48d475f10003 100644
---- a/arch/ia64/hp/common/sba_iommu.c
-+++ b/arch/ia64/hp/common/sba_iommu.c
-@@ -798,22 +798,26 @@ sba_io_pdir_entry(u64 *pdir_ptr, unsigned long vba)
- #endif
+diff --git a/arch/m68k/include/asm/cacheflush_mm.h b/arch/m68k/include/asm/cacheflush_mm.h
+index 1ac55e7b47f0..2244c35178d0 100644
+--- a/arch/m68k/include/asm/cacheflush_mm.h
++++ b/arch/m68k/include/asm/cacheflush_mm.h
+@@ -220,13 +220,13 @@ static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vm
  
- #ifdef ENABLE_MARK_CLEAN
--/**
-+/*
-  * Since DMA is i-cache coherent, any (complete) pages that were written via
-  * DMA can be marked as "clean" so that lazy_mmu_prot_update() doesn't have to
-  * flush them when they get mapped into an executable vm-area.
-  */
--static void
--mark_clean (void *addr, size_t size)
-+static void mark_clean(void *addr, size_t size)
+ /* Push the page at kernel virtual address and clear the icache */
+ /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
+-static inline void __flush_page_to_ram(void *vaddr)
++static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
  {
--	unsigned long pg_addr, end;
--
--	pg_addr = PAGE_ALIGN((unsigned long) addr);
--	end = (unsigned long) addr + size;
--	while (pg_addr + PAGE_SIZE <= end) {
--		struct page *page = virt_to_page((void *)pg_addr);
--		set_bit(PG_arch_1, &page->flags);
--		pg_addr += PAGE_SIZE;
-+	struct folio *folio = virt_to_folio(addr);
-+	ssize_t left = size;
-+	size_t offset = offset_in_folio(folio, addr);
-+
-+	if (offset) {
-+		left -= folio_size(folio) - offset;
-+		folio = folio_next(folio);
-+	}
-+
-+	while (left >= folio_size(folio)) {
-+		set_bit(PG_arch_1, &folio->flags);
-+		left -= folio_size(folio);
-+		folio = folio_next(folio);
- 	}
+ 	if (CPU_IS_COLDFIRE) {
+ 		unsigned long addr, start, end;
+ 		addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
+ 		start = addr & ICACHE_SET_MASK;
+-		end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
++		end = (addr + nr * PAGE_SIZE - 1) & ICACHE_SET_MASK;
+ 		if (start > end) {
+ 			flush_cf_bcache(0, end);
+ 			end = ICACHE_MAX_ADDR;
+@@ -249,10 +249,14 @@ static inline void __flush_page_to_ram(void *vaddr)
  }
- #endif
-diff --git a/arch/ia64/include/asm/cacheflush.h b/arch/ia64/include/asm/cacheflush.h
-index 708c0fa5d975..eac493fa9e0d 100644
---- a/arch/ia64/include/asm/cacheflush.h
-+++ b/arch/ia64/include/asm/cacheflush.h
-@@ -13,10 +13,16 @@
- #include <asm/page.h>
  
  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
--#define flush_dcache_page(page)			\
--do {						\
--	clear_bit(PG_arch_1, &(page)->flags);	\
--} while (0)
-+static inline void flush_dcache_folio(struct folio *folio)
-+{
-+	clear_bit(PG_arch_1, &folio->flags);
-+}
-+#define flush_dcache_folio flush_dcache_folio
-+
-+static inline void flush_dcache_page(struct page *page)
-+{
-+	flush_dcache_folio(page_folio(page));
-+}
+-#define flush_dcache_page(page)		__flush_page_to_ram(page_address(page))
++#define flush_dcache_page(page)	__flush_pages_to_ram(page_address(page), 1)
++#define flush_dcache_folio(folio)		\
++	__flush_pages_to_ram(folio_address(folio), folio_nr_pages(folio))
+ #define flush_dcache_mmap_lock(mapping)		do { } while (0)
+ #define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+-#define flush_icache_page(vma, page)	__flush_page_to_ram(page_address(page))
++#define flush_icache_pages(vma, page, nr)	\
++	__flush_pages_to_ram(page_address(page), nr)
++#define flush_icache_page(vma, page) flush_icache_pages(vma, page, 1)
  
- extern void flush_icache_range(unsigned long start, unsigned long end);
- #define flush_icache_range flush_icache_range
-diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
-index 21c97e31a28a..0c2be4ea664b 100644
---- a/arch/ia64/include/asm/pgtable.h
-+++ b/arch/ia64/include/asm/pgtable.h
-@@ -303,7 +303,18 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
- 	*ptep = pteval;
- }
- 
+ extern void flush_icache_user_page(struct vm_area_struct *vma, struct page *page,
+ 				    unsigned long addr, int len);
+diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
+index b93c41fe2067..400206c17c97 100644
+--- a/arch/m68k/include/asm/pgtable_mm.h
++++ b/arch/m68k/include/asm/pgtable_mm.h
+@@ -31,8 +31,20 @@
+ 	do{							\
+ 		*(pteptr) = (pteval);				\
+ 	} while(0)
 -#define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
+ 
 +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
 +		pte_t *ptep, pte_t pte, unsigned int nr)
 +{
@@ -147,72 +118,41 @@ index 21c97e31a28a..0c2be4ea664b 100644
 +		pte_val(pte) += PAGE_SIZE;
 +	}
 +}
-+#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, add, ptep, pte, 1)
- 
- /*
-  * Make page protection values cacheable, uncacheable, or write-
-@@ -396,6 +407,7 @@ pte_same (pte_t a, pte_t b)
- 	return pte_val(a) == pte_val(b);
- }
- 
-+#define update_mmu_cache_range(vma, address, ptep, nr) do { } while (0)
- #define update_mmu_cache(vma, address, ptep) do { } while (0)
- 
- extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
-diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-index 7f5353e28516..12aef25944aa 100644
---- a/arch/ia64/mm/init.c
-+++ b/arch/ia64/mm/init.c
-@@ -50,30 +50,39 @@ void
- __ia64_sync_icache_dcache (pte_t pte)
- {
- 	unsigned long addr;
--	struct page *page;
-+	struct folio *folio;
- 
--	page = pte_page(pte);
--	addr = (unsigned long) page_address(page);
-+	folio = page_folio(pte_page(pte));
-+	addr = (unsigned long)folio_address(folio);
- 
--	if (test_bit(PG_arch_1, &page->flags))
-+	if (test_bit(PG_arch_1, &folio->flags))
- 		return;				/* i-cache is already coherent with d-cache */
- 
--	flush_icache_range(addr, addr + page_size(page));
--	set_bit(PG_arch_1, &page->flags);	/* mark page as clean */
-+	flush_icache_range(addr, addr + folio_size(folio));
-+	set_bit(PG_arch_1, &folio->flags);	/* mark page as clean */
- }
- 
- /*
-- * Since DMA is i-cache coherent, any (complete) pages that were written via
-+ * Since DMA is i-cache coherent, any (complete) folios that were written via
-  * DMA can be marked as "clean" so that lazy_mmu_prot_update() doesn't have to
-  * flush them when they get mapped into an executable vm-area.
-  */
- void arch_dma_mark_clean(phys_addr_t paddr, size_t size)
- {
--	unsigned long pfn = PHYS_PFN(paddr);
-+	struct folio *folio = page_folio(phys_to_page(paddr));
-+	ssize_t left = size;
-+	size_t offset = offset_in_folio(folio, paddr);
- 
--	do {
-+	if (offset) {
-+		left -= folio_size(folio) - offset;
-+		folio = folio_next(folio);
-+	}
 +
-+	while (left >= (ssize_t)folio_size(folio)) {
- 		set_bit(PG_arch_1, &pfn_to_page(pfn)->flags);
--	} while (++pfn <= PHYS_PFN(paddr + size - 1));
-+		left -= folio_size(folio);
-+		folio = folio_next(folio);
-+	}
++#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
+ 
+ /* PMD_SHIFT determines the size of the area a second-level page table can map */
+ #if CONFIG_PGTABLE_LEVELS == 3
+@@ -138,11 +150,14 @@ extern void kernel_set_cachemode(void *addr, unsigned long size, int cmode);
+  * tables contain all the necessary information.  The Sun3 does, but
+  * they are updated on demand.
+  */
+-static inline void update_mmu_cache(struct vm_area_struct *vma,
+-				    unsigned long address, pte_t *ptep)
++static inline void update_mmu_cache_range(struct vm_area_struct *vma,
++		unsigned long address, pte_t *ptep, unsigned int nr)
+ {
  }
  
- inline void
++#define update_mmu_cache(vma, addr, ptep) \
++	update_mmu_cache_range(vma, addr, ptep, 1)
++
+ #endif /* !__ASSEMBLY__ */
+ 
+ /* MMU-specific headers */
+diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
+index 2a375637e007..7784d0fcdf6e 100644
+--- a/arch/m68k/mm/motorola.c
++++ b/arch/m68k/mm/motorola.c
+@@ -81,7 +81,7 @@ static inline void cache_page(void *vaddr)
+ 
+ void mmu_page_ctor(void *page)
+ {
+-	__flush_page_to_ram(page);
++	__flush_pages_to_ram(page, 1);
+ 	flush_tlb_kernel_page(page);
+ 	nocache_page(page);
+ }
 -- 
 2.39.1
 
