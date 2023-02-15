@@ -2,57 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D3F697FDF
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Feb 2023 16:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F65169800C
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Feb 2023 17:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjBOPwo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Feb 2023 10:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S229890AbjBOQAE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Feb 2023 11:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjBOPwn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Feb 2023 10:52:43 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F74E37B6D
-        for <linux-arch@vger.kernel.org>; Wed, 15 Feb 2023 07:52:41 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id n26so3166093ual.7
-        for <linux-arch@vger.kernel.org>; Wed, 15 Feb 2023 07:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QHEckESBmtanHoXNoCvk3gYsaCb3mmNnsjrBL0CHXHo=;
-        b=uFE2tcYXYvgsB0sRGahu4i6/jR0i1fWRumRbB6+LOj6E4ZTQeoJQKY+uir8dwyQAPf
-         0tFSiyKW/Fnvdx7G9YqrFDzJ5rpovQR98oqoI9mDNOHpQoG6qkudJ1v0/vpv9DTZyvHu
-         2FZ5pBhMrW+AwLQ0UHgvstufkVnkWswfeG6NT/qsFhsMW+RqE4zXszDTo9BrlFUTp25+
-         B7HTBOKfeZtBkRm441r7YFaJc0rXVKo3xjPJcpiXV6JNc9DsILiJLKJHBFrcxHls+m2Y
-         ZP+U/dMUytGegPXffNuxumCFe0jCae7w9HsecNZLfJZoIChNvNanAquRYPfNiHANjZr/
-         6auA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QHEckESBmtanHoXNoCvk3gYsaCb3mmNnsjrBL0CHXHo=;
-        b=IS96oREZwRJkIpliUHWE5LjNX4MiiEhum8wHjjdbt6VE5VKi1X0F7nbB1SinPzs9In
-         DBIHnT/xCvSGIH5ovxZL0x/meZwsCKRUHX1dShAEPqyTsX+RwS8/HA40Dl5JuFk1R00C
-         lHjVH6+mabv6DhA8k431PU/H7ZLQW+v082TJ3FIZpPRc27lEdlb2TaqiTmUlx0qFdzNP
-         w/1BGkGnWg4PujRrU+qo+nxVOli/97nfCKolosgiTDmbpGgoIPg5KtyM0lNGm1FcCFRb
-         qXzWDgX+dPf7ouFuYo0Mb/V2tF3DZBw1o5H17BdGjH8IxcLogrgXDCpxHINe3qehJ8Jw
-         MFjA==
-X-Gm-Message-State: AO0yUKW7yA087YWOR1uHI5AnaoP/RD/Od35dCCrBfSr223RwRxR1viNW
-        nTIhcxPg3jXJo03jiZKQ4R7ZS4dJe0ixatSbaBpl+A==
-X-Google-Smtp-Source: AK7set+vnGRn5VJvyu0QxjkbABjPQvrEocRoV7wexNKYGw75YkBBJD0qPPmjAkmta0f6ajtUkrNDoiyJSIKAB5KOn4A=
-X-Received: by 2002:ab0:654d:0:b0:68a:7054:58a6 with SMTP id
- x13-20020ab0654d000000b0068a705458a6mr367631uap.22.1676476360679; Wed, 15 Feb
- 2023 07:52:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 15 Feb 2023 16:52:29 +0100
-Message-ID: <CAMRc=MdsCZKh12QcqdWk+Zht5UDpA_G1+rx6+_3dzwjDYe6L+Q@mail.gmail.com>
-Subject: Re: [PATCH v4 00/18] gpiolib cleanups
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229940AbjBOQAD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Feb 2023 11:00:03 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594FA3A86E;
+        Wed, 15 Feb 2023 07:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676476790; x=1708012790;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rFzlPJjklUrRYXlztiXxbWF4vZTLJe24dy5KZSKBFTU=;
+  b=a2QbX3wd6aUC0XQJ2qfsU00tzCVvCSv9F3xqk4Z83a8t6xUnXvoVdf4i
+   NBxzdPdWCGWw2G0+a2FRuc48aS6+5zJjMUsAUU4x7VaRvR1kt0dzcZeE4
+   jHo1zYFgV07HaGAbi4BPBks+qZO9fn82e64Aa8yl7lKBMwgcsv+zV9IxW
+   OiuiwgzZBscUVew/h/YbZuv2dJSiEXos8iy5r5aT66TiKYAAe654m+i11
+   7/wVHEjSAu+ZufvrTjIJdAAaHjX6IYCkPCwqy3u3/8UDxpT3SMTZUn4cD
+   5pGtrG081KVPyAUVsBJtZcBo/nzky/lMvsHKB6yLBlnvLINeQJm0/k0wE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="331461160"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="331461160"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2023 07:59:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10622"; a="700017813"
+X-IronPort-AV: E=Sophos;i="5.97,300,1669104000"; 
+   d="scan'208";a="700017813"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 15 Feb 2023 07:59:31 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pSKBp-007KF7-0b;
+        Wed, 15 Feb 2023 17:59:25 +0200
+Date:   Wed, 15 Feb 2023 17:59:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
@@ -113,35 +105,53 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Kalle Valo <kvalo@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v4 00/18] gpiolib cleanups
+Message-ID: <Y+0BXGLf2n+dAi4v@smile.fi.intel.com>
+References: <20230208173343.37582-1-andriy.shevchenko@linux.intel.com>
+ <CAMRc=MdsCZKh12QcqdWk+Zht5UDpA_G1+rx6+_3dzwjDYe6L+Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MdsCZKh12QcqdWk+Zht5UDpA_G1+rx6+_3dzwjDYe6L+Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 8, 2023 at 6:34 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> These are some older patches Arnd did last year, rebased to
-> linux-next-20230208. On top there are Andy's patches regarding
-> similar topic. The series starts with Linus Walleij's patches.
->
-> The main goal is to remove some of the legacy bits of the gpiolib
-> interfaces, where the corner cases are easily avoided or replaced
-> with gpio descriptor based interfaces.
->
-> The idea is to get an immutable branch and route the whole series
-> via GPIO tree.
->
+On Wed, Feb 15, 2023 at 04:52:29PM +0100, Bartosz Golaszewski wrote:
+> On Wed, Feb 8, 2023 at 6:34 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > These are some older patches Arnd did last year, rebased to
+> > linux-next-20230208. On top there are Andy's patches regarding
+> > similar topic. The series starts with Linus Walleij's patches.
+> >
+> > The main goal is to remove some of the legacy bits of the gpiolib
+> > interfaces, where the corner cases are easily avoided or replaced
+> > with gpio descriptor based interfaces.
+> >
+> > The idea is to get an immutable branch and route the whole series
+> > via GPIO tree.
+> 
+> Andy,
+> 
+> looks like this series has all the acks it needs but I decided to not
+> send it in the upcoming merge window, I'd prefer it gets some time in
+> next so I'll let it sit until the next release cycle.
 
-Andy,
+Ah, I forgot to mention that this is for the next cycle (v6.4).
+Hence it's fine. (Moreover it's based on Linux Next, so it will
+fail compilation in any certain tree except that one.)
 
-looks like this series has all the acks it needs but I decided to not
-send it in the upcoming merge window, I'd prefer it gets some time in
-next so I'll let it sit until the next release cycle.
+I will create an immutable branch after v6.3-rc1 is out.
 
-Bart
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
