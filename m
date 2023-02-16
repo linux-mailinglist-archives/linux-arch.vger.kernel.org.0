@@ -2,135 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC01699473
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 13:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024BF699497
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 13:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjBPMfr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Feb 2023 07:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S229731AbjBPMmq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Feb 2023 07:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjBPMfq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 07:35:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4846D3A85C
-        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 04:35:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1676550903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5gn5xqT9XfmH8tKovLjSHCJ1d21jDbu3NIptvTi8Sio=;
-        b=ZxhAR0g128yuxW81NjzzRu99CvsepOx6p5IniM7Il6vyiOYkiN1rGjD2fN/kTNyjZK0Ayp
-        AuOR9ViBny2q07OQaWE0ZTXPSRy3Il4+V0h70pZNmWSVXv+HTXLucWVVfI7LNN4Xgp8dZJ
-        Y0foul7qeRdjxOxCuPhi8M85zHyt2Fg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-401-2MLUCqQ5OUieeNkqxfzfVw-1; Thu, 16 Feb 2023 07:35:00 -0500
-X-MC-Unique: 2MLUCqQ5OUieeNkqxfzfVw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7027B381494E;
-        Thu, 16 Feb 2023 12:34:59 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-99.pek2.redhat.com [10.72.12.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C55D1492C3C;
-        Thu, 16 Feb 2023 12:34:53 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        christophe.leroy@csgroup.eu, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@ACULAB.COM, shorne@gmail.com,
-        arnd@arndb.de, Baoquan He <bhe@redhat.com>,
-        linux-arch@vger.kernel.org
-Subject: [PATCH v4 04/16] mm: ioremap: allow ARCH to have its own ioremap method definition
-Date:   Thu, 16 Feb 2023 20:34:07 +0800
-Message-Id: <20230216123419.461016-5-bhe@redhat.com>
-In-Reply-To: <20230216123419.461016-1-bhe@redhat.com>
+        with ESMTP id S229725AbjBPMmo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 07:42:44 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B883311C1;
+        Thu, 16 Feb 2023 04:42:11 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8C9095C00BE;
+        Thu, 16 Feb 2023 07:42:08 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Feb 2023 07:42:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1676551328; x=1676637728; bh=4av0BcgO57
+        q6PB48qfskBTT3lQalafxs0+Jkv9f+ETk=; b=fwdeBLH8dTHrGbPNhRjaH73LJ4
+        g4YLate0C/+/NPvvKigVGKh3hgOLc7x0K8dOTpvE4yhsoD9MnXdvPq3PwbNjY1dN
+        0Fx76WBWTnnH8D/hnn3ienM9XCsQfQ0vWKorriw0dvI8UCZ9X/nsQvht+pvdaO0m
+        9Uz+/yHQCUVIKYg8xCUR87WSl3bOlgi/FBwWwpEmb1HXEV9oU+Nux1chsF6/m7bG
+        QaLKoAFXxPxFHMiG73SV0xUi4b2edzxivQoB+J79vY6fSLZ77YGXRw0bR/29pOyI
+        GnuBLVdTFm+U1ExWgLUOX7s4+jZCdzNyYiVUUAR33fEcUnh61qmIbxjhgmrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676551328; x=1676637728; bh=4av0BcgO57q6PB48qfskBTT3lQal
+        afxs0+Jkv9f+ETk=; b=dEoQmo4s0anb3S3N8HPNR0ZZy/aYvoMKXJiWyaxfG4rX
+        GcF3gnjZrskxj9C1nFPjFXzF5ozgikRom25Co8ySi30qJMDV7ZS85l6IbscIcemL
+        1rR2PHTRRkJ/G5MgjlpPv5zEcvofztTP27zMPfzjCfsMOnJDPSn1oZVEz8obbhfS
+        RaQGXt1ds3uFrJP3HansNLJYIEpapHmSmyxt0ewbaRkeQqIY49j4ogeX/gZ5CFGF
+        mH7DaiocUH0ch7JWFch8/AXvOrN/6RwfNLtbHlI522U8taigMBdhgpIVnacDWeL1
+        IviOVslVI6VdnsDXky35glkRGZFULHo/T2lMlfwzyQ==
+X-ME-Sender: <xms:nyTuY_zFlIxyhMAhKUQoT2wFloAl6rRRnytiAYpYO14eZ-3TfPMYow>
+    <xme:nyTuY3TQftmcV8XyxkbV9st_qJnVfohlFUyF-gNmqepd4TxKVCjeOfXAQgPQwx65R
+    MtdmlMq1LBBbev2xh0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeijedggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:oCTuY5VRl0RYfyjZhprRZvs1jPfVlprFM2S4EeC4A2HDIA9HyileIw>
+    <xmx:oCTuY5gG-dcLiyJLDfsl7Ex8tJV4tIP6oFuDVLB94mX_SyzjEdqVQA>
+    <xmx:oCTuYxAjWNG7VDdsTI5wRgqV4IajPABfCd8vVY0H922XnBIYTpK1-w>
+    <xmx:oCTuY1v9POI7Q7M-iwZBb-OyZNqVVEbqn90QpipewMEiJOgBIZ3-Qw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DD2F1B60086; Thu, 16 Feb 2023 07:42:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-156-g081acc5ed5-fm-20230206.001-g081acc5e
+Mime-Version: 1.0
+Message-Id: <f4f4c47a-7bd1-484a-8190-203357efa0ab@app.fastmail.com>
+In-Reply-To: <20230216123419.461016-5-bhe@redhat.com>
 References: <20230216123419.461016-1-bhe@redhat.com>
-MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230216123419.461016-5-bhe@redhat.com>
+Date:   Thu, 16 Feb 2023 13:41:49 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Baoquan He" <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "David Laight" <David.Laight@ACULAB.COM>,
+        "Stafford Horne" <shorne@gmail.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v4 04/16] mm: ioremap: allow ARCH to have its own ioremap method
+ definition
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Architectures can be converted to GENERIC_IOREMAP, to take standard
-ioremap_xxx() and iounmap() way. But some ARCH-es could have specific
-handling for ioremap_prot(), ioremap() and iounmap(), than standard
-methods.
+On Thu, Feb 16, 2023, at 13:34, Baoquan He wrote:
+> Architectures can be converted to GENERIC_IOREMAP, to take standard
+> ioremap_xxx() and iounmap() way. But some ARCH-es could have specific
+> handling for ioremap_prot(), ioremap() and iounmap(), than standard
+> methods.
+>
+> In oder to convert these ARCH-es to take GENERIC_IOREMAP, allow these
+> architecutres to have their own ioremap_prot(), ioremap() and iounmap()
+> definitions.
+>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Cc: linux-arch@vger.kernel.org
 
-In oder to convert these ARCH-es to take GENERIC_IOREMAP, allow these
-architecutres to have their own ioremap_prot(), ioremap() and iounmap()
-definitions.
-
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc: linux-arch@vger.kernel.org
----
- include/asm-generic/io.h | 3 +++
- mm/ioremap.c             | 4 ++++
- 2 files changed, 7 insertions(+)
-
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 5a9cf16ee0c2..29ee791164ac 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1081,11 +1081,14 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- void iounmap(volatile void __iomem *addr);
- void generic_iounmap(volatile void __iomem *addr);
- 
-+#ifndef ioremap
-+#define ioremap ioremap
- static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
- {
- 	/* _PAGE_IOREMAP needs to be supplied by the architecture */
- 	return ioremap_prot(addr, size, _PAGE_IOREMAP);
- }
-+#endif
- #endif /* !CONFIG_MMU || CONFIG_GENERIC_IOREMAP */
- 
- #ifndef ioremap_wc
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index db6234b9db59..9f34a8f90b58 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -46,12 +46,14 @@ void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
- 	return (void __iomem *)(vaddr + offset);
- }
- 
-+#ifndef ioremap_prot
- void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 			   unsigned long prot)
- {
- 	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
- }
- EXPORT_SYMBOL(ioremap_prot);
-+#endif
- 
- void generic_iounmap(volatile void __iomem *addr)
- {
-@@ -64,8 +66,10 @@ void generic_iounmap(volatile void __iomem *addr)
- 		vunmap(vaddr);
- }
- 
-+#ifndef iounmap
- void iounmap(volatile void __iomem *addr)
- {
- 	generic_iounmap(addr);
- }
- EXPORT_SYMBOL(iounmap);
-+#endif
--- 
-2.34.1
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
