@@ -2,81 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD57698964
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 01:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2405A698991
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 01:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjBPAlr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Feb 2023 19:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
+        id S229633AbjBPA7y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Feb 2023 19:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjBPAlm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Feb 2023 19:41:42 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEAE442FB
-        for <linux-arch@vger.kernel.org>; Wed, 15 Feb 2023 16:41:38 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id lx15-20020a17090b4b0f00b0023465ea4b65so190330pjb.3
-        for <linux-arch@vger.kernel.org>; Wed, 15 Feb 2023 16:41:38 -0800 (PST)
+        with ESMTP id S229504AbjBPA7v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Feb 2023 19:59:51 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99ED422000
+        for <linux-arch@vger.kernel.org>; Wed, 15 Feb 2023 16:59:50 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id mg23so388881pjb.0
+        for <linux-arch@vger.kernel.org>; Wed, 15 Feb 2023 16:59:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwSw3tYb5bXq9fGeFYVzZ4Uji8t9bzNp02Nu0wqGVr8=;
-        b=a6/aZwZMKgM9Qwg+eZcRGVXefYnK2gekXci5+402C9kYjaRKvCntG9/9UB64dqHJj4
-         utKOg+syvAUy0EV4DBkBSn9lMSketoQ/IKXaOt1Z/yjVFG1HfWHMlNFXX4aNcRKANnmH
-         eAPnL1XgdbYfIT8hZYQ8fObP+OEaQS1UkFxrNAsWasJb6HEbZXTNCOF/s33NcZRZ+OQk
-         BqNQ/CyZLmfjBzr7r1oNqVmOkPA5/8tV65euXIZEud6Iazk/zMeKJDYccPllrwFkPAEO
-         ukqjTuuwoXWvGYWEq+OSuWeuT3TY7Y2Z+KS2DU57mQtp8rwmzmbo5nddYHr9bU6Se8r/
-         J7Rw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mpHQhzeyzL5wD6cZybCHw0C081RE1xl3jXGOGKhpSHc=;
+        b=BQTA+Db/5dUfeEZto6bJS/MbnGO3ZD5hXIRPrej7JH5TEgw7bl03VPxjQEv0GiZ6FO
+         DHHRPc7s2ay4VWWigo8PljTia413U8vrJrVfuRBnttCQzcKPG3UH7PLxxrsiGjApRQIQ
+         22y0byBAuVO08L8BAfmMPewvYtQTEF8AqOJjmaspZF799pi/rQ1JjmKMjdNjJWpV5t1D
+         AameQMn+kU8kJdBAFO114OFMf1+HukRDrhcGnw4mbMOREhcM0l6uYcKm/M9zau/wjUFL
+         LW7EBP4u0wPXTAOsmqjIMFBbN40bpkwVQnj01jdTGxfx9SUPfzK1VAK+Apmf23B9RlvQ
+         PAmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwSw3tYb5bXq9fGeFYVzZ4Uji8t9bzNp02Nu0wqGVr8=;
-        b=ApGK3W8NK+oAyn+ljXPwPlyvDD10iklSLX9Z48KbrR6IaOU0UWE3fyPdd+kXQhc9hd
-         p1fyVgIPj8/IqQxA5Usf7JwHRLs/FNM7XGQQ3V1IQu4mWOpKS2SzqztYirSmCDH4Sq5D
-         KUMW3eDczwt/6Xs+zzBaL0q5YK9/Q7MnajN0waHubyWHOi000PeHP65oNC6Qch2INZNp
-         lHokbMLSPfW6jwvNCc2zNoqOnZMHq1T7LoV+Wg2MsHwi0tT08czY9Ud1r/xVeHM/sTzG
-         DYeBu1FXmU6Gb4ktnQ2ZheW7qyZxOqTBE/1ujChWVRMN54HwOhEpKehiGx5HJ/93P9PS
-         wedw==
-X-Gm-Message-State: AO0yUKW9WeJAH653nkZTIQ/sFa2+9h4fJKVHtDS2TcnFumM1VZy+z4fO
-        FGTsNbkv9fzrs0lzihuDX8qRr0EzbyS7mwe61A==
-X-Google-Smtp-Source: AK7set+Z1QsboPNl7B2dUCqzJnv4n3cQF2QXtmZ8FpQ59D9VPXhoYAFz0KibJoYgA3wgebXfV3oTbIw8kSpaDzjaOg==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:903:2594:b0:19a:b107:bd11 with
- SMTP id jb20-20020a170903259400b0019ab107bd11mr951631plb.29.1676508097502;
- Wed, 15 Feb 2023 16:41:37 -0800 (PST)
-Date:   Thu, 16 Feb 2023 00:41:17 +0000
-In-Reply-To: <cover.1676507663.git.ackerleytng@google.com>
-Mime-Version: 1.0
-References: <cover.1676507663.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.39.1.637.g21b0678d19-goog
-Message-ID: <06098450437ba5ed2011090d95f6ccb817728710.1676507663.git.ackerleytng@google.com>
-Subject: [RFC PATCH 2/2] selftests: restrictedmem: Check hugepage-ness of
- shmem file backing restrictedmem fd
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org
-Cc:     chao.p.peng@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
-        rppt@kernel.org, seanjc@google.com, shuah@kernel.org,
-        steven.price@arm.com, tabba@google.com, tglx@linutronix.de,
-        vannapurve@google.com, vbabka@suse.cz, vkuznets@redhat.com,
-        wanpengli@tencent.com, wei.w.wang@intel.com, x86@kernel.org,
-        yu.c.zhang@linux.intel.com, Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpHQhzeyzL5wD6cZybCHw0C081RE1xl3jXGOGKhpSHc=;
+        b=aCaRY6lf9HVXHZzUlpALmJXxs9VX1pbdaA6LYWmvwXyZmGn7x007O7AqtPMllqAgpB
+         R/VNXbXMNRJiXD5TQeYaXy8Lh7g/WytEjKWyS9ni6gjFlKCMYo6r3gpQJOTvUDeguz3k
+         Sw4gpyQFENOpwTkfpnjVsvlMdbMZj2dlS2BxQp8l3U+chP9oHNyMpNCwEanOVJ4mY/NI
+         7GW0ElzdoT4PM2ZRG06b6Dz73iFg/17Vp1X/9pZf8WqZ1Q1t4bxgwB/aXE2nJhvPYOEj
+         /DMVLL1y175GlQ08n2JajQq0WDz0vqOXZf1x7R35pbElGw+XZC/7WDpKWq9U6eLPOx6y
+         kkpA==
+X-Gm-Message-State: AO0yUKWvgwVPU/DRjzGDYVfGKsrFlraNoq2ZqbNDGBHvpBYzZvpvMHTu
+        ZPZNjW6SjFIz0rYDg5bWQAONIUP25bA=
+X-Google-Smtp-Source: AK7set9luO9T3j6foSqzsOaMOecYdtmK+BrOQ5wXWoT7IBdAJRugwBFrd2VAWQLwjg6ebn3RF6BNDg==
+X-Received: by 2002:a17:90b:380e:b0:22b:f622:56ae with SMTP id mq14-20020a17090b380e00b0022bf62256aemr4926750pjb.23.1676509190042;
+        Wed, 15 Feb 2023 16:59:50 -0800 (PST)
+Received: from ?IPV6:2001:df0:0:200c:cd94:f395:2261:621f? ([2001:df0:0:200c:cd94:f395:2261:621f])
+        by smtp.gmail.com with ESMTPSA id m6-20020a17090a858600b00233e8a83853sm207269pjn.34.2023.02.15.16.59.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Feb 2023 16:59:49 -0800 (PST)
+Message-ID: <84c923f7-c60b-068d-bb06-48aea1412f53@gmail.com>
+Date:   Thu, 16 Feb 2023 13:59:44 +1300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 15/17] m68k: Implement the new page table range API
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arch@vger.kernel.org
+References: <20230215000446.1655635-1-willy@infradead.org>
+ <20230215200920.1849567-1-willy@infradead.org>
+ <20230215200920.1849567-2-willy@infradead.org>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+In-Reply-To: <20230215200920.1849567-2-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,448 +77,125 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For memfd_restricted() calls without a userspace mount, the backing
-file should be the shmem mount in the kernel, and the size of backing
-pages should be as defined by system-wide shmem configuration.
+Matthew,
 
-If a userspace mount is provided, the size of backing pages should be
-as defined in the mount.
+On 16/02/23 09:09, Matthew Wilcox (Oracle) wrote:
+> Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
+> flush_dcache_folio().  I'm not entirely certain that the 040/060 case
+> in __flush_pages_to_ram() is correct.
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/Makefile              |   1 +
- .../selftests/restrictedmem/.gitignore        |   3 +
- .../testing/selftests/restrictedmem/Makefile  |  14 +
- .../testing/selftests/restrictedmem/common.c  |   9 +
- .../testing/selftests/restrictedmem/common.h  |   8 +
- .../restrictedmem_hugepage_test.c             | 344 ++++++++++++++++++
- 6 files changed, 379 insertions(+)
- create mode 100644 tools/testing/selftests/restrictedmem/.gitignore
- create mode 100644 tools/testing/selftests/restrictedmem/Makefile
- create mode 100644 tools/testing/selftests/restrictedmem/common.c
- create mode 100644 tools/testing/selftests/restrictedmem/common.h
- create mode 100644 tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
+I'm pretty sure you need to iterate to hit each of the pages - the code 
+as is will only push cache entries for the first page.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index f07aef7c592c..44078eeefb79 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -60,6 +60,7 @@ TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
- TARGETS += resctrl
-+TARGETS += restrictedmem
- TARGETS += rlimits
- TARGETS += rseq
- TARGETS += rtc
-diff --git a/tools/testing/selftests/restrictedmem/.gitignore b/tools/testing/selftests/restrictedmem/.gitignore
-new file mode 100644
-index 000000000000..2581bcc8ff29
---- /dev/null
-+++ b/tools/testing/selftests/restrictedmem/.gitignore
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+restrictedmem_hugepage_test
-diff --git a/tools/testing/selftests/restrictedmem/Makefile b/tools/testing/selftests/restrictedmem/Makefile
-new file mode 100644
-index 000000000000..da9665718c8a
---- /dev/null
-+++ b/tools/testing/selftests/restrictedmem/Makefile
-@@ -0,0 +1,14 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS = $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS += restrictedmem_hugepage_test
-+
-+include ../lib.mk
-+
-+EXTRA_CLEAN = $(OUTPUT)/common.o
-+
-+$(OUTPUT)/common.o: common.c
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
-+
-+$(TEST_GEN_PROGS): $(OUTPUT)/common.o
-diff --git a/tools/testing/selftests/restrictedmem/common.c b/tools/testing/selftests/restrictedmem/common.c
-new file mode 100644
-index 000000000000..79b2ac98cc89
---- /dev/null
-+++ b/tools/testing/selftests/restrictedmem/common.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <sys/syscall.h>
-+#include <unistd.h>
-+
-+int memfd_restricted(unsigned int flags, char *mount_path)
-+{
-+	return syscall(__NR_memfd_restricted, flags, mount_path);
-+}
-diff --git a/tools/testing/selftests/restrictedmem/common.h b/tools/testing/selftests/restrictedmem/common.h
-new file mode 100644
-index 000000000000..5d59edc4f23f
---- /dev/null
-+++ b/tools/testing/selftests/restrictedmem/common.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef SELFTESTS_RESTRICTEDMEM_COMMON_H
-+#define SELFTESTS_RESTRICTEDMEM_COMMON_H
-+
-+int memfd_restricted(unsigned int flags, char *mount_path);
-+
-+#endif  // SELFTESTS_RESTRICTEDMEM_COMMON_H
-diff --git a/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c b/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
-new file mode 100644
-index 000000000000..0d9cf2ced754
---- /dev/null
-+++ b/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
-@@ -0,0 +1,344 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include "linux/limits.h"
-+#include <errno.h>
-+#include <limits.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+
-+#include "linux/restrictedmem.h"
-+
-+#include "common.h"
-+#include "../kselftest_harness.h"
-+
-+static int get_hpage_pmd_size(void)
-+{
-+	FILE *fp;
-+	char buf[100];
-+	char *ret;
-+	int size;
-+
-+	fp = fopen("/sys/kernel/mm/transparent_hugepage/hpage_pmd_size", "r");
-+	if (!fp)
-+		return -1;
-+
-+	ret = fgets(buf, 100, fp);
-+	if (ret != buf) {
-+		size = -1;
-+		goto out;
-+	}
-+
-+	if (sscanf(buf, "%d\n", &size) != 1)
-+		size = -1;
-+
-+out:
-+	fclose(fp);
-+
-+	return size;
-+}
-+
-+static bool is_valid_shmem_thp_policy(char *policy)
-+{
-+	if (strcmp(policy, "always") == 0)
-+		return true;
-+	if (strcmp(policy, "within_size") == 0)
-+		return true;
-+	if (strcmp(policy, "advise") == 0)
-+		return true;
-+	if (strcmp(policy, "never") == 0)
-+		return true;
-+	if (strcmp(policy, "deny") == 0)
-+		return true;
-+	if (strcmp(policy, "force") == 0)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int get_shmem_thp_policy(char *policy)
-+{
-+	FILE *fp;
-+	char buf[100];
-+	char *left = NULL;
-+	char *right = NULL;
-+	int ret = -1;
-+
-+	fp = fopen("/sys/kernel/mm/transparent_hugepage/shmem_enabled", "r");
-+	if (!fp)
-+		return -1;
-+
-+	if (fgets(buf, 100, fp) != buf)
-+		goto out;
-+
-+	/*
-+	 * Expect shmem_enabled to be of format like "always within_size advise
-+	 * [never] deny force"
-+	 */
-+	left = memchr(buf, '[', 100);
-+	if (!left)
-+		goto out;
-+
-+	right = memchr(buf, ']', 100);
-+	if (!right)
-+		goto out;
-+
-+	memcpy(policy, left + 1, right - left - 1);
-+
-+	ret = !is_valid_shmem_thp_policy(policy);
-+
-+out:
-+	fclose(fp);
-+	return ret;
-+}
-+
-+static int set_shmem_thp_policy(char *policy)
-+{
-+	FILE *fp;
-+	size_t len = strlen(policy);
-+	int ret = -1;
-+
-+	if (!is_valid_shmem_thp_policy(policy))
-+		return ret;
-+
-+	fp = fopen("/sys/kernel/mm/transparent_hugepage/shmem_enabled", "w");
-+	if (!fp)
-+		return ret;
-+
-+	if (fwrite(policy, 1, len, fp) != len)
-+		goto out;
-+
-+	if (fwrite("\n", 1, 1, fp) != 1)
-+		goto out;
-+
-+	ret = 0;
-+
-+out:
-+	fclose(fp);
-+	return ret;
-+}
-+
-+FIXTURE(reset_shmem_enabled)
-+{
-+	/*
-+	 * Expect shmem_enabled to be one of always, within_size, advise, never,
-+	 * deny, force
-+	 */
-+	char shmem_enabled[12];
-+};
-+
-+FIXTURE_SETUP(reset_shmem_enabled)
-+{
-+	memset(self->shmem_enabled, 0, 12);
-+	ASSERT_EQ(0, get_shmem_thp_policy(self->shmem_enabled));
-+}
-+
-+FIXTURE_TEARDOWN(reset_shmem_enabled)
-+{
-+	ASSERT_EQ(0, set_shmem_thp_policy(self->shmem_enabled));
-+}
-+
-+TEST_F(reset_shmem_enabled, restrictedmem_fstat_shmem_enabled_never)
-+{
-+	int mfd = -1;
-+	struct stat stat;
-+	char *orig_shmem_enabled;
-+
-+	ASSERT_EQ(0, set_shmem_thp_policy("never"));
-+
-+	mfd = memfd_restricted(0, NULL);
-+	ASSERT_NE(-1, mfd);
-+
-+	ASSERT_EQ(0, fstat(mfd, &stat));
-+
-+	/*
-+	 * st_blksize is set based on the superblock's s_blocksize_bits. For
-+	 * shmem, this is set to PAGE_SHIFT
-+	 */
-+	ASSERT_EQ(stat.st_blksize, getpagesize());
-+
-+	close(mfd);
-+}
-+
-+TEST_F(reset_shmem_enabled, restrictedmem_fstat_shmem_enabled_always)
-+{
-+	int mfd = -1;
-+	struct stat stat;
-+	char *orig_shmem_enabled;
-+
-+	ASSERT_EQ(0, set_shmem_thp_policy("always"));
-+
-+	mfd = memfd_restricted(0, NULL);
-+	ASSERT_NE(-1, mfd);
-+
-+	ASSERT_EQ(0, fstat(mfd, &stat));
-+
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	close(mfd);
-+}
-+
-+TEST(restrictedmem_tmpfile_no_mount_path)
-+{
-+	int mfd = memfd_restricted(RMFD_TMPFILE, NULL);
-+
-+	ASSERT_EQ(-1, mfd);
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST(restrictedmem_tmpfile_nonexistent_mount_path)
-+{
-+	int mfd = memfd_restricted(RMFD_TMPFILE,
-+				   "/nonexistent/nonexistent/nonexistent");
-+
-+	ASSERT_EQ(-1, mfd);
-+	ASSERT_EQ(ENOENT, errno);
-+}
-+
-+TEST(restrictedmem_tmpfile_not_tmpfs_mount)
-+{
-+	int mfd = memfd_restricted(RMFD_TMPFILE, "/proc");
-+
-+	ASSERT_EQ(-1, mfd);
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+static bool directory_exists(const char *path)
-+{
-+	struct stat sb;
-+
-+	return stat(path, &sb) == 0 && S_ISDIR(sb.st_mode);
-+}
-+
-+FIXTURE(tmpfs_hugepage_mount_path)
-+{
-+	char *mount_path;
-+};
-+
-+FIXTURE_SETUP(tmpfs_hugepage_mount_path)
-+{
-+	int ret = -1;
-+
-+	/* /tmp is an FHS-mandated world-writable directory */
-+	self->mount_path = "/tmp/restrictedmem-selftest-mnt";
-+
-+	if (!directory_exists(self->mount_path)) {
-+		ret = mkdir(self->mount_path, 0777);
-+		ASSERT_EQ(0, ret);
-+	}
-+}
-+
-+FIXTURE_TEARDOWN(tmpfs_hugepage_mount_path)
-+{
-+	int ret = -1;
-+
-+	if (!directory_exists(self->mount_path))
-+		return;
-+
-+	ret = umount2(self->mount_path, MNT_FORCE);
-+	EXPECT_EQ(0, ret);
-+	if (ret == -1 && errno == EINVAL)
-+		fprintf(stderr, "%s was not mounted\n", self->mount_path);
-+
-+	ret = rmdir(self->mount_path);
-+	ASSERT_EQ(0, ret);
-+}
-+
-+TEST_F(tmpfs_hugepage_mount_path, restrictedmem_fstat_tmpfs_huge_always)
-+{
-+	int ret = -1;
-+	int mfd = -1;
-+	struct stat stat;
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(0, ret);
-+
-+	mfd = memfd_restricted(RMFD_TMPFILE, self->mount_path);
-+	ASSERT_NE(-1, mfd);
-+
-+	ret = fstat(mfd, &stat);
-+	ASSERT_EQ(0, ret);
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	close(mfd);
-+}
-+
-+TEST_F(tmpfs_hugepage_mount_path, restrictedmem_fstat_tmpfs_huge_never)
-+{
-+	int ret = -1;
-+	int mfd = -1;
-+	struct stat stat;
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=never");
-+	ASSERT_EQ(0, ret);
-+
-+	mfd = memfd_restricted(RMFD_TMPFILE, self->mount_path);
-+	ASSERT_NE(-1, mfd);
-+
-+	ret = fstat(mfd, &stat);
-+	ASSERT_EQ(0, ret);
-+	ASSERT_EQ(stat.st_blksize, getpagesize());
-+
-+	close(mfd);
-+}
-+
-+TEST_F(tmpfs_hugepage_mount_path, restrictedmem_umount_rmdir_while_file_open)
-+{
-+	int ret = -1;
-+	int mfd = -1;
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(0, ret);
-+
-+	mfd = memfd_restricted(RMFD_TMPFILE, self->mount_path);
-+	ASSERT_NE(-1, mfd);
-+
-+	ret = umount2(self->mount_path, MNT_FORCE);
-+	ASSERT_EQ(-1, ret);
-+	ASSERT_EQ(EBUSY, errno);
-+
-+	ret = rmdir(self->mount_path);
-+	ASSERT_EQ(-1, ret);
-+	ASSERT_EQ(EBUSY, errno);
-+
-+	close(mfd);
-+}
-+
-+TEST_F(tmpfs_hugepage_mount_path, restrictedmem_provide_mount_subdir)
-+{
-+	int ret = -1;
-+	int mfd = -1;
-+	struct stat stat;
-+	char subdir_path[PATH_MAX] = {0};
-+
-+	ret = mount("name", self->mount_path, "tmpfs", 0, "huge=always");
-+	ASSERT_EQ(0, ret);
-+
-+	snprintf(subdir_path, PATH_MAX, "%s/%s", self->mount_path, "subdir");
-+	ret = mkdir(subdir_path, 0777);
-+	ASSERT_EQ(0, ret);
-+
-+	/*
-+	 * Any subdirectory of a tmpfs mount can be provided to memfd_restricted
-+	 * as a reference to a mount
-+	 */
-+	mfd = memfd_restricted(RMFD_TMPFILE, subdir_path);
-+	ASSERT_NE(-1, mfd);
-+
-+	ret = fstat(mfd, &stat);
-+	ASSERT_EQ(0, ret);
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	/*
-+	 * shmem file is created at the mount, so the subdirectory can be
-+	 * removed without issues.
-+	 */
-+	ret = rmdir(subdir_path);
-+	ASSERT_EQ(0, ret);
-+
-+	close(mfd);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.39.1.637.g21b0678d19-goog
+Quoting the 040 UM:
 
+"Both instructions [cinv, cpush] allow operation on a single cache line, 
+all cache lines in a specific page, or an entire cache, and can select 
+one or both caches for the operation. For line and page operations, a 
+physical address in an address register specifies the memory address."
+
+Cheers,
+
+     Michael
+
+
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>   arch/m68k/include/asm/cacheflush_mm.h | 12 ++++++++----
+>   arch/m68k/include/asm/pgtable_mm.h    | 21 ++++++++++++++++++---
+>   arch/m68k/mm/motorola.c               |  2 +-
+>   3 files changed, 27 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/m68k/include/asm/cacheflush_mm.h b/arch/m68k/include/asm/cacheflush_mm.h
+> index 1ac55e7b47f0..2244c35178d0 100644
+> --- a/arch/m68k/include/asm/cacheflush_mm.h
+> +++ b/arch/m68k/include/asm/cacheflush_mm.h
+> @@ -220,13 +220,13 @@ static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vm
+>   
+>   /* Push the page at kernel virtual address and clear the icache */
+>   /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
+> -static inline void __flush_page_to_ram(void *vaddr)
+> +static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
+>   {
+>   	if (CPU_IS_COLDFIRE) {
+>   		unsigned long addr, start, end;
+>   		addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
+>   		start = addr & ICACHE_SET_MASK;
+> -		end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
+> +		end = (addr + nr * PAGE_SIZE - 1) & ICACHE_SET_MASK;
+>   		if (start > end) {
+>   			flush_cf_bcache(0, end);
+>   			end = ICACHE_MAX_ADDR;
+> @@ -249,10 +249,14 @@ static inline void __flush_page_to_ram(void *vaddr)
+>   }
+>   
+>   #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+> -#define flush_dcache_page(page)		__flush_page_to_ram(page_address(page))
+> +#define flush_dcache_page(page)	__flush_pages_to_ram(page_address(page), 1)
+> +#define flush_dcache_folio(folio)		\
+> +	__flush_pages_to_ram(folio_address(folio), folio_nr_pages(folio))
+>   #define flush_dcache_mmap_lock(mapping)		do { } while (0)
+>   #define flush_dcache_mmap_unlock(mapping)	do { } while (0)
+> -#define flush_icache_page(vma, page)	__flush_page_to_ram(page_address(page))
+> +#define flush_icache_pages(vma, page, nr)	\
+> +	__flush_pages_to_ram(page_address(page), nr)
+> +#define flush_icache_page(vma, page) flush_icache_pages(vma, page, 1)
+>   
+>   extern void flush_icache_user_page(struct vm_area_struct *vma, struct page *page,
+>   				    unsigned long addr, int len);
+> diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
+> index b93c41fe2067..400206c17c97 100644
+> --- a/arch/m68k/include/asm/pgtable_mm.h
+> +++ b/arch/m68k/include/asm/pgtable_mm.h
+> @@ -31,8 +31,20 @@
+>   	do{							\
+>   		*(pteptr) = (pteval);				\
+>   	} while(0)
+> -#define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
+>   
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +		pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	for (;;) {
+> +		set_pte(ptep, pte);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		pte_val(pte) += PAGE_SIZE;
+> +	}
+> +}
+> +
+> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
+>   
+>   /* PMD_SHIFT determines the size of the area a second-level page table can map */
+>   #if CONFIG_PGTABLE_LEVELS == 3
+> @@ -138,11 +150,14 @@ extern void kernel_set_cachemode(void *addr, unsigned long size, int cmode);
+>    * tables contain all the necessary information.  The Sun3 does, but
+>    * they are updated on demand.
+>    */
+> -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> -				    unsigned long address, pte_t *ptep)
+> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> +		unsigned long address, pte_t *ptep, unsigned int nr)
+>   {
+>   }
+>   
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
+> +
+>   #endif /* !__ASSEMBLY__ */
+>   
+>   /* MMU-specific headers */
+> diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
+> index 2a375637e007..7784d0fcdf6e 100644
+> --- a/arch/m68k/mm/motorola.c
+> +++ b/arch/m68k/mm/motorola.c
+> @@ -81,7 +81,7 @@ static inline void cache_page(void *vaddr)
+>   
+>   void mmu_page_ctor(void *page)
+>   {
+> -	__flush_page_to_ram(page);
+> +	__flush_pages_to_ram(page, 1);
+>   	flush_tlb_kernel_page(page);
+>   	nocache_page(page);
+>   }
