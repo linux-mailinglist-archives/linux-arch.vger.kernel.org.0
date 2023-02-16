@@ -2,157 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16391699AC1
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 18:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566F9699F93
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 23:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjBPRGj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Feb 2023 12:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S229956AbjBPWDZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Feb 2023 17:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjBPRGi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 12:06:38 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9514BEA2;
-        Thu, 16 Feb 2023 09:06:37 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E3141EC086F;
-        Thu, 16 Feb 2023 18:06:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676567195;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e+I15oMGZyPJMc2Ii9Bnc8ieIaE4xdHS1ezVdaO9Rsk=;
-        b=N6Ry6di65M1mZcQoHgLTI/qcdlU0VYOslr7klqY5J4cZ+ZcG+UcMc+8BzrirdsSLKBui0I
-        T5h+r2ibNhD+jI2f4KES2a5p4u1kpp3ezsxK9qQGA1iWE2jnA85A12/Yl+0mF2UF0gFmaa
-        VxmxWtfdcbm7lmA/DyPRwQTkcK6PlE8=
-Date:   Thu, 16 Feb 2023 18:06:34 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y+5immKTXCsjSysx@zn.tnic>
-References: <Y+aVFxrE6a6b37XN@zn.tnic>
- <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aczIbbQm/ZNunZ@zn.tnic>
- <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
- <Y+auMQ88In7NEc30@google.com>
- <Y+av0SVUHBLCVdWE@google.com>
- <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+bXjxUtSf71E5SS@google.com>
- <Y+4wiyepKU8IEr48@zn.tnic>
- <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
+        with ESMTP id S229704AbjBPWDY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 17:03:24 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4A43E60C
+        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 14:03:22 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id bt4-20020a17090af00400b002341621377cso7347706pjb.2
+        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 14:03:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tk54cGH4LqQLVC9wacMRd+1/MbtH+DDbz5meeqWmlLg=;
+        b=Cn/Z8dptlM1o5l8Qv2p3Oaokark0bEAl1MucuaCKlVeM+0nhegqv6XBQSJ7iLJkXtE
+         cQpSFXJsZsnqKjyy1NVXcMCPM8yVsKLZIY1IXS7NLrGMbScUo5PmC6krigekwmd/lx2O
+         pc1qgDKmO0d6YsxcPD/c6i18hhvWvWng7n9BRq2rs9lKMlp46D+6wCgng8wUOp7JUlS8
+         ITkvtg1QaQJCfndc1GwCoZx7zw3v3BljoOu33hQQQPv0Oae8m0Qi025g/G0ouXCDH0HB
+         8WoCU6zMHYKSuwklsq/FTsCnJ0F3o2zfMnQeNVO2j7SvoPxgwNoAlz9YqmsXkxCPhC7g
+         Uw/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tk54cGH4LqQLVC9wacMRd+1/MbtH+DDbz5meeqWmlLg=;
+        b=Y+FEzNfiRo4b9mNPxiMF8S0blZCGUMlWQu1OqnpTS8JKFGeT4J0wXWAhjOgkhVZSYk
+         EgAiXOcG0ktXXelXgSo2w8yEfRgglwe4AFxYLs7kKlBdODI23bBB7p7XlmemW5J5FjFV
+         uDdp+//mzMcKWOFux6tRWBM/kroYBnjEhPuTRlWt1np8BLWgD8mCvZcEYTE9dPzZYVyn
+         VC/JP8GRnPntAifQgYdNOzsXA+UN9jf/QbUg0L6Xt0dlJpZ5ll/p3BBcJlj98kio8kFT
+         8FpBPo3xy1X7JavVQ2za5R6R0sKv6wngf5AC/1omcqcR5BqqQHUkK5wHtHdAoVkskXs6
+         vyww==
+X-Gm-Message-State: AO0yUKWasR+TaDV+lyGKX2ITx4ATRiBX6GE5LozNNlZD9dBYTgsOLg1l
+        AmkJS8H0nrfeCt4BJpY3CHw=
+X-Google-Smtp-Source: AK7set/O7mi33sTg65iC+16XhIxGTaiqxvui8Y6X+Ehn5Zki9wIVvuZcanngN2uUvi/EFQX18Bb5iA==
+X-Received: by 2002:a17:903:2844:b0:19a:9797:1631 with SMTP id kq4-20020a170903284400b0019a97971631mr5811307plb.3.1676585002264;
+        Thu, 16 Feb 2023 14:03:22 -0800 (PST)
+Received: from ?IPV6:2001:df0:0:200c:8dff:a3c:def2:5826? ([2001:df0:0:200c:8dff:a3c:def2:5826])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902ee4d00b0019919b7e5b1sm1789528plo.168.2023.02.16.14.03.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 14:03:21 -0800 (PST)
+Message-ID: <a1783a1c-b599-0e44-e88c-181470c5675f@gmail.com>
+Date:   Fri, 17 Feb 2023 11:03:16 +1300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 15/17] m68k: Implement the new page table range API
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arch@vger.kernel.org
+References: <20230215000446.1655635-1-willy@infradead.org>
+ <20230215200920.1849567-1-willy@infradead.org>
+ <20230215200920.1849567-2-willy@infradead.org>
+ <84c923f7-c60b-068d-bb06-48aea1412f53@gmail.com>
+ <Y+2wdSxVgS6HmFRy@casper.infradead.org>
+Content-Language: en-US
+From:   Michael Schmitz <schmitzmic@gmail.com>
+In-Reply-To: <Y+2wdSxVgS6HmFRy@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 04:16:16PM +0000, Michael Kelley (LINUX) wrote:
-> Historically, callbacks like Sean proposed default to NULL and do nothing
-> unless they are explicitly set.  The Hyper-V vTOM code would set the callback.
-> Is that not sufficient?  Or in the two places where the callback would
-> be made, do you want to bracket with a test for being in a Hyper-V vTOM
-> VM?  If so, then we're back to needing something like CC_ATTR_PARAVISOR
-> on which to gate the callbacks.
-> 
-> Or do you mean something else entirely?
+Hi Matthew,
 
-See the second part of my reply.
+On 16/02/23 17:26, Matthew Wilcox wrote:
+> On Thu, Feb 16, 2023 at 01:59:44PM +1300, Michael Schmitz wrote:
+>> Matthew,
+>>
+>> On 16/02/23 09:09, Matthew Wilcox (Oracle) wrote:
+>>> Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
+>>> flush_dcache_folio().  I'm not entirely certain that the 040/060 case
+>>> in __flush_pages_to_ram() is correct.
+>> I'm pretty sure you need to iterate to hit each of the pages - the code as
+>> is will only push cache entries for the first page.
+>>
+>> Quoting the 040 UM:
+>>
+>> "Both instructions [cinv, cpush] allow operation on a single cache line, all
+>> cache lines in a specific page, or an entire cache, and can select one or
+>> both caches for the operation. For line and page operations, a physical
+>> address in an address register specifies the memory address."
+> I actually found that!  What I didn't find was how to tell if this
+> cpush insn is the one which is operating on a single cache line,
+> a single page, or the entire cache.
+>
+> So I should do a loop around this asm and call it once for each page
+> we're flushing?
 
-This thing...
+Yes, that's the idea. I'm uncertain whether contiguous virtual pages are 
+always guaranteed to have contiguous physical mappings, so no point in 
+trying to 'optimize' and shift the loop into inline assembly.
 
-> > because there's the next crapola with
-> > 
-> > https://lore.kernel.org/all/20230209072220.6836-4-jgross@suse.com/
-> > 
-> > because apparently hyperv does PAT but disables MTRRs for such vTOM
-> > SEV-SNP guests and ... madness.
-> > 
-> > But that's not the only example - Xen has been doing this thing too.
-> > 
-> > And Jürgen has been trying to address this in a clean way but it is
-> > a pain.
-> > 
-> > What I don't want to have is a gazillion ways to check what needs to
-> > happen for which guest type. Because people who change the kernel to run
-> > on baremetal, will break them. And I can't blame them. We try to support
-> > all kinds of guests in the x86 code but this support should be plain and
-> > simple.
+Cheers,
 
-... here.
+     Michael
 
-We need a single way to test for this guest type and stick with it.
 
-I'd like for all guest types we support to be queried in a plain and
-simple way.
 
-Not:
-
-* CC_ATTR_GUEST_MEM_ENCRYPT
-
-* x86_platform.hyper.is_private_mmio(addr)
-
-* CC_ATTR_PARAVISOR
-
-to mean three different aspects of SEV-SNP guests using vTOM on Hyper-V.
-
-This is going to be a major mess which we won't support.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+>
