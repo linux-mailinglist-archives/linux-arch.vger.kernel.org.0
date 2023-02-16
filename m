@@ -2,178 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAB3698E73
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 09:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833F1699040
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 10:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjBPIRD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Feb 2023 03:17:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S229633AbjBPJmt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Feb 2023 04:42:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjBPIRC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 03:17:02 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710F530C2
-        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 00:17:01 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9C48910000E;
-        Thu, 16 Feb 2023 08:16:56 +0000 (UTC)
-Message-ID: <e107fa05-e3d1-cf9f-227e-01923bfab023@ghiti.fr>
-Date:   Thu, 16 Feb 2023 09:16:55 +0100
+        with ESMTP id S229796AbjBPJme (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 04:42:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB0C22DC9
+        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 01:41:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1676540480;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gmwi3nEDJwaAff3Fc8Gdw19GfxhLDRlC4Hp/kbYrQqc=;
+        b=QUm924d1eQ4/YeSGNU+9zftH1vyBIPQ3uswRg69oerBJHX2NQCCPiVlHOfWfktArNep4JC
+        0IkDs6vNmWi5TeWt0o4YQsXQDJbBg/wwQJ8kw+ka8d3rmi39nhEH7DyaOkfT5TorvXMV3W
+        BSsz6vzYEBygMTXdI5RX8BpQOwGD6gw=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-589-8_Eg0DbYOcO2n0Q-euKUHg-1; Thu, 16 Feb 2023 04:41:18 -0500
+X-MC-Unique: 8_Eg0DbYOcO2n0Q-euKUHg-1
+Received: by mail-wm1-f69.google.com with SMTP id j20-20020a05600c1c1400b003dc5dd44c0cso596253wms.8
+        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 01:41:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gmwi3nEDJwaAff3Fc8Gdw19GfxhLDRlC4Hp/kbYrQqc=;
+        b=u8aSc0YJozzQaWNRl3n8teJB8dlqbbHrWX1NYDARXo9q5zF3wpKlo3wl54CE221fCn
+         ykiWlS6BLq/+nZYm2Qs/N4fHgQ+d/t5hjEulCRvP/UxI4FJfGGG1cBmU85WCczMf75m6
+         UAVQtXUCrLl1aI9z9IxZJqnCdmNfjBKWBKklWhNplxrdUpjrQrGP+ARbWEYPuWOGWNve
+         baHip2T6ZGBJH+/VgBpS8jLMI/U/FG8es0rOb3Nj+vB3pwKHgPz2c41Xfli6orQ/0yRf
+         a7hqx4BdgxsyyX7KtFnow4PbbUCdiyZNuKzedWbM8c22m7kRbPFeb9vP65pM6Ty+6yn0
+         O/HA==
+X-Gm-Message-State: AO0yUKXnQJVfeFcO0Ih92fi341QCwEMbo66GqUkTuc1Wp/rFrXZKrZ4y
+        yypxCr6gO5hn36ZU1ALvdOr76RMk6UF6+3dtT66ccMa/y9oVv6yrScwEuMHQjB/n9D05F5MB+f6
+        Bud4dAvxqk2fIvZ4kkkkKZA==
+X-Received: by 2002:a05:600c:43d2:b0:3e1:f8af:7942 with SMTP id f18-20020a05600c43d200b003e1f8af7942mr4417098wmn.22.1676540477730;
+        Thu, 16 Feb 2023 01:41:17 -0800 (PST)
+X-Google-Smtp-Source: AK7set/oggqqqV4UfbebLA50a7kFC2t5aIQUzgDU4Y/+rLroQMqzr7b1jBFCFplQuftcMkUVk4L02g==
+X-Received: by 2002:a05:600c:43d2:b0:3e1:f8af:7942 with SMTP id f18-20020a05600c43d200b003e1f8af7942mr4417078wmn.22.1676540477379;
+        Thu, 16 Feb 2023 01:41:17 -0800 (PST)
+Received: from ?IPV6:2003:cb:c708:bc00:2acb:9e46:1412:686a? (p200300cbc708bc002acb9e461412686a.dip0.t-ipconnect.de. [2003:cb:c708:bc00:2acb:9e46:1412:686a])
+        by smtp.gmail.com with ESMTPSA id j26-20020a05600c1c1a00b003df245cd853sm1211974wms.44.2023.02.16.01.41.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Feb 2023 01:41:16 -0800 (PST)
+Message-ID: <62c84fa8-d7c4-5163-fe1e-f2c7e5a2c7aa@redhat.com>
+Date:   Thu, 16 Feb 2023 10:41:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 10/7] riscv: Implement the new page table range API
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
 Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-arch@vger.kernel.org
-References: <20230211033948.891959-1-willy@infradead.org>
- <20230215000446.1655635-1-willy@infradead.org>
- <20230215000446.1655635-2-willy@infradead.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230215000446.1655635-2-willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>,
+        Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        mhocko@suse.com, wei.w.wang@intel.com
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <Y+27kRxJoXlMcbtH@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y+27kRxJoXlMcbtH@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Matthew,
+On 16.02.23 06:13, Mike Rapoport wrote:
+> Hi,
+> 
+> On Fri, Dec 02, 2022 at 02:13:38PM +0800, Chao Peng wrote:
+>> This patch series implements KVM guest private memory for confidential
+>> computing scenarios like Intel TDX[1]. If a TDX host accesses
+>> TDX-protected guest memory, machine check can happen which can further
+>> crash the running host system, this is terrible for multi-tenant
+>> configurations. The host accesses include those from KVM userspace like
+>> QEMU. This series addresses KVM userspace induced crash by introducing
+>> new mm and KVM interfaces so KVM userspace can still manage guest memory
+>> via a fd-based approach, but it can never access the guest memory
+>> content.
+> 
+> Sorry for jumping late.
+> 
+> Unless I'm missing something, hibernation will also cause an machine check
+> when there is TDX-protected memory in the system. When the hibernation
+> creates memory snapshot it essentially walks all physical pages and saves
+> their contents, so for TDX memory this will trigger machine check, right?
 
-On 2/15/23 01:04, Matthew Wilcox (Oracle) wrote:
-> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
->
-> The PG_dcache_clear flag changes from being a per-page bit to being a
-> per-folio bit.
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->   arch/riscv/include/asm/cacheflush.h | 19 +++++++++----------
->   arch/riscv/include/asm/pgtable.h    | 25 ++++++++++++++++++-------
->   arch/riscv/mm/cacheflush.c          | 11 ++---------
->   3 files changed, 29 insertions(+), 26 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index 03e3b95ae6da..10e5e96f09b5 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -15,20 +15,19 @@ static inline void local_flush_icache_all(void)
->   
->   #define PG_dcache_clean PG_arch_1
->   
-> -static inline void flush_dcache_page(struct page *page)
-> +static inline void flush_dcache_folio(struct folio *folio)
->   {
-> -	/*
-> -	 * HugeTLB pages are always fully mapped and only head page will be
-> -	 * set PG_dcache_clean (see comments in flush_icache_pte()).
-> -	 */
-> -	if (PageHuge(page))
-> -		page = compound_head(page);
-> -
-> -	if (test_bit(PG_dcache_clean, &page->flags))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	if (test_bit(PG_dcache_clean, &folio->flags))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
->   }
-> +#define flush_dcache_folio flush_dcache_folio
->   #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->   
-> +static inline void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
-> +
->   /*
->    * RISC-V doesn't have an instruction to flush parts of the instruction cache,
->    * so instead we just flush the whole thing.
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 13222fd5c4b4..03706c833e70 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -405,8 +405,8 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->   
->   
->   /* Commit new configuration to MMU hardware */
-> -static inline void update_mmu_cache(struct vm_area_struct *vma,
-> -	unsigned long address, pte_t *ptep)
-> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
-> +		unsigned long address, pte_t *ptep, unsigned int nr)
->   {
->   	/*
->   	 * The kernel assumes that TLBs don't cache invalid entries, but
-> @@ -415,8 +415,10 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->   	 * Relying on flush_tlb_fix_spurious_fault would suffice, but
->   	 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
->   	 */
-> -	flush_tlb_page(vma, address);
-> +	flush_tlb_range(vma, address, address + nr * PAGE_SIZE);
->   }
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
->   
->   #define __HAVE_ARCH_UPDATE_MMU_TLB
->   #define update_mmu_tlb update_mmu_cache
-> @@ -456,12 +458,21 @@ static inline void __set_pte_at(struct mm_struct *mm,
->   	set_pte(ptep, pteval);
->   }
->   
-> -static inline void set_pte_at(struct mm_struct *mm,
-> -	unsigned long addr, pte_t *ptep, pte_t pteval)
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, pte_t pteval, unsigned int nr)
->   {
-> -	page_table_check_ptes_set(mm, addr, ptep, pteval, 1);
-> -	__set_pte_at(mm, addr, ptep, pteval);
-> +	page_table_check_ptes_set(mm, addr, ptep, pteval, nr);
-> +
-> +	for (;;) {
-> +		__set_pte_at(mm, addr, ptep, pteval);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +		pte_val(pteval) += 1 << _PAGE_PFN_SHIFT;
-> +	}
->   }
-> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
->   
->   static inline void pte_clear(struct mm_struct *mm,
->   	unsigned long addr, pte_t *ptep)
-> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> index 3cc07ed45aeb..b725c3f6f57f 100644
-> --- a/arch/riscv/mm/cacheflush.c
-> +++ b/arch/riscv/mm/cacheflush.c
-> @@ -81,16 +81,9 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
->   #ifdef CONFIG_MMU
->   void flush_icache_pte(pte_t pte)
->   {
-> -	struct page *page = pte_page(pte);
-> +	struct folio *folio = page_folio(pte_page(pte));
->   
-> -	/*
-> -	 * HugeTLB pages are always fully mapped, so only setting head page's
-> -	 * PG_dcache_clean flag is enough.
-> -	 */
-> -	if (PageHuge(page))
-> -		page = compound_head(page);
-> -
-> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> +	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
->   		flush_icache_all();
->   }
->   #endif /* CONFIG_MMU */
+I recall bringing that up in the past (also memory access due to kdump, 
+/prov/kcore) and was told that the main focus for now is preventing 
+unprivileged users from crashing the system, that is, not mapping such 
+memory into user space (e.g., QEMU). In the long run, we'll want to 
+handle such pages also properly in the other events where the kernel 
+might access them.
 
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
+-- 
 Thanks,
 
-Alex
+David / dhildenb
 
