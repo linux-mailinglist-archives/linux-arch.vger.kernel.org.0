@@ -2,174 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C988369ABD6
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Feb 2023 13:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9D869AC48
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Feb 2023 14:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjBQMsK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Feb 2023 07:48:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S229744AbjBQNUC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Feb 2023 08:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjBQMsI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Feb 2023 07:48:08 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9547125972;
-        Fri, 17 Feb 2023 04:48:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BY26KxokUyAyVFbK3P0ph/1aKfn/YlN5/Yc7SHdhyvoV+LrEwvLdTkROzQCixzVMaq/3bbyzjFfvH7eFlLBuFAh287ur3ANyKbCe/Hz6prS4/WijpKluM7qPgKU1DOpkOjlE4SXE1HwLY3TYrbkOBQ8h07qiEZVbufs9hxoN0EXmwcibNpNSg7khYW/ZV6IrhkQgdRInhWBX+VuA7QAJ/wtGtt5uU1yw7325+zOhGDidp0nCvbqyvtjuEJf6eRITBT7krByzwcSCEBSyPanSkYon6AIVPpS9uYQMVbThHklEGMnm0si6X0eT22/01Yk2d22g+OjdmUhbT8aSLeFi9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kjxQNO9z6Oa8HUpBf3sLfiY8x2NUNNz4aCo8SZMXPPk=;
- b=Xcjqh4t2iJnoTmUm2JmuNNE+fyxbK8fKPV1ttVw4QPCY5aiZKLlzO//1bXAWCgklUxicXJEfkZ4wEDTb8Sp37gMEz7u1wLnazBqj3HyF2P2RZIu+bHe7qP97Gl/jEpaI9WTK3Jk9RP7rWwx8WwGd9V+csxuI8VVcRWpbaaZvXMJ/mR6HhqH9fOCsj8Ob3pKrPFqsmtHCh5bPlP1MKEnkv2rS+bgt4vZ+BX0trBhtybH8FJMi2GuTK7quq97VAAPY0A0OQO6hZREybUdPJ1t3Uq0dfK4vBIEeLj43KWpEWaHksiSuqeNMKJ5kkLqusIluYQVDYbGvH36GvoobRmZGIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kjxQNO9z6Oa8HUpBf3sLfiY8x2NUNNz4aCo8SZMXPPk=;
- b=p4Lv01VFEVFWwVmmAhHroc9USaU0sQDFgj+dUstqL6hRuWzGYHOwCDxLj2thp9fVYiTqpPFTybCVCuQ60PO3hhp8bjpr6ysdHnkz4ZLeslV/2H8MD8WgcOPJ93Y22rNsbQV0eRpqZ85CutMi9aODDxyjtGbiU1ailXG/ja4cW+8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- SN7PR12MB6929.namprd12.prod.outlook.com (2603:10b6:806:263::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Fri, 17 Feb
- 2023 12:48:05 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::b84e:f638:fa40:27ef]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::b84e:f638:fa40:27ef%6]) with mapi id 15.20.6111.013; Fri, 17 Feb 2023
- 12:48:05 +0000
-Message-ID: <fe100597-26be-23e4-bfa9-f45aa27b7966@amd.com>
-Date:   Fri, 17 Feb 2023 13:47:55 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH V3 00/16] x86/hyperv/sev: Add AMD sev-snp enlightened
- guest support on hyperv
-Content-Language: en-US
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <fac62414-06f9-0454-8393-f039aa30571a@amd.com>
-In-Reply-To: <fac62414-06f9-0454-8393-f039aa30571a@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0061.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:93::18) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
+        with ESMTP id S229748AbjBQNUB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Feb 2023 08:20:01 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D410067452;
+        Fri, 17 Feb 2023 05:19:58 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id CC70D3200916;
+        Fri, 17 Feb 2023 08:19:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 17 Feb 2023 08:19:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1676639993; x=1676726393; bh=my
+        TFn4KmrWimVKjCPObg5mC8iDNbWDR3kBMFSM8XDnQ=; b=jIl4Nkl5jkqu+kJgn0
+        wN3uIEIM7zCYq38PGioTcFq7vXepwAOt0Yrlh2RIluYl39TyOPQOdpDut3RpbIOA
+        Vohcmg5M2B1sl1ySUYJhLnyd0Ubk2RT8YqMB+Hg+t9xKnzhoUG15qhsMHOtvFth1
+        dkh0X2N2KBk90VztU/Qvb3JkyFaJ1fYP57Bw+ogBoh24Lx/r4tRINJVR7O16jsBN
+        LVTjws1NZMWCQ2CrJ9GPQoCmwy11gT3yZ6XoropRxbCy43JuISPzshzPyKOp7ebh
+        87Ho9RXevbBCmlDQbnlf0bQdcjjhN5e9oedv4B7524ZLorgok+/GcdlSS/DdgCmK
+        AUUg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1676639993; x=1676726393; bh=myTFn4KmrWimVKjCPObg5mC8iDNb
+        WDR3kBMFSM8XDnQ=; b=cUKALe8Q4obU06Q6HHbdK8SDP5dP9iGmM13t4a2n6fz2
+        911jUXRKpFCOCWCfkriiRPgaBg0d7saR/lL73FjsfjSfYR5XGaxxHt9HssZTtj3u
+        GqfHTXiQTM6Steopzl4uZRFGpZ5Su1cdzGDBC/TnjOwvN2JgJT9MfRaiqPgTr4Rw
+        n0zsLu4iE8b7yChlK8LZLBjkvnTockJ17AUa2QmW1WI1ZUruH2tWqFe87zy9mTM4
+        0QU+MMlAV5ePqjdVaLbUMrDI6CdpjoaCqLFyRV5iL0IzwvhhCLb38q2sKRCBvCcB
+        fxIY82lNSvWrOO3+rtmtJo0iAkc34ZiTciJQQMoDZQ==
+X-ME-Sender: <xms:-H7vY67baue8pdKk10h1Fi2ENbQKuNV18npNZdESxuM-nRqhEgn3VQ>
+    <xme:-H7vYz75OzpIIc7_4jz6msqs2FEI_W6uMYZM8ijM1_sfgWJLeH7EIyCXc0XPfZFHm
+    2GaXkthmoSts3lQ538>
+X-ME-Received: <xmr:-H7vY5cr_y1AcWEev1L3WIfbiYIs_6ygaKakrAtyWmDk_w1iCuaUZkns1M6fAsrYNV5qkQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeiledggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:-H7vY3Kl5jyiglPmMnnV4XJtu99v-mj0IYgcUrz709wsnUcWwxOqvw>
+    <xmx:-H7vY-KhNMQUQ9kYPlmsRN81fM4iHUX18xYMiOSlGeKpdJpI9ECR6A>
+    <xmx:-H7vY4yVGI1mk796blOZkk2Jnj-bTjUmTDl-v7hnHwXlJ2p7kraQTQ>
+    <xmx:-X7vY2DMDwIvu7g2ocAODvyFBnQCMPepOEh9yiHIfyj98NRh-4sUOA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 Feb 2023 08:19:51 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 13A4910BDBB; Fri, 17 Feb 2023 16:19:49 +0300 (+03)
+Date:   Fri, 17 Feb 2023 16:19:49 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        brijesh.singh@amd.com, dan.j.williams@intel.com,
+        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
+        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
+Subject: Re: [PATCH v3 2/6] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Message-ID: <20230217131949.oj4jz4dbvhyen5rl@box.shutemov.name>
+References: <20230206192419.24525-1-decui@microsoft.com>
+ <20230206192419.24525-3-decui@microsoft.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SN7PR12MB6929:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55e86118-d418-4208-8cd2-08db10e53690
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: chPRdne3POwVDczwtQ97K7WXc9rihAJbmZ/Qvm/p4GcnQ/ePapMj1F1wWel4hfmOV6K00fZuIo/VGnx15Kav4eGcG9Mz777Yk6bjP3X2Defx3ZlPeI/a/urcweqnGG3v888EOIkzS0QcR25Bj3ppUE1423ACyh6o1wYoPzZZkqaTIf6bWm4960u4XTgmmf7rOaHK18nQ/x5ZTMxD7+ivODC4Q85Gm1VNTH/9z5Kg8ynLiEx5c/06A4d3AdSY3mCRMaSNPQ/HWMjjN2vD5FZl7v11P788ik0V3p1dvuLCT38/zyIT+kgbSSLzt+OubtkuzYn/xWQNLxho97nl0KUnqw0wsYT49IeFsVUxfyDen4PpOd910t99F9zhrcSXCCwgiOUi70rRuPmIHNY9FwFr168tiCuB/W/r0UyPnevw8XvC/60w7EUQY4Cd13jFoMVmBrMLYqKLGKX+Sgc8sZxoOjsZU8nLlpDRm5Da36zZRZsQ2xdamIEdDq+9XSbrzQNF4lLy74xis4jzXiOcXci6gCBI6IC9cKgrobDZ4Pc/oIT74sFIOjFx53U4/VcnUSoLrKHtlXyZeA2Kvde+vHJZZN4uvZmPr4GOmhq3CMs9kKzh0HAylMhzfSPEulUhIQPeTohB6RB0lY89lL90Dh/tekcHNfK9MgZvhauwGE3UGpgfQ0ygHSc69GUOvv/njufNJBZz+1fA5TzQ1oE34iD6Uo8zIeZ8KB3z02NWX6/i0JiRIJ4uEh8yoHpuzGgM5Pxd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(366004)(376002)(39860400002)(396003)(451199018)(8936002)(316002)(921005)(38100700002)(7406005)(7416002)(66476007)(4326008)(8676002)(66946007)(5660300002)(6666004)(41300700001)(2906002)(6486002)(66556008)(2616005)(478600001)(6512007)(186003)(6506007)(83380400001)(36756003)(86362001)(31696002)(31686004)(53546011)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WmlScmxlQm1hdFlrQmhLSnpLR3FXTkk5VGVxd2tkbitHTndhY0I5ZTZXYWpn?=
- =?utf-8?B?ZmJ5b2dOVk5UTERrRm81N3MzaDJzemxjd210c2FPNTduQ1NSekw2VU8vSWpD?=
- =?utf-8?B?bkNzTDVWWEhJV1FLZno4MTZpMXNiZTlqT2NwZGsxTlBYWE9RUThLUlR1T2NR?=
- =?utf-8?B?NmczdGlJWGNRTmMxWXVIakJIRllqVEFBU0xNUUxUV2NNbXJxNnQ3aGowTzJa?=
- =?utf-8?B?LzJnZjZKSytFT2ZDM2NkRC8vbjFKOENsUE9Ea1FTaFpNUGl2OWRTRnlXREtH?=
- =?utf-8?B?a3BOdnZjcnlteGJVYk52QW5BYjVnai9xN0IrelJjRDJ3ZTZnRloxeGEzbHlX?=
- =?utf-8?B?QVZsQmNoRFFVMmlYZXJXMVZqSDNVQ0N4ZmhBTmpnZnNackw5RGJwR3Zib0Mr?=
- =?utf-8?B?d0YvVWNnRXlhYzcxTlhERitUYWZFTVlxLzdaUldnZjJnNXJpTnJKUWs3OFRB?=
- =?utf-8?B?Um9HRnN0dkd3VWJOb0xBcEwybXh4WlplWi9kZ3FFUVo4MWNaR3JuR3NqN0RJ?=
- =?utf-8?B?czU4T0RKTkZYUTlUaDFaTW1tMDNOZnFWTUlUbDFKQ25mNm83cktTa1I4QmRJ?=
- =?utf-8?B?cldvMFVBbElCcEVQRXBHNTJFaGZpUHRLOWcwZFVBNFN5ZjNzYjhvQnNIY28r?=
- =?utf-8?B?eWZobWlpc2kwb0hnWTlIeUFaVi9CcXFuODllZnU2TitxM082Y09qSnZ0NVls?=
- =?utf-8?B?QXJGc3BzU2lyRWkvWW1nWmRBb3R2cjM1blJQV0JWMUxqSXVFQkswN2xKTms1?=
- =?utf-8?B?Q3MrMEdpSEh5d0ltWDE4a3JFakNDenJHVHdFdWxWcU1VZjQ2N0NYRUp6ZTJW?=
- =?utf-8?B?SWx5UlY3d3dZckMzR2paT1loT1pRRWlFcnNETDUzUVE0dXc3MEplYU5QcjJo?=
- =?utf-8?B?bmFTNXZ2WTNJRFEvOUdVbE9TaG1teTc1RTRLYndOSGN4L2tpbEJ1eUt5WWRY?=
- =?utf-8?B?R3kveGo5eEZnZ25wcWZqRG9wVmk2dTM3UldaVXBwMllyN1pxb0NER2Vwa1BU?=
- =?utf-8?B?M0VHeWVZQVQ0d045Wis5bVMxd0VORlpubUtFQXEvZy9EZzZpaVpwNERLMFRZ?=
- =?utf-8?B?NjFwbFkrcVM1ZEVFS2VkU3RKYWZLK0tPMmdJN3k5Z2xncXMrY1ZyaktjdXBi?=
- =?utf-8?B?WHIvQmxRbUFJcVo3UlFsN29oQkFUQUJHY3pFeXNJU0VDc0I4MnlySG5MMW90?=
- =?utf-8?B?TmxxeWFWQ3BpUVplWmNGVnFzL2k0ZUhDd3FIVHhyQUxWamhUek9GQXJNd3E3?=
- =?utf-8?B?MFJMZi82MW5uZkhqYTUyUnl5RmpJQS9MSmczWXh3eTJQWGZKVldQeUUzamQx?=
- =?utf-8?B?eDAxQ01CSURjbmRrZmNlNm52MkFtcVI0Z0RMa2c2RktxOE9ucjNpV25hVkt5?=
- =?utf-8?B?bWxJKzNzZ0gxVHdZdDN5MXBSbXdsM2NGSlN5c3JENXJhRitLdHdJTmNuNVJW?=
- =?utf-8?B?VENPU2lWNVkzYVNkZHY2dFdpYTJHWmI2VDBmMmlCTDh2VXArU3VmcEpkcFpQ?=
- =?utf-8?B?aHFiOTY4ZVExS2lUM3VXOXZFTXFRdHhWRzQ5TlFXeUhGS1RpNDBvTXBsVncx?=
- =?utf-8?B?d3BMREJaWURhd2FJVHRway9BS0F4VE1UaXE3bU8zYUZqWXRBckoyNE1pVmha?=
- =?utf-8?B?YzNtQkNoMUtUK1IvQzUyUWtYWlNoUTB2S2hJaVRPZktmVko2K0x3S2VST2J6?=
- =?utf-8?B?RExCWjV4ZFV1S29FaVI3NWtXYmxLb0NiVzAycXZ3Qkh3aC9yakJxRXBLUlZN?=
- =?utf-8?B?bHJqTFJUQzhVZ1EwTXk2M3BLZGM0ekowMkMrZ2JNclA3TUJ3Y01jRFFmQzly?=
- =?utf-8?B?MFhUWUs4WE1kTGtySlNxSEVrNDBQVEdaSHB3aktseXF4YjFzdVZqZTZiMXFl?=
- =?utf-8?B?b0JIYXJCMzl0K2NpZGh4M3R6aFBjeHZWazBuYXpHTWRnMkhSOHQzRGdudUJy?=
- =?utf-8?B?NHlHSVRXc2ZRdHQ5MzJwYmprU09PM1BnbXhRSGhNWG1NaGk0d3BiWTJwMjNE?=
- =?utf-8?B?d1NzVGgyME9YQjRVc0FKcjE1RlNpam1aWUoxTUl3SEkyWGxxY2pQT2Zyekhp?=
- =?utf-8?B?RllZUnprU1gzRVIwQlBSeTFIejdlQlFpUWRLQ0twSndJTkRuek5PRjVkK2k1?=
- =?utf-8?Q?vLn2qYtuiaeY1Xp/wf2wbu0n/?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55e86118-d418-4208-8cd2-08db10e53690
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2023 12:48:05.5648
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pxJqfb0S5MipARuelXSuEdWTCICAw6s34T8EAHuYpUMkNb0EAzoqW8mLG3DZYgIGa0M8AKir/Wb0nhFO/aTq3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6929
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230206192419.24525-3-decui@microsoft.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2/9/2023 12:36 PM, Gupta, Pankaj wrote:
-> Hi Tianyu,
+On Mon, Feb 06, 2023 at 11:24:15AM -0800, Dexuan Cui wrote:
+> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
+> allocates buffers using vzalloc(), and needs to share the buffers with the
+> host OS by calling set_memory_decrypted(), which is not working for
+> vmalloc() yet. Add the support by handling the pages one by one.
 > 
->> This patchset is to add AMD sev-snp enlightened guest
->> support on hyperv. Hyperv uses Linux direct boot mode
->> to boot up Linux kernel and so it needs to pvalidate
->> system memory by itself.
->>
->> In hyperv case, there is no boot loader and so cc blob
->> is prepared by hypervisor. In this series, hypervisor
->> set the cc blob address directly into boot parameter
->> of Linux kernel. If the magic number on cc blob address
->> is valid, kernel will read cc blob.
->>
->> Shared memory between guests and hypervisor should be
->> decrypted and zero memory after decrypt memory. The data
->> in the target address. It maybe smearedto avoid smearing
->> data.
->>
->> Introduce #HV exception support in AMD sev snp code and
->> #HV handler.
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
 > 
-> I am interested to test the Linux guest #HV exception handling (patches 
-> 12-16 in this series) for the restricted interrupt injection with the 
-> Linux/KVM host.
+> ---
 > 
-> Do you have a git tree which or any base commit on which
-> I can use to apply these patches?
+> Changes in v2:
+>   Changed tdx_enc_status_changed() in place.
+> 
+> Hi, Dave, I checked the huge vmalloc mapping code, but still don't know
+> how to get the underlying huge page info (if huge page is in use) and
+> try to use PG_LEVEL_2M/1G in try_accept_page() for vmalloc: I checked
+> is_vm_area_hugepages() and  __vfree() -> __vunmap(), and I think the
+> underlying page allocation info is internal to the mm code, and there
+> is no mm API to for me get the info in tdx_enc_status_changed().
 
-Never mind. I could apply the patches 12-16 on master (except minor 
-tweak in patch 14). Now, will try to test.
+I also don't obvious way to retrieve this info after vmalloc() is
+complete. split_page() makes all pages independent.
 
-Thanks,
-Pankaj
+I think you can try to do this manually: allocate a vmalloc region,
+allocate pages manually, and put into the region. This way you always know
+page sizes and can optimize conversion to shared memory.
 
+But it is tedious and I'm not sure if it worth the gain.
+
+> Hi, Kirill, the load_unaligned_zeropad() issue is not addressed in
+> this patch. The issue looks like a generic issue that also happens to
+> AMD SNP vTOM mode and C-bit mode. Will need to figure out how to
+> address the issue. If we decide to adjust direct mapping to have the
+> shared bit set, it lools like we need to do the below for each
+> 'start_va' vmalloc page:
+>   pa = slow_virt_to_phys(start_va);
+>   set_memory_decrypted(phys_to_virt(pa), 1); -- this line calls
+> tdx_enc_status_changed() the second time for the same age, which is not
+> great. It looks like we need to find a way to reuse the cpa_flush()
+> related code in __set_memory_enc_pgtable() and make sure we call
+> tdx_enc_status_changed() only once for the same page from vmalloc()?
+
+Actually, current code will change direct mapping for you. I just
+double-checked: the alias processing in __change_page_attr_set_clr() will
+change direct mapping if you call it on vmalloc()ed memory.
+
+Splitting direct mapping is still unfortunate, but well.
+
+> 
+> Changes in v3:
+>   No change since v2.
+> 
+>  arch/x86/coco/tdx/tdx.c | 69 ++++++++++++++++++++++++++---------------
+>  1 file changed, 44 insertions(+), 25 deletions(-)
+
+I don't hate what you did here. But I think the code below is a bit
+cleaner.
+
+Any opinions?
+
+static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
+					bool enc)
+{
+	if (!tdx_map_gpa(start, end, enc))
+		return false;
+
+	/* private->shared conversion requires only MapGPA call */
+	if (!enc)
+		return true;
+
+	return try_accept_page(start, end);
+}
+
+/*
+ * Inform the VMM of the guest's intent for this physical page: shared with
+ * the VMM or private to the guest. The VMM is expected to change its mapping
+ * of the page in response.
+ */
+static bool tdx_enc_status_changed(unsigned long start, int numpages, bool enc)
+{
+	unsigned long end = start + numpages * PAGE_SIZE;
+
+	if (offset_in_page(start) != 0)
+		return false;
+
+	if (!is_vmalloc_addr((void *)start))
+		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
+
+	while (start < end) {
+		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
+		phys_addr_t end_pa = start_pa + PAGE_SIZE;
+
+		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
+			return false;
+
+		start += PAGE_SIZE;
+	}
+
+	return true;
+}
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
