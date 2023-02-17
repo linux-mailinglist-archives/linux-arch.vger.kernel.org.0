@@ -2,117 +2,284 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566F9699F93
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Feb 2023 23:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1155469A56E
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Feb 2023 07:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjBPWDZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Feb 2023 17:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        id S229510AbjBQGBn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Feb 2023 01:01:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjBPWDY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Feb 2023 17:03:24 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4A43E60C
-        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 14:03:22 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id bt4-20020a17090af00400b002341621377cso7347706pjb.2
-        for <linux-arch@vger.kernel.org>; Thu, 16 Feb 2023 14:03:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tk54cGH4LqQLVC9wacMRd+1/MbtH+DDbz5meeqWmlLg=;
-        b=Cn/Z8dptlM1o5l8Qv2p3Oaokark0bEAl1MucuaCKlVeM+0nhegqv6XBQSJ7iLJkXtE
-         cQpSFXJsZsnqKjyy1NVXcMCPM8yVsKLZIY1IXS7NLrGMbScUo5PmC6krigekwmd/lx2O
-         pc1qgDKmO0d6YsxcPD/c6i18hhvWvWng7n9BRq2rs9lKMlp46D+6wCgng8wUOp7JUlS8
-         ITkvtg1QaQJCfndc1GwCoZx7zw3v3BljoOu33hQQQPv0Oae8m0Qi025g/G0ouXCDH0HB
-         8WoCU6zMHYKSuwklsq/FTsCnJ0F3o2zfMnQeNVO2j7SvoPxgwNoAlz9YqmsXkxCPhC7g
-         Uw/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tk54cGH4LqQLVC9wacMRd+1/MbtH+DDbz5meeqWmlLg=;
-        b=Y+FEzNfiRo4b9mNPxiMF8S0blZCGUMlWQu1OqnpTS8JKFGeT4J0wXWAhjOgkhVZSYk
-         EgAiXOcG0ktXXelXgSo2w8yEfRgglwe4AFxYLs7kKlBdODI23bBB7p7XlmemW5J5FjFV
-         uDdp+//mzMcKWOFux6tRWBM/kroYBnjEhPuTRlWt1np8BLWgD8mCvZcEYTE9dPzZYVyn
-         VC/JP8GRnPntAifQgYdNOzsXA+UN9jf/QbUg0L6Xt0dlJpZ5ll/p3BBcJlj98kio8kFT
-         8FpBPo3xy1X7JavVQ2za5R6R0sKv6wngf5AC/1omcqcR5BqqQHUkK5wHtHdAoVkskXs6
-         vyww==
-X-Gm-Message-State: AO0yUKWasR+TaDV+lyGKX2ITx4ATRiBX6GE5LozNNlZD9dBYTgsOLg1l
-        AmkJS8H0nrfeCt4BJpY3CHw=
-X-Google-Smtp-Source: AK7set/O7mi33sTg65iC+16XhIxGTaiqxvui8Y6X+Ehn5Zki9wIVvuZcanngN2uUvi/EFQX18Bb5iA==
-X-Received: by 2002:a17:903:2844:b0:19a:9797:1631 with SMTP id kq4-20020a170903284400b0019a97971631mr5811307plb.3.1676585002264;
-        Thu, 16 Feb 2023 14:03:22 -0800 (PST)
-Received: from ?IPV6:2001:df0:0:200c:8dff:a3c:def2:5826? ([2001:df0:0:200c:8dff:a3c:def2:5826])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902ee4d00b0019919b7e5b1sm1789528plo.168.2023.02.16.14.03.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Feb 2023 14:03:21 -0800 (PST)
-Message-ID: <a1783a1c-b599-0e44-e88c-181470c5675f@gmail.com>
-Date:   Fri, 17 Feb 2023 11:03:16 +1300
+        with ESMTP id S229445AbjBQGBm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Feb 2023 01:01:42 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6772B082;
+        Thu, 16 Feb 2023 22:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676613700; x=1708149700;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=e8dwyHe1OfxIWTM3M8v2ygxze2bnZHcEvqIdWl3nJa0=;
+  b=iLvNtbsciBts0vNE7YoQJBU7LrLWPRZUmyit1hPdU9tHQRmYzlzghaST
+   rUWTBpsCKJ4s6WE4LCeH3HNDyg0fg2smvykL/Hd96dfRhBDs/URsb4cEB
+   /wBZ7/16Kwodn0f1/uLZ8a3AtXwFjSshrR7+zDOevb7xkYv7DLyqccpXD
+   V2tZkGY+Sm5sCogWyC7UZgujsRRs21qyB138Yug8NK8cmpyW2fmvo9eJF
+   QV9DmitJ0gUwK+bI+hyY2Kq3jjG0UNuMjIFl5UdwVsDx5QSiwAqUZxSeS
+   CtJGp/sqRnySIYojfhuvxJyOtDohgOqlaTiHiNKIbGEZcO4hcNrnpAe0q
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="320019929"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="320019929"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 22:01:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10623"; a="779676233"
+X-IronPort-AV: E=Sophos;i="5.97,304,1669104000"; 
+   d="scan'208";a="779676233"
+Received: from jaeikcho-mobl1.amr.corp.intel.com (HELO [10.212.245.223]) ([10.212.245.223])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2023 22:01:38 -0800
+Message-ID: <00d25fba-345f-a461-d852-33813da45cf8@linux.intel.com>
+Date:   Thu, 16 Feb 2023 22:01:37 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 15/17] m68k: Implement the new page table range API
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-m68k@lists.linux-m68k.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-arch@vger.kernel.org
-References: <20230215000446.1655635-1-willy@infradead.org>
- <20230215200920.1849567-1-willy@infradead.org>
- <20230215200920.1849567-2-willy@infradead.org>
- <84c923f7-c60b-068d-bb06-48aea1412f53@gmail.com>
- <Y+2wdSxVgS6HmFRy@casper.infradead.org>
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v3 4/6] x86/hyperv: Support hypercalls for TDX guests
 Content-Language: en-US
-From:   Michael Schmitz <schmitzmic@gmail.com>
-In-Reply-To: <Y+2wdSxVgS6HmFRy@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, seanjc@google.com, tglx@linutronix.de,
+        tony.luck@intel.com, wei.liu@kernel.org, x86@kernel.org,
+        mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
+References: <20230206192419.24525-1-decui@microsoft.com>
+ <20230206192419.24525-5-decui@microsoft.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230206192419.24525-5-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Matthew,
-
-On 16/02/23 17:26, Matthew Wilcox wrote:
-> On Thu, Feb 16, 2023 at 01:59:44PM +1300, Michael Schmitz wrote:
->> Matthew,
->>
->> On 16/02/23 09:09, Matthew Wilcox (Oracle) wrote:
->>> Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
->>> flush_dcache_folio().  I'm not entirely certain that the 040/060 case
->>> in __flush_pages_to_ram() is correct.
->> I'm pretty sure you need to iterate to hit each of the pages - the code as
->> is will only push cache entries for the first page.
->>
->> Quoting the 040 UM:
->>
->> "Both instructions [cinv, cpush] allow operation on a single cache line, all
->> cache lines in a specific page, or an entire cache, and can select one or
->> both caches for the operation. For line and page operations, a physical
->> address in an address register specifies the memory address."
-> I actually found that!  What I didn't find was how to tell if this
-> cpush insn is the one which is operating on a single cache line,
-> a single page, or the entire cache.
->
-> So I should do a loop around this asm and call it once for each page
-> we're flushing?
-
-Yes, that's the idea. I'm uncertain whether contiguous virtual pages are 
-always guaranteed to have contiguous physical mappings, so no point in 
-trying to 'optimize' and shift the loop into inline assembly.
-
-Cheers,
-
-     Michael
 
 
+On 2/6/23 11:24 AM, Dexuan Cui wrote:
+> A TDX guest uses the GHCI call rather than hv_hypercall_pg.
+> 
+> In hv_do_hypercall(), Hyper-V requires that the input/output addresses
+> must have the cc_mask.
+> 
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> 
+> ---
 
->
+Looks good to me
+
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+
+> 
+> Changes in v2:
+>   Implemented hv_tdx_hypercall() in C rather than in assembly code.
+>   Renamed the parameter names of hv_tdx_hypercall().
+>   Used cc_mkdec() directly in hv_do_hypercall().
+> 
+> Changes in v3:
+>   Decrypted/encrypted hyperv_pcpu_input_arg in
+>     hv_common_cpu_init() and hv_common_cpu_die().
+> 
+>  arch/x86/hyperv/hv_init.c       |  8 ++++++++
+>  arch/x86/hyperv/ivm.c           | 14 ++++++++++++++
+>  arch/x86/include/asm/mshyperv.h | 17 +++++++++++++++++
+>  drivers/hv/hv_common.c          | 21 +++++++++++++++++++++
+>  4 files changed, 60 insertions(+)
+> 
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 41ef036ebb7b..6a0bcbd18306 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -430,6 +430,10 @@ void __init hyperv_init(void)
+>  	/* Hyper-V requires to write guest os id via ghcb in SNP IVM. */
+>  	hv_ghcb_msr_write(HV_X64_MSR_GUEST_OS_ID, guest_id);
+>  
+> +	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg. */
+> +	if (hv_isolation_type_tdx())
+> +		goto skip_hypercall_pg_init;
+> +
+>  	hv_hypercall_pg = __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START,
+>  			VMALLOC_END, GFP_KERNEL, PAGE_KERNEL_ROX,
+>  			VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
+> @@ -469,6 +473,7 @@ void __init hyperv_init(void)
+>  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
+>  	}
+>  
+> +skip_hypercall_pg_init:
+>  	/*
+>  	 * hyperv_init() is called before LAPIC is initialized: see
+>  	 * apic_intr_mode_init() -> x86_platform.apic_post_init() and
+> @@ -602,6 +607,9 @@ bool hv_is_hyperv_initialized(void)
+>  	if (x86_hyper_type != X86_HYPER_MS_HYPERV)
+>  		return false;
+>  
+> +	/* A TDX guest uses the GHCI call rather than hv_hypercall_pg. */
+> +	if (hv_isolation_type_tdx())
+> +		return true;
+>  	/*
+>  	 * Verify that earlier initialization succeeded by checking
+>  	 * that the hypercall page is setup
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+> index 13ccb52eecd7..07e4253b5809 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -276,6 +276,20 @@ bool hv_isolation_type_tdx(void)
+>  {
+>  	return static_branch_unlikely(&isolation_type_tdx);
+>  }
+> +
+> +u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2)
+> +{
+> +	struct tdx_hypercall_args args = { };
+> +
+> +	args.r10 = control;
+> +	args.rdx = param1;
+> +	args.r8  = param2;
+> +
+> +	(void)__tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT);
+> +
+> +	return args.r11;
+> +}
+> +EXPORT_SYMBOL_GPL(hv_tdx_hypercall);
+>  #endif
+>  
+>  /*
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 49bca07bbd2c..159ab74d80e6 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -10,6 +10,7 @@
+>  #include <asm/nospec-branch.h>
+>  #include <asm/paravirt.h>
+>  #include <asm/mshyperv.h>
+> +#include <asm/coco.h>
+>  
+>  union hv_ghcb;
+>  
+> @@ -37,6 +38,12 @@ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
+>  int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
+>  int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flags);
+>  
+> +u64 hv_tdx_hypercall(u64 control, u64 param1, u64 param2);
+> +
+> +/*
+> + * If the hypercall involves no input or output parameters, the hypervisor
+> + * ignores the corresponding GPA pointer.
+> + */
+>  static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+>  {
+>  	u64 input_address = input ? virt_to_phys(input) : 0;
+> @@ -44,6 +51,10 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+>  	u64 hv_status;
+>  
+>  #ifdef CONFIG_X86_64
+> +	if (hv_isolation_type_tdx())
+> +		return hv_tdx_hypercall(control,
+> +					cc_mkdec(input_address),
+> +					cc_mkdec(output_address));
+>  	if (!hv_hypercall_pg)
+>  		return U64_MAX;
+>  
+> @@ -81,6 +92,9 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
+>  	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
+>  
+>  #ifdef CONFIG_X86_64
+> +	if (hv_isolation_type_tdx())
+> +		return hv_tdx_hypercall(control, input1, 0);
+> +
+>  	{
+>  		__asm__ __volatile__(CALL_NOSPEC
+>  				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+> @@ -112,6 +126,9 @@ static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
+>  	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
+>  
+>  #ifdef CONFIG_X86_64
+> +	if (hv_isolation_type_tdx())
+> +		return hv_tdx_hypercall(control, input1, input2);
+> +
+>  	{
+>  		__asm__ __volatile__("mov %4, %%r8\n"
+>  				     CALL_NOSPEC
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index a9a03ab04b97..219c3f235c50 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -21,6 +21,7 @@
+>  #include <linux/ptrace.h>
+>  #include <linux/slab.h>
+>  #include <linux/dma-map-ops.h>
+> +#include <linux/set_memory.h>
+>  #include <asm/hyperv-tlfs.h>
+>  #include <asm/mshyperv.h>
+>  
+> @@ -125,6 +126,7 @@ int hv_common_cpu_init(unsigned int cpu)
+>  	u64 msr_vp_index;
+>  	gfp_t flags;
+>  	int pgcount = hv_root_partition ? 2 : 1;
+> +	int ret;
+>  
+>  	/* hv_cpu_init() can be called with IRQs disabled from hv_resume() */
+>  	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
+> @@ -134,6 +136,17 @@ int hv_common_cpu_init(unsigned int cpu)
+>  	if (!(*inputarg))
+>  		return -ENOMEM;
+>  
+> +	if (hv_isolation_type_tdx()) {
+> +		ret = set_memory_decrypted((unsigned long)*inputarg, pgcount);
+> +		if (ret) {
+> +			/* It may be unsafe to free *inputarg */
+> +			*inputarg = NULL;
+> +			return ret;
+> +		}
+> +
+> +		memset(*inputarg, 0x00, pgcount * HV_HYP_PAGE_SIZE);
+> +	}
+> +
+>  	if (hv_root_partition) {
+>  		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+>  		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+> @@ -154,6 +167,8 @@ int hv_common_cpu_die(unsigned int cpu)
+>  	unsigned long flags;
+>  	void **inputarg, **outputarg;
+>  	void *mem;
+> +	int pgcount = hv_root_partition ? 2 : 1;
+> +	int ret;
+>  
+>  	local_irq_save(flags);
+>  
+> @@ -168,6 +183,12 @@ int hv_common_cpu_die(unsigned int cpu)
+>  
+>  	local_irq_restore(flags);
+>  
+> +	if (hv_isolation_type_tdx()) {
+> +		ret = set_memory_encrypted((unsigned long)mem, pgcount);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	kfree(mem);
+>  
+>  	return 0;
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
