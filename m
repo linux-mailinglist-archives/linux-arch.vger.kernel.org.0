@@ -2,91 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B18369AE7F
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Feb 2023 15:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F6B69B047
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Feb 2023 17:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjBQOz1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Feb 2023 09:55:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
+        id S230404AbjBQQMG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Feb 2023 11:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjBQOz0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Feb 2023 09:55:26 -0500
+        with ESMTP id S229525AbjBQQMF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Feb 2023 11:12:05 -0500
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EB96EB9D;
-        Fri, 17 Feb 2023 06:55:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2C071495;
+        Fri, 17 Feb 2023 08:11:41 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E1411EC0752;
-        Fri, 17 Feb 2023 15:55:09 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 98D951EC0947;
+        Fri, 17 Feb 2023 17:11:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1676645709;
+        t=1676650299;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JrwIMUT5Q2EPqy66puuhgnw/kQvrwJKXmMCph/xJRv8=;
-        b=F8KVnbnRylxJ3Q02ws1l0VvHI+pqIFwZ1eG+bUBhyQcBH77nB5uGm3NXUfLfTM+jAZ9qWV
-        EjmR+A9IDxQ7tJs6n0Uk0eIcVbmm4y3scun/CE/aGmm2u+MyGtco3V4SevPzjW5pt/YqGr
-        d4KXmWnegvfpTMUjXFbEa7c7+k7ZAq0=
-Date:   Fri, 17 Feb 2023 15:55:05 +0100
+        bh=4y1K+ippPallw44msMIiTOwFvw7Y/qQvd/jrIKuWufQ=;
+        b=pC0kWiA8XgbbDqXoBi0ZQAhCQQnBzSEOtx+o6/Z3o1Bmsd/vToZtakDOiDpFp68pxrqaoi
+        I5pLmz/+ZlM8JR8KIK4/kruEfhCaPEV/O8VJmUVFzMef3BCF7EMkt0WDHDIjC7+2vCaCL/
+        wXw8LH85DU+DgfJWSHEHhvlJl91iUXs=
+Date:   Fri, 17 Feb 2023 17:11:35 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
         "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
         "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <Y++VSZNAX9Cstbqo@zn.tnic>
-References: <Y+aczIbbQm/ZNunZ@zn.tnic>
- <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
- <Y+auMQ88In7NEc30@google.com>
- <Y+av0SVUHBLCVdWE@google.com>
- <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+bXjxUtSf71E5SS@google.com>
- <Y+4wiyepKU8IEr48@zn.tnic>
- <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+5immKTXCsjSysx@zn.tnic>
- <BYAPR21MB16880EC9C85EC9343F9AF178D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v5 11/39] x86/mm: Update pte_modify for _PAGE_COW
+Message-ID: <Y++nN8x08RopoWJr@zn.tnic>
+References: <20230119212317.8324-1-rick.p.edgecombe@intel.com>
+ <20230119212317.8324-12-rick.p.edgecombe@intel.com>
+ <Y+T+ZxydCZS1Yjmz@zn.tnic>
+ <49d20fcd197e85e8475f5170db78780f06396cc0.camel@intel.com>
+ <Y+ZNL4o57lCrmwpb@zn.tnic>
+ <15c76808ac5975df2294d0c7edf0abfe8587da2d.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <BYAPR21MB16880EC9C85EC9343F9AF178D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <15c76808ac5975df2294d0c7edf0abfe8587da2d.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -96,34 +89,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 06:16:56AM +0000, Michael Kelley (LINUX) wrote:
-> Is that consistent with your thinking, or is the whole
-> cc_platform_has() approach problematic, including for the existing SEV
-> flavors and for TDX?
+On Fri, Feb 10, 2023 at 05:00:05PM +0000, Edgecombe, Rick P wrote:
+> 	/*
+> 	 * Dirty bit is not preserved above so it can be done
+> 	 * in a special way for the shadow stack case, where it
+> 	 * may need to set _PAGE_SAVED_DIRTY. __pte_mkdirty() will do
+> 	 * this in the case of shadow stack.
+> 	 */
+> 	if (oldval & _PAGE_DIRTY)
+> 		if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) &&
+> 		    !pte_write(pte_result))
+> 			pte_set_flags(pte_result, _PAGE_SAVED_DIRTY);
+> 		else
+> 			pte_set_flags(pte_result, _PAGE_DIRTY);
+> 	}
+> 
+> 	return pte_result;
+> }
+> 
+> So the later logic of doing the _PAGE_SAVED_DIRTY (_PAGE_COW) part is
+> not centralized. It's ok?
 
-The confidential computing attributes are, yes, features. I've been
-preaching since the very beginning that vTOM *is* *also* one such
-feature. It is a feature bit in sev_features, for chrissakes. So by that
-logic, those SEV-SNP HyperV guests should return true when
+I think so.
 
-	cc_platform_has(CC_ATTR_GUEST_SEV_SNP_VTOM);
+1. If you have a single pte_mkdirty() and not also a __ helper, then
+   there's less confusion for callers as to which interface they should be
+   using
 
-is tested.
+2. The not centralized part is a single conditional so it's not like
+   you're saving on gazillion code lines
 
-But Sean doesn't like that.
+So I'd prefer that.
 
-If the access method to the IO-APIC and vTPM are specific to the
-HyperV's vTOM implementation, then I don't mind if this were called
+If we end up needing this in more places then we can carve it out into
+a proper helper which is not in a header file such that anyone can use
+it but move the whole functionality into cet.c or so where we can
+control its visibility to the rest of the kernel.
 
-	cc_platform_has(CC_ATTR_GUEST_HYPERV_VTOM);
+I'd say.
 
-Frankly, I don't see any other enlightened guest using vTOM except
-HyperV's but virt folks have managed to surprise me in the past too.
-
-In any case, a single flag which is specific to that guest type is fine
-too.
-
-It feels like we're running in circles by now... ;-\
+Thx.
 
 -- 
 Regards/Gruss,
