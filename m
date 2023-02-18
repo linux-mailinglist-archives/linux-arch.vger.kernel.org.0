@@ -2,152 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A8169B84A
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 07:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF0669B876
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 08:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjBRGOO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Feb 2023 01:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S229704AbjBRHQQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Feb 2023 02:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjBRGON (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 01:14:13 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B3853EFF
-        for <linux-arch@vger.kernel.org>; Fri, 17 Feb 2023 22:14:12 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id j23so65285ljq.8
-        for <linux-arch@vger.kernel.org>; Fri, 17 Feb 2023 22:14:12 -0800 (PST)
+        with ESMTP id S229436AbjBRHQO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 02:16:14 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31CE3D93E;
+        Fri, 17 Feb 2023 23:16:11 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id w9-20020a17090a028900b00236679bc70cso984214pja.4;
+        Fri, 17 Feb 2023 23:16:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9meo/2HsyQjWTOLBePu8gQ8aMOImbRjLtTEkBnxFWA=;
-        b=rNW4pWyLBgZAXvqJjvCoQS8lk2lmt0bpvLoQdrZ4JtZt7F/xLQANfMR03xhYfnh+h2
-         rmKCOP/qyMs+J36NL88QnT7nLTcqAAMfUbpj9E0xe3jdJKKjcCQ++dD7IBc/gnmYd8Ln
-         WROBH3wQ8mnvc2t6fvC/87NGLDoo+sxFiJiaE=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+zeAyStGOAFnstrUajjYueyIYBwjl00KpR/f53YMTfg=;
+        b=XvX6Qh9VLDn0hoAkDRv9heT0qhQaWB3AGZIizkKYTCVUSnBIR8d6YaC0FZGYNXsCwT
+         9v8X0gMWKywWprau/Oo3skJxuOSHSEgG/QyK/Rhuu0913/a5yP0i6allU9vhxwS/Wtqq
+         lfDu2umQzzmc0EvxysC3hmS/We55bTx/TjubE4eeL9xlwu2mZr4yJt/EYtvd84j7iZUA
+         mwUmIb9fKzdrlKefeMExdXM3Nuiw81GfVlUyg8VJpG3JqrVcw5nvvwe3GQM9fZY+RdvN
+         wGP6N/olAoTEx0T1t6CXthG7wtqJ1u/g22pduHAVX/gtuYHjWWK32cX7GhHOlltZ7aQW
+         W+Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M9meo/2HsyQjWTOLBePu8gQ8aMOImbRjLtTEkBnxFWA=;
-        b=HhuxPZWbK4BpQ+8KxblJIqV/5IbYGWheo6p7wHpB6KN7pzAlRSnRycdwOPUxnct3J5
-         Ds8NnSpi/ew1BpByjDhaQgrJ5PQZ0AMJ2TWi525CVF6XYH33kq+7yyeG5JOwwXTU+9ms
-         z5YWXKRYTJiGNcbLw80EZFVD39IvZbHSeMNnvDTgkHtxXCrqErds+xqa9i+QqPBaQpNc
-         UUWYuUqUUE8jTFfTTEJ1lG83HG6E4s859QlGcO973evPPnXvV5K1H6DaxiHXSzUSQ3eS
-         g22dt6agSpkZEI0bbAyMcRGHVbhaaxud/PByWWHrKktc3WecfcL2U6uXf9I14OLAYXWx
-         2x0g==
-X-Gm-Message-State: AO0yUKWHUf5TLiyJO+GJYohaP2ZEwZrJrU/WW0Cm4KcEPOd413PwZIkC
-        KVI3ygMKol+h0ztYomQ2Eh1XFKTivFhqZ/vzgeLV4Q==
-X-Google-Smtp-Source: AK7set/q4K2z6T8tTM3H+wXeDE+gFiACy9O/yEXPJeOfHZ8S48WmuHxW5F7bIDV9xIb0GRZIxHoXzwQbijx97x4nEzs=
-X-Received: by 2002:a05:651c:1688:b0:293:4647:364a with SMTP id
- bd8-20020a05651c168800b002934647364amr1066205ljb.3.1676700850733; Fri, 17 Feb
- 2023 22:14:10 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+zeAyStGOAFnstrUajjYueyIYBwjl00KpR/f53YMTfg=;
+        b=rf3cGYiAZ3B6WigxluvJjC+0C5cqIqwao/osF4okFnF2sAbOTELBHuoZ+ntNYOcaHm
+         VFNRz47SCMCnEhhtui/so3Cxp5S8eVOtdSjUiNuxcM/kUOnkxfsH5cW2JZQQGRLYA1ud
+         qe0h3ViAk0yIfpMZMy1IJH/6XejFHEWce2XGZU6JuPKev/7JXgj9M1T1aAWAk60zbcKu
+         U6bOR/ouNokrOdNE01/hEZhHDZS3MS05oeREeuTKRL16pE0SeSQM7bD4JXhGXb/mmsWE
+         YSWVykI5hQ6aY3XE0pJoI2r8Bfq6YJLzyESHzhKwSUDHjW/CnMurEfWH9RFndP8AbS0W
+         tnfA==
+X-Gm-Message-State: AO0yUKWCvfqeGFZ9b0/L3H0bo7pq2sla5Xe5+JiWWHyHPz7GuG5FFzcx
+        VlknH4fygwFrp3+kZRj4TT8=
+X-Google-Smtp-Source: AK7set/UOWJ97CrDvzvUthnHbSBIgUOhimOsG8Qwgc/q/lUkAoTaohMx0gVAv3CVVGfVhrqmHW0ZWQ==
+X-Received: by 2002:a17:903:1206:b0:19c:355c:6eb5 with SMTP id l6-20020a170903120600b0019c355c6eb5mr2073660plh.30.1676704571284;
+        Fri, 17 Feb 2023 23:16:11 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id c19-20020a170902849300b0019460ac7c6asm4091827plo.283.2023.02.17.23.16.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Feb 2023 23:16:10 -0800 (PST)
+Message-ID: <17278603-4328-3753-cae9-eb10ce69db7a@gmail.com>
+Date:   Sat, 18 Feb 2023 15:15:58 +0800
 MIME-Version: 1.0
-References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
- <Y920w4QRLtC6kd+x@rowland.harvard.edu> <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
- <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
- <Y+fN2fvUjGDWBYrv@google.com> <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
- <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com> <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-In-Reply-To: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sat, 18 Feb 2023 01:13:59 -0500
-Message-ID: <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
-Subject: Re: Current LKMM patch disposition
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
-        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, akiyks@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH V3 00/16] x86/hyperv/sev: Add AMD sev-snp enlightened
+ guest support on hyperv
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230122024607.788454-1-ltykernel@gmail.com>
+ <fac62414-06f9-0454-8393-f039aa30571a@amd.com>
+ <fe100597-26be-23e4-bfa9-f45aa27b7966@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <fe100597-26be-23e4-bfa9-f45aa27b7966@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Alan,
+On 2/17/2023 8:47 PM, Gupta, Pankaj wrote:
+> On 2/9/2023 12:36 PM, Gupta, Pankaj wrote:
+>> Hi Tianyu,
+>>
+>>> This patchset is to add AMD sev-snp enlightened guest
+>>> support on hyperv. Hyperv uses Linux direct boot mode
+>>> to boot up Linux kernel and so it needs to pvalidate
+>>> system memory by itself.
+>>>
+>>> In hyperv case, there is no boot loader and so cc blob
+>>> is prepared by hypervisor. In this series, hypervisor
+>>> set the cc blob address directly into boot parameter
+>>> of Linux kernel. If the magic number on cc blob address
+>>> is valid, kernel will read cc blob.
+>>>
+>>> Shared memory between guests and hypervisor should be
+>>> decrypted and zero memory after decrypt memory. The data
+>>> in the target address. It maybe smearedto avoid smearing
+>>> data.
+>>>
+>>> Introduce #HV exception support in AMD sev snp code and
+>>> #HV handler.
+>>
+>> I am interested to test the Linux guest #HV exception handling 
+>> (patches 12-16 in this series) for the restricted interrupt injection 
+>> with the Linux/KVM host.
+>>
+>> Do you have a git tree which or any base commit on which
+>> I can use to apply these patches?
+> 
+> Never mind. I could apply the patches 12-16 on master (except minor 
+> tweak in patch 14). Now, will try to test.
+> 
 
-On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-[...]
->
-> Would you like to post a few examples showing some of the most difficult
-> points you encountered?  Maybe explanation.txt can be improved.
-
-One additional feedback I wanted to mention, regarding this paragraph
-under "WARNING":
-===========
-The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
-not perfect; and under some circumstances it is possible for the
-compiler to undermine the memory model. Here is an example. Suppose
-both branches of an "if" statement store the same value to the same
-location:
-r1 = READ_ONCE(x);
-if (r1) {
-WRITE_ONCE(y, 2);
-... /* do something */
-} else {
-WRITE_ONCE(y, 2);
-... /* do something else */
-}
-===========
-
-I tried lots of different compilers with varying degrees of
-optimization, in all cases I find that the conditional instruction
-always appears in program order before the stores inside the body of
-the conditional. So I am not sure if this is really a valid concern on
-current compilers, if not - could you provide an example of a compiler
-and options that cause it?
-
-In any case, if it is a theoretical concern, it could be clarified
-that this is a theoretical possibility in the text.  And if it is a
-real/practical concern, then it could be mentioned the specific
-compiler/arch this was seen in.
-
-Thanks!
-
- - Joel
-
-
-
->
-> > > I'm not sure that breaking this relation up into pieces will make it any
-> > > easier to understand.
-> >
-> > Yes, but I tried. I will keep trying to understand your last patch
-> > more. Especially I am still not sure, why in the case of an SRCU
-> > reader on a single CPU, the following does not work:
-> > let srcu-rscs = ([Srcu-lock]; data; [Srcu-unlock]).
->
-> You have to understand that herd7 does not track dependencies through
-> stores and subsequent loads.  That is, if you have something like:
->
->         r1 = READ_ONCE(*x);
->         WRITE_ONCE(*y, r1);
->         r2 = READ_ONCE(*y);
->         WRITE_ONCE(*z, r2);
->
-> then herd7 will realize that the write to y depends on the value read
-> from x, and it will realize that the write to z depends on the value
-> read from y.  But it will not realize that the write to z depends on the
-> value read from x; it loses track of that dependency because of the
-> intervening store/load from y.
->
-> More to the point, if you have:
->
->         r1 = srcu_read_lock(lock);
->         WRITE_ONCE(*y, r1);
->         r2 = READ_ONCE(*y);
->         srcu_read_unlock(lock, r2);
->
-> then herd7 will not realize that the value of r2 depends on the value of
-> r1.  So there will be no data dependency from the srcu_read_lock() to
-> the srcu_read_unlock().
->
-> Alan
+Hi Pankaj:
+	Sorry. I missed your first mail. Please let me know any issue son KVM 
+side if available。Thanks in advance.
