@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489DC69BC4D
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95EC869BC51
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjBRVQd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Feb 2023 16:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S229875AbjBRVQf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Feb 2023 16:16:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjBRVQJ (ORCPT
+        with ESMTP id S229843AbjBRVQJ (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 16:16:09 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC47B166C3;
-        Sat, 18 Feb 2023 13:16:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1570116336;
+        Sat, 18 Feb 2023 13:16:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676754960; x=1708290960;
+  t=1676754961; x=1708290961;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=4iLM/QQV8kQnF+xZq53uEjXr+ZUWXLeX39BIgsKBw78=;
-  b=UYWK4qS9pRlRSm6vLHK9dWhs9y4z2+bFXn91rlk6kxD/wMBJpwvGZXZT
-   Hpuww398fbhMUf4Tq/VU4NoxrQkL7Vepb42GHMXBHrX5Kwxxk7qiQYR3t
-   z0yHhrstH3e5sHMABQzDsZ+2cWnNSqhdcqVR6wdECPsKrxfp4Yx/FghDl
-   i1gFdhJXxGLLH1UZ6oiA/zz5j+Lm0QX7xoejctE9X+DLbpXb+YAEkoqwp
-   8+mOp8Sy+RjL+9ZDyfKlNdsPSzu1Sq0S8IN3kSMC2Wis9ScyDdJYIXzms
-   MxqQcYcpN9NefDC9Tr5xF/agmQIsB8csW5fISxjccF4y9IUWRgyv/OO1t
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427115"
+  bh=taTLN9jgTVYTLY9Eitvg4bLvIT9+A18uF00hT2wXoJs=;
+  b=G7QHn+Mi8+/+zr8XBFuVtSRHxtVrRHK/SbNGVlpVWKUN78sHmGLX3MLk
+   8+UkXNhdXmSsnCR9fXyn0VIwoRE1ti3CJJylfQgzdDZ05MbBHbrB5gxCD
+   Q8M0v5H0VLWHkbvlb3i7d/nnSwpOozYHv0ytiETTQ3njGLa+cU+aZfGmT
+   ayhsz14KcDW67+j4+n8UiL8y4aAWJz6nEs5QGhOwANbIoTLIZI9YEvUFp
+   qtoU6yiVEllhUzr6t7GWVEUB3Gd+KLCOoseAAmPgMjaamZ3C+6M7/fqAH
+   1/nOAB9UW7GYAteAhJuCKr1KhjVTQRWc8RKxaL00NleGRRY+Lv/rPoPXi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427138"
 X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="418427115"
+   d="scan'208";a="418427138"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:15:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241574"
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:15:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241580"
 X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="664241574"
+   d="scan'208";a="664241580"
 Received: from adityava-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.80.223])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:15:57 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:15:58 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -67,9 +67,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v6 02/41] x86/shstk: Add Kconfig option for shadow stack
-Date:   Sat, 18 Feb 2023 13:13:54 -0800
-Message-Id: <20230218211433.26859-3-rick.p.edgecombe@intel.com>
+Subject: [PATCH v6 03/41] x86/cpufeatures: Add CPU feature flags for shadow stacks
+Date:   Sat, 18 Feb 2023 13:13:55 -0800
+Message-Id: <20230218211433.26859-4-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
 References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
@@ -84,16 +84,23 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-Shadow stack provides protection for applications against function return
-address corruption. It is active when the processor supports it, the
-kernel has CONFIG_X86_SHADOW_STACK enabled, and the application is built
-for the feature. This is only implemented for the 64-bit kernel. When it
-is enabled, legacy non-shadow stack applications continue to work, but
-without protection.
+The Control-Flow Enforcement Technology contains two related features,
+one of which is Shadow Stacks. Future patches will utilize this feature
+for shadow stack support in KVM, so add a CPU feature flags for Shadow
+Stacks (CPUID.(EAX=7,ECX=0):ECX[bit 7]).
 
-Since there is another feature that utilizes CET (Kernel IBT) that will
-share implementation with shadow stacks, create CONFIG_CET to signify
-that at least one CET feature is configured.
+To protect shadow stack state from malicious modification, the registers
+are only accessible in supervisor mode. This implementation
+context-switches the registers with XSAVES. Make X86_FEATURE_SHSTK depend
+on XSAVES.
+
+The shadow stack feature, enumerated by the CPUID bit described above,
+encompasses both supervisor and userspace support for shadow stack. In
+near future patches, only userspace shadow stack will be enabled. In
+expectation of future supervisor shadow stack support, create a software
+CPU capability to enumerate kernel utilization of userspace shadow stack
+support. This user shadow stack bit should depend on the HW "shstk"
+capability and that logic will be implemented in future patches.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
@@ -105,89 +112,83 @@ Cc: Kees Cook <keescook@chromium.org>
 
 ---
 v5:
- - Remove capitalization of shadow stack (Boris)
+ - Drop "shstk" from cpuinfo (Boris)
+ - Remove capitalization on shadow stack (Boris)
 
 v3:
- - Add X86_CET (Kees)
- - Add back WRUSS dependency (Kees)
- - Fix verbiage (Dave)
- - Change from promt to bool (Kirill)
- - Add more to commit log
+ - Add user specific shadow stack cpu cap (Andrew Cooper)
+ - Drop reviewed-bys from Boris and Kees due to the above change.
 
 v2:
- - Remove already wrong kernel size increase info (tlgx)
- - Change prompt to remove "Intel" (tglx)
- - Update line about what CPUs are supported (Dave)
+ - Remove IBT reference in commit log (Kees)
+ - Describe xsaves dependency using text from (Dave)
 
-Yu-cheng v25:
- - Remove X86_CET and use X86_SHADOW_STACK directly.
+v1:
+ - Remove IBT, can be added in a follow on IBT series.
 ---
- arch/x86/Kconfig           | 24 ++++++++++++++++++++++++
- arch/x86/Kconfig.assembler |  5 +++++
- 2 files changed, 29 insertions(+)
+ arch/x86/include/asm/cpufeatures.h       | 2 ++
+ arch/x86/include/asm/disabled-features.h | 8 +++++++-
+ arch/x86/kernel/cpu/cpuid-deps.c         | 1 +
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index a825bf031f49..f03791b73f9f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1851,6 +1851,11 @@ config CC_HAS_IBT
- 		  (CC_IS_CLANG && CLANG_VERSION >= 140000)) && \
- 		  $(as-instr,endbr64)
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index fdb8e09234ba..af4178e0d76a 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -309,6 +309,7 @@
+ #define X86_FEATURE_MSR_TSX_CTRL	(11*32+20) /* "" MSR IA32_TSX_CTRL (Intel) implemented */
+ #define X86_FEATURE_SMBA		(11*32+21) /* "" Slow Memory Bandwidth Allocation */
+ #define X86_FEATURE_BMEC		(11*32+22) /* "" Bandwidth Monitoring Event Configuration */
++#define X86_FEATURE_USER_SHSTK		(11*32+23) /* Shadow stack support for user mode applications */
  
-+config X86_CET
-+	def_bool n
-+	help
-+	  CET features configured (Shadow stack or IBT)
-+
- config X86_KERNEL_IBT
- 	prompt "Indirect Branch Tracking"
- 	def_bool y
-@@ -1858,6 +1863,7 @@ config X86_KERNEL_IBT
- 	# https://github.com/llvm/llvm-project/commit/9d7001eba9c4cb311e03cd8cdc231f9e579f2d0f
- 	depends on !LD_IS_LLD || LLD_VERSION >= 140000
- 	select OBJTOOL
-+	select X86_CET
- 	help
- 	  Build the kernel with support for Indirect Branch Tracking, a
- 	  hardware support course-grain forward-edge Control Flow Integrity
-@@ -1952,6 +1958,24 @@ config X86_SGX
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+@@ -375,6 +376,7 @@
+ #define X86_FEATURE_OSPKE		(16*32+ 4) /* OS Protection Keys Enable */
+ #define X86_FEATURE_WAITPKG		(16*32+ 5) /* UMONITOR/UMWAIT/TPAUSE Instructions */
+ #define X86_FEATURE_AVX512_VBMI2	(16*32+ 6) /* Additional AVX512 Vector Bit Manipulation Instructions */
++#define X86_FEATURE_SHSTK		(16*32+ 7) /* "" Shadow stack */
+ #define X86_FEATURE_GFNI		(16*32+ 8) /* Galois Field New Instructions */
+ #define X86_FEATURE_VAES		(16*32+ 9) /* Vector AES */
+ #define X86_FEATURE_VPCLMULQDQ		(16*32+10) /* Carry-Less Multiplication Double Quadword */
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 5dfa4fb76f4b..505f78ddca82 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -99,6 +99,12 @@
+ # define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
+ #endif
  
- 	  If unsure, say N.
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++#define DISABLE_USER_SHSTK	0
++#else
++#define DISABLE_USER_SHSTK	(1 << (X86_FEATURE_USER_SHSTK & 31))
++#endif
++
+ /*
+  * Make sure to add features to the correct mask
+  */
+@@ -114,7 +120,7 @@
+ #define DISABLED_MASK9	(DISABLE_SGX)
+ #define DISABLED_MASK10	0
+ #define DISABLED_MASK11	(DISABLE_RETPOLINE|DISABLE_RETHUNK|DISABLE_UNRET| \
+-			 DISABLE_CALL_DEPTH_TRACKING)
++			 DISABLE_CALL_DEPTH_TRACKING|DISABLE_USER_SHSTK)
+ #define DISABLED_MASK12	0
+ #define DISABLED_MASK13	0
+ #define DISABLED_MASK14	0
+diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
+index f6748c8bd647..e462c1d3800a 100644
+--- a/arch/x86/kernel/cpu/cpuid-deps.c
++++ b/arch/x86/kernel/cpu/cpuid-deps.c
+@@ -81,6 +81,7 @@ static const struct cpuid_dep cpuid_deps[] = {
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
+ 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
+ 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
++	{ X86_FEATURE_SHSTK,			X86_FEATURE_XSAVES    },
+ 	{}
+ };
  
-+config X86_USER_SHADOW_STACK
-+	bool "X86 userspace shadow stack"
-+	depends on AS_WRUSS
-+	depends on X86_64
-+	select ARCH_USES_HIGH_VMA_FLAGS
-+	select X86_CET
-+	help
-+	  Shadow stack protection is a hardware feature that detects function
-+	  return address corruption.  This helps mitigate ROP attacks.
-+	  Applications must be enabled to use it, and old userspace does not
-+	  get protection "for free".
-+
-+	  CPUs supporting shadow stacks were first released in 2020.
-+
-+	  See Documentation/x86/shstk.rst for more information.
-+
-+	  If unsure, say N.
-+
- config EFI
- 	bool "EFI runtime service support"
- 	depends on ACPI
-diff --git a/arch/x86/Kconfig.assembler b/arch/x86/Kconfig.assembler
-index 26b8c08e2fc4..00c79dd93651 100644
---- a/arch/x86/Kconfig.assembler
-+++ b/arch/x86/Kconfig.assembler
-@@ -19,3 +19,8 @@ config AS_TPAUSE
- 	def_bool $(as-instr,tpause %ecx)
- 	help
- 	  Supported by binutils >= 2.31.1 and LLVM integrated assembler >= V7
-+
-+config AS_WRUSS
-+	def_bool $(as-instr,wrussq %rax$(comma)(%rbx))
-+	help
-+	  Supported by binutils >= 2.31 and LLVM integrated assembler
 -- 
 2.17.1
 
