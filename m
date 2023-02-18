@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402AA69BCD1
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:21:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DC969BCD3
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjBRVVU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Feb 2023 16:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S230174AbjBRVVW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Feb 2023 16:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjBRVUp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 16:20:45 -0500
+        with ESMTP id S230168AbjBRVUq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 16:20:46 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB0D15CAE;
-        Sat, 18 Feb 2023 13:18:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984B018B30;
+        Sat, 18 Feb 2023 13:18:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676755093; x=1708291093;
+  t=1676755096; x=1708291096;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Siy80TX29l+RDBjhgBwEUhEMPmCeRxNDGp+kmyr8mZA=;
-  b=V8e05LH8wq4DYV0pv2mLzqRb/1A/TvkrchSatAWp+3UXeXKdX8KcVL4u
-   wGRbrDoIkP13n/3HC8vRlalvV1+Gg9n/vMLaaFp7iGX4cp/yFoJ2hQBvO
-   JFc8XuzhDF0HrycwBx2qLWvyrXPWYhNvUOIF5RRJvBYL8pFTjohRSzRh1
-   vVBz64W4QXCa2/NYxguGUficLPxDqpSu5a0cyab24ru3qBjyJ9oWdQ5MT
-   UAGGST1tVEnlQDjjbAE0u5J149aUIARMZxHCyMVJoNFqP0SJb6lJjyMfF
-   OkRR/WfemylqTXvCoBikdD5LiA8o+3dS2v/V6v0wuuGt1bkKO4M1vxBvc
+  bh=QFt1nd3j6Yjl0jrlYnYinrJNdu94hS5cjLAeUme4VXo=;
+  b=E1UiPFrxhJldmoH6JhfQco+WGw96hbZ90AGvKng9xkYHA+B1+CK+O4PE
+   SLXdb+CvhtHi9E/oLSifMuNYdztRIpqj91U6UkFl0brGFX9JU94ceR5gN
+   X94Br6/eYK3XJB8YDp3H25jqT5wMxRuuixNRE1Gu2vocSWo+Xp5geaNzy
+   Makcg+48lzd2vXp/+pyh/uMR6Pw8RSJHCvzkEfvKtu6FldtJKIk7yiueD
+   fMM9Vhrp7ajaeuiA+D5qBLVB5Y+ln4R9NZjqMKRxSmSFf0yKAzdNA7GT6
+   SYWWScGGe3O/pelOeFkJRakuSvnDdHhsoS5Gvg26RRr0mb+pmd8Zdpg1z
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427628"
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427649"
 X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="418427628"
+   d="scan'208";a="418427649"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:17 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241690"
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241695"
 X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="664241690"
+   d="scan'208";a="664241695"
 Received: from adityava-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.80.223])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:16 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:17 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -67,9 +67,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com
 Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v6 25/41] x86/mm: Introduce MAP_ABOVE4G
-Date:   Sat, 18 Feb 2023 13:14:17 -0800
-Message-Id: <20230218211433.26859-26-rick.p.edgecombe@intel.com>
+Subject: [PATCH v6 26/41] mm: Warn on shadow stack memory in wrong vma
+Date:   Sat, 18 Feb 2023 13:14:18 -0800
+Message-Id: <20230218211433.26859-27-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
 References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
@@ -84,115 +84,132 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 The x86 Control-flow Enforcement Technology (CET) feature includes a new
 type of memory called shadow stack. This shadow stack memory has some
-unusual properties, which require some core mm changes to function
+unusual properties, which requires some core mm changes to function
 properly.
 
-One of the properties is that the shadow stack pointer (SSP), which is a
-CPU register that points to the shadow stack like the stack pointer points
-to the stack, can't be pointing outside of the 32 bit address space when
-the CPU is executing in 32 bit mode. It is desirable to prevent executing
-in 32 bit mode when shadow stack is enabled because the kernel can't easily
-support 32 bit signals.
+One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
+treated as shadow by the CPU, but this combination used to be created by
+the kernel on x86. Previous patches have changed the kernel to now avoid
+creating these PTEs unless they are for shadow stack memory. In case any
+missed corners of the kernel are still creating PTEs like this for
+non-shadow stack memory, and to catch any re-introductions of the logic,
+warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
+stack VMAs when they are being zapped. This won't catch transient cases
+but should have decent coverage. It will be compiled out when shadow
+stack is not configured.
 
-On x86 it is possible to transition to 32 bit mode without any special
-interaction with the kernel, by doing a "far call" to a 32 bit segment.
-So the shadow stack implementation can use this address space behavior
-as a feature, by enforcing that shadow stack memory is always crated
-outside of the 32 bit address space. This way userspace will trigger a
-general protection fault which will in turn trigger a segfault if it
-tries to transition to 32 bit mode with shadow stack enabled.
-
-This provides a clean error generating border for the user if they try
-attempt to do 32 bit mode shadow stack, rather than leave the kernel in a
-half working state for userspace to be surprised by.
-
-So to allow future shadow stack enabling patches to map shadow stacks
-out of the 32 bit address space, introduce MAP_ABOVE4G. The behavior
-is pretty much like MAP_32BIT, except that it has the opposite address
-range. The are a few differences though.
-
-If both MAP_32BIT and MAP_ABOVE4G are provided, the kernel will use the
-MAP_ABOVE4G behavior. Like MAP_32BIT, MAP_ABOVE4G is ignored in a 32 bit
-syscall.
-
-Since the default search behavior is top down, the normal kaslr base can
-be used for MAP_ABOVE4G. This is unlike MAP_32BIT which has to add it's
-own randomization in the bottom up case.
-
-For MAP_32BIT, only the bottom up search path is used. For MAP_ABOVE4G
-both are potentially valid, so both are used. In the bottomup search
-path, the default behavior is already consistent with MAP_ABOVE4G since
-mmap base should be above 4GB.
-
-Without MAP_ABOVE4G, the shadow stack will already normally be above 4GB.
-So without introducing MAP_ABOVE4G, trying to transition to 32 bit mode
-with shadow stack enabled would usually segfault anyway. This is already
-pretty decent guard rails. But the addition of MAP_ABOVE4G is some small
-complexity spent to make it make it more complete.
+In order to check if a pte is shadow stack in core mm code, add two arch
+breakouts arch_check_zapped_pte/pmd(). This will allow shadow stack
+specific code to be kept in arch/x86.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+Tested-by: John Allen <john.allen@amd.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
 ---
+v6:
+ - Add arch breakout to remove shstk from core MM code.
+
 v5:
+ - Fix typo in commit log
+
+v3:
  - New patch
 ---
- arch/x86/include/uapi/asm/mman.h | 1 +
- arch/x86/kernel/sys_x86_64.c     | 6 +++++-
- include/linux/mman.h             | 4 ++++
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/pgtable.h |  6 ++++++
+ arch/x86/mm/pgtable.c          | 12 ++++++++++++
+ include/linux/pgtable.h        | 14 ++++++++++++++
+ mm/huge_memory.c               |  1 +
+ mm/memory.c                    |  1 +
+ 5 files changed, 34 insertions(+)
 
-diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
-index 775dbd3aff73..5a0256e73f1e 100644
---- a/arch/x86/include/uapi/asm/mman.h
-+++ b/arch/x86/include/uapi/asm/mman.h
-@@ -3,6 +3,7 @@
- #define _ASM_X86_MMAN_H
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 20d0df494269..f3dc16fc4389 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1687,6 +1687,12 @@ static inline bool arch_has_hw_pte_young(void)
+ 	return true;
+ }
  
- #define MAP_32BIT	0x40		/* only give out 32bit addresses */
-+#define MAP_ABOVE4G	0x80		/* only map above 4GB */
- 
- #ifdef CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS
- #define arch_calc_vm_prot_bits(prot, key) (		\
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index 8cc653ffdccd..06378b5682c1 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -193,7 +193,11 @@ arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
- 
- 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
- 	info.length = len;
--	info.low_limit = PAGE_SIZE;
-+	if (!in_32bit_syscall() && (flags & MAP_ABOVE4G))
-+		info.low_limit = 0x100000000;
-+	else
-+		info.low_limit = PAGE_SIZE;
++#define arch_check_zapped_pte arch_check_zapped_pte
++void arch_check_zapped_pte(struct vm_area_struct *vma, pte_t pte);
 +
- 	info.high_limit = get_mmap_base(0);
++#define arch_check_zapped_pmd arch_check_zapped_pmd
++void arch_check_zapped_pmd(struct vm_area_struct *vma, pmd_t pmd);
++
+ #ifdef CONFIG_XEN_PV
+ #define arch_has_hw_nonleaf_pmd_young arch_has_hw_nonleaf_pmd_young
+ static inline bool arch_has_hw_nonleaf_pmd_young(void)
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 98856bcc8102..afab0bc7862b 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -906,3 +906,15 @@ pmd_t pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
  
- 	/*
-diff --git a/include/linux/mman.h b/include/linux/mman.h
-index 58b3abd457a3..32156daa985a 100644
---- a/include/linux/mman.h
-+++ b/include/linux/mman.h
-@@ -15,6 +15,9 @@
- #ifndef MAP_32BIT
- #define MAP_32BIT 0
+ 	return pmd;
+ }
++
++void arch_check_zapped_pte(struct vm_area_struct *vma, pte_t pte)
++{
++	VM_WARN_ON_ONCE(!(vma->vm_flags & VM_SHADOW_STACK) &&
++			pte_shstk(pte));
++}
++
++void arch_check_zapped_pmd(struct vm_area_struct *vma, pmd_t pmd)
++{
++	VM_WARN_ON_ONCE(!(vma->vm_flags & VM_SHADOW_STACK) &&
++			pmd_shstk(pmd));
++}
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 1159b25b0542..22787c86c8f2 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -291,6 +291,20 @@ static inline bool arch_has_hw_pte_young(void)
+ }
  #endif
-+#ifndef MAP_ABOVE4G
-+#define MAP_ABOVE4G 0
+ 
++#ifndef arch_check_zapped_pte
++static inline void arch_check_zapped_pte(struct vm_area_struct *vma,
++					 pte_t pte)
++{
++}
 +#endif
- #ifndef MAP_HUGE_2MB
- #define MAP_HUGE_2MB 0
- #endif
-@@ -50,6 +53,7 @@
- 		| MAP_STACK \
- 		| MAP_HUGETLB \
- 		| MAP_32BIT \
-+		| MAP_ABOVE4G \
- 		| MAP_HUGE_2MB \
- 		| MAP_HUGE_1GB)
- 
++
++#ifndef arch_check_zapped_pmd
++static inline void arch_check_zapped_pmd(struct vm_area_struct *vma,
++					 pmd_t pmd)
++{
++}
++#endif
++
+ #ifndef __HAVE_ARCH_PTEP_GET_AND_CLEAR
+ static inline pte_t ptep_get_and_clear(struct mm_struct *mm,
+ 				       unsigned long address,
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index a216129e6a7c..842925f7fa9e 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1696,6 +1696,7 @@ int zap_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+ 	 */
+ 	orig_pmd = pmdp_huge_get_and_clear_full(vma, addr, pmd,
+ 						tlb->fullmm);
++	arch_check_zapped_pmd(vma, orig_pmd);
+ 	tlb_remove_pmd_tlb_entry(tlb, pmd, addr);
+ 	if (vma_is_special_huge(vma)) {
+ 		if (arch_needs_pgtable_deposit())
+diff --git a/mm/memory.c b/mm/memory.c
+index 6ad031d5cfb0..29e8f043b603 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1377,6 +1377,7 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 				continue;
+ 			ptent = ptep_get_and_clear_full(mm, addr, pte,
+ 							tlb->fullmm);
++			arch_check_zapped_pte(vma, ptent);
+ 			tlb_remove_tlb_entry(tlb, pte, addr);
+ 			zap_install_uffd_wp_if_needed(vma, addr, pte, details,
+ 						      ptent);
 -- 
 2.17.1
 
