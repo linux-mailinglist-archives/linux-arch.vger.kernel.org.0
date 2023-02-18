@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5C869BCD9
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 339D369BCDA
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjBRVVg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Feb 2023 16:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S230218AbjBRVVh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Feb 2023 16:21:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjBRVUu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 16:20:50 -0500
+        with ESMTP id S230212AbjBRVU4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 16:20:56 -0500
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A621ABEF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B53413D55;
         Sat, 18 Feb 2023 13:18:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1676755104; x=1708291104;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=gHMCyuAknB7ri+34Rr5iU3FsNUK61YpioXkhorFA7UU=;
-  b=QqrhcmX2fBvjEcdbUGHL1DQLhUfkAr4dxbmZcoAOLs3NQGehJgPuSo16
-   xNw14ExkMdj7DkSvUKNrtOn/i3DBHzN2PXGQL2pH7jtmyv9uV2GyTXd+e
-   HuLNBRBXvq3hSXX4/W17KgtIiQ4zlZuD7W4nHi7pcswfJOrFpXqaEsFye
-   brCVK1kszgCkVG5vpOXcZxH22QtlR/92TbSUALwZbQ+NB0/jdg7+DaNhn
-   N0fnAKg4Ij7014TipWYeNwAvwPWMdxBLGPAY432WzPTJBwE/Gh127ym/b
-   ZzIEaLYmPCpj6TugOLrJFDo8qOZ7EGYnkGPQi/Em59dlFBfOQENTNFXDK
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427670"
+  bh=l9ok0JOA/L86m7W4+eWESC88bM6ZrRTo0gq2MfVIjZo=;
+  b=liBNs4V5LTTFyelMEAzT/wG3t9d7oEpqjCmcbHM1vFotKkwhD0fk5tbL
+   4u0uArJpNPr4WHZzEvXKmNLRWZhCMuLAaB+DrsitVJln/wjafOCmFO0lV
+   NfcUhET8otkszgxA8nmnZAeZsoF+lgAv8qeIBEFkCBUUx40yTCHY5pNEd
+   ec5oSDnUd5gp+z0glTvPESv16JgarXSurYxSJfMLBLXJ1Oj2RVfzBCmFg
+   QPwapS265NeEQhjhfhKMUOGzwWDip5uoOLraMauu+ahSG/8FsWjOyKTqK
+   83f9kavf1heSXPGHz92xJ/eKAyf6cHPq0P/UcSO13ZUGE9CvxjPAPEogd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427694"
 X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="418427670"
+   d="scan'208";a="418427694"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241699"
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:19 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241705"
 X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="664241699"
+   d="scan'208";a="664241705"
 Received: from adityava-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.80.223])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:17 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:18 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -67,9 +67,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com
 Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v6 27/41] x86/mm: Warn if create Write=0,Dirty=1 with raw prot
-Date:   Sat, 18 Feb 2023 13:14:19 -0800
-Message-Id: <20230218211433.26859-28-rick.p.edgecombe@intel.com>
+Subject: [PATCH v6 28/41] x86: Introduce userspace API for shadow stack
+Date:   Sat, 18 Feb 2023 13:14:20 -0800
+Message-Id: <20230218211433.26859-29-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
 References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
@@ -82,56 +82,211 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When user shadow stack is use, Write=0,Dirty=1 is treated by the CPU as
-shadow stack memory. So for shadow stack memory this bit combination is
-valid, but when Dirty=1,Write=1 (conventionally writable) memory is being
-write protected, the kernel has been taught to transition the Dirty=1
-bit to SavedDirty=1, to avoid inadvertently creating shadow stack
-memory. It does this inside pte_wrprotect() because it knows the PTE is
-not intended to be a writable shadow stack entry, it is supposed to be
-write protected.
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 
-However, when a PTE is created by a raw prot using mk_pte(), mk_pte()
-can't know whether to adjust Dirty=1 to SavedDirty=1. It can't
-distinguish between the caller intending to create a shadow stack PTE or
-needing the SavedDirty shift.
+Add three new arch_prctl() handles:
 
-The kernel has been updated to not do this, and so Write=0,Dirty=1
-memory should only be created by the pte_mkfoo() helpers. Add a warning
-to make sure no new mk_pte() start doing this.
+ - ARCH_SHSTK_ENABLE/DISABLE enables or disables the specified
+   feature. Returns 0 on success or an error.
+
+ - ARCH_SHSTK_LOCK prevents future disabling or enabling of the
+   specified feature. Returns 0 on success or an error
+
+The features are handled per-thread and inherited over fork(2)/clone(2),
+but reset on exec().
+
+This is preparation patch. It does not implement any features.
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+Tested-by: John Allen <john.allen@amd.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+[tweaked with feedback from tglx]
+Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
 ---
-v6:
- - New patch (Note, this has already been a useful warning, it caught the
-   newly added set_memory_rox() doing this)
----
- arch/x86/include/asm/pgtable.h | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+v4:
+ - Remove references to CET and replace with shadow stack (Peterz)
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index f3dc16fc4389..db8fe5511c74 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1032,7 +1032,15 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
-  * (Currently stuck as a macro because of indirect forward reference
-  * to linux/mm.h:page_to_nid())
-  */
--#define mk_pte(page, pgprot)   pfn_pte(page_to_pfn(page), (pgprot))
-+#define mk_pte(page, pgprot)						 \
-+({									 \
-+	pgprot_t __pgprot = pgprot;					 \
-+									 \
-+	WARN_ON_ONCE(cpu_feature_enabled(X86_FEATURE_USER_SHSTK) &&	 \
-+		    (pgprot_val(__pgprot) & (_PAGE_DIRTY | _PAGE_RW)) == \
-+		    _PAGE_DIRTY);					 \
-+	pfn_pte(page_to_pfn(page), __pgprot);				 \
-+})
+v3:
+ - Move shstk.c Makefile changes earlier (Kees)
+ - Add #ifdef around features_locked and features (Kees)
+ - Encapsulate features reset earlier in reset_thread_features() so
+   features and features_locked are not referenced in code that would be
+   compiled !CONFIG_X86_USER_SHADOW_STACK. (Kees)
+ - Fix typo in commit log (Kees)
+ - Switch arch_prctl() numbers to avoid conflict with LAM
+
+v2:
+ - Only allow one enable/disable per call (tglx)
+ - Return error code like a normal arch_prctl() (Alexander Potapenko)
+ - Make CET only (tglx)
+---
+ arch/x86/include/asm/processor.h  |  6 +++++
+ arch/x86/include/asm/shstk.h      | 21 +++++++++++++++
+ arch/x86/include/uapi/asm/prctl.h |  6 +++++
+ arch/x86/kernel/Makefile          |  2 ++
+ arch/x86/kernel/process_64.c      |  7 ++++-
+ arch/x86/kernel/shstk.c           | 44 +++++++++++++++++++++++++++++++
+ 6 files changed, 85 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/include/asm/shstk.h
+ create mode 100644 arch/x86/kernel/shstk.c
+
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 8d73004e4cac..bd16e012b3e9 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -28,6 +28,7 @@ struct vm86;
+ #include <asm/unwind_hints.h>
+ #include <asm/vmxfeatures.h>
+ #include <asm/vdso/processor.h>
++#include <asm/shstk.h>
  
- static inline int pmd_bad(pmd_t pmd)
- {
+ #include <linux/personality.h>
+ #include <linux/cache.h>
+@@ -475,6 +476,11 @@ struct thread_struct {
+ 	 */
+ 	u32			pkru;
+ 
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++	unsigned long		features;
++	unsigned long		features_locked;
++#endif
++
+ 	/* Floating point and extended processor state */
+ 	struct fpu		fpu;
+ 	/*
+diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
+new file mode 100644
+index 000000000000..ec753809f074
+--- /dev/null
++++ b/arch/x86/include/asm/shstk.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_SHSTK_H
++#define _ASM_X86_SHSTK_H
++
++#ifndef __ASSEMBLY__
++#include <linux/types.h>
++
++struct task_struct;
++
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++long shstk_prctl(struct task_struct *task, int option, unsigned long features);
++void reset_thread_features(void);
++#else
++static inline long shstk_prctl(struct task_struct *task, int option,
++			       unsigned long arg2) { return -EINVAL; }
++static inline void reset_thread_features(void) {}
++#endif /* CONFIG_X86_USER_SHADOW_STACK */
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* _ASM_X86_SHSTK_H */
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..b2b3b7200b2d 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -20,4 +20,10 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
+ 
++/* Don't use 0x3001-0x3004 because of old glibcs */
++
++#define ARCH_SHSTK_ENABLE		0x5001
++#define ARCH_SHSTK_DISABLE		0x5002
++#define ARCH_SHSTK_LOCK			0x5003
++
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 92446f1dedd7..b366641703e3 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -146,6 +146,8 @@ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+ 
+ obj-$(CONFIG_X86_CET)			+= cet.o
+ 
++obj-$(CONFIG_X86_USER_SHADOW_STACK)	+= shstk.o
++
+ ###
+ # 64 bit specific files
+ ifeq ($(CONFIG_X86_64),y)
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 4e34b3b68ebd..71094c8a305f 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -514,6 +514,8 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
+ 		load_gs_index(__USER_DS);
+ 	}
+ 
++	reset_thread_features();
++
+ 	loadsegment(fs, 0);
+ 	loadsegment(es, _ds);
+ 	loadsegment(ds, _ds);
+@@ -830,7 +832,10 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 	case ARCH_MAP_VDSO_64:
+ 		return prctl_map_vdso(&vdso_image_64, arg2);
+ #endif
+-
++	case ARCH_SHSTK_ENABLE:
++	case ARCH_SHSTK_DISABLE:
++	case ARCH_SHSTK_LOCK:
++		return shstk_prctl(task, option, arg2);
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+new file mode 100644
+index 000000000000..41ed6552e0a5
+--- /dev/null
++++ b/arch/x86/kernel/shstk.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * shstk.c - Intel shadow stack support
++ *
++ * Copyright (c) 2021, Intel Corporation.
++ * Yu-cheng Yu <yu-cheng.yu@intel.com>
++ */
++
++#include <linux/sched.h>
++#include <linux/bitops.h>
++#include <asm/prctl.h>
++
++void reset_thread_features(void)
++{
++	current->thread.features = 0;
++	current->thread.features_locked = 0;
++}
++
++long shstk_prctl(struct task_struct *task, int option, unsigned long features)
++{
++	if (option == ARCH_SHSTK_LOCK) {
++		task->thread.features_locked |= features;
++		return 0;
++	}
++
++	/* Don't allow via ptrace */
++	if (task != current)
++		return -EINVAL;
++
++	/* Do not allow to change locked features */
++	if (features & task->thread.features_locked)
++		return -EPERM;
++
++	/* Only support enabling/disabling one feature at a time. */
++	if (hweight_long(features) > 1)
++		return -EINVAL;
++
++	if (option == ARCH_SHSTK_DISABLE) {
++		return -EINVAL;
++	}
++
++	/* Handle ARCH_SHSTK_ENABLE */
++	return -EINVAL;
++}
 -- 
 2.17.1
 
