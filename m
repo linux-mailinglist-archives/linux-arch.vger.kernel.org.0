@@ -2,131 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B529669B716
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 01:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A8169B84A
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 07:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjBRApJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Feb 2023 19:45:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S229555AbjBRGOO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Feb 2023 01:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjBRApA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Feb 2023 19:45:00 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0870D6D798
-        for <linux-arch@vger.kernel.org>; Fri, 17 Feb 2023 16:44:31 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id o137-20020a25418f000000b009419f64f6afso2189469yba.2
-        for <linux-arch@vger.kernel.org>; Fri, 17 Feb 2023 16:44:30 -0800 (PST)
+        with ESMTP id S229496AbjBRGON (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 01:14:13 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B3853EFF
+        for <linux-arch@vger.kernel.org>; Fri, 17 Feb 2023 22:14:12 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id j23so65285ljq.8
+        for <linux-arch@vger.kernel.org>; Fri, 17 Feb 2023 22:14:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9mwmDPnm22mSNSwTn0VodViIvXaPz9XlM8QDWYhbyM8=;
-        b=eMm01hnumElMl3UotGf8lJtLmKUjjLEmp4ZHK0o1H0LRyNA5w7x33BZeE7ifCfM7pg
-         Cd3CBejXIUZT0dDASkiYet2Q11r1oqaxT2jWL7729gQTvNyIV+Z3A265SCXl8KKZFvM6
-         J2aSWma9rqTSDwyH7vONqfORZObAwWA+6hRLW5QjldLuMtFrDr6CiZLUw313wtVBTkEY
-         Uql860ZaIf2fzbiPBXmxv8De94uhU4jaykP5woFVxM5M2xVs65vFvbC27a8oelqLROik
-         ucodFnqa/c0QR5Ark7refIrmAYAsOKE19K26vuVEVEq0bwodrw1HGi4stiNrcoXlrrSh
-         sdyA==
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=M9meo/2HsyQjWTOLBePu8gQ8aMOImbRjLtTEkBnxFWA=;
+        b=rNW4pWyLBgZAXvqJjvCoQS8lk2lmt0bpvLoQdrZ4JtZt7F/xLQANfMR03xhYfnh+h2
+         rmKCOP/qyMs+J36NL88QnT7nLTcqAAMfUbpj9E0xe3jdJKKjcCQ++dD7IBc/gnmYd8Ln
+         WROBH3wQ8mnvc2t6fvC/87NGLDoo+sxFiJiaE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9mwmDPnm22mSNSwTn0VodViIvXaPz9XlM8QDWYhbyM8=;
-        b=JnCebbP3i3p/5h22lEiqWfBTbiY0HWUx9k2zdNPy+r8S2Yj0Ld+10YU7ImHBo3Kzus
-         gZXsHVNinVEUa1L2vP9aRoPb6P0hIpNKZPjaptKE5+9//XerqSmHFz5o9XdJ04yY/48F
-         3YzxS8HZb/EH149CLec2mdxQYqksqZ4rCkdpnIchCrh8nJ9f80X60jtXhVc7OAzBD7Mi
-         FvsPDlTnKtXyWRyeIQxd0/95000hTGH2bb0OHZtwB+xFSLsRfIep5TmRScZPiglX9HXy
-         +jku5qc6jhD9NEZMP69SbtiLJU8wITnF8E8oWgb/om3YV7DM8bqGT34dd9oYmubSiaqS
-         JxqA==
-X-Gm-Message-State: AO0yUKUElhwGKrL5KL1C2VUf34mAsuW6rzL3jRdfmBEfZfloiTtMnqN+
-        5VFDm5hmMYugKiiJ0RFan6VFiAGgKsOQUvHpag==
-X-Google-Smtp-Source: AK7set8GCw+l6Q5gppx0SI7xgHF70UCy3j05OUIa+XJfbCoB3vIVoiRjffivwnfUze8k0uHuDZvSsWzxIhc/w0Mo2w==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:10e:b0:95d:6b4f:a73a with
- SMTP id o14-20020a056902010e00b0095d6b4fa73amr5895ybh.8.1676681001601; Fri,
- 17 Feb 2023 16:43:21 -0800 (PST)
-Date:   Sat, 18 Feb 2023 00:43:02 +0000
-In-Reply-To: <cover.1676680548.git.ackerleytng@google.com>
-Mime-Version: 1.0
-References: <cover.1676680548.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.39.2.637.g21b0678d19-goog
-Message-ID: <67956539824ea9dd66a94d67b046b2f4bb0aa6f2.1676680548.git.ackerleytng@google.com>
-Subject: [RFC PATCH 2/2] selftests: restrictedmem: Add selftest for RMFD_HUGEPAGE
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org
-Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
-        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
-        david@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
-        jmattson@google.com, joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com,
-        Ackerley Tng <ackerleytng@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M9meo/2HsyQjWTOLBePu8gQ8aMOImbRjLtTEkBnxFWA=;
+        b=HhuxPZWbK4BpQ+8KxblJIqV/5IbYGWheo6p7wHpB6KN7pzAlRSnRycdwOPUxnct3J5
+         Ds8NnSpi/ew1BpByjDhaQgrJ5PQZ0AMJ2TWi525CVF6XYH33kq+7yyeG5JOwwXTU+9ms
+         z5YWXKRYTJiGNcbLw80EZFVD39IvZbHSeMNnvDTgkHtxXCrqErds+xqa9i+QqPBaQpNc
+         UUWYuUqUUE8jTFfTTEJ1lG83HG6E4s859QlGcO973evPPnXvV5K1H6DaxiHXSzUSQ3eS
+         g22dt6agSpkZEI0bbAyMcRGHVbhaaxud/PByWWHrKktc3WecfcL2U6uXf9I14OLAYXWx
+         2x0g==
+X-Gm-Message-State: AO0yUKWHUf5TLiyJO+GJYohaP2ZEwZrJrU/WW0Cm4KcEPOd413PwZIkC
+        KVI3ygMKol+h0ztYomQ2Eh1XFKTivFhqZ/vzgeLV4Q==
+X-Google-Smtp-Source: AK7set/q4K2z6T8tTM3H+wXeDE+gFiACy9O/yEXPJeOfHZ8S48WmuHxW5F7bIDV9xIb0GRZIxHoXzwQbijx97x4nEzs=
+X-Received: by 2002:a05:651c:1688:b0:293:4647:364a with SMTP id
+ bd8-20020a05651c168800b002934647364amr1066205ljb.3.1676700850733; Fri, 17 Feb
+ 2023 22:14:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20230204004843.GA2677518@paulmck-ThinkPad-P17-Gen-1>
+ <Y920w4QRLtC6kd+x@rowland.harvard.edu> <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu> <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com> <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+ <Y+fN2fvUjGDWBYrv@google.com> <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
+ <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com> <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+In-Reply-To: <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sat, 18 Feb 2023 01:13:59 -0500
+Message-ID: <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
+Subject: Re: Current LKMM patch disposition
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, parri.andrea@gmail.com,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Tests that when RMFD_HUGEPAGE is specified, restrictedmem will be
-backed by Transparent HugePages.
+Hi Alan,
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../restrictedmem_hugepage_test.c             | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+On Sat, Feb 11, 2023 at 9:59 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+[...]
+>
+> Would you like to post a few examples showing some of the most difficult
+> points you encountered?  Maybe explanation.txt can be improved.
 
-diff --git a/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c b/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
-index 0d9cf2ced754..75283d68696f 100644
---- a/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
-+++ b/tools/testing/selftests/restrictedmem/restrictedmem_hugepage_test.c
-@@ -180,6 +180,31 @@ TEST_F(reset_shmem_enabled, restrictedmem_fstat_shmem_enabled_always)
- 	close(mfd);
- }
- 
-+TEST(restrictedmem_invalid_flags)
-+{
-+	int mfd = memfd_restricted(99, NULL);
-+
-+	ASSERT_EQ(-1, mfd);
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(reset_shmem_enabled, restrictedmem_rmfd_hugepage)
-+{
-+	int mfd = -1;
-+	struct stat stat;
-+
-+	ASSERT_EQ(0, set_shmem_thp_policy("never"));
-+
-+	mfd = memfd_restricted(RMFD_HUGEPAGE, NULL);
-+	ASSERT_NE(-1, mfd);
-+
-+	ASSERT_EQ(0, fstat(mfd, &stat));
-+
-+	ASSERT_EQ(stat.st_blksize, get_hpage_pmd_size());
-+
-+	close(mfd);
-+}
-+
- TEST(restrictedmem_tmpfile_no_mount_path)
- {
- 	int mfd = memfd_restricted(RMFD_TMPFILE, NULL);
--- 
-2.39.2.637.g21b0678d19-goog
+One additional feedback I wanted to mention, regarding this paragraph
+under "WARNING":
+===========
+The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
+not perfect; and under some circumstances it is possible for the
+compiler to undermine the memory model. Here is an example. Suppose
+both branches of an "if" statement store the same value to the same
+location:
+r1 = READ_ONCE(x);
+if (r1) {
+WRITE_ONCE(y, 2);
+... /* do something */
+} else {
+WRITE_ONCE(y, 2);
+... /* do something else */
+}
+===========
 
+I tried lots of different compilers with varying degrees of
+optimization, in all cases I find that the conditional instruction
+always appears in program order before the stores inside the body of
+the conditional. So I am not sure if this is really a valid concern on
+current compilers, if not - could you provide an example of a compiler
+and options that cause it?
+
+In any case, if it is a theoretical concern, it could be clarified
+that this is a theoretical possibility in the text.  And if it is a
+real/practical concern, then it could be mentioned the specific
+compiler/arch this was seen in.
+
+Thanks!
+
+ - Joel
+
+
+
+>
+> > > I'm not sure that breaking this relation up into pieces will make it any
+> > > easier to understand.
+> >
+> > Yes, but I tried. I will keep trying to understand your last patch
+> > more. Especially I am still not sure, why in the case of an SRCU
+> > reader on a single CPU, the following does not work:
+> > let srcu-rscs = ([Srcu-lock]; data; [Srcu-unlock]).
+>
+> You have to understand that herd7 does not track dependencies through
+> stores and subsequent loads.  That is, if you have something like:
+>
+>         r1 = READ_ONCE(*x);
+>         WRITE_ONCE(*y, r1);
+>         r2 = READ_ONCE(*y);
+>         WRITE_ONCE(*z, r2);
+>
+> then herd7 will realize that the write to y depends on the value read
+> from x, and it will realize that the write to z depends on the value
+> read from y.  But it will not realize that the write to z depends on the
+> value read from x; it loses track of that dependency because of the
+> intervening store/load from y.
+>
+> More to the point, if you have:
+>
+>         r1 = srcu_read_lock(lock);
+>         WRITE_ONCE(*y, r1);
+>         r2 = READ_ONCE(*y);
+>         srcu_read_unlock(lock, r2);
+>
+> then herd7 will not realize that the value of r2 depends on the value of
+> r1.  So there will be no data dependency from the srcu_read_lock() to
+> the srcu_read_unlock().
+>
+> Alan
