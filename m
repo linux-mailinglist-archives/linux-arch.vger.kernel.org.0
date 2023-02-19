@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B203769C26F
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Feb 2023 21:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB5969C270
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Feb 2023 21:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjBSUlG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Feb 2023 15:41:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
+        id S231263AbjBSUl7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Feb 2023 15:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjBSUky (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Feb 2023 15:40:54 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61F118B1D
-        for <linux-arch@vger.kernel.org>; Sun, 19 Feb 2023 12:40:49 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id q9so1375209plh.6
-        for <linux-arch@vger.kernel.org>; Sun, 19 Feb 2023 12:40:49 -0800 (PST)
+        with ESMTP id S230513AbjBSUl6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Feb 2023 15:41:58 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EAE18B03
+        for <linux-arch@vger.kernel.org>; Sun, 19 Feb 2023 12:41:57 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id ky4so402369plb.3
+        for <linux-arch@vger.kernel.org>; Sun, 19 Feb 2023 12:41:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lqAwlutC29lMR1tf1e4XOcfdxhypv9zb0T2DcQuJ+3c=;
-        b=XSbexFaS+Tm+Fh9bIb5+7TsH8cXc/OyRJvw9NZqY53ctg5O6XlonIQ+mSxQEFs9syE
-         lUVQj3khdSe3Fc3LpOxcyIdBOEkgeUJK3z40Fm415uv701QNzTtbevYXP5ioH+guMWrP
-         r7f7SjRms7JvKdWdxLsJL7avrtKIOQCRDQ1xE=
+        bh=+n51xriYqbsbmvYxxt4ftJ/ywsWPB5yxY3XzOVKdQok=;
+        b=HRzIL01EiKj/B1V4WeH7nE3SXQQTw+bANhZZ8/P4v4m9JiU3rQDUDjq7P6TKtP1rny
+         vCDVBdBy2yNcsh7+DwfKoYd/3bLIxn7mf2cOxU2YAI1Df8480mfwgGzhWANf1AJ1vmBE
+         iifkkTIsXn3XmVPq4cxEpzRJEyv/l4CEuJZOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:subject:cc
          :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lqAwlutC29lMR1tf1e4XOcfdxhypv9zb0T2DcQuJ+3c=;
-        b=Uez1BsIdYEhBydcEbIWzernpS3iiM0vTngOOcH9TIlx4qHg4ZtVIKMHlfQMNOEJOi3
-         8B+ldktIRFUSvQOPX6VaCqpDhTbScTbBGBRcGagAPwijG7tpH6UKqk8n9tJD71SqAx1K
-         Iw/0HMtoM6D2UNgw4H2DO2Cd5OkG6sec3Y5c7ltyiPBUMZdieiTaZHAyfvGVCI2cywVD
-         +JDHGRW2Y4xfQDBMDgoFun48DjWc9h7NNL3b9xBOe/VfdCezIfiHhajAx3wZgdTFMD31
-         pBCZTlQRhBsURT5M2xKWz5oEmQC0S6Om3RVBXtMJWqUUaoK2joCzSreX54o+FVbdknhO
-         mQZA==
-X-Gm-Message-State: AO0yUKW/BTv4KSbnveF0P4SoCpPmzgs9apD8nrnXjEQWTNrVl1RBQ4iC
-        eH+NtKlEDNTZOC+rLBd8YJSzIg==
-X-Google-Smtp-Source: AK7set8cjnk+CNzhzKm/hjA5DP1TH7rqpGSr8BvS/qmpfvVklVJ20vp+KwvbQWrpg9WzBslEVX8M9Q==
-X-Received: by 2002:a17:902:d4c8:b0:199:30a6:376c with SMTP id o8-20020a170902d4c800b0019930a6376cmr2895713plg.68.1676839248964;
-        Sun, 19 Feb 2023 12:40:48 -0800 (PST)
+        bh=+n51xriYqbsbmvYxxt4ftJ/ywsWPB5yxY3XzOVKdQok=;
+        b=rIDAHa15z36uNTwkOHtDYjVd2sQk6uAc30867gJWGHZppDm8WK1q0x2AlkmSLp2edx
+         umtvR/hc7pgOTnZPpL62xrpggQEGQIPH/U0xbKQ9rvqvMWmBteWw8jKY4VGb9wS/1Cnh
+         9h3E6y22p83I0mCvUnNMKDNWh0NerdmORsd97pTnKT834ybvuWM7L2OlW1oR+wneRD82
+         t0PL8UlXL8/1Ts5RhC0WfLut2yIxCxQupiPPQ4M4d64aW8ercP62Xittw3qcJI9mHAd+
+         jO//+fidAfDtU/JbQ05GN77WPcYLq+ZNIiPdYSyUbjO4Yn/h8J7S4wyvuho3gAvZheTM
+         BcVA==
+X-Gm-Message-State: AO0yUKWJ4Ws65j85NRZtdhwVJmtUKIw4C6Tu7Ifa2S2IqgQphhEoAuLl
+        oYkpBQNMsF8PAROshEnFJ9e5cQ==
+X-Google-Smtp-Source: AK7set/hmfWCZDm8xxBH1RGSdTrSPtAkyiRqs8cvWgzZE55+0av+de2ucJ0TWqIBTxeOu8W9SRaPTg==
+X-Received: by 2002:a17:902:d502:b0:196:8292:e879 with SMTP id b2-20020a170902d50200b001968292e879mr3763331plg.1.1676839316745;
+        Sun, 19 Feb 2023 12:41:56 -0800 (PST)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170902c21100b00199190b00efsm6372235pll.97.2023.02.19.12.40.47
+        by smtp.gmail.com with ESMTPSA id a8-20020a1709027e4800b0019a8597788csm829072pln.0.2023.02.19.12.41.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Feb 2023 12:40:48 -0800 (PST)
-Message-ID: <63f28950.170a0220.3759b.b525@mx.google.com>
-X-Google-Original-Message-ID: <202302191240.@keescook>
-Date:   Sun, 19 Feb 2023 12:40:47 -0800
+        Sun, 19 Feb 2023 12:41:56 -0800 (PST)
+Message-ID: <63f28994.170a0220.e86dc.1134@mx.google.com>
+X-Google-Original-Message-ID: <202302191241.@keescook>
+Date:   Sun, 19 Feb 2023 12:41:55 -0800
 From:   Kees Cook <keescook@chromium.org>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -76,86 +76,44 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        Michal Simek <monstr@monstr.eu>,
-        Dinh Nguyen <dinguyen@kernel.org>, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v6 13/41] mm: Make pte_mkwrite() take a VMA
+        david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v6 20/41] x86/mm: Teach pte_mkwrite() about stack memory
 References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-14-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-21-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230218211433.26859-14-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230218211433.26859-21-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Feb 18, 2023 at 01:14:05PM -0800, Rick Edgecombe wrote:
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
+On Sat, Feb 18, 2023 at 01:14:12PM -0800, Rick Edgecombe wrote:
+> If a VMA has the VM_SHADOW_STACK flag, it is shadow stack memory. So
+> when it is made writable with pte_mkwrite(), it should create shadow
+> stack memory, not conventionally writable memory. Now that pte_mkwrite()
+> takes a VMA, and places where shadow stack memory might be created pass
+> one, pte_mkwrite() can know when it should do this.
 > 
-> One of these unusual properties is that shadow stack memory is writable,
-> but only in limited ways. These limits are applied via a specific PTE
-> bit combination. Nevertheless, the memory is writable, and core mm code
-> will need to apply the writable permissions in the typical paths that
-> call pte_mkwrite().
+> So make pte_mkwrite() create shadow stack memory when the VMA has the
+> VM_SHADOW_STACK flag. Do the same thing for pmd_mkwrite().
 > 
-> In addition to VM_WRITE, the shadow stack VMA's will have a flag denoting
-> that they are special shadow stack flavor of writable memory. So make
-> pte_mkwrite() take a VMA, so that the x86 implementation of it can know to
-> create regular writable memory or shadow stack memory.
+> This requires referencing VM_SHADOW_STACK in these functions, which are
+> currently defined in pgtable.h, however mm.h (where VM_SHADOW_STACK is
+> located) can't be pulled in without causing problems for files that
+> reference pgtable.h. So also move pte/pmd_mkwrite() into pgtable.c, where
+> they can safely reference VM_SHADOW_STACK.
 > 
-> Apply the same changes for pmd_mkwrite() and huge_pte_mkwrite().
-> 
-> No functional change.
-> 
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-csky@vger.kernel.org
-> Cc: linux-hexagon@vger.kernel.org
-> Cc: linux-ia64@vger.kernel.org
-> Cc: loongarch@lists.linux.dev
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: Michal Simek <monstr@monstr.eu>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: linux-mips@vger.kernel.org
-> Cc: openrisc@lists.librecores.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: linux-um@lists.infradead.org
-> Cc: xen-devel@lists.xenproject.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-mm@kvack.org
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
 > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
-I'm not an arch maintainer, but it looks like a correct tree-wide
-refactor.
+Is there any realistic performance impact from making these not inline
+now?
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
