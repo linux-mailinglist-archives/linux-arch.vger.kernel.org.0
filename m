@@ -2,194 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1881C69BD11
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Feb 2023 22:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4617F69BE19
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Feb 2023 03:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjBRVXe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Feb 2023 16:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S229461AbjBSCFL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Feb 2023 21:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjBRVWw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 16:22:52 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0126C1B32C;
-        Sat, 18 Feb 2023 13:19:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676755171; x=1708291171;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=ubqwcNNiyY5+cprOn2ju85ofUOiPXcRDQntgWmd5we0=;
-  b=AM5FxVSmXKeji3D1SaGTdUFSUintLQLKf2IbregECXxnxmkv/K45vM93
-   PTOpfkUJhDuVsLytxgxL9BsmBNPi3VmhB81cUWZ8h8LQFf5z4Gc+x2KW1
-   4GyZwFsx5WiuTZOrQJBCyBadipFxYml2DkeTTmcEIi6ILR8/Sj1+lGpGb
-   YKDFWiFo5AvvTCVtBPEZkANL9e/BRsZRA2hlYS+R4iDY+SN0LIx6AM+h2
-   JEzjazkftnwkRLQD6AmqQX2EBwfkgiDxDK+G3t8B6ZtQofeRqD5+iaDwQ
-   C2C9lFAHK0rNP0iD0wIBvA1ZybQmef52fdyFeBPowt/8krWFIdO/odr75
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="418427982"
-X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="418427982"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10625"; a="664241768"
-X-IronPort-AV: E=Sophos;i="5.97,309,1669104000"; 
-   d="scan'208";a="664241768"
-Received: from adityava-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.80.223])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2023 13:16:30 -0800
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v6 41/41] x86/shstk: Add ARCH_SHSTK_STATUS
-Date:   Sat, 18 Feb 2023 13:14:33 -0800
-Message-Id: <20230218211433.26859-42-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229436AbjBSCFK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Feb 2023 21:05:10 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F1D13DE9;
+        Sat, 18 Feb 2023 18:05:09 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id d14so6530786eda.4;
+        Sat, 18 Feb 2023 18:05:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oAG0HrBT+nsRDBk5CT3fX4o0S+udyVyKE7ZqJ4H9AH4=;
+        b=qIN//xl1ZDXS0szWN3S/OOut7PPst+N6uWkUJ+hRLujRtmZaNjPYfs6nIi8eeJWtbk
+         QspmpY8l8W2lcbPLkGlUqf63Lf59A4DDJwVS0Jd8WyK78SAdA5lHEZ0SM2r/7nfYqhzd
+         fH8mLurYIDs3iEbM242ESx+Rdt7/Y31FVNCrgV35bjAiKhiuiyggcKoFTvYSI4T/ePly
+         ibRao3K3RfNMdSjdFaw0QKbOloQlRRHI9eIb77d4Gtqp+htHCj8etHEh8gk/kzsDeByP
+         rp6K3fefWLCwEvuA9V4tXrQxs5bQAMzDr5dzw1Ppnw9LeMJgNRrmv0hU5KAxCYxnlozR
+         S0DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oAG0HrBT+nsRDBk5CT3fX4o0S+udyVyKE7ZqJ4H9AH4=;
+        b=FgahnurGZPA60o289q7uiSXbb7FEj5OlY4pPauJBlRb2/3DqJc8t2TnZkzG0IGZNNX
+         5ypXNeKf7wY34U6AIBdolYBw5jhkw2Gd9snTo7f+o/UFkCGRHga37sCXamXzJb7oE0ZK
+         2ql0JRzgBbws/a03ZRhcmrn9quyrtwv+Y2Es0CcGasuO919lvPY26sV53bsta7Tljy0j
+         3I0y2r3/MnVxiJu+8kByLAHgIVCJW+9e35E4xGl7FwLiqQZKoG04rWTFF0U5gAwVwzAy
+         X6offRzAUBRiQSm/2JrunsWav65ku/I8Kb9NKlGH1J3iYZ6T3M+FiDWPJLIGhHtzXGNc
+         cHAA==
+X-Gm-Message-State: AO0yUKUJg7tAK2Jv0o/4ZqV3YXKp3o0fhgNWl/IZ+7KT4tRMyh7TLY38
+        YM1pzyLqTrZYzyvPSA1lG3BBWrWmFq/vJRGG
+X-Google-Smtp-Source: AK7set9yQauCBQB3u2AjNtHRFyKL21MFwQclHD9/bSMJrhyR99YO2MkRzvDQ/1YUj+WcoVwN6wIMBw==
+X-Received: by 2002:a17:906:c44a:b0:8b1:fc:d737 with SMTP id ck10-20020a170906c44a00b008b100fcd737mr3887401ejb.19.1676772307408;
+        Sat, 18 Feb 2023 18:05:07 -0800 (PST)
+Received: from andrea (host-79-32-69-136.retail.telecomitalia.it. [79.32.69.136])
+        by smtp.gmail.com with ESMTPSA id lg17-20020a170906f89100b008b1797a53b4sm3263873ejb.215.2023.02.18.18.05.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Feb 2023 18:05:06 -0800 (PST)
+Date:   Sun, 19 Feb 2023 03:05:01 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com
+Subject: Re: Current LKMM patch disposition
+Message-ID: <Y/GDzXkJzjxbP6I4@andrea>
+References: <20230204014941.GS2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y95yhJgNq8lMXPdF@rowland.harvard.edu>
+ <20230204222411.GC2948950@paulmck-ThinkPad-P17-Gen-1>
+ <Y9+41ctA54pjm/KG@google.com>
+ <Y+FJSzUoGTgReLPB@rowland.harvard.edu>
+ <Y+fN2fvUjGDWBYrv@google.com>
+ <Y+f4TYZ9BPlt8y8B@rowland.harvard.edu>
+ <CAEXW_YRuTfjc=5OAskTV0Qt_zSJTPP3-01=Y=SypMdPsF_weAQ@mail.gmail.com>
+ <Y+hWAksfk4C0M2gB@rowland.harvard.edu>
+ <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YQ3fvFDNi9wG5w4Zqkbda8SUByOnM6y6MXQpxT9oQw8xQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CRIU and GDB need to get the current shadow stack and WRSS enablement
-status. This information is already available via /proc/pid/status, but
-this is inconvenient for CRIU because it involves parsing the text output
-in an area of the code where this is difficult. Provide a status
-arch_prctl(), ARCH_SHSTK_STATUS for retrieving the status. Have arg2 be a
-userspace address, and make the new arch_prctl simply copy the features
-out to userspace.
+> One additional feedback I wanted to mention, regarding this paragraph
+> under "WARNING":
+> ===========
+> The protections provided by READ_ONCE(), WRITE_ONCE(), and others are
+> not perfect; and under some circumstances it is possible for the
+> compiler to undermine the memory model. Here is an example. Suppose
+> both branches of an "if" statement store the same value to the same
+> location:
+> r1 = READ_ONCE(x);
+> if (r1) {
+> WRITE_ONCE(y, 2);
+> ... /* do something */
+> } else {
+> WRITE_ONCE(y, 2);
+> ... /* do something else */
+> }
+> ===========
+> 
+> I tried lots of different compilers with varying degrees of
+> optimization, in all cases I find that the conditional instruction
+> always appears in program order before the stores inside the body of
+> the conditional. So I am not sure if this is really a valid concern on
+> current compilers, if not - could you provide an example of a compiler
+> and options that cause it?
 
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+The compiler cannot change the order in which the load and the store
+appear in the program (these are "volatile accesses"); the concern is
+that (quoting from the .txt) it "could list the stores out of the
+conditional", thus effectively destroying the control dependency between
+the load and the store (the load-store "reordering" could then be
+performed by the uarch, under certain archs).  For example, compare:
 
----
-v5:
- - Fix typo in commit log
+(for the C snippet)
 
-v4:
- - New patch
----
- Documentation/x86/shstk.rst       | 6 ++++++
- arch/x86/include/asm/shstk.h      | 2 +-
- arch/x86/include/uapi/asm/prctl.h | 1 +
- arch/x86/kernel/process_64.c      | 1 +
- arch/x86/kernel/shstk.c           | 8 +++++++-
- 5 files changed, 16 insertions(+), 2 deletions(-)
+void func(int *x, int *y)
+{
+	int r1 = *(const volatile int *)x;
 
-diff --git a/Documentation/x86/shstk.rst b/Documentation/x86/shstk.rst
-index e8ed5fc0f7ae..7f4af798794e 100644
---- a/Documentation/x86/shstk.rst
-+++ b/Documentation/x86/shstk.rst
-@@ -77,6 +77,11 @@ arch_prctl(ARCH_SHSTK_UNLOCK, unsigned long features)
-     Unlock features. 'features' is a mask of all features to unlock. All
-     bits set are processed, unset bits are ignored. Only works via ptrace.
- 
-+arch_prctl(ARCH_SHSTK_STATUS, unsigned long addr)
-+    Copy the currently enabled features to the address passed in addr. The
-+    features are described using the bits passed into the others in
-+    'features'.
-+
- The return values are as follows. On success, return 0. On error, errno can
- be::
- 
-@@ -84,6 +89,7 @@ be::
-         -ENOTSUPP if the feature is not supported by the hardware or
-          kernel.
-         -EINVAL arguments (non existing feature, etc)
-+        -EFAULT if could not copy information back to userspace
- 
- The feature's bits supported are::
- 
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index acee68d30a07..be9267897211 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -14,7 +14,7 @@ struct thread_shstk {
- 	u64	size;
- };
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
- void reset_thread_features(void);
- int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
- 			     unsigned long stack_size,
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 200efbbe5809..1b85bc876c2d 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -26,6 +26,7 @@
- #define ARCH_SHSTK_DISABLE		0x5002
- #define ARCH_SHSTK_LOCK			0x5003
- #define ARCH_SHSTK_UNLOCK		0x5004
-+#define ARCH_SHSTK_STATUS		0x5005
- 
- /* ARCH_SHSTK_ features bits */
- #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index d368854fa9c4..dde43caf196e 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -836,6 +836,7 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_SHSTK_DISABLE:
- 	case ARCH_SHSTK_LOCK:
- 	case ARCH_SHSTK_UNLOCK:
-+	case ARCH_SHSTK_STATUS:
- 		return shstk_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index 3197ff824809..4069d5bbbe8c 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -444,8 +444,14 @@ SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsi
- 	return alloc_shstk(addr, aligned_size, size, set_tok);
- }
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
- {
-+	unsigned long features = arg2;
-+
-+	if (option == ARCH_SHSTK_STATUS) {
-+		return put_user(task->thread.features, (unsigned long __user *)arg2);
-+	}
-+
- 	if (option == ARCH_SHSTK_LOCK) {
- 		task->thread.features_locked |= features;
- 		return 0;
--- 
-2.17.1
+	if (r1)
+		*(volatile int *)y = 2;
+	else
+		*(volatile int *)y = 2;
+}
 
+- arm64 gcc 11.3 -O1 gives:
+
+func:
+	ldr     w0, [x0]
+	cbz     w0, .L2
+	mov     w0, 2
+	str     w0, [x1]
+.L1:
+	ret
+.L2:
+	mov     w0, 2
+	str     w0, [x1]
+	b       .L1
+
+- OTOH, arm64 gcc 11.3 -O2 gives:
+
+func:
+	ldr     w0, [x0]
+	mov     w0, 2
+	str     w0, [x1]
+	ret
+
+- similarly, using arm64 clang 14.0.0 -O2,
+
+func:                                   // @func
+	mov     w8, #2
+	ldr     wzr, [x0]
+	str     w8, [x1]
+	ret
+
+I saw similar results using riscv, powerpc, x86 gcc & clang.
+
+  Andrea
