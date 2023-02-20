@@ -2,129 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341C569C54D
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Feb 2023 07:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EAB69C56F
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Feb 2023 07:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230198AbjBTGUU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Feb 2023 01:20:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S229671AbjBTGu4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Feb 2023 01:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjBTGUT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Feb 2023 01:20:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42F8A75;
-        Sun, 19 Feb 2023 22:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l+6M2Hg2VWv7REExXj0y1+ocsKsaxPlFIc1mUwU0F2I=; b=OLNgiYt1OWea+X56z7nZmhL6k2
-        nr+HZO5U9UV5o/ENalIFE3xdmB6Ydtd5xIaQRLNoD15tkAHOT/JRBogymNzYlYjC+UzHeNjCc/wDl
-        v3Xof0xl1ClYS/ePR1PRx8ADBsT6WrClWeEhFQJ2Po8binIIoxu/y4FvsnLrqY1rnChijmp0YyRtK
-        S9ZuSCE70YOVgsggNpzQD2rnyjfRIaaaowgW/DQM/ToNzxq3laL8Hl0nWWQG448y+l+nfCzXhlHWA
-        IrzYZ/r9jvmqP6KqGVO7miQgbsKPhz2VPtL2DrvtYElutUMh+VmIxUjRq65Sy4YiffthV4rvNPO4Y
-        gM9lD5QA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pTzWy-0038A2-Cy; Mon, 20 Feb 2023 06:20:08 +0000
-Date:   Sun, 19 Feb 2023 22:20:08 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, Chas Williams <3chas3@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        Andrew Waterman <waterman@eecs.berkeley.edu>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [PATCH 4/4] Move USE_WCACHING to drivers/block/pktcdvd.c
-Message-ID: <Y/MRGCxfWpm73r79@infradead.org>
-References: <20230217202301.436895-1-thuth@redhat.com>
- <20230217202301.436895-5-thuth@redhat.com>
+        with ESMTP id S229667AbjBTGuz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Feb 2023 01:50:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A640AD2A;
+        Sun, 19 Feb 2023 22:50:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 231A7B80AD5;
+        Mon, 20 Feb 2023 06:50:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C2AC433EF;
+        Mon, 20 Feb 2023 06:50:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676875851;
+        bh=8ea/W8EPaGnZGcQn5kFoCfUqrn/UjnED2e0Ukr+lUV0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ar25jCVK8MzN7+bVdQZtDcBDGEZmSz4d5L1idXv/g3IMG9MkJNLgVG8e/aaSEsSE6
+         NBJ81vRXMyri3EtEGciviwl4KiniDa79ObM16tpGxwRjRZY7Lf5lohJPtR6p09pjsf
+         UlO70fZO9ocQ9ympyYoaYCRAZ+hEHMtfvj3p8aNeFrEXwwyxoGKg9UikMWbnWWiAlI
+         4qDjC0A93LRgT+5FfqKIAigndBOSMIn7GnKWg3NRyJbdPzCHmTKmoXqR5wVcn/I3uY
+         gUE95b4j9EoR1/d026lm0ymfIOKTHCdzn5XixoKwZSSRuZ5J0Z0lp3WbO4KGcRyGMj
+         pGavmNWjAgRCw==
+Date:   Mon, 20 Feb 2023 08:50:29 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v6 00/41] Shadow stacks for userspace
+Message-ID: <Y/MYNRHrG61ZiAgt@kernel.org>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230217202301.436895-5-thuth@redhat.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 17, 2023 at 09:23:01PM +0100, Thomas Huth wrote:
-> From: Palmer Dabbelt <palmer@dabbelt.com>
+On Sat, Feb 18, 2023 at 01:13:52PM -0800, Rick Edgecombe wrote:
+> Hi,
 > 
-> I don't think this was ever intended to be exposed to userspace, but
-> it did require an "#ifdef CONFIG_*".  Since the name is kind of
-> generic and was only used in one place, I've moved the definition to
-> the one user.
+> This series implements Shadow Stacks for userspace using x86's Control-flow 
+> Enforcement Technology (CET). CET consists of two related security features: 
+> shadow stacks and indirect branch tracking. This series implements just the 
+> shadow stack part of this feature, and just for userspace.
 
-I'd just remove USE_WCACHING entirel with something like:
+For the series
 
-diff --git a/drivers/block/pktcdvd.c b/drivers/block/pktcdvd.c
-index 2f1a92509271c4..5ae2a80db2c341 100644
---- a/drivers/block/pktcdvd.c
-+++ b/drivers/block/pktcdvd.c
-@@ -1869,12 +1869,12 @@ static noinline_for_stack int pkt_probe_settings(struct pktcdvd_device *pd)
- /*
-  * enable/disable write caching on drive
-  */
--static noinline_for_stack int pkt_write_caching(struct pktcdvd_device *pd,
--						int set)
-+static noinline_for_stack int pkt_write_caching(struct pktcdvd_device *pd)
- {
- 	struct packet_command cgc;
- 	struct scsi_sense_hdr sshdr;
- 	unsigned char buf[64];
-+	bool set = IS_ENABLED(CONFIG_CDROM_PKTCDVD_WCACHE);
- 	int ret;
- 
- 	init_cdrom_command(&cgc, buf, sizeof(buf), CGC_DATA_READ);
-@@ -1890,7 +1890,12 @@ static noinline_for_stack int pkt_write_caching(struct pktcdvd_device *pd,
- 	if (ret)
- 		return ret;
- 
--	buf[pd->mode_offset + 10] |= (!!set << 2);
-+	/*
-+	 * use drive write caching -- we need deferred error handling to be
-+	 * able to successfully recover with this option (drive will return good
-+	 * status as soon as the cdb is validated).
-+	 */
-+	buf[pd->mode_offset + 10] |= (set << 2);
- 
- 	cgc.buflen = cgc.cmd[8] = 2 + ((buf[0] << 8) | (buf[1] & 0xff));
- 	ret = pkt_mode_select(pd, &cgc);
-@@ -2085,7 +2090,7 @@ static int pkt_open_write(struct pktcdvd_device *pd)
- 		return -EIO;
- 	}
- 
--	pkt_write_caching(pd, USE_WCACHING);
-+	pkt_write_caching(pd);
- 
- 	ret = pkt_get_max_speed(pd, &write_speed);
- 	if (ret)
-diff --git a/include/uapi/linux/pktcdvd.h b/include/uapi/linux/pktcdvd.h
-index 9cbb55d21c94af..6a5552dfd6af4e 100644
---- a/include/uapi/linux/pktcdvd.h
-+++ b/include/uapi/linux/pktcdvd.h
-@@ -29,17 +29,6 @@
-  */
- #define PACKET_WAIT_TIME	(HZ * 5 / 1000)
- 
--/*
-- * use drive write caching -- we need deferred error handling to be
-- * able to successfully recover with this option (drive will return good
-- * status as soon as the cdb is validated).
-- */
--#if defined(CONFIG_CDROM_PKTCDVD_WCACHE)
--#define USE_WCACHING		1
--#else
--#define USE_WCACHING		0
--#endif
--
- /*
-  * No user-servicable parts beyond this point ->
-  */
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
+-- 
+Sincerely yours,
+Mike.
