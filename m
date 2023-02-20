@@ -2,277 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44A969D47F
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Feb 2023 21:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A194469D4F3
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Feb 2023 21:24:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232447AbjBTULd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Feb 2023 15:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S232897AbjBTUYe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Feb 2023 15:24:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjBTULd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Feb 2023 15:11:33 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC931EFF4;
-        Mon, 20 Feb 2023 12:11:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1676923891; x=1708459891;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kn4pld7IQxDxYFj1OkmASNOLxEzb1abPukEUl/1gRJc=;
-  b=a/7NBj7rdfg6+FvAzm/CLwh/WM0KfDvJbgi6qln692frvIlgtcwN/0d+
-   mTMZvjMVXN3BlgsjUbUJiTXg595D1HxciJaATO5FrntPjT4yV5to5HNX9
-   JMONrgcNpBibQBbx6iTjEved3GtWMOyx48LZ02ciXlkuwJMrZPiYes3H7
-   iosekel4XttkQONaLij90XEfQ5duyiZebgnKLfaXztYfsivENqjw1wzYW
-   uM/W1EK4SN1llc/HBYKvqyw7iE63/b3MrKhFBMC/lEV3M8DN2w7VEZ6mR
-   s/B1XLxLlgUVSR9WvyBItXjyYGU+6R0sOPjKo7388+j+OrZ757kshABq9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="418706419"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="418706419"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 12:11:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="760282644"
-X-IronPort-AV: E=Sophos;i="5.97,313,1669104000"; 
-   d="scan'208";a="760282644"
-Received: from lkp-server01.sh.intel.com (HELO 4455601a8d94) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Feb 2023 12:11:28 -0800
-Received: from kbuild by 4455601a8d94 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pUCVT-000E9N-2U;
-        Mon, 20 Feb 2023 20:11:27 +0000
-Date:   Tue, 21 Feb 2023 04:11:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arch@vger.kernel.org,
-        devicetree@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- d2af0fa4bfa4ec29d03b449ccd43fee39501112d
-Message-ID: <63f3d3e0.jVwHKeaSAe5ASSpD%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
+        with ESMTP id S232874AbjBTUYb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Feb 2023 15:24:31 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2062e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B732005A;
+        Mon, 20 Feb 2023 12:24:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MFwkzyqDJwSs+SniBWksmymVjih8ijaCUgqzX2wFOgwrzbmMLqXqiSKLV1VwVKiDco3g+DKDoXYk3rTLaz0OkJBlbLK+KAsx9IFPS85X7C6GajV3msghajOyiulEsN9GLHbO43xAWlFVP96rr2nG89ID8n+JuIsoKMmUoXkFVdZZ95eLU3WX2ZPEprvtNshnBrJZeLqWTveKAXqykhK13Ljp/VES42SlkXkhY/K05lQY4c6Vl4ukgrtusTwuABPEUYlYxBIR9iy/+F8p4yfd2PjhYKJVu05xWWAqBMqsgahIkG47YB+1rsvkTDNLB64KFF7tBGT3dQP8bIHeNep/+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FSarqJTVS/+y9QRSYpb2Ud58dGIJVpE1p861D3UckX8=;
+ b=LQ6dzScpmEMAUIbOcSzG9ccQjbQuLU4RcRMxt4Ii7T93BexcKzk9u+0dUbzOROx5fdqdIikdMagKcLz48Q9QBq7LG3LgD3SNU+N+rxoxblAejzfN+46Ic0QceRceD/1eEeK5Bz94OuD8xLXeq7I1u+Do42fZpj4q8UUDbPle8RIYb+ZP2s/LEaQpPrppJp6hER3v3ae8q303TsZOiWA5RTAwa3hqFcLP4NeAmoqDz5KTpM7zUXJvGaFK7VLXRPNlT4zYkMA/VOEnMOe/LZ/BuTEHWa8EQw9ag62LrnoQdTJ/Dhp/VYCGRivltxupXIzxgwqsU5gluzZo6dltmgvSvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FSarqJTVS/+y9QRSYpb2Ud58dGIJVpE1p861D3UckX8=;
+ b=uJlVyWDAcPS3yEwzOuffNRRTfqwjsnvY+YCZKnajKp+1lr11it6iKfjs+N9hzfzzWNvzceLib1kLncP/ry5edmJLoZ+1IXCvEAGlOR9yu8TpQkjPSFdpTRjAQq5PotJnnYm8OO6MoKmsGDMHF5WwFfWn5HNCXN9D5D28TNTufxE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20)
+ by PH8PR12MB6844.namprd12.prod.outlook.com (2603:10b6:510:1cb::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.19; Mon, 20 Feb
+ 2023 20:22:50 +0000
+Received: from BL1PR12MB5995.namprd12.prod.outlook.com
+ ([fe80::de95:3582:8274:ff60]) by BL1PR12MB5995.namprd12.prod.outlook.com
+ ([fe80::de95:3582:8274:ff60%2]) with mapi id 15.20.6111.020; Mon, 20 Feb 2023
+ 20:22:50 +0000
+Date:   Mon, 20 Feb 2023 14:22:36 -0600
+From:   John Allen <john.allen@amd.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        kcc@google.com, eranian@google.com, rppt@kernel.org,
+        jamorris@linux.microsoft.com, dethoma@microsoft.com,
+        akpm@linux-foundation.org, Andrew.Cooper3@citrix.com,
+        christina.schimpe@intel.com, david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v6 00/41] Shadow stacks for userspace
+Message-ID: <Y/PWjCAxKcahq98B@johallen-workstation>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+X-ClientProxiedBy: YT3PR01CA0040.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:82::26) To BL1PR12MB5995.namprd12.prod.outlook.com
+ (2603:10b6:208:39b::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5995:EE_|PH8PR12MB6844:EE_
+X-MS-Office365-Filtering-Correlation-Id: d39b6967-481f-4a29-6be1-08db13803cc0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HAXGmPAOo/wKEDOC9b/4rj6lF5I7xRiE6kkhnTqSze23Z9Pj8W9aQIZE0eSD5LG1XAyFN7y4Q1Km3JGcardeENL26UaKxfmChoY/gmIURtEz6SFDC5A7azpfacrL6jqE9LrxnbH2MXcojw3woZtvC0jPA22d/hBUslgQZ0c+Rd7KEaZ/94oufLt+axOgTY1N5X8ASeUO8dwXY9G/CxKhsQFQvhv4WI5vrQfICt0pQ3kf1MKMZOp++ocw3PJ/3lkdEoKv5pSxHezCjjM5A39Ws4hk5q6xMQqHzJXay15c8V8xCgD22T8R6Kgy5T62ER+KeXz24h5br+ah/h+58rRJrhs4fS3t7BHJnJqIMqhBqkOoptgkrKrTvUFKuKNdJl4kSKTCRO7fAvUTJmVxA2flqo9qqOzlGtZ/DMW2bPtfnKW8lFMIaD/icFvxqRaV6/F1SkVVtqoZso0EcIuiy2yKt9nfjcP2OHGHybPMvJgP6ISu1xHNzqR4sn0x0r2A/h41JOsNT+WemkvVNRaK8HGEAtWWGeY57bcYPtuPdgcVZd1COScq2O5wt+dVkZLdrkC7f9abITDUlu19iwuCfC0VroIGeWiI0d9e2On+aArUUunyD6HhJQgcuZD6H4hNJNio
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5995.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(451199018)(8936002)(966005)(478600001)(2906002)(7416002)(5660300002)(7406005)(44832011)(6486002)(6916009)(66476007)(66946007)(8676002)(4326008)(54906003)(316002)(66556008)(6666004)(83380400001)(26005)(186003)(6512007)(86362001)(9686003)(6506007)(41300700001)(38100700002)(33716001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WtO3ZG/aw9tze9o+on2vmGykZ3t8y7XechOrWDOxCih1b79Ds0UrtfXMpTRU?=
+ =?us-ascii?Q?cQimVAUiae2Z7wW3aoJRFJOIKqpKT2jpCqBWuS/DznJE1B0IbxUe1dZjBIWK?=
+ =?us-ascii?Q?FJuqiMw6Y4Q6WFECdRUlJq2VsIkKp3+uT32uedD2hBGQ8u2mnIJP/ozTEX/W?=
+ =?us-ascii?Q?a9SwHniMD6a5bZqqxRRNdklVBL5dTJh+TRpFR6EO4Yc8HKOxefhIdauWUgq7?=
+ =?us-ascii?Q?U0c1mt6+vBhyZZMDGhY6Ji21AV2y8Ijg4IHOmdZLLxlNXXILngIMfd6WEK2e?=
+ =?us-ascii?Q?obyTlaqtVGEf+OB8MsehHg+SkKdw8/OffGZnorOtCYb7WHzrj0AODdHTlr/b?=
+ =?us-ascii?Q?mLWhDy7bokwgska0Rc2th8e4R+a7D7C58o+N8LCGURiJlZbi05pB6U1TjrZH?=
+ =?us-ascii?Q?afG2Y6tjHREQeD6x0Zos9rQLgEwWWM1ZjukKoM2asjo0kFVIUcYDyRtjWK3Q?=
+ =?us-ascii?Q?0MLzGcH/99UuTi/k5q3MUpGb964yvop930dNWMVPZo9Xc3OgnAgCW/dAJmxn?=
+ =?us-ascii?Q?9G29NkLP1E8T9l43MOqL+RmNGW96kYC0JWSS5i2gO+8+olDKrO9CAa3xN8+G?=
+ =?us-ascii?Q?5LGYUSbR/gemsgRj+EcFG1+4fWRLtyXtQFp4jElZRfe5sNCyQM0v1YvHw52/?=
+ =?us-ascii?Q?5RiBRpBk9ZiyCNplVrEk0vG+B+AJ1+eKvmYMcwf3HXGMArhFgg+jXQRBB6oA?=
+ =?us-ascii?Q?tOb56fNJt1ilyGZN1PoFyec9PEDcMD1/RrAxQIYyoW/WXGVow+vfD66sF7E0?=
+ =?us-ascii?Q?egEWftDkHVoHZacoET00DCtJMIFW4FoF47FIBkWHQyIl3L9447Rc4ZtbWh79?=
+ =?us-ascii?Q?xNnOrzstiX+CX4eaV5p/aw7NbzmaIw1oC8gk5Ruq+HidRk6a4P0VzjNJxI6x?=
+ =?us-ascii?Q?fvs7/f2Ft5mmQmJpF+h4gZpAoAIXemVJOoGwTA0XDyNIURBd4AgXE4b8WhGN?=
+ =?us-ascii?Q?yVLX18WawL8FxiYQ5ktcI117Xjdp+gFDDjMttgyefnfOwX4MrfC+Plpc/5uR?=
+ =?us-ascii?Q?2klHD5yCI6ewuySYL1J0Jc5E8VRF/tXtVTVgPIsYMlwU/Wz+h3NsMHFIncwp?=
+ =?us-ascii?Q?67J+hYKeRFS7Ha0ITVDOjusBtVYZLa3s3KB8laGoR+vuKCiX66TcGBCwxkcs?=
+ =?us-ascii?Q?XjGHCeg3UdRsiMKB0ooBm4qWoudDvT5hsX07HVbS9uhKzrQ9F3fT51MiD5jJ?=
+ =?us-ascii?Q?4gbFyWXZY9LnfYmuZcbzAjfI7Q9k508AHii0qNKf5IP/J8CkjjmvweeXxnCr?=
+ =?us-ascii?Q?gOiX9K59XmDdTVHouPPRJvJ5G8moZoBIZa8ZkAQwbV+nWs21ZlsmG+g8NGKc?=
+ =?us-ascii?Q?sEIVB82SMchrtREEGGl7j5vDVW3XWH1k/A2ZiDeRt5ICjVjA5Sp7rT8m5xp6?=
+ =?us-ascii?Q?Cf9N6VN5OjDX3apU+gAW2TI2ab3mf5gsC93tTx5WDF7fN+uo5l28DFLxNr/P?=
+ =?us-ascii?Q?z9231pKKSO7cZ5hXCNu47OLaDkRE8ttgFMhp2E8bN0/bsmBOOQOPH67hoF0w?=
+ =?us-ascii?Q?+ZWryv7QO+AuLezewZ89SBiS5kTewkPN03jWaO/YOXDg54BgfVQgOApcsHDR?=
+ =?us-ascii?Q?JaUjI0+jrMUf2X8Xk4PzQBll0yPp6phxJDCbS5E3?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d39b6967-481f-4a29-6be1-08db13803cc0
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5995.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2023 20:22:50.1086
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 40oL4zPkGHpjXKldGC/2oEFCMZCpGMxDk4bHeDwNUVpDjdXnh1u+hIuztGYeAbhVooqRppegKDUzJZNxZ6cr3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6844
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: d2af0fa4bfa4ec29d03b449ccd43fee39501112d  Add linux-next specific files for 20230220
+On Sat, Feb 18, 2023 at 01:13:52PM -0800, Rick Edgecombe wrote:
+> I left tested-by tags in place per discussion with testers. Testers, please
+> retest.
 
-Error/Warning reports:
+v6 is still working well on my AMD system (Dell PowerEdge
+R6515 w/ EPYC 7713).
 
-https://lore.kernel.org/oe-kbuild-all/202302062224.ByzeTXh1-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302092211.54EYDhYH-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302170355.Ljqlzucu-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302210017.XT59WvsM-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302210350.lynWcL4t-lkp@intel.com
+The selftests run cleanly:
 
-Error/Warning: (recently discovered and may have been fixed)
+[INFO]  new_ssp = 7f53069ffff8, *new_ssp = 7f5306a00001
+[INFO]  changing ssp from 7f53071ffff0 to 7f53069ffff8
+[INFO]  ssp is now 7f5306a00000
+[OK]    Shadow stack pivot
+[OK]    Shadow stack faults
+[INFO]  Corrupting shadow stack
+[INFO]  Generated shadow stack violation successfully
+[OK]    Shadow stack violation test
+[INFO]  Gup read -> shstk access success
+[INFO]  Gup write -> shstk access success
+[INFO]  Violation from normal write
+[INFO]  Gup read -> write access success
+[INFO]  Violation from normal write
+[INFO]  Gup write -> write access success
+[INFO]  Cow gup write -> write access success
+[OK]    Shadow gup test
+[INFO]  Violation from shstk access
+[OK]    mprotect() test
+[OK]    Userfaultfd test
+[OK]    32 bit test
 
-Documentation/sphinx/templates/kernel-toc.html: 1:36 Invalid token: #}
-ERROR: modpost: "__umoddi3" [fs/btrfs/btrfs.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-FAILED: load BTF from vmlinux: No data available
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn32/dcn32_resource_helpers.c:62:18: warning: variable 'cursor_bpp' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_detection.c:1199: warning: expecting prototype for dc_link_detect_connection_type(). Prototype was for link_detect_connection_type() instead
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_capability.c:1292:32: warning: variable 'result_write_min_hblank' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training.c:1586:38: warning: variable 'result' set but not used [-Wunused-but-set-variable]
-drivers/net/ethernet/sfc/ef100_nic.c:1197:9: warning: variable 'rc' is uninitialized when used here [-Wuninitialized]
-drivers/net/ethernet/sfc/efx_devlink.c:326:58: error: expected ')' before 'build_id'
-drivers/net/ethernet/sfc/efx_devlink.c:338:55: error: expected ';' before '}' token
-drivers/of/unittest.c:3042:41: error: 'struct device_node' has no member named 'kobj'
-drivers/pwm/pwm-dwc.c:314:1: error: type defaults to 'int' in declaration of 'module_pci_driver' [-Werror=implicit-int]
-include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+And I can see the control protection messages in dmesg when
+running the shstk violation test from here:
+https://gitlab.com/cet-software/cet-smoke-test
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+ld-linux-x86-64[51598] control protection ip:401139 sp:7ffd68b1b7c8 ssp:7fb433578fd8 error:1(near ret) in shstk1[401000+1000]
 
-drivers/infiniband/hw/hfi1/verbs.c:1661 hfi1_alloc_hw_device_stats() error: we previously assumed 'dev_cntr_descs' could be null (see line 1650)
-drivers/net/phy/phy-c45.c:712 genphy_c45_write_eee_adv() error: uninitialized symbol 'changed'.
-drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_8188e.c:1678 rtl8188e_handle_ra_tx_report2() warn: ignoring unreachable code.
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-drivers/virtio/virtio_ring.c:1585 virtqueue_add_packed_vring() error: uninitialized symbol 'prev'.
-drivers/virtio/virtio_ring.c:1593 virtqueue_add_packed_vring() error: uninitialized symbol 'head_flags'.
-drivers/virtio/virtio_ring.c:697 virtqueue_add_split_vring() error: uninitialized symbol 'prev'.
-pahole: .tmp_vmlinux.btf: No such file or directory
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- alpha-buildonly-randconfig-r006-20230219
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arc-randconfig-r001-20230219
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|-- arc-randconfig-r043-20230219
-|   `-- drivers-of-unittest.c:error:struct-device_node-has-no-member-named-kobj
-|-- arm-allmodconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- csky-randconfig-s041-20230219
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- csky-randconfig-s042-20230219
-|   |-- include-asm-generic-cmpxchg-local.h:sparse:sparse:cast-truncates-bits-from-constant-value-(-becomes-)
-|   `-- include-asm-generic-cmpxchg-local.h:sparse:sparse:cast-truncates-bits-from-constant-value-(aaa31337-becomes-)
-|-- i386-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn32-dcn32_resource_helpers.c:warning:variable-cursor_bpp-set-but-not-used
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-link_detection.c:warning:expecting-prototype-for-dc_link_detect_connection_type().-Prototype-was-for-link_detect_connection_type()-instead
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_capability.c:warning:variable-result_write_min_hblank-set-but-not-used
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training.c:warning:variable-result-set-but-not-used
-|-- i386-randconfig-m021
-|   |-- drivers-virtio-virtio_ring.c-virtqueue_add_packed_vring()-error:uninitialized-symbol-head_flags-.
-|   |-- drivers-virtio-virtio_ring.c-virtqueue_add_packed_vring()-error:uninitialized-symbol-prev-.
-|   `-- drivers-virtio-virtio_ring.c-virtqueue_add_split_vring()-error:uninitialized-symbol-prev-.
-|-- ia64-randconfig-r025-20230220
-clang_recent_errors
-|-- i386-randconfig-a001-20230213
-|   `-- ERROR:__umoddi3-fs-btrfs-btrfs.ko-undefined
-`-- powerpc-skiroot_defconfig
-    `-- drivers-net-ethernet-sfc-ef100_nic.c:warning:variable-rc-is-uninitialized-when-used-here
-
-elapsed time: 843m
-
-configs tested: 96
-configs skipped: 6
-
-gcc tested configs:
-alpha                            allyesconfig
-alpha                               defconfig
-arc                              alldefconfig
-arc                              allyesconfig
-arc                          axs103_defconfig
-arc                                 defconfig
-arc                  randconfig-r043-20230219
-arc                  randconfig-r043-20230220
-arc                        vdk_hs38_defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm                         axm55xx_defconfig
-arm                                 defconfig
-arm                  randconfig-r046-20230220
-arm64                            allyesconfig
-arm64                               defconfig
-csky                                defconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                                defconfig
-i386                 randconfig-a001-20230220
-i386                 randconfig-a002-20230220
-i386                 randconfig-a003-20230220
-i386                 randconfig-a004-20230220
-i386                 randconfig-a005-20230220
-i386                 randconfig-a006-20230220
-i386                          randconfig-c001
-ia64                             allmodconfig
-ia64                                defconfig
-loongarch                        allmodconfig
-loongarch                         allnoconfig
-loongarch                           defconfig
-m68k                             allmodconfig
-m68k                                defconfig
-mips                             allmodconfig
-mips                             allyesconfig
-mips                     decstation_defconfig
-mips                            gpr_defconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-powerpc                     ep8248e_defconfig
-powerpc                 linkstation_defconfig
-powerpc                      makalu_defconfig
-powerpc                     taishan_defconfig
-riscv                            allmodconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                randconfig-r042-20230219
-riscv                          rv32_defconfig
-s390                             allmodconfig
-s390                             allyesconfig
-s390                                defconfig
-s390                 randconfig-r044-20230219
-sh                               allmodconfig
-sh                        apsh4ad0a_defconfig
-sh                             espt_defconfig
-sh                     magicpanelr2_defconfig
-sh                     sh7710voipgw_defconfig
-sparc                               defconfig
-sparc                       sparc32_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           alldefconfig
-x86_64                            allnoconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-xtensa                  cadence_csp_defconfig
-
-clang tested configs:
-arm                     davinci_all_defconfig
-arm                  randconfig-r046-20230219
-arm                       spear13xx_defconfig
-hexagon              randconfig-r041-20230219
-hexagon              randconfig-r041-20230220
-hexagon              randconfig-r045-20230219
-hexagon              randconfig-r045-20230220
-i386                 randconfig-a011-20230220
-i386                 randconfig-a012-20230220
-i386                 randconfig-a013-20230220
-i386                 randconfig-a014-20230220
-i386                 randconfig-a015-20230220
-i386                 randconfig-a016-20230220
-mips                          ath25_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                     skiroot_defconfig
-riscv                randconfig-r042-20230220
-s390                 randconfig-r044-20230220
-x86_64               randconfig-a011-20230220
-x86_64               randconfig-a012-20230220
-x86_64               randconfig-a013-20230220
-x86_64               randconfig-a014-20230220
-x86_64               randconfig-a015-20230220
-x86_64               randconfig-a016-20230220
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Tested-by: John Allen <john.allen@amd.com>
