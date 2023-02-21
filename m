@@ -2,313 +2,687 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D79869D7CB
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Feb 2023 01:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5016869D892
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Feb 2023 03:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbjBUA66 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Feb 2023 19:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S233003AbjBUCiH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Feb 2023 21:38:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232005AbjBUA66 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Feb 2023 19:58:58 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1059B93D3
-        for <linux-arch@vger.kernel.org>; Mon, 20 Feb 2023 16:58:56 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id f1so3909802qvx.13
-        for <linux-arch@vger.kernel.org>; Mon, 20 Feb 2023 16:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RtHN1DgoRqr2Ay47r+sHQwKz0JkWSbPOHgkJwWGWT+c=;
-        b=trh3wO2P5RoBJwzLqkMPs6xcj+FmWrZwVJ/4Ft1dD4xgWxOGzAuFdNpVJNmdEsYqhP
-         PbFDPBn3D/1QpFpgPB6e7loUh4U4u2Iu7WJDK1u/uOAkinwfZakAZWext1O3rmWW9zW+
-         63NMxTE22XNpsNBZY5r9iaG7hutz/+N3DFfoE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RtHN1DgoRqr2Ay47r+sHQwKz0JkWSbPOHgkJwWGWT+c=;
-        b=r0ujTGAPjfl9rpcxTlBJ4T785ADyn0sp1dRrRj1wW9HmSel/4WGLaw8VG2BZackukd
-         LSUmrOWuCYZGPKeP6WkMqZNpGpE84ude6L5I/Q7jSP6qaLyjtW8UY5P+TZJhO/LYyR1K
-         wKjbjfd6xlZJYoJN+50juavZqJwW7AyzJLUvIwO+WQCSvQtAgiNu5fcKpCw1M7gOj4Ok
-         EI8S+fYBHbqpYDiWgI9aF1AOl+plmajN08U2F5CI6Nd4Hx8x1McukQ/T/t5SYjQozeZL
-         ltYUxvDu0mu4l5o/Mmn/WWvH6YNvY41G4D9X8fJQDfOQOVl0jY9jzQ2pKbnvbBDnkEsZ
-         7sjg==
-X-Gm-Message-State: AO0yUKWcucTeQl09D4tBX4cWka3VzLp6QbkLWNnLURahOz0ik0lxE0HX
-        1LoQrlsaCTfoauWXzUskiM2Z3g==
-X-Google-Smtp-Source: AK7set90yXQoiEC6YPRTOsb5vuGyvmifVmCKz0YBoQL5M+/0tEor6TfkR8GTsV40W+UmLmmuwf6p4g==
-X-Received: by 2002:a05:6214:dc6:b0:56f:979:b1e8 with SMTP id 6-20020a0562140dc600b0056f0979b1e8mr6908461qvt.48.1676941135016;
-        Mon, 20 Feb 2023 16:58:55 -0800 (PST)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05620a048300b007290be5557bsm1825868qkr.38.2023.02.20.16.58.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Feb 2023 16:58:54 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] tools/memory-model: Add details about SRCU read-side critical sections
-Date:   Mon, 20 Feb 2023 19:58:43 -0500
-Message-Id: <BCA3CF43-3F03-4DFB-AB2F-FC1A638D743E@joelfernandes.org>
-References: <Y/PgxRorDQZ7wPKU@rowland.harvard.edu>
-Cc:     linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        with ESMTP id S232934AbjBUCiF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Feb 2023 21:38:05 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377882333F;
+        Mon, 20 Feb 2023 18:37:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1676947051; x=1708483051;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=pJYEIgNOCbjutS3bVbfbPZEsCLggPaoJ1ZLtawowN7s=;
+  b=jFM9j9CmtVchmhLsE7guwMKaUtmVKqHNTWGXXEuCtjNmwlXTk4Yi4ikF
+   U2xOlwlKepntuFN31QvdupSmbJjwQWpJEBc+fkkX0JFBTM7hHQyoQr5oN
+   bQ6XOHWBNjDnJeubpSisWWRfuI4oQU57wnwoooud0dSawkK3rHhwcCNyi
+   ZRWUoD7QqGrHdgqqqYWQaNgFDyfjkHVJewOfxh3fR1/KF0v/4npXzsjyt
+   PjaTvr7ZDt0oq460Z03Dns28vAb1kB51p8vvqdn1bp+2RW9VhI0vuH4Jd
+   wRNQVGujYS0WWPxaLqEjZxBESEDkff34rLwE42yyJtBDFHB0ze3KstDZ+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="312899154"
+X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
+   d="c'?scan'208";a="312899154"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2023 18:37:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10627"; a="673523766"
+X-IronPort-AV: E=Sophos;i="5.97,314,1669104000"; 
+   d="c'?scan'208";a="673523766"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga007.fm.intel.com with ESMTP; 20 Feb 2023 18:37:30 -0800
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 20 Feb 2023 18:37:29 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 20 Feb 2023 18:37:29 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 20 Feb 2023 18:37:28 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZTrf13t8pp6l9PqH04tWFasDPYSz6xJwU10sE0RM4zLwfcft2DxdhvN4gNWlmHIi34guFQj6tLmqH/Qpl4eQmkAEeNJZ/DwxghI2sodGZpqY0SVGwGrwqjaLqldZBQ5SEsTDVbBqBZxHMYKi9XW1wR11F8H/Qp9Y69QnEgPGERc3XF6Xt7wPAL3X+gf7Zx8DA0Y1XRma/GxneWxpOLRB41bNqQkTxZhGEefJp+uB5Ky/A2y54irl/uv04y0ecjJ9O89zcQe4hSH+zDZe9GvcUXIXJlDB1TaLocisV8vZ0Zo8FV0hRAQaO6LAhBAWZHmiRxtYOANz9E72ejnb3VZlzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bsVT3xKBS5usxg59mGJB8ifkyhw5L/i5MKwt1cd5tzM=;
+ b=mse6F2MlCk/rmWsAjpFCiVztPPZtB4YhCywD0cv6iJ4dvBZ7JRRGCN9qJDzOMUvpcAgBYREM8b9WYYLh1IfqYZ74B1nXW+s+iXy42YVWpN27geKCuvrxp18rpCkqDDTtzCWm2kJ0skm0QjkT9ELhnSkrIFNb4jxPXT8O64WYkwZMzljCdLF5G5IZCygbBSppCiHnrWkOY+h8n2YuVzADdrOF7wfJcQVQPE2j10ROFNQ9W/9el+FXk38/4eR5RP20yORwADe+yLVDZg387/kUiydEx59jbPrc0eZO/MgMUyhZBeZ0RljT13k7NQisUS0M6HVzy/CBzbehQY/dsMUHtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com (2603:10b6:510:42::18)
+ by DS0PR11MB7288.namprd11.prod.outlook.com (2603:10b6:8:13b::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.20; Tue, 21 Feb
+ 2023 02:37:21 +0000
+Received: from PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::e28f:b27b:4b9d:2154]) by PH0PR11MB4839.namprd11.prod.outlook.com
+ ([fe80::e28f:b27b:4b9d:2154%4]) with mapi id 15.20.6111.020; Tue, 21 Feb 2023
+ 02:37:21 +0000
+Date:   Tue, 21 Feb 2023 10:38:21 +0800
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+CC:     <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arch@vger.kernel.org>, <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, "Jann Horn" <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        =?utf-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        Will Deacon <will@kernel.org>
-In-Reply-To: <Y/PgxRorDQZ7wPKU@rowland.harvard.edu>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, <kcc@google.com>,
+        <eranian@google.com>, <rppt@kernel.org>,
+        <jamorris@linux.microsoft.com>, <dethoma@microsoft.com>,
+        <akpm@linux-foundation.org>, <Andrew.Cooper3@citrix.com>,
+        <christina.schimpe@intel.com>, <david@redhat.com>,
+        <debug@rivosinc.com>, <heng.su@intel.com>
+Subject: Re: [PATCH v6 00/41] Shadow stacks for userspace
+Message-ID: <Y/QunS2skya40mUu@xpf.sh.intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+Content-Type: multipart/mixed; boundary="gkqNPeSovw7GjVb3"
+Content-Disposition: inline
+In-Reply-To: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+X-ClientProxiedBy: SG2PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:3:17::21) To PH0PR11MB4839.namprd11.prod.outlook.com
+ (2603:10b6:510:42::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4839:EE_|DS0PR11MB7288:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5eb152b-3ebe-4033-af0e-08db13b48e41
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yELK2NAn1406M5LOfRq00EWZKsoxWnRzsFQv3eoUXuGeMygFc4E0IOnysi+dvRslChymBk3tjNt8q3ljLDp4NCQ70qnjJlN5lN9md0/BMKv/GyIegbH978pV1R1vop+iff0zaRLMyaCMYWth28hPEsN6GsMQzOBMXo9/pWpUfpDgoMAyvz8Y1QILpGo4QOctf07EH2JhUDOWpieKlpqSd+p0Ri+CMJhXk3lqBL1xU4kJg+FXJShfCClijlRfDc/YLDcsgHhgxgG5Tm8xtRAsiylfBlgQzYudR0Osu6MvXJi80zwWUecIF6CKTMLrXjVHDetLoiKHve/30h0samxTXv5ZL+G7FueJGCBe8yLOIlKe+kh691KezsZnfHuR2g90jKCvF0tnk2V0nnzpiFv97SaDe1TdfPgni/8t2ywbwwWHS4HVenHg6zbP3kiuyMLZht3P9Xf9Y7c2/Py08u4gjWjF92obo7KxjGNj9u4mqEJo7YuPL6G/91qNLOThtC3w+ED1nUrxi8w8+/TrEL/d4aTw13sOOaQNG2UM0ZoOGoJCtw8VqpZhViE9jJHXQWWHRRiz4luA++YWLfNeVBb0ddlhqQ33GtQrc/edZsAVUlbV9ZFK/wi6lGZq76Zw+Ef2KYyIvZfXB5yCSyl/Koiurfor0yX1z5v0NUnXpUAZKO/Ip5oie8jzfhzqze5gQhPlgub9WCoMuyKnNMDPjOaDIyoHziMPI4bfNvqClXBIBLo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4839.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199018)(82960400001)(38100700002)(186003)(26005)(966005)(6486002)(6506007)(316002)(53546011)(2906002)(44144004)(6636002)(478600001)(54906003)(66946007)(66476007)(6512007)(4326008)(8676002)(66556008)(8936002)(83380400001)(5660300002)(6862004)(235185007)(86362001)(44832011)(7416002)(7406005)(41300700001)(2700100001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gLrBQ7EyayoH4FrjjaCrzMjMvxXose/CHOs+7QYJvsBI+RwkSKbrPcYj+4tl?=
+ =?us-ascii?Q?L8WK725kUECCp9/hAwWepSJcpHOMFAU6AV6Liolx3dCZoFVgi7xiYVfjBXTh?=
+ =?us-ascii?Q?mRoBVuJcIT9LGbjW3Zbb5s/kfgK3yBcWyhsz9XXX3bXiyiY4AenxIwQNzHu9?=
+ =?us-ascii?Q?vYrS5Bhcl9yRX7uB1nn90ykvhK0ymDgMrfUFRQHPVnfqw73CXy9nlKF8k05a?=
+ =?us-ascii?Q?FYXiC9QKm+03JiL/GO7ggN13AHsANR+FSHODEif6g3Q7oX5PdMcJsVVL9EDc?=
+ =?us-ascii?Q?sC/gwQyRUadSCqbUjg+bh5B0CDBp9F4+u9GRk3O3C8JdMUYKFnxQ7OngXubs?=
+ =?us-ascii?Q?ZkON01Nj9Pi2XRg17dtqNNWkke62sz7OLqYVMrlqvcxtVoSL80FjwnG52r+Y?=
+ =?us-ascii?Q?Vn3vWj/M7zPZKn8nIbOx4fsPFrLEqyyxgnKOpjUMwHOdzrROgqumRZqD1n2Q?=
+ =?us-ascii?Q?msce7cddguzQM9XixRiugb6b2KunhP3xs/KMUL9IjQO72U55+0PASxfUR3UZ?=
+ =?us-ascii?Q?OHDlZfLv4Jk+MNOK2Nw5Gri1qwpnxuSa/1U5zbJsNL7AoYntoa1XMhQVz0ho?=
+ =?us-ascii?Q?N3zfPI9/qCm47Cwqi3syO37GPS1H/P5XdfLishv06g2aMTw5rmAd6d4ZroKT?=
+ =?us-ascii?Q?Vw3oCoGps7C7yLvAIj/BNo5x4Ynm9l4r2CEeAh14+ZabBTvi9mOglbN3CN4I?=
+ =?us-ascii?Q?glKI1nGBbT+RJeazgRcvJLssLrN2Ug7eAFfHi3NrLipDMQyU8HbUy2UNNIyT?=
+ =?us-ascii?Q?k+/GZ514NY/yQuiqfQKHLXvR3FO3ecBPp3CIZ2qN2hns76BAz/G+sq+0NjRJ?=
+ =?us-ascii?Q?UW0XmChfqUKwGSrWDsQNaRtiDIIDHCNaItroUzFdfxYkVDuMKeEbhyP8WlZg?=
+ =?us-ascii?Q?yNCbf7ivl7YOhsoJygswkzAt+akZJOKr03FmFpyiy9gsEUPm5MECnsqAi04T?=
+ =?us-ascii?Q?6FlBM2JumczvrCeVWbuLP+81gmyPoNJS45Dd5eJMn+AZ4RqXuBvWHDo2eKai?=
+ =?us-ascii?Q?yV70zCSLfOJcjKOmA6KWKAcQlcCP71HAGrN31sonnBRMbtg8jIkIdHDBIejC?=
+ =?us-ascii?Q?adZ5tqShM+GrFVmTZBh2sVXmlcf7hCFYrSIDF0jjkSsVgbyxYi9uOsQ3CmAm?=
+ =?us-ascii?Q?fg/jKqqOpm9MBH7BII/hsFgcoJW8dVOEfgMQ55oF8Znh0iIi3Yia0g1mdX/G?=
+ =?us-ascii?Q?qmYXIJ6wdP9EyuqVyTZq2AdfVR7jTiXR1Jw2WnXcVJmeGzWgYBOQpUoYlJS7?=
+ =?us-ascii?Q?nxKjUMk3GvNGWPV5NihNz6fkBCLK7F995YUCyw+M8Lw0ytFF08tt83H2E3CD?=
+ =?us-ascii?Q?601fqCu4oqt1bOZ1MEkcycUNf+ivQ/WQ8QRCpti/gNGFIk4nCUWpS4DxXoDB?=
+ =?us-ascii?Q?e6iY8E76BZCLOBZox84L74bYcOnu8RrySIH+E1QY7E380sUa/e1ByULPjHrK?=
+ =?us-ascii?Q?LXN5bnCujmyNz6BtKeJQd9y84OmOXrj8PegVM+3dnsYLrvuUGTe+ymptIrzp?=
+ =?us-ascii?Q?Swh7/aRm1bWJYWdbTLsYvZj58GcG0mqe74NPleWW3M9awPpwASsNW5d0yHpv?=
+ =?us-ascii?Q?+SpQzdZ8tkMH4NYnWVpKX5ovX6gRhmnK6qCcRAy3o8MpUQye1h8HKBrMS0lk?=
+ =?us-ascii?Q?oA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5eb152b-3ebe-4033-af0e-08db13b48e41
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4839.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2023 02:37:21.0235
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nQi+4KtbunTVitUmA6LOLhYuI3KFexYs8iPuBUVLmYOVCdPCNKA4TWwfiT+kl1gcD5p6gcxZ1rc/VTsNY2IZgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7288
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+--gkqNPeSovw7GjVb3
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+
+Hi Rick,
+
+On 2023-02-18 at 13:13:52 -0800, Rick Edgecombe wrote:
+> Hi,
+> 
+...
+> 
+> I left tested-by tags in place per discussion with testers. Testers, please
+> retest.
+> 
+
+1. Tested kself-test from user space shstk on ADL-S, TGL-U without Glibc shstk
+support in CentOS 8 stream OS:
+
+// From the test_shadow_stack code in this patch series:
+# ./test_shadow_stack
+[INFO]  new_ssp = 7f014ac2dff8, *new_ssp = 7f014ac2e001
+[INFO]  changing ssp from 7f014a1ffff0 to 7f014ac2dff8
+[INFO]  ssp is now 7f014ac2e000
+[OK]    Shadow stack pivot
+[OK]    Shadow stack faults
+[INFO]  Corrupting shadow stack
+[INFO]  Generated shadow stack violation successfully
+[OK]    Shadow stack violation test
+[INFO]  Gup read -> shstk access success
+[INFO]  Gup write -> shstk access success
+[INFO]  Violation from normal write
+[INFO]  Gup read -> write access success
+[INFO]  Violation from normal write
+[INFO]  Gup write -> write access success
+[INFO]  Cow gup write -> write access success
+[OK]    Shadow gup test
+[INFO]  Violation from shstk access
+[OK]    mprotect() test
+[OK]    Userfaultfd test
+[OK]    32 bit test
+
+// shstk violation without SHSTK glibc support
+// Code link: https://github.com/intel/lkvs/blob/main/cet/shstk_cp.c
+# ./shstk_cp
+[PASS]  Enable SHSTK successfully
+[PASS]  Disabling shadow stack successfully
+[PASS]  Re-enable shadow stack successfully
+[PASS]  SHSTK enabled, ssp:7fa3bfe00000
+[INFO]  do_hack() change address for return:
+[INFO]  Before,ssp:7fa3bfdffff8,*ssp:40133f,rbp:0x7ffc23b5b440,*rbp:7ffc23b5b480,*(rbp+1):40133f
+[INFO]  After, ssp:7fa3bfdffff8,*ssp:40133f,rbp:0x7ffc23b5b440,*rbp:7ffc23b5b480,*(rbp+1):401146
+Segmentation fault (core dumped)
+
+Dmesg:
+[1117184.518588] shstk_cp[1523882] control protection ip:40122c sp:7ffc23b5b448 ssp:7fa3bfdffff8 error:1(near ret) in shstk_cp[401000+1000]
+
+// shstk ARCH_SHSTK_STATUS read/set test without SHSTK Glibc support
+// Code link: https://github.com/intel/lkvs/blob/main/cet/shstk_unlock_test.c
+# ./shstk_unlock_test
+[PASS]  Parent process enable SHSTK.
+[PASS]  Parent pid:1522040, ssp:0x7f57fc400000
+[INFO]  pid:1522040, ssp:0x7f57fc3ffff8, *ssp:401799
+[PASS]  Unlock CET successfully for pid:1522041
+[PASS]  GET CET REG ret:0, err:0, ssp:7f57fc3ffff8
+[PASS]  SET CET REG ret:0, err:0, ssp:7f57fc3ffff8
+[PASS]  SET ssp -1 failed(expected) ret:-1, errno:22
+[PASS]  GET xstate successfully ret:0
+[PASS]  SHSTK is enabled in child process
+[INFO]  Child:1522041 origin ssp:0x7f57fc400000
+[INFO]  Child:1522041, ssp:0x7f57fc400000, bp,0x7ffcf32ba0f0, *bp:401dc0, *(bp+1):7f57fc43ad85
+[PASS]  Disabling shadow stack succesfully
+[PASS]  SHSTK_STATUS ok, feature:0 is 0, ret:0
+[PASS]  Child process re-enable ssp
+[PASS]  SHSTK_STATUS ok, feature:1 1st bit is 1, ret:0
+[PASS]  Child process enabled wrss
+[PASS]  SHSTK_STATUS ok, feature:3 2nd bit is 1, ret:0
+[INFO]  Child:1522041, ssp:0x7f57fc400000, bp,0x7ffcf32ba0f0, *bp:401dc0, *(bp+1):7f57fc43ad85
+[INFO]  ssp addr:0x7f57fc400000 is same as ssp_verify:0x7f57fc400000
+[PASS]  Child process disable shstk successfully.
+[PASS]  Parent process disable shadow stack successfully.
 
 
-> On Feb 20, 2023, at 4:06 PM, Alan Stern <stern@rowland.harvard.edu> wrote:=
+2. Tested fedora37 OS + Hongjiu provided user space SHSTK support Glibc:
+// shstk with Glibc support:
+// Related Glibc support for Fedora37:  http://gnu-4.sc.intel.com/git/?p=hjl/misc.git;a=tree;f=setup/fedora/37;h=63af84a8f28f3d0802f09266e47fb94eb5cdff26;hb=HEAD
+# readelf  -n shadow_test_fork | head
+readelf: Warning: Gap in build notes detected from 0x4011d7 to 0x4011e4
 
->=20
-> =EF=BB=BFOn Sun, Feb 19, 2023 at 12:13:14PM -0500, Joel Fernandes wrote:
->>> On Sun, Feb 19, 2023 at 12:11 PM Joel Fernandes <joel@joelfernandes.org>=
- wrote:
->>> Even though it may be redundant: would it be possible to also mention
->>> (after this paragraph) that this case forms an undesirable "->rf" link
->>> between B and C, which then causes us to link A and D as a result?
->>>=20
->>> A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
->>=20
->> Apologies, I meant here, care must be taken to avoid:
->>=20
->> A[srcu-lock] ->data B[srcu-unlock] ->rf C[srcu-lock] ->data D[srcu-unlock=
-].
->=20
-> Revised patch below.  I changed more than just this bit.  Mostly small=20
-> edits to improve readability, but I did add a little additional=20
-> material.
+Displaying notes found in: .note.gnu.property
+  Owner                Data size        Description
+    GNU                  0x00000040       NT_GNU_PROPERTY_TYPE_0
+          Properties: x86 feature: IBT, SHSTK
+...
+// shadow_test_fork code is in attached
+// gcc -fcf-protection=full -mshstk -O0 -fno-stack-check -fno-stack-protector    shadow_test_fork.c   -o shadow_test_fork
+# ./shadow_test_fork s2
+[INFO]  s2: stack rbp + 1
+[INFO]  do_hack() change address for return:
+[INFO]  After change, rbp+1 to hacked:0x401296
+Segmentation fault (core dumped)
 
-Looks good to me. Thanks!
+Dmesg:
+[418653.591014] shadow_test_for[16529] control protection ip:401367 sp:7fff6ed0a728 ssp:7f661265bfe0 error:1(near ret) in shadow_test_fork[401000+1000]
 
- - Joel
+All above user space SHSTK tests are passed.
+
+Many thanks Rick and all!
+
+Thanks!
+BR.
+Pengfei
+
+> -- 
+> 2.17.1
+> 
+
+--gkqNPeSovw7GjVb3
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment; filename="shadow_test_fork.c"
+
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Contributors:
+ *      Pengfei, Xu <pengfei.xu@intel.com>
+ *      - Test CET shadow stack function, should trigger #CP protection
+ *      - Add the print, and show stack address and content before and after
+ *        changed
+ */
+
+#define _GNU_SOURCE
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <signal.h>
+#include <sched.h>
+#include <immintrin.h>
+
+static long hacked(void)
+{
+	printf("[INFO]\tAccess hack function\n");
+	printf("[FAIL]\tpid=%d Hacked!\n", getpid());
+	printf("[WARN]\tYou see this line, which means CET shstk #CP failed!\n");
+	return 1;
+}
+
+/*
+ * stack variable y + 1(1 means 8bytes for 64bit, 4bytes for 32bit) is bp,
+ * and here use bp directly, it's bp hacked not sp hacked, so it should not
+ * trigger #CP.
+ */
+static void stack_add1_test(unsigned long changed_bp)
+{
+	unsigned long *func_bp;
+
+#ifdef __x86_64__
+	asm("movq %%rbp,%0" : "=r"(func_bp));
+#else
+	asm("mov %%ebp,%0" : "=r"(func_bp));
+#endif
+	printf("[INFO]\tReal add1 function rbp content:%lx for main rbp.\n",
+	       *func_bp);
+	*func_bp = changed_bp;
+	printf("[INFO]\tChange add1 rbp content:%lx, but right main rbp content in it!\n",
+	       *func_bp);
+}
+
+/* stack base rbp + 1 addr test, which should be hacked and #CP should work */
+static unsigned long stack_add2_test(void)
+{
+	unsigned long y;
+	unsigned long *i, *j;
+
+	i = (unsigned long *)_get_ssp();
+	j = __builtin_frame_address(0);
+
+	printf("[INFO]\tdo_hack() change address for return:\n");
+	printf("[INFO]\tBefore change,y:%lx,&y:%p,j:%p,*j:%lx,*(&j+1):0x%lx, ssp:%p *ssp:0x%lx\n",
+	       y, &y, j, *j, *(j+1), i, *i);
+
+	/* j(rbp)+1 is sp address, change rbp+1 to change sp content */
+	*(j + 1) = (unsigned long)hacked;
+
+	printf("[INFO]\tAfter change, rbp+1 to hacked:0x%lx\n", *(j+1));
+	printf("[INFO]\tAfter hacked  &y:%p, *j:0x%lx,*(&j+1):0x%lx\n",
+	       &y, *j, *(j + 1));
+
+	/* Debug purpose: it's not related with ret instruction in objdump. */
+	return y;
+}
+
+/* stack base y + 3 addr test, which should not be hacked and #CP */
+static unsigned long stack_add3_test(void)
+{
+	unsigned long y;
+
+	printf("[INFO]\tdo_hack() change address for return:\n");
+	printf("[INFO]\tBefore change, y:0x%lx, *(&y+2):0x%lx\n", y,
+	       *((unsigned long *)&y + 2));
+	*((unsigned long *)&y + 3) = (unsigned long)hacked;
+	printf("[INFO]\tAfter change, *(&y+3) to change:0x%lx\n", (unsigned long)hacked);
+	printf("[INFO]\tAfter change &y+3:%p,*(&x+2):0x%lx\n",
+	       (unsigned long *)&y + 3, *((unsigned long *)&y + 3));
+	printf("[INFO]\tAfter changed &y:%p, &y+2:%p,*(&y+2):0x%lx\n",
+	       &y, (unsigned long *)&y + 2, *((unsigned long *)&y + 2));
+
+	return y;
+}
+
+static long stack_long2_test(unsigned long i)
+{
+	unsigned long *p;
 
 
->=20
-> Alan
->=20
->=20
->=20
-> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
-> @@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory C
->   20. THE HAPPENS-BEFORE RELATION: hb
->   21. THE PROPAGATES-BEFORE RELATION: pb
->   22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, an=
-d rb
-> -  23. LOCKING
-> -  24. PLAIN ACCESSES AND DATA RACES
-> -  25. ODDS AND ENDS
-> +  23. SRCU READ-SIDE CRITICAL SECTIONS
-> +  24. LOCKING
-> +  25. PLAIN ACCESSES AND DATA RACES
-> +  26. ODDS AND ENDS
->=20
->=20
->=20
-> @@ -1848,14 +1849,169 @@ section in P0 both starts before P1's gr
-> before it does, and the critical section in P2 both starts after P1's
-> grace period does and ends after it does.
->=20
-> -Addendum: The LKMM now supports SRCU (Sleepable Read-Copy-Update) in
-> -addition to normal RCU.  The ideas involved are much the same as
-> -above, with new relations srcu-gp and srcu-rscsi added to represent
-> -SRCU grace periods and read-side critical sections.  There is a
-> -restriction on the srcu-gp and srcu-rscsi links that can appear in an
-> -rcu-order sequence (the srcu-rscsi links must be paired with srcu-gp
-> -links having the same SRCU domain with proper nesting); the details
-> -are relatively unimportant.
-> +The LKMM supports SRCU (Sleepable Read-Copy-Update) in addition to
-> +normal RCU.  The ideas involved are much the same as above, with new
-> +relations srcu-gp and srcu-rscsi added to represent SRCU grace periods
-> +and read-side critical sections.  However, there are some important
-> +differences between RCU read-side critical sections and their SRCU
-> +counterparts, as described in the next section.
-> +
-> +
-> +SRCU READ-SIDE CRITICAL SECTIONS
-> +--------------------------------
-> +
-> +The LKMM models uses the srcu-rscsi relation to model SRCU read-side
-> +critical sections.  They are different from RCU read-side critical
-> +sections in the following respects:
-> +
-> +1.    Unlike the analogous RCU primitives, synchronize_srcu(),
-> +    srcu_read_lock(), and srcu_read_unlock() take a pointer to a
-> +    struct srcu_struct as an argument.  This structure is called
-> +    an SRCU domain, and calls linked by srcu-rscsi must have the
-> +    same domain.  Read-side critical sections and grace periods
-> +    associated with different domains are independent of one
-> +    another; the SRCU version of the RCU Guarantee applies only
-> +    to pairs of critical sections and grace periods having the
-> +    same domain.
-> +
-> +2.    srcu_read_lock() returns a value, called the index, which must
-> +    be passed to the matching srcu_read_unlock() call.  Unlike
-> +    rcu_read_lock() and rcu_read_unlock(), an srcu_read_lock()
-> +    call does not always have to match the next unpaired
-> +    srcu_read_unlock().  In fact, it is possible for two SRCU
-> +    read-side critical sections to overlap partially, as in the
-> +    following example (where s is an srcu_struct and idx1 and idx2
-> +    are integer variables):
-> +
-> +        idx1 =3D srcu_read_lock(&s);    // Start of first RSCS
-> +        idx2 =3D srcu_read_lock(&s);    // Start of second RSCS
-> +        srcu_read_unlock(&s, idx1);    // End of first RSCS
-> +        srcu_read_unlock(&s, idx2);    // End of second RSCS
-> +
-> +    The matching is determined entirely by the domain pointer and
-> +    index value.  By contrast, if the calls had been
-> +    rcu_read_lock() and rcu_read_unlock() then they would have
-> +    created two nested (fully overlapping) read-side critical
-> +    sections: an inner one and an outer one.
-> +
-> +3.    The srcu_down_read() and srcu_up_read() primitives work
-> +    exactly like srcu_read_lock() and srcu_read_unlock(), except
-> +    that matching calls don't have to execute on the same CPU.
-> +    (The names are meant to be suggestive of operations on
-> +    semaphores.)  Since the matching is determined by the domain
-> +    pointer and index value, these primitives make it possible for
-> +    an SRCU read-side critical section to start on one CPU and end
-> +    on another, so to speak.
-> +
-> +In order to account for these properties of SRCU, the LKMM models
-> +srcu_read_lock() as a special type of load event (which is
-> +appropriate, since it takes a memory location as argument and returns
-> +a value, just as a load does) and srcu_read_unlock() as a special type
-> +of store event (again appropriate, since it takes as arguments a
-> +memory location and a value).  These loads and stores are annotated as
-> +belonging to the "srcu-lock" and "srcu-unlock" event classes
-> +respectively.
-> +
-> +This approach allows the LKMM to tell whether two events are
-> +associated with the same SRCU domain, simply by checking whether they
-> +access the same memory location (i.e., they are linked by the loc
-> +relation).  It also gives a way to tell which unlock matches a
-> +particular lock, by checking for the presence of a data dependency
-> +from the load (srcu-lock) to the store (srcu-unlock).  For example,
-> +given the situation outlined earlier (with statement labels added):
-> +
-> +    A: idx1 =3D srcu_read_lock(&s);
-> +    B: idx2 =3D srcu_read_lock(&s);
-> +    C: srcu_read_unlock(&s, idx1);
-> +    D: srcu_read_unlock(&s, idx2);
-> +
-> +the LKMM will treat A and B as loads from s yielding values saved in
-> +idx1 and idx2 respectively.  Similarly, it will treat C and D as
-> +though they stored the values from idx1 and idx2 in s.  The end result
-> +is much as if we had written:
-> +
-> +    A: idx1 =3D READ_ONCE(s);
-> +    B: idx2 =3D READ_ONCE(s);
-> +    C: WRITE_ONCE(s, idx1);
-> +    D: WRITE_ONCE(s, idx2);
-> +
-> +except for the presence of the special srcu-lock and srcu-unlock
-> +annotations.  You can see at once that we have A ->data C and
-> +B ->data D.  These dependencies tell the LKMM that C is the
-> +srcu-unlock event matching srcu-lock event A, and D is the
-> +srcu-unlock event matching srcu-lock event B.
-> +
-> +This approach is admittedly a hack, and it has the potential to lead
-> +to problems.  For example, in:
-> +
-> +    idx1 =3D srcu_read_lock(&s);
-> +    srcu_read_unlock(&s, idx1);
-> +    idx2 =3D srcu_read_lock(&s);
-> +    srcu_read_unlock(&s, idx2);
-> +
-> +the LKMM will believe that idx2 must have the same value as idx1,
-> +since it reads from the immediately preceding store of idx1 in s.
-> +Fortunately this won't matter, assuming that litmus tests never do
-> +anything with SRCU index values other than pass them to
-> +srcu_read_unlock() or srcu_up_read() calls.
-> +
-> +However, sometimes it is necessary to store an index value in a
-> +shared variable temporarily.  In fact, this is the only way for
-> +srcu_down_read() to pass the index it gets to an srcu_up_read() call
-> +on a different CPU.  In more detail, we might have soething like:
-> +
-> +    struct srcu_struct s;
-> +    int x;
-> +
-> +    P0()
-> +    {
-> +        int r0;
-> +
-> +        A: r0 =3D srcu_down_read(&s);
-> +        B: WRITE_ONCE(x, r0);
-> +    }
-> +
-> +    P1()
-> +    {
-> +        int r1;
-> +
-> +        C: r1 =3D READ_ONCE(x);
-> +        D: srcu_up_read(&s, r1);
-> +    }
-> +
-> +Assuming that P1 executes after P0 and does read the index value
-> +stored in x, we can write this (using brackets to represent event
-> +annotations) as:
-> +
-> +    A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
-> +
-> +The LKMM defines a carries-srcu-data relation to express this
-> +pattern; it permits an arbitrarily long sequence of
-> +
-> +    data ; rf
-> +
-> +pairs (that is, a data link followed by an rf link) to occur between
-> +an srcu-lock event and the final data dependency leading to the
-> +matching srcu-unlock event.  carry-srcu-data is complicated by the
-> +need to ensure that none of the intermediate store events in this
-> +sequence are instances of srcu-unlock.  This is necessary because in a
-> +pattern like the one above:
-> +
-> +    A: idx1 =3D srcu_read_lock(&s);
-> +    B: srcu_read_unlock(&s, idx1);
-> +    C: idx2 =3D srcu_read_lock(&s);
-> +    D: srcu_read_unlock(&s, idx2);
-> +
-> +the LKMM treats B as a store to the variable s and C as a load from
-> +that variable, creating an undesirable rf link from B to C:
-> +
-> +    A ->data B ->rf C ->data D.
-> +
-> +This would cause carry-srcu-data to mistakenly extend a data
-> +dependency from A to D and give the impression that D was the
-> +srcu-unlock event matching A's srcu-lock.  To avoid such problems,
-> +carry-srcu-data does not accept sequences in which the ends of any of
-> +the intermediate ->data links (B above) is an srcu-unlock event.
->=20
->=20
-> LOCKING
->=20
+	printf("[INFO]\tuse rbp + long(+8bytes) size to hack:\n");
+	/*
+	 * Another way to read rbp
+	 * asm("movq %%rbp,%0" : "=r"(p));
+	 */
+	p = __builtin_frame_address(0);
+
+	printf("[INFO]\t*(p+1):%lx will be hacked\n", *(p + 1));
+	*(p + 1) = (unsigned long)hacked;
+
+	return 0;
+}
+
+/* stack base y + 2 change to random value to do shstk violation */
+static unsigned long stack_random(unsigned long j)
+{
+	unsigned long y;
+	unsigned long *p;
+
+	y = j;
+	printf("[INFO]\tSHSTK hack with random value:\n");
+#ifdef __x86_64__
+	asm("movq %%rbp,%0" : "=r"(p));
+#else
+	asm("mov %%ebp,%0" : "=r"(p));
+#endif
+
+	*(p + 1) = j;
+
+	return y;
+}
+
+/* stack base y + 2 changed but no return */
+static void stack_no_return(void)
+{
+	unsigned long *p;
+
+	printf("[INFO]\tSHSTK with void no return function:\n");
+#ifdef __x86_64__
+	asm("movq %%rbp,%0" : "=r"(p));
+#else
+	asm("mov %%ebp,%0" : "=r"(p));
+#endif
+
+	*(p + 1) = (unsigned long)hacked;
+}
+
+/* buffer overflow change stack base, which should trigger #CP */
+static void stack_buf_impact(void)
+{
+	char buffer[20];
+	int overflow_num = 44;
+
+	printf("[INFO]\tbuffer[20]:%x\n", buffer[20]);
+	memset(buffer, 0, overflow_num);
+	printf("[INFO]\tbuffer[44]:%x,&buffer[44]:%p\n", buffer[44], &buffer[44]);
+	printf("[INFO]\tbuffer[20] after overflow:%x\n", buffer[20]);
+}
+
+/* buffer overflow not change stack base, which should not trigger #CP */
+static void stack_buf_no_impact(void)
+{
+	char buf[20];
+	int overflow_24 = 24, overflow_28 = 28;
+
+	printf("[INFO]\tbuf[20]:%x\n", buf[20]);
+#ifdef __x86_64__
+	memset(buf, 0, overflow_28);
+#else
+	memset(buf, 0, overflow_24);
+#endif
+	printf("[INFO]\tbuf[20] after overflow:%x\n", buf[20]);
+}
+
+/* test hack function */
+static int do_hack(void *p)
+{
+	/*
+	 * Ret and then rip will get this value(rbp + 8 bytes in 64 bit OS)
+	 * rbp(8 bytes in 64bit OS)
+	 * *i, *j and so on variable content
+	 */
+	unsigned long *i, *j;
+
+	i = (unsigned long *)_get_ssp();
+	j = __builtin_frame_address(0);
+
+	printf("[INFO]\tBefore: rbp+8:0x%p content=0x%lx; ssp=0x%p, ssp content=0x%lx\n",
+		j + 1, *(j + 1), i, *i);
+	*(j+1) = (unsigned long)hacked;
+	printf("[INFO]\tAfter: rbp+8:0x%p content=0x%lx; ssp=0x%p, ssp content=0x%lx\n",
+		j + 1, *(j + 1), i, *i);
+
+	return 0;
+}
+
+/* check shadow stack wo core dump in child pid */
+static void stack_wo_core(void)
+{
+	void *s = malloc(0x100000);
+
+	if (fork() == 0)
+		do_hack(s);
+}
+
+/* test shstk by clone way */
+static int stack_clone(void)
+{
+	pid_t cid;
+
+	void *child_stack = malloc(0x100000);
+
+	if (child_stack == NULL) {
+		printf("[FAIL]\tmalloc child_stack failed!\n");
+		return 1;
+	}
+
+	cid = clone(
+	do_hack, /* function */
+	child_stack + 0x100000,
+	SIGCHLD,
+	0 /*arg*/
+	);
+
+	if (cid == -1) {
+		printf("[FAIL]\tclone failed!\n");
+		free(child_stack);
+		return 1;
+	}
+
+	printf("[INFO]\tparent=%d, child=%d\n", getpid(), cid);
+
+	if (waitpid(cid, NULL, 0) == -1) {
+		printf("[FAIL]\twaitpid() failed!\n");
+		return 1;
+	}
+	printf("[INFO]\tchild exits!\n");
+
+	free(child_stack);
+	return 0;
+}
+
+/*
+ * Check shadow stack address and content and
+ * rbp address and protect address content
+ */
+static int shadow_stack_check(void)
+{
+	unsigned long y;
+	unsigned long *bp_a, *ssp_a;
+	unsigned long long size_bp, size_ssp;
+
+	ssp_a = (unsigned long *)_get_ssp();
+	bp_a = __builtin_frame_address(0);
+	size_bp = sizeof(*(bp_a + 1));
+	size_ssp = sizeof(*ssp_a);
+
+	printf("[INFO]\t&y=0x%p\n", &y);
+	printf("[INFO]\tbp=%p,bp+1=%p,*(bp+1):0x%lx(size:%lld) ssp=%p *ssp=0x%lx(size:%lld)\n",
+		bp_a, bp_a + 1, *(bp_a + 1), size_bp, ssp_a, *ssp_a, size_ssp);
+	return 0;
+}
+
+static void usage(void)
+{
+	printf("Usage: [null | s1 | s2 | s3 | sl1 | sr | sn...]\n");
+	printf("  null: no parm, stack add 2 test, should trigger #CP\n");
+	printf("  s1: stack add 1 test\n");
+	printf("  s2: stack add 2 test, should trigger #CP\n");
+	printf("  s3: stack add 3 test\n");
+	printf("  sl1: stack with long add 2 test\n");
+	printf("  sr: stack change to random value\n");
+	printf("  sn: stack change but no return\n");
+	printf("  buf1: buffer overflow change stack base\n");
+	printf("  buf2: buffer overflow not change stack base\n");
+	printf("  snc: test shadow stack wo core dump\n");
+	printf("  sc: test shadow stack by clone way\n");
+	printf("  ssp: check shadow stack addr and content\n");
+}
+
+int main(int argc, char *argv[])
+{
+	char *parm = "";
+	unsigned long a = 0, *main_rbp, fake_bp[2];
+
+	a = rand();
+	enum {
+		e_s1, /* enum stack base, y + 1 */
+		e_s2, /* enum stack base + 1 addr content change test */
+		e_s3, /* enum stack base y + 3 */
+		e_sl1, /* enum stack base with long + 2 */
+		e_sr, /* enum stack base change to random value */
+		e_sn, /* enum stack base changed but no return */
+		e_buf1, /* buffer overflow change stack base */
+		e_buf2, /* buffer overflow not change stack base */
+		e_snc, /* shadow stack wo core dump */
+		e_sc, /* test shstk by stack clone way */
+		e_ssp /* check shadow stack addr and content */
+	} option;
+
+#ifdef __x86_64__
+	asm("movq %%rbp,%0" : "=r"(main_rbp));
+#else
+	asm("mov %%ebp,%0" : "=r"(main_rbp));
+#endif
+
+	/* Use real main rbp address and content to make one fake bp and sp */
+	fake_bp[0] = *main_rbp;
+	fake_bp[1] = *(main_rbp + 1);
+
+	if (argc == 1) {
+		usage();
+		stack_add2_test();
+	} else {
+		parm = argv[1];
+		if (strcmp(argv[1], "s1") == 0)
+			option = e_s1;
+		else if (strcmp(argv[1], "s2") == 0)
+			option = e_s2;
+		else if (strcmp(argv[1], "s3") == 0)
+			option = e_s3;
+		else if (strcmp(argv[1], "sl1") == 0)
+			option = e_sl1;
+		else if (strcmp(argv[1], "sr") == 0)
+			option = e_sr;
+		else if (strcmp(argv[1], "sn") == 0)
+			option = e_sn;
+		else if (strcmp(argv[1], "buf1") == 0)
+			option = e_buf1;
+		else if (strcmp(argv[1], "buf2") == 0)
+			option = e_buf2;
+		else if (strcmp(argv[1], "snc") == 0)
+			option = e_snc;
+		else if (strcmp(argv[1], "sc") == 0)
+			option = e_sc;
+		else if (strcmp(argv[1], "ssp") == 0)
+			option = e_ssp;
+		else {
+			usage();
+			exit(1);
+		}
+	}
+
+	switch (option) {
+	case e_s1:
+		printf("[INFO]\ts1: stack + 1\n");
+		stack_add1_test((unsigned long)&fake_bp[0]);
+		break;
+	case e_s2:
+		printf("[INFO]\ts2: stack rbp + 1\n");
+		stack_add2_test();
+		break;
+	case e_s3:
+		printf("[INFO]\ts3: stack + 3\n");
+		stack_add3_test();
+		break;
+	case e_sl1:
+		printf("[INFO]\tsl1: stack with long + 2, a:0x%lx\n", a);
+		stack_long2_test(a);
+		break;
+	case e_sr:
+		printf("[INFO]\tsr: stack changed to random value a:0x%lx\n", a);
+		stack_random(a);
+		break;
+	case e_sn:
+		printf("[INFO]\tsn: stack changed but no return\n");
+		stack_no_return();
+		break;
+	case e_buf1:
+		printf("buf1: buffer overflow change stack base\n");
+		stack_buf_impact();
+		break;
+	case e_buf2:
+		printf("[INFO]\tbuf2: buffer overflow not change stack base\n");
+		stack_buf_no_impact();
+		break;
+	case e_snc:
+		printf("[INFO]\tsnc: test shadow stack wo core dump\n");
+		stack_wo_core();
+		break;
+	case e_sc:
+		printf("[INFO]\tsc: test shstk by stack clone way\n");
+		stack_clone();
+		break;
+	case e_ssp:
+		printf("[INFO]\tssp: check shadow stack addr and content\n");
+		shadow_stack_check();
+		break;
+	default:
+		usage();
+		exit(1);
+	}
+
+	printf("[RESULTS]\tParent pid=%d is done.\n", getpid());
+
+	return 0;
+}
+
+--gkqNPeSovw7GjVb3--
