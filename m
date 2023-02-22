@@ -2,342 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C6269ED85
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Feb 2023 04:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7A169F0EA
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Feb 2023 10:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjBVDc2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Feb 2023 22:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
+        id S231572AbjBVJGN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Feb 2023 04:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjBVDcS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Feb 2023 22:32:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1000434C2F;
-        Tue, 21 Feb 2023 19:31:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 56CDACE1CE7;
-        Wed, 22 Feb 2023 03:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAEEC433A1;
-        Wed, 22 Feb 2023 03:31:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677036695;
-        bh=BCEF9tz3PqpoLVNs6mBcgcViy7YzFnU5Zx1xRtgtCrQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R1RpW8UtqtmM0PPoFbekx/WGniM1mqrmVKT6pQwhNBM/+wrXaF8TEO80rZvYIhh99
-         M9UWU9bnquG4jnW60wmVL87IFH4ZjOgilCHMwFpxm+k6XuYdt/TDY7DfMKwl2dBgmT
-         QN5hwPLd+EyLlEkLM9jXEeNH+ixcUjHwqeOlFXUrOUzBVfFpEpYpjcQLVR2sU1w7Iz
-         F+W1miBt+iwAu1KXzY0BnERMYnMGt2cQDVTgiSYG8Gp4e+rw5maWwH8g5OVmEy2Dld
-         guJ1Fzr01mHt/KnaR3obPBKg8GVUMCBZxpzm11vt0xlUC3gZkjNyK3kjjNKX2fhLgt
-         lYtdnhlgt7LYw==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org,
-        mark.rutland@arm.com, ben@decadent.org.uk, bjorn@kernel.org,
-        palmer@dabbelt.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>
-Subject: [PATCH -next V17 7/7] riscv: entry: Consolidate general regs saving/restoring
-Date:   Tue, 21 Feb 2023 22:30:21 -0500
-Message-Id: <20230222033021.983168-8-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230222033021.983168-1-guoren@kernel.org>
-References: <20230222033021.983168-1-guoren@kernel.org>
+        with ESMTP id S231589AbjBVJGK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 04:06:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875C72CC73
+        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 01:05:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677056723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9LjUQ9O0HnvcxKh2XAsUTz7YC8LaZ/FmXdZBrCkpK+Q=;
+        b=XR9b0fi9KvAiaDE5BTpc8TIOo/qeHDi/6bFhI2uNFW5uWGqpkfgvQAMrEKbV0W/KPpWkN3
+        9IniZuquw6W2gHT+DX86O89ZNADBkd0SalosCPceq+edugj7/xobyiZfJQ2Sqvkvshwhdb
+        RzzLiGVMmu8xLawJ6umYmi7w8Q02jEQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-586-tyqJIBfEOa687qVSM9tfmA-1; Wed, 22 Feb 2023 04:05:22 -0500
+X-MC-Unique: tyqJIBfEOa687qVSM9tfmA-1
+Received: by mail-wr1-f71.google.com with SMTP id c14-20020adffb0e000000b002bfda39265aso1641513wrr.13
+        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 01:05:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9LjUQ9O0HnvcxKh2XAsUTz7YC8LaZ/FmXdZBrCkpK+Q=;
+        b=EaNLE+ceNGaCjB36fWcSrYhCMwqgaTctnGAWlU6dTTDwwdiIkF4RAdnBPqmXeybVXF
+         eWLK1/NM4gPWXb4KRuG0fhDXIPpo84UKLXOhleZurGW96pq3LDu3SXjpmEU6otyErEt9
+         sfLm8fqqL0k1ydTtARPw8BWHK6QevfJO/9tOEPuQX07YyB7e9dRboEy7gxJHWnydUT+7
+         PIH32szopz3SjU6P9fa3LUEI7jHkZ4TgJVL6osvqnIWiHRxXZmZP9KGlR2rn43pbXCsG
+         gLluMpSupWrPLTbYeak/FEVs1EcTOv3ncz5elLpWB/IL/YSwUJcqd3DmhL2kpZPsuSW3
+         fncw==
+X-Gm-Message-State: AO0yUKXqGapgzvZ1Oxq0rvx6TPEQVaZwp33iIpnRsbVJ16rhgyYAytbY
+        2nlNAMGEMSNrrmV8tffWjZrKjXxlUaEViANPnHo8HrmHmYuAGDLNOSl5B192xSMcBj2Y44tulLu
+        lTTHcsZHA5DNdmliulDx5uQ==
+X-Received: by 2002:a05:600c:80f:b0:3db:fc3:6de4 with SMTP id k15-20020a05600c080f00b003db0fc36de4mr5069721wmp.35.1677056721241;
+        Wed, 22 Feb 2023 01:05:21 -0800 (PST)
+X-Google-Smtp-Source: AK7set9SGBIryzMFukKmMVx5ow2JjCNOU/7I00r/woNcU3wsCpyUfsO529XXrVJjBQAVq81y0YSzRQ==
+X-Received: by 2002:a05:600c:80f:b0:3db:fc3:6de4 with SMTP id k15-20020a05600c080f00b003db0fc36de4mr5069668wmp.35.1677056720798;
+        Wed, 22 Feb 2023 01:05:20 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:a100:95ad:6325:131:6b1d? (p200300cbc704a10095ad632501316b1d.dip0.t-ipconnect.de. [2003:cb:c704:a100:95ad:6325:131:6b1d])
+        by smtp.gmail.com with ESMTPSA id c22-20020a7bc856000000b003e01493b136sm7194166wml.43.2023.02.22.01.05.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Feb 2023 01:05:20 -0800 (PST)
+Message-ID: <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
+Date:   Wed, 22 Feb 2023 10:05:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-15-rick.p.edgecombe@intel.com>
+ <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
+ <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+ <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+ <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+In-Reply-To: <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Jisheng Zhang <jszhang@kernel.org>
+On 21.02.23 21:13, Dave Hansen wrote:
+> On 2/21/23 00:38, David Hildenbrand wrote:> Sure, for my taste this is
+> (1) too repetitive (2) too verbose (3) to
+>> specialized. But whatever x86 maintainers prefer.
+> 
+> At this point, I'm not going to be too nitpicky.  I personally think we
+> need to get _something_ merged.  We can then nitpick it to death once
+> its in the tree.
 
-Consolidate the saving/restoring GPs (except zero, ra, sp, gp,
-tp and t0) into save_from_x6_to_x31/restore_from_x6_to_x31 macros.
+Yes, but ... do we have to rush right now?
 
-No functional change intended.
+This series wasn't in -next and we're in the merge window. Is the plan 
+to still include it into this merge window?
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-Tested-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/include/asm/asm.h   | 61 +++++++++++++++++++++++++
- arch/riscv/kernel/entry.S      | 81 ++--------------------------------
- arch/riscv/kernel/mcount-dyn.S | 57 ++----------------------
- 3 files changed, 68 insertions(+), 131 deletions(-)
+Also, I think concise patch descriptions and comments are not 
+necessarily nitpicking like "please rename that variable".
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index 816e753de636..114bbadaef41 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -69,6 +69,7 @@
- #endif
- 
- #ifdef __ASSEMBLY__
-+#include <asm/asm-offsets.h>
- 
- /* Common assembly source macros */
- 
-@@ -81,6 +82,66 @@
- 	.endr
- .endm
- 
-+	/* save all GPs except x1 ~ x5 */
-+	.macro save_from_x6_to_x31
-+	REG_S x6,  PT_T1(sp)
-+	REG_S x7,  PT_T2(sp)
-+	REG_S x8,  PT_S0(sp)
-+	REG_S x9,  PT_S1(sp)
-+	REG_S x10, PT_A0(sp)
-+	REG_S x11, PT_A1(sp)
-+	REG_S x12, PT_A2(sp)
-+	REG_S x13, PT_A3(sp)
-+	REG_S x14, PT_A4(sp)
-+	REG_S x15, PT_A5(sp)
-+	REG_S x16, PT_A6(sp)
-+	REG_S x17, PT_A7(sp)
-+	REG_S x18, PT_S2(sp)
-+	REG_S x19, PT_S3(sp)
-+	REG_S x20, PT_S4(sp)
-+	REG_S x21, PT_S5(sp)
-+	REG_S x22, PT_S6(sp)
-+	REG_S x23, PT_S7(sp)
-+	REG_S x24, PT_S8(sp)
-+	REG_S x25, PT_S9(sp)
-+	REG_S x26, PT_S10(sp)
-+	REG_S x27, PT_S11(sp)
-+	REG_S x28, PT_T3(sp)
-+	REG_S x29, PT_T4(sp)
-+	REG_S x30, PT_T5(sp)
-+	REG_S x31, PT_T6(sp)
-+	.endm
-+
-+	/* restore all GPs except x1 ~ x5 */
-+	.macro restore_from_x6_to_x31
-+	REG_L x6,  PT_T1(sp)
-+	REG_L x7,  PT_T2(sp)
-+	REG_L x8,  PT_S0(sp)
-+	REG_L x9,  PT_S1(sp)
-+	REG_L x10, PT_A0(sp)
-+	REG_L x11, PT_A1(sp)
-+	REG_L x12, PT_A2(sp)
-+	REG_L x13, PT_A3(sp)
-+	REG_L x14, PT_A4(sp)
-+	REG_L x15, PT_A5(sp)
-+	REG_L x16, PT_A6(sp)
-+	REG_L x17, PT_A7(sp)
-+	REG_L x18, PT_S2(sp)
-+	REG_L x19, PT_S3(sp)
-+	REG_L x20, PT_S4(sp)
-+	REG_L x21, PT_S5(sp)
-+	REG_L x22, PT_S6(sp)
-+	REG_L x23, PT_S7(sp)
-+	REG_L x24, PT_S8(sp)
-+	REG_L x25, PT_S9(sp)
-+	REG_L x26, PT_S10(sp)
-+	REG_L x27, PT_S11(sp)
-+	REG_L x28, PT_T3(sp)
-+	REG_L x29, PT_T4(sp)
-+	REG_L x30, PT_T5(sp)
-+	REG_L x31, PT_T6(sp)
-+	.endm
-+
- #endif /* __ASSEMBLY__ */
- 
- #endif /* _ASM_RISCV_ASM_H */
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index 5ccef259498d..3fbb100bc9e4 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -42,32 +42,7 @@ _save_context:
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x6_to_x31
- 
- 	/*
- 	 * Disable user-mode memory access as it should only be set in the
-@@ -182,32 +157,7 @@ SYM_CODE_START_NOALIGN(ret_from_exception)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
- 	REG_L x5,  PT_T0(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	restore_from_x6_to_x31
- 
- 	REG_L x2,  PT_SP(sp)
- 
-@@ -287,32 +237,7 @@ restore_caller_reg:
- 	REG_S x1,  PT_RA(sp)
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x6_to_x31
- 
- 	REG_L s0, TASK_TI_KERNEL_SP(tp)
- 	csrr s1, CSR_STATUS
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 125de818d1ba..669b8697aa38 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -66,66 +66,17 @@
- 	REG_S x3,  PT_GP(sp)
- 	REG_S x4,  PT_TP(sp)
- 	REG_S x5,  PT_T0(sp)
--	REG_S x6,  PT_T1(sp)
--	REG_S x7,  PT_T2(sp)
--	REG_S x8,  PT_S0(sp)
--	REG_S x9,  PT_S1(sp)
--	REG_S x10, PT_A0(sp)
--	REG_S x11, PT_A1(sp)
--	REG_S x12, PT_A2(sp)
--	REG_S x13, PT_A3(sp)
--	REG_S x14, PT_A4(sp)
--	REG_S x15, PT_A5(sp)
--	REG_S x16, PT_A6(sp)
--	REG_S x17, PT_A7(sp)
--	REG_S x18, PT_S2(sp)
--	REG_S x19, PT_S3(sp)
--	REG_S x20, PT_S4(sp)
--	REG_S x21, PT_S5(sp)
--	REG_S x22, PT_S6(sp)
--	REG_S x23, PT_S7(sp)
--	REG_S x24, PT_S8(sp)
--	REG_S x25, PT_S9(sp)
--	REG_S x26, PT_S10(sp)
--	REG_S x27, PT_S11(sp)
--	REG_S x28, PT_T3(sp)
--	REG_S x29, PT_T4(sp)
--	REG_S x30, PT_T5(sp)
--	REG_S x31, PT_T6(sp)
-+	save_from_x6_to_x31
- 	.endm
- 
- 	.macro RESTORE_ALL
--	REG_L t0,  PT_EPC(sp)
- 	REG_L x1,  PT_RA(sp)
- 	REG_L x2,  PT_SP(sp)
- 	REG_L x3,  PT_GP(sp)
- 	REG_L x4,  PT_TP(sp)
--	REG_L x6,  PT_T1(sp)
--	REG_L x7,  PT_T2(sp)
--	REG_L x8,  PT_S0(sp)
--	REG_L x9,  PT_S1(sp)
--	REG_L x10, PT_A0(sp)
--	REG_L x11, PT_A1(sp)
--	REG_L x12, PT_A2(sp)
--	REG_L x13, PT_A3(sp)
--	REG_L x14, PT_A4(sp)
--	REG_L x15, PT_A5(sp)
--	REG_L x16, PT_A6(sp)
--	REG_L x17, PT_A7(sp)
--	REG_L x18, PT_S2(sp)
--	REG_L x19, PT_S3(sp)
--	REG_L x20, PT_S4(sp)
--	REG_L x21, PT_S5(sp)
--	REG_L x22, PT_S6(sp)
--	REG_L x23, PT_S7(sp)
--	REG_L x24, PT_S8(sp)
--	REG_L x25, PT_S9(sp)
--	REG_L x26, PT_S10(sp)
--	REG_L x27, PT_S11(sp)
--	REG_L x28, PT_T3(sp)
--	REG_L x29, PT_T4(sp)
--	REG_L x30, PT_T5(sp)
--	REG_L x31, PT_T6(sp)
-+	/* Restore t0 with PT_EPC */
-+	REG_L x5,  PT_EPC(sp)
-+	restore_from_x6_to_x31
- 
- 	addi	sp, sp, PT_SIZE_ON_STACK
- 	.endm
+> 
+> So I prefer whatever will move the set along. ;)
+
+If the plan is to merge it in the next merge window (which I suspect, 
+but I might be wrong), I suggest including it in -next fairly soonish, 
+and in the meantime, polish the remaining bits.
+
+Knowing the plan would be good ;)
+
 -- 
-2.36.1
+Thanks,
+
+David / dhildenb
 
