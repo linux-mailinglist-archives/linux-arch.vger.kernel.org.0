@@ -2,86 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CAB69F73B
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Feb 2023 16:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E72B69FA14
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Feb 2023 18:24:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjBVPAc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Feb 2023 10:00:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S231214AbjBVRYZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Feb 2023 12:24:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjBVPAb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 10:00:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5673772E
-        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 07:00:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FEDBB815CE
-        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 15:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6844EC4331F;
-        Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677078022;
-        bh=1eibqrEVyHu9DLfK/UXBBIAovcr/WxnHB/rsWksX1+g=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kcfJwyFqxdeHC4R5LTjDXNmal+HVth0hqbbz+djzUU/Pi2yJBJvALDCiCbQhWG7Tm
-         VNF9j6Nuli2a1kV+qkktkV8teVIkEAQwd+gh/RfymM7HXQhKOy0U4VezZ/jkroa7vt
-         xelK2KlnFeHIe1r9CvCmdkDz+elp6kG395GaoL2FzY8i7FZ/lRWQGhsJHKftoZEG2I
-         vGnKDh5PttJSubPfQM1yZHLbDAZ50JVmZo9BDGz3UpSwUuB5IsukWQM7mXqz+Z/r9u
-         gblA6fzhBlxsuR2RGq+OioSt1RM0daB8wqf/TtC8x2vcqZES+rL8p8Gs7jmLy8kdr5
-         OgaPOfmXBQ4Ng==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E491C43151;
-        Wed, 22 Feb 2023 15:00:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232097AbjBVRYY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 12:24:24 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB8E392A1;
+        Wed, 22 Feb 2023 09:24:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677086653; x=1708622653;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jpKYWzPJiotn2GFQC2lVUcC/mIszPtwMm3RSKsW81ZE=;
+  b=RWtznhT8GSmcwamG3QlD6sdp4hNa180PRf1H6DqHMiPXVUShbLXSjGFt
+   9SKz4/wVmVv1Ls4+n6Z6weN7fYEIuIkc+fgOtL52osX3n1ITv226A7oai
+   DUZ8wIcv7FxbMxyr7tcIFNak610l4H75aerBTrRoCAOXkxIZIan40Conz
+   ojUophBIaoHTTsPlackbVhk4V7dMH1cbPfoIMEZjukuvVhG1smCqHdMJU
+   vWUyc09BNEPyuoZexqE/lVKV7Ts+2qWPyXYCNwW2fP58LzVKNmANVtlXx
+   +8GaB6eLeHN63i1Cs2NROYCQfZD88NGasJtPy18Dppf7maRX0xRpvbUi9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="332988958"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="332988958"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:23:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10629"; a="815006664"
+X-IronPort-AV: E=Sophos;i="5.97,319,1669104000"; 
+   d="scan'208";a="815006664"
+Received: from tzinser-mobl.amr.corp.intel.com (HELO [10.209.49.182]) ([10.209.49.182])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2023 09:23:52 -0800
+Message-ID: <74b91f3e-17f7-6d89-a7d1-7373101bf8b7@intel.com>
+Date:   Wed, 22 Feb 2023 09:23:51 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] riscv: mm: fix regression due to update_mmu_cache change
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167707802231.24438.5384447032819989101.git-patchwork-notify@kernel.org>
-Date:   Wed, 22 Feb 2023 15:00:22 +0000
-References: <20230129211818.686557-1-geomatsi@gmail.com>
-In-Reply-To: <20230129211818.686557-1-geomatsi@gmail.com>
-To:     Sergey Matyukevich <geomatsi@gmail.com>
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        prabhakar.csengg@gmail.com, guoren@kernel.org,
-        aou@eecs.berkeley.edu, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, heiko@sntech.de,
-        sergey.matyukevich@syntacore.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-15-rick.p.edgecombe@intel.com>
+ <70681787-0d33-a9ed-7f2a-747be1490932@redhat.com>
+ <6f19d7c7ad9f61fa8f6c9bd09d24524dbe17463f.camel@intel.com>
+ <6e1201f5-da25-6040-8230-c84856221838@redhat.com>
+ <273414f5-2a7c-3cc0-dc27-d07baaa5787b@intel.com>
+ <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <52f001ef-a409-4f33-f28f-02e806ef305a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello:
+On 2/22/23 01:05, David Hildenbrand wrote:
+> This series wasn't in -next and we're in the merge window. Is the plan
+> to still include it into this merge window?
 
-This patch was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+No way.  It's 6.4 material at the earliest.
 
-On Mon, 30 Jan 2023 00:18:18 +0300 you wrote:
-> From: Sergey Matyukevich <sergey.matyukevich@syntacore.com>
-> 
-> This is a partial revert of the commit 4bd1d80efb5a ("riscv: mm: notify
-> remote harts about mmu cache updates"). Original commit included two
-> loosely related changes serving the same purpose of fixing stale TLB
-> entries causing user-space application crash:
-> - introduce deferred per-ASID TLB flush for CPUs not running the task
-> - switch to per-ASID TLB flush on all CPUs running the task in update_mmu_cache
-> 
-> [...]
-
-Here is the summary with links:
-  - riscv: mm: fix regression due to update_mmu_cache change
-    https://git.kernel.org/riscv/c/b49f700668ff
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I'm just saying to Rick not to worry _too_ much about earlier feedback
+from me if folks have more recent review feedback.
