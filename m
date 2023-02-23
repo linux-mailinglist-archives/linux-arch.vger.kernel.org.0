@@ -2,102 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BB76A0086
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 02:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDDC6A00A1
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 02:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjBWBVd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Feb 2023 20:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S232814AbjBWBcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Feb 2023 20:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbjBWBVc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 20:21:32 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31598199CE
-        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 17:21:29 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id t18-20020a170902e85200b0019c91fd0967so3464041plg.20
-        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 17:21:29 -0800 (PST)
+        with ESMTP id S232500AbjBWBb6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 20:31:58 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1DD3E61E
+        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 17:31:56 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id w3-20020aa78583000000b005d244af158eso2619955pfn.23
+        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 17:31:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Utax3e55p3N2FiK+44m4EPF0IspqZNOsObveiGZKnps=;
-        b=qEb0sRMMQP+D3NIM0EavDhPqQ4MvMH/BkwStlAQZrjsNxsvp5AK1UfYEygcyPWPwJL
-         aw+JkiEqI0Wk8zGQmrouiI1z4upjRMubH9ZbMcD4DfUtX9Kh6wziQif1uoq55HTC3OnT
-         FkqnuFlPOv90b4F9aF2KaT24ghCOlh+8WCOGn6hLcFk+lS1tpcpAs56CWVfDHEhq5Ah+
-         M5mzL9C5YTPTLkTiGKHI6Qe115kFoyX58YgaW0qYBkv6o9AziLvKdimHbPOGepgb44h4
-         mzvdFkwJ0UuukAL7MBFDuYqBQ7qmF7FQJtSZrsAyl+BiB9B4nmX4rvZmwl8TcRhOvWlG
-         zxDw==
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Say+6a1ZyYr+UuCKdaAjxZI4dgG3bJdQNiusmWUgqvk=;
+        b=ZftMo2Jr/MYc+TnSUI/NqHqeLeV4TeeVWH0yMAlI85IeiLcuVkcU0Xi9yTYAL4Ti4N
+         Pcptnd77UOE+Ubfxn8QRWMdZmWSY4akFCQf6v1PFTzO870zP5UiH0CvKAUAI60rjhMim
+         A2kOh6/xUtroxJBIX+ZIQDEuJ2pVebSSpDtdCRhVuxII0dGn+QairZ/42WYH8onaX3sW
+         VTadd7UYWVbVvmpPJT8zKlqq4fO8PhGLg1iNudHVb3yTAkso/TczAQYjur3wkh3ATGMq
+         V9iE2XTX1+ukTikznIFKOxl8ReNuuDE+7TSPpoSVLKtc3hqyAmK9WjjTQq/mdtnRLNoK
+         xRbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Utax3e55p3N2FiK+44m4EPF0IspqZNOsObveiGZKnps=;
-        b=zvS3MpSFEqc5Srojz4QU/ITRU0F6hDahrxw+i8lUPwl/M7wCQ4mwGY1waDMyNOk8oY
-         KdagUsgjK+EcuHCT7BR/j5gd2ZWtYFQ0+KTrq2jhSp2n8qyE8HcwyCfJR/nIRhXY9uML
-         8yBxz7O5dMmUWgWzQt/OK3Hl5kn+qSpDkmbg0SEsDFLbTuhosls5Rm4jsdcMHbPfe8lH
-         Dj8TNFA0/8wqFEHsFVXF/cqQf4HncGKXnlbulWSX7s//jwAe2S2OogRSRWgyw3So6WYg
-         1JNa2pz+8shbwrrQPxucfs6FK5SNg3GlKWEwEcROXjwvMe23WkxzaYKIJm8hAc3fM+s+
-         0Xrw==
-X-Gm-Message-State: AO0yUKWa7ZHkcjaRIa2f6PwZIUx0kyjiIVpEMu/cmiqfjcYHTY9DTqYM
-        aHHNekG2w8O960FKGqaS9BrqhA3LiaU=
-X-Google-Smtp-Source: AK7set8uqJFTeifQRndK5OY7LsjNYEZihFhZGcRxMmqtrSL2SRl7UXNO3Bil4Wyqwogd1sRe6etbqkK7/G4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:66c6:0:b0:4fc:1da2:5f95 with SMTP id
- c6-20020a6566c6000000b004fc1da25f95mr1307512pgw.7.1677115288904; Wed, 22 Feb
- 2023 17:21:28 -0800 (PST)
-Date:   Wed, 22 Feb 2023 17:21:27 -0800
-In-Reply-To: <Y/ammgkyo3QVon+A@zn.tnic>
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Say+6a1ZyYr+UuCKdaAjxZI4dgG3bJdQNiusmWUgqvk=;
+        b=lvLdD+1zMy0KXP0hcmR+pnZQHJWoAG+9j/UZwbDjZ/798oEefviIENn2Yst66od0f1
+         vuWDTZuoMe/sCIwITMLYWGzJ9yA301sf+BF3Kw8Oit26RurB3SlgWorkWg217fN1v2Rj
+         I7p/mifimYUUHOze4nVj+ko7dJ7S1uCtTR7Yt7JY/nSfStJkjr44MHZtp/nKFyX7pXQa
+         3ttPIhkYRylcwfcovR8Q4pc/9xbNRoTiZ+ZZDAbWe0kjG1FS/tJ5XzlrichiV8i58zIJ
+         x8S/6UrkaVAkdVcZPUCeuv1SyXuO1PwRIHgctLZq3yXF1PqjxPbudHNw9GyaxpQQxwwV
+         /s5A==
+X-Gm-Message-State: AO0yUKW8S5/uLhhW4VKnIJorfDc6DMVMmnSyoYi0snsxEbkat5T8HT5K
+        LwjP++G7e7qi4WlfDAE8wX8cbZemsgUsL5xDwg==
+X-Google-Smtp-Source: AK7set8In7pASIkwc5RmcKGC5gPhzEpeOqmjGbH5z8/aZP8m2bTicadsvcxB91Z6rAsHkHh1dfvaP8X5FauAcxQlUQ==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a17:90a:49ca:b0:231:1d90:7b1b with
+ SMTP id l10-20020a17090a49ca00b002311d907b1bmr79634pjm.2.1677115915638; Wed,
+ 22 Feb 2023 17:31:55 -0800 (PST)
+Date:   Thu, 23 Feb 2023 01:31:54 +0000
+In-Reply-To: <20230220030412.fgh3f5qzgihz4f4x@yy-desk-7060> (message from Yuan
+ Yao on Mon, 20 Feb 2023 11:04:12 +0800)
 Mime-Version: 1.0
-References: <Y+bXjxUtSf71E5SS@google.com> <Y+4wiyepKU8IEr48@zn.tnic>
- <BYAPR21MB168853FD0676CCACF7C249B0D7A09@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+5immKTXCsjSysx@zn.tnic> <BYAPR21MB16880EC9C85EC9343F9AF178D7A19@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y++VSZNAX9Cstbqo@zn.tnic> <Y/aTmL5Y8DtOJu9w@google.com> <Y/aYQlQzRSEH5II/@zn.tnic>
- <Y/adN3GQJTdDPmS8@google.com> <Y/ammgkyo3QVon+A@zn.tnic>
-Message-ID: <Y/a/lzOwqMjOUaYZ@google.com>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Content-Type: text/plain; charset="us-ascii"
+Message-ID: <diqzk0099ng5.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [RFC PATCH 0/2] Add flag as THP allocation hint for
+ memfd_restricted() syscall
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
@@ -108,57 +86,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 23, 2023, Borislav Petkov wrote:
-> On Wed, Feb 22, 2023 at 02:54:47PM -0800, Sean Christopherson wrote:
-> > Why?  I genuinely don't understand the motivation for bundling all of this stuff
-> > under a single "feature".
-> 
-> It is called "sanity".
-> 
-> See here:
-> 
-> https://lore.kernel.org/r/Y%2B5immKTXCsjSysx@zn.tnic
-> 
-> We support SEV, SEV-ES, SEV-SNP, TDX, HyperV... guests and whatever's
-> coming down the pipe. And all that goes into arch/x86/ kernel proper
-> code.
-> 
-> The CC_ATTR stuff is clean-ish in the sense that we have separation by
-> confidential computing platform - AMD's and Intel's. Hyper-V comes along
-> and wants to define a different subset of that. And that's only the
-> SEV-SNP side - there's a TDX patchset too.
-> 
-> And then some other hypervisor will come along and say, but but, I wanna
-> have X and Y and a pink pony too.
-> 
-> Oh, and there's this other fun with MTRRs where each HV decides to do
-> whatever it wants.
-
-The MTRR mess isn't unique to coco guests, e.g. KVM explicitly "supports" VMMs
-hiding MTTRs from the guest by defaulting to WB if MTTRs aren't exposed to the
-guest.  Why on earth Hyper-V suddenly needs to enlighten the guest is beyond me,
-but whatever the reason, it's not unique to coco VMs.
-
-> So, we have a zoo brewing on the horizon already!
-> 
-> If there's no clean definition of what each guest is and requires and
-> that stuff isn't documented properly and if depending on which "feature"
-> I need to check, I need to call a different function or query
-> a different variable, then it won't go anywhere as far as guest support
-> goes.
-> 
-> The cc_platform_has() thing gives us a relatively clean way to abstract
-> all those differences away and keep the code sane-ish.
-
-For features that are inherent to the platform, I agree, or at least I don't hate
-the interface.  But defining a platform to have specific devices runs counter to
-pretty much the entire x86 ecosystem.  At some point, there _will_ be more devices
-in private memory than just IO-APIC and TPM, and conversely there will be "platforms"
-that support a trusted TPM but not a trusted IO-APIC, and probably even vice versa.
-
-All I'm advocating is that for determining whether or not a device should be mapped
-private vs. shared, provide an API so that the hypervisor-specific enlightened code
-can manage that insanity without polluting common code.  If we are ever fortunate
-enough to have common enumeration, e.g. through ACPI or something, the enlightened
-code can simply reroute to the common code.  This is a well established pattern for
-many paravirt features, I don't see why it wouldn't work here.
+WXVhbiBZYW8gPHl1YW4ueWFvQGxpbnV4LmludGVsLmNvbT4gd3JpdGVzOg0KDQo+IE9uIFNhdCwg
+RmViIDE4LCAyMDIzIGF0IDEyOjQzOjAwQU0gKzAwMDAsIEFja2VybGV5IFRuZyB3cm90ZToNCj4+
+IEhlbGxvLA0KDQo+PiBUaGlzIHBhdGNoc2V0IGJ1aWxkcyB1cG9uIHRoZSBtZW1mZF9yZXN0cmlj
+dGVkKCkgc3lzdGVtIGNhbGwgdGhhdCBoYXMNCj4+IGJlZW4gZGlzY3Vzc2VkIGluIHRoZSDigJhL
+Vk06IG1tOiBmZC1iYXNlZCBhcHByb2FjaCBmb3Igc3VwcG9ydGluZyBLVk3igJkNCj4+IHBhdGNo
+IHNlcmllcywgYXQNCj4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyMjEyMDIwNjEz
+NDcuMTA3MDI0Ni0xLWNoYW8ucC5wZW5nQGxpbnV4LmludGVsLmNvbS9ULyNtN2U5NDRkNzg5MmFm
+ZGQxZDYyYTAzYTI4N2JkNDg4YzU2ZTM3N2IwYw0KDQo+PiBUaGUgdHJlZSBjYW4gYmUgZm91bmQg
+YXQ6DQo+PiBodHRwczovL2dpdGh1Yi5jb20vZ29vZ2xlcHJvZGtlcm5lbC9saW51eC1jYy90cmVl
+L3Jlc3RyaWN0ZWRtZW0tcm1mZC1odWdlcGFnZQ0KDQo+PiBGb2xsb3dpbmcgdGhlIFJGQyB0byBw
+cm92aWRlIG1vdW50IGZvciBtZW1mZF9yZXN0cmljdGVkKCkgc3lzY2FsbCBhdA0KPj4gaHR0cHM6
+Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC9jb3Zlci4xNjc2NTA3NjYzLmdpdC5hY2tlcmxleXRuZ0Bn
+b29nbGUuY29tL1QvI3UsDQo+PiB0aGlzIHBhdGNoc2V0IGFkZHMgdGhlIFJNRkRfSFVHRVBBR0Ug
+ZmxhZyB0byB0aGUgbWVtZmRfcmVzdHJpY3RlZCgpDQo+PiBzeXNjYWxsLCB3aGljaCB3aWxsIGhp
+bnQgdGhlIGtlcm5lbCB0byB1c2UgVHJhbnNwYXJlbnQgSHVnZVBhZ2VzIHRvDQo+PiBiYWNrIHJl
+c3RyaWN0ZWRtZW0gcGFnZXMuDQoNCj4+IFRoaXMgc3VwcGxlbWVudHMgdGhlIGludGVyZmFjZSBw
+cm9wb3NlZCBlYXJsaWVyLCB3aGljaCByZXF1aXJlcyB0aGUNCj4+IGNyZWF0aW9uIG9mIGEgdG1w
+ZnMgbW91bnQgdG8gYmUgcGFzc2VkIHRvIG1lbWZkX3Jlc3RyaWN0ZWQoKSwgd2l0aCBhDQo+PiBt
+b3JlIGRpcmVjdCBwZXItZmlsZSBoaW50Lg0KDQo+PiBEZXBlbmRlbmNpZXM6DQoNCj4+ICsgU2Vh
+buKAmXMgaXRlcmF0aW9uIG9mIHRoZSDigJhLVk06IG1tOiBmZC1iYXNlZCBhcHByb2FjaCBmb3Ig
+c3VwcG9ydGluZw0KPj4gICAgS1ZN4oCZIHBhdGNoIHNlcmllcyBhdA0KPj4gICAgaHR0cHM6Ly9n
+aXRodWIuY29tL3NlYW4tamMvbGludXgvdHJlZS94ODYvdXBtX2Jhc2Vfc3VwcG9ydA0KPj4gKyBQ
+cm9wb3NlZCBmaXggZm9yIHJlc3RyaWN0ZWRtZW1fZ2V0YXR0cigpIGFzIG1lbnRpb25lZCBvbiB0
+aGUgbWFpbGluZw0KPj4gICAgbGlzdCBhdA0KPj4gICAgIA0KPj4gaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvbGttbC9kaXF6emdhMGZ2OTYuZnNmQGFja2VybGV5dG5nLWNsb3VkdG9wLXNnLmMuZ29v
+Z2xlcnMuY29tLw0KPj4gKyBIdWdo4oCZcyBwYXRjaDoNCj4+ICAgICANCj4+IGh0dHBzOi8vbG9y
+ZS5rZXJuZWwub3JnL2xrbWwvYzE0MGY1NmEtMWFhMy1mN2FlLWI3ZDEtOTNkYTdkNWEzNTcyQGdv
+b2dsZS5jb20vLA0KPj4gICAgd2hpY2ggcHJvdmlkZXMgZnVuY3Rpb25hbGl0eSBpbiBzaG1lbSB0
+aGF0IHJlYWRzIHRoZSBWTV9IVUdFUEFHRQ0KPj4gICAgZmxhZyBpbiBrZXkgZnVuY3Rpb25zIHNo
+bWVtX2lzX2h1Z2UoKSBhbmQgc2htZW1fZ2V0X2lub2RlKCkNCg0KPiBXaWxsIEh1Z2gncyBwYXRj
+aCBiZSBtZXJnZWQgaW50byA2LjMgPyBJIGRpZG4ndCBmaW5kIGl0IGluIDYuMi1yYzguDQo+IElN
+SE8gdGhpcyBwYXRjaCB3b24ndCB3b3JrIHdpdGhvdXQgSHVnaCdzIHBhdGNoLCBvciBhdCBsZWFz
+dCBuZWVkDQo+IGFub3RoZXIgd2F5LCBlLmcuIEhNRU1fU0IoaW5vZGUtPmlfc2IpLT5odWdlLg0K
+DQoNCkh1Z2gncyBwYXRjaCBpcyBzdGlsbCBwZW5kaW5nIGRpc2N1c3Npb24gYW5kIG1heSBub3Qg
+YmUgbWVyZ2VkIHNvDQpzb29uLiBUaGVzZSBwYXRjaGVzIHdpbGwgbm90IHdvcmsgd2l0aG91dCBI
+dWdoJ3MgcGF0Y2guDQoNCkkgd291bGQgbGlrZSB0byB1bmRlcnN0YW5kIHdoYXQgdGhlIGNvbW11
+bml0eSB0aGlua3Mgb2YgdGhlIHByb3Bvc2VkDQppbnRlcmZhY2UgKFJNRkRfSFVHRVBBR0UgZmxh
+ZywgcGFzc2VkIHRvIHRoZSBtZW1mZF9yZXN0cmljdGVkKCkNCnN5c2NhbGwpLiBJZiB0aGlzIGlu
+dGVyZmFjZSBpcyBmYXZvcmFibHkgcmVjZWl2ZWQsIHdlIGNhbiBkZWZpbml0ZWx5DQpmaW5kIGFu
+b3RoZXIgd2F5IGZvciBzaG1lbSB0byBzdXBwb3J0IHRoaXMgaW50ZXJmYWNlLg0KDQpJZiBJIHVu
+ZGVyc3RhbmQgY29ycmVjdGx5LCBTSE1FTV9TQihpbm9kZS0+aV9zYiktPmh1Z2UgY2hlY2tzIHRo
+ZSBzdGF0ZQ0Kb2YgaHVnZXBhZ2UtbmVzcyBmb3IgdGhlIHN1cGVyYmxvY2suIFNpbmNlIHRoZSBw
+cm9wb3NlZCBpbnRlcmZhY2Ugd2lsbA0Kb25seSBhZmZlY3QgYSBzaW5nbGUgZmlsZSwgd2Ugd2ls
+bCBuZWVkIHNvbWV0aGluZyBjbG9zZXIgdG8NCg0KICAgICBib29sIHNobWVtX2lzX2h1Z2Uoc3Ry
+dWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsIHN0cnVjdCBpbm9kZSAqaW5vZGUsDQogICAgICAgICAg
+ICAgICAgICAgICAgICBwZ29mZl90IGluZGV4LCBib29sIHNobWVtX2h1Z2VfZm9yY2UpDQogICAg
+IHsNCiAgICAgICAgICAgICAuLi4NCg0KICAgICAgICAgICAgIGlmIChTSE1FTV9JKGlub2RlKS0+
+ZmxhZ3MgJiBWTV9IVUdFUEFHRSkNCiAgICAgICAgICAgICAgICAgICAgIHJldHVybiB0cnVlOw0K
+DQogICAgICAgICAgICAgLi4uDQogICAgIH0NCg0KZnJvbSBIdWdoJ3MgcGF0Y2guDQo=
