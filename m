@@ -2,83 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDDC6A00A1
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 02:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3398D6A0135
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 03:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232814AbjBWBcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Feb 2023 20:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
+        id S232476AbjBWCgI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Feb 2023 21:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbjBWBb6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 20:31:58 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1DD3E61E
-        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 17:31:56 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id w3-20020aa78583000000b005d244af158eso2619955pfn.23
-        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 17:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Say+6a1ZyYr+UuCKdaAjxZI4dgG3bJdQNiusmWUgqvk=;
-        b=ZftMo2Jr/MYc+TnSUI/NqHqeLeV4TeeVWH0yMAlI85IeiLcuVkcU0Xi9yTYAL4Ti4N
-         Pcptnd77UOE+Ubfxn8QRWMdZmWSY4akFCQf6v1PFTzO870zP5UiH0CvKAUAI60rjhMim
-         A2kOh6/xUtroxJBIX+ZIQDEuJ2pVebSSpDtdCRhVuxII0dGn+QairZ/42WYH8onaX3sW
-         VTadd7UYWVbVvmpPJT8zKlqq4fO8PhGLg1iNudHVb3yTAkso/TczAQYjur3wkh3ATGMq
-         V9iE2XTX1+ukTikznIFKOxl8ReNuuDE+7TSPpoSVLKtc3hqyAmK9WjjTQq/mdtnRLNoK
-         xRbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Say+6a1ZyYr+UuCKdaAjxZI4dgG3bJdQNiusmWUgqvk=;
-        b=lvLdD+1zMy0KXP0hcmR+pnZQHJWoAG+9j/UZwbDjZ/798oEefviIENn2Yst66od0f1
-         vuWDTZuoMe/sCIwITMLYWGzJ9yA301sf+BF3Kw8Oit26RurB3SlgWorkWg217fN1v2Rj
-         I7p/mifimYUUHOze4nVj+ko7dJ7S1uCtTR7Yt7JY/nSfStJkjr44MHZtp/nKFyX7pXQa
-         3ttPIhkYRylcwfcovR8Q4pc/9xbNRoTiZ+ZZDAbWe0kjG1FS/tJ5XzlrichiV8i58zIJ
-         x8S/6UrkaVAkdVcZPUCeuv1SyXuO1PwRIHgctLZq3yXF1PqjxPbudHNw9GyaxpQQxwwV
-         /s5A==
-X-Gm-Message-State: AO0yUKW8S5/uLhhW4VKnIJorfDc6DMVMmnSyoYi0snsxEbkat5T8HT5K
-        LwjP++G7e7qi4WlfDAE8wX8cbZemsgUsL5xDwg==
-X-Google-Smtp-Source: AK7set8In7pASIkwc5RmcKGC5gPhzEpeOqmjGbH5z8/aZP8m2bTicadsvcxB91Z6rAsHkHh1dfvaP8X5FauAcxQlUQ==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:90a:49ca:b0:231:1d90:7b1b with
- SMTP id l10-20020a17090a49ca00b002311d907b1bmr79634pjm.2.1677115915638; Wed,
- 22 Feb 2023 17:31:55 -0800 (PST)
-Date:   Thu, 23 Feb 2023 01:31:54 +0000
-In-Reply-To: <20230220030412.fgh3f5qzgihz4f4x@yy-desk-7060> (message from Yuan
- Yao on Mon, 20 Feb 2023 11:04:12 +0800)
-Mime-Version: 1.0
-Message-ID: <diqzk0099ng5.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [RFC PATCH 0/2] Add flag as THP allocation hint for
- memfd_restricted() syscall
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
-        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
-        joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        with ESMTP id S231214AbjBWCgH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Feb 2023 21:36:07 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 82F5D2A99E
+        for <linux-arch@vger.kernel.org>; Wed, 22 Feb 2023 18:36:05 -0800 (PST)
+Received: (qmail 1227900 invoked by uid 1000); 22 Feb 2023 21:36:04 -0500
+Date:   Wed, 22 Feb 2023 21:36:04 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH] tools/memory-model: Add documentation about SRCU read-side
+ critical sections
+Message-ID: <Y/bRFNrzjIRjFgxz@rowland.harvard.edu>
+References: <20230213015506.778246-1-joel@joelfernandes.org>
+ <Y/JS5SYKPeeDQErL@rowland.harvard.edu>
+ <CAEXW_YQrFSiDEM9cuhkTT2_1+CZoGbg7vC9oL-D-Wd5OQ2mm2w@mail.gmail.com>
+ <CAEXW_YR6eKDCv+E8Xv2aX=Eo=H0667cqrXkMqKhc_QMZ4Vf59A@mail.gmail.com>
+ <Y/PgxRorDQZ7wPKU@rowland.harvard.edu>
+ <20230222195051.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230222195051.GT2948950@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,52 +54,223 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-WXVhbiBZYW8gPHl1YW4ueWFvQGxpbnV4LmludGVsLmNvbT4gd3JpdGVzOg0KDQo+IE9uIFNhdCwg
-RmViIDE4LCAyMDIzIGF0IDEyOjQzOjAwQU0gKzAwMDAsIEFja2VybGV5IFRuZyB3cm90ZToNCj4+
-IEhlbGxvLA0KDQo+PiBUaGlzIHBhdGNoc2V0IGJ1aWxkcyB1cG9uIHRoZSBtZW1mZF9yZXN0cmlj
-dGVkKCkgc3lzdGVtIGNhbGwgdGhhdCBoYXMNCj4+IGJlZW4gZGlzY3Vzc2VkIGluIHRoZSDigJhL
-Vk06IG1tOiBmZC1iYXNlZCBhcHByb2FjaCBmb3Igc3VwcG9ydGluZyBLVk3igJkNCj4+IHBhdGNo
-IHNlcmllcywgYXQNCj4+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwvMjAyMjEyMDIwNjEz
-NDcuMTA3MDI0Ni0xLWNoYW8ucC5wZW5nQGxpbnV4LmludGVsLmNvbS9ULyNtN2U5NDRkNzg5MmFm
-ZGQxZDYyYTAzYTI4N2JkNDg4YzU2ZTM3N2IwYw0KDQo+PiBUaGUgdHJlZSBjYW4gYmUgZm91bmQg
-YXQ6DQo+PiBodHRwczovL2dpdGh1Yi5jb20vZ29vZ2xlcHJvZGtlcm5lbC9saW51eC1jYy90cmVl
-L3Jlc3RyaWN0ZWRtZW0tcm1mZC1odWdlcGFnZQ0KDQo+PiBGb2xsb3dpbmcgdGhlIFJGQyB0byBw
-cm92aWRlIG1vdW50IGZvciBtZW1mZF9yZXN0cmljdGVkKCkgc3lzY2FsbCBhdA0KPj4gaHR0cHM6
-Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC9jb3Zlci4xNjc2NTA3NjYzLmdpdC5hY2tlcmxleXRuZ0Bn
-b29nbGUuY29tL1QvI3UsDQo+PiB0aGlzIHBhdGNoc2V0IGFkZHMgdGhlIFJNRkRfSFVHRVBBR0Ug
-ZmxhZyB0byB0aGUgbWVtZmRfcmVzdHJpY3RlZCgpDQo+PiBzeXNjYWxsLCB3aGljaCB3aWxsIGhp
-bnQgdGhlIGtlcm5lbCB0byB1c2UgVHJhbnNwYXJlbnQgSHVnZVBhZ2VzIHRvDQo+PiBiYWNrIHJl
-c3RyaWN0ZWRtZW0gcGFnZXMuDQoNCj4+IFRoaXMgc3VwcGxlbWVudHMgdGhlIGludGVyZmFjZSBw
-cm9wb3NlZCBlYXJsaWVyLCB3aGljaCByZXF1aXJlcyB0aGUNCj4+IGNyZWF0aW9uIG9mIGEgdG1w
-ZnMgbW91bnQgdG8gYmUgcGFzc2VkIHRvIG1lbWZkX3Jlc3RyaWN0ZWQoKSwgd2l0aCBhDQo+PiBt
-b3JlIGRpcmVjdCBwZXItZmlsZSBoaW50Lg0KDQo+PiBEZXBlbmRlbmNpZXM6DQoNCj4+ICsgU2Vh
-buKAmXMgaXRlcmF0aW9uIG9mIHRoZSDigJhLVk06IG1tOiBmZC1iYXNlZCBhcHByb2FjaCBmb3Ig
-c3VwcG9ydGluZw0KPj4gICAgS1ZN4oCZIHBhdGNoIHNlcmllcyBhdA0KPj4gICAgaHR0cHM6Ly9n
-aXRodWIuY29tL3NlYW4tamMvbGludXgvdHJlZS94ODYvdXBtX2Jhc2Vfc3VwcG9ydA0KPj4gKyBQ
-cm9wb3NlZCBmaXggZm9yIHJlc3RyaWN0ZWRtZW1fZ2V0YXR0cigpIGFzIG1lbnRpb25lZCBvbiB0
-aGUgbWFpbGluZw0KPj4gICAgbGlzdCBhdA0KPj4gICAgIA0KPj4gaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvbGttbC9kaXF6emdhMGZ2OTYuZnNmQGFja2VybGV5dG5nLWNsb3VkdG9wLXNnLmMuZ29v
-Z2xlcnMuY29tLw0KPj4gKyBIdWdo4oCZcyBwYXRjaDoNCj4+ICAgICANCj4+IGh0dHBzOi8vbG9y
-ZS5rZXJuZWwub3JnL2xrbWwvYzE0MGY1NmEtMWFhMy1mN2FlLWI3ZDEtOTNkYTdkNWEzNTcyQGdv
-b2dsZS5jb20vLA0KPj4gICAgd2hpY2ggcHJvdmlkZXMgZnVuY3Rpb25hbGl0eSBpbiBzaG1lbSB0
-aGF0IHJlYWRzIHRoZSBWTV9IVUdFUEFHRQ0KPj4gICAgZmxhZyBpbiBrZXkgZnVuY3Rpb25zIHNo
-bWVtX2lzX2h1Z2UoKSBhbmQgc2htZW1fZ2V0X2lub2RlKCkNCg0KPiBXaWxsIEh1Z2gncyBwYXRj
-aCBiZSBtZXJnZWQgaW50byA2LjMgPyBJIGRpZG4ndCBmaW5kIGl0IGluIDYuMi1yYzguDQo+IElN
-SE8gdGhpcyBwYXRjaCB3b24ndCB3b3JrIHdpdGhvdXQgSHVnaCdzIHBhdGNoLCBvciBhdCBsZWFz
-dCBuZWVkDQo+IGFub3RoZXIgd2F5LCBlLmcuIEhNRU1fU0IoaW5vZGUtPmlfc2IpLT5odWdlLg0K
-DQoNCkh1Z2gncyBwYXRjaCBpcyBzdGlsbCBwZW5kaW5nIGRpc2N1c3Npb24gYW5kIG1heSBub3Qg
-YmUgbWVyZ2VkIHNvDQpzb29uLiBUaGVzZSBwYXRjaGVzIHdpbGwgbm90IHdvcmsgd2l0aG91dCBI
-dWdoJ3MgcGF0Y2guDQoNCkkgd291bGQgbGlrZSB0byB1bmRlcnN0YW5kIHdoYXQgdGhlIGNvbW11
-bml0eSB0aGlua3Mgb2YgdGhlIHByb3Bvc2VkDQppbnRlcmZhY2UgKFJNRkRfSFVHRVBBR0UgZmxh
-ZywgcGFzc2VkIHRvIHRoZSBtZW1mZF9yZXN0cmljdGVkKCkNCnN5c2NhbGwpLiBJZiB0aGlzIGlu
-dGVyZmFjZSBpcyBmYXZvcmFibHkgcmVjZWl2ZWQsIHdlIGNhbiBkZWZpbml0ZWx5DQpmaW5kIGFu
-b3RoZXIgd2F5IGZvciBzaG1lbSB0byBzdXBwb3J0IHRoaXMgaW50ZXJmYWNlLg0KDQpJZiBJIHVu
-ZGVyc3RhbmQgY29ycmVjdGx5LCBTSE1FTV9TQihpbm9kZS0+aV9zYiktPmh1Z2UgY2hlY2tzIHRo
-ZSBzdGF0ZQ0Kb2YgaHVnZXBhZ2UtbmVzcyBmb3IgdGhlIHN1cGVyYmxvY2suIFNpbmNlIHRoZSBw
-cm9wb3NlZCBpbnRlcmZhY2Ugd2lsbA0Kb25seSBhZmZlY3QgYSBzaW5nbGUgZmlsZSwgd2Ugd2ls
-bCBuZWVkIHNvbWV0aGluZyBjbG9zZXIgdG8NCg0KICAgICBib29sIHNobWVtX2lzX2h1Z2Uoc3Ry
-dWN0IHZtX2FyZWFfc3RydWN0ICp2bWEsIHN0cnVjdCBpbm9kZSAqaW5vZGUsDQogICAgICAgICAg
-ICAgICAgICAgICAgICBwZ29mZl90IGluZGV4LCBib29sIHNobWVtX2h1Z2VfZm9yY2UpDQogICAg
-IHsNCiAgICAgICAgICAgICAuLi4NCg0KICAgICAgICAgICAgIGlmIChTSE1FTV9JKGlub2RlKS0+
-ZmxhZ3MgJiBWTV9IVUdFUEFHRSkNCiAgICAgICAgICAgICAgICAgICAgIHJldHVybiB0cnVlOw0K
-DQogICAgICAgICAgICAgLi4uDQogICAgIH0NCg0KZnJvbSBIdWdoJ3MgcGF0Y2guDQo=
+Expand the discussion of SRCU and its read-side critical sections in
+the Linux Kernel Memory Model documentation file explanation.txt.  The
+new material discusses recent changes to the memory model made in
+commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
+semantics").
+
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: Andrea Parri <andrea.parri@amarulasolutions.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Jade Alglave <j.alglave@ucl.ac.uk>
+Cc: Luc Maranget <luc.maranget@inria.fr>
+Cc: "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Will Deacon <will.deacon@arm.com>
+Cc: Jonas Oberhauser <jonas.oberhauser@huawei.com>
+
+---
+
+Joel, please feel free to add your Co-developed-by and Signed-off-by
+tags to this patch.
+
+ tools/memory-model/Documentation/explanation.txt |  178 +++++++++++++++++++++--
+ 1 file changed, 167 insertions(+), 11 deletions(-)
+
+Index: usb-devel/tools/memory-model/Documentation/explanation.txt
+===================================================================
+--- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
++++ usb-devel/tools/memory-model/Documentation/explanation.txt
+@@ -28,9 +28,10 @@ Explanation of the Linux-Kernel Memory C
+   20. THE HAPPENS-BEFORE RELATION: hb
+   21. THE PROPAGATES-BEFORE RELATION: pb
+   22. RCU RELATIONS: rcu-link, rcu-gp, rcu-rscsi, rcu-order, rcu-fence, and rb
+-  23. LOCKING
+-  24. PLAIN ACCESSES AND DATA RACES
+-  25. ODDS AND ENDS
++  23. SRCU READ-SIDE CRITICAL SECTIONS
++  24. LOCKING
++  25. PLAIN ACCESSES AND DATA RACES
++  26. ODDS AND ENDS
+ 
+ 
+ 
+@@ -1848,14 +1849,169 @@ section in P0 both starts before P1's gr
+ before it does, and the critical section in P2 both starts after P1's
+ grace period does and ends after it does.
+ 
+-Addendum: The LKMM now supports SRCU (Sleepable Read-Copy-Update) in
+-addition to normal RCU.  The ideas involved are much the same as
+-above, with new relations srcu-gp and srcu-rscsi added to represent
+-SRCU grace periods and read-side critical sections.  There is a
+-restriction on the srcu-gp and srcu-rscsi links that can appear in an
+-rcu-order sequence (the srcu-rscsi links must be paired with srcu-gp
+-links having the same SRCU domain with proper nesting); the details
+-are relatively unimportant.
++The LKMM supports SRCU (Sleepable Read-Copy-Update) in addition to
++normal RCU.  The ideas involved are much the same as above, with new
++relations srcu-gp and srcu-rscsi added to represent SRCU grace periods
++and read-side critical sections.  However, there are some important
++differences between RCU read-side critical sections and their SRCU
++counterparts, as described in the next section.
++
++
++SRCU READ-SIDE CRITICAL SECTIONS
++--------------------------------
++
++The LKMM models uses the srcu-rscsi relation to model SRCU read-side
++critical sections.  They are different from RCU read-side critical
++sections in the following respects:
++
++1.	Unlike the analogous RCU primitives, synchronize_srcu(),
++	srcu_read_lock(), and srcu_read_unlock() take a pointer to a
++	struct srcu_struct as an argument.  This structure is called
++	an SRCU domain, and calls linked by srcu-rscsi must have the
++	same domain.  Read-side critical sections and grace periods
++	associated with different domains are independent of one
++	another; the SRCU version of the RCU Guarantee applies only
++	to pairs of critical sections and grace periods having the
++	same domain.
++
++2.	srcu_read_lock() returns a value, called the index, which must
++	be passed to the matching srcu_read_unlock() call.  Unlike
++	rcu_read_lock() and rcu_read_unlock(), an srcu_read_lock()
++	call does not always have to match the next unpaired
++	srcu_read_unlock().  In fact, it is possible for two SRCU
++	read-side critical sections to overlap partially, as in the
++	following example (where s is an srcu_struct and idx1 and idx2
++	are integer variables):
++
++		idx1 = srcu_read_lock(&s);	// Start of first RSCS
++		idx2 = srcu_read_lock(&s);	// Start of second RSCS
++		srcu_read_unlock(&s, idx1);	// End of first RSCS
++		srcu_read_unlock(&s, idx2);	// End of second RSCS
++
++	The matching is determined entirely by the domain pointer and
++	index value.  By contrast, if the calls had been
++	rcu_read_lock() and rcu_read_unlock() then they would have
++	created two nested (fully overlapping) read-side critical
++	sections: an inner one and an outer one.
++
++3.	The srcu_down_read() and srcu_up_read() primitives work
++	exactly like srcu_read_lock() and srcu_read_unlock(), except
++	that matching calls don't have to execute on the same CPU.
++	(The names are meant to be suggestive of operations on
++	semaphores.)  Since the matching is determined by the domain
++	pointer and index value, these primitives make it possible for
++	an SRCU read-side critical section to start on one CPU and end
++	on another, so to speak.
++
++In order to account for these properties of SRCU, the LKMM models
++srcu_read_lock() as a special type of load event (which is
++appropriate, since it takes a memory location as argument and returns
++a value, just as a load does) and srcu_read_unlock() as a special type
++of store event (again appropriate, since it takes as arguments a
++memory location and a value).  These loads and stores are annotated as
++belonging to the "srcu-lock" and "srcu-unlock" event classes
++respectively.
++
++This approach allows the LKMM to tell whether two events are
++associated with the same SRCU domain, simply by checking whether they
++access the same memory location (i.e., they are linked by the loc
++relation).  It also gives a way to tell which unlock matches a
++particular lock, by checking for the presence of a data dependency
++from the load (srcu-lock) to the store (srcu-unlock).  For example,
++given the situation outlined earlier (with statement labels added):
++
++	A: idx1 = srcu_read_lock(&s);
++	B: idx2 = srcu_read_lock(&s);
++	C: srcu_read_unlock(&s, idx1);
++	D: srcu_read_unlock(&s, idx2);
++
++the LKMM will treat A and B as loads from s yielding values saved in
++idx1 and idx2 respectively.  Similarly, it will treat C and D as
++though they stored the values from idx1 and idx2 in s.  The end result
++is much as if we had written:
++
++	A: idx1 = READ_ONCE(s);
++	B: idx2 = READ_ONCE(s);
++	C: WRITE_ONCE(s, idx1);
++	D: WRITE_ONCE(s, idx2);
++
++except for the presence of the special srcu-lock and srcu-unlock
++annotations.  You can see at once that we have A ->data C and
++B ->data D.  These dependencies tell the LKMM that C is the
++srcu-unlock event matching srcu-lock event A, and D is the
++srcu-unlock event matching srcu-lock event B.
++
++This approach is admittedly a hack, and it has the potential to lead
++to problems.  For example, in:
++
++	idx1 = srcu_read_lock(&s);
++	srcu_read_unlock(&s, idx1);
++	idx2 = srcu_read_lock(&s);
++	srcu_read_unlock(&s, idx2);
++
++the LKMM will believe that idx2 must have the same value as idx1,
++since it reads from the immediately preceding store of idx1 in s.
++Fortunately this won't matter, assuming that litmus tests never do
++anything with SRCU index values other than pass them to
++srcu_read_unlock() or srcu_up_read() calls.
++
++However, sometimes it is necessary to store an index value in a
++shared variable temporarily.  In fact, this is the only way for
++srcu_down_read() to pass the index it gets to an srcu_up_read() call
++on a different CPU.  In more detail, we might have soething like:
++
++	struct srcu_struct s;
++	int x;
++
++	P0()
++	{
++		int r0;
++
++		A: r0 = srcu_down_read(&s);
++		B: WRITE_ONCE(x, r0);
++	}
++
++	P1()
++	{
++		int r1;
++
++		C: r1 = READ_ONCE(x);
++		D: srcu_up_read(&s, r1);
++	}
++
++Assuming that P1 executes after P0 and does read the index value
++stored in x, we can write this (using brackets to represent event
++annotations) as:
++
++	A[srcu-lock] ->data B[once] ->rf C[once] ->data D[srcu-unlock].
++
++The LKMM defines a carry-srcu-data relation to express this pattern;
++it permits an arbitrarily long sequence of
++
++	data ; rf
++
++pairs (that is, a data link followed by an rf link) to occur between
++an srcu-lock event and the final data dependency leading to the
++matching srcu-unlock event.  carry-srcu-data is complicated by the
++need to ensure that none of the intermediate store events in this
++sequence are instances of srcu-unlock.  This is necessary because in a
++pattern like the one above:
++
++	A: idx1 = srcu_read_lock(&s);
++	B: srcu_read_unlock(&s, idx1);
++	C: idx2 = srcu_read_lock(&s);
++	D: srcu_read_unlock(&s, idx2);
++
++the LKMM treats B as a store to the variable s and C as a load from
++that variable, creating an undesirable rf link from B to C:
++
++	A ->data B ->rf C ->data D.
++
++This would cause carry-srcu-data to mistakenly extend a data
++dependency from A to D, giving the impression that D was the
++srcu-unlock event matching A's srcu-lock.  To avoid such problems,
++carry-srcu-data does not accept sequences in which the ends of any of
++the intermediate ->data links (B above) is an srcu-unlock event.
+ 
+ 
+ LOCKING
