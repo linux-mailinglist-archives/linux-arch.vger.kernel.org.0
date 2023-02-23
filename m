@@ -2,225 +2,169 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5956A090C
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 13:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE976A09C3
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 14:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbjBWM4l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Feb 2023 07:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S234390AbjBWNJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Feb 2023 08:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233346AbjBWM4k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 07:56:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A40F497F2
-        for <linux-arch@vger.kernel.org>; Thu, 23 Feb 2023 04:55:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677156952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PT6kgDTp7/GY4ysTzhnQOlEbU8Ib9XDdtbwXVzEvIDI=;
-        b=OyZwUgfiTSQb0oXyy4q+khFNd1z0Q2i1Zaa/fy/c4JFYJIbrhpLMdaistzrRWMAHSlgSm2
-        sxXdDkeA3bbdjwRR4GRS+u5ForDEzZYridcXGWyOeON7srpF3WBR7UmYbNnyVpq3HAfoeL
-        ZHLQa0KRmYVMUS3oN1PVXWNQX7SEfWQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-17-40yO325JOampoNPtj81oTA-1; Thu, 23 Feb 2023 07:55:51 -0500
-X-MC-Unique: 40yO325JOampoNPtj81oTA-1
-Received: by mail-wr1-f71.google.com with SMTP id m15-20020adfa3cf000000b002be0eb97f4fso2237960wrb.8
-        for <linux-arch@vger.kernel.org>; Thu, 23 Feb 2023 04:55:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PT6kgDTp7/GY4ysTzhnQOlEbU8Ib9XDdtbwXVzEvIDI=;
-        b=SGyDporQcLnh4dMHIpqhZ1mw1mOhpOR5rQhswqY3XJgZ3cJ3qN6xDZnOuJoDK3aVv9
-         aYlYzUIGzmguZ2yl6e3hKXjoWc7S10cZBLHaRAP7l1ubZ2Fs9Xd6m/8IPJInxIzE9uTn
-         gJnBrOwYGIXZcKaJwcShP1OKahBs2fl72IHaM8V3YE+ZnoJT7T8iy30B+StL1qYbceEz
-         IISiTQEwiRSOAIbtu3QEiTv0CwtzZkA5KN+XYBIY4CbHG+hvMX0LRg9OjrPfjRNDsFIa
-         1nUOSmT8GeezhQpTw4YarVAtB6PskKb5sFOFEFs9F27JyI+QJlnfUhXmEOK9kr3/u4sd
-         b6qg==
-X-Gm-Message-State: AO0yUKXoEH7oWG+ygtXRL2VJiaNaifK2r1US5NkWFs1/FcqnwerMgthU
-        SOs9uST5PmLiQ5D9AWPCkGPE9hMh/F4iYNcdjlO0WX7AT9thSaTxcHNUCfEWZ8YE0h6SOWrxm1d
-        422ZRm0IYsrhbjFDI1mQSEQ==
-X-Received: by 2002:a05:600c:13d4:b0:3ea:dbdd:66e1 with SMTP id e20-20020a05600c13d400b003eadbdd66e1mr129149wmg.28.1677156950084;
-        Thu, 23 Feb 2023 04:55:50 -0800 (PST)
-X-Google-Smtp-Source: AK7set+z4Zckn4kGh4RDzbT5i3WSb5X8+Y/ga4x3DBVsKlX44yNblYKhzFO6jE19EiwrBNHiOOrHYg==
-X-Received: by 2002:a05:600c:13d4:b0:3ea:dbdd:66e1 with SMTP id e20-20020a05600c13d400b003eadbdd66e1mr129131wmg.28.1677156949645;
-        Thu, 23 Feb 2023 04:55:49 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id m3-20020a05600c4f4300b003df5be8987esm4390794wmq.20.2023.02.23.04.55.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 23 Feb 2023 04:55:49 -0800 (PST)
-Message-ID: <2905adaa-97f8-912d-5d23-bee92eb4483e@redhat.com>
-Date:   Thu, 23 Feb 2023 13:55:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "Yu, Yu-cheng" <yu-cheng.yu@intel.com>
-References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
- <20230218211433.26859-20-rick.p.edgecombe@intel.com>
- <458b3d39-ddce-c0f2-fe80-4e0cc5b101bd@redhat.com>
- <c67f511516d2f28385bbe079b7d7d40f136adb27.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v6 19/41] x86/mm: Check shadow stack page fault errors
-In-Reply-To: <c67f511516d2f28385bbe079b7d7d40f136adb27.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234410AbjBWNJu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 08:09:50 -0500
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26BD16332;
+        Thu, 23 Feb 2023 05:09:40 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 22E3A581FE1;
+        Thu, 23 Feb 2023 08:09:39 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 23 Feb 2023 08:09:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677157779; x=1677164979; bh=7qpJ4fyuUV
+        Fw9F28lxEJyIMUTjdhT7HcNbFM6c+Ezgs=; b=HxQNx9y5lkyPfQ9EucQyFAYeXv
+        +wBR4Ci7rIGXcf143C5IPzx2ZqOJaNF3jH5KmZtz7FNxSNa7UoskPstWQeZigMq4
+        WxcCQ/z8bM77PvSxe3rqZoHfF3/mUHrwHyZBzZyDjUboQ9PAUWQIgKxeLmPPaybo
+        9/oRTW8VDP0nTjfHs0i59PhLTfNd8oWYpFzHOr0hyB1JlkxO557CYUNzTcaySrYq
+        HfLz3P47VseG4GU6ljvciKdgu2WLAHI0ASvuTQe3I7jJxJymgUN3BAWU2M5XA1VM
+        uz8KTTIcMwkEpMCm/wKVwxs95KyUmVotFEk351GtecxQeN6fTZ8IWLBMqI8Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677157779; x=1677164979; bh=7qpJ4fyuUVFw9F28lxEJyIMUTjdh
+        T7HcNbFM6c+Ezgs=; b=RNlma8km1MAuSRNBq9ipJtyRBtTc/ZaAqtJnrMAUd01N
+        A3vr/e+h0oVB8QM+EKHuX7FBVUPTgKtTYa2OG7uDKF7mduylXrp7vgdnX2bpO6hn
+        LS+Tf+OM77FKRpjy1JUZ2k0z0u/ejvDE6PI/VehVVhk2zuyRoIGqumjHPpY/bmKf
+        gvFjjmEnsXN8V98XE2pj0tKi9Raz1zeD5754Phu10AF+P5RZcfvQiwYY0QyK/8IM
+        Z39ZZNv3bEYOxSsbpEC/pekLv/VdBZd/iO4Lnr0WCAnTGVKHo4fDKs57IjC2i0EP
+        d1qc3PDGC8rYTjrBw1CIt1iMeMmgiwXuDce1d0Oivw==
+X-ME-Sender: <xms:kGX3Y3ous26euV3YoyiFJjq3ixwKAGVcNF8YOm8J6PvPHtK-RotuAw>
+    <xme:kGX3YxqCegrJEbUNfah7isGKrsvvXcWdV6BiyY6iP9_c7iKPA4gwBe8CDKSxsQmsp
+    iSx53Wsw9qCkCqiXG4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekuddggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:kGX3Y0MZZfqfcD0VGp9DlsZ1Swf2ynZlE3p_Z8X_FJsHbAIjqOEPMA>
+    <xmx:kGX3Y65fZRpBccwKrsV3jr7sAnG0lDQI0aqT_-pKFxlTBQg3DS1ixA>
+    <xmx:kGX3Y27Vy6XJ9Ep718BXrLdXAhCs5gSA4QbBN1kcE8ycfHfyCwcofw>
+    <xmx:k2X3YyBwHlCTwxFQtAXbLNTtXf_KnKgFaDgG5zL8sv-qdX4Uj_y99g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 24130B60086; Thu, 23 Feb 2023 08:09:36 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <874b8076-b0d1-4aaa-bcd8-05d523060152@app.fastmail.com>
+In-Reply-To: <CAHVXubgsvjxGbgM6AcxfsHDsHT0iL2pAemGMr5t8KVLKiqC3RA@mail.gmail.com>
+References: <20230214074925.228106-1-alexghiti@rivosinc.com>
+ <20230214074925.228106-4-alexghiti@rivosinc.com>
+ <Y+zXIgwO5wteLQZ5@shell.armlinux.org.uk>
+ <f3e1585c-0d9d-4709-9b21-74a63d8cc9ac@app.fastmail.com>
+ <CAHVXubgsvjxGbgM6AcxfsHDsHT0iL2pAemGMr5t8KVLKiqC3RA@mail.gmail.com>
+Date:   Thu, 23 Feb 2023 14:09:17 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Alexandre Ghiti" <alexghiti@rivosinc.com>
+Cc:     "Russell King" <linux@armlinux.org.uk>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Matt Turner" <mattst88@gmail.com>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Vasily Gorbik" <gor@linux.ibm.com>,
+        "Alexander Gordeev" <agordeev@linux.ibm.com>,
+        "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+        "Sven Schnelle" <svens@linux.ibm.com>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        "Rich Felker" <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chris Zankel" <chris@zankel.net>,
+        "Max Filippov" <jcmvbkbc@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Palmer Dabbelt" <palmer@rivosinc.com>
+Subject: Re: [PATCH v3 03/24] arm: Remove COMMAND_LINE_SIZE from uapi
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 23.02.23 00:07, Edgecombe, Rick P wrote:
-> On Mon, 2023-02-20 at 13:57 +0100, David Hildenbrand wrote:
->>>     
->>> +     /*
->>> +      * When a page becomes COW it changes from a shadow stack
->>> permission
->>> +      * page (Write=0,Dirty=1) to (Write=0,Dirty=0,SavedDirty=1),
->>> which is simply
->>> +      * read-only to the CPU. When shadow stack is enabled, a RET
->>> would
->>> +      * normally pop the shadow stack by reading it with a "shadow
->>> stack
->>> +      * read" access. However, in the COW case the shadow stack
->>> memory does
->>> +      * not have shadow stack permissions, it is read-only. So it
->>> will
->>> +      * generate a fault.
->>> +      *
->>> +      * For conventionally writable pages, a read can be serviced
->>> with a
->>> +      * read only PTE, and COW would not have to happen. But for
->>> shadow
->>> +      * stack, there isn't the concept of read-only shadow stack
->>> memory.
->>> +      * If it is shadow stack permission, it can be modified via
->>> CALL and
->>> +      * RET instructions. So COW needs to happen before any memory
->>> can be
->>> +      * mapped with shadow stack permissions.
->>> +      *
->>> +      * Shadow stack accesses (read or write) need to be serviced
->>> with
->>> +      * shadow stack permission memory, so in the case of a shadow
->>> stack
->>> +      * read access, treat it as a WRITE fault so both COW will
->>> happen and
->>> +      * the write fault path will tickle maybe_mkwrite() and map
->>> the memory
->>> +      * shadow stack.
->>> +      */
+On Thu, Feb 23, 2023, at 10:54, Alexandre Ghiti wrote:
+> On Wed, Feb 15, 2023 at 2:05 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >>
->> Again, I suggest dropping all details about COW from this comment
->> and
->> from the patch description. It's just one such case that can happen.
-> 
-> Hi David,
+>> On Wed, Feb 15, 2023, at 13:59, Russell King (Oracle) wrote:
+>> > On Tue, Feb 14, 2023 at 08:49:04AM +0100, Alexandre Ghiti wrote:
+>> >> From: Palmer Dabbelt <palmer@rivosinc.com>
+>> >>
+>> >> As far as I can tell this is not used by userspace and thus should not
+>> >> be part of the user-visible API.
+>> >>
+>> >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> >
+>> > Looks good to me. What's the merge plan for this?
+>>
+>> The easiest way is probably if I merge it through the whole
+>> series through the asm-generic tree. The timing is a bit
+>> unfortunate as we're just ahead of the merge window, so unless
+>> we really need this in 6.3, I'd suggest that Alexandre resend
+>> the series to me in two weeks with the Acks added in and I'll
+>> pick it up for 6.4.
+>
+> Sorry for the response delay, I was waiting to see if Palmer would
+> merge my KASAN patchset in 6.3 (which he does): I have to admit that
+> fixing the command line size + the KASAN patchset would allow 6.3 to
+> run on syzkaller, which would be nice.
+>
+> If I don't see this merged in 6.3, I'll send another round as you
+> suggested in 1 week now :)
 
-Hi Rick,
+Hi Alexandre,
 
-> 
-> I was just trying to edit this one to drop COW details, but I think in
-> this case, one of the major reasons for the code *is* actually COW. We
-> are not working around the whole inadvertent shadow stack memory piece
-> here, but something else: Making sure shadow stack memory is faulted in
-> and doing COW if required to make this possible. I came up with this,
-> does it seem better?
+I have no plans to still pick up the series for 6.3. The patches
+all look fine to me, but it's clearly too late now. What is the
+actual dependency for KASAN, do you just need a longer command
+line or something else? If it's just the command line size,
+I would suggest that Palmer can still pick up a oneline change
+to increase it and refer to this thread in the changelog as a
+reference for why it is not an actual UAPI break.
 
-Regarding the fault handling I completely agree. We have to treat a read 
-like a write event. And as read-only shadow stack PTEs don't exist, we 
-have to tell the MM to create a writable one for us.
-
-> 
-> 
-> /*
->   * For conventionally writable pages, a read can be serviced with a
->   *
-> read only PTE. But for shadow stack, there isn't a concept of
->   * read-
-> only shadow stack memory. If it a PTE has the shadow stack
->   *
-> permission, it can be modified via CALL and RET instructions. So
->   * core
-> MM needs to fault in a writable PTE and do things it already
->   * does for
-> write faults.
->   *
->   * Shadow stack accesses (read or write) need to be
-> serviced with
->   * shadow stack permission memory, so in the case of a
-> shadow stack
->   * read access, treat it as a WRITE fault so both any
-> required COW will
->   * happen and the write fault path will tickle
-> maybe_mkwrite() and map
->   * the memory shadow stack.
->   */
-
-That sounds good! I'd rewrite the last part slightly.
-
-"
-Shadow stack accesses (read or write) need to be serviced with
-shadow stack permission memory, which always include write permissions. 
-So in the case of a shadow stack read access, treat it as a WRITE fault. 
-This will make sure that MM will prepare everything (e.g., break COW) 
-such that maybe_mkwrite() can create a proper shadow stack PTE.
-"
-
--- 
-Thanks,
-
-David / dhildenb
-
+     Arnd
