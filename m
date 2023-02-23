@@ -2,159 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422D46A0A14
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 14:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928036A0B23
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 14:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbjBWNM6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Feb 2023 08:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S234426AbjBWNsX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Feb 2023 08:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234495AbjBWNM5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 08:12:57 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923A35678B
-        for <linux-arch@vger.kernel.org>; Thu, 23 Feb 2023 05:12:14 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id t15so10753171wrz.7
-        for <linux-arch@vger.kernel.org>; Thu, 23 Feb 2023 05:12:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tb59OZw0P/9NeiLo7j0/pIIcP5QkKD4A9oJDDcL4MAg=;
-        b=hrlRDOKwOAsNkn63EV7n3EEAQ4B9IaQtA8AIfHsOiB4TORHkWY2kK38L935i7RoAkO
-         olQa3vClBYmwI8KwEFJB6OPacgNRv5x0BN4vdHf3XCEpriaGT+omA4tS0gMZiZxKcc3F
-         KYWPSwsUHx/frhqkq7A+J1wZizAG8ePYV7KvjhBPsnTPCUograCrVBFqcg6srDhRwA+g
-         U3yCkqCB9uB9VtPc5hwrVaCL1hVrTXMesQpZ4o6rR2fhIdFruEUpbstEzITPCLTBBZC5
-         KBWMT1Y873RFeL8aM322RZ3QoSZitsWNIn2ZjY4a1FDfQORGN+A8UZHYx1nVnn/nmc6t
-         CSGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tb59OZw0P/9NeiLo7j0/pIIcP5QkKD4A9oJDDcL4MAg=;
-        b=43nYtkfgC6uoKaAzXE0AjGwfbvSMDbU9JqlE8jjQjFhyvovY5Ht1ImYKqzvHH3+HES
-         qPdLf/8OB/5JplOEsr+HKG+W/hTzn/I2ef1VHhUt3JZQN2UT56Gp5eGG70XY0TB6IlMT
-         mmbvxdTu6WfM9dtAJuh1t8U7VcC+3T9V/wwixaOVMhXVh3MAFYi2DPeHkeYhjsDCVqlC
-         IvDMrsDhiH5muRt6MPKVqe89aUcG8avgvpMRjVSUX0QTAdLdvW6coqxZNGEKc0QTfugQ
-         ojTkvHEncDALpSrDuXBe51R85MzJD+wXIq/Fbybwi6qT9dMXHG7jry8z1kKPJBZQIKnd
-         F/hw==
-X-Gm-Message-State: AO0yUKXJDng3qfq3FJW+fAJP96YWJTWwPkPlLqKkfYMu0e71Vv0c0m2k
-        j83ZKGe2V/SGNqlz1FPk+1LkHh63QTXD+PiRQ+1CVw==
-X-Google-Smtp-Source: AK7set94r7NGT29eIpH72O39BJhvhcK+eRKfihpjHL0Bl53RKHrn48B3FXlJGKNmfO3t+QnjF/nB7RwGXZWsm1mLo5s=
-X-Received: by 2002:a5d:4d0b:0:b0:2c5:532b:cd20 with SMTP id
- z11-20020a5d4d0b000000b002c5532bcd20mr663712wrt.11.1677157925879; Thu, 23 Feb
- 2023 05:12:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214074925.228106-1-alexghiti@rivosinc.com>
- <20230214074925.228106-4-alexghiti@rivosinc.com> <Y+zXIgwO5wteLQZ5@shell.armlinux.org.uk>
- <f3e1585c-0d9d-4709-9b21-74a63d8cc9ac@app.fastmail.com> <CAHVXubgsvjxGbgM6AcxfsHDsHT0iL2pAemGMr5t8KVLKiqC3RA@mail.gmail.com>
- <874b8076-b0d1-4aaa-bcd8-05d523060152@app.fastmail.com>
-In-Reply-To: <874b8076-b0d1-4aaa-bcd8-05d523060152@app.fastmail.com>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Thu, 23 Feb 2023 14:11:55 +0100
-Message-ID: <CAHVXubidtBHNi8iFrFAWqRtkxiUBbmzzXFn+=R1DjEd5X0SpQw@mail.gmail.com>
-Subject: Re: [PATCH v3 03/24] arm: Remove COMMAND_LINE_SIZE from uapi
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
+        with ESMTP id S234272AbjBWNsS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 08:48:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88CD1EBDC;
+        Thu, 23 Feb 2023 05:47:58 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 669341EC06C0;
+        Thu, 23 Feb 2023 14:47:55 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677160075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=hO7XAwGHrh7jFk3tHCK0hu6b1iYy4OafzVQ/2u7pgt0=;
+        b=XfrOb7PSES+S6B9eQEkNsjlZRHVF4TWjOqGoeG4O4dPJLEYmxc8q1Ehl5tvde40+rpKH68
+        3wN/883J0piBys3sMxNwuV9jX8TKi5vKKbjvvJPUrReZ+bzfj4BeS2P9fQiRfrIHpbz3Bl
+        1WIZQ+6CUY+TxMk/R6vjW/NeYUVVxE8=
+Date:   Thu, 23 Feb 2023 14:47:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v6 37/41] selftests/x86: Add shadow stack test
+Message-ID: <Y/duhySUieqUWoGX@zn.tnic>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-38-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230218211433.26859-38-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 2:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Feb 23, 2023, at 10:54, Alexandre Ghiti wrote:
-> > On Wed, Feb 15, 2023 at 2:05 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >>
-> >> On Wed, Feb 15, 2023, at 13:59, Russell King (Oracle) wrote:
-> >> > On Tue, Feb 14, 2023 at 08:49:04AM +0100, Alexandre Ghiti wrote:
-> >> >> From: Palmer Dabbelt <palmer@rivosinc.com>
-> >> >>
-> >> >> As far as I can tell this is not used by userspace and thus should not
-> >> >> be part of the user-visible API.
-> >> >>
-> >> >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >> >
-> >> > Looks good to me. What's the merge plan for this?
-> >>
-> >> The easiest way is probably if I merge it through the whole
-> >> series through the asm-generic tree. The timing is a bit
-> >> unfortunate as we're just ahead of the merge window, so unless
-> >> we really need this in 6.3, I'd suggest that Alexandre resend
-> >> the series to me in two weeks with the Acks added in and I'll
-> >> pick it up for 6.4.
-> >
-> > Sorry for the response delay, I was waiting to see if Palmer would
-> > merge my KASAN patchset in 6.3 (which he does): I have to admit that
-> > fixing the command line size + the KASAN patchset would allow 6.3 to
-> > run on syzkaller, which would be nice.
-> >
-> > If I don't see this merged in 6.3, I'll send another round as you
-> > suggested in 1 week now :)
->
-> Hi Alexandre,
->
-> I have no plans to still pick up the series for 6.3. The patches
-> all look fine to me, but it's clearly too late now. What is the
-> actual dependency for KASAN, do you just need a longer command
-> line or something else? If it's just the command line size,
-> I would suggest that Palmer can still pick up a oneline change
-> to increase it and refer to this thread in the changelog as a
-> reference for why it is not an actual UAPI break.
+On Sat, Feb 18, 2023 at 01:14:29PM -0800, Rick Edgecombe wrote:
+> Since this test exercises a recently added syscall manually, it needs
+> to find the automatically created __NR_foo defines. Per the selftest
+> documentation, KHDR_INCLUDES can be used to help the selftest Makefile's
 
-Indeed, we only need a longer command line size. I'll ask Palmer to do
-that then, thanks!
+Well, why don't you make it easier for the user of this to not have to
+jump through hoops to get the test built?
 
-Alex
+IOW, something like the below ontop.
 
->
->      Arnd
+It works if I do
+
+$ make -j<num> test_shadow_stack_64
+
+It would only need to be fixed to work when you do
+
+$ make -j<num>
+
+without arguments as then make does a parallel build.
+
+I guess something like
+
+ifneq ($(filter test_shadow_stack_64, $(MAKECMDGOALS)),)
+.NOTPARALLEL:
+endif
+
+needs to happen but I'm not sure...
+
+Thx.
+
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index a5c5ee73052a..9287dc7c0263 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -14,6 +14,10 @@ top_srcdir ?= ../../..
+ abs_srctree := $(shell cd $(top_srcdir) && pwd)
+ KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+ 
++test_shadow_stack_64: test_shadow_stack.c helpers.h
++	cd $(top_srcdir) && $(MAKE) headers
++	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $^ -lrt -ldl
++
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
+ 			test_vsyscall mov_ss_trap \
+@@ -22,7 +26,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+-			corrupt_xstate_header amx test_shadow_stack
++			corrupt_xstate_header amx
+ # Some selftests require 32bit support enabled also on 64bit systems
+ TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
+ 
+@@ -38,7 +42,7 @@ BINARIES_64 := $(TARGETS_C_64BIT_ALL:%=%_64)
+ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+ BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+ 
+-CFLAGS := -O2 -g -std=gnu99 -pthread -Wall $(KHDR_INCLUDES)
++CFLAGS := -O2 -g -std=gnu99 -pthread -Wall
+ 
+ # call32_from_64 in thunks.S uses absolute addresses.
+ ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
