@@ -2,225 +2,252 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A40B6A11C5
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 22:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D84E6A11D9
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 22:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjBWVQA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 23 Feb 2023 16:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S229688AbjBWVUb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Feb 2023 16:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjBWVP7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 16:15:59 -0500
-Received: from BN6PR00CU002-vft-obe.outbound.protection.outlook.com (mail-eastus2azon11021024.outbound.protection.outlook.com [52.101.57.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4FD227B7;
-        Thu, 23 Feb 2023 13:15:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hzrR64Il7nL7//ADrAtTARdLRhcEiw9g5L+KS/sEPDtgn+9u1gMoSBFP2e4MMpE2zbJFy/HAiitM9KcKoKH2tNVzEJBN16tXUgtXTsjRpITuLskQBubrpOFKIR7+bhMwfHVe9KaTW9a4rRjpxd7hwBGg6TdXTa52iv+z2zjLN3uHlJXRQg4v5pZC6KZAahUmwZhVR0u46I/a00Y/CBIC6IYQJBizIVjmgYTqCSVz+6+nCt/3vrCThELP7zvgZ4BVKPy8xMLQwq4FHglWFytH3ZTcliKHaOI3zC/Vwy8p5OHwFe4OpXaDOxhwLBmTZEJefK19ZL0yL7Rwtfp1H5QBbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DaZwr/sJn0XSdmExK3isHEe7tbv0uUPDIhq1GK0VGsE=;
- b=ith1TKILzOpEbl0m/LYu8baVgVAE7Ax38jMbAYjCrr/8QKyVDvzbQjjLK/gnF3NkFF8087fMZTgc956gq6WubMTnML/LCQowZ+e3/loHmHyozkrO7QXIzc/7GBmudrdUrlJQuhbIIDtxwaW78gqmeTuLYveXz+btv7itCjsMB2kErO8s39+UCSDn1cuK5VRDnavtghd5mczUDzy08/rW2WyiLb42xOrNfrXmu1fa8XaOYZC+rR06vXDXdXz3jdN2VfjdGcyEJQVUrusWHCgTa4XqIwtM/UXhY4c6gPAz0VYRL2Q3aj0HpRF7YuEf/+M+RH/DK57ppOxQJZx3KixNNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by DS7PR21MB3431.namprd21.prod.outlook.com (2603:10b6:8:90::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.10; Thu, 23 Feb
- 2023 21:15:54 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a%5]) with mapi id 15.20.6156.005; Thu, 23 Feb 2023
- 21:15:54 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Thread-Topic: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Thread-Index: AQHZJs7d1RPl+inmE0Kn2DbFJZ3EJa6nyiwAgAAUafCAB237AIAL8mwQgAhWY4CAAeE2AIABk95AgAGmoACAAAYigIAAAicAgAAHCQCAAAYXAIAADqWAgAAB8ICAAAP2cIAAK2uAgBQ2PACAAAQygIAAAMUwgAAGfYCAAAFlIA==
-Date:   Thu, 23 Feb 2023 21:15:54 +0000
-Message-ID: <BYAPR21MB1688452212CF8E1B97D8826DD7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <BYAPR21MB16882083E84F20B906E2C847D7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+aczIbbQm/ZNunZ@zn.tnic> <cb80e102-4b78-1a03-9c32-6450311c0f55@intel.com>
- <Y+auMQ88In7NEc30@google.com> <Y+av0SVUHBLCVdWE@google.com>
- <BYAPR21MB168864EF662ABC67B19654CCD7DE9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y+bXjxUtSf71E5SS@google.com>
- <e15a1d20-5014-d704-d747-01069b5f4c88@intel.com>
- <e517d9dd-c1a2-92f6-6b4b-c77d9ea47546@intel.com>
- <BYAPR21MB168836495869ABB4E3D61D61D7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y/fVoc4C5BNI+i7l@google.com>
-In-Reply-To: <Y/fVoc4C5BNI+i7l@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d7a4ac8b-aa0d-4ab2-96b4-9526de0ce7e9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-02-23T21:12:44Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DS7PR21MB3431:EE_
-x-ms-office365-filtering-correlation-id: 9d604ad3-61a3-46f4-c87b-08db15e3260c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6+96bSTZk1ooZcq910Rg+b2hZ6HkfORvaUgpgEQTNK3UucO2SnVzZhXLBelKJyKXnorLFimWNXaT/FhMVJ32keoSpb+BM/E4PVQ3UrwlDQ+SLXP4/X/s3T63M4Lzq7GV3GbwScP8ZE8nPxAZzz4oKGi8vwRXFhUYpOrB027U+UINgKVwhYQy1o2po/QEgrCdDmxHfJ+YilEMvaZpj1ITOfUgBi06HztXUAoLbSDOnqHbtvamccdr8e/oWcMvAx/K8T5jCHEvgZnnZJEeFjupEXZCT9M5fSMUw3+g15B9HAVgz9aRuriBUpUd0u5NyuXNVODhdMDe+mps7EjkVexWRrlIYwY+n3GPy8TVgPVkXLBBNbu5Ruc24ppExc/8msqpJBQ+U0vdcnOuYgHnfDEY9ZqnViGe6wOMMxcaY00JA4hQGmT72pDaM6KG7L35pnqINTDhr/8YrvX2qlkv99600QAOB+ig+6YocUgr6GpCq/vaHyB25s7xfV9dYImY1N/jpvaxVCTGnRMOyfxb2bO47JEl8nNemdXO6F18MqBKjhavK/skBsqPQN68TKUbGib8FnmQLUtDQcmjKY2ey1GSnG++oVnLOZeVDZ3izpYL7rhM4CR8qwB4jOtaZnJw4apFBZh/vu4sekEZiVkAqBqjnUKLOlK1sIViaofL6+m8NTvEkodEE/ov7nGehK7W2CikRO+bXiDCyrBDrdPkdDi/6dbCYhZij7cEq3O9xY1tf94iwpgoW9D1Z8LHLHbWGEB9
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(346002)(396003)(376002)(451199018)(2906002)(38070700005)(7406005)(7416002)(8936002)(8990500004)(86362001)(33656002)(54906003)(5660300002)(52536014)(41300700001)(316002)(82960400001)(38100700002)(82950400001)(122000001)(10290500003)(478600001)(55016003)(71200400001)(53546011)(66476007)(66556008)(64756008)(76116006)(6916009)(66446008)(66946007)(8676002)(4326008)(26005)(9686003)(186003)(6506007)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SIeRg0/fqo1mZH5sPa3e89Wm01IkSeXD4RC0c7dJuY7aQDUnhJDU5ibMdxHK?=
- =?us-ascii?Q?PFOC8aGUF1wPEc4ayXL/CB5irt9uQgSh/f233ZK81TKbHNr9H62dC9LNKkbJ?=
- =?us-ascii?Q?jrvJNihuE6OUDes/7R8OeqKzSjJzs2PyFDFOaECQtoMLNoOYVQwIo0RAZvhm?=
- =?us-ascii?Q?ibSrp7DYwhkZ3YAi7ESliv0cUcXRvgv9iwpAJFbn76tsvesZUpHntVeRLG33?=
- =?us-ascii?Q?0wXUQQTlvJ9HJ/LUxIeP9JqejJ+y3LRMUlWN7duEbicOEM2mJI9/hgNB3Pmb?=
- =?us-ascii?Q?o/SwD2F8Shc2lU8JE1xURic4gJFO0sLB6FmHy0JOCE4z4JlLa2ZQ88cWgUts?=
- =?us-ascii?Q?vet7s69qr679Vpxxa0s9VqVhklMRTpy4d7o2yQrZfc/mKbfuD5Ip47f2bptQ?=
- =?us-ascii?Q?tRFdF8t6Weq12Qeq8c7bk9KjSbdt7ZqZgkRysAnsiNEaw8jsmKSy6hN0hI13?=
- =?us-ascii?Q?xvRV5/jsZdORYfQMgWyEgh1EGryyCTgzlmYUPjjz6Dv7XMpIJMxIAtanz1NW?=
- =?us-ascii?Q?i1H3/qcG53smzkImYsGs4+lcMpagu9g7KWWPGNB59vfySQwYXFrjEJ0Gc65E?=
- =?us-ascii?Q?+UAZuq3mj8yxkQ6s/YEQTyYKvPMBNYKssugFEs0txRsEdmQlldD4/A9jG99K?=
- =?us-ascii?Q?CgzjEHhtv7Ry7umoGQiL+FozGUamXGAa0/4o2BhE2uz7nsDLeKoH3dKnrGhC?=
- =?us-ascii?Q?M9JnA2jEH6WC2lLbGOad76712MlvQPDjVzm0UvIgfKXhPWURU4rbRZTLSIWO?=
- =?us-ascii?Q?/xV7z7ytphfdUemQRBP5b/FZOgiKWZdkEOFVaQGiLcXMGP8fTWAC93Gf56Jt?=
- =?us-ascii?Q?bcFC7+3etCe89GcmU6XDq1xbJ3fGaY7W/tNvIybf5BiaY37ya+CyOVleOy3I?=
- =?us-ascii?Q?2gO8THxxAHjW/mG61IywwJHgakjkpHBXJ9Y+wG0iuk7MvI3BAyGgQ7TifHOO?=
- =?us-ascii?Q?UyaCS6+EMRXGWPIZ81gkFkUhPv0NoqlBkm38lRceo0OePG14oNRiG19ybqB1?=
- =?us-ascii?Q?6EdxVILhDgH6e6JNqB9Y5oSB8SKUpX6xxhS51nP7iSsVH08dUD+n8Pvh+5BP?=
- =?us-ascii?Q?NLfRW+MwB8wP5U2bpBRffhRREve46mc++o5wr2G1ktgfq7ZutbXBKd8hjdc/?=
- =?us-ascii?Q?xmGVTvuYrjdlmskjY1SNCi4zow5pLXnFE7r+NANL6blX5KFSKdy0H/toUPxq?=
- =?us-ascii?Q?T8t8MMlTvBa5O0TlIrYzaVteZLntom4DFQ5ypkpylRHzc0PlmFuS8ScRd8tm?=
- =?us-ascii?Q?g4/wsRKPGwtjYArUNfVEuFPHhT3Fs5tGL4VGP1nh2qFzUxR7ju4+5bJ5wkcM?=
- =?us-ascii?Q?rZ4gX/KDrc2KlkyG19I/UW1TA+jh1xetFnSTDYLYHbbCbPvno42GsLjBQI8n?=
- =?us-ascii?Q?JTbJB8gi6YBV2YOkQOO7mNqJdqYZOuSMzE4KWlLPY6/kHfL5aizQDVMBaKyn?=
- =?us-ascii?Q?GUID+kiWQutGRKTrl97Ezlr2Cq04ydly/MD7OEpLwYtL2LoxNic1RK4h021j?=
- =?us-ascii?Q?bAxYA/GMo9CCMcZLXjQarIoZ/oaMEYpYUDs24jX4SutUIPFDRJClAYfWRuXY?=
- =?us-ascii?Q?Tk74JJCVGXZ3Ydm9U+IwyzOy4ET8oRwHkN3kaGrxys31mOo5ceavMyZnFk1+?=
- =?us-ascii?Q?+w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S229588AbjBWVUb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 16:20:31 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435E851F99
+        for <linux-arch@vger.kernel.org>; Thu, 23 Feb 2023 13:20:21 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x10so46454458edd.13
+        for <linux-arch@vger.kernel.org>; Thu, 23 Feb 2023 13:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGNK+81UETaPn0jcsEtslOWqhVdogFDF7Oyic4eRMC0=;
+        b=dZ0PmdnqNzzjl4gyodTo7Zb17UgRMZptHwXLBomZ/AvWARR5ZPd6XaTkwjBxJFuGaT
+         H0F3qnuxv3chDjD33jmtByO/Il4zihwWqNRj/EEYnB9Er7lIZ8MGu+au2KIEm8IkqdMt
+         WfEamdrk6xp1+wq8oDc1jQF3iNhV3+/x/+qKI21/MbCuhRW6FiaAU6cN2nBTZzvkDg9m
+         J0h8xSdbeOsGBxBQoM5VmCu+Xj2Pn3BiMhr9jxIsxQrgeI9plEFpVFpjTVHQqDV2PQ9P
+         IGrsG1Wtc/Y6sEBGu7yxprbHh6Ygufryb07uAYG0eTFXjd75azPNJX+kgrT9eVceeION
+         FccQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OGNK+81UETaPn0jcsEtslOWqhVdogFDF7Oyic4eRMC0=;
+        b=KRy9dpZ4M4ECZx2Fcpo1bai2KLltNJylFAWXO/AMgsgevBzYNLf7OU4Neb/vFqUaMa
+         YAoZ2LP5Z7IRexIne/4C4OBNXXTuWe/mmrqMM50fLz1rt+dd5zDYuRAxctZsH42j/PyO
+         sbIVF3ymLPe9eoqPsJ5XFCVM1Mhipz7j4uCkYGsaXTE8uuebufmWqcEsjm4wR5AO5Jp5
+         Zz7vEYWutHUrcIQTcVVxjhxLPKF2i3rUrw3VQ1dFr1Q8CaKLsFUNJwJAYoQ+eoYUPzXu
+         l4sDe2Ms7SIYB/vTHBWUDQCXvwK2Mn1uuxv/KBBFrHREyAkBIsXK/G9ovOqlkQFr+Js8
+         vOvg==
+X-Gm-Message-State: AO0yUKWjNm9bn5NaIUPyM0g0fCUeoEYwS+u/PACMayJ7fjVy3PhNoWJS
+        gbXiDlON9Z1Af1QzWeRHarwjLvYwWeRB7ZN1UzEX+Q==
+X-Google-Smtp-Source: AK7set+KUUdbnyo5JRRHrV1ozmg6AbjBaYX0SdvoC+Bros6cRT/lBPSqwRJvMri7bJe/UlGznB+3heSzYzD8bnfAmKI=
+X-Received: by 2002:a17:907:2b09:b0:8b1:cd2e:177a with SMTP id
+ gc9-20020a1709072b0900b008b1cd2e177amr10778294ejc.6.1677187219479; Thu, 23
+ Feb 2023 13:20:19 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d604ad3-61a3-46f4-c87b-08db15e3260c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2023 21:15:54.2551
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: z2Zd9UNzI3Iuru3opSo3Q4d8cgg+qoWpFHhn7ZJ/u2xnsOlAiFh6b0O85yo+w2MP3/4ZctH8b8FJ+6yT5NXcx3zsb63mwSc/PXZdlRMtodk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3431
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-34-rick.p.edgecombe@intel.com> <20230223000340.GB945966@debug.ba.rivosinc.com>
+ <49a151d5a704487d541e421699cf798c87a80ca5.camel@intel.com>
+In-Reply-To: <49a151d5a704487d541e421699cf798c87a80ca5.camel@intel.com>
+From:   Deepak Gupta <debug@rivosinc.com>
+Date:   Thu, 23 Feb 2023 13:20:06 -0800
+Message-ID: <CAKC1njSXDY_NUxLdrbJbF6zGaP4aifAh3g1ku0E5RkAxK4tqLA@mail.gmail.com>
+Subject: Re: [PATCH v6 33/41] x86/shstk: Introduce map_shadow_stack syscall
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com> Sent: Thursday, February 23, 2023 1:08 PM
-> 
-> On Thu, Feb 23, 2023, Michael Kelley (LINUX) wrote:
-> > From: Dave Hansen <dave.hansen@intel.com> Sent: Thursday, February 23, 2023
-> 12:42 PM
+On Wed, Feb 22, 2023 at 5:11 PM Edgecombe, Rick P
+<rick.p.edgecombe@intel.com> wrote:
+>
+> On Wed, 2023-02-22 at 16:03 -0800, Deepak Gupta wrote:
+> > On Sat, Feb 18, 2023 at 01:14:25PM -0800, Rick Edgecombe wrote:
+> > > When operating with shadow stacks enabled, the kernel will
+> > > automatically
+> > > allocate shadow stacks for new threads, however in some cases
+> > > userspace
+> > > will need additional shadow stacks. The main example of this is the
+> > > ucontext family of functions, which require userspace allocating
+> > > and
+> > > pivoting to userspace managed stacks.
 > > >
-> > > On 2/23/23 12:26, Dave Hansen wrote:
-> > > >> +       if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
-> > > >> +               /*
-> > > >> +               * Ensure fixmaps for IOAPIC MMIO respect memory encryption pgprot
-> > > >> +               * bits, just like normal ioremap():
-> > > >> +               */
-> > > >> +               if (x86_platform.hyper.is_private_mmio(phys))
-> > > >> +                       flags = pgprot_encrypted(flags);
-> > > >> +               else
-> > > >> +                       flags = pgprot_decrypted(flags);
-> > > >> +       }
-> > > ...
-> > > > It does seem a bit odd that there's a new CC_ATTR_GUEST_MEM_ENCRYPT
-> > > > check wrapping this whole thing.  I guess the trip through
-> > > > pgprot_decrypted() is harmless on normal platforms, though.
+> > > Unlike most other user memory permissions, shadow stacks need to be
+> > > provisioned with special data in order to be useful. They need to
+> > > be setup
+> > > with a restore token so that userspace can pivot to them via the
+> > > RSTORSSP
+> > > instruction. But, the security design of shadow stack's is that
+> > > they
+> > > should not be written to except in limited circumstances. This
+> > > presents a
+> > > problem for userspace, as to how userspace can provision this
+> > > special
+> > > data, without allowing for the shadow stack to be generally
+> > > writable.
 > > >
-> > > Yeah, that's _really_ odd.  Sean, were you trying to optimize away the
-> > > indirect call or something?
-> 
-> No, my thought was simply to require platforms that support GUEST_MEM_ENCRYPT
-> to
-> implement x86_platform.hyper.is_private_mmio, e.g. to avoid having to check if
-> is_private_mmio is NULL, to explicit document that non-Hyper-V encrypted guests
-> don't (yet) support private MMIO, and to add a bit of documentation around the
-> {de,en}crypted logic.
-> 
-> > > I would just expect the Hyper-V/vTOM code to leave
-> > > x86_platform.hyper.is_private_mmio alone unless it *knows* the platform has
-> > > private MMIO *and* CC_ATTR_GUEST_MEM_ENCRYPT.
-> >
-> > Agreed.
-> >
+> > > Previously, a new PROT_SHADOW_STACK was attempted, which could be
+> > > mprotect()ed from RW permissions after the data was provisioned.
+> > > This was
+> > > found to not be secure enough, as other thread's could write to the
+> > > shadow stack during the writable window.
 > > >
-> > > Is there ever a case where CC_ATTR_GUEST_MEM_ENCRYPT==0 and he
-> > > Hyper-V/vTOM code would need to set x86_platform.hyper.is_private_mmio?
+> > > The kernel can use a special instruction, WRUSS, to write directly
+> > > to
+> > > userspace shadow stacks. So the solution can be that memory can be
+> > > mapped
+> > > as shadow stack permissions from the beginning (never generally
+> > > writable
+> > > in userspace), and the kernel itself can write the restore token.
+> > >
+> > > First, a new madvise() flag was explored, which could operate on
+> > > the
+> > > PROT_SHADOW_STACK memory. This had a couple downsides:
+> > > 1. Extra checks were needed in mprotect() to prevent writable
+> > > memory from
+> > >    ever becoming PROT_SHADOW_STACK.
+> > > 2. Extra checks/vma state were needed in the new madvise() to
+> > > prevent
+> > >    restore tokens being written into the middle of pre-used shadow
+> > > stacks.
+> > >    It is ideal to prevent restore tokens being added at arbitrary
+> > >    locations, so the check was to make sure the shadow stack had
+> > > never been
+> > >    written to.
+> > > 3. It stood out from the rest of the madvise flags, as more of
+> > > direct
+> > >    action than a hint at future desired behavior.
+> > >
+> > > So rather than repurpose two existing syscalls (mmap, madvise) that
+> > > don't
+> > > quite fit, just implement a new map_shadow_stack syscall to allow
+> > > userspace to map and setup new shadow stacks in one step. While
+> > > ucontext
+> > > is the primary motivator, userspace may have other unforeseen
+> > > reasons to
+> > > setup it's own shadow stacks using the WRSS instruction. Towards
+> > > this
+> > > provide a flag so that stacks can be optionally setup securely for
+> > > the
+> > > common case of ucontext without enabling WRSS. Or potentially have
+> > > the
+> > > kernel set up the shadow stack in some new way.
 > >
-> > There's no such case.
+> > Was following ever attempted?
 > >
-> > I agree that gating with CC_ATTR_GUEST_MEM_ENCRYPT isn't really necessary.
-> > Current upstream code always does the pgprot_decrypted(), and as you said,
-> > that's a no-op on platforms with no memory encryption.
-> 
-> Right, but since is_private_mmio can be NULL, unless I'm missing something we'll
-> need an extra check no matter what, i.e. the alternative would be
-> 
-> 	if (x86_platform.hyper.is_private_mmio &&
-> 	    x86_platform.hyper.is_private_mmio(phys))
-> 		flags = pgprot_encrypted(flags);
-> 	else
-> 		flags = pgprot_decrypted(flags);
-> 
-> I have no objection to that approach.  It does have the advantage of not needing
-> an indirect call for encrypted guests that don't support private MMIO, though
-> I can't imagine this code is performance sensitive.
+> > void *shstk = mmap(0, size, PROT_SHADOWSTACK, ...);
+> > - limit PROT_SHADOWSTACK protection flag to only mmap (and thus
+> > mprotect can't
+> >    convert memory from shadow stack to non-shadow stack type or vice
+> > versa)
+> > - limit PROT_SHADOWSTACK protection flag to anonymous memory only.
+> > - top level mmap handler to put a token at the base using WRUSS if
+> > prot == PROT_SHADOWSTACK
+> >
+> > You essentially would get shadow stack manufacturing with existing
+> > (single) syscall.
+> > Acting a bit selfish here, this allows other architectures as well to
+> > re-use this and
+> > do their own implementation of mapping and placing the token at the
+> > base.
+>
+> Yes, I looked at it. You end up with a pile of checks and hooks added
+> to mmap() and various other places as you outline. We also now have the
+> MAP_ABOVE4G limitation for x86 shadow stack that would need checking
+> for too. It's not exactly a clean fit. Then, callers would have to pass
+> special x86 flags in anyway.
 
-Or statically set a default stub function for is_private_mmio() that returns "false".
-Then there's no need to check for NULL, and only platforms that want to use it
-have to code anything.  Several other entries in x86_platform have such defaults.
+riscv has mechanisms using which a 32bit app can run on 64bit kernel.
+So technically if there are 32bit and 64bit code in address space,
+MAP_ABOVE4G could be useful.
+Although I am not sure (or aware of) if there are such requirement
+from app/developers yet (to guarantee address mapping above 4G)
 
-Michael
+But I see this as orthogonal to memory protection flags.
+
+>
+> It doesn't seem like the complexity of the checks is worth saving the
+> tiny syscall. Is there some reason why riscv can't use the same syscall
+> stub? It doesn't need to live forever in x86 code. Not sure what the
+> savings are for riscv of the mmap+checks approach are either...
+
+I don't see a lot of extra complexity here.
+If `mprotect` and friends don't know about `PROT_SHADOWSTACK`, they'll
+just fail by default (which is desired)
+
+It's only `mmap` that needs to be enlightened. And it can just pass
+`VMA_SHADOW_STACK` to `do_mmap` if input is `PROT_SHADOWSTACK`.
+
+Adding a syscall just for mapping shadow stack is weird when it can be
+solved with existing system calls.
+As you say in your response below, it would be good to have such a
+syscall which serve larger purposes (e.g. provisioning special
+security-type memory)
+
+arm64's memory tagging is one such example. Not exactly security-type
+memory (but eventual application is security for this feature) .
+It adds extra meaning to virtual addresses (i.e. an address has tags).
+arm64 went about using a protection flag `PROT_MTE` instead of a
+special system call.
+
+Being said that since this patch has gone through multiple revisions
+and I am new to the party. If others dont have issues on this special
+system call,
+I think it's fine then. In case of riscv I can choose to use this
+mechanism or go via arm's route to define PROT_SHADOWSTACK which is
+arch specific.
+
+>
+> I did wonder if there could be some sort of more general syscall for
+> mapping and provisioning special security-type memory. But we probably
+> need a few more non-shadow stack examples to get an idea of what that
+> would look like.
+
+As I mentioned memory tagging and thus PROT_MTE is already such a use
+case which uses `mmap/mprotect` protection flags to designate special
+meaning to a virtual address.
