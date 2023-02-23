@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CDF6A0535
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 10:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 818096A053E
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Feb 2023 10:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbjBWJu3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Feb 2023 04:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S234136AbjBWJvv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Feb 2023 04:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233272AbjBWJu2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 04:50:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F275E4DE2E;
-        Thu, 23 Feb 2023 01:50:26 -0800 (PST)
+        with ESMTP id S233354AbjBWJvu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Feb 2023 04:51:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C964E5F5;
+        Thu, 23 Feb 2023 01:51:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7CB5B81990;
-        Thu, 23 Feb 2023 09:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D17C433EF;
-        Thu, 23 Feb 2023 09:50:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7CD461629;
+        Thu, 23 Feb 2023 09:51:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE07EC433EF;
+        Thu, 23 Feb 2023 09:51:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677145824;
-        bh=6+RS3vKNtOBH6Iix7VuTmtdw51WghGYeiUtoXdjfsao=;
+        s=korg; t=1677145908;
+        bh=00vV012v5IGFYupEfY8cRFX6H7hj6D67NRk/FGmf4tA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pxNV593LF5ua2oXpyWhWw1CF8jqDWKRzFCBzYfUwdPB1+9vcs6TD9K2SlZipxjpQB
-         kV9faWEzrhPUEdIgV4eq1gA6XRO9nQrFwQ5KdKWOiyXk8WAIxeNisp8BiVE0gT9p4h
-         n5hwQSUaA3nqHXumhYz3HIspsumEAftd2BDgXNvU=
-Date:   Thu, 23 Feb 2023 10:50:22 +0100
+        b=YKN0HiTB8aCX3lOBp4YzZBOc2xpCFZlbfBq3sS4elxzCo2DgNpiZvRfAWw0EEZPsY
+         1Of0ObePM7oOGZSXHavj/fw/9VtCuHNTRtjKVOIOkZsnPDjlBnZOMH/qYnzeemOMYn
+         QCvYeMdiLvlizuKv6Sq3UBy1YChubHjmOCkJD0iI=
+Date:   Thu, 23 Feb 2023 10:51:45 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Tom Saeger <tom.saeger@oracle.com>
 Cc:     Sasha Levin <sashal@kernel.org>,
@@ -45,20 +45,17 @@ Cc:     Sasha Levin <sashal@kernel.org>,
         stable@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        "H.J. Lu" <hjl.tools@gmail.com>, Borislav Petkov <bp@suse.de>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH 5.4 v2 1/6] x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to
- generic DISCARDS
-Message-ID: <Y/c23lnfn42s5uCC@kroah.com>
-References: <20230210-tsaeger-upstream-linux-stable-5-4-v2-0-a56d1e0f5e98@oracle.com>
- <20230210-tsaeger-upstream-linux-stable-5-4-v2-1-a56d1e0f5e98@oracle.com>
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org
+Subject: Re: [PATCH 5.15 v2 1/5] arch: fix broken BuildID for arm64 and riscv
+Message-ID: <Y/c3MSvnN4DcvzSx@kroah.com>
+References: <20230210-tsaeger-upstream-linux-stable-5-15-v2-0-6c68622745e9@oracle.com>
+ <20230210-tsaeger-upstream-linux-stable-5-15-v2-1-6c68622745e9@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230210-tsaeger-upstream-linux-stable-5-4-v2-1-a56d1e0f5e98@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230210-tsaeger-upstream-linux-stable-5-15-v2-1-6c68622745e9@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,49 +63,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 10, 2023 at 01:20:22PM -0700, Tom Saeger wrote:
-> From: "H.J. Lu" <hjl.tools@gmail.com>
+On Fri, Feb 10, 2023 at 01:18:40PM -0700, Tom Saeger wrote:
+> From: Masahiro Yamada <masahiroy@kernel.org>
 > 
-> commit 84d5f77fc2ee4e010c2c037750e32f06e55224b0 upstream.
+> commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
 > 
-> In the x86 kernel, .exit.text and .exit.data sections are discarded at
-> runtime, not by the linker. Add RUNTIME_DISCARD_EXIT to generic DISCARDS
-> and define it in the x86 kernel linker script to keep them.
+> Dennis Gilmore reports that the BuildID is missing in the arm64 vmlinux
+> since commit 994b7ac1697b ("arm64: remove special treatment for the
+> link order of head.o").
 > 
-> The sections are added before the DISCARD directive so document here
-> only the situation explicitly as this change doesn't have any effect on
-> the generated kernel. Also, other architectures like ARM64 will use it
-> too so generalize the approach with the RUNTIME_DISCARD_EXIT define.
+> The issue is that the type of .notes section, which contains the BuildID,
+> changed from NOTES to PROGBITS.
 > 
->  [ bp: Massage and extend commit message. ]
+> Ard Biesheuvel figured out that whichever object gets linked first gets
+> to decide the type of a section. The PROGBITS type is the result of the
+> compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
 > 
-> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
-> Signed-off-by: Borislav Petkov <bp@suse.de>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Link: https://lkml.kernel.org/r/20200326193021.255002-1-hjl.tools@gmail.com
-> Signed-off-by: Tom Saeger <tom.saeger@oracle.com>
-> ---
->  arch/x86/kernel/vmlinux.lds.S     |  1 +
->  include/asm-generic/vmlinux.lds.h | 11 +++++++++--
->  2 files changed, 10 insertions(+), 2 deletions(-)
+> While Ard provided a fix for arm64, I want to fix this globally because
+> the same issue is happening on riscv since commit 2348e6bf4421 ("riscv:
+> remove special treatment for the link order of head.o"). This problem
+> will happen in general for other architectures if they start to drop
+> unneeded entries from scripts/head-object-list.txt.
 > 
-> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> index 1afe211d7a7c..0ae3cd9a25ea 100644
-> --- a/arch/x86/kernel/vmlinux.lds.S
-> +++ b/arch/x86/kernel/vmlinux.lds.S
-> @@ -21,6 +21,7 @@
->  #define LOAD_OFFSET __START_KERNEL_map
->  #endif
->  
-> +#define RUNTIME_DISCARD_EXIT
->  #include <asm-generic/vmlinux.lds.h>
->  #include <asm/asm-offsets.h>
->  #include <asm/thread_info.h>
+> Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
+> 
+> Link: https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
+> Fixes: 994b7ac1697b ("arm64: remove special treatment for the link order of head.o")
+> Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link order of head.o")
 
-Does this backport look correct from a style point-of-view?
+Why are we adding a commit to 5.15.y that fixes an issue that only
+showed up in 6.1.y?
 
-Hint, extra blank line needed after the define, like what is done in the
-original...
+We need a good comment somewhere saying why this is needed...
 
 thanks,
 
