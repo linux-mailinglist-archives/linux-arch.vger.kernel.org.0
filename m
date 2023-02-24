@@ -2,130 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A8B6A1829
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Feb 2023 09:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C43646A18E9
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Feb 2023 10:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjBXIoW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Feb 2023 03:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
+        id S229537AbjBXJhh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Feb 2023 04:37:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjBXIoV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Feb 2023 03:44:21 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E447B305DC;
-        Fri, 24 Feb 2023 00:44:19 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 952FA5C0114;
-        Fri, 24 Feb 2023 03:44:16 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 24 Feb 2023 03:44:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677228256; x=1677314656; bh=wd581eFP3K
-        lFvq0U5aP/IpGssCNvXt/Gl6A0XM6S2f8=; b=Monkq1jJUfCZdOoiz1FE83JYuY
-        /6RUz5BC3xZtyIEf5ljLKr1dAyekA5oFnuLom7W/uC9diIWNz0L6OeM5+BmVmGVD
-        M14ozvZ9dUDNeydSFXcHXXKUAHwrxxn1pu8pgPD5wH34Q2bmZcLhTCp1BJgGXLtF
-        PjoIdVBjXsAx7FlIh8/hmim7eiWdkf3O7ihTW3o1fOlINP2LP7ttoH2yYvHcSdR+
-        tkbzBSbgwlDmRnVXT3xCz7Eq3n8lpzMfmizZbmGpIvZ7EtjFpvBj4Z9fGc4lwRnV
-        VJtZk+JrBWWE0cxCcx/jCMO7VDEdSpvxBcf32nUW70TBys4qC+LyxSWISbXw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677228256; x=1677314656; bh=wd581eFP3KlFvq0U5aP/IpGssCNv
-        Xt/Gl6A0XM6S2f8=; b=e/TmRPCS0wj/UWm+XzSLvIZ7jY+LnhpHxE3O5247TutF
-        9XkRyxGoGAX0vIdf8uHr91M18S7KiWl589pWfM331mKO2hq0iU3djNTg1ej57zQH
-        l5qPJP8qzRXhEkZx1K2rnj0OZCtu705aqCzLPoijpoCzsITyRgPBKiiO954FBRk+
-        MEgFcUU+RNpKE+jOgghUpgnze5Am2XS6by2Md6NfZItwiiOnIoLEv5U1URKSLWt6
-        srx6M5sqPk6k3JwVPyGb5V717p2Y3gL0uUX1aERG/9nVKCCJXtNf/Xc5QX4QZmt+
-        9P3rJPvFfrpkgBpM23faLFUt9n/pD0UCQA2mWhfxhw==
-X-ME-Sender: <xms:4Hj4Y8HUBy7BvSvp656WhypfqVyJqB9dYDk3RC8_nMme50d0bXplrw>
-    <xme:4Hj4Y1UYXWpQoZIQwpkwZWOC3iAja6rrHgWYpv409hOephFfTzpkogQExvtSecI_Y
-    GL8m_RzZBunNEhuLGI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekvddguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:4Hj4Y2ISPAlmrZ2ZCcuv7Cn4x6FCV0dZA7W9Ja-_8_9eVMv-GxEJ1Q>
-    <xmx:4Hj4Y-FLUxr5PzRy7UmjPJ3CaSSrTo_g7U-IFBmblWyo2hHHoYp7pg>
-    <xmx:4Hj4YyU5U1kox6vJSm0QB9PTNPu4-xZW_QNvTYns3y8mRoyRcsGCrw>
-    <xmx:4Hj4Y2pXfBw3evWyOYheDyOrmguy0dPo-pulBKDAVmqGm79NUZL3Mg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3B2C8B60086; Fri, 24 Feb 2023 03:44:16 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
-Mime-Version: 1.0
-Message-Id: <0818df3a-76c9-4cb3-8016-4717f4d5bf18@app.fastmail.com>
-In-Reply-To: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
-References: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
-Date:   Fri, 24 Feb 2023 09:43:27 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Asahi Lina" <lina@asahilina.net>,
-        "Miguel Ojeda" <ojeda@kernel.org>,
-        "Alex Gaynor" <alex.gaynor@gmail.com>,
-        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
-        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] rust: ioctl: Add ioctl number manipulation functions
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229532AbjBXJhg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Feb 2023 04:37:36 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDE64D70;
+        Fri, 24 Feb 2023 01:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677231422; x=1708767422;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qh5dHIF3Zy/2vFiSSHWmzyQvmvJlUbTRwfF+WltTESk=;
+  b=WDRmYASbnHMX3Ojs54SxtR4XRQJcnzIlqgO0LVMrqnnPuoTJUGcsDl+p
+   q7lTPDO1RvYqMufhR4Swyq+ciCjFN5UzzFbTRdCIH31tMDTToidONCaWO
+   wwVgFq3VlbhT2hZsgq6GRfavpzfa4627vKCHOGo6QjKSlXHo1GviywI04
+   Jb9qM+kFi5zX1vpLGvmsqz9i7yiHw8qHcjyh8LDYOHTZlmViKL6GS+xfP
+   lh2NK0dHo/LYlKDOQrSstBW12KHy/00lN/ngwTbVod68HxdA0UGoZc79o
+   DbNRlqAFoks4I6NKWKYWyptQ8/jcGFitNemb/4umoWmXqr2tOM3Kgqt9/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331171606"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="331171606"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:13 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="741608912"
+X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
+   d="scan'208";a="741608912"
+Received: from rkris18-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.56.190])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:03 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id C84DF10A581; Fri, 24 Feb 2023 12:36:00 +0300 (+03)
+Date:   Fri, 24 Feb 2023 12:36:00 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, kvm@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org, chao.p.peng@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
+        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
+        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
+        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
+        jun.nakajima@intel.com, linmiaohe@huawei.com, luto@kernel.org,
+        mail@maciej.szmigiero.name, mhocko@suse.com, michael.roth@amd.com,
+        mingo@redhat.com, naoya.horiguchi@nec.com, pbonzini@redhat.com,
+        qperret@google.com, rppt@kernel.org, seanjc@google.com,
+        shuah@kernel.org, steven.price@arm.com, tabba@google.com,
+        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
+        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
+        x86@kernel.org, yu.c.zhang@linux.intel.com
+Subject: Re: [RFC PATCH 1/2] mm: restrictedmem: Allow userspace to specify
+ mount_path for memfd_restricted
+Message-ID: <20230224093600.osmbpilmsi64wlwb@box.shutemov.name>
+References: <20230216100150.yv2ehwrdcfzbdhcq@box.shutemov.name>
+ <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 24, 2023, at 08:36, Asahi Lina wrote:
-> Add simple 1:1 wrappers of the C ioctl number manipulation functions.
-> Since these are macros we cannot bindgen them directly, and since they
-> should be usable in const context we cannot use helper wrappers, so
-> we'll have to reimplement them in Rust. Thankfully, the C headers do
-> declare defines for the relevant bitfield positions, so we don't need
-> to duplicate that.
->
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
+On Thu, Feb 23, 2023 at 12:55:16AM +0000, Ackerley Tng wrote:
+> 
+> "Kirill A. Shutemov" <kirill@shutemov.name> writes:
+> 
+> > On Thu, Feb 16, 2023 at 12:41:16AM +0000, Ackerley Tng wrote:
+> > > By default, the backing shmem file for a restrictedmem fd is created
+> > > on shmem's kernel space mount.
+> 
+> > > With this patch, an optional tmpfs mount can be specified, which will
+> > > be used as the mountpoint for backing the shmem file associated with a
+> > > restrictedmem fd.
+> 
+> > > This change is modeled after how sys_open() can create an unnamed
+> > > temporary file in a given directory with O_TMPFILE.
+> 
+> > > This will help restrictedmem fds inherit the properties of the
+> > > provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+> > > binding hints, etc.
+> 
+> > > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > > ---
+> > >   include/linux/syscalls.h           |  2 +-
+> > >   include/uapi/linux/restrictedmem.h |  8 ++++
+> > >   mm/restrictedmem.c                 | 63 +++++++++++++++++++++++++++---
+> > >   3 files changed, 66 insertions(+), 7 deletions(-)
+> > >   create mode 100644 include/uapi/linux/restrictedmem.h
+> 
+> > > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> > > index f9e9e0c820c5..4b8efe9a8680 100644
+> > > --- a/include/linux/syscalls.h
+> > > +++ b/include/linux/syscalls.h
+> > > @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int
+> > > flags);
+> > >   asmlinkage long sys_set_mempolicy_home_node(unsigned long start,
+> > > unsigned long len,
+> > >   					    unsigned long home_node,
+> > >   					    unsigned long flags);
+> > > -asmlinkage long sys_memfd_restricted(unsigned int flags);
+> > > +asmlinkage long sys_memfd_restricted(unsigned int flags, const char
+> > > __user *mount_path);
+> 
+> > >   /*
+> > >    * Architecture-specific system calls
+> 
+> > I'm not sure what the right practice now: do we provide string that
+> > contains mount path or fd that represents the filesystem (returned from
+> > fsmount(2) or open_tree(2)).
+> 
+> > fd seems more flexible: it allows to specify unbind mounts.
+> 
+> I tried out the suggestion of passing fds to memfd_restricted() instead
+> of strings.
+> 
+> One benefit I see of using fds is interface uniformity: it feels more
+> aligned with other syscalls like fsopen(), fsconfig(), and fsmount() in
+> terms of using and passing around fds.
+> 
+> Other than being able to use a mount without a path attached to the
+> mount, are there any other benefits of using fds over using the path string?
 
-I don't know much rust yet, but it looks like a correct abstraction
-that handles all the corner cases of architectures with unusual
-_IOC_*MASK combinations the same way as the C version.
+It would be nice if anyone from fs folks comment on this.
 
-There is one corner case I'm not sure about:
+> Should I post the patches that allows specifying a mount using fds?
+> Should I post them as a separate RFC, or as a new revision to this RFC?
 
-> +/// Build an ioctl number, analogous to the C macro of the same name.
-> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
-> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
-> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
-> +    core::assert!(nr <= bindings::_IOC_NRMASK);
-> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
-> +
-> +    (dir << bindings::_IOC_DIRSHIFT)
-> +        | (ty << bindings::_IOC_TYPESHIFT)
-> +        | (nr << bindings::_IOC_NRSHIFT)
-> +        | ((size as u32) << bindings::_IOC_SIZESHIFT)
-> +}
+Let's first decide what the right direction is.
 
-This has the assertions inside of _IOC() while the C version
-has them in the outer _IOR()/_IOW() /_IOWR() helpers. This was
-intentional since some users of _IOC() pass a variable
-length in rather than sizeof(type), and this would cause
-a link failure in C.
-
-How is the _IOC_SIZEMASK assertion evaluated here? It's
-probably ok if this is a compile-time assertion that prevents
-the variable-length arguments, but it would be bad if this
-could lead to a BUG() or panic() in case of a user-supplied
-length that is out of range.
-
-     Arnd
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
