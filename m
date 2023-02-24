@@ -2,148 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43646A18E9
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Feb 2023 10:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257656A1B8F
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Feb 2023 12:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjBXJhh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Feb 2023 04:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S229685AbjBXLqH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Feb 2023 06:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjBXJhg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Feb 2023 04:37:36 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DDE64D70;
-        Fri, 24 Feb 2023 01:37:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677231422; x=1708767422;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qh5dHIF3Zy/2vFiSSHWmzyQvmvJlUbTRwfF+WltTESk=;
-  b=WDRmYASbnHMX3Ojs54SxtR4XRQJcnzIlqgO0LVMrqnnPuoTJUGcsDl+p
-   q7lTPDO1RvYqMufhR4Swyq+ciCjFN5UzzFbTRdCIH31tMDTToidONCaWO
-   wwVgFq3VlbhT2hZsgq6GRfavpzfa4627vKCHOGo6QjKSlXHo1GviywI04
-   Jb9qM+kFi5zX1vpLGvmsqz9i7yiHw8qHcjyh8LDYOHTZlmViKL6GS+xfP
-   lh2NK0dHo/LYlKDOQrSstBW12KHy/00lN/ngwTbVod68HxdA0UGoZc79o
-   DbNRlqAFoks4I6NKWKYWyptQ8/jcGFitNemb/4umoWmXqr2tOM3Kgqt9/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="331171606"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="331171606"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10630"; a="741608912"
-X-IronPort-AV: E=Sophos;i="5.97,324,1669104000"; 
-   d="scan'208";a="741608912"
-Received: from rkris18-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.56.190])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2023 01:36:03 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C84DF10A581; Fri, 24 Feb 2023 12:36:00 +0300 (+03)
-Date:   Fri, 24 Feb 2023 12:36:00 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, kvm@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        qemu-devel@nongnu.org, chao.p.peng@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, linmiaohe@huawei.com, luto@kernel.org,
-        mail@maciej.szmigiero.name, mhocko@suse.com, michael.roth@amd.com,
-        mingo@redhat.com, naoya.horiguchi@nec.com, pbonzini@redhat.com,
-        qperret@google.com, rppt@kernel.org, seanjc@google.com,
-        shuah@kernel.org, steven.price@arm.com, tabba@google.com,
-        tglx@linutronix.de, vannapurve@google.com, vbabka@suse.cz,
-        vkuznets@redhat.com, wanpengli@tencent.com, wei.w.wang@intel.com,
-        x86@kernel.org, yu.c.zhang@linux.intel.com
-Subject: Re: [RFC PATCH 1/2] mm: restrictedmem: Allow userspace to specify
- mount_path for memfd_restricted
-Message-ID: <20230224093600.osmbpilmsi64wlwb@box.shutemov.name>
-References: <20230216100150.yv2ehwrdcfzbdhcq@box.shutemov.name>
- <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
+        with ESMTP id S229636AbjBXLqG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Feb 2023 06:46:06 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5388164D6E;
+        Fri, 24 Feb 2023 03:46:04 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 80E8A1EC0723;
+        Fri, 24 Feb 2023 12:46:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677239162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OSDHzpRiPKXFuKbj/ntPOkDODEh8hWASFyXRMMoKKPg=;
+        b=aA+1bgzgnvaLFpgSuz1deBeWtCAEBmlV7GEzr7ZA4Mp69V9HXC6O2/Ul+Pfxkyh4rVX5fc
+        n3kDrsTIKdr7MJGhF4cuP0UpC14Urlzpbs+vc6PJC4x5S5P+o+Bmw0KsEqIkEtE1ARcMxk
+        ahkS3utYulVNwD95M9K9ipo0UizTrH4=
+Date:   Fri, 24 Feb 2023 12:45:57 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v6 37/41] selftests/x86: Add shadow stack test
+Message-ID: <Y/ijdXoTAATt0+Ct@zn.tnic>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-38-rick.p.edgecombe@intel.com>
+ <Y/duhySUieqUWoGX@zn.tnic>
+ <5fe0874655a7190a6ea5a070584d2603522f4395.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <diqzsfex5hfv.fsf@ackerleytng-cloudtop.c.googlers.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <5fe0874655a7190a6ea5a070584d2603522f4395.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 12:55:16AM +0000, Ackerley Tng wrote:
-> 
-> "Kirill A. Shutemov" <kirill@shutemov.name> writes:
-> 
-> > On Thu, Feb 16, 2023 at 12:41:16AM +0000, Ackerley Tng wrote:
-> > > By default, the backing shmem file for a restrictedmem fd is created
-> > > on shmem's kernel space mount.
-> 
-> > > With this patch, an optional tmpfs mount can be specified, which will
-> > > be used as the mountpoint for backing the shmem file associated with a
-> > > restrictedmem fd.
-> 
-> > > This change is modeled after how sys_open() can create an unnamed
-> > > temporary file in a given directory with O_TMPFILE.
-> 
-> > > This will help restrictedmem fds inherit the properties of the
-> > > provided tmpfs mounts, for example, hugepage allocation hints, NUMA
-> > > binding hints, etc.
-> 
-> > > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> > > ---
-> > >   include/linux/syscalls.h           |  2 +-
-> > >   include/uapi/linux/restrictedmem.h |  8 ++++
-> > >   mm/restrictedmem.c                 | 63 +++++++++++++++++++++++++++---
-> > >   3 files changed, 66 insertions(+), 7 deletions(-)
-> > >   create mode 100644 include/uapi/linux/restrictedmem.h
-> 
-> > > diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> > > index f9e9e0c820c5..4b8efe9a8680 100644
-> > > --- a/include/linux/syscalls.h
-> > > +++ b/include/linux/syscalls.h
-> > > @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int
-> > > flags);
-> > >   asmlinkage long sys_set_mempolicy_home_node(unsigned long start,
-> > > unsigned long len,
-> > >   					    unsigned long home_node,
-> > >   					    unsigned long flags);
-> > > -asmlinkage long sys_memfd_restricted(unsigned int flags);
-> > > +asmlinkage long sys_memfd_restricted(unsigned int flags, const char
-> > > __user *mount_path);
-> 
-> > >   /*
-> > >    * Architecture-specific system calls
-> 
-> > I'm not sure what the right practice now: do we provide string that
-> > contains mount path or fd that represents the filesystem (returned from
-> > fsmount(2) or open_tree(2)).
-> 
-> > fd seems more flexible: it allows to specify unbind mounts.
-> 
-> I tried out the suggestion of passing fds to memfd_restricted() instead
-> of strings.
-> 
-> One benefit I see of using fds is interface uniformity: it feels more
-> aligned with other syscalls like fsopen(), fsconfig(), and fsmount() in
-> terms of using and passing around fds.
-> 
-> Other than being able to use a mount without a path attached to the
-> mount, are there any other benefits of using fds over using the path string?
+On Thu, Feb 23, 2023 at 05:54:55PM +0000, Edgecombe, Rick P wrote:
+> The proposed Makefile solution seems a bit unusual. What about this
+> less complicated solution to just make this case work?
 
-It would be nice if anyone from fs folks comment on this.
+I like simple. :)
 
-> Should I post the patches that allows specifying a mount using fds?
-> Should I post them as a separate RFC, or as a new revision to this RFC?
+> So alternatively, why not just always encourage building the headers
+> before running the selftests by warning if
+> ${abs_srctree}/usr/include/linux is not found?
 
-Let's first decide what the right direction is.
+s/encourage/automate/
+
+Imagine this situation: maintainer says: "please run the selftests".
+User says, "uh oh, it fails building, I need to figure that out first."
+
+So we should not have users have to figure out stuff if we can code it
+to happen automatically for the default case.
+
+If they want something special, then they can do all the figuring out
+they want. :-)
+
+Thx.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
