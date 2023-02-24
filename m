@@ -2,64 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8376A1760
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Feb 2023 08:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A8B6A1829
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Feb 2023 09:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjBXHjC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Feb 2023 02:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S229560AbjBXIoW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Feb 2023 03:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjBXHjB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Feb 2023 02:39:01 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C6A41B4D;
-        Thu, 23 Feb 2023 23:38:23 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 032ED4248B;
-        Fri, 24 Feb 2023 07:36:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1677224215;
-        bh=ftldOtsJAJMVwxmGhAw4Tv8zQ8GizSKOo29lCYZdWFw=;
-        h=From:Date:Subject:To:Cc;
-        b=drjwKx3RRPHd19TUf2L1KqJDkXjkcmyQ2GRSY6Ui8dR/CfJ+Sw6D0JqyPjm2AQZbt
-         tFzoC/B7PjT5+wweNJHdIqXYCVAwM/ZWa+tsZReQyZ5fxgJwnLJ7OLxazMBqE2BLxu
-         y/TZmrv1iHCwA7Jn6yr3eGeedTfhYUt5lo7p21DIqmp/3WnDG0FDTxJnaCb0bGSb1s
-         KNMc+40Yt0WtjaZ48onP3+vBR2ZS8rWwU7RzkPwnS+92zRfuACznHlN0w8bN7tks16
-         2eAQUNBqMOxW9WEcq6DeGjdbhRdRmEEG0BEeoxOPWsrUqqxOPeMJUA9yWqtPHHmRoB
-         cBlmCEAp2nnIA==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Fri, 24 Feb 2023 16:36:42 +0900
-Subject: [PATCH] rust: ioctl: Add ioctl number manipulation functions
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
-X-B4-Tracking: v=1; b=H4sIAAlp+GMC/x2NwQrCQAxEf6XkbHDNKoi/Ih6ya9oGZFuSVoTSf
- 3e3xzczj9nAxVQcHt0GJl91nUqFy6mDPHIZBPVdGShQDERXtNUX1CkvH+QbhT5Kisx3qEJiF0z
- GJY9NGeb1fKxb3vrZpNffcfZ87fsfDKl8yHwAAAA=
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
+        with ESMTP id S229485AbjBXIoV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Feb 2023 03:44:21 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E447B305DC;
+        Fri, 24 Feb 2023 00:44:19 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 952FA5C0114;
+        Fri, 24 Feb 2023 03:44:16 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 24 Feb 2023 03:44:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1677228256; x=1677314656; bh=wd581eFP3K
+        lFvq0U5aP/IpGssCNvXt/Gl6A0XM6S2f8=; b=Monkq1jJUfCZdOoiz1FE83JYuY
+        /6RUz5BC3xZtyIEf5ljLKr1dAyekA5oFnuLom7W/uC9diIWNz0L6OeM5+BmVmGVD
+        M14ozvZ9dUDNeydSFXcHXXKUAHwrxxn1pu8pgPD5wH34Q2bmZcLhTCp1BJgGXLtF
+        PjoIdVBjXsAx7FlIh8/hmim7eiWdkf3O7ihTW3o1fOlINP2LP7ttoH2yYvHcSdR+
+        tkbzBSbgwlDmRnVXT3xCz7Eq3n8lpzMfmizZbmGpIvZ7EtjFpvBj4Z9fGc4lwRnV
+        VJtZk+JrBWWE0cxCcx/jCMO7VDEdSpvxBcf32nUW70TBys4qC+LyxSWISbXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1677228256; x=1677314656; bh=wd581eFP3KlFvq0U5aP/IpGssCNv
+        Xt/Gl6A0XM6S2f8=; b=e/TmRPCS0wj/UWm+XzSLvIZ7jY+LnhpHxE3O5247TutF
+        9XkRyxGoGAX0vIdf8uHr91M18S7KiWl589pWfM331mKO2hq0iU3djNTg1ej57zQH
+        l5qPJP8qzRXhEkZx1K2rnj0OZCtu705aqCzLPoijpoCzsITyRgPBKiiO954FBRk+
+        MEgFcUU+RNpKE+jOgghUpgnze5Am2XS6by2Md6NfZItwiiOnIoLEv5U1URKSLWt6
+        srx6M5sqPk6k3JwVPyGb5V717p2Y3gL0uUX1aERG/9nVKCCJXtNf/Xc5QX4QZmt+
+        9P3rJPvFfrpkgBpM23faLFUt9n/pD0UCQA2mWhfxhw==
+X-ME-Sender: <xms:4Hj4Y8HUBy7BvSvp656WhypfqVyJqB9dYDk3RC8_nMme50d0bXplrw>
+    <xme:4Hj4Y1UYXWpQoZIQwpkwZWOC3iAja6rrHgWYpv409hOephFfTzpkogQExvtSecI_Y
+    GL8m_RzZBunNEhuLGI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekvddguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:4Hj4Y2ISPAlmrZ2ZCcuv7Cn4x6FCV0dZA7W9Ja-_8_9eVMv-GxEJ1Q>
+    <xmx:4Hj4Y-FLUxr5PzRy7UmjPJ3CaSSrTo_g7U-IFBmblWyo2hHHoYp7pg>
+    <xmx:4Hj4YyU5U1kox6vJSm0QB9PTNPu4-xZW_QNvTYns3y8mRoyRcsGCrw>
+    <xmx:4Hj4Y2pXfBw3evWyOYheDyOrmguy0dPo-pulBKDAVmqGm79NUZL3Mg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3B2C8B60086; Fri, 24 Feb 2023 03:44:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-172-g9a2dae1853-fm-20230213.001-g9a2dae18
+Mime-Version: 1.0
+Message-Id: <0818df3a-76c9-4cb3-8016-4717f4d5bf18@app.fastmail.com>
+In-Reply-To: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
+References: <20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net>
+Date:   Fri, 24 Feb 2023 09:43:27 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Asahi Lina" <lina@asahilina.net>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
 Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arch@vger.kernel.org,
-        Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677224211; l=3944;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=ftldOtsJAJMVwxmGhAw4Tv8zQ8GizSKOo29lCYZdWFw=;
- b=UY88w5bi8StsTR72L84kydfChihsTIsd1ljE84ofuZgXcNUupsV6puBS6LpRaX5W7GYsjNZL7
- JWpEx6b0TwJBHTDCcjpBs0HRith3EWOhm6d65lU7lhrI8c5SvAON3Hy
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        asahi@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] rust: ioctl: Add ioctl number manipulation functions
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,122 +87,45 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add simple 1:1 wrappers of the C ioctl number manipulation functions.
-Since these are macros we cannot bindgen them directly, and since they
-should be usable in const context we cannot use helper wrappers, so
-we'll have to reimplement them in Rust. Thankfully, the C headers do
-declare defines for the relevant bitfield positions, so we don't need
-to duplicate that.
+On Fri, Feb 24, 2023, at 08:36, Asahi Lina wrote:
+> Add simple 1:1 wrappers of the C ioctl number manipulation functions.
+> Since these are macros we cannot bindgen them directly, and since they
+> should be usable in const context we cannot use helper wrappers, so
+> we'll have to reimplement them in Rust. Thankfully, the C headers do
+> declare defines for the relevant bitfield positions, so we don't need
+> to duplicate that.
+>
+> Signed-off-by: Asahi Lina <lina@asahilina.net>
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- rust/bindings/bindings_helper.h |  3 +-
- rust/kernel/ioctl.rs            | 64 +++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |  1 +
- 3 files changed, 67 insertions(+), 1 deletion(-)
+I don't know much rust yet, but it looks like a correct abstraction
+that handles all the corner cases of architectures with unusual
+_IOC_*MASK combinations the same way as the C version.
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 75d85bd6c592..aef60f300be0 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -6,8 +6,9 @@
-  * Sorted alphabetically.
-  */
- 
--#include <linux/slab.h>
-+#include <linux/ioctl.h>
- #include <linux/refcount.h>
-+#include <linux/slab.h>
- 
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
-diff --git a/rust/kernel/ioctl.rs b/rust/kernel/ioctl.rs
-new file mode 100644
-index 000000000000..6cd8e5738b91
---- /dev/null
-+++ b/rust/kernel/ioctl.rs
-@@ -0,0 +1,64 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#![allow(non_snake_case)]
-+
-+//! ioctl() number definitions
-+//!
-+//! C header: [`include/asm-generic/ioctl.h`](../../../../include/asm-generic/ioctl.h)
-+
-+/// Build an ioctl number, analogous to the C macro of the same name.
-+const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
-+    core::assert!(dir <= bindings::_IOC_DIRMASK);
-+    core::assert!(ty <= bindings::_IOC_TYPEMASK);
-+    core::assert!(nr <= bindings::_IOC_NRMASK);
-+    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
-+
-+    (dir << bindings::_IOC_DIRSHIFT)
-+        | (ty << bindings::_IOC_TYPESHIFT)
-+        | (nr << bindings::_IOC_NRSHIFT)
-+        | ((size as u32) << bindings::_IOC_SIZESHIFT)
-+}
-+
-+/// Build an ioctl number for an argumentless ioctl.
-+pub const fn _IO(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_NONE, ty, nr, 0)
-+}
-+
-+/// Build an ioctl number for an read-only ioctl.
-+pub const fn _IOR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_READ, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for an write-only ioctl.
-+pub const fn _IOW<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for a read-write ioctl.
-+pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(
-+        bindings::_IOC_READ | bindings::_IOC_WRITE,
-+        ty,
-+        nr,
-+        core::mem::size_of::<T>(),
-+    )
-+}
-+
-+/// Get the ioctl direction from an ioctl number.
-+pub const fn _IOC_DIR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_DIRSHIFT) & bindings::_IOC_DIRMASK
-+}
-+
-+/// Get the ioctl type from an ioctl number.
-+pub const fn _IOC_TYPE(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_TYPESHIFT) & bindings::_IOC_TYPEMASK
-+}
-+
-+/// Get the ioctl number from an ioctl number.
-+pub const fn _IOC_NR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_NRSHIFT) & bindings::_IOC_NRMASK
-+}
-+
-+/// Get the ioctl size from an ioctl number.
-+pub const fn _IOC_SIZE(nr: u32) -> usize {
-+    ((nr >> bindings::_IOC_SIZESHIFT) & bindings::_IOC_SIZEMASK) as usize
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 223564f9f0cc..7610b18ee642 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -30,6 +30,7 @@ compile_error!("Missing kernel configuration for conditional compilation");
- mod allocator;
- mod build_assert;
- pub mod error;
-+pub mod ioctl;
- pub mod prelude;
- pub mod print;
- mod static_assert;
+There is one corner case I'm not sure about:
 
----
-base-commit: 83f978b63fa7ad474ca22d7e2772c5988101c9bd
-change-id: 20230224-rust-ioctl-a520f3eb3aa8
+> +/// Build an ioctl number, analogous to the C macro of the same name.
+> +const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
+> +    core::assert!(dir <= bindings::_IOC_DIRMASK);
+> +    core::assert!(ty <= bindings::_IOC_TYPEMASK);
+> +    core::assert!(nr <= bindings::_IOC_NRMASK);
+> +    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
+> +
+> +    (dir << bindings::_IOC_DIRSHIFT)
+> +        | (ty << bindings::_IOC_TYPESHIFT)
+> +        | (nr << bindings::_IOC_NRSHIFT)
+> +        | ((size as u32) << bindings::_IOC_SIZESHIFT)
+> +}
 
-Thank you,
-~~ Lina
+This has the assertions inside of _IOC() while the C version
+has them in the outer _IOR()/_IOW() /_IOWR() helpers. This was
+intentional since some users of _IOC() pass a variable
+length in rather than sizeof(type), and this would cause
+a link failure in C.
 
+How is the _IOC_SIZEMASK assertion evaluated here? It's
+probably ok if this is a compile-time assertion that prevents
+the variable-length arguments, but it would be bad if this
+could lead to a BUG() or panic() in case of a user-supplied
+length that is out of range.
+
+     Arnd
