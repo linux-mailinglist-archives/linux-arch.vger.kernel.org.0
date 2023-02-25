@@ -2,194 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2B26A2B04
-	for <lists+linux-arch@lfdr.de>; Sat, 25 Feb 2023 18:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA766A2B3E
+	for <lists+linux-arch@lfdr.de>; Sat, 25 Feb 2023 19:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjBYRLo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 25 Feb 2023 12:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S229540AbjBYSLk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 25 Feb 2023 13:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjBYRLn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 25 Feb 2023 12:11:43 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5551042E;
-        Sat, 25 Feb 2023 09:11:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677345102; x=1708881102;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/wmzhNxDeMcFcsLck+WoGXoesP55t1mLA577Oo+iWV8=;
-  b=Zqi74QDS720c77fRW5MRilYBviP9dNeN7+dfD9QSVgvYcpe+TMBj2DmO
-   2G0ZNMQldVj981zyneHEwmbd/Y1mah3hHUAZ8kMbLrtuiqrLgl3NWqEGU
-   sXLlsp7/x/Q8dTCGj5wQ8M7SIvHaC7sP/q5ecyYO/lCn2RCWjJeQUnLTm
-   lhP+xsGztWi8iAKTetB1kU+16q86eQV+LPk/OkRYw+DdqVQB5QQUixrDo
-   abWbP7H7tgl3eT3Zpi+vr9XmFNk+AVyRcJWZzd1emYTL84g6/cC/vwT1s
-   ZnfduqCUswBSAhj0bUFG4KFC/CVYDFuUYYChcAlPbrTX9K6ihgnd/q+kG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="332369633"
-X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
-   d="scan'208";a="332369633"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2023 09:11:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10631"; a="673233092"
-X-IronPort-AV: E=Sophos;i="5.97,328,1669104000"; 
-   d="scan'208";a="673233092"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 25 Feb 2023 09:11:39 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pVy5C-0003KB-0e;
-        Sat, 25 Feb 2023 17:11:38 +0000
-Date:   Sun, 26 Feb 2023 01:10:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-mm@kvack.org,
-        linux-bluetooth@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        io-uring@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 8232539f864ca60474e38eb42d451f5c26415856
-Message-ID: <63fa411f.ZvVOisJt5OlLzGYF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229492AbjBYSLj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 25 Feb 2023 13:11:39 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A7A168A8;
+        Sat, 25 Feb 2023 10:11:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VkU3wglkazA3WDdsvY+r6GTOXkswm1z2trXm0IechuI=; b=DjStN73s/52C2aKUHJ/N7u+67C
+        xKVsxbGgc73JqCB9UjmsEXo28HLWtkaadn4Qvw3tfQ17fHwFv4xLIaSY4juqo0jfuluJOSt53Nnm0
+        J8miHKoX3rnhGz3CIFW4q/edegpeos3t2+FOnrUohR5FwZmcES4bSpPnvsdPfTmg8vIyGFPAxJ0WL
+        2xtQTXNuwr45ZB2usatus2AtDy+tzz51O8QNmg4FLoCibIJRsy7SLXCoy3hYICxmMM0rpCnf4hXNF
+        toOagD/u7ZgV18tcTWmTxhdx/qim6JhKTXHpKXqQl9N286vfbTxVVsV64HYFhRv988vdiaujpipbm
+        egPcgAcg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pVz1D-00CHC6-39;
+        Sat, 25 Feb 2023 18:11:36 +0000
+Date:   Sat, 25 Feb 2023 18:11:35 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [git pull] vfs.git misc bits
+Message-ID: <Y/pPV0q43R+drVtV@ZenIV>
+References: <Y/gxyQA+yKJECwyp@ZenIV>
+ <CAHk-=wiPHkYmiFY_O=7MK-vbWtLEiRP90ufugj1H1QFeiLPoVw@mail.gmail.com>
+ <Y/mEQUfLqf8m2s/G@ZenIV>
+ <Y/mVP5EsmoCt9NwK@ZenIV>
+ <CAHk-=wgQz8VDDxdaj3rk861Ucjzk72hJoCjZvfaeo8jCyVc_2w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgQz8VDDxdaj3rk861Ucjzk72hJoCjZvfaeo8jCyVc_2w@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 8232539f864ca60474e38eb42d451f5c26415856  Add linux-next specific files for 20230225
+On Sat, Feb 25, 2023 at 09:04:57AM -0800, Linus Torvalds wrote:
+> On Fri, Feb 24, 2023 at 8:57 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > Let's have it sit around for at least a few days, OK?  I mean, I'm pretty
+> > certain that these are fixes, but they hadn't been in any public tree -
+> > only posted to linux-arch.  At least #fixes gets picked by linux-next...
+> 
+> Ack, sounds good.
 
-Error/Warning reports:
+... and Intel build-bot had immediately caught a breakage in microblaze.
+Fixed and pushed out; I've checked all architectures affected by
+this series, and that was the only build breakage.  However, I still have
+no way to test it (or anything, for that matter) on microblaze - I've no
+userland images for it.  Status right now:
 
-https://lore.kernel.org/oe-kbuild-all/202302040652.zkUBTjyo-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302112104.g75cGHZd-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302210350.lynWcL4t-lkp@intel.com
+alpha: bug confirmed, patch fixes it.
+hexagon, m68k, riscv: acked by maintainer (with explicit tested-by for m68k and riscv)
+microblaze, openrisc, nios2: builds, no way for me to test.
+sparc32, sparc64, itanic: builds, preparing to test (itanic - once I resurrect
+the sodding space heater I hadn't tried to boot for a couple of years; no
+idea whether it works).
+parisc: builds, but maintainers say that reproducer doesn't confirm the bug
+in mainline.  I've parisc32 box, will try to resurrect and see what's going
+on.  No way to test parisc64 here - no hardware and qemu/pa-risc doesn't handle
+64bit system emulation.
 
-Error/Warning: (recently discovered and may have been fixed)
+Incidentally, while digging through the arch code around #PF, something's
+weird on csky.  Not this bug (it's handled correctly there), but...
+looks like vm_get_page_prot(0) returns something that would *not*
+pass pte_present().  Which should make life wonderful for e.g. PROT_READ|PROT_WRITE
+mmap() + memcpy to it + PROT_NONE mprotect() + PROT_READ|PROT_WRITE mprotect().
 
-FAILED: load BTF from vmlinux: No data available
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-drivers/pcmcia/pxa2xx_sharpsl.c:206:5: warning: no previous prototype for function 'pcmcia_collie_init' [-Wmissing-prototypes]
-include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+Unless I'm seriously misunderstanding something, we have 3 mutually exclusive
+cases:
+	absent PTE - no further information in it.  No page at the corresponding
+address range, access will fault and work from scratch; pte_none() is true for those.
+	swap PTE - page had been swapped out, access will fault, the information in
+the entry encodes the location in swap.  is_swap_pte() is true for those.
+	normal page - page is there, access might or might not fault due to permissions,
+PTE contains the page frame number.  pte_present() is true for those.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+PROT_NONE should not yield something that looks like a swap entry.  And on csky we
+have
+#define PAGE_NONE       __pgprot(_PAGE_PROT_NONE)
+#define pte_none(pte)           (!(pte_val(pte) & ~_PAGE_GLOBAL))
+#define pte_present(pte)        (pte_val(pte) & _PAGE_PRESENT)
 
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-io_uring/rsrc.c:1262 io_sqe_buffer_register() error: uninitialized symbol 'folio'.
-mm/page_alloc.c:257:1: sparse: sparse: symbol 'check_pages_enabled' was not declared. Should it be static?
-net/bluetooth/hci_sync.c:2403 hci_pause_addr_resolution() warn: missing error code? 'err'
+and
 
-Error/Warning ids grouped by kconfigs:
+arch/csky/abiv1/inc/abi/pgtable-bits.h:26:#define _PAGE_PROT_NONE               _PAGE_READ
+arch/csky/abiv1/inc/abi/pgtable-bits.h:8:#define _PAGE_READ             (1<<1)
+arch/csky/abiv1/inc/abi/pgtable-bits.h:14:#define _PAGE_GLOBAL          (1<<6)
+arch/csky/abiv1/inc/abi/pgtable-bits.h:7:#define _PAGE_PRESENT          (1<<0)
 
-gcc_recent_errors
-|-- alpha-randconfig-s041-20230222
-|   `-- mm-page_alloc.c:sparse:sparse:symbol-check_pages_enabled-was-not-declared.-Should-it-be-static
-|-- arc-allyesconfig
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-allmodconfig
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-allyesconfig
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-randconfig-s051-20230222
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- i386-randconfig-s001
-|   |-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- i386-randconfig-s002
-|   `-- drivers-gpu-drm-i915-gem-i915_gem_ttm.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-vm_fault_t-assigned-usertype-ret-got-int
-|-- i386-randconfig-s003
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- loongarch-randconfig-m041-20230225
-|   `-- io_uring-rsrc.c-io_sqe_buffer_register()-error:uninitialized-symbol-folio-.
-|-- openrisc-randconfig-r014-20230225
-|   `-- FAILED:load-BTF-from-vmlinux:No-data-available
-|-- openrisc-randconfig-s052-20230222
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- parisc-randconfig-m031-20230223
-|   `-- net-bluetooth-hci_sync.c-hci_pause_addr_resolution()-warn:missing-error-code-err
-|-- powerpc-allmodconfig
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- x86_64-allnoconfig
-|   `-- Warning:Documentation-devicetree-bindings-usb-rockchip-dwc3.yaml-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-phy-phy-rockchip-inno-usb2.yaml
-|-- x86_64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- x86_64-randconfig-m001
-|   `-- io_uring-rsrc.c-io_sqe_buffer_register()-error:uninitialized-symbol-folio-.
-`-- x86_64-randconfig-s021
-    `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-clang_recent_errors
-`-- arm-collie_defconfig
-    `-- drivers-pcmcia-pxa2xx_sharpsl.c:warning:no-previous-prototype-for-function-pcmcia_collie_init
+arch/csky/abiv2/inc/abi/pgtable-bits.h:26:#define _PAGE_PROT_NONE               _PAGE_WRITE
+arch/csky/abiv2/inc/abi/pgtable-bits.h:9:#define _PAGE_WRITE            (1<<9)
+arch/csky/abiv2/inc/abi/pgtable-bits.h:14:#define _PAGE_GLOBAL          (1<<0)
+arch/csky/abiv2/inc/abi/pgtable-bits.h:10:#define _PAGE_PRESENT         (1<<10)
 
-elapsed time: 730m
-
-configs tested: 46
-configs skipped: 5
-
-tested configs:
-alpha                               defconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                                 defconfig   gcc  
-arm                          collie_defconfig   clang
-arm                                 defconfig   gcc  
-arm                      jornada720_defconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-i386                                defconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                         amcore_defconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                        bcm47xx_defconfig   gcc  
-mips                       lemote2f_defconfig   clang
-mips                     loongson1c_defconfig   clang
-mips                     loongson2k_defconfig   clang
-mips                           mtx1_defconfig   clang
-mips                      pic32mzda_defconfig   clang
-mips                        qi_lb60_defconfig   clang
-mips                          rm200_defconfig   clang
-nios2                               defconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    klondike_defconfig   gcc  
-powerpc                  mpc885_ads_defconfig   clang
-powerpc                      pasemi_defconfig   gcc  
-powerpc                     skiroot_defconfig   clang
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                                defconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                        dreamcast_defconfig   gcc  
-sh                          landisk_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sparc                            alldefconfig   gcc  
-sparc                               defconfig   gcc  
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                              defconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                generic_kc705_defconfig   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+IOW, on both ABI variants we have PAGE_NONE looking like a malformed swap entry.
+And is_swap_pte() is simply !pte_none() && !pte_present()...
