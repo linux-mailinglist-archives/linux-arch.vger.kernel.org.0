@@ -2,223 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5986A32E5
-	for <lists+linux-arch@lfdr.de>; Sun, 26 Feb 2023 17:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56BE46A33D5
+	for <lists+linux-arch@lfdr.de>; Sun, 26 Feb 2023 21:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjBZQos (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 26 Feb 2023 11:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229777AbjBZUEJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 26 Feb 2023 15:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjBZQor (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Feb 2023 11:44:47 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E959CCA16
-        for <linux-arch@vger.kernel.org>; Sun, 26 Feb 2023 08:44:45 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso940838wmq.1
-        for <linux-arch@vger.kernel.org>; Sun, 26 Feb 2023 08:44:45 -0800 (PST)
+        with ESMTP id S229743AbjBZUEI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 26 Feb 2023 15:04:08 -0500
+Received: from antispamsnwll.cedia.org.ec (antispamsnwll.cedia.org.ec [201.159.220.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4CEB11E96;
+        Sun, 26 Feb 2023 12:04:07 -0800 (PST)
+Received: from antispamsnwll.cedia.org.ec (127.0.0.1) id hvetje0171sr; Sun, 26 Feb 2023 13:25:31 -0500 (envelope-from <prvs=1421df1a3c=phernandez@cuenca.gob.ec>)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ocj2R23WDknAZNtiIVt3IW9MrBrM5xCTWqwgy1N+IqI=;
-        b=TMYvOa2MEdtxVrJma4tnZyGFUMCuBCIu3k7h9+WtXgzPzpbJ5z/YUgJpWMA/oZEo5N
-         mgFpcmPwCDagOB96K2BJxXbI5Qj29zVzCtlTIZk7SdkH3OF5I+dvSxPOULIz2P6BOrow
-         vG+P/b3jJ3TSwWpTyJw9ILd3eoBOquR+TCJw+L2J6Q05gR+4gonZS+lxCMFDjvfOHtsV
-         XtnNJr5KzncWJ0ZjaTRhM6pJAqbuaDbyMda4QhyUTD6XjzUD50zMRCqarZZzuAVjjVFr
-         ccIJ6qZRrqZx89W755bONFXWL7Ek9hMQGQRtUw8pjchlPi2j/krcTENFAlkdTzU29dNn
-         ZNeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ocj2R23WDknAZNtiIVt3IW9MrBrM5xCTWqwgy1N+IqI=;
-        b=tIUVjD+I06PfLgb7eN+pSCdIi/WW9+OkspZHb0t9+gGOp6tC1GoULH37OLlo8lh9Yx
-         ou1XKCXciOIaoLkTrxW5GtrmzeFb6pB4pL/0prZCvEbrTgMPN0zAnmUmFQaGe8NOcOkx
-         EDhfmKDC6PYKXUMqTnu0npuMWV/0qGsV+I5Ijn/yIXmyH53RWwG8AbXEjHZiYBGmqZjr
-         PzQtyxfR6SgmxZTcZTndV0TKAXFZyyYS7aWcY7L17/Hb7IDxaNYR/AlfWjqcCoQJxmJE
-         cE1mD/t17p20NwYc2W9u92lJlM5XhwhxITikCzO9hauONNKfj8tamapdxzKgRp0NUDw9
-         0vmA==
-X-Gm-Message-State: AO0yUKXv+lXIeJShOi65V/hG8quHDewz3Ecbi5ZyyOiIGV23X2Wj8GHy
-        /t5zjgOYeg5i88DI9gX7rdattA==
-X-Google-Smtp-Source: AK7set85WMifA8RqMsuFmKb2O6ubbft7kyOg7T5hC17Bm/ZgEXzhLVpiF0wESGHsFa+iTUW5VOVqPQ==
-X-Received: by 2002:a05:600c:358f:b0:3eb:3300:1d13 with SMTP id p15-20020a05600c358f00b003eb33001d13mr4728730wmq.14.1677429884420;
-        Sun, 26 Feb 2023 08:44:44 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05600c359400b003daf7721bb3sm10560323wmq.12.2023.02.26.08.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Feb 2023 08:44:44 -0800 (PST)
-Date:   Sun, 26 Feb 2023 17:44:42 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sergey Matyukevich <geomatsi@gmail.com>
-Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Zong Li <zong.li@sifive.com>, Guo Ren <guoren@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] riscv: asid: Fixup stale TLB entry cause application
- crash
-Message-ID: <20230226164442.lqrmpkwsaqj3og7x@orel>
-References: <20230226150137.1919750-1-geomatsi@gmail.com>
- <20230226150137.1919750-3-geomatsi@gmail.com>
+        d=cuenca.gob.ec; s=cuenca; i=@cuenca.gob.ec; h=Received:Received:
+        Received:Received:Received:Content-Type:MIME-Version:
+        Content-Transfer-Encoding:Content-Description:Subject:To:From:
+        Date:Reply-To:Message-Id; bh=4Q8sM1WnLl2+Gbtb3rrOkEcuzcuZBE8iv+H
+        DJ7a/1zw=; b=TFtjE8Dkrxywa+KHbHuXAhzp8KaIuGkUkCL1QSrVaBpZae7f7Bz
+        /BflN7C1HgeLJbf99Lv2ih3jNyJh8yyc1nfgptj+gRE92Ci2q6EYrSezYe6aO3jG
+        BzHCKerSXrZfAoMaVqlR993L1XiQsGE6tbyQbfsU63I5hscVJjbBCIjY=
+Received: from mtace.cuenca.gob.ec ([200.55.234.131])
+        by antispamsnwll.cedia.org.ec ([192.168.205.200]) (SonicWall 10.0.21.7607)
+        with ESMTP id o202302261825300028171-2; Sun, 26 Feb 2023 13:25:30 -0500
+Received: from mtace.cuenca.gob.ec (localhost [127.0.0.1])
+        by mtace.cuenca.gob.ec (Postfix) with ESMTPS id 6E4584205D21;
+        Sun, 26 Feb 2023 13:25:30 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mtace.cuenca.gob.ec (Postfix) with ESMTP id 1C3914205D13;
+        Sun, 26 Feb 2023 13:25:30 -0500 (-05)
+Received: from mtace.cuenca.gob.ec ([127.0.0.1])
+        by localhost (mtace.cuenca.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id srGGYxKZ9_H0; Sun, 26 Feb 2023 13:25:29 -0500 (-05)
+Received: from [10.20.18.117] (unknown [156.146.63.154])
+        by mtace.cuenca.gob.ec (Postfix) with ESMTPSA id 176CB4205D08;
+        Sun, 26 Feb 2023 13:25:20 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230226150137.1919750-3-geomatsi@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Investment proposition
+To:     Recipients <phernandez@cuenca.gob.ec>
+From:   "Franklin C. James QC" <phernandez@cuenca.gob.ec>
+Date:   Sun, 26 Feb 2023 19:25:08 +0100
+Reply-To: franklin.c34@aol.com
+X-Antivirus: Avast (VPS 230226-0, 2/26/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230226182521.176CB4205D08@mtace.cuenca.gob.ec>
+X-Mlf-DSE-Version: 7077
+X-Mlf-Rules-Version: s20230112191048; ds20200715013501;
+        di20230221222152; ri20160318003319; fs20230223174059
+X-Mlf-Smartnet-Version: 20210917223710
+X-Mlf-Envelope-From: phernandez@cuenca.gob.ec
+X-Mlf-CnxnMgmt-Allow: 200.55.234.131
+X-Mlf-Version: 10.0.21.7607
+X-Mlf-License: BSV_C_AP_T_R
+X-Mlf-UniqueId: o202302261825300028171
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_PSBL,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
+        *      [201.159.220.42 listed in psbl.surriel.com]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [franklin.c34[at]aol.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 06:01:37PM +0300, Sergey Matyukevich wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> After use_asid_allocator is enabled, the userspace application will
-> crash by stale TLB entries. Because only using cpumask_clear_cpu without
-> local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
-> Then set_mm_asid would cause the user space application to get a stale
-> value by stale TLB entry, but set_mm_noasid is okay.
-> 
-> Here is the symptom of the bug:
-> unhandled signal 11 code 0x1 (coredump)
->    0x0000003fd6d22524 <+4>:     auipc   s0,0x70
->    0x0000003fd6d22528 <+8>:     ld      s0,-148(s0) # 0x3fd6d92490
-> => 0x0000003fd6d2252c <+12>:    ld      a5,0(s0)
-> (gdb) i r s0
-> s0          0x8082ed1cc3198b21       0x8082ed1cc3198b21
-> (gdb) x /2x 0x3fd6d92490
-> 0x3fd6d92490:   0xd80ac8a8      0x0000003f
-> The core dump file shows that register s0 is wrong, but the value in
-> memory is correct. Because 'ld s0, -148(s0)' used a stale mapping entry
-> in TLB and got a wrong result from an incorrect physical address.
-> 
-> When the task ran on CPU0, which loaded/speculative-loaded the value of
-> address(0x3fd6d92490), then the first version of the mapping entry was
-> PTWed into CPU0's TLB.
-> When the task switched from CPU0 to CPU1 (No local_tlb_flush_all here by
-> asid), it happened to write a value on the address (0x3fd6d92490). It
-> caused do_page_fault -> wp_page_copy -> ptep_clear_flush ->
-> ptep_get_and_clear & flush_tlb_page.
-> The flush_tlb_page used mm_cpumask(mm) to determine which CPUs need TLB
-> flush, but CPU0 had cleared the CPU0's mm_cpumask in the previous
-> switch_mm. So we only flushed the CPU1 TLB and set the second version
-> mapping of the PTE. When the task switched from CPU1 to CPU0 again, CPU0
-> still used a stale TLB mapping entry which contained a wrong target
-> physical address. It raised a bug when the task happened to read that
-> value.
-> 
->    CPU0                               CPU1
->    - switch 'task' in
->    - read addr (Fill stale mapping
->      entry into TLB)
->    - switch 'task' out (no tlb_flush)
->                                       - switch 'task' in (no tlb_flush)
->                                       - write addr cause pagefault
->                                         do_page_fault() (change to
->                                         new addr mapping)
->                                           wp_page_copy()
->                                             ptep_clear_flush()
->                                               ptep_get_and_clear()
->                                               & flush_tlb_page()
->                                         write new value into addr
->                                       - switch 'task' out (no tlb_flush)
->    - switch 'task' in (no tlb_flush)
->    - read addr again (Use stale
->      mapping entry in TLB)
->      get wrong value from old phyical
->      addr, BUG!
-> 
-> The solution is to keep all CPUs' footmarks of cpumask(mm) in switch_mm,
-> which could guarantee to invalidate all stale TLB entries during TLB
-> flush.
-> 
-> Fixes: 65d4b9c53017 ("RISC-V: Implement ASID allocator")
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Tested-by: Zong Li <zong.li@sifive.com>
-> Tested-by: Sergey Matyukevich <sergey.matyukevich@syntacore.com>
-> Cc: Anup Patel <apatel@ventanamicro.com>
-> Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> Cc: stable@vger.kernel.org
-> 
-> ---
->  arch/riscv/mm/context.c | 30 ++++++++++++++++++++----------
->  1 file changed, 20 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-> index 7acbfbd14557..0f784e3d307b 100644
-> --- a/arch/riscv/mm/context.c
-> +++ b/arch/riscv/mm/context.c
-> @@ -205,12 +205,24 @@ static void set_mm_noasid(struct mm_struct *mm)
->  	local_flush_tlb_all();
->  }
->  
-> -static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-> +static inline void set_mm(struct mm_struct *prev,
-> +			  struct mm_struct *next, unsigned int cpu)
->  {
-> -	if (static_branch_unlikely(&use_asid_allocator))
-> -		set_mm_asid(mm, cpu);
-> -	else
-> -		set_mm_noasid(mm);
-> +	/*
-> +	 * The mm_cpumask indicates which harts' TLBs contain the virtual
-> +	 * address mapping of the mm. Compared to noasid, using asid
-> +	 * can't guarantee that stale TLB entries are invalidated because
-> +	 * the asid mechanism wouldn't flush TLB for every switch_mm for
-> +	 * performance. So when using asid, keep all CPUs footmarks in
-> +	 * cpumask() until mm reset.
-> +	 */
-> +	cpumask_set_cpu(cpu, mm_cpumask(next));
-> +	if (static_branch_unlikely(&use_asid_allocator)) {
-> +		set_mm_asid(next, cpu);
-> +	} else {
-> +		cpumask_clear_cpu(cpu, mm_cpumask(prev));
-> +		set_mm_noasid(next);
-> +	}
->  }
->  
->  static int __init asids_init(void)
-> @@ -264,7 +276,8 @@ static int __init asids_init(void)
->  }
->  early_initcall(asids_init);
->  #else
-> -static inline void set_mm(struct mm_struct *mm, unsigned int cpu)
-> +static inline void set_mm(struct mm_struct *prev,
-> +			  struct mm_struct *next, unsigned int cpu)
->  {
->  	/* Nothing to do here when there is no MMU */
->  }
-> @@ -317,10 +330,7 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
->  	 */
->  	cpu = smp_processor_id();
->  
-> -	cpumask_clear_cpu(cpu, mm_cpumask(prev));
-> -	cpumask_set_cpu(cpu, mm_cpumask(next));
-> -
-> -	set_mm(next, cpu);
-> +	set_mm(prev, next, cpu);
->  
->  	flush_icache_deferred(next, cpu);
->  }
-> -- 
-> 2.39.2
->
+I trust you are staying safe and well, I am Franklin C. James QC. from Glas=
+gow, Scotland. I have an investment proposition for your consideration and =
+more details will be revealed once your interest is indicated.
+   
+Yours in service,
+Franklin C. James QC.
+____________________
+Secretary: Phillip Hernandez
 
-This is identical to what I reviewed before, so my r-b could have been
-kept, anyway here it is again
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
