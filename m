@@ -2,318 +2,224 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A0B6A4380
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 14:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA3B6A48BB
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 18:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjB0N6F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 08:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S230094AbjB0R5z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 12:57:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjB0N6E (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 08:58:04 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1721C7EFB;
-        Mon, 27 Feb 2023 05:58:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677506283; x=1709042283;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=LyjZENe9a58xVacAUqqOV7tjA6jkVjLtJKW3Hpgpaoo=;
-  b=oCB83bhRjnYDEb+ix/zloNAKc4uFOS+VaIjFWCrlmQqM++tg6rd0CHz+
-   tJERns6dBOK6FfbKKDXoiW3a6PPJsAoPgISAFc8vlI9pFQvJAlemC2/6I
-   FDcAyaPKCGgdUUq0qf+o8YWHLjUi4e5pkuxU3IOLN3ar+iOXdMW1ofgv+
-   5fXrGAWecT8K4oE8l1udfwrR8oGkOGL8c5ZylqJOa4Rgn6VwlQZ5sc0nq
-   oU9NsmCzzpo6W7zdhmYFg7MLo64pojVY3THeMHbXgQz1Nmqpa5Gqw21qW
-   TACXfZoLzDCIZNtgaQLLVE1Y2ayg+eGMnxS6dqXiYR7YHfi0JGTYS7JtQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="361419431"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="361419431"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 05:57:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="797641398"
-X-IronPort-AV: E=Sophos;i="5.98,332,1673942400"; 
-   d="scan'208";a="797641398"
-Received: from lkp-server01.sh.intel.com (HELO 3895f5c55ead) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Feb 2023 05:57:44 -0800
-Received: from kbuild by 3895f5c55ead with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pWe0d-0004TT-11;
-        Mon, 27 Feb 2023 13:57:43 +0000
-Date:   Mon, 27 Feb 2023 21:57:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 7f7a8831520f12a3cf894b0627641fad33971221
-Message-ID: <63fcb6b4.yGpADaCT3Jus/Y+Z%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230030AbjB0R5x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 12:57:53 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45F1241C5;
+        Mon, 27 Feb 2023 09:57:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=3tdRFaZeQcW/4jPn25orVr3lG3sjhHxz5IbjVZonYE0=; b=KGN3qiGAedqU9G+2dxTsB5Atye
+        +9rGfP48swyhdH/2v9S9G36W1666kQlY39X1xKpIQVB4Nf5gvlyZu4XcG2N9FFaVi1wH7MsvlHBu/
+        OWYeMQGgCGLIBjSNjkV2c8d++14737v1xrVKFfPH4Te5ff+1FCXMgg6qvS55m4oK6QH5xH8ffxFkX
+        QCgPY66AqyiM6Pqspa7xWxEpp8gwq44s3xw8nZ87uG5obywzC0f7FWDMF4nZhM1AhHwN81RjmwyPq
+        grLNAzPe4ycwmu5h7ZPwhFoQQ1os1lIZMpFr33jxdfS50zk+4eCjOylVBZ3dILo0ZCQ/lpeFp1bgT
+        pCxhOHTg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWhks-000IWn-UM; Mon, 27 Feb 2023 17:57:43 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/30] New page table range API
+Date:   Mon, 27 Feb 2023 17:57:11 +0000
+Message-Id: <20230227175741.71216-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 7f7a8831520f12a3cf894b0627641fad33971221  Add linux-next specific files for 20230227
+This patchset changes the API used by the MM to set up page table entries.
+The four APIs are:
+    set_ptes(mm, addr, ptep, pte, nr)
+    update_mmu_cache_range(vma, addr, ptep, nr)
+    flush_dcache_folio(folio)
+    flush_icache_pages(vma, page, nr)
 
-Error/Warning reports:
+flush_dcache_folio() isn't technically new, but no architecture
+implemented it, so I've done that for you.  The old APIs remain around
+but are mostly implemented by calling the new interfaces.
 
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302170355.Ljqlzucu-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302210350.lynWcL4t-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302242257.4W4myB9z-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302262324.Xemtp2Zk-lkp@intel.com
+The new APIs are based around setting up N page table entries at once.
+The N entries belong to the same PMD, the same folio and the same VMA,
+so ptep++ is a legitimate operation, and locking is taken care of for
+you.  Some architectures can do a better job of it than just a loop,
+but I have hesitated to make too deep a change to architectures I don't
+understand well.
 
-Error/Warning: (recently discovered and may have been fixed)
+One thing I have changed in every architecture is that PG_arch_1 is now a
+per-folio bit instead of a per-page bit.  This was something that would
+have to happen eventually, and it makes sense to do it now rather than
+iterate over every page involved in a cache flush and figure out if it
+needs to happen.
 
-FAILED: load BTF from vmlinux: No data available
-drivers/block/zram/zram_drv.c:1234:23: error: incompatible pointer types passing 'atomic_long_t *' (aka 'atomic_t *') to parameter of type 'const atomic64_t *' [-Werror,-Wincompatible-pointer-types]
-drivers/block/zram/zram_drv.c:1234:44: error: passing argument 1 of 'atomic64_read' from incompatible pointer type [-Werror=incompatible-pointer-types]
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-idma64.c:(.text+0x145a): undefined reference to `devm_platform_ioremap_resource'
-idma64.c:(.text+0xacc): undefined reference to `devm_platform_ioremap_resource'
-include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+The point of all this is better performance, and Fengwei Yin has
+measured improvement on x86.  I suspect you'll see improvement on
+your architecture too.  Try the new will-it-scale test mentioned here:
+https://lore.kernel.org/linux-mm/20230206140639.538867-5-fengwei.yin@intel.com/
+You'll need to run it on an XFS filesystem and have
+CONFIG_TRANSPARENT_HUGEPAGE set.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+For testing, I've only run the code on x86.  If an x86->foo compiler
+exists in Debian, I've built defconfig.  I'm relying on the buildbots
+to tell me what I missed, and people who actually have the hardware to
+tell me if it actually works.
 
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-mm/page_alloc.c:257:1: sparse: sparse: symbol 'check_pages_enabled' was not declared. Should it be static?
+I'd like to get this into the MM tree soon after the current merge window
+closes, so quick feedback would be appreciated.
 
-Error/Warning ids grouped by kconfigs:
+Matthew Wilcox (Oracle) (26):
+  mm: Convert page_table_check_pte_set() to page_table_check_ptes_set()
+  mm: Add generic flush_icache_pages() and documentation
+  mm: Add folio_flush_mapping()
+  mm: Remove ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
+  alpha: Implement the new page table range API
+  arc: Implement the new page table range API
+  arm64: Implement the new page table range API
+  csky: Implement the new page table range API
+  hexagon: Implement the new page table range API
+  ia64: Implement the new page table range API
+  loongarch: Implement the new page table range API
+  m68k: Implement the new page table range API
+  microblaze: Implement the new page table range API
+  mips: Implement the new page table range API
+  nios2: Implement the new page table range API
+  openrisc: Implement the new page table range API
+  parisc: Implement the new page table range API
+  powerpc: Implement the new page table range API
+  riscv: Implement the new page table range API
+  s390: Implement the new page table range API
+  superh: Implement the new page table range API
+  sparc32: Implement the new page table range API
+  sparc64: Implement the new page table range API
+  um: Implement the new page table range API
+  x86: Implement the new page table range API
+  xtensa: Implement the new page table range API
 
-gcc_recent_errors
-|-- alpha-randconfig-s031-20230226
-|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   `-- mm-page_alloc.c:sparse:sparse:symbol-check_pages_enabled-was-not-declared.-Should-it-be-static
-|-- arc-allyesconfig
-|   |-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-allmodconfig
-|   |-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm-allyesconfig
-|   |-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- csky-allmodconfig
-|   |-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|   `-- include-asm-generic-div64.h:error:passing-argument-of-__div64_32-from-incompatible-pointer-type
-|-- csky-randconfig-r001-20230226
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- i386-allyesconfig
-|   |-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- m68k-allmodconfig
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- m68k-defconfig
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- m68k-hp300_defconfig
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- m68k-mvme16x_defconfig
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- microblaze-randconfig-c043-20230226
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- mips-allmodconfig
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- mips-allyesconfig
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- nios2-randconfig-s032-20230226
-|   `-- mm-page_alloc.c:sparse:sparse:symbol-check_pages_enabled-was-not-declared.-Should-it-be-static
-|-- nios2-randconfig-s053-20230226
-|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- include-asm-generic-cmpxchg-local.h:sparse:sparse:cast-truncates-bits-from-constant-value-(-becomes-)
-|   |-- include-asm-generic-cmpxchg-local.h:sparse:sparse:cast-truncates-bits-from-constant-value-(aaa31337-becomes-)
-|   `-- mm-page_alloc.c:sparse:sparse:symbol-check_pages_enabled-was-not-declared.-Should-it-be-static
-|-- openrisc-randconfig-r002-20230227
-|   `-- drivers-block-zram-zram_drv.c:error:passing-argument-of-atomic64_read-from-incompatible-pointer-type
-|-- parisc-randconfig-s052-20230226
-|   |-- FAILED:load-BTF-from-vmlinux:No-data-available
-|   |-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   `-- mm-page_alloc.c:sparse:sparse:symbol-check_pages_enabled-was-not-declared.-Should-it-be-static
-|-- powerpc-allmodconfig
-clang_recent_errors
-|-- hexagon-randconfig-r032-20230227
-|   `-- drivers-block-zram-zram_drv.c:error:incompatible-pointer-types-passing-atomic_long_t-(aka-atomic_t-)-to-parameter-of-type-const-atomic64_t-Werror-Wincompatible-pointer-types
-|-- hexagon-randconfig-r041-20230226
-|   `-- drivers-block-zram-zram_drv.c:error:incompatible-pointer-types-passing-atomic_long_t-(aka-atomic_t-)-to-parameter-of-type-const-atomic64_t-Werror-Wincompatible-pointer-types
-|-- hexagon-randconfig-r045-20230226
-|   `-- drivers-block-zram-zram_drv.c:error:incompatible-pointer-types-passing-atomic_long_t-(aka-atomic_t-)-to-parameter-of-type-const-atomic64_t-Werror-Wincompatible-pointer-types
-|-- i386-randconfig-a005-20230227
-|   `-- drivers-block-zram-zram_drv.c:error:incompatible-pointer-types-passing-atomic_long_t-(aka-atomic_t-)-to-parameter-of-type-const-atomic64_t-Werror-Wincompatible-pointer-types
-|-- powerpc-mpc8560_ads_defconfig
-|   `-- error:unknown-target-CPU
-|-- powerpc-ppa8548_defconfig
-|   `-- error:unknown-target-CPU
-|-- powerpc-socrates_defconfig
-|   `-- error:unknown-target-CPU
-`-- powerpc-tqm8540_defconfig
-    `-- error:unknown-target-CPU
+Yin Fengwei (4):
+  filemap: Add filemap_map_folio_range()
+  rmap: add folio_add_file_rmap_range()
+  mm: Convert do_set_pte() to set_pte_range()
+  filemap: Batch PTE mappings
 
-elapsed time: 724m
-
-configs tested: 145
-configs skipped: 11
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230227   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r035-20230226   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r003-20230226   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r032-20230226   gcc  
-arc                  randconfig-r034-20230226   gcc  
-arc                  randconfig-r043-20230226   gcc  
-arc                  randconfig-r043-20230227   gcc  
-arm                     am200epdkit_defconfig   clang
-arm                           h3600_defconfig   gcc  
-arm                  randconfig-r036-20230226   clang
-arm                  randconfig-r046-20230226   gcc  
-arm                  randconfig-r046-20230227   clang
-arm                           tegra_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r006-20230226   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r001-20230226   gcc  
-csky                 randconfig-r004-20230227   gcc  
-csky                 randconfig-r011-20230227   gcc  
-hexagon              randconfig-r013-20230226   clang
-hexagon              randconfig-r015-20230226   clang
-hexagon              randconfig-r032-20230227   clang
-hexagon              randconfig-r041-20230226   clang
-hexagon              randconfig-r041-20230227   clang
-hexagon              randconfig-r045-20230226   clang
-hexagon              randconfig-r045-20230227   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230227   clang
-i386                 randconfig-a002-20230227   clang
-i386                 randconfig-a003-20230227   clang
-i386                 randconfig-a004-20230227   clang
-i386                 randconfig-a005-20230227   clang
-i386                 randconfig-a006-20230227   clang
-i386                 randconfig-a011-20230227   gcc  
-i386                 randconfig-a012-20230227   gcc  
-i386                 randconfig-a013-20230227   gcc  
-i386                 randconfig-a014-20230227   gcc  
-i386                 randconfig-a015-20230227   gcc  
-i386                 randconfig-a016-20230227   gcc  
-i386                 randconfig-r034-20230227   clang
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r002-20230227   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r036-20230227   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230226   gcc  
-loongarch            randconfig-r003-20230226   gcc  
-loongarch            randconfig-r005-20230227   gcc  
-loongarch            randconfig-r011-20230226   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r004-20230227   gcc  
-m68k                                defconfig   gcc  
-m68k                          hp300_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                 randconfig-r004-20230226   gcc  
-m68k                 randconfig-r013-20230227   gcc  
-m68k                 randconfig-r016-20230227   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r005-20230226   clang
-mips                  cavium_octeon_defconfig   clang
-mips                           ip28_defconfig   clang
-mips                    maltaup_xpa_defconfig   gcc  
-mips                 randconfig-r014-20230227   clang
-mips                          rm200_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230227   gcc  
-openrisc             randconfig-r002-20230227   gcc  
-openrisc             randconfig-r031-20230226   gcc  
-openrisc             randconfig-r031-20230227   gcc  
-parisc       buildonly-randconfig-r004-20230226   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc               randconfig-r015-20230227   gcc  
-parisc               randconfig-r035-20230227   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r001-20230227   gcc  
-powerpc      buildonly-randconfig-r003-20230227   gcc  
-powerpc                      cm5200_defconfig   gcc  
-powerpc                        icon_defconfig   clang
-powerpc                   microwatt_defconfig   clang
-powerpc                 mpc8560_ads_defconfig   clang
-powerpc                     ppa8548_defconfig   clang
-powerpc                    socrates_defconfig   clang
-powerpc                     tqm8540_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv             nommu_k210_sdcard_defconfig   gcc  
-riscv                randconfig-r003-20230227   clang
-riscv                randconfig-r006-20230226   gcc  
-riscv                randconfig-r006-20230227   clang
-riscv                randconfig-r042-20230226   clang
-riscv                randconfig-r042-20230227   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230226   clang
-s390                 randconfig-r044-20230227   gcc  
-sh                               allmodconfig   gcc  
-sh                                  defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                   randconfig-r005-20230226   gcc  
-sh                   randconfig-r012-20230226   gcc  
-sh                          rsk7269_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230226   gcc  
-sparc                       sparc64_defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230227   clang
-x86_64               randconfig-a002-20230227   clang
-x86_64               randconfig-a003-20230227   clang
-x86_64               randconfig-a004-20230227   clang
-x86_64               randconfig-a005-20230227   clang
-x86_64               randconfig-a006-20230227   clang
-x86_64               randconfig-a011-20230227   gcc  
-x86_64               randconfig-a012-20230227   gcc  
-x86_64               randconfig-a013-20230227   gcc  
-x86_64               randconfig-a014-20230227   gcc  
-x86_64               randconfig-a015-20230227   gcc  
-x86_64               randconfig-a016-20230227   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r006-20230227   gcc  
-xtensa               randconfig-r033-20230226   gcc  
-xtensa               randconfig-r033-20230227   gcc  
+ Documentation/core-api/cachetlb.rst       |  35 +++----
+ Documentation/filesystems/locking.rst     |   2 +-
+ arch/alpha/include/asm/cacheflush.h       |  10 ++
+ arch/alpha/include/asm/pgtable.h          |  18 +++-
+ arch/arc/include/asm/cacheflush.h         |   7 +-
+ arch/arc/include/asm/pgtable-bits-arcv2.h |  20 +++-
+ arch/arc/mm/cache.c                       |  61 +++++++-----
+ arch/arc/mm/tlb.c                         |  18 ++--
+ arch/arm/include/asm/cacheflush.h         |  24 +++--
+ arch/arm/include/asm/pgtable.h            |   5 +-
+ arch/arm/include/asm/tlbflush.h           |  13 ++-
+ arch/arm/mm/copypage-v4mc.c               |   5 +-
+ arch/arm/mm/copypage-v6.c                 |   5 +-
+ arch/arm/mm/copypage-xscale.c             |   5 +-
+ arch/arm/mm/dma-mapping.c                 |  24 ++---
+ arch/arm/mm/fault-armv.c                  |  14 +--
+ arch/arm/mm/flush.c                       |  99 +++++++++++--------
+ arch/arm/mm/mm.h                          |   2 +-
+ arch/arm/mm/mmu.c                         |  14 ++-
+ arch/arm64/include/asm/cacheflush.h       |   4 +-
+ arch/arm64/include/asm/pgtable.h          |  25 +++--
+ arch/arm64/mm/flush.c                     |  36 +++----
+ arch/csky/abiv1/cacheflush.c              |  32 ++++---
+ arch/csky/abiv1/inc/abi/cacheflush.h      |   2 +
+ arch/csky/abiv2/cacheflush.c              |  30 +++---
+ arch/csky/abiv2/inc/abi/cacheflush.h      |  10 +-
+ arch/csky/include/asm/pgtable.h           |  21 +++-
+ arch/hexagon/include/asm/cacheflush.h     |   7 +-
+ arch/hexagon/include/asm/pgtable.h        |  16 +++-
+ arch/ia64/hp/common/sba_iommu.c           |  26 ++---
+ arch/ia64/include/asm/cacheflush.h        |  14 ++-
+ arch/ia64/include/asm/pgtable.h           |  14 ++-
+ arch/ia64/mm/init.c                       |  29 ++++--
+ arch/loongarch/include/asm/cacheflush.h   |   2 +
+ arch/loongarch/include/asm/pgtable.h      |  30 ++++--
+ arch/m68k/include/asm/cacheflush_mm.h     |  26 +++--
+ arch/m68k/include/asm/pgtable_mm.h        |  21 +++-
+ arch/m68k/mm/motorola.c                   |   2 +-
+ arch/microblaze/include/asm/cacheflush.h  |   8 ++
+ arch/microblaze/include/asm/pgtable.h     |  17 +++-
+ arch/microblaze/include/asm/tlbflush.h    |   4 +-
+ arch/mips/include/asm/cacheflush.h        |  32 ++++---
+ arch/mips/include/asm/pgtable.h           |  36 ++++---
+ arch/mips/mm/c-r4k.c                      |   5 +-
+ arch/mips/mm/cache.c                      |  56 +++++------
+ arch/mips/mm/init.c                       |  17 ++--
+ arch/nios2/include/asm/cacheflush.h       |   6 +-
+ arch/nios2/include/asm/pgtable.h          |  27 ++++--
+ arch/nios2/mm/cacheflush.c                |  61 ++++++------
+ arch/openrisc/include/asm/cacheflush.h    |   8 +-
+ arch/openrisc/include/asm/pgtable.h       |  27 +++++-
+ arch/openrisc/mm/cache.c                  |  12 ++-
+ arch/parisc/include/asm/cacheflush.h      |  14 ++-
+ arch/parisc/include/asm/pgtable.h         |  28 ++++--
+ arch/parisc/kernel/cache.c                | 101 ++++++++++++++------
+ arch/powerpc/include/asm/book3s/pgtable.h |  10 +-
+ arch/powerpc/include/asm/cacheflush.h     |  14 ++-
+ arch/powerpc/include/asm/kvm_ppc.h        |  10 +-
+ arch/powerpc/include/asm/nohash/pgtable.h |  13 +--
+ arch/powerpc/include/asm/pgtable.h        |   6 ++
+ arch/powerpc/mm/book3s64/hash_utils.c     |  11 ++-
+ arch/powerpc/mm/cacheflush.c              |  81 ++--------------
+ arch/powerpc/mm/nohash/e500_hugetlbpage.c |   3 +-
+ arch/powerpc/mm/pgtable.c                 |  51 +++++-----
+ arch/riscv/include/asm/cacheflush.h       |  19 ++--
+ arch/riscv/include/asm/pgtable.h          |  26 +++--
+ arch/riscv/mm/cacheflush.c                |  11 +--
+ arch/s390/include/asm/pgtable.h           |  34 +++++--
+ arch/sh/include/asm/cacheflush.h          |  21 ++--
+ arch/sh/include/asm/pgtable.h             |   6 +-
+ arch/sh/include/asm/pgtable_32.h          |  16 +++-
+ arch/sh/mm/cache-j2.c                     |   4 +-
+ arch/sh/mm/cache-sh4.c                    |  26 +++--
+ arch/sh/mm/cache-sh7705.c                 |  26 +++--
+ arch/sh/mm/cache.c                        |  54 ++++++-----
+ arch/sh/mm/kmap.c                         |   3 +-
+ arch/sparc/include/asm/cacheflush_32.h    |   9 +-
+ arch/sparc/include/asm/cacheflush_64.h    |  18 ++--
+ arch/sparc/include/asm/pgtable_32.h       |  15 ++-
+ arch/sparc/include/asm/pgtable_64.h       |  25 ++++-
+ arch/sparc/kernel/smp_64.c                |  56 +++++++----
+ arch/sparc/mm/init_32.c                   |  13 ++-
+ arch/sparc/mm/init_64.c                   |  78 ++++++++-------
+ arch/sparc/mm/tlb.c                       |   5 +-
+ arch/um/include/asm/pgtable.h             |  15 ++-
+ arch/x86/include/asm/pgtable.h            |  21 +++-
+ arch/xtensa/include/asm/cacheflush.h      |   9 +-
+ arch/xtensa/include/asm/pgtable.h         |  24 +++--
+ arch/xtensa/mm/cache.c                    |  83 +++++++++-------
+ include/asm-generic/cacheflush.h          |   5 +
+ include/linux/cacheflush.h                |   4 +-
+ include/linux/mm.h                        |   3 +-
+ include/linux/page_table_check.h          |  14 +--
+ include/linux/pagemap.h                   |  26 ++++-
+ include/linux/rmap.h                      |   2 +
+ mm/filemap.c                              | 111 +++++++++++++---------
+ mm/memory.c                               |  27 +++---
+ mm/page_table_check.c                     |  14 +--
+ mm/rmap.c                                 |  60 +++++++++---
+ mm/util.c                                 |   2 +-
+ 100 files changed, 1433 insertions(+), 838 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
