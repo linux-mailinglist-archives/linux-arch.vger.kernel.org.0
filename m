@@ -2,127 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992926A4203
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 13:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5576A42C3
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 14:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjB0Mt2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 07:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
+        id S230179AbjB0Nd7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 08:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjB0Mt2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 07:49:28 -0500
-X-Greylist: delayed 1251 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Feb 2023 04:49:25 PST
-Received: from jayabaya.inti.net.id (jayabaya.inti.net.id [103.53.76.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86050A5F4
-        for <linux-arch@vger.kernel.org>; Mon, 27 Feb 2023 04:49:25 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by jayabaya.inti.net.id (Postfix) with ESMTP id B44C920A2F48F;
-        Mon, 27 Feb 2023 19:21:18 +0700 (WIB)
-Received: from jayabaya.inti.net.id ([127.0.0.1])
-        by localhost (jayabaya.inti.net.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Gf0EaL3H2ISq; Mon, 27 Feb 2023 19:21:15 +0700 (WIB)
-Received: from jayabaya.inti.net.id (localhost [127.0.0.1])
-        by jayabaya.inti.net.id (Postfix) with ESMTPS id C547320900382;
-        Mon, 27 Feb 2023 19:20:50 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 jayabaya.inti.net.id C547320900382
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inti.net.id;
-        s=25E9A704-571A-11E6-9418-628C66225056; t=1677500451;
-        bh=AnaVDtaFNkYilNDMre2OJ9jGovgvy9D+GYyGe0VSevE=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=SaAFqqT7I/SfKYTcqfT7tARJn3tq9MK6WETb43RhLePYa7ONrwRCascyevvxvevl8
-         0/bCV1yUvxjYdrziwVIdJsNJiCgV3VRiUAMZJN2nCh3pIVSZE1uWQzFoRhIr+WaV1Q
-         mw7iqFBqWOKxYK+l8hgkxWjc/6qu0iUJ5e1zfJi03hkzy9+QYdP7m6oFzMxm4ijZZ2
-         eokJLLhDHINZIWxGnihlLIo2wC0It4OAazhVkf9xE4eWsb3+oUkjb4QcyxShSL3+Cr
-         SZe1e0YgoKDt0yQ8MkA6saiLLSbr5OPzV416mDHYg6t+WQwUWvutq3/aJi4XVzm08n
-         FwGnjz8I/T/6g==
-Received: from jayabaya.inti.net.id (jayabaya.inti.net.id [103.53.76.30])
-        by jayabaya.inti.net.id (Postfix) with ESMTP id 4B35620A9699D;
-        Mon, 27 Feb 2023 19:20:47 +0700 (WIB)
-Date:   Mon, 27 Feb 2023 19:20:47 +0700 (WIB)
-From:   =?utf-8?B?0YHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
-        <ali@inti.net.id>
-Reply-To: sistemassadmins@mail2engineer.com
-Message-ID: <1798451523.86949.1677500447131.JavaMail.zimbra@inti.net.id>
-Subject: 
+        with ESMTP id S230212AbjB0Ndh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 08:33:37 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8079B95
+        for <linux-arch@vger.kernel.org>; Mon, 27 Feb 2023 05:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lYtdb3OvoePD9FKa/wblmpog8oSZWnWeDVgUCfTs9As=; b=I0RZYM2uTHooxcHaCkgIjRt6S4
+        Q+Cio3xlxnE2D8zBu9EwrwmOHggoJ4gPAUNYZLjzw6o6dohV+xL162RX8FtA3I/WRk1wFdNPEm/yr
+        yrKFjbWHC1ZMcqj/0irRPq39VpTS5bCGOh+VFsbhmQUAls+W6xDUTrdPqBkP6MdJ6Rvt2Hjd19xYC
+        9leBtPob2IRbId2+FqrKY9fTkZ6D+RbZusAK7d7eGmHpRP7Hxvnw1VZqOvC4MIc5pzaGzxjDYi/yr
+        tlalojHEEtgTFimWnPIYIitNI7zGfGggSUik5O456sxE5vEq3hLP19ZxR53wd51AF/rpo5SH2HOqY
+        3ZlKpOkQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pWdcq-00EEZC-0g;
+        Mon, 27 Feb 2023 13:33:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4A9E8300293;
+        Mon, 27 Feb 2023 14:33:06 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2942823B24806; Mon, 27 Feb 2023 14:33:06 +0100 (CET)
+Date:   Mon, 27 Feb 2023 14:33:06 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Rik van Riel <riel@redhat.com>,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Andy Lutomirski <luto@amacapital.net>
+Subject: Re: [PATCH v7 5/5] powerpc/64s: enable MMU_LAZY_TLB_SHOOTDOWN
+Message-ID: <Y/yxEnCcPmUk89Jp@hirez.programming.kicks-ass.net>
+References: <20230203071837.1136453-1-npiggin@gmail.com>
+ <20230203071837.1136453-6-npiggin@gmail.com>
+ <20230226141238.6ec5fdf7d75dcf2cd4c58ba0@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-Originating-IP: [103.53.76.30]
-X-Mailer: Zimbra 8.7.11_GA_3808 (zclient/8.7.11_GA_3808)
-Thread-Index: KhR2nOOjZ/l7LQwTae0/l889ylClUQ==
-Thread-Topic: 
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,
-        REPLYTO_WITHOUT_TO_CC,SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230226141238.6ec5fdf7d75dcf2cd4c58ba0@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-=D1=83=D0=B2=D0=B0=D0=B3=D0=B0;
+On Sun, Feb 26, 2023 at 02:12:38PM -0800, Andrew Morton wrote:
+> On Fri,  3 Feb 2023 17:18:37 +1000 Nicholas Piggin <npiggin@gmail.com> wrote:
+> 
+> > On a 16-socket 192-core POWER8 system, the context_switch1_threads
+> > benchmark from will-it-scale (see earlier changelog), upstream can
+> > achieve a rate of about 1 million context switches per second, due to
+> > contention on the mm refcount.
+> > 
+> > 64s meets the prerequisites for CONFIG_MMU_LAZY_TLB_SHOOTDOWN, so enable
+> > the option. This increases the above benchmark to 118 million context
+> > switches per second.
+> 
+> Is that the best you can do ;)
+> 
+> > This generates 314 additional IPI interrupts on a 144 CPU system doing
+> > a kernel compile, which is in the noise in terms of kernel cycles.
+> > 
+> > ...
+> >
+> > --- a/arch/powerpc/Kconfig
+> > +++ b/arch/powerpc/Kconfig
+> > @@ -265,6 +265,7 @@ config PPC
+> >  	select MMU_GATHER_PAGE_SIZE
+> >  	select MMU_GATHER_RCU_TABLE_FREE
+> >  	select MMU_GATHER_MERGE_VMAS
+> > +	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
+> >  	select MODULES_USE_ELF_RELA
+> >  	select NEED_DMA_MAP_STATE		if PPC64 || NOT_COHERENT_CACHE
+> >  	select NEED_PER_CPU_EMBED_FIRST_CHUNK	if PPC64
+> 
+> Can we please have a summary of which other architectures might benefit
+> from this, and what must they do?
+> 
+> As this is powerpc-only, I expect it won't get a lot of testing in
+> mm.git or in linux-next.  The powerpc maintainers might choose to merge
+> in the mm-stable branch at
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm if this is a
+> concern.
 
-=D0=92=D0=B0=D1=88=D0=B0 =D0=B5=D0=BB=D0=B5=D0=BA=D1=82=D1=80=D0=BE=D0=BD=
-=D0=BD=D0=B0 =D0=BF=D0=BE=D1=88=D1=82=D0=B0 =D0=BF=D0=B5=D1=80=D0=B5=D0=B2=
-=D0=B8=D1=89=D0=B8=D0=BB=D0=B0 =D0=BE=D0=B1=D0=BC=D0=B5=D0=B6=D0=B5=D0=BD=
-=D0=BD=D1=8F =D0=BF=D0=B0=D0=BC'=D1=8F=D1=82=D1=96, =D1=8F=D0=BA=D0=B5 =D1=
-=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=B8=D1=82=D1=8C 5 =D0=93=D0=91, =D0=B2=
-=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=B5 =D0=B0=D0=B4=D0=BC=D1=96=
-=D0=BD=D1=96=D1=81=D1=82=D1=80=D0=B0=D1=82=D0=BE=D1=80=D0=BE=D0=BC, =D1=8F=
-=D0=BA=D0=B5 =D0=B2 =D0=B4=D0=B0=D0=BD=D0=B8=D0=B9 =D1=87=D0=B0=D1=81 =D0=
-=BF=D1=80=D0=B0=D1=86=D1=8E=D1=94 =D0=BD=D0=B0 10,9 =D0=93=D0=91. =D0=92=D0=
-=B8 =D0=BD=D0=B5 =D0=B7=D0=BC=D0=BE=D0=B6=D0=B5=D1=82=D0=B5 =D0=BD=D0=B0=D0=
-=B4=D1=81=D0=B8=D0=BB=D0=B0=D1=82=D0=B8 =D0=B0=D0=B1=D0=BE =D0=BE=D1=82=D1=
-=80=D0=B8=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=BD=D0=BE=D0=B2=D1=83 =D0=
-=BF=D0=BE=D1=88=D1=82=D1=83, =D0=B4=D0=BE=D0=BA=D0=B8 =D0=BD=D0=B5 =D0=BF=
-=D0=B5=D1=80=D0=B5=D0=B2=D1=96=D1=80=D0=B8=D1=82=D0=B5 =D0=BF=D0=BE=D1=88=
-=D1=82=D0=BE=D0=B2=D1=83 =D1=81=D0=BA=D1=80=D0=B8=D0=BD=D1=8C=D0=BA=D1=83=
- "=D0=92=D1=85=D1=96=D0=B4=D0=BD=D1=96". =D0=A9=D0=BE=D0=B1 =D0=B2=D1=96=D0=
-=B4=D0=BD=D0=BE=D0=B2=D0=B8=D1=82=D0=B8 =D1=81=D0=BF=D1=80=D0=B0=D0=B2=D0=
-=BD=D1=96=D1=81=D1=82=D1=8C =D0=BF=D0=BE=D1=88=D1=82=D0=BE=D0=B2=D0=BE=D1=
-=97 =D1=81=D0=BA=D1=80=D0=B8=D0=BD=D1=8C=D0=BA=D0=B8, =D0=BD=D0=B0=D0=B4=D1=
-=96=D1=88=D0=BB=D1=96=D1=82=D1=8C =D1=82=D0=B0=D0=BA=D1=96 =D0=B2=D1=96=D0=
-=B4=D0=BE=D0=BC=D0=BE=D1=81=D1=82=D1=96
-=D0=BD=D0=B8=D0=B6=D1=87=D0=B5:
+I haven't really had time to page all of this back in, but x86 is very
+close to be able to use this, it mostly just needs cleaning up some
+accidental active_mm usage.
 
-=D0=86=D0=BC'=D1=8F:
-=D0=86=D0=BC'=D1=8F =D0=BA=D0=BE=D1=80=D0=B8=D1=81=D1=82=D1=83=D0=B2=D0=B0=
-=D1=87=D0=B0:
-=D0=BF=D0=B0=D1=80=D0=BE=D0=BB=D1=8C:
-=D0=9F=D1=96=D0=B4=D1=82=D0=B2=D0=B5=D1=80=D0=B4=D0=B6=D0=B5=D0=BD=D0=BD=D1=
-=8F =D0=BF=D0=B0=D1=80=D0=BE=D0=BB=D1=8F:
-=D0=90=D0=B4=D1=80=D0=B5=D1=81=D0=B0 =D0=B5=D0=BB=D0=B5=D0=BA=D1=82=D1=80=
-=D0=BE=D0=BD=D0=BD=D0=BE=D1=97 =D0=BF=D0=BE=D1=88=D1=82=D0=B8:
-=D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD:
+I've got a branch here:
 
-=D0=AF=D0=BA=D1=89=D0=BE =D0=BD=D0=B5 =D0=B2=D0=B4=D0=B0=D1=94=D1=82=D1=8C=
-=D1=81=D1=8F =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=BE =D0=BF=D0=B5=
-=D1=80=D0=B5=D0=B2=D1=96=D1=80=D0=B8=D1=82=D0=B8 =D0=BF=D0=BE=D0=B2=D1=96=
-=D0=B4=D0=BE=D0=BC=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F, =D0=B2=D0=B0=D1=88=D0=B0=
- =D0=BF=D0=BE=D1=88=D1=82=D0=BE=D0=B2=D0=B0 =D1=81=D0=BA=D1=80=D0=B8=D0=BD=
-=D1=8C=D0=BA=D0=B0 =D0=B1=D1=83=D0=B4=D0=B5 =D0=92=D0=B8=D0=BC=D0=BA=D0=BD=
-=D1=83=D1=82=D0=BE!
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=x86/lazy
 
-=D0=9F=D1=80=D0=B8=D0=BD=D0=BE=D1=81=D0=B8=D0=BC=D0=BE =D0=B2=D0=B8=D0=B1=
-=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=B7=D0=B0 =D0=BD=D0=B5=D0=B7=D1=80=
-=D1=83=D1=87=D0=BD=D0=BE=D1=81=D1=82=D1=96.
-=D0=9A=D0=BE=D0=B4 =D0=BF=D1=96=D0=B4=D1=82=D0=B2=D0=B5=D1=80=D0=B4=D0=B6=
-=D0=B5=D0=BD=D0=BD=D1=8F: UA:@UA.WEB.ADMIN.WEBUR431MeP453.UA
-=D0=A2=D0=B5=D1=85=D0=BD=D1=96=D1=87=D0=BD=D0=B0 =D0=BF=D1=96=D0=B4=D1=82=
-=D1=80=D0=B8=D0=BC=D0=BA=D0=B0 =D0=9F=D0=BE=D1=88=D1=82=D0=B8 =D0=A1=D0=B8=
-=D1=81=D1=82=D0=B5=D0=BC=D0=BD=D0=B8=D0=B9 =D0=B0=D0=B4=D0=BC=D1=96=D0=BD=
-=D1=96=D1=81=D1=82=D1=80=D0=B0=D1=82=D0=BE=D1=80 =C2=A9 2023
+That's mostly Nick's patches with a bunch of Andy's old patches stuck on
+top. I also have a pile of notes, but alas, not finished in any way.
