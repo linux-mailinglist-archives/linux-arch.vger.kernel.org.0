@@ -2,114 +2,299 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14DEE6A4BF2
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 21:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1B36A4C26
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 21:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjB0UE1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 15:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S229620AbjB0UVD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 15:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjB0UE0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 15:04:26 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCA1227BD;
-        Mon, 27 Feb 2023 12:04:25 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 633825C0113;
-        Mon, 27 Feb 2023 15:04:25 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 27 Feb 2023 15:04:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1677528265; x=1677614665; bh=zexpZQ5bJ9
-        hbIaBDiHdAg4Kdi9EcW4M9yOSGV4fDHqI=; b=UmD1++vWuDhma9hYn/5OBgkV9W
-        SmKh3J+jW/DRQw9ZayTbfH4doyDnfMKGcrUjRg+MHXB7+skv9MR2Wn6feDUwa/pc
-        PGT3Jx1cKFRVV3yUC+Xbv73xv4yG9hlMD+x2L5XYUsFkhcKBk+bS73Zg84OwAvEZ
-        RNZMUvBcMXHf7fLXwSvthCoH+1LmkzeFxFlxrddpojiVz793BS8I93v3s80ny4oe
-        1FufDxHhi6hoVKIkPvvLYmJ+SFsDbckDivUEjltSlVQ3ucoef5IiqpK+X/HiLHU1
-        GwGjKaqWwuFOXkvK+hEEYfudtjKdyB2/Ux5tmyNKJb3vsbFLjm9k6AAh9Bvg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1677528265; x=1677614665; bh=zexpZQ5bJ9hbIaBDiHdAg4Kdi9Ec
-        W4M9yOSGV4fDHqI=; b=j7dASZo3V9dUBM6DtvQO9/dlt76IBaikXPpslXjq6pST
-        jFfZh2uRAMePwDHhoQQLNQzkC12wPkXcZPLXx2ADjJtqEKy7bW2+gxDbbcJDDOVQ
-        VuvwS4PM8MQcf2Rr7qyfXLPe5Lc46+01w63aLtcMijCn/ZKTsn+l9IY4axqQB3ol
-        2+Oudolo5/Ha3o/ZLMIKLoOyX7RvZncBzpV5PZV5kFhzlW2izGNS0rTWVEdEpYEc
-        Al+q0KEZn6nANGo4y6fiDSB7LzYpD7c9+b8aYZTgtvzwWVL+zjKnTCaX+ZymZxf+
-        98xn4wFADSco0SR13mRCBDtf/UGEqWcwjxcgYDRQuQ==
-X-ME-Sender: <xms:yAz9Y4QZ0bFqOsCcmYvhDiiHwpxCKqqbcoDxkoq0bcMaF6zxsmIhLA>
-    <xme:yAz9Y1yRmthicotCWDvnALQCFqZxBnSU3xJUZLCygQBrua0hWqRWUqUEq7uINKysC
-    ybAQeT6N9FlN87aCss>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeltddguddvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:yAz9Y13kmNhmOhtb3wu_v8-vYIJiuGXAPPQgztyZ7fxY0YH2388u_Q>
-    <xmx:yAz9Y8A15AZvjUD-laD2dBaFISanpvfqgH7VrgM-JuuNfwTcJV-QsQ>
-    <xmx:yAz9YxgnuUCrgQLpa3tOZBdHss6HmqK7a0b2jqyXZwHv4uftJYQElA>
-    <xmx:yQz9Y6anFwyHybOEKazqP3sfgZcO0TLbxR_X_5vMC9wUpJAVx2fVxA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B48BBB60086; Mon, 27 Feb 2023 15:04:24 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <5de30963-9be9-4e87-a696-7a642d92630f@app.fastmail.com>
-In-Reply-To: <20230212084611.1311177-1-rppt@kernel.org>
-References: <20230212084611.1311177-1-rppt@kernel.org>
-Date:   Mon, 27 Feb 2023 21:04:04 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Mike Rapoport" <rppt@kernel.org>
-Cc:     "Dave Airlie" <airlied@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Helge Deller" <deller@gmx.de>, "Matt Turner" <mattst88@gmail.com>,
-        "Michael Ellerman" <mpe@ellerman.id.au>, x86@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH 0/2] char/agp: consolidate asm/agp.h
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229511AbjB0UVD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 15:21:03 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462E11C7F9;
+        Mon, 27 Feb 2023 12:21:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=E2dr+WPpewMczIAEoyECoMJTwHYh5rKSEujDBRqJLXg=; b=aQLtru7wx3Rr1O2V6XdQGckFOV
+        FEnrPvzQq6NPqHH+iZb8rzJt0MFOpAWePYj6L8bbRB7GJ/Ss9qB9h9ss6jV1Njq3eYkZQuYkiEmkY
+        4shbZlYVaaTpj6vTmOzbst4gBNSVGiERp2sPSTIVVd6AURmtNCNWOgS9uql3L/Qxel+4AFVmviEbR
+        1gYgTS37g/3ome8G0h7JOqiz8uVezekbra8rJNsr7NEsvC+b2No2vsuWe9L5/P+hsWiyFuEDsa+GN
+        ChcZiykhQk3DB7lzWa/4Dl62d8Jpb/j9xBFckTBK0e6UB0BLoiz8ChAn5sGU1MG/CaKRgt+fYDVJW
+        DsO2dlUg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pWjzU-000NS1-2d; Mon, 27 Feb 2023 20:20:56 +0000
+Date:   Mon, 27 Feb 2023 20:20:56 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2 18/30] powerpc: Implement the new page table range API
+Message-ID: <Y/0QqO10jK55zHO0@casper.infradead.org>
+References: <20230227175741.71216-1-willy@infradead.org>
+ <20230227175741.71216-19-willy@infradead.org>
+ <ee864b97-90e6-4535-4db3-2659a2250afd@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ee864b97-90e6-4535-4db3-2659a2250afd@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 12, 2023, at 09:46, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
->
-> asm/agp.h is duplicated in several architectures, with x86 being the
-> only instance that differs from the rest.
->
-> Introduce asm-generic/agp.h and use it instead of per-architecture
-> headers for the most cases.
->
-> I believe that asm-generic is the best tree to pick up this patches.
->
-> Mike Rapoport (IBM) (2):  char/agp: consolidate
-> {alloc,free}_gatt_pages()  char/agp: introduce asm-generic/agp.h
+On Mon, Feb 27, 2023 at 07:45:08PM +0000, Christophe Leroy wrote:
+> Hi,
+> 
+> Le 27/02/2023 à 18:57, Matthew Wilcox (Oracle) a écrit :
+> > Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
+> > Change the PG_arch_1 (aka PG_dcache_dirty) flag from being per-page to
+> > per-folio.
+> > 
+> > I'm unsure about my merging of flush_dcache_icache_hugepage() and
+> > flush_dcache_icache_page() into flush_dcache_icache_folio() and subsequent
+> > removal of flush_dcache_icache_phys().  Please review.
+> 
+> Not sure why you want to remove flush_dcache_icache_phys().
 
-Hi Mike,
+Well, I didn't, necessarily.  It's just that when I merged
+flush_dcache_icache_hugepage() and flush_dcache_icache_page()
+together, it was left with no callers.
 
-It looks like I wrote an email saying I merged these two patches,
-but never actually sent it out. Not sure if you found out another
-way, but this was part of the asm-generic tree for 6.3 and is now
-merged upstream.
+> Allthough that's only feasible when address bus is not wider than 32 
+> bits and cannot be done on BOOKE as you can't switch off MMU on BOOKE, 
+> flush_dcache_icache_phys() allows to flush not mapped pages without 
+> having to map them. So it is more efficient.
 
-Thanks for the cleanup,
+And it was just never done for the hugepage case?
 
-     Arnd
+> > @@ -148,17 +103,20 @@ static void __flush_dcache_icache(void *p)
+> >   	invalidate_icache_range(addr, addr + PAGE_SIZE);
+> >   }
+> >   
+> > -static void flush_dcache_icache_hugepage(struct page *page)
+> > +void flush_dcache_icache_folio(struct folio *folio)
+> >   {
+> > -	int i;
+> > -	int nr = compound_nr(page);
+> > +	unsigned int i, nr = folio_nr_pages(folio);
+> >   
+> > -	if (!PageHighMem(page)) {
+> > +	if (flush_coherent_icache())
+> > +		return;
+> > +
+> > +	if (!folio_test_highmem(folio)) {
+> > +		void *addr = folio_address(folio);
+> >   		for (i = 0; i < nr; i++)
+> > -			__flush_dcache_icache(lowmem_page_address(page + i));
+> > +			__flush_dcache_icache(addr + i * PAGE_SIZE);
+> >   	} else {
+> >   		for (i = 0; i < nr; i++) {
+> > -			void *start = kmap_local_page(page + i);
+> > +			void *start = kmap_local_folio(folio, i * PAGE_SIZE);
+> >   
+> >   			__flush_dcache_icache(start);
+> >   			kunmap_local(start);
+
+So you'd like this to be:
+
+	} else if (IS_ENABLED(CONFIG_BOOKE) || sizeof(phys_addr_t) > sizeof(void *)) {
+		for (i = 0; i < nr; i++) {
+			 void *start = kmap_local_folio(folio, i * PAGE_SIZE);
+			 __flush_dcache_icache(start);
+			 kunmap_local(start);
+		}
+	} else {
+		unsigned long pfn = folio_pfn(folio);
+		for (i = 0; i < nr; i++)
+			flush_dcache_icache_phys((pfn + i) * PAGE_SIZE;
+	}
+
+(or maybe you'd prefer a flush_dcache_icache_pfn() that doesn't need to
+worry about PAGE_MASK).
+
+> > @@ -166,27 +124,6 @@ static void flush_dcache_icache_hugepage(struct page *page)
+> >   	}
+> >   }
+> >   
+> > -void flush_dcache_icache_page(struct page *page)
+> > -{
+> > -	if (flush_coherent_icache())
+> > -		return;
+> > -
+> > -	if (PageCompound(page))
+> > -		return flush_dcache_icache_hugepage(page);
+> > -
+> > -	if (!PageHighMem(page)) {
+> > -		__flush_dcache_icache(lowmem_page_address(page));
+> > -	} else if (IS_ENABLED(CONFIG_BOOKE) || sizeof(phys_addr_t) > sizeof(void *)) {
+> > -		void *start = kmap_local_page(page);
+> > -
+> > -		__flush_dcache_icache(start);
+> > -		kunmap_local(start);
+> > -	} else {
+> > -		flush_dcache_icache_phys(page_to_phys(page));
+> > -	}
+> > -}
+> > -EXPORT_SYMBOL(flush_dcache_icache_page);
+> > -
+> >   void clear_user_page(void *page, unsigned long vaddr, struct page *pg)
+> >   {
+> >   	clear_page(page);
+> > diff --git a/arch/powerpc/mm/nohash/e500_hugetlbpage.c b/arch/powerpc/mm/nohash/e500_hugetlbpage.c
+> > index 58c8d9849cb1..f3cb91107a47 100644
+> > --- a/arch/powerpc/mm/nohash/e500_hugetlbpage.c
+> > +++ b/arch/powerpc/mm/nohash/e500_hugetlbpage.c
+> > @@ -178,7 +178,8 @@ book3e_hugetlb_preload(struct vm_area_struct *vma, unsigned long ea, pte_t pte)
+> >    *
+> >    * This must always be called with the pte lock held.
+> >    */
+> > -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address, pte_t *ptep)
+> > +void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
+> > +		pte_t *ptep, unsigned int nr)
+> >   {
+> >   	if (is_vm_hugetlb_page(vma))
+> >   		book3e_hugetlb_preload(vma, address, *ptep);
+> > diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
+> > index cb2dcdb18f8e..b3c7b874a7a2 100644
+> > --- a/arch/powerpc/mm/pgtable.c
+> > +++ b/arch/powerpc/mm/pgtable.c
+> > @@ -58,7 +58,7 @@ static inline int pte_looks_normal(pte_t pte)
+> >   	return 0;
+> >   }
+> >   
+> > -static struct page *maybe_pte_to_page(pte_t pte)
+> > +static struct folio *maybe_pte_to_folio(pte_t pte)
+> >   {
+> >   	unsigned long pfn = pte_pfn(pte);
+> >   	struct page *page;
+> > @@ -68,7 +68,7 @@ static struct page *maybe_pte_to_page(pte_t pte)
+> >   	page = pfn_to_page(pfn);
+> >   	if (PageReserved(page))
+> >   		return NULL;
+> > -	return page;
+> > +	return page_folio(page);
+> >   }
+> >   
+> >   #ifdef CONFIG_PPC_BOOK3S
+> > @@ -84,12 +84,12 @@ static pte_t set_pte_filter_hash(pte_t pte)
+> >   	pte = __pte(pte_val(pte) & ~_PAGE_HPTEFLAGS);
+> >   	if (pte_looks_normal(pte) && !(cpu_has_feature(CPU_FTR_COHERENT_ICACHE) ||
+> >   				       cpu_has_feature(CPU_FTR_NOEXECUTE))) {
+> > -		struct page *pg = maybe_pte_to_page(pte);
+> > -		if (!pg)
+> > +		struct folio *folio = maybe_pte_to_folio(pte);
+> > +		if (!folio)
+> >   			return pte;
+> > -		if (!test_bit(PG_dcache_clean, &pg->flags)) {
+> > -			flush_dcache_icache_page(pg);
+> > -			set_bit(PG_dcache_clean, &pg->flags);
+> > +		if (!test_bit(PG_dcache_clean, &folio->flags)) {
+> > +			flush_dcache_icache_folio(folio);
+> > +			set_bit(PG_dcache_clean, &folio->flags);
+> >   		}
+> >   	}
+> >   	return pte;
+> > @@ -107,7 +107,7 @@ static pte_t set_pte_filter_hash(pte_t pte) { return pte; }
+> >    */
+> >   static inline pte_t set_pte_filter(pte_t pte)
+> >   {
+> > -	struct page *pg;
+> > +	struct folio *folio;
+> >   
+> >   	if (radix_enabled())
+> >   		return pte;
+> > @@ -120,18 +120,18 @@ static inline pte_t set_pte_filter(pte_t pte)
+> >   		return pte;
+> >   
+> >   	/* If you set _PAGE_EXEC on weird pages you're on your own */
+> > -	pg = maybe_pte_to_page(pte);
+> > -	if (unlikely(!pg))
+> > +	folio = maybe_pte_to_folio(pte);
+> > +	if (unlikely(!folio))
+> >   		return pte;
+> >   
+> >   	/* If the page clean, we move on */
+> > -	if (test_bit(PG_dcache_clean, &pg->flags))
+> > +	if (test_bit(PG_dcache_clean, &folio->flags))
+> >   		return pte;
+> >   
+> >   	/* If it's an exec fault, we flush the cache and make it clean */
+> >   	if (is_exec_fault()) {
+> > -		flush_dcache_icache_page(pg);
+> > -		set_bit(PG_dcache_clean, &pg->flags);
+> > +		flush_dcache_icache_folio(folio);
+> > +		set_bit(PG_dcache_clean, &folio->flags);
+> >   		return pte;
+> >   	}
+> >   
+> > @@ -142,7 +142,7 @@ static inline pte_t set_pte_filter(pte_t pte)
+> >   static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+> >   				     int dirty)
+> >   {
+> > -	struct page *pg;
+> > +	struct folio *folio;
+> >   
+> >   	if (IS_ENABLED(CONFIG_PPC_BOOK3S_64))
+> >   		return pte;
+> > @@ -168,17 +168,17 @@ static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+> >   #endif /* CONFIG_DEBUG_VM */
+> >   
+> >   	/* If you set _PAGE_EXEC on weird pages you're on your own */
+> > -	pg = maybe_pte_to_page(pte);
+> > -	if (unlikely(!pg))
+> > +	folio = maybe_pte_to_folio(pte);
+> > +	if (unlikely(!folio))
+> >   		goto bail;
+> >   
+> >   	/* If the page is already clean, we move on */
+> > -	if (test_bit(PG_dcache_clean, &pg->flags))
+> > +	if (test_bit(PG_dcache_clean, &folio->flags))
+> >   		goto bail;
+> >   
+> >   	/* Clean the page and set PG_dcache_clean */
+> > -	flush_dcache_icache_page(pg);
+> > -	set_bit(PG_dcache_clean, &pg->flags);
+> > +	flush_dcache_icache_folio(folio);
+> > +	set_bit(PG_dcache_clean, &folio->flags);
+> >   
+> >    bail:
+> >   	return pte_mkexec(pte);
+> > @@ -187,8 +187,8 @@ static pte_t set_access_flags_filter(pte_t pte, struct vm_area_struct *vma,
+> >   /*
+> >    * set_pte stores a linux PTE into the linux page table.
+> >    */
+> > -void set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> > -		pte_t pte)
+> > +void set_ptes(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> > +		pte_t pte, unsigned int nr)
+> >   {
+> >   	/*
+> >   	 * Make sure hardware valid bit is not set. We don't do
+> > @@ -203,7 +203,14 @@ void set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
+> >   	pte = set_pte_filter(pte);
+> >   
+> >   	/* Perform the setting of the PTE */
+> > -	__set_pte_at(mm, addr, ptep, pte, 0);
+> > +	for (;;) {
+> > +		__set_pte_at(mm, addr, ptep, pte, 0);
+> > +		if (--nr == 0)
+> > +			break;
+> > +		ptep++;
+> > +		pte = __pte(pte_val(pte) + PAGE_SIZE);
+> > +		addr += PAGE_SIZE;
+> > +	}
+> >   }
+> >   
+> >   void unmap_kernel_page(unsigned long va)
