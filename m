@@ -2,38 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC736A48D1
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 18:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B94F6A48E0
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 18:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjB0R6O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 12:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47908 "EHLO
+        id S229685AbjB0R6e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 12:58:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjB0R54 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 12:57:56 -0500
+        with ESMTP id S230303AbjB0R6Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 12:58:16 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658E42449B;
-        Mon, 27 Feb 2023 09:57:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF540F1;
+        Mon, 27 Feb 2023 09:57:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=FcAVSqRhOvKHjYDKfG+YKts/V6VftTlUNnoYvCjS+is=; b=oduE/873LY4TwSZyoAOMOKJOyP
-        xXxts9JED1MF554jNMWSsOvEsnO0EYuncvAN9hjmrTJayQ7UIXPyYXZZKT6a79DJGzELdLksphJDy
-        5W+dTaVULNh+n0yLtuQvxjwgSn7gdjgmj0Q1dgtw79FhvhrjJC9yanZ7AOlHIUwnAkl1C1xUDWAqp
-        C8nv7A4sS7Jx43txb8g3DOXFYnsd7dEhPX+y8Vu96gdfUu6Yd32TcgZ2nUR7DQ+u7Fp6rV/Z5zVjD
-        lImQ23LRH//blmVTQ0btFdu/WJMWymPs+f3H9BABVs/jMbMwtxdJHobktTIBKoL+BbMDepenzzCAr
-        CBDR2xng==;
+        bh=i9ts6rBAYolQ1/FBCYccIPnlyslRrUlDUNhaTG0F47Y=; b=QtMpbNCSVu4JKKMG0QgiDe3O8b
+        zrRrZY9W8ngOU1X3jxbL7EApreJb8qUkDPJT19/fxOodt64vAkKWFfFaLNqfHZ9+sdL3+c1vWQrRj
+        2NE/0nH7B7nIR7QjcKZ0zYypB/xIPiolYiv8qRfxdPwrCrunm+GkZ0xcxRNnurK4JbdwEf6ySQSHe
+        HgSLXgm6E8tMHFZeRIGzBIAn2fm9y7NXWTGF9RquGRacqm8JXvQimkq9D7yOlxauD3VPs9qbFF9qD
+        QXolgPXHEX6cV8/guJRIeLHspJekp6ZNQK2p3ze3D8Es1HH1LLmJRIDlpPgh8//zrfMP0c+XO5YtU
+        YsXZXUvw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWhkw-000IYf-EB; Mon, 27 Feb 2023 17:57:46 +0000
+        id 1pWhkw-000IYu-KK; Mon, 27 Feb 2023 17:57:46 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org
-Subject: [PATCH v2 26/30] xtensa: Implement the new page table range API
-Date:   Mon, 27 Feb 2023 17:57:37 +0000
-Message-Id: <20230227175741.71216-27-willy@infradead.org>
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH v2 27/30] filemap: Add filemap_map_folio_range()
+Date:   Mon, 27 Feb 2023 17:57:38 +0000
+Message-Id: <20230227175741.71216-28-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230227175741.71216-1-willy@infradead.org>
 References: <20230227175741.71216-1-willy@infradead.org>
@@ -48,239 +47,163 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio() and
-flush_icache_pages().
+From: Yin Fengwei <fengwei.yin@intel.com>
 
+filemap_map_folio_range() maps partial/full folio. Comparing to original
+filemap_map_pages(), it updates refcount once per folio instead of per
+page and gets minor performance improvement for large folio.
+
+With a will-it-scale.page_fault3 like app (change file write
+fault testing to read fault testing. Trying to upstream it to
+will-it-scale at [1]), got 2% performance gain on a 48C/96T
+Cascade Lake test box with 96 processes running against xfs.
+
+[1]: https://github.com/antonblanchard/will-it-scale/pull/37
+
+Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: linux-xtensa@linux-xtensa.org
 ---
- arch/xtensa/include/asm/cacheflush.h |  9 ++-
- arch/xtensa/include/asm/pgtable.h    | 24 +++++---
- arch/xtensa/mm/cache.c               | 83 ++++++++++++++++------------
- 3 files changed, 72 insertions(+), 44 deletions(-)
+ mm/filemap.c | 98 +++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 54 insertions(+), 44 deletions(-)
 
-diff --git a/arch/xtensa/include/asm/cacheflush.h b/arch/xtensa/include/asm/cacheflush.h
-index 7b4359312c25..35153f6725e4 100644
---- a/arch/xtensa/include/asm/cacheflush.h
-+++ b/arch/xtensa/include/asm/cacheflush.h
-@@ -119,8 +119,14 @@ void flush_cache_page(struct vm_area_struct*,
- #define flush_cache_vmap(start,end)	flush_cache_all()
- #define flush_cache_vunmap(start,end)	flush_cache_all()
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 2723104cc06a..db86e459dde6 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2202,16 +2202,6 @@ unsigned filemap_get_folios(struct address_space *mapping, pgoff_t *start,
+ }
+ EXPORT_SYMBOL(filemap_get_folios);
  
-+void flush_dcache_folio(struct folio *folio);
-+#define flush_dcache_folio flush_dcache_folio
-+
- #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
--void flush_dcache_page(struct page *);
-+static inline void flush_dcache_page(struct page *page)
+-static inline
+-bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
+-{
+-	if (!folio_test_large(folio) || folio_test_hugetlb(folio))
+-		return false;
+-	if (index >= max)
+-		return false;
+-	return index < folio->index + folio_nr_pages(folio) - 1;
+-}
+-
+ /**
+  * filemap_get_folios_contig - Get a batch of contiguous folios
+  * @mapping:	The address_space to search
+@@ -3483,6 +3473,53 @@ static inline struct folio *next_map_page(struct address_space *mapping,
+ 				  mapping, xas, end_pgoff);
+ }
+ 
++/*
++ * Map page range [start_page, start_page + nr_pages) of folio.
++ * start_page is gotten from start by folio_page(folio, start)
++ */
++static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
++			struct folio *folio, unsigned long start,
++			unsigned long addr, unsigned int nr_pages)
 +{
-+	flush_dcache_folio(page_folio(page));
-+}
- 
- void local_flush_cache_range(struct vm_area_struct *vma,
- 		unsigned long start, unsigned long end);
-@@ -156,6 +162,7 @@ void local_flush_cache_page(struct vm_area_struct *vma,
- 
- /* This is not required, see Documentation/core-api/cachetlb.rst */
- #define	flush_icache_page(vma,page)			do { } while (0)
-+#define	flush_icache_pages(vma, page, nr)		do { } while (0)
- 
- #define flush_dcache_mmap_lock(mapping)			do { } while (0)
- #define flush_dcache_mmap_unlock(mapping)		do { } while (0)
-diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
-index fc7a14884c6c..293101530541 100644
---- a/arch/xtensa/include/asm/pgtable.h
-+++ b/arch/xtensa/include/asm/pgtable.h
-@@ -301,17 +301,25 @@ static inline void update_pte(pte_t *ptep, pte_t pteval)
- 
- struct mm_struct;
- 
--static inline void
--set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep, pte_t pteval)
-+static inline void set_pte(pte_t *ptep, pte_t pte)
- {
--	update_pte(ptep, pteval);
-+	update_pte(ptep, pte);
- }
- 
--static inline void set_pte(pte_t *ptep, pte_t pteval)
-+static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-+		pte_t *ptep, pte_t pte, unsigned int nr)
- {
--	update_pte(ptep, pteval);
-+	for (;;) {
-+		set_pte(ptep, pte);
-+		if (--nr == 0)
-+			break;
-+		ptep++;
-+		pte_val(pte) += PAGE_SIZE;
-+	}
- }
- 
-+#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
++	vm_fault_t ret = 0;
++	struct vm_area_struct *vma = vmf->vma;
++	struct file *file = vma->vm_file;
++	struct page *page = folio_page(folio, start);
++	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
++	unsigned int ref_count = 0, count = 0;
 +
- static inline void
- set_pmd(pmd_t *pmdp, pmd_t pmdval)
++	do {
++		if (PageHWPoison(page))
++			continue;
++
++		if (mmap_miss > 0)
++			mmap_miss--;
++
++		/*
++		 * NOTE: If there're PTE markers, we'll leave them to be
++		 * handled in the specific fault path, and it'll prohibit the
++		 * fault-around logic.
++		 */
++		if (!pte_none(*vmf->pte))
++			continue;
++
++		if (vmf->address == addr)
++			ret = VM_FAULT_NOPAGE;
++
++		ref_count++;
++		do_set_pte(vmf, page, addr);
++		update_mmu_cache(vma, addr, vmf->pte);
++	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
++
++	/* Restore the vmf->pte */
++	vmf->pte -= nr_pages;
++
++	folio_ref_add(folio, ref_count);
++	WRITE_ONCE(file->f_ra.mmap_miss, mmap_miss);
++
++	return ret;
++}
++
+ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 			     pgoff_t start_pgoff, pgoff_t end_pgoff)
  {
-@@ -407,8 +415,10 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
- 
- #else
- 
--extern  void update_mmu_cache(struct vm_area_struct * vma,
--			      unsigned long address, pte_t *ptep);
-+void update_mmu_cache_range(struct vm_area_struct *vma,
-+		unsigned long address, pte_t *ptep, unsigned int nr);
-+#define update_mmu_cache(vma, address, ptep) \
-+	update_mmu_cache_range(vma, address, ptep, 1)
- 
- typedef pte_t *pte_addr_t;
- 
-diff --git a/arch/xtensa/mm/cache.c b/arch/xtensa/mm/cache.c
-index 19e5a478a7e8..65c0d5298041 100644
---- a/arch/xtensa/mm/cache.c
-+++ b/arch/xtensa/mm/cache.c
-@@ -121,9 +121,9 @@ EXPORT_SYMBOL(copy_user_highpage);
-  *
-  */
- 
--void flush_dcache_page(struct page *page)
-+void flush_dcache_folio(struct folio *folio)
- {
--	struct address_space *mapping = page_mapping_file(page);
-+	struct address_space *mapping = folio_flush_mapping(folio);
- 
- 	/*
- 	 * If we have a mapping but the page is not mapped to user-space
-@@ -132,14 +132,14 @@ void flush_dcache_page(struct page *page)
- 	 */
- 
- 	if (mapping && !mapping_mapped(mapping)) {
--		if (!test_bit(PG_arch_1, &page->flags))
--			set_bit(PG_arch_1, &page->flags);
-+		if (!test_bit(PG_arch_1, &folio->flags))
-+			set_bit(PG_arch_1, &folio->flags);
- 		return;
- 
- 	} else {
--
--		unsigned long phys = page_to_phys(page);
--		unsigned long temp = page->index << PAGE_SHIFT;
-+		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
-+		unsigned long temp = folio_pos(folio);
-+		unsigned int i, nr = folio_nr_pages(folio);
- 		unsigned long alias = !(DCACHE_ALIAS_EQ(temp, phys));
- 		unsigned long virt;
- 
-@@ -154,22 +154,26 @@ void flush_dcache_page(struct page *page)
- 			return;
- 
- 		preempt_disable();
--		virt = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
--		__flush_invalidate_dcache_page_alias(virt, phys);
-+		for (i = 0; i < nr; i++) {
-+			virt = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-+			__flush_invalidate_dcache_page_alias(virt, phys);
- 
--		virt = TLBTEMP_BASE_1 + (temp & DCACHE_ALIAS_MASK);
-+			virt = TLBTEMP_BASE_1 + (temp & DCACHE_ALIAS_MASK);
- 
--		if (alias)
--			__flush_invalidate_dcache_page_alias(virt, phys);
-+			if (alias)
-+				__flush_invalidate_dcache_page_alias(virt, phys);
- 
--		if (mapping)
--			__invalidate_icache_page_alias(virt, phys);
-+			if (mapping)
-+				__invalidate_icache_page_alias(virt, phys);
-+			phys += PAGE_SIZE;
-+			temp += PAGE_SIZE;
-+		}
- 		preempt_enable();
- 	}
- 
- 	/* There shouldn't be an entry in the cache for this page anymore. */
- }
--EXPORT_SYMBOL(flush_dcache_page);
-+EXPORT_SYMBOL(flush_dcache_folio);
- 
- /*
-  * For now, flush the whole cache. FIXME??
-@@ -207,45 +211,52 @@ EXPORT_SYMBOL(local_flush_cache_page);
- 
- #endif /* DCACHE_WAY_SIZE > PAGE_SIZE */
- 
--void
--update_mmu_cache(struct vm_area_struct * vma, unsigned long addr, pte_t *ptep)
-+void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-+		pte_t *ptep, unsigned int nr)
- {
- 	unsigned long pfn = pte_pfn(*ptep);
+@@ -3493,9 +3530,9 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 	unsigned long addr;
+ 	XA_STATE(xas, &mapping->i_pages, start_pgoff);
+ 	struct folio *folio;
 -	struct page *page;
-+	struct folio *folio;
-+	unsigned int i;
+ 	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
+ 	vm_fault_t ret = 0;
++	int nr_pages = 0;
  
- 	if (!pfn_valid(pfn))
- 		return;
- 
--	page = pfn_to_page(pfn);
-+	folio = page_folio(pfn_to_page(pfn));
- 
--	/* Invalidate old entry in TLBs */
+ 	rcu_read_lock();
+ 	folio = first_map_page(mapping, &xas, end_pgoff);
+@@ -3510,45 +3547,18 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 	addr = vma->vm_start + ((start_pgoff - vma->vm_pgoff) << PAGE_SHIFT);
+ 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
+ 	do {
+-again:
+-		page = folio_file_page(folio, xas.xa_index);
+-		if (PageHWPoison(page))
+-			goto unlock;
 -
--	flush_tlb_page(vma, addr);
-+	/* Invalidate old entries in TLBs */
-+	for (i = 0; i < nr; i++)
-+		flush_tlb_page(vma, addr + i * PAGE_SIZE);
-+	nr = folio_nr_pages(folio);
+-		if (mmap_miss > 0)
+-			mmap_miss--;
++		unsigned long end;
  
- #if (DCACHE_WAY_SIZE > PAGE_SIZE)
+ 		addr += (xas.xa_index - last_pgoff) << PAGE_SHIFT;
+ 		vmf->pte += xas.xa_index - last_pgoff;
+ 		last_pgoff = xas.xa_index;
++		end = folio->index + folio_nr_pages(folio) - 1;
++		nr_pages = min(end, end_pgoff) - xas.xa_index + 1;
  
--	if (!PageReserved(page) && test_bit(PG_arch_1, &page->flags)) {
--		unsigned long phys = page_to_phys(page);
-+	if (!folio_test_reserved(folio) && test_bit(PG_arch_1, &folio->flags)) {
-+		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
- 		unsigned long tmp;
+-		/*
+-		 * NOTE: If there're PTE markers, we'll leave them to be
+-		 * handled in the specific fault path, and it'll prohibit the
+-		 * fault-around logic.
+-		 */
+-		if (!pte_none(*vmf->pte))
+-			goto unlock;
++		ret |= filemap_map_folio_range(vmf, folio,
++				xas.xa_index - folio->index, addr, nr_pages);
++		xas.xa_index += nr_pages;
  
- 		preempt_disable();
--		tmp = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
--		__flush_invalidate_dcache_page_alias(tmp, phys);
--		tmp = TLBTEMP_BASE_1 + (addr & DCACHE_ALIAS_MASK);
--		__flush_invalidate_dcache_page_alias(tmp, phys);
--		__invalidate_icache_page_alias(tmp, phys);
-+		for (i = 0; i < nr; i++) {
-+			tmp = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-+			__flush_invalidate_dcache_page_alias(tmp, phys);
-+			tmp = TLBTEMP_BASE_1 + (addr & DCACHE_ALIAS_MASK);
-+			__flush_invalidate_dcache_page_alias(tmp, phys);
-+			__invalidate_icache_page_alias(tmp, phys);
-+			phys += PAGE_SIZE;
-+		}
- 		preempt_enable();
- 
--		clear_bit(PG_arch_1, &page->flags);
-+		clear_bit(PG_arch_1, &folio->flags);
- 	}
- #else
--	if (!PageReserved(page) && !test_bit(PG_arch_1, &page->flags)
-+	if (!folio_test_reserved(folio) && !test_bit(PG_arch_1, &folio->flags)
- 	    && (vma->vm_flags & VM_EXEC) != 0) {
--		unsigned long paddr = (unsigned long)kmap_atomic(page);
--		__flush_dcache_page(paddr);
--		__invalidate_icache_page(paddr);
--		set_bit(PG_arch_1, &page->flags);
--		kunmap_atomic((void *)paddr);
-+		for (i = 0; i < nr; i++) {
-+			void *paddr = kmap_local_folio(folio, i * PAGE_SIZE);
-+			__flush_dcache_page((unsigned long)paddr);
-+			__invalidate_icache_page((unsigned long)paddr);
-+			kunmap_atomic(paddr);
-+		}
-+		set_bit(PG_arch_1, &folio->flags);
- 	}
- #endif
- }
+-		/* We're about to handle the fault */
+-		if (vmf->address == addr)
+-			ret = VM_FAULT_NOPAGE;
+-
+-		do_set_pte(vmf, page, addr);
+-		/* no need to invalidate: a not-present page won't be cached */
+-		update_mmu_cache(vma, addr, vmf->pte);
+-		if (folio_more_pages(folio, xas.xa_index, end_pgoff)) {
+-			xas.xa_index++;
+-			folio_ref_inc(folio);
+-			goto again;
+-		}
+-		folio_unlock(folio);
+-		continue;
+-unlock:
+-		if (folio_more_pages(folio, xas.xa_index, end_pgoff)) {
+-			xas.xa_index++;
+-			goto again;
+-		}
+ 		folio_unlock(folio);
+ 		folio_put(folio);
+ 	} while ((folio = next_map_page(mapping, &xas, end_pgoff)) != NULL);
 -- 
 2.39.1
 
