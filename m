@@ -2,39 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC326A4E2C
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 23:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186FC6A4E1D
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 23:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjB0WcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 17:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S229763AbjB0WcA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 17:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjB0Wbp (ORCPT
+        with ESMTP id S230230AbjB0Wbp (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 17:31:45 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325AD29E11;
-        Mon, 27 Feb 2023 14:31:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0EE25BBA;
+        Mon, 27 Feb 2023 14:31:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677537096; x=1709073096;
+  t=1677537097; x=1709073097;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=h3g9dfsaSYOQw9Djcf7aO6npKOb7bN/WODuQBbF8SE0=;
-  b=Ubt3Gx3414HK4ZAPqQUtqCrY0JJ1PRz/pqMyEujJszk+C6y1JlZrm5+T
-   QwIAgj62FyaDRJpWfRZszQ1PAHUrVpe2OyM0tnrzkbLt7KpPMSYhV0XjQ
-   +GPzDRqtxbJgblUy/fh/zsMoARk1aOnSX1wShQoyJNUEdW5Eu3rbObzuQ
-   oeMoCoYZTRt3MAN0NFSRu+5JaFTDB+KAv76wkukKFmyfhMRIZrCrC3Sti
-   Lv71oAIY2Thr+/Q1IqF67W61c44pl1w6hFd6jT5eITuxQwakahbOYPi64
-   EHDgeviIIASmf2Xco8s3VgN+fiY9jt7hREwB3HOUGd9eMHFqMZ+oLwIrV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313657249"
+  bh=ErfroshrbQualKPLAsK/DpeAwNdzrJEBOvME1abf8WI=;
+  b=YJW48+NJ3BjgA2pQc6uwO/JakOBnTRN5+PRW5JhczADne0MtGqZsvIDn
+   0VA1m/hU9bS0FgBok7lr+RksNslpUE7o0Um4tOb8mOWiFl8j5uNe7nqwp
+   /cIfj/gHWq+3fXPreTDBPcgE84GT4tiB9ENX/cRpms/1Hgt+vb3VW6FKz
+   Y0UsNvgGABefZDw5Y3so0KJGhG7+MfmnhaMqzY3WaxAbthPQJwnC59rtV
+   TatdRKEvJaSCVW4sNdbBEJNrGl3Y6Zn7PBa6v8xNINQaATfMZWtts8hOW
+   e3a6cjI3zokkuuJz5MlaEDad9T7E8XatAs5Cm8xTVPMitsYtqQ0gcMgsc
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313657279"
 X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="313657249"
+   d="scan'208";a="313657279"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848024459"
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848024471"
 X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="848024459"
+   d="scan'208";a="848024471"
 Received: from leonqu-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.72.19])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:15 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
@@ -66,11 +66,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com
-Cc:     rick.p.edgecombe@intel.com, linux-arm-kernel@lists.infradead.org,
-        linux-s390@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: [PATCH v7 11/41] mm: Introduce pte_mkwrite_kernel()
-Date:   Mon, 27 Feb 2023 14:29:27 -0800
-Message-Id: <20230227222957.24501-12-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, linux-s390@vger.kernel.org
+Subject: [PATCH v7 12/41] s390/mm: Introduce pmd_mkwrite_kernel()
+Date:   Mon, 27 Feb 2023 14:29:28 -0800
+Message-Id: <20230227222957.24501-13-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
 References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
@@ -91,30 +90,29 @@ type of memory called shadow stack. This shadow stack memory has some
 unusual properties, which requires some core mm changes to function
 properly.
 
-One of these changes is to allow for pte_mkwrite() to create different
+One of these changes is to allow for pmd_mkwrite() to create different
 types of writable memory (the existing conventionally writable type and
-also the new shadow stack type). Future patches will convert pte_mkwrite()
+also the new shadow stack type). Future patches will convert pmd_mkwrite()
 to take a VMA in order to facilitate this, however there are places in the
-kernel where pte_mkwrite() is called outside of the context of a VMA.
+kernel where pmd_mkwrite() is called outside of the context of a VMA.
 These are for kernel memory. So create a new variant called
-pte_mkwrite_kernel() and switch the kernel users over to it. Have
-pte_mkwrite() and pte_mkwrite_kernel() be the same for now. Future patches
-will introduce changes to make pte_mkwrite() take a VMA.
+pmd_mkwrite_kernel() and switch the kernel users over to it. Have
+pmd_mkwrite() and pmd_mkwrite_kernel() be the same for now. Future patches
+will introduce changes to make pmd_mkwrite() take a VMA.
 
-Only do this for architectures that need it because they call pte_mkwrite()
+Only do this for architectures that need it because they call pmd_mkwrite()
 in arch code without an associated VMA. Since it will only currently be
 used in arch code, so do not include it in arch_pgtable_helpers.rst.
 
-Cc: linux-doc@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
 Cc: linux-s390@vger.kernel.org
-Cc: xen-devel@lists.xenproject.org
 Cc: linux-arch@vger.kernel.org
 Cc: linux-mm@kvack.org
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
 Acked-by: David Hildenbrand <david@redhat.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Suggested-by: David Hildenbrand <david@redhat.com>
@@ -146,133 +144,48 @@ Hopefully that is enough context. Thanks!
 v6:
  - New patch
 ---
- arch/arm64/include/asm/pgtable.h | 7 ++++++-
- arch/arm64/mm/trans_pgd.c        | 4 ++--
- arch/s390/include/asm/pgtable.h  | 7 ++++++-
- arch/s390/mm/pageattr.c          | 2 +-
- arch/x86/include/asm/pgtable.h   | 7 ++++++-
- arch/x86/xen/mmu_pv.c            | 2 +-
- 6 files changed, 22 insertions(+), 7 deletions(-)
+ arch/s390/include/asm/pgtable.h | 7 ++++++-
+ arch/s390/mm/pageattr.c         | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index b6ba466e2e8a..cccf8885792e 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -180,13 +180,18 @@ static inline pmd_t set_pmd_bit(pmd_t pmd, pgprot_t prot)
+diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+index d4943f2d3f00..deeb918cae1d 100644
+--- a/arch/s390/include/asm/pgtable.h
++++ b/arch/s390/include/asm/pgtable.h
+@@ -1491,7 +1491,7 @@ static inline pmd_t pmd_wrprotect(pmd_t pmd)
+ 	return set_pmd_bit(pmd, __pgprot(_SEGMENT_ENTRY_PROTECT));
+ }
+ 
+-static inline pmd_t pmd_mkwrite(pmd_t pmd)
++static inline pmd_t pmd_mkwrite_kernel(pmd_t pmd)
+ {
+ 	pmd = set_pmd_bit(pmd, __pgprot(_SEGMENT_ENTRY_WRITE));
+ 	if (pmd_val(pmd) & _SEGMENT_ENTRY_DIRTY)
+@@ -1499,6 +1499,11 @@ static inline pmd_t pmd_mkwrite(pmd_t pmd)
  	return pmd;
  }
  
--static inline pte_t pte_mkwrite(pte_t pte)
-+static inline pte_t pte_mkwrite_kernel(pte_t pte)
- {
- 	pte = set_pte_bit(pte, __pgprot(PTE_WRITE));
- 	pte = clear_pte_bit(pte, __pgprot(PTE_RDONLY));
- 	return pte;
- }
- 
-+static inline pte_t pte_mkwrite(pte_t pte)
++static inline pmd_t pmd_mkwrite(pmd_t pmd)
 +{
-+	return pte_mkwrite_kernel(pte);
++	return pmd_mkwrite_kernel(pmd);
 +}
 +
- static inline pte_t pte_mkclean(pte_t pte)
+ static inline pmd_t pmd_mkclean(pmd_t pmd)
  {
- 	pte = clear_pte_bit(pte, __pgprot(PTE_DIRTY));
-diff --git a/arch/arm64/mm/trans_pgd.c b/arch/arm64/mm/trans_pgd.c
-index 4ea2eefbc053..5c07e68d80ea 100644
---- a/arch/arm64/mm/trans_pgd.c
-+++ b/arch/arm64/mm/trans_pgd.c
-@@ -40,7 +40,7 @@ static void _copy_pte(pte_t *dst_ptep, pte_t *src_ptep, unsigned long addr)
- 		 * read only (code, rodata). Clear the RDONLY bit from
- 		 * the temporary mappings we use during restore.
- 		 */
--		set_pte(dst_ptep, pte_mkwrite(pte));
-+		set_pte(dst_ptep, pte_mkwrite_kernel(pte));
- 	} else if (debug_pagealloc_enabled() && !pte_none(pte)) {
- 		/*
- 		 * debug_pagealloc will removed the PTE_VALID bit if
-@@ -53,7 +53,7 @@ static void _copy_pte(pte_t *dst_ptep, pte_t *src_ptep, unsigned long addr)
- 		 */
- 		BUG_ON(!pfn_valid(pte_pfn(pte)));
- 
--		set_pte(dst_ptep, pte_mkpresent(pte_mkwrite(pte)));
-+		set_pte(dst_ptep, pte_mkpresent(pte_mkwrite_kernel(pte)));
- 	}
- }
- 
-diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-index 2c70b4d1263d..d4943f2d3f00 100644
---- a/arch/s390/include/asm/pgtable.h
-+++ b/arch/s390/include/asm/pgtable.h
-@@ -1005,7 +1005,7 @@ static inline pte_t pte_wrprotect(pte_t pte)
- 	return set_pte_bit(pte, __pgprot(_PAGE_PROTECT));
- }
- 
--static inline pte_t pte_mkwrite(pte_t pte)
-+static inline pte_t pte_mkwrite_kernel(pte_t pte)
- {
- 	pte = set_pte_bit(pte, __pgprot(_PAGE_WRITE));
- 	if (pte_val(pte) & _PAGE_DIRTY)
-@@ -1013,6 +1013,11 @@ static inline pte_t pte_mkwrite(pte_t pte)
- 	return pte;
- }
- 
-+static inline pte_t pte_mkwrite(pte_t pte)
-+{
-+	return pte_mkwrite_kernel(pte);
-+}
-+
- static inline pte_t pte_mkclean(pte_t pte)
- {
- 	pte = clear_pte_bit(pte, __pgprot(_PAGE_DIRTY));
+ 	pmd = clear_pmd_bit(pmd, __pgprot(_SEGMENT_ENTRY_DIRTY));
 diff --git a/arch/s390/mm/pageattr.c b/arch/s390/mm/pageattr.c
-index 85195c18b2e8..4ee5fe5caa23 100644
+index 4ee5fe5caa23..7b6967dfacd0 100644
 --- a/arch/s390/mm/pageattr.c
 +++ b/arch/s390/mm/pageattr.c
-@@ -96,7 +96,7 @@ static int walk_pte_level(pmd_t *pmdp, unsigned long addr, unsigned long end,
- 		if (flags & SET_MEMORY_RO)
- 			new = pte_wrprotect(new);
- 		else if (flags & SET_MEMORY_RW)
--			new = pte_mkwrite(pte_mkdirty(new));
-+			new = pte_mkwrite_kernel(pte_mkdirty(new));
- 		if (flags & SET_MEMORY_NX)
- 			new = set_pte_bit(new, __pgprot(_PAGE_NOEXEC));
- 		else if (flags & SET_MEMORY_X)
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 56eea96502c6..3607f2572f9e 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -364,11 +364,16 @@ static inline pte_t pte_mkyoung(pte_t pte)
- 	return pte_set_flags(pte, _PAGE_ACCESSED);
- }
- 
--static inline pte_t pte_mkwrite(pte_t pte)
-+static inline pte_t pte_mkwrite_kernel(pte_t pte)
- {
- 	return pte_set_flags(pte, _PAGE_RW);
- }
- 
-+static inline pte_t pte_mkwrite(pte_t pte)
-+{
-+	return pte_mkwrite_kernel(pte);
-+}
-+
- static inline pte_t pte_mkhuge(pte_t pte)
- {
- 	return pte_set_flags(pte, _PAGE_PSE);
-diff --git a/arch/x86/xen/mmu_pv.c b/arch/x86/xen/mmu_pv.c
-index ee29fb558f2e..a23f04243c19 100644
---- a/arch/x86/xen/mmu_pv.c
-+++ b/arch/x86/xen/mmu_pv.c
-@@ -150,7 +150,7 @@ void make_lowmem_page_readwrite(void *vaddr)
- 	if (pte == NULL)
- 		return;		/* vaddr missing */
- 
--	ptev = pte_mkwrite(*pte);
-+	ptev = pte_mkwrite_kernel(*pte);
- 
- 	if (HYPERVISOR_update_va_mapping(address, ptev, 0))
- 		BUG();
+@@ -146,7 +146,7 @@ static void modify_pmd_page(pmd_t *pmdp, unsigned long addr,
+ 	if (flags & SET_MEMORY_RO)
+ 		new = pmd_wrprotect(new);
+ 	else if (flags & SET_MEMORY_RW)
+-		new = pmd_mkwrite(pmd_mkdirty(new));
++		new = pmd_mkwrite_kernel(pmd_mkdirty(new));
+ 	if (flags & SET_MEMORY_NX)
+ 		new = set_pmd_bit(new, __pgprot(_SEGMENT_ENTRY_NOEXEC));
+ 	else if (flags & SET_MEMORY_X)
 -- 
 2.17.1
 
