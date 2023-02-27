@@ -2,79 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11C26A3B6B
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 08:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992926A4203
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 13:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjB0HBc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 02:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S229486AbjB0Mt2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 07:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjB0HBb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 02:01:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0621A495;
-        Sun, 26 Feb 2023 23:01:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30E1FB80C95;
-        Mon, 27 Feb 2023 07:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DC5C433EF;
-        Mon, 27 Feb 2023 07:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677481287;
-        bh=yx/JP9DY2+Ns9YVFs9b7YUupR2IltXfb3fYeyIdlu7A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sQCMBnx+0V3Gmv7jt08xoll+puX2HcX25pJDjIQdeH3qCULUDhqB9/kyBelmHP9R7
-         eEeLzM1MszQi14iFaMSD4eVNHiwYRdbaB81zuZa89n0oLd6fO/xQrgCfqE1fmAhXu3
-         RAzh8DvKCSAqQ8ll20J7ubzHikTYMN4snlwrCTLMT5VuWCKC/KefYUbDCBFAfox53Z
-         ats5QoLwd50Wvi6VvJKRrOj/EfEGHY6Kj6cOULJSq58UDHkR+fiha7/f/tXbBHTkAL
-         Z8MtXFUwFbgXmQyP4bvCHwKI7a2F2CFQGDla762TKw9RLHNSIQ0PBpjCxY8pEKde+E
-         OQeFu1KJSXabQ==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org
-Subject: [GIT PULL] csky changes for v6.3
-Date:   Mon, 27 Feb 2023 02:01:22 -0500
-Message-Id: <20230227070122.1840809-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S229470AbjB0Mt2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 07:49:28 -0500
+X-Greylist: delayed 1251 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Feb 2023 04:49:25 PST
+Received: from jayabaya.inti.net.id (jayabaya.inti.net.id [103.53.76.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86050A5F4
+        for <linux-arch@vger.kernel.org>; Mon, 27 Feb 2023 04:49:25 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by jayabaya.inti.net.id (Postfix) with ESMTP id B44C920A2F48F;
+        Mon, 27 Feb 2023 19:21:18 +0700 (WIB)
+Received: from jayabaya.inti.net.id ([127.0.0.1])
+        by localhost (jayabaya.inti.net.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Gf0EaL3H2ISq; Mon, 27 Feb 2023 19:21:15 +0700 (WIB)
+Received: from jayabaya.inti.net.id (localhost [127.0.0.1])
+        by jayabaya.inti.net.id (Postfix) with ESMTPS id C547320900382;
+        Mon, 27 Feb 2023 19:20:50 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 jayabaya.inti.net.id C547320900382
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inti.net.id;
+        s=25E9A704-571A-11E6-9418-628C66225056; t=1677500451;
+        bh=AnaVDtaFNkYilNDMre2OJ9jGovgvy9D+GYyGe0VSevE=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=SaAFqqT7I/SfKYTcqfT7tARJn3tq9MK6WETb43RhLePYa7ONrwRCascyevvxvevl8
+         0/bCV1yUvxjYdrziwVIdJsNJiCgV3VRiUAMZJN2nCh3pIVSZE1uWQzFoRhIr+WaV1Q
+         mw7iqFBqWOKxYK+l8hgkxWjc/6qu0iUJ5e1zfJi03hkzy9+QYdP7m6oFzMxm4ijZZ2
+         eokJLLhDHINZIWxGnihlLIo2wC0It4OAazhVkf9xE4eWsb3+oUkjb4QcyxShSL3+Cr
+         SZe1e0YgoKDt0yQ8MkA6saiLLSbr5OPzV416mDHYg6t+WQwUWvutq3/aJi4XVzm08n
+         FwGnjz8I/T/6g==
+Received: from jayabaya.inti.net.id (jayabaya.inti.net.id [103.53.76.30])
+        by jayabaya.inti.net.id (Postfix) with ESMTP id 4B35620A9699D;
+        Mon, 27 Feb 2023 19:20:47 +0700 (WIB)
+Date:   Mon, 27 Feb 2023 19:20:47 +0700 (WIB)
+From:   =?utf-8?B?0YHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
+        <ali@inti.net.id>
+Reply-To: sistemassadmins@mail2engineer.com
+Message-ID: <1798451523.86949.1677500447131.JavaMail.zimbra@inti.net.id>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+X-Originating-IP: [103.53.76.30]
+X-Mailer: Zimbra 8.7.11_GA_3808 (zclient/8.7.11_GA_3808)
+Thread-Index: KhR2nOOjZ/l7LQwTae0/l889ylClUQ==
+Thread-Topic: 
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  1.0 MISSING_HEADERS Missing To: header
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+=D1=83=D0=B2=D0=B0=D0=B3=D0=B0;
 
-Please pull the latest csky changes from:
+=D0=92=D0=B0=D1=88=D0=B0 =D0=B5=D0=BB=D0=B5=D0=BA=D1=82=D1=80=D0=BE=D0=BD=
+=D0=BD=D0=B0 =D0=BF=D0=BE=D1=88=D1=82=D0=B0 =D0=BF=D0=B5=D1=80=D0=B5=D0=B2=
+=D0=B8=D1=89=D0=B8=D0=BB=D0=B0 =D0=BE=D0=B1=D0=BC=D0=B5=D0=B6=D0=B5=D0=BD=
+=D0=BD=D1=8F =D0=BF=D0=B0=D0=BC'=D1=8F=D1=82=D1=96, =D1=8F=D0=BA=D0=B5 =D1=
+=81=D1=82=D0=B0=D0=BD=D0=BE=D0=B2=D0=B8=D1=82=D1=8C 5 =D0=93=D0=91, =D0=B2=
+=D0=B8=D0=B7=D0=BD=D0=B0=D1=87=D0=B5=D0=BD=D0=B5 =D0=B0=D0=B4=D0=BC=D1=96=
+=D0=BD=D1=96=D1=81=D1=82=D1=80=D0=B0=D1=82=D0=BE=D1=80=D0=BE=D0=BC, =D1=8F=
+=D0=BA=D0=B5 =D0=B2 =D0=B4=D0=B0=D0=BD=D0=B8=D0=B9 =D1=87=D0=B0=D1=81 =D0=
+=BF=D1=80=D0=B0=D1=86=D1=8E=D1=94 =D0=BD=D0=B0 10,9 =D0=93=D0=91. =D0=92=D0=
+=B8 =D0=BD=D0=B5 =D0=B7=D0=BC=D0=BE=D0=B6=D0=B5=D1=82=D0=B5 =D0=BD=D0=B0=D0=
+=B4=D1=81=D0=B8=D0=BB=D0=B0=D1=82=D0=B8 =D0=B0=D0=B1=D0=BE =D0=BE=D1=82=D1=
+=80=D0=B8=D0=BC=D1=83=D0=B2=D0=B0=D1=82=D0=B8 =D0=BD=D0=BE=D0=B2=D1=83 =D0=
+=BF=D0=BE=D1=88=D1=82=D1=83, =D0=B4=D0=BE=D0=BA=D0=B8 =D0=BD=D0=B5 =D0=BF=
+=D0=B5=D1=80=D0=B5=D0=B2=D1=96=D1=80=D0=B8=D1=82=D0=B5 =D0=BF=D0=BE=D1=88=
+=D1=82=D0=BE=D0=B2=D1=83 =D1=81=D0=BA=D1=80=D0=B8=D0=BD=D1=8C=D0=BA=D1=83=
+ "=D0=92=D1=85=D1=96=D0=B4=D0=BD=D1=96". =D0=A9=D0=BE=D0=B1 =D0=B2=D1=96=D0=
+=B4=D0=BD=D0=BE=D0=B2=D0=B8=D1=82=D0=B8 =D1=81=D0=BF=D1=80=D0=B0=D0=B2=D0=
+=BD=D1=96=D1=81=D1=82=D1=8C =D0=BF=D0=BE=D1=88=D1=82=D0=BE=D0=B2=D0=BE=D1=
+=97 =D1=81=D0=BA=D1=80=D0=B8=D0=BD=D1=8C=D0=BA=D0=B8, =D0=BD=D0=B0=D0=B4=D1=
+=96=D1=88=D0=BB=D1=96=D1=82=D1=8C =D1=82=D0=B0=D0=BA=D1=96 =D0=B2=D1=96=D0=
+=B4=D0=BE=D0=BC=D0=BE=D1=81=D1=82=D1=96
+=D0=BD=D0=B8=D0=B6=D1=87=D0=B5:
 
-The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
+=D0=86=D0=BC'=D1=8F:
+=D0=86=D0=BC'=D1=8F =D0=BA=D0=BE=D1=80=D0=B8=D1=81=D1=82=D1=83=D0=B2=D0=B0=
+=D1=87=D0=B0:
+=D0=BF=D0=B0=D1=80=D0=BE=D0=BB=D1=8C:
+=D0=9F=D1=96=D0=B4=D1=82=D0=B2=D0=B5=D1=80=D0=B4=D0=B6=D0=B5=D0=BD=D0=BD=D1=
+=8F =D0=BF=D0=B0=D1=80=D0=BE=D0=BB=D1=8F:
+=D0=90=D0=B4=D1=80=D0=B5=D1=81=D0=B0 =D0=B5=D0=BB=D0=B5=D0=BA=D1=82=D1=80=
+=D0=BE=D0=BD=D0=BD=D0=BE=D1=97 =D0=BF=D0=BE=D1=88=D1=82=D0=B8:
+=D1=82=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD:
 
-  Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
+=D0=AF=D0=BA=D1=89=D0=BE =D0=BD=D0=B5 =D0=B2=D0=B4=D0=B0=D1=94=D1=82=D1=8C=
+=D1=81=D1=8F =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=BE =D0=BF=D0=B5=
+=D1=80=D0=B5=D0=B2=D1=96=D1=80=D0=B8=D1=82=D0=B8 =D0=BF=D0=BE=D0=B2=D1=96=
+=D0=B4=D0=BE=D0=BC=D0=BB=D0=B5=D0=BD=D0=BD=D1=8F, =D0=B2=D0=B0=D1=88=D0=B0=
+ =D0=BF=D0=BE=D1=88=D1=82=D0=BE=D0=B2=D0=B0 =D1=81=D0=BA=D1=80=D0=B8=D0=BD=
+=D1=8C=D0=BA=D0=B0 =D0=B1=D1=83=D0=B4=D0=B5 =D0=92=D0=B8=D0=BC=D0=BA=D0=BD=
+=D1=83=D1=82=D0=BE!
 
-are available in the Git repository at:
-
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-6.3
-
-for you to fetch changes up to 4a3ec00957fdf182be705d46e77acacc430f7d65:
-
-  csky: delay: Add function alignment (2022-12-29 23:47:52 -0500)
-
-----------------------------------------------------------------
-rch/csky patches for 6.3
-
-The pull request we've done:
- - Optimize delay accuracy
-
-----------------------------------------------------------------
-Jialu Xu (1):
-      csky: delay: Add function alignment
-
- arch/csky/lib/delay.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+=D0=9F=D1=80=D0=B8=D0=BD=D0=BE=D1=81=D0=B8=D0=BC=D0=BE =D0=B2=D0=B8=D0=B1=
+=D0=B0=D1=87=D0=B5=D0=BD=D0=BD=D1=8F =D0=B7=D0=B0 =D0=BD=D0=B5=D0=B7=D1=80=
+=D1=83=D1=87=D0=BD=D0=BE=D1=81=D1=82=D1=96.
+=D0=9A=D0=BE=D0=B4 =D0=BF=D1=96=D0=B4=D1=82=D0=B2=D0=B5=D1=80=D0=B4=D0=B6=
+=D0=B5=D0=BD=D0=BD=D1=8F: UA:@UA.WEB.ADMIN.WEBUR431MeP453.UA
+=D0=A2=D0=B5=D1=85=D0=BD=D1=96=D1=87=D0=BD=D0=B0 =D0=BF=D1=96=D0=B4=D1=82=
+=D1=80=D0=B8=D0=BC=D0=BA=D0=B0 =D0=9F=D0=BE=D1=88=D1=82=D0=B8 =D0=A1=D0=B8=
+=D1=81=D1=82=D0=B5=D0=BC=D0=BD=D0=B8=D0=B9 =D0=B0=D0=B4=D0=BC=D1=96=D0=BD=
+=D1=96=D1=81=D1=82=D1=80=D0=B0=D1=82=D0=BE=D1=80 =C2=A9 2023
