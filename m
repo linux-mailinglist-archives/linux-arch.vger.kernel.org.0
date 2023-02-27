@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9F46A490D
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 19:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704A56A48BA
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 18:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjB0R7J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 12:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        id S230006AbjB0R5y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 12:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230258AbjB0R6W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 12:58:22 -0500
+        with ESMTP id S230048AbjB0R5y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 12:57:54 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138F844B1;
-        Mon, 27 Feb 2023 09:57:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B475B241C6;
+        Mon, 27 Feb 2023 09:57:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=aaXlbA2/BvRg6HHDAadnVZCwlkGxkg/4CEs3FrmdfUo=; b=HXN9VHt2EFXUIhhFmEnV3MVjKc
-        W8bimZyhdFaayUqTL0aWIlWF4u8HSlrCZsPP6sAgvIwuQhK9Xu6jYzgV7d8u496T7uVOMbbb7lKs2
-        DiMor3aKe0pkza1VKFtk5sS4gi0rR8DzvDgOvfd+wGjAUOw1XZ3HutdOhQgQHoIB51MWYkybo0Mhy
-        EPb4RTDx8bELqsN7hhScXf6q+G0xfo0BODTUyYYkw+Jzst9swDFfIaImLaFI07iafp0gD5Sh/CUdj
-        NjVT0AXThjTjSN7OuG3+iOmCQUo+eSPJvGLcNaowabymnfQKN0Ul+3Xlfew5Gx285pk6Lsj1fXtFk
-        OabJICJg==;
+        bh=hMFJoNiTv8ERJFzuWrR/5P0mYOI2i9vULkEqsj63YhY=; b=eJibqO57YZFwds944V3v+goNNV
+        uL8xM/5dlRClPneYAKfqRqNxOy9AXPlKJbOYwcYSD6xmr1gbh2nXoV2SJ90excX60nNbn4YkfzbJK
+        jrFNcGl7JdscQ9qmNEdzF9dtc9/xvIIG9NfXDdiw2w15ps8w961rR0vTrDfnJ+zxF7gA+RaK7HCnr
+        ttacLATW7WSZrkHX/D/coc6QziGwa115pKH4T0B2GkTIu5Tj5y98Q1TIOPVNHbRaGJQ0/gYffMm3L
+        bOaO5ZUbzBO2xh1y91BH+TvJOV71GYaWaRrFslgqaSndJGwxodoVHPpuCXbE8mErNOigANX9YGZsP
+        A61/SyTA==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pWhkt-000IWt-9T; Mon, 27 Feb 2023 17:57:43 +0000
+        id 1pWhkt-000IWv-CC; Mon, 27 Feb 2023 17:57:43 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-mm@kvack.org, linux-arch@vger.kernel.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 03/30] mm: Add folio_flush_mapping()
-Date:   Mon, 27 Feb 2023 17:57:14 +0000
-Message-Id: <20230227175741.71216-4-willy@infradead.org>
+Subject: [PATCH v2 04/30] mm: Remove ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
+Date:   Mon, 27 Feb 2023 17:57:15 +0000
+Message-Id: <20230227175741.71216-5-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230227175741.71216-1-willy@infradead.org>
 References: <20230227175741.71216-1-willy@infradead.org>
@@ -47,61 +47,49 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is the folio equivalent of page_mapping_file(), but rename it
-to make it clear that it's very different from page_file_mapping().
-Theoretically, there's nothing flush-only about it, but there are no
-other users today, and I doubt there will be; it's almost always more
-useful to know the swapfile's mapping or the swapcache's mapping.
+Current best practice is to reuse the name of the function as a define
+to indicate that the function is implemented by the architecture.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/pagemap.h | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ include/linux/cacheflush.h | 4 ++--
+ mm/util.c                  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 51b75b89730e..647c5a036a97 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -369,6 +369,26 @@ static inline struct address_space *folio_file_mapping(struct folio *folio)
- 	return folio->mapping;
- }
+diff --git a/include/linux/cacheflush.h b/include/linux/cacheflush.h
+index a6189d21f2ba..82136f3fcf54 100644
+--- a/include/linux/cacheflush.h
++++ b/include/linux/cacheflush.h
+@@ -7,14 +7,14 @@
+ struct folio;
  
-+/**
-+ * folio_flush_mapping - Find the file mapping this folio belongs to.
-+ * @folio: The folio.
-+ *
-+ * For folios which are in the page cache, return the mapping that this
-+ * page belongs to.  Anonymous folios return NULL, even if they're in
-+ * the swap cache.  Other kinds of folio also return NULL.
-+ *
-+ * This is ONLY used by architecture cache flushing code.  If you aren't
-+ * writing cache flushing code, you want either folio_mapping() or
-+ * folio_file_mapping().
-+ */
-+static inline struct address_space *folio_flush_mapping(struct folio *folio)
-+{
-+	if (unlikely(folio_test_swapcache(folio)))
-+		return swapcache_mapping(folio);
-+
-+	return folio->mapping;
-+}
-+
- static inline struct address_space *page_file_mapping(struct page *page)
+ #if ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE
+-#ifndef ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
++#ifndef flush_dcache_folio
+ void flush_dcache_folio(struct folio *folio);
+ #endif
+ #else
+ static inline void flush_dcache_folio(struct folio *folio)
  {
- 	return folio_file_mapping(page_folio(page));
-@@ -379,11 +399,7 @@ static inline struct address_space *page_file_mapping(struct page *page)
-  */
- static inline struct address_space *page_mapping_file(struct page *page)
- {
--	struct folio *folio = page_folio(page);
--
--	if (unlikely(folio_test_swapcache(folio)))
--		return NULL;
--	return folio_mapping(folio);
-+	return folio_flush_mapping(page_folio(page));
  }
+-#define ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO 0
++#define flush_dcache_folio flush_dcache_folio
+ #endif /* ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE */
  
- /**
+ #endif /* _LINUX_CACHEFLUSH_H */
+diff --git a/mm/util.c b/mm/util.c
+index b8ed9dbc7fd5..f66e0ca82d2d 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -1124,7 +1124,7 @@ void page_offline_end(void)
+ }
+ EXPORT_SYMBOL(page_offline_end);
+ 
+-#ifndef ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
++#ifndef flush_dcache_folio
+ void flush_dcache_folio(struct folio *folio)
+ {
+ 	long i, nr = folio_nr_pages(folio);
 -- 
 2.39.1
 
