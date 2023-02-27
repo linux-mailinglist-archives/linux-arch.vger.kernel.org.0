@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6AC6A4E54
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 23:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBB36A4E4D
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 23:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjB0WcR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 17:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37686 "EHLO
+        id S230378AbjB0WcQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 17:32:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjB0Wbw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 17:31:52 -0500
+        with ESMTP id S230274AbjB0Wby (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 17:31:54 -0500
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F107F28D2D;
-        Mon, 27 Feb 2023 14:31:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE18298FC;
+        Mon, 27 Feb 2023 14:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677537109; x=1709073109;
+  t=1677537110; x=1709073110;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=ZIfeT04mKir/YNhHsgsFjFvjvr/0UP7Swg3kZIhAJQw=;
-  b=Mrl5nwOMuKKAo9wkPfvKEB+7neim1lcySms1JrkKaU9ySLztoefFugoK
-   /ZelKfl+A8yoaohyfVIC4qqjl6ItI3scq0VopnndwGxUgGSBc6rQ0XLS9
-   kCrDnCZIOd4EMCz+A/YyNTfzedOU05BkU62MDFg/xqVwsiHLTXksCwTy2
-   YRSbys5vN2oL4uRl/HhyeRb+qqQPYH2sfgUBdgm0T97H+H6+DxyjvwXNF
-   I/sw3NrHy95O679WaTAm4pmusC2J2WaVWlXZTmW9oW+165/7LkyP4djS8
-   Yp6lCNTk7xATIw1zLFvlpsnJduH8D3+GPOj1uafbFodrYH/MRnPWpotHp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313657504"
+  bh=Wm5/KWrYYFgliIdaotUWNuGKUFxakUNYXMA7lYNP4nA=;
+  b=dsSHAGG93ijLSCIdWEPUJCzp2kfcIIFuVaGzBHtooL/JBFZno7hUD/Xg
+   YjiL4WbAxr4dOl/x3qVtn7Hdu+gEqoaMx/ElGnz59fkmkmhTJacw7lkrY
+   vIssB6UwuCDqJu+cKTMNys7cvHPJFJMVOkSmuIQ8UyhkUUDs0absjAPDr
+   LB8biAtTElCsBHoN08glyOvoP01Ub/NhejKHhT4NW8Iyt3qrHiyxq85Hi
+   KnV4IcnTKtIl8/YAk1g6looc42mH/Mhiaz1aq1u47QudhzAzRzD1elhN7
+   Xn8raHx6myKAhHsqJMQ98v6FHUGuLkQLHJrgqkFYKp5mQp4D01DGS8UrB
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313657542"
 X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="313657504"
+   d="scan'208";a="313657542"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:24 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848024631"
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:25 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848024644"
 X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="848024631"
+   d="scan'208";a="848024644"
 Received: from leonqu-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.72.19])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:23 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:24 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -67,9 +67,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v7 22/41] mm/mmap: Add shadow stack pages to memory accounting
-Date:   Mon, 27 Feb 2023 14:29:38 -0800
-Message-Id: <20230227222957.24501-23-rick.p.edgecombe@intel.com>
+Subject: [PATCH v7 23/41] mm: Re-introduce vm_flags to do_mmap()
+Date:   Mon, 27 Feb 2023 14:29:39 -0800
+Message-Id: <20230227222957.24501-24-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
 References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
@@ -84,69 +84,154 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-The x86 Control-flow Enforcement Technology (CET) feature includes a new
-type of memory called shadow stack. This shadow stack memory has some
-unusual properties, which requires some core mm changes to function
-properly.
+There was no more caller passing vm_flags to do_mmap(), and vm_flags was
+removed from the function's input by:
 
-Account shadow stack pages to stack memory. Do this by adding a
-VM_SHADOW_STACK check in is_stack_mapping().
+    commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
+
+There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
+do_mmap().  Thus, re-introduce vm_flags to do_mmap().
 
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Reviewed-by: Peter Collingbourne <pcc@google.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Kees Cook <keescook@chromium.org>
-
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: linux-mm@kvack.org
 ---
-v7:
- - Change is_stack_mapping() to know about VM_SHADOW_STACK so the
-   additions in vm_stat_account() can be dropped. (David Hildenbrand)
+ fs/aio.c           |  2 +-
+ include/linux/mm.h |  3 ++-
+ ipc/shm.c          |  2 +-
+ mm/mmap.c          | 10 +++++-----
+ mm/nommu.c         |  4 ++--
+ mm/util.c          |  2 +-
+ 6 files changed, 12 insertions(+), 11 deletions(-)
 
-v3:
- - Remove unneeded VM_SHADOW_STACK check in accountable_mapping()
-   (Kirill)
-
-v2:
- - Remove is_shadow_stack_mapping() and just change it to directly bitwise
-   and VM_SHADOW_STACK.
-
-Yu-cheng v26:
- - Remove redundant #ifdef CONFIG_MMU.
-
-Yu-cheng v25:
- - Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping().
----
- mm/internal.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/mm/internal.h b/mm/internal.h
-index 7920a8b7982e..1d13d5580f64 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -491,14 +491,14 @@ static inline bool is_exec_mapping(vm_flags_t flags)
- }
+diff --git a/fs/aio.c b/fs/aio.c
+index b0b17bd098bb..4a7576989719 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -558,7 +558,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
  
- /*
-- * Stack area - automatically grows in one direction
-+ * Stack area
-  *
-- * VM_GROWSUP / VM_GROWSDOWN VMAs are always private anonymous:
-- * do_mmap() forbids all other combinations.
-+ * VM_GROWSUP, VM_GROWSDOWN VMAs are always private
-+ * anonymous. do_mmap() forbids all other combinations.
+ 	ctx->mmap_base = do_mmap(ctx->aio_ring_file, 0, ctx->mmap_size,
+ 				 PROT_READ | PROT_WRITE,
+-				 MAP_SHARED, 0, &unused, NULL);
++				 MAP_SHARED, 0, 0, &unused, NULL);
+ 	mmap_write_unlock(mm);
+ 	if (IS_ERR((void *)ctx->mmap_base)) {
+ 		ctx->mmap_size = 0;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 6a093daced88..87e46a9e0e93 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3014,7 +3014,8 @@ extern unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	struct list_head *uf);
+ extern unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	unsigned long len, unsigned long prot, unsigned long flags,
+-	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
++	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
++	struct list_head *uf);
+ extern int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			 unsigned long start, size_t len, struct list_head *uf,
+ 			 bool downgrade);
+diff --git a/ipc/shm.c b/ipc/shm.c
+index 60e45e7045d4..576a543b7cff 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -1662,7 +1662,7 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
+ 			goto invalid;
+ 	}
+ 
+-	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL);
++	addr = do_mmap(file, addr, size, prot, flags, 0, 0, &populate, NULL);
+ 	*raddr = addr;
+ 	err = 0;
+ 	if (IS_ERR_VALUE(addr))
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 20f21f0949dd..eedae44dfc78 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1191,11 +1191,11 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
   */
- static inline bool is_stack_mapping(vm_flags_t flags)
+ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			unsigned long len, unsigned long prot,
+-			unsigned long flags, unsigned long pgoff,
+-			unsigned long *populate, struct list_head *uf)
++			unsigned long flags, vm_flags_t vm_flags,
++			unsigned long pgoff, unsigned long *populate,
++			struct list_head *uf)
  {
--	return (flags & VM_STACK) == VM_STACK;
-+	return ((flags & VM_STACK) == VM_STACK) || (flags & VM_SHADOW_STACK);
- }
+ 	struct mm_struct *mm = current->mm;
+-	vm_flags_t vm_flags;
+ 	int pkey = 0;
  
- /*
+ 	validate_mm(mm);
+@@ -1256,7 +1256,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	 * to. we assume access permissions have been handled by the open
+ 	 * of the memory object, so we don't do any here.
+ 	 */
+-	vm_flags = calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
++	vm_flags |= calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
+ 			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
+ 
+ 	if (flags & MAP_LOCKED)
+@@ -2829,7 +2829,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 
+ 	file = get_file(vma->vm_file);
+ 	ret = do_mmap(vma->vm_file, start, size,
+-			prot, flags, pgoff, &populate, NULL);
++			prot, flags, 0, pgoff, &populate, NULL);
+ 	fput(file);
+ out:
+ 	mmap_write_unlock(mm);
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 57ba243c6a37..f6ddd084671f 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -1002,6 +1002,7 @@ unsigned long do_mmap(struct file *file,
+ 			unsigned long len,
+ 			unsigned long prot,
+ 			unsigned long flags,
++			vm_flags_t vm_flags,
+ 			unsigned long pgoff,
+ 			unsigned long *populate,
+ 			struct list_head *uf)
+@@ -1009,7 +1010,6 @@ unsigned long do_mmap(struct file *file,
+ 	struct vm_area_struct *vma;
+ 	struct vm_region *region;
+ 	struct rb_node *rb;
+-	vm_flags_t vm_flags;
+ 	unsigned long capabilities, result;
+ 	int ret;
+ 	VMA_ITERATOR(vmi, current->mm, 0);
+@@ -1029,7 +1029,7 @@ unsigned long do_mmap(struct file *file,
+ 
+ 	/* we've determined that we can make the mapping, now translate what we
+ 	 * now know into VMA flags */
+-	vm_flags = determine_vm_flags(file, prot, flags, capabilities);
++	vm_flags |= determine_vm_flags(file, prot, flags, capabilities);
+ 
+ 
+ 	/* we're going to need to record the mapping */
+diff --git a/mm/util.c b/mm/util.c
+index b8ed9dbc7fd5..a93e832f4065 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -539,7 +539,7 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 	if (!ret) {
+ 		if (mmap_write_lock_killable(mm))
+ 			return -EINTR;
+-		ret = do_mmap(file, addr, len, prot, flag, pgoff, &populate,
++		ret = do_mmap(file, addr, len, prot, flag, 0, pgoff, &populate,
+ 			      &uf);
+ 		mmap_write_unlock(mm);
+ 		userfaultfd_unmap_complete(mm, &uf);
 -- 
 2.17.1
 
