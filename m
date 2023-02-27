@@ -2,197 +2,343 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721B46A4EBD
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 23:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 749036A4EF1
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Feb 2023 23:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjB0WiB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Feb 2023 17:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S229515AbjB0WxG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Feb 2023 17:53:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjB0Whb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 17:37:31 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA00C244B5;
-        Mon, 27 Feb 2023 14:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677537203; x=1709073203;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=dUBKpkq7gq2yOqJjADRSuNiVlevkRQtTmCsetlkcYh0=;
-  b=NxyD5GvfR3k1Feyz9RMmFr/mRJQ9Nfvb9FOrz/nHA8mGK5xcPUfqWHOI
-   EeGGzjSNOZQ4Cp4Rm/ezYL9a1IyS1lT1Ax37GRDu4UzorQAU0SaPPVxyZ
-   jKSKmFgJS8wjmAtYCsuZqKKnLyxy+lJO969YDG545a6dVW2mStVgvVo2E
-   rVZDx07/G7Futfd0qKzj/2tyG173afj4oHQJVyf+EhnWhwphp8GlsYFSm
-   /fPH25Ah+SFHiLwQ4A665nKn+mcrq/klSRDMwinFedAx6FEk2VwsSutPZ
-   gbR3cdT70ilGkkd8Z8aZY24xSPJ3s9n68484XBxFSQlTSKw/f3fgzMRmM
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="313658000"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="313658000"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:38 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10634"; a="848024827"
-X-IronPort-AV: E=Sophos;i="5.98,220,1673942400"; 
-   d="scan'208";a="848024827"
-Received: from leonqu-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.72.19])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2023 14:31:37 -0800
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v7 41/41] x86/shstk: Add ARCH_SHSTK_STATUS
-Date:   Mon, 27 Feb 2023 14:29:57 -0800
-Message-Id: <20230227222957.24501-42-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229481AbjB0WxF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Feb 2023 17:53:05 -0500
+X-Greylist: delayed 120 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Feb 2023 14:53:02 PST
+Received: from cmx-torrgo002.bell.net (mta-tor-001.bell.net [209.71.212.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFDF59FF;
+        Mon, 27 Feb 2023 14:53:02 -0800 (PST)
+X-RG-CM-BuS: 0
+X-RG-CM-SC: 0
+X-RG-CM: Clean
+X-Originating-IP: [174.88.80.104]
+X-RG-Env-Sender: dave.anglin@bell.net
+X-RG-Rigid: 63F52EA400BF142C
+X-CM-Envelope: MS4xfBjLlk4zjYSEeu3WVaCwa0ihj889TfqQ1k8id6DSyKQuv0pkLGawZ0Wv1EUpzwCd4cja7fZbg4R4/bKu8rRuTMNJ3nYXwr99v/8Dd0xiWuJuPVKXvRgY
+ 2OagrLXBZU3YOlWKwBAScYUVkBnmrOt8CF2FLyhS3igeicz4gePFF4s6Pz7tX1qlY9Pp6CJoRmdTWw8attHsWjj51QbRW2hICF+bI4NoR+q0kI+RqDayg7Z4
+ Q45OehPaWaOjy+cgYtwpu6ybtIyXr/MJPt/VAiqTMlO90EoeZrAIpcZeWpETrFNwkov6jMizeuMwvU7rzsssESbylVXJNOhkA6FYXETTz0XO0bjDXfN18u1n
+ gZUQnrNlHzBr8TqYhOyGUgoKnXQDGVu6Xlu8iKN3DcZrKkQLeBuKN5cVWcHc5X16h93HV86TZQrdsFLXJzRBtBfSiTlLOfcjJPX9NGXEGUUZnArGiIbXW/bU
+ PymloKnqOFUNmgGQ
+X-CM-Analysis: v=2.4 cv=ULS+oATy c=1 sm=1 tr=0 ts=63fd336d
+ a=jp24WXWxBM5iMX8AJ3NPbw==:117 a=jp24WXWxBM5iMX8AJ3NPbw==:17
+ a=IkcTkHD0fZMA:10 a=JfrnYn6hAAAA:8 a=bLk-5xynAAAA:8 a=VwQbUJbxAAAA:8
+ a=FBHGMhGWAAAA:8 a=s9f9GiaaRdOqZ5pmIrgA:9 a=QEXdDO2ut3YA:10
+ a=1CNFftbPRP8L7MoqJWF3:22 a=zSyb8xVVt2t83sZkrLMb:22 a=AjGcO6oz07-iQ99wixmX:22
+ a=9gvnlMMaQFpL9xblJ6ne:22
+Received: from [192.168.2.49] (174.88.80.104) by cmx-torrgo002.bell.net (5.8.814) (authenticated as dave.anglin@bell.net)
+        id 63F52EA400BF142C; Mon, 27 Feb 2023 17:49:17 -0500
+Message-ID: <d97b8a56-89cc-1eb4-1298-7b16079b3b46@bell.net>
+Date:   Mon, 27 Feb 2023 17:49:18 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 17/30] parisc: Implement the new page table range API
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
+References: <20230227175741.71216-1-willy@infradead.org>
+ <20230227175741.71216-18-willy@infradead.org>
+Content-Language: en-US
+From:   John David Anglin <dave.anglin@bell.net>
+In-Reply-To: <20230227175741.71216-18-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CRIU and GDB need to get the current shadow stack and WRSS enablement
-status. This information is already available via /proc/pid/status, but
-this is inconvenient for CRIU because it involves parsing the text output
-in an area of the code where this is difficult. Provide a status
-arch_prctl(), ARCH_SHSTK_STATUS for retrieving the status. Have arg2 be a
-userspace address, and make the new arch_prctl simply copy the features
-out to userspace.
+On 2023-02-27 12:57 p.m., Matthew Wilcox (Oracle) wrote:
+> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio()
+> and flush_icache_pages().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
+> from being per-page to per-folio.
+>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: linux-parisc@vger.kernel.org
+> ---
+>   arch/parisc/include/asm/cacheflush.h |  14 ++--
+>   arch/parisc/include/asm/pgtable.h    |  28 +++++---
+>   arch/parisc/kernel/cache.c           | 101 +++++++++++++++++++--------
+>   3 files changed, 99 insertions(+), 44 deletions(-)
+>
+> diff --git a/arch/parisc/include/asm/cacheflush.h b/arch/parisc/include/asm/cacheflush.h
+> index ff07c509e04b..0bf8b69d086b 100644
+> --- a/arch/parisc/include/asm/cacheflush.h
+> +++ b/arch/parisc/include/asm/cacheflush.h
+> @@ -46,16 +46,20 @@ void invalidate_kernel_vmap_range(void *vaddr, int size);
+>   #define flush_cache_vmap(start, end)		flush_cache_all()
+>   #define flush_cache_vunmap(start, end)		flush_cache_all()
+>   
+> +void flush_dcache_folio(struct folio *folio);
+> +#define flush_dcache_folio flush_dcache_folio
+>   #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+> -void flush_dcache_page(struct page *page);
+> +static inline void flush_dcache_page(struct page *page)
+> +{
+> +	flush_dcache_folio(page_folio(page));
+> +}
+>   
+>   #define flush_dcache_mmap_lock(mapping)		xa_lock_irq(&mapping->i_pages)
+>   #define flush_dcache_mmap_unlock(mapping)	xa_unlock_irq(&mapping->i_pages)
+>   
+> -#define flush_icache_page(vma,page)	do { 		\
+> -	flush_kernel_dcache_page_addr(page_address(page)); \
+> -	flush_kernel_icache_page(page_address(page)); 	\
+> -} while (0)
+> +void flush_icache_pages(struct vm_area_struct *vma, struct page *page,
+> +		unsigned int nr);
+> +#define flush_icache_page(vma, page)	flush_icache_pages(vma, page, 1)
+>   
+>   #define flush_icache_range(s,e)		do { 		\
+>   	flush_kernel_dcache_range_asm(s,e); 		\
+> diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
+> index e2950f5db7c9..78ee9816f423 100644
+> --- a/arch/parisc/include/asm/pgtable.h
+> +++ b/arch/parisc/include/asm/pgtable.h
+> @@ -73,14 +73,7 @@ extern void __update_cache(pte_t pte);
+>   		mb();				\
+>   	} while(0)
+>   
+> -#define set_pte_at(mm, addr, pteptr, pteval)	\
+> -	do {					\
+> -		if (pte_present(pteval) &&	\
+> -		    pte_user(pteval))		\
+> -			__update_cache(pteval);	\
+> -		*(pteptr) = (pteval);		\
+> -		purge_tlb_entries(mm, addr);	\
+> -	} while (0)
+> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
+>   
+>   #endif /* !__ASSEMBLY__ */
+>   
+> @@ -391,11 +384,28 @@ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+>   
+>   extern void paging_init (void);
+>   
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +		pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	if (pte_present(pte) && pte_user(pte))
+> +		__update_cache(pte);
+> +	for (;;) {
+> +		*ptep = pte;
+> +		purge_tlb_entries(mm, addr);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		pte_val(pte) += 1 << PFN_PTE_SHIFT;
+> +		addr += PAGE_SIZE;
+> +	}
+> +}
+> +
+>   /* Used for deferring calls to flush_dcache_page() */
+>   
+>   #define PG_dcache_dirty         PG_arch_1
+>   
+> -#define update_mmu_cache(vms,addr,ptep) __update_cache(*ptep)
+> +#define update_mmu_cache_range(vma, addr, ptep, nr) __update_cache(*ptep)
+> +#define update_mmu_cache(vma, addr, ptep) __update_cache(*ptep)
+>   
+>   /*
+>    * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
+> diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
+> index 984d3a1b3828..16057812103b 100644
+> --- a/arch/parisc/kernel/cache.c
+> +++ b/arch/parisc/kernel/cache.c
+> @@ -92,11 +92,11 @@ static inline void flush_data_cache(void)
+>   /* Kernel virtual address of pfn.  */
+>   #define pfn_va(pfn)	__va(PFN_PHYS(pfn))
+>   
+> -void
+> -__update_cache(pte_t pte)
+> +void __update_cache(pte_t pte)
+>   {
+>   	unsigned long pfn = pte_pfn(pte);
+> -	struct page *page;
+> +	struct folio *folio;
+> +	unsigned int nr;
+>   
+>   	/* We don't have pte special.  As a result, we can be called with
+>   	   an invalid pfn and we don't need to flush the kernel dcache page.
+> @@ -104,13 +104,17 @@ __update_cache(pte_t pte)
+>   	if (!pfn_valid(pfn))
+>   		return;
+>   
+> -	page = pfn_to_page(pfn);
+> -	if (page_mapping_file(page) &&
+> -	    test_bit(PG_dcache_dirty, &page->flags)) {
+> -		flush_kernel_dcache_page_addr(pfn_va(pfn));
+> -		clear_bit(PG_dcache_dirty, &page->flags);
+> +	folio = page_folio(pfn_to_page(pfn));
+> +	pfn = folio_pfn(folio);
+> +	nr = folio_nr_pages(folio);
+> +	if (folio_flush_mapping(folio) &&
+Shouldn't this call be to folio_mapping()?
+> +	    test_bit(PG_dcache_dirty, &folio->flags)) {
+> +		while (nr--)
+> +			flush_kernel_dcache_page_addr(pfn_va(pfn + nr));
+> +		clear_bit(PG_dcache_dirty, &folio->flags);
+>   	} else if (parisc_requires_coherency())
+> -		flush_kernel_dcache_page_addr(pfn_va(pfn));
+> +		while (nr--)
+> +			flush_kernel_dcache_page_addr(pfn_va(pfn + nr));
+>   }
+>   
+>   void
+> @@ -365,6 +369,20 @@ static void flush_user_cache_page(struct vm_area_struct *vma, unsigned long vmad
+>   	preempt_enable();
+>   }
+>   
+> +void flush_icache_pages(struct vm_area_struct *vma, struct page *page,
+> +		unsigned int nr)
+> +{
+> +	void *kaddr = page_address(page);
+> +
+> +	for (;;) {
+> +		flush_kernel_dcache_page_addr(kaddr);
+> +		flush_kernel_icache_page(kaddr);
+> +		if (--nr == 0)
+> +			break;
+> +		page += PAGE_SIZE;
+> +	}
+> +}
+> +
+>   static inline pte_t *get_ptep(struct mm_struct *mm, unsigned long addr)
+>   {
+>   	pte_t *ptep = NULL;
+> @@ -393,26 +411,30 @@ static inline bool pte_needs_flush(pte_t pte)
+>   		== (_PAGE_PRESENT | _PAGE_ACCESSED);
+>   }
+>   
+> -void flush_dcache_page(struct page *page)
+> +void flush_dcache_folio(struct folio *folio)
+>   {
+> -	struct address_space *mapping = page_mapping_file(page);
+> -	struct vm_area_struct *mpnt;
+> -	unsigned long offset;
+> +	struct address_space *mapping = folio_flush_mapping(folio);
+Likewise.
+> +	struct vm_area_struct *vma;
+>   	unsigned long addr, old_addr = 0;
+> +	void *kaddr;
+>   	unsigned long count = 0;
+> +	unsigned long i, nr;
+>   	pgoff_t pgoff;
+>   
+>   	if (mapping && !mapping_mapped(mapping)) {
+> -		set_bit(PG_dcache_dirty, &page->flags);
+> +		set_bit(PG_dcache_dirty, &folio->flags);
+>   		return;
+>   	}
+>   
+> -	flush_kernel_dcache_page_addr(page_address(page));
+> +	nr = folio_nr_pages(folio);
+> +	kaddr = folio_address(folio);
+> +	for (i = 0; i < nr; i++)
+> +		flush_kernel_dcache_page_addr(kaddr + i * PAGE_SIZE);
+>   
+>   	if (!mapping)
+>   		return;
+>   
+> -	pgoff = page->index;
+> +	pgoff = folio->index;
+>   
+>   	/*
+>   	 * We have carefully arranged in arch_get_unmapped_area() that
+> @@ -422,15 +444,29 @@ void flush_dcache_page(struct page *page)
+>   	 * on machines that support equivalent aliasing
+>   	 */
+>   	flush_dcache_mmap_lock(mapping);
+> -	vma_interval_tree_foreach(mpnt, &mapping->i_mmap, pgoff, pgoff) {
+> -		offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
+> -		addr = mpnt->vm_start + offset;
+> -		if (parisc_requires_coherency()) {
+> -			pte_t *ptep;
+> +	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff + nr - 1) {
+> +		unsigned long offset = pgoff - vma->vm_pgoff;
+> +		unsigned long pfn = folio_pfn(folio);
+> +
+> +		addr = vma->vm_start;
+> +		nr = folio_nr_pages(folio);
+> +		if (offset > -nr) {
+> +			pfn -= offset;
+> +			nr += offset;
+> +		} else {
+> +			addr += offset * PAGE_SIZE;
+> +		}
+> +		if (addr + nr * PAGE_SIZE > vma->vm_end)
+> +			nr = (vma->vm_end - addr) / PAGE_SIZE;
+>   
+> -			ptep = get_ptep(mpnt->vm_mm, addr);
+> -			if (ptep && pte_needs_flush(*ptep))
+> -				flush_user_cache_page(mpnt, addr);
+> +		if (parisc_requires_coherency()) {
+> +			for (i = 0; i < nr; i++) {
+> +				pte_t *ptep = get_ptep(vma->vm_mm,
+> +							addr + i * PAGE_SIZE);
+> +				if (ptep && pte_needs_flush(*ptep))
+> +					flush_user_cache_page(vma,
+> +							addr + i * PAGE_SIZE);
+> +			}
+>   		} else {
+>   			/*
+>   			 * The TLB is the engine of coherence on parisc:
+> @@ -443,27 +479,32 @@ void flush_dcache_page(struct page *page)
+>   			 * in (until the user or kernel specifically
+>   			 * accesses it, of course)
+>   			 */
+> -			flush_tlb_page(mpnt, addr);
+> +			for (i = 0; i < nr; i++)
+> +				flush_tlb_page(vma, addr + i * PAGE_SIZE);
+>   			if (old_addr == 0 || (old_addr & (SHM_COLOUR - 1))
+>   					!= (addr & (SHM_COLOUR - 1))) {
+> -				__flush_cache_page(mpnt, addr, page_to_phys(page));
+> +				for (i = 0; i < nr; i++)
+> +					__flush_cache_page(vma,
+> +						addr + i * PAGE_SIZE,
+> +						(pfn + i) * PAGE_SIZE);
+>   				/*
+>   				 * Software is allowed to have any number
+>   				 * of private mappings to a page.
+>   				 */
+> -				if (!(mpnt->vm_flags & VM_SHARED))
+> +				if (!(vma->vm_flags & VM_SHARED))
+>   					continue;
+>   				if (old_addr)
+>   					pr_err("INEQUIVALENT ALIASES 0x%lx and 0x%lx in file %pD\n",
+> -						old_addr, addr, mpnt->vm_file);
+> -				old_addr = addr;
+> +						old_addr, addr, vma->vm_file);
+> +				if (nr == folio_nr_pages(folio))
+> +					old_addr = addr;
+>   			}
+>   		}
+>   		WARN_ON(++count == 4096);
+>   	}
+>   	flush_dcache_mmap_unlock(mapping);
+>   }
+> -EXPORT_SYMBOL(flush_dcache_page);
+> +EXPORT_SYMBOL(flush_dcache_folio);
+>   
+>   /* Defined in arch/parisc/kernel/pacache.S */
+>   EXPORT_SYMBOL(flush_kernel_dcache_range_asm);
 
-Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-Tested-by: John Allen <john.allen@amd.com>
-Tested-by: Kees Cook <keescook@chromium.org>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Suggested-by: Mike Rapoport <rppt@kernel.org>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
----
-v5:
- - Fix typo in commit log
-
-v4:
- - New patch
----
- Documentation/x86/shstk.rst       | 6 ++++++
- arch/x86/include/asm/shstk.h      | 2 +-
- arch/x86/include/uapi/asm/prctl.h | 1 +
- arch/x86/kernel/process_64.c      | 1 +
- arch/x86/kernel/shstk.c           | 8 +++++++-
- 5 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/x86/shstk.rst b/Documentation/x86/shstk.rst
-index e8ed5fc0f7ae..7f4af798794e 100644
---- a/Documentation/x86/shstk.rst
-+++ b/Documentation/x86/shstk.rst
-@@ -77,6 +77,11 @@ arch_prctl(ARCH_SHSTK_UNLOCK, unsigned long features)
-     Unlock features. 'features' is a mask of all features to unlock. All
-     bits set are processed, unset bits are ignored. Only works via ptrace.
- 
-+arch_prctl(ARCH_SHSTK_STATUS, unsigned long addr)
-+    Copy the currently enabled features to the address passed in addr. The
-+    features are described using the bits passed into the others in
-+    'features'.
-+
- The return values are as follows. On success, return 0. On error, errno can
- be::
- 
-@@ -84,6 +89,7 @@ be::
-         -ENOTSUPP if the feature is not supported by the hardware or
-          kernel.
-         -EINVAL arguments (non existing feature, etc)
-+        -EFAULT if could not copy information back to userspace
- 
- The feature's bits supported are::
- 
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index acee68d30a07..be9267897211 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -14,7 +14,7 @@ struct thread_shstk {
- 	u64	size;
- };
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
- void reset_thread_features(void);
- int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
- 			     unsigned long stack_size,
-diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 200efbbe5809..1b85bc876c2d 100644
---- a/arch/x86/include/uapi/asm/prctl.h
-+++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -26,6 +26,7 @@
- #define ARCH_SHSTK_DISABLE		0x5002
- #define ARCH_SHSTK_LOCK			0x5003
- #define ARCH_SHSTK_UNLOCK		0x5004
-+#define ARCH_SHSTK_STATUS		0x5005
- 
- /* ARCH_SHSTK_ features bits */
- #define ARCH_SHSTK_SHSTK		(1ULL <<  0)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index d368854fa9c4..dde43caf196e 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -836,6 +836,7 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_SHSTK_DISABLE:
- 	case ARCH_SHSTK_LOCK:
- 	case ARCH_SHSTK_UNLOCK:
-+	case ARCH_SHSTK_STATUS:
- 		return shstk_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index 3197ff824809..4069d5bbbe8c 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -444,8 +444,14 @@ SYSCALL_DEFINE3(map_shadow_stack, unsigned long, addr, unsigned long, size, unsi
- 	return alloc_shstk(addr, aligned_size, size, set_tok);
- }
- 
--long shstk_prctl(struct task_struct *task, int option, unsigned long features)
-+long shstk_prctl(struct task_struct *task, int option, unsigned long arg2)
- {
-+	unsigned long features = arg2;
-+
-+	if (option == ARCH_SHSTK_STATUS) {
-+		return put_user(task->thread.features, (unsigned long __user *)arg2);
-+	}
-+
- 	if (option == ARCH_SHSTK_LOCK) {
- 		task->thread.features_locked |= features;
- 		return 0;
 -- 
-2.17.1
+John David Anglin  dave.anglin@bell.net
 
