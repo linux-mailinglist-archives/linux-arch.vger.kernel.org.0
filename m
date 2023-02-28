@@ -2,55 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC236A530F
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Feb 2023 07:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B243B6A5345
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Feb 2023 07:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjB1GeO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Feb 2023 01:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
+        id S230182AbjB1G6i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Feb 2023 01:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjB1GeN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Feb 2023 01:34:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930AD93D0;
-        Mon, 27 Feb 2023 22:34:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CC95B80DDF;
-        Tue, 28 Feb 2023 06:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FA76C433EF;
-        Tue, 28 Feb 2023 06:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677566046;
-        bh=puCS9IFL6kxVatidzdwisKvTOz6f3zVPNXE9LZnaU2s=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=EHEJDVpGa03b0TSBpW14w5LXf2zeKNUqwPfxAyLmL9kOycbkWwZ7odIUGwkzosFw5
-         rcLkkrA5EqydY/CJ3+WW6RG5iFPnICcnKxdPG8vFUyId5RXlSjaq/dgO+xx1Zorn4x
-         E7EQnYhVcpDhmP39kRZ20B8ncRTAN5ucTVqSDgoe9QJMJabrjZjCmCTRQlFfeYwhlF
-         v+xvkgkNU9WRJh0xVTnSsB+R+r3GYDyEgy1AesImsaOCSiCA/qOUOJ16u+Hlw9uMay
-         NcRQPurT8+q/GLPQZ8khfpLSNnN6U1vwF/UUqjl9ZJWE3uZH7mYj7S+G3xB94YPsUO
-         CbF2coVhwXFHg==
-Message-ID: <e62ebe27-a1f6-ebd5-9ee0-a78e14ec4d38@kernel.org>
-Date:   Mon, 27 Feb 2023 22:34:05 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 06/30] arc: Implement the new page table range API
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org
+        with ESMTP id S229762AbjB1G63 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Feb 2023 01:58:29 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2070.outbound.protection.outlook.com [40.107.9.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE303E3A9;
+        Mon, 27 Feb 2023 22:58:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nwxl3wee/iyjTLVD9cK0MYEpUnkcRdqgJWHGcLb2SgC8KtD8oDvnSW/W2yI/PtzmuvTgE00WgBYVO7arR4i9T0XktKQvdWT5k5nKFFRp5CHSdH0BLPFD/0554hTAXkUOtgdMAhAxdA6cS0zlhhsO924QG+9bdrcmEQQR+fTkYd6z1E+d9eZGsfRv55jWQBXYizwzIw64fQQRVEWVoFULZOcso2Us1y+EvCF2GM2tyzzyz663+BOJAuHuCNiG20Hy6N1Q55GJAoCYJVZaUJpo9Kwb3hGO7DzepLMSyRIem4qkufgoXC7RS9BAK0XefS69hClUxT/iAOwBgPzO37sTYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eCLAHHXF0lbmZorfRFp1BWX8qLIp+udCu8oSVxeL3eg=;
+ b=SQZmtNr+QkjvaYFY/WwfQGuVGTQNOvKfWL7TRUhIXzXLY+VgJdQ4rwmwF+GCl85V1yiNZIC5vd5bfw8CxEInn64mqf433dNx56VPpBIlqhe/PrWzzrV9KXZD/0R++QzlyXEaaVvsK2tf6BbzJFvIpbLTpRGbMy4zB6WaRXJ2zdYJHr4pfY0CQMTkrRkU2cM1Prws1ynYtJu3UVguiYSds0gqbwFGeXBOCSea8hIVf+lK+3ma6kXjsyG2LTXpzjz6xldtkEwpbOmE/xCWEdvMPRpq5tK/yDiEEYWzfRCZx4G8DHW8xdRpV4YuFMTa9Z6OdIT4nfkbZXaPxy55ms3zog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eCLAHHXF0lbmZorfRFp1BWX8qLIp+udCu8oSVxeL3eg=;
+ b=ZvTF6R8Ccrgj2mY60fe2MYMHyWswZvbrQluW7XVvh1DVafNp/nTaKUrswhnto+CeIId4RwR5dHzvRB+iTlAtCzT4pfd4mVw27DnYK4bmlu4EybBEMyPesyRKAIZmKrYZFbed/KUKNQiilvzfLMEVtp0dXDNroSP2f/44JPTiLLWSr7OPXcqmy7IIBKtRi6GEcJINbIGgKeTZqcNVV+4FBUpxpeiOoZeF7WaDNyLQ1Bn9oz4aWYvZg28VssIQOYrNYVd5OgQlhNbt2For5E9YmCsGu3jeoKgd4+lYSZmnOcpkcWOmArtT/oW8ozpR5O+Lpuu3nnzp7Z9gZj1BnNgl2w==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MRZP264MB2940.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Tue, 28 Feb
+ 2023 06:58:18 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::2cfb:d4c:1932:b097%5]) with mapi id 15.20.6134.030; Tue, 28 Feb 2023
+ 06:58:18 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v2 18/30] powerpc: Implement the new page table range API
+Thread-Topic: [PATCH v2 18/30] powerpc: Implement the new page table range API
+Thread-Index: AQHZStUJBEwAYnjQzEOVusOyuXC6o67jMlKAgAAKAgCAALITgA==
+Date:   Tue, 28 Feb 2023 06:58:18 +0000
+Message-ID: <9425f83a-e923-b119-cf7a-6b9a9f8dd8b7@csgroup.eu>
 References: <20230227175741.71216-1-willy@infradead.org>
- <20230227175741.71216-7-willy@infradead.org>
-From:   Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <20230227175741.71216-7-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+ <20230227175741.71216-19-willy@infradead.org>
+ <ee864b97-90e6-4535-4db3-2659a2250afd@csgroup.eu>
+ <Y/0QqO10jK55zHO0@casper.infradead.org>
+In-Reply-To: <Y/0QqO10jK55zHO0@casper.infradead.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB2940:EE_
+x-ms-office365-filtering-correlation-id: 406def1a-d4d8-413c-2110-08db19592bd4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: F7+L4pLh1DG0N1GrBi0stykcuCc9TJIkTLhLFn9mEHzvx9gtBiifHmVe7aFdv2Scbfeb5ImQBGjp0UFe9d2LZDu7mj37rZG6M6I+EyQWN0KhvPgjmUt1B1Pu5n2sPkqYJAfWfcfFHI7/Mo4P4jhvUGiCHxBskgYSy+0tOBPPf0UJDhK3j+hf6FPwFDXTiMTxANn0efdVbffRAG3/9pUqfekoRmbDxmXej7nX/3wFUEpUlC2YmTDmwiVz+kbkOA6IFIbl1I7U55rl7Otg9pp5SKEcSAy55O6s/Jg0sRRPOmtxxxhKHx6SgKB9O6x36dEGFkIRCya+kIaehxdq6lnSqK3dB7Gu/uD7yHnSIKSaaYq26gXWqGvLsJGSbSFiRZkOuaHIJxf4Fe2/nBx93uCBw/OH+m9NvfEuvWRMf+scAw3DdU/KVPcqebaTg9wah+OkqwQ0mWpNJw5fIk4KEpj6EmEgGK/zyeMv8U35vIqaq1jWl34iXAsh3YSEaLc91nxMnXVCfefhVwgAZ08Pq22qVxo0cAzbE/PNWK7wubysgAJzzcg+beGSU+/hrZP7cFiD4+ixc3zYstIFqb5Wkfdrj9U+Dy4BV5XyQaqS0R711M1sQTfrGmEL2371tv3M7guAASM0gIg9deDBU0ft1kdOOOegKerwUvU7KrHR3ZKwZIF4kai+dYxZ/x5tWE841UpaY6Nv8XZ6TFMVHkOOdw+5bTCJgJiFJhMTUJZcX3hcHObXy6LWtlhnSSUOWHKA3sRov+j/EgGHY5bwEYHIaq4baw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199018)(54906003)(8936002)(31696002)(86362001)(44832011)(5660300002)(6486002)(66946007)(316002)(122000001)(66556008)(6916009)(66476007)(64756008)(4326008)(66446008)(36756003)(8676002)(76116006)(38100700002)(41300700001)(38070700005)(91956017)(66574015)(2906002)(2616005)(71200400001)(6506007)(31686004)(26005)(186003)(6512007)(83380400001)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eVdwdGlCRzZMc01tU2dYd2V5TkdGRU1xNmRxU0JFQmc1dm9zMHBTWnhhVmdI?=
+ =?utf-8?B?TEVFdElnM2ZuSDU0Wk9yZUFkOEJtVEVvN2M0NEZjT2F2L2x1VHBQUDNNWlpy?=
+ =?utf-8?B?MVdIdWpiS2tyUy9BUmdSTWdib0dXa0E1ZzJsVHJEYkN3K3RLdjVsQzVPQ3Q3?=
+ =?utf-8?B?WEZMQVUzbGNXbm5kY0RxWU5JSUMvQ2pCeWs5VE1KWlJ2M0lBZXJDQjhCcUl2?=
+ =?utf-8?B?WEkyRys0RE5QblduSmoyVHFMaTJTMHMydXlyOXdlWnAvM1duK2FsanA1L2Yv?=
+ =?utf-8?B?MUhuVVNOdStPQytzTytkNEtwTmNGNHdCb3EzNVAxdldwSCt6MUZQT3h3d3RV?=
+ =?utf-8?B?WnY5MzJNOVZLZUZHRVdBajNmaVhXSk80R1lCK2xJa2ZmSGM4b0VtdERnV1FS?=
+ =?utf-8?B?SjVwckJuN3V0UWhGNHE2bDZGcmJDcUp4bWNTajc4aUdmNXZFMWxOc2pyVzA5?=
+ =?utf-8?B?M21nelRmWUZTUTBnYWJpZ1FIc0JRS1FXbE4wREdaMG5qbllKS1NZSkRBR2dY?=
+ =?utf-8?B?Uy9IaTJMU1QrUENNMVdNbnc0YUUxeE1yYlY2NWhnSGtGZSt0ODhZTGZjdjdo?=
+ =?utf-8?B?TEhhQnBraldlSW5BZFlOSE5haEJETWhQWWxYdGc1VEFDTE5IQmxWb3p0ZDAr?=
+ =?utf-8?B?VzhwOG1XdWpja1MrK0FnVHNBZlZtbEt2eFpOREQ2VzBKYkozN2JZd3Z6T1lF?=
+ =?utf-8?B?Z2hhNkVucnlGYjVaUkNHcVNmK1BZLzZTZFhZcmZnQjNiWWhBUCsvR280Smhh?=
+ =?utf-8?B?N3d1dVRHbW0vWmxnelBZNHNQRlNteFovMS9FdlM1RVZLOWZHWjZCaFM5UGFY?=
+ =?utf-8?B?cVh5VlJCbTdtcmF3MUFjZ1dUN2t1bW9jWlh3Umt3R3pNbHlOUkZ2VWJKVmZq?=
+ =?utf-8?B?a1A5UTk1U2JIWFZTTFFFOWJpcFV0eGQ0MVZNdDJpQUFvU2h0c005Smk0RXNT?=
+ =?utf-8?B?bzMwWkE4c2VHOGFZWWovVWxvWXZ3MDJpK2V3dUlKeHJ0eW80QXhFdEdYalZL?=
+ =?utf-8?B?QlJ5OVBiN2F1cUtHVVZHMWc3cWkrV3puY3NDUGF2ZWRWTW5ERk9SbS9pdFM3?=
+ =?utf-8?B?aGdNT0l4RUZlL0p2WUFVOFZKOWp6RitYazRvY1FYVGRrQ3V1OENFb1RuaExs?=
+ =?utf-8?B?VXZSL002bGhSR3loQldOSWVBL2c2WFhxSEZPSk8xWnVZRDFDWkJpM2ExYkZx?=
+ =?utf-8?B?WVJXYWphV296TFhIamV0NWUyd2dycjBMemxXVEFZSUorbTRtMEJYVDl2UVBY?=
+ =?utf-8?B?OGxoS0dMQ3kra0ZoSlZ5UVZ0V29VOUN0N0t1cy9KNGttUkRsYURTU0VZU1hL?=
+ =?utf-8?B?eFEwempkTWhUTXRlOERPOHozR3E5S1JPcXZQVTJoL0VueG0yRnZMN1NvN3p1?=
+ =?utf-8?B?Y1Nwa0JIY0ZzTVVDekVuRkM2QUY0eWtQWmk3MENyMGprdEFtak9Qb25Oa2FY?=
+ =?utf-8?B?dnRuQVlFRjFUSC9EU3dTTkNEWG9tMGl6UEtONGRDZnJQQzN0eWVnZnBJK0NJ?=
+ =?utf-8?B?SEFxQ2tURStieExxQ1I1MGRuaHArNXNsSFRrTGdOaXVUNWdZRHdnN29ZRU9K?=
+ =?utf-8?B?dy9mNERSYlcyMmFFYUZFL25zSHFRQ0JGZFBGeWtISlU0RjRtTktsbGYySU1z?=
+ =?utf-8?B?MzNSWmc0M00vMzZaSFBqVU5rbHRMalZQT2s5b1hlTVpCY1RER0NTTVpOMU9B?=
+ =?utf-8?B?dTh2cjBMQ1Q5V2k1VVZDenpnUEtkVmZrSzU1NlpCOXdMajdYUzNUSVZpZXN1?=
+ =?utf-8?B?SFFFOTlJcjRsc3JsNWk4c2hnRTRKdUlxSnh6OVFEWld3QmxpT2ZRT3lYNi9y?=
+ =?utf-8?B?WHl0R3FQRDZEd1E1QzN6aVVVR1lVTGpxaDVXeGZDTkJtL0ExL3hUZjYxTlh6?=
+ =?utf-8?B?clJLakF6dlJMclJqcU8rRlM0YmN1N1kyZEN1QlAwQW1FR213ZS9majNQRytr?=
+ =?utf-8?B?SUpNbjNNcDUrMjdmZDBWWWIwUGd3Qk01b0R4WjEzNHBIY1ZiVGhyV2dVUTNa?=
+ =?utf-8?B?bnR4U21XbXNLWmpSK1pDL0VidldWVGlUbXZZeERFblNyR3lOVnVBZ09LcWlt?=
+ =?utf-8?B?aEw1eDZrVU55TFNPbGhGTmR4Umg0RGpSdmtReDVESzY4Zy9IbmRuZkxOVkUw?=
+ =?utf-8?B?Z2VVditzK0x4L00vNTE0WTZpaW8wT3dvSXZkTFVGMjQ3ejFZV1cyL0tTdlN2?=
+ =?utf-8?B?aEE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A29B386F57A33F46A12E3CDF298D7136@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 406def1a-d4d8-413c-2110-08db19592bd4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Feb 2023 06:58:18.0538
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: olhKL5bbBLIehdwJL7d/EjcolVgnfF86b5/uHL/LbhO5Blvv5O6y87fPF6nsd+kFboQsYGFcizhcgaCECVPKWFE4bccNHagt5bh1KzmQqeE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2940
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,813 +135,54 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 2/27/23 09:57, Matthew Wilcox (Oracle) wrote:
-> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio()
-> and flush_icache_pages().
->
-> Change the PG_dc_clean flag from being per-page to per-folio (which
-> means it cannot always be set as we don't know that all pages in this
-> folio were cleaned).  Enhance the internal flush routines to take the
-> number of pages to flush.
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: linux-snps-arc@lists.infradead.org
-> ---
->   arch/arc/include/asm/cacheflush.h         |  7 +-
->   arch/arc/include/asm/pgtable-bits-arcv2.h | 20 +++--
->   arch/arc/mm/cache.c                       | 61 ++++++++------
->   arch/arc/mm/tlb.c                         | 18 +++--
-
-You need to split ARC and ARM into separate patches.
-
-Also it'd be best to drop all the VIPT aliasing bits for ARC, they are a 
-needless maintenance burden.
-I can send a patch which you could carry in your tree for easier logistics.
-
--Vineet
-
->   arch/arm/include/asm/cacheflush.h         | 24 +++---
->   arch/arm/include/asm/pgtable.h            |  5 +-
->   arch/arm/include/asm/tlbflush.h           | 13 +--
->   arch/arm/mm/copypage-v4mc.c               |  5 +-
->   arch/arm/mm/copypage-v6.c                 |  5 +-
->   arch/arm/mm/copypage-xscale.c             |  5 +-
->   arch/arm/mm/dma-mapping.c                 | 24 +++---
->   arch/arm/mm/fault-armv.c                  | 14 ++--
->   arch/arm/mm/flush.c                       | 99 ++++++++++++++---------
->   arch/arm/mm/mm.h                          |  2 +-
->   arch/arm/mm/mmu.c                         | 14 +++-
->   15 files changed, 193 insertions(+), 123 deletions(-)
->
-> diff --git a/arch/arc/include/asm/cacheflush.h b/arch/arc/include/asm/cacheflush.h
-> index e201b4b1655a..04f65f588510 100644
-> --- a/arch/arc/include/asm/cacheflush.h
-> +++ b/arch/arc/include/asm/cacheflush.h
-> @@ -25,17 +25,20 @@
->    * in update_mmu_cache()
->    */
->   #define flush_icache_page(vma, page)
-> +#define flush_icache_pages(vma, page, nr)
->   
->   void flush_cache_all(void);
->   
->   void flush_icache_range(unsigned long kstart, unsigned long kend);
->   void __sync_icache_dcache(phys_addr_t paddr, unsigned long vaddr, int len);
-> -void __inv_icache_page(phys_addr_t paddr, unsigned long vaddr);
-> -void __flush_dcache_page(phys_addr_t paddr, unsigned long vaddr);
-> +void __inv_icache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr);
-> +void __flush_dcache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr);
->   
->   #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->   
->   void flush_dcache_page(struct page *page);
-> +void flush_dcache_folio(struct folio *folio);
-> +#define flush_dcache_folio flush_dcache_folio
->   
->   void dma_cache_wback_inv(phys_addr_t start, unsigned long sz);
->   void dma_cache_inv(phys_addr_t start, unsigned long sz);
-> diff --git a/arch/arc/include/asm/pgtable-bits-arcv2.h b/arch/arc/include/asm/pgtable-bits-arcv2.h
-> index 6e9f8ca6d6a1..4a1b2ce204c6 100644
-> --- a/arch/arc/include/asm/pgtable-bits-arcv2.h
-> +++ b/arch/arc/include/asm/pgtable-bits-arcv2.h
-> @@ -100,14 +100,24 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->   	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
->   }
->   
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pteval)
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, pte_t pte, unsigned int nr)
->   {
-> -	set_pte(ptep, pteval);
-> +	for (;;) {
-> +		set_pte(ptep, pte);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		pte_val(pte) += PAGE_SIZE;
-> +	}
->   }
-> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
->   
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -		      pte_t *ptep);
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
-> +		      pte_t *ptep, unsigned int nr);
-> +
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
->   
->   /*
->    * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
-> diff --git a/arch/arc/mm/cache.c b/arch/arc/mm/cache.c
-> index 55c6de138eae..3c16ee942a5c 100644
-> --- a/arch/arc/mm/cache.c
-> +++ b/arch/arc/mm/cache.c
-> @@ -752,17 +752,17 @@ static inline void arc_slc_enable(void)
->    * There's a corollary case, where kernel READs from a userspace mapped page.
->    * If the U-mapping is not congruent to K-mapping, former needs flushing.
->    */
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->   {
->   	struct address_space *mapping;
->   
->   	if (!cache_is_vipt_aliasing()) {
-> -		clear_bit(PG_dc_clean, &page->flags);
-> +		clear_bit(PG_dc_clean, &folio->flags);
->   		return;
->   	}
->   
->   	/* don't handle anon pages here */
-> -	mapping = page_mapping_file(page);
-> +	mapping = folio_flush_mapping(folio);
->   	if (!mapping)
->   		return;
->   
-> @@ -771,17 +771,27 @@ void flush_dcache_page(struct page *page)
->   	 * Make a note that K-mapping is dirty
->   	 */
->   	if (!mapping_mapped(mapping)) {
-> -		clear_bit(PG_dc_clean, &page->flags);
-> -	} else if (page_mapcount(page)) {
-> -
-> +		clear_bit(PG_dc_clean, &folio->flags);
-> +	} else if (folio_mapped(folio)) {
->   		/* kernel reading from page with U-mapping */
-> -		phys_addr_t paddr = (unsigned long)page_address(page);
-> -		unsigned long vaddr = page->index << PAGE_SHIFT;
-> +		phys_addr_t paddr = (unsigned long)folio_address(folio);
-> +		unsigned long vaddr = folio_pos(folio);
->   
-> +		/*
-> +		 * vaddr is not actually the virtual address, but is
-> +		 * congruent to every user mapping.
-> +		 */
->   		if (addr_not_cache_congruent(paddr, vaddr))
-> -			__flush_dcache_page(paddr, vaddr);
-> +			__flush_dcache_pages(paddr, vaddr,
-> +						folio_nr_pages(folio));
->   	}
->   }
-> +EXPORT_SYMBOL(flush_dcache_folio);
-> +
-> +void flush_dcache_page(struct page *page)
-> +{
-> +	return flush_dcache_folio(page_folio(page));
-> +}
->   EXPORT_SYMBOL(flush_dcache_page);
->   
->   /*
-> @@ -921,18 +931,18 @@ void __sync_icache_dcache(phys_addr_t paddr, unsigned long vaddr, int len)
->   }
->   
->   /* wrapper to compile time eliminate alignment checks in flush loop */
-> -void __inv_icache_page(phys_addr_t paddr, unsigned long vaddr)
-> +void __inv_icache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr)
->   {
-> -	__ic_line_inv_vaddr(paddr, vaddr, PAGE_SIZE);
-> +	__ic_line_inv_vaddr(paddr, vaddr, nr * PAGE_SIZE);
->   }
->   
->   /*
->    * wrapper to clearout kernel or userspace mappings of a page
->    * For kernel mappings @vaddr == @paddr
->    */
-> -void __flush_dcache_page(phys_addr_t paddr, unsigned long vaddr)
-> +void __flush_dcache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr)
->   {
-> -	__dc_line_op(paddr, vaddr & PAGE_MASK, PAGE_SIZE, OP_FLUSH_N_INV);
-> +	__dc_line_op(paddr, vaddr & PAGE_MASK, nr * PAGE_SIZE, OP_FLUSH_N_INV);
->   }
->   
->   noinline void flush_cache_all(void)
-> @@ -962,10 +972,10 @@ void flush_cache_page(struct vm_area_struct *vma, unsigned long u_vaddr,
->   
->   	u_vaddr &= PAGE_MASK;
->   
-> -	__flush_dcache_page(paddr, u_vaddr);
-> +	__flush_dcache_pages(paddr, u_vaddr, 1);
->   
->   	if (vma->vm_flags & VM_EXEC)
-> -		__inv_icache_page(paddr, u_vaddr);
-> +		__inv_icache_pages(paddr, u_vaddr, 1);
->   }
->   
->   void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
-> @@ -978,9 +988,9 @@ void flush_anon_page(struct vm_area_struct *vma, struct page *page,
->   		     unsigned long u_vaddr)
->   {
->   	/* TBD: do we really need to clear the kernel mapping */
-> -	__flush_dcache_page((phys_addr_t)page_address(page), u_vaddr);
-> -	__flush_dcache_page((phys_addr_t)page_address(page),
-> -			    (phys_addr_t)page_address(page));
-> +	__flush_dcache_pages((phys_addr_t)page_address(page), u_vaddr, 1);
-> +	__flush_dcache_pages((phys_addr_t)page_address(page),
-> +			    (phys_addr_t)page_address(page), 1);
->   
->   }
->   
-> @@ -989,6 +999,8 @@ void flush_anon_page(struct vm_area_struct *vma, struct page *page,
->   void copy_user_highpage(struct page *to, struct page *from,
->   	unsigned long u_vaddr, struct vm_area_struct *vma)
->   {
-> +	struct folio *src = page_folio(from);
-> +	struct folio *dst = page_folio(to);
->   	void *kfrom = kmap_atomic(from);
->   	void *kto = kmap_atomic(to);
->   	int clean_src_k_mappings = 0;
-> @@ -1005,7 +1017,7 @@ void copy_user_highpage(struct page *to, struct page *from,
->   	 * addr_not_cache_congruent() is 0
->   	 */
->   	if (page_mapcount(from) && addr_not_cache_congruent(kfrom, u_vaddr)) {
-> -		__flush_dcache_page((unsigned long)kfrom, u_vaddr);
-> +		__flush_dcache_pages((unsigned long)kfrom, u_vaddr, 1);
->   		clean_src_k_mappings = 1;
->   	}
->   
-> @@ -1019,17 +1031,17 @@ void copy_user_highpage(struct page *to, struct page *from,
->   	 * non copied user pages (e.g. read faults which wire in pagecache page
->   	 * directly).
->   	 */
-> -	clear_bit(PG_dc_clean, &to->flags);
-> +	clear_bit(PG_dc_clean, &dst->flags);
->   
->   	/*
->   	 * if SRC was already usermapped and non-congruent to kernel mapping
->   	 * sync the kernel mapping back to physical page
->   	 */
->   	if (clean_src_k_mappings) {
-> -		__flush_dcache_page((unsigned long)kfrom, (unsigned long)kfrom);
-> -		set_bit(PG_dc_clean, &from->flags);
-> +		__flush_dcache_pages((unsigned long)kfrom,
-> +					(unsigned long)kfrom, 1);
->   	} else {
-> -		clear_bit(PG_dc_clean, &from->flags);
-> +		clear_bit(PG_dc_clean, &src->flags);
->   	}
->   
->   	kunmap_atomic(kto);
-> @@ -1038,8 +1050,9 @@ void copy_user_highpage(struct page *to, struct page *from,
->   
->   void clear_user_page(void *to, unsigned long u_vaddr, struct page *page)
->   {
-> +	struct folio *folio = page_folio(page);
->   	clear_page(to);
-> -	clear_bit(PG_dc_clean, &page->flags);
-> +	clear_bit(PG_dc_clean, &folio->flags);
->   }
->   EXPORT_SYMBOL(clear_user_page);
->   
-> diff --git a/arch/arc/mm/tlb.c b/arch/arc/mm/tlb.c
-> index 5f71445f26bd..0a996b65bb4e 100644
-> --- a/arch/arc/mm/tlb.c
-> +++ b/arch/arc/mm/tlb.c
-> @@ -467,8 +467,8 @@ void create_tlb(struct vm_area_struct *vma, unsigned long vaddr, pte_t *ptep)
->    * Note that flush (when done) involves both WBACK - so physical page is
->    * in sync as well as INV - so any non-congruent aliases don't remain
->    */
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long vaddr_unaligned,
-> -		      pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma,
-> +		unsigned long vaddr_unaligned, pte_t *ptep, unsigned int nr)
->   {
->   	unsigned long vaddr = vaddr_unaligned & PAGE_MASK;
->   	phys_addr_t paddr = pte_val(*ptep) & PAGE_MASK_PHYS;
-> @@ -491,15 +491,19 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long vaddr_unaligned,
->   	 */
->   	if ((vma->vm_flags & VM_EXEC) ||
->   	     addr_not_cache_congruent(paddr, vaddr)) {
-> -
-> -		int dirty = !test_and_set_bit(PG_dc_clean, &page->flags);
-> +		struct folio *folio = page_folio(page);
-> +		int dirty = !test_and_set_bit(PG_dc_clean, &folio->flags);
->   		if (dirty) {
-> +			unsigned long offset = offset_in_folio(folio, paddr);
-> +			nr = folio_nr_pages(folio);
-> +			paddr -= offset;
-> +			vaddr -= offset;
->   			/* wback + inv dcache lines (K-mapping) */
-> -			__flush_dcache_page(paddr, paddr);
-> +			__flush_dcache_pages(paddr, paddr, nr);
->   
->   			/* invalidate any existing icache lines (U-mapping) */
->   			if (vma->vm_flags & VM_EXEC)
-> -				__inv_icache_page(paddr, vaddr);
-> +				__inv_icache_pages(paddr, vaddr, nr);
->   		}
->   	}
->   }
-> @@ -531,7 +535,7 @@ void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
->   				 pmd_t *pmd)
->   {
->   	pte_t pte = __pte(pmd_val(*pmd));
-> -	update_mmu_cache(vma, addr, &pte);
-> +	update_mmu_cache_range(vma, addr, &pte, HPAGE_PMD_NR);
->   }
->   
->   void local_flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
-> diff --git a/arch/arm/include/asm/cacheflush.h b/arch/arm/include/asm/cacheflush.h
-> index a094f964c869..841e268d2374 100644
-> --- a/arch/arm/include/asm/cacheflush.h
-> +++ b/arch/arm/include/asm/cacheflush.h
-> @@ -231,14 +231,15 @@ vivt_flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
->   					vma->vm_flags);
->   }
->   
-> -static inline void
-> -vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn)
-> +static inline void vivt_flush_cache_pages(struct vm_area_struct *vma,
-> +		unsigned long user_addr, unsigned long pfn, unsigned int nr)
->   {
->   	struct mm_struct *mm = vma->vm_mm;
->   
->   	if (!mm || cpumask_test_cpu(smp_processor_id(), mm_cpumask(mm))) {
->   		unsigned long addr = user_addr & PAGE_MASK;
-> -		__cpuc_flush_user_range(addr, addr + PAGE_SIZE, vma->vm_flags);
-> +		__cpuc_flush_user_range(addr, addr + nr * PAGE_SIZE,
-> +				vma->vm_flags);
->   	}
->   }
->   
-> @@ -247,15 +248,17 @@ vivt_flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsig
->   		vivt_flush_cache_mm(mm)
->   #define flush_cache_range(vma,start,end) \
->   		vivt_flush_cache_range(vma,start,end)
-> -#define flush_cache_page(vma,addr,pfn) \
-> -		vivt_flush_cache_page(vma,addr,pfn)
-> +#define flush_cache_pages(vma, addr, pfn, nr) \
-> +		vivt_flush_cache_pages(vma, addr, pfn, nr)
->   #else
-> -extern void flush_cache_mm(struct mm_struct *mm);
-> -extern void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
-> -extern void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn);
-> +void flush_cache_mm(struct mm_struct *mm);
-> +void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned long end);
-> +void flush_cache_pages(struct vm_area_struct *vma, unsigned long user_addr,
-> +		unsigned long pfn, unsigned int nr);
->   #endif
->   
->   #define flush_cache_dup_mm(mm) flush_cache_mm(mm)
-> +#define flush_cache_page(vma, addr, pfn) flush_cache_pages(vma, addr, pfn, 1)
->   
->   /*
->    * flush_icache_user_range is used when we want to ensure that the
-> @@ -289,7 +292,9 @@ extern void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr
->    * See update_mmu_cache for the user space part.
->    */
->   #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
-> -extern void flush_dcache_page(struct page *);
-> +void flush_dcache_page(struct page *);
-> +void flush_dcache_folio(struct folio *folio);
-> +#define flush_dcache_folio flush_dcache_folio
->   
->   #define ARCH_IMPLEMENTS_FLUSH_KERNEL_VMAP_RANGE 1
->   static inline void flush_kernel_vmap_range(void *addr, int size)
-> @@ -321,6 +326,7 @@ static inline void flush_anon_page(struct vm_area_struct *vma,
->    * duplicate cache flushing elsewhere performed by flush_dcache_page().
->    */
->   #define flush_icache_page(vma,page)	do { } while (0)
-> +#define flush_icache_pages(vma, page, nr)	do { } while (0)
->   
->   /*
->    * flush_cache_vmap() is used when creating mappings (eg, via vmap,
-> diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-> index a58ccbb406ad..6525ac82bd50 100644
-> --- a/arch/arm/include/asm/pgtable.h
-> +++ b/arch/arm/include/asm/pgtable.h
-> @@ -207,8 +207,9 @@ static inline void __sync_icache_dcache(pte_t pteval)
->   extern void __sync_icache_dcache(pte_t pteval);
->   #endif
->   
-> -void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -		      pte_t *ptep, pte_t pteval);
-> +void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +		      pte_t *ptep, pte_t pteval, unsigned int nr);
-> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
->   
->   static inline pte_t clear_pte_bit(pte_t pte, pgprot_t prot)
->   {
-> diff --git a/arch/arm/include/asm/tlbflush.h b/arch/arm/include/asm/tlbflush.h
-> index 0ccc985b90af..7d792e485f4f 100644
-> --- a/arch/arm/include/asm/tlbflush.h
-> +++ b/arch/arm/include/asm/tlbflush.h
-> @@ -619,18 +619,21 @@ extern void flush_bp_all(void);
->    * If PG_dcache_clean is not set for the page, we need to ensure that any
->    * cache entries for the kernels virtual memory range are written
->    * back to the page. On ARMv6 and later, the cache coherency is handled via
-> - * the set_pte_at() function.
-> + * the set_ptes() function.
->    */
->   #if __LINUX_ARM_ARCH__ < 6
-> -extern void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-> -	pte_t *ptep);
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr);
->   #else
-> -static inline void update_mmu_cache(struct vm_area_struct *vma,
-> -				    unsigned long addr, pte_t *ptep)
-> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
-> +		unsigned long addr, pte_t *ptep, unsigned int nr)
->   {
->   }
->   #endif
->   
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
-> +
->   #define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
->   
->   #endif
-> diff --git a/arch/arm/mm/copypage-v4mc.c b/arch/arm/mm/copypage-v4mc.c
-> index f1da3b439b96..7ddd82b9fe8b 100644
-> --- a/arch/arm/mm/copypage-v4mc.c
-> +++ b/arch/arm/mm/copypage-v4mc.c
-> @@ -64,10 +64,11 @@ static void mc_copy_user_page(void *from, void *to)
->   void v4_mc_copy_user_highpage(struct page *to, struct page *from,
->   	unsigned long vaddr, struct vm_area_struct *vma)
->   {
-> +	struct folio *src = page_folio(from);
->   	void *kto = kmap_atomic(to);
->   
-> -	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
-> -		__flush_dcache_page(page_mapping_file(from), from);
-> +	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
-> +		__flush_dcache_folio(folio_flush_mapping(src), src);
->   
->   	raw_spin_lock(&minicache_lock);
->   
-> diff --git a/arch/arm/mm/copypage-v6.c b/arch/arm/mm/copypage-v6.c
-> index d8a115de5507..a1a71f36d850 100644
-> --- a/arch/arm/mm/copypage-v6.c
-> +++ b/arch/arm/mm/copypage-v6.c
-> @@ -69,11 +69,12 @@ static void discard_old_kernel_data(void *kto)
->   static void v6_copy_user_highpage_aliasing(struct page *to,
->   	struct page *from, unsigned long vaddr, struct vm_area_struct *vma)
->   {
-> +	struct folio *src = page_folio(from);
->   	unsigned int offset = CACHE_COLOUR(vaddr);
->   	unsigned long kfrom, kto;
->   
-> -	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
-> -		__flush_dcache_page(page_mapping_file(from), from);
-> +	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
-> +		__flush_dcache_folio(folio_flush_mapping(src), src);
->   
->   	/* FIXME: not highmem safe */
->   	discard_old_kernel_data(page_address(to));
-> diff --git a/arch/arm/mm/copypage-xscale.c b/arch/arm/mm/copypage-xscale.c
-> index bcb485620a05..f1e29d3e8193 100644
-> --- a/arch/arm/mm/copypage-xscale.c
-> +++ b/arch/arm/mm/copypage-xscale.c
-> @@ -84,10 +84,11 @@ static void mc_copy_user_page(void *from, void *to)
->   void xscale_mc_copy_user_highpage(struct page *to, struct page *from,
->   	unsigned long vaddr, struct vm_area_struct *vma)
->   {
-> +	struct folio *src = page_folio(from);
->   	void *kto = kmap_atomic(to);
->   
-> -	if (!test_and_set_bit(PG_dcache_clean, &from->flags))
-> -		__flush_dcache_page(page_mapping_file(from), from);
-> +	if (!test_and_set_bit(PG_dcache_clean, &src->flags))
-> +		__flush_dcache_folio(folio_flush_mapping(src), src);
->   
->   	raw_spin_lock(&minicache_lock);
->   
-> diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
-> index 8bc01071474a..5ecfde41d70a 100644
-> --- a/arch/arm/mm/dma-mapping.c
-> +++ b/arch/arm/mm/dma-mapping.c
-> @@ -693,6 +693,7 @@ static void __dma_page_cpu_to_dev(struct page *page, unsigned long off,
->   static void __dma_page_dev_to_cpu(struct page *page, unsigned long off,
->   	size_t size, enum dma_data_direction dir)
->   {
-> +	struct folio *folio = page_folio(page);
->   	phys_addr_t paddr = page_to_phys(page) + off;
->   
->   	/* FIXME: non-speculating: not required */
-> @@ -707,19 +708,18 @@ static void __dma_page_dev_to_cpu(struct page *page, unsigned long off,
->   	 * Mark the D-cache clean for these pages to avoid extra flushing.
->   	 */
->   	if (dir != DMA_TO_DEVICE && size >= PAGE_SIZE) {
-> -		unsigned long pfn;
-> -		size_t left = size;
-> -
-> -		pfn = page_to_pfn(page) + off / PAGE_SIZE;
-> -		off %= PAGE_SIZE;
-> -		if (off) {
-> -			pfn++;
-> -			left -= PAGE_SIZE - off;
-> +		ssize_t left = size;
-> +		size_t offset = offset_in_folio(folio, paddr);
-> +
-> +		if (offset) {
-> +			left -= folio_size(folio) - offset;
-> +			folio = folio_next(folio);
->   		}
-> -		while (left >= PAGE_SIZE) {
-> -			page = pfn_to_page(pfn++);
-> -			set_bit(PG_dcache_clean, &page->flags);
-> -			left -= PAGE_SIZE;
-> +
-> +		while (left >= (ssize_t)folio_size(folio)) {
-> +			set_bit(PG_dcache_clean, &folio->flags);
-> +			left -= folio_size(folio);
-> +			folio = folio_next(folio);
->   		}
->   	}
->   }
-> diff --git a/arch/arm/mm/fault-armv.c b/arch/arm/mm/fault-armv.c
-> index 0e49154454a6..e2c869b8f012 100644
-> --- a/arch/arm/mm/fault-armv.c
-> +++ b/arch/arm/mm/fault-armv.c
-> @@ -178,8 +178,8 @@ make_coherent(struct address_space *mapping, struct vm_area_struct *vma,
->    *
->    * Note that the pte lock will be held.
->    */
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-> -	pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr)
->   {
->   	unsigned long pfn = pte_pfn(*ptep);
->   	struct address_space *mapping;
-> @@ -192,13 +192,13 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
->   	 * The zero page is never written to, so never has any dirty
->   	 * cache lines, and therefore never needs to be flushed.
->   	 */
-> -	page = pfn_to_page(pfn);
-> -	if (page == ZERO_PAGE(0))
-> +	if (is_zero_pfn(pfn))
->   		return;
->   
-> -	mapping = page_mapping_file(page);
-> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> -		__flush_dcache_page(mapping, page);
-> +	folio = page_folio(pfn_to_page(pfn));
-> +	mapping = folio_flush_mapping(page);
-> +	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
-> +		__flush_dcache_folio(mapping, folio);
->   	if (mapping) {
->   		if (cache_is_vivt())
->   			make_coherent(mapping, vma, addr, ptep, pfn);
-> diff --git a/arch/arm/mm/flush.c b/arch/arm/mm/flush.c
-> index 7ff9feea13a6..07ea0ab51099 100644
-> --- a/arch/arm/mm/flush.c
-> +++ b/arch/arm/mm/flush.c
-> @@ -95,10 +95,10 @@ void flush_cache_range(struct vm_area_struct *vma, unsigned long start, unsigned
->   		__flush_icache_all();
->   }
->   
-> -void flush_cache_page(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn)
-> +void flush_cache_pages(struct vm_area_struct *vma, unsigned long user_addr, unsigned long pfn, unsigned int nr)
->   {
->   	if (cache_is_vivt()) {
-> -		vivt_flush_cache_page(vma, user_addr, pfn);
-> +		vivt_flush_cache_pages(vma, user_addr, pfn, nr);
->   		return;
->   	}
->   
-> @@ -196,29 +196,31 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
->   #endif
->   }
->   
-> -void __flush_dcache_page(struct address_space *mapping, struct page *page)
-> +void __flush_dcache_folio(struct address_space *mapping, struct folio *folio)
->   {
->   	/*
->   	 * Writeback any data associated with the kernel mapping of this
->   	 * page.  This ensures that data in the physical page is mutually
->   	 * coherent with the kernels mapping.
->   	 */
-> -	if (!PageHighMem(page)) {
-> -		__cpuc_flush_dcache_area(page_address(page), page_size(page));
-> +	if (!folio_test_highmem(folio)) {
-> +		__cpuc_flush_dcache_area(folio_address(folio),
-> +					folio_size(folio));
->   	} else {
->   		unsigned long i;
->   		if (cache_is_vipt_nonaliasing()) {
-> -			for (i = 0; i < compound_nr(page); i++) {
-> -				void *addr = kmap_atomic(page + i);
-> +			for (i = 0; i < folio_nr_pages(folio); i++) {
-> +				void *addr = kmap_local_folio(folio,
-> +								i * PAGE_SIZE);
->   				__cpuc_flush_dcache_area(addr, PAGE_SIZE);
-> -				kunmap_atomic(addr);
-> +				kunmap_local(addr);
->   			}
->   		} else {
-> -			for (i = 0; i < compound_nr(page); i++) {
-> -				void *addr = kmap_high_get(page + i);
-> +			for (i = 0; i < folio_nr_pages(folio); i++) {
-> +				void *addr = kmap_high_get(folio_page(folio, i));
->   				if (addr) {
->   					__cpuc_flush_dcache_area(addr, PAGE_SIZE);
-> -					kunmap_high(page + i);
-> +					kunmap_high(folio_page(folio, i));
->   				}
->   			}
->   		}
-> @@ -230,15 +232,14 @@ void __flush_dcache_page(struct address_space *mapping, struct page *page)
->   	 * userspace colour, which is congruent with page->index.
->   	 */
->   	if (mapping && cache_is_vipt_aliasing())
-> -		flush_pfn_alias(page_to_pfn(page),
-> -				page->index << PAGE_SHIFT);
-> +		flush_pfn_alias(folio_pfn(folio), folio_pos(folio));
->   }
->   
-> -static void __flush_dcache_aliases(struct address_space *mapping, struct page *page)
-> +static void __flush_dcache_aliases(struct address_space *mapping, struct folio *folio)
->   {
->   	struct mm_struct *mm = current->active_mm;
-> -	struct vm_area_struct *mpnt;
-> -	pgoff_t pgoff;
-> +	struct vm_area_struct *vma;
-> +	pgoff_t pgoff, pgoff_end;
->   
->   	/*
->   	 * There are possible user space mappings of this page:
-> @@ -246,21 +247,36 @@ static void __flush_dcache_aliases(struct address_space *mapping, struct page *p
->   	 *   data in the current VM view associated with this page.
->   	 * - aliasing VIPT: we only need to find one mapping of this page.
->   	 */
-> -	pgoff = page->index;
-> +	pgoff = folio->index;
-> +	pgoff_end = pgoff + folio_nr_pages(folio) - 1;
->   
->   	flush_dcache_mmap_lock(mapping);
-> -	vma_interval_tree_foreach(mpnt, &mapping->i_mmap, pgoff, pgoff) {
-> -		unsigned long offset;
-> +	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff_end) {
-> +		unsigned long start, offset, pfn;
-> +		unsigned int nr;
->   
->   		/*
->   		 * If this VMA is not in our MM, we can ignore it.
->   		 */
-> -		if (mpnt->vm_mm != mm)
-> +		if (vma->vm_mm != mm)
->   			continue;
-> -		if (!(mpnt->vm_flags & VM_MAYSHARE))
-> +		if (!(vma->vm_flags & VM_MAYSHARE))
->   			continue;
-> -		offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
-> -		flush_cache_page(mpnt, mpnt->vm_start + offset, page_to_pfn(page));
-> +
-> +		start = vma->vm_start;
-> +		pfn = folio_pfn(folio);
-> +		nr = folio_nr_pages(folio);
-> +		offset = pgoff - vma->vm_pgoff;
-> +		if (offset > -nr) {
-> +			pfn -= offset;
-> +			nr += offset;
-> +		} else {
-> +			start += offset * PAGE_SIZE;
-> +		}
-> +		if (start + nr * PAGE_SIZE > vma->vm_end)
-> +			nr = (vma->vm_end - start) / PAGE_SIZE;
-> +
-> +		flush_cache_pages(vma, start, pfn, nr);
->   	}
->   	flush_dcache_mmap_unlock(mapping);
->   }
-> @@ -269,7 +285,7 @@ static void __flush_dcache_aliases(struct address_space *mapping, struct page *p
->   void __sync_icache_dcache(pte_t pteval)
->   {
->   	unsigned long pfn;
-> -	struct page *page;
-> +	struct folio *folio;
->   	struct address_space *mapping;
->   
->   	if (cache_is_vipt_nonaliasing() && !pte_exec(pteval))
-> @@ -279,14 +295,14 @@ void __sync_icache_dcache(pte_t pteval)
->   	if (!pfn_valid(pfn))
->   		return;
->   
-> -	page = pfn_to_page(pfn);
-> +	folio = page_folio(pfn_to_page(pfn));
->   	if (cache_is_vipt_aliasing())
-> -		mapping = page_mapping_file(page);
-> +		mapping = folio_flush_mapping(folio);
->   	else
->   		mapping = NULL;
->   
-> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> -		__flush_dcache_page(mapping, page);
-> +	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
-> +		__flush_dcache_folio(mapping, folio);
->   
->   	if (pte_exec(pteval))
->   		__flush_icache_all();
-> @@ -312,7 +328,7 @@ void __sync_icache_dcache(pte_t pteval)
->    * Note that we disable the lazy flush for SMP configurations where
->    * the cache maintenance operations are not automatically broadcasted.
->    */
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->   {
->   	struct address_space *mapping;
->   
-> @@ -320,31 +336,36 @@ void flush_dcache_page(struct page *page)
->   	 * The zero page is never written to, so never has any dirty
->   	 * cache lines, and therefore never needs to be flushed.
->   	 */
-> -	if (page == ZERO_PAGE(0))
-> +	if (is_zero_pfn(folio_pfn(folio)))
->   		return;
->   
->   	if (!cache_ops_need_broadcast() && cache_is_vipt_nonaliasing()) {
-> -		if (test_bit(PG_dcache_clean, &page->flags))
-> -			clear_bit(PG_dcache_clean, &page->flags);
-> +		if (test_bit(PG_dcache_clean, &folio->flags))
-> +			clear_bit(PG_dcache_clean, &folio->flags);
->   		return;
->   	}
->   
-> -	mapping = page_mapping_file(page);
-> +	mapping = folio_flush_mapping(folio);
->   
->   	if (!cache_ops_need_broadcast() &&
-> -	    mapping && !page_mapcount(page))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	    mapping && !folio_mapped(folio))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
->   	else {
-> -		__flush_dcache_page(mapping, page);
-> +		__flush_dcache_folio(mapping, folio);
->   		if (mapping && cache_is_vivt())
-> -			__flush_dcache_aliases(mapping, page);
-> +			__flush_dcache_aliases(mapping, folio);
->   		else if (mapping)
->   			__flush_icache_all();
-> -		set_bit(PG_dcache_clean, &page->flags);
-> +		set_bit(PG_dcache_clean, &folio->flags);
->   	}
->   }
-> -EXPORT_SYMBOL(flush_dcache_page);
-> +EXPORT_SYMBOL(flush_dcache_folio);
->   
-> +void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
-> +EXPORT_SYMBOL(flush_dcache_page);
->   /*
->    * Flush an anonymous page so that users of get_user_pages()
->    * can safely access the data.  The expected sequence is:
-> diff --git a/arch/arm/mm/mm.h b/arch/arm/mm/mm.h
-> index d7ffccb7fea7..419316316711 100644
-> --- a/arch/arm/mm/mm.h
-> +++ b/arch/arm/mm/mm.h
-> @@ -45,7 +45,7 @@ struct mem_type {
->   
->   const struct mem_type *get_mem_type(unsigned int type);
->   
-> -extern void __flush_dcache_page(struct address_space *mapping, struct page *page);
-> +void __flush_dcache_folio(struct address_space *mapping, struct folio *folio);
->   
->   /*
->    * ARM specific vm_struct->flags bits.
-> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-> index 463fc2a8448f..9947bbc32b04 100644
-> --- a/arch/arm/mm/mmu.c
-> +++ b/arch/arm/mm/mmu.c
-> @@ -1788,7 +1788,7 @@ void __init paging_init(const struct machine_desc *mdesc)
->   	bootmem_init();
->   
->   	empty_zero_page = virt_to_page(zero_page);
-> -	__flush_dcache_page(NULL, empty_zero_page);
-> +	__flush_dcache_folio(NULL, page_folio(empty_zero_page));
->   }
->   
->   void __init early_mm_init(const struct machine_desc *mdesc)
-> @@ -1797,8 +1797,8 @@ void __init early_mm_init(const struct machine_desc *mdesc)
->   	early_paging_init(mdesc);
->   }
->   
-> -void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pteval)
-> +void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +			      pte_t *ptep, pte_t pteval, unsigned int nr)
->   {
->   	unsigned long ext = 0;
->   
-> @@ -1808,5 +1808,11 @@ void set_pte_at(struct mm_struct *mm, unsigned long addr,
->   		ext |= PTE_EXT_NG;
->   	}
->   
-> -	set_pte_ext(ptep, pteval, ext);
-> +	for (;;) {
-> +		set_pte_ext(ptep, pteval, ext);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		pte_val(pteval) += PAGE_SIZE;
-> +	}
->   }
-
+DQoNCkxlIDI3LzAyLzIwMjMgw6AgMjE6MjAsIE1hdHRoZXcgV2lsY294IGEgw6ljcml0wqA6DQo+
+IE9uIE1vbiwgRmViIDI3LCAyMDIzIGF0IDA3OjQ1OjA4UE0gKzAwMDAsIENocmlzdG9waGUgTGVy
+b3kgd3JvdGU6DQo+PiBIaSwNCj4+DQo+PiBMZSAyNy8wMi8yMDIzIMOgIDE4OjU3LCBNYXR0aGV3
+IFdpbGNveCAoT3JhY2xlKSBhIMOpY3JpdMKgOg0KPj4+IEFkZCBzZXRfcHRlcygpLCB1cGRhdGVf
+bW11X2NhY2hlX3JhbmdlKCkgYW5kIGZsdXNoX2RjYWNoZV9mb2xpbygpLg0KPj4+IENoYW5nZSB0
+aGUgUEdfYXJjaF8xIChha2EgUEdfZGNhY2hlX2RpcnR5KSBmbGFnIGZyb20gYmVpbmcgcGVyLXBh
+Z2UgdG8NCj4+PiBwZXItZm9saW8uDQo+Pj4NCj4+PiBJJ20gdW5zdXJlIGFib3V0IG15IG1lcmdp
+bmcgb2YgZmx1c2hfZGNhY2hlX2ljYWNoZV9odWdlcGFnZSgpIGFuZA0KPj4+IGZsdXNoX2RjYWNo
+ZV9pY2FjaGVfcGFnZSgpIGludG8gZmx1c2hfZGNhY2hlX2ljYWNoZV9mb2xpbygpIGFuZCBzdWJz
+ZXF1ZW50DQo+Pj4gcmVtb3ZhbCBvZiBmbHVzaF9kY2FjaGVfaWNhY2hlX3BoeXMoKS4gIFBsZWFz
+ZSByZXZpZXcuDQo+Pg0KPj4gTm90IHN1cmUgd2h5IHlvdSB3YW50IHRvIHJlbW92ZSBmbHVzaF9k
+Y2FjaGVfaWNhY2hlX3BoeXMoKS4NCj4gDQo+IFdlbGwsIEkgZGlkbid0LCBuZWNlc3NhcmlseS4g
+IEl0J3MganVzdCB0aGF0IHdoZW4gSSBtZXJnZWQNCj4gZmx1c2hfZGNhY2hlX2ljYWNoZV9odWdl
+cGFnZSgpIGFuZCBmbHVzaF9kY2FjaGVfaWNhY2hlX3BhZ2UoKQ0KPiB0b2dldGhlciwgaXQgd2Fz
+IGxlZnQgd2l0aCBubyBjYWxsZXJzLg0KPiANCj4+IEFsbHRob3VnaCB0aGF0J3Mgb25seSBmZWFz
+aWJsZSB3aGVuIGFkZHJlc3MgYnVzIGlzIG5vdCB3aWRlciB0aGFuIDMyDQo+PiBiaXRzIGFuZCBj
+YW5ub3QgYmUgZG9uZSBvbiBCT09LRSBhcyB5b3UgY2FuJ3Qgc3dpdGNoIG9mZiBNTVUgb24gQk9P
+S0UsDQo+PiBmbHVzaF9kY2FjaGVfaWNhY2hlX3BoeXMoKSBhbGxvd3MgdG8gZmx1c2ggbm90IG1h
+cHBlZCBwYWdlcyB3aXRob3V0DQo+PiBoYXZpbmcgdG8gbWFwIHRoZW0uIFNvIGl0IGlzIG1vcmUg
+ZWZmaWNpZW50Lg0KPiANCj4gQW5kIGl0IHdhcyBqdXN0IG5ldmVyIGRvbmUgZm9yIHRoZSBodWdl
+cGFnZSBjYXNlPw0KDQpJIHRoaW5rIG9uIFBQQzMyIGh1Z2VwYWdlcyBhcmUgYXZhaWxhYmxlIG9u
+bHkgb24gOHh4IGFuZCBCT09LRS4gOHh4IA0KZG9lc24ndCBoYXZlIEhJR0hNRU0gYW5kIEJPT0tF
+IGNhbm5vdCBzd2l0Y2ggTU1VIG9mZi4gU28gdGhlcmUgaXMgbm8gdXNlIA0KY2FzZSBmb3IgZmx1
+c2hfZGNhY2hlX2ljYWNoZV9waHlzKCkgd2l0aCBodWdlcGFnZXMuDQoNCj4gDQo+Pj4gQEAgLTE0
+OCwxNyArMTAzLDIwIEBAIHN0YXRpYyB2b2lkIF9fZmx1c2hfZGNhY2hlX2ljYWNoZSh2b2lkICpw
+KQ0KPj4+ICAgIAlpbnZhbGlkYXRlX2ljYWNoZV9yYW5nZShhZGRyLCBhZGRyICsgUEFHRV9TSVpF
+KTsNCj4+PiAgICB9DQo+Pj4gICAgDQo+Pj4gLXN0YXRpYyB2b2lkIGZsdXNoX2RjYWNoZV9pY2Fj
+aGVfaHVnZXBhZ2Uoc3RydWN0IHBhZ2UgKnBhZ2UpDQo+Pj4gK3ZvaWQgZmx1c2hfZGNhY2hlX2lj
+YWNoZV9mb2xpbyhzdHJ1Y3QgZm9saW8gKmZvbGlvKQ0KPj4+ICAgIHsNCj4+PiAtCWludCBpOw0K
+Pj4+IC0JaW50IG5yID0gY29tcG91bmRfbnIocGFnZSk7DQo+Pj4gKwl1bnNpZ25lZCBpbnQgaSwg
+bnIgPSBmb2xpb19ucl9wYWdlcyhmb2xpbyk7DQo+Pj4gICAgDQo+Pj4gLQlpZiAoIVBhZ2VIaWdo
+TWVtKHBhZ2UpKSB7DQo+Pj4gKwlpZiAoZmx1c2hfY29oZXJlbnRfaWNhY2hlKCkpDQo+Pj4gKwkJ
+cmV0dXJuOw0KPj4+ICsNCj4+PiArCWlmICghZm9saW9fdGVzdF9oaWdobWVtKGZvbGlvKSkgew0K
+Pj4+ICsJCXZvaWQgKmFkZHIgPSBmb2xpb19hZGRyZXNzKGZvbGlvKTsNCj4+PiAgICAJCWZvciAo
+aSA9IDA7IGkgPCBucjsgaSsrKQ0KPj4+IC0JCQlfX2ZsdXNoX2RjYWNoZV9pY2FjaGUobG93bWVt
+X3BhZ2VfYWRkcmVzcyhwYWdlICsgaSkpOw0KPj4+ICsJCQlfX2ZsdXNoX2RjYWNoZV9pY2FjaGUo
+YWRkciArIGkgKiBQQUdFX1NJWkUpOw0KPj4+ICAgIAl9IGVsc2Ugew0KPj4+ICAgIAkJZm9yIChp
+ID0gMDsgaSA8IG5yOyBpKyspIHsNCj4+PiAtCQkJdm9pZCAqc3RhcnQgPSBrbWFwX2xvY2FsX3Bh
+Z2UocGFnZSArIGkpOw0KPj4+ICsJCQl2b2lkICpzdGFydCA9IGttYXBfbG9jYWxfZm9saW8oZm9s
+aW8sIGkgKiBQQUdFX1NJWkUpOw0KPj4+ICAgIA0KPj4+ICAgIAkJCV9fZmx1c2hfZGNhY2hlX2lj
+YWNoZShzdGFydCk7DQo+Pj4gICAgCQkJa3VubWFwX2xvY2FsKHN0YXJ0KTsNCj4gDQo+IFNvIHlv
+dSdkIGxpa2UgdGhpcyB0byBiZToNCj4gDQo+IAl9IGVsc2UgaWYgKElTX0VOQUJMRUQoQ09ORklH
+X0JPT0tFKSB8fCBzaXplb2YocGh5c19hZGRyX3QpID4gc2l6ZW9mKHZvaWQgKikpIHsNCj4gCQlm
+b3IgKGkgPSAwOyBpIDwgbnI7IGkrKykgew0KPiAJCQkgdm9pZCAqc3RhcnQgPSBrbWFwX2xvY2Fs
+X2ZvbGlvKGZvbGlvLCBpICogUEFHRV9TSVpFKTsNCj4gCQkJIF9fZmx1c2hfZGNhY2hlX2ljYWNo
+ZShzdGFydCk7DQo+IAkJCSBrdW5tYXBfbG9jYWwoc3RhcnQpOw0KPiAJCX0NCj4gCX0gZWxzZSB7
+DQo+IAkJdW5zaWduZWQgbG9uZyBwZm4gPSBmb2xpb19wZm4oZm9saW8pOw0KPiAJCWZvciAoaSA9
+IDA7IGkgPCBucjsgaSsrKQ0KPiAJCQlmbHVzaF9kY2FjaGVfaWNhY2hlX3BoeXMoKHBmbiArIGkp
+ICogUEFHRV9TSVpFOw0KPiAJfQ0KPiANCj4gKG9yIG1heWJlIHlvdSdkIHByZWZlciBhIGZsdXNo
+X2RjYWNoZV9pY2FjaGVfcGZuKCkgdGhhdCBkb2Vzbid0IG5lZWQgdG8NCj4gd29ycnkgYWJvdXQg
+UEFHRV9NQVNLKS4NCg0KWWVzIGxvb2tzIGdvb2QuDQoNCg0KQ2hyaXN0b3BoZQ0K
