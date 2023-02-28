@@ -2,129 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F896A54EA
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Feb 2023 09:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E53D6A5754
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Feb 2023 11:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjB1I6Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Feb 2023 03:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S229671AbjB1K6u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Feb 2023 05:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjB1I6V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Feb 2023 03:58:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFD57D9F;
-        Tue, 28 Feb 2023 00:58:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S231318AbjB1K6k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Feb 2023 05:58:40 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C7130F3;
+        Tue, 28 Feb 2023 02:58:32 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E33761030;
-        Tue, 28 Feb 2023 08:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24246C433D2;
-        Tue, 28 Feb 2023 08:58:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1677574699;
-        bh=UztsLsaqmIXyoCT63yUOOYX/F2RBn+tEboh82iUTl84=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dvFldP2nDPK1JM1UdTSvrNFQgLKdCKwOzfkHHphaxtZJbfiOb+x1w8SgrPHVVLpTM
-         0+DGxsyLVGr/st2iaB5VqG6eeN9RmbwrKyu1S1M0ogYouEhMNuHsdIhPyL2tnEfVU1
-         gTZGjIJffgoh26CK72V24tXXKN+/RvSZ3yTVgjyc=
-Date:   Tue, 28 Feb 2023 09:58:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tom Saeger <tom.saeger@oracle.com>
-Cc:     Sasha Levin <sashal@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rich Felker <dalias@libc.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dennis Gilmore <dennis@ausil.us>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org
-Subject: Re: [PATCH 5.15 v2 1/5] arch: fix broken BuildID for arm64 and riscv
-Message-ID: <Y/3CKO8XjvyMlg+5@kroah.com>
-References: <20230210-tsaeger-upstream-linux-stable-5-15-v2-0-6c68622745e9@oracle.com>
- <20230210-tsaeger-upstream-linux-stable-5-15-v2-1-6c68622745e9@oracle.com>
- <Y/c3MSvnN4DcvzSx@kroah.com>
- <20230223175331.7tsgvkvcur6wl7h7@oracle.com>
- <20230224024724.whvtsrljz5k3jpln@oracle.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D566B1EC067E;
+        Tue, 28 Feb 2023 11:58:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677581910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=8M3tlnbS9Pz471dSvOzN4aKK6qk+Uej9KAtfSfq3hVM=;
+        b=AoiltTMvFbe/f/ypMXgOnhHwt+phRCl8mXS5lx3DkxlOxvdf31/yUuFf6amM69Bov1xqnP
+        44Md0Q+v9X6VCHe229Cfao5EsmCUhy/O+5uqW3SelHzpFRnaj/yN+ErabZpQAMGomc7Rfb
+        noGKmIIfKLYOoiyBdkJwLQWaY5b+Os8=
+Date:   Tue, 28 Feb 2023 11:58:25 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v6 28/41] x86: Introduce userspace API for shadow stack
+Message-ID: <Y/3eUQEV95gZEoaF@zn.tnic>
+References: <20230218211433.26859-1-rick.p.edgecombe@intel.com>
+ <20230218211433.26859-29-rick.p.edgecombe@intel.com>
+ <Y/irg8d6OZ+OCFml@zn.tnic>
+ <9c67abd16cce9251bfdb87bcc7e47bbf32e4a9f2.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230224024724.whvtsrljz5k3jpln@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9c67abd16cce9251bfdb87bcc7e47bbf32e4a9f2.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 08:47:24PM -0600, Tom Saeger wrote:
-> On Thu, Feb 23, 2023 at 11:53:42AM -0600, Tom Saeger wrote:
-> > On Thu, Feb 23, 2023 at 10:51:45AM +0100, Greg Kroah-Hartman wrote:
-> > > On Fri, Feb 10, 2023 at 01:18:40PM -0700, Tom Saeger wrote:
-> > > > From: Masahiro Yamada <masahiroy@kernel.org>
-> > > > 
-> > > > commit 99cb0d917ffa1ab628bb67364ca9b162c07699b1 upstream.
-> > > > 
-> > > > Dennis Gilmore reports that the BuildID is missing in the arm64 vmlinux
-> > > > since commit 994b7ac1697b ("arm64: remove special treatment for the
-> > > > link order of head.o").
-> > > > 
-> > > > The issue is that the type of .notes section, which contains the BuildID,
-> > > > changed from NOTES to PROGBITS.
-> > > > 
-> > > > Ard Biesheuvel figured out that whichever object gets linked first gets
-> > > > to decide the type of a section. The PROGBITS type is the result of the
-> > > > compiler emitting .note.GNU-stack as PROGBITS rather than NOTE.
-> > > > 
-> > > > While Ard provided a fix for arm64, I want to fix this globally because
-> > > > the same issue is happening on riscv since commit 2348e6bf4421 ("riscv:
-> > > > remove special treatment for the link order of head.o"). This problem
-> > > > will happen in general for other architectures if they start to drop
-> > > > unneeded entries from scripts/head-object-list.txt.
-> > > > 
-> > > > Discard .note.GNU-stack in include/asm-generic/vmlinux.lds.h.
-> > > > 
-> > > > Link: https://lore.kernel.org/lkml/CAABkxwuQoz1CTbyb57n0ZX65eSYiTonFCU8-LCQc=74D=xE=rA@mail.gmail.com/
-> > > > Fixes: 994b7ac1697b ("arm64: remove special treatment for the link order of head.o")
-> > > > Fixes: 2348e6bf4421 ("riscv: remove special treatment for the link order of head.o")
+On Fri, Feb 24, 2023 at 06:37:57PM +0000, Edgecombe, Rick P wrote:
+> In the first patch:
 > 
-> Greg, how about something like this tacked onto backport of this commit?
+> https://lore.kernel.org/lkml/20230218211433.26859-2-rick.p.edgecombe@intel.com/
 > 
-> [Tom: stable backport 5.15.y, 5.10.y, 5.4.y]
-> 
-> Though the above "Fixes:" commits are not in this kernel, the conditions
-> which lead to a missing Build ID in arm64 vmlinux are similar.
-> 
-> Evidence points to these conditions:
-> 1. ld version > 2.36 (exact binutils commit documented in a494398bde27)
-> 2. first object which gets linked (head.o) has a PROGBITS .note.GNU-stack segment
-> 
-> These conditions can be observed when:
-> - 5.15.60+ OR 5.10.136+ OR 5.4.210+
-> - AND ld version > 2.36
-> - AND arch=arm64
-> - AND CONFIG_MODVERSIONS=y
-> 
-> This was previously bisected to the stable backport of 0d362be5b142.
-> Follow-up experiments were discussed here: https://lore.kernel.org/all/20221221235413.xaisboqmr7dkqwn6@oracle.com/ 
-> which strongly hints at condition 2.
-> 
-> 
-> > > 
-> > > Why are we adding a commit to 5.15.y that fixes an issue that only
-> > > showed up in 6.1.y?
-> 
-> If you approve - I'll send v3 for 5.15, 5.10, and 5.4 (with style fixes).
+> Then some more documentation is added about ARCH_SHSTK_UNLOCK and
+> ARCH_SHSTK_STATUS (which are for CRIU) in those patches.
 
-That would make more sense, thanks.
+Right, I was thinking more about ARCH_PRCTL(2), the man page.
 
-greg k-h
+But you can send that to the manpages folks later. I.e., it should be
+nearly impossible to be missed. :)
+
+> There are glibc patches prepared by HJ to use the new interface and
+> it's my understanding that he has discussed the changes with the other
+> glibc folks. Those glibc patches are used for testing these kernel
+> patches, but will not get upstream until the kernel patches to avoid
+> repeating the past problems. So I think it's as prepared as it can be.
+
+Good.
+
+> One future thing that might come up... Glibc has this mode called
+> "permissive mode". When glibc is configured this way (compile time or
+> env var), it is supposed to disable shadow stack when dlopen()ing any
+> DSO that doesn't have the shadow stack elf header bit.
+
+Maybe I don't understand all the possible use cases but if I were
+interested in using shadow stack, then I'd enable it for all objects.
+And if I want permissive, I'd disable it for all. A mixed thing sounds
+like a mixed can of worms waiting to be opened.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
