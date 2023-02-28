@@ -2,174 +2,240 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638B16A6050
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Feb 2023 21:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 956786A6190
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Feb 2023 22:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbjB1UXc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Feb 2023 15:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S230143AbjB1VjM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Feb 2023 16:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjB1UXb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Feb 2023 15:23:31 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E6F30B22;
-        Tue, 28 Feb 2023 12:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1677615752; i=deller@gmx.de;
-        bh=mMIeglln83RQh/7wRZEKK1o/NLvQ+p7BkhZ5ZuPVbIU=;
-        h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
-        b=cBEe29uFuAf87w1SYnm3RouqwXZ52uB9EL4JqVmnVswWSfJz2ZBc3oVfiVXlOmsZf
-         yCpz8KatgjbzL8NnWbgIGTHHG3H1og6MZiGVR0HPExymd2MPKPv+v5ogfjm5TSspHG
-         QOzGDrJETybhARUAMnMsYTCfyUctOWPzv9ejLNHpENk1EKMnAsV9G0c+h7BWbFFW0R
-         5BLh08hzgNC71BfuNPxlBMIBtNzgyX5o1m5biho/jXMzrHkVVNw0bRABlA0PEqFlvM
-         v3QwiCfTkM2fnu0iJY/vr4amYfST/AiIgV994p9JF9I8eRuDq9lOM4llwju0hcv4bd
-         jnF8PiguJYevQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.156.241]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N17Ye-1oUnZK153a-012aKI; Tue, 28
- Feb 2023 21:22:32 +0100
-Message-ID: <2646c13f-33b8-1047-7cfe-bf7e394344b6@gmx.de>
-Date:   Tue, 28 Feb 2023 21:22:31 +0100
+        with ESMTP id S229602AbjB1Vie (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Feb 2023 16:38:34 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D6634332;
+        Tue, 28 Feb 2023 13:37:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=fLtuHMMW/l3ffYaEEFZhV99ypxiXAgkmGjII9SpctF0=; b=Zs0bpvtHoywcNWJGY1rRPAt6Hi
+        1rvpGwYePXAiLphmGpiEbcxbj46IpCKIniNuOx6PHGKMLl7ZO49+J/ZjZ/KwcWY6Ko0bUgpPsz46O
+        bzBfRYtorcWPEmMdWs39oqWD6bxVaeCZJ0N6WZtnqI4LeBgX0UPDWBT/gHQhNnNQfn6fSQRsFPKlA
+        YkVY5R4//ic3TBIzyohEVBax9WW3C++qPsvZClhpiVuznmoGsoW24S78hqmLL7IErXrissVDQpt8X
+        Hh2wKxhKmteZIg2AOZ6ATy9ZwHkynMZOdV6CTiWBAtRFTJ1dJw2t0SZBFtLxRzrqQFRw4XNqaV1V8
+        WuIZiBow==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pX7fH-0018oS-Fe; Tue, 28 Feb 2023 21:37:39 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/34] New page table range API
+Date:   Tue, 28 Feb 2023 21:37:03 +0000
+Message-Id: <20230228213738.272178-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 08/10] parisc: fix livelock in uaccess
-Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-arch@vger.kernel.org, linux-parisc@vger.kernel.org
-References: <Y9lz6yk113LmC9SI@ZenIV> <Y9l0w4M91DwYLO3N@ZenIV>
- <84b1c2e4-c096-ed19-9701-472b54a4890c@gmx.de> <Y/47PMmpLDX5lPWx@ZenIV>
- <e9972a0e-14e6-987c-fcee-005a50d28e46@gmx.de> <Y/5Sf3fXn0uOUXTw@ZenIV>
- <39436c4d-f5a2-edd5-24ba-19e4812ea364@gmx.de>
- <215b226f-7ffd-70d8-4e7b-85b37f288062@gmx.de>
-In-Reply-To: <215b226f-7ffd-70d8-4e7b-85b37f288062@gmx.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:m27YsgZtZ8ksJeQxfq1aJIP7UA0lwVViGKacyAWC0goMIGYtCSA
- 5OzzU8FcEkdemFIi+VOK7Ux05yk7/kPo0hRMK+78g9H0hNiU1YyQeI9S96Q9lOJn37h/r0/
- WQPDJU2Is2XpH+E0hyjVpT5v3tax1+LMscAxqeijakONn0Nyw2q4q7v7HXWqKCozrFKo9E+
- 6zw2uS4d0TPcsTt+I8D8A==
-UI-OutboundReport: notjunk:1;M01:P0:UlbeYbijYU8=;47pdr1/iyn9bO5BN1seb4oDWNxl
- mAt0VW2p1/13tHe3OVYXTrE5kbw+euu2riKyf/+W6cFv9+P/c0qGD+w9a0dcS9yk1ZiGi4NBO
- /ajB5pWoqF6LsV1/HPmG2Rkhb9O04k5/IO8dKMLPGJNHbTGYyAWM/4ZgjD/1Moa9J776b3zM+
- ulr5vuE6Ehddxv2CoUrre45fUEQtytEJUTtX1lJ5KvGz848UnCZTtpIAVLVlfvnAdMfVCbEwh
- /loD+lBNF440gr+fhjgr1ZsA5ghGa1sZs5uN1c1vBjKv3U30G/dKaI89ZlWKD80AV8V4xw2sq
- wV95EOV8twE06gFPl0UmzKFNPv0w4x7eHK1guggfJmXrcV1e4s+8RbktJQ48ZHGnp3JERW5V9
- PL52Dq1SAhfmJG38V+Hatvuea6FkPBDkAp5LmqXhfUmWp+tMSFqNnJVCy4lW5g9hxwoWebX3H
- jPMk9VFSMXJaUYf/LtRPVwvv9b0HNkeg52sGFj1YDg7Ix8lgxOAScsYV3l/+iOsI/5+6y8Cnu
- WEFF5UGrNt7d4KB3gXL2UegSkwGzfZVbyWZVXL+UFJ1Qf6GJpVI27x2TKP+M2Q3HGPOs2NXr/
- Smh/gTVdQm2/nRXELGi1iKDmMX3J+y9u1nQzrtxPqdSP3GgPq0zZKDikfQrn+u0CXZrynIrto
- lx/eu4R9Z1yuER5Ewse8+DHjc+cIwJhgQrHjs4SRMj7UV6J3BaFcBp4A0Wzk9Al8QXgiKp4SU
- Syf7itOf+D1crfcU3ITnk5egKnzTKLAfIgh7/u4KgDr2czP/5GvED7O4KOA/phTA89lVS9/aq
- YhzEtguoNHerlGk2QZ+Bk1Z8T3KntotJtqfIRxupqVO81uj0Lu5f2xk/+g2J+vU9WLs3IaZ8O
- prYZKlHb2Dx3JGrzO1Q1vURngPB4kqEyGcmmcHVK0Ku878sKmC5ngA/jM4Gbjv6PaFxMBl+Ct
- 0iS9hOM4BxPZzg3s4yBuWTMUyPM=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Al,
+This patchset changes the API used by the MM to set up page table entries.
+The four APIs are:
+    set_ptes(mm, addr, ptep, pte, nr)
+    update_mmu_cache_range(vma, addr, ptep, nr)
+    flush_dcache_folio(folio)
+    flush_icache_pages(vma, page, nr)
 
-On 2/28/23 21:00, Helge Deller wrote:
-> On 2/28/23 20:32, Helge Deller wrote:
->> Hi Al,
->>
->> On 2/28/23 20:14, Al Viro wrote:
->>> On Tue, Feb 28, 2023 at 07:26:48PM +0100, Helge Deller wrote:
->>>
->>>> I can test both parisc32 and parisc64.
->>>>
->>>>> =C2=A0=C2=A0=C2=A0=C2=A0Just to confirm: your "can be killed with ^C=
-" had been on the
->>>>> mainline parisc kernel (with userfaultfd enable, of course, or it wo=
-uldn't
->>>>> hang up at all), right?
->>>>
->>>> It was a recent mainline kernel with your patch.
->>>
->>> Er...=C2=A0 Reproducer *is* supposed to block; the bug is that on the =
-kernel
->>> without this patch it would (AFAICS) be impossible to kill - not even
->>> with kill -9.=C2=A0 With bug fixed the behaviour should be "blocks and=
- is
->>> killable", i.e. what you've reported.
->>>
->>> What does it do on unpatched kernel?=C2=A0 *IF* the big is there, it w=
-ould
->>> block and be unkillable by any means.=C2=A0 Could you verify that?
->>
->> I just tried 32- and 64-bit kernels.
->> With and without your patch on top of kernel 6.2.
->> The result is always the same:
->> The process hangs, but does not consume CPU and can be killed with ^C o=
-r kill command.
->>
->> strace output is:
->>
->> userfaultfd(0)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 =3D 3
->> ioctl(3, UFFDIO_API, {api=3D0xaa, features=3D0 =3D> features=3DUFFD_FEA=
-TURE_EVENT_FORK|UFFD_FEATURE_EVENT_REMAP|UFFD_FEATURE_EVENT_REMOVE|UFFD_FE=
-ATURE_MISSING_HUGETLBFS|UFFD_FEATURE_MISSING_SHMEM|UFFD_FEATURE_EVENT_UNMA=
-P|UFFD_FEATURE_SIGBUS|UFFD_FEATURE_THREAD_ID|0x800, ioctls=3D1<<_UFFDIO_RE=
-GISTER|1<<_UFFDIO_UNREGISTER|1<<_UFFDIO_API}) =3D 0
->> ioctl(3, UFFDIO_REGISTER, {range=3D{start=3D0xf7afa000, len=3D0x1000}, =
-mode=3DUFFDIO_REGISTER_MODE_MISSING, ioctls=3D1<<_UFFDIO_WAKE|1<<_UFFDIO_C=
-OPY|1<<_UFFDIO_ZEROPAGE}) =3D 0
->> fstatfs64(0, 88, {f_type=3DDEVPTS_SUPER_MAGIC, f_bsize=3D4096, f_blocks=
-=3D0, f_bfree=3D0, f_bavail=3D0, f_files=3D0, f_ffree=3D0, f_fsid=3D{val=
-=3D[0, 0]}, f_namelen=3D255, f_frsize=3D4096, f_flags=3DST_VALID|ST_NOSUID=
-|ST_NOEXEC|ST_RELATIME}) =3D 0
->
-> Ok, one step further...
->
-> We get fooled by glibc, which replaces this line in the testcase:
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D fstatfs(0, (struct s=
-tatfs *)mem);
-> and instead executes the 64-bit variant fstatfs64() inside a wrapper in =
-glibc on another address.
->
-> I replaced that line in the testcase to use the 32-bit syscall with the =
-right (userfault-specified) address by
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D syscall(__NR_fstatfs=
-, 0, mem);
-> and now I see:
-> userfaultfd(0)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 =3D 3
-> ioctl(3, UFFDIO_API, {api=3D0xaa, features=3D0 =3D> features=3DUFFD_FEAT=
-URE_EVENT_FORK|UFFD_FEATURE_EVENT_REMAP|UFFD_FEATURE_EVENT_REMOVE|UFFD_FEA=
-TURE_MISSING_HUGETLBFS|UFFD_FEATURE_MISSING_SHMEM|UFFD_FEATURE_EVENT_UNMAP=
-|UFFD_FEATURE_SIGBUS|UFFD_FEATURE_THREAD_ID|0x800, ioctls=3D1<<_UFFDIO_REG=
-ISTER|1<<_UFFDIO_UNREGISTER|1<<_UFFDIO_API}) =3D 0
-> ioctl(3, UFFDIO_REGISTER, {range=3D{start=3D0xf7afa000, len=3D0x1000}, m=
-ode=3DUFFDIO_REGISTER_MODE_MISSING, ioctls=3D1<<_UFFDIO_WAKE|1<<_UFFDIO_CO=
-PY|1<<_UFFDIO_ZEROPAGE}) =3D 0
-> fstatfs(0,
-> <here it hangs now and is unkillable>
->
-> Needs further testing.
+flush_dcache_folio() isn't technically new, but no architecture
+implemented it, so I've done that for you.  The old APIs remain around
+but are mostly implemented by calling the new interfaces.
 
-Now I can confirm (with the adjusted reproducer), that your patch
-allows to kill the process with SIGKILL, while without your patch
-it's not possibe to kill the process at all.
-I've tested with a 32- and 64-bit parisc kernel.
+The new APIs are based around setting up N page table entries at once.
+The N entries belong to the same PMD, the same folio and the same VMA,
+so ptep++ is a legitimate operation, and locking is taken care of for
+you.  Some architectures can do a better job of it than just a loop,
+but I have hesitated to make too deep a change to architectures I don't
+understand well.
 
-You may add
-Tested-by: Helge Deller <deller@gmx.de> # parisc
-to the patch.
+One thing I have changed in every architecture is that PG_arch_1 is now a
+per-folio bit instead of a per-page bit.  This was something that would
+have to happen eventually, and it makes sense to do it now rather than
+iterate over every page involved in a cache flush and figure out if it
+needs to happen.
 
-If you want me to take the patch (with the warning regarding missing msg v=
-ariable fixed)
-through the parisc tree, please let me know.
+The point of all this is better performance, and Fengwei Yin has
+measured improvement on x86.  I suspect you'll see improvement on
+your architecture too.  Try the new will-it-scale test mentioned here:
+https://lore.kernel.org/linux-mm/20230206140639.538867-5-fengwei.yin@intel.com/
+You'll need to run it on an XFS filesystem and have
+CONFIG_TRANSPARENT_HUGEPAGE set.
 
-Thank you!
-Helge
+For testing, I've only run the code on x86.  If an x86->foo compiler
+exists in Debian, I've built defconfig.  I'm relying on the buildbots
+to tell me what I missed, and people who actually have the hardware to
+tell me if it actually works.
+
+I'd like to get this into the MM tree soon after the current merge window
+closes, so quick feedback would be appreciated.
+
+v3:
+ - Reinstate flush_dcache_icache_phys() on PowerPC
+ - Fix folio_flush_mapping().  The documentation was correct and the
+   implementation was completely wrong
+ - Change the flush_dcache_page() documentation to describe
+   flush_dcache_folio() instead
+ - Split ARM from ARC.  I messed up my git commands
+ - Remove page_mapping_file()
+ - Rationalise how flush_icache_pages() and flush_icache_page() are defined
+ - Use flush_icache_pages() in do_set_pmd()
+ - Pick up Guo Ren's Ack for csky
+
+Matthew Wilcox (Oracle) (30):
+  mm: Convert page_table_check_pte_set() to page_table_check_ptes_set()
+  mm: Add generic flush_icache_pages() and documentation
+  mm: Add folio_flush_mapping()
+  mm: Remove ARCH_IMPLEMENTS_FLUSH_DCACHE_FOLIO
+  alpha: Implement the new page table range API
+  arc: Implement the new page table range API
+  arm: Implement the new page table range API
+  arm64: Implement the new page table range API
+  csky: Implement the new page table range API
+  hexagon: Implement the new page table range API
+  ia64: Implement the new page table range API
+  loongarch: Implement the new page table range API
+  m68k: Implement the new page table range API
+  microblaze: Implement the new page table range API
+  mips: Implement the new page table range API
+  nios2: Implement the new page table range API
+  openrisc: Implement the new page table range API
+  parisc: Implement the new page table range API
+  powerpc: Implement the new page table range API
+  riscv: Implement the new page table range API
+  s390: Implement the new page table range API
+  superh: Implement the new page table range API
+  sparc32: Implement the new page table range API
+  sparc64: Implement the new page table range API
+  um: Implement the new page table range API
+  x86: Implement the new page table range API
+  xtensa: Implement the new page table range API
+  mm: Remove page_mapping_file()
+  mm: Rationalise flush_icache_pages() and flush_icache_page()
+  mm: Use flush_icache_pages() in do_set_pmd()
+
+Yin Fengwei (4):
+  filemap: Add filemap_map_folio_range()
+  rmap: add folio_add_file_rmap_range()
+  mm: Convert do_set_pte() to set_pte_range()
+  filemap: Batch PTE mappings
+
+ Documentation/core-api/cachetlb.rst       |  51 +++++-----
+ Documentation/filesystems/locking.rst     |   2 +-
+ arch/alpha/include/asm/cacheflush.h       |  13 ++-
+ arch/alpha/include/asm/pgtable.h          |  18 +++-
+ arch/arc/include/asm/cacheflush.h         |  14 +--
+ arch/arc/include/asm/pgtable-bits-arcv2.h |  20 +++-
+ arch/arc/mm/cache.c                       |  61 +++++++-----
+ arch/arc/mm/tlb.c                         |  18 ++--
+ arch/arm/include/asm/cacheflush.h         |  29 +++---
+ arch/arm/include/asm/pgtable.h            |   5 +-
+ arch/arm/include/asm/tlbflush.h           |  13 ++-
+ arch/arm/mm/copypage-v4mc.c               |   5 +-
+ arch/arm/mm/copypage-v6.c                 |   5 +-
+ arch/arm/mm/copypage-xscale.c             |   5 +-
+ arch/arm/mm/dma-mapping.c                 |  24 ++---
+ arch/arm/mm/fault-armv.c                  |  14 +--
+ arch/arm/mm/flush.c                       |  99 +++++++++++--------
+ arch/arm/mm/mm.h                          |   2 +-
+ arch/arm/mm/mmu.c                         |  14 ++-
+ arch/arm64/include/asm/cacheflush.h       |   4 +-
+ arch/arm64/include/asm/pgtable.h          |  25 +++--
+ arch/arm64/mm/flush.c                     |  36 +++----
+ arch/csky/abiv1/cacheflush.c              |  32 ++++---
+ arch/csky/abiv1/inc/abi/cacheflush.h      |   3 +-
+ arch/csky/abiv2/cacheflush.c              |  30 +++---
+ arch/csky/abiv2/inc/abi/cacheflush.h      |  11 ++-
+ arch/csky/include/asm/pgtable.h           |  21 +++-
+ arch/hexagon/include/asm/cacheflush.h     |   9 +-
+ arch/hexagon/include/asm/pgtable.h        |  16 +++-
+ arch/ia64/hp/common/sba_iommu.c           |  26 ++---
+ arch/ia64/include/asm/cacheflush.h        |  14 ++-
+ arch/ia64/include/asm/pgtable.h           |  14 ++-
+ arch/ia64/mm/init.c                       |  29 ++++--
+ arch/loongarch/include/asm/cacheflush.h   |   2 +-
+ arch/loongarch/include/asm/pgtable.h      |  30 ++++--
+ arch/m68k/include/asm/cacheflush_mm.h     |  25 +++--
+ arch/m68k/include/asm/pgtable_mm.h        |  21 +++-
+ arch/m68k/mm/motorola.c                   |   2 +-
+ arch/microblaze/include/asm/cacheflush.h  |   8 ++
+ arch/microblaze/include/asm/pgtable.h     |  17 +++-
+ arch/microblaze/include/asm/tlbflush.h    |   4 +-
+ arch/mips/include/asm/cacheflush.h        |  32 ++++---
+ arch/mips/include/asm/pgtable.h           |  36 ++++---
+ arch/mips/mm/c-r4k.c                      |   5 +-
+ arch/mips/mm/cache.c                      |  56 +++++------
+ arch/mips/mm/init.c                       |  17 ++--
+ arch/nios2/include/asm/cacheflush.h       |   6 +-
+ arch/nios2/include/asm/pgtable.h          |  27 ++++--
+ arch/nios2/mm/cacheflush.c                |  62 ++++++------
+ arch/openrisc/include/asm/cacheflush.h    |   8 +-
+ arch/openrisc/include/asm/pgtable.h       |  27 +++++-
+ arch/openrisc/mm/cache.c                  |  12 ++-
+ arch/parisc/include/asm/cacheflush.h      |  14 ++-
+ arch/parisc/include/asm/pgtable.h         |  28 ++++--
+ arch/parisc/kernel/cache.c                | 101 ++++++++++++++------
+ arch/powerpc/include/asm/book3s/pgtable.h |  10 +-
+ arch/powerpc/include/asm/cacheflush.h     |  14 ++-
+ arch/powerpc/include/asm/kvm_ppc.h        |  10 +-
+ arch/powerpc/include/asm/nohash/pgtable.h |  13 +--
+ arch/powerpc/include/asm/pgtable.h        |   6 ++
+ arch/powerpc/mm/book3s64/hash_utils.c     |  11 ++-
+ arch/powerpc/mm/cacheflush.c              |  40 +++-----
+ arch/powerpc/mm/nohash/e500_hugetlbpage.c |   3 +-
+ arch/powerpc/mm/pgtable.c                 |  51 +++++-----
+ arch/riscv/include/asm/cacheflush.h       |  19 ++--
+ arch/riscv/include/asm/pgtable.h          |  26 +++--
+ arch/riscv/mm/cacheflush.c                |  11 +--
+ arch/s390/include/asm/pgtable.h           |  34 +++++--
+ arch/sh/include/asm/cacheflush.h          |  21 ++--
+ arch/sh/include/asm/pgtable.h             |   6 +-
+ arch/sh/include/asm/pgtable_32.h          |  16 +++-
+ arch/sh/mm/cache-j2.c                     |   4 +-
+ arch/sh/mm/cache-sh4.c                    |  26 +++--
+ arch/sh/mm/cache-sh7705.c                 |  26 +++--
+ arch/sh/mm/cache.c                        |  54 ++++++-----
+ arch/sh/mm/kmap.c                         |   3 +-
+ arch/sparc/include/asm/cacheflush_32.h    |   9 +-
+ arch/sparc/include/asm/cacheflush_64.h    |  19 ++--
+ arch/sparc/include/asm/pgtable_32.h       |  15 ++-
+ arch/sparc/include/asm/pgtable_64.h       |  25 ++++-
+ arch/sparc/kernel/smp_64.c                |  56 +++++++----
+ arch/sparc/mm/init_32.c                   |  13 ++-
+ arch/sparc/mm/init_64.c                   |  78 ++++++++-------
+ arch/sparc/mm/tlb.c                       |   5 +-
+ arch/um/include/asm/pgtable.h             |  15 ++-
+ arch/x86/include/asm/pgtable.h            |  21 +++-
+ arch/xtensa/include/asm/cacheflush.h      |  11 ++-
+ arch/xtensa/include/asm/pgtable.h         |  24 +++--
+ arch/xtensa/mm/cache.c                    |  83 +++++++++-------
+ include/asm-generic/cacheflush.h          |   7 --
+ include/linux/cacheflush.h                |  13 ++-
+ include/linux/mm.h                        |   3 +-
+ include/linux/page_table_check.h          |  14 +--
+ include/linux/pagemap.h                   |  28 ++++--
+ include/linux/rmap.h                      |   2 +
+ mm/filemap.c                              | 111 +++++++++++++---------
+ mm/memory.c                               |  30 +++---
+ mm/page_table_check.c                     |  14 +--
+ mm/rmap.c                                 |  60 +++++++++---
+ mm/util.c                                 |   2 +-
+ 100 files changed, 1436 insertions(+), 848 deletions(-)
+
+-- 
+2.39.1
+
