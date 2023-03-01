@@ -2,132 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFD16A6879
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Mar 2023 08:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571E06A688E
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Mar 2023 09:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjCAH4T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Mar 2023 02:56:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S229470AbjCAIGi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Mar 2023 03:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCAH4P (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Mar 2023 02:56:15 -0500
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516BB37562;
-        Tue, 28 Feb 2023 23:56:10 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id E71E7240009;
-        Wed,  1 Mar 2023 07:56:04 +0000 (UTC)
-Message-ID: <c0b60456-8731-0999-df3b-f25731209471@ghiti.fr>
-Date:   Wed, 1 Mar 2023 08:56:04 +0100
+        with ESMTP id S229656AbjCAIGh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Mar 2023 03:06:37 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D29937545;
+        Wed,  1 Mar 2023 00:06:36 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id w23so13380137qtn.6;
+        Wed, 01 Mar 2023 00:06:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IxktB80SVUUGX5HN3L3vi17Q72ZYHj/nfVmA7YVgBaA=;
+        b=wdSGo+pdXlu84nww6+YIrwwId9/9f8cBR8qDxCYPd3No4OoqNMrxTjE5TMK8t0JDVt
+         ktYYTzCNIPcVr4q94cdRARxGLi2i3+ZJlue8Jyjihib5QDxpj5tfQAw3xwrXslGSnJCI
+         bkTQDidm3G1UNSqC6lsKGOl4LRQe395rR5okFH5pE3bkc2uS+G5nHHI9dmHjngW4omac
+         vnIDBALcG3K7dEkl9RSJNvEbEXvtSv29NuPfAkPYjY7DujuzVzcze3Rc9WCQGzvU5FKc
+         WPUEIxarWe9RFCAOVp6TqiLeUrjuQn4maCpDncVLiX2YSuf4Mv5P2BJN7DoiIQ0slpjq
+         vR6Q==
+X-Gm-Message-State: AO0yUKWDHWpSfxPZBTbyVB+Qq0GItkfFsULXP6obhQ14XhqmV9NzO+O1
+        YQifRG1thbbWIWJt+M265jceiebVhmG6dg==
+X-Google-Smtp-Source: AK7set/auLsMLIlNhlXEG7ezcbAVvMv6WpFBcVJldKF6TnUx+tdBEq6g7gL2y4ZbvM6vu/qPOYnrrg==
+X-Received: by 2002:a05:622a:101:b0:3b6:2b5c:97e5 with SMTP id u1-20020a05622a010100b003b62b5c97e5mr9880556qtw.17.1677657995153;
+        Wed, 01 Mar 2023 00:06:35 -0800 (PST)
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
+        by smtp.gmail.com with ESMTPSA id p12-20020a37420c000000b007426ec97253sm5944573qka.111.2023.03.01.00.06.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Mar 2023 00:06:34 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-53916ab0c6bso344568887b3.7;
+        Wed, 01 Mar 2023 00:06:34 -0800 (PST)
+X-Received: by 2002:a81:ad45:0:b0:52e:cacb:d7c4 with SMTP id
+ l5-20020a81ad45000000b0052ecacbd7c4mr3373237ywk.5.1677657994373; Wed, 01 Mar
+ 2023 00:06:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-References: <20230125081214.1576313-2-alexghiti@rivosinc.com>
- <202301282230.sz4DCUe6-lkp@intel.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <202301282230.sz4DCUe6-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230228213738.272178-1-willy@infradead.org> <20230228213738.272178-23-willy@infradead.org>
+In-Reply-To: <20230228213738.272178-23-willy@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 1 Mar 2023 09:06:16 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVY9VSZ57g-RXpDVBigfKJZLyF5wuyRsbmOm6d+m08OEA@mail.gmail.com>
+Message-ID: <CAMuHMdVY9VSZ57g-RXpDVBigfKJZLyF5wuyRsbmOm6d+m08OEA@mail.gmail.com>
+Subject: Re: [PATCH v3 22/34] superh: Implement the new page table range API
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/28/23 15:58, kernel test robot wrote:
-> Hi Alexandre,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on linus/master v6.2-rc5 next-20230127]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Get-rid-of-riscv_pfn_base-variable/20230125-161537
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230125081214.1576313-2-alexghiti%40rivosinc.com
-> patch subject: [PATCH v5 1/2] riscv: Get rid of riscv_pfn_base variable
-> config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230128/202301282230.sz4DCUe6-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # https://github.com/intel-lab-lkp/linux/commit/90b21402dc8a7e6e36a62ad19c4969ff13fad168
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Alexandre-Ghiti/riscv-Get-rid-of-riscv_pfn_base-variable/20230125-161537
->          git checkout 90b21402dc8a7e6e36a62ad19c4969ff13fad168
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->     In file included from include/asm-generic/bug.h:22,
->                      from arch/riscv/include/asm/bug.h:83,
->                      from include/linux/bug.h:5,
->                      from arch/riscv/include/asm/cmpxchg.h:9,
->                      from arch/riscv/include/asm/atomic.h:19,
->                      from include/linux/atomic.h:7,
->                      from include/linux/jump_label.h:255,
->                      from arch/riscv/include/asm/vdso/processor.h:7,
->                      from include/vdso/processor.h:10,
->                      from arch/riscv/include/asm/processor.h:11,
->                      from arch/riscv/include/asm/irqflags.h:10,
->                      from include/linux/irqflags.h:16,
->                      from arch/riscv/include/asm/bitops.h:14,
->                      from include/linux/bitops.h:68,
->                      from include/linux/kernel.h:22,
->                      from mm/debug.c:9:
->     mm/debug.c: In function '__dump_page':
->>> include/linux/kern_levels.h:5:25: warning: format '%lx' expects argument of type 'long unsigned int', but argument 7 has type 'long long unsigned int' [-Wformat=]
->         5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
->           |                         ^~~~~~
->     include/linux/printk.h:429:25: note: in definition of macro 'printk_index_wrap'
->       429 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
->           |                         ^~~~
->     include/linux/printk.h:510:9: note: in expansion of macro 'printk'
->       510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
->           |         ^~~~~~
->     include/linux/kern_levels.h:12:25: note: in expansion of macro 'KERN_SOH'
->        12 | #define KERN_WARNING    KERN_SOH "4"    /* warning conditions */
->           |                         ^~~~~~~~
->     include/linux/printk.h:510:16: note: in expansion of macro 'KERN_WARNING'
->       510 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
->           |                ^~~~~~~~~~~~
->     mm/debug.c:93:9: note: in expansion of macro 'pr_warn'
->        93 |         pr_warn("page:%p refcount:%d mapcount:%d mapping:%p index:%#lx pfn:%#lx\n",
->           |         ^~~~~~~
->
->
-> vim +5 include/linux/kern_levels.h
->
-> 314ba3520e513a Joe Perches 2012-07-30  4
-> 04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-> 04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-> 04d2c8c83d0e3a Joe Perches 2012-07-30  7
->
+Hi Willy,
 
-And this one was mine, sorry I i overlooked that!
+On Tue, Feb 28, 2023 at 10:39 PM Matthew Wilcox (Oracle)
+<willy@infradead.org> wrote:
+> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio() and
+> flush_icache_pages().  Change the PG_dcache_clean flag from being
+> per-page to per-folio.  Flush the entire folio containing the pages in
+> flush_icache_pages() for ease of implementation.
+>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
+Thanks for your patch!
+
+> --- a/arch/sh/mm/cache.c
+> +++ b/arch/sh/mm/cache.c
+
+>  void __flush_anon_page(struct page *page, unsigned long vmaddr)
+>  {
+> +       struct folio *folio = page_folio(page);
+>         unsigned long addr = (unsigned long) page_address(page);
+>
+>         if (pages_do_alias(addr, vmaddr)) {
+> -               if (boot_cpu_data.dcache.n_aliases && page_mapcount(page) &&
+> -                   test_bit(PG_dcache_clean, &page->flags)) {
+> +               if (boot_cpu_data.dcache.n_aliases && folio_mapped(folio) &&
+> +                   test_bit(PG_dcache_clean, &folio->flags)) {
+>                         void *kaddr;
+>
+>                         kaddr = kmap_coherent(page, vmaddr);
+>                         /* XXX.. For now kunmap_coherent() does a purge */
+>                         /* __flush_purge_region((void *)kaddr, PAGE_SIZE); */
+>                         kunmap_coherent(kaddr);
+> -               } else
+> -                       __flush_purge_region((void *)addr, PAGE_SIZE);
+> +               } else
+
+Trailing whitespace. Please run scripts/checkpath.pl (on the full series).
+
+> +                       __flush_purge_region(folio_address(folio),
+> +                                               folio_size(folio));
+>         }
+>  }
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
