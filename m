@@ -2,279 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87586A6B74
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Mar 2023 12:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B7D6A6C1C
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Mar 2023 13:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjCALMU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Mar 2023 06:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S229471AbjCAMJJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Mar 2023 07:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCALMT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Mar 2023 06:12:19 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2076.outbound.protection.outlook.com [40.107.243.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE5018B2B;
-        Wed,  1 Mar 2023 03:12:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GWatQxGVcFTPTeLP5oivEMKtMwbvFS0unh6Ak8t3DnFOI+fti+1bYp5OWBApb56Ai/N26m6RgoyoiiWL84RUrjbetpJJCzakzH3LK5NuHdSpGNIxIimOkbxX8LDcdRLD4SuMvfl1swxfm4Zl9TLRVcS5GKRcsH2jAF2j4GvfGUFaJ88s/A9Xts/qJYuQOFNKgwkYOEzNN2V8Xid0CN64f6Icj2I03hztK1EyzVQYofFPynbo4AJuFWpouqBDT5IHBEE2hYhHfNB7e3kxsZN8bD9TcDs/SQJGeFSJJVUe7Y84y3NNVA6b4intR/qwf+2wfGdk5EnwgCqfI7/W7lAb7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=55OybL9vqp1n/WkXr1U+Um0rHbLtebXEuGnLRWuACZU=;
- b=Bnr6Levj8+6WcCo8ap90kLESre5C/epmaL/ntT0hIxbM3wz3wnyhIiJheOteHZRnDsnY6qhl6JRXraMh8Hf1tCdaD++04eC06ikG0zIX9ffUfpp9p5j5OpQEoloxnpQnz9Qjk3eKThkPFSaWpOZywogHlJQpEUigvfrj0IMUJg709s5g0MGqfrfboOGUp90g9noHX/EMlmvta/k5f5Obstbwoao4pwyMllfeDLgBqYPvB34tPpImSS1Z9dLcBr+ELSxdF/YAzJp/ahmZoW/QHUU4kZ4kJkPmN5h+CImOSBYZoeIv0qe20OP0jdQELEqveG1soVt8qSb6p9Q6YYmByA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=55OybL9vqp1n/WkXr1U+Um0rHbLtebXEuGnLRWuACZU=;
- b=yXfd4yfe+Oqpgwj0OPKFYeHdfQe57C+XeAgNc2vahJTCcLjRQJ05608FJLGya1MR8dXUZTI3IXCNKRmWCQHpwy4ReNAw7Ak9Txt5XNTYwPJ8b9g5OFWoN3WU+8OPfGFbrGgQL1ipbHkjaJ2K2fHIl4ufR+SaiM2SGiHAbvso478=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- MW4PR12MB6828.namprd12.prod.outlook.com (2603:10b6:303:209::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 11:12:12 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::bad5:8f56:fc07:15cf]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::bad5:8f56:fc07:15cf%3]) with mapi id 15.20.6134.025; Wed, 1 Mar 2023
- 11:12:11 +0000
-Message-ID: <e3c53388-f332-5b52-c724-a42d8ea624a7@amd.com>
-Date:   Wed, 1 Mar 2023 12:11:57 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH V3 13/16] x86/sev: Add Check of #HV event in path
-Content-Language: en-US
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-14-ltykernel@gmail.com>
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20230122024607.788454-14-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0084.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::20) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
+        with ESMTP id S229515AbjCAMJI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Mar 2023 07:09:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B777ABA;
+        Wed,  1 Mar 2023 04:09:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48F736125E;
+        Wed,  1 Mar 2023 12:09:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B39CBC433A7;
+        Wed,  1 Mar 2023 12:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677672545;
+        bh=LyxjBmZE6k3cyXzfB6KJvDfOSHZHGuQ/9tS1lTapdM4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Kw6I4aeXa2+2Y9qw6IH8RV1FmZczVbWAApPipv9xqq49sVaMTtkhZ69LA+19PvKjl
+         wf481hPIc084dwtXs2yol5ag7NvJkyUrLydoYaqmDJRykeSZS5HCE1X0wPKM2h6yD+
+         cSKWvux4hGVNjgTPkLkVTvKVv4/hBYInXoe6ZjpfdMNU2dPV2QkHVlohwbCdi7ANxp
+         kAw6U5AhwQAgjaq5cB9VGsyghxX+hVDp4+EcwP+1ccTnwF4OSluRRQmeWBtlK9Fr3E
+         H9H95QhUWuIIZZvdFl5OAo5+mej4kkLSzWej9UdLO5gPaLL/XY8L0whXlaDE+eH2m5
+         wMAthLqPnLjaQ==
+Received: by mail-ed1-f49.google.com with SMTP id f13so52852331edz.6;
+        Wed, 01 Mar 2023 04:09:05 -0800 (PST)
+X-Gm-Message-State: AO0yUKVSbyftsh6/X2IThGo/rUX7bOV+skWwDbdZz/q+v5fMI9iQDAJh
+        6L48zIVZxUVvmF5z9nozJIz0hab17biR/COml5Q=
+X-Google-Smtp-Source: AK7set/92sOR99OrQQ2Hss1LQNZFBaeHDmMNJ4qKgQWrSzJZFRNFm2Q9MR3c57+mNT4iHuisVIzBzhjCrBlv8F27lnU=
+X-Received: by 2002:a17:906:4f99:b0:8b0:e909:9136 with SMTP id
+ o25-20020a1709064f9900b008b0e9099136mr3015106eju.1.1677672543889; Wed, 01 Mar
+ 2023 04:09:03 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|MW4PR12MB6828:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd344748-59f6-4966-4923-08db1a45cdff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E/+o6Mj2hvdF7qsONDiHLYoq0PHcKE3QGU/ZIEvyZxaLiS/0dI4SPHsuJinz/O8Zoew7VpuboDszvpdmbmncLYr/8tmTSF8cS8wcvR/VNgLyUHWMwqlTX6aazfYUo6/MYxnhyIrhR3t38ezpJIVAAhMkywb9g4TGlPszDtfjM8skDWjDG+X2kUQ8WMS8b5Lj5jAbsO7n8H00HT2lO0I3CsP0Q664ewRWKT5euK5oIifP3hthrITAQY2lUKjOhs4OBVcGOu8YKq0SQf0rZ8bzYt9M7faTOf6uFNb+/0oU/HhHYX5c3BoCZ6sIxtBu7fUOeq+YKeAqgB7eQTKh+eHMc9O2aVcGdheZepuKCALskgzk9KcTQV7ok5w9MHylT691p16rP6jdyMXXY5uG2tV7H2p2qxRJ+bsoCSz2HvadeqL5hHzy2r73vluyghqfw0MAVxxVUsYoMICl4UKaAGsWyfqAzn/lDGYNb0sudgmRAOhPaON5qsiKbBBNas/muFyzRHZGb6xIiRExcajO0bhD9Sg/18OuuqsQSxZO+VKTOv/2911as5itw/oQev77+pp4ttZ8rCZZcvjgwHbRd6Mx5Hb6dMsW5wvqT0iF01U1tU3Wdp83vIMO5NJdQWL+vlu7aPIGwhP+i23WgXls4EpmVI/1X47+p/PIrCmdVTJEZ6M9oTNPdTa6fTnPQy1aw0uOD97R/X1DZDZJTEyi3eIPJB8HXwo7VnvMNtzqajvYCaARDREh5ezNgIITXOGzo4oq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(39860400002)(346002)(366004)(376002)(451199018)(921005)(86362001)(31696002)(38100700002)(8676002)(5660300002)(36756003)(7406005)(7416002)(2906002)(66946007)(8936002)(66556008)(4326008)(66476007)(41300700001)(45080400002)(2616005)(53546011)(186003)(26005)(6506007)(83380400001)(6512007)(6666004)(478600001)(316002)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WG1KaDhRc0VaNHBWc2FOUGxpV2I1dzVudU1KR2xQSDJ0Q3hkUGpCdHMvbWZB?=
- =?utf-8?B?SjZBMkRheUlXVVdXZWJ3WCtwTjFZdjZscTZsdVhsemJNTi9kUHNhSFFyZkpW?=
- =?utf-8?B?R2dqZGRrY3E0QiswMXFBQlhkUUlpTU5UMDFsVmRUc1R2TUlvRjl3TEc4R2Ja?=
- =?utf-8?B?aE9xWGdNNnpybzMzU2RkNWE2dndSVmgrWEFOVlZ6MFNhZTNNTVhjbG9yNm9a?=
- =?utf-8?B?YUltOUJtWVdOSW4vMFJUQzE1aWZjMzZYWFhPQlgwVmxjV2x1T2p0S0VNa21Z?=
- =?utf-8?B?TWlWYnl6dWtldy9zbityMEpZcnk3MDlwZEZGeng5aldSM3ZSdVB0Q0FYWTl5?=
- =?utf-8?B?bXMwaDlJSGpFWEFmc3l2U3hjcXFHVllOWllBRk9hcWkyNVVJb1hZUU41SHVD?=
- =?utf-8?B?M1dEblBYckFET3lLd2JhMlk4VkdzZHJKcFU1aFdiQzNjMW9udkpaOE5NOXV1?=
- =?utf-8?B?WUQ1SWR5VHlVcG5hRVNsRzBJVVRjT2hoLzVjM0FPQzBFR05PTXp1U3BRWWZv?=
- =?utf-8?B?WkRmY2VURFNRbldiRVhZTVBjaGdBaWh0V20zT01nTHAyWmVOelFpcmxFTjE5?=
- =?utf-8?B?T1RMQXJLNENOUUhubVhhOERtQ09YQmpBWWRBM1dQWEltSG00YVlqa0gvYlox?=
- =?utf-8?B?eUNnSHNtcFhEdFBBakM4R0RWVFNsWmxRSGVZSk8weGlCejZjOUNCSks0OXdI?=
- =?utf-8?B?RGFJUXVicTZBVm9mdUYrbUZlQ2p4b3Q2QWViNXNNSTQ2NWU0Q21vYmFIZVJ5?=
- =?utf-8?B?SVJUdmhnOE9xaVNXZ3JQTXNDUDVXbmQ0NG0vQ3htQ3hlcktESlFZZjZXQlZM?=
- =?utf-8?B?QXh4aTZnM2Ryd0h2RXRFaXcyNEtQWTdBZjU5TjlQcDYwTEY4ZS9ZOWVpTnBL?=
- =?utf-8?B?NlBqbGVFSTQ3Z1Vjc2JudzFYYUJBSlZob1JlaUxlU2MrNEYrRzhoNWJ1K29u?=
- =?utf-8?B?aitmdm9aNUI4Mk5YaEdpeVp2cnpDNWhoUHBlRm00bHpHaWthTVFoVDFsZXp6?=
- =?utf-8?B?U3NRcGdTdGNkek5PODM2TTRpVDdsNERidlg1eG00emYyK01qa0lXK2NzQUo0?=
- =?utf-8?B?dTdmUmVNdjNkVnVlU1M3R2o3MzBEVG82MUZKRkFXRXRyaFBDWmZ3ZXpYU1hR?=
- =?utf-8?B?S3BQOHQrWTZ1dTlpS0FOTWRtbkZYRi9UNXBYbTVNeVBGUEV3S092dGQrNHRC?=
- =?utf-8?B?WlltUmhmd3I1SUZiUWdiL3BIcHdQRVh0bTNtejI4bUZncjVhNnFFSkt0RWsz?=
- =?utf-8?B?aVVCWE1JTWxiVWFQb1R6aVpwMVArSURHL3NaMit4VVl3cTRvYUVRK09NSm1i?=
- =?utf-8?B?L2NSOFJjTlRlT2l5MXhtMm5UTUVsM0ZsbURlZDNNWUJUSHZiMkg5M3Rhc2lY?=
- =?utf-8?B?alRHc1hvSFAvMHhkL3k1ZmFDV0pqQ3ZCR3lnaUtQbTFnSjdNWC93bTBNd0Rl?=
- =?utf-8?B?MGsxanZqNnhrdDRpM3lrYlpuSVdWTXBzSitIV09BSGUvZUlFQnRoSUZ5emcz?=
- =?utf-8?B?STg4ZnlrRFcwMVc2UG1oREdBRjNmY1JmSlgySitXYjAvRmJ4ZkVRczhlOUow?=
- =?utf-8?B?OUVEcGc3NFlOb00wRDFpVjlsakxuMkJCU3U4TVZvbm1CWW5GQWxGM2xZM2VD?=
- =?utf-8?B?OVZ6R29UaUcwaTU0ZUgvL3NXQnpKR0tkTEZiVjBnU05oc3gzVzE5cGlPZlUv?=
- =?utf-8?B?YzhNRVdMQ2tQT3k3YWxTL0lpTTFnVkhidXpIWjRSRmZhT2tWTlA3QkJTc212?=
- =?utf-8?B?YWMxUG1aems3eDYzTEtBSTJyYkNqcmhyN09TcnRNRHNzUmZXdWRZSjFqTFEx?=
- =?utf-8?B?aGZYMkZYazVJR2VTdVMxa3FqWTZhSVdtSjF1c3FYL3lKa285NmRwd1o3NGdB?=
- =?utf-8?B?QTB5RjN4RkdZQTFBQ2lpQzZTNzJIWGtTcG5qSkFjNWVjN2ROeDRvY2ZBQWg5?=
- =?utf-8?B?NHdjSVl1VEs0bFBFMjRyeUVEYkh3L2NxM0M4eml4NGFvWW4wVG56SlRBdzZp?=
- =?utf-8?B?YWswRk82NGh0bld5ZHNiaml0YVhNQjhxZUYwakc3Si9aT2txMk1XWDMyVXJ2?=
- =?utf-8?B?N0F5TFkxSXRMYmh6UEE3RXJhSDJRTWE4eHA1Z2V3R3liTVpuSHN0ZjNMMDlZ?=
- =?utf-8?Q?qf8xKo0JYzh4ZYXlSNsjLCHfi?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd344748-59f6-4966-4923-08db1a45cdff
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 11:12:11.7307
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Szf03JdYYiSP5oXU1GAYY1lxpGHgibA7co6G6kTL4Znbw7aWS790nhwuCM5jizbi7U/ORZCt9y3P6n9LGedbEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6828
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20230301085109.2373524-1-chenhuacai@loongson.cn> <b22aa314-5804-ef10-7865-2445222e2f49@xen0n.name>
+In-Reply-To: <b22aa314-5804-ef10-7865-2445222e2f49@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 1 Mar 2023 20:08:50 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H70DGG6z5NMDg7h0GN-v3HGqi4RGvNHMpmLQ-CC=WtCzA@mail.gmail.com>
+Message-ID: <CAAhV-H70DGG6z5NMDg7h0GN-v3HGqi4RGvNHMpmLQ-CC=WtCzA@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Export some symbols without GPL
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/22/2023 3:46 AM, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
-> 
-> Add check_hv_pending() and check_hv_pending_after_irq() to
-> check queued #HV event when irq is disabled.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
->   arch/x86/entry/entry_64.S       | 18 +++++++++++++++
->   arch/x86/include/asm/irqflags.h | 10 +++++++++
->   arch/x86/kernel/sev.c           | 39 +++++++++++++++++++++++++++++++++
->   3 files changed, 67 insertions(+)
-> 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index 6baec7653f19..aec8dc4443d1 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -1064,6 +1064,15 @@ SYM_CODE_END(paranoid_entry)
->    * R15 - old SPEC_CTRL
->    */
->   SYM_CODE_START_LOCAL(paranoid_exit)
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/*
-> +	 * If a #HV was delivered during execution and interrupts were
-> +	 * disabled, then check if it can be handled before the iret
-> +	 * (which may re-enable interrupts).
-> +	 */
-> +	mov     %rsp, %rdi
-> +	call    check_hv_pending
-> +#endif
->   	UNWIND_HINT_REGS
->   
->   	/*
-> @@ -1188,6 +1197,15 @@ SYM_CODE_START(error_entry)
->   SYM_CODE_END(error_entry)
->   
->   SYM_CODE_START_LOCAL(error_return)
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	/*
-> +	 * If a #HV was delivered during execution and interrupts were
-> +	 * disabled, then check if it can be handled before the iret
-> +	 * (which may re-enable interrupts).
-> +	 */
-> +	mov     %rsp, %rdi
-> +	call    check_hv_pending
-> +#endif
->   	UNWIND_HINT_REGS
->   	DEBUG_ENTRY_ASSERT_IRQS_OFF
->   	testb	$3, CS(%rsp)
-> diff --git a/arch/x86/include/asm/irqflags.h b/arch/x86/include/asm/irqflags.h
-> index 7793e52d6237..fe46e59168dd 100644
-> --- a/arch/x86/include/asm/irqflags.h
-> +++ b/arch/x86/include/asm/irqflags.h
-> @@ -14,6 +14,10 @@
->   /*
->    * Interrupt control:
->    */
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +void check_hv_pending(struct pt_regs *regs);
-> +void check_hv_pending_irq_enable(void);
-> +#endif
->   
->   /* Declaration required for gcc < 4.9 to prevent -Werror=missing-prototypes */
->   extern inline unsigned long native_save_fl(void);
-> @@ -43,12 +47,18 @@ static __always_inline void native_irq_disable(void)
->   static __always_inline void native_irq_enable(void)
->   {
->   	asm volatile("sti": : :"memory");
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	check_hv_pending_irq_enable();
-> +#endif
->   }
->   
->   static inline __cpuidle void native_safe_halt(void)
->   {
->   	mds_idle_clear_cpu_buffers();
->   	asm volatile("sti; hlt": : :"memory");
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +	check_hv_pending_irq_enable();
-> +#endif
->   }
->   
->   static inline __cpuidle void native_halt(void)
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index a8862a2eff67..fe5e5e41433d 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -179,6 +179,45 @@ void noinstr __sev_es_ist_enter(struct pt_regs *regs)
->   	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], new_ist);
->   }
->   
-> +static void do_exc_hv(struct pt_regs *regs)
-> +{
-> +	/* Handle #HV exception. */
-> +}
-> +
-> +void check_hv_pending(struct pt_regs *regs)
-> +{
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> +		return;
-> +
-> +	if ((regs->flags & X86_EFLAGS_IF) == 0)
-> +		return;
+Hi, Xuerui,
 
-Will this return and prevent guest from executing NMI's
-while irqs are disabled?
+On Wed, Mar 1, 2023 at 6:07=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wrot=
+e:
+>
+> Hi,
+>
+> On 2023/3/1 16:51, Huacai Chen wrote:
+> > Some symbols, i.e., vm_map_base, empty_zero_page and invalid_pmd_table,
+> > could be accessed widely by some out-of-tree non-GPL but important file
+> > systems or drivers (e.g., OpenZFS). Let's use EXPORT_SYMBOL() instead o=
+f
+> > EXPORT_SYMBOL_GPL() to export them, so as to avoid build errors.
+>
+> The commit title probably could become "Mark 3 symbol exports as non-GPL"=
+.
+>
+> Also you could drop the "some symbols, i.e.," part and go straight to
+> the 3 symbols. It sounds more natural to me at least (because I know the
+> current wording is 1:1 perfectly idiomatic Chinese, so it is highly
+> likely some adjustment would be needed: idiomatic English don't
+> *perfectly* map to Chinese).
+>
+> In addition to this, I've did some archaeology:
+>
+> In the OpenZFS case, empty_zero_page and vm_map_base are affected.
+> vm_map_base is arch/loongarch invention so we actually kind of have
+> "authority" over it, but what follows is a little more background on why
+> EXPORT_SYMBOL is arguably more appropriate for empty_zero_page.
+>
+> As it stands today, only 3 architectures export empty_zero_page as a GPL
+> symbol: ia64, loongarch and mips. loongarch gets the GPL export by
+> inheriting from mips, and the mips export was first introduced in commit
+> 497d2adcbf50b ("[MIPS] Export empty_zero_page for sake of the ext4
+> module."). The ia64 export was similar: commit a7d57ecf4216e ("[IA64]
+> Export three symbols for module use") did so for kvm.
+>
+> In both ia64 and mips, the export of empty_zero_page was done for
+> satisfying some in-kernel component built as module (kvm and ext4
+> respectively), and given its reasonably low-level nature, GPL is a
+> reasonable choice. But looking at the bigger picture it is evident most
+> other architectures do not regard it as GPL, so in effect the symbol
+> probably should not be treated as such, in favor of consistency.
+>
+> You could incorporate some or all of this into the commit message to
+> give others some background on the justification. After all reverting
+> symbols to non-GPL is relatively rare compared to all the GPL-marking
+> actions.
+Thank you very much for giving so many backgrounds, I will update the
+commit message.
 
-Thanks,
-Pankaj
-
-> +
-> +	do_exc_hv(regs);
-> +}
-> +
-> +void check_hv_pending_irq_enable(void)
-> +{
-> +	unsigned long flags;
-> +	struct pt_regs regs;
-> +
-> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> +		return;
-> +
-> +	memset(&regs, 0, sizeof(struct pt_regs));
-> +	asm volatile("movl %%cs, %%eax;" : "=a" (regs.cs));
-> +	asm volatile("movl %%ss, %%eax;" : "=a" (regs.ss));
-> +	regs.orig_ax = 0xffffffff;
-> +	regs.flags = native_save_fl();
-> +
-> +	/*
-> +	 * Disable irq when handle pending #HV events after
-> +	 * re-enabling irq.
-> +	 */
-> +	asm volatile("cli" : : : "memory");
-> +	do_exc_hv(&regs);
-> +	asm volatile("sti" : : : "memory");
-> +}
-> +
->   void noinstr __sev_es_ist_exit(void)
->   {
->   	unsigned long ist;
-
+Huacai
+>
+> >
+> > Details about vm_map_base: may be referenced through macros PCI_IOBASE,
+> > VMALLOC_START and VMALLOC_END.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/kernel/cpu-probe.c | 2 +-
+> >   arch/loongarch/mm/init.c          | 4 ++--
+> >   2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/=
+cpu-probe.c
+> > index 008b0249905f..001e43dd94ca 100644
+> > --- a/arch/loongarch/kernel/cpu-probe.c
+> > +++ b/arch/loongarch/kernel/cpu-probe.c
+> > @@ -60,7 +60,7 @@ static inline void set_elf_platform(int cpu, const ch=
+ar *plat)
+> >
+> >   /* MAP BASE */
+> >   unsigned long vm_map_base;
+> > -EXPORT_SYMBOL_GPL(vm_map_base);
+> > +EXPORT_SYMBOL(vm_map_base);
+> >
+> >   static void cpu_probe_addrbits(struct cpuinfo_loongarch *c)
+> >   {
+> > diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+> > index e018aed34586..3b7d8129570b 100644
+> > --- a/arch/loongarch/mm/init.c
+> > +++ b/arch/loongarch/mm/init.c
+> > @@ -41,7 +41,7 @@
+> >    * don't have to care about aliases on other CPUs.
+> >    */
+> >   unsigned long empty_zero_page, zero_page_mask;
+> > -EXPORT_SYMBOL_GPL(empty_zero_page);
+> > +EXPORT_SYMBOL(empty_zero_page);
+> >   EXPORT_SYMBOL(zero_page_mask);
+> >
+> >   void setup_zero_pages(void)
+> > @@ -270,7 +270,7 @@ pud_t invalid_pud_table[PTRS_PER_PUD] __page_aligne=
+d_bss;
+> >   #endif
+> >   #ifndef __PAGETABLE_PMD_FOLDED
+> >   pmd_t invalid_pmd_table[PTRS_PER_PMD] __page_aligned_bss;
+> > -EXPORT_SYMBOL_GPL(invalid_pmd_table);
+> > +EXPORT_SYMBOL(invalid_pmd_table);
+> >   #endif
+> >   pte_t invalid_pte_table[PTRS_PER_PTE] __page_aligned_bss;
+> >   EXPORT_SYMBOL(invalid_pte_table);
+>
+> And in the latter two cases it seems we're actually fixing
+> inconsistencies. Nice!
+>
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
+>
+> --
+> WANG "xen0n" Xuerui
+>
+> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+>
+>
