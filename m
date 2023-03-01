@@ -2,158 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61176A6E96
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Mar 2023 15:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C8B6A6F35
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Mar 2023 16:19:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjCAOjm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Mar 2023 09:39:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S229633AbjCAPTs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Mar 2023 10:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCAOjl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Mar 2023 09:39:41 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2075.outbound.protection.outlook.com [40.107.8.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B8DC17D;
-        Wed,  1 Mar 2023 06:39:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uNs6fVo4ZHzdRfCBdEySdsHlPlfN9VH0Vwjyk2X5S0Q=;
- b=MCizelb+1Ddeuhvx1fX7PLxYo0lyGNCJSsHJJbiV04Z8ujVjkz9ChCxV0Jscwts1ILu8k8KZlFt6AHTQqHYirSrCz5Ywh68+SlMXs6UAv+lQB5+Ia0Fhscx035Nd7MyRQOx51iuaNnSaF4kSqJKiuT0FRW77dHgReSJtOf+5j80=
-Received: from AS9PR06CA0054.eurprd06.prod.outlook.com (2603:10a6:20b:463::14)
- by GVXPR08MB7776.eurprd08.prod.outlook.com (2603:10a6:150:5::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.30; Wed, 1 Mar
- 2023 14:39:08 +0000
-Received: from AM7EUR03FT020.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:463:cafe::82) by AS9PR06CA0054.outlook.office365.com
- (2603:10a6:20b:463::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.17 via Frontend
- Transport; Wed, 1 Mar 2023 14:39:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT020.mail.protection.outlook.com (100.127.140.196) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.18 via Frontend Transport; Wed, 1 Mar 2023 14:39:07 +0000
-Received: ("Tessian outbound f2a8d6d66d12:v135"); Wed, 01 Mar 2023 14:39:06 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 5be87fd4441e352b
-X-CR-MTA-TID: 64aa7808
-Received: from 22f55ed123fb.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 9A40068D-263B-4F3F-9D53-FFD66E4AA87B.1;
-        Wed, 01 Mar 2023 14:38:59 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 22f55ed123fb.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 01 Mar 2023 14:38:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FT7Q01YnF0/7cKvdDTlf9WsfINCdetpcwbsyupnag6V0UBGu5gFJmYR0RUjgdjDUHucz1LGdqp7FbZTxYAX4ad9swdniSKufLzfs3gzCkrHXPQKx5sWAwqzz6DHslyS7dz1W5+afW/7UJAwAmDJnlClE9WQWxd2V/DN7XyBw8oSRrAqeaA83lY8NKwjPk+otUPwUxU4BSxTN8QbmLMtAAJfH3t6Gp0iiGUQXYEvYslHDWOClDYyrCdEUZZuuvJVzAoxh+UBtgWrOPJNMOfVXAGgSQoLSq/eum4TIMBNIxV1nwwK3eFjgHTb49Dj5vwIqCV3aLoUq+HHj6nQV1A1NPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uNs6fVo4ZHzdRfCBdEySdsHlPlfN9VH0Vwjyk2X5S0Q=;
- b=N+nGidwZ4aeyegpEgDSTlkzD5EVfZPi4dp91n/y7jUIdOIuGknzmHpwaBu6RDa2kV7/cshVOGK6+mBlLIpKjzhSrQZhqApLqr3QcRdac8xaEbSIRxPn/Npi5MKzNdqOQvq3Fj2ItwkQvaJ/6wPpAU5jSIjgPot79lDwKZGpAYG4MXUThqMScKJGPRU2yopFl8xUdvwzrlY+ALxZTmDIr3dCr+XFt00zi8v6+A3KA0dqAjyltCT4XFBwOsvlS0HOyDIVuDr7hw+uRbkXmUIW2ArvRerHRWBNbTP2e04IkErJWkDZPXVYSY5OnEsMEUZJNXTRI35zrhhU4l9OcH6wjTQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uNs6fVo4ZHzdRfCBdEySdsHlPlfN9VH0Vwjyk2X5S0Q=;
- b=MCizelb+1Ddeuhvx1fX7PLxYo0lyGNCJSsHJJbiV04Z8ujVjkz9ChCxV0Jscwts1ILu8k8KZlFt6AHTQqHYirSrCz5Ywh68+SlMXs6UAv+lQB5+Ia0Fhscx035Nd7MyRQOx51iuaNnSaF4kSqJKiuT0FRW77dHgReSJtOf+5j80=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DU0PR08MB9727.eurprd08.prod.outlook.com (2603:10a6:10:445::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.27; Wed, 1 Mar
- 2023 14:38:53 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6134.027; Wed, 1 Mar 2023
- 14:38:53 +0000
-Date:   Wed, 1 Mar 2023 14:38:26 +0000
-From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Mark Brown <broonie@kernel.org>
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, nd@arm.com
-Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <Y/9jYvXUzWdsW+oU@arm.com>
-References: <20230227222957.24501-2-rick.p.edgecombe@intel.com>
- <Y/9fdYQ8Cd0GI+8C@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y/9fdYQ8Cd0GI+8C@arm.com>
-X-ClientProxiedBy: SN7P222CA0005.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:806:124::22) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
-MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DU0PR08MB9727:EE_|AM7EUR03FT020:EE_|GVXPR08MB7776:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf48c2f4-7f78-491c-1a58-08db1a62b6d6
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: vPP/o139YbdelF+ifIrsX6tzGpdTtny+7Mhf7o/yT+NeP2f2S1qqgEMom4MfKs4ubgu9su7a3z6jCjepCPdVp3/Ze6uT8mR8ighWq0z+soRa/1qmPymuzMk6AkCvQle9vNZTCzRf0pqQjplfeQI3OKD4lkk7ArO3WxqvxZoClTkyejAZ7nT6Za3ypcnhoQ4ZCMa2RbQ6b7aZs2kkpdyg0k5rG3dUAr3NECcE62eIhsZDsmfsIbK/4bg1gmPXhg2Tlyx2+XYlwd+kBQG4zj+xucCmwmOAEiGB++bZOQsCydpMefRaf2vf6Suu49/7YLjXKsozqUKSA6vDhZiKV5sY1kiuwGGbbzNYqX3jIrNPbCmANMk1u07+NaIonh57oN3qN6iS22Pr/dHrfZL99dVbyBFNqacltoON1LWPQR71zzkoeHDdoBTsZsM2Y8I1SoTGSwT+WnXXlppjsD0royck61nvBfSAuuf4gE0uqxK2d5Ia/1eaFK5+WrhUs/2C3NfFc/UzZ1WH9RYSBXWwtfv5hLi+fMO9d7zYkWKhP8VKFwvXnUkIv6ZcxddGN1eAdbkGeNo8E4A3XjEUIOo1Kn7tyM+e97UHH9nfz/Ak8HR2IGxuWvHjzR2hllx2MDCcB3ci1h72QLlGJpmLObH27dCDNZ0up8wx2tnt0eTUEpHrcyV7TI/W5Q64CxhwwQCYKom7
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39860400002)(136003)(396003)(346002)(376002)(451199018)(8676002)(83380400001)(6666004)(36756003)(8936002)(38100700002)(478600001)(5660300002)(7416002)(921005)(7406005)(186003)(26005)(316002)(66476007)(6506007)(6512007)(86362001)(6486002)(66556008)(4744005)(4326008)(44832011)(66946007)(2906002)(110136005)(41300700001)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9727
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT020.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: b071bdb9-710c-4c94-a1c8-08db1a62ae28
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hzu1lDPtp/gXlmYVKE9F5nnhrfViEYRPk/95oAeffDz/423k0kpJo3aIG83dwUg75d1rHAcb/M1iuKq+uf1U/11fOSrF1Z+yTK9/MsyOt+Vam3IcxdVO3hv7MtmRQkNM5L9SCESdqDsNo6RPboeulxZpkWLp9Zc1WpPM/FLIQDH+pb/CgLwfbGlzA0W1PnA9uLTcuhdkKu8i5qWLfow60DO2N8g9IScyOARt8rWFJ8Vjhpt7SCnszSVP7BGIfxAPY5+Lfs6NhBm6sRHSej1e+M8yPGwpfFVuffywFc47PiYQ7xOMujBxZ1Qw0F0OTnCe7fFZTNm0lbjE1mksYBZ08hB5mACPbldA8NeMcgD0EweD5pBjAVp5IRKvHemSLZQGQWxUWJgE7LiB5Ceq10hNBFQRVDWsg4gPw95QomdtIi987XgqB42JjI0Ln70P8/j3TJUeKDY0DiVa+xcoUAr8DYt6HKD/UBf1zL06zAJ9MQK6MqYU0Ju7hK3sX2y3ygZb+LqRzeeEVTkpFbViEbK9UkSsiS6uFsJRM82whwzDHgILuMiufLbAQLyf3PkWDfuhjQpxer/qsY7NXmJaFxkGKWcUgWcysBToILfDqts31+sgrZH2BzIbvg5l1pqnb/rJTTUkYZbsSIbWbraAtkkM6cLEYMamzjS5LhnaLC9HdUn/FQg8B3miJvxzxYXmTLhZ15oWupjzUaoat3nl16T+FT/3sx7zcLjWsSEvVhR2Cqo=
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199018)(46966006)(36840700001)(40470700004)(82310400005)(450100002)(316002)(83380400001)(110136005)(36756003)(40480700001)(82740400003)(4326008)(70206006)(4744005)(36860700001)(81166007)(8676002)(40460700003)(70586007)(47076005)(336012)(41300700001)(6486002)(478600001)(6512007)(26005)(6506007)(6666004)(8936002)(186003)(5660300002)(2616005)(2906002)(86362001)(44832011)(356005)(921005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2023 14:39:07.8565
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf48c2f4-7f78-491c-1a58-08db1a62b6d6
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT020.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7776
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        with ESMTP id S230244AbjCAPTq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Mar 2023 10:19:46 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC723C784
+        for <linux-arch@vger.kernel.org>; Wed,  1 Mar 2023 07:19:44 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id n2so8120176pfo.12
+        for <linux-arch@vger.kernel.org>; Wed, 01 Mar 2023 07:19:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fgz/Djjon8JkpfSssPQphU3ki++kBUAfgIVgXczgsW4=;
+        b=lE55rVTqYPSFuy5+14nvjA7f4zrhciYiHT8VxVUE1MJ7P9pqQTtaQwm0UYoMcgO6Os
+         OL0u3iwp4bZ4TUCrjpjd6wpnKK6Ill/WF0G+JYw2wlNK7Y6POjtfdCcoc2ttDvGtpLso
+         jlmVp7Y1CFCUdUB420Fcg47yHb6eBzqfyU0TzRZ7n8PpWluvmaAhk6ttjub4j4l9ErPQ
+         OJc2vrqoK01sDWIMxa4Zg/iGQVbsddxJDdcJd0xQvoO4bl8laDibtpksUiJjlRAPmEXq
+         th7bdkji/lLhHZ81E440EAQ3YvSpip90VI5oJrqDCeC7SPptRKu7pAxcF10xZ+PfzErA
+         fInw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fgz/Djjon8JkpfSssPQphU3ki++kBUAfgIVgXczgsW4=;
+        b=QumY0PTLFstIPvuTJ8aMHCrkoNEJQMjRTVDb5j0s+xT8oLSBq1y28pI3Dq3JgKVvgj
+         BGVd+MjUF1eEteEn+FqwvlSFVKuR0OTCmFgxohLZQl+QpisI5TIeS+qvfUz/lUGAXFeQ
+         zWTMsISY5/OBOcA9/axG+DosdXT6VQ3gLFVz+XVms56PRrgIXku1OBNN9/acXzFE0HAh
+         McqhtsLKG9tzBvDtNv/ROHW/EBnPCMPEcD+SDVW7fPchjB+q692ZO28CSiiHlRsXmkGI
+         ur1J7MwDoEdP7GXbEqs+EJcTqIJZKnuB9kfiauDj4o6pyJ9fgXEj/oBIPSsnfCJiadnV
+         rp5Q==
+X-Gm-Message-State: AO0yUKXCWuHJ2ve/WMjkdeNDWluxnta+uUoH0kwU5JfWHcKr6qXYT707
+        ecZCRUvk8qxNhtnNU7rMAaeIYQ==
+X-Google-Smtp-Source: AK7set8D4X5l66tyx1++Qt6S5OywQT89DpL4bGWD4TuPqWS1oorrBx8v0SQeMQr+7yhYkpYfA0BFLw==
+X-Received: by 2002:a62:7911:0:b0:5a9:4af:b05b with SMTP id u17-20020a627911000000b005a904afb05bmr7735128pfc.12.1677683984329;
+        Wed, 01 Mar 2023 07:19:44 -0800 (PST)
+Received: from smtpclient.apple ([51.52.155.79])
+        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b005ae02dc5b94sm8093180pfi.219.2023.03.01.07.19.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Mar 2023 07:19:43 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.2\))
+Subject: Re: [PATCH] locking/atomic: cmpxchg: Make __generic_cmpxchg_local
+ compare against zero-extended 'old' value
+From:   Matt Evans <mev@rivosinc.com>
+In-Reply-To: <e27d184e-2561-4efe-a191-8c0401f815b0@app.fastmail.com>
+Date:   Wed, 1 Mar 2023 15:19:40 +0000
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C7DB3543-8DB2-49F8-85A4-E9288843BCDD@rivosinc.com>
+References: <8B94CEAB-63AD-400F-A5CD-31AC4490EF4C@rivosinc.com>
+ <e27d184e-2561-4efe-a191-8c0401f815b0@app.fastmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+X-Mailer: Apple Mail (2.3696.120.41.1.2)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -161,11 +75,131 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The 03/01/2023 14:21, Szabolcs Nagy wrote:
->...
-> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+Hi Arnd,
 
-sorry,
-ignore this.
+> On 26 Feb 2023, at 10:13, Arnd Bergmann <arnd@arndb.de> wrote:
+>=20
+> On Wed, Feb 1, 2023, at 19:39, Matt Evans wrote:
+>> __generic_cmpxchg_local takes unsigned long old/new arguments which
+>> might end up being up-cast from smaller signed types (which will
+>> sign-extend).  The loaded compare value must be compared against a
+>> truncated smaller type, so down-cast appropriately for each size.
+>>=20
+>> The issue is apparent on 64-bit machines with code, such as
+>> atomic_dec_unless_positive(), that sign-extends from int.
+>>=20
+>> 64-bit machines generally don't use the generic cmpxchg but
+>> development/early ports might make use of it, so make it correct.
+>>=20
+>> Signed-off-by: Matt Evans <mev@rivosinc.com>
+>=20
+> Hi Matt,
+>=20
+> I'm getting emails about nios2 sparse warnings from the
+> kernel test robot about your patch. I can also reproduce
+> this on armv5:
+>=20
+>=20
+> fs/erofs/zdata.c: note: in included file (through =
+/home/arnd/arm-soc/arch/arm/include/asm/cmpxchg.h, =
+/home/arnd/arm-soc/arch/arm/include/asm/atomic.h, =
+/home/arnd/arm-soc/include/linux/atomic.h, ...):
+> include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates =
+bits from constant value (5f0ecafe becomes fe)
+> include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates =
+bits from constant value (5f0ecafe becomes cafe)
+> include/asm-generic/cmpxchg-local.h:29:33: warning: cast truncates =
+bits from constant value (5f0ecafe becomes fe)
+> include/asm-generic/cmpxchg-local.h:30:42: warning: cast truncates =
+bits from constant value (5f0edead becomes ad)
+> include/asm-generic/cmpxchg-local.h:33:34: warning: cast truncates =
+bits from constant value (5f0ecafe becomes cafe)
+> include/asm-generic/cmpxchg-local.h:34:44: warning: cast truncates =
+bits from constant value (5f0edead becomes dead)
+>=20
+> This was already warning for the 'new' cast, but now also warns
+> for the 'old' cast, so the bot thinks this is a new problem.
 
+Thank you!  Hmm, indeed, it=E2=80=99s =E2=80=9Cmore of the same=E2=80=9D =
+warning-wise but your alternative is nicer.
+
+> I managed to shut up the warning by using a binary '&' operator
+> instead of the cast, but I wonder if it would be better to do
+> also mask this in the caller, when arch_atomic_cmpxchg() with its
+> signed argument calls into arch_cmpxchg() with its unsigned argument:
+
+Proposed patch LGTM, but one query:  are the casts in =
+arch_[cmp]xchg()=E2=80=99s args necessary?  The new masks should deal =
+with the issue (and consistency would imply same for all other users of =
+arch_cmpxchg(), not ideal).
+
+> diff --git a/include/asm-generic/atomic.h =
+b/include/asm-generic/atomic.h
+> index 04b8be9f1a77..e271d6708c87 100644
+> --- a/include/asm-generic/atomic.h
+> +++ b/include/asm-generic/atomic.h
+> @@ -130,7 +130,7 @@ ATOMIC_OP(xor, ^)
+> #define arch_atomic_read(v)                    READ_ONCE((v)->counter)
+> #define arch_atomic_set(v, i)                  =
+WRITE_ONCE(((v)->counter), (i))
+>=20
+> -#define arch_atomic_xchg(ptr, v)               =
+(arch_xchg(&(ptr)->counter, (v)))
+> -#define arch_atomic_cmpxchg(v, old, new)       =
+(arch_cmpxchg(&((v)->counter), (old), (new)))
+> +#define arch_atomic_xchg(ptr, v)               =
+(arch_xchg(&(ptr)->counter, (u32)(v)))
+> +#define arch_atomic_cmpxchg(v, old, new)       =
+(arch_cmpxchg(&((v)->counter), (u32)(old), (u32)(new)))
+>=20
+> #endif /* __ASM_GENERIC_ATOMIC_H */
+> diff --git a/include/asm-generic/cmpxchg-local.h =
+b/include/asm-generic/cmpxchg-local.h
+> index c3e7315b7c1d..f9d52d1f0472 100644
+> --- a/include/asm-generic/cmpxchg-local.h
+> +++ b/include/asm-generic/cmpxchg-local.h
+> @@ -26,20 +26,20 @@ static inline unsigned long =
+__generic_cmpxchg_local(volatile void *ptr,
+>        raw_local_irq_save(flags);
+>        switch (size) {
+>        case 1: prev =3D *(u8 *)ptr;
+> -               if (prev =3D=3D (u8)old)
+> -                       *(u8 *)ptr =3D (u8)new;
+> +               if (prev =3D=3D (old & 0xff))
+> +                       *(u8 *)ptr =3D (new & 0xffu);
+>                break;
+>        case 2: prev =3D *(u16 *)ptr;
+> -               if (prev =3D=3D (u16)old)
+> -                       *(u16 *)ptr =3D (u16)new;
+> +               if (prev =3D=3D (old & 0xffffu))
+> +                       *(u16 *)ptr =3D (new & 0xffffu);
+>                break;
+>        case 4: prev =3D *(u32 *)ptr;
+> -               if (prev =3D=3D (u32)old)
+> -                       *(u32 *)ptr =3D (u32)new;
+> +               if (prev =3D=3D (old & 0xffffffffu))
+> +                       *(u32 *)ptr =3D (new & 0xffffffffu);
+>                break;
+>        case 8: prev =3D *(u64 *)ptr;
+>                if (prev =3D=3D old)
+> -                       *(u64 *)ptr =3D (u64)new;
+> +                       *(u64 *)ptr =3D new;
+>                break;
+>        default:
+>                wrong_size_cmpxchg(ptr);
+
+FWIW (including the casts in atomic.h, if you prefer):
+
+Reviewed-by: Matt Evans <mev@rivosinc.com>
+
+
+Thanks,
+
+
+Matt
+
+
+>=20
+>=20
+>     Arnd
 
