@@ -2,128 +2,173 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7D26A7BAC
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 08:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973ED6A7C2B
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 08:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCBHNR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Mar 2023 02:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S229694AbjCBH5Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Mar 2023 02:57:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCBHNQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 02:13:16 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8AEB13DE0;
-        Wed,  1 Mar 2023 23:13:12 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id C136332007E8;
-        Thu,  2 Mar 2023 02:13:09 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 02 Mar 2023 02:13:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1677741189; x=1677827589; bh=kG
-        Zk/ZSES0uDeincOVUYwzfC8LsnwfhTz4QhmBeE1uo=; b=rWuj+oY9nZyiLBlQ65
-        Z2lbPD/6Wc+HW7YZdFLPmSGzFiz8EY7Pptdm4m+a1AW4IpaRxDjSHFLDhKolcqoK
-        vZ5BcM5SczEOStXZ3ziqhulDfXeFmPZX3otZfxOBSbOMsqd6v/LXOutKDdQlMEhE
-        5vtiRUCc1SGophm87H5r+iJWi0Hl8oC1QEgkd7DJALk9imESHMQWP9JwHnRuDvXP
-        JOdJJw6+1nRL63ALo+U1bl9/RpQJJMVOTZ9PS2J5Khu5F9xM0FzZ7hVgWkhGpoHI
-        Pz5UXm1g6oeFY2Wwu1Y94aCb+nWQG3PhhWuatKDwe/Q/Ue1cVJcJ0YNBKHRoS+fh
-        jIYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677741189; x=1677827589; bh=kGZk/ZSES0uDe
-        incOVUYwzfC8LsnwfhTz4QhmBeE1uo=; b=OZOSbFPBkowy8HYOohMIePdMYe0ca
-        8pjqNX4CV6DtjahbMVk92ejsYszVZnC0GOR0EzjdWE44eMJg6Pa1umUBJDQeVVZJ
-        B9XY1Y2iEDjrhnp3Xm3AuCjB4tH+MwREq2ibPretWPNSmQPuPDyVtBYqW31/N8h9
-        GCJUHB+qA1XI5t631UweyWWOenWQ/gXGi1GZzw3eCuNSL5b7cspH3vUhTDjnmgT1
-        IajsEiO6OmhFfyXd/ZUMMeunX/8B2wjVX5Ytbpjj6nt2yr3VYAU0/ZDAb3N/y72F
-        maXPD1C5wFTBujLWAtJRpUTGmAhWgck6D2ukqoqDNDWBx24bJJZNGNHKw==
-X-ME-Sender: <xms:hEwAZJNc38Zpde-_b15n9O3oFr--8ydU9f2_eUfeU3sgSTpZduBS6Q>
-    <xme:hEwAZL-YwHOdGyv3FtelSboVvDuuURqoIl4JEKaibyQ5gPrYiiLCAIvB8mto9v4F2
-    a6isMLBcc33y21YuqY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeliedguddtfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:hEwAZIT7sLujkcqDLLPgnZwb_onF8qMzKkdwSAnHP3AhsTdUrmjyqQ>
-    <xmx:hEwAZFsb54avJmLxekcI23Uxl8BJorb4sBIGjEJG7XNt1PK2kG5SFg>
-    <xmx:hEwAZBcsInGGJCDs4Um5xLDm8gO73R8xs1JZsGfzxid6FJCSjTYTHA>
-    <xmx:hUwAZAzNZbkhsuWgnz7I82j3FVumflnhb9YrLhV4x0qvHNddwHq4rA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 73253B60086; Thu,  2 Mar 2023 02:13:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <b2958824-786b-46d7-a880-17c948fbe2b0@app.fastmail.com>
-In-Reply-To: <ZAAiJcx80RU0QuHw@MiWiFi-R3L-srv>
-References: <20230301102208.148490-1-bhe@redhat.com>
- <20230301102208.148490-2-bhe@redhat.com>
- <5edd5304-ef11-4607-9189-a07613ecfee2@app.fastmail.com>
- <ZAAiJcx80RU0QuHw@MiWiFi-R3L-srv>
-Date:   Thu, 02 Mar 2023 08:12:48 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Baoquan He" <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Christoph Hellwig" <hch@infradead.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mips: add <asm-generic/io.h> including
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229677AbjCBH5X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 02:57:23 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4FE360A5
+        for <linux-arch@vger.kernel.org>; Wed,  1 Mar 2023 23:57:21 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso1100960wmb.0
+        for <linux-arch@vger.kernel.org>; Wed, 01 Mar 2023 23:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1677743839;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3gGlmdrxpk12L0HtiU5R9bJeUayhxQ74GXgfAq6meuw=;
+        b=pn+DJn+k9uImMGeBMXuwnMQE1biMNzy71Plo8H7DOI3fKK/ceps9rgGUxc/bmw8s6L
+         4TQMSud9TXFc8/r2OEOEiAKv5SApxcJ1Yd/LQHA0imhiw3qi8hrsJYLIdS7LaNAmBH1O
+         AbgLlGVWFn2hf8BkmR90At5+g3zqQ61Ankq9cGuBB9WgQfAsyn4JZulcRbW71gf7ZeYz
+         oRP4F6/LxUTL9nxCbjnWUdwQSV0fTcnbx/sIcDMk8fB8xQ9dJ6UAQMnDD3HBbCn+Qr4a
+         fIykdIwuX5WmEnYpwkBvfu6oXc7MDCcdwlfNYOa5JGNIdVdo8Hubuxh+Kfco99U7Z89i
+         QfaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677743839;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3gGlmdrxpk12L0HtiU5R9bJeUayhxQ74GXgfAq6meuw=;
+        b=WCchcdnD/AT7OPYvF++FEH77TzmQaMNaKLvkiQfX9DQjg4S1SVj+NJ5hCB7kCXghvO
+         +v9QAE0P4KBJv70kjdMJTMa2P0b1RgRdVysvHGT1zF/Fjrq81kT9KFvI4vUybvGgp3oj
+         WHmd2Asr24aMtLcVqeJArv9x6gLaNko7M4BG3CSFfDBkZXPq3c35i/UuebqocW9jSZM9
+         L3u4YBya7qYvHJ27WJg4jnFEmt3CTAKO30rfXhLLL9nZRIPV+aTInPazIp9QecvpfZEk
+         28rIPdfq92m6ZRAuYwRwRU/xN5Bo29guoj7xLmf5gVn0Kyr89t7FSjf7CNWZNyh4uf9j
+         KpPg==
+X-Gm-Message-State: AO0yUKUJfx9tLq9br+uqcYE5IHOkc/VEhaXaoFVTkKGtnVGEMAzdVLHy
+        qHLhu7DlNYguoeLpQKcnr/zyLYhrnKnInrR7rI1Eww==
+X-Google-Smtp-Source: AK7set8WtHYe+gEo1Fgs1pSlJqsnM2tCvgsXzdB6/J3n+P8FnRw3jetc5Yrjj9TAlqQSjPmyeFZCYlu44lotg0az/Sk=
+X-Received: by 2002:a05:600c:4591:b0:3ea:8ed9:8e4b with SMTP id
+ r17-20020a05600c459100b003ea8ed98e4bmr2655128wmo.6.1677743839531; Wed, 01 Mar
+ 2023 23:57:19 -0800 (PST)
+MIME-Version: 1.0
+References: <Y+tSBlSsQBQF/Ro2@osiris> <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
+In-Reply-To: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Thu, 2 Mar 2023 08:57:08 +0100
+Message-ID: <CAHVXubgdr_NrLPnZ6NhuDt8uZYZD+R_swpCVGoLDxnD+eOJcuA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     hca@linux.ibm.com, geert@linux-m68k.org, corbet@lwn.net,
+        Richard Henderson <richard.henderson@linaro.org>,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
+        kernel@xen0n.name, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        chris@zankel.net, jcmvbkbc@gmail.com,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 2, 2023, at 05:12, Baoquan He wrote:
-> On 03/01/23 at 03:06pm, Arnd Bergmann wrote:
+On Thu, Mar 2, 2023 at 4:17=E2=80=AFAM Palmer Dabbelt <palmer@dabbelt.com> =
+wrote:
 >
-> Yeah, defining mmiowb() to wmb() directly is also good to me. I tried
-> to comb including sequence and find where asm/io.h is included, but
-> failed. Mainly asm/mmiowb.h including asm/io.h will cause below
-> compiling error, the asm/io.h need see mmiowb_set_pending which is
-> defnined in asm-generic/mmiowb.h. Moving asm-generic/mmiowb.h to above
-> asm/io.h can also fix the compiling error.
+> On Tue, 14 Feb 2023 01:19:02 PST (-0800), hca@linux.ibm.com wrote:
+> > On Tue, Feb 14, 2023 at 09:58:17AM +0100, Geert Uytterhoeven wrote:
+> >> Hi Heiko,
+> >>
+> >> On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux.ibm.com> wro=
+te:
+> >> > On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
+> >> > > This all came up in the context of increasing COMMAND_LINE_SIZE in=
+ the
+> >> > > RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE =
+is the
+> >> > > maximum length of /proc/cmdline and userspace could staticly rely =
+on
+> >> > > that to be correct.
+> >> > >
+> >> > > Usually I wouldn't mess around with changing this sort of thing, b=
+ut
+> >> > > PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LIN=
+E_SIZE
+> >> > > to 2048").  There are also a handful of examples of COMMAND_LINE_S=
+IZE
+> >> > > increasing, but they're from before the UAPI split so I'm not quit=
+e sure
+> >> > > what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE =
+from
+> >> > > asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to ker=
+nel
+> >> > > boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE=
+"),
+> >> > > and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+> >> > > asm-generic/setup.h.").
+> >> > >
+> >> > > It seems to me like COMMAND_LINE_SIZE really just shouldn't have b=
+een
+> >> > > part of the uapi to begin with, and userspace should be able to ha=
+ndle
+> >> > > /proc/cmdline of whatever length it turns out to be.  I don't see =
+any
+> >> > > references to COMMAND_LINE_SIZE anywhere but Linux via a quick Goo=
+gle
+> >> > > search, but that's not really enough to consider it unused on my e=
+nd.
+> >> > >
+> >> > > The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE r=
+eally
+> >> > > shouldn't be part of uapi, so this now touches all the ports.  I'v=
+e
+> >> > > tried to split this all out and leave it bisectable, but I haven't
+> >> > > tested it all that aggressively.
+> >> >
+> >> > Just to confirm this assumption a bit more: that's actually the same
+> >> > conclusion that we ended up with when commit 3da0243f906a ("s390: ma=
+ke
+> >> > command line configurable") went upstream.
 >
-> =============
-> diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
-> index a40824e3ef8e..cae2745935bc 100644
-> --- a/arch/mips/include/asm/mmiowb.h
-> +++ b/arch/mips/include/asm/mmiowb.h
-> @@ -2,10 +2,8 @@
->  #ifndef _ASM_MMIOWB_H
->  #define _ASM_MMIOWB_H
-> 
-> +#include <asm-generic/mmiowb.h>
->  #include <asm/io.h>
-> 
->  #define mmiowb()       iobarrier_w()
-> -
-> -#include <asm-generic/mmiowb.h>
-> -
->  #endif /* _ASM_MMIOWB_H */
+> Thanks, I guess I'd missed that one.  At some point I think there was
+> some discussion of making this a Kconfig for everyone, which seems
+> reasonable to me -- our use case for this being extended is syzkaller,
+> but we're sort of just picking a value that's big enough for now and
+> running with it.
+>
+> Probably best to get it out of uapi first, though, as that way at least
+> it's clear that it's not uABI.
+>
+> >> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
+> >> I assume?
+> >
+> > Yes, sorry for that. I got distracted while writing and used the wrong
+> > branch to look this up.
+>
+> Alex: Probably worth adding that to the list in the cover letter as it
+> looks like you were planning on a v4 anyway (which I guess you now have
+> to do, given that I just added the issue to RISC-V).
 
-According to the comment in asm-generic/mmiowb.h, the intention is
-to have the mmiowb definition before the #include, though this would
-only be necessary if there was an "#ifndef mmiowb" fallback in that
-file. If the definition to wmb() works, I'd go for that one and
-leave the include order unchanged.
+Yep, I will :)
 
-       Arnd
+Thanks,
+
+Alex
