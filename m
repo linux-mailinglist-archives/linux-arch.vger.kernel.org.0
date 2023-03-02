@@ -2,133 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE116A8291
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 13:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01F66A838D
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 14:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCBMse (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Mar 2023 07:48:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S229986AbjCBNcU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Mar 2023 08:32:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCBMsd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 07:48:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427B418B2B;
-        Thu,  2 Mar 2023 04:48:32 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBA871EC04F0;
-        Thu,  2 Mar 2023 13:48:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677761310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=4MfiBkMkz5ebUfMAXrylF6PkikHE4wLk3HTn0lHaOb8=;
-        b=R49PSVoU67TzEd1On6SpyLZ5WN+gqAjISYxKzodjcp2/ghuXDA5b8QNG5KBnMO6cXj5YsF
-        WpCPRF0NmdOGSrDnKXws+eFjaG91CTVWNqlrOkaSjyjNIHM7nBkjL7+VWFZt1SHGYHoUg0
-        xc2yxp3B4WH91qCi1Cnu2Lbg6fCdzg4=
-Date:   Thu, 2 Mar 2023 13:48:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 14/41] x86/mm: Introduce _PAGE_SAVED_DIRTY
-Message-ID: <ZACbFc55bcVYRXpG@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-15-rick.p.edgecombe@intel.com>
+        with ESMTP id S229541AbjCBNcT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 08:32:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F53B675;
+        Thu,  2 Mar 2023 05:32:18 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322DFZvZ010455;
+        Thu, 2 Mar 2023 13:32:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Ba61TMgbgtq2qCLloS89YKVV6TrsoEUxqPkJmjoGD+Q=;
+ b=rnzVAew6rlusCElG0+c9Ft8GCJZwxOCj9pEbrQJH+tbt377GnwnW5K7LZNsm7LkH6h7D
+ 3FMv95yDnAFSaN+R+B/pqQnEyh7H/PgW64tPAo+aMa0WViiNSm+uPom4zsUS2QdW+y1H
+ ll1DU3Q2g91JJ9xAMaFuxpWI5Vbb7IWg1PVFK80T2xE7NLG3KmSB5KvHvjYcWd5ud6VY
+ XUXBJ2GRH270NMAN3ZY6qxpD80fpT3CZfsH2LkFTLPYY587jtpGRMpSod+cvVnzmLr89
+ M3VahycIScDLF7CY0xRfMBBjiYK5cge1YedI9OPgkfY1Gz2xFCk/ubdGygBh82tU6miC hQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2vhcrfbw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 13:32:03 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32264nRo013030;
+        Thu, 2 Mar 2023 13:32:00 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nybcq5uj8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Mar 2023 13:32:00 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 322DVv9a64094476
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Mar 2023 13:31:57 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F284920043;
+        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81DE520040;
+        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
+Received: from thinkpad-T15 (unknown [9.152.212.238])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
+Date:   Thu, 2 Mar 2023 14:31:54 +0100
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 21/34] s390: Implement the new page table range API
+Message-ID: <20230302143154.1886c213@thinkpad-T15>
+In-Reply-To: <20230228213738.272178-22-willy@infradead.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+        <20230228213738.272178-22-willy@infradead.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-15-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aAeGP5EBVBGILPMKK7Fm47tHFTlZ37R7
+X-Proofpoint-GUID: aAeGP5EBVBGILPMKK7Fm47tHFTlZ37R7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-02_07,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ clxscore=1011 suspectscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=640 mlxscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303020113
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:30PM -0800, Rick Edgecombe wrote:
-> diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
-> index 0646ad00178b..56b374d1bffb 100644
-> --- a/arch/x86/include/asm/pgtable_types.h
-> +++ b/arch/x86/include/asm/pgtable_types.h
-> @@ -21,7 +21,8 @@
->  #define _PAGE_BIT_SOFTW2	10	/* " */
->  #define _PAGE_BIT_SOFTW3	11	/* " */
->  #define _PAGE_BIT_PAT_LARGE	12	/* On 2MB or 1GB pages */
-> -#define _PAGE_BIT_SOFTW4	58	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW4	57	/* available for programmer */
-> +#define _PAGE_BIT_SOFTW5	58	/* available for programmer */
->  #define _PAGE_BIT_PKEY_BIT0	59	/* Protection Keys, bit 1/4 */
->  #define _PAGE_BIT_PKEY_BIT1	60	/* Protection Keys, bit 2/4 */
->  #define _PAGE_BIT_PKEY_BIT2	61	/* Protection Keys, bit 3/4 */
-> @@ -34,6 +35,15 @@
->  #define _PAGE_BIT_SOFT_DIRTY	_PAGE_BIT_SOFTW3 /* software dirty tracking */
->  #define _PAGE_BIT_DEVMAP	_PAGE_BIT_SOFTW4
+On Tue, 28 Feb 2023 21:37:24 +0000
+"Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+
+> Add set_ptes() and update_mmu_cache_range().
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> ---
+>  arch/s390/include/asm/pgtable.h | 34 ++++++++++++++++++++++++---------
+>  1 file changed, 25 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+> index 2c70b4d1263d..46bf475116f1 100644
+> --- a/arch/s390/include/asm/pgtable.h
+> +++ b/arch/s390/include/asm/pgtable.h
+> @@ -50,6 +50,7 @@ void arch_report_meminfo(struct seq_file *m);
+>   * tables contain all the necessary information.
+>   */
+>  #define update_mmu_cache(vma, address, ptep)     do { } while (0)
+> +#define update_mmu_cache_range(vma, addr, ptep, nr)	do { } while (0)
+>  #define update_mmu_cache_pmd(vma, address, ptep) do { } while (0)
 >  
-> +/*
-> + * Indicates a Saved Dirty bit page.
-> + */
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#define _PAGE_BIT_SAVED_DIRTY		_PAGE_BIT_SOFTW5 /* Saved Dirty bit */
-> +#else
-> +#define _PAGE_BIT_SAVED_DIRTY		0
-> +#endif
-> +
->  /* If _PAGE_BIT_PRESENT is clear, we use these: */
->  /* - if the user mapped it with PROT_NONE; pte_present gives true */
->  #define _PAGE_BIT_PROTNONE	_PAGE_BIT_GLOBAL
-> @@ -117,6 +127,25 @@
->  #define _PAGE_SOFTW4	(_AT(pteval_t, 0))
->  #endif
+>  /*
+> @@ -1317,21 +1318,36 @@ pgprot_t pgprot_writecombine(pgprot_t prot);
+>  pgprot_t pgprot_writethrough(pgprot_t prot);
 >  
-> +/*
-> + * The hardware requires shadow stack to be Write=0,Dirty=1. However,
-> + * there are valid cases where the kernel might create read-only PTEs that
-> + * are dirty (e.g., fork(), mprotect(), uffd-wp(), soft-dirty  tracking). In
-> + * this case, the _PAGE_SAVED_DIRTY bit is used instead of the HW-dirty bit,
-> + * to avoid creating a wrong "shadow stack" PTEs. Such PTEs have
-> + * (Write=0,SavedDirty=1,Dirty=0) set.
-> + *
-> + * Note that on processors without shadow stack support, the 
+>  /*
+> - * Certain architectures need to do special things when PTEs
+> - * within a page table are directly modified.  Thus, the following
+> - * hook is made available.
+> + * Set multiple PTEs to consecutive pages with a single call.  All PTEs
+> + * are within the same folio, PMD and VMA.
+>   */
+> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t entry)
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +			      pte_t *ptep, pte_t entry, unsigned int nr)
+>  {
+>  	if (pte_present(entry))
+>  		entry = clear_pte_bit(entry, __pgprot(_PAGE_UNUSED));
+> -	if (mm_has_pgste(mm))
+> -		ptep_set_pte_at(mm, addr, ptep, entry);
+> -	else
+> -		set_pte(ptep, entry);
+> +	if (mm_has_pgste(mm)) {
+> +		for (;;) {
+> +			ptep_set_pte_at(mm, addr, ptep, entry);
 
-.git/rebase-apply/patch:154: trailing whitespace.
- * Note that on processors without shadow stack support, the 
-warning: 1 line adds whitespace errors.
+There might be room for additional optimization here, regarding the
+preempt_disable/enable() in ptep_set_pte_at(), i.e. move it out of
+ptep_set_pte_at() and do it only once in this loop.
 
-Hm, apparently git checks for that too - not only trailing empty lines.
+We could add that later with an add-on patch, but for this series it
+all looks good.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
