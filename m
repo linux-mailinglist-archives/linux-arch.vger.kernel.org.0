@@ -2,150 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01F66A838D
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 14:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C1F6A85CF
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 17:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjCBNcU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Mar 2023 08:32:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S229702AbjCBQFi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Mar 2023 11:05:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCBNcT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 08:32:19 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4F53B675;
-        Thu,  2 Mar 2023 05:32:18 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 322DFZvZ010455;
-        Thu, 2 Mar 2023 13:32:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ba61TMgbgtq2qCLloS89YKVV6TrsoEUxqPkJmjoGD+Q=;
- b=rnzVAew6rlusCElG0+c9Ft8GCJZwxOCj9pEbrQJH+tbt377GnwnW5K7LZNsm7LkH6h7D
- 3FMv95yDnAFSaN+R+B/pqQnEyh7H/PgW64tPAo+aMa0WViiNSm+uPom4zsUS2QdW+y1H
- ll1DU3Q2g91JJ9xAMaFuxpWI5Vbb7IWg1PVFK80T2xE7NLG3KmSB5KvHvjYcWd5ud6VY
- XUXBJ2GRH270NMAN3ZY6qxpD80fpT3CZfsH2LkFTLPYY587jtpGRMpSod+cvVnzmLr89
- M3VahycIScDLF7CY0xRfMBBjiYK5cge1YedI9OPgkfY1Gz2xFCk/ubdGygBh82tU6miC hQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p2vhcrfbw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 13:32:03 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32264nRo013030;
-        Thu, 2 Mar 2023 13:32:00 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3nybcq5uj8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Mar 2023 13:32:00 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 322DVv9a64094476
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Mar 2023 13:31:57 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F284920043;
-        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81DE520040;
-        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
-Received: from thinkpad-T15 (unknown [9.152.212.238])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Mar 2023 13:31:56 +0000 (GMT)
-Date:   Thu, 2 Mar 2023 14:31:54 +0100
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 21/34] s390: Implement the new page table range API
-Message-ID: <20230302143154.1886c213@thinkpad-T15>
-In-Reply-To: <20230228213738.272178-22-willy@infradead.org>
-References: <20230228213738.272178-1-willy@infradead.org>
-        <20230228213738.272178-22-willy@infradead.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+        with ESMTP id S229649AbjCBQFi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 11:05:38 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE1F83B0D6;
+        Thu,  2 Mar 2023 08:05:33 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 48FDB209FE32; Thu,  2 Mar 2023 08:05:33 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 48FDB209FE32
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1677773133;
+        bh=L801GfCIaCc8TQ59NB6OalOz4HbAG1dowLBurfTTNUo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EbEOiM7jx9UTqagU+Vf/tR69Gm/9ndQznRX4QcmY592TKfPoI9Xdo61UbOv6g4xWK
+         XqIZ8wINF2wRqwaTh+ksYgTfqQlb9GMjzL0b4PBZsl2mV9cPVdsVnufpu9+DmfaHge
+         hUmCmWEua0E7ofBqUREv6iYojXaZxGcX/QevxzGk=
+Date:   Thu, 2 Mar 2023 08:05:33 -0800
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 2/2] x86/hyperv: VTL support for Hyper-V
+Message-ID: <20230302160533.GA30703@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1677665288-6879-1-git-send-email-ssengar@linux.microsoft.com>
+ <1677665288-6879-3-git-send-email-ssengar@linux.microsoft.com>
+ <20230301133436.GA1135@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aAeGP5EBVBGILPMKK7Fm47tHFTlZ37R7
-X-Proofpoint-GUID: aAeGP5EBVBGILPMKK7Fm47tHFTlZ37R7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-02_07,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- clxscore=1011 suspectscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=640 mlxscore=0 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303020113
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230301133436.GA1135@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 28 Feb 2023 21:37:24 +0000
-"Matthew Wilcox (Oracle)" <willy@infradead.org> wrote:
+Thanks for your review.
 
-> Add set_ptes() and update_mmu_cache_range().
+On Wed, Mar 01, 2023 at 05:34:36AM -0800, Jeremi Piotrowski wrote:
+> On Wed, Mar 01, 2023 at 02:08:08AM -0800, Saurabh Sengar wrote:
+> > VTL helps enable Hyper-V Virtual Secure Mode (VSM) feature. VSM is a
+> > set of hypervisor capabilities and enlightenments offered to host and
+> > guest partitions which enable the creation and management of new
+> > security boundaries within operating system software. VSM achieves
+> > and maintains isolation through VTLs.
+> > 
+> > Add early initialization for Virtual Trust Levels (VTL). This includes
+> > initializing the x86 platform for VTL and enabling boot support for
+> > secondary CPUs to start in targeted VTL context. For now, only enable
+> > the code for targeted VTL level as 2.
+> > 
+> > In VTL, AP has to start directly in the 64-bit mode, bypassing the
+> > usual 16-bit -> 32-bit -> 64-bit mode transition sequence that occurs
+> > after waking up an AP with SIPI whose vector points to the 16-bit AP
+> > startup trampoline code.
+> > 
+> > This commit also moves hv_get_nmi_reason function to header file, so
+> > that it can be reused by VTL.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  arch/x86/Kconfig                   |  23 +++
+> >  arch/x86/hyperv/Makefile           |   1 +
+> >  arch/x86/hyperv/hv_vtl.c           | 242 +++++++++++++++++++++++++++++
+> >  arch/x86/include/asm/hyperv-tlfs.h |  75 +++++++++
+> >  arch/x86/include/asm/mshyperv.h    |  14 ++
+> >  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+> >  include/asm-generic/hyperv-tlfs.h  |   4 +
+> >  7 files changed, 360 insertions(+), 5 deletions(-)
+> >  create mode 100644 arch/x86/hyperv/hv_vtl.c
+> > 
+(...)
+> > +	 * Do not try to access the PIC (even if it is there).
+> > +	 * Reserve 1 IRQ so that PCI MSIs to not get allocated to virq 0,
+> > +	 * which is not generally considered a valid IRQ by Linux (and so
+> > +	 * causes various problems).
+> > +	 */
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> ---
->  arch/s390/include/asm/pgtable.h | 34 ++++++++++++++++++++++++---------
->  1 file changed, 25 insertions(+), 9 deletions(-)
+> This sounds like a bug that should be investigated and fixed and not worked around.
+
+Agree, I will fix thi in V2.
+
 > 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 2c70b4d1263d..46bf475116f1 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -50,6 +50,7 @@ void arch_report_meminfo(struct seq_file *m);
->   * tables contain all the necessary information.
->   */
->  #define update_mmu_cache(vma, address, ptep)     do { } while (0)
-> +#define update_mmu_cache_range(vma, addr, ptep, nr)	do { } while (0)
->  #define update_mmu_cache_pmd(vma, address, ptep) do { } while (0)
->  
->  /*
-> @@ -1317,21 +1318,36 @@ pgprot_t pgprot_writecombine(pgprot_t prot);
->  pgprot_t pgprot_writethrough(pgprot_t prot);
->  
->  /*
-> - * Certain architectures need to do special things when PTEs
-> - * within a page table are directly modified.  Thus, the following
-> - * hook is made available.
-> + * Set multiple PTEs to consecutive pages with a single call.  All PTEs
-> + * are within the same folio, PMD and VMA.
->   */
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t entry)
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +			      pte_t *ptep, pte_t entry, unsigned int nr)
->  {
->  	if (pte_present(entry))
->  		entry = clear_pte_bit(entry, __pgprot(_PAGE_UNUSED));
-> -	if (mm_has_pgste(mm))
-> -		ptep_set_pte_at(mm, addr, ptep, entry);
-> -	else
-> -		set_pte(ptep, entry);
-> +	if (mm_has_pgste(mm)) {
-> +		for (;;) {
-> +			ptep_set_pte_at(mm, addr, ptep, entry);
+> > +	vtl_pic = null_legacy_pic;
+> > +	vtl_pic.nr_legacy_irqs = 1;
+> > +	vtl_pic.probe = vtl_pic_probe;
+> > +	legacy_pic = &vtl_pic;
+> > +}
+> > +
+> > +static inline u64 hv_vtl_system_desc_base(struct ldttss_desc *desc)
+> > +{
+> > +	return ((u64)desc->base3 << 32) | ((u64)desc->base2 << 24) |
+> > +		(desc->base1 << 16) | desc->base0;
+> > +}
+(...)
+> > +	if (boot_cpu_has(X86_FEATURE_XSAVE))
+> > +		panic("XSAVE has to be disabled as it is not supported by this module.\n"
+> > +			  "Please add 'noxsave' to the kernel command line.\n");
+> 
+> boot_cpu_has -> cpu_feature_enabled (I've seen this suggestion from Boris several times).
 
-There might be room for additional optimization here, regarding the
-preempt_disable/enable() in ptep_set_pte_at(), i.e. move it out of
-ptep_set_pte_at() and do it only once in this loop.
+OK
 
-We could add that later with an add-on patch, but for this series it
-all looks good.
+> 
+> > +
+> > +	real_mode_header = &hv_vtl_real_mode_header;
+> > +	apic->wakeup_secondary_cpu_64 = hv_vtl_wakeup_secondary_cpu;
+> > +
+> > +	return 0;
+> > +}
+> > +early_initcall(hv_vtl_early_init);
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> > index 0b73a809e9e1..08a6845a233d 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -713,6 +713,81 @@ union hv_msi_entry {
+> >  	} __packed;
+> >  };
+> >  
+> > +struct hv_x64_segment_register {
+> > +	__u64 base;
+> > +	__u32 limit;
+> > +	__u16 selector;
+> > +	union {
+> > +		struct {
+(...)
+> > -	return 0;
+> > -}
+> > -
+> >  #ifdef CONFIG_X86_LOCAL_APIC
+> >  /*
+> >   * Prior to WS2016 Debug-VM sends NMIs to all CPUs which makes
+> > @@ -521,6 +516,7 @@ static void __init ms_hyperv_init_platform(void)
+> >  
+> >  	/* Register Hyper-V specific clocksource */
+> >  	hv_init_clocksource();
+> > +	hv_vtl_init_platform();
+> 
+> Is there a way to runtime check for VTL and which VTL we're running at? That
+> way this could be made a conditional call, and kernels with HYPERV_VTL enabled
+> would also work in a normal environment.
 
-Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+VTL can only be detected at runtime via hypercall. However hypercalls
+are not available this early in boot process.
+
+> 
+> >  #endif
+> >  	/*
+> >  	 * TSC should be marked as unstable only after Hyper-V
+> > diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> > index b870983596b9..87258341fd7c 100644
+> > --- a/include/asm-generic/hyperv-tlfs.h
+> > +++ b/include/asm-generic/hyperv-tlfs.h
+> > @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
+> >  /* Declare the various hypercall operations. */
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
+> > +#define HVCALL_ENABLE_VP_VTL			0x000f
+> >  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+> >  #define HVCALL_SEND_IPI				0x000b
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+> > @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
+> >  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
+> >  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+> >  #define HVCALL_RETARGET_INTERRUPT		0x007e
+> > +#define HVCALL_START_VP				0x0099
+> > +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+> >  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> > @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
+> >  #define HV_STATUS_INVALID_PORT_ID		17
+> >  #define HV_STATUS_INVALID_CONNECTION_ID		18
+> >  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> > +#define HV_STATUS_VTL_ALREADY_ENABLED		134
+> >  
+> >  /*
+> >   * The Hyper-V TimeRefCount register and the TSC
+> > -- 
+> > 2.34.1
+> > 
