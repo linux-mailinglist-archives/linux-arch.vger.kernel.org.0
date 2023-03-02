@@ -2,56 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD7E26A7E92
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 10:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47E96A7F99
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Mar 2023 11:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjCBJsr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 2 Mar 2023 04:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S229677AbjCBKGl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Mar 2023 05:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCBJsc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 04:48:32 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973BC1F5C0;
-        Thu,  2 Mar 2023 01:48:07 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id l13so17405161qtv.3;
-        Thu, 02 Mar 2023 01:48:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SFYMa4F5zx6QmdN+xdk9xuKBVfUQIkEC+rLl+xVi7rY=;
-        b=EfWCg05Dz/dIbTXy8d2dQdWFtNHulqzR5EmYrJOAWtetN56edOc/BaF2idN6KAtGMv
-         opLrvdZbPb9X+UprI3QsRj9fMZZfsDlMBtsPl68xxLKA1kn5tjSTzWXyCm6xlPhnB+xz
-         otE4rBY/2jKe1fKwVD4sYB8yq6JvRO6t5W7qaUzpPjK1Vz+l911AdHurr6Ij00EGAwER
-         6xnLNpSqAJ+hKClqQv++dhRSSmVEyVn3w0Ym5molSy/+o96NGs0uNL+1yRKOGD0lM5N3
-         Ty+i4/9XKXfBskLwETb40iZ9FHxLAMW1XmkSMHBgtcuNHFp6jqFL9vt8pxO3uqpXuUe/
-         wDwA==
-X-Gm-Message-State: AO0yUKXKX8sJ4VHXrlnHjrU6pDWVI13jwSCl3Pk36ofUfOqiYXZpBWHB
-        ASg/FHuiu1O8Ki2y3CWgeu4I7J0FPx+ppQ==
-X-Google-Smtp-Source: AK7set/8n0Vqjnq+nbmuXuxHIwYDhUAg1l+gXXyY1EkLs/qabGOfH5PkBGr8PPpz0kMiSJVhaw07kw==
-X-Received: by 2002:a05:622a:1a8c:b0:3b9:bc8c:c1fb with SMTP id s12-20020a05622a1a8c00b003b9bc8cc1fbmr2434895qtc.6.1677750486350;
-        Thu, 02 Mar 2023 01:48:06 -0800 (PST)
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
-        by smtp.gmail.com with ESMTPSA id s184-20020a372cc1000000b0073bb00eb0besm10573028qkh.22.2023.03.02.01.48.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 01:48:05 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id cf14so17332967qtb.10;
-        Thu, 02 Mar 2023 01:48:03 -0800 (PST)
-X-Received: by 2002:a81:ad43:0:b0:533:91d2:9d94 with SMTP id
- l3-20020a81ad43000000b0053391d29d94mr5972312ywk.5.1677750462713; Thu, 02 Mar
- 2023 01:47:42 -0800 (PST)
+        with ESMTP id S230383AbjCBKGf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Mar 2023 05:06:35 -0500
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399309EE9;
+        Thu,  2 Mar 2023 02:06:31 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 181981C0004;
+        Thu,  2 Mar 2023 10:06:11 +0000 (UTC)
+Message-ID: <040104fc-81b7-fd45-b268-111e39f2927f@ghiti.fr>
+Date:   Thu, 2 Mar 2023 11:06:11 +0100
 MIME-Version: 1.0
-References: <20230302093539.372962-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230302093539.372962-1-alexghiti@rivosinc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 2 Mar 2023 10:47:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
-Message-ID: <CAMuHMdVC99kFpS9vL+HEqbXdDRMKVSW_t21X1p37d0oQufxKLw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
 Subject: Re: [PATCH v4 00/24] Remove COMMAND_LINE_SIZE from uapi
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
+Content-Language: en-US
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Richard Henderson <richard.henderson@linaro.org>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
@@ -61,9 +35,10 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Will Deacon <will@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>,
         WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Michal Simek <monstr@monstr.eu>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -93,22 +68,25 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-arch@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+References: <20230302093539.372962-1-alexghiti@rivosinc.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <20230302093539.372962-1-alexghiti@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Alex,
+Hi Arnd,
 
-On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
+On 3/2/23 10:35, Alexandre Ghiti wrote:
 > This all came up in the context of increasing COMMAND_LINE_SIZE in the
 > RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
 > maximum length of /proc/cmdline and userspace could staticly rely on
@@ -142,19 +120,93 @@ On Thu, Mar 2, 2023 at 10:35 AM Alexandre Ghiti <alexghiti@rivosinc.com> wrote
 > Changes since v3 <https://lore.kernel.org/all/20230214074925.228106-1-alexghiti@rivosinc.com/>:
 > * Added RB/AB
 > * Added a mention to commit 622021cd6c56 ("s390: make command line
->   configurable") in the cover letter
+>    configurable") in the cover letter
+>
+> Changes since v2 <https://lore.kernel.org/all/20221211061358.28035-1-palmer@rivosinc.com/>:
+> * Fix sh, csky and ia64 builds, as reported by kernel test robot
+>
+> Changes since v1 <https://lore.kernel.org/all/20210423025545.313965-1-palmer@dabbelt.com/>:
+> * Touches every arch.
+>
+> base-commit-tag: next-20230207
+>
+> Palmer Dabbelt (24):
+>    alpha: Remove COMMAND_LINE_SIZE from uapi
+>    arm64: Remove COMMAND_LINE_SIZE from uapi
+>    arm: Remove COMMAND_LINE_SIZE from uapi
+>    ia64: Remove COMMAND_LINE_SIZE from uapi
+>    m68k: Remove COMMAND_LINE_SIZE from uapi
+>    microblaze: Remove COMMAND_LINE_SIZE from uapi
+>    mips: Remove COMMAND_LINE_SIZE from uapi
+>    parisc: Remove COMMAND_LINE_SIZE from uapi
+>    powerpc: Remove COMMAND_LINE_SIZE from uapi
+>    sparc: Remove COMMAND_LINE_SIZE from uapi
+>    xtensa: Remove COMMAND_LINE_SIZE from uapi
+>    asm-generic: Remove COMMAND_LINE_SIZE from uapi
+>    alpha: Remove empty <uapi/asm/setup.h>
+>    arc: Remove empty <uapi/asm/setup.h>
+>    m68k: Remove empty <uapi/asm/setup.h>
+>    arm64: Remove empty <uapi/asm/setup.h>
+>    microblaze: Remove empty <uapi/asm/setup.h>
+>    sparc: Remove empty <uapi/asm/setup.h>
+>    parisc: Remove empty <uapi/asm/setup.h>
+>    x86: Remove empty <uapi/asm/setup.h>
+>    xtensa: Remove empty <uapi/asm/setup.h>
+>    powerpc: Remove empty <uapi/asm/setup.h>
+>    mips: Remove empty <uapi/asm/setup.h>
+>    s390: Remove empty <uapi/asm/setup.h>
+>
+>   .../admin-guide/kernel-parameters.rst         |  2 +-
+>   arch/alpha/include/asm/setup.h                |  4 +--
+>   arch/alpha/include/uapi/asm/setup.h           |  7 -----
+>   arch/arc/include/asm/setup.h                  |  1 -
+>   arch/arc/include/uapi/asm/setup.h             |  6 -----
+>   arch/arm/include/asm/setup.h                  |  1 +
+>   arch/arm/include/uapi/asm/setup.h             |  2 --
+>   arch/arm64/include/asm/setup.h                |  3 ++-
+>   arch/arm64/include/uapi/asm/setup.h           | 27 -------------------
+>   arch/ia64/include/asm/setup.h                 | 10 +++++++
+>   arch/ia64/include/uapi/asm/setup.h            |  6 ++---
+>   arch/loongarch/include/asm/setup.h            |  2 +-
+>   arch/m68k/include/asm/setup.h                 |  3 +--
+>   arch/m68k/include/uapi/asm/setup.h            | 17 ------------
+>   arch/microblaze/include/asm/setup.h           |  2 +-
+>   arch/microblaze/include/uapi/asm/setup.h      | 20 --------------
+>   arch/mips/include/asm/setup.h                 |  3 ++-
+>   arch/mips/include/uapi/asm/setup.h            |  8 ------
+>   arch/parisc/include/{uapi => }/asm/setup.h    |  0
+>   arch/powerpc/include/asm/setup.h              |  2 +-
+>   arch/powerpc/include/uapi/asm/setup.h         |  7 -----
+>   arch/s390/include/asm/setup.h                 |  1 -
+>   arch/s390/include/uapi/asm/setup.h            |  1 -
+>   arch/sh/include/asm/setup.h                   |  2 +-
+>   arch/sparc/include/asm/setup.h                |  6 ++++-
+>   arch/sparc/include/uapi/asm/setup.h           | 16 -----------
+>   arch/x86/include/asm/setup.h                  |  2 --
+>   arch/x86/include/uapi/asm/setup.h             |  1 -
+>   arch/xtensa/include/{uapi => }/asm/setup.h    |  0
+>   include/asm-generic/Kbuild                    |  1 +
+>   include/{uapi => }/asm-generic/setup.h        |  0
+>   include/uapi/asm-generic/Kbuild               |  1 -
+>   32 files changed, 31 insertions(+), 133 deletions(-)
+>   delete mode 100644 arch/alpha/include/uapi/asm/setup.h
+>   delete mode 100644 arch/arc/include/uapi/asm/setup.h
+>   delete mode 100644 arch/arm64/include/uapi/asm/setup.h
+>   create mode 100644 arch/ia64/include/asm/setup.h
+>   delete mode 100644 arch/m68k/include/uapi/asm/setup.h
+>   delete mode 100644 arch/microblaze/include/uapi/asm/setup.h
+>   delete mode 100644 arch/mips/include/uapi/asm/setup.h
+>   rename arch/parisc/include/{uapi => }/asm/setup.h (100%)
+>   delete mode 100644 arch/powerpc/include/uapi/asm/setup.h
+>   delete mode 100644 arch/s390/include/uapi/asm/setup.h
+>   delete mode 100644 arch/sparc/include/uapi/asm/setup.h
+>   delete mode 100644 arch/x86/include/uapi/asm/setup.h
+>   rename arch/xtensa/include/{uapi => }/asm/setup.h (100%)
+>   rename include/{uapi => }/asm-generic/setup.h (100%)
+>
+Björn noticed that I should also remove the command line size for riscv 
+since it was picked up in 6.3 by Palmer...I send a v6 right now, sorry 
+about that.
 
-Thanks for the update!
+Alex
 
- Apparently you forgot to add your own SoB?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
