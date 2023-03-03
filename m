@@ -2,247 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93E36A96CE
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 12:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47896A96DE
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 12:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCCL4y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Mar 2023 06:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S229804AbjCCL70 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Mar 2023 06:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCCL4y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 06:56:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1711D5D880;
-        Fri,  3 Mar 2023 03:56:51 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BD61617B4;
-        Fri,  3 Mar 2023 11:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD28C433D2;
-        Fri,  3 Mar 2023 11:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677844609;
-        bh=dOgzlBLPlOS+XYasJ+6eJlX1/dEnbvS4fGafOnUfsz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AByWUKAVZiITmU8Swud8hn6PhHc/swNFS21og02GUGdjC864s3RfOkwOWi7mGhwka
-         Vn9nDg/PAA8PQIUcLRHMVxBI3OL0Zh6j14sIHjGlVQythjKtVeybJ6CCVDNXEMqrPF
-         FQL3GpKM/skJJ6kzb1OcBAhc+uZtoPnUomEfbw9xW7NaKze7EXuT1qxXiRxYcJ8Sxj
-         gNEoXpKSYaZL8N+HE3rOTlYQZAfPDzf/tcZKFcDrl9Fzr9u1cgMCf5AgAlrr8Sb8eA
-         H02/TD16cAijVy2/josMh83yvCBoiSqW7/Yw30d+S/50Aphl/Ni5YlNAjuCfahxOo6
-         LrK18vjSTHW7Q==
-Date:   Fri, 3 Mar 2023 13:56:36 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v3 11/34] ia64: Implement the new page table range API
-Message-ID: <ZAHgdEzqWk4Peyjh@kernel.org>
-References: <20230228213738.272178-1-willy@infradead.org>
- <20230228213738.272178-12-willy@infradead.org>
+        with ESMTP id S229734AbjCCL7Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 06:59:25 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BF82D53;
+        Fri,  3 Mar 2023 03:59:21 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id 078BCFF807;
+        Fri,  3 Mar 2023 11:59:01 +0000 (UTC)
+Message-ID: <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
+Date:   Fri, 3 Mar 2023 12:59:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228213738.272178-12-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
+Content-Language: en-US
+To:     "H. Peter Anvin" <hpa@zytor.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, hca@linux.ibm.com
+Cc:     geert@linux-m68k.org, alexghiti@rivosinc.com, corbet@lwn.net,
+        Richard Henderson <richard.henderson@linaro.org>,
+        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
+        kernel@xen0n.name, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.osdn.me, dalias@libc.org, davem@davemloft.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net,
+        jcmvbkbc@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        linux-arch@vger.kernel.org
+References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
+ <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:37:14PM +0000, Matthew Wilcox (Oracle) wrote:
-> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
-> Change the PG_arch_1 (aka PG_dcache_clean) flag from being per-page to
-> per-folio, which makes arch_dma_mark_clean() and mark_clean() a little
-> more exciting.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: linux-ia64@vger.kernel.org
-> ---
->  arch/ia64/hp/common/sba_iommu.c    | 26 +++++++++++++++-----------
->  arch/ia64/include/asm/cacheflush.h | 14 ++++++++++----
->  arch/ia64/include/asm/pgtable.h    | 14 +++++++++++++-
->  arch/ia64/mm/init.c                | 29 +++++++++++++++++++----------
->  4 files changed, 57 insertions(+), 26 deletions(-)
-> 
-> diff --git a/arch/ia64/hp/common/sba_iommu.c b/arch/ia64/hp/common/sba_iommu.c
-> index 8ad6946521d8..48d475f10003 100644
-> --- a/arch/ia64/hp/common/sba_iommu.c
-> +++ b/arch/ia64/hp/common/sba_iommu.c
-> @@ -798,22 +798,26 @@ sba_io_pdir_entry(u64 *pdir_ptr, unsigned long vba)
->  #endif
->  
->  #ifdef ENABLE_MARK_CLEAN
-> -/**
-> +/*
->   * Since DMA is i-cache coherent, any (complete) pages that were written via
->   * DMA can be marked as "clean" so that lazy_mmu_prot_update() doesn't have to
->   * flush them when they get mapped into an executable vm-area.
->   */
-> -static void
-> -mark_clean (void *addr, size_t size)
-> +static void mark_clean(void *addr, size_t size)
->  {
-> -	unsigned long pg_addr, end;
-> -
-> -	pg_addr = PAGE_ALIGN((unsigned long) addr);
-> -	end = (unsigned long) addr + size;
-> -	while (pg_addr + PAGE_SIZE <= end) {
-> -		struct page *page = virt_to_page((void *)pg_addr);
-> -		set_bit(PG_arch_1, &page->flags);
-> -		pg_addr += PAGE_SIZE;
-> +	struct folio *folio = virt_to_folio(addr);
-> +	ssize_t left = size;
-> +	size_t offset = offset_in_folio(folio, addr);
-> +
-> +	if (offset) {
-> +		left -= folio_size(folio) - offset;
-> +		folio = folio_next(folio);
-> +	}
-> +
-> +	while (left >= folio_size(folio)) {
-> +		set_bit(PG_arch_1, &folio->flags);
-> +		left -= folio_size(folio);
-> +		folio = folio_next(folio);
->  	}
->  }
->  #endif
-> diff --git a/arch/ia64/include/asm/cacheflush.h b/arch/ia64/include/asm/cacheflush.h
-> index 708c0fa5d975..eac493fa9e0d 100644
-> --- a/arch/ia64/include/asm/cacheflush.h
-> +++ b/arch/ia64/include/asm/cacheflush.h
-> @@ -13,10 +13,16 @@
->  #include <asm/page.h>
->  
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
-> -#define flush_dcache_page(page)			\
-> -do {						\
-> -	clear_bit(PG_arch_1, &(page)->flags);	\
-> -} while (0)
-> +static inline void flush_dcache_folio(struct folio *folio)
-> +{
-> +	clear_bit(PG_arch_1, &folio->flags);
-> +}
-> +#define flush_dcache_folio flush_dcache_folio
-> +
-> +static inline void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
->  
->  extern void flush_icache_range(unsigned long start, unsigned long end);
->  #define flush_icache_range flush_icache_range
-> diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
-> index 21c97e31a28a..0c2be4ea664b 100644
-> --- a/arch/ia64/include/asm/pgtable.h
-> +++ b/arch/ia64/include/asm/pgtable.h
-> @@ -303,7 +303,18 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
->  	*ptep = pteval;
->  }
->  
-> -#define set_pte_at(mm,addr,ptep,pteval) set_pte(ptep,pteval)
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, pte_t pte, unsigned int nr)
-> +{
-> +	for (;;) {
-> +		set_pte(ptep, pte);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		pte_val(pte) += PAGE_SIZE;
-> +	}
-> +}
-> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, add, ptep, pte, 1)
->  
->  /*
->   * Make page protection values cacheable, uncacheable, or write-
-> @@ -396,6 +407,7 @@ pte_same (pte_t a, pte_t b)
->  	return pte_val(a) == pte_val(b);
->  }
->  
-> +#define update_mmu_cache_range(vma, address, ptep, nr) do { } while (0)
->  #define update_mmu_cache(vma, address, ptep) do { } while (0)
->  
->  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
-> diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-> index 7f5353e28516..12aef25944aa 100644
-> --- a/arch/ia64/mm/init.c
-> +++ b/arch/ia64/mm/init.c
-> @@ -50,30 +50,39 @@ void
->  __ia64_sync_icache_dcache (pte_t pte)
->  {
->  	unsigned long addr;
-> -	struct page *page;
-> +	struct folio *folio;
->  
-> -	page = pte_page(pte);
-> -	addr = (unsigned long) page_address(page);
-> +	folio = page_folio(pte_page(pte));
-> +	addr = (unsigned long)folio_address(folio);
->  
-> -	if (test_bit(PG_arch_1, &page->flags))
-> +	if (test_bit(PG_arch_1, &folio->flags))
->  		return;				/* i-cache is already coherent with d-cache */
->  
-> -	flush_icache_range(addr, addr + page_size(page));
-> -	set_bit(PG_arch_1, &page->flags);	/* mark page as clean */
-> +	flush_icache_range(addr, addr + folio_size(folio));
-> +	set_bit(PG_arch_1, &folio->flags);	/* mark page as clean */
->  }
->  
->  /*
-> - * Since DMA is i-cache coherent, any (complete) pages that were written via
-> + * Since DMA is i-cache coherent, any (complete) folios that were written via
->   * DMA can be marked as "clean" so that lazy_mmu_prot_update() doesn't have to
->   * flush them when they get mapped into an executable vm-area.
->   */
->  void arch_dma_mark_clean(phys_addr_t paddr, size_t size)
->  {
-> -	unsigned long pfn = PHYS_PFN(paddr);
-> +	struct folio *folio = page_folio(phys_to_page(paddr));
-> +	ssize_t left = size;
-> +	size_t offset = offset_in_folio(folio, paddr);
+Hi Peter,
 
-Build of defconfig failed miserably for me without this:
 
-diff --git a/arch/ia64/mm/init.c b/arch/ia64/mm/init.c
-index 12aef25944aa..0775e7870257 100644
---- a/arch/ia64/mm/init.c
-+++ b/arch/ia64/mm/init.c
-@@ -69,7 +69,8 @@ __ia64_sync_icache_dcache (pte_t pte)
-  */
- void arch_dma_mark_clean(phys_addr_t paddr, size_t size)
- {
--	struct folio *folio = page_folio(phys_to_page(paddr));
-+	unsigned long pfn = __phys_to_pfn(paddr);
-+	struct folio *folio = page_folio(pfn_to_page(pfn));
- 	ssize_t left = size;
- 	size_t offset = offset_in_folio(folio, paddr);
- 
+On 3/2/23 20:50, H. Peter Anvin wrote:
+> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> On Tue, 14 Feb 2023 01:19:02 PST (-0800), hca@linux.ibm.com wrote:
+>>> On Tue, Feb 14, 2023 at 09:58:17AM +0100, Geert Uytterhoeven wrote:
+>>>> Hi Heiko,
+>>>>
+>>>> On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux.ibm.com> wrote:
+>>>>> On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
+>>>>>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
+>>>>>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
+>>>>>> maximum length of /proc/cmdline and userspace could staticly rely on
+>>>>>> that to be correct.
+>>>>>>
+>>>>>> Usually I wouldn't mess around with changing this sort of thing, but
+>>>>>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
+>>>>>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
+>>>>>> increasing, but they're from before the UAPI split so I'm not quite sure
+>>>>>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
+>>>>>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
+>>>>>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
+>>>>>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
+>>>>>> asm-generic/setup.h.").
+>>>>>>
+>>>>>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
+>>>>>> part of the uapi to begin with, and userspace should be able to handle
+>>>>>> /proc/cmdline of whatever length it turns out to be.  I don't see any
+>>>>>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
+>>>>>> search, but that's not really enough to consider it unused on my end.
+>>>>>>
+>>>>>> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
+>>>>>> shouldn't be part of uapi, so this now touches all the ports.  I've
+>>>>>> tried to split this all out and leave it bisectable, but I haven't
+>>>>>> tested it all that aggressively.
+>>>>> Just to confirm this assumption a bit more: that's actually the same
+>>>>> conclusion that we ended up with when commit 3da0243f906a ("s390: make
+>>>>> command line configurable") went upstream.
+>> Thanks, I guess I'd missed that one.  At some point I think there was some discussion of making this a Kconfig for everyone, which seems reasonable to me -- our use case for this being extended is syzkaller, but we're sort of just picking a value that's big enough for now and running with it.
+>>
+>> Probably best to get it out of uapi first, though, as that way at least it's clear that it's not uABI.
+>>
+>>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
+>>>> I assume?
+>>> Yes, sorry for that. I got distracted while writing and used the wrong
+>>> branch to look this up.
+>> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
+> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
 
->  
-> -	do {
-> +	if (offset) {
-> +		left -= folio_size(folio) - offset;
-> +		folio = folio_next(folio);
-> +	}
-> +
-> +	while (left >= (ssize_t)folio_size(folio)) {
->  		set_bit(PG_arch_1, &pfn_to_page(pfn)->flags);
-> -	} while (++pfn <= PHYS_PFN(paddr + size - 1));
-> +		left -= folio_size(folio);
-> +		folio = folio_next(folio);
-> +	}
->  }
->  
->  inline void
-> -- 
-> 2.39.1
-> 
+Is COMMAND_LINE_SIZE what you call the default length? Does that mean 
+that to you the patchset is wrong?
 
--- 
-Sincerely yours,
-Mike.
+Thanks,
+
+Alex
+
+
