@@ -2,176 +2,292 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8BA6A9BEE
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 17:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 413FB6A9C83
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 17:58:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjCCQlo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Mar 2023 11:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47768 "EHLO
+        id S231450AbjCCQ6H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Mar 2023 11:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231158AbjCCQll (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 11:41:41 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0505B28D11;
-        Fri,  3 Mar 2023 08:41:23 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 0DEE9581876;
-        Fri,  3 Mar 2023 11:41:23 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 03 Mar 2023 11:41:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1677861683; x=1677868883; bh=cq
-        QZ3RgaXf1BBbVEeoodJ6F1ZwSPMj6A5MLY/vjXzGA=; b=Qg18LNgvOVfFg7uMPf
-        8fRKoa7WlhijGwszu3Ic5SITTKwawR9B4I6XiClcZ6ujIEL9zVzHiioA2EjIov5s
-        tRcxg3C97rd5Qh3iqM/nd48Hb9b7a50w/6DZE1MzWvKwa+aOXKgEBbAuFqwTw8IO
-        2/zrTU4zUJhWjGOFVyk4cMUxKlr0jFTzBpR0rcRkXCqmlSQg+1mKD1l/rCUxrq7V
-        AihMHWGAQq5UOL4IcNCaCr0vFPf0edeb4YgCH1r82QvI+8miMlqwJ9RIy277z2fo
-        EYkDNEf8mCiriMB8VOffc0buYRAQEBhVnDohf6yDdBARed4fr/O8O2naCxLKuEJ1
-        FmIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677861683; x=1677868883; bh=cqQZ3RgaXf1BB
-        bVEeoodJ6F1ZwSPMj6A5MLY/vjXzGA=; b=B7rPNJeusJPtOmHPup8e0wxsJaB14
-        FGL6vkrY8GHqsXIc2V5zsu3B4xZEBJOHklvsYTn6cMwmxpEeSnRvlTctzLXXyrXP
-        9TrBh5erAm5rnNg9EUeTsf+lY9yT/91mQrCarXvtL1boNYFm9EBkDhTchuKj9wo/
-        Vcljkzp6um1LTXdLqg+kNYUapTvAI76XHCPOKqRJAjH8uzC14hkGGbIhqvg9smqE
-        9gk7xnhPT94YAL+KeKmqqFj3ep1BV/HHgDskGZEGHTV139D4jm59Krp4ve/+OW5/
-        HbWdFOCVWJeLjyz/P08DuMz9uoT2Z1BPftr9Y2L2ohywcFpCIMJxhhtIw==
-X-ME-Sender: <xms:MCMCZFL4Vj5B4o3IALIvz6pg60SCJX6TD7RqwuRdJoAXjFHZ0Phf8w>
-    <xme:MCMCZBKDr_18-ZCp9fq_mQ4hcfnV3bmMG_AWa-n5fjtp8mZF3Lhw2HF6H3yj4rqId
-    bqalm9nA4D9Or8b-2Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:MCMCZNtSdRvlahaw8kkpJg5S_mXaS2NGhMnRJHAOSZVgamhknWW26A>
-    <xmx:MCMCZGZ1LKp15mUy0pPlL-EOq16PpXi1zG62wPySDj-SICoXbN6kvg>
-    <xmx:MCMCZMZks1DsXpkJ0U23I5CMsMZR0ofN8WaGql7nqVneRcx1e3czpQ>
-    <xmx:MyMCZBjiubroXaC0t4anGM3CORVrncxIG1WjD4S72n_xh-uiQS8zyQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9A291B60086; Fri,  3 Mar 2023 11:41:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
-In-Reply-To: <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
-References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
- <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
- <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
-Date:   Fri, 03 Mar 2023 17:40:46 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Alexandre Ghiti" <alex@ghiti.fr>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Heiko Carstens" <hca@linux.ibm.com>
-Cc:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Alexandre Ghiti" <alexghiti@rivosinc.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        ysato@users.osdn.me, "Rich Felker" <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
-        chris@zankel.net, "Max Filippov" <jcmvbkbc@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230424AbjCCQ6G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 11:58:06 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D6DBDDD;
+        Fri,  3 Mar 2023 08:58:04 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id x199so2564215ybg.5;
+        Fri, 03 Mar 2023 08:58:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677862683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tURdhw498bOHnYQo1Wbcyg/CVD2GUHQ/ilVefn7+ZzY=;
+        b=IDIBW0UNVpMI+IMCx1+mckdBWjg/FVAdJKROu+nBsttHf8pTuYRxWlw4sNGnlqQR5l
+         7WIyPrarL2OAHw3eugjv2bBaRATtrgVVY+6JMknIEirhKSPLNcEhhPNa7WHiZ2LpZ260
+         /SzgyM/a3KmbmSGl9Vo+MJfY9mQLHxSmn2Iil/Me5OusWN6U2DYkkp10BA9g9dTpQSO/
+         CWxVyJROAUMr++qVJPCqqdcFIgaP86Ysrw5vdbFlF8nf2oIfRk9GGkjmwINitq3+VFcm
+         R6PaMqu3cjBYb9ZZlRdEIWH9NgDwNYjvOID4ClEtARGUOukOi+HIYQE2E1a5ZDVS3z2f
+         z85g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677862683;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tURdhw498bOHnYQo1Wbcyg/CVD2GUHQ/ilVefn7+ZzY=;
+        b=mWqo3X+q3ytjlxFyQ3SfHeiLiQEinGXHJdvOTQM6CczMH7KFSHYoEx/IzkaKg9eY/x
+         m6Z5y5ZROqrv3Ig+2jKWVfAFwYZBfa7NiiKXFiO+6vqgkS6spoeoyAi9RAoX3dwG9iWC
+         rKg3ATf9EJ00VbSKFDkW4BfyMAya83xgYgRF2x15U8gGa6FgbHXlXMh9ygh2Lhd2uI0l
+         5oPAnfyuQs1NKtAhTWnxXx0VTQBZahT7EXTUk7wi7shq6oorXDjp5u1l/WeYA4Z1BhF2
+         62vJV2RF5NtzG1OMSGDccDQV0sylE6rH8KLnaWeD9xUK8d/NrMCMTyPMNLgmqZdaxMCg
+         rqsw==
+X-Gm-Message-State: AO0yUKXNyOvns1jlBMkb1/nkJV5Vboq/LrHkR5rkyIxCFOyJQUEXBQHr
+        lEM9p5GG2rvdSyC09SRGHVORImrOqQ9+Dk6JJgU=
+X-Google-Smtp-Source: AK7set8CJEPgUHfm0NWAyZb3Ct1QVtkyvLCsvbeoZUIfZc1JR5vgiNci4fMnknHET2767/ewn501c8bkQgWEQc7mcyw=
+X-Received: by 2002:a05:6902:2ca:b0:8a3:d147:280b with SMTP id
+ w10-20020a05690202ca00b008a3d147280bmr1316955ybh.3.1677862683371; Fri, 03 Mar
+ 2023 08:58:03 -0800 (PST)
+MIME-Version: 1.0
+References: <Y/9fdYQ8Cd0GI+8C@arm.com> <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+ <ZADLZJI1W1PCJf5t@arm.com> <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
+ <ZAIgrXQ4670gxlE4@arm.com>
+In-Reply-To: <ZAIgrXQ4670gxlE4@arm.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Fri, 3 Mar 2023 08:57:27 -0800
+Message-ID: <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack description
+To:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 3, 2023, at 12:59, Alexandre Ghiti wrote:
-> On 3/2/23 20:50, H. Peter Anvin wrote:
->> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
-
->>>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
->>>>> I assume?
->>>> Yes, sorry for that. I got distracted while writing and used the wrong
->>>> branch to look this up.
->>> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
->> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
+On Fri, Mar 3, 2023 at 8:31=E2=80=AFAM szabolcs.nagy@arm.com
+<szabolcs.nagy@arm.com> wrote:
 >
-> Is COMMAND_LINE_SIZE what you call the default length? Does that mean 
-> that to you the patchset is wrong?
+> The 03/02/2023 21:17, Edgecombe, Rick P wrote:
+> > Is the idea that shadow stack would be forced on regardless of if the
+> > linked libraries support it? In which case it could be allowed to crash
+> > if they do not?
+>
+> execute a binary
+> - with shstk enabled and locked (only if marked?).
+> - with shstk disabled and locked.
+> could be managed in userspace, but it is libc dependent then.
+>
+> > > > > - I think it's better to have a new limit specifically for shadow
+> > > > >   stack size (which by default can be RLIMIT_STACK) so userspace
+> > > > >   can adjust it if needed (another reason is that stack size is
+> > > > >   not always a good indicator of max call depth).
+> >
+> > Looking at this again, I'm not sure why a new rlimit is needed. It
+> > seems many of those points were just formulations of that the clone3
+> > stack size was not used, but it actually is and just not documented. If
+> > you disagree perhaps you could elaborate on what the requirements are
+> > and we can see if it seems tricky to do in a follow up.
+>
+> - tiny thread stack and deep signal stack.
+> (note that this does not really work with glibc because it has
+> implementation internal signals that don't run on alt stack,
+> cannot be masked and don't fit on a tiny thread stack, but
+> with other runtimes this can be a valid use-case, e.g. musl
+> allows tiny thread stacks, < pagesize.)
+>
+> - thread runtimes with clone (glibc uses clone3 but some dont).
+>
+> - huge stacks but small call depth (problem if some va limit
+>   is hit or memory overcommit is disabled).
+>
+> > > "sigaltshstk() is separate from sigaltstack(). You can have one
+> > > without the other, neither or both together. Because the shadow
+> > > stack specific state is pushed to the shadow stack, the two
+> > > features don=E2=80=99t need to know about each other."
+> ...
+> > > i don't see why automatic alt shadow stack allocation would
+> > > not work (kernel manages it transparently when an alt stack
+> > > is installed or disabled).
+> >
+> > Ah, I think I see where maybe I can fill you in. Andy Luto had
+> > discounted this idea out of hand originally, but I didn't see it at
+> > first. sigaltstack lets you set, retrieve, or disable the shadow stack,
+> > right... But this doesn't allocate anything, it just sets where the
+> > next signal will be handled. This is different than things like threads
+> > where there is a new resources being allocated and it makes coming up
+> > with logic to guess when to de-allocate the alt shadow stack difficult.
+> > You probably already know...
+> >
+> > But because of this there can be some modes where the shadow stack is
+> > changed while on it. For one example, SS_AUTODISARM will disable the
+> > alt shadow stack while switching to it and restore when sigreturning.
+> > At which point a new altstack can be set. In the non-shadow stack case
+> > this is nice because future signals won't clobber the alt stack if you
+> > switch away from it (swapcontext(), etc). But it also means you can
+> > "change" the alt stack while on it ("change" sort of, the auto disarm
+> > results in the kernel forgetting it temporarily).
+>
+> the problem with swapcontext is that it may unmask signals
+> that run on the alt stack, which means the code cannot jump
+> back after another signal clobbered the alt stack.
+>
+> the non-standard SS_AUTODISARM aims to solve this by disabling
+> alt stack settings on signal entry until the handler returns.
+>
+> so this use case is not about supporting swapcontext out, but
+> about jumping back. however that does not work reliably with
+> this patchset: if swapcontext goes to the thread stack (and
+> not to another stack e.g. used by makecontext), then jump back
+> fails. (and if there is a sigaltshstk installed then even jump
+> out fails.)
+>
+> assuming
+> - jump out from alt shadow stack can be made to work.
+> - alt shadow stack management can be automatic.
+> then this can be improved so jump back works reliably.
+>
+> > I hear where you are coming from with the desire to have it "just work"
+> > with existing code, but I think the resulting ABI around the alt shadow
+> > stack allocation lifecycle would be way too complicated even if it
+> > could be made to work. Hence making a new interface. But also, the idea
+> > was that the x86 signal ABI should support handling alt shadow stacks,
+> > which is what we have done with this series. If a different interface
+> > for configuring it is better than the one from the POC, I'm not seeing
+> > a problem jump out. Is there any specific concern about backwards
+> > compatibility here?
+>
+> sigaltstack syscall behaviour may be hard to change later
+> and currently
+> - shadow stack overflow cannot be recovered from.
+> - longjmp out of signal handler fails (with sigaltshstk).
+> - SS_AUTODISARM does not work (jump back can fail).
+>
+> > > "Since shadow alt stacks are a new feature, longjmp()ing from an
+> > > alt shadow stack will simply not be supported. If a libc want=E2=80=
+=99s
+> > > to support this it will need to enable WRSS and write it=E2=80=99s ow=
+n
+> > > restore token."
+> > >
+> > > i think longjmp should work without enabling writes to the shadow
+> > > stack in the libc. this can also affect unwinding across signal
+> > > handlers (not for c++ but e.g. glibc thread cancellation).
+> >
+> > glibc today does not support longjmp()ing from a different stack (for
+> > example even today after a swapcontext()) when shadow stack is used. If
+> > glibc used wrss it could be supported maybe, but otherwise I don't see
+> > how the HW can support it.
+> >
+> > HJ and I were actually just discussing this the other day. Are you
+> > looking at this series with respect to the arm shadow stack feature by
+> > any chance? I would love if glibc/tools would document what the shadow
+> > stack limitations are. If the all the arch's have the same or similar
+> > limitations perhaps this could be one developer guide. For the most
+> > part though, the limitations I've encountered are in glibc and the
+> > kernel is more the building blocks.
+>
+> well we hope that shadow stack behaviour and limitations can
+> be similar across targets.
+>
+> longjmp to different stack should work: it can do the same as
+> setcontext/swapcontext: scan for the pivot token. then only
+> longjmp out of alt shadow stack fails. (this is non-conforming
+> longjmp use, but e.g. qemu relies on it.)
 
-On x86, the COMMAND_LINE_SIZE value is already not part of a uapi header,
-but instead (since bzImage format version 2.06) is communicated from
-the kernel to the boot loader, which then knows how much data the
-kernel will read (at most) from the command line.
+Restore token may not be used with longjmp.  Unlike setcontext/swapcontext,
+longjmp is optional.  If longjmp isn't called, there will be an extra
+token on shadow
+stack and RET will fail.
 
-Most x86 kernels these days are booted using UEFI, which I think has
-no such interface, the firmware just passes the command line and a
-length, but has no way of knowing if the kernel will truncate this.
-I think that is the same as with any other architecture that passes
-the command line through UEFI, DT or ATAGS, all of which use
-length/value pairs.
+> for longjmp out of alt shadow stack, the target shadow stack
+> needs a pivot token, which implies the kernel needs to push that
+> on signal entry, which can overflow. but i suspect that can be
+> handled the same way as stackoverflow on signal entry is handled.
+>
+> > A general comment. Not sure if you are aware, but this shadow stack
+> > enabling effort is quite old at this point and there have been many
+> > discussions on these topics stretching back years. The latest
+> > conversation was around getting this series into linux-next soon to get
+> > some testing on the MM pieces. I really appreciate getting this ABI
+> > feedback as it is always tricky to get right, but at this stage I would
+> > hope to be focusing mostly on concrete problems.
+> >
+> > I also expect to have some amount of ABI growth going forward with all
+> > the normal things that entails. Shadow stack is not special in that it
+> > can come fully finalized without the need for the real world usage
+> > iterative feedback process. At some point we need to move forward with
+> > something, and we have quite a bit of initial changes at this point.
+> >
+> > So I would like to minimize the initial implementation unless anyone
+> > sees any likely problems with future growth. Can you be clear if you
+> > see any concrete problems at this point or are more looking to evaluate
+> > the design reasoning? I'm under the assumption there is nothing that
+> > would prohibit linux-next testing while any ABI shakedown happens
+> > concurrently at least?
+>
+> understood.
+>
+> the points that i think are worth raising:
+>
+> - shadow stack size logic may need to change later.
+>   (it can be too big, or too small in practice.)
+> - shadow stack overflow is not recoverable and the
+>   possible fix for that (sigaltshstk) breaks longjmp
+>   out of signal handlers.
+> - jump back after SS_AUTODISARM swapcontext cannot be
+>   reliable if alt signal uses thread shadow stack.
+> - the above two concerns may be mitigated by different
+>   sigaltstack behaviour which may be hard to add later.
+> - end token for backtrace may be useful, if added
+>   later it can be hard to check.
+>
+> thanks.
 
-Russell argued on IRC that this can be considered an ABI since a
-boot loader may use its knowledge of the kernel's command line size
-limit to reject long command lines. On the other hand, I don't
-think that any boot loader actually does, they just trust that it
-fits and don't have a good way of rejecting invalid configuration
-other than truncating and/or warning.
 
-One notable exception I found while looking through is the old
-(pre-ATAGS) parameter structure on Arm, which uses COMMAND_LINE_SIZE
-as part of the structure definition. Apparently this was deprecated
-22 years ago, so hopefully the remaining riscpc and footbridge
-users have all upgraded their bootloaders.
 
-The only other case I could find that might go wrong is
-m68knommu with a few files copying a COMMAND_LINE_SIZE sized
-buffer from flash into a kernel buffer:
-
-arch/m68k/coldfire/m5206.c:void __init config_BSP(char *commandp, int size)
-arch/m68k/coldfire/m5206.c-{
-arch/m68k/coldfire/m5206.c-#if defined(CONFIG_NETtel)
-arch/m68k/coldfire/m5206.c-     /* Copy command line from FLASH to local buffer... */
-arch/m68k/coldfire/m5206.c-     memcpy(commandp, (char *) 0xf0004000, size);
-arch/m68k/coldfire/m5206.c-     commandp[size-1] = 0;
-arch/m68k/coldfire/m5206.c-#endif /* CONFIG_NETtel */
-
-     Arnd
+--=20
+H.J.
