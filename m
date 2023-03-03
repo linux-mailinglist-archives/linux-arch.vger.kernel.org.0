@@ -2,114 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F94D6A98F7
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 15:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE156A9900
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 15:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjCCOAa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Mar 2023 09:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S229956AbjCCOCS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Mar 2023 09:02:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjCCOA3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 09:00:29 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD335C13B;
-        Fri,  3 Mar 2023 06:00:28 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        with ESMTP id S229804AbjCCOCR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 09:02:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B761C222D9;
+        Fri,  3 Mar 2023 06:02:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 242C31EC0657;
-        Fri,  3 Mar 2023 15:00:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677852027;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=qnYHVDGtQv3jnmqIeyy8ite/fQyg2MBE/ckQjSbBpNM=;
-        b=YlRhGsYyfadQXHimloeHMfYzHgPMt4rRKJ5ZJpz3f7rZXiR4DcSs61vbGpJcRD7wubIbgn
-        Cy5sYRTCmvgOgF2q8BIUBY0oGyQjXPUVKD2axEEDzT4EdiJfZum0kFSwUDEeQjb4kIYCi9
-        dwYF79zrOj6nrFa4wG5FeRtKoWY9ZUM=
-Date:   Fri, 3 Mar 2023 15:00:22 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 19/41] x86/mm: Check shadow stack page fault errors
-Message-ID: <ZAH9dhFGtbR5J8j+@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-20-rick.p.edgecombe@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E84261828;
+        Fri,  3 Mar 2023 14:02:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F1AC433EF;
+        Fri,  3 Mar 2023 14:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677852134;
+        bh=D2lATwcmN4e22YZ5aHLO1Pv+OgVSoP6nsGri2C6eY78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aW4ocQYBp4uogb72z4sv47K6g3fT9l+F4mRbGdRLzIKGvY21PnFHBkN13xd1wWH85
+         3Au16CfOJrrkSmTPBoGE3q2RFFf/mC1S2lfOAZ4U7pyMUpK/qT9T5nMMmGIcjE5V7r
+         ilBNJZQmYAm+inSqsXGSVMxGH11OnAx1qp2xzqCwDgYPR4VcV4n0ryrN4FPDG9IFwp
+         ZA2qUwhmgYHDzNWMPyjZsa0+fog7PVxQ5yh3usUCzseq2o4nKCU0BxgxBdWxZJJWMX
+         tAczGM5E7R94IVlsjyhupZCDS3aGxmeGrwEkUc2dGN6DQJ3NDEMZfR5AKQc3eXHHVk
+         A9dcEcS52Lvlw==
+Date:   Fri, 3 Mar 2023 16:02:01 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 30/34] mm: Use flush_icache_pages() in do_set_pmd()
+Message-ID: <ZAH92UJ+vObeGsG/@kernel.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-31-willy@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-20-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230228213738.272178-31-willy@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:35PM -0800, Rick Edgecombe wrote:
-> @@ -1310,6 +1324,23 @@ void do_user_addr_fault(struct pt_regs *regs,
->  
->  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
->  
-> +	/*
-> +	 * For conventionally writable pages, a read can be serviced with a
-> +	 * read only PTE. But for shadow stack, there isn't a concept of
-> +	 * read-only shadow stack memory. If it a PTE has the shadow stack
-
-s/it //
-
-> +	 * permission, it can be modified via CALL and RET instructions. So
-> +	 * core MM needs to fault in a writable PTE and do things it already
-> +	 * does for write faults.
-> +	 *
-> +	 * Shadow stack accesses (read or write) need to be serviced with
-> +	 * shadow stack permission memory, which always include write
-> +	 * permissions. So in the case of a shadow stack read access, treat it
-> +	 * as a WRITE fault. This will make sure that MM will prepare
-> +	 * everything (e.g., break COW) such that maybe_mkwrite() can create a
-> +	 * proper shadow stack PTE.
-> +	 */
-> +	if (error_code & X86_PF_SHSTK)
-> +		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_WRITE)
->  		flags |= FAULT_FLAG_WRITE;
->  	if (error_code & X86_PF_INSTR)
-> -- 
-> 2.17.1
+On Tue, Feb 28, 2023 at 09:37:33PM +0000, Matthew Wilcox (Oracle) wrote:
+> Push the iteration over each page down to the architectures (many
+> can flush the entire THP without iteration).
 > 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  mm/memory.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/mm/memory.c b/mm/memory.c
+> index bfa3100ec5a3..69e844d5f75c 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4222,8 +4222,7 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+>  	if (unlikely(!pmd_none(*vmf->pmd)))
+>  		goto out;
+>  
+> -	for (i = 0; i < HPAGE_PMD_NR; i++)
+> -		flush_icache_page(vma, page + i);
+> +	flush_icache_pages(vma, page, HPAGE_PMD_NR);
+>  
+>  	entry = mk_huge_pmd(page, vma->vm_page_prot);
+>  	if (write)
+> -- 
+> 2.39.1
+
+I get this:
+
+  CC      mm/memory.o
+/home/mike/git/linux/mm/memory.c: In function 'do_set_pmd':
+/home/mike/git/linux/mm/memory.c:4191:13: warning: unused variable 'i' [-Wunused-variable]
+ 4191 |         int i;
+      |             ^
+
+And the patch here makes it go away:
+
+diff --git a/mm/memory.c b/mm/memory.c
+index cc7845ff09ba..c359fb8643e5 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4188,7 +4188,6 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+ 	bool write = vmf->flags & FAULT_FLAG_WRITE;
+ 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
+ 	pmd_t entry;
+-	int i;
+ 	vm_fault_t ret = VM_FAULT_FALLBACK;
+ 
+ 	if (!transhuge_vma_suitable(vma, haddr))
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Sincerely yours,
+Mike.
