@@ -2,91 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68126A9ACA
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 16:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDAA6A9B4D
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Mar 2023 17:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjCCPhf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Mar 2023 10:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51122 "EHLO
+        id S230393AbjCCQCW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Mar 2023 11:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjCCPhe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 10:37:34 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A407B444;
-        Fri,  3 Mar 2023 07:37:31 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 7AA891EC04CC;
-        Fri,  3 Mar 2023 16:37:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1677857849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=IcCCEVJ5p/dYZeUl9ZMUyOCdeHoX9FqsqGWMwnIjrWs=;
-        b=JSrUhl44xpVsGruuKI0ZMol9HtgjgILcEJRz7AWLaeUjfLEJ6DNDEfp/Yyp9Q1Ae3oH2I+
-        m8kj0NQQtD9prRxPWIHQLBD9C5Qi0W4lvaMIYYUpm2BQEOxGJvsDVm4JRq7naMFNxaAYsX
-        8Vi2X4vY7nHBg8NoFC+hdUmp7fxXAn8=
-Date:   Fri, 3 Mar 2023 16:37:24 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Subject: Re: [PATCH v7 20/41] x86/mm: Teach pte_mkwrite() about stack memory
-Message-ID: <ZAIUNCxuQfirC+9n@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-21-rick.p.edgecombe@intel.com>
+        with ESMTP id S230101AbjCCQCV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 11:02:21 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553F81ACCF;
+        Fri,  3 Mar 2023 08:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a61vCLGPtw7ytsuivCnnaSA8TTux/ew1GXnO2PIM6zc=; b=sl1U8UXpCLNhOfwHysl9WpB/2H
+        xt/mbpCW2+7f+sFCHI0rLgv00mzL/mURYeMG2TtC4kp4zXgm6G1Ftyc8IaQotvjv0y7dlzwv5FN1a
+        mQgNBRi2fdsQ4cJspqff8wgITzcyblPbLTUFwihxnZhLXa2rmTRvqERmbOr0Mw/8mappWNymP9sz/
+        34yLwES7mduMh72ypGwnGe1tOEuANrIakykmNSN8XfFU5hnu2sMmb6AkYzxAI2DrKLMlKVwyjxzdf
+        wm+Z2zqcRqAxAdxLRAGP5Oskesw6Kt8hZTRid0cH/lM2FaYAQ/vZrCbsnJ4cKUMqZl9ze9Kk7s+IK
+        7/olMkqQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pY7rH-003Dre-IC; Fri, 03 Mar 2023 16:02:11 +0000
+Date:   Fri, 3 Mar 2023 16:02:11 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 30/34] mm: Use flush_icache_pages() in do_set_pmd()
+Message-ID: <ZAIaA8YaZrxE7HZe@casper.infradead.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-31-willy@infradead.org>
+ <ZAH92UJ+vObeGsG/@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-21-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZAH92UJ+vObeGsG/@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:36PM -0800, Rick Edgecombe wrote:
-> If a VMA has the VM_SHADOW_STACK flag, it is shadow stack memory. So
-> when it is made writable with pte_mkwrite(), it should create shadow
-> stack memory, not conventionally writable memory. Now that pte_mkwrite()
-> takes a VMA, and places where shadow stack memory might be created pass
-> one, pte_mkwrite() can know when it should do this.
-^^^^
+On Fri, Mar 03, 2023 at 04:02:01PM +0200, Mike Rapoport wrote:
+> On Tue, Feb 28, 2023 at 09:37:33PM +0000, Matthew Wilcox (Oracle) wrote:
+> > Push the iteration over each page down to the architectures (many
+> > can flush the entire THP without iteration).
+> > 
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > ---
+> >  mm/memory.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index bfa3100ec5a3..69e844d5f75c 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -4222,8 +4222,7 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+> >  	if (unlikely(!pmd_none(*vmf->pmd)))
+> >  		goto out;
+> >  
+> > -	for (i = 0; i < HPAGE_PMD_NR; i++)
+> > -		flush_icache_page(vma, page + i);
+> > +	flush_icache_pages(vma, page, HPAGE_PMD_NR);
+> >  
+> >  	entry = mk_huge_pmd(page, vma->vm_page_prot);
+> >  	if (write)
+> > -- 
+> > 2.39.1
+> 
+> I get this:
+> 
+>   CC      mm/memory.o
+> /home/mike/git/linux/mm/memory.c: In function 'do_set_pmd':
+> /home/mike/git/linux/mm/memory.c:4191:13: warning: unused variable 'i' [-Wunused-variable]
+>  4191 |         int i;
 
-This sentence needs rewriting.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Yep, caught that one last night.  My build test must have been with a
+config that didn't include THP.  Thanks.
