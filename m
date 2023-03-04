@@ -2,62 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B05816AA5CA
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Mar 2023 00:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2816AAB1F
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Mar 2023 17:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCCXrj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Mar 2023 18:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S229487AbjCDQ1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 4 Mar 2023 11:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCXri (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Mar 2023 18:47:38 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEDD58B6D;
-        Fri,  3 Mar 2023 15:47:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677887251; x=1709423251;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PU07nuQaWNZxtnMFSIXOXAP+ifOpD0/dT6yWLSPpnpo=;
-  b=FnPcbREe8Gjka6mFdWaR7jHn++ar6OMd0+GNXYZgJ+3zXd4iGYkqosO1
-   ycWOTwvVi/StxHt1Hyg8Lr1O93RMpJcjvi+f2aIbYMcXQviY+1KKk8zaL
-   sbXCiSbY/Utsh/ltdEDFH2MPLdKe+fA+pVatHQEbUdO2suCIJo59i1oe+
-   vmtBbSSUr+2WByyAtXdfPl2AFcIyr2vJm1MwHkT2Ucitf0N71HbvjKt+g
-   h14fln4Aax3gIf3G/mPgvbTSo+IAPQIU5ImOtzaxLg37fA/zBaajFfikg
-   CqJLeyV4NM+hjERRDF8klkPeTv6bprpk0GtD1KQ0K87qlYmCBkva96kUn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="314844231"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="314844231"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 15:47:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="739681028"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="739681028"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 03 Mar 2023 15:47:29 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYF7Y-0001jg-1n;
-        Fri, 03 Mar 2023 23:47:28 +0000
-Date:   Sat, 04 Mar 2023 07:46:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arch@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD SUCCESS WITH WARNING
- 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1
-Message-ID: <640286eb.B5GGXMVRNOx+ogeQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229437AbjCDQ1Y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Mar 2023 11:27:24 -0500
+Received: from cmx-torrgo002.bell.net (mta-tor-003.bell.net [209.71.212.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC3316330;
+        Sat,  4 Mar 2023 08:27:21 -0800 (PST)
+X-RG-CM-BuS: 0
+X-RG-CM-SC: 0
+X-RG-CM: Clean
+X-Originating-IP: [174.88.80.104]
+X-RG-Env-Sender: dave.anglin@bell.net
+X-RG-Rigid: 63F52EA4013DC794
+X-CM-Envelope: MS4xfPAwDXrr0lTNBpO76MquL13GSzS2lbIIn9y8GHZeXujBE6Kpo2YbpjALv0sJ4k41hU80QEXK+NfxsR7bAKaURZpKKuY0Dz27Jm6T/uvsHzHF5I6alCxw
+ rovtKbUrNmqDADYUNUV/CjeFpC8N0ZgAP8xMbUoi5OMnwAjnsI33apdrCzLxqcUMm5a0pMbQ8pZTte7fq0+6VUJvyDF0wH1DOS6+qrofBNhAMY3LGOvI8wv7
+ nrYkeWYD5jmI0mzozUXyv0BFbXLKhG9u06Yoig7ST+oERZToprfvLQupYmdSQ5rKoiGXeU8Bp6UamTmBomJplWwMdoQDsQmzSmGVW3oRTfy7REFdk5at8Swq
+ WDfmeNpfdyVm5X01C2gpNf3J9JgL81vyIBbzv9dUJJFuXUlxhjftysAOCRgsnd2L8XZbSkt1VpeZOGygx4kOh0YHqCsYpz3aDePIyAunAiyfn3XRRdpvmkn9
+ Pur3yJpsBaZZcsh0
+X-CM-Analysis: v=2.4 cv=ULS+oATy c=1 sm=1 tr=0 ts=6403715c
+ a=jp24WXWxBM5iMX8AJ3NPbw==:117 a=jp24WXWxBM5iMX8AJ3NPbw==:17
+ a=IkcTkHD0fZMA:10 a=FBHGMhGWAAAA:8 a=yjjJ_ZKkwfyTRQLKwtIA:9 a=QEXdDO2ut3YA:10
+ a=9gvnlMMaQFpL9xblJ6ne:22
+Received: from [192.168.2.49] (174.88.80.104) by cmx-torrgo002.bell.net (5.8.814) (authenticated as dave.anglin@bell.net)
+        id 63F52EA4013DC794; Sat, 4 Mar 2023 11:27:08 -0500
+Message-ID: <970f7627-e1fd-9f81-fbfa-091a03f0ac2a@bell.net>
+Date:   Sat, 4 Mar 2023 11:27:07 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 18/34] parisc: Implement the new page table range API
+From:   John David Anglin <dave.anglin@bell.net>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-19-willy@infradead.org>
+ <9bb5280e-c875-6eee-b28e-2abc03427e5f@bell.net>
+ <1d0efde0-a7a5-11ca-158a-a30825d44516@bell.net>
+Content-Language: en-US
+In-Reply-To: <1d0efde0-a7a5-11ca-158a-a30825d44516@bell.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,208 +60,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1  Add linux-next specific files for 20230303
+On 2023-03-02 3:40 p.m., John David Anglin wrote:
+> On 2023-03-02 11:43 a.m., John David Anglin wrote:
+>> On 2023-02-28 4:37 p.m., Matthew Wilcox (Oracle) wrote:
+>>> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio()
+>>> and flush_icache_pages().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
+>>> from being per-page to per-folio.
+>> I have tested this change on rp3440 at mainline commit e492250d5252635b6c97d52eddf2792ec26f1ec1
+>> and c8000 at mainline commit ee3f96b164688dae21e2466a57f2e806b64e8a37.
+> Here's another one:
+>
+> ------------[ cut here ]------------
+> kernel BUG at mm/memory.c:3865!
+> CPU: 1 PID: 6972 Comm: sbuild Not tainted 6.2.0+ #1
+> Hardware name: 9000/800/rp3440
+>
+>      YZrvWESTHLNXBCVMcbcbcbcbOGFRQPDI
+> PSW: 00001000000001101111111100001111 Not tainted
+> r00-03  000000000806ff0f 000000004fab8d40 00000000404584b0 000000004fab8d40
+> r04-07  0000000040c2f4c0 0000000047fe60c0 000000004fab8b98 0000000000000953
+> r08-11  000000004de3de00 0000000000000000 0000000047fe60c0 0000004093ff4660
+> r12-15  0000000000000001 0000000047fe60c0 0000000040000540 000000022f8e9540
+> r16-19  0000000000000000 000000004c694c40 000000004fab8860 00000000000003d0
+> r20-23  0000000007be3a40 0000000000000fff 0000000000000000 000000004109f1a0
+> r24-27  0000000000000000 0000000000000cc0 0000000046de3a68 0000000040c2f4c0
+> r28-31  80e00000000a0435 000000004fab8df0 000000004fab8e20 0000000000000001
+> sr00-03  0000000000207c00 0000000000000000 0000000000000000 0000000002f11c00
+> sr04-07  0000000000000000 0000000000000000 0000000000000000 0000000000000000
+>
+> IASQ: 0000000000000000 0000000000000000 IAOQ: 000000004045908c 0000000040459090
+>  IIR: 03ffe01f    ISR: 0000000000000000  IOR: 0000000000000000
+>  CPU:        1   CR30: 0000004095d64c20 CR31: ffffffffffffffff
+>  ORIG_R28: 000000001c569ad0
+>  IAOQ[0]: do_swap_page+0x108c/0x1168
+>  IAOQ[1]: do_swap_page+0x1090/0x1168
+>  RP(r2): do_swap_page+0x4b0/0x1168
+> Backtrace:
+>  [<000000004045a554>] handle_pte_fault+0x244/0x358
+>  [<000000004045c58c>] __handle_mm_fault+0x104/0x1b8
+>  [<000000004045c81c>] handle_mm_fault+0x1dc/0x318
+>  [<000000004044cb38>] faultin_page+0xa8/0x178
+>  [<000000004044e848>] __get_user_pages+0x328/0x560
+>  [<0000000040450ac4>] get_dump_page+0x9c/0x128
+>  [<0000000040596cb8>] dump_user_range+0xc0/0x2d8
+>  [<000000004058e790>] elf_core_dump+0x5f8/0x708
+>  [<0000000040596384>] do_coredump+0xc2c/0x14a0
+>  [<0000000040259040>] get_signal+0x4a8/0xb60
+>  [<000000004021a570>] do_signal+0x50/0x228
+>  [<000000004021ab38>] do_notify_resume+0x68/0x150
+>  [<0000000040203ee0>] syscall_do_signal+0x54/0xa0
+Removed new page table API change and still see a swap issue on rp3440.  So, these bugs are probably
+unrelated to the API change.
 
-Warning reports:
+get_swap_device: Bad swap file entry 600000000014ee20
+get_swap_device: Bad swap file entry 600000000014ee20
+[...]
+get_swap_device: Bad swap file entry 600000000014ee20
+_swap_info_get: Bad swap file entry 600000000014ee20
+BUG: Bad page map in process sh  pte:14ee2418 pmd:01372913
+addr:00000000f8406000 vm_flags:00000075 anon_vma:0000000000000000 mapping:000000007f67e1a8 index:25
+file:libc.so.6 fault:xfs_filemap_fault [xfs] mmap:xfs_file_mmap [xfs] read_folio:xfs_vm_read_folio [xfs]
+CPU: 3 PID: 12702 Comm: sh Not tainted 6.2.0+ #1
+Hardware name: 9000/800/rp3440
+Backtrace:
+  [<000000004020ac50>] show_stack+0x70/0x90
+  [<0000000040b7c148>] dump_stack_lvl+0xd8/0x128
+  [<0000000040b7c1cc>] dump_stack+0x34/0x48
+  [<000000004045020c>] print_bad_pte+0x24c/0x318
+  [<0000000040454f78>] zap_pte_range+0x908/0x990
+  [<0000000040455238>] unmap_page_range+0x1d8/0x490
+  [<00000000404556bc>] unmap_vmas+0x10c/0x1a8
+  [<0000000040465278>] exit_mmap+0x198/0x4a0
+  [<0000000040234a3c>] mmput+0x114/0x2a8
+  [<0000000040243c10>] do_exit+0x4e0/0xc68
+  [<00000000402446b8>] do_group_exit+0x68/0x128
+  [<00000000402583fc>] get_signal+0xae4/0xb60
+  [<0000000040219310>] do_signal+0x50/0x228
+  [<00000000402198d8>] do_notify_resume+0x68/0x150
+  [<00000000402030b4>] intr_check_sig+0x38/0x3c
 
-https://lore.kernel.org/oe-kbuild-all/202302111601.jtY4lKrA-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202302170355.Ljqlzucu-lkp@intel.com
-
-Warning: (recently discovered and may have been fixed)
-
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_optc.c:294:6: warning: no previous prototype for 'optc3_wait_drr_doublebuffer_pending_clear' [-Wmissing-prototypes]
-
-Unverified Warning (likely false positive, please contact us if interested):
-
-drivers/usb/gadget/composite.c:2082:33: sparse: sparse: restricted __le16 degrades to integer
-drivers/watchdog/imx2_wdt.c:442:22: sparse: sparse: symbol 'imx_wdt' was not declared. Should it be static?
-drivers/watchdog/imx2_wdt.c:446:22: sparse: sparse: symbol 'imx_wdt_legacy' was not declared. Should it be static?
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- csky-randconfig-s043-20230302
-|   |-- include-asm-generic-cmpxchg-local.h:sparse:sparse:cast-truncates-bits-from-constant-value-(-becomes-)
-|   `-- include-asm-generic-cmpxchg-local.h:sparse:sparse:cast-truncates-bits-from-constant-value-(aaa31337-becomes-)
-|-- i386-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-|-- i386-randconfig-s001
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- i386-randconfig-s003
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- openrisc-randconfig-s032-20230302
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- powerpc-randconfig-s042-20230302
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- riscv-randconfig-s041-20230302
-|   |-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt-was-not-declared.-Should-it-be-static
-|   `-- drivers-watchdog-imx2_wdt.c:sparse:sparse:symbol-imx_wdt_legacy-was-not-declared.-Should-it-be-static
-|-- sparc-randconfig-s051-20230302
-|   `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- x86_64-allnoconfig
-|   `-- Warning:Documentation-devicetree-bindings-usb-rockchip-dwc3.yaml-references-a-file-that-doesn-t-exist:Documentation-devicetree-bindings-phy-phy-rockchip-inno-usb2.yaml
-|-- x86_64-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-dcn30-dcn30_optc.c:warning:no-previous-prototype-for-optc3_wait_drr_doublebuffer_pending_clear
-`-- x86_64-randconfig-s021
-    `-- drivers-usb-gadget-composite.c:sparse:sparse:restricted-__le16-degrades-to-integer
-
-elapsed time: 1261m
-
-configs tested: 145
-configs skipped: 6
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r003-20230302   gcc  
-arc                  randconfig-r031-20230302   gcc  
-arc                  randconfig-r043-20230302   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       imx_v4_v5_defconfig   clang
-arm                           imxrt_defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                        neponset_defconfig   clang
-arm                  randconfig-c002-20230302   gcc  
-arm                  randconfig-r046-20230302   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             alldefconfig   gcc  
-csky         buildonly-randconfig-r002-20230302   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r016-20230302   gcc  
-hexagon              randconfig-r011-20230302   clang
-hexagon              randconfig-r033-20230302   clang
-hexagon              randconfig-r041-20230302   clang
-hexagon              randconfig-r045-20230302   clang
-i386                             allyesconfig   clang
-i386                             allyesconfig   gcc  
-i386                         debian-10.3-func   gcc  
-i386                   debian-10.3-kselftests   gcc  
-i386                        debian-10.3-kunit   gcc  
-i386                          debian-10.3-kvm   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r002-20230302   gcc  
-ia64                 randconfig-r023-20230302   gcc  
-ia64                          tiger_defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r004-20230302   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r012-20230302   gcc  
-m68k                 randconfig-r022-20230302   gcc  
-m68k                 randconfig-r035-20230302   gcc  
-microblaze   buildonly-randconfig-r001-20230302   gcc  
-microblaze   buildonly-randconfig-r003-20230302   gcc  
-microblaze           randconfig-r005-20230302   gcc  
-microblaze           randconfig-r025-20230302   gcc  
-microblaze           randconfig-r026-20230302   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                       lemote2f_defconfig   clang
-mips                      maltasmvp_defconfig   gcc  
-mips                        qi_lb60_defconfig   clang
-mips                 randconfig-c004-20230302   clang
-mips                           rs90_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r006-20230302   gcc  
-nios2                randconfig-r014-20230302   gcc  
-openrisc             randconfig-r004-20230302   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r015-20230302   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                        fsp2_defconfig   clang
-powerpc                 mpc832x_mds_defconfig   clang
-powerpc                      ppc44x_defconfig   clang
-powerpc                       ppc64_defconfig   gcc  
-powerpc              randconfig-c003-20230302   clang
-powerpc              randconfig-r034-20230302   gcc  
-powerpc                     tqm5200_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r013-20230302   clang
-riscv                randconfig-r024-20230302   clang
-riscv                randconfig-r036-20230302   gcc  
-riscv                randconfig-r042-20230302   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230302   clang
-sh                               allmodconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                   randconfig-r001-20230302   gcc  
-sh                   randconfig-r021-20230302   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                          sdk7786_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-c001   gcc  
-x86_64                        randconfig-k001   clang
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-kvm   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                           rhel-8.3-syz   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa       buildonly-randconfig-r005-20230302   gcc  
+Dave
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+John David Anglin  dave.anglin@bell.net
+
