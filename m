@@ -2,43 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAC16AADD0
-	for <lists+linux-arch@lfdr.de>; Sun,  5 Mar 2023 03:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BBC6AAE4D
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Mar 2023 06:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjCECKs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 4 Mar 2023 21:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S229495AbjCEF2r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Mar 2023 00:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjCECKr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Mar 2023 21:10:47 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8518713D58;
-        Sat,  4 Mar 2023 18:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=3ZoSoAgAc45as1CbqRRfIYjrDgicK0h9/Eydc3y8CvI=; b=uL31q83onkyvAad/3/HrEjNKCF
-        Q/ch0bwsL0cHBeH6t9o2+jUxC2h8HCgZI/LXxuinBRAoVWnVCYgV6xsqom+okFRwpFHQhX/UEv/dN
-        NqobvNrRa4F1jk9282S6xqaRWr6ROxfsYwDGm0c0hYMI9LcQjBvIRWxehofrjp4ki3r8LvaUc+FRX
-        QOOcyiTIKlmU1xCZEfhsUrryeCOl3HcV2yy6EExlSG+1rHuWkxrV2N/SdNohdYFD/9lrjuABti8M4
-        80e3bfyd5AANlUga0YQ8UfpARuBHnlx0Ex4W9ThuI/075uHJxTvx7ADxMFxLHjCQuygoxCcamtfrP
-        VmNkyUXQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pYdpi-00E15l-21;
-        Sun, 05 Mar 2023 02:10:42 +0000
-Date:   Sun, 5 Mar 2023 02:10:42 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [git pull] VM_FAULT_RETRY fixes
-Message-ID: <ZAP6IvbWaNjPthCq@ZenIV>
+        with ESMTP id S229489AbjCEF2q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 00:28:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633A8B45C;
+        Sat,  4 Mar 2023 21:28:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD276B808D5;
+        Sun,  5 Mar 2023 05:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093DFC433EF;
+        Sun,  5 Mar 2023 05:28:39 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Provide kernel fpu functions
+Date:   Sun,  5 Mar 2023 13:28:18 +0800
+Message-Id: <20230305052818.4030447-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,71 +44,92 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit c9c3395d5e3dcc6daee66c6908354d47bf98cb0c:
+Provide kernel_fpu_begin()/kernel_fpu_end() to let the kernel use fpu
+itself. They can be used by AMDGPU graphic driver for DCN.
 
-  Linux 6.2 (2023-02-19 14:24:22 -0800)
+Reported-by: Xuerui Wang <kernel@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/include/asm/fpu.h |  3 +++
+ arch/loongarch/kernel/Makefile   |  2 +-
+ arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 arch/loongarch/kernel/kfpu.c
 
-are available in the Git repository at:
+diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
+index 358b254d9c1d..192f8e35d912 100644
+--- a/arch/loongarch/include/asm/fpu.h
++++ b/arch/loongarch/include/asm/fpu.h
+@@ -21,6 +21,9 @@
+ 
+ struct sigcontext;
+ 
++extern void kernel_fpu_begin(void);
++extern void kernel_fpu_end(void);
++
+ extern void _init_fpu(unsigned int);
+ extern void _save_fp(struct loongarch_fpu *);
+ extern void _restore_fp(struct loongarch_fpu *);
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 78d4e3384305..9a72d91cd104 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+ obj-$(CONFIG_ACPI)		+= acpi.o
+ obj-$(CONFIG_EFI) 		+= efi.o
+ 
+-obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
++obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
+ 
+ obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
+ 
+diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
+new file mode 100644
+index 000000000000..cd2a18fecdcc
+--- /dev/null
++++ b/arch/loongarch/kernel/kfpu.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <asm/fpu.h>
++#include <asm/smp.h>
++
++static DEFINE_PER_CPU(bool, in_kernel_fpu);
++
++void kernel_fpu_begin(void)
++{
++	if(this_cpu_read(in_kernel_fpu))
++		return;
++
++	preempt_disable();
++	this_cpu_write(in_kernel_fpu, true);
++
++	if (!is_fpu_owner())
++		enable_fpu();
++	else
++		_save_fp(&current->thread.fpu);
++}
++EXPORT_SYMBOL_GPL(kernel_fpu_begin);
++
++void kernel_fpu_end(void)
++{
++	if(!this_cpu_read(in_kernel_fpu))
++		return;
++
++	if (!is_fpu_owner())
++		disable_fpu();
++	else
++		_restore_fp(&current->thread.fpu);
++
++	this_cpu_write(in_kernel_fpu, false);
++	preempt_enable();
++}
++EXPORT_SYMBOL_GPL(kernel_fpu_end);
+-- 
+2.39.1
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
-
-for you to fetch changes up to caa82ae7ef52b7cf5f80a2b2fbcbdbcfd16426cc:
-
-  openrisc: fix livelock in uaccess (2023-03-02 12:32:44 -0500)
-
-----------------------------------------------------------------
-VM_FAULT_RETRY fixes
-
-Some of the page fault handlers do not deal with the following case
-correctly:
-	* handle_mm_fault() has returned VM_FAULT_RETRY
-	* there is a pending fatal signal
-	* fault had happened in kernel mode
-Correct action in such case is not "return unconditionally" - fatal
-signals are handled only upon return to userland and something like
-copy_to_user() would end up retrying the faulting instruction and
-triggering the same fault again and again.
-
-What we need to do in such case is to make the caller to treat that
-as failed uaccess attempt - handle exception if there is an exception
-handler for faulting instruction or oops if there isn't one.
-
-Over the years some architectures had been fixed and now are handling
-that case properly; some still do not.  This series should fix the
-remaining ones.
-
-Status:
-	m68k, riscv, hexagon, parisc: tested/acked by maintainers.
-	alpha, sparc32, sparc64: tested locally - bug has been
-reproduced on the unpatched kernel and verified to be fixed by
-this series.
-	ia64, microblaze, nios2, openrisc: build, but otherwise
-completely untested.
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-
-----------------------------------------------------------------
-Al Viro (10):
-      m68k: fix livelock in uaccess
-      riscv: fix livelock in uaccess
-      hexagon: fix livelock in uaccess
-      parisc: fix livelock in uaccess
-      alpha: fix livelock in uaccess
-      sparc: fix livelock in uaccess
-      ia64: fix livelock in uaccess
-      microblaze: fix livelock in uaccess
-      nios2: fix livelock in uaccess
-      openrisc: fix livelock in uaccess
-
- arch/alpha/mm/fault.c      | 5 ++++-
- arch/hexagon/mm/vm_fault.c | 5 ++++-
- arch/ia64/mm/fault.c       | 5 ++++-
- arch/m68k/mm/fault.c       | 5 ++++-
- arch/microblaze/mm/fault.c | 5 ++++-
- arch/nios2/mm/fault.c      | 5 ++++-
- arch/openrisc/mm/fault.c   | 5 ++++-
- arch/parisc/mm/fault.c     | 7 ++++++-
- arch/riscv/mm/fault.c      | 5 ++++-
- arch/sparc/mm/fault_32.c   | 5 ++++-
- arch/sparc/mm/fault_64.c   | 7 ++++++-
- 11 files changed, 48 insertions(+), 11 deletions(-)
