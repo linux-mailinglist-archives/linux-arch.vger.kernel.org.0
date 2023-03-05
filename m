@@ -2,123 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1ED6AB169
-	for <lists+linux-arch@lfdr.de>; Sun,  5 Mar 2023 17:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768546AB1E6
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Mar 2023 20:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjCEQtG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sun, 5 Mar 2023 11:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
+        id S229748AbjCETh0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Mar 2023 14:37:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCEQtF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 11:49:05 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED99B45D;
-        Sun,  5 Mar 2023 08:49:05 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id l18so8303760qtp.1;
-        Sun, 05 Mar 2023 08:49:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678034944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=laWnaU7+yvIkdIWbPnbMvJLuXve3O1O7/VL48bFhhYw=;
-        b=dO3D8+BBiR7wl21z6Hx1g9b2VEUB62GEA/F9/8cxLMFWv7Gm5SzlPzfC8uvagqxpYa
-         CdTdur2lU0er5aNyOkK1BA/r9U3yu2zclAnL6w2vA0hS6c7koDl0T2LMRxmo6irW9SFY
-         sccjySkjkESseHsD7DaW8i3dGCy0JshzEUR4U9mbWLPSSci/gXHFSf4CX8h5pQVE83Oc
-         wtYPFyuC0UL7dlZB0uckHvqkefdIakyXtMDkxOgGSmrrh64KX61LVJ2aNNPOJGS1wlyr
-         zKWoAcwKSzRkqya8VOMAeFcVMIFzTaHy91iCqeSo9isMkkzUyRlOs2bmwUo53po5Vspu
-         PVqQ==
-X-Gm-Message-State: AO0yUKWaNh57HHgNqNqKVUq0FpHoRr0Bz4eKFCfyZssnhWoV84Gi58Wy
-        5s/Qoc7/39raGeGW35nHQ/1+WI2tjPN5pg==
-X-Google-Smtp-Source: AK7set8yjxPoSgjL0uc2k6Qxm6zxh/BsQbRNWxMcQ4UqtZDaaM3WVx8vkH6Ty8si2Ld6Xb4LyOZsnA==
-X-Received: by 2002:a05:622a:24b:b0:3b9:b422:4d69 with SMTP id c11-20020a05622a024b00b003b9b4224d69mr15083859qtx.39.1678034944087;
-        Sun, 05 Mar 2023 08:49:04 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05620a121300b007424376ca4bsm5760060qkj.18.2023.03.05.08.49.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 08:49:03 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-536bbe5f888so141262797b3.8;
-        Sun, 05 Mar 2023 08:49:03 -0800 (PST)
-X-Received: by 2002:a81:b61d:0:b0:52e:f66d:b70f with SMTP id
- u29-20020a81b61d000000b0052ef66db70fmr4814861ywh.5.1678034943362; Sun, 05 Mar
- 2023 08:49:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20230228213738.272178-1-willy@infradead.org> <20230228213738.272178-14-willy@infradead.org>
- <CAMuHMdW5TtUeZDmtHvxw+DxqUADC-OCW=tHE2Gptcoie62T+4w@mail.gmail.com> <ZAS1Lq6//oO/0PXe@casper.infradead.org>
-In-Reply-To: <ZAS1Lq6//oO/0PXe@casper.infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 5 Mar 2023 17:48:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVb+yFOZFK5_KAUpHfq6i3rbqbFqTA0Q4+xLC4v0ot7UA@mail.gmail.com>
-Message-ID: <CAMuHMdVb+yFOZFK5_KAUpHfq6i3rbqbFqTA0Q4+xLC4v0ot7UA@mail.gmail.com>
-Subject: Re: [PATCH v3 13/34] m68k: Implement the new page table range API
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229643AbjCEThX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 14:37:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66E910270;
+        Sun,  5 Mar 2023 11:37:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71EDD60AF9;
+        Sun,  5 Mar 2023 19:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D1378C433D2;
+        Sun,  5 Mar 2023 19:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678045041;
+        bh=gu4SRTD/SC+m/XuEgo5RPPjxEIyU4Yz60uvmiW/iiNk=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Hjx9k9jU9JkL1fa3XACbpml5ypXIWbyLBvg875DZcYRv8CjccvyDUg1jEGyAsTRYb
+         9GasV7xkRCMytnvdobh3Vk2Srb3GJrSL9B/weUd2L+j9K/f1WrRr8xAUrEMgwCxkx0
+         GdmTDjDHjoQbGwkK439ns4I7XsvB6vV68kVbv0tdFQDfoThFY3A8r891sp4C/6k074
+         9eSe75IBn5wrS/nozQTqF5njN8fVhovFpQnfL6g5XXuNuK6kk1LO2nr+0dSD8ZjBLV
+         moaJDLNCp5PWzor0RahsN16rrrfNJO6fonWH5B1mB20W8urOAR0HsBKqMnszCOMa6P
+         GaP0ZzITOpN+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C02A8C41679;
+        Sun,  5 Mar 2023 19:37:21 +0000 (UTC)
+Subject: Re: [git pull] VM_FAULT_RETRY fixes
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZAP6IvbWaNjPthCq@ZenIV>
+References: <ZAP6IvbWaNjPthCq@ZenIV>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZAP6IvbWaNjPthCq@ZenIV>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
+X-PR-Tracked-Commit-Id: caa82ae7ef52b7cf5f80a2b2fbcbdbcfd16426cc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1a8d05a726dc5b82e608f0962511e15fcbcab1ab
+Message-Id: <167804504178.1860.13031058916643663964.pr-tracker-bot@kernel.org>
+Date:   Sun, 05 Mar 2023 19:37:21 +0000
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Willy,
+The pull request you sent on Sun, 5 Mar 2023 02:10:42 +0000:
 
-On Sun, Mar 5, 2023 at 4:28 PM Matthew Wilcox <willy@infradead.org> wrote:
-> On Sun, Mar 05, 2023 at 11:16:13AM +0100, Geert Uytterhoeven wrote:
-> > > +               while (nr--) {
-> > > +                       __asm__ __volatile__("nop\n\t"
-> > > +                                            ".chip 68040\n\t"
-> > > +                                            "cpushp %%bc,(%0)\n\t"
-> > > +                                            ".chip 68k"
-> > > +                                            : : "a" (paddr + nr * PAGE_SIZE));
-> >
-> > As gcc (9.5.0) keeps on calculating "paddr + nr * PAGE_SIZE"
-> > inside the loop (albeit using a shift instead of a multiplication),
-> > please use "paddr" here, followed by "paddr += PAGE_SIZE;".
->
-> Thanks.  So this?
->
-> +++ b/arch/m68k/include/asm/cacheflush_mm.h
-> @@ -235,13 +235,14 @@ static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
->         } else if (CPU_IS_040_OR_060) {
->                 unsigned long paddr = __pa(vaddr);
->
-> -               while (nr--) {
-> +               do {
->                         __asm__ __volatile__("nop\n\t"
->                                              ".chip 68040\n\t"
->                                              "cpushp %%bc,(%0)\n\t"
->                                              ".chip 68k"
-> -                                            : : "a" (paddr + nr * PAGE_SIZE));
-> -               }
-> +                                            : : "a" (paddr));
-> +                       paddr += PAGE_SIZE;
-> +               } while (--nr);
->         } else {
->                 unsigned long _tmp;
->                 __asm__ __volatile__("movec %%cacr,%0\n\t"
+> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
 
-LGTM. Might be safer to keep the "while (nr--) {", just in case someone
-ever passes zero.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1a8d05a726dc5b82e608f0962511e15fcbcab1ab
 
-> Also, I noticed that I broke sun3.  It puts the PFN in bits 0-n instead
-> of 12-n.  New patch coming soon.
-
-Thanks, hadn't noticed (there are no sun3-specific code changes in
-this series?)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Thank you!
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
