@@ -2,127 +2,205 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C8F6AAEF7
-	for <lists+linux-arch@lfdr.de>; Sun,  5 Mar 2023 11:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFBB06AAF72
+	for <lists+linux-arch@lfdr.de>; Sun,  5 Mar 2023 13:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjCEKQe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sun, 5 Mar 2023 05:16:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S229566AbjCEMTO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Mar 2023 07:19:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCEKQ2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 05:16:28 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFA714EAE;
-        Sun,  5 Mar 2023 02:16:26 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id jo29so4790022qvb.0;
-        Sun, 05 Mar 2023 02:16:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678011385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h5qRGfTs5+kV00emn3Oo5iN+DSAN1HACfQYEpZctxMY=;
-        b=4K6y9814ZyQ0hwtUKKBmR3oS8/2R5G5CKDMOqOqnlpftu6GPIK+P5as99uyggPWWwY
-         D0m12G7PRVLpWeD38MMEci9pM69YzMX78rTM+NxAcRuWQZ+5NCMyRubDYMhu0tJgjXKp
-         Oe0Kf8ov5rN3yWf37kxb7SW7k/3qdu9w77XzDNp9n/Zcmq0poAvyKQUo6PStw4IFRvD7
-         acqpmUPqawqULtfm1pdFEWbxAusZ46tLiotivi0gSFyk7T6/w4DaWol9B3CsaZq9GID9
-         Wno4TVNlOM2efxN8nXl1NSKI/DzVokhWN6ksafMSX/6jFPgNAWCWGeLJBRMv1joMYSMM
-         VtDQ==
-X-Gm-Message-State: AO0yUKU2hot4uLRnEZnP2+ecTwD0hPpbRw+rpw4DfAkdzFf49mwtQKbX
-        GHNMMCbL/gtD5jt+ph9PpXJKUY5f9Jg6pw==
-X-Google-Smtp-Source: AK7set+WkshgVzUUvxr+RB0KBsVwUS07ynJt+HPDLkRG47WFTc4UcMK4NbAlcssGYMvgyxxgmnN/Xw==
-X-Received: by 2002:a05:6214:20a4:b0:583:a07b:5566 with SMTP id 4-20020a05621420a400b00583a07b5566mr5888801qvd.41.1678011385557;
-        Sun, 05 Mar 2023 02:16:25 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id t190-20020a3746c7000000b0074235745fdasm5273276qka.58.2023.03.05.02.16.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 02:16:25 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-536af432ee5so130761407b3.0;
-        Sun, 05 Mar 2023 02:16:24 -0800 (PST)
-X-Received: by 2002:a81:b61d:0:b0:52e:f66d:b70f with SMTP id
- u29-20020a81b61d000000b0052ef66db70fmr4376324ywh.5.1678011384672; Sun, 05 Mar
- 2023 02:16:24 -0800 (PST)
+        with ESMTP id S229526AbjCEMTN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 07:19:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC05E07F;
+        Sun,  5 Mar 2023 04:19:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B79DD60A54;
+        Sun,  5 Mar 2023 12:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18100C433A0;
+        Sun,  5 Mar 2023 12:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678018751;
+        bh=eaCWuGYM9w2VikIC3ptHBvXxP1mOVgZ4wreQHD81Uxs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sibKS33VbRqkU21P3oHklXd8gYnm0+bd2m5OWXY1IiKAZzvXD9Ocgk1VQAC0SVAZO
+         zesHPuha5GAInx110yVLuYJnQ3hE0aeu1IfaPuV5y+MEJxnNYFo5fJqVDKjdit6PtY
+         fWb8K7uy2NrAa766LzELwt+RPpBELMVEJcqyC3AhV72X2A1SNh3FqD2pf6v5D0Di0Z
+         HjcqALi/rUzkx6wNZy7+pRb88SHV05JssascfrqBrpV5hYVB4X09YhXKCG8tSiHf5R
+         dLQ43zT+C/6cYjFSF2k3VBh5aMWDElHAQsWAL+0LiqaeKON8QmxzuID5z3I29u6dz0
+         79oPHPiLzvIzQ==
+Received: by mail-ed1-f50.google.com with SMTP id i34so27749000eda.7;
+        Sun, 05 Mar 2023 04:19:11 -0800 (PST)
+X-Gm-Message-State: AO0yUKW1w1+2nl68bdpfzQNQ3S99h8eHGI746fbRGuCIa1n7otvLUhvD
+        ANmS/Fc5exP3IjGQsRah0SopO/ywCWf38k2vTg0=
+X-Google-Smtp-Source: AK7set9HpSqnBuNpG80A12biEE3obOYDBysgdv7zsSl6uIn/ixbsWEZFTSp5H3jXGZIX4xtaGv3ccl3ST0qpDr2RNu8=
+X-Received: by 2002:a17:906:d041:b0:87b:da7a:f202 with SMTP id
+ bo1-20020a170906d04100b0087bda7af202mr3308431ejb.1.1678018749262; Sun, 05 Mar
+ 2023 04:19:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20230228213738.272178-1-willy@infradead.org> <20230228213738.272178-14-willy@infradead.org>
-In-Reply-To: <20230228213738.272178-14-willy@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 5 Mar 2023 11:16:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW5TtUeZDmtHvxw+DxqUADC-OCW=tHE2Gptcoie62T+4w@mail.gmail.com>
-Message-ID: <CAMuHMdW5TtUeZDmtHvxw+DxqUADC-OCW=tHE2Gptcoie62T+4w@mail.gmail.com>
-Subject: Re: [PATCH v3 13/34] m68k: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
+References: <20230305052818.4030447-1-chenhuacai@loongson.cn> <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
+In-Reply-To: <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sun, 5 Mar 2023 20:18:54 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
+Message-ID: <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Willy,
+Hi, Xuerui,
 
-On Tue, Feb 28, 2023 at 10:37 PM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
-> Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
-> flush_dcache_folio().
+On Sun, Mar 5, 2023 at 1:53=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wrot=
+e:
 >
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-Thanks for your patch!
-
-> --- a/arch/m68k/include/asm/cacheflush_mm.h
-> +++ b/arch/m68k/include/asm/cacheflush_mm.h
-> @@ -220,24 +220,28 @@ static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vm
+> On 3/5/23 13:28, Huacai Chen wrote:
+> > Provide kernel_fpu_begin()/kernel_fpu_end() to let the kernel use fpu
+> > itself. They can be used by AMDGPU graphic driver for DCN.
 >
->  /* Push the page at kernel virtual address and clear the icache */
->  /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
-> -static inline void __flush_page_to_ram(void *vaddr)
-> +static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
->  {
->         if (CPU_IS_COLDFIRE) {
->                 unsigned long addr, start, end;
->                 addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
->                 start = addr & ICACHE_SET_MASK;
-> -               end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
-> +               end = (addr + nr * PAGE_SIZE - 1) & ICACHE_SET_MASK;
->                 if (start > end) {
->                         flush_cf_bcache(0, end);
->                         end = ICACHE_MAX_ADDR;
->                 }
->                 flush_cf_bcache(start, end);
->         } else if (CPU_IS_040_OR_060) {
-> -               __asm__ __volatile__("nop\n\t"
-> -                                    ".chip 68040\n\t"
-> -                                    "cpushp %%bc,(%0)\n\t"
-> -                                    ".chip 68k"
-> -                                    : : "a" (__pa(vaddr)));
-> +               unsigned long paddr = __pa(vaddr);
-> +
-> +               while (nr--) {
-> +                       __asm__ __volatile__("nop\n\t"
-> +                                            ".chip 68040\n\t"
-> +                                            "cpushp %%bc,(%0)\n\t"
-> +                                            ".chip 68k"
-> +                                            : : "a" (paddr + nr * PAGE_SIZE));
+> Grammar nit: "itself" is wrongly placed. "allow the kernel itself to use
+> FPU" could be better.
+>
+> Also the expected usage is way broader than a single driver's single
+> component. It's useful for a wide array of operations that will benefit
+> from SIMD acceleration support that'll hopefully appear later. For now
+> I'd suggest at least adding a single "e.g." after "used by" to signify
+> this, if you're not rewording the sentence.
+OK, I will update it.
 
-As gcc (9.5.0) keeps on calculating "paddr + nr * PAGE_SIZE"
-inside the loop (albeit using a shift instead of a multiplication),
-please use "paddr" here, followed by "paddr += PAGE_SIZE;".
+>
+> >
+> > Reported-by: Xuerui Wang <kernel@xen0n.name>
+> Thanks, but I prefer my name spelled in the native word order ;-)
+OK, I will correct it.
 
-Gr{oetje,eeting}s,
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/include/asm/fpu.h |  3 +++
+> >   arch/loongarch/kernel/Makefile   |  2 +-
+> >   arch/loongarch/kernel/kfpu.c     | 41 +++++++++++++++++++++++++++++++=
++
+> >   3 files changed, 45 insertions(+), 1 deletion(-)
+> >   create mode 100644 arch/loongarch/kernel/kfpu.c
+> >
+> > diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/=
+asm/fpu.h
+> > index 358b254d9c1d..192f8e35d912 100644
+> > --- a/arch/loongarch/include/asm/fpu.h
+> > +++ b/arch/loongarch/include/asm/fpu.h
+> > @@ -21,6 +21,9 @@
+> >
+> >   struct sigcontext;
+> >
+> > +extern void kernel_fpu_begin(void);
+> > +extern void kernel_fpu_end(void);
+> > +
+> >   extern void _init_fpu(unsigned int);
+> >   extern void _save_fp(struct loongarch_fpu *);
+> >   extern void _restore_fp(struct loongarch_fpu *);
+> > diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Mak=
+efile
+> > index 78d4e3384305..9a72d91cd104 100644
+> > --- a/arch/loongarch/kernel/Makefile
+> > +++ b/arch/loongarch/kernel/Makefile
+> > @@ -13,7 +13,7 @@ obj-y               +=3D head.o cpu-probe.o cacheinfo=
+.o env.o setup.o entry.o genex.o \
+> >   obj-$(CONFIG_ACPI)          +=3D acpi.o
+> >   obj-$(CONFIG_EFI)           +=3D efi.o
+> >
+> > -obj-$(CONFIG_CPU_HAS_FPU)    +=3D fpu.o
+> > +obj-$(CONFIG_CPU_HAS_FPU)    +=3D fpu.o kfpu.o
+> >
+> >   obj-$(CONFIG_ARCH_STRICT_ALIGN)     +=3D unaligned.o
+> >
+> > diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.=
+c
+> > new file mode 100644
+> > index 000000000000..cd2a18fecdcc
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/kfpu.c
+> > @@ -0,0 +1,41 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#include <linux/cpu.h>
+> > +#include <linux/init.h>
+> > +#include <asm/fpu.h>
+> > +#include <asm/smp.h>
+> > +
+> > +static DEFINE_PER_CPU(bool, in_kernel_fpu);
+> > +
+> > +void kernel_fpu_begin(void)
+> > +{
+> > +     if(this_cpu_read(in_kernel_fpu))
+> > +             return;
+> Could be a conditional WARN_ON_ONCE like in arch/x86?
+> > +
+> > +     preempt_disable();
+> > +     this_cpu_write(in_kernel_fpu, true);
+> > +
+> > +     if (!is_fpu_owner())
+> > +             enable_fpu();
+> > +     else
+> > +             _save_fp(&current->thread.fpu);
+> > +}
+> > +EXPORT_SYMBOL_GPL(kernel_fpu_begin);
+>
+> Might be good to provide some explanation in the commit message as to
+> why the pair of helpers should be GPL-only. Do they touch state buried
+> deep enough to make any downstream user a "derivative work"? Or are the
+> annotation inspired by arch/x86?
+Yes, just inspired by arch/x86, and I don't think these symbols should
+be used by non-GPL modules.
 
-                        Geert
-
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Huacai
+>
+> I think this kinda needs more thought, because similar operations like
+> arm's kernel_neon_{begin,end}, powerpc's enable_kernel_{fp,vsx,altivec}
+> or s390's __kernel_fpu_{begin,end} are not made GPL-only. Making these
+> helpers GPL-only precludes any non-GPL module to make use of SIMD on
+> LoongArch, which may or may not be what you want. This can have
+> commercial consequences so I can only leave the decision to you.
+> (Although IMO the semantics are encapsulated and high-level enough to
+> not warrant GPL-only marks, but it may well be the case that you have
+> thought of something else but didn't mention here.)
+>
+> > +
+> > +void kernel_fpu_end(void)
+> > +{
+> > +     if(!this_cpu_read(in_kernel_fpu))
+> > +             return;
+> > +
+> > +     if (!is_fpu_owner())
+> > +             disable_fpu();
+> > +     else
+> > +             _restore_fp(&current->thread.fpu);
+> > +
+> > +     this_cpu_write(in_kernel_fpu, false);
+> > +     preempt_enable();
+> > +}
+> > +EXPORT_SYMBOL_GPL(kernel_fpu_end);
+>
+> --
+> WANG "xen0n" Xuerui
+>
+> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+>
