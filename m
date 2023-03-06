@@ -2,154 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF036AB8BB
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 09:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EF96ABA1D
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 10:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjCFIri (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Mar 2023 03:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S230098AbjCFJkl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Mar 2023 04:40:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCFIrg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Mar 2023 03:47:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C522D48
-        for <linux-arch@vger.kernel.org>; Mon,  6 Mar 2023 00:46:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678092408;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vSd8hwHPbmWReXdvpQsZ0BwbyP6BUUMBochFuTwRaSI=;
-        b=KS/dRXNTcR1O9WPP1MoaqlVHfqMjLL8CqnLBvke9JZm1q8fnKotqXjrBZVd2kvIThh3yXx
-        hbvkDM7kfb9/G/eqHTbN4QInQFgXKj1Dg5Ork7fdmBqo5WmcswzdSYleA9va8Dvy2ZcWnt
-        rJcwrShBtciRtGgl4ZPC/3kdJsPxcpI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-100-LYVAfDgZPR-21MvuG0sNlw-1; Mon, 06 Mar 2023 03:46:44 -0500
-X-MC-Unique: LYVAfDgZPR-21MvuG0sNlw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2893E802C18;
-        Mon,  6 Mar 2023 08:46:43 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 20EFAC16029;
-        Mon,  6 Mar 2023 08:46:41 +0000 (UTC)
-Date:   Mon, 6 Mar 2023 16:46:38 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: add <asm-generic/io.h> including
-Message-ID: <ZAWobtBuBYBng6s+@MiWiFi-R3L-srv>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-2-bhe@redhat.com>
- <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
+        with ESMTP id S230086AbjCFJkk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Mar 2023 04:40:40 -0500
+X-Greylist: delayed 1184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 01:40:38 PST
+Received: from mail.ettrick.pl (mail.ettrick.pl [141.94.21.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EF7211DE
+        for <linux-arch@vger.kernel.org>; Mon,  6 Mar 2023 01:40:38 -0800 (PST)
+Received: by mail.ettrick.pl (Postfix, from userid 1002)
+        id 44897A4E17; Mon,  6 Mar 2023 09:01:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ettrick.pl; s=mail;
+        t=1678093404; bh=KHux3km3Civcx5ChslOYQZwQRBjoJa4kWJfGcMIuN6w=;
+        h=Date:From:To:Subject:From;
+        b=MYG+nIS2UYNLX6zOxzyfxirz2AOrf/nFvTs0jhn7s/1BALervWaFHPzZn8pR4zSSo
+         p0J4vgqAuMFpIwHhJnwYJPHCS8cy9SFx+y9vu7s6ONZJmZ6/qHwulG0dCqQSD9B2K6
+         9iOxAMJgfL/zvjGwLBYDX92OTQy4/m6IJWGU3KEEKSQ6Pw1k3KnTLrn6vYHVPlZkZ9
+         O5mDQ4vy1IrhMmpJagbXrXwzv/j/74m091o0pCfPnJigj3+oHsVaPSg4apCDyYlW+B
+         Dx4d6Y/TI0us12JuFemo/Jn2oJXJX0TAmJY7K5ZsK0uUsFZqsd/syhuQ3n8z7aEokM
+         zmJcbGF07AGzw==
+Received: by mail.ettrick.pl for <linux-arch@vger.kernel.org>; Mon,  6 Mar 2023 09:00:53 GMT
+Message-ID: <20230306074500-0.1.97.36zaa.0.jxxk9hmi27@ettrick.pl>
+Date:   Mon,  6 Mar 2023 09:00:53 GMT
+From:   "Norbert Karecki" <norbert.karecki@ettrick.pl>
+To:     <linux-arch@vger.kernel.org>
+Subject: Fotowoltaika - nowe warunki
+X-Mailer: mail.ettrick.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_ABUSE_SURBL,URIBL_CSS_A,URIBL_DBL_SPAM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [141.94.21.111 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        * -0.5 BAYES_05 BODY: Bayes spam probability is 1 to 5%
+        *      [score: 0.0141]
+        *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
+        *      blocklist
+        *      [URIs: ettrick.pl]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 03/03/23 at 01:40pm, Arnd Bergmann wrote:
-> On Fri, Mar 3, 2023, at 11:28, Baoquan He wrote:
-> > With the adding, some default ioremap_xx methods defined in
-> > asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> > NULL.
-> >
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: Serge Semin <fancer.lancer@gmail.com>
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Cc: linux-mips@vger.kernel.org
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> I think this is all good. I had look at what cleanups we could do as
-> follow-ups:
+Dzie=C5=84 dobry,
 
-Thanks a lot for careful reviewing and great suggestions.
+chcia=C5=82bym poinformowa=C4=87, i=C5=BC mog=C4=85 Pa=C5=84stwo uzyska=C4=
+=87 dofinansowanie na systemy fotowoltaiczne w ramach nowej edycji progra=
+mu M=C3=B3j Pr=C4=85d.
 
-> 
-> > +#define phys_to_virt phys_to_virt
-> >  static inline void * phys_to_virt(unsigned long address)
-> >  {
-> >  	return __va(address);
-> 
-> This is the same as the asm-generic version, so the mips definition
-> is no longer needed.
+Program zapewnia 6000 z=C5=82 dofinansowania na instalacj=C4=99 paneli i =
+16 000 z=C5=82 na magazyn energii, ni=C5=BCsze cen pr=C4=85du i mo=C5=BCl=
+iwo=C5=9B=C4=87 odliczenia koszt=C3=B3w zwi=C4=85zanych z instalacj=C4=85=
+ fotowoltaiki w ramach rozliczenia PIT (tzw. ulga termomodernizacyjna).
 
-Agree, I can clean this up with a followup patch.
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
-> 
-> > @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
-> >  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
-> >  #endif
-> > 
-> > +#define readb readb
-> > +#define readw readw
-> > +#define readl readl
-> > +#define writeb writeb
-> > +#define writew writew
-> > +#define writel writel
-> > +
-> > +#ifdef CONFIG_64BIT
-> > +#define readq readq
-> > +#define writeq writeq
-> > +#define __raw_readq __raw_readq
-> > +#define __raw_writeq __raw_writeq
-> > +#endif
-> > +
-> > +#define __raw_readb __raw_readb
-> > +#define __raw_readw __raw_readw
-> > +#define __raw_readl __raw_readl
-> > +#define __raw_writeb __raw_writeb
-> > +#define __raw_writew __raw_writew
-> > +#define __raw_writel __raw_writel
-> 
-> The mips code defines the __raw variants with slightly different
-> semantics on both barriers and byteswap, which makes it impractical
-> to share any of the above.				
-> 
-> > +#define memset_io memset_io
-> >  static inline void memset_io(volatile void __iomem *addr, unsigned 
-> > char val, int count)
-> >  {
-> >  	memset((void __force *) addr, val, count);
-> >  }
-> > +#define memcpy_fromio memcpy_fromio
-> >  static inline void memcpy_fromio(void *dst, const volatile void 
-> > __iomem *src, int count)
-> >  {
-> >  	memcpy(dst, (void __force *) src, count);
-> >  }
-> > +#define memcpy_toio memcpy_toio
-> 
-> These are again the same as the generic version
 
-OK, can remove this with the above change.
-
+Pozdrawiam,
+Norbert Karecki
