@@ -2,152 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B02E6AC09E
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 14:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7F96AC0ED
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 14:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjCFNT0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Mar 2023 08:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56516 "EHLO
+        id S231191AbjCFNaG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Mar 2023 08:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbjCFNTY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Mar 2023 08:19:24 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F022A985
-        for <linux-arch@vger.kernel.org>; Mon,  6 Mar 2023 05:19:21 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso5157575wmp.4
-        for <linux-arch@vger.kernel.org>; Mon, 06 Mar 2023 05:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678108760;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vrJgxYarH7I6tNp9lZXR/Ac4rjm0j3spQFQq/MBh93Y=;
-        b=jHFLuIxja1G7FgaKieMDho79j97bJcJzl5r6JSUNDsV4mA/2T7Rt4dEtFe+mJ68fX4
-         BeL12/7YXldN+W+jMsW2lzMpm7r3Yib7HB15R0q1heNbBxPxEhqAIyFb3CQ8yqwvxO6o
-         BJurB4kLXa0lNndbLzZFaNMuolqgLqLKrQAR20V3xF0z74ogRkWYyf9Fn6yc2fhFf5Yt
-         FkCUzXT6yQqa29dR6x7uYhnNqncplW9W2fbLvSLNfHc7S5X+e6Ao0YebH65T7dKnNa3q
-         Jy+sBKs6+/mTsBRIAlMv1Y4l4Lt9r2RJbnY6D7RgudRSTAB6XHrXBh5KlORUW46XFdOz
-         u/1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678108760;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vrJgxYarH7I6tNp9lZXR/Ac4rjm0j3spQFQq/MBh93Y=;
-        b=t3hkJEuNqGn8jlDAEj/ZaChRLO3gV9Xn9oVspciuQtlOw0kGRnzDNKaSJnmggbtAFc
-         MPXcImEwMrgHHb/gxy06ie8RHLEHXqbiExlTQGKiakwKDct2xaQK07LrNXfslJaOaS7Q
-         enFornMlrzRzVbz7HjJWOhdCcDvFJwALQjttxfVO2vvzrnsuzjQ5bQqE9HiETFKIJACb
-         D2UWcVtGv+yn5bV+YjvmArnLtSD7LXCDrfqo+om7enJ13EzMn3bYeme1kv9s9d6pKjih
-         7z86xuvQb86/bX3qghf+b9htiJSku6M2mNg+i0GRBMIRFl7QSobvoKH9GA3ypMhvEuGj
-         Krvw==
-X-Gm-Message-State: AO0yUKWv/Jz1108MN6CMzq6PadKbCCxMYksd0BLExi11vNxRNu3WKV7w
-        /Z4ed6hZPqOJjkoyTw+FQauECg==
-X-Google-Smtp-Source: AK7set/GCxEC4IkWKnP9EDEQUMxesVbqKr+YvF+/CM/XdLiZbcIHy+xB1RCNFt5QnRqORoMSq/nNOw==
-X-Received: by 2002:a05:600c:1548:b0:3e2:1f00:bff7 with SMTP id f8-20020a05600c154800b003e21f00bff7mr7424203wmg.12.1678108760216;
-        Mon, 06 Mar 2023 05:19:20 -0800 (PST)
-Received: from [192.168.30.216] ([81.0.6.76])
-        by smtp.gmail.com with ESMTPSA id f21-20020a1c6a15000000b003e733a973d2sm13613044wmc.39.2023.03.06.05.19.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 05:19:19 -0800 (PST)
-Message-ID: <e1fa23ff-951e-176b-1a84-cbaab34ed44d@linaro.org>
-Date:   Mon, 6 Mar 2023 14:19:15 +0100
+        with ESMTP id S231194AbjCFNaF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Mar 2023 08:30:05 -0500
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7295279B1;
+        Mon,  6 Mar 2023 05:30:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1678109398; bh=lITNNvdtYsjqw5lqa0YQTU4ptGEenKZNcLXWw4qTE18=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UftSwTS/34MZUF5jcucRs9JAODbvtXjZnYKG3wnjL2eA/0G+Trvz/pyAtOOwPazT8
+         hgUBUygRbBGWCehovcnTlyPn9cPwh5HBb4X4UfZ1LvogFyWjfPxyyV5VjtX1eIUY7E
+         SbFp/zITanIah/9KbAdbkTHNMgB9bMprJ9n1Oyq4=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 7EE0560B18;
+        Mon,  6 Mar 2023 21:29:58 +0800 (CST)
+Message-ID: <fbbd1e3d-6554-0d09-eba1-9e432e05746f@xen0n.name>
+Date:   Mon, 6 Mar 2023 21:29:58 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v5 00/26] Remove COMMAND_LINE_SIZE from uapi
+Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
 Content-Language: en-US
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+To:     David Laight <David.Laight@ACULAB.COM>,
         Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-References: <20230306100508.1171812-1-alexghiti@rivosinc.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20230306100508.1171812-1-alexghiti@rivosinc.com>
+        Xi Ruoyao <xry111@xry111.site>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "loongson-kernel@lists.loongnix.cn" 
+        <loongson-kernel@lists.loongnix.cn>
+References: <20230305052818.4030447-1-chenhuacai@loongson.cn>
+ <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
+ <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
+ <58cc7e6d19628757d6d8dc192d07876288f6077e.camel@xry111.site>
+ <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
+ <65d890c8-9c37-070c-f5c6-db26ab8cfe54@xen0n.name>
+ <50dd43063e244fa9a4d025873c862331@AcuMS.aculab.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <50dd43063e244fa9a4d025873c862331@AcuMS.aculab.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/3/23 11:04, Alexandre Ghiti wrote:
-> This all came up in the context of increasing COMMAND_LINE_SIZE in the
-> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
-> maximum length of /proc/cmdline and userspace could staticly rely on
-> that to be correct.
+On 2023/3/6 20:53, David Laight wrote:
+> ...
+>> Also, if the old world is taken into consideration (which we normally
+>> have the luxury of not having to do so), consider Ruoyao's case where a
+>> commercial partner of Loongson wants to do this with the vendor kernel,
+>> but the symbols are exported GPL -- in this case I doubt the GPL marking
+>> will remain, thus creating inconsistency between upstream and vendor
+>> kernels, and community distros are going to complain loudly about the
+>> need to patch things. It's probably best to avoid all of this upfront.
 > 
-> Usually I wouldn't mess around with changing this sort of thing, but
-> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
-> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
-> increasing, but they're from before the UAPI split so I'm not quite sure
-> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
-> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
-> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
-> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
-> asm-generic/setup.h.").
-> 
-> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
-> part of the uapi to begin with, and userspace should be able to handle
-> /proc/cmdline of whatever length it turns out to be.  I don't see any
-> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
-> search, but that's not really enough to consider it unused on my end.
-> 
-> This issue was already considered in s390 and they reached the same
-> conclusion in commit 622021cd6c56 ("s390: make command line
-> configurable").
-> 
-> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
-> shouldn't be part of uapi, so this now touches all the ports.  I've
-> tried to split this all out and leave it bisectable, but I haven't
-> tested it all that aggressively.
+> It is pretty easy to load a non-GPL module into a distro-built
+> kernel and call GPL-only functions.
+> (And without doing horrid things with kallsyms.)
+> As soon as you actually need to do one, adding others isn't a problem.
 
-Series:
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Hmm, do you mean patching the kernel downstream to remove the license 
+checks, or something like that? I remember the so-called "GPL condom" 
+trick was banned some time earlier, in commit 262e6ae7081df ("modules: 
+inherit TAINT_PROPRIETARY_MODULE"). For now I can't think of a way that 
+would allow such reference...
+
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
