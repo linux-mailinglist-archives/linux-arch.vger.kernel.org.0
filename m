@@ -2,170 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C126AB508
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 04:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2DD6AB50A
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 04:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjCFDVd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Mar 2023 22:21:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S229694AbjCFDVp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Mar 2023 22:21:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbjCFDVb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 22:21:31 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699EB93F8;
-        Sun,  5 Mar 2023 19:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1678072887; bh=6vjYI8Q8uw2bYGAG6a88ZZWfz7Vkjax20kWczargcZw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lHtuoGDjxxhhng8DCi0x+1gsg9uxk6urmjmVZcCiADU0jHdPj4XQoyt91aXWGLseJ
-         K9fxcV3pIvAF51kmYZThsZs1l8u+R0aQvZUskpRj2XpQ4giea2TWhW5jHlFmTUs6pI
-         RmEF0USwlqHyZX8ywqFvF8tJFDB8sVWsFYWUFcdU=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229555AbjCFDVo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 22:21:44 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C21A12589;
+        Sun,  5 Mar 2023 19:21:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 9F52F600A6;
-        Mon,  6 Mar 2023 11:21:26 +0800 (CST)
-Message-ID: <95ddb5c5-57d4-4594-2712-863391f1c6c1@xen0n.name>
-Date:   Mon, 6 Mar 2023 11:21:25 +0800
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4BEDBCE0E6D;
+        Mon,  6 Mar 2023 03:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C92C4339C;
+        Mon,  6 Mar 2023 03:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678072898;
+        bh=pv8wEDoyBv2b1A68E+Gby64QdTGgcQAxaKKzEZ9lwg0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mmsT6hwIuat+dw5ClAts+TaEBza1mV1u7iOolfUNISctHIuuhoP5wp0B1xIjdalQq
+         InkuOp1S607k4AyFSYaLUGCPeySLg9V1MWe79fhZNg9O8Fc+gk05zmKA3KWaOMwPYY
+         FXEp/UIoAezznxVNw/qx1kq3lEzU0VGttbseT8mrf/J77bnHb9DLRB8JJ8MextEhL3
+         0PMUZzeHX9+9j6HIbph56wQg6DLk7ctoghIO7/GIbwhtCvbNUlHcOXmXkxP/iXRdeQ
+         wKNtd/TdU6RlJLYhPsuMDWDIPKEYUowI70JJsMtLMCIO8L28cEIffYXfU/1DgO1xkH
+         EHWDv1FcMgVfw==
+Received: by mail-ed1-f47.google.com with SMTP id s11so32923329edy.8;
+        Sun, 05 Mar 2023 19:21:38 -0800 (PST)
+X-Gm-Message-State: AO0yUKWuvrjMvXo4+POBY4BmopLHuhe71EMDggowMbCKUwvbZw6QNUfD
+        IlFyl/QuAyXypfq/l+sGD++mNgpW7manT7P/gTw=
+X-Google-Smtp-Source: AK7set+v/sQets5ucBK7ug/sAkL2ojd3qvp7Md6yoDGFmcT1Zo+FEUa7QLiDvpZuq0zeLaUe1JpDSKj1ynBL7/TpCCo=
+X-Received: by 2002:a17:906:f47:b0:8b0:e909:9136 with SMTP id
+ h7-20020a1709060f4700b008b0e9099136mr4488372ejj.1.1678072896840; Sun, 05 Mar
+ 2023 19:21:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
+References: <20230306031258.99230-1-chenhuacai@loongson.cn> <984b486f-0613-6adc-4e87-5fc00560498f@infradead.org>
+In-Reply-To: <984b486f-0613-6adc-4e87-5fc00560498f@infradead.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 6 Mar 2023 11:21:26 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4tMTaZQAu7tUoZXbdq0F80+BY+4eesZwavH0V6JO-RBQ@mail.gmail.com>
+Message-ID: <CAAhV-H4tMTaZQAu7tUoZXbdq0F80+BY+4eesZwavH0V6JO-RBQ@mail.gmail.com>
 Subject: Re: [PATCH V2] LoongArch: Provide kernel fpu functions
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230306031258.99230-1-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230306031258.99230-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2023/3/6 11:12, Huacai Chen wrote:
-> Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
-> to use fpu. They can be used by some other kernel components, e.g., the
-> AMDGPU graphic driver for DCN.
+On Mon, Mar 6, 2023 at 11:15=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+> Hi,
+>
+>
+> On 3/5/23 19:12, Huacai Chen wrote:
+> > +void kernel_fpu_begin(void)
+> > +{
+> > +     if(this_cpu_read(in_kernel_fpu))
+>
+>         if (
+> > +             return;
+> > +
+> > +     preempt_disable();
+> > +     this_cpu_write(in_kernel_fpu, true);
+> > +
+> > +     if (!is_fpu_owner())
+> > +             enable_fpu();
+> > +     else
+> > +             _save_fp(&current->thread.fpu);
+> > +}
+> > +EXPORT_SYMBOL(kernel_fpu_begin);
+> > +
+> > +void kernel_fpu_end(void)
+> > +{
+> > +     if(!this_cpu_read(in_kernel_fpu))
+>
+>         if (
+>
+> i.e., add a space after "if".
+OK, thanks.
 
-IMO my previous explanation works better, but the current wording kinda 
-works for me. </grumble>
-
-> 
-> Reported-by: WANG Xuerui<kernel@xen0n.name>
-
-One space before the opening angle bracket.
-
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> V2: Use non-GPL exports and update commit messages.
-> 
->   arch/loongarch/include/asm/fpu.h |  3 +++
->   arch/loongarch/kernel/Makefile   |  2 +-
->   arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
->   3 files changed, 45 insertions(+), 1 deletion(-)
->   create mode 100644 arch/loongarch/kernel/kfpu.c
-> 
-> diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-> index 358b254d9c1d..192f8e35d912 100644
-> --- a/arch/loongarch/include/asm/fpu.h
-> +++ b/arch/loongarch/include/asm/fpu.h
-> @@ -21,6 +21,9 @@
->   
->   struct sigcontext;
->   
-> +extern void kernel_fpu_begin(void);
-> +extern void kernel_fpu_end(void);
-> +
->   extern void _init_fpu(unsigned int);
->   extern void _save_fp(struct loongarch_fpu *);
->   extern void _restore_fp(struct loongarch_fpu *);
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 78d4e3384305..9a72d91cd104 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
->   obj-$(CONFIG_ACPI)		+= acpi.o
->   obj-$(CONFIG_EFI) 		+= efi.o
->   
-> -obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
-> +obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
->   
->   obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
->   
-> diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
-> new file mode 100644
-> index 000000000000..cd2a18fecdcc
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/kfpu.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-
-2020?
-
-> + */
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/init.h>
-> +#include <asm/fpu.h>
-> +#include <asm/smp.h>
-> +
-> +static DEFINE_PER_CPU(bool, in_kernel_fpu);
-> +
-> +void kernel_fpu_begin(void)
-> +{
-> +	if(this_cpu_read(in_kernel_fpu))
-> +		return;
-
-You've ignored my WARN suggestion, but I could add it later anyway so 
-I'd allow this to go in as-is for now.
-
-> +
-> +	preempt_disable();
-> +	this_cpu_write(in_kernel_fpu, true);
-> +
-> +	if (!is_fpu_owner())
-> +		enable_fpu();
-> +	else
-> +		_save_fp(&current->thread.fpu);
-> +}
-> +EXPORT_SYMBOL(kernel_fpu_begin);
-> +
-> +void kernel_fpu_end(void)
-> +{
-> +	if(!this_cpu_read(in_kernel_fpu))
-> +		return;
-> +
-> +	if (!is_fpu_owner())
-> +		disable_fpu();
-> +	else
-> +		_restore_fp(&current->thread.fpu);
-> +
-> +	this_cpu_write(in_kernel_fpu, false);
-> +	preempt_enable();
-> +}
-> +EXPORT_SYMBOL(kernel_fpu_end);
-
-I've tested this along with the amdgpu DCN enablement, so:
-
-Tested-by: WANG Xuerui <git@xen0n.name>
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+Huacai
+>
+> > +             return;
+> > +
+> > +     if (!is_fpu_owner())
+> > +             disable_fpu();
+> > +     else
+> > +             _restore_fp(&current->thread.fpu);
+> > +
+> > +     this_cpu_write(in_kernel_fpu, false);
+> > +     preempt_enable();
+> > +}
+> > +EXPORT_SYMBOL(kernel_fpu_end);
+>
+> --
+> ~Randy
