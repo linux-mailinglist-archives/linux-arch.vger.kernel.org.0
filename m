@@ -2,137 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF3E6AB4F9
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 04:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393746AB4FD
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 04:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjCFDNN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Mar 2023 22:13:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S229478AbjCFDPu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Mar 2023 22:15:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCFDNM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 22:13:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781008688;
-        Sun,  5 Mar 2023 19:13:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC1E5B80B0E;
-        Mon,  6 Mar 2023 03:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEEAC433EF;
-        Mon,  6 Mar 2023 03:13:05 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+        with ESMTP id S229486AbjCFDPt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 22:15:49 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB5E11670;
+        Sun,  5 Mar 2023 19:15:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=z90/4JGdbEKqrGeZRYhIg9Sanb/fEMmQopDvi9/WFeo=; b=ztwVpACRtiWxy3GWpmfjTbVFaP
+        SOVIudq0nIen+nAbYIuwUdO1AO5EazFCKO/IIbYG3gKFJbG7eOdR4Cz5q7raeJZgQzW7vkzNS/Fba
+        i60RFMLtc86g1pRL78NZjQ7iq3sksxabj7Hj3BWM6hcE1E/ZiAug2E5L4kcwP9wWf8OJEjtrxjerD
+        23ssZB+0/oWS1j9PK39/W05H2vPsa9F1Y+4Qe0tRWd6FVg13z8aT7dxHqaqKLysbc7dwBVWR62uAm
+        MZ0rD8H/kjM2nvLEMtmQlzpPheEGM/IDWVtOtNHWeunn8W+1QnZa2xG/vh6zHrhvGH2x2/UnTJbgl
+        xNfyMzvg==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZ1K7-00B6c0-PX; Mon, 06 Mar 2023 03:15:39 +0000
+Message-ID: <984b486f-0613-6adc-4e87-5fc00560498f@infradead.org>
+Date:   Sun, 5 Mar 2023 19:15:39 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V2] LoongArch: Provide kernel fpu functions
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2] LoongArch: Provide kernel fpu functions
-Date:   Mon,  6 Mar 2023 11:12:58 +0800
-Message-Id: <20230306031258.99230-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <20230306031258.99230-1-chenhuacai@loongson.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230306031258.99230-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
-to use fpu. They can be used by some other kernel components, e.g., the
-AMDGPU graphic driver for DCN.
+Hi,
 
-Reported-by: WANG Xuerui<kernel@xen0n.name>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-V2: Use non-GPL exports and update commit messages.
 
- arch/loongarch/include/asm/fpu.h |  3 +++
- arch/loongarch/kernel/Makefile   |  2 +-
- arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+), 1 deletion(-)
- create mode 100644 arch/loongarch/kernel/kfpu.c
+On 3/5/23 19:12, Huacai Chen wrote:
+> +void kernel_fpu_begin(void)
+> +{
+> +	if(this_cpu_read(in_kernel_fpu))
 
-diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-index 358b254d9c1d..192f8e35d912 100644
---- a/arch/loongarch/include/asm/fpu.h
-+++ b/arch/loongarch/include/asm/fpu.h
-@@ -21,6 +21,9 @@
- 
- struct sigcontext;
- 
-+extern void kernel_fpu_begin(void);
-+extern void kernel_fpu_end(void);
-+
- extern void _init_fpu(unsigned int);
- extern void _save_fp(struct loongarch_fpu *);
- extern void _restore_fp(struct loongarch_fpu *);
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 78d4e3384305..9a72d91cd104 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
- obj-$(CONFIG_ACPI)		+= acpi.o
- obj-$(CONFIG_EFI) 		+= efi.o
- 
--obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
-+obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
- 
- obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
- 
-diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
-new file mode 100644
-index 000000000000..cd2a18fecdcc
---- /dev/null
-+++ b/arch/loongarch/kernel/kfpu.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpu.h>
-+#include <linux/init.h>
-+#include <asm/fpu.h>
-+#include <asm/smp.h>
-+
-+static DEFINE_PER_CPU(bool, in_kernel_fpu);
-+
-+void kernel_fpu_begin(void)
-+{
-+	if(this_cpu_read(in_kernel_fpu))
-+		return;
-+
-+	preempt_disable();
-+	this_cpu_write(in_kernel_fpu, true);
-+
-+	if (!is_fpu_owner())
-+		enable_fpu();
-+	else
-+		_save_fp(&current->thread.fpu);
-+}
-+EXPORT_SYMBOL(kernel_fpu_begin);
-+
-+void kernel_fpu_end(void)
-+{
-+	if(!this_cpu_read(in_kernel_fpu))
-+		return;
-+
-+	if (!is_fpu_owner())
-+		disable_fpu();
-+	else
-+		_restore_fp(&current->thread.fpu);
-+
-+	this_cpu_write(in_kernel_fpu, false);
-+	preempt_enable();
-+}
-+EXPORT_SYMBOL(kernel_fpu_end);
+	if (
+> +		return;
+> +
+> +	preempt_disable();
+> +	this_cpu_write(in_kernel_fpu, true);
+> +
+> +	if (!is_fpu_owner())
+> +		enable_fpu();
+> +	else
+> +		_save_fp(&current->thread.fpu);
+> +}
+> +EXPORT_SYMBOL(kernel_fpu_begin);
+> +
+> +void kernel_fpu_end(void)
+> +{
+> +	if(!this_cpu_read(in_kernel_fpu))
+
+	if (
+
+i.e., add a space after "if".
+
+> +		return;
+> +
+> +	if (!is_fpu_owner())
+> +		disable_fpu();
+> +	else
+> +		_restore_fp(&current->thread.fpu);
+> +
+> +	this_cpu_write(in_kernel_fpu, false);
+> +	preempt_enable();
+> +}
+> +EXPORT_SYMBOL(kernel_fpu_end);
+
 -- 
-2.39.1
-
+~Randy
