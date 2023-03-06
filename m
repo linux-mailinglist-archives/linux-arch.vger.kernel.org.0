@@ -2,103 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337F96AB495
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 03:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF3E6AB4F9
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 04:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjCFCSm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 5 Mar 2023 21:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S229723AbjCFDNN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 5 Mar 2023 22:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjCFCSm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 21:18:42 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD66CA02;
-        Sun,  5 Mar 2023 18:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1678069116; bh=ZHnW+A+s3D7t9NyDHWLNv5AKl7GYJwEEJGQPmuQN+TM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LCrc16B+oLgMfDF07fT2jeraC0azAnESHc2hlMFFHEFEBjuJ3LWGtcqzNhYS29XuE
-         dOXw4fW3iiPqwcjbzFy2XLUKALVmq6M4My1dDLgj/wd2xu8gjqS9/c/gzBGnqg0ncb
-         SvkDNVr91Jkcky1gUgKef5CSaAq334D8RAbXJ3jQ=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229572AbjCFDNM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 5 Mar 2023 22:13:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781008688;
+        Sun,  5 Mar 2023 19:13:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 00029600BD;
-        Mon,  6 Mar 2023 10:18:35 +0800 (CST)
-Message-ID: <65d890c8-9c37-070c-f5c6-db26ab8cfe54@xen0n.name>
-Date:   Mon, 6 Mar 2023 10:18:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>, Xi Ruoyao <xry111@xry111.site>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC1E5B80B0E;
+        Mon,  6 Mar 2023 03:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEEAC433EF;
+        Mon,  6 Mar 2023 03:13:05 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230305052818.4030447-1-chenhuacai@loongson.cn>
- <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
- <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
- <58cc7e6d19628757d6d8dc192d07876288f6077e.camel@xry111.site>
- <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2] LoongArch: Provide kernel fpu functions
+Date:   Mon,  6 Mar 2023 11:12:58 +0800
+Message-Id: <20230306031258.99230-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2023/3/6 09:55, Huacai Chen wrote:
-> On Sun, Mar 5, 2023 at 9:28 PM Xi Ruoyao <xry111@xry111.site> wrote:
->>
->> On Sun, 2023-03-05 at 20:18 +0800, Huacai Chen wrote:
->>>> Might be good to provide some explanation in the commit message as to
->>>> why the pair of helpers should be GPL-only. Do they touch state buried
->>>> deep enough to make any downstream user a "derivative work"? Or are the
->>>> annotation inspired by arch/x86?
->>> Yes, just inspired by arch/x86, and I don't think these symbols should
->>> be used by non-GPL modules.
->>
->> Hmm, what if one of your partners wish to provide a proprietary GPU
->> driver using the FPU like this way?  As a FLOSS developer I'd say "don't
->> do that, make your driver GPL".  But for Loongson there may be a
->> commercial issue.
-> So use EXPORT_SYMBOL can make life easier?
+Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
+to use fpu. They can be used by some other kernel components, e.g., the
+AMDGPU graphic driver for DCN.
 
-As I've detailed in my first reply, every arch other than x86 exposes 
-this functionality without the GPL-only restriction. Although IMO 
-non-GPL driver developers wouldn't grieve over this particular feature 
-simply because pretty much everyone would have to build on x86 and that 
-arch wouldn't have it exposed, I do think it will be more demanded on 
-loongarch, where HW performance is in general lower than x86/arm64 
-offerings at similar cost levels, so perhaps people would have to resort 
-to FP/SIMD tricks to reach performance on par with others.
+Reported-by: WANG Xuerui<kernel@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+V2: Use non-GPL exports and update commit messages.
 
-Also, if the old world is taken into consideration (which we normally 
-have the luxury of not having to do so), consider Ruoyao's case where a 
-commercial partner of Loongson wants to do this with the vendor kernel, 
-but the symbols are exported GPL -- in this case I doubt the GPL marking 
-will remain, thus creating inconsistency between upstream and vendor 
-kernels, and community distros are going to complain loudly about the 
-need to patch things. It's probably best to avoid all of this upfront.
+ arch/loongarch/include/asm/fpu.h |  3 +++
+ arch/loongarch/kernel/Makefile   |  2 +-
+ arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 arch/loongarch/kernel/kfpu.c
 
-Note that this is all suggestion though, it's down to you and your team 
-to decide after all. And I've not done the archaeology about the other 
-arches' choice yet, which may or may not reveal more reasoning behind 
-their status quo.
-
+diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
+index 358b254d9c1d..192f8e35d912 100644
+--- a/arch/loongarch/include/asm/fpu.h
++++ b/arch/loongarch/include/asm/fpu.h
+@@ -21,6 +21,9 @@
+ 
+ struct sigcontext;
+ 
++extern void kernel_fpu_begin(void);
++extern void kernel_fpu_end(void);
++
+ extern void _init_fpu(unsigned int);
+ extern void _save_fp(struct loongarch_fpu *);
+ extern void _restore_fp(struct loongarch_fpu *);
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 78d4e3384305..9a72d91cd104 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+ obj-$(CONFIG_ACPI)		+= acpi.o
+ obj-$(CONFIG_EFI) 		+= efi.o
+ 
+-obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
++obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
+ 
+ obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
+ 
+diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
+new file mode 100644
+index 000000000000..cd2a18fecdcc
+--- /dev/null
++++ b/arch/loongarch/kernel/kfpu.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <asm/fpu.h>
++#include <asm/smp.h>
++
++static DEFINE_PER_CPU(bool, in_kernel_fpu);
++
++void kernel_fpu_begin(void)
++{
++	if(this_cpu_read(in_kernel_fpu))
++		return;
++
++	preempt_disable();
++	this_cpu_write(in_kernel_fpu, true);
++
++	if (!is_fpu_owner())
++		enable_fpu();
++	else
++		_save_fp(&current->thread.fpu);
++}
++EXPORT_SYMBOL(kernel_fpu_begin);
++
++void kernel_fpu_end(void)
++{
++	if(!this_cpu_read(in_kernel_fpu))
++		return;
++
++	if (!is_fpu_owner())
++		disable_fpu();
++	else
++		_restore_fp(&current->thread.fpu);
++
++	this_cpu_write(in_kernel_fpu, false);
++	preempt_enable();
++}
++EXPORT_SYMBOL(kernel_fpu_end);
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+2.39.1
 
