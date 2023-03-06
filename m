@@ -2,145 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1886AB9F4
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 10:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD4A6ABA95
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Mar 2023 11:00:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjCFJfi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Mar 2023 04:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S229670AbjCFKAH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Mar 2023 05:00:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCFJfh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Mar 2023 04:35:37 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D56CA275;
-        Mon,  6 Mar 2023 01:35:33 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id D7AAE60017;
-        Mon,  6 Mar 2023 09:35:17 +0000 (UTC)
-Message-ID: <caaed678-4a5a-70e5-2ee7-cb2c8042afc0@ghiti.fr>
-Date:   Mon, 6 Mar 2023 10:35:17 +0100
+        with ESMTP id S230206AbjCFJ7y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Mar 2023 04:59:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224441C593;
+        Mon,  6 Mar 2023 01:59:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84900B80D76;
+        Mon,  6 Mar 2023 09:59:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C72C433D2;
+        Mon,  6 Mar 2023 09:59:41 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V3] LoongArch: Provide kernel fpu functions
+Date:   Mon,  6 Mar 2023 17:59:34 +0800
+Message-Id: <20230306095934.609589-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        ysato@users.osdn.me, Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        chris@zankel.net, Max Filippov <jcmvbkbc@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
- <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
- <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
- <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
+to use fpu. They can be used by some other kernel components, e.g., the
+AMDGPU graphic driver for DCN.
 
-On 3/3/23 17:40, Arnd Bergmann wrote:
-> On Fri, Mar 3, 2023, at 12:59, Alexandre Ghiti wrote:
->> On 3/2/23 20:50, H. Peter Anvin wrote:
->>> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>>>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
->>>>>> I assume?
->>>>> Yes, sorry for that. I got distracted while writing and used the wrong
->>>>> branch to look this up.
->>>> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
->>> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
->> Is COMMAND_LINE_SIZE what you call the default length? Does that mean
->> that to you the patchset is wrong?
-> On x86, the COMMAND_LINE_SIZE value is already not part of a uapi header,
-> but instead (since bzImage format version 2.06) is communicated from
-> the kernel to the boot loader, which then knows how much data the
-> kernel will read (at most) from the command line.
->
-> Most x86 kernels these days are booted using UEFI, which I think has
-> no such interface, the firmware just passes the command line and a
-> length, but has no way of knowing if the kernel will truncate this.
-> I think that is the same as with any other architecture that passes
-> the command line through UEFI, DT or ATAGS, all of which use
-> length/value pairs.
->
-> Russell argued on IRC that this can be considered an ABI since a
-> boot loader may use its knowledge of the kernel's command line size
-> limit to reject long command lines. On the other hand, I don't
-> think that any boot loader actually does, they just trust that it
-> fits and don't have a good way of rejecting invalid configuration
-> other than truncating and/or warning.
->
-> One notable exception I found while looking through is the old
-> (pre-ATAGS) parameter structure on Arm, which uses COMMAND_LINE_SIZE
-> as part of the structure definition. Apparently this was deprecated
-> 22 years ago, so hopefully the remaining riscpc and footbridge
-> users have all upgraded their bootloaders.
->
-> The only other case I could find that might go wrong is
-> m68knommu with a few files copying a COMMAND_LINE_SIZE sized
-> buffer from flash into a kernel buffer:
->
-> arch/m68k/coldfire/m5206.c:void __init config_BSP(char *commandp, int size)
-> arch/m68k/coldfire/m5206.c-{
-> arch/m68k/coldfire/m5206.c-#if defined(CONFIG_NETtel)
-> arch/m68k/coldfire/m5206.c-     /* Copy command line from FLASH to local buffer... */
-> arch/m68k/coldfire/m5206.c-     memcpy(commandp, (char *) 0xf0004000, size);
-> arch/m68k/coldfire/m5206.c-     commandp[size-1] = 0;
-> arch/m68k/coldfire/m5206.c-#endif /* CONFIG_NETtel */
+Reported-by: WANG Xuerui <kernel@xen0n.name>
+Tested-by: WANG Xuerui <kernel@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+V2: Use non-GPL exports and update commit messages.
+V3: Add spaces for coding style.
 
+ arch/loongarch/include/asm/fpu.h |  3 +++
+ arch/loongarch/kernel/Makefile   |  2 +-
+ arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 arch/loongarch/kernel/kfpu.c
 
-I see, thanks your thorough explanation: I don't see this m64k issue as 
-a blocker (unless Geert disagrees but he already reviewed the m64k 
-patches),  so I'll send the v5 now.
+diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
+index 358b254d9c1d..192f8e35d912 100644
+--- a/arch/loongarch/include/asm/fpu.h
++++ b/arch/loongarch/include/asm/fpu.h
+@@ -21,6 +21,9 @@
+ 
+ struct sigcontext;
+ 
++extern void kernel_fpu_begin(void);
++extern void kernel_fpu_end(void);
++
+ extern void _init_fpu(unsigned int);
+ extern void _save_fp(struct loongarch_fpu *);
+ extern void _restore_fp(struct loongarch_fpu *);
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 78d4e3384305..9a72d91cd104 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+ obj-$(CONFIG_ACPI)		+= acpi.o
+ obj-$(CONFIG_EFI) 		+= efi.o
+ 
+-obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
++obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
+ 
+ obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
+ 
+diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
+new file mode 100644
+index 000000000000..cd2a18fecdcc
+--- /dev/null
++++ b/arch/loongarch/kernel/kfpu.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <asm/fpu.h>
++#include <asm/smp.h>
++
++static DEFINE_PER_CPU(bool, in_kernel_fpu);
++
++void kernel_fpu_begin(void)
++{
++	if (this_cpu_read(in_kernel_fpu))
++		return;
++
++	preempt_disable();
++	this_cpu_write(in_kernel_fpu, true);
++
++	if (!is_fpu_owner())
++		enable_fpu();
++	else
++		_save_fp(&current->thread.fpu);
++}
++EXPORT_SYMBOL(kernel_fpu_begin);
++
++void kernel_fpu_end(void)
++{
++	if (!this_cpu_read(in_kernel_fpu))
++		return;
++
++	if (!is_fpu_owner())
++		disable_fpu();
++	else
++		_restore_fp(&current->thread.fpu);
++
++	this_cpu_write(in_kernel_fpu, false);
++	preempt_enable();
++}
++EXPORT_SYMBOL(kernel_fpu_end);
+-- 
+2.39.1
 
-Thanks again,
-
-Alex
-
-
->
->       Arnd
