@@ -2,273 +2,209 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315C06ADE3A
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Mar 2023 13:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367A26ADFB5
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Mar 2023 14:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCGMA6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Mar 2023 07:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S229917AbjCGNFO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Mar 2023 08:05:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCGMA5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Mar 2023 07:00:57 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA17930B3F;
-        Tue,  7 Mar 2023 04:00:54 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PWDXl435Nz6J7Pg;
-        Tue,  7 Mar 2023 20:00:23 +0800 (CST)
-Received: from localhost (10.126.173.40) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 7 Mar
- 2023 12:00:51 +0000
-Date:   Tue, 7 Mar 2023 12:00:50 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     James Morse <james.morse@arm.com>
-CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-        <kvmarm@lists.linux.dev>, <kvm@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-ia64@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "Oliver Upton" <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        <kangkang.shen@futurewei.com>
-Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual
- cpuhotplug
-Message-ID: <20230307120050.000032f1@Huawei.com>
-In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
-References: <20230203135043.409192-1-james.morse@arm.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S230267AbjCGNFJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Mar 2023 08:05:09 -0500
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on061e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::61e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114D4C14;
+        Tue,  7 Mar 2023 05:04:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l9wjEM+BXrUgXzeL253Oh7TI6xqk/bvmsEcrcAgBCpk=;
+ b=V/e049aKAUKOrFUy30U1Q1anGILL6BshMPbJWUsHeHPD/wZpeVMglOff/0BNKebpTxWgBlo02O5zso7z4HDSBq3l1dnqa5DJZObScfHnIcRWkW2P+judEb4eO3WjihI7e2bXR861FDUDxakshkHXsFKCPK3Z7G+wdGU1zypn3NM=
+Received: from DU2PR04CA0269.eurprd04.prod.outlook.com (2603:10a6:10:28e::34)
+ by GVXPR08MB7701.eurprd08.prod.outlook.com (2603:10a6:150:6d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
+ 2023 13:04:10 +0000
+Received: from DBAEUR03FT030.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:28e:cafe::33) by DU2PR04CA0269.outlook.office365.com
+ (2603:10a6:10:28e::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29 via Frontend
+ Transport; Tue, 7 Mar 2023 13:04:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT030.mail.protection.outlook.com (100.127.142.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.29 via Frontend Transport; Tue, 7 Mar 2023 13:04:10 +0000
+Received: ("Tessian outbound b29c0599cbc9:v135"); Tue, 07 Mar 2023 13:04:09 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: fbf96094be138c9e
+X-CR-MTA-TID: 64aa7808
+Received: from d596103510da.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 38AF58CA-0745-4C11-A8B7-2E631332AA62.1;
+        Tue, 07 Mar 2023 13:04:03 +0000
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id d596103510da.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 07 Mar 2023 13:04:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ThZSGarOVjX4SzRmJMrnGUz7SRLJhq6/vJBMqvTon6mZJ479zg0GXFhlyXpyV92XWavns5aiYa/cVS1/y+Vr1gONCgvybeLgVHDrUvm51SJktZZPuRSNIItET3PaHGrYOTKYZGg7B0Vkmht1KwT4TAH2KkOkTNQ9VMwlcX7rPONPRSGnzcY8YbKNGd7020poOKxNmccG4rKWNFLGOSv1E66t+7WOfY8p8UuKX36WJuAWpa/88dEKF+hrqHxdimtnwPUwjDM6nmMBIkSjYer5qbTJD1YrCU3M8fVptJcT5nnFXiredXlcsk+02TfGauklz5rdCF8nVFNrmzwXpynKaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l9wjEM+BXrUgXzeL253Oh7TI6xqk/bvmsEcrcAgBCpk=;
+ b=V3MuoKc6YawCHfzUg096Bq0yP32wQ6DygRFG+L2Gp3PpFc3IdoXBKxGBveHTEBuK+cnxpVoyBJU32DMe8zBR/bVhLdYuwl/mhPBd+T93AsH+hRNJL8i5B2PWIqFfpBjYKrH3OYZO0uFJWdsLgmjj0o17+R/zBOtLqzeZiu3GxErEiHg7SfDrk+zTUsMp7VRiUAqnQWfC1eQrWEAS13P66KGUtUupDhJOFszZJ9iqi2WTOj4UBlw4+//x9pKQwYaZ3U7qo3lublJHUtlgSOzSXihMrOzrjSDV05BwPWR0AlJAPY8RO7hsQzcijqrBNYYAKZ3cSvgV7XH3Xet8pI51tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l9wjEM+BXrUgXzeL253Oh7TI6xqk/bvmsEcrcAgBCpk=;
+ b=V/e049aKAUKOrFUy30U1Q1anGILL6BshMPbJWUsHeHPD/wZpeVMglOff/0BNKebpTxWgBlo02O5zso7z4HDSBq3l1dnqa5DJZObScfHnIcRWkW2P+judEb4eO3WjihI7e2bXR861FDUDxakshkHXsFKCPK3Z7G+wdGU1zypn3NM=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by DU2PR08MB10105.eurprd08.prod.outlook.com (2603:10a6:10:46c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.23; Tue, 7 Mar
+ 2023 13:03:57 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
+ 13:03:57 +0000
+Date:   Tue, 7 Mar 2023 13:03:41 +0000
+From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>, "nd@arm.com" <nd@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZAc2LQEfvRLCknQQ@arm.com>
+References: <Y/9fdYQ8Cd0GI+8C@arm.com>
+ <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+ <df8ef3a9e5139655a223589c16a68393ab3f6d1d.camel@intel.com>
+ <ZADQISkczejfgdoS@arm.com>
+ <9714f724b53b04fdf69302c6850885f5dfbf3af5.camel@intel.com>
+ <ZAYS6CHuZ0MiFvmE@arm.com>
+ <87wn3tsuxf.fsf@oldenburg.str.redhat.com>
+ <a205aed2171a0a463e3bb7179e8dd63bd4012e7e.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a205aed2171a0a463e3bb7179e8dd63bd4012e7e.camel@intel.com>
+X-ClientProxiedBy: LO3P265CA0016.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:bb::21) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.173.40]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DU2PR08MB10105:EE_|DBAEUR03FT030:EE_|GVXPR08MB7701:EE_
+X-MS-Office365-Filtering-Correlation-Id: a00dce6e-e15f-4c84-cdd7-08db1f0c711c
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: yYGPmxYeNWEoRIdcLQmOVQM2uEI9HDgORbZGJjKq06OUzn4QbVUOVIQBNfS4nHH//FmkCH6nbcmW4r5RPY9MijUDEupQ0kXG3vq3DxeTLzrWq6YTIOKpkREvia8ceja5h9NRy81yur4Dnkw8qj+UPC7tWKcWeA6vLpBG4OO4jJMFCn09Wyvs5cBD0sxYZOEVlhZvjNu3eJOfJzc3IbZYsFXgqETu9/atAkvRbe+xNFUjMFdm+AsqSUOWrgZWEhyWueQ3R7QjssOuqnBggySQhP2vLA7lB9c095Kl3Nw99IyZvOGrrre9QKnrjTe7QadSLwuNh7RJvfhKxLcfncWI9OLOiIAumTsBDe66vSea+Bcw4YytwggNa418mUnail7KNpmntQd1VJeF1bC7RpiVzctZRSEO1vMgPBV93iUi6i3IbMW3V3V56uiOMAEwjqE4exUMe0Krq5DiI7Db3/+M5g7fmWq2o+5XTxPED24V11WjpHxXa4ff1PvsocIKKuSv20ALAXodQobAdd9tEkz9aduLiQyzksTZMwtd8W9RcQ8ywjJ9uvcldSjuMgsQGy6fCFN9hoVg2PkK+Q6r0F94li04BLSRVeWZ8ho7NWqYm/s8pBA50xcFoa3ZhT2Ps7Oaw66Vuzji50waUYv9vK45Sw==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199018)(66899018)(478600001)(83380400001)(6666004)(36756003)(110136005)(54906003)(316002)(38100700002)(186003)(6512007)(26005)(6486002)(6506007)(66556008)(2906002)(2616005)(5660300002)(7406005)(7416002)(8936002)(4326008)(41300700001)(66476007)(66946007)(86362001)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10105
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT030.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 9d5f05ba-a605-456f-a355-08db1f0c6889
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mpaxp6nTJm470b0iVppdp750omS7rsC78wDkULbC+h1FkGjdiytBVUy29rxsBjWVnYjLV9uc9dC6K4iF7P3Sf2F197oPHGH3GLeWtOIW7K91jX4aSrRmJa6kHFlcfG611ILw8adfL5i0Bxxlvg6SFt0i/srNUPBBMKb2zLN2AMkmHFf49DdIh0JZ5DKUOAhv/enHrR8Yh0vV2GLZSDaTwadlIw3cWA7gimVVAug5HVbvuJZeEn0eoRtnyz4SpagTu3EJaOuyw7AiGE2+dz3aIRGtwnC/HOjR9IOvxA9+7iTtCl4atOAqhueHcIJ1UPT/H58jKZIaoGCqe76HDecrTRROkwsXPA9PYblVgXa76svcQThPdeHhUbBJ8meDEvXV5BS1gJABkS860MuEPuxSism49mau3tiD9d0Ss0IoTdT1emqPwKXQDz9IebZRZKJxDdw7TP9ZyHzy2iCwBDEnlRzIwr9O0gWfHE0/63kQsWOy6DCiN2SEiVEU3hLzyjP6RBvmq6xlFTgLVd3O2tV4trFGer/SKcIk7HE0mvkpLXnIO11oDaybGjUYxjblOOsj8YDHUorJncJcSeUvLhj94z2VKyKIEGaiy2jSz54EbwivdOJ/UWZfmp+Le14pqanoIp/+B7gr3xln6dLJj6gtpX1GR7Vo+Diluysd1M5ruBEbe4c/syOcnrVjo++8obbyTFgvX1C0Sown+V0LJNko+Q==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199018)(40470700004)(46966006)(36840700001)(83380400001)(336012)(82310400005)(2906002)(2616005)(47076005)(66899018)(450100002)(70206006)(4326008)(8676002)(5660300002)(36860700001)(26005)(186003)(70586007)(41300700001)(81166007)(8936002)(36756003)(6666004)(107886003)(82740400003)(478600001)(6486002)(40480700001)(356005)(40460700003)(54906003)(6512007)(6506007)(316002)(110136005)(86362001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 13:04:10.0682
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a00dce6e-e15f-4c84-cdd7-08db1f0c711c
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT030.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7701
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri,  3 Feb 2023 13:50:11 +0000
-James Morse <james.morse@arm.com> wrote:
+The 03/06/2023 18:08, Edgecombe, Rick P wrote:
+> On Mon, 2023-03-06 at 17:31 +0100, Florian Weimer wrote:
+> > I assume there is no desire at all on the kernel side that
+> > sigaltstack
+> > transparently allocates the shadow stack?  
+> 
+> It could have some nice benefit for some apps, so I did look into it.
+> 
+> > Because there is no
+> > deallocation function today for sigaltstack?
+> 
+> Yea, this is why we can't do it transparently. There was some
+> discussion up the thread on this.
 
+changing/disabling the alt stack is not valid while a handler is
+executing on it. if we don't allow jumping out and back to an
+alt stack (swapcontext) then there can be only one alt stack
+live per thread and change/disable can do the shadow stack free.
 
-...
+if jump back is allowed (linux even makes it race-free with
+SS_AUTODISARM) then the life-time of alt stack is extended
+beyond change/disable (jump back to an unregistered alt stack).
 
-> On a system that supports cpuhotplug the MADT has to describe every possible
-> CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
-> the guest is started.
-> With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
-> policy about which CPUs can be brought online.
-> 
-> This series adds support for virtual-cpuhotplug as exactly that: firmware
-> policy. This may even work on a physical machine too; for a guest the part of
-> firmware is played by the VMM. (typically Qemu).
-> 
-> PSCI support is modified to return 'DENIED' if the CPU can't be brought
-> online/enabled yet. The CPU object's _STA method's enabled bit is used to
-> indicate firmware's current disposition. If the CPU has its enabled bit clear,
-> it will not be registered with sysfs, and attempts to bring it online will
-> fail. The notifications that _STA has changed its value then work in the same
-> way as physical hotplug, and firmware can cause the CPU to be registered some
-> time later, allowing it to be brought online.
+to support jump back to an alt stack the requirements are
 
-Hi James,
+1) user has to manage an alt shadow stack together with the alt
+   stack (requies user code change, not just libc).
 
-As we discussed on an LOD call a while back, I think that we need some path to
-find out if the guest supports vCPU HP or not so that info can be queried by
-an orchestrator / libvirt etc.  In general the entity responsible for allocating
-extra vCPUs may not know what support the VM has for this feature.
-
-There are various ways we could get this information into the VMM.
-My immediate thought is to use one of the ACPI interfaces that lets us write
-AML that can set an emulated register. A query to the VMM can check if this
-register is set.
-
-So options.
-
-_OSI() - Deprecated on ARM64 so lets not use that ;)
-_OSC() - Could add a bit to Table 6.13 Platform-Wide Capabilites in ACPI 6.5 spec.
-         Given x86 has a similar online capable bit perhaps this is the best option
-         though it is the one that requires a formal code first proposal to ASWG.
-_OSC() - Could add a new UUID and put it under a suitable device - maybe all CPUs?
-         You could definitely argue this feature is an operating system property.
-_DSM() - Similar to OSC but always under a device.
-         Whilst can be used for this I'm not sure it really matches intended usecase.
-
-Assuming everyone agrees this bit of introspection is useful,
-Rafael / other ACPI specialists: Any suggestions on how best to do this?
-
-Jonathan
-
-
-
-
-
-> 
-> This creates something that looks like cpuhotplug to user-space, as the sysfs
-> files appear and disappear, and the udev notifications look the same.
-> 
-> One notable difference is the CPU present mask, which is exposed via sysfs.
-> Because the CPUs remain present throughout, they can still be seen in that mask.
-> This value does get used by webbrowsers to estimate the number of CPUs
-> as the CPU online mask is constantly changed on mobile phones.
-> 
-> Linux is tolerant of PSCI returning errors, as its always been allowed to do
-> that. To avoid confusing OS that can't tolerate this, we needed an additional
-> bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
-> appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
-> has a different bit position in the GICC.
-> 
-> This code is unconditionally enabled for all ACPI architectures.
-> If there are problems with firmware tables on some devices, the CPUs will
-> already be online by the time the acpi_processor_make_enabled() is called.
-> A mismatch here causes a firmware-bug message and kernel taint. This should
-> only affect people with broken firmware who also boot with maxcpus=1, and
-> bring CPUs online later.
-> 
-> I had a go at switching the remaining architectures over to GENERIC_CPU_DEVICES,
-> so that the Kconfig symbol can be removed, but I got stuck with powerpc
-> and s390.
-> 
-> 
-> The first patch has already been posted as a fix here:
-> https://www.spinics.net/lists/linux-ia64/msg21920.html
-> I've only build tested Loongarch and ia64.
-> 
-> 
-> If folk want to play along at home, you'll need a copy of Qemu that supports this.
-> https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
-> 
-> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
-> to match your host kernel. Replace your '-smp' argument with something like:
-> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
-> 
-> then feed the following to the Qemu montior;
-> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
-> | (qemu) device_del cpu1
-> 
-> 
-> This series is based on v6.2-rc3, and can be retrieved from:
-> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
-> 
-> 
-> Thanks,
-> 
-> James Morse (29):
->   ia64: Fix build error due to switch case label appearing next to
->     declaration
->   ACPI: Move ACPI_HOTPLUG_CPU to be enabled per architecture
->   drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
->   drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden
->   drivers: base: Move cpu_dev_init() after node_dev_init()
->   arm64: setup: Switch over to GENERIC_CPU_DEVICES using
->     arch_register_cpu()
->   ia64/topology: Switch over to GENERIC_CPU_DEVICES
->   x86/topology: Switch over to GENERIC_CPU_DEVICES
->   LoongArch: Switch over to GENERIC_CPU_DEVICES
->   arch_topology: Make register_cpu_capacity_sysctl() tolerant to late
->     CPUs
->   ACPI: processor: Add support for processors described as container
->     packages
->   ACPI: processor: Register CPUs that are online, but not described in
->     the DSDT
->   ACPI: processor: Register all CPUs from acpi_processor_get_info()
->   ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
->   ACPI: Move acpi_bus_trim_one() before acpi_scan_hot_remove()
->   ACPI: Rename acpi_processor_hotadd_init and remove pre-processor
->     guards
->   ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
->   ACPI: Check _STA present bit before making CPUs not present
->   ACPI: Warn when the present bit changes but the feature is not enabled
->   drivers: base: Implement weak arch_unregister_cpu()
->   LoongArch: Use the __weak version of arch_unregister_cpu()
->   arm64: acpi: Move get_cpu_for_acpi_id() to a header
->   ACPICA: Add new MADT GICC flags fields [code first?]
->   arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a
->     helper
->   irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
->   irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
->     CPUs
->   ACPI: add support to register CPUs based on the _STA enabled bit
->   arm64: document virtual CPU hotplug's expectations
->   cpumask: Add enabled cpumask for present CPUs that can be brought
->     online
-> 
-> Jean-Philippe Brucker (3):
->   arm64: psci: Ignore DENIED CPUs
->   KVM: arm64: Pass hypercalls to userspace
->   KVM: arm64: Pass PSCI calls to userspace
-> 
->  Documentation/arm64/cpu-hotplug.rst       |  79 ++++++++++++
->  Documentation/arm64/index.rst             |   1 +
->  Documentation/virt/kvm/api.rst            |  31 ++++-
->  Documentation/virt/kvm/arm/hypercalls.rst |   1 +
->  arch/arm64/Kconfig                        |   1 +
->  arch/arm64/include/asm/acpi.h             |  11 ++
->  arch/arm64/include/asm/cpu.h              |   1 -
->  arch/arm64/include/asm/kvm_host.h         |   2 +
->  arch/arm64/kernel/acpi_numa.c             |  11 --
->  arch/arm64/kernel/psci.c                  |   2 +-
->  arch/arm64/kernel/setup.c                 |  13 +-
->  arch/arm64/kernel/smp.c                   |   5 +-
->  arch/arm64/kvm/arm.c                      |  15 ++-
->  arch/arm64/kvm/hypercalls.c               |  28 ++++-
->  arch/arm64/kvm/psci.c                     |  13 ++
->  arch/ia64/Kconfig                         |   2 +
->  arch/ia64/include/asm/acpi.h              |   2 +-
->  arch/ia64/include/asm/cpu.h               |  11 --
->  arch/ia64/kernel/acpi.c                   |   6 +-
->  arch/ia64/kernel/setup.c                  |   2 +-
->  arch/ia64/kernel/sys_ia64.c               |   7 +-
->  arch/ia64/kernel/topology.c               |  35 +-----
->  arch/loongarch/Kconfig                    |   2 +
->  arch/loongarch/kernel/topology.c          |  31 +----
->  arch/x86/Kconfig                          |   2 +
->  arch/x86/include/asm/cpu.h                |   6 -
->  arch/x86/kernel/acpi/boot.c               |   4 +-
->  arch/x86/kernel/topology.c                |  19 +--
->  drivers/acpi/Kconfig                      |   5 +-
->  drivers/acpi/acpi_processor.c             | 146 +++++++++++++++++-----
->  drivers/acpi/processor_core.c             |   2 +-
->  drivers/acpi/scan.c                       | 116 +++++++++++------
->  drivers/base/arch_topology.c              |  38 ++++--
->  drivers/base/cpu.c                        |  31 ++++-
->  drivers/base/init.c                       |   2 +-
->  drivers/firmware/psci/psci.c              |   2 +
->  drivers/irqchip/irq-gic-v3.c              |  38 +++---
->  include/acpi/acpi_bus.h                   |   1 +
->  include/acpi/actbl2.h                     |   1 +
->  include/kvm/arm_hypercalls.h              |   1 +
->  include/kvm/arm_psci.h                    |   4 +
->  include/linux/acpi.h                      |  10 +-
->  include/linux/cpu.h                       |   6 +
->  include/linux/cpumask.h                   |  25 ++++
->  include/uapi/linux/kvm.h                  |   2 +
->  kernel/cpu.c                              |   3 +
->  46 files changed, 532 insertions(+), 244 deletions(-)
->  create mode 100644 Documentation/arm64/cpu-hotplug.rst
-> 
-
+2) kernel has to push a restore token on the thread shadow stack
+   on signal entry (at least in case of alt shadow stack, and
+   deal with corner cases around shadow stack overflow).
