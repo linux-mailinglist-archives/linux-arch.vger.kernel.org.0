@@ -2,75 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080BD6B002F
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 08:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABAD6B0217
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 09:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjCHHsS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Mar 2023 02:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S230167AbjCHIyF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Mar 2023 03:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjCHHsS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Mar 2023 02:48:18 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449764ECD9;
-        Tue,  7 Mar 2023 23:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678261696; x=1709797696;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=MPjpMnF2pYRp601r/CV/4rcJZOvf9VGuPDqjdu0MkGE=;
-  b=laniImVi/D2OeyIXehqaJ1zzZgBwQv/O8iHVcJwyW9RnrGhjjeh5Iy06
-   v/3ZjqzAybk9UYcf+LicxxLSkK/v8/0566QBATg8EKngSTM4qbxaDIgKt
-   jrJ9v+tIdSTKVyt8CYxuU3dk3u84bx/6dlQ1jdYkTTqC17CYUes/7tpyl
-   lv0EJXHvXfE8QxlbpXt36kY3AnpkJ6sKiC0TWYRX2DtpGa2l6MHBdKVKA
-   ABEllsjxoS+0r4LeWFg47aYl6KFICzMzCW2SLHf9BDh2PnolOfzebFxPb
-   lKAoeYqSQe0OalzGEQLRmmxgk7hRmQJkLcTwAjKk/K6tfKUDyFgXLJ+E8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363727024"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="363727024"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 23:48:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="745821383"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="745821383"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Mar 2023 23:48:04 -0800
-Date:   Wed, 8 Mar 2023 15:40:26 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     seanjc@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
-        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        kirill.shutemov@linux.intel.com, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-Message-ID: <20230308074026.GA2183207@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20230128140030.GB700688@chaop.bj.intel.com>
- <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+        with ESMTP id S229895AbjCHIyE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Mar 2023 03:54:04 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02149580E8;
+        Wed,  8 Mar 2023 00:54:01 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0D24B1EC068F;
+        Wed,  8 Mar 2023 09:54:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678265640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Lx+RtzEAI/Slt9PnACaAiwIIiVncBJt8vf25npLTWIw=;
+        b=Tq5bUtS4Q5K9bX5guN+oxYuAy7F6QgZ2H55hEoG3FMab4FjiaTFTYnjGlWPRxMH3d6tF1U
+        AL+Z5rk8nMkZp9oAb33R9UMNB9T0zBgq1lFONG2kG9ezmNUmdEOv2+WpNqS/oGO6X+ue/B
+        RvMeh/XO2tf5CdetPqmMpOYWWW2TKlA=
+Date:   Wed, 8 Mar 2023 09:53:54 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com
+Subject: Re: [PATCH v7 26/41] mm: Warn on shadow stack memory in wrong vma
+Message-ID: <ZAhNInCPPYt0q6Kl@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-27-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20230227222957.24501-27-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,93 +75,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
-> Chao Peng <chao.p.peng@linux.intel.com> writes:
+On Mon, Feb 27, 2023 at 02:29:42PM -0800, Rick Edgecombe wrote:
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
 > 
-> > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
-> > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > ...
-> > > Strongly prefer to use similar logic to existing code that detects wraps:
+> One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
+> treated as shadow by the CPU, but this combination used to be created by
+> the kernel on x86. Previous patches have changed the kernel to now avoid
+> creating these PTEs unless they are for shadow stack memory. In case any
+> missed corners of the kernel are still creating PTEs like this for
+> non-shadow stack memory, and to catch any re-introductions of the logic,
+> warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
+> stack VMAs when they are being zapped. This won't catch transient cases
+> but should have decent coverage. It will be compiled out when shadow
+> stack is not configured.
 > 
-> > > 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
-> 
-> > > This is also where I'd like to add the "gfn is aligned to offset"
-> > > check, though
-> > > my brain is too fried to figure that out right now.
-> 
-> > Used count_trailing_zeros() for this TODO, unsure we have other better
-> > approach.
-> 
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index afc8c26fa652..fd34c5f7cd2f 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -56,6 +56,7 @@
-> >   #include <asm/processor.h>
-> >   #include <asm/ioctl.h>
-> >   #include <linux/uaccess.h>
-> > +#include <linux/count_zeros.h>
-> 
-> >   #include "coalesced_mmio.h"
-> >   #include "async_pf.h"
-> > @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct
-> > kvm_memslots *slots, int id,
-> >   	return false;
-> >   }
-> 
-> > +/*
-> > + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
-> > + */
-> > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
-> > +{
-> > +	if (!offset)
-> > +		return true;
-> > +	if (!gpa)
-> > +		return false;
-> > +
-> > +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
-> 
-> Perhaps we could do something like
-> 
-> #define lowest_set_bit(val) (val & -val)
-> 
-> and use
-> 
-> return lowest_set_bit(offset) >= lowest_set_bit(gpa);
+> In order to check if a pte is shadow stack in core mm code, add two arch
 
-I see kernel already has fls64(), that looks what we need ;)
+s/pte/PTE/
 
-> 
-> Please help me to understand: why must ALIGNMENT(offset) >=
-> ALIGNMENT(gpa)? Why is it not sufficient to have both gpa and offset be
-> aligned to PAGE_SIZE?
+-- 
+Regards/Gruss,
+    Boris.
 
-Yes, it's sufficient. Here we just want to be conservative on the uAPI
-as Sean explained this at [1]:
-
-  I would rather reject memslot if the gfn has lesser alignment than the
-  offset. I'm totally ok with this approach _if_ there's a use case. 
-  Until such a use case presents itself, I would rather be conservative
-  from a uAPI perspective.
-
-[1] https://lore.kernel.org/all/Y8HldeHBrw+OOZVm@google.com/
-
-Chao
-> 
-> > +}
-> > +
-> >   /*
-> >    * Allocate some memory and give it an address in the guest physical
-> > address
-> >    * space.
-> > @@ -2128,7 +2142,8 @@ int __kvm_set_memory_region(struct kvm *kvm,
-> >   	if (mem->flags & KVM_MEM_PRIVATE &&
-> >   	    (mem->restrictedmem_offset & (PAGE_SIZE - 1) ||
-> >   	     mem->restrictedmem_offset + mem->memory_size <
-> > mem->restrictedmem_offset ||
-> > -	     0 /* TODO: require gfn be aligned with restricted offset */))
-> > +	     !kvm_check_rmem_offset_alignment(mem->restrictedmem_offset,
-> > +					      mem->guest_phys_addr)))
-> >   		return -EINVAL;
-> >   	if (as_id >= kvm_arch_nr_memslot_as_ids(kvm) || id >= KVM_MEM_SLOTS_NUM)
-> >   		return -EINVAL;
+https://people.kernel.org/tglx/notes-about-netiquette
