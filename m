@@ -2,73 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858B16B0C9E
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 16:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFAB6B0E6C
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 17:18:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjCHP0M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Mar 2023 10:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S230151AbjCHQSi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Mar 2023 11:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjCHP0L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Mar 2023 10:26:11 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD95D893;
-        Wed,  8 Mar 2023 07:26:06 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E4F2B1EC053F;
-        Wed,  8 Mar 2023 16:26:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678289165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0YZFEJ4cAs1XpubhR+bVW6Ra4NdOXmwmbEoV5/5yyRc=;
-        b=dtU8MD7MnP6eQPuPrVOrLw3IOhDbONhvPWew+BaeOWqCec5Wv2fzyDEfHf4wjHzLBlYNYH
-        Z9maXvegSwDqzaejWBASPjzFR36tHjxJJ6jB9g4zq8roVzifvs06B6rFJJjnkgcS3kZlvd
-        zE6MuI7N30FA56Zls5hIliZDyjtUSm4=
-Date:   Wed, 8 Mar 2023 16:26:00 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 30/41] x86/shstk: Handle thread shadow stack
-Message-ID: <ZAipCNBCtPA2bcck@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-31-rick.p.edgecombe@intel.com>
+        with ESMTP id S229817AbjCHQSe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Mar 2023 11:18:34 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565A45C9D8;
+        Wed,  8 Mar 2023 08:18:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TpTpFNetVpKd6xpNY5wi97fyHb0jYT9CFCWMOI6XG3zWjTNCQnS0BbrDZFF9/2+2Z/1cJCYAI2v1Ha0f/BiMYmRK00hTOh1mwoiW5Ymb56MRdeemLH1WEMImEYzBJVYTxXqObe/b749R5SpczWKqoIxpUqwGAM+SP/yDBgcUU2Sm423JTrxB6TMHrsY3V8rnB55e+6zaKScA7T3vyBEk/TCRfMyXWFauz4JAW1twqId4yas/XW40UlRlDTzi5CosvTibaLZFSZSbxjXbStLkI28lbejeZpLptUD77Lmnqrgq5tEzNpsje7frf123LgSd+dCkyP2MQXQm0rpP+gacVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m5KQkv9OMYdoR66YLzSYfcspeil79aV/4IT2zyy2NWU=;
+ b=fMWoNffoNx5WjvnIhfMDYlnks/znOBTJbSR56ZtMEmpyruHiZrzBHWcBsn6VTfVixR3L825I2FdxIPE5MfvqRCQJkHIe96m4QHXBM1BFDOKP8WqCFf/X2wFZAQwf6dFtFTa4wIq3lHMYhNqkcLI6OJgXCm1RdN+ikZE3zPPvTD5yVek8Yu8A60bNIMYzvQBzXYwSRemRgSORNyeQCpxyRm6CCONHWntUSZfHm0ZBgYLShUmaSNy36IuAtw4AvZF7+dMwZEyCGpNcZ2Xqc9l0Skof+cQjE/UOMYBE+50P0y7yFdakQY6XnY18AxcGYaNN517GeO1AR/VaduOan2OD9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m5KQkv9OMYdoR66YLzSYfcspeil79aV/4IT2zyy2NWU=;
+ b=B7GhCKsS9lvqPqe92RoDQX7Q/V/5LS4BidoGgiGhjpWTg2l//zvcVuAJoofDLtOPeOGjG8ZMm6gDoHvQEbUY4Cs4a96rVCG5UGobwsdQzhwFxKl4NJY7iEglPP/tiORs2xsIpZ6O4IKwWSL4WFPZbusapRKmDgtPSUaXvaJfYjo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
+ DM4PR12MB7622.namprd12.prod.outlook.com (2603:10b6:8:109::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.28; Wed, 8 Mar 2023 16:18:28 +0000
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::bad5:8f56:fc07:15cf]) by DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::bad5:8f56:fc07:15cf%3]) with mapi id 15.20.6156.028; Wed, 8 Mar 2023
+ 16:18:28 +0000
+Message-ID: <5061dfee-636c-6b68-8f33-5f32e5bfa093@amd.com>
+Date:   Wed, 8 Mar 2023 17:18:13 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH V3 13/16] x86/sev: Add Check of #HV event in path
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230122024607.788454-1-ltykernel@gmail.com>
+ <20230122024607.788454-14-ltykernel@gmail.com>
+ <e3c53388-f332-5b52-c724-a42d8ea624a7@amd.com>
+Content-Language: en-US
+In-Reply-To: <e3c53388-f332-5b52-c724-a42d8ea624a7@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0130.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::17) To DM6PR12MB2810.namprd12.prod.outlook.com
+ (2603:10b6:5:41::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-31-rick.p.edgecombe@intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|DM4PR12MB7622:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e3c610b-15da-4824-d10f-08db1ff0c062
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QwzbxmUSYcAAy77TAhAod8Uy3Jax5z+I8OZfxQCkc+k4RBzqVQ4dHHOoNt4Lg49FkQXFBFjtd0vn9A2aJIEohYH9925Ud7wqWgZ27PhgNxqRhw1HlxmTkUeliUT6Mm5CVgdTv+S/h4cMwOsi4LISABCWN34DsANY6+RqR4nrBMR57UFu0TKUZPK5q6yM+2ZY7W2MWq0mumcrOVvqhiVkxoYnSYwDQSF8QMv1pcDTBDmu1pEktrjhkNE9IyyG8gLBYjm7VpmvyAn6TOm1ZCeH03m+JkK3rj/6X5CbinqNMK+QWO4WJQihPNb8Hb7KlJoEAfW1E1KFDeXO1kKrKJbtDvg4zy6B4gIv1e9DfDMX9zMpSVey31D/eUCh6CIOofdOAEWc50YyQJ6yxIUPdiGLzXlMA/uQOWtjKcUzzEM9xwORdQmwXb8mvwvxZkCg+h2NrUoDkJ/CO+PCdyBVZb3ywU35IIqdQXXHxHNIe2jMqRxKQOyoJvd+JEVxWcQrdR9O/197lD2+ZrHkysL4uQVCLH6XLJKHvrud0FJACRzj07Wc5RD655iwrFOQK0aO8gT3kI6WgQP4O6d5g6gc2QjqDPB1ykCUwTAUGMa7skH7naNSZ0PUX0Hdk52xS1wTEVZz10FO1+wBU6CVOw3vHHyY7ZUUz+C3VX6y9Ft4K0UbyHojq6rAKm+owxtusKqbR33r3+qpWo5EUvEUpj9KEdjXcn5Hi/oNpdHQocGK48NId+BE9KASEcrI5CunHAX7m+GN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(451199018)(31686004)(316002)(36756003)(83380400001)(31696002)(86362001)(6506007)(6486002)(186003)(45080400002)(66476007)(2906002)(7406005)(6666004)(41300700001)(7416002)(8676002)(66946007)(2616005)(6512007)(26005)(478600001)(66556008)(53546011)(8936002)(4326008)(38100700002)(5660300002)(921005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWd2MFdtcW1TSTg5eUJudDZtNFJtdWlicll0NDUxWWl6T1p1dHhjNytEY2NW?=
+ =?utf-8?B?U2krQXIwdEpJRTRvYXdBY0VBSE9VQ0luTG1VWUd0SFJXOUVxREZrWVJqNE5s?=
+ =?utf-8?B?WGxINks4QWs5SEYrNmN5RFlRRmN5cVRkYVZBUGxJVWljSkFzb3ZIMWQwdGtR?=
+ =?utf-8?B?aDI0bkI1enBzVjlsVUdlc1RpUHVENFFuRjQyMUhzdkZrR2lCaUJRaFFoU1RO?=
+ =?utf-8?B?RldLNk9abkRBVWZNOVkzdCtMQms5bkVMWDgzTjl2YlVySGV4ekN3NVh6eEhY?=
+ =?utf-8?B?RVlxZFpYZDJibW1oZXl6T3ZWcHhDOCszN3VBN1FsR3VjWHlQRnlTVXZuSGg2?=
+ =?utf-8?B?d292NndxalBVZk42Z2YrWXdZV1RGUkFjVEZ2QUczUTNPbmE5aFRoa0orb211?=
+ =?utf-8?B?bG5HZ0pQdTl3NklWWS93emFhSzQwZWFWc05sUUx4YWREZElZZko5Ly9hNHpp?=
+ =?utf-8?B?T1RCWHdaMFNaLzZsdEtOZkZEQjNCNmp4alptVURkMExVRkhjQnJISTVlSkNw?=
+ =?utf-8?B?Q1MyYWd5anlBdXZzTC9TZjlTOGJ5b2lxZ244Zm5zd0x4MVk4SzdsK0JOWWNk?=
+ =?utf-8?B?UXh3bTFDQTRLNTdzZ1dKTUQzQ3NCWEZJaGE4eTVkdG5LQ1RqZGtHYjg1bjQv?=
+ =?utf-8?B?TDdrZmJwNE03ZGMvejcva3RjaFRhdkQyUmRKZ3JwVGpwUnVDVjJzNUpLaUJZ?=
+ =?utf-8?B?KytUWmx1MHdUdTliZ1FWQU9SeUg1RGxEQnYwVjV2MmVEa2dvd2U1SU9IOVFx?=
+ =?utf-8?B?cm95dFlrY1BFKzdJM21JY2ZXRHBKTmR4RFZtTlFXZ1JDUDM0ajBXdnFWNCtJ?=
+ =?utf-8?B?YTRJMzhlNFFmZ05UU0JNQjRvZFBGOFRYUExPMnl3cGlYZWpsUDdFN1lSeFZ4?=
+ =?utf-8?B?U01CUUg4cTVYUFBYeUJKTSs0MzN4RUNteHlYZVR3UjRJcG42YnVISVhrRVNr?=
+ =?utf-8?B?bTFPM0VseFUxaXA4bEp3Uld5enNsTHVFZkxJdGxYeVZaUTJmY21sMTczVzVG?=
+ =?utf-8?B?Z1JHZWZEVEo3dU0xRkxzTlAzZWJ1bkFKNnVCT0xlYVQvZG5oZXhoeUlzZnZW?=
+ =?utf-8?B?R1RkZVNkUWk3YkNRMkNiVDBlWVB2QmFLcXdWalcvajl2MEJ3Tm1kTjl2Y0ZQ?=
+ =?utf-8?B?ZVNRZ2xVYUV3QmlpMGRMcEluaE1mSWt1czFQZVlUaENDNmpjUS9TQStwVUJB?=
+ =?utf-8?B?ejJoNlZKeVRTRmRyRUxLWE00RWp6ZmVOejRWeXVKd3NsTkZVZW9peHB5SXdx?=
+ =?utf-8?B?a1p0NWZqQzZwaFFJZ2d4K3dEblFjM2I1OXVXR1hZZS9mTUxabllvcGRnbEVF?=
+ =?utf-8?B?T3dBUW5HR1hTbW1uYzU3eGM5SnBWc1d6SkRYYWdmZ3lFV3hhWDExaENpR3lo?=
+ =?utf-8?B?STE1RHdQMzJVbzhWZnhNdzdoK08xMldld0RWamt0V0lmVGhFeXpVWHZsQWNO?=
+ =?utf-8?B?TlE1Z0tlNXY5cHNhQnlHaSttVS9vR0tQNjBQeTFjWEEyTWZjeS84aGhKNlBU?=
+ =?utf-8?B?OHFPKzdFS2pQRFRHZ0tFeml1WWx6N0E2MHNKYnlYS0d0VjBVVzNnQmt0UHhB?=
+ =?utf-8?B?V0lTYWNsTVZOb0duV2dRV0xPUm5qcUh3MVZJRUhTR1dtdHNhZHpSSTJzQTZq?=
+ =?utf-8?B?b0RzMGNjNEY2WTI3eWJwejBwNkVVNnNLZXVoV21ESmxiWE14dWhwQXVNeVlJ?=
+ =?utf-8?B?bG81anprMHM0U3B0dkF1VjJHNTFSTUsvZEFlVjlnM2hFMHJvc1d4c0xPNTN5?=
+ =?utf-8?B?UGFHaFVDejdJRTBOa0QybkRqRHh5SS90bjFDL3NKSjM5a3lTUG1xa3BwTTNO?=
+ =?utf-8?B?RWdON2JNTjFuRytlQlRhUXlYd21yOHBmbGJ0OFhCQ2xob3ZabEdNV3pIZWxa?=
+ =?utf-8?B?OGs1bnc1b0xyVytPdkFFK2M2aU1sZ3VmeGNlU1Z6RVl0cUI1c3VzOGlSVkhv?=
+ =?utf-8?B?NGNnN2NuYnJJL2pvc25QbWcvOWd2L2dFYUovMnhaS3JoWThiR0V2cXRUK0tL?=
+ =?utf-8?B?YUJzOHlpT1RXdFdsMVRDVU1qSlJBYXBHVUNLd2xKQndqOHJXWlM2QVpGRVBN?=
+ =?utf-8?B?R1JrdGdmWUZha0dSbW5WZ28vK2FjdVdrK21jZkphNnQyYVVtMEVyalQzMStu?=
+ =?utf-8?Q?8gV/GssbBylHNrV7qnuUIRPOx?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e3c610b-15da-4824-d10f-08db1ff0c062
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 16:18:28.6651
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q00zt1nqUdYoFYzYe2slpyaL+SEq/5BrQQRb/stG3rRDU85GorG1UYFPq3vJHwg9IDo+RE4Re/eM/XKiUYPvpA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7622
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,187 +137,116 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:46PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+On 3/1/2023 12:11 PM, Gupta, Pankaj wrote:
+> On 1/22/2023 3:46 AM, Tianyu Lan wrote:
+>> From: Tianyu Lan <tiala@microsoft.com>
+>>
+>> Add check_hv_pending() and check_hv_pending_after_irq() to
+>> check queued #HV event when irq is disabled.
+>>
+>> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+>> ---
+>>   arch/x86/entry/entry_64.S       | 18 +++++++++++++++
+>>   arch/x86/include/asm/irqflags.h | 10 +++++++++
+>>   arch/x86/kernel/sev.c           | 39 +++++++++++++++++++++++++++++++++
+>>   3 files changed, 67 insertions(+)
+>>
+>> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+>> index 6baec7653f19..aec8dc4443d1 100644
+>> --- a/arch/x86/entry/entry_64.S
+>> +++ b/arch/x86/entry/entry_64.S
+>> @@ -1064,6 +1064,15 @@ SYM_CODE_END(paranoid_entry)
+>>    * R15 - old SPEC_CTRL
+>>    */
+>>   SYM_CODE_START_LOCAL(paranoid_exit)
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +    /*
+>> +     * If a #HV was delivered during execution and interrupts were
+>> +     * disabled, then check if it can be handled before the iret
+>> +     * (which may re-enable interrupts).
+>> +     */
+>> +    mov     %rsp, %rdi
+>> +    call    check_hv_pending
+>> +#endif
+>>       UNWIND_HINT_REGS
+>>       /*
+>> @@ -1188,6 +1197,15 @@ SYM_CODE_START(error_entry)
+>>   SYM_CODE_END(error_entry)
+>>   SYM_CODE_START_LOCAL(error_return)
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +    /*
+>> +     * If a #HV was delivered during execution and interrupts were
+>> +     * disabled, then check if it can be handled before the iret
+>> +     * (which may re-enable interrupts).
+>> +     */
+>> +    mov     %rsp, %rdi
+>> +    call    check_hv_pending
+>> +#endif
+>>       UNWIND_HINT_REGS
+>>       DEBUG_ENTRY_ASSERT_IRQS_OFF
+>>       testb    $3, CS(%rsp)
+>> diff --git a/arch/x86/include/asm/irqflags.h 
+>> b/arch/x86/include/asm/irqflags.h
+>> index 7793e52d6237..fe46e59168dd 100644
+>> --- a/arch/x86/include/asm/irqflags.h
+>> +++ b/arch/x86/include/asm/irqflags.h
+>> @@ -14,6 +14,10 @@
+>>   /*
+>>    * Interrupt control:
+>>    */
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +void check_hv_pending(struct pt_regs *regs);
+>> +void check_hv_pending_irq_enable(void);
+>> +#endif
+>>   /* Declaration required for gcc < 4.9 to prevent 
+>> -Werror=missing-prototypes */
+>>   extern inline unsigned long native_save_fl(void);
+>> @@ -43,12 +47,18 @@ static __always_inline void native_irq_disable(void)
+>>   static __always_inline void native_irq_enable(void)
+>>   {
+>>       asm volatile("sti": : :"memory");
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +    check_hv_pending_irq_enable();
+>> +#endif
+>>   }
+>>   static inline __cpuidle void native_safe_halt(void)
+>>   {
+>>       mds_idle_clear_cpu_buffers();
+>>       asm volatile("sti; hlt": : :"memory");
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +    check_hv_pending_irq_enable();
+>> +#endif
+>>   }
+>>   static inline __cpuidle void native_halt(void)
+>> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+>> index a8862a2eff67..fe5e5e41433d 100644
+>> --- a/arch/x86/kernel/sev.c
+>> +++ b/arch/x86/kernel/sev.c
+>> @@ -179,6 +179,45 @@ void noinstr __sev_es_ist_enter(struct pt_regs 
+>> *regs)
+>>       this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], new_ist);
+>>   }
+>> +static void do_exc_hv(struct pt_regs *regs)
+>> +{
+>> +    /* Handle #HV exception. */
+>> +}
+>> +
+>> +void check_hv_pending(struct pt_regs *regs)
+>> +{
+>> +    if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+>> +        return;
+>> +
+>> +    if ((regs->flags & X86_EFLAGS_IF) == 0)
+>> +        return;
 > 
-> When a process is duplicated, but the child shares the address space with
-> the parent, there is potential for the threads sharing a single stack to
-> cause conflicts for each other. In the normal non-cet case this is handled
+> Will this return and prevent guest from executing NMI's
+> while irqs are disabled?
 
-"non-CET"
+I think we need to handle NMI's even when irqs are disabled.
 
-> in two ways.
-> 
-> With regular CLONE_VM a new stack is provided by userspace such that the
-> parent and child have different stacks.
-> 
-> For vfork, the parent is suspended until the child exits. So as long as
-> the child doesn't return from the vfork()/CLONE_VFORK calling function and
-> sticks to a limited set of operations, the parent and child can share the
-> same stack.
-> 
-> For shadow stack, these scenarios present similar sharing problems. For the
-> CLONE_VM case, the child and the parent must have separate shadow stacks.
-> Instead of changing clone to take a shadow stack, have the kernel just
-> allocate one and switch to it.
-> 
-> Use stack_size passed from clone3() syscall for thread shadow stack size. A
-> compat-mode thread shadow stack size is further reduced to 1/4. This
-> allows more threads to run in a 32-bit address space. The clone() does not
-> pass stack_size, which was added to clone3(). In that case, use
-> RLIMIT_STACK size and cap to 4 GB.
-> 
-> For shadow stack enabled vfork(), the parent and child can share the same
-> shadow stack, like they can share a normal stack. Since the parent is
-> suspended until the child terminates, the child will not interfere with
-> the parent while executing as long as it doesn't return from the vfork()
-> and overwrite up the shadow stack. The child can safely overwrite down
-> the shadow stack, as the parent can just overwrite this later. So CET does
-> not add any additional limitations for vfork().
-> 
-> Userspace implementing posix vfork() can actually prevent the child from
+As we reset "no_further_signal" in hv_raw_handle_exception()
+and return from check_hv_pending() when irqs are disabled, this
+can result in loss/delay of NMI event?
 
-"POSIX"
-
-...
-
-> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> index f851558b673f..bc3de4aeb661 100644
-> --- a/arch/x86/kernel/fpu/core.c
-> +++ b/arch/x86/kernel/fpu/core.c
-> @@ -552,8 +552,41 @@ static inline void fpu_inherit_perms(struct fpu *dst_fpu)
->  	}
->  }
->  
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
-> +{
-> +	struct cet_user_state *xstate;
-> +
-> +	/* If ssp update is not needed. */
-> +	if (!ssp)
-> +		return 0;
-> +
-> +	xstate = get_xsave_addr(&dst->thread.fpu.fpstate->regs.xsave,
-> +				XFEATURE_CET_USER);
-> +
-> +	/*
-> +	 * If there is a non-zero ssp, then 'dst' must be configured with a shadow
-> +	 * stack and the fpu state should be up to date since it was just copied
-> +	 * from the parent in fpu_clone(). So there must be a valid non-init CET
-> +	 * state location in the buffer.
-> +	 */
-> +	if (WARN_ON_ONCE(!xstate))
-> +		return 1;
-> +
-> +	xstate->user_ssp = (u64)ssp;
-> +
-> +	return 0;
-> +}
-> +#else
-> +static int update_fpu_shstk(struct task_struct *dst, unsigned long shstk_addr)
-								      ^^^^^^^^^^^
-ssp, like above.
-
-Better yet:
-
-static int update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
-{
-#ifdef CONFIG_X86_USER_SHADOW_STACK
-	...
-#endif
-	return 0;
-}
-
-and less ifdeffery.
-
-
-
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  /* Clone current's FPU state on fork */
-> -int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal)
-> +int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal,
-> +	      unsigned long ssp)
->  {
->  	struct fpu *src_fpu = &current->thread.fpu;
->  	struct fpu *dst_fpu = &dst->thread.fpu;
-> @@ -613,6 +646,12 @@ int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool minimal)
->  	if (use_xsave())
->  		dst_fpu->fpstate->regs.xsave.header.xfeatures &= ~XFEATURE_MASK_PASID;
->  
-> +	/*
-> +	 * Update shadow stack pointer, in case it changed during clone.
-> +	 */
-> +	if (update_fpu_shstk(dst, ssp))
-> +		return 1;
-> +
->  	trace_x86_fpu_copy_src(src_fpu);
->  	trace_x86_fpu_copy_dst(dst_fpu);
->  
-> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> index b650cde3f64d..bf703f53fa49 100644
-> --- a/arch/x86/kernel/process.c
-> +++ b/arch/x86/kernel/process.c
-> @@ -48,6 +48,7 @@
->  #include <asm/frame.h>
->  #include <asm/unwind.h>
->  #include <asm/tdx.h>
-> +#include <asm/shstk.h>
->  
->  #include "process.h"
->  
-> @@ -119,6 +120,7 @@ void exit_thread(struct task_struct *tsk)
->  
->  	free_vm86(t);
->  
-> +	shstk_free(tsk);
->  	fpu__drop(fpu);
->  }
->  
-> @@ -140,6 +142,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
->  	struct inactive_task_frame *frame;
->  	struct fork_frame *fork_frame;
->  	struct pt_regs *childregs;
-> +	unsigned long shstk_addr = 0;
->  	int ret = 0;
->  
->  	childregs = task_pt_regs(p);
-> @@ -174,7 +177,13 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
->  	frame->flags = X86_EFLAGS_FIXED;
->  #endif
->  
-> -	fpu_clone(p, clone_flags, args->fn);
-> +	/* Allocate a new shadow stack for pthread if needed */
-> +	ret = shstk_alloc_thread_stack(p, clone_flags, args->stack_size,
-> +				       &shstk_addr);
-
-That function will return 0 even if shstk_addr hasn't been written in it
-and you will continue merrily and call
-
-	fpu_clone(..., shstk_addr=0);
-
-why don't you return the shadow stack address or negative on error
-instead of adding an I/O parameter which is pretty much always nasty to
-deal with.
-
-
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	fpu_clone(p, clone_flags, args->fn, shstk_addr);
->  
->  	/* Kernel thread ? */
->  	if (unlikely(p->flags & PF_KTHREAD)) {
-
-...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Pankaj
