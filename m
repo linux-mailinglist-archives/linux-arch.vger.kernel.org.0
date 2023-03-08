@@ -2,135 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631EA6AF7D4
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Mar 2023 22:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21506AFAE7
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 01:13:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCGVmE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Mar 2023 16:42:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50030 "EHLO
+        id S229577AbjCHANb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Mar 2023 19:13:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjCGVmD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Mar 2023 16:42:03 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29961A6761
-        for <linux-arch@vger.kernel.org>; Tue,  7 Mar 2023 13:41:59 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id i3so15618522plg.6
-        for <linux-arch@vger.kernel.org>; Tue, 07 Mar 2023 13:41:59 -0800 (PST)
+        with ESMTP id S229651AbjCHAN3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Mar 2023 19:13:29 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA87521FD
+        for <linux-arch@vger.kernel.org>; Tue,  7 Mar 2023 16:13:27 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id l24-20020a25b318000000b007eba3f8e3baso15601030ybj.4
+        for <linux-arch@vger.kernel.org>; Tue, 07 Mar 2023 16:13:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678225318;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h0UBWEzua7mI1E3a/+R1pzklpJ+RGJpYFy9mijom/UM=;
-        b=3d0i9L9fgsM6wfDV6SgEVPe2doCmA84h8dgaHpMbejZeZuQRklJuURRf6PhkCN7ukc
-         w/n+8nbuC+OW0mQWtjtERbzb9wBvkWnsuB3UcR0sH2Ba3g7FDMT+jDol43sV0ZSapUuU
-         afFVzDtGs7qaCnWpNgGUvXPCI9VeRCtjLQt1T3AcBXMLT19wGawFny88dkq7b+SM519J
-         izcWM0iUW0/Sac/AVhLneLvdpP7x0olNKc4YqRIWvevDICe0+qs1ypmIQEYjXt6H2n6Q
-         PGyqmNUpfeGmcTALJ+qCkHjqjpTn7tbuCsOrFtOo3YqXRw3n/PRxx6fcIN5oBf8fOwBc
-         hPrQ==
+        d=google.com; s=20210112; t=1678234406;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mmMlzzjnms9LP64W1EI4s9J2Aar/VS+/OpXG4YzMt1g=;
+        b=DQipY5o6kwt2urMmc3ga0lGBCwLobU1Ifep42NoUNsZIX8Td2En8TfxAl5sbGzyNBB
+         LIWsf3t77LSuCc0pGvjcZjIWULi+KlePCMmeN/QbMHXhC1Ixa4kOh+7152WsxGf2VC2d
+         Ms1xKb6gHNm+/4O8RDcSjT+AzBbqUzpwW93RRiqm6+BJSL4+2HqKul5reyJxS2qUjQVn
+         TjBmoEh1iNCS+lDVRczhTC0nw7EmFFlXj/fUYAlIAjyVh4kOpH9EZLnti4uHp00WyheW
+         Vcv6eAX7BJrGIniLd7INUu4OdKbDatMzJF7cbOv0xYoxbaZDVLO31xC6G1jgMlMxSBxo
+         JYtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678225318;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h0UBWEzua7mI1E3a/+R1pzklpJ+RGJpYFy9mijom/UM=;
-        b=0bn6Ahvmg+7OHtWI2FM8G9kE/9bDvgMSxNWhSa20SDQ6odzrTR2UR5BVllEyAAisSL
-         67Ndab7iMm9OwMkxCfs2uG0/qHiNCt3TyOS9MuVeZUNiIjuhQyeA9S65/seop7RGWr2W
-         TU85SpULGQxHmr/LEFkJVgsyGM8FFGWsdtLDYLVJH75ErY5cbkWv8b+Gz7OKEYmprU9q
-         Pr4C+L8L0G7ZGbebqrHIsUq3oTjJ4HATO/dbumbG2bVv7cc6GwDE8ZRIO6xdr9Bc04Og
-         mm+xnVvVsbvTepixHwr8zT9jWplwdT1BMnTuXMrkuh0/oYfc3LvdgcdKtzUT3nFumAny
-         yEyw==
-X-Gm-Message-State: AO0yUKVbrDxWYdVT29BM0/vOzNQTrbiAP0ukGOnsJMT3+yOjmv4CL4AT
-        6zaE79byq175+3HsfqkkkBFfCg==
-X-Google-Smtp-Source: AK7set/K6eJAQf/eSbaq269PoSBswE0gsDc5h7lzSW9lr2zauw1plinMmCGHpVyR/4qKnDR1/eXDIg==
-X-Received: by 2002:a17:902:ce90:b0:19a:9434:af30 with SMTP id f16-20020a170902ce9000b0019a9434af30mr18505363plg.18.1678225318377;
-        Tue, 07 Mar 2023 13:41:58 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id km12-20020a17090327cc00b0019e30e3068bsm8866509plb.168.2023.03.07.13.41.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 13:41:57 -0800 (PST)
-Date:   Tue, 07 Mar 2023 13:41:57 -0800 (PST)
-X-Google-Original-Date: Tue, 07 Mar 2023 13:40:59 PST (-0800)
-Subject:     Re: [PATCH v5 12/26] riscv: Remove COMMAND_LINE_SIZE from uapi
-In-Reply-To: <20230306100508.1171812-13-alexghiti@rivosinc.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>, corbet@lwn.net,
-        Richard Henderson <richard.henderson@linaro.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org, alexghiti@rivosinc.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alexghiti@rivosinc.com
-Message-ID: <mhng-d4be5bb5-f0ad-4e76-9b11-83732d233a45@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678234406;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mmMlzzjnms9LP64W1EI4s9J2Aar/VS+/OpXG4YzMt1g=;
+        b=i8pH3WPJ9JXM6DW12HuU1YYA1W8NTWCqBib++7pvwW1NvLKOEOgmCTUqsY9gnDdDpH
+         hKeKicHkIegClhbfyZxtIs63naux3vF09S3vck7Q370c7j7DDIaPFeRVCryLv75lQr20
+         5JHpANq3Vl5/qrUaabcCUHYG4wa6YyKqlu/gmNg54EMS5V/mdvU569XCYVPJHO4mWFNB
+         YpDzFRChu1S1qZgQD/iSSTwRtDmn65TsAgldqUZM+JZJUI6C7wl+h7UNnAwYJDvyu2Dc
+         aVBOk6HGQqc409KhlJY8qyQef7tggrcu6/hLR4oHomgRXgZbuUS/QJ++piFmBVdz8847
+         1cTg==
+X-Gm-Message-State: AO0yUKV3TtK0jOnPPgG//zfUY7e34OxuBLJqDREIbrmUcJdqID9PbxQp
+        XdXUGryyBny3Pghnfytf2iep6Czzy8WAtpOPEw==
+X-Google-Smtp-Source: AK7set9fM9oqHN6RTfjUl1adN2jlRFEqmkZWFcTMizE5EgbRXDHz1eOesgkblPkKuD6/cVScAGsGMu92G3PJwAt7ew==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:145:b0:ac2:a7a7:23c3 with
+ SMTP id p5-20020a056902014500b00ac2a7a723c3mr5937614ybh.12.1678234406173;
+ Tue, 07 Mar 2023 16:13:26 -0800 (PST)
+Date:   Wed, 08 Mar 2023 00:13:24 +0000
+In-Reply-To: <20230128140030.GB700688@chaop.bj.intel.com> (message from Chao
+ Peng on Sat, 28 Jan 2023 22:00:30 +0800)
+Mime-Version: 1.0
+Message-ID: <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     seanjc@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
+        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
+        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        vannapurve@google.com, yu.c.zhang@linux.intel.com,
+        kirill.shutemov@linux.intel.com, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
+        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 06 Mar 2023 02:04:54 PST (-0800), alexghiti@rivosinc.com wrote:
-> As far as I can tell this is not used by userspace and thus should not
-> be part of the user-visible API.
->
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  arch/riscv/include/asm/setup.h      | 7 +++++++
->  arch/riscv/include/uapi/asm/setup.h | 2 --
->  2 files changed, 7 insertions(+), 2 deletions(-)
->  create mode 100644 arch/riscv/include/asm/setup.h
->
-> diff --git a/arch/riscv/include/asm/setup.h b/arch/riscv/include/asm/setup.h
-> new file mode 100644
-> index 000000000000..f165a14344e2
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/setup.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +#ifndef _ASM_RISCV_SETUP_H
-> +#define _ASM_RISCV_SETUP_H
-> +
-> +#define COMMAND_LINE_SIZE       1024
-> +
-> +#endif /* _ASM_RISCV_SETUP_H */
-> diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
-> index 66b13a522880..17fcecd4a2f8 100644
-> --- a/arch/riscv/include/uapi/asm/setup.h
-> +++ b/arch/riscv/include/uapi/asm/setup.h
-> @@ -3,6 +3,4 @@
->  #ifndef _UAPI_ASM_RISCV_SETUP_H
->  #define _UAPI_ASM_RISCV_SETUP_H
->
-> -#define COMMAND_LINE_SIZE	1024
-> -
->  #endif /* _UAPI_ASM_RISCV_SETUP_H */
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
+>> On Fri, Dec 02, 2022, Chao Peng wrote:
+> ...
+>> Strongly prefer to use similar logic to existing code that detects wraps:
 
-Thanks!
+>> 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+
+>> This is also where I'd like to add the "gfn is aligned to offset" check,  
+>> though
+>> my brain is too fried to figure that out right now.
+
+> Used count_trailing_zeros() for this TODO, unsure we have other better
+> approach.
+
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index afc8c26fa652..fd34c5f7cd2f 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -56,6 +56,7 @@
+>   #include <asm/processor.h>
+>   #include <asm/ioctl.h>
+>   #include <linux/uaccess.h>
+> +#include <linux/count_zeros.h>
+
+>   #include "coalesced_mmio.h"
+>   #include "async_pf.h"
+> @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct  
+> kvm_memslots *slots, int id,
+>   	return false;
+>   }
+
+> +/*
+> + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
+> + */
+> +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
+> +{
+> +	if (!offset)
+> +		return true;
+> +	if (!gpa)
+> +		return false;
+> +
+> +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
+
+Perhaps we could do something like
+
+#define lowest_set_bit(val) (val & -val)
+
+and use
+
+return lowest_set_bit(offset) >= lowest_set_bit(gpa);
+
+Please help me to understand: why must ALIGNMENT(offset) >=
+ALIGNMENT(gpa)? Why is it not sufficient to have both gpa and offset be
+aligned to PAGE_SIZE?
+
+> +}
+> +
+>   /*
+>    * Allocate some memory and give it an address in the guest physical  
+> address
+>    * space.
+> @@ -2128,7 +2142,8 @@ int __kvm_set_memory_region(struct kvm *kvm,
+>   	if (mem->flags & KVM_MEM_PRIVATE &&
+>   	    (mem->restrictedmem_offset & (PAGE_SIZE - 1) ||
+>   	     mem->restrictedmem_offset + mem->memory_size <  
+> mem->restrictedmem_offset ||
+> -	     0 /* TODO: require gfn be aligned with restricted offset */))
+> +	     !kvm_check_rmem_offset_alignment(mem->restrictedmem_offset,
+> +					      mem->guest_phys_addr)))
+>   		return -EINVAL;
+>   	if (as_id >= kvm_arch_nr_memslot_as_ids(kvm) || id >= KVM_MEM_SLOTS_NUM)
+>   		return -EINVAL;
