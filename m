@@ -2,57 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21506AFAE7
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 01:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080BD6B002F
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Mar 2023 08:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjCHANb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Mar 2023 19:13:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
+        id S229750AbjCHHsS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Mar 2023 02:48:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCHAN3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Mar 2023 19:13:29 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA87521FD
-        for <linux-arch@vger.kernel.org>; Tue,  7 Mar 2023 16:13:27 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id l24-20020a25b318000000b007eba3f8e3baso15601030ybj.4
-        for <linux-arch@vger.kernel.org>; Tue, 07 Mar 2023 16:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678234406;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mmMlzzjnms9LP64W1EI4s9J2Aar/VS+/OpXG4YzMt1g=;
-        b=DQipY5o6kwt2urMmc3ga0lGBCwLobU1Ifep42NoUNsZIX8Td2En8TfxAl5sbGzyNBB
-         LIWsf3t77LSuCc0pGvjcZjIWULi+KlePCMmeN/QbMHXhC1Ixa4kOh+7152WsxGf2VC2d
-         Ms1xKb6gHNm+/4O8RDcSjT+AzBbqUzpwW93RRiqm6+BJSL4+2HqKul5reyJxS2qUjQVn
-         TjBmoEh1iNCS+lDVRczhTC0nw7EmFFlXj/fUYAlIAjyVh4kOpH9EZLnti4uHp00WyheW
-         Vcv6eAX7BJrGIniLd7INUu4OdKbDatMzJF7cbOv0xYoxbaZDVLO31xC6G1jgMlMxSBxo
-         JYtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678234406;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mmMlzzjnms9LP64W1EI4s9J2Aar/VS+/OpXG4YzMt1g=;
-        b=i8pH3WPJ9JXM6DW12HuU1YYA1W8NTWCqBib++7pvwW1NvLKOEOgmCTUqsY9gnDdDpH
-         hKeKicHkIegClhbfyZxtIs63naux3vF09S3vck7Q370c7j7DDIaPFeRVCryLv75lQr20
-         5JHpANq3Vl5/qrUaabcCUHYG4wa6YyKqlu/gmNg54EMS5V/mdvU569XCYVPJHO4mWFNB
-         YpDzFRChu1S1qZgQD/iSSTwRtDmn65TsAgldqUZM+JZJUI6C7wl+h7UNnAwYJDvyu2Dc
-         aVBOk6HGQqc409KhlJY8qyQef7tggrcu6/hLR4oHomgRXgZbuUS/QJ++piFmBVdz8847
-         1cTg==
-X-Gm-Message-State: AO0yUKV3TtK0jOnPPgG//zfUY7e34OxuBLJqDREIbrmUcJdqID9PbxQp
-        XdXUGryyBny3Pghnfytf2iep6Czzy8WAtpOPEw==
-X-Google-Smtp-Source: AK7set9fM9oqHN6RTfjUl1adN2jlRFEqmkZWFcTMizE5EgbRXDHz1eOesgkblPkKuD6/cVScAGsGMu92G3PJwAt7ew==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6902:145:b0:ac2:a7a7:23c3 with
- SMTP id p5-20020a056902014500b00ac2a7a723c3mr5937614ybh.12.1678234406173;
- Tue, 07 Mar 2023 16:13:26 -0800 (PST)
-Date:   Wed, 08 Mar 2023 00:13:24 +0000
-In-Reply-To: <20230128140030.GB700688@chaop.bj.intel.com> (message from Chao
- Peng on Sat, 28 Jan 2023 22:00:30 +0800)
-Mime-Version: 1.0
-Message-ID: <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
+        with ESMTP id S229501AbjCHHsS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Mar 2023 02:48:18 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449764ECD9;
+        Tue,  7 Mar 2023 23:48:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678261696; x=1709797696;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=MPjpMnF2pYRp601r/CV/4rcJZOvf9VGuPDqjdu0MkGE=;
+  b=laniImVi/D2OeyIXehqaJ1zzZgBwQv/O8iHVcJwyW9RnrGhjjeh5Iy06
+   v/3ZjqzAybk9UYcf+LicxxLSkK/v8/0566QBATg8EKngSTM4qbxaDIgKt
+   jrJ9v+tIdSTKVyt8CYxuU3dk3u84bx/6dlQ1jdYkTTqC17CYUes/7tpyl
+   lv0EJXHvXfE8QxlbpXt36kY3AnpkJ6sKiC0TWYRX2DtpGa2l6MHBdKVKA
+   ABEllsjxoS+0r4LeWFg47aYl6KFICzMzCW2SLHf9BDh2PnolOfzebFxPb
+   lKAoeYqSQe0OalzGEQLRmmxgk7hRmQJkLcTwAjKk/K6tfKUDyFgXLJ+E8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="363727024"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="363727024"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 23:48:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="745821383"
+X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
+   d="scan'208";a="745821383"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Mar 2023 23:48:04 -0800
+Date:   Wed, 8 Mar 2023 15:40:26 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Ackerley Tng <ackerleytng@google.com>
 Cc:     seanjc@google.com, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -71,88 +59,112 @@ Cc:     seanjc@google.com, kvm@vger.kernel.org,
         david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
         dhildenb@redhat.com, qperret@google.com, tabba@google.com,
         michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+Message-ID: <20230308074026.GA2183207@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20230128140030.GB700688@chaop.bj.intel.com>
+ <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
+On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
+> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> 
+> > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
+> > > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > ...
+> > > Strongly prefer to use similar logic to existing code that detects wraps:
+> 
+> > > 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+> 
+> > > This is also where I'd like to add the "gfn is aligned to offset"
+> > > check, though
+> > > my brain is too fried to figure that out right now.
+> 
+> > Used count_trailing_zeros() for this TODO, unsure we have other better
+> > approach.
+> 
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index afc8c26fa652..fd34c5f7cd2f 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -56,6 +56,7 @@
+> >   #include <asm/processor.h>
+> >   #include <asm/ioctl.h>
+> >   #include <linux/uaccess.h>
+> > +#include <linux/count_zeros.h>
+> 
+> >   #include "coalesced_mmio.h"
+> >   #include "async_pf.h"
+> > @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct
+> > kvm_memslots *slots, int id,
+> >   	return false;
+> >   }
+> 
+> > +/*
+> > + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
+> > + */
+> > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
+> > +{
+> > +	if (!offset)
+> > +		return true;
+> > +	if (!gpa)
+> > +		return false;
+> > +
+> > +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
+> 
+> Perhaps we could do something like
+> 
+> #define lowest_set_bit(val) (val & -val)
+> 
+> and use
+> 
+> return lowest_set_bit(offset) >= lowest_set_bit(gpa);
 
-> On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
->> On Fri, Dec 02, 2022, Chao Peng wrote:
-> ...
->> Strongly prefer to use similar logic to existing code that detects wraps:
+I see kernel already has fls64(), that looks what we need ;)
 
->> 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+> 
+> Please help me to understand: why must ALIGNMENT(offset) >=
+> ALIGNMENT(gpa)? Why is it not sufficient to have both gpa and offset be
+> aligned to PAGE_SIZE?
 
->> This is also where I'd like to add the "gfn is aligned to offset" check,  
->> though
->> my brain is too fried to figure that out right now.
+Yes, it's sufficient. Here we just want to be conservative on the uAPI
+as Sean explained this at [1]:
 
-> Used count_trailing_zeros() for this TODO, unsure we have other better
-> approach.
+  I would rather reject memslot if the gfn has lesser alignment than the
+  offset. I'm totally ok with this approach _if_ there's a use case. 
+  Until such a use case presents itself, I would rather be conservative
+  from a uAPI perspective.
 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index afc8c26fa652..fd34c5f7cd2f 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -56,6 +56,7 @@
->   #include <asm/processor.h>
->   #include <asm/ioctl.h>
->   #include <linux/uaccess.h>
-> +#include <linux/count_zeros.h>
+[1] https://lore.kernel.org/all/Y8HldeHBrw+OOZVm@google.com/
 
->   #include "coalesced_mmio.h"
->   #include "async_pf.h"
-> @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct  
-> kvm_memslots *slots, int id,
->   	return false;
->   }
-
-> +/*
-> + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
-> + */
-> +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
-> +{
-> +	if (!offset)
-> +		return true;
-> +	if (!gpa)
-> +		return false;
-> +
-> +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
-
-Perhaps we could do something like
-
-#define lowest_set_bit(val) (val & -val)
-
-and use
-
-return lowest_set_bit(offset) >= lowest_set_bit(gpa);
-
-Please help me to understand: why must ALIGNMENT(offset) >=
-ALIGNMENT(gpa)? Why is it not sufficient to have both gpa and offset be
-aligned to PAGE_SIZE?
-
-> +}
-> +
->   /*
->    * Allocate some memory and give it an address in the guest physical  
-> address
->    * space.
-> @@ -2128,7 +2142,8 @@ int __kvm_set_memory_region(struct kvm *kvm,
->   	if (mem->flags & KVM_MEM_PRIVATE &&
->   	    (mem->restrictedmem_offset & (PAGE_SIZE - 1) ||
->   	     mem->restrictedmem_offset + mem->memory_size <  
-> mem->restrictedmem_offset ||
-> -	     0 /* TODO: require gfn be aligned with restricted offset */))
-> +	     !kvm_check_rmem_offset_alignment(mem->restrictedmem_offset,
-> +					      mem->guest_phys_addr)))
->   		return -EINVAL;
->   	if (as_id >= kvm_arch_nr_memslot_as_ids(kvm) || id >= KVM_MEM_SLOTS_NUM)
->   		return -EINVAL;
+Chao
+> 
+> > +}
+> > +
+> >   /*
+> >    * Allocate some memory and give it an address in the guest physical
+> > address
+> >    * space.
+> > @@ -2128,7 +2142,8 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >   	if (mem->flags & KVM_MEM_PRIVATE &&
+> >   	    (mem->restrictedmem_offset & (PAGE_SIZE - 1) ||
+> >   	     mem->restrictedmem_offset + mem->memory_size <
+> > mem->restrictedmem_offset ||
+> > -	     0 /* TODO: require gfn be aligned with restricted offset */))
+> > +	     !kvm_check_rmem_offset_alignment(mem->restrictedmem_offset,
+> > +					      mem->guest_phys_addr)))
+> >   		return -EINVAL;
+> >   	if (as_id >= kvm_arch_nr_memslot_as_ids(kvm) || id >= KVM_MEM_SLOTS_NUM)
+> >   		return -EINVAL;
