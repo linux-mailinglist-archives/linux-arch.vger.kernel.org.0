@@ -2,95 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD5196B238D
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Mar 2023 13:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D9F6B24C2
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Mar 2023 13:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjCIMAF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Mar 2023 07:00:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S231388AbjCIM7U (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Mar 2023 07:59:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjCIL7r (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Mar 2023 06:59:47 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E822DDAB80;
-        Thu,  9 Mar 2023 03:59:45 -0800 (PST)
+        with ESMTP id S230207AbjCIM6p (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Mar 2023 07:58:45 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259C613DDA;
+        Thu,  9 Mar 2023 04:57:57 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4E4001EC03CA;
-        Thu,  9 Mar 2023 12:59:44 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B3A8A1EC06C2;
+        Thu,  9 Mar 2023 13:57:55 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678363184;
+        t=1678366675;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=90vFMcU1aj7MNl0YJWHq0D+SdgqMmwppIDssNkGHN0s=;
-        b=qiiJY7lCp+bHxVH6C28W+gwzLyykdT2M2oNSDZWtkL8aMO7DJ2N4sOH42a0CCM8tVyB+r9
-        FwX2ofvtwttj/UgIJETiFm7w1MLPzUyE1KS1uBIBuJw1QfPYSuP6AD5YlvEMj/M7TqnDal
-        MOJgdA8GVC26djw3lokZIYc9Pq/ibZE=
-Date:   Thu, 9 Mar 2023 12:59:37 +0100
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=xQyqIfhwDtsH4v2hzkG71ZUDZ3mfvpSPc21bFOtyc8o=;
+        b=fDFEvQtHUkVd5hg2jwozRJNNeYEmJDaydIMnUV32Y1pbRgJfDXS1H4M5nX/CfYRKoCVihb
+        3ILX6KDKna6HwzKfng8Lw9jZ4oJyDn4iE9ih6v1/O7oCyW0hud4Jdm2vA1Y/q2Yt7FNSO6
+        8eSpKHVFnsUjVrFxdxE+EIORJXWBCZw=
+Date:   Thu, 9 Mar 2023 13:57:52 +0100
 From:   Borislav Petkov <bp@alien8.de>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        =?utf-8?B?SsO2cmcgUsO2ZGVs?= <joro@8bytes.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
         "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
         "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
         "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v5 06/14] x86/ioremap: Support hypervisor specified range
- to map as encrypted
-Message-ID: <20230309115937.GAZAnKKRef99EwOu/S@fat_crate.local>
-References: <Y/aTmL5Y8DtOJu9w@google.com>
- <Y/aYQlQzRSEH5II/@zn.tnic>
- <Y/adN3GQJTdDPmS8@google.com>
- <Y/ammgkyo3QVon+A@zn.tnic>
- <Y/a/lzOwqMjOUaYZ@google.com>
- <Y/dDvTMrCm4GFsvv@zn.tnic>
- <BYAPR21MB1688F68888213E5395396DD9D7AB9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <255249f2-47af-07b7-d9d9-9edfdd108348@intel.com>
- <20230306215104.GEZAZgSPa4qBBu9lRd@fat_crate.local>
- <a23a36ccb8e1ad05e12a4c4192cdd98267591556.camel@infradead.org>
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v7 28/41] x86: Introduce userspace API for shadow stack
+Message-ID: <20230309125739.GCZAnXw5T1dfzwtqh8@fat_crate.local>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-29-rick.p.edgecombe@intel.com>
+ <ZAhjLAIm91rJ2Lpr@zn.tnic>
+ <9e00b2a3d988f7b24d274a108d31f5f0096eeaae.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a23a36ccb8e1ad05e12a4c4192cdd98267591556.camel@infradead.org>
+In-Reply-To: <9e00b2a3d988f7b24d274a108d31f5f0096eeaae.camel@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -100,46 +88,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-First of all,
+On Wed, Mar 08, 2023 at 11:32:36PM +0000, Edgecombe, Rick P wrote:
+> This would be for things like the "permissive mode", where glibc
+> determines that it has to do something like dlopen() an unsupporting
+> DSO much later.
+> 
+> But being able to late lock the features is required for the working
+> behavior of glibc as well. Glibc enables shadow stack very early, then
+> disables it later if it finds that any of the normal dynamic libraries
+> don't support it. It only locks shadow stack after this point even in
+> non-permissive mode.
 
-thanks for proactively pointing that out instead of simply using what's
-there and we get to find out later, only by chance.
+So this all sounds weird. Especially from a user point of view.
 
-Much appreciated. :-)
+Now let's imagine there's a Linux user called Boris and he goes and buys
+a CPU which supports shadow stack, gets a distro which has shadow stack
+enabled. All good.
 
-On Thu, Mar 09, 2023 at 11:12:10AM +0000, David Woodhouse wrote:
-> > Right, I think we're ok with the following basic rules:
-> >
-> > - pure arch/x86/ code should use the x86_platform function pointers to
-> >   query hypervisor capabilities/peculiarities
-> >
-> > - cc_platform_has() should be used in generic/driver code as it
-> >   abstracts away the underlying platform better. IOW, querying
-> >   x86_platform.... in generic, platform-agnostic driver code looks weird to
-> >   say the least
-> >
-> > The hope is that those two should be enough to support most guest types
-> > and not let the zoo get too much out of hand...
-> >
-> > Thx.
->
-> In
-> https://lore.kernel.org/all/20230308171328.1562857-13-usama.arif@bytedance.com/
-> I added an sev_es_active() helper for x86 code.
->
-> Is that consistent with the vision here, or should I do something different?
+Now, at some point he loads a program which pulls in an old library
+which hasn't been enabled for shadow stack yet.
 
-So looking at sev_es_init_vc_handling() where we set that key, I'm
-*thinking* that key can be removed now and the code should check
+In the name of not breaking stuff, his glibc is configured in permissive
+mode by default so that program loads and shadow stack for it is
+disabled.
 
-  cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)
+And Boris doesn't even know and continues on his merry way thinking that
+he has all that cool ROP protection.
 
-instead.
+So where is the knob that says, "disable permissive mode"?
 
-Because if some of the checks in that function below fail, the guest
-will terminate anyway.
+Or at least where does the user get a warning saying, "hey, this app
+doesn't do shadow stack and we disabled it for ya so that it can still
+work"?
 
-Jörg, Tom?
+Or am I way off?
+
+I hope you're catching my drift. Because if there's no enforcement of
+shstk and we do this permissive mode by default, this whole overhead is
+just a unnecessary nuisance...
+
+But maybe that'll come later and I should keep going through the set...
+
+Thx.
 
 -- 
 Regards/Gruss,
