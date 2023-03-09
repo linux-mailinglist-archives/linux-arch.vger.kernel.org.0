@@ -2,74 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDD36B2F72
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Mar 2023 22:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 554B16B317C
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Mar 2023 23:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbjCIVRh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Mar 2023 16:17:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S231315AbjCIWzP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Mar 2023 17:55:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbjCIVR1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Mar 2023 16:17:27 -0500
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3884AFFBE9;
-        Thu,  9 Mar 2023 13:17:15 -0800 (PST)
-Received: by mail-wr1-f46.google.com with SMTP id g3so3252744wri.6;
-        Thu, 09 Mar 2023 13:17:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678396633;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O8dQHhXSJ1fnfi7P2Y78mV0gCGQ/b1IV17ij7Uj/LYk=;
-        b=OO16La+IsUTTiYgf/OJjgbf8n+t+hI0uJ7oLVXQOhVUS1DoTj7Z1ZlDVUyhe2Dby4D
-         pYbJQ6ImwLlPPyViCbt8TmRe0fbQ6ubTmAZRuWXsYEiSZclAnLAxplZMLjtOce9J6zqo
-         i8rkOmFYHCoWqjdbRLL5IAXqOvmThbOMpJipAWU0+gqt0YLjjYlIWF2MtGy8Q2+FkZQu
-         tUwKY39uUOu0B8SHvf8XFMD8jGaPSTzXy1NnfGM657Whxuhq4/W4oSnF+IDlmhFVZRc4
-         ItT6LXRd1uzX6u3aWrSEEfOLom2wLUGMs3R4tE41kPuWXGgszqdfoQQVmueUVLhRf9K7
-         JKEw==
-X-Gm-Message-State: AO0yUKWJUFiFGrmp15K98UGRe/sUJ6o7d9p72q/EzeQAEnFlbZGlFWAu
-        CuJuFTHF6s4OoQMzBIIMw7w=
-X-Google-Smtp-Source: AK7set/pgbmbEva5WzpAaoO2T5cGk33MFlFSDNu70MSwCn9I/1LUJkZ7xr3SVprX5qq4FyT2iyjS5A==
-X-Received: by 2002:adf:f3c7:0:b0:2cc:23fc:88e3 with SMTP id g7-20020adff3c7000000b002cc23fc88e3mr15608864wrp.40.1678396633569;
-        Thu, 09 Mar 2023 13:17:13 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id c7-20020adffb47000000b002c567b58e9asm357984wrs.56.2023.03.09.13.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Mar 2023 13:17:13 -0800 (PST)
-Date:   Thu, 9 Mar 2023 21:17:07 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] x86/init: Make get/set_rtc_noop() public
-Message-ID: <ZApM00Y+03gpDRGv@liuwe-devbox-debian-v2>
-References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
- <1678386957-18016-2-git-send-email-ssengar@linux.microsoft.com>
+        with ESMTP id S230494AbjCIWzK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Mar 2023 17:55:10 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520653CE03;
+        Thu,  9 Mar 2023 14:54:40 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PXkyW6RNvz4x7s;
+        Fri, 10 Mar 2023 09:54:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1678402469;
+        bh=HnGqhsJTeGjqlPVUTmz3g9ouF0ULtGaBV4DNsEeVxsY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=qtChMEayOa7BG3gV8biPN1UquvZjKKHH1PLnOktZLFk+z7+30lmoHFQWG/ybTGOfV
+         Msn+vq0214G/5bCC5sK8YEWC4SONYn3IjVV2gLKa55Cy0vLJqZpwyIgKHr5xpyRlRO
+         2B59x+JG32iD6Ll1IeACkY+jSFZ42uC6mHr940GQ8rZCqsWJ73oUfODgJNTU1QA4cH
+         /Zt2BN0brA6nfVHnuvaamrjV+75syVJwmQZUAWs6jzdNGb6ONfyH1iskU2QALlqqJR
+         fcr5fnsHZCG3RA30SBInWnaih8rWQ8VzjneqbRw1yHLKc3Q/ihjyNUCZJzzzjHFnUd
+         puglrrgtkl1qg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
+        Baoquan He <bhe@redhat.com>, linux-alpha@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] arch/*/io.h: remove ioremap_uc in some
+ architectures
+In-Reply-To: <20230308130710.368085-4-bhe@redhat.com>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-4-bhe@redhat.com>
+Date:   Fri, 10 Mar 2023 09:54:27 +1100
+Message-ID: <874jqtpmcc.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1678386957-18016-2-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:35:56AM -0800, Saurabh Sengar wrote:
-> Make get/set_rtc_noop() to be public so that they can be used
-> in other modules as well.
-> 
-> Co-developed-by: Tianyu Lan <tiala@microsoft.com>
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+Baoquan He <bhe@redhat.com> writes:
+> ioremap_uc() is only meaningful on old x86-32 systems with the PAT
+> extension, and on ia64 with its slightly unconventional ioremap()
+> behavior. So remove the ioremap_uc() definition in architecutures
+> other than x86 and ia64. These architectures all have asm-generic/io.h
+> included and will have the default ioremap_uc() definition which
+> returns NULL.
+>
+> This changes the existing behaviour, while no need to worry about
+> any breakage because in the only callsite of ioremap_uc(), code
+> has been adjusted to eliminate the impact. Please see
+> atyfb_setup_generic() of drivers/video/fbdev/aty/atyfb_base.c.
+>
+> If any new invocation of ioremap_uc() need be added, please consider
+> using ioremap() intead or adding a ARCH specific version if necessary.
+>
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Cc: linux-alpha@vger.kernel.org
+> Cc: linux-hexagon@vger.kernel.org
+> Cc: linux-m68k@lists.linux-m68k.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-sh@vger.kernel.org
+> Cc: sparclinux@vger.kernel.org
+> ---
+>  Documentation/driver-api/device-io.rst | 9 +++++----
+>  arch/alpha/include/asm/io.h            | 1 -
+>  arch/hexagon/include/asm/io.h          | 3 ---
+>  arch/m68k/include/asm/kmap.h           | 1 -
+>  arch/mips/include/asm/io.h             | 1 -
+>  arch/parisc/include/asm/io.h           | 2 --
+>  arch/powerpc/include/asm/io.h          | 1 -
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+cheers
