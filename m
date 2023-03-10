@@ -2,113 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915776B5160
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Mar 2023 21:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037B06B516B
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Mar 2023 21:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjCJUF3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Mar 2023 15:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S229890AbjCJUHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Mar 2023 15:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCJUF1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Mar 2023 15:05:27 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849AB1223B9;
-        Fri, 10 Mar 2023 12:05:26 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9FA451EC0505;
-        Fri, 10 Mar 2023 21:05:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678478724;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LxdcVjTex/5D1F21dsooykzTuaD2TSooCSq9ywUUbCo=;
-        b=OB18JSyEdXi4pf5angNvJJKWTx+eE2riAiW7HZ8+/koQuO8c7cn9BCKwos+7vWXzK3bqe9
-        gI5QFueasqn8lGgpHOzIQpqvyWwSNr6wPX30zwl9MVbWoY3VHuxGT6B2sLbgl5ZUxzrzU5
-        2XmSXnM+O6phpIyuU4WoRuNqm5zDS7Y=
-Date:   Fri, 10 Mar 2023 21:05:19 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Message-ID: <20230310200519.GDZAuNf+bvYjGtazqv@fat_crate.local>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-34-rick.p.edgecombe@intel.com>
- <ZAtWp76svXxvQl94@zn.tnic>
- <b85a86e8013280ce17a54d570aa162f1d463a230.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b85a86e8013280ce17a54d570aa162f1d463a230.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230427AbjCJUHM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Mar 2023 15:07:12 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425D9126F06;
+        Fri, 10 Mar 2023 12:07:09 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 407C932003C0;
+        Fri, 10 Mar 2023 15:07:06 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 10 Mar 2023 15:07:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678478825; x=1678565225; bh=0a
+        Ymj5tx8ig6QH6sJhzcEPY7Nw5ZBynuJPqxTvDXknM=; b=X5SC3oGJ1EZkFs8ADD
+        QVEjij51GN0LONEbpD6hZlYAnCAyOxHB/gFebYyrdKkWFPpYeZ8Ekojii9DGHmhk
+        NuBEKgBccRnqnpkf1bwkTbG11Wx6ZsIYpEcAjpvDZwqR+r8If9LLEn3/3tKl5jiR
+        KIXh71Rvp5EdS8mY+Vv6InffJAiSovUyHbykouSLymLzscVVo4JAdCHSEMTfRFbj
+        kufQxdZbwlk6CjcOy1VRp48RBpwGu2jRTDwJ3oRtPok05nduJx58UG6oBsp0Hi/q
+        sYvXorvn29xBldNcEVVc5Ce/4US4FzQCRi9b++9OBz4s/c5OwEmgHrWPnCi80hSp
+        Ve3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678478825; x=1678565225; bh=0aYmj5tx8ig6Q
+        H6sJhzcEPY7Nw5ZBynuJPqxTvDXknM=; b=emaikchmYYs5S9yN9qw7620/5cxeP
+        a3pzILMyUL+Iz3TjbcPSeUXhgluPzTHXu8eshOEMhlwZ+3pantwcpDBDUcd094Ms
+        yIHZwVPKdwGZuAWeMmyA72Ef8Oh+qipTK7xSr3tbXRyyNBYAJXzMuiuGpEqWC8p6
+        wYyXGsZOITWS8h5trFBjkrAHuvxaqgefwN/KYDFuubn6liRXjPXhUpZatSA71ukZ
+        LaGMcwPgrJsjT55ocE/nyMeVyKwSNgR1UuGCNS2ova0zrXDx3FwOUN9LMspMbt4W
+        9sor26Ysa7FuEcRPKgHz64QhVDVvJYj/gmOnGGf6uftFm3EEsaaEGZ+mA==
+X-ME-Sender: <xms:6Y0LZL4hM-WTjE7oYScaxRaC4bmFlHc401-aeXrUMWqRgx2kKUepdw>
+    <xme:6Y0LZA4uNK5KMORPICWxUj4OoL7PjxR6CmxGyKuukUMu0uZ2a1LwmkdjW2z7179bY
+    PHFEXcxs0wf0zlhi2U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddukedguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:6Y0LZCeI4J1F1ejZsac9taQx3HQQ2wtWYwOz_LvnafEMtTHfkqPJ9w>
+    <xmx:6Y0LZMJuxI1NjEo29mH0yiYmAjDPykYQR8yQqSilWZSRTP7yTZDQ8w>
+    <xmx:6Y0LZPI4QWu68qVcwMHW6SDIGnvwPH3fgeJCqxq3TQaguypMs_GxNQ>
+    <xmx:6Y0LZMpXXbTU9riN2MVYqmKlpXj3JzLs5aTumgZAio8D2aERXyZr0Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9843DB60086; Fri, 10 Mar 2023 15:07:05 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <1a2c5d85-049c-4512-be39-1319fa790924@app.fastmail.com>
+In-Reply-To: <20230310160757.199253-1-thuth@redhat.com>
+References: <20230310160757.199253-1-thuth@redhat.com>
+Date:   Fri, 10 Mar 2023 21:06:44 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Huth" <thuth@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        "Chas Williams" <3chas3@gmail.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        Netdev <netdev@vger.kernel.org>,
+        "Christoph Hellwig" <hch@infradead.org>
+Subject: Re: [PATCH v2 0/5] Remove #ifdef CONFIG_* from uapi headers (2023 edition)
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 05:12:40PM +0000, Edgecombe, Rick P wrote:
-> > Can we use distinct negative retvals in each case so that it is clear
-> > to
-> > userspace where it fails, *if* it fails?
-> 
-> Good idea, I think maybe ERANGE.
+On Fri, Mar 10, 2023, at 17:07, Thomas Huth wrote:
+> uapi headers should not use the kernel-internal CONFIG switches.
+> Palmer Dabbelt sent some patches to clean this up a couple of years
+> ago, but unfortunately some of those patches never got merged.
+> So here's a rebased version of those patches - since they are rather
+> trivial, I hope it's OK for everybody if they could go through Arnd's
+> "generic include/asm header files" branch.
+>
+> v2:
+> - Added Reviewed-bys from v1
+> - Changed the CONFIG_CDROM_PKTCDVD_WCACHE patch according to Christoph's
+>   suggestion
+> - Added final patch to clean the list in scripts/headers_install.sh
 
-For those two, right?
+Thanks for the rebase, applied to the asm-generic tree now, as I'm
+fairly optimistic they are all good.
 
-        /* If there isn't space for a token */
-        if (set_tok && size < 8)
-                return -EINVAL;
-
-        if (addr && addr <= 0xFFFFFFFF)
-                return -EINVAL;
-
-They are kinda range-checking of sorts. A wider range but still
-similar... 
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+    Arnd
