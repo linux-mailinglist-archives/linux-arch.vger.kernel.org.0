@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8BF6B5D23
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Mar 2023 16:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77216B5D36
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Mar 2023 16:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjCKPGL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Mar 2023 10:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S229743AbjCKPLe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Mar 2023 10:11:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCKPGK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Mar 2023 10:06:10 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984D9311C3;
-        Sat, 11 Mar 2023 07:06:08 -0800 (PST)
+        with ESMTP id S229437AbjCKPLd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Mar 2023 10:11:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8C2233E5;
+        Sat, 11 Mar 2023 07:11:31 -0800 (PST)
 Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 250D91EC0501;
-        Sat, 11 Mar 2023 16:06:07 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E6171EC0501;
+        Sat, 11 Mar 2023 16:11:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678547167;
+        t=1678547489;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=i83jfo39n7QMWxUoY3tEAV03lUsmodN+NDXkdxSgb/8=;
-        b=SggQnHUgQJgx3LqZReMr0kMmCymGL3wmgRsic7eHnZ0lKfbKfBbtV3o/gIij9K4QAzCZI/
-        ewqsr3IuyHt2IdnynzYStZidsPtO5oYVJBw6cX88UZd5t5g5YELH+rP2ZHr4CKEb2PaLr+
-        DZUyBLy+vG75cHJywPqFlYmuMf3DEuQ=
-Date:   Sat, 11 Mar 2023 16:06:02 +0100
+        bh=d3tDult2va7U5ecOKiAJ68n8tKbP1WHykv3YoeJx32s=;
+        b=ZzZRlJGsHlAcooltNW/El62mvS4AgXOhPjNfTZqu36mBSxSiHh4K7bHUHfYO0DCm9ivGaH
+        P3p5Ufg507LYYaCDuGX82pP+Zgkuw+QpOAy7uWIOIpVC1A2YvqjVthdo9cpFhh4/AO3qu2
+        Zf2R0x39eifZqq/wrxVASJXrU69uy5o=
+Date:   Sat, 11 Mar 2023 16:11:28 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
@@ -58,15 +58,15 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 39/41] x86: Add PTRACE interface for shadow stack
-Message-ID: <ZAyY2mor+HJAO1ht@zn.tnic>
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v7 40/41] x86/shstk: Add ARCH_SHSTK_UNLOCK
+Message-ID: <ZAyaIJFhSh0QyVq0@zn.tnic>
 References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-40-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-41-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-40-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230227222957.24501-41-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -76,79 +76,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:55PM -0800, Rick Edgecombe wrote:
-> The only downside to not having a generic supervisor xfeature regset,
-> is that apps need to be enlightened of any new supervisor xfeature
-> exposed this way (i.e. they can't try to have generic save/restore
-> logic). But maybe that is a good thing, because they have to think
-> through each new xfeature instead of encountering issues when new a new
-
-Remove the first "new".
-
-> supervisor xfeature was added.
+On Mon, Feb 27, 2023 at 02:29:56PM -0800, Rick Edgecombe wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> By adding a shadow stack regset, it also has the effect of including the
-> shadow stack state in a core dump, which could be useful for debugging.
-> 
-> The shadow stack specific xstate includes the SSP, and the shadow stack
-> and WRSS enablement status. Enabling shadow stack or wrss in the kernel
-						       ^^^^
-
-"WRSS"
-
-> involves more than just flipping the bit. The kernel is made aware that
-> it has to do extra things when cloning or handling signals. That logic
-> is triggered off of separate feature enablement state kept in the task
-> struct. So the flipping on HW shadow stack enforcement without notifying
-> the kernel to change its behavior would severely limit what an application
-> could do without crashing, and the results would depend on kernel
-> internal implementation details. There is also no known use for controlling
-> this state via prtace today. So only expose the SSP, which is something
-
-Unknown word [prtace] in commit message.
-Suggestions: ['ptrace'
-
-> that userspace already has indirect control over.
+> Userspace loaders may lock features before a CRIU restore operation has
+> the chance to set them to whatever state is required by the process
+> being restored. Allow a way for CRIU to unlock features. Add it as an
+> arch_prctl() like the other shadow stack operations, but restrict it being
+> called by the ptrace arch_pctl() interface.
 > 
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
 > Tested-by: Kees Cook <keescook@chromium.org>
 > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-I think your SOB should come last:
+That tag is kinda implicit here. Unless he doesn't ACK his own patch.
+:-P
+
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> [Merged into recent API changes, added commit log and docs]
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
 ...
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 
-Pls check whole set.
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 2faf9b45ac72..3197ff824809 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -451,9 +451,14 @@ long shstk_prctl(struct task_struct *task, int option, unsigned long features)
+>  		return 0;
+>  	}
+>  
+> -	/* Don't allow via ptrace */
+> -	if (task != current)
+> +	/* Only allow via ptrace */
+> +	if (task != current) {
 
+Is that the only case? task != current means ptrace and there's no other
+way to do this from userspace?
 
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +int ssp_active(struct task_struct *target, const struct user_regset *regset)
-> +{
-> +	if (target->thread.features & ARCH_SHSTK_SHSTK)
-> +		return regset->n;
-> +
-> +	return 0;
-> +}
-> +
-> +int ssp_get(struct task_struct *target, const struct user_regset *regset,
-> +	    struct membuf to)
-> +{
-> +	struct fpu *fpu = &target->thread.fpu;
-> +	struct cet_user_state *cetregs;
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK))
-
-check_for_deprecated_apis: WARNING: arch/x86/kernel/fpu/regset.c:193: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
-
-Check your whole set pls.
+Isn't there some flag which says that task is ptraced? I think we should
+check that one too...
 
 -- 
 Regards/Gruss,
