@@ -2,125 +2,181 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77216B5D36
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Mar 2023 16:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAB86B63D2
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Mar 2023 09:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCKPLe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Mar 2023 10:11:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S229557AbjCLIKy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 12 Mar 2023 04:10:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCKPLd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Mar 2023 10:11:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8C2233E5;
-        Sat, 11 Mar 2023 07:11:31 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E6171EC0501;
-        Sat, 11 Mar 2023 16:11:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678547489;
+        with ESMTP id S229515AbjCLIKy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Mar 2023 04:10:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70A34D61F
+        for <linux-arch@vger.kernel.org>; Sun, 12 Mar 2023 00:10:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678608605;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=d3tDult2va7U5ecOKiAJ68n8tKbP1WHykv3YoeJx32s=;
-        b=ZzZRlJGsHlAcooltNW/El62mvS4AgXOhPjNfTZqu36mBSxSiHh4K7bHUHfYO0DCm9ivGaH
-        P3p5Ufg507LYYaCDuGX82pP+Zgkuw+QpOAy7uWIOIpVC1A2YvqjVthdo9cpFhh4/AO3qu2
-        Zf2R0x39eifZqq/wrxVASJXrU69uy5o=
-Date:   Sat, 11 Mar 2023 16:11:28 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCH v7 40/41] x86/shstk: Add ARCH_SHSTK_UNLOCK
-Message-ID: <ZAyaIJFhSh0QyVq0@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-41-rick.p.edgecombe@intel.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wJAgYUosYoqDCfWrXcT8rQOHhqo41K/Tpr4p5XcYly8=;
+        b=dmZz/8rF1h/nPs84yBZZxz0o8+dWEivd31Odn4fBcZ3tmuMx4G3paeb05QXqhpiha3CUpQ
+        Xj/jE4pvyhhaGsyRONBHGyqJdlEkLuy+bbUpefFl2+hiOm8G2otHdibY2B8EYqvnYpsgtM
+        4/fVsGgpkl7Te76vvbB3TofRE327jdk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-447-V4F0EYN3PhS2cNH4jc19xg-1; Sun, 12 Mar 2023 04:10:01 -0400
+X-MC-Unique: V4F0EYN3PhS2cNH4jc19xg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93498802D2A;
+        Sun, 12 Mar 2023 08:10:00 +0000 (UTC)
+Received: from ypodemsk.tlv.csb (unknown [10.39.192.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6EA47140EBF4;
+        Sun, 12 Mar 2023 08:09:57 +0000 (UTC)
+From:   Yair Podemsky <ypodemsk@redhat.com>
+To:     will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, npiggin@gmail.com, peterz@infradead.org,
+        arnd@arndb.de, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mtosatti@redhat.com,
+        ppandit@redhat.com, alougovs@redhat.com
+Cc:     ypodemsk@redhat.com, David Hildenbrand <david@redhat.com>
+Subject: [PATCH] mm/mmu_gather: send tlb_remove_table_smp_sync IPI only to MM CPUs
+Date:   Sun, 12 Mar 2023 10:09:45 +0200
+Message-Id: <20230312080945.14171-1-ypodemsk@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-41-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:56PM -0800, Rick Edgecombe wrote:
-> From: Mike Rapoport <rppt@linux.ibm.com>
-> 
-> Userspace loaders may lock features before a CRIU restore operation has
-> the chance to set them to whatever state is required by the process
-> being restored. Allow a way for CRIU to unlock features. Add it as an
-> arch_prctl() like the other shadow stack operations, but restrict it being
-> called by the ptrace arch_pctl() interface.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+indiscriminately, this causes unnecessary work and delays notable in
+real-time use-cases and isolated cpus, this patch will limit this IPI to
+only be sent to cpus referencing the effected mm and are currently in
+kernel space.
 
-That tag is kinda implicit here. Unless he doesn't ACK his own patch.
-:-P
+Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
+---
+ include/asm-generic/tlb.h |  4 ++--
+ mm/khugepaged.c           |  4 ++--
+ mm/mmu_gather.c           | 20 +++++++++++++++-----
+ 3 files changed, 19 insertions(+), 9 deletions(-)
 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> [Merged into recent API changes, added commit log and docs]
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-
-...
-
-> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-> index 2faf9b45ac72..3197ff824809 100644
-> --- a/arch/x86/kernel/shstk.c
-> +++ b/arch/x86/kernel/shstk.c
-> @@ -451,9 +451,14 @@ long shstk_prctl(struct task_struct *task, int option, unsigned long features)
->  		return 0;
->  	}
->  
-> -	/* Don't allow via ptrace */
-> -	if (task != current)
-> +	/* Only allow via ptrace */
-> +	if (task != current) {
-
-Is that the only case? task != current means ptrace and there's no other
-way to do this from userspace?
-
-Isn't there some flag which says that task is ptraced? I think we should
-check that one too...
-
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index b46617207c93..0b6ba17cc8d3 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -222,7 +222,7 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+ #define tlb_needs_table_invalidate() (true)
+ #endif
+ 
+-void tlb_remove_table_sync_one(void);
++void tlb_remove_table_sync_one(struct mm_struct *mm);
+ 
+ #else
+ 
+@@ -230,7 +230,7 @@ void tlb_remove_table_sync_one(void);
+ #error tlb_needs_table_invalidate() requires MMU_GATHER_RCU_TABLE_FREE
+ #endif
+ 
+-static inline void tlb_remove_table_sync_one(void) { }
++static inline void tlb_remove_table_sync_one(struct mm_struct *mm) { }
+ 
+ #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+ 
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 5cb401aa2b9d..86a82c0ac41f 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1051,7 +1051,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	_pmd = pmdp_collapse_flush(vma, address, pmd);
+ 	spin_unlock(pmd_ptl);
+ 	mmu_notifier_invalidate_range_end(&range);
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 
+ 	spin_lock(pte_ptl);
+ 	result =  __collapse_huge_page_isolate(vma, address, pte, cc,
+@@ -1408,7 +1408,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 				addr + HPAGE_PMD_SIZE);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 	pmd = pmdp_collapse_flush(vma, addr, pmdp);
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 	mmu_notifier_invalidate_range_end(&range);
+ 	mm_dec_nr_ptes(mm);
+ 	page_table_check_pte_clear_range(mm, addr, pmd);
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 2b93cf6ac9ae..3b267600a5e9 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -9,6 +9,7 @@
+ #include <linux/smp.h>
+ #include <linux/swap.h>
+ #include <linux/rmap.h>
++#include <linux/context_tracking_state.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <asm/tlb.h>
+@@ -191,7 +192,15 @@ static void tlb_remove_table_smp_sync(void *arg)
+ 	/* Simply deliver the interrupt */
+ }
+ 
+-void tlb_remove_table_sync_one(void)
++static bool cpu_in_kernel(int cpu, void *info)
++{
++	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
++	int statue = atomic_read(&ct->state);
++	//will return true only for cpu's in kernel space
++	return !(statue & CT_STATE_MASK);
++}
++
++void tlb_remove_table_sync_one(struct mm_struct *mm)
+ {
+ 	/*
+ 	 * This isn't an RCU grace period and hence the page-tables cannot be
+@@ -200,7 +209,8 @@ void tlb_remove_table_sync_one(void)
+ 	 * It is however sufficient for software page-table walkers that rely on
+ 	 * IRQ disabling.
+ 	 */
+-	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
++	on_each_cpu_cond_mask(cpu_in_kernel, tlb_remove_table_smp_sync,
++			NULL, true, mm_cpumask(mm));
+ }
+ 
+ static void tlb_remove_table_rcu(struct rcu_head *head)
+@@ -237,9 +247,9 @@ static inline void tlb_table_invalidate(struct mmu_gather *tlb)
+ 	}
+ }
+ 
+-static void tlb_remove_table_one(void *table)
++static void tlb_remove_table_one(struct mm_struct *mm, void *table)
+ {
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 	__tlb_remove_table(table);
+ }
+ 
+@@ -262,7 +272,7 @@ void tlb_remove_table(struct mmu_gather *tlb, void *table)
+ 		*batch = (struct mmu_table_batch *)__get_free_page(GFP_NOWAIT | __GFP_NOWARN);
+ 		if (*batch == NULL) {
+ 			tlb_table_invalidate(tlb);
+-			tlb_remove_table_one(table);
++			tlb_remove_table_one(tlb->mm, table);
+ 			return;
+ 		}
+ 		(*batch)->nr = 0;
 -- 
-Regards/Gruss,
-    Boris.
+2.31.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
