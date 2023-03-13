@@ -2,201 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419176B7D32
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Mar 2023 17:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EDB6B7EEE
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Mar 2023 18:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjCMQPf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Mar 2023 12:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S230199AbjCMRL3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Mar 2023 13:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCMQPd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Mar 2023 12:15:33 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F6570A0;
-        Mon, 13 Mar 2023 09:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678724130; x=1710260130;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=xbyIRyOPRwgMQ6+VGNyTHFXmR2By6+UJNs8MEd95ld0=;
-  b=H5z0BavZt1gHhGSRrFmg9sHuXmOZDjsks4agtAEwqmQhBg0ee38Keqvs
-   DIUTs8/YHEMnYNA+A9PhmNSUGf/jAwq053z5H/hTue2NiWfTB2CMyKrGM
-   0pORGPxK79c8wu/Rl9XOYPJrQ7zXbGIc+nglTffKtLcml59so9Kea/Pqw
-   votF7h714CAZXGpUmViS0X2RWS92P5HnOlGZNb9/agvgoyJw2J80Supch
-   O9/5rozgDxSSgtYcoc4FSX+ZUD03k3RQ3EfLIcx3PEtSFIw2V99R2Zac6
-   /3ChxJm2fC+eM2uLXv7TPtpEx+s2F4jI13gnzhFusUwJ0tEjxQRoWIOeR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325552297"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="325552297"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:11:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="788986763"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="788986763"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Mar 2023 09:11:13 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 09:11:10 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 09:10:34 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 09:10:34 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 13 Mar 2023 09:10:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WLShmqSR8s6S3j6gEVLM41T9WL+sIwLyRt/oNaKYdSqDXEJYN8xFwNRTsbrNqHuXim7zE37v8NseUq+IZq+mF9sJxViWCpT++XRh6wgyWO58JifR7J1v43AWQd7ybAPetYR4acMqOjerp++xuA8r7kS0D2PPRnCfoBtgfPpnr8uz0q9gnjhBwBvP6W01XmA7tICLiMi+LTUC4jtF9W+anTgCchMKLw2vTJaEtGKMsWgVn0MBpqwt66Mc1joaxPk3ADwS+wM/YrBJeFRYf9+MZ9lcro2kCXO26qtBfmEe54vntndiwj/mPrcjieYSWR7PjWtG/bQYYtHhW986YFVXVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xbyIRyOPRwgMQ6+VGNyTHFXmR2By6+UJNs8MEd95ld0=;
- b=i15Ww1vy1LZlmqMTXgLpX86l0AmX1mA/+Ezp80rB9xKME1LCxh93oIv3i9HW2aFcEDaRgYkr8MkRvJ1lZTL2jZpbvODDXIo7uvfpaJ9sTvgJ3s06qmZebvrUQDnPT0hEMuqtfd7kE0CFXotk1qc3B2IwHVP3DgSpEICkDFmpiN8WxrbP3mc3FgNviDxrESlK88ghOoV96FqOG5JhMbl3zbsMwSpl/Wm7f3bEXsuU+lFTIDug1yv9tZz8VZchld6dhbaC57UdNdj+NyOlDR5bCMA2QNHtLTpXvp59SDMo4uhqDS8+IYJdSMFnxBHj+Tfb4MXuUdLP789MhEy5dDmmiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by CO6PR11MB5586.namprd11.prod.outlook.com (2603:10b6:5:35d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 16:10:15 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 16:10:15 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 38/41] x86/fpu: Add helper for initing features
-Thread-Topic: [PATCH v7 38/41] x86/fpu: Add helper for initing features
-Thread-Index: AQHZSvtH//l8GkMHSEuT277fH1R14q71m1QAgAJ6WACAAItGgIAAVasA
-Date:   Mon, 13 Mar 2023 16:10:14 +0000
-Message-ID: <04f821e6d4a8a736e6df2eb73ce811022cd42537.camel@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-         <20230227222957.24501-39-rick.p.edgecombe@intel.com>
-         <ZAx6Egh6U5SCZEby@zn.tnic>
-         <3385eaf888f4178607ce4621ae2103d08ba79994.camel@intel.com>
-         <20230313110335.GAZA8DB6PNSMGOGHpw@fat_crate.local>
-In-Reply-To: <20230313110335.GAZA8DB6PNSMGOGHpw@fat_crate.local>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|CO6PR11MB5586:EE_
-x-ms-office365-filtering-correlation-id: cc5d0c87-bec2-4438-8046-08db23dd6e5b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YeTQKM515azt8rVV0S4JIlxlTvv8gQdwBlvrKkehJL6J3RT84crL0wPaa3R5f4nHg8Q0Hf90zkA5YBmKNYt9xH8u9Q+gH/DSj4PAlbWS6/39enTLztzbNjVA4A4In9PQ2y9E/o89714ndZ3z1rY0sUmehpFCiXwgNHmHX/ZLxtTY6QR/C+pjVPG4+HxFfpAhjzQYGuwKVnq5yfbtEg6yRSO5zwxkma8wKKbRp8hZFTzJctgYzSseof4EmXExra3zNEdZw0FRCMPYTdLo+iA5hP/dN7n37qkl2DQqfLJK8b+omJ07tVRK71m8NyW1NsizNBeynkd6Kj3Y+7/D8i1aYdwyKys9hUexdSZbUQenKavjtgpHgU6Mn+JT4Z3xtTvqcYOnpk6ZDov8vS52Yta4Nzcouvq8V3IhtMRqOMZ7hA2upzt8hEOoVeVGpYaSUvUwd3Nho77cYk2PM1VO5rJJN/dfSDb/u3ylzBhAxGdjPDRca9rdqcayA5UPhnuARbW3k+AB4KBs3vm9SpWmAX2e61Ps7dM2Qxiy6bWrR0aedyUlqnexMFxFAdEuLh2HEK+ygbEvQbpe79cC1jia4foBFWYvDa9nJJLSSpQ+dG+g2ZvY6Nb0F3uHSIU65a8UMldeeGwtkjbEdx9cVAOWuGWD4mKu2KdfOA4tERkyjaHHN3MHPI+AdBEfK5xrlZYJ3COT1sS8Z+JDUb6s+bagtIgBKIQp2t2Hgg7xT9gldSLwASI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199018)(38070700005)(86362001)(36756003)(38100700002)(82960400001)(122000001)(66476007)(66556008)(66946007)(4326008)(6916009)(76116006)(66446008)(64756008)(8676002)(41300700001)(54906003)(478600001)(8936002)(7406005)(5660300002)(7416002)(2906002)(2616005)(6486002)(71200400001)(6512007)(26005)(186003)(6506007)(316002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SmdDSzBKK3Rpb0tTRDhDMTA5SEUzK0VFN3l3azY5Ull1dlRCQjRwRTJUR1ZN?=
- =?utf-8?B?ZkRQTWFpbnVFdnFUUjcwR1ozWGNwdHYxMkQwWTBROTJEeUJQOHFYWWN4cjlz?=
- =?utf-8?B?Y05aaTg1dnl4SGZneHNPaEpzNWNHc2NpZUszYVlLU3BkZEw3czRKWWNuMGhO?=
- =?utf-8?B?bjNkM0REY3V1TGF2NitlQWZ0ekUvUnlSa2t1aXh2bDRRSFQ0SWhKVUZCMjFU?=
- =?utf-8?B?MGIzRzFVK1FGMGFyYjM2cVU3aUhOYzg0MTQ2RE9hNi9yNUhscTZ4WXhjVVBQ?=
- =?utf-8?B?ZS9OdE9WdVpmVXp0d3IySXNXeWEvVXhqd2ZoWllCVy9MS1JXNk1kZ3lGeXBn?=
- =?utf-8?B?bmI4SnllZU5yeHlWYkMrSHJGOFZmTXZpRnFJU05lM2p6NGxUeVFwdmxnK1h5?=
- =?utf-8?B?RzV5dFVhTjhza1FEcTlhL1cwN1RDNU1WOERydEx2Z0lpTXlyUUFEcTJVdU1V?=
- =?utf-8?B?RkZKTFVadEU0czRBUmswWGFTS0xmbmJnc3IxaC9uMXNyc2NmTFNYZ2FKd2tS?=
- =?utf-8?B?TCtYNHRpL29YL1pJRFdtZ25DOE1XVXFQL2pVSXl1VS9JV0Yva2VEckdVQjkz?=
- =?utf-8?B?QVdYMW1rQ3NVUU5yY0ppeVNJMGdyT0xtMG9FL2pvQTRGTUc1Syt5am9aQXQx?=
- =?utf-8?B?TnFpT0FFWFBXT29PREpHanRrekErQ2ZVVTIyeUF4OXBLZ21SQ0lOYjlNWlZm?=
- =?utf-8?B?ZU1qcmRRUEh1ckorQ3hxSHR3djJWK0Q5OW9zOHkyQ05ZUEN1QTZXUkkxOG9M?=
- =?utf-8?B?Q0tEb0h3MkpSemtadkdjSm12dm40dUk1VFpQaFBrVUVyOVpSUnd1VXdYZEVY?=
- =?utf-8?B?eW42MHFNcnR0RnlYSTFBMzdoNjFtU0ZnMEFuTFp0Zk1BNVhFNVowd2UxY2Fu?=
- =?utf-8?B?dmR1NThSbEJuRVFxN3E2dWdHS1ArOVRoZGlrM2RYT3JXcW95UWdIUmF2RXl5?=
- =?utf-8?B?Ri81bkswaWQ0ckhBNVNLdXhXR0NVMlVzNlhlN2ZFVldxbldGUUE0ZnEyL0Fq?=
- =?utf-8?B?TVJqN0FoeE4va2tDSysrcUtIYWk5NjNabkdKM0pUZ3RQQTFwb2dGeFZPWmNm?=
- =?utf-8?B?K1FZZGIzSFpZMWgvS2ZiMHN6VnJDcUtxTHlRK2E2MzdaZnZNelNpdE9XL3Z2?=
- =?utf-8?B?K1NrMTlWOVV4ZEg0bHdZR0h0S1VzKzVBRmRxbkl2alI1SGhFUFkycmRua3Zo?=
- =?utf-8?B?a0pLU1JLQ0F6SDRkWHhYaHNKczlnZDFDaVpVYzYxZHpnK0kvRERhNHFBZUta?=
- =?utf-8?B?OUYzWVVwRnZKOStWZXg5SU8zU05SdEhlYUpkdllabVBXZVBmVEZjc0E3emc3?=
- =?utf-8?B?dHJKdHJhZTRmTXQrZEdVKy9sNXJYL3F0WXU3NWVzSVFmRDlVS2l2dzgrc0Jq?=
- =?utf-8?B?TGhVNFZuWW53RlFZUzFyTFNUeTE3MnltaEFCeHlXOFJWMmFtbEpGMVNheGl3?=
- =?utf-8?B?SUFUVzFxZm40TTVVMzNHL2tCTjBxYkVlTklHdkRSdjNTMGZRVnBNMDBFdlhr?=
- =?utf-8?B?b1A0YU1mcm42bHRhclZ1N1VaV3F0RjNnSXJlQnV4NHBNYWh6UUNMS0tUSmo3?=
- =?utf-8?B?UTZyamdpNlVhQXZhL1B4cDZDN1JKODM2Z1hUUlplNEVnQXBEMGFsNWdUNWEz?=
- =?utf-8?B?cXNVeTdtNXNrby9Eb2lmeERDYUJLd0theGZCY2RENzlCYTA1WkR2UElOTzJS?=
- =?utf-8?B?Sk1IM2RoQW9ERkorVHZBVFVQejA4dmx5QnhsdlcvcjFMd0gvL1BPclhmeDZp?=
- =?utf-8?B?dVJ1c3J3UzlsbGl5QlJvVXJ4algwRFVYTmdDL0p4TWhhR2QvZDJlRVRLVU91?=
- =?utf-8?B?MzV6VVBPYmd0a1VRRnVzVVlBUVN1TmJZOEVuWTJOTmVyb2VxRjNFWTRKNXln?=
- =?utf-8?B?UCs3Rkp6VmJpOEczempnRHRPbzI4ZnNGS1FwNXFWbzRJY3l1dytweS9pcjFj?=
- =?utf-8?B?RUtJWW83V2pEL3Z4WEx2N0R1NEtPRUNEc2EvU2gvMUVRMUZiUVA3QnBYbW5s?=
- =?utf-8?B?VWlacmR4VzdSTXFvNTdndVFDOXY0Y0daQjh4cm5QdUdWRUZMOXcrOTlPOXF0?=
- =?utf-8?B?eEtIaC94Sk9PV1dZYVhvNVkzZEZvNUxxcUlTQlV1SS80ZUN6Z1BnNEJERDkz?=
- =?utf-8?B?RnJKQWVZWjJGclEwTTVmaVFiZWdlTDhOQmhzdW5TUUdYZXkzL1dnMnlKMjUr?=
- =?utf-8?Q?CLd9vtv3UhxmfSlocE8xOSs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <502F7F5861171447ACC9017BDE752B47@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230238AbjCMRL2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Mar 2023 13:11:28 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CD9E1A644;
+        Mon, 13 Mar 2023 10:10:51 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id B642420C5A48; Mon, 13 Mar 2023 10:02:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B642420C5A48
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678726930;
+        bh=rHkMVLkuBYnPzdmwlt2WJuj1IZOknppY/Qczcdxao4I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jl8ersrDie4qZ+d8IntOeMTSetQsrQxwHzQJEyCI69PKxEFMc4a8iokrJ0218t/fu
+         mGfgomm+pZx4fGVPKrGW7Bvkkkt0k2LDf5Mbdoa4gecPeRRa8aLtCGaM0M//5iSK2C
+         gKz8oSj5do+P4Ejn0H6zbHyndqkgSV4+AyN9ZKNI=
+Date:   Mon, 13 Mar 2023 10:02:10 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
+Message-ID: <20230313170210.GA4354@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
+ <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+ <87a60gww0h.fsf@redhat.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc5d0c87-bec2-4438-8046-08db23dd6e5b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 16:10:14.8823
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AVKCKEcCMNik/oi4Z170ysCwfpZvSEvusg2K0WNRNM93EPRa7aVDZ5ekp+LB5EfRPVbYr9QnvcIB/ArKCGTtiA9qvQrNEwBTIUGTIi/oAQE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5586
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a60gww0h.fsf@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -204,40 +53,535 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTAzLTEzIGF0IDEyOjAzICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
-DQo+IE9uIE1vbiwgTWFyIDEzLCAyMDIzIGF0IDAyOjQ1OjA4QU0gKzAwMDAsIEVkZ2Vjb21iZSwg
-UmljayBQIHdyb3RlOg0KPiA+IFRoZXNlIHR3byBhcmUgZnJvbSB0aGUgZXhpc3RpbmcgY29kZS4g
-QmFzaWNhbGx5IHRoZXkgZ2V0IGV4dHJhY3RlZA0KPiA+IGludG8NCj4gPiBhIG5ldyBmdW5jdGlv
-bi4NCj4gDQo+IEkga25vdyBidXQgeW91IGNhbiBmaXggdGhlbSB3aGlsZSBhdCBpdC4NCg0KT2su
-DQoNCj4gDQo+ID4gSSBkaWQgaXQgdXAsIGFuZCBpdCBtYWtlcyB0aGUgY2FsbGVyIGNvZGUgY2xl
-YW5lci4gQnV0IEknbSBub3Qgc3VyZQ0KPiA+IHdoYXQgdG8gdGhpbmsgb2YgaXQuIElzIHRoaXMg
-bm90IG1peGluZyB0d28gb3BlcmF0aW9ucyB0b2dldGhlcj8NCj4gPiBUb2RheQ0KPiA+IGdldF94
-c2F2ZV9hZGRyKCkgcHJldHR5IG11Y2gganVzdCBnZXRzIGEgYnVmZmVyIG9mZnNldCB3aXRoIHNv
-bWUNCj4gPiBjaGVja3MuIE5vdyBpdCB3b3VsZCBjb21wdXRlIHRoZSBvZmZzZXQgYW5kIGFsc28g
-c2lsZW50bHkgZ28gb2ZmDQo+ID4gYW5kDQo+ID4gY2hhbmdlcyB0aGUgYnVmZmVyLg0KPiANCj4g
-T2ssIHNvIHdoeSBkb24ndCB5b3Ugd3JpdGUgdGhlIGNhbGwgc2l0ZSB0aGlzIHdheSBpbnN0ZWFk
-Og0KPiANCj4gICAgICAgICBjZXRyZWdzID0gZ2V0X3hzYXZlX2FkZHIoeHNhdmUsIFhGRUFUVVJF
-X0NFVF9VU0VSKTsNCj4gICAgICAgICBpZiAoIWNldHJlZ3MpIHsNCj4gICAgICAgICAgICAgICAg
-IGlmICh4ZmVhdHVyZV9zYXZlZCh4c2F2ZSwgWEZFQVRVUkVfQ0VUX1VTRVIpKSB7DQo+ICAgICAg
-ICAgICAgICAgICAgICAgICAgIFdBUk4oInNvbWV0aGluZydzIHdyb25nIHdpdGggdGhpcyBidWZm
-ZXIiKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLi4uOw0KPiAgICAgICAgICAg
-ICAgICAgfQ0KPiANCj4gICAgICAgICAgICAgICAgIC8qIE5vdCBzYXZlZCwgaW5pdGlhbGl6ZSBp
-dCAqLw0KPiAgICAgICAgICAgICAgICAgaW5pdF94ZmVhdHVyZSh4c2F2ZSwgWEZFQVRVUkVfQ0VU
-X1VTRVIpKTsNCj4gICAgICAgICB9DQo+IA0KPiAgICAgICAgIGNldHJlZ3MgPSBnZXRfeHNhdmVf
-YWRkcih4c2F2ZSwgWEZFQVRVUkVfQ0VUX1VTRVIpOw0KPiAgICAgICAgIGlmICghY2V0cmVncykg
-ew0KPiAgICAgICAgICAgICAgICAgV0FSTl9PTigiV1RGIikNCj4gICAgICAgICAgICAgICAgIHJl
-dHVybiAtRU5PREVWOw0KPiAgICAgICAgIH0NCj4gDQo+IE5vdyBpdCBpcyBjbGVhciB3aGF0IGhh
-cHBlbnMgYW5kIGl0IGlzIGEgY29tbW9uIGNvZGUgcGF0dGVybiBvZg0KPiB0cnlpbmcNCj4gdG8g
-Z2V0IHNvbWV0aGluZyBhbmQgaW5pdGlhbGl6aW5nIGl0IGlmIGl0IHdhc24ndCBpbml0aWFsaXpl
-ZCB5ZXQsDQo+IGFuZA0KPiB0aGVuIHJldHJ5aW5nLi4uDQo+IA0KPiBIbW0/DQoNClRoaXMgc2Vl
-bXMgbW9yZSBjbGVhci4gSSdtIHNvcnJ5IGZvciB0aGUgbm9pc2UgaGVyZSB0aG91Z2gsIGJlY2F1
-c2UNCnRoaXMgaGFzIG1hZGUgbWUgcmVhbGl6ZSB0aGF0IHRoZSBpbml0aW5nIGxvZ2ljIHNob3Vs
-ZCBuZXZlciBiZSBoaXQuIFdlDQp1c2VkIHRvIHN1cHBvcnQgdGhlIGZ1bGwgQ0VUX1Ugc3RhdGUg
-aW4gcHRyYWNlLCBidXQgdGhlbiBkcm9wcGVkIGl0IHRvDQpqdXN0IHRoZSBTU1AgYW5kIG9ubHkg
-YWxsb3dlZCBpdCB3aGVuIHNoYWRvdyBzdGFjayBpcyBhY3RpdmUuIFRoaXMNCm1lYW5zIHRoYXQg
-Q0VUX1Ugd2lsbCBhbHdheXMgaGF2ZSBhdCBsZWFzdCB0aGUgQ0VUX1NIU1RLX0VOIGJpdCBzZXQg
-YW5kDQpzbyBub3QgYmUgaW4gdGhlIGluaXQgc3RhdGUuIFNvIHRoaXMgY2FuIHByb2JhYmx5IGp1
-c3Qgd2FybiBhbmQgYmFpbCBpZg0KaXQgc2VlcyBhbiBpbml0IHN0YXRlLg0KDQpVbmxlc3MgdGhl
-IGV4dHJhIGxvZ2ljIHNlZW1zIG1vcmUgcm9idXN0PyBCdXQgaXQgaXMgYWx3YXlzIG5pY2Ugd2hl
-bg0KdGhlIGNoYW5jZSBjb21lcyB0byBkcm9wIGEgcGF0Y2ggb3V0IG9mIHRoaXMgdGhpbmcuLi4N
-Cg==
+On Mon, Mar 13, 2023 at 03:45:02PM +0100, Vitaly Kuznetsov wrote:
+> Saurabh Sengar <ssengar@linux.microsoft.com> writes:
+> 
+> > Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
+> > feature. VSM is a set of hypervisor capabilities and enlightenments
+> > offered to host and guest partitions which enable the creation and
+> > management of new security boundaries within operating system software.
+> > VSM achieves and maintains isolation through VTLs.
+> >
+> > Add early initialization for Virtual Trust Levels (VTL). This includes
+> > initializing the x86 platform for VTL and enabling boot support for
+> > secondary CPUs to start in targeted VTL context. For now, only enable
+> > the code for targeted VTL level as 2.
+> >
+> > When starting an AP at a VTL other than VTL 0, the AP must start directly
+> > in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
+> > transition sequence that occurs after waking up an AP with SIPI whose
+> > vector points to the 16-bit AP startup trampoline code.
+> >
+> > This commit also moves hv_get_nmi_reason function to header file, so
+> > that it can be reused by VTL.
+> >
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  arch/x86/Kconfig                   |  24 +++
+> >  arch/x86/hyperv/Makefile           |   1 +
+> >  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
+> >  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
+> >  arch/x86/include/asm/mshyperv.h    |  14 ++
+> >  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+> >  include/asm-generic/hyperv-tlfs.h  |   4 +
+> 
+> This patch is quite big, I'd suggest you split it up. E.g. TLFS definitions
+> can easily be a separate patch. Moving hv_get_nmi_reason() can be a
+> separate patch. Secondary CPU bringup can be a separate patch. The new
+> config option to enable the feature (assuming it is really needed) can
+> be the last separate patch.
+
+Ok will do in next version.
+
+> 
+> >  7 files changed, 346 insertions(+), 5 deletions(-)
+> >  create mode 100644 arch/x86/hyperv/hv_vtl.c
+> >
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 453f462f6c9c..b9e52ac9c9f9 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
+> >  
+> >  if HYPERVISOR_GUEST
+> >  
+> > +config HYPERV_VTL
+> > +	bool "Enable VTL"
+> > +	depends on X86_64 && HYPERV
+> > +	default n
+> > +	help
+> > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+> > +	  enlightenments offered to host and guest partitions which enables
+> > +	  the creation and management of new security boundaries within
+> > +	  operating system software.
+> > +
+> > +	  VSM achieves and maintains isolation through Virtual Trust Levels
+> > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+> > +	  being more privileged than lower levels. VTL0 is the least privileged
+> > +	  level, and currently only other level supported is VTL2.
+> > +
+> > +	  Select this option to build a Linux kernel to run at a VTL other than
+> > +	  the normal VTL 0, which currently is only VTL 2.  This option
+> > +	  initializes the x86 platform for VTL 2, and adds the ability to boot
+> > +	  secondary CPUs directly into 64-bit context as required for VTLs other
+> > +	  than 0.  A kernel built with this option must run at VTL 2, and will
+> > +	  not run as a normal guest.
+> 
+> This is quite unfortunate, is there a way to detect which VTL the guest
+> is running at and change the behavior dynamically?
+
+Only way to detect VTL is via hypercall. However hypercalls are not
+available this early in boot sequence.
+
+> 
+> > +
+> > +	  If unsure, say N
+> > +
+> >  config PARAVIRT
+> >  	bool "Enable paravirtualization code"
+> >  	depends on HAVE_STATIC_CALL
+> > diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
+> > index 5d2de10809ae..a538df01181a 100644
+> > --- a/arch/x86/hyperv/Makefile
+> > +++ b/arch/x86/hyperv/Makefile
+> > @@ -1,6 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
+> >  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
+> > +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
+> >  
+> >  ifdef CONFIG_X86_64
+> >  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
+> > diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> > new file mode 100644
+> > index 000000000000..0da8b242eb8b
+> > --- /dev/null
+> > +++ b/arch/x86/hyperv/hv_vtl.c
+> > @@ -0,0 +1,227 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2023, Microsoft Corporation.
+> > + *
+> > + * Author:
+> > + *   Saurabh Sengar <ssengar@microsoft.com>
+> > + */
+> > +
+> > +#include <asm/apic.h>
+> > +#include <asm/boot.h>
+> > +#include <asm/desc.h>
+> > +#include <asm/i8259.h>
+> > +#include <asm/mshyperv.h>
+> > +#include <asm/realmode.h>
+> > +
+> > +extern struct boot_params boot_params;
+> > +static struct real_mode_header hv_vtl_real_mode_header;
+> > +
+> > +void __init hv_vtl_init_platform(void)
+> > +{
+> > +	pr_info("Initializing Hyper-V VTL\n");
+> > +
+> > +	x86_init.irqs.pre_vector_init = x86_init_noop;
+> > +	x86_init.timers.timer_init = x86_init_noop;
+> > +
+> > +	x86_platform.get_wallclock = get_rtc_noop;
+> > +	x86_platform.set_wallclock = set_rtc_noop;
+> > +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
+> > +
+> > +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
+> > +	x86_platform.legacy.rtc = 0;
+> > +	x86_platform.legacy.warm_reset = 0;
+> > +	x86_platform.legacy.reserve_bios_regions = 0;
+> > +	x86_platform.legacy.devices.pnpbios = 0;
+> > +}
+> > +
+> > +static inline u64 hv_vtl_system_desc_base(struct ldttss_desc *desc)
+> > +{
+> > +	return ((u64)desc->base3 << 32) | ((u64)desc->base2 << 24) |
+> > +		(desc->base1 << 16) | desc->base0;
+> > +}
+> > +
+> > +static inline u32 hv_vtl_system_desc_limit(struct ldttss_desc *desc)
+> > +{
+> > +	return ((u32)desc->limit1 << 16) | (u32)desc->limit0;
+> > +}
+> > +
+> > +typedef void (*secondary_startup_64_fn)(void*, void*);
+> > +static void hv_vtl_ap_entry(void)
+> > +{
+> > +	((secondary_startup_64_fn)secondary_startup_64)(&boot_params, &boot_params);
+> > +}
+> > +
+> > +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
+> > +{
+> > +	u64 status;
+> > +	int ret = 0;
+> > +	struct hv_enable_vp_vtl *input;
+> > +	unsigned long irq_flags;
+> > +
+> > +	struct desc_ptr gdt_ptr;
+> > +	struct desc_ptr idt_ptr;
+> > +
+> > +	struct ldttss_desc *tss;
+> > +	struct ldttss_desc *ldt;
+> > +	struct desc_struct *gdt;
+> > +
+> > +	u64 rsp = initial_stack;
+> > +	u64 rip = (u64)&hv_vtl_ap_entry;
+> > +
+> > +	native_store_gdt(&gdt_ptr);
+> > +	store_idt(&idt_ptr);
+> > +
+> > +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
+> > +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
+> > +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
+> > +
+> > +	local_irq_save(irq_flags);
+> > +
+> > +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+> > +	memset(input, 0, sizeof(*input));
+> > +
+> > +	input->partition_id = HV_PARTITION_ID_SELF;
+> > +	input->vp_index = target_vp_index;
+> > +	input->target_vtl.target_vtl = HV_VTL_MGMT;
+> > +
+> > +	/*
+> > +	 * The x86_64 Linux kernel follows the 16-bit -> 32-bit -> 64-bit
+> > +	 * mode transition sequence after waking up an AP with SIPI whose
+> > +	 * vector points to the 16-bit AP startup trampoline code. Here in
+> > +	 * VTL2, we can't perform that sequence as the AP has to start in
+> > +	 * the 64-bit mode.
+> > +	 *
+> > +	 * To make this happen, we tell the hypervisor to load a valid 64-bit
+> > +	 * context (most of which is just magic numbers from the CPU manual)
+> > +	 * so that AP jumps right to the 64-bit entry of the kernel, and the
+> > +	 * control registers are loaded with values that let the AP fetch the
+> > +	 * code and data and carry on with work it gets assigned.
+> > +	 */
+> > +
+> > +	input->vp_context.rip = rip;
+> > +	input->vp_context.rsp = rsp;
+> > +	input->vp_context.rflags = 0x0000000000000002;
+> > +	input->vp_context.efer = __rdmsr(MSR_EFER);
+> > +	input->vp_context.cr0 = native_read_cr0();
+> > +	input->vp_context.cr3 = __native_read_cr3();
+> > +	input->vp_context.cr4 = native_read_cr4();
+> > +	input->vp_context.msr_cr_pat = __rdmsr(MSR_IA32_CR_PAT);
+> > +	input->vp_context.idtr.limit = idt_ptr.size;
+> > +	input->vp_context.idtr.base = idt_ptr.address;
+> > +	input->vp_context.gdtr.limit = gdt_ptr.size;
+> > +	input->vp_context.gdtr.base = gdt_ptr.address;
+> > +
+> > +	/* Non-system desc (64bit), long, code, present */
+> > +	input->vp_context.cs.selector = __KERNEL_CS;
+> > +	input->vp_context.cs.base = 0;
+> > +	input->vp_context.cs.limit = 0xffffffff;
+> > +	input->vp_context.cs.attributes = 0xa09b;
+> > +	/* Non-system desc (64bit), data, present, granularity, default */
+> > +	input->vp_context.ss.selector = __KERNEL_DS;
+> > +	input->vp_context.ss.base = 0;
+> > +	input->vp_context.ss.limit = 0xffffffff;
+> > +	input->vp_context.ss.attributes = 0xc093;
+> > +
+> > +	/* System desc (128bit), present, LDT */
+> > +	input->vp_context.ldtr.selector = GDT_ENTRY_LDT * 8;
+> > +	input->vp_context.ldtr.base = hv_vtl_system_desc_base(ldt);
+> > +	input->vp_context.ldtr.limit = hv_vtl_system_desc_limit(ldt);
+> > +	input->vp_context.ldtr.attributes = 0x82;
+> > +
+> > +	/* System desc (128bit), present, TSS, 0x8b - busy, 0x89 -- default */
+> > +	input->vp_context.tr.selector = GDT_ENTRY_TSS * 8;
+> > +	input->vp_context.tr.base = hv_vtl_system_desc_base(tss);
+> > +	input->vp_context.tr.limit = hv_vtl_system_desc_limit(tss);
+> > +	input->vp_context.tr.attributes = 0x8b;
+> > +
+> > +	status = hv_do_hypercall(HVCALL_ENABLE_VP_VTL, input, NULL);
+> > +
+> > +	if (!hv_result_success(status) &&
+> > +	    hv_result(status) != HV_STATUS_VTL_ALREADY_ENABLED) {
+> > +		pr_err("HVCALL_ENABLE_VP_VTL failed for VP : %d ! [Err: %#llx\n]",
+> > +		       target_vp_index, status);
+> > +		ret = -EINVAL;
+> > +		goto free_lock;
+> > +	}
+> > +
+> > +	status = hv_do_hypercall(HVCALL_START_VP, input, NULL);
+> > +
+> > +	if (!hv_result_success(status)) {
+> > +		pr_err("HVCALL_START_VP failed for VP : %d ! [Err: %#llx]\n",
+> > +		       target_vp_index, status);
+> > +		ret = -EINVAL;
+> > +	}
+> > +
+> > +free_lock:
+> > +	local_irq_restore(irq_flags);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
+> > +{
+> > +	u64 control;
+> > +	u64 status;
+> > +	unsigned long irq_flags;
+> > +	struct hv_get_vp_from_apic_id_in *input;
+> > +	u32 *output, ret;
+> > +
+> > +	local_irq_save(irq_flags);
+> > +
+> > +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+> > +	memset(input, 0, sizeof(*input));
+> > +	input->partition_id = HV_PARTITION_ID_SELF;
+> > +	input->apic_ids[0] = apic_id;
+> > +
+> > +	output = (u32 *)input;
+> > +
+> > +	control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_ID_FROM_APIC_ID;
+> > +	status = hv_do_hypercall(control, input, output);
+> > +	ret = output[0];
+> > +
+> > +	local_irq_restore(irq_flags);
+> > +
+> > +	if (!hv_result_success(status)) {
+> > +		pr_err("failed to get vp id from apic id %d, status %#llx\n",
+> > +		       apic_id, status);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int hv_vtl_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
+> > +{
+> > +	int vp_id;
+> > +
+> > +	pr_debug("Bringing up CPU with APIC ID %d in VTL2...\n", apicid);
+> > +	vp_id = hv_vtl_apicid_to_vp_id(apicid);
+> > +
+> > +	if (vp_id < 0) {
+> > +		pr_err("Couldn't find CPU with APIC ID %d\n", apicid);
+> > +		return -EINVAL;
+> > +	}
+> > +	if (vp_id > ms_hyperv.max_vp_index) {
+> > +		pr_err("Invalid CPU id %d for APIC ID %d\n", vp_id, apicid);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	return hv_vtl_bringup_vcpu(vp_id, start_eip);
+> > +}
+> > +
+> > +static int __init hv_vtl_early_init(void)
+> > +{
+> > +	/*
+> > +	 * `boot_cpu_has` returns the runtime feature support,
+> > +	 * and here is the earliest it can be used.
+> > +	 */
+> > +	if (cpu_feature_enabled(X86_FEATURE_XSAVE))
+> > +		panic("XSAVE has to be disabled as it is not supported by this module.\n"
+> > +			  "Please add 'noxsave' to the kernel command line.\n");
+> 
+> Can't we just suppress the feature early instead?
+
+`noxsave` is parsed very early in boot sequence. Possibly this needs to
+be done even before the FPU system is initialized.
+
+Moreover we suspect there could be other things dependent on noxsave
+and nofpu which should be handled. I am not sure if there is any easy
+way to do this, hence decide to have requirement for 'noxsave'
+commandline. Please let me know your suggestion if any.
+
+> 
+> > +
+> > +	real_mode_header = &hv_vtl_real_mode_header;
+> > +	apic->wakeup_secondary_cpu_64 = hv_vtl_wakeup_secondary_cpu;
+> > +
+> > +	return 0;
+> > +}
+> > +early_initcall(hv_vtl_early_init);
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> > index 0b73a809e9e1..08a6845a233d 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -713,6 +713,81 @@ union hv_msi_entry {
+> >  	} __packed;
+> >  };
+> >  
+> > +struct hv_x64_segment_register {
+> > +	__u64 base;
+> > +	__u32 limit;
+> > +	__u16 selector;
+> > +	union {
+> > +		struct {
+> > +			__u16 segment_type : 4;
+> > +			__u16 non_system_segment : 1;
+> > +			__u16 descriptor_privilege_level : 2;
+> > +			__u16 present : 1;
+> > +			__u16 reserved : 4;
+> > +			__u16 available : 1;
+> > +			__u16 _long : 1;
+> > +			__u16 _default : 1;
+> > +			__u16 granularity : 1;
+> > +		} __packed;
+> > +		__u16 attributes;
+> > +	};
+> > +} __packed;
+> > +
+> > +struct hv_x64_table_register {
+> > +	__u16 pad[3];
+> > +	__u16 limit;
+> > +	__u64 base;
+> > +} __packed;
+> > +
+> > +struct hv_init_vp_context_t {
+> > +	u64 rip;
+> > +	u64 rsp;
+> > +	u64 rflags;
+> > +
+> > +	struct hv_x64_segment_register cs;
+> > +	struct hv_x64_segment_register ds;
+> > +	struct hv_x64_segment_register es;
+> > +	struct hv_x64_segment_register fs;
+> > +	struct hv_x64_segment_register gs;
+> > +	struct hv_x64_segment_register ss;
+> > +	struct hv_x64_segment_register tr;
+> > +	struct hv_x64_segment_register ldtr;
+> > +
+> > +	struct hv_x64_table_register idtr;
+> > +	struct hv_x64_table_register gdtr;
+> > +
+> > +	u64 efer;
+> > +	u64 cr0;
+> > +	u64 cr3;
+> > +	u64 cr4;
+> > +	u64 msr_cr_pat;
+> > +} __packed;
+> > +
+> > +union hv_input_vtl {
+> > +	u8 as_uint8;
+> > +	struct {
+> > +		u8 target_vtl: 4;
+> > +		u8 use_target_vtl: 1;
+> > +		u8 reserved_z: 3;
+> > +	};
+> > +} __packed;
+> > +
+> > +struct hv_enable_vp_vtl {
+> > +	u64				partition_id;
+> > +	u32				vp_index;
+> > +	union hv_input_vtl		target_vtl;
+> > +	u8				mbz0;
+> > +	u16				mbz1;
+> > +	struct hv_init_vp_context_t	vp_context;
+> > +} __packed;
+> > +
+> > +struct hv_get_vp_from_apic_id_in {
+> > +	u64 partition_id;
+> > +	union hv_input_vtl target_vtl;
+> > +	u8 res[7];
+> > +	u32 apic_ids[];
+> > +} __packed;
+> > +
+> >  #include <asm-generic/hyperv-tlfs.h>
+> >  
+> >  #endif
+> > diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> > index 4c4c0ec3b62e..4ff549dcd49a 100644
+> > --- a/arch/x86/include/asm/mshyperv.h
+> > +++ b/arch/x86/include/asm/mshyperv.h
+> > @@ -11,6 +11,10 @@
+> >  #include <asm/paravirt.h>
+> >  #include <asm/mshyperv.h>
+> >  
+> > +#define HV_VTL_NORMAL 0x0
+> > +#define HV_VTL_SECURE 0x1
+> > +#define HV_VTL_MGMT   0x2
+> 
+> Don't these belong to hyperv-tlfs.h too (even if they're not directly
+> described in Hyper-V TLFS)?
+
+Can move these to x86/include/asm/hyperv-tlfs.h
+
+> 
+> > +
+> >  union hv_ghcb;
+> >  
+> >  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
+> > @@ -181,6 +185,11 @@ static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
+> >  	return hv_vp_assist_page[cpu];
+> >  }
+> >  
+> > +static inline unsigned char hv_get_nmi_reason(void)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> >  void __init hyperv_init(void);
+> >  void hyperv_setup_mmu_ops(void);
+> >  void set_hv_tscchange_cb(void (*cb)(void));
+> > @@ -266,6 +275,11 @@ static inline int hv_set_mem_host_visibility(unsigned long addr, int numpages,
+> >  }
+> >  #endif /* CONFIG_HYPERV */
+> >  
+> > +#ifdef CONFIG_HYPERV_VTL
+> > +void __init hv_vtl_init_platform(void);
+> > +#else
+> > +static inline void __init hv_vtl_init_platform(void) {}
+> > +#endif
+> >  
+> >  #include <asm-generic/mshyperv.h>
+> >  
+> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> > index f36dc2f796c5..da5d13d29c4e 100644
+> > --- a/arch/x86/kernel/cpu/mshyperv.c
+> > +++ b/arch/x86/kernel/cpu/mshyperv.c
+> > @@ -250,11 +250,6 @@ static uint32_t  __init ms_hyperv_platform(void)
+> >  	return HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS;
+> >  }
+> >  
+> > -static unsigned char hv_get_nmi_reason(void)
+> > -{
+> > -	return 0;
+> > -}
+> > -
+> >  #ifdef CONFIG_X86_LOCAL_APIC
+> >  /*
+> >   * Prior to WS2016 Debug-VM sends NMIs to all CPUs which makes
+> > @@ -521,6 +516,7 @@ static void __init ms_hyperv_init_platform(void)
+> >  
+> >  	/* Register Hyper-V specific clocksource */
+> >  	hv_init_clocksource();
+> > +	hv_vtl_init_platform();
+> >  #endif
+> >  	/*
+> >  	 * TSC should be marked as unstable only after Hyper-V
+> > diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> > index b870983596b9..87258341fd7c 100644
+> > --- a/include/asm-generic/hyperv-tlfs.h
+> > +++ b/include/asm-generic/hyperv-tlfs.h
+> > @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
+> >  /* Declare the various hypercall operations. */
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
+> > +#define HVCALL_ENABLE_VP_VTL			0x000f
+> >  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+> >  #define HVCALL_SEND_IPI				0x000b
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+> > @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
+> >  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
+> >  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+> >  #define HVCALL_RETARGET_INTERRUPT		0x007e
+> > +#define HVCALL_START_VP				0x0099
+> > +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+> >  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> > @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
+> >  #define HV_STATUS_INVALID_PORT_ID		17
+> >  #define HV_STATUS_INVALID_CONNECTION_ID		18
+> >  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> > +#define HV_STATUS_VTL_ALREADY_ENABLED		134
+> >  
+> >  /*
+> >   * The Hyper-V TimeRefCount register and the TSC
+> 
+> -- 
+> Vitaly
