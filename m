@@ -2,50 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31656B6E9B
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Mar 2023 05:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C056B7520
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Mar 2023 12:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjCME5d (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Mar 2023 00:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S229899AbjCMLDr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Mar 2023 07:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCME5b (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Mar 2023 00:57:31 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A78073B877;
-        Sun, 12 Mar 2023 21:57:30 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 19C0E204778C; Sun, 12 Mar 2023 21:57:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19C0E204778C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678683450;
-        bh=9aLl/BvNmqEEf3Eln7g8qpek3FbNIeMRD0Ya6P8HIrc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VwpvAFouSf69voKUGyg9brlqv6dO49K9bBxDilrgJFfPsHxpBnrpGctyR9HKwd8Ya
-         vd7gZbsTLj67WSxbL8WMEcAI3tQ9mUEFxWZBnBuu1ImcPNFvqj67PQimxhpOTS4h4u
-         jI912CeX5cv3iI/ujtzAy5D6/9WQczgoprTIlsOk=
-Date:   Sun, 12 Mar 2023 21:57:30 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        arnd@arndb.de, tiala@microsoft.com, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
-Message-ID: <20230313045730.GA31503@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
- <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
- <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
+        with ESMTP id S229877AbjCMLDo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Mar 2023 07:03:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD0F13D4D;
+        Mon, 13 Mar 2023 04:03:41 -0700 (PDT)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6AA151EC04DA;
+        Mon, 13 Mar 2023 12:03:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678705420;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=LtyOPOOWBs+hlc/CXfZFBydFPquT6KOjs11AJIp5x3s=;
+        b=W5NtNYHASJ8ymhQ56TWX2poWPntiPfwL0Jm6wgZu5FXtkL/4BQxiKuEYXM0MfJy1z/wVrb
+        OEDBwqThoSqO6S+EXw2mqWVI1Rv1oESm2+3HriA30+euNEv/+eH6cPWSUaXB0bF/8X1zzO
+        ypXqNIiVPvf2YY7M5mSGiC/7KcmacAE=
+Date:   Mon, 13 Mar 2023 12:03:35 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v7 38/41] x86/fpu: Add helper for initing features
+Message-ID: <20230313110335.GAZA8DB6PNSMGOGHpw@fat_crate.local>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-39-rick.p.edgecombe@intel.com>
+ <ZAx6Egh6U5SCZEby@zn.tnic>
+ <3385eaf888f4178607ce4621ae2103d08ba79994.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <3385eaf888f4178607ce4621ae2103d08ba79994.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,237 +88,45 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Thanks for your review, please find my comments inline.
+On Mon, Mar 13, 2023 at 02:45:08AM +0000, Edgecombe, Rick P wrote:
+> These two are from the existing code. Basically they get extracted into
+> a new function.
 
-On Sun, Mar 12, 2023 at 09:49:53PM +0000, Wei Liu wrote:
-> On Thu, Mar 09, 2023 at 10:35:57AM -0800, Saurabh Sengar wrote:
-> > Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
-> > feature. VSM is a set of hypervisor capabilities and enlightenments
-> > offered to host and guest partitions which enable the creation and
-> > management of new security boundaries within operating system software.
-> > VSM achieves and maintains isolation through VTLs.
-> > 
-> > Add early initialization for Virtual Trust Levels (VTL). This includes
-> > initializing the x86 platform for VTL and enabling boot support for
-> > secondary CPUs to start in targeted VTL context. For now, only enable
-> > the code for targeted VTL level as 2.
-> > 
-> > When starting an AP at a VTL other than VTL 0, the AP must start directly
-> > in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
-> > transition sequence that occurs after waking up an AP with SIPI whose
-> > vector points to the 16-bit AP startup trampoline code.
-> > 
-> > This commit also moves hv_get_nmi_reason function to header file, so
-> > that it can be reused by VTL.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  arch/x86/Kconfig                   |  24 +++
-> >  arch/x86/hyperv/Makefile           |   1 +
-> >  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
-> >  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
-> >  arch/x86/include/asm/mshyperv.h    |  14 ++
-> >  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
-> >  include/asm-generic/hyperv-tlfs.h  |   4 +
-> >  7 files changed, 346 insertions(+), 5 deletions(-)
-> >  create mode 100644 arch/x86/hyperv/hv_vtl.c
-> > 
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 453f462f6c9c..b9e52ac9c9f9 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
-> >  
-> >  if HYPERVISOR_GUEST
-> >  
-> > +config HYPERV_VTL
-> > +	bool "Enable VTL"
-> 
-> This is not to "Enable VTL". VTL is always there with or without this
-> option. This option is to enable Linux to run in VTL2.
-> 
-> I would suggest it to be changed to HYPERV_VTL2_MODE or something more
-> explicit.
-> 
-> HYPERV_VTL is better reserved to guard code which makes use of VTL
-> related functionality -- if there is such a need in the future.
+I know but you can fix them while at it.
 
-Thanks, I am fine to change the description. However I named it as HYPERV_VTL
-so as this is generic and in future it can be extended to other VTLs. I see it
-as generic VTL code with current support only for VTL2, others will be added
-when need arises.
+> I did it up, and it makes the caller code cleaner. But I'm not sure
+> what to think of it. Is this not mixing two operations together? Today
+> get_xsave_addr() pretty much just gets a buffer offset with some
+> checks. Now it would compute the offset and also silently go off and
+> changes the buffer.
 
-As per my understanding apart from setting the target VTL, rest of the code
-can be reused for any VTL. Once we have the other VTLs support we might think
-of tweaking the target vtl whereas the flag name and other code remains same.
-Please let me know your opinion on this.
+Ok, so why don't you write the call site this way instead:
 
-> 
-> > +	depends on X86_64 && HYPERV
-> > +	default n
-> > +	help
-> > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
-> > +	  enlightenments offered to host and guest partitions which enables
-> > +	  the creation and management of new security boundaries within
-> > +	  operating system software.
-> > +
-> > +	  VSM achieves and maintains isolation through Virtual Trust Levels
-> > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
-> > +	  being more privileged than lower levels. VTL0 is the least privileged
-> > +	  level, and currently only other level supported is VTL2.
-> 
-> Please be consistent as to VTL 0 vs VTL0. You use one form here and the
-> other form in the next paragraph.
+        cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
+        if (!cetregs) {
+		if (xfeature_saved(xsave, XFEATURE_CET_USER)) {
+			WARN("something's wrong with this buffer")
+			return ...;
+		}
 
-Sure will fix this in next version.
+		/* Not saved, initialize it */
+		init_xfeature(xsave, XFEATURE_CET_USER));
+	}
 
-> 
-> > +
-> > +	  Select this option to build a Linux kernel to run at a VTL other than
-> > +	  the normal VTL 0, which currently is only VTL 2.  This option
-> > +	  initializes the x86 platform for VTL 2, and adds the ability to boot
-> > +	  secondary CPUs directly into 64-bit context as required for VTLs other
-> > +	  than 0.  A kernel built with this option must run at VTL 2, and will
-> > +	  not run as a normal guest.
-> > +
-> > +	  If unsure, say N
-> > +
-> >  config PARAVIRT
-> >  	bool "Enable paravirtualization code"
-> >  	depends on HAVE_STATIC_CALL
-> > diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> > index 5d2de10809ae..a538df01181a 100644
-> > --- a/arch/x86/hyperv/Makefile
-> > +++ b/arch/x86/hyperv/Makefile
-> > @@ -1,6 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
-> >  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
-> > +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
-> >  
-> >  ifdef CONFIG_X86_64
-> >  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-> > diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-> > new file mode 100644
-> > index 000000000000..0da8b242eb8b
-> > --- /dev/null
-> > +++ b/arch/x86/hyperv/hv_vtl.c
-> > @@ -0,0 +1,227 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2023, Microsoft Corporation.
-> > + *
-> > + * Author:
-> > + *   Saurabh Sengar <ssengar@microsoft.com>
-> > + */
-> > +
-> > +#include <asm/apic.h>
-> > +#include <asm/boot.h>
-> > +#include <asm/desc.h>
-> > +#include <asm/i8259.h>
-> > +#include <asm/mshyperv.h>
-> > +#include <asm/realmode.h>
-> > +
-> > +extern struct boot_params boot_params;
-> > +static struct real_mode_header hv_vtl_real_mode_header;
-> > +
-> > +void __init hv_vtl_init_platform(void)
-> > +{
-> > +	pr_info("Initializing Hyper-V VTL\n");
-> > +
-> 
-> We can be more explicit here, "Linux runs in Hyper-V Virtual Trust Level 2".
-> 
-> If we go with this, this and other function names should be renamed to
-> something more explicit too.
+	cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
+	if (!cetregs) {
+		WARN_ON("WTF")
+                return -ENODEV;
+	}
 
-Sure I can do this. However I will like to put it as generic VTL not specific
-to VTL 2 only. Please let me know your opinion.
+Now it is clear what happens and it is a common code pattern of trying
+to get something and initializing it if it wasn't initialized yet, and
+then retrying...
 
-> 
-> > +	x86_init.irqs.pre_vector_init = x86_init_noop;
-> > +	x86_init.timers.timer_init = x86_init_noop;
-> > +
-> > +	x86_platform.get_wallclock = get_rtc_noop;
-> > +	x86_platform.set_wallclock = set_rtc_noop;
-> > +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
-> > +
-> > +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
-> > +	x86_platform.legacy.rtc = 0;
-> > +	x86_platform.legacy.warm_reset = 0;
-> > +	x86_platform.legacy.reserve_bios_regions = 0;
-> > +	x86_platform.legacy.devices.pnpbios = 0;
-> > +}
-> > +
-> [...]
-> > +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
-> > +{
-> > +	u64 status;
-> > +	int ret = 0;
-> > +	struct hv_enable_vp_vtl *input;
-> > +	unsigned long irq_flags;
-> > +
-> > +	struct desc_ptr gdt_ptr;
-> > +	struct desc_ptr idt_ptr;
-> > +
-> > +	struct ldttss_desc *tss;
-> > +	struct ldttss_desc *ldt;
-> > +	struct desc_struct *gdt;
-> > +
-> > +	u64 rsp = initial_stack;
-> > +	u64 rip = (u64)&hv_vtl_ap_entry;
-> > +
-> > +	native_store_gdt(&gdt_ptr);
-> > +	store_idt(&idt_ptr);
-> > +
-> > +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
-> > +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
-> > +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
-> > +
-> > +	local_irq_save(irq_flags);
-> > +
-> > +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
-> 
-> Not a big deal, but you don't actually need to cast here.
+Hmm?
 
-Ok, will fix.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> [...]
-> > +
-> > +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
-> > +{
-> > +	u64 control;
-> > +	u64 status;
-> > +	unsigned long irq_flags;
-> > +	struct hv_get_vp_from_apic_id_in *input;
-> > +	u32 *output, ret;
-> > +
-> > +	local_irq_save(irq_flags);
-> > +
-> > +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
-> 
-> No need to cast here.
-
-Sure.
-
-> 
-> [...]
-> > +struct hv_x64_table_register {
-> > +	__u16 pad[3];
-> > +	__u16 limit;
-> > +	__u64 base;
-> > +} __packed;
-> > +
-> > +struct hv_init_vp_context_t {
-> 
-> Drop the _t suffix please.
-
-OK
-
-Regards,
-Saurabh
-
-> 
-> Thanks,
-> Wei.
+https://people.kernel.org/tglx/notes-about-netiquette
