@@ -2,64 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A796B931D
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Mar 2023 13:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D666B9328
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Mar 2023 13:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjCNMPJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Mar 2023 08:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S231851AbjCNMPL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Mar 2023 08:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbjCNMN6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Mar 2023 08:13:58 -0400
+        with ESMTP id S229801AbjCNMOO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Mar 2023 08:14:14 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B0C149B0;
-        Tue, 14 Mar 2023 05:13:08 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EC0hJH016904;
-        Tue, 14 Mar 2023 12:12:38 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6906C59FD;
+        Tue, 14 Mar 2023 05:13:13 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EAaLGQ006993;
+        Tue, 14 Mar 2023 12:12:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=9ctcUx5LZI/mg0TO+YXc+fY3QgO4PfYu+vXzePpmDDA=;
- b=RJxZuGJMIEvdVwAnfQluh7iLTAQsy4hewAzyoIua8j9W529nlN62PD5BMfzJ8FeGvdyK
- QFkqfLkpWNeK0Z/PM2H3NzgfKDKffPl6gVp3zqNCJlBxDSafmHqu2+Ub84lcRO+c3DST
- ealIljO2e2LzsVCaZX9gA+mH/uuQaTh0Yl3bFcThOTMBZhnwIwgLtVaovkTathuuHN5W
- eZgdWoKz15hOdJ6IFkesEI6Pf2j2OMdbAy1MxGo565BYDtAOroVPNGUOYguToGq5ywn/
- NkJRFLLB0hy2uRoOpUljwnJsU60PJJvNsTz3lMzAvcu5A/JLS8a56g3U7nZiO61FwUJo gw== 
+ bh=PfD4c4PH+3TJqACOJC/3Xq+/Vg5zTqCDtNpSTLItBiw=;
+ b=MPBWVVr8r1GGVnw/vbZXPrN8B9a3POHYs+f0hejEK4xiuvz5jsDptWzeOe2oHgKAtSCD
+ qhQHhsehsphe8WgybJ3AA/rIKpkVZ3+9gx7rwn6FP5QtA0O0n3MKFxS6C+ZkrUP9qHvy
+ vx4V+Im0sFuJ89bTvh6pLDd/XK22En4f2gy1Hv0rg9tPNpfs5NQrDhfQlxzN8IbEVw9p
+ 2CSYC0s+ZNq6NL9WeIn1SVtoEc8zZ4VELX68uc3kZhgz9h+YboLPGLOilU6flaw6mT7v
+ rBN7pIgm1JmBfs3og0hCcsjFnT3XY/aOi5z14IYPCa5TnBMlhp8S5sU3gsiy4PMeX1WT 5g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paph23ua2-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3papkwkk5r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 12:12:39 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EC8AuG010624;
+        Tue, 14 Mar 2023 12:12:38 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3papkwkk4t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 14 Mar 2023 12:12:38 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32E9gSMR019210;
-        Tue, 14 Mar 2023 12:12:37 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paph23u92-1
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E8ibsS006605;
+        Tue, 14 Mar 2023 12:12:35 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3p8h96krsk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:37 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E7uGPX001011;
-        Tue, 14 Mar 2023 12:12:34 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96mrvv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:34 +0000
+        Tue, 14 Mar 2023 12:12:35 +0000
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ECCW3m53281030
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ECCXWH30737014
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Mar 2023 12:12:32 GMT
+        Tue, 14 Mar 2023 12:12:33 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 579362007B;
+        by IMSVA (Postfix) with ESMTP id 284502007A;
+        Tue, 14 Mar 2023 12:12:33 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A22EE2007C;
         Tue, 14 Mar 2023 12:12:32 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E06AC2007A;
-        Tue, 14 Mar 2023 12:12:31 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 12:12:31 +0000 (GMT)
+        Tue, 14 Mar 2023 12:12:32 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -73,25 +73,25 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-input@vger.kernel.org
-Subject: [PATCH v3 14/38] Input: gameport: add ISA and HAS_IOPORT dependencies
-Date:   Tue, 14 Mar 2023 13:11:52 +0100
-Message-Id: <20230314121216.413434-15-schnelle@linux.ibm.com>
+        linux-leds@vger.kernel.org
+Subject: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
+Date:   Tue, 14 Mar 2023 13:11:53 +0100
+Message-Id: <20230314121216.413434-16-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230314121216.413434-1-schnelle@linux.ibm.com>
 References: <20230314121216.413434-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: jpwPOrAaD_62i7b-0Mmc2U-MuxknLPtb
-X-Proofpoint-GUID: ECloxw04p-P-7aJw5nMxgM5nMruHWqjf
+X-Proofpoint-GUID: 0RB3YBuUVZzui5n7_sVaDswk8SZsinOl
+X-Proofpoint-ORIG-GUID: S5XuEkeQhlIeR5u6F0A975Ay9p09ti__
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-14_06,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- suspectscore=0 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=999 spamscore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=774
+ suspectscore=0 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2303140103
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -103,74 +103,29 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. As ISA already implies HAS_IOPORT we can simply add
-this dependency and guard sections of code using inb()/outb() as
-alternative access methods.
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
+Acked-by: Pavel Machek <pavel@ucw.cz>
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/input/gameport/Kconfig | 4 +++-
- include/linux/gameport.h       | 9 +++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ drivers/leds/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/input/gameport/Kconfig b/drivers/input/gameport/Kconfig
-index 5a2c2fb3217d..fe73b26e647a 100644
---- a/drivers/input/gameport/Kconfig
-+++ b/drivers/input/gameport/Kconfig
-@@ -25,6 +25,7 @@ if GAMEPORT
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index 9dbce09eabac..55b4a4de8f1a 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -662,7 +662,7 @@ config LEDS_LM355x
  
- config GAMEPORT_NS558
- 	tristate "Classic ISA and PnP gameport support"
-+	depends on ISA
+ config LEDS_OT200
+ 	tristate "LED support for the Bachmann OT200"
+-	depends on LEDS_CLASS && HAS_IOMEM && (X86_32 || COMPILE_TEST)
++	depends on LEDS_CLASS && HAS_IOPORT && (X86_32 || COMPILE_TEST)
  	help
- 	  Say Y here if you have an ISA or PnP gameport.
- 
-@@ -35,6 +36,7 @@ config GAMEPORT_NS558
- 
- config GAMEPORT_L4
- 	tristate "PDPI Lightning 4 gamecard support"
-+	depends on ISA
- 	help
- 	  Say Y here if you have a PDPI Lightning 4 gamecard.
- 
-@@ -53,7 +55,7 @@ config GAMEPORT_EMU10K1
- 
- config GAMEPORT_FM801
- 	tristate "ForteMedia FM801 gameport support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  Say Y here if you have ForteMedia FM801 PCI audio controller
- 	  (Abit AU10, Genius Sound Maker, HP Workstation zx2000,
-diff --git a/include/linux/gameport.h b/include/linux/gameport.h
-index 8c2f00018e89..4d5720022b63 100644
---- a/include/linux/gameport.h
-+++ b/include/linux/gameport.h
-@@ -167,16 +167,21 @@ static inline void gameport_trigger(struct gameport *gameport)
- {
- 	if (gameport->trigger)
- 		gameport->trigger(gameport);
-+#ifdef CONFIG_HAS_IOPORT
- 	else
- 		outb(0xff, gameport->io);
-+#endif
- }
- 
- static inline unsigned char gameport_read(struct gameport *gameport)
- {
- 	if (gameport->read)
- 		return gameport->read(gameport);
--	else
--		return inb(gameport->io);
-+#ifdef CONFIG_HAS_IOPORT
-+	return inb(gameport->io);
-+#else
-+	return 0xff;
-+#endif
- }
- 
- static inline int gameport_cooked_read(struct gameport *gameport, int *axes, int *buttons)
+ 	  This option enables support for the LEDs on the Bachmann OT200.
+ 	  Say Y to enable LEDs on the Bachmann OT200.
 -- 
 2.37.2
 
