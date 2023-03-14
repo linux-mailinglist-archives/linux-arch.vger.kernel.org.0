@@ -2,157 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8119F6B8BD5
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Mar 2023 08:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3356B90F3
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Mar 2023 12:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjCNHT4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Mar 2023 03:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S230274AbjCNLD5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 14 Mar 2023 07:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbjCNHTx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Mar 2023 03:19:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DDB19C68;
-        Tue, 14 Mar 2023 00:19:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ACB9B81887;
-        Tue, 14 Mar 2023 07:19:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B34C433EF;
-        Tue, 14 Mar 2023 07:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678778388;
-        bh=rEcwpr6ZTgtGaQrka2qK+7yPmKYXTmYdMJswZJ4beXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xc+htRg4jwkaQ1NdwL15ZlqUDMviGCnMWy9asoPgzTkQsycHYyOuxImk+2fwxRjJg
-         ANSpQgtaUXSm5JxSsOEx18+zhZX4fFXLwaw89hdRjNu+43fhg7cT2exl6XR/v50yQx
-         PVdG/eSVNK9EXDfcDdUf3czRPirAefJxegCSQo0VUSKps7q9gqtPs+f87B4YaMdsgM
-         pnULmDVF+F93AQhI8H5MAQdQAK2mCfBbSxV6ARQ0lKbuqqyuK7HcPID8wRiIB/R/S1
-         ksVWWlmvLvg/6n6asn34itV+OVlWruZdWD4KY/wTe8Y6R7U2VUCKtue6AvIarS974i
-         U01UkRTpXIeng==
-Date:   Tue, 14 Mar 2023 09:19:25 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Deepak Gupta <debug@rivosinc.com>
-Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
+        with ESMTP id S230265AbjCNLDz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Mar 2023 07:03:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884C99CBDF;
+        Tue, 14 Mar 2023 04:03:13 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PbVw92GJMz6J7Km;
+        Tue, 14 Mar 2023 19:02:01 +0800 (CST)
+Received: from localhost (10.48.148.120) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 14 Mar
+ 2023 11:02:51 +0000
+Date:   Tue, 14 Mar 2023 11:02:50 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <kvmarm@lists.linux.dev>, <kvm@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-ia64@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, nd@arm.com, al.grant@arm.com
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-Message-ID: <ZBAf/QI42hcVQ4Uq@kernel.org>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-34-rick.p.edgecombe@intel.com>
- <ZADbP7HvyPHuwUY9@arm.com>
- <20230309185511.GA1964069@debug.ba.rivosinc.com>
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        <kangkang.shen@futurewei.com>
+Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual
+ cpuhotplug
+Message-ID: <20230314110250.00005685@Huawei.com>
+In-Reply-To: <1f21673e-e5e6-a158-94a4-6ae6724c1f93@arm.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+        <20230307120050.000032f1@Huawei.com>
+        <1f21673e-e5e6-a158-94a4-6ae6724c1f93@arm.com>
+Followup-To: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309185511.GA1964069@debug.ba.rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.48.148.120]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Mon, 13 Mar 2023 15:50:52 +0000
+James Morse <james.morse@arm.com> wrote:
 
-On Thu, Mar 09, 2023 at 10:55:11AM -0800, Deepak Gupta wrote:
-> On Thu, Mar 02, 2023 at 05:22:07PM +0000, Szabolcs Nagy wrote:
-> > The 02/27/2023 14:29, Rick Edgecombe wrote:
-> > > Previously, a new PROT_SHADOW_STACK was attempted,
-> > ...
-> > > So rather than repurpose two existing syscalls (mmap, madvise) that don't
-> > > quite fit, just implement a new map_shadow_stack syscall to allow
-> > > userspace to map and setup new shadow stacks in one step. While ucontext
-> > > is the primary motivator, userspace may have other unforeseen reasons to
-> > > setup it's own shadow stacks using the WRSS instruction. Towards this
-> > > provide a flag so that stacks can be optionally setup securely for the
-> > > common case of ucontext without enabling WRSS. Or potentially have the
-> > > kernel set up the shadow stack in some new way.
-> > ...
-> > > The following example demonstrates how to create a new shadow stack with
-> > > map_shadow_stack:
-> > > void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
+> Hi Jonathan,
+> 
+> On 07/03/2023 12:00, Jonathan Cameron wrote:
+> > On Fri,  3 Feb 2023 13:50:11 +0000
+> > James Morse <james.morse@arm.com> wrote:  
+> 
+> >> On a system that supports cpuhotplug the MADT has to describe every possible
+> >> CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+> >> the guest is started.
+> >> With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+> >> policy about which CPUs can be brought online.
+> >>
+> >> This series adds support for virtual-cpuhotplug as exactly that: firmware
+> >> policy. This may even work on a physical machine too; for a guest the part of
+> >> firmware is played by the VMM. (typically Qemu).
+> >>
+> >> PSCI support is modified to return 'DENIED' if the CPU can't be brought
+> >> online/enabled yet. The CPU object's _STA method's enabled bit is used to
+> >> indicate firmware's current disposition. If the CPU has its enabled bit clear,
+> >> it will not be registered with sysfs, and attempts to bring it online will
+> >> fail. The notifications that _STA has changed its value then work in the same
+> >> way as physical hotplug, and firmware can cause the CPU to be registered some
+> >> time later, allowing it to be brought online.  
+> 
+> > As we discussed on an LOD call a while back, I think that we need some path to
+> > find out if the guest supports vCPU HP or not so that info can be queried by
+> > an orchestrator / libvirt etc.  In general the entity responsible for allocating
+> > extra vCPUs may not know what support the VM has for this feature.  
+> 
+> I agree. For arm64 this is going to be important if/when there are machines that do
+> physical hotplug of CPUs too.
+> 
+> 
+> > There are various ways we could get this information into the VMM.
+> > My immediate thought is to use one of the ACPI interfaces that lets us write
+> > AML that can set an emulated register. A query to the VMM can check if this
+> > register is set.
 > > 
-> > i think
+> > So options.
 > > 
-> > mmap(addr, size, PROT_READ, MAP_ANON|MAP_SHADOW_STACK, -1, 0);
+> > _OSI() - Deprecated on ARM64 so lets not use that ;)  
+> 
+> News to me, I've only just discovered it!
+> 
+> 
+> > _OSC() - Could add a bit to Table 6.13 Platform-Wide Capabilites in ACPI 6.5 spec.
+> >          Given x86 has a similar online capable bit perhaps this is the best option
+> >          though it is the one that requires a formal code first proposal to ASWG.  
+> 
+> I've had a go at writing this one:
+> https://gitlab.arm.com/linux-arm/linux-jm/-/commit/220b0d8b0261d7467c8705e6f614d57325798859
+
+From a quick glance that looks good to me.
+
+> 
+> It'll appear in the v1 of the series once the kernel and qemu bits are all lined up again.
+
+We'll also need to kick off the spec change with a code-first proposal.
+I think current standard way to do that is a bugzilla entry in EDK2 repo 
+https://bugzilla.tianocore.org/buglist.cgi?component=Specification%20Update&product=EDK2%20Code%20First&resolution=---
+and the get someone in ASWG to create equivalent tracking issue in mantis.
+
+Great if you already have that in hand via relevant ARM folks.
+
+Jonathan
+
+> 
+> 
+> Thanks,
+> 
+> James
+> 
+> 
+> > _OSC() - Could add a new UUID and put it under a suitable device - maybe all CPUs?
+> >          You could definitely argue this feature is an operating system property.
+> > _DSM() - Similar to OSC but always under a device.
+> >          Whilst can be used for this I'm not sure it really matches intended usecase.
 > > 
-> > could do the same with less disruption to users (new syscalls
-> > are harder to deal with than new flags). it would do the
-> > guard page and initial token setup too (there is no flag for
-> > it but could be squeezed in).
+> > Assuming everyone agrees this bit of introspection is useful,
+> > Rafael / other ACPI specialists: Any suggestions on how best to do this?  
 > 
-> Discussion on this topic in v6
-> https://lore.kernel.org/all/20230223000340.GB945966@debug.ba.rivosinc.com/
-> 
-> Again I know earlier CET patches had protection flag and somehow due to pushback
-> on mailing list, it was adopted to go for special syscall because no one else
-> had shadow stack.
-> 
-> Seeing a response from Szabolcs, I am assuming arm4 would also want to follow
-> using mmap to manufacture shadow stack. For reference RFC patches for risc-v shadow stack,
-> use a new protection flag = PROT_SHADOWSTACK.
-> https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
-> 
-> I know earlier discussion had been that we let this go and do a re-factor later as other
-> arch support trickle in. But as I thought more on this and I think it may just be
-> messy from user mode point of view as well to have cognition of two different ways of
-> creating shadow stack. One would be special syscall (in current libc) and another `mmap`
-> (whenever future re-factor happens)
-> 
-> If it's not too late, it would be more wise to take `mmap`
-> approach rather than special `syscall` approach.
- 
-I disagree. 
 
-Having shadow stack flags for mmap() adds unnecessary complexity to the
-core-mm, while having a dedicated syscall hides all the details in the
-architecture specific code.
-
-Another reason to use a dedicated system call allows for better
-extensibility if/when we'd need to update the way shadow stack VMA is
-created.
-
-As for the userspace convenience, it is anyway required to add special
-code for creating the shadow stack and it wouldn't matter if that code
-would use mmap(NEW_FLAG) or map_shadow_stack().
-
-> > most of the mmap features need not be available (EINVAL) when
-> > MAP_SHADOW_STACK is specified.
-> > 
-> > the main drawback is running out of mmap flags so extension
-> > is limited. (but the new syscall has limitations too).
-
--- 
-Sincerely yours,
-Mike.
