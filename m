@@ -2,136 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186D86B94F9
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Mar 2023 13:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033FA6B9504
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Mar 2023 13:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjCNM4F convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 14 Mar 2023 08:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S232372AbjCNM5z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Mar 2023 08:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232807AbjCNMzb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Mar 2023 08:55:31 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EFBA676D;
-        Tue, 14 Mar 2023 05:51:00 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id h7so8570179ila.5;
-        Tue, 14 Mar 2023 05:51:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678798136;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gBpmO88aubLNx5ds9k4LYpaw6LJjHZV6232nWb27C40=;
-        b=F/kw06fa4E2Ncy3YZWjTpozsk/uEjpPYL+2is5cIZC+P58OegEkgDGz8ouVWG/Q1xE
-         Et8D+rcrK0xMif92M6dEqkmX6yfko55xNYaRa/dbni5K4hnMg2kJbS4/8N5mQY5HTF7Q
-         BuNVrYExTJQKj0m847hrRMjI5hL/at2PTpDev6MFju/5YmkoW25rySdsU0UD+4d5UkNo
-         jXBkpw5/9i7PCHGZNLOZEH415wd3DX5XJX3ItX9HWYdCiie0ZC/MqygGX6ds/8v08Pbm
-         yaXtFFKw61YpJpp/62dKUu7jdJfUxdSx37XPUWZuUUVoXqX6fT4tmKAD2dnnb8j9ZqBS
-         cfHQ==
-X-Gm-Message-State: AO0yUKV7FGwu8G54frPgXfvRFHivRRVu38Rlppr/9khy6TUcYSyIfRZ9
-        eGWLIfvbg58oegOwmWkvWHM1NlT5zYRypg==
-X-Google-Smtp-Source: AK7set9uaU9BS2YJ7QMbWwxTVXrP8kR0ag9yvjORrw/DCh/YZzKu/5KzWRtQ0EXzIfXazCdoYGSwVA==
-X-Received: by 2002:a05:6e02:df2:b0:316:e39f:13f2 with SMTP id m18-20020a056e020df200b00316e39f13f2mr2007150ilj.12.1678798136649;
-        Tue, 14 Mar 2023 05:48:56 -0700 (PDT)
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
-        by smtp.gmail.com with ESMTPSA id z22-20020a029f16000000b003c4920e7c74sm750704jal.57.2023.03.14.05.48.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 05:48:56 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id i19so8550137ila.10;
-        Tue, 14 Mar 2023 05:48:55 -0700 (PDT)
-X-Received: by 2002:a05:6902:1002:b0:b48:1359:4e28 with SMTP id
- w2-20020a056902100200b00b4813594e28mr461087ybt.12.1678798114483; Tue, 14 Mar
- 2023 05:48:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-2-schnelle@linux.ibm.com>
-In-Reply-To: <20230314121216.413434-2-schnelle@linux.ibm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Mar 2023 13:48:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV9ZoB5XNiiVEG-zBzB9eN5RJSC42WMDD-RZfcg=2tr4g@mail.gmail.com>
-Message-ID: <CAMuHMdV9ZoB5XNiiVEG-zBzB9eN5RJSC42WMDD-RZfcg=2tr4g@mail.gmail.com>
-Subject: Re: [PATCH v3 01/38] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
+        with ESMTP id S232071AbjCNM5h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Mar 2023 08:57:37 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87AE15542;
+        Tue, 14 Mar 2023 05:53:02 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D864E1C000B;
+        Tue, 14 Mar 2023 12:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678798325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vkuaXd86klfX5z5UBkkpcJQxbSjcGacKOadUv840wU0=;
+        b=GLHReGkFiwl8ZclCScYGYcgHFF1aQqYZ497lEAln7rYtb4CUkp7z3wlXmzRm6eSFZkycCS
+        7anQTtpYnx0wO3U4k421K3uAplgifxxwiNXC+YuEvG4HAy7zDeKxxslIf9dovi9DIPH4fP
+        J6FNwuzyEQsZrIY4wfkTbM8mo7gWh+Yev7IWNH3xp4oRQIo1odhNxIYxuA0ZfXCYSOh/kn
+        1Li47k7SXaojwKX3xHx6eUAXPB9yfC0xxsteYcnUrlR70ZRSasHJDxjLJlkjtVGW40zKV9
+        UNPDcUCitcHOiqUQtppBZ1x70VqNFCae4MPPXnaUjEB22JH/ilqsWWfe4HT0+Q==
+Date:   Tue, 14 Mar 2023 13:52:02 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Niklas Schnelle <schnelle@linux.ibm.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 28/38] rtc: add HAS_IOPORT dependencies
+Message-ID: <202303141252027ef5511a@mail.local>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-29-schnelle@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314121216.413434-29-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 1:13 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/O
-> Port access. In a future patch HAS_IOPORT=n will disable compilation of
-> the I/O accessor functions inb()/outb() and friends on architectures
-> which can not meaningfully support legacy I/O spaces such as s390. Also
-> add dependencies on HAS_IOPORT for the ISA and HAVE_EISA config options
-> as these busses always go along with HAS_IOPORT.
->
-> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
-> for HAS_IOPORT specific sections will be added in subsequent patches on
-> a per subsystem basis.
->
+Hello,
+
+On 14/03/2023 13:12:06+0100, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
 > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/rtc/Kconfig | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 5a71579af0a1..20aa77bf0a9f 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+>  config RTC_DRV_CMOS
+>  	tristate "PC-style 'CMOS'"
+>  	depends on X86 || ARM || PPC || MIPS || SPARC64
+> +	depends on HAS_IOPORT
 
->  arch/m68k/Kconfig       | 1 +
+Did you check that this will not break platforms that doesn't have RTC_PORT defined?
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+>  	default y if X86
+>  	select RTC_MC146818_LIB
+>  	help
+> @@ -976,6 +977,7 @@ config RTC_DRV_CMOS
+>  config RTC_DRV_ALPHA
+>  	bool "Alpha PC-style CMOS"
+>  	depends on ALPHA
+> +	depends on HAS_IOPORT
+>  	select RTC_MC146818_LIB
+>  	default y
+>  	help
+> @@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
+>  
+>  config RTC_DRV_BQ4802
+>  	tristate "TI BQ4802"
+> -	depends on HAS_IOMEM
+> +	depends on HAS_IOMEM && HAS_IOPORT
+>  	help
+>  	  If you say Y here you will get support for the TI
+>  	  BQ4802 RTC chip.
+> -- 
+> 2.37.2
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
