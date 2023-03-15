@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47056BA6D7
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 06:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508906BA694
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 06:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjCOFQI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 01:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S229673AbjCOFOu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 01:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbjCOFPV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 01:15:21 -0400
+        with ESMTP id S229506AbjCOFOt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 01:14:49 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E80D34312;
-        Tue, 14 Mar 2023 22:14:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE24199C2;
+        Tue, 14 Mar 2023 22:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=Y6UQRtApFRekBXOS3Hoo+JaDt5MuymsqP/Dtb80Hd68=; b=kMtfC4Y8cRwzxnyikLnmC+pXrF
-        S08XyEXWi259m5wWZQqlD79SBIbUYDxcBLuSL86NVAnvtg4xXfUpltnS44mI+15iJXI9fg69EAtlg
-        MFIUlzW9PHr3U1aoRU6P/B6aSLfq4i/oLgpIFnUfxfZ6d5qRVlFsATQUZdfABblJUxj02K64BvXpu
-        nOhhgag7XC2+IC+wmMtRq5j7b59hvdYcelXnmrIYdRsXeq+SOSx6p7FPuyxFeXcRHgv5D5Bms1+Ni
-        voGyM7rAG7rdO/7aF//y2RXEjckrpOfLiBlAJ7ioUYzG0feEklpTZUSI/jBHX5Pog4JA0O1BxkSV8
-        Xm1kdeqA==;
+        bh=n6Ti8OhlWeNjG2zsHJM+UjK+Z9Pmy+kwTwNJ+mNPVvs=; b=jXJA/lY+mNfxjhnHMcPpOcZktl
+        OP+tmmLUZQplcYMr969H3MlWVh4M8UbWKPP0xxgrWVRdnUZfOR6zLHYFG5wszll0o8pRkCNcOL1JY
+        16o+kcpPH9LNx1+TKFXHq8TGywKk7dGmxX4G+FSKewMk4lNllHqIF8s8FE+JBz4BDhl7hboF4RL+i
+        CcXrAlV4h3+QyiJJ86OYjHScPv47+m2a0lvGzrAztGy1kUuS1eyTHhvuhboviz5liEIJSJiRABoHg
+        aTUpEB1zZKKrLCb3K+tpcEVwrXjhbemDdSy63QoH8fw5+QNfVJStj6gMw88C4OF4r1znXsskP0ZQ2
+        +NIVpg0w==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcJTK-00DYAt-IK; Wed, 15 Mar 2023 05:14:46 +0000
+        id 1pcJTK-00DYAv-LY; Wed, 15 Mar 2023 05:14:46 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-arch@vger.kernel.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 02/36] mm: Add generic flush_icache_pages() and documentation
-Date:   Wed, 15 Mar 2023 05:14:10 +0000
-Message-Id: <20230315051444.3229621-3-willy@infradead.org>
+Subject: [PATCH v4 03/36] mm: Add folio_flush_mapping()
+Date:   Wed, 15 Mar 2023 05:14:11 +0000
+Message-Id: <20230315051444.3229621-4-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
 References: <20230315051444.3229621-1-willy@infradead.org>
@@ -47,94 +47,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-flush_icache_page() is deprecated but not yet removed, so add
-a range version of it.  Change the documentation to refer to
-update_mmu_cache_range() instead of update_mmu_cache().
+This is the folio equivalent of page_mapping_file(), but rename it
+to make it clear that it's very different from page_file_mapping().
+Theoretically, there's nothing flush-only about it, but there are no
+other users today, and I doubt there will be; it's almost always more
+useful to know the swapfile's mapping or the swapcache's mapping.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- Documentation/core-api/cachetlb.rst | 35 +++++++++++++++--------------
- include/asm-generic/cacheflush.h    |  5 +++++
- 2 files changed, 23 insertions(+), 17 deletions(-)
+ include/linux/pagemap.h | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/core-api/cachetlb.rst b/Documentation/core-api/cachetlb.rst
-index 5c0552e78c58..d4c9e2a28d36 100644
---- a/Documentation/core-api/cachetlb.rst
-+++ b/Documentation/core-api/cachetlb.rst
-@@ -88,13 +88,13 @@ changes occur:
+diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+index a56308a9d1a4..e56c2023aa0e 100644
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@ -369,6 +369,26 @@ static inline struct address_space *folio_file_mapping(struct folio *folio)
+ 	return folio->mapping;
+ }
  
- 	This is used primarily during fault processing.
- 
--5) ``void update_mmu_cache(struct vm_area_struct *vma,
--   unsigned long address, pte_t *ptep)``
-+5) ``void update_mmu_cache_range(struct vm_area_struct *vma,
-+   unsigned long address, pte_t *ptep, unsigned int nr)``
- 
--	At the end of every page fault, this routine is invoked to
--	tell the architecture specific code that a translation
--	now exists at virtual address "address" for address space
--	"vma->vm_mm", in the software page tables.
-+	At the end of every page fault, this routine is invoked to tell
-+	the architecture specific code that translations now exists
-+	in the software page tables for address space "vma->vm_mm"
-+	at virtual address "address" for "nr" consecutive pages.
- 
- 	A port may use this information in any way it so chooses.
- 	For example, it could use this event to pre-load TLB
-@@ -306,17 +306,18 @@ maps this page at its virtual address.
- 	private".  The kernel guarantees that, for pagecache pages, it will
- 	clear this bit when such a page first enters the pagecache.
- 
--	This allows these interfaces to be implemented much more efficiently.
--	It allows one to "defer" (perhaps indefinitely) the actual flush if
--	there are currently no user processes mapping this page.  See sparc64's
--	flush_dcache_page and update_mmu_cache implementations for an example
--	of how to go about doing this.
-+	This allows these interfaces to be implemented much more
-+	efficiently.  It allows one to "defer" (perhaps indefinitely) the
-+	actual flush if there are currently no user processes mapping this
-+	page.  See sparc64's flush_dcache_page and update_mmu_cache_range
-+	implementations for an example of how to go about doing this.
- 
--	The idea is, first at flush_dcache_page() time, if page_file_mapping()
--	returns a mapping, and mapping_mapped on that mapping returns %false,
--	just mark the architecture private page flag bit.  Later, in
--	update_mmu_cache(), a check is made of this flag bit, and if set the
--	flush is done and the flag bit is cleared.
-+	The idea is, first at flush_dcache_page() time, if
-+	page_file_mapping() returns a mapping, and mapping_mapped on that
-+	mapping returns %false, just mark the architecture private page
-+	flag bit.  Later, in update_mmu_cache_range(), a check is made
-+	of this flag bit, and if set the flush is done and the flag bit
-+	is cleared.
- 
- 	.. important::
- 
-@@ -369,7 +370,7 @@ maps this page at its virtual address.
-   ``void flush_icache_page(struct vm_area_struct *vma, struct page *page)``
- 
- 	All the functionality of flush_icache_page can be implemented in
--	flush_dcache_page and update_mmu_cache. In the future, the hope
-+	flush_dcache_page and update_mmu_cache_range. In the future, the hope
- 	is to remove this interface completely.
- 
- The final category of APIs is for I/O to deliberately aliased address
-diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
-index f46258d1a080..09d51a680765 100644
---- a/include/asm-generic/cacheflush.h
-+++ b/include/asm-generic/cacheflush.h
-@@ -78,6 +78,11 @@ static inline void flush_icache_range(unsigned long start, unsigned long end)
- #endif
- 
- #ifndef flush_icache_page
-+static inline void flush_icache_pages(struct vm_area_struct *vma,
-+				     struct page *page, unsigned int nr)
++/**
++ * folio_flush_mapping - Find the file mapping this folio belongs to.
++ * @folio: The folio.
++ *
++ * For folios which are in the page cache, return the mapping that this
++ * page belongs to.  Anonymous folios return NULL, even if they're in
++ * the swap cache.  Other kinds of folio also return NULL.
++ *
++ * This is ONLY used by architecture cache flushing code.  If you aren't
++ * writing cache flushing code, you want either folio_mapping() or
++ * folio_file_mapping().
++ */
++static inline struct address_space *folio_flush_mapping(struct folio *folio)
 +{
++	if (unlikely(folio_test_swapcache(folio)))
++		return NULL;
++
++	return folio_mapping(folio);
 +}
 +
- static inline void flush_icache_page(struct vm_area_struct *vma,
- 				     struct page *page)
+ static inline struct address_space *page_file_mapping(struct page *page)
  {
+ 	return folio_file_mapping(page_folio(page));
+@@ -379,11 +399,7 @@ static inline struct address_space *page_file_mapping(struct page *page)
+  */
+ static inline struct address_space *page_mapping_file(struct page *page)
+ {
+-	struct folio *folio = page_folio(page);
+-
+-	if (unlikely(folio_test_swapcache(folio)))
+-		return NULL;
+-	return folio_mapping(folio);
++	return folio_flush_mapping(page_folio(page));
+ }
+ 
+ /**
 -- 
 2.39.2
 
