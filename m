@@ -2,60 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B926BAF15
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 12:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67E66BAF43
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 12:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231564AbjCOLUu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 07:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
+        id S231657AbjCOLb5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 07:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbjCOLU3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 07:20:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B851DBDF;
-        Wed, 15 Mar 2023 04:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Y1qbaNmKGtblNVhdlxDCOnZuD6KOCPFbJF9ZFx/bdFM=; b=r9sY4aY3ZXCD0AcKFsKkZA5YuC
-        aIpytDEDMlZWSG0ayXCImdw3to0/+P8A12SOeeirCAWSzGf4HoEL6a09f8wVRmKh4wIgf4S+j0poD
-        aQa+zFKzEVKRJ+mrYP1x/RwdKl4Rdr6wUyavTo74ONgR2GLhGhS+ZtT8zV89SgDXvAcO8CEgHm3h7
-        jsdSYpqFO5InR0xfLRpm8f8ksdxjAIGDqyQWBeIYkcgthiKUFDuAj9J8FT6qgKVMsxbnxXPDKZTrh
-        IukN0ALe+uTYJT1fNTtje36S90BSYB6W7ATPK2uFsbyOuuKYS08IIXDKTaXM9jqNr7rENnFOBDIbN
-        GCNVi9cg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcPAV-00Dmgc-Hw; Wed, 15 Mar 2023 11:19:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F2FFB300288;
-        Wed, 15 Mar 2023 12:19:41 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id DAF6920FF20AE; Wed, 15 Mar 2023 12:19:41 +0100 (CET)
-Date:   Wed, 15 Mar 2023 12:19:41 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4 27/36] x86: Implement the new page table range API
-Message-ID: <20230315111941.GC2006103@hirez.programming.kicks-ass.net>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-28-willy@infradead.org>
- <20230315103436.GA2006103@hirez.programming.kicks-ass.net>
- <ZBGpCC21vygomEkr@kernel.org>
+        with ESMTP id S231529AbjCOLbp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 07:31:45 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EAF64849;
+        Wed, 15 Mar 2023 04:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678879904; x=1710415904;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=emKW1DsDd6J7BoaliTpiqaTlAsPQ1Xr/3FNEg+io6NQ=;
+  b=YBQo49A55PKeoUSU5BCFs2agz8PmUVtJt+YZOEMAV1NMkBxtToYRazVt
+   AjDCbSdgAmSN7D5bJ5pD2S6CIOUJiHmluUnsrXOzm5BA4RdYyuF0Bq1YX
+   nFJR3h6ZfsZQyXG6LFqv/Qo8C8SBqjHCfPIadtNiIUdQWHLtrXsRZqmoo
+   vl8+VtnTak+6fzh0WqvKVMahp1Obxqdcsvy5BrWjrbT88csIPqfYpTB5Q
+   1yOJ2CCVvjqMYd4ATlxJTyQhLOpqbU77U4u/om5trkG3oB0lK52VH7PLK
+   4zmsCy11YVDQ7iRTtFEL9o7ud4iDKpU8uedSSGuiPcnfyaBlM1ApDC3I2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="340040093"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="340040093"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="768455999"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="768455999"
+Received: from nopopovi-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.48])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:38 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A507B10CC9C; Wed, 15 Mar 2023 14:31:35 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH 00/10] Fix confusion around MAX_ORDER
+Date:   Wed, 15 Mar 2023 14:31:23 +0300
+Message-Id: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBGpCC21vygomEkr@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,50 +62,110 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 01:16:24PM +0200, Mike Rapoport wrote:
-> On Wed, Mar 15, 2023 at 11:34:36AM +0100, Peter Zijlstra wrote:
-> > On Wed, Mar 15, 2023 at 05:14:35AM +0000, Matthew Wilcox (Oracle) wrote:
-> > > Add PFN_PTE_SHIFT and a noop update_mmu_cache_range().
-> > > 
-> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Cc: Ingo Molnar <mingo@redhat.com>
-> > > Cc: Borislav Petkov <bp@alien8.de>
-> > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > > Cc: x86@kernel.org
-> > > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > > ---
-> > >  arch/x86/include/asm/pgtable.h | 13 ++++++-------
-> > >  1 file changed, 6 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> > > index 1031025730d0..b237878061c4 100644
-> > > --- a/arch/x86/include/asm/pgtable.h
-> > > +++ b/arch/x86/include/asm/pgtable.h
-> > > @@ -184,6 +184,8 @@ static inline int pte_special(pte_t pte)
-> > >  
-> > >  static inline u64 protnone_mask(u64 val);
-> > >  
-> > > +#define PFN_PTE_SHIFT	PAGE_SHIFT
-> > > +
-> > >  static inline unsigned long pte_pfn(pte_t pte)
-> > >  {
-> > >  	phys_addr_t pfn = pte_val(pte);
-> > > @@ -1019,13 +1021,6 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
-> > >  	return res;
-> > >  }
-> > >  
-> > > -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> > > -			      pte_t *ptep, pte_t pte)
-> > > -{
-> > > -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
-> > > -	set_pte(ptep, pte);
-> > > -}
-> > > -
-> > 
-> > And remove set_pte_at() apparently.. whut?!?
-> 
-> It's now in include/linux/pgtable.h
+MAX_ORDER currently defined as number of orders page allocator supports:
+user can ask buddy allocator for page order between 0 and MAX_ORDER-1.
 
-All I have is this one patch -- and the changelog doesn't mention this.
-HTF am I supposed to know that?
+This definition is counter-intuitive and lead to number of bugs all over
+the kernel.
+
+Fix the bugs and then change the definition of MAX_ORDER to be
+inclusive: the range of orders user can ask from buddy allocator is
+0..MAX_ORDER now.
+
+Kirill A. Shutemov (10):
+  sparc/mm: Fix MAX_ORDER usage in tsb_grow()
+  um: Fix MAX_ORDER usage in linux_main()
+  floppy: Fix MAX_ORDER usage
+  drm/i915: Fix MAX_ORDER usage in i915_gem_object_get_pages_internal()
+  genwqe: Fix MAX_ORDER usage
+  perf/core: Fix MAX_ORDER usage in rb_alloc_aux_page()
+  mm/page_reporting: Fix MAX_ORDER usage in page_reporting_register()
+  mm/slub: Fix MAX_ORDER usage in calculate_order()
+  iommu: Fix MAX_ORDER usage in __iommu_dma_alloc_pages()
+  mm, treewide: Redefine MAX_ORDER sanely
+
+ .../admin-guide/kdump/vmcoreinfo.rst          |  2 +-
+ .../admin-guide/kernel-parameters.txt         |  2 +-
+ arch/arc/Kconfig                              |  4 +-
+ arch/arm/Kconfig                              |  9 ++---
+ arch/arm/configs/imx_v6_v7_defconfig          |  2 +-
+ arch/arm/configs/milbeaut_m10v_defconfig      |  2 +-
+ arch/arm/configs/oxnas_v6_defconfig           |  2 +-
+ arch/arm/configs/pxa_defconfig                |  2 +-
+ arch/arm/configs/sama7_defconfig              |  2 +-
+ arch/arm/configs/sp7021_defconfig             |  2 +-
+ arch/arm64/Kconfig                            | 27 ++++++-------
+ arch/arm64/include/asm/sparsemem.h            |  2 +-
+ arch/arm64/kvm/hyp/include/nvhe/gfp.h         |  2 +-
+ arch/arm64/kvm/hyp/nvhe/page_alloc.c          | 10 ++---
+ arch/csky/Kconfig                             |  2 +-
+ arch/ia64/Kconfig                             |  8 ++--
+ arch/ia64/include/asm/sparsemem.h             |  4 +-
+ arch/ia64/mm/hugetlbpage.c                    |  2 +-
+ arch/loongarch/Kconfig                        | 15 +++-----
+ arch/m68k/Kconfig.cpu                         |  5 +--
+ arch/mips/Kconfig                             | 19 ++++------
+ arch/nios2/Kconfig                            |  7 +---
+ arch/powerpc/Kconfig                          | 27 ++++++-------
+ arch/powerpc/configs/85xx/ge_imp3a_defconfig  |  2 +-
+ arch/powerpc/configs/fsl-emb-nonhw.config     |  2 +-
+ arch/powerpc/mm/book3s64/iommu_api.c          |  2 +-
+ arch/powerpc/mm/hugetlbpage.c                 |  2 +-
+ arch/powerpc/platforms/powernv/pci-ioda.c     |  2 +-
+ arch/sh/configs/ecovec24_defconfig            |  2 +-
+ arch/sh/mm/Kconfig                            | 17 ++++-----
+ arch/sparc/Kconfig                            |  5 +--
+ arch/sparc/kernel/pci_sun4v.c                 |  2 +-
+ arch/sparc/kernel/traps_64.c                  |  2 +-
+ arch/sparc/mm/tsb.c                           |  4 +-
+ arch/xtensa/Kconfig                           |  5 +--
+ drivers/base/regmap/regmap-debugfs.c          |  8 ++--
+ drivers/block/floppy.c                        |  2 +-
+ drivers/crypto/ccp/sev-dev.c                  |  2 +-
+ drivers/crypto/hisilicon/sgl.c                |  6 +--
+ .../gpu/drm/i915/gem/selftests/huge_pages.c   |  2 +-
+ drivers/gpu/drm/ttm/ttm_pool.c                | 22 +++++------
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  2 +-
+ drivers/iommu/dma-iommu.c                     |  4 +-
+ drivers/irqchip/irq-gic-v3-its.c              |  4 +-
+ drivers/md/dm-bufio.c                         |  2 +-
+ drivers/misc/genwqe/card_utils.c              |  2 +-
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   |  2 +-
+ drivers/net/ethernet/ibm/ibmvnic.h            |  2 +-
+ drivers/video/fbdev/hyperv_fb.c               |  4 +-
+ drivers/video/fbdev/vermilion/vermilion.c     |  2 +-
+ drivers/virtio/virtio_balloon.c               |  2 +-
+ drivers/virtio/virtio_mem.c                   | 12 +++---
+ fs/ramfs/file-nommu.c                         |  2 +-
+ include/drm/ttm/ttm_pool.h                    |  2 +-
+ include/linux/hugetlb.h                       |  2 +-
+ include/linux/mmzone.h                        | 10 ++---
+ include/linux/pageblock-flags.h               |  4 +-
+ include/linux/slab.h                          |  6 +--
+ kernel/crash_core.c                           |  2 +-
+ kernel/dma/pool.c                             |  6 +--
+ mm/Kconfig                                    |  6 +--
+ mm/compaction.c                               |  8 ++--
+ mm/debug_vm_pgtable.c                         |  4 +-
+ mm/huge_memory.c                              |  2 +-
+ mm/hugetlb.c                                  |  4 +-
+ mm/kmsan/init.c                               |  6 +--
+ mm/memblock.c                                 |  2 +-
+ mm/memory_hotplug.c                           |  4 +-
+ mm/page_alloc.c                               | 38 +++++++++----------
+ mm/page_isolation.c                           | 12 +++---
+ mm/page_owner.c                               |  6 +--
+ mm/page_reporting.c                           |  4 +-
+ mm/shuffle.h                                  |  2 +-
+ mm/slab.c                                     |  2 +-
+ mm/slub.c                                     |  4 +-
+ mm/vmscan.c                                   |  2 +-
+ mm/vmstat.c                                   | 14 +++----
+ net/smc/smc_ib.c                              |  2 +-
+ security/integrity/ima/ima_crypto.c           |  2 +-
+ tools/testing/memblock/linux/mmzone.h         |  6 +--
+ 80 files changed, 210 insertions(+), 240 deletions(-)
+
+-- 
+2.39.2
+
