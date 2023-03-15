@@ -2,188 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFE96BB923
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 17:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03066BB93B
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 17:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjCOQJS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 12:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S232799AbjCOQNV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 12:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjCOQIs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 12:08:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09E5C6189;
-        Wed, 15 Mar 2023 09:08:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 322B04B3;
-        Wed, 15 Mar 2023 09:08:49 -0700 (PDT)
-Received: from [10.57.64.236] (unknown [10.57.64.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3C7B3F67D;
-        Wed, 15 Mar 2023 09:08:04 -0700 (PDT)
-Message-ID: <01071d9c-483f-2d95-87a6-e1030acaf8dd@arm.com>
-Date:   Wed, 15 Mar 2023 16:08:03 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
-Content-Language: en-US
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+        with ESMTP id S232447AbjCOQNG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 12:13:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712946189;
+        Wed, 15 Mar 2023 09:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cCW7axuUfgTUO6O263OSKMwVHUkLkmelwIVXmpc1WJQ=; b=keEczDyeAJz4CTyMgdmjHNLJji
+        tlZVcxG3jY9teZ1rL+FUsyT7ix2zDn23oalr1sEmolShALWOIS3jMo9bzv1d1PE0JNv/r+vF3PdCb
+        otX4eDzoawS8lsC7rMipIc532u55ey7MLVjK9bUCTrgaTS8H9KxkvxbHGqZPoqGZ7kmj2NTlED8lW
+        pSILl7cUhzdL4ANpx1LLPFYTpxcQrawP9FvgP0utshVAzl9AbAYJK1aEDlYvVjAhdW01Ip6FFez7Q
+        lbWZHz55SzIU2dyVkelEWJVmYlX5JR4Cub+sEk95ideeAkpf9uxb1wEUuHEqVZbXU8rygUf90IKva
+        JEQagxlw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pcTjf-00DyaW-BQ; Wed, 15 Mar 2023 16:12:19 +0000
+Date:   Wed, 15 Mar 2023 16:12:19 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 27/36] x86: Implement the new page table range API
+Message-ID: <ZBHuY8dEuHlt3a3X@casper.infradead.org>
 References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-35-willy@infradead.org>
- <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
-In-Reply-To: <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <20230315051444.3229621-28-willy@infradead.org>
+ <20230315103436.GA2006103@hirez.programming.kicks-ass.net>
+ <ZBGpCC21vygomEkr@kernel.org>
+ <20230315111941.GC2006103@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315111941.GC2006103@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 15/03/2023 13:34, Ryan Roberts wrote:
-> On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
->> From: Yin Fengwei <fengwei.yin@intel.com>
->>
->> folio_add_file_rmap_range() allows to add pte mapping to a specific
->> range of file folio. Comparing to page_add_file_rmap(), it batched
->> updates __lruvec_stat for large folio.
->>
->> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
->> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->> ---
->>  include/linux/rmap.h |  2 ++
->>  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
->>  2 files changed, 48 insertions(+), 14 deletions(-)
->>
->> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
->> index b87d01660412..a3825ce81102 100644
->> --- a/include/linux/rmap.h
->> +++ b/include/linux/rmap.h
->> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->>  		unsigned long address);
->>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->>  		bool compound);
->> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
->> +		struct vm_area_struct *, bool compound);
->>  void page_remove_rmap(struct page *, struct vm_area_struct *,
->>  		bool compound);
->>  
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index 4898e10c569a..a91906b28835 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->>  }
->>  
->>  /**
->> - * page_add_file_rmap - add pte mapping to a file page
->> - * @page:	the page to add the mapping to
->> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
->> + * @folio:	The folio to add the mapping to
->> + * @page:	The first page to add
->> + * @nr_pages:	The number of pages which will be mapped
->>   * @vma:	the vm area in which the mapping is added
->>   * @compound:	charge the page as compound or small page
->>   *
->> + * The page range of folio is defined by [first_page, first_page + nr_pages)
->> + *
->>   * The caller needs to hold the pte lock.
->>   */
->> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->> -		bool compound)
->> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
->> +			unsigned int nr_pages, struct vm_area_struct *vma,
->> +			bool compound)
->>  {
->> -	struct folio *folio = page_folio(page);
->>  	atomic_t *mapped = &folio->_nr_pages_mapped;
->> -	int nr = 0, nr_pmdmapped = 0;
->> -	bool first;
->> +	unsigned int nr_pmdmapped = 0, first;
->> +	int nr = 0;
->>  
->> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
->> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
->>  
->>  	/* Is page being mapped by PTE? Is this its first map to be added? */
->>  	if (likely(!compound)) {
->> -		first = atomic_inc_and_test(&page->_mapcount);
->> -		nr = first;
->> -		if (first && folio_test_large(folio)) {
->> -			nr = atomic_inc_return_relaxed(mapped);
->> -			nr = (nr < COMPOUND_MAPPED);
->> -		}
->> +		do {
->> +			first = atomic_inc_and_test(&page->_mapcount);
->> +			if (first && folio_test_large(folio)) {
->> +				first = atomic_inc_return_relaxed(mapped);
->> +				first = (nr < COMPOUND_MAPPED);
+On Wed, Mar 15, 2023 at 12:19:41PM +0100, Peter Zijlstra wrote:
+> On Wed, Mar 15, 2023 at 01:16:24PM +0200, Mike Rapoport wrote:
+> > On Wed, Mar 15, 2023 at 11:34:36AM +0100, Peter Zijlstra wrote:
+> > > On Wed, Mar 15, 2023 at 05:14:35AM +0000, Matthew Wilcox (Oracle) wrote:
+> > > > Add PFN_PTE_SHIFT and a noop update_mmu_cache_range().
+> > > > 
+> > > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > Cc: Ingo Molnar <mingo@redhat.com>
+> > > > Cc: Borislav Petkov <bp@alien8.de>
+> > > > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > > > Cc: x86@kernel.org
+> > > > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > > > ---
+> > > >  arch/x86/include/asm/pgtable.h | 13 ++++++-------
+> > > >  1 file changed, 6 insertions(+), 7 deletions(-)
+> > > > 
+> > > > diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> > > > index 1031025730d0..b237878061c4 100644
+> > > > --- a/arch/x86/include/asm/pgtable.h
+> > > > +++ b/arch/x86/include/asm/pgtable.h
+> > > > @@ -184,6 +184,8 @@ static inline int pte_special(pte_t pte)
+> > > >  
+> > > >  static inline u64 protnone_mask(u64 val);
+> > > >  
+> > > > +#define PFN_PTE_SHIFT	PAGE_SHIFT
+> > > > +
+> > > >  static inline unsigned long pte_pfn(pte_t pte)
+> > > >  {
+> > > >  	phys_addr_t pfn = pte_val(pte);
+> > > > @@ -1019,13 +1021,6 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
+> > > >  	return res;
+> > > >  }
+> > > >  
+> > > > -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> > > > -			      pte_t *ptep, pte_t pte)
+> > > > -{
+> > > > -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+> > > > -	set_pte(ptep, pte);
+> > > > -}
+> > > > -
+> > > 
+> > > And remove set_pte_at() apparently.. whut?!?
+> > 
+> > It's now in include/linux/pgtable.h
 > 
-> This still contains the typo that Yin Fengwei spotted in the previous version:
-> https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
-> 
-> FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
-> Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
-> ext4 filesystem). Looks like instruction aborts are taking much longer and a
-> selection of syscalls are a bit slower. Still hunting down the root cause. Will
-> report once I have conclusive diagnosis.
+> All I have is this one patch -- and the changelog doesn't mention this.
+> HTF am I supposed to know that?
 
-I'm sorry - I'm struggling to find the exact cause. But its spending over 2x the
-amount of time in the instruction abort handling code once patches 32-36 are
-included. Everything in the flame graph is just taking longer. Perhaps we are
-getting more instruction aborts somehow? I have the flamegraphs if anyone wants
-them - just shout and I'll email them separately.
-
-> 
-> Thanks,
-> Ryan
-> 
-> 
->> +			}
->> +
->> +			if (first)
->> +				nr++;
->> +		} while (page++, --nr_pages > 0);
->>  	} else if (folio_test_pmd_mappable(folio)) {
->>  		/* That test is redundant: it's for safety or to optimize out */
->>  
->> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>  	mlock_vma_folio(folio, vma, compound);
->>  }
->>  
->> +/**
->> + * page_add_file_rmap - add pte mapping to a file page
->> + * @page:	the page to add the mapping to
->> + * @vma:	the vm area in which the mapping is added
->> + * @compound:	charge the page as compound or small page
->> + *
->> + * The caller needs to hold the pte lock.
->> + */
->> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->> +		bool compound)
->> +{
->> +	struct folio *folio = page_folio(page);
->> +	unsigned int nr_pages;
->> +
->> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
->> +
->> +	if (likely(!compound))
->> +		nr_pages = 1;
->> +	else
->> +		nr_pages = folio_nr_pages(folio);
->> +
->> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
->> +}
->> +
->>  /**
->>   * page_remove_rmap - take down pte mapping from a page
->>   * @page:	page to remove mapping from
-> 
-
+You should be subscribed to linux-arch.  I literally can't cc all arch
+maintainers on every patch; many of the mailing lists will reject the
+emails based on "too many recipients".  That's what linux-arch is _for_.
