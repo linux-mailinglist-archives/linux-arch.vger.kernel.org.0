@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B726F6BAC00
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 10:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D15586BAC1D
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 10:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjCOJVh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 05:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S231346AbjCOJ1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 05:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbjCOJV0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 05:21:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039A21B557;
-        Wed, 15 Mar 2023 02:21:24 -0700 (PDT)
+        with ESMTP id S230212AbjCOJ1X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 05:27:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177CC52F75;
+        Wed, 15 Mar 2023 02:27:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8441B81D76;
-        Wed, 15 Mar 2023 09:21:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FA7C433EF;
-        Wed, 15 Mar 2023 09:21:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A599861ABD;
+        Wed, 15 Mar 2023 09:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B76AC433D2;
+        Wed, 15 Mar 2023 09:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678872081;
-        bh=bma7awM6tHmIC3wO1SvO/FynqdjWMUbMRsUs73RSibM=;
+        s=k20201202; t=1678872441;
+        bh=w+J8gucSlfSu3xi4ruapy/hNtDvk5NYHt9AxAbkHP2Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CC1f8HDMk5mh+yXoQO1uNb2ErxcZr3nYdhbeGeShrB7B8SPUSY5lo6sgP/daZztup
-         6y8laGWeuU9XvN3WtrzW4cLbE0a2HI7AxD7wt+AwU5G2+0HR+tGdoYQ0Juz8jYcJ6B
-         KOVVw+v8fgCble4wjy6cZ7w6r8pQoomkWZeJxzEvtSXwKDVr8sv62+C4FSV7jWN9J+
-         oSSA/DK9S61JTIG8STBS+nZfPaFyQgnpAOX+2rcS23+3+34kR5z49qkql/GBBBsY6s
-         pw33RsU4qQjKGcgAyWEN/7lMBTu/ecLfn4OtAHATzidnNHxKgiP3VsxP4tKcUklT6O
-         Bqo+5xyOsjaFg==
-Date:   Wed, 15 Mar 2023 11:21:08 +0200
+        b=D18IvsKQQ9L5V4uTkOLzo7MrZqxnmEgzsXlep3LHdUJh+J07Tpiv8BkZUf/NZ99G2
+         RppyUvZKVA773EwBQT1DchLMTboYO/75iEoxXenBf1n64UZBzxJXQ+iF+Yf5OnALwy
+         n4Cz1QNywLpftpwOghTcDxmArWpaLoP44WvKPG+zmt8mFMNjXWW+jJROzwlr3yAmJr
+         l4DDII8x2NlaDlIqL1TC2fijEJNksy9lrYYhtJcyWjFSuRObeKSyYW3gRKhtj41IDZ
+         /gLtH0JaOqgHMx2CIlaNhtF9B925CBeWVFsha0VHVk6TlTsiv8xBftlNFsi8mKMtkB
+         z67Z53tc/o6Hw==
+Date:   Wed, 15 Mar 2023 11:27:08 +0200
 From:   Mike Rapoport <rppt@kernel.org>
 To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 01/36] mm: Convert page_table_check_pte_set() to
- page_table_check_ptes_set()
-Message-ID: <ZBGOBIOwFexlEfdx@kernel.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-2-willy@infradead.org>
+Subject: Re: [PATCH v3 02/34] mm: Add generic flush_icache_pages() and
+ documentation
+Message-ID: <ZBGPbCcUDFBQOx3W@kernel.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-3-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230315051444.3229621-2-willy@infradead.org>
+In-Reply-To: <20230228213738.272178-3-willy@infradead.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,140 +54,100 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:14:09AM +0000, Matthew Wilcox (Oracle) wrote:
-> Tell the page table check how many PTEs & PFNs we want it to check.
+On Tue, Feb 28, 2023 at 09:37:05PM +0000, Matthew Wilcox (Oracle) wrote:
+> flush_icache_page() is deprecated but not yet removed, so add
+> a range version of it.  Change the documentation to refer to
+> update_mmu_cache_range() instead of update_mmu_cache().
 > 
 > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
 > ---
->  arch/arm64/include/asm/pgtable.h |  2 +-
->  arch/riscv/include/asm/pgtable.h |  2 +-
->  arch/x86/include/asm/pgtable.h   |  2 +-
->  include/linux/page_table_check.h | 14 +++++++-------
->  mm/page_table_check.c            | 14 ++++++++------
->  5 files changed, 18 insertions(+), 16 deletions(-)
+>  Documentation/core-api/cachetlb.rst | 35 +++++++++++++++--------------
+>  include/asm-generic/cacheflush.h    |  5 +++++
+>  2 files changed, 23 insertions(+), 17 deletions(-)
 > 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 0bd18de9fd97..9428748f4691 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -358,7 +358,7 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
->  static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
->  			      pte_t *ptep, pte_t pte)
->  {
-> -	page_table_check_pte_set(mm, addr, ptep, pte);
-> +	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
->  	return __set_pte_at(mm, addr, ptep, pte);
->  }
+> diff --git a/Documentation/core-api/cachetlb.rst b/Documentation/core-api/cachetlb.rst
+> index 5c0552e78c58..d4c9e2a28d36 100644
+> --- a/Documentation/core-api/cachetlb.rst
+> +++ b/Documentation/core-api/cachetlb.rst
+> @@ -88,13 +88,13 @@ changes occur:
 >  
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index ab05f892d317..b516f3b59616 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -459,7 +459,7 @@ static inline void __set_pte_at(struct mm_struct *mm,
->  static inline void set_pte_at(struct mm_struct *mm,
->  	unsigned long addr, pte_t *ptep, pte_t pteval)
->  {
-> -	page_table_check_pte_set(mm, addr, ptep, pteval);
-> +	page_table_check_ptes_set(mm, addr, ptep, pteval, 1);
->  	__set_pte_at(mm, addr, ptep, pteval);
->  }
+>  	This is used primarily during fault processing.
 >  
-> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-> index 15ae4d6ba476..1031025730d0 100644
-> --- a/arch/x86/include/asm/pgtable.h
-> +++ b/arch/x86/include/asm/pgtable.h
-> @@ -1022,7 +1022,7 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
->  static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
->  			      pte_t *ptep, pte_t pte)
->  {
-> -	page_table_check_pte_set(mm, addr, ptep, pte);
-> +	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
->  	set_pte(ptep, pte);
->  }
+> -5) ``void update_mmu_cache(struct vm_area_struct *vma,
+> -   unsigned long address, pte_t *ptep)``
+> +5) ``void update_mmu_cache_range(struct vm_area_struct *vma,
+> +   unsigned long address, pte_t *ptep, unsigned int nr)``
 >  
-> diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
-> index 01e16c7696ec..ba269c7009e4 100644
-> --- a/include/linux/page_table_check.h
-> +++ b/include/linux/page_table_check.h
-> @@ -20,8 +20,8 @@ void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
->  				  pmd_t pmd);
->  void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
->  				  pud_t pud);
-> -void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
-> -				pte_t *ptep, pte_t pte);
-> +void __page_table_check_ptes_set(struct mm_struct *mm, unsigned long addr,
-> +				pte_t *ptep, pte_t pte, unsigned int nr);
->  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
->  				pmd_t *pmdp, pmd_t pmd);
->  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
-> @@ -73,14 +73,14 @@ static inline void page_table_check_pud_clear(struct mm_struct *mm,
->  	__page_table_check_pud_clear(mm, addr, pud);
->  }
+> -	At the end of every page fault, this routine is invoked to
+> -	tell the architecture specific code that a translation
+> -	now exists at virtual address "address" for address space
+> -	"vma->vm_mm", in the software page tables.
+> +	At the end of every page fault, this routine is invoked to tell
+> +	the architecture specific code that translations now exists
+> +	in the software page tables for address space "vma->vm_mm"
+> +	at virtual address "address" for "nr" consecutive pages.
 >  
-> -static inline void page_table_check_pte_set(struct mm_struct *mm,
-> +static inline void page_table_check_ptes_set(struct mm_struct *mm,
->  					    unsigned long addr, pte_t *ptep,
-> -					    pte_t pte)
-> +					    pte_t pte, unsigned int nr)
->  {
->  	if (static_branch_likely(&page_table_check_disabled))
->  		return;
+>  	A port may use this information in any way it so chooses.
+>  	For example, it could use this event to pre-load TLB
+> @@ -306,17 +306,18 @@ maps this page at its virtual address.
+>  	private".  The kernel guarantees that, for pagecache pages, it will
+>  	clear this bit when such a page first enters the pagecache.
 >  
-> -	__page_table_check_pte_set(mm, addr, ptep, pte);
-> +	__page_table_check_ptes_set(mm, addr, ptep, pte, nr);
->  }
+> -	This allows these interfaces to be implemented much more efficiently.
+> -	It allows one to "defer" (perhaps indefinitely) the actual flush if
+> -	there are currently no user processes mapping this page.  See sparc64's
+> -	flush_dcache_page and update_mmu_cache implementations for an example
+> -	of how to go about doing this.
+> +	This allows these interfaces to be implemented much more
+> +	efficiently.  It allows one to "defer" (perhaps indefinitely) the
+> +	actual flush if there are currently no user processes mapping this
+> +	page.  See sparc64's flush_dcache_page and update_mmu_cache_range
+> +	implementations for an example of how to go about doing this.
 >  
->  static inline void page_table_check_pmd_set(struct mm_struct *mm,
-> @@ -138,9 +138,9 @@ static inline void page_table_check_pud_clear(struct mm_struct *mm,
->  {
->  }
+> -	The idea is, first at flush_dcache_page() time, if page_file_mapping()
+> -	returns a mapping, and mapping_mapped on that mapping returns %false,
+> -	just mark the architecture private page flag bit.  Later, in
+> -	update_mmu_cache(), a check is made of this flag bit, and if set the
+> -	flush is done and the flag bit is cleared.
+> +	The idea is, first at flush_dcache_page() time, if
+> +	page_file_mapping() returns a mapping, and mapping_mapped on that
+> +	mapping returns %false, just mark the architecture private page
+> +	flag bit.  Later, in update_mmu_cache_range(), a check is made
+> +	of this flag bit, and if set the flush is done and the flag bit
+> +	is cleared.
 >  
-> -static inline void page_table_check_pte_set(struct mm_struct *mm,
-> +static inline void page_table_check_ptes_set(struct mm_struct *mm,
->  					    unsigned long addr, pte_t *ptep,
-> -					    pte_t pte)
-> +					    pte_t pte, unsigned int nr)
->  {
->  }
+>  	.. important::
 >  
-> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-> index 25d8610c0042..e6f4d40caaa2 100644
-> --- a/mm/page_table_check.c
-> +++ b/mm/page_table_check.c
-> @@ -184,20 +184,22 @@ void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
->  }
->  EXPORT_SYMBOL(__page_table_check_pud_clear);
+> @@ -369,7 +370,7 @@ maps this page at its virtual address.
+>    ``void flush_icache_page(struct vm_area_struct *vma, struct page *page)``
 >  
-> -void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
-> -				pte_t *ptep, pte_t pte)
-> +void __page_table_check_ptes_set(struct mm_struct *mm, unsigned long addr,
-> +				pte_t *ptep, pte_t pte, unsigned int nr)
->  {
-> +	unsigned int i;
+>  	All the functionality of flush_icache_page can be implemented in
+> -	flush_dcache_page and update_mmu_cache. In the future, the hope
+> +	flush_dcache_page and update_mmu_cache_range. In the future, the hope
+>  	is to remove this interface completely.
+>  
+>  The final category of APIs is for I/O to deliberately aliased address
+> diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
+> index f46258d1a080..09d51a680765 100644
+> --- a/include/asm-generic/cacheflush.h
+> +++ b/include/asm-generic/cacheflush.h
+> @@ -78,6 +78,11 @@ static inline void flush_icache_range(unsigned long start, unsigned long end)
+>  #endif
+>  
+>  #ifndef flush_icache_page
+> +static inline void flush_icache_pages(struct vm_area_struct *vma,
+> +				     struct page *page, unsigned int nr)
+> +{
+> +}
 > +
->  	if (&init_mm == mm)
->  		return;
->  
-> -	__page_table_check_pte_clear(mm, addr, *ptep);
-> +	for (i = 0; i < nr; i++)
-> +		__page_table_check_pte_clear(mm, addr, ptep[i]);
->  	if (pte_user_accessible_page(pte)) {
-> -		page_table_check_set(mm, addr, pte_pfn(pte),
-> -				     PAGE_SIZE >> PAGE_SHIFT,
-> +		page_table_check_set(mm, addr, pte_pfn(pte), nr,
->  				     pte_write(pte));
->  	}
->  }
-> -EXPORT_SYMBOL(__page_table_check_pte_set);
-> +EXPORT_SYMBOL(__page_table_check_ptes_set);
->  
->  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
->  				pmd_t *pmdp, pmd_t pmd)
+>  static inline void flush_icache_page(struct vm_area_struct *vma,
+>  				     struct page *page)
+>  {
 > -- 
-> 2.39.2
+> 2.39.1
 > 
 > 
 
