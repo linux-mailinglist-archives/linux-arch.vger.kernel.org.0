@@ -2,295 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6636D6BAD40
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 11:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AF96BAD73
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 11:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjCOKOA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 06:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S232437AbjCOKTd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 06:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232048AbjCOKNo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 06:13:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182572D73;
-        Wed, 15 Mar 2023 03:13:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3575961CB7;
-        Wed, 15 Mar 2023 10:13:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38093C433EF;
-        Wed, 15 Mar 2023 10:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678875187;
-        bh=SpzWDoK7qAGbMSU8Yr17uy7Rhx7zMtILCSejQpFo2l0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MxO/x+FRKRcxyeSR6+WSyd5a99oglmZ4Eq/yFZkg3B46/PASztZONy+1cGcWgOCNO
-         HyqAWjzf0JmyuETSbby0vCf62/nwRBLH8YVWpMq+Wp+FlJIr3v58JlZgxKPIgKC+6R
-         h0/bwbhV31cqmrA0zrIVqG/O+mWnYkVotW9ErvJiglV/5//h6ekCQlVn4UBUFC8rKe
-         jhydY5GFmUO8pK1E4IxjqPYN9iZbVLJCxPrsRL3mXb7vfLJRKxVKKnZ5OhK2tVb6MC
-         gLqn3CF8lR8yiUwTNPQ68NfiN604iLw52DNEjWwYVC+sr2S0b6Im3KvNnMPwchwfzA
-         nrm5v7jmbq90A==
-Date:   Wed, 15 Mar 2023 12:12:54 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 28/36] xtensa: Implement the new page table range API
-Message-ID: <ZBGaJvOTsl9tdsF4@kernel.org>
+        with ESMTP id S232098AbjCOKTS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 06:19:18 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2049.outbound.protection.outlook.com [40.107.12.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3D86C1AD;
+        Wed, 15 Mar 2023 03:18:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nflIrsrEFuXyWpFOhmVtDZU28CUs98Ea9sbKc/36dXPGDivI4C2NXyFDPomk05uuYgRplFqbEySnm8IGoppztSHhJkKBo4k1jXa3rOx1czfvTL+RgTsCo1oSN2eFO0V539U96KR4mkYlMrLKYETm+L2923QLMUtvdgoniWaOh5kLNBfdk3Zmd1e61MH+nSBMdKZ8xKefn7iBGqHbCnNQg2Wc2B7+otk7KLlDgQxfzY/SWSdkgfzxxKg7FVZVMXvd7JkR7z6ETGr2wGNnnFocDLRz9hjqs8tyfx8PobrTRaetzD8u7alWQWT/P9Liv14uCB+VdDTC9fbenc4A22TsqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NGubZEUNBfdLkgmycInfwezwxHfXMP4zTgFbkNw7F3Q=;
+ b=MrG7cMdpBlbpBiVDvg4yBkEtcaBroVSBoUsEwAw0hREoqcSWck/yoUiSSkleI9Gxi+KuCZnIJb0yesOnga+nYw/4OGcT4KSfzhriBe9/0KbjPdMxWDe3rOSL7+a7Ive4KcfGmIsGveXHtin3AOo4klWzZeyPfefjXsxwWqxYJ7wMiFNRW+QC2Mxq52V9b19MLXX/GgUwOCwQW14R21pJNt5yPgbI49K08RHJAHM3hdS5pALIWvXDCTi6kGLK5iN6VirogkVHOQ9Oga2296AJspzr3DvN6HF3mTl/Hpin6b1S1QuKk/8IHIItnG4bUPLnRiMkp6+gwPnHvwLt2jwUXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NGubZEUNBfdLkgmycInfwezwxHfXMP4zTgFbkNw7F3Q=;
+ b=3GuzOK8RKlhj5+NnyQH073GhPFYusuVjmbvmYXBVgiUFa0jShSEJQwCMSTq93H96Fj3gz80OuqRXTkU0jcPK19HAa8z7DOQ7MxtaQfcwJAsIGZCqasjbDu0imhbBpFQ9rCKJtgjyx4Fher0mba5P4DBIyAt3xItovz/hlfrdz9gVha2SSQxh8kYSuMv6ncnJ5sHadG5tPUOiCKv5uYuMbvg2iLbo856mI16vCuLOvqO5yPQ7wgPJa0yPeBb4fM8tTU/+ROhV/b3grTCJ3nRZ1IY1QUiuiNo8V5kQPX7joO1qmAbPS0gVnwbwoG5Ku7XvmRPCzUr3w5PtIs9J7D9k7A==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PAZP264MB2333.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e4::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
+ 2023 10:18:22 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::3943:154a:eccc:fe3a]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::3943:154a:eccc:fe3a%7]) with mapi id 15.20.6178.029; Wed, 15 Mar 2023
+ 10:18:22 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v4 20/36] powerpc: Implement the new page table range API
+Thread-Topic: [PATCH v4 20/36] powerpc: Implement the new page table range API
+Thread-Index: AQHZVv0YjMzoz9l+LU6zj9tdkgq+2a77l0WAgAAJsQA=
+Date:   Wed, 15 Mar 2023 10:18:22 +0000
+Message-ID: <c7f08247-8bcd-184c-5e06-91f91257f1f6@csgroup.eu>
 References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-29-willy@infradead.org>
+ <20230315051444.3229621-21-willy@infradead.org>
+ <1743d96f-8efe-0127-2cae-7368ce0eb2e6@csgroup.eu>
+In-Reply-To: <1743d96f-8efe-0127-2cae-7368ce0eb2e6@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB2333:EE_
+x-ms-office365-filtering-correlation-id: 836bc186-c09e-4ef3-9ee1-08db253e9b6b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Zw6csyt8Tig+97L9lZvW4MBur7eGd3KvUjMeFLr64Oph6DtP2AOSi7TOMpxRCpQ4VW+Ms56ij9NK8iYVg7WzMmvTRa/VLDue282t2eb5HKj6qcr+O+jN8ahPgKaB8rfHI5b5G0UAXx0VYuybl1Xphuhpp+KpO6t9tPZyWpzXG+vDMbdujI636gDAxJNmECmUgarecXhqCuuT8rNP/QG5g3YC0oR3tKAYWgRmjm6/JMExO//KA8kVkfDfxJ3DEGfbrGWrAGckElODMjmFF0D8U/wCzBVY+kjls7Yc5Ea/S1cgEN7i/95ZkelRw4TUufPlqYo8sTGQricozL6i7EQxP2FJrNlVj4eMYIw6OzEzqmj+75AcWKM2Hx9Wj0GTbE1GMDPl7S0mGIiSgnEL0/m2Lg2B/8CS8RdbLpE5sBYlplwey3FrzWu88+/fIcsjM6yRqRqfI/PBYBFo102s2FnSbNyLWenxHAuMyatsNNDcwkHhjdcf+QAFEIrHpLDrEI46yCEREXS8SpxgkOlZQ7S+8kjQzc9AU7kZTQwXxf3BiDlvj08AnnjAMlgCd6hFVw8O8hI6k0ZH1i9Zl+DIwg65yVL+YvKh5WuzE/GxILjDZUWA77HeaUDuzCRQh0MSeDKTJJt0UcqurbFBBNz7k1QU7l0PKJR/UY3WUUDMwyciNAWgaye/L/LrxhwhSzeutf/r0kno6o2QOst23je1Bp1PYYmdBM1s2NInAqXHe0h7fQCm475jKNwBGUenx7MTaonf
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199018)(38070700005)(86362001)(31696002)(36756003)(38100700002)(122000001)(44832011)(2906002)(41300700001)(8936002)(5660300002)(4326008)(6512007)(186003)(2616005)(26005)(66574015)(6506007)(316002)(54906003)(83380400001)(110136005)(66556008)(66446008)(64756008)(8676002)(91956017)(66476007)(76116006)(66946007)(6486002)(966005)(71200400001)(478600001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d2ttRi93R1lqQ3dzNFFDNE1jbDVmM294QnNIVU4xc25rUkY2Yi9nblZhK3pB?=
+ =?utf-8?B?aHpyMXB5WXVyNjkvS0kvYWFtVEZiMGpmaXozSFppeVFjQjdzS2dFcWZmMUN4?=
+ =?utf-8?B?V0xOZ0NsNktkOVRKbXlBN0Y2U0NUUjhock9WTmUrT3hJNDhKNFMzdHpiSTdG?=
+ =?utf-8?B?ejFTMDFLVFJVZThGUmhQVDNONjd5OE9CME9jUnBuMEFSajFEQ25IMURPRXFz?=
+ =?utf-8?B?U1hOSFNkbVZ4VHNzTjJpaEdldHFDZnFIODdtck8vRmZZMFlnMGREeklKeWFQ?=
+ =?utf-8?B?YkJGT3c3N2dnVms1V0JndEZZRksvY3NkYlE0dFp2NmZ3dmozTDZUQ1RXNUxC?=
+ =?utf-8?B?eGlDRUcvSEMrd2FWU0RDWnVJTlpPdFNnR1BwcjJkSW43dXRlV1o5NmxmWU1K?=
+ =?utf-8?B?RE1KdzZmRkVMaG84d1BUZnRCRU1tSHIvbVY0WTl4ams1NGlwYmxqNFZXZDVt?=
+ =?utf-8?B?dDR1QUNOMXl6cUZqVGFzZytFNVNxNU1KdDRNTUJ2UWl6OGlPcGdBc3RYcEhx?=
+ =?utf-8?B?N0srYm9YZHFJeit0eFFuczI2cEdDS2oxWndETVBDVjNhMHZRcVJhcVBtMXFi?=
+ =?utf-8?B?ckZhVFR2YldGSnEzZmlJZWxEYjFheHBnTTRCVEVZV09zNTFKWU51VE9LTDlK?=
+ =?utf-8?B?SmkvYmxoZE84QldSVVpicWF1K1JFY0NiNVB4Y1JUNSt5NzBsaFdWbkxXMEZN?=
+ =?utf-8?B?elJ0bHZjYnM2TDZKaFdyZ3g0ZHgvalpXQ25HVmc2QmkxdlFJVkVRV2VINzVn?=
+ =?utf-8?B?YWpjMkYvT1Z1ekcwaW5WRzNQbjNWWXBOZmN2R3A0OXk2SWl6Qk1DSStzRmlU?=
+ =?utf-8?B?eGc2V08vRnVTUUs3bEZqTGVidURiZHljUmF2MWlVa2xjOTBUcC94Q1E2SzFm?=
+ =?utf-8?B?d1gwUStreVNKUCtQV29adHJBTFc0VHZCQno3anU4VmJOeWhobzR6U0tBTFJB?=
+ =?utf-8?B?SE4wNVVYVGkzN011QXFBdkoydWV0NndXdGYzREY2Sm5SV2lqMFdpYWZudEVV?=
+ =?utf-8?B?OHNNRHN5KzByUTlrRTBWYnhDc2doV3o5ZnlGREcrbVNRdjAyWUN5RWk4SkY4?=
+ =?utf-8?B?Tkt6NVAzdGJqWVhVSnNMS0o4NW9TbWxZaUdRM3VRSGRTTXozemhTK0FObE95?=
+ =?utf-8?B?S3NEQ01ZNHErRk5ZTy9zNzZtaWJNUjVzaGt3cmRqQ1IwUnVIT01CUG9PZ1pS?=
+ =?utf-8?B?bFNQTXVUeE5vZlNGNTJMU3RtSmFoN3E0QkNNckU1K0pkMExCWC9QSlBsN2Rq?=
+ =?utf-8?B?d0F4ZEdjYVJrTGdSMlRpSUJvSzZIRGlFUWlucW1ZTWhWQXBkaktQK09CRmZ2?=
+ =?utf-8?B?aVViWU5BZHM4ZUhBYUpNWVJ1S29yTEJmRkJFTGRqZ3hKa1g2VXhBR29YSTNT?=
+ =?utf-8?B?dS9qV2lLQWtyS0R3WUVZSFptUy95RUdQTHpXT2ZsbXFJYk9MNWg5TWMvcjhn?=
+ =?utf-8?B?dHREZFJJTjZybldHTGcrSElDYXlUc201dGdRdVdBNm9xRWRLMVhlMmNKL2tj?=
+ =?utf-8?B?U0pReVc1VEE5ek1SemwwQzFHblJtbGFsWUVCMXhqZlF6MXFyUC8wZEdvNFM0?=
+ =?utf-8?B?TGYzVVNxNzRUQjFOYWJkUTQzSENEUjV2MC84OE9zRFRUSG9QMWJOdEdzbVcw?=
+ =?utf-8?B?enRRQlhHcGJxRGRHVlVqK1BmSW5ZRm9vQ3B5b0hodHlIcy9EMmQ4WnVCMU5H?=
+ =?utf-8?B?bFNYYUlTM2Qzbm5vSlBQaGRNOEIyVVNJeDRsWFRPUUJwQmEvOTN6TFpwNG1W?=
+ =?utf-8?B?NVB3L0loTXNyTUt4cjhBWTIzeFJMQW1mK3R2Qy9WZjJJazNjSExKckhYdit3?=
+ =?utf-8?B?ZGlDRUV0TW8zTUxmZzgxcnBVZHFBUlAyVU5URDNvR2FlZm5wWmNFRS9WaWtW?=
+ =?utf-8?B?dENGN2prUmFPWHlsNFBJQ21ldzN6VldMRjM3VWNWS1VsN05GRnF2ZnZMVkhF?=
+ =?utf-8?B?Y253N0lORFhmMFZMK2orUWw1VHhieTFjclA0L1ppYmhHQU00SjVIRjZzVXJ5?=
+ =?utf-8?B?YjhGQ3FBRWVZTjR1bGJuaHM5d0RPMGJ6SVl6ZG4xdnNjWFlZMURQVStCYUlZ?=
+ =?utf-8?B?V2VnOEpLYTdPWndEaXAvMWtxZ0NaYmJacVM0eHNtZkVjSVVSaUZKVGpEYXd6?=
+ =?utf-8?B?T3lsQXpCMFN1WXlUd3dtMlpJL2ZCS1N5Wk9YdWVpZ2psWmFLbmZGQUJoZVVr?=
+ =?utf-8?B?ZkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <BCA731677E505A4BA93AA92626E85C11@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315051444.3229621-29-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 836bc186-c09e-4ef3-9ee1-08db253e9b6b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 10:18:22.8310
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1vtqiP90W4A5AtQkWCXPF4EnFaDVlCyMfgGjW3zCkJ6xdRWJsiTNC7YN5iEnrv1u3dfWJjvxpkeYVZNNAgu+fTZSRIXk0U5ytx2+OswfmG4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2333
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:14:36AM +0000, Matthew Wilcox (Oracle) wrote:
-> Add PFN_PTE_SHIFT, update_mmu_cache_range(), flush_dcache_folio() and
-> flush_icache_pages().
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: linux-xtensa@linux-xtensa.org
-
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
-> ---
->  arch/xtensa/include/asm/cacheflush.h |  9 ++-
->  arch/xtensa/include/asm/pgtable.h    | 17 +++---
->  arch/xtensa/mm/cache.c               | 83 ++++++++++++++++------------
->  3 files changed, 62 insertions(+), 47 deletions(-)
-> 
-> diff --git a/arch/xtensa/include/asm/cacheflush.h b/arch/xtensa/include/asm/cacheflush.h
-> index 7b4359312c25..35153f6725e4 100644
-> --- a/arch/xtensa/include/asm/cacheflush.h
-> +++ b/arch/xtensa/include/asm/cacheflush.h
-> @@ -119,8 +119,14 @@ void flush_cache_page(struct vm_area_struct*,
->  #define flush_cache_vmap(start,end)	flush_cache_all()
->  #define flush_cache_vunmap(start,end)	flush_cache_all()
->  
-> +void flush_dcache_folio(struct folio *folio);
-> +#define flush_dcache_folio flush_dcache_folio
-> +
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
-> -void flush_dcache_page(struct page *);
-> +static inline void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
->  
->  void local_flush_cache_range(struct vm_area_struct *vma,
->  		unsigned long start, unsigned long end);
-> @@ -156,6 +162,7 @@ void local_flush_cache_page(struct vm_area_struct *vma,
->  
->  /* This is not required, see Documentation/core-api/cachetlb.rst */
->  #define	flush_icache_page(vma,page)			do { } while (0)
-> +#define	flush_icache_pages(vma, page, nr)		do { } while (0)
->  
->  #define flush_dcache_mmap_lock(mapping)			do { } while (0)
->  #define flush_dcache_mmap_unlock(mapping)		do { } while (0)
-> diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
-> index fc7a14884c6c..80bc70251aad 100644
-> --- a/arch/xtensa/include/asm/pgtable.h
-> +++ b/arch/xtensa/include/asm/pgtable.h
-> @@ -274,6 +274,7 @@ static inline pte_t pte_mkwrite(pte_t pte)
->   * and a page entry and page directory to the page they refer to.
->   */
->  
-> +#define PFN_PTE_SHIFT		PAGE_SHIFT
->  #define pte_pfn(pte)		(pte_val(pte) >> PAGE_SHIFT)
->  #define pte_same(a,b)		(pte_val(a) == pte_val(b))
->  #define pte_page(x)		pfn_to_page(pte_pfn(x))
-> @@ -301,15 +302,9 @@ static inline void update_pte(pte_t *ptep, pte_t pteval)
->  
->  struct mm_struct;
->  
-> -static inline void
-> -set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep, pte_t pteval)
-> -{
-> -	update_pte(ptep, pteval);
-> -}
-> -
-> -static inline void set_pte(pte_t *ptep, pte_t pteval)
-> +static inline void set_pte(pte_t *ptep, pte_t pte)
->  {
-> -	update_pte(ptep, pteval);
-> +	update_pte(ptep, pte);
->  }
->  
->  static inline void
-> @@ -407,8 +402,10 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
->  
->  #else
->  
-> -extern  void update_mmu_cache(struct vm_area_struct * vma,
-> -			      unsigned long address, pte_t *ptep);
-> +void update_mmu_cache_range(struct vm_area_struct *vma,
-> +		unsigned long address, pte_t *ptep, unsigned int nr);
-> +#define update_mmu_cache(vma, address, ptep) \
-> +	update_mmu_cache_range(vma, address, ptep, 1)
->  
->  typedef pte_t *pte_addr_t;
->  
-> diff --git a/arch/xtensa/mm/cache.c b/arch/xtensa/mm/cache.c
-> index 19e5a478a7e8..27bd798e4d89 100644
-> --- a/arch/xtensa/mm/cache.c
-> +++ b/arch/xtensa/mm/cache.c
-> @@ -121,9 +121,9 @@ EXPORT_SYMBOL(copy_user_highpage);
->   *
->   */
->  
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->  {
-> -	struct address_space *mapping = page_mapping_file(page);
-> +	struct address_space *mapping = folio_flush_mapping(folio);
->  
->  	/*
->  	 * If we have a mapping but the page is not mapped to user-space
-> @@ -132,14 +132,14 @@ void flush_dcache_page(struct page *page)
->  	 */
->  
->  	if (mapping && !mapping_mapped(mapping)) {
-> -		if (!test_bit(PG_arch_1, &page->flags))
-> -			set_bit(PG_arch_1, &page->flags);
-> +		if (!test_bit(PG_arch_1, &folio->flags))
-> +			set_bit(PG_arch_1, &folio->flags);
->  		return;
->  
->  	} else {
-> -
-> -		unsigned long phys = page_to_phys(page);
-> -		unsigned long temp = page->index << PAGE_SHIFT;
-> +		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
-> +		unsigned long temp = folio_pos(folio);
-> +		unsigned int i, nr = folio_nr_pages(folio);
->  		unsigned long alias = !(DCACHE_ALIAS_EQ(temp, phys));
->  		unsigned long virt;
->  
-> @@ -154,22 +154,26 @@ void flush_dcache_page(struct page *page)
->  			return;
->  
->  		preempt_disable();
-> -		virt = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-> -		__flush_invalidate_dcache_page_alias(virt, phys);
-> +		for (i = 0; i < nr; i++) {
-> +			virt = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-> +			__flush_invalidate_dcache_page_alias(virt, phys);
->  
-> -		virt = TLBTEMP_BASE_1 + (temp & DCACHE_ALIAS_MASK);
-> +			virt = TLBTEMP_BASE_1 + (temp & DCACHE_ALIAS_MASK);
->  
-> -		if (alias)
-> -			__flush_invalidate_dcache_page_alias(virt, phys);
-> +			if (alias)
-> +				__flush_invalidate_dcache_page_alias(virt, phys);
->  
-> -		if (mapping)
-> -			__invalidate_icache_page_alias(virt, phys);
-> +			if (mapping)
-> +				__invalidate_icache_page_alias(virt, phys);
-> +			phys += PAGE_SIZE;
-> +			temp += PAGE_SIZE;
-> +		}
->  		preempt_enable();
->  	}
->  
->  	/* There shouldn't be an entry in the cache for this page anymore. */
->  }
-> -EXPORT_SYMBOL(flush_dcache_page);
-> +EXPORT_SYMBOL(flush_dcache_folio);
->  
->  /*
->   * For now, flush the whole cache. FIXME??
-> @@ -207,45 +211,52 @@ EXPORT_SYMBOL(local_flush_cache_page);
->  
->  #endif /* DCACHE_WAY_SIZE > PAGE_SIZE */
->  
-> -void
-> -update_mmu_cache(struct vm_area_struct * vma, unsigned long addr, pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr)
->  {
->  	unsigned long pfn = pte_pfn(*ptep);
-> -	struct page *page;
-> +	struct folio *folio;
-> +	unsigned int i;
->  
->  	if (!pfn_valid(pfn))
->  		return;
->  
-> -	page = pfn_to_page(pfn);
-> +	folio = page_folio(pfn_to_page(pfn));
->  
-> -	/* Invalidate old entry in TLBs */
-> -
-> -	flush_tlb_page(vma, addr);
-> +	/* Invalidate old entries in TLBs */
-> +	for (i = 0; i < nr; i++)
-> +		flush_tlb_page(vma, addr + i * PAGE_SIZE);
-> +	nr = folio_nr_pages(folio);
->  
->  #if (DCACHE_WAY_SIZE > PAGE_SIZE)
->  
-> -	if (!PageReserved(page) && test_bit(PG_arch_1, &page->flags)) {
-> -		unsigned long phys = page_to_phys(page);
-> +	if (!folio_test_reserved(folio) && test_bit(PG_arch_1, &folio->flags)) {
-> +		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
->  		unsigned long tmp;
->  
->  		preempt_disable();
-> -		tmp = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-> -		__flush_invalidate_dcache_page_alias(tmp, phys);
-> -		tmp = TLBTEMP_BASE_1 + (addr & DCACHE_ALIAS_MASK);
-> -		__flush_invalidate_dcache_page_alias(tmp, phys);
-> -		__invalidate_icache_page_alias(tmp, phys);
-> +		for (i = 0; i < nr; i++) {
-> +			tmp = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-> +			__flush_invalidate_dcache_page_alias(tmp, phys);
-> +			tmp = TLBTEMP_BASE_1 + (addr & DCACHE_ALIAS_MASK);
-> +			__flush_invalidate_dcache_page_alias(tmp, phys);
-> +			__invalidate_icache_page_alias(tmp, phys);
-> +			phys += PAGE_SIZE;
-> +		}
->  		preempt_enable();
->  
-> -		clear_bit(PG_arch_1, &page->flags);
-> +		clear_bit(PG_arch_1, &folio->flags);
->  	}
->  #else
-> -	if (!PageReserved(page) && !test_bit(PG_arch_1, &page->flags)
-> +	if (!folio_test_reserved(folio) && !test_bit(PG_arch_1, &folio->flags)
->  	    && (vma->vm_flags & VM_EXEC) != 0) {
-> -		unsigned long paddr = (unsigned long)kmap_atomic(page);
-> -		__flush_dcache_page(paddr);
-> -		__invalidate_icache_page(paddr);
-> -		set_bit(PG_arch_1, &page->flags);
-> -		kunmap_atomic((void *)paddr);
-> +		for (i = 0; i < nr; i++) {
-> +			void *paddr = kmap_local_folio(folio, i * PAGE_SIZE);
-> +			__flush_dcache_page((unsigned long)paddr);
-> +			__invalidate_icache_page((unsigned long)paddr);
-> +			kunmap_local(paddr);
-> +		}
-> +		set_bit(PG_arch_1, &folio->flags);
->  	}
->  #endif
->  }
-> -- 
-> 2.39.2
-> 
-> 
-
--- 
-Sincerely yours,
-Mike.
+DQoNCkxlIDE1LzAzLzIwMjMgw6AgMTA6NDMsIENocmlzdG9waGUgTGVyb3kgYSDDqWNyaXTCoDoN
+Cj4gDQo+IA0KPiBMZSAxNS8wMy8yMDIzIMOgIDA2OjE0LCBNYXR0aGV3IFdpbGNveCAoT3JhY2xl
+KSBhIMOpY3JpdMKgOg0KPj4gQWRkIHNldF9wdGVzKCksIHVwZGF0ZV9tbXVfY2FjaGVfcmFuZ2Uo
+KSBhbmQgZmx1c2hfZGNhY2hlX2ZvbGlvKCkuDQo+PiBDaGFuZ2UgdGhlIFBHX2FyY2hfMSAoYWth
+IFBHX2RjYWNoZV9kaXJ0eSkgZmxhZyBmcm9tIGJlaW5nIHBlci1wYWdlIHRvDQo+PiBwZXItZm9s
+aW8uDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogTWF0dGhldyBXaWxjb3ggKE9yYWNsZSkgPHdpbGx5
+QGluZnJhZGVhZC5vcmc+DQo+PiBDYzogTWljaGFlbCBFbGxlcm1hbiA8bXBlQGVsbGVybWFuLmlk
+LmF1Pg0KPj4gQ2M6IE5pY2hvbGFzIFBpZ2dpbiA8bnBpZ2dpbkBnbWFpbC5jb20+DQo+PiBDYzog
+Q2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPj4gQ2M6IGxp
+bnV4cHBjLWRldkBsaXN0cy5vemxhYnMub3JnDQo+PiAtLS0NCg0KPj4gQEAgLTIwMyw3ICsyMDMs
+MTQgQEAgdm9pZCBzZXRfcHRlX2F0KHN0cnVjdCBtbV9zdHJ1Y3QgKm1tLCB1bnNpZ25lZCANCj4+
+IGxvbmcgYWRkciwgcHRlX3QgKnB0ZXAsDQo+PiDCoMKgwqDCoMKgIHB0ZSA9IHNldF9wdGVfZmls
+dGVyKHB0ZSk7DQo+PiDCoMKgwqDCoMKgIC8qIFBlcmZvcm0gdGhlIHNldHRpbmcgb2YgdGhlIFBU
+RSAqLw0KPj4gLcKgwqDCoCBfX3NldF9wdGVfYXQobW0sIGFkZHIsIHB0ZXAsIHB0ZSwgMCk7DQo+
+PiArwqDCoMKgIGZvciAoOzspIHsNCj4+ICvCoMKgwqDCoMKgwqDCoCBfX3NldF9wdGVfYXQobW0s
+IGFkZHIsIHB0ZXAsIHB0ZSwgMCk7DQo+PiArwqDCoMKgwqDCoMKgwqAgaWYgKC0tbnIgPT0gMCkN
+Cj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4gK8KgwqDCoMKgwqDCoMKgIHB0
+ZXArKzsNCj4+ICvCoMKgwqDCoMKgwqDCoCBwdGUgPSBfX3B0ZShwdGVfdmFsKHB0ZSkgKyBQQUdF
+X1NJWkUpOw0KPiANCj4gSSBkb24ndCBsaWtlIHRoYXQgbWF0aCB0b28gbXVjaCwgYnV0IEkgaGF2
+ZSBubyBiZXR0ZXIgaWRlYSBhdCB0aGUgbW9tZW50Lg0KPiANCj4gTWF5YmUgc2V0X3B0ZXMoKSBz
+aG91bGQgdGFrZSBhIHBncHJvdF90IGFuZCByZWJ1aWxkIHRoZSBwdGUgd2l0aCANCj4gbWtfcHRl
+KCkgb3Igc2ltaWxhciA/DQo+IA0KPj4gK8KgwqDCoMKgwqDCoMKgIGFkZHIgKz0gUEFHRV9TSVpF
+Ow0KPj4gK8KgwqDCoCB9DQo+PiDCoCB9DQo+PiDCoCB2b2lkIHVubWFwX2tlcm5lbF9wYWdlKHVu
+c2lnbmVkIGxvbmcgdmEpDQoNCkkgaW52ZXN0aWdhdGVkIGEgYml0IGZ1cnRoZXIgYW5kIGNhbiBj
+b25maXJtIG5vdyB0aGF0IHRoZSBhYm92ZSB3b24ndCANCmFsd2F5cyB3b3JrLCBzZWUgY29tbWVu
+dCANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2LjMtcmMyL3NvdXJjZS9hcmNo
+L3Bvd2VycGMvaW5jbHVkZS9hc20vbm9oYXNoLzMyL3BndGFibGUuaCNMMTQ3DQoNCkFuZCB0aGVu
+IHlvdSBzZWUgDQpodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Ni4zLXJjMi9zb3Vy
+Y2UvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL25vaGFzaC9wdGUtZTUwMC5oI0w2Mw0KDQpDaHJp
+c3RvcGhlDQo=
