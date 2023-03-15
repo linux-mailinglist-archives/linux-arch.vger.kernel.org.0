@@ -2,66 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4446BB710
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 16:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6D76BB7AE
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 16:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbjCOPJm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 11:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S231976AbjCOP0V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 11:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjCOPJl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 11:09:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA83B1701;
-        Wed, 15 Mar 2023 08:09:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678892980; x=1710428980;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5NuMuo1ja/MmNbvMIOTlFS5JYqzd32pXaq+oo+UalMo=;
-  b=lbAv4ySmppUVZSu/rKYk7KW2E5u7c4zZt+4EZm1k9DB1Ttd2hkm6jmzr
-   cF2Ote6Fw40qzGQNh6zO8umWt1QsvaQE7MdM9TC8WLLdQO6f8WzxcGcOk
-   jaz+DPocZWm8RZm/WUavP4BCXeT6Q7SjL5EijOFO8w8TxbKn5+yWzLAi/
-   Ph5LZqAvTEgA50pQugE6LRfZ/Ot8iwN3w67k0PBgw+2z5uyzOQGtOmg5O
-   HbMUd2qtQKonLiHTkNrJZjZDHoyQJy1CGRDVkYecz9BRC8TNDCo3lvcAb
-   Ii5mfs+xYnGtqxOwWYBy+eEuViuh0v9ii7DmT9ZTwDl7a4/bNwRfCqp98
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402598867"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="402598867"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 08:06:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="822809512"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="822809512"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2023 08:06:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcSiL-0007nz-2Y;
-        Wed, 15 Mar 2023 15:06:53 +0000
-Date:   Wed, 15 Mar 2023 23:06:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
-Message-ID: <202303152251.0kYjWIXW-lkp@intel.com>
-References: <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
+        with ESMTP id S231466AbjCOP0U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 11:26:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E09EA27D;
+        Wed, 15 Mar 2023 08:26:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B2044B3;
+        Wed, 15 Mar 2023 08:27:01 -0700 (PDT)
+Received: from [10.57.64.236] (unknown [10.57.64.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 777913F67D;
+        Wed, 15 Mar 2023 08:26:16 -0700 (PDT)
+Message-ID: <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
+Date:   Wed, 15 Mar 2023 15:26:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-36-willy@infradead.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230315051444.3229621-36-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,96 +46,132 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Kirill,
+On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
+> From: Yin Fengwei <fengwei.yin@intel.com>
+> 
+> set_pte_range() allows to setup page table entries for a specific
+> range.  It takes advantage of batched rmap update for large folio.
+> It now takes care of calling update_mmu_cache_range().
+> 
+> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  Documentation/filesystems/locking.rst |  2 +-
+>  include/linux/mm.h                    |  3 ++-
+>  mm/filemap.c                          |  3 +--
+>  mm/memory.c                           | 27 +++++++++++++++------------
+>  4 files changed, 19 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+> index 7de7a7272a5e..922886fefb7f 100644
+> --- a/Documentation/filesystems/locking.rst
+> +++ b/Documentation/filesystems/locking.rst
+> @@ -663,7 +663,7 @@ locked. The VM will unlock the page.
+>  Filesystem should find and map pages associated with offsets from "start_pgoff"
+>  till "end_pgoff". ->map_pages() is called with page table locked and must
+>  not block.  If it's not possible to reach a page without blocking,
+> -filesystem should skip it. Filesystem should use do_set_pte() to setup
+> +filesystem should skip it. Filesystem should use set_pte_range() to setup
+>  page table entry. Pointer to entry associated with the page is passed in
+>  "pte" field in vm_fault structure. Pointers to entries for other offsets
+>  should be calculated relative to "pte".
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index ee755bb4e1c1..81788c985a8c 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1299,7 +1299,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>  }
+>  
+>  vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
+> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
+> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
+> +		struct page *page, unsigned int nr, unsigned long addr);
+>  
+>  vm_fault_t finish_fault(struct vm_fault *vmf);
+>  vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 6e2b0778db45..e2317623dcbf 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -3504,8 +3504,7 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+>  			ret = VM_FAULT_NOPAGE;
+>  
+>  		ref_count++;
+> -		do_set_pte(vmf, page, addr);
+> -		update_mmu_cache(vma, addr, vmf->pte);
+> +		set_pte_range(vmf, folio, page, 1, addr);
+>  	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
+>  
+>  	/* Restore the vmf->pte */
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 6aa21e8f3753..9a654802f104 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4274,7 +4274,8 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+>  }
+>  #endif
+>  
+> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
+> +		struct page *page, unsigned int nr, unsigned long addr)
+>  {
+>  	struct vm_area_struct *vma = vmf->vma;
+>  	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
+> @@ -4282,7 +4283,7 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>  	bool prefault = vmf->address != addr;
 
-Thank you for the patch! Yet something to improve:
+I think you are changing behavior here - is this intentional? Previously this
+would be evaluated per page, now its evaluated once for the whole range. The
+intention below is that directly faulted pages are mapped young and prefaulted
+pages are mapped old. But now a whole range will be mapped the same.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on powerpc/next powerpc/fixes linus/master v6.3-rc2 next-20230315]
-[cannot apply to davem-sparc/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Ryan
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/sparc-mm-Fix-MAX_ORDER-usage-in-tsb_grow/20230315-193254
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230315113133.11326-11-kirill.shutemov%40linux.intel.com
-patch subject: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
-config: mips-randconfig-r015-20230313 (https://download.01.org/0day-ci/archive/20230315/202303152251.0kYjWIXW-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ccefb5df94c3c6c966f6f583d60c9d9c832b7a34
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kirill-A-Shutemov/sparc-mm-Fix-MAX_ORDER-usage-in-tsb_grow/20230315-193254
-        git checkout ccefb5df94c3c6c966f6f583d60c9d9c832b7a34
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
+>  	pte_t entry;
+>  
+> -	flush_icache_page(vma, page);
+> +	flush_icache_pages(vma, page, nr);
+>  	entry = mk_pte(page, vma->vm_page_prot);
+>  
+>  	if (prefault && arch_wants_old_prefaulted_pte())
+> @@ -4296,14 +4297,18 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>  		entry = pte_mkuffd_wp(entry);
+>  	/* copy-on-write page */
+>  	if (write && !(vma->vm_flags & VM_SHARED)) {
+> -		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+> -		page_add_new_anon_rmap(page, vma, addr);
+> -		lru_cache_add_inactive_or_unevictable(page, vma);
+> +		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr);
+> +		VM_BUG_ON_FOLIO(nr != 1, folio);
+> +		folio_add_new_anon_rmap(folio, vma, addr);
+> +		folio_add_lru_vma(folio, vma);
+>  	} else {
+> -		inc_mm_counter(vma->vm_mm, mm_counter_file(page));
+> -		page_add_file_rmap(page, vma, false);
+> +		add_mm_counter(vma->vm_mm, mm_counter_file(page), nr);
+> +		folio_add_file_rmap_range(folio, page, nr, vma, false);
+>  	}
+> -	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
+> +	set_ptes(vma->vm_mm, addr, vmf->pte, entry, nr);
+> +
+> +	/* no need to invalidate: a not-present page won't be cached */
+> +	update_mmu_cache_range(vma, addr, vmf->pte, nr);
+>  }
+>  
+>  static bool vmf_pte_changed(struct vm_fault *vmf)
+> @@ -4376,11 +4381,9 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
+>  
+>  	/* Re-check under ptl */
+>  	if (likely(!vmf_pte_changed(vmf))) {
+> -		do_set_pte(vmf, page, vmf->address);
+> -
+> -		/* no need to invalidate: a not-present page won't be cached */
+> -		update_mmu_cache(vma, vmf->address, vmf->pte);
+> +		struct folio *folio = page_folio(page);
+>  
+> +		set_pte_range(vmf, folio, page, 1, vmf->address);
+>  		ret = 0;
+>  	} else {
+>  		update_mmu_tlb(vma, vmf->address, vmf->pte);
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303152251.0kYjWIXW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/gfp.h:7,
-                    from include/linux/xarray.h:15,
-                    from include/linux/list_lru.h:14,
-                    from include/linux/fs.h:13,
-                    from include/linux/compat.h:17,
-                    from arch/mips/kernel/asm-offsets.c:12:
->> include/linux/mmzone.h:1749:2: error: #error Allocator MAX_ORDER exceeds SECTION_SIZE
-    1749 | #error Allocator MAX_ORDER exceeds SECTION_SIZE
-         |  ^~~~~
-   arch/mips/kernel/asm-offsets.c:26:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
-      26 | void output_ptreg_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:78:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
-      78 | void output_task_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:92:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
-      92 | void output_thread_info_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:108:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
-     108 | void output_thread_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:136:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
-     136 | void output_thread_fpu_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:179:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
-     179 | void output_mm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:235:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
-     235 | void output_sc_defines(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:248:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
-     248 | void output_signal_defined(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~
-   arch/mips/kernel/asm-offsets.c:341:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
-     341 | void output_kvm_defines(void)
-         |      ^~~~~~~~~~~~~~~~~~
-   make[2]: *** [scripts/Makefile.build:114: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:1287: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:226: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +1749 include/linux/mmzone.h
-
-d41dee369bff3b Andy Whitcroft     2005-06-23  1744  
-835c134ec4dd75 Mel Gorman         2007-10-16  1745  #define SECTION_BLOCKFLAGS_BITS \
-d9c2340052278d Mel Gorman         2007-10-16  1746  	((1UL << (PFN_SECTION_SHIFT - pageblock_order)) * NR_PAGEBLOCK_BITS)
-835c134ec4dd75 Mel Gorman         2007-10-16  1747  
-ccefb5df94c3c6 Kirill A. Shutemov 2023-03-15  1748  #if (MAX_ORDER + PAGE_SHIFT) > SECTION_SIZE_BITS
-d41dee369bff3b Andy Whitcroft     2005-06-23 @1749  #error Allocator MAX_ORDER exceeds SECTION_SIZE
-d41dee369bff3b Andy Whitcroft     2005-06-23  1750  #endif
-d41dee369bff3b Andy Whitcroft     2005-06-23  1751  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
