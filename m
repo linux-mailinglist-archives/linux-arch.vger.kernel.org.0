@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7564D6BAF4B
+	by mail.lfdr.de (Postfix) with ESMTP id CAFC16BAF4C
 	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 12:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjCOLcB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 07:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
+        id S231722AbjCOLcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 07:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjCOLb5 (ORCPT
+        with ESMTP id S231646AbjCOLb5 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 07:31:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D178664D0;
-        Wed, 15 Mar 2023 04:31:47 -0700 (PDT)
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5166F6F629;
+        Wed, 15 Mar 2023 04:31:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678879907; x=1710415907;
+  t=1678879909; x=1710415909;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KJJgxfSP5w2rtkaNO15MqwNgcC5YINyIgZH9vrQT2MQ=;
-  b=OFIJz5RTr0KulGvPwLtNejHHmww9sohvdM9pYVkC+2Zg1frCCbt/qopb
-   HC+JiS20rn63B+HquZdtaYJQLzFSMzbJOE4T1BNoae9nXWKCRz1RFhNDy
-   WDvy9cx47XCM/jmW1sPpN3+4aq0c3Sy+RVRj9d5wv0uDWhmd7xthuaJWy
-   TPlUmyprae0mLDXbG+p9jzPR4ZEuR6bhuGYYYjs6mD4KNh108vOpdM1Qr
-   msiAPTzAHx3hrBCMP/bXWktuTLV5xWMJIprNRxSvbxRscOJIVyQDLkFEM
-   zHHzEViP1kLLBW4m1EM2xDICjC1K+9WAvKhP//mswx/vq5ZfujXRrJkEU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="340040142"
+  bh=DqwXAyl2Jl7pmzwDfdXypoW87246pyJ3bkPjNFW5WAg=;
+  b=lS8vMHlZnp5hCr9HdN/4jahh+XMIIyEyxoQoU9M82vcytcBDx5XLTCMQ
+   28Hil5dHOVqHQnafdCk2IsC0WXe2+B2ohrELEMHX58bKqllLOLuwCIMaF
+   ivbLatbLgyhw9c1hxu30IUsH64qjj9rf+Y7yPERN9KHhwSJjFRNKR3KV5
+   PEerK4IXkiC/+1Ff7DjEqgcfkvBh/ZCk51pPycuzJYeuRnqtO+vpQ9HHh
+   8lv+JJ67PNqFLA0tMvN3v9FMhybIMAcyveRk2Rkc+0RApSt4KNNx1DDaJ
+   csAvTgBrfaFDrP7dkIrIH62i7y1ufs8lihc4FGvXT34m9fwKqVWHR1QXe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317330345"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="340040142"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:46 -0700
+   d="scan'208";a="317330345"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:45 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="768456024"
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="925310581"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="768456024"
+   d="scan'208";a="925310581"
 Received: from nopopovi-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.48])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:43 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:43 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id D288A10CCA2; Wed, 15 Mar 2023 14:31:35 +0300 (+03)
+        id DB6B510CCA3; Wed, 15 Mar 2023 14:31:35 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
@@ -47,25 +47,17 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
-Subject: [PATCH 06/10] perf/core: Fix MAX_ORDER usage in rb_alloc_aux_page()
-Date:   Wed, 15 Mar 2023 14:31:29 +0300
-Message-Id: <20230315113133.11326-7-kirill.shutemov@linux.intel.com>
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>
+Subject: [PATCH 07/10] mm/page_reporting: Fix MAX_ORDER usage in page_reporting_register()
+Date:   Wed, 15 Mar 2023 14:31:30 +0300
+Message-Id: <20230315113133.11326-8-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
 References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +68,27 @@ X-Mailing-List: linux-arch@vger.kernel.org
 MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
 can deliver is MAX_ORDER-1.
 
-Fix MAX_ORDER usage in rb_alloc_aux_page().
+Fix MAX_ORDER usage in page_reporting_register().
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Duyck <alexander.h.duyck@linux.intel.com>
 ---
- kernel/events/ring_buffer.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/page_reporting.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-index 273a0fe7910a..d6bbdb7830b2 100644
---- a/kernel/events/ring_buffer.c
-+++ b/kernel/events/ring_buffer.c
-@@ -609,8 +609,8 @@ static struct page *rb_alloc_aux_page(int node, int order)
- {
- 	struct page *page;
+diff --git a/mm/page_reporting.c b/mm/page_reporting.c
+index c65813a9dc78..275b466de37b 100644
+--- a/mm/page_reporting.c
++++ b/mm/page_reporting.c
+@@ -370,7 +370,7 @@ int page_reporting_register(struct page_reporting_dev_info *prdev)
+ 	 */
  
--	if (order > MAX_ORDER)
--		order = MAX_ORDER;
-+	if (order >= MAX_ORDER)
-+		order = MAX_ORDER - 1;
- 
- 	do {
- 		page = alloc_pages_node(node, PERF_AUX_GFP, order);
+ 	if (page_reporting_order == -1) {
+-		if (prdev->order > 0 && prdev->order <= MAX_ORDER)
++		if (prdev->order > 0 && prdev->order < MAX_ORDER)
+ 			page_reporting_order = prdev->order;
+ 		else
+ 			page_reporting_order = pageblock_order;
 -- 
 2.39.2
 
