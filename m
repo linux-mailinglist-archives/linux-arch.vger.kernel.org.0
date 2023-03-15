@@ -2,164 +2,195 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7436BABD6
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 10:13:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B726F6BAC00
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 10:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbjCOJNq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 05:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S231969AbjCOJVh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 05:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbjCOJNQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 05:13:16 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D23759C8
-        for <linux-arch@vger.kernel.org>; Wed, 15 Mar 2023 02:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1678871574; x=1710407574;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ynUyFtPJe+8qjzMq2dP0OfMsuwyEwaqT9RTkOz0XYsQ=;
-  b=ELyJYaxmv6bmSlM1wwODMwTHXUWQcnmfEsgVVxyDmjn7xxgVpYJXfWCe
-   ttTPRsbvwRzf41PQih8krVxE6qIAmrB6QWni4JbyTPDNo839Wy/6ZHL5H
-   BlMoRLDenuxPUALniZzk5PVXeKEc7stPR2GVZ6sIwI4TwXfrE2Pq2zS1P
-   0HSpD/W1S4r5lqaR1Cfyx/dIIxyEhfC9a1FCErJ9kGL6STLPOOfm5lLGV
-   s3DV/uLRudAPivgRh0WzZl6Gm2lilQph0IGLwKowmGpt+tf7YfgjCEFtU
-   aXUXvChebkDWG29+9haIcxvU7iKAW2zEYbFtpktRrXvoi1JBlNNR7vW+k
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,262,1673884800"; 
-   d="scan'208";a="225463460"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2023 17:12:54 +0800
-IronPort-SDR: 3cujwMzD/hKfaQtw2UGZb172QVaj+78KanwKzEZmFnLsZTFKRbJST50LuWO53a/iL8t1eUPUZf
- PVyd86y5Ja1KFX4TkAz100SUR9kJtB5IV1B4f4Wda4LKGCZeWSXrN6ouzpGZ3kwoWnFJCAzz9e
- HvWMBNyzQGW7FKdsawufG25N5mmolbJl/HgWQbFlkQ2epDUtdJR7XXZM0pJJleBufCjwl+DQpc
- uGA4wdjg7Vp4hifLXoGWF56SV2JeLkcN2i/fHrR17eUtlOeF9ZcKedWuun+AUNTU36NpDJyLJE
- r5Y=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Mar 2023 01:23:40 -0700
-IronPort-SDR: KgsDrkkDp5ZHEZkDFRUvVr0drhWSk5QWT3jEGeyscjOptmGdTCTTKy48lh3HbjKA1DNhj7RSV6
- x+6qlBOpmh4FlRELZxoHX8eaCicokpAw3H7IfOKWMQa6JXB6OrtSOJcTvsDBHJQXi/rCJ+ZEqX
- ZQGkRuSmRDLY195/0JiaWbxsuAMvtREo6sNZQSp83v8Mst4+7jblwLGXlFOuxn9HzmAsFg3WG3
- aNRKH45v0rKPTDrer2vQs7gdTQ7OOy3OV+8jnbiMm+cnl1raRFKpoT/anypztMB/HIjrvNPDDz
- Xpo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Mar 2023 02:12:55 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pc4Rn6RMKz1RtVx
-        for <linux-arch@vger.kernel.org>; Wed, 15 Mar 2023 02:12:53 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1678871572; x=1681463573; bh=ynUyFtPJe+8qjzMq2dP0OfMsuwyEwaqT9RT
-        kOz0XYsQ=; b=XrebnydX6PPijQC6+48JvZDwc6+oPA9n2SNcXSDTRknZL6dEkKL
-        LB/LxIv/oTLZF9AgMtKzNG7a+7NuMz8Ez+3Af2P1El6FUUhXBZSv/2ZxPj6i1nGr
-        OwsjmwkcBgtDZl8L5WSONyXBkrwK1mAFeooOqU4jJBSMl88QXAGyzd671lnzh4+I
-        08o3xpGEj1NE2F+cmES7I+rxMxZZcfUaQtVPFQLB8X5jk19i87A6gBnIA1tX92y5
-        XNFjxMsrjGw8MB7mUanHURNAlj8Q4tfFARg5twRq2S366pDjcwUTCqGtD/NIRpNw
-        0utgHvH5gXDm4IcQgim9OdY9HSOj1cMBmuA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id GOMpZwnphIbK for <linux-arch@vger.kernel.org>;
-        Wed, 15 Mar 2023 02:12:52 -0700 (PDT)
-Received: from [10.225.163.84] (unknown [10.225.163.84])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pc4Rk0Ng0z1RtVm;
-        Wed, 15 Mar 2023 02:12:49 -0700 (PDT)
-Message-ID: <c7315ca2-3ebf-7f3b-da64-9a74a995b0ae@opensource.wdc.com>
-Date:   Wed, 15 Mar 2023 18:12:48 +0900
+        with ESMTP id S231927AbjCOJV0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 05:21:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039A21B557;
+        Wed, 15 Mar 2023 02:21:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8441B81D76;
+        Wed, 15 Mar 2023 09:21:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FA7C433EF;
+        Wed, 15 Mar 2023 09:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678872081;
+        bh=bma7awM6tHmIC3wO1SvO/FynqdjWMUbMRsUs73RSibM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CC1f8HDMk5mh+yXoQO1uNb2ErxcZr3nYdhbeGeShrB7B8SPUSY5lo6sgP/daZztup
+         6y8laGWeuU9XvN3WtrzW4cLbE0a2HI7AxD7wt+AwU5G2+0HR+tGdoYQ0Juz8jYcJ6B
+         KOVVw+v8fgCble4wjy6cZ7w6r8pQoomkWZeJxzEvtSXwKDVr8sv62+C4FSV7jWN9J+
+         oSSA/DK9S61JTIG8STBS+nZfPaFyQgnpAOX+2rcS23+3+34kR5z49qkql/GBBBsY6s
+         pw33RsU4qQjKGcgAyWEN/7lMBTu/ecLfn4OtAHATzidnNHxKgiP3VsxP4tKcUklT6O
+         Bqo+5xyOsjaFg==
+Date:   Wed, 15 Mar 2023 11:21:08 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 01/36] mm: Convert page_table_check_pte_set() to
+ page_table_check_ptes_set()
+Message-ID: <ZBGOBIOwFexlEfdx@kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-2-willy@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-ide@vger.kernel.org
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-3-schnelle@linux.ibm.com>
- <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315051444.3229621-2-willy@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/15/23 17:39, Geert Uytterhoeven wrote:
-> Hi Niklas,
->=20
-> On Tue, Mar 14, 2023 at 1:12=E2=80=AFPM Niklas Schnelle <schnelle@linux=
-.ibm.com> wrote:
->> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frien=
-ds
->> not being declared. We thus need to add HAS_IOPORT as dependency for
->> those drivers using them.
->>
->> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
->> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->=20
-> Thanks for your patch!
->=20
->> --- a/drivers/ata/Kconfig
->> +++ b/drivers/ata/Kconfig
->> @@ -342,6 +342,7 @@ endif # HAS_DMA
->>
->>  config ATA_SFF
->>         bool "ATA SFF support (for legacy IDE and PATA)"
->> +       depends on HAS_IOPORT
->>         default y
->>         help
->>           This option adds support for ATA controllers with SFF
->=20
-> ATA_SFF is a dependency for lots of (S)ATA drivers.
-> (at least) The following don't use I/O port access:
->=20
->     CONFIG_SATA_RCAR (arm/arm64)
->     CONFIG_PATA_FALCON (m68k/atari and m68k/q40)
->     CONFIG_PATA_GAYLE (m68k/amiga)
->     CONFIG_PATA_BUDDHA (m68k/amiga)
->=20
-> (at least) The following can use either MMIO or I/O port accesses:
->=20
->     CONFIG_PATA_PLATFORM (m68k/mac)
+On Wed, Mar 15, 2023 at 05:14:09AM +0000, Matthew Wilcox (Oracle) wrote:
+> Tell the page table check how many PTEs & PFNs we want it to check.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-But for these arch/platforms, would there be any reason to not have HAS_I=
-OPORT ?
-It is supported right now, so we should have HAS_IOPORT for them.
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
->=20
-> Gr{oetje,eeting}s,
->=20
->                         Geert
->=20
+> ---
+>  arch/arm64/include/asm/pgtable.h |  2 +-
+>  arch/riscv/include/asm/pgtable.h |  2 +-
+>  arch/x86/include/asm/pgtable.h   |  2 +-
+>  include/linux/page_table_check.h | 14 +++++++-------
+>  mm/page_table_check.c            | 14 ++++++++------
+>  5 files changed, 18 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 0bd18de9fd97..9428748f4691 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -358,7 +358,7 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  			      pte_t *ptep, pte_t pte)
+>  {
+> -	page_table_check_pte_set(mm, addr, ptep, pte);
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+>  	return __set_pte_at(mm, addr, ptep, pte);
+>  }
+>  
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index ab05f892d317..b516f3b59616 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -459,7 +459,7 @@ static inline void __set_pte_at(struct mm_struct *mm,
+>  static inline void set_pte_at(struct mm_struct *mm,
+>  	unsigned long addr, pte_t *ptep, pte_t pteval)
+>  {
+> -	page_table_check_pte_set(mm, addr, ptep, pteval);
+> +	page_table_check_ptes_set(mm, addr, ptep, pteval, 1);
+>  	__set_pte_at(mm, addr, ptep, pteval);
+>  }
+>  
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 15ae4d6ba476..1031025730d0 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -1022,7 +1022,7 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
+>  static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  			      pte_t *ptep, pte_t pte)
+>  {
+> -	page_table_check_pte_set(mm, addr, ptep, pte);
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+>  	set_pte(ptep, pte);
+>  }
+>  
+> diff --git a/include/linux/page_table_check.h b/include/linux/page_table_check.h
+> index 01e16c7696ec..ba269c7009e4 100644
+> --- a/include/linux/page_table_check.h
+> +++ b/include/linux/page_table_check.h
+> @@ -20,8 +20,8 @@ void __page_table_check_pmd_clear(struct mm_struct *mm, unsigned long addr,
+>  				  pmd_t pmd);
+>  void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+>  				  pud_t pud);
+> -void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+> -				pte_t *ptep, pte_t pte);
+> +void __page_table_check_ptes_set(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte, unsigned int nr);
+>  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+>  				pmd_t *pmdp, pmd_t pmd);
+>  void __page_table_check_pud_set(struct mm_struct *mm, unsigned long addr,
+> @@ -73,14 +73,14 @@ static inline void page_table_check_pud_clear(struct mm_struct *mm,
+>  	__page_table_check_pud_clear(mm, addr, pud);
+>  }
+>  
+> -static inline void page_table_check_pte_set(struct mm_struct *mm,
+> +static inline void page_table_check_ptes_set(struct mm_struct *mm,
+>  					    unsigned long addr, pte_t *ptep,
+> -					    pte_t pte)
+> +					    pte_t pte, unsigned int nr)
+>  {
+>  	if (static_branch_likely(&page_table_check_disabled))
+>  		return;
+>  
+> -	__page_table_check_pte_set(mm, addr, ptep, pte);
+> +	__page_table_check_ptes_set(mm, addr, ptep, pte, nr);
+>  }
+>  
+>  static inline void page_table_check_pmd_set(struct mm_struct *mm,
+> @@ -138,9 +138,9 @@ static inline void page_table_check_pud_clear(struct mm_struct *mm,
+>  {
+>  }
+>  
+> -static inline void page_table_check_pte_set(struct mm_struct *mm,
+> +static inline void page_table_check_ptes_set(struct mm_struct *mm,
+>  					    unsigned long addr, pte_t *ptep,
+> -					    pte_t pte)
+> +					    pte_t pte, unsigned int nr)
+>  {
+>  }
+>  
+> diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+> index 25d8610c0042..e6f4d40caaa2 100644
+> --- a/mm/page_table_check.c
+> +++ b/mm/page_table_check.c
+> @@ -184,20 +184,22 @@ void __page_table_check_pud_clear(struct mm_struct *mm, unsigned long addr,
+>  }
+>  EXPORT_SYMBOL(__page_table_check_pud_clear);
+>  
+> -void __page_table_check_pte_set(struct mm_struct *mm, unsigned long addr,
+> -				pte_t *ptep, pte_t pte)
+> +void __page_table_check_ptes_set(struct mm_struct *mm, unsigned long addr,
+> +				pte_t *ptep, pte_t pte, unsigned int nr)
+>  {
+> +	unsigned int i;
+> +
+>  	if (&init_mm == mm)
+>  		return;
+>  
+> -	__page_table_check_pte_clear(mm, addr, *ptep);
+> +	for (i = 0; i < nr; i++)
+> +		__page_table_check_pte_clear(mm, addr, ptep[i]);
+>  	if (pte_user_accessible_page(pte)) {
+> -		page_table_check_set(mm, addr, pte_pfn(pte),
+> -				     PAGE_SIZE >> PAGE_SHIFT,
+> +		page_table_check_set(mm, addr, pte_pfn(pte), nr,
+>  				     pte_write(pte));
+>  	}
+>  }
+> -EXPORT_SYMBOL(__page_table_check_pte_set);
+> +EXPORT_SYMBOL(__page_table_check_ptes_set);
+>  
+>  void __page_table_check_pmd_set(struct mm_struct *mm, unsigned long addr,
+>  				pmd_t *pmdp, pmd_t pmd)
+> -- 
+> 2.39.2
+> 
+> 
 
---=20
-Damien Le Moal
-Western Digital Research
-
+-- 
+Sincerely yours,
+Mike.
