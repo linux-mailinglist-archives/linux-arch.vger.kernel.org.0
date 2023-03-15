@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84866BBEAB
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 22:15:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FE16BBEAD
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 22:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjCOVP5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 17:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S231802AbjCOVP6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 17:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjCOVPy (ORCPT
+        with ESMTP id S232351AbjCOVPy (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 17:15:54 -0400
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C3A95E18;
-        Wed, 15 Mar 2023 14:15:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C60D8C818;
+        Wed, 15 Mar 2023 14:15:52 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id 498B2378;
+        by ms.lwn.net (Postfix) with ESMTPA id 0A23744A;
         Wed, 15 Mar 2023 21:15:50 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 498B2378
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0A23744A
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1678914950; bh=bp9wnAq18A0+juKVo1Js4YF/qFjka3dcKSIzCMqh1OQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=kknMgdkuAMTOoDuKrguJtOGWJ7aLTQEeQzurApW+cXl0iHhVUMHUZpwzIJsHS2fOH
-         eWjyd2ATo+CztGkskDV+b5Nbj5aCroS6GbrUz2NV9njj/FcfZrC3JDS73vEGIwDh3T
-         GHRa1xrhDaSo+f+CGlEvlo9agy7zHPprtYA8CfcP+NAFmUMth5x3kCP+1ArDD/TerA
-         pVdrDEGQnubBhRBUqKSC0ColwCmtyqsxTHBXYRjh69tAvQGpn2JjxqiRfDweOKWK7q
-         ZIJ41NLQys7oi3Rmdh54++zGJg/Gt4t5kv8uMZ9mBhO1IsnYx/iG7G3heC2n5FAG6x
-         uE4OfBngzRiEA==
+        t=1678914951; bh=cMmlmnb7gOKAQJ/wbgOlJHiItUUHcn+mpPRcSPMfXLc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DATlSj+enLcc+hVE2qTcBvcMt1jh76dc6vxZr7CFDISPU5HtD9UmjqSzUuOreig8l
+         CDICiIIz9mz03jwJCHYqDcIXtRv4uCzN6W1uYtRtmJDy6l7K3YzoHbfu7ogfyBBTSA
+         8o8SSuJIfw4SrbRCn8a0dLBzswhShkZiDteHVn/LALLq50WoIYQjmLj/na9uxyoJJC
+         a19zxhJ635nJnVCfbp/WMN0iWONr0ki4cwL9lOWB/ay3m9uQTPLX7cdDOszj2YgZrq
+         J9cmpLHeWrBRvAUZVl4bpDZmCAyRbCRWEJsqckg88fVdbTylNSqV7NZXhPCqBYuHPK
+         IIg4ngsT+flcw==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -35,10 +35,12 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
         Borislav Petkov <bp@alien8.de>
-Subject: [PATCH RFC 0/2] Begin reorganizing the arch documentation
-Date:   Wed, 15 Mar 2023 15:15:21 -0600
-Message-Id: <20230315211523.108836-1-corbet@lwn.net>
+Subject: [PATCH 1/2] docs: create a top-level arch/ directory
+Date:   Wed, 15 Mar 2023 15:15:22 -0600
+Message-Id: <20230315211523.108836-2-corbet@lwn.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230315211523.108836-1-corbet@lwn.net>
+References: <20230315211523.108836-1-corbet@lwn.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -50,176 +52,102 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This two-patch series is a bare beginning of a project to reorganize the
-Documentation directory somewhat; it's a toe in the water to see how many
-sharks chomp at it.
+As the first step in bringing some order to our architecture-specific
+documentation, create a top-level arch/ directory and move arch.rst as its
+index.rst file.
 
-The top-level Documentation/ directory, despite the efforts of the last few
-years, is still a mess; there is too much stuff there, making it harder to
-find anything.  We do not organize our source directories that way, and for
-good reasons.
+There is no change in the rendered docs at this point.
 
-To bring the docs closer to the source organization, create a directory
-Documentation/arch and move the x86 docs there, updating all of the
-internal references that are broken by the move.  The appearance of the
-rendered documentation does not change.  I've deliberately not changed
-any overly long lines generated to keep the diff easy to read; that can
-be fixed up later if warranted.
-
-I can also break the second patch up if maintainers want to handle pieces
-of it separately.
-
-I think this move is worthwhile (for the other arches too) because it will
-make our documentation better organized in a way that matches the source
-and easier to navigate.  It will also make easier to experiment with tools
-like intersphinx.
-
-On the other hand, it *is* a fair amount of churn.  If it's more than
-people can handle, I'll quietly back away and we'll muddle along as we have
-been; this isn't something I'm going to dig in my heels over.
-
-Also, it is worth noting that, while the rendered HTML looks the same,
-links that went to Documentation/x86 (on https://kernel.org, say) will be
-broken by this change.  We have never considered whether we care about
-preserving external links to the rendered docs on kernel.org or not; I
-don't think we should break them without thinking about it.
-
-Thoughts?
-
-Thanks,
-
-jon
-
-
-Jonathan Corbet (2):
-  docs: create a top-level arch/ directory
-  docs: move x86 documentation into Documentation/arch/
-
- Documentation/admin-guide/hw-vuln/mds.rst     |  2 +-
- .../admin-guide/hw-vuln/tsx_async_abort.rst   |  2 +-
- .../admin-guide/kernel-parameters.rst         |  6 ++--
- .../admin-guide/kernel-parameters.txt         |  8 +++---
- Documentation/admin-guide/ras.rst             |  2 +-
- Documentation/admin-guide/sysctl/kernel.rst   |  4 +--
- Documentation/arch.rst                        | 28 -------------------
- Documentation/arch/index.rst                  | 28 +++++++++++++++++++
- .../{ => arch}/x86/amd-memory-encryption.rst  |  0
- Documentation/{ => arch}/x86/amd_hsmp.rst     |  0
- Documentation/{ => arch}/x86/boot.rst         |  4 +--
- Documentation/{ => arch}/x86/booting-dt.rst   |  2 +-
- Documentation/{ => arch}/x86/buslock.rst      |  0
- Documentation/{ => arch}/x86/cpuinfo.rst      |  0
- Documentation/{ => arch}/x86/earlyprintk.rst  |  0
- Documentation/{ => arch}/x86/elf_auxvec.rst   |  0
- Documentation/{ => arch}/x86/entry_64.rst     |  0
- .../{ => arch}/x86/exception-tables.rst       |  0
- Documentation/{ => arch}/x86/features.rst     |  0
- Documentation/{ => arch}/x86/i386/IO-APIC.rst |  0
- Documentation/{ => arch}/x86/i386/index.rst   |  0
- Documentation/{ => arch}/x86/ifs.rst          |  0
- Documentation/{ => arch}/x86/index.rst        |  0
- Documentation/{ => arch}/x86/intel-hfi.rst    |  0
- Documentation/{ => arch}/x86/intel_txt.rst    |  0
- Documentation/{ => arch}/x86/iommu.rst        |  0
- .../{ => arch}/x86/kernel-stacks.rst          |  0
- Documentation/{ => arch}/x86/mds.rst          |  0
- Documentation/{ => arch}/x86/microcode.rst    |  0
- Documentation/{ => arch}/x86/mtrr.rst         |  2 +-
- Documentation/{ => arch}/x86/orc-unwinder.rst |  0
- Documentation/{ => arch}/x86/pat.rst          |  0
- Documentation/{ => arch}/x86/pti.rst          |  0
- Documentation/{ => arch}/x86/resctrl.rst      |  0
- Documentation/{ => arch}/x86/sgx.rst          |  0
- Documentation/{ => arch}/x86/sva.rst          |  0
- Documentation/{ => arch}/x86/tdx.rst          |  0
- Documentation/{ => arch}/x86/tlb.rst          |  0
- Documentation/{ => arch}/x86/topology.rst     |  0
- .../{ => arch}/x86/tsx_async_abort.rst        |  0
- .../{ => arch}/x86/usb-legacy-support.rst     |  0
- .../{ => arch}/x86/x86_64/5level-paging.rst   |  2 +-
- .../{ => arch}/x86/x86_64/boot-options.rst    |  4 +--
- .../x86/x86_64/cpu-hotplug-spec.rst           |  0
- .../x86/x86_64/fake-numa-for-cpusets.rst      |  2 +-
- Documentation/{ => arch}/x86/x86_64/fsgs.rst  |  0
- Documentation/{ => arch}/x86/x86_64/index.rst |  0
- .../{ => arch}/x86/x86_64/machinecheck.rst    |  0
- Documentation/{ => arch}/x86/x86_64/mm.rst    |  0
- Documentation/{ => arch}/x86/x86_64/uefi.rst  |  0
- Documentation/{ => arch}/x86/xstate.rst       |  0
- Documentation/{ => arch}/x86/zero-page.rst    |  0
- Documentation/core-api/asm-annotations.rst    |  2 +-
- Documentation/driver-api/device-io.rst        |  2 +-
- Documentation/index.rst                       |  2 +-
- Documentation/virt/kvm/api.rst                |  2 +-
- MAINTAINERS                                   | 12 ++++----
- arch/arm/Kconfig                              |  2 +-
- arch/x86/Kconfig                              | 10 +++----
- arch/x86/Kconfig.debug                        |  2 +-
- arch/x86/boot/header.S                        |  2 +-
- arch/x86/entry/entry_64.S                     |  2 +-
- arch/x86/include/asm/bootparam_utils.h        |  2 +-
- arch/x86/include/asm/page_64_types.h          |  2 +-
- arch/x86/include/asm/pgtable_64_types.h       |  2 +-
- arch/x86/kernel/cpu/microcode/amd.c           |  2 +-
- arch/x86/kernel/cpu/resctrl/monitor.c         |  2 +-
- arch/x86/kernel/cpu/sgx/sgx.h                 |  2 +-
- arch/x86/kernel/kexec-bzimage64.c             |  2 +-
- arch/x86/kernel/pci-dma.c                     |  2 +-
- arch/x86/mm/pat/set_memory.c                  |  2 +-
- arch/x86/mm/tlb.c                             |  2 +-
- arch/x86/platform/pvh/enlighten.c             |  2 +-
- drivers/vhost/vhost.c                         |  2 +-
- security/Kconfig                              |  2 +-
- tools/include/linux/err.h                     |  2 +-
- tools/objtool/Documentation/objtool.txt       |  2 +-
- 77 files changed, 82 insertions(+), 82 deletions(-)
+Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+---
+ Documentation/arch.rst       | 28 ----------------------------
+ Documentation/arch/index.rst | 28 ++++++++++++++++++++++++++++
+ Documentation/index.rst      |  2 +-
+ 3 files changed, 29 insertions(+), 29 deletions(-)
  delete mode 100644 Documentation/arch.rst
  create mode 100644 Documentation/arch/index.rst
- rename Documentation/{ => arch}/x86/amd-memory-encryption.rst (100%)
- rename Documentation/{ => arch}/x86/amd_hsmp.rst (100%)
- rename Documentation/{ => arch}/x86/boot.rst (99%)
- rename Documentation/{ => arch}/x86/booting-dt.rst (96%)
- rename Documentation/{ => arch}/x86/buslock.rst (100%)
- rename Documentation/{ => arch}/x86/cpuinfo.rst (100%)
- rename Documentation/{ => arch}/x86/earlyprintk.rst (100%)
- rename Documentation/{ => arch}/x86/elf_auxvec.rst (100%)
- rename Documentation/{ => arch}/x86/entry_64.rst (100%)
- rename Documentation/{ => arch}/x86/exception-tables.rst (100%)
- rename Documentation/{ => arch}/x86/features.rst (100%)
- rename Documentation/{ => arch}/x86/i386/IO-APIC.rst (100%)
- rename Documentation/{ => arch}/x86/i386/index.rst (100%)
- rename Documentation/{ => arch}/x86/ifs.rst (100%)
- rename Documentation/{ => arch}/x86/index.rst (100%)
- rename Documentation/{ => arch}/x86/intel-hfi.rst (100%)
- rename Documentation/{ => arch}/x86/intel_txt.rst (100%)
- rename Documentation/{ => arch}/x86/iommu.rst (100%)
- rename Documentation/{ => arch}/x86/kernel-stacks.rst (100%)
- rename Documentation/{ => arch}/x86/mds.rst (100%)
- rename Documentation/{ => arch}/x86/microcode.rst (100%)
- rename Documentation/{ => arch}/x86/mtrr.rst (99%)
- rename Documentation/{ => arch}/x86/orc-unwinder.rst (100%)
- rename Documentation/{ => arch}/x86/pat.rst (100%)
- rename Documentation/{ => arch}/x86/pti.rst (100%)
- rename Documentation/{ => arch}/x86/resctrl.rst (100%)
- rename Documentation/{ => arch}/x86/sgx.rst (100%)
- rename Documentation/{ => arch}/x86/sva.rst (100%)
- rename Documentation/{ => arch}/x86/tdx.rst (100%)
- rename Documentation/{ => arch}/x86/tlb.rst (100%)
- rename Documentation/{ => arch}/x86/topology.rst (100%)
- rename Documentation/{ => arch}/x86/tsx_async_abort.rst (100%)
- rename Documentation/{ => arch}/x86/usb-legacy-support.rst (100%)
- rename Documentation/{ => arch}/x86/x86_64/5level-paging.rst (98%)
- rename Documentation/{ => arch}/x86/x86_64/boot-options.rst (98%)
- rename Documentation/{ => arch}/x86/x86_64/cpu-hotplug-spec.rst (100%)
- rename Documentation/{ => arch}/x86/x86_64/fake-numa-for-cpusets.rst (97%)
- rename Documentation/{ => arch}/x86/x86_64/fsgs.rst (100%)
- rename Documentation/{ => arch}/x86/x86_64/index.rst (100%)
- rename Documentation/{ => arch}/x86/x86_64/machinecheck.rst (100%)
- rename Documentation/{ => arch}/x86/x86_64/mm.rst (100%)
- rename Documentation/{ => arch}/x86/x86_64/uefi.rst (100%)
- rename Documentation/{ => arch}/x86/xstate.rst (100%)
- rename Documentation/{ => arch}/x86/zero-page.rst (100%)
 
+diff --git a/Documentation/arch.rst b/Documentation/arch.rst
+deleted file mode 100644
+index 41a66a8b38e4..000000000000
+--- a/Documentation/arch.rst
++++ /dev/null
+@@ -1,28 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-CPU Architectures
+-=================
+-
+-These books provide programming details about architecture-specific
+-implementation.
+-
+-.. toctree::
+-   :maxdepth: 2
+-
+-   arc/index
+-   arm/index
+-   arm64/index
+-   ia64/index
+-   loongarch/index
+-   m68k/index
+-   mips/index
+-   nios2/index
+-   openrisc/index
+-   parisc/index
+-   powerpc/index
+-   riscv/index
+-   s390/index
+-   sh/index
+-   sparc/index
+-   x86/index
+-   xtensa/index
+diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
+new file mode 100644
+index 000000000000..5f494e001eb4
+--- /dev/null
++++ b/Documentation/arch/index.rst
+@@ -0,0 +1,28 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++CPU Architectures
++=================
++
++These books provide programming details about architecture-specific
++implementation.
++
++.. toctree::
++   :maxdepth: 2
++
++   ../arc/index
++   ../arm/index
++   ../arm64/index
++   ../ia64/index
++   ../loongarch/index
++   ../m68k/index
++   ../mips/index
++   ../nios2/index
++   ../openrisc/index
++   ../parisc/index
++   ../powerpc/index
++   ../riscv/index
++   ../s390/index
++   ../sh/index
++   ../sparc/index
++   ../x86/index
++   ../xtensa/index
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 76d1a3ec9be3..9dfdc826618c 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -99,7 +99,7 @@ Architecture-specific documentation
+ .. toctree::
+    :maxdepth: 2
+ 
+-   arch
++   arch/index
+ 
+ 
+ Other documentation
 -- 
 2.39.2
 
