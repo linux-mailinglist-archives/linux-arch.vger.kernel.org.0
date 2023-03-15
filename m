@@ -2,198 +2,178 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A1C6BB3F8
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 14:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BE36BB4C2
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 14:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjCONKw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 09:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        id S231667AbjCONfA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 09:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCONKt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 09:10:49 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9382A67706;
-        Wed, 15 Mar 2023 06:10:40 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pcQtk-0006KN-00; Wed, 15 Mar 2023 14:10:32 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 1A279C1AB5; Wed, 15 Mar 2023 13:52:16 +0100 (CET)
-Date:   Wed, 15 Mar 2023 13:52:16 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <20230315125216.GA12532@alpha.franken.de>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
- <20230313175521.GA14404@alpha.franken.de>
- <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
- <20230314153421.GA13322@alpha.franken.de>
- <7f39daad-05b0-46f8-bc89-185b336d8fd4@gmail.com>
- <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
- <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
+        with ESMTP id S232442AbjCONe6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 09:34:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D535E35BC;
+        Wed, 15 Mar 2023 06:34:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 831762F4;
+        Wed, 15 Mar 2023 06:35:26 -0700 (PDT)
+Received: from [10.57.64.236] (unknown [10.57.64.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F15173F8C6;
+        Wed, 15 Mar 2023 06:34:41 -0700 (PDT)
+Message-ID: <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
+Date:   Wed, 15 Mar 2023 13:34:40 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-35-willy@infradead.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230315051444.3229621-35-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 08:49:53AM +0800, Baoquan He wrote:
-> On 03/14/23 at 06:19pm, Arnd Bergmann wrote:
-> > On Tue, Mar 14, 2023, at 17:31, Florian Fainelli wrote:
-> > > On 3/14/23 08:34, Thomas Bogendoerfer wrote:
-> > >> On Tue, Mar 14, 2023 at 10:56:36AM +0800, Baoquan He wrote:
-> > >>>> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-> > >>>>                   from /local/tbogendoerfer/korg/linux/init/version.c:17:
-> > >> 
-> > >> already tried it, but it doesn't fix the issue. I've attached the
-> > >> config.
-> > >
-> > > I had attempted a similar approach before as Baoquan did, but met the 
-> > > same build issue as Thomas that was not immediately clear to me why it 
-> > > popped up. I would be curious to see how this can be resolved.
-> > 
-> > I think this is the result of recursive header inclusion:
-> > spinlock.h includes lockdep.h, but its header guard is already
-> > there from the include chain.
-> > 
-> > There is probably something in one of the mips asm/*.h headers that
-> > causes this recursion that is not present elsewhere.
-> > 
-> > I think this should fix it, but is likely to cause another problem elsewhere:
-> > 
-> > --- a/arch/mips/include/asm/smp-ops.h
-> > +++ b/arch/mips/include/asm/smp-ops.h
-> > @@ -13,8 +13,6 @@
-> >  
-> >  #include <linux/errno.h>
-> >  
-> > -#include <asm/mips-cps.h>
-> > -
-> >  #ifdef CONFIG_SMP
-> >  
-> >  #include <linux/cpumask.h>
+On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
+> From: Yin Fengwei <fengwei.yin@intel.com>
 > 
-> Will meet below compiling error after appllying above patch. Adding
-> asm/mips-cps.h including in arch/mips/kernel/setup.c will fix it as below.
+> folio_add_file_rmap_range() allows to add pte mapping to a specific
+> range of file folio. Comparing to page_add_file_rmap(), it batched
+> updates __lruvec_stat for large folio.
 > 
-> arch/mips/kernel/setup.c: In function ‘setup_arch’:
-> arch/mips/kernel/setup.c:781:9: error: implicit declaration of function ‘mips_cm_probe’ [-Werror=implicit-function-declaration]
->   781 |         mips_cm_probe();
->       |         ^~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  include/linux/rmap.h |  2 ++
+>  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
+>  2 files changed, 48 insertions(+), 14 deletions(-)
 > 
-> 
-> diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-> index f1c88f8a1dc5..e8c4020ef367 100644
-> --- a/arch/mips/kernel/setup.c
-> +++ b/arch/mips/kernel/setup.c
-> @@ -43,6 +43,7 @@
->  #include <asm/smp-ops.h>
->  #include <asm/prom.h>
->  #include <asm/fw/fw.h>
-> +#include <asm/mips-cps.h>
+> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+> index b87d01660412..a3825ce81102 100644
+> --- a/include/linux/rmap.h
+> +++ b/include/linux/rmap.h
+> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
+>  		unsigned long address);
+>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
+>  		bool compound);
+> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
+> +		struct vm_area_struct *, bool compound);
+>  void page_remove_rmap(struct page *, struct vm_area_struct *,
+>  		bool compound);
 >  
->  #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
->  char __section(".appended_dtb") __appended_dtb[0x100000];
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 4898e10c569a..a91906b28835 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
+>  }
+>  
+>  /**
+> - * page_add_file_rmap - add pte mapping to a file page
+> - * @page:	the page to add the mapping to
+> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
+> + * @folio:	The folio to add the mapping to
+> + * @page:	The first page to add
+> + * @nr_pages:	The number of pages which will be mapped
+>   * @vma:	the vm area in which the mapping is added
+>   * @compound:	charge the page as compound or small page
+>   *
+> + * The page range of folio is defined by [first_page, first_page + nr_pages)
+> + *
+>   * The caller needs to hold the pte lock.
+>   */
+> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+> -		bool compound)
+> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
+> +			unsigned int nr_pages, struct vm_area_struct *vma,
+> +			bool compound)
+>  {
+> -	struct folio *folio = page_folio(page);
+>  	atomic_t *mapped = &folio->_nr_pages_mapped;
+> -	int nr = 0, nr_pmdmapped = 0;
+> -	bool first;
+> +	unsigned int nr_pmdmapped = 0, first;
+> +	int nr = 0;
+>  
+> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
+>  
+>  	/* Is page being mapped by PTE? Is this its first map to be added? */
+>  	if (likely(!compound)) {
+> -		first = atomic_inc_and_test(&page->_mapcount);
+> -		nr = first;
+> -		if (first && folio_test_large(folio)) {
+> -			nr = atomic_inc_return_relaxed(mapped);
+> -			nr = (nr < COMPOUND_MAPPED);
+> -		}
+> +		do {
+> +			first = atomic_inc_and_test(&page->_mapcount);
+> +			if (first && folio_test_large(folio)) {
+> +				first = atomic_inc_return_relaxed(mapped);
+> +				first = (nr < COMPOUND_MAPPED);
 
-with
+This still contains the typo that Yin Fengwei spotted in the previous version:
+https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
 
-diff --git a/arch/mips/pci/pci-ip27.c b/arch/mips/pci/pci-ip27.c
-index d85cbf84e41c..973faea61cad 100644
---- a/arch/mips/pci/pci-ip27.c
-+++ b/arch/mips/pci/pci-ip27.c
-@@ -7,6 +7,9 @@
-  * Copyright (C) 1999, 2000, 04 Ralf Baechle (ralf@linux-mips.org)
-  * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-  */
-+
-+#include <linux/io.h>
-+
- #include <asm/sn/addrs.h>
- #include <asm/sn/types.h>
- #include <asm/sn/klconfig.h>
+FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
+Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
+ext4 filesystem). Looks like instruction aborts are taking much longer and a
+selection of syscalls are a bit slower. Still hunting down the root cause. Will
+report once I have conclusive diagnosis.
 
-on top, all my builds are ok. But my malta qemu setup crashes:
+Thanks,
+Ryan
 
-Unhandled kernel unaligned access[#1]:
-CPU: 0 PID: 1 Comm: systemd Not tainted 6.3.0-rc1-00022-gff6bffcfbf9e #290
-$ 0   : 00000000 00000001 81000640 00000001
-$ 4   : 80bd8641 00000001 00000000 00000000
-$ 8   : 00000001 00000001 77c5abae ffffffff
-$12   : 00000000 7b3eeedb 820f7380 bdd54e39
-$16   : 80bd8641 820fbdc4 81000640 80ad0000
-$20   : 00000008 80ad0000 80ad0000 80ad0000
-$24   : 00000000 f592e7d4                  
-$28   : 820f8000 820fbd48 80c20000 801c44f4
-Hi    : 001f93e2
-Lo    : 18073cf3
-epc   : 80902188 _raw_spin_lock+0xc/0x54
-ra    : 801c44f4 add_timer_on+0x94/0x1b0
-Status: 1400a402	KERNEL EXL 
-Cause : 10800010 (ExcCode 04)
-BadVA : 80bd8641
-PrId  : 00019300 (MIPS 24Kc)
-Modules linked in:
-Process systemd (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=76f2b6e0)
-Stack : 80bd8641 820fbdc4 80ad0000 80ad0000 00000008 80ad0000 80ad0000 801c44f4
-        80ad0000 80ad0000 820f8000 820fbd98 00000001 f01a83f8 00000008 820fbdc0
-        80ad0000 820fbdc4 80ad0000 808f4f20 00000001 822f7640 822f7940 f01a83f8
-        00000000 820fbec0 00000001 00000001 00000001 77d3fafc 3e01e433 00000122
-        00000000 ffff8c77 808f513c 0dc40000 00000001 00000001 00000001 82a1f900
-        ...
-Call Trace:
-[<80902188>] _raw_spin_lock+0xc/0x54
-[<801c44f4>] add_timer_on+0x94/0x1b0
-[<808f4f20>] try_to_generate_entropy+0x1e8/0x270
-[<805c7408>] urandom_read_iter+0x10c/0x114
-[<802d77f8>] vfs_read+0x21c/0x2bc
-[<802d8284>] ksys_read+0x7c/0x118
-[<8011b130>] syscall_common+0x34/0x58
 
-Code: 27bdffe0  afbf001c  24030001 <c0850000> 14a00005  00000000  00600825  e0810000  1020fffa 
+> +			}
+> +
+> +			if (first)
+> +				nr++;
+> +		} while (page++, --nr_pages > 0);
+>  	} else if (folio_test_pmd_mappable(folio)) {
+>  		/* That test is redundant: it's for safety or to optimize out */
+>  
+> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+>  	mlock_vma_folio(folio, vma, compound);
+>  }
+>  
+> +/**
+> + * page_add_file_rmap - add pte mapping to a file page
+> + * @page:	the page to add the mapping to
+> + * @vma:	the vm area in which the mapping is added
+> + * @compound:	charge the page as compound or small page
+> + *
+> + * The caller needs to hold the pte lock.
+> + */
+> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+> +		bool compound)
+> +{
+> +	struct folio *folio = page_folio(page);
+> +	unsigned int nr_pages;
+> +
+> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
+> +
+> +	if (likely(!compound))
+> +		nr_pages = 1;
+> +	else
+> +		nr_pages = folio_nr_pages(folio);
+> +
+> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
+> +}
+> +
+>  /**
+>   * page_remove_rmap - take down pte mapping from a page
+>   * @page:	page to remove mapping from
 
----[ end trace 0000000000000000 ]---
-
-I guess this has something to do with the removal of #include <asm/mips-cps.h>
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
