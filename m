@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7046BA6AC
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 06:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C116BA6CB
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 06:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjCOFPP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 01:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S231339AbjCOFPk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 01:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbjCOFPI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 01:15:08 -0400
+        with ESMTP id S229734AbjCOFPJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 01:15:09 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A98229415;
-        Tue, 14 Mar 2023 22:14:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4009136699;
+        Tue, 14 Mar 2023 22:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=BuY0++zuEEGNdRYvMzcc0MIGd74y5or4vnxSMjxSxAU=; b=KO1zVLlGb/MzuwQDc6H5JGyaiM
-        Rcd8vcHf9egA+FO/fneFm2txL7VYi7RGvKiYak65nKIhpMQYh5LYZ23GREoZnDyWUhfJJlzR6cz5E
-        z8KN/MPG9T2jlYkxKrF4K33ud3w2oV4+pqBCVlhSddpm1HAiF2CpmpsGIOdC/zLyrNYNIlfh0c3aZ
-        d8oO9am1dBH9CzW4W+jf64/ZJe6NYzB9er70DxS58dqSMTGNPqh16kMVXBx4aPUrzrc9zzT2eJ3eF
-        zPkCTWdMjtaMHnvzt85vbQXvo/OnTpecryfD+3uwDbqVIpn8hor2cZSjxd3xuyKg5td/+gj7MpPeF
-        RY1ek+SQ==;
+        bh=73ezd5W5E0KEIO6VAvV47amCBEQJWRQwkcGKvspT3vU=; b=masNXlurESfGKFlz8RtpG3Ix6m
+        c4wAtigik6OB2AQV5nlqZHF40DQ4SrO2QghheJqdi4JolrLkVBcE9Yd5IK23rR+n/r9h/QmMvK3ZU
+        ElD/3Y4EjDSwQH54M0hFmcONJ2bo+CjcPl3G4AygvaJU0Cy5Gbnnz96Ye7+TAf8rujSVl7nV0lHh/
+        7yqn+jtIlBnnXwW3QX20uiMY39Vi/D9atJNh43Eq4qt5SiXsDTJP2Fou6RtcgrVPwLb0vLi/HTe/3
+        ktJdJDSo3K4fmYtt1pytHUU5UYwNDRF45mZX+FvpApd2hzNqngqiie8i8+JYj9OeATVTI+fXiWYGQ
+        H271YV6Q==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcJTO-00DYDX-87; Wed, 15 Mar 2023 05:14:50 +0000
+        id 1pcJTO-00DYDg-CJ; Wed, 15 Mar 2023 05:14:50 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     linux-arch@vger.kernel.org
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 31/36] mm: Tidy up set_ptes definition
-Date:   Wed, 15 Mar 2023 05:14:39 +0000
-Message-Id: <20230315051444.3229621-32-willy@infradead.org>
+Subject: [PATCH v4 32/36] mm: Use flush_icache_pages() in do_set_pmd()
+Date:   Wed, 15 Mar 2023 05:14:40 +0000
+Message-Id: <20230315051444.3229621-33-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
 References: <20230315051444.3229621-1-willy@infradead.org>
@@ -47,40 +47,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now that all architectures are converted, we can remove the
-PFN_PTE_SHIFT ifdef and we can define set_pte_at() unconditionally.
+Push the iteration over each page down to the architectures (many
+can flush the entire THP without iteration).
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/pgtable.h | 6 ------
- 1 file changed, 6 deletions(-)
+ mm/memory.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index a755fe94b4b4..a54b9197f2f2 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -173,7 +173,6 @@ static inline int pmd_young(pmd_t pmd)
- #endif
+diff --git a/mm/memory.c b/mm/memory.c
+index c5f1bf906d0c..6aa21e8f3753 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4209,7 +4209,6 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+ 	bool write = vmf->flags & FAULT_FLAG_WRITE;
+ 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
+ 	pmd_t entry;
+-	int i;
+ 	vm_fault_t ret = VM_FAULT_FALLBACK;
  
- #ifndef set_ptes
--#ifdef PFN_PTE_SHIFT
- /**
-  * set_ptes - Map consecutive pages to a contiguous range of addresses.
-  * @mm: Address space to map the pages into.
-@@ -201,13 +200,8 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		pte = __pte(pte_val(pte) + (1UL << PFN_PTE_SHIFT));
- 	}
- }
--#ifndef set_pte_at
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--#endif
- #endif
--#else
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--#endif
+ 	if (!transhuge_vma_suitable(vma, haddr))
+@@ -4242,8 +4241,7 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+ 	if (unlikely(!pmd_none(*vmf->pmd)))
+ 		goto out;
  
- #ifndef __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
- extern int ptep_set_access_flags(struct vm_area_struct *vma,
+-	for (i = 0; i < HPAGE_PMD_NR; i++)
+-		flush_icache_page(vma, page + i);
++	flush_icache_pages(vma, page, HPAGE_PMD_NR);
+ 
+ 	entry = mk_huge_pmd(page, vma->vm_page_prot);
+ 	if (write)
 -- 
 2.39.2
 
