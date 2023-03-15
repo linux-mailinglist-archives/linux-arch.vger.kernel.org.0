@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15586BAC1D
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 10:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA306BAC21
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 10:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjCOJ1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 05:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
+        id S231967AbjCOJ2K (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 05:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjCOJ1X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 05:27:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177CC52F75;
-        Wed, 15 Mar 2023 02:27:22 -0700 (PDT)
+        with ESMTP id S230212AbjCOJ2J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 05:28:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADE1C59F;
+        Wed, 15 Mar 2023 02:28:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A599861ABD;
-        Wed, 15 Mar 2023 09:27:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B76AC433D2;
-        Wed, 15 Mar 2023 09:27:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B07E061C33;
+        Wed, 15 Mar 2023 09:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E654C433D2;
+        Wed, 15 Mar 2023 09:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678872441;
-        bh=w+J8gucSlfSu3xi4ruapy/hNtDvk5NYHt9AxAbkHP2Y=;
+        s=k20201202; t=1678872487;
+        bh=hQlDaYYZ9JaiC4+1J4jss5nVwEEiNfh99jIwoGnYlK8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D18IvsKQQ9L5V4uTkOLzo7MrZqxnmEgzsXlep3LHdUJh+J07Tpiv8BkZUf/NZ99G2
-         RppyUvZKVA773EwBQT1DchLMTboYO/75iEoxXenBf1n64UZBzxJXQ+iF+Yf5OnALwy
-         n4Cz1QNywLpftpwOghTcDxmArWpaLoP44WvKPG+zmt8mFMNjXWW+jJROzwlr3yAmJr
-         l4DDII8x2NlaDlIqL1TC2fijEJNksy9lrYYhtJcyWjFSuRObeKSyYW3gRKhtj41IDZ
-         /gLtH0JaOqgHMx2CIlaNhtF9B925CBeWVFsha0VHVk6TlTsiv8xBftlNFsi8mKMtkB
-         z67Z53tc/o6Hw==
-Date:   Wed, 15 Mar 2023 11:27:08 +0200
+        b=NkIGZPSCuGKgCQXvfnUUuNEOcyqt7OR8gYUcmyClJsQim67utdP6Wn6T6tw0MYIMk
+         QEA9q66qoC1nIeyquWUyutIYS7EZmSIxV0rdTRM2AqJ3TWp2Q+9cWqDNa90yUTxeFn
+         kGZEwo+PVDmqNmLHtIuHrARSfNywjZWVh5ih6XiTSo1EGieR0jwhGWZbuQxWvOsn7a
+         fcW21beU3ZKcvq2FeboqNEoOmZfOYPp2EXFAIBIG1+vBC8bwNAAdJIeX2Ic7Upfy9B
+         qc8OD7RwzMRZPanX8+EDrTgTKgWbUTh1ErQ+gToP4RuUIrgEJ07AWXG1sjDkcyygtW
+         JpHmh5eCO6tAw==
+Date:   Wed, 15 Mar 2023 11:27:54 +0200
 From:   Mike Rapoport <rppt@kernel.org>
 To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/34] mm: Add generic flush_icache_pages() and
+Subject: Re: [PATCH v4 02/36] mm: Add generic flush_icache_pages() and
  documentation
-Message-ID: <ZBGPbCcUDFBQOx3W@kernel.org>
-References: <20230228213738.272178-1-willy@infradead.org>
- <20230228213738.272178-3-willy@infradead.org>
+Message-ID: <ZBGPmq7bv5pky4tl@kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-3-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230228213738.272178-3-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230315051444.3229621-3-willy@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,7 +54,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:37:05PM +0000, Matthew Wilcox (Oracle) wrote:
+On Wed, Mar 15, 2023 at 05:14:10AM +0000, Matthew Wilcox (Oracle) wrote:
 > flush_icache_page() is deprecated but not yet removed, so add
 > a range version of it.  Change the documentation to refer to
 > update_mmu_cache_range() instead of update_mmu_cache().
@@ -147,7 +147,7 @@ Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 >  				     struct page *page)
 >  {
 > -- 
-> 2.39.1
+> 2.39.2
 > 
 > 
 
