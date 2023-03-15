@@ -2,178 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BE36BB4C2
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 14:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C696BB5CB
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 15:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjCONfA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 09:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
+        id S232570AbjCOOTM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 10:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjCONe6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 09:34:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D535E35BC;
-        Wed, 15 Mar 2023 06:34:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 831762F4;
-        Wed, 15 Mar 2023 06:35:26 -0700 (PDT)
-Received: from [10.57.64.236] (unknown [10.57.64.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F15173F8C6;
-        Wed, 15 Mar 2023 06:34:41 -0700 (PDT)
-Message-ID: <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
-Date:   Wed, 15 Mar 2023 13:34:40 +0000
+        with ESMTP id S232182AbjCOOTJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 10:19:09 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9A12135;
+        Wed, 15 Mar 2023 07:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678889939; x=1710425939;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QLmbsiwvupMvAjcg/HjKbM+oTZqTZfEMbms/hcTaWtk=;
+  b=ILQ9S1vF5W/DqmZuIFC4g4UXfq3YGX7B2YqfqSbP8FiVjO7YucNRHaC2
+   Wwa7ZmefZS46DMyDpwfj79Waej0UtSXF0nDiSmqhATUSxsZLG5/1gROyq
+   lDgwGl1FGTJjYT/ffYWsiiqAlb2oz3Ze70JSGvWM5t2MQ3P6f4LTf6f6Q
+   BU0ty6Xr9QYfutGN5n4GlLCSgO2FOh2OYyJVTE7rkwWCSeRMNQwTePOqr
+   eyweQK8jWsZ6eyz6oBUCGcg4BG3BhJKEQDeLJVflmJ2tBb9tnjqQo7Lsf
+   /0gfn902evOsfAYyqtrKk6ZIDGwUwxmKBBF9vndSE4XhP+WBe+oT23Wpv
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="365397272"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="365397272"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 07:18:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="822786477"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="822786477"
+Received: from rhdahlex-mobl2.amr.corp.intel.com (HELO [10.212.59.168]) ([10.212.59.168])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 07:18:54 -0700
+Message-ID: <7fe9a4a0-9b30-38db-e739-1dc1f7a8f74e@linux.intel.com>
+Date:   Wed, 15 Mar 2023 14:18:52 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 04/10] drm/i915: Fix MAX_ORDER usage in
+ i915_gem_object_get_pages_internal()
 Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-35-willy@infradead.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230315051444.3229621-35-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
-> From: Yin Fengwei <fengwei.yin@intel.com>
+
+On 15/03/2023 11:31, Kirill A. Shutemov wrote:
+> MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
+> can deliver is MAX_ORDER-1.
+
+This looks to be true on inspection:
+
+__alloc_pages():
+..
+	if (WARN_ON_ONCE_GFP(order >= MAX_ORDER, gfp))
+
+So a bit of a misleading name "max".. For the i915 patch:
+
+Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+
+I don't however see the whole series to understand the context, or how 
+you want to handle the individual patches. Is it a tree wide cleanup of 
+the same mistake?
+
+Regards,
+
+Tvrtko
+
+> Fix MAX_ORDER usage in i915_gem_object_get_pages_internal().
 > 
-> folio_add_file_rmap_range() allows to add pte mapping to a specific
-> range of file folio. Comparing to page_add_file_rmap(), it batched
-> updates __lruvec_stat for large folio.
-> 
-> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
 > ---
->  include/linux/rmap.h |  2 ++
->  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
->  2 files changed, 48 insertions(+), 14 deletions(-)
+>   drivers/gpu/drm/i915/gem/i915_gem_internal.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-> index b87d01660412..a3825ce81102 100644
-> --- a/include/linux/rmap.h
-> +++ b/include/linux/rmap.h
-> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->  		unsigned long address);
->  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->  		bool compound);
-> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
-> +		struct vm_area_struct *, bool compound);
->  void page_remove_rmap(struct page *, struct vm_area_struct *,
->  		bool compound);
->  
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 4898e10c569a..a91906b28835 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->  }
->  
->  /**
-> - * page_add_file_rmap - add pte mapping to a file page
-> - * @page:	the page to add the mapping to
-> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
-> + * @folio:	The folio to add the mapping to
-> + * @page:	The first page to add
-> + * @nr_pages:	The number of pages which will be mapped
->   * @vma:	the vm area in which the mapping is added
->   * @compound:	charge the page as compound or small page
->   *
-> + * The page range of folio is defined by [first_page, first_page + nr_pages)
-> + *
->   * The caller needs to hold the pte lock.
->   */
-> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
-> -		bool compound)
-> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
-> +			unsigned int nr_pages, struct vm_area_struct *vma,
-> +			bool compound)
->  {
-> -	struct folio *folio = page_folio(page);
->  	atomic_t *mapped = &folio->_nr_pages_mapped;
-> -	int nr = 0, nr_pmdmapped = 0;
-> -	bool first;
-> +	unsigned int nr_pmdmapped = 0, first;
-> +	int nr = 0;
->  
-> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
-> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
->  
->  	/* Is page being mapped by PTE? Is this its first map to be added? */
->  	if (likely(!compound)) {
-> -		first = atomic_inc_and_test(&page->_mapcount);
-> -		nr = first;
-> -		if (first && folio_test_large(folio)) {
-> -			nr = atomic_inc_return_relaxed(mapped);
-> -			nr = (nr < COMPOUND_MAPPED);
-> -		}
-> +		do {
-> +			first = atomic_inc_and_test(&page->_mapcount);
-> +			if (first && folio_test_large(folio)) {
-> +				first = atomic_inc_return_relaxed(mapped);
-> +				first = (nr < COMPOUND_MAPPED);
-
-This still contains the typo that Yin Fengwei spotted in the previous version:
-https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
-
-FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
-Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
-ext4 filesystem). Looks like instruction aborts are taking much longer and a
-selection of syscalls are a bit slower. Still hunting down the root cause. Will
-report once I have conclusive diagnosis.
-
-Thanks,
-Ryan
-
-
-> +			}
-> +
-> +			if (first)
-> +				nr++;
-> +		} while (page++, --nr_pages > 0);
->  	} else if (folio_test_pmd_mappable(folio)) {
->  		/* That test is redundant: it's for safety or to optimize out */
->  
-> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->  	mlock_vma_folio(folio, vma, compound);
->  }
->  
-> +/**
-> + * page_add_file_rmap - add pte mapping to a file page
-> + * @page:	the page to add the mapping to
-> + * @vma:	the vm area in which the mapping is added
-> + * @compound:	charge the page as compound or small page
-> + *
-> + * The caller needs to hold the pte lock.
-> + */
-> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
-> +		bool compound)
-> +{
-> +	struct folio *folio = page_folio(page);
-> +	unsigned int nr_pages;
-> +
-> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
-> +
-> +	if (likely(!compound))
-> +		nr_pages = 1;
-> +	else
-> +		nr_pages = folio_nr_pages(folio);
-> +
-> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
-> +}
-> +
->  /**
->   * page_remove_rmap - take down pte mapping from a page
->   * @page:	page to remove mapping from
-
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> index 6bc26b4b06b8..eae9e9f6d3bf 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> @@ -36,7 +36,7 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+>   	struct sg_table *st;
+>   	struct scatterlist *sg;
+>   	unsigned int npages; /* restricted by sg_alloc_table */
+> -	int max_order = MAX_ORDER;
+> +	int max_order = MAX_ORDER - 1;
+>   	unsigned int max_segment;
+>   	gfp_t gfp;
+>   
