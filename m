@@ -2,176 +2,151 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6D76BB7AE
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 16:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4786BB7B1
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 16:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbjCOP0V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 11:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S231466AbjCOP0r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjCOP0U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 11:26:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E09EA27D;
-        Wed, 15 Mar 2023 08:26:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B2044B3;
-        Wed, 15 Mar 2023 08:27:01 -0700 (PDT)
-Received: from [10.57.64.236] (unknown [10.57.64.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 777913F67D;
-        Wed, 15 Mar 2023 08:26:16 -0700 (PDT)
-Message-ID: <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
-Date:   Wed, 15 Mar 2023 15:26:14 +0000
+        with ESMTP id S232052AbjCOP0q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 11:26:46 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426F17282;
+        Wed, 15 Mar 2023 08:26:44 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7FB625C0526;
+        Wed, 15 Mar 2023 11:26:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 15 Mar 2023 11:26:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1678894000; x=
+        1678980400; bh=1a7Z0QOweSdKPfL3+2JtnZEiWnfLAdqF+RdCisEu7wY=; b=r
+        5QxaErtXFf5btxuf+LxZ0XiRnU7iYpoupZ2V+X/zgVCfoQf+zsgffilLx8NPGD2c
+        Cs+kgmjK4KvqemwMlem1R8wsVaGvj0LRPvx4eErUVn/vC4iToy6n1d+PmanYaOH0
+        +APhFj3eXtWF/X2LFI3rK0MseCb/RyLRJvKdVT5Dw+fLHS0rQbKqDkhXC3kjuaDg
+        5/oPIWmzm7bmDhhhtgaLZ5nRCqTs6VZWxpdL8lfu8i+Zb9YatszMS2D8RmZPprUW
+        UdctrgE2UaFsFWeJINIRY816ZL/fk7Pbx4t7BPt5npqRAvYu6oHrw6ovx/SYMon4
+        5EEmAgvZwLc9SnZVRkTrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678894000; x=1678980400; bh=1a7Z0QOweSdKP
+        fL3+2JtnZEiWnfLAdqF+RdCisEu7wY=; b=NQ0w13sMVDzsNs1fq2E+ZJBOrmwut
+        BEc4SnUed2iMQheefYZ7onWWgNjp7mBJt4FCfMourZ+8HA99tum3lC2af8VW7/oY
+        SnCbvbK9Ydi/l2kfITI9GJl7Upq1k181MbIJTu08I3kgytRQ48jZXJYTL1sFdjjh
+        lJgsD9hrwz47qEUYD3NgOwpSxVEdVTB6VuasOPeVhs3OWjm9VdTPr/FeXRD9jJtU
+        BJ1EnsekDiRSAzvdf+o4h1E6DpypOXipYIXknn8f6WCdrglIKuLfsiyY5E3pSgQr
+        CmcpYJKb8+wr9tBiFbQLZsBsbaZfn+X2NHhTsdL2q4+TcDrGmPsr1+STw==
+X-ME-Sender: <xms:r-MRZBC0W0j6ZdsR59MdUj_16qZQnHMaKK1xXHan5BsCvld4SoS-Kw>
+    <xme:r-MRZPgmiFms6EeUfwqgAWsXEv5WtIG9UTCrr5BPHDdwvA40Q_5zoW6bABwj30vpq
+    pDCd0Gn632ePq5WU7A>
+X-ME-Received: <xmr:r-MRZMm_-2WwUlLskPmKjpe8zJ96vdrHrjNqja2mom0Ls0SJDwhbEldOtJDBy-nxGs_Hrw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvkedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeekveegudeuheffteelfefffeehleffgefhtdej
+    vdeufedtvedvjeevfeekjeeggfenucffohhmrghinhepghhithdqshgtmhdrtghomhdpgh
+    hithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusghu
+    shgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:r-MRZLyqrvoWeGvR_IKfAjk7GP3YRUr7dxT1HrD1XuM80teHlbNo1Q>
+    <xmx:r-MRZGReV1O8g6et6bnlZ2zr0aEuNfhk4hcXeElOp2iYXdfFwSxOiQ>
+    <xmx:r-MRZOakFzixLAPUynMn-3kU2zkp96uQsbpwUm4opO3pmGsBipn2eQ>
+    <xmx:sOMRZH_y8_3I-qvJEcGWcJgGogRCfjtg56yldqNhEUEHkwdPLKEIzQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 15 Mar 2023 11:26:39 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id CC85C10C8DF; Wed, 15 Mar 2023 18:26:36 +0300 (+03)
+Date:   Wed, 15 Mar 2023 18:26:36 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     kernel test robot <lkp@intel.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
+Message-ID: <20230315152636.smn34f3c6a5jzpn3@box>
+References: <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
+ <202303152251.0kYjWIXW-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
-Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-36-willy@infradead.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230315051444.3229621-36-willy@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303152251.0kYjWIXW-lkp@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
-> From: Yin Fengwei <fengwei.yin@intel.com>
+On Wed, Mar 15, 2023 at 11:06:21PM +0800, kernel test robot wrote:
+> Hi Kirill,
 > 
-> set_pte_range() allows to setup page table entries for a specific
-> range.  It takes advantage of batched rmap update for large folio.
-> It now takes care of calling update_mmu_cache_range().
+> Thank you for the patch! Yet something to improve:
 > 
-> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  Documentation/filesystems/locking.rst |  2 +-
->  include/linux/mm.h                    |  3 ++-
->  mm/filemap.c                          |  3 +--
->  mm/memory.c                           | 27 +++++++++++++++------------
->  4 files changed, 19 insertions(+), 16 deletions(-)
+> [auto build test ERROR on akpm-mm/mm-everything]
+> [also build test ERROR on powerpc/next powerpc/fixes linus/master v6.3-rc2 next-20230315]
+> [cannot apply to davem-sparc/master]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
-> index 7de7a7272a5e..922886fefb7f 100644
-> --- a/Documentation/filesystems/locking.rst
-> +++ b/Documentation/filesystems/locking.rst
-> @@ -663,7 +663,7 @@ locked. The VM will unlock the page.
->  Filesystem should find and map pages associated with offsets from "start_pgoff"
->  till "end_pgoff". ->map_pages() is called with page table locked and must
->  not block.  If it's not possible to reach a page without blocking,
-> -filesystem should skip it. Filesystem should use do_set_pte() to setup
-> +filesystem should skip it. Filesystem should use set_pte_range() to setup
->  page table entry. Pointer to entry associated with the page is passed in
->  "pte" field in vm_fault structure. Pointers to entries for other offsets
->  should be calculated relative to "pte".
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index ee755bb4e1c1..81788c985a8c 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1299,7 +1299,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
->  }
->  
->  vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
-> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
-> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
-> +		struct page *page, unsigned int nr, unsigned long addr);
->  
->  vm_fault_t finish_fault(struct vm_fault *vmf);
->  vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 6e2b0778db45..e2317623dcbf 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -3504,8 +3504,7 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
->  			ret = VM_FAULT_NOPAGE;
->  
->  		ref_count++;
-> -		do_set_pte(vmf, page, addr);
-> -		update_mmu_cache(vma, addr, vmf->pte);
-> +		set_pte_range(vmf, folio, page, 1, addr);
->  	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
->  
->  	/* Restore the vmf->pte */
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 6aa21e8f3753..9a654802f104 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4274,7 +4274,8 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
->  }
->  #endif
->  
-> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
-> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
-> +		struct page *page, unsigned int nr, unsigned long addr)
->  {
->  	struct vm_area_struct *vma = vmf->vma;
->  	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
-> @@ -4282,7 +4283,7 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
->  	bool prefault = vmf->address != addr;
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/sparc-mm-Fix-MAX_ORDER-usage-in-tsb_grow/20230315-193254
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230315113133.11326-11-kirill.shutemov%40linux.intel.com
+> patch subject: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
+> config: mips-randconfig-r015-20230313 (https://download.01.org/0day-ci/archive/20230315/202303152251.0kYjWIXW-lkp@intel.com/config)
+> compiler: mips64el-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/ccefb5df94c3c6c966f6f583d60c9d9c832b7a34
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Kirill-A-Shutemov/sparc-mm-Fix-MAX_ORDER-usage-in-tsb_grow/20230315-193254
+>         git checkout ccefb5df94c3c6c966f6f583d60c9d9c832b7a34
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303152251.0kYjWIXW-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from include/linux/gfp.h:7,
+>                     from include/linux/xarray.h:15,
+>                     from include/linux/list_lru.h:14,
+>                     from include/linux/fs.h:13,
+>                     from include/linux/compat.h:17,
+>                     from arch/mips/kernel/asm-offsets.c:12:
+> >> include/linux/mmzone.h:1749:2: error: #error Allocator MAX_ORDER exceeds SECTION_SIZE
+>     1749 | #error Allocator MAX_ORDER exceeds SECTION_SIZE
+>          |  ^~~~~
 
-I think you are changing behavior here - is this intentional? Previously this
-would be evaluated per page, now its evaluated once for the whole range. The
-intention below is that directly faulted pages are mapped young and prefaulted
-pages are mapped old. But now a whole range will be mapped the same.
+It is not regression. MIPS Kconfig allows for excessively large
+ARCH_FORCE_MAX_ORDER. The patch changes nothing with regarards to this.
+But it changes meaning of ARCH_FORCE_MAX_ORDER and old configs are now
+breaks.
 
-Thanks,
-Ryan
+Thomas, could you help with formulating more sensible upper limit for the
+config option, so it won't collide with SECTION_SIZE?
 
->  	pte_t entry;
->  
-> -	flush_icache_page(vma, page);
-> +	flush_icache_pages(vma, page, nr);
->  	entry = mk_pte(page, vma->vm_page_prot);
->  
->  	if (prefault && arch_wants_old_prefaulted_pte())
-> @@ -4296,14 +4297,18 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
->  		entry = pte_mkuffd_wp(entry);
->  	/* copy-on-write page */
->  	if (write && !(vma->vm_flags & VM_SHARED)) {
-> -		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-> -		page_add_new_anon_rmap(page, vma, addr);
-> -		lru_cache_add_inactive_or_unevictable(page, vma);
-> +		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr);
-> +		VM_BUG_ON_FOLIO(nr != 1, folio);
-> +		folio_add_new_anon_rmap(folio, vma, addr);
-> +		folio_add_lru_vma(folio, vma);
->  	} else {
-> -		inc_mm_counter(vma->vm_mm, mm_counter_file(page));
-> -		page_add_file_rmap(page, vma, false);
-> +		add_mm_counter(vma->vm_mm, mm_counter_file(page), nr);
-> +		folio_add_file_rmap_range(folio, page, nr, vma, false);
->  	}
-> -	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
-> +	set_ptes(vma->vm_mm, addr, vmf->pte, entry, nr);
-> +
-> +	/* no need to invalidate: a not-present page won't be cached */
-> +	update_mmu_cache_range(vma, addr, vmf->pte, nr);
->  }
->  
->  static bool vmf_pte_changed(struct vm_fault *vmf)
-> @@ -4376,11 +4381,9 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
->  
->  	/* Re-check under ptl */
->  	if (likely(!vmf_pte_changed(vmf))) {
-> -		do_set_pte(vmf, page, vmf->address);
-> -
-> -		/* no need to invalidate: a not-present page won't be cached */
-> -		update_mmu_cache(vma, vmf->address, vmf->pte);
-> +		struct folio *folio = page_folio(page);
->  
-> +		set_pte_range(vmf, folio, page, 1, vmf->address);
->  		ret = 0;
->  	} else {
->  		update_mmu_tlb(vma, vmf->address, vmf->pte);
-
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
