@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE14A6BAF3C
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 12:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE086BAF44
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 12:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjCOLbo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 07:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
+        id S231720AbjCOLb6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 07:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjCOLbm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 07:31:42 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1937864846;
-        Wed, 15 Mar 2023 04:31:42 -0700 (PDT)
+        with ESMTP id S231563AbjCOLbq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 07:31:46 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C898637EB;
+        Wed, 15 Mar 2023 04:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678879902; x=1710415902;
+  t=1678879905; x=1710415905;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CbKC9In0sfgAFhGmEkzB7Bb+JmElN2MpqrLq/60tyc4=;
-  b=ElAxf5JwDWlsUz4WnDO0m9NyEmkAV2NOUUFD8qSfgU5WNco8iswrNDK/
-   JxrlzVeaTH3ohGiyvpG9OqH6PnQPETgTErrS1IJTHRipzvVjqHA4xHOsW
-   u/H3MKTPE9LFLn3n2T1ailbwqD5u7q+ecvpQ+bqdcnga9TtLOP/VbdSle
-   Bb7G7iE5RBCnXSmP02CHBt2U1dvgbFoRwkeIWjUVKffnx1tzEe9cug62j
-   b7Pn1tNrutSldOoKv2sOzMOfV2TpMRczu252huVVkppqOS/75UCXhcjDJ
-   WhVjNtEfeWuHmoXcUneeQHmxR6GVBLY4p3PHXzGI9xRzdGe1zURM6iKeQ
+  bh=iwb00sFFSTPogcirxHway05JjoMe28eGhip2vpTL5qE=;
+  b=koXTKplPFP8v3n3Kd+PxTUwBvXmaAjfVoESvEmqtRU6xNetdFIQEfXyv
+   bK/oJtj9g3aN0R3lKi1YYcT40J0MZ1wt08AHFjGmu2aJP7PFUrpdJuqZP
+   66QcbOtDGLaJAMPLWjAWY7H9V4gxeZGjB9vuQ49HQsjSS0K/ughe85jcT
+   FwzUWmkY5/Qbr8CyP5pbAlnTCIexsH+h5ekLF+Vs2J17Ki1DpaVv4tq2s
+   Ur/DGd/5xvgZ3SoXX7xjnhC1GYFtNyTzmAC8G3KgGMqjNZRVWAO71zl0c
+   RExxRKGiQGxxWK7B+EWLiiiSpRY+efKI+JxfH6vS3MSUgE1jG5e7Ihrqd
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317330268"
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="340040105"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="317330268"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:40 -0700
+   d="scan'208";a="340040105"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="925310514"
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="768456009"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="925310514"
+   d="scan'208";a="768456009"
 Received: from nopopovi-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.48])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:38 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:38 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id BB81D10CC9F; Wed, 15 Mar 2023 14:31:35 +0300 (+03)
+        id C230110CCA0; Wed, 15 Mar 2023 14:31:35 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
@@ -47,17 +47,20 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Denis Efremov <efremov@linux.com>
-Subject: [PATCH 03/10] floppy: Fix MAX_ORDER usage
-Date:   Wed, 15 Mar 2023 14:31:26 +0300
-Message-Id: <20230315113133.11326-4-kirill.shutemov@linux.intel.com>
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Subject: [PATCH 04/10] drm/i915: Fix MAX_ORDER usage in i915_gem_object_get_pages_internal()
+Date:   Wed, 15 Mar 2023 14:31:27 +0300
+Message-Id: <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
 References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,39 +71,30 @@ X-Mailing-List: linux-arch@vger.kernel.org
 MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
 can deliver is MAX_ORDER-1.
 
-Fix MAX_ORDER usage in floppy code.
-
-Also allocation buffer exactly PAGE_SIZE << MAX_ORDER bytes is okay. Fix
-MAX_LEN check.
+Fix MAX_ORDER usage in i915_gem_object_get_pages_internal().
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Denis Efremov <efremov@linux.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
 ---
- drivers/block/floppy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-index 487840e3564d..90d2dfb6448e 100644
---- a/drivers/block/floppy.c
-+++ b/drivers/block/floppy.c
-@@ -3079,7 +3079,7 @@ static void raw_cmd_free(struct floppy_raw_cmd **ptr)
- 	}
- }
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+index 6bc26b4b06b8..eae9e9f6d3bf 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+@@ -36,7 +36,7 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+ 	struct sg_table *st;
+ 	struct scatterlist *sg;
+ 	unsigned int npages; /* restricted by sg_alloc_table */
+-	int max_order = MAX_ORDER;
++	int max_order = MAX_ORDER - 1;
+ 	unsigned int max_segment;
+ 	gfp_t gfp;
  
--#define MAX_LEN (1UL << MAX_ORDER << PAGE_SHIFT)
-+#define MAX_LEN (1UL << (MAX_ORDER - 1) << PAGE_SHIFT)
- 
- static int raw_cmd_copyin(int cmd, void __user *param,
- 				 struct floppy_raw_cmd **rcmd)
-@@ -3108,7 +3108,7 @@ static int raw_cmd_copyin(int cmd, void __user *param,
- 	ptr->resultcode = 0;
- 
- 	if (ptr->flags & (FD_RAW_READ | FD_RAW_WRITE)) {
--		if (ptr->length <= 0 || ptr->length >= MAX_LEN)
-+		if (ptr->length <= 0 || ptr->length > MAX_LEN)
- 			return -EINVAL;
- 		ptr->kernel_data = (char *)fd_dma_mem_alloc(ptr->length);
- 		fallback_on_nodma_alloc(&ptr->kernel_data, ptr->length);
 -- 
 2.39.2
 
