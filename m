@@ -2,57 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5DB6BAAAF
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 09:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E27A36BAAEC
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Mar 2023 09:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjCOIXj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 15 Mar 2023 04:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S231225AbjCOIjY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 15 Mar 2023 04:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjCOIXg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 04:23:36 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D3B40C2;
-        Wed, 15 Mar 2023 01:23:30 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id nv15so15384045qvb.7;
-        Wed, 15 Mar 2023 01:23:30 -0700 (PDT)
+        with ESMTP id S229734AbjCOIjX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 04:39:23 -0400
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7623E1F4AE;
+        Wed, 15 Mar 2023 01:39:21 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id op8so15419238qvb.11;
+        Wed, 15 Mar 2023 01:39:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678868610;
+        d=1e100.net; s=20210112; t=1678869560;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SaoW6/JdJH8lfXUx6KbDnZfqvHebZRWorOeb874e6r4=;
-        b=VchdIcvTTDhOatXzudnq1ZkAdPGKKvInlXw69joXHFRjbeg3GVBgLndWnI71OICvBc
-         4iL0XkHG6DG34nofJ7RBOvbyumYDO+j8RVlO148xksYdYKylc0kpR8rgfNmAmFb4YBr1
-         lNYTIrTPfWYlI3wm5/sCOdf6YYoA97gT/1EjltUNFM89dbk5wepTuWtQzfMA7t4yFx5C
-         7/ruJ/6ic3NCEXFxCDSXQ5HJw4o1ROs/4kJSS+c9KY1JofR7ohEPOw7Au1LZIZuBjczi
-         GPDnxaqs3ssfoF9YYaZLshr5AEL9lJxVjWONUD7B0MxAuw/ohMHg7RljfpuFLLZ6ocif
-         0GaQ==
-X-Gm-Message-State: AO0yUKWH+gzShfWrDf13OCYeZS5YWCLxomab2LCNCLg1MrgQSvFC3coF
-        BAhJv1ccIH7u7XYJDdf2WtteB9HvEcytoues
-X-Google-Smtp-Source: AK7set+/QuD48RBcMyneZTsffzUy8QoPqxNYBNUGSYYkwcT6k3aWzfa7JjHPNwxHsGsGTJhS/xfNFg==
-X-Received: by 2002:a05:6214:27c6:b0:5a1:451a:8d31 with SMTP id ge6-20020a05621427c600b005a1451a8d31mr22473603qvb.10.1678868609803;
-        Wed, 15 Mar 2023 01:23:29 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id bs37-20020a05620a472500b00738e8e81dc9sm3368797qkb.75.2023.03.15.01.23.04
+        bh=uK8SYGT7bTD8H1jPAKwresu1h0ClqZnQVBVABXZukEk=;
+        b=X05VsDP+z/p1qbx2LcD2S55Mx7xuF5MfFd/lRpxPzU6LXWKlm8NI3raazMoLBn+cs9
+         4SjbnI4NZuEFs+STO0kG9LmOPCU2c3utwXJTYJiJSsNAd8xQjs2s7b/9e+f8ftw4yUlK
+         GkEkTWwY/4gntU8v+jRt+U+XtkJdDWLQRsePT2dlHTovM06az9klA3Mv8PjJMv7KrE7L
+         y6feo2ZXfaDJlHBsW+LLL4k6jh30QcrfOKsgtUvqjRFgNVWmqSlXiuSvblnUMLhNG/kd
+         IQeiv7eGL58ZvfS8MY+hMUEPScGLB6ro7dBPeqpwso4wEFdHhsjVbh0Nh7HWaG2qje/t
+         9DKg==
+X-Gm-Message-State: AO0yUKVsb5Y+0qQGRgNd5bKNtXXb5hIEk5rhFZzh8kCb2mIcdyIP3jIJ
+        hchHxwiM+vR5ur4+u7pZmTrUD4fqhypTmusP
+X-Google-Smtp-Source: AK7set+TIfKWkDNFAqiqL6XRg0WXzPq6qqVeJNIOmKj98qpQnoO8b03j813O1Dy8znNlVtCFo2lsaw==
+X-Received: by 2002:a05:622a:3d1:b0:3c0:40c1:7a71 with SMTP id k17-20020a05622a03d100b003c040c17a71mr36429085qtx.66.1678869560320;
+        Wed, 15 Mar 2023 01:39:20 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id s135-20020a37a98d000000b007290be5557bsm3308031qke.38.2023.03.15.01.39.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 01:23:07 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id r1so5649845ybu.5;
-        Wed, 15 Mar 2023 01:23:04 -0700 (PDT)
-X-Received: by 2002:a5b:2cc:0:b0:a02:a3a6:78fa with SMTP id
- h12-20020a5b02cc000000b00a02a3a678famr20093284ybp.12.1678868583785; Wed, 15
- Mar 2023 01:23:03 -0700 (PDT)
+        Wed, 15 Mar 2023 01:39:19 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id r1so5686758ybu.5;
+        Wed, 15 Mar 2023 01:39:19 -0700 (PDT)
+X-Received: by 2002:a5b:68c:0:b0:b30:d9c:b393 with SMTP id j12-20020a5b068c000000b00b300d9cb393mr11119061ybq.12.1678869558588;
+ Wed, 15 Mar 2023 01:39:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-14-schnelle@linux.ibm.com>
-In-Reply-To: <20230314121216.413434-14-schnelle@linux.ibm.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-3-schnelle@linux.ibm.com>
+In-Reply-To: <20230314121216.413434-3-schnelle@linux.ibm.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Mar 2023 09:22:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUbaFhb3HURhSfrkDyq_cz6z=S3TtTr0-5f6svho9MftQ@mail.gmail.com>
-Message-ID: <CAMuHMdUbaFhb3HURhSfrkDyq_cz6z=S3TtTr0-5f6svho9MftQ@mail.gmail.com>
-Subject: Re: [PATCH v3 13/38] Input: add HAS_IOPORT dependencies
+Date:   Wed, 15 Mar 2023 09:39:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
+Message-ID: <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
+Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
 To:     Niklas Schnelle <schnelle@linux.ibm.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
@@ -65,7 +64,7 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-input@vger.kernel.org
+        linux-ide@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -90,19 +89,28 @@ On Tue, Mar 14, 2023 at 1:12 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote
 
 Thanks for your patch!
 
-> --- a/drivers/input/serio/Kconfig
-> +++ b/drivers/input/serio/Kconfig
-> @@ -75,6 +75,7 @@ config SERIO_Q40KBD
->  config SERIO_PARKBD
->         tristate "Parallel port keyboard adapter"
->         depends on PARPORT
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -342,6 +342,7 @@ endif # HAS_DMA
+>
+>  config ATA_SFF
+>         bool "ATA SFF support (for legacy IDE and PATA)"
 > +       depends on HAS_IOPORT
+>         default y
 >         help
->           Say Y here if you built a simple parallel port adapter to attach
->           an additional AT keyboard, XT keyboard or PS/2 mouse.
+>           This option adds support for ATA controllers with SFF
 
-This driver seems to use only the parport and serio APIs, so it might
-work on systems without HAS_IOPORT.  Dunno for sure.
+ATA_SFF is a dependency for lots of (S)ATA drivers.
+(at least) The following don't use I/O port access:
+
+    CONFIG_SATA_RCAR (arm/arm64)
+    CONFIG_PATA_FALCON (m68k/atari and m68k/q40)
+    CONFIG_PATA_GAYLE (m68k/amiga)
+    CONFIG_PATA_BUDDHA (m68k/amiga)
+
+(at least) The following can use either MMIO or I/O port accesses:
+
+    CONFIG_PATA_PLATFORM (m68k/mac)
 
 Gr{oetje,eeting}s,
 
