@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7607A6BC29F
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Mar 2023 01:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A68F6BC29D
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Mar 2023 01:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbjCPAcF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Mar 2023 20:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S233318AbjCPAcE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Mar 2023 20:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbjCPAbq (ORCPT
+        with ESMTP id S233214AbjCPAbq (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Mar 2023 20:31:46 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A4FE88DAF
-        for <linux-arch@vger.kernel.org>; Wed, 15 Mar 2023 17:31:22 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id q1-20020a656841000000b0050be5e5bb24so21536pgt.3
-        for <linux-arch@vger.kernel.org>; Wed, 15 Mar 2023 17:31:21 -0700 (PDT)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E950DA226C
+        for <linux-arch@vger.kernel.org>; Wed, 15 Mar 2023 17:31:23 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id j125-20020a25d283000000b008f257b16d71so97143ybg.15
+        for <linux-arch@vger.kernel.org>; Wed, 15 Mar 2023 17:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678926680;
+        d=google.com; s=20210112; t=1678926682;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JjmIOJvjUEG2+4aovgmSBlRBGRP0JRLKbOkhR3o7e/I=;
-        b=XWGmJ9JAs9QizM49LznB/3WeGWT9Pc+PU89wCd8j/FUtVE5mMn/ax/bL088f1qtOz1
-         RFmCWBaiH29nU9Rm1KEJYwwbJN+AkVaHOxnJG89ZrDJuTFkTNXO5WvuZG2ISNDllw0uo
-         fSjaUkPVuesviWcTzk98UxYatwmpd417x6c+02nHUCPhFRDc3jObfLW3h3zTrxlqgUMt
-         LSd6LeHzPnNB0IV8pPZgCTjW0bYxKCuKc0IBsjiwto4vhAFiBAjpHsDO9Qt092Ms2tAr
-         DgVpYe+MAJleDmnTkKW5CLiYIwwbNbMGX4Gf9ND5AcxA8F5WN4Z2xDh5NS+5PrMXSWp9
-         XSmA==
+        bh=/WhAZz5TZYbz5eACM2xmX0O35zR+4WA+K6fPnqmTdp0=;
+        b=DFkZM4WxAkVVNIJBuBzB0nwyIoWMqXfdjlRk3WXV6Jxw5x54jqdNlx617tRGFPhNbf
+         FSFEhLgx9YrnXMD2N9F3ND0dGS2wEQLQ6W2DinnGY36gb1WqdxpuV00Tng2C80Dv85bd
+         GGCXZZnPgvalLdYHdJ5gJafblCxeiqDbyy5BB57SEGPtzpj8zUdhi4l6LoIgVVGg05nZ
+         6Mo31eLAizgeZ7625k2PZoVDucHfhEkPNcn7OmHS1vFJrTg1pI8T6QFyePo8eh9L2ANf
+         ioVmITbi3yeESUanrzgTRmSVNxGVFuNzX/w7x5gA4sylAMhIN1UM2xnxuIntZGawA78b
+         lh/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678926680;
+        d=1e100.net; s=20210112; t=1678926682;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JjmIOJvjUEG2+4aovgmSBlRBGRP0JRLKbOkhR3o7e/I=;
-        b=ZkocQoIQ+eMxjyZM5Aaqx9XjSYAntZusjScfYktnEPcM7mLQE5qTNmIex0dJoKBHhw
-         rScwBzofnpSYr+Y5k4Jcohma5TaMDTJhwordEiQe8HKIFId8m/RK2SsNJ7oCLU69gjRg
-         e99jXuAsXP1Qw99WGvXCa+sgT5NQFiBzWsqocREbfUgU1WLtK9U1+Dsb4oSh2DEvs05z
-         a0YqF+CjvjFGreHr2zLo3xVghGNIlPdMUgQvykV3Bv8Mb3zzFte5VDp44/sptg0MlPBM
-         QZFUPQMJIMQJ62AA9hJ7lOysjKLuGfCcJvceBJl1bn92cX7rr6iEGFFqaI0NqJg3YYyy
-         9iXQ==
-X-Gm-Message-State: AO0yUKV5QkBmkUj5S+lBQ/XXAD5gEJ4Ba/qAjbUN0xEeBgAhGl9DrZRZ
-        K36poiyJDMyHKUfXe1h4rlFr6ZvOezeY5XyiZA==
-X-Google-Smtp-Source: AK7set+j36PrTQ1uWKwZ/ZTMviUfrC3nfQJHH3bSUBCARqM/YyB/PYWAqeXRAUTM8xOy7rllnybTZtBO0uvKhOtP8A==
+        bh=/WhAZz5TZYbz5eACM2xmX0O35zR+4WA+K6fPnqmTdp0=;
+        b=gw2rSJWsH6nkr6uzLKn4r/TxYl/uR4D28Qq4RYrNggxcd1fMShns58+0f6ZTQPGAAf
+         RyMhnSwzGqtcTnRk0e48ei9Sa7I80acFtMb+kuq/TB0kYdNbR/Ad85FMSEXWRsfDCcVN
+         kympnsXiDnGLh5TOLQpspr61tgMi0C7OpvkBZkZDr8NDK4JeE87wVAOCQh0iRw8z0790
+         1qD+w96xcNjHw0A4DIqX9Vbn7oWz8MPjH6nvEPod6J9qUE7GYHPb08tq7WR+h+ZmPTGM
+         mAe74HLxkTESZzouUkypdZFYr3PQAt5r6BNHUNhN6ElHRcjg2Yxt7ejwZtl8lct1MaxF
+         yRIg==
+X-Gm-Message-State: AO0yUKVJWXIshoTYo8LP71hKCU/bpSC3OgPVpPA6QIDvFkre3bVNI8K7
+        l3lDhLWckjIIJlo74Bpmtdj/QR8s7h8ueEkBfw==
+X-Google-Smtp-Source: AK7set9tsl6JIRx5mbMVZPA/DONTxMkHWtMyPLSYdDprwtuWdlOsvzYeVaLj2tQwnFWT9YsS5B+6yQbk5CSUogkZdg==
 X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:902:e5cb:b0:1a0:4346:d43e with
- SMTP id u11-20020a170902e5cb00b001a04346d43emr595748plf.11.1678926680301;
- Wed, 15 Mar 2023 17:31:20 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 00:30:56 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a25:8b08:0:b0:b14:91e:4d19 with SMTP
+ id i8-20020a258b08000000b00b14091e4d19mr20688255ybl.7.1678926681818; Wed, 15
+ Mar 2023 17:31:21 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 00:30:57 +0000
 In-Reply-To: <cover.1678926164.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1678926164.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-Message-ID: <48490641ce981c31ea58c11ad478ff85cd0dd156.1678926164.git.ackerleytng@google.com>
-Subject: [RFC PATCH 03/10] KVM: selftests: Test that VM private memory should
- not be readable from host
+Message-ID: <a80f3bcce5b5612af9ddd42badbac57eb464f6b4.1678926164.git.ackerleytng@google.com>
+Subject: [RFC PATCH 04/10] KVM: selftests: Exercise restrictedmem allocation
+ and truncation code after KVM invalidation code has been unbound
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -84,131 +84,66 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-After VM memory is remapped as private memory and guest has written to
-private memory, request the host to read the corresponding hva for
-that private memory.
+The kernel interfaces restrictedmem_bind and restrictedmem_unbind are
+used by KVM to bind/unbind kvm functions to restrictedmem's
+invalidate_start and invalidate_end callbacks.
 
-The host should not be able to read the value in private memory.
+After the KVM VM is freed, the KVM functions should have been unbound
+from the restrictedmem_fd's callbacks.
 
-This selftest shows that private memory contents of the guest are not
-accessible to host userspace via the HVA.
+In this test, we exercise fallocate to back and unback memory using
+the restrictedmem fd, and we expect no problems (crashes) after the
+KVM functions have been unbound.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- .../kvm/x86_64/private_mem_conversions_test.c | 54 ++++++++++++++++---
- 1 file changed, 48 insertions(+), 6 deletions(-)
+ .../kvm/x86_64/private_mem_conversions_test.c | 26 ++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c
-index ef9894340a2b..f2c1e4450b0e 100644
+index f2c1e4450b0e..7741916818db 100644
 --- a/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c
-@@ -47,6 +47,16 @@ static void memcmp_h(uint8_t *mem, uint8_t pattern, size_t size)
- 			    pattern, i, mem[i]);
+@@ -203,6 +203,30 @@ static void handle_exit_hypercall(struct kvm_vcpu *vcpu)
+ 	run->hypercall.ret = 0;
  }
  
-+static void memcmp_ne_h(uint8_t *mem, uint8_t pattern, size_t size)
++static void test_invalidation_code_unbound(struct kvm_vm *vm)
 +{
-+	size_t i;
++	uint32_t fd;
++	uint64_t offset;
++	struct userspace_mem_region *region;
 +
-+	for (i = 0; i < size; i++)
-+		TEST_ASSERT(mem[i] != pattern,
-+			    "Expected not to find 0x%x at offset %lu but got 0x%x",
-+			    pattern, i, mem[i]);
++	region = memslot2region(vm, DATA_SLOT);
++	fd = region->region.restrictedmem_fd;
++	offset = region->region.restrictedmem_offset;
++
++	kvm_vm_free(vm);
++
++	/*
++	 * At this point the KVM invalidation code should have been unbound from
++	 * the vm. We do allocation and truncation to exercise the restrictedmem
++	 * code. There should be no issues after the unbinding happens.
++	 */
++	if (fallocate(fd, 0, offset, DATA_SIZE))
++		TEST_FAIL("Unexpected error in fallocate");
++	if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
++		      offset, DATA_SIZE))
++		TEST_FAIL("Unexpected error in fallocate");
 +}
 +
- /*
-  * Run memory conversion tests with explicit conversion:
-  * Execute KVM hypercall to map/unmap gpa range which will cause userspace exit
-@@ -64,8 +74,14 @@ static void memcmp_h(uint8_t *mem, uint8_t pattern, size_t size)
- 
- #define GUEST_STAGE(o, s) { .offset = o, .size = s }
- 
--#define GUEST_SYNC4(gpa, size, current_pattern, new_pattern) \
--	ucall(UCALL_SYNC, 4, gpa, size, current_pattern, new_pattern)
-+#define UCALL_RW_SHARED (0xca11 - 0)
-+#define UCALL_R_PRIVATE (0xca11 - 1)
-+
-+#define REQUEST_HOST_RW_SHARED(gpa, size, current_pattern, new_pattern) \
-+	ucall(UCALL_RW_SHARED, 4, gpa, size, current_pattern, new_pattern)
-+
-+#define REQUEST_HOST_R_PRIVATE(gpa, size, expected_pattern) \
-+	ucall(UCALL_R_PRIVATE, 3, gpa, size, expected_pattern)
- 
- static void guest_code(void)
+ static void test_mem_conversions(enum vm_mem_backing_src_type src_type)
  {
-@@ -86,7 +102,7 @@ static void guest_code(void)
+ 	struct kvm_vcpu *vcpu;
+@@ -270,7 +294,7 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type)
+ 	}
  
- 	/* Memory should be shared by default. */
- 	memset((void *)DATA_GPA, ~init_p, DATA_SIZE);
--	GUEST_SYNC4(DATA_GPA, DATA_SIZE, ~init_p, init_p);
-+	REQUEST_HOST_RW_SHARED(DATA_GPA, DATA_SIZE, ~init_p, init_p);
- 	memcmp_g(DATA_GPA, init_p, DATA_SIZE);
+ done:
+-	kvm_vm_free(vm);
++	test_invalidation_code_unbound(vm);
+ }
  
- 	for (i = 0; i < ARRAY_SIZE(stages); i++) {
-@@ -113,6 +129,12 @@ static void guest_code(void)
- 		kvm_hypercall_map_private(gpa, size);
- 		memset((void *)gpa, p2, size);
- 
-+		/*
-+		 * Host should not be able to read the values written to private
-+		 * memory
-+		 */
-+		REQUEST_HOST_R_PRIVATE(gpa, size, p2);
-+
- 		/*
- 		 * Verify that the private memory was set to pattern two, and
- 		 * that shared memory still holds the initial pattern.
-@@ -133,11 +155,20 @@ static void guest_code(void)
- 				continue;
- 
- 			kvm_hypercall_map_shared(gpa + j, PAGE_SIZE);
--			GUEST_SYNC4(gpa + j, PAGE_SIZE, p1, p3);
-+			REQUEST_HOST_RW_SHARED(gpa + j, PAGE_SIZE, p1, p3);
- 
- 			memcmp_g(gpa + j, p3, PAGE_SIZE);
- 		}
- 
-+		/*
-+		 * Even-number pages are still mapped as private, host should
-+		 * not be able to read those values.
-+		 */
-+		for (j = 0; j < size; j += PAGE_SIZE) {
-+			if (!((j >> PAGE_SHIFT) & 1))
-+				REQUEST_HOST_R_PRIVATE(gpa + j, PAGE_SIZE, p2);
-+		}
-+
- 		/*
- 		 * Convert the entire region back to shared, explicitly write
- 		 * pattern three to fill in the even-number frames before
-@@ -145,7 +176,7 @@ static void guest_code(void)
- 		 */
- 		kvm_hypercall_map_shared(gpa, size);
- 		memset((void *)gpa, p3, size);
--		GUEST_SYNC4(gpa, size, p3, p4);
-+		REQUEST_HOST_RW_SHARED(gpa, size, p3, p4);
- 		memcmp_g(gpa, p4, size);
- 
- 		/* Reset the shared memory back to the initial pattern. */
-@@ -209,7 +240,18 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type)
- 		switch (get_ucall(vcpu, &uc)) {
- 		case UCALL_ABORT:
- 			REPORT_GUEST_ASSERT_4(uc, "%lx %lx %lx %lx");
--		case UCALL_SYNC: {
-+		case UCALL_R_PRIVATE: {
-+			uint8_t *hva = addr_gpa2hva(vm, uc.args[0]);
-+			uint64_t size = uc.args[1];
-+
-+			/*
-+			 * Try to read hva for private gpa from host, should not
-+			 * be able to read private data
-+			 */
-+			memcmp_ne_h(hva, uc.args[2], size);
-+			break;
-+		}
-+		case UCALL_RW_SHARED: {
- 			uint8_t *hva = addr_gpa2hva(vm, uc.args[0]);
- 			uint64_t size = uc.args[1];
- 
+ int main(int argc, char *argv[])
 -- 
 2.40.0.rc2.332.ga46443480c-goog
 
