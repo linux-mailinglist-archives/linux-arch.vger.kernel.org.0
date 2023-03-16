@@ -2,128 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6294D6BDCE8
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Mar 2023 00:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3667D6BDD31
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Mar 2023 00:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbjCPXa6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Mar 2023 19:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        id S229489AbjCPXu4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Mar 2023 19:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCPXa5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Mar 2023 19:30:57 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A419E066;
-        Thu, 16 Mar 2023 16:30:56 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id EE46D5C0003;
-        Thu, 16 Mar 2023 19:30:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 16 Mar 2023 19:30:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679009455; x=
-        1679095855; bh=mWjnFNvzepxM90lSc+OOQwduG8sRnhr4PdJP/q1hvoQ=; b=C
-        Y7m2Kt2AcPEeMIc9lF8vV7fzv8FuxtG1ugefnXwzUBQd4FEyQX24p0GZfctzEkaJ
-        SCr+lF7u+Edq1Ao2utuvGI1ibzp/YfHTr0vqu418BFfQSmZbnyvpXii0IQrkfx7v
-        N6PISxC8KmfFK7Us8H2CuHkO98BN6pb5CM+liuwgOiY6iUllAGSg1TsVA7dUAHe0
-        N+jXOUHqEepWaTc/wcRsIwKysEAsRPSwoJaveQs05Rsy6F06CJWYhZH3bD05w4EO
-        Sac/ifu28oaHeqexZgieYwW6M7AOdhyQsPKFJiYDFWBGta9JkDFIfsMr4Nx3A26H
-        5Ohi5ddr4inW6xmRWuNlA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679009455; x=1679095855; bh=mWjnFNvzepxM9
-        0lSc+OOQwduG8sRnhr4PdJP/q1hvoQ=; b=KiE1iVJ3JifNjDNCeVPeEhzreHnj3
-        LXVvywWxEhHfyMeQvna8NgxoUudcCQgxRM5G8jpUpFFQwKk4ye7AVc125mzBZdLr
-        10wa+IXcjBCQZ0JIi6J+loG+u93b4R+7EchczP/kPyPiKoLtstjJQ0vD7vKrV6CJ
-        9AQuqqPMURqIthmjxRtr2iQ0oPA/qivNRnGPFjR/MC/TQLx630pKNmImDuDE55E2
-        FjFN3akAfMhoPbGeoUThph6qY4UIviGAFWOr+EGCAm309wGwN9jSCNg4hjnE8vAw
-        ukmyxiskbj1ty2LMnGjPR7xZmoF7sG08dwxUvjp3Pu9kjOe1ZBBdh6GnA==
-X-ME-Sender: <xms:r6YTZPR_AslS4vjkGifCEMZKqkvy7GL6b_13ovWtEn5OdBOF6WaPrw>
-    <xme:r6YTZAzP66nWeiJuG8ekR6Rq40iyisIV3gCFzRH6hPqv2ERUilHO2beVyhk9Wy-lx
-    0k4hQ65wJMxJNTSEtI>
-X-ME-Received: <xmr:r6YTZE1I3HPhbgyFRthg6W2KTW1hCAWDoX5AdO5ipB9I4GQB2rSOgRBhX3fVtk9MTplA-g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefuddguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:r6YTZPBin-_siT6DcMMsJkztuAouFd9LD5gaBRt5nWW1_x1cE5-4Qw>
-    <xmx:r6YTZIiERMs1sKnYMDgJSe2Xzs1JoBgQpVSkPtsEpzITRxP5dVukQw>
-    <xmx:r6YTZDo6hbli4-M0wF3f4U9uECoqUh3dmCJEicXI0AdSEl4S2KBuCw>
-    <xmx:r6YTZBXeEf7XE932DJAfIVHXxy94rJnV_COUPPNFrppB_9rhr_Qs-A>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Mar 2023 19:30:54 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 4B65910C9F7; Fri, 17 Mar 2023 02:30:53 +0300 (+03)
-Date:   Fri, 17 Mar 2023 02:30:53 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Vineet Gupta <vgupta@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
-Message-ID: <20230316233053.iwsffmfxzzacnkuy@box.shutemov.name>
-References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
- <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
- <20230316181547.GA6211@monkey>
+        with ESMTP id S229436AbjCPXuz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Mar 2023 19:50:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B672D56;
+        Thu, 16 Mar 2023 16:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679010652; x=1710546652;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HYh2yjwxxolCh/KcrNvRu0dI0MlLh3G+ulItT32xy3w=;
+  b=R4e5UE61YVWrdYSwnNseilpRPqHF417yOaewHZ8XHKOHLWPunGU9+Jdf
+   r06AfBFAD9z+feER2dphpR3nj47+wQoGxett4QYrMPXIaQ7akABtlhS6U
+   9erL9xFPz2bWTyRa7ExzUb2S1T8mQ2H4MVoctRgBr3q4npwfx6eewi/A8
+   2ORYMJUxs7gOVwWYJKplSQT2zVHJoMfnnkHwHJZW4KRej9QezHM0mKSvx
+   zQ6omlSfN7B9bh+kX+R/JY6vivXOX4/+5hbrpPWe0CD33WtDgM3xCxLov
+   C95cX+qnUGulnSjcNzgxkUIwQfOSbWl46OIvVFamGmO0zrBDvImTufyUA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317795084"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="317795084"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:50:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="657367445"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="657367445"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2023 16:50:47 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcxMs-0008ta-26;
+        Thu, 16 Mar 2023 23:50:46 +0000
+Date:   Fri, 17 Mar 2023 07:50:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        davem@davemloft.net
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <202303170733.ZQbJFE5x-lkp@intel.com>
+References: <20230316131526.283569-2-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316181547.GA6211@monkey>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230316131526.283569-2-aleksandr.mikhalitsyn@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 11:15:47AM -0700, Mike Kravetz wrote:
-> On 03/15/23 14:31, Kirill A. Shutemov wrote:
-> > MAX_ORDER currently defined as number of orders page allocator supports:
-> > user can ask buddy allocator for page order between 0 and MAX_ORDER-1.
-> > 
-> > This definition is counter-intuitive and lead to number of bugs all over
-> > the kernel.
-> > 
-> > Change the definition of MAX_ORDER to be inclusive: the range of orders
-> > user can ask from buddy allocator is 0..MAX_ORDER now.
-> > 
-> > --- a/arch/arc/Kconfig
-> > +++ b/arch/arc/Kconfig
-> > @@ -556,7 +556,7 @@ endmenu	 # "ARC Architecture Configuration"
-> >  
-> >  config ARCH_FORCE_MAX_ORDER
-> >  	int "Maximum zone order"
-> > -	default "12" if ARC_HUGEPAGE_16M
-> > -	default "11"
-> > +	default "11" if ARC_HUGEPAGE_16M
-> > +	default "10"
-> 
-> Is this Kconfig file wrong (off by 1) today?  It seems like it wants MAX_ORDER
-> to be sufficiently large to allocate 16M if ARC_HUGEPAGE_16M.  So, seems like
-> it should be 13 today?
+Hi Alexander,
 
-+Vineet.
+Thank you for the patch! Yet something to improve:
 
-Hm. I think it is okay as long as CONFIG_ARC_PAGE_SIZE_8K=y which is
-default, but breaks for other PAGE_SIZE.
+[auto build test ERROR on net-next/main]
 
-Looks like ARCH_FORCE_MAX_ORDER calculation should involve selected page
-size.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230316-214315
+patch link:    https://lore.kernel.org/r/20230316131526.283569-2-aleksandr.mikhalitsyn%40canonical.com
+patch subject: [PATCH net-next 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+config: s390-buildonly-randconfig-r002-20230312 (https://download.01.org/0day-ci/archive/20230317/202303170733.ZQbJFE5x-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/41687b4ae0dcef1fdffd656e533f9f35214043d0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230316-214315
+        git checkout 41687b4ae0dcef1fdffd656e533f9f35214043d0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170733.ZQbJFE5x-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
+>> ERROR: modpost: "pidfd_create" [net/unix/unix.ko] undefined!
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
