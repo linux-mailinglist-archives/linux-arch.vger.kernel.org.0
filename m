@@ -2,42 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6DF6BD5ED
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Mar 2023 17:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCFB6BD607
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Mar 2023 17:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjCPQgz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Mar 2023 12:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
+        id S229733AbjCPQkf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Mar 2023 12:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjCPQgS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Mar 2023 12:36:18 -0400
+        with ESMTP id S231660AbjCPQkH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Mar 2023 12:40:07 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F0EEE6FC5;
-        Thu, 16 Mar 2023 09:35:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DFF42DCA63;
+        Thu, 16 Mar 2023 09:39:32 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC2BB2F4;
-        Thu, 16 Mar 2023 09:35:14 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77BF82F4;
+        Thu, 16 Mar 2023 09:39:44 -0700 (PDT)
 Received: from [10.1.30.156] (C02CF1NRLVDN.cambridge.arm.com [10.1.30.156])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 717313F885;
-        Thu, 16 Mar 2023 09:34:30 -0700 (PDT)
-Message-ID: <fe743597-cefa-4bf8-aa3f-da9cc10bbd5f@arm.com>
-Date:   Thu, 16 Mar 2023 16:34:29 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5D0A3F885;
+        Thu, 16 Mar 2023 09:38:59 -0700 (PDT)
+Message-ID: <2fa5a911-8432-2fce-c6e1-de4e592219d8@arm.com>
+Date:   Thu, 16 Mar 2023 16:38:58 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
 Content-Language: en-US
 To:     "Yin, Fengwei" <fengwei.yin@intel.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
+        linux-arch@vger.kernel.org, will@kernel.org
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-35-willy@infradead.org>
- <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
- <01071d9c-483f-2d95-87a6-e1030acaf8dd@arm.com>
- <0f581d0d-3139-4007-2161-592a0a545b50@intel.com>
+ <20230315051444.3229621-36-willy@infradead.org>
+ <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
+ <b39f4816-2064-e402-4e02-908f40c396d4@intel.com>
 From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <0f581d0d-3139-4007-2161-592a0a545b50@intel.com>
+In-Reply-To: <b39f4816-2064-e402-4e02-908f40c396d4@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -49,109 +48,109 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 16/03/2023 16:27, Yin, Fengwei wrote:
-> Hi Matthew,
+On 16/03/2023 16:23, Yin, Fengwei wrote:
 > 
-> On 3/16/2023 12:08 AM, Ryan Roberts wrote:
->> On 15/03/2023 13:34, Ryan Roberts wrote:
->>> On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
->>>> From: Yin Fengwei <fengwei.yin@intel.com>
->>>>
->>>> folio_add_file_rmap_range() allows to add pte mapping to a specific
->>>> range of file folio. Comparing to page_add_file_rmap(), it batched
->>>> updates __lruvec_stat for large folio.
->>>>
->>>> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
->>>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->>>> ---
->>>>  include/linux/rmap.h |  2 ++
->>>>  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
->>>>  2 files changed, 48 insertions(+), 14 deletions(-)
->>>>
->>>> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
->>>> index b87d01660412..a3825ce81102 100644
->>>> --- a/include/linux/rmap.h
->>>> +++ b/include/linux/rmap.h
->>>> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->>>>  		unsigned long address);
->>>>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->>>>  		bool compound);
->>>> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
->>>> +		struct vm_area_struct *, bool compound);
->>>>  void page_remove_rmap(struct page *, struct vm_area_struct *,
->>>>  		bool compound);
->>>>  
->>>> diff --git a/mm/rmap.c b/mm/rmap.c
->>>> index 4898e10c569a..a91906b28835 100644
->>>> --- a/mm/rmap.c
->>>> +++ b/mm/rmap.c
->>>> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->>>>  }
->>>>  
->>>>  /**
->>>> - * page_add_file_rmap - add pte mapping to a file page
->>>> - * @page:	the page to add the mapping to
->>>> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
->>>> + * @folio:	The folio to add the mapping to
->>>> + * @page:	The first page to add
->>>> + * @nr_pages:	The number of pages which will be mapped
->>>>   * @vma:	the vm area in which the mapping is added
->>>>   * @compound:	charge the page as compound or small page
->>>>   *
->>>> + * The page range of folio is defined by [first_page, first_page + nr_pages)
->>>> + *
->>>>   * The caller needs to hold the pte lock.
->>>>   */
->>>> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>>> -		bool compound)
->>>> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
->>>> +			unsigned int nr_pages, struct vm_area_struct *vma,
->>>> +			bool compound)
->>>>  {
->>>> -	struct folio *folio = page_folio(page);
->>>>  	atomic_t *mapped = &folio->_nr_pages_mapped;
->>>> -	int nr = 0, nr_pmdmapped = 0;
->>>> -	bool first;
->>>> +	unsigned int nr_pmdmapped = 0, first;
->>>> +	int nr = 0;
->>>>  
->>>> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
->>>> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
->>>>  
->>>>  	/* Is page being mapped by PTE? Is this its first map to be added? */
->>>>  	if (likely(!compound)) {
->>>> -		first = atomic_inc_and_test(&page->_mapcount);
->>>> -		nr = first;
->>>> -		if (first && folio_test_large(folio)) {
->>>> -			nr = atomic_inc_return_relaxed(mapped);
->>>> -			nr = (nr < COMPOUND_MAPPED);
->>>> -		}
->>>> +		do {
->>>> +			first = atomic_inc_and_test(&page->_mapcount);
->>>> +			if (first && folio_test_large(folio)) {
->>>> +				first = atomic_inc_return_relaxed(mapped);
->>>> +				first = (nr < COMPOUND_MAPPED);
+> 
+> On 3/15/2023 11:26 PM, Ryan Roberts wrote:
+>> On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
+>>> From: Yin Fengwei <fengwei.yin@intel.com>
 >>>
->>> This still contains the typo that Yin Fengwei spotted in the previous version:
->>> https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
+>>> set_pte_range() allows to setup page table entries for a specific
+>>> range.  It takes advantage of batched rmap update for large folio.
+>>> It now takes care of calling update_mmu_cache_range().
 >>>
->>> FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
->>> Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
->>> ext4 filesystem). Looks like instruction aborts are taking much longer and a
->>> selection of syscalls are a bit slower. Still hunting down the root cause. Will
->>> report once I have conclusive diagnosis.
+>>> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+>>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>> ---
+>>>  Documentation/filesystems/locking.rst |  2 +-
+>>>  include/linux/mm.h                    |  3 ++-
+>>>  mm/filemap.c                          |  3 +--
+>>>  mm/memory.c                           | 27 +++++++++++++++------------
+>>>  4 files changed, 19 insertions(+), 16 deletions(-)
+>>>
+>>> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+>>> index 7de7a7272a5e..922886fefb7f 100644
+>>> --- a/Documentation/filesystems/locking.rst
+>>> +++ b/Documentation/filesystems/locking.rst
+>>> @@ -663,7 +663,7 @@ locked. The VM will unlock the page.
+>>>  Filesystem should find and map pages associated with offsets from "start_pgoff"
+>>>  till "end_pgoff". ->map_pages() is called with page table locked and must
+>>>  not block.  If it's not possible to reach a page without blocking,
+>>> -filesystem should skip it. Filesystem should use do_set_pte() to setup
+>>> +filesystem should skip it. Filesystem should use set_pte_range() to setup
+>>>  page table entry. Pointer to entry associated with the page is passed in
+>>>  "pte" field in vm_fault structure. Pointers to entries for other offsets
+>>>  should be calculated relative to "pte".
+>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>> index ee755bb4e1c1..81788c985a8c 100644
+>>> --- a/include/linux/mm.h
+>>> +++ b/include/linux/mm.h
+>>> @@ -1299,7 +1299,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>>>  }
+>>>  
+>>>  vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
+>>> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
+>>> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
+>>> +		struct page *page, unsigned int nr, unsigned long addr);
+>>>  
+>>>  vm_fault_t finish_fault(struct vm_fault *vmf);
+>>>  vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
+>>> diff --git a/mm/filemap.c b/mm/filemap.c
+>>> index 6e2b0778db45..e2317623dcbf 100644
+>>> --- a/mm/filemap.c
+>>> +++ b/mm/filemap.c
+>>> @@ -3504,8 +3504,7 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+>>>  			ret = VM_FAULT_NOPAGE;
+>>>  
+>>>  		ref_count++;
+>>> -		do_set_pte(vmf, page, addr);
+>>> -		update_mmu_cache(vma, addr, vmf->pte);
+>>> +		set_pte_range(vmf, folio, page, 1, addr);
+>>>  	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
+>>>  
+>>>  	/* Restore the vmf->pte */
+>>> diff --git a/mm/memory.c b/mm/memory.c
+>>> index 6aa21e8f3753..9a654802f104 100644
+>>> --- a/mm/memory.c
+>>> +++ b/mm/memory.c
+>>> @@ -4274,7 +4274,8 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+>>>  }
+>>>  #endif
+>>>  
+>>> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>>> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
+>>> +		struct page *page, unsigned int nr, unsigned long addr)
+>>>  {
+>>>  	struct vm_area_struct *vma = vmf->vma;
+>>>  	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
+>>> @@ -4282,7 +4283,7 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>>>  	bool prefault = vmf->address != addr;
 >>
->> I'm sorry - I'm struggling to find the exact cause. But its spending over 2x the
->> amount of time in the instruction abort handling code once patches 32-36 are
->> included. Everything in the flame graph is just taking longer. Perhaps we are
->> getting more instruction aborts somehow? I have the flamegraphs if anyone wants
->> them - just shout and I'll email them separately.
-> Thanks a lot to Ryan for sharing the flamegraphs to me. I found the __do_fault()
-> is called with patch 32-36 while no __do_fault() just with first 31 patches. I 
-> suspect the folio_add_file_rmap_range() missed some PTEs population. Please give
-> me few days to find the root cause and fix. Sorry for this.
+>> I think you are changing behavior here - is this intentional? Previously this
+>> would be evaluated per page, now its evaluated once for the whole range. The
+>> intention below is that directly faulted pages are mapped young and prefaulted
+>> pages are mapped old. But now a whole range will be mapped the same.
+> 
+> Yes. You are right here.
+> 
+> Look at the prefault and cpu_has_hw_af for ARM64, it looks like we
+> can avoid to handle vmf->address == addr specially. It's OK to 
+> drop prefault and change the logic here a little bit to:
+>   if (arch_wants_old_prefaulted_pte())
+>       entry = pte_mkold(entry);
+>   else
+>       entry = pte_sw_mkyong(entry);
+> 
+> It's not necessary to use pte_sw_mkyong for vmf->address == addr
+> because HW will set the ACCESS bit in page table entry.
+> 
+> Add Will Deacon in case I missed something here. Thanks.
 
-You're welcome. Give me a shout once you have a re-spin and I'll rerun the tests.
+I'll defer to Will's response, but not all arm HW supports HW access flag
+management. In that case it's done by SW, so I would imagine that by setting
+this to old initially, we will get a second fault to set the access bit, which
+will slow things down. I wonder if you will need to split this into (up to) 3
+calls to set_ptes()?
 
 > 
 > 
@@ -159,50 +158,54 @@ You're welcome. Give me a shout once you have a re-spin and I'll rerun the tests
 > Yin, Fengwei
 > 
 >>
->>>
->>> Thanks,
->>> Ryan
->>>
->>>
->>>> +			}
->>>> +
->>>> +			if (first)
->>>> +				nr++;
->>>> +		} while (page++, --nr_pages > 0);
->>>>  	} else if (folio_test_pmd_mappable(folio)) {
->>>>  		/* That test is redundant: it's for safety or to optimize out */
->>>>  
->>>> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>>>  	mlock_vma_folio(folio, vma, compound);
->>>>  }
->>>>  
->>>> +/**
->>>> + * page_add_file_rmap - add pte mapping to a file page
->>>> + * @page:	the page to add the mapping to
->>>> + * @vma:	the vm area in which the mapping is added
->>>> + * @compound:	charge the page as compound or small page
->>>> + *
->>>> + * The caller needs to hold the pte lock.
->>>> + */
->>>> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>>> +		bool compound)
->>>> +{
->>>> +	struct folio *folio = page_folio(page);
->>>> +	unsigned int nr_pages;
->>>> +
->>>> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
->>>> +
->>>> +	if (likely(!compound))
->>>> +		nr_pages = 1;
->>>> +	else
->>>> +		nr_pages = folio_nr_pages(folio);
->>>> +
->>>> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
->>>> +}
->>>> +
->>>>  /**
->>>>   * page_remove_rmap - take down pte mapping from a page
->>>>   * @page:	page to remove mapping from
->>>
+>> Thanks,
+>> Ryan
+>>
+>>>  	pte_t entry;
+>>>  
+>>> -	flush_icache_page(vma, page);
+>>> +	flush_icache_pages(vma, page, nr);
+>>>  	entry = mk_pte(page, vma->vm_page_prot);
+>>>  
+>>>  	if (prefault && arch_wants_old_prefaulted_pte())
+>>> @@ -4296,14 +4297,18 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>>>  		entry = pte_mkuffd_wp(entry);
+>>>  	/* copy-on-write page */
+>>>  	if (write && !(vma->vm_flags & VM_SHARED)) {
+>>> -		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+>>> -		page_add_new_anon_rmap(page, vma, addr);
+>>> -		lru_cache_add_inactive_or_unevictable(page, vma);
+>>> +		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr);
+>>> +		VM_BUG_ON_FOLIO(nr != 1, folio);
+>>> +		folio_add_new_anon_rmap(folio, vma, addr);
+>>> +		folio_add_lru_vma(folio, vma);
+>>>  	} else {
+>>> -		inc_mm_counter(vma->vm_mm, mm_counter_file(page));
+>>> -		page_add_file_rmap(page, vma, false);
+>>> +		add_mm_counter(vma->vm_mm, mm_counter_file(page), nr);
+>>> +		folio_add_file_rmap_range(folio, page, nr, vma, false);
+>>>  	}
+>>> -	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
+>>> +	set_ptes(vma->vm_mm, addr, vmf->pte, entry, nr);
+>>> +
+>>> +	/* no need to invalidate: a not-present page won't be cached */
+>>> +	update_mmu_cache_range(vma, addr, vmf->pte, nr);
+>>>  }
+>>>  
+>>>  static bool vmf_pte_changed(struct vm_fault *vmf)
+>>> @@ -4376,11 +4381,9 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
+>>>  
+>>>  	/* Re-check under ptl */
+>>>  	if (likely(!vmf_pte_changed(vmf))) {
+>>> -		do_set_pte(vmf, page, vmf->address);
+>>> -
+>>> -		/* no need to invalidate: a not-present page won't be cached */
+>>> -		update_mmu_cache(vma, vmf->address, vmf->pte);
+>>> +		struct folio *folio = page_folio(page);
+>>>  
+>>> +		set_pte_range(vmf, folio, page, 1, vmf->address);
+>>>  		ret = 0;
+>>>  	} else {
+>>>  		update_mmu_tlb(vma, vmf->address, vmf->pte);
 >>
 
