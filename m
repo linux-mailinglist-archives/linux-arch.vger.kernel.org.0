@@ -2,44 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD536BE994
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Mar 2023 13:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56626BE9C3
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Mar 2023 14:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbjCQMqs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Mar 2023 08:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S229654AbjCQNAv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Mar 2023 09:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCQMqr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Mar 2023 08:46:47 -0400
+        with ESMTP id S229539AbjCQNAu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Mar 2023 09:00:50 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4DE0AE11C;
-        Fri, 17 Mar 2023 05:46:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55D24A9DC7;
+        Fri, 17 Mar 2023 06:00:48 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F291D1480;
-        Fri, 17 Mar 2023 05:47:26 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA6F61480;
+        Fri, 17 Mar 2023 06:01:31 -0700 (PDT)
 Received: from [10.57.64.98] (unknown [10.57.64.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C16F3F64C;
-        Fri, 17 Mar 2023 05:46:42 -0700 (PDT)
-Message-ID: <2b41a6dd-130b-acf3-72fd-b996272c1710@arm.com>
-Date:   Fri, 17 Mar 2023 12:46:40 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11ABE3F64C;
+        Fri, 17 Mar 2023 06:00:46 -0700 (PDT)
+Message-ID: <01df1870-8e2f-0e86-6dbc-728353cdd224@arm.com>
+Date:   Fri, 17 Mar 2023 13:00:45 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
 Content-Language: en-US
 To:     "Yin, Fengwei" <fengwei.yin@intel.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, will@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
 References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-35-willy@infradead.org>
- <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
- <01071d9c-483f-2d95-87a6-e1030acaf8dd@arm.com>
- <0f581d0d-3139-4007-2161-592a0a545b50@intel.com>
- <fe743597-cefa-4bf8-aa3f-da9cc10bbd5f@arm.com>
- <f3ffe13c-321a-07f6-6a6f-1a67f585ffe2@intel.com>
+ <20230315051444.3229621-36-willy@infradead.org>
+ <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
+ <b39f4816-2064-e402-4e02-908f40c396d4@intel.com>
+ <2fa5a911-8432-2fce-c6e1-de4e592219d8@arm.com>
+ <ZBNXcmOrrOS4Rydg@casper.infradead.org>
+ <b2c00aab-82ad-ea7a-df9d-c816b216b0f1@intel.com>
+ <ZBPiOgYDLYBmVwOc@casper.infradead.org>
+ <12d7564f-5b33-bdcc-1a06-504ad8487aca@intel.com>
+ <25bf8e75-cc2e-7d08-dbba-41c53ab751b0@arm.com>
+ <d2e90338-6200-f005-110d-4626fda067a2@intel.com>
 From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <f3ffe13c-321a-07f6-6a6f-1a67f585ffe2@intel.com>
+In-Reply-To: <d2e90338-6200-f005-110d-4626fda067a2@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -51,71 +55,117 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 17/03/2023 08:23, Yin, Fengwei wrote:
-[...]
-
->>>>> FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
->>>>> Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
->>>>> ext4 filesystem). Looks like instruction aborts are taking much longer and a
->>>>> selection of syscalls are a bit slower. Still hunting down the root cause. Will
->>>>> report once I have conclusive diagnosis.
+On 17/03/2023 08:19, Yin, Fengwei wrote:
+> 
+> 
+> On 3/17/2023 4:00 PM, Ryan Roberts wrote:
+>> On 17/03/2023 06:33, Yin, Fengwei wrote:
+>>>
+>>>
+>>> On 3/17/2023 11:44 AM, Matthew Wilcox wrote:
+>>>> On Fri, Mar 17, 2023 at 09:58:17AM +0800, Yin, Fengwei wrote:
+>>>>>
+>>>>>
+>>>>> On 3/17/2023 1:52 AM, Matthew Wilcox wrote:
+>>>>>> On Thu, Mar 16, 2023 at 04:38:58PM +0000, Ryan Roberts wrote:
+>>>>>>> On 16/03/2023 16:23, Yin, Fengwei wrote:
+>>>>>>>>> I think you are changing behavior here - is this intentional? Previously this
+>>>>>>>>> would be evaluated per page, now its evaluated once for the whole range. The
+>>>>>>>>> intention below is that directly faulted pages are mapped young and prefaulted
+>>>>>>>>> pages are mapped old. But now a whole range will be mapped the same.
+>>>>>>>>
+>>>>>>>> Yes. You are right here.
+>>>>>>>>
+>>>>>>>> Look at the prefault and cpu_has_hw_af for ARM64, it looks like we
+>>>>>>>> can avoid to handle vmf->address == addr specially. It's OK to 
+>>>>>>>> drop prefault and change the logic here a little bit to:
+>>>>>>>>   if (arch_wants_old_prefaulted_pte())
+>>>>>>>>       entry = pte_mkold(entry);
+>>>>>>>>   else
+>>>>>>>>       entry = pte_sw_mkyong(entry);
+>>>>>>>>
+>>>>>>>> It's not necessary to use pte_sw_mkyong for vmf->address == addr
+>>>>>>>> because HW will set the ACCESS bit in page table entry.
+>>>>>>>>
+>>>>>>>> Add Will Deacon in case I missed something here. Thanks.
+>>>>>>>
+>>>>>>> I'll defer to Will's response, but not all arm HW supports HW access flag
+>>>>>>> management. In that case it's done by SW, so I would imagine that by setting
+>>>>>>> this to old initially, we will get a second fault to set the access bit, which
+>>>>>>> will slow things down. I wonder if you will need to split this into (up to) 3
+>>>>>>> calls to set_ptes()?
+>>>>>>
+>>>>>> I don't think we should do that.  The limited information I have from
+>>>>>> various microarchitectures is that the PTEs must differ only in their
+>>>>>> PFN bits in order to use larger TLB entries.  That includes the Accessed
+>>>>>> bit (or equivalent).  So we should mkyoung all the PTEs in the same
+>>>>>> folio, at least initially.
+>>>>>>
+>>>>>> That said, we should still do this conditionally.  We'll prefault some
+>>>>>> other folios too.  So I think this should be:
+>>>>>>
+>>>>>>         bool prefault = (addr > vmf->address) || ((addr + nr) < vmf->address);
+>>>>>>
+>>>>> According to commit 46bdb4277f98e70d0c91f4289897ade533fe9e80, if hardware access
+>>>>> flag is supported on ARM64, there is benefit if prefault PTEs is set as "old".
+>>>>> If we change prefault like above, the PTEs is set as "yong" which loose benefit
+>>>>> on ARM64 with hardware access flag.
+>>>>>
+>>>>> ITOH, if from "old" to "yong" is cheap, why not leave all PTEs of folio as "old"
+>>>>> and let hardware to update it to "yong"?
 >>>>
->>>> I'm sorry - I'm struggling to find the exact cause. But its spending over 2x the
->>>> amount of time in the instruction abort handling code once patches 32-36 are
->>>> included. Everything in the flame graph is just taking longer. Perhaps we are
->>>> getting more instruction aborts somehow? I have the flamegraphs if anyone wants
->>>> them - just shout and I'll email them separately.
->>> Thanks a lot to Ryan for sharing the flamegraphs to me. I found the __do_fault()
->>> is called with patch 32-36 while no __do_fault() just with first 31 patches. I 
->>> suspect the folio_add_file_rmap_range() missed some PTEs population. Please give
->>> me few days to find the root cause and fix. Sorry for this.
+>>>> Because we're tracking the entire folio as a single entity.  So we're
+>>>> better off avoiding the extra pagefaults to update the accessed bit,
+>>>> which won't actually give us any information (vmscan needs to know "were
+>>>> any of the accessed bits set", not "how many of them were set").
+>>> There is no extra pagefaults to update the accessed bit. There are three cases here:
+>>> 1. hardware support access flag and cheap from "old" to "yong" without extra fault
+>>> 2. hardware support access flag and expensive from "old" to "yong" without extra fault
+>>> 3. no hardware support access flag (extra pagefaults from "old" to "yong". Expensive)
+>>>
+>>> For #2 and #3, it's expensive from "old" to "yong", so we always set PTEs "yong" in
+>>> page fault.
+>>> For #1, It's cheap from "old" to "yong", so it's OK to set PTEs "old" in page fault.
+>>> And hardware will set it to "yong" when access memory. Actually, ARM64 with hardware
+>>> access bit requires to set PTEs "old".
 >>
->> You're welcome. Give me a shout once you have a re-spin and I'll rerun the tests.
-> Could you please help to try following changes? Thanks in advance.
+>> Your logic makes sense, but it doesn't take into account the HPA
+>> micro-architectural feature present in some ARM CPUs. HPA can transparently
+>> coalesce multiple pages into a single TLB entry when certain conditions are met
+>> (roughly; upto 4 pages physically and virtually contiguous and all within a
+>> 4-page natural alignment). But as Matthew says, this works out better when all
+>> pte attributes (including access and dirty) match. Given the reason for setting
+>> the prefault pages to old is so that vmscan can do a better job of finding cold
+>> pages, and given vmscan will now be looking for folios and not individual pages
+>> (I assume?), I agree with Matthew that we should make whole folios young or old.
+>> It will marginally increase our chances of the access and dirty bits being
+>> consistent across the whole 4-page block that the HW tries to coalesce. If we
+>> unconditionally make everything old, the hw will set accessed for the single
+>> page that faulted, and we therefore don't have consistency for that 4-page block.
+> My concern was that the benefit of "old" PTEs for ARM64 with hardware access bit
+> will be lost. The workloads (application launch latency and direct reclaim according
+> to commit 46bdb4277f98e70d0c91f4289897ade533fe9e80) can show regression with this
+> series. Thanks.
+
+My (potentially incorrect) understanding of the reason that marking the
+prefaulted ptes as old was because it made it easier/quicker for vmscan to
+identify those prefaulted pages and reclaim them under memory pressure. I
+_assume_ now that we have large folios, that vmscan will be trying to pick
+folios for reclaim, not individual subpages within the folio? In which case,
+vmscan will only consider the folio as old if _all_ pages within are old. So
+marking all the pages of a folio young vs marking 1 page in the folio young
+won't make a difference from this perspective. But it will make a difference
+from the perspective a HPA. (Please Matthew or somebody else, correct me if my
+understanding is incorrect!)
+
 > 
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 40be33b5ee46..137011320c68 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -3504,15 +3504,16 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
->  		if (!pte_none(vmf->pte[count]))
->  			goto skip;
->  
-> -		if (vmf->address == addr)
-> -			ret = VM_FAULT_NOPAGE;
-> -
->  		count++;
->  		continue;
->  skip:
->  		if (count) {
->  			set_pte_range(vmf, folio, page, count, addr);
->  			folio_ref_add(folio, count);
-> +			if ((vmf->address < (addr + count * PAGE_SIZE)) &&
-> +					(vmf->address >= addr))
-> +				ret = VM_FAULT_NOPAGE;
-> +
->  		}
->  
->  		count++;
-> @@ -3525,6 +3526,9 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
->  	if (count) {
->  		set_pte_range(vmf, folio, page, count, addr);
->  		folio_ref_add(folio, count);
-> +		if ((vmf->address < (addr + count * PAGE_SIZE)) &&
-> +				(vmf->address >= addr))
-> +			ret = VM_FAULT_NOPAGE;
->  	}
->  
->  	vmf->pte = old_ptep;
-> 
+> BTW, with TLB merge feature, should hardware update coalesce multiple pages access
+> bit together? otherwise, it's avoidable that only one page access is set by hardware
+> finally.
 
-I'm afraid this hasn't fixed it, and I still see __do_fault(). I'll send the
-flame graph over separately.
-
-Given I'm running on ext4, I wasn't expecting to see any large page cache
-folios? So I don't think we would have expected this patch to help anyway? (or
-perhaps there are still THP folios? But I think they will get PMD mapped?).
-
+No, the HW will only update the access flag for the single page that is
+accessed. So yes, in the long run the value of the flags across the 4-page block
+will diverge - that's why I said "marginal" above.
 
 > 
 > Regards
@@ -123,57 +173,22 @@ perhaps there are still THP folios? But I think they will get PMD mapped?).
 > 
 >>
 >>>
+>>>>
+>>>> Anyway, hopefully Ryan can test this and let us know if it fixes the
+>>>> regression he sees.
+>>> I highly suspect the regression Ryan saw is not related with this but another my
+>>> stupid work. I will send out the testing patch soon. Thanks.
+>>
+>> I tested a version of this where I made everything unconditionally young,
+>> thinking it might be the source of the perf regression, before I reported it. It
+>> doesn't make any difference. So I agree the regression is somewhere else.
+>>
+>> Thanks,
+>> Ryan
+>>
+>>>
 >>>
 >>> Regards
 >>> Yin, Fengwei
->>>
->>>>
->>>>>
->>>>> Thanks,
->>>>> Ryan
->>>>>
->>>>>
->>>>>> +			}
->>>>>> +
->>>>>> +			if (first)
->>>>>> +				nr++;
->>>>>> +		} while (page++, --nr_pages > 0);
->>>>>>  	} else if (folio_test_pmd_mappable(folio)) {
->>>>>>  		/* That test is redundant: it's for safety or to optimize out */
->>>>>>  
->>>>>> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>>>>>  	mlock_vma_folio(folio, vma, compound);
->>>>>>  }
->>>>>>  
->>>>>> +/**
->>>>>> + * page_add_file_rmap - add pte mapping to a file page
->>>>>> + * @page:	the page to add the mapping to
->>>>>> + * @vma:	the vm area in which the mapping is added
->>>>>> + * @compound:	charge the page as compound or small page
->>>>>> + *
->>>>>> + * The caller needs to hold the pte lock.
->>>>>> + */
->>>>>> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>>>>> +		bool compound)
->>>>>> +{
->>>>>> +	struct folio *folio = page_folio(page);
->>>>>> +	unsigned int nr_pages;
->>>>>> +
->>>>>> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
->>>>>> +
->>>>>> +	if (likely(!compound))
->>>>>> +		nr_pages = 1;
->>>>>> +	else
->>>>>> +		nr_pages = folio_nr_pages(folio);
->>>>>> +
->>>>>> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
->>>>>> +}
->>>>>> +
->>>>>>  /**
->>>>>>   * page_remove_rmap - take down pte mapping from a page
->>>>>>   * @page:	page to remove mapping from
->>>>>
->>>>
->>
 >>
 
