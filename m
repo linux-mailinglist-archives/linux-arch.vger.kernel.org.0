@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309896BEF40
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Mar 2023 18:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CB26BEF49
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Mar 2023 18:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCQRK2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Mar 2023 13:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53436 "EHLO
+        id S229878AbjCQRMe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Mar 2023 13:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjCQRKK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Mar 2023 13:10:10 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA42457D6
-        for <linux-arch@vger.kernel.org>; Fri, 17 Mar 2023 10:09:43 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id e71so6494849ybc.0
-        for <linux-arch@vger.kernel.org>; Fri, 17 Mar 2023 10:09:43 -0700 (PDT)
+        with ESMTP id S229986AbjCQRMd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Mar 2023 13:12:33 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A289739CFF
+        for <linux-arch@vger.kernel.org>; Fri, 17 Mar 2023 10:12:31 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id r1so6479077ybu.5
+        for <linux-arch@vger.kernel.org>; Fri, 17 Mar 2023 10:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679072982;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679073150;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yyGiCOuzpCUygYrGB2PwFluAD4+Kj2HT1bQEGXBzqqs=;
-        b=Z7nmpkLKoGRLV+P2V/8LME8aWSNFmNhPgyFVKqtl2aYwfLMBFAy6IMaHXlp4FvtbZp
-         sKYJeU2zg04OOU+M8DqUhdKDmF7CtBnyJF3DMmZ2lCQEWexghjH2XTbPUAENd2lKOEbJ
-         7vrbI5pnmVpv2N0sNAYLpmfWtkXRNeBYMnYo7leB0kUTfRFH+FQYCvXjsdNB6THdBg4t
-         8zlIbIx0O6DH/n6MnYPSE7Bd4EMyp6tRtl8L/QYFYGMWkiu8752qSl9k4rD8eb+D36al
-         DtH4cdKh6iSZNyV79DtBAMOaQXxbV5eILGoWqiE06QQ4rmbfz9F7OI/W6UE2RAfld7KL
-         A7QA==
+        bh=3ikWb9GqbCHXDoNjDF2yyQsEog3dPXb54BKqYKGLZKo=;
+        b=Zfo2sCJiLQjkcgp4hl850DgKMGKFeMrifVhcXlQv2qElaBsO7vaXPlKO/mdARlti23
+         8VPUEVXZngQedMVddPcy+xa7qlbkZuDci2xhcaUrExNMXCB0BLRPSznglejsnJNXw5ga
+         RHzCNLPAoyv8psmkyR/QZtWDNz6zDpFfajtu9fd+byeuGP3OVNiTX1NwMkTXrRsmSiaM
+         kwPuCZirTBcWpekpwTV60PfiSEURz6/awp/zWgGgnqKwCMh3QLkJmqKnQYqmXwIwAIlV
+         kTtlgROVwfJgJkjXYAVD+QfBwuzQqod4NYECB2ZccqVLkcppcUvaY7Cc2QbGnU59+iYz
+         YDbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679072982;
+        d=1e100.net; s=20210112; t=1679073150;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yyGiCOuzpCUygYrGB2PwFluAD4+Kj2HT1bQEGXBzqqs=;
-        b=ytQ5bzaqSANa1JGFNmA0FhoWye9pAhA9tjkQQysoKp32ekgiSNKIHIYGBPizvjZW1z
-         mlWC4tTrHAR3UKJTuwqxKDrv90GlQawnq2m+0kL0PJdXLelnLd07oJ1JLxNPkRDQdHmE
-         zJDW0RKZ3LBIkHesHak2c/hgQWmwt8SzQjKWJtsTAqsMCqZ1SmAPyCjdMT2ffnomg+hh
-         iMw6MYIvqBI5PA23cGlGl3W/X3NuH3l9DCpmEs/cVgwt0+t0RN5iJJ4y5Jffxu9V62tj
-         ni4AFAJWVrCGGagM+pxGDH+IDhjKT64cGVXf1txnw8jHhcRVNo0WXLiv2G9PHX8FLzTz
-         PFUw==
-X-Gm-Message-State: AO0yUKXkmfYHeD5Cpuh/IuaavR5qRLUUzFlBFz7nbFVRdk+nP8+kvJ40
-        U7NWitJv2pxqzNRCjtPShfp9uVEjCenqRlYcejRMOg==
-X-Google-Smtp-Source: AK7set8WHpFUpGLzM3ZMAI8efrv3wxVYI2960/n8L99qdwz+ch5b09JYgpcWyA+XYcURNxejBGDwGuAnYXXWegpW86k=
-X-Received: by 2002:a5b:406:0:b0:a09:314f:a3ef with SMTP id
- m6-20020a5b0406000000b00a09314fa3efmr160914ybp.12.1679072982266; Fri, 17 Mar
- 2023 10:09:42 -0700 (PDT)
+        bh=3ikWb9GqbCHXDoNjDF2yyQsEog3dPXb54BKqYKGLZKo=;
+        b=HykGlIBRmulRqXc38PQG1PpztDhNNboFLeRfID4T9AV98OBC/JtOiOwxoimmRGXMLN
+         bb6rgrl7TJfXNgXDcxPobrTZ1THgbGhNaL5tLyAFgACIR8FwVruJzC/tYjO94JBZraFs
+         JuvJMUmnNeq0Rucby3vkfoOOY+KTKrs69Cq4BwVnRVCO2/XnZs+afji8IfIbZ56ahvP3
+         +8Egv1n8m4UNspiXmVd+iQRRtcmmwBvVpP2wcCbCCoQnG9rV+yxbB49EabyRMgQu8x9W
+         G6HHDoUM8TZD1QhYoH9hlaiGRjhxbj+sT3Vn3C8cY02bwjJ51VDBIO585FQ/tMFUc/kR
+         qKtg==
+X-Gm-Message-State: AO0yUKXKKlUXX/ZtwiWSps7JVRcWv6JJOeA6p+DjM7ncmKSXqvAYv122
+        RTBBoKQ/ZKLiuLIV7sd6SLlR6RSz+zVwhSZr2lrqyA==
+X-Google-Smtp-Source: AK7set/QfKKXHCQJ3mrdY3gq80ku8GQMwyT8c5IhgvAeBv6xKwxPXs/SU34oJvp29NZ60hId0CNTrh08jaWhgmevYpM=
+X-Received: by 2002:a5b:bc3:0:b0:ac2:a7a7:23c3 with SMTP id
+ c3-20020a5b0bc3000000b00ac2a7a723c3mr154479ybr.12.1679073150497; Fri, 17 Mar
+ 2023 10:12:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com> <20230227222957.24501-22-rick.p.edgecombe@intel.com>
-In-Reply-To: <20230227222957.24501-22-rick.p.edgecombe@intel.com>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com> <20230227222957.24501-23-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230227222957.24501-23-rick.p.edgecombe@intel.com>
 From:   Deepak Gupta <debug@rivosinc.com>
-Date:   Fri, 17 Mar 2023 10:09:33 -0700
-Message-ID: <CAKC1njTexZ3-8u8iW3cDv9FBSUx107N-MMekMoLL5ShRFaryYQ@mail.gmail.com>
-Subject: Re: [PATCH v7 21/41] mm: Add guard pages around a shadow stack.
+Date:   Fri, 17 Mar 2023 10:12:21 -0700
+Message-ID: <CAKC1njQ+resjS-O8vAVLhRfLHEdgta09faEr5zwi1JTNSWK0Fw@mail.gmail.com>
+Subject: Re: [PATCH v7 22/41] mm/mmap: Add shadow stack pages to memory accounting
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
 Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -85,8 +85,8 @@ Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,44 +103,8 @@ On Mon, Feb 27, 2023 at 2:31=E2=80=AFPM Rick Edgecombe
 > unusual properties, which requires some core mm changes to function
 > properly.
 >
-> The architecture of shadow stack constrains the ability of userspace to
-> move the shadow stack pointer (SSP) in order to  prevent corrupting or
-> switching to other shadow stacks. The RSTORSSP can move the ssp to
-> different shadow stacks, but it requires a specially placed token in orde=
-r
-> to do this. However, the architecture does not prevent incrementing the
-> stack pointer to wander onto an adjacent shadow stack. To prevent this in
-> software, enforce guard pages at the beginning of shadow stack vmas, such
-> that there will always be a gap between adjacent shadow stacks.
->
-> Make the gap big enough so that no userspace SSP changing operations
-> (besides RSTORSSP), can move the SSP from one stack to the next. The
-> SSP can increment or decrement by CALL, RET  and INCSSP. CALL and RET
-> can move the SSP by a maximum of 8 bytes, at which point the shadow
-> stack would be accessed.
->
-> The INCSSP instruction can also increment the shadow stack pointer. It
-> is the shadow stack analog of an instruction like:
->
->         addq    $0x80, %rsp
->
-> However, there is one important difference between an ADD on %rsp and
-> INCSSP. In addition to modifying SSP, INCSSP also reads from the memory
-> of the first and last elements that were "popped". It can be thought of
-> as acting like this:
->
-> READ_ONCE(ssp);       // read+discard top element on stack
-> ssp +=3D nr_to_pop * 8; // move the shadow stack
-> READ_ONCE(ssp-8);     // read+discard last popped stack element
->
-> The maximum distance INCSSP can move the SSP is 2040 bytes, before it
-> would read the memory. Therefore a single page gap will be enough to
-> prevent any operation from shifting the SSP to an adjacent stack, since
-> it would have to land in the gap at least once, causing a fault.
->
-> This could be accomplished by using VM_GROWSDOWN, but this has a
-> downside. The behavior would allow shadow stack's to grow, which is
-> unneeded and adds a strange difference to how most regular stacks work.
+> Account shadow stack pages to stack memory. Do this by adding a
+> VM_SHADOW_STACK check in is_stack_mapping().
 >
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
@@ -153,82 +117,60 @@ r
 > Cc: Kees Cook <keescook@chromium.org>
 >
 > ---
-> v5:
->  - Fix typo in commit log
+> v7:
+>  - Change is_stack_mapping() to know about VM_SHADOW_STACK so the
+>    additions in vm_stat_account() can be dropped. (David Hildenbrand)
 >
-> v4:
->  - Drop references to 32 bit instructions
->  - Switch to generic code to drop __weak (Peterz)
+> v3:
+>  - Remove unneeded VM_SHADOW_STACK check in accountable_mapping()
+>    (Kirill)
 >
 > v2:
->  - Use __weak instead of #ifdef (Dave Hansen)
->  - Only have start gap on shadow stack (Andy Luto)
->  - Create stack_guard_start_gap() to not duplicate code
->    in an arch version of vm_start_gap() (Dave Hansen)
->  - Improve commit log partly with verbiage from (Dave Hansen)
+>  - Remove is_shadow_stack_mapping() and just change it to directly bitwis=
+e
+>    and VM_SHADOW_STACK.
+>
+> Yu-cheng v26:
+>  - Remove redundant #ifdef CONFIG_MMU.
 >
 > Yu-cheng v25:
->  - Move SHADOW_STACK_GUARD_GAP to arch/x86/mm/mmap.c.
+>  - Remove #ifdef CONFIG_ARCH_HAS_SHADOW_STACK for is_shadow_stack_mapping=
+().
 > ---
->  include/linux/mm.h | 31 ++++++++++++++++++++++++++-----
->  1 file changed, 26 insertions(+), 5 deletions(-)
+>  mm/internal.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 097544afb1aa..6a093daced88 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3107,15 +3107,36 @@ struct vm_area_struct *vma_lookup(struct mm_struc=
-t *mm, unsigned long addr)
->         return mtree_load(&mm->mm_mt, addr);
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 7920a8b7982e..1d13d5580f64 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -491,14 +491,14 @@ static inline bool is_exec_mapping(vm_flags_t flags=
+)
 >  }
 >
-> +static inline unsigned long stack_guard_start_gap(struct vm_area_struct =
-*vma)
-> +{
-> +       if (vma->vm_flags & VM_GROWSDOWN)
-> +               return stack_guard_gap;
-> +
-> +       /*
-> +        * Shadow stack pointer is moved by CALL, RET, and INCSSPQ.
-> +        * INCSSPQ moves shadow stack pointer up to 255 * 8 =3D ~2 KB
-> +        * and touches the first and the last element in the range, which
-> +        * triggers a page fault if the range is not in a shadow stack.
-> +        * Because of this, creating 4-KB guard pages around a shadow
-> +        * stack prevents these instructions from going beyond.
-> +        *
-> +        * Creation of VM_SHADOW_STACK is tightly controlled, so a vma
-> +        * can't be both VM_GROWSDOWN and VM_SHADOW_STACK
-> +        */
-> +       if (vma->vm_flags & VM_SHADOW_STACK)
-> +               return PAGE_SIZE;
-
-This is an arch agnostic header file. Can we remove `VM_SHADOW_STACK`
-from here? and instead
-have `arch_is_shadow_stack` which consumes vma flags and returns true or fa=
-lse.
-This allows different architectures to choose their own encoding of
-vma flags to represent a shadow stack.
-
-> +
-> +       return 0;
-> +}
-> +
->  static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
+>  /*
+> - * Stack area - automatically grows in one direction
+> + * Stack area
+>   *
+> - * VM_GROWSUP / VM_GROWSDOWN VMAs are always private anonymous:
+> - * do_mmap() forbids all other combinations.
+> + * VM_GROWSUP, VM_GROWSDOWN VMAs are always private
+> + * anonymous. do_mmap() forbids all other combinations.
+>   */
+>  static inline bool is_stack_mapping(vm_flags_t flags)
 >  {
-> +       unsigned long gap =3D stack_guard_start_gap(vma);
->         unsigned long vm_start =3D vma->vm_start;
->
-> -       if (vma->vm_flags & VM_GROWSDOWN) {
-> -               vm_start -=3D stack_guard_gap;
-> -               if (vm_start > vma->vm_start)
-> -                       vm_start =3D 0;
-> -       }
-> +       vm_start -=3D gap;
-> +       if (vm_start > vma->vm_start)
-> +               vm_start =3D 0;
->         return vm_start;
+> -       return (flags & VM_STACK) =3D=3D VM_STACK;
+> +       return ((flags & VM_STACK) =3D=3D VM_STACK) || (flags & VM_SHADOW=
+_STACK);
+
+Same comment here. `VM_SHADOW_STACK` is an x86 specific way of
+encoding a shadow stack.
+Instead let's have a proxy here which allows architectures to have
+their own encodings to represent a shadow stack.
+
 >  }
 >
+>  /*
 > --
 > 2.17.1
 >
