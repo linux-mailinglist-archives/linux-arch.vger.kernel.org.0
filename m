@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8446BFE66
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6E06BFE6C
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjCSAVk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Mar 2023 20:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
+        id S230309AbjCSAV4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Mar 2023 20:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjCSAVE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:21:04 -0400
+        with ESMTP id S230095AbjCSAVO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:21:14 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE932A176;
-        Sat, 18 Mar 2023 17:19:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2562A6C0;
+        Sat, 18 Mar 2023 17:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679185155; x=1710721155;
+  t=1679185161; x=1710721161;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=0ExKgIRjskyaMqTzivet8rEqvydaMzUAlH3acHHtrn0=;
-  b=cX7gWp2tsOdwp19pokmAOdbD+i5RbuMXPCYC7ldGPkihHPvvd8aW4LX0
-   Xf+gB9QxmxDzJ8RvJ3WshMG7xaXjWQ3Mxuo+l/lqhrnrGaoKVSjSCOXME
-   1LiCdAjNkEX1c1o+n36h6Kqz1VPdi+Ag+2t9GcE4MJ63r5ymlK7y1LBJf
-   sHg55+MNRiSdGBAoB+DI+LdnOBg4N/C8zeMYsYxhQFKYq3jTfyPSKZN4O
-   jZXaM2C7/JIkMKFfN1ckFJK4D3k491ImYyaLG8fTh8F4k2ZACc+pecwIA
-   Ud6xFeAiWSvMVoToxerB410Rr+CQO2MurmAn0qQGviGEX4UJX9gQMjJyo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491351"
+  bh=qFnC8BjwG9ajYhpSUihMC4CLPCFBVSbSaq8Aw+3zJPY=;
+  b=JiLVNFuoWfaTXh6i20fugnVZyH0hKLbI0J58B000jrDCfltGpFfo1s/e
+   1OKX2JZ58vwPth6nVn4teWqPi0eWtUawtKjoFi1WEFe7OtyrNih8Ub0/M
+   bOh/X9f5IE5Ey8PKmPi1nQZjaLShkkQdGQsnfQ/3zKldGK6sY+JVV1WjE
+   R8ZotepRpyFaOR3StpFY5e9TGjHPRV560QdAVlCOBUKdUAWOPxe3GeDk8
+   j+o3D654o12NvEV01jsL2VNJ8LgWpbrKC4fiKk2+8VdfDUyHPaegfKLt6
+   1epyVwdmVzwsuDtZR44AT5gTjHHvfK+qukD1vmhWhT3KerF3jkq9XEIgs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491375"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="338491351"
+   d="scan'208";a="338491375"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:41 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672914"
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672927"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="749672914"
+   d="scan'208";a="749672927"
 Received: from bmahatwo-mobl1.gar.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.135.34.5])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:39 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:41 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -67,10 +67,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH v8 28/40] x86: Introduce userspace API for shadow stack
-Date:   Sat, 18 Mar 2023 17:15:23 -0700
-Message-Id: <20230319001535.23210-29-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: [PATCH v8 29/40] x86/shstk: Add user-mode shadow stack support
+Date:   Sat, 18 Mar 2023 17:15:24 -0700
+Message-Id: <20230319001535.23210-30-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
 References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
@@ -83,20 +83,20 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add three new arch_prctl() handles:
+Introduce basic shadow stack enabling/disabling/allocation routines.
+A task's shadow stack is allocated from memory with VM_SHADOW_STACK flag
+and has a fixed size of min(RLIMIT_STACK, 4GB).
 
- - ARCH_SHSTK_ENABLE/DISABLE enables or disables the specified
-   feature. Returns 0 on success or a negative value on error.
+Keep the task's shadow stack address and size in thread_struct. This will
+be copied when cloning new threads, but needs to be cleared during exec,
+so add a function to do this.
 
- - ARCH_SHSTK_LOCK prevents future disabling or enabling of the
-   specified feature. Returns 0 on success or a negative value
-   on error.
+32 bit shadow stack is not expected to have many users and it will
+complicate the signal implementation. So do not support IA32 emulation
+or x32.
 
-The features are handled per-thread and inherited over fork(2)/clone(2),
-but reset on exec().
-
-Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
@@ -104,193 +104,244 @@ Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
-This is preparation patch. It does not implement any features. The {}
-are to make the diff in a future patch cleaner.
+v7:
+ - Add explanation for not supporting 32 bit in commit log (Boris)
 
-v8:
- - Update commit log verbiage (Boris)
+v5:
+ - Switch to EOPNOTSUPP
+ - Use MAP_ABOVE4G
+ - Move set_clr_bits_msrl() to patch where it is first used
 
 v4:
- - Remove references to CET and replace with shadow stack (Peterz)
+ - Just set MSR_IA32_U_CET when disabling shadow stack, since we don't
+   have IBT yet. (Peterz)
 
 v3:
- - Move shstk.c Makefile changes earlier (Kees)
- - Add #ifdef around features_locked and features (Kees)
- - Encapsulate features reset earlier in reset_thread_features() so
-   features and features_locked are not referenced in code that would be
-   compiled !CONFIG_X86_USER_SHADOW_STACK. (Kees)
- - Fix typo in commit log (Kees)
- - Switch arch_prctl() numbers to avoid conflict with LAM
-
-v2:
- - Only allow one enable/disable per call (tglx)
- - Return error code like a normal arch_prctl() (Alexander Potapenko)
- - Make CET only (tglx)
+ - Use define for set_clr_bits_msrl() (Kees)
+ - Make some functions static (Kees)
+ - Change feature_foo() to features_foo() (Kees)
+ - Centralize shadow stack size rlimit checks (Kees)
+ - Disable x32 support
 ---
- arch/x86/include/asm/processor.h  |  6 +++++
- arch/x86/include/asm/shstk.h      | 21 +++++++++++++++
- arch/x86/include/uapi/asm/prctl.h |  6 +++++
- arch/x86/kernel/Makefile          |  2 ++
- arch/x86/kernel/process_64.c      |  7 ++++-
- arch/x86/kernel/shstk.c           | 44 +++++++++++++++++++++++++++++++
- 6 files changed, 85 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/include/asm/shstk.h
- create mode 100644 arch/x86/kernel/shstk.c
+ arch/x86/include/asm/processor.h  |   2 +
+ arch/x86/include/asm/shstk.h      |   7 ++
+ arch/x86/include/uapi/asm/prctl.h |   3 +
+ arch/x86/kernel/shstk.c           | 145 ++++++++++++++++++++++++++++++
+ 4 files changed, 157 insertions(+)
 
 diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 8d73004e4cac..bd16e012b3e9 100644
+index bd16e012b3e9..ff98cd6d5af2 100644
 --- a/arch/x86/include/asm/processor.h
 +++ b/arch/x86/include/asm/processor.h
-@@ -28,6 +28,7 @@ struct vm86;
- #include <asm/unwind_hints.h>
- #include <asm/vmxfeatures.h>
- #include <asm/vdso/processor.h>
-+#include <asm/shstk.h>
- 
- #include <linux/personality.h>
- #include <linux/cache.h>
-@@ -475,6 +476,11 @@ struct thread_struct {
- 	 */
- 	u32			pkru;
- 
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+	unsigned long		features;
-+	unsigned long		features_locked;
-+#endif
+@@ -479,6 +479,8 @@ struct thread_struct {
+ #ifdef CONFIG_X86_USER_SHADOW_STACK
+ 	unsigned long		features;
+ 	unsigned long		features_locked;
 +
++	struct thread_shstk	shstk;
+ #endif
+ 
  	/* Floating point and extended processor state */
- 	struct fpu		fpu;
- 	/*
 diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-new file mode 100644
-index 000000000000..ec753809f074
---- /dev/null
+index ec753809f074..2b1f7c9b9995 100644
+--- a/arch/x86/include/asm/shstk.h
 +++ b/arch/x86/include/asm/shstk.h
-@@ -0,0 +1,21 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_SHSTK_H
-+#define _ASM_X86_SHSTK_H
+@@ -8,12 +8,19 @@
+ struct task_struct;
+ 
+ #ifdef CONFIG_X86_USER_SHADOW_STACK
++struct thread_shstk {
++	u64	base;
++	u64	size;
++};
 +
-+#ifndef __ASSEMBLY__
-+#include <linux/types.h>
-+
-+struct task_struct;
-+
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+long shstk_prctl(struct task_struct *task, int option, unsigned long features);
-+void reset_thread_features(void);
-+#else
-+static inline long shstk_prctl(struct task_struct *task, int option,
-+			       unsigned long arg2) { return -EINVAL; }
-+static inline void reset_thread_features(void) {}
-+#endif /* CONFIG_X86_USER_SHADOW_STACK */
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _ASM_X86_SHSTK_H */
+ long shstk_prctl(struct task_struct *task, int option, unsigned long features);
+ void reset_thread_features(void);
++void shstk_free(struct task_struct *p);
+ #else
+ static inline long shstk_prctl(struct task_struct *task, int option,
+ 			       unsigned long arg2) { return -EINVAL; }
+ static inline void reset_thread_features(void) {}
++static inline void shstk_free(struct task_struct *p) {}
+ #endif /* CONFIG_X86_USER_SHADOW_STACK */
+ 
+ #endif /* __ASSEMBLY__ */
 diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-index 500b96e71f18..b2b3b7200b2d 100644
+index b2b3b7200b2d..7dfd9dc00509 100644
 --- a/arch/x86/include/uapi/asm/prctl.h
 +++ b/arch/x86/include/uapi/asm/prctl.h
-@@ -20,4 +20,10 @@
- #define ARCH_MAP_VDSO_32		0x2002
- #define ARCH_MAP_VDSO_64		0x2003
+@@ -26,4 +26,7 @@
+ #define ARCH_SHSTK_DISABLE		0x5002
+ #define ARCH_SHSTK_LOCK			0x5003
  
-+/* Don't use 0x3001-0x3004 because of old glibcs */
-+
-+#define ARCH_SHSTK_ENABLE		0x5001
-+#define ARCH_SHSTK_DISABLE		0x5002
-+#define ARCH_SHSTK_LOCK			0x5003
++/* ARCH_SHSTK_ features bits */
++#define ARCH_SHSTK_SHSTK		(1ULL <<  0)
 +
  #endif /* _ASM_X86_PRCTL_H */
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 92446f1dedd7..b366641703e3 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -146,6 +146,8 @@ obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
- 
- obj-$(CONFIG_X86_CET)			+= cet.o
- 
-+obj-$(CONFIG_X86_USER_SHADOW_STACK)	+= shstk.o
-+
- ###
- # 64 bit specific files
- ifeq ($(CONFIG_X86_64),y)
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index bb65a68b4b49..9bbad1763e33 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -514,6 +514,8 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
- 		load_gs_index(__USER_DS);
- 	}
- 
-+	reset_thread_features();
-+
- 	loadsegment(fs, 0);
- 	loadsegment(es, _ds);
- 	loadsegment(ds, _ds);
-@@ -830,7 +832,10 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
- 	case ARCH_MAP_VDSO_64:
- 		return prctl_map_vdso(&vdso_image_64, arg2);
- #endif
--
-+	case ARCH_SHSTK_ENABLE:
-+	case ARCH_SHSTK_DISABLE:
-+	case ARCH_SHSTK_LOCK:
-+		return shstk_prctl(task, option, arg2);
- 	default:
- 		ret = -EINVAL;
- 		break;
 diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-new file mode 100644
-index 000000000000..41ed6552e0a5
---- /dev/null
+index 41ed6552e0a5..3cb85224d856 100644
+--- a/arch/x86/kernel/shstk.c
 +++ b/arch/x86/kernel/shstk.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * shstk.c - Intel shadow stack support
-+ *
-+ * Copyright (c) 2021, Intel Corporation.
-+ * Yu-cheng Yu <yu-cheng.yu@intel.com>
-+ */
-+
-+#include <linux/sched.h>
-+#include <linux/bitops.h>
-+#include <asm/prctl.h>
-+
-+void reset_thread_features(void)
+@@ -8,14 +8,159 @@
+ 
+ #include <linux/sched.h>
+ #include <linux/bitops.h>
++#include <linux/types.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/slab.h>
++#include <linux/uaccess.h>
++#include <linux/sched/signal.h>
++#include <linux/compat.h>
++#include <linux/sizes.h>
++#include <linux/user.h>
++#include <asm/msr.h>
++#include <asm/fpu/xstate.h>
++#include <asm/fpu/types.h>
++#include <asm/shstk.h>
++#include <asm/special_insns.h>
++#include <asm/fpu/api.h>
+ #include <asm/prctl.h>
+ 
++static bool features_enabled(unsigned long features)
 +{
-+	current->thread.features = 0;
-+	current->thread.features_locked = 0;
++	return current->thread.features & features;
 +}
 +
-+long shstk_prctl(struct task_struct *task, int option, unsigned long features)
++static void features_set(unsigned long features)
 +{
-+	if (option == ARCH_SHSTK_LOCK) {
-+		task->thread.features_locked |= features;
++	current->thread.features |= features;
++}
++
++static void features_clr(unsigned long features)
++{
++	current->thread.features &= ~features;
++}
++
++static unsigned long alloc_shstk(unsigned long size)
++{
++	int flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_ABOVE4G;
++	struct mm_struct *mm = current->mm;
++	unsigned long addr, unused;
++
++	mmap_write_lock(mm);
++	addr = do_mmap(NULL, addr, size, PROT_READ, flags,
++		       VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
++
++	mmap_write_unlock(mm);
++
++	return addr;
++}
++
++static unsigned long adjust_shstk_size(unsigned long size)
++{
++	if (size)
++		return PAGE_ALIGN(size);
++
++	return PAGE_ALIGN(min_t(unsigned long long, rlimit(RLIMIT_STACK), SZ_4G));
++}
++
++static void unmap_shadow_stack(u64 base, u64 size)
++{
++	while (1) {
++		int r;
++
++		r = vm_munmap(base, size);
++
++		/*
++		 * vm_munmap() returns -EINTR when mmap_lock is held by
++		 * something else, and that lock should not be held for a
++		 * long time.  Retry it for the case.
++		 */
++		if (r == -EINTR) {
++			cond_resched();
++			continue;
++		}
++
++		/*
++		 * For all other types of vm_munmap() failure, either the
++		 * system is out of memory or there is bug.
++		 */
++		WARN_ON_ONCE(r);
++		break;
++	}
++}
++
++static int shstk_setup(void)
++{
++	struct thread_shstk *shstk = &current->thread.shstk;
++	unsigned long addr, size;
++
++	/* Already enabled */
++	if (features_enabled(ARCH_SHSTK_SHSTK))
 +		return 0;
-+	}
 +
-+	/* Don't allow via ptrace */
-+	if (task != current)
-+		return -EINVAL;
++	/* Also not supported for 32 bit and x32 */
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) || in_32bit_syscall())
++		return -EOPNOTSUPP;
 +
-+	/* Do not allow to change locked features */
-+	if (features & task->thread.features_locked)
-+		return -EPERM;
++	size = adjust_shstk_size(0);
++	addr = alloc_shstk(size);
++	if (IS_ERR_VALUE(addr))
++		return PTR_ERR((void *)addr);
 +
-+	/* Only support enabling/disabling one feature at a time. */
-+	if (hweight_long(features) > 1)
-+		return -EINVAL;
++	fpregs_lock_and_load();
++	wrmsrl(MSR_IA32_PL3_SSP, addr + size);
++	wrmsrl(MSR_IA32_U_CET, CET_SHSTK_EN);
++	fpregs_unlock();
 +
-+	if (option == ARCH_SHSTK_DISABLE) {
-+		return -EINVAL;
-+	}
++	shstk->base = addr;
++	shstk->size = size;
++	features_set(ARCH_SHSTK_SHSTK);
 +
-+	/* Handle ARCH_SHSTK_ENABLE */
-+	return -EINVAL;
++	return 0;
 +}
++
+ void reset_thread_features(void)
+ {
++	memset(&current->thread.shstk, 0, sizeof(struct thread_shstk));
+ 	current->thread.features = 0;
+ 	current->thread.features_locked = 0;
+ }
+ 
++void shstk_free(struct task_struct *tsk)
++{
++	struct thread_shstk *shstk = &tsk->thread.shstk;
++
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
++	    !features_enabled(ARCH_SHSTK_SHSTK))
++		return;
++
++	if (!tsk->mm)
++		return;
++
++	unmap_shadow_stack(shstk->base, shstk->size);
++}
++
++static int shstk_disable(void)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++		return -EOPNOTSUPP;
++
++	/* Already disabled? */
++	if (!features_enabled(ARCH_SHSTK_SHSTK))
++		return 0;
++
++	fpregs_lock_and_load();
++	/* Disable WRSS too when disabling shadow stack */
++	wrmsrl(MSR_IA32_U_CET, 0);
++	wrmsrl(MSR_IA32_PL3_SSP, 0);
++	fpregs_unlock();
++
++	shstk_free(current);
++	features_clr(ARCH_SHSTK_SHSTK);
++
++	return 0;
++}
++
+ long shstk_prctl(struct task_struct *task, int option, unsigned long features)
+ {
+ 	if (option == ARCH_SHSTK_LOCK) {
 -- 
 2.17.1
 
