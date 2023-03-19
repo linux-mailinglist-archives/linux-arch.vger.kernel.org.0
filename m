@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AC16BFE33
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACAA6BFE35
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCSAS2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Mar 2023 20:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S230001AbjCSAS5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Mar 2023 20:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjCSARy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:17:54 -0400
+        with ESMTP id S230094AbjCSASM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:18:12 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFB528D2B;
-        Sat, 18 Mar 2023 17:16:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F792A176;
+        Sat, 18 Mar 2023 17:17:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679185013; x=1710721013;
+  t=1679185028; x=1710721028;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=bCew3mJcfQObTYD8BfRHQ7rk2S0psN/tr65S9eiRcMg=;
-  b=Rph1UHcdY1SmqGbeMuGQQcaQuEZwG9pSmrL6KHICpg5jFrjF7/imRahT
-   Ri0pwEXfu8LGp/cY7VOKMCBoikLJ5toT4zn0aZKJyGxNWpLIsN+SW7DTi
-   s2oW+oVi2Y8QuQuMS7D1HeNWIW43fCrEoHEIKP9SU1LRissalx7fhAn8l
-   DgVNGopLcVzPTbzx4HJJ3s9e7x6JcRHMnDSLBUExjfWA6bWsdHzio+VrG
-   Wy7uLw8zJF6VDQMJw3xUJLywZqKo4kw/VVwmobN+o08oJzug7FFSB/Vj/
-   wOZLsu9j9Wd0tqtTfHjalQWGgdALqF6cx1kaMKLGWVb1MtJf1IxvRThUw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491050"
+  bh=V5J+b+gsGH0IqMjFO6EWI1A0U+2t/hj/jJS5+EQE7p4=;
+  b=VHawS3Az1Dt65+LznpuKFD0WkBv8wrbayKcVbRrPFFCSQByqahY3Wd6B
+   V/WX7wy9tlvDxtcUZsuRfP4ZPXDnmFDoEZ8OQV54JOekvzlEASctoUkcb
+   F7D6ZPc6EFC+LEHyCs+CAgBxcer7L8W18smIBBhCWEe9cAvD81UGno+RL
+   EQm9XiJt/Syac0YjEHbx92oDZICEWwTIM4/EXouvHdBRyvHzldmtR14LQ
+   yInvGZovzhyn/kPSd5C8BhFW9xfgR70sqUtxSZA8FEis9y8fNpwTk+ynx
+   OpCmqTMCncw/9CLpAnCZZT5cQUgrk93NhAALTXZmVb4NZdyWcMDUYXMMn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491072"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="338491050"
+   d="scan'208";a="338491072"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:20 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:21 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672841"
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672845"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="749672841"
+   d="scan'208";a="749672845"
 Received: from bmahatwo-mobl1.gar.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.135.34.5])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:18 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:20 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -68,9 +68,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v8 15/40] x86/mm: Update ptep/pmdp_set_wrprotect() for _PAGE_SAVED_DIRTY
-Date:   Sat, 18 Mar 2023 17:15:10 -0700
-Message-Id: <20230319001535.23210-16-rick.p.edgecombe@intel.com>
+Subject: [PATCH v8 16/40] x86/mm: Start actually marking _PAGE_SAVED_DIRTY
+Date:   Sat, 18 Mar 2023 17:15:11 -0700
+Message-Id: <20230319001535.23210-17-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
 References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
@@ -83,37 +83,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When shadow stack is in use, Write=0,Dirty=1 PTE are preserved for
-shadow stack. Copy-on-write PTEs then have Write=0,SavedDirty=1.
+The recently introduced _PAGE_SAVED_DIRTY should be used instead of the
+HW Dirty bit whenever a PTE is Write=0, in order to not inadvertently
+create shadow stack PTEs. Update pte_mk*() helpers to do this, and apply
+the same changes to pmd and pud.
 
-When a PTE goes from Write=1,Dirty=1 to Write=0,SavedDirty=1, it could
-become a transient shadow stack PTE in two cases:
+For pte_modify() this is a bit trickier. It takes a "raw" pgprot_t which
+was not necessarily created with any of the existing PTE bit helpers.
+That means that it can return a pte_t with Write=0,Dirty=1, a shadow
+stack PTE, when it did not intend to create one.
 
-1. Some processors can start a write but end up seeing a Write=0 PTE by
-   the time they get to the Dirty bit, creating a transient shadow stack
-   PTE. However, this will not occur on processors supporting shadow
-   stack, and a TLB flush is not necessary.
+Modify it to also move _PAGE_DIRTY to _PAGE_SAVED_DIRTY. To avoid
+creating Write=0,Dirty=1 PTEs, pte_modify() needs to avoid:
+1. Marking Write=0 PTEs Dirty=1
+2. Marking Dirty=1 PTEs Write=0
 
-2. When _PAGE_DIRTY is replaced with _PAGE_SAVED_DIRTY non-atomically, a
-   transient shadow stack PTE can be created as a result. Thus, prevent
-   that with cmpxchg.
-
-In the case of pmdp_set_wrprotect(), for nopmd configs the ->pmd operated
-on does not exist and the logic would need to be different. Although the
-extra functionality will normally be optimized out when user shadow
-stacks are not configured, also exclude it in the preprocessor stage so
-that it will still compile. User shadow stack is not supported there by
-Linux anyway. Leave the cpu_feature_enabled() check so that the
-functionality also gets disabled based on runtime detection of the
-feature.
-
-Similarly, compile it out in ptep_set_wrprotect() due to a clang warning
-on i386. Like above, the code path should get optimized out on i386
-since shadow stack is not supported on 32 bit kernels, but this makes
-the compiler happy.
-
-Dave Hansen, Jann Horn, Andy Lutomirski, and Peter Zijlstra provided many
-insights to the issue. Jann Horn provided the cmpxchg solution.
+The first case cannot happen as the existing behavior of pte_modify() is to
+filter out any Dirty bit passed in newprot. Handle the second case by
+shifting _PAGE_DIRTY=1 to _PAGE_SAVED_DIRTY=1 if the PTE was write
+protected by the pte_modify() call. Apply the same changes to
+pmd_modify().
 
 Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -125,79 +114,322 @@ Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
 v6:
- - Fix comment and log to update for _PAGE_COW being replaced with
-   _PAGE_SAVED_DIRTY.
+ - Rename _PAGE_COW to _PAGE_SAVED_DIRTY (David Hildenbrand)
+ - Open code _PAGE_SAVED_DIRTY part in pte_modify() (Boris)
+ - Change the logic so the open coded part is not too ugly
+ - Merge pte_modify() patch with this one because of the above
 
-v5:
- - Commit log verbiage and formatting (Boris)
- - Remove capitalization on shadow stack (Boris)
- - Fix i386 warning on recent clang
-
-v3:
- - Remove unnecessary #ifdef (Dave Hansen)
-
-v2:
- - Compile out some code due to clang build error
- - Clarify commit log (dhansen)
- - Normalize PTE bit descriptions between patches (dhansen)
- - Update comment with text from (dhansen)
+v4:
+ - Break part patch for better bisectability
 ---
- arch/x86/include/asm/pgtable.h | 35 ++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ arch/x86/include/asm/pgtable.h | 168 ++++++++++++++++++++++++++++-----
+ 1 file changed, 145 insertions(+), 23 deletions(-)
 
 diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 7360783f2140..349fcab0405a 100644
+index 349fcab0405a..05dfdbdf96b4 100644
 --- a/arch/x86/include/asm/pgtable.h
 +++ b/arch/x86/include/asm/pgtable.h
-@@ -1192,6 +1192,23 @@ static inline pte_t ptep_get_and_clear_full(struct mm_struct *mm,
- static inline void ptep_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pte_t *ptep)
+@@ -124,9 +124,17 @@ extern pmdval_t early_pmd_flags;
+  * The following only work if pte_present() is true.
+  * Undefined behaviour if not..
+  */
+-static inline int pte_dirty(pte_t pte)
++static inline bool pte_dirty(pte_t pte)
  {
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+	/*
-+	 * Avoid accidentally creating shadow stack PTEs
-+	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
-+	 * the hardware setting Dirty=1.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK)) {
-+		pte_t old_pte, new_pte;
+-	return pte_flags(pte) & _PAGE_DIRTY;
++	return pte_flags(pte) & _PAGE_DIRTY_BITS;
++}
 +
-+		old_pte = READ_ONCE(*ptep);
-+		do {
-+			new_pte = pte_wrprotect(old_pte);
-+		} while (!try_cmpxchg(&ptep->pte, &old_pte.pte, new_pte.pte));
++static inline bool pte_shstk(pte_t pte)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++		return false;
 +
-+		return;
-+	}
-+#endif
- 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
++	return (pte_flags(pte) & (_PAGE_RW | _PAGE_DIRTY)) == _PAGE_DIRTY;
  }
  
-@@ -1244,6 +1261,24 @@ static inline pud_t pudp_huge_get_and_clear(struct mm_struct *mm,
- static inline void pmdp_set_wrprotect(struct mm_struct *mm,
- 				      unsigned long addr, pmd_t *pmdp)
- {
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+	/*
-+	 * Avoid accidentally creating shadow stack PTEs
-+	 * (Write=0,Dirty=1).  Use cmpxchg() to prevent races with
-+	 * the hardware setting Dirty=1.
-+	 */
-+	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK)) {
-+		pmd_t old_pmd, new_pmd;
-+
-+		old_pmd = READ_ONCE(*pmdp);
-+		do {
-+			new_pmd = pmd_wrprotect(old_pmd);
-+		} while (!try_cmpxchg(&pmdp->pmd, &old_pmd.pmd, new_pmd.pmd));
-+
-+		return;
-+	}
-+#endif
-+
- 	clear_bit(_PAGE_BIT_RW, (unsigned long *)pmdp);
+ static inline int pte_young(pte_t pte)
+@@ -134,9 +142,18 @@ static inline int pte_young(pte_t pte)
+ 	return pte_flags(pte) & _PAGE_ACCESSED;
  }
  
+-static inline int pmd_dirty(pmd_t pmd)
++static inline bool pmd_dirty(pmd_t pmd)
+ {
+-	return pmd_flags(pmd) & _PAGE_DIRTY;
++	return pmd_flags(pmd) & _PAGE_DIRTY_BITS;
++}
++
++static inline bool pmd_shstk(pmd_t pmd)
++{
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK))
++		return false;
++
++	return (pmd_flags(pmd) & (_PAGE_RW | _PAGE_DIRTY | _PAGE_PSE)) ==
++	       (_PAGE_DIRTY | _PAGE_PSE);
+ }
+ 
+ #define pmd_young pmd_young
+@@ -145,9 +162,9 @@ static inline int pmd_young(pmd_t pmd)
+ 	return pmd_flags(pmd) & _PAGE_ACCESSED;
+ }
+ 
+-static inline int pud_dirty(pud_t pud)
++static inline bool pud_dirty(pud_t pud)
+ {
+-	return pud_flags(pud) & _PAGE_DIRTY;
++	return pud_flags(pud) & _PAGE_DIRTY_BITS;
+ }
+ 
+ static inline int pud_young(pud_t pud)
+@@ -157,13 +174,21 @@ static inline int pud_young(pud_t pud)
+ 
+ static inline int pte_write(pte_t pte)
+ {
+-	return pte_flags(pte) & _PAGE_RW;
++	/*
++	 * Shadow stack pages are logically writable, but do not have
++	 * _PAGE_RW.  Check for them separately from _PAGE_RW itself.
++	 */
++	return (pte_flags(pte) & _PAGE_RW) || pte_shstk(pte);
+ }
+ 
+ #define pmd_write pmd_write
+ static inline int pmd_write(pmd_t pmd)
+ {
+-	return pmd_flags(pmd) & _PAGE_RW;
++	/*
++	 * Shadow stack pages are logically writable, but do not have
++	 * _PAGE_RW.  Check for them separately from _PAGE_RW itself.
++	 */
++	return (pmd_flags(pmd) & _PAGE_RW) || pmd_shstk(pmd);
+ }
+ 
+ #define pud_write pud_write
+@@ -342,7 +367,16 @@ static inline pte_t pte_clear_saveddirty(pte_t pte)
+ 
+ static inline pte_t pte_wrprotect(pte_t pte)
+ {
+-	return pte_clear_flags(pte, _PAGE_RW);
++	pte = pte_clear_flags(pte, _PAGE_RW);
++
++	/*
++	 * Blindly clearing _PAGE_RW might accidentally create
++	 * a shadow stack PTE (Write=0,Dirty=1). Move the hardware
++	 * dirty value to the software bit.
++	 */
++	if (pte_dirty(pte))
++		pte = pte_mksaveddirty(pte);
++	return pte;
+ }
+ 
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
+@@ -380,7 +414,7 @@ static inline pte_t pte_clear_uffd_wp(pte_t pte)
+ 
+ static inline pte_t pte_mkclean(pte_t pte)
+ {
+-	return pte_clear_flags(pte, _PAGE_DIRTY);
++	return pte_clear_flags(pte, _PAGE_DIRTY_BITS);
+ }
+ 
+ static inline pte_t pte_mkold(pte_t pte)
+@@ -395,7 +429,19 @@ static inline pte_t pte_mkexec(pte_t pte)
+ 
+ static inline pte_t pte_mkdirty(pte_t pte)
+ {
+-	return pte_set_flags(pte, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
++	pteval_t dirty = _PAGE_DIRTY;
++
++	/* Avoid creating Dirty=1,Write=0 PTEs */
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) && !pte_write(pte))
++		dirty = _PAGE_SAVED_DIRTY;
++
++	return pte_set_flags(pte, dirty | _PAGE_SOFT_DIRTY);
++}
++
++static inline pte_t pte_mkwrite_shstk(pte_t pte)
++{
++	/* pte_clear_saveddirty() also sets Dirty=1 */
++	return pte_clear_saveddirty(pte);
+ }
+ 
+ static inline pte_t pte_mkyoung(pte_t pte)
+@@ -412,7 +458,12 @@ struct vm_area_struct;
+ 
+ static inline pte_t pte_mkwrite(pte_t pte, struct vm_area_struct *vma)
+ {
+-	return pte_mkwrite_kernel(pte);
++	pte = pte_mkwrite_kernel(pte);
++
++	if (pte_dirty(pte))
++		pte = pte_clear_saveddirty(pte);
++
++	return pte;
+ }
+ 
+ static inline pte_t pte_mkhuge(pte_t pte)
+@@ -481,7 +532,15 @@ static inline pmd_t pmd_clear_saveddirty(pmd_t pmd)
+ 
+ static inline pmd_t pmd_wrprotect(pmd_t pmd)
+ {
+-	return pmd_clear_flags(pmd, _PAGE_RW);
++	pmd = pmd_clear_flags(pmd, _PAGE_RW);
++	/*
++	 * Blindly clearing _PAGE_RW might accidentally create
++	 * a shadow stack PMD (RW=0, Dirty=1). Move the hardware
++	 * dirty value to the software bit.
++	 */
++	if (pmd_dirty(pmd))
++		pmd = pmd_mksaveddirty(pmd);
++	return pmd;
+ }
+ 
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
+@@ -508,12 +567,23 @@ static inline pmd_t pmd_mkold(pmd_t pmd)
+ 
+ static inline pmd_t pmd_mkclean(pmd_t pmd)
+ {
+-	return pmd_clear_flags(pmd, _PAGE_DIRTY);
++	return pmd_clear_flags(pmd, _PAGE_DIRTY_BITS);
+ }
+ 
+ static inline pmd_t pmd_mkdirty(pmd_t pmd)
+ {
+-	return pmd_set_flags(pmd, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
++	pmdval_t dirty = _PAGE_DIRTY;
++
++	/* Avoid creating (HW)Dirty=1, Write=0 PMDs */
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) && !pmd_write(pmd))
++		dirty = _PAGE_SAVED_DIRTY;
++
++	return pmd_set_flags(pmd, dirty | _PAGE_SOFT_DIRTY);
++}
++
++static inline pmd_t pmd_mkwrite_shstk(pmd_t pmd)
++{
++	return pmd_clear_saveddirty(pmd);
+ }
+ 
+ static inline pmd_t pmd_mkdevmap(pmd_t pmd)
+@@ -533,7 +603,12 @@ static inline pmd_t pmd_mkyoung(pmd_t pmd)
+ 
+ static inline pmd_t pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+ {
+-	return pmd_set_flags(pmd, _PAGE_RW);
++	pmd = pmd_set_flags(pmd, _PAGE_RW);
++
++	if (pmd_dirty(pmd))
++		pmd = pmd_clear_saveddirty(pmd);
++
++	return pmd;
+ }
+ 
+ static inline pud_t pud_set_flags(pud_t pud, pudval_t set)
+@@ -577,17 +652,32 @@ static inline pud_t pud_mkold(pud_t pud)
+ 
+ static inline pud_t pud_mkclean(pud_t pud)
+ {
+-	return pud_clear_flags(pud, _PAGE_DIRTY);
++	return pud_clear_flags(pud, _PAGE_DIRTY_BITS);
+ }
+ 
+ static inline pud_t pud_wrprotect(pud_t pud)
+ {
+-	return pud_clear_flags(pud, _PAGE_RW);
++	pud = pud_clear_flags(pud, _PAGE_RW);
++
++	/*
++	 * Blindly clearing _PAGE_RW might accidentally create
++	 * a shadow stack PUD (RW=0, Dirty=1). Move the hardware
++	 * dirty value to the software bit.
++	 */
++	if (pud_dirty(pud))
++		pud = pud_mksaveddirty(pud);
++	return pud;
+ }
+ 
+ static inline pud_t pud_mkdirty(pud_t pud)
+ {
+-	return pud_set_flags(pud, _PAGE_DIRTY | _PAGE_SOFT_DIRTY);
++	pudval_t dirty = _PAGE_DIRTY;
++
++	/* Avoid creating (HW)Dirty=1, Write=0 PUDs */
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) && !pud_write(pud))
++		dirty = _PAGE_SAVED_DIRTY;
++
++	return pud_set_flags(pud, dirty | _PAGE_SOFT_DIRTY);
+ }
+ 
+ static inline pud_t pud_mkdevmap(pud_t pud)
+@@ -607,7 +697,11 @@ static inline pud_t pud_mkyoung(pud_t pud)
+ 
+ static inline pud_t pud_mkwrite(pud_t pud)
+ {
+-	return pud_set_flags(pud, _PAGE_RW);
++	pud = pud_set_flags(pud, _PAGE_RW);
++
++	if (pud_dirty(pud))
++		pud = pud_clear_saveddirty(pud);
++	return pud;
+ }
+ 
+ #ifdef CONFIG_HAVE_ARCH_SOFT_DIRTY
+@@ -724,6 +818,8 @@ static inline u64 flip_protnone_guard(u64 oldval, u64 val, u64 mask);
+ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ {
+ 	pteval_t val = pte_val(pte), oldval = val;
++	bool wr_protected;
++	pte_t pte_result;
+ 
+ 	/*
+ 	 * Chop off the NX bit (if present), and add the NX portion of
+@@ -732,17 +828,43 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ 	val &= _PAGE_CHG_MASK;
+ 	val |= check_pgprot(newprot) & ~_PAGE_CHG_MASK;
+ 	val = flip_protnone_guard(oldval, val, PTE_PFN_MASK);
+-	return __pte(val);
++
++	pte_result = __pte(val);
++
++	/*
++	 * Do the saveddirty fixup if the PTE was just write protected and
++	 * it's dirty.
++	 */
++	wr_protected = (oldval & _PAGE_RW) && !(val & _PAGE_RW);
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) && wr_protected &&
++	    (val & _PAGE_DIRTY))
++		pte_result = pte_mksaveddirty(pte_result);
++
++	return pte_result;
+ }
+ 
+ static inline pmd_t pmd_modify(pmd_t pmd, pgprot_t newprot)
+ {
+ 	pmdval_t val = pmd_val(pmd), oldval = val;
++	bool wr_protected;
++	pmd_t pmd_result;
+ 
+-	val &= _HPAGE_CHG_MASK;
++	val &= (_HPAGE_CHG_MASK & ~_PAGE_DIRTY);
+ 	val |= check_pgprot(newprot) & ~_HPAGE_CHG_MASK;
+ 	val = flip_protnone_guard(oldval, val, PHYSICAL_PMD_PAGE_MASK);
+-	return __pmd(val);
++
++	pmd_result = __pmd(val);
++
++	/*
++	 * Do the saveddirty fixup if the PMD was just write protected and
++	 * it's dirty.
++	 */
++	wr_protected = (oldval & _PAGE_RW) && !(val & _PAGE_RW);
++	if (cpu_feature_enabled(X86_FEATURE_USER_SHSTK) && wr_protected &&
++	    (val & _PAGE_DIRTY))
++		pmd_result = pmd_mksaveddirty(pmd_result);
++
++	return pmd_result;
+ }
+ 
+ /*
 -- 
 2.17.1
 
