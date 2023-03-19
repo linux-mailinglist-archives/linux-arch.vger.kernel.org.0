@@ -2,102 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBD96C0234
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 15:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2926C03D2
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 19:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjCSOA7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Mar 2023 10:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
+        id S229826AbjCSSpw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Mar 2023 14:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCSOA6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Mar 2023 10:00:58 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B056E15167;
-        Sun, 19 Mar 2023 07:00:56 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3D09A1EC058B;
-        Sun, 19 Mar 2023 15:00:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679234455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=08wb2BaJoY/XVDaHupNryXzATVqPgXkBLa+gDTXa+E4=;
-        b=b+twr4atfKgJSerQfWNi1DLsSBHEOxMXeIeuxbJE9GBI8bYD3cL1D4hz+KZesAVUrcM392
-        gWmDsW5ROl00zVp4u4PbBmHt/hOOKP9xLmOh3nB0OdfaIaN3BqMRc1neCt6DnhWziuxxZ8
-        nwh5C+lEFx0NjCXrTrfYPJqy7M7U/Ok=
-Date:   Sun, 19 Mar 2023 15:00:51 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com
-Subject: Re: [PATCH v8 00/40] Shadow stacks for userspace
-Message-ID: <20230319140051.GDZBcVkwgbwqAQZd20@fat_crate.local>
-References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
+        with ESMTP id S229612AbjCSSpv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Mar 2023 14:45:51 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8759011150;
+        Sun, 19 Mar 2023 11:45:49 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pdy2J-0000Vs-00; Sun, 19 Mar 2023 19:45:43 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9B5CAC1B09; Sun, 19 Mar 2023 19:45:36 +0100 (CET)
+Date:   Sun, 19 Mar 2023 19:45:36 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 16/36] mips: Implement the new page table range API
+Message-ID: <20230319184536.GA6491@alpha.franken.de>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-17-willy@infradead.org>
+ <20230315105022.GA9850@alpha.franken.de>
+ <ZBIrkW5EB/uHj4sm@casper.infradead.org>
+ <20230317152920.GA11653@alpha.franken.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317152920.GA11653@alpha.franken.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Mar 18, 2023 at 05:14:55PM -0700, Rick Edgecombe wrote:
-> At this point, I think we have a pretty good initial shadow stack implementation
-> here. I'd like to start with the basics and let real world usage inform the
-> enhancements if we can.
+On Fri, Mar 17, 2023 at 04:29:20PM +0100, Thomas Bogendoerfer wrote:
+> On Wed, Mar 15, 2023 at 08:33:21PM +0000, Matthew Wilcox wrote:
+> > On Wed, Mar 15, 2023 at 11:50:22AM +0100, Thomas Bogendoerfer wrote:
+> > > On Wed, Mar 15, 2023 at 05:14:24AM +0000, Matthew Wilcox (Oracle) wrote:
+> > > > Rename _PFN_SHIFT to PFN_PTE_SHIFT.  Convert a few places
+> > > > to call set_pte() instead of set_pte_at().  Add set_ptes(),
+> > > > update_mmu_cache_range(), flush_icache_pages() and flush_dcache_folio().
+> > > 
+> > > /local/tbogendoerfer/korg/linux/mm/memory.c: In function ‘set_pte_range’:
+> > > /local/tbogendoerfer/korg/linux/mm/memory.c:4290:2: error: implicit declaration of function ‘update_mmu_cache_range’ [-Werror=implicit-function-declaration]
+> > >   update_mmu_cache_range(vma, addr, vmf->pte, nr);
+> > > 
+> > > update_mmu_cache_range() is missing in this patch.
+> > 
+> > Oops.  And mips was one of the arches I did a test build for!
+> > 
+> > Looks like we could try to gain some efficiency by passing 'nr' to
+> > __update_tlb(), but as far as I can tell, that's only called for r3k and
+> > r4k, so maybe it's not worth optimising at this point?
+> 
+> hmm, not sure if that would help. R4k style TLB has two PTEs mapped
+> per TLB entry. So by advancing per page __update_tlb() is called more
+> often than needed.
 
-Yes, finally!
+btw. how big is nr going to be ? There are MIPS SoCs out there, which
+just have 16 TLBs...
 
-That was loooong in the making. Thanks for the persistence and
-patience.
-
-For the whole set:
-
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-
-> Unless anyone sees any likely ABI trap we are walking into.
-
-Yeah, dhansen, let's queue this and run it on everything and as much as
-possible before the MW comes so that we can have a chance to catch any
-potential showstopper snafus we've missed.
-
-Thx.
+Thomas.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
