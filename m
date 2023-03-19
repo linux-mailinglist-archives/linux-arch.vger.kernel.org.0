@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8385B6BFE74
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C79F56BFE78
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjCSAWW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Mar 2023 20:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S230347AbjCSAWc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Mar 2023 20:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjCSAVa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:21:30 -0400
+        with ESMTP id S230306AbjCSAVm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:21:42 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD3E2B9D1;
-        Sat, 18 Mar 2023 17:19:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E37129427;
+        Sat, 18 Mar 2023 17:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679185182; x=1710721182;
+  t=1679185189; x=1710721189;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=dBIkMgtPKqQv5kVHDuakiGU5eUx6LQnshjLSaxY9/+4=;
-  b=IsdWT5sxlFApwumXL8OAmtxb2UhFWs8+9Z/Jt8IBJcAOJz0eNRdvHiw2
-   NJcIdxmOKE6x7TCXY4s9vt8pTdHoyAdwFP6/FM/zcxjW5ZZNEyJm58JaH
-   SgIy0oeN9s/O7ETdq/tdcHHKn+bjetTkD1a980J317yu1HYFx1ABsGI+a
-   FSBrzDYpQEAEtNPah2/jNnn1C/2qa7YKdWbbmlVL8MEPT8UyBl1ZLJmq3
-   L5jUA99zdASzzCm8yzokO0jxV2Ev8DsNO3M8gU5zPGu5sp1NBb0V7zoeW
-   SvUqmGRPaxkYGtVdILCIiki0mzQQPHjV08yzwoaD1wJdUl++E+CbwgiUC
+  bh=44qPir7RLXKA27y57yzk3u7KQrjWXmALrqhQJT9eSm4=;
+  b=SE/tLHXDMUBAet5m0M4KZsPTs+/4If9d/zyoraZEh8Uzl4hcYrbBR84t
+   vtyCi/Z/CBm8a5JHNKMDH2KHbbm2Uxb6C2PSwrFAcAKjwupc7RVw2XHKR
+   nJzzGsvquzYkkBQwy8HknsDB0Amb2ULhJBQPnakppvKpujgMTjXanlobZ
+   x2z22n9FfBfC73pRITTmvyVNzp7S6qrqTfl0LWZt2msGd7OYPJjty2o5n
+   jU/TH8bOX7lnDo1DBjooDMJADk9u5gyRWfmWSxKP6/TbCwb/ORk4aQDqO
+   OdOcTRp+/dZeu+HtvcERuh4FoIJjMhC5QvtMMAPkqO23/bf560URpgSxd
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491420"
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491443"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="338491420"
+   d="scan'208";a="338491443"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:46 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672945"
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672951"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="749672945"
+   d="scan'208";a="749672951"
 Received: from bmahatwo-mobl1.gar.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.135.34.5])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:44 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:46 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -68,9 +68,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v8 31/40] x86/shstk: Introduce routines modifying shstk
-Date:   Sat, 18 Mar 2023 17:15:26 -0700
-Message-Id: <20230319001535.23210-32-rick.p.edgecombe@intel.com>
+Subject: [PATCH v8 32/40] x86/shstk: Handle signals for shadow stack
+Date:   Sat, 18 Mar 2023 17:15:27 -0700
+Message-Id: <20230319001535.23210-33-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
 References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
@@ -83,29 +83,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Shadow stacks are normally written to via CALL/RET or specific CET
-instructions like RSTORSSP/SAVEPREVSSP. However, sometimes the kernel will
-need to write to the shadow stack directly using the ring-0 only WRUSS
-instruction.
+When a signal is handled, the context is pushed to the stack before
+handling it. For shadow stacks, since the shadow stack only tracks return
+addresses, there isn't any state that needs to be pushed. However, there
+are still a few things that need to be done. These things are visible to
+userspace and which will be kernel ABI for shadow stacks.
 
-A shadow stack restore token marks a restore point of the shadow stack, and
-the address in a token must point directly above the token, which is within
-the same shadow stack. This is distinctively different from other pointers
-on the shadow stack, since those pointers point to executable code area.
+One is to make sure the restorer address is written to shadow stack, since
+the signal handler (if not changing ucontext) returns to the restorer, and
+the restorer calls sigreturn. So add the restorer on the shadow stack
+before handling the signal, so there is not a conflict when the signal
+handler returns to the restorer.
 
-Introduce token setup and verify routines. Also introduce WRUSS, which is
-a kernel-mode instruction but writes directly to user shadow stack.
+The other thing to do is to place some type of checkable token on the
+thread's shadow stack before handling the signal and check it during
+sigreturn. This is an extra layer of protection to hamper attackers
+calling sigreturn manually as in SROP-like attacks.
 
-In future patches that enable shadow stack to work with signals, the kernel
-will need something to denote the point in the stack where sigreturn may be
-called. This will prevent attackers calling sigreturn at arbitrary places
-in the stack, in order to help prevent SROP attacks.
+For this token the shadow stack data format defined earlier can be used.
+Have the data pushed be the previous SSP. In the future the sigreturn
+might want to return back to a different stack. Storing the SSP (instead
+of a restore offset or something) allows for future functionality that
+may want to restore to a different stack.
 
-To do this, something that can only be written by the kernel needs to be
-placed on the shadow stack. This can be accomplished by setting bit 63 in
-the frame written to the shadow stack. Userspace return addresses can't
-have this bit set as it is in the kernel range. It also can't be a valid
-restore token.
+So, when handling a signal push
+ - the SSP pointing in the shadow stack data format
+ - the restorer address below the restore token.
+
+In sigreturn, verify SSP is stored in the data format and pop the shadow
+stack.
 
 Co-developed-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
@@ -118,141 +124,154 @@ Tested-by: Kees Cook <keescook@chromium.org>
 ---
 v8:
  - Update commit log verbiage (Boris)
- - Use define instead of magic BIT(63) (Boris)
-
-v5:
- - Fix typo in commit log
+ - Remove duplicate alignment check (Boris)
 
 v3:
- - Drop shstk_check_rstor_token()
- - Fail put_shstk_data() if bit 63 is set in the data (Kees)
- - Add comment in create_rstor_token() (Kees)
- - Pull in create_rstor_token() changes from future patch (Kees)
+ - Drop shstk_setup_rstor_token() (Kees)
+ - Drop x32 signal support, since x32 support is dropped
 
 v2:
- - Add data helpers for writing to shadow stack.
----
- arch/x86/include/asm/special_insns.h | 13 +++++
- arch/x86/kernel/shstk.c              | 75 ++++++++++++++++++++++++++++
- 2 files changed, 88 insertions(+)
+ - Switch to new shstk signal format
 
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index de48d1389936..d6cd9344f6c7 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -202,6 +202,19 @@ static inline void clwb(volatile void *__p)
- 		: [pax] "a" (p));
- }
+v1:
+ - Use xsave helpers.
+ - Expand commit log.
+---
+ arch/x86/include/asm/shstk.h |  5 ++
+ arch/x86/kernel/shstk.c      | 95 ++++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/signal.c     |  1 +
+ arch/x86/kernel/signal_64.c  |  6 +++
+ 4 files changed, 107 insertions(+)
+
+diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
+index d4a5c7b10cb5..ecb23a8ca47d 100644
+--- a/arch/x86/include/asm/shstk.h
++++ b/arch/x86/include/asm/shstk.h
+@@ -6,6 +6,7 @@
+ #include <linux/types.h>
  
-+#ifdef CONFIG_X86_USER_SHADOW_STACK
-+static inline int write_user_shstk_64(u64 __user *addr, u64 val)
-+{
-+	asm_volatile_goto("1: wrussq %[val], (%[addr])\n"
-+			  _ASM_EXTABLE(1b, %l[fail])
-+			  :: [addr] "r" (addr), [val] "r" (val)
-+			  :: fail);
-+	return 0;
-+fail:
-+	return -EFAULT;
-+}
-+#endif /* CONFIG_X86_USER_SHADOW_STACK */
-+
- #define nop() asm volatile ("nop")
+ struct task_struct;
++struct ksignal;
  
- static inline void serialize(void)
+ #ifdef CONFIG_X86_USER_SHADOW_STACK
+ struct thread_shstk {
+@@ -18,6 +19,8 @@ void reset_thread_features(void);
+ unsigned long shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
+ 				       unsigned long stack_size);
+ void shstk_free(struct task_struct *p);
++int setup_signal_shadow_stack(struct ksignal *ksig);
++int restore_signal_shadow_stack(void);
+ #else
+ static inline long shstk_prctl(struct task_struct *task, int option,
+ 			       unsigned long arg2) { return -EINVAL; }
+@@ -26,6 +29,8 @@ static inline unsigned long shstk_alloc_thread_stack(struct task_struct *p,
+ 						     unsigned long clone_flags,
+ 						     unsigned long stack_size) { return 0; }
+ static inline void shstk_free(struct task_struct *p) {}
++static inline int setup_signal_shadow_stack(struct ksignal *ksig) { return 0; }
++static inline int restore_signal_shadow_stack(void) { return 0; }
+ #endif /* CONFIG_X86_USER_SHADOW_STACK */
+ 
+ #endif /* __ASSEMBLY__ */
 diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index bd9cdc3a7338..e22928c63ffc 100644
+index e22928c63ffc..f02e8ea4f1b5 100644
 --- a/arch/x86/kernel/shstk.c
 +++ b/arch/x86/kernel/shstk.c
-@@ -25,6 +25,8 @@
- #include <asm/fpu/api.h>
- #include <asm/prctl.h>
- 
-+#define SS_FRAME_SIZE 8
-+
- static bool features_enabled(unsigned long features)
- {
- 	return current->thread.features & features;
-@@ -40,6 +42,35 @@ static void features_clr(unsigned long features)
- 	current->thread.features &= ~features;
+@@ -232,6 +232,101 @@ static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
+ 	return 0;
  }
  
-+/*
-+ * Create a restore token on the shadow stack.  A token is always 8-byte
-+ * and aligned to 8.
-+ */
-+static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
++static int shstk_push_sigframe(unsigned long *ssp)
 +{
-+	unsigned long addr;
++	unsigned long target_ssp = *ssp;
 +
 +	/* Token must be aligned */
-+	if (!IS_ALIGNED(ssp, 8))
++	if (!IS_ALIGNED(target_ssp, 8))
 +		return -EINVAL;
 +
-+	addr = ssp - SS_FRAME_SIZE;
-+
-+	/*
-+	 * SSP is aligned, so reserved bits and mode bit are a zero, just mark
-+	 * the token 64-bit.
-+	 */
-+	ssp |= BIT(0);
-+
-+	if (write_user_shstk_64((u64 __user *)addr, (u64)ssp))
++	*ssp -= SS_FRAME_SIZE;
++	if (put_shstk_data((void *__user)*ssp, target_ssp))
 +		return -EFAULT;
-+
-+	if (token_addr)
-+		*token_addr = addr;
 +
 +	return 0;
 +}
 +
- static unsigned long alloc_shstk(unsigned long size)
- {
- 	int flags = MAP_ANONYMOUS | MAP_PRIVATE | MAP_ABOVE4G;
-@@ -157,6 +188,50 @@ unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long cl
- 	return addr + size;
- }
- 
-+static unsigned long get_user_shstk_addr(void)
++static int shstk_pop_sigframe(unsigned long *ssp)
 +{
-+	unsigned long long ssp;
++	unsigned long token_addr;
++	int err;
++
++	err = get_shstk_data(&token_addr, (unsigned long __user *)*ssp);
++	if (unlikely(err))
++		return err;
++
++	/* Restore SSP aligned? */
++	if (unlikely(!IS_ALIGNED(token_addr, 8)))
++		return -EINVAL;
++
++	/* SSP in userspace? */
++	if (unlikely(token_addr >= TASK_SIZE_MAX))
++		return -EINVAL;
++
++	*ssp = token_addr;
++
++	return 0;
++}
++
++int setup_signal_shadow_stack(struct ksignal *ksig)
++{
++	void __user *restorer = ksig->ka.sa.sa_restorer;
++	unsigned long ssp;
++	int err;
++
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
++	    !features_enabled(ARCH_SHSTK_SHSTK))
++		return 0;
++
++	if (!restorer)
++		return -EINVAL;
++
++	ssp = get_user_shstk_addr();
++	if (unlikely(!ssp))
++		return -EINVAL;
++
++	err = shstk_push_sigframe(&ssp);
++	if (unlikely(err))
++		return err;
++
++	/* Push restorer address */
++	ssp -= SS_FRAME_SIZE;
++	err = write_user_shstk_64((u64 __user *)ssp, (u64)restorer);
++	if (unlikely(err))
++		return -EFAULT;
 +
 +	fpregs_lock_and_load();
-+
-+	rdmsrl(MSR_IA32_PL3_SSP, ssp);
-+
++	wrmsrl(MSR_IA32_PL3_SSP, ssp);
 +	fpregs_unlock();
 +
-+	return ssp;
-+}
-+
-+#define SHSTK_DATA_BIT BIT(63)
-+
-+static int put_shstk_data(u64 __user *addr, u64 data)
-+{
-+	if (WARN_ON_ONCE(data & SHSTK_DATA_BIT))
-+		return -EINVAL;
-+
-+	/*
-+	 * Mark the high bit so that the sigframe can't be processed as a
-+	 * return address.
-+	 */
-+	if (write_user_shstk_64(addr, data | SHSTK_DATA_BIT))
-+		return -EFAULT;
 +	return 0;
 +}
 +
-+static int get_shstk_data(unsigned long *data, unsigned long __user *addr)
++int restore_signal_shadow_stack(void)
 +{
-+	unsigned long ldata;
++	unsigned long ssp;
++	int err;
 +
-+	if (unlikely(get_user(ldata, addr)))
-+		return -EFAULT;
++	if (!cpu_feature_enabled(X86_FEATURE_USER_SHSTK) ||
++	    !features_enabled(ARCH_SHSTK_SHSTK))
++		return 0;
 +
-+	if (!(ldata & SHSTK_DATA_BIT))
++	ssp = get_user_shstk_addr();
++	if (unlikely(!ssp))
 +		return -EINVAL;
 +
-+	*data = ldata & ~SHSTK_DATA_BIT;
++	err = shstk_pop_sigframe(&ssp);
++	if (unlikely(err))
++		return err;
++
++	fpregs_lock_and_load();
++	wrmsrl(MSR_IA32_PL3_SSP, ssp);
++	fpregs_unlock();
 +
 +	return 0;
 +}
@@ -260,6 +279,42 @@ index bd9cdc3a7338..e22928c63ffc 100644
  void shstk_free(struct task_struct *tsk)
  {
  	struct thread_shstk *shstk = &tsk->thread.shstk;
+diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
+index 004cb30b7419..356253e85ce9 100644
+--- a/arch/x86/kernel/signal.c
++++ b/arch/x86/kernel/signal.c
+@@ -40,6 +40,7 @@
+ #include <asm/syscall.h>
+ #include <asm/sigframe.h>
+ #include <asm/signal.h>
++#include <asm/shstk.h>
+ 
+ static inline int is_ia32_compat_frame(struct ksignal *ksig)
+ {
+diff --git a/arch/x86/kernel/signal_64.c b/arch/x86/kernel/signal_64.c
+index 0e808c72bf7e..cacf2ede6217 100644
+--- a/arch/x86/kernel/signal_64.c
++++ b/arch/x86/kernel/signal_64.c
+@@ -175,6 +175,9 @@ int x64_setup_rt_frame(struct ksignal *ksig, struct pt_regs *regs)
+ 	frame = get_sigframe(ksig, regs, sizeof(struct rt_sigframe), &fp);
+ 	uc_flags = frame_uc_flags(regs);
+ 
++	if (setup_signal_shadow_stack(ksig))
++		return -EFAULT;
++
+ 	if (!user_access_begin(frame, sizeof(*frame)))
+ 		return -EFAULT;
+ 
+@@ -260,6 +263,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
+ 	if (!restore_sigcontext(regs, &frame->uc.uc_mcontext, uc_flags))
+ 		goto badframe;
+ 
++	if (restore_signal_shadow_stack())
++		goto badframe;
++
+ 	if (restore_altstack(&frame->uc.uc_stack))
+ 		goto badframe;
+ 
 -- 
 2.17.1
 
