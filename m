@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1DC6BFE3A
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCC86BFE3C
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Mar 2023 01:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjCSATK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Mar 2023 20:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
+        id S230149AbjCSATM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Mar 2023 20:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCSASV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:18:21 -0400
+        with ESMTP id S229981AbjCSASc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Mar 2023 20:18:32 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD832A6EE;
-        Sat, 18 Mar 2023 17:17:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CD82A985;
+        Sat, 18 Mar 2023 17:17:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679185036; x=1710721036;
+  t=1679185041; x=1710721041;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Za8k1YHP/NKzL9PLFScEe9Ide1J8X/tcTz7SUA3IT3Y=;
-  b=CuNWZCLKvehmV2IW7nIXkP8BFvTWA4GN1+YLjm3EbCE0S3JUTwrs4rx0
-   5BUEG64yj+3ltWxBJ/wN/D7gSE1mMyX9k6N3KoPACkWd+ZBPAN0DLTHK5
-   80+sATCYt5fqo/z8t3NNysRUpI3YbVzRyzvEa06nOMX4DOcwaP4Nj28on
-   I5ZLaz9RM93Vy5bDiYRWXwwtoPjrBePAn7hJh9jKUSjJyXivGZ9C3n/H2
-   Oo6ZbFTLI8foIJMdxP1QC6Ff7+f2dgGcxz0PrE9a7FALW1Kf+NUypmcaI
-   mQ9Ez/on+wI8eD8uyr9IVjYQNm9HlJWuDhKnQMh9ffpVO//NW2GbGQoaV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491095"
+  bh=zgMYcW7jhLowf3LtAX7K40lEhH7jOSIjySbX8LofR4w=;
+  b=nejJyKbK8OTQ4nhv1fyYtK6FJRFFBzex9bWu7+CL1dlXDPTOuDZTxo/E
+   J/UeUbegClGQZYB2iDLR/g4RlrLfw4nmual8vI3+2Eu337CtWZEq13FLC
+   9p88uiKab8xjfGS0NJIo/RHTspn39UONismVf2sbd4iEBo3YQ/a7X/Y6z
+   dJv5t5PuP+hzQGta3q+zOsdPPpaxX9G9EuBrAwWM9Cfi2viwHJUTXYPQ4
+   nbMj5Hl7IaLHyGwgNxrx994lCktni20kshku3EaSXA1mFU2Yb01ZFNquj
+   IR4xQyUY4sm2BrKnpgpKWArN2ZtobhKVHuNQYCfFCEHMZvswzvoxTy2cd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="338491117"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="338491095"
+   d="scan'208";a="338491117"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:23 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672849"
+X-IronPort-AV: E=McAfee;i="6600,9927,10653"; a="749672855"
 X-IronPort-AV: E=Sophos;i="5.98,272,1673942400"; 
-   d="scan'208";a="749672849"
+   d="scan'208";a="749672855"
 Received: from bmahatwo-mobl1.gar.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.135.34.5])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:21 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Mar 2023 17:16:23 -0700
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -68,9 +68,9 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         david@redhat.com, debug@rivosinc.com, szabolcs.nagy@arm.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH v8 17/40] mm: Move VM_UFFD_MINOR_BIT from 37 to 38
-Date:   Sat, 18 Mar 2023 17:15:12 -0700
-Message-Id: <20230319001535.23210-18-rick.p.edgecombe@intel.com>
+Subject: [PATCH v8 18/40] mm: Introduce VM_SHADOW_STACK for shadow stack memory
+Date:   Sat, 18 Mar 2023 17:15:13 -0700
+Message-Id: <20230319001535.23210-19-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
 References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
@@ -85,45 +85,104 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-The x86 Control-flow Enforcement Technology (CET) feature includes a new
-type of memory called shadow stack. This shadow stack memory has some
-unusual properties, which requires some core mm changes to function
-properly.
+New hardware extensions implement support for shadow stack memory, such
+as x86 Control-flow Enforcement Technology (CET). Add a new VM flag to
+identify these areas, for example, to be used to properly indicate shadow
+stack PTEs to the hardware.
 
-Future patches will introduce a new VM flag VM_SHADOW_STACK that will be
-VM_HIGH_ARCH_BIT_5. VM_HIGH_ARCH_BIT_1 through VM_HIGH_ARCH_BIT_4 are
-bits 32-36, and bit 37 is the unrelated VM_UFFD_MINOR_BIT. For the sake
-of order, make all VM_HIGH_ARCH_BITs stay together by moving
-VM_UFFD_MINOR_BIT from 37 to 38. This will allow VM_SHADOW_STACK to be
-introduced as 37.
+Shadow stack VMA creation will be tightly controlled and limited to
+anonymous memory to make the implementation simpler and since that is all
+that is required. The solution will rely on pte_mkwrite() to create the
+shadow stack PTEs, so it will not be required for vm_get_page_prot() to
+learn how to create shadow stack memory. For this reason document that
+VM_SHADOW_STACK should not be mixed with VM_SHARED.
 
 Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Reviewed-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Acked-by: Peter Xu <peterx@redhat.com>
 Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 Tested-by: John Allen <john.allen@amd.com>
 Tested-by: Kees Cook <keescook@chromium.org>
 ---
- include/linux/mm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v7:
+ - Use lightly edited commit log verbiage from (David Hildenbrand)
+ - Add explanation for VM_SHARED limitation (David Hildenbrand)
 
+v6:
+ - Add comment about VM_SHADOW_STACK not being allowed with VM_SHARED
+   (David Hildenbrand)
+
+v3:
+ - Drop arch specific change in arch_vma_name(). The memory can show as
+   anonymous (Kirill)
+ - Change CONFIG_ARCH_HAS_SHADOW_STACK to CONFIG_X86_USER_SHADOW_STACK
+   in show_smap_vma_flags() (Boris)
+---
+ Documentation/filesystems/proc.rst | 1 +
+ fs/proc/task_mmu.c                 | 3 +++
+ include/linux/mm.h                 | 8 ++++++++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 9d5fd9424e8b..8b314df7ccdf 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -564,6 +564,7 @@ encoded manner. The codes are the following:
+     mt    arm64 MTE allocation tags are enabled
+     um    userfaultfd missing tracking
+     uw    userfaultfd wr-protect tracking
++    ss    shadow stack page
+     ==    =======================================
+ 
+ Note that there is no guarantee that every flag and associated mnemonic will
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 6a96e1713fd5..324b092c2ac9 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -711,6 +711,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+ 		[ilog2(VM_UFFD_MINOR)]	= "ui",
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++		[ilog2(VM_SHADOW_STACK)] = "ss",
++#endif
+ 	};
+ 	size_t i;
+ 
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index af652444fbba..a1b31caae013 100644
+index a1b31caae013..097544afb1aa 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -377,7 +377,7 @@ extern unsigned int kobjsize(const void *objp);
- #endif
+@@ -326,11 +326,13 @@ extern unsigned int kobjsize(const void *objp);
+ #define VM_HIGH_ARCH_BIT_2	34	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_3	35	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_BIT_4	36	/* bit only usable on 64-bit architectures */
++#define VM_HIGH_ARCH_BIT_5	37	/* bit only usable on 64-bit architectures */
+ #define VM_HIGH_ARCH_0	BIT(VM_HIGH_ARCH_BIT_0)
+ #define VM_HIGH_ARCH_1	BIT(VM_HIGH_ARCH_BIT_1)
+ #define VM_HIGH_ARCH_2	BIT(VM_HIGH_ARCH_BIT_2)
+ #define VM_HIGH_ARCH_3	BIT(VM_HIGH_ARCH_BIT_3)
+ #define VM_HIGH_ARCH_4	BIT(VM_HIGH_ARCH_BIT_4)
++#define VM_HIGH_ARCH_5	BIT(VM_HIGH_ARCH_BIT_5)
+ #endif /* CONFIG_ARCH_USES_HIGH_VMA_FLAGS */
  
- #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
--# define VM_UFFD_MINOR_BIT	37
-+# define VM_UFFD_MINOR_BIT	38
- # define VM_UFFD_MINOR		BIT(VM_UFFD_MINOR_BIT)	/* UFFD minor faults */
- #else /* !CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
- # define VM_UFFD_MINOR		VM_NONE
+ #ifdef CONFIG_ARCH_HAS_PKEYS
+@@ -346,6 +348,12 @@ extern unsigned int kobjsize(const void *objp);
+ #endif
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
+ 
++#ifdef CONFIG_X86_USER_SHADOW_STACK
++# define VM_SHADOW_STACK	VM_HIGH_ARCH_5 /* Should not be set with VM_SHARED */
++#else
++# define VM_SHADOW_STACK	VM_NONE
++#endif
++
+ #if defined(CONFIG_X86)
+ # define VM_PAT		VM_ARCH_1	/* PAT reserves whole VMA at once (x86) */
+ #elif defined(CONFIG_PPC)
 -- 
 2.17.1
 
