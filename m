@@ -2,105 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09036C103B
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 12:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5FC6C10B5
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 12:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjCTLGd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Mar 2023 07:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S229882AbjCTLX0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Mar 2023 07:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjCTLFv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 07:05:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EFB2DE5A
-        for <linux-arch@vger.kernel.org>; Mon, 20 Mar 2023 04:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679310007;
+        with ESMTP id S230234AbjCTLXX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 07:23:23 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4E8C67D;
+        Mon, 20 Mar 2023 04:23:05 -0700 (PDT)
+Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D531F1EC0531;
+        Mon, 20 Mar 2023 12:23:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1679311383;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YvwS21V87OZURkjfZ9iHLFx7wse477fWO8o7cVdC8zE=;
-        b=MdRPEgE5VvQvfQcgZUUy4mNEkVBiMLnAep96N9EojmfFh2UIDUndOaBykFo9ReIQ7I2Kqm
-        ZRaHnzv9W4C8TrQBzmd4xC0+l6j/ja/mqQvn00/NWr6b8c/l/TAhWIyDL1tKayk52rLMiP
-        mXHUj2jk2g31Cu7YB7bGLbScBRY0uQ4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-294-BoAd7mc3PcCLOgMKh31Nzw-1; Mon, 20 Mar 2023 07:00:06 -0400
-X-MC-Unique: BoAd7mc3PcCLOgMKh31Nzw-1
-Received: by mail-wm1-f69.google.com with SMTP id bi5-20020a05600c3d8500b003edda1368d7so1105013wmb.8
-        for <linux-arch@vger.kernel.org>; Mon, 20 Mar 2023 04:00:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679310005;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YvwS21V87OZURkjfZ9iHLFx7wse477fWO8o7cVdC8zE=;
-        b=wquKbj1wJXpXlYKBdvSrexHHACJxTnEpCfFjwlRja1WUQ1fKN+jjFz3iwMEeV8j1aE
-         T+1geyn0LJVj+rmT2m1aZN24V3n7WiGkL1apIAsIx2SGvX1x1e+C/rmg6PacgRMlWHlm
-         hbS5L4phFt81NNVVCxJsRDRy6r98hpK6RKVMG+0XdrWxRsxpaLXIg49Ffyitz516dpL6
-         iapYYZVH56EQM0llTwqbge6DAjWV1lGE6ZwMPEgf+L2a0LU6iNaEzDDUCpP0O35mhmBg
-         8H1hSsspZ/OGpKkGukFFKdTtOlKJ/lI6i4VVr2XRDK1Wcla6bMPMDKSJe9wQWFJ9JoTA
-         w2iw==
-X-Gm-Message-State: AO0yUKWUux7ZEh/J7DTY39IMFlAaYzu7L6SfjAhSts7YY6939POBXVXm
-        xB0I8JMOyQlmFE5Slwnt/6dqv8CjnKKDbtW6jHlk190EdypN9DIyEwplfljGJ5SkcfHGDDrZSIy
-        fbn5qvO9JGIjYAjlIxbxk5Q==
-X-Received: by 2002:adf:fb01:0:b0:2ce:b7a1:c1a3 with SMTP id c1-20020adffb01000000b002ceb7a1c1a3mr13234750wrr.3.1679310005016;
-        Mon, 20 Mar 2023 04:00:05 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+Nm/AP50JtymPg9eFJ2hX8KoBE8+/Y4A7ha4GmGX4nlc3yTngMWY2fH+jF7oTeCP5yHiDIEA==
-X-Received: by 2002:adf:fb01:0:b0:2ce:b7a1:c1a3 with SMTP id c1-20020adffb01000000b002ceb7a1c1a3mr13234726wrr.3.1679310004672;
-        Mon, 20 Mar 2023 04:00:04 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id u8-20020adfdb88000000b002cff06039d7sm8616030wri.39.2023.03.20.04.00.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 04:00:04 -0700 (PDT)
-Message-ID: <94d228b4-3d49-8cb0-a45c-3342c8b1da22@redhat.com>
-Date:   Mon, 20 Mar 2023 12:00:02 +0100
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=JHX6LI9jJmsbEsBfZqSHSOd2XPlLSGzi7teSPbRUpc8=;
+        b=d4AGbS54cHbrOmAlC2TeA8RAdxFydCPUxwHuWE7LG94VZK/I81tDgXPPZMWVpf4DNq8Y7P
+        2Q52sQOzeJnEVE+hMv3/j20c4Y2TKQi8M0j1bP07zCuNMpJ6+F7LmQvyK1uwJWvQtLv0p8
+        g3UvKNX3SFkQ0BWBa8xO/48ku3u2ygY=
+Date:   Mon, 20 Mar 2023 12:22:58 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use
+ standard coco mechanisms
+Message-ID: <20230320112258.GCZBhCEpNAIk0rUDnx@fat_crate.local>
+References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
+ <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v8 26/40] mm: Warn on shadow stack memory in wrong vma
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        debug@rivosinc.com, szabolcs.nagy@arm.com
-References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
- <20230319001535.23210-27-rick.p.edgecombe@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230319001535.23210-27-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,38 +65,95 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 19.03.23 01:15, Rick Edgecombe wrote:
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
-> 
-> One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
-> treated as shadow by the CPU, but this combination used to be created by
-> the kernel on x86. Previous patches have changed the kernel to now avoid
-> creating these PTEs unless they are for shadow stack memory. In case any
-> missed corners of the kernel are still creating PTEs like this for
-> non-shadow stack memory, and to catch any re-introductions of the logic,
-> warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
-> stack VMAs when they are being zapped. This won't catch transient cases
-> but should have decent coverage. It will be compiled out when shadow
-> stack is not configured.
-> 
-> In order to check if a PTE is shadow stack in core mm code, add two arch
-> breakouts arch_check_zapped_pte/pmd(). This will allow shadow stack
-> specific code to be kept in arch/x86.
-> 
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Tested-by: Kees Cook <keescook@chromium.org>
+On Wed, Mar 08, 2023 at 06:40:07PM -0800, Michael Kelley wrote:
+> diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+> index 49b44f8..d1c3306 100644
+> --- a/arch/x86/coco/core.c
+> +++ b/arch/x86/coco/core.c
+> @@ -88,8 +106,6 @@ bool cc_platform_has(enum cc_attr attr)
+>  		return amd_cc_platform_has(attr);
+>  	case CC_VENDOR_INTEL:
+>  		return intel_cc_platform_has(attr);
+> -	case CC_VENDOR_HYPERV:
+> -		return hyperv_cc_platform_has(attr);
+>  	default:
+>  		return false;
+>  	}
+> @@ -103,11 +119,14 @@ u64 cc_mkenc(u64 val)
+>  	 * encryption status of the page.
+>  	 *
+>  	 * - for AMD, bit *set* means the page is encrypted
+> -	 * - for Intel *clear* means encrypted.
+> +	 * - for AMD with vTOM and for Intel, *clear* means encrypted
+>  	 */
+>  	switch (vendor) {
+>  	case CC_VENDOR_AMD:
+> -		return val | cc_mask;
+> +		if (sev_status & MSR_AMD64_SNP_VTOM)
+> +			return val & ~cc_mask;
 
-Acked-by: David Hildenbrand <david@redhat.com>
+This is silly. It should simply be:
+
+		if (sev_status & MSR_AMD64_SNP_VTOM)
+			return val;
+
+
+> +		else
+> +			return val | cc_mask;
+>  	case CC_VENDOR_INTEL:
+>  		return val & ~cc_mask;
+>  	default:
+> @@ -120,7 +139,10 @@ u64 cc_mkdec(u64 val)
+>  	/* See comment in cc_mkenc() */
+>  	switch (vendor) {
+>  	case CC_VENDOR_AMD:
+> -		return val & ~cc_mask;
+> +		if (sev_status & MSR_AMD64_SNP_VTOM)
+> +			return val | cc_mask;
+
+So if you set the C-bit, that doesn't make it decrypted on AMD. cc_mask
+on VTOM is 0 so why even bother?
+
+Same as the above.
+
+> +		else
+> +			return val & ~cc_mask;
+>  	case CC_VENDOR_INTEL:
+>  		return val | cc_mask;
+>  	default:
+
+...
+
+> +void __init hv_vtom_init(void)
+> +{
+> +	/*
+> +	 * By design, a VM using vTOM doesn't see the SEV setting,
+> +	 * so SEV initialization is bypassed and sev_status isn't set.
+> +	 * Set it here to indicate a vTOM VM.
+> +	 */
+
+This looks like a hack. The SEV status MSR cannot be intercepted so the
+guest should see vTOM. How are you running vTOM without setting it even up?!
+
+> +	sev_status = MSR_AMD64_SNP_VTOM;
+> +	cc_set_vendor(CC_VENDOR_AMD);
+> +	cc_set_mask(ms_hyperv.shared_gpa_boundary);
+> +	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
+> +
+> +	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
+> +	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
+> +	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
+> +	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
+> +}
+> +
+> +#endif /* CONFIG_AMD_MEM_ENCRYPT */
+> +
+>  /*
+>   * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
+>   */
 
 -- 
-Thanks,
+Regards/Gruss,
+    Boris.
 
-David / dhildenb
-
+https://people.kernel.org/tglx/notes-about-netiquette
