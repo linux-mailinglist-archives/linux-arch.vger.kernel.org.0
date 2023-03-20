@@ -2,152 +2,247 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B116C145F
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 15:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFDD6C15E4
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 15:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjCTOIw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Mar 2023 10:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S231939AbjCTO6u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Mar 2023 10:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjCTOIs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 10:08:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3603A49FB;
-        Mon, 20 Mar 2023 07:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MJxCjOddyT7A7I/gLOdqBjGGzMXJDL0bQXHZfHiA2i4=; b=tpRr5kRvwQtlBuB+YU/YMpXZFe
-        KxoTKMD3RPkaZixl8ji082MY6W6IC05IZ5EVl+lm4vGGDvWSL0bMXHKu8zsqz0Wf3qmNN5p8nt+3R
-        2PXoaoQjnkfGBIrOCSH8IK0DlDCSOmgrvTMKbfGmtNSkU8QyKRWpU1hRap8MXPW3V/Rb13adp/kI9
-        nnBl+L484LzrirsbKQ2hjfIMqec40/FLok8E9n6gVmiAT1dkoFC2UyAs48Ng2YXO3CaNZPA0uJ/zr
-        Mdlom7lZgT+JQeJUG7UEdSoxs0jMdSjuWVbAKg3DLuAwFsO7E8tUB73N94rCPMgH7WYqWkLR6d2xW
-        K1/AU9Tw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1peGBl-0015zY-V2; Mon, 20 Mar 2023 14:08:41 +0000
-Date:   Mon, 20 Mar 2023 14:08:41 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-arch@vger.kernel.org,
-        will@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
-Message-ID: <ZBho6Q6Xq/YqRmBT@casper.infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-36-willy@infradead.org>
- <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
- <b39f4816-2064-e402-4e02-908f40c396d4@intel.com>
- <2fa5a911-8432-2fce-c6e1-de4e592219d8@arm.com>
- <ZBNXcmOrrOS4Rydg@casper.infradead.org>
- <b2c00aab-82ad-ea7a-df9d-c816b216b0f1@intel.com>
- <ZBPiOgYDLYBmVwOc@casper.infradead.org>
- <483fd440-df7b-fab3-b138-f3789f2dc078@intel.com>
+        with ESMTP id S231893AbjCTO6K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 10:58:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3561125A7;
+        Mon, 20 Mar 2023 07:56:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8FD62AD7;
+        Mon, 20 Mar 2023 07:57:13 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AAA413F71E;
+        Mon, 20 Mar 2023 07:56:26 -0700 (PDT)
+Date:   Mon, 20 Mar 2023 14:56:20 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Guo Ren <guoren@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>, linux@armlinux.org.uk,
+        linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v3 07/51] cpuidle,psci: Push RCU-idle into driver
+Message-ID: <ZBh0FPlF1oeqHftc@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230112194314.845371875@infradead.org>
+ <20230112195539.760296658@infradead.org>
+ <ff338b9f-4ab0-741b-26ea-7b7351da156@linux-m68k.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <483fd440-df7b-fab3-b138-f3789f2dc078@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ff338b9f-4ab0-741b-26ea-7b7351da156@linux-m68k.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 09:38:55PM +0800, Yin, Fengwei wrote:
-> Thanks a lot to Ryan for helping to test the debug patch I made.
+Hi Geert,
+
+On Tue, Mar 07, 2023 at 05:40:08PM +0100, Geert Uytterhoeven wrote:
+> 	Hoi Peter,
 > 
-> Ryan confirmed that the following change could fix the kernel build regression:
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index db86e459dde6..343d6ff36b2c 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -3557,7 +3557,7 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+> (reduced the insane CC list)
+
+Helpfully you dropped me from Cc, so I missed this until just now...
+
+> On Thu, 12 Jan 2023, Peter Zijlstra wrote:
+> > Doing RCU-idle outside the driver, only to then temporarily enable it
+> > again, at least twice, before going idle is daft.
+> > 
+> > Notably once implicitly through the cpu_pm_*() calls and once
+> > explicitly doing ct_irq_*_irqon().
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> > Reviewed-by: Guo Ren <guoren@kernel.org>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+> > Tested-by: Tony Lindgren <tony@atomide.com>
+> > Tested-by: Ulf Hansson <ulf.hansson@linaro.org>
 > 
->                 ret |= filemap_map_folio_range(vmf, folio,
->                                 xas.xa_index - folio->index, addr, nr_pages);
-> -               xas.xa_index += nr_pages;
-> +               xas.xa_index += folio_test_large(folio) ? nr_pages : 0;
+> Thanks for your patch, which is now commit e038f7b8028a1d1b ("cpuidle,
+> psci: Push RCU-idle into driver") in v6.3-rc1.
 > 
->                 folio_unlock(folio);
->                 folio_put(folio);
+> I have bisected a PSCI checker regression on Renesas R-Car Gen3/4 SoCs
+> to commit a01353cf1896ea5b ("cpuidle: Fix ct_idle_*() usage") (the 7
+> commits before that do not compile):
+>
+> psci_checker: PSCI checker started using 2 CPUs
+> psci_checker: Starting hotplug tests
+> psci_checker: Trying to turn off and on again all CPUs
+> psci: CPU0 killed (polled 0 ms)
+> Detected PIPT I-cache on CPU0
+> CPU0: Booted secondary processor 0x0000000000 [0x411fd073]
+> psci_checker: Trying to turn off and on again group 0 (CPUs 0-1)
+> psci: CPU0 killed (polled 0 ms)
+> Detected PIPT I-cache on CPU0
+> CPU0: Booted secondary processor 0x0000000000 [0x411fd073]
+> psci_checker: Hotplug tests passed OK
+> psci_checker: Starting suspend tests (10 cycles per state)
+> psci_checker: CPU 0 entering suspend cycles, states 1 through 1
+> psci_checker: CPU 1 entering suspend cycles, states 1 through 1
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 177 at kernel/context_tracking.c:141 ct_kernel_exit.constprop.0+0xd8/0xf4
+
+So that's:
+
+  WARN_ON_ONCE(IS_ENABLED(CONFIG_RCU_EQS_DEBUG) && !user && !is_idle_task(current));
+
+... and the PSCI checker doens't run in the context of the idle thread, so the
+warning is correct, and we're violating the expectation of the context tracking
+code.
+
+The PSCI checker is very much a special case, and I'm not sure how we can fix
+this without removing the warning in the cases we want it. It'd be nicer if we
+could "queue" the idle into the relevant idle thread. :/
+
+I'm very tempted to say we should just rip the checker code out, rather than
+contorting the rest of the code to make that work.
+
+Thanks,
+Mark.
+
+> Modules linked in:
+> CPU: 1 PID: 177 Comm: psci_suspend_te Not tainted 6.2.0-rc1-salvator-x-00052-ga01353cf1896 #1415
+> Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+> pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : ct_kernel_exit.constprop.0+0xd8/0xf4
+> lr : ct_kernel_exit.constprop.0+0xc8/0xf4
+> sp : ffffffc00b73bd30
+> x29: ffffffc00b73bd30 x28: ffffff807fbadc90 x27: 0000000000000000
+> x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffffff800981e140 x22: 0000000000000001 x21: 0000000000010000
+> x20: ffffffc0086be1d8 x19: ffffff807fbac070 x18: 0000000000000000
+> x17: ffffff80083d1000 x16: ffffffc00841fff8 x15: ffffffc00b73b990
+> x14: ffffffc00895be78 x13: 0000000000000001 x12: 0000000000000000
+> x11: 00000000000001aa x10: 00000000ffffffea x9 : 000000000000000f
+> x8 : ffffffc00b73bb68 x7 : ffffffc00b73be18 x6 : ffffffc00815ff34
+> x5 : ffffffc00a6a0c30 x4 : ffffffc00801ce00 x3 : 0000000000000000
+> x2 : ffffffc008dc3070 x1 : ffffffc008dc3078 x0 : 0000000004208040
+> Call trace:
+>  ct_kernel_exit.constprop.0+0xd8/0xf4
+>  ct_idle_enter+0x18/0x20
+>  psci_enter_idle_state+0xa4/0xfc
+>  suspend_test_thread+0x238/0x2f0
+>  kthread+0xd8/0xe8
+>  ret_from_fork+0x10/0x20
+> irq event stamp: 0
+> hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+> hardirqs last disabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
+> softirqs last  enabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
+> softirqs last disabled at (0): [<0000000000000000>] 0x0
+> ---[ end trace 0000000000000000 ]---
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 177 at kernel/context_tracking.c:186 ct_kernel_enter.constprop.0+0x78/0xa4
+> Modules linked in:
+> CPU: 1 PID: 177 Comm: psci_suspend_te Tainted: G        W          6.2.0-rc1-salvator-x-00052-ga01353cf1896 #1415
+> Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+> pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> pc : ct_kernel_enter.constprop.0+0x78/0xa4
+> lr : ct_kernel_enter.constprop.0+0x68/0xa4
+> sp : ffffffc00b73bd30
+> x29: ffffffc00b73bd30 x28: ffffff807fbadc90 x27: 0000000000000000
+> x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+> x23: ffffff800981e140 x22: 0000000000000001 x21: 00000000ffffffa1
+> x20: ffffffc0086be1d8 x19: 00000000000000c0 x18: 0000000000000000
+> x17: ffffff80083d1000 x16: ffffffc00841fff8 x15: ffffffc00b73b990
+> x14: ffffffc00895be78 x13: ffffff800e325180 x12: ffffffc076de9000
+> x11: 0000000034d4d91d x10: 0000000000000008 x9 : 0000000000001000
+> x8 : ffffffc008012800 x7 : 0000000000000000 x6 : ffffff807fbac070
+> x5 : ffffffc008dc3070 x4 : 0000000000000000 x3 : 000000000001a9fc
+> x2 : 0000000000000003 x1 : ffffffc008dc3070 x0 : 0000000004208040
+> Call trace:
+>  ct_kernel_enter.constprop.0+0x78/0xa4
+>  ct_idle_exit+0x18/0x38
+>  psci_enter_idle_state+0xdc/0xfc
+>  suspend_test_thread+0x238/0x2f0
+>  kthread+0xd8/0xe8
+>  ret_from_fork+0x10/0x20
+> irq event stamp: 0
+> hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+> hardirqs last disabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
+> softirqs last  enabled at (0): [<ffffffc0080798b0>] copy_process+0x608/0x13dc
+> softirqs last disabled at (0): [<0000000000000000>] 0x0
+> ---[ end trace 0000000000000000 ]---
+> psci_checker: Failed to suspend CPU 1: error -1 (requested state 1, cycle 0)
+> psci_checker: CPU 0 suspend test results: success 0, shallow states 10, errors 0
+> mmcblk0rpmb: mmc0:0001 BGSD3R 4.00 MiB, chardev (243:0)
+> psci_checker: CPU 1 suspend test results: success 0, shallow states 9, errors 1
+> psci_checker: 1 error(s) encountered in suspend tests
+> psci_checker: PSCI checker completed
 > 
-> I will make upstream-able change as "xas.xa_index += nr_pages - 1;"
-
-Thanks to both of you!
-
-Really, we shouldn't need to interfere with xas.xa_index at all.
-Does this work?
-
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 8e4f95c5b65a..e40c967dde5f 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -3420,10 +3420,10 @@ static bool filemap_map_pmd(struct vm_fault *vmf, struct folio *folio,
- 	return false;
- }
- 
--static struct folio *next_uptodate_page(struct folio *folio,
--				       struct address_space *mapping,
--				       struct xa_state *xas, pgoff_t end_pgoff)
-+static struct folio *next_uptodate_folio(struct xa_state *xas,
-+		struct address_space *mapping, pgoff_t end_pgoff)
- {
-+	struct folio *folio = xas_next_entry(xas, end_pgoff);
- 	unsigned long max_idx;
- 
- 	do {
-@@ -3461,22 +3461,6 @@ static struct folio *next_uptodate_page(struct folio *folio,
- 	return NULL;
- }
- 
--static inline struct folio *first_map_page(struct address_space *mapping,
--					  struct xa_state *xas,
--					  pgoff_t end_pgoff)
--{
--	return next_uptodate_page(xas_find(xas, end_pgoff),
--				  mapping, xas, end_pgoff);
--}
--
--static inline struct folio *next_map_page(struct address_space *mapping,
--					 struct xa_state *xas,
--					 pgoff_t end_pgoff)
--{
--	return next_uptodate_page(xas_next_entry(xas, end_pgoff),
--				  mapping, xas, end_pgoff);
--}
--
- /*
-  * Map page range [start_page, start_page + nr_pages) of folio.
-  * start_page is gotten from start by folio_page(folio, start)
-@@ -3552,7 +3536,7 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
- 	int nr_pages = 0;
- 
- 	rcu_read_lock();
--	folio = first_map_page(mapping, &xas, end_pgoff);
-+	folio = next_uptodate_folio(&xas, mapping, end_pgoff);
- 	if (!folio)
- 		goto out;
- 
-@@ -3574,11 +3558,11 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
- 
- 		ret |= filemap_map_folio_range(vmf, folio,
- 				xas.xa_index - folio->index, addr, nr_pages);
--		xas.xa_index += nr_pages;
- 
- 		folio_unlock(folio);
- 		folio_put(folio);
--	} while ((folio = next_map_page(mapping, &xas, end_pgoff)) != NULL);
-+		folio = next_uptodate_folio(&xas, mapping, end_pgoff);
-+	} while (folio);
- 	pte_unmap_unlock(vmf->pte, vmf->ptl);
- out:
- 	rcu_read_unlock();
-
-> Ryan and I also identify some other changes needed. I am not sure how to
-> integrate those changes to this series. Maybe an add-on patch after this
-> series? Thanks.
-
-Up to you; I'm happy to integrate fixup patches into the current series
-or add on new ones.
+> > ---
+> > drivers/cpuidle/cpuidle-psci.c |    9 +++++----
+> > 1 file changed, 5 insertions(+), 4 deletions(-)
+> > 
+> > --- a/drivers/cpuidle/cpuidle-psci.c
+> > +++ b/drivers/cpuidle/cpuidle-psci.c
+> > @@ -69,12 +69,12 @@ static int __psci_enter_domain_idle_stat
+> > 		return -1;
+> > 
+> > 	/* Do runtime PM to manage a hierarchical CPU toplogy. */
+> > -	ct_irq_enter_irqson();
+> > 	if (s2idle)
+> > 		dev_pm_genpd_suspend(pd_dev);
+> > 	else
+> > 		pm_runtime_put_sync_suspend(pd_dev);
+> > -	ct_irq_exit_irqson();
+> > +
+> > +	ct_idle_enter();
+> > 
+> > 	state = psci_get_domain_state();
+> > 	if (!state)
+> > @@ -82,12 +82,12 @@ static int __psci_enter_domain_idle_stat
+> > 
+> > 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
+> > 
+> > -	ct_irq_enter_irqson();
+> > +	ct_idle_exit();
+> > +
+> > 	if (s2idle)
+> > 		dev_pm_genpd_resume(pd_dev);
+> > 	else
+> > 		pm_runtime_get_sync(pd_dev);
+> > -	ct_irq_exit_irqson();
+> > 
+> > 	cpu_pm_exit();
+> > 
+> > @@ -240,6 +240,7 @@ static int psci_dt_cpu_init_topology(str
+> > 	 * of a shared state for the domain, assumes the domain states are all
+> > 	 * deeper states.
+> > 	 */
+> > +	drv->states[state_count - 1].flags |= CPUIDLE_FLAG_RCU_IDLE;
+> > 	drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
+> > 	drv->states[state_count - 1].enter_s2idle = psci_enter_s2idle_domain_idle_state;
+> > 	psci_cpuidle_use_cpuhp = true;
+> 
+> Gr{oetje,eeting}s,
+> 
+> 						Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+> 							    -- Linus Torvalds
+> 
