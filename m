@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5FC6C10B5
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 12:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CE26C10CA
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 12:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbjCTLX0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Mar 2023 07:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S231286AbjCTL2A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Mar 2023 07:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjCTLXX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 07:23:23 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4E8C67D;
-        Mon, 20 Mar 2023 04:23:05 -0700 (PDT)
+        with ESMTP id S231250AbjCTL1g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 07:27:36 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B063D52C;
+        Mon, 20 Mar 2023 04:27:19 -0700 (PDT)
 Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D531F1EC0531;
-        Mon, 20 Mar 2023 12:23:03 +0100 (CET)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1134D1EC0662;
+        Mon, 20 Mar 2023 12:27:14 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1679311383;
+        t=1679311634;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=JHX6LI9jJmsbEsBfZqSHSOd2XPlLSGzi7teSPbRUpc8=;
-        b=d4AGbS54cHbrOmAlC2TeA8RAdxFydCPUxwHuWE7LG94VZK/I81tDgXPPZMWVpf4DNq8Y7P
-        2Q52sQOzeJnEVE+hMv3/j20c4Y2TKQi8M0j1bP07zCuNMpJ6+F7LmQvyK1uwJWvQtLv0p8
-        g3UvKNX3SFkQ0BWBa8xO/48ku3u2ygY=
-Date:   Mon, 20 Mar 2023 12:22:58 +0100
+        bh=PE0V7lE9EfhB921N//zo5ZjSYSOvTBfEu1v7T+9F1sY=;
+        b=dCu69jjGMO1potJ7a2X20nTWZx06nNYsCEepX6UJ7SL80wE9zvtHc3bymc6rx6Q2Vjhq4N
+        bE3iqcCbsNY1tBR/XZefUmkzRnn3IQ7NwEVoQHjxjCi0vQW3RsK6EroJZUqdMq+F5X9WWd
+        xW9Kn/hEDhTI+D/D6kYApwf4ub1HsGM=
+Date:   Mon, 20 Mar 2023 12:27:13 +0100
 From:   Borislav Petkov <bp@alien8.de>
 To:     Michael Kelley <mikelley@microsoft.com>
 Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
@@ -47,15 +47,14 @@ Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
         linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
         iommu@lists.linux.dev
-Subject: Re: [PATCH v6 06/13] x86/hyperv: Change vTOM handling to use
- standard coco mechanisms
-Message-ID: <20230320112258.GCZBhCEpNAIk0rUDnx@fat_crate.local>
+Subject: Re: [PATCH v6 00/13] Add PCI pass-thru support to Hyper-V
+ Confidential VMs
+Message-ID: <20230320112713.GDZBhDESaTus4AR3SJ@fat_crate.local>
 References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
- <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1678329614-3482-7-git-send-email-mikelley@microsoft.com>
+In-Reply-To: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -65,92 +64,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 06:40:07PM -0800, Michael Kelley wrote:
-> diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-> index 49b44f8..d1c3306 100644
-> --- a/arch/x86/coco/core.c
-> +++ b/arch/x86/coco/core.c
-> @@ -88,8 +106,6 @@ bool cc_platform_has(enum cc_attr attr)
->  		return amd_cc_platform_has(attr);
->  	case CC_VENDOR_INTEL:
->  		return intel_cc_platform_has(attr);
-> -	case CC_VENDOR_HYPERV:
-> -		return hyperv_cc_platform_has(attr);
->  	default:
->  		return false;
->  	}
-> @@ -103,11 +119,14 @@ u64 cc_mkenc(u64 val)
->  	 * encryption status of the page.
->  	 *
->  	 * - for AMD, bit *set* means the page is encrypted
-> -	 * - for Intel *clear* means encrypted.
-> +	 * - for AMD with vTOM and for Intel, *clear* means encrypted
->  	 */
->  	switch (vendor) {
->  	case CC_VENDOR_AMD:
-> -		return val | cc_mask;
-> +		if (sev_status & MSR_AMD64_SNP_VTOM)
-> +			return val & ~cc_mask;
-
-This is silly. It should simply be:
-
-		if (sev_status & MSR_AMD64_SNP_VTOM)
-			return val;
-
-
-> +		else
-> +			return val | cc_mask;
->  	case CC_VENDOR_INTEL:
->  		return val & ~cc_mask;
->  	default:
-> @@ -120,7 +139,10 @@ u64 cc_mkdec(u64 val)
->  	/* See comment in cc_mkenc() */
->  	switch (vendor) {
->  	case CC_VENDOR_AMD:
-> -		return val & ~cc_mask;
-> +		if (sev_status & MSR_AMD64_SNP_VTOM)
-> +			return val | cc_mask;
-
-So if you set the C-bit, that doesn't make it decrypted on AMD. cc_mask
-on VTOM is 0 so why even bother?
-
-Same as the above.
-
-> +		else
-> +			return val & ~cc_mask;
->  	case CC_VENDOR_INTEL:
->  		return val | cc_mask;
->  	default:
+On Wed, Mar 08, 2023 at 06:40:01PM -0800, Michael Kelley wrote:
+>  arch/x86/coco/core.c                |  42 +++++--
+>  arch/x86/hyperv/hv_init.c           |  18 +--
+>  arch/x86/hyperv/ivm.c               | 148 +++++++++++++----------
+>  arch/x86/include/asm/coco.h         |   1 -
+>  arch/x86/include/asm/hyperv-tlfs.h  |   3 +
+>  arch/x86/include/asm/mshyperv.h     |  16 ++-
+>  arch/x86/include/asm/x86_init.h     |   4 +
+>  arch/x86/kernel/apic/io_apic.c      |  16 ++-
+>  arch/x86/kernel/cpu/mshyperv.c      |  22 ++--
+>  arch/x86/kernel/x86_init.c          |   2 +
+>  arch/x86/mm/ioremap.c               |   5 +
+>  arch/x86/mm/mem_encrypt_amd.c       |  10 +-
+>  arch/x86/mm/pat/set_memory.c        |   3 -
 
 ...
 
-> +void __init hv_vtom_init(void)
-> +{
-> +	/*
-> +	 * By design, a VM using vTOM doesn't see the SEV setting,
-> +	 * so SEV initialization is bypassed and sev_status isn't set.
-> +	 * Set it here to indicate a vTOM VM.
-> +	 */
+>  29 files changed, 440 insertions(+), 439 deletions(-)
 
-This looks like a hack. The SEV status MSR cannot be intercepted so the
-guest should see vTOM. How are you running vTOM without setting it even up?!
+The x86 bits look pretty much ready modulo some uncertainties in patch 6.
 
-> +	sev_status = MSR_AMD64_SNP_VTOM;
-> +	cc_set_vendor(CC_VENDOR_AMD);
-> +	cc_set_mask(ms_hyperv.shared_gpa_boundary);
-> +	physical_mask &= ms_hyperv.shared_gpa_boundary - 1;
-> +
-> +	x86_platform.hyper.is_private_mmio = hv_is_private_mmio;
-> +	x86_platform.guest.enc_cache_flush_required = hv_vtom_cache_flush_required;
-> +	x86_platform.guest.enc_tlb_flush_required = hv_vtom_tlb_flush_required;
-> +	x86_platform.guest.enc_status_change_finish = hv_vtom_set_host_visibility;
-> +}
-> +
-> +#endif /* CONFIG_AMD_MEM_ENCRYPT */
-> +
->  /*
->   * hv_map_memory - map memory to extra space in the AMD SEV-SNP Isolation VM.
->   */
+When this has all been clarified I'm thinking of taking patches
+
+1-2,4-6
+
+through tip and giving an immutable branch to HyperV maintainers to base
+the rest ontop...
+
+Thx.
 
 -- 
 Regards/Gruss,
