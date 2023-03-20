@@ -2,67 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFBF6C1015
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 12:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09036C103B
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Mar 2023 12:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjCTLBu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Mar 2023 07:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42064 "EHLO
+        id S230355AbjCTLGd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Mar 2023 07:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjCTLBZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 07:01:25 -0400
+        with ESMTP id S230035AbjCTLFv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 07:05:51 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A422A9A1
-        for <linux-arch@vger.kernel.org>; Mon, 20 Mar 2023 03:56:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EFB2DE5A
+        for <linux-arch@vger.kernel.org>; Mon, 20 Mar 2023 04:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679309763;
+        s=mimecast20190719; t=1679310007;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Uev/6TIR5F3PclO8PFZRAwXYZNKhyqQFBI+8u5UniWw=;
-        b=YqOfT8QgWqlRTD52936zGnWQaEhQ6o4/H/RxLYTvZfR6wmqUHBFW5zxcid+HsJQzEkogJ3
-        fdSto1nYaYeBPejekD5bJ88FK9+voWRYSgryEupVj2mJ6gGsyC8YI93Vh11UV4GIy/+FqQ
-        /gzmwKk5LoqreEbtNFOXiooHLHkg3fs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=YvwS21V87OZURkjfZ9iHLFx7wse477fWO8o7cVdC8zE=;
+        b=MdRPEgE5VvQvfQcgZUUy4mNEkVBiMLnAep96N9EojmfFh2UIDUndOaBykFo9ReIQ7I2Kqm
+        ZRaHnzv9W4C8TrQBzmd4xC0+l6j/ja/mqQvn00/NWr6b8c/l/TAhWIyDL1tKayk52rLMiP
+        mXHUj2jk2g31Cu7YB7bGLbScBRY0uQ4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-608-xKtZpQncOyWheVSRz7jU0g-1; Mon, 20 Mar 2023 06:56:02 -0400
-X-MC-Unique: xKtZpQncOyWheVSRz7jU0g-1
-Received: by mail-wm1-f70.google.com with SMTP id bi5-20020a05600c3d8500b003edda1368d7so1099461wmb.8
-        for <linux-arch@vger.kernel.org>; Mon, 20 Mar 2023 03:56:02 -0700 (PDT)
+ us-mta-294-BoAd7mc3PcCLOgMKh31Nzw-1; Mon, 20 Mar 2023 07:00:06 -0400
+X-MC-Unique: BoAd7mc3PcCLOgMKh31Nzw-1
+Received: by mail-wm1-f69.google.com with SMTP id bi5-20020a05600c3d8500b003edda1368d7so1105013wmb.8
+        for <linux-arch@vger.kernel.org>; Mon, 20 Mar 2023 04:00:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679309761;
+        d=1e100.net; s=20210112; t=1679310005;
         h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Uev/6TIR5F3PclO8PFZRAwXYZNKhyqQFBI+8u5UniWw=;
-        b=S+XsrNG7qDCJQ1BfYWFoDIBfKy6jqCqr/+2fkpihEaDLY9aHyU/NVeHt5egoYCYPg7
-         12f5sbGsBrKbSIr/p9jI0Ko4koK9DdhHAqSE8TAM3NXH872bzC/xwVsRNa1ByQHidb1n
-         W8YH1pvKQxJY63Z8Yj6HUQGpqor0P4ZmHs/aatuHXDJVUR7NrfIpkVtb2eO9T8hDDwzC
-         lGF98I6rl7oPPa22Zb/DAYRyruAHfUtAatuk/zZ/7TB3/jxgRlZcMgXYGWVJgwhjR8GB
-         Rupfx7vhlRm1E7cLTA7VfMxtFQFUWwnHFtQuAZMM5LmpxYc//1jLTLBExi96fLRiMzlE
-         bfaw==
-X-Gm-Message-State: AO0yUKUFBCdWVJF6m7Ctp4Ixzofqqlr9VGx5MkGWTi8EXhf70/GMsmdZ
-        NGl+/8suzu59lFiGRGRU2/6Bx1JAd9EM5yBR4aOGQ9FvZDC9OXQ+uwyk78U5mdfUwlupe1m+kAX
-        3WFIsN8SkyAHkTKY2v7/9Cw==
-X-Received: by 2002:adf:e489:0:b0:2cf:f04b:fb24 with SMTP id i9-20020adfe489000000b002cff04bfb24mr5824050wrm.37.1679309761547;
-        Mon, 20 Mar 2023 03:56:01 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8WX92KehpQIBsLhcgUmkTOLAy5Ruvm0+sHAsLPZBEH3a+gBm5GFUVie1BNgZZNDNfEQFrU3w==
-X-Received: by 2002:adf:e489:0:b0:2cf:f04b:fb24 with SMTP id i9-20020adfe489000000b002cff04bfb24mr5824021wrm.37.1679309761182;
-        Mon, 20 Mar 2023 03:56:01 -0700 (PDT)
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YvwS21V87OZURkjfZ9iHLFx7wse477fWO8o7cVdC8zE=;
+        b=wquKbj1wJXpXlYKBdvSrexHHACJxTnEpCfFjwlRja1WUQ1fKN+jjFz3iwMEeV8j1aE
+         T+1geyn0LJVj+rmT2m1aZN24V3n7WiGkL1apIAsIx2SGvX1x1e+C/rmg6PacgRMlWHlm
+         hbS5L4phFt81NNVVCxJsRDRy6r98hpK6RKVMG+0XdrWxRsxpaLXIg49Ffyitz516dpL6
+         iapYYZVH56EQM0llTwqbge6DAjWV1lGE6ZwMPEgf+L2a0LU6iNaEzDDUCpP0O35mhmBg
+         8H1hSsspZ/OGpKkGukFFKdTtOlKJ/lI6i4VVr2XRDK1Wcla6bMPMDKSJe9wQWFJ9JoTA
+         w2iw==
+X-Gm-Message-State: AO0yUKWUux7ZEh/J7DTY39IMFlAaYzu7L6SfjAhSts7YY6939POBXVXm
+        xB0I8JMOyQlmFE5Slwnt/6dqv8CjnKKDbtW6jHlk190EdypN9DIyEwplfljGJ5SkcfHGDDrZSIy
+        fbn5qvO9JGIjYAjlIxbxk5Q==
+X-Received: by 2002:adf:fb01:0:b0:2ce:b7a1:c1a3 with SMTP id c1-20020adffb01000000b002ceb7a1c1a3mr13234750wrr.3.1679310005016;
+        Mon, 20 Mar 2023 04:00:05 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+Nm/AP50JtymPg9eFJ2hX8KoBE8+/Y4A7ha4GmGX4nlc3yTngMWY2fH+jF7oTeCP5yHiDIEA==
+X-Received: by 2002:adf:fb01:0:b0:2ce:b7a1:c1a3 with SMTP id c1-20020adffb01000000b002ceb7a1c1a3mr13234726wrr.3.1679310004672;
+        Mon, 20 Mar 2023 04:00:04 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c702:4100:a064:1ded:25ec:cf2f? (p200300cbc7024100a0641ded25eccf2f.dip0.t-ipconnect.de. [2003:cb:c702:4100:a064:1ded:25ec:cf2f])
-        by smtp.gmail.com with ESMTPSA id b9-20020a05600010c900b002c7163660a9sm8595635wrx.105.2023.03.20.03.55.59
+        by smtp.gmail.com with ESMTPSA id u8-20020adfdb88000000b002cff06039d7sm8616030wri.39.2023.03.20.04.00.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Mar 2023 03:56:00 -0700 (PDT)
-Message-ID: <a7176b88-98ac-75b7-2de3-a85b342401ef@redhat.com>
-Date:   Mon, 20 Mar 2023 11:55:58 +0100
+        Mon, 20 Mar 2023 04:00:04 -0700 (PDT)
+Message-ID: <94d228b4-3d49-8cb0-a45c-3342c8b1da22@redhat.com>
+Date:   Mon, 20 Mar 2023 12:00:02 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v8 18/40] mm: Introduce VM_SHADOW_STACK for shadow stack
- memory
+Subject: Re: [PATCH v8 26/40] mm: Warn on shadow stack memory in wrong vma
 Content-Language: en-US
 To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         "H . Peter Anvin" <hpa@zytor.com>,
@@ -93,12 +91,11 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         dethoma@microsoft.com, akpm@linux-foundation.org,
         Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
         debug@rivosinc.com, szabolcs.nagy@arm.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 References: <20230319001535.23210-1-rick.p.edgecombe@intel.com>
- <20230319001535.23210-19-rick.p.edgecombe@intel.com>
+ <20230319001535.23210-27-rick.p.edgecombe@intel.com>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-In-Reply-To: <20230319001535.23210-19-rick.p.edgecombe@intel.com>
+In-Reply-To: <20230319001535.23210-27-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -112,30 +109,32 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 19.03.23 01:15, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
 > 
-> New hardware extensions implement support for shadow stack memory, such
-> as x86 Control-flow Enforcement Technology (CET). Add a new VM flag to
-> identify these areas, for example, to be used to properly indicate shadow
-> stack PTEs to the hardware.
+> One sharp edge is that PTEs that are both Write=0 and Dirty=1 are
+> treated as shadow by the CPU, but this combination used to be created by
+> the kernel on x86. Previous patches have changed the kernel to now avoid
+> creating these PTEs unless they are for shadow stack memory. In case any
+> missed corners of the kernel are still creating PTEs like this for
+> non-shadow stack memory, and to catch any re-introductions of the logic,
+> warn if any shadow stack PTEs (Write=0, Dirty=1) are found in non-shadow
+> stack VMAs when they are being zapped. This won't catch transient cases
+> but should have decent coverage. It will be compiled out when shadow
+> stack is not configured.
 > 
-> Shadow stack VMA creation will be tightly controlled and limited to
-> anonymous memory to make the implementation simpler and since that is all
-> that is required. The solution will rely on pte_mkwrite() to create the
-> shadow stack PTEs, so it will not be required for vm_get_page_prot() to
-> learn how to create shadow stack memory. For this reason document that
-> VM_SHADOW_STACK should not be mixed with VM_SHARED.
+> In order to check if a PTE is shadow stack in core mm code, add two arch
+> breakouts arch_check_zapped_pte/pmd(). This will allow shadow stack
+> specific code to be kept in arch/x86.
 > 
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 > Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 > Tested-by: Pengfei Xu <pengfei.xu@intel.com>
 > Tested-by: John Allen <john.allen@amd.com>
 > Tested-by: Kees Cook <keescook@chromium.org>
-> ---
 
 Acked-by: David Hildenbrand <david@redhat.com>
 
