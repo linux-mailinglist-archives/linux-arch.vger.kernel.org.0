@@ -2,75 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D146C2BB8
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 08:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A356C2BC5
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 08:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjCUHxS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 03:53:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S230475AbjCUHzo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 03:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjCUHxR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 03:53:17 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4FD15898;
-        Tue, 21 Mar 2023 00:53:15 -0700 (PDT)
+        with ESMTP id S230468AbjCUHzm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 03:55:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9321C7F5;
+        Tue, 21 Mar 2023 00:55:41 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D3B4321A7C;
-        Tue, 21 Mar 2023 07:53:13 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EED6A21A70;
+        Tue, 21 Mar 2023 07:55:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679385193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679385339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HvJEMoCJ+Uw47SELOagFbF1pjz2WAesoMkcGUA9f9xo=;
-        b=PqhOfbp5zIVY4iT79I18TP5hqT2nkIv7V2t8mV02DBmEa+ReCdf2nOONDJpQcSQ0rHkl58
-        USx67rKWvy2qd47569aiLtvprVqGS8YkfQrZ9AIpwja2iC4Vk6oWvFPRCB0lz7ZK37x6O6
-        nnbm+AVuQnYu8/3ATt6VdYb7Bg/OH50=
+        bh=9cGY12kDQSwASIHfhJiV2pRr9ipekQXRkFafDBu1XBk=;
+        b=egdeMcqdv25PErCesAzCg289ZaANuPs9QP53OZbgodUWtlljfv5IWJ1hr/r6URWplpp0/j
+        NQ/PGyNDQXvcO+hxCR3tu7qSvhPa+9FpS7uObiD5RQMD24KGMQnbgCRoZlmhZE8Ea1QU01
+        ND3mqsU4qfp/DPOeFiYkdrtrjuCanyc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679385193;
+        s=susede2_ed25519; t=1679385339;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HvJEMoCJ+Uw47SELOagFbF1pjz2WAesoMkcGUA9f9xo=;
-        b=w9eJuJzlbi+4y0PIcwuRPmPZNoKOdLIgwXA8Dnu0Pcg8ln3wqVpjiPrqqkq/LxWM/Vb/GI
-        H2KKMy1vvTD9ZbBA==
+        bh=9cGY12kDQSwASIHfhJiV2pRr9ipekQXRkFafDBu1XBk=;
+        b=wDA9s17OE8q24MWB2jK0ByNbJtNmEbp17cxlen43oljpli0F+NRSPrNQkLSJEfsnfMUVWc
+        PQ8fctZ/cwcFyVAw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AED2413440;
-        Tue, 21 Mar 2023 07:53:13 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BFE5C13440;
+        Tue, 21 Mar 2023 07:55:39 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 293vKWliGWQtNAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 07:53:13 +0000
-Message-ID: <9673d62f-e308-9c43-0318-e2f611f43eec@suse.cz>
-Date:   Tue, 21 Mar 2023 08:53:13 +0100
+        id fOAKLvtiGWR2NwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 07:55:39 +0000
+Message-ID: <e639c07d-7104-95a1-35ba-c183036e71ea@suse.cz>
+Date:   Tue, 21 Mar 2023 08:55:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 03/10] floppy: Fix MAX_ORDER usage
+Subject: Re: [PATCH 04/10] drm/i915: Fix MAX_ORDER usage in
+ i915_gem_object_get_pages_internal()
 Content-Language: en-US
 To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Mel Gorman <mgorman@suse.de>,
         David Hildenbrand <david@redhat.com>
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Denis Efremov <efremov@linux.com>
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
 References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
- <20230315113133.11326-4-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
 From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230315113133.11326-4-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,40 +86,31 @@ On 3/15/23 12:31, Kirill A. Shutemov wrote:
 > MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
 > can deliver is MAX_ORDER-1.
 > 
-> Fix MAX_ORDER usage in floppy code.
-> 
-> Also allocation buffer exactly PAGE_SIZE << MAX_ORDER bytes is okay. Fix
-> MAX_LEN check.
+> Fix MAX_ORDER usage in i915_gem_object_get_pages_internal().
 > 
 > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
 Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> Cc: Denis Efremov <efremov@linux.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
 > ---
->  drivers/block/floppy.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/i915/gem/i915_gem_internal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/block/floppy.c b/drivers/block/floppy.c
-> index 487840e3564d..90d2dfb6448e 100644
-> --- a/drivers/block/floppy.c
-> +++ b/drivers/block/floppy.c
-> @@ -3079,7 +3079,7 @@ static void raw_cmd_free(struct floppy_raw_cmd **ptr)
->  	}
->  }
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_internal.c b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> index 6bc26b4b06b8..eae9e9f6d3bf 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_internal.c
+> @@ -36,7 +36,7 @@ static int i915_gem_object_get_pages_internal(struct drm_i915_gem_object *obj)
+>  	struct sg_table *st;
+>  	struct scatterlist *sg;
+>  	unsigned int npages; /* restricted by sg_alloc_table */
+> -	int max_order = MAX_ORDER;
+> +	int max_order = MAX_ORDER - 1;
+>  	unsigned int max_segment;
+>  	gfp_t gfp;
 >  
-> -#define MAX_LEN (1UL << MAX_ORDER << PAGE_SHIFT)
-> +#define MAX_LEN (1UL << (MAX_ORDER - 1) << PAGE_SHIFT)
->  
->  static int raw_cmd_copyin(int cmd, void __user *param,
->  				 struct floppy_raw_cmd **rcmd)
-> @@ -3108,7 +3108,7 @@ static int raw_cmd_copyin(int cmd, void __user *param,
->  	ptr->resultcode = 0;
->  
->  	if (ptr->flags & (FD_RAW_READ | FD_RAW_WRITE)) {
-> -		if (ptr->length <= 0 || ptr->length >= MAX_LEN)
-> +		if (ptr->length <= 0 || ptr->length > MAX_LEN)
->  			return -EINVAL;
->  		ptr->kernel_data = (char *)fd_dma_mem_alloc(ptr->length);
->  		fallback_on_nodma_alloc(&ptr->kernel_data, ptr->length);
 
