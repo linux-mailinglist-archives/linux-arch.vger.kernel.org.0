@@ -2,109 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D446C3446
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 15:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1F26C34D6
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 15:55:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjCUOdH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 10:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S231494AbjCUOzd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 10:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCUOdG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 10:33:06 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B928228E87
-        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 07:33:04 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id c18so18050636qte.5
-        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 07:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1679409184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PE0Q2urSrQgTvUZSFNMrQiYswRteUmKjVjKK7YyvjOs=;
-        b=pS1b6B4vl3/brpituXp0/WjTu4YeJGOtWmjmcBMPwY0q1e5UURFy0dHxKB2x6scs33
-         f7DZjyOjGFO4+xLcU/TWBMw8DgUSp3E+PSI8V4sm0UJgXlIkrtn8aJR60PiuSo8s1PeI
-         lRWYRjw4JD3xGeDnuKmpl/Cu/o2dIBQvvfZzl1M/j6jTVdyrYP0if6ou0Twdt2CpEvvK
-         Xo20K1JEGf88s6ynPckpcIL/FAbdgIo239hBDnVXOqebJ+uT2W60hkdTDPzf+NX6jDUK
-         2jxuok02LCb6kHGQ59iukpmOtG+9obX6tikY93CyL0AiQtaIstGdS5F4PiQ/e2nIRnC4
-         UcHA==
+        with ESMTP id S231442AbjCUOz3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 10:55:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2481CBF9
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 07:54:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679410482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TDOd2zDlUp3XynZRBEciyJxiXKaJOZb5vSM1x4tXnxc=;
+        b=Pwalfb62/go49B8n0v95setGyT4cvvVdx0AsXtosYevTSbn99G9wOKUiaa9Ri4CrIIOsb3
+        B5pR9ciPhphxuHYd9v8gXBmAz3o8oF6gtvp905u82Dz51vMBx2jwjYOwqwKJ1aZentlUh6
+        j5Z1KSla9fV6C8Cl2w2Jb4vD258oEEU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-441-nEiAeN9aNOC7FElmZj5vbQ-1; Tue, 21 Mar 2023 10:54:35 -0400
+X-MC-Unique: nEiAeN9aNOC7FElmZj5vbQ-1
+Received: by mail-ed1-f71.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so22241463eda.6
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 07:54:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679409184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PE0Q2urSrQgTvUZSFNMrQiYswRteUmKjVjKK7YyvjOs=;
-        b=2kPy8Hv6gSDFUbTckz8T79pJ5AUc2XPmlB9l1r95lCTTjUeF53SOm60P6nsVulOEv9
-         aSABTKnINN0PhOZDl6LQMr3LErQEdFvnRevapENQct1wW41u7zwOtlCehSvBoDSgIidQ
-         l3nlhwkYco3NVH7Bd/ONse4+29/vbCQulx9Uu/70V9wpD1jeyMfihE/S6G1zIYFG9ZFq
-         HRgdgmrnnK9qs7DlQwZPT8daOlrUCA/q4bmztiYjzgY/cow2tKwv+2gKRaQKhLpQmTHs
-         fyc8sW8UlXk5OwMTmBBbNNfj8N41MTAn1x8cJyHzEVC2gotN6qX9Qeqa/mH4vh0REcH6
-         zqcg==
-X-Gm-Message-State: AO0yUKXLazK3ctAx/nh6066iLogqKSmaMAzx2NE9GDU5QqcZLyMmoD9/
-        LMlqeH5APNHt2wc78FTyTfkjDw==
-X-Google-Smtp-Source: AK7set9R/JiYTa+wywUxBgEMSGSbgZkcQlBT/C6J1sAycNW5wTVKmIe6cUHx5pgx1Hsf4sp+7n0u1A==
-X-Received: by 2002:a05:622a:20e:b0:3bf:d7f8:4f85 with SMTP id b14-20020a05622a020e00b003bfd7f84f85mr161977qtx.12.1679409183856;
-        Tue, 21 Mar 2023 07:33:03 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id i18-20020ac84f52000000b003d621964626sm8484287qtw.8.2023.03.21.07.33.03
+        d=1e100.net; s=20210112; t=1679410472;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TDOd2zDlUp3XynZRBEciyJxiXKaJOZb5vSM1x4tXnxc=;
+        b=Hh6hB7IWg9XLJ4ISfJEIIzf0T0NJo0owafxQy1e3RPFgnBkNcLZ1r6k0ztmO2wqr/A
+         cFboXfYr9kA7p0hMu/VZXeOaNTm5ZkTa5VbD5B0Y85KRvSKV9kOct1va6no9O97/PZN0
+         RMzoDeEGWMMhnj7g764IrK39n6/NjBdT/0MHoOK01z3wVubXZkB/Rd+yyKCFP7IZAHPK
+         2aMYfJBs1vUk/G7r4ZonoYMLTRV8MSJ6Nisw0n67FO5slX7Kng9z/2BLZlD2WYP438RL
+         0MNSEYzGdfKKOlh92o4SrQ/H2Pw9WaFmjUyQZUPl2abrFkozvinRG7OFaZ2d6b0+Er2b
+         lN1g==
+X-Gm-Message-State: AO0yUKVmmaf1f5N46KJOdpaL+B1LNpjQvz9oTRuNNd2sif6MHLzN631s
+        e5C6Z6N3avHh6O+NVIdsaqNfWFn2R2MYoy9XQwer1TOsJ1wI7SNf0EM/6EeLXI99CtQ6ARuV/Nd
+        7zsc1nnZ+Pivb1EDelAABNAAaz+qV25v4x1jIw5K/ZMeJ5dtACKr2EOsKkI9StLaEhg45TVmioi
+        kb2Hkr/Q==
+X-Received: by 2002:a05:6402:488:b0:4fb:de7d:b05a with SMTP id k8-20020a056402048800b004fbde7db05amr2921285edv.40.1679410472014;
+        Tue, 21 Mar 2023 07:54:32 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9SCosURDLVeQrzecFcayr4BLzaAe8HKC09/+MUZOIZlQX7DY76j2ex8vA3Wm4t4NAPplYLQA==
+X-Received: by 2002:a05:6402:488:b0:4fb:de7d:b05a with SMTP id k8-20020a056402048800b004fbde7db05amr2921258edv.40.1679410471631;
+        Tue, 21 Mar 2023 07:54:31 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id u5-20020a50d505000000b004c09f0ba24dsm6409600edi.48.2023.03.21.07.54.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 07:33:03 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ped2s-000VQL-PI;
-        Tue, 21 Mar 2023 11:33:02 -0300
-Date:   Tue, 21 Mar 2023 11:33:02 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Corey Minyard <minyard@acm.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v3 03/38] char: impi, tpm: depend on HAS_IOPORT
-Message-ID: <ZBnAHoPy4SiaD1Xu@ziepe.ca>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-4-schnelle@linux.ibm.com>
+        Tue, 21 Mar 2023 07:54:31 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     KY Srinivasan <kys@microsoft.com>,
+        Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
+In-Reply-To: <DS7PR21MB3127E3FBE1ABB368C6CBC097A0B99@DS7PR21MB3127.namprd21.prod.outlook.com>
+References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
+ <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+ <87a60gww0h.fsf@redhat.com>
+ <20230313170210.GA4354@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <DS7PR21MB3127E3FBE1ABB368C6CBC097A0B99@DS7PR21MB3127.namprd21.prod.outlook.com>
+Date:   Tue, 21 Mar 2023 15:54:29 +0100
+Message-ID: <87bkkmupcq.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314121216.413434-4-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:11:41PM +0100, Niklas Schnelle wrote:
-> diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-> index 9c924a1440a9..2d2ae37153ba 100644
-> --- a/drivers/char/tpm/tpm_infineon.c
-> +++ b/drivers/char/tpm/tpm_infineon.c
-> @@ -51,34 +51,40 @@ static struct tpm_inf_dev tpm_dev;
->  
->  static inline void tpm_data_out(unsigned char data, unsigned char offset)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
->  		outb(data, tpm_dev.data_regs + offset);
+KY Srinivasan <kys@microsoft.com> writes:
 
-You should ifdef away TPM_INF_IO_PORT as well
+>> -----Original Message-----
+>> From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+>> Sent: Monday, March 13, 2023 10:02 AM
+>> To: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de;
+>> dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com; KY Srinivasan
+>> <kys@microsoft.com>; Haiyang Zhang <haiyangz@microsoft.com>;
+>> wei.liu@kernel.org; Dexuan Cui <decui@microsoft.com>; arnd@arndb.de;
+>> Tianyu Lan <Tianyu.Lan@microsoft.com>; Michael Kelley (LINUX)
+>> <mikelley@microsoft.com>; linux-kernel@vger.kernel.org; linux-
+>> hyperv@vger.kernel.org; linux-arch@vger.kernel.org
+>> Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
+>> 
+>> On Mon, Mar 13, 2023 at 03:45:02PM +0100, Vitaly Kuznetsov wrote:
+>> > Saurabh Sengar <ssengar@linux.microsoft.com> writes:
+>> >
 
-Jason
+...
+
+>> > > +config HYPERV_VTL
+>> > > +	bool "Enable VTL"
+>> > > +	depends on X86_64 && HYPERV
+>> > > +	default n
+>> > > +	help
+>> > > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+>> > > +	  enlightenments offered to host and guest partitions which enables
+>> > > +	  the creation and management of new security boundaries within
+>> > > +	  operating system software.
+>> > > +
+>> > > +	  VSM achieves and maintains isolation through Virtual Trust Levels
+>> > > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+>> > > +	  being more privileged than lower levels. VTL0 is the least privileged
+>> > > +	  level, and currently only other level supported is VTL2.
+>> > > +
+>> > > +	  Select this option to build a Linux kernel to run at a VTL other than
+>> > > +	  the normal VTL 0, which currently is only VTL 2.  This option
+>> > > +	  initializes the x86 platform for VTL 2, and adds the ability to boot
+>> > > +	  secondary CPUs directly into 64-bit context as required for VTLs other
+>> > > +	  than 0.  A kernel built with this option must run at VTL 2, and will
+>> > > +	  not run as a normal guest.
+>> >
+>> > This is quite unfortunate, is there a way to detect which VTL the
+>> > guest is running at and change the behavior dynamically?
+>> 
+>> Only way to detect VTL is via hypercall. However hypercalls are not available
+>> this early in boot sequence.
+>
+> Vitaly, we looked at all the options and we felt this detection did not have to be dynamic and could
+> well be a compile time option. Think of this kernel as a Linux based Trusted Execution Environment that
+> only runs in the Virtual Trust Level surfaced by Hyper-V with limited hardware exposed to this environment.
+
+I understand kernels placed in other VTLs serve very specific purposes
+so likely there is no need to run standard kernels shipped with various
+Linux distributions there in production. It may still come handy to have
+such option if only for debugging/testing purposes. The way it is
+designed now, CONFIG_HYPERV_VTL will always end up disabled in anything
+but your custom builds for VTLs (as such builds won't boot anywhere
+else).
+
+Doing a hypercall in early boot may not be trivial now but should be
+possible. It would be even better if current VTL would be exposed
+somewhere in CPUID by the hypervisor.
+
+Just a suggestion.
+
+-- 
+Vitaly
+
