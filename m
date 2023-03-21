@@ -2,249 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3AA6C38D0
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 19:02:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 233506C38E3
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 19:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjCUSBq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 14:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S230338AbjCUSFN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 14:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjCUSB3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 14:01:29 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020021.outbound.protection.outlook.com [52.101.61.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21779244BB;
-        Tue, 21 Mar 2023 11:01:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EoPnXBGxF8YlCsG38zwq7mXgD4AqmCI/u967KLbzAGAm9hCJr4O1JWbpCD07XoTTzTn/J9TxeDCB5w1nVNYrW49HJe43tvuV8Bw21jB91PcCQCoPVY9di68KNInIxgbg8JpJQdlFSzU70piTy7wzXxOerbjdNXRFsdeTwGRN+4D9p/VIaETgPZa6eaQNpSQYqpjYDafy+2GdQsNj5zsI7Cvs/YRbOowe0JiYxY3F+Z4Q7HZefs9N0lDAGH13+iha3V4YQjnSUJr2vuQ+T1GQK6l/rVq0tNuVuRMTvQeIxxtO87TEQznwx4qF7HREJhUOp3S7Wajp8BIpZui2FE7GlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YLYlvb3tpdPBXs7zQJMlujmD25fUktAsHFiCiTGT+Ow=;
- b=dTbtsMfNQHYzwB7tZj0Pc2k+T0biAdYmTToyg4Gpc8luNB8x837dWxOb38FU5MmTc9/O8OUD1q3yA3wyXjCQOJ9GTWkv/NaQadytoVNkvht0lW5BVoxkVpV9M4b7FPq11Z3mTddnc8DdDsOLC7RaJfpV6nsQEEmd5YEkwlp27xiHeAt175/hTlMby/1bQZa5jRIsfzpHxY/xY76SqfOOIppzcKxZvlXywFEAHjPJJXoD07dWmbnnXriiSpSkT2laZU0FRTc9q7OXeb7dFfVSqZbaBCI7fouwyB+Jvvb6bk8skSMIipRQSEhXP4KkXT3sr/M4lXVUyY158qC09qR2oQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YLYlvb3tpdPBXs7zQJMlujmD25fUktAsHFiCiTGT+Ow=;
- b=XCNtm9+u5V8HVICxDNgmKLMR7NlQmcm7/YI5IftFGjdOHfOD0Sfjx3rE/OitJ7FJu35xukc31a1/QZa+TIb4ekzygK4x8oYBLBCNrwu90guXRtVOUvrL8Os4hfS9EVhC4EOdszE10gu+SnR3FeJ23i3j9onpyJkTWKjudrXOslE=
-Received: from DS7PR21MB3127.namprd21.prod.outlook.com (2603:10b6:8:77::16) by
- IA0PR21MB4004.namprd21.prod.outlook.com (2603:10b6:208:483::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.3; Tue, 21 Mar 2023 18:01:25 +0000
-Received: from DS7PR21MB3127.namprd21.prod.outlook.com
- ([fe80::e9c6:93c6:abb9:c2a4]) by DS7PR21MB3127.namprd21.prod.outlook.com
- ([fe80::e9c6:93c6:abb9:c2a4%6]) with mapi id 15.20.6254.001; Tue, 21 Mar 2023
- 18:01:25 +0000
-From:   KY Srinivasan <kys@microsoft.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [EXTERNAL] RE: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
-Thread-Topic: [EXTERNAL] RE: [PATCH v2 2/2] x86/hyperv: VTL support for
- Hyper-V
-Thread-Index: AQHZVc2QXZ33ZRlfGU2JPNSvGGsDh675Al3wgAxcG4CAAC5+AA==
-Date:   Tue, 21 Mar 2023 18:01:25 +0000
-Message-ID: <DS7PR21MB312782CFB728409A243EA8DFA0819@DS7PR21MB3127.namprd21.prod.outlook.com>
-References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
- <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
- <87a60gww0h.fsf@redhat.com>
- <20230313170210.GA4354@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
- <DS7PR21MB3127E3FBE1ABB368C6CBC097A0B99@DS7PR21MB3127.namprd21.prod.outlook.com>
- <87bkkmupcq.fsf@redhat.com>
-In-Reply-To: <87bkkmupcq.fsf@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=71449230-85c6-4b2f-9147-0ccdf9c59486;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-21T17:40:53Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS7PR21MB3127:EE_|IA0PR21MB4004:EE_
-x-ms-office365-filtering-correlation-id: f98b6e97-83b3-4bdd-e124-08db2a364963
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9dJg7/v95SrG0U1LfPaiD1l58iOfKGuwa0YrPGC3O1ClkG4KmJBTcgMG27+uaFH2Kw6j6usmMk6ee829kbf/OKIZ/U9WtDrRN4iktYnoz2mKANc4waRLACtk5nCGGUVuyRRqI3eZeCe8pmXPfbi7zbvSIw+zgJ/u5+og666Asts1fjGXIDCRADWBA7dgjwfQX1V4DJDM5IYjQoXY+hwOzpk1YzxboSpfdD7ZSnwNvIMwoShUe+A+xzPYPC2KstoLca/RwBtIKb1gOGtDWR8bi7b16nzHORTGHr0o7p8MOkUfqUbekpDyGXO5+l+/AOFo/03DL6seVJSjkEARbeQspUphPpJq+RDSFDPLxsCm3PqgGXiIZvrDeQ/Gg01/13KNibRZvVsRt6ShQS6Smu1ILabhFK8OVV04gXly2/Q4Es3TpHJV1ikREYYj2wIVki6MjtClEaOCfEqjGbC9rztTqPp9nlWTp9lAyTW6Dq1LiGUKQDRygT92WxblsAjLjw7ISQHA04O83J+KtGe/N+Ie9lh/j3kvfKXoZhH0yL3QM7yfAnPojj43s3Vbp2LdkY5L48Xc3z80B+8Wx9kbRV1g4faysVtXRIa+El3/if4WTbPBoRUVSinFHa5X9YW2CuiJ+KCzPIHNSBH+a6PZ2EF6azpr4RK2/BUi47QyJoclWnXIa88CIArCNPId/vpRj/e4TdF35G1PHi6E4g9oKQLwKHhS7GsGNh3dIbYVRKbtTV5rE5x6nfZxjHW9aQ0M/QsL
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR21MB3127.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39860400002)(366004)(451199018)(83380400001)(71200400001)(8990500004)(186003)(53546011)(38070700005)(9686003)(122000001)(82950400001)(64756008)(82960400001)(6506007)(38100700002)(41300700001)(66446008)(8676002)(76116006)(66946007)(33656002)(66476007)(66556008)(4326008)(52536014)(5660300002)(8936002)(7416002)(316002)(7696005)(2906002)(55016003)(110136005)(86362001)(478600001)(10290500003)(54906003)(66899018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?znaJOySAQSoJyLHkcEM98ZETIsHXNF6rAfgNjVh4jKgU3lNBs6bypKqA8HrE?=
- =?us-ascii?Q?OZOqk4bfMO9mCnsgOotPN/hdn1MUCWBL3LIj0h5Nwa9OJJR2RuCM97LV6tUA?=
- =?us-ascii?Q?QCEI2SR3FuENb3cZisJ1Dt3w9N/AAdlDyELTOXGHfLfZ5f6dN381vc7ozK1v?=
- =?us-ascii?Q?djiXT2MsOM2z6iUec0ieaHW3+24At4Z2//VPnAfmbTg4iVZYncqYl9soNqMP?=
- =?us-ascii?Q?YDFLybuOvo9a7d9nLwCYxP9O2LTUrd89EV5mDverwFnZWd2GU+SEnaYSL5Cg?=
- =?us-ascii?Q?lS7r5OcQTV8rUI3Z81nrGeQhyI21b2LdIFyNBPSkWiuZ4t/mwqTcJMedPV0x?=
- =?us-ascii?Q?FTaOzp1Xr4A8wr5zcYI+X/0a+sllVunXcPluiIhHGiN0CKsyN44rxjIeWmk8?=
- =?us-ascii?Q?Sko+2fDu5CQxTEB2c9dqN3XjIKMt1sQPRzap5q4M+X5RWIUxYqqgCagefYws?=
- =?us-ascii?Q?F5aBdNHT4nSCMPDika/mTQq27H9sVGQKy6g+d6dmIItr4aln33YkFLAq8AmN?=
- =?us-ascii?Q?HsOmdResamnnfS4aAeSV86l4yPnBvJ88HGaV0Ow9GWvBF9m+nIjXrT700BQ6?=
- =?us-ascii?Q?9wrQWDvq7wu+Ik0UZrqaF5BK6yjqyqy/NPFQpRbTWwmryehgbyK0jpzEdHw3?=
- =?us-ascii?Q?HuiwNP00X6HmCpVYteONEb7pwP8fWGP7th6cGthEunZ3lc/eWxLnYw81ykIC?=
- =?us-ascii?Q?jsNaP4FloUdbV2fFJE+ko28IKIZ6Uczvp8DfMFIHx+7pgGKZJhB0yXM6dZ7/?=
- =?us-ascii?Q?If1bd8wRnEYKFbdtrYMenqM5XBEMREi0kKsT+3JKczClVISrJmTqM8dzbeUG?=
- =?us-ascii?Q?Sa+Z2RpMu7A/9H20NqIeihBxGwUgGOu4mgfGEGFF2YltmEQMYpPsgEm5Dwug?=
- =?us-ascii?Q?Wcotq2dJZIyifx1fzsjhQdDhu+wF6TR+HIWEd4sfRJ7I/S1LKFWRqzzAuSv3?=
- =?us-ascii?Q?bapgEvsJcrxNhrCqUGvkQXyQyie3eVnrpkRYfBuWoEEsPUxPOVnaHXG7m39/?=
- =?us-ascii?Q?djwaCiU5dPGXUNVLc5lb2/4cTTiFLrUNy9/+ewTX08s76D5y5GU8F4qXX8sc?=
- =?us-ascii?Q?8GRA2++hzlNrcpqhXZSoE0AhVD/kXFfBqfRm/vLTSqFCXctPi/QJvYlHr+Pe?=
- =?us-ascii?Q?FDBg/tn/fDS2m23H5yrBgy42yk+1C3gUkzawTqdUWbqIYRLDcEOqIcd8YlA0?=
- =?us-ascii?Q?40cCKaQFwnqeqz7UbWpTKl1k51WdvwHekXnqHPAd36/6uyV5bUoJw+coteGW?=
- =?us-ascii?Q?6iSEaVDxJAJpUXh2mEUWPGdvvOW7FUnVD9jXeAkbOi8VS9RfqcAJPudSlsND?=
- =?us-ascii?Q?SlpnYKSuWOktyxhqfbdwWwjHyHAKm3wuoiZtwjcRO4yn3LsTKlcx+Khd2okx?=
- =?us-ascii?Q?ccp2fNXsNvg/WSI2/FTsLnArBK0lxCO3C3rEI0RPiDaqrCK0mAjg2q8+odJp?=
- =?us-ascii?Q?F/COWUIL/kHw74mVSeOaLEDOKfaAOkdUP1cc8VNyQYiCfxJQ01d7UBxg7BjP?=
- =?us-ascii?Q?v8Ec5ko4glgnz1I9SGpBSO8gtP8uU0Ifj+yCd0tza+uheN/O3deo8h39niwt?=
- =?us-ascii?Q?5sy9KPgJl/Dar7DRZfFQdLKfsOJsMnqInlHYydMZ3EavnhwL55IRGT5elSHm?=
- =?us-ascii?Q?TvZZYwgraeOxp/hD/D5Z9dilNdCrcdU58oLhmfVadmoo?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S230370AbjCUSFL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 14:05:11 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D63038471
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:04:47 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id cy23so63000800edb.12
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679421885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E7SLq5regHpbyQXTIDtK1SgaDzSaRkQ8eVCIyS1gzK4=;
+        b=bWYVHkPrJ3lhl2qvydsocOaNohhdflPAx40ZjmJAkc2ONftBovoeyN6KKIOYZpM74h
+         3mzeM/WZjQxgY09Q6myFysAsy47qYHAkO4bHr8grBwOU3B6t6B5Tu5/nyb8GYPzQgaIl
+         LEtyibH+8V9c0YyTCK9k+y/A/VQifyeRzodrw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679421885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E7SLq5regHpbyQXTIDtK1SgaDzSaRkQ8eVCIyS1gzK4=;
+        b=8LFcJl+KBciGHKfpOuus29rGQ1ct4onKda1YIBt0MT3r3JvjiNk+zAjdvT4eTpLOXL
+         eXBcTFoB8Y2GfRqL2ugccOfPMXgp8ekEjuhSlgwySatcjsHRV2kHCAdwTLe9zlKIMGqf
+         u2wL4aKnlg1RMRoJxRerx0sdY00c7Yuqxv0CJwI8Kc7rtyeg82ooloQAR7m61vDslTUw
+         jiAhJxGhfKfHPRWo+iAbVdhpJXeXyN/rKD/NMUsfCBk+lYu+hkBakx5App0C7+nXZxca
+         Asd5lLJcreQtJAYcnuZ0zo2fURlXp74y1qqtvPrbYOW6I1X+R1aleBlI5gHujQzDOfWO
+         G+Hg==
+X-Gm-Message-State: AO0yUKXTMlaKJaCtwhOwDKBvxgwpKIOskuz9Z8VJ4krwfcK5V3HsYbwc
+        JQjpXOGSENEUckjfFegpBkHqlYq+6WKIjojBfNUPKQ==
+X-Google-Smtp-Source: AK7set/TfVF9W3WWFS/DqeTtEpKxy+/JR1LOKvEgFQeVq7EQ30G5MYP55aJ0rSmnIug6ideqwVOhlg==
+X-Received: by 2002:aa7:c84a:0:b0:500:2a15:f86b with SMTP id g10-20020aa7c84a000000b005002a15f86bmr3958344edt.42.1679421885180;
+        Tue, 21 Mar 2023 11:04:45 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id r12-20020a50c00c000000b00501d2f10d19sm2227312edb.20.2023.03.21.11.04.43
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Mar 2023 11:04:44 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id b20so30162695edd.1
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:04:43 -0700 (PDT)
+X-Received: by 2002:a17:906:6d6:b0:933:f6e8:26d9 with SMTP id
+ v22-20020a17090606d600b00933f6e826d9mr1718588ejb.15.1679421883223; Tue, 21
+ Mar 2023 11:04:43 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR21MB3127.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f98b6e97-83b3-4bdd-e124-08db2a364963
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Mar 2023 18:01:25.0893
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 81hxeoXUhL0j/uTisUusIMpRQJKY6Sv5NSkoxaFE3gQcvg92WXU9J6IITDzPV3I8yafRZNxDu/mjIzkR2mp2ew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR21MB4004
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230321122514.1743889-1-mark.rutland@arm.com> <20230321122514.1743889-2-mark.rutland@arm.com>
+In-Reply-To: <20230321122514.1743889-2-mark.rutland@arm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 21 Mar 2023 11:04:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
+Message-ID: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
+        aou@eecs.berkeley.edu, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, davem@davemloft.net,
+        gor@linux.ibm.com, hca@linux.ibm.com, linux-arch@vger.kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robin.murphy@arm.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Mar 21, 2023 at 5:25=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
+>
+> * arm64's copy_to_user() under-reports the number of bytes copied in
+>   some cases, e.g.
 
+So I think this is the ok case.
 
+> * arm's copy_to_user() under-reports the number of bytes copied in some
+>   cases, and both copy_to_user() and copy_from_user() don't guarantee
+>   that at least a single byte is copied when a partial copy is possible,
 
-> -----Original Message-----
-> From: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Sent: Tuesday, March 21, 2023 7:54 AM
-> To: KY Srinivasan <kys@microsoft.com>; Saurabh Singh Sengar
-> <ssengar@linux.microsoft.com>
-> Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de;
-> dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com; Haiyang Zhang
-> <haiyangz@microsoft.com>; wei.liu@kernel.org; Dexuan Cui
-> <decui@microsoft.com>; arnd@arndb.de; Tianyu Lan
-> <Tianyu.Lan@microsoft.com>; Michael Kelley (LINUX)
-> <mikelley@microsoft.com>; linux-kernel@vger.kernel.org; linux-
-> hyperv@vger.kernel.org; linux-arch@vger.kernel.org
-> Subject: [EXTERNAL] RE: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-=
-V
->=20
-> KY Srinivasan <kys@microsoft.com> writes:
->=20
-> >> -----Original Message-----
-> >> From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-> >> Sent: Monday, March 13, 2023 10:02 AM
-> >> To: Vitaly Kuznetsov <vkuznets@redhat.com>
-> >> Cc: tglx@linutronix.de; mingo@redhat.com; bp@alien8.de;
-> >> dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com; KY
-> >> Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> >> <haiyangz@microsoft.com>; wei.liu@kernel.org; Dexuan Cui
-> >> <decui@microsoft.com>; arnd@arndb.de; Tianyu Lan
-> >> <Tianyu.Lan@microsoft.com>; Michael Kelley (LINUX)
-> >> <mikelley@microsoft.com>; linux-kernel@vger.kernel.org; linux-
-> >> hyperv@vger.kernel.org; linux-arch@vger.kernel.org
-> >> Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
-> >>
-> >> On Mon, Mar 13, 2023 at 03:45:02PM +0100, Vitaly Kuznetsov wrote:
-> >> > Saurabh Sengar <ssengar@linux.microsoft.com> writes:
-> >> >
->=20
-> ...
->=20
-> >> > > +config HYPERV_VTL
-> >> > > +	bool "Enable VTL"
-> >> > > +	depends on X86_64 && HYPERV
-> >> > > +	default n
-> >> > > +	help
-> >> > > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities =
-and
-> >> > > +	  enlightenments offered to host and guest partitions which enab=
-les
-> >> > > +	  the creation and management of new security boundaries within
-> >> > > +	  operating system software.
-> >> > > +
-> >> > > +	  VSM achieves and maintains isolation through Virtual Trust Lev=
-els
-> >> > > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher lev=
-els
-> >> > > +	  being more privileged than lower levels. VTL0 is the least pri=
-vileged
-> >> > > +	  level, and currently only other level supported is VTL2.
-> >> > > +
-> >> > > +	  Select this option to build a Linux kernel to run at a VTL oth=
-er than
-> >> > > +	  the normal VTL 0, which currently is only VTL 2.  This option
-> >> > > +	  initializes the x86 platform for VTL 2, and adds the ability t=
-o boot
-> >> > > +	  secondary CPUs directly into 64-bit context as required for VT=
-Ls other
-> >> > > +	  than 0.  A kernel built with this option must run at VTL 2, an=
-d will
-> >> > > +	  not run as a normal guest.
-> >> >
-> >> > This is quite unfortunate, is there a way to detect which VTL the
-> >> > guest is running at and change the behavior dynamically?
-> >>
-> >> Only way to detect VTL is via hypercall. However hypercalls are not
-> >> available this early in boot sequence.
-> >
-> > Vitaly, we looked at all the options and we felt this detection did
-> > not have to be dynamic and could well be a compile time option. Think
-> > of this kernel as a Linux based Trusted Execution Environment that only=
- runs
-> in the Virtual Trust Level surfaced by Hyper-V with limited hardware expo=
-sed to
-> this environment.
->=20
-> I understand kernels placed in other VTLs serve very specific purposes so=
- likely
-> there is no need to run standard kernels shipped with various Linux
-> distributions there in production. It may still come handy to have such o=
-ption if
-> only for debugging/testing purposes. The way it is designed now,
-> CONFIG_HYPERV_VTL will always end up disabled in anything but your custom
-> builds for VTLs (as such builds won't boot anywhere else).
->=20
-> Doing a hypercall in early boot may not be trivial now but should be poss=
-ible. It
-> would be even better if current VTL would be exposed somewhere in CPUID b=
-y
-> the hypervisor.
->=20
-> Just a suggestion.
+Again, this is ok historically.
 
-Thanks Vitaly and I hear your concern. The VTL environment is so different =
-and so constrained,
-that paying the cost of a run-time detection we felt did not buy us anythin=
-g. We did discuss the CPUID option as the most
-efficient form of run-time detection and the hypervisor team had some issue=
-s with this option and so we went with the
-compile time option.
+> * i386's copy_from_user does not guarantee that at least a single byte
+>   is copied when a partial copit is possible, e.g.
+>
+>   | too few bytes consumed (offset=3D4093, size=3D8, ret=3D8)
 
-Regards,
+And here's the real example of "we've always done this optimization".
+The exact details have differed, but the i386 case is the really
+really traditional one: it does word-at-a-time copies, and does *not*
+try to fall back to byte-wise copies. Never has.
 
-K. Y
+> * riscv's copy_to_user() and copy_from_user() don't guarantee that at
+>   least a single byte is copied when a partial copy is possible, e.g.
+>
+>   | too few bytes consumed (offset=3D4095, size=3D2, ret=3D2)
 
+Yup. This is all the same "we've never forced byte-at-a-time copies"
+
+> * s390 passes all tests
+>
+> * sparc's copy_from_user() over-reports the number of bbytes copied in
+>   some caes, e.g.
+
+So this case I think this is wrong, and an outright bug. That can
+cause people to think that uninitialized data is initialized, and leak
+sensitive information.
+
+> * x86_64 passes all tests
+
+I suspect your testing is flawed due to being too limited, and x86-64
+having multiple different copying routines.
+
+Yes, at some point we made everything be quite careful with
+"handle_tail" etc, but we end up still having things that fail early,
+and fail hard.
+
+At a minimum, at least unsafe_copy_to_user() will fault and not do the
+"fill to the very last byte" case. Of course, that doesn't return a
+partial length (it only has a "fail" case), but it's an example of
+this whole thing where we haven't really been byte-exact when doing
+copies.
+
+So again, I get the feeling that these rules may make sense from a
+validation standpoint, but I'm not 100% sure we should generally have
+to be this careful.
+
+                 Linus
