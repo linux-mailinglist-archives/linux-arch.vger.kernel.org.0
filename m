@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4906C2762
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 02:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA2B6C26D6
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 02:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjCUBV2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Mar 2023 21:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S229975AbjCUBHH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Mar 2023 21:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCUBV0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 21:21:26 -0400
+        with ESMTP id S230060AbjCUBGn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 21:06:43 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A77230F2;
-        Mon, 20 Mar 2023 18:20:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F9E3029B;
+        Mon, 20 Mar 2023 18:06:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DDB72CE1742;
-        Tue, 21 Mar 2023 01:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F089C43446;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1340BCE1745;
+        Tue, 21 Mar 2023 01:05:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB747C4331F;
         Tue, 21 Mar 2023 01:05:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679360751;
-        bh=dTl9j0kLFz79+DRz2r2NTYGvZ0TA7ESPIKqeRybBfzE=;
+        bh=TZ/HARgy2h040ZnfHsCeMp2AvhKFuiI8pmwwADeA4vE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ICLcFajJjU4lafzH2MN39Hm7EJA/qpGtwdKnPpyx9Tzo+X6AaNaCyKe8Ka3SWTqAM
-         KjBHkbq6JzXpi4xl340zifEfc1pJtgnS0NsImElUne/YUHXEPJBl5exjyP30adp1vo
-         OLY32WGsrx1ljIN6fyhB6jpMqXHS9BV9hM/YZsp0JRhUDWz8cg6QuRyowTdgwuaoat
-         E9XgeLZwanbTWdfQL+1nv1CXJ2qV8mkDbUJ4jxHnNltKeK6n/NnZzKAk+IwcTBgQqL
-         YrP/YOoNoQpHNLr6Dedl0MTiWHj2dmAPP2SrMi9iiSeGmQ1ne6/RCE7PTtqkPKPzSM
-         /RZGRsFCU5R6A==
+        b=PfIudBR6f5u5j2wiIDbYIX5bnTglR4QomDedyfgFDH575mdR3JgpyUgc7zrxeMJ5x
+         BJiUmDmkAH2/pGlju4O0ZxnsiqhjuHR7r8ZgwLPYgiLiGLq3crQjqhM0n1i8wmh8ZQ
+         KgInFrOSB/lN+YYcIfTXjj4icJrT60oHSWXFYHS1BKjr5uE0xIOSgePdewYIGlU11B
+         zp84khUvxTmvUhm30jYqKIMmtj3fKQOzGmAWnD03TG574E2e11nsYi57xIFwzGyqZu
+         m42jJp43sDbPe3EeXootZW3aa6P8ext/8OHzu2TJ2Ez+blmjLIRCpgnLfHI4gWXAkG
+         yrDJ8kCfEHG+A==
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C31B815403C5; Mon, 20 Mar 2023 18:05:50 -0700 (PDT)
+        id C931915403C7; Mon, 20 Mar 2023 18:05:50 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@meta.com, mingo@kernel.org
@@ -40,9 +40,9 @@ Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
         akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH memory-model scripts 23/31] tools/memory-model: Make history-check scripts use mselect7
-Date:   Mon, 20 Mar 2023 18:05:41 -0700
-Message-Id: <20230321010549.51296-23-paulmck@kernel.org>
+Subject: [PATCH memory-model scripts 24/31] tools/memory-model:  Add "--" to parseargs.sh for additional arguments
+Date:   Mon, 20 Mar 2023 18:05:42 -0700
+Message-Id: <20230321010549.51296-24-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc2
 In-Reply-To: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
 References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
@@ -58,45 +58,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The history-check scripts currently use grep to ignore non-C-language
-litmus tests, which is a bit fragile.  This commit therefore enlists the
-aid of "mselect7 -arch C", given Luc Maraget's recent modifications that
-allow mselect7 to operate in filter mode.
-
-This change requires herdtools 7.52-32-g1da3e0e50977 or later.
+Currently, parseargs.sh expects to consume all the command-line arguments,
+which prevents the calling script from having any of its own arguments.
+This commit therefore causes parseargs.sh to stop consuming arguments
+when it encounters a "--" argument, leaving any remaining arguments for
+the calling script.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/memory-model/scripts/initlitmushist.sh | 2 +-
- tools/memory-model/scripts/newlitmushist.sh  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/memory-model/scripts/parseargs.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/memory-model/scripts/initlitmushist.sh b/tools/memory-model/scripts/initlitmushist.sh
-index 956b6957484d..31ea782955d3 100755
---- a/tools/memory-model/scripts/initlitmushist.sh
-+++ b/tools/memory-model/scripts/initlitmushist.sh
-@@ -60,7 +60,7 @@ fi
- 
- # Create a list of the C-language litmus tests with no more than the
- # specified number of processes (per the --procs argument).
--find litmus -name '*.litmus' -exec grep -l -m 1 "^C " {} \; > $T/list-C
-+find litmus -name '*.litmus' -print | mselect7 -arch C > $T/list-C
- xargs < $T/list-C -r grep -L "^P${LKMM_PROCS}" > $T/list-C-short
- 
- scripts/runlitmushist.sh < $T/list-C-short
-diff --git a/tools/memory-model/scripts/newlitmushist.sh b/tools/memory-model/scripts/newlitmushist.sh
-index 3f4b06e29988..25235e2049cf 100755
---- a/tools/memory-model/scripts/newlitmushist.sh
-+++ b/tools/memory-model/scripts/newlitmushist.sh
-@@ -43,7 +43,7 @@ fi
- 
- # Form full list of litmus tests with no more than the specified
- # number of processes (per the --procs argument).
--find litmus -name '*.litmus' -exec grep -l -m 1 "^C " {} \; > $T/list-C-all
-+find litmus -name '*.litmus' -print | mselect7 -arch C > $T/list-C-all
- xargs < $T/list-C-all -r grep -L "^P${LKMM_PROCS}" > $T/list-C-short
- 
- # Form list of new tests.  Note: This does not handle litmus-test deletion!
+diff --git a/tools/memory-model/scripts/parseargs.sh b/tools/memory-model/scripts/parseargs.sh
+index 25a81ac0dfdf..7aa58755adfc 100755
+--- a/tools/memory-model/scripts/parseargs.sh
++++ b/tools/memory-model/scripts/parseargs.sh
+@@ -83,7 +83,7 @@ do
+ 			echo "Cannot create directory --destdir '$LKMM_DESTDIR'"
+ 			usage
+ 		fi
+-		if test -d "$LKMM_DESTDIR" -a -w "$LKMM_DESTDIR" -a -x "$LKMM_DESTDIR"
++		if test -d "$LKMM_DESTDIR" -a -x "$LKMM_DESTDIR"
+ 		then
+ 			:
+ 		else
+@@ -127,6 +127,10 @@ do
+ 		LKMM_TIMEOUT="$2"
+ 		shift
+ 		;;
++	--)
++		shift
++		break
++		;;
+ 	*)
+ 		echo Unknown argument $1
+ 		usage
 -- 
 2.40.0.rc2
 
