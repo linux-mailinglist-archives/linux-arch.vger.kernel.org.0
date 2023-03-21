@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC1E6C26F9
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 02:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6BB6C26D4
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 02:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjCUBJ0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Mar 2023 21:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S230016AbjCUBHG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Mar 2023 21:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjCUBIk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 21:08:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BE63864E;
-        Mon, 20 Mar 2023 18:07:33 -0700 (PDT)
+        with ESMTP id S229950AbjCUBGn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Mar 2023 21:06:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6092B2ED5E;
+        Mon, 20 Mar 2023 18:06:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DAAB61923;
-        Tue, 21 Mar 2023 01:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B552BC43323;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4665B811C3;
+        Tue, 21 Mar 2023 01:05:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7B91C43324;
         Tue, 21 Mar 2023 01:05:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1679360751;
-        bh=zCihDnP1nhMRD7A4aKMBexBXbcNXxLpiIowJmzZbfCY=;
+        bh=wa5pYtC5SYWp9ZShIu2HSy2OIsdx39BjnrLPgX+Su3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Brt0kjtXDiG28K+fPikI/fC2jGfYPLyjf9idP56YaGbo2y0gfFPHTxF8IvLDqIPic
-         KEqeeMCAWVD5hyiqQ5Alt1g0h9xRiFtYNkwNOGeqB9XT/djoTpXU2pvoncvbATzdJu
-         wcwZkRQmNwDQML75ZWnRtDJ098Wz3SogPyJFNx6eoiB4aVt4r3IFaLIWVmHqaiPAlY
-         eTac3CxYlchsF6DO6wS6BaYTkHHZxr/KR5Sm137oGJ0zrYAH4B+pLKvnszeMGjiur2
-         VUp0mzynqSxc6HpJ6h5BG2pHNAoZE+tRZCosOcHfFSXoZcPYrutA2Je5TwNXprwzoH
-         1Sw+dRTM0uaGQ==
+        b=AtpyVMekd3m51PaRDe+rVxdlIheIptFu7ri+D5Cd5GUFhkPqtpQFpbmcVQwG6RDoI
+         Rlt7ea8SmHEvnoUJd2DxiIQeYgDPBC9OJFYHcP5bGIYoBnMCkJmMtVDpvZPNGdnDXb
+         ySFCxdWHpFMk9LNQSSNMpjLyJ1SxWyWYUXL1zCOI1749PoGTrleh/Bth5YMwmsnJlK
+         i/N9TwUD9itnAKnzFvz4CnjJ2YAFA3U+btHMNfoHDUsDRan8f2V5YlhtXTgXv8UMGi
+         C+S0ZFxz30e8fn4qPrKTpiYAr7+0M2RwzPWndU/2iinwYKJmm2SsHOYMOezYDOuHuM
+         J6T1yY1ZP6jaw==
 Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id DB56715403CD; Mon, 20 Mar 2023 18:05:50 -0700 (PDT)
+        id DF22315403CF; Mon, 20 Mar 2023 18:05:50 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         kernel-team@meta.com, mingo@kernel.org
@@ -40,9 +40,9 @@ Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
         peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
         dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
         akiyks@gmail.com, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH memory-model scripts 28/31] tools/memory-model: Make judgelitmus.sh handle scripted Result: tag
-Date:   Mon, 20 Mar 2023 18:05:46 -0700
-Message-Id: <20230321010549.51296-28-paulmck@kernel.org>
+Subject: [PATCH memory-model scripts 29/31] tools/memory-model: Use "-unroll 0" to keep --hw runs finite
+Date:   Mon, 20 Mar 2023 18:05:47 -0700
+Message-Id: <20230321010549.51296-29-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc2
 In-Reply-To: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
 References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
@@ -58,36 +58,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The scripts that generate the litmus tests in the "auto" directory of
-the https://github.com/paulmckrcu/litmus archive place the "Result:"
-tag into a single-line ocaml comment, which judgelitmus.sh currently
-does not recognize.  This commit therefore makes judgelitmus.sh
-recognize both the multiline comment format that it currently does
-and the automatically generated single-line format.
+Litmus tests involving atomic operations produce LL/SC loops on a number
+of architectures, and unrolling these loops can result in excessive
+verification times or even stack overflows.  This commit therefore uses
+the "-unroll 0" herd7 argument to avoid unrolling, on the grounds that
+additional passes through an LL/SC loop should not change the verification.
 
+Note however, that certain bugs in the mapping of the LL/SC loop to
+machine instructions may go undetected.  On the other hand, herd7 might
+not be the best vehicle for finding such bugs in any case.  (You do
+stress-test your architecture-specific code, don't you?)
+
+Suggested-by: Luc Maranget <luc.maranget@inria.fr>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/memory-model/scripts/judgelitmus.sh | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/memory-model/scripts/runlitmus.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/memory-model/scripts/judgelitmus.sh b/tools/memory-model/scripts/judgelitmus.sh
-index 2700481d20f0..1ec5d89fcfbb 100755
---- a/tools/memory-model/scripts/judgelitmus.sh
-+++ b/tools/memory-model/scripts/judgelitmus.sh
-@@ -57,10 +57,10 @@ if grep -q '^Flag data-race$' "$LKMM_DESTDIR/$litmusout"
- then
- 	datarace_modeled=1
+diff --git a/tools/memory-model/scripts/runlitmus.sh b/tools/memory-model/scripts/runlitmus.sh
+index dfdb1f00fcc0..94608d4b6502 100755
+--- a/tools/memory-model/scripts/runlitmus.sh
++++ b/tools/memory-model/scripts/runlitmus.sh
+@@ -75,6 +75,6 @@ then
+ 	cp $T/$hwlitmusfile.jingle7.out $LKMM_DESTDIR/$hwlitmus.err
+ 	exit 253
  fi
--if grep -q '^ \* Result: ' $litmus
-+if grep -q '^[( ]\* Result: ' $litmus
- then
--	outcome=`grep -m 1 '^ \* Result: ' $litmus | awk '{ print $3 }'`
--	if grep -m1 '^ \* Result: .* DATARACE' $litmus
-+	outcome=`grep -m 1 '^[( ]\* Result: ' $litmus | awk '{ print $3 }'`
-+	if grep -m1 '^[( ]\* Result: .* DATARACE' $litmus
- 	then
- 		datarace_predicted=1
- 	fi
+-/usr/bin/time $LKMM_TIMEOUT_CMD herd7 $LKMM_DESTDIR/$hwlitmus > $LKMM_DESTDIR/$hwlitmus.out 2>&1
++/usr/bin/time $LKMM_TIMEOUT_CMD herd7 -unroll 0 $LKMM_DESTDIR/$hwlitmus > $LKMM_DESTDIR/$hwlitmus.out 2>&1
+ 
+ exit $?
 -- 
 2.40.0.rc2
 
