@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F67B6C2BD2
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 09:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 797B26C2BDB
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 09:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCUIAH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 04:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S230377AbjCUICH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 04:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCUIAG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 04:00:06 -0400
+        with ESMTP id S230374AbjCUIB6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 04:01:58 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5CA3B846;
-        Tue, 21 Mar 2023 01:00:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0383928F;
+        Tue, 21 Mar 2023 01:01:56 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8D78721A7C;
-        Tue, 21 Mar 2023 08:00:03 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DA75C21A7C;
+        Tue, 21 Mar 2023 08:01:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1679385603; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1679385714; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sUwEiqw/SKliyyK0F22lRGPEA7rIU5pf46IYT4psqJ8=;
-        b=AO02s6ujgE27wmr4i7t4eIh7XSbBk/phGyn8LsRKqi4PjG0Tz70wgbhgtZlZF9UB9/Iwru
-        HUjYssvFNMoGPN3nj4yxDA3NU6MwoKZqRIBOrKN7MoLiikq2pv8Wn+yKwMQnmtCyc0og09
-        zyKZ1FuPWC+s4bHkLOOHha1f0kMjEDk=
+        bh=ctS+eKV0U5OIdHV3xnU3MmgGcrolUtwAToziodkFTXQ=;
+        b=j55E7TVWuklZamsfwYqXgOHP+fWCAZ2tGRT5x7bQjlk1kBu2/SjlvPQw6E9FKUHaPudmkj
+        un9PVnQw/lXKgrLiq7S2u/JanY88w5/Tk+l9hhYYU7H01VcAo5shYeRxIXLm/xZEZtRhff
+        vjs2z8HcwLOtqdMVAeLA38fmOzlVGK0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1679385603;
+        s=susede2_ed25519; t=1679385714;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sUwEiqw/SKliyyK0F22lRGPEA7rIU5pf46IYT4psqJ8=;
-        b=nxfG6i+EiDjiMqChCtl0kgOT7OwNopMs7qj6wHESD6njKb+Z7pckCih0Ts74LL/PaLWvWh
-        HPdFxNVafKxhPIDA==
+        bh=ctS+eKV0U5OIdHV3xnU3MmgGcrolUtwAToziodkFTXQ=;
+        b=5rCAUXh9BgcbPrucB5nQUS11Y73lHAQGezjezAFYeMah7RiMKbDcGyvQU+p0l3Ue93dIBM
+        2WtgWFX0ziQDQuCA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4A59013440;
-        Tue, 21 Mar 2023 08:00:03 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B3D3A13440;
+        Tue, 21 Mar 2023 08:01:54 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8vpvEQNkGWTHOQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 08:00:03 +0000
-Message-ID: <93b37049-af7e-3408-37bf-805f633271e4@suse.cz>
-Date:   Tue, 21 Mar 2023 09:00:03 +0100
+        id n9oqK3JkGWS6OgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 21 Mar 2023 08:01:54 +0000
+Message-ID: <3f85d13e-5faa-ca0b-5ef5-79422bbae7a5@suse.cz>
+Date:   Tue, 21 Mar 2023 09:01:54 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 06/10] perf/core: Fix MAX_ORDER usage in
- rb_alloc_aux_page()
+Subject: Re: [PATCH 07/10] mm/page_reporting: Fix MAX_ORDER usage in
+ page_reporting_register()
 Content-Language: en-US
 To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -62,19 +62,11 @@ To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         David Hildenbrand <david@redhat.com>
 Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>
 References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
- <20230315113133.11326-7-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-8-kirill.shutemov@linux.intel.com>
 From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230315113133.11326-7-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20230315113133.11326-8-kirill.shutemov@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,38 +83,28 @@ On 3/15/23 12:31, Kirill A. Shutemov wrote:
 > MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
 > can deliver is MAX_ORDER-1.
 > 
-> Fix MAX_ORDER usage in rb_alloc_aux_page().
+> Fix MAX_ORDER usage in page_reporting_register().
 > 
 > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Alexander Duyck <alexander.h.duyck@linux.intel.com>
 > ---
->  kernel/events/ring_buffer.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  mm/page_reporting.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
-> index 273a0fe7910a..d6bbdb7830b2 100644
-> --- a/kernel/events/ring_buffer.c
-> +++ b/kernel/events/ring_buffer.c
-> @@ -609,8 +609,8 @@ static struct page *rb_alloc_aux_page(int node, int order)
->  {
->  	struct page *page;
+> diff --git a/mm/page_reporting.c b/mm/page_reporting.c
+> index c65813a9dc78..275b466de37b 100644
+> --- a/mm/page_reporting.c
+> +++ b/mm/page_reporting.c
+> @@ -370,7 +370,7 @@ int page_reporting_register(struct page_reporting_dev_info *prdev)
+>  	 */
 >  
-> -	if (order > MAX_ORDER)
-> -		order = MAX_ORDER;
-> +	if (order >= MAX_ORDER)
-> +		order = MAX_ORDER - 1;
->  
->  	do {
->  		page = alloc_pages_node(node, PERF_AUX_GFP, order);
+>  	if (page_reporting_order == -1) {
+> -		if (prdev->order > 0 && prdev->order <= MAX_ORDER)
+> +		if (prdev->order > 0 && prdev->order < MAX_ORDER)
+>  			page_reporting_order = prdev->order;
+>  		else
+>  			page_reporting_order = pageblock_order;
 
