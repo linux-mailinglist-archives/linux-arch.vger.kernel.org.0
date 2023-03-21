@@ -2,141 +2,379 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233506C38E3
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 19:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CAD6C3964
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 19:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCUSFN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 14:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S230325AbjCUSpl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 14:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjCUSFL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 14:05:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D63038471
-        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:04:47 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id cy23so63000800edb.12
-        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:04:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1679421885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E7SLq5regHpbyQXTIDtK1SgaDzSaRkQ8eVCIyS1gzK4=;
-        b=bWYVHkPrJ3lhl2qvydsocOaNohhdflPAx40ZjmJAkc2ONftBovoeyN6KKIOYZpM74h
-         3mzeM/WZjQxgY09Q6myFysAsy47qYHAkO4bHr8grBwOU3B6t6B5Tu5/nyb8GYPzQgaIl
-         LEtyibH+8V9c0YyTCK9k+y/A/VQifyeRzodrw=
+        with ESMTP id S230378AbjCUSpk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 14:45:40 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E5F53D81
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:45:37 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 359184451C
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 18:45:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1679424335;
+        bh=Y4XQJB5xJHgpbRaZqSQtANQq6ZuOUq+kRR7IuBZcCcI=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=bfcKT1ZF3M9It/YBnElcyi2Nxa5SveIEdSeiSODIHbMPNDYXwCVd29S0DV+6UnZwO
+         ynBLOTWO3+EFxjolQwWnG0b9zdmRtVaUFtIKJJt0V0qMMkJwDa9I6FQgWEn1SqSr6Q
+         /WVLQRKf6kFJ4EME29sf2pm0yDKiNSvyyyhraVhiaxQ3yNOdW8xA2KSoW0EoSJsBeW
+         giHzLTNNezafQaNtJBePkT7UZU+38zpFye0rA1z9ATCqqH+tH4/cdJpnWKvqbmrRf8
+         Fc+TseEJwWe5LFKkehvp17BihLzWX0aVnH3kC7Ia+lkKeKj/CkquYn8Uz+4iiBFPbA
+         B+q2SdOcplUAQ==
+Received: by mail-ed1-f71.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so23367119edh.14
+        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:45:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679421885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679424335;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E7SLq5regHpbyQXTIDtK1SgaDzSaRkQ8eVCIyS1gzK4=;
-        b=8LFcJl+KBciGHKfpOuus29rGQ1ct4onKda1YIBt0MT3r3JvjiNk+zAjdvT4eTpLOXL
-         eXBcTFoB8Y2GfRqL2ugccOfPMXgp8ekEjuhSlgwySatcjsHRV2kHCAdwTLe9zlKIMGqf
-         u2wL4aKnlg1RMRoJxRerx0sdY00c7Yuqxv0CJwI8Kc7rtyeg82ooloQAR7m61vDslTUw
-         jiAhJxGhfKfHPRWo+iAbVdhpJXeXyN/rKD/NMUsfCBk+lYu+hkBakx5App0C7+nXZxca
-         Asd5lLJcreQtJAYcnuZ0zo2fURlXp74y1qqtvPrbYOW6I1X+R1aleBlI5gHujQzDOfWO
-         G+Hg==
-X-Gm-Message-State: AO0yUKXTMlaKJaCtwhOwDKBvxgwpKIOskuz9Z8VJ4krwfcK5V3HsYbwc
-        JQjpXOGSENEUckjfFegpBkHqlYq+6WKIjojBfNUPKQ==
-X-Google-Smtp-Source: AK7set/TfVF9W3WWFS/DqeTtEpKxy+/JR1LOKvEgFQeVq7EQ30G5MYP55aJ0rSmnIug6ideqwVOhlg==
-X-Received: by 2002:aa7:c84a:0:b0:500:2a15:f86b with SMTP id g10-20020aa7c84a000000b005002a15f86bmr3958344edt.42.1679421885180;
-        Tue, 21 Mar 2023 11:04:45 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id r12-20020a50c00c000000b00501d2f10d19sm2227312edb.20.2023.03.21.11.04.43
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Mar 2023 11:04:44 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id b20so30162695edd.1
-        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 11:04:43 -0700 (PDT)
-X-Received: by 2002:a17:906:6d6:b0:933:f6e8:26d9 with SMTP id
- v22-20020a17090606d600b00933f6e826d9mr1718588ejb.15.1679421883223; Tue, 21
- Mar 2023 11:04:43 -0700 (PDT)
+        bh=Y4XQJB5xJHgpbRaZqSQtANQq6ZuOUq+kRR7IuBZcCcI=;
+        b=Z7dthw+ieg5+EKqmLsIlwmNZOuLsp6ZdzBaFzG3JAUv+miW2TI1UZRFyuuZjT98irE
+         gbpFBHHjoIZU0U1XPwIA7qCxMrHZA8uMYMnlsva59X23LRJ7LDrPK6XhllvtW7xO4rfQ
+         HhkL0ItRlnG9SwfAMXXwyMzXN1iIwI843yx72PpwH4tH9bWme4LXKxybev8U5m9L4X+A
+         QlGz4aiy4yM3EzfFBvjo3VpysKXqiIzhpyTS87iTZ3cML8WeQ7kD/WczhxXo0+wyWbkq
+         Q4ORBbOqLmMICXPqB0uvHdVNJzJBpjfw+G5sg81WEti3Ai8YujP9Z41KT/fO8/hD2Snz
+         QJwA==
+X-Gm-Message-State: AO0yUKVmeDk/jbWrP7ERCODwsT16yaCfsYbmyKz4asTSwIzn76YZ5eIc
+        FMAD/+JCGAvPiLNETx8WBnD9nUaac9ngCz/8KYwqFYehBCr9YzGQqou4nkMOgBbc5KFD3Ttv8/u
+        pkaUo3Ag5DGNwYqRG9Bmj3All83fMkBo0Gal3ZGw=
+X-Received: by 2002:a17:906:c348:b0:878:7189:a457 with SMTP id ci8-20020a170906c34800b008787189a457mr4070960ejb.51.1679424335024;
+        Tue, 21 Mar 2023 11:45:35 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8C2G05XgpiKl7H5tk4vcGkpOvrtYdN9YaqQcbOuUfEEJE22/YFnpMf48r1Oo4SCfLYU736Mw==
+X-Received: by 2002:a17:906:c348:b0:878:7189:a457 with SMTP id ci8-20020a170906c34800b008787189a457mr4070941ejb.51.1679424334870;
+        Tue, 21 Mar 2023 11:45:34 -0700 (PDT)
+Received: from amikhalitsyn.. (ip5f5bd076.dynamic.kabel-deutschland.de. [95.91.208.118])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709060e8900b0093313f4fc3csm4928194ejf.70.2023.03.21.11.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Mar 2023 11:45:34 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     davem@davemloft.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH net-next v2 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Date:   Tue, 21 Mar 2023 19:33:40 +0100
+Message-Id: <20230321183342.617114-2-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
+References: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-References: <20230321122514.1743889-1-mark.rutland@arm.com> <20230321122514.1743889-2-mark.rutland@arm.com>
-In-Reply-To: <20230321122514.1743889-2-mark.rutland@arm.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 21 Mar 2023 11:04:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
-Message-ID: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
-        aou@eecs.berkeley.edu, bp@alien8.de, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, davem@davemloft.net,
-        gor@linux.ibm.com, hca@linux.ibm.com, linux-arch@vger.kernel.org,
-        linux@armlinux.org.uk, mingo@redhat.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, robin.murphy@arm.com, tglx@linutronix.de,
-        viro@zeniv.linux.org.uk, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 5:25=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
- wrote:
->
-> * arm64's copy_to_user() under-reports the number of bytes copied in
->   some cases, e.g.
+Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+but it contains pidfd instead of plain pid, which allows programmers not
+to care about PID reuse problem.
 
-So I think this is the ok case.
+Idea comes from UAPI kernel group:
+https://uapi-group.org/kernel-features/
 
-> * arm's copy_to_user() under-reports the number of bytes copied in some
->   cases, and both copy_to_user() and copy_from_user() don't guarantee
->   that at least a single byte is copied when a partial copy is possible,
+Big thanks to Christian Brauner and Lennart Poettering for productive
+discussions about this.
 
-Again, this is ok historically.
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Lennart Poettering <mzxreary@0pointer.de>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+v2:
+	According to review comments from Kuniyuki Iwashima and Christian Brauner:
+	- use pidfd_create(..) retval as a result
+	- whitespace change
+---
+ arch/alpha/include/uapi/asm/socket.h    |  2 ++
+ arch/mips/include/uapi/asm/socket.h     |  2 ++
+ arch/parisc/include/uapi/asm/socket.h   |  2 ++
+ arch/sparc/include/uapi/asm/socket.h    |  2 ++
+ include/linux/net.h                     |  1 +
+ include/linux/socket.h                  |  1 +
+ include/net/scm.h                       | 14 ++++++++++++--
+ include/uapi/asm-generic/socket.h       |  2 ++
+ net/core/sock.c                         | 11 +++++++++++
+ net/mptcp/sockopt.c                     |  1 +
+ net/unix/af_unix.c                      | 18 +++++++++++++-----
+ tools/include/uapi/asm-generic/socket.h |  2 ++
+ 12 files changed, 51 insertions(+), 7 deletions(-)
 
-> * i386's copy_from_user does not guarantee that at least a single byte
->   is copied when a partial copit is possible, e.g.
->
->   | too few bytes consumed (offset=3D4093, size=3D8, ret=3D8)
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 739891b94136..ff310613ae64 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -137,6 +137,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index 18f3d95ecfec..762dcb80e4ec 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -148,6 +148,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index f486d3dfb6bb..df16a3e16d64 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -129,6 +129,8 @@
+ 
+ #define SO_RCVMARK		0x4049
+ 
++#define SO_PASSPIDFD		0x404A
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 2fda57a3ea86..6e2847804fea 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -130,6 +130,8 @@
+ 
+ #define SO_RCVMARK               0x0054
+ 
++#define SO_PASSPIDFD             0x0055
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/linux/net.h b/include/linux/net.h
+index b73ad8e3c212..c234dfbe7a30 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -43,6 +43,7 @@ struct net;
+ #define SOCK_PASSSEC		4
+ #define SOCK_SUPPORT_ZC		5
+ #define SOCK_CUSTOM_SOCKOPT	6
++#define SOCK_PASSPIDFD		7
+ 
+ #ifndef ARCH_HAS_SOCKET_TYPES
+ /**
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index 13c3a237b9c9..6bf90f251910 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -177,6 +177,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
+ #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
+ #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
+ #define SCM_SECURITY	0x03		/* rw: security label		*/
++#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
+ 
+ struct ucred {
+ 	__u32	pid;
+diff --git a/include/net/scm.h b/include/net/scm.h
+index 585adc1346bd..0c717ae9c8db 100644
+--- a/include/net/scm.h
++++ b/include/net/scm.h
+@@ -124,8 +124,9 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+ 				struct scm_cookie *scm, int flags)
+ {
+ 	if (!msg->msg_control) {
+-		if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
+-		    scm_has_secdata(sock))
++		if (test_bit(SOCK_PASSCRED, &sock->flags) ||
++		    test_bit(SOCK_PASSPIDFD, &sock->flags) ||
++		    scm->fp || scm_has_secdata(sock))
+ 			msg->msg_flags |= MSG_CTRUNC;
+ 		scm_destroy(scm);
+ 		return;
+@@ -141,6 +142,15 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+ 		put_cmsg(msg, SOL_SOCKET, SCM_CREDENTIALS, sizeof(ucreds), &ucreds);
+ 	}
+ 
++	if (test_bit(SOCK_PASSPIDFD, &sock->flags)) {
++		int pidfd;
++
++		WARN_ON_ONCE(!scm->pid);
++		pidfd = pidfd_create(scm->pid, 0);
++
++		put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd);
++	}
++
+ 	scm_destroy_cred(scm);
+ 
+ 	scm_passec(sock, msg, scm);
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 638230899e98..b76169fdb80b 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -132,6 +132,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+diff --git a/net/core/sock.c b/net/core/sock.c
+index c25888795390..3f974246ba3e 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1246,6 +1246,13 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+ 			clear_bit(SOCK_PASSCRED, &sock->flags);
+ 		break;
+ 
++	case SO_PASSPIDFD:
++		if (valbool)
++			set_bit(SOCK_PASSPIDFD, &sock->flags);
++		else
++			clear_bit(SOCK_PASSPIDFD, &sock->flags);
++		break;
++
+ 	case SO_TIMESTAMP_OLD:
+ 	case SO_TIMESTAMP_NEW:
+ 	case SO_TIMESTAMPNS_OLD:
+@@ -1737,6 +1744,10 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+ 		v.val = !!test_bit(SOCK_PASSCRED, &sock->flags);
+ 		break;
+ 
++	case SO_PASSPIDFD:
++		v.val = !!test_bit(SOCK_PASSPIDFD, &sock->flags);
++		break;
++
+ 	case SO_PEERCRED:
+ 	{
+ 		struct ucred peercred;
+diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
+index 8a9656248b0f..bd80e707d0b3 100644
+--- a/net/mptcp/sockopt.c
++++ b/net/mptcp/sockopt.c
+@@ -355,6 +355,7 @@ static int mptcp_setsockopt_sol_socket(struct mptcp_sock *msk, int optname,
+ 	case SO_BROADCAST:
+ 	case SO_BSDCOMPAT:
+ 	case SO_PASSCRED:
++	case SO_PASSPIDFD:
+ 	case SO_PASSSEC:
+ 	case SO_RXQ_OVFL:
+ 	case SO_WIFI_STATUS:
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index 0b0f18ecce44..b0ac768752fa 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -1361,7 +1361,8 @@ static int unix_dgram_connect(struct socket *sock, struct sockaddr *addr,
+ 		if (err)
+ 			goto out;
+ 
+-		if (test_bit(SOCK_PASSCRED, &sock->flags) &&
++		if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
++		     test_bit(SOCK_PASSPIDFD, &sock->flags)) &&
+ 		    !unix_sk(sk)->addr) {
+ 			err = unix_autobind(sk);
+ 			if (err)
+@@ -1469,7 +1470,8 @@ static int unix_stream_connect(struct socket *sock, struct sockaddr *uaddr,
+ 	if (err)
+ 		goto out;
+ 
+-	if (test_bit(SOCK_PASSCRED, &sock->flags) && !u->addr) {
++	if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
++	     test_bit(SOCK_PASSPIDFD, &sock->flags)) && !u->addr) {
+ 		err = unix_autobind(sk);
+ 		if (err)
+ 			goto out;
+@@ -1670,6 +1672,8 @@ static void unix_sock_inherit_flags(const struct socket *old,
+ {
+ 	if (test_bit(SOCK_PASSCRED, &old->flags))
+ 		set_bit(SOCK_PASSCRED, &new->flags);
++	if (test_bit(SOCK_PASSPIDFD, &old->flags))
++		set_bit(SOCK_PASSPIDFD, &new->flags);
+ 	if (test_bit(SOCK_PASSSEC, &old->flags))
+ 		set_bit(SOCK_PASSSEC, &new->flags);
+ }
+@@ -1819,8 +1823,10 @@ static bool unix_passcred_enabled(const struct socket *sock,
+ 				  const struct sock *other)
+ {
+ 	return test_bit(SOCK_PASSCRED, &sock->flags) ||
++	       test_bit(SOCK_PASSPIDFD, &sock->flags) ||
+ 	       !other->sk_socket ||
+-	       test_bit(SOCK_PASSCRED, &other->sk_socket->flags);
++	       test_bit(SOCK_PASSCRED, &other->sk_socket->flags) ||
++	       test_bit(SOCK_PASSPIDFD, &other->sk_socket->flags);
+ }
+ 
+ /*
+@@ -1922,7 +1928,8 @@ static int unix_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+ 			goto out;
+ 	}
+ 
+-	if (test_bit(SOCK_PASSCRED, &sock->flags) && !u->addr) {
++	if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
++	     test_bit(SOCK_PASSPIDFD, &sock->flags)) && !u->addr) {
+ 		err = unix_autobind(sk);
+ 		if (err)
+ 			goto out;
+@@ -2824,7 +2831,8 @@ static int unix_stream_read_generic(struct unix_stream_read_state *state,
+ 			/* Never glue messages from different writers */
+ 			if (!unix_skb_scm_eq(skb, &scm))
+ 				break;
+-		} else if (test_bit(SOCK_PASSCRED, &sock->flags)) {
++		} else if (test_bit(SOCK_PASSCRED, &sock->flags) ||
++			   test_bit(SOCK_PASSPIDFD, &sock->flags)) {
+ 			/* Copy credentials */
+ 			scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
+ 			unix_set_secdata(&scm, skb);
+diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
+index 8756df13be50..fbbc4bf53ee3 100644
+--- a/tools/include/uapi/asm-generic/socket.h
++++ b/tools/include/uapi/asm-generic/socket.h
+@@ -121,6 +121,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+-- 
+2.34.1
 
-And here's the real example of "we've always done this optimization".
-The exact details have differed, but the i386 case is the really
-really traditional one: it does word-at-a-time copies, and does *not*
-try to fall back to byte-wise copies. Never has.
-
-> * riscv's copy_to_user() and copy_from_user() don't guarantee that at
->   least a single byte is copied when a partial copy is possible, e.g.
->
->   | too few bytes consumed (offset=3D4095, size=3D2, ret=3D2)
-
-Yup. This is all the same "we've never forced byte-at-a-time copies"
-
-> * s390 passes all tests
->
-> * sparc's copy_from_user() over-reports the number of bbytes copied in
->   some caes, e.g.
-
-So this case I think this is wrong, and an outright bug. That can
-cause people to think that uninitialized data is initialized, and leak
-sensitive information.
-
-> * x86_64 passes all tests
-
-I suspect your testing is flawed due to being too limited, and x86-64
-having multiple different copying routines.
-
-Yes, at some point we made everything be quite careful with
-"handle_tail" etc, but we end up still having things that fail early,
-and fail hard.
-
-At a minimum, at least unsafe_copy_to_user() will fault and not do the
-"fill to the very last byte" case. Of course, that doesn't return a
-partial length (it only has a "fail" case), but it's an example of
-this whole thing where we haven't really been byte-exact when doing
-copies.
-
-So again, I get the feeling that these rules may make sense from a
-validation standpoint, but I'm not 100% sure we should generally have
-to be this careful.
-
-                 Linus
