@@ -2,74 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2196C4C0D
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 14:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A5E6C4C81
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 14:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCVNlu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 09:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S230525AbjCVNzR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Mar 2023 09:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCVNlt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 09:41:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BAC279AF;
-        Wed, 22 Mar 2023 06:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679492508; x=1711028508;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D22wytD9rbU2KaRKdwdHM/avd+nOb5IHbZpOTnO3+xQ=;
-  b=H3WOBlIz36TXX2RwJq6w/sWofKQPkUdeGJtLHjaNvanBbGlq8Rmy0ExI
-   CDMrgznn8myzWBEhYMAny/+J5mcwQ6Q5LIsTYan2wsLt9Thywr0OkVqg6
-   tqwL/ekTkj7U3YQvHKdrFQx02Z0+4+tymFWY0IqbQmbhadFsgPet917p4
-   jVO8/JRHBjCLE49ZfI/JnobYFsu+35OPpbeGkZfclzk1xepWS1u4V+DCq
-   cRD1CDeKNZ0aAmA3cS4D5XmTmc3RcNx4BsLibvSHrj6RgNad6JpaDcsyI
-   4w3AjQV2yoBTFE2kKjElo7ByXSoanbzVkV2tZYaOzGeuzIwBQGTcCvAJ3
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="336717234"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="336717234"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 06:41:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10657"; a="675269882"
-X-IronPort-AV: E=Sophos;i="5.98,282,1673942400"; 
-   d="scan'208";a="675269882"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Mar 2023 06:41:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1peyih-000DLu-01;
-        Wed, 22 Mar 2023 13:41:39 +0000
-Date:   Wed, 22 Mar 2023 21:41:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <202303222101.avwNiFWQ-lkp@intel.com>
-References: <20230321183342.617114-2-aleksandr.mikhalitsyn@canonical.com>
+        with ESMTP id S231133AbjCVNzQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 09:55:16 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 106AF59E4B;
+        Wed, 22 Mar 2023 06:55:13 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87F004B3;
+        Wed, 22 Mar 2023 06:55:57 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.53.3])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B32103F71E;
+        Wed, 22 Mar 2023 06:55:10 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 13:55:08 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
+        aou@eecs.berkeley.edu, bp@alien8.de, catalin.marinas@arm.com,
+        dave.hansen@linux.intel.com, davem@davemloft.net,
+        gor@linux.ibm.com, hca@linux.ibm.com, linux-arch@vger.kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, robin.murphy@arm.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk, will@kernel.org
+Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+Message-ID: <ZBsIvLUBNwYAjNUK@FVFF77S0Q05N>
+References: <20230321122514.1743889-1-mark.rutland@arm.com>
+ <20230321122514.1743889-2-mark.rutland@arm.com>
+ <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230321183342.617114-2-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wgknoR11b+mX=AP8TcHP+gsFGdhPk7sJPROaQBBsqdubw@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,37 +49,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Alexander,
+On Tue, Mar 21, 2023 at 11:04:26AM -0700, Linus Torvalds wrote:
+> On Tue, Mar 21, 2023 at 5:25 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > * arm64's copy_to_user() under-reports the number of bytes copied in
+> >   some cases, e.g.
+> 
+> So I think this is the ok case.
+> 
+> > * arm's copy_to_user() under-reports the number of bytes copied in some
+> >   cases, and both copy_to_user() and copy_from_user() don't guarantee
+> >   that at least a single byte is copied when a partial copy is possible,
+> 
+> Again, this is ok historically.
+> 
+> > * i386's copy_from_user does not guarantee that at least a single byte
+> >   is copied when a partial copit is possible, e.g.
+> >
+> >   | too few bytes consumed (offset=4093, size=8, ret=8)
+> 
+> And here's the real example of "we've always done this optimization".
+> The exact details have differed, but the i386 case is the really
+> really traditional one: it does word-at-a-time copies, and does *not*
+> try to fall back to byte-wise copies. Never has.
 
-Thank you for the patch! Yet something to improve:
+Sure; I understand that. The reason for pointing this out is that Al was very
+specific that implementations *must* guarantee this back in:
 
-[auto build test ERROR on net-next/main]
+  https://lore.kernel.org/all/YNSyZaZtPTmTa5P8@zeniv-ca.linux.org.uk/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230322-024808
-patch link:    https://lore.kernel.org/r/20230321183342.617114-2-aleksandr.mikhalitsyn%40canonical.com
-patch subject: [PATCH net-next v2 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230322/202303222101.avwNiFWQ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/491b69039f4479e1e0fb3af635c96989cdd23734
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230322-024808
-        git checkout 491b69039f4479e1e0fb3af635c96989cdd23734
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+... and that this could be done by having the fixup handler try to copy a byte.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303222101.avwNiFWQ-lkp@intel.com/
+I had assumed that *something* depended upon that, but I don't know what that
+something actually is.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+I'm not wedded to the semantic either way; if that's not required I can drop it
+from the tests.
 
->> ERROR: modpost: "pidfd_create" [net/unix/unix.ko] undefined!
+> > * s390 passes all tests
+> >
+> > * sparc's copy_from_user() over-reports the number of bbytes copied in
+> >   some caes, e.g.
+> 
+> So this case I think this is wrong, and an outright bug. That can
+> cause people to think that uninitialized data is initialized, and leak
+> sensitive information.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Agreed.
+
+> > * x86_64 passes all tests
+> 
+> I suspect your testing is flawed due to being too limited, and x86-64
+> having multiple different copying routines.
+
+Sorry; I should've called that out explicitly. I'm aware I'm not testing all
+the variants (I'd be happy to); I just wanted to check that I wasn't going off
+into the weeds with the semantics first.
+
+I probably should've sent this as an RFC...
+
+> Yes, at some point we made everything be quite careful with
+> "handle_tail" etc, but we end up still having things that fail early,
+> and fail hard.
+> 
+> At a minimum, at least unsafe_copy_to_user() will fault and not do the
+> "fill to the very last byte" case. Of course, that doesn't return a
+> partial length (it only has a "fail" case), but it's an example of
+> this whole thing where we haven't really been byte-exact when doing
+> copies.
+
+Sure; that does seem to be different structurally too, so it'd need to be
+plumbed into the harness differently.
+
+I'll note that's more like {get,put}_user() which similarly just have a fail
+case (and a put_user() could do a parital write then fault).
+
+> So again, I get the feeling that these rules may make sense from a
+> validation standpoint, but I'm not 100% sure we should generally have
+> to be this careful.
+
+I'm more than happy to relax the tests (and the docs); I just need to know
+where the boundary is between what we must guarantee and what's a nice-to-have.
+
+Thanks,
+Mark.
