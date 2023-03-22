@@ -2,103 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6186C3DD0
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Mar 2023 23:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7806C3F3C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 01:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCUWld (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 18:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
+        id S229584AbjCVAoH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 20:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjCUWlc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 18:41:32 -0400
-X-Greylist: delayed 891 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Mar 2023 15:41:31 PDT
-Received: from hall.aurel32.net (hall.aurel32.net [195.154.113.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B39058C02
-        for <linux-arch@vger.kernel.org>; Tue, 21 Mar 2023 15:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=mIwynQgjzMEjx1NFjlz0a05nnkbCrn+qgmoGl+S5aZE=; b=TlnQnwPD0bY4H/Ev84SzuT+cQs
-        kH/adSoMXHBN3TbSyBaJpmaGqEfGeMUpHm2/E1f3fmTfwUSDrx9UKMsHARF7GooQSiSQnH0qpN0Sa
-        SgcwBO8BwqxybVTCU+lkQZDI7BegMamueI6mdy7fKvNfeBh2EYkfXACpWBXi8qfWFR2sgceV+yo6h
-        TMRLHnpi9NUMhxJu7Au9B5yNbBZycP8nLfmcTdSN5IxPFF46dHfv+mOP/y4Kbx4EyGBMI2gKXqqod
-        cLXbMyJjtqdrRfjQ1733EBV6B91k4RlL0bhoPRIifcKtouzv6Cs2MJwVv3Boe8BLfwFHnr/TTSjlP
-        LcKD2Cdw==;
-Received: from aurel32 by hall.aurel32.net with local (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1pekQs-001zcp-Oi; Tue, 21 Mar 2023 23:26:18 +0100
-Date:   Tue, 21 Mar 2023 23:26:18 +0100
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of
- head.o
-Message-ID: <ZBovCrMXJk7NPISp@aurel32.net>
-Mail-Followup-To: Masahiro Yamada <masahiroy@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>, linux-kernel@vger.kernel.org
-References: <20221012233500.156764-1-masahiroy@kernel.org>
+        with ESMTP id S229511AbjCVAoH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 20:44:07 -0400
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B661B2F6;
+        Tue, 21 Mar 2023 17:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1679445846; x=1710981846;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=iOvNHogHw969vKlcxixxLuHiGmXJLT1uyknvGNdo50Q=;
+  b=OW74Xcz7D3IYkuiX45zolQ1tp2FPrkpYD4Kq1XNfWh6y9LO124MGHE1f
+   wOMKBE/ikyKSzh1aFB/hJdFyAgIcUDXCFo4WR2xYhqoaF3zeRFKRVv7Ot
+   Eg/hyFtMKERNytNB9aWPC5qQt0APLXxXXTUO9wmygK4ZRs5hWokgZKgZ5
+   M=;
+X-IronPort-AV: E=Sophos;i="5.98,280,1673913600"; 
+   d="scan'208";a="196002635"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2023 00:44:02 +0000
+Received: from EX19MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com (Postfix) with ESMTPS id 29B4580EF2;
+        Wed, 22 Mar 2023 00:43:57 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Wed, 22 Mar 2023 00:43:57 +0000
+Received: from 88665a182662.ant.amazon.com (10.94.217.231) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.24; Wed, 22 Mar 2023 00:43:52 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <aleksandr.mikhalitsyn@canonical.com>
+CC:     <arnd@arndb.de>, <brauner@kernel.org>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>,
+        <keescook@chromium.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <leon@kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <mzxreary@0pointer.de>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v2 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Date:   Tue, 21 Mar 2023 17:43:42 -0700
+Message-ID: <20230322004342.29904-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230321183342.617114-2-aleksandr.mikhalitsyn@canonical.com>
+References: <20230321183342.617114-2-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221012233500.156764-1-masahiroy@kernel.org>
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.94.217.231]
+X-ClientProxiedBy: EX19D039UWB004.ant.amazon.com (10.13.138.57) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=0.3 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On 2022-10-13 08:35, Masahiro Yamada wrote:
-> In the previous discussion (see the Link tag), Ard pointed out that
-> arm/arm64/kernel/head.o does not need any special treatment - the only
-> piece that must appear right at the start of the binary image is the
-> image header which is emitted into .head.text.
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Tue, 21 Mar 2023 19:33:40 +0100
+> Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+> but it contains pidfd instead of plain pid, which allows programmers not
+> to care about PID reuse problem.
 > 
-> The linker script does the right thing to do. The build system does
-> not need to manipulate the link order of head.o.
+> Idea comes from UAPI kernel group:
+> https://uapi-group.org/kernel-features/
 > 
-> Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
+> Big thanks to Christian Brauner and Lennart Poettering for productive
+> discussions about this.
 > 
->  scripts/head-object-list.txt | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
-> index b16326a92c45..f226e45e3b7b 100644
-> --- a/scripts/head-object-list.txt
-> +++ b/scripts/head-object-list.txt
-> @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
->  arch/arc/kernel/head.o
->  arch/arm/kernel/head-nommu.o
->  arch/arm/kernel/head.o
-> -arch/arm64/kernel/head.o
->  arch/csky/kernel/head.o
->  arch/hexagon/kernel/head.o
->  arch/ia64/kernel/head.o
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 
-This patch causes a significant increase of the arch/arm64/boot/Image
-size. For instance the generic arm64 Debian kernel went from 31 to 39 MB
-after this patch has been applied to the 6.1 stable tree.
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-In turn this causes issues with some bootloaders, for instance U-Boot on
-a Raspberry Pi limits the kernel size to 36 MB.
-
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
+Thanks,
+Kuniyuki
