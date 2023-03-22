@@ -2,125 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE1E6C4D43
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 15:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D326C4DB7
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 15:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjCVOQK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 10:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S231403AbjCVObC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Mar 2023 10:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjCVOQJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 10:16:09 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F562618AD;
-        Wed, 22 Mar 2023 07:16:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01DB94B3;
-        Wed, 22 Mar 2023 07:16:51 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.53.3])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 396BA3F71E;
-        Wed, 22 Mar 2023 07:16:04 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 14:16:01 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
-        aou@eecs.berkeley.edu, bp@alien8.de, catalin.marinas@arm.com,
-        dave.hansen@linux.intel.com, davem@davemloft.net,
-        gor@linux.ibm.com, hca@linux.ibm.com, linux-arch@vger.kernel.org,
-        linux@armlinux.org.uk, mingo@redhat.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, robin.murphy@arm.com, tglx@linutronix.de,
-        viro@zeniv.linux.org.uk, will@kernel.org
-Subject: Re: [PATCH v2 3/4] arm64: fix __raw_copy_to_user semantics
-Message-ID: <ZBsNoftQ4FMvvKtQ@FVFF77S0Q05N>
-References: <20230321122514.1743889-1-mark.rutland@arm.com>
- <20230321122514.1743889-4-mark.rutland@arm.com>
- <CAHk-=wjCN93bY_iMUF-msP6+2cCQTssQe4kiW2P1ZBDxf4Rt3g@mail.gmail.com>
+        with ESMTP id S231446AbjCVObB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 10:31:01 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 5C8F664B10
+        for <linux-arch@vger.kernel.org>; Wed, 22 Mar 2023 07:30:58 -0700 (PDT)
+Received: (qmail 1103384 invoked by uid 1000); 22 Mar 2023 10:30:57 -0400
+Date:   Wed, 22 Mar 2023 10:30:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, Joel Fernandes <joel@joelfernandes.org>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>
+Subject: Re: [PATCH memory-model 7/8] tools/memory-model: Add documentation
+ about SRCU read-side critical sections
+Message-ID: <4599c0d4-6c2a-431f-8bf3-173855c7ba77@rowland.harvard.edu>
+References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
+ <20230321010246.50960-7-paulmck@kernel.org>
+ <ZBpcpPIq9k2mX7cw@andrea>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wjCN93bY_iMUF-msP6+2cCQTssQe4kiW2P1ZBDxf4Rt3g@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZBpcpPIq9k2mX7cw@andrea>
+X-Spam-Status: No, score=0.2 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 10:50:33AM -0700, Linus Torvalds wrote:
-> On Tue, Mar 21, 2023 at 5:25 AM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > For some combinations of sizes and alignments __{arch,raw}_copy_to_user
-> > will copy some bytes between (to + size - N) and (to + size), but will
-> > never modify bytes past (to + size).
-> >
-> > This violates the documentation in <linux/uaccess.h>, which states:
-> >
-> > > If raw_copy_{to,from}_user(to, from, size) returns N, size - N bytes
-> > > starting at to must become equal to the bytes fetched from the
-> > > corresponding area starting at from.  All data past to + size - N must
-> > > be left unmodified.
+On Wed, Mar 22, 2023 at 02:40:52AM +0100, Andrea Parri wrote:
+> On Mon, Mar 20, 2023 at 06:02:45PM -0700, Paul E. McKenney wrote:
+> > From: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > Expand the discussion of SRCU and its read-side critical sections in
+> > the Linux Kernel Memory Model documentation file explanation.txt.  The
+> > new material discusses recent changes to the memory model made in
+> > commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU
+> > semantics").
 > 
-> Hmm.
+> How about squashing the diff below (adjusting subject and changelog):
 > 
-> I'm not 100% sure we couldn't just relax the documentation.
-
-Ok.
-
-> After all, the "exception happens in the middle of a copy" is a
-> special case, and generally results in -EFAULT rather than any
-> indication of "this is how much data we filled in for user space".
+>   Andrea
 > 
-> Now, some operations do *try* to generally give partial results
-> (notably "read()") even in the presence of page faults in the middle,
-> but I'm not entirely convinced we need to bend over backwards over
-> this.
+> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+> index 26554b1c5575e..acac527328a1f 100644
+> --- a/tools/memory-model/Documentation/litmus-tests.txt
+> +++ b/tools/memory-model/Documentation/litmus-tests.txt
+> @@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+>  		additional call_rcu() process to the site of the
+>  		emulated rcu-barrier().
+>  
+> -	e.	Although sleepable RCU (SRCU) is now modeled, there
+> -		are some subtle differences between its semantics and
+> -		those in the Linux kernel.  For example, the kernel
+> -		might interpret the following sequence as two partially
+> -		overlapping SRCU read-side critical sections:
+> -
+> -			 1  r1 = srcu_read_lock(&my_srcu);
+> -			 2  do_something_1();
+> -			 3  r2 = srcu_read_lock(&my_srcu);
+> -			 4  do_something_2();
+> -			 5  srcu_read_unlock(&my_srcu, r1);
+> -			 6  do_something_3();
+> -			 7  srcu_read_unlock(&my_srcu, r2);
+> -
+> -		In contrast, LKMM will interpret this as a nested pair of
+> -		SRCU read-side critical sections, with the outer critical
+> -		section spanning lines 1-7 and the inner critical section
+> -		spanning lines 3-5.
+> -
+> -		This difference would be more of a concern had anyone
+> -		identified a reasonable use case for partially overlapping
+> -		SRCU read-side critical sections.  For more information
+> -		on the trickiness of such overlapping, please see:
+> -		https://paulmck.livejournal.com/40593.html
+> -
+> -	f.	Reader-writer locking is not modeled.  It can be
+> +	e.	Reader-writer locking is not modeled.  It can be
+>  		emulated in litmus tests using atomic read-modify-write
+>  		operations.
 
-If you think we should relax the documented semantic, I can go do that. If we
-actually need the documented semantic in some cases, then something will need
-to change.
+Excellent suggestion!
 
-All I'm really after is "what should the semantic be?" since there's clearly a
-disconnect between the documentation and the code. I'm happy to go update
-either.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-> Put another way: we have lots of situations where we fill in partial
-> user butffers and then return EFAULT, so "copy_to_user()" has at no
-> point been "atomic" wrt the return value.
-> 
-> So I in no way hate this patch, and I do think it's a good "QoI fix",
-> but if this ends up being painful for some architecture, I get the
-> feeling that we could easily just relax the implementation instead.
-> 
-> We have accepted the whole "return value is not byte-exact" thing
-> forever, simply because we have never required user copies to be done
-> as byte-at-a-time copies.
-> 
-> Now, it is undoubtedly true that the buffer we fill in with a user copy must
-> 
->  (a) be filled AT LEAST as much as we reported it to be filled in (ie
-> user space can expect that there's no uninitialized data in any range
-> we claimed to fill)
-> 
->  (b) obviously never filled past the buffer size that was given
-
-I agree those are both necessary.
-
-> But if we take an exception in the middle, and write a partial aligned
-> word, and don't report that as written (which is what you are fixing),
-> I really feel that is a "QoI" thing, not a correctness thing.
->
-> I don't think this arm implementation thing has ever hurt anything, in
-> other words.
-> 
-> That said, at some point that quality-of-implementation thing makes
-> validation so much easier that maybe it's worth doing just for that
-> reason, which is why I think "if it's not too painful, go right ahead"
-> is fine.
-
-Fair enough.
-
-Thanks,
-Mark.
+Alan
