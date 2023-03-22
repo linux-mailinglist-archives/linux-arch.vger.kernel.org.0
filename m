@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B3D6C3F55
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 01:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A3A6C3F5C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 01:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCVAva (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 20:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S229663AbjCVAxI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 20:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCVAv3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 20:51:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD291136C1;
-        Tue, 21 Mar 2023 17:51:28 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id cn12so21012373edb.4;
-        Tue, 21 Mar 2023 17:51:28 -0700 (PDT)
+        with ESMTP id S229684AbjCVAxH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 20:53:07 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68C5128;
+        Tue, 21 Mar 2023 17:53:06 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h8so66649669ede.8;
+        Tue, 21 Mar 2023 17:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679446287;
+        d=gmail.com; s=20210112; t=1679446385;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/D//vq30gDfSAxNqZwDD5621tlN45WCAw1FWd9BqcCA=;
-        b=TSKcI0tuP2Ju+B6pP9VT5ptFQ8Di1BhckjhFdZ/43FtFsCdpfCdvSvMoTnFnpFXkfw
-         5HH/QGz7nIFIOyoqaTBeGmEemGc9vhBgTPZUs2G70iAWK/Rb0xPT9tT1IkGOiNwKTXH8
-         Q4zT6ud9vvcPOw4/o09Qj7AeMyrR+cVSQeN2aENkoLoPn6ZmhGygaEkiQX0h7a6jP1UO
-         mfVqeYaVqWDe5NZj+w7IgFafcSxAO0EMPsLNhiBu190i2e0Pmg/Vh87Ci+kdY2lfWtf5
-         Eis6tpfbVv9Zbw3EmlBNlb3NeyU0QJFcw1g6+41L6OeJjGyzDku16L2Q/7pPEHWUUVqL
-         /6tw==
+        bh=KWanL4XoGy6t+xq48/4j9gGBTUnLwvzHVYZkeKl6VbQ=;
+        b=RdseRlDCBR9eS9GdfveQeNqOTOGuKEuvv+HePDyMvbyCt4e5hUpGRQ5PPs1UmAIufr
+         G2yLolV6AQ+7v3Pg9AepDKXIQbWIxnrE6GHb0aLRNUG0/5hg1boYChtIJvq+MlE4mRmM
+         nZ/FXE3lK4tpyAZIQ9oCRlAg6TYk/chfjeJOAl+Werk8t39Gb7PXfgHC5B9xhKyZouTH
+         cx+tBd95RluLALhBgoTeRAE40oz8dBFBzCy1MEwlTq6i9LjnKmTsFm+LHbWBXQ4x6M2G
+         TPB2x6fOoVjVJljRWJv4cHKUmNHpc3YfHXD9sAImxaqmpTuaB5n3WDy2FM6ESSLYyFrl
+         Jxyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679446287;
+        d=1e100.net; s=20210112; t=1679446385;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/D//vq30gDfSAxNqZwDD5621tlN45WCAw1FWd9BqcCA=;
-        b=IQzIbBbHWGgMaf+oDRWi5WTGgXF/+wxVeWGTK+G60MDeyfMJCbkf3+ahxYkqtBQZdv
-         SYRN5eK4wo03F9ZwYPlW3DSWNsctHjd42yhu7E5uraUK/Fn9dVLaK//xI4rnfYSDqOmV
-         zqBq1v8dtMZuDtxsVHKMUg6cPytqKaQztza0pleYh68izJ0ouTL/yBsBmF8E5NKOYHAE
-         DCBfQiCIBi+djDXXolA4OE8fKbGLhRg+yIfE0h5FRJ5tDJBjAvIsn7aRhBJmUjirSY7a
-         K4KtvS8V6ylF4C6X7XoQ+HesuLJ79xWGhJkzMgTVUdhJ+gMOG1tVN9RfOXs+gQLtX88+
-         vgdQ==
-X-Gm-Message-State: AO0yUKV6+XkT7QEu3kl3GDkIpyM0pAjNJ2hxyT+WwklI4zaBP8DvQbXM
-        qjPx/sSecXD9obAgSX7GJ78=
-X-Google-Smtp-Source: AK7set9dAVfJ7otaBNTbqgHH52y55gibQ0cV8TsPgxrer+dKm3cdqy1ShNxwJXR4t5oCAFDnHodd6A==
-X-Received: by 2002:a17:906:94ce:b0:8aa:875d:9d9a with SMTP id d14-20020a17090694ce00b008aa875d9d9amr4667867ejy.50.1679446287094;
-        Tue, 21 Mar 2023 17:51:27 -0700 (PDT)
+        bh=KWanL4XoGy6t+xq48/4j9gGBTUnLwvzHVYZkeKl6VbQ=;
+        b=3Rpgvy/VDLcg7CtiiYb0zjzK9vt4JGd5CQGSDf56E4NnY4OuHg/XK4srIMwQPKS3t5
+         NdmYucC93vwsH5lkq9OKT4heiLWZf+3MR/+ykc0hGBLXKYaoSu/Ddde+29PrY4V6Xime
+         wKePhgA7Kk1ZzCmnXZIccl8pbbqEyR+G6k17NE0iHDuIPE++piQ8AXcOArNSWkH65E8O
+         ftKFPwRK/ei8fUJECZ/cua6llcMFeNTiB0ieFanYYnFb7rnJ6Hc3zZv2GW7PqUgor+yi
+         cm4vHyxfhJJSgJgiqvGPGuuXmk6goIkTAW81QPmQuxQPH2VV6gQqovVsaIC4HnooDiSm
+         Vewg==
+X-Gm-Message-State: AO0yUKW4esfqZzdZ2sf7fiUdgWwCjcnSzLy7kenEnFvm2DHIFsYUCBbG
+        1lG0QA4HMlRgPo5vMooB8NM=
+X-Google-Smtp-Source: AK7set94eoaNQw1l/nDMh6hRX1FLBMDuisHYGDIgeC1+Xl+p+jDLBAj0mQbz+bCkIJ+xu8gRe+k15w==
+X-Received: by 2002:a17:906:33c7:b0:933:9f43:5c3b with SMTP id w7-20020a17090633c700b009339f435c3bmr5174418eja.59.1679446384821;
+        Tue, 21 Mar 2023 17:53:04 -0700 (PDT)
 Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
-        by smtp.gmail.com with ESMTPSA id e8-20020a170906c00800b008e1509dde19sm6364793ejz.205.2023.03.21.17.51.25
+        by smtp.gmail.com with ESMTPSA id g26-20020a1709064e5a00b00930525d89e2sm6375124ejw.89.2023.03.21.17.53.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 17:51:26 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 01:51:22 +0100
+        Tue, 21 Mar 2023 17:53:04 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 01:53:00 +0100
 From:   Andrea Parri <parri.andrea@gmail.com>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -56,41 +56,50 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
         npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
         luc.maranget@inria.fr, akiyks@gmail.com,
-        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Subject: Re: [PATCH memory-model 1/8] tools/memory-model: Update some warning
- labels
-Message-ID: <ZBpRCiHuC6LPkFOc@andrea>
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: Re: [PATCH memory-model 4/8] tools/memory-model: Restrict to-r to
+ read-read address dependency
+Message-ID: <ZBpRbPvdq6hQLyhX@andrea>
 References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
- <20230321010246.50960-1-paulmck@kernel.org>
+ <20230321010246.50960-4-paulmck@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321010246.50960-1-paulmck@kernel.org>
+In-Reply-To: <20230321010246.50960-4-paulmck@kernel.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 06:02:39PM -0700, Paul E. McKenney wrote:
-> From: Alan Stern <stern@rowland.harvard.edu>
+On Mon, Mar 20, 2023 at 06:02:42PM -0700, Paul E. McKenney wrote:
+> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
 > 
-> Some of the warning labels used in the LKMM are unfortunately
-> ambiguous.  In particular, the same warning is used for both an
-> unmatched rcu_read_lock() call and for an unmatched rcu_read_unlock()
-> call.  Likewise for the srcu_* equivalents.  Also, the warning about
-> passing a wrong value to srcu_read_unlock() -- i.e., a value different
-> from the one returned by the matching srcu_read_lock() -- talks about
-> bad nesting rather than non-matching values.
+> During a code-reading exercise of linux-kernel.cat CAT file, I generated
+> a graph to show the to-r relations. While likely not problematic for the
+> model, I found it confusing that a read-write address dependency would
+> show as a to-r edge on the graph.
 > 
-> Let's update the warning labels to make their meanings more clear.
+> This patch therefore restricts the to-r links derived from addr to only
+> read-read address dependencies, so that read-write address dependencies don't
+> show as to-r in the graphs. This should also prevent future users of to-r from
+> deriving incorrect relations. Note that a read-write address dep, obviously,
+> still ends up in the ppo relation via the to-w relation.
 > 
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Reviewed-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> I verified that a read-read address dependency still shows up as a to-r
+> link in the graph, as it did before.
+> 
+> For reference, the problematic graph was generated with the following
+> command:
+> herd7 -conf linux-kernel.cfg \
+>    -doshow dep -doshow to-r -doshow to-w ./foo.litmus -show all -o OUT/
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
@@ -99,42 +108,22 @@ Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
 
 > ---
->  tools/memory-model/linux-kernel.bell | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  tools/memory-model/linux-kernel.cat | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/tools/memory-model/linux-kernel.bell b/tools/memory-model/linux-kernel.bell
-> index 70a9073dec3e..dc464854d28a 100644
-> --- a/tools/memory-model/linux-kernel.bell
-> +++ b/tools/memory-model/linux-kernel.bell
-> @@ -53,8 +53,8 @@ let rcu-rscs = let rec
->  	in matched
+> diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
+> index 3a4d3b49e85c..cfc1b8fd46da 100644
+> --- a/tools/memory-model/linux-kernel.cat
+> +++ b/tools/memory-model/linux-kernel.cat
+> @@ -81,7 +81,7 @@ let dep = addr | data
+>  let rwdep = (dep | ctrl) ; [W]
+>  let overwrite = co | fr
+>  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
+> -let to-r = addr | (dep ; [Marked] ; rfi)
+> +let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
+>  let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
 >  
->  (* Validate nesting *)
-> -flag ~empty Rcu-lock \ domain(rcu-rscs) as unbalanced-rcu-locking
-> -flag ~empty Rcu-unlock \ range(rcu-rscs) as unbalanced-rcu-locking
-> +flag ~empty Rcu-lock \ domain(rcu-rscs) as unmatched-rcu-lock
-> +flag ~empty Rcu-unlock \ range(rcu-rscs) as unmatched-rcu-unlock
->  
->  (* Compute matching pairs of nested Srcu-lock and Srcu-unlock *)
->  let srcu-rscs = let rec
-> @@ -69,14 +69,14 @@ let srcu-rscs = let rec
->  	in matched
->  
->  (* Validate nesting *)
-> -flag ~empty Srcu-lock \ domain(srcu-rscs) as unbalanced-srcu-locking
-> -flag ~empty Srcu-unlock \ range(srcu-rscs) as unbalanced-srcu-locking
-> +flag ~empty Srcu-lock \ domain(srcu-rscs) as unmatched-srcu-lock
-> +flag ~empty Srcu-unlock \ range(srcu-rscs) as unmatched-srcu-unlock
->  
->  (* Check for use of synchronize_srcu() inside an RCU critical section *)
->  flag ~empty rcu-rscs & (po ; [Sync-srcu] ; po) as invalid-sleep
->  
->  (* Validate SRCU dynamic match *)
-> -flag ~empty different-values(srcu-rscs) as srcu-bad-nesting
-> +flag ~empty different-values(srcu-rscs) as srcu-bad-value-match
->  
->  (* Compute marked and plain memory accesses *)
->  let Marked = (~M) | IW | Once | Release | Acquire | domain(rmw) | range(rmw) |
+>  (* Propagation: Ordering from release operations and strong fences. *)
 > -- 
 > 2.40.0.rc2
 > 
