@@ -2,84 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8ED6C4E90
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 15:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAE56C4E79
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 15:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjCVOxa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 10:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
+        id S229996AbjCVOud (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Mar 2023 10:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjCVOxR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 10:53:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1276A6B5C8;
-        Wed, 22 Mar 2023 07:51:27 -0700 (PDT)
+        with ESMTP id S229842AbjCVOuL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 10:50:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D74B65C6F;
+        Wed, 22 Mar 2023 07:48:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 05565CE1DC9;
-        Wed, 22 Mar 2023 14:46:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8027C4339B;
-        Wed, 22 Mar 2023 14:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679496383;
-        bh=mcvsw1hiR3Qyp1OeN9vHnJd3gGmdmQuM7Wjd77b+bFE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ELQQHZhIzJhFR/Tk978Cc4oL5KccT10G3P7OufM8u/DwJJrgnZYhnwjbsbICQlAMV
-         H+J2nxPCk7sKDxEk34dFgAr484iXX4ipdk//qSUVurVNswYNy4ZSHw5nYc790DuL3M
-         PnNS/ccgSsaYCQELdpk4B0pPGzXNVCo1CFLdg1MfyiNyibq7XYuZHOI0bzhHhix8lj
-         U6J4yngMnQ+jtjD45ynxoDUuwZ57lvqd/kXS1x484UXRQ4eNCmEdQzZJDa/oy2x3Ia
-         VYXpIz0i0RFlhNGItPYC8Dn2i2KTVu5XRZTviQ2+ZYGkJJUGLZ+Fac/BU6OCPSePxT
-         XixNdk9EVFQPg==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     guoren@kernel.org, arnd@arndb.de, guoren@kernel.org,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        palmer@dabbelt.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Lai Jiangshan <laijs@linux.alibaba.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        =?utf-8?B?QmrDtnJu?= =?utf-8?B?IFTDtnBlbA==?= 
-        <bjorn@rivosinc.com>
-Subject: Re: [PATCH -next V17 1/7] compiler_types.h: Add __noinstr_section()
- for noinstr
-In-Reply-To: <20230222033021.983168-2-guoren@kernel.org>
-References: <20230222033021.983168-1-guoren@kernel.org>
- <20230222033021.983168-2-guoren@kernel.org>
-Date:   Wed, 22 Mar 2023 15:46:20 +0100
-Message-ID: <87ilesu9mr.fsf@all.your.base.are.belong.to.us>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBB20B81CE4;
+        Wed, 22 Mar 2023 14:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94351C4339B;
+        Wed, 22 Mar 2023 14:48:29 +0000 (UTC)
+Date:   Wed, 22 Mar 2023 14:48:26 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
+        aou@eecs.berkeley.edu, bp@alien8.de, dave.hansen@linux.intel.com,
+        davem@davemloft.net, gor@linux.ibm.com, hca@linux.ibm.com,
+        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
+        mingo@redhat.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        robin.murphy@arm.com, tglx@linutronix.de,
+        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
+        will@kernel.org
+Subject: Re: [PATCH v2 3/4] arm64: fix __raw_copy_to_user semantics
+Message-ID: <ZBsVOu6ygLoGOI5d@arm.com>
+References: <20230321122514.1743889-1-mark.rutland@arm.com>
+ <20230321122514.1743889-4-mark.rutland@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321122514.1743889-4-mark.rutland@arm.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-guoren@kernel.org writes:
+On Tue, Mar 21, 2023 at 12:25:13PM +0000, Mark Rutland wrote:
+> For some combinations of sizes and alignments __{arch,raw}_copy_to_user
+> will copy some bytes between (to + size - N) and (to + size), but will
+> never modify bytes past (to + size).
+> 
+> This violates the documentation in <linux/uaccess.h>, which states:
+> 
+> > If raw_copy_{to,from}_user(to, from, size) returns N, size - N bytes
+> > starting at to must become equal to the bytes fetched from the
+> > corresponding area starting at from.  All data past to + size - N must
+> > be left unmodified.
+> 
+> This can be demonstrated through testing, e.g.
+> 
+> |     # test_copy_to_user: EXPECTATION FAILED at lib/usercopy_kunit.c:287
+> | post-destination bytes modified (dst_page[4082]=0x1, offset=4081, size=16, ret=15)
+> | [FAILED] 16 byte copy
+> 
+> This happens because the __arch_copy_to_user() can make unaligned stores
+> to the userspace buffer, and the ARM architecture permits (but does not
+> require) that such unaligned stores write some bytes before raising a
+> fault (per ARM DDI 0487I.a Section B2.2.1 and Section B2.7.1). The
+> extable fixup handlers in __arch_copy_to_user() assume that any faulting
+> store has failed entirely, and so under-report the number of bytes
+> copied when an unaligned store writes some bytes before faulting.
 
-> From: Lai Jiangshan <laijs@linux.alibaba.com>
->
-> Using __noinstr_section() doesn't automatically disable all
-> instrumentations on the section. Inhibition for some
-> instrumentations requires extra code. I.E. KPROBES explicitly
-> avoids instrumenting on .noinstr.text.
+I find the Arm ARM hard to parse (no surprise here). Do you happen to
+know what the behavior is for the new CPY instructions? I'd very much
+like to use those for uaccess as well eventually but if they have the
+same imp def behaviour, I'd rather relax the documentation and continue
+to live with the current behaviour.
 
-Guo, the generic entry series doesn't apply cleanly on
-riscv/for-next >6.2-rc1, and this patch is the issue.
+> The only architecturally guaranteed way to avoid this is to only use
+> aligned stores to write to user memory.	This patch rewrites
+> __arch_copy_to_user() to only access the user buffer with aligned
+> stores, such that the bytes written can always be determined reliably.
 
-Could you do a respin (potentially w/o this patch)?
+Can we not fall back to byte-at-a-time? There's still a potential race
+if the page becomes read-only for example. Well, probably not worth it
+if we decide to go this route.
 
+Where we may notice some small performance degradation is copy_to_user()
+where the reads from the source end up unaligned due to the destination
+buffer alignment. I doubt that's a common case though and most CPUs can
+probably cope just well with this.
 
-Cheers,
-Bj=C3=B6rn
+-- 
+Catalin
