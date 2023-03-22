@@ -2,134 +2,439 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9F36C4F73
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 16:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BE96C4F89
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 16:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbjCVPas (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 11:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S230194AbjCVPf4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Mar 2023 11:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjCVPar (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 11:30:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAD98460BB;
-        Wed, 22 Mar 2023 08:30:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EAE24B3;
-        Wed, 22 Mar 2023 08:31:29 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.53.3])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 408FE3F71E;
-        Wed, 22 Mar 2023 08:30:42 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 15:30:39 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
-        aou@eecs.berkeley.edu, bp@alien8.de, dave.hansen@linux.intel.com,
-        davem@davemloft.net, gor@linux.ibm.com, hca@linux.ibm.com,
-        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
-        mingo@redhat.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        robin.murphy@arm.com, tglx@linutronix.de,
-        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
-        will@kernel.org
-Subject: Re: [PATCH v2 3/4] arm64: fix __raw_copy_to_user semantics
-Message-ID: <ZBsfH6DCVFhrGleS@FVFF77S0Q05N>
-References: <20230321122514.1743889-1-mark.rutland@arm.com>
- <20230321122514.1743889-4-mark.rutland@arm.com>
- <ZBsVOu6ygLoGOI5d@arm.com>
+        with ESMTP id S231289AbjCVPfz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 11:35:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B75E3B0C7;
+        Wed, 22 Mar 2023 08:35:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 496E7B81D21;
+        Wed, 22 Mar 2023 15:35:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11C4C433D2;
+        Wed, 22 Mar 2023 15:35:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679499351;
+        bh=WVV/H80+zuLPMgmWWvz0wCM8BiYBexz+Nk2HHh9NVAM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BvgGxD2hLC0s4kB+sGkNES8gUWeJsKFGUdzYIvpWQnEAxyw7aoDYglaH2Jlntv64z
+         Zl6TjXUh7CTlS4gDKjae1ZZ8UUsnGbogyPRpzzlEifpWYL02rztCs+gWedcCCdKlc5
+         6IJvp2KRCLEHB8jJTQ69yMr3WpM4CCHjYaSf5MtxydiCl4cUEP/8uiq4mZMsPLq4QP
+         cH0BlanMPmYN3dQx/wsbuNWz1RonkO8hBn4yg5j1hWlpbuwTK8vY1vVR7QloEzpvcJ
+         sqIN5ADEdxhkppgC1AW33t4BDnAgisjqsim4LGVy9VrU930J2oS9lpaGES86xasWZE
+         xvUnp8Zd/YGaA==
+Date:   Wed, 22 Mar 2023 16:35:44 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/3] net: core: add getsockopt SO_PEERPIDFD
+Message-ID: <20230322153544.u7rfjijcpuheda6m@wittgenstein>
+References: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230321183342.617114-3-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZBsVOu6ygLoGOI5d@arm.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230321183342.617114-3-aleksandr.mikhalitsyn@canonical.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 02:48:26PM +0000, Catalin Marinas wrote:
-> On Tue, Mar 21, 2023 at 12:25:13PM +0000, Mark Rutland wrote:
-> > For some combinations of sizes and alignments __{arch,raw}_copy_to_user
-> > will copy some bytes between (to + size - N) and (to + size), but will
-> > never modify bytes past (to + size).
-> > 
-> > This violates the documentation in <linux/uaccess.h>, which states:
-> > 
-> > > If raw_copy_{to,from}_user(to, from, size) returns N, size - N bytes
-> > > starting at to must become equal to the bytes fetched from the
-> > > corresponding area starting at from.  All data past to + size - N must
-> > > be left unmodified.
-> > 
-> > This can be demonstrated through testing, e.g.
-> > 
-> > |     # test_copy_to_user: EXPECTATION FAILED at lib/usercopy_kunit.c:287
-> > | post-destination bytes modified (dst_page[4082]=0x1, offset=4081, size=16, ret=15)
-> > | [FAILED] 16 byte copy
-> > 
-> > This happens because the __arch_copy_to_user() can make unaligned stores
-> > to the userspace buffer, and the ARM architecture permits (but does not
-> > require) that such unaligned stores write some bytes before raising a
-> > fault (per ARM DDI 0487I.a Section B2.2.1 and Section B2.7.1). The
-> > extable fixup handlers in __arch_copy_to_user() assume that any faulting
-> > store has failed entirely, and so under-report the number of bytes
-> > copied when an unaligned store writes some bytes before faulting.
+On Tue, Mar 21, 2023 at 07:33:41PM +0100, Alexander Mikhalitsyn wrote:
+> Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
+> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 > 
-> I find the Arm ARM hard to parse (no surprise here). Do you happen to
-> know what the behavior is for the new CPY instructions? I'd very much
-> like to use those for uaccess as well eventually but if they have the
-> same imp def behaviour, I'd rather relax the documentation and continue
-> to live with the current behaviour.
-
-My understanding is that those have to be broken up into a set of smaller
-accesses, and so the same applies, with the architectural window for clobbering
-being the *entire* range from 'to' to 'to + size'
-
-That said, the description of the forward-only instructions (CPYF*) suggests
-those might have to be exact.
-
-In ARM DDI 0487I.a, section C6.2.80 "CPYFPWT, CPYFMWT, CPYFEWT", it says:
-
-> The memory copy performed by these instructions is in the forward direction
-> only, so the instructions are suitable for a memory copy only where there is
-> no overlap between the source and destination locations, or where the source
-> address is greater than the destination address.
-
-That *might* mean in practice that CPYF* instructions can't clobber later bytes
-in dst in case they'll later be consumed as src bytes, but it doesn't strictly
-say that (and maybe the core would figure out how much potential overlap there
-is and tune the copy chunk size).
-
-We could chase our architects on that.
-
-> > The only architecturally guaranteed way to avoid this is to only use
-> > aligned stores to write to user memory.	This patch rewrites
-> > __arch_copy_to_user() to only access the user buffer with aligned
-> > stores, such that the bytes written can always be determined reliably.
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> ---
+> v2:
+> 	According to review comments from Kuniyuki Iwashima and Christian Brauner:
+> 	- use pidfd_create(..) retval as a result
+> 	- whitespace change
+> ---
+>  arch/alpha/include/uapi/asm/socket.h    |  1 +
+>  arch/mips/include/uapi/asm/socket.h     |  1 +
+>  arch/parisc/include/uapi/asm/socket.h   |  1 +
+>  arch/sparc/include/uapi/asm/socket.h    |  1 +
+>  include/uapi/asm-generic/socket.h       |  1 +
+>  net/core/sock.c                         | 21 +++++++++++++++++++++
+>  tools/include/uapi/asm-generic/socket.h |  1 +
+>  7 files changed, 27 insertions(+)
 > 
-> Can we not fall back to byte-at-a-time? There's still a potential race
-> if the page becomes read-only for example. Well, probably not worth it
-> if we decide to go this route.
+> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> index ff310613ae64..e94f621903fe 100644
+> --- a/arch/alpha/include/uapi/asm/socket.h
+> +++ b/arch/alpha/include/uapi/asm/socket.h
+> @@ -138,6 +138,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> index 762dcb80e4ec..60ebaed28a4c 100644
+> --- a/arch/mips/include/uapi/asm/socket.h
+> +++ b/arch/mips/include/uapi/asm/socket.h
+> @@ -149,6 +149,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> index df16a3e16d64..be264c2b1a11 100644
+> --- a/arch/parisc/include/uapi/asm/socket.h
+> +++ b/arch/parisc/include/uapi/asm/socket.h
+> @@ -130,6 +130,7 @@
+>  #define SO_RCVMARK		0x4049
+>  
+>  #define SO_PASSPIDFD		0x404A
+> +#define SO_PEERPIDFD		0x404B
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> index 6e2847804fea..682da3714686 100644
+> --- a/arch/sparc/include/uapi/asm/socket.h
+> +++ b/arch/sparc/include/uapi/asm/socket.h
+> @@ -131,6 +131,7 @@
+>  #define SO_RCVMARK               0x0054
+>  
+>  #define SO_PASSPIDFD             0x0055
+> +#define SO_PEERPIDFD             0x0056
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+> index b76169fdb80b..8ce8a39a1e5f 100644
+> --- a/include/uapi/asm-generic/socket.h
+> +++ b/include/uapi/asm-generic/socket.h
+> @@ -133,6 +133,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 3f974246ba3e..85c269ca9d8a 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1763,6 +1763,27 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+>  		goto lenout;
+>  	}
+>  
+> +	case SO_PEERPIDFD:
+> +	{
+> +		struct pid *peer_pid;
+> +		int pidfd;
+> +
+> +		if (len > sizeof(pidfd))
+> +			len = sizeof(pidfd);
+> +
+> +		spin_lock(&sk->sk_peer_lock);
+> +		peer_pid = get_pid(sk->sk_peer_pid);
+> +		spin_unlock(&sk->sk_peer_lock);
+> +
+> +		pidfd = pidfd_create(peer_pid, 0);
+> +
+> +		put_pid(peer_pid);
+> +
+> +		if (copy_to_sockptr(optval, &pidfd, len))
+> +			return -EFAULT;
 
-I was trying to avoid that shape of race.
+This leaks the pidfd. We could do:
 
-I also believe that if we have a misaligned store straddling two pages, and the
-first page is faulting, it the store can do a partial write to the 2nd page,
-which I suspected is not what we want (though maybe that's beningn, if we're
-going to say that clobbering anywhere within the dst buffer is fine).
+	if (copy_to_sockptr(optval, &pidfd, len)) {
+		close_fd(pidfd);
+		return -EFAULT;
+	}
 
-> Where we may notice some small performance degradation is copy_to_user()
-> where the reads from the source end up unaligned due to the destination
-> buffer alignment. I doubt that's a common case though and most CPUs can
-> probably cope just well with this.
+but it's a nasty anti-pattern to install the fd in the caller's fdtable
+and then close it again. So let's avoid it if we can. Since you can only
+set one socket option per setsockopt() sycall we should be able to
+reserve an fd and pidfd_file, do the stuff that might fail, and then
+call fd_install. So that would roughly be:
 
-FWIW, I instrumented a kernel build workload, and the significant majority of
-the time (IIRC by ~100x), both src and dst happened to be aligned to at least 8
-bytes, so even if that were slow its the rare case. I guess that's because any
-structures we copy are likely to contain a long or a pointer, and a bunch of
-other copies are going to be bulk page copies into buffers which the allocator
-has aligned to at least 8 bytes.
+	peer_pid = get_pid(sk->sk_peer_pid);
+	pidfd_file = pidfd_file_create(peer_pid, 0, &pidfd);
+	f (copy_to_sockptr(optval, &pidfd, len))
+	       return -EFAULT;
+	goto lenout:
+	
+	.
+	.
+	.
 
-Thanks,
-Mark.
+lenout:
+	if (copy_to_sockptr(optlen, &len, sizeof(int)))
+		return -EFAULT;
+
+	// Made it safely, install pidfd now.
+	fd_install(pidfd, pidfd_file)
+
+(See below for the associated api I'm going to publish independent of
+this as kernel/fork.c and fanotify both could use it.)
+
+But now, let's look at net/socket.c there's another wrinkle. So let's say you
+have successfully installed the pidfd then it seems you can still fail later:
+
+        if (level == SOL_SOCKET)
+                err = sock_getsockopt(sock, level, optname, optval, optlen);
+        else if (unlikely(!sock->ops->getsockopt))
+                err = -EOPNOTSUPP;
+        else
+                err = sock->ops->getsockopt(sock, level, optname, optval,
+                                            optlen);
+
+        if (!in_compat_syscall())
+                err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
+                                                     optval, optlen, max_optlen,
+                                                     err);
+
+out_put:
+	fput_light(sock->file, fput_needed);
+	return err;
+
+If the bpf hook returns an error we've placed an fd into the caller's sockopt
+buffer without their knowledge.
+
+From 4fee16f0920308bee2531fd3b08484f607eb5830 Mon Sep 17 00:00:00 2001
+From: Christian Brauner <brauner@kernel.org>
+Date: Wed, 22 Mar 2023 15:59:02 +0100
+Subject: [PATCH 1/3] [HERE BE DRAGONS - DRAFT - __UNTESTED__] pid: add
+ pidfd_file_create()
+
+Reserve and fd and pidfile, do stuff that might fail, install fd when
+point of no return.
+
+[HERE BE DRAGONS - DRAFT - __UNTESTED__] pid: add pidfd_file_create()
+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ include/linux/pid.h |  1 +
+ kernel/pid.c        | 45 +++++++++++++++++++++++++++++++++------------
+ 2 files changed, 34 insertions(+), 12 deletions(-)
+
+diff --git a/include/linux/pid.h b/include/linux/pid.h
+index 343abf22092e..c486dbc4d7b6 100644
+--- a/include/linux/pid.h
++++ b/include/linux/pid.h
+@@ -80,6 +80,7 @@ extern struct pid *pidfd_pid(const struct file *file);
+ struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags);
+ struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags);
+ int pidfd_create(struct pid *pid, unsigned int flags);
++struct file *pidfd_file_create(struct pid *pid, unsigned int flags, int *pidfd);
+ 
+ static inline struct pid *get_pid(struct pid *pid)
+ {
+diff --git a/kernel/pid.c b/kernel/pid.c
+index 3fbc5e46b721..8d0924f1dbf6 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -576,6 +576,32 @@ struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags)
+ 	return task;
+ }
+ 
++struct file *pidfd_file_create(struct pid *pid, unsigned int flags, int *pidfd)
++{
++	int fd;
++	struct file *pidfile;
++
++	if (!pid || !pid_has_task(pid, PIDTYPE_TGID))
++		return ERR_PTR(-EINVAL);
++
++	if (flags & ~(O_NONBLOCK | O_RDWR | O_CLOEXEC))
++		return ERR_PTR(-EINVAL);
++
++	fd = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
++	if (fd < 0)
++		return ERR_PTR(fd);
++
++	pidfile = anon_inode_getfile("[pidfd]", &pidfd_fops, pid,
++				     flags | O_RDWR | O_CLOEXEC);
++	if (IS_ERR(pidfile)) {
++		put_unused_fd(fd);
++		return pidfile;
++	}
++	get_pid(pid); /* held by pidfile now */
++	*pidfd = fd;
++	return pidfile;
++}
++
+ /**
+  * pidfd_create() - Create a new pid file descriptor.
+  *
+@@ -594,20 +620,15 @@ struct task_struct *pidfd_get_task(int pidfd, unsigned int *flags)
+  */
+ int pidfd_create(struct pid *pid, unsigned int flags)
+ {
+-	int fd;
++	int pidfd;
++	struct file *pidfile;
+ 
+-	if (!pid || !pid_has_task(pid, PIDTYPE_TGID))
+-		return -EINVAL;
++	pidfile = pidfd_file_create(pid, flags, &pidfd);
++	if (IS_ERR(pidfile))
++		return PTR_ERR(pidfile);
+ 
+-	if (flags & ~(O_NONBLOCK | O_RDWR | O_CLOEXEC))
+-		return -EINVAL;
+-
+-	fd = anon_inode_getfd("[pidfd]", &pidfd_fops, get_pid(pid),
+-			      flags | O_RDWR | O_CLOEXEC);
+-	if (fd < 0)
+-		put_pid(pid);
+-
+-	return fd;
++	fd_install(pidfd, pidfile);
++	return pidfd;
+ }
+ 
+ /**
+-- 
+2.34.1
+
+From c336f1c6cc39faa5aef4fbedd3c4f8eca51d8436 Mon Sep 17 00:00:00 2001
+From: Christian Brauner <brauner@kernel.org>
+Date: Wed, 22 Mar 2023 15:59:54 +0100
+Subject: [PATCH 2/3] [HERE BE DRAGONS - DRAFT - __UNTESTED__] fork: use
+ pidfd_file_create()
+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ kernel/fork.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index f68954d05e89..c8dc78ee0a74 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2296,20 +2296,11 @@ static __latent_entropy struct task_struct *copy_process(
+ 	 * if the fd table isn't shared).
+ 	 */
+ 	if (clone_flags & CLONE_PIDFD) {
+-		retval = get_unused_fd_flags(O_RDWR | O_CLOEXEC);
+-		if (retval < 0)
+-			goto bad_fork_free_pid;
+-
+-		pidfd = retval;
+-
+-		pidfile = anon_inode_getfile("[pidfd]", &pidfd_fops, pid,
+-					      O_RDWR | O_CLOEXEC);
++		pidfile = pidfd_file_create(pid, O_RDWR | O_CLOEXEC, &pidfd);
+ 		if (IS_ERR(pidfile)) {
+-			put_unused_fd(pidfd);
+ 			retval = PTR_ERR(pidfile);
+ 			goto bad_fork_free_pid;
+ 		}
+-		get_pid(pid);	/* held by pidfile now */
+ 
+ 		retval = put_user(pidfd, args->pidfd);
+ 		if (retval)
+-- 
+2.34.1
+
+From 0897f68fe06a8777d8ec600fdc719143f76095b1 Mon Sep 17 00:00:00 2001
+From: Christian Brauner <brauner@kernel.org>
+Date: Wed, 22 Mar 2023 16:02:50 +0100
+Subject: [PATCH 3/3] [HERE BE DRAGONS - DRAFT - __UNTESTED__] fanotify: use
+ pidfd_file_create()
+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ fs/notify/fanotify/fanotify_user.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+index 8f430bfad487..4a8db6b5f690 100644
+--- a/fs/notify/fanotify/fanotify_user.c
++++ b/fs/notify/fanotify/fanotify_user.c
+@@ -665,6 +665,7 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
+ 	unsigned int pidfd_mode = info_mode & FAN_REPORT_PIDFD;
+ 	struct file *f = NULL;
+ 	int ret, pidfd = FAN_NOPIDFD, fd = FAN_NOFD;
++	struct file *pidfd_file = NULL;
+ 
+ 	pr_debug("%s: group=%p event=%p\n", __func__, group, event);
+ 
+@@ -718,9 +719,11 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
+ 		    !pid_has_task(event->pid, PIDTYPE_TGID)) {
+ 			pidfd = FAN_NOPIDFD;
+ 		} else {
+-			pidfd = pidfd_create(event->pid, 0);
+-			if (pidfd < 0)
++			pidfd_file = pidfd_file_create(event->pid, 0, &pidfd);
++			if (IS_ERR(pidfd_file)) {
+ 				pidfd = FAN_EPIDFD;
++				pidfd_file = NULL;
++			}
+ 		}
+ 	}
+ 
+@@ -750,6 +753,8 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
+ 
+ 	if (f)
+ 		fd_install(fd, f);
++	if (pidfd_file)
++		fd_install(pidfd, pidfd_file);
+ 
+ 	return metadata.event_len;
+ 
+@@ -759,8 +764,10 @@ static ssize_t copy_event_to_user(struct fsnotify_group *group,
+ 		fput(f);
+ 	}
+ 
+-	if (pidfd >= 0)
+-		close_fd(pidfd);
++	if (pidfd >= 0) {
++		put_unused_fd(pidfd);
++		fput(pidfd_file);
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.34.1
+
