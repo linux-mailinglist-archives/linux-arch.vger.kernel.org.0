@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A3A6C3F5C
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 01:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1DB6C3F63
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 01:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjCVAxI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Mar 2023 20:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S229671AbjCVA7G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Mar 2023 20:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCVAxH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 20:53:07 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68C5128;
-        Tue, 21 Mar 2023 17:53:06 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h8so66649669ede.8;
-        Tue, 21 Mar 2023 17:53:06 -0700 (PDT)
+        with ESMTP id S229838AbjCVA7G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Mar 2023 20:59:06 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40C357D1E;
+        Tue, 21 Mar 2023 17:59:04 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id w9so66753508edc.3;
+        Tue, 21 Mar 2023 17:59:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679446385;
+        d=gmail.com; s=20210112; t=1679446743;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KWanL4XoGy6t+xq48/4j9gGBTUnLwvzHVYZkeKl6VbQ=;
-        b=RdseRlDCBR9eS9GdfveQeNqOTOGuKEuvv+HePDyMvbyCt4e5hUpGRQ5PPs1UmAIufr
-         G2yLolV6AQ+7v3Pg9AepDKXIQbWIxnrE6GHb0aLRNUG0/5hg1boYChtIJvq+MlE4mRmM
-         nZ/FXE3lK4tpyAZIQ9oCRlAg6TYk/chfjeJOAl+Werk8t39Gb7PXfgHC5B9xhKyZouTH
-         cx+tBd95RluLALhBgoTeRAE40oz8dBFBzCy1MEwlTq6i9LjnKmTsFm+LHbWBXQ4x6M2G
-         TPB2x6fOoVjVJljRWJv4cHKUmNHpc3YfHXD9sAImxaqmpTuaB5n3WDy2FM6ESSLYyFrl
-         Jxyg==
+        bh=i8yKs2Hu30YhP0Me3c6fPX37b/EvrU0cmnZmogWkvQI=;
+        b=ntDGzzUmt8XqElY0V5I9cixjIB2WrKcr3ak2vVl7vsITkOG+z3cazrd9YBYBMyGwbm
+         DZpU8sS6yt71vnB1sgHGSjDULOEC+v24D/wFxmBrF9tqyEmtI6ZYFrs/czRWqpn739e+
+         Nvxd0phI8I6kzhBlF/FcWWkYAGS066dfM8Ry3Z19FfFJuEwdjXP6tY8b6U05j1Tzy6nP
+         R/pZrCMekQf7POi4E1vjLFJhXqv2iL4ruKmFTt1nVwSsO0ba5L1PVucyCPsI4xsfRGXN
+         zoOGgjXNrU9VtsjBcufiYl3vcNqj2Bds5mP+EyMFSbT4vKILLbb13UW0T90McISReYle
+         eQJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679446385;
+        d=1e100.net; s=20210112; t=1679446743;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KWanL4XoGy6t+xq48/4j9gGBTUnLwvzHVYZkeKl6VbQ=;
-        b=3Rpgvy/VDLcg7CtiiYb0zjzK9vt4JGd5CQGSDf56E4NnY4OuHg/XK4srIMwQPKS3t5
-         NdmYucC93vwsH5lkq9OKT4heiLWZf+3MR/+ykc0hGBLXKYaoSu/Ddde+29PrY4V6Xime
-         wKePhgA7Kk1ZzCmnXZIccl8pbbqEyR+G6k17NE0iHDuIPE++piQ8AXcOArNSWkH65E8O
-         ftKFPwRK/ei8fUJECZ/cua6llcMFeNTiB0ieFanYYnFb7rnJ6Hc3zZv2GW7PqUgor+yi
-         cm4vHyxfhJJSgJgiqvGPGuuXmk6goIkTAW81QPmQuxQPH2VV6gQqovVsaIC4HnooDiSm
-         Vewg==
-X-Gm-Message-State: AO0yUKW4esfqZzdZ2sf7fiUdgWwCjcnSzLy7kenEnFvm2DHIFsYUCBbG
-        1lG0QA4HMlRgPo5vMooB8NM=
-X-Google-Smtp-Source: AK7set94eoaNQw1l/nDMh6hRX1FLBMDuisHYGDIgeC1+Xl+p+jDLBAj0mQbz+bCkIJ+xu8gRe+k15w==
-X-Received: by 2002:a17:906:33c7:b0:933:9f43:5c3b with SMTP id w7-20020a17090633c700b009339f435c3bmr5174418eja.59.1679446384821;
-        Tue, 21 Mar 2023 17:53:04 -0700 (PDT)
+        bh=i8yKs2Hu30YhP0Me3c6fPX37b/EvrU0cmnZmogWkvQI=;
+        b=VhtMEIQ1bUW/x5yJd4rHCMxyJUqWcxFfg9lv7+ugkxlaKXGebafZl46cQNQsz35LAu
+         FAXoeFBmEch+K9FeAJ1h8tlottZO/7Iq7mjAU6TH11P/vRjIYiUn/zXjuT6PIZJqFji5
+         Ohqc9KiTxLW2dnGDn9bxk9VZy8tURRsluenb6ZLbVNs8VD7FGk+XPtogshzFBotMYlZx
+         smZX5itXitMZeBNcDCa2+LCNsbfa98BY36uYXUnE6Dgu5pgG+fcxLir/SbGBghJvldPm
+         wk7JuodCPpBVg1wtQ9rb5z2mj99lxg4Qbf1o8GLRHhVZSXqZPXJCzTFPU7QZ5tUd0yRn
+         blzg==
+X-Gm-Message-State: AO0yUKXNZMiuREgffHRQbasXgB+BsVz5QqAO8FLybINjlt/w8CvPN4Lv
+        HYXjrv7d4owFSgiXmldEkwA=
+X-Google-Smtp-Source: AK7set/UAKhbBJvj5SSE7BVnmbEYv9k8efLVjCNR2SsU6FMwTFEyOwvRGQozQVLxn+RfaFG85qqQNw==
+X-Received: by 2002:a17:906:c04c:b0:92b:5c67:c660 with SMTP id bm12-20020a170906c04c00b0092b5c67c660mr4995293ejb.69.1679446743071;
+        Tue, 21 Mar 2023 17:59:03 -0700 (PDT)
 Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
-        by smtp.gmail.com with ESMTPSA id g26-20020a1709064e5a00b00930525d89e2sm6375124ejw.89.2023.03.21.17.53.03
+        by smtp.gmail.com with ESMTPSA id k8-20020a17090627c800b008d1693c212csm6384115ejc.8.2023.03.21.17.59.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Mar 2023 17:53:04 -0700 (PDT)
-Date:   Wed, 22 Mar 2023 01:53:00 +0100
+        Tue, 21 Mar 2023 17:59:02 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 01:59:00 +0100
 From:   Andrea Parri <parri.andrea@gmail.com>
 To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -56,16 +56,16 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
         npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
         luc.maranget@inria.fr, akiyks@gmail.com,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: Re: [PATCH memory-model 4/8] tools/memory-model: Restrict to-r to
- read-read address dependency
-Message-ID: <ZBpRbPvdq6hQLyhX@andrea>
+        Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Subject: Re: [PATCH memory-model 2/8] tools/memory-model: Unify UNLOCK+LOCK
+ pairings to po-unlock-lock-po
+Message-ID: <ZBpS1H2rufhVoCid@andrea>
 References: <778147e4-ccab-40cf-b6ef-31abe4e3f6b7@paulmck-laptop>
- <20230321010246.50960-4-paulmck@kernel.org>
+ <20230321010246.50960-2-paulmck@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321010246.50960-4-paulmck@kernel.org>
+In-Reply-To: <20230321010246.50960-2-paulmck@kernel.org>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -76,31 +76,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 20, 2023 at 06:02:42PM -0700, Paul E. McKenney wrote:
-> From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+On Mon, Mar 20, 2023 at 06:02:40PM -0700, Paul E. McKenney wrote:
+> From: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
 > 
-> During a code-reading exercise of linux-kernel.cat CAT file, I generated
-> a graph to show the to-r relations. While likely not problematic for the
-> model, I found it confusing that a read-write address dependency would
-> show as a to-r edge on the graph.
+> LKMM uses two relations for talking about UNLOCK+LOCK pairings:
 > 
-> This patch therefore restricts the to-r links derived from addr to only
-> read-read address dependencies, so that read-write address dependencies don't
-> show as to-r in the graphs. This should also prevent future users of to-r from
-> deriving incorrect relations. Note that a read-write address dep, obviously,
-> still ends up in the ppo relation via the to-w relation.
+> 	1) po-unlock-lock-po, which handles UNLOCK+LOCK pairings
+> 	   on the same CPU or immediate lock handovers on the same
+> 	   lock variable
 > 
-> I verified that a read-read address dependency still shows up as a to-r
-> link in the graph, as it did before.
+> 	2) po;[UL];(co|po);[LKW];po, which handles UNLOCK+LOCK pairs
+> 	   literally as described in rcupdate.h#L1002, i.e., even
+> 	   after a sequence of handovers on the same lock variable.
 > 
-> For reference, the problematic graph was generated with the following
-> command:
-> herd7 -conf linux-kernel.cfg \
->    -doshow dep -doshow to-r -doshow to-w ./foo.litmus -show all -o OUT/
+> The latter relation is used only once, to provide the guarantee
+> defined in rcupdate.h#L1002 by smp_mb__after_unlock_lock(), which
+> makes any UNLOCK+LOCK pair followed by the fence behave like a full
+> barrier.
 > 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> This patch drops this use in favor of using po-unlock-lock-po
+> everywhere, which unifies the way the model talks about UNLOCK+LOCK
+> pairings.  At first glance this seems to weaken the guarantee given
+> by LKMM: When considering a long sequence of lock handovers
+> such as below, where P0 hands the lock to P1, which hands it to P2,
+> which finally executes such an after_unlock_lock fence, the mb
+> relation currently links any stores in the critical section of P0
+> to instructions P2 executes after its fence, but not so after the
+> patch.
+> 
+> P0(int *x, int *y, spinlock_t *mylock)
+> {
+>         spin_lock(mylock);
+>         WRITE_ONCE(*x, 2);
+>         spin_unlock(mylock);
+>         WRITE_ONCE(*y, 1);
+> }
+> 
+> P1(int *y, int *z, spinlock_t *mylock)
+> {
+>         int r0 = READ_ONCE(*y); // reads 1
+>         spin_lock(mylock);
+>         spin_unlock(mylock);
+>         WRITE_ONCE(*z,1);
+> }
+> 
+> P2(int *z, int *d, spinlock_t *mylock)
+> {
+>         int r1 = READ_ONCE(*z); // reads 1
+>         spin_lock(mylock);
+>         spin_unlock(mylock);
+>         smp_mb__after_unlock_lock();
+>         WRITE_ONCE(*d,1);
+> }
+> 
+> P3(int *x, int *d)
+> {
+>         WRITE_ONCE(*d,2);
+>         smp_mb();
+>         WRITE_ONCE(*x,1);
+> }
+> 
+> exists (1:r0=1 /\ 2:r1=1 /\ x=2 /\ d=2)
+> 
+> Nevertheless, the ordering guarantee given in rcupdate.h is actually
+> not weakened.  This is because the unlock operations along the
+> sequence of handovers are A-cumulative fences.  They ensure that any
+> stores that propagate to the CPU performing the first unlock
+> operation in the sequence must also propagate to every CPU that
+> performs a subsequent lock operation in the sequence.  Therefore any
+> such stores will also be ordered correctly by the fence even if only
+> the final handover is considered a full barrier.
+> 
+> Indeed this patch does not affect the behaviors allowed by LKMM at
+> all.  The mb relation is used to define ordering through:
+> 1) mb/.../ppo/hb, where the ordering is subsumed by hb+ where the
+>    lock-release, rfe, and unlock-acquire orderings each provide hb
+> 2) mb/strong-fence/cumul-fence/prop, where the rfe and A-cumulative
+>    lock-release orderings simply add more fine-grained cumul-fence
+>    edges to substitute a single strong-fence edge provided by a long
+>    lock handover sequence
+> 3) mb/strong-fence/pb and various similar uses in the definition of
+>    data races, where as discussed above any long handover sequence
+>    can be turned into a sequence of cumul-fence edges that provide
+>    the same ordering.
+> 
+> Signed-off-by: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+Looks like after-unlock-lock has just won the single fattest inline comment
+in linux-kernel.cat.  :-)
 
 Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
@@ -108,22 +173,35 @@ Acked-by: Andrea Parri <parri.andrea@gmail.com>
 
 
 > ---
->  tools/memory-model/linux-kernel.cat | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/memory-model/linux-kernel.cat | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 > 
 > diff --git a/tools/memory-model/linux-kernel.cat b/tools/memory-model/linux-kernel.cat
-> index 3a4d3b49e85c..cfc1b8fd46da 100644
+> index 07f884f9b2bf..6e531457bb73 100644
 > --- a/tools/memory-model/linux-kernel.cat
 > +++ b/tools/memory-model/linux-kernel.cat
-> @@ -81,7 +81,7 @@ let dep = addr | data
->  let rwdep = (dep | ctrl) ; [W]
->  let overwrite = co | fr
->  let to-w = rwdep | (overwrite & int) | (addr ; [Plain] ; wmb)
-> -let to-r = addr | (dep ; [Marked] ; rfi)
-> +let to-r = (addr ; [R]) | (dep ; [Marked] ; rfi)
->  let ppo = to-r | to-w | fence | (po-unlock-lock-po & int)
+> @@ -37,8 +37,19 @@ let mb = ([M] ; fencerel(Mb) ; [M]) |
+>  	([M] ; fencerel(Before-atomic) ; [RMW] ; po? ; [M]) |
+>  	([M] ; po? ; [RMW] ; fencerel(After-atomic) ; [M]) |
+>  	([M] ; po? ; [LKW] ; fencerel(After-spinlock) ; [M]) |
+> -	([M] ; po ; [UL] ; (co | po) ; [LKW] ;
+> -		fencerel(After-unlock-lock) ; [M])
+> +(*
+> + * Note: The po-unlock-lock-po relation only passes the lock to the direct
+> + * successor, perhaps giving the impression that the ordering of the
+> + * smp_mb__after_unlock_lock() fence only affects a single lock handover.
+> + * However, in a longer sequence of lock handovers, the implicit
+> + * A-cumulative release fences of lock-release ensure that any stores that
+> + * propagate to one of the involved CPUs before it hands over the lock to
+> + * the next CPU will also propagate to the final CPU handing over the lock
+> + * to the CPU that executes the fence.  Therefore, all those stores are
+> + * also affected by the fence.
+> + *)
+> +	([M] ; po-unlock-lock-po ;
+> +		[After-unlock-lock] ; po ; [M])
+>  let gp = po ; [Sync-rcu | Sync-srcu] ; po?
+>  let strong-fence = mb | gp
 >  
->  (* Propagation: Ordering from release operations and strong fences. *)
 > -- 
 > 2.40.0.rc2
 > 
