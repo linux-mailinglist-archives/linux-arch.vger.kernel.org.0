@@ -2,170 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE35A6C4316
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 07:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784AA6C457C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 09:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjCVGYJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 02:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57314 "EHLO
+        id S229544AbjCVI7r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Mar 2023 04:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCVGYI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 02:24:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C644FCFD;
-        Tue, 21 Mar 2023 23:24:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0563B818DC;
-        Wed, 22 Mar 2023 06:24:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E4BC433D2;
-        Wed, 22 Mar 2023 06:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679466244;
-        bh=cQj5ND6NQ+jRWxCbfQwoB4SOr8K6z0BISCctoUKWGVU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P4g55mQ4GpArph+pkS+DQ31CizcD7NV2GqC7nU+0eZFeZsNlVkpLotPVaeLBhc+ZJ
-         t0hji+++80ENIgmcqns5g37vfI9HzF5YEW9X9LvxWCsL3icilIPJHIHHwkLzyG/GnP
-         U34qvhk4vbbvHm50Y/wMjbElLuC0H1bnj3bNVYxbS0zqdm4sxEdzPUeR6gTHwRbGio
-         Au29QAEj9fggf14xN984GN2wQ9la2m+2W3YMVEsuGmZZxhyhFNaJhW0ParEpy5jujz
-         E7qP1r8C0s5SZlPnZ5rJIis+nSZ5Opxv287UZRMNchX9ZeZaXj80SNxAEhnGgt42B/
-         9sqEy/CaHWgzQ==
-Date:   Wed, 22 Mar 2023 08:23:51 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv2] mm/page_alloc: Make deferred page init free pages in
- MAX_ORDER blocks
-Message-ID: <ZBqe97HNpE/gpOX8@kernel.org>
-References: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
+        with ESMTP id S229459AbjCVI7q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 04:59:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368D84AFE7;
+        Wed, 22 Mar 2023 01:59:45 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ew6so6798246edb.7;
+        Wed, 22 Mar 2023 01:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679475583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fMZAhNKxBafShWjvkXP8mjAoJFEZrRyPKGSB67IZ/W0=;
+        b=pMSH/splwrSv6wUN6+i3TwO4YKPv7JdL9hDPQMaYG5sM5Ew87ocbSH13Zl0fbrAZqn
+         4d5BhHkup6u+kzjEEBzFon2wzhVEVkZN8eJ2Jx50b60Cr+3xxU6rsgVKuoGDix8zxJ5O
+         H1OQHJa0FhVmuPdkQDLf/H2DtAlXHh47w4gmyHgCtSDhLaMxZHrOraZIYBjfuewL0rfD
+         r86qFgDR5Ax356p8B9Fz+gMBMFnGhSrEVQuwER2Vg8ahOb+jm6IpEYuzgLdN+zCQTwjZ
+         HpDz1v1JGW263Y54jiyFKnQkcySFJPC/uyc04zNXZNhHcsECutr1fs7yDyKWIgxl75TQ
+         C/pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679475583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fMZAhNKxBafShWjvkXP8mjAoJFEZrRyPKGSB67IZ/W0=;
+        b=tORwcq7YeqYKkBiIuZLn/cqgw/lpF6D6hGVDIdO4zzX6OFlp4KNZ756HJe3zvSd8GI
+         tF9ucmhqiod5Ucy3BDE9uslhOtOOTQQYmnpPWPbyPI7lZxGMSL0D86dM2scTHTQkcPam
+         tAbCv9u7X9M8f4A0dyKR8WxUkuUOkj2RaFZwOPYryo9VvWK2sdCw79XP/hF19u+Uw1SS
+         UQZKyRCjHPqKrxLjWpJi8IVmXqvB27CkHbK2mLscNoS2P1vsI7NK3Dcq9rjPnKIOlr4O
+         j6IEsw3H7y91Mj+APwAG0wDl8ui3EsA0ojSQySMs0xXWYl1UfkBGHyMzTFHg0nz7uw9f
+         pqvg==
+X-Gm-Message-State: AO0yUKWEwBaMdPLoKJfMouc1twnYor4b9sTZuSFWoqL0nu/UdCF7aL/5
+        kHrmcCOWj+TLOSvU1VPxoBsJpjnwcFj3lx6j
+X-Google-Smtp-Source: AK7set9Urn7PFBX1x9P+a/1n9aK7bGYS/XxjM4AtTKEWqA9Gk5aLosso8dBHHTcdixT45+1epb9bxg==
+X-Received: by 2002:a17:906:2e8e:b0:933:44ef:e5b5 with SMTP id o14-20020a1709062e8e00b0093344efe5b5mr6944534eji.30.1679475583472;
+        Wed, 22 Mar 2023 01:59:43 -0700 (PDT)
+Received: from andrea (93-41-0-79.ip79.fastwebnet.it. [93.41.0.79])
+        by smtp.gmail.com with ESMTPSA id u25-20020a50c2d9000000b004faf34064c8sm7294180edf.62.2023.03.22.01.59.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Mar 2023 01:59:43 -0700 (PDT)
+Date:   Wed, 22 Mar 2023 09:59:38 +0100
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org, stern@rowland.harvard.edu,
+        will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com
+Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model:  Document
+ locking corner cases
+Message-ID: <ZBrDeoCIs1wmNBeF@andrea>
+References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
+ <20230321010549.51296-1-paulmck@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230321002415.20843-1-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230321010549.51296-1-paulmck@kernel.org>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 03:24:15AM +0300, Kirill A. Shutemov wrote:
-> Normal page init path frees pages during the boot in MAX_ORDER chunks,
-> but deferred page init path does it in pageblock blocks.
-> 
-> Change deferred page init path to work in MAX_ORDER blocks.
-> 
-> For cases when MAX_ORDER is larger than pageblock, set migrate type to
-> MIGRATE_MOVABLE for all pageblocks covered by the page.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>  create mode 100644 Documentation/litmus-tests/locking/DCL-broken.litmus
+>  create mode 100644 Documentation/litmus-tests/locking/DCL-fixed.litmus
+>  create mode 100644 Documentation/litmus-tests/locking/RM-broken.litmus
+>  create mode 100644 Documentation/litmus-tests/locking/RM-fixed.litmus
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Unfortunately none of them were liked by klitmus7/gcc, the diff below
+works for me but please double check.
 
-> ---
-> 
-> Note: the patch depends on the new definiton of MAX_ORDER.
-> 
-> v2:
-> 
->  - Fix commit message;
-> 
-> ---
->  include/linux/mmzone.h |  2 ++
->  mm/page_alloc.c        | 19 ++++++++++---------
->  2 files changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 96599cb9eb62..f53fe3a7ca45 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -32,6 +32,8 @@
->  #endif
->  #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
->  
-> +#define IS_MAX_ORDER_ALIGNED(pfn) IS_ALIGNED(pfn, MAX_ORDER_NR_PAGES)
-> +
->  /*
->   * PAGE_ALLOC_COSTLY_ORDER is the order at which allocations are deemed
->   * costly to service.  That is between allocation orders which should
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 87d760236dba..fc02a243425d 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1875,9 +1875,10 @@ static void __init deferred_free_range(unsigned long pfn,
->  	page = pfn_to_page(pfn);
->  
->  	/* Free a large naturally-aligned chunk if possible */
-> -	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
-> -		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
-> -		__free_pages_core(page, pageblock_order);
-> +	if (nr_pages == MAX_ORDER_NR_PAGES && IS_MAX_ORDER_ALIGNED(pfn)) {
-> +		for (i = 0; i < nr_pages; i += pageblock_nr_pages)
-> +			set_pageblock_migratetype(page + i, MIGRATE_MOVABLE);
-> +		__free_pages_core(page, MAX_ORDER);
->  		return;
->  	}
->  
-> @@ -1901,19 +1902,19 @@ static inline void __init pgdat_init_report_one_done(void)
->  /*
->   * Returns true if page needs to be initialized or freed to buddy allocator.
->   *
-> - * We check if a current large page is valid by only checking the validity
-> + * We check if a current MAX_ORDER block is valid by only checking the validity
->   * of the head pfn.
->   */
->  static inline bool __init deferred_pfn_valid(unsigned long pfn)
->  {
-> -	if (pageblock_aligned(pfn) && !pfn_valid(pfn))
-> +	if (IS_MAX_ORDER_ALIGNED(pfn) && !pfn_valid(pfn))
->  		return false;
->  	return true;
->  }
->  
->  /*
->   * Free pages to buddy allocator. Try to free aligned pages in
-> - * pageblock_nr_pages sizes.
-> + * MAX_ORDER_NR_PAGES sizes.
->   */
->  static void __init deferred_free_pages(unsigned long pfn,
->  				       unsigned long end_pfn)
-> @@ -1924,7 +1925,7 @@ static void __init deferred_free_pages(unsigned long pfn,
->  		if (!deferred_pfn_valid(pfn)) {
->  			deferred_free_range(pfn - nr_free, nr_free);
->  			nr_free = 0;
-> -		} else if (pageblock_aligned(pfn)) {
-> +		} else if (IS_MAX_ORDER_ALIGNED(pfn)) {
->  			deferred_free_range(pfn - nr_free, nr_free);
->  			nr_free = 1;
->  		} else {
-> @@ -1937,7 +1938,7 @@ static void __init deferred_free_pages(unsigned long pfn,
->  
->  /*
->   * Initialize struct pages.  We minimize pfn page lookups and scheduler checks
-> - * by performing it only once every pageblock_nr_pages.
-> + * by performing it only once every MAX_ORDER_NR_PAGES.
->   * Return number of pages initialized.
->   */
->  static unsigned long  __init deferred_init_pages(struct zone *zone,
-> @@ -1953,7 +1954,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
->  		if (!deferred_pfn_valid(pfn)) {
->  			page = NULL;
->  			continue;
-> -		} else if (!page || pageblock_aligned(pfn)) {
-> +		} else if (!page || IS_MAX_ORDER_ALIGNED(pfn)) {
->  			page = pfn_to_page(pfn);
->  		} else {
->  			page++;
-> -- 
-> 2.39.2
-> 
+  Andrea
 
--- 
-Sincerely yours,
-Mike.
+
+diff --git a/Documentation/litmus-tests/locking/DCL-broken.litmus b/Documentation/litmus-tests/locking/DCL-broken.litmus
+index cfaa25ff82b1e..bfb7ba4316d69 100644
+--- a/Documentation/litmus-tests/locking/DCL-broken.litmus
++++ b/Documentation/litmus-tests/locking/DCL-broken.litmus
+@@ -10,10 +10,9 @@ C DCL-broken
+ {
+ 	int flag;
+ 	int data;
+-	int lck;
+ }
+ 
+-P0(int *flag, int *data, int *lck)
++P0(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -32,7 +31,7 @@ P0(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-P1(int *flag, int *data, int *lck)
++P1(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -51,5 +50,5 @@ P1(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-locations [flag;data;lck;0:r0;0:r1;1:r0;1:r1]
++locations [flag;data;0:r0;0:r1;1:r0;1:r1]
+ exists (0:r2=0 \/ 1:r2=0)
+diff --git a/Documentation/litmus-tests/locking/DCL-fixed.litmus b/Documentation/litmus-tests/locking/DCL-fixed.litmus
+index 579d6c246f167..d1b60bcb0c8f3 100644
+--- a/Documentation/litmus-tests/locking/DCL-fixed.litmus
++++ b/Documentation/litmus-tests/locking/DCL-fixed.litmus
+@@ -11,10 +11,9 @@ C DCL-fixed
+ {
+ 	int flag;
+ 	int data;
+-	int lck;
+ }
+ 
+-P0(int *flag, int *data, int *lck)
++P0(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -33,7 +32,7 @@ P0(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-P1(int *flag, int *data, int *lck)
++P1(int *flag, int *data, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -52,5 +51,5 @@ P1(int *flag, int *data, int *lck)
+ 	r2 = READ_ONCE(*data);
+ }
+ 
+-locations [flag;data;lck;0:r0;0:r1;1:r0;1:r1]
++locations [flag;data;0:r0;0:r1;1:r0;1:r1]
+ exists (0:r2=0 \/ 1:r2=0)
+diff --git a/Documentation/litmus-tests/locking/RM-broken.litmus b/Documentation/litmus-tests/locking/RM-broken.litmus
+index c586ae4b547de..b7ef30cedfe51 100644
+--- a/Documentation/litmus-tests/locking/RM-broken.litmus
++++ b/Documentation/litmus-tests/locking/RM-broken.litmus
+@@ -9,12 +9,11 @@ C RM-broken
+  *)
+ 
+ {
+-	int lck;
+ 	int x;
+-	int y;
++	atomic_t y;
+ }
+ 
+-P0(int *x, int *y, int *lck)
++P0(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r2;
+ 
+@@ -24,7 +23,7 @@ P0(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-P1(int *x, int *y, int *lck)
++P1(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -37,6 +36,6 @@ P1(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-locations [x;lck;0:r2;1:r0;1:r1;1:r2]
+-filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
++locations [x;0:r2;1:r0;1:r1;1:r2]
++filter (1:r0=0 /\ 1:r1=1)
+ exists (1:r2=1)
+diff --git a/Documentation/litmus-tests/locking/RM-fixed.litmus b/Documentation/litmus-tests/locking/RM-fixed.litmus
+index 672856736b42e..b628175596160 100644
+--- a/Documentation/litmus-tests/locking/RM-fixed.litmus
++++ b/Documentation/litmus-tests/locking/RM-fixed.litmus
+@@ -9,12 +9,11 @@ C RM-fixed
+  *)
+ 
+ {
+-	int lck;
+ 	int x;
+-	int y;
++	atomic_t y;
+ }
+ 
+-P0(int *x, int *y, int *lck)
++P0(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r2;
+ 
+@@ -24,7 +23,7 @@ P0(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-P1(int *x, int *y, int *lck)
++P1(int *x, atomic_t *y, spinlock_t *lck)
+ {
+ 	int r0;
+ 	int r1;
+@@ -37,6 +36,6 @@ P1(int *x, int *y, int *lck)
+ 	spin_unlock(lck);
+ }
+ 
+-locations [x;lck;0:r2;1:r0;1:r1;1:r2]
+-filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
++locations [x;0:r2;1:r0;1:r1;1:r2]
++filter (1:r0=0 /\ 1:r1=1)
+ exists (1:r2=1)
