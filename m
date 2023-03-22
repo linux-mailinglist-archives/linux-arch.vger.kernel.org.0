@@ -2,98 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAE56C4E79
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 15:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784286C4E92
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Mar 2023 15:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjCVOud (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 10:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S231235AbjCVOxz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Mar 2023 10:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjCVOuL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 10:50:11 -0400
+        with ESMTP id S230054AbjCVOxk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 10:53:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D74B65C6F;
-        Wed, 22 Mar 2023 07:48:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DC7A5C2;
+        Wed, 22 Mar 2023 07:52:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBB20B81CE4;
-        Wed, 22 Mar 2023 14:48:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94351C4339B;
-        Wed, 22 Mar 2023 14:48:29 +0000 (UTC)
-Date:   Wed, 22 Mar 2023 14:48:26 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, agordeev@linux.ibm.com,
-        aou@eecs.berkeley.edu, bp@alien8.de, dave.hansen@linux.intel.com,
-        davem@davemloft.net, gor@linux.ibm.com, hca@linux.ibm.com,
-        linux-arch@vger.kernel.org, linux@armlinux.org.uk,
-        mingo@redhat.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        robin.murphy@arm.com, tglx@linutronix.de,
-        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk,
-        will@kernel.org
-Subject: Re: [PATCH v2 3/4] arm64: fix __raw_copy_to_user semantics
-Message-ID: <ZBsVOu6ygLoGOI5d@arm.com>
-References: <20230321122514.1743889-1-mark.rutland@arm.com>
- <20230321122514.1743889-4-mark.rutland@arm.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14328B81D12;
+        Wed, 22 Mar 2023 14:52:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A79CCC433EF;
+        Wed, 22 Mar 2023 14:52:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679496725;
+        bh=Anc3h/ob8bGNXsYwROqEqoe0uiyD6BcePglSRs5RQmw=;
+        h=References:In-Reply-To:From:Date:Subject:To:From;
+        b=nbCI+ZVflki5cD04n7kS3qOmEgfaTEZcYYUnejFnPqhp8X4dv4lTlmVqRiUEwFMZC
+         OgToC9onrhDZJJh7cB9TiQvSiUlcxRjyIEZ/Ys8jzCkmHMMEf6yJ4mtHOV/e2J3qad
+         lL2MvLwk7d9HG6erqoDiBUcUHU1acRS3amW3lKFHuF32Msq4kq1eyC1OkYXHylDaCP
+         KFzltMLV3ThpucUcQvHIDd4znWDRWZlXLvBy7TTuzsu6MERTztNXeVKLadIOWBPaEt
+         Oz2hPPdwhT+WKG4acdI+bxPbhkWH2rw8dZic6Qxe2rONhAbowtnfzacoui520xBWpa
+         4j8bsEAOzYI3A==
+Received: by mail-lj1-f179.google.com with SMTP id e11so10597600lji.8;
+        Wed, 22 Mar 2023 07:52:05 -0700 (PDT)
+X-Gm-Message-State: AO0yUKUc1fqUy3Q9ydwwEFc0kGbHjaS9nXvktI3vTUeEShmSasi26inq
+        ADsd4BLK8JT59B22OoPNfEmWr7xkFcvAXEyfYs0=
+X-Google-Smtp-Source: AK7set97dkgt+LAR/pDeF0mhD2Ie4KDLa5HL0PqhcYNv+mZ40ijtxUuamxsLb4P/y4qgDR2i4cXuLoW8ZTdOpoDxnHU=
+X-Received: by 2002:a2e:9d4d:0:b0:29e:7cae:fc19 with SMTP id
+ y13-20020a2e9d4d000000b0029e7caefc19mr2052920ljj.2.1679496723712; Wed, 22 Mar
+ 2023 07:52:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321122514.1743889-4-mark.rutland@arm.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221012233500.156764-1-masahiroy@kernel.org> <ZBovCrMXJk7NPISp@aurel32.net>
+In-Reply-To: <ZBovCrMXJk7NPISp@aurel32.net>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 22 Mar 2023 15:51:52 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+Message-ID: <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of head.o
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 12:25:13PM +0000, Mark Rutland wrote:
-> For some combinations of sizes and alignments __{arch,raw}_copy_to_user
-> will copy some bytes between (to + size - N) and (to + size), but will
-> never modify bytes past (to + size).
-> 
-> This violates the documentation in <linux/uaccess.h>, which states:
-> 
-> > If raw_copy_{to,from}_user(to, from, size) returns N, size - N bytes
-> > starting at to must become equal to the bytes fetched from the
-> > corresponding area starting at from.  All data past to + size - N must
-> > be left unmodified.
-> 
-> This can be demonstrated through testing, e.g.
-> 
-> |     # test_copy_to_user: EXPECTATION FAILED at lib/usercopy_kunit.c:287
-> | post-destination bytes modified (dst_page[4082]=0x1, offset=4081, size=16, ret=15)
-> | [FAILED] 16 byte copy
-> 
-> This happens because the __arch_copy_to_user() can make unaligned stores
-> to the userspace buffer, and the ARM architecture permits (but does not
-> require) that such unaligned stores write some bytes before raising a
-> fault (per ARM DDI 0487I.a Section B2.2.1 and Section B2.7.1). The
-> extable fixup handlers in __arch_copy_to_user() assume that any faulting
-> store has failed entirely, and so under-report the number of bytes
-> copied when an unaligned store writes some bytes before faulting.
+On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net> wrote:
+>
+> Hi,
+>
+> On 2022-10-13 08:35, Masahiro Yamada wrote:
+> > In the previous discussion (see the Link tag), Ard pointed out that
+> > arm/arm64/kernel/head.o does not need any special treatment - the only
+> > piece that must appear right at the start of the binary image is the
+> > image header which is emitted into .head.text.
+> >
+> > The linker script does the right thing to do. The build system does
+> > not need to manipulate the link order of head.o.
+> >
+> > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/head-object-list.txt | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+> > index b16326a92c45..f226e45e3b7b 100644
+> > --- a/scripts/head-object-list.txt
+> > +++ b/scripts/head-object-list.txt
+> > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+> >  arch/arc/kernel/head.o
+> >  arch/arm/kernel/head-nommu.o
+> >  arch/arm/kernel/head.o
+> > -arch/arm64/kernel/head.o
+> >  arch/csky/kernel/head.o
+> >  arch/hexagon/kernel/head.o
+> >  arch/ia64/kernel/head.o
+>
+> This patch causes a significant increase of the arch/arm64/boot/Image
+> size. For instance the generic arm64 Debian kernel went from 31 to 39 MB
+> after this patch has been applied to the 6.1 stable tree.
+>
+> In turn this causes issues with some bootloaders, for instance U-Boot on
+> a Raspberry Pi limits the kernel size to 36 MB.
+>
 
-I find the Arm ARM hard to parse (no surprise here). Do you happen to
-know what the behavior is for the new CPY instructions? I'd very much
-like to use those for uaccess as well eventually but if they have the
-same imp def behaviour, I'd rather relax the documentation and continue
-to live with the current behaviour.
+I cannot reproduce this with mainline
 
-> The only architecturally guaranteed way to avoid this is to only use
-> aligned stores to write to user memory.	This patch rewrites
-> __arch_copy_to_user() to only access the user buffer with aligned
-> stores, such that the bytes written can always be determined reliably.
+With the patch
 
-Can we not fall back to byte-at-a-time? There's still a potential race
-if the page becomes read-only for example. Well, probably not worth it
-if we decide to go this route.
+$ size vmlinux
+   text    data     bss     dec     hex filename
+24567309 14752630 621680 39941619 26175f3 vmlinux
 
-Where we may notice some small performance degradation is copy_to_user()
-where the reads from the source end up unaligned due to the destination
-buffer alignment. I doubt that's a common case though and most CPUs can
-probably cope just well with this.
+With the patch reverted
 
--- 
-Catalin
+$ size vmlinux
+   text    data     bss     dec     hex filename
+24567309 14752694 621680 39941683 2617633 vmlinux
+
+It would help to compare the resulting vmlinux ELF images from both
+builds to see where the extra space is being allocated
