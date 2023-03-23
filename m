@@ -2,53 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F676C712B
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 20:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D10156C71E2
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 21:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjCWTkR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 15:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S230011AbjCWUxJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 16:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjCWTkQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 15:40:16 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A0420069;
-        Thu, 23 Mar 2023 12:40:15 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 877CF60A;
-        Thu, 23 Mar 2023 19:40:14 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 877CF60A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1679600414; bh=iQi8Bi9hacIn33KLkpIHUMRozKG0oaFhXdu49BmPO4k=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=k0FDr3OzJvgw2XqhhWd1E+YHjnJ0AUrhtyaUyDHHAw+k0FR4HqJBaXoY+3sEVbgQF
-         vF5oGSNrO6mX6ul+tg9Xv92MWo56Z0+oF6hIqBNOGq7DeBqt4RcMQF54B3YeX0EtmN
-         jFdtJ809hXRkOGpKI08CVbIVTlA/L3Y+luIFMg9GgE+/jUkpVc8Q0MYUv41ewex2ia
-         qBxcXulpBMhTTM2qDirqXJXSB4l4XtIIZaT1GakvDrRp8FCp+tv28m+g/u21wq6LU/
-         tJDrve0L9Qts0xBIy9uy30HFA0G6iGk0zqKPttP/6tBjyUoSTdAIMJVrvKU05I1fX1
-         qPBk0C4u1yCEw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH RFC 0/2] Begin reorganizing the arch documentation
-In-Reply-To: <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
-References: <20230315211523.108836-1-corbet@lwn.net>
- <fe5d1e0e-0725-45eb-8b96-edcd12ae4a8b@intel.com>
- <87cz4zb8xu.fsf@meer.lwn.net>
- <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
-Date:   Thu, 23 Mar 2023 13:40:13 -0600
-Message-ID: <87v8ir9rz6.fsf@meer.lwn.net>
+        with ESMTP id S229499AbjCWUxH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 16:53:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237B3211D9;
+        Thu, 23 Mar 2023 13:53:07 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1679604785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1rYDeXeXdW0cuqWo9UuJC5RYidgtmZSNCr4/RwqvXg=;
+        b=kCFatXP07k+7ELzDIE3JTCvp4GpTnFsSYJVF8TY++iD9F33t0ypFsp2djOR123wyiPBUFl
+        edUT3UFpBESREWBdgBB0RdGstybe1YRSlALb74nyo36FQPCCvjNaZautJKFq71MAg33Zfu
+        7DgkXp/TCDMoObM5KIrAjBONh0jSQSVIzaKBKuqzS21tN+o3pLms6sIH4olxjTQOlUhDcd
+        lEU7aGONdS5+0lqIOcIquj2cdG45IcD7/801f6UyE4sl5rTI2KAoHEypMTlEW4Gieq0T3T
+        aiT1jG4LhuuBEuFZOHrvl8eqbAAmEXnTYNEnxtuyO6qj6ejw4TUz3UWvsn5Oaw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1679604785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1rYDeXeXdW0cuqWo9UuJC5RYidgtmZSNCr4/RwqvXg=;
+        b=en2d05+owSRS5DeKKg4zUpsBpaYDlKJlhWl+48pw84bzkbJyCo+8luXKBa/JrihpiQjr1n
+        GD174VWof6W8QVBw==
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2] irq domain: drop IRQ_DOMAIN_HIERARCHY option, make
+ it always on
+In-Reply-To: <20230313023935.31037-1-rdunlap@infradead.org>
+References: <20230313023935.31037-1-rdunlap@infradead.org>
+Date:   Thu, 23 Mar 2023 21:53:04 +0100
+Message-ID: <877cv78a1b.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,26 +55,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dave Hansen <dave.hansen@intel.com> writes:
+On Sun, Mar 12 2023 at 19:39, Randy Dunlap wrote:
+> In preparation for dropping the IRQ_DOMAIN Kconfig option (effectively
+> making it always set/on), first drop IRQ_DOMAIN_HIERARCHY as an option,
+> making its code always set/on.
+>
+> This has been built successfully on all ARCHes except hexagon,
+> both 32-bit and 64-bit where applicable.
 
-> On 3/23/23 11:48, Jonathan Corbet wrote:
->> I could do the "fix up and send at the end of the merge window" trick
->> with it.
->
-> That would work for me.
->
->>  Or perhaps some of this should go via tip?  Suggestions welcome.
->
-> Since we have so many branches, we'll still have to do the merges
-> between whatever branch carries the move and the actual doc-update branches.
->
-> The end-of-the-merge-window is nice for us maintainers because we can
-> ask the submitters to do any rebasing.
+I really like where this is going, but reviewing this is a pain. I tried
+to split it up into more digestable pieces:
 
-Now that I look...the only thing in linux-next currently that conflicts
-is the shadow-stack series; if that continues, it might not be necessary
-to do anything special.
+   https://tglx.de/~tglx/patches.tar
+
+That's not completely equivalent to your patch as I did some of the
+changes below. It builds on various oddball architectures with
+IRQ_DOMAIN=n, but is otherwise completely untested.
+
+It should be actually trivial after that to make IRQ_DOMAIN def_bool y
+and then gradually remove the IRQ_DOMAIN selects and ifdeffery.
+
+> v2: add stubs in include/linux/irqdomain.h for the config case of
+> IRQ_DOMAIN is not set. If these are not added, there will be plenty
+> of build errors (not so much for modern arches as for older ones).
+
+I'm not really convinced that all of these stubs are required. Why would
+there suddenly be a requirement to expose stubs for functions which
+depend on CONFIG_IRQ_DOMAIN=y already today just by removing the
+hierarchy config?
+
+Even exposing stubs for functions which have been only available via
+CONFIG_IRQ_DOMAIN_HIERARCHY is questionable simply because there cannot
+be any code which invokes them unconditionally if
+CONFIG_IRQ_DOMAIN_HIERARCHY=n today.
+
+IOW, the sum of required stubs cannot be larger than number of stubs
+required today.
+
+If there is code which has a #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY then
+this needs to be changed to CONFIG_IRQ_DOMAIN or the required functions
+have to be exposed unconditionally, right?
+
+> diff -- a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+> --- a/drivers/gpio/Kconfig
+> +++ b/drivers/gpio/Kconfig
+> @@ -361,7 +361,7 @@ config GPIO_IXP4XX
+>  	depends on OF
+>  	select GPIO_GENERIC
+>  	select GPIOLIB_IRQCHIP
+> -	select IRQ_DOMAIN_HIERARCHY
+> +	select IRQ_DOMAIN
+
+IRQ_DOMAIN is already selected by GPIOLIB_IRQCHIP, so this select is
+redundant for all GPIO configs which select GPIOLIB_IRQCHIP.
 
 Thanks,
 
-jon
+        tglx
