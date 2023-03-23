@@ -2,40 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1817A6C72F6
+	by mail.lfdr.de (Postfix) with ESMTP id 677236C72F7
 	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 23:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbjCWWUH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 18:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S231582AbjCWWUI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 18:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231483AbjCWWUF (ORCPT
+        with ESMTP id S231527AbjCWWUF (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 18:20:05 -0400
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C522385A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87C72386A;
         Thu, 23 Mar 2023 15:20:04 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id 6D2C9733;
+        by ms.lwn.net (Postfix) with ESMTPA id 01630740;
         Thu, 23 Mar 2023 22:20:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 6D2C9733
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 01630740
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1679610003; bh=sKGqOrWJA71ARwk29FqcItJLbTRHc7B6f2O5jNNhG9A=;
+        t=1679610004; bh=eXvOcnCVWEcAAlbhOrBfaAqzmDDbnhKNFXWeX9mfadU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iqW/q98zaAIcwV/xip11UzIEk6AyMj9kiVmHFYhQ2AtDWeBzaZSHtNmoYSTE8vLUN
-         4GbhRY1BN9oNtZutnrDbRacfzmhXhdMxXlS2hAfBMmRFfhZop58X67bn0UaJJzevqh
-         VtdLow9GEZBGBHleaE1ufbJn3G92OwjXT0k9CVczc6VsbtogCus8z/sYgIt+bNBwLQ
-         6u/yPulnrW5l6v2KddVCp+b85d0+5XuTdzNHULQY9PllSzHONrm9N7+wYeIN82BmJc
-         ZPCU62GVhDb29J6+Xe2q8lfQU8UXvBIKtaOr649tyU5QTg/aF/4bpj7dyfj4bW7aFY
-         xxXpmMYNCkWnA==
+        b=QucedCzXvmmEH1mUyowYrc/jeJ3leta3yYs4n/eaCSnTOl8lcr0+HYHhsKWFvHttW
+         nZEcPcwcp+BYucGn9dH4qAGHuky6JyNF1tS+GvYK60oVWWE6kIpTiIITl7D+a1YN6s
+         NzeoDvlWPEPWhOTBg2N92II72Bh/H+WKTzMvNeEZEcZ1QRi1NxDJ67hTHOn08+1U89
+         DGcSkcmD/ppzTjbTgkqBg7Tpf01vM1RniqEZDPW764syr3WInPwHzIZri+IHteMQGc
+         FQxBAYz122JAA9rLKR57F7lO0dF3dxmnRN/Ju+Cz2QvauIJ0EY+ha0c4Wdza93Eh2h
+         NAJnleMqQ+Gtw==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 2/6] docs: move xtensa documentation under Documentation/arch/
-Date:   Thu, 23 Mar 2023 16:19:44 -0600
-Message-Id: <20230323221948.352154-3-corbet@lwn.net>
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 3/6] docs: move sparc documentation under Documentation/arch/
+Date:   Thu, 23 Mar 2023 16:19:45 -0600
+Message-Id: <20230323221948.352154-4-corbet@lwn.net>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230323221948.352154-1-corbet@lwn.net>
 References: <20230323221948.352154-1-corbet@lwn.net>
@@ -53,69 +52,76 @@ X-Mailing-List: linux-arch@vger.kernel.org
 Architecture-specific documentation is being moved into Documentation/arch/
 as a way of cleaning up the top-level documentation directory and making
 the docs hierarchy more closely match the source hierarchy.  Move
-Documentation/xtensa into arch/ and fix all in-tree references.
+Documentation/sparc into arch/ and fix all in-tree references.
 
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
 Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 ---
- Documentation/arch/index.rst                 | 2 +-
- Documentation/{ => arch}/xtensa/atomctl.rst  | 0
- Documentation/{ => arch}/xtensa/booting.rst  | 0
- Documentation/{ => arch}/xtensa/features.rst | 0
- Documentation/{ => arch}/xtensa/index.rst    | 0
- Documentation/{ => arch}/xtensa/mmu.rst      | 0
- arch/xtensa/include/asm/initialize_mmu.h     | 2 +-
- 7 files changed, 2 insertions(+), 2 deletions(-)
- rename Documentation/{ => arch}/xtensa/atomctl.rst (100%)
- rename Documentation/{ => arch}/xtensa/booting.rst (100%)
- rename Documentation/{ => arch}/xtensa/features.rst (100%)
- rename Documentation/{ => arch}/xtensa/index.rst (100%)
- rename Documentation/{ => arch}/xtensa/mmu.rst (100%)
+ Documentation/arch/index.rst                         | 2 +-
+ Documentation/{ => arch}/sparc/adi.rst               | 0
+ Documentation/{ => arch}/sparc/console.rst           | 0
+ Documentation/{ => arch}/sparc/features.rst          | 0
+ Documentation/{ => arch}/sparc/index.rst             | 0
+ Documentation/{ => arch}/sparc/oradax/dax-hv-api.txt | 0
+ Documentation/{ => arch}/sparc/oradax/oracle-dax.rst | 0
+ drivers/sbus/char/oradax.c                           | 2 +-
+ 8 files changed, 2 insertions(+), 2 deletions(-)
+ rename Documentation/{ => arch}/sparc/adi.rst (100%)
+ rename Documentation/{ => arch}/sparc/console.rst (100%)
+ rename Documentation/{ => arch}/sparc/features.rst (100%)
+ rename Documentation/{ => arch}/sparc/index.rst (100%)
+ rename Documentation/{ => arch}/sparc/oradax/dax-hv-api.txt (100%)
+ rename Documentation/{ => arch}/sparc/oradax/oracle-dax.rst (100%)
 
 diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-index 64a5de81c425..208a8e67599c 100644
+index 208a8e67599c..8ec614488bd2 100644
 --- a/Documentation/arch/index.rst
 +++ b/Documentation/arch/index.rst
-@@ -25,4 +25,4 @@ implementation.
+@@ -23,6 +23,6 @@ implementation.
+    ../riscv/index
+    ../s390/index
     ../sh/index
-    ../sparc/index
+-   ../sparc/index
++   sparc/index
     x86/index
--   ../xtensa/index
-+   xtensa/index
-diff --git a/Documentation/xtensa/atomctl.rst b/Documentation/arch/xtensa/atomctl.rst
+    xtensa/index
+diff --git a/Documentation/sparc/adi.rst b/Documentation/arch/sparc/adi.rst
 similarity index 100%
-rename from Documentation/xtensa/atomctl.rst
-rename to Documentation/arch/xtensa/atomctl.rst
-diff --git a/Documentation/xtensa/booting.rst b/Documentation/arch/xtensa/booting.rst
+rename from Documentation/sparc/adi.rst
+rename to Documentation/arch/sparc/adi.rst
+diff --git a/Documentation/sparc/console.rst b/Documentation/arch/sparc/console.rst
 similarity index 100%
-rename from Documentation/xtensa/booting.rst
-rename to Documentation/arch/xtensa/booting.rst
-diff --git a/Documentation/xtensa/features.rst b/Documentation/arch/xtensa/features.rst
+rename from Documentation/sparc/console.rst
+rename to Documentation/arch/sparc/console.rst
+diff --git a/Documentation/sparc/features.rst b/Documentation/arch/sparc/features.rst
 similarity index 100%
-rename from Documentation/xtensa/features.rst
-rename to Documentation/arch/xtensa/features.rst
-diff --git a/Documentation/xtensa/index.rst b/Documentation/arch/xtensa/index.rst
+rename from Documentation/sparc/features.rst
+rename to Documentation/arch/sparc/features.rst
+diff --git a/Documentation/sparc/index.rst b/Documentation/arch/sparc/index.rst
 similarity index 100%
-rename from Documentation/xtensa/index.rst
-rename to Documentation/arch/xtensa/index.rst
-diff --git a/Documentation/xtensa/mmu.rst b/Documentation/arch/xtensa/mmu.rst
+rename from Documentation/sparc/index.rst
+rename to Documentation/arch/sparc/index.rst
+diff --git a/Documentation/sparc/oradax/dax-hv-api.txt b/Documentation/arch/sparc/oradax/dax-hv-api.txt
 similarity index 100%
-rename from Documentation/xtensa/mmu.rst
-rename to Documentation/arch/xtensa/mmu.rst
-diff --git a/arch/xtensa/include/asm/initialize_mmu.h b/arch/xtensa/include/asm/initialize_mmu.h
-index 9793b49fc641..574795a20d6f 100644
---- a/arch/xtensa/include/asm/initialize_mmu.h
-+++ b/arch/xtensa/include/asm/initialize_mmu.h
-@@ -43,7 +43,7 @@
- #if XCHAL_HAVE_S32C1I && (XCHAL_HW_MIN_VERSION >= XTENSA_HWVERSION_RC_2009_0)
- /*
-  * We Have Atomic Operation Control (ATOMCTL) Register; Initialize it.
-- * For details see Documentation/xtensa/atomctl.rst
-+ * For details see Documentation/arch/xtensa/atomctl.rst
+rename from Documentation/sparc/oradax/dax-hv-api.txt
+rename to Documentation/arch/sparc/oradax/dax-hv-api.txt
+diff --git a/Documentation/sparc/oradax/oracle-dax.rst b/Documentation/arch/sparc/oradax/oracle-dax.rst
+similarity index 100%
+rename from Documentation/sparc/oradax/oracle-dax.rst
+rename to Documentation/arch/sparc/oradax/oracle-dax.rst
+diff --git a/drivers/sbus/char/oradax.c b/drivers/sbus/char/oradax.c
+index e300cf26bc2a..d698ca506cca 100644
+--- a/drivers/sbus/char/oradax.c
++++ b/drivers/sbus/char/oradax.c
+@@ -18,7 +18,7 @@
+  * the recommended way for applications to use the coprocessor, and
+  * the driver interface is not intended for general use.
+  *
+- * See Documentation/sparc/oradax/oracle-dax.rst for more details.
++ * See Documentation/arch/sparc/oradax/oracle-dax.rst for more details.
   */
- #if XCHAL_DCACHE_IS_COHERENT
- 	movi	a3, 0x25	/* For SMP/MX -- internal for writeback,
+ 
+ #include <linux/uaccess.h>
 -- 
 2.39.2
 
