@@ -2,305 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1066C5CDE
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 03:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22C96C67AF
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 13:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjCWCx3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Mar 2023 22:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44050 "EHLO
+        id S230231AbjCWMJD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 08:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjCWCx0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Mar 2023 22:53:26 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655DE30197;
-        Wed, 22 Mar 2023 19:53:08 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o6-20020a17090a9f8600b0023f32869993so601591pjp.1;
-        Wed, 22 Mar 2023 19:53:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679539987;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lUIti2w3zoA1edKcsXAjpxPn2QEkm+FuO+iswKLAI/g=;
-        b=NtZrbvoxKjNgA+xGoQw0VkjOqoUrcYmv0q9yVlg3/j9PS72bUvCUPg3cxt4+qCBISr
-         KaDDhlnzGmQQoTlo72ftedHP2nmqpQgcBKBOzf4AonGyQeb5ef5AdQLJd8EO1u1hWeYH
-         DTJ2Iw/MID2Qd7YVkv9cNi+Zlhj58jAbYuIllc6eJ6jAzfUdRHXeESv20KHWPdduVDCX
-         L0AaNN2TH+5uJwAv+wfJJGa/mhUd+fXyZdFWhmyqHkTk5W0XG4YE1ft2Gd0Rz/fIUwv2
-         8u/BXEREPRnTis/YpLX+Y0I1OUDlTRPYhAHpqwEOtAnbBaivgFXfLAD3aMhRikW7sTCb
-         PALg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679539987;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUIti2w3zoA1edKcsXAjpxPn2QEkm+FuO+iswKLAI/g=;
-        b=OPgpWW7dn7X90TjLetkmmZ8KDWcNWsNjH3yOdff8P/ghBBggwoDlpa+K95oGfzGQni
-         MTvodj+X/B5eA4O7aNC4I2KU47dPzkZJqCfQNXKd/u0JJdqecofOfLwQPAKYYGKY7BXq
-         8bHJ4QinD5GesY2lji52FtIL80/SL4Kf5bzbES8VffsnpZmOoN/ZJPDxgS+a+L3NNO1g
-         Epuo70mP9qqTTev/oqQX43HjNCdbKbs+DUvULC/a86yORsCAK7sjLzcHUcZe9k1a8mgu
-         0CL6+VaqwEdWCXBdTN6+zH2NvJNaujtFqkE8qTIN72VnYUbVH9+Zt/Ontti5zBQWPX06
-         72qw==
-X-Gm-Message-State: AO0yUKVIffuxcAwGgivong16llkoECr/RR1YbZZpw9amrkUv1tzsoLyV
-        SpPuayf+Vof6PlGF6TeQytw=
-X-Google-Smtp-Source: AK7set/J8FImsjRQ9ZGziCp1gE2RxxB/o0DKoRZJBu8JTtIKjSnVPP/RCOb87cxvAGVa8roChk2pfw==
-X-Received: by 2002:a05:6a20:4b10:b0:da:99f3:4b15 with SMTP id fp16-20020a056a204b1000b000da99f34b15mr1509003pzb.13.1679539987556;
-        Wed, 22 Mar 2023 19:53:07 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa793a3000000b005a8851e0cddsm10752459pff.188.2023.03.22.19.53.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Mar 2023 19:53:07 -0700 (PDT)
-Message-ID: <f940cb6c-4aa6-41a4-d9d7-330becd5427a@gmail.com>
-Date:   Thu, 23 Mar 2023 11:52:57 +0900
+        with ESMTP id S229775AbjCWMJB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 08:09:01 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC59269E;
+        Thu, 23 Mar 2023 05:08:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: linasend@asahilina.net)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id C95AD421F5;
+        Thu, 23 Mar 2023 12:08:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
+        s=default; t=1679573336;
+        bh=sYPq8DVDqYDKIlu8xuvRRYDZkcKq3MJzONMmKDC0UM4=;
+        h=From:Date:Subject:To:Cc;
+        b=b5r9D30nX6KXu9h9G5IiPVFFfIWwAYiP84ipgYGlmyVxNPiAoEMl+Mp2qj0vyS1NK
+         bP67cZcyyUX1L+WbQAmENjtiqzVzjt1rhn0U+Lxvvz2Fpor1Sm8Cih3cUZhzNUPixh
+         u0up56pJmVYi7pNoledGlPqPuz1duVnFMhMWC4XvfGnqXklxAbtogJ/XE4PWHLThMm
+         rWzjIvJ6gSXq+Sg2OxMHMCF013HVxMWjYiUuvTFqK9FlIh7pVVBF4TKrUmIURnmgvm
+         Pyc7VsWZDicDZFE2te2a8iegBSqeuvXwW6Vhgoqwn8h5wT1x04r76nsVq0fkfPgEsL
+         GymOeIrun/HUw==
+From:   Asahi Lina <lina@asahilina.net>
+Date:   Thu, 23 Mar 2023 21:08:47 +0900
+Subject: [PATCH v2] rust: ioctl: Add ioctl number manipulation functions
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model: Document
- locking corner cases
-To:     "Paul E. McKenney" <paulmck@kernel.org>, parri.andrea@gmail.com
-Cc:     stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@meta.com, mingo@kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
- <20230321010549.51296-1-paulmck@kernel.org>
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20230321010549.51296-1-paulmck@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net>
+X-B4-Tracking: v=1; b=H4sIAE5BHGQC/22NQQ6CMBBFr2K6tkqnYNSV9zAsBhjoJKSQTiEaw
+ t1tWbt8P//lbUooMIl6njYVaGXhySeA80m1Dv1AmrvECgqwBUCpwyJR89TGUWMFRW+psYh3lYQ
+ GhXQT0LcuK8O8XI933iEf5kA9f47au07sWOIUvkd8NXn921mNNroyJXT2VuHDli8UdDyyx4unq
+ Op933+pCs51yQAAAA==
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arch@vger.kernel.org,
+        Asahi Lina <lina@asahilina.net>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1679573333; l=4141;
+ i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
+ bh=sYPq8DVDqYDKIlu8xuvRRYDZkcKq3MJzONMmKDC0UM4=;
+ b=F+5I18tAITjTn4Cl9G85fDVFPqZZZOIJ9kK2woOoY4IUVIUPjhN/89l3WByg3T6/jNMqzVfVB
+ pA27X5lTLFrB2tQUr0JyeTRlIAVG8n7i3ab8VbRAwvS48DYggKDKJ4S
+X-Developer-Key: i=lina@asahilina.net; a=ed25519;
+ pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Paul,
+Add simple 1:1 wrappers of the C ioctl number manipulation functions.
+Since these are macros we cannot bindgen them directly, and since they
+should be usable in const context we cannot use helper wrappers, so
+we'll have to reimplement them in Rust. Thankfully, the C headers do
+declare defines for the relevant bitfield positions, so we don't need
+to duplicate that.
 
-On Mon, 20 Mar 2023 18:05:19 -0700, Paul E. McKenney wrote:
-> Most Linux-kernel uses of locking are straightforward, but there are
-> corner-case uses that rely on less well-known aspects of the lock and
-> unlock primitives.  This commit therefore adds a locking.txt and litmus
-> tests in Documentation/litmus-tests/locking to explain these corner-case
-> uses.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
->  .../litmus-tests/locking/DCL-broken.litmus    |  55 +++
->  .../litmus-tests/locking/DCL-fixed.litmus     |  56 +++
->  .../litmus-tests/locking/RM-broken.litmus     |  42 +++
->  .../litmus-tests/locking/RM-fixed.litmus      |  42 +++
->  tools/memory-model/Documentation/locking.txt  | 320 ++++++++++++++++++
+Signed-off-by: Asahi Lina <lina@asahilina.net>
+---
+Changes in v2:
+- Changed from assert!() to build_assert!() (static_assert!() can't work
+  here)
+- Link to v1: https://lore.kernel.org/r/20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net
+---
+ rust/bindings/bindings_helper.h |  3 +-
+ rust/kernel/ioctl.rs            | 64 +++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/lib.rs              |  1 +
+ 3 files changed, 67 insertions(+), 1 deletion(-)
 
-I think the documentation needs adjustment to cope with Andrea's change
-of litmus tests.
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index 75d85bd6c592..aef60f300be0 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -6,8 +6,9 @@
+  * Sorted alphabetically.
+  */
+ 
+-#include <linux/slab.h>
++#include <linux/ioctl.h>
+ #include <linux/refcount.h>
++#include <linux/slab.h>
+ 
+ /* `bindgen` gets confused at certain things. */
+ const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
+diff --git a/rust/kernel/ioctl.rs b/rust/kernel/ioctl.rs
+new file mode 100644
+index 000000000000..6cd8e5738b91
+--- /dev/null
++++ b/rust/kernel/ioctl.rs
+@@ -0,0 +1,64 @@
++// SPDX-License-Identifier: GPL-2.0
++#![allow(non_snake_case)]
++
++//! ioctl() number definitions
++//!
++//! C header: [`include/asm-generic/ioctl.h`](../../../../include/asm-generic/ioctl.h)
++
++/// Build an ioctl number, analogous to the C macro of the same name.
++const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
++    core::assert!(dir <= bindings::_IOC_DIRMASK);
++    core::assert!(ty <= bindings::_IOC_TYPEMASK);
++    core::assert!(nr <= bindings::_IOC_NRMASK);
++    core::assert!(size <= (bindings::_IOC_SIZEMASK as usize));
++
++    (dir << bindings::_IOC_DIRSHIFT)
++        | (ty << bindings::_IOC_TYPESHIFT)
++        | (nr << bindings::_IOC_NRSHIFT)
++        | ((size as u32) << bindings::_IOC_SIZESHIFT)
++}
++
++/// Build an ioctl number for an argumentless ioctl.
++pub const fn _IO(ty: u32, nr: u32) -> u32 {
++    _IOC(bindings::_IOC_NONE, ty, nr, 0)
++}
++
++/// Build an ioctl number for an read-only ioctl.
++pub const fn _IOR<T>(ty: u32, nr: u32) -> u32 {
++    _IOC(bindings::_IOC_READ, ty, nr, core::mem::size_of::<T>())
++}
++
++/// Build an ioctl number for an write-only ioctl.
++pub const fn _IOW<T>(ty: u32, nr: u32) -> u32 {
++    _IOC(bindings::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
++}
++
++/// Build an ioctl number for a read-write ioctl.
++pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
++    _IOC(
++        bindings::_IOC_READ | bindings::_IOC_WRITE,
++        ty,
++        nr,
++        core::mem::size_of::<T>(),
++    )
++}
++
++/// Get the ioctl direction from an ioctl number.
++pub const fn _IOC_DIR(nr: u32) -> u32 {
++    (nr >> bindings::_IOC_DIRSHIFT) & bindings::_IOC_DIRMASK
++}
++
++/// Get the ioctl type from an ioctl number.
++pub const fn _IOC_TYPE(nr: u32) -> u32 {
++    (nr >> bindings::_IOC_TYPESHIFT) & bindings::_IOC_TYPEMASK
++}
++
++/// Get the ioctl number from an ioctl number.
++pub const fn _IOC_NR(nr: u32) -> u32 {
++    (nr >> bindings::_IOC_NRSHIFT) & bindings::_IOC_NRMASK
++}
++
++/// Get the ioctl size from an ioctl number.
++pub const fn _IOC_SIZE(nr: u32) -> usize {
++    ((nr >> bindings::_IOC_SIZESHIFT) & bindings::_IOC_SIZEMASK) as usize
++}
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 223564f9f0cc..7610b18ee642 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -30,6 +30,7 @@ compile_error!("Missing kernel configuration for conditional compilation");
+ mod allocator;
+ mod build_assert;
+ pub mod error;
++pub mod ioctl;
+ pub mod prelude;
+ pub mod print;
+ mod static_assert;
 
-Also, coding style of code snippets taken from litmus tests look somewhat
-inconsistent with other snippets taken from MP+... litmus tests:
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230224-rust-ioctl-a520f3eb3aa8
 
-  - Simple function signature such as "void CPU0(void)".
-  - No declaration of local variables.
-  - Indirection level of global variables.
-  - No "locations" clause
-
-How about applying the diff below?
-
-        Thanks, Akira
-
------
-diff --git a/tools/memory-model/Documentation/locking.txt b/tools/memory-model/Documentation/locking.txt
-index 4e05c6d53ab7..65c898c64a93 100644
---- a/tools/memory-model/Documentation/locking.txt
-+++ b/tools/memory-model/Documentation/locking.txt
-@@ -91,25 +91,21 @@ double-checked locking work correctly,  This litmus test illustrates
- one incorrect approach:
- 
- 	/* See Documentation/litmus-tests/locking/DCL-broken.litmus. */
--	P0(int *flag, int *data, int *lck)
-+	void CPU0(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		r0 = READ_ONCE(*flag);
-+		r0 = READ_ONCE(flag);
- 		if (r0 == 0) {
--			spin_lock(lck);
--			r1 = READ_ONCE(*flag);
-+			spin_lock(&lck);
-+			r1 = READ_ONCE(flag);
- 			if (r1 == 0) {
--				WRITE_ONCE(*data, 1);
--				WRITE_ONCE(*flag, 1);
-+				WRITE_ONCE(data, 1);
-+				WRITE_ONCE(flag, 1);
- 			}
--			spin_unlock(lck);
-+			spin_unlock(&lck);
- 		}
--		r2 = READ_ONCE(*data);
-+		r2 = READ_ONCE(data);
- 	}
--	/* P1() is the exactly the same as P0(). */
-+	/* CPU1() is the exactly the same as CPU0(). */
- 
- There are two problems.  First, there is no ordering between the first
- READ_ONCE() of "flag" and the READ_ONCE() of "data".  Second, there is
-@@ -120,25 +116,21 @@ One way to fix this is to use smp_load_acquire() and smp_store_release()
- as shown in this corrected version:
- 
- 	/* See Documentation/litmus-tests/locking/DCL-fixed.litmus. */
--	P0(int *flag, int *data, int *lck)
-+	void CPU0(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		r0 = smp_load_acquire(flag);
-+		r0 = smp_load_acquire(&flag);
- 		if (r0 == 0) {
--			spin_lock(lck);
--			r1 = READ_ONCE(*flag);
-+			spin_lock(&lck);
-+			r1 = READ_ONCE(flag);
- 			if (r1 == 0) {
--				WRITE_ONCE(*data, 1);
--				smp_store_release(flag, 1);
-+				WRITE_ONCE(data, 1);
-+				smp_store_release(&flag, 1);
- 			}
--			spin_unlock(lck);
-+			spin_unlock(&lck);
- 		}
--		r2 = READ_ONCE(*data);
-+		r2 = READ_ONCE(data);
- 	}
--	/* P1() is the exactly the same as P0(). */
-+	/* CPU1() is the exactly the same as CPU0(). */
- 
- The smp_load_acquire() guarantees that its load from "flags" will
- be ordered before the READ_ONCE() from data, thus solving the first
-@@ -238,81 +230,67 @@ loads, with a "filter" clause to constrain the first to return the
- initial value and the second to return the updated value, as shown below:
- 
- 	/* See Documentation/litmus-tests/locking/RM-fixed.litmus. */
--	P0(int *x, int *y, int *lck)
-+	void CPU0(void)
- 	{
--		int r2;
--
--		spin_lock(lck);
--		r2 = atomic_inc_return(y);
--		WRITE_ONCE(*x, 1);
--		spin_unlock(lck);
-+		spin_lock(&lck);
-+		r2 = atomic_inc_return(&y);
-+		WRITE_ONCE(x, 1);
-+		spin_unlock(&lck);
- 	}
- 
--	P1(int *x, int *y, int *lck)
-+	void CPU1(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		r0 = READ_ONCE(*x);
--		r1 = READ_ONCE(*x);
--		spin_lock(lck);
--		r2 = atomic_inc_return(y);
--		spin_unlock(lck);
-+		r0 = READ_ONCE(x);
-+		r1 = READ_ONCE(x);
-+		spin_lock(&lck);
-+		r2 = atomic_inc_return(&y);
-+		spin_unlock(&lck);
- 	}
- 
--	filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+	filter (1:r0=0 /\ 1:r1=1)
- 	exists (1:r2=1)
- 
- The variable "x" is the control variable for the emulated spin loop.
--P0() sets it to "1" while holding the lock, and P1() emulates the
-+CPU0() sets it to "1" while holding the lock, and CPU1() emulates the
- spin loop by reading it twice, first into "1:r0" (which should get the
- initial value "0") and then into "1:r1" (which should get the updated
- value "1").
- 
--The purpose of the variable "y" is to reject deadlocked executions.
--Only those executions where the final value of "y" have avoided deadlock.
-+The "filter" clause takes this into account, constraining "1:r0" to
-+equal "0" and "1:r1" to equal 1.
- 
--The "filter" clause takes all this into account, constraining "y" to
--equal "2", "1:r0" to equal "0", and "1:r1" to equal 1.
--
--Then the "exists" clause checks to see if P1() acquired its lock first,
--which should not happen given the filter clause because P0() updates
-+Then the "exists" clause checks to see if CPU1() acquired its lock first,
-+which should not happen given the filter clause because CPU0() updates
- "x" while holding the lock.  And herd7 confirms this.
- 
- But suppose that the compiler was permitted to reorder the spin loop
--into P1()'s critical section, like this:
-+into CPU1()'s critical section, like this:
- 
- 	/* See Documentation/litmus-tests/locking/RM-broken.litmus. */
--	P0(int *x, int *y, int *lck)
-+	void CPU0(void)
- 	{
- 		int r2;
- 
--		spin_lock(lck);
--		r2 = atomic_inc_return(y);
--		WRITE_ONCE(*x, 1);
--		spin_unlock(lck);
-+		spin_lock(&lck);
-+		r2 = atomic_inc_return(&y);
-+		WRITE_ONCE(x, 1);
-+		spin_unlock(&lck);
- 	}
- 
--	P1(int *x, int *y, int *lck)
-+	void CPU1(void)
- 	{
--		int r0;
--		int r1;
--		int r2;
--
--		spin_lock(lck);
--		r0 = READ_ONCE(*x);
--		r1 = READ_ONCE(*x);
--		r2 = atomic_inc_return(y);
--		spin_unlock(lck);
-+		spin_lock(&lck);
-+		r0 = READ_ONCE(x);
-+		r1 = READ_ONCE(x);
-+		r2 = atomic_inc_return(&y);
-+		spin_unlock(&lck);
- 	}
- 
--	locations [x;lck;0:r2;1:r0;1:r1;1:r2]
--	filter (y=2 /\ 1:r0=0 /\ 1:r1=1)
-+	filter (1:r0=0 /\ 1:r1=1)
- 	exists (1:r2=1)
- 
--If "1:r0" is equal to "0", "1:r1" can never equal "1" because P0()
--cannot update "x" while P1() holds the lock.  And herd7 confirms this,
-+If "1:r0" is equal to "0", "1:r1" can never equal "1" because CPU0()
-+cannot update "x" while CPU1() holds the lock.  And herd7 confirms this,
- showing zero executions matching the "filter" criteria.
- 
- And this is why Linux-kernel lock and unlock primitives must prevent
-
-
+Thank you,
+~~ Lina
 
