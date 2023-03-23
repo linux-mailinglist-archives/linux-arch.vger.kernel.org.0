@@ -2,93 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC3B6C72F1
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 23:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A696C7406
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 00:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbjCWWUK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 18:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S229990AbjCWXaq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 19:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbjCWWUI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 18:20:08 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAB823D99;
-        Thu, 23 Mar 2023 15:20:06 -0700 (PDT)
-Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id D3CED845;
-        Thu, 23 Mar 2023 22:20:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D3CED845
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1679610006; bh=rsDSg4mYvFmVgpSxVekYd+TcSXV5fNk9ODWCs9zntmw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qPiUUuy+mDNP1JupNnClvXBOF9+M9rw3YKNbQzP6w9Q+awaf/j/T9Q6OQ/cNVtlW6
-         BFSuWLmZRj3/oTkIFMkr/oy6kEu6D2KzExUjuWLf81+PK8aNJx+QKv3UaG57LnD5Kj
-         slFIvgrB2fUO/+ZZXL/cRNWrbLvFvVqfNxFYN4gUMXvKDBEfj81XW/aG8jbn3EyoSn
-         nwp31ZQJZRiaF3dfrkudo+SpT4wDUW4kqnsg7PqsGE2UKe1o2UwiOwmODLs084aQlg
-         +ub6erX52awqq34eSmkIl5J1iOU7Wpjnt/nJ6qS0Dqc+EWfQ7dWLJkkO0PEajs4aRE
-         T+ljhvWb8pLcA==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 6/6] docs: move nios2 documentation under Documentation/arch/
-Date:   Thu, 23 Mar 2023 16:19:48 -0600
-Message-Id: <20230323221948.352154-7-corbet@lwn.net>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230323221948.352154-1-corbet@lwn.net>
-References: <20230323221948.352154-1-corbet@lwn.net>
+        with ESMTP id S229576AbjCWXap (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 19:30:45 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC0225BBF;
+        Thu, 23 Mar 2023 16:30:45 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i15so226808pfo.8;
+        Thu, 23 Mar 2023 16:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679614244;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gGnK9kK6rwPE9Cig9j09DuEmiYA9Kj1n7jjctGAB9Ic=;
+        b=GJ9VeSHvJENNkSlhS1vvDkzUudpQA2ONvLrGRjvUl+P+nTPj111yCwQTUUY8z9+rZ2
+         +F10vAsuqJs5k5sA7jOkFPTzeu4eaZxDZAWOsnXmU0HnLD0kMuxoSPGBjkqAS5St/47P
+         EW34fnL1WzJ43qrq4NC4MKQfzXfBx1zKJNDLbxKbf5GF+FYwaUtKkNoAQCUawdn8SZEl
+         cGNZwdnf7DQeco3xpS9AjeCNr/IStf7BQGcQUjNBkVpmfrSoqMjaghqeECzdF2PIbCEe
+         QW5nO+e5EeQ2tL3TkVhTld07oFfa13mzRi1BAq9R9RXmZDUKNeyYzdjPe8pJR/TQ/kcd
+         LDwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679614244;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gGnK9kK6rwPE9Cig9j09DuEmiYA9Kj1n7jjctGAB9Ic=;
+        b=l7Ba6OCxuPhQ2q2SivKZCrUF3UZFANi+WIO7puKnCYAFweiOM6ghobwiVxxi8Agirh
+         Yc8Ro3BMK0f2W6mxjDpevCr4qyuMVMf1HK6Mnst6ejUUGVg5nF91WEDeznlfksba01X9
+         71uP/KHUZPMQqIKIGhmxTyW+Luvj75gXE0lmlvbVv1otMBYUWTjrHiETn/b7vJ1Q+Vye
+         kGkmgpQ8FR/fmn1ScZmADToLKkFpWqB7uQRRr+SmwtdanQ79JEpZZrsem2ZsJYIwFQb9
+         /hsISfa7cNBaerkG7qYZrq6C2mctvQdbnfzDYOEikRlOegpCByES6kILZF/SlIPVZ6pA
+         S/kg==
+X-Gm-Message-State: AAQBX9dmGDgQJvz6mSI7C/TGuHudS7v+DU4jslgVn7nUlri7wLHomA4J
+        PZpY3ZVTO7KSaanx9Tsc5GI=
+X-Google-Smtp-Source: AKy350arDXi1ErMT2avja0wJVTL1MaLBvhcDLtF6L3fuVg0w3KNh4LAvc+sBGxh+PzdedZWiyOuaJA==
+X-Received: by 2002:a62:1d95:0:b0:627:e577:4326 with SMTP id d143-20020a621d95000000b00627e5774326mr716072pfd.17.1679614244499;
+        Thu, 23 Mar 2023 16:30:44 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id 22-20020aa79216000000b005fdf8c06320sm12874003pfo.175.2023.03.23.16.30.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Mar 2023 16:30:44 -0700 (PDT)
+Message-ID: <2d26aad2-a1d5-649c-86ec-9457c577333f@gmail.com>
+Date:   Fri, 24 Mar 2023 08:30:38 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH memory-model scripts 01/31] tools/memory-model: Document
+ locking corner cases
+To:     paulmck@kernel.org
+Cc:     parri.andrea@gmail.com, stern@rowland.harvard.edu, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@meta.com, mingo@kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <4e5839bb-e980-4931-a550-3548d025a32a@paulmck-laptop>
+ <20230321010549.51296-1-paulmck@kernel.org>
+ <f940cb6c-4aa6-41a4-d9d7-330becd5427a@gmail.com>
+ <cd356db2-1643-4b01-bb13-16a7f92cf980@paulmck-laptop>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <cd356db2-1643-4b01-bb13-16a7f92cf980@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Architecture-specific documentation is being moved into Documentation/arch/
-as a way of cleaning up the top-level documentation directory and making
-the docs hierarchy more closely match the source hierarchy.  Move
-Documentation/nios2 into arch/ and fix all in-tree references.
+On Thu, 23 Mar 2023 11:52:15 -0700, Paul E. McKenney wrote:
+> On Thu, Mar 23, 2023 at 11:52:57AM +0900, Akira Yokosawa wrote:
+>> Hi Paul,
+>>
+>> On Mon, 20 Mar 2023 18:05:19 -0700, Paul E. McKenney wrote:
+>>> Most Linux-kernel uses of locking are straightforward, but there are
+>>> corner-case uses that rely on less well-known aspects of the lock and
+>>> unlock primitives.  This commit therefore adds a locking.txt and litmus
+>>> tests in Documentation/litmus-tests/locking to explain these corner-case
+>>> uses.
+>>>
+>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+>>> ---
+>>>  .../litmus-tests/locking/DCL-broken.litmus    |  55 +++
+>>>  .../litmus-tests/locking/DCL-fixed.litmus     |  56 +++
+>>>  .../litmus-tests/locking/RM-broken.litmus     |  42 +++
+>>>  .../litmus-tests/locking/RM-fixed.litmus      |  42 +++
+>>>  tools/memory-model/Documentation/locking.txt  | 320 ++++++++++++++++++
+>>
+>> I think the documentation needs adjustment to cope with Andrea's change
+>> of litmus tests.
+>>
+>> Also, coding style of code snippets taken from litmus tests look somewhat
+>> inconsistent with other snippets taken from MP+... litmus tests:
+>>
+>>   - Simple function signature such as "void CPU0(void)".
+>>   - No declaration of local variables.
+>>   - Indirection level of global variables.
+>>   - No "locations" clause
+>>
+>> How about applying the diff below?
+> 
+> Good eyes, thank you!  I will fold this in with attribution.
 
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
----
- Documentation/arch/index.rst                | 2 +-
- Documentation/{ => arch}/nios2/features.rst | 0
- Documentation/{ => arch}/nios2/index.rst    | 0
- Documentation/{ => arch}/nios2/nios2.rst    | 0
- 4 files changed, 1 insertion(+), 1 deletion(-)
- rename Documentation/{ => arch}/nios2/features.rst (100%)
- rename Documentation/{ => arch}/nios2/index.rst (100%)
- rename Documentation/{ => arch}/nios2/nios2.rst (100%)
+Feel free to add
 
-diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-index 65945daa40fe..ccb4d10fc1b6 100644
---- a/Documentation/arch/index.rst
-+++ b/Documentation/arch/index.rst
-@@ -16,7 +16,7 @@ implementation.
-    ../loongarch/index
-    ../m68k/index
-    ../mips/index
--   ../nios2/index
-+   nios2/index
-    openrisc/index
-    ../parisc/index
-    ../powerpc/index
-diff --git a/Documentation/nios2/features.rst b/Documentation/arch/nios2/features.rst
-similarity index 100%
-rename from Documentation/nios2/features.rst
-rename to Documentation/arch/nios2/features.rst
-diff --git a/Documentation/nios2/index.rst b/Documentation/arch/nios2/index.rst
-similarity index 100%
-rename from Documentation/nios2/index.rst
-rename to Documentation/arch/nios2/index.rst
-diff --git a/Documentation/nios2/nios2.rst b/Documentation/arch/nios2/nios2.rst
-similarity index 100%
-rename from Documentation/nios2/nios2.rst
-rename to Documentation/arch/nios2/nios2.rst
--- 
-2.39.2
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+
+        Thanks, Akira
+> 
+> 							Thanx, Paul
+> 
+>>         Thanks, Akira
 
