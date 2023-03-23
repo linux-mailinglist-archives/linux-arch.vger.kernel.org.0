@@ -2,52 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10156C71E2
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 21:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BABE6C722D
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 22:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCWUxJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 16:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S229738AbjCWVMu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 17:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCWUxH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 16:53:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237B3211D9;
-        Thu, 23 Mar 2023 13:53:07 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1679604785;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/1rYDeXeXdW0cuqWo9UuJC5RYidgtmZSNCr4/RwqvXg=;
-        b=kCFatXP07k+7ELzDIE3JTCvp4GpTnFsSYJVF8TY++iD9F33t0ypFsp2djOR123wyiPBUFl
-        edUT3UFpBESREWBdgBB0RdGstybe1YRSlALb74nyo36FQPCCvjNaZautJKFq71MAg33Zfu
-        7DgkXp/TCDMoObM5KIrAjBONh0jSQSVIzaKBKuqzS21tN+o3pLms6sIH4olxjTQOlUhDcd
-        lEU7aGONdS5+0lqIOcIquj2cdG45IcD7/801f6UyE4sl5rTI2KAoHEypMTlEW4Gieq0T3T
-        aiT1jG4LhuuBEuFZOHrvl8eqbAAmEXnTYNEnxtuyO6qj6ejw4TUz3UWvsn5Oaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1679604785;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/1rYDeXeXdW0cuqWo9UuJC5RYidgtmZSNCr4/RwqvXg=;
-        b=en2d05+owSRS5DeKKg4zUpsBpaYDlKJlhWl+48pw84bzkbJyCo+8luXKBa/JrihpiQjr1n
-        GD174VWof6W8QVBw==
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2] irq domain: drop IRQ_DOMAIN_HIERARCHY option, make
- it always on
-In-Reply-To: <20230313023935.31037-1-rdunlap@infradead.org>
-References: <20230313023935.31037-1-rdunlap@infradead.org>
-Date:   Thu, 23 Mar 2023 21:53:04 +0100
-Message-ID: <877cv78a1b.ffs@tglx>
+        with ESMTP id S229590AbjCWVMt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 17:12:49 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460DF2597B;
+        Thu, 23 Mar 2023 14:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
+        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
+        bh=EWwVIz5hLvBmT6Tz5cl4jST1aXNmll6pvQLb1c2drjk=; b=CLNJ7YLSLaPjyJTvgUAwcXTSmH
+        8gwTOo7bDshYvYEvTb92eayZOBGcWwgu/k6cDJauBDofvMB2BjFh6+KJ6NaLs042xBqiuT0pxaLgb
+        v4pjf/Ilr0m0SpPFr7dTqyZFr3FbhelSHsHJ2Zy07THiN40wFBoPvfVUtmNuId33M0NN3d3vSI9wl
+        /KbslUVNgGQRdcf01DO0WxM/Uzo+t02XjB2KNAOPUIxP3qUr+gc3cPm++57DK3bTddS0UUzn4vKj6
+        S1DK2IAblz+eElWSSC/7KYdAw6rAYUAwr6HGMNhqdynQPDH8T4qE5Zldwa01UZKs/GJlpTxTC2jhZ
+        fyUNs6Tg==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1pfSEB-003QpI-Kh; Thu, 23 Mar 2023 22:12:07 +0100
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1pfSEB-00EeXf-0F;
+        Thu, 23 Mar 2023 22:12:07 +0100
+Date:   Thu, 23 Mar 2023 22:12:07 +0100
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+Message-ID: <ZBzAp457rrO52FPy@aurel32.net>
+Mail-Followup-To: Ard Biesheuvel <ardb@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+References: <20221012233500.156764-1-masahiroy@kernel.org>
+ <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,60 +68,80 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 12 2023 at 19:39, Randy Dunlap wrote:
-> In preparation for dropping the IRQ_DOMAIN Kconfig option (effectively
-> making it always set/on), first drop IRQ_DOMAIN_HIERARCHY as an option,
-> making its code always set/on.
->
-> This has been built successfully on all ARCHes except hexagon,
-> both 32-bit and 64-bit where applicable.
+Hi,
 
-I really like where this is going, but reviewing this is a pain. I tried
-to split it up into more digestable pieces:
+On 2023-03-22 15:51, Ard Biesheuvel wrote:
+> On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net> wrote:
+> >
+> > Hi,
+> >
+> > On 2022-10-13 08:35, Masahiro Yamada wrote:
+> > > In the previous discussion (see the Link tag), Ard pointed out that
+> > > arm/arm64/kernel/head.o does not need any special treatment - the only
+> > > piece that must appear right at the start of the binary image is the
+> > > image header which is emitted into .head.text.
+> > >
+> > > The linker script does the right thing to do. The build system does
+> > > not need to manipulate the link order of head.o.
+> > >
+> > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  scripts/head-object-list.txt | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > >
+> > > diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+> > > index b16326a92c45..f226e45e3b7b 100644
+> > > --- a/scripts/head-object-list.txt
+> > > +++ b/scripts/head-object-list.txt
+> > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+> > >  arch/arc/kernel/head.o
+> > >  arch/arm/kernel/head-nommu.o
+> > >  arch/arm/kernel/head.o
+> > > -arch/arm64/kernel/head.o
+> > >  arch/csky/kernel/head.o
+> > >  arch/hexagon/kernel/head.o
+> > >  arch/ia64/kernel/head.o
+> >
+> > This patch causes a significant increase of the arch/arm64/boot/Image
+> > size. For instance the generic arm64 Debian kernel went from 31 to 39 MB
+> > after this patch has been applied to the 6.1 stable tree.
+> >
+> > In turn this causes issues with some bootloaders, for instance U-Boot on
+> > a Raspberry Pi limits the kernel size to 36 MB.
+> >
+> 
+> I cannot reproduce this with mainline
+> 
+> With the patch
+> 
+> $ size vmlinux
+>    text    data     bss     dec     hex filename
+> 24567309 14752630 621680 39941619 26175f3 vmlinux
+> 
+> With the patch reverted
+> 
+> $ size vmlinux
+>    text    data     bss     dec     hex filename
+> 24567309 14752694 621680 39941683 2617633 vmlinux
 
-   https://tglx.de/~tglx/patches.tar
+I have tried with the current mainline, this is what I get, using GCC 12.2.0
+and binutils 2.40:
 
-That's not completely equivalent to your patch as I did some of the
-changes below. It builds on various oddball architectures with
-IRQ_DOMAIN=n, but is otherwise completely untested.
+   text    data     bss     dec     hex filename
+32531655        8192996  621968 41346619        276e63b vmlinux.orig
+25170610        8192996  621968 33985574        2069426 vmlinux.revert
 
-It should be actually trivial after that to make IRQ_DOMAIN def_bool y
-and then gradually remove the IRQ_DOMAIN selects and ifdeffery.
+> It would help to compare the resulting vmlinux ELF images from both
+> builds to see where the extra space is being allocated
 
-> v2: add stubs in include/linux/irqdomain.h for the config case of
-> IRQ_DOMAIN is not set. If these are not added, there will be plenty
-> of build errors (not so much for modern arches as for older ones).
+At a first glance, it seems the extra space is allocated in the BTF
+section. I have uploaded the resulting files as well as the config file
+I used there:
+https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
 
-I'm not really convinced that all of these stubs are required. Why would
-there suddenly be a requirement to expose stubs for functions which
-depend on CONFIG_IRQ_DOMAIN=y already today just by removing the
-hierarchy config?
-
-Even exposing stubs for functions which have been only available via
-CONFIG_IRQ_DOMAIN_HIERARCHY is questionable simply because there cannot
-be any code which invokes them unconditionally if
-CONFIG_IRQ_DOMAIN_HIERARCHY=n today.
-
-IOW, the sum of required stubs cannot be larger than number of stubs
-required today.
-
-If there is code which has a #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY then
-this needs to be changed to CONFIG_IRQ_DOMAIN or the required functions
-have to be exposed unconditionally, right?
-
-> diff -- a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -361,7 +361,7 @@ config GPIO_IXP4XX
->  	depends on OF
->  	select GPIO_GENERIC
->  	select GPIOLIB_IRQCHIP
-> -	select IRQ_DOMAIN_HIERARCHY
-> +	select IRQ_DOMAIN
-
-IRQ_DOMAIN is already selected by GPIOLIB_IRQCHIP, so this select is
-redundant for all GPIO configs which select GPIOLIB_IRQCHIP.
-
-Thanks,
-
-        tglx
+-- 
+Aurelien Jarno                          GPG: 4096R/1DDD8C9B
+aurelien@aurel32.net                 http://www.aurel32.net
