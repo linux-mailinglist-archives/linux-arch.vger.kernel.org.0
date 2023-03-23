@@ -2,121 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216EF6C6A70
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 15:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B886C6A91
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 15:18:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjCWOIN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 10:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
+        id S230482AbjCWOSI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 10:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCWOIM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 10:08:12 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34D23801B;
-        Thu, 23 Mar 2023 07:06:53 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4B4EB5C00C1;
-        Thu, 23 Mar 2023 10:06:21 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 23 Mar 2023 10:06:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1679580381; x=1679666781; bh=dY
-        48kEVl9pgLxa2CyFA5QtbXG3NJEfHcCiZY//VXuhI=; b=N3CTATQ7q9ZFPQYbjV
-        2M3sXLRM2ydNF/4V7sLh4NmkOAzI9HQjCc6cgXlL0VVeZCU+MMnXXyp+z/sy+Vja
-        hz+o8yvkfpAY6CcmZfx+nB4/3SiUyZifZ0kioxWvtjd0WrCuk3Rdqwg7P6oj6oZw
-        BP00DjLhNvHgy0S0vFIl76edKgf5TYfKRH2O88jk7FJaj68BZJoVLpX691hcsxXB
-        HmZTxrTNuaJKQHIZe6DVgSZMU9ZxkBkKxM6cC1mBv5vh1U5LZ6qHUOGetE+5aQgH
-        1J35G7Z2vO2KHY/Cqhexk2prWj8+onKH6dOYQ215k9JGqOWuoEesdDzaMQr+GgoQ
-        dV1Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679580381; x=1679666781; bh=dY48kEVl9pgLx
-        a2CyFA5QtbXG3NJEfHcCiZY//VXuhI=; b=MrT5Zv5EfNpKnWV6JOjV1cAVQBsiX
-        X69n9fMDOkRG2DaY40xnf5Xp5v5H30Wc3Xr9qL+lmaWpmZa2Wuyd+tdNv125UsbP
-        BJvqNR5y/pu57M9ocW6THhNRR5JtPDlnmxrc1CKSGgDYHjPO//KOMd5PMWaHLfyn
-        9OjZG1nQnKekdjHEbdkq/UjVimMEMNx/Iil1ZfVlq53WnAwn5RlxAJ8mabhpf5wf
-        Axs6dZHlmj7Aufn5J1+a/S3f4OlW6IwLmZ5TKy93kubwd57uWAFPFb8YVlfjbAFv
-        sNDuEf9qNuS2Hw5ZIdzqNt2HRbnFfCeESmChliRFB1zR1kIF8SLq/E9bQ==
-X-ME-Sender: <xms:3FwcZIMb2z1yB6dpSJjclnQp0c-g-lab80yefJt_urC7W_tgT_ULPQ>
-    <xme:3FwcZO-EvG-pyZdpHzyWeIH89xbuD-8PDBV5dbYy0EPs7X6Y5ySw-sXvrWR5U-GXe
-    876k-6A86weXyQFOn0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeggedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:3FwcZPSrZ7jEVy-WPrRZ5LUBHatN2NLK7f773ycdY-B25mAA0VgZPQ>
-    <xmx:3FwcZAvbdApivWiyh4QQ7VI6OANcoDaPBkkoLTzsFyEASiWhklMopA>
-    <xmx:3FwcZAfq9CQcGmPgxlBY_2tFfqCwjAviKvXsxQMQxyKYhMNeoGvvuQ>
-    <xmx:3VwcZE9Hgf136vtECKcakHIv9C-QVEG_JWMzrPs17JgoSwjI7bqzog>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 21472B60086; Thu, 23 Mar 2023 10:06:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-236-g06c0f70e43-fm-20230313.001-g06c0f70e
-Mime-Version: 1.0
-Message-Id: <357de40d-e1bd-4e67-9a8c-240ed2ef7809@app.fastmail.com>
-In-Reply-To: <14a5fa1cc6edd9a297b20af779b68d1e58f83419.camel@linux.ibm.com>
+        with ESMTP id S231473AbjCWOSH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 10:18:07 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDB326A1;
+        Thu, 23 Mar 2023 07:18:03 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32ND6Paq002292;
+        Thu, 23 Mar 2023 14:17:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=cpFYQ2RGL4S22c+iykKlnzU6tO8T2kyReL46W2u6N/A=;
+ b=MG5ejEv/qpozMv8iB3QyhdwwSiWQvFW9dy1T2RxAOOkyQ3Hrn5WD8MBjambXIEIQkPZ/
+ dp4UxmZO9PnuvwRMp82oJT7zbIAf/3m4awsoGylzqZQIfkYlEr1Nn2E0HOTiD9Sy2AjT
+ qy99Ulzy4Gp6wVim+Z5aJ+LMzi3OURoKhNUEY/F5MMNUY7LevPvzM4P3OWRgSruidXm1
+ eje776vQKUHJynhTZDB9KM1G8EOY7W5Z3XnOXZmFnph5TwD1N8oVglbIvlp79Ra8b5pn
+ 67DnL/vGBNk+3eNs5JGur/P5S7Hvd3CehNQlaV5yPWaOyVTNGLLKA5DjV/9boRjKwkHu Jg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgk22gfr7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 14:17:45 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32ND8rkr014433;
+        Thu, 23 Mar 2023 14:17:45 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgk22gfq2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 14:17:44 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NDlMOi014687;
+        Thu, 23 Mar 2023 14:17:42 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3pd4x6e8yv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 14:17:42 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NEHde142271144
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 14:17:39 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8DB362004B;
+        Thu, 23 Mar 2023 14:17:39 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7400920043;
+        Thu, 23 Mar 2023 14:17:38 +0000 (GMT)
+Received: from [9.171.87.16] (unknown [9.171.87.16])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 14:17:38 +0000 (GMT)
+Message-ID: <917b95c9af1b80843b8a361d1b7fa337a25105e7.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 35/38] video: handle HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Ville =?ISO-8859-1?Q?Syrj=E4l=E4?= 
+        <ville.syrjala@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-fbdev@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Date:   Thu, 23 Mar 2023 15:17:38 +0100
+In-Reply-To: <ZBGbxDWEhqr8hhgU@intel.com>
 References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-16-schnelle@linux.ibm.com>
- <20230316161442.GV9667@google.com>
- <607a80040fc7e0c8c7474926088133be1e245127.camel@linux.ibm.com>
- <97b5a5c3-d20f-4201-8deb-1d34e7edee6c@app.fastmail.com>
- <14a5fa1cc6edd9a297b20af779b68d1e58f83419.camel@linux.ibm.com>
-Date:   Thu, 23 Mar 2023 15:05:59 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Lee Jones" <lee@kernel.org>
-Cc:     "Pavel Machek" <pavel@ucw.cz>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+         <20230314121216.413434-36-schnelle@linux.ibm.com>
+         <CAMuHMdW4f8GJ-kFDPg6Ao=g3ZAXq79u9nUZ_dW1LonHu+vxk8Q@mail.gmail.com>
+         <ZBGbxDWEhqr8hhgU@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: wOByOOqF28Bb_tV_j8EvP2d7aSoJMXnM
+X-Proofpoint-GUID: kXBBpD7D6_8p_SykMMv8dWepn1gybyIZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-23_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ mlxlogscore=513 impostorscore=0 priorityscore=1501 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230106
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 23, 2023, at 15:02, Niklas Schnelle wrote:
-> On Thu, 2023-03-23 at 14:32 +0100, Arnd Bergmann wrote:
->> On Thu, Mar 23, 2023, at 13:42, Niklas Schnelle wrote:
->> > On Thu, 2023-03-16 at 16:14 +0000, Lee Jones wrote:
->> > > On Tue, 14 Mar 2023, Niklas Schnelle wrote:
+On Wed, 2023-03-15 at 12:19 +0200, Ville Syrj=C3=A4l=C3=A4 wrote:
+> On Wed, Mar 15, 2023 at 09:16:50AM +0100, Geert Uytterhoeven wrote:
+> > Hi Niklas,
+> >=20
+> > On Tue, Mar 14, 2023 at 1:13=E2=80=AFPM Niklas Schnelle <schnelle@linux=
+.ibm.com> wrote:
+> > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frie=
+nds
+> > > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > > those drivers using them and guard inline code in headers.
+> > >=20
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> >=20
+> > Thanks for your patch!
+> >=20
+> > > --- a/drivers/video/fbdev/Kconfig
+> > > +++ b/drivers/video/fbdev/Kconfig
+> >=20
+> > > @@ -1284,7 +1285,7 @@ config FB_ATY128_BACKLIGHT
+> > >=20
+> > >  config FB_ATY
+> > >         tristate "ATI Mach64 display support" if PCI || ATARI
+> > > -       depends on FB && !SPARC32
+> > > +       depends on FB && HAS_IOPORT && !SPARC32
+> >=20
+> > On Atari, this works without ATARI_ROM_ISA, hence it must not depend
+> > on HAS_IOPORT.
+> > The only call to inb() is inside a section protected by #ifdef
+> > CONFIG_PCI. So:
+>=20
+> That piece of code is a nop anyway. We immediately overwrite
+> clk_wr_offset with a hardcoded selection after the register reads.
+> So if you nuke that nop code then no IOPORT dependency required
+> at all.
+>=20
 
-> Yes, sorry I was traveling Thursday to Monday and then spent some time
-> catching up and investigating an internal issue. I'm currently going
-> through the patches one by one incorporating comments. I fear the split
-> of the USB patch as well as the suggestions for video might take a bit
-> of time, so if you prefer I could also send just an updated patch 1
-> separately. How would I do this cleanly? Send as v4 without(?) a cover
-> letter and add a Note after the '---'?
+I agree this "looks" like a nop but are we sure the inb() doesn't have
+side effects?=C2=A0
+(for reference drivers/video/fbdev/aty/aty/atyfb_base.c:
+atyfb_setup_generc() towards the end)
 
-Yes, that sounds good to me. In case you need multiple
-versions, I would suggest you continue counting at v4
-independently for both the preparation patch and the
-rest of the series.
+It does feel a bit out of scope for this series but if it's really a
+nop nuking it surely is the cleaner solution.
 
-    Arnd
+Thanks,
+Niklas
+
