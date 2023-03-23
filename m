@@ -2,204 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8856C686B
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 13:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E551D6C68A9
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 13:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjCWMeH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 08:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S231508AbjCWMn0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 08:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjCWMeG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 08:34:06 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B33196AD;
-        Thu, 23 Mar 2023 05:34:04 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id DE791420CF;
-        Thu, 23 Mar 2023 12:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1679574842;
-        bh=dU+ouRLpZkJDik6nlmkKXlAzXALaF6/l7WtvgLXO5Rg=;
-        h=From:Date:Subject:To:Cc;
-        b=KCmfvMiMVpberx82OFDcDMPsbno/GMxpzLzAunpRDDyccD9oRx9YXrVvq0B6ja2+2
-         6uAd6QuJb1ZCVPPwdf/RGoVp75+S3HGkXKUDFCr+VVhcDzC/Jgj9OS0RHq8mTW5Lpy
-         oveYqQCEB+E6sLFoZLXvAMkw+TSoPwMz+/EMvfRtz7W25bmDCZnzDdz3O+I5hlzw/c
-         Ipp/GSvbwL+OJk7o6phNwyM+rppi2PTa7V9C/GGm1clx5RFaXOUl6BXrka47vzZ6Hz
-         +RCm2sSZzsaH1Vn8csb+A/YA7Jso4wbt13rysCibodoHQ9HZUVER/8lctaDjycbsZi
-         q3S585ItjEupw==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Thu, 23 Mar 2023 21:33:54 +0900
-Subject: [PATCH v3] rust: ioctl: Add ioctl number manipulation functions
+        with ESMTP id S231416AbjCWMnV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 08:43:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911DA29155;
+        Thu, 23 Mar 2023 05:43:19 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32NAje8b007776;
+        Thu, 23 Mar 2023 12:42:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=tuNKUZojerTn1bhSdxusIxZNGrSU5CH43HCACIz8URQ=;
+ b=FInZGXOYg/XEcnd1VhWmVTrVdfGiW7LqeRaEy+e71CA1WMsnStkGv8Rm8YSAnfg93O99
+ qdCXEDeYspXVYL9lgHvCc96MGJ8CNY/4qOyGsIk6U4eEjTQDLFbTcVNRVBc4HLR2v1mE
+ 4m69SXiUTI0P2rDin3j3kY/YedUimiDrlzIZLEOPrDW2ISkx4em3jwGVZwmEDxg9KFUZ
+ DBVNytGC5y6tYqoHVGflCzdeZZMRlHjjjCWoPCDB5bYR6qr8l0EgmG7WRhrWuWBHyIjb
+ QG49DSh9LOjTYjJWQcCo99WtT8EZLCZGpXUVVkpvUj7gDAs7VxtFHiPLG0Dw+6IiTHuq MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgk22e4vr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:42:58 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32NBuY2a005246;
+        Thu, 23 Mar 2023 12:42:58 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pgk22e4uv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:42:57 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32NAFJi1017094;
+        Thu, 23 Mar 2023 12:42:55 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pd4x6fbj7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Mar 2023 12:42:55 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32NCgqlR24642082
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Mar 2023 12:42:52 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B62F62004D;
+        Thu, 23 Mar 2023 12:42:52 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 800EC20040;
+        Thu, 23 Mar 2023 12:42:51 +0000 (GMT)
+Received: from [9.171.87.16] (unknown [9.171.87.16])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Mar 2023 12:42:51 +0000 (GMT)
+Message-ID: <607a80040fc7e0c8c7474926088133be1e245127.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-leds@vger.kernel.org
+Date:   Thu, 23 Mar 2023 13:42:51 +0100
+In-Reply-To: <20230316161442.GV9667@google.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-16-schnelle@linux.ibm.com>
+         <20230316161442.GV9667@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230224-rust-ioctl-v3-1-3c5f7a6954b5@asahilina.net>
-X-B4-Tracking: v=1; b=H4sIADFHHGQC/3WNwQ6CMBBEf4X0bBW2FMWT/2E8LLDQTUwhLTQaw
- r/bcjR6fJN5M6vw5Ji8uGarcBTY82gjqEMmWoN2IMldZAE5qByglG7xs+SxnZ8SNeS9okYhXkQ
- UGvQkG4e2NUkZpuW0t1MOqTA56vm1v90fkQ37eXTv/TwUKf35EwpZSF2U0KlKY63KG3o0/GSLR
- 0uzSFMB/uuQdAWazhXW0PXf+rZtHzY15/EIAQAA
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arch@vger.kernel.org,
-        Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1679574839; l=4426;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=dU+ouRLpZkJDik6nlmkKXlAzXALaF6/l7WtvgLXO5Rg=;
- b=pNeQGZgAbH44+sahsleVEVvZ/xncu3esemq28+oJ0oHzhrHwUv6yVnjKisOIoI73mCXQ0/ayb
- W5kgtIYTLLLDl5j0pqcQPo7VuOzOvobdPG7yMPnAilECZwhGMG8BzWF
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: f8YjC6l8VFrCUnBpp9LLREtXx9Yu7-Tu
+X-Proofpoint-GUID: RG3Rr7zNt7wvgtHtzGEBAkrMMONzN-nC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-22_21,2023-03-22_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ mlxlogscore=658 impostorscore=0 priorityscore=1501 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 adultscore=0 spamscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303230094
+X-Spam-Status: No, score=-0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add simple 1:1 wrappers of the C ioctl number manipulation functions.
-Since these are macros we cannot bindgen them directly, and since they
-should be usable in const context we cannot use helper wrappers, so
-we'll have to reimplement them in Rust. Thankfully, the C headers do
-declare defines for the relevant bitfield positions, so we don't need
-to duplicate that.
+On Thu, 2023-03-16 at 16:14 +0000, Lee Jones wrote:
+> On Tue, 14 Mar 2023, Niklas Schnelle wrote:
+>=20
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
+s
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them.
+> >=20
+> > Acked-by: Pavel Machek <pavel@ucw.cz>
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/leds/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> Applied, thanks
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
-Changes in v3:
-- Actually made the change intended in v2.
-- Link to v2: https://lore.kernel.org/r/20230224-rust-ioctl-v2-1-5325e76a92df@asahilina.net
+Sorry should have maybe been more clear, without patch 1 of this series
+this won't work as the HAS_IOPORT config option is new and will be
+missing otherwise. There's currently two options of merging this,
+either all at once or first only patch 1 and then the additional
+patches per subsystem until finally the last patch can remove
+inb()/outb() and friends when HAS_IOPORT is unset.
 
-Changes in v2:
-- Changed from assert!() to build_assert!() (static_assert!() can't work
-  here)
-- Link to v1: https://lore.kernel.org/r/20230224-rust-ioctl-v1-1-5142d365a934@asahilina.net
----
- rust/bindings/bindings_helper.h |  3 +-
- rust/kernel/ioctl.rs            | 71 +++++++++++++++++++++++++++++++++++++++++
- rust/kernel/lib.rs              |  1 +
- 3 files changed, 74 insertions(+), 1 deletion(-)
-
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index 75d85bd6c592..aef60f300be0 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -6,8 +6,9 @@
-  * Sorted alphabetically.
-  */
- 
--#include <linux/slab.h>
-+#include <linux/ioctl.h>
- #include <linux/refcount.h>
-+#include <linux/slab.h>
- 
- /* `bindgen` gets confused at certain things. */
- const gfp_t BINDINGS_GFP_KERNEL = GFP_KERNEL;
-diff --git a/rust/kernel/ioctl.rs b/rust/kernel/ioctl.rs
-new file mode 100644
-index 000000000000..b2076113b6a8
---- /dev/null
-+++ b/rust/kernel/ioctl.rs
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#![allow(non_snake_case)]
-+
-+//! ioctl() number definitions
-+//!
-+//! C header: [`include/asm-generic/ioctl.h`](../../../../include/asm-generic/ioctl.h)
-+
-+use crate::build_assert;
-+
-+/// Build an ioctl number, analogous to the C macro of the same name.
-+#[inline(always)]
-+const fn _IOC(dir: u32, ty: u32, nr: u32, size: usize) -> u32 {
-+    build_assert!(dir <= bindings::_IOC_DIRMASK);
-+    build_assert!(ty <= bindings::_IOC_TYPEMASK);
-+    build_assert!(nr <= bindings::_IOC_NRMASK);
-+    build_assert!(size <= (bindings::_IOC_SIZEMASK as usize));
-+
-+    (dir << bindings::_IOC_DIRSHIFT)
-+        | (ty << bindings::_IOC_TYPESHIFT)
-+        | (nr << bindings::_IOC_NRSHIFT)
-+        | ((size as u32) << bindings::_IOC_SIZESHIFT)
-+}
-+
-+/// Build an ioctl number for an argumentless ioctl.
-+#[inline(always)]
-+pub const fn _IO(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_NONE, ty, nr, 0)
-+}
-+
-+/// Build an ioctl number for an read-only ioctl.
-+#[inline(always)]
-+pub const fn _IOR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_READ, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for an write-only ioctl.
-+#[inline(always)]
-+pub const fn _IOW<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(bindings::_IOC_WRITE, ty, nr, core::mem::size_of::<T>())
-+}
-+
-+/// Build an ioctl number for a read-write ioctl.
-+#[inline(always)]
-+pub const fn _IOWR<T>(ty: u32, nr: u32) -> u32 {
-+    _IOC(
-+        bindings::_IOC_READ | bindings::_IOC_WRITE,
-+        ty,
-+        nr,
-+        core::mem::size_of::<T>(),
-+    )
-+}
-+
-+/// Get the ioctl direction from an ioctl number.
-+pub const fn _IOC_DIR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_DIRSHIFT) & bindings::_IOC_DIRMASK
-+}
-+
-+/// Get the ioctl type from an ioctl number.
-+pub const fn _IOC_TYPE(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_TYPESHIFT) & bindings::_IOC_TYPEMASK
-+}
-+
-+/// Get the ioctl number from an ioctl number.
-+pub const fn _IOC_NR(nr: u32) -> u32 {
-+    (nr >> bindings::_IOC_NRSHIFT) & bindings::_IOC_NRMASK
-+}
-+
-+/// Get the ioctl size from an ioctl number.
-+pub const fn _IOC_SIZE(nr: u32) -> usize {
-+    ((nr >> bindings::_IOC_SIZESHIFT) & bindings::_IOC_SIZEMASK) as usize
-+}
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 223564f9f0cc..7610b18ee642 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -30,6 +30,7 @@ compile_error!("Missing kernel configuration for conditional compilation");
- mod allocator;
- mod build_assert;
- pub mod error;
-+pub mod ioctl;
- pub mod prelude;
- pub mod print;
- mod static_assert;
-
----
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-change-id: 20230224-rust-ioctl-a520f3eb3aa8
-
-Thank you,
-~~ Lina
-
+Thanks,
+Niklas
