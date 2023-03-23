@@ -2,79 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C267B6C7055
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 19:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4656C7071
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 19:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjCWShi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 14:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S231515AbjCWSpc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Mar 2023 14:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjCWShh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 14:37:37 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1B619F12
-        for <linux-arch@vger.kernel.org>; Thu, 23 Mar 2023 11:37:36 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id c19so27683668qtn.13
-        for <linux-arch@vger.kernel.org>; Thu, 23 Mar 2023 11:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1679596655;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XbRJPS/v8/2yp+Yuy7Nlcd2zcwyezFJR04VBr9Hh16c=;
-        b=fw8O2F6Uczyucy9+5FNKoD4fblHBvwXyeAYBq0UqCYAB9WztSy9Uz/VWXuZ1/o/Udt
-         xKbVYrVnTdNdsi8h2wVgeYNkXCSr7E71emTH4EegG6M1NV3vAZz3zO5jh+zf8wuXi/xX
-         vnXX5EFeHX4mKSz0QL8a5VY/fYV3qXw2jWBu0pDT5erVfOshtk/WQQxEGuMTI0CDdiN/
-         SKpaNEHr2twiIBLVH6Wsy+oKXHYdQBJblAi4bfwycHj9FWyHQokvRFosPlg05D4JU8A2
-         +n/rH3+Ouc57dC7KPQdbQ3YrTDh9zNH93vbWbL/33Wa+VX+iKoU6gxALKcn2p3zcsneJ
-         Pd+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679596655;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XbRJPS/v8/2yp+Yuy7Nlcd2zcwyezFJR04VBr9Hh16c=;
-        b=nHkhQuO2gl9fcNn2NO2YDu2AQ2iVcanpcx0BO5ekIP4G1wawG73NfCd38Y6knr5QbC
-         Uzifa6lLf6WP+uxfg9UucluohacSs05O7Vyo2SIjGb0qJuLn3+EQ9TK0afSOsnK1ZVGq
-         FnjCdd9xrUQ+TyR3f6/5dihuzIccRpHY3fBrAFAbYYh3UxRNce5Brxz0HCwJWsLSxjSy
-         9NJQFsPuRo6GsBF+BCORT8Ks4Wa2t+SH/izRfRw7EasvxuGSqvlG+g0uQM6XPZ+gpUj2
-         Da5J01jllGPvPffu4Qr8cwIBWFBbAnV5xSqwte4eYOTO1aQvCRNeTjFuX+VKrLingbfT
-         pjug==
-X-Gm-Message-State: AO0yUKUNswSiUi9GyCIFWivsPsLaF0zJvwU1DMh8qi5eqjyntXWVMoJA
-        GW6m63gW1zh3G1Dvx3ntydHXVkBW+uZ5HeAyHWtb+5KPbfvK7+r2t9U=
-X-Google-Smtp-Source: AK7set9PBf2gqbX+dZtVGyurSRrdxxPqbcUa0IJaTtOpaDUBKo5pZTjqrQwh/NWyAHLPrSspo4A1UsuFDpdNqZPlSZE=
-X-Received: by 2002:a05:622a:1a02:b0:3e3:f70f:fb13 with SMTP id
- f2-20020a05622a1a0200b003e3f70ffb13mr142785qtb.6.1679596655348; Thu, 23 Mar
- 2023 11:37:35 -0700 (PDT)
+        with ESMTP id S231521AbjCWSpa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 14:45:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916851166D;
+        Thu, 23 Mar 2023 11:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AB1362859;
+        Thu, 23 Mar 2023 18:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB9BC433EF;
+        Thu, 23 Mar 2023 18:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679597124;
+        bh=WBplPgPjttulgaA8Xi55MWgaUgRrcw1aBmIQbNUQakg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hO0vpyI7W+wHQtVzcAKmyObsj+Fk00P30z8SnYEWhqaHiQWj7CgEDGWfHThs6C6VP
+         tyBzXBO1wRbWzlBxu74Np0Qh6uz2aA3rNLaETAQRKB6FIQy5nRm/uoC4W+SAUj47+p
+         SlDIKgeAjLNgjFpbTlhHTyDweTIthe0ENHElEo9JiSZlRHp+GdhRJ/njqjLukVveb+
+         jAk2rKxW95dw5HySvIEXrWLJAgYwCJNGXrWfhpgliK9KLtmUaVBSbetLn3esdwq+tn
+         xRV3qftHOoBYDwQHjkmMX4V4qSQ4I1MJ1i0JG+L/lPs+UvtT1olWnPw5gaoW7Bj+M+
+         Ac+1ZgpN1grFA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id EBF701540398; Thu, 23 Mar 2023 11:45:23 -0700 (PDT)
+Date:   Thu, 23 Mar 2023 11:45:23 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     stern@rowland.harvard.edu, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, npiggin@gmail.com, dhowells@redhat.com,
+        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
+        dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] tools/memory-model: Remove out-of-date SRCU documentation
+Message-ID: <451e1eb4-a1a3-41b3-9189-fa8aa5096eb3@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230323013751.77588-1-parri.andrea@gmail.com>
 MIME-Version: 1.0
-References: <20230315051444.3229621-1-willy@infradead.org> <20230315051444.3229621-2-willy@infradead.org>
-In-Reply-To: <20230315051444.3229621-2-willy@infradead.org>
-From:   Pasha Tatashin <pasha.tatashin@soleen.com>
-Date:   Thu, 23 Mar 2023 14:36:58 -0400
-Message-ID: <CA+CK2bCzC8U_Fu-iwWuodHRaYYAhxRPk79cHoY_3ajAw=zWdTA@mail.gmail.com>
-Subject: Re: [PATCH v4 01/36] mm: Convert page_table_check_pte_set() to page_table_check_ptes_set()
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230323013751.77588-1-parri.andrea@gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 1:15=E2=80=AFAM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
->
-> Tell the page table check how many PTEs & PFNs we want it to check.
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+On Thu, Mar 23, 2023 at 02:37:51AM +0100, Andrea Parri wrote:
+> Commit 6cd244c87428 ("tools/memory-model: Provide exact SRCU semantics")
+> changed the semantics of partially overlapping SRCU read-side critical
+> sections (among other things), making such documentation out-of-date.
+> The new, semantic changes are discussed in explanation.txt.  Remove the
+> out-of-date documentation.
+> 
+> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Applied, thank you all!
 
-Thanks,
-Pasha
+							Thanx, Paul
+
+> ---
+>  .../Documentation/litmus-tests.txt            | 27 +------------------
+>  1 file changed, 1 insertion(+), 26 deletions(-)
+> 
+> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+> index 26554b1c5575e..acac527328a1f 100644
+> --- a/tools/memory-model/Documentation/litmus-tests.txt
+> +++ b/tools/memory-model/Documentation/litmus-tests.txt
+> @@ -1028,32 +1028,7 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+>  		additional call_rcu() process to the site of the
+>  		emulated rcu-barrier().
+>  
+> -	e.	Although sleepable RCU (SRCU) is now modeled, there
+> -		are some subtle differences between its semantics and
+> -		those in the Linux kernel.  For example, the kernel
+> -		might interpret the following sequence as two partially
+> -		overlapping SRCU read-side critical sections:
+> -
+> -			 1  r1 = srcu_read_lock(&my_srcu);
+> -			 2  do_something_1();
+> -			 3  r2 = srcu_read_lock(&my_srcu);
+> -			 4  do_something_2();
+> -			 5  srcu_read_unlock(&my_srcu, r1);
+> -			 6  do_something_3();
+> -			 7  srcu_read_unlock(&my_srcu, r2);
+> -
+> -		In contrast, LKMM will interpret this as a nested pair of
+> -		SRCU read-side critical sections, with the outer critical
+> -		section spanning lines 1-7 and the inner critical section
+> -		spanning lines 3-5.
+> -
+> -		This difference would be more of a concern had anyone
+> -		identified a reasonable use case for partially overlapping
+> -		SRCU read-side critical sections.  For more information
+> -		on the trickiness of such overlapping, please see:
+> -		https://paulmck.livejournal.com/40593.html
+> -
+> -	f.	Reader-writer locking is not modeled.  It can be
+> +	e.	Reader-writer locking is not modeled.  It can be
+>  		emulated in litmus tests using atomic read-modify-write
+>  		operations.
+>  
+> -- 
+> 2.34.1
+> 
