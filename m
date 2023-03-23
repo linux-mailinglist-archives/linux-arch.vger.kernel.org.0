@@ -2,146 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BABE6C722D
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 22:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1C26C72DE
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Mar 2023 23:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCWVMu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Mar 2023 17:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S231438AbjCWWQZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 23 Mar 2023 18:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCWVMt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 17:12:49 -0400
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460DF2597B;
-        Thu, 23 Mar 2023 14:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=EWwVIz5hLvBmT6Tz5cl4jST1aXNmll6pvQLb1c2drjk=; b=CLNJ7YLSLaPjyJTvgUAwcXTSmH
-        8gwTOo7bDshYvYEvTb92eayZOBGcWwgu/k6cDJauBDofvMB2BjFh6+KJ6NaLs042xBqiuT0pxaLgb
-        v4pjf/Ilr0m0SpPFr7dTqyZFr3FbhelSHsHJ2Zy07THiN40wFBoPvfVUtmNuId33M0NN3d3vSI9wl
-        /KbslUVNgGQRdcf01DO0WxM/Uzo+t02XjB2KNAOPUIxP3qUr+gc3cPm++57DK3bTddS0UUzn4vKj6
-        S1DK2IAblz+eElWSSC/7KYdAw6rAYUAwr6HGMNhqdynQPDH8T4qE5Zldwa01UZKs/GJlpTxTC2jhZ
-        fyUNs6Tg==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1pfSEB-003QpI-Kh; Thu, 23 Mar 2023 22:12:07 +0100
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1pfSEB-00EeXf-0F;
-        Thu, 23 Mar 2023 22:12:07 +0100
-Date:   Thu, 23 Mar 2023 22:12:07 +0100
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of
- head.o
-Message-ID: <ZBzAp457rrO52FPy@aurel32.net>
-Mail-Followup-To: Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-References: <20221012233500.156764-1-masahiroy@kernel.org>
- <ZBovCrMXJk7NPISp@aurel32.net>
- <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+        with ESMTP id S231491AbjCWWQV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Mar 2023 18:16:21 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E307C241CB
+        for <linux-arch@vger.kernel.org>; Thu, 23 Mar 2023 15:16:17 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-304-j6IE1sL7Moe3xE5Tqe041Q-1; Thu, 23 Mar 2023 22:16:13 +0000
+X-MC-Unique: j6IE1sL7Moe3xE5Tqe041Q-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 23 Mar
+ 2023 22:16:12 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 23 Mar 2023 22:16:12 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mark Rutland' <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "will@kernel.org" <will@kernel.org>
+Subject: RE: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+Thread-Topic: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+Thread-Index: AQHZXMdjsqmkKsLMq0ilztF2kMGJDa8I7Ypw
+Date:   Thu, 23 Mar 2023 22:16:12 +0000
+Message-ID: <f4d24e8024e84ec5a20ab17b6c2d7f60@AcuMS.aculab.com>
+References: <20230321122514.1743889-1-mark.rutland@arm.com>
+ <20230321122514.1743889-2-mark.rutland@arm.com> <ZBnk3O0QLs6+8KNN@arm.com>
+ <ZBsLGTYjKoUTLrva@FVFF77S0Q05N>
+In-Reply-To: <ZBsLGTYjKoUTLrva@FVFF77S0Q05N>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.0 required=5.0 tests=PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On 2023-03-22 15:51, Ard Biesheuvel wrote:
-> On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net> wrote:
-> >
-> > Hi,
-> >
-> > On 2022-10-13 08:35, Masahiro Yamada wrote:
-> > > In the previous discussion (see the Link tag), Ard pointed out that
-> > > arm/arm64/kernel/head.o does not need any special treatment - the only
-> > > piece that must appear right at the start of the binary image is the
-> > > image header which is emitted into .head.text.
-> > >
-> > > The linker script does the right thing to do. The build system does
-> > > not need to manipulate the link order of head.o.
-> > >
-> > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
-> > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > ---
-> > >
-> > >  scripts/head-object-list.txt | 1 -
-> > >  1 file changed, 1 deletion(-)
-> > >
-> > > diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
-> > > index b16326a92c45..f226e45e3b7b 100644
-> > > --- a/scripts/head-object-list.txt
-> > > +++ b/scripts/head-object-list.txt
-> > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
-> > >  arch/arc/kernel/head.o
-> > >  arch/arm/kernel/head-nommu.o
-> > >  arch/arm/kernel/head.o
-> > > -arch/arm64/kernel/head.o
-> > >  arch/csky/kernel/head.o
-> > >  arch/hexagon/kernel/head.o
-> > >  arch/ia64/kernel/head.o
-> >
-> > This patch causes a significant increase of the arch/arm64/boot/Image
-> > size. For instance the generic arm64 Debian kernel went from 31 to 39 MB
-> > after this patch has been applied to the 6.1 stable tree.
-> >
-> > In turn this causes issues with some bootloaders, for instance U-Boot on
-> > a Raspberry Pi limits the kernel size to 36 MB.
-> >
+From: Mark Rutland
+> Sent: 22 March 2023 14:05
+....
+> > IIUC, in such tests you only vary the destination offset. Our copy
+> > routines in general try to align the source and leave the destination
+> > unaligned for performance. It would be interesting to add some variation
+> > on the source offset as well to spot potential issues with that part of
+> > the memcpy routines.
 > 
-> I cannot reproduce this with mainline
-> 
-> With the patch
-> 
-> $ size vmlinux
->    text    data     bss     dec     hex filename
-> 24567309 14752630 621680 39941619 26175f3 vmlinux
-> 
-> With the patch reverted
-> 
-> $ size vmlinux
->    text    data     bss     dec     hex filename
-> 24567309 14752694 621680 39941683 2617633 vmlinux
+> I have that on my TODO list; I had intended to drop that into the
+> usercopy_params. The only problem is that the cross product of size,
+> src_offset, and dst_offset gets quite large.
 
-I have tried with the current mainline, this is what I get, using GCC 12.2.0
-and binutils 2.40:
+I thought that is was better to align the writes and do misaligned reads.
+Although maybe copy_to/from_user() would be best aligning the user address
+(to avoid page faults part way through a misaligned access).
 
-   text    data     bss     dec     hex filename
-32531655        8192996  621968 41346619        276e63b vmlinux.orig
-25170610        8192996  621968 33985574        2069426 vmlinux.revert
+OTOH, on x86, is it even worth bothering at all.
+I have measured a performance drop for misaligned reads, but it
+was less than 1 clock per cache line in a test that was doing
+2 misaligned reads in at least some of the clock cycles.
+I think the memory read path can do two AVX reads each clock.
+So doing two misaligned 64bit reads isn't stressing it.
 
-> It would help to compare the resulting vmlinux ELF images from both
-> builds to see where the extra space is being allocated
+	David
 
-At a first glance, it seems the extra space is allocated in the BTF
-section. I have uploaded the resulting files as well as the config file
-I used there:
-https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                 http://www.aurel32.net
