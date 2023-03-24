@@ -2,131 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CD06C8121
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 16:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AC16C81A6
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 16:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbjCXPYc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 11:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S232098AbjCXPoF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 11:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjCXPYb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 11:24:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73818F77D;
-        Fri, 24 Mar 2023 08:24:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A435B824F8;
-        Fri, 24 Mar 2023 15:24:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F96C433EF;
-        Fri, 24 Mar 2023 15:24:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679671467;
-        bh=jOuFrReXEcmNuXh48EzaKOxXoRuwvYMtKdgb5EN0x2g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B4rjk5/4fCLDYsZ5Pz+6iIesW3ftkP0Qw2eR3A+P7kCtTCqII0uwahfAftC2UASHI
-         tn3wkODgEA/o8SqZ6zloKnijXRxo+9NFG9BGiVusrdjb/wZgGVm8SKzEFOCRaiwFjw
-         avkMfwuIVl5dsfQE/nctb674GJK+pBX+k0w6HfDOxdHVoR/gNorJkTkAJqQ/20VRFt
-         2whdHWHfBoe5N3Z6ElPzvw9OQ6jGzud+oqXxKBgtPKvWev7HsJCPSOirgfFh5HKIYx
-         0Xr4mNzf8CejJmJoLOxwsWZ5GuYN46mxVqGqRVKBLqS4VdhBajDNQLQL1KL1UnCPYQ
-         SI8jSmqMJQ3fA==
-Date:   Fri, 24 Mar 2023 16:24:14 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "hch@lst.de" <hch@lst.de>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: Re: [PATCH v6 12/13] PCI: hv: Add hypercalls to read/write MMIO space
-Message-ID: <ZB3AnngemTf8vKlA@lpieralisi>
-References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
- <1678329614-3482-13-git-send-email-mikelley@microsoft.com>
- <ZB24Kdu6WMGYH1L7@lpieralisi>
- <BYAPR21MB1688C99BC6C86DEAC22C35D1D7849@BYAPR21MB1688.namprd21.prod.outlook.com>
+        with ESMTP id S232170AbjCXPoD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 11:44:03 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924FFF75C;
+        Fri, 24 Mar 2023 08:43:46 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-544787916d9so39361457b3.13;
+        Fri, 24 Mar 2023 08:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679672623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sQ68igRUsnQg6wVXldKGuyS+4F6MYvbK1+eEkynFAsY=;
+        b=K53LV2Ko7xTlcNS5SUEdTEPHSAx9VMu3KndgmdfNMx+UIms9g0RyB7VJUhxrU24QnI
+         cQDhfbolVWi2kplhpvxOrqu+G2TNMB31B1alqPIag3L9My7jwcxa0nzuK0FzEsAQXANT
+         CuoYXCRV7QkE5rCDrHbdvkoGK9/6Nw5J3z4nUFuwANGrXUw5+QGVdzSDcN1kNiJnyBLg
+         8ckJxCZjD5I6IeWuw5SlTI4F1OLUxA+83oM9s6+Y14yUpMn+LHgms2YPXRSG3MyExdUC
+         3ajx0Xnh/NIFmAoQlAZEFK0nrM7l1qSkTn9vF4HxnS8qyXkaF1PAVl1JfMaMDSwyDAX6
+         ZKIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679672623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sQ68igRUsnQg6wVXldKGuyS+4F6MYvbK1+eEkynFAsY=;
+        b=C2GEqOizvbIJiKLmdkiFJH2G0xk+S31R6IKCbU4FotFmdq3dJ+qTFPyodPZkhhVhbG
+         Wo3ond4vsIXJ6J/PuhlFIYfDiNXRSBPkycxzq2GCkAWh1YrM1qBwy+VfhyP6riFHlC4+
+         TYyBEtVx8vwikjKRGEQMG7OeTKBlPrEow4GKK1bt5tL3JfxR2pDCr3yzgbLi3rsBK0/i
+         u/yUdlzgWoxfYBiB7ssnqytq8ZuNMbIfUHoettSLVVrCHVsNOApxPYR/rVZmg+sJukX9
+         y18/GLg7A7iU+CklaOkCdVrB43RJtCRJV2xGmt06edWwt2zV2pZ2+h0wb4yieVBOJJZy
+         8E2Q==
+X-Gm-Message-State: AAQBX9fjJLcCqWd4ibT+GDpY7FY/oqQAH4xJBFhkaIcOJzzNRlhlTx4Y
+        XdhmAZmC6hTU2ggfrmygPCLfIZyPj3mhdfrtcfc=
+X-Google-Smtp-Source: AKy350bNHA5192Yp0xtsBy+BnFapAy006gmelWsyIvqLWKFQXqJqxH4nWrB7/16FYuoooXDwmaHGuPjIe8uT4/9/A+Q=
+X-Received: by 2002:a81:b721:0:b0:545:3f42:2d97 with SMTP id
+ v33-20020a81b721000000b005453f422d97mr216474ywh.3.1679672623440; Fri, 24 Mar
+ 2023 08:43:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688C99BC6C86DEAC22C35D1D7849@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230305205628.27385-1-ubizjak@gmail.com> <20230305205628.27385-2-ubizjak@gmail.com>
+ <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+In-Reply-To: <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Fri, 24 Mar 2023 16:43:32 +0100
+Message-ID: <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
+Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg() fallbacks
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 03:13:02PM +0000, Michael Kelley (LINUX) wrote:
-> From: Lorenzo Pieralisi <lpieralisi@kernel.org> Sent: Friday, March 24, 2023 7:48 AM
-> > 
-> > On Wed, Mar 08, 2023 at 06:40:13PM -0800, Michael Kelley wrote:
-> > > To support PCI pass-thru devices in Confidential VMs, Hyper-V
-> > > has added hypercalls to read and write MMIO space. Add the
-> > > appropriate definitions to hyperv-tlfs.h and implement
-> > > functions to make the hypercalls.
-> > >
-> > > Co-developed-by: Dexuan Cui <decui@microsoft.com>
-> > > Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> > > Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-> > > Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
-> > > ---
-> > >  arch/x86/include/asm/hyperv-tlfs.h  |  3 ++
-> > >  drivers/pci/controller/pci-hyperv.c | 64
-> > +++++++++++++++++++++++++++++++++++++
-> > >  include/asm-generic/hyperv-tlfs.h   | 22 +++++++++++++
-> > >  3 files changed, 89 insertions(+)
-> > 
-> > Nit: I'd squash this in with the patch where the calls are used,
-> > don't think this patch is bisectable as it stands (maybe you
-> > split them for review purposes, apologies if so).
-> > 
-> > Lorenzo
-> 
-> I did split the new code into two patches to make it more
-> consumable from a review standpoint.  But I'm not understanding
-> what you mean by not being bisectable.  After applying the first
-> of the two patches, everything should still compile and work
-> even though there are no users of the new hypercalls.  Or maybe
-> your concern is that there would be "unused function" warnings?
+On Fri, Mar 24, 2023 at 3:13=E2=80=AFPM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
+>
+> On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
+> > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warn=
+ing.
+>
+> Can you give an example of where we are passing an incompatible pointer?
 
-That's what I meant - that's it.
- 
-> In any case, squashing the two patches isn't a problem.
+An example is patch 10/10 from the series, which will fail without
+this fix when fallback code is used. We have:
 
-Thanks,
-Lorenzo
+-       } while (local_cmpxchg(&rb->head, offset, head) !=3D offset);
++       } while (!local_try_cmpxchg(&rb->head, &offset, head));
+
+where rb->head is defined as:
+
+typedef struct {
+   atomic_long_t a;
+} local_t;
+
+while offset is defined as 'unsigned long'.
+
+The assignment in existing try_cmpxchg template:
+
+typeof(*(_ptr)) *___op =3D (_oldp)
+
+will trigger an initialization from an incompatible pointer type error.
+
+Please note that x86 avoids this issue by a cast in its
+target-dependent definition:
+
+#define __raw_try_cmpxchg(_ptr, _pold, _new, size, lock)                \
+({                                                                      \
+       bool success;                                                   \
+       __typeof__(_ptr) _old =3D (__typeof__(_ptr))(_pold);              \
+       __typeof__(*(_ptr)) __old =3D *_old;                              \
+       __typeof__(*(_ptr)) __new =3D (_new);                             \
+
+so, the warning/error will trigger only in the fallback code.
+
+> That sounds indicative of a bug in the caller, but maybe I'm missing some
+> reason this is necessary due to some indirection.
+>
+> > Fixes: 29f006fdefe6 ("asm-generic/atomic: Add try_cmpxchg() fallbacks")
+>
+> I'm not sure that this needs a fixes tag. Does anything go wrong today, o=
+r only
+> later in this series?
+
+The patch at [1] triggered a build error in posix_acl.c/__get.acl due
+to the same problem. The compilation for x86 target was OK, because
+x86 defines target-specific arch_try_cmpxchg, but the compilation
+broke for targets that revert to generic support. Please note that
+this specific problem was recently fixed in a different way [2], but
+the issue with the fallback remains.
+
+[1] https://lore.kernel.org/lkml/20220714173819.13312-1-ubizjak@gmail.com/
+[2] https://lore.kernel.org/lkml/20221201160103.76012-1-ubizjak@gmail.com/
+
+Uros.
