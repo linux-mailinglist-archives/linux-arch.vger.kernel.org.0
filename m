@@ -2,171 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E6B6C80F1
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 16:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6FB6C80DF
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 16:13:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjCXPON (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 11:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
+        id S232548AbjCXPNh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 11:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjCXPNr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 11:13:47 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCB7231D8
-        for <linux-arch@vger.kernel.org>; Fri, 24 Mar 2023 08:13:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679670802; x=1711206802;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lkfjtbLz1Eoif6LurWZ+qcbyMbcPyXpyV9l702WBkIQ=;
-  b=n3ksyKYXOzM3DAWGtRXjMHEYbQCLv5wulp/btj13gWT5bAQKH9vv3ujt
-   FVSrvTN5Wg09X4CrxB/HHSIZc9TQqLkABAaPp3QS7yuLT4zxtivEA4nu1
-   WD3CX17FgPmHWwV6NV2PsLRA//ah+TXLwdRCEZEXOBIff/pCYnpJu7a1s
-   WIlBVj9DKb4r33QBZ/tZUD+KFKkAXYrK3APPls1GxoMqKa4eYHj7qs8RK
-   20sLZC9QX+jDi8xdCzN1LWK6NhEm2drlaiGAZdBBXnsHGnz6L97g58+27
-   obdJHapFXHmVOGFewJ28ElVD0kU6EsGpf5jlFS8ZocaZK5pkwqIHIzqLo
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="338520141"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="338520141"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 08:13:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="660090130"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="660090130"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Mar 2023 08:13:20 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfj6V-000FPc-16;
-        Fri, 24 Mar 2023 15:13:19 +0000
-Date:   Fri, 24 Mar 2023 23:12:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:dma-sync-rework 5/20]
- arch/powerpc/mm/dma-noncoherent.c:91:59: error: unknown type name
- 'dma_cache_op'
-Message-ID: <202303242353.M76EyrYe-lkp@intel.com>
+        with ESMTP id S232427AbjCXPNQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 11:13:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C14F13D5C;
+        Fri, 24 Mar 2023 08:13:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCE5E62B75;
+        Fri, 24 Mar 2023 15:13:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB15CC433EF;
+        Fri, 24 Mar 2023 15:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679670786;
+        bh=2AcWw4U7YmKhyTQRefWWqoVh+t5hGac5B/I1GEORDcs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zzel3ow2bRiSIP0uPoMOj3Tjki4KkCXh7YbB8eL/QTEZhbndhov4+1S/2mYlsbS8m
+         luqNLI1F6hwOAv/xgkt6VRZPUwd6GyEqbGjmuKHjT4XMYEbuslKmQf97b7aRjKFnj/
+         0NuMEF8wpIB1dc0gJBGzG/pt7pQTQCdhPN4/gpQGPPmjiyxioUWKzcA0TvWl6g+LLd
+         mQUJV0M94I5y4IfFJU+1IOwxk/5KkeUREzRCdqf/63Z4+WmQw/lEQQOeO0O1Y305Q2
+         tJuzPAzLuXsby6sl5MvGE9aD2TDimW1sXGN/IuwVeQMMTfDBtv+4Z+myCoacgasg5a
+         UdxITN47UaYaQ==
+Date:   Fri, 24 Mar 2023 15:13:00 +0000
+From:   Will Deacon <will@kernel.org>
+To:     ypodemsk@redhat.com
+Cc:     Peter Zijlstra <peterz@infradead.org>, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, npiggin@gmail.com, arnd@arndb.de,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mtosatti@redhat.com,
+        ppandit@redhat.com, alougovs@redhat.com,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm/mmu_gather: send tlb_remove_table_smp_sync IPI only
+ to MM CPUs
+Message-ID: <20230324151259.GC27199@willie-the-truck>
+References: <20230312080945.14171-1-ypodemsk@redhat.com>
+ <20230320084902.GE2194297@hirez.programming.kicks-ass.net>
+ <a6ee41b39f3f516aab0f7fb327620cb2a43eeaca.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <a6ee41b39f3f516aab0f7fb327620cb2a43eeaca.camel@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git dma-sync-rework
-head:   9a711fbea373208c1eeb2fafb0c744bc23a79a43
-commit: 8c96c581a246a71ec30a3971cdf7b702b22bb537 [5/20] powerpc: dma-mapping: split out cache operation logic
-config: powerpc-randconfig-r013-20230322 (https://download.01.org/0day-ci/archive/20230324/202303242353.M76EyrYe-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=8c96c581a246a71ec30a3971cdf7b702b22bb537
-        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-        git fetch --no-tags arnd-asm-generic dma-sync-rework
-        git checkout 8c96c581a246a71ec30a3971cdf7b702b22bb537
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/
+On Wed, Mar 22, 2023 at 04:11:44PM +0200, ypodemsk@redhat.com wrote:
+> On Mon, 2023-03-20 at 09:49 +0100, Peter Zijlstra wrote:
+> > On Sun, Mar 12, 2023 at 10:09:45AM +0200, Yair Podemsky wrote:
+> > > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+> > > indiscriminately, this causes unnecessary work and delays notable
+> > > in
+> > > real-time use-cases and isolated cpus, this patch will limit this
+> > > IPI to
+> > > only be sent to cpus referencing the effected mm and are currently
+> > > in
+> > > kernel space.
+> > 
+> > Did you validate that all architectures for which this is relevant
+> > actually set bits in mm_cpumask() ?
+> > 
+> Hi Peter,
+> Thank you for bringing this to my attention.
+> I reviewed the architectures using the MMU_GATHER_RCU_TABLE_FREE:
+> arm, powerpc, s390, sparc and x86 set the bit when switching process
+> in.
+> for arm64 removed set/clear bit in 38d96287504a ("arm64: mm: kill
+> mm_cpumask usage")
+> The reason given was that mm_cpumask was not used.
+> Given that we now have a use for it, I will add a patch to revert.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303242353.M76EyrYe-lkp@intel.com/
+Maintaining the mask is also not free, so I'm not keen on adding it back
+unless there's a net win.
 
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/mm/dma-noncoherent.c:91:59: error: unknown type name 'dma_cache_op'
-      91 | static void __dma_phys_op(phys_addr_t paddr, size_t size, dma_cache_op op)
-         |                                                           ^~~~~~~~~~~~
-   arch/powerpc/mm/dma-noncoherent.c: In function 'arch_sync_dma_for_device':
-   arch/powerpc/mm/dma-noncoherent.c:107:17: error: 'direction' undeclared (first use in this function); did you mean 'irqaction'?
-     107 |         switch (direction) {
-         |                 ^~~~~~~~~
-         |                 irqaction
-   arch/powerpc/mm/dma-noncoherent.c:107:17: note: each undeclared identifier is reported only once for each function it appears in
->> arch/powerpc/mm/dma-noncoherent.c:115:22: error: 'start' undeclared (first use in this function); did you mean 'stat'?
-     115 |                 if ((start | end) & (L1_CACHE_BYTES - 1))
-         |                      ^~~~~
-         |                      stat
->> arch/powerpc/mm/dma-noncoherent.c:115:30: error: 'end' undeclared (first use in this function); did you mean '_end'?
-     115 |                 if ((start | end) & (L1_CACHE_BYTES - 1))
-         |                              ^~~
-         |                              _end
->> arch/powerpc/mm/dma-noncoherent.c:116:25: error: implicit declaration of function '__dma_phys_op'; did you mean '__dma_op'? [-Werror=implicit-function-declaration]
-     116 |                         __dma_phys_op(start, end, DMA_CACHE_FLUSH);
-         |                         ^~~~~~~~~~~~~
-         |                         __dma_op
-   arch/powerpc/mm/dma-noncoherent.c: In function 'arch_sync_dma_for_cpu':
-   arch/powerpc/mm/dma-noncoherent.c:132:17: error: 'direction' undeclared (first use in this function); did you mean 'irqaction'?
-     132 |         switch (direction) {
-         |                 ^~~~~~~~~
-         |                 irqaction
-   arch/powerpc/mm/dma-noncoherent.c:140:22: error: 'start' undeclared (first use in this function); did you mean 'stat'?
-     140 |                 if ((start | end) & (L1_CACHE_BYTES - 1))
-         |                      ^~~~~
-         |                      stat
-   arch/powerpc/mm/dma-noncoherent.c:140:30: error: 'end' undeclared (first use in this function); did you mean '_end'?
-     140 |                 if ((start | end) & (L1_CACHE_BYTES - 1))
-         |                              ^~~
-         |                              _end
-   cc1: all warnings being treated as errors
-
-
-vim +/dma_cache_op +91 arch/powerpc/mm/dma-noncoherent.c
-
-    86	
-    87	/*
-    88	 * __dma_phys_op makes memory consistent. identical to __dma_op, but
-    89	 * takes a phys_addr_t instead of a virtual address
-    90	 */
-  > 91	static void __dma_phys_op(phys_addr_t paddr, size_t size, dma_cache_op op)
-    92	{
-    93		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-    94		unsigned offset = paddr & ~PAGE_MASK;
-    95	
-    96	#ifdef CONFIG_HIGHMEM
-    97		__dma_highmem_op(page, offset, size, op);
-    98	#else
-    99		unsigned long start = (unsigned long)page_address(page) + offset;
-   100		__dma_op((void *)start, size, op);
-   101	#endif
-   102	}
-   103	
-   104	void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-   105			enum dma_data_direction dir)
-   106	{
-   107		switch (direction) {
-   108		case DMA_NONE:
-   109			BUG();
-   110		case DMA_FROM_DEVICE:
-   111			/*
-   112			 * invalidate only when cache-line aligned otherwise there is
-   113			 * the potential for discarding uncommitted data from the cache
-   114			 */
- > 115			if ((start | end) & (L1_CACHE_BYTES - 1))
- > 116				__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-   117			else
-   118				__dma_phys_op(start, end, DMA_CACHE_INVAL);
-   119			break;
-   120		case DMA_TO_DEVICE:		/* writeback only */
-   121			__dma_phys_op(start, end, DMA_CACHE_CLEAN);
-   122			break;
-   123		case DMA_BIDIRECTIONAL:	/* writeback and invalidate */
-   124			__dma_phys_op(start, end, DMA_CACHE_FLUSH);
-   125			break;
-   126		}
-   127	}
-   128	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Will
