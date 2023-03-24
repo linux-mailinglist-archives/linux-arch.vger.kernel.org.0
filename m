@@ -2,131 +2,220 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1319A6C7FE8
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 15:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F006C8040
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 15:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCXOcV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 10:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S232021AbjCXOs5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 10:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCXOcU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 10:32:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE05B14235
-        for <linux-arch@vger.kernel.org>; Fri, 24 Mar 2023 07:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679668339; x=1711204339;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iss6ZZCyK2nkk17pJKVbsmbvgd8SvoQv3pUkA9mNt+8=;
-  b=Yx4gD2niBI/l6qmf4j/6DakrvECrYD7durjqqw8D+jBaPy3JZamsn36j
-   NnfLw2XkvzVVpTwQqgG/poPUYES1gQlsbRpnoahZClP+SuUsKfhKBY+/h
-   Co9rm/xnKz4++mQNu4zdIKKZLLENnuDwPFFbuYYLX8A62hE44WdAwLBRy
-   BMalOOg5f60SOBjh/uZld8IS0Q9Bmyuc3bqrBaBz7bj2mttSHE3UoJqtx
-   qrwP6KTYDb8n+faRkB9ADdhIT0b3B3f0tjT4bDQD0MaJjnTq69VfxXHXf
-   Vpv7rgQn7Nj3ObVdtGsPvI8gl7yhg4XRfv3bxHa1sC3BIN0oqVBTbSy+V
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="404707372"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="404707372"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2023 07:32:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10659"; a="826276319"
-X-IronPort-AV: E=Sophos;i="5.98,288,1673942400"; 
-   d="scan'208";a="826276319"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Mar 2023 07:32:18 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pfiSn-000FMu-1i;
-        Fri, 24 Mar 2023 14:32:17 +0000
-Date:   Fri, 24 Mar 2023 22:31:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:dma-sync-rework 20/20]
- arch/openrisc/kernel/dma.c:126:9: warning: this 'for' clause does not
- guard...
-Message-ID: <202303242205.5V2cu64T-lkp@intel.com>
+        with ESMTP id S232124AbjCXOsz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 10:48:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBF7170C;
+        Fri, 24 Mar 2023 07:48:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1C6262B4E;
+        Fri, 24 Mar 2023 14:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9C33C433A1;
+        Fri, 24 Mar 2023 14:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679669304;
+        bh=uIDuJfqse5TrCvE+0X2CUu9fuJ7qZ+uiMca4t+ghwyk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NdkKTv/fUNBuums3xr8SjuRRw+Xn4h1rDo6/OUZr0RcNgIUSWjhSrP7NdYUhgaMgJ
+         CvjVy4C2T5DTtD7ZeG7ktMhxsHRTRLGH6ENIuSowuc0aTL4DZbSamGRCJxdCDMZsFo
+         W+sP2ef0yOQVzAOaDxZCOaQe1rPPfDjIzronhDE76/PbbTEU1PB7fWgr4S4xq5KOb1
+         a2BQhs5dqOUGQE8cCsmlSYmwH964Jrmf8U5jtD2qXIoAtG7W+bsbcGucrNRGEiglCw
+         4giFx/IQlGBPc2K8cWEulZ6bPgZdSCKSP3N/z2cVMejOlExF2LU67esn/tZIp2UT4F
+         ldXnMsEvMYSJA==
+Date:   Fri, 24 Mar 2023 15:48:09 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, hch@lst.de,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH v6 12/13] PCI: hv: Add hypercalls to read/write MMIO space
+Message-ID: <ZB24Kdu6WMGYH1L7@lpieralisi>
+References: <1678329614-3482-1-git-send-email-mikelley@microsoft.com>
+ <1678329614-3482-13-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1678329614-3482-13-git-send-email-mikelley@microsoft.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git dma-sync-rework
-head:   9a711fbea373208c1eeb2fafb0c744bc23a79a43
-commit: 9a711fbea373208c1eeb2fafb0c744bc23a79a43 [20/20] dma-mapping: replace custom code with generic implementation
-config: openrisc-randconfig-r002-20230322 (https://download.01.org/0day-ci/archive/20230324/202303242205.5V2cu64T-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=9a711fbea373208c1eeb2fafb0c744bc23a79a43
-        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-        git fetch --no-tags arnd-asm-generic dma-sync-rework
-        git checkout 9a711fbea373208c1eeb2fafb0c744bc23a79a43
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash arch/openrisc/kernel/
+On Wed, Mar 08, 2023 at 06:40:13PM -0800, Michael Kelley wrote:
+> To support PCI pass-thru devices in Confidential VMs, Hyper-V
+> has added hypercalls to read and write MMIO space. Add the
+> appropriate definitions to hyperv-tlfs.h and implement
+> functions to make the hypercalls.
+> 
+> Co-developed-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+> ---
+>  arch/x86/include/asm/hyperv-tlfs.h  |  3 ++
+>  drivers/pci/controller/pci-hyperv.c | 64 +++++++++++++++++++++++++++++++++++++
+>  include/asm-generic/hyperv-tlfs.h   | 22 +++++++++++++
+>  3 files changed, 89 insertions(+)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303242205.5V2cu64T-lkp@intel.com/
+Nit: I'd squash this in with the patch where the calls are used,
+don't think this patch is bisectable as it stands (maybe you
+split them for review purposes, apologies if so).
 
-All warnings (new ones prefixed by >>):
+Lorenzo
 
-   arch/openrisc/kernel/dma.c: In function 'arch_dma_cache_inv':
-   arch/openrisc/kernel/dma.c:115:19: error: 'addr' undeclared (first use in this function); did you mean 'paddr'?
-     115 |         for (cl = addr; cl < addr + size;
-         |                   ^~~~
-         |                   paddr
-   arch/openrisc/kernel/dma.c:115:19: note: each undeclared identifier is reported only once for each function it appears in
-   arch/openrisc/kernel/dma.c: In function 'arch_dma_cache_wback_inv':
-   arch/openrisc/kernel/dma.c:126:19: error: 'addr' undeclared (first use in this function); did you mean 'paddr'?
-     126 |         for (cl = addr; cl < addr + size;
-         |                   ^~~~
-         |                   paddr
->> arch/openrisc/kernel/dma.c:126:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
-     126 |         for (cl = addr; cl < addr + size;
-         |         ^~~
-   arch/openrisc/kernel/dma.c:129:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
-     129 |                 break;
-         |                 ^~~~~
-   arch/openrisc/kernel/dma.c:129:17: error: break statement not within loop or switch
-
-
-vim +/for +126 arch/openrisc/kernel/dma.c
-
-9a711fbea373208 Arnd Bergmann 2023-03-22  119  
-9a711fbea373208 Arnd Bergmann 2023-03-22  120  static inline void arch_dma_cache_wback_inv(phys_addr_t paddr, size_t size)
-9a711fbea373208 Arnd Bergmann 2023-03-22  121  {
-9a711fbea373208 Arnd Bergmann 2023-03-22  122  	unsigned long cl;
-9a711fbea373208 Arnd Bergmann 2023-03-22  123  	struct cpuinfo_or1k *cpuinfo = &cpuinfo_or1k[smp_processor_id()];
-9a711fbea373208 Arnd Bergmann 2023-03-22  124  
-586fa29b78e5976 Arnd Bergmann 2023-03-21  125  	/* Flush the dcache for the requested range */
-586fa29b78e5976 Arnd Bergmann 2023-03-21 @126  	for (cl = addr; cl < addr + size;
-586fa29b78e5976 Arnd Bergmann 2023-03-21  127  	     cl += cpuinfo->dcache_block_size)
-586fa29b78e5976 Arnd Bergmann 2023-03-21  128  		mtspr(SPR_DCBFR, cl);
-586fa29b78e5976 Arnd Bergmann 2023-03-21  129  		break;
-a39af6f7b806f2a Jonas Bonn    2011-06-04  130  }
-9a711fbea373208 Arnd Bergmann 2023-03-22  131  
-
-:::::: The code at line 126 was first introduced by commit
-:::::: 586fa29b78e59767a0a6d19e82c81e469bae6e08 openrisc: dma-mapping: flush bidirectional mappings
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 0b73a80..b4fb75b 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -122,6 +122,9 @@
+>  /* Recommend using enlightened VMCS */
+>  #define HV_X64_ENLIGHTENED_VMCS_RECOMMENDED		BIT(14)
+>  
+> +/* Use hypercalls for MMIO config space access */
+> +#define HV_X64_USE_MMIO_HYPERCALLS			BIT(21)
+> +
+>  /*
+>   * CPU management features identification.
+>   * These are HYPERV_CPUID_CPU_MANAGEMENT_FEATURES.EAX bits.
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index f33370b..d78a419 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -1041,6 +1041,70 @@ static int wslot_to_devfn(u32 wslot)
+>  	return PCI_DEVFN(slot_no.bits.dev, slot_no.bits.func);
+>  }
+>  
+> +static void hv_pci_read_mmio(struct device *dev, phys_addr_t gpa, int size, u32 *val)
+> +{
+> +	struct hv_mmio_read_input *in;
+> +	struct hv_mmio_read_output *out;
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Must be called with interrupts disabled so it is safe
+> +	 * to use the per-cpu input argument page.  Use it for
+> +	 * both input and output.
+> +	 */
+> +	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	out = *this_cpu_ptr(hyperv_pcpu_input_arg) + sizeof(*in);
+> +	in->gpa = gpa;
+> +	in->size = size;
+> +
+> +	ret = hv_do_hypercall(HVCALL_MMIO_READ, in, out);
+> +	if (hv_result_success(ret)) {
+> +		switch (size) {
+> +		case 1:
+> +			*val = *(u8 *)(out->data);
+> +			break;
+> +		case 2:
+> +			*val = *(u16 *)(out->data);
+> +			break;
+> +		default:
+> +			*val = *(u32 *)(out->data);
+> +			break;
+> +		}
+> +	} else
+> +		dev_err(dev, "MMIO read hypercall error %llx addr %llx size %d\n",
+> +				ret, gpa, size);
+> +}
+> +
+> +static void hv_pci_write_mmio(struct device *dev, phys_addr_t gpa, int size, u32 val)
+> +{
+> +	struct hv_mmio_write_input *in;
+> +	u64 ret;
+> +
+> +	/*
+> +	 * Must be called with interrupts disabled so it is safe
+> +	 * to use the per-cpu input argument memory.
+> +	 */
+> +	in = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	in->gpa = gpa;
+> +	in->size = size;
+> +	switch (size) {
+> +	case 1:
+> +		*(u8 *)(in->data) = val;
+> +		break;
+> +	case 2:
+> +		*(u16 *)(in->data) = val;
+> +		break;
+> +	default:
+> +		*(u32 *)(in->data) = val;
+> +		break;
+> +	}
+> +
+> +	ret = hv_do_hypercall(HVCALL_MMIO_WRITE, in, NULL);
+> +	if (!hv_result_success(ret))
+> +		dev_err(dev, "MMIO write hypercall error %llx addr %llx size %d\n",
+> +				ret, gpa, size);
+> +}
+> +
+>  /*
+>   * PCI Configuration Space for these root PCI buses is implemented as a pair
+>   * of pages in memory-mapped I/O space.  Writing to the first page chooses
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index b870983..ea406e9 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -168,6 +168,8 @@ struct ms_hyperv_tsc_page {
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+>  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> +#define HVCALL_MMIO_READ			0x0106
+> +#define HVCALL_MMIO_WRITE			0x0107
+>  
+>  /* Extended hypercalls */
+>  #define HV_EXT_CALL_QUERY_CAPABILITIES		0x8001
+> @@ -796,4 +798,24 @@ struct hv_memory_hint {
+>  	union hv_gpa_page_range ranges[];
+>  } __packed;
+>  
+> +/* Data structures for HVCALL_MMIO_READ and HVCALL_MMIO_WRITE */
+> +#define HV_HYPERCALL_MMIO_MAX_DATA_LENGTH 64
+> +
+> +struct hv_mmio_read_input {
+> +	u64 gpa;
+> +	u32 size;
+> +	u32 reserved;
+> +} __packed;
+> +
+> +struct hv_mmio_read_output {
+> +	u8 data[HV_HYPERCALL_MMIO_MAX_DATA_LENGTH];
+> +} __packed;
+> +
+> +struct hv_mmio_write_input {
+> +	u64 gpa;
+> +	u32 size;
+> +	u32 reserved;
+> +	u8 data[HV_HYPERCALL_MMIO_MAX_DATA_LENGTH];
+> +} __packed;
+> +
+>  #endif
+> -- 
+> 1.8.3.1
+> 
