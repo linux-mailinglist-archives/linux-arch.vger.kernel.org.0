@@ -2,137 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27956C77A4
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 07:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6166C7890
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 08:14:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCXGLI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 02:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S230112AbjCXHO2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 03:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCXGLH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 02:11:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35D81554F;
-        Thu, 23 Mar 2023 23:11:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=o8GyCLdqZI9t+Daq6eq68G2ZZ4b2XpF2IvGRiP6/CDU=; b=tu0UUQHu2yZU5mA/5Vw6tv7GYW
-        TBBSOVpTIR+dhrDRoQU8qF+0JzyO59axpNdqbH9x/X0rFD8mL085g7m1a1Rv7p1BEzmZ8xRza4360
-        QPflV6WYoB7Ybjy1q5kBZFOaZs/nZxaNnHFT1ZqZxi2mF6DIi5HIwQ4m6EbBONcGnfpEKik5oOOAx
-        7AQBrCLwOfaS1oPe0hO+CLk+sJZGzdmYxrAdA+pVx9ob1dq3sdkmwzmfWKyMaMzshxEr/gD81B3+e
-        TmEsb5m5u4bKNmbE2prromJC8XaAxQuU8OaA3RbEqFJMpuuBacYRPJN7TOEgzltyOMjYWT1o4ues4
-        bPphdAUg==;
-Received: from [2601:1c2:980:9ec0::21b4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pfadi-003eY8-2N;
-        Fri, 24 Mar 2023 06:11:02 +0000
-Message-ID: <24da75fa-b0f9-b9ff-5b34-42ae6fc2ba24@infradead.org>
-Date:   Thu, 23 Mar 2023 23:11:02 -0700
+        with ESMTP id S230132AbjCXHO1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 03:14:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A2DF977;
+        Fri, 24 Mar 2023 00:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59B03B822F4;
+        Fri, 24 Mar 2023 07:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBDBC4339B;
+        Fri, 24 Mar 2023 07:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679642063;
+        bh=EedrYgr7tkK5Mvh078T+7DfsEEWhgvcGC/Eoj8RUZNk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eWxOyk+vXuOr7sWjquE27lpMmBg6b7f5Qpcd6b/YERHMsqBBznLDpSuG3j+ax4Y6m
+         6z6nVG20YkUtNYY/FShqzI9xKLN3HSk7F0JhHzJlb/aJvt7wnL7Nr5GeoFJb1mOcb8
+         68bcG5eFXBfxpwK8QheCkvvqTlsi6CHkSgy+6LhCmJxKrZbnupTevCfxkiccrb/zgm
+         vc0HWcmnKbV5zsGfDm0/1Mdkxl3Bd2eIYAWv9aLIabNy3wx/t3KcK0jpWGGQlxAIEI
+         onysatkm+FHHrYp3GD8RsZFcLt+O26yKkJ22ijiUgVCbVjutX8TCfDsd+niYSJWQgj
+         XPdWr/klbRQSg==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org,
+        mark.rutland@arm.com, bjorn@kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V11 0/3] riscv: Add independent irq/softirq stacks
+Date:   Fri, 24 Mar 2023 03:12:36 -0400
+Message-Id: <20230324071239.151677-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] irq domain: drop IRQ_DOMAIN_HIERARCHY option, make it
- always on
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20230313023935.31037-1-rdunlap@infradead.org>
- <877cv78a1b.ffs@tglx>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <877cv78a1b.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Thomas,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On 3/23/23 13:53, Thomas Gleixner wrote:
-> On Sun, Mar 12 2023 at 19:39, Randy Dunlap wrote:
->> In preparation for dropping the IRQ_DOMAIN Kconfig option (effectively
->> making it always set/on), first drop IRQ_DOMAIN_HIERARCHY as an option,
->> making its code always set/on.
->>
->> This has been built successfully on all ARCHes except hexagon,
->> both 32-bit and 64-bit where applicable.
-> 
-> I really like where this is going, but reviewing this is a pain. I tried
-> to split it up into more digestable pieces:
-> 
->    https://tglx.de/~tglx/patches.tar
-> 
-> That's not completely equivalent to your patch as I did some of the
-> changes below. It builds on various oddball architectures with
-> IRQ_DOMAIN=n, but is otherwise completely untested.
-> 
-> It should be actually trivial after that to make IRQ_DOMAIN def_bool y
-> and then gradually remove the IRQ_DOMAIN selects and ifdeffery.
+This patch series adds independent irq/softirq stacks to decrease the
+press of the thread stack. Also, add a thread STACK_SIZE config for
+users to adjust the proper size during compile time.
 
-Yeah, that may be the best & simplest approach.
+This patch series belonged to the generic entry, which has been merged
+to for-next now.
 
-Or just use your patches.tar.
+v11:
+ - Rebase on palmer/for-next (20230324)
+ - Separate from generic entry patch series.
 
->> v2: add stubs in include/linux/irqdomain.h for the config case of
->> IRQ_DOMAIN is not set. If these are not added, there will be plenty
->> of build errors (not so much for modern arches as for older ones).
-> 
-> I'm not really convinced that all of these stubs are required. Why would
-> there suddenly be a requirement to expose stubs for functions which
-> depend on CONFIG_IRQ_DOMAIN=y already today just by removing the
-> hierarchy config?
+v10:
+https://lore.kernel.org/linux-riscv/20221208025816.138712-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221208)
+ - Remove unrelated patches from the series (Suggested-by: Bjorn)
+ - Fixup Typos.
 
-All of those stubs were added because I had configs/builds that were
-failing due to them. I didn't just add them for fun or "completeness."
+v9:
+https://lore.kernel.org/linux-riscv/20221130034059.826599-1-guoren@kernel.org/
+ - Fixup NR_syscalls check (by Ben Hutchings)
+ - Add Tested-by: Jisheng Zhang
 
-I just checked and I didn't save all of those failing configs or
-output files that contain the errors.
+v8:
+https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
+ - Rebase on palmer/for-next branch (20221102)
+ - Add save/restore_from_x5_to_x31 .macro (JishengZhang)
+ - Consolidate ret_from_kernel_thread into ret_from_fork (JishengZhang)
+ - Optimize __noinstr_section comment (JiangshanLai)
 
+v7:
+https://lore.kernel.org/linux-riscv/20221015114702.3489989-1-guoren@kernel.org/
+ - Fixup regs_irqs_disabled with SR_PIE
+ - Optimize stackleak_erase -> stackleak_erase_on_task_stack (Thx Mark
+   Rutland)
+ - Add BUG_ON(!irqs_disabled()) in trap handlers
+ - Using regs_irqs_disabled in __do_page_fault
+ - Remove unnecessary irq disable in ret_from_exception and add comment
 
-> Even exposing stubs for functions which have been only available via
-> CONFIG_IRQ_DOMAIN_HIERARCHY is questionable simply because there cannot
-> be any code which invokes them unconditionally if
-> CONFIG_IRQ_DOMAIN_HIERARCHY=n today.
-> 
-> IOW, the sum of required stubs cannot be larger than number of stubs
-> required today.
-> 
-> If there is code which has a #ifdef CONFIG_IRQ_DOMAIN_HIERARCHY then
-> this needs to be changed to CONFIG_IRQ_DOMAIN or the required functions
-> have to be exposed unconditionally, right?
+v6:
+https://lore.kernel.org/linux-riscv/20221002012451.2351127-1-guoren@kernel.org/
+ - Use THEAD_SIZE_ORDER for thread size adjustment in kconfig (Thx Arnd)
+ - Move call_on_stack to inline style (Thx Peter Zijlstra)
+ - Fixup fp chain broken (Thx Chen Zhongjin)
+ - Remove common entry modification, and fixup page_fault entry (Thx
+   Peter Zijlstra)
+ - Treat some traps as nmi entry (Thx Peter Zijlstra)
 
-Yes, s/CONFIG_IRQ_DOMAIN_HIERARCHY/CONFIG_IRQ_DOMAIN/ in code.
+v5:
+https://lore.kernel.org/linux-riscv/20220918155246.1203293-1-guoren@kernel.org/
+ - Add riscv own stackleak patch instead of generic entry modification
+   (by Mark Rutland)
+ - Add EXPERT dependency for THREAD_SIZE (by Arnd)
+ - Add EXPERT dependency for IRQ_STACK (by Sebastian, David Laight)
+ - Corrected __trap_section (by Peter Zijlstra)
+ - Add Tested-by (Yipeng Zou)
+ - Use CONFIG_SOFTIRQ_ON_OWN_STACK replace "#ifndef CONFIG_PREEMPT_RT"
+ - Fixup systrace_enter compile error
+ - Fixup exit_to_user_mode_prepare preempt_disable warning
 
+V4:
+https://lore.kernel.org/linux-riscv/20220908022506.1275799-1-guoren@kernel.org/
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Zijlstra)
 
->> diff -- a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->> --- a/drivers/gpio/Kconfig
->> +++ b/drivers/gpio/Kconfig
->> @@ -361,7 +361,7 @@ config GPIO_IXP4XX
->>  	depends on OF
->>  	select GPIO_GENERIC
->>  	select GPIOLIB_IRQCHIP
->> -	select IRQ_DOMAIN_HIERARCHY
->> +	select IRQ_DOMAIN
-> 
-> IRQ_DOMAIN is already selected by GPIOLIB_IRQCHIP, so this select is
-> redundant for all GPIO configs which select GPIOLIB_IRQCHIP.
+V3:
+https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
 
-Ack.
+V2:
+https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
 
-I'm perfectly happy to use either Marc's patch that he posted on
-2023-FEB-14 (https://lore.kernel.org/all/86y1p0xbqd.wl-maz@kernel.org/)
-or your patches. Both of you know your way around this better than I do.
+V1:
+https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
 
-Thanks for your review and feedback.
+Guo Ren (3):
+  riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: stack: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: stack: Add config of thread stack size
+
+ arch/riscv/Kconfig                   | 19 ++++++++
+ arch/riscv/include/asm/thread_info.h | 14 ++----
+ arch/riscv/include/asm/vmap_stack.h  | 28 ++++++++++++
+ arch/riscv/kernel/irq.c              | 66 ++++++++++++++++++++++++++++
+ arch/riscv/kernel/traps.c            | 38 +++++++++++++++-
+ 5 files changed, 152 insertions(+), 13 deletions(-)
+ create mode 100644 arch/riscv/include/asm/vmap_stack.h
 
 -- 
-~Randy
+2.36.1
+
