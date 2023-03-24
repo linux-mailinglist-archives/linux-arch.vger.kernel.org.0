@@ -2,246 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A4D6C78B0
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 08:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F8F6C78EB
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 08:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCXHTO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 03:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S229870AbjCXHgn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 03:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjCXHTN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 03:19:13 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BFE19BA;
-        Fri, 24 Mar 2023 00:19:12 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id g18so741795ljl.3;
-        Fri, 24 Mar 2023 00:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679642350;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dxovThApevwims1d/uyTbtFdKD78MsUDwDytaLqWWyQ=;
-        b=meDyMuK4AKtB7G75lOHCDEFXanUAZYCqRRlZxdSRLZp5Nqg1ozFRi7UbmVDDTPGxTe
-         ozhBB09MNMGA28nc8q7Whc4fvp1zMc/6A9flaRFVqEn6el+l870OFVfnh4r/8ph3Tj4+
-         31yJ27xLWhZKLx5kip+qonOzOgKSNdiPKEb/DXDL23v6Nba0CpdN3IKRWbKzqnNzSsIO
-         kHC215XrEtJx1OMV56dHtk8iCgX07kfA5yVY6xakelapue2N0FV6JItDi4r3Sf+nFnGJ
-         mhQ0ks4ugg1TV4ZkfewPKsDRy1krwVie/Tk5jEYQHSUrZWIKliGHXkoNfb0uElEbCzLn
-         snTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679642350;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dxovThApevwims1d/uyTbtFdKD78MsUDwDytaLqWWyQ=;
-        b=iVykoEWGiYO+m25KAixZeUemV5XHpbTpzFcDdWeMe+irrbVas8EmIHdLKyik5F7LAN
-         6fh16AaRPVa4zZihS0/6zJy1vI48NqKgndelouqC28HpMG9VkheAs4txm2JwaA9AHDfl
-         V4zjwsQLpHceTVoXLwMvjEH6MkPq/R0jftyF4gDjuj/SL4WrjOKFZYrrJT+QZ9ALwuyB
-         4IqZq2axk9eMeX33SauE+y8K1ij+zRTDKhiH08NbD4d4yp9LOkNW5yvaXDHIV3NrOcbN
-         B2H3jC/gDnESuTtVvQlG+zNP3NHJKbHzo7l96NXnU4Z0UvAEUMpha9OmUs4nSItGJOW9
-         wVpA==
-X-Gm-Message-State: AAQBX9dj4Un0dNDJ7sHq/+Nir2eC6yhYxy62mUnxy6cth/5eWinaE8nh
-        y/DkYwtm86tX1hM7n6JygAQc8EYsmucxB4VSc7g=
-X-Google-Smtp-Source: AKy350ZmOa+xSBA3KdLPC1TZGAe6iXd1pKFjVEv+tZuOIp9NH7Xo/9Fe8GLkoulUpAJ1GZKORTX1WmjSeUN+AUnPlA0=
-X-Received: by 2002:a2e:240b:0:b0:29c:9226:33f7 with SMTP id
- k11-20020a2e240b000000b0029c922633f7mr556512ljk.1.1679642350532; Fri, 24 Mar
- 2023 00:19:10 -0700 (PDT)
+        with ESMTP id S229522AbjCXHgm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 03:36:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31A340C0;
+        Fri, 24 Mar 2023 00:36:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 524E56296F;
+        Fri, 24 Mar 2023 07:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC356C433D2;
+        Fri, 24 Mar 2023 07:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679643400;
+        bh=BBS9cSTname+Z1/k6YNt/nmdj4wvYmKElUY7I0mcqBI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rDQrw1PN087BeT3VrGtecrJalaSgojkdpf8sH9ycPAcc0VFY6USfYCuXf+HzgvtnY
+         ZBKrIykAz+2aq/t8xLXZCtuXq9cyOQ5KRfH6pwn+9h633cZ19+Kegx48iGbQvPX2a/
+         rPUaVZ0+3vvBrOat7/3QV/XC+xOkLSjUwBrLH3uPGL43Q0zkskOYaj0XMx439stJcp
+         8NfnYd9S7Haxb5Kni2pjf3swk6A8VWJysCTx5ktEE1jbEKPdukR2n65lkpzX1PZYe4
+         pH7foapRz5RZa4b16jkHjNxWpRB+XNZypEGbI8+wqD/xgA5hQ2ucUf4furLV82OnoD
+         RI4dApSC69dsQ==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        esyr@redhat.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH V3] uapi: Fixup strace compile error
+Date:   Fri, 24 Mar 2023 03:36:30 -0400
+Message-Id: <20230324073630.161034-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20230323221948.352154-1-corbet@lwn.net> <20230323221948.352154-6-corbet@lwn.net>
- <271b00b7-fa10-fc2c-3929-c533a41bb22a@loongson.cn>
-In-Reply-To: <271b00b7-fa10-fc2c-3929-c533a41bb22a@loongson.cn>
-From:   Alex Shi <seakeel@gmail.com>
-Date:   Fri, 24 Mar 2023 15:18:34 +0800
-Message-ID: <CAJy-Am=BWE5fHg038tShduXQ4SaxqzRVUiWjYyj0ngxSH+JxFg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] docs: move openrisc documentation under Documentation/arch/
-To:     Yanteng Si <siyanteng@loongson.cn>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>, Alex Shi <alexs@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 9:43=E2=80=AFAM Yanteng Si <siyanteng@loongson.cn> =
-wrote:
->
->
-> =E5=9C=A8 3/24/23 06:19, Jonathan Corbet =E5=86=99=E9=81=93:
-> > Architecture-specific documentation is being moved into Documentation/a=
-rch/
-> > as a way of cleaning up the top-level documentation directory and makin=
-g
-> > the docs hierarchy more closely match the source hierarchy.  Move
-> > Documentation/openrisc into arch/ and fix all in-tree references.
-> >
-> > Cc: Jonas Bonn <jonas@southpole.se>
-> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> > Cc: Stafford Horne <shorne@gmail.com>
-> > Cc: Alex Shi <alexs@kernel.org>
-> > Cc: Yanteng Si <siyanteng@loongson.cn>
-> > Signed-off-by: Jonathan Corbet <corbet@lwn.net>
->
-> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-Thanks for taking care!
+Export F_*64 definitions to userspace permanently. "ifndef" usage made it
+vailable at all times to the userspace, and this change has actually broken
+building strace with the latest kernel headers. There could be some debate
+whether having these F_*64 definitions exposed to the user space 64-bit
+applications, but it seems that were no harm (as they were exposed already
+for quite some time), and they are useful at least for strace for compat
+application tracing purposes.
 
-Acked-by: Alex Shi <alexs@kernel.org>
+Here is the compile error log:
+../../../src/xlat/fcntlcmds.h:54:7: error: ‘F_GETLK64’ undeclared here
+(not in a function); did you mean ‘F_GETLK’?
+   54 |  XLAT(F_GETLK64),
+      |       ^~~~~~~~~
+../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
+   64 | # define XLAT(val)                      { (unsigned)(val), #val
+      }
+      |                                                      ^~~
+../../../src/xlat/fcntlcmds.h:57:7: error: ‘F_SETLK64’ undeclared here
+(not in a function); did you mean ‘F_SETLK’?
+   57 |  XLAT(F_SETLK64),
+      |       ^~~~~~~~~
+../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
+   64 | # define XLAT(val)                      { (unsigned)(val), #val
+      }
+      |                                                      ^~~
+../../../src/xlat/fcntlcmds.h:60:7: error: ‘F_SETLKW64’ undeclared here
+(not in a function); did you mean ‘F_SETLKW’?
+   60 |  XLAT(F_SETLKW64),
+      |       ^~~~~~~~~~
+../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
+   64 | # define XLAT(val)                      { (unsigned)(val), #val
+      }
 
->
->
-> Thanks,
->
-> Yanteng
->
-> > ---
-> >   Documentation/arch/index.rst                                  | 2 +-
-> >   Documentation/{ =3D> arch}/openrisc/features.rst                | 0
-> >   Documentation/{ =3D> arch}/openrisc/index.rst                   | 0
-> >   Documentation/{ =3D> arch}/openrisc/openrisc_port.rst           | 0
-> >   Documentation/{ =3D> arch}/openrisc/todo.rst                    | 0
-> >   Documentation/translations/zh_CN/arch/index.rst               | 2 +-
-> >   .../translations/zh_CN/{ =3D> arch}/openrisc/index.rst          | 4 +=
-+--
-> >   .../translations/zh_CN/{ =3D> arch}/openrisc/openrisc_port.rst  | 4 +=
-+--
-> >   Documentation/translations/zh_CN/{ =3D> arch}/openrisc/todo.rst | 4 +=
-+--
-> >   MAINTAINERS                                                   | 2 +-
-> >   10 files changed, 9 insertions(+), 9 deletions(-)
-> >   rename Documentation/{ =3D> arch}/openrisc/features.rst (100%)
-> >   rename Documentation/{ =3D> arch}/openrisc/index.rst (100%)
-> >   rename Documentation/{ =3D> arch}/openrisc/openrisc_port.rst (100%)
-> >   rename Documentation/{ =3D> arch}/openrisc/todo.rst (100%)
-> >   rename Documentation/translations/zh_CN/{ =3D> arch}/openrisc/index.r=
-st (79%)
-> >   rename Documentation/translations/zh_CN/{ =3D> arch}/openrisc/openris=
-c_port.rst (97%)
-> >   rename Documentation/translations/zh_CN/{ =3D> arch}/openrisc/todo.rs=
-t (88%)
-> >
-> > diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rs=
-t
-> > index 792f58e30f25..65945daa40fe 100644
-> > --- a/Documentation/arch/index.rst
-> > +++ b/Documentation/arch/index.rst
-> > @@ -17,7 +17,7 @@ implementation.
-> >      ../m68k/index
-> >      ../mips/index
-> >      ../nios2/index
-> > -   ../openrisc/index
-> > +   openrisc/index
-> >      ../parisc/index
-> >      ../powerpc/index
-> >      ../riscv/index
-> > diff --git a/Documentation/openrisc/features.rst b/Documentation/arch/o=
-penrisc/features.rst
-> > similarity index 100%
-> > rename from Documentation/openrisc/features.rst
-> > rename to Documentation/arch/openrisc/features.rst
-> > diff --git a/Documentation/openrisc/index.rst b/Documentation/arch/open=
-risc/index.rst
-> > similarity index 100%
-> > rename from Documentation/openrisc/index.rst
-> > rename to Documentation/arch/openrisc/index.rst
-> > diff --git a/Documentation/openrisc/openrisc_port.rst b/Documentation/a=
-rch/openrisc/openrisc_port.rst
-> > similarity index 100%
-> > rename from Documentation/openrisc/openrisc_port.rst
-> > rename to Documentation/arch/openrisc/openrisc_port.rst
-> > diff --git a/Documentation/openrisc/todo.rst b/Documentation/arch/openr=
-isc/todo.rst
-> > similarity index 100%
-> > rename from Documentation/openrisc/todo.rst
-> > rename to Documentation/arch/openrisc/todo.rst
-> > diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Document=
-ation/translations/zh_CN/arch/index.rst
-> > index aa53dcff268e..7e59af567331 100644
-> > --- a/Documentation/translations/zh_CN/arch/index.rst
-> > +++ b/Documentation/translations/zh_CN/arch/index.rst
-> > @@ -11,7 +11,7 @@
-> >      ../mips/index
-> >      ../arm64/index
-> >      ../riscv/index
-> > -   ../openrisc/index
-> > +   openrisc/index
-> >      ../parisc/index
-> >      ../loongarch/index
-> >
-> > diff --git a/Documentation/translations/zh_CN/openrisc/index.rst b/Docu=
-mentation/translations/zh_CN/arch/openrisc/index.rst
-> > similarity index 79%
-> > rename from Documentation/translations/zh_CN/openrisc/index.rst
-> > rename to Documentation/translations/zh_CN/arch/openrisc/index.rst
-> > index 9ad6cc600884..da21f8ab894b 100644
-> > --- a/Documentation/translations/zh_CN/openrisc/index.rst
-> > +++ b/Documentation/translations/zh_CN/arch/openrisc/index.rst
-> > @@ -1,8 +1,8 @@
-> >   .. SPDX-License-Identifier: GPL-2.0
-> >
-> > -.. include:: ../disclaimer-zh_CN.rst
-> > +.. include:: ../../disclaimer-zh_CN.rst
-> >
-> > -:Original: Documentation/openrisc/index.rst
-> > +:Original: Documentation/arch/openrisc/index.rst
-> >
-> >   :=E7=BF=BB=E8=AF=91:
-> >
-> > diff --git a/Documentation/translations/zh_CN/openrisc/openrisc_port.rs=
-t b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
-> > similarity index 97%
-> > rename from Documentation/translations/zh_CN/openrisc/openrisc_port.rst
-> > rename to Documentation/translations/zh_CN/arch/openrisc/openrisc_port.=
-rst
-> > index b8a67670492d..cadc580fa23b 100644
-> > --- a/Documentation/translations/zh_CN/openrisc/openrisc_port.rst
-> > +++ b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
-> > @@ -1,6 +1,6 @@
-> > -.. include:: ../disclaimer-zh_CN.rst
-> > +.. include:: ../../disclaimer-zh_CN.rst
-> >
-> > -:Original: Documentation/openrisc/openrisc_port.rst
-> > +:Original: Documentation/arch/openrisc/openrisc_port.rst
-> >
-> >   :=E7=BF=BB=E8=AF=91:
-> >
-> > diff --git a/Documentation/translations/zh_CN/openrisc/todo.rst b/Docum=
-entation/translations/zh_CN/arch/openrisc/todo.rst
-> > similarity index 88%
-> > rename from Documentation/translations/zh_CN/openrisc/todo.rst
-> > rename to Documentation/translations/zh_CN/arch/openrisc/todo.rst
-> > index 63c38717edb1..1f6f95616633 100644
-> > --- a/Documentation/translations/zh_CN/openrisc/todo.rst
-> > +++ b/Documentation/translations/zh_CN/arch/openrisc/todo.rst
-> > @@ -1,6 +1,6 @@
-> > -.. include:: ../disclaimer-zh_CN.rst
-> > +.. include:: ../../disclaimer-zh_CN.rst
-> >
-> > -:Original: Documentation/openrisc/todo.rst
-> > +:Original: Documentation/arch/openrisc/todo.rst
-> >
-> >   :=E7=BF=BB=E8=AF=91:
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index cf4eb913ea12..64ea94536f4c 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -15638,7 +15638,7 @@ S:    Maintained
-> >   W:  http://openrisc.io
-> >   T:  git https://github.com/openrisc/linux.git
-> >   F:  Documentation/devicetree/bindings/openrisc/
-> > -F:   Documentation/openrisc/
-> > +F:   Documentation/arch/openrisc/
-> >   F:  arch/openrisc/
-> >   F:  drivers/irqchip/irq-ompic.c
-> >   F:  drivers/irqchip/irq-or1k-*
->
+Fixes: 306f7cc1e9061 "uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h"
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reported-by: Eugene Syromiatnikov <esyr@redhat.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Heiko Stuebner <heiko@sntech.de>
+---
+Changelog
+v3:
+ - Add error log
+
+v2:
+https://lore.kernel.org/lkml/20220804025448.1240780-1-guoren@kernel.org/
+ - Optimize commit log
+
+v1:
+https://lore.kernel.org/lkml/20220613013051.1741434-1-guoren@kernel.org/
+---
+ include/uapi/asm-generic/fcntl.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 1ecdb911add8..3a389895328a 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -116,13 +116,11 @@
+ #define F_GETSIG	11	/* for sockets. */
+ #endif
+ 
+-#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+ #ifndef F_GETLK64
+ #define F_GETLK64	12	/*  using 'struct flock64' */
+ #define F_SETLK64	13
+ #define F_SETLKW64	14
+ #endif
+-#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+ 
+ #ifndef F_SETOWN_EX
+ #define F_SETOWN_EX	15
+-- 
+2.36.1
+
