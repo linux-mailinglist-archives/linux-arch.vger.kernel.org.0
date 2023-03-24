@@ -2,53 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F8F6C78EB
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 08:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76976C799E
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 09:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCXHgn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 03:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S230061AbjCXIXx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 04:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCXHgm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 03:36:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31A340C0;
-        Fri, 24 Mar 2023 00:36:41 -0700 (PDT)
+        with ESMTP id S229484AbjCXIXw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 04:23:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018CBE057;
+        Fri, 24 Mar 2023 01:23:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 524E56296F;
-        Fri, 24 Mar 2023 07:36:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC356C433D2;
-        Fri, 24 Mar 2023 07:36:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D54FB81E21;
+        Fri, 24 Mar 2023 08:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43031C433EF;
+        Fri, 24 Mar 2023 08:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679643400;
-        bh=BBS9cSTname+Z1/k6YNt/nmdj4wvYmKElUY7I0mcqBI=;
+        s=k20201202; t=1679646228;
+        bh=WNmnBMlXQbbzSIzNbiTJv8PajglyS7jPcj9FFmg6NWU=;
         h=From:To:Cc:Subject:Date:From;
-        b=rDQrw1PN087BeT3VrGtecrJalaSgojkdpf8sH9ycPAcc0VFY6USfYCuXf+HzgvtnY
-         ZBKrIykAz+2aq/t8xLXZCtuXq9cyOQ5KRfH6pwn+9h633cZ19+Kegx48iGbQvPX2a/
-         rPUaVZ0+3vvBrOat7/3QV/XC+xOkLSjUwBrLH3uPGL43Q0zkskOYaj0XMx439stJcp
-         8NfnYd9S7Haxb5Kni2pjf3swk6A8VWJysCTx5ktEE1jbEKPdukR2n65lkpzX1PZYe4
-         pH7foapRz5RZa4b16jkHjNxWpRB+XNZypEGbI8+wqD/xgA5hQ2ucUf4furLV82OnoD
-         RI4dApSC69dsQ==
+        b=dDeq+INQJQ8cdGwiqzVv1YUb+oIdwqPJJHuTj1Q0fbnl92ex0saerlTqYpdWYHewN
+         7CF1K1iztsPDj71V0OW3fxLF/4LCJVPqvt1gitdHYBWfUfRHssbptB7A0tdQN3VG6p
+         3xDGQe+GA3LdUHIFx+Yh5EihmAcO7RdA9gqiVoHQIjfB/MENJKU090orHMCrRU++Ks
+         thLUVJeZlY9O/HNWXo5LuNn22vCOzw1j7jatENm+YJDEV2xili6xuUmTDnbS8Ud/6J
+         USGAGp4AH+yBsBdNwBnvZlFvpNR/J5aEu53kvZ0Aijlxp8iO7UY0E2bSauakE6Xcow
+         H9Ady5C0BXUpQ==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        esyr@redhat.com
+        bjorn@kernel.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH V3] uapi: Fixup strace compile error
-Date:   Fri, 24 Mar 2023 03:36:30 -0400
-Message-Id: <20230324073630.161034-1-guoren@kernel.org>
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH -next V4] riscv: jump_label: Optimize the code size with compressed instruction
+Date:   Fri, 24 Mar 2023 04:23:20 -0400
+Message-Id: <20230324082320.290410-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,80 +54,137 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Export F_*64 definitions to userspace permanently. "ifndef" usage made it
-vailable at all times to the userspace, and this change has actually broken
-building strace with the latest kernel headers. There could be some debate
-whether having these F_*64 definitions exposed to the user space 64-bit
-applications, but it seems that were no harm (as they were exposed already
-for quite some time), and they are useful at least for strace for compat
-application tracing purposes.
+Reduce the size of the static branch instruction and prevent atomic
+update problems when CONFIG_RISCV_ISA_C=y. It also reduces the jump
+range from 1MB to 4KB, but 4KB is enough for the current riscv
+requirement.
 
-Here is the compile error log:
-../../../src/xlat/fcntlcmds.h:54:7: error: ‘F_GETLK64’ undeclared here
-(not in a function); did you mean ‘F_GETLK’?
-   54 |  XLAT(F_GETLK64),
-      |       ^~~~~~~~~
-../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
-   64 | # define XLAT(val)                      { (unsigned)(val), #val
-      }
-      |                                                      ^~~
-../../../src/xlat/fcntlcmds.h:57:7: error: ‘F_SETLK64’ undeclared here
-(not in a function); did you mean ‘F_SETLK’?
-   57 |  XLAT(F_SETLK64),
-      |       ^~~~~~~~~
-../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
-   64 | # define XLAT(val)                      { (unsigned)(val), #val
-      }
-      |                                                      ^~~
-../../../src/xlat/fcntlcmds.h:60:7: error: ‘F_SETLKW64’ undeclared here
-(not in a function); did you mean ‘F_SETLKW’?
-   60 |  XLAT(F_SETLKW64),
-      |       ^~~~~~~~~~
-../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
-   64 | # define XLAT(val)                      { (unsigned)(val), #val
-      }
-
-Fixes: 306f7cc1e9061 "uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h"
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Reported-by: Eugene Syromiatnikov <esyr@redhat.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Heiko Stuebner <heiko@sntech.de>
 ---
 Changelog
+v4:
+ - Rebase on palmer/for-next (20230324)
+ - Separate from "riscv: jump_label: Fixup & Optimization"
+
 v3:
- - Add error log
+https://lore.kernel.org/linux-riscv/20230126170607.1489141-3-guoren@kernel.org/
 
 v2:
-https://lore.kernel.org/lkml/20220804025448.1240780-1-guoren@kernel.org/
- - Optimize commit log
+https://lore.kernel.org/linux-riscv/20221210100927.835145-3-guoren@kernel.org/
 
 v1:
-https://lore.kernel.org/lkml/20220613013051.1741434-1-guoren@kernel.org/
+https://lore.kernel.org/linux-riscv/20220913094252.3555240-6-andy.chiu@sifive.com/
 ---
- include/uapi/asm-generic/fcntl.h | 2 --
- 1 file changed, 2 deletions(-)
+ arch/riscv/include/asm/jump_label.h | 16 +++++++++++----
+ arch/riscv/kernel/jump_label.c      | 30 +++++++++++++++++++++++++++--
+ 2 files changed, 40 insertions(+), 6 deletions(-)
 
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index 1ecdb911add8..3a389895328a 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -116,13 +116,11 @@
- #define F_GETSIG	11	/* for sockets. */
- #endif
+diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
+index 14a5ea8d8ef0..afc58c31d02b 100644
+--- a/arch/riscv/include/asm/jump_label.h
++++ b/arch/riscv/include/asm/jump_label.h
+@@ -12,17 +12,23 @@
+ #include <linux/types.h>
+ #include <asm/asm.h>
  
--#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
- #ifndef F_GETLK64
- #define F_GETLK64	12	/*  using 'struct flock64' */
- #define F_SETLK64	13
- #define F_SETLKW64	14
- #endif
--#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
++#ifdef CONFIG_RISCV_ISA_C
++#define JUMP_LABEL_NOP_SIZE 2
++#else
+ #define JUMP_LABEL_NOP_SIZE 4
++#endif
  
- #ifndef F_SETOWN_EX
- #define F_SETOWN_EX	15
+ static __always_inline bool arch_static_branch(struct static_key * const key,
+ 					       const bool branch)
+ {
+ 	asm_volatile_goto(
+-		"	.align		2			\n\t"
+ 		"	.option push				\n\t"
+ 		"	.option norelax				\n\t"
+-		"	.option norvc				\n\t"
++#ifdef CONFIG_RISCV_ISA_C
++		"1:	c.nop					\n\t"
++#else
+ 		"1:	nop					\n\t"
++#endif
+ 		"	.option pop				\n\t"
+ 		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		"	.align		" RISCV_LGPTR "		\n\t"
+@@ -40,11 +46,13 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
+ 						    const bool branch)
+ {
+ 	asm_volatile_goto(
+-		"	.align		2			\n\t"
+ 		"	.option push				\n\t"
+ 		"	.option norelax				\n\t"
+-		"	.option norvc				\n\t"
++#ifdef CONFIG_RISCV_ISA_C
++		"1:	c.j		%l[label]		\n\t"
++#else
+ 		"1:	jal		zero, %l[label]		\n\t"
++#endif
+ 		"	.option pop				\n\t"
+ 		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ 		"	.align		" RISCV_LGPTR "		\n\t"
+diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
+index e6694759dbd0..08f42c49e3a0 100644
+--- a/arch/riscv/kernel/jump_label.c
++++ b/arch/riscv/kernel/jump_label.c
+@@ -11,26 +11,52 @@
+ #include <asm/bug.h>
+ #include <asm/patch.h>
+ 
++#ifdef CONFIG_RISCV_ISA_C
++#define RISCV_INSN_NOP 0x0001U
++#define RISCV_INSN_C_J 0xa001U
++#else
+ #define RISCV_INSN_NOP 0x00000013U
+ #define RISCV_INSN_JAL 0x0000006fU
++#endif
+ 
+ void arch_jump_label_transform(struct jump_entry *entry,
+ 			       enum jump_label_type type)
+ {
+ 	void *addr = (void *)jump_entry_code(entry);
++#ifdef CONFIG_RISCV_ISA_C
++	u16 insn;
++#else
+ 	u32 insn;
++#endif
+ 
+ 	if (type == JUMP_LABEL_JMP) {
+ 		long offset = jump_entry_target(entry) - jump_entry_code(entry);
+-
+-		if (WARN_ON(offset & 1 || offset < -524288 || offset >= 524288))
++		if (WARN_ON(offset & 1 || offset < -2048 || offset >= 2048))
+ 			return;
+ 
++#ifdef CONFIG_RISCV_ISA_C
++		/*
++		 * 001 | imm[11|4|9:8|10|6|7|3:1|5] 01 - C.J
++		 */
++		insn = RISCV_INSN_C_J |
++			(((u16)offset & GENMASK(5, 5)) >> (5 - 2)) |
++			(((u16)offset & GENMASK(3, 1)) << (3 - 1)) |
++			(((u16)offset & GENMASK(7, 7)) >> (7 - 6)) |
++			(((u16)offset & GENMASK(6, 6)) << (7 - 6)) |
++			(((u16)offset & GENMASK(10, 10)) >> (10 - 8)) |
++			(((u16)offset & GENMASK(9, 8)) << (9 - 8)) |
++			(((u16)offset & GENMASK(4, 4)) << (11 - 4)) |
++			(((u16)offset & GENMASK(11, 11)) << (12 - 11));
++#else
++		/*
++		 * imm[20|10:1|11|19:12] | rd | 1101111 - JAL
++		 */
+ 		insn = RISCV_INSN_JAL |
+ 			(((u32)offset & GENMASK(19, 12)) << (12 - 12)) |
+ 			(((u32)offset & GENMASK(11, 11)) << (20 - 11)) |
+ 			(((u32)offset & GENMASK(10,  1)) << (21 -  1)) |
+ 			(((u32)offset & GENMASK(20, 20)) << (31 - 20));
++#endif
+ 	} else {
+ 		insn = RISCV_INSN_NOP;
+ 	}
 -- 
 2.36.1
 
