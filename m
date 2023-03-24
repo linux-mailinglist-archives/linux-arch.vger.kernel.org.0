@@ -2,49 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76976C799E
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 09:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF446C7D3C
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Mar 2023 12:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCXIXx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Mar 2023 04:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S229870AbjCXLeA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Mar 2023 07:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCXIXw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 04:23:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018CBE057;
-        Fri, 24 Mar 2023 01:23:50 -0700 (PDT)
+        with ESMTP id S229508AbjCXLd7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Mar 2023 07:33:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D306B1C7FB;
+        Fri, 24 Mar 2023 04:33:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D54FB81E21;
-        Fri, 24 Mar 2023 08:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43031C433EF;
-        Fri, 24 Mar 2023 08:23:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83EE2B8239C;
+        Fri, 24 Mar 2023 11:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F2BC4339B;
+        Fri, 24 Mar 2023 11:33:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679646228;
-        bh=WNmnBMlXQbbzSIzNbiTJv8PajglyS7jPcj9FFmg6NWU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dDeq+INQJQ8cdGwiqzVv1YUb+oIdwqPJJHuTj1Q0fbnl92ex0saerlTqYpdWYHewN
-         7CF1K1iztsPDj71V0OW3fxLF/4LCJVPqvt1gitdHYBWfUfRHssbptB7A0tdQN3VG6p
-         3xDGQe+GA3LdUHIFx+Yh5EihmAcO7RdA9gqiVoHQIjfB/MENJKU090orHMCrRU++Ks
-         thLUVJeZlY9O/HNWXo5LuNn22vCOzw1j7jatENm+YJDEV2xili6xuUmTDnbS8Ud/6J
-         USGAGp4AH+yBsBdNwBnvZlFvpNR/J5aEu53kvZ0Aijlxp8iO7UY0E2bSauakE6Xcow
-         H9Ady5C0BXUpQ==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        bjorn@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH -next V4] riscv: jump_label: Optimize the code size with compressed instruction
-Date:   Fri, 24 Mar 2023 04:23:20 -0400
-Message-Id: <20230324082320.290410-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        s=k20201202; t=1679657634;
+        bh=gN1rw7P5nD0EPnar+Hih8wRjO2zp+3Y1UdQYfZsCqBs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oKBFZiTSugNI6NXoGDFM/eBf78cVT9COzfU+bK3uSgOS53e3/8uY8Lu7lDAbjrduk
+         f+o8I4IP6BYkZGnxLmFm4qVfvm7dJSJkandF8nEHZh/DaIWiYRlpfG6z0ULmtwPtIg
+         nDHS6FGdnDYwICHFy4dxqwAXliGTH64w++/LYtza0OHzdJky1GlEg3mil1o4aW6rbz
+         Si9H/Df8j+pf7qs8sOV622rw/SqwGlYi73awC5Nv4oZBD90kbgTPSq3JXLOam8tfXA
+         kH7kbVtZ3aljmfG69UC5diNO8GcTecvllVT+g4KIePYuMC3aOG6ac2SfijvN6YPeoE
+         ncSzwNoANakxg==
+Received: by mail-lf1-f44.google.com with SMTP id br6so1810469lfb.11;
+        Fri, 24 Mar 2023 04:33:54 -0700 (PDT)
+X-Gm-Message-State: AAQBX9dTve0JONSYQmUyJyR56PQSmIso5wytq8LDFdP8iNPZ96Yw35Qh
+        s3AdWz0odaJVclBtzsyALS+Q8HQVkfStO+11k8c=
+X-Google-Smtp-Source: AKy350b8q3+lUeJ9w5ZT9GW50L8qAY6bqdL3UY0CHDzs4u9bAT5b8qVWBbNxvRz6Pby8JiJnvjS/qp42bIAdEGY9RWU=
+X-Received: by 2002:ac2:4a89:0:b0:4ea:12f7:a725 with SMTP id
+ l9-20020ac24a89000000b004ea12f7a725mr650882lfp.4.1679657632209; Fri, 24 Mar
+ 2023 04:33:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+References: <20221012233500.156764-1-masahiroy@kernel.org> <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com> <ZBzAp457rrO52FPy@aurel32.net>
+In-Reply-To: <ZBzAp457rrO52FPy@aurel32.net>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 24 Mar 2023 12:33:40 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+Message-ID: <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of head.o
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,139 +68,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+(cc BTF list and maintainer)
 
-Reduce the size of the static branch instruction and prevent atomic
-update problems when CONFIG_RISCV_ISA_C=y. It also reduces the jump
-range from 1MB to 4KB, but 4KB is enough for the current riscv
-requirement.
+On Thu, 23 Mar 2023 at 22:12, Aurelien Jarno <aurelien@aurel32.net> wrote:
+>
+> Hi,
+>
+> On 2023-03-22 15:51, Ard Biesheuvel wrote:
+> > On Tue, 21 Mar 2023 at 23:26, Aurelien Jarno <aurelien@aurel32.net> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On 2022-10-13 08:35, Masahiro Yamada wrote:
+> > > > In the previous discussion (see the Link tag), Ard pointed out that
+> > > > arm/arm64/kernel/head.o does not need any special treatment - the only
+> > > > piece that must appear right at the start of the binary image is the
+> > > > image header which is emitted into .head.text.
+> > > >
+> > > > The linker script does the right thing to do. The build system does
+> > > > not need to manipulate the link order of head.o.
+> > > >
+> > > > Link: https://lore.kernel.org/lkml/CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com/
+> > > > Suggested-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > > ---
+> > > >
+> > > >  scripts/head-object-list.txt | 1 -
+> > > >  1 file changed, 1 deletion(-)
+> > > >
+> > > > diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
+> > > > index b16326a92c45..f226e45e3b7b 100644
+> > > > --- a/scripts/head-object-list.txt
+> > > > +++ b/scripts/head-object-list.txt
+> > > > @@ -15,7 +15,6 @@ arch/alpha/kernel/head.o
+> > > >  arch/arc/kernel/head.o
+> > > >  arch/arm/kernel/head-nommu.o
+> > > >  arch/arm/kernel/head.o
+> > > > -arch/arm64/kernel/head.o
+> > > >  arch/csky/kernel/head.o
+> > > >  arch/hexagon/kernel/head.o
+> > > >  arch/ia64/kernel/head.o
+> > >
+> > > This patch causes a significant increase of the arch/arm64/boot/Image
+> > > size. For instance the generic arm64 Debian kernel went from 31 to 39 MB
+> > > after this patch has been applied to the 6.1 stable tree.
+> > >
+> > > In turn this causes issues with some bootloaders, for instance U-Boot on
+> > > a Raspberry Pi limits the kernel size to 36 MB.
+> > >
+> >
+> > I cannot reproduce this with mainline
+> >
+> > With the patch
+> >
+> > $ size vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24567309 14752630 621680 39941619 26175f3 vmlinux
+> >
+> > With the patch reverted
+> >
+> > $ size vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24567309 14752694 621680 39941683 2617633 vmlinux
+>
+> I have tried with the current mainline, this is what I get, using GCC 12.2.0
+> and binutils 2.40:
+>
+>    text    data     bss     dec     hex filename
+> 32531655        8192996  621968 41346619        276e63b vmlinux.orig
+> 25170610        8192996  621968 33985574        2069426 vmlinux.revert
+>
+> > It would help to compare the resulting vmlinux ELF images from both
+> > builds to see where the extra space is being allocated
+>
+> At a first glance, it seems the extra space is allocated in the BTF
+> section. I have uploaded the resulting files as well as the config file
+> I used there:
+> https://temp.aurel32.net/linux-arm64-size-head.o.tar.gz
+>
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
-Changelog
-v4:
- - Rebase on palmer/for-next (20230324)
- - Separate from "riscv: jump_label: Fixup & Optimization"
+Indeed. So we go from
 
-v3:
-https://lore.kernel.org/linux-riscv/20230126170607.1489141-3-guoren@kernel.org/
+  [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+       00000000005093d6  0000000000000000   A       0     0     1
 
-v2:
-https://lore.kernel.org/linux-riscv/20221210100927.835145-3-guoren@kernel.org/
+to
 
-v1:
-https://lore.kernel.org/linux-riscv/20220913094252.3555240-6-andy.chiu@sifive.com/
----
- arch/riscv/include/asm/jump_label.h | 16 +++++++++++----
- arch/riscv/kernel/jump_label.c      | 30 +++++++++++++++++++++++++++--
- 2 files changed, 40 insertions(+), 6 deletions(-)
+  [15] .BTF              PROGBITS         ffff8000091d1ff4  011e1ff4
+       0000000000c0e5eb  0000000000000000   A       0     0     1
 
-diff --git a/arch/riscv/include/asm/jump_label.h b/arch/riscv/include/asm/jump_label.h
-index 14a5ea8d8ef0..afc58c31d02b 100644
---- a/arch/riscv/include/asm/jump_label.h
-+++ b/arch/riscv/include/asm/jump_label.h
-@@ -12,17 +12,23 @@
- #include <linux/types.h>
- #include <asm/asm.h>
- 
-+#ifdef CONFIG_RISCV_ISA_C
-+#define JUMP_LABEL_NOP_SIZE 2
-+#else
- #define JUMP_LABEL_NOP_SIZE 4
-+#endif
- 
- static __always_inline bool arch_static_branch(struct static_key * const key,
- 					       const bool branch)
- {
- 	asm_volatile_goto(
--		"	.align		2			\n\t"
- 		"	.option push				\n\t"
- 		"	.option norelax				\n\t"
--		"	.option norvc				\n\t"
-+#ifdef CONFIG_RISCV_ISA_C
-+		"1:	c.nop					\n\t"
-+#else
- 		"1:	nop					\n\t"
-+#endif
- 		"	.option pop				\n\t"
- 		"	.pushsection	__jump_table, \"aw\"	\n\t"
- 		"	.align		" RISCV_LGPTR "		\n\t"
-@@ -40,11 +46,13 @@ static __always_inline bool arch_static_branch_jump(struct static_key * const ke
- 						    const bool branch)
- {
- 	asm_volatile_goto(
--		"	.align		2			\n\t"
- 		"	.option push				\n\t"
- 		"	.option norelax				\n\t"
--		"	.option norvc				\n\t"
-+#ifdef CONFIG_RISCV_ISA_C
-+		"1:	c.j		%l[label]		\n\t"
-+#else
- 		"1:	jal		zero, %l[label]		\n\t"
-+#endif
- 		"	.option pop				\n\t"
- 		"	.pushsection	__jump_table, \"aw\"	\n\t"
- 		"	.align		" RISCV_LGPTR "		\n\t"
-diff --git a/arch/riscv/kernel/jump_label.c b/arch/riscv/kernel/jump_label.c
-index e6694759dbd0..08f42c49e3a0 100644
---- a/arch/riscv/kernel/jump_label.c
-+++ b/arch/riscv/kernel/jump_label.c
-@@ -11,26 +11,52 @@
- #include <asm/bug.h>
- #include <asm/patch.h>
- 
-+#ifdef CONFIG_RISCV_ISA_C
-+#define RISCV_INSN_NOP 0x0001U
-+#define RISCV_INSN_C_J 0xa001U
-+#else
- #define RISCV_INSN_NOP 0x00000013U
- #define RISCV_INSN_JAL 0x0000006fU
-+#endif
- 
- void arch_jump_label_transform(struct jump_entry *entry,
- 			       enum jump_label_type type)
- {
- 	void *addr = (void *)jump_entry_code(entry);
-+#ifdef CONFIG_RISCV_ISA_C
-+	u16 insn;
-+#else
- 	u32 insn;
-+#endif
- 
- 	if (type == JUMP_LABEL_JMP) {
- 		long offset = jump_entry_target(entry) - jump_entry_code(entry);
--
--		if (WARN_ON(offset & 1 || offset < -524288 || offset >= 524288))
-+		if (WARN_ON(offset & 1 || offset < -2048 || offset >= 2048))
- 			return;
- 
-+#ifdef CONFIG_RISCV_ISA_C
-+		/*
-+		 * 001 | imm[11|4|9:8|10|6|7|3:1|5] 01 - C.J
-+		 */
-+		insn = RISCV_INSN_C_J |
-+			(((u16)offset & GENMASK(5, 5)) >> (5 - 2)) |
-+			(((u16)offset & GENMASK(3, 1)) << (3 - 1)) |
-+			(((u16)offset & GENMASK(7, 7)) >> (7 - 6)) |
-+			(((u16)offset & GENMASK(6, 6)) << (7 - 6)) |
-+			(((u16)offset & GENMASK(10, 10)) >> (10 - 8)) |
-+			(((u16)offset & GENMASK(9, 8)) << (9 - 8)) |
-+			(((u16)offset & GENMASK(4, 4)) << (11 - 4)) |
-+			(((u16)offset & GENMASK(11, 11)) << (12 - 11));
-+#else
-+		/*
-+		 * imm[20|10:1|11|19:12] | rd | 1101111 - JAL
-+		 */
- 		insn = RISCV_INSN_JAL |
- 			(((u32)offset & GENMASK(19, 12)) << (12 - 12)) |
- 			(((u32)offset & GENMASK(11, 11)) << (20 - 11)) |
- 			(((u32)offset & GENMASK(10,  1)) << (21 -  1)) |
- 			(((u32)offset & GENMASK(20, 20)) << (31 - 20));
-+#endif
- 	} else {
- 		insn = RISCV_INSN_NOP;
- 	}
--- 
-2.36.1
+i.e, from 5 MiB to 12+ MiB of BTF metadata.
 
+To me, it is not clear at all how one would be related to the other,
+so it will leave it to the Kbuild and BTF experts to chew on this one.
