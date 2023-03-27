@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541606CA564
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Mar 2023 15:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589A46CA569
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Mar 2023 15:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjC0NRW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Mar 2023 09:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S232460AbjC0NR1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Mar 2023 09:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbjC0NRV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Mar 2023 09:17:21 -0400
+        with ESMTP id S232435AbjC0NRW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Mar 2023 09:17:22 -0400
 Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021022.outbound.protection.outlook.com [52.101.62.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEAF1FCA;
-        Mon, 27 Mar 2023 06:17:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954C61723;
+        Mon, 27 Mar 2023 06:17:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AfgGCupc5PovLn2RYW2YcHW3yzMSNHvcd/4P3A1fY8EK5qdqcIF6ZypEuzryYWLWXagqo3eRvBfjCTYuUhoUc3RKk0CHix840JsyDaBxZdJteIzaK0n6tWLkNiwQWjezTHAznBYLCs3A0Tw+TwrWCMmHF5tI6lsHkoE88NkbuWqvWu2lSqbz5NEyggqAB1YKVc+sbfaTYCQYXf2ie5BfL/u8sNdixzfS/U3YYrVScQ4s+d6tp3Vvn1PtlQV+utd221WOSB55OMQFGx/apF9rYJGbkHnA9mQ80198tExs4Pvb+pa67j7d1LB4H+ep65LbVil+PGQYDuoLj84oL91gRA==
+ b=JbM1D/zetlQ6RNFDMqa/LrvX6DmkEpOAMlVA86TaRlRFwjFH6Vd7TZvZx0jSa4IX9UZ7RRuTAyNGU4nKBZr3jgfrxgrjuVyEcq4w4POpwlwTG05dg6woRj8YKuvoz4IdGK6CrS7N7Z7jj+kO/r1egiH1uZMqh4tk7KjHA1aQB93sdb0NRWCP0hieW55JVIenkJjUFBSgyeNiHImjRAgc2QrRDoKo9yVkibKITlgew+yXlL8WyOkBNTd7223B9Hbr124pnSsvPtjQ3+hGjZOkVjdfwITY0reD7zBD7GH/+Wdl0S+G+tRqJ2RPAMFwHcekj72dd51oQHaeOSGFapqyTQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8xupBTUcaU1e7hATDzHTPvE57L+mAHynBW8Havvc1O0=;
- b=k7S/MAQhf3l0l+adjPFFa3IttiaxEWCnrTCQJ468bBWwJR8mTzTqzvW6Wgtk12rtEdQwsTCWq8T/nILcT+y0CatLuU6AVQ75M88zyr5T+LSfd5+cenN4/xdvc2LT9FmMM9xoLDlscrk4KJDkTO0MWBYahWUFhMwJNpd1eI7D4suYUQ6DsBXOifhQ4RkqMV36Z1lPpQikNBSRDfTypO2IUEetcMs6C4AxumiIjiDeBpYn30YffNEMZ7pTCfeU9jmhoUoFQgCVr704Urx3Q8nEYCZeLK9Pw/4+qg6kSkpsalupwOyvTV4WZllQIHbtr6H8QmQBIhf+TKDCyf4y8kLy1g==
+ bh=1wivdlfXRZHaFecrxciooBcchDqO+eaAuuDzZW4Ha+w=;
+ b=XHJqwkGEWHmNnoGIomgbKX9KUR/bQoUWm0F0MBCBoQsRstEXXsQ6cJSP5MI/r0H/zugDlrk3lLHwf9zQk3Yt/BBO35QcOsjovxJWfZu4iJlpZMJjjJ/a5i9yPk7nDbNXLfdBRRMXCGV3Af4+809gSdj//VmGZdofoS8PajXZIguTplMG2K9JjBSS/MBmdoM31TvIl6HVus1nwdeaFBBd0w2laVGEyHHAkPvr0wTsc6vt8eIC618UIjeFz47P35XgoJD3k4diFK2gDAEPgwOYJAlwsNP9jTjJ32+SrMOeOV6vUXjgbSughsbm9vrYyDAF+/5USvQDJ+qxJxBhYf/PUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8xupBTUcaU1e7hATDzHTPvE57L+mAHynBW8Havvc1O0=;
- b=cHJvZ5irLlcOspcEp0whHCBt5WacwOM3kTBsM4vi/swaubrmlcpEkVFZSmcknqdgJKzHuK/m3+xsmvgVt59R0GcJYPIJRiQN9uZ+I1IvQ06VhVYyRbLwpHxDQkLx8Ym9bfPcnVwwz8a1iBWmtKtrloJt1OlFONvzsb/U2GPiqa8=
+ bh=1wivdlfXRZHaFecrxciooBcchDqO+eaAuuDzZW4Ha+w=;
+ b=ESmlUFjbxjsQhHnOrPPphPK17SYI7i7EOAL2hPILRT44TqJ6r7N9KZLGvJKnMxm6nGrwBSUoPiIhhkBsz7492boSNPSEaZepse116CR/EUsjwSduoNzXjfiQsj0AXs+C1regiwIVTK3X0cho+9EsGHhj+kkBA+xiMPXQZiiie3k=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
  by SA3PR21MB3960.namprd21.prod.outlook.com (2603:10b6:806:2fd::6) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6254.11; Mon, 27 Mar
- 2023 13:17:17 +0000
+ 2023 13:17:18 +0000
 Received: from DM6PR21MB1370.namprd21.prod.outlook.com
  ([fe80::b7e9:4da1:3c23:35f]) by DM6PR21MB1370.namprd21.prod.outlook.com
  ([fe80::b7e9:4da1:3c23:35f%3]) with mapi id 15.20.6254.016; Mon, 27 Mar 2023
- 13:17:17 +0000
+ 13:17:18 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
@@ -47,9 +47,9 @@ To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
         arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
 Cc:     mikelley@microsoft.com
-Subject: [PATCH 1/2] x86/hyperv: Add callback filter to cpumask_to_vpset()
-Date:   Mon, 27 Mar 2023 06:16:06 -0700
-Message-Id: <1679922967-26582-2-git-send-email-mikelley@microsoft.com>
+Subject: [PATCH 2/2] x86/hyperv: Exclude lazy TLB mode CPUs from enlightened TLB flushes
+Date:   Mon, 27 Mar 2023 06:16:07 -0700
+Message-Id: <1679922967-26582-3-git-send-email-mikelley@microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1679922967-26582-1-git-send-email-mikelley@microsoft.com>
 References: <1679922967-26582-1-git-send-email-mikelley@microsoft.com>
@@ -61,50 +61,50 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM6PR21MB1370:EE_|SA3PR21MB3960:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb85640f-7a8e-4097-00ce-08db2ec59526
+X-MS-Office365-Filtering-Correlation-Id: d2cec5f0-a4d9-44d8-7991-08db2ec595b9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SPZC4lPpQ5Pl5OzZbklPak16ddFUuWkyh1as54uTMLrFos/se9cyf7GPnQZTdIaLAuGMTJ3lWbLkixJHTa8QcFbcVPCeNOLyfD3Tdn/2axZ82OTMuKcDCOIW7Kp+c9wBH3XE0R7Zb3D+Tc8TsnBRmTNiDZji3vU2oXxzjT5jAqfggqO++Dhv5DaKRigDcBOj1DMLlyJJvQsX6A1lBMkKqB452i/79Ek243Ws6QzMiO82hu6kXbrMqzU32oYpLqoegwuXK9Uc8rNEKFRG8oj15QsKwcX+fKQ0NZYktx/6QdkbnC9kl+ewzhktORORBlojhfylNTbLOl+qnLPyWdzFzeMvS6THBYfLhxaazRdGj5IdGsDfbkFfhNsDbGDFcw/vuKxScTGdHk2AmsQQ6nf+wtIAWxTMsuimf66sGH9w/THkWhaFg7ET7D5kwQw8c7n7wZxPb1z+bCf+Ri6C6PWAm9Z13bICTpjXrtN1hKWuFr19Rt/nVy0XjkbHkJK5/rj7U3JCwqbm/qsQl/y3MgXz9bG3fl7+DxKCZcsdMmCh0z7XsCY81N1BxZCeG0bmg5urJLEythhHBrjwNumeoxXBuR0QK2O1/lNKqFIm61/+t7lCjpsWyAS+Mshdc/sPu6mFcToLp8ImX0C7va8UzoP1B2PPuyFONWOztJISwB26oFOeJPnP0PGIsbDlXqGTkXDm
+X-Microsoft-Antispam-Message-Info: Ch/bgHkZ1Ldh+zQrGBC+7iSfguH/lTpTupfkUuFYIhEdhbg84oVqqi23NftCs35ODo5X8kSeoAeuw38nUvUQ9VhMyu/Uc8UqUGUFFLrqNoARoKLYS/RSuL063ZRa/IP/UwesLltT11r4SX9g8+39sc03uc/1Ok3Bm21eRJg800WJPEHAljLK71vznkfErgap46IO7IiuoXNEK99Dsg/8a8gA7e+DvhkvLVUS3Ct450UxsJANeKTnZiVGaIAABZSUYdiRGXCqfexl73u30/+E3Qo48v1QfseIqgA+mKnp7I8kIfk9lyae1VMkBdvveJB2TG1ghQj23BeniiPl7Ap+oUBczwqcC02pN2JW2vBA+WRUB8bVwdruqCdxfi82BOh3oRb8Gf5Ltv6mdLli7LZfoAOY1ohNBq/heEUY47t4mKlDxt9DmyRc0cLI8CniGlHZwPaEatIp8188QVYrHXNFvGEl5KQv4uG9a5a/rEcoyHIvFyrXThbdEy3k5sNrMvypUrNOQ7qtvG2Ln61083/s7t2NdTfqJTUqX18ZmgtCyqevmC3mcLJe8ZVEKlzSbUURJ/njYGmt0Sfb08nlkQAaqXc6V93WOX6ad34BZu4ytf4YFsFFu/qfZUzeB25z0oJlE6JOEeNbln/LlEouVJNuy9GWaAaYNi2PYFc9V0AB97RazsKpNT4rWj7wQWICy+L5
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(136003)(366004)(396003)(451199021)(41300700001)(4326008)(82950400001)(26005)(2616005)(921005)(6506007)(6486002)(82960400001)(8936002)(86362001)(66946007)(66556008)(5660300002)(66476007)(8676002)(6512007)(10290500003)(83380400001)(2906002)(38100700002)(38350700002)(107886003)(7416002)(36756003)(6666004)(316002)(52116002)(186003)(478600001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iIMo6sNFm5AjsTMW9ASboPlZCOdEqXrNLUAPgYX86gCYsXbVpCJIn0wEwVvu?=
- =?us-ascii?Q?tCwLSW2xa8olbT7EegqZXNhGnGHo7P32BtZASGZZ4qnBgJmdE1bpgjs+jWGA?=
- =?us-ascii?Q?Nx5VC0RgGhmpH8i7HdqDjIF04hKR/zeb85lJSMcLurbWGUw6r4MrfNZ4g4Iq?=
- =?us-ascii?Q?v5l5k6P4Gth3IUIBzRqQMg2e+znvg0L6CFhR4VJJNK751TqtbzFboyTFkw6u?=
- =?us-ascii?Q?fLCL47oSIcwE4lnQz2rVsokCnVSf0rEbxh9O4mjRcRAquqfU2sm40nnJKCDZ?=
- =?us-ascii?Q?JKmRPkK8ejoRhNqNsTUvYhjkjauzEpPRsHILZZsNHF4XYOBztrPyCWz3Qa76?=
- =?us-ascii?Q?by789PebGv251Mlr5MR5a5mGQVqW5mE1fACM5zb/qEKBa7VvCY8z+/9EClw0?=
- =?us-ascii?Q?Hgc3z9WvNzvAExap+eKAgk+qMuZLn3A4qHSUzFMF0hNTCdTRymNFZprRJuV/?=
- =?us-ascii?Q?dhEHHG31XvzLIMblIUrT4O4l3WvGyE8QnGY9iQmWOgzQTy4eDPyVJ9fw8gUk?=
- =?us-ascii?Q?NmvQ/34H4pats2Dwlrd7ASwTCSIaOEa7NB6Ak9NJs6+OAz2gsbcSqJGJpaPo?=
- =?us-ascii?Q?ajbjmygy+6npGAAyurqfWNybJAgIsNsr7lr5g2uRZfe04eOoW87ouyu5iQov?=
- =?us-ascii?Q?DiHZhTBP2IfMNalIUrtMY0ABHjxy7r8FqpYygH0x74y2LpDQUFs/V8jsF8Ui?=
- =?us-ascii?Q?w0DYiF6M0tUxW9bh18obHl12Z/g732nm8RqQ2GimtPTtINsj0MJLVp11Xk0X?=
- =?us-ascii?Q?YgIXyf5Rt2LjSVyvurBVpbq+oSno6phMiJmGFZXYwyudAiWBqZmS98L7xvz6?=
- =?us-ascii?Q?4AQKzt+SwNRgTNVx88U8dywdNC6G0JDsvbHMHvEmYlgXPvlpPYzWDl4r6aMB?=
- =?us-ascii?Q?6mchC7aBkrHe2POqW7dPSiZy5nSrQ5E5UFi9S7zQPQ1B+PrMX7G8jrPkPbGS?=
- =?us-ascii?Q?A3XGH31f9EIbdDWgMX37kfyhrVWHixZKN92u4gRsic8MakdaVnRCQVQeJR3S?=
- =?us-ascii?Q?xKh149IxE//2PV6aMHJv+s+65mq2pW8wuzFEnFeB/IngKHoJ6dWoTuiRAtDR?=
- =?us-ascii?Q?2aq0VLBacwjCwhxwuaQkcRXm6nr7ezbLJlnRSFAmFaorln01LP6s6/mQzR45?=
- =?us-ascii?Q?tfidpQiZDJZoO+Dykv7FXa7V8ziTmuPKvHdBa1tHdq1UjQRExt4poBqVPHN+?=
- =?us-ascii?Q?6p+I2+8gWIadrjQyX+KVC8ghatDEJj0TEFjJEjO6SznwrtBtW9F+9fMDQaEg?=
- =?us-ascii?Q?9nn8OmHAeeyetiWHMx5oDdNxGqZSVxOCColVQvXMKhZsZcvQPbkIgNTvtU+l?=
- =?us-ascii?Q?CcZWVK0BHXI/Q/naplY7YNyv8i5hhR4IVZQ6oCDsUNfWgg0RlqsoWXEkYyTf?=
- =?us-ascii?Q?XqMGF0IVBu/HzhZBBFKonlYcWBsaD1DhEcRtN5D9Pm4O7Q/NHRJlcT7kdrls?=
- =?us-ascii?Q?2SYxTvyu2zsXpwa98zSOyuE591z+bClTx3UEtuX3L7UCYkNdBZozx1r/d7nJ?=
- =?us-ascii?Q?n0/nB0qtvvQyXQEwIKI1p/hTCxkdCV0iGAwT8MBqmb57M82qk+WtDMJCRLTM?=
- =?us-ascii?Q?U4Wm1KyVIjsYkHRhCRPc80ZpnnS1Ize2IVpQaMWQ?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YP9169tbuVsR/+nA9t9DPTwJhb7Trm/bj29oeeH4tok7O9a4UIJY01ponSNY?=
+ =?us-ascii?Q?J/8QfjTGi7pX8fwgpORhnGEtBFMZi+DeOSAiYuNlU3bXV629HKfmYCKk3agm?=
+ =?us-ascii?Q?3eO8Ia2xF6mcLqjOH0q/PtcYbNTpduOdDQzj0cUzIOz0XBwtfEaHWiiqe8cZ?=
+ =?us-ascii?Q?qqaFtYO2uoX60G/+gziF19zDq95xdI4+9ZGFmy2cu7MUOerMJjf+3/gJVbNX?=
+ =?us-ascii?Q?LT4PzVSpcCYieEJsohJa0IXyOhS7EwHjsOuFXqkj3PZJO1eTZdaAL7v/0V4s?=
+ =?us-ascii?Q?J4m2BMJ8mpLRN2GgR04TqYzc68nmHuY2+xLthbPHjdULUO2sgTENi/cFebSA?=
+ =?us-ascii?Q?M51vJFdZMnvG957h90VVWVKhmPXPHe6mNvziTuMvcgUJ81o98N9ulg1UMl1j?=
+ =?us-ascii?Q?SqSdD3Ffx0wYGsmo6dYK5FEiMMmUBhME9jxt2loxgSlm33ijPgbHQu7Ot5Sm?=
+ =?us-ascii?Q?ISrcOp3a1h7UW89XY57+KnExHn0lUnlun19/IY3YYOSuFiqhCTia0bEUVuCl?=
+ =?us-ascii?Q?4ZdctoE9O/Lh8Ys/FIsesvWyhd3FsJkkL93H/xz3nhNevYo4iu4B4MfYaNz0?=
+ =?us-ascii?Q?LhCzPSHexNw8UoYwlxFNnEgv3h/PoOaaf/CoWHK+IvPEYVi6t3TqfQFx21lH?=
+ =?us-ascii?Q?wh+EsP77ThGNVE75O5hNp95yA4CbC3ebZcDMM38H6xxg7HC5wlZjs0BuZmqP?=
+ =?us-ascii?Q?mqFPAKJZOpauSHGji4mWVDnaUBcmPMN2IkA1RnWZt5dy/iS6yNV8Vzev5bkQ?=
+ =?us-ascii?Q?lm5hpHkoVKsosBtT3ABAcbH1Pomt2clsyRUnrSzR8ERuEBW7eN3y2EFd9CzN?=
+ =?us-ascii?Q?fmHi0z1xp2buNMC9rDGl8fhYK9ekHI74uH42pVfe9wqPqSa/AGK30697GxAx?=
+ =?us-ascii?Q?DfCmplm1nvnvCAV9MpWGwhP5uPVRCSYrM/vq8BD6qDEahA+2h2D9KhNalIKy?=
+ =?us-ascii?Q?C2jtt/AALZvgwhpoheHuMZ7A6QTaVz0Hhv8CX7AlQXRBDskL+K/SCHc2dXRw?=
+ =?us-ascii?Q?PBhx+RfNMlJLqm7qM05sRBsxPSjkGf+hMw8E/zlSbVAAk9fTtvWvb6cBDzw0?=
+ =?us-ascii?Q?49Uu+DIj1O6i7D0f/iobURqb+BbbVE8Ipt55lQU1/g9ZVrxv7ZUDn3Wtj1Rd?=
+ =?us-ascii?Q?JPMg8fmRfuvvJ+kQ6k8S1wUxoK22PaMWaWMFFbQyiq/fzGmXvOSdJy6WroBO?=
+ =?us-ascii?Q?4rhnB96Ah7gxQ7QkNGoINRojilrTf/zA8SfEJ6KSqFipwr7DmVNgxhMsKnJE?=
+ =?us-ascii?Q?m208pXF1JkuWJZUZOa0WI3LTMhsRPBsE7hfHkt0gbmXdx7uBjGFtYGprDW+b?=
+ =?us-ascii?Q?GT+0zUggKHR/wiuQMJoyCyVfQr4OMiFlCbU/4tHyOQwIMgeIvY3PU4xkUAfY?=
+ =?us-ascii?Q?M4RCi9Dse1bzTqseMyL/CfnCCm81Xy0z+DWnvvdd10BwIVVi4sTyLMhCIjSS?=
+ =?us-ascii?Q?A4fzngC3vVvSAAHaNrIV8StoU6+ekF/850sbYsRPC3yPCndZdP4ufM29jst6?=
+ =?us-ascii?Q?MOiYkmIqVaerg1xLBBKa5xBwWB2dBMEXVEJJKvYM+OMzvNwK+bxatADc3vgt?=
+ =?us-ascii?Q?/0B9gpNmMMjc+uSre/B+VzK/A9yy3s/Vkqn8N+xH?=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb85640f-7a8e-4097-00ce-08db2ec59526
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2cec5f0-a4d9-44d8-7991-08db2ec595b9
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 13:17:15.0338
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2023 13:17:15.9715
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i6XvrxwwC//OWbZW2DM5ALv6ehlXFj6Cy4AFlJx4jjyTYE+hhU1U4XVX4sF9aDW/eVEyfX0lR46Aiaf+p+Hv0Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7m6soiOALhqtLTR8otuiWmCLOlfQZHJ0UG6KBTG07trWupd66+LCuhW6AHMGPKmGrG4FXx/2vPieD9OLfXykQA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR21MB3960
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,106 +116,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When copying CPUs from a Linux cpumask to a Hyper-V VPset,
-cpumask_to_vpset() currently has a "_noself" variant that doesn't copy
-the current CPU to the VPset. Generalize this variant by replacing it
-with a "_skip" variant having a callback function that is invoked for
-each CPU to decide if that CPU should be copied. Update the one caller
-of cpumask_to_vpset_noself() to use the new "_skip" variant instead.
+In the case where page tables are not freed, native_flush_tlb_multi()
+does not do a remote TLB flush on CPUs in lazy TLB mode because the
+CPU will flush itself at the next context switch. By comparison, the
+Hyper-V enlightened TLB flush does not exclude CPUs in lazy TLB mode
+and so performs unnecessary flushes.
 
-No functional change.
+If we're not freeing page tables, add logic to test for lazy TLB
+mode when adding CPUs to the input argument to the Hyper-V TLB
+flush hypercall. Exclude lazy TLB mode CPUs so the behavior
+matches native_flush_tlb_multi() and the unnecessary flushes are
+avoided. Handle both the <=64 vCPU case and the _ex case for >64
+vCPUs.
 
 Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 ---
- arch/x86/hyperv/hv_apic.c      | 12 ++++++++----
- include/asm-generic/mshyperv.h | 22 ++++++++++++++--------
- 2 files changed, 22 insertions(+), 12 deletions(-)
+ arch/x86/hyperv/mmu.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
-index fb8b2c0..1fbda2f 100644
---- a/arch/x86/hyperv/hv_apic.c
-+++ b/arch/x86/hyperv/hv_apic.c
-@@ -96,6 +96,11 @@ static void hv_apic_eoi_write(u32 reg, u32 val)
- 	wrmsr(HV_X64_MSR_EOI, val, 0);
+diff --git a/arch/x86/hyperv/mmu.c b/arch/x86/hyperv/mmu.c
+index 0ad2378..8460bd3 100644
+--- a/arch/x86/hyperv/mmu.c
++++ b/arch/x86/hyperv/mmu.c
+@@ -52,6 +52,11 @@ static inline int fill_gva_list(u64 gva_list[], int offset,
+ 	return gva_n - offset;
  }
  
-+static bool cpu_is_self(int cpu)
++static bool cpu_is_lazy(int cpu)
 +{
-+	return cpu == smp_processor_id();
++	return per_cpu(cpu_tlbstate_shared.is_lazy, cpu);
 +}
 +
- /*
-  * IPI implementation on Hyper-V.
-  */
-@@ -128,10 +133,9 @@ static bool __send_ipi_mask_ex(const struct cpumask *mask, int vector,
- 	 */
- 	if (!cpumask_equal(mask, cpu_present_mask) || exclude_self) {
- 		ipi_arg->vp_set.format = HV_GENERIC_SET_SPARSE_4K;
--		if (exclude_self)
--			nr_bank = cpumask_to_vpset_noself(&(ipi_arg->vp_set), mask);
--		else
--			nr_bank = cpumask_to_vpset(&(ipi_arg->vp_set), mask);
-+
-+		nr_bank = cpumask_to_vpset_skip(&(ipi_arg->vp_set), mask,
-+				exclude_self ? cpu_is_self : NULL);
- 
- 		/*
- 		 * 'nr_bank <= 0' means some CPUs in cpumask can't be
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index afcd9ae..402a8c1 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -210,10 +210,9 @@ static inline int hv_cpu_number_to_vp_number(int cpu_number)
- 
- static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
- 				    const struct cpumask *cpus,
--				    bool exclude_self)
-+				    bool (*func)(int cpu))
+ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
+ 				   const struct flush_tlb_info *info)
  {
- 	int cpu, vcpu, vcpu_bank, vcpu_offset, nr_bank = 1;
--	int this_cpu = smp_processor_id();
- 	int max_vcpu_bank = hv_max_vp_index / HV_VCPUS_PER_SPARSE_BANK;
+@@ -60,6 +65,7 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
+ 	struct hv_tlb_flush *flush;
+ 	u64 status;
+ 	unsigned long flags;
++	bool do_lazy = !info->freed_tables;
  
- 	/* vpset.valid_bank_mask can represent up to HV_MAX_SPARSE_VCPU_BANKS banks */
-@@ -232,7 +231,7 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
- 	 * Some banks may end up being empty but this is acceptable.
- 	 */
- 	for_each_cpu(cpu, cpus) {
--		if (exclude_self && cpu == this_cpu)
-+		if (func && func(cpu))
- 			continue;
- 		vcpu = hv_cpu_number_to_vp_number(cpu);
- 		if (vcpu == VP_INVAL)
-@@ -248,17 +247,24 @@ static inline int __cpumask_to_vpset(struct hv_vpset *vpset,
- 	return nr_bank;
- }
+ 	trace_hyperv_mmu_flush_tlb_multi(cpus, info);
  
-+/*
-+ * Convert a Linux cpumask into a Hyper-V VPset. In the _skip variant,
-+ * 'func' is called for each CPU present in cpumask.  If 'func' returns
-+ * true, that CPU is skipped -- i.e., that CPU from cpumask is *not*
-+ * added to the Hyper-V VPset. If 'func' is NULL, no CPUs are
-+ * skipped.
-+ */
- static inline int cpumask_to_vpset(struct hv_vpset *vpset,
- 				    const struct cpumask *cpus)
- {
--	return __cpumask_to_vpset(vpset, cpus, false);
-+	return __cpumask_to_vpset(vpset, cpus, NULL);
- }
+@@ -112,6 +118,8 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
+ 			goto do_ex_hypercall;
  
--static inline int cpumask_to_vpset_noself(struct hv_vpset *vpset,
--				    const struct cpumask *cpus)
-+static inline int cpumask_to_vpset_skip(struct hv_vpset *vpset,
-+				    const struct cpumask *cpus,
-+				    bool (*func)(int cpu))
- {
--	WARN_ON_ONCE(preemptible());
--	return __cpumask_to_vpset(vpset, cpus, true);
-+	return __cpumask_to_vpset(vpset, cpus, func);
- }
+ 		for_each_cpu(cpu, cpus) {
++			if (do_lazy && cpu_is_lazy(cpu))
++				continue;
+ 			vcpu = hv_cpu_number_to_vp_number(cpu);
+ 			if (vcpu == VP_INVAL) {
+ 				local_irq_restore(flags);
+@@ -198,7 +206,8 @@ static u64 hyperv_flush_tlb_others_ex(const struct cpumask *cpus,
+ 	flush->hv_vp_set.valid_bank_mask = 0;
  
- void hyperv_report_panic(struct pt_regs *regs, long err, bool in_die);
+ 	flush->hv_vp_set.format = HV_GENERIC_SET_SPARSE_4K;
+-	nr_bank = cpumask_to_vpset(&(flush->hv_vp_set), cpus);
++	nr_bank = cpumask_to_vpset_skip(&flush->hv_vp_set, cpus,
++			info->freed_tables ? NULL : cpu_is_lazy);
+ 	if (nr_bank < 0)
+ 		return HV_STATUS_INVALID_PARAMETER;
+ 
 -- 
 1.8.3.1
 
