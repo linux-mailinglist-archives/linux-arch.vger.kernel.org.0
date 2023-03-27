@@ -2,120 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE646C9F66
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Mar 2023 11:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1F96CA0F5
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Mar 2023 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233174AbjC0Jaj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Mar 2023 05:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S233376AbjC0KMG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Mar 2023 06:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbjC0Jai (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Mar 2023 05:30:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7617D46AA;
-        Mon, 27 Mar 2023 02:30:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8DqjXeO1tc2m6wXJ4uu/hd4TZQ+nIIRzc4UwCMqvjG8=; b=ju+MEMZ16NRWnIDWX78+WhqTZD
-        ikrhVB7IopcJONyDZgU+z4k71dPM9zCprIgO9Yh6YW/iq+MBarJoh/04SRlg3RmPOLuA8DaaoZY4F
-        F8Z2boePxShTaCL+vLO/ogb7T0r0qjHF6PRAE3bn18c0iH1Lc6T1XWvk+1uOQggT65mD3k1/PnYkr
-        sHSgh4bFQu3XQgTnsNGV1nzKLrse91+KjHFkGmTsYep0WiKeiiAjAvOZ1FQJU/AR7XmJ1k1xh2itY
-        Ujh0eJBNbGzJQkLenUzehssEwGgfLXN4fqfc1sxeAcUHVYt0EZ2cH5ZbRwwMCEg5BSk/1bpaWeayX
-        rtGZ0RDA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pgjBC-007HH2-81; Mon, 27 Mar 2023 09:30:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 488B73001E5;
-        Mon, 27 Mar 2023 11:30:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E8DF82014D86B; Mon, 27 Mar 2023 11:30:16 +0200 (CEST)
-Date:   Mon, 27 Mar 2023 11:30:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dan Li <ashimida.1990@gmail.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>, Borislav Petkov <bp@suse.de>,
-        Brian Gerst <brgerst@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Changbin Du <changbin.du@intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        gcc-patches@gcc.gnu.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Marco Elver <elver@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Richard Sandiford <richard.sandiford@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Song Liu <song@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>, Uros Bizjak <ubizjak@gmail.com>,
-        Will Deacon <will@kernel.org>, x86@kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [RFC/RFT,V2] CFI: Add support for gcc CFI in aarch64
-Message-ID: <20230327093016.GB4253@hirez.programming.kicks-ass.net>
-References: <20221219061758.23321-1-ashimida.1990@gmail.com>
- <20230325085416.95191-1-ashimida.1990@gmail.com>
+        with ESMTP id S233516AbjC0KL5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Mar 2023 06:11:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDFE5BBE;
+        Mon, 27 Mar 2023 03:11:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EDD3B81057;
+        Mon, 27 Mar 2023 10:11:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 840B3C433EF;
+        Mon, 27 Mar 2023 10:11:43 +0000 (UTC)
+Date:   Mon, 27 Mar 2023 11:11:40 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Mark Rutland' <mark.rutland@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "gor@linux.ibm.com" <gor@linux.ibm.com>,
+        "hca@linux.ibm.com" <hca@linux.ibm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "will@kernel.org" <will@kernel.org>
+Subject: Re: [PATCH v2 1/4] lib: test copy_{to,from}_user()
+Message-ID: <ZCFr3I36Te2D0ZuQ@arm.com>
+References: <20230321122514.1743889-1-mark.rutland@arm.com>
+ <20230321122514.1743889-2-mark.rutland@arm.com>
+ <ZBnk3O0QLs6+8KNN@arm.com>
+ <ZBsLGTYjKoUTLrva@FVFF77S0Q05N>
+ <f4d24e8024e84ec5a20ab17b6c2d7f60@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230325085416.95191-1-ashimida.1990@gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <f4d24e8024e84ec5a20ab17b6c2d7f60@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Mar 25, 2023 at 01:54:16AM -0700, Dan Li wrote:
-
-> In the compiler part[4], most of the content is the same as Sami's
-> implementation[3], except for some minor differences, mainly including:
+On Thu, Mar 23, 2023 at 10:16:12PM +0000, David Laight wrote:
+> From: Mark Rutland
+> > Sent: 22 March 2023 14:05
+> ....
+> > > IIUC, in such tests you only vary the destination offset. Our copy
+> > > routines in general try to align the source and leave the destination
+> > > unaligned for performance. It would be interesting to add some variation
+> > > on the source offset as well to spot potential issues with that part of
+> > > the memcpy routines.
+> > 
+> > I have that on my TODO list; I had intended to drop that into the
+> > usercopy_params. The only problem is that the cross product of size,
+> > src_offset, and dst_offset gets quite large.
 > 
-> 1. The function typeid is calculated differently and it is difficult
-> to be consistent.
+> I thought that is was better to align the writes and do misaligned reads.
 
-This means there is an effective ABI break between the compilers, which
-is sad :-( Is there really nothing to be done about this?
+We inherited the memcpy/memset routines from the optimised cortex
+strings library (fine-tuned by the toolchain people for various Arm
+microarchitectures). For some CPUs with less aggressive prefetching it's
+probably marginally faster to align the reads instead of writes (as
+multiple unaligned writes are usually combined in the write buffer
+somewhere).
+
+Also, IIRC for some small copies (less than 16 bytes), our routines
+don't bother with any alignment at all.
+
+> Although maybe copy_to/from_user() would be best aligning the user address
+> (to avoid page faults part way through a misaligned access).
+
+In theory only copy_to_user() needs the write aligned if we want strict
+guarantees of what was written. For copy_from_user() we can work around
+by falling back to a byte read.
+
+> OTOH, on x86, is it even worth bothering at all.
+> I have measured a performance drop for misaligned reads, but it
+> was less than 1 clock per cache line in a test that was doing
+> 2 misaligned reads in at least some of the clock cycles.
+> I think the memory read path can do two AVX reads each clock.
+> So doing two misaligned 64bit reads isn't stressing it.
+
+I think that's what Mark found as well in his testing, though I'm sure
+one can build a very specific benchmark that shows a small degradation.
+
+-- 
+Catalin
