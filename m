@@ -2,221 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B147C6CC6F9
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 17:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D2F6CC861
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 18:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbjC1PqJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Mar 2023 11:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S230421AbjC1Qs0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Mar 2023 12:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbjC1Ppy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 11:45:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C5FC651;
-        Tue, 28 Mar 2023 08:45:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0453F61866;
-        Tue, 28 Mar 2023 15:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58D2C4339B;
-        Tue, 28 Mar 2023 15:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680018328;
-        bh=YaVokJjTfZg9ew9bIb0zo1vyOb8HUUoQ6sQaU8pHly0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n1uCILJmCdk/8w7/Eaq777UV8wyFy7PlG/AQyRbXtROLN+yOM0XNPzmb7lnpLDEGT
-         thcW/V9Cg5kYXmJEh1hMUZsUGpMi7g6p96ScLIXjCPJB9t04THfLDlxdkKFjk47aY9
-         Wfh9ya9NNQbr4d36zBGi2FZjQh+4YU8csu9N8BBYm29BtqjFxZX5SMphQnSSoVu7/7
-         G0i+pcIMrQFZyblkKQnzTkC9NWB52LLdltSYmG96Zxi8icf8c9bOCuGCbu3TBX8TRP
-         s4BWaSvi3KAUUYnXVlwPsFJfSz1RaW9IIr8h43IvAuzS8a8tjPJ1yT4tu+a/qXvdKR
-         O7w15C0TfCDMg==
-Date:   Tue, 28 Mar 2023 17:45:16 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/3] net: core: add getsockopt SO_PEERPIDFD
-Message-ID: <20230328154516.5qqt7uoewdzwb37m@wittgenstein>
-References: <20230321183342.617114-1-aleksandr.mikhalitsyn@canonical.com>
- <20230321183342.617114-3-aleksandr.mikhalitsyn@canonical.com>
- <20230322153544.u7rfjijcpuheda6m@wittgenstein>
+        with ESMTP id S230339AbjC1QsY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 12:48:24 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4428A49;
+        Tue, 28 Mar 2023 09:48:22 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id q88so9523243qvq.13;
+        Tue, 28 Mar 2023 09:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680022102;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U5Tvv02beQxw04P5UwgN8lsFSBfOGArfLL4YIiRjeVg=;
+        b=QGbyQ2OVm/JaefeGmkoM3bQ/pmorQVe+oX3slbncUyNgKcdrd60ZjraMe1BEkNahlB
+         LgUjx2vqbj+WcIOnxuYL+llvGJekVUkO3WQduZTR+gKtSkUuN8BgOUD26cyQ2HIXkIuX
+         cC2tW7bsjEpSeW6wlb1oJEiJm34Y71NuHA9JJb/GaH7bFSTeWlCyBat8Cp+H4mDcg53k
+         3ftrJBL0RYv5yfq/8mcLri7EOkcX64JGTY0xTeaIjJMPoe2vG0ya3A09FR8cptyfHc0H
+         lsvSu5EgejkesFf85yUFHHta8T/39f0j4kubbyLcTNPbMzdj9329B8u5g9lTOzegvv8o
+         jm4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680022102;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U5Tvv02beQxw04P5UwgN8lsFSBfOGArfLL4YIiRjeVg=;
+        b=sOxaqTqw9kdhECjphbJkRk8qrkVY0Na4SSTnqoQ+mNqOyYlCNbACHvEWlEScy1VvOw
+         drWqMhLc8LdFjz9QMr8upj4FWGkQePt9vq+buTM6owrM2QmEUZ7LdL2SVdbU5PwxUPSY
+         W1kd+FCPGKn797Pa73xmu2yP7S/Ptr+Q6HiSSTQcnoGoqLB0tDEXey7YGg3RYeP2PUpQ
+         3oUshyzSzBEUl96Gf+gfmC1rjJMPGyIS+/EFeT8xmazBfuTWuc1yjU6vh0rWPHSf01ry
+         iSbd26hl2qL7WIS28UsvHKfel5yUfA01IVralljGprR8P5AKyfr44R49UdohVgP+3tvM
+         bBuQ==
+X-Gm-Message-State: AAQBX9cc06cYa1Di+9GGyo3qHoMUwOcG94BszFQFpDVpM5mDRYTudcgP
+        HHtYJJli0vehEZui9tO/iOL0fw6n9pSk+bM=
+X-Google-Smtp-Source: AKy350YOkL74vRK61mRi1pJPqckixB4oEN5zmCmx5upWbMccNyntAe/H6RyfQGuqJMXUJOrCLBj4AA==
+X-Received: by 2002:a05:6214:130b:b0:56f:fb19:1650 with SMTP id pn11-20020a056214130b00b0056ffb191650mr29277713qvb.2.1680022101920;
+        Tue, 28 Mar 2023 09:48:21 -0700 (PDT)
+Received: from fedora.mshome.net (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
+        by smtp.gmail.com with ESMTPSA id qh16-20020a0562144c1000b005dd8b93457bsm3938206qvb.19.2023.03.28.09.48.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 09:48:21 -0700 (PDT)
+From:   Gregory Price <gourry.memverge@gmail.com>
+X-Google-Original-From: Gregory Price <gregory.price@memverge.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, oleg@redhat.com, avagin@gmail.com,
+        peterz@infradead.org, luto@kernel.org, krisman@collabora.com,
+        tglx@linutronix.de, corbet@lwn.net, shuah@kernel.org,
+        catalin.marinas@arm.com, arnd@arndb.de, will@kernel.org,
+        mark.rutland@arm.com, tongtiangen@huawei.com, robin.murphy@arm.com,
+        Gregory Price <gregory.price@memverge.com>
+Subject: [PATCH v14 0/4] Checkpoint Support for Syscall User Dispatch
+Date:   Tue, 28 Mar 2023 12:48:07 -0400
+Message-Id: <20230328164811.2451-1-gregory.price@memverge.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230322153544.u7rfjijcpuheda6m@wittgenstein>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 22, 2023 at 04:35:51PM +0100, Christian Brauner wrote:
-> On Tue, Mar 21, 2023 at 07:33:41PM +0100, Alexander Mikhalitsyn wrote:
-> > Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
-> > This thing is direct analog of SO_PEERCRED which allows to get plain PID.
-> > 
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: Leon Romanovsky <leon@kernel.org>
-> > Cc: David Ahern <dsahern@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > Cc: Lennart Poettering <mzxreary@0pointer.de>
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-arch@vger.kernel.org
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> > ---
-> > v2:
-> > 	According to review comments from Kuniyuki Iwashima and Christian Brauner:
-> > 	- use pidfd_create(..) retval as a result
-> > 	- whitespace change
-> > ---
-> >  arch/alpha/include/uapi/asm/socket.h    |  1 +
-> >  arch/mips/include/uapi/asm/socket.h     |  1 +
-> >  arch/parisc/include/uapi/asm/socket.h   |  1 +
-> >  arch/sparc/include/uapi/asm/socket.h    |  1 +
-> >  include/uapi/asm-generic/socket.h       |  1 +
-> >  net/core/sock.c                         | 21 +++++++++++++++++++++
-> >  tools/include/uapi/asm-generic/socket.h |  1 +
-> >  7 files changed, 27 insertions(+)
-> > 
-> > diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-> > index ff310613ae64..e94f621903fe 100644
-> > --- a/arch/alpha/include/uapi/asm/socket.h
-> > +++ b/arch/alpha/include/uapi/asm/socket.h
-> > @@ -138,6 +138,7 @@
-> >  #define SO_RCVMARK		75
-> >  
-> >  #define SO_PASSPIDFD		76
-> > +#define SO_PEERPIDFD		77
-> >  
-> >  #if !defined(__KERNEL__)
-> >  
-> > diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-> > index 762dcb80e4ec..60ebaed28a4c 100644
-> > --- a/arch/mips/include/uapi/asm/socket.h
-> > +++ b/arch/mips/include/uapi/asm/socket.h
-> > @@ -149,6 +149,7 @@
-> >  #define SO_RCVMARK		75
-> >  
-> >  #define SO_PASSPIDFD		76
-> > +#define SO_PEERPIDFD		77
-> >  
-> >  #if !defined(__KERNEL__)
-> >  
-> > diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-> > index df16a3e16d64..be264c2b1a11 100644
-> > --- a/arch/parisc/include/uapi/asm/socket.h
-> > +++ b/arch/parisc/include/uapi/asm/socket.h
-> > @@ -130,6 +130,7 @@
-> >  #define SO_RCVMARK		0x4049
-> >  
-> >  #define SO_PASSPIDFD		0x404A
-> > +#define SO_PEERPIDFD		0x404B
-> >  
-> >  #if !defined(__KERNEL__)
-> >  
-> > diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-> > index 6e2847804fea..682da3714686 100644
-> > --- a/arch/sparc/include/uapi/asm/socket.h
-> > +++ b/arch/sparc/include/uapi/asm/socket.h
-> > @@ -131,6 +131,7 @@
-> >  #define SO_RCVMARK               0x0054
-> >  
-> >  #define SO_PASSPIDFD             0x0055
-> > +#define SO_PEERPIDFD             0x0056
-> >  
-> >  #if !defined(__KERNEL__)
-> >  
-> > diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-> > index b76169fdb80b..8ce8a39a1e5f 100644
-> > --- a/include/uapi/asm-generic/socket.h
-> > +++ b/include/uapi/asm-generic/socket.h
-> > @@ -133,6 +133,7 @@
-> >  #define SO_RCVMARK		75
-> >  
-> >  #define SO_PASSPIDFD		76
-> > +#define SO_PEERPIDFD		77
-> >  
-> >  #if !defined(__KERNEL__)
-> >  
-> > diff --git a/net/core/sock.c b/net/core/sock.c
-> > index 3f974246ba3e..85c269ca9d8a 100644
-> > --- a/net/core/sock.c
-> > +++ b/net/core/sock.c
-> > @@ -1763,6 +1763,27 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
-> >  		goto lenout;
-> >  	}
-> >  
-> > +	case SO_PEERPIDFD:
-> > +	{
-> > +		struct pid *peer_pid;
-> > +		int pidfd;
-> > +
-> > +		if (len > sizeof(pidfd))
-> > +			len = sizeof(pidfd);
-> > +
-> > +		spin_lock(&sk->sk_peer_lock);
-> > +		peer_pid = get_pid(sk->sk_peer_pid);
-> > +		spin_unlock(&sk->sk_peer_lock);
-> > +
-> > +		pidfd = pidfd_create(peer_pid, 0);
-> > +
-> > +		put_pid(peer_pid);
-> > +
-> > +		if (copy_to_sockptr(optval, &pidfd, len))
-> > +			return -EFAULT;
-> 
-> This leaks the pidfd. We could do:
-> 
-> 	if (copy_to_sockptr(optval, &pidfd, len)) {
-> 		close_fd(pidfd);
-> 		return -EFAULT;
-> 	}
-> 
-> but it's a nasty anti-pattern to install the fd in the caller's fdtable
-> and then close it again. So let's avoid it if we can. Since you can only
-> set one socket option per setsockopt() sycall we should be able to
-> reserve an fd and pidfd_file, do the stuff that might fail, and then
-> call fd_install. So that would roughly be:
-> 
-> 	peer_pid = get_pid(sk->sk_peer_pid);
-> 	pidfd_file = pidfd_file_create(peer_pid, 0, &pidfd);
-> 	f (copy_to_sockptr(optval, &pidfd, len))
-> 	       return -EFAULT;
-> 	goto lenout:
-> 	
-> 	.
-> 	.
-> 	.
-> 
-> lenout:
-> 	if (copy_to_sockptr(optlen, &len, sizeof(int)))
-> 		return -EFAULT;
-> 
-> 	// Made it safely, install pidfd now.
-> 	fd_install(pidfd, pidfd_file)
-> 
-> (See below for the associated api I'm going to publish independent of
-> this as kernel/fork.c and fanotify both could use it.)
+v14: implement task_access_ok variant for cross-task pointer checks
+     patch 2/4 changed from access_ok to task_access_ok
 
-Sent out yesterday:
-https://lore.kernel.org/lkml/20230328090026.b54a4jhccntfraey@quack3
+v13: sizeof consistency and cosmetic changes in patch 2
+
+v12: split test into its own patch
+     change from padding a u8 to using a u64
+     casting issues
+     checkpatch.pl
+
+[truncating version history]
+
+Syscall user dispatch makes it possible to cleanly intercept system
+calls from user-land.  However, most transparent checkpoint software
+presently leverages some combination of ptrace and system call
+injection to place software in a ready-to-checkpoint state.
+
+If Syscall User Dispatch is enabled at the time of being quiesced,
+injected system calls will subsequently be interposed upon and
+dispatched to the task's signal handler.
+
+Patch summary:
+- Create new task_access_ok which leverages the provided task's
+  information when validating userland pointers.  For ARM64 this means
+  MTE tags are accounted for.  For all other architectures, this simply
+  reduces to access_ok (presently).
+
+- Refactor configuration setting interface to operate on a task
+  rather than current, so the set and error paths can be consolidated
+
+- Implement a getter interface for Syscall User Dispatch config info.
+  To resume successfully, the checkpoint/resume software has to
+  save and restore this information.  Presently this configuration
+  is write-only, with no way for C/R software to save it.
+
+  This was done in ptrace because syscall user dispatch is not part of
+  uapi. The syscall_user_dispatch_config structure was added to the
+  ptrace exports.
+
+- Selftest for the new feature
+
+Gregory Price (4):
+  asm-generic,arm64: create task variant of access_ok
+  syscall_user_dispatch: helper function to operate on given task
+  ptrace,syscall_user_dispatch: checkpoint/restore support for SUD
+  selftest,ptrace: Add selftest for syscall user dispatch config api
+
+ .../admin-guide/syscall-user-dispatch.rst     |  4 ++
+ arch/arm64/include/asm/uaccess.h              | 13 +++-
+ include/asm-generic/access_ok.h               | 10 +++
+ include/linux/syscall_user_dispatch.h         | 18 +++++
+ include/uapi/linux/ptrace.h                   | 29 ++++++++
+ kernel/entry/syscall_user_dispatch.c          | 67 ++++++++++++++---
+ kernel/ptrace.c                               |  9 +++
+ tools/testing/selftests/ptrace/.gitignore     |  1 +
+ tools/testing/selftests/ptrace/Makefile       |  2 +-
+ tools/testing/selftests/ptrace/get_set_sud.c  | 72 +++++++++++++++++++
+ 10 files changed, 213 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/get_set_sud.c
+
+-- 
+2.39.1
+
