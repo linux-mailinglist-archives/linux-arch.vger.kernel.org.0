@@ -2,281 +2,274 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA576CBC8D
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 12:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0330E6CBCD4
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 12:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbjC1Kde (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Mar 2023 06:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
+        id S230432AbjC1KtN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Mar 2023 06:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjC1Kdd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 06:33:33 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F466184;
-        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id eh3so47501559edb.11;
-        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679999611;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
-        b=o4qT9SLghP4XbsHKw9QxW2+RPXLZrIgtQgby5gUwPo/7cOw/RNnLSvEY0bU2OeFUTu
-         ojRw+U4yltSYLTyibFiWX8Xby2z2WnzJz2tS56S7IY5c/BhlGj8M/HX63wOhrSkOPbLo
-         f1V3e9JjUvv77z2hsH2MHZVU3ztkIh0DkoZ07zjQ9VNOwoQet7VJmTG5eezvsK5DZvzN
-         nk8RS7WEHuFmGXseieuMoizjue2HDbHr8jrE3L6jggeZexP4h1/KQ2W8TQcf+FV148ZH
-         gr5xQrLDAjpeoQERSU+c9UxinojfuawU/jH+zHDCi1aF9TdJrkbvkZjXo+jTHm3HxleH
-         0/IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679999611;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
-        b=LZlHeUMxOiWkq2pH2hAPxQE5SXw8GWJ0SU4LF7z9WvSyZqxt+IZHqfwdTsWQKkj2Vg
-         o+Zo28WIgxtnFcm4nYnpsxvacQcez1JfxY9KjPLNtiNT2AxVGj81KFkN3wDt00kUJ+9Q
-         +nIoWtId8qPtEsI8muaEAl1yzt+4V2NaOKnqfbjAgkBTdNAoa94vZTJBodCQUqZcGOyN
-         4cVonrR3zzEL7TGamulibP/gLazyGcDCT7hhUh4m83V9hvnfL23XDsBmXZtBOEYh/v5R
-         gpvLPx/WEIM5BAODYGvAUqcaNSUj+kNskoMGiOtd1kV5PekRuswakUAZujXZsmce5GGO
-         W9ow==
-X-Gm-Message-State: AAQBX9dNIZRP3jN+yK+oqtBH8FyfpAOOK17VnKbTamnVmmFRxalJOspx
-        i8CeRJ+Ur5pMRtfA5XMWdL4=
-X-Google-Smtp-Source: AKy350YvW5QQ8F3pllLvIf5HJCqeL8GzHWuERe1VUWtWMxMrHM8FBwDUAVkg16gdmX1/2PUX6IRVhQ==
-X-Received: by 2002:a17:907:8a8e:b0:944:49ee:aea2 with SMTP id sf14-20020a1709078a8e00b0094449eeaea2mr9148171ejc.71.1679999610846;
-        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id hy16-20020a1709068a7000b00931d3509af1sm15025292ejc.222.2023.03.28.03.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
-Message-ID: <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of
- head.o
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>
-Date:   Tue, 28 Mar 2023 13:33:29 +0300
-In-Reply-To: <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
-References: <20221012233500.156764-1-masahiroy@kernel.org>
-         <ZBovCrMXJk7NPISp@aurel32.net>
-         <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
-         <ZBzAp457rrO52FPy@aurel32.net>
-         <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
-         <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
-         <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S232502AbjC1KtM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 06:49:12 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA6A1BC0;
+        Tue, 28 Mar 2023 03:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680000550; x=1711536550;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=AseN6rlr5gwMYM5zhMJq+cjPxZAZKyFMZLKoTjj2S7w=;
+  b=RUVD9MEmst1jITrfZs9/DT/PV0vpczqs7TuvEXdFcSBeNBtA1QtZtSBH
+   qc2ws/fqgP85SX9IMZydBcISwuvlcAnbjl4MrqTcR9pXfydNGZPwg+SdO
+   4r/UA/LT2U59icVUOuPhf/syfYSOteovi51yhUN43wW/FjmzWBdLS0Ccb
+   24jYxM+QttAgeGaUvJqmjLHr9ISN4UHLKd5nupKb1UwUiMpUyo9StDVAD
+   izlO/1hFMBp7ZUnPPSVrgu1uCuctztbjpUS79jg9D/cEpoMY7EDglbP5+
+   x6geM7JCzPwk/EAp1dxCpsUXCtpS22GTmP2fHgYa7HA9pNyy+k0A1oXUl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="403144893"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="403144893"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 03:48:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="794757674"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="794757674"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.105])
+  by fmsmga002.fm.intel.com with ESMTP; 28 Mar 2023 03:48:42 -0700
+Date:   Tue, 28 Mar 2023 18:41:08 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Ackerley Tng <ackerleytng@google.com>, seanjc@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        pbonzini@redhat.com, corbet@lwn.net, vkuznets@redhat.com,
+        wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, arnd@arndb.de,
+        naoya.horiguchi@nec.com, linmiaohe@huawei.com, x86@kernel.org,
+        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org, shuah@kernel.org,
+        rppt@kernel.org, steven.price@arm.com, mail@maciej.szmigiero.name,
+        vbabka@suse.cz, vannapurve@google.com, yu.c.zhang@linux.intel.com,
+        kirill.shutemov@linux.intel.com, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
+        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+Message-ID: <20230328104108.GB2909606@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20230128140030.GB700688@chaop.bj.intel.com>
+ <diqz5ybc3xsr.fsf@ackerleytng-cloudtop.c.googlers.com>
+ <20230308074026.GA2183207@chaop.bj.intel.com>
+ <20230323004131.GA214881@ls.amr.corp.intel.com>
+ <20230324021029.GA2774613@chaop.bj.intel.com>
+ <6cf365a3-dddc-8b74-4d74-04666fbeb53d@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6cf365a3-dddc-8b74-4d74-04666fbeb53d@intel.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
-[...]
-> > Strange.
-> >=20
-> > I used the .config file Aurelien provided, but
-> > I still cannot reproduce this issue.
-> >=20
-> >=20
-> > The vmlinux size is small
-> > as-is in the current mainline.
-> >=20
-> >=20
-> >=20
-> > [mainline]
-> >=20
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
-> > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
-> > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
-> >    text    data     bss     dec     hex filename
-> > 24561282 8186912 622032 33370226 1fd3072 vmlinux
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
-> > vmlinux | grep -A1 BTF
-> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> >        000000000048209c  0000000000000000   A       0     0     1
-> >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
-> >        0000000000000a1c  0000000000000000   A       0     0     1
-> >=20
-> >=20
-> >=20
-> >=20
-> > [mainline + revert 994b7ac]
-> >=20
-> > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
-> > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
-> > for the link order of head.o"
-> > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
-> > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
-> >    text    data     bss     dec     hex filename
-> > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
-> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
-> > vmlinux | grep -A1 BTF
-> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> >        00000000004820cb  0000000000000000   A       0     0     1
-> >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
-> >        0000000000000a1c  0000000000000000   A       0     0     1
-> >=20
-> >=20
-> >=20
-> > I still do not know what affects reproducibility.
-> > (compiler version, pahole version, etc. ?)
-> >=20
-> >=20
-> >=20
-> >=20
-> > Aurelien used GCC 12 + binutils 2.40, but
-> > my toolchain is a bit older.
-> >=20
-> >=20
-> >=20
-> > FWIW, I tested this on Ubuntu 22.04LTS.
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
-> > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
-> > Copyright (C) 2021 Free Software Foundation, Inc.
-> > This is free software; see the source for copying conditions.  There is=
- NO
-> > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURP=
-OSE.
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ pahole --version
-> > v1.22
-> >=20
-> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
-> > GNU assembler (GNU Binutils for Ubuntu) 2.38
-> > Copyright (C) 2022 Free Software Foundation, Inc.
-> > This program is free software; you may redistribute it under the terms =
-of
-> > the GNU General Public License version 3 or later.
-> > This program has absolutely no warranty.
-> > This assembler was configured for a target of `aarch64-linux-gnu'.
->=20
->=20
->=20
->=20
->=20
-> I did the same things in Deiban sid
-> in order to use newer versions of tools.
+On Fri, Mar 24, 2023 at 10:29:25AM +0800, Xiaoyao Li wrote:
+> On 3/24/2023 10:10 AM, Chao Peng wrote:
+> > On Wed, Mar 22, 2023 at 05:41:31PM -0700, Isaku Yamahata wrote:
+> > > On Wed, Mar 08, 2023 at 03:40:26PM +0800,
+> > > Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > > 
+> > > > On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
+> > > > > Chao Peng <chao.p.peng@linux.intel.com> writes:
+> > > > > 
+> > > > > > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean Christopherson wrote:
+> > > > > > > On Fri, Dec 02, 2022, Chao Peng wrote:
+> > > > > > ...
+> > > > > > > Strongly prefer to use similar logic to existing code that detects wraps:
+> > > > > 
+> > > > > > > 		mem->restricted_offset + mem->memory_size < mem->restricted_offset
+> > > > > 
+> > > > > > > This is also where I'd like to add the "gfn is aligned to offset"
+> > > > > > > check, though
+> > > > > > > my brain is too fried to figure that out right now.
+> > > > > 
+> > > > > > Used count_trailing_zeros() for this TODO, unsure we have other better
+> > > > > > approach.
+> > > > > 
+> > > > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > > > > index afc8c26fa652..fd34c5f7cd2f 100644
+> > > > > > --- a/virt/kvm/kvm_main.c
+> > > > > > +++ b/virt/kvm/kvm_main.c
+> > > > > > @@ -56,6 +56,7 @@
+> > > > > >    #include <asm/processor.h>
+> > > > > >    #include <asm/ioctl.h>
+> > > > > >    #include <linux/uaccess.h>
+> > > > > > +#include <linux/count_zeros.h>
+> > > > > 
+> > > > > >    #include "coalesced_mmio.h"
+> > > > > >    #include "async_pf.h"
+> > > > > > @@ -2087,6 +2088,19 @@ static bool kvm_check_memslot_overlap(struct
+> > > > > > kvm_memslots *slots, int id,
+> > > > > >    	return false;
+> > > > > >    }
+> > > > > 
+> > > > > > +/*
+> > > > > > + * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
+> > > > > > + */
+> > > > > > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
+> > > > > > +{
+> > > > > > +	if (!offset)
+> > > > > > +		return true;
+> > > > > > +	if (!gpa)
+> > > > > > +		return false;
+> > > > > > +
+> > > > > > +	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
+> > > 
+> > > This check doesn't work expected. For example, offset = 2GB, gpa=4GB
+> > > this check fails.
+> > 
+> > This case is expected to fail as Sean initially suggested[*]:
+> >    I would rather reject memslot if the gfn has lesser alignment than
+> >    the offset. I'm totally ok with this approach _if_ there's a use case.
+> >    Until such a use case presents itself, I would rather be conservative
+> >    from a uAPI perspective.
+> > 
+> > I understand that we put tighter restriction on this but if you see such
+> > restriction is really a big issue for real usage, instead of a
+> > theoretical problem, then we can loosen the check here. But at that time
+> > below code is kind of x86 specific and may need improve.
+> > 
+> > BTW, in latest code, I replaced count_trailing_zeros() with fls64():
+> >    return !!(fls64(offset) >= fls64(gpa));
+> 
+> wouldn't it be !!(ffs64(offset) <= ffs64(gpa)) ?
 
+As the function document explains, here we want to return true when
+ALIGNMENT(offset) >= ALIGNMENT(gpa), so '>=' is what we need.
 
-Hi Masahiro,
+It's worthy clarifying that in Sean's original suggestion he actually
+mentioned the opposite. He said 'reject memslot if the gfn has lesser
+alignment than the offset', but I wonder this is his purpose, since
+if ALIGNMENT(offset) < ALIGNMENT(gpa), we wouldn't be possible to map
+the page as largepage. Consider we have below config:
 
-An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
-duplicate IDs reported by resolve_btfids matches the description of
-the following thread:
+  gpa=2M, offset=1M
 
-https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
+In this case KVM tries to map gpa at 2M as 2M hugepage but the physical
+page at the offset(1M) in private_fd cannot provide the 2M page due to
+misalignment.
 
-The issue is caused by change in GNU assembler DWARF generation.
-I've sent a patch to fix it a few weeks ago and it is merged in
-dwarves master:
+But as we discussed in the off-list thread, here we do find a real use
+case indicating this check is too strict. i.e. QEMU immediately fails
+when launch a guest > 2G memory. For this case QEMU splits guest memory
+space into two slots:
 
-a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecif=
-ied types")
+  Slot#1(ram_below_4G): gpa=0x0, offset=0x0, size=2G
+  Slot#2(ram_above_4G): gpa=4G,  offset=2G,  size=totalsize-2G
 
-Could you please grab a fresh version of dwarves from:
+This strict alignment check fails for slot#2 because offset(2G) has less
+alignment than gpa(4G). To allow this, one solution can revert to my
+previous change in kvm_alloc_memslot_metadata() to disallow hugepage
+only when the offset/gpa are not aligned to related page size.
 
-git@github.com:acmel/dwarves.git
+Sean, How do you think?
 
-compile 'pahole' and try with?
-
-Thanks,
-Eduard
-
->=20
->=20
->=20
-> Yup, I saw a huge increase in the .BTF section,
-> and observed the difference w/wo 994b7ac.
->=20
-> masahiro@3e9802d667e3:~/ref/linux2$ aarch64-linux-gnu-readelf -S
-> vmlinux | grep -A1 BTF
->   [15] .BTF              PROGBITS         ffff8000091d26c4  011e26c4
->        000000000093e626  0000000000000000   A       0     0     1
->   [16] .BTF_ids          PROGBITS         ffff800009b10cec  01b20cec
->        0000000000000a1c  0000000000000000   A       0     0     1
->=20
->=20
-> I guess some tool might be affecting this.
-> Even with 994b7ac reverted, the .BTF section
-> is much bigger.
->=20
->=20
-> At the same time, I saw a ton of warnings
-> while building BTF.
->=20
->=20
-> masahiro@3e9802d667e3:~/ref/linux2$ cat /etc/os-release
-> PRETTY_NAME=3D"Debian GNU/Linux bookworm/sid"
-> NAME=3D"Debian GNU/Linux"
-> VERSION_CODENAME=3Dbookworm
-> ID=3Ddebian
-> HOME_URL=3D"https://www.debian.org/"
-> SUPPORT_URL=3D"https://www.debian.org/support"
-> BUG_REPORT_URL=3D"https://bugs.debian.org/"
->=20
->=20
->=20
->   LD      vmlinux
->   BTFIDS  vmlinux
-> WARN: multiple IDs found for 'task_struct': 177, 16690 - using 177
-> WARN: multiple IDs found for 'file': 517, 16712 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 16714 - using 524
-> WARN: multiple IDs found for 'inode': 586, 16773 - using 586
-> WARN: multiple IDs found for 'path': 618, 16802 - using 618
-> WARN: multiple IDs found for 'task_struct': 177, 17267 - using 177
-> WARN: multiple IDs found for 'file': 517, 17312 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 17315 - using 524
-> WARN: multiple IDs found for 'seq_file': 1029, 17376 - using 1029
-> WARN: multiple IDs found for 'inode': 586, 17494 - using 586
-> WARN: multiple IDs found for 'path': 618, 17523 - using 618
-> WARN: multiple IDs found for 'cgroup': 704, 17532 - using 704
-> WARN: multiple IDs found for 'task_struct': 177, 18652 - using 177
-> WARN: multiple IDs found for 'file': 517, 18704 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 18707 - using 524
-> WARN: multiple IDs found for 'seq_file': 1029, 18781 - using 1029
-> WARN: multiple IDs found for 'inode': 586, 18911 - using 586
-> WARN: multiple IDs found for 'path': 618, 18940 - using 618
-> WARN: multiple IDs found for 'cgroup': 704, 18949 - using 704
-> WARN: multiple IDs found for 'task_struct': 177, 20514 - using 177
-> WARN: multiple IDs found for 'file': 517, 20515 - using 517
-> WARN: multiple IDs found for 'vm_area_struct': 524, 20541 - using 524
-> WARN: multiple IDs found for 'inode': 586, 20595 - using 586
-> WARN: multiple IDs found for 'path': 618, 20624 - using 618
-> WARN: multiple IDs found for 'cgroup': 704, 20639 - using 704
-> WARN: multiple IDs found for 'seq_file': 1029, 20801 - using 1029
->    ...
->=20
->=20
->=20
->=20
-> I am not sure whether these warnings are related to
-> the current issue or not.
->=20
->=20
-> I did not look into it any further.
-> I may not be seeing a sane build result.
->=20
->=20
-
+Chao
+> 
+> > [*] https://lore.kernel.org/all/Y8HldeHBrw+OOZVm@google.com/
+> > 
+> > Chao
+> > > I come up with the following.
+> > > 
+> > > >From ec87e25082f0497431b732702fae82c6a05071bf Mon Sep 17 00:00:00 2001
+> > > Message-Id: <ec87e25082f0497431b732702fae82c6a05071bf.1679531995.git.isaku.yamahata@intel.com>
+> > > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > Date: Wed, 22 Mar 2023 15:32:56 -0700
+> > > Subject: [PATCH] KVM: Relax alignment check for restricted mem
+> > > 
+> > > kvm_check_rmem_offset_alignment() only checks based on offset alignment
+> > > and GPA alignment.  However, the actual alignment for offset depends
+> > > on architecture.  For x86 case, it can be 1G, 2M or 4K.  So even if
+> > > GPA is aligned for 1G+, only 1G-alignment is required for offset.
+> > > 
+> > > Without this patch, gpa=4G, offset=2G results in failure of memory slot
+> > > creation.
+> > > 
+> > > Fixes: edc8814b2c77 ("KVM: Require gfn be aligned with restricted offset")
+> > > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > > ---
+> > >   arch/x86/include/asm/kvm_host.h | 15 +++++++++++++++
+> > >   virt/kvm/kvm_main.c             |  9 ++++++++-
+> > >   2 files changed, 23 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > index 88e11dd3afde..03af44650f24 100644
+> > > --- a/arch/x86/include/asm/kvm_host.h
+> > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > @@ -16,6 +16,7 @@
+> > >   #include <linux/irq_work.h>
+> > >   #include <linux/irq.h>
+> > >   #include <linux/workqueue.h>
+> > > +#include <linux/count_zeros.h>
+> > >   #include <linux/kvm.h>
+> > >   #include <linux/kvm_para.h>
+> > > @@ -143,6 +144,20 @@
+> > >   #define KVM_HPAGE_MASK(x)	(~(KVM_HPAGE_SIZE(x) - 1))
+> > >   #define KVM_PAGES_PER_HPAGE(x)	(KVM_HPAGE_SIZE(x) / PAGE_SIZE)
+> > > +#define kvm_arch_required_alignment	kvm_arch_required_alignment
+> > > +static inline int kvm_arch_required_alignment(u64 gpa)
+> > > +{
+> > > +	int zeros = count_trailing_zeros(gpa);
+> > > +
+> > > +	WARN_ON_ONCE(!PAGE_ALIGNED(gpa));
+> > > +	if (zeros >= KVM_HPAGE_SHIFT(PG_LEVEL_1G))
+> > > +		return KVM_HPAGE_SHIFT(PG_LEVEL_1G);
+> > > +	else if (zeros >= KVM_HPAGE_SHIFT(PG_LEVEL_2M))
+> > > +		return KVM_HPAGE_SHIFT(PG_LEVEL_2M);
+> > > +
+> > > +	return PAGE_SHIFT;
+> > > +}
+> > > +
+> > >   #define KVM_MEMSLOT_PAGES_TO_MMU_PAGES_RATIO 50
+> > >   #define KVM_MIN_ALLOC_MMU_PAGES 64UL
+> > >   #define KVM_MMU_HASH_SHIFT 12
+> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > > index c9c4eef457b0..f4ff96171d24 100644
+> > > --- a/virt/kvm/kvm_main.c
+> > > +++ b/virt/kvm/kvm_main.c
+> > > @@ -2113,6 +2113,13 @@ static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+> > >   	return false;
+> > >   }
+> > > +#ifndef kvm_arch_required_alignment
+> > > +__weak int kvm_arch_required_alignment(u64 gpa)
+> > > +{
+> > > +	return PAGE_SHIFT
+> > > +}
+> > > +#endif
+> > > +
+> > >   /*
+> > >    * Return true when ALIGNMENT(offset) >= ALIGNMENT(gpa).
+> > >    */
+> > > @@ -2123,7 +2130,7 @@ static bool kvm_check_rmem_offset_alignment(u64 offset, u64 gpa)
+> > >   	if (!gpa)
+> > >   		return false;
+> > > -	return !!(count_trailing_zeros(offset) >= count_trailing_zeros(gpa));
+> > > +	return !!(count_trailing_zeros(offset) >= kvm_arch_required_alignment(gpa));
+> > >   }
+> > >   /*
+> > > -- 
+> > > 2.25.1
+> > > 
+> > > 
+> > > 
+> > > -- 
+> > > Isaku Yamahata <isaku.yamahata@gmail.com>
