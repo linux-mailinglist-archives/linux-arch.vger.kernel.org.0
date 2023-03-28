@@ -2,279 +2,281 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8532D6CB616
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 07:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA576CBC8D
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 12:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjC1FaA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Mar 2023 01:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S232385AbjC1Kde (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Mar 2023 06:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjC1F37 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 01:29:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7F71BD6
-        for <linux-arch@vger.kernel.org>; Mon, 27 Mar 2023 22:29:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679981394; x=1711517394;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Pi/v/E0s++YLCIPUjGTEWYsW7l5wsSkOVVM7Pqy/sb8=;
-  b=F5dno+RdoYHbh3MsuRa4he7yi6y6NbBJ5iLsAco9y2fstTN47Lep5Wef
-   aaGB0fcD0zyA3+o5rQAgzCjhClDguJxtkwDfXRG8fS+OZuEdoaGNtKHFS
-   eHhYksMotwgyxpKn97Gj9mu4ALXsAajuf74uUsjHW9SbAUtN6raYvlaB0
-   dLsukLjcWTtN8TxkadvWWquLbzOGlEGQslGCTkKiI1ltlBb9jMsp8V1Go
-   cq4FVtNswLub9nnTiVbO4xwfLL4B6mqOaX+KiuJJAk5+Hr2YyTHBYj8la
-   E51hLJ58Mn/sghm3sanhPkg9+zmU+KFD6X3eFKzBT3+KOLmtAODxOorp2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="328931709"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="328931709"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Mar 2023 22:29:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10662"; a="857925395"
-X-IronPort-AV: E=Sophos;i="5.98,296,1673942400"; 
-   d="scan'208";a="857925395"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 27 Mar 2023 22:29:50 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ph1u1-000IIh-1O;
-        Tue, 28 Mar 2023 05:29:49 +0000
-Date:   Tue, 28 Mar 2023 13:28:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:dma-sync-rework-v1 22/23]
- arch/arm/mm/dma-mapping.c:1306:31: error: use of undeclared identifier 's'
-Message-ID: <202303281326.s4BXzpx2-lkp@intel.com>
+        with ESMTP id S229670AbjC1Kdd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 06:33:33 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F466184;
+        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id eh3so47501559edb.11;
+        Tue, 28 Mar 2023 03:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679999611;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
+        b=o4qT9SLghP4XbsHKw9QxW2+RPXLZrIgtQgby5gUwPo/7cOw/RNnLSvEY0bU2OeFUTu
+         ojRw+U4yltSYLTyibFiWX8Xby2z2WnzJz2tS56S7IY5c/BhlGj8M/HX63wOhrSkOPbLo
+         f1V3e9JjUvv77z2hsH2MHZVU3ztkIh0DkoZ07zjQ9VNOwoQet7VJmTG5eezvsK5DZvzN
+         nk8RS7WEHuFmGXseieuMoizjue2HDbHr8jrE3L6jggeZexP4h1/KQ2W8TQcf+FV148ZH
+         gr5xQrLDAjpeoQERSU+c9UxinojfuawU/jH+zHDCi1aF9TdJrkbvkZjXo+jTHm3HxleH
+         0/IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679999611;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xIQtKmY6yWS8CDXvo4BZswBARmIubt6ewMMSD2EbBJg=;
+        b=LZlHeUMxOiWkq2pH2hAPxQE5SXw8GWJ0SU4LF7z9WvSyZqxt+IZHqfwdTsWQKkj2Vg
+         o+Zo28WIgxtnFcm4nYnpsxvacQcez1JfxY9KjPLNtiNT2AxVGj81KFkN3wDt00kUJ+9Q
+         +nIoWtId8qPtEsI8muaEAl1yzt+4V2NaOKnqfbjAgkBTdNAoa94vZTJBodCQUqZcGOyN
+         4cVonrR3zzEL7TGamulibP/gLazyGcDCT7hhUh4m83V9hvnfL23XDsBmXZtBOEYh/v5R
+         gpvLPx/WEIM5BAODYGvAUqcaNSUj+kNskoMGiOtd1kV5PekRuswakUAZujXZsmce5GGO
+         W9ow==
+X-Gm-Message-State: AAQBX9dNIZRP3jN+yK+oqtBH8FyfpAOOK17VnKbTamnVmmFRxalJOspx
+        i8CeRJ+Ur5pMRtfA5XMWdL4=
+X-Google-Smtp-Source: AKy350YvW5QQ8F3pllLvIf5HJCqeL8GzHWuERe1VUWtWMxMrHM8FBwDUAVkg16gdmX1/2PUX6IRVhQ==
+X-Received: by 2002:a17:907:8a8e:b0:944:49ee:aea2 with SMTP id sf14-20020a1709078a8e00b0094449eeaea2mr9148171ejc.71.1679999610846;
+        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id hy16-20020a1709068a7000b00931d3509af1sm15025292ejc.222.2023.03.28.03.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Mar 2023 03:33:30 -0700 (PDT)
+Message-ID: <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Date:   Tue, 28 Mar 2023 13:33:29 +0300
+In-Reply-To: <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+References: <20221012233500.156764-1-masahiroy@kernel.org>
+         <ZBovCrMXJk7NPISp@aurel32.net>
+         <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+         <ZBzAp457rrO52FPy@aurel32.net>
+         <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+         <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
+         <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git dma-sync-rework-v1
-head:   524c2e1f26db4535ab4a23797fe7e29092b2493c
-commit: 7c9ef569f03eea4838f8c126d216d86c2cef085c [22/23] ARM: dma-mapping: split out arch_dma_mark_clean() helper
-config: arm-randconfig-r024-20230326 (https://download.01.org/0day-ci/archive/20230328/202303281326.s4BXzpx2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=7c9ef569f03eea4838f8c126d216d86c2cef085c
-        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-        git fetch --no-tags arnd-asm-generic dma-sync-rework-v1
-        git checkout 7c9ef569f03eea4838f8c126d216d86c2cef085c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/ drivers/perf/
+On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
+[...]
+> > Strange.
+> >=20
+> > I used the .config file Aurelien provided, but
+> > I still cannot reproduce this issue.
+> >=20
+> >=20
+> > The vmlinux size is small
+> > as-is in the current mainline.
+> >=20
+> >=20
+> >=20
+> > [mainline]
+> >=20
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
+> > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
+> > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24561282 8186912 622032 33370226 1fd3072 vmlinux
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
+> > vmlinux | grep -A1 BTF
+> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> >        000000000048209c  0000000000000000   A       0     0     1
+> >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
+> >        0000000000000a1c  0000000000000000   A       0     0     1
+> >=20
+> >=20
+> >=20
+> >=20
+> > [mainline + revert 994b7ac]
+> >=20
+> > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
+> > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
+> > for the link order of head.o"
+> > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
+> > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
+> >    text    data     bss     dec     hex filename
+> > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
+> > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
+> > vmlinux | grep -A1 BTF
+> >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> >        00000000004820cb  0000000000000000   A       0     0     1
+> >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
+> >        0000000000000a1c  0000000000000000   A       0     0     1
+> >=20
+> >=20
+> >=20
+> > I still do not know what affects reproducibility.
+> > (compiler version, pahole version, etc. ?)
+> >=20
+> >=20
+> >=20
+> >=20
+> > Aurelien used GCC 12 + binutils 2.40, but
+> > my toolchain is a bit older.
+> >=20
+> >=20
+> >=20
+> > FWIW, I tested this on Ubuntu 22.04LTS.
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
+> > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+> > Copyright (C) 2021 Free Software Foundation, Inc.
+> > This is free software; see the source for copying conditions.  There is=
+ NO
+> > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURP=
+OSE.
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ pahole --version
+> > v1.22
+> >=20
+> > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
+> > GNU assembler (GNU Binutils for Ubuntu) 2.38
+> > Copyright (C) 2022 Free Software Foundation, Inc.
+> > This program is free software; you may redistribute it under the terms =
+of
+> > the GNU General Public License version 3 or later.
+> > This program has absolutely no warranty.
+> > This assembler was configured for a target of `aarch64-linux-gnu'.
+>=20
+>=20
+>=20
+>=20
+>=20
+> I did the same things in Deiban sid
+> in order to use newer versions of tools.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303281326.s4BXzpx2-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+Hi Masahiro,
 
->> arch/arm/mm/dma-mapping.c:1306:31: error: use of undeclared identifier 's'
-                   arch_sync_dma_for_cpu(phys, s->length, dir);
-                                               ^
-   arch/arm/mm/dma-mapping.c:1309:29: error: use of undeclared identifier 's'
-                   arch_dma_mark_clean(phys, s->length);
-                                             ^
-   arch/arm/mm/dma-mapping.c:1436:6: warning: unused variable 'len' [-Wunused-variable]
-           int len = PAGE_ALIGN(size + offset);
-               ^
->> arch/arm/mm/dma-mapping.c:1446:14: error: unknown type name 'mapping'
-           iommu_unmap(mapping->domain, iova, len);
-                       ^
->> arch/arm/mm/dma-mapping.c:1446:21: error: expected ')'
-           iommu_unmap(mapping->domain, iova, len);
-                              ^
-   arch/arm/mm/dma-mapping.c:1446:13: note: to match this '('
-           iommu_unmap(mapping->domain, iova, len);
-                      ^
->> arch/arm/mm/dma-mapping.c:1446:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-           iommu_unmap(mapping->domain, iova, len);
-           ^
-           int
-   arch/arm/mm/dma-mapping.c:1447:2: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-           __free_iova(mapping, iova, len);
-           ^
-           int
->> arch/arm/mm/dma-mapping.c:1447:14: error: a parameter list without types is only allowed in a function definition
-           __free_iova(mapping, iova, len);
-                       ^
->> arch/arm/mm/dma-mapping.c:1448:1: error: extraneous closing brace ('}')
-   }
-   ^
-   1 warning and 8 errors generated.
+An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
+duplicate IDs reported by resolve_btfids matches the description of
+the following thread:
 
+https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
 
-vim +/s +1306 arch/arm/mm/dma-mapping.c
+The issue is caused by change in GNU assembler DWARF generation.
+I've sent a patch to fix it a few weeks ago and it is merged in
+dwarves master:
 
-  1300	
-  1301	static void arm_iommu_sync_dma_for_cpu(phys_addr_t phys, size_t len,
-  1302					       enum dma_data_direction dir,
-  1303					       bool dma_coherent)
-  1304	{
-  1305		if (!dma_coherent)
-> 1306			arch_sync_dma_for_cpu(phys, s->length, dir);
-  1307	
-  1308		if (dir == DMA_FROM_DEVICE)
-  1309			arch_dma_mark_clean(phys, s->length);
-  1310	}
-  1311	
-  1312	/**
-  1313	 * arm_iommu_unmap_sg - unmap a set of SG buffers mapped by dma_map_sg
-  1314	 * @dev: valid struct device pointer
-  1315	 * @sg: list of buffers
-  1316	 * @nents: number of buffers to unmap (same as was passed to dma_map_sg)
-  1317	 * @dir: DMA transfer direction (same as was passed to dma_map_sg)
-  1318	 *
-  1319	 * Unmap a set of streaming mode DMA translations.  Again, CPU access
-  1320	 * rules concerning calls here are the same as for dma_unmap_single().
-  1321	 */
-  1322	static void arm_iommu_unmap_sg(struct device *dev,
-  1323				       struct scatterlist *sg, int nents,
-  1324				       enum dma_data_direction dir,
-  1325				       unsigned long attrs)
-  1326	{
-  1327		struct scatterlist *s;
-  1328		int i;
-  1329	
-  1330		for_each_sg(sg, s, nents, i) {
-  1331			if (sg_dma_len(s))
-  1332				__iommu_remove_mapping(dev, sg_dma_address(s),
-  1333						       sg_dma_len(s));
-  1334			if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
-  1335				arm_iommu_sync_dma_for_cpu(sg_phys(s), s->length, dir,
-  1336							   dev->dma_coherent);
-  1337		}
-  1338	}
-  1339	
-  1340	/**
-  1341	 * arm_iommu_sync_sg_for_cpu
-  1342	 * @dev: valid struct device pointer
-  1343	 * @sg: list of buffers
-  1344	 * @nents: number of buffers to map (returned from dma_map_sg)
-  1345	 * @dir: DMA transfer direction (same as was passed to dma_map_sg)
-  1346	 */
-  1347	static void arm_iommu_sync_sg_for_cpu(struct device *dev,
-  1348				struct scatterlist *sg,
-  1349				int nents, enum dma_data_direction dir)
-  1350	{
-  1351		struct scatterlist *s;
-  1352		int i;
-  1353	
-  1354		for_each_sg(sg, s, nents, i)
-  1355			arm_iommu_sync_dma_for_cpu(sg_phys(s), s->length, dir,
-  1356						   dev->dma_coherent);
-  1357	}
-  1358	
-  1359	/**
-  1360	 * arm_iommu_sync_sg_for_device
-  1361	 * @dev: valid struct device pointer
-  1362	 * @sg: list of buffers
-  1363	 * @nents: number of buffers to map (returned from dma_map_sg)
-  1364	 * @dir: DMA transfer direction (same as was passed to dma_map_sg)
-  1365	 */
-  1366	static void arm_iommu_sync_sg_for_device(struct device *dev,
-  1367				struct scatterlist *sg,
-  1368				int nents, enum dma_data_direction dir)
-  1369	{
-  1370		struct scatterlist *s;
-  1371		int i;
-  1372	
-  1373		if (dev->dma_coherent)
-  1374			return;
-  1375	
-  1376		for_each_sg(sg, s, nents, i)
-  1377			arch_sync_dma_for_device(page_to_phys(sg_page(s)) + s->offset,
-  1378						 s->length, dir);
-  1379	}
-  1380	
-  1381	/**
-  1382	 * arm_iommu_map_page
-  1383	 * @dev: valid struct device pointer
-  1384	 * @page: page that buffer resides in
-  1385	 * @offset: offset into page for start of buffer
-  1386	 * @size: size of buffer to map
-  1387	 * @dir: DMA transfer direction
-  1388	 *
-  1389	 * IOMMU aware version of arm_dma_map_page()
-  1390	 */
-  1391	static dma_addr_t arm_iommu_map_page(struct device *dev, struct page *page,
-  1392		     unsigned long offset, size_t size, enum dma_data_direction dir,
-  1393		     unsigned long attrs)
-  1394	{
-  1395		struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
-  1396		dma_addr_t dma_addr;
-  1397		int ret, prot, len = PAGE_ALIGN(size + offset);
-  1398	
-  1399		if (!dev->dma_coherent && !(attrs & DMA_ATTR_SKIP_CPU_SYNC))
-  1400			arch_sync_dma_for_device(page_to_phys(page) + offset,
-  1401						 size, dir);
-  1402	
-  1403		dma_addr = __alloc_iova(mapping, len);
-  1404		if (dma_addr == DMA_MAPPING_ERROR)
-  1405			return dma_addr;
-  1406	
-  1407		prot = __dma_info_to_prot(dir, attrs);
-  1408	
-  1409		ret = iommu_map(mapping->domain, dma_addr, page_to_phys(page), len,
-  1410				prot, GFP_KERNEL);
-  1411		if (ret < 0)
-  1412			goto fail;
-  1413	
-  1414		return dma_addr + offset;
-  1415	fail:
-  1416		__free_iova(mapping, dma_addr, len);
-  1417		return DMA_MAPPING_ERROR;
-  1418	}
-  1419	
-  1420	/**
-  1421	 * arm_iommu_unmap_page
-  1422	 * @dev: valid struct device pointer
-  1423	 * @handle: DMA address of buffer
-  1424	 * @size: size of buffer (same as passed to dma_map_page)
-  1425	 * @dir: DMA transfer direction (same as passed to dma_map_page)
-  1426	 *
-  1427	 * IOMMU aware version of arm_dma_unmap_page()
-  1428	 */
-  1429	static void arm_iommu_unmap_page(struct device *dev, dma_addr_t handle,
-  1430			size_t size, enum dma_data_direction dir, unsigned long attrs)
-  1431	{
-  1432		struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
-  1433		dma_addr_t iova = handle & PAGE_MASK;
-  1434		phys_addr_t phys;
-  1435		int offset = handle & ~PAGE_MASK;
-  1436		int len = PAGE_ALIGN(size + offset);
-  1437	
-  1438		if (!iova)
-  1439			return;
-  1440	
-  1441		if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
-  1442			phys = iommu_iova_to_phys(mapping->domain, handle);
-  1443			arm_iommu_sync_dma_for_cpu(phys, size, dir, dev->dma_coherent);
-  1444		}
-  1445	
-> 1446		iommu_unmap(mapping->domain, iova, len);
-> 1447		__free_iova(mapping, iova, len);
-> 1448	}
-  1449	
+a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecif=
+ied types")
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Could you please grab a fresh version of dwarves from:
+
+git@github.com:acmel/dwarves.git
+
+compile 'pahole' and try with?
+
+Thanks,
+Eduard
+
+>=20
+>=20
+>=20
+> Yup, I saw a huge increase in the .BTF section,
+> and observed the difference w/wo 994b7ac.
+>=20
+> masahiro@3e9802d667e3:~/ref/linux2$ aarch64-linux-gnu-readelf -S
+> vmlinux | grep -A1 BTF
+>   [15] .BTF              PROGBITS         ffff8000091d26c4  011e26c4
+>        000000000093e626  0000000000000000   A       0     0     1
+>   [16] .BTF_ids          PROGBITS         ffff800009b10cec  01b20cec
+>        0000000000000a1c  0000000000000000   A       0     0     1
+>=20
+>=20
+> I guess some tool might be affecting this.
+> Even with 994b7ac reverted, the .BTF section
+> is much bigger.
+>=20
+>=20
+> At the same time, I saw a ton of warnings
+> while building BTF.
+>=20
+>=20
+> masahiro@3e9802d667e3:~/ref/linux2$ cat /etc/os-release
+> PRETTY_NAME=3D"Debian GNU/Linux bookworm/sid"
+> NAME=3D"Debian GNU/Linux"
+> VERSION_CODENAME=3Dbookworm
+> ID=3Ddebian
+> HOME_URL=3D"https://www.debian.org/"
+> SUPPORT_URL=3D"https://www.debian.org/support"
+> BUG_REPORT_URL=3D"https://bugs.debian.org/"
+>=20
+>=20
+>=20
+>   LD      vmlinux
+>   BTFIDS  vmlinux
+> WARN: multiple IDs found for 'task_struct': 177, 16690 - using 177
+> WARN: multiple IDs found for 'file': 517, 16712 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 16714 - using 524
+> WARN: multiple IDs found for 'inode': 586, 16773 - using 586
+> WARN: multiple IDs found for 'path': 618, 16802 - using 618
+> WARN: multiple IDs found for 'task_struct': 177, 17267 - using 177
+> WARN: multiple IDs found for 'file': 517, 17312 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 17315 - using 524
+> WARN: multiple IDs found for 'seq_file': 1029, 17376 - using 1029
+> WARN: multiple IDs found for 'inode': 586, 17494 - using 586
+> WARN: multiple IDs found for 'path': 618, 17523 - using 618
+> WARN: multiple IDs found for 'cgroup': 704, 17532 - using 704
+> WARN: multiple IDs found for 'task_struct': 177, 18652 - using 177
+> WARN: multiple IDs found for 'file': 517, 18704 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 18707 - using 524
+> WARN: multiple IDs found for 'seq_file': 1029, 18781 - using 1029
+> WARN: multiple IDs found for 'inode': 586, 18911 - using 586
+> WARN: multiple IDs found for 'path': 618, 18940 - using 618
+> WARN: multiple IDs found for 'cgroup': 704, 18949 - using 704
+> WARN: multiple IDs found for 'task_struct': 177, 20514 - using 177
+> WARN: multiple IDs found for 'file': 517, 20515 - using 517
+> WARN: multiple IDs found for 'vm_area_struct': 524, 20541 - using 524
+> WARN: multiple IDs found for 'inode': 586, 20595 - using 586
+> WARN: multiple IDs found for 'path': 618, 20624 - using 618
+> WARN: multiple IDs found for 'cgroup': 704, 20639 - using 704
+> WARN: multiple IDs found for 'seq_file': 1029, 20801 - using 1029
+>    ...
+>=20
+>=20
+>=20
+>=20
+> I am not sure whether these warnings are related to
+> the current issue or not.
+>=20
+>=20
+> I did not look into it any further.
+> I may not be seeing a sane build result.
+>=20
+>=20
+
