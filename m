@@ -2,114 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1916CCA31
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 20:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05196CCAF0
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Mar 2023 21:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjC1Sqf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Mar 2023 14:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S229540AbjC1Twv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Mar 2023 15:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjC1Sqe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 14:46:34 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7142107;
-        Tue, 28 Mar 2023 11:46:30 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 341855C00B9;
-        Tue, 28 Mar 2023 14:46:27 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 28 Mar 2023 14:46:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1680029187; x=1680115587; bh=OR
-        P2FIKdfRirdyD2Lu4aWJpigZ2drmLWozeD8QCTfbg=; b=Zmq41Z/qSRMn9rYp+h
-        QDNmVcNMoLhclV/Hq1H5ugsx2lOCfEYHLvvTFmQg+RMWJrkym/WeIRc3MLvDHkDO
-        HTLlocYp2MP2d8ICO4tnvSs469GkfAH6/BwEDWyKiyXrt/Grg0Q36E3ytLWoMgVY
-        kVs6uuC6q4rihRfqOtOtxlAzLj5Do+ABME+dLp8/dowyD7zms93hlezwCC0hO2jO
-        gc4Etx3f3cr9lkTjP9KQr25IAKxCDW6mY9imntxbaqqBHgOY+zPHISXPfZNt/fuE
-        hdzRkfn+jZ/Tf25ykGdteW4/5VebEAdEgCiW2ZmIVpd9GHM26wsg4EidEvJeT/07
-        dtHw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1680029187; x=1680115587; bh=ORP2FIKdfRird
-        yD2Lu4aWJpigZ2drmLWozeD8QCTfbg=; b=tdxBQh+0EYo2NEcZuqxzWQqO0iBup
-        z7kKFZO7eLXSnp/penapQpwCORauQUrn1+S28WIKpr9NXH22yUC7X7WM4KoT0sSA
-        Utdqa1wIqN3voN9NMdJhx+n1s/L0/t0c2qL7KhFQMUVrtS6IEovWlufwT4grYd2g
-        Mpvz5DsY3OOX4Brj/D+dZx/AThVFwhXIAhMoqD/yv/9Sc/Nx7VdtZdWPfPb9NT15
-        gTtJyaIh/FC/BxrH9ORyJMvFvYyPUafyy6Rrx2Hlw0Syj2ID5lqcQPJdSSMOhNwy
-        OCKv82SpmoGpl8+byqpQUt7DnPctCQ+AwuApPF2SjgNgsRo5HKGVYMvZQ==
-X-ME-Sender: <xms:AjYjZKbgzVIbwPrq7_BIJIaFu20D34SyJbGqsiK4XwKns_w6Nqafeg>
-    <xme:AjYjZNbme47GuCgltwoyMI2lamCL7qadYs67pfnBxYcEsfn0Y4m6CzxbITNpe_LPe
-    j8-T9eqA18pUsnotsk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdehgedguddvlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:AjYjZE_lzVS2e3UQMYqpds57bY5IRM2trHFYYatTNaqTiMtbXjs0Zg>
-    <xmx:AjYjZMoIZ0O43yjyTJ-QbGtT2jmdVTsfR9278Yf55J9URtL8rIz6IQ>
-    <xmx:AjYjZFr-P8cIFe3xJN12TNHds6E7fgzjA64i5ULxbG61OHNEOdXovw>
-    <xmx:AzYjZLblnJuQRIaOyK96rwdmhmhmXmoh6aBI-vdT4fT2hJyOA9OBMA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4754DB60098; Tue, 28 Mar 2023 14:46:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-237-g62623e8e3f-fm-20230327.001-g62623e8e
-Mime-Version: 1.0
-Message-Id: <b0d8da28-2499-48db-be17-7d126697e303@app.fastmail.com>
-In-Reply-To: <20230328164811.2451-2-gregory.price@memverge.com>
-References: <20230328164811.2451-1-gregory.price@memverge.com>
- <20230328164811.2451-2-gregory.price@memverge.com>
-Date:   Tue, 28 Mar 2023 20:46:06 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Gregory Price" <gourry.memverge@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Oleg Nesterov" <oleg@redhat.com>, avagin@gmail.com,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Andy Lutomirski" <luto@kernel.org>, krisman@collabora.com,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Jonathan Corbet" <corbet@lwn.net>, shuah <shuah@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>, tongtiangen@huawei.com,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "Gregory Price" <gregory.price@memverge.com>
-Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of access_ok
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229456AbjC1Twu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Mar 2023 15:52:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E81BEF;
+        Tue, 28 Mar 2023 12:52:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F12A1B81DF4;
+        Tue, 28 Mar 2023 19:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E59DC433EF;
+        Tue, 28 Mar 2023 19:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680033166;
+        bh=3tCsQlZNxjpj6kRrRVaA2+D40G/G8omyRmcPC6eNHcs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S8c83d6zKDAseuUsmPwdWmhujxfPqFtrEXrW653rlLKUrkNLZqsnZfSf2rOmri2lF
+         eblSB48mq0XMv5XNxHk/TSur5NY0H94GtwFqxAhZ6B6xyq1OXzxumv5C57bm/PmnUr
+         LGRSRFfPPY+g8EPNJLtDGbY3jQipSeiMah3zR0CxiBcHrfFH/IaWe3ezeGGsKGsqVL
+         HhFiGKP/Y3OixbpkKK47mEFSa82RCJrr2ju3/yTReI8G6JPU/aJSZhLacNNDrOUcVP
+         nJtW4msn5ahphR3iPD5l/7lxjqeME9MNH7aqUZAfUpdDk4aJTni2/afC89IWzIX0WV
+         aJGQepl2T6dUQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id C8F6F4052D; Tue, 28 Mar 2023 16:52:43 -0300 (-03)
+Date:   Tue, 28 Mar 2023 16:52:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Eduard Zingerman <eddyz87@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>
+Subject: Re: [PATCH] arm64: remove special treatment for the link order of
+ head.o
+Message-ID: <ZCNFi65T4anhk6hH@kernel.org>
+References: <20221012233500.156764-1-masahiroy@kernel.org>
+ <ZBovCrMXJk7NPISp@aurel32.net>
+ <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
+ <ZBzAp457rrO52FPy@aurel32.net>
+ <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
+ <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
+ <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
+ <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 28, 2023, at 18:48, Gregory Price wrote:
-> On arm64, access_ok makes adjustments to pointers based on whether
-> memory tagging is enabled for a task (ARM MTE). When leveraging ptrace,
-> it's possible for a task to enable/disable various kernel features (such
-> as syscall user dispatch) which require user points as arguments.
->
-> To enable Task A to set these features via ptrace with Task B's
-> pointers, a task variant of access_ok is required for architectures with
-> features such as memory tagging.
->
-> If the architecture does not implement task_access_ok, the operation
-> reduces to access_ok and the task argument is discarded.
->
-> Signed-off-by: Gregory Price <gregory.price@memverge.com>
+Em Tue, Mar 28, 2023 at 01:33:29PM +0300, Eduard Zingerman escreveu:
+> On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
+> [...]
+> > > Strange.
+> > > 
+> > > I used the .config file Aurelien provided, but
+> > > I still cannot reproduce this issue.
+> > > 
+> > > The vmlinux size is small as-is in the current mainline.
+> > > 
+> > > [mainline]
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
+> > > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
+> > > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
+> > >    text    data     bss     dec     hex filename
+> > > 24561282 8186912 622032 33370226 1fd3072 vmlinux
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
+> > > vmlinux | grep -A1 BTF
+> > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> > >        000000000048209c  0000000000000000   A       0     0     1
+> > >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
+> > >        0000000000000a1c  0000000000000000   A       0     0     1
+> > > 
+> > > [mainline + revert 994b7ac]
+> > > 
+> > > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
+> > > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
+> > > for the link order of head.o"
+> > > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
+> > > 'mm-hotfixes-stable-2023-03-24-17-09' of
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
+> > >    text    data     bss     dec     hex filename
+> > > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
+> > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
+> > > vmlinux | grep -A1 BTF
+> > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
+> > >        00000000004820cb  0000000000000000   A       0     0     1
+> > >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
+> > >        0000000000000a1c  0000000000000000   A       0     0     1
+> > > 
+> > > 
+> > > 
+> > > I still do not know what affects reproducibility.
+> > > (compiler version, pahole version, etc. ?)
+> > > 
+> > > 
+> > > 
+> > > 
+> > > Aurelien used GCC 12 + binutils 2.40, but
+> > > my toolchain is a bit older.
+> > > 
+> > > FWIW, I tested this on Ubuntu 22.04LTS.
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
+> > > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+> > > Copyright (C) 2021 Free Software Foundation, Inc.
+> > > This is free software; see the source for copying conditions.  There is NO
+> > > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ pahole --version
+> > > v1.22
+> > > 
+> > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
+> > > GNU assembler (GNU Binutils for Ubuntu) 2.38
+> > > Copyright (C) 2022 Free Software Foundation, Inc.
+> > > This program is free software; you may redistribute it under the terms of
+> > > the GNU General Public License version 3 or later.
+> > > This program has absolutely no warranty.
+> > > This assembler was configured for a target of `aarch64-linux-gnu'.
+> > 
+> > I did the same things in Deiban sid
+> > in order to use newer versions of tools.
+> 
+> 
+> Hi Masahiro,
+> 
+> An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
+> duplicate IDs reported by resolve_btfids matches the description of
+> the following thread:
+> 
+> https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
+> 
+> The issue is caused by change in GNU assembler DWARF generation.
+> I've sent a patch to fix it a few weeks ago and it is merged in
+> dwarves master:
+> 
+> a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecified types")
+> 
+> Could you please grab a fresh version of dwarves from:
+> 
+> git@github.com:acmel/dwarves.git
+> 
+> compile 'pahole' and try with?
 
-For asm-generic:
+pahole 1.25 is long overdue, so let see if this got fixed with what is
+in master, please take a look, you can as well get it from:
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+git://git.kernel.org/pub/scm/devel/pahole/pahole.git
+
+- Arnald o
