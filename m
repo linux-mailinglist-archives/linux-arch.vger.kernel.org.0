@@ -2,131 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8E56CF6A9
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Mar 2023 01:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9117A6CF7CC
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Mar 2023 01:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjC2XBy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Mar 2023 19:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S230474AbjC2Xzs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Mar 2023 19:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjC2XBy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Mar 2023 19:01:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB38546AF;
-        Wed, 29 Mar 2023 16:01:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231283AbjC2Xzr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Mar 2023 19:55:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9263259DA
+        for <linux-arch@vger.kernel.org>; Wed, 29 Mar 2023 16:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680134101;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YDvzU53CPeswLit/FMHu3YOxwiNaBZwdjQxKehJieKw=;
+        b=XF35G6+5gVpLlCqkKhTBABjypRQn5+pr79iRSgxyIAmVnLi+L8eIzmHgmKE1tGI6gs1k2s
+        xBmQLMu6SxIbzZrmxfrHiACfJMIxFLQrj0j63HkQp/AxEnQsVU3JPNzubZO1w0HsMekQr7
+        ld5gVPNFos7MVkOqQcZ+Lk2hfmn5KSE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-gjbwPLEMPuu8BeS56HR0nQ-1; Wed, 29 Mar 2023 19:54:56 -0400
+X-MC-Unique: gjbwPLEMPuu8BeS56HR0nQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFC87B8243B;
-        Wed, 29 Mar 2023 23:01:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71ECFC433D2;
-        Wed, 29 Mar 2023 23:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680130909;
-        bh=aUhmYOlJNPE9UBSfWYsXAC0QUzpgCRA5cLcAhflMRgs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kQXMZGKhK3bZUJlUkAI6inUFGy20RLqEOiljUVVekUf6NXW/AdLaRByGMS+3DNJTF
-         tsbwQNiLyqgm3eBNSAJ/XRqeLQNNMNMrjOeegrYcczNGFEhXl42vHKhBVDnywRbK0c
-         HVl3zTHL9q3cS7Ut3ZfN/v3eH9aCNdYVcc1UsHk0QBlHlEh/oDRvjtIgRyimZHfDH5
-         SFTrDiIq1HmyqH1IkTOjnmIZDa616Jhc1uVy1/fC28A2Wj/06cYQzIDhOJhtYxXPpV
-         y17Z91txj/M2jdt8Ibwhp6Wyztz3JUBtvRWLk/QEdw1kxe61WJL7d9PRoE6iePY5sS
-         NrDinURmVCwsQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 2E2061062665; Thu, 30 Mar 2023 01:01:46 +0200 (CEST)
-Date:   Thu, 30 Mar 2023 01:01:46 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C88EE3C0DDA1;
+        Wed, 29 Mar 2023 23:54:55 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.161])
+        by smtp.corp.redhat.com (Postfix) with SMTP id AFE50492C3E;
+        Wed, 29 Mar 2023 23:54:51 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 30 Mar 2023 01:54:48 +0200 (CEST)
+Date:   Thu, 30 Mar 2023 01:54:43 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Gregory Price <gregory.price@memverge.com>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 27/38] power: add HAS_IOPORT dependencies
-Message-ID: <20230329230146.pvkfnsoqr6tuuuxf@mercury.elektranox.org>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-28-schnelle@linux.ibm.com>
+        Gregory Price <gourry.memverge@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, avagin@gmail.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, krisman@collabora.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Corbet <corbet@lwn.net>, shuah <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, tongtiangen@huawei.com,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v14 1/4] asm-generic,arm64: create task variant of
+ access_ok
+Message-ID: <20230329235442.GA10790@redhat.com>
+References: <20230328164811.2451-1-gregory.price@memverge.com>
+ <20230328164811.2451-2-gregory.price@memverge.com>
+ <20230329151515.GA913@redhat.com>
+ <9a456346-e207-44e1-873e-40d21334e01b@app.fastmail.com>
+ <20230329160322.GA4477@redhat.com>
+ <ZCO20bzX/IB8J6Gp@memverge.com>
+ <20230329171322.GB4477@redhat.com>
+ <ZCPOpClZ3hOQCs7a@memverge.com>
+ <20230329175850.GA8425@redhat.com>
+ <ZCQMsWNfkMJ0xHSy@memverge.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qigw7wbrpbhgomf7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314121216.413434-28-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZCQMsWNfkMJ0xHSy@memverge.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 03/29, Gregory Price wrote:
+>
+> Last note on this before I push up another patch set.
+>
+> The change from __get_user to get_user also introduces a call to
+> might_fault() which adds a larger callstack for every syscall /
+> dispatch.  This turns into a might_sleep and might_reschedule, which
+> represent a very different pattern of execution from before.
 
---qigw7wbrpbhgomf7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+might_fault() is nop unless CONFIG_PROVE_LOCKING || DEBUG_ATOMIC_SLEEP.
 
-Hi,
+Again, I won't really argue with task_access_ok(). Just I am not sure
+2/4 gives enough justification for this new helper with unclear semantics
+(until we ensure that access_ok() doesn't depend on current).
 
-On Tue, Mar 14, 2023 at 01:12:05PM +0100, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
->=20
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
+Oleg.
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
-
--- Sebastian
-
->  drivers/power/reset/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index 8c87eeda0fec..fff07b2bd77b 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
->  config POWER_RESET_PIIX4_POWEROFF
->  	tristate "Intel PIIX4 power-off driver"
->  	depends on PCI
-> +	depends on HAS_IOPORT
->  	depends on MIPS || COMPILE_TEST
->  	help
->  	  This driver supports powering off a system using the Intel PIIX4
-> --=20
-> 2.37.2
->=20
-
---qigw7wbrpbhgomf7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQkw1kACgkQ2O7X88g7
-+pryjg/9EBDNrxN5toE3uocrn9nnnJfVvqmn4QAIN3XdHQwzlP/07e9nGZd2Vcht
-KDFycurrvH6p/N/UhvI3PByHJbGjwHGr0Q/dj7nz8UsQMdEsmwlKpF9ocHG1E1tx
-N0/ezM+YyX+E7lYpe5jgywKS9DMArCbvKa3nTNayJsde4Xb8gklIh6PDDvQZYC/g
-LYm/qj/B3cRjYHjaVsx1tXd7U0MEwY6F1yET45dyxnaXVyUkUBLh4bcKCh1Ol8oO
-MCWyDnwu+mLU7E++Gz5/V2d9KZmiCu2E4ra+LZX5m4y9n8TpLkK0pej9CcqkbHud
-nUbdttl8ceEANfZjbvyCUGyQWcwgYZwlIpluwwj6dIyJx5GkdA89QHS1ArFDYE7y
-bJZfheHnAyv6hscuMCSfjaJoiSBBZVVIUiMkFuwSEmWLEzjzl28s/MpFacGaN9ls
-Ujzah53zrAB38Wnq0+ZmlVEPPZYDKh1vob3qAL5F5TuSzR6yFum9Pl/Q4jqeZJkx
-NeXPUAHhA/SkwCjdJfe2YrR40Tf/QwjJKmwQVnFaiBzu94sMQtfddkfRtkrcdapO
-bJ3hdNuSkaIHJcHdrrLLTVwua0EgnrY5ov5th2RWHSx8IfZnDmcSYBsV0o3Xd15q
-1LovrtDYKTzJKo8UU3/j3DdarmC+HylKhKga+gd9XqauYQuh7dY=
-=e4RC
------END PGP SIGNATURE-----
-
---qigw7wbrpbhgomf7--
