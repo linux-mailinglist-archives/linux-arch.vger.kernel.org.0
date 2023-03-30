@@ -2,80 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92B06D0D96
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Mar 2023 20:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93C76D0E20
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Mar 2023 20:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjC3SRC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Mar 2023 14:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S229995AbjC3SxE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Mar 2023 14:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjC3SRB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Mar 2023 14:17:01 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A030E18C
-        for <linux-arch@vger.kernel.org>; Thu, 30 Mar 2023 11:16:56 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so20618849pjz.1
-        for <linux-arch@vger.kernel.org>; Thu, 30 Mar 2023 11:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=infob2bdata-com.20210112.gappssmtp.com; s=20210112; t=1680200216;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tbuPvX9KBpITKF+sjIR/341/cPLlmuEGqdIbfikGfdg=;
-        b=w42fQUQ5eK0Phf6F7ZHTWgvs+a1t9IVNTiHYnFY5hT4jKA/cIglRHW4g4/fxgnq4sn
-         5O/ovDGtbij0/DTAeYp6YwIHHKptbD9jr9FBJSbKf8cM9HF4N5Kbc2WN8rFvh3/ie9m0
-         uaGfRJFf8ZwPr7jbjzVKZ6RLCY1WcS7Dv1edRncM6opgLWXkx4/WY/eM/Fhwf7hrLk9i
-         mhtVrvFd2BjMRbzsKHyIzGArYRewYVv54/cpvybnekuN2EVnvGkWp90Pm7+1I1q8IBCB
-         8SgtLubBePx5BKARd6rMlghfZVVqwDBfNKTHGgWRkRhuDTGKU8Iy2DUFEU5Plvvi+ur+
-         deZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680200216;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tbuPvX9KBpITKF+sjIR/341/cPLlmuEGqdIbfikGfdg=;
-        b=Jn3VQRiMA8G0Cyfu4CN7Aks1bY3us+llGSsvTEzpLjA2fE9OciO9q5gP1lefwlFt4Y
-         SXl9bgGeYRx7QAD6ewzkRMEqyZehWJJhQwqM1qmZn92Yxff6lIQcE0UTYauAkhorlrxR
-         W6+rNMl9SQ/yM/jU2l/zMVBBmecjuU9iOpW9xW5wi0k47A2yBK4F8rhE3a4WESt6XItq
-         7cqIOgO3Om5HjgBMu+MAy8NOSgeVqBJZF5KtJszASyzQ7xTx3v4LBdBvvyV2heWlI/BD
-         ZWGiy+KdhbVwBoOkSFlymQvUZM7uLx5g1gOFg9dglbvV9lU0WjamgDP5psC1182JkpS7
-         s9wA==
-X-Gm-Message-State: AAQBX9dwKqtPSVVfF/tSRNhhP262rOZCoIpGTURJORNjgE0ERqE56x2b
-        W7sOVL/M1HjmmfI8bMoEozgUaf9cQxRbLKCCUdwgLg==
-X-Google-Smtp-Source: AKy350ahE1wnvvYwydYcNsmrky9JDNMGCZgF/Q0y/4slhb/TM2utRwON+wgywSdQlbWK+Xj1tnFkVqLo35Mt2Zitp4s=
-X-Received: by 2002:a17:902:dace:b0:1a0:41ea:b9ba with SMTP id
- q14-20020a170902dace00b001a041eab9bamr9325951plx.8.1680200216015; Thu, 30 Mar
- 2023 11:16:56 -0700 (PDT)
+        with ESMTP id S229862AbjC3SxE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Mar 2023 14:53:04 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A691EB6D;
+        Thu, 30 Mar 2023 11:52:42 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id A267A733;
+        Thu, 30 Mar 2023 18:52:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A267A733
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1680202361; bh=wg7OMp22RDcyo//HBDrXS4XZAIraWO+qV5yrMrn+nVs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=MXklz7tGfEWzk+yrrfjZmgjKxua8EpWUwK7hX4N9XaKfDQT77bh/3d5wC5Mh1KQtt
+         gnpaQu6wqHIIdUtlwZHQ+sXGUSUjZ7img3+9OatvW5eIHNaD26Gu3ETEQIMUjqrLg/
+         iMMYhgK6Wq0o/PhHXeG35HQtkQN33JDGmuf2BVKWDvsu7l9cXgHvEFEFXWTHNnEFQK
+         Rvxj9HhE+nmOlRBQf7jaE5kxFwGd4+R/+PtVmZtz1WzGrz5pnSWIsG0VJwSfwkym+g
+         QDYXjJx53D1IDAL76Nh1WJRZKideTzsZganlMJ+BLZn5xQJL54coI6kcsvtGdEcr0D
+         oguMY+GSfDdmQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Dave Hansen <dave.hansen@intel.com>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH RFC 0/2] Begin reorganizing the arch documentation
+In-Reply-To: <87v8ir9rz6.fsf@meer.lwn.net>
+References: <20230315211523.108836-1-corbet@lwn.net>
+ <fe5d1e0e-0725-45eb-8b96-edcd12ae4a8b@intel.com>
+ <87cz4zb8xu.fsf@meer.lwn.net>
+ <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
+ <87v8ir9rz6.fsf@meer.lwn.net>
+Date:   Thu, 30 Mar 2023 12:52:40 -0600
+Message-ID: <87a5zuf4w7.fsf@meer.lwn.net>
 MIME-Version: 1.0
-From:   Stella Jacob <stella@infob2bdata.com>
-Date:   Thu, 30 Mar 2023 13:16:45 -0500
-Message-ID: <CADH7MrGf7wFL=A03Uz7L2zmU3EixqYaPPPYKv3H6XJiL_r1nzA@mail.gmail.com>
-Subject: RE: RSA Conference Attendees Email List-2023
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=2.0 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Jonathan Corbet <corbet@lwn.net> writes:
 
-Would you be interested in acquiring the RSA Conference 2023 Attendees
-Email List?
+> Now that I look...the only thing in linux-next currently that conflicts
+> is the shadow-stack series; if that continues, it might not be necessary
+> to do anything special.
 
-List Contains: Company Name, Contact Name, First Name, Middle Name,
-Last Name, Title, Address, Street, City, Zip code, State, Country,
-Telephone, Email address and more=E2=80=A6
+There's an FPU patch now too.  Git seems to handle the conflicts *almost*
+seamlessly, though.  So, FYI, I think I'll go ahead and drop this change
+into docs-next, which will probably get us a cheery note from Stephen in
+the near future.
 
-Number of Contacts :-35,894
-Cost :- USD-1,862
+(Stephen: the change is simply:
 
-Interested? Let me know your thoughts and advice on the next steps.
+  mv Documentation/x86 Documentation/arch/x86
 
-Kind Regards,
-Stella Jacob
+the only fix I had to do in my test merge was to add the new
+shadow-stack document in the new directory).
+
+Thanks,
+
+jon
