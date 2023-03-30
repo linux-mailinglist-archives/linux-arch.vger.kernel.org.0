@@ -2,53 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93C76D0E20
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Mar 2023 20:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03486D0F78
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Mar 2023 21:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjC3SxE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Mar 2023 14:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S231634AbjC3T4S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Mar 2023 15:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbjC3SxE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Mar 2023 14:53:04 -0400
+        with ESMTP id S231912AbjC3T4R (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Mar 2023 15:56:17 -0400
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A691EB6D;
-        Thu, 30 Mar 2023 11:52:42 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A267A733;
-        Thu, 30 Mar 2023 18:52:41 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A267A733
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C310410;
+        Thu, 30 Mar 2023 12:56:15 -0700 (PDT)
+Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
+        by ms.lwn.net (Postfix) with ESMTPA id 71726736;
+        Thu, 30 Mar 2023 19:56:14 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 71726736
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1680202361; bh=wg7OMp22RDcyo//HBDrXS4XZAIraWO+qV5yrMrn+nVs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=MXklz7tGfEWzk+yrrfjZmgjKxua8EpWUwK7hX4N9XaKfDQT77bh/3d5wC5Mh1KQtt
-         gnpaQu6wqHIIdUtlwZHQ+sXGUSUjZ7img3+9OatvW5eIHNaD26Gu3ETEQIMUjqrLg/
-         iMMYhgK6Wq0o/PhHXeG35HQtkQN33JDGmuf2BVKWDvsu7l9cXgHvEFEFXWTHNnEFQK
-         Rvxj9HhE+nmOlRBQf7jaE5kxFwGd4+R/+PtVmZtz1WzGrz5pnSWIsG0VJwSfwkym+g
-         QDYXjJx53D1IDAL76Nh1WJRZKideTzsZganlMJ+BLZn5xQJL54coI6kcsvtGdEcr0D
-         oguMY+GSfDdmQ==
+        t=1680206174; bh=N2IjKygEUNSWzbk9HGHBaTn8tSmphhsRZ+T4HZU7T4A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N11ThEoftHzgDZyRRy5XaAhIHIoygIt2DNi+uBUBvEOZ5WzS+vBamxM40IepJXu/i
+         BiLjVd7oPPEdBTNF+QrwK0vNnHx3vvYr/maxB8tDl6/SrGsIlF8VDMyUIG8h5Me0xI
+         FSiNcVornnTwjM1ruKphnudluEC6zRhf0Arl7BuAA8wp9NteXex3GfNQ9xQje/DgOY
+         YynTvlX09YGyjwFPRQg0QBx8BqH8MFTT3AgWx6yK1KoyKaJlYYZuSb5wHSusH7uz6z
+         Ypu/kjz8ZEToj0Re5j257032pIFzCw2JZMDU0D0fu3XwPKt6PB5gMkAXYtyLPnnThf
+         qNjOzA+ndZd9Q==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Dave Hansen <dave.hansen@intel.com>, linux-doc@vger.kernel.org
+To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH RFC 0/2] Begin reorganizing the arch documentation
-In-Reply-To: <87v8ir9rz6.fsf@meer.lwn.net>
-References: <20230315211523.108836-1-corbet@lwn.net>
- <fe5d1e0e-0725-45eb-8b96-edcd12ae4a8b@intel.com>
- <87cz4zb8xu.fsf@meer.lwn.net>
- <498938d3-60a4-6219-a02c-a03e490103c3@intel.com>
- <87v8ir9rz6.fsf@meer.lwn.net>
-Date:   Thu, 30 Mar 2023 12:52:40 -0600
-Message-ID: <87a5zuf4w7.fsf@meer.lwn.net>
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH 0/4] docs: move yet more architecture docs
+Date:   Thu, 30 Mar 2023 13:56:00 -0600
+Message-Id: <20230330195604.269346-1-corbet@lwn.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -58,24 +46,85 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Jonathan Corbet <corbet@lwn.net> writes:
+This series builds on top of the documentation reorganization posted at
 
-> Now that I look...the only thing in linux-next currently that conflicts
-> is the shadow-stack series; if that continues, it might not be necessary
-> to do anything special.
+    https://lore.kernel.org/lkml/20230315211523.108836-1-corbet@lwn.net/
 
-There's an FPU patch now too.  Git seems to handle the conflicts *almost*
-seamlessly, though.  So, FYI, I think I'll go ahead and drop this change
-into docs-next, which will probably get us a cheery note from Stephen in
-the near future.
+it adds several more architectures (the relatively inactive ones) to the
+new arch/ directory.  This series goes on top of the previous one.
 
-(Stephen: the change is simply:
+The cover letter from that series provides the motivation for this work:
 
-  mv Documentation/x86 Documentation/arch/x86
+    The top-level Documentation/ directory, despite the efforts of the last
+    few years, is still a mess; there is too much stuff there, making it
+    harder to find anything.  We do not organize our source directories
+    that way, and for good reasons.
 
-the only fix I had to do in my test merge was to add the new
-shadow-stack document in the new directory).
+Jonathan Corbet (4):
+  docs: Move arc architecture docs under Documentation/arch/
+  docs: move ia64 architecture docs under Documentation/arch/
+  docs: move parisc documentation under Documentation/arch/
+  docs: move m68k architecture documentation under Documentation/arch/
 
-Thanks,
+ Documentation/admin-guide/kernel-parameters.rst           | 2 +-
+ Documentation/{ => arch}/arc/arc.rst                      | 0
+ Documentation/{ => arch}/arc/features.rst                 | 0
+ Documentation/{ => arch}/arc/index.rst                    | 0
+ Documentation/{ => arch}/ia64/aliasing.rst                | 0
+ Documentation/{ => arch}/ia64/efirtc.rst                  | 0
+ Documentation/{ => arch}/ia64/err_inject.rst              | 0
+ Documentation/{ => arch}/ia64/features.rst                | 0
+ Documentation/{ => arch}/ia64/fsys.rst                    | 0
+ Documentation/{ => arch}/ia64/ia64.rst                    | 0
+ Documentation/{ => arch}/ia64/index.rst                   | 0
+ Documentation/{ => arch}/ia64/irq-redir.rst               | 0
+ Documentation/{ => arch}/ia64/mca.rst                     | 0
+ Documentation/{ => arch}/ia64/serial.rst                  | 0
+ Documentation/arch/index.rst                              | 8 ++++----
+ Documentation/{ => arch}/m68k/buddha-driver.rst           | 0
+ Documentation/{ => arch}/m68k/features.rst                | 0
+ Documentation/{ => arch}/m68k/index.rst                   | 0
+ Documentation/{ => arch}/m68k/kernel-options.rst          | 0
+ Documentation/{ => arch}/parisc/debugging.rst             | 0
+ Documentation/{ => arch}/parisc/features.rst              | 0
+ Documentation/{ => arch}/parisc/index.rst                 | 0
+ Documentation/{ => arch}/parisc/registers.rst             | 0
+ Documentation/translations/zh_CN/arch/index.rst           | 2 +-
+ .../translations/zh_CN/{ => arch}/parisc/debugging.rst    | 4 ++--
+ .../translations/zh_CN/{ => arch}/parisc/index.rst        | 4 ++--
+ .../translations/zh_CN/{ => arch}/parisc/registers.rst    | 4 ++--
+ MAINTAINERS                                               | 6 +++---
+ arch/ia64/kernel/efi.c                                    | 2 +-
+ arch/ia64/kernel/fsys.S                                   | 2 +-
+ arch/ia64/mm/ioremap.c                                    | 2 +-
+ arch/ia64/pci/pci.c                                       | 2 +-
+ arch/m68k/Kconfig.machine                                 | 4 ++--
+ 33 files changed, 21 insertions(+), 21 deletions(-)
+ rename Documentation/{ => arch}/arc/arc.rst (100%)
+ rename Documentation/{ => arch}/arc/features.rst (100%)
+ rename Documentation/{ => arch}/arc/index.rst (100%)
+ rename Documentation/{ => arch}/ia64/aliasing.rst (100%)
+ rename Documentation/{ => arch}/ia64/efirtc.rst (100%)
+ rename Documentation/{ => arch}/ia64/err_inject.rst (100%)
+ rename Documentation/{ => arch}/ia64/features.rst (100%)
+ rename Documentation/{ => arch}/ia64/fsys.rst (100%)
+ rename Documentation/{ => arch}/ia64/ia64.rst (100%)
+ rename Documentation/{ => arch}/ia64/index.rst (100%)
+ rename Documentation/{ => arch}/ia64/irq-redir.rst (100%)
+ rename Documentation/{ => arch}/ia64/mca.rst (100%)
+ rename Documentation/{ => arch}/ia64/serial.rst (100%)
+ rename Documentation/{ => arch}/m68k/buddha-driver.rst (100%)
+ rename Documentation/{ => arch}/m68k/features.rst (100%)
+ rename Documentation/{ => arch}/m68k/index.rst (100%)
+ rename Documentation/{ => arch}/m68k/kernel-options.rst (100%)
+ rename Documentation/{ => arch}/parisc/debugging.rst (100%)
+ rename Documentation/{ => arch}/parisc/features.rst (100%)
+ rename Documentation/{ => arch}/parisc/index.rst (100%)
+ rename Documentation/{ => arch}/parisc/registers.rst (100%)
+ rename Documentation/translations/zh_CN/{ => arch}/parisc/debugging.rst (94%)
+ rename Documentation/translations/zh_CN/{ => arch}/parisc/index.rst (79%)
+ rename Documentation/translations/zh_CN/{ => arch}/parisc/registers.rst (98%)
 
-jon
+-- 
+2.39.2
+
