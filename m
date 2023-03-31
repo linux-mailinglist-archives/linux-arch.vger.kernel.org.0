@@ -2,197 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59B676D2484
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Mar 2023 17:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60EF26D26B2
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Mar 2023 19:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbjCaP5c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Mar 2023 11:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S230126AbjCaRcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Mar 2023 13:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233036AbjCaP53 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Mar 2023 11:57:29 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EB4D51A;
-        Fri, 31 Mar 2023 08:57:19 -0700 (PDT)
-Received: from zn.tnic (p5de8e687.dip0.t-ipconnect.de [93.232.230.135])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2C1F91EC063A;
-        Fri, 31 Mar 2023 17:57:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1680278238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0rD3I7pDpzoNaSFC4TdHBq3s3XmiqLHEPo2QS3bW4YQ=;
-        b=nZHaTl+2ItWGRQjk4Mi0AMnoMOfozXzlwllzqzhmqYQrDKcl1umRlwGNz90hJxrZOwPiIH
-        edhamtvG6EZeSHa5v/SlFdtMiOwLFI5MH7UKUwjou+THlsPgNPu9UM2LacfWOotC8PVyAb
-        PnyiUejhtkO3TkYtzCYAAhH8NA8Q6Cg=
-Date:   Fri, 31 Mar 2023 17:57:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V3 12/16] x86/sev: Add a #HV exception handler
-Message-ID: <20230331155714.GCZCcC2pHVZgIHr8k8@fat_crate.local>
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-13-ltykernel@gmail.com>
+        with ESMTP id S230302AbjCaRcC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Mar 2023 13:32:02 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251E01DF90;
+        Fri, 31 Mar 2023 10:32:01 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so15848168wmq.4;
+        Fri, 31 Mar 2023 10:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680283919; x=1682875919;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JgfNIm0/b0S1WJTNKx0RJfqBlqbq2Is5rY0BnBfIYgI=;
+        b=HxTYUrxQFyfr2IFr3t/oz+cV+7dwpjSUNvJg7TA/5z4etdrS42cWV9DAjKZwQ9wTIz
+         MLQn3RcTY6zgcx2XAlZwF5CzNRNaOevF6l6L/q+6B3QQvvr81uJmt22IH0/EO8iLehyA
+         DeW9mWb0fdpuoQxuyPieF9yLwLF5EXId2ef1Llm4KtWMJmrlbGABHFsLlnqnvHj9XF8M
+         VDjmORYD1o7I5yJHiUzH7/3HZxKE2JQSC2WdlFRwNypYDx9k51pDSHM5rkgnAs1cTZ5k
+         0z+lk4nwrwicd5388RkmwjZTv06viZuldB2TsK3kpm9KtH1beEanT7Jd5kCSRqjdfHaV
+         ABHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680283919; x=1682875919;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JgfNIm0/b0S1WJTNKx0RJfqBlqbq2Is5rY0BnBfIYgI=;
+        b=hhThJY9nEYLgNtMqWuGDYEkg/dMzSlPdi9zg6808uvJjCK5NLZB8TiUXguZhA65SGE
+         86G35WJn02pniEpBPWgsz5Beiyp0UUlWZ4jxvTNVnwZAHNwSUACQkNC7U4Qp9cggrt0Q
+         YbV+fvEOuztAty5wNlBAoplhG+tGxA3Iq/QeSX04bi37Y5MbzWEqIu3X++Vs/YGaMa3o
+         2XkrePTj1fN1Zjmt+M+nrZRQL8mLvu/yp4O695xkmMy3a4G/jFRNe9IeccBNJHpy7YeC
+         1U9NddIIkmS1AY5LYx0sznV/HhXHS19NK0eZ+ctXUpbJBfwsCFScgGtVfan9o3VJ4EjH
+         A0ug==
+X-Gm-Message-State: AO0yUKXSGiPaE71DlY3GW3ljATh1KkKBDQ+WVLciOd4mog9VAgWwZAOK
+        Zwi1JzdNTxIzzcWn1juakgw=
+X-Google-Smtp-Source: AK7set8GLYgYWDweiiQubwdK8pBuq6rDyJKMVzE3Ht6dxeyx7PB1WmnUe+Ysn61PqU2HeB53ilbwRQ==
+X-Received: by 2002:a1c:7206:0:b0:3ed:2352:eebd with SMTP id n6-20020a1c7206000000b003ed2352eebdmr21386687wmc.11.1680283919518;
+        Fri, 31 Mar 2023 10:31:59 -0700 (PDT)
+Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
+        by smtp.gmail.com with ESMTPSA id g19-20020a05600c311300b003ee74c25f12sm10411423wmo.35.2023.03.31.10.31.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Mar 2023 10:31:58 -0700 (PDT)
+Date:   Sat, 1 Apr 2023 02:31:58 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
+Subject: Re: [PATCH 5/6] docs: move openrisc documentation under
+ Documentation/arch/
+Message-ID: <ZCcZDn9Rbqx+47MX@antec>
+References: <20230323221948.352154-1-corbet@lwn.net>
+ <20230323221948.352154-6-corbet@lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230122024607.788454-13-ltykernel@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230323221948.352154-6-corbet@lwn.net>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 09:46:02PM -0500, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
+On Thu, Mar 23, 2023 at 04:19:47PM -0600, Jonathan Corbet wrote:
+> Architecture-specific documentation is being moved into Documentation/arch/
+> as a way of cleaning up the top-level documentation directory and making
+> the docs hierarchy more closely match the source hierarchy.  Move
+> Documentation/openrisc into arch/ and fix all in-tree references.
 > 
-> Add a #HV exception handler that uses IST stack.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> Cc: Jonas Bonn <jonas@southpole.se>
+> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> Cc: Stafford Horne <shorne@gmail.com>
+> Cc: Alex Shi <alexs@kernel.org>
+> Cc: Yanteng Si <siyanteng@loongson.cn>
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 > ---
-> Change since RFC V2:
->        * Remove unnecessary line in the change log.
-> ---
->  arch/x86/entry/entry_64.S             | 58 +++++++++++++++++++++++++++
->  arch/x86/include/asm/cpu_entry_area.h |  6 +++
->  arch/x86/include/asm/idtentry.h       | 39 +++++++++++++++++-
->  arch/x86/include/asm/page_64_types.h  |  1 +
->  arch/x86/include/asm/trapnr.h         |  1 +
->  arch/x86/include/asm/traps.h          |  1 +
->  arch/x86/kernel/cpu/common.c          |  1 +
->  arch/x86/kernel/dumpstack_64.c        |  9 ++++-
->  arch/x86/kernel/idt.c                 |  1 +
->  arch/x86/kernel/sev.c                 | 53 ++++++++++++++++++++++++
->  arch/x86/kernel/traps.c               | 40 ++++++++++++++++++
->  arch/x86/mm/cpu_entry_area.c          |  2 +
->  12 files changed, 209 insertions(+), 3 deletions(-)
+>  Documentation/arch/index.rst                                  | 2 +-
+>  Documentation/{ => arch}/openrisc/features.rst                | 0
+>  Documentation/{ => arch}/openrisc/index.rst                   | 0
+>  Documentation/{ => arch}/openrisc/openrisc_port.rst           | 0
+>  Documentation/{ => arch}/openrisc/todo.rst                    | 0
+>  Documentation/translations/zh_CN/arch/index.rst               | 2 +-
+>  .../translations/zh_CN/{ => arch}/openrisc/index.rst          | 4 ++--
+>  .../translations/zh_CN/{ => arch}/openrisc/openrisc_port.rst  | 4 ++--
+>  Documentation/translations/zh_CN/{ => arch}/openrisc/todo.rst | 4 ++--
+>  MAINTAINERS                                                   | 2 +-
+>  10 files changed, 9 insertions(+), 9 deletions(-)
+>  rename Documentation/{ => arch}/openrisc/features.rst (100%)
+>  rename Documentation/{ => arch}/openrisc/index.rst (100%)
+>  rename Documentation/{ => arch}/openrisc/openrisc_port.rst (100%)
+>  rename Documentation/{ => arch}/openrisc/todo.rst (100%)
+>  rename Documentation/translations/zh_CN/{ => arch}/openrisc/index.rst (79%)
+>  rename Documentation/translations/zh_CN/{ => arch}/openrisc/openrisc_port.rst (97%)
+>  rename Documentation/translations/zh_CN/{ => arch}/openrisc/todo.rst (88%)
 > 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index 15739a2c0983..6baec7653f19 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -563,6 +563,64 @@ SYM_CODE_START(\asmsym)
->  .Lfrom_usermode_switch_stack_\@:
->  	idtentry_body user_\cfunc, has_error_code=1
+> diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
+> index 792f58e30f25..65945daa40fe 100644
+> --- a/Documentation/arch/index.rst
+> +++ b/Documentation/arch/index.rst
+> @@ -17,7 +17,7 @@ implementation.
+>     ../m68k/index
+>     ../mips/index
+>     ../nios2/index
+> -   ../openrisc/index
+> +   openrisc/index
+>     ../parisc/index
+>     ../powerpc/index
+>     ../riscv/index
+> diff --git a/Documentation/openrisc/features.rst b/Documentation/arch/openrisc/features.rst
+> similarity index 100%
+> rename from Documentation/openrisc/features.rst
+> rename to Documentation/arch/openrisc/features.rst
+> diff --git a/Documentation/openrisc/index.rst b/Documentation/arch/openrisc/index.rst
+> similarity index 100%
+> rename from Documentation/openrisc/index.rst
+> rename to Documentation/arch/openrisc/index.rst
+> diff --git a/Documentation/openrisc/openrisc_port.rst b/Documentation/arch/openrisc/openrisc_port.rst
+> similarity index 100%
+> rename from Documentation/openrisc/openrisc_port.rst
+> rename to Documentation/arch/openrisc/openrisc_port.rst
+> diff --git a/Documentation/openrisc/todo.rst b/Documentation/arch/openrisc/todo.rst
+> similarity index 100%
+> rename from Documentation/openrisc/todo.rst
+> rename to Documentation/arch/openrisc/todo.rst
+> diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Documentation/translations/zh_CN/arch/index.rst
+> index aa53dcff268e..7e59af567331 100644
+> --- a/Documentation/translations/zh_CN/arch/index.rst
+> +++ b/Documentation/translations/zh_CN/arch/index.rst
+> @@ -11,7 +11,7 @@
+>     ../mips/index
+>     ../arm64/index
+>     ../riscv/index
+> -   ../openrisc/index
+> +   openrisc/index
+>     ../parisc/index
+>     ../loongarch/index
 >  
-> +_ASM_NOKPROBE(\asmsym)
-> +SYM_CODE_END(\asmsym)
-> +.endm
-> +/*
-> + * idtentry_hv - Macro to generate entry stub for #HV
-> + * @vector:		Vector number
-> + * @asmsym:		ASM symbol for the entry point
-> + * @cfunc:		C function to be called
-> + *
-> + * The macro emits code to set up the kernel context for #HV. The #HV handler
-> + * runs on an IST stack and needs to be able to support nested #HV exceptions.
-> + *
-> + * To make this work the #HV entry code tries its best to pretend it doesn't use
-> + * an IST stack by switching to the task stack if coming from user-space (which
-> + * includes early SYSCALL entry path) or back to the stack in the IRET frame if
-> + * entered from kernel-mode.
-> + *
-> + * If entered from kernel-mode the return stack is validated first, and if it is
-> + * not safe to use (e.g. because it points to the entry stack) the #HV handler
-> + * will switch to a fall-back stack (HV2) and call a special handler function.
-> + *
-> + * The macro is only used for one vector, but it is planned to be extended in
-> + * the future for the #HV exception.
-> + */
-> +.macro idtentry_hv vector asmsym cfunc
-> +SYM_CODE_START(\asmsym)
-
-...
-
-why is this so much duplicated code instead of sharing it with
-idtentry_vc and all the facilities it does?
-
-> +	UNWIND_HINT_IRET_REGS
-> +	ASM_CLAC
-> +	pushq	$-1			/* ORIG_RAX: no syscall to restart */
-> +
-> +	testb	$3, CS-ORIG_RAX(%rsp)
-> +	jnz	.Lfrom_usermode_switch_stack_\@
-> +
-> +	call	paranoid_entry
-> +
-> +	UNWIND_HINT_REGS
-> +
-> +	/*
-> +	 * Switch off the IST stack to make it free for nested exceptions.
-> +	 */
-> +	movq	%rsp, %rdi		/* pt_regs pointer */
-> +	call	hv_switch_off_ist
-> +	movq	%rax, %rsp		/* Switch to new stack */
-> +
-> +	UNWIND_HINT_REGS
-> +
-> +	/* Update pt_regs */
-> +	movq	ORIG_RAX(%rsp), %rsi	/* get error code into 2nd argument*/
-> +	movq	$-1, ORIG_RAX(%rsp)	/* no syscall to restart */
-> +
-> +	movq	%rsp, %rdi		/* pt_regs pointer */
-> +	call	kernel_\cfunc
-> +
-> +	jmp	paranoid_exit
-> +
-> +.Lfrom_usermode_switch_stack_\@:
-> +	idtentry_body user_\cfunc, has_error_code=1
-> +
->  _ASM_NOKPROBE(\asmsym)
->  SYM_CODE_END(\asmsym)
->  .endm
-> diff --git a/arch/x86/include/asm/cpu_entry_area.h b/arch/x86/include/asm/cpu_entry_area.h
-> index 462fc34f1317..2186ed601b4a 100644
-> --- a/arch/x86/include/asm/cpu_entry_area.h
-> +++ b/arch/x86/include/asm/cpu_entry_area.h
-> @@ -30,6 +30,10 @@
->  	char	VC_stack[optional_stack_size];			\
->  	char	VC2_stack_guard[guardsize];			\
->  	char	VC2_stack[optional_stack_size];			\
-> +	char	HV_stack_guard[guardsize];			\
-> +	char	HV_stack[optional_stack_size];			\
-> +	char	HV2_stack_guard[guardsize];			\
-> +	char	HV2_stack[optional_stack_size];			\
->  	char	IST_top_guard[guardsize];			\
+> diff --git a/Documentation/translations/zh_CN/openrisc/index.rst b/Documentation/translations/zh_CN/arch/openrisc/index.rst
+> similarity index 79%
+> rename from Documentation/translations/zh_CN/openrisc/index.rst
+> rename to Documentation/translations/zh_CN/arch/openrisc/index.rst
+> index 9ad6cc600884..da21f8ab894b 100644
+> --- a/Documentation/translations/zh_CN/openrisc/index.rst
+> +++ b/Documentation/translations/zh_CN/arch/openrisc/index.rst
+> @@ -1,8 +1,8 @@
+>  .. SPDX-License-Identifier: GPL-2.0
 >  
->  /* The exception stacks' physical storage. No guard pages required */
-> @@ -52,6 +56,8 @@ enum exception_stack_ordering {
->  	ESTACK_MCE,
->  	ESTACK_VC,
->  	ESTACK_VC2,
-> +	ESTACK_HV,
-> +	ESTACK_HV2,
->  	N_EXCEPTION_STACKS
+> -.. include:: ../disclaimer-zh_CN.rst
+> +.. include:: ../../disclaimer-zh_CN.rst
+>  
+> -:Original: Documentation/openrisc/index.rst
+> +:Original: Documentation/arch/openrisc/index.rst
+>  
+>  :翻译:
+>  
+> diff --git a/Documentation/translations/zh_CN/openrisc/openrisc_port.rst b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
+> similarity index 97%
+> rename from Documentation/translations/zh_CN/openrisc/openrisc_port.rst
+> rename to Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
+> index b8a67670492d..cadc580fa23b 100644
+> --- a/Documentation/translations/zh_CN/openrisc/openrisc_port.rst
+> +++ b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
+> @@ -1,6 +1,6 @@
+> -.. include:: ../disclaimer-zh_CN.rst
+> +.. include:: ../../disclaimer-zh_CN.rst
+>  
+> -:Original: Documentation/openrisc/openrisc_port.rst
+> +:Original: Documentation/arch/openrisc/openrisc_port.rst
+>  
+>  :翻译:
+>  
+> diff --git a/Documentation/translations/zh_CN/openrisc/todo.rst b/Documentation/translations/zh_CN/arch/openrisc/todo.rst
+> similarity index 88%
+> rename from Documentation/translations/zh_CN/openrisc/todo.rst
+> rename to Documentation/translations/zh_CN/arch/openrisc/todo.rst
+> index 63c38717edb1..1f6f95616633 100644
+> --- a/Documentation/translations/zh_CN/openrisc/todo.rst
+> +++ b/Documentation/translations/zh_CN/arch/openrisc/todo.rst
+> @@ -1,6 +1,6 @@
+> -.. include:: ../disclaimer-zh_CN.rst
+> +.. include:: ../../disclaimer-zh_CN.rst
+>  
+> -:Original: Documentation/openrisc/todo.rst
+> +:Original: Documentation/arch/openrisc/todo.rst
+>  
+>  :翻译:
+>  
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cf4eb913ea12..64ea94536f4c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15638,7 +15638,7 @@ S:	Maintained
+>  W:	http://openrisc.io
+>  T:	git https://github.com/openrisc/linux.git
+>  F:	Documentation/devicetree/bindings/openrisc/
+> -F:	Documentation/openrisc/
+> +F:	Documentation/arch/openrisc/
+>  F:	arch/openrisc/
+>  F:	drivers/irqchip/irq-ompic.c
+>  F:	drivers/irqchip/irq-or1k-*
 
-Ditto.
+This all looks ok to me.
 
-And so on...
-
-Please share code - not duplicate.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Acked-by: Stafford Horne <shorne@gmail.com>
