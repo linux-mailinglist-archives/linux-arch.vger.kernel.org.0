@@ -2,218 +2,221 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EF26D26B2
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Mar 2023 19:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCA06D27E4
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Mar 2023 20:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCaRcD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Mar 2023 13:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
+        id S231663AbjCaSer (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Mar 2023 14:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbjCaRcC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Mar 2023 13:32:02 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251E01DF90;
-        Fri, 31 Mar 2023 10:32:01 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id i5-20020a05600c354500b003edd24054e0so15848168wmq.4;
-        Fri, 31 Mar 2023 10:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680283919; x=1682875919;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JgfNIm0/b0S1WJTNKx0RJfqBlqbq2Is5rY0BnBfIYgI=;
-        b=HxTYUrxQFyfr2IFr3t/oz+cV+7dwpjSUNvJg7TA/5z4etdrS42cWV9DAjKZwQ9wTIz
-         MLQn3RcTY6zgcx2XAlZwF5CzNRNaOevF6l6L/q+6B3QQvvr81uJmt22IH0/EO8iLehyA
-         DeW9mWb0fdpuoQxuyPieF9yLwLF5EXId2ef1Llm4KtWMJmrlbGABHFsLlnqnvHj9XF8M
-         VDjmORYD1o7I5yJHiUzH7/3HZxKE2JQSC2WdlFRwNypYDx9k51pDSHM5rkgnAs1cTZ5k
-         0z+lk4nwrwicd5388RkmwjZTv06viZuldB2TsK3kpm9KtH1beEanT7Jd5kCSRqjdfHaV
-         ABHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680283919; x=1682875919;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JgfNIm0/b0S1WJTNKx0RJfqBlqbq2Is5rY0BnBfIYgI=;
-        b=hhThJY9nEYLgNtMqWuGDYEkg/dMzSlPdi9zg6808uvJjCK5NLZB8TiUXguZhA65SGE
-         86G35WJn02pniEpBPWgsz5Beiyp0UUlWZ4jxvTNVnwZAHNwSUACQkNC7U4Qp9cggrt0Q
-         YbV+fvEOuztAty5wNlBAoplhG+tGxA3Iq/QeSX04bi37Y5MbzWEqIu3X++Vs/YGaMa3o
-         2XkrePTj1fN1Zjmt+M+nrZRQL8mLvu/yp4O695xkmMy3a4G/jFRNe9IeccBNJHpy7YeC
-         1U9NddIIkmS1AY5LYx0sznV/HhXHS19NK0eZ+ctXUpbJBfwsCFScgGtVfan9o3VJ4EjH
-         A0ug==
-X-Gm-Message-State: AO0yUKXSGiPaE71DlY3GW3ljATh1KkKBDQ+WVLciOd4mog9VAgWwZAOK
-        Zwi1JzdNTxIzzcWn1juakgw=
-X-Google-Smtp-Source: AK7set8GLYgYWDweiiQubwdK8pBuq6rDyJKMVzE3Ht6dxeyx7PB1WmnUe+Ysn61PqU2HeB53ilbwRQ==
-X-Received: by 2002:a1c:7206:0:b0:3ed:2352:eebd with SMTP id n6-20020a1c7206000000b003ed2352eebdmr21386687wmc.11.1680283919518;
-        Fri, 31 Mar 2023 10:31:59 -0700 (PDT)
-Received: from localhost (cpc1-brnt4-2-0-cust862.4-2.cable.virginm.net. [86.9.131.95])
-        by smtp.gmail.com with ESMTPSA id g19-20020a05600c311300b003ee74c25f12sm10411423wmo.35.2023.03.31.10.31.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Mar 2023 10:31:58 -0700 (PDT)
-Date:   Sat, 1 Apr 2023 02:31:58 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
-Subject: Re: [PATCH 5/6] docs: move openrisc documentation under
- Documentation/arch/
-Message-ID: <ZCcZDn9Rbqx+47MX@antec>
-References: <20230323221948.352154-1-corbet@lwn.net>
- <20230323221948.352154-6-corbet@lwn.net>
+        with ESMTP id S229561AbjCaSeq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Mar 2023 14:34:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729A1CB9B;
+        Fri, 31 Mar 2023 11:34:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 830D8B831A0;
+        Fri, 31 Mar 2023 18:34:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53E8C433EF;
+        Fri, 31 Mar 2023 18:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1680287678;
+        bh=cFHZKXBfF/aAqc3Fsp181F2WteOHfwqXMSb2SVo24wM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ea8m8/H+V5fiadF+7hEBnBK3lItvH3lvCfCUguyEM5G7pmgTYTFrJiQusiFvEg8mN
+         3lkVKNXzoZR2jvkUUlxTq6g6/+UbneQxcOrLby7z37mR5VPxvB+GTpdRBulVUL0lp4
+         4ZnJ2ipVCUS1vGBi3BwiA0hCIVhdeiVTfngniubtBW8pEo6UuwM+2nUIfraH0L04Xb
+         gy1HcfzVUh78BAdlRfhC5DCTGFrALl3/VzWIJxKQzAZy2jERt/OGJBn5+QmwONQsh4
+         qvn8ghtm3E3JVeHuzcDOYdAWBOEg/rzaRRFJbXNVclLedWRh9ZO2NDQICIAFNWKbx8
+         BtR9TkzaQDyrA==
+Date:   Fri, 31 Mar 2023 19:34:31 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>
+Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
+Message-ID: <60ee7c26-1a70-427d-beaf-92e2989fc479@spud>
+References: <20230222033021.983168-1-guoren@kernel.org>
+ <20230222033021.983168-5-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2r0N5+2Ft3yyCaRu"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230323221948.352154-6-corbet@lwn.net>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230222033021.983168-5-guoren@kernel.org>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Mar 23, 2023 at 04:19:47PM -0600, Jonathan Corbet wrote:
-> Architecture-specific documentation is being moved into Documentation/arch/
-> as a way of cleaning up the top-level documentation directory and making
-> the docs hierarchy more closely match the source hierarchy.  Move
-> Documentation/openrisc into arch/ and fix all in-tree references.
-> 
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Alex Shi <alexs@kernel.org>
-> Cc: Yanteng Si <siyanteng@loongson.cn>
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> ---
->  Documentation/arch/index.rst                                  | 2 +-
->  Documentation/{ => arch}/openrisc/features.rst                | 0
->  Documentation/{ => arch}/openrisc/index.rst                   | 0
->  Documentation/{ => arch}/openrisc/openrisc_port.rst           | 0
->  Documentation/{ => arch}/openrisc/todo.rst                    | 0
->  Documentation/translations/zh_CN/arch/index.rst               | 2 +-
->  .../translations/zh_CN/{ => arch}/openrisc/index.rst          | 4 ++--
->  .../translations/zh_CN/{ => arch}/openrisc/openrisc_port.rst  | 4 ++--
->  Documentation/translations/zh_CN/{ => arch}/openrisc/todo.rst | 4 ++--
->  MAINTAINERS                                                   | 2 +-
->  10 files changed, 9 insertions(+), 9 deletions(-)
->  rename Documentation/{ => arch}/openrisc/features.rst (100%)
->  rename Documentation/{ => arch}/openrisc/index.rst (100%)
->  rename Documentation/{ => arch}/openrisc/openrisc_port.rst (100%)
->  rename Documentation/{ => arch}/openrisc/todo.rst (100%)
->  rename Documentation/translations/zh_CN/{ => arch}/openrisc/index.rst (79%)
->  rename Documentation/translations/zh_CN/{ => arch}/openrisc/openrisc_port.rst (97%)
->  rename Documentation/translations/zh_CN/{ => arch}/openrisc/todo.rst (88%)
-> 
-> diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
-> index 792f58e30f25..65945daa40fe 100644
-> --- a/Documentation/arch/index.rst
-> +++ b/Documentation/arch/index.rst
-> @@ -17,7 +17,7 @@ implementation.
->     ../m68k/index
->     ../mips/index
->     ../nios2/index
-> -   ../openrisc/index
-> +   openrisc/index
->     ../parisc/index
->     ../powerpc/index
->     ../riscv/index
-> diff --git a/Documentation/openrisc/features.rst b/Documentation/arch/openrisc/features.rst
-> similarity index 100%
-> rename from Documentation/openrisc/features.rst
-> rename to Documentation/arch/openrisc/features.rst
-> diff --git a/Documentation/openrisc/index.rst b/Documentation/arch/openrisc/index.rst
-> similarity index 100%
-> rename from Documentation/openrisc/index.rst
-> rename to Documentation/arch/openrisc/index.rst
-> diff --git a/Documentation/openrisc/openrisc_port.rst b/Documentation/arch/openrisc/openrisc_port.rst
-> similarity index 100%
-> rename from Documentation/openrisc/openrisc_port.rst
-> rename to Documentation/arch/openrisc/openrisc_port.rst
-> diff --git a/Documentation/openrisc/todo.rst b/Documentation/arch/openrisc/todo.rst
-> similarity index 100%
-> rename from Documentation/openrisc/todo.rst
-> rename to Documentation/arch/openrisc/todo.rst
-> diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Documentation/translations/zh_CN/arch/index.rst
-> index aa53dcff268e..7e59af567331 100644
-> --- a/Documentation/translations/zh_CN/arch/index.rst
-> +++ b/Documentation/translations/zh_CN/arch/index.rst
-> @@ -11,7 +11,7 @@
->     ../mips/index
->     ../arm64/index
->     ../riscv/index
-> -   ../openrisc/index
-> +   openrisc/index
->     ../parisc/index
->     ../loongarch/index
->  
-> diff --git a/Documentation/translations/zh_CN/openrisc/index.rst b/Documentation/translations/zh_CN/arch/openrisc/index.rst
-> similarity index 79%
-> rename from Documentation/translations/zh_CN/openrisc/index.rst
-> rename to Documentation/translations/zh_CN/arch/openrisc/index.rst
-> index 9ad6cc600884..da21f8ab894b 100644
-> --- a/Documentation/translations/zh_CN/openrisc/index.rst
-> +++ b/Documentation/translations/zh_CN/arch/openrisc/index.rst
-> @@ -1,8 +1,8 @@
->  .. SPDX-License-Identifier: GPL-2.0
->  
-> -.. include:: ../disclaimer-zh_CN.rst
-> +.. include:: ../../disclaimer-zh_CN.rst
->  
-> -:Original: Documentation/openrisc/index.rst
-> +:Original: Documentation/arch/openrisc/index.rst
->  
->  :翻译:
->  
-> diff --git a/Documentation/translations/zh_CN/openrisc/openrisc_port.rst b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
-> similarity index 97%
-> rename from Documentation/translations/zh_CN/openrisc/openrisc_port.rst
-> rename to Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
-> index b8a67670492d..cadc580fa23b 100644
-> --- a/Documentation/translations/zh_CN/openrisc/openrisc_port.rst
-> +++ b/Documentation/translations/zh_CN/arch/openrisc/openrisc_port.rst
-> @@ -1,6 +1,6 @@
-> -.. include:: ../disclaimer-zh_CN.rst
-> +.. include:: ../../disclaimer-zh_CN.rst
->  
-> -:Original: Documentation/openrisc/openrisc_port.rst
-> +:Original: Documentation/arch/openrisc/openrisc_port.rst
->  
->  :翻译:
->  
-> diff --git a/Documentation/translations/zh_CN/openrisc/todo.rst b/Documentation/translations/zh_CN/arch/openrisc/todo.rst
-> similarity index 88%
-> rename from Documentation/translations/zh_CN/openrisc/todo.rst
-> rename to Documentation/translations/zh_CN/arch/openrisc/todo.rst
-> index 63c38717edb1..1f6f95616633 100644
-> --- a/Documentation/translations/zh_CN/openrisc/todo.rst
-> +++ b/Documentation/translations/zh_CN/arch/openrisc/todo.rst
-> @@ -1,6 +1,6 @@
-> -.. include:: ../disclaimer-zh_CN.rst
-> +.. include:: ../../disclaimer-zh_CN.rst
->  
-> -:Original: Documentation/openrisc/todo.rst
-> +:Original: Documentation/arch/openrisc/todo.rst
->  
->  :翻译:
->  
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf4eb913ea12..64ea94536f4c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15638,7 +15638,7 @@ S:	Maintained
->  W:	http://openrisc.io
->  T:	git https://github.com/openrisc/linux.git
->  F:	Documentation/devicetree/bindings/openrisc/
-> -F:	Documentation/openrisc/
-> +F:	Documentation/arch/openrisc/
->  F:	arch/openrisc/
->  F:	drivers/irqchip/irq-ompic.c
->  F:	drivers/irqchip/irq-or1k-*
 
-This all looks ok to me.
+--2r0N5+2Ft3yyCaRu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Stafford Horne <shorne@gmail.com>
+On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> This patch converts riscv to use the generic entry infrastructure from
+> kernel/entry/*. The generic entry makes maintainers' work easier and
+> codes more elegant. Here are the changes:
+>=20
+>  - More clear entry.S with handle_exception and ret_from_exception
+>  - Get rid of complex custom signal implementation
+>  - Move syscall procedure from assembly to C, which is much more
+>    readable.
+>  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+>  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+>  - Use the standard preemption code instead of custom
+
+This has unfortunately broken booting my usual NFS rootfs on both my D1
+and Icicle. It's one of the Fedora images from David, I think this one:
+http://fedora.riscv.rocks/kojifiles/work/tasks/3933/1313933/
+
+It gets pretty far into things, it's once systemd is operational that
+things go pear shaped:
+
+[  OK  ] Mounted Huge Pages File System.
+[   70.297439] systemd[1]: Mounted POSIX Message Queue File System.
+[  OK  ] Mounted POSIX Message Queue File System.
+[   70.453489] systemd[1]: Mounted Kernel Debug File System.
+[  OK  ] Mounted Kernel Debug File System.
+[   70.516331] systemd[1]: Mounted Kernel Trace File System.
+[  OK  ] Mounted Kernel Trace File System.
+[   70.679253] systemd[1]: modprobe@configfs.service: Succeeded.
+[   70.788400] systemd[1]: Finished Load Kernel Module configfs.
+[  OK  ] Finished Load Kernel Module configfs.
+[   71.501222] systemd[1]: modprobe@drm.service: Succeeded.
+[   71.573295] systemd[1]: Finished Load Kernel Module drm.
+[  OK  ] Finished Load Kernel Module drm.
+[   71.825934] systemd[1]: modprobe@fuse.service: Succeeded.
+[   71.886945] systemd[1]: Finished Load Kernel Module fuse.
+[  OK  ] Finished Load Kernel Module fuse.
+[   71.991932] systemd[1]: nfs-convert.service: Succeeded.
+[   72.034674] systemd[1]: Finished Preprocess NFS configuration convertion.
+[  OK  ] Finished Preprocess NFS configuration convertion.
+[   72.148778] systemd[1]: systemd-modules-load.service: Main process exite=
+d, code=3Dexited, status=3D1/FAILURE
+[   72.256659] systemd[1]: systemd-modules-load.service: Failed with result=
+ 'exit-code'.
+[   72.337818] systemd[1]: Failed to start Load Kernel Modules.
+[FAILED] Failed to start Load Kernel Modules.
+See 'systemctl status systemd-modules-load.service' for details.
+[   72.410491] systemd[1]: systemd-modules-load.service: Consumed 1.463s CP=
+U time.
+[   72.496739] systemd[1]: Condition check resulted in FUSE Control File Sy=
+stem being skipped.
+[   72.513689] systemd[1]: Condition check resulted in Kernel Configuration=
+ File System being skipped.
+[   72.682549] systemd[1]: Starting Apply Kernel Variables..
+[  OK  ] Finished Apply Kernel Variables.
+[   76.314434] systemd[1]: Finished Load/Save Random Seed.
+[  OK  ] Finished Load/Save Random Seed.
+[***   ] (1 of 6) A start job is running for=E2=80=A6p Virtual Console (14s=
+ / no limit)
+[  OK  ] Finished Create Static Device Nodes in /dev.
+[   79.787065] systemd[1]: Started Entropy Daemon based on the HAVEGE algor=
+ithm.
+[  OK  ] Started Entropy Daemon based on the HAVEGE algorithm.
+[   80.186295] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   80.713508] systemd[1]: Starting Rule-based Manager for Device Events an=
+d Files...
+         Starting Rule-based Manage=E2=80=A6for Device Events and Files...
+[  *** ] (2 of 7) A start job is running for=E2=80=A6 All udev Devices (17s=
+ / no limit)
+[   82.939347] systemd[1]: systemd-journald.service: Main process exited, c=
+ode=3Dexited, status=3D1/FAILURE
+[   83.032046] systemd[1]: systemd-journald.service: Failed with result 'ex=
+it-code'.
+[FAILED] Failed to start Journal Service.
+See 'systemctl status systemd-journald.service' for details.
+[   83.210041] systemd[1]: Dependency failed for Flush Journal to Persisten=
+t Storage.
+[DEPEND] Dependency failed for Flus=E2=80=A6Journal to Persistent Storage.
+[   83.254122] systemd[1]: systemd-journal-flush.service: Job systemd-journ=
+al-flush.service/start failed with result 'dependency'.
+[   83.272366] systemd[1]: systemd-journald.service: Consumed 1.443s CPU ti=
+me.
+[   83.334360] systemd[1]: systemd-journald.service: Scheduled restart job,=
+ restart counter is at 1.
+[   83.427839] systemd[1]: Finished Setup Virtual Console.
+[  OK  ] Finished Setup Virtual Console.
+[   83.510650] systemd[1]: Stopped Journal Service.
+[  OK  ] Stopped Journal Service.
+[   83.554417] systemd[1]: systemd-journald.service: Consumed 1.443s CPU ti=
+me.
+[   83.576573] systemd[1]: Condition check resulted in Journal Audit Socket=
+ being skipped.
+[   83.904878] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   85.752090] systemd[1]: systemd-journald.service: Main process exited, c=
+ode=3Dexited, status=3D1/FAILURE
+[   85.826421] systemd[1]: systemd-journald.service: Failed with result 'ex=
+it-code'.
+[   85.876165] systemd[1]: Failed to start Journal Service.
+[FAILED] Failed to start Journal Service.
+See 'systemctl status systemd-journald.service' for details.
+[   85.952221] systemd[1]: systemd-journald.service: Consumed 1.355s CPU ti=
+me.
+[   86.002092] systemd[1]: systemd-journald.service: Scheduled restart job,=
+ restart counter is at 2.
+[   86.015081] systemd[1]: Stopped Journal Service.
+[  OK  ] Stopped Journal Service.
+[   86.076429] systemd[1]: systemd-journald.service: Consumed 1.355s CPU ti=
+me.
+[   86.089700] systemd[1]: Condition check resulted in Journal Audit Socket=
+ being skipped.
+[   86.390162] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+[   87.904427] systemd[1]: systemd-journald.service: Main process exited, c=
+ode=3Dexited, status=3D1/FAILURE
+[   87.950259] systemd[1]: systemd-journald.service: Failed with result 'ex=
+it-code'.
+[   88.000661] systemd[1]: Failed to start Journal Service.
+[FAILED] Failed to start Journal Service.
+See 'systemctl status systemd-journald.service' for details.
+[   88.079953] systemd[1]: systemd-journald.service: Consumed 1.316s CPU ti=
+me.
+[   88.128956] systemd[1]: systemd-journald.service: Scheduled restart job,=
+ restart counter is at 3.
+[   88.145365] systemd[1]: Stopped Journal Service.
+[  OK  ] Stopped Journal Service.
+[   88.189975] systemd[1]: systemd-journald.service: Consumed 1.316s CPU ti=
+me.
+[   88.205799] systemd[1]: Condition check resulted in Journal Audit Socket=
+ being skipped.
+[   88.514817] systemd[1]: Starting Journal Service...
+         Starting Journal Service...
+
+(Note, you need to merge -rc2 into riscv/for-next to actually boot)
+
+Cheers,
+Conor.
+
+--2r0N5+2Ft3yyCaRu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCcntwAKCRB4tDGHoIJi
+0mArAP4pqQMIediLrvbLgu1Oy1INpWVZQ5I6KGzgbid6ph2Y1wEAkH+kN4Fi9RCj
+xtvqiZXfW4Als+2R4FJMyfQbcFDQGw8=
+=rXo/
+-----END PGP SIGNATURE-----
+
+--2r0N5+2Ft3yyCaRu--
