@@ -2,95 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B8F6D2F66
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Apr 2023 11:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2476D30AA
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Apr 2023 14:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbjDAJcT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Apr 2023 05:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S229569AbjDAMLB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Sat, 1 Apr 2023 08:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjDAJcT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Apr 2023 05:32:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8F2CC19;
-        Sat,  1 Apr 2023 02:32:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AC35B80760;
-        Sat,  1 Apr 2023 09:32:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3059C433EF;
-        Sat,  1 Apr 2023 09:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680341535;
-        bh=A5HEcH0POC1LQ0vBBzRHCMIcClN+LFwasAfQrlGntQo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uZr15WEFQvk2JjTe5rDaNJERa72I1D5N3iTbwZYVZhm3A8FHrQVJ/zIoyjci9cpTn
-         rIckJFN3fk9BuZ6SAJQmwWV7zcH+ENysMgdjkjUHauEbIkWoy1ns+aqXFElH/+ATju
-         1wGzr7lLqcsKA5/iA7/9FoJBKfaIH3HqDp34hP5Kn/APT1IKUVvBH1CP0OO2p4n0QL
-         UMQa1eKUhagaALNCtxGNDmPSqYf7pUtVa8IqF/g1t++7IqvHYX39SE/r8jEkpyO+E1
-         zFtSk3gGP68oPd9Q9kUMbaqCQBmoI28yl19pP2wDgoZgnWMCh3VBLe9khZJ3HpGk9M
-         35HuN/nleBrXA==
-Date:   Sat, 1 Apr 2023 10:32:08 +0100
-From:   Conor Dooley <conor@kernel.org>
+        with ESMTP id S229441AbjDAMLB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Apr 2023 08:11:01 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243461D937;
+        Sat,  1 Apr 2023 05:10:58 -0700 (PDT)
+Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pia3u-0002IB-NC; Sat, 01 Apr 2023 14:10:26 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
 To:     Guo Ren <guoren@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+Cc:     Conor Dooley <conor@kernel.org>, arnd@arndb.de,
+        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
+        luto@kernel.org, conor.dooley@microchip.com, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org,
+        mark.rutland@arm.com, ben@decadent.org.uk, bjorn@kernel.org,
+        palmer@dabbelt.com, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
         Yipeng Zou <zouyipeng@huawei.com>
 Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-Message-ID: <0d07b570-07ac-4a36-a988-b2ffa2a4d433@spud>
-References: <20230222033021.983168-1-guoren@kernel.org>
- <20230222033021.983168-5-guoren@kernel.org>
- <60ee7c26-1a70-427d-beaf-92e2989fc479@spud>
- <CAJF2gTQJB3f=80sOsgXpYn7JqfGmq+FSaCwCJ-Er=d7fKhwJcA@mail.gmail.com>
+Date:   Sat, 01 Apr 2023 14:10:25 +0200
+Message-ID: <2587778.7s5MMGUR32@diego>
+In-Reply-To: <CAJF2gTSWETHhQFuE19H+RVX6Jbue+UAu8o94QoBFx65NABas1Q@mail.gmail.com>
+References: <20230222033021.983168-1-guoren@kernel.org> <23668656.ouqheUzb2q@diego>
+ <CAJF2gTSWETHhQFuE19H+RVX6Jbue+UAu8o94QoBFx65NABas1Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="N697bhe7hq7YhlHp"
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTQJB3f=80sOsgXpYn7JqfGmq+FSaCwCJ-Er=d7fKhwJcA@mail.gmail.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.0 required=5.0 tests=SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Guo,
 
---N697bhe7hq7YhlHp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Am Samstag, 1. April 2023, 04:15:32 CEST schrieb Guo Ren:
+> On Fri, Mar 31, 2023 at 2:47 PM Heiko Stübner <heiko@sntech.de> wrote:
+> > Am Freitag, 31. März 2023, 20:41:35 CEST schrieb Conor Dooley:
+> > > On Fri, Mar 31, 2023 at 07:34:38PM +0100, Conor Dooley wrote:
+> > > > On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
+> > > > > From: Guo Ren <guoren@linux.alibaba.com>
+> > > > >
+> > > > > This patch converts riscv to use the generic entry infrastructure from
+> > > > > kernel/entry/*. The generic entry makes maintainers' work easier and
+> > > > > codes more elegant. Here are the changes:
+> > > > >
+> > > > >  - More clear entry.S with handle_exception and ret_from_exception
+> > > > >  - Get rid of complex custom signal implementation
+> > > > >  - Move syscall procedure from assembly to C, which is much more
+> > > > >    readable.
+> > > > >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+> > > > >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+> > > > >  - Use the standard preemption code instead of custom
+> > > >
+> > > > This has unfortunately broken booting my usual NFS rootfs on both my D1
+> > > > and Icicle. It's one of the Fedora images from David, I think this one:
+> > > > http://fedora.riscv.rocks/kojifiles/work/tasks/3933/1313933/
+> > > >
+> > > > It gets pretty far into things, it's once systemd is operational that
+> > > > things go pear shaped:
+> > >
+> > > Shoulda said, can share the full logs if required of course, but they're
+> > > quite verbose cos systemd etc.
+> >
+> > I was just investigating the same thing just now. So that saves me some
+> > tracking down the culprit :-) .
+> >
+> > My main qemu is living as a "board" in my boardfarm (also doing nfsroot)
+> > as well as my d1 nezha with nfsroot was affected.
+> Can you reproduce it with qemu? Could give me some tips and let me
+> reproduce it on qemu?
 
-On Fri, Mar 31, 2023 at 09:39:32PM -0400, Guo Ren wrote:
-> On Fri, Mar 31, 2023 at 2:34=E2=80=AFPM Conor Dooley <conor@kernel.org> w=
-rote:
+As written the issue both happens on qemu-virt and also the d1-nezha board.
+Below I've summarized my setup a bit:
 
-> > [   72.337818] systemd[1]: Failed to start Load Kernel Modules.
-> > [FAILED] Failed to start Load Kernel Modules.
 
-> Are you sure, you've compiled all kernel modules? This patch needs all
-> kernel stuff re-compiled.
+(1) Qemu-commandline:
+---------------------
 
-It does this with CONFIG_MODULES=3Dn kernels too FWIW.
+/usr/local/bin/qemu-system-riscv64 -M virt -smp 2 -m 1G -display none \
+  -cpu rv64,zbb=true,zbc=true,svpbmt=true,Zicbom=true,Zawrs=true,sscofpmf=true,v=true \
+  -serial telnet:localhost:5500,server,nowait -kernel /home/devel/nfs/kernel/riscv64/Image \
+  -append "earlycon=sbi root=/dev/nfs nfsroot=10.0.2.2:/home/devel/nfs/rootfs-riscv64virt ip=dhcp rw" \
+  -netdev user,id=n1 -device virtio-net-pci,netdev=n1
 
---N697bhe7hq7YhlHp
-Content-Type: application/pgp-signature; name="signature.asc"
+Which does the start using a nfs-root coming from an nfs-server running
+on the same host as qemu.
 
------BEGIN PGP SIGNATURE-----
+Though the issue does not seem to be related to the nfs. I also tried
+starting with a local disk image like [0] and the issue with the journald
+still persists.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZCf6GAAKCRB4tDGHoIJi
-0ty8AP4pLw9M1SQ8agp95E8v0ZshSN4g/vspxvoTn3ZBCm1TfgD9FPZ4yEkwdAj/
-ar7NYJ22grdRYVRIMczJ3M7lD9nLMgE=
-=pMx5
------END PGP SIGNATURE-----
 
---N697bhe7hq7YhlHp--
+(2) the rootfs-contents:
+------------------------
+
+Conor seems to be using Fedora, while my distribution of choice is Debian.
+My rootfs was created following the instructions on the Debian wiki for
+the debports with debootstrap [1].
+
+
+This morning I also re-created a completely new and pristine rootfs using
+those instructions and the issue appeared immediately on first-boot.
+
+
+Hope this helps a bit
+Heiko
+
+
+[0] same result with a disk-image ... journald failing
+/usr/local/bin/qemu-system-riscv64 -M virt -smp 2 -m 1G -display none \
+  -cpu rv64,zbb=true,zbc=true,svpbmt=true,Zicbom=true,Zawrs=true,sscofpmf=true,v=true \
+  -serial telnet:localhost:5500,server,nowait -kernel /home/devel/nfs/kernel/riscv64/Image \
+  -append 'root=/dev/vda console=ttyS0' \
+  -drive file=/home/devel/nfs/rootfs-riscv64virt.ext4,format=raw,id=hd0 \
+  -device virtio-blk-pci,drive=hd0
+
+[1] https://wiki.debian.org/RISC-V#debootstrap
+
+
