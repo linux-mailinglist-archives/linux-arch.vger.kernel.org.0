@@ -2,68 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F51F6D2DA7
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Apr 2023 04:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91676D2EC3
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Apr 2023 08:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjDACPu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Mar 2023 22:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S233301AbjDAGnm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Apr 2023 02:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbjDACPt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Mar 2023 22:15:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AFF12049;
-        Fri, 31 Mar 2023 19:15:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B812B62D63;
-        Sat,  1 Apr 2023 02:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259FAC433A1;
-        Sat,  1 Apr 2023 02:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680315346;
-        bh=FXua526i85PRorKEsrWCzuQNWGXkTMXjZIj2FQTkD3U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DVrhdT8gxsqP43tJ9qjz+euqr0tdZjtpaNdJrd4h4RDRBWkhx7zOEd+h6fhmnn6L8
-         PhJ5GQ4oIOuLIajX/MPv+9zNLZYYiz91vqKnC6N2yA9SNoSZy4j9/j906cTWJ9SLwb
-         Vazw1TdKPR3ttl9mmTkhMq1lNtVseq7wFOiTnEtWcrYlTWQnmLu+rGtZV1u2QcM5uU
-         +OlM2IHe4H8vcscGOkSpUMTEYB/P0EWTRYOigCv9rR8g+1ita26UfbOIcDBN05tC3G
-         4nbvFLjtZQWvagZ400gPCgKiQCZtzFGC+NEKxzE4reWW93a6CBSk8MrAICxw5Gh5Xw
-         zsfLbPr51h9pA==
-Received: by mail-ed1-f52.google.com with SMTP id h8so96778871ede.8;
-        Fri, 31 Mar 2023 19:15:46 -0700 (PDT)
-X-Gm-Message-State: AAQBX9cdy65uvSbDy1EyhLxdUkoR+DtW2sa7vJol0vx6DEbefwiH1Yeq
-        qlwHWyN0FSVxXCrtMKqKmOxKNmU6IGD/5aGgwpo=
-X-Google-Smtp-Source: AKy350aSsa2iJhw13jQLmVesifQsgW6X47IMO5Y+zS6KyXRJurEnJIfW/4EqLuGscLJtWipNMr2jzG1iE10YvvT06/o=
-X-Received: by 2002:a17:906:a146:b0:931:fb3c:f88d with SMTP id
- bu6-20020a170906a14600b00931fb3cf88dmr14532529ejb.5.1680315344177; Fri, 31
- Mar 2023 19:15:44 -0700 (PDT)
+        with ESMTP id S230193AbjDAGnl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Apr 2023 02:43:41 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACBB7E192;
+        Fri, 31 Mar 2023 23:43:38 -0700 (PDT)
+Received: from loongson.cn (unknown [112.20.109.241])
+        by gateway (Coremail) with SMTP id _____8Axu5eZ0idkVy4VAA--.32734S3;
+        Sat, 01 Apr 2023 14:43:37 +0800 (CST)
+Received: from [192.168.100.131] (unknown [112.20.109.241])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxwOSS0idk2aoSAA--.51534S3;
+        Sat, 01 Apr 2023 14:43:30 +0800 (CST)
+Message-ID: <17ecd97e-a750-55ca-a067-986890a8d494@loongson.cn>
+Date:   Sat, 1 Apr 2023 14:43:30 +0800
 MIME-Version: 1.0
-References: <20230222033021.983168-1-guoren@kernel.org> <60ee7c26-1a70-427d-beaf-92e2989fc479@spud>
- <ee83cd00-1f97-49a0-b1f6-b8b4f3ce7258@spud> <23668656.ouqheUzb2q@diego>
-In-Reply-To: <23668656.ouqheUzb2q@diego>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 31 Mar 2023 22:15:32 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTSWETHhQFuE19H+RVX6Jbue+UAu8o94QoBFx65NABas1Q@mail.gmail.com>
-Message-ID: <CAJF2gTSWETHhQFuE19H+RVX6Jbue+UAu8o94QoBFx65NABas1Q@mail.gmail.com>
-Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Conor Dooley <conor@kernel.org>, arnd@arndb.de,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org,
-        mark.rutland@arm.com, ben@decadent.org.uk, bjorn@kernel.org,
-        palmer@dabbelt.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 3/4] docs: move parisc documentation under
+ Documentation/arch/
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Alex Shi <alexs@kernel.org>
+References: <20230330195604.269346-1-corbet@lwn.net>
+ <20230330195604.269346-4-corbet@lwn.net>
+Content-Language: en-US
+From:   Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <20230330195604.269346-4-corbet@lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxwOSS0idk2aoSAA--.51534S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3WrWUuF1kWw1xJF1kXrWkJFb_yoWxXF1xp3
+        Z7Kr1Ig3WSvryUC348WF17GFy7Ca4xua13WF4Utw10qFn8W39Yyr4UK3s0gFn3XrW0yFWk
+        uF4fKrW5uw1qywUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
+        xVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
+        C2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_
+        JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
+        daVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
+X-Spam-Status: No, score=-0.0 required=5.0 tests=NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,192 +65,145 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 2:47=E2=80=AFPM Heiko St=C3=BCbner <heiko@sntech.de=
-> wrote:
->
-> Hi,
->
-> Am Freitag, 31. M=C3=A4rz 2023, 20:41:35 CEST schrieb Conor Dooley:
-> > On Fri, Mar 31, 2023 at 07:34:38PM +0100, Conor Dooley wrote:
-> > > On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
-> > > > From: Guo Ren <guoren@linux.alibaba.com>
-> > > >
-> > > > This patch converts riscv to use the generic entry infrastructure f=
-rom
-> > > > kernel/entry/*. The generic entry makes maintainers' work easier an=
-d
-> > > > codes more elegant. Here are the changes:
-> > > >
-> > > >  - More clear entry.S with handle_exception and ret_from_exception
-> > > >  - Get rid of complex custom signal implementation
-> > > >  - Move syscall procedure from assembly to C, which is much more
-> > > >    readable.
-> > > >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
-> > > >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_m=
-ode
-> > > >  - Use the standard preemption code instead of custom
-> > >
-> > > This has unfortunately broken booting my usual NFS rootfs on both my =
-D1
-> > > and Icicle. It's one of the Fedora images from David, I think this on=
-e:
-> > > http://fedora.riscv.rocks/kojifiles/work/tasks/3933/1313933/
-> > >
-> > > It gets pretty far into things, it's once systemd is operational that
-> > > things go pear shaped:
-> >
-> > Shoulda said, can share the full logs if required of course, but they'r=
-e
-> > quite verbose cos systemd etc.
->
-> I was just investigating the same thing just now. So that saves me some
-> tracking down the culprit :-) .
->
-> My main qemu is living as a "board" in my boardfarm (also doing nfsroot)
-> as well as my d1 nezha with nfsroot was affected.
-Can you reproduce it with qemu? Could give me some tips and let me
-reproduce it on qemu?
 
+在 3/31/23 03:56, Jonathan Corbet 写道:
+> Architecture-specific documentation is being moved into Documentation/arch/
+> as a way of cleaning up the top-level documentation directory and making
+> the docs hierarchy more closely match the source hierarchy.  Move
+> Documentation/parisc into arch/ and fix all in-tree references.
 >
-> Though my board is stuck in some failure loop with both the journal- as
-> well as the timesyncd service failing again and again. And I haven't
-> figured out how to get logs without a working login console yet.
->
->
-> Heiko
->
->
-> >
-> > >
-> > > [  OK  ] Mounted Huge Pages File System.
-> > > [   70.297439] systemd[1]: Mounted POSIX Message Queue File System.
-> > > [  OK  ] Mounted POSIX Message Queue File System.
-> > > [   70.453489] systemd[1]: Mounted Kernel Debug File System.
-> > > [  OK  ] Mounted Kernel Debug File System.
-> > > [   70.516331] systemd[1]: Mounted Kernel Trace File System.
-> > > [  OK  ] Mounted Kernel Trace File System.
-> > > [   70.679253] systemd[1]: modprobe@configfs.service: Succeeded.
-> > > [   70.788400] systemd[1]: Finished Load Kernel Module configfs.
-> > > [  OK  ] Finished Load Kernel Module configfs.
-> > > [   71.501222] systemd[1]: modprobe@drm.service: Succeeded.
-> > > [   71.573295] systemd[1]: Finished Load Kernel Module drm.
-> > > [  OK  ] Finished Load Kernel Module drm.
-> > > [   71.825934] systemd[1]: modprobe@fuse.service: Succeeded.
-> > > [   71.886945] systemd[1]: Finished Load Kernel Module fuse.
-> > > [  OK  ] Finished Load Kernel Module fuse.
-> > > [   71.991932] systemd[1]: nfs-convert.service: Succeeded.
-> > > [   72.034674] systemd[1]: Finished Preprocess NFS configuration conv=
-ertion.
-> > > [  OK  ] Finished Preprocess NFS configuration convertion.
-> > > [   72.148778] systemd[1]: systemd-modules-load.service: Main process=
- exited, code=3Dexited, status=3D1/FAILURE
-> > > [   72.256659] systemd[1]: systemd-modules-load.service: Failed with =
-result 'exit-code'.
-> > > [   72.337818] systemd[1]: Failed to start Load Kernel Modules.
-> > > [FAILED] Failed to start Load Kernel Modules.
-> > > See 'systemctl status systemd-modules-load.service' for details.
-> > > [   72.410491] systemd[1]: systemd-modules-load.service: Consumed 1.4=
-63s CPU time.
-> > > [   72.496739] systemd[1]: Condition check resulted in FUSE Control F=
-ile System being skipped.
-> > > [   72.513689] systemd[1]: Condition check resulted in Kernel Configu=
-ration File System being skipped.
-> > > [   72.682549] systemd[1]: Starting Apply Kernel Variables..
-> > > [  OK  ] Finished Apply Kernel Variables.
-> > > [   76.314434] systemd[1]: Finished Load/Save Random Seed.
-> > > [  OK  ] Finished Load/Save Random Seed.
-> > > [***   ] (1 of 6) A start job is running for=E2=80=A6p Virtual Consol=
-e (14s / no limit)
-> > > [  OK  ] Finished Create Static Device Nodes in /dev.
-> > > [   79.787065] systemd[1]: Started Entropy Daemon based on the HAVEGE=
- algorithm.
-> > > [  OK  ] Started Entropy Daemon based on the HAVEGE algorithm.
-> > > [   80.186295] systemd[1]: Starting Journal Service...
-> > >          Starting Journal Service...
-> > > [   80.713508] systemd[1]: Starting Rule-based Manager for Device Eve=
-nts and Files...
-> > >          Starting Rule-based Manage=E2=80=A6for Device Events and Fil=
-es...
-> > > [  *** ] (2 of 7) A start job is running for=E2=80=A6 All udev Device=
-s (17s / no limit)
-> > > [   82.939347] systemd[1]: systemd-journald.service: Main process exi=
-ted, code=3Dexited, status=3D1/FAILURE
-> > > [   83.032046] systemd[1]: systemd-journald.service: Failed with resu=
-lt 'exit-code'.
-> > > [FAILED] Failed to start Journal Service.
-> > > See 'systemctl status systemd-journald.service' for details.
-> > > [   83.210041] systemd[1]: Dependency failed for Flush Journal to Per=
-sistent Storage.
-> > > [DEPEND] Dependency failed for Flus=E2=80=A6Journal to Persistent Sto=
-rage.
-> > > [   83.254122] systemd[1]: systemd-journal-flush.service: Job systemd=
--journal-flush.service/start failed with result 'dependency'.
-> > > [   83.272366] systemd[1]: systemd-journald.service: Consumed 1.443s =
-CPU time.
-> > > [   83.334360] systemd[1]: systemd-journald.service: Scheduled restar=
-t job, restart counter is at 1.
-> > > [   83.427839] systemd[1]: Finished Setup Virtual Console.
-> > > [  OK  ] Finished Setup Virtual Console.
-> > > [   83.510650] systemd[1]: Stopped Journal Service.
-> > > [  OK  ] Stopped Journal Service.
-> > > [   83.554417] systemd[1]: systemd-journald.service: Consumed 1.443s =
-CPU time.
-> > > [   83.576573] systemd[1]: Condition check resulted in Journal Audit =
-Socket being skipped.
-> > > [   83.904878] systemd[1]: Starting Journal Service...
-> > >          Starting Journal Service...
-> > > [   85.752090] systemd[1]: systemd-journald.service: Main process exi=
-ted, code=3Dexited, status=3D1/FAILURE
-> > > [   85.826421] systemd[1]: systemd-journald.service: Failed with resu=
-lt 'exit-code'.
-> > > [   85.876165] systemd[1]: Failed to start Journal Service.
-> > > [FAILED] Failed to start Journal Service.
-> > > See 'systemctl status systemd-journald.service' for details.
-> > > [   85.952221] systemd[1]: systemd-journald.service: Consumed 1.355s =
-CPU time.
-> > > [   86.002092] systemd[1]: systemd-journald.service: Scheduled restar=
-t job, restart counter is at 2.
-> > > [   86.015081] systemd[1]: Stopped Journal Service.
-> > > [  OK  ] Stopped Journal Service.
-> > > [   86.076429] systemd[1]: systemd-journald.service: Consumed 1.355s =
-CPU time.
-> > > [   86.089700] systemd[1]: Condition check resulted in Journal Audit =
-Socket being skipped.
-> > > [   86.390162] systemd[1]: Starting Journal Service...
-> > >          Starting Journal Service...
-> > > [   87.904427] systemd[1]: systemd-journald.service: Main process exi=
-ted, code=3Dexited, status=3D1/FAILURE
-> > > [   87.950259] systemd[1]: systemd-journald.service: Failed with resu=
-lt 'exit-code'.
-> > > [   88.000661] systemd[1]: Failed to start Journal Service.
-> > > [FAILED] Failed to start Journal Service.
-> > > See 'systemctl status systemd-journald.service' for details.
-> > > [   88.079953] systemd[1]: systemd-journald.service: Consumed 1.316s =
-CPU time.
-> > > [   88.128956] systemd[1]: systemd-journald.service: Scheduled restar=
-t job, restart counter is at 3.
-> > > [   88.145365] systemd[1]: Stopped Journal Service.
-> > > [  OK  ] Stopped Journal Service.
-> > > [   88.189975] systemd[1]: systemd-journald.service: Consumed 1.316s =
-CPU time.
-> > > [   88.205799] systemd[1]: Condition check resulted in Journal Audit =
-Socket being skipped.
-> > > [   88.514817] systemd[1]: Starting Journal Service...
-> > >          Starting Journal Service...
-> > >
-> > > (Note, you need to merge -rc2 into riscv/for-next to actually boot)
-> > >
-> > > Cheers,
-> > > Conor.
-> >
-> >
-> >
->
->
->
->
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Alex Shi <alexs@kernel.org>
+> Cc: Yanteng Si <siyanteng@loongson.cn>
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+
+Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
 
 
---=20
-Best Regards
- Guo Ren
+Thanks,
+
+Yanteng
+
+> ---
+>   Documentation/arch/index.rst                                    | 2 +-
+>   Documentation/{ => arch}/parisc/debugging.rst                   | 0
+>   Documentation/{ => arch}/parisc/features.rst                    | 0
+>   Documentation/{ => arch}/parisc/index.rst                       | 0
+>   Documentation/{ => arch}/parisc/registers.rst                   | 0
+>   Documentation/translations/zh_CN/arch/index.rst                 | 2 +-
+>   .../translations/zh_CN/{ => arch}/parisc/debugging.rst          | 2 +-
+>   Documentation/translations/zh_CN/{ => arch}/parisc/index.rst    | 2 +-
+>   .../translations/zh_CN/{ => arch}/parisc/registers.rst          | 2 +-
+>   MAINTAINERS                                                     | 2 +-
+>   10 files changed, 6 insertions(+), 6 deletions(-)
+>   rename Documentation/{ => arch}/parisc/debugging.rst (100%)
+>   rename Documentation/{ => arch}/parisc/features.rst (100%)
+>   rename Documentation/{ => arch}/parisc/index.rst (100%)
+>   rename Documentation/{ => arch}/parisc/registers.rst (100%)
+>   rename Documentation/translations/zh_CN/{ => arch}/parisc/debugging.rst (97%)
+>   rename Documentation/translations/zh_CN/{ => arch}/parisc/index.rst (88%)
+>   rename Documentation/translations/zh_CN/{ => arch}/parisc/registers.rst (99%)
+>
+> diff --git a/Documentation/arch/index.rst b/Documentation/arch/index.rst
+> index 77e287c3eeb9..6839cd46850d 100644
+> --- a/Documentation/arch/index.rst
+> +++ b/Documentation/arch/index.rst
+> @@ -18,7 +18,7 @@ implementation.
+>      ../mips/index
+>      nios2/index
+>      openrisc/index
+> -   ../parisc/index
+> +   parisc/index
+>      ../powerpc/index
+>      ../riscv/index
+>      ../s390/index
+> diff --git a/Documentation/parisc/debugging.rst b/Documentation/arch/parisc/debugging.rst
+> similarity index 100%
+> rename from Documentation/parisc/debugging.rst
+> rename to Documentation/arch/parisc/debugging.rst
+> diff --git a/Documentation/parisc/features.rst b/Documentation/arch/parisc/features.rst
+> similarity index 100%
+> rename from Documentation/parisc/features.rst
+> rename to Documentation/arch/parisc/features.rst
+> diff --git a/Documentation/parisc/index.rst b/Documentation/arch/parisc/index.rst
+> similarity index 100%
+> rename from Documentation/parisc/index.rst
+> rename to Documentation/arch/parisc/index.rst
+> diff --git a/Documentation/parisc/registers.rst b/Documentation/arch/parisc/registers.rst
+> similarity index 100%
+> rename from Documentation/parisc/registers.rst
+> rename to Documentation/arch/parisc/registers.rst
+> diff --git a/Documentation/translations/zh_CN/arch/index.rst b/Documentation/translations/zh_CN/arch/index.rst
+> index 7e59af567331..908ea131bb1c 100644
+> --- a/Documentation/translations/zh_CN/arch/index.rst
+> +++ b/Documentation/translations/zh_CN/arch/index.rst
+> @@ -12,7 +12,7 @@
+>      ../arm64/index
+>      ../riscv/index
+>      openrisc/index
+> -   ../parisc/index
+> +   parisc/index
+>      ../loongarch/index
+>   
+>   TODOList:
+> diff --git a/Documentation/translations/zh_CN/parisc/debugging.rst b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
+> similarity index 97%
+> rename from Documentation/translations/zh_CN/parisc/debugging.rst
+> rename to Documentation/translations/zh_CN/arch/parisc/debugging.rst
+> index 68b73eb57105..9bd197eb0d41 100644
+> --- a/Documentation/translations/zh_CN/parisc/debugging.rst
+> +++ b/Documentation/translations/zh_CN/arch/parisc/debugging.rst
+> @@ -1,6 +1,6 @@
+>   .. include:: ../disclaimer-zh_CN.rst
+>   
+> -:Original: Documentation/parisc/debugging.rst
+> +:Original: Documentation/arch/parisc/debugging.rst
+>   
+>   :翻译:
+>   
+> diff --git a/Documentation/translations/zh_CN/parisc/index.rst b/Documentation/translations/zh_CN/arch/parisc/index.rst
+> similarity index 88%
+> rename from Documentation/translations/zh_CN/parisc/index.rst
+> rename to Documentation/translations/zh_CN/arch/parisc/index.rst
+> index 0cc553fc8272..848742539550 100644
+> --- a/Documentation/translations/zh_CN/parisc/index.rst
+> +++ b/Documentation/translations/zh_CN/arch/parisc/index.rst
+> @@ -1,7 +1,7 @@
+>   .. SPDX-License-Identifier: GPL-2.0
+>   .. include:: ../disclaimer-zh_CN.rst
+>   
+> -:Original: Documentation/parisc/index.rst
+> +:Original: Documentation/arch/parisc/index.rst
+>   
+>   :翻译:
+>   
+> diff --git a/Documentation/translations/zh_CN/parisc/registers.rst b/Documentation/translations/zh_CN/arch/parisc/registers.rst
+> similarity index 99%
+> rename from Documentation/translations/zh_CN/parisc/registers.rst
+> rename to Documentation/translations/zh_CN/arch/parisc/registers.rst
+> index d2ab1874a602..caf5f258248b 100644
+> --- a/Documentation/translations/zh_CN/parisc/registers.rst
+> +++ b/Documentation/translations/zh_CN/arch/parisc/registers.rst
+> @@ -1,6 +1,6 @@
+>   .. include:: ../disclaimer-zh_CN.rst
+>   
+> -:Original: Documentation/parisc/registers.rst
+> +:Original: Documentation/arch/parisc/registers.rst
+>   
+>   :翻译:
+>   
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c515abc269f2..02720bc91481 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15834,7 +15834,7 @@ W:	https://parisc.wiki.kernel.org
+>   Q:	http://patchwork.kernel.org/project/linux-parisc/list/
+>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jejb/parisc-2.6.git
+>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git
+> -F:	Documentation/parisc/
+> +F:	Documentation/arch/parisc/
+>   F:	arch/parisc/
+>   F:	drivers/char/agp/parisc-agp.c
+>   F:	drivers/input/misc/hp_sdc_rtc.c
+
