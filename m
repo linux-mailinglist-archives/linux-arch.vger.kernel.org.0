@@ -2,92 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8026D30F1
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Apr 2023 15:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697E36D3282
+	for <lists+linux-arch@lfdr.de>; Sat,  1 Apr 2023 18:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjDANTb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Apr 2023 09:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S229791AbjDAQIT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 1 Apr 2023 12:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjDANTa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Apr 2023 09:19:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860501C1CD;
-        Sat,  1 Apr 2023 06:19:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16AFD60E03;
-        Sat,  1 Apr 2023 13:19:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2FCC433EF;
-        Sat,  1 Apr 2023 13:19:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680355167;
-        bh=62febkaNQnAPXtdyR9VpUShs/vCJRfylF056sOOKvKM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=upWKPQmZHPtKFqP2Djjw38dQywaVjwuQ0YfIxJqy6uaBjMYTghJuWxPWnyKJepKaY
-         SZ3R7lj9gAzvTJ+ZvZv61bGdQ7L/Qgi1qfPAGntT8tV457aMsONrxIvgx0g//Doz0Z
-         IXU5ZFfR13im+N2Mx1Df7FRnMpnGAL6QtKoW0XPM+zhxYcT4Syp12nIqDh9pBB+xLM
-         316UVaUBNdzlvo6FXA3PQ6X0hSU6cXkmi4kBSCKAWQgLS7NnhzS5FbcexvKWx8BL84
-         1DnCpjCSCV0zJ6T58lBwqUto6yd7/EDjIVdOVTTMJJ0Rz317uQCex0lJk/VKsU07NR
-         OTNeHRLt9rJ5A==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@kernel.org>
-Cc:     Conor Dooley <conor@kernel.org>, arnd@arndb.de,
-        palmer@rivosinc.com, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, conor.dooley@microchip.com, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org,
-        mark.rutland@arm.com, ben@decadent.org.uk, palmer@dabbelt.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>
-Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-In-Reply-To: <2587778.7s5MMGUR32@diego>
-References: <20230222033021.983168-1-guoren@kernel.org>
- <23668656.ouqheUzb2q@diego>
- <CAJF2gTSWETHhQFuE19H+RVX6Jbue+UAu8o94QoBFx65NABas1Q@mail.gmail.com>
- <2587778.7s5MMGUR32@diego>
-Date:   Sat, 01 Apr 2023 15:19:24 +0200
-Message-ID: <87mt3rloyr.fsf@all.your.base.are.belong.to.us>
+        with ESMTP id S229540AbjDAQIS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Apr 2023 12:08:18 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE901C1DF
+        for <linux-arch@vger.kernel.org>; Sat,  1 Apr 2023 09:08:17 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id z19so24222613plo.2
+        for <linux-arch@vger.kernel.org>; Sat, 01 Apr 2023 09:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680365297;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ps43Ql5Tjnd+rS8BdUE8H1PpwwGazEWm6mc1DzBYYUo=;
+        b=ZUwOEoNvh875rA+TPV5BQ7mnuU/KXX20LmyR3axW4Q0MbJJTwjqlsl2P7TguCY21zd
+         7OGV1gbcELHgjaW0x/mt9+4NPG11pl/nk/SDaMwGRE2dePzbA4E6vm84jkH4/eSoVllW
+         SZxgalu9daSyzJ0SQ6YVzH5ZGglHcCwUlVJBDX71CLukf0xmgU7ZULVld8IqjphtsQyk
+         st69Hn0Y4RgdPq2WvMu0GwuxsP8VN7d5K1im6lRXhlK+koAx435lzJ/0n2ZxwkOBI9C3
+         B074Q1YRrqLOVJU6mJ6f5F+DiSELzil5GmHPtiyZN1YLPfWodMzBzVq1RwTOciaOnXbB
+         a9YQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680365297;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ps43Ql5Tjnd+rS8BdUE8H1PpwwGazEWm6mc1DzBYYUo=;
+        b=wSs5cJ1uFx3vcCssI9teqJ1ze7bgiWeoXfzZO4FI9m1F6YUXWi5C4kZcWtcMY5OjhB
+         /UYcW+miPEcV4zSBckQrdhNZ/c7POmL4Tt7BAVqPMMNCKhDGc/XiKJWewmiQSDXv3v/b
+         5p6nBrB2pIgKR1RW/TYYOpuHJRYS88O9UdY/mHg4T/dh+Ba74qX16hMgRGyZAdzIrofp
+         olr0NGeW02xuYGk+y86SCIseIguqS1ciDalFZFjaQyaD00uWN7AsBvtc4voITK8KuR8u
+         I86cxRqEj7AeuSc5EmzL9JUOdvI+o0wDmgRto9MRqAogUvH0RmodYvK7/80WWa3bmxW9
+         6MsQ==
+X-Gm-Message-State: AAQBX9c1NfKWmHRYacnJywMIbV/CgbS+CAiG9LduJYYJNfLMpGhcq6TJ
+        zYN7qcImAt8jSuM22LczhVc/VAiwNRrbZg+bFqE=
+X-Google-Smtp-Source: AKy350acEoMJ4Q5pdqpZOypoQsq8HKU584B+NHUTlHNsHAlO6vFYv+wz1/I471Rz2YvjFibLRZwDeWgB2SeqK//tf2I=
+X-Received: by 2002:a17:90a:12c7:b0:240:9b4c:536e with SMTP id
+ b7-20020a17090a12c700b002409b4c536emr5609559pjg.6.1680365297181; Sat, 01 Apr
+ 2023 09:08:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:8c92:b0:474:c743:9f91 with HTTP; Sat, 1 Apr 2023
+ 09:08:16 -0700 (PDT)
+Reply-To: fiona.hill.2023@outlook.com
+From:   Fiona Hill <leea4982@gmail.com>
+Date:   Sat, 1 Apr 2023 09:08:16 -0700
+Message-ID: <CADa=nC1Ei9Fia=TEH90rN6UFyj+q+UzTGFNWj+EG8uNjUZqm_A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
->> > > > This has unfortunately broken booting my usual NFS rootfs on both my D1
->> > > > and Icicle. It's one of the Fedora images from David, I think this one:
->> > > > http://fedora.riscv.rocks/kojifiles/work/tasks/3933/1313933/
->> > > >
->> > > > It gets pretty far into things, it's once systemd is operational that
->> > > > things go pear shaped:
->> > >
->> > > Shoulda said, can share the full logs if required of course, but they're
->> > > quite verbose cos systemd etc.
->> >
->> > I was just investigating the same thing just now. So that saves me some
->> > tracking down the culprit :-) .
->> >
->> > My main qemu is living as a "board" in my boardfarm (also doing nfsroot)
->> > as well as my d1 nezha with nfsroot was affected.
->> Can you reproduce it with qemu? Could give me some tips and let me
->> reproduce it on qemu?
-
-FWIW, I'm getting the systemd issue w/o NFS, on a regular 9p virtfs.
-
-| $ sudo mmdebstrap --architecture=riscv64 lunar rv-rootfs http://ports.ubuntu.com
-
-and the rootfs qemu config:
- |  -fsdev local,id=root,path=/path/to/rv-rootfs/,security_model=none \
- |  -device virtio-9p-pci,fsdev=root,mount_tag=/dev/root \
- |  -append "root=/dev/root rw rootfstype=9p rootflags=version=9p2000.L,trans=virtio,cache=mmap,access=any security=none earlycon console=tty0 console=ttyS0"
-
+-- 
+Hello did you receive my message?
