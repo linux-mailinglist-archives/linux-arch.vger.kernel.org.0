@@ -2,82 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CD36D3D4A
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Apr 2023 08:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0679B6D3EDC
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Apr 2023 10:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjDCG0t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Apr 2023 02:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        id S231585AbjDCIXK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Apr 2023 04:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjDCG0s (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Apr 2023 02:26:48 -0400
+        with ESMTP id S231725AbjDCIXJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Apr 2023 04:23:09 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F26974F
-        for <linux-arch@vger.kernel.org>; Sun,  2 Apr 2023 23:26:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005CDE3B1
+        for <linux-arch@vger.kernel.org>; Mon,  3 Apr 2023 01:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680503160;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        s=mimecast20190719; t=1680510114;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=afBNaZ0DMuI7GB+2iDCGbyFFwGSVdQ773bP8QWimT1I=;
-        b=hVt84RZB1Lu91P0oGv2K24vng+TC4k4uSIffBfcZfn62oUIQoW4CZpkU+zWbVJr1rgB6+X
-        c6o8jp3nKng/EC7jBdAvjVPxbBjnirMiYc1Gg8sJ1A2WniM3alfYAgmOSCMjL7GBgNgH5C
-        xznGjOmUH1Ow6EM4awrGrZ0C+SmKQug=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-28z4qi46NM2VpjD3-hJMRQ-1; Mon, 03 Apr 2023 02:25:57 -0400
-X-MC-Unique: 28z4qi46NM2VpjD3-hJMRQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0C99A801210;
-        Mon,  3 Apr 2023 06:25:56 +0000 (UTC)
-Received: from [10.72.12.158] (ovpn-12-158.pek2.redhat.com [10.72.12.158])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2D5BAC15BA0;
-        Mon,  3 Apr 2023 06:25:40 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
-To:     Shaoqin Huang <shahuang@redhat.com>,
-        James Morse <james.morse@arm.com>, linux-pm@vger.kernel.org,
-        loongarch@lists.linux.dev, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Len Brown <lenb@kernel.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230203135043.409192-1-james.morse@arm.com>
- <e17627fb-283e-dd42-94c1-f89dea167577@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <972ed7df-78cd-e02a-7376-78c806181b5f@redhat.com>
-Date:   Mon, 3 Apr 2023 14:25:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        bh=jQzDBAQKeqgfsxxyrlkQCm/LEl+p6ixMadQZXFxQxwQ=;
+        b=El3TnhDUXHt8UTsZ2QAB/RhQPlaWpCAu51LnLK6yiNzx73uiU5Rr14linVCmbKk8t2hxls
+        MPPCq5NaqZhI10E6Y2TXUiQTkBqH//8ywjJ8HKJKhw/+46PfRU9T5LqQf1Ma7k4415DflK
+        cymZPGXQmeHmTBrmGRPg0+FzC35Dw4g=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-510-ecLkSGP4POuQF9KjgcDs4Q-1; Mon, 03 Apr 2023 04:21:52 -0400
+X-MC-Unique: ecLkSGP4POuQF9KjgcDs4Q-1
+Received: by mail-wm1-f69.google.com with SMTP id m27-20020a05600c3b1b00b003ee502f1b16so14145052wms.9
+        for <linux-arch@vger.kernel.org>; Mon, 03 Apr 2023 01:21:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680510112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jQzDBAQKeqgfsxxyrlkQCm/LEl+p6ixMadQZXFxQxwQ=;
+        b=TgLrdB7lG3RtSr3Bnb1FHT9sE/pvKFBsWKo+cxDu3aa8oeW6kDvx6P3fFyk1B+D1hl
+         mS/OdrnsHH2zXi6cBNy8t5a0cK4Nlnx95+VjEMBfIGX6CBlzs26kV41QeTqtMENoLz7P
+         4bNY5az9rH8oPpd3CZvVTdiVX1+1OmJntthXfUO9Zt7/GllJix6GHP91iBxOryZi+CsZ
+         Esb1u24coFoPDqLEGq3daqsoJREgwTiOVVqKHZmWyVWewMRbMYYBftr+RgSxIbnplre/
+         6iY44qwugCChRGct37Vi08YocnrbtAM/0XQkEkcRTi77WajT6x/J7YDJxRiKoQqO8AOV
+         dd1A==
+X-Gm-Message-State: AO0yUKViA2Cru7ME4AMPxyD1RTSPcn5nZL3lOJTeW1AvcDajQlGBVCyR
+        zOS1AFzfmbi6VbkGv7nljcGxcdcvRj3rDVgxi+DpvBaNiEe3+eS58qaOKw2+PojtTlBhM42HEZp
+        no9J/xRDRrj8EE3e+3r0vjq76xz0DZg==
+X-Received: by 2002:a05:600c:20d:b0:3ee:672d:caae with SMTP id 13-20020a05600c020d00b003ee672dcaaemr26843812wmi.36.1680510111656;
+        Mon, 03 Apr 2023 01:21:51 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/AgkVl4NRObZrwop/hyYIrLuclF7oALAw2adBku9J1XTbgT5nDnZVWZTlkdOAVCBUc2F54wA==
+X-Received: by 2002:a05:600c:20d:b0:3ee:672d:caae with SMTP id 13-20020a05600c020d00b003ee672dcaaemr26843772wmi.36.1680510111270;
+        Mon, 03 Apr 2023 01:21:51 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c702:5e00:8e78:71f3:6243:77f0? (p200300cbc7025e008e7871f3624377f0.dip0.t-ipconnect.de. [2003:cb:c702:5e00:8e78:71f3:6243:77f0])
+        by smtp.gmail.com with ESMTPSA id c2-20020adfe702000000b002d6f285c0a2sm9135348wrm.42.2023.04.03.01.21.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Apr 2023 01:21:50 -0700 (PDT)
+Message-ID: <f0232380-4171-f4d3-f1a6-07993e551b46@redhat.com>
+Date:   Mon, 3 Apr 2023 10:21:48 +0200
 MIME-Version: 1.0
-In-Reply-To: <e17627fb-283e-dd42-94c1-f89dea167577@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
 Content-Language: en-US
+To:     Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org
+Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
+        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
+        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+References: <cover.1680306489.git.ackerleytng@google.com>
+ <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.6 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
@@ -88,72 +100,218 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Shaoqin,
-
-On 3/29/23 1:52 PM, Shaoqin Huang wrote:
-> On 2/3/23 21:50, James Morse wrote:
-
-[...]
-
->>
->> The first patch has already been posted as a fix here:
->> https://www.spinics.net/lists/linux-ia64/msg21920.html
->> I've only build tested Loongarch and ia64.
->>
->>
->> If folk want to play along at home, you'll need a copy of Qemu that supports this.
->> https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
->>
->> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
->> to match your host kernel. Replace your '-smp' argument with something like:
->> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
->>
->> then feed the following to the Qemu montior;
->> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
->> | (qemu) device_del cpu1
->>
->>
->> This series is based on v6.2-rc3, and can be retrieved from:
->> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+On 01.04.23 01:50, Ackerley Tng wrote:
+> By default, the backing shmem file for a restrictedmem fd is created
+> on shmem's kernel space mount.
 > 
-> I applied this patch series on v6.2-rc3 and using the QEMU cloned from the salil-mehta/qemu.git repo. But when I try to run the QEMU, it shows:
+> With this patch, an optional tmpfs mount can be specified via an fd,
+> which will be used as the mountpoint for backing the shmem file
+> associated with a restrictedmem fd.
 > 
-> $ qemu-system-aarch64: -accel kvm: Failed to enable KVM_CAP_ARM_PSCI_TO_USER cap.
+> This will help restrictedmem fds inherit the properties of the
+> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+> binding hints, etc.
 > 
-> Here is the command I use:
+> Permissions for the fd passed to memfd_restricted() is modeled after
+> the openat() syscall, since both of these allow creation of a file
+> upon a mount/directory.
 > 
-> $ qemu-system-aarch64
-> -machine virt
-> -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd
-> -accel kvm
-> -m 4096
-> -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
-> -cpu host
-> -qmp unix:./src.socket,server,nowait
-> -hda ./XXX.qcow2
-> -serial unix:./src.serial,server,nowait
-> -monitor stdio
+> Permission to reference the mount the fd represents is checked upon fd
+> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
+> etc) and any process that can present memfd_restricted() with a valid
+> fd is expected to have obtained permission to use the mount
+> represented by the fd. This behavior is intended to parallel that of
+> the openat() syscall.
 > 
-> It seems something related to your notice: You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
-> to match your host kernel.
+> memfd_restricted() will check that the tmpfs superblock is
+> writable, and that the mount is also writable, before attempting to
+> create a restrictedmem file on the mount.
 > 
-> But I'm not actually understand what should I fix, since I haven't review the patch series. Could you give me some more information? Maybe I'm doing something wrong.
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>   include/linux/syscalls.h           |  2 +-
+>   include/uapi/linux/restrictedmem.h |  8 ++++
+>   mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
+>   3 files changed, 77 insertions(+), 7 deletions(-)
+>   create mode 100644 include/uapi/linux/restrictedmem.h
 > 
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index f9e9e0c820c5..a23c4c385cd3 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>   asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>   					    unsigned long home_node,
+>   					    unsigned long flags);
+> -asmlinkage long sys_memfd_restricted(unsigned int flags);
+> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
+> 
+>   /*
+>    * Architecture-specific system calls
+> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
+> new file mode 100644
+> index 000000000000..22d6f2285f6d
+> --- /dev/null
+> +++ b/include/uapi/linux/restrictedmem.h
+> @@ -0,0 +1,8 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
+> +#define _UAPI_LINUX_RESTRICTEDMEM_H
+> +
+> +/* flags for memfd_restricted */
+> +#define RMFD_USERMNT		0x0001U
 
-When the kernel is rebased to v6.2.rc3, the two capabilities are conflictsing
-between QEMU and host kernel. Please adjust them like below and have a try:
+I wonder if we can come up with a more expressive prefix than RMFD. 
+Sounds more like "rm fd" ;) Maybe it should better match the 
+"memfd_restricted" syscall name, like "MEMFD_RSTD_USERMNT".
 
-In qemu/linux-headers/linux/kvm.h
 
-#define KVM_CAP_ARM_HVC_TO_USER 250 /* TODO: as per linux 6.1-rc2 */
-#define KVM_CAP_ARM_PSCI_TO_USER 251 /* TODO: as per linux 6.1-rc2 */
+> +
+> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
+> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> index c5d869d8c2d8..f7b62364a31a 100644
+> --- a/mm/restrictedmem.c
+> +++ b/mm/restrictedmem.c
+> @@ -1,11 +1,12 @@
+>   // SPDX-License-Identifier: GPL-2.0
+> -#include "linux/sbitmap.h"
 
-In linux/include/uapi/linux/kvm.h
+Looks like an unrelated change?
 
-#define KVM_CAP_ARM_HVC_TO_USER 250
-#define KVM_CAP_ARM_PSCI_TO_USER 251
+> +#include <linux/namei.h>
+>   #include <linux/pagemap.h>
+>   #include <linux/pseudo_fs.h>
+>   #include <linux/shmem_fs.h>
+>   #include <linux/syscalls.h>
+>   #include <uapi/linux/falloc.h>
+>   #include <uapi/linux/magic.h>
+> +#include <uapi/linux/restrictedmem.h>
+>   #include <linux/restrictedmem.h>
+> 
+>   struct restrictedmem {
+> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
+>   	return file;
+>   }
+> 
+> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+> +static int restrictedmem_create(struct vfsmount *mount)
+>   {
+>   	struct file *file, *restricted_file;
+>   	int fd, err;
+> 
+> -	if (flags)
+> -		return -EINVAL;
+> -
+>   	fd = get_unused_fd_flags(0);
+>   	if (fd < 0)
+>   		return fd;
+> 
+> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +	if (mount)
+> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
+> +	else
+> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +
+>   	if (IS_ERR(file)) {
+>   		err = PTR_ERR(file);
+>   		goto err_fd;
+> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+>   	return err;
+>   }
+> 
+> +static bool is_shmem_mount(struct vfsmount *mnt)
+> +{
+> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+> +}
+> +
+> +static bool is_mount_root(struct file *file)
+> +{
+> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+> +}
 
+I'd inline at least that function, pretty self-explaining.
+
+> +
+> +static int restrictedmem_create_on_user_mount(int mount_fd)
+> +{
+> +	int ret;
+> +	struct fd f;
+> +	struct vfsmount *mnt;
+> +
+> +	f = fdget_raw(mount_fd);
+> +	if (!f.file)
+> +		return -EBADF;
+> +
+> +	ret = -EINVAL;
+> +	if (!is_mount_root(f.file))
+> +		goto out;
+> +
+> +	mnt = f.file->f_path.mnt;
+> +	if (!is_shmem_mount(mnt))
+> +		goto out;
+> +
+> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = mnt_want_write(mnt);
+> +	if (unlikely(ret))
+> +		goto out;
+> +
+> +	ret = restrictedmem_create(mnt);
+> +
+> +	mnt_drop_write(mnt);
+> +out:
+> +	fdput(f);
+> +
+> +	return ret;
+> +}
+> +
+> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+> +{
+> +	if (flags & ~RMFD_USERMNT)
+> +		return -EINVAL;
+> +
+> +	if (flags == RMFD_USERMNT) {
+> +		if (mount_fd < 0)
+> +			return -EINVAL;
+> +
+> +		return restrictedmem_create_on_user_mount(mount_fd);
+> +	} else {
+> +		return restrictedmem_create(NULL);
+> +	}
+
+
+You can drop the else case:
+
+if (flags == RMFD_USERMNT) {
+	...
+	return restrictedmem_create_on_user_mount(mount_fd);
+}
+return restrictedmem_create(NULL);
+
+
+I do wonder if you want to properly check for a flag instead of 
+comparing values. Results in a more natural way to deal with flags:
+
+if (flags & RMFD_USERMNT) {
+
+}
+
+> +}
+> +
+>   int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+>   		       struct restrictedmem_notifier *notifier, bool exclusive)
+>   {
+
+The "memfd_restricted" vs. "restrictedmem" terminology is a bit 
+unfortunate, but not your fault here.
+
+
+I'm not a FS person, but it does look good to me.
+
+-- 
 Thanks,
-Gavin
 
+David / dhildenb
 
