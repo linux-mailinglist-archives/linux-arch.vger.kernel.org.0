@@ -2,50 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0CA6D41D6
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Apr 2023 12:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCDA06D4F3B
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Apr 2023 19:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjDCKUi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Apr 2023 06:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S230511AbjDCRoM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Apr 2023 13:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbjDCKUU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Apr 2023 06:20:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4D2A12875;
-        Mon,  3 Apr 2023 03:19:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A5C41063;
-        Mon,  3 Apr 2023 03:20:37 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.57.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18E933F840;
-        Mon,  3 Apr 2023 03:19:50 -0700 (PDT)
-Date:   Mon, 3 Apr 2023 11:19:48 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
- fallbacks
-Message-ID: <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N>
-References: <20230305205628.27385-1-ubizjak@gmail.com>
- <20230305205628.27385-2-ubizjak@gmail.com>
- <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
- <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
- <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
- <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
- <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
+        with ESMTP id S229780AbjDCRoM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Apr 2023 13:44:12 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615C92107;
+        Mon,  3 Apr 2023 10:44:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id r7-20020a17090b050700b002404be7920aso29376348pjz.5;
+        Mon, 03 Apr 2023 10:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680543850;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMv3NS5XhEsCAYXWn3ESVcr5ieV886jiRxfmDBuVIfU=;
+        b=pd1ROCDaZ68jHr6hwCKXbIOlrkY3nPjTdhPGucgfsoGilpiVmMcR99mHCcfucQcqlm
+         86hgl0ZH0w+tscwx2mNOHTdhjjZW5SAlbnwL6mu3IiGTs6iGfP162z75etA6IP05fs4J
+         TcG00AOBfOpGNlkYQUrD1gFYMyrCuD9JrFQAkpwdy1LuNnTCihD6aSDhbDXp3ql5wlzF
+         YZ9FHQxDYlfw0A8KQ9tAz5Ty/QY6jd93msexD583ggLVqfcWq4Cojs9P4wRVf2D2JGM6
+         D3Z4lkkc9L5wb2WCnTW5QplxoGmpBAZM5ROpnQwJN9oarMsWQ7L6t+XvyLQws8Lda1xx
+         ZYag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680543850;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HMv3NS5XhEsCAYXWn3ESVcr5ieV886jiRxfmDBuVIfU=;
+        b=5Io+9//sQJEhCzB8mkFvBCAc6T/Q8q8rEgEkJwy9+u1bNprhgthIsfWq3BdxpvU/RD
+         OfsNhqhWi3RN4A4soIp9mPzhOTrTfCMKBUrmXDHLJed5fHpGeulIfaN+xE8HCMmjVLpf
+         K+i/FSw5n7hHXxwG9oliJ2ta4mM4js0lO3XEJFRrSpaSOxqoM4up4kBbEtSONzitHSHP
+         VMANy6FnmnvXdAAmyWyl4GVtgJf0awUtUUSC4zCFIA/+e6EwfJMK+9gxLGPpRtkzZ9Qq
+         qUhKiuNASZ1+zEfTvKQ3VlfuEPLZinPL1uVuXikwlKsVJU2jGuvyDnoD8T1gtrWS/2ug
+         oEAg==
+X-Gm-Message-State: AAQBX9fV4qg6OPAmpaDZFeZPic2PyUDuA902JQYtryBk6klL8zJ/Qjlv
+        wjKNAkqWZ1sjcYsq296yKWE=
+X-Google-Smtp-Source: AKy350aE5mgMIF7xAkJwwvpqwaSOclhTbYdem6aF5HYRPLcF7xZXGn9vhmIsZSFKydeMPYrYJ9Lb1g==
+X-Received: by 2002:a17:903:32cc:b0:1a1:f5dd:2dde with SMTP id i12-20020a17090332cc00b001a1f5dd2ddemr43879613plr.44.1680543849575;
+        Mon, 03 Apr 2023 10:44:09 -0700 (PDT)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:2:8635:6e96:35c1:c560])
+        by smtp.gmail.com with ESMTPSA id jj21-20020a170903049500b001a19196af48sm6883803plb.64.2023.04.03.10.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Apr 2023 10:44:09 -0700 (PDT)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [RFC PATCH V4 00/17] x86/hyperv/sev: Add AMD sev-snp enlightened guest support on hyperv
+Date:   Mon,  3 Apr 2023 13:43:48 -0400
+Message-Id: <20230403174406.4180472-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,175 +81,108 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Mar 26, 2023 at 09:28:38PM +0200, Uros Bizjak wrote:
-> On Fri, Mar 24, 2023 at 5:33 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
-> > > On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
-> > > > On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
-> > > > >
-> > > > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
-> > > > > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
-> > > > >
-> > > > > Can you give an example of where we are passing an incompatible pointer?
-> > > >
-> > > > An example is patch 10/10 from the series, which will fail without
-> > > > this fix when fallback code is used. We have:
-> > > >
-> > > > -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
-> > > > +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
-> > > >
-> > > > where rb->head is defined as:
-> > > >
-> > > > typedef struct {
-> > > >    atomic_long_t a;
-> > > > } local_t;
-> > > >
-> > > > while offset is defined as 'unsigned long'.
-> > >
-> > > Ok, but that's because we're doing the wrong thing to start with.
-> > >
-> > > Since local_t is defined in terms of atomic_long_t, we should define the
-> > > generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
-> > > have a mismatch between 'long *' and 'unsigned long *', but then we can fix
-> > > that in the callsite:
-> > >
-> > >       while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
-> >
-> > Sorry, that should be:
-> >
-> >         while (!local_try_cmpxchg(&rb->head, (long *)&offset, head))
-> 
-> The fallbacks are a bit more complicated than above, and are different
-> from atomic_try_cmpxchg.
-> 
-> Please note in patch 2/10, the falbacks when arch_try_cmpxchg_local
-> are not defined call arch_cmpxchg_local. Also in patch 2/10,
-> try_cmpxchg_local is introduced, where it calls
-> arch_try_cmpxchg_local. Targets (and generic code) simply define (e.g.
-> :
-> 
-> #define local_cmpxchg(l, o, n) \
->        (cmpxchg_local(&((l)->a.counter), (o), (n)))
-> +#define local_try_cmpxchg(l, po, n) \
-> +       (try_cmpxchg_local(&((l)->a.counter), (po), (n)))
-> 
-> which is part of the local_t API. Targets should either define all
-> these #defines, or none. There are no partial fallbacks as is the case
-> with atomic_t.
+From: Tianyu Lan <tiala@microsoft.com>
 
-Whether or not there are fallbacks is immaterial.
 
-In those cases, architectures can just as easily write C wrappers, e.g.
+This patchset is to add AMD sev-snp enlightened guest
+support on hyperv. Hyperv uses Linux direct boot mode
+to boot up Linux kernel and so it needs to pvalidate
+system memory by itself.
 
-long local_cmpxchg(local_t *l, long old, long new)
-{
-	return cmpxchg_local(&l->a.counter, old, new);
-}
+In hyperv case, there is no boot loader and so cc blob
+is prepared by hypervisor. In this series, hypervisor
+set the cc blob address directly into boot parameter
+of Linux kernel. If the magic number on cc blob address
+is valid, kernel will read cc blob.
 
-long local_try_cmpxchg(local_t *l, long *old, long new)
-{
-	return try_cmpxchg_local(&l->a.counter, old, new);
-}
+Shared memory between guests and hypervisor should be
+decrypted and zero memory after decrypt memory. The data
+in the target address. It maybe smearedto avoid smearing
+data.
 
-> The core of the local_h API is in the local.h header. If the target
-> doesn't define its own local.h header, then asm-generic/local.h is
-> used that does exactly what you propose above regarding the usage of
-> atomic functions.
-> 
-> OTOH, when the target defines its own local.h, then the above
-> target-dependent #define path applies. The target should define its
-> own arch_try_cmpxchg_local, otherwise a "generic" target-dependent
-> fallback that calls target arch_cmpxchg_local applies. In the case of
-> x86, patch 9/10 enables new instruction by defining
-> arch_try_cmpxchg_local.
-> 
-> FYI, the patch sequence is carefully chosen so that x86 also exercises
-> fallback code between different patches in the series.
-> 
-> Targets are free to define local_t to whatever they like, but for some
-> reason they all define it to:
-> 
-> typedef struct {
->     atomic_long_t a;
-> } local_t;
+Introduce #HV exception support in AMD sev snp code and
+#HV handler.
 
-Yes, which is why I used atomic_long() above.
+Change since v3:
+       - Replace struct sev_es_save_area with struct vmcb_save_area
+       - Move smp, cpu and memory enumerating code from mshyperv.c to ivm.c
+       - Handle nested entry case of do_exc_hv() case.
+       - Check NMI event when irq is disabled
 
-> so they have to dig the variable out of the struct like:
-> 
-> #define local_cmpxchg(l, o, n) \
->      (cmpxchg_local(&((l)->a.counter), (o), (n)))
-> 
-> Regarding the mismatch of 'long *' vs 'unsigned long *': x86
-> target-specific code does for try_cmpxchg:
-> 
-> #define __raw_try_cmpxchg(_ptr, _pold, _new, size, lock) \
-> ({ \
-> bool success; \
-> __typeof__(_ptr) _old = (__typeof__(_ptr))(_pold); \
-> __typeof__(*(_ptr)) __old = *_old; \
-> __typeof__(*(_ptr)) __new = (_new); \
-> 
-> so, it *does* cast the "old" pointer to the type of "ptr". The generic
-> code does *not*. This difference is dangerous, since the compilation
-> of some code involving try_cmpxchg will compile OK for x86 but will
-> break for other targets that use try_cmpxchg fallback templates (I was
-> the unlucky one that tripped on this in the past). Please note that
-> this problem is not specific to the proposed local_try_cmpxchg series,
-> but affects the existing try_cmpxchg API.
+Change since v2:
+       - Remove validate kernel memory code at boot stage
+       - Split #HV page patch into two parts
+       - Remove HV-APIC change due to enable x2apic from
+       	 host side
+       - Rework vmbus code to handle error of decrypt page
+       - Spilt memory and cpu initialization patch. 
+Change since v1:
+       - Remove boot param changes for cc blob address and
+       use setup head to pass cc blob info
+       - Remove unnessary WARN and BUG check
+       - Add system vector table map in the #HV exception
+       - Fix interrupt exit issue when use #HV exception
 
-I understand the problem of arch code differing from generic code, and that we
-want to have *a* consistent behaviour for hte API.
+Ashish Kalra (2):
+  x86/sev: optimize system vector processing invoked from #HV exception
+  x86/sev: Fix interrupt exit code paths from #HV exception
 
-What I'm saying is that the behaviour we should aim for is where the 'old'
-pointer has a specific type (long), and we always require that, as we do for
-the various atomic_*() APIs of which local_*() is a cousin.
+Tianyu Lan (15):
+  x86/hyperv: Add sev-snp enlightened guest static key
+  Drivers: hv: vmbus: Decrypt vmbus ring buffer
+  x86/hyperv: Set Virtual Trust Level in VMBus init message
+  x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
+    enlightened guest
+  clocksource/drivers/hyper-v: decrypt hyperv tsc page in sev-snp
+    enlightened guest
+  x86/hyperv: decrypt VMBus pages for sev-snp enlightened guest
+  drivers: hv: Decrypt percpu hvcall input arg page in sev-snp
+    enlightened guest
+  x86/hyperv: Initialize cpu and memory for sev-snp enlightened guest
+  x86/hyperv: SEV-SNP enlightened guest don't support legacy rtc
+  x86/hyperv: Add smp support for sev-snp guest
+  x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+  x86/sev: Add a #HV exception handler
+  x86/sev: Add Check of #HV event in path
+  x86/hyperv/sev: Add AMD sev-snp enlightened guest support on hyperv
+  x86/sev: Remove restrict interrupt injection from
+    SNP_FEATURES_IMPL_REQ
 
-> Also, I don't think that "fixing" callsites is the right thing to do.
+ arch/x86/boot/compressed/sev.c        |   1 -
+ arch/x86/entry/entry_64.S             |  84 ++++++
+ arch/x86/hyperv/hv_init.c             |  42 +++
+ arch/x86/hyperv/ivm.c                 | 181 ++++++++++++
+ arch/x86/include/asm/cpu_entry_area.h |   6 +
+ arch/x86/include/asm/hyperv-tlfs.h    |   7 +
+ arch/x86/include/asm/idtentry.h       | 105 ++++++-
+ arch/x86/include/asm/irqflags.h       |  11 +
+ arch/x86/include/asm/mem_encrypt.h    |   2 +
+ arch/x86/include/asm/mshyperv.h       |  81 ++++-
+ arch/x86/include/asm/page_64_types.h  |   1 +
+ arch/x86/include/asm/sev.h            |  13 +
+ arch/x86/include/asm/svm.h            |  15 +-
+ arch/x86/include/asm/trapnr.h         |   1 +
+ arch/x86/include/asm/traps.h          |   1 +
+ arch/x86/include/asm/x86_init.h       |   2 +
+ arch/x86/include/uapi/asm/svm.h       |   4 +
+ arch/x86/kernel/cpu/common.c          |   1 +
+ arch/x86/kernel/cpu/mshyperv.c        |  42 ++-
+ arch/x86/kernel/dumpstack_64.c        |   9 +-
+ arch/x86/kernel/idt.c                 |   1 +
+ arch/x86/kernel/sev.c                 | 407 ++++++++++++++++++++++----
+ arch/x86/kernel/traps.c               |  42 +++
+ arch/x86/kernel/vmlinux.lds.S         |   7 +
+ arch/x86/kernel/x86_init.c            |   4 +-
+ arch/x86/mm/cpu_entry_area.c          |   2 +
+ drivers/clocksource/hyperv_timer.c    |   2 +-
+ drivers/hv/connection.c               |   1 +
+ drivers/hv/hv.c                       |  42 ++-
+ drivers/hv/hv_common.c                |  27 +-
+ include/asm-generic/hyperv-tlfs.h     |  19 ++
+ include/asm-generic/mshyperv.h        |   2 +
+ include/linux/hyperv.h                |   4 +-
+ 33 files changed, 1092 insertions(+), 77 deletions(-)
 
-Why? What's wrong with doing that?
+-- 
+2.25.1
 
-The documentation in Documentation/core-api/local_ops.rst says:
-
-    The ``local_t`` type is defined as an opaque ``signed long``
-
-So the obvious and least surprising thing is for the local_*() functions to use
-'long' for values and 'long *' for pointers to values.
-
-Requiring a cast in a few places is not the end of the world.
-
-> The generic code should follow x86 and cast the "old" pointer to the
-> type of "ptr" inside the fallback.
-
-Why?
-
-I disagree, and think it's far better to be strict by default. That way,
-accidental usage of the wrong type will be caught by the compiler, and if
-someone *really* wants to use a differently type then can use a cast in the
-callsite, which makes it really obvious when that is happening.
-
-I appreciate that may require some preparatory cleanup, but I think that's a
-small price to pay for having this in a clearer and more maintainable state.
-
-> > The fundamenalthing I'm trying to say is that the
-> > atomic/atomic64/atomic_long/local/local64 APIs should be type-safe, and for
-> > their try_cmpxchg() implementations, the type signature should be:
-> >
-> >         ${atomictype}_try_cmpxchg(${atomictype} *ptr, ${inttype} *old, ${inttype} new)
-> 
-> This conversion should be performed also for the cmpxchg family of
-> functions, if desired at all. try_cmpxchg fallback is just cmpxchg
-> with some extra code around.
-
-FWIW, I agree that we *should* make try_cmpxchg() check that ptr and old
-pointer are the same type.
-
-However, I don't think that's a prerequisite for doing so for
-local_try_cmpxchg().
-
-Plese make local_try_cmpxchg() have a proper type-safe C prototype, as we do
-with the atomic*_try_cmpxchg() APIs.
-
-Thanks,
-Mark,
