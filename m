@@ -2,113 +2,299 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548C46D5007
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Apr 2023 20:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1436D5AC6
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Apr 2023 10:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjDCSKC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Apr 2023 14:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S234234AbjDDIZY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Apr 2023 04:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjDCSKB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Apr 2023 14:10:01 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43C22134;
-        Mon,  3 Apr 2023 11:10:00 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id z19so28893394plo.2;
-        Mon, 03 Apr 2023 11:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680545400;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pa2BV/2hukT+SOvhLFebRK93sjsVntvwqiFRZkq+S+8=;
-        b=Ft1qqfdfNGU5SGGFhFJNTwfnyli0Ti5FvIuAoBaGQFmOv1UTShqS/OfC3YTYjAUQs0
-         dJKvkxBdJPgpi90Y0F85ubmo/RVC8OiYG8AENDXv4/VnYMlmKD8jM6MBWMb6Sfcnr4JH
-         H/Hxx0NOLriYHwfg3xDQPPHQYsBHIqAOG+w6Vv8EXmkiY8XmOZFJDfleP8N+/EJdUxNi
-         A1Q8PUhpj273Vr0Gjmm/xGVl8xnG9jqsl0s7Swia350HDxZ7w77JQMMY4sWLSOm1Km2s
-         A+2RPlTw8BMCXO0z8jv2cyaPCtT+6UkAnH99lmKLyE5hqlRw8keomBUy+dLCS+QFYo5F
-         r8vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680545400;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pa2BV/2hukT+SOvhLFebRK93sjsVntvwqiFRZkq+S+8=;
-        b=Ht55l5xrNZ7CT/c3CjPQu4pEChUzCfZz3nhYYpFgLw/QI3fJK0tdQYXkvDP0IvkHzd
-         JSd/b610iW1OqjitgfS95dJk7zrmxoUsiLa6Tm1lDWLpR35Ot5pRcv4qKQcTENNm0y5q
-         gr8huhfQWX+NzCgsup/Z062z0D3WkSNaoU0cwOQizI93OKEYkN13jrNd0V1GPeaY2BER
-         oFsd+CKOmV8qDYjJLOr9zP9iM1ckSR/wvbie8l5TWXKweMeYQ6v5vYne6m9WgRnmCGY7
-         c63AX0YaX3eDkZ/d5V5uxV8wl5UuT52uPoYpMf/Q/0PJkEO6jc16pOxuwWKl5GeihHd5
-         PL+Q==
-X-Gm-Message-State: AAQBX9c//o8IF/3orRW7mUvabS1G5EMSOoik1vXoqnUaMf1Q2grkGs0N
-        KxOz3MLKN0CxStv1eZSZ+Pg=
-X-Google-Smtp-Source: AKy350Zef2NXFx8d/z1eeGXLPDrs0U7IRPUog3tPrwe+/NGcARuYKvdU1cdBJ5iugXXsESTU7UsL9A==
-X-Received: by 2002:a17:902:ce8e:b0:19e:2fb0:a5d9 with SMTP id f14-20020a170902ce8e00b0019e2fb0a5d9mr22338760plg.32.1680545400262;
-        Mon, 03 Apr 2023 11:10:00 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id x23-20020a1709027c1700b001a23e056423sm6893029pll.283.2023.04.03.11.09.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Apr 2023 11:09:59 -0700 (PDT)
-Message-ID: <7efbc4fa-1797-0da8-2846-e0753e578ffe@gmail.com>
-Date:   Tue, 4 Apr 2023 02:09:46 +0800
+        with ESMTP id S234188AbjDDIZQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Apr 2023 04:25:16 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8CD19B6;
+        Tue,  4 Apr 2023 01:25:13 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 1357F582072;
+        Tue,  4 Apr 2023 04:25:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 04 Apr 2023 04:25:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1680596713; x=
+        1680603913; bh=ucaJdjXCvIGCze6KDfbsPlFe2n6TgL3UUQGpg9tF7po=; b=I
+        DSiBq2VrNCBC6QDxMURGV8kNtJO9gautIsomo38gXtIcakYN8v07Vw2OYXsSxfn/
+        aME2qwMeJzDNTlSp3qzI9uRMEP3f+Py0rAVeAXat7UyeKEzqp3FPlm0aIf9IsYjU
+        VJMXwkd4SeUH00xSxDFBjlctr/KE/jVpLD7/h5Z7c2HZosqmXl8ah69koYjVKfMT
+        EKGrhBzG7kgvGD167S1ZyDIT9zruuzRj0k6xLwq1xP8PbiKquj2w/Trgcl4nMdZn
+        pEn9oeVAmcytzq5luBhkXUbiTk4DEACjFw2INXfbGWz9X3yl0QxMdplcJtecGdDv
+        w/IPQCjLyN72kjsv7QPJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1680596713; x=1680603913; bh=ucaJdjXCvIGCz
+        e6KDfbsPlFe2n6TgL3UUQGpg9tF7po=; b=KxjPvdshfxbt2/6hFUHYrRjGmYUQI
+        AacryrBkFC92hJLW6LUXwVPG8eoE6c9/ToxcviVUPXwT9n6U9KUtitW12VQTgEPM
+        dtWOhdv0rYR6MoluiNosghIZDNR9g+Xn7iMiDrGkNh+VsX9uFKovlLDYM4XsFMtn
+        BxmQ+xNwM/IVoJHAXQenfwwYITbs+6mK6YhZpuLJlps+FR2JJDBBaN5137529WCO
+        G6WozEo2zY2g0o+poTxy+XKEesh2njzFQJghOtV/BlkD90rQ1c1qkjfLVq8/8Nsj
+        cZR1ZPsKHFr0W0XueC5rcVZqlM9mpJNRHSnNgFCxUbirqS4tT4YcQT3vw==
+X-ME-Sender: <xms:594rZFsDdlfX3C3UBbehL30vE9YfyLf7XUtU0hKYnmKgT4UOtgLOcQ>
+    <xme:594rZOdLHY59ptztN9KpTQEq7XwkbjmkQqY0vzVa_GylWcd_Y6rxwruI_4HTO2_s5
+    2qQMdMxhutCwm-0Qlc>
+X-ME-Received: <xmr:594rZIwz_xb5yM2dG1h_WtLjuLqY2FJ1LNGUP70yWmzAIeKm4ZHovzbraDlUXc3NCuzxBQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeiledgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:594rZMMm7ERGOuRf6j0KEPnsIaOnJLLIAtNtQtvW9Kw28ObNyP2O4w>
+    <xmx:594rZF93Z5UZUB6gYgYG8-jATfACy8p3b0q_hraVNF4DpZz1KDIypw>
+    <xmx:594rZMXJx4DaW1I1BdTCKFNDqbrKkl3kR0g6UZ4xsMVfMaN14WwR3w>
+    <xmx:6d4rZEDiAVOUK62NR-3AI4m0fzW6ULVpFZqPWyawWzV3iixQHl6osw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 4 Apr 2023 04:25:10 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 5730E10CC3C; Tue,  4 Apr 2023 11:25:07 +0300 (+03)
+Date:   Tue, 4 Apr 2023 11:25:07 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
+        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
+        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
+        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
+        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
+        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
+Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
+ mount for memfd_restricted
+Message-ID: <20230404082507.sbyfahwc4gdupmya@box.shutemov.name>
+References: <cover.1680306489.git.ackerleytng@google.com>
+ <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC PATCH V3 12/16] x86/sev: Add a #HV exception handler
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-References: <20230122024607.788454-1-ltykernel@gmail.com>
- <20230122024607.788454-13-ltykernel@gmail.com>
- <20230331155714.GCZCcC2pHVZgIHr8k8@fat_crate.local>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20230331155714.GCZCcC2pHVZgIHr8k8@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/31/2023 11:57 PM, Borislav Petkov wrote:
->> + *
->> + * If entered from kernel-mode the return stack is validated first, and if it is
->> + * not safe to use (e.g. because it points to the entry stack) the #HV handler
->> + * will switch to a fall-back stack (HV2) and call a special handler function.
->> + *
->> + * The macro is only used for one vector, but it is planned to be extended in
->> + * the future for the #HV exception.
->> + */
->> +.macro idtentry_hv vector asmsym cfunc
->> +SYM_CODE_START(\asmsym)
-> ...
+On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
+> By default, the backing shmem file for a restrictedmem fd is created
+> on shmem's kernel space mount.
 > 
-> why is this so much duplicated code instead of sharing it with
-> idtentry_vc and all the facilities it does?
+> With this patch, an optional tmpfs mount can be specified via an fd,
+> which will be used as the mountpoint for backing the shmem file
+> associated with a restrictedmem fd.
 > 
+> This will help restrictedmem fds inherit the properties of the
+> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
+> binding hints, etc.
+> 
+> Permissions for the fd passed to memfd_restricted() is modeled after
+> the openat() syscall, since both of these allow creation of a file
+> upon a mount/directory.
+> 
+> Permission to reference the mount the fd represents is checked upon fd
+> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
+> etc) and any process that can present memfd_restricted() with a valid
+> fd is expected to have obtained permission to use the mount
+> represented by the fd. This behavior is intended to parallel that of
+> the openat() syscall.
+> 
+> memfd_restricted() will check that the tmpfs superblock is
+> writable, and that the mount is also writable, before attempting to
+> create a restrictedmem file on the mount.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  include/linux/syscalls.h           |  2 +-
+>  include/uapi/linux/restrictedmem.h |  8 ++++
+>  mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
+>  3 files changed, 77 insertions(+), 7 deletions(-)
+>  create mode 100644 include/uapi/linux/restrictedmem.h
+> 
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index f9e9e0c820c5..a23c4c385cd3 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
+>  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
+>  					    unsigned long home_node,
+>  					    unsigned long flags);
+> -asmlinkage long sys_memfd_restricted(unsigned int flags);
+> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
+> 
+>  /*
+>   * Architecture-specific system calls
+> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
+> new file mode 100644
+> index 000000000000..22d6f2285f6d
+> --- /dev/null
+> +++ b/include/uapi/linux/restrictedmem.h
+> @@ -0,0 +1,8 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
+> +#define _UAPI_LINUX_RESTRICTEDMEM_H
+> +
+> +/* flags for memfd_restricted */
+> +#define RMFD_USERMNT		0x0001U
+> +
+> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
+> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
+> index c5d869d8c2d8..f7b62364a31a 100644
+> --- a/mm/restrictedmem.c
+> +++ b/mm/restrictedmem.c
+> @@ -1,11 +1,12 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -#include "linux/sbitmap.h"
+> +#include <linux/namei.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/shmem_fs.h>
+>  #include <linux/syscalls.h>
+>  #include <uapi/linux/falloc.h>
+>  #include <uapi/linux/magic.h>
+> +#include <uapi/linux/restrictedmem.h>
+>  #include <linux/restrictedmem.h>
+> 
+>  struct restrictedmem {
+> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
+>  	return file;
+>  }
+> 
+> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+> +static int restrictedmem_create(struct vfsmount *mount)
+>  {
+>  	struct file *file, *restricted_file;
+>  	int fd, err;
+> 
+> -	if (flags)
+> -		return -EINVAL;
+> -
+>  	fd = get_unused_fd_flags(0);
+>  	if (fd < 0)
+>  		return fd;
+> 
+> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +	if (mount)
+> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
+> +	else
+> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
+> +
+>  	if (IS_ERR(file)) {
+>  		err = PTR_ERR(file);
+>  		goto err_fd;
+> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
+>  	return err;
+>  }
+> 
+> +static bool is_shmem_mount(struct vfsmount *mnt)
+> +{
+> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
+> +}
+> +
+> +static bool is_mount_root(struct file *file)
+> +{
+> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+> +}
+> +
+> +static int restrictedmem_create_on_user_mount(int mount_fd)
+> +{
+> +	int ret;
+> +	struct fd f;
+> +	struct vfsmount *mnt;
+> +
+> +	f = fdget_raw(mount_fd);
+> +	if (!f.file)
+> +		return -EBADF;
+> +
+> +	ret = -EINVAL;
+> +	if (!is_mount_root(f.file))
+> +		goto out;
+> +
+> +	mnt = f.file->f_path.mnt;
+> +	if (!is_shmem_mount(mnt))
+> +		goto out;
+> +
+> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
 
-Hi Boris:
-	#VC and #HV use different stack. I try reusing vc code path for #HV 
-doesn't work. I will continue to work on this direction and report back 
-later. In the RFC v4, I still keep the old version and other patches may 
-be reviewed in the parellel.
+Why MAY_EXEC?
 
-Thanks.
+> +	if (ret)
+> +		goto out;
+> +
+> +	ret = mnt_want_write(mnt);
+> +	if (unlikely(ret))
+> +		goto out;
+> +
+> +	ret = restrictedmem_create(mnt);
+> +
+> +	mnt_drop_write(mnt);
+> +out:
+> +	fdput(f);
+> +
+> +	return ret;
+> +}
+
+We need review from fs folks. Look mostly sensible, but I have no
+experience in fs.
+
+> +
+> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
+> +{
+> +	if (flags & ~RMFD_USERMNT)
+> +		return -EINVAL;
+> +
+> +	if (flags == RMFD_USERMNT) {
+> +		if (mount_fd < 0)
+> +			return -EINVAL;
+> +
+> +		return restrictedmem_create_on_user_mount(mount_fd);
+> +	} else {
+> +		return restrictedmem_create(NULL);
+> +	}
+
+Maybe restructure with single restrictedmem_create() call?
+
+	struct vfsmount *mnt = NULL;
+
+	if (flags == RMFD_USERMNT) {
+		...
+		mnt = ...();
+	}
+
+	return restrictedmem_create(mnt);
+> +}
+> +
+>  int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
+>  		       struct restrictedmem_notifier *notifier, bool exclusive)
+>  {
+> --
+> 2.40.0.348.gf938b09366-goog
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
