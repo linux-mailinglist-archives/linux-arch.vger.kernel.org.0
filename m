@@ -2,314 +2,233 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B7B6D63FE
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Apr 2023 15:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FC16D64A2
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Apr 2023 16:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235726AbjDDNxw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Apr 2023 09:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S235553AbjDDOFe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Apr 2023 10:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235742AbjDDNxk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Apr 2023 09:53:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72574224;
-        Tue,  4 Apr 2023 06:53:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4159E61FF6;
-        Tue,  4 Apr 2023 13:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01718C4339B;
-        Tue,  4 Apr 2023 13:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680616407;
-        bh=/XmQ33Vz5rwMvBxocOUTIIX51AasQPq8MBzmwbLl0tM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j3pvbEx+ZOhkZUE1LhdjIxby9njBvyhGGDw8XHNztZL/HYm+7Hxi7G2yVH87tLGXc
-         8CnD+aWL0pEfl8K8eEelOm98QkGvx9t82yLNNIDbeUQbrNgrgJfn5szL4qfacmifzK
-         rPf45WV4a2jbZGv1xNcqWD6pLaJXwrjXc0olsbyf9BBEd2EZkpozWqX1cpZJ+N/H4B
-         DgcmwjDTRFPqxMyHwoKOds6qUcJuJA5u8+/FD/+XXp0LvwfGWk4fHYFr/UhTWZm0gV
-         fPQ9esbG+NnpA8lDyV4zQGiCjpZvv+DaqXProbhEGTYkWTuiPCv+24pkuCN8MpR4Xn
-         uVKJnk0xDg9EA==
-Date:   Tue, 4 Apr 2023 15:53:13 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
-        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
-        joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-Message-ID: <20230404-amnesty-untying-01de932d4945@brauner>
-References: <cover.1680306489.git.ackerleytng@google.com>
- <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
+        with ESMTP id S235436AbjDDOFb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Apr 2023 10:05:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6165B4C0C
+        for <linux-arch@vger.kernel.org>; Tue,  4 Apr 2023 07:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680617025;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+eiQuy0297qofRfcSxKqcQyipv7GSPC3sFo1rtx/hWs=;
+        b=CXL8Zj5OK4ZKlVnJY7bQLVNLPFtqPyimhPZbzFxLUUaYcvRGPtEPD9pm6+rd/0ygN2Tchc
+        7sd/0WYm1lGsBeeG4/+wakLD/XxoXUVOCwY7ya90tXps0Melmt16ERdsXyIj6a6hHOzgFr
+        AQq3GgqEbJ0JbMfPhaOddQYib4sCNdM=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-564-R12avT4nNymIH-_JoSnk3g-1; Tue, 04 Apr 2023 10:03:44 -0400
+X-MC-Unique: R12avT4nNymIH-_JoSnk3g-1
+Received: by mail-wm1-f69.google.com with SMTP id j27-20020a05600c1c1b00b003edd2023418so17840397wms.4
+        for <linux-arch@vger.kernel.org>; Tue, 04 Apr 2023 07:03:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680617022;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+eiQuy0297qofRfcSxKqcQyipv7GSPC3sFo1rtx/hWs=;
+        b=QZ3B/1DaT9Ay3VK7om1/acdGGly+oHbNsTKlEeV9p7KYoXXOjUMkMEHv9ohP0HpHcs
+         gZUOXyCDmGxzO2m7lPDuL25+UIv1bvBCzz6f/fqjocsLuwY2K8EqpVkPi7UB0wTJdmUh
+         Z+KtWbI9ZLtQsxOlLQ6U4xc3/Nnu5P3u2sdCm4MEE+FafMVRFbuFFgZcj3/vfzGE1waO
+         //776VraOPLkvQOXvtakPHaBi4xqJWXkD0P7J1doA8NBivzb+5uT++HJxj8434yKdNke
+         7stFNi1JX/DggsRTN/IJTRsM/1UYeJWcFBPK5eePxBNBdrDmsNStUuu/RRUouX2biGh3
+         cRTw==
+X-Gm-Message-State: AAQBX9fqf2gjt0/Jusl6360yz1qqBTQYfRciJoO2QSfaUxz2YkNvbltn
+        3OEHDcLxI+tfMaCdDnv46Zw5vROS857emoHnglckR4OQkxae/3sugDtlHFLMLGd+CBFPMjD4Zqb
+        P4b+w7qsTM3BCnKrwXp4oAg==
+X-Received: by 2002:a5d:6291:0:b0:2d6:5afe:7b99 with SMTP id k17-20020a5d6291000000b002d65afe7b99mr1501634wru.10.1680617021989;
+        Tue, 04 Apr 2023 07:03:41 -0700 (PDT)
+X-Google-Smtp-Source: AKy350ZgF89ZubYczhCwXf0n6e5MiZ9Gbs+vNGbCQed6l+DJFU8EvLia/3dXAX7rxTgsIMUPc3yreQ==
+X-Received: by 2002:a5d:6291:0:b0:2d6:5afe:7b99 with SMTP id k17-20020a5d6291000000b002d65afe7b99mr1501576wru.10.1680617021501;
+        Tue, 04 Apr 2023 07:03:41 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c709:b600:e63:6c3b:7b5d:f439? (p200300cbc709b6000e636c3b7b5df439.dip0.t-ipconnect.de. [2003:cb:c709:b600:e63:6c3b:7b5d:f439])
+        by smtp.gmail.com with ESMTPSA id i17-20020a5d5591000000b002eaac3a9beesm2694936wrv.8.2023.04.04.07.03.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Apr 2023 07:03:40 -0700 (PDT)
+Message-ID: <d21bfe1d-46e6-5547-cdcb-0d851bf0834a@redhat.com>
+Date:   Tue, 4 Apr 2023 16:03:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <592ebd9e33a906ba026d56dc68f42d691706f865.1680306489.git.ackerleytng@google.com>
-X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Content-Language: en-US
+To:     Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, peterz@infradead.org, arnd@arndb.de,
+        keescook@chromium.org, paulmck@kernel.org, jpoimboe@kernel.org,
+        samitolvanen@google.com, frederic@kernel.org, ardb@kernel.org,
+        juerg.haefliger@canonical.com, rmk+kernel@armlinux.org.uk,
+        geert+renesas@glider.be, tony@atomide.com,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        nick.hawkins@hpe.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, mtosatti@redhat.com, vschneid@redhat.com,
+        dhildenb@redhat.com
+Cc:     alougovs@redhat.com
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230404134224.137038-4-ypodemsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
-> By default, the backing shmem file for a restrictedmem fd is created
-> on shmem's kernel space mount.
+On 04.04.23 15:42, Yair Podemsky wrote:
+> The tlb_remove_table_smp_sync IPI is used to ensure the outdated tlb page
+> is not currently being accessed and can be cleared.
+> This occurs once all CPUs have left the lockless gup code section.
+> If they reenter the page table walk, the pointers will be to the new
+> pages.
+> Therefore the IPI is only needed for CPUs in kernel mode.
+> By preventing the IPI from being sent to CPUs not in kernel mode,
+> Latencies are reduced.
 > 
-> With this patch, an optional tmpfs mount can be specified via an fd,
-> which will be used as the mountpoint for backing the shmem file
-> associated with a restrictedmem fd.
+> Race conditions considerations:
+> The context state check is vulnerable to race conditions between the
+> moment the context state is read to when the IPI is sent (or not).
 > 
-> This will help restrictedmem fds inherit the properties of the
-> provided tmpfs mounts, for example, hugepage allocation hints, NUMA
-> binding hints, etc.
+> Here are these scenarios.
+> case 1:
+> CPU-A                                             CPU-B
 > 
-> Permissions for the fd passed to memfd_restricted() is modeled after
-> the openat() syscall, since both of these allow creation of a file
-> upon a mount/directory.
+>                                                    state == CONTEXT_KERNEL
+> int state = atomic_read(&ct->state);
+>                                                    Kernel-exit:
+>                                                    state == CONTEXT_USER
+> if (state & CT_STATE_MASK == CONTEXT_KERNEL)
 > 
-> Permission to reference the mount the fd represents is checked upon fd
-> creation by other syscalls (e.g. fsmount(), open(), or open_tree(),
-> etc) and any process that can present memfd_restricted() with a valid
-> fd is expected to have obtained permission to use the mount
-> represented by the fd. This behavior is intended to parallel that of
-> the openat() syscall.
+> In this case, the IPI will be sent to CPU-B despite it is no longer in
+> the kernel. The consequence of which would be an unnecessary IPI being
+> handled by CPU-B, causing a reduction in latency.
+> This would have been the case every time without this patch.
 > 
-> memfd_restricted() will check that the tmpfs superblock is
-> writable, and that the mount is also writable, before attempting to
-> create a restrictedmem file on the mount.
+> case 2:
+> CPU-A                                             CPU-B
 > 
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> modify pagetables
+> tlb_flush (memory barrier)
+>                                                    state == CONTEXT_USER
+> int state = atomic_read(&ct->state);
+>                                                    Kernel-enter:
+>                                                    state == CONTEXT_KERNEL
+>                                                    READ(pagetable values)
+> if (state & CT_STATE_MASK == CONTEXT_USER)
+> 
+> In this case, the IPI will not be sent to CPU-B despite it returning to
+> the kernel and even reading the pagetable.
+> However since this CPU-B has entered the pagetable after the
+> modification it is reading the new, safe values.
+> 
+> The only case when this IPI is truly necessary is when CPU-B has entered
+> the lockless gup code section before the pagetable modifications and
+> has yet to exit them, in which case it is still in the kernel.
+> 
+> Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
 > ---
->  include/linux/syscalls.h           |  2 +-
->  include/uapi/linux/restrictedmem.h |  8 ++++
->  mm/restrictedmem.c                 | 74 +++++++++++++++++++++++++++---
->  3 files changed, 77 insertions(+), 7 deletions(-)
->  create mode 100644 include/uapi/linux/restrictedmem.h
+>   mm/mmu_gather.c | 19 +++++++++++++++++--
+>   1 file changed, 17 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index f9e9e0c820c5..a23c4c385cd3 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -1056,7 +1056,7 @@ asmlinkage long sys_memfd_secret(unsigned int flags);
->  asmlinkage long sys_set_mempolicy_home_node(unsigned long start, unsigned long len,
->  					    unsigned long home_node,
->  					    unsigned long flags);
-> -asmlinkage long sys_memfd_restricted(unsigned int flags);
-> +asmlinkage long sys_memfd_restricted(unsigned int flags, int mount_fd);
-> 
->  /*
->   * Architecture-specific system calls
-> diff --git a/include/uapi/linux/restrictedmem.h b/include/uapi/linux/restrictedmem.h
-> new file mode 100644
-> index 000000000000..22d6f2285f6d
-> --- /dev/null
-> +++ b/include/uapi/linux/restrictedmem.h
-> @@ -0,0 +1,8 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_LINUX_RESTRICTEDMEM_H
-> +#define _UAPI_LINUX_RESTRICTEDMEM_H
+> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+> index 5ea9be6fb87c..731d955e152d 100644
+> --- a/mm/mmu_gather.c
+> +++ b/mm/mmu_gather.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/smp.h>
+>   #include <linux/swap.h>
+>   #include <linux/rmap.h>
+> +#include <linux/context_tracking_state.h>
+>   
+>   #include <asm/pgalloc.h>
+>   #include <asm/tlb.h>
+> @@ -191,6 +192,20 @@ static void tlb_remove_table_smp_sync(void *arg)
+>   	/* Simply deliver the interrupt */
+>   }
+>   
 > +
-> +/* flags for memfd_restricted */
-> +#define RMFD_USERMNT		0x0001U
-> +
-> +#endif /* _UAPI_LINUX_RESTRICTEDMEM_H */
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> index c5d869d8c2d8..f7b62364a31a 100644
-> --- a/mm/restrictedmem.c
-> +++ b/mm/restrictedmem.c
-> @@ -1,11 +1,12 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -#include "linux/sbitmap.h"
-> +#include <linux/namei.h>
->  #include <linux/pagemap.h>
->  #include <linux/pseudo_fs.h>
->  #include <linux/shmem_fs.h>
->  #include <linux/syscalls.h>
->  #include <uapi/linux/falloc.h>
->  #include <uapi/linux/magic.h>
-> +#include <uapi/linux/restrictedmem.h>
->  #include <linux/restrictedmem.h>
-> 
->  struct restrictedmem {
-> @@ -189,19 +190,20 @@ static struct file *restrictedmem_file_create(struct file *memfd)
->  	return file;
->  }
-> 
-> -SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
-> +static int restrictedmem_create(struct vfsmount *mount)
->  {
->  	struct file *file, *restricted_file;
->  	int fd, err;
-> 
-> -	if (flags)
-> -		return -EINVAL;
-> -
->  	fd = get_unused_fd_flags(0);
-
-Any reasons the file descriptors aren't O_CLOEXEC by default? I don't
-see any reasons why we should introduce new fdtypes that aren't
-O_CLOEXEC by default. The "don't mix-and-match" train has already left
-the station anyway as we do have seccomp noitifer fds and pidfds both of
-which are O_CLOEXEC by default.
-
->  	if (fd < 0)
->  		return fd;
-> 
-> -	file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> +	if (mount)
-> +		file = shmem_file_setup_with_mnt(mount, "memfd:restrictedmem", 0, VM_NORESERVE);
-> +	else
-> +		file = shmem_file_setup("memfd:restrictedmem", 0, VM_NORESERVE);
-> +
->  	if (IS_ERR(file)) {
->  		err = PTR_ERR(file);
->  		goto err_fd;
-> @@ -223,6 +225,66 @@ SYSCALL_DEFINE1(memfd_restricted, unsigned int, flags)
->  	return err;
->  }
-> 
-> +static bool is_shmem_mount(struct vfsmount *mnt)
+> +#ifdef CONFIG_CONTEXT_TRACKING
+> +static bool cpu_in_kernel(int cpu, void *info)
 > +{
-> +	return mnt && mnt->mnt_sb && mnt->mnt_sb->s_magic == TMPFS_MAGIC;
-
-This can just be if (mnt->mnt_sb->s_magic == TMPFS_MAGIC).
-
+> +	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+> +	int state = atomic_read(&ct->state);
+> +	/* will return true only for cpus in kernel space */
+> +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
 > +}
+> +#define CONTEXT_PREDICATE cpu_in_kernel
+> +#else
+> +#define CONTEXT_PREDICATE NULL
+> +#endif /* CONFIG_CONTEXT_TRACKING */
 > +
-> +static bool is_mount_root(struct file *file)
-> +{
-> +	return file->f_path.dentry == file->f_path.mnt->mnt_root;
+>   #ifdef CONFIG_ARCH_HAS_CPUMASK_BITS
+>   #define REMOVE_TABLE_IPI_MASK mm_cpumask(mm)
+>   #else
+> @@ -206,8 +221,8 @@ void tlb_remove_table_sync_one(struct mm_struct *mm)
+>   	 * It is however sufficient for software page-table walkers that rely on
+>   	 * IRQ disabling.
+>   	 */
+> -	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
+> -			NULL, true);
+> +	on_each_cpu_cond_mask(CONTEXT_PREDICATE, tlb_remove_table_smp_sync,
+> +			NULL, true, REMOVE_TABLE_IPI_MASK);
+>   }
+>   
+>   static void tlb_remove_table_rcu(struct rcu_head *head)
 
-mount -t tmpfs tmpfs /mnt
-touch /mnt/bla
-touch /mnt/ble
-mount --bind /mnt/bla /mnt/ble
-fd = open("/mnt/ble")
-fd_restricted = memfd_restricted(fd)
 
-IOW, this doesn't restrict it to the tmpfs root. It only restricts it to
-paths that refer to the root of any tmpfs mount. To exclude bind-mounts
-that aren't bind-mounts of the whole filesystem you want:
+Maybe a bit cleaner by avoiding CONTEXT_PREDICATE, still not completely nice
+(an empty dummy function "cpu_maybe_in_kernel" might be cleanest but would
+be slightly slower for !CONFIG_CONTEXT_TRACKING):
 
-path->dentry == path->mnt->mnt_root && 
-path->mnt->mnt_root == path->mnt->mnt_sb->s_root
-
-> +}
-> +
-> +static int restrictedmem_create_on_user_mount(int mount_fd)
-> +{
-> +	int ret;
-> +	struct fd f;
-> +	struct vfsmount *mnt;
-> +
-> +	f = fdget_raw(mount_fd);
-> +	if (!f.file)
-> +		return -EBADF;
-> +
-> +	ret = -EINVAL;
-> +	if (!is_mount_root(f.file))
-> +		goto out;
-> +
-> +	mnt = f.file->f_path.mnt;
-> +	if (!is_shmem_mount(mnt))
-> +		goto out;
-> +
-> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
-
-With the current semantics you're asking whether you have write
-permissions on the /mnt/ble file in order to get answer to the question
-whether you're allowed to create an unlinked restricted memory file.
-That doesn't make much sense afaict.
-
-> +	if (ret)
-> +		goto out;
-> +
-> +	ret = mnt_want_write(mnt);
-> +	if (unlikely(ret))
-> +		goto out;
-> +
-> +	ret = restrictedmem_create(mnt);
-> +
-> +	mnt_drop_write(mnt);
-> +out:
-> +	fdput(f);
-> +
-> +	return ret;
-> +}
-> +
-> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
-> +{
-> +	if (flags & ~RMFD_USERMNT)
-> +		return -EINVAL;
-> +
-> +	if (flags == RMFD_USERMNT) {
-
-Why do you even need this flag? It seems that @mount_fd being < 0 is
-sufficient to indicate that a new restricted memory fd is supposed to be
-created in the system instance.
-
-> +		if (mount_fd < 0)
-> +			return -EINVAL;
-> +
-> +		return restrictedmem_create_on_user_mount(mount_fd);
-> +	} else {
-> +		return restrictedmem_create(NULL);
-> +	}
-> +}
-
-I have to say that I'm very confused by all of this the more I look at it.
-
-Effectively memfd restricted functions as a wrapper filesystem around
-the tmpfs filesystem. This is basically a weird overlay filesystem.
-You're allocating tmpfs files that you stash in restrictedmem files. 
-I have to say that this seems very hacky. I didn't get this at all at
-first.
-
-So what does the caller get if they call statx() on a restricted memfd?
-Do they get the device number of the tmpfs mount and the inode numbers
-of the tmpfs mount? Because it looks like they would:
-
-static int restrictedmem_getattr(struct user_namespace *mnt_userns,
-				 const struct path *path, struct kstat *stat,
-				 u32 request_mask, unsigned int query_flags)
+#ifdef CONFIG_CONTEXT_TRACKING
+static bool cpu_in_kernel(int cpu, void *info)
 {
-	struct inode *inode = d_inode(path->dentry);
-	struct restrictedmem *rm = inode->i_mapping->private_data;
-	struct file *memfd = rm->memfd;
+	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+	int state = atomic_read(&ct->state);
+	/* will return true only for cpus in kernel space */
+	return state & CT_STATE_MASK == CONTEXT_KERNEL;
+}
+#endif /* CONFIG_CONTEXT_TRACKING */
 
-	return memfd->f_inode->i_op->getattr(mnt_userns, path, stat,
-					     request_mask, query_flags);
 
-That @memfd would be a struct file allocated in a tmpfs instance, no? So
-you'd be calling the inode operation of the tmpfs file meaning that
-struct kstat will be filled up with the info from the tmpfs instance.
+...
+#ifdef CONFIG_CONTEXT_TRACKING
+	on_each_cpu_mask(REMOVE_TABLE_IPI_MASK, tlb_remove_table_smp_sync,
+			 NULL, true);
+#else /* CONFIG_CONTEXT_TRACKING */
+	on_each_cpu_cond_mask(cpu_in_kernel, tlb_remove_table_smp_sync,
+			      NULL, true, REMOVE_TABLE_IPI_MASK);
+#endif /* CONFIG_CONTEXT_TRACKING */
 
-But then if I call statfs() and check the fstype I would get
-RESTRICTEDMEM_MAGIC, no? This is... unorthodox?
 
-I'm honestly puzzled and this sounds really strange. There must be a
-better way to implement all of this.
+-- 
+Thanks,
 
-Shouldn't you try and make this a part of tmpfs proper? Make a really
-separate filesystem and add a memfs library that both tmpfs and
-restrictedmemfs can use? Add a mount option to tmpfs that makes it a
-restricted tmpfs?
+David / dhildenb
+
