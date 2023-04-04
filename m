@@ -2,165 +2,397 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10976D604D
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Apr 2023 14:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F506D62A5
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Apr 2023 15:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbjDDM0u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Apr 2023 08:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S235022AbjDDNUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Apr 2023 09:20:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbjDDM0q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Apr 2023 08:26:46 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20610.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::610])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F96E212A;
-        Tue,  4 Apr 2023 05:26:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nHMqE6YScsjy1TIExkONv7WHmwTbFItRHKptr/+AV1tdjWrsUQAX9ZfrtxLoS7q0waRe1G1fX2uxbIs+LufZ1jgdC/7uV4qFCOWV7oaagEVAQJeNJ7riHsVY9VviXwxhXGYLKxsq8qxN8cHAtBsvU9NPN8heFGxTl7Iza5qm7qp48KLs5vDOeISojTO9C9S2z7BqozkDfwYuhs+/+PbrPnrDTuIfWtMFQ463lZV/dHX415MIGmrX1utlM+wFOd3SUCrIgeEaDbUKsfN2TuX3mPQ4AmSWNr+ummVNC5a5l+HnIics/LQ44hYUh++T/TYXWgB8lLFPVlfi9ZMr1WhXEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v3rSf80nQXERL5Q2CTDFFM+dezlKvYNWSR2PnmWwy3M=;
- b=GtlG9ersmLtNfSnWliyL1Qm00+JSGfa0Zp5ACrtQixgeWtJnpwF/4QdxI2GEdSUGil+eqsKofQ5Yd8fASV5Y0+LnfHpX1St7ziwNKtiU1N8oCbfBJV2tB67OfVbFaWhbTqS0PGz08Px6oH+v6HBuz8lEBaKisBN0p2rzgX0cUa+vYuWR1AsMC0z+CVdYdwEncGzuPiY1FGZAX21ABJ3JZn72n3fIcYnZ3hwx6DBF8K6CPfIX+yZ4kNCVS5nN20R2KGfI2s1OrT9spiwRqLs9pPygXfm0jXQNjjhGFi90tmY/tTa3ENS77UGzpo/P1DL31b+lVlNypRfBOrBAkqylgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v3rSf80nQXERL5Q2CTDFFM+dezlKvYNWSR2PnmWwy3M=;
- b=Qv75FtbuD1ahTI3s/3RQJUtmUja1KSYixCoJS4qRnziFMjZBPeQ01UNc72ek8p5oNxiYpbtOrptJehzxxv8quOR+ayUVqHf73n/XqmFMbKLbI7kcQ8zvqvOBB7PYSCzL2iBfarU8jqRhnKFOxIPlZFBzQgNTu9Hxi8DfcGMVnqU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- SA1PR12MB6970.namprd12.prod.outlook.com (2603:10b6:806:24d::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6254.33; Tue, 4 Apr 2023 12:26:22 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::b6b7:4b22:74f0:dfeb]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::b6b7:4b22:74f0:dfeb%2]) with mapi id 15.20.6254.034; Tue, 4 Apr 2023
- 12:26:21 +0000
-Message-ID: <f2dde9d6-dc04-4c33-7f9d-49454bb192da@amd.com>
-Date:   Tue, 4 Apr 2023 14:25:33 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH V4 17/17] x86/sev: Remove restrict interrupt injection
- from SNP_FEATURES_IMPL_REQ
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-18-ltykernel@gmail.com>
-Content-Language: en-US
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20230403174406.4180472-18-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0120.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9d::13) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
+        with ESMTP id S235000AbjDDNUa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Apr 2023 09:20:30 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4499A4688;
+        Tue,  4 Apr 2023 06:20:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED0B3D75;
+        Tue,  4 Apr 2023 06:20:07 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.35.139])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE7773F762;
+        Tue,  4 Apr 2023 06:19:21 -0700 (PDT)
+Date:   Tue, 4 Apr 2023 14:19:19 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 01/10] locking/atomic: Add missing cast to try_cmpxchg()
+ fallbacks
+Message-ID: <ZCwj19okhYNRN8er@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230305205628.27385-1-ubizjak@gmail.com>
+ <20230305205628.27385-2-ubizjak@gmail.com>
+ <ZB2v+avNt52ac/+w@FVFF77S0Q05N>
+ <CAFULd4ZCgxDYnyy--qdgKoAo_y7MbNSaQdbdBFefnFuMoM2OYw@mail.gmail.com>
+ <ZB3MR8lGbnea9ui6@FVFF77S0Q05N>
+ <ZB3QtDYuWdpiD5qk@FVFF77S0Q05N>
+ <CAFULd4aFUF5k=QJD8tDp4qzm2iBF7=rNvp1SJWrg44X5hTFxtQ@mail.gmail.com>
+ <ZCqoRNU8EJhKJVEu@FVFF77S0Q05N>
+ <CAFULd4ZUnbtDYXBBbuTJnq9wLSf5cZTc=hUPxg6-8KRNA7YVeQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SA1PR12MB6970:EE_
-X-MS-Office365-Filtering-Correlation-Id: b096c2cb-a8d3-4098-d14e-08db3507cc34
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LUSFFvkbWvAlss/wnsJ2uU0z5EUjzwfpRJh67J5HfMim1re7FMgB0r15kdg1qIIkfYFZcqWB5zSsPClxUsH+XxUUQoEuXhceWSrb2cjp6cTR1+jZl1HCCWEKVHL7DwMfMMdVol+uxrgIDQk/DvoWJnvzP3zxXY55+CM/nmKv0aoovbt6/gqcwSbaHj4Qf9CK1khy7O6nx/KBiM/FxMAoz8aX/XKN/Xt1dr8lVIMyntfwT3r8tLIgqbe/TFF3DWcwgo2UC74d9XoKDXToJhWCrUJ9KUgc94VuwaGziI5EWytBX1elGiKfPZumLiaZtQjVmjcUWB7PNwQgn2zXfcMHIHAH1LDq4FsA9eWKsa5alClHhpZ9avgrryuv9OI51dlN744qwe4yQreP7zckrtKLo7xONo5pZ4ho4t4GmGRlXXHzWtGxUboZLFLyQXgMYIGb1PYdeqJFlzOkdsfaQzNOfu5+pYrhzTdXbb/x5RQHlu8etPdJf3KQEO72VXd/6XcKdE83hkvZkZBMy89/FdsdauqRY/SrUbXRbvePH9fvJtAXCjMZ6Qw7q4Smdqn4UGh90/LhRV1XXIFhriOKfeAXnMli13QtatvgoxzBBrhTkX6pE5jy2S6bZFMgvc1g3NlfOVnhIuzbyMdkB6ykl/nw893LWTzZ9wiqWGeC2eNhaLo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(451199021)(478600001)(2906002)(186003)(2616005)(6512007)(6506007)(36756003)(6666004)(83380400001)(6486002)(921005)(38100700002)(4744005)(86362001)(316002)(31696002)(5660300002)(7416002)(41300700001)(7406005)(8936002)(4326008)(31686004)(66476007)(66556008)(66946007)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZE1QTWlCNEt2YTFhenp0NWVXM1JJU1k3Qm10aEtPb004VGxiQTZvVVFXdHVQ?=
- =?utf-8?B?Zy9CU0dYYTRTaXh6a0NWRkl0RFdickcxSXBFQ2U0V0ExcHdYZHRXOGllZURl?=
- =?utf-8?B?NTVERGRRMkhNTWFyMzliRHloSExWZHhSR0ZQdmRYbGsvbUJHY2RibGI0QUYw?=
- =?utf-8?B?dk0xak5MMGlJSnlzRjJRSUYxUWxpQ2NMMXJ6WnFGbGdjanF0Y08vS3hSbERN?=
- =?utf-8?B?enh4K0l3Q25acU16YVZTemtHOXdJbGNQVVhoL1c2L1NGaGVCbU1VeStnbTdL?=
- =?utf-8?B?eGhNUVRhWW9BOVlMYmk5VEJlTUlyOXJaYldqdGlXc3lvTWU5dkdQcHJteHp0?=
- =?utf-8?B?d0VRaXEyNkgwakdTaU12ZGZjWHI0T1BpaVRyV3l1RTlHc0EwSGUvamJZL2JF?=
- =?utf-8?B?Y0VvSVVyb3dic2J4aFFpTmhOWjZYK0E2WnFkSVhBQVZvbEZwMkk1bExPVE1o?=
- =?utf-8?B?WGJiYUZucnpWRlRJZlBGa3RQQjdRdGkrclBtS1hkT2JWWllJcUtZdEh0b0hG?=
- =?utf-8?B?SU5TMjNpRzAxSnNEdEN4SytmVE1LV0oxVDBlZXQ4Ryt0KzNoVzMxb2pFeVA3?=
- =?utf-8?B?UzBIaGMxcDRZWEZhR3Zxelg4TS9kUHRuYnZuVWtqQytnc0N5MkFFcmhIRmEx?=
- =?utf-8?B?WFdEdm00cWZnVHJ3WkdTZFo2RXlXZGxjcEhpeDlUTlAvVmR1b1N5d1JhcTlU?=
- =?utf-8?B?NDE2RUpTOC8wcGhYY3JqRU8wYm85L2dtcmhoNmkzKzhJekhNVnVieXJOWnVR?=
- =?utf-8?B?TE1nV2k0TWNvcnYvVVhxeDlqb2w0cExhcUJlbUlTR09EemcrbjBUaDhWOGpX?=
- =?utf-8?B?MEMvNWR4N1NLczlFT1R1TzgxK3Rqd3VFc0RLVElkdGpLeGVMcWkvbjRCa0pB?=
- =?utf-8?B?bVpWdWtrUHFqa0ZObVYvSDNQYlM1dW96VzZEc2k2S2RRZWZUQmw4V2diWi9R?=
- =?utf-8?B?dmtIM2FCNG1MRndjS1FmWmJ2VENzUWt5cVNuRGVwSVFtVEhWSzJtbGNybnVj?=
- =?utf-8?B?WEUvenVVUjBqNSs1N0tSQVhDOU5rNWIvZlhZaUMyWTNma09WZGNYN3JvWndV?=
- =?utf-8?B?cDFlNDBtTUE5azVEZ0poVmFvSDI3T0NSZVRsN2l4M0FvT3BURFhjVXlLVEhZ?=
- =?utf-8?B?eDVRNXpqNnRHY01nYUsyaldVeFpwRmFvYUdjcEEzS2t0eUd1WWQ1MXlUci9j?=
- =?utf-8?B?cmJ5LzJEcGcrSlZRRHhtS2M5RHV1dFNTbGQrYWdIMW1UWHJ6cllNRVZsMDMx?=
- =?utf-8?B?ZWpIQXR6dURHcGF6eDRGSWNCSGZGV0I4MHMxOWsxYXhPREtueDBKRTRoYUhP?=
- =?utf-8?B?T2R2SWQ2Wmt0VXUvQ0ZKM1BFZTZRTENQbTdycWIzS1kxRHNkWEg5OUNXN0Fw?=
- =?utf-8?B?djFjcHQvYzJxbjJ2dFNLQW9BaHZWN2pSdkJ6MnMrenI3MVd3eHlYcWFMc3Rt?=
- =?utf-8?B?SEpxcU1PY2dRaGxFZHZQUWY0a1ZqU0RzRkZ3cXVoSnc5aFo2Z3I0a3lKZUJa?=
- =?utf-8?B?VE5wNGRiQnVWRDJ1dERlU3JDT0J3c3M5ZjFHRjM1TFUzSENUcFRXWklDTlUz?=
- =?utf-8?B?Mk9mWTE2V3ZIQTBIeWV5LzV3YWRtZnRBMFRYaXorcEkrMEtDMTZrdXhLNm8y?=
- =?utf-8?B?dmFBWDlzeUh3dGFoZmRsd2ViMm8yUlFBaE45b0lGQWhwNFVjRUd3VGd3eVZY?=
- =?utf-8?B?MWJSRzY3Y1FxaWRrLzMzQXBsOTdsUjVNNEhzdUdrK0kzSlhLRnU0aUVwNyty?=
- =?utf-8?B?MDVQY3NlYmJsUHlIdnBxQWx0aGcwS1l5UVl5aXlLU2wwSkR4Q3J5Y2tTMG5F?=
- =?utf-8?B?dHpBaGw2THlsWkdqUGdNUG1zSnFROTdqSzY3L1h5dFNyRjk2ZURCVDA3OXhV?=
- =?utf-8?B?OW9nMFNHYjZqVTlVb3NXOGQrQ3dZUnYxRXpjR1E4TEhZTktlLzBWbnpQZjV1?=
- =?utf-8?B?TlRyTnlJallER3hpTzFoU3ZqbGJQRHgwNTNHWFB6OEVwUU1oVTczZnE1c1JU?=
- =?utf-8?B?N2ZlNHZNaGFJMWFKM1EvZ3dBNVhOeUxZQlNpd3ZjZEJzRDJNMVRDQTd2Y3pO?=
- =?utf-8?B?TnZjd3FQWEFXeTJKZnZnOWZsZEZEUnhLYTBhM3NrRStGRDBxZFd1VzhvZEVP?=
- =?utf-8?B?dUFqbVNYejNrYXphZTFUWStBaHk4OHdDNFkrUlNjaDBPbkJWV1l1QUIydWNM?=
- =?utf-8?Q?JnUTle3WSa+G+jqFw/UnK0MSIm1vzyktQ7Bp1cTxDEuC?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b096c2cb-a8d3-4098-d14e-08db3507cc34
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2023 12:26:21.3375
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /6LALqDz9PmyU1K83FyB5TD+ACp3xpQxqoA8rzR+eq9lMYi/ZM3Eteaz9mbJBTCpkWtPvuQgXox7SX5PWC71Ww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6970
-X-Spam-Status: No, score=-1.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFULd4ZUnbtDYXBBbuTJnq9wLSf5cZTc=hUPxg6-8KRNA7YVeQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.3 required=5.0 tests=RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-> Enabled restrict interrupt injection function. Remove MSR_AMD64_
-> SNP_RESTRICTED_INJ from SNP_FEATURES_IMPL_REQ to let kernel boot
-> up with this function.
-> ---
->   arch/x86/boot/compressed/sev.c | 1 -
->   1 file changed, 1 deletion(-)
+On Tue, Apr 04, 2023 at 02:24:38PM +0200, Uros Bizjak wrote:
+> On Mon, Apr 3, 2023 at 12:19 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Sun, Mar 26, 2023 at 09:28:38PM +0200, Uros Bizjak wrote:
+> > > On Fri, Mar 24, 2023 at 5:33 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > >
+> > > > On Fri, Mar 24, 2023 at 04:14:22PM +0000, Mark Rutland wrote:
+> > > > > On Fri, Mar 24, 2023 at 04:43:32PM +0100, Uros Bizjak wrote:
+> > > > > > On Fri, Mar 24, 2023 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > > > > >
+> > > > > > > On Sun, Mar 05, 2023 at 09:56:19PM +0100, Uros Bizjak wrote:
+> > > > > > > > Cast _oldp to the type of _ptr to avoid incompatible-pointer-types warning.
+> > > > > > >
+> > > > > > > Can you give an example of where we are passing an incompatible pointer?
+> > > > > >
+> > > > > > An example is patch 10/10 from the series, which will fail without
+> > > > > > this fix when fallback code is used. We have:
+> > > > > >
+> > > > > > -       } while (local_cmpxchg(&rb->head, offset, head) != offset);
+> > > > > > +       } while (!local_try_cmpxchg(&rb->head, &offset, head));
+> > > > > >
+> > > > > > where rb->head is defined as:
+> > > > > >
+> > > > > > typedef struct {
+> > > > > >    atomic_long_t a;
+> > > > > > } local_t;
+> > > > > >
+> > > > > > while offset is defined as 'unsigned long'.
+> > > > >
+> > > > > Ok, but that's because we're doing the wrong thing to start with.
+> > > > >
+> > > > > Since local_t is defined in terms of atomic_long_t, we should define the
+> > > > > generic local_try_cmpxchg() in terms of atomic_long_try_cmpxchg(). We'll still
+> > > > > have a mismatch between 'long *' and 'unsigned long *', but then we can fix
+> > > > > that in the callsite:
+> > > > >
+> > > > >       while (!local_try_cmpxchg(&rb->head, &(long *)offset, head))
+> > > >
+> > > > Sorry, that should be:
+> > > >
+> > > >         while (!local_try_cmpxchg(&rb->head, (long *)&offset, head))
+> > >
+> > > The fallbacks are a bit more complicated than above, and are different
+> > > from atomic_try_cmpxchg.
+> > >
+> > > Please note in patch 2/10, the falbacks when arch_try_cmpxchg_local
+> > > are not defined call arch_cmpxchg_local. Also in patch 2/10,
+> > > try_cmpxchg_local is introduced, where it calls
+> > > arch_try_cmpxchg_local. Targets (and generic code) simply define (e.g.
+> > > :
+> > >
+> > > #define local_cmpxchg(l, o, n) \
+> > >        (cmpxchg_local(&((l)->a.counter), (o), (n)))
+> > > +#define local_try_cmpxchg(l, po, n) \
+> > > +       (try_cmpxchg_local(&((l)->a.counter), (po), (n)))
+> > >
+> > > which is part of the local_t API. Targets should either define all
+> > > these #defines, or none. There are no partial fallbacks as is the case
+> > > with atomic_t.
+> >
+> > Whether or not there are fallbacks is immaterial.
+> >
+> > In those cases, architectures can just as easily write C wrappers, e.g.
+> >
+> > long local_cmpxchg(local_t *l, long old, long new)
+> > {
+> >         return cmpxchg_local(&l->a.counter, old, new);
+> > }
+> >
+> > long local_try_cmpxchg(local_t *l, long *old, long new)
+> > {
+> >         return try_cmpxchg_local(&l->a.counter, old, new);
+> > }
 > 
-> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> index d63ad8f99f83..a5f41301a600 100644
-> --- a/arch/x86/boot/compressed/sev.c
-> +++ b/arch/x86/boot/compressed/sev.c
-> @@ -299,7 +299,6 @@ static void enforce_vmpl0(void)
->    */
->   #define SNP_FEATURES_IMPL_REQ	(MSR_AMD64_SNP_VTOM |			\
->   				 MSR_AMD64_SNP_REFLECT_VC |		\
-> -				 MSR_AMD64_SNP_RESTRICTED_INJ |		\
+> Please find attached the complete prototype patch that implements the
+> above suggestion.
+> 
+> The patch includes:
+> - implementation of instrumented try_cmpxchg{,64}_local definitions
+> - corresponding arch_try_cmpxchg{,64}_local fallback definitions
+> - generic local{,64}_try_cmpxchg (and local{,64}_cmpxchg) C wrappers
+> 
+> - x86 specific local_try_cmpxchg (and local_cmpxchg) C wrappers
+> - x86 specific arch_try_cmpxchg_local definition
+> 
+> - kernel/events/ring_buffer.c change to test local_try_cmpxchg
+> implementation and illustrate the transition
+> - arch/x86/events/core.c change to test local64_try_cmpxchg
+> implementation and illustrate the transition
+> 
+> The definition of atomic_long_t is different for 64-bit and 32-bit
+> targets (s64 vs int), so target specific C wrappers have to use
+> different casts to account for this difference.
+> 
+> Uros.
 
-Should we update the bit in "SNP_FEATURES_PRESENT" instead?
+Thanks for this!
 
-Thanks,
-Pankaj	
->   				 MSR_AMD64_SNP_ALT_INJ |		\
->   				 MSR_AMD64_SNP_DEBUG_SWAP |		\
->   				 MSR_AMD64_SNP_VMPL_SSS |		\
+FWIW, the patch (inline below) looks good to me.
+
+Mark.
+
+> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+> index d096b04bf80e..d9310e9363f1 100644
+> --- a/arch/x86/events/core.c
+> +++ b/arch/x86/events/core.c
+> @@ -129,13 +129,12 @@ u64 x86_perf_event_update(struct perf_event *event)
+>  	 * exchange a new raw count - then add that new-prev delta
+>  	 * count to the generic event atomically:
+>  	 */
+> -again:
+>  	prev_raw_count = local64_read(&hwc->prev_count);
+> -	rdpmcl(hwc->event_base_rdpmc, new_raw_count);
+>  
+> -	if (local64_cmpxchg(&hwc->prev_count, prev_raw_count,
+> -					new_raw_count) != prev_raw_count)
+> -		goto again;
+> +	do {
+> +		rdpmcl(hwc->event_base_rdpmc, new_raw_count);
+> +	} while (!local64_try_cmpxchg(&hwc->prev_count, &prev_raw_count,
+> +				      new_raw_count));
+>  
+>  	/*
+>  	 * Now we have the new raw value and have updated the prev
+> diff --git a/arch/x86/include/asm/cmpxchg.h b/arch/x86/include/asm/cmpxchg.h
+> index 94fbe6ae7431..540573f515b7 100644
+> --- a/arch/x86/include/asm/cmpxchg.h
+> +++ b/arch/x86/include/asm/cmpxchg.h
+> @@ -221,9 +221,15 @@ extern void __add_wrong_size(void)
+>  #define __try_cmpxchg(ptr, pold, new, size)				\
+>  	__raw_try_cmpxchg((ptr), (pold), (new), (size), LOCK_PREFIX)
+>  
+> +#define __try_cmpxchg_local(ptr, pold, new, size)			\
+> +	__raw_try_cmpxchg((ptr), (pold), (new), (size), "")
+> +
+>  #define arch_try_cmpxchg(ptr, pold, new) 				\
+>  	__try_cmpxchg((ptr), (pold), (new), sizeof(*(ptr)))
+>  
+> +#define arch_try_cmpxchg_local(ptr, pold, new)				\
+> +	__try_cmpxchg_local((ptr), (pold), (new), sizeof(*(ptr)))
+> +
+>  /*
+>   * xadd() adds "inc" to "*ptr" and atomically returns the previous
+>   * value of "*ptr".
+> diff --git a/arch/x86/include/asm/local.h b/arch/x86/include/asm/local.h
+> index 349a47acaa4a..d286a6c7c0b7 100644
+> --- a/arch/x86/include/asm/local.h
+> +++ b/arch/x86/include/asm/local.h
+> @@ -120,8 +120,20 @@ static inline long local_sub_return(long i, local_t *l)
+>  #define local_inc_return(l)  (local_add_return(1, l))
+>  #define local_dec_return(l)  (local_sub_return(1, l))
+>  
+> -#define local_cmpxchg(l, o, n) \
+> -	(cmpxchg_local(&((l)->a.counter), (o), (n)))
+> +static inline long local_cmpxchg(local_t *l, long old, long new)
+> +{
+> +	return cmpxchg_local(&l->a.counter, old, new);
+> +}
+> +
+> +static inline bool local_try_cmpxchg(local_t *l, long *old, long new)
+> +{
+> +#ifdef CONFIG_64BIT
+> +	return try_cmpxchg_local(&l->a.counter, (s64 *)old, new);
+> +#else
+> +	return try_cmpxchg_local(&l->a.counter, (int *)old, new);
+> +#endif
+> +}
+> +
+>  /* Always has a lock prefix */
+>  #define local_xchg(l, n) (xchg(&((l)->a.counter), (n)))
+>  
+> diff --git a/include/asm-generic/local.h b/include/asm-generic/local.h
+> index fca7f1d84818..7f97018df66f 100644
+> --- a/include/asm-generic/local.h
+> +++ b/include/asm-generic/local.h
+> @@ -42,6 +42,7 @@ typedef struct
+>  #define local_inc_return(l) atomic_long_inc_return(&(l)->a)
+>  
+>  #define local_cmpxchg(l, o, n) atomic_long_cmpxchg((&(l)->a), (o), (n))
+> +#define local_try_cmpxchg(l, po, n) atomic_long_try_cmpxchg((&(l)->a), (po), (n))
+>  #define local_xchg(l, n) atomic_long_xchg((&(l)->a), (n))
+>  #define local_add_unless(l, _a, u) atomic_long_add_unless((&(l)->a), (_a), (u))
+>  #define local_inc_not_zero(l) atomic_long_inc_not_zero(&(l)->a)
+> diff --git a/include/asm-generic/local64.h b/include/asm-generic/local64.h
+> index 765be0b7d883..14963a7a6253 100644
+> --- a/include/asm-generic/local64.h
+> +++ b/include/asm-generic/local64.h
+> @@ -42,7 +42,16 @@ typedef struct {
+>  #define local64_sub_return(i, l) local_sub_return((i), (&(l)->a))
+>  #define local64_inc_return(l)	local_inc_return(&(l)->a)
+>  
+> -#define local64_cmpxchg(l, o, n) local_cmpxchg((&(l)->a), (o), (n))
+> +static inline s64 local64_cmpxchg(local64_t *l, s64 old, s64 new)
+> +{
+> +	return local_cmpxchg(&l->a, old, new);
+> +}
+> +
+> +static inline bool local64_try_cmpxchg(local64_t *l, s64 *old, s64 new)
+> +{
+> +	return local_try_cmpxchg(&l->a, (long *)old, new);
+> +}
+> +
+>  #define local64_xchg(l, n)	local_xchg((&(l)->a), (n))
+>  #define local64_add_unless(l, _a, u) local_add_unless((&(l)->a), (_a), (u))
+>  #define local64_inc_not_zero(l)	local_inc_not_zero(&(l)->a)
+> @@ -81,6 +90,7 @@ typedef struct {
+>  #define local64_inc_return(l)	atomic64_inc_return(&(l)->a)
+>  
+>  #define local64_cmpxchg(l, o, n) atomic64_cmpxchg((&(l)->a), (o), (n))
+> +#define local64_try_cmpxchg(l, po, n) atomic64_try_cmpxchg((&(l)->a), (po), (n))
+>  #define local64_xchg(l, n)	atomic64_xchg((&(l)->a), (n))
+>  #define local64_add_unless(l, _a, u) atomic64_add_unless((&(l)->a), (_a), (u))
+>  #define local64_inc_not_zero(l)	atomic64_inc_not_zero(&(l)->a)
+> diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+> index 77bc5522e61c..36c92851cdee 100644
+> --- a/include/linux/atomic/atomic-arch-fallback.h
+> +++ b/include/linux/atomic/atomic-arch-fallback.h
+> @@ -217,6 +217,28 @@
+>  
+>  #endif /* arch_try_cmpxchg64_relaxed */
+>  
+> +#ifndef arch_try_cmpxchg_local
+> +#define arch_try_cmpxchg_local(_ptr, _oldp, _new) \
+> +({ \
+> +	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	___r = arch_cmpxchg_local((_ptr), ___o, (_new)); \
+> +	if (unlikely(___r != ___o)) \
+> +		*___op = ___r; \
+> +	likely(___r == ___o); \
+> +})
+> +#endif /* arch_try_cmpxchg_local */
+> +
+> +#ifndef arch_try_cmpxchg64_local
+> +#define arch_try_cmpxchg64_local(_ptr, _oldp, _new) \
+> +({ \
+> +	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
+> +	___r = arch_cmpxchg64_local((_ptr), ___o, (_new)); \
+> +	if (unlikely(___r != ___o)) \
+> +		*___op = ___r; \
+> +	likely(___r == ___o); \
+> +})
+> +#endif /* arch_try_cmpxchg64_local */
+> +
+>  #ifndef arch_atomic_read_acquire
+>  static __always_inline int
+>  arch_atomic_read_acquire(const atomic_t *v)
+> @@ -2456,4 +2478,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+>  #endif
+>  
+>  #endif /* _LINUX_ATOMIC_FALLBACK_H */
+> -// b5e87bdd5ede61470c29f7a7e4de781af3770f09
+> +// 1f49bd4895a4b7a5383906649027205c52ec80ab
+> diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
+> index 7a139ec030b0..14a9212cc987 100644
+> --- a/include/linux/atomic/atomic-instrumented.h
+> +++ b/include/linux/atomic/atomic-instrumented.h
+> @@ -2066,6 +2066,24 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  	arch_sync_cmpxchg(__ai_ptr, __VA_ARGS__); \
+>  })
+>  
+> +#define try_cmpxchg_local(ptr, oldp, ...) \
+> +({ \
+> +	typeof(ptr) __ai_ptr = (ptr); \
+> +	typeof(oldp) __ai_oldp = (oldp); \
+> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +	arch_try_cmpxchg_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+> +})
+> +
+> +#define try_cmpxchg64_local(ptr, oldp, ...) \
+> +({ \
+> +	typeof(ptr) __ai_ptr = (ptr); \
+> +	typeof(oldp) __ai_oldp = (oldp); \
+> +	instrument_atomic_write(__ai_ptr, sizeof(*__ai_ptr)); \
+> +	instrument_atomic_write(__ai_oldp, sizeof(*__ai_oldp)); \
+> +	arch_try_cmpxchg64_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+> +})
+> +
+>  #define cmpxchg_double(ptr, ...) \
+>  ({ \
+>  	typeof(ptr) __ai_ptr = (ptr); \
+> @@ -2083,4 +2101,4 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+>  })
+>  
+>  #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+> -// 764f741eb77a7ad565dc8d99ce2837d5542e8aee
+> +// 456e206c7e4e681126c482e4edcc6f46921ac731
+> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> index 273a0fe7910a..111ab85ee97d 100644
+> --- a/kernel/events/ring_buffer.c
+> +++ b/kernel/events/ring_buffer.c
+> @@ -191,9 +191,10 @@ __perf_output_begin(struct perf_output_handle *handle,
+>  
+>  	perf_output_get_handle(handle);
+>  
+> +	offset = local_read(&rb->head);
+>  	do {
+>  		tail = READ_ONCE(rb->user_page->data_tail);
+> -		offset = head = local_read(&rb->head);
+> +		head = offset;
+>  		if (!rb->overwrite) {
+>  			if (unlikely(!ring_buffer_has_space(head, tail,
+>  							    perf_data_size(rb),
+> @@ -217,7 +218,7 @@ __perf_output_begin(struct perf_output_handle *handle,
+>  			head += size;
+>  		else
+>  			head -= size;
+> -	} while (local_cmpxchg(&rb->head, offset, head) != offset);
+> +	} while (!local_try_cmpxchg(&rb->head, &offset, head));
+>  
+>  	if (backward) {
+>  		offset = head;
+> diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
+> index 3a07695e3c89..6e853f0dad8d 100755
+> --- a/scripts/atomic/gen-atomic-fallback.sh
+> +++ b/scripts/atomic/gen-atomic-fallback.sh
+> @@ -225,6 +225,10 @@ for cmpxchg in "cmpxchg" "cmpxchg64"; do
+>  	gen_try_cmpxchg_fallbacks "${cmpxchg}"
+>  done
+>  
+> +for cmpxchg in "cmpxchg_local" "cmpxchg64_local"; do
+> +	gen_try_cmpxchg_fallback "${cmpxchg}" ""
+> +done
+> +
+>  grep '^[a-z]' "$1" | while read name meta args; do
+>  	gen_proto "${meta}" "${name}" "atomic" "int" ${args}
+>  done
+> diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
+> index 77c06526a574..c8165e9431bf 100755
+> --- a/scripts/atomic/gen-atomic-instrumented.sh
+> +++ b/scripts/atomic/gen-atomic-instrumented.sh
+> @@ -173,7 +173,7 @@ for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg" "try_cmpxchg64"; do
+>  	done
+>  done
+>  
+> -for xchg in "cmpxchg_local" "cmpxchg64_local" "sync_cmpxchg"; do
+> +for xchg in "cmpxchg_local" "cmpxchg64_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" ; do
+>  	gen_xchg "${xchg}" "" ""
+>  	printf "\n"
+>  done
 
