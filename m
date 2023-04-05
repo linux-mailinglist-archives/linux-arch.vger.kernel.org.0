@@ -2,139 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1C66D864F
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 20:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725EA6D872B
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 21:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbjDESx7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Apr 2023 14:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        id S229731AbjDETqp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Apr 2023 15:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjDESx7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 14:53:59 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98523A9E;
-        Wed,  5 Apr 2023 11:53:57 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id br40so5571055qkb.9;
-        Wed, 05 Apr 2023 11:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680720837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DRtXFO8p+VJqvb8EGOqoRE2s3RWE1f66fx+Rp1t5D9o=;
-        b=OMlSV93FLik5uu6Z8lBQaDkNCKwnSNM3KQNtekolqO7lEAxeuPLjS7vAMwzAzhfHZ9
-         iiFaH/lpB9PdL8VEOyRPJ2pWuyf0eRnq8GXT9u4Qo7TmPlJABcbGiYYymYezYDB9VYTc
-         xkNWzfRwbvB7nsbQtDV4/jeva/rzwD/SG5iPLBdW1yU5S04rD1O1LmD0uMbkKZ9cGtiw
-         +p904lLQLMu8a2ioQfdd0zG/38JialqxNkswfgAIGzhFtqnihwTUUxXK7+i0iOfKFj0n
-         RxGvXaOp6UMT9qYlKaIWuENHXQXsbghZYBb+ZiWjtEDaJJlLAe6PZq1h6UR5rPhPq351
-         o8gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680720837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DRtXFO8p+VJqvb8EGOqoRE2s3RWE1f66fx+Rp1t5D9o=;
-        b=4m39JjkQvJ/s7F/lUJ6miKU3QORnr/SjopxFomB/I5pe2RfAmAy2xxnH/KW2vV8ATR
-         wdaoBU5NWKHcV8Vu2fFYVqOoqDn5h3Scco95RkUyk9m/toRQ0br3Onh6N4a5JQACvqrE
-         EkzZqXTV2tZpVbBUZzS7YOPeuPbgGdX3IrTSw2UPg4CkGkvISkridFDQA0Ti/zOdYyPd
-         BCZggEka0Cw2csMmyL6AoBNZ4Buy6bS374qpTuP+eFgR2rEb7Tm2L48KTiTp/inAMf/H
-         uqgItKmDsYqF02TGK6klGaRotaqy2RMcPMMt+M1IMoL50eR5PKzbATKKpSj2OF6xrIJs
-         6OGA==
-X-Gm-Message-State: AAQBX9dfhw1pW865yNuoXSqvVTyx1F0unwFk8BUKvlkHJ8CohZ6/pSLj
-        FyNhUDyhlU5e90+3rDW1KaYssgED5ToPT11g7pOd9e5jWJsD03kI
-X-Google-Smtp-Source: AKy350aArjUI2H96/efNuT4p4Gns0LFchwaT84DgmUSYAPmyhG0Hxnacumi6y7a0qpoFL35F7ev0gS5BSSlbBVcMbIg=
-X-Received: by 2002:a05:620a:280a:b0:745:7249:49ed with SMTP id
- f10-20020a05620a280a00b00745724949edmr1345672qkp.6.1680720836842; Wed, 05 Apr
- 2023 11:53:56 -0700 (PDT)
+        with ESMTP id S229507AbjDETqo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 15:46:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9C91BCB
+        for <linux-arch@vger.kernel.org>; Wed,  5 Apr 2023 12:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1680723962;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+2zEtqXoZ8EUol2cclpRVKkKNXmBP9BtyvyLsaVT0jc=;
+        b=IHr326Oj0N26xa5gQkJW3os8cdcmQWMlINIkTgYno6gdUDUnNTTv/csK3/fUP3av3Sd8hU
+        2Z2vebdoiAkOo6CAgUKASMsGdssEeOBM6GTltzvz1XFtcQNofFD0ONTpeSJ9BjAk6sfUJF
+        rLEGgkP1qL8KZk+d2C9112Mt/JpPC9U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-6AAFnWjlOs2G1gaCxtVpqg-1; Wed, 05 Apr 2023 15:46:00 -0400
+X-MC-Unique: 6AAFnWjlOs2G1gaCxtVpqg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C7243C0D86F;
+        Wed,  5 Apr 2023 19:45:57 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B9FF21121314;
+        Wed,  5 Apr 2023 19:45:55 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id E6884400E055B; Wed,  5 Apr 2023 16:43:14 -0300 (-03)
+Date:   Wed, 5 Apr 2023 16:43:14 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, peterz@infradead.org, arnd@arndb.de,
+        keescook@chromium.org, paulmck@kernel.org, jpoimboe@kernel.org,
+        samitolvanen@google.com, ardb@kernel.org,
+        juerg.haefliger@canonical.com, rmk+kernel@armlinux.org.uk,
+        geert+renesas@glider.be, tony@atomide.com,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        nick.hawkins@hpe.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <ZC3PUkI7N2uEKy6v@tpad>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
 MIME-Version: 1.0
-References: <20230405141710.3551-1-ubizjak@gmail.com> <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-In-Reply-To: <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
-From:   Uros Bizjak <ubizjak@gmail.com>
-Date:   Wed, 5 Apr 2023 20:53:45 +0200
-Message-ID: <CAFULd4a6u=LB0ivfHtHt=jRxeJeLWuBot=Pync6pbrvKi=CdjA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZC1Q7uX4rNLg3vEg@lothringen>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 5, 2023 at 6:37=E2=80=AFPM Dave Hansen <dave.hansen@intel.com> =
-wrote:
->
-> On 4/5/23 07:17, Uros Bizjak wrote:
-> > Add generic and target specific support for local{,64}_try_cmpxchg
-> > and wire up support for all targets that use local_t infrastructure.
->
-> I feel like I'm missing some context.
->
-> What are the actual end user visible effects of this series?  Is there a
-> measurable decrease in perf overhead?  Why go to all this trouble for
-> perf?  Who else will use local_try_cmpxchg()?
+On Wed, Apr 05, 2023 at 12:43:58PM +0200, Frederic Weisbecker wrote:
+> On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
+> > @@ -191,6 +192,20 @@ static void tlb_remove_table_smp_sync(void *arg)
+> >  	/* Simply deliver the interrupt */
+> >  }
+> >  
+> > +
+> > +#ifdef CONFIG_CONTEXT_TRACKING
+> > +static bool cpu_in_kernel(int cpu, void *info)
+> > +{
+> > +	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
+> 
+> Like Peter said, an smp_mb() is required here before the read (unless there is
+> already one between the page table modification and that ct->state read?).
+> 
+> So that you have this pairing:
+> 
+> 
+>            WRITE page_table                  WRITE ct->state
+> 	   smp_mb()                          smp_mb() // implied by atomic_fetch_or
+>            READ ct->state                    READ page_table
+> 
+> > +	int state = atomic_read(&ct->state);
+> > +	/* will return true only for cpus in kernel space */
+> > +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
+> > +}
+> 
+> Also note that this doesn't stricly prevent userspace from being interrupted.
+> You may well observe the CPU in kernel but it may receive the IPI later after
+> switching to userspace.
+> 
+> We could arrange for avoiding that with marking ct->state with a pending work bit
+> to flush upon user entry/exit but that's a bit more overhead so I first need to
+> know about your expectations here, ie: can you tolerate such an occasional
+> interruption or not?
 
-This functionality was requested by perf people [1], so perhaps Steven
-can give us some concrete examples. In general, apart from the removal
-of unneeded compare instruction on x86, usage of try_cmpxchg also
-results in slightly better code on non-x86 targets [2], since the code
-now correctly identifies fast-path through the cmpxchg loop.
+Two points:
 
-Also important is that try_cmpxchg code reuses the result of cmpxchg
-instruction in the loop, so a read from the memory in the loop is
-eliminated. When reviewing the cmpxchg usage sites, I found numerous
-places where unnecessary read from memory was present in the loop, two
-examples can be seen in the last patch of this series.
+1) For a virtualized system, the overhead is not only of executing the
+IPI but:
 
-Also, using try_cmpxchg prevents inconsistencies of the cmpxchg loop,
-where the result of the cmpxchg is compared with the wrong "old" value
-- one such bug is still lurking in x86 APIC code, please see [3].
+	VM-exit
+	run VM-exit code in host
+	handle IPI
+	run VM-entry code in host
+	VM-entry
 
-Please note that apart from perf subsystem, event subsystem can also
-be improved by using local_try_cmpxchg. This is the reason that the
-last patch includes a change in events/core.c.
+2) Depends on the application and the definition of "occasional".
 
-> I'm all for improving things, and perf is an important user.  But, if
-> the goal here is improving performance, it would be nice to see at least
-> a stab at quantifying the performance delta.
+For certain types of applications (for example PLC software or
+RAN processing), upon occurrence of an event, it is necessary to
+complete a certain task in a maximum amount of time (deadline).
 
-[1] https://lore.kernel.org/lkml/20230301131831.6c8d4ff5@gandalf.local.home=
-/
-[2] https://lore.kernel.org/lkml/Yo91omfDZtTgXhyn@FVFF77S0Q05N.cambridge.ar=
-m.com/
-[3] https://lore.kernel.org/lkml/20230227160917.107820-1-ubizjak@gmail.com/
+One way to express this requirement is with a pair of numbers,
+deadline time and execution time, where:
 
-Uros.
+       	* deadline time: length of time between event and deadline.
+       	* execution time: length of time it takes for processing of event
+                          to occur on a particular hardware platform
+                          (uninterrupted).
+
+
+
