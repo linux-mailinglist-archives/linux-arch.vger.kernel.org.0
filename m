@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E8E6D80B1
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 17:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268336D80A6
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 17:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbjDEPG1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Apr 2023 11:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S238756AbjDEPGX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Apr 2023 11:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238663AbjDEPGE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 11:06:04 -0400
+        with ESMTP id S233443AbjDEPGG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 11:06:06 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3462A9;
-        Wed,  5 Apr 2023 08:06:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F484C05;
+        Wed,  5 Apr 2023 08:06:01 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E2872064F;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B633120600;
         Wed,  5 Apr 2023 15:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1680707159; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Lx1SiYMoPblobWQV3Y8ege1Ac9VeTo2HJVjw9lN70UA=;
-        b=aPWxJrqNwLdQycG78DQKj0AN0HtJwj7y7Pss6+/k+ouZCc57PoWj2gvJKtyrMC61DiQQgl
-        9NxCi+fenSM6Y4IEtqFEAhmFFmu+0LFE/2mSTaqvjpZMxysJxtU2tqRGvMoJqJ+KH9wBxw
-        rNr4S5ecLKvuHRsB3zCkrl6e1HjRSoM=
+        bh=I+ebQj+prghiXixUTBCQCVOwwXF4D1Rgum6gbJOw+s4=;
+        b=GDiLZyY86lwF2fRr+YRDQwYf6Uq4gXikQToAyRqZBU7u5MWnfWk0yn76mZwoFdTifS919O
+        aqVBOpZ9lpN+CGaKJb/7VobgYkqjNnZyw10FgUU7IXA6m5V79OKQQzeSonRJy7ahlNLd0i
+        hcxJqJEu/M48URUm5FAtWAnunjO3XXM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1680707159;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Lx1SiYMoPblobWQV3Y8ege1Ac9VeTo2HJVjw9lN70UA=;
-        b=wNobhRpjJpHIhTvVIjZ02da4FsfrsV5Upx5qouftXFU1GPfwXKta8Kn1crsmMdqowoVE67
-        4JhFW8HmM4EgLQCQ==
+        bh=I+ebQj+prghiXixUTBCQCVOwwXF4D1Rgum6gbJOw+s4=;
+        b=RvN/SuN57MEBeAu843+3OQKQiZa9/dYcEzCLLSlTUkbdFSXAkUCMA2ZFBm6qPCz1qjknhQ
+        sk1yBshymmXVF+Cw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C855113A92;
-        Wed,  5 Apr 2023 15:05:58 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 422A413A10;
+        Wed,  5 Apr 2023 15:05:59 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id uGgJMFaOLWTPIAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 05 Apr 2023 15:05:58 +0000
+        id YAc0D1eOLWTPIAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 05 Apr 2023 15:05:59 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
         javierm@redhat.com, gregkh@linuxfoundation.org
@@ -60,10 +60,11 @@ Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, x86@kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH 03/18] arch/arm: Implement <asm/fb.h> with generic helpers
-Date:   Wed,  5 Apr 2023 17:05:39 +0200
-Message-Id: <20230405150554.30540-4-tzimmermann@suse.de>
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 04/18] arch/arm64: Implement <asm/fb.h> with generic helpers
+Date:   Wed,  5 Apr 2023 17:05:40 +0200
+Message-Id: <20230405150554.30540-5-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230405150554.30540-1-tzimmermann@suse.de>
 References: <20230405150554.30540-1-tzimmermann@suse.de>
@@ -82,18 +83,19 @@ Replace the architecture's fb_is_primary_device() with the generic
 one from <asm-generic/fb.h>. No functional changes.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: Russell King <linux@armlinux.org.uk>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 ---
- arch/arm/include/asm/fb.h | 10 ++++------
+ arch/arm64/include/asm/fb.h | 10 ++++------
  1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/include/asm/fb.h b/arch/arm/include/asm/fb.h
-index d92e99cd8c8a..a341d76e6d8f 100644
---- a/arch/arm/include/asm/fb.h
-+++ b/arch/arm/include/asm/fb.h
-@@ -1,19 +1,17 @@
- #ifndef _ASM_FB_H_
- #define _ASM_FB_H_
+diff --git a/arch/arm64/include/asm/fb.h b/arch/arm64/include/asm/fb.h
+index bdc735ee1f67..fc31a5d1f48a 100644
+--- a/arch/arm64/include/asm/fb.h
++++ b/arch/arm64/include/asm/fb.h
+@@ -5,19 +5,17 @@
+ #ifndef __ASM_FB_H_
+ #define __ASM_FB_H_
  
 -#include <linux/fb.h>
 -#include <linux/fs.h>
@@ -114,7 +116,7 @@ index d92e99cd8c8a..a341d76e6d8f 100644
 -}
 +#include <asm-generic/fb.h>
  
- #endif /* _ASM_FB_H_ */
+ #endif /* __ASM_FB_H_ */
 -- 
 2.40.0
 
