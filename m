@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E596D735D
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 06:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AB36D7371
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 06:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236858AbjDEE1H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Apr 2023 00:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S229630AbjDEEjE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Apr 2023 00:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjDEE1H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 00:27:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88116172C
-        for <linux-arch@vger.kernel.org>; Tue,  4 Apr 2023 21:27:05 -0700 (PDT)
+        with ESMTP id S236893AbjDEEjD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 00:39:03 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFEF1BF3
+        for <linux-arch@vger.kernel.org>; Tue,  4 Apr 2023 21:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680668825; x=1712204825;
+  t=1680669542; x=1712205542;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=so4TzaLEeTO0N0bW4U1K26FFNjV0fIHc1Z/hvvJWSkg=;
-  b=L83zSDUGwqPuYqpj1nb5hO1ofT8VfvYaiu0T4C8lGq8sOo0pYMtTFkun
-   9IETvV0JRsOtPBNnzMG32Ee8075jbok7fmZDm1k/JBl4Ays/JV7sc2ppj
-   ylA7rGuGZ/zqkO263dFDcVWeTRZ8dtmPMOP2tHYeuBth1jzsnA8woqjEb
-   RlFv5kWxrMHOa8llz/Jz5GWWcjV0wLrkk/YGKgcVexA0xEHGJ6YDO+wya
-   I1kpnlgOnr71yXyee/mJbXSM062NRJmQQWRfTDvi+/I/bUMcQrB2RQ5NN
-   /2sIdA8l5liMXBhySDSs5vi7TXdTmRGXe7QrTOVvfW65FYHt83zU/rU7q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="339860015"
+  bh=9Gw6NG/+DAZkYL1oE7BnVMurmcAULAAAGcjRH1sXz+8=;
+  b=TzV/w3gC+akQSmXxf9jMmv+TJ/8Arxi6xsMQJregiYQYVIxW6/1ssbn6
+   NXvomeALM6HoVvpp08V/URJln+6DseSWsVBuva74qQWJKKwmCmwC59629
+   lPGPklMVSm7giFIEOf0xpeE0PpILjBz1CnlgIsTNdi2n7mE2nmXNJw9tn
+   dUkxpVhUYrVHH2pD/MYgk8xgq0oIHJmaZHEeZQdYfmjTHrylWM+N28aiI
+   7QKiyABg8iw8lbxQWdoMInmhEaEIYgGAi4NgzD4q3iQGKkT5+Eq2h4OJj
+   17C5eo4G7VUuHnS3O42DwvZowTKhekJ0Tqa0RsHqpB50C+mivzcAt0t+G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="405140772"
 X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="339860015"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 21:27:05 -0700
+   d="scan'208";a="405140772"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2023 21:39:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="719181872"
+X-IronPort-AV: E=McAfee;i="6600,9927,10670"; a="797762256"
 X-IronPort-AV: E=Sophos;i="5.98,319,1673942400"; 
-   d="scan'208";a="719181872"
+   d="scan'208";a="797762256"
 Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 04 Apr 2023 21:27:03 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 04 Apr 2023 21:38:59 -0700
 Received: from kbuild by b613635ddfff with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pjujZ-000QIO-1n;
-        Wed, 05 Apr 2023 04:26:57 +0000
-Date:   Wed, 05 Apr 2023 12:26:16 +0800
+        id 1pjuvC-000QJX-1h;
+        Wed, 05 Apr 2023 04:38:58 +0000
+Date:   Wed, 05 Apr 2023 12:38:13 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- b7c72732697a28f26630d0cbc2057553e6e2f812
-Message-ID: <642cf868.Mqh/U/ji4JVjYiB7%lkp@intel.com>
+Subject: [arnd-asm-generic:asm-generic-fixes] BUILD SUCCESS
+ 656e9007ef5862746cdf7ac16267c8e06e7b0989
+Message-ID: <642cfb35.ws40VEv1Id9644aB%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -62,10 +62,10 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: b7c72732697a28f26630d0cbc2057553e6e2f812  Merge branch 'asm-generic-fixes' of https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic into asm-generic
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
+branch HEAD: 656e9007ef5862746cdf7ac16267c8e06e7b0989  asm-generic: avoid __generic_cmpxchg_local warnings
 
-elapsed time: 720m
+elapsed time: 731m
 
 configs tested: 243
 configs skipped: 19
