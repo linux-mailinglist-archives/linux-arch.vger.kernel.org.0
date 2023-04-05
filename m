@@ -2,40 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A833A6D8768
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 21:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A66D877E
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Apr 2023 21:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjDETxx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Apr 2023 15:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S232994AbjDET4m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Apr 2023 15:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjDETxw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 15:53:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC10C18F;
-        Wed,  5 Apr 2023 12:53:49 -0700 (PDT)
+        with ESMTP id S233489AbjDET4l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 15:56:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EEAC0;
+        Wed,  5 Apr 2023 12:56:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xfugB8gwxIrdC2R107Iwf3RGbPJjSDOcowvFi/5tZ98=; b=RQLyy2B2a56aLhk92w1zockLYu
-        GyxtlcJv3uVkzVuUAbS+vCfQAByO61u7M3A1OPrBog1K7cUo2unN2+IR18kVFW97eBVtrxu6XXJX/
-        wafQIo6qPTFiithrwoY3bfzt/wxMPxkLE+Mo9B/tHJ/QuLXN9WsqxXQU94wawQvs2+OmKXFu0eSg8
-        tdTc+xbXAue/v07k/Ctw5B3ctOuWZ7G+pkHjz/FpgoMyVKuL/951PBtsipQ+36I0uMAUwH0IYKihE
-        PBio4xNYHmMDQPU7AiJUKS1W/VYoSP2mqzTOp+RckMuOuXKpd+tSf9MLnaF6hFLQ8Vhb2wwZu77pq
-        +ZM5SYhg==;
+        bh=B30n3pHhQ67VUrCvHblGlQhSttCrPNMRQNjpDfnCSKM=; b=CJI95hU4T3CctR2X2KCz7i8NWi
+        YVt1ex1JpgAHIkmuy1kwgmXIwoo8mBoQM1QWzDBBKhLlgV5gG20QMCPVnsJLgz7GRzOm4rDjqGEX7
+        SmFG/4YZOLagPlJCfMyKsqXiKz6fWZ/Jk9afJU/jjYA7gG9XdM9XNSnVMS1ZUyvJEx5WQFenjZoAI
+        zO2cSWiVjU2pubWN8bbwjUL6wmrfBNOTp8MuoRZde24eZSrrkyuyRHB2Tk3nQSha1cz0pm0m39FhU
+        k2KMEzOUMhMRj2A+rxwttKpIIRQXafgeaIFhn68NBf9aN8oHHlDlL/YAU/DyPzhJcQlSRGMXoJ0cF
+        xlMCIp8w==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pk9BM-00Ghqu-7z; Wed, 05 Apr 2023 19:52:36 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pk9De-00A4Ht-2h;
+        Wed, 05 Apr 2023 19:54:59 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A2292300194;
-        Wed,  5 Apr 2023 21:52:26 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B6577300194;
+        Wed,  5 Apr 2023 21:54:57 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 886E2200B42A8; Wed,  5 Apr 2023 21:52:26 +0200 (CEST)
-Date:   Wed, 5 Apr 2023 21:52:26 +0200
+        id 9929B200B42A8; Wed,  5 Apr 2023 21:54:57 +0200 (CEST)
+Date:   Wed, 5 Apr 2023 21:54:57 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Marcelo Tosatti <mtosatti@redhat.com>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -59,16 +60,15 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         alougovs@redhat.com
 Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
  only to CPUs in kernel mode
-Message-ID: <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+Message-ID: <20230405195457.GC365912@hirez.programming.kicks-ass.net>
 References: <20230404134224.137038-1-ypodemsk@redhat.com>
  <20230404134224.137038-4-ypodemsk@redhat.com>
  <ZC1Q7uX4rNLg3vEg@lothringen>
- <ZC1XD/sEJY+zRujE@lothringen>
- <ZC3P3Ds/BIcpRNGr@tpad>
+ <ZC3PUkI7N2uEKy6v@tpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZC3P3Ds/BIcpRNGr@tpad>
+In-Reply-To: <ZC3PUkI7N2uEKy6v@tpad>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -78,30 +78,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 05, 2023 at 04:45:32PM -0300, Marcelo Tosatti wrote:
-> On Wed, Apr 05, 2023 at 01:10:07PM +0200, Frederic Weisbecker wrote:
-> > On Wed, Apr 05, 2023 at 12:44:04PM +0200, Frederic Weisbecker wrote:
-> > > On Tue, Apr 04, 2023 at 04:42:24PM +0300, Yair Podemsky wrote:
-> > > > +	int state = atomic_read(&ct->state);
-> > > > +	/* will return true only for cpus in kernel space */
-> > > > +	return state & CT_STATE_MASK == CONTEXT_KERNEL;
-> > > > +}
-> > > 
-> > > Also note that this doesn't stricly prevent userspace from being interrupted.
-> > > You may well observe the CPU in kernel but it may receive the IPI later after
-> > > switching to userspace.
-> > > 
-> > > We could arrange for avoiding that with marking ct->state with a pending work bit
-> > > to flush upon user entry/exit but that's a bit more overhead so I first need to
-> > > know about your expectations here, ie: can you tolerate such an occasional
-> > > interruption or not?
-> > 
-> > Bah, actually what can we do to prevent from that racy IPI? Not much I fear...
-> 
-> Use a different mechanism other than an IPI to ensure in progress
-> __get_free_pages_fast() has finished execution.
-> 
-> Isnt this codepath slow path enough that it can use
-> synchronize_rcu_expedited?
+On Wed, Apr 05, 2023 at 04:43:14PM -0300, Marcelo Tosatti wrote:
 
-To actually hit this path you're doing something really dodgy.
+> Two points:
+> 
+> 1) For a virtualized system, the overhead is not only of executing the
+> IPI but:
+> 
+> 	VM-exit
+> 	run VM-exit code in host
+> 	handle IPI
+> 	run VM-entry code in host
+> 	VM-entry
+
+I thought we could do IPIs without VMexit these days? Also virt... /me
+walks away.
+
+> 2) Depends on the application and the definition of "occasional".
+> 
+> For certain types of applications (for example PLC software or
+> RAN processing), upon occurrence of an event, it is necessary to
+> complete a certain task in a maximum amount of time (deadline).
+
+If the application is properly NOHZ_FULL and never does a kernel entry,
+it will never get that IPI. If it is a pile of shit and does kernel
+entries while it pretends to be NOHZ_FULL it gets to keep the pieces and
+no amount of crying will get me to care.
