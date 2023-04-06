@@ -2,40 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51DA26D9841
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 15:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1846D9855
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 15:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbjDFNbB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Apr 2023 09:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S238300AbjDFNdi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Apr 2023 09:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238128AbjDFNbA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 09:31:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EF69768;
-        Thu,  6 Apr 2023 06:30:59 -0700 (PDT)
+        with ESMTP id S229671AbjDFNdh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 09:33:37 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6976598;
+        Thu,  6 Apr 2023 06:33:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Nd3XkTPolwnpqLUE3NgrOTALtPa5jjJD1/nKvlAaz2Y=; b=vue8C2R2wX38xDkBGmlwtFuwej
-        Uh9YLsW/EhfXMh7OJlSlN4QIICEHntt5WzTJnGsnePbisoQVK9CJRIbgzILTTKcC9rMcoH5KSTnLC
-        +BM4FSDOzNuPtj0pJezReU7JgYDtuX7kZBnGSJ5R6oJeKcNvAgEzHJ5cnyJl6vMuW/lwUcLdzsb+U
-        jV4L2Sfce7s6V1mmzQ7Ujvs482g3uQ7SKnRijWGFfVXch9CHyJFxOeVVM6YM2Zd34fz6GBDK0qY8r
-        kylhl+3KwiY5LKfmkEmzd8bEYUSWaULkGLEtIOsfwdZDai4Vh6S9T3AIUaj4NN1o1QFsneAz55xwe
-        RYXZfkyg==;
+        bh=8m50I/Ah33OEfXawnqY/+7a+kb6PdH9s8PZL/puCTb8=; b=BDn6m0yWTioOdmUoj2vNFk/9Kq
+        E3jqJ2aswcVVxCzKrLJcxUza7IGtwWNvHaCywMfJf4ZqTjvIJqrQnKwgLnyKqVaB8mB0HJrFfgWJ5
+        QoWrxGQt8uXMJZ1oWyaF6RQG2UmojK9F4eXmB1OkhAO+YwUs7gNgvlxNnenV+vzWvaD9yCcGzNyhH
+        qY9Fq8ToVeVAGpc7TALor/XzTwT+IgjMjtlibDz2/Kw4q0z21hdW+F2EDFbmp5RoMAX9GLXNwIa9b
+        e5q7Ym/WFOQGFTf28c+5rkhAfU4qynJ0DYOiow3+Q0jkH8SYzkWKnhoWVPQCxLWuVTNBYyo1iOZF7
+        OufwRulQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pkPgE-00HS2T-GH; Thu, 06 Apr 2023 13:29:34 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkPih-00AXEX-1N;
+        Thu, 06 Apr 2023 13:32:07 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A336A300194;
-        Thu,  6 Apr 2023 15:29:28 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DA9393000DC;
+        Thu,  6 Apr 2023 15:32:06 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7C90E212E36AC; Thu,  6 Apr 2023 15:29:28 +0200 (CEST)
-Date:   Thu, 6 Apr 2023 15:29:28 +0200
+        id C1731212E36AE; Thu,  6 Apr 2023 15:32:06 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 15:32:06 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Marcelo Tosatti <mtosatti@redhat.com>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -59,18 +60,17 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         alougovs@redhat.com
 Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
  only to CPUs in kernel mode
-Message-ID: <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+Message-ID: <20230406133206.GN386572@hirez.programming.kicks-ass.net>
 References: <20230404134224.137038-1-ypodemsk@redhat.com>
  <20230404134224.137038-4-ypodemsk@redhat.com>
  <ZC1Q7uX4rNLg3vEg@lothringen>
- <ZC1XD/sEJY+zRujE@lothringen>
- <ZC3P3Ds/BIcpRNGr@tpad>
- <20230405195226.GB365912@hirez.programming.kicks-ass.net>
- <ZC69Wmqjdwk+I8kn@tpad>
+ <ZC3PUkI7N2uEKy6v@tpad>
+ <20230405195457.GC365912@hirez.programming.kicks-ass.net>
+ <ZC6/0hRXztNwqXg0@tpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZC69Wmqjdwk+I8kn@tpad>
+In-Reply-To: <ZC6/0hRXztNwqXg0@tpad>
 X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -80,18 +80,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
+On Thu, Apr 06, 2023 at 09:49:22AM -0300, Marcelo Tosatti wrote:
 
-> > To actually hit this path you're doing something really dodgy.
+> > > 2) Depends on the application and the definition of "occasional".
+> > > 
+> > > For certain types of applications (for example PLC software or
+> > > RAN processing), upon occurrence of an event, it is necessary to
+> > > complete a certain task in a maximum amount of time (deadline).
+> > 
+> > If the application is properly NOHZ_FULL and never does a kernel entry,
+> > it will never get that IPI. If it is a pile of shit and does kernel
+> > entries while it pretends to be NOHZ_FULL it gets to keep the pieces and
+> > no amount of crying will get me to care.
 > 
-> Apparently khugepaged is using the same infrastructure:
+> I suppose its common practice to use certain system calls in latency
+> sensitive applications, for example nanosleep. Some examples:
 > 
-> $ grep tlb_remove_table khugepaged.c 
-> 	tlb_remove_table_sync_one();
-> 	tlb_remove_table_sync_one();
-> 
-> So just enabling khugepaged will hit that path.
+> 1) cyclictest		(nanosleep)
 
-Urgh, WTF..
+cyclictest is not a NOHZ_FULL application, if you tihnk it is, you're
+deluded.
 
-Let me go read that stuff :/
+> 2) PLC programs		(nanosleep)
+
+What's a PLC? Programmable Logic Circuit?
+
+> A system call does not necessarily have to take locks, does it ?
+
+This all is unrelated to locks
+
+> Or even if application does system calls, but runs under a VM,
+> then you are requiring it to never VM-exit.
+
+That seems to be a goal for performance anyway.
+
+> This reduces the flexibility of developing such applications.
+
+Yeah, that's the cards you're dealt, deal with it.
