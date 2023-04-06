@@ -2,190 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C810D6DB204
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Apr 2023 19:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9421F6D98E7
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 16:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjDGRsv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Apr 2023 13:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S238935AbjDFOFH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Apr 2023 10:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbjDGRsr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Apr 2023 13:48:47 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F355611D;
-        Fri,  7 Apr 2023 10:48:45 -0700 (PDT)
-Received: from skinsburskii.localdomain (unknown [131.107.1.229])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 48572210CBEC;
-        Fri,  7 Apr 2023 10:48:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 48572210CBEC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1680889725;
-        bh=ZHx9rbN3CaHGufs06rXZ7LY5QATY03RrJRAxGsR3Ztg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oH4FKtQW13Dt8V8h2dM3d2tnSpnpkrR4ALyAWOVziqPiHu+jxqm3dae0wbl410ZXz
-         Sdw9aCjN0D4UjNBIgYZe5EQM1s/oQNaKouE2RqcD7+JJouIEApKt1z+kPhNyr3n0yS
-         8ek1uSpGQyLzgj5kJgo86X8c8/4rpCOYjW9R8FA4=
-Date:   Thu, 6 Apr 2023 06:51:13 -0700
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        jgross@suse.com, mat.jonczyk@o2.pl
-Subject: Re: [PATCH v4 2/5] x86/hyperv: Add VTL specific structs and
- hypercalls
-Message-ID: <20230406135113.GB1317@skinsburskii.localdomain>
-References: <1680598864-16981-1-git-send-email-ssengar@linux.microsoft.com>
- <1680598864-16981-3-git-send-email-ssengar@linux.microsoft.com>
+        with ESMTP id S238926AbjDFOFG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 10:05:06 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A9F86AC;
+        Thu,  6 Apr 2023 07:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=92YHTTMfDlN4SnJGHYPEf7ALbRz1gExsNSlQbfCkiJE=; b=VD9zdoH+cdV2/P8HJ83hRBLEjI
+        JpdueSAzOmoj5lCh7T87b9I6gbGuMKT0JVGD26qs0FHKIB3yJoXQe+Y4WcX1wGtdc5Gf3D5swAlSD
+        EXr1mZc5rPBC5shJ4xrHAyWqSOcNkw5tuIyHXQO1g47XKYVj5hQlqd5LcUwNCCAn1cGW9SS3G7uax
+        zmp5ipQM/zPtv02Uri8vdyNZuZVVZGKIWz2E7oa+uuBEOkZHVNccAKz2SL3V1kMqabFQew4XDjGMP
+        UDtpCwd9Y5Asm9kd3xNpC2rhBHIMzw4QpCAoQ3vLq5u1SjJpvC/3lviLAn7JaG9fKetrRHP2MOqLI
+        rQxkw6jQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkQDx-00AXes-0w;
+        Thu, 06 Apr 2023 14:04:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 94388300194;
+        Thu,  6 Apr 2023 16:04:23 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7CEE5212E36AC; Thu,  6 Apr 2023 16:04:23 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 16:04:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com, jannh@google.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen>
+ <ZC3P3Ds/BIcpRNGr@tpad>
+ <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+ <ZC69Wmqjdwk+I8kn@tpad>
+ <20230406132928.GM386572@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1680598864-16981-3-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-17.4 required=5.0 tests=DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 04, 2023 at 02:01:01AM -0700, Saurabh Sengar wrote:
-> Add structs and hypercalls required to enable VTL support on x86.
+On Thu, Apr 06, 2023 at 03:29:28PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 09:38:50AM -0300, Marcelo Tosatti wrote:
 > 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->  arch/x86/include/asm/hyperv-tlfs.h | 75 ++++++++++++++++++++++++++++++
->  include/asm-generic/hyperv-tlfs.h  |  4 ++
->  2 files changed, 79 insertions(+)
+> > > To actually hit this path you're doing something really dodgy.
+> > 
+> > Apparently khugepaged is using the same infrastructure:
+> > 
+> > $ grep tlb_remove_table khugepaged.c 
+> > 	tlb_remove_table_sync_one();
+> > 	tlb_remove_table_sync_one();
+> > 
+> > So just enabling khugepaged will hit that path.
 > 
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> index 0b73a809e9e1..0b0b4e9a4318 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -713,6 +713,81 @@ union hv_msi_entry {
->  	} __packed;
->  };
->  
-> +struct hv_x64_segment_register {
-> +	__u64 base;
+> Urgh, WTF..
+> 
+> Let me go read that stuff :/
 
-Ideally they arch-size types naming should be consistent: either with underscores or
-without.
-The majority of cases in this file are without underscores.
+At the very least the one on collapse_and_free_pmd() could easily become
+a call_rcu() based free.
 
-Reviewed-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
-
-> +	__u32 limit;
-> +	__u16 selector;
-> +	union {
-> +		struct {
-> +			__u16 segment_type : 4;
-> +			__u16 non_system_segment : 1;
-> +			__u16 descriptor_privilege_level : 2;
-> +			__u16 present : 1;
-> +			__u16 reserved : 4;
-> +			__u16 available : 1;
-> +			__u16 _long : 1;
-> +			__u16 _default : 1;
-> +			__u16 granularity : 1;
-> +		} __packed;
-> +		__u16 attributes;
-> +	};
-> +} __packed;
-> +
-> +struct hv_x64_table_register {
-> +	__u16 pad[3];
-> +	__u16 limit;
-> +	__u64 base;
-> +} __packed;
-> +
-> +struct hv_init_vp_context {
-> +	u64 rip;
-> +	u64 rsp;
-> +	u64 rflags;
-> +
-> +	struct hv_x64_segment_register cs;
-> +	struct hv_x64_segment_register ds;
-> +	struct hv_x64_segment_register es;
-> +	struct hv_x64_segment_register fs;
-> +	struct hv_x64_segment_register gs;
-> +	struct hv_x64_segment_register ss;
-> +	struct hv_x64_segment_register tr;
-> +	struct hv_x64_segment_register ldtr;
-> +
-> +	struct hv_x64_table_register idtr;
-> +	struct hv_x64_table_register gdtr;
-> +
-> +	u64 efer;
-> +	u64 cr0;
-> +	u64 cr3;
-> +	u64 cr4;
-> +	u64 msr_cr_pat;
-> +} __packed;
-> +
-> +union hv_input_vtl {
-> +	u8 as_uint8;
-> +	struct {
-> +		u8 target_vtl: 4;
-> +		u8 use_target_vtl: 1;
-> +		u8 reserved_z: 3;
-> +	};
-> +} __packed;
-> +
-> +struct hv_enable_vp_vtl {
-> +	u64				partition_id;
-> +	u32				vp_index;
-> +	union hv_input_vtl		target_vtl;
-> +	u8				mbz0;
-> +	u16				mbz1;
-> +	struct hv_init_vp_context	vp_context;
-> +} __packed;
-> +
-> +struct hv_get_vp_from_apic_id_in {
-> +	u64 partition_id;
-> +	union hv_input_vtl target_vtl;
-> +	u8 res[7];
-> +	u32 apic_ids[];
-> +} __packed;
-> +
->  #include <asm-generic/hyperv-tlfs.h>
->  
->  #endif
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index b870983596b9..87258341fd7c 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
->  /* Declare the various hypercall operations. */
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
-> +#define HVCALL_ENABLE_VP_VTL			0x000f
->  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
->  #define HVCALL_SEND_IPI				0x000b
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
-> @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
->  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
->  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
->  #define HVCALL_RETARGET_INTERRUPT		0x007e
-> +#define HVCALL_START_VP				0x0099
-> +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
->  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
-> @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
->  #define HV_STATUS_INVALID_PORT_ID		17
->  #define HV_STATUS_INVALID_CONNECTION_ID		18
->  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
-> +#define HV_STATUS_VTL_ALREADY_ENABLED		134
->  
->  /*
->   * The Hyper-V TimeRefCount register and the TSC
-> -- 
-> 2.34.1
+I'm not sure I'm following what collapse_huge_page() does just yet.
