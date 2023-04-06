@@ -2,104 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A5D6DA179
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 21:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BEE6DA226
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 22:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236924AbjDFTfV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Apr 2023 15:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S238542AbjDFUDV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Apr 2023 16:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236928AbjDFTfT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 15:35:19 -0400
-Received: from mail.sf-mail.de (mail.sf-mail.de [IPv6:2a01:4f8:1c17:6fae:616d:6c69:616d:6c69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87403658B
-        for <linux-arch@vger.kernel.org>; Thu,  6 Apr 2023 12:35:16 -0700 (PDT)
-Received: (qmail 22331 invoked from network); 6 Apr 2023 19:08:40 -0000
-Received: from unknown ([2001:9e8:6dc6:3c00:76d4:35ff:feb7:be92]:48442 HELO eto.sf-tec.de) (auth=eike@sf-mail.de)
-        by mail.sf-mail.de (Qsmtpd 0.38dev) with (TLS_AES_256_GCM_SHA384 encrypted) ESMTPSA
-        for <arnd@arndb.de>; Thu, 06 Apr 2023 21:08:40 +0200
-From:   Rolf Eike Beer <eike-kernel@sf-tec.de>
-To:     arnd@arndb.de, daniel.vetter@ffwll.ch, deller@gmx.de,
-        javierm@redhat.com, gregkh@linuxfoundation.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>
-Subject: Re: [PATCH 12/18] arch/parisc: Implement fb_is_primary_device() under arch/parisc
-Date:   Thu, 06 Apr 2023 21:08:33 +0200
-Message-ID: <5921681.lOV4Wx5bFT@eto.sf-tec.de>
-In-Reply-To: <20230405150554.30540-13-tzimmermann@suse.de>
-References: <20230405150554.30540-1-tzimmermann@suse.de> <20230405150554.30540-13-tzimmermann@suse.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4819412.31r3eYUQgx"; micalg="pgp-sha1"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-0.0 required=5.0 tests=SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S237421AbjDFUDT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 16:03:19 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7B083D0;
+        Thu,  6 Apr 2023 13:03:17 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 03CAB5C018C;
+        Thu,  6 Apr 2023 16:03:17 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 16:03:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1680811396; x=1680897796; bh=alW+rItMMZUBv3x2WJDrCkS16QOeGSZn6sF
+        y9BwGDDA=; b=a1ENtT/Kd7sEGN62GAhjp4PF0eOGkwiuFTaHixKRImwlqxVJjGB
+        tKW5nMApOSWk0uUQ871fNLq8480laJcgHpmaK1x0Klpy+cTCLzCl/oYjCLuDn94A
+        kRzS8wNPGgtWMxSWyLL2G3Loft5y4HhwSDYuFfxC87arv7nBfzbWWeW4mOBdIDB8
+        h0F7AoHmI1Ezo9HI6DRnDumpeAKvXLKpY9gktbcA8Pf21Fhm291PYtqeQliLnva8
+        muW4htisShgzyKXsOWafQXG6e8H1uPJdDfirl/FBsDBWPpnF1uOFowBlYY0DOP5C
+        VTJafPktTik6jWUF1Zk/Ike8Yf26I6w69tA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680811396; x=1680897796; bh=alW+rItMMZUBv3x2WJDrCkS16QOeGSZn6sF
+        y9BwGDDA=; b=MucNCKYY+nfqafXm7sZiWP3KvPbHU5kIN2coW9dtgElWX2c4PKl
+        n8xoeGpegG69jbejq8lxquHD3k7hOKcYUX6YsrkVeT6XU/3Ju3feFlTefh9VUJOy
+        MyJ/SDJWSQrkyK4eO992pjmPgAe36gp8CusyHNq5tzrlk1gaDDXqD/bsH8xvWyDH
+        U/zhiI8zG98YmPaRlz5vKtZNnLSzC5zyY8ly1ZMLOrwYgNJhXFaUZpqE5moP0DpK
+        Ya2C8M/suVJhTLD8+fODywpuF7+MLQfDdX2dKaZbX3EqkEGZCHIEEpNCoW1UrnfD
+        OTbA7AY5Lf/dJ+Og58KAjMsfhWIlfylkwJw==
+X-ME-Sender: <xms:hCUvZLYKcpD7tr3s6NTe1ZHTlZWf9IxM1lQeHzn7r7-rsOfRdKnlJg>
+    <xme:hCUvZKYv7PGRWx1SCo19N4xJFGR-BePPajWWtFJRKLuVYRclKNFDJOxyYCZPPIlif
+    xpVSrXKEk6xkfLM3g8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejfedgudegfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:hCUvZN_FxwwvxXNGWHoM_6a888kMP9dKo1FlYiXsuNl4n2Rm6jixPg>
+    <xmx:hCUvZBoGTf1PLQrA-qQo7qK9iGjRxSG_a0MEHP3_-wi1U7FmCcJbkA>
+    <xmx:hCUvZGq5gnWWA0mWEkAKkOdpNfdoM-FPGeuN40JKYbGolxYaGFuyAQ>
+    <xmx:hCUvZN3JH7YqIgDH0SzUuJgIHOS7vg5AhacnyODNmV8Es7VswefKbw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9BB63B6008D; Thu,  6 Apr 2023 16:03:16 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
+Mime-Version: 1.0
+Message-Id: <bc11f501-f020-4e90-9588-5d234e96159d@app.fastmail.com>
+In-Reply-To: <CAHk-=wgyY_FKpWk1LAHirjmWbABc78C+mgVhqaYHZts0fbkYJQ@mail.gmail.com>
+References: <f44680f5-df08-4034-9ed7-6d43ee4c4c2a@app.fastmail.com>
+ <CAHk-=wgyY_FKpWk1LAHirjmWbABc78C+mgVhqaYHZts0fbkYJQ@mail.gmail.com>
+Date:   Thu, 06 Apr 2023 22:02:45 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
+        "Matt Evans" <mev@rivosinc.com>
+Subject: Re: [GIT PULL] asm-generic fixes for 6.3
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---nextPart4819412.31r3eYUQgx
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Rolf Eike Beer <eike-kernel@sf-tec.de>
-Date: Thu, 06 Apr 2023 21:08:33 +0200
-Message-ID: <5921681.lOV4Wx5bFT@eto.sf-tec.de>
-In-Reply-To: <20230405150554.30540-13-tzimmermann@suse.de>
+On Thu, Apr 6, 2023, at 19:04, Linus Torvalds wrote:
+> On Thu, Apr 6, 2023 at 1:13=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> w=
+rote:
+>>
+>> Some of the less common I/O accessors are missing __force casts and
+>> cause sparse warnings for their implied byteswap, and a recent change
+>> to __generic_cmpxchg_local() causes a warning about constant integer
+>> truncation.
+>
+> Ugh. I'm not super-happy about those casts, and maybe sparse should be
+> less chatty about these things. It shouldn't be impossible to have
+> sparse not warn about losing bits in casts in code that is statically
+> dead.
+>
+> But we seem to have lost our sparse maintainer, so I've pulled this.
+>
+> I also wish we had a size-specific version of "_Generic()" instead of
+> having to play games with "switch (sizeof(..))" like we traditionally
+> do.
+>
+> But things like xchg() and user accesses really just care about the
+> size of the object, and there is no size-specific "_Generic()" thing,
+> and I can't think of any cute trick either.
 
-Am Mittwoch, 5. April 2023, 17:05:48 CEST schrieb Thomas Zimmermann:
-> Move PARISC's implementation of fb_is_primary_device() into the
-> architecture directory. This the place of the declaration and
-> where other architectures implement this function. No functional
-> changes.
+There is actually one idea I had a while ago that would (mostly)
+solve this:
 
-> diff --git a/arch/parisc/video/fbdev.c b/arch/parisc/video/fbdev.c
-> new file mode 100644
-> index 000000000000..4a0ae08fc75b
-> --- /dev/null
-> +++ b/arch/parisc/video/fbdev.c
-> @@ -0,0 +1,27 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2000 Philipp Rumpf <prumpf@tux.org>
-> + * Copyright (C) 2001-2020 Helge Deller <deller@gmx.de>
-> + * Copyright (C) 2001-2002 Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> + */
-> +
-> +#include <linux/module.h>
-> +
-> +#include <asm/fb.h>
-> +
-> +#include <video/sticore.h>
-> +
-> +int fb_is_primary_device(struct fb_info *info)
-> +{
+As far as I can tell, almost no users of
+{cmp,}xchg{,_local,_relaxed,acquire,release} that actually use
+8-bit and 16-bit objects, and they are not even implemented on
+some architectures.
 
-Looking at this makes me wonder why the argument to all of these functions 
-isn't const? Not your fault, but could be a candidate for patch #19?
+There is already a special case for the 64-bit xchg()/cmpxchg()
+variants that can get called on 32-bit architectures, so what
+I'd prefer is having each architecture implement only explicit
+fixed length cmpxchg8(), cmpxchg16(), cmpgxchg32() and optionally
+cmpxchg64() interfaces as normal inline functions that work on
+the respective integer types.
 
-Eike
---nextPart4819412.31r3eYUQgx
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+The existing interfaces then just need to deal with non-integer
+arguments (four byte structures, pointers) that they handle today,
+as well as multiplexing between the 32-bit and 64-bit integers
+on 64-bit architectures. That still leaves a theoretical sparse
+warning when something passes a 64-bit constant, but I don't think
+any code does that.
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSaYVDeqwKa3fTXNeNcpIk+abn8TgUCZC8YsQAKCRBcpIk+abn8
-TroxAKCInC1+nDFT2zUZ2BABKO6rWJJXygCfXz1dtt8vvCEpTBZxHF+hSbDdIVk=
-=5z1v
------END PGP SIGNATURE-----
-
---nextPart4819412.31r3eYUQgx--
-
-
-
+     Arnd
