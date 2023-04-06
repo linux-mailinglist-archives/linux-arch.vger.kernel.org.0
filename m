@@ -2,172 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12DD6D8AA6
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 00:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362776D9145
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 10:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbjDEWc4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Apr 2023 18:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
+        id S233602AbjDFINg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Apr 2023 04:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbjDEWco (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Apr 2023 18:32:44 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CEC7EE4
-        for <linux-arch@vger.kernel.org>; Wed,  5 Apr 2023 15:32:28 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d12-20020a056a0024cc00b006256990dddeso16676789pfv.9
-        for <linux-arch@vger.kernel.org>; Wed, 05 Apr 2023 15:32:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1680733948;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Gu2QsUrLzhWAeLzNTmiDWMuuwgGUJt5zdF3ZUZTfDtU=;
-        b=Ic1+NmDLa5hMPtGVT8+HebQhOzm+kEy+BqEiLEtn+OlCuFrgeenhk8Ei5IhgHP7PFO
-         eeER4W3YVU7OjGoXtDaRa2v00Q4mA4BRjRKbY+moqn9fUzpd9J3fOLNMEsAQwxZSmFAN
-         zEtXNk6jlku/4N0COH2zXWsx/euB+01q00epSAu0jyzLc2/sltspKE3bB6roHqVjtGqg
-         VzMHDk3si+DA6W8KXKy+W0gYsfEYxlU1JEAsppztBzx/e3ztJAFLGXUIzmY9i5iBOdlz
-         /2zB9ElbSyQs7GT/ZG774asZvNwjHOtnCVfMMPNi5dyMxANZV96RmdxXXumeB8Gon07o
-         jqsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680733948;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gu2QsUrLzhWAeLzNTmiDWMuuwgGUJt5zdF3ZUZTfDtU=;
-        b=c5D3m4CpZMa4bjybwpRbN4BkshHKDlAsSWMfZVqezBhg52XwyVArXiKX4Pt+fMH8gg
-         UEkxWJx5XSGB+JN7GzsV4gC3JbM/PEYd6ItkekPzpT52yQzR1jItWmW9+Jpa/5pKA1go
-         Z8JFUjTP9TB8inPinnUgA2LZqQ8emMx8Zyaopa7/5CtPrL9w5KEHHSBp5VKsJp8M4czH
-         3LqjcVg4WTeIJj0Q4yHN48rTYcwXNXIfQDCL2Qhz1qQLeU4Zr97W70DprMOcAYLT0lPT
-         52wF+6ryPLyR15tYkc8vHakp2ZjDILNFkq0/fygsCYTuUB/F9yCUF+jNOn1UJFoTS6kb
-         S/8A==
-X-Gm-Message-State: AAQBX9curh0PBeu+42YwIeYOjrh6RzcDihF458J7aVo3yYFh2CdwN9zr
-        bWGPa/xayZxV4I78pKTbQG2te9EnlZQAGiyYPg==
-X-Google-Smtp-Source: AKy350bu8kP+l7JHrBlhgnLqNucEG6rtKm9issrnydB2heDAMrKaEZaVtTKV56Xmq1ks6MtG/TvZQI0fxIJ6Cse1xA==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a05:6a00:2313:b0:593:fcfb:208b with
- SMTP id h19-20020a056a00231300b00593fcfb208bmr4149900pfh.3.1680733947764;
- Wed, 05 Apr 2023 15:32:27 -0700 (PDT)
-Date:   Wed, 05 Apr 2023 22:32:26 +0000
-In-Reply-To: <20230404082507.sbyfahwc4gdupmya@box.shutemov.name> (kirill@shutemov.name)
+        with ESMTP id S235579AbjDFINf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 04:13:35 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B830C6581;
+        Thu,  6 Apr 2023 01:13:30 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7F3CF5C00DC;
+        Thu,  6 Apr 2023 04:13:27 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 06 Apr 2023 04:13:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1680768807; x=1680855207; bh=sC3OcFARCK6wqn3B9SU+8yo+b
+        Z6jV1elvr18iH9YA44=; b=jfIQrCC4W93F7GUUr15gh2UlzM+Ji/wULzYDTudF7
+        1j4NRroit0TwW8EdXv7m7IMfS/gpFJhNKBC90/h++Y3RQeKLGOX7grAycNSKvErF
+        6JUjWkYn5K+RTIT7t5iJ2mvs1ln1Sd5w77x+vNikcwyNHjFefvOtsV2DF0xZQ/dH
+        o1QuQoA+nLYndw/noTE8TTQFhTQ5mQlnLiXypMhOQae4uXFYAbLnTA19ImY78x7u
+        Fbt+LrACPoXoiVJQWi8X1XPNJrkw7UfjMFMY1IDORLeU0Iszd/Q/S5yHZx6rnGt9
+        mMdssk8tQypvlvgrpxJbNx2EFemeWPd13enC8pc+5Ni/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1680768807; x=1680855207; bh=sC3OcFARCK6wqn3B9SU+8yo+bZ6jV1elvr1
+        8iH9YA44=; b=tgtKQ6fpnUVCyNa+j5riZz0tRDmguh/7FoOSWAe3whmaMkOGOVP
+        dFx3JkfdP6IjGJvnImxDZiNojZxYqmeKesiP3Bi35RF7RA00F4UcGjibN2AX94tI
+        RdCeQRRpW2AyzPyDhsHmvbbqaE7alcPbbXzwWxIjZVOFDE4oDcntsDbrh/kbbZ9A
+        VHIQWkt/ZcZU2OKQZQPzlIiOhl+Qc5CgSuFkl2svnfhfM6nwx4MBAbmMAhzX6Wqn
+        9kJJWYCrN2sH1m6SjmZHpMozwYA3rf/1fY0qpjlk4ZO85miOYwmuWs+wwrZU1LHW
+        Ka07dH5SbJ7egUTLHRrF/vG98gy8JtaX5pQ==
+X-ME-Sender: <xms:J38uZKaBHdFKwk-BSK6A0zfnVz024pv5D3fFuDMAwNk7RgqAKKm62A>
+    <xme:J38uZNZzCU24OxXAokr-xiDkoKLqlFFafSoE7jcFwP-THfsP6_NlXk6lzKSwcI6du
+    z6PH0AX0FCpeigj1p8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdejvddgudefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefg
+    ieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:J38uZE_uwJ_gkkDdjm03tsFUtQOGcpLsNzypHoPk-eZyB20H0OleSQ>
+    <xmx:J38uZMrd99LBbF_GOSB9Oqcc3YY7bD0-_iH6u87XB5d1r73xDB6lWQ>
+    <xmx:J38uZFqvSGOastlpoKRTHku5VbHnQCeEPe3Q76fQbwGBmtQuRmHaKw>
+    <xmx:J38uZM2NFOwA3IJoaYbJ1JsMqPfcbN7h2IA_m5PHJCC5ThGaMZm6og>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 439FDB60093; Thu,  6 Apr 2023 04:13:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
 Mime-Version: 1.0
-Message-ID: <diqzfs9e0xl1.fsf@ackerleytng-cloudtop.c.googlers.com>
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org, aarcange@redhat.com,
-        ak@linux.intel.com, akpm@linux-foundation.org, arnd@arndb.de,
-        bfields@fieldses.org, bp@alien8.de, chao.p.peng@linux.intel.com,
-        corbet@lwn.net, dave.hansen@intel.com, david@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, jmattson@google.com,
-        joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-X-Spam-Status: No, score=-7.7 required=5.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-Id: <f44680f5-df08-4034-9ed7-6d43ee4c4c2a@app.fastmail.com>
+Date:   Thu, 06 Apr 2023 10:12:53 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
+        "Matt Evans" <mev@rivosinc.com>
+Subject: [GIT PULL] asm-generic fixes for 6.3
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
-Thanks for reviewing these patches!
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-"Kirill A. Shutemov" <kirill@shutemov.name> writes:
+are available in the Git repository at:
 
-> On Fri, Mar 31, 2023 at 11:50:39PM +0000, Ackerley Tng wrote:
+  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-6.3
 
->> ...
+for you to fetch changes up to 656e9007ef5862746cdf7ac16267c8e06e7b0989:
 
->> +static int restrictedmem_create_on_user_mount(int mount_fd)
->> +{
->> +	int ret;
->> +	struct fd f;
->> +	struct vfsmount *mnt;
->> +
->> +	f = fdget_raw(mount_fd);
->> +	if (!f.file)
->> +		return -EBADF;
->> +
->> +	ret = -EINVAL;
->> +	if (!is_mount_root(f.file))
->> +		goto out;
->> +
->> +	mnt = f.file->f_path.mnt;
->> +	if (!is_shmem_mount(mnt))
->> +		goto out;
->> +
->> +	ret = file_permission(f.file, MAY_WRITE | MAY_EXEC);
+  asm-generic: avoid __generic_cmpxchg_local warnings (2023-04-04 17:58:11 +0200)
 
-> Why MAY_EXEC?
+----------------------------------------------------------------
+asm-generic fixes for 6.3
 
+These are minor fixes to address false-positive build warnings:
 
-Christian pointed out that this check does not make sense, I'll be
-removing the entire check in the next revision.
+Some of the less common I/O accessors are missing __force casts and
+cause sparse warnings for their implied byteswap, and a recent change
+to __generic_cmpxchg_local() causes a warning about constant integer
+truncation.
 
->> +	if (ret)
->> +		goto out;
->> +
->> +	ret = mnt_want_write(mnt);
->> +	if (unlikely(ret))
->> +		goto out;
->> +
->> +	ret = restrictedmem_create(mnt);
->> +
->> +	mnt_drop_write(mnt);
->> +out:
->> +	fdput(f);
->> +
->> +	return ret;
->> +}
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      asm-generic: avoid __generic_cmpxchg_local warnings
 
-> We need review from fs folks. Look mostly sensible, but I have no
-> experience in fs.
+Vladimir Oltean (2):
+      asm-generic/io.h: suppress endianness warnings for readq() and writeq()
+      asm-generic/io.h: suppress endianness warnings for relaxed accessors
 
->> +
->> +SYSCALL_DEFINE2(memfd_restricted, unsigned int, flags, int, mount_fd)
->> +{
->> +	if (flags & ~RMFD_USERMNT)
->> +		return -EINVAL;
->> +
->> +	if (flags == RMFD_USERMNT) {
->> +		if (mount_fd < 0)
->> +			return -EINVAL;
->> +
->> +		return restrictedmem_create_on_user_mount(mount_fd);
->> +	} else {
->> +		return restrictedmem_create(NULL);
->> +	}
-
-> Maybe restructure with single restrictedmem_create() call?
-
-> 	struct vfsmount *mnt = NULL;
-
-> 	if (flags == RMFD_USERMNT) {
-> 		...
-> 		mnt = ...();
-> 	}
-
-> 	return restrictedmem_create(mnt);
-
-Will do so in the next revision.
-
->> +}
->> +
->>   int restrictedmem_bind(struct file *file, pgoff_t start, pgoff_t end,
->>   		       struct restrictedmem_notifier *notifier, bool exclusive)
->>   {
->> --
->> 2.40.0.348.gf938b09366-goog
+ include/asm-generic/atomic.h        |  4 ++--
+ include/asm-generic/cmpxchg-local.h | 12 ++++++------
+ include/asm-generic/cmpxchg.h       |  6 +++---
+ include/asm-generic/io.h            | 16 ++++++++--------
+ 4 files changed, 19 insertions(+), 19 deletions(-)
