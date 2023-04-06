@@ -2,181 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197036D91BB
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 10:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0823D6D91D0
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 10:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbjDFIev (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Apr 2023 04:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
+        id S235960AbjDFIjH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Apr 2023 04:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbjDFIer (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 04:34:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECD512F
-        for <linux-arch@vger.kernel.org>; Thu,  6 Apr 2023 01:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1680770086; x=1712306086;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jd+6UW6q9elquw5bZDGjMqW7rOg0F1EQwi8lrQCZdBk=;
-  b=GVKg25t66Dpwexc3IsXV0Ko+mnDB4x0wLQcHhrqwjNhJ2QXfVUjCdcWZ
-   a7Y2AJkCpBjOpDOt1EvLTqDuGOHChCPA7D+4CdGqptRWm/W8M3Ip7Eomx
-   yumQnCfF+1CorZuRHuDWrinLwbcfb+wSdls4R/33HiynZDOQ9SOH5G1XE
-   l5dHFltr+w/VjH6jI96jNVASpI0haiPTo05+1t7nqY8L7fLpvcomYnP+H
-   sCPIr0BCNfUaNUpCovJxGKwHwxf/bRlVV8W8R/nZ6LDEuklzM0Y5gfh09
-   1GGjPuO9PWI/AF3qYmK20FiTn9K1b0J1s/Z6xbp1kV0YcbFBVj9Yb6MHj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="407778821"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="407778821"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2023 01:34:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10671"; a="664367274"
-X-IronPort-AV: E=Sophos;i="5.98,323,1673942400"; 
-   d="scan'208";a="664367274"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 06 Apr 2023 01:34:44 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pkL4u-000RE1-1S;
-        Thu, 06 Apr 2023 08:34:44 +0000
-Date:   Thu, 06 Apr 2023 16:34:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic-io] BUILD SUCCESS
- fcbfe8121a45152a3cfbe1c28c96a3b611b7347d
-Message-ID: <642e83f9.5QLtuhNr00jluzSH%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S235893AbjDFIjF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 04:39:05 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E1C7686;
+        Thu,  6 Apr 2023 01:38:55 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id h8so11791668qko.8;
+        Thu, 06 Apr 2023 01:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1680770335; x=1683362335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NlaEdqHEUWRBg+c+TC3rtvHvp43Ws6SzpzXrskt0NuQ=;
+        b=FcEFN1D0ri75uBu6r0ZHhcejyvqKNx6oJ/kCWbsPjgbRTXUK+5sFyIyJ41szjzh2vz
+         xVhDHcBOXBBaBl2763I8yyGNI4Y1fwMQfazSTTslgohL9KsMOTUPXNHmYVexNch0+1d0
+         Uq60kWvODRXwWd5fupV+fGBAPS0e5NQtrRQ18m1KgxMA+htmCUOAemJHSj13GyKNBBwP
+         LnTUsXPtIhkrA3+iVp9wttq9oZ6eterHG0fTb3sDXzAZV2onLK9uY4a0ZVJ4Q0/1Ldd7
+         h/usCfUZRrxzV7W5BNMQNSXEN2Am7bp6nL8tc/66t7LSwmSuBBvt43oRFVcj6mjWFab7
+         P2Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1680770335; x=1683362335;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NlaEdqHEUWRBg+c+TC3rtvHvp43Ws6SzpzXrskt0NuQ=;
+        b=QqKE/jumRQnNiz5fTD4GPttkurePn1RtSNihaQEBlOsHzWBToVpKdol7a3fhQycB5p
+         ysW/vlWrc9NLDv5juul2EiT6DUoMflCFTt9nPIOkC7l6Ky1LOY/KHkKrC+oIMY2h9gd8
+         qoJbcKzjSLB0Uix3hu83W3cX7aOr0VEr04fds2dmAlGHT/FZXTYDWPZBJf+tw2HTIZho
+         kYUKQNd8k45EWwoIQzzLB2A9PN3bq/b/ZJC7bwla7d9R+E1mEBpyh9DXYsgF7BGYWHgv
+         v8jbx0gM2ZuXlQ5Xw1d+sfYL6ymwbgg2/h7eaqR0lDGKoIom6uvNYFjWdpk8xjBkPghr
+         rt1A==
+X-Gm-Message-State: AAQBX9ccnf/DzmPNKDfFxaU35dpMpJvRn2VA0PyX+Yu6sHj5N99IsPJS
+        gVApIrcE169PK0W+O2zivv42BOM5UT6UIgHTFuo=
+X-Google-Smtp-Source: AKy350YwsvugLcxPSe8VSwbY+2C98qYCdXwWk5K70J+qErUm4ut29wpYfoU3MlskEoJeNSNDzBP/SXVDE5xtKbu7RqE=
+X-Received: by 2002:a05:620a:1a28:b0:742:71e6:b8d4 with SMTP id
+ bk40-20020a05620a1a2800b0074271e6b8d4mr2043793qkb.6.1680770334780; Thu, 06
+ Apr 2023 01:38:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230405141710.3551-1-ubizjak@gmail.com> <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
+ <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
+In-Reply-To: <5c10520ac747430cb421badcb293c706@AcuMS.aculab.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 6 Apr 2023 10:38:43 +0200
+Message-ID: <CAFULd4YPM18B6Nv=-rNd=D0TmCbn64oLvgbDJ3CWc9DsdJG8gg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-io
-branch HEAD: fcbfe8121a45152a3cfbe1c28c96a3b611b7347d  Kconfig: introduce HAS_IOPORT option and select it as necessary
+On Thu, Apr 6, 2023 at 10:26=E2=80=AFAM David Laight <David.Laight@aculab.c=
+om> wrote:
+>
+> From: Dave Hansen
+> > Sent: 05 April 2023 17:37
+> >
+> > On 4/5/23 07:17, Uros Bizjak wrote:
+> > > Add generic and target specific support for local{,64}_try_cmpxchg
+> > > and wire up support for all targets that use local_t infrastructure.
+> >
+> > I feel like I'm missing some context.
+> >
+> > What are the actual end user visible effects of this series?  Is there =
+a
+> > measurable decrease in perf overhead?  Why go to all this trouble for
+> > perf?  Who else will use local_try_cmpxchg()?
+>
+> I'm assuming the local_xxx operations only have to be save wrt interrupts=
+?
+> On x86 it is possible that an alternate instruction sequence
+> that doesn't use a locked instruction may actually be faster!
 
-elapsed time: 726m
+Please note that "local" functions do not use lock prefix. Only atomic
+properties of cmpxchg instruction are exploited since it only needs to
+be safe wrt interrupts.
 
-configs tested: 101
-configs skipped: 6
+Uros.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r025-20230403   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230403   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r026-20230403   clang
-arm                  randconfig-r046-20230403   clang
-arm                         vf610m4_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r004-20230403   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230403   gcc  
-csky                 randconfig-r021-20230403   gcc  
-csky                 randconfig-r032-20230405   gcc  
-csky                 randconfig-r035-20230405   gcc  
-hexagon      buildonly-randconfig-r006-20230404   clang
-hexagon              randconfig-r041-20230403   clang
-hexagon              randconfig-r045-20230403   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230403   clang
-i386                 randconfig-a002-20230403   clang
-i386                 randconfig-a003-20230403   clang
-i386                 randconfig-a004-20230403   clang
-i386                 randconfig-a005-20230403   clang
-i386                 randconfig-a006-20230403   clang
-i386                 randconfig-a011-20230403   gcc  
-i386                 randconfig-a012-20230403   gcc  
-i386                 randconfig-a013-20230403   gcc  
-i386                 randconfig-a014-20230403   gcc  
-i386                 randconfig-a015-20230403   gcc  
-i386                 randconfig-a016-20230403   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r004-20230404   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r023-20230403   gcc  
-m68k                 randconfig-r031-20230405   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                 randconfig-r024-20230403   clang
-mips                 randconfig-r033-20230405   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r003-20230403   gcc  
-openrisc     buildonly-randconfig-r005-20230404   gcc  
-openrisc             randconfig-r034-20230405   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230404   clang
-powerpc                       holly_defconfig   gcc  
-powerpc              randconfig-r001-20230403   clang
-powerpc              randconfig-r005-20230403   clang
-powerpc                      walnut_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r002-20230403   clang
-riscv                randconfig-r042-20230403   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230403   gcc  
-sh                               allmodconfig   gcc  
-sparc        buildonly-randconfig-r001-20230404   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r022-20230403   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230403   clang
-x86_64               randconfig-a002-20230403   clang
-x86_64               randconfig-a003-20230403   clang
-x86_64               randconfig-a004-20230403   clang
-x86_64               randconfig-a005-20230403   clang
-x86_64               randconfig-a006-20230403   clang
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64               randconfig-k001-20230403   gcc  
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Although, maybe, any kind of locked cmpxchg just needs to ensure
+> the cache line isn't 'stolen', so apart from possible slight
+> delays on another cpu that gets a cache miss for the line in
+> all makes little difference.
+> The cache line miss costs a lot anyway, line bouncing more
+> and is best avoided.
+> So is there actually much of a benefit at all?
+>
+> Clearly the try_cmpxchg help - but that is a different issue.
+>
+>         David
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
