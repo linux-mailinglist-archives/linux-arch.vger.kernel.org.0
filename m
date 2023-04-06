@@ -2,100 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9325D6D9E20
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 19:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88096D9FD1
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Apr 2023 20:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239866AbjDFRFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Apr 2023 13:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        id S239799AbjDFS2x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Apr 2023 14:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjDFRFG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 13:05:06 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646F48688
-        for <linux-arch@vger.kernel.org>; Thu,  6 Apr 2023 10:05:04 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id g18so2997560ejj.5
-        for <linux-arch@vger.kernel.org>; Thu, 06 Apr 2023 10:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680800703; x=1683392703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y+/M2omUP0H0I3+C442gwyIY7zx7Kzi7zGFIhChXSsk=;
-        b=LsYWYUn/bUzcFairJl4RxVpnt4tZrFJtg2/saPdsjse1TtzDH0Z/UgBqyrweA/Y+xI
-         XMxjK261SuwjMgkK4lQvz+5uK8VrIWqktK8Y77rAu/PB7dCTIR9elWNQYGK/7fpb0bjb
-         uVFSGzwQqtQvccqzswF7R83Lk5CddU3sfjZt0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680800703; x=1683392703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y+/M2omUP0H0I3+C442gwyIY7zx7Kzi7zGFIhChXSsk=;
-        b=a17dCy5J+MTOeDpayyD4n2PEZUKMHgDRnR7IFauy+UhhNfvaQ1My/f6LAJnQxMvUlh
-         jdDTCsvrpZIsTs/yB5KtysM9eWbfNL0QA87dI/+UD/Ny9nQDzg6kdypiJ9Ry/G609qY4
-         xx04+JGJc3z8Aj4T/7f3IAj37jilkR9lvSqFkpFBacdJ3qtaURGNpuun9aQxFwsTpHwI
-         Qj3qlVDB7CX5IdbYa9TgDsJIe+tUMOBoOBkfnwR/RLzT62LzgdO8gcY7Y770wkgF532E
-         WkZarhNE8QjqW0QXD8PoNX6L6R4XeTEA/eZYRG6tHMLVav741/JAm0oCtR8mHtRH5LDM
-         bfCA==
-X-Gm-Message-State: AAQBX9dSYzK8I2qTBznA3ryjQzU+zAOKNbbnXaDhekZEQMX8B1dn85lr
-        HFzu6zfC0xU0mZ9GgOltyL85qzdTyR0aN8F12JLUuA==
-X-Google-Smtp-Source: AKy350YmROoXwPeDCnmrvnA2tBqZJ84U+j7MMeuDt0xS9Cpc3OkyH+9zmMCMvG6XbbjWOyI3zYhddg==
-X-Received: by 2002:a17:907:a49:b0:949:cb6a:b6ed with SMTP id be9-20020a1709070a4900b00949cb6ab6edmr2663274ejc.32.1680800702575;
-        Thu, 06 Apr 2023 10:05:02 -0700 (PDT)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id gg20-20020a170906e29400b008f767c69421sm1054220ejb.44.2023.04.06.10.05.01
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Apr 2023 10:05:01 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id sg7so2998401ejc.9
-        for <linux-arch@vger.kernel.org>; Thu, 06 Apr 2023 10:05:01 -0700 (PDT)
-X-Received: by 2002:a17:906:3393:b0:933:7658:8b44 with SMTP id
- v19-20020a170906339300b0093376588b44mr3515396eja.15.1680800701412; Thu, 06
- Apr 2023 10:05:01 -0700 (PDT)
+        with ESMTP id S229674AbjDFS2w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Apr 2023 14:28:52 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451D759FA;
+        Thu,  6 Apr 2023 11:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=krRR1rbNljM3A0v7Or9ollBea6RqbuAL/TrS9ntMbko=; b=HYwyP5557eX2aBI0hUlezid1GH
+        5hoyG1Aj5dHjNeznaZOFr7Cy51rbii3Y5i3cE2woInFfeI8EAPtppz3o99BPe2GIduN6vXv6uyaw7
+        R9cuTob59q/BPrQnGdBywtK77Stl8OJJpBnvpSy/YFDL7vPiYkNIMiGQPDEidGAvoA4jROBnBdVah
+        jOoSwHyGjI0QMaTrXlud204St1NXsF+ujX5WasSumcwLZCeKMORJsJy5xkcpHYXjSOgsSKV186/O/
+        cA0kt/u7rjhL3oPljvBtkfjk5sjNe9coia8oht3RGaO73x29c2Bi67dc2zk8arCu3QV+LNr4pLHNl
+        VKwPG5qQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pkUKx-00Ad17-2X;
+        Thu, 06 Apr 2023 18:27:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BDA6530008D;
+        Thu,  6 Apr 2023 20:27:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A5453212E36AA; Thu,  6 Apr 2023 20:27:49 +0200 (CEST)
+Date:   Thu, 6 Apr 2023 20:27:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com, jannh@google.com,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <20230406182749.GA405948@hirez.programming.kicks-ass.net>
+References: <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC1XD/sEJY+zRujE@lothringen>
+ <ZC3P3Ds/BIcpRNGr@tpad>
+ <20230405195226.GB365912@hirez.programming.kicks-ass.net>
+ <ZC69Wmqjdwk+I8kn@tpad>
+ <20230406132928.GM386572@hirez.programming.kicks-ass.net>
+ <20230406140423.GA386634@hirez.programming.kicks-ass.net>
+ <20230406150213.GQ386572@hirez.programming.kicks-ass.net>
+ <248392c0-52d1-d09d-75ec-9e930435c053@redhat.com>
 MIME-Version: 1.0
-References: <f44680f5-df08-4034-9ed7-6d43ee4c4c2a@app.fastmail.com>
-In-Reply-To: <f44680f5-df08-4034-9ed7-6d43ee4c4c2a@app.fastmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 6 Apr 2023 10:04:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgyY_FKpWk1LAHirjmWbABc78C+mgVhqaYHZts0fbkYJQ@mail.gmail.com>
-Message-ID: <CAHk-=wgyY_FKpWk1LAHirjmWbABc78C+mgVhqaYHZts0fbkYJQ@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic fixes for 6.3
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Matt Evans <mev@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <248392c0-52d1-d09d-75ec-9e930435c053@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 1:13=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> Some of the less common I/O accessors are missing __force casts and
-> cause sparse warnings for their implied byteswap, and a recent change
-> to __generic_cmpxchg_local() causes a warning about constant integer
-> truncation.
+On Thu, Apr 06, 2023 at 05:51:52PM +0200, David Hildenbrand wrote:
+> On 06.04.23 17:02, Peter Zijlstra wrote:
 
-Ugh. I'm not super-happy about those casts, and maybe sparse should be
-less chatty about these things. It shouldn't be impossible to have
-sparse not warn about losing bits in casts in code that is statically
-dead.
+> > DavidH, what do you thikn about reviving Jann's patches here:
+> > 
+> >    https://bugs.chromium.org/p/project-zero/issues/detail?id=2365#c1
+> > 
+> > Those are far more invasive, but afaict they seem to do the right thing.
+> > 
+> 
+> I recall seeing those while discussed on security@kernel.org. What we
+> currently have was (IMHO for good reasons) deemed better to fix the issue,
+> especially when caring about backports and getting it right.
 
-But we seem to have lost our sparse maintainer, so I've pulled this.
+Yes, and I think that was the right call. However, we can now revisit
+without having the pressure of a known defect and backport
+considerations.
 
-I also wish we had a size-specific version of "_Generic()" instead of
-having to play games with "switch (sizeof(..))" like we traditionally
-do.
+> The alternative that was discussed in that context IIRC was to simply
+> allocate a fresh page table, place the fresh page table into the list
+> instead, and simply free the old page table (then using common machinery).
+> 
+> TBH, I'd wish (and recently raised) that we could just stop wasting memory
+> on page tables for THPs that are maybe never going to get PTE-mapped ... and
+> eventually just allocate on demand (with some caching?) and handle the
+> places where we're OOM and cannot PTE-map a THP in some descend way.
+> 
+> ... instead of trying to figure out how to deal with these page tables we
+> cannot free but have to special-case simply because of GUP-fast.
 
-But things like xchg() and user accesses really just care about the
-size of the object, and there is no size-specific "_Generic()" thing,
-and I can't think of any cute trick either.
+Not keeping them around sounds good to me, but I'm not *that* familiar
+with the THP code, most of that happened after I stopped tracking mm. So
+I'm not sure how feasible is it.
 
-               Linus
+But it does look entirely feasible to rework this page-table freeing
+along the lines Jann did.
