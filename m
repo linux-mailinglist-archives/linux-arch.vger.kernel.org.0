@@ -2,153 +2,192 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AFC6DB49D
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Apr 2023 21:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41E66DB57E
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Apr 2023 22:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjDGT73 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Apr 2023 15:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
+        id S229724AbjDGU4g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Apr 2023 16:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjDGT72 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Apr 2023 15:59:28 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA088AD0A
-        for <linux-arch@vger.kernel.org>; Fri,  7 Apr 2023 12:59:24 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id g18so10586624ejx.7
-        for <linux-arch@vger.kernel.org>; Fri, 07 Apr 2023 12:59:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1680897563; x=1683489563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FaUQBomv+m9YOS1+lTfr+NOwuLJy2GeX3csYQ/E4Tx8=;
-        b=WY0PnRP5u/3kbSNQoSEZoLY0s1/2IbIfOo9zZpnHmHNYIgorJfVe4T+09VfZjKiJV4
-         t+5K2+HFnTcl9WoId4lnBdKkOCz5hoL8yJeSS8d+/0v2ilqRU+7PvW77U+XmCmJaBwF+
-         A+3/jnje0bq/Cj7RCwDktP4apxNSFJqvE1hnM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680897563; x=1683489563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FaUQBomv+m9YOS1+lTfr+NOwuLJy2GeX3csYQ/E4Tx8=;
-        b=cSCsxxeaRx2vzePSWa4/H70icmXip7hkJzWotWtznkfTEOF1IeRO3eKjO9EKTanWGR
-         2/wsgSLagQCLUWdh3IM+5kUzDNcajVwMeftlw8VTRdI4moGs/YaJmuwhiw6pc1HAGkwf
-         Got2XIcCpXIePsBK1XNMHUYV+76R4Xeth2EZmfsAkmdjrUxYrEJKjenSojDRNHY2j0Kw
-         fO6Kn6/hdzUctogdTFnJobMMeBDJP6xHfcbXsHJA+kVMB0Q1jtaFxG7HwxM7gDJX7Hu8
-         MQ3VHPS8b46kOt+/FnJiVHO3B2YjB1P++wo3T7Fprc0t6Bgfga9EIyQmaRJto9yMbhSF
-         J2ZA==
-X-Gm-Message-State: AAQBX9dgIzOwRm4TJksBOIOGFZG4xz+zEB/vY3jYWPDr7osax/rOSSwh
-        /aSJYVaX7SJW4ixSVMW/PuC4SutpZ9BcjcZ0Abszqg==
-X-Google-Smtp-Source: AKy350Zy554H9qgpRABtnGp2bDbub6f5R6J4DdKZZY8waEZGFBERRT/pHazgBidYCk/CpInV18e6Xw==
-X-Received: by 2002:a17:907:10d3:b0:932:4cbf:5bbb with SMTP id rv19-20020a17090710d300b009324cbf5bbbmr540176ejb.19.1680897562999;
-        Fri, 07 Apr 2023 12:59:22 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id k16-20020a17090646d000b0094863433fdcsm2369430ejs.51.2023.04.07.12.59.22
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Apr 2023 12:59:22 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id lj25so10567292ejb.11
-        for <linux-arch@vger.kernel.org>; Fri, 07 Apr 2023 12:59:22 -0700 (PDT)
-X-Received: by 2002:a17:906:380c:b0:931:2bcd:ee00 with SMTP id
- v12-20020a170906380c00b009312bcdee00mr246788ejc.15.1680897561831; Fri, 07 Apr
- 2023 12:59:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <f44680f5-df08-4034-9ed7-6d43ee4c4c2a@app.fastmail.com>
- <CAHk-=wgyY_FKpWk1LAHirjmWbABc78C+mgVhqaYHZts0fbkYJQ@mail.gmail.com> <bc11f501-f020-4e90-9588-5d234e96159d@app.fastmail.com>
-In-Reply-To: <bc11f501-f020-4e90-9588-5d234e96159d@app.fastmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 7 Apr 2023 12:59:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wik+Sh=cV9FHxPe1Rsb+=XGNFHU1wJZ7yqtcgwYLz5Xuw@mail.gmail.com>
-Message-ID: <CAHk-=wik+Sh=cV9FHxPe1Rsb+=XGNFHU1wJZ7yqtcgwYLz5Xuw@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic fixes for 6.3
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Matt Evans <mev@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229454AbjDGU4f (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Apr 2023 16:56:35 -0400
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020017.outbound.protection.outlook.com [52.101.61.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22917ABA;
+        Fri,  7 Apr 2023 13:56:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mzSXUdWcutYQQv40wvGpe3lxKNlx+xXEWIUEq70rkptx4rXboU9mzoqC78PrZ3E3xnNvh2DKqqfNFbzO3bD0hVAxSAGHZfXs4widMLj+zd9CP2+3vo2g7i+PebFFN0LsFvuQWeDdFkpX+IUuhB+VMlW5DUqJHc93Mwl3pbVh7fZIuVQTcUpetSvslqab6MvZ4OSxYqE9GfI/EYKv1qMxpGuBAK1/HlGG7905lyTfcNb9tWioEsGbPf5MdDYAJOWdP4FbE+0ElL8BNSPnz9EVRMAUyAS/kAi4Iy+e9eiNEB94eBaEvLdnI8lE0v0UOKhIJf5PnWtaDOF6KaIY9IPIkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/nKn6z4qDhxYKm5r2PIC+wUGyN7CqyyfbBinmtZvxN8=;
+ b=GVnwLp27XNkats1kky5A3k57ZVwYwOWjpTe5Q2QbWfcFmawzo4FUlyFoMJ8JmS5SQuwkHjS1Kkyx2dYmQUoWIx/quAv48i1J2+6JkqmcdZRk6W722WOjF7eNyhUMCTNqIUwN4BK0l+lgEEoUKH0jcW7p5v4M/0wkr1g/HcichpKZ+YgUCCR+FdixanGSkqXvzY65KZjT3umMd20dI295OMMnBWnk2XbFTABjrKxcU/cCapZ5Ekk6jHh090F6ohO0q/+CHV6eTVvHO8s50Uk+od2qeWUCZ7gho8rdAB/4azoI59a713SGH+rF1q31iD9C7hYq7s5i40ZL5VwvzGcB3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/nKn6z4qDhxYKm5r2PIC+wUGyN7CqyyfbBinmtZvxN8=;
+ b=BYZ6aw/QEYru1Yb7JhaRwZpz7UohJNLiuMHelBVjDaZCCZ0LfXS1wL4S+BP8x64bwA8cFrQwteHorlNlHffGiObZk6LGM5EWQ0hZLg38oGuRoppLHkU2IEvSUhduQnLQmUQ/+obHMP+eS4eC7d5x+b5ji+bCgcvNxR8DPx28byE=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BY5PR21MB1507.namprd21.prod.outlook.com (2603:10b6:a03:231::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6298.20; Fri, 7 Apr
+ 2023 20:56:30 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6298.018; Fri, 7 Apr 2023
+ 20:56:30 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
+        Saurabh Sengar <ssengar@linux.microsoft.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "mat.jonczyk@o2.pl" <mat.jonczyk@o2.pl>
+Subject: RE: [PATCH v4 5/5] x86/hyperv: VTL support for Hyper-V
+Thread-Topic: [PATCH v4 5/5] x86/hyperv: VTL support for Hyper-V
+Thread-Index: AQHZZtQDm7r7516jUUWroUo0jRWt9K8eVKeAgAIBzDA=
+Date:   Fri, 7 Apr 2023 20:56:29 +0000
+Message-ID: <BYAPR21MB1688E43D583B016AA3DAD906D7969@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1680598864-16981-1-git-send-email-ssengar@linux.microsoft.com>
+ <1680598864-16981-6-git-send-email-ssengar@linux.microsoft.com>
+ <20230406140743.GA1443@skinsburskii.localdomain>
+In-Reply-To: <20230406140743.GA1443@skinsburskii.localdomain>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5a44cace-9304-4bc1-bb69-41cd463c906b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-07T20:46:39Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BY5PR21MB1507:EE_
+x-ms-office365-filtering-correlation-id: 4cdd923b-c369-4228-487d-08db37aa8fd7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T2ii7xLwtp0vvoUuYvLzTfz92LuyqIXpzJoxwAOu0Fzp/7tNJSLKmUfWpdcR14hOh2mP42yY9CJC8pkwhPGADQR1NAEMTbBVXxAVhjWLe0gAhVM8r2dNJkcFCmge+SfHcPgCKzXf63NTIFytZKoCe8ydhFDzgEu0kfSXzewXRb6wuMG41DXm21EBvk+zun3kjjgCKj8bJw1rru72r4OjYYs3dxLSizv6hhPqke3oBMxpvjO2uNoyodK+gGgcM+g/UKCWnNYBUsgfhXWHMMBi+WjGnnoMhgfI8YDU44ViqWZd1XBTTX42D3WkdAasMMnoBm0Ql78DBPOAPdCmad1q2rJb1L/l0DsRfrhrfxKdOPUgcbZ3lmnByXzsQ3oTldgbX7xBrTlr1cMrOWtrXGyrDC9IGmDWMEUcHk7nZIjLMHtI8loDHvbWlotKu1HVfmKHkJ/XQHT3K11LMCkNnyiJoW7FUscT6rbLwS4nwe+5U34+pna3FDWivmKy+OLSxRNj2P1ThT4I4cG/CyK8fsbwn1svcEU8fGzd+RuMKG1LLvdmKs+puuz3n1C/tThJ4ZulumRkILb0V66q/Lf2iSU4CUUo5OtR9FZLy7zWEIoqxFPkFmpMrGIE11+H/i6+C8qRI+Lw6tbG8gLBbHb4qFh/FQ+4Icpyr/9r2Gb8c3CKm/I=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(451199021)(8936002)(41300700001)(71200400001)(7696005)(55016003)(52536014)(8990500004)(38070700005)(83380400001)(316002)(110136005)(38100700002)(786003)(54906003)(122000001)(82960400001)(82950400001)(5660300002)(186003)(4326008)(7416002)(8676002)(33656002)(66476007)(10290500003)(478600001)(86362001)(66946007)(66556008)(64756008)(76116006)(9686003)(6506007)(2906002)(66446008)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5Okya/Wr9BZxuPRVpZiMWp2qmoq7xp7lHhm4RDHvnzIG6VSn4+XY/6u4s30R?=
+ =?us-ascii?Q?8p3TggT/1E7VF9axHgWx/AQKMsQgtPiN0YOTTq+lhOdssKNbbK+NvlV2fIQi?=
+ =?us-ascii?Q?nBao60HhY1eSFT5LavfDYXP+36wexkpPWZRv1sOH1DkTddcVLhLJWYwOmycp?=
+ =?us-ascii?Q?rO9BQkOqxhjjC/af8O6WLDH4pAD+T1CSabPrwfm7pZt0elrJJG+D4PbQt3QU?=
+ =?us-ascii?Q?0Gb+coP8kAylYsFPKFuvbOsPXxyZ0gyaWDHBIyAF1juWmGksdp2g3MD8/DXZ?=
+ =?us-ascii?Q?hGh2khIAyloVdXPaIpqX3RyjnBbKZxPp6DmzbWUzjRCn5/A5heVxHa1QHT3O?=
+ =?us-ascii?Q?8Wdd2bBbKBligFe96/DXkKd3g3GSVeLSHINKVkOcr+XhfmCOdBJhL1iIUsx1?=
+ =?us-ascii?Q?r0C0A6HOfP1VLTjKb72uHOpfDeRqMQ067n2D95UZGhgpTlLCbL77osgx5bAR?=
+ =?us-ascii?Q?EK071ihRpIagwixpuWwzoqrf/v702ngxcicSaBu+H28pK6Y8QHeJY9kuErXN?=
+ =?us-ascii?Q?t9KKBZtcn/EeMXBmP3dxawjTi0wA5jFPf8X9raZaQHm8Vk2cHYw88DZUrcHC?=
+ =?us-ascii?Q?DDG8f7/CU2pvT4Fa0qf7Ad8RW/GPZaYd6rRNdCgCkh+qMiAOA/g++jWgJLNE?=
+ =?us-ascii?Q?3hOGcODW4P1KUQCjv0crvFG3ZDDRhqzzMtC7eJso4g91C/J6U8rztCMGWp2N?=
+ =?us-ascii?Q?bsmf4IGphENs5ZAfGO/5En8mAha1kwNfEvjo/oNem/yPSzajq84F9IV2DUt7?=
+ =?us-ascii?Q?uhXEGKMkTu9ZNLzEGrQSa97hdxiUOB6MFAfGurht6ofUFcSC7vDQciB5QzAv?=
+ =?us-ascii?Q?/cAMSFcLW7gZbCjbHyZMNfkAgmfNwx4doi3LAq/Jfq0m2iav4R4jO/jrNpwy?=
+ =?us-ascii?Q?HABZTyykYzu60o+d21+tto/72uEKrp9mBghWNZAZzDZcffUt50RqlIf6czfA?=
+ =?us-ascii?Q?946yfeJLoHLmMWg72c1zu0E6Bhu2DbLG91231CskdcNxTaIwGpnoYpCBUyIq?=
+ =?us-ascii?Q?cKKjplxhIo1+M2fhcLHosA9yl7QA8t49Sz9VK2FybJfCX8IQLA3yi6yt0vzV?=
+ =?us-ascii?Q?0fXt4BIPANs9TO5581LZlTzFgttR+azk/YoDKNBpEcjXGViAKYNqmyQn+o41?=
+ =?us-ascii?Q?i2nKRk3d063bsJ26syyapZM6j+EONGpeyO2N6ZX9e66MPVyNVhjoTXFGe5ag?=
+ =?us-ascii?Q?1gmP5Jzg7DxE2fxyfMVBgnbeF+sRDTajmljZWgA6reJ7r/UuYEmc8c/pqg1K?=
+ =?us-ascii?Q?1KClmTBVtU4Gah0xJxu5tyuWiNt3D6pe36mCnlFbqOFhf+N9cYT964lN6X4I?=
+ =?us-ascii?Q?78GKnyzR0SLJAGbaADmNsmlUWTtDLSU+QUNEGLmjMchHjn+8QVKk7GyptlFx?=
+ =?us-ascii?Q?+z5VZTxDnHNKxcwdwS5kZO7GWsWoOH+u0bOh0h0U/53HZ3y3Rinez95pil9g?=
+ =?us-ascii?Q?wappYlrNpYPUIyfIXroCzeqZZ8qMVgXEKg2sa2DcwjyYTZAPKABhDkNHv5tD?=
+ =?us-ascii?Q?LMV4yIZzZGaiX7vu1uHovDNkjReyX5kwpqpDwdygU7sMorYt7npGXFXeZyYc?=
+ =?us-ascii?Q?KMtf74yq2e+ax+ZKgIDw8ZeCiaAEihPaAS5ghjfna2iIoq+oLaM4+Di7w5bs?=
+ =?us-ascii?Q?6w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.1 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cdd923b-c369-4228-487d-08db37aa8fd7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Apr 2023 20:56:30.0169
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6QTlCmExll7sb/Mu860yZHXqWnW8rFqX00cHZ13opMIcEEsbPOB7MAOwB2Vq77rPb6d2QquQ5vxajp4J/2bMTRowhmEmotNrTWYe8oC+GGw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1507
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 1:03=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> As far as I can tell, almost no users of
-> {cmp,}xchg{,_local,_relaxed,acquire,release} that actually use
-> 8-bit and 16-bit objects, and they are not even implemented on
-> some architectures.
+From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com> Sent: Thursd=
+ay, April 6, 2023 7:08 AM
+>=20
+> On Tue, Apr 04, 2023 at 02:01:04AM -0700, Saurabh Sengar wrote:
 
-Yeah, I think we only have a driver or two that wants to do a 8/16-bit
-cmpxchg, and many architectures don't support it at all natively (ie
-it has to be implemented as a load-mask-store).
+[snip]
 
-But iirc we *did* have a couple of uses, so..
+> > --- /dev/null
+> > +++ b/arch/x86/hyperv/hv_vtl.c
+> > @@ -0,0 +1,227 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2023, Microsoft Corporation.
+> > + *
+> > + * Author:
+> > + *   Saurabh Sengar <ssengar@microsoft.com>
+> > + */
+> > +
+> > +#include <asm/apic.h>
+> > +#include <asm/boot.h>
+> > +#include <asm/desc.h>
+> > +#include <asm/i8259.h>
+> > +#include <asm/mshyperv.h>
+> > +#include <asm/realmode.h>
+> > +
+> > +extern struct boot_params boot_params;
+> > +static struct real_mode_header hv_vtl_real_mode_header;
+> > +
+> > +void __init hv_vtl_init_platform(void)
+> > +{
+> > +	pr_info("Linux runs in Hyper-V Virtual Trust Level\n");
+> > +
+> > +	x86_init.irqs.pre_vector_init =3D x86_init_noop;
+> > +	x86_init.timers.timer_init =3D x86_init_noop;
+> > +
+> > +	x86_platform.get_wallclock =3D get_rtc_noop;
+> > +	x86_platform.set_wallclock =3D set_rtc_noop;
+>=20
+> Nit: this code is VTL feature and hypevisor specific.
+> Defining vtl_get_rtc_noop instead of exporting get_rtc_noop would allow t=
+o make
+> this series less intrusive to the rest of x86 generic code.
+>=20
+> Reviewed-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
+>=20
 
-> There is already a special case for the 64-bit xchg()/cmpxchg()
-> variants that can get called on 32-bit architectures, so what
-> I'd prefer is having each architecture implement only explicit
-> fixed length cmpxchg8(), cmpxchg16(), cmpgxchg32() and optionally
-> cmpxchg64() interfaces as normal inline functions that work on
-> the respective integer types.
+Saurabh's initial version of the code did define its own version of
+get/set_rtc_noop().  I had suggested that he use the existing functions
+from x86 generic code, and KY had also commented about re-using
+existing code wherever possible.  :-)   My suggestion was partly because
+the VTL code is already re-using x86_init_noop(), and then just to avoid
+code duplication.  Admittedly, there's not much code being duplicated
+in these stub functions.  I slightly prefer re-using the existing functions=
+,
+but don't feel strongly about it.
 
-Hmm. Maybe. Except the reason we have those size-dependent macros is
-that it is *really* really convenient - to the point of being very
-important - when different architectures (or different kernel
-configurations) end up causing the same logical thing to have
-different sizes.
-
-The whole "switch (sizeof(x))" model with complex macros is very ugly
-and I'd much rather strive to implement something that is much more
-geared to actual compiler issues where the compiler really explicitly
-does select the right thign (rather than have the preprocessor expand
-it to multiple things and then depending on the optimizer to do the
-"selection").
-
-But at the same time, aside from the macro ugliness, it really ends up
-being *hugely* powerful as a concept, and avoiding a lot of
-conditionals in the use cases.
-
-Now, cmpxchg *may* be uncommon enough that the use cases are limited
-enough that the "generic size" model wouldn't be worth it there, but I
-was really thinking about the more generic cases.
-
-Things like "get_user()" and "put_user()" would be *entirely* useless
-without the automatic sizing.
-
-How do I know? because we originally didn't have "get_user()". We had
-"get_fs_byte()" and "get_fs_word()" etc. The "fs" part was due to the
-original x86 implementation, so ignore the naming, but the issue with
-"just use fixed types" really DOES NOT WORK when different
-architectures have different types.
-
-So switching over to "get_user()" that just automatically did the
-right thing based on size instead of the size-specific ones really was
-a huge deal. There's no way we could ever go back.
-
-And while 'cmpxchg()' is the problem case here, I really think it
-would be lovely if we had some nice *unified* way of handling these
-"use size of access to determine variant" thing. Something like
-_Generic, just based on size.
-
-I guess __builtin_choose_expr() might be the right way to go there.
-
-That's very much a "compiler statically picks one over the other"
-interface. I despise the syntax, which is why it's not very commonly
-used, but it might be what we should use.
-
-Of course, another reason - other than syntax - for our "switch
-(sizeof())" model is simply history. The kernel "get_user()"
-interfaces go back to 1995 and Linux-1.3.0, and actually predates
-__builtin_choose_expt() support in gcc by several years. Gcc only
-started doing that in 2001 (gcc-3.4.5)
-
-So we do have a few uses of __builtin_choose_expr() in the kernel, but
-our really old interfaces simply didn't even have it available.
-
-                 Linus
+Michael
