@@ -2,55 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C98A6DBC36
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Apr 2023 18:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5CF6DBC7C
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Apr 2023 20:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjDHQuC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Apr 2023 12:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51886 "EHLO
+        id S229451AbjDHS6h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Apr 2023 14:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjDHQuA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Apr 2023 12:50:00 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0B0173C
-        for <linux-arch@vger.kernel.org>; Sat,  8 Apr 2023 09:49:58 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id ly9so4312780qvb.5
-        for <linux-arch@vger.kernel.org>; Sat, 08 Apr 2023 09:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1680972597;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ijfgt0VBpcFp7S3FT0E/4pyBptFK+Ct1rfgc4iMqxiM=;
-        b=WH0bfYgfWpdorK2UK87FfXUeNxDZvFxty6Rg7smG5Ec1ssKELrPFfhaQJjz1nMNxte
-         AYh9Ek7hA5g+7bQn8m1CKjjKzoXsJE9sHNAsdDb0IQ0eG5y/k4DGf3jGD8buV21Iaj8d
-         qJxo3LDd2scQkV9VXwwWB2xu/xVznjjlp1gsk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680972597;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ijfgt0VBpcFp7S3FT0E/4pyBptFK+Ct1rfgc4iMqxiM=;
-        b=Y6cCAcB3aTv/LxgFL6WyCq4w7sBVr0hs89KxAr4IvbuXBNNOhEy73vb3GfKgex/Y6K
-         NZpuDFRDqqt2IbJ5uvNAz5EnxO3p+8/cRLbUWH2mhbjKjeF4TMD9glQhizOGpXO1D+1P
-         4HjYZ0hHA2OrwmyS9md73stnfbc7drFhsoYMFKOUF/F0V9cdQCgGyUEAd0uq1VfkACFS
-         fp5d7e7iaCfBXJ/34c7K+d6pMjH7mAdOhXZxjkHfP7t+TzAP8sUlTOj1cOvy14FLV0Xn
-         JUzi7Kfuv0XUT0hDngX0s+jWCaBqxQ0U7LuB5hVdt+hcoz4QaoZwutsiZ19Fa9w0sfom
-         u+XQ==
-X-Gm-Message-State: AAQBX9eYd16Y3YwDgA1ft9XG4OBZzzgSpctWrR4wbMJTKVO8PB3xh1F2
-        azJubqIhGXPagUyiEy/PlKBTPg==
-X-Google-Smtp-Source: AKy350Yj+fH9S1xMyqxeEOlrJXqxLhtyKl+FGK8O3k9IGrvd9ZXAVJ4vACVr8+4Bm51YTlfnm+E7nQ==
-X-Received: by 2002:a05:6214:252c:b0:5ea:5948:8ee2 with SMTP id gg12-20020a056214252c00b005ea59488ee2mr1261129qvb.33.1680972597546;
-        Sat, 08 Apr 2023 09:49:57 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id i11-20020a056214020b00b005dd8b9345a6sm2148911qvt.62.2023.04.08.09.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 09:49:56 -0700 (PDT)
-Date:   Sat, 8 Apr 2023 16:49:56 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        with ESMTP id S229448AbjDHS6g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Apr 2023 14:58:36 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14D99741;
+        Sat,  8 Apr 2023 11:58:34 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Pv45k1Hz5z9xFGX;
+        Sun,  9 Apr 2023 02:49:14 +0800 (CST)
+Received: from [10.45.159.72] (unknown [10.45.159.72])
+        by APP1 (Coremail) with SMTP id LxC2BwAnsAs3uTFkERIJAg--.354S2;
+        Sat, 08 Apr 2023 19:58:10 +0100 (CET)
+Message-ID: <e4a2059d-8199-b74e-d776-116c99c73fe6@huaweicloud.com>
+Date:   Sat, 8 Apr 2023 20:57:57 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: Litmus test names
+To:     Joel Fernandes <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
@@ -62,150 +40,143 @@ Cc:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
         David Howells <dhowells@redhat.com>,
         Jonas Oberhauser <jonas.oberhauser@huawei.com>,
         linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
         Will Deacon <will@kernel.org>
-Subject: Re: Litmus test names
-Message-ID: <20230408164956.GA680332@google.com>
 References: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
  <3908932E-17D4-4B87-AB0C-D10564F10623@joelfernandes.org>
  <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
  <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <20230408164956.GA680332@google.com>
+From:   Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+In-Reply-To: <20230408164956.GA680332@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwAnsAs3uTFkERIJAg--.354S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1DWry8Jw1Duw48KryDWrg_yoW8Kw48pF
+        yUKFsxGws8Jr4Fqwn7tw4Duw4IyanrJw1UZ3WDXr15ZFyqqr98KF1UWr909Fyjvrs3XFWD
+        Jr4Uta47AFy5ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+        WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU13rcDUUUUU==
+X-CM-SenderInfo: 5mrqt2oorev25kdx2v3u6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.1 required=5.0 tests=NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 05:49:02PM -0700, Paul E. McKenney wrote:
-> On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
-> > 
-> > 
-> > On 4/7/2023 2:12 AM, Joel Fernandes wrote:
-> > > 
-> > > 
-> > > > On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > 
-> > > > ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
-> > > > > Paul:
-> > > > > 
-> > > > > I just saw that two of the files in
-> > > > > tools/memory-model/litmus-tests have
-> > > > > almost identical names:
-> > > > > 
-> > > > >  Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > > >  Z6.0+pooncelock+poonceLock+pombonce.litmus
-> > > > > 
-> > > > > They differ only by a lower-case 'l' vs. a capital 'L'.  It's
-> > > > > not at all
-> > > > > easy to see, and won't play well in case-insensitive filesystems.
-> > > > > 
-> > > > > Should one of them be renamed?
-> > > > 
-> > > > Quite possibly!
-> > > > 
-> > > > The "L" denotes smp_mb__after_spinlock().  The only code difference
-> > > > between these is that Z6.0+pooncelock+poonceLock+pombonce.litmus has
-> > > > smp_mb__after_spinlock() and Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > > does not.
-> > > > 
-> > > > Suggestions for a better name?  We could capitalize all the letters
-> > > > in LOCK, I suppose...
-> > 
-> > I don't think capitalizing LOCK is helpful.
-> 
-> Greek font, then?  (Sorry, couldn't resist...)
-> 
-> > To be honest, almost all the names are extremely cryptic to newcomers like
-> > me (like, what does Z6.0 mean? Is it some magic incantation?).
-> > And that's not something that's easy to fix.
-> 
-> All too true on all counts.  Some of the names abbreviate the litmus
-> test itself, and there are multiple encodings depending one who/what
-> generated the test in question.  Others of the names relate to who came
-> up with them or the code from which they are derived.
-> 
-> New allegedly universal naming schemes have a rather short half-life.
-> 
-> What would be cool would be a way to structurally compare litmus tests.
-> I bet that there are quite a few duplicates, for example.
-> 
-> > The only use case I can think of for spending time improving the names is
-> > that sometimes you wanna say something like "oh, this is like
-> > Z6.0+pooncelock+pooncelockmb+pombonce". And then people can look up what
-> > that is.
-> > For that, it's important that the names are easy to disambiguate by humans,
-> > and I think Joel's suggestion is an improvement.
-> > (and it also fixes the issue brought up by Alan about case-insensitive file
-> > systems)
-> > 
-> > > 
-> > > Z6.0+pooncelock+pooncelockmb+pombonce.litmus ?
-> 
-> I am OK with this one, but then again, I was also OK with the original
-> Z6.0+pooncelock+poonceLock+pombonce.litmus.  ;-)
 
-FWIW, if I move that smp_mb_after..() a step lower, that also makes the test
-work (see below).
+On 4/8/2023 6:49 PM, Joel Fernandes wrote:
+> On Fri, Apr 07, 2023 at 05:49:02PM -0700, Paul E. McKenney wrote:
+>> On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
+>>>
+>>> On 4/7/2023 2:12 AM, Joel Fernandes wrote:
+>>>>
+>>>>> On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>>>>>
+>>>>> ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
+>>>>>> Paul:
+>>>>>>
+>>>>>> I just saw that two of the files in
+>>>>>> tools/memory-model/litmus-tests have
+>>>>>> almost identical names:
+>>>>>>
+>>>>>>   Z6.0+pooncelock+pooncelock+pombonce.litmus
+>>>>>>   Z6.0+pooncelock+poonceLock+pombonce.litmus
+>>>>>>
+>>>>>> They differ only by a lower-case 'l' vs. a capital 'L'.  It's
+>>>>>> not at all
+>>>>>> easy to see, and won't play well in case-insensitive filesystems.
+>>>>>>
+>>>>>> Should one of them be renamed?
+>>>>>
+> FWIW, if I move that smp_mb_after..() a step lower, that also makes the test
+> work (see below).
+>
+> If you may look over quickly my analysis of why this smp_mb_after..() is
+> needed, it is because what I marked as a and d below don't have an hb
+> relation right?
 
-If you may look over quickly my analysis of why this smp_mb_after..() is
-needed, it is because what I marked as a and d below don't have an hb
-relation right?
+I think a and d have an hb relation due to the
+a ->po-rel X ->rfe Y ->acq-po d
+edges (where X and Y are the unlock/lock events I annotated in your 
+example below).
 
-(*
-  b ->rf c
+Generally, an mb_unlock_lock isn't used to give you hb, but to turn some 
+(coe/fre) ; hb* edges into pb edges
 
-  d ->co e
-
-  e ->hb f
-
-  basically the issue is a ->po b ->rf c ->po d    does not imply a ->hb d
-*)
-
-P0(int *x, int *y, spinlock_t *mylock)
-{
-	spin_lock(mylock);
-	WRITE_ONCE(*x, 1); // a
-	WRITE_ONCE(*y, 1); // b
-	spin_unlock(mylock);
-}
-
-P1(int *y, int *z, spinlock_t *mylock)
-{
-	int r0;
-
-	spin_lock(mylock);
-	r0 = READ_ONCE(*y); // c
-	smp_mb__after_spinlock(); // moving this a bit lower also works fwiw.
-	WRITE_ONCE(*z, 1);  // d
-	spin_unlock(mylock);
-}
-
-P2(int *x, int *z)
-{
-	int r1;
-
-	WRITE_ONCE(*z, 2);  // e
-	smp_mb();
-	r1 = READ_ONCE(*x); // f
-}
-
-exists (1:r0=1 /\ z=2 /\ 2:r1=0)
+In this case, that would probably be
+f ->fre a ->hb* f   (where a ->hb* f comes from a ->hb* d ->hb e ->hb f)
+By adding the mb_unlock_lock_po in one of the right places, this becomes 
+f ->pb f,
+thus forbidden.
 
 
-> Would someone like to to a "git mv" send the resulting patch?
+Have fun,
+jonas
 
-Yes I can do that in return as I am thankful in advance for the above
-discussion. ;)
 
-thanks,
-
- - Joel
+>
+> (*
+>    b ->rf c
+>
+>    d ->co e
+>
+>    e ->hb f
+>
+>    basically the issue is a ->po b ->rf c ->po d    does not imply a ->hb d
+> *)
+>
+> P0(int *x, int *y, spinlock_t *mylock)
+> {
+> 	spin_lock(mylock);
+> 	WRITE_ONCE(*x, 1); // a
+> 	WRITE_ONCE(*y, 1); // b
+> 	spin_unlock(mylock); // X
+> }
+>
+> P1(int *y, int *z, spinlock_t *mylock)
+> {
+> 	int r0;
+>
+> 	spin_lock(mylock); // Y
+> 	r0 = READ_ONCE(*y); // c
+> 	smp_mb__after_spinlock(); // moving this a bit lower also works fwiw.
+> 	WRITE_ONCE(*z, 1);  // d
+> 	spin_unlock(mylock);
+> }
+>
+> P2(int *x, int *z)
+> {
+> 	int r1;
+>
+> 	WRITE_ONCE(*z, 2);  // e
+> 	smp_mb();
+> 	r1 = READ_ONCE(*x); // f
+> }
+>
+> exists (1:r0=1 /\ z=2 /\ 2:r1=0)
+>
+>
+>> Would someone like to to a "git mv" send the resulting patch?
+> Yes I can do that in return as I am thankful in advance for the above
+> discussion. ;)
+>
+> thanks,
+>
+>   - Joel
+>
 
