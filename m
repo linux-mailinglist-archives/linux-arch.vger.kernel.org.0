@@ -2,142 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 729EB6DB7E1
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Apr 2023 02:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B786DB8D5
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Apr 2023 06:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229455AbjDHAtF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Apr 2023 20:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S229786AbjDHE2F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Apr 2023 00:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjDHAtF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Apr 2023 20:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF4EAF3E;
-        Fri,  7 Apr 2023 17:49:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE49E65593;
-        Sat,  8 Apr 2023 00:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1E4C433EF;
-        Sat,  8 Apr 2023 00:49:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1680914943;
-        bh=U+av11hX25u4IyfwQg9yYQJu8Wq0oTxiwzajUtWOdug=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Eh67NABHplIbkUbYYBKerJOwmtmuxB+0NXLRY8qJfAOTSbEGAlkWRKyZky8RSOukJ
-         XRQO676cLTHlP0F3grhPGpLCSVKtt6XPdhaikuOK3q5WgEjnBTBTP2i1mkOVnYefHG
-         LLBSbjJYXSk8pI/Svugkvv8Q9TmvP8T63FecQ8S2uChQfQv6/Hs7XHB1fZOfD204T4
-         9PATU+SOBEmo8Pbm5zAkECjHOQuSzSIkA/W0a3k178VFY2PJqYSvErW1/YveIaGAaw
-         FvvwjaAAjV6CsKFUfdrselqRH25KB+4lwafgh7x++zY4BMIzBI+rq3W/5K3BF14Pqq
-         L161KXqHEFmKg==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id BCC7615404B5; Fri,  7 Apr 2023 17:49:02 -0700 (PDT)
-Date:   Fri, 7 Apr 2023 17:49:02 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Will Deacon <will@kernel.org>
-Subject: Re: Litmus test names
-Message-ID: <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
- <3908932E-17D4-4B87-AB0C-D10564F10623@joelfernandes.org>
- <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
+        with ESMTP id S229719AbjDHE2E (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Apr 2023 00:28:04 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96938B456;
+        Fri,  7 Apr 2023 21:28:02 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 19BA7213B640; Fri,  7 Apr 2023 21:28:02 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19BA7213B640
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1680928082;
+        bh=W+0x2OvkEBqnZiWb8C8jsuH6ZwkjR30+p5rTEImjBuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cOUImu6FQ4W41G/6fzFr2LxrANh36hnC+OtlWuglGa6LH4AGOo7kMb6SnFwBaykD5
+         gVsLTzOwA/A/CSxNWbBwWUaJynpijxctsqe5DvJdgZ2w54y015KNwb+xHIO6N6JlnP
+         kHXbFwSfJ31TNnygZRrw11QVd+nTXG8u+8FtyYaA=
+Date:   Fri, 7 Apr 2023 21:28:02 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v4 2/5] x86/hyperv: Add VTL specific structs and
+ hypercalls
+Message-ID: <20230408042802.GA14345@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1680598864-16981-1-git-send-email-ssengar@linux.microsoft.com>
+ <1680598864-16981-3-git-send-email-ssengar@linux.microsoft.com>
+ <20230406135113.GB1317@skinsburskii.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230406135113.GB1317@skinsburskii.localdomain>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
-> 
-> 
-> On 4/7/2023 2:12 AM, Joel Fernandes wrote:
+On Thu, Apr 06, 2023 at 06:51:13AM -0700, Stanislav Kinsburskii wrote:
+> On Tue, Apr 04, 2023 at 02:01:01AM -0700, Saurabh Sengar wrote:
+> > Add structs and hypercalls required to enable VTL support on x86.
 > > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> > ---
+> >  arch/x86/include/asm/hyperv-tlfs.h | 75 ++++++++++++++++++++++++++++++
+> >  include/asm-generic/hyperv-tlfs.h  |  4 ++
+> >  2 files changed, 79 insertions(+)
 > > 
-> > > On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > 
-> > > ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
-> > > > Paul:
-> > > > 
-> > > > I just saw that two of the files in
-> > > > tools/memory-model/litmus-tests have
-> > > > almost identical names:
-> > > > 
-> > > >  Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > >  Z6.0+pooncelock+poonceLock+pombonce.litmus
-> > > > 
-> > > > They differ only by a lower-case 'l' vs. a capital 'L'.  It's
-> > > > not at all
-> > > > easy to see, and won't play well in case-insensitive filesystems.
-> > > > 
-> > > > Should one of them be renamed?
-> > > 
-> > > Quite possibly!
-> > > 
-> > > The "L" denotes smp_mb__after_spinlock().  The only code difference
-> > > between these is that Z6.0+pooncelock+poonceLock+pombonce.litmus has
-> > > smp_mb__after_spinlock() and Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > does not.
-> > > 
-> > > Suggestions for a better name?  We could capitalize all the letters
-> > > in LOCK, I suppose...
+> > diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> > index 0b73a809e9e1..0b0b4e9a4318 100644
+> > --- a/arch/x86/include/asm/hyperv-tlfs.h
+> > +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> > @@ -713,6 +713,81 @@ union hv_msi_entry {
+> >  	} __packed;
+> >  };
+> >  
+> > +struct hv_x64_segment_register {
+> > +	__u64 base;
 > 
-> I don't think capitalizing LOCK is helpful.
+> Ideally they arch-size types naming should be consistent: either with underscores or
+> without.
+> The majority of cases in this file are without underscores.
 
-Greek font, then?  (Sorry, couldn't resist...)
+Although I am fine either way, I think in a non-uapi file "without underscore" is prefered.
+I can change this in next version.
 
-> To be honest, almost all the names are extremely cryptic to newcomers like
-> me (like, what does Z6.0 mean? Is it some magic incantation?).
-> And that's not something that's easy to fix.
+Regards,
+Saurabh
 
-All too true on all counts.  Some of the names abbreviate the litmus
-test itself, and there are multiple encodings depending one who/what
-generated the test in question.  Others of the names relate to who came
-up with them or the code from which they are derived.
 
-New allegedly universal naming schemes have a rather short half-life.
-
-What would be cool would be a way to structurally compare litmus tests.
-I bet that there are quite a few duplicates, for example.
-
-> The only use case I can think of for spending time improving the names is
-> that sometimes you wanna say something like "oh, this is like
-> Z6.0+pooncelock+pooncelockmb+pombonce". And then people can look up what
-> that is.
-> For that, it's important that the names are easy to disambiguate by humans,
-> and I think Joel's suggestion is an improvement.
-> (and it also fixes the issue brought up by Alan about case-insensitive file
-> systems)
 > 
-> > 
-> > Z6.0+pooncelock+pooncelockmb+pombonce.litmus ?
-
-I am OK with this one, but then again, I was also OK with the original
-Z6.0+pooncelock+poonceLock+pombonce.litmus.  ;-)
-
-Would someone like to to a "git mv" send the resulting patch?
-
-							Thanx, Paul
+> Reviewed-by: Stanislav Kinsburskii <stanislav.kinsburskii@gmail.com>
+> 
+> > +	__u32 limit;
+> > +	__u16 selector;
+> > +	union {
+> > +		struct {
+> > +			__u16 segment_type : 4;
+> > +			__u16 non_system_segment : 1;
+> > +			__u16 descriptor_privilege_level : 2;
+> > +			__u16 present : 1;
+> > +			__u16 reserved : 4;
+> > +			__u16 available : 1;
+> > +			__u16 _long : 1;
+> > +			__u16 _default : 1;
+> > +			__u16 granularity : 1;
+> > +		} __packed;
+> > +		__u16 attributes;
+> > +	};
+> > +} __packed;
+> > +
+> > +struct hv_x64_table_register {
+> > +	__u16 pad[3];
+> > +	__u16 limit;
+> > +	__u64 base;
+> > +} __packed;
+> > +
+> > +struct hv_init_vp_context {
+> > +	u64 rip;
+> > +	u64 rsp;
+> > +	u64 rflags;
+> > +
+> > +	struct hv_x64_segment_register cs;
+> > +	struct hv_x64_segment_register ds;
+> > +	struct hv_x64_segment_register es;
+> > +	struct hv_x64_segment_register fs;
+> > +	struct hv_x64_segment_register gs;
+> > +	struct hv_x64_segment_register ss;
+> > +	struct hv_x64_segment_register tr;
+> > +	struct hv_x64_segment_register ldtr;
+> > +
+> > +	struct hv_x64_table_register idtr;
+> > +	struct hv_x64_table_register gdtr;
+> > +
+> > +	u64 efer;
+> > +	u64 cr0;
+> > +	u64 cr3;
+> > +	u64 cr4;
+> > +	u64 msr_cr_pat;
+> > +} __packed;
+> > +
+> > +union hv_input_vtl {
+> > +	u8 as_uint8;
+> > +	struct {
+> > +		u8 target_vtl: 4;
+> > +		u8 use_target_vtl: 1;
+> > +		u8 reserved_z: 3;
+> > +	};
+> > +} __packed;
+> > +
+> > +struct hv_enable_vp_vtl {
+> > +	u64				partition_id;
+> > +	u32				vp_index;
+> > +	union hv_input_vtl		target_vtl;
+> > +	u8				mbz0;
+> > +	u16				mbz1;
+> > +	struct hv_init_vp_context	vp_context;
+> > +} __packed;
+> > +
+> > +struct hv_get_vp_from_apic_id_in {
+> > +	u64 partition_id;
+> > +	union hv_input_vtl target_vtl;
+> > +	u8 res[7];
+> > +	u32 apic_ids[];
+> > +} __packed;
+> > +
+> >  #include <asm-generic/hyperv-tlfs.h>
+> >  
+> >  #endif
+> > diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> > index b870983596b9..87258341fd7c 100644
+> > --- a/include/asm-generic/hyperv-tlfs.h
+> > +++ b/include/asm-generic/hyperv-tlfs.h
+> > @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
+> >  /* Declare the various hypercall operations. */
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
+> > +#define HVCALL_ENABLE_VP_VTL			0x000f
+> >  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+> >  #define HVCALL_SEND_IPI				0x000b
+> >  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+> > @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
+> >  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
+> >  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+> >  #define HVCALL_RETARGET_INTERRUPT		0x007e
+> > +#define HVCALL_START_VP				0x0099
+> > +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+> >  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+> >  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> > @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
+> >  #define HV_STATUS_INVALID_PORT_ID		17
+> >  #define HV_STATUS_INVALID_CONNECTION_ID		18
+> >  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> > +#define HV_STATUS_VTL_ALREADY_ENABLED		134
+> >  
+> >  /*
+> >   * The Hyper-V TimeRefCount register and the TSC
+> > -- 
+> > 2.34.1
