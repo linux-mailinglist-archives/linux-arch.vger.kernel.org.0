@@ -2,180 +2,233 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B30066DBD0E
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Apr 2023 22:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DFC6DBE93
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Apr 2023 06:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjDHUtt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Apr 2023 16:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
+        id S229451AbjDIE3V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Apr 2023 00:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjDHUto (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Apr 2023 16:49:44 -0400
-Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020023.outbound.protection.outlook.com [52.101.56.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38E8B752;
-        Sat,  8 Apr 2023 13:49:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L71lEBW9Dh10rGT71T1ihrbfnnGoiA51q34YmXOwtYJjh3CGm/IlxJuvVfjUlRnJkyrBjKOCuWjD2TsTyhvrBvG2TRdvNL7NMUlpXW7Pfudnk+GmUA7pquDdYn6jnrDjmX0MG+ND2bUrW4exKngQ697UcmybrULSdzK9gQRONSANV4Ak4u85qEZ9BYM5lMthv3EJZiKcVWO3ffFdXBDvjzVVDypKR3L/7jxw+8Bqoy3E3DXCehNMB80Bjh9iNPbqs47I+pbQboA1Q2PF+Q6884F20T4IGbpb5p0PmRwTObwhtMyCkwWSJnJ3HZXnT2pRkZ9V3KtAagCFHyPm5Mgu1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bdLR7U+eYdNzw5TcfNruWTluG40uXqBcyz6GVbJIGEA=;
- b=n6Z21jV5Fq4ZsA7VcWsCB8XOLZRzsNAB4wkYle3W8o5214UjBo08N1PkLoWs39P351n399yex4xfXB08ojIv6Y2hqHYgeHo7ZQ6ohhj00j9oMfSW+cgXKZjUfH6bECTpWizl+b53wwK19/BdeubjdNcijLboWuxvRWT35PlNL81RBiTlC310L3wrLi/WkB5uIbMh6fECILOh3HnQqWbpgC+ktQtICJfdhShKVq86+QmRj6DG2XdiKOpjU3L6ORMeGiLqafdkFEq2ewVPmHQ3cNrQzYDiuddsffeWvW582sJi+FynMkmMTZ00wweqDe2ezr4gL0lqLzyD9ftAk+ZdEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bdLR7U+eYdNzw5TcfNruWTluG40uXqBcyz6GVbJIGEA=;
- b=T5xdLFhL1FSWcDbkm2KHOq7GNh+LJa1FUi6ThhSevWeTz0eceTK8087bv8hJtQyxjVJ/lbEvarmBysxzxpRasQdiwfsmmTbT1iBCkNQXtnwueqgQ5JN85x/qwcPaa4A9K7lJ9gik6Rj+wuBlZk94CdLS9daSF2mUsBhxQ9BDQrI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23) by BYAPR21MB1336.namprd21.prod.outlook.com
- (2603:10b6:a03:115::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.1; Sat, 8 Apr
- 2023 20:49:38 +0000
-Received: from BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::97b2:25ca:c44:9b7]) by BL0PR2101MB1092.namprd21.prod.outlook.com
- ([fe80::97b2:25ca:c44:9b7%6]) with mapi id 15.20.6298.017; Sat, 8 Apr 2023
- 20:49:38 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        Dexuan Cui <decui@microsoft.com>
-Subject: [PATCH v4 6/6] x86/hyperv: Fix serial console interrupts for TDX guests
-Date:   Sat,  8 Apr 2023 13:47:59 -0700
-Message-Id: <20230408204759.14902-7-decui@microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230408204759.14902-1-decui@microsoft.com>
-References: <20230408204759.14902-1-decui@microsoft.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0117.namprd03.prod.outlook.com
- (2603:10b6:303:b7::32) To BL0PR2101MB1092.namprd21.prod.outlook.com
- (2603:10b6:207:30::23)
+        with ESMTP id S229445AbjDIE3U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Apr 2023 00:29:20 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DE559ED
+        for <linux-arch@vger.kernel.org>; Sat,  8 Apr 2023 21:29:18 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id ek19so1556582qvb.9
+        for <linux-arch@vger.kernel.org>; Sat, 08 Apr 2023 21:29:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1681014558;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FDuFy9RPjn4n6kcj3GDtjcBDkENRtGj7xCf7X4HUB5g=;
+        b=d4wiQoURlizx8dQxnBgls3y2Y3NLZxLGGqOlct0UigRk/Z8vXJFXimbhdqurCqikSs
+         mbWNjv1P+vuVmWnxLCMNCX7hZUtgsERrY3g4rcYWYPBMi/IgpJFqvsHLNQNo81Lb0zG7
+         9Mg8rq1krY1m1L0jFI2zjhI9pvWGQhuQh+SGM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681014558;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FDuFy9RPjn4n6kcj3GDtjcBDkENRtGj7xCf7X4HUB5g=;
+        b=E4xBAY9M7E4zN4OmY3FTOTEmMbR29D51ieODPqp2l2Jqesen/77pr5VK+IjUchkeyQ
+         V5PMy9le70cFOdwUJwutuAK9QEu+hY0pGNsXDR97DKGEvb41Bqq41b6WKoZEa4EGc6x9
+         ppBssSeXEIIhJaqWm/qSGV8Cxkc5UtIUtY9DIHMqOb15r6M44OhZTOGtdn4mnPLZ/jrk
+         2vLDtyzbEBPtgysENdK9C8Apu5KEu/W0F/hTgckCDqSBvkBSzdMxBz0ErGHvYmrfRku/
+         LlRAWTK4XuuZR+u2frNYzFUfCATtUL2h4XagXnQzaZo3ugG6XqLJKsYjJmDZ62VSvqqY
+         itsw==
+X-Gm-Message-State: AAQBX9ehyoI/cBA0gBFOrsVoR9q2nMazvllQr5unEtgky4RrVGamAquT
+        lb4f78k4ppef2sgKb0dFwOPAOQ==
+X-Google-Smtp-Source: AKy350bW8vfXUfpXHyTmbQKPZ9aG3HQ+NsZGV/I5W1on1KOny35YQuXbwp59dJlBC8HsOL7ySk8WmA==
+X-Received: by 2002:a05:6214:62c:b0:56e:9f19:71f9 with SMTP id a12-20020a056214062c00b0056e9f1971f9mr17393007qvx.17.1681014557940;
+        Sat, 08 Apr 2023 21:29:17 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id s63-20020a37a942000000b00706b09b16fasm2433706qke.11.2023.04.08.21.29.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Apr 2023 21:29:17 -0700 (PDT)
+Date:   Sun, 9 Apr 2023 04:29:16 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        David Howells <dhowells@redhat.com>,
+        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Will Deacon <will@kernel.org>
+Subject: Re: Litmus test names
+Message-ID: <20230409042916.GA768965@google.com>
+References: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
+ <3908932E-17D4-4B87-AB0C-D10564F10623@joelfernandes.org>
+ <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
+ <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
+ <20230408164956.GA680332@google.com>
+ <e4a2059d-8199-b74e-d776-116c99c73fe6@huaweicloud.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR2101MB1092:EE_|BYAPR21MB1336:EE_
-X-MS-Office365-Filtering-Correlation-Id: b36d130f-7762-42fb-89cf-08db3872c4ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HBLRgLxdEONZWVQm/6uv7spJf7g1orO0wXtGe1oOvtD/uu6UvGsAv02KDIv6ri1b+8Rc6z+DMqK+fLDiNCVLcpwrC1TPNk4kDFdJwLGx2V9Cyt6gZb/xNSyn2ugSosfsArPkjgyh1N/exCQxKsxly0n28EFPey22K4LRa1Cy4oXPtHSjyR1Wwoz0Hbq1aMnCcE6GlARjFZRPdyTduc96kZaYQ2Slfvl7v5Fu5J8vTcAOuXYvE+l6WO3Mg0u8bOFJU+f3BPLaJklpeG+aRt9T4TyE26b3PmIUU9U3ltiVW3SGLpUVzJnkC5uSfDBmmzQqVWr8pFI3SLthSUk0jw+AA61cGlRnztLJqU4zNzEjJ4/mZaQryYxP8V8eGK4kQhprlvZEPVed46w6yEEim1hkRonlbEEEQ2ajt5JI4DLa/QiARSfGRCiUdKgOKb9yB5Pyic5GrR8o2T7QOjcdzzKJAyC483w+GLUHcA1B7HGs0xGpSzlfSL1osqCVIT76dUDidrvDv22XLZGCvB89zX19DhWeWWdO2Lh37hdRt3FxA4jvwowIsHcQF92f3i63pl2232q7mOz7Fzj2UfhB9oeGiFAAVs8k4m+jDdCyjQo7uAbhcOCIP43KL/hgkzXSB1J9tlmO7ol8BVINnHsj0/u6zQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR2101MB1092.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(136003)(346002)(451199021)(786003)(66946007)(66556008)(66476007)(4326008)(478600001)(316002)(6636002)(5660300002)(7416002)(38100700002)(41300700001)(921005)(82950400001)(82960400001)(8936002)(8676002)(186003)(83380400001)(2616005)(6486002)(6666004)(52116002)(10290500003)(107886003)(6512007)(6506007)(1076003)(86362001)(36756003)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WZm3Ujk2Zy0o7SOe3OBkDeuOGaaNjob/UA5Rp0jQe2dXYVzRDRVHrASJ3jwe?=
- =?us-ascii?Q?6eyV+AOYUsJTR82zGIsnfv1zonBEp1f6MhcPoko4T9WGVtl8sjP3WKKnHQRx?=
- =?us-ascii?Q?S1bNerQOaHui4U9+wKez7jbi3mYCFG4hHTpZdnA5RXb727rZcV5cKT8gk8Uu?=
- =?us-ascii?Q?4g0HxaP664tE+oYPu/V8xav25KQE6vwBznRIpgzGwzICYq24od72/zcOrk6Q?=
- =?us-ascii?Q?ZNepIri/NBPuW1MVxqRE39I7RxYt1jUKFez5pSSBWmsfTaYpy8ruHSdJGN5+?=
- =?us-ascii?Q?JS+lPVNltWWkqIlP++lVLZN+j1mtFfSIjNFFPE7dEa6d7p9mPq8jjxwzCu/m?=
- =?us-ascii?Q?5tiXl/g0pCfDuX6CB3FdIgawTgMP/902TpnuMZ94mPIpTgZbrL11P/9a+JNO?=
- =?us-ascii?Q?35+gpwB6XS6qUfi5DazBupUqiFZ4ynr1U+n5o0tMoM+O5LymkkqszJ2EVDdr?=
- =?us-ascii?Q?dnOZhV1dOh3Z10273hHpH0Y8fT+9UWAZ+kmbvl7jri4Us/bC3B+Vhzz1LMIC?=
- =?us-ascii?Q?GSqsQzGvsFK3v6VNe2xZWXVAAhSBjgZeHV7wnCaBEUgegqgtGMvo57Y48CSM?=
- =?us-ascii?Q?2Co1k3M9RFU5Jgr2Ns+0Y1A3KRAp58Mfoyqe1ctgUkgdRwj/aR2H2RB4rZvQ?=
- =?us-ascii?Q?R6M8Ifx9vf4DuUhX28mIdcxBaxswK4Qo4JgRTDprjP+N5Xsg6yctSxi01UWT?=
- =?us-ascii?Q?D6pGG4R+V9XQ7MwjZ9sCnNE+XLYtKEAh8pcJIR675FJ2JVCokglsD/jBdfo2?=
- =?us-ascii?Q?7w/N69n9uS3iqldMoVOFVswK1Qri3T6b1uxyC9g3lMn5PMiP/+MJggvCRzhl?=
- =?us-ascii?Q?6V5jxbY3oLxgKsi5Nw+4CGVv9krLn4PsAy+ZqL4Leey2y6CIlkleeWTeHKZq?=
- =?us-ascii?Q?TLFqqwArh6FCh8x3S8pEgZPzncLoF2DRdiljvqKrHEsoP/N0g2Sb8S0X/QPr?=
- =?us-ascii?Q?o9VZHYTpYzn8N51bNMh83rp9iDVcCf7GdMddHRtDrJ+Kxg8Yj59Et33Nsbmr?=
- =?us-ascii?Q?UMW4HhDC2fI0MOvPEEO/qRGI1yiinbYNoPU/iBv+77kHR+R09YJAV34cgAUJ?=
- =?us-ascii?Q?NvigbJ4hyRd4xddThNME0PTOY556x+wgzvE/QK8CB35P7GDrruF7HDdM8EH5?=
- =?us-ascii?Q?KdNQ5tcVz0LoOL87yjaoCE9yWxKnJM8LPD+lbE5qNjUqQKLeVcRjglYo070m?=
- =?us-ascii?Q?vVa/GGELvwwUIbdZDlFVEW2yUjx86AVcl6W8DdDcthi35RDtVHn/odrKko7l?=
- =?us-ascii?Q?uONixGtXTgxZ4/DwZ51WkqHuHUpkdODnwXSHlX1VemBWhPWCcBO9SZfGHFeJ?=
- =?us-ascii?Q?fy+VfvCV0+jTyEfIy9mn1vZ1brAXNmOi/k7Xp8C/dgAyY2Ln+b5NA3XVaMTV?=
- =?us-ascii?Q?iVqfXfmCsEErvU6E/O8jFeZmI6rP3u9ppoYT6+tdjpMWndTpmTl++60T6wUU?=
- =?us-ascii?Q?+hVlx3F93/LTDR4MsoaPXnrcI0xvvVqYCs1f0IVqrcGQqoyyaKNSMCUAawoR?=
- =?us-ascii?Q?QuGvCR3ck0RpeDqkB4ab2OFejJqfNmApwo+TXgAB3gOVk28Jupv1w16CQS04?=
- =?us-ascii?Q?MT8+9WARfChoyPIMR8ZLHJq5dGuQXAfb796TT/lCPtI6EvuI819CHPCXDQiq?=
- =?us-ascii?Q?VnyU0F3+cb6/Mpn7V8g49sRW6BtHE5KwmmwelyIKnGW6?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b36d130f-7762-42fb-89cf-08db3872c4ad
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR2101MB1092.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2023 20:49:38.2158
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iXDHG1fqd8W4AQeQE2y9Wv0JWoNCrmkgRFusi0po5n4ep4ZZdMapeyV4S+Cu+MeKA4corgTG/hJMn1iAM09Djw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR21MB1336
-X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e4a2059d-8199-b74e-d776-116c99c73fe6@huaweicloud.com>
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When a TDX guest runs on Hyper-V, the UEFI firmware sets the HW_REDUCED
-flag, and consequently ttyS0 interrupts can't work. Fix the issue by
-overriding x86_init.acpi.reduced_hw_early_init().
+On Sat, Apr 08, 2023 at 08:57:57PM +0200, Jonas Oberhauser wrote:
+> 
+> On 4/8/2023 6:49 PM, Joel Fernandes wrote:
+> > On Fri, Apr 07, 2023 at 05:49:02PM -0700, Paul E. McKenney wrote:
+> > > On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
+> > > > 
+> > > > On 4/7/2023 2:12 AM, Joel Fernandes wrote:
+> > > > > 
+> > > > > > On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > > 
+> > > > > > ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
+> > > > > > > Paul:
+> > > > > > > 
+> > > > > > > I just saw that two of the files in
+> > > > > > > tools/memory-model/litmus-tests have
+> > > > > > > almost identical names:
+> > > > > > > 
+> > > > > > >   Z6.0+pooncelock+pooncelock+pombonce.litmus
+> > > > > > >   Z6.0+pooncelock+poonceLock+pombonce.litmus
+> > > > > > > 
+> > > > > > > They differ only by a lower-case 'l' vs. a capital 'L'.  It's
+> > > > > > > not at all
+> > > > > > > easy to see, and won't play well in case-insensitive filesystems.
+> > > > > > > 
+> > > > > > > Should one of them be renamed?
+> > > > > > 
+> > FWIW, if I move that smp_mb_after..() a step lower, that also makes the test
+> > work (see below).
+> > 
+> > If you may look over quickly my analysis of why this smp_mb_after..() is
+> > needed, it is because what I marked as a and d below don't have an hb
+> > relation right?
+> 
+> I think a and d have an hb relation due to the
+> a ->po-rel X ->rfe Y ->acq-po d
+> edges (where X and Y are the unlock/lock events I annotated in your example
+> below).
 
-Signed-off-by: Dexuan Cui <decui@microsoft.com>
----
+I kind of disagree with that, because if I understand correctly, a ->hb d
+means ALL CPUs agree as a universal fact that a happened before d.
 
-Changes since v1:
-    None.
+Clearly, without the smp_mb(), CPU P2 disagrees that a happened before d.
 
- arch/x86/kernel/cpu/mshyperv.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+So the po-rel acq-po doesn't imply a->hb d, IMHO. Correct me if I'm wrong
+though with any counter example. ;-)
 
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index e9106c9d92f81..deedced0f2bb0 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -318,6 +318,26 @@ static void __init hv_smp_prepare_cpus(unsigned int max_cpus)
- }
- #endif
- 
-+/*
-+ * When a TDX guest runs on Hyper-V, the firmware sets the HW_REDUCED flag: see
-+ * acpi_tb_create_local_fadt(). Consequently ttyS0 interrupts can't work because
-+ * request_irq() -> ... -> irq_to_desc() returns NULL for ttyS0. This happens
-+ * because mp_config_acpi_legacy_irqs() sees a nr_legacy_irqs() of 0, so it
-+ * doesn't initialize the array 'mp_irqs[]', and later setup_IO_APIC_irqs() ->
-+ * find_irq_entry() fails to find the legacy irqs from the array, and hence
-+ * doesn't create the necessary irq description info.
-+ *
-+ * Copy arch/x86/kernel/acpi/boot.c: acpi_generic_reduced_hw_init() but doesn't
-+ * change 'legacy_pic', so it keeps its default value 'default_legacy_pic' in
-+ * mp_config_acpi_legacy_irqs(), which sees a non-zero nr_legacy_irqs(), and
-+ * eventually serial console interrupts can work properly.
-+ */
-+static void __init reduced_hw_init(void)
-+{
-+	x86_init.timers.timer_init	= x86_init_noop;
-+	x86_init.irqs.pre_vector_init	= x86_init_noop;
-+}
-+
- static void __init ms_hyperv_init_platform(void)
+> 
+> Generally, an mb_unlock_lock isn't used to give you hb, but to turn some
+> (coe/fre) ; hb* edges into pb edges
+> 
+> In this case, that would probably be
+> f ->fre a ->hb* f   (where a ->hb* f comes from a ->hb* d ->hb e ->hb f)
+> By adding the mb_unlock_lock_po in one of the right places, this becomes f
+> ->pb f,
+> thus forbidden.
+
+This I fully agree with. I observed this litmus is actually the R-pattern
+with P0 split into 2 CPUs by spltting the thread of execution using a lock
+and ordering them with an ->rfe and the exists() clause.
+
+Otherwise it is identical.
+
+In the R-pattern also, you need an smp_mb() between the pair of accesses.
+
+Using the same annotations but instead applying them to the R-pattern, it
+looks like:
+
+ P0(int *x, int *y)
  {
- 	int hv_max_functions_eax;
-@@ -425,6 +445,8 @@ static void __init ms_hyperv_init_platform(void)
- 
- 			/* A TDX VM must use x2APIC and doesn't use lazy EOI */
- 			ms_hyperv.hints &= ~HV_X64_APIC_ACCESS_RECOMMENDED;
-+
-+			x86_init.acpi.reduced_hw_early_init = reduced_hw_init;
- 		}
- 	}
- 
--- 
-2.25.1
+ 	WRITE_ONCE(*x, 1); // a
+	// Here we need an smp_mb() to order the stores to x and z.
+ 	WRITE_ONCE(*z, 1);  // d
+ }
 
+ P2(int *x, int *z)
+ {
+ 	int r1;
+ 
+ 	WRITE_ONCE(*z, 2);  // e
+ 	smp_mb();
+ 	r1 = READ_ONCE(*x); // f
+
+exists (z=2 /\ 2:r1=0)
+
+
+thanks,
+
+ - Joel
+
+
+> 
+> Have fun,
+> jonas
+> 
+> 
+> > 
+> > (*
+> >    b ->rf c
+> > 
+> >    d ->co e
+> > 
+> >    e ->hb f
+> > 
+> >    basically the issue is a ->po b ->rf c ->po d    does not imply a ->hb d
+> > *)
+> > 
+> > P0(int *x, int *y, spinlock_t *mylock)
+> > {
+> > 	spin_lock(mylock);
+> > 	WRITE_ONCE(*x, 1); // a
+> > 	WRITE_ONCE(*y, 1); // b
+> > 	spin_unlock(mylock); // X
+> > }
+> > 
+> > P1(int *y, int *z, spinlock_t *mylock)
+> > {
+> > 	int r0;
+> > 
+> > 	spin_lock(mylock); // Y
+> > 	r0 = READ_ONCE(*y); // c
+> > 	smp_mb__after_spinlock(); // moving this a bit lower also works fwiw.
+> > 	WRITE_ONCE(*z, 1);  // d
+> > 	spin_unlock(mylock);
+> > }
+> > 
+> > P2(int *x, int *z)
+> > {
+> > 	int r1;
+> > 
+> > 	WRITE_ONCE(*z, 2);  // e
+> > 	smp_mb();
+> > 	r1 = READ_ONCE(*x); // f
+> > }
+> > 
+> > exists (1:r0=1 /\ z=2 /\ 2:r1=0)
+> > 
+> > 
+> > > Would someone like to to a "git mv" send the resulting patch?
+> > Yes I can do that in return as I am thankful in advance for the above
+> > discussion. ;)
+> > 
+> > thanks,
+> > 
+> >   - Joel
+> > 
+> 
