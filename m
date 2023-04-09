@@ -2,81 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DFC6DBE93
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Apr 2023 06:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD85E6DBEA0
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Apr 2023 06:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbjDIE3V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Apr 2023 00:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S229503AbjDIEsm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Apr 2023 00:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjDIE3U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Apr 2023 00:29:20 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DE559ED
-        for <linux-arch@vger.kernel.org>; Sat,  8 Apr 2023 21:29:18 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id ek19so1556582qvb.9
-        for <linux-arch@vger.kernel.org>; Sat, 08 Apr 2023 21:29:18 -0700 (PDT)
+        with ESMTP id S229488AbjDIEsl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Apr 2023 00:48:41 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6BB59E5
+        for <linux-arch@vger.kernel.org>; Sat,  8 Apr 2023 21:48:40 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id p2so38647703qtw.13
+        for <linux-arch@vger.kernel.org>; Sat, 08 Apr 2023 21:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1681014558;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FDuFy9RPjn4n6kcj3GDtjcBDkENRtGj7xCf7X4HUB5g=;
-        b=d4wiQoURlizx8dQxnBgls3y2Y3NLZxLGGqOlct0UigRk/Z8vXJFXimbhdqurCqikSs
-         mbWNjv1P+vuVmWnxLCMNCX7hZUtgsERrY3g4rcYWYPBMi/IgpJFqvsHLNQNo81Lb0zG7
-         9Mg8rq1krY1m1L0jFI2zjhI9pvWGQhuQh+SGM=
+        d=joelfernandes.org; s=google; t=1681015719;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V3qp54zofXL6HqwANXHbIqSJAW5oTYcp+phuNdRg/30=;
+        b=bZk6ef5UuG6O3E/Y8htUsoTwirOIIPyvE7GJK7dBhiVc2Wxdz9zT60P4FDnGVygzX9
+         6W9X3MRxRnIx8wMNXcclZFzD9tH7eV6WGw/iVl70zu1nw+Mhiq90AjhykyoltjOopMEG
+         7xEjbLbJlBN/UfGF0BxxORT3GeioWuyuEnp2M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1681014558;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDuFy9RPjn4n6kcj3GDtjcBDkENRtGj7xCf7X4HUB5g=;
-        b=E4xBAY9M7E4zN4OmY3FTOTEmMbR29D51ieODPqp2l2Jqesen/77pr5VK+IjUchkeyQ
-         V5PMy9le70cFOdwUJwutuAK9QEu+hY0pGNsXDR97DKGEvb41Bqq41b6WKoZEa4EGc6x9
-         ppBssSeXEIIhJaqWm/qSGV8Cxkc5UtIUtY9DIHMqOb15r6M44OhZTOGtdn4mnPLZ/jrk
-         2vLDtyzbEBPtgysENdK9C8Apu5KEu/W0F/hTgckCDqSBvkBSzdMxBz0ErGHvYmrfRku/
-         LlRAWTK4XuuZR+u2frNYzFUfCATtUL2h4XagXnQzaZo3ugG6XqLJKsYjJmDZ62VSvqqY
-         itsw==
-X-Gm-Message-State: AAQBX9ehyoI/cBA0gBFOrsVoR9q2nMazvllQr5unEtgky4RrVGamAquT
-        lb4f78k4ppef2sgKb0dFwOPAOQ==
-X-Google-Smtp-Source: AKy350bW8vfXUfpXHyTmbQKPZ9aG3HQ+NsZGV/I5W1on1KOny35YQuXbwp59dJlBC8HsOL7ySk8WmA==
-X-Received: by 2002:a05:6214:62c:b0:56e:9f19:71f9 with SMTP id a12-20020a056214062c00b0056e9f1971f9mr17393007qvx.17.1681014557940;
-        Sat, 08 Apr 2023 21:29:17 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id s63-20020a37a942000000b00706b09b16fasm2433706qke.11.2023.04.08.21.29.16
+        d=1e100.net; s=20210112; t=1681015719;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V3qp54zofXL6HqwANXHbIqSJAW5oTYcp+phuNdRg/30=;
+        b=gYNZ7eCFRCWNe8X15GKn3mG1SJxLeJabFr88fJV+adEDGRV/A1Dhq8lZ5DE51tJ2/n
+         zqA040MAsGEQZ/9ZF0kraWGtQ72L/VKmXam/VQ6mxqxGLTDNy0C98lSMfl3adyHcJLHx
+         71SCg+b8tukBjMgRqjqLAyrcQJZxipENfB//QlVn1/txUuZWJz3oQ05DQaA/mzJ0tTmS
+         tBTe1tDYXDYqRVXdJA8HPv6YyOIrHkfNLYZEXYywTQZyMKeTBZeIedcsh5Moub2sYpvF
+         fD6E5XWT5E/GjgIlTldDLtPririvjWREcz58RRv0eZvzfA6R+79tQlyIdvV3yS1jwA1T
+         GJug==
+X-Gm-Message-State: AAQBX9caUVikKu6w0TmqWO77BXze5YUBMYrb7wCmYbMwI/FLkuw9jkaf
+        wFwoisLgpaxb48wOE1kmXd1zCA==
+X-Google-Smtp-Source: AKy350ZKwQ2XEp/crMH+ihARzNWWaNa99vwdIYw+uuZwiSY9SYfDcvIJ1Kn10flzhIvD4yJPPCW+Bw==
+X-Received: by 2002:ac8:5f8b:0:b0:3d9:307e:8b with SMTP id j11-20020ac85f8b000000b003d9307e008bmr5937947qta.35.1681015719372;
+        Sat, 08 Apr 2023 21:48:39 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id z63-20020a376542000000b007417e60f621sm2421270qkb.126.2023.04.08.21.48.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Apr 2023 21:29:17 -0700 (PDT)
-Date:   Sun, 9 Apr 2023 04:29:16 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Sat, 08 Apr 2023 21:48:38 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org,
         Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
         Jade Alglave <j.alglave@ucl.ac.uk>,
         Luc Maranget <luc.maranget@inria.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will.deacon@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Akira Yokosawa <akiyks@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
         Daniel Lustig <dlustig@nvidia.com>,
-        David Howells <dhowells@redhat.com>,
-        Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        linux-arch@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Will Deacon <will@kernel.org>
-Subject: Re: Litmus test names
-Message-ID: <20230409042916.GA768965@google.com>
-References: <ea9376b4-4b3d-48ee-9c27-ad8de8a7b5cb@paulmck-laptop>
- <3908932E-17D4-4B87-AB0C-D10564F10623@joelfernandes.org>
- <159545c3-0093-3cbd-e822-7298ae764966@huaweicloud.com>
- <d32901a8-3a07-440c-9089-36b37c3f04e5@paulmck-laptop>
- <20230408164956.GA680332@google.com>
- <e4a2059d-8199-b74e-d776-116c99c73fe6@huaweicloud.com>
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-arch@vger.kernel.org
+Subject: [PATCH] tools: memory-model: Rename litmus test to avoid confusion with similar-named test
+Date:   Sun,  9 Apr 2023 04:48:22 +0000
+Message-Id: <20230409044823.775760-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.40.0.577.gac1e443424-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e4a2059d-8199-b74e-d776-116c99c73fe6@huaweicloud.com>
 X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -86,149 +76,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 08:57:57PM +0200, Jonas Oberhauser wrote:
-> 
-> On 4/8/2023 6:49 PM, Joel Fernandes wrote:
-> > On Fri, Apr 07, 2023 at 05:49:02PM -0700, Paul E. McKenney wrote:
-> > > On Fri, Apr 07, 2023 at 03:05:01PM +0200, Jonas Oberhauser wrote:
-> > > > 
-> > > > On 4/7/2023 2:12 AM, Joel Fernandes wrote:
-> > > > > 
-> > > > > > On Apr 6, 2023, at 6:34 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > > > > 
-> > > > > > ﻿On Thu, Apr 06, 2023 at 05:36:13PM -0400, Alan Stern wrote:
-> > > > > > > Paul:
-> > > > > > > 
-> > > > > > > I just saw that two of the files in
-> > > > > > > tools/memory-model/litmus-tests have
-> > > > > > > almost identical names:
-> > > > > > > 
-> > > > > > >   Z6.0+pooncelock+pooncelock+pombonce.litmus
-> > > > > > >   Z6.0+pooncelock+poonceLock+pombonce.litmus
-> > > > > > > 
-> > > > > > > They differ only by a lower-case 'l' vs. a capital 'L'.  It's
-> > > > > > > not at all
-> > > > > > > easy to see, and won't play well in case-insensitive filesystems.
-> > > > > > > 
-> > > > > > > Should one of them be renamed?
-> > > > > > 
-> > FWIW, if I move that smp_mb_after..() a step lower, that also makes the test
-> > work (see below).
-> > 
-> > If you may look over quickly my analysis of why this smp_mb_after..() is
-> > needed, it is because what I marked as a and d below don't have an hb
-> > relation right?
-> 
-> I think a and d have an hb relation due to the
-> a ->po-rel X ->rfe Y ->acq-po d
-> edges (where X and Y are the unlock/lock events I annotated in your example
-> below).
+In order to differentiate the test
+Z6.0+pooncelock+poonceLock+pombonce.litmus from another test that only
+differs by a capital L, the following file has been renamed:
 
-I kind of disagree with that, because if I understand correctly, a ->hb d
-means ALL CPUs agree as a universal fact that a happened before d.
+renamed: litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus ->
+litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus
 
-Clearly, without the smp_mb(), CPU P2 disagrees that a happened before d.
+This change should help avoid confusion between the two tests.
 
-So the po-rel acq-po doesn't imply a->hb d, IMHO. Correct me if I'm wrong
-though with any counter example. ;-)
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ ...mbonce.litmus => Z6.0+pooncelock+pooncelockmb+pombonce.litmus} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename tools/memory-model/litmus-tests/{Z6.0+pooncelock+poonceLock+pombonce.litmus => Z6.0+pooncelock+pooncelockmb+pombonce.litmus} (100%)
 
-> 
-> Generally, an mb_unlock_lock isn't used to give you hb, but to turn some
-> (coe/fre) ; hb* edges into pb edges
-> 
-> In this case, that would probably be
-> f ->fre a ->hb* f   (where a ->hb* f comes from a ->hb* d ->hb e ->hb f)
-> By adding the mb_unlock_lock_po in one of the right places, this becomes f
-> ->pb f,
-> thus forbidden.
+diff --git a/tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus b/tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus
+similarity index 100%
+rename from tools/memory-model/litmus-tests/Z6.0+pooncelock+poonceLock+pombonce.litmus
+rename to tools/memory-model/litmus-tests/Z6.0+pooncelock+pooncelockmb+pombonce.litmus
+-- 
+2.40.0.577.gac1e443424-goog
 
-This I fully agree with. I observed this litmus is actually the R-pattern
-with P0 split into 2 CPUs by spltting the thread of execution using a lock
-and ordering them with an ->rfe and the exists() clause.
-
-Otherwise it is identical.
-
-In the R-pattern also, you need an smp_mb() between the pair of accesses.
-
-Using the same annotations but instead applying them to the R-pattern, it
-looks like:
-
- P0(int *x, int *y)
- {
- 	WRITE_ONCE(*x, 1); // a
-	// Here we need an smp_mb() to order the stores to x and z.
- 	WRITE_ONCE(*z, 1);  // d
- }
-
- P2(int *x, int *z)
- {
- 	int r1;
- 
- 	WRITE_ONCE(*z, 2);  // e
- 	smp_mb();
- 	r1 = READ_ONCE(*x); // f
-
-exists (z=2 /\ 2:r1=0)
-
-
-thanks,
-
- - Joel
-
-
-> 
-> Have fun,
-> jonas
-> 
-> 
-> > 
-> > (*
-> >    b ->rf c
-> > 
-> >    d ->co e
-> > 
-> >    e ->hb f
-> > 
-> >    basically the issue is a ->po b ->rf c ->po d    does not imply a ->hb d
-> > *)
-> > 
-> > P0(int *x, int *y, spinlock_t *mylock)
-> > {
-> > 	spin_lock(mylock);
-> > 	WRITE_ONCE(*x, 1); // a
-> > 	WRITE_ONCE(*y, 1); // b
-> > 	spin_unlock(mylock); // X
-> > }
-> > 
-> > P1(int *y, int *z, spinlock_t *mylock)
-> > {
-> > 	int r0;
-> > 
-> > 	spin_lock(mylock); // Y
-> > 	r0 = READ_ONCE(*y); // c
-> > 	smp_mb__after_spinlock(); // moving this a bit lower also works fwiw.
-> > 	WRITE_ONCE(*z, 1);  // d
-> > 	spin_unlock(mylock);
-> > }
-> > 
-> > P2(int *x, int *z)
-> > {
-> > 	int r1;
-> > 
-> > 	WRITE_ONCE(*z, 2);  // e
-> > 	smp_mb();
-> > 	r1 = READ_ONCE(*x); // f
-> > }
-> > 
-> > exists (1:r0=1 /\ z=2 /\ 2:r1=0)
-> > 
-> > 
-> > > Would someone like to to a "git mv" send the resulting patch?
-> > Yes I can do that in return as I am thankful in advance for the above
-> > discussion. ;)
-> > 
-> > thanks,
-> > 
-> >   - Joel
-> > 
-> 
