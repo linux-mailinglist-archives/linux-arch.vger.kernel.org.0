@@ -2,108 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167226DDC74
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Apr 2023 15:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13B96DDFC9
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Apr 2023 17:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjDKNnn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Apr 2023 09:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S229788AbjDKPht (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Apr 2023 11:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjDKNnm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Apr 2023 09:43:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2661707;
-        Tue, 11 Apr 2023 06:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681220621; x=1712756621;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2GeQQq+KcbTCEU+rXh5JGw+yLkL8a8JmHupdRnaoc8M=;
-  b=chh0jmd4I6VNBC14A5780CVuHTxHv34bO0UjY1fWhG0r+A/g9vuNnnrk
-   E+fR5m5J7LjjjauKWjtM5cDvn/VshNJS7PkdCiRCVmTIhUshEwoVGEG8b
-   wy1Pi7MzUi65BzAmzI0VR+9oQ7q8s3WT3M0V1L5tNCwwunJzcv97RHTzx
-   8Qq1eRnZKzEXBwkocoGx0q2IWHtWIVYVgI46XPRMqoq1DfPfa0JUw94/i
-   wfzMjpmAHVtA+0eunF8M3nQVkiQyBB+wHFH9lRuec31hAZeGU7Aky1Osl
-   AO673s42/mPq2YqPWCRbRKBnog/LYpIYyM7jKV5gjF4yHdc6en+zZzG0n
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="429905385"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="429905385"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:43:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10677"; a="812566489"
-X-IronPort-AV: E=Sophos;i="5.98,336,1673942400"; 
-   d="scan'208";a="812566489"
-Received: from gtryonx-mobl.amr.corp.intel.com (HELO [10.209.72.81]) ([10.209.72.81])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2023 06:43:39 -0700
-Message-ID: <1fee0372-3a3b-5e09-38c3-ffb3523fe195@intel.com>
-Date:   Tue, 11 Apr 2023 06:43:39 -0700
+        with ESMTP id S229491AbjDKPhs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Apr 2023 11:37:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D33619A8;
+        Tue, 11 Apr 2023 08:37:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC59162086;
+        Tue, 11 Apr 2023 15:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B22A8C433EF;
+        Tue, 11 Apr 2023 15:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681227466;
+        bh=LzNQ4sR+LJ3/3uk2+mqyCitVnuo74ey0tmvHPnc/lKs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IpAAS93/lB3z4/7MRIvqLvWGfLQHohb7nhjCRstD2yCqz3SllqPkyLUT+dFLBcHik
+         eSMufuZVyldqf8I6rdvX7WVw5NlpjT1GJuDsYzxvufQ6COOwztlOMZOnd83NVwCaG+
+         0kreWQvdSFpgQHPPE2DaMgYdQ+Zeb/r/+riDd4mJ6VKIU7DTIjqvJ2O1106DujAC60
+         8H1qsU0T4OmEdxHEViqcsb6YDl2mnPTf8sWeo7iMKoV8Z78qxVAidylq836YDiR7OU
+         n6Ynxd4hlwGkAjbCm55Hb8tfNHdCFnxw0T+s2IYcbGEdFO/0VfmqbM/9zWVfKGr0x+
+         KwC3A3Bewe3tQ==
+Date:   Tue, 11 Apr 2023 17:37:39 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230411-umarmen-mulden-c34abb9b2511@brauner>
+References: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230411104231.160837-2-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 0/5] locking: Introduce local{,64}_try_cmpxchg
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Uros Bizjak <ubizjak@gmail.com>, linux-alpha@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jun Yi <yijun@loongson.cn>
-References: <20230405141710.3551-1-ubizjak@gmail.com>
- <7360ffd2-a5aa-1373-8309-93e71ff36cbb@intel.com>
- <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ZDVGFhMwOtpxJtnQ@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230411104231.160837-2-aleksandr.mikhalitsyn@canonical.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/11/23 04:35, Mark Rutland wrote:
-> I agree it'd be nice to have performance figures, but I think those would only
-> need to demonstrate a lack of a regression rather than a performance
-> improvement, and I think it's fairly clear from eyeballing the generated
-> instructions that a regression isn't likely.
+On Tue, Apr 11, 2023 at 12:42:28PM +0200, Alexander Mikhalitsyn wrote:
+> Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+> but it contains pidfd instead of plain pid, which allows programmers not
+> to care about PID reuse problem.
+> 
+> Idea comes from UAPI kernel group:
+> https://uapi-group.org/kernel-features/
+> 
+> Big thanks to Christian Brauner and Lennart Poettering for productive
+> discussions about this.
+> 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: Luca Boccassi <bluca@debian.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Tested-by: Luca Boccassi <bluca@debian.org>
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> ---
+> v2:
+> 	According to review comments from Kuniyuki Iwashima and Christian Brauner:
+> 	- use pidfd_create(..) retval as a result
+> 	- whitespace change
+> ---
+>  arch/alpha/include/uapi/asm/socket.h    |  2 ++
+>  arch/mips/include/uapi/asm/socket.h     |  2 ++
+>  arch/parisc/include/uapi/asm/socket.h   |  2 ++
+>  arch/sparc/include/uapi/asm/socket.h    |  2 ++
+>  include/linux/net.h                     |  1 +
+>  include/linux/socket.h                  |  1 +
+>  include/net/scm.h                       | 14 ++++++++++++--
+>  include/uapi/asm-generic/socket.h       |  2 ++
+>  net/core/sock.c                         | 11 +++++++++++
+>  net/mptcp/sockopt.c                     |  1 +
+>  net/unix/af_unix.c                      | 18 +++++++++++++-----
+>  tools/include/uapi/asm-generic/socket.h |  2 ++
+>  12 files changed, 51 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> index 739891b94136..ff310613ae64 100644
+> --- a/arch/alpha/include/uapi/asm/socket.h
+> +++ b/arch/alpha/include/uapi/asm/socket.h
+> @@ -137,6 +137,8 @@
+>  
+>  #define SO_RCVMARK		75
+>  
+> +#define SO_PASSPIDFD		76
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> index 18f3d95ecfec..762dcb80e4ec 100644
+> --- a/arch/mips/include/uapi/asm/socket.h
+> +++ b/arch/mips/include/uapi/asm/socket.h
+> @@ -148,6 +148,8 @@
+>  
+>  #define SO_RCVMARK		75
+>  
+> +#define SO_PASSPIDFD		76
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> index f486d3dfb6bb..df16a3e16d64 100644
+> --- a/arch/parisc/include/uapi/asm/socket.h
+> +++ b/arch/parisc/include/uapi/asm/socket.h
+> @@ -129,6 +129,8 @@
+>  
+>  #define SO_RCVMARK		0x4049
+>  
+> +#define SO_PASSPIDFD		0x404A
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  #if __BITS_PER_LONG == 64
+> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> index 2fda57a3ea86..6e2847804fea 100644
+> --- a/arch/sparc/include/uapi/asm/socket.h
+> +++ b/arch/sparc/include/uapi/asm/socket.h
+> @@ -130,6 +130,8 @@
+>  
+>  #define SO_RCVMARK               0x0054
+>  
+> +#define SO_PASSPIDFD             0x0055
+> +
+>  #if !defined(__KERNEL__)
+>  
+>  
+> diff --git a/include/linux/net.h b/include/linux/net.h
+> index b73ad8e3c212..c234dfbe7a30 100644
+> --- a/include/linux/net.h
+> +++ b/include/linux/net.h
+> @@ -43,6 +43,7 @@ struct net;
+>  #define SOCK_PASSSEC		4
+>  #define SOCK_SUPPORT_ZC		5
+>  #define SOCK_CUSTOM_SOCKOPT	6
+> +#define SOCK_PASSPIDFD		7
+>  
+>  #ifndef ARCH_HAS_SOCKET_TYPES
+>  /**
+> diff --git a/include/linux/socket.h b/include/linux/socket.h
+> index 13c3a237b9c9..6bf90f251910 100644
+> --- a/include/linux/socket.h
+> +++ b/include/linux/socket.h
+> @@ -177,6 +177,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
+>  #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
+>  #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
+>  #define SCM_SECURITY	0x03		/* rw: security label		*/
+> +#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
+>  
+>  struct ucred {
+>  	__u32	pid;
+> diff --git a/include/net/scm.h b/include/net/scm.h
+> index 585adc1346bd..0c717ae9c8db 100644
+> --- a/include/net/scm.h
+> +++ b/include/net/scm.h
+> @@ -124,8 +124,9 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+>  				struct scm_cookie *scm, int flags)
+>  {
+>  	if (!msg->msg_control) {
+> -		if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
+> -		    scm_has_secdata(sock))
+> +		if (test_bit(SOCK_PASSCRED, &sock->flags) ||
+> +		    test_bit(SOCK_PASSPIDFD, &sock->flags) ||
+> +		    scm->fp || scm_has_secdata(sock))
+>  			msg->msg_flags |= MSG_CTRUNC;
+>  		scm_destroy(scm);
+>  		return;
+> @@ -141,6 +142,15 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+>  		put_cmsg(msg, SOL_SOCKET, SCM_CREDENTIALS, sizeof(ucreds), &ucreds);
+>  	}
+>  
+> +	if (test_bit(SOCK_PASSPIDFD, &sock->flags)) {
+> +		int pidfd;
+> +
+> +		WARN_ON_ONCE(!scm->pid);
+> +		pidfd = pidfd_create(scm->pid, 0);
+> +
+> +		put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd);
 
-Thanks for the additional context.
-
-I totally agree that there's zero burden here to show a performance
-increase.  If anyone can think of a quick way to do _some_ kind of
-benchmark on the code being changed and just show that it's free of
-brown paper bags, it would be appreciated.  Nothing crazy, just think of
-one workload (synthetic or not) that will stress the paths being changed
-and run it with and without these changes.  Make sure there are not
-surprises.
-
-I also agree that it's unlikely to be brown paper bag material.
+I know you already mentioned that you accidently missed to change this
+to not leak an fd. But just so we keep track of it see the comment to v2
+https://lore.kernel.org/netdev/20230322154817.c6qasnixow452e6x@wittgenstein/#t
