@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6406DD225
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Apr 2023 07:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461626DD228
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Apr 2023 07:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjDKFzj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Apr 2023 01:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S230031AbjDKFzk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Apr 2023 01:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjDKFzi (ORCPT
+        with ESMTP id S229745AbjDKFzi (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Apr 2023 01:55:38 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E415910CA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E32B3E6A;
         Mon, 10 Apr 2023 22:55:37 -0700 (PDT)
 Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EBD822174E48;
-        Mon, 10 Apr 2023 22:55:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EBD822174E48
+        by linux.microsoft.com (Postfix) with ESMTPSA id 11C622174E4C;
+        Mon, 10 Apr 2023 22:55:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 11C622174E4C
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1681192536;
-        bh=BUwSLsXfYVsGNrHJTEz77cf8Go462e5WitqMNoWYPGg=;
-        h=From:To:Subject:Date:From;
-        b=Rzze8DqgI69GfOLVOwx8ULBAFUUblB3YT6tCaqRndRRa5MzcTKCr6/MAIXIplBQYi
-         wOoho4UOLibP8Q96Jjjfk/Qy2CaMysxh0URsmLt2KDm4wtM4AY8BnmTQ1bgu/Xo0Pn
-         hqazn2eaTetSlZozkqtUnZL8eopNe3PFeTy8lw0w=
+        bh=sYN20W6hPtwdUe2Zl//cBVNvF4+/oIZeshaAhbV6svU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=idzwUv6Gsdkg0wnyQqpq5lQkOeM6LIXE5fuooJdMtIHc+LywW6HD5zD3UO4eknCiq
+         v+/jYfSZQZb34Coj6puOwdMHmRyFkhm35IT4ASF9xJbKdsdd2d82VeJG95k1REsFpW
+         ropd9J62LPnJs9RMsXECXs+SZJGiOqm+E+25n7MU=
 From:   Saurabh Sengar <ssengar@linux.microsoft.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
@@ -33,88 +33,62 @@ To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         mikelley@microsoft.com, linux-kernel@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
         jgross@suse.com, mat.jonczyk@o2.pl
-Subject: [PATCH v5 0/5] Hyper-V VTL support
-Date:   Mon, 10 Apr 2023 22:55:27 -0700
-Message-Id: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+Subject: [PATCH v5 1/5] x86/init: Make get/set_rtc_noop() public
+Date:   Mon, 10 Apr 2023 22:55:28 -0700
+Message-Id: <1681192532-15460-2-git-send-email-ssengar@linux.microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-15.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+In-Reply-To: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+References: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-17.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
         DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,URI_TRY_3LD,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch series introduces support for Virtual Trust Level (VTL)
-in Hyper-V systems. It provide a foundation for the implementation
-of Hyper-V VSM support in the Linux kernel, providing a secure
-platform for the development and deployment of applications.
+Make get/set_rtc_noop() to be public so that they can be used
+in other modules as well.
 
-Virtual Secure Mode (VSM) is a critical aspect of the security
-infrastructure in Hyper-V systems. It provides a set of hypervisor
-capabilities and enlightenments that enable the creation and
-management of new security boundaries within operating system
-software. The VSM achieves and maintains isolation through Virtual
-Trust Levels, which are hierarchical, with higher levels being more
-privileged than lower levels. Please refer to this link for further
-information: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/vsm
+Co-developed-by: Tianyu Lan <tiala@microsoft.com>
+Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+---
+ arch/x86/include/asm/x86_init.h | 2 ++
+ arch/x86/kernel/x86_init.c      | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-This patch series adds the initialization of the x86 platform for VTL
-systems. This also adds the VTL early bootup code for initializing
-and bringing up secondary cpus to targeted VTL context. In VTL, AP
-has to start directly in the 64-bit mode, bypassing the usual
-16-bit -> 32-bit -> 64-bit mode transition sequence that occurs after
-waking up an AP with SIPI whose vector points to the 16-bit AP
-startup trampoline code.
-
-Currently only VTL level supprted is '2'. This patch series is tested
-extensively on VTL2 systems.
-
-[V5]
-- __u64/__u16 -> u64/u16
-
-[V4]
-- Move HYPERV_VTL_MODE definition from arch/x86/Kconfig to drivers/hv/Kconfig
-- Move Kconfig changes before its getting used
-- Replace initial_stack with current->thread.sp as per recent upstream changes
-
-[V3]
- - Break in to 5 patches
- - hv_init_vp_context_t -> hv_init_vp_context
- - HYPERV_VTL -> HYPERV_VTL_MODE
- - Modify description of HYPERV_VTL_MODE
- - VTL 0 and VTL 2 -> VTL0 and VTL2
- - Remove casting for this_cpu_ptr pointer
-
-[V2]
- - Remove the code for reserve 1 IRQ.
- - boot_cpu_has -> cpu_feature_enabled.
- - Improved commit message for 0002 patch.
- - Improved Kconfig flag description for HYPERV_VTL.
- - Removed hv_result as a wrapper around hv_do_hypercall().
- - The value of output[0] copied to a local variable before returning.
-
-Saurabh Sengar (5):
-  x86/init: Make get/set_rtc_noop() public
-  x86/hyperv: Add VTL specific structs and hypercalls
-  x86/hyperv: Make hv_get_nmi_reason public
-  Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
-  x86/hyperv: VTL support for Hyper-V
-
- arch/x86/hyperv/Makefile           |   1 +
- arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
- arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
- arch/x86/include/asm/mshyperv.h    |  15 ++
- arch/x86/include/asm/x86_init.h    |   2 +
- arch/x86/kernel/cpu/mshyperv.c     |   6 +-
- arch/x86/kernel/x86_init.c         |   4 +-
- drivers/hv/Kconfig                 |  24 +++
- include/asm-generic/hyperv-tlfs.h  |   4 +
- 9 files changed, 351 insertions(+), 7 deletions(-)
- create mode 100644 arch/x86/hyperv/hv_vtl.c
-
+diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+index acc20ae4079d..88085f369ff6 100644
+--- a/arch/x86/include/asm/x86_init.h
++++ b/arch/x86/include/asm/x86_init.h
+@@ -330,5 +330,7 @@ extern void x86_init_uint_noop(unsigned int unused);
+ extern bool bool_x86_init_noop(void);
+ extern void x86_op_int_noop(int cpu);
+ extern bool x86_pnpbios_disabled(void);
++extern int set_rtc_noop(const struct timespec64 *now);
++extern void get_rtc_noop(struct timespec64 *now);
+ 
+ #endif
+diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+index 95be3831df73..d82f4fa2f1bf 100644
+--- a/arch/x86/kernel/x86_init.c
++++ b/arch/x86/kernel/x86_init.c
+@@ -33,8 +33,8 @@ static int __init iommu_init_noop(void) { return 0; }
+ static void iommu_shutdown_noop(void) { }
+ bool __init bool_x86_init_noop(void) { return false; }
+ void x86_op_int_noop(int cpu) { }
+-static __init int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
+-static __init void get_rtc_noop(struct timespec64 *now) { }
++int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
++void get_rtc_noop(struct timespec64 *now) { }
+ 
+ static __initconst const struct of_device_id of_cmos_match[] = {
+ 	{ .compatible = "motorola,mc146818" },
 -- 
 2.34.1
 
