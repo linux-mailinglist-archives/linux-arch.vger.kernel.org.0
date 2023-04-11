@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC846DE00C
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Apr 2023 17:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F786DE020
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Apr 2023 17:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjDKPxr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Apr 2023 11:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
+        id S229877AbjDKP5s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Apr 2023 11:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjDKPxm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Apr 2023 11:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7BB5FDE;
-        Tue, 11 Apr 2023 08:53:19 -0700 (PDT)
+        with ESMTP id S230339AbjDKP5q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Apr 2023 11:57:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF71DE7B;
+        Tue, 11 Apr 2023 08:57:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14C2C61F63;
-        Tue, 11 Apr 2023 15:53:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA167C433EF;
-        Tue, 11 Apr 2023 15:53:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3E462807;
+        Tue, 11 Apr 2023 15:57:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E8E7C433EF;
+        Tue, 11 Apr 2023 15:57:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681228397;
-        bh=kEGv9Qpwl20xnx3B2UscGqU7o9pj7FAf2kZu43eWHHQ=;
+        s=k20201202; t=1681228663;
+        bh=Hdp/O4sWkXQQLjlMeKKnQiGPMpZXSJyElbG/I6uZC2k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zr6rNQU3Ih2CGRLfL2hImIWXcbX1eR5t/ji6L3M1ccKZhGWtcfosKlXJCQ6iT4h8Z
-         o4/rxH4ylQdUzorXkwqtiuy2ocyFXmAxEyTRSqahnuTc2jH2O8QcXojJAjCnFNFnS9
-         qyp3BaeWzPF6OjcYbj7dgKEJ+bOX9jTgfNMIiUwAcdTKPCuG/SXRG4Ei0zjFND6ski
-         8Wtkkdr14nsjZ0IXr2bu7Z+fHHkgSFm4cPimV9oM7mMxRnUcg5jX/iqmPaTfjKPRga
-         Y3ZvY948GTgVIZwjm2yPfdfEYZ0QSNwgXaJd7kOGhPsQtMVwqnEL3TrTjnxBVyiUcn
-         jZ9KvVivi/qjg==
-Date:   Tue, 11 Apr 2023 17:53:10 +0200
+        b=BP4XJv5U6an713Mb8FIiRbB0lxcHDfKTYmY2jXC1shtmLoRge1Irdgy/ptNV98a8I
+         lFk9PJOaHivyyxrhbUbZgAVVHoppaSYiAay6XIHSpztneMBBbsRs7GOPiCJCpkQc2H
+         Y7qzqz7QVqWRykxy/ASiaq1srPlLvPz5XoaEJxIYfaVTnwiY7+IKi7nm6m6q+2REKI
+         brselQs96d9XAyH9c6t+vlfjHNyExql4aDekp77MKxJfJtX0AEQWkQkejaabyrmqjR
+         69aeeSxO2SffZyGW7iUcKG/nJ1jfVe1cJPRi7KUkEyhkOkcRH1lb9aSLE6RS/p5dpw
+         2kxqmOdYbZjvA==
+Date:   Tue, 11 Apr 2023 17:57:31 +0200
 From:   Christian Brauner <brauner@kernel.org>
 To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
@@ -44,18 +44,17 @@ Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>
-Subject: Re: [PATCH net-next v3 2/4] net: socket: add sockopts blacklist for
- BPF cgroup hook
-Message-ID: <20230411-nudelsalat-spreu-3038458f25c4@brauner>
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/4] net: core: add getsockopt SO_PEERPIDFD
+Message-ID: <20230411-pantoffeln-voreilig-208e37ba62bb@brauner>
 References: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
- <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
+ <20230411104231.160837-4-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230411104231.160837-3-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20230411104231.160837-4-aleksandr.mikhalitsyn@canonical.com>
+X-Spam-Status: No, score=-5.2 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,13 +62,9 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 12:42:29PM +0200, Alexander Mikhalitsyn wrote:
-> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
-> that bpf cgroup hook can cause FD leaks when used with sockopts which
-> install FDs into the process fdtable.
-> 
-> After some offlist discussion it was proposed to add a blacklist of
-> socket options those can cause troubles when BPF cgroup hook is enabled.
+On Tue, Apr 11, 2023 at 12:42:30PM +0200, Alexander Mikhalitsyn wrote:
+> Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
+> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 > 
 > Cc: "David S. Miller" <davem@davemloft.net>
 > Cc: Eric Dumazet <edumazet@google.com>
@@ -82,142 +77,180 @@ On Tue, Apr 11, 2023 at 12:42:29PM +0200, Alexander Mikhalitsyn wrote:
 > Cc: Christian Brauner <brauner@kernel.org>
 > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
 > Cc: Lennart Poettering <mzxreary@0pointer.de>
+> Cc: Luca Boccassi <bluca@debian.org>
 > Cc: linux-kernel@vger.kernel.org
 > Cc: netdev@vger.kernel.org
 > Cc: linux-arch@vger.kernel.org
-> Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
-> Suggested-by: Christian Brauner <brauner@kernel.org>
+> Tested-by: Luca Boccassi <bluca@debian.org>
 > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 > ---
-
-Just some background for kicks
-
-A crucial point for SO_PEERPIDFD is the allocation of a pidfd and to
-place it into the optval buffer for userspace to retrieve.
-
-The way we orginally envisioned this working is by splitting this into
-an fd and file allocation phase, then get past the point of failure in
-sockopt processing and then call fd_install(fd, pidfd_file).
-
-While looking at this I realized that there's a generic problem in this
-code:
-
-	if (level == SOL_SOCKET)
-		err = sock_getsockopt(sock, level, optname, optval, optlen);
-	else if (unlikely(!sock->ops->getsockopt))
-	        err = -EOPNOTSUPP;
-	else
-	        err = sock->ops->getsockopt(sock, level, optname, optval, optlen);
-	
-	if (!in_compat_syscall())
-	        err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname, optval, optlen, max_optlen, err);
-
-That BPF_CGROUP_RUN_PROG_GETSOCKOPT hook can fail after getsockopt
-itself succeeded. So anything that places an fd into optval risks
-leaking an fd into the caller's fdtable if the bpf hook fails.
-
-If we do a pidfd_create() and place the pidfd into the optval buffer the
-the bpf hook could reasonably interact with the fd but if it fails the
-fd would be leaked. It could clean this up calling close_fd() but it
-would be ugly since the fd has already been visible in the caller's
-fdtable. Someone might've snatched it already even.
-
-If we delay installing the fd and file past the bpf hook then the fd is
-meaningless for the bpf hook but we wouldn't risk leaking the fd.
-
-It should also be noted that the hook does a copy_from_user() on the
-optval right after the prior getsockopt did a copy_to_user() into that
-optval. This is not just racy it's also a bit wasteful. Userspace could
-try to retrieve the optval and then copy another value over it so that
-the bpf hook operates on another value than getsockopt originally placed
-into optval. If the bpf hook wants to care about fd resources in the
-future it should probably be passed the allocated struct file.
-
-This should be addressed separately though. The solution here works for
-me,
-
-Acked-by: Christian Brauner <brauner@kernel.org>
-
->  net/socket.c | 38 +++++++++++++++++++++++++++++++++++---
->  1 file changed, 35 insertions(+), 3 deletions(-)
+> v3:
+> 	- fixed possible fd leak (thanks to Christian Brauner)
+> v2:
+> 	According to review comments from Kuniyuki Iwashima and Christian Brauner:
+> 	- use pidfd_create(..) retval as a result
+> 	- whitespace change
+> ---
+>  arch/alpha/include/uapi/asm/socket.h    |  1 +
+>  arch/mips/include/uapi/asm/socket.h     |  1 +
+>  arch/parisc/include/uapi/asm/socket.h   |  1 +
+>  arch/sparc/include/uapi/asm/socket.h    |  1 +
+>  include/uapi/asm-generic/socket.h       |  1 +
+>  net/core/sock.c                         | 33 +++++++++++++++++++++++++
+>  net/socket.c                            |  7 ++++++
+>  tools/include/uapi/asm-generic/socket.h |  1 +
+>  8 files changed, 46 insertions(+)
 > 
+> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> index ff310613ae64..e94f621903fe 100644
+> --- a/arch/alpha/include/uapi/asm/socket.h
+> +++ b/arch/alpha/include/uapi/asm/socket.h
+> @@ -138,6 +138,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> index 762dcb80e4ec..60ebaed28a4c 100644
+> --- a/arch/mips/include/uapi/asm/socket.h
+> +++ b/arch/mips/include/uapi/asm/socket.h
+> @@ -149,6 +149,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> index df16a3e16d64..be264c2b1a11 100644
+> --- a/arch/parisc/include/uapi/asm/socket.h
+> +++ b/arch/parisc/include/uapi/asm/socket.h
+> @@ -130,6 +130,7 @@
+>  #define SO_RCVMARK		0x4049
+>  
+>  #define SO_PASSPIDFD		0x404A
+> +#define SO_PEERPIDFD		0x404B
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> index 6e2847804fea..682da3714686 100644
+> --- a/arch/sparc/include/uapi/asm/socket.h
+> +++ b/arch/sparc/include/uapi/asm/socket.h
+> @@ -131,6 +131,7 @@
+>  #define SO_RCVMARK               0x0054
+>  
+>  #define SO_PASSPIDFD             0x0055
+> +#define SO_PEERPIDFD             0x0056
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+> index b76169fdb80b..8ce8a39a1e5f 100644
+> --- a/include/uapi/asm-generic/socket.h
+> +++ b/include/uapi/asm-generic/socket.h
+> @@ -133,6 +133,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 3f974246ba3e..2b040a69e355 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1763,6 +1763,39 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+>  		goto lenout;
+>  	}
+>  
+> +	case SO_PEERPIDFD:
+> +	{
+> +		struct pid *peer_pid;
+> +		struct file *pidfd_file = NULL;
+> +		int pidfd;
+> +
+> +		if (len > sizeof(pidfd))
+> +			len = sizeof(pidfd);
+> +
+> +		spin_lock(&sk->sk_peer_lock);
+> +		peer_pid = get_pid(sk->sk_peer_pid);
+> +		spin_unlock(&sk->sk_peer_lock);
+> +
+> +		pidfd = pidfd_prepare(peer_pid, 0, &pidfd_file);
+> +
+> +		put_pid(peer_pid);
+
+Would be a bit nicer if this would be:
+
+	pidfd = pidfd_prepare(peer_pid, 0, &pidfd_file);
+	put_pid(peer_pid);
+	if (pidfd < 0)
+		return pidfd;
+	if (copy_to_sockptr(optval, &pidfd, len) ||
+	    copy_to_sockptr(optlen, &len, sizeof(int)))
+		return -EFAULT;
+	
+	fd_install(pidfd, pidfd_file);
+	return 0;
+
+Otherwise seems good enough to me.
+
+> +
+> +		if (copy_to_sockptr(optval, &pidfd, len) ||
+> +		    copy_to_sockptr(optlen, &len, sizeof(int))) {
+> +			if (pidfd >= 0) {
+> +				put_unused_fd(pidfd);
+> +				fput(pidfd_file);
+> +			}
+> +
+> +			return -EFAULT;
+> +		}
+> +
+> +		if (pidfd_file)
+> +			fd_install(pidfd, pidfd_file);
+> +
+> +		return 0;
+> +	}
+> +
+>  	case SO_PEERGROUPS:
+>  	{
+>  		const struct cred *cred;
 > diff --git a/net/socket.c b/net/socket.c
-> index 73e493da4589..9c1ef11de23f 100644
+> index 9c1ef11de23f..505b85489354 100644
 > --- a/net/socket.c
 > +++ b/net/socket.c
-> @@ -108,6 +108,8 @@
->  #include <linux/ptp_clock_kernel.h>
->  #include <trace/events/sock.h>
->  
-> +#include <linux/sctp.h>
-> +
->  #ifdef CONFIG_NET_RX_BUSY_POLL
->  unsigned int sysctl_net_busy_read __read_mostly;
->  unsigned int sysctl_net_busy_poll __read_mostly;
-> @@ -2227,6 +2229,36 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
->  	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
->  }
->  
-> +#ifdef CONFIG_CGROUP_BPF
-> +static bool sockopt_installs_fd(int level, int optname)
-> +{
-> +	/*
-> +	 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-> +	 * hook returns an error after success of the original handler
-> +	 * sctp_getsockopt(...), userspace will receive an error from getsockopt
-> +	 * syscall and will be not aware that fd was successfully installed into fdtable.
-> +	 *
-> +	 * Let's prevent bpf cgroup hook from running on them.
-> +	 */
-> +	if (level == SOL_SCTP) {
+> @@ -2248,6 +2248,13 @@ static bool sockopt_installs_fd(int level, int optname)
+>  		default:
+>  			return false;
+>  		}
+> +	} else if (level == SOL_SOCKET) {
 > +		switch (optname) {
-> +		case SCTP_SOCKOPT_PEELOFF:
-> +		case SCTP_SOCKOPT_PEELOFF_FLAGS:
+> +		case SO_PEERPIDFD:
 > +			return true;
 > +		default:
 > +			return false;
 > +		}
-> +	}
-> +
-> +	return false;
-> +}
-> +#else /* CONFIG_CGROUP_BPF */
-> +static inline bool sockopt_installs_fd(int level, int optname)
-> +{
-> +	return false;
-> +}
-> +#endif /* CONFIG_CGROUP_BPF */
-> +
->  /*
->   *	Set a socket option. Because we don't know the option lengths we have
->   *	to pass the user mode parameter for the protocols to sort out.
-> @@ -2250,7 +2282,7 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
->  	if (err)
->  		goto out_put;
+>  	}
 >  
-> -	if (!in_compat_syscall())
-> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
->  		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
->  						     user_optval, &optlen,
->  						     &kernel_optval);
-> @@ -2304,7 +2336,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
->  	if (err)
->  		goto out_put;
+>  	return false;
+> diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
+> index fbbc4bf53ee3..54d9c8bf7c55 100644
+> --- a/tools/include/uapi/asm-generic/socket.h
+> +++ b/tools/include/uapi/asm-generic/socket.h
+> @@ -122,6 +122,7 @@
+>  #define SO_RCVMARK		75
 >  
-> -	if (!in_compat_syscall())
-> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
->  		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
 >  
->  	if (level == SOL_SOCKET)
-> @@ -2315,7 +2347,7 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
->  		err = sock->ops->getsockopt(sock, level, optname, optval,
->  					    optlen);
+>  #if !defined(__KERNEL__)
 >  
-> -	if (!in_compat_syscall())
-> +	if (!in_compat_syscall() && !sockopt_installs_fd(level, optname))
->  		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
->  						     optval, optlen, max_optlen,
->  						     err);
 > -- 
 > 2.34.1
 > 
