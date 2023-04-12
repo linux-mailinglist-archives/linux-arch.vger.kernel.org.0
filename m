@@ -2,138 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8E06DF671
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Apr 2023 15:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445EF6DF75E
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Apr 2023 15:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjDLNFo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Apr 2023 09:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S229864AbjDLNiF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Apr 2023 09:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjDLNFn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 09:05:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9301846B1;
-        Wed, 12 Apr 2023 06:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681304743; x=1712840743;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=SIIbTWQFtQiwPFHLG3XRxl427QCGbNZPIB/wgRCV9gw=;
-  b=ImipW82lxvv7OmeYSD/zm32eB6/dUxj7Gj5E/grSNNfbFKpE9Sgp9UGA
-   24qwRQLHkl4D/dLdat0YtV/OY+2GXBTAMoExdWLlKgq5y7AozVkIxGO+Y
-   tYxgwh4H5LH28+4+MLhMaXYJ3xzxTpkrWvGKHWOmda2rsZmdkRAtEUrYa
-   IZ+6jPk4QPzN4MIfMNvsdbLHHyC0YqyVXtv3C5k5fmXrPW1Rv2DLGaidP
-   oO9/hYASxYMRha8JtTG6P6b6V3w7j9v16OXHdVN7QQBclmWRQErzNc/Zv
-   RutCD9qxnSvWsGm3DxoQwJgd1VPA3b17FLt2fDfiKTXlW7pAExDeto0OI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="332583354"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="332583354"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:03:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10678"; a="639226969"
-X-IronPort-AV: E=Sophos;i="5.98,339,1673942400"; 
-   d="scan'208";a="639226969"
-Received: from chanse1-mobl2.ger.corp.intel.com ([10.251.213.80])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2023 06:03:47 -0700
-Date:   Wed, 12 Apr 2023 16:03:45 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Johan Hovold <johan@kernel.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] serial: fix TIOCSRS485 locking
-In-Reply-To: <20230412124811.11217-1-johan@kernel.org>
-Message-ID: <1c814de8-ea36-7a63-34c2-b957d6608cec@linux.intel.com>
-References: <20230412124811.11217-1-johan@kernel.org>
+        with ESMTP id S229521AbjDLNiE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 09:38:04 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE2340F2;
+        Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id bj35so4378019qkb.7;
+        Wed, 12 Apr 2023 06:38:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681306682; x=1683898682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WWdLpuhyNb11g+2phf0ujfTe5bokf6y5zMA0DxQiBiA=;
+        b=B/jjBNSTypcC+joaCW6KBpHZMJp0zGfpqOXg+zBPIJ4NWlwYrPSMxjdSJy75T7U+3W
+         U3p3HotHjbkZlaRKmFC8qc1Afx6oeTJ5uQpH2hG5w6sceSXtWvhwqD0ty4GTJOrTqqUL
+         idO/30jacGJYN69+SVScPsn3OHD9k8oRdDeFIGHLcMZu3eu8rF9Xwdo+4T1+slcDtYsU
+         YH0NOP8VGLe82rREMYx2QH+7wkX8dWpsJjPbWWLufPzhXmFeBT9DiKG3mgcWZ9nD2lka
+         J4Q7aWlsb6BWQEoFbqY6WJkyrIjqnRCGYJf4CUJlNWaYPJ0je3GRhXlmjShv2pC79kPd
+         uijw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1681306682; x=1683898682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WWdLpuhyNb11g+2phf0ujfTe5bokf6y5zMA0DxQiBiA=;
+        b=b6gBQOYwn0iv6j28deCPgMLLksHtVWvph94bSzJdnLF+eBjV2wF3XjmJ1prFZrdHYU
+         Ac9Fa6HZR3LHWVeJhKeiBG6V1DZ8iBpipYwJVQkgDQPfWcYmKdmIe63FQ28dq99VOFgW
+         a3oxs0sgKdKVhxjubS5iuqkBkJmhLG4hgBwNQ38zte8uuroy1kajWTCk+pFqOtgQzm+y
+         Yw7sTMLu0XTVzVrjTzav8PlihjuCCwGHu9SWNQs0oL4+UjvJelfxqBwMYlhJBn9uZ74+
+         XKFGLGy7nlmcGZHZFvfYZtbWrlVlDifU/zvJaorRO5FrfPeXPMl19toEN4Ut4qiIpZQU
+         R7bA==
+X-Gm-Message-State: AAQBX9dmLvbkbOCHa4I7kp452wdamYNpIBB1ZuEgl0I08sBI5+YjTpIL
+        UuYqCkyVnuicMXHfpa4M+Y11A4uSHw/Pvk9zUYM=
+X-Google-Smtp-Source: AKy350bQZX93U7KKOQF4PJTiOvTycKd+ntmsVru9e/foHUOInkoawqILTSPuq4LXHeg8osg4IFMokyT1/kYfdkvFekQ=
+X-Received: by 2002:a05:620a:4482:b0:746:83cd:8d1d with SMTP id
+ x2-20020a05620a448200b0074683cd8d1dmr2165203qkp.6.1681306681702; Wed, 12 Apr
+ 2023 06:38:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1754916380-1681304629=:2300"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230405141710.3551-1-ubizjak@gmail.com> <20230405141710.3551-4-ubizjak@gmail.com>
+ <20230412113231.GA628377@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230412113231.GA628377@hirez.programming.kicks-ass.net>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Wed, 12 Apr 2023 15:37:50 +0200
+Message-ID: <CAFULd4aCNNcyQm3Av+KkWVXuU9Cb0G5H5cFmqVR_T5LwCW=YJA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] locking/arch: Wire up local_try_cmpxchg
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, linux-arch@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jun Yi <yijun@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Wed, Apr 12, 2023 at 1:33=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> On Wed, Apr 05, 2023 at 04:17:08PM +0200, Uros Bizjak wrote:
+> > diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/as=
+m/local.h
+> > index bc4bd19b7fc2..45492fb5bf22 100644
+> > --- a/arch/powerpc/include/asm/local.h
+> > +++ b/arch/powerpc/include/asm/local.h
+> > @@ -90,6 +90,17 @@ static __inline__ long local_cmpxchg(local_t *l, lon=
+g o, long n)
+> >       return t;
+> >  }
+> >
+> > +static __inline__ bool local_try_cmpxchg(local_t *l, long *po, long n)
+> > +{
+> > +     long o =3D *po, r;
+> > +
+> > +     r =3D local_cmpxchg(l, o, n);
+> > +     if (unlikely(r !=3D o))
+> > +             *po =3D r;
+> > +
+> > +     return likely(r =3D=3D o);
+> > +}
+> > +
+>
+> Why is the ppc one different from the rest? Why can't it use the
+> try_cmpxchg_local() fallback and needs to have it open-coded?
 
---8323329-1754916380-1681304629=:2300
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Please note that ppc directly defines local_cmpxchg that bypasses
+cmpxchg_local/arch_cmpxchg_local machinery. The patch takes the same
+approach for local_try_cmpxchg, because fallbacks are using
+arch_cmpxchg_local definitions.
 
-On Wed, 12 Apr 2023, Johan Hovold wrote:
+PPC should be converted to use arch_cmpxchg_local (to also enable
+instrumentation), but this is not the scope of the proposed patchset.
 
-> The RS485 multipoint addressing support for some reason added a new
-> ADDRB termios cflag which is (only!) updated from one of the RS485
-> ioctls.
-> 
-> Make sure to take the termios rw semaphore for the right ioctl (i.e.
-> set, not get).
-> 
-> Fixes: ae50bb275283 ("serial: take termios_rwsem for ->rs485_config() & pass termios as param")
-> Cc: stable@vger.kernel.org	# 6.0
-> Cc: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
-> 
-> I did not have time to review the multipoint addressing patches at the
-> time and only skimmed the archives now, but I can't seem to find any
-> motivation for why a precious termios bit was seemingly wasted on ADDRB
-> when it is only updated from the RS485 ioctls.
-> 
-> I hope it wasn't done just to simplify the implementation of
-> tty_get_frame_size()? Or was it a left-over from the RFC which
-> apparently actually used termios to enable this feature?
-
-No. I made it intentionally. It felt natural place for storing it because 
-ADDRB does impact the wire format and cflag is where other wire-format 
-impacting bits are also stored.
-
-> Should we consider dropping the Linux-specific ADDRB bit again?
-> 
-> Johan
-> 
-> 
->  drivers/tty/serial/serial_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> index 2bd32c8ece39..728cb72be066 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -1552,7 +1552,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->  		goto out;
->  
->  	/* rs485_config requires more locking than others */
-> -	if (cmd == TIOCGRS485)
-> +	if (cmd == TIOCSRS485)
->  		down_write(&tty->termios_rwsem);
->  
->  	mutex_lock(&port->mutex);
-> @@ -1595,7 +1595,7 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
->  	}
->  out_up:
->  	mutex_unlock(&port->mutex);
-> -	if (cmd == TIOCGRS485)
-> +	if (cmd == TIOCSRS485)
->  		up_write(&tty->termios_rwsem);
->  out:
->  	return ret;
-> 
-
-Indeed, the caps are so blinding.
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
--- 
- i.
-
---8323329-1754916380-1681304629=:2300--
+Uros.
