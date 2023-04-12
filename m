@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D486DF859
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Apr 2023 16:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35236DF88A
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Apr 2023 16:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbjDLOZA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Apr 2023 10:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
+        id S231521AbjDLOcZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Apr 2023 10:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjDLOY7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 10:24:59 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021015.outbound.protection.outlook.com [52.101.57.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3184D183;
-        Wed, 12 Apr 2023 07:24:58 -0700 (PDT)
+        with ESMTP id S230211AbjDLOcY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 10:32:24 -0400
+Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021021.outbound.protection.outlook.com [52.101.62.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692D810C0;
+        Wed, 12 Apr 2023 07:32:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mqUcKLIVfGkhqZeFlJ4YstsIn6vb86fJ0tpcWrayRyx4cpMecHbjyYd4cUl8z0PfIYhVNWoxPwARyjjaaECGjJ+3zGZBLedHPWzRjeKl8a77D8ytSVn0pQSoLDKui0Va+Xhm0zm5tt3Zd8Bszj/OV0wgo3FtWDwVFq7vL1xlT3VTwrb+ad9tW6xEEHR9FK5jTsRnpfjJU5+/T7TLofXYFgUb5Ne9fSYG41AWeM9BhREq7w5a7XhYg81U0ousTAY3BRz5/70fIIgDX3l+wK6OAIUwUlY61D7gxPiGJ5V4kM7cRrtLuE2pcKBktV+CE2mnhE7yaHp6Puev7fNpjkHMCg==
+ b=MvIG6ItK3xbl+eFMJhk8pUEdl4xC8gxhjPAhSMke7PzrlWelulI8LLAv/4bInQPkjwnsXLY04Cm+eeCzglhHf3QUArn+8voi2e6Bz/TjRjg2QtehBtQAV8Nh63ADSJVuUQJS3rnSz4zcW9DVtL1hc6eBkpyftVNUAv3ybeIp4XAtnP4ftxFccHgQGg053rVrc7mgqG4HsQE0biyIPO+y2Fwr006kdSNYFpoixqMPlS7cvliDDl14VOz6Qr8G0XZ2RTZXkAqZMlw9ILYQ/x0EHmteBxRGqDAwYMvD2f4Cl1Ptx6HC9aOD66yiYbSjLSgmdo0EEVfa5cJM6NjgYmzcXw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jZ9WeeDGqRc0cywUe/RtAAJDCw6s/FJoU0+ZlOKH99c=;
- b=Oef3yH0+2ODdG8Qk1jFteWF1ttDVGEh23JocZtHYjEbagv/NoHgUokH1VRFpAuJyr+9Kt4Sqir9iTXNLHFluQhv1ijSAaGcBxTz4AN+Xuanr8+/P9+MahuDywBM+p3DmdwKcdFM2whFth4CtmiscoW0AdeTLd9K8DYnZFZSR5lMNAamL/yl50ZQnw0Dk7nZ75Pz7LyusJfAmfxO2Eg5nSNpOuwOBtylaMx7Eoh+1V2FHxGtL78ly52lNza4Y4EZIM6gOifnJU5txXW6Tsk1UpCTwgxLBDCDN5lKJ3pPVWZjFpx/I6ygJXY9+3t5yeIxsE2NtxtLpvGSAgtjGCPgjqg==
+ bh=82J2yBwDtd+iYQ+ywXRpFlgELpnhOVK8KiJKapbXo9w=;
+ b=MoAoLripP9/fHMAFGvW1rz1ulLlz1HdZY2BhX4p8l0DffMOt1d8mtDVO5og/yQ+Clv2cob5wSfD+hmAKeWovERnPKKinrH0jjv9go9yODFDFwCsefXL7PPpot4BlFv4l1xT4MpfiTaXtIuRQihUxJIYh2AYiDgsgk6SO3pRGUQZaE8hDfh9DNyY+5/4Y+owQTkGhCtEPEWDxJq2p2+Asffc91yZhm6xLL7aOQD05alh0q9ult1zd0zKbMGG/1DNNsyn5Hvxcho2aAz9sFdIcemR4PWsM/8x0v7+Ykc6oT+Bx5nU8wsDFguA0NN1tcTUTkrxqL3v5PMr96y1InotJ+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jZ9WeeDGqRc0cywUe/RtAAJDCw6s/FJoU0+ZlOKH99c=;
- b=h2NlDYK5eQcrpvLQ9WBmgHhmikh8WmHaHjl5G2i9E98sASqfMHRbwbCAjJHpT6r37hiYdOKS03MbW5hY9JCWwg6vK2iHHPzS1FWpBhzRswVAWNqIkMzqxu6h3tNslOxcnppGtXaJEaM7oMeLi/Rl8f6vdevAGLTfDfGr4CjmzkE=
+ bh=82J2yBwDtd+iYQ+ywXRpFlgELpnhOVK8KiJKapbXo9w=;
+ b=Sf2Nz12N8KOhUSDq6m1+v6sFlwsUIcNzguAt97toneeNizMyjZvCM790VOTmOTrELxkUlymAy/lGwSPcxR8I7vG4jEXEiHRvTM+x5453tfHbmzZHt8xCtGCAY3LMscjqp9qDeUPiuWJStRTyM+AEcrAaxZNscrdZgQg9IZ9GqZw=
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
  by DM4PR21MB3584.namprd21.prod.outlook.com (2603:10b6:8:a4::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.3; Wed, 12 Apr
- 2023 14:24:43 +0000
+ 2023 14:32:19 +0000
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6319.004; Wed, 12 Apr 2023
- 14:24:42 +0000
+ 14:32:19 +0000
 From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         "luto@kernel.org" <luto@kernel.org>,
@@ -68,7 +68,6 @@ To:     Tianyu Lan <ltykernel@gmail.com>,
         "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
         "michael.roth@amd.com" <michael.roth@amd.com>,
         "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
         "sterritt@google.com" <sterritt@google.com>,
         "tony.luck@intel.com" <tony.luck@intel.com>,
         "samitolvanen@google.com" <samitolvanen@google.com>,
@@ -78,73 +77,73 @@ CC:     "pangupta@amd.com" <pangupta@amd.com>,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V4 03/17] x86/hyperv: Set Virtual Trust Level in VMBus
- init message
-Thread-Topic: [RFC PATCH V4 03/17] x86/hyperv: Set Virtual Trust Level in
- VMBus init message
-Thread-Index: AQHZZlP0wCLp2n3CnUG8320w9R7z3a8nw8cA
-Date:   Wed, 12 Apr 2023 14:24:41 +0000
-Message-ID: <BYAPR21MB1688C9F78B11DA2FC7A5AAFFD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: RE: [RFC PATCH V4 06/17] x86/hyperv: decrypt VMBus pages for sev-snp
+ enlightened guest
+Thread-Topic: [RFC PATCH V4 06/17] x86/hyperv: decrypt VMBus pages for sev-snp
+ enlightened guest
+Thread-Index: AQHZZlP4KhAtAWHoZ0CkaGoCwKH4eq8nyLrA
+Date:   Wed, 12 Apr 2023 14:32:18 +0000
+Message-ID: <BYAPR21MB16882B5A167C985B516B6E5FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
 References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-4-ltykernel@gmail.com>
-In-Reply-To: <20230403174406.4180472-4-ltykernel@gmail.com>
+ <20230403174406.4180472-7-ltykernel@gmail.com>
+In-Reply-To: <20230403174406.4180472-7-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d6cd17f3-468a-49a0-8e34-abc05234cbf2;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-12T14:08:12Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=659b0fb6-da3b-4d19-9530-638611e9ba06;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-12T14:25:55Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DM4PR21MB3584:EE_
-x-ms-office365-filtering-correlation-id: 1290295d-80bf-4b5e-db42-08db3b61a7eb
+x-ms-office365-filtering-correlation-id: 0bd57b9c-1d9d-4e3d-f276-08db3b62b86e
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zIQa8a7ilLgBVTlpve3rf9OY33fTnIJ/G+zVQs3hC1GrZ73RsjMFPJPzVERkB5+HTt/L1GZDHsHK26GxXYvrw2naVVekivP1f3jeU/JG7c1JVUe7s66KIbhs/mQnZm8B1I9YxoLepk+X11sOnBa/1PU6odEWjHZ5Bol5PiswMWTWtSIUB9y5l6PE2OH/FHDXNS6EvRHhqFTnSeMxKvhKk8oXOuR+pbjNBhNSvrJ6bdPQeuV7Hg9lrEbJyAMgG4UDyLiQZNgcH2C5Wpg2DXLN79pxX9sn2XMvjs5nKC7di3/cNrbDHrlJpiTgNqjXs2IieizsSG2LWAl8h+ETOFGNiEOWDDDWbX+kB0OebpCIzx4tkk60r9xRX9A05I6ud9Dgw5/n29FcUagkfwfM4FvuonxKSf87j8r2t6j8KF8qfZKqhN9QNzQLKJiNcAaZRKbtsuMegGDuMrmhGpn/Jbb6drXz/UQdJ7sM2rKg/nxu/pl+IwHjIT15pA26wD3SKyFn9taE/S3s0oFmK6ArnHmIiRuN4f/kqbGVP3D+FChDC8wO4/KmNgOudqPTXRvQCcrVZ2GG7GUHYMlHlGwBCY+iFfYGOB1+K4/5/hwsYGnNIl4stU697qEuNdEFaBxIK7cTnrvAtLRFIRWwfJCe7snUJRBd1ydx1EfwYJI6i2Oex56Z/DAuA5oZXgPycAuH9UWo
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199021)(10290500003)(54906003)(786003)(316002)(110136005)(478600001)(83380400001)(186003)(33656002)(55016003)(26005)(6506007)(9686003)(122000001)(38100700002)(921005)(38070700005)(86362001)(82950400001)(82960400001)(71200400001)(7696005)(8990500004)(41300700001)(64756008)(76116006)(66476007)(66556008)(4326008)(8676002)(66446008)(66946007)(15650500001)(5660300002)(7406005)(7416002)(2906002)(8936002)(52536014);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: LnLlxwGGKRPsURK/EKv3n34cPO5pbGuaVtfC4E5n7cIPMHvjdeNEpcIz0o6akwNosi5KZthxmVHtuxhwacbIAymJFjrgJ0Vc9Gs0FVb/92x3WjcsFx9G0Di0i4aKeWDz0QbwKT2C+g/USgy+7Jzc6/+1+/P9rQT6Qg+5z4OqyGC4igO7T+4o0UoKbalIUFYSyiAgWKRf+3ed2knk7uNrWWldMF7G+j6Z5HHbMEGa89tpJfLRrsg7GqMWs419aq3UXW+VSa7gPfJ4XH3jmjaGhEbo9GSt9kj1PVP5bPI6qrJqu/mQpY1QUyoEhCYtim7fPpco3FnNvCXK7GX2p1qReA5lgrpBHikg3jaNOWRQedJMsYfcvKFoKh1bSjU6yEz1d+2NQ9m0SJrrO4sZFyvNefsGCRLQFpwvxffDcPzRr4canKy5HY2b3CrALyJw8z04XH+NGjHab3Rz038qVSspJi474cR4Lx8fE3aq6VWeRFqWGOX59PVkZBJ1aundvBVuI9HoL1LVP2ty5cYzRVcE83Nf+3kRJM/wZ/MCsAXhHOR4+QOal1omuiWykdxcZVhHjehWRzH2i19zcrhGPiNNq7DWkhTvJHU77Ovaj1sooMjPS6Y9zeWkt8KUgIphWAT3uH4+FGH5AVtPCOLHlUS/o1jynndeJ0o6MBqJoOuBW5t0To9xhCe+4sH5+zn+a22Q
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199021)(10290500003)(54906003)(786003)(316002)(110136005)(478600001)(83380400001)(186003)(33656002)(55016003)(26005)(6506007)(9686003)(122000001)(38100700002)(921005)(38070700005)(86362001)(82950400001)(82960400001)(71200400001)(7696005)(8990500004)(41300700001)(64756008)(76116006)(66476007)(66556008)(4326008)(8676002)(66446008)(66946007)(5660300002)(7406005)(7416002)(2906002)(8936002)(52536014);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EnI7puF4l0bN1XFJEdmew+gUMi9hYWTUJVDSPOqE4okrWs6CmHp/wMl/Pa3B?=
- =?us-ascii?Q?58sNxXvrj2bq5m9slN7pdZkGedKMsDMdTdp4SahoaONvxp8NZQkjEwL4c37d?=
- =?us-ascii?Q?eb/SFURaJ5+9IBsiEDXbTnCJc/nKFFL1HlwiW1JhAstO9e6s+2Law3uhPcEg?=
- =?us-ascii?Q?YzheiYF09z8d0nVy4JBhfO3SO0iQ1T54OSC5ij54/jA9/Hh2fh6XFZLW6yJ0?=
- =?us-ascii?Q?aS0bkuRDUQ5oOLjSLPJdA8D+Yxk9Rvaetp/PlF0EDKez5vzdBMvR/iOp4IoP?=
- =?us-ascii?Q?4XsRHGv97ja+yAcjOONx/zQf7FUd1TG6cFp/oFddT+4c+kiYQXcvuGtfgK0/?=
- =?us-ascii?Q?2HeQXbKXVqjZ4Qdl3Y5wI7Q5a+U2+KdzDTpy0gseEgRBOiYSZL/TmEGcqA3J?=
- =?us-ascii?Q?p1kohuL4g5KZNje7e0yezzi/aae1XumYwEgPZ9iOTBzGIRrBL0N10CEksZB9?=
- =?us-ascii?Q?V3UGVkAdHDed4sr1bMOVBELI6KqnHcNqGBsqMRP0pI2AEJJZUdy/oZbbl526?=
- =?us-ascii?Q?fOYYt8Gh/XRvzfdiLPC2KlpYFoMllzByZKh0FlsygEJmA2YLV/anWL9GVYl2?=
- =?us-ascii?Q?EyReeULnEZR0fzehJDxt9cZz0nrX1aADlXesjSd7WOjI9YuzHQW7crmlY/6E?=
- =?us-ascii?Q?k9mVPuXvrjc2FnilN+atVMUhxQjBlfl0FOkL9Rey6QAl0xtQOdFgOudwfAXJ?=
- =?us-ascii?Q?qpgi0iG89rrLYUqHRyfj2vRYqwj+zLDTVgLCXobvdxr5LiHi28eOTLtlyF5j?=
- =?us-ascii?Q?A1jjOmcMSzdLHlIhV1TR7RngBOPwb3bCyKwc7N6lbtdtfSyM9GJ5olQjjq6e?=
- =?us-ascii?Q?ZaQsD9GtwosuRF1mH906x4xrp0ft6KT9grixgP1sx/KVe6ZMOfz/rcnfm3fA?=
- =?us-ascii?Q?OKMxd0jST+UwM4DOXl55Iqnge1D/kKcQ5Rm2eDUbylrg/o0fLbNQfowsvKwG?=
- =?us-ascii?Q?hNWZPpmMId6smvnbBItFA+GcWijKOUzsXFRzy5/Eh30Osf8eJd6JUQuf4r7G?=
- =?us-ascii?Q?IGHbG/apdpU4JMAiUyA85VVkLkwBCMLdReoTf63+Rv61mCeiVcx2G1sSvbt7?=
- =?us-ascii?Q?06GzxcxUHtzDjCfwHYsgd3A0xk3m91NqvCXVRe7fQBh6lwpjDqNnRNOMygrh?=
- =?us-ascii?Q?jFazvUVDpkeGgzcMAKn5rKYr+E0GNJjt7M5YNvgs67uiIm1qdofNlBVUxDif?=
- =?us-ascii?Q?ZdpWAiESdGx5bIcyaFaPvOksKhXq8cgkO2U/7VChw3XWCTq4BFBNHQowhl+T?=
- =?us-ascii?Q?kS1iShgyd6Hik4oT50W2jPW+vFNggmfLkv6BgNgxRLwu+4GODjFno0S30IOD?=
- =?us-ascii?Q?JT9hAP8lQVzOHHQ4N8FUYov1Rh5TOvASLtSCZvVjj/MHuW57eiRIiGlvf78M?=
- =?us-ascii?Q?261qzyFQ1BkM4pDlNPugwjwHs4Rcb6BqdgtRqDMF08D/eqDsv4swuQrgml4f?=
- =?us-ascii?Q?jXdMw+izOFrTAg5K8t9FwWwOwfGQEJI9ktA9aNinMWqWtsLOCPv5foTTOaKE?=
- =?us-ascii?Q?P2TFQ5Q1i3awuwwOLIYyvPBi7idmVgg5bW99uxCigM+HsPONLJy0XB9UN22X?=
- =?us-ascii?Q?wAjsDE7ciPkKSUac9hpuvHqjWDn8CbBfKgIssHjytmTVXsAhT9I3bB3+HL9u?=
- =?us-ascii?Q?DQ=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?BU61NWykFoP+fatcF2oAH63XjNSHEjub6j4uliA7k5lsbwBAhDex84JQ3QAz?=
+ =?us-ascii?Q?qHb1bTpn8kYrdJV8iVOMbd8Yc4xRMdWn6gDiTytIPVHmwqIxIFrYeXYW5x0M?=
+ =?us-ascii?Q?xlo1hwzOHQdf5FiBjgWhNTGJ9iNRZUrA3vYbQ5iQCSEO8OITDCwQkrZgoYLQ?=
+ =?us-ascii?Q?7r4bBF0dXL05XMEuTMoWddnsaBW2yLx+KZ4plzPtXeLf6XSRqGwFSpCrdZbZ?=
+ =?us-ascii?Q?n234VjrrXyA+rdqsPtvCUoz5G4YS2mmXtFLxPK8rlK9kQoEwyf9EZ46WgimR?=
+ =?us-ascii?Q?+zvVW3ywPWomzlNm8hzHBy392pT90amiYFf7IdXc75qdGQnE2lTa8BvmFUSq?=
+ =?us-ascii?Q?56E2IcPXn9Wx1UhpJSQOx//IypuLPo/250vnLjeRWGfUZ7yMaecEoZSLxUs0?=
+ =?us-ascii?Q?HSX5s8babJwEfqKYl/9cwRR7n6AHOXozImYRj7kRu40lMgVGmUtsNyamQPKs?=
+ =?us-ascii?Q?VCZ+bP00zZdaeqBRnNLhlZaIogM7pOcPcaHXacCWIuvW50CuOKY6pmYFviQL?=
+ =?us-ascii?Q?uKOtyNb6oMq2SUaS311dCN2676txmrqpnbbxSjIrpvylruggD4E6IA7tg0rC?=
+ =?us-ascii?Q?sMnSUzBrpplpEyLJp50/y+IU55xdM03V0Xh+sD2hbvYgUc0PaM8Lfe0ezjoz?=
+ =?us-ascii?Q?xbbJQACrHDBg0foOQY9zPDSq1bw5DYAZqMrWAuouoVTKLn9Vjv2du9yMfHh8?=
+ =?us-ascii?Q?0/DBP9WbLDJbjORliOAir3VvEXgS7FMwlfeKJu2I2+JnBQ2EPnqDEwB3jMOL?=
+ =?us-ascii?Q?plTtRAx68+SLZNwFAXnvK7h4/xrrCBaZyDkT+4U+aoRYoW+2YmZ37Zp+wDKI?=
+ =?us-ascii?Q?yz1rvPhPUuibQHszTT5NY4+d/i7EKdlFNccHyjzOecrMQWN4EOPlVuijL1iC?=
+ =?us-ascii?Q?z5cHEJHDsHQoe5Hp0xCbGJJ7u0yfgBX8kQ5DOIMcdJ7YCrICv2aBEHE+kpWC?=
+ =?us-ascii?Q?yYQx0gO+DsQ34RwAHROeXo9DecVnQpBWehgPycIoSD/nCPMY7LS0r2o7NQES?=
+ =?us-ascii?Q?2y35kZQFXNdDARsbo5Z7GoJTdsRj/IRQOb9xin68QJ5c0fnW1M67rCw2N4D7?=
+ =?us-ascii?Q?X03bD8+qSmDqUHtou7ZhACDvhFvX2Z/5iqjw5lemOeqViGOqK9zoANoawnYN?=
+ =?us-ascii?Q?aBwIEWcCzpO2V37UFSL4LW+a9Ldq0+Vx9tWYa0Lo5FH+1TYxRUXIoVicWYwA?=
+ =?us-ascii?Q?KFDvscD982wRLh9IXNHhmB9KjttzIXYG1oaGZnUHKJdbZbHWBuXwMEtJJE7v?=
+ =?us-ascii?Q?2XH2ZlHkzH6dt0RkgOC6+o+1yaJKyATusGZmt4RVOOIsQMvEmZABo5zUlcC5?=
+ =?us-ascii?Q?ddFFvYBL7hlo4QnMJD0ux5T3kU32W1yNLkhMxw2enw+wDxmzsgQ/kEWsNNzx?=
+ =?us-ascii?Q?NUMTtbxE3i+DpuMh3qwXv68o2NF4MDr3jL7qNoyicogpdRUwBMHcTaCbrh8q?=
+ =?us-ascii?Q?YmdEutB3E95Ylh98HQ1BfVXloQf2/oGSbYMuK/8iEZJouXwrAY6mKyrZBX38?=
+ =?us-ascii?Q?BwpwQWiOgirICSfrW0QGZiXWGtakwY5Ppn9ExZKQsUlbaLfl2TPKuXhDDMSs?=
+ =?us-ascii?Q?i+jYk6wuWXNDLIH1ydh+jqDWVqe0oD8G0itJWVUA6ATm4bEc73BO06LgiPb1?=
+ =?us-ascii?Q?nA=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1290295d-80bf-4b5e-db42-08db3b61a7eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 14:24:41.8122
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bd57b9c-1d9d-4e3d-f276-08db3b62b86e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 14:32:19.0039
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kEC8YMpPyFFaT9On6vO/Kl+uyB2wztvYRq3P9H9pVE0bkyUHN2xah+7sKKgFvdBFWdap+UNDWQaXmt1V+J9ZfuF5DdEMkrfPa4+Pdo8nFMc=
+X-MS-Exchange-CrossTenant-userprincipalname: VWniapfn0FWUu6+0k0kiNe7aPI2yEhk1at4R5JS2t5NFw9u4pjaqwotkrqlch5yqp9KmL9PurUEeH5+vjYsREECsXvQtLAouNa7jKDVoKCo=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3584
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -157,176 +156,116 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, April 3, 2023 10:44 AM
 >=20
-> sev-snp guest provides vtl(Virtual Trust Level) and
-> get it from hyperv hvcall via HVCALL_GET_VP_REGISTERS.
-> Set target vtl in the VMBus init message.
+
+The Subject prefix for this patch is still wrong.  I previously commented o=
+n
+this. :-(   It should be Drivers: hv: vmbus:=20
+
+
+> VMBus post msg, synic event and message pages are shared
+> with hypervisor and so decrypt these pages in the sev-snp guest.
 >=20
 > Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 > ---
-> Change since RFC v3:
->        * Use the standard helper functions to check hypercall result
->        * Fix coding style
+> Change since RFC V3:
+>        * Set encrypt page back in the hv_synic_free()
 >=20
-> Change since RFC v2:
->        * Rename get_current_vtl() to get_vtl()
->        * Fix some coding style issues
+> Change since RFC V2:
+>        * Fix error in the error code path and encrypt
+>        	 pages correctly when decryption failure happens.
 > ---
->  arch/x86/hyperv/hv_init.c          | 36 ++++++++++++++++++++++++++++++
->  arch/x86/include/asm/hyperv-tlfs.h |  7 ++++++
->  drivers/hv/connection.c            |  1 +
->  include/asm-generic/mshyperv.h     |  2 ++
->  include/linux/hyperv.h             |  4 ++--
->  5 files changed, 48 insertions(+), 2 deletions(-)
+>  drivers/hv/hv.c | 42 +++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 41 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index 9f3e2d71d015..7602db5ad4aa 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -384,6 +384,40 @@ static void __init hv_get_partition_id(void)
->  	local_irq_restore(flags);
->  }
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index 008234894d28..e09cea8f2f04 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/interrupt.h>
+>  #include <clocksource/hyperv_timer.h>
+>  #include <asm/mshyperv.h>
+> +#include <linux/set_memory.h>
+>  #include "hyperv_vmbus.h"
 >=20
-> +static u8 __init get_vtl(void)
-> +{
-> +	u64 control =3D HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-> +	struct hv_get_vp_registers_input *input;
-> +	struct hv_get_vp_registers_output *output;
-> +	u64 vtl =3D 0;
-> +	u64 ret;
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	input =3D *(struct hv_get_vp_registers_input **)this_cpu_ptr(hyperv_pcp=
-u_input_arg);
-
-The cast to struct hv_get_vp_registers_input isn't needed here.  Just do:
-
-	input =3D *this_cpu_ptr(hyperv_pcpu_input_arg);
-
-I know we have other code that references hyperv_pcpu_input_arg with a more
-complicated code sequence, but it's really not necessary.  At some point, w=
-e
-should go back and clean those up, but let's not add any new cases. :-)
-
-
-> +	output =3D (struct hv_get_vp_registers_output *)input;
-> +	if (!input) {
-> +		local_irq_restore(flags);
-> +		goto done;
-> +	}
-> +
-> +	memset(input, 0, sizeof(*input) + sizeof(input->element[0]));
-
-Use struct_size() to calculate the size of a structure plus a trailing
-variable size array.
-
-> +	input->header.partitionid =3D HV_PARTITION_ID_SELF;
-> +	input->header.vpindex =3D HV_VP_INDEX_SELF;
-> +	input->header.inputvtl =3D 0;
-> +	input->element[0].name0 =3D HV_X64_REGISTER_VSM_VP_STATUS;
-> +
-> +	ret =3D hv_do_hypercall(control, input, output);
-> +	if (hv_result_success(ret))
-> +		vtl =3D output->as64.low & HV_X64_VTL_MASK;
-> +	else
-> +		pr_err("Hyper-V: failed to get VTL!");
-
-Let's include the hypercall status in the failure message.  If a failure ev=
-er
-happens, we will really want to know what that status is.  :-)
-
-> +	local_irq_restore(flags);
-> +
-> +done:
-> +	return vtl;
-> +}
-> +
->  /*
->   * This function is to be invoked early in the boot sequence after the
->   * hypervisor has been detected.
-> @@ -512,6 +546,8 @@ void __init hyperv_init(void)
->  	/* Query the VMs extended capability once, so that it can be cached. */
->  	hv_query_ext_cap(0);
+>  /* The one and only */
+> @@ -117,7 +118,7 @@ int hv_post_message(union hv_connection_id connection=
+_id,
 >=20
-> +	/* Find the VTL */
-> +	ms_hyperv.vtl =3D get_vtl();
->  	return;
+>  int hv_synic_alloc(void)
+>  {
+> -	int cpu;
+> +	int cpu, ret;
+>  	struct hv_per_cpu_context *hv_cpu;
 >=20
->  clean_guest_os_id:
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hy=
-perv-tlfs.h
-> index b4fb75bd1013..3d3f014976e8 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -301,6 +301,13 @@ enum hv_isolation_type {
->  #define HV_X64_MSR_TIME_REF_COUNT	HV_REGISTER_TIME_REF_COUNT
->  #define HV_X64_MSR_REFERENCE_TSC	HV_REGISTER_REFERENCE_TSC
->=20
-> +/*
-> + * Registers are only accessible via HVCALL_GET_VP_REGISTERS hvcall and
-> + * there is not associated MSR address.
-> + */
-> +#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
-> +#define	HV_X64_VTL_MASK			GENMASK(3, 0)
+>  	/*
+> @@ -168,9 +169,39 @@ int hv_synic_alloc(void)
+>  			pr_err("Unable to allocate post msg page\n");
+>  			goto err;
+>  		}
 > +
->  /* Hyper-V memory host visibility */
->  enum hv_mem_host_visibility {
->  	VMBUS_PAGE_NOT_VISIBLE		=3D 0,
-> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-> index f670cfd2e056..e4c39f4016ad 100644
-> --- a/drivers/hv/connection.c
-> +++ b/drivers/hv/connection.c
-> @@ -98,6 +98,7 @@ int vmbus_negotiate_version(struct vmbus_channel_msginf=
-o *msginfo, u32 version)
->  	 */
->  	if (version >=3D VERSION_WIN10_V5) {
->  		msg->msg_sint =3D VMBUS_MESSAGE_SINT;
-> +		msg->msg_vtl =3D ms_hyperv.vtl;
->  		vmbus_connection.msg_conn_id =3D VMBUS_MESSAGE_CONNECTION_ID_4;
->  	} else {
->  		msg->interrupt_page =3D virt_to_phys(vmbus_connection.int_page);
-> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyper=
-v.h
-> index afcd9ae9588c..f91fb06634f0 100644
-> --- a/include/asm-generic/mshyperv.h
-> +++ b/include/asm-generic/mshyperv.h
-> @@ -48,6 +48,7 @@ struct ms_hyperv_info {
->  		};
->  	};
->  	u64 shared_gpa_boundary;
-> +	u8 vtl;
->  };
->  extern struct ms_hyperv_info ms_hyperv;
->  extern bool hv_nested;
-> @@ -58,6 +59,7 @@ extern void * __percpu *hyperv_pcpu_output_arg;
->  extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputadd=
-r);
->  extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
->  extern bool hv_isolation_type_snp(void);
-> +extern bool hv_isolation_type_en_snp(void);
-
-Why is this extern added as part of this patch?  There are not any new
-references to hv_isolation_type_en_snp() that would need it.
-
+> +		if (hv_isolation_type_en_snp()) {
+> +			ret =3D set_memory_decrypted((unsigned long)
+> +				hv_cpu->synic_message_page, 1);
+> +			if (ret)
+> +				goto err;
+> +
+> +			ret =3D set_memory_decrypted((unsigned long)
+> +				hv_cpu->synic_event_page, 1);
+> +			if (ret)
+> +				goto err_decrypt_event_page;
+> +
+> +			ret =3D set_memory_decrypted((unsigned long)
+> +				hv_cpu->post_msg_page, 1);
+> +			if (ret)
+> +				goto err_decrypt_msg_page;
+> +
+> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
+> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
+> +			memset(hv_cpu->post_msg_page, 0, PAGE_SIZE);
+> +		}
+>  	}
 >=20
->  /* Helper functions that provide a consistent pattern for checking Hyper=
--V hypercall status. */
->  static inline int hv_result(u64 status)
-> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-> index bfbc37ce223b..1f2bfec4abde 100644
-> --- a/include/linux/hyperv.h
-> +++ b/include/linux/hyperv.h
-> @@ -665,8 +665,8 @@ struct vmbus_channel_initiate_contact {
->  		u64 interrupt_page;
->  		struct {
->  			u8	msg_sint;
-> -			u8	padding1[3];
-> -			u32	padding2;
-> +			u8	msg_vtl;
-> +			u8	reserved[6];
->  		};
->  	};
->  	u64 monitor_page1;
+>  	return 0;
+> +
+> +err_decrypt_msg_page:
+> +	set_memory_encrypted((unsigned long)
+> +		hv_cpu->synic_event_page, 1);
+> +
+> +err_decrypt_event_page:
+> +	set_memory_encrypted((unsigned long)
+> +		hv_cpu->synic_message_page, 1);
+> +
+>  err:
+>  	/*
+>  	 * Any memory allocations that succeeded will be freed when
+> @@ -191,6 +222,15 @@ void hv_synic_free(void)
+>  		free_page((unsigned long)hv_cpu->synic_event_page);
+>  		free_page((unsigned long)hv_cpu->synic_message_page);
+>  		free_page((unsigned long)hv_cpu->post_msg_page);
+> +
+> +		if (hv_isolation_type_en_snp()) {
+> +			set_memory_encrypted((unsigned long)
+> +				hv_cpu->synic_message_page, 1);
+> +			set_memory_encrypted((unsigned long)
+> +				hv_cpu->synic_event_page, 1);
+> +			set_memory_encrypted((unsigned long)
+> +				hv_cpu->post_msg_page, 1);
+> +		}
+
+The re-encryption must be done *before* pages are freed!
+
+Furthermore, if the re-encryption fails, we should not free
+the page as it would pollute the free memory pool.  The best
+we can do is leak the memory.  See Patch 5 in Dexuan's
+TDX series, which does the same thing (but still doesn't
+get it quite right, per my comments).
+
+Michael
+
+>  	}
+>=20
+>  	kfree(hv_context.hv_numa_map);
 > --
 > 2.25.1
 
