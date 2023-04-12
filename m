@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC276DF933
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Apr 2023 16:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880B16DF941
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Apr 2023 17:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjDLO74 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Apr 2023 10:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S230296AbjDLPCq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Apr 2023 11:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjDLO7w (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 10:59:52 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2114.outbound.protection.outlook.com [40.107.244.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B928AD;
-        Wed, 12 Apr 2023 07:59:49 -0700 (PDT)
+        with ESMTP id S230259AbjDLPCp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 11:02:45 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021018.outbound.protection.outlook.com [52.101.57.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47532DC;
+        Wed, 12 Apr 2023 08:02:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UkYOM3EGWkD8rG8iwulyzTu9ox4jeKNIpZhlLb5qYQ21Xgopk/dJxFOh4O26bf216brb1XZk5h0B1rd+FYEtGaEK6YM/7uzKAde7wgFNg2wayZkk5mwrCCtu6etA/r6ZkS3zZfST2A0vlhNKTFHMPX9FZtV8JyNPWFKYBVp0SzO9fZZu9bYT7t8zMK4y7gHbLxusGMsbzf76ZHD7oY6KbNXXbadfC0C5Dizdi1w2B/4CF6hAhI6wHrlKIm45rHJmRScADBNKNz2ha4x5pEw813sU2UvAqkfkLQ5LJymnPJeQrViX2UtUi3gRW57O8fKpWLE7l05rAIXF0ZwoEzTADQ==
+ b=M2g/U+KeW5IEo0JAwkvoK5fWPwn2rNtT3uzS8f9OGbzJ1NtEKmEppjAYh0CnKM+jNCSGpxOtkDdzDXMyd6HOjZBo47JiScf3hAgsgCLYUHMLJ7l9bZ4k4cZ+Cx+F7decT6TpSUY1e8dMSnu2tqBzNfF0U/Lg0E07tY0QsTKGed+srH2wQwUUDD6lfKwBV0kpERlVgEMAK3UkqXfCatD9/NPadtDHjk3wgTp7VXpgfGLMihDGSuGDv1psaiY+fM0IRNeE4zL0MFpGyMvn/G4uQwULGLjjARPm4QS1fLGfxWdwRPBTxb69mV5sLyQXnROYBEkZlf9Y6WBxh5LmtLx99w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mz/ydTEovSjwCUV+ZJe8jMhGdynP3Va2C2L0v6GPihk=;
- b=TTIr1nkek0XNa1leylkpN4thdW9JhG2HMknV2SgXnfaX/j2BDkRE/v+5NE3vLzMFS9PslPsd3qxWprpJJBSjSYbJMsjxZQki+b/i70ruCTXRQd/G3+HmOlPNNuce5M1gXaArFtJw+RhClmb24QTOTmrqNDl1UcFo7BhFt/IE4h6JZq10ew/3m0/YsF7kafKqs9JSYk3NyLLxHPgRxhwHyKibIJ9rTl1D5su0l3oQUgG2uY8QrEyKrq4C7uporP1Fuq4qMb1NczdkXu7AazcfYj2smSIagI71S7g9wFnUsGJYwY+OPo1uWPR4p9+pLPGhCkAg7JVWYKPBKAaTj2+9Tg==
+ bh=0Rz6J1qlqD47ATrWFtLAcxBM58Cqe0SCAvaovW9G12k=;
+ b=Q9GLA9eal8wPuFfncuEIw00nW/ez7KKV7npxepI25g3W+qovlzEQ3PjXyxDMBEeCpEsPWxRSseKzEYb6WVxxILzdZ0uLUdaQ28YL7V37zIE420VQrvwffQwhD4furHeriKrEg9IWtExudmJ0I5uNPc5BApz5QhS+x2tuCco/L65Y2QPRmPFCImm5/Sbq6zkzpio2aYZ0ASUFZk32UlZGTvZirnMZlADBWomYNXlzqkcWMl+G6h9g7/6azbSrBddhRnRKx5NOABtsaOGfEHE9Skw2e12YDukb2c55AR+quA/EfaiPhO6Z1+ARzYcqpX4hq9EFRCbgW2QAup51fCFr4w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mz/ydTEovSjwCUV+ZJe8jMhGdynP3Va2C2L0v6GPihk=;
- b=hgOWP8p7xYfLuzeNFBWDKQDLpNnFWqsaEfvocgzc1NYBvLOCeUF6YVxTaCoTKdJJFB+BB7jfJfqdK9cLjgT3z20TwEyXWpG7t02CJt9cwghdg1FEQQYZt0CnTr7/lYIk8jszDiRLuLMzpvJtgBG/h+NATIA2BxpLVrGasScD5Zw=
+ bh=0Rz6J1qlqD47ATrWFtLAcxBM58Cqe0SCAvaovW9G12k=;
+ b=eOe51BvCxMfC8vkmyS7PR2sMGF5YI5RAZGp1tfTVYmeTP6mRXBl7a6zHrur2KQaXRUv6duBo5jEhXjesQxIoYdgeK5oEeKxCPQXE4uaSzSBBbeQNE3QXaF8j1z176P4dKa1dFYvq+XriIKQ3wxOESWkOHfjq4y+d4qKLwy90O9Y=
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
  by CH3PR21MB4016.namprd21.prod.outlook.com (2603:10b6:610:178::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6319.4; Wed, 12 Apr
- 2023 14:59:45 +0000
+ 2023 15:02:39 +0000
 Received: from BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::acd0:6aec:7be2:719c]) by BYAPR21MB1688.namprd21.prod.outlook.com
  ([fe80::acd0:6aec:7be2:719c%7]) with mapi id 15.20.6319.004; Wed, 12 Apr 2023
- 14:59:45 +0000
+ 15:02:32 +0000
 From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
 To:     Tianyu Lan <ltykernel@gmail.com>,
         "luto@kernel.org" <luto@kernel.org>,
@@ -68,6 +68,7 @@ To:     Tianyu Lan <ltykernel@gmail.com>,
         "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
         "michael.roth@amd.com" <michael.roth@amd.com>,
         "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
         "sterritt@google.com" <sterritt@google.com>,
         "tony.luck@intel.com" <tony.luck@intel.com>,
         "samitolvanen@google.com" <samitolvanen@google.com>,
@@ -77,78 +78,77 @@ CC:     "pangupta@amd.com" <pangupta@amd.com>,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: [RFC PATCH V4 10/17] x86/hyperv: Add smp support for sev-snp
- guest
-Thread-Topic: [RFC PATCH V4 10/17] x86/hyperv: Add smp support for sev-snp
- guest
-Thread-Index: AQHZZlQPVSjp+rVBdUS2/G4UxLSwka8nzVYQ
-Date:   Wed, 12 Apr 2023 14:59:45 +0000
-Message-ID: <BYAPR21MB1688D729D203638C17FBC82AD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Subject: RE: [RFC PATCH V4 14/17] x86/hyperv/sev: Add AMD sev-snp enlightened
+ guest support on hyperv
+Thread-Topic: [RFC PATCH V4 14/17] x86/hyperv/sev: Add AMD sev-snp enlightened
+ guest support on hyperv
+Thread-Index: AQHZZlRT0ThUaqkS0k+wLQND5IeAFa8n0lkw
+Date:   Wed, 12 Apr 2023 15:02:32 +0000
+Message-ID: <BYAPR21MB16884681B85CE6C83CBC2B1FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
 References: <20230403174406.4180472-1-ltykernel@gmail.com>
- <20230403174406.4180472-11-ltykernel@gmail.com>
-In-Reply-To: <20230403174406.4180472-11-ltykernel@gmail.com>
+ <20230403174406.4180472-15-ltykernel@gmail.com>
+In-Reply-To: <20230403174406.4180472-15-ltykernel@gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=d03f3e91-80d0-4246-b006-49a3b3c34a11;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-12T14:42:25Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9a1229e2-a6ed-4685-b5c2-a5a409036695;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-12T15:00:21Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CH3PR21MB4016:EE_
-x-ms-office365-filtering-correlation-id: e128a1ea-6f38-401e-6ee9-08db3b668db1
+x-ms-office365-filtering-correlation-id: 7b7a1c72-724d-425a-44e6-08db3b66f156
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SU7dZAkQeyQp/SjAelI7Zr19Bf5K96SS+G/7hdf9rb0SUCcKYmQ9z3dKzOfGjdctwKvNTIoxJySiKb4L4J1vn6gudfNhwdMtSxbml0K9tvoR780SGq21TPjQHpTzdyIf32BKZLsN+WuNQnnuJHn+4NOvbmE3jEYIRFRKVJN93ozda2ojRUgrOW6sv82WVLe3zKviVG0mhpVs1zI8NC1rwVUPawGhxPR7sfbla71V5urFXYMKEw/aX9LWgH3nEuXr1E9JHavG5PKrQ1QDgxO986T4KwmRa4VoMF7UM6AhDecv03IPRqkIU8pQcyTLkiwxgM5N0DxR0r+7XCXT6hBl0cXdBFnFcP2+7RqtLU/uxEM4d8kNT0BTXbcrgWZUMrJ2cNI991znPXyyJEGvR1FXhwavHFzvLNrsxnP7IKuEXlkgzqxj3LWocC2iqwjsuD00nptciQezNsUNTKthoWE/ba713A5VZRKx5FpQ7xWvBquy1MQ8pXP4H8vODgPzT9Cen8f10+R+GL0S4kTFrDMPoZnxSx58YDyX6ziZLQdXB398duI6gvz1GW6OcGDfzgoh0yFF/6mFE6CU0iRmYZU490VlaEuQT9VdCd8qFJZuP/meDajfo8N9cMZvObk5yiyKTXCeixmztdvdKvrNNDmsyc6IsQujmjb/PfjrGkOzgps=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199021)(33656002)(38100700002)(122000001)(7406005)(7416002)(5660300002)(52536014)(30864003)(2906002)(786003)(38070700005)(8676002)(55016003)(86362001)(8936002)(4326008)(66556008)(64756008)(66476007)(66946007)(66446008)(82950400001)(82960400001)(41300700001)(921005)(966005)(83380400001)(76116006)(26005)(316002)(54906003)(9686003)(110136005)(8990500004)(6506007)(10290500003)(7696005)(186003)(478600001)(71200400001);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: EzKirbmC8DYbbzW/HF2htT+iekCKLapB9zarh7N2Kqr10lyc+UM2RLesdmqt1eQ15mxMTAmRz5AODzAFHWLjqhVuPoTJwDhWoHqkeBRZqBqH8RBaoY9zi5czYSzP4cvCh/g/vUs1CxAZvQl0mHRiPD/S5KMh7Es5qVYMVDUISCJkJtPCUFMtGjgwFvGeUhXd+el0r5Ebk1J+7DTtvsqvx7m0Oi8HGcOMdbX6IiiHykiEhFMo3Yop4evaRA/a0gKyLSPNNcp7flVldzv2cATZTc5hykeNnZ6wSbq/mx36Qwzgt/f6XK5BnXiMGKBGH75lyDHhNIrxLd2OiPM9wqkp0140UBvwITVzqeIYOD5b/3ngNncynkfUrqpu/uG1uWhvSeHPEeVUf2fs515LksX4aTU/rKMLw9i2c1lyfeAAsFH3aw0OgSwt9JqNXImTJOWxqrjNczUger4ZdHGM/adY44Rbh/RRcZdMpdKk+FUEeG6UTK5WFFCdYTL5sGWbTg+Z7huc2L7TgLLD2h8qtiL98j7EjeABTJdaTigdWqs6PbN93hg7nO0s42LpKtczYuy+VWWpmAV2MBRgxAygZLCqdgaAMRSo+m054H9LYvdADM6DVYwj6xQKSxsrrtFUV53ZiO/SVkpxUGMQftkbp4mzS2YUryJLCAojwAwizUnwhcmPeYDIunKLsIWlgj7Qye6G
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:cs;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(396003)(136003)(39860400002)(376002)(451199021)(33656002)(38100700002)(122000001)(7406005)(7416002)(5660300002)(52536014)(30864003)(2906002)(786003)(38070700005)(8676002)(55016003)(86362001)(8936002)(4326008)(66556008)(64756008)(66476007)(66946007)(66446008)(82950400001)(82960400001)(41300700001)(921005)(83380400001)(76116006)(26005)(316002)(54906003)(9686003)(110136005)(8990500004)(6506007)(10290500003)(7696005)(186003)(478600001)(71200400001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mofzIiWQO6fgFce4zyhRNKSjMIYWc8Zg49ZS+zBd0dyo9IYDwOK1VmGUEfw+?=
- =?us-ascii?Q?Ywcj0SO5cJCkKd0TURKzuvs6I2lg45jd+izmCAFExLJSHfF3H9zfP8/ilbOe?=
- =?us-ascii?Q?pTZi6G2uMa4SkpkTVaCTmyfsylJGZh0Tz0KwrFtcIWqDEXFqnsTf5XH4j1q8?=
- =?us-ascii?Q?n1rQJJhFVR9erAMg6fQCo2a9AObq0PvnqSANlI+h0exUCF8eBdcU5TKNWdbl?=
- =?us-ascii?Q?o39HT7EeZ3fSgOvsT1syMPHfs4+V7o70GtO3hyToxcgvYFudrHAyC80PTD7s?=
- =?us-ascii?Q?UOtEVEwp5SU4dDFHsAD1kgUaXq9wGNYO21yMzEkcn+3oc1Xq5u6I1CvGgxcx?=
- =?us-ascii?Q?2XHbP0AQyTuaRHLqsmzOCx6lhRqqzFfaEP17QFRIZ9aKwX8W9igRNYVSeWPb?=
- =?us-ascii?Q?74fk96sWZu8zJA20Pucj1EsjV2y+Pneid8mZW7Ri28hokD/NinnEE/kk93A/?=
- =?us-ascii?Q?3FBHS8vhQOS9Okb+SGaq5LB6Huh/T1t7a3OM0yBobF3BLk5N+5SeeXEDYmjO?=
- =?us-ascii?Q?nK7c/m6tPTmuKFypfeUDlG/cBGlD4wanyXWRUzdCwDVgPgU60YoAmJ6gmAMJ?=
- =?us-ascii?Q?4g/ebrKlYlQBTIzJho+Nsj9RNawGPVi/eOZZ1kGZoxzFaiNz1T1UKdSjCwmf?=
- =?us-ascii?Q?zcZWpWf4ugXEYaJmkpNbOe+uCBptu+3sm8UTLXtuGUClZ3fmyNFHezmv1SS8?=
- =?us-ascii?Q?L+eI34v+nU8nOVOBMpecpYoJVkeidm1P8b0Sl2k2CAlBRc9qDHb26kKHMpHT?=
- =?us-ascii?Q?9DzM30K3BP0oT2ZM6jDxXPjXcUID9UYkmoFOZH8KbTTGDcJllUeDg+cIAdGT?=
- =?us-ascii?Q?65doDpXixOud+olp2fvxAhQICpYokDvLNmrpoTOrGkluffCrvQ9bizVNiQ9z?=
- =?us-ascii?Q?GL63jJe9+NdPYknDReJbIwhilT/R6Gdv0fBVMCujxqIYucGKfCA9yWNP0l+x?=
- =?us-ascii?Q?avHbcuALs6QYo6iUQcSvEqajLOq2wCBg2tQWHbC9qJtLAKOrXcTlQiYjC+h5?=
- =?us-ascii?Q?WVJzQ9rcVj7w4BiagbxKDqpsjw6u3yy3sWnyl4p/PAJUgx0Njwpy4anf1P3G?=
- =?us-ascii?Q?9JDUhH24qoqEvZxlV+Wu74IMnwaCDUwBg/XJq/5KpKveXrIHCNn/5dfM88X0?=
- =?us-ascii?Q?FbMz7I8It8Iu0QfpYzQgd+MxWOdMnl0IZswyG00YUryb/PhK2h7Zb1CFGdIC?=
- =?us-ascii?Q?9tcE1TECBO0dZK9qSxEcC/v8DdkHxHmIAWQfuIYQ9SsZe48jj4k2w/eo4frA?=
- =?us-ascii?Q?sx4LAbxO2nBCMs2e2hhsJWxcZUUQApf0O6D+tZdQhkTiivoxi+9NqAI3/ZLv?=
- =?us-ascii?Q?Qk4LvxFCCpXhy4FeGGbpWyXdCIZTJw63PtO1vrUA0y0kR6NBR4QobgzsgwV7?=
- =?us-ascii?Q?f4ZxGMH0tjAaU1FS9DQv4JewEaKdd6oZ1gO8Mre56UhB3Ny+7+mXqKXOUIcJ?=
- =?us-ascii?Q?Wy5wMNzwi+gGPSMR2ZJgLt6LR08X7F19eQJMmzMOBFj2O3i9IdBHtGOv+6dg?=
- =?us-ascii?Q?NQbJZOL8ia38IkS2yGHy2lhiV1DjUlFAzGn1Z1g09P26fhI9GNbBgt7JKt/6?=
- =?us-ascii?Q?yGq7e1TXubjb+zNtz204fyIgsRtaKsbWB5MScKoBaexl6BwrmLkMem6AlmKr?=
- =?us-ascii?Q?Vw=3D=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9674VDfsr7bZfu2vpHPNe2YfhSNUXTLnE7GQWl0JbD6ebq62P1LqYZnr0StF?=
+ =?us-ascii?Q?jVKcRtuQ/idyMvLIB3iKVwMcMNLMEMRO7LABPxNurcyLNbYMAErgNjccodEQ?=
+ =?us-ascii?Q?R7eJxJDcVYw51kS5m5KBU/sqJvC8++DC3FYgV3GHGOXAqVD7kukkUpsjzzU6?=
+ =?us-ascii?Q?1IJmSWYKDgbUa0mgbSpStJ9fx5P2B7PcLymBWGge5dE7+ugkKqafqQnl7t0o?=
+ =?us-ascii?Q?9Gf9RUproRkxBDkhjM9fErjDuiXM8UJqbQ2y0Dy/o6i6m6xqiITYvloBC1tk?=
+ =?us-ascii?Q?lFNqlMgqMIhCBaQ67iA5CuVIjgCZNBTEHa8NSD7fO9ybK2QAO0/VkeaZwmPT?=
+ =?us-ascii?Q?oGSPswqpgNcybK8gGD/s04T8TdugS98g3Bna7x4e9Ro6FkDr0iM78uDg7jfj?=
+ =?us-ascii?Q?+zIH8yLixO0N/xLJOwj9B2HyDFf0kQCJbVQX3t9yg0nFSjsPjiXeZ64lKpiT?=
+ =?us-ascii?Q?/OltAvOxuzuYDShsfbCho+q1U3n322BMQsciMMBz2f8by73MR4uSgd90w22F?=
+ =?us-ascii?Q?rlvm8GcDVJec/YFZ06vHYt2WcsCwb1q4KruHJ0Akygooefy3/jAjhJZkYkVB?=
+ =?us-ascii?Q?8B/SCNS/Ad5miplvnTn5OO78bKqQZn85xX1mz3NJTPoefU9slBO1jioI4C4u?=
+ =?us-ascii?Q?Us9RLykiYblOZXzLS7GtkB62mNMAoyyYg/pon13KF8z46kdZgiooxhRhokhK?=
+ =?us-ascii?Q?YmLmF65/aN5lu1d+SlFvYB70qjzdc0FABxRwvw1AC355RVl2PUc2ksd5Y5m7?=
+ =?us-ascii?Q?YYz4yg/rU79ikvp+D9xDk6NgWyQY4yYrNvsG05qx8T8WbChhhGcy/LdS9kh6?=
+ =?us-ascii?Q?lVH70PxPaxxJI4PP/z9H7EcwCeC+k8nquuTfvl/47h+ra0s1uF/P1IPFXuA+?=
+ =?us-ascii?Q?RO5hrWDtyZWREWsMmZHwCVkS6oLJ4W12KnWBpICQvbonyLXQZ3bUqhxvGnGH?=
+ =?us-ascii?Q?ME1ZVW/fq5+mIGAQRB/CzLR8TSQuFSaOf2SOZQoOZWTCCTT23VeaJxVWbsba?=
+ =?us-ascii?Q?CrgP7eAkEvZZiNoZVfSoOHo4DZVO/5xCMRaTVQOhcrF5UVC+LAxbMuOFgkPM?=
+ =?us-ascii?Q?2rO4OGvfFfzSigntFHf6RWnqPhERDpzgqs2bzTy4aOxUByTkAzFgsNdteOAM?=
+ =?us-ascii?Q?b+zEbJp9zBrOrCPJZghbsZsA8Jmvbw6toNgxpxG1hvh+7OmNmcxGvqy7EYvB?=
+ =?us-ascii?Q?dsa8+P6aAPMzWnqQGMHD7/52/YgoW6LznF6xkgXkF/op3cWSYZ0QrMkSnoS4?=
+ =?us-ascii?Q?o3unQHn/x+Tp9x1UdDgdWSVpnOrjFWZDXw3o5EiqZhKJw/xj6RjWmLIm5KsK?=
+ =?us-ascii?Q?NfzK7lmWO3jUKA4Jo6hY15O/r1l3poKscer0gmdUgkTQV/2JZI+GBJ3aCxAJ?=
+ =?us-ascii?Q?IhnXIWSd/dHVX13NihX+FY/BbRdC2eRmks1gWO9JJf5stH55rzG5yX0yJ9+5?=
+ =?us-ascii?Q?qvZ8F23gonSg34UQ9TLhofdebmS4XpnNL2D7220bPDVXeaNiTHkwpelO9g6p?=
+ =?us-ascii?Q?+RobNrpR/RUmWouvFIDRVAOMbIUEXsYaKi9PHES60Y6nKiRZbLXibhHtmYvM?=
+ =?us-ascii?Q?6a9KYavg6PtlhvxFvDEN9J9RY1z8BkoHCUJto/+G2AbUalrT0uzN6fQJJvCv?=
+ =?us-ascii?Q?MQ=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e128a1ea-6f38-401e-6ee9-08db3b668db1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 14:59:45.2480
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b7a1c72-724d-425a-44e6-08db3b66f156
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2023 15:02:32.4118
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hD921riyHIuLWB9f/A7lo2l7J7OAEru3TX5kxTO50d4SwZZVYY5iWB8BK60qFFYq4s4u3VS94YpbqSepORUo4oSer7cJUwsfRT19rB7MnoQ=
+X-MS-Exchange-CrossTenant-userprincipalname: 1wc2NFks/GBFN+uyTFsA4q/jvErmEEhtws/m9bH1mCOBgyYe0o6ihf3OvuoDynff/Bsjznl89ipzzLlgdkrHWtKca1/e5g9wRv+ikAj1WIk=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR21MB4016
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -156,388 +156,493 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, April 3, 2023 10:44 AM
+>
+
+The patch subject prefix of "x86/hyperv/sev:" doesn't make sense.
+There's no pathname like that in the kernel code.  I think it should just b=
+e
+"x86/sev:".
+=20
+> Enable #HV exception to handle interrupt requests from hypervisor.
 >=20
-> The wakeup_secondary_cpu callback was populated with wakeup_
-> cpu_via_vmgexit() which doesn't work for Hyper-V and Hyper-V
-> requires to call Hyper-V specific hvcall to start APs. So override
-> it with Hyper-V specific hook to start AP sev_es_save_area data
-> structure.
->=20
+> Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
+> Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
 > Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 > ---
-> Change sicne RFC v3:
->        * Replace struct sev_es_save_area with struct
->          vmcb_save_area
->        * Move code from mshyperv.c to ivm.c
->=20
-> Change since RFC v2:
->        * Add helper function to initialize segment
->        * Fix some coding style
+> Change since RFC V3:
+>        * Check NMI event when irq is disabled.
+>        * Remove redundant variable
 > ---
->  arch/x86/hyperv/ivm.c             | 89 +++++++++++++++++++++++++++++++
->  arch/x86/include/asm/mshyperv.h   | 18 +++++++
->  arch/x86/include/asm/sev.h        | 13 +++++
->  arch/x86/include/asm/svm.h        | 15 +++++-
->  arch/x86/kernel/cpu/mshyperv.c    | 13 ++++-
->  arch/x86/kernel/sev.c             |  4 +-
->  include/asm-generic/hyperv-tlfs.h | 19 +++++++
->  7 files changed, 166 insertions(+), 5 deletions(-)
+>  arch/x86/include/asm/mem_encrypt.h |   2 +
+>  arch/x86/include/uapi/asm/svm.h    |   4 +
+>  arch/x86/kernel/sev.c              | 314 ++++++++++++++++++++++++-----
+>  arch/x86/kernel/traps.c            |   2 +
+>  4 files changed, 266 insertions(+), 56 deletions(-)
 >=20
-> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-> index c0f3fa924163..51243148b8e6 100644
-> --- a/arch/x86/hyperv/ivm.c
-> +++ b/arch/x86/hyperv/ivm.c
-> @@ -22,11 +22,15 @@
->  #include <asm/sev.h>
->  #include <asm/realmode.h>
->  #include <asm/e820/api.h>
-> +#include <asm/desc.h>
+> diff --git a/arch/x86/include/asm/mem_encrypt.h
+> b/arch/x86/include/asm/mem_encrypt.h
+> index b7126701574c..9299caeca69f 100644
+> --- a/arch/x86/include/asm/mem_encrypt.h
+> +++ b/arch/x86/include/asm/mem_encrypt.h
+> @@ -50,6 +50,7 @@ void __init early_set_mem_enc_dec_hypercall(unsigned lo=
+ng
+> vaddr, int npages,
+>  void __init mem_encrypt_free_decrypted_mem(void);
 >=20
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>  void __init sev_es_init_vc_handling(void);
+> +void __init sev_snp_init_hv_handling(void);
 >=20
->  #define GHCB_USAGE_HYPERV_CALL	1
+>  #define __bss_decrypted __section(".bss..decrypted")
 >=20
-> +static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted __aligned(PAGE_S=
-IZE);
-> +static u8 ap_start_stack[PAGE_SIZE] __aligned(PAGE_SIZE);
-
-Just a question:  ap_start_stack is a static variable that gets used as the
-starting stack for every AP.  So obviously, once each AP is started, we mus=
-t
-be sure that the AP moves off the ap_start_stack before the next AP is
-started.  How is that synchronization done?  I see that do_boot_cpu() is
-where the wakeup_secondary_cpu() function is called.  Then there's
-some waiting until the AP completes "initial initialization" per the
-comment in the code.  Is there where we know that the AP is no
-longer using ap_start_stack?
-
-> +
->  union hv_ghcb {
->  	struct ghcb ghcb;
->  	struct {
-> @@ -437,6 +441,91 @@ __init void hv_sev_init_mem_and_cpu(void)
->  	}
->  }
+> @@ -73,6 +74,7 @@ static inline void __init sme_encrypt_kernel(struct boo=
+t_params
+> *bp) { }
+>  static inline void __init sme_enable(struct boot_params *bp) { }
 >=20
-> +#define hv_populate_vmcb_seg(seg, gdtr_base)			\
-> +do {								\
-> +	if (seg.selector) {					\
-> +		seg.base =3D 0;					\
-> +		seg.limit =3D HV_AP_SEGMENT_LIMIT;		\
-> +		seg.attrib =3D *(u16 *)(gdtr_base + seg.selector + 5);	\
-> +		seg.attrib =3D (seg.attrib & 0xFF) | ((seg.attrib >> 4) & 0xF00); \
-> +	}							\
-> +} while (0)							\
-> +
-> +int hv_snp_boot_ap(int cpu, unsigned long start_ip)
-> +{
-> +	struct sev_es_save_area *vmsa =3D (struct sev_es_save_area *)
-> +		__get_free_page(GFP_KERNEL | __GFP_ZERO);
-> +	struct desc_ptr gdtr;
-> +	u64 ret, retry =3D 5;
-> +	struct hv_start_virtual_processor_input *start_vp_input;
-> +	union sev_rmp_adjust rmp_adjust;
-> +	unsigned long flags;
-> +
-> +	native_store_gdt(&gdtr);
-> +
-> +	vmsa->gdtr.base =3D gdtr.address;
-> +	vmsa->gdtr.limit =3D gdtr.size;
-> +
-> +	asm volatile("movl %%es, %%eax;" : "=3Da" (vmsa->es.selector));
-> +	hv_populate_vmcb_seg(vmsa->es, vmsa->gdtr.base);
-> +
-> +	asm volatile("movl %%cs, %%eax;" : "=3Da" (vmsa->cs.selector));
-> +	hv_populate_vmcb_seg(vmsa->cs, vmsa->gdtr.base);
-> +
-> +	asm volatile("movl %%ss, %%eax;" : "=3Da" (vmsa->ss.selector));
-> +	hv_populate_vmcb_seg(vmsa->ss, vmsa->gdtr.base);
-> +
-> +	asm volatile("movl %%ds, %%eax;" : "=3Da" (vmsa->ds.selector));
-> +	hv_populate_vmcb_seg(vmsa->ds, vmsa->gdtr.base);
-> +
-> +	vmsa->efer =3D native_read_msr(MSR_EFER);
-> +
-> +	asm volatile("movq %%cr4, %%rax;" : "=3Da" (vmsa->cr4));
-> +	asm volatile("movq %%cr3, %%rax;" : "=3Da" (vmsa->cr3));
-> +	asm volatile("movq %%cr0, %%rax;" : "=3Da" (vmsa->cr0));
-> +
-> +	vmsa->xcr0 =3D 1;
-> +	vmsa->g_pat =3D HV_AP_INIT_GPAT_DEFAULT;
-> +	vmsa->rip =3D (u64)secondary_startup_64_no_verify;
-> +	vmsa->rsp =3D (u64)&ap_start_stack[PAGE_SIZE];
-> +
-> +	vmsa->sev_features.snp =3D 1;
-> +	vmsa->sev_features.restrict_injection =3D 1;
-> +
-> +	rmp_adjust.as_uint64 =3D 0;
-> +	rmp_adjust.target_vmpl =3D 1;
-> +	rmp_adjust.vmsa =3D 1;
-> +	ret =3D rmpadjust((unsigned long)vmsa, RMP_PG_SIZE_4K,
-> +			rmp_adjust.as_uint64);
-> +	if (ret !=3D 0) {
-> +		pr_err("RMPADJUST(%llx) failed: %llx\n", (u64)vmsa, ret);
-> +		return ret;
-> +	}
-> +
-> +	local_irq_save(flags);
-> +	start_vp_input =3D
-> +		(struct hv_start_virtual_processor_input *)ap_start_input_arg;
-> +	memset(start_vp_input, 0, sizeof(*start_vp_input));
-> +	start_vp_input->partitionid =3D -1;
-> +	start_vp_input->vpindex =3D cpu;
-> +	start_vp_input->targetvtl =3D ms_hyperv.vtl;
-> +	*(u64 *)&start_vp_input->context[0] =3D __pa(vmsa) | 1;
-> +
-> +	do {
-> +		ret =3D hv_do_hypercall(HVCALL_START_VIRTUAL_PROCESSOR,
-> +				      start_vp_input, NULL);
-> +	} while (hv_result(ret) =3D=3D HV_STATUS_TIME_OUT && retry--);
-> +
-> +	if (!hv_result_success(ret)) {
-> +		pr_err("HvCallStartVirtualProcessor failed: %llx\n", ret);
-> +		goto done;
-> +	}
-> +
-> +done:
-> +	local_irq_restore(flags);
-> +	return ret;
-> +}
-> +
->  void __init hv_vtom_init(void)
->  {
->  	/*
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
-erv.h
-> index a4a59007b5f2..e23c987deb7a 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -55,6 +55,20 @@ struct memory_map_entry {
->  	u32 reserved;
->  };
+>  static inline void sev_es_init_vc_handling(void) { }
+> +static inline void sev_snp_init_hv_handling(void) { }
 >=20
-> +/*
-> + * DEFAULT INIT GPAT and SEGMENT LIMIT value in struct VMSA
-> + * to start AP in enlightened SEV guest.
-> + */
-> +#define HV_AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
-> +#define HV_AP_SEGMENT_LIMIT		0xffffffff
+>  static inline int __init
+>  early_set_memory_decrypted(unsigned long vaddr, unsigned long size) { re=
+turn 0; }
+> diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/=
+svm.h
+> index 80e1df482337..828d624a38cf 100644
+> --- a/arch/x86/include/uapi/asm/svm.h
+> +++ b/arch/x86/include/uapi/asm/svm.h
+> @@ -115,6 +115,10 @@
+>  #define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
+>  #define SVM_VMGEXIT_AP_CREATE			1
+>  #define SVM_VMGEXIT_AP_DESTROY			2
+> +#define SVM_VMGEXIT_HV_DOORBELL_PAGE		0x80000014
+> +#define SVM_VMGEXIT_GET_PREFERRED_HV_DOORBELL_PAGE	0
+> +#define SVM_VMGEXIT_SET_HV_DOORBELL_PAGE		1
+> +#define SVM_VMGEXIT_QUERY_HV_DOORBELL_PAGE		2
+>  #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
+>  #define SVM_VMGEXIT_TERM_REQUEST		0x8000fffe
+>  #define SVM_VMGEXIT_TERM_REASON(reason_set, reason_code)	\
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 6445f5356c45..7fcb3b548215 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -122,6 +122,152 @@ struct sev_config {
+>=20
+>  static struct sev_config sev_cfg __read_mostly;
+>=20
+> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state);
+> +static noinstr void __sev_put_ghcb(struct ghcb_state *state);
+> +static int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa);
+> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb);
 > +
-> +/*
-> + * DEFAULT INIT GPAT and SEGMENT LIMIT value in struct VMSA
-> + * to start AP in enlightened SEV guest.
-> + */
-> +#define HV_AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
-> +#define HV_AP_SEGMENT_LIMIT		0xffffffff
-
-This code looks like it is erroneously added twice.
-
-> +
->  int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
->  int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
->  int hv_call_create_vp(int node, u64 partition_id, u32 vp_index, u32 flag=
-s);
-> @@ -253,6 +267,8 @@ struct irq_domain *hv_create_pci_msi_domain(void);
->  int hv_map_ioapic_interrupt(int ioapic_id, bool level, int vcpu, int vec=
-tor,
->  		struct hv_interrupt_entry *entry);
->  int hv_unmap_ioapic_interrupt(int ioapic_id, struct hv_interrupt_entry *=
-entry);
-> +int hv_set_mem_host_visibility(unsigned long addr, int numpages, bool vi=
-sible);
-> +int hv_snp_boot_ap(int cpu, unsigned long start_ip);
->=20
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
->  void hv_ghcb_msr_write(u64 msr, u64 value);
-> @@ -261,6 +277,7 @@ bool hv_ghcb_negotiate_protocol(void);
->  void hv_ghcb_terminate(unsigned int set, unsigned int reason);
->  void hv_vtom_init(void);
->  void hv_sev_init_mem_and_cpu(void);
-> +int hv_snp_boot_ap(int cpu, unsigned long start_ip);
->  #else
->  static inline void hv_ghcb_msr_write(u64 msr, u64 value) {}
->  static inline void hv_ghcb_msr_read(u64 msr, u64 *value) {}
-> @@ -268,6 +285,7 @@ static inline bool hv_ghcb_negotiate_protocol(void) {=
- return
-> false; }
->  static inline void hv_ghcb_terminate(unsigned int set, unsigned int reas=
-on) {}
->  static inline void hv_vtom_init(void) {}
->  static inline void hv_sev_init_mem_and_cpu(void) {}
-> +static int hv_snp_boot_ap(int cpu, unsigned long start_ip) {}
->  #endif
->=20
->  extern bool hv_isolation_type_snp(void);
-> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> index ebc271bb6d8e..e34aaf730220 100644
-> --- a/arch/x86/include/asm/sev.h
-> +++ b/arch/x86/include/asm/sev.h
-> @@ -86,6 +86,19 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
->=20
->  #define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
->=20
-> +union sev_rmp_adjust {
-> +	u64 as_uint64;
+> +union hv_pending_events {
+> +	u16 events;
 > +	struct {
-> +		unsigned long target_vmpl : 8;
-> +		unsigned long enable_read : 1;
-> +		unsigned long enable_write : 1;
-> +		unsigned long enable_user_execute : 1;
-> +		unsigned long enable_kernel_execute : 1;
-> +		unsigned long reserved1 : 4;
-> +		unsigned long vmsa : 1;
+> +		u8 vector;
+> +		u8 nmi : 1;
+> +		u8 mc : 1;
+> +		u8 reserved1 : 5;
+> +		u8 no_further_signal : 1;
 > +	};
 > +};
 > +
->  /* SNP Guest message request */
->  struct snp_req_data {
->  	unsigned long req_gpa;
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index cb1ee53ad3b1..bcf970901512 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -423,7 +423,20 @@ struct sev_es_save_area {
->  	u64 guest_exit_info_2;
->  	u64 guest_exit_int_info;
->  	u64 guest_nrip;
-> -	u64 sev_features;
-> +	union {
-> +		struct {
-> +			u64 snp                     : 1;
-> +			u64 vtom                    : 1;
-> +			u64 reflectvc               : 1;
-> +			u64 restrict_injection      : 1;
-> +			u64 alternate_injection     : 1;
-> +			u64 full_debug              : 1;
-> +			u64 reserved1               : 1;
-> +			u64 snpbtb_isolation        : 1;
-> +			u64 resrved2                : 56;
-> +		};
-> +		u64 val;
-> +	} sev_features;
->  	u64 vintr_ctrl;
->  	u64 guest_exit_code;
->  	u64 virtual_tom;
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
-v.c
-> index 71820bbf9e90..829234ba8da5 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -300,6 +300,16 @@ static void __init hv_smp_prepare_cpus(unsigned int =
-max_cpus)
->=20
->  	native_smp_prepare_cpus(max_cpus);
->=20
-> +	/*
-> +	 *  Override wakeup_secondary_cpu callback for SEV-SNP
-> +	 *  enlightened guest.
-> +	 */
-> +	if (hv_isolation_type_en_snp())
-> +		apic->wakeup_secondary_cpu =3D hv_snp_boot_ap;
-
-In another patch set for starting CPUs at VTL2, there was some discussion
-about using wakeup_secondary_cpu vs. wakeup_secondary_cpu_64.  The
-decision was to use wakeup_secondary_cpu_64.  See=20
-https://lore.kernel.org/linux-hyperv/1681192532-15460-6-git-send-email-ssen=
-gar@linux.microsoft.com/T/#u
-
-I'm not sure of all the tradeoffs, but I wonder if wakeup_secondary_cpu_64
-should be used here.
-
+> +struct sev_hv_doorbell_page {
+> +	union hv_pending_events pending_events;
+> +	u8 no_eoi_required;
+> +	u8 reserved2[61];
+> +	u8 padding[4032];
+> +};
 > +
-> +	if (!hv_root_partition)
+> +struct sev_snp_runtime_data {
+> +	struct sev_hv_doorbell_page hv_doorbell_page;
+> +};
+> +
+> +static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
+> +
+> +static inline u64 sev_es_rd_ghcb_msr(void)
+> +{
+> +	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
+> +}
+> +
+> +static __always_inline void sev_es_wr_ghcb_msr(u64 val)
+> +{
+> +	u32 low, high;
+> +
+> +	low  =3D (u32)(val);
+> +	high =3D (u32)(val >> 32);
+> +
+> +	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
+> +}
+> +
+> +struct sev_hv_doorbell_page *sev_snp_current_doorbell_page(void)
+> +{
+> +	return &this_cpu_read(snp_runtime_data)->hv_doorbell_page;
+> +}
+> +
+> +static u8 sev_hv_pending(void)
+> +{
+> +	return sev_snp_current_doorbell_page()->pending_events.events;
+> +}
+> +
+> +#define sev_hv_pending_nmi	\
+> +		sev_snp_current_doorbell_page()->pending_events.nmi
+> +
+> +static void hv_doorbell_apic_eoi_write(u32 reg, u32 val)
+> +{
+> +	if (xchg(&sev_snp_current_doorbell_page()->no_eoi_required, 0) & 0x1)
 > +		return;
 > +
->  #ifdef CONFIG_X86_64
->  	for_each_present_cpu(i) {
->  		if (i =3D=3D 0)
-> @@ -503,8 +513,7 @@ static void __init ms_hyperv_init_platform(void)
->=20
->  # ifdef CONFIG_SMP
->  	smp_ops.smp_prepare_boot_cpu =3D hv_smp_prepare_boot_cpu;
-> -	if (hv_root_partition)
-> -		smp_ops.smp_prepare_cpus =3D hv_smp_prepare_cpus;
-> +	smp_ops.smp_prepare_cpus =3D hv_smp_prepare_cpus;
->  # endif
->=20
->  	/*
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 679026a640ef..b3f95fcb8b18 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -1080,7 +1080,7 @@ static int wakeup_cpu_via_vmgexit(int apic_id, unsi=
-gned long start_ip)
->  	 *   SEV_FEATURES (matches the SEV STATUS MSR right shifted 2 bits)
->  	 */
->  	vmsa->vmpl		=3D 0;
-> -	vmsa->sev_features	=3D sev_status >> 2;
-> +	vmsa->sev_features.val =3D sev_status >> 2;
->=20
->  	/* Switch the page over to a VMSA page now that it is initialized */
->  	ret =3D snp_set_vmsa(vmsa, true);
-> @@ -1097,7 +1097,7 @@ static int wakeup_cpu_via_vmgexit(int apic_id, unsi=
-gned long start_ip)
->  	ghcb =3D __sev_get_ghcb(&state);
->=20
->  	vc_ghcb_invalidate(ghcb);
-> -	ghcb_set_rax(ghcb, vmsa->sev_features);
-> +	ghcb_set_rax(ghcb, vmsa->sev_features.val);
->  	ghcb_set_sw_exit_code(ghcb, SVM_VMGEXIT_AP_CREATION);
->  	ghcb_set_sw_exit_info_1(ghcb, ((u64)apic_id << 32) | SVM_VMGEXIT_AP_CRE=
-ATE);
->  	ghcb_set_sw_exit_info_2(ghcb, __pa(vmsa));
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hype=
-rv-tlfs.h
-> index ea406e901469..b2f14aa608f7 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -148,6 +148,7 @@ union hv_reference_tsc_msr {
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
->  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
->  #define HVCALL_SEND_IPI				0x000b
-> +#define HVCALL_ENABLE_VP_VTL			0x000f
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX	0x0014
->  #define HVCALL_SEND_IPI_EX			0x0015
-> @@ -165,6 +166,7 @@ union hv_reference_tsc_msr {
->  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
->  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
->  #define HVCALL_RETARGET_INTERRUPT		0x007e
-> +#define HVCALL_START_VIRTUAL_PROCESSOR		0x0099
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
->  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
-> @@ -220,6 +222,7 @@ enum HV_GENERIC_SET_FORMAT {
->  #define HV_STATUS_INVALID_PORT_ID		17
->  #define HV_STATUS_INVALID_CONNECTION_ID		18
->  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
-> +#define HV_STATUS_TIME_OUT                     0x78
->=20
->  /*
->   * The Hyper-V TimeRefCount register and the TSC
-> @@ -779,6 +782,22 @@ struct hv_input_unmap_device_interrupt {
->  	struct hv_interrupt_entry interrupt_entry;
->  } __packed;
->=20
-> +struct hv_enable_vp_vtl_input {
-> +	u64 partitionid;
-> +	u32 vpindex;
-> +	u8 targetvtl;
-> +	u8 padding[3];
-> +	u8 context[0xe0];
-> +} __packed;
+> +	BUG_ON(reg !=3D APIC_EOI);
+> +	apic->write(reg, val);
+> +}
 > +
-> +struct hv_start_virtual_processor_input {
-> +	u64 partitionid;
-> +	u32 vpindex;
-> +	u8 targetvtl;
-> +	u8 padding[3];
-> +	u8 context[0xe0];
-> +} __packed;
+> +static void do_exc_hv(struct pt_regs *regs)
+> +{
+> +	union hv_pending_events pending_events;
 > +
->  #define HV_SOURCE_SHADOW_NONE               0x0
->  #define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
+> +	while (sev_hv_pending()) {
+> +		pending_events.events =3D xchg(
+> +			&sev_snp_current_doorbell_page()->pending_events.events,
+> +			0);
+> +
+> +		if (pending_events.nmi)
+> +			exc_nmi(regs);
+> +
+> +#ifdef CONFIG_X86_MCE
+> +		if (pending_events.mc)
+> +			exc_machine_check(regs);
+> +#endif
+> +
+> +		if (!pending_events.vector)
+> +			return;
+> +
+> +		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
+> +			/* Exception vectors */
+> +			WARN(1, "exception shouldn't happen\n");
+> +		} else if (pending_events.vector =3D=3D FIRST_EXTERNAL_VECTOR) {
+> +			sysvec_irq_move_cleanup(regs);
+> +		} else if (pending_events.vector =3D=3D IA32_SYSCALL_VECTOR) {
+> +			WARN(1, "syscall shouldn't happen\n");
+> +		} else if (pending_events.vector >=3D FIRST_SYSTEM_VECTOR) {
+> +			switch (pending_events.vector) {
+> +#if IS_ENABLED(CONFIG_HYPERV)
+> +			case HYPERV_STIMER0_VECTOR:
+> +				sysvec_hyperv_stimer0(regs);
+> +				break;
+> +			case HYPERVISOR_CALLBACK_VECTOR:
+> +				sysvec_hyperv_callback(regs);
+> +				break;
+> +#endif
+> +#ifdef CONFIG_SMP
+> +			case RESCHEDULE_VECTOR:
+> +				sysvec_reschedule_ipi(regs);
+> +				break;
+> +			case IRQ_MOVE_CLEANUP_VECTOR:
+> +				sysvec_irq_move_cleanup(regs);
+> +				break;
+> +			case REBOOT_VECTOR:
+> +				sysvec_reboot(regs);
+> +				break;
+> +			case CALL_FUNCTION_SINGLE_VECTOR:
+> +				sysvec_call_function_single(regs);
+> +				break;
+> +			case CALL_FUNCTION_VECTOR:
+> +				sysvec_call_function(regs);
+> +				break;
+> +#endif
+> +#ifdef CONFIG_X86_LOCAL_APIC
+> +			case ERROR_APIC_VECTOR:
+> +				sysvec_error_interrupt(regs);
+> +				break;
+> +			case SPURIOUS_APIC_VECTOR:
+> +				sysvec_spurious_apic_interrupt(regs);
+> +				break;
+> +			case LOCAL_TIMER_VECTOR:
+> +				sysvec_apic_timer_interrupt(regs);
+> +				break;
+> +			case X86_PLATFORM_IPI_VECTOR:
+> +				sysvec_x86_platform_ipi(regs);
+> +				break;
+> +#endif
+> +			case 0x0:
+> +				break;
+> +			default:
+> +				panic("Unexpected vector %d\n", vector);
+> +				unreachable();
+> +			}
+> +		} else {
+> +			common_interrupt(regs, pending_events.vector);
+> +		}
+> +	}
+> +}
+> +
+>  static __always_inline bool on_vc_stack(struct pt_regs *regs)
+>  {
+>  	unsigned long sp =3D regs->sp;
+> @@ -179,18 +325,19 @@ void noinstr __sev_es_ist_enter(struct pt_regs *reg=
+s)
+>  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], new_ist);
+>  }
 >=20
+> -static void do_exc_hv(struct pt_regs *regs)
+> -{
+> -	/* Handle #HV exception. */
+> -}
+> -
+>  void check_hv_pending(struct pt_regs *regs)
+>  {
+>  	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+>  		return;
+>=20
+> -	if ((regs->flags & X86_EFLAGS_IF) =3D=3D 0)
+> +	/* Handle NMI when irq is disabled. */
+> +	if ((regs->flags & X86_EFLAGS_IF) =3D=3D 0) {
+> +		if (sev_hv_pending_nmi) {
+> +			exc_nmi(regs);
+> +			sev_hv_pending_nmi =3D 0;
+> +		}
+>  		return;
+> +	}
+>=20
+>  	do_exc_hv(regs);
+>  }
+> @@ -231,68 +378,35 @@ void noinstr __sev_es_ist_exit(void)
+>  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)=
+ist);
+>  }
+>=20
+> -/*
+> - * Nothing shall interrupt this code path while holding the per-CPU
+> - * GHCB. The backup GHCB is only for NMIs interrupting this path.
+> - *
+> - * Callers must disable local interrupts around it.
+> - */
+> -static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
+> +static bool sev_restricted_injection_enabled(void)
+> +{
+> +	return sev_status & MSR_AMD64_SNP_RESTRICTED_INJ;
+> +}
+> +
+> +void __init sev_snp_init_hv_handling(void)
+>  {
+>  	struct sev_es_runtime_data *data;
+> +	struct ghcb_state state;
+>  	struct ghcb *ghcb;
+> +	unsigned long flags;
+>=20
+>  	WARN_ON(!irqs_disabled());
+> +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP) ||
+> !sev_restricted_injection_enabled())
+> +		return;
+>=20
+>  	data =3D this_cpu_read(runtime_data);
+> -	ghcb =3D &data->ghcb_page;
+> -
+> -	if (unlikely(data->ghcb_active)) {
+> -		/* GHCB is already in use - save its contents */
+> -
+> -		if (unlikely(data->backup_ghcb_active)) {
+> -			/*
+> -			 * Backup-GHCB is also already in use. There is no way
+> -			 * to continue here so just kill the machine. To make
+> -			 * panic() work, mark GHCBs inactive so that messages
+> -			 * can be printed out.
+> -			 */
+> -			data->ghcb_active        =3D false;
+> -			data->backup_ghcb_active =3D false;
+> -
+> -			instrumentation_begin();
+> -			panic("Unable to handle #VC exception! GHCB and Backup
+> GHCB are already in use");
+> -			instrumentation_end();
+> -		}
+> -
+> -		/* Mark backup_ghcb active before writing to it */
+> -		data->backup_ghcb_active =3D true;
+>=20
+> -		state->ghcb =3D &data->backup_ghcb;
+> +	local_irq_save(flags);
+>=20
+> -		/* Backup GHCB content */
+> -		*state->ghcb =3D *ghcb;
+> -	} else {
+> -		state->ghcb =3D NULL;
+> -		data->ghcb_active =3D true;
+> -	}
+> +	ghcb =3D __sev_get_ghcb(&state);
+>=20
+> -	return ghcb;
+> -}
+> +	sev_snp_setup_hv_doorbell_page(ghcb);
+>=20
+> -static inline u64 sev_es_rd_ghcb_msr(void)
+> -{
+> -	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
+> -}
+> -
+> -static __always_inline void sev_es_wr_ghcb_msr(u64 val)
+> -{
+> -	u32 low, high;
+> +	__sev_put_ghcb(&state);
+>=20
+> -	low  =3D (u32)(val);
+> -	high =3D (u32)(val >> 32);
+> +	apic_set_eoi_write(hv_doorbell_apic_eoi_write);
+>=20
+> -	native_wrmsr(MSR_AMD64_SEV_ES_GHCB, low, high);
+> +	local_irq_restore(flags);
+>  }
+>=20
+>  static int vc_fetch_insn_kernel(struct es_em_ctxt *ctxt,
+> @@ -553,6 +667,69 @@ static enum es_result vc_slow_virt_to_phys(struct gh=
+cb
+> *ghcb, struct es_em_ctxt
+>  /* Include code shared with pre-decompression boot stage */
+>  #include "sev-shared.c"
+>=20
+> +/*
+> + * Nothing shall interrupt this code path while holding the per-CPU
+> + * GHCB. The backup GHCB is only for NMIs interrupting this path.
+> + *
+> + * Callers must disable local interrupts around it.
+> + */
+> +static noinstr struct ghcb *__sev_get_ghcb(struct ghcb_state *state)
+> +{
+> +	struct sev_es_runtime_data *data;
+> +	struct ghcb *ghcb;
+> +
+> +	WARN_ON(!irqs_disabled());
+> +
+> +	data =3D this_cpu_read(runtime_data);
+> +	ghcb =3D &data->ghcb_page;
+> +
+> +	if (unlikely(data->ghcb_active)) {
+> +		/* GHCB is already in use - save its contents */
+> +
+> +		if (unlikely(data->backup_ghcb_active)) {
+> +			/*
+> +			 * Backup-GHCB is also already in use. There is no way
+> +			 * to continue here so just kill the machine. To make
+> +			 * panic() work, mark GHCBs inactive so that messages
+> +			 * can be printed out.
+> +			 */
+> +			data->ghcb_active        =3D false;
+> +			data->backup_ghcb_active =3D false;
+> +
+> +			instrumentation_begin();
+> +			panic("Unable to handle #VC exception! GHCB and Backup
+> GHCB are already in use");
+> +			instrumentation_end();
+> +		}
+> +
+> +		/* Mark backup_ghcb active before writing to it */
+> +		data->backup_ghcb_active =3D true;
+> +
+> +		state->ghcb =3D &data->backup_ghcb;
+> +
+> +		/* Backup GHCB content */
+> +		*state->ghcb =3D *ghcb;
+> +	} else {
+> +		state->ghcb =3D NULL;
+> +		data->ghcb_active =3D true;
+> +	}
+> +
+> +	return ghcb;
+> +}
+> +
+> +static void sev_snp_setup_hv_doorbell_page(struct ghcb *ghcb)
+> +{
+> +	u64 pa;
+> +	enum es_result ret;
+> +
+> +	pa =3D __pa(sev_snp_current_doorbell_page());
+> +	vc_ghcb_invalidate(ghcb);
+> +	ret =3D vmgexit_hv_doorbell_page(ghcb,
+> +				       SVM_VMGEXIT_SET_HV_DOORBELL_PAGE,
+> +				       pa);
+> +	if (ret !=3D ES_OK)
+> +		panic("SEV-SNP: failed to set up #HV doorbell page");
+> +}
+> +
+>  static noinstr void __sev_put_ghcb(struct ghcb_state *state)
+>  {
+>  	struct sev_es_runtime_data *data;
+> @@ -1281,6 +1458,7 @@ static void snp_register_per_cpu_ghcb(void)
+>  	ghcb =3D &data->ghcb_page;
+>=20
+>  	snp_register_ghcb_early(__pa(ghcb));
+> +	sev_snp_setup_hv_doorbell_page(ghcb);
+>  }
+>=20
+>  void setup_ghcb(void)
+> @@ -1320,6 +1498,11 @@ void setup_ghcb(void)
+>  		snp_register_ghcb_early(__pa(&boot_ghcb_page));
+>  }
+>=20
+> +int vmgexit_hv_doorbell_page(struct ghcb *ghcb, u64 op, u64 pa)
+> +{
+> +	return sev_es_ghcb_hv_call(ghcb, NULL, SVM_VMGEXIT_HV_DOORBELL_PAGE,
+> op, pa);
+> +}
+> +
+>  #ifdef CONFIG_HOTPLUG_CPU
+>  static void sev_es_ap_hlt_loop(void)
+>  {
+> @@ -1393,6 +1576,7 @@ static void __init alloc_runtime_data(int cpu)
+>  static void __init init_ghcb(int cpu)
+>  {
+>  	struct sev_es_runtime_data *data;
+> +	struct sev_snp_runtime_data *snp_data;
+>  	int err;
+>=20
+>  	data =3D per_cpu(runtime_data, cpu);
+> @@ -1404,6 +1588,19 @@ static void __init init_ghcb(int cpu)
+>=20
+>  	memset(&data->ghcb_page, 0, sizeof(data->ghcb_page));
+>=20
+> +	snp_data =3D memblock_alloc(sizeof(*snp_data), PAGE_SIZE);
+> +	if (!snp_data)
+> +		panic("Can't allocate SEV-SNP runtime data");
+> +
+> +	err =3D early_set_memory_decrypted((unsigned long)&snp_data-
+> >hv_doorbell_page,
+> +					 sizeof(snp_data->hv_doorbell_page));
+> +	if (err)
+> +		panic("Can't map #HV doorbell pages unencrypted");
+> +
+> +	memset(&snp_data->hv_doorbell_page, 0, sizeof(snp_data-
+> >hv_doorbell_page));
+> +
+> +	per_cpu(snp_runtime_data, cpu) =3D snp_data;
+> +
+>  	data->ghcb_active =3D false;
+>  	data->backup_ghcb_active =3D false;
+>  }
+> @@ -2044,7 +2241,12 @@ DEFINE_IDTENTRY_VC_USER(exc_vmm_communication)
+>=20
+>  static bool hv_raw_handle_exception(struct pt_regs *regs)
+>  {
+> -	return false;
+> +	/* Clear the no_further_signal bit */
+> +	sev_snp_current_doorbell_page()->pending_events.events &=3D 0x7fff;
+> +
+> +	check_hv_pending(regs);
+> +
+> +	return true;
+>  }
+>=20
+>  static __always_inline bool on_hv_fallback_stack(struct pt_regs *regs)
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index d29debec8134..1aa6cab2394b 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -1503,5 +1503,7 @@ void __init trap_init(void)
+>  	cpu_init_exception_handling();
+>  	/* Setup traps as cpu_init() might #GP */
+>  	idt_setup_traps();
+> +	sev_snp_init_hv_handling();
+> +
+>  	cpu_init();
+>  }
 > --
 > 2.25.1
 
