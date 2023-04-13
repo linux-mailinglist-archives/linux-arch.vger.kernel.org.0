@@ -2,169 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0956E037A
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 03:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8246E0389
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 03:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjDMBHc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Apr 2023 21:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
+        id S229634AbjDMBQT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Apr 2023 21:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjDMBHc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 21:07:32 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A77619E
-        for <linux-arch@vger.kernel.org>; Wed, 12 Apr 2023 18:07:31 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id k7-20020a170902c40700b001a20f75cd40so7504532plk.22
-        for <linux-arch@vger.kernel.org>; Wed, 12 Apr 2023 18:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681348050; x=1683940050;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EBLbhNm3fsRbkajEjRmINqzacPrnC3sWkejBQFnfCeY=;
-        b=l81F5p/zxISuNsOTdPBgLBjqThC2vDQDK5Uw+271tLolnlAHCMjlZe8AeG/jf3nOrx
-         ExWxIQK7CKtblDvJ8H3VSzPnmPuqB/YeLXauyGbc5MYvJjSXVvNUPEsSQLuxsR77moKZ
-         UlTepofDb02LxLShDY5FjB4dpGfEQe3unZKqgtyJNvz/0ht5ta0+OYjQykpOh/ft4xiY
-         iCpoKLuH+PMrGysZjyKXtcxmXgl9ury1l15XbUM9kGssTvMz69Uh47nolIPDiQg/ZLYy
-         kWyCbb4PMZcJ8WgWH7QKSQOInzUxQhQDlNJXdkLhsMb661/+oYSUbCYk/vgAZ5pUqK7f
-         uA9w==
+        with ESMTP id S229536AbjDMBQS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 21:16:18 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA57E2D58;
+        Wed, 12 Apr 2023 18:16:13 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id i3so3303411wrc.4;
+        Wed, 12 Apr 2023 18:16:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681348050; x=1683940050;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EBLbhNm3fsRbkajEjRmINqzacPrnC3sWkejBQFnfCeY=;
-        b=Kn7twgMTFxlnLt5oXuSBhIy3KjWnv+H3KO+Npnq1ArS6BGqb4bcoGXE+hYSRBoiqdW
-         FmQJoatv7VJNoGMepLjMS6OM2TiX4IqDPfBbl3I9RlwN8q4J4dD0y6yQOuCUQi1YFdNi
-         NsHBrNd52ecv2Vc5DLVNT455fqI45mJgiIgTkNWL8uXgW78RA1oEZ/dI7SVohwJNxpv/
-         ZahkNNfzweLX7zFQvLiURE6iUG3k4BJfVBsCCCV27XkzuAK+NyJBD7Ita+lnKEoNrnsK
-         8FMg71EaMpEOtUi/y8hVeUnYjpF9eCIwN94+gIKPp5RzB5A74J80sxrkQvUHHLcAhJ0P
-         zwIg==
-X-Gm-Message-State: AAQBX9fSm0YOd/DBI+BvIgya2DXKM53/iQeio9UHzGLIZrRpQu7+7NM1
-        b6iZBZfC82WZ9IONYaeKTk6u7Rd3HSY=
-X-Google-Smtp-Source: AKy350Yi++EiqbAHiD3SnOi84M+UlU1LyPdYHPeuc+OePAq+A1CU6oZwmUR77MLD4jcxJ/2tHyPNMvmLNLU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:d413:b0:19a:7f9c:66e3 with SMTP id
- b19-20020a170902d41300b0019a7f9c66e3mr13167ple.5.1681348050454; Wed, 12 Apr
- 2023 18:07:30 -0700 (PDT)
-Date:   Wed, 12 Apr 2023 18:07:28 -0700
-In-Reply-To: <20230125125321.yvsivupbbaqkb7a5@box.shutemov.name>
-Mime-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <Y8H5Z3e4hZkFxAVS@google.com> <48953bf2-cee9-f818-dc50-5fb5b9b410bf@oracle.com>
- <Y9B1yiRR8DpANAEo@google.com> <20230125125321.yvsivupbbaqkb7a5@box.shutemov.name>
-Message-ID: <ZDdV0Fh7nDEnY/eW@google.com>
-Subject: Re: [PATCH v10 0/9] KVM: mm: fd-based approach for supporting KVM
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Liam Merwick <liam.merwick@oracle.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1681348572; x=1683940572;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EfIRGx4NmUH+6AwOlHWuuT1aV7ClftxmalQe00WqSS8=;
+        b=CyZHsL+IDly3ElcF5YkGbF+9QmFZJm0NGdS6C6Bj1ndEuCB3DdR6wu4Igu3cgEPZkM
+         X+I8qMITLsyko2IgYAryJSbXsizsWCXaVl3oAQUM6z974Q5i29iDS2NQzNnspx1WY8Cc
+         ErpdMb48FXMe7pTthwpJr8bLE1dVF59ozkVIa17ltiG0Ad8+bpvUVSam/URBSFKWq7er
+         nowOzadGNhBX61KXinI3Rh7l/iY/QYHGaGtSc5ArgXhCjJVTr6UlbwqNiVweGdbEBtFW
+         +zIwXXB5xRQWKJcndLsosb77NKgPsOkgq6ZkLJh3HHfz8LUUuSwX7e7N4qhfWoGEOcRZ
+         aq6g==
+X-Gm-Message-State: AAQBX9dOrrLDBBgLpVXFg9lRGZy8v7ThnOm88NRbY6d9PNFj83tJfqbE
+        hofMLvePOoB9MwmxFywQxVw=
+X-Google-Smtp-Source: AKy350YzdXdXMww1bxV4fYIJG4lRNJ+IggH071o/rb5LVmffYnDOwBFe7RHucNOzB6hlkJy0W8diow==
+X-Received: by 2002:adf:dd8c:0:b0:2cf:e868:f789 with SMTP id x12-20020adfdd8c000000b002cfe868f789mr123340wrl.48.1681348572055;
+        Wed, 12 Apr 2023 18:16:12 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h8-20020adfe988000000b002efdf3e5be0sm115885wrm.44.2023.04.12.18.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Apr 2023 18:16:11 -0700 (PDT)
+Date:   Thu, 13 Apr 2023 01:16:07 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v5 1/5] x86/init: Make get/set_rtc_noop() public
+Message-ID: <ZDdX11GuiTu0uvpW@liuwe-devbox-debian-v2>
+References: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+ <1681192532-15460-2-git-send-email-ssengar@linux.microsoft.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681192532-15460-2-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 25, 2023, Kirill A. Shutemov wrote:
-> On Wed, Jan 25, 2023 at 12:20:26AM +0000, Sean Christopherson wrote:
-> > On Tue, Jan 24, 2023, Liam Merwick wrote:
-> > > On 14/01/2023 00:37, Sean Christopherson wrote:
-> > > > On Fri, Dec 02, 2022, Chao Peng wrote:
-> > > > > This patch series implements KVM guest private memory for confidential
-> > > > > computing scenarios like Intel TDX[1]. If a TDX host accesses
-> > > > > TDX-protected guest memory, machine check can happen which can further
-> > > > > crash the running host system, this is terrible for multi-tenant
-> > > > > configurations. The host accesses include those from KVM userspace like
-> > > > > QEMU. This series addresses KVM userspace induced crash by introducing
-> > > > > new mm and KVM interfaces so KVM userspace can still manage guest memory
-> > > > > via a fd-based approach, but it can never access the guest memory
-> > > > > content.
-> > > > > 
-> > > > > The patch series touches both core mm and KVM code. I appreciate
-> > > > > Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
-> > > > > reviews are always welcome.
-> > > > >    - 01: mm change, target for mm tree
-> > > > >    - 02-09: KVM change, target for KVM tree
-> > > > 
-> > > > A version with all of my feedback, plus reworked versions of Vishal's selftest,
-> > > > is available here:
-> > > > 
-> > > >    git@github.com:sean-jc/linux.git x86/upm_base_support
-> > > > 
-> > > > It compiles and passes the selftest, but it's otherwise barely tested.  There are
-> > > > a few todos (2 I think?) and many of the commits need changelogs, i.e. it's still
-> > > > a WIP.
-> > > > 
-> > > 
-> > > When running LTP (https://github.com/linux-test-project/ltp) on the v10
-> > > bits (and also with Sean's branch above) I encounter the following NULL
-> > > pointer dereference with testcases/kernel/syscalls/madvise/madvise01
-> > > (100% reproducible).
-> > > 
-> > > It appears that in restrictedmem_error_page()
-> > > inode->i_mapping->private_data is NULL in the
-> > > list_for_each_entry_safe(inode, next, &sb->s_inodes, i_sb_list) but I
-> > > don't know why.
-> > 
-> > Kirill, can you take a look?  Or pass the buck to someone who can? :-)
+On Mon, Apr 10, 2023 at 10:55:28PM -0700, Saurabh Sengar wrote:
+> Make get/set_rtc_noop() to be public so that they can be used
+> in other modules as well.
 > 
-> The patch below should help.
+> Co-developed-by: Tianyu Lan <tiala@microsoft.com>
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> Reviewed-by: Wei Liu <wei.liu@kernel.org>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+
+x86 maintainers, can you please ack or nack this patch?
+
+This looks trivially correct, but I don't want to apply this patch
+without an ack since this is under arch/x86.
+
+Thanks,
+Wei.
+
+> ---
+>  arch/x86/include/asm/x86_init.h | 2 ++
+>  arch/x86/kernel/x86_init.c      | 4 ++--
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/mm/restrictedmem.c b/mm/restrictedmem.c
-> index 15c52301eeb9..39ada985c7c0 100644
-> --- a/mm/restrictedmem.c
-> +++ b/mm/restrictedmem.c
-> @@ -307,14 +307,29 @@ void restrictedmem_error_page(struct page *page, struct address_space *mapping)
+> diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
+> index acc20ae4079d..88085f369ff6 100644
+> --- a/arch/x86/include/asm/x86_init.h
+> +++ b/arch/x86/include/asm/x86_init.h
+> @@ -330,5 +330,7 @@ extern void x86_init_uint_noop(unsigned int unused);
+>  extern bool bool_x86_init_noop(void);
+>  extern void x86_op_int_noop(int cpu);
+>  extern bool x86_pnpbios_disabled(void);
+> +extern int set_rtc_noop(const struct timespec64 *now);
+> +extern void get_rtc_noop(struct timespec64 *now);
 >  
->  	spin_lock(&sb->s_inode_list_lock);
->  	list_for_each_entry_safe(inode, next, &sb->s_inodes, i_sb_list) {
-> -		struct restrictedmem *rm = inode->i_mapping->private_data;
->  		struct restrictedmem_notifier *notifier;
-> -		struct file *memfd = rm->memfd;
-> +		struct restrictedmem *rm;
->  		unsigned long index;
-> +		struct file *memfd;
+>  #endif
+> diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
+> index 95be3831df73..d82f4fa2f1bf 100644
+> --- a/arch/x86/kernel/x86_init.c
+> +++ b/arch/x86/kernel/x86_init.c
+> @@ -33,8 +33,8 @@ static int __init iommu_init_noop(void) { return 0; }
+>  static void iommu_shutdown_noop(void) { }
+>  bool __init bool_x86_init_noop(void) { return false; }
+>  void x86_op_int_noop(int cpu) { }
+> -static __init int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
+> -static __init void get_rtc_noop(struct timespec64 *now) { }
+> +int set_rtc_noop(const struct timespec64 *now) { return -EINVAL; }
+> +void get_rtc_noop(struct timespec64 *now) { }
 >  
-> -		if (memfd->f_mapping != mapping)
-> +		if (atomic_read(&inode->i_count))
-
-Kirill, should this be
-
-		if (!atomic_read(&inode->i_count))
-			continue;
-
-i.e. skip unreferenced inodes, not skip referenced inodes?
+>  static __initconst const struct of_device_id of_cmos_match[] = {
+>  	{ .compatible = "motorola,mc146818" },
+> -- 
+> 2.34.1
+> 
