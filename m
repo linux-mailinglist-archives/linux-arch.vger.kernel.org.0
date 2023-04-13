@@ -2,47 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D59E6E048E
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 04:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22156E0491
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 04:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjDMCj6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Apr 2023 22:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S231176AbjDMCkG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Apr 2023 22:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjDMCj2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 22:39:28 -0400
+        with ESMTP id S230034AbjDMCjk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 22:39:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330B1116;
-        Wed, 12 Apr 2023 19:37:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD8D9006;
+        Wed, 12 Apr 2023 19:38:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10F7A63AB0;
-        Thu, 13 Apr 2023 02:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C827AC4339E;
-        Thu, 13 Apr 2023 02:37:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E10F63AB1;
+        Thu, 13 Apr 2023 02:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DD6C433EF;
+        Thu, 13 Apr 2023 02:38:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681353477;
-        bh=1eO2mQahIqPUHlcx0RY6P55blfFH5Nk26/p9x67hqlw=;
+        s=k20201202; t=1681353487;
+        bh=4MSEWpCPmsHnmUimKtkF4utaACAQQHhpJqm1WmamqPs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RjNi92wimtViUaV+THs6bxRWyvng0d0vcBHwFa1KpsVTOaUyL/bbI1CClbqBS+iaz
-         4hUJINI+3y2xyfAsDIPmvBAeZR8Uj1IhGcVXNJx3FOngndEx7tV/a+Eoi8N3r7EYEi
-         03RfOibV4oQXaYkvTkdyBEbaokfuWYby3LLp9ytvs0BiXdwzIfYiRyBjOFCZohHV8k
-         kuJ26dKCK0Ws2pjP04mGz469XVLiaG1Orrrw2wXOPi+05CbPZYdAZUN17cQ2izKCNe
-         8oVaI7jxH+5AIug9wCfs9hpjULAHQCjnXL4NYbMT+U7bkxSB0RXObAA0b4LuJMPCMG
-         OVbRIxJxW0kwg==
+        b=fJ6QGMN0pG1gr1d7Oi6zw25f1Wa/w+Y5oeaJ5Ge6Eo6+oqjcHYb6dJHqwhf6QhLaO
+         HExE/QhpcWTlhVQXxVvRNWKvklhzbTskIIMrlCg71TVvxdsmMgeOzNlA51h0SFPSWn
+         0c1qGQbfHVERBs/t3wV29c4Ygw51SsgyhAzz99ylYW1V0s68xOuWxbWx9+0h82gyw9
+         tzZjViqfDwjEbmcpD7QpVHcqt/zS0c2RlxfwkVkusGg/fUzoaq8ieGpzbkWehcjW4W
+         RrKqF+NfpdYOmGK6TAAIml9sLq/9yBq9h3uLcBUvWcaEUkoSoCRZ0xLZ0lscVuMoPR
+         UsTGpoAahPk+Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 4/4] asm-generic/io.h: suppress endianness warnings for readq() and writeq()
-Date:   Wed, 12 Apr 2023 22:37:44 -0400
-Message-Id: <20230413023746.74984-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 3/3] asm-generic/io.h: suppress endianness warnings for readq() and writeq()
+Date:   Wed, 12 Apr 2023 22:37:58 -0400
+Message-Id: <20230413023759.75048-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413023746.74984-1-sashal@kernel.org>
-References: <20230413023746.74984-1-sashal@kernel.org>
+In-Reply-To: <20230413023759.75048-1-sashal@kernel.org>
+References: <20230413023759.75048-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -77,7 +77,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 9ea83d80eb6f9..dcbd41048b4e7 100644
+index d02806513670c..3dd3416f1df03 100644
 --- a/include/asm-generic/io.h
 +++ b/include/asm-generic/io.h
 @@ -190,7 +190,7 @@ static inline u64 readq(const volatile void __iomem *addr)
