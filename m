@@ -2,581 +2,273 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB826E0EEF
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 15:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695696E0F0C
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 15:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjDMNiL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Apr 2023 09:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S231417AbjDMNml (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Apr 2023 09:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjDMNha (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Apr 2023 09:37:30 -0400
+        with ESMTP id S231441AbjDMNmT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Apr 2023 09:42:19 -0400
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B535DD512
-        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 06:35:17 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5F3B751
+        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 06:40:32 -0700 (PDT)
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C2BC83F4EA
-        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 13:34:44 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7D27F3F42A
+        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 13:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1681392884;
-        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=YuPzYQjG7COSSYeO3LYFuncm1PCOdGpsFvJEXbzzqX9Iw/pDEeo7ZY2XFWUW9qglA
-         B/QZSdljEtlLfwa0wZ37sqkCEZtPVZEoiVc96suZ9PI+OT1mgXYvLw34wI3OfUn5tQ
-         vnI5GEBzRtmWGW3FcG8SEnYO5JA6yN8nXBW5N24NxusLJ/Z+taiEZBR85ayJxwmUjJ
-         RUY3fS7GTkDtKD9NISwrAoULGFs5P8I8JFtdQkhHWjuuu2q6TXYXpTFQ8K2LWwDROn
-         ketzDlnbIambHhvSu2igazld25feBeGqCMpzvItozdDDnm8dJxvybTE5mFfYq7s9Ks
-         LY8Ng+AJMQ91A==
-Received: by mail-ed1-f72.google.com with SMTP id a26-20020a509b5a000000b004acbe232c03so8117965edj.9
-        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 06:34:44 -0700 (PDT)
+        s=20210705; t=1681393201;
+        bh=Fwm2zA4Lu+pnk2wfvmdsIMzskA4Hu3SYjIKwChZpmug=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=AWQY2V1XaMZhW8MzHMHoQ2wL1+urxuW4IcripYmhfVi+9HleXuaSpmjnD7zoxUhy3
+         iyzP/W5gCwxLS3sP3JnxfAS2Ytw+Lp0fMNv5H31L7VSn2tg3oxS0Y+jMYjYjywkp+C
+         0BDZ2Uvk3E6R7LbYOREocWWvIXsslaTJjcRnSCWA/jfo/vODqywKDJMqjYu2zq8OIp
+         Wp54ZzOafPN/B07V8Ut2JPvO+JCj4zoKX2PziLc8aTWn3et/u1emPYjjbi8pEZnaf0
+         KL2OrcqUpM7iWJniBKOMYGDLT6EDb4srr/gaq3Ofl/OTD8SGbGz/C93Gff/SUZMPkU
+         x/YTgGuZomnfA==
+Received: by mail-yb1-f198.google.com with SMTP id j6-20020a255506000000b00b8ef3da4acfso13010679ybb.8
+        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 06:40:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681392883; x=1683984883;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1681393200; x=1683985200;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9OFnG70DkKWiYI7WkrGxo4LXdZLPfs21Ye1s1GRVjTU=;
-        b=fUz8u85z8eHENiPKz2i6q0PcChvLak/+HX5ZASGZOnor8Ccx11qnIXpm3g8t7TJd9t
-         MwktdJGs1ymefC4rOEoS7yebKH7gRwHQijtK766vYOWHuyQXdsJlkpNoJXdDLIv8aZBN
-         ajm2GL7x/lKkuRYbvfWFOkN0W3t9Iw2d2pEJR4bWhavNN1ORAQDaZ/ifsB8bkr7SKr+s
-         bg1mEAgTB+X26FNIzfd3Z/jg68kmq6ntSAVA4ChaqlT2hiWDtDsoUdrDFKzOkYWLhfCh
-         6IwpEiC9C/H3Al1Qm3IKqSS86KQEcqi5gk2K3TgSB3TvS1eWdi3O+WPOFzdUG2pr6Roq
-         uOag==
-X-Gm-Message-State: AAQBX9ee1kAsLaJrGQPzpfwOq0hpomFE84ORe8Eykh7GTXwBWW03Ah5t
-        APm+YLgZo5zSKZRbjG083ylSuRhqrqnCIkvBiiGSMRt56EtCA3kuCjs+Qw8/lXzt873ZIGnNr0F
-        stdRSH7IAT84UkcqLIhqdSZK1KLn7TEhh3Jkj9EU=
-X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639504ejb.46.1681392883229;
-        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
-X-Google-Smtp-Source: AKy350Y8Ak1AMedhDxrX0Hch7Jn9DeuDHTYqN/ZQLJbSNTNoYaDS8nhCmAWBIfXbaLlh1gAdP/aUGA==
-X-Received: by 2002:a17:906:ae8a:b0:882:cdd4:14d9 with SMTP id md10-20020a170906ae8a00b00882cdd414d9mr2639484ejb.46.1681392883023;
-        Thu, 13 Apr 2023 06:34:43 -0700 (PDT)
-Received: from amikhalitsyn.. ([95.91.208.118])
-        by smtp.gmail.com with ESMTPSA id et22-20020a170907295600b0094a966330fdsm976806ejc.211.2023.04.13.06.34.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Apr 2023 06:34:42 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     davem@davemloft.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Eric Dumazet <edumazet@google.com>,
+        bh=Fwm2zA4Lu+pnk2wfvmdsIMzskA4Hu3SYjIKwChZpmug=;
+        b=FWYePZ22GyZ+IZZ19Zqs7U3JyVtvGNtkL5k4erdaNJo3XKf+aUsogycVUnZ0MNrc15
+         s2d/0C8VqytQl2138Dl6YiohR6MsmI86QwfMr6EflX5DIUsr6bPfYYATBKeDZlgmzpIW
+         1Ehh2KjOcPcbhpfCgj0cbyHj6zghSZVueGpN/8GMNoVS345zgN52zv3Nx1mKWGZSknhH
+         ZMqHoPZ26DFCddSyWY33VvUCmopnUKmhb2Vx2jMNwJnQ2tl6aWaGZIG40VKkr42npWa4
+         6W0TBu9SPQSqTka9RUYFui9O9LjzTbnszZoym5czVImG+djGqKgg/CTyL8mE/qM+flwj
+         3Rtg==
+X-Gm-Message-State: AAQBX9f+BngmoJ6oLLoZpjyYOGqDH5CYkGGJ8te5W/XOiNhEkBrHRcDj
+        Zh4xFma/vopHLlOCG8GFgC8rMbtz5wFgYf6NjG7swV+hyaIrDVUFbiLTsycsmKnVwOpL6x5k3Wh
+        4dOLSKvbA4vzFFgpnrneB9/Qss48a6ICqhDfRKo4sO/dvEqiYKtuAFdk=
+X-Received: by 2002:a81:ae0b:0:b0:54f:8f2e:a03 with SMTP id m11-20020a81ae0b000000b0054f8f2e0a03mr1459785ywh.1.1681393200537;
+        Thu, 13 Apr 2023 06:40:00 -0700 (PDT)
+X-Google-Smtp-Source: AKy350bWBZ+Oe+dqnl0WOzPCmKCiFgGY9gArAk6IN/SlCoHxVcrE5UC1Wg715sEPuLSw04N9G3npVyH3kp0ZgILmuV4=
+X-Received: by 2002:a81:ae0b:0:b0:54f:8f2e:a03 with SMTP id
+ m11-20020a81ae0b000000b0054f8f2e0a03mr1459771ywh.1.1681393200269; Thu, 13 Apr
+ 2023 06:40:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230411104231.160837-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230411104231.160837-2-aleksandr.mikhalitsyn@canonical.com> <20230411-umarmen-mulden-c34abb9b2511@brauner>
+In-Reply-To: <20230411-umarmen-mulden-c34abb9b2511@brauner>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Thu, 13 Apr 2023 15:39:49 +0200
+Message-ID: <CAEivzxfHjSPGu9HJP0jKa0i34vUVbaMqkGks+=0FzT7Wq_so8A@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Leon Romanovsky <leon@kernel.org>,
         David Ahern <dsahern@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v4 4/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
-Date:   Thu, 13 Apr 2023 15:33:55 +0200
-Message-Id: <20230413133355.350571-5-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Basic test to check consistency between:
-- SCM_CREDENTIALS and SCM_PIDFD
-- SO_PEERCRED and SO_PEERPIDFD
+Fixed in -v4
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
-v3:
-	- started using kselftest lib (thanks to Kuniyuki Iwashima for suggestion/review)
-	- now test covers abstract sockets too and SOCK_DGRAM sockets
----
- tools/testing/selftests/net/.gitignore        |   1 +
- tools/testing/selftests/net/af_unix/Makefile  |   2 +-
- .../testing/selftests/net/af_unix/scm_pidfd.c | 430 ++++++++++++++++++
- 3 files changed, 432 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/af_unix/scm_pidfd.c
+https://lore.kernel.org/netdev/20230413133355.350571-2-aleksandr.mikhalitsy=
+n@canonical.com/T/#u
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 80f06aa62034..83fd1ebd34ec 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -26,6 +26,7 @@ reuseport_bpf_cpu
- reuseport_bpf_numa
- reuseport_dualstack
- rxtimestamp
-+scm_pidfd
- sk_bind_sendto_listen
- sk_connect_zero_addr
- socket
-diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing/selftests/net/af_unix/Makefile
-index 1e4b397cece6..f5ca9da8c4d5 100644
---- a/tools/testing/selftests/net/af_unix/Makefile
-+++ b/tools/testing/selftests/net/af_unix/Makefile
-@@ -1,3 +1,3 @@
--TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect
-+TEST_GEN_PROGS := diag_uid test_unix_oob unix_connect scm_pidfd
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/af_unix/scm_pidfd.c b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-new file mode 100644
-index 000000000000..a86222143d79
---- /dev/null
-+++ b/tools/testing/selftests/net/af_unix/scm_pidfd.c
-@@ -0,0 +1,430 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+#define _GNU_SOURCE
-+#include <error.h>
-+#include <limits.h>
-+#include <stddef.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/socket.h>
-+#include <linux/socket.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <sys/un.h>
-+#include <sys/signal.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+
-+#include "../../kselftest_harness.h"
-+
-+#define clean_errno() (errno == 0 ? "None" : strerror(errno))
-+#define log_err(MSG, ...)                                                   \
-+	fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", __FILE__, __LINE__, \
-+		clean_errno(), ##__VA_ARGS__)
-+
-+#ifndef SCM_PIDFD
-+#define SCM_PIDFD 0x04
-+#endif
-+
-+static void child_die()
-+{
-+	exit(1);
-+}
-+
-+static int safe_int(const char *numstr, int *converted)
-+{
-+	char *err = NULL;
-+	long sli;
-+
-+	errno = 0;
-+	sli = strtol(numstr, &err, 0);
-+	if (errno == ERANGE && (sli == LONG_MAX || sli == LONG_MIN))
-+		return -ERANGE;
-+
-+	if (errno != 0 && sli == 0)
-+		return -EINVAL;
-+
-+	if (err == numstr || *err != '\0')
-+		return -EINVAL;
-+
-+	if (sli > INT_MAX || sli < INT_MIN)
-+		return -ERANGE;
-+
-+	*converted = (int)sli;
-+	return 0;
-+}
-+
-+static int char_left_gc(const char *buffer, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i++) {
-+		if (buffer[i] == ' ' || buffer[i] == '\t')
-+			continue;
-+
-+		return i;
-+	}
-+
-+	return 0;
-+}
-+
-+static int char_right_gc(const char *buffer, size_t len)
-+{
-+	int i;
-+
-+	for (i = len - 1; i >= 0; i--) {
-+		if (buffer[i] == ' ' || buffer[i] == '\t' ||
-+		    buffer[i] == '\n' || buffer[i] == '\0')
-+			continue;
-+
-+		return i + 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static char *trim_whitespace_in_place(char *buffer)
-+{
-+	buffer += char_left_gc(buffer, strlen(buffer));
-+	buffer[char_right_gc(buffer, strlen(buffer))] = '\0';
-+	return buffer;
-+}
-+
-+/* borrowed (with all helpers) from pidfd/pidfd_open_test.c */
-+static pid_t get_pid_from_fdinfo_file(int pidfd, const char *key, size_t keylen)
-+{
-+	int ret;
-+	char path[512];
-+	FILE *f;
-+	size_t n = 0;
-+	pid_t result = -1;
-+	char *line = NULL;
-+
-+	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
-+
-+	f = fopen(path, "re");
-+	if (!f)
-+		return -1;
-+
-+	while (getline(&line, &n, f) != -1) {
-+		char *numstr;
-+
-+		if (strncmp(line, key, keylen))
-+			continue;
-+
-+		numstr = trim_whitespace_in_place(line + 4);
-+		ret = safe_int(numstr, &result);
-+		if (ret < 0)
-+			goto out;
-+
-+		break;
-+	}
-+
-+out:
-+	free(line);
-+	fclose(f);
-+	return result;
-+}
-+
-+static int cmsg_check(int fd)
-+{
-+	struct msghdr msg = { 0 };
-+	struct cmsghdr *cmsg;
-+	struct iovec iov;
-+	struct ucred *ucred = NULL;
-+	int data = 0;
-+	char control[CMSG_SPACE(sizeof(struct ucred)) +
-+		     CMSG_SPACE(sizeof(int))] = { 0 };
-+	int *pidfd = NULL;
-+	pid_t parent_pid;
-+	int err;
-+
-+	iov.iov_base = &data;
-+	iov.iov_len = sizeof(data);
-+
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+	msg.msg_control = control;
-+	msg.msg_controllen = sizeof(control);
-+
-+	err = recvmsg(fd, &msg, 0);
-+	if (err < 0) {
-+		log_err("recvmsg");
-+		return 1;
-+	}
-+
-+	if (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC)) {
-+		log_err("recvmsg: truncated");
-+		return 1;
-+	}
-+
-+	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL;
-+	     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_PIDFD) {
-+			if (cmsg->cmsg_len < sizeof(*pidfd)) {
-+				log_err("CMSG parse: SCM_PIDFD wrong len");
-+				return 1;
-+			}
-+
-+			pidfd = (void *)CMSG_DATA(cmsg);
-+		}
-+
-+		if (cmsg->cmsg_level == SOL_SOCKET &&
-+		    cmsg->cmsg_type == SCM_CREDENTIALS) {
-+			if (cmsg->cmsg_len < sizeof(*ucred)) {
-+				log_err("CMSG parse: SCM_CREDENTIALS wrong len");
-+				return 1;
-+			}
-+
-+			ucred = (void *)CMSG_DATA(cmsg);
-+		}
-+	}
-+
-+	/* send(pfd, "x", sizeof(char), 0) */
-+	if (data != 'x') {
-+		log_err("recvmsg: data corruption");
-+		return 1;
-+	}
-+
-+	if (!pidfd) {
-+		log_err("CMSG parse: SCM_PIDFD not found");
-+		return 1;
-+	}
-+
-+	if (!ucred) {
-+		log_err("CMSG parse: SCM_CREDENTIALS not found");
-+		return 1;
-+	}
-+
-+	/* pidfd from SCM_PIDFD should point to the parent process PID */
-+	parent_pid =
-+		get_pid_from_fdinfo_file(*pidfd, "Pid:", sizeof("Pid:") - 1);
-+	if (parent_pid != getppid()) {
-+		log_err("wrong SCM_PIDFD %d != %d", parent_pid, getppid());
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+struct sock_addr {
-+	char sock_name[32];
-+	struct sockaddr_un listen_addr;
-+	socklen_t addrlen;
-+};
-+
-+FIXTURE(scm_pidfd)
-+{
-+	int server;
-+	pid_t client_pid;
-+	int startup_pipe[2];
-+	struct sock_addr server_addr;
-+	struct sock_addr *client_addr;
-+};
-+
-+FIXTURE_VARIANT(scm_pidfd)
-+{
-+	int type;
-+	bool abstract;
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, stream_pathname)
-+{
-+	.type = SOCK_STREAM,
-+	.abstract = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, stream_abstract)
-+{
-+	.type = SOCK_STREAM,
-+	.abstract = 1,
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, dgram_pathname)
-+{
-+	.type = SOCK_DGRAM,
-+	.abstract = 0,
-+};
-+
-+FIXTURE_VARIANT_ADD(scm_pidfd, dgram_abstract)
-+{
-+	.type = SOCK_DGRAM,
-+	.abstract = 1,
-+};
-+
-+FIXTURE_SETUP(scm_pidfd)
-+{
-+	self->client_addr = mmap(NULL, sizeof(*self->client_addr), PROT_READ | PROT_WRITE,
-+				 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+	ASSERT_NE(MAP_FAILED, self->client_addr);
-+}
-+
-+FIXTURE_TEARDOWN(scm_pidfd)
-+{
-+	close(self->server);
-+
-+	kill(self->client_pid, SIGKILL);
-+	waitpid(self->client_pid, NULL, 0);
-+
-+	if (!variant->abstract) {
-+		unlink(self->server_addr.sock_name);
-+		unlink(self->client_addr->sock_name);
-+	}
-+}
-+
-+static void fill_sockaddr(struct sock_addr *addr, bool abstract)
-+{
-+	char *sun_path_buf = (char *)&addr->listen_addr.sun_path;
-+
-+	addr->listen_addr.sun_family = AF_UNIX;
-+	addr->addrlen = offsetof(struct sockaddr_un, sun_path);
-+	snprintf(addr->sock_name, sizeof(addr->sock_name), "scm_pidfd_%d", getpid());
-+	addr->addrlen += strlen(addr->sock_name);
-+	if (abstract) {
-+		*sun_path_buf = '\0';
-+		addr->addrlen++;
-+		sun_path_buf++;
-+	} else {
-+		unlink(addr->sock_name);
-+	}
-+	memcpy(sun_path_buf, addr->sock_name, strlen(addr->sock_name));
-+}
-+
-+static void client(FIXTURE_DATA(scm_pidfd) *self,
-+		   const FIXTURE_VARIANT(scm_pidfd) *variant)
-+{
-+	int err;
-+	int cfd;
-+	socklen_t len;
-+	struct ucred peer_cred;
-+	int peer_pidfd;
-+	pid_t peer_pid;
-+	int on = 0;
-+
-+	cfd = socket(AF_UNIX, variant->type, 0);
-+	if (cfd < 0) {
-+		log_err("socket");
-+		child_die();
-+	}
-+
-+	if (variant->type == SOCK_DGRAM) {
-+		fill_sockaddr(self->client_addr, variant->abstract);
-+
-+		if (bind(cfd, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen)) {
-+			log_err("bind");
-+			child_die();
-+		}
-+	}
-+
-+	if (connect(cfd, (struct sockaddr *)&self->server_addr.listen_addr,
-+		    self->server_addr.addrlen) != 0) {
-+		log_err("connect");
-+		child_die();
-+	}
-+
-+	on = 1;
-+	if (setsockopt(cfd, SOL_SOCKET, SO_PASSCRED, &on, sizeof(on))) {
-+		log_err("Failed to set SO_PASSCRED");
-+		child_die();
-+	}
-+
-+	if (setsockopt(cfd, SOL_SOCKET, SO_PASSPIDFD, &on, sizeof(on))) {
-+		log_err("Failed to set SO_PASSPIDFD");
-+		child_die();
-+	}
-+
-+	close(self->startup_pipe[1]);
-+
-+	if (cmsg_check(cfd)) {
-+		log_err("cmsg_check failed");
-+		child_die();
-+	}
-+
-+	/* skip further for SOCK_DGRAM as it's not applicable */
-+	if (variant->type == SOCK_DGRAM)
-+		return;
-+
-+	len = sizeof(peer_cred);
-+	if (getsockopt(cfd, SOL_SOCKET, SO_PEERCRED, &peer_cred, &len)) {
-+		log_err("Failed to get SO_PEERCRED");
-+		child_die();
-+	}
-+
-+	len = sizeof(peer_pidfd);
-+	if (getsockopt(cfd, SOL_SOCKET, SO_PEERPIDFD, &peer_pidfd, &len)) {
-+		log_err("Failed to get SO_PEERPIDFD");
-+		child_die();
-+	}
-+
-+	/* pid from SO_PEERCRED should point to the parent process PID */
-+	if (peer_cred.pid != getppid()) {
-+		log_err("peer_cred.pid != getppid(): %d != %d", peer_cred.pid, getppid());
-+		child_die();
-+	}
-+
-+	peer_pid = get_pid_from_fdinfo_file(peer_pidfd,
-+					    "Pid:", sizeof("Pid:") - 1);
-+	if (peer_pid != peer_cred.pid) {
-+		log_err("peer_pid != peer_cred.pid: %d != %d", peer_pid, peer_cred.pid);
-+		child_die();
-+	}
-+}
-+
-+TEST_F(scm_pidfd, test)
-+{
-+	int err;
-+	int pfd;
-+	int child_status = 0;
-+
-+	self->server = socket(AF_UNIX, variant->type, 0);
-+	ASSERT_NE(-1, self->server);
-+
-+	fill_sockaddr(&self->server_addr, variant->abstract);
-+
-+	err = bind(self->server, (struct sockaddr *)&self->server_addr.listen_addr, self->server_addr.addrlen);
-+	ASSERT_EQ(0, err);
-+
-+	if (variant->type == SOCK_STREAM) {
-+		err = listen(self->server, 1);
-+		ASSERT_EQ(0, err);
-+	}
-+
-+	err = pipe(self->startup_pipe);
-+	ASSERT_NE(-1, err);
-+
-+	self->client_pid = fork();
-+	ASSERT_NE(-1, self->client_pid);
-+	if (self->client_pid == 0) {
-+		close(self->server);
-+		close(self->startup_pipe[0]);
-+		client(self, variant);
-+		exit(0);
-+	}
-+	close(self->startup_pipe[1]);
-+
-+	if (variant->type == SOCK_STREAM) {
-+		pfd = accept(self->server, NULL, NULL);
-+		ASSERT_NE(-1, pfd);
-+	} else {
-+		pfd = self->server;
-+	}
-+
-+	/* wait until the child arrives at checkpoint */
-+	read(self->startup_pipe[0], &err, sizeof(int));
-+	close(self->startup_pipe[0]);
-+
-+	if (variant->type == SOCK_DGRAM) {
-+		err = sendto(pfd, "x", sizeof(char), 0, (struct sockaddr *)&self->client_addr->listen_addr, self->client_addr->addrlen);
-+		ASSERT_NE(-1, err);
-+	} else {
-+		err = send(pfd, "x", sizeof(char), 0);
-+		ASSERT_NE(-1, err);
-+	}
-+
-+	close(pfd);
-+	waitpid(self->client_pid, &child_status, 0);
-+	ASSERT_EQ(0, WIFEXITED(child_status) ? WEXITSTATUS(child_status) : 1);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.34.1
+Kind regards,
+Alex
 
+
+On Tue, Apr 11, 2023 at 5:37=E2=80=AFPM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Tue, Apr 11, 2023 at 12:42:28PM +0200, Alexander Mikhalitsyn wrote:
+> > Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTI=
+ALS,
+> > but it contains pidfd instead of plain pid, which allows programmers no=
+t
+> > to care about PID reuse problem.
+> >
+> > Idea comes from UAPI kernel group:
+> > https://uapi-group.org/kernel-features/
+> >
+> > Big thanks to Christian Brauner and Lennart Poettering for productive
+> > discussions about this.
+> >
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: Leon Romanovsky <leon@kernel.org>
+> > Cc: David Ahern <dsahern@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > Cc: Lennart Poettering <mzxreary@0pointer.de>
+> > Cc: Luca Boccassi <bluca@debian.org>
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: linux-arch@vger.kernel.org
+> > Tested-by: Luca Boccassi <bluca@debian.org>
+> > Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+> > v2:
+> >       According to review comments from Kuniyuki Iwashima and Christian=
+ Brauner:
+> >       - use pidfd_create(..) retval as a result
+> >       - whitespace change
+> > ---
+> >  arch/alpha/include/uapi/asm/socket.h    |  2 ++
+> >  arch/mips/include/uapi/asm/socket.h     |  2 ++
+> >  arch/parisc/include/uapi/asm/socket.h   |  2 ++
+> >  arch/sparc/include/uapi/asm/socket.h    |  2 ++
+> >  include/linux/net.h                     |  1 +
+> >  include/linux/socket.h                  |  1 +
+> >  include/net/scm.h                       | 14 ++++++++++++--
+> >  include/uapi/asm-generic/socket.h       |  2 ++
+> >  net/core/sock.c                         | 11 +++++++++++
+> >  net/mptcp/sockopt.c                     |  1 +
+> >  net/unix/af_unix.c                      | 18 +++++++++++++-----
+> >  tools/include/uapi/asm-generic/socket.h |  2 ++
+> >  12 files changed, 51 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/=
+uapi/asm/socket.h
+> > index 739891b94136..ff310613ae64 100644
+> > --- a/arch/alpha/include/uapi/asm/socket.h
+> > +++ b/arch/alpha/include/uapi/asm/socket.h
+> > @@ -137,6 +137,8 @@
+> >
+> >  #define SO_RCVMARK           75
+> >
+> > +#define SO_PASSPIDFD         76
+> > +
+> >  #if !defined(__KERNEL__)
+> >
+> >  #if __BITS_PER_LONG =3D=3D 64
+> > diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/ua=
+pi/asm/socket.h
+> > index 18f3d95ecfec..762dcb80e4ec 100644
+> > --- a/arch/mips/include/uapi/asm/socket.h
+> > +++ b/arch/mips/include/uapi/asm/socket.h
+> > @@ -148,6 +148,8 @@
+> >
+> >  #define SO_RCVMARK           75
+> >
+> > +#define SO_PASSPIDFD         76
+> > +
+> >  #if !defined(__KERNEL__)
+> >
+> >  #if __BITS_PER_LONG =3D=3D 64
+> > diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/includ=
+e/uapi/asm/socket.h
+> > index f486d3dfb6bb..df16a3e16d64 100644
+> > --- a/arch/parisc/include/uapi/asm/socket.h
+> > +++ b/arch/parisc/include/uapi/asm/socket.h
+> > @@ -129,6 +129,8 @@
+> >
+> >  #define SO_RCVMARK           0x4049
+> >
+> > +#define SO_PASSPIDFD         0x404A
+> > +
+> >  #if !defined(__KERNEL__)
+> >
+> >  #if __BITS_PER_LONG =3D=3D 64
+> > diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/=
+uapi/asm/socket.h
+> > index 2fda57a3ea86..6e2847804fea 100644
+> > --- a/arch/sparc/include/uapi/asm/socket.h
+> > +++ b/arch/sparc/include/uapi/asm/socket.h
+> > @@ -130,6 +130,8 @@
+> >
+> >  #define SO_RCVMARK               0x0054
+> >
+> > +#define SO_PASSPIDFD             0x0055
+> > +
+> >  #if !defined(__KERNEL__)
+> >
+> >
+> > diff --git a/include/linux/net.h b/include/linux/net.h
+> > index b73ad8e3c212..c234dfbe7a30 100644
+> > --- a/include/linux/net.h
+> > +++ b/include/linux/net.h
+> > @@ -43,6 +43,7 @@ struct net;
+> >  #define SOCK_PASSSEC         4
+> >  #define SOCK_SUPPORT_ZC              5
+> >  #define SOCK_CUSTOM_SOCKOPT  6
+> > +#define SOCK_PASSPIDFD               7
+> >
+> >  #ifndef ARCH_HAS_SOCKET_TYPES
+> >  /**
+> > diff --git a/include/linux/socket.h b/include/linux/socket.h
+> > index 13c3a237b9c9..6bf90f251910 100644
+> > --- a/include/linux/socket.h
+> > +++ b/include/linux/socket.h
+> > @@ -177,6 +177,7 @@ static inline size_t msg_data_left(struct msghdr *m=
+sg)
+> >  #define      SCM_RIGHTS      0x01            /* rw: access rights (arr=
+ay of int) */
+> >  #define SCM_CREDENTIALS 0x02         /* rw: struct ucred             *=
+/
+> >  #define SCM_SECURITY 0x03            /* rw: security label           *=
+/
+> > +#define SCM_PIDFD    0x04            /* ro: pidfd (int)              *=
+/
+> >
+> >  struct ucred {
+> >       __u32   pid;
+> > diff --git a/include/net/scm.h b/include/net/scm.h
+> > index 585adc1346bd..0c717ae9c8db 100644
+> > --- a/include/net/scm.h
+> > +++ b/include/net/scm.h
+> > @@ -124,8 +124,9 @@ static __inline__ void scm_recv(struct socket *sock=
+, struct msghdr *msg,
+> >                               struct scm_cookie *scm, int flags)
+> >  {
+> >       if (!msg->msg_control) {
+> > -             if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
+> > -                 scm_has_secdata(sock))
+> > +             if (test_bit(SOCK_PASSCRED, &sock->flags) ||
+> > +                 test_bit(SOCK_PASSPIDFD, &sock->flags) ||
+> > +                 scm->fp || scm_has_secdata(sock))
+> >                       msg->msg_flags |=3D MSG_CTRUNC;
+> >               scm_destroy(scm);
+> >               return;
+> > @@ -141,6 +142,15 @@ static __inline__ void scm_recv(struct socket *soc=
+k, struct msghdr *msg,
+> >               put_cmsg(msg, SOL_SOCKET, SCM_CREDENTIALS, sizeof(ucreds)=
+, &ucreds);
+> >       }
+> >
+> > +     if (test_bit(SOCK_PASSPIDFD, &sock->flags)) {
+> > +             int pidfd;
+> > +
+> > +             WARN_ON_ONCE(!scm->pid);
+> > +             pidfd =3D pidfd_create(scm->pid, 0);
+> > +
+> > +             put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)=
+;
+>
+> I know you already mentioned that you accidently missed to change this
+> to not leak an fd. But just so we keep track of it see the comment to v2
+> https://lore.kernel.org/netdev/20230322154817.c6qasnixow452e6x@wittgenste=
+in/#t
