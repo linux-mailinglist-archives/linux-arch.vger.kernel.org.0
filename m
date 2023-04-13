@@ -2,102 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22156E0491
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 04:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404B36E0536
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Apr 2023 05:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjDMCkG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Apr 2023 22:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S229586AbjDMD3v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Apr 2023 23:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjDMCjk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 22:39:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD8D9006;
-        Wed, 12 Apr 2023 19:38:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E10F63AB1;
-        Thu, 13 Apr 2023 02:38:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DD6C433EF;
-        Thu, 13 Apr 2023 02:38:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1681353487;
-        bh=4MSEWpCPmsHnmUimKtkF4utaACAQQHhpJqm1WmamqPs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fJ6QGMN0pG1gr1d7Oi6zw25f1Wa/w+Y5oeaJ5Ge6Eo6+oqjcHYb6dJHqwhf6QhLaO
-         HExE/QhpcWTlhVQXxVvRNWKvklhzbTskIIMrlCg71TVvxdsmMgeOzNlA51h0SFPSWn
-         0c1qGQbfHVERBs/t3wV29c4Ygw51SsgyhAzz99ylYW1V0s68xOuWxbWx9+0h82gyw9
-         tzZjViqfDwjEbmcpD7QpVHcqt/zS0c2RlxfwkVkusGg/fUzoaq8ieGpzbkWehcjW4W
-         RrKqF+NfpdYOmGK6TAAIml9sLq/9yBq9h3uLcBUvWcaEUkoSoCRZ0xLZ0lscVuMoPR
-         UsTGpoAahPk+Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 3/3] asm-generic/io.h: suppress endianness warnings for readq() and writeq()
-Date:   Wed, 12 Apr 2023 22:37:58 -0400
-Message-Id: <20230413023759.75048-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230413023759.75048-1-sashal@kernel.org>
-References: <20230413023759.75048-1-sashal@kernel.org>
+        with ESMTP id S229498AbjDMD3u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Apr 2023 23:29:50 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B12139;
+        Wed, 12 Apr 2023 20:29:49 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a52674f1abso9563125ad.2;
+        Wed, 12 Apr 2023 20:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681356588; x=1683948588;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ct5vuDCIzGTNk2BukrX+dS6D2BQBnqAt9BW7ZooNL4=;
+        b=i51NDCHer5Nw5tsR6vq2qb3VFxbbEMt8N3XKCTXJn4CRPmo9u1H9DVKr6bUFmKd2qr
+         UH6hyyjuajYvY+Ww1ecJgQ6TuYj6o8OL5qV+Kx/mTsHQZhTjA99KJveR27Tupro20RdJ
+         AlxAWwLXCTNawsNaoZAs7/nh+vomwU7TGDy8TQCTnGQ3SfZTmPFBdw78aW0Kerczi3Rz
+         VTQiPb29KOUwdX7tfrZsi9pkQtvJSV3p9+R7jZB3pX6u5LA5gbFtBAp6FtiU7Sgyq5Bn
+         EuQEgt258NXfxoTPwWx+lA9ac4RP70bNejZdgTytiP+IzGz/GoApaUEZnhBKOvmOjjtV
+         wmYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681356588; x=1683948588;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9ct5vuDCIzGTNk2BukrX+dS6D2BQBnqAt9BW7ZooNL4=;
+        b=LSg2kIDL6pOqSV2HuAYFFI/tqVCvtwc+TJlf3IpgTnnNPRpjcBWSxZ/JHumdXtA4wN
+         Qu9GvlNqqgPX6nb3ouO/Z1D+U9mtuxQnse/jKy07K0MgmoPSqQQpdJXfZZFdbHDPLMdY
+         ap2o/hG+n/D7CY85SukMk/Tw6LrPo71gXQeOwso/WIvj6aLNbfzV3S16sNF8KOsIA1bF
+         AHL9siBUgMFYYA/02i7JvLCbQaO/v5OXdvC9jlK2in1rwW9lNv+QaPKDKbJkMgulQsd2
+         McQzYhrs2LFhLpmYiWz9vLJjC4tKIBV2aprbTlZZGX0mSyGddvWKxpPgW6/+BpIpkBal
+         Pq2Q==
+X-Gm-Message-State: AAQBX9eEOg4AUKyCRixTpW92Jj39vlz2xPKj16tuBfPHlZCecZ0BnIUs
+        r2lWe9hx/aGL4Irgw0tlBgQ=
+X-Google-Smtp-Source: AKy350a5bJd+5J9hzd7eNKibHMPGrbvJJaBfv31qVnH2TgtZiZ0L8twbCoBPIz9V/kjtsW4YgUp+bg==
+X-Received: by 2002:a05:6a00:a1d:b0:637:f1ae:d47 with SMTP id p29-20020a056a000a1d00b00637f1ae0d47mr1369781pfh.17.1681356588596;
+        Wed, 12 Apr 2023 20:29:48 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id s5-20020aa78d45000000b005941ff79428sm199275pfe.90.2023.04.12.20.29.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Apr 2023 20:29:48 -0700 (PDT)
+Message-ID: <518e2a05-a4e8-8dbb-8ba0-8e8cf80a57d2@gmail.com>
+Date:   Thu, 13 Apr 2023 11:29:36 +0800
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [RFC PATCH V4 03/17] x86/hyperv: Set Virtual Trust Level in VMBus
+ init message
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "pangupta@amd.com" <pangupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230403174406.4180472-1-ltykernel@gmail.com>
+ <20230403174406.4180472-4-ltykernel@gmail.com>
+ <BYAPR21MB1688C9F78B11DA2FC7A5AAFFD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB1688C9F78B11DA2FC7A5AAFFD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+On 4/12/2023 10:24 PM, Michael Kelley (LINUX) wrote:
+>> +static u8 __init get_vtl(void)
+>> +{
+>> +	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
+>> +	struct hv_get_vp_registers_input *input;
+>> +	struct hv_get_vp_registers_output *output;
+>> +	u64 vtl = 0;
+>> +	u64 ret;
+>> +	unsigned long flags;
+>> +
+>> +	local_irq_save(flags);
+>> +	input = *(struct hv_get_vp_registers_input **)this_cpu_ptr(hyperv_pcpu_input_arg);
+> The cast to struct hv_get_vp_registers_input isn't needed here.  Just do:
+> 
+> 	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> 
+> I know we have other code that references hyperv_pcpu_input_arg with a more
+> complicated code sequence, but it's really not necessary.  At some point, we
+> should go back and clean those up, but let's not add any new cases. 😄
 
-[ Upstream commit d564fa1ff19e893e2971d66e5c8f49dc1cdc8ffc ]
 
-Commit c1d55d50139b ("asm-generic/io.h: Fix sparse warnings on
-big-endian architectures") missed fixing the 64-bit accessors.
+Hi Michael:
+	Thanks for your review. Yes, agree. I just follow the old coding style 
+and will update.
 
-Arnd explains in the attached link why the casts are necessary, even if
-__raw_readq() and __raw_writeq() do not take endian-specific types.
+> 
+> 
+>> +	output = (struct hv_get_vp_registers_output *)input;
+>> +	if (!input) {
+>> +		local_irq_restore(flags);
+>> +		goto done;
+>> +	}
+>> +
+>> +	memset(input, 0, sizeof(*input) + sizeof(input->element[0]));
+> Use struct_size() to calculate the size of a structure plus a trailing
+> variable size array.
+> 
+>> +	input->header.partitionid = HV_PARTITION_ID_SELF;
+>> +	input->header.vpindex = HV_VP_INDEX_SELF;
+>> +	input->header.inputvtl = 0;
+>> +	input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
+>> +
+>> +	ret = hv_do_hypercall(control, input, output);
+>> +	if (hv_result_success(ret))
+>> +		vtl = output->as64.low & HV_X64_VTL_MASK;
+>> +	else
+>> +		pr_err("Hyper-V: failed to get VTL!");
+> Let's include the hypercall status in the failure message.  If a failure ever
+> happens, we will really want to know what that status is.  😄
+> 
 
-Link: https://lore.kernel.org/lkml/9105d6fc-880b-4734-857d-e3d30b87ccf6@app.fastmail.com/
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/asm-generic/io.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Agree. Will update.
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index d02806513670c..3dd3416f1df03 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -190,7 +190,7 @@ static inline u64 readq(const volatile void __iomem *addr)
- 	u64 val;
- 
- 	__io_br();
--	val = __le64_to_cpu(__raw_readq(addr));
-+	val = __le64_to_cpu((__le64 __force)__raw_readq(addr));
- 	__io_ar(val);
- 	return val;
- }
-@@ -233,7 +233,7 @@ static inline void writel(u32 value, volatile void __iomem *addr)
- static inline void writeq(u64 value, volatile void __iomem *addr)
- {
- 	__io_bw();
--	__raw_writeq(__cpu_to_le64(value), addr);
-+	__raw_writeq((u64 __force)__cpu_to_le64(value), addr);
- 	__io_aw();
- }
- #endif
--- 
-2.39.2
+>> rv;
+>>   extern bool hv_nested;
+>> @@ -58,6 +59,7 @@ extern void * __percpu *hyperv_pcpu_output_arg;
+>>   extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
+>>   extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
+>>   extern bool hv_isolation_type_snp(void);
+>> +extern bool hv_isolation_type_en_snp(void);
+> 
 
