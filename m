@@ -2,80 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEB86E17DA
-	for <lists+linux-arch@lfdr.de>; Fri, 14 Apr 2023 01:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E790B6E18A6
+	for <lists+linux-arch@lfdr.de>; Fri, 14 Apr 2023 02:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbjDMXHc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Apr 2023 19:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S229782AbjDNAMC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Apr 2023 20:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjDMXHa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Apr 2023 19:07:30 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397AE1726
-        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 16:07:29 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54ee1fd7876so172347817b3.23
-        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 16:07:29 -0700 (PDT)
+        with ESMTP id S229561AbjDNAMB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Apr 2023 20:12:01 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C0B30DA
+        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 17:11:59 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id v200-20020a252fd1000000b00b8f548a72bbso4563995ybv.9
+        for <linux-arch@vger.kernel.org>; Thu, 13 Apr 2023 17:11:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681427248; x=1684019248;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m0eoChJ3C+wX0j/cXmxt8QdAgHqIaCqFV7218jkkfFU=;
-        b=cUBnq6doIYuLvUGVyiYaA7jpkgVtHOtimIKcwt2fzUEGbTagC+SbFxwzie3YwQBvoi
-         2tvxYDlX35dBRsyJ0dqJ0imqCLe7ogS8WTyC7A5vLzXCTzi2nfvrTc7VxeigvLRuypoj
-         d9zWu9lsiLRAeEcyRqF2vB0H2fEa6JEL4FKRXo81NT0wlQUQMuRZJC6/qqZxiWVlFuvs
-         rCpdS64PxIo7V8SajS2etdSOROdKTmlVD4sBgXB1W2FZSMb7wXUNI2yqiz+J9cWyF9eb
-         0i6PytQOESujv8I6M/6hszVyOyKaqVF3BjpcBY+b2iw09H2OLHz5o/ci5kucUCGLlxuh
-         5zxg==
+        d=google.com; s=20221208; t=1681431119; x=1684023119;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i+pweVgTeWv08z0ELDTsB0Ltp1Ye2bcZK0KHo4GqVbw=;
+        b=SxumLiXBZqVvPSsO4nE95gXtUUxXVcRm2giZRY9/5ORZ+OjADqAAbFJkobyKcqmfCt
+         ePUsZvwKG04KkaahIzuPRZeniJUEzn01e6frQqq0jAgCaSwlASsR29xtCtNlSjb+T5pj
+         VEWY0EVxAPptAmO48HG5tvNAJPPxntiFot3tECFeEreHjLrDdGnAKPlTKHy30+MbbqI8
+         64DeVDk4CEwT4IFGcaTIdQJJ7t2C3BZm2t+9Gp59h71CPchlPnK0jhl4w3WF/G3NQ2HG
+         SBMasteYkoK5+FJ8YkRnsN77u+ShB1rljGgMoVKQvjdG4NVzxFbFqiD01CFCoQkbIqFa
+         aeNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681427248; x=1684019248;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m0eoChJ3C+wX0j/cXmxt8QdAgHqIaCqFV7218jkkfFU=;
-        b=ClaRq1L2TGM0x5WWol7U7WemPpKlp5krzA/yZitCiZRfPLQEccwIohZHxj8t8viycX
-         vxsezPuxlm7BMOfYqbe0Cr/7pf8q43+j0TI1wX+pZLrZ0GHs7MZNTwDT9D/qIxp1MdSD
-         1sjC32NYvR9tohVTTIMUaEBgSeOwKNeHNNay18ik7PyQQEY9zY03ALov1WINT1gJo03w
-         0H9IoYX6fDElDK+AgCrFzsnqmS7fUufZs2oJpPqxjbiKCaBfKvoJoC2mnpB55JL0SX+o
-         NrMelO7w55WXfk7Z3d5Y07/FW5z0vDIUhz//XOyoN+LWCuO9ckpLl4H1Xf+MwMXF+OUU
-         dIRQ==
-X-Gm-Message-State: AAQBX9dwNmNfsv/SPW/PbCoJRIftb4HN/HPV6OdDSBWz9mhDIH17UBmE
-        dTpV0qKWAbGt1xryATX5Cjwb25egCmU=
-X-Google-Smtp-Source: AKy350amwDqyJa+LlzM7biYAI+3i1mkieCfxZS836tmzptZ4SOWRoy5g8JqAYQ9+zKy/xdEKWNYlO5mXB8A=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:d0d6:0:b0:b8f:559f:bd49 with SMTP id
- h205-20020a25d0d6000000b00b8f559fbd49mr2479865ybg.6.1681427247867; Thu, 13
- Apr 2023 16:07:27 -0700 (PDT)
-Date:   Thu, 13 Apr 2023 23:07:26 +0000
-In-Reply-To: <diqzedono0m5.fsf@ackerleytng-cloudtop.c.googlers.com>
+        d=1e100.net; s=20221208; t=1681431119; x=1684023119;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i+pweVgTeWv08z0ELDTsB0Ltp1Ye2bcZK0KHo4GqVbw=;
+        b=QeuerAjp96f0z+TgoMvtpuZeWXbxfNaDbkUEIVBmkjKmDqt9Ind7C+1iynZor+4b/J
+         L4ZtRqla74qnhhbf8NSAneRRolQ0x6bAo8eOoa5gTeJkBs6nhWK5RVRpvnM74IKWizCS
+         k2zNLUo8y1Esa538tfyXsK70bbt/8YmV14UALfrBtHVFiHye/Wk9BG5T8D+r3xrfcIeG
+         aAPQPT8LpH2k5sBKwgwtzuOuC3dJxbUfus8neZ7mrwRcHVmY9ik3ojFY3DDecaEqiUS0
+         jYZ0ZZJkmS3+soaeUmBi13uKYndb7Clo+xT/tf+D6GiA5PS+HfQqtvf6rJV/p0lYtSvE
+         MG5w==
+X-Gm-Message-State: AAQBX9duv499DtZsPh8LNRUnLgLT1x7KXjySFd5SkqnhKVTVmGgugkWu
+        q2IHkU53NBCasSJsfulmf5XfikjHTgGjMaNF2w==
+X-Google-Smtp-Source: AKy350aFyMPBdyqRFopcQD1OOk7RIztiWHN973sMgROTFTwCsBiX6bTJGMx6PuL8Cu3fjd47w7zygKuC4QNdUU7X4w==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a25:72d6:0:b0:b8f:55f6:e50f with SMTP
+ id n205-20020a2572d6000000b00b8f55f6e50fmr2609596ybc.1.1681431119162; Thu, 13
+ Apr 2023 17:11:59 -0700 (PDT)
+Date:   Fri, 14 Apr 2023 00:11:49 +0000
 Mime-Version: 1.0
-References: <20230412-kurzweilig-unsummen-3c1136f7f437@brauner> <diqzedono0m5.fsf@ackerleytng-cloudtop.c.googlers.com>
-Message-ID: <ZDiLLih4XHUCCwFY@google.com>
-Subject: Re: [RFC PATCH v3 1/2] mm: restrictedmem: Allow userspace to specify
- mount for memfd_restricted
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     Christian Brauner <brauner@kernel.org>, kvm@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        qemu-devel@nongnu.org, aarcange@redhat.com, ak@linux.intel.com,
-        akpm@linux-foundation.org, arnd@arndb.de, bfields@fieldses.org,
-        bp@alien8.de, chao.p.peng@linux.intel.com, corbet@lwn.net,
-        dave.hansen@intel.com, david@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, hpa@zytor.com, hughd@google.com,
-        jlayton@kernel.org, jmattson@google.com, joro@8bytes.org,
-        jun.nakajima@intel.com, kirill.shutemov@linux.intel.com,
-        linmiaohe@huawei.com, luto@kernel.org, mail@maciej.szmigiero.name,
-        mhocko@suse.com, michael.roth@amd.com, mingo@redhat.com,
-        naoya.horiguchi@nec.com, pbonzini@redhat.com, qperret@google.com,
-        rppt@kernel.org, shuah@kernel.org, steven.price@arm.com,
+X-Mailer: git-send-email 2.40.0.634.g4ca3ef3211-goog
+Message-ID: <cover.1681430907.git.ackerleytng@google.com>
+Subject: [RFC PATCH 0/6] Setting memory policy for restrictedmem file
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, qemu-devel@nongnu.org
+Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
+        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
+        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
+        david@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
+        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
+        jmattson@google.com, joro@8bytes.org, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
+        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
+        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
+        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
+        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
         tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
         vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com
-Content-Type: text/plain; charset="us-ascii"
+        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com,
+        muchun.song@linux.dev, feng.tang@intel.com, brgerst@gmail.com,
+        rdunlap@infradead.org, masahiroy@kernel.org,
+        mailhol.vincent@wanadoo.fr, Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,11 +85,100 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 13, 2023, Ackerley Tng wrote:
-> Christian Brauner <brauner@kernel.org> writes:
-> > I'm curious, is there an LSFMM session for this?
-> 
-> As far as I know, there is no LSFMM session for this.
+Hello,
 
-Correct, no LSFMM session.  In hindsight, that's obviously something we should
-have pursued :-(
+This patchset builds upon the memfd_restricted() system call that was
+discussed in the 'KVM: mm: fd-based approach for supporting KVM' patch
+series [1].
+
+The tree can be found at:
+https://github.com/googleprodkernel/linux-cc/tree/restrictedmem-set-memory-=
+policy
+
+In this patchset, a new syscall is introduced, which allows userspace
+to set the memory policy (e.g. NUMA bindings) for a restrictedmem
+file, to the granularity of offsets within the file.
+
+The offset/length tuple is termed a file_range which is passed to the
+kernel via a pointer to get around the limit of 6 arguments for a
+syscall.
+
+The following other approaches were also considered:
+
+1. Pre-configuring a mount with a memory policy and providing that
+   mount to memfd_restricted() as proposed at [2].
+    + Pro: It allows choice of a specific backing mount with custom
+      memory policy configurations
+    + Con: Will need to create an entire new mount just to set memory
+      policy for a restrictedmem file; files on the same mount cannot
+      have different memory policies.
+
+2. Passing memory policy to the memfd_restricted() syscall at creation time=
+.
+    + Pro: Only need to make a single syscall to create a file with a
+      given memory policy
+    + Con: At creation time, the kernel doesn=E2=80=99t know the size of th=
+e
+      restrictedmem file. Given that memory policy is stored in the
+      inode based on ranges (start, end), it is awkward for the kernel
+      to store the memory policy and then add hooks to set the memory
+      policy when allocation is done.
+
+3. A more generic fbind(): it seems like this new functionality is
+   really only needed for restrictedmem files, hence a separate,
+   specific syscall was proposed to avoid complexities with handling
+   conflicting policies that may be specified via other syscalls like
+   mbind()
+
+TODOs
+
++ Return -EINVAL if file_range is not within the size of the file and
+  tests for this
+
+Dependencies:
+
++ Chao=E2=80=99s work on UPM [3]
+
+[1] https://lore.kernel.org/lkml/20221202061347.1070246-1-chao.p.peng@linux=
+.intel.com/T/
+[2] https://lore.kernel.org/lkml/cover.1681176340.git.ackerleytng@google.co=
+m/T/
+[3] https://github.com/chao-p/linux/commits/privmem-v11.5
+
+---
+
+Ackerley Tng (6):
+  mm: shmem: Refactor out shmem_shared_policy() function
+  mm: mempolicy: Refactor out mpol_init_from_nodemask
+  mm: mempolicy: Refactor out __mpol_set_shared_policy()
+  mm: mempolicy: Add and expose mpol_create
+  mm: restrictedmem: Add memfd_restricted_bind() syscall
+  selftests: mm: Add selftest for memfd_restricted_bind()
+
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ include/linux/mempolicy.h                     |   4 +
+ include/linux/shmem_fs.h                      |   7 +
+ include/linux/syscalls.h                      |   5 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/mempolicy.h                |   7 +-
+ kernel/sys_ni.c                               |   1 +
+ mm/mempolicy.c                                | 100 ++++++++++---
+ mm/restrictedmem.c                            |  75 ++++++++++
+ mm/shmem.c                                    |  10 +-
+ scripts/checksyscalls.sh                      |   1 +
+ tools/testing/selftests/mm/.gitignore         |   1 +
+ tools/testing/selftests/mm/Makefile           |   8 +
+ .../selftests/mm/memfd_restricted_bind.c      | 139 ++++++++++++++++++
+ .../mm/restrictedmem_testmod/Makefile         |  21 +++
+ .../restrictedmem_testmod.c                   |  89 +++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   6 +
+ 18 files changed, 454 insertions(+), 27 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/memfd_restricted_bind.c
+ create mode 100644 tools/testing/selftests/mm/restrictedmem_testmod/Makefi=
+le
+ create mode 100644 tools/testing/selftests/mm/restrictedmem_testmod/restri=
+ctedmem_testmod.c
+
+--
+2.40.0.634.g4ca3ef3211-goog
