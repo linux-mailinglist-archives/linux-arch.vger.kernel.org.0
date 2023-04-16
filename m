@@ -2,30 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96236E3A99
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Apr 2023 19:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DC06E3AE7
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Apr 2023 19:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjDPReW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 16 Apr 2023 13:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        id S229501AbjDPR5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Apr 2023 13:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjDPReS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Apr 2023 13:34:18 -0400
+        with ESMTP id S229446AbjDPR5F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Apr 2023 13:57:05 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210EA35B7;
-        Sun, 16 Apr 2023 10:34:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44B31FD4;
+        Sun, 16 Apr 2023 10:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1681666442; bh=AOkjniAjsX5UuN+KSlNpkEVvIA/wgxBbj3kApEEslcE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GJOmOysblNX5Q8ZwQpm/v1z1J5TX3AVKGLML2yhfWGaoHPY7cLCHLwpUqjJ6PVG+T
-         9KW0tllnpic4aN2LGKXFhPNmNHb3gOyqZdjbOFmkVkGSzTzkkbfFnejxTq8WvgMcCb
-         uNphAXpAWfLdoLgV6zYtKzMVt9TTq8Lvwo6+3pgc=
-Received: from ld50.lan (unknown [101.228.138.124])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+        t=1681667822; bh=Ycs3BbkcbYBxkaedeLz9oNKmeJ6DgMiMBUEi4pn/pqw=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=n1XN50xgMfcNt1jP5AtB5DOaPLdUPz9LoGXVTTclyLrC3J7IlfV2aX6b/gj2Tuhob
+         26xwHgieBJ3Xbsy0D7CjRoReRZqrKQYVaVi5D3Jlbw2Yk8ZsBjdYu3D0jSeWSDreV/
+         CXJkBBCzaEExUdWty/Hzwopa0hqoMeCZR71ZUvVs=
+Received: from [192.168.9.172] (unknown [101.228.138.124])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 8E23A6018C;
-        Mon, 17 Apr 2023 01:34:01 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 1F8276011C;
+        Mon, 17 Apr 2023 01:57:02 +0800 (CST)
+Message-ID: <ab6e8eeb-576c-436b-abee-fd9bce08ac0c@xen0n.name>
+Date:   Mon, 17 Apr 2023 01:57:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] LoongArch: Relay BCE exceptions to userland as
+ SIGSEGVs with si_code=SEGV_BNDERR
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     loongarch@lists.linux.dev
 Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
@@ -34,242 +41,57 @@ Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] LoongArch: Relay BCE exceptions to userland as SIGSEGVs with si_code=SEGV_BNDERR
-Date:   Mon, 17 Apr 2023 01:33:26 +0800
-Message-Id: <20230416173326.3995295-3-kernel@xen0n.name>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230416173326.3995295-1-kernel@xen0n.name>
 References: <20230416173326.3995295-1-kernel@xen0n.name>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20230416173326.3995295-3-kernel@xen0n.name>
+Content-Language: en-US
+In-Reply-To: <20230416173326.3995295-3-kernel@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: WANG Xuerui <git@xen0n.name>
+On 4/17/23 01:33, WANG Xuerui wrote:
+> <snip>
+> @@ -589,6 +591,110 @@ static void bug_handler(struct pt_regs *regs)
+>   	}
+>   }
+>   
+> +asmlinkage void noinstr do_bce(struct pt_regs *regs)
+> +{
+> +	irqentry_state_t state = irqentry_enter(regs);
+> +	bool user = user_mode(regs);
+> +	unsigned long era = exception_era(regs);
+> +	union loongarch_instruction insn;
+> +	u64 badv = 0, lower = 0, upper = ULONG_MAX;
+> +
+> +	if (regs->csr_prmd & CSR_PRMD_PIE)
+> +		local_irq_enable();
+> +
+> +	current->thread.trap_nr = read_csr_excode();
+> +
+> +	/*
+> +	 * notify the kprobe handlers, if instruction is likely to
+> +	 * pertain to them.
+> +	 */
+> +	if (notify_die(DIE_BOUNDS_CHECK, "Bounds check error", regs, 0,
+> +		       current->thread.trap_nr, SIGSEGV) == NOTIFY_STOP)
+> +		goto out;
+> +
+> +	__show_regs(regs);
 
-SEGV_BNDERR was introduced initially for supporting the Intel MPX, but
-fell into disuse after the MPX support was removed. The LoongArch
-bounds-checking instructions behave very differently than MPX, but
-overall the interface is still kind of suitable for conveying the
-information to userland when bounds-checking assertions trigger, so we
-wouldn't have to invent more UAPI. Specifically, when the BCE triggers,
-a SEGV_BNDERR is sent to userland, with si_addr set to the out-of-bounds
-address or value (in asrt{gt,le}'s case), and one of si_lower or
-si_upper set to the configured bound depending on the faulting
-instruction. The other bound is set to either 0 or ULONG_MAX to resemble
-a range with both lower and upper bounds.
+Ah, remnant of debug code. Please ignore this line; I'm not resending 
+for now because I fully anticipate a v2 (and possibly even more). Lack 
+of coffee/tea and presence of beer during weekends aren't going to help...
 
-Note that it is possible to have si_addr == si_lower in case of failing
-asrtgt or {ld,st}gt, because those instructions test for strict
-greater-than relationship. This should not pose a problem for userland,
-though, because the faulting PC is available for the application to
-associate back to the exact instruction for figuring out the
-expectation.
-
-Somewhat contrary to the ISA manual's wording, CSR.BADV does not seem to
-contain the out-of-bounds value when BCE occurs, so we have to resort to
-pattern-matching the instruction word to pull out the appropriate
-operand ourselves from the context.
-
-Example exception context generated by a faulting `asrtgt.d t0, t1`
-(assert t0 > t1 or BCE) with t0=100 and t1=200:
-
-> tp 00007ffff2f2f180 sp 00007ffffbf9fb80 a0 0000000000000002
-> a1 00007ffffbf9fce8 a2 00007ffffbf9fd00 a3 00007ffff2ed4558
-> a4 0000000000000000 a5 00007ffff2f044c8 a6 00007ffffbf9fce0
-> a7 fffffffffffff000 t0 0000000000000064 t1 00000000000000c8
-> t2 00007ffffbfa2d5e t3 00007ffff2f12aa0 t4 00007ffff2ed6158
-> t5 00007ffff2ed6158 t6 000000000000002e t7 0000000003d8f538
-> t8 0000000000000005 u0 0000000000000000 s9 0000000000000000
-> s0 00007ffffbf9fce8 s1 0000000000000002 s2 0000000000000000
-> s3 00007ffff2f2c038 s4 0000555555820610 s5 00007ffff2ed5000
-> s6 0000555555827e38 s7 00007ffffbf9fd00 s8 0000555555827e38
->   era: 00005555558206a4
->    ra: 00007ffff2d854fc
->  crmd: 000000b0 (-WE DACM=CC DACF=CC +PG -DA -IE PLV0)
->  prmd: 00000007 (-PWE +PIE PPLV3)
->  euen: 00000000 (-BTE -ASXE -SXE -FPE)
->  ecfg: 0007181c (VS=7 LIE=2-4,11-12)
-> estat: 000a0000 [BCE] (EsubCode=0 ECode=10 IS=)
->  prid: 0014c010 (Loongson-64bit)
-
-Signed-off-by: WANG Xuerui <git@xen0n.name>
----
- arch/loongarch/include/asm/kdebug.h |   1 +
- arch/loongarch/kernel/genex.S       |   1 +
- arch/loongarch/kernel/traps.c       | 107 ++++++++++++++++++++++++++++
- 3 files changed, 109 insertions(+)
-
-diff --git a/arch/loongarch/include/asm/kdebug.h b/arch/loongarch/include/asm/kdebug.h
-index d721b4b82fae..793a8fdfeb90 100644
---- a/arch/loongarch/include/asm/kdebug.h
-+++ b/arch/loongarch/include/asm/kdebug.h
-@@ -18,6 +18,7 @@ enum die_val {
- 	DIE_SSTEPBP,
- 	DIE_UPROBE,
- 	DIE_UPROBE_XOL,
-+	DIE_BOUNDS_CHECK,
- };
- 
- #endif /* _ASM_LOONGARCH_KDEBUG_H */
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 44ff1ff64260..78f066384657 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -82,6 +82,7 @@ SYM_FUNC_END(except_vec_cex)
- 
- 	BUILD_HANDLER ade ade badv
- 	BUILD_HANDLER ale ale badv
-+	BUILD_HANDLER bce bce none
- 	BUILD_HANDLER bp bp none
- 	BUILD_HANDLER fpe fpe fcsr
- 	BUILD_HANDLER fpu fpu none
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index a060481198af..c6fc421a5983 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -36,6 +36,7 @@
- #include <asm/break.h>
- #include <asm/cpu.h>
- #include <asm/fpu.h>
-+#include <asm/inst.h>
- #include <asm/loongarch.h>
- #include <asm/mmu_context.h>
- #include <asm/pgtable.h>
-@@ -51,6 +52,7 @@
- 
- extern asmlinkage void handle_ade(void);
- extern asmlinkage void handle_ale(void);
-+extern asmlinkage void handle_bce(void);
- extern asmlinkage void handle_sys(void);
- extern asmlinkage void handle_bp(void);
- extern asmlinkage void handle_ri(void);
-@@ -589,6 +591,110 @@ static void bug_handler(struct pt_regs *regs)
- 	}
- }
- 
-+asmlinkage void noinstr do_bce(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
-+	bool user = user_mode(regs);
-+	unsigned long era = exception_era(regs);
-+	union loongarch_instruction insn;
-+	u64 badv = 0, lower = 0, upper = ULONG_MAX;
-+
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_enable();
-+
-+	current->thread.trap_nr = read_csr_excode();
-+
-+	/*
-+	 * notify the kprobe handlers, if instruction is likely to
-+	 * pertain to them.
-+	 */
-+	if (notify_die(DIE_BOUNDS_CHECK, "Bounds check error", regs, 0,
-+		       current->thread.trap_nr, SIGSEGV) == NOTIFY_STOP)
-+		goto out;
-+
-+	__show_regs(regs);
-+	die_if_kernel("Bounds check error in kernel code", regs);
-+
-+	/*
-+	 * Pull out the address that failed bounds checking, and the lower /
-+	 * upper bound, by minimally looking at the faulting instruction word
-+	 * and reading from the correct register.
-+	 *
-+	 * Somewhat counter-intuitively (but kinds of makes sense), BCEs
-+	 * during checked memory accesses *do not* update CSR.BADV. So badv
-+	 * still comes from regs[rj] in these cases.
-+	 */
-+	if (__get_inst(&insn.word, (u32 *)era, user))
-+		goto bad_era;
-+	switch (insn.reg3_format.opcode) {
-+	case asrtle_op:
-+		if (insn.reg3_format.rd != 0)
-+			/* not asrtle */
-+			break;
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case asrtgt_op:
-+		if (insn.reg3_format.rd != 0)
-+			/* not asrtgt */
-+			break;
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case fldles_op:
-+	case fldled_op:
-+	case fstles_op:
-+	case fstled_op:
-+	case ldleb_op:
-+	case ldleh_op:
-+	case ldlew_op:
-+	case ldled_op:
-+	case stleb_op:
-+	case stleh_op:
-+	case stlew_op:
-+	case stled_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case fldgts_op:
-+	case fldgtd_op:
-+	case fstgts_op:
-+	case fstgtd_op:
-+	case ldgtb_op:
-+	case ldgth_op:
-+	case ldgtw_op:
-+	case ldgtd_op:
-+	case stgtb_op:
-+	case stgth_op:
-+	case stgtw_op:
-+	case stgtd_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+	}
-+
-+	force_sig_bnderr((void __user *)badv, (void __user *)lower,
-+			 (void __user *)upper);
-+
-+out:
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_disable();
-+
-+	irqentry_exit(regs, state);
-+	return;
-+
-+bad_era:
-+	/*
-+	 * Cannot pull out the instruction word, hence cannot provide more
-+	 * info than a regular SIGSEGV in this case.
-+	 */
-+	force_sig(SIGSEGV);
-+	goto out;
-+}
-+
- asmlinkage void noinstr do_bp(struct pt_regs *regs)
- {
- 	bool user = user_mode(regs);
-@@ -1032,6 +1138,7 @@ void __init trap_init(void)
- 
- 	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
- 	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
-+	set_handler(EXCCODE_OOB * VECSIZE, handle_bce, VECSIZE);
- 	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
- 	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
- 	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
 -- 
-2.40.0
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
