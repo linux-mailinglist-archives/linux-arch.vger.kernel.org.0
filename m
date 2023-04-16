@@ -2,58 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F256E35B1
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Apr 2023 09:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8036E35CC
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Apr 2023 09:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjDPHYM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 16 Apr 2023 03:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S230272AbjDPHiD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Apr 2023 03:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbjDPHYM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Apr 2023 03:24:12 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182BC90;
-        Sun, 16 Apr 2023 00:24:11 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50508810c8bso2672965a12.3;
-        Sun, 16 Apr 2023 00:24:11 -0700 (PDT)
+        with ESMTP id S229919AbjDPHiC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Apr 2023 03:38:02 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228921FFC;
+        Sun, 16 Apr 2023 00:38:01 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-63b4960b015so844888b3a.3;
+        Sun, 16 Apr 2023 00:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681629849; x=1684221849;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WzApRNmLj/C3OG/CHM2LgsaZWOMDJjJGhX2jIgFh5iQ=;
-        b=ZzGoJ8Ob6wDQiTectXDiaEkTh5bRHklVWginnSvk8wNf5X3+mXGfkkyW/o7oaIoqTb
-         20bjGhupgHK5yAlaeS5jTRbVd1AzlO7jepKjx+YVjZMgiy6sr5Uc95ognkhCWzJQXCci
-         0urW3ObSU9WN3EVaCCsT+IhK/1Xf+38PmrRCTDkZpf6382bzOfSZeLzFwP5Ti6lG62Z0
-         TBEmvEFHzefbPLGLzSdaC/NTmstevmzg6R4F8OKFseD0Gi3NTMLu4/VuyelDbUNCH2of
-         cqjlSSmYEqRaReg6Xm/655MPnIP9GqteNUoJKATPlVOip++HCP7KiOWyscb25HyOAWyz
-         ixtQ==
+        d=gmail.com; s=20221208; t=1681630680; x=1684222680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I5NhvhFxKX4Eel+mjyeudZ+71BGwovQHUqehBfxjjbo=;
+        b=Wq2JSSOcotk2koSIqamk3acYvBpROM5iA8zomrDZXIIFuFSEYQI9UoHiiiQ+C3LiT4
+         lspt7yhui0LBRekgQ4qZrSAFYDSRhNzbX0tuhGA+lb145WQP0zQVVYhDH+b12U+Wy0iF
+         gYImZ9ka1A5WsYRLNNHptVnDmubY/hILmhD0Z3X1PmF6SBflIlBDNO244wPcQjklnOvC
+         TarKt3tv1iFENcM3Bm1S/CW+y9TfLvi+9L1rnSlm/hiOfGPWZxU6TG+EOILYl6j/uBMN
+         Wlvlc10VArc5FrgasZSYfiFpFeJi8dSDNRfBXIM5nNfuugLjg2EPy0WPq4dv+AYnEArB
+         Z9jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681629849; x=1684221849;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WzApRNmLj/C3OG/CHM2LgsaZWOMDJjJGhX2jIgFh5iQ=;
-        b=L0bgMPXUbwtAJIDbaxaFUoSo9y27y7dy86ef+LHni3qEOKS3QnLuSVL6R/9kBz1bp0
-         2xfYdtyuIi2E2nnIOWz3DRzsoT9z0tPzBkfj/ycVxX4iMKmkvidstK2EMWVFQD1nazo6
-         tFJ2jpQrtQrQglXLhgPMmutNFGg8Xpk4oZDZ493Xn7DV+kZ4W8Atx70leKj/ciORy2PO
-         f/VhvhC5Cr5jLH0uiOs8MbxBWh27frNTdqXy2UCk6Nk2SFC/6BxFkRl53oQQtcPTh+6v
-         oztpQKyOxd+jjyoUXoQv/kezxmgOGUVxmHn6mAjAfPf3UthnCH2GFS4uASqXg4+x8QrN
-         SX2A==
-X-Gm-Message-State: AAQBX9eTb+LzMbCBGQVkRyd60vyVUjlmy+AjiiwO8luCFYne3nfJFRr8
-        Q8yjf/+30nducRzoeZ+JI3yVf4B4kmjddAKv77M=
-X-Google-Smtp-Source: AKy350bovBnK6IYlQYXJJeOhlweH+duu5L0amN8OVVWuh88RlMjNoRuoFYcuEEXdzYGPozQ8Hs03V+iTqVA8M93Bpq0=
-X-Received: by 2002:a50:ab15:0:b0:504:eb61:b4eb with SMTP id
- s21-20020a50ab15000000b00504eb61b4ebmr5491982edc.7.1681629849148; Sun, 16 Apr
- 2023 00:24:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681630680; x=1684222680;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=I5NhvhFxKX4Eel+mjyeudZ+71BGwovQHUqehBfxjjbo=;
+        b=ZKejT8CCHYg/QNFRVLuTHtpvUFx5yryhmjcYuj3h4ylYjJVy+i+qw9C2yEdRtvGB4t
+         UQ/Av/AiBcd9cBMDr/nbgclstr1m0Rt0OmDsEO3BkqfI/O+rXMVFISIpemmKa1UwdiPN
+         3uuK70SOuQClTF/diLspgc06D/B45+c1DP2Gk8eVoI+dFDunCil7L82aQLURx0ehK4ys
+         JLMfwPcZSQjPRuuR2gbtiTkIMl6Z4WOdBD/pQhr1NaqG4W/Kyk84riJ9SS2PkkzHtOoO
+         kq/6t8VlYFJA5Opl3XZip+WdHSVpbKm3s1xhMgb8Em4Qu+enUcLA0W0aNuBb23FnF9mq
+         1MMg==
+X-Gm-Message-State: AAQBX9fD7K6rLJnJoW9b+AyvK64XSBMSUVVksRxB9G7IJPeRuICnRswl
+        J/CRlHkcv5ZAn3suvYo8VS4=
+X-Google-Smtp-Source: AKy350ZdVtbyE9peGmRyH7eUsqqLQvUeElVcM5ven2Cb85XZ2BPQRqQm9YUSOfSUVQWBejQBwCsoLA==
+X-Received: by 2002:a05:6a00:1acb:b0:63b:23b0:a72e with SMTP id f11-20020a056a001acb00b0063b23b0a72emr16202900pfv.15.1681630680586;
+        Sun, 16 Apr 2023 00:38:00 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id 12-20020aa7914c000000b00637ca3eada8sm5555427pfi.6.2023.04.16.00.37.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 00:38:00 -0700 (PDT)
+Message-ID: <1ec6d77e-c5a1-52ac-de12-a878b753abcc@gmail.com>
+Date:   Sun, 16 Apr 2023 15:37:49 +0800
 MIME-Version: 1.0
-References: <20230403174406.4180472-1-ltykernel@gmail.com> <20230403174406.4180472-9-ltykernel@gmail.com>
- <BYAPR21MB1688DB1442B486A8DEBEF821D79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB1688DB1442B486A8DEBEF821D79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   sky free <ltykernel@gmail.com>
-Date:   Sun, 16 Apr 2023 15:23:33 +0800
-Message-ID: <CAMvTesC42Rf=r6fsi6PVB+WgtRxWOXSeTY7RvyHZizFJkDRSyg@mail.gmail.com>
-Subject: Re: [RFC PATCH V4 08/17] x86/hyperv: Initialize cpu and memory for
- sev-snp enlightened guest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH V4 14/17] x86/hyperv/sev: Add AMD sev-snp enlightened
+ guest support on hyperv
 To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         "luto@kernel.org" <luto@kernel.org>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
@@ -93,9 +95,15 @@ Cc:     "pangupta@amd.com" <pangupta@amd.com>,
         "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <20230403174406.4180472-1-ltykernel@gmail.com>
+ <20230403174406.4180472-15-ltykernel@gmail.com>
+ <BYAPR21MB16884681B85CE6C83CBC2B1FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB16884681B85CE6C83CBC2B1FD79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -104,11 +112,12 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/12/2023 10:39 PM, Michael Kelley (LINUX) wrote:
->> +    /* Read processor number and memory layout. */
->> +    processor_count = *(u32 *)__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
->> +    entry = (struct memory_map_entry *)(__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR)
->> +                    + sizeof(struct memory_map_entry));
-> Why is the first map entry being skipped?
+On 4/12/2023 11:02 PM, Michael Kelley (LINUX) wrote:
+> From: Tianyu Lan<ltykernel@gmail.com>  Sent: Monday, April 3, 2023 10:44 AM
+> The patch subject prefix of "x86/hyperv/sev:" doesn't make sense.
+> There's no pathname like that in the kernel code.  I think it should just be
+> "x86/sev:".
+>
 
-The first entry is populated with processor count by Hyper-V.
+Agree. Will update in the next version.
+
