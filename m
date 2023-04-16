@@ -2,117 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0616E3457
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Apr 2023 00:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC866E35A5
+	for <lists+linux-arch@lfdr.de>; Sun, 16 Apr 2023 09:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjDOW5y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 15 Apr 2023 18:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S230193AbjDPHWG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 16 Apr 2023 03:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjDOW5x (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 15 Apr 2023 18:57:53 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B357410F0
-        for <linux-arch@vger.kernel.org>; Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id hg12so7522276pjb.2
-        for <linux-arch@vger.kernel.org>; Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
+        with ESMTP id S230131AbjDPHWF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 16 Apr 2023 03:22:05 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DA63AB0;
+        Sun, 16 Apr 2023 00:21:36 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-517c0b93cedso1282469a12.3;
+        Sun, 16 Apr 2023 00:21:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1681599471; x=1684191471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1681629696; x=1684221696;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9jm23euiY98fsN22kiG5rHbRtDdr3VWwy800+EazcFQ=;
-        b=GBfLzDMaedtUl6MyPA5MjqwskjXDB8bXlQkls/cGP4aq1jUv7RrRFtXHLwgTEGVidb
-         x+yYSroQA1+8wmK2nLvfaVEN3cMOIs5qH3X54gCP+KRH3xJ+4SmDE1grbMoFifyFXlPc
-         RI0xSxywOQMml3hnpp2skrtAslxJZk2wR9p79TDktIn6BkkyDaCbEmvvHIRn0QjEWqht
-         8eQQirlYYZgBQ/JwhSrlewqOHstVPBpK4duQ8aUnfUE+nLGCySqyLX1g1NOzCO3wSxFa
-         jm9ygqNznrgQ9S2/G24r7ngYQJBkMGHFycKgNG88gySGQA40KnO1k13R5U3FnMpOhOD2
-         Pi9w==
+        bh=WzApRNmLj/C3OG/CHM2LgsaZWOMDJjJGhX2jIgFh5iQ=;
+        b=qMiR54KzcLn1DsnMyZOFNfkPOGsHgIksYHpXeU+7AhizRUl8WZpQhhtR3RVu/h1RDZ
+         1MshIYnilckG98SWYHJX83+cm3V/TKfxbld149/3XfWsw5M1AEKdF99VKOT1kTbWeQtx
+         SYwuD0bTWJZYoZWcMPXBohh0eUVWTztWf8B8Tc+bD/wVLzGrktczCPkc6azqpWq2Q9cO
+         MRYmkuslT8pooJCGslPwvpBxLw2AlolRauqlKl15eLNXZtEJZqAB4JGYpJOotQavoDp7
+         pSH2ywgg4/5s68FVeI+HNzXpGZWg6llMKns6fXxIs/w5MuBJg4GngVkuJPWikPc4G8QA
+         sQQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681599471; x=1684191471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9jm23euiY98fsN22kiG5rHbRtDdr3VWwy800+EazcFQ=;
-        b=CV/ryGDlp9yZEHzbI+O7IZ8BCeucR8EoJ3FyG+tsxZZYzn0YcmIUrQBpWP4DOtN13O
-         6eoXzU6rP7ztNOG6HoFm3UzGgYIo1t9qfeqc6GV88QVeAfShmf4HDcV12tVQYnhecse6
-         OIeK2WQQpDnkI2u9tpCrdlx2O4xt7RhKRdh9Tfjj+BRz8NFJjNlgw6kiJyOPr6D7khsa
-         NfTyPd+U3ZmuPcELTDRnILK9DZYwoJWJIWjX3yy/wgB+YkISzr6J6vLHvOXKiR3gZ+vk
-         W9KAR72tbYkDWlMMIcdBRoz/4IpQm+TOSYBCUICHqFH0G24kzozUWIcUoVHXI2CJuBfd
-         CCgQ==
-X-Gm-Message-State: AAQBX9d+OOYCOLe38Afc4i7kwMYfnvYnajpzBp/2w7rutgaDfU53RLMh
-        OFBuwmfK5GDR9mNryOe7x7DgRQ==
-X-Google-Smtp-Source: AKy350atP7YyE1uh5Cv1o1OIAdHqZyYd5TMCJvKCXUcCmogo34GyZWci+oDz1ExgkYU+uGfEZj3q7Q==
-X-Received: by 2002:a17:902:d583:b0:1a0:6bd4:ea78 with SMTP id k3-20020a170902d58300b001a06bd4ea78mr7929045plh.31.1681599471180;
-        Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id y13-20020a170902b48d00b001a68991e1b3sm4801780plr.263.2023.04.15.15.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Apr 2023 15:57:51 -0700 (PDT)
-Date:   Sat, 15 Apr 2023 15:57:48 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     david.keisarschm@mail.huji.ac.il
-Cc:     linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>, Jason@zx2c4.com,
-        keescook@chromium.org, ilay.bahat1@gmail.com, aksecurity@gmail.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] Replace invocation of weak PRNG
-Message-ID: <20230415155748.2c9663a9@hermes.local>
-In-Reply-To: <20230415173756.5520-1-david.keisarschm@mail.huji.ac.il>
-References: <20230415173756.5520-1-david.keisarschm@mail.huji.ac.il>
+        d=1e100.net; s=20221208; t=1681629696; x=1684221696;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WzApRNmLj/C3OG/CHM2LgsaZWOMDJjJGhX2jIgFh5iQ=;
+        b=aUrokqSxWDE5CI22klzyTqLb+I1PCtw0d/YcrOfUr7MgwRZm9RFOcdb6i/DE1m07R4
+         LaYTTaFNuoGsSDQ63y3tUy/PmBeewq5dZ+Lx5cePMaEWFEcbRF9UJLUQqWWtLGDZ9Npq
+         QK2m5GDLZavsWIxW1VyKRTwxmaPRmSSVf9MD52pECX72il7M7tVflBQYWASouey1oKUb
+         i7A/g2UluOSRUbgIiA/kv7L5ENdsQq1uO9naXv+sZYmnj4N94LfZzKsR6P42Uuu8+73E
+         +Kf9dVmm44cgAZridtHk65r0lGvINiMK+AhrqghmWdbM/OuCyNyr2IU1YbCq1eGiC3w0
+         Vbdg==
+X-Gm-Message-State: AAQBX9cEb6Zb8/ErTmcUvGd2AXV3Ht+kDt7zQ9EslBjx7XRFjbfqqYBT
+        qhc9/DOYgifLPvANJqM/eSM=
+X-Google-Smtp-Source: AKy350atqxP4Yz6NIUftxzPOKTEySbesWnO8LNsuERkvUh0YKCErD2eEKFRksqY+kmu8cvuUIarOIQ==
+X-Received: by 2002:a05:6a00:234a:b0:63b:2102:a068 with SMTP id j10-20020a056a00234a00b0063b2102a068mr17495268pfj.26.1681629695927;
+        Sun, 16 Apr 2023 00:21:35 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id v18-20020a62a512000000b006089fb79f1esm5690205pfm.96.2023.04.16.00.21.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Apr 2023 00:21:35 -0700 (PDT)
+Message-ID: <b4c74d0e-5b54-5101-ec18-cc09449ed358@gmail.com>
+Date:   Sun, 16 Apr 2023 15:21:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH V4 08/17] x86/hyperv: Initialize cpu and memory for
+ sev-snp enlightened guest
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "pangupta@amd.com" <pangupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20230403174406.4180472-1-ltykernel@gmail.com>
+ <20230403174406.4180472-9-ltykernel@gmail.com>
+ <BYAPR21MB1688DB1442B486A8DEBEF821D79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <BYAPR21MB1688DB1442B486A8DEBEF821D79B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 15 Apr 2023 20:37:53 +0300
-david.keisarschm@mail.huji.ac.il wrote:
+On 4/12/2023 10:39 PM, Michael Kelley (LINUX) wrote:
+>> +	/* Read processor number and memory layout. */
+>> +	processor_count = *(u32 *)__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR);
+>> +	entry = (struct memory_map_entry *)(__va(EN_SEV_SNP_PROCESSOR_INFO_ADDR)
+>> +			+ sizeof(struct memory_map_entry));
+> Why is the first map entry being skipped?
 
->  include/uapi/linux/netfilter/xt_connmark.h    |  40 +-
->  include/uapi/linux/netfilter/xt_dscp.h        |  27 +-
->  include/uapi/linux/netfilter/xt_mark.h        |  17 +-
->  include/uapi/linux/netfilter/xt_rateest.h     |  38 +-
->  include/uapi/linux/netfilter/xt_tcpmss.h      |  13 +-
->  include/uapi/linux/netfilter_ipv4/ipt_ecn.h   |  40 +-
->  include/uapi/linux/netfilter_ipv4/ipt_ttl.h   |  14 +-
->  include/uapi/linux/netfilter_ipv6/ip6t_hl.h   |  14 +-
->  net/netfilter/xt_dscp.c                       | 149 ++++---
->  net/netfilter/xt_hl.c                         | 164 +++++---
->  net/netfilter/xt_rateest.c                    | 282 ++++++++-----
->  net/netfilter/xt_tcpmss.c                     | 378 ++++++++++++++----
->  ...Z6.0+pooncelock+pooncelock+pombonce.litmus |  12 +-
+The first entry is populated with processor count by Hyper-V.
 
-NAK
-You sucked in some unrelated netfilter stuff.
