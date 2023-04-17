@@ -2,171 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C113B6E4FE8
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Apr 2023 20:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E286E6E50D7
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Apr 2023 21:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjDQSKc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Apr 2023 14:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S229915AbjDQT13 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Apr 2023 15:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjDQSKb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 14:10:31 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9D619BC
-        for <linux-arch@vger.kernel.org>; Mon, 17 Apr 2023 11:10:29 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-63b4bf2d74aso1160792b3a.2
-        for <linux-arch@vger.kernel.org>; Mon, 17 Apr 2023 11:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1681755029; x=1684347029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4sl9ziKyZqPoy8aLo+Gl92oC/7FehXmT2AIhyqndHBY=;
-        b=nJVr4FILdu5bU4E72aAnZSynAvymUqegXgB59klqsogKC7WJxtqSYGYUybck5xKIH8
-         FYb5pFzFqkrQKBvl0P66732MQeRjhzSHNoNRtH37Ux2NmgsVxlSiENHCrExCzd+Q/0DR
-         P82BdWDMQ50B64/Fc5K+e6vFzUY2y4oCaiEmdabrVXF1FvQ0qlwDMuEjqHcDN7nlGtLd
-         58Di7uv/E/K9O6RuLskhxGsDbekYPJZZMQdoDqUfR08+O8D5PYUCEBiYV+RGHRbCcIGH
-         bYphFSe5O4b/Hc3hl9lI8jUMn0LhPWi2SeLRu6Tb4So5ZljeCMNqhtLGOvfpjjTLGz/j
-         W/7w==
+        with ESMTP id S229930AbjDQT12 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 15:27:28 -0400
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6243376BD;
+        Mon, 17 Apr 2023 12:26:58 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-3f09b4a1584so12455935e9.2;
+        Mon, 17 Apr 2023 12:26:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681755029; x=1684347029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4sl9ziKyZqPoy8aLo+Gl92oC/7FehXmT2AIhyqndHBY=;
-        b=PyZyUbvORyLqn+1nsASrs6GDL30A3VxSeFLwfyvxnUnmyfMl337UEH4OOmJOb6+lDn
-         6BIc2sxbm1AqcOqC95gwIFtE+jP7d2FZy4v3CD859U0hi7nmCkwbwdQo+BqTyuaPfmdY
-         wmh2zHlm1uHCzdtcE+k97xp0mj3ygHx+yEqpFFa610Tbd+zQFUI2x9IEZnPmudtpYCHV
-         9Rry6S9lYonFTjuJ2HnA6p5F9Icw39jLyu5ACfnk7J4TTcscEavDAoS4SKqefYpYFke0
-         XxVz7brt+S2H6zsRMOIz9cv9lf7vsrUW+3rl+WQGxCXBBqFg8z7K0fMJrJtaZ8yj8LxW
-         e+3g==
-X-Gm-Message-State: AAQBX9e3ViuikQCgRem9V+Oli2lsTikV5NFnE8wu7DVR/2d30F9meoPs
-        6HrACZdGc/uTf1Bl/0l3Zn2JJbeUs5Qo2Q2XUlxErA==
-X-Google-Smtp-Source: AKy350agKI3IJEia6GE10oRHfJ2yBUf/emYDmwLibiytnwVpTiKZKIXteccNnA4CKimextC1Abl3uVyOBTN12S3XK2g=
-X-Received: by 2002:a05:6a00:1a43:b0:62e:154e:d6be with SMTP id
- h3-20020a056a001a4300b0062e154ed6bemr7839056pfv.5.1681755028758; Mon, 17 Apr
- 2023 11:10:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1681759617; x=1684351617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+5RS4OCZjuf4jfezYrqMeVPvp3K61VGB0efnNQZ4z/4=;
+        b=Z6yweulJJ4gGcqydP1IMSqfEzCKvMktn5Z5/Jt4ReE9SsQ6f2/BdxqkEI7i0IOudVR
+         1VTljQeg/bbXUwRXCNeI0zq4lV32vGIhVNeGPgx0yLuD6aUZsA3RAXs0/3F5l/+Roynq
+         GotCIrvURYYsNWLRMFxdcrzKwvgK26Ak11nCVtUOanNoLcRFXi6Empj9/EXxdpCW96ug
+         6iGu+0+KyVkxmOHL19X/Ztkb1I086EQ30uYljNSfaPTs/5FRTfsYlvDasi3b+c520zpq
+         idZeNt1jDCxq9ZOHr0Crg+Hbweojqr7ZX8v2D9NFk2c2a3vrpqXgzUdS7r1h3Co+7OBM
+         pgFw==
+X-Gm-Message-State: AAQBX9fT6NXxVEhMdEPRAN0gtCVZzh9fqOKvum3FXC7n4/xp2WvdC52g
+        pKwwAEa/VHpzyiN0hzIIUWk=
+X-Google-Smtp-Source: AKy350ZFvg5yKuE1DjUbqiVfYlFE4k3Q6gUqHWytAcm0hYz+RbnUbsAqe4q8fpcFgoLQPNg5UJaN9g==
+X-Received: by 2002:a5d:6a11:0:b0:2fb:f6ff:e8d2 with SMTP id m17-20020a5d6a11000000b002fbf6ffe8d2mr25346wru.35.1681759616704;
+        Mon, 17 Apr 2023 12:26:56 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id v3-20020adfe4c3000000b002f459afc809sm11189828wrm.72.2023.04.17.12.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Apr 2023 12:26:56 -0700 (PDT)
+Date:   Mon, 17 Apr 2023 19:26:54 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        jgross@suse.com, mat.jonczyk@o2.pl
+Subject: Re: [PATCH v5 0/5] Hyper-V VTL support
+Message-ID: <ZD2dfuHFCJmOkGt9@liuwe-devbox-debian-v2>
+References: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
- <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
- <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
- <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
- <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
- <ZDoEG0VF6fb9y0EC@google.com> <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
-In-Reply-To: <20230417-wellblech-zoodirektor-76a80f7763ab@brauner>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 17 Apr 2023 11:10:17 -0700
-Message-ID: <CAKH8qBuW+T23ZvvYf4-MPc-S+ChSOARPWpTnLqTEQmF-p_3F6w@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 2/4] net: socket: add sockopts blacklist for
- BPF cgroup hook
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1681192532-15460-1-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 7:42=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Fri, Apr 14, 2023 at 06:55:39PM -0700, Stanislav Fomichev wrote:
-> > On 04/13, Stanislav Fomichev wrote:
-> > > On Thu, Apr 13, 2023 at 7:38=E2=80=AFAM Aleksandr Mikhalitsyn
-> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> > > >
-> > > > On Thu, Apr 13, 2023 at 4:22=E2=80=AFPM Eric Dumazet <edumazet@goog=
-le.com> wrote:
-> > > > >
-> > > > > On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
-> > > > > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> > > > > >
-> > > > > > During work on SO_PEERPIDFD, it was discovered (thanks to Chris=
-tian),
-> > > > > > that bpf cgroup hook can cause FD leaks when used with sockopts=
- which
-> > > > > > install FDs into the process fdtable.
-> > > > > >
-> > > > > > After some offlist discussion it was proposed to add a blacklis=
-t of
-> > > > >
-> > > > > We try to replace this word by either denylist or blocklist, even=
- in changelogs.
-> > > >
-> > > > Hi Eric,
-> > > >
-> > > > Oh, I'm sorry about that. :( Sure.
-> > > >
-> > > > >
-> > > > > > socket options those can cause troubles when BPF cgroup hook is=
- enabled.
-> > > > > >
-> > > > >
-> > > > > Can we find the appropriate Fixes: tag to help stable teams ?
-> > > >
-> > > > Sure, I will add next time.
-> > > >
-> > > > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hook=
-s")
-> > > >
-> > > > I think it's better to add Stanislav Fomichev to CC.
-> > >
-> > > Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
-> > > use it for tcp zerocopy, I'm assuming it should work in this case as
-> > > well?
-> >
-> > Jakub reminded me of the other things I wanted to ask here bug forgot:
-> >
-> > - setsockopt is probably not needed, right? setsockopt hook triggers
-> >   before the kernel and shouldn't leak anything
-> > - for getsockopt, instead of bypassing bpf completely, should we instea=
-d
-> >   ignore the error from the bpf program? that would still preserve
->
-> That's fine by me as well.
->
-> It'd be great if the net folks could tell Alex how they would want this
-> handled.
+On Mon, Apr 10, 2023 at 10:55:27PM -0700, Saurabh Sengar wrote:
+[...]
+> Saurabh Sengar (5):
+>   x86/init: Make get/set_rtc_noop() public
+>   x86/hyperv: Add VTL specific structs and hypercalls
+>   x86/hyperv: Make hv_get_nmi_reason public
+>   Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
+>   x86/hyperv: VTL support for Hyper-V
+> 
 
-Doing the bypass seems fine with me for now. If we ever decide that
-fd-based optvals are worth inspecting in bpf, we can lift that bypass.
-
-> >   the observability aspect
->
-> Please see for more details
-> https://lore.kernel.org/lkml/20230411-nudelsalat-spreu-3038458f25c4@braun=
-er
-
-Thanks for the context. Yeah, sockopts are being used for a lot of
-interesting things :-(
-
-> > - or maybe we can even have a per-proto bpf_getsockopt_cleanup call tha=
-t
-> >   gets called whenever bpf returns an error to make sure protocols have
-> >   a chance to handle that condition (and free the fd)
->
-> Installing an fd into an fdtable makes it visible to userspace at which
-> point calling close_fd() is doable but an absolute last resort and
-> generally a good indicator of misdesign. If the bpf hook wants to make
-> decisions based on the file then it should receive a struct
-> file, not an fd.
-
-SG! Then let's not over-complicate it for now and do a simple bypass.
+Applied to hyperv-next. Thanks.
