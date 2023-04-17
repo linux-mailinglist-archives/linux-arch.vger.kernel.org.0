@@ -2,133 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE1C6E43EA
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Apr 2023 11:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B016E447D
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Apr 2023 11:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjDQJcw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Apr 2023 05:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S229771AbjDQJ5q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Apr 2023 05:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjDQJcv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 05:32:51 -0400
-X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 02:32:08 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE5F5FDF;
-        Mon, 17 Apr 2023 02:32:07 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id DD2C02B066BA;
-        Mon, 17 Apr 2023 05:22:47 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 17 Apr 2023 05:22:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1681723367; x=1681730567; bh=peYP/lOIqmvTTJ2GJZFK05PdIeVxfQrMTMT
-        dWlxN2bY=; b=hoxslnOKq5L0fgq1KZ5uwFxkfCsDUbQoEitttD9Gb157/4VvDaL
-        fzRTYgwNrKhMTGBEWYk5kV4pCoKxj3IQV0FpUtGeddLg5GfVlMhZex8QF6mhL8p9
-        gvwX4MSUzxesv1YcnaqKaa4Hf8aEonHOEB+LqYDIenoy4k9B5AvOOz7WXYv6rPww
-        vauHxzq0EC93J9INj8HpYFP0uokUJZlvJ0DGwXpWQ8LUcqRJMmLECR08O/Gg7C4C
-        FExoluX3ejusbKwfN3AFnDxBNc0Jh1L5n5E2k8MJ529jR2BSvuckTFMjwePw4/jA
-        IVxKZIBctylYcZmrJ3YTpI6yusKyhHnhjmw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1681723367; x=1681730567; bh=peYP/lOIqmvTTJ2GJZFK05PdIeVxfQrMTMT
-        dWlxN2bY=; b=MR4yxKuz3/tjr23pAzsFitwD0Txq7SZ+LasC5Fyh1rdL9W+5uLQ
-        QWuTkcsnaN+XbFlYxewK49c7zL/ltjC0cAxyGzvY+pAqila9tzloSXls1fSGTLU8
-        83j+ql9LP2Am/jKxSL+2eFTD9s2a+pAHNF1s4l+85O8VFC4gAEQAX/IiexVaT7mA
-        1njCOrvD++JH4RDb7rqDNfo30GjQVpEJWnie2UNVdXN3+HoTO7VAHqni1UoK4zJb
-        K0nmV8AH3mMhRqTjxdJcDOoA4dxU/4N4+juQYM/HVijErDhMcN+7kkXCY9vJtEKX
-        A6hZ5WwaK7trmU2l173N30Rm9x+GYS13Hyg==
-X-ME-Sender: <xms:5g89ZGh1XGEKu3GOwuyxUAI_aRj0-gXb1yU9cH41yOyGtrZXXEBRxw>
-    <xme:5g89ZHCJrzk8kcvbfI9uoi9xOXxIpgIcnUMY2tPn_xA8atud9UMgflJi8xJj_xxVr
-    3CIR7jk9VrljLNWmYA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeliedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:5g89ZOF82A9szmMdiIKfUdndIY5Y_J2WWepzSI164UFVULZ600rDfg>
-    <xmx:5g89ZPS9rsGZ3-6dQW4K4hejhxqnpa-f-mX9DnhlkCPRmeMFlap6YA>
-    <xmx:5g89ZDzdQ2ec3Pn4h3UEvgarbJnSwOf3ZSGbcWd6YhZnAMBHYJ805Q>
-    <xmx:5w89ZEqvqQ-8qIHbFuXLaLZUzpDWtqOdQ0aVq4skLKD0cgTZu8vkwIppGeY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2AD08B60086; Mon, 17 Apr 2023 05:22:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-334-g8c072af647-fm-20230330.001-g8c072af6
-Mime-Version: 1.0
-Message-Id: <55abd7af-acb8-47ce-89db-1722bcf0cb9c@app.fastmail.com>
-In-Reply-To: <2b4f75b8-aa83-8e41-7c99-7c8d573c0f31@suse.de>
-References: <20230406143019.6709-1-tzimmermann@suse.de>
- <20230406143019.6709-2-tzimmermann@suse.de>
- <CAMuHMdUfViWzPbB+GcGUwxmGNxAohfq71Jed3DzS=Cb+gBzotg@mail.gmail.com>
- <2b4f75b8-aa83-8e41-7c99-7c8d573c0f31@suse.de>
-Date:   Mon, 17 Apr 2023 11:22:24 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 01/19] fbdev: Prepare generic architecture helpers
-Content-Type: text/plain;charset=utf-8
+        with ESMTP id S229458AbjDQJ5p (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 05:57:45 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70525659D;
+        Mon, 17 Apr 2023 02:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1681725043;
+        bh=O/cKAdPP1ntH7IK9e/3cclJfPJoYfiCKYcnR1FDS28c=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=E5ZnmxxoCi42LLMmO5z0FR3DlqAoAY5yiajei+fCHQX57j4JBVZRuMDZiTncJykyh
+         MqkIeXj9QPaMbH2TEpJA+cyEtEDz72q/MhY7nble68s8WYuOCo6UfpWh6gtX/oQqyZ
+         EjNGC9LdHmSREBfn9zK60G0/Qx4weomdm7z9QWL4=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 2A3F865C4E;
+        Mon, 17 Apr 2023 05:50:42 -0400 (EDT)
+Message-ID: <f54abfae989023fcfdabb4e9800a66847c357b85.camel@xry111.site>
+Subject: Re: [PATCH 0/2] LoongArch: Make bounds-checking instructions useful
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
+Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 17 Apr 2023 17:50:40 +0800
+In-Reply-To: <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
+References: <20230416173326.3995295-1-kernel@xen0n.name>
+         <e593541e7995cc46359da3dd4eb3a69094e969e2.camel@xry111.site>
+         <6ca642a9-62a6-00e5-39ac-f14ef36f6bdb@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.48.0 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 17, 2023, at 11:03, Thomas Zimmermann wrote:
-> Am 11.04.23 um 10:08 schrieb Geert Uytterhoeven:
->> On Thu, Apr 6, 2023 at 4:30=E2=80=AFPM Thomas Zimmermann <tzimmermann=
-@suse.de> wrote:
+On Mon, 2023-04-17 at 15:54 +0800, WANG Xuerui wrote:
+> On 2023/4/17 14:47, Xi Ruoyao wrote:
+> > On Mon, 2023-04-17 at 01:33 +0800, WANG Xuerui wrote:
+> > > From: WANG Xuerui <git@xen0n.name>
+> > >=20
+> > > Hi,
+> > >=20
+> > > The LoongArch-64 base architecture is capable of performing
+> > > bounds-checking either before memory accesses or alone, with speciali=
+zed
+> > > instructions generating BCEs (bounds-checking error) in case of faile=
+d
+> > > assertions (ISA manual Volume 1, Sections 2.2.6.1 [1] and 2.2.10.3 [2=
+]).
+> > > This could be useful for managed runtimes, but the exception is not
+> > > being handled so far, resulting in SIGSYSes in these cases, which is
+> > > incorrect and warrants a fix in itself.
+> > >=20
+> > > During experimentation, it was discovered that there is already UAPI =
+for
+> > > expressing such semantics: SIGSEGV with si_code=3DSEGV_BNDERR. This w=
+as
+> > > originally added for Intel MPX, and there is currently no user (!) af=
+ter
+> > > the removal of MPX support a few years ago. Although the semantics is
+> > > not a 1:1 match to that of LoongArch, still it is better than
+> > > alternatives such as SIGTRAP or SIGBUS of BUS_OBJERR kind, due to bei=
+ng
+> > > able to convey both the value that failed assertion and the bound val=
+ue.
+> > >=20
+> > > This patch series implements just this approach: translating BCEs int=
+o
+> > > SIGSEGVs with si_code=3DSEGV_BNDERR, si_value set to the offending va=
+lue,
+> > > and si_lower and si_upper set to resemble a range with both lower and
+> > > upper bound while in fact there is only one.
+> > >=20
+> > > The instructions are not currently used anywhere yet in the fledgling
+> > > LoongArch ecosystem, so it's not very urgent and we could take the ti=
+me
+> > > to figure out the best way forward (should SEGV_BNDERR turn out not
+> > > suitable).
+> >=20
+> > I don't think these instructions can be used in any systematic way
+> > within a Linux userspace in 2023.=C2=A0 IMO they should not exist in
+> > LoongArch at all because they have all the same disadvantages of Intel
+> > MPX; MPX has been removed by Intel in 2019, and LoongArch is designed
+> > after 2019.
+>=20
+> Well, the difference is IMO significant enough to make LoongArch=20
+> bounds-checking more useful, at least for certain use cases. For=20
+> example, the bounds were a separate register bank in Intel MPX, but in
+> LoongArch they are just values in GPRs. This fits naturally into=20
+> JIT-ting or other managed runtimes (e.g. Go) whose slice indexing ops=20
+> already bounds-check with a temporary register per bound anyway, so it's=
+=20
+> just a matter of this snippet (or something like it)
+>=20
+> - calculate element address
+> - if address < base: goto fail
+> - load/calculate upper bound
+> - if address >=3D upper bound: goto fail
+> - access memory
+>=20
+> becoming
+>=20
+> - calculate element address
+> - asrtgt address, base - 1
+> - load/calculate upper bound
+> - {ld,st}le address, upper bound
+>=20
+> then in SIGSEGV handler, check PC to associate the signal back with the=
+=20
+> exact access op;
 
->>> +#ifndef fb_pgprotect
->>> +#define fb_pgprotect fb_pgprotect
->>> +static inline void fb_pgprotect(struct file *file, struct vm_area_s=
-truct *vma,
->>> +                               unsigned long off)
->>=20
->> Does this affect any noMMU platforms that relied on fb_pgprotect()
->> doing nothing before?
->> Perhaps the body below should be protected by "#ifdef CONFIG_MMU"?
->
-> I cannot conclusively answer this question, but I did some grep'ing=20
-> ('git grep ndef | grep CONFIG_MMU'):
->
-> Only the architectures in this patchset provide <asm/fb.h> but nothing=20
-> anywhere uses <asm-generic/fb.h> yet. And of those architectures, only=20
-> arm and m68k have !CONFIG_MMU cases. Those are handled in the rsp=20
-> patches. I think we're good.
+I remember using the signal handler for "usual" error handling can be a
+very bad idea but I can't remember where I've read about it.  Is there
+any managed environments doing so in practice?
 
-Agreed. The generic version is just a more elaborate way to do
-nothing here, as the=20
+If we redefine new_ldle/new_stle as "if [[likely]] the address is in-
+bound, do the load/store and skip the next instruction; otherwise do
+nothing", we can say:
 
-     vma->vm_page_prot =3D pgprot_writecombine(vma->vm_page_prot);
+blt        address, base, 1f
+new_ldle.d rd, address, upperbound
+1:b        panic_oob_access
+xor        rd, rd, 42 // use rd to do something
 
-line on nommu just turns into a self-assignment of the same member
-that was set the line before.
+This is more versatile, and useful for building a loop as well:
 
-     Arnd
+or            a0, r0, r0
+0:new_ldle.d  t1, t0, t2
+b             1f
+add.d         a0, t1, a0
+add.d         t0, t0, 8
+b             0b
+1:bl          do_something_with_the_sum
+
+Yes it's "non-RISC", but at least more RISC than the current ldle: if
+you want a trap anyway you can say
+
+blt        address, base, 1f
+new_ldle.d rd, address, upperbound
+1:break    {a code defined for OOB}
+xor        rd, rd, 42 // use rd
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
