@@ -2,74 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F349C6E6E44
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 23:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D54D6E6FFE
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 01:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbjDRVd0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Apr 2023 17:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S231895AbjDRXko (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Apr 2023 19:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbjDRVdZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 17:33:25 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F04BAF2D;
-        Tue, 18 Apr 2023 14:33:19 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54fa9da5e5bso275696507b3.1;
-        Tue, 18 Apr 2023 14:33:19 -0700 (PDT)
+        with ESMTP id S231434AbjDRXk2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 19:40:28 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6886314446
+        for <linux-arch@vger.kernel.org>; Tue, 18 Apr 2023 16:38:34 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1a68d45627dso14071355ad.1
+        for <linux-arch@vger.kernel.org>; Tue, 18 Apr 2023 16:38:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681853598; x=1684445598;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fZ+faik75720SnLDzvntxl1cmAaRHsLQ7oOmPoVPf3o=;
-        b=fBPSS93aalbav0LUzUejRt2NjbHpBJmNsHVPRRbsF+jG5Nu8WjfWT+weSiXFGrkEbN
-         Bl+EcMNC7lpcawm/MuwqggHfJmNk7zAK9haLpnJV08P367c5YohyB4lPm9ubYCuINJZG
-         pmhBTFu6UKlSFmyU0QWGBEDpdg/7xojdmyIrq4CWcHgeoPLavovDZAMaCmQm5Tmi+PdF
-         awAr9pJ9qRfL4qAoU/GIaaVF0Yb/A9oc1EXdyleFSucNiyAMBSWiFjcubi/Cl7MqSDQT
-         LqfYl5LxNuy3TqKDTGZky+Cx6fyOI9+XqrTm2mW88NG+xvACaI/puCphU95FqO3MwFDd
-         on2A==
+        d=google.com; s=20221208; t=1681861114; x=1684453114;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KZZcbhEIXep3CsDuGt1XX4NDaxpUgfaEfLEdZFPghSQ=;
+        b=hm9bDIHJQIeAjh+0Wi4XwWxk5FEWf9SU2iifaVaFm2SHEQi+MfvRomA6hNFQPypblO
+         ajskHfJ21yXbKIgYGAkYYUqP0Ygv5283TmzvvXkvGPLvNGcY8IspXO87zRQLxoMgm7+A
+         44LeeK44/TjVVWr4ejNfVV1NjMwkMAjVBZwnQccmKfvNgc/rCXeLfUDkrNJrLDo+aM/k
+         5pFpnDDsiw5EE9Dzm//Lga2qY9q3z+kEsegm3Xv/EsUZ8FyYGeSCyJOZ49dURNwlnL2q
+         Y5lq2y1JVNHacWD2DjdNMHYSACvPNhgvLrByCLzQkYOtXAP0CIMW0LotNLXFCHIJamQv
+         WJuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681853598; x=1684445598;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fZ+faik75720SnLDzvntxl1cmAaRHsLQ7oOmPoVPf3o=;
-        b=aWGt3ryN3Ppg8/UQ/Gpx8SoGMNAtUazbaiRyDmk/+Ya8wZaQMFtC/J1vDYgc37uuxd
-         cD2DGBI8Yn9tgC+aT0FMy40DkCzhwPfd9jb5VXMmWUpoNpLGDAOzxFwCoLUpKgeADEtK
-         fSovEg38ZkpPr9jZewffRZn7N7Hwobrfqs97iRSVtAOLWZn3YnCiiZyHhEKrHORR4CNw
-         YP1iIEvqMzW0oxpKJm5QUE/fOb1Xt93WkY4rKDyFq/zJoyR+cjw7Ldaf/TBfwQH9YjqL
-         BfeSxm7FvBzL7wkXbDlreQlNWo/e6qmpayACP2sRUFsoHRm1zu/HeGUVKYR9XiYQYqi6
-         FHgg==
-X-Gm-Message-State: AAQBX9dnNB+aIEVE1UBPdT3KEpk/1YBOvbnSlZuQwCWomPxbb3dg1c1y
-        Ej0oZ8jdgW5yPnGtJXvFu6NWOIX69WGLd8hiX/s=
-X-Google-Smtp-Source: AKy350Zg9/w1pIq1h9Mfl98gkIvdjlXYVLE/yxlCrmuaudFEJKPjKGaCNnj1KVCOnrcLYZjlnD0Q2KC4cnvL5HhzBhY=
-X-Received: by 2002:a81:8443:0:b0:54f:8af3:6488 with SMTP id
- u64-20020a818443000000b0054f8af36488mr1215032ywf.23.1681853598073; Tue, 18
- Apr 2023 14:33:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230417205048.15870-1-vishal.moola@gmail.com>
- <20230417205048.15870-2-vishal.moola@gmail.com> <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
-In-Reply-To: <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Tue, 18 Apr 2023 14:33:06 -0700
-Message-ID: <CAOzc2pwpRhNoFbdzdzuvrqbZdf2OsrTvBGs40QCZJjA5fS_q1A@mail.gmail.com>
-Subject: Re: [PATCH 01/33] s390: Use _pt_s390_gaddr for gmap address tracking
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        d=1e100.net; s=20221208; t=1681861114; x=1684453114;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZZcbhEIXep3CsDuGt1XX4NDaxpUgfaEfLEdZFPghSQ=;
+        b=TSTA3BGZ3/pyl4Yb1McXe8Ck6NOQy3Xt6NGN90lgr6dfFtPtWThutr8K6S9WjeAych
+         SD7iKbOhF3a8yx2bR1bb6Xfm9fhmsjdPoiti80cPQvri+ufF9yftecUXFt06QSd5gW1X
+         EWP3hrHQvQjrvmqGqI94s3K8tqmHh60NQ8z2vta5EdH49eILYjpEdiq5esArDuG5dJK1
+         9Sx/xbRaXMVfwCjt6cjkGnTZuXgOR+CNyIKxUWkDRxVlO3fb/iiAfczVmxCt32v0sv5X
+         DBbkgUSawx1YTalgFmuHQM0E/8E/GZEOLh/S1PxvHgRLZVQuKfckxenABCx7LIes9aRA
+         efgg==
+X-Gm-Message-State: AAQBX9fA0EXMtrUGDTmOGNRiMajH/Hm8XS59r53nLru97T0pWn0LmYHe
+        Q2/WjCmZTc0/gWYtEj5ZaTM5mNOPDrczAXCL8w==
+X-Google-Smtp-Source: AKy350Y4yrZy3jVvN3wQp7+RZBqQNJ9wdfC4ADrLjc4RYHgu0a5KoOvNA6U3D5YLtIMfO6ES8yW87Yjz2s2FcMbRug==
+X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
+ (user=ackerleytng job=sendgmr) by 2002:a17:903:41c5:b0:19a:7bd4:5b0d with
+ SMTP id u5-20020a17090341c500b0019a7bd45b0dmr1394106ple.8.1681861113900; Tue,
+ 18 Apr 2023 16:38:33 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 23:38:32 +0000
+In-Reply-To: <ZDnAuGKrCO2wgjlG@google.com> (message from Sean Christopherson
+ on Fri, 14 Apr 2023 14:08:08 -0700)
+Mime-Version: 1.0
+Message-ID: <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     chao.p.peng@linux.intel.com, xiaoyao.li@intel.com,
+        isaku.yamahata@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
+        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
+        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        vannapurve@google.com, yu.c.zhang@linux.intel.com,
+        kirill.shutemov@linux.intel.com, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
+        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,57 +83,193 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 18, 2023 at 8:45=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
->
-> On 17.04.23 22:50, Vishal Moola (Oracle) wrote:
-> > s390 uses page->index to keep track of page tables for the guest addres=
-s
-> > space. In an attempt to consolidate the usage of page fields in s390,
-> > replace _pt_pad_2 with _pt_s390_gaddr to replace page->index in gmap.
-> >
-> > This will help with the splitting of struct ptdesc from struct page, as
-> > well as allow s390 to use _pt_frag_refcount for fragmented page table
-> > tracking.
-> >
-> > Since page->_pt_s390_gaddr aliases with mapping, ensure its set to NULL
-> > before freeing the pages as well.
-> >
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> > ---
->
-> [...]
->
-> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> > index 3fc9e680f174..2616d64c0e8c 100644
-> > --- a/include/linux/mm_types.h
-> > +++ b/include/linux/mm_types.h
-> > @@ -144,7 +144,7 @@ struct page {
-> >               struct {        /* Page table pages */
-> >                       unsigned long _pt_pad_1;        /* compound_head =
-*/
-> >                       pgtable_t pmd_huge_pte; /* protected by page->ptl=
- */
-> > -                     unsigned long _pt_pad_2;        /* mapping */
-> > +                     unsigned long _pt_s390_gaddr;   /* mapping */
-> >                       union {
-> >                               struct mm_struct *pt_mm; /* x86 pgds only=
- */
-> >                               atomic_t pt_frag_refcount; /* powerpc */
->
-> The confusing part is, that these gmap page tables are not ordinary
-> process page tables that we would ordinarily place into this section
-> here. That's why they are also not allocated/freed using the typical
-> page table constructor/destructor ...
+Sean Christopherson <seanjc@google.com> writes:
 
-I initially thought the same, so I was quite confused when I saw
-__gmap_segment_gaddr was using pmd_pgtable_page().
+> On Tue, Mar 28, 2023, Chao Peng wrote:
+>> On Fri, Mar 24, 2023 at 10:29:25AM +0800, Xiaoyao Li wrote:
+>> > On 3/24/2023 10:10 AM, Chao Peng wrote:
+>> > > On Wed, Mar 22, 2023 at 05:41:31PM -0700, Isaku Yamahata wrote:
+>> > > > On Wed, Mar 08, 2023 at 03:40:26PM +0800,
+>> > > > Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>> > > >
+>> > > > > On Wed, Mar 08, 2023 at 12:13:24AM +0000, Ackerley Tng wrote:
+>> > > > > > Chao Peng <chao.p.peng@linux.intel.com> writes:
+>> > > > > >
+>> > > > > > > On Sat, Jan 14, 2023 at 12:01:01AM +0000, Sean  
+>> Christopherson wrote:
+>> > > > > > > > On Fri, Dec 02, 2022, Chao Peng wrote:
+>> > > > > > > +static bool kvm_check_rmem_offset_alignment(u64 offset, u64  
+>> gpa)
+>> > > > > > > +{
+>> > > > > > > +	if (!offset)
+>> > > > > > > +		return true;
+>> > > > > > > +	if (!gpa)
+>> > > > > > > +		return false;
+>> > > > > > > +
+>> > > > > > > +	return !!(count_trailing_zeros(offset) >=  
+>> count_trailing_zeros(gpa));
+>> > > >
+>> > > > This check doesn't work expected. For example, offset = 2GB,  
+>> gpa=4GB
+>> > > > this check fails.
+>> > >
+>> > > This case is expected to fail as Sean initially suggested[*]:
+>> > >    I would rather reject memslot if the gfn has lesser alignment than
+>> > >    the offset. I'm totally ok with this approach _if_ there's a use  
+>> case.
+>> > >    Until such a use case presents itself, I would rather be  
+>> conservative
+>> > >    from a uAPI perspective.
+>> > >
+>> > > I understand that we put tighter restriction on this but if you see  
+>> such
+>> > > restriction is really a big issue for real usage, instead of a
+>> > > theoretical problem, then we can loosen the check here. But at that  
+>> time
+>> > > below code is kind of x86 specific and may need improve.
+>> > >
+>> > > BTW, in latest code, I replaced count_trailing_zeros() with fls64():
+>> > >    return !!(fls64(offset) >= fls64(gpa));
+>> >
+>> > wouldn't it be !!(ffs64(offset) <= ffs64(gpa)) ?
 
-Although they are not ordinary process page tables, since we
-eventually want to move them out of struct page, I think shifting them
-to be in ptdescs, being a memory descriptor for page tables, makes
-the most sense.
+>> As the function document explains, here we want to return true when
+>> ALIGNMENT(offset) >= ALIGNMENT(gpa), so '>=' is what we need.
 
-Another option is to leave pmd_pgtable_page() as is just for this case.
-Or we can revert commit 7e25de77bc5ea which uses the function here
-then figure out where these gmap pages table pages will go later.
+>> It's worthy clarifying that in Sean's original suggestion he actually
+>> mentioned the opposite. He said 'reject memslot if the gfn has lesser
+>> alignment than the offset', but I wonder this is his purpose, since
+>> if ALIGNMENT(offset) < ALIGNMENT(gpa), we wouldn't be possible to map
+>> the page as largepage. Consider we have below config:
+
+>>    gpa=2M, offset=1M
+
+>> In this case KVM tries to map gpa at 2M as 2M hugepage but the physical
+>> page at the offset(1M) in private_fd cannot provide the 2M page due to
+>> misalignment.
+
+>> But as we discussed in the off-list thread, here we do find a real use
+>> case indicating this check is too strict. i.e. QEMU immediately fails
+>> when launch a guest > 2G memory. For this case QEMU splits guest memory
+>> space into two slots:
+
+>>    Slot#1(ram_below_4G): gpa=0x0, offset=0x0, size=2G
+>>    Slot#2(ram_above_4G): gpa=4G,  offset=2G,  size=totalsize-2G
+
+>> This strict alignment check fails for slot#2 because offset(2G) has less
+>> alignment than gpa(4G). To allow this, one solution can revert to my
+>> previous change in kvm_alloc_memslot_metadata() to disallow hugepage
+>> only when the offset/gpa are not aligned to related page size.
+
+>> Sean, How do you think?
+
+> I agree, a pure alignment check is too restrictive, and not really what I  
+> intended
+> despite past me literally saying that's what I wanted :-)  I think I may  
+> have also
+> inverted the "less alignment" statement, but luckily I believe that ends  
+> up being
+> a moot point.
+
+> The goal is to avoid having to juggle scenarios where KVM wants to create  
+> a hugepage,
+> but restrictedmem can't provide one because of a misaligned file offset.   
+> I think
+> the rule we want is that the offset must be aligned to the largest page  
+> size allowed
+> by the memslot _size_.  E.g. on x86, if the memslot size is >=1GiB then  
+> the offset
+> must be 1GiB or beter, ditto for >=2MiB and >=4KiB (ignoring that 4KiB is  
+> already a
+> requirement).
+
+> We could loosen that to say the largest size allowed by the memslot, but  
+> I don't
+> think that's worth the effort unless it's trivially easy to implement in  
+> code,
+> e.g. KVM could technically allow a 4KiB aligned offset if the memslot is  
+> 2MiB
+> sized but only 4KiB aligned on the GPA.  I doubt there's a real use case  
+> for such
+> a memslot, so I want to disallow that unless it's super easy to implement.
+
+Checking my understanding here about why we need this alignment check:
+
+When KVM requests a page from restrictedmem, KVM will provide an offset
+into the file in terms of 4K pages.
+
+When shmem is configured to use hugepages, shmem_get_folio() will round
+the requested offset down to the nearest hugepage-aligned boundary in
+shmem_alloc_hugefolio().
+
+Example of problematic configuration provided to
+KVM_SET_USER_MEMORY_REGION2:
+
++ shmem configured to use 1GB pages
++ restrictedmem_offset provided to KVM_SET_USER_MEMORY_REGION2: 0x4000
++ memory_size provided in KVM_SET_USER_MEMORY_REGION2: 1GB
++ KVM requests offset (pgoff_t) 0x8, which translates to offset 0x8000
+
+restrictedmem_get_page() and shmem_get_folio() returns the page for
+offset 0x0 in the file, since rounding down 0x8000 to the nearest 1GB is
+0x0. This is allocating outside the range that KVM is supposed to use,
+since the parameters provided in KVM_SET_USER_MEMORY_REGION2 is only
+supposed to be offset 0x4000 to (0x4000 + 1GB = 0x40004000) in the file.
+
+IIUC shmem will actually just round down (0x4000 rounded down to nearest
+1GB will be 0x0) and allocate without checking bounds, so if offset 0x0
+to 0x4000 in the file were supposed to be used by something else, there
+might be issues.
+
+Hence, this alignment check ensures that rounding down of any offsets
+provided by KVM (based on page size configured in the backing file
+provided) to restrictedmem_get_page() must not go below the offset
+provided to KVM_SET_USER_MEMORY_REGION2.
+
+Enforcing alignment of restrictedmem_offset based on the currently-set
+page size in the backing file (i.e. shmem) may not be effective, since
+the size of the pages in the backing file can be adjusted to a larger
+size after KVM_SET_USER_MEMORY_REGION2 succeeds. With that, we may still
+end up allocating outside the range that KVM was provided with.
+
+Hence, to be safe, we should check alignment to the max page size across
+all backing filesystems, so the constraint is
+
+     rounding down restrictedmem_offset to
+     min(max page size across all backing filesystems,
+         max page size that fits in memory_size) == restrictedmem_offset
+
+which is the same check as
+
+     restrictedmem_offset must be aligned to min(max page size across all
+     backing filesystems, max page size that fits in memory_size)
+
+which can safely reduce to
+
+     restrictedmem_offset must be aligned to max page size that fits in
+     memory_size
+
+since "max page size that fits in memory_size" is probably <= to "max
+page size across all backing filesystems", and if it's larger, it'll
+just be a tighter constraint.
+
+If the above understanding is correct:
+
++ We must enforce this in the KVM_SET_USER_MEMORY_REGION2 handler, since
+   IIUC shmem will just round down and allocate without checking bounds.
+
+     + I think this is okay because holes in the restrictedmem file (in
+       terms of offset) made to accommodate this constraint don't cost us
+       anything anyway(?) Are they just arbitrary offsets in a file? In
+       our case, this file is usually a new and empty file.
+
+     + In the case of migration of a restrictedmem file between two KVM
+       VMs, this constraint would cause a problem is if the largest
+       possible page size on the destination machine is larger than that
+       of the source machine. In that case, we might have to move the
+       data in the file to a different offset (a separate problem).
+
++ On this note, it seems like there is no check for when the range is
+   smaller than the allocated page? Like if the range provided is 4KB in
+   size, but shmem is then configured to use a 1GB page, will we end up
+   allocating past the end of the range?
