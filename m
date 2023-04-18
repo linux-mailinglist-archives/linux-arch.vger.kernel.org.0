@@ -2,145 +2,263 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77106E5635
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 03:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304966E5657
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 03:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjDRBJV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Apr 2023 21:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
+        id S229635AbjDRBXT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Apr 2023 21:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjDRBJU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 21:09:20 -0400
-X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 18:09:19 PDT
-Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [95.215.58.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2813640C8
-        for <linux-arch@vger.kernel.org>; Mon, 17 Apr 2023 18:09:19 -0700 (PDT)
-Message-ID: <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1681779821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F6L4XXjJ7DAIawwAHN6exDhyLIgvinWJ7u4alQvnINk=;
-        b=lrWoVAvN2dp4uPEXlR77OB9JFoLC9kWgFsZ9/4nEg+fkkX22rpYNjZ5BF5XaMVYgdbk15j
-        yhdXAjHD9Ey+WsBnri+bIiW4dwJXCnhqcJgCMf+C4tMtcF2XvUj3AqxgOBy6x/dojejDj/
-        Ae2yiGOgVqeW9s9fpj36dJzyQNjz8Es=
-Date:   Mon, 17 Apr 2023 18:03:35 -0700
+        with ESMTP id S229499AbjDRBXR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 21:23:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF5E2111;
+        Mon, 17 Apr 2023 18:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1681780996; x=1713316996;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xxj4orMdwSEXYJlb7suHd8py6WoU3VU9TrspjC7QyJg=;
+  b=LEycVl/XZGccDaguaPWKnazeh8hVy4Qtr/wHPXFgRlVu0gj+asT87lfX
+   SrQmYdbH2siYSARPem4Wyz7eYTjugAT/5GKFZIt+//E8cbuxDv3bHsKDb
+   wbpL9K35u69lBoi/TKBaQwjxbrgiuToIlO1N16a7h+tH0TzIKKllYmPm2
+   ILFpgv/RBu/pYkdmxWl/Zwk07orBvC6RMovrkHgy9rKjlhxVQk9VLECcf
+   6/iOY2VU2CoQhuFqTDt/1XdB5VNNi8pJSZ5W9daNsm2jQJWrRuw13+RUe
+   AHEWC04tYLZDsn3fKJ9wtUVufJAPGNzHLrUv/PFUPIMXTz6+FvJuuIFDH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="410264157"
+X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
+   d="scan'208";a="410264157"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 18:23:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="668298836"
+X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
+   d="scan'208";a="668298836"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 17 Apr 2023 18:23:10 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1poa3p-000co7-26;
+        Tue, 18 Apr 2023 01:23:09 +0000
+Date:   Tue, 18 Apr 2023 09:22:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: Re: [PATCH 04/33] mm: add utility functions for ptdesc
+Message-ID: <202304180913.p1BuXrBb-lkp@intel.com>
+References: <20230417205048.15870-5-vishal.moola@gmail.com>
 MIME-Version: 1.0
-Subject: handling unsupported optlen in cgroup bpf getsockopt: (was [PATCH
- net-next v4 2/4] net: socket: add sockopts blacklist for BPF cgroup hook)
-Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org,
-        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        bpf <bpf@vger.kernel.org>
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
- <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
- <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
- <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
- <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
- <ZDoEG0VF6fb9y0EC@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <ZDoEG0VF6fb9y0EC@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417205048.15870-5-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/14/23 6:55 PM, Stanislav Fomichev wrote:
-> On 04/13, Stanislav Fomichev wrote:
->> On Thu, Apr 13, 2023 at 7:38 AM Aleksandr Mikhalitsyn
->> <aleksandr.mikhalitsyn@canonical.com> wrote:
->>>
->>> On Thu, Apr 13, 2023 at 4:22 PM Eric Dumazet <edumazet@google.com> wrote:
->>>>
->>>> On Thu, Apr 13, 2023 at 3:35 PM Alexander Mikhalitsyn
->>>> <aleksandr.mikhalitsyn@canonical.com> wrote:
->>>>>
->>>>> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
->>>>> that bpf cgroup hook can cause FD leaks when used with sockopts which
->>>>> install FDs into the process fdtable.
->>>>>
->>>>> After some offlist discussion it was proposed to add a blacklist of
->>>>
->>>> We try to replace this word by either denylist or blocklist, even in changelogs.
->>>
->>> Hi Eric,
->>>
->>> Oh, I'm sorry about that. :( Sure.
->>>
->>>>
->>>>> socket options those can cause troubles when BPF cgroup hook is enabled.
->>>>>
->>>>
->>>> Can we find the appropriate Fixes: tag to help stable teams ?
->>>
->>> Sure, I will add next time.
->>>
->>> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
->>>
->>> I think it's better to add Stanislav Fomichev to CC.
->>
->> Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
->> use it for tcp zerocopy, I'm assuming it should work in this case as
->> well?
-> 
-> Jakub reminded me of the other things I wanted to ask here bug forgot:
-> 
-> - setsockopt is probably not needed, right? setsockopt hook triggers
->    before the kernel and shouldn't leak anything
-> - for getsockopt, instead of bypassing bpf completely, should we instead
->    ignore the error from the bpf program? that would still preserve
->    the observability aspect
+Hi Vishal,
 
-stealing this thread to discuss the optlen issue which may make sense to bypass 
-also.
+kernel test robot noticed the following build errors:
 
-There has been issue with optlen. Other than this older post related to optlen > 
-PAGE_SIZE: 
-https://lore.kernel.org/bpf/5c8b7d59-1f28-2284-f7b9-49d946f2e982@linux.dev/, the 
-recent one related to optlen that we have seen is NETLINK_LIST_MEMBERSHIPS. The 
-userspace passed in optlen == 0 and the kernel put the expected optlen (> 0) and 
-'return 0;' to userspace. The userspace intention is to learn the expected 
-optlen. This makes 'ctx.optlen > max_optlen' and 
-__cgroup_bpf_run_filter_getsockopt() ends up returning -EFAULT to the userspace 
-even the bpf prog has not changed anything.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus linus/master v6.3-rc7 next-20230417]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Does it make sense to also bypass the bpf prog when 'ctx.optlen > max_optlen' 
-for now (and this can use a separate patch which as usual requires a bpf selftests)?
+url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/s390-Use-_pt_s390_gaddr-for-gmap-address-tracking/20230418-045832
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230417205048.15870-5-vishal.moola%40gmail.com
+patch subject: [PATCH 04/33] mm: add utility functions for ptdesc
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230418/202304180913.p1BuXrBb-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1b6f8137ca50a543ad2937092836635ca58c78ce
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vishal-Moola-Oracle/s390-Use-_pt_s390_gaddr-for-gmap-address-tracking/20230418-045832
+        git checkout 1b6f8137ca50a543ad2937092836635ca58c78ce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh prepare
 
-In the future, does it make sense to have a specific cgroup-bpf-prog (a specific 
-attach type?) that only uses bpf_dynptr kfunc to access the optval such that it 
-can enforce read-only for some optname and potentially also track if bpf-prog 
-has written a new optval? The bpf-prog can only return 1 (OK) and only allows 
-using bpf_set_retval() instead. Likely there is still holes but could be a seed 
-of thought to continue polishing the idea.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202304180913.p1BuXrBb-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from arch/sh/kernel/asm-offsets.c:14:
+   include/linux/mm.h: In function 'virt_to_ptdesc':
+>> include/linux/mm.h:2723:16: error: implicit declaration of function 'page_ptdesc' [-Werror=implicit-function-declaration]
+    2723 |         return page_ptdesc(virt_to_head_page(x));
+         |                ^~~~~~~~~~~
+>> include/linux/mm.h:2723:16: warning: returning 'int' from a function with return type 'struct ptdesc *' makes pointer from integer without a cast [-Wint-conversion]
+    2723 |         return page_ptdesc(virt_to_head_page(x));
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/sh/include/asm/thread_info.h:13,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/sh/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:56,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/mm.h:7:
+   include/linux/mm.h: In function 'ptdesc_to_virt':
+>> include/linux/mm.h:2728:29: error: implicit declaration of function 'ptdesc_page'; did you mean 'pte_page'? [-Werror=implicit-function-declaration]
+    2728 |         return page_to_virt(ptdesc_page(pt));
+         |                             ^~~~~~~~~~~
+   arch/sh/include/asm/page.h:139:27: note: in definition of macro '___va'
+     139 | #define ___va(x)        ((x)+PAGE_OFFSET)
+         |                           ^
+   include/linux/mm.h:117:25: note: in expansion of macro '__va'
+     117 | #define page_to_virt(x) __va(PFN_PHYS(page_to_pfn(x)))
+         |                         ^~~~
+   include/linux/mm.h:117:30: note: in expansion of macro 'PFN_PHYS'
+     117 | #define page_to_virt(x) __va(PFN_PHYS(page_to_pfn(x)))
+         |                              ^~~~~~~~
+   include/asm-generic/memory_model.h:64:21: note: in expansion of macro '__page_to_pfn'
+      64 | #define page_to_pfn __page_to_pfn
+         |                     ^~~~~~~~~~~~~
+   include/linux/mm.h:2728:16: note: in expansion of macro 'page_to_virt'
+    2728 |         return page_to_virt(ptdesc_page(pt));
+         |                ^~~~~~~~~~~~
+>> include/asm-generic/memory_model.h:46:35: warning: initialization of 'const struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      46 | ({      const struct page *__pg = (pg);                         \
+         |                                   ^
+   arch/sh/include/asm/page.h:139:27: note: in definition of macro '___va'
+     139 | #define ___va(x)        ((x)+PAGE_OFFSET)
+         |                           ^
+   include/linux/mm.h:117:25: note: in expansion of macro '__va'
+     117 | #define page_to_virt(x) __va(PFN_PHYS(page_to_pfn(x)))
+         |                         ^~~~
+   include/linux/mm.h:117:30: note: in expansion of macro 'PFN_PHYS'
+     117 | #define page_to_virt(x) __va(PFN_PHYS(page_to_pfn(x)))
+         |                              ^~~~~~~~
+   include/asm-generic/memory_model.h:64:21: note: in expansion of macro '__page_to_pfn'
+      64 | #define page_to_pfn __page_to_pfn
+         |                     ^~~~~~~~~~~~~
+   include/linux/mm.h:117:39: note: in expansion of macro 'page_to_pfn'
+     117 | #define page_to_virt(x) __va(PFN_PHYS(page_to_pfn(x)))
+         |                                       ^~~~~~~~~~~
+   include/linux/mm.h:2728:16: note: in expansion of macro 'page_to_virt'
+    2728 |         return page_to_virt(ptdesc_page(pt));
+         |                ^~~~~~~~~~~~
+   include/linux/mm.h: In function 'ptdesc_address':
+>> include/linux/mm.h:2733:30: error: implicit declaration of function 'ptdesc_folio'; did you mean 'page_folio'? [-Werror=implicit-function-declaration]
+    2733 |         return folio_address(ptdesc_folio(pt));
+         |                              ^~~~~~~~~~~~
+         |                              page_folio
+>> include/linux/mm.h:2733:30: warning: passing argument 1 of 'folio_address' makes pointer from integer without a cast [-Wint-conversion]
+    2733 |         return folio_address(ptdesc_folio(pt));
+         |                              ^~~~~~~~~~~~~~~~
+         |                              |
+         |                              int
+   include/linux/mm.h:2151:55: note: expected 'const struct folio *' but argument is of type 'int'
+    2151 | static inline void *folio_address(const struct folio *folio)
+         |                                   ~~~~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/mm.h: In function 'ptdesc_is_reserved':
+>> include/linux/mm.h:2738:36: warning: passing argument 1 of 'folio_test_reserved' makes pointer from integer without a cast [-Wint-conversion]
+    2738 |         return folio_test_reserved(ptdesc_folio(pt));
+         |                                    ^~~~~~~~~~~~~~~~
+         |                                    |
+         |                                    int
+   In file included from include/linux/mmzone.h:23:
+   include/linux/page-flags.h:375:62: note: expected 'struct folio *' but argument is of type 'int'
+     375 | static __always_inline bool folio_test_##lname(struct folio *folio)     \
+         |                                                ~~~~~~~~~~~~~~^~~~~
+   include/linux/page-flags.h:423:9: note: in expansion of macro 'TESTPAGEFLAG'
+     423 |         TESTPAGEFLAG(uname, lname, policy)                              \
+         |         ^~~~~~~~~~~~
+   include/linux/page-flags.h:494:1: note: in expansion of macro 'PAGEFLAG'
+     494 | PAGEFLAG(Reserved, reserved, PF_NO_COMPOUND)
+         | ^~~~~~~~
+   include/linux/mm.h: In function 'ptdesc_alloc':
+   include/linux/mm.h:2745:16: warning: returning 'int' from a function with return type 'struct ptdesc *' makes pointer from integer without a cast [-Wint-conversion]
+    2745 |         return page_ptdesc(page);
+         |                ^~~~~~~~~~~~~~~~~
+   include/linux/mm.h: In function 'ptdesc_free':
+>> include/linux/mm.h:2750:29: warning: initialization of 'struct page *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+    2750 |         struct page *page = ptdesc_page(pt);
+         |                             ^~~~~~~~~~~
+   include/linux/mm.h: In function 'free_reserved_ptdesc':
+>> include/linux/mm.h:2988:28: warning: passing argument 1 of 'free_reserved_page' makes pointer from integer without a cast [-Wint-conversion]
+    2988 |         free_reserved_page(ptdesc_page(pt));
+         |                            ^~~~~~~~~~~~~~~
+         |                            |
+         |                            int
+   include/linux/mm.h:2971:52: note: expected 'struct page *' but argument is of type 'int'
+    2971 | static inline void free_reserved_page(struct page *page)
+         |                                       ~~~~~~~~~~~~~^~~~
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:114: arch/sh/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1286: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-> - or maybe we can even have a per-proto bpf_getsockopt_cleanup call that
->    gets called whenever bpf returns an error to make sure protocols have
->    a chance to handle that condition (and free the fd)
-> 
+vim +/page_ptdesc +2723 include/linux/mm.h
 
+  2720	
+  2721	static inline struct ptdesc *virt_to_ptdesc(const void *x)
+  2722	{
+> 2723		return page_ptdesc(virt_to_head_page(x));
+  2724	}
+  2725	
+  2726	static inline void *ptdesc_to_virt(struct ptdesc *pt)
+  2727	{
+> 2728		return page_to_virt(ptdesc_page(pt));
+  2729	}
+  2730	
+  2731	static inline void *ptdesc_address(struct ptdesc *pt)
+  2732	{
+> 2733		return folio_address(ptdesc_folio(pt));
+  2734	}
+  2735	
+  2736	static inline bool ptdesc_is_reserved(struct ptdesc *pt)
+  2737	{
+> 2738		return folio_test_reserved(ptdesc_folio(pt));
+  2739	}
+  2740	
+  2741	static inline struct ptdesc *ptdesc_alloc(gfp_t gfp, unsigned int order)
+  2742	{
+  2743		struct page *page = alloc_pages(gfp | __GFP_COMP, order);
+  2744	
+  2745		return page_ptdesc(page);
+  2746	}
+  2747	
+  2748	static inline void ptdesc_free(struct ptdesc *pt)
+  2749	{
+> 2750		struct page *page = ptdesc_page(pt);
+  2751	
+  2752		__free_pages(page, compound_order(page));
+  2753	}
+  2754	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
