@@ -2,79 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6E06E5AAA
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 09:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8572E6E5BD6
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 10:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjDRHpE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Apr 2023 03:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S230476AbjDRIQT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Apr 2023 04:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbjDRHpD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 03:45:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678AD10D0;
-        Tue, 18 Apr 2023 00:45:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S229681AbjDRIQR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 04:16:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD62EE5;
+        Tue, 18 Apr 2023 01:16:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 1CEA11F8D5;
-        Tue, 18 Apr 2023 07:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1681803900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k4kCGiDu7eZCY2kHWyBi9arEU5jU+OwaWl9LlmgBgTo=;
-        b=01AbIdbC2ZN0fhxv/iYxLgj8ciDX6tD9uCd3cIhELGAw4YSRK9w6/GGAiuAaLtZg7KlYip
-        UPvsdBcpWNtNJ71zbqUvLKTD1lA83nSqPPrphOIt3mJsfodK1zfwzqX4BEKAaXkUnOToit
-        aPED/mfiOl6WMMIYqzVnNBr0VoJ5y+A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1681803900;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=k4kCGiDu7eZCY2kHWyBi9arEU5jU+OwaWl9LlmgBgTo=;
-        b=Rmm87b7uMzS061Xyb6C7LuYQh7WlZOBtlpx0lMkwJOlh/1UTUlnJfZxcIJZTcTRQYKl8ZJ
-        E719xeledovycCBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B324C139CC;
-        Tue, 18 Apr 2023 07:44:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lXeyKntKPmTxagAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 18 Apr 2023 07:44:59 +0000
-Message-ID: <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
-Date:   Tue, 18 Apr 2023 09:44:59 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D9762E48;
+        Tue, 18 Apr 2023 08:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1F4C433EF;
+        Tue, 18 Apr 2023 08:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1681805774;
+        bh=xJe/cvA/yQa/oa7uh2DGr4Pbn1V0PtNWuUU9sEnJsN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LnURkV4I9zJfISjViWpIuEW3mBJjq5J5iCm9vx+8WukLz0BCER5g/eknoNorJ43V/
+         xGB/xArqxYf/UxVzzRjwKbZ9Rq6ZDWcghKsEjZovWUOgybIrOXVEQHtvsteJJg1OY7
+         3hyCXyzdLCNy1ZPbQ++rnHTFbwsT8sMICgh79U6o1jY4zruYfgfVGJe9BxfJl3IY8F
+         8YRe4Il8a5KOlAFi9UY9Xu+9Vt2KsK00DMzvgJzzYP9RbqazxQjqGAdgyn4DDlarcN
+         woqwgqYlzyrULrrflvpchodo4jLK4xAjTkgxSgKCPbUe/x7kQRW6QhgLeo3joh72V8
+         jPbt1omo/z8dw==
+Date:   Tue, 18 Apr 2023 10:16:07 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, daniel@iogearbox.net,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v4 1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230418-eckig-festland-60d2d5c41720@brauner>
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-2-aleksandr.mikhalitsyn@canonical.com>
+ <20230417-bahnanlagen-fixstern-bccf5afe6fa0@brauner>
+ <CAEivzxcAeBPJYTVTN7cRik7AXo3y-Ox1yffPG2bvwxXsH2WWDg@mail.gmail.com>
+ <20230417-irren-performanz-3c18de02e6e2@brauner>
+ <CANn89i+cBg24iEnXnx2x5AB40ZLf6g2ysbLENBW9mXWB8arbjw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 00/19] arch: Consolidate <asm/fb.h>
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-References: <20230417125651.25126-1-tzimmermann@suse.de>
- <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------rFRj0NtGM3Zijx0xyHfeKvB1"
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANn89i+cBg24iEnXnx2x5AB40ZLf6g2ysbLENBW9mXWB8arbjw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,76 +69,273 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------rFRj0NtGM3Zijx0xyHfeKvB1
-Content-Type: multipart/mixed; boundary="------------18o4xqtdrHnA7yRGq0Gjgi9D";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@arndb.de>, Daniel Vetter <daniel.vetter@ffwll.ch>,
- Helge Deller <deller@gmx.de>, Javier Martinez Canillas <javierm@redhat.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-sh@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Message-ID: <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
-Subject: Re: [PATCH v3 00/19] arch: Consolidate <asm/fb.h>
-References: <20230417125651.25126-1-tzimmermann@suse.de>
- <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
-In-Reply-To: <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
+On Mon, Apr 17, 2023 at 07:43:19PM +0200, Eric Dumazet wrote:
+> On Mon, Apr 17, 2023 at 7:16 PM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Mon, Apr 17, 2023 at 06:01:16PM +0200, Aleksandr Mikhalitsyn wrote:
+> > > On Mon, Apr 17, 2023 at 5:18 PM Christian Brauner <brauner@kernel.org> wrote:
+> > > >
+> > > > On Thu, Apr 13, 2023 at 03:33:52PM +0200, Alexander Mikhalitsyn wrote:
+> > > > > Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+> > > > > but it contains pidfd instead of plain pid, which allows programmers not
+> > > > > to care about PID reuse problem.
+> > > > >
+> > > > > Idea comes from UAPI kernel group:
+> > > > > https://uapi-group.org/kernel-features/
+> > > > >
+> > > > > Big thanks to Christian Brauner and Lennart Poettering for productive
+> > > > > discussions about this.
+> > > > >
+> > > > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > > > Cc: Eric Dumazet <edumazet@google.com>
+> > > > > Cc: Jakub Kicinski <kuba@kernel.org>
+> > > > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > > > Cc: Leon Romanovsky <leon@kernel.org>
+> > > > > Cc: David Ahern <dsahern@kernel.org>
+> > > > > Cc: Arnd Bergmann <arnd@arndb.de>
+> > > > > Cc: Kees Cook <keescook@chromium.org>
+> > > > > Cc: Christian Brauner <brauner@kernel.org>
+> > > > > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > > > > Cc: Lennart Poettering <mzxreary@0pointer.de>
+> > > > > Cc: Luca Boccassi <bluca@debian.org>
+> > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > Cc: netdev@vger.kernel.org
+> > > > > Cc: linux-arch@vger.kernel.org
+> > > > > Tested-by: Luca Boccassi <bluca@debian.org>
+> > > > > Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > > > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> > > > > ---
+> > > > > v4:
+> > > > >       - fixed silent fd_install if writting of CMSG to the userspace fails (pointed by Christian)
+> > > > > v2:
+> > > > >       According to review comments from Kuniyuki Iwashima and Christian Brauner:
+> > > > >       - use pidfd_create(..) retval as a result
+> > > > >       - whitespace change
+> > > > > ---
+> > > > >  arch/alpha/include/uapi/asm/socket.h    |  2 ++
+> > > > >  arch/mips/include/uapi/asm/socket.h     |  2 ++
+> > > > >  arch/parisc/include/uapi/asm/socket.h   |  2 ++
+> > > > >  arch/sparc/include/uapi/asm/socket.h    |  2 ++
+> > > > >  include/linux/net.h                     |  1 +
+> > > > >  include/linux/socket.h                  |  1 +
+> > > > >  include/net/scm.h                       | 39 +++++++++++++++++++++++--
+> > > > >  include/uapi/asm-generic/socket.h       |  2 ++
+> > > > >  net/core/sock.c                         | 11 +++++++
+> > > > >  net/mptcp/sockopt.c                     |  1 +
+> > > > >  net/unix/af_unix.c                      | 18 ++++++++----
+> > > > >  tools/include/uapi/asm-generic/socket.h |  2 ++
+> > > > >  12 files changed, 76 insertions(+), 7 deletions(-)
+> > > > >
+> > > > > diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> > > > > index 739891b94136..ff310613ae64 100644
+> > > > > --- a/arch/alpha/include/uapi/asm/socket.h
+> > > > > +++ b/arch/alpha/include/uapi/asm/socket.h
+> > > > > @@ -137,6 +137,8 @@
+> > > > >
+> > > > >  #define SO_RCVMARK           75
+> > > > >
+> > > > > +#define SO_PASSPIDFD         76
+> > > > > +
+> > > > >  #if !defined(__KERNEL__)
+> > > > >
+> > > > >  #if __BITS_PER_LONG == 64
+> > > > > diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> > > > > index 18f3d95ecfec..762dcb80e4ec 100644
+> > > > > --- a/arch/mips/include/uapi/asm/socket.h
+> > > > > +++ b/arch/mips/include/uapi/asm/socket.h
+> > > > > @@ -148,6 +148,8 @@
+> > > > >
+> > > > >  #define SO_RCVMARK           75
+> > > > >
+> > > > > +#define SO_PASSPIDFD         76
+> > > > > +
+> > > > >  #if !defined(__KERNEL__)
+> > > > >
+> > > > >  #if __BITS_PER_LONG == 64
+> > > > > diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> > > > > index f486d3dfb6bb..df16a3e16d64 100644
+> > > > > --- a/arch/parisc/include/uapi/asm/socket.h
+> > > > > +++ b/arch/parisc/include/uapi/asm/socket.h
+> > > > > @@ -129,6 +129,8 @@
+> > > > >
+> > > > >  #define SO_RCVMARK           0x4049
+> > > > >
+> > > > > +#define SO_PASSPIDFD         0x404A
+> > > > > +
+> > > > >  #if !defined(__KERNEL__)
+> > > > >
+> > > > >  #if __BITS_PER_LONG == 64
+> > > > > diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> > > > > index 2fda57a3ea86..6e2847804fea 100644
+> > > > > --- a/arch/sparc/include/uapi/asm/socket.h
+> > > > > +++ b/arch/sparc/include/uapi/asm/socket.h
+> > > > > @@ -130,6 +130,8 @@
+> > > > >
+> > > > >  #define SO_RCVMARK               0x0054
+> > > > >
+> > > > > +#define SO_PASSPIDFD             0x0055
+> > > > > +
+> > > > >  #if !defined(__KERNEL__)
+> > > > >
+> > > > >
+> > > > > diff --git a/include/linux/net.h b/include/linux/net.h
+> > > > > index b73ad8e3c212..c234dfbe7a30 100644
+> > > > > --- a/include/linux/net.h
+> > > > > +++ b/include/linux/net.h
+> > > > > @@ -43,6 +43,7 @@ struct net;
+> > > > >  #define SOCK_PASSSEC         4
+> > > > >  #define SOCK_SUPPORT_ZC              5
+> > > > >  #define SOCK_CUSTOM_SOCKOPT  6
+> > > > > +#define SOCK_PASSPIDFD               7
+> > > > >
+> > > > >  #ifndef ARCH_HAS_SOCKET_TYPES
+> > > > >  /**
+> > > > > diff --git a/include/linux/socket.h b/include/linux/socket.h
+> > > > > index 13c3a237b9c9..6bf90f251910 100644
+> > > > > --- a/include/linux/socket.h
+> > > > > +++ b/include/linux/socket.h
+> > > > > @@ -177,6 +177,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
+> > > > >  #define      SCM_RIGHTS      0x01            /* rw: access rights (array of int) */
+> > > > >  #define SCM_CREDENTIALS 0x02         /* rw: struct ucred             */
+> > > > >  #define SCM_SECURITY 0x03            /* rw: security label           */
+> > > > > +#define SCM_PIDFD    0x04            /* ro: pidfd (int)              */
+> > > > >
+> > > > >  struct ucred {
+> > > > >       __u32   pid;
+> > > > > diff --git a/include/net/scm.h b/include/net/scm.h
+> > > > > index 585adc1346bd..c67f765a165b 100644
+> > > > > --- a/include/net/scm.h
+> > > > > +++ b/include/net/scm.h
+> > > > > @@ -120,12 +120,44 @@ static inline bool scm_has_secdata(struct socket *sock)
+> > > > >  }
+> > > > >  #endif /* CONFIG_SECURITY_NETWORK */
+> > > > >
+> > > > > +static __inline__ void scm_pidfd_recv(struct msghdr *msg, struct scm_cookie *scm)
+> > > > > +{
+> > > > > +     struct file *pidfd_file = NULL;
+> > > > > +     int pidfd;
+> > > > > +
+> > > > > +     /*
+> > > > > +      * put_cmsg() doesn't return an error if CMSG is truncated,
+> > > > > +      * that's why we need to opencode these checks here.
+> > > > > +      */
+> > > > > +     if ((msg->msg_controllen <= sizeof(struct cmsghdr)) ||
+> > > > > +         (msg->msg_controllen - sizeof(struct cmsghdr)) < sizeof(int)) {
+> > > > > +             msg->msg_flags |= MSG_CTRUNC;
+> > > > > +             return;
+> > > >
+> > > > Hm, curious about this: We mark the message as truncated for SCM_PIDFD
+> > > > but if the same conditions were to apply for SCM_PASSCRED we don't mark
+> > > > the message as truncated. Am I reading this correct? And is so, you
+> > > > please briefly explain this difference?
+> > >
+> > > Hi, Christian!
+> > >
+> > > For SCM_CREDENTIALS we mark it too. Inside the put_cmsg function:
+> > > https://github.com/torvalds/linux/blob/6a8f57ae2eb07ab39a6f0ccad60c760743051026/net/core/scm.c#L225
+> > >
+> > > The reason why I'm open-coding these checks is that I want to know
+> > > that the message
+> > > doesn't fit into the userspace buffer before doing pidfd_prepare and
+> > > other stuff and because
+> > > put_cmsg is not returning an error when message doesn't fit in the
+> > > userspace buffer and
+> > > we won't be able to properly do pidfd cleanup (put struct pid and fd index).
+> > >
+> > > >
+> > > > > +     }
+> > > > > +
+> > > > > +     WARN_ON_ONCE(!scm->pid);
+> > > > > +     pidfd = pidfd_prepare(scm->pid, 0, &pidfd_file);
+> > > > > +
+> > > > > +     if (put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)) {
+> > > >
+> > > > If the put_cmsg() of the pidfd fails userspace needs to be able to
+> > > > detect this. Otherwise they can't distinguish between the SCM_PIDFD
+> > > > value being zero because the put_cmsg() failed or put_cmsg() succeeded
+> > > > and the allocated fd nr was 0.
+> > >
+> > > If pidfd_prepare fails then userspace will receive SCM_PIDFD message
+> > > with negative pidfd value.
+> >
+> > So we discussed this a bit offline and I think there's still an issue.
+> > If put_cmsg() fails
+> >
+> >           if (msg->msg_control_is_user) {
+> >                   struct cmsghdr __user *cm = msg->msg_control_user;
+> >
+> >                   check_object_size(data, cmlen - sizeof(*cm), true);
+> >
+> >                   if (!user_write_access_begin(cm, cmlen))
+> >                           goto efault;
+> >
+> >                   // This succeeds so cm->cmsg_len == sizeof(int)
+> >                   unsafe_put_user(cmlen, &cm->cmsg_len, efault_end);
+> >
+> >                   // This succeeds so cm->cmsg_level == SOL_SOCKET
+> >                   unsafe_put_user(level, &cm->cmsg_level, efault_end);
+> >
+> >                   // This succeeds so cm->cmsg_type == SCM_PIDFD
+> >                   unsafe_put_user(type, &cm->cmsg_type, efault_end);
+> >
+> >                   // This fails and leaves all bits set to 0
+> >                   unsafe_copy_to_user(CMSG_USER_DATA(cm), data,
+> >                                       cmlen - sizeof(*cm), efault_end);
+> >                   user_write_access_end();
+> >
+> > so now we hit
+> >
+> >           if (put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)) {
+> >                   if (pidfd_file) {
+> >                           put_unused_fd(pidfd);
+> >                           fput(pidfd_file);
+> >                   }
+> >
+> >                   return;
+> >           }
+> >
+> > and return early. Afaict, userspace would now receive:
+> >
+> >         if (cmsg && cmsg->cmsg_len == CMSG_LEN(sizeof(int)) &&
+> >             cmsg->cmsg_level == SOL_SOCKET &&
+> >             cmsg->cmsg_type == SCM_PIDFD) {
+> >                 memcpy(&pidfd, CMSG_DATA(cmsg), sizeof(int));
+> >
+> >                 // pidfd is now 0 which is a valid fd number
+> >                 // it'll likely refer to /dev/stdin or whatever and so
+> >                 // will fail or, worst case, 0 refers to another pidfd :)
+> >                 pidfd_send_signal(pidfd, SIGKILL);
+> >
+> > so we need to address this. So one way I think that would solve this is:
+> >
+> > diff --git a/net/core/scm.c b/net/core/scm.c
+> > index 3cd7dd377e53..d1f4cd135c5a 100644
+> > --- a/net/core/scm.c
+> > +++ b/net/core/scm.c
+> > @@ -236,9 +236,9 @@ int put_cmsg(struct msghdr * msg, int level, int type, int len, void *data)
+> >
+> >                 unsafe_put_user(cmlen, &cm->cmsg_len, efault_end);
+> >                 unsafe_put_user(level, &cm->cmsg_level, efault_end);
+> > -               unsafe_put_user(type, &cm->cmsg_type, efault_end);
+> >                 unsafe_copy_to_user(CMSG_USER_DATA(cm), data,
+> >                                     cmlen - sizeof(*cm), efault_end);
+> > +               unsafe_put_user(type, &cm->cmsg_type, efault_end);
+> >                 user_write_access_end();
+> >         } else {
+> >                 struct cmsghdr *cm = msg->msg_control;
+> >
+> > such that we only copy cm->cmsg_type after we transfered the data.
+> 
+> This looks wrong to me.
+> 
+> if put_cmsg() returns -EFAULT, then msg->msg_control and
+> msg->msg_controllen were not changed.
+> 
+> So the user application should not attempt to read this part of the
+> control buffer, this could contain garbage.
 
---------------18o4xqtdrHnA7yRGq0Gjgi9D
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Thanks for the review, Eric. That's reassuring.
 
-SGkNCg0KQW0gMTcuMDQuMjMgdW0gMTY6MTIgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
-biBNb24sIEFwciAxNywgMjAyMywgYXQgMTQ6NTYsIFRob21hcyBaaW1tZXJtYW5uIHdyb3Rl
-Og0KPj4gVmFyaW91cyBhcmNoaXRlY3R1cmVzIHByb3ZpZGUgPGFzbS9mYi5oPiB3aXRoIGhl
-bHBlcnMgZm9yIGZiZGV2DQo+PiBmcmFtZWJ1ZmZlciBkZXZpY2VzLiBTaGFyZSB0aGUgY29u
-dGFpbmVkIGNvZGUgd2hlcmUgcG9zc2libGUuIFRoZXJlDQo+PiBpcyBhbHJlYWR5IDxhc20t
-Z2VuZXJpYy9mYi5oPiwgd2hpY2ggaW1wbGVtZW50cyBnZW5lcmljIChhcyBpbg0KPj4gJ2Vt
-cHR5JykgZnVuY3Rpb25zIG9mIHRoZSBmYmRldiBoZWxwZXJzLiBUaGUgaGVhZGVyIHdhcyBh
-ZGRlZCBpbg0KPj4gY29tbWl0IGFhZmU0ZGJlZDBiZiAoImFzbS1nZW5lcmljOiBhZGQgZ2Vu
-ZXJpYyB2ZXJzaW9ucyBvZiBjb21tb24NCj4+IGhlYWRlcnMiKSwgYnV0IG5ldmVyIHVzZWQu
-DQo+Pg0KPj4gRWFjaCBwZXItYXJjaGl0ZWN0dXJlIGhlYWRlciBmaWxlIGRlY2xhcmVzIGFu
-ZC9vciBpbXBsZW1lbnRzIGZiZGV2DQo+PiBoZWxwZXJzIGFuZCBkZWZpbmVzIGEgcHJlcHJv
-Y2Vzc29yIHRva2VuIGZvciBlYWNoLiBUaGUgZ2VuZXJpYw0KPj4gaGVhZGVyIHRoZW4gcHJv
-dmlkZXMgdGhlIHJlbWFpbmluZyBoZWxwZXJzLiBJdCB3b3JrcyBsaWtlIHRoZSBJL08NCj4+
-IGhlbHBlcnMgaW4gPGFzbS9pby5oPi4NCj4gDQo+IExvb2tzIGFsbCBnb29kIHRvIG1lLA0K
-PiANCj4gQWNrZWQtYnk6IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQoNClRoYW5r
-cyBhIGxvdC4gSSBrbm93IHRoYXQgSGVsZ2Ugd2FudHMgdG8gdGVzdCB0aGUgUEFSSVNDIGNo
-YW5nZXMsIHNvIA0KSSdsbCBrZWVwIHRoaXMgc2VyaWVzIHBlbmRpbmcgZm9yIGEgYml0IGxv
-bmdlci4gSSdkIGxpa2UgdG8gbWVyZ2UgdGhlIA0KcGF0Y2hlcyB0aHJvdWdoIHRoZSBEUk0g
-dHJlZSwgaWYgbm8gb25lIG9iamVjdHMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4g
-DQo+ICAgICAgIEFybmQNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJp
-dmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpN
-YXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFH
-IE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
-
---------------18o4xqtdrHnA7yRGq0Gjgi9D--
-
---------------rFRj0NtGM3Zijx0xyHfeKvB1
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQ+SnsFAwAAAAAACgkQlh/E3EQov+Dd
-XQ//Zqe+Ke6gkghrBiUGQ20ACZc8VRAA3V1KtkJbElUAoQFaUum7w/yrlS81UEEJjoRMuX1FFcG+
-Rgbn5SQ/UepB6HwWPDfLlwvC4oUfNthoc8c95PMqnBG4qC6ln8pmzQf0Kh3KqcP7JSLUCZQ5hk0S
-UQ5o4XBTJvdwLDkcwaKIk8l4Up8BSKjx4CtpCLiplMu6raS6B2gHyKJ4Z5JRPPQBfR8XmfJKoBGA
-cJaPYTFMY4Nds0+lkFOgVFZeXpMuhIEt+jScoLwoDxb/2Ee+uaacWl7kCE2BQ8Hdhtm5Z18SDIUv
-oI7I2ASXRLCQbUMl+7R2paUr8KyYfV3f3FOq9KIfU0GiZP07CCLHEkojxcdp001KJV4Y8/u91nqe
-XPAjD+qEVK/Dqfe8J1nSZESRHsy3f30yr4kUhVBpZpeqdt205SA3Aa3z8Wa+bbk8vJ+7hqoc1pXp
-OAwdl1qf48I5AvxZiDdJ9d3lAJBhzEzStBvilwdb+hloJ1vlt/N7eG9d10qCSvEfHdMOma7ym+da
-0cHlXkncuXTzhVUj4UWbF/qWakRRElf7lGym4/Ns7gdxWb5/sHGmamxH8cT7lu16UXcGO6JyKi8J
-GT7X/bWqUKOYRFUujmWoafHadee1TGvLnPd3nI9GHLZ9WIH6fz8EopcK3bOx3WIBF3E/KBhrZYHH
-Nvk=
-=wq7p
------END PGP SIGNATURE-----
-
---------------rFRj0NtGM3Zijx0xyHfeKvB1--
+I've done a bit of container related networking before but I'm fumbling
+my way through the reviews here. So any additional reviews here would be
+very helpful.
