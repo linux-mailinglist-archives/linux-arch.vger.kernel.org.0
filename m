@@ -2,109 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E27D36E6C1C
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 20:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F349C6E6E44
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 23:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjDRScz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Apr 2023 14:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S232848AbjDRVd0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Apr 2023 17:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbjDRScy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 14:32:54 -0400
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EA659FE;
-        Tue, 18 Apr 2023 11:32:53 -0700 (PDT)
-Received: by mail-wm1-f54.google.com with SMTP id he13so21000890wmb.2;
-        Tue, 18 Apr 2023 11:32:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681842772; x=1684434772;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        with ESMTP id S231403AbjDRVdZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 17:33:25 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F04BAF2D;
+        Tue, 18 Apr 2023 14:33:19 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-54fa9da5e5bso275696507b3.1;
+        Tue, 18 Apr 2023 14:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681853598; x=1684445598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=38LQJYPWUqk2wm2FrKkjM2roC+rzVyedYiQ0NaT9neg=;
-        b=bn80a51UNOU9X3oxGpV3gMt8BgvgDLRkVyZThki4n4q09veFIasQ9/gP5kS4cvvrBQ
-         djZ+T7K6n7x56lK84xSBW6otzO/pTHS5JDHwjRPM1XGhYJbkpRtcTWS37fZPCu/Uooh5
-         CghFm9coYIWT8SCI6/zrEUjEWgUjUe+r9wZ8atHNSRTIRviA5C8IC6V7frR5gB17HxnY
-         1an4c9hsJGIo5gbA6+eWQSfI3tFbr/k+kWPHYvtbx51Mfagm7isXOl/J/43xWBtPtDmK
-         1aqUwowq4wXZ9CRjX7G9OLdwspFDaoyoMg2XUj74MQZ76t0QQDCx1lzxKfustZGw2q6+
-         kBXQ==
-X-Gm-Message-State: AAQBX9dx/2hiZF9T0xW80dCL/oaTTTPMnOfz1BzGZCYmLty2MJy7rSyx
-        U9u+j+avVaPLLgGLPdB2CV5QQW3V0lMj4Q==
-X-Google-Smtp-Source: AKy350Z2klkrkHGSTZin2XZE1doQmXIcxeHcXQuTn8gy15VXTc5xFj/K/Z7yXUb3r6k/PiKKqNW4Rw==
-X-Received: by 2002:a05:600c:3797:b0:3f1:7a18:942e with SMTP id o23-20020a05600c379700b003f17a18942emr2198775wmr.6.1681842771727;
-        Tue, 18 Apr 2023 11:32:51 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id f24-20020a7bcd18000000b003f09a9151c1sm15719667wmj.30.2023.04.18.11.32.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Apr 2023 11:32:50 -0700 (PDT)
-Date:   Tue, 18 Apr 2023 18:32:47 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Long Li <longli@microsoft.com>
-Subject: Re: [PATCH v2] Drivers: hv: move panic report code from vmbus to hv
- early init code
-Message-ID: <ZD7iT/+Uil3jTuNO@liuwe-devbox-debian-v2>
-References: <1681435612-19282-1-git-send-email-longli@linuxonhyperv.com>
- <BYAPR21MB1688377B56A9A844EAABEEDAD79E9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <ZD2dxHaq8NDzpfYw@liuwe-devbox-debian-v2>
+        bh=fZ+faik75720SnLDzvntxl1cmAaRHsLQ7oOmPoVPf3o=;
+        b=fBPSS93aalbav0LUzUejRt2NjbHpBJmNsHVPRRbsF+jG5Nu8WjfWT+weSiXFGrkEbN
+         Bl+EcMNC7lpcawm/MuwqggHfJmNk7zAK9haLpnJV08P367c5YohyB4lPm9ubYCuINJZG
+         pmhBTFu6UKlSFmyU0QWGBEDpdg/7xojdmyIrq4CWcHgeoPLavovDZAMaCmQm5Tmi+PdF
+         awAr9pJ9qRfL4qAoU/GIaaVF0Yb/A9oc1EXdyleFSucNiyAMBSWiFjcubi/Cl7MqSDQT
+         LqfYl5LxNuy3TqKDTGZky+Cx6fyOI9+XqrTm2mW88NG+xvACaI/puCphU95FqO3MwFDd
+         on2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681853598; x=1684445598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fZ+faik75720SnLDzvntxl1cmAaRHsLQ7oOmPoVPf3o=;
+        b=aWGt3ryN3Ppg8/UQ/Gpx8SoGMNAtUazbaiRyDmk/+Ya8wZaQMFtC/J1vDYgc37uuxd
+         cD2DGBI8Yn9tgC+aT0FMy40DkCzhwPfd9jb5VXMmWUpoNpLGDAOzxFwCoLUpKgeADEtK
+         fSovEg38ZkpPr9jZewffRZn7N7Hwobrfqs97iRSVtAOLWZn3YnCiiZyHhEKrHORR4CNw
+         YP1iIEvqMzW0oxpKJm5QUE/fOb1Xt93WkY4rKDyFq/zJoyR+cjw7Ldaf/TBfwQH9YjqL
+         BfeSxm7FvBzL7wkXbDlreQlNWo/e6qmpayACP2sRUFsoHRm1zu/HeGUVKYR9XiYQYqi6
+         FHgg==
+X-Gm-Message-State: AAQBX9dnNB+aIEVE1UBPdT3KEpk/1YBOvbnSlZuQwCWomPxbb3dg1c1y
+        Ej0oZ8jdgW5yPnGtJXvFu6NWOIX69WGLd8hiX/s=
+X-Google-Smtp-Source: AKy350Zg9/w1pIq1h9Mfl98gkIvdjlXYVLE/yxlCrmuaudFEJKPjKGaCNnj1KVCOnrcLYZjlnD0Q2KC4cnvL5HhzBhY=
+X-Received: by 2002:a81:8443:0:b0:54f:8af3:6488 with SMTP id
+ u64-20020a818443000000b0054f8af36488mr1215032ywf.23.1681853598073; Tue, 18
+ Apr 2023 14:33:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZD2dxHaq8NDzpfYw@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230417205048.15870-1-vishal.moola@gmail.com>
+ <20230417205048.15870-2-vishal.moola@gmail.com> <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
+In-Reply-To: <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Tue, 18 Apr 2023 14:33:06 -0700
+Message-ID: <CAOzc2pwpRhNoFbdzdzuvrqbZdf2OsrTvBGs40QCZJjA5fS_q1A@mail.gmail.com>
+Subject: Re: [PATCH 01/33] s390: Use _pt_s390_gaddr for gmap address tracking
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 17, 2023 at 07:28:04PM +0000, Wei Liu wrote:
-> On Sat, Apr 15, 2023 at 06:16:11PM +0000, Michael Kelley (LINUX) wrote:
-> > From: longli@linuxonhyperv.com <longli@linuxonhyperv.com> Sent: Thursday, April 13, 2023 6:27 PM
-> > > 
-> > > The panic reporting code was added in commit 81b18bce48af
-> > > ("Drivers: HV: Send one page worth of kmsg dump over Hyper-V during panic")
-> > > 
-> > > It was added to the vmbus driver. The panic reporting has no dependence
-> > > on vmbus, and can be enabled at an earlier boot time when Hyper-V is
-> > > initialized.
-> > > 
-> > > This patch moves the panic reporting code out of vmbus. There is no
-> > > functionality changes. During moving, also refactored some cleanup
-> > > functions into hv_kmsg_dump_unregister(), and removed unused function
-> > > hv_alloc_hyperv_page().
-> > > 
-> > > Signed-off-by: Long Li <longli@microsoft.com>
-> > > ---
-> > > 
-> > > Change log v2:
-> > > 1. Check on hv_is_isolation_supported() before reporting crash dump
-> > > 2. Remove hyperv_report_reg(), inline the check condition instead
-> > > 3. Remove the test NULL on hv_panic_page when freeing it
-> > > 
-> > >  drivers/hv/hv.c                |  36 ------
-> > >  drivers/hv/hv_common.c         | 229 +++++++++++++++++++++++++++++++++
-> > >  drivers/hv/vmbus_drv.c         | 199 ----------------------------
-> > >  include/asm-generic/mshyperv.h |   1 -
-> > >  4 files changed, 229 insertions(+), 236 deletions(-)
-> > 
-> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> 
-> Applied to hyperv-next. Thanks.
+On Tue, Apr 18, 2023 at 8:45=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> On 17.04.23 22:50, Vishal Moola (Oracle) wrote:
+> > s390 uses page->index to keep track of page tables for the guest addres=
+s
+> > space. In an attempt to consolidate the usage of page fields in s390,
+> > replace _pt_pad_2 with _pt_s390_gaddr to replace page->index in gmap.
+> >
+> > This will help with the splitting of struct ptdesc from struct page, as
+> > well as allow s390 to use _pt_frag_refcount for fragmented page table
+> > tracking.
+> >
+> > Since page->_pt_s390_gaddr aliases with mapping, ensure its set to NULL
+> > before freeing the pages as well.
+> >
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+>
+> [...]
+>
+> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> > index 3fc9e680f174..2616d64c0e8c 100644
+> > --- a/include/linux/mm_types.h
+> > +++ b/include/linux/mm_types.h
+> > @@ -144,7 +144,7 @@ struct page {
+> >               struct {        /* Page table pages */
+> >                       unsigned long _pt_pad_1;        /* compound_head =
+*/
+> >                       pgtable_t pmd_huge_pte; /* protected by page->ptl=
+ */
+> > -                     unsigned long _pt_pad_2;        /* mapping */
+> > +                     unsigned long _pt_s390_gaddr;   /* mapping */
+> >                       union {
+> >                               struct mm_struct *pt_mm; /* x86 pgds only=
+ */
+> >                               atomic_t pt_frag_refcount; /* powerpc */
+>
+> The confusing part is, that these gmap page tables are not ordinary
+> process page tables that we would ordinarily place into this section
+> here. That's why they are also not allocated/freed using the typical
+> page table constructor/destructor ...
 
-This broke allmodconfig. I've removed it from the tree. Please fix and
-resend.
+I initially thought the same, so I was quite confused when I saw
+__gmap_segment_gaddr was using pmd_pgtable_page().
 
-Thanks,
-Wei.
+Although they are not ordinary process page tables, since we
+eventually want to move them out of struct page, I think shifting them
+to be in ptdescs, being a memory descriptor for page tables, makes
+the most sense.
+
+Another option is to leave pmd_pgtable_page() as is just for this case.
+Or we can revert commit 7e25de77bc5ea which uses the function here
+then figure out where these gmap pages table pages will go later.
