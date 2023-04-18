@@ -2,135 +2,202 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0856E6887
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 17:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3DD6E6A19
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 18:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjDRPqo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Apr 2023 11:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
+        id S232495AbjDRQsX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Apr 2023 12:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjDRPqn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 11:46:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5908BB762
-        for <linux-arch@vger.kernel.org>; Tue, 18 Apr 2023 08:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1681832709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=27YuiGTc/1Ayk3pIwHwifC0cK9cQSm41NYDsP6qMI7E=;
-        b=CDPJWjw7922+HWw5MqXWuotkaTCG5XVEvGU1OSihcrxAc9NydIVybPt59TN32MBRtuA/5m
-        UFxuV07/YeaK2h96WTHKE4Xc2Lrlnzyri5go6ZXhcHvV4A47wf/QxXJa4YP8FT4DCwQ8QM
-        +Mu/7eMO8xZc5VF/cbvXjIiEcZcwDkE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-524-UaOEPlIMO_i-46nLUI7tdQ-1; Tue, 18 Apr 2023 11:45:07 -0400
-X-MC-Unique: UaOEPlIMO_i-46nLUI7tdQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f08ed462c0so42522945e9.1
-        for <linux-arch@vger.kernel.org>; Tue, 18 Apr 2023 08:45:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681832706; x=1684424706;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        with ESMTP id S231488AbjDRQsW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Apr 2023 12:48:22 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E16C118EA
+        for <linux-arch@vger.kernel.org>; Tue, 18 Apr 2023 09:48:05 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-63b67a25fc1so1545755b3a.1
+        for <linux-arch@vger.kernel.org>; Tue, 18 Apr 2023 09:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1681836469; x=1684428469;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=27YuiGTc/1Ayk3pIwHwifC0cK9cQSm41NYDsP6qMI7E=;
-        b=lrqdLtIjObkjaK60NB9RecL0nbEqwufWjMiFxzcXJnMKj6d6GrxLIWoygae6ZIWxh/
-         sqeOOgwQky4PCGohQGza+wSULVgipLH0EVoknzg4aeBq9Vpwt826kXarOUNRtuV83wyt
-         EZur6oZU0BEYMMj4lPtRb7swZgub/AqQZFxqwtZ+a8ZP+2mwXCe933oTlJ3AXlco+gtV
-         fZR2Lr01bYEjwgHmRY1SxVeEBgiaOJWqP1s8A10viEgpmX8ztPK8fb5sJOgq+pTxo0Qk
-         Zbwh+cnpQfHCq2yg69SgxSpvSpAc9/xlcLw+QN8ZelReNn+Epu9tGPMX0J+tE18YoU+n
-         mBDg==
-X-Gm-Message-State: AAQBX9fmqsxlvkKHENFvCdneqwwfAG/tFhymtWki7NzA1c0xcdpCZFCj
-        4X7VDKB5MSQzrcC4g7EuSyVunO1uHNuTkrDHIf+mj/I0uTMwEf7pH0Tl5XEqfLsSoSdfRsowAjx
-        vy1beg20b4bxDVuL8v4we4g==
-X-Received: by 2002:a5d:6dcc:0:b0:2ef:b8ae:8791 with SMTP id d12-20020a5d6dcc000000b002efb8ae8791mr2341920wrz.10.1681832706618;
-        Tue, 18 Apr 2023 08:45:06 -0700 (PDT)
-X-Google-Smtp-Source: AKy350boD2pgyaTgtT87B/OGZT/ZiXFytTcP4U4+Qx8x/yMODSTgYDG7+n20ySQtuSYJgFc2NPKTdg==
-X-Received: by 2002:a5d:6dcc:0:b0:2ef:b8ae:8791 with SMTP id d12-20020a5d6dcc000000b002efb8ae8791mr2341904wrz.10.1681832706235;
-        Tue, 18 Apr 2023 08:45:06 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c715:3f00:7545:deb6:f2f4:27ef? (p200300cbc7153f007545deb6f2f427ef.dip0.t-ipconnect.de. [2003:cb:c715:3f00:7545:deb6:f2f4:27ef])
-        by smtp.gmail.com with ESMTPSA id z10-20020a5d654a000000b002daeb108304sm13380984wrv.33.2023.04.18.08.45.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Apr 2023 08:45:05 -0700 (PDT)
-Message-ID: <da600570-51c7-8088-b46b-7524c9e66e5d@redhat.com>
-Date:   Tue, 18 Apr 2023 17:45:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH 01/33] s390: Use _pt_s390_gaddr for gmap address tracking
-Content-Language: en-US
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
-        kvm@vger.kernel.org
-References: <20230417205048.15870-1-vishal.moola@gmail.com>
- <20230417205048.15870-2-vishal.moola@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230417205048.15870-2-vishal.moola@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        bh=5rSxGUFrAmISVwIuFMTX0Aaejk/CKt02QLw7n2d5NOs=;
+        b=PfoljIC5AZgXfIxDU8fcFKkh+Ai7eQzzLzicR4jBjiom7LEoYDZGvTMDGrbG1Z4Ud7
+         uMFVTAK+JTtzoS0MKvtPGWwdSGtIBD8kbc4SfLXHCjA0I+SdKKcDb46CvxZO4RN+QKcr
+         4hGNVdTIfrAcrWEkQiQ8/3e7ZlrlhVk194MVJD6NQvH/IjLipRSf4B0QGnTZ6j+s3rfO
+         FoaxHebR4VegmT9yDpEETwUTkmKAd4ZKG8Yfxznn/n4SwSaLHbnH7ecVFw7Uf6szdwMe
+         597Gvj4Ii7piDYSmLzXGyGrd1L9thTQGMBdxwypwEggoGYj/8WHWeiNd3wF6/PVMsJk1
+         sufA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681836469; x=1684428469;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5rSxGUFrAmISVwIuFMTX0Aaejk/CKt02QLw7n2d5NOs=;
+        b=VLO7Mk0i9CTSJDmwEK81d+vBaawWFc5y6gO6YIy/nY7Fkh2x8D2uF+I/+9IZuOPBf8
+         aGU6COcIbYQEW0fmEUOIyTER4WvmSpNPc3dz9nYJmZpC1aHEp0WFrVZc2mqVDc0iUGmk
+         rfnYOhVpS8jOkqc9f00qBs0WWUTHeLAa5F7hlTvUOd/pf4VyCqsBjABzbyuI5NHJk39a
+         f9UDgGFQflao0VKN813xEHeluuwylA3lq3tSMUHc2JOhzpMmGAy4+xPuv/6K8ueCZWZc
+         dljSUoA3X89Rg9Wt4qnceCi+VrKYt5ejuwOyj6OymFWOGp9MblMO6R/5cnxCc1FSfuPe
+         UpDw==
+X-Gm-Message-State: AAQBX9e5XeV5xhFnZ/lkOnOeOplUoyYA+kMHahxpwUqC9abSO/oUXMY8
+        RU/WKidR/UfK1z4vv57cNcn8z6Y=
+X-Google-Smtp-Source: AKy350ZqYBxtk9IGpUQI+ESsiEZ06M7bEzkTzb5twCE4jk0SIv/hlG6z2jLAoF7+l4gdKxwicmpHmjg=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a05:6a00:17a0:b0:63b:8778:99e5 with SMTP id
+ s32-20020a056a0017a000b0063b877899e5mr195402pfg.5.1681836468849; Tue, 18 Apr
+ 2023 09:47:48 -0700 (PDT)
+Date:   Tue, 18 Apr 2023 09:47:47 -0700
+In-Reply-To: <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
+Mime-Version: 1.0
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+ <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+ <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
+ <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+ <ZDoEG0VF6fb9y0EC@google.com> <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
+Message-ID: <ZD7Js4fj5YyI2oLd@google.com>
+Subject: Re: handling unsupported optlen in cgroup bpf getsockopt: (was [PATCH
+ net-next v4 2/4] net: socket: add sockopts blacklist for BPF cgroup hook)
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org,
+        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 17.04.23 22:50, Vishal Moola (Oracle) wrote:
-> s390 uses page->index to keep track of page tables for the guest address
-> space. In an attempt to consolidate the usage of page fields in s390,
-> replace _pt_pad_2 with _pt_s390_gaddr to replace page->index in gmap.
-> 
-> This will help with the splitting of struct ptdesc from struct page, as
-> well as allow s390 to use _pt_frag_refcount for fragmented page table
-> tracking.
-> 
-> Since page->_pt_s390_gaddr aliases with mapping, ensure its set to NULL
-> before freeing the pages as well.
-> 
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
+On 04/17, Martin KaFai Lau wrote:
+> On 4/14/23 6:55 PM, Stanislav Fomichev wrote:
+> > On 04/13, Stanislav Fomichev wrote:
+> > > On Thu, Apr 13, 2023 at 7:38=E2=80=AFAM Aleksandr Mikhalitsyn
+> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > >=20
+> > > > On Thu, Apr 13, 2023 at 4:22=E2=80=AFPM Eric Dumazet <edumazet@goog=
+le.com> wrote:
+> > > > >=20
+> > > > > On Thu, Apr 13, 2023 at 3:35=E2=80=AFPM Alexander Mikhalitsyn
+> > > > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > > > >=20
+> > > > > > During work on SO_PEERPIDFD, it was discovered (thanks to Chris=
+tian),
+> > > > > > that bpf cgroup hook can cause FD leaks when used with sockopts=
+ which
+> > > > > > install FDs into the process fdtable.
+> > > > > >=20
+> > > > > > After some offlist discussion it was proposed to add a blacklis=
+t of
+> > > > >=20
+> > > > > We try to replace this word by either denylist or blocklist, even=
+ in changelogs.
+> > > >=20
+> > > > Hi Eric,
+> > > >=20
+> > > > Oh, I'm sorry about that. :( Sure.
+> > > >=20
+> > > > >=20
+> > > > > > socket options those can cause troubles when BPF cgroup hook is=
+ enabled.
+> > > > > >=20
+> > > > >=20
+> > > > > Can we find the appropriate Fixes: tag to help stable teams ?
+> > > >=20
+> > > > Sure, I will add next time.
+> > > >=20
+> > > > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hook=
+s")
+> > > >=20
+> > > > I think it's better to add Stanislav Fomichev to CC.
+> > >=20
+> > > Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
+> > > use it for tcp zerocopy, I'm assuming it should work in this case as
+> > > well?
+> >=20
+> > Jakub reminded me of the other things I wanted to ask here bug forgot:
+> >=20
+> > - setsockopt is probably not needed, right? setsockopt hook triggers
+> >    before the kernel and shouldn't leak anything
+> > - for getsockopt, instead of bypassing bpf completely, should we instea=
+d
+> >    ignore the error from the bpf program? that would still preserve
+> >    the observability aspect
+>=20
+> stealing this thread to discuss the optlen issue which may make sense to
+> bypass also.
+>=20
+> There has been issue with optlen. Other than this older post related to
+> optlen > PAGE_SIZE:
+> https://lore.kernel.org/bpf/5c8b7d59-1f28-2284-f7b9-49d946f2e982@linux.de=
+v/,
+> the recent one related to optlen that we have seen is
+> NETLINK_LIST_MEMBERSHIPS. The userspace passed in optlen =3D=3D 0 and the=
+ kernel
+> put the expected optlen (> 0) and 'return 0;' to userspace. The userspace
+> intention is to learn the expected optlen. This makes 'ctx.optlen >
+> max_optlen' and __cgroup_bpf_run_filter_getsockopt() ends up returning
+> -EFAULT to the userspace even the bpf prog has not changed anything.
 
-[...]
+(ignoring -EFAULT issue) this seems like it needs to be
 
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 3fc9e680f174..2616d64c0e8c 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -144,7 +144,7 @@ struct page {
->   		struct {	/* Page table pages */
->   			unsigned long _pt_pad_1;	/* compound_head */
->   			pgtable_t pmd_huge_pte; /* protected by page->ptl */
-> -			unsigned long _pt_pad_2;	/* mapping */
-> +			unsigned long _pt_s390_gaddr;	/* mapping */
->   			union {
->   				struct mm_struct *pt_mm; /* x86 pgds only */
->   				atomic_t pt_frag_refcount; /* powerpc */
+	if (optval && (ctx.optlen > max_optlen || ctx.optlen < 0)) {
+		/* error */
+	}
 
-The confusing part is, that these gmap page tables are not ordinary 
-process page tables that we would ordinarily place into this section 
-here. That's why they are also not allocated/freed using the typical 
-page table constructor/destructor ...
+?
 
--- 
-Thanks,
+> Does it make sense to also bypass the bpf prog when 'ctx.optlen >
+> max_optlen' for now (and this can use a separate patch which as usual
+> requires a bpf selftests)?
 
-David / dhildenb
+Yeah, makes sense. Replacing this -EFAULT with WARN_ON_ONCE or something
+seems like the way to go. It caused too much trouble already :-(
 
+Should I prepare a patch or do you want to take a stab at it?
+
+> In the future, does it make sense to have a specific cgroup-bpf-prog (a
+> specific attach type?) that only uses bpf_dynptr kfunc to access the optv=
+al
+> such that it can enforce read-only for some optname and potentially also
+> track if bpf-prog has written a new optval? The bpf-prog can only return =
+1
+> (OK) and only allows using bpf_set_retval() instead. Likely there is stil=
+l
+> holes but could be a seed of thought to continue polishing the idea.
+
+Ack, let's think about it.
+
+Maybe we should re-evaluate 'getsockopt-happens-after-the-kernel' idea
+as well? If we can have a sleepable hook that can copy_from_user/copy_to_us=
+er,
+and we have a mostly working bpf_getsockopt (after your refactoring),
+I don't see why we need to continue the current scheme of triggering
+after the kernel?
+
+> > - or maybe we can even have a per-proto bpf_getsockopt_cleanup call tha=
+t
+> >    gets called whenever bpf returns an error to make sure protocols hav=
+e
+> >    a chance to handle that condition (and free the fd)
+> >=20
+>=20
+>=20
