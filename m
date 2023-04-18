@@ -2,72 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DA86E54A0
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 00:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77106E5635
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Apr 2023 03:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjDQWTa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Apr 2023 18:19:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
+        id S230026AbjDRBJV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Apr 2023 21:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjDQWT3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 18:19:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C661F5275;
-        Mon, 17 Apr 2023 15:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1681769968; x=1713305968;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yMAw32GB6bnYHTIaJx+3YJu4UkN11Fi/gjV1eDLzAFs=;
-  b=brz8CcyL1HOoLlpbB2TIzyxT1Iu3Qf66g66JzOZm3y58A/jPkO7eDQ6p
-   GsEeVdywLd/4vlMPkttjhIc3KVbG6H2Hk0Zmdw0qvQ4Bd5bJaMEC5pnKT
-   vR8EIM0bEyldMhjCrbq7rWCP6WBVWbpxISZnaP01+ozpZdaaUcqYzC0st
-   y1sOvAB3BRWTViGLf5rDUWSBpLZdSjciEy2DM6hRTFK7OfD+eGwL/+Jv2
-   C11tPeZrthUd92qhp6pXDZhf5WaRBOXQOC3RXKclEZFYXcpl55ewvy/dP
-   X5nRPMuisdAvgw/OBjZEEckfZceKwJR4boC0QvjCbJlJhGQJJ2pzTgHv+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="347767943"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="347767943"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2023 15:19:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10683"; a="684313012"
-X-IronPort-AV: E=Sophos;i="5.99,205,1677571200"; 
-   d="scan'208";a="684313012"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 17 Apr 2023 15:19:05 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1poXBh-000chh-0f;
-        Mon, 17 Apr 2023 22:19:05 +0000
-Date:   Tue, 18 Apr 2023 06:18:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: Re: [PATCH 24/33] m68k: Convert various functions to use ptdescs
-Message-ID: <202304180652.LeoLmaNQ-lkp@intel.com>
-References: <20230417205048.15870-25-vishal.moola@gmail.com>
+        with ESMTP id S229619AbjDRBJU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Apr 2023 21:09:20 -0400
+X-Greylist: delayed 336 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 Apr 2023 18:09:19 PDT
+Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [95.215.58.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2813640C8
+        for <linux-arch@vger.kernel.org>; Mon, 17 Apr 2023 18:09:19 -0700 (PDT)
+Message-ID: <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1681779821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F6L4XXjJ7DAIawwAHN6exDhyLIgvinWJ7u4alQvnINk=;
+        b=lrWoVAvN2dp4uPEXlR77OB9JFoLC9kWgFsZ9/4nEg+fkkX22rpYNjZ5BF5XaMVYgdbk15j
+        yhdXAjHD9Ey+WsBnri+bIiW4dwJXCnhqcJgCMf+C4tMtcF2XvUj3AqxgOBy6x/dojejDj/
+        Ae2yiGOgVqeW9s9fpj36dJzyQNjz8Es=
+Date:   Mon, 17 Apr 2023 18:03:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230417205048.15870-25-vishal.moola@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: handling unsupported optlen in cgroup bpf getsockopt: (was [PATCH
+ net-next v4 2/4] net: socket: add sockopts blacklist for BPF cgroup hook)
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org,
+        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        bpf <bpf@vger.kernel.org>
+References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
+ <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
+ <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
+ <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
+ <ZDoEG0VF6fb9y0EC@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <ZDoEG0VF6fb9y0EC@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,92 +68,79 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Vishal,
+On 4/14/23 6:55 PM, Stanislav Fomichev wrote:
+> On 04/13, Stanislav Fomichev wrote:
+>> On Thu, Apr 13, 2023 at 7:38 AM Aleksandr Mikhalitsyn
+>> <aleksandr.mikhalitsyn@canonical.com> wrote:
+>>>
+>>> On Thu, Apr 13, 2023 at 4:22 PM Eric Dumazet <edumazet@google.com> wrote:
+>>>>
+>>>> On Thu, Apr 13, 2023 at 3:35 PM Alexander Mikhalitsyn
+>>>> <aleksandr.mikhalitsyn@canonical.com> wrote:
+>>>>>
+>>>>> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
+>>>>> that bpf cgroup hook can cause FD leaks when used with sockopts which
+>>>>> install FDs into the process fdtable.
+>>>>>
+>>>>> After some offlist discussion it was proposed to add a blacklist of
+>>>>
+>>>> We try to replace this word by either denylist or blocklist, even in changelogs.
+>>>
+>>> Hi Eric,
+>>>
+>>> Oh, I'm sorry about that. :( Sure.
+>>>
+>>>>
+>>>>> socket options those can cause troubles when BPF cgroup hook is enabled.
+>>>>>
+>>>>
+>>>> Can we find the appropriate Fixes: tag to help stable teams ?
+>>>
+>>> Sure, I will add next time.
+>>>
+>>> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
+>>>
+>>> I think it's better to add Stanislav Fomichev to CC.
+>>
+>> Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
+>> use it for tcp zerocopy, I'm assuming it should work in this case as
+>> well?
+> 
+> Jakub reminded me of the other things I wanted to ask here bug forgot:
+> 
+> - setsockopt is probably not needed, right? setsockopt hook triggers
+>    before the kernel and shouldn't leak anything
+> - for getsockopt, instead of bypassing bpf completely, should we instead
+>    ignore the error from the bpf program? that would still preserve
+>    the observability aspect
 
-kernel test robot noticed the following build warnings:
+stealing this thread to discuss the optlen issue which may make sense to bypass 
+also.
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on next-20230417]
-[cannot apply to s390/features powerpc/next powerpc/fixes geert-m68k/for-next geert-m68k/for-linus linus/master v6.3-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+There has been issue with optlen. Other than this older post related to optlen > 
+PAGE_SIZE: 
+https://lore.kernel.org/bpf/5c8b7d59-1f28-2284-f7b9-49d946f2e982@linux.dev/, the 
+recent one related to optlen that we have seen is NETLINK_LIST_MEMBERSHIPS. The 
+userspace passed in optlen == 0 and the kernel put the expected optlen (> 0) and 
+'return 0;' to userspace. The userspace intention is to learn the expected 
+optlen. This makes 'ctx.optlen > max_optlen' and 
+__cgroup_bpf_run_filter_getsockopt() ends up returning -EFAULT to the userspace 
+even the bpf prog has not changed anything.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vishal-Moola-Oracle/s390-Use-_pt_s390_gaddr-for-gmap-address-tracking/20230418-045832
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230417205048.15870-25-vishal.moola%40gmail.com
-patch subject: [PATCH 24/33] m68k: Convert various functions to use ptdescs
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230418/202304180652.LeoLmaNQ-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/630b38053b213e6138d3deb3e4325b24ad6dcb1f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vishal-Moola-Oracle/s390-Use-_pt_s390_gaddr-for-gmap-address-tracking/20230418-045832
-        git checkout 630b38053b213e6138d3deb3e4325b24ad6dcb1f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
+Does it make sense to also bypass the bpf prog when 'ctx.optlen > max_optlen' 
+for now (and this can use a separate patch which as usual requires a bpf selftests)?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304180652.LeoLmaNQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   arch/m68k/mm/motorola.c: In function 'free_pointer_table':
->> arch/m68k/mm/motorola.c:204:56: warning: passing argument 1 of 'virt_to_ptdesc' makes pointer from integer without a cast [-Wint-conversion]
-     204 |                         ptdesc_pte_dtor(virt_to_ptdesc(page));
-         |                                                        ^~~~
-         |                                                        |
-         |                                                        long unsigned int
-   In file included from arch/m68k/mm/motorola.c:15:
-   include/linux/mm.h:2721:57: note: expected 'const void *' but argument is of type 'long unsigned int'
-    2721 | static inline struct ptdesc *virt_to_ptdesc(const void *x)
-         |                                             ~~~~~~~~~~~~^
-   arch/m68k/mm/motorola.c: At top level:
-   arch/m68k/mm/motorola.c:418:13: warning: no previous prototype for 'paging_init' [-Wmissing-prototypes]
-     418 | void __init paging_init(void)
-         |             ^~~~~~~~~~~
+In the future, does it make sense to have a specific cgroup-bpf-prog (a specific 
+attach type?) that only uses bpf_dynptr kfunc to access the optval such that it 
+can enforce read-only for some optname and potentially also track if bpf-prog 
+has written a new optval? The bpf-prog can only return 1 (OK) and only allows 
+using bpf_set_retval() instead. Likely there is still holes but could be a seed 
+of thought to continue polishing the idea.
 
 
-vim +/virt_to_ptdesc +204 arch/m68k/mm/motorola.c
+> - or maybe we can even have a per-proto bpf_getsockopt_cleanup call that
+>    gets called whenever bpf returns an error to make sure protocols have
+>    a chance to handle that condition (and free the fd)
+> 
 
-   185	
-   186	int free_pointer_table(void *table, int type)
-   187	{
-   188		ptable_desc *dp;
-   189		unsigned long ptable = (unsigned long)table;
-   190		unsigned long page = ptable & PAGE_MASK;
-   191		unsigned int mask = 1U << ((ptable - page)/ptable_size(type));
-   192	
-   193		dp = PD_PTABLE(page);
-   194		if (PD_MARKBITS (dp) & mask)
-   195			panic ("table already free!");
-   196	
-   197		PD_MARKBITS (dp) |= mask;
-   198	
-   199		if (PD_MARKBITS(dp) == ptable_mask(type)) {
-   200			/* all tables in page are free, free page */
-   201			list_del(dp);
-   202			mmu_page_dtor((void *)page);
-   203			if (type == TABLE_PTE)
- > 204				ptdesc_pte_dtor(virt_to_ptdesc(page));
-   205			free_page (page);
-   206			return 1;
-   207		} else if (ptable_list[type].next != dp) {
-   208			/*
-   209			 * move this descriptor to the front of the list, since
-   210			 * it has one or more free tables.
-   211			 */
-   212			list_move(dp, &ptable_list[type]);
-   213		}
-   214		return 0;
-   215	}
-   216	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
