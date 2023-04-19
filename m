@@ -2,117 +2,222 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0826E8041
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 19:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7196E82B8
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 22:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbjDSRX1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Apr 2023 13:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S230077AbjDSUaK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Apr 2023 16:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjDSRXZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Apr 2023 13:23:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90A659B;
-        Wed, 19 Apr 2023 10:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1681924974; i=deller@gmx.de;
-        bh=C5yrQi1O5H/ZJ6i2wZhc9S+TYhhPSe8koYmOSkrsxpg=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=refzFEX/nVgK8/0c/yNY2CyfC3AdkpdTH+IYk+xIV5Q+38dlY1vRhZEFTmpMyUDc/
-         9kvkEZP0kVR01Hn28FwdYcvQkmsX1L9UWL+i8vZhz0goEWhOLvIAIfwTtlVmCjbgUD
-         u0lHmNPk61xpVh/6OWDJbveUXhuyj8lAjtP3C/VV7CHk+16/4VihPYwuUHEvivlYBw
-         UlL1VdmKWD8uIdo0Aoh5XASGCGmlY7GyOYsX3ffFnBo5KedAYvGh4FHhvglxT+KgCd
-         xQN6ABCnavylRmWcBFmE/lQHqF7hO3CioLhryov1vpJhVvImQ4wtSXMt4z9yTImXug
-         5i3ajdU7cJ5LA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.144.134]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MatVb-1qRYCj0P8t-00cRzi; Wed, 19
- Apr 2023 19:22:54 +0200
-Message-ID: <b1f90fa4-85c7-e785-ba14-f32962f87d5e@gmx.de>
-Date:   Wed, 19 Apr 2023 19:22:50 +0200
+        with ESMTP id S229602AbjDSUaJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Apr 2023 16:30:09 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9BA8A45;
+        Wed, 19 Apr 2023 13:29:29 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54fb615ac3dso17398657b3.2;
+        Wed, 19 Apr 2023 13:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1681936166; x=1684528166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ri4M7wwnqfUyWg7ITQYtSCFlkjwgDD80RYs577YrqxA=;
+        b=WIB0Mw6mTuaRsirvoZFjheEp9yY5Y/q9onOHwXnfWFMdFmYyli6xaVNh9nuRkFM8Bu
+         OnXLT3OfefylOw1YM4VwkunQfq+Wm/ji1lKG5q5iuDSnqXz+pveEOmagYUHY70pV+qoa
+         KvVDM5rfvXh7k0t2ztxy0CpMZU4jrTcGpdw3ugWQ7PYvTc5DIMuci51oMb3/89hTRu18
+         ASTMyUIpSKSpdVyzVJqnIsAfKfcTX+AN3kdlEImle/BVRj8WezpdfvQGOxxtdhWDpR5M
+         v2CCX9NS0Q1nwilMdzeBzucKwgU44O+OvH3u0Wiv6qbWAvaUduq3fyhR1v2QD/zzuIcP
+         d4gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1681936166; x=1684528166;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ri4M7wwnqfUyWg7ITQYtSCFlkjwgDD80RYs577YrqxA=;
+        b=fA7oFQsGvJQ3i43IS74zb1MqMjTV0S1kZdt1hO4vfzpeVjFxxpX451Zvqx5htZ+wIN
+         s+E+2j4fL31lgSXUvDx8uX2rZ27EtOFe8/uJf2wbKzs6xeFpiHxcjOz3ENgPeQ9mvYwc
+         T+nn5liT0JubB3kNFfRVJqjn98Dk10oIdA46WWdihsonPquEYmQd6QRjwdN5xA5+v4N1
+         pupMN5BtfCAARSzzvRoeN5gAk9rF4yQJ8iPB65SQD0dOoKde99sdq0QXGWsROtxUKlRg
+         Zjg3mmViA4bdX1lcZ2IYjhBGLTQASbjCjFbz4oVgm1d6Dzfozk7dvJ1QwYe9LZxDY/aw
+         KmRg==
+X-Gm-Message-State: AAQBX9dkC3nKzMHk0XftNaIR8EqYFRKlJV/K8dzqTa2ojj33aE8GqedT
+        tql5UMZPs0+4p32GbnyNMtI0gMm/UKizSpJSqzcoV7zJYb/jtw==
+X-Google-Smtp-Source: AKy350aNDMALBM0VAdPN5cwgCAJgGmI7MyMPzfpEMhO/TACZWqeGBJUZoGoWlGr6ZHAaYh0Tzxhzwi/dxg7Fov1Ofog=
+X-Received: by 2002:a81:53c2:0:b0:54e:84f6:6669 with SMTP id
+ h185-20020a8153c2000000b0054e84f66669mr4502802ywb.49.1681936166163; Wed, 19
+ Apr 2023 13:29:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 00/19] arch: Consolidate <asm/fb.h>
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
-        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-References: <20230417125651.25126-1-tzimmermann@suse.de>
- <1641007d-7953-426a-a3de-ca9c90f6c5a9@app.fastmail.com>
- <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <5fa98536-a4b0-7b71-7342-9ba05158062f@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20230417205048.15870-1-vishal.moola@gmail.com>
+ <20230417205048.15870-5-vishal.moola@gmail.com> <ZD/syK8RYO9FZ6ks@vernon-pc>
+In-Reply-To: <ZD/syK8RYO9FZ6ks@vernon-pc>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Wed, 19 Apr 2023 13:29:14 -0700
+Message-ID: <CAOzc2pyt8MBv7N0qizdxr0__RKXK7hMLX-Jqvsd6RPh3nyTFVw@mail.gmail.com>
+Subject: Re: [PATCH 4/33] mm: add utility functions for ptdesc
+To:     Vernon Yang <vernon2gm@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:H9qZXkCOPDN+3vsO7z+9ttDKPCRSFaiF/4cDmiO5ovofGlBxTzT
- kMlRPG3r4Q6KYGeHBb//fU40kwtmWj1gVkdx7p7FELLCFOD5Nql8qYPGjnWefhzsS88zNIK
- xaqD2s84khdceDbFsitlOpU2HidQYYXlykQQ9SD+p1IgyfdLRLZnqUmFoBDr2Oq3uB/Hpmu
- vy6bniwylk05WNGd4sCJg==
-UI-OutboundReport: notjunk:1;M01:P0:5ox/8AYo9cY=;DXfWBLw0Wfb00Me5ctwgZzfIUZ/
- 1GcLaW7zyF+rDR6gv5OFGKt/ECtMI2VLnGHaGgup0zhzHr7BbEMURzdNk4ut1hQ/I1Ur1dsc0
- 1JvQBABCmnEIVKxSHIzxSDISBJC4Qap+OiyTLFMWZ9un0xA1yRdsUs2M1yt+a2EqGcCluQlae
- 19JYqGAwJcB9zy4M2luWaDfLR+ZKhj9ZKj8YSY34zxXwBPDgYmXrjwHYmJ4VTpPq9lQoP7XYz
- zFNmrhEsoPBmtBzXWAha6jdgOhp/DgbHDRiAP61aoHFFNbzRmhAGM4NsKuWZgVMGEWTXl21UX
- RWqLtp/2wf2qeOu3egFZaXc8jYCWg1NlAIcF9HZ3295DdF25gExyuV9did7VXP77oNQQ+QXPc
- fhCOeNGtft8Mand8MEWSS+3kWNhuIfz07igr9+fsGtxP3ysYKTaY3WPhXV0YMVT8Bep0brJsz
- it0ElaUn+GMQsDuKpgWJIn6dE2RbkRjrP0KTWEny7DHSk8JEWgia6+A8qE0EY++w+1sCntVun
- q6L6YvL6bob4Q1BUg6FQGSTaWbEOj1aXk0c3aEh6x+vXVvTOLaLYYUvW1lFtPoRMygYgZx4wQ
- rJN3kennM/9oLujbd5BqjhpxyFEKAHVCVXS45wO+oSJnirRTWt+IU+XGjNEY0ptfkn3mN4x/q
- kvGcY6cnurtogkHbIzoeA9JDtK7wJr1dYuVhIbxaw4ROiwNGBzb/BR3lIpmxi2xnCf7zxwLP8
- po9pTOMtKhkJLo/DaIoVdM7R07TLStHRQWeCtVEbKyLKDvKxPjppGZ6s5Tz5A6AXYgiSFhuW4
- cGKpK8tRgRhTmcAGp6W5xqVoysF2XWyW46xmjytoEwKEd8r8g4J//wzQ3dLfMvZ9GduabVyKy
- Tq5+OYpXodvPTj/P2JbKEivhf9ZtS7PrHr8f0DO4nsV7nYIV9I/xwMZ3jymGdPYzWNpnTiyox
- UXVSng==
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Thomas,
-
-> Am 17.04.23 um 16:12 schrieb Arnd Bergmann:>> On Mon, Apr 17, 2023, at 1=
-4:56, Thomas Zimmermann wrote:
->>> Various architectures provide <asm/fb.h> with helpers for fbdev
->>> framebuffer devices. Share the contained code where possible. There
->>> is already <asm-generic/fb.h>, which implements generic (as in
->>> 'empty') functions of the fbdev helpers. The header was added in
->>> commit aafe4dbed0bf ("asm-generic: add generic versions of common
->>> headers"), but never used.
->>>
->>> Each per-architecture header file declares and/or implements fbdev
->>> helpers and defines a preprocessor token for each. The generic
->>> header then provides the remaining helpers. It works like the I/O
->>> helpers in <asm/io.h>.
->>
->> Looks all good to me,
->>
->> Acked-by: Arnd Bergmann <arnd@arndb.de>
+On Wed, Apr 19, 2023 at 6:34=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com> w=
+rote:
 >
-> Thanks a lot. I know that Helge wants to test the PARISC changes, so
-> I'll keep this series pending for a bit longer. I'd like to merge the
-> patches through the DRM tree, if no one objects.
+> On Mon, Apr 17, 2023 at 01:50:19PM -0700, Vishal Moola wrote:
+> > Introduce utility functions setting the foundation for ptdescs. These
+> > will also assist in the splitting out of ptdesc from struct page.
+> >
+> > ptdesc_alloc() is defined to allocate new ptdesc pages as compound
+> > pages. This is to standardize ptdescs by allowing for one allocation
+> > and one free function, in contrast to 2 allocation and 2 free functions=
+.
+> >
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >  include/asm-generic/tlb.h | 11 ++++++++++
+> >  include/linux/mm.h        | 44 +++++++++++++++++++++++++++++++++++++++
+> >  include/linux/pgtable.h   | 13 ++++++++++++
+> >  3 files changed, 68 insertions(+)
+> >
+> > diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> > index b46617207c93..6bade9e0e799 100644
+> > --- a/include/asm-generic/tlb.h
+> > +++ b/include/asm-generic/tlb.h
+> > @@ -481,6 +481,17 @@ static inline void tlb_remove_page(struct mmu_gath=
+er *tlb, struct page *page)
+> >       return tlb_remove_page_size(tlb, page, PAGE_SIZE);
+> >  }
+> >
+> > +static inline void tlb_remove_ptdesc(struct mmu_gather *tlb, void *pt)
+> > +{
+> > +     tlb_remove_table(tlb, pt);
+> > +}
+> > +
+> > +/* Like tlb_remove_ptdesc, but for page-like page directories. */
+> > +static inline void tlb_remove_page_ptdesc(struct mmu_gather *tlb, stru=
+ct ptdesc *pt)
+> > +{
+> > +     tlb_remove_page(tlb, ptdesc_page(pt));
+> > +}
+> > +
+> >  static inline void tlb_change_page_size(struct mmu_gather *tlb,
+> >                                                    unsigned int page_si=
+ze)
+> >  {
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index b18848ae7e22..ec3cbe2fa665 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -2744,6 +2744,45 @@ static inline pmd_t *pmd_alloc(struct mm_struct =
+*mm, pud_t *pud, unsigned long a
+> >  }
+> >  #endif /* CONFIG_MMU */
+> >
+> > +static inline struct ptdesc *virt_to_ptdesc(const void *x)
+> > +{
+> > +     return page_ptdesc(virt_to_head_page(x));
+> > +}
+> > +
+> > +static inline void *ptdesc_to_virt(struct ptdesc *pt)
+> > +{
+> > +     return page_to_virt(ptdesc_page(pt));
+> > +}
+> > +
+> > +static inline void *ptdesc_address(struct ptdesc *pt)
+> > +{
+> > +     return folio_address(ptdesc_folio(pt));
+> > +}
+> > +
+> > +static inline bool ptdesc_is_reserved(struct ptdesc *pt)
+> > +{
+> > +     return folio_test_reserved(ptdesc_folio(pt));
+> > +}
+> > +
+> > +static inline struct ptdesc *ptdesc_alloc(gfp_t gfp, unsigned int orde=
+r)
+> > +{
+> > +     struct page *page =3D alloc_pages(gfp | __GFP_COMP, order);
+> > +
+> > +     return page_ptdesc(page);
+> > +}
+> > +
+> > +static inline void ptdesc_free(struct ptdesc *pt)
+> > +{
+> > +     struct page *page =3D ptdesc_page(pt);
+> > +
+> > +     __free_pages(page, compound_order(page));
+> > +}
+> > +
+> > +static inline void ptdesc_clear(void *x)
+> > +{
+> > +     clear_page(x);
+> > +}
+> > +
+> >  #if USE_SPLIT_PTE_PTLOCKS
+> >  #if ALLOC_SPLIT_PTLOCKS
+> >  void __init ptlock_cache_init(void);
+> > @@ -2970,6 +3009,11 @@ static inline void mark_page_reserved(struct pag=
+e *page)
+> >       adjust_managed_page_count(page, -1);
+> >  }
+> >
+> > +static inline void free_reserved_ptdesc(struct ptdesc *pt)
+> > +{
+> > +     free_reserved_page(ptdesc_page(pt));
+> > +}
+> > +
+> >  /*
+> >   * Default method to free all the __init memory into the buddy system.
+> >   * The freed pages will be poisoned with pattern "poison" if it's with=
+in
+> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> > index 7cc6ea057ee9..7cd803aa38eb 100644
+> > --- a/include/linux/pgtable.h
+> > +++ b/include/linux/pgtable.h
+> > @@ -97,6 +97,19 @@ TABLE_MATCH(ptl, ptl);
+> >  #undef TABLE_MATCH
+> >  static_assert(sizeof(struct ptdesc) <=3D sizeof(struct page));
+> >
+> > +#define ptdesc_page(pt)                      (_Generic((pt),          =
+       \
+> > +     const struct ptdesc *:          (const struct page *)(pt),      \
+> > +     struct ptdesc *:                (struct page *)(pt)))
+> > +
+> > +#define ptdesc_folio(pt)             (_Generic((pt),                 \
+> > +     const struct ptdesc *:          (const struct folio *)(pt),     \
+> > +     struct ptdesc *:                (struct folio *)(pt)))
+> > +
+> > +static inline struct ptdesc *page_ptdesc(struct page *page)
+> > +{
+> > +     return (struct ptdesc *)page;
+> > +}
+>
+> Hi Vishal,
+>
+> I'm a little curious, why is the page_ptdesc() using inline functions ins=
+tead of macro?
+> If this is any magic, please tell me, thank you very much.
 
-Yes, patch is good and I've tested it on parisc. Thanks!
+No magic here, I was mainly basing it off Matthew's netmem
+series. I'm not too clear on when to use macros vs inlines
+myself :/.
 
-You may add:
-Acked-by: Helge Deller <deller@gmx.de>
-to the series and take it through the drm tree.
-
-Helge
+If there's a benefit to having it be a macro let me
+know and I can make that change in v2.
