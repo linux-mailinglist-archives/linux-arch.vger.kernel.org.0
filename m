@@ -2,107 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771E76E7724
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 12:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 392916E7873
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 13:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjDSKGJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Apr 2023 06:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S232548AbjDSLUf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Apr 2023 07:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232963AbjDSKGG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Apr 2023 06:06:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DB913C10;
-        Wed, 19 Apr 2023 03:05:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S231597AbjDSLUe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Apr 2023 07:20:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94AA256
+        for <linux-arch@vger.kernel.org>; Wed, 19 Apr 2023 04:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1681903133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yk2MXIcMGsqVm4bpeyyiPIAlxJgEs4vB5F4slfGpqbs=;
+        b=T84gPzenBLipwWXMLyNLS8wHcJboOQDcZ+hiP+T24usAlnwF7o6OgfSWEp4+y0lVdVIPCJ
+        2xDR4mWyKrE/s5woLjia87k2xcCDjxR0mplC9BlKi/NJhgFlqfOIesCapTKCuPK0gUVByT
+        3Yn1vnt1py8nyRQ61rPIWuEylgtLW7Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-169-jmHSCGkANleXDaHYHeFrNA-1; Wed, 19 Apr 2023 07:18:51 -0400
+X-MC-Unique: jmHSCGkANleXDaHYHeFrNA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DC97634D8;
-        Wed, 19 Apr 2023 10:05:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87EA5C433EF;
-        Wed, 19 Apr 2023 10:05:54 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch fixes for v6.3-final
-Date:   Wed, 19 Apr 2023 18:05:17 +0800
-Message-Id: <20230419100517.3647508-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 59BDC101A54F;
+        Wed, 19 Apr 2023 11:18:49 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 75C83492B05;
+        Wed, 19 Apr 2023 11:18:48 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id C0514401344A1; Wed, 19 Apr 2023 08:01:41 -0300 (-03)
+Date:   Wed, 19 Apr 2023 08:01:41 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux@armlinux.org.uk,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, arnd@arndb.de, keescook@chromium.org,
+        paulmck@kernel.org, jpoimboe@kernel.org, samitolvanen@google.com,
+        ardb@kernel.org, juerg.haefliger@canonical.com,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        tony@atomide.com, linus.walleij@linaro.org,
+        sebastian.reichel@collabora.com, nick.hawkins@hpe.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, vschneid@redhat.com, dhildenb@redhat.com,
+        alougovs@redhat.com
+Subject: Re: [PATCH 3/3] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
+ only to CPUs in kernel mode
+Message-ID: <ZD/KFW0BaG1qJr0l@tpad>
+References: <20230404134224.137038-1-ypodemsk@redhat.com>
+ <20230404134224.137038-4-ypodemsk@redhat.com>
+ <ZC1Q7uX4rNLg3vEg@lothringen>
+ <ZC3PUkI7N2uEKy6v@tpad>
+ <20230405195457.GC365912@hirez.programming.kicks-ass.net>
+ <ZC6/0hRXztNwqXg0@tpad>
+ <20230406133206.GN386572@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230406133206.GN386572@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 6a8f57ae2eb07ab39a6f0ccad60c760743051026:
+On Thu, Apr 06, 2023 at 03:32:06PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 06, 2023 at 09:49:22AM -0300, Marcelo Tosatti wrote:
+> 
+> > > > 2) Depends on the application and the definition of "occasional".
+> > > > 
+> > > > For certain types of applications (for example PLC software or
+> > > > RAN processing), upon occurrence of an event, it is necessary to
+> > > > complete a certain task in a maximum amount of time (deadline).
+> > > 
+> > > If the application is properly NOHZ_FULL and never does a kernel entry,
+> > > it will never get that IPI. If it is a pile of shit and does kernel
+> > > entries while it pretends to be NOHZ_FULL it gets to keep the pieces and
+> > > no amount of crying will get me to care.
+> > 
+> > I suppose its common practice to use certain system calls in latency
+> > sensitive applications, for example nanosleep. Some examples:
+> > 
+> > 1) cyclictest		(nanosleep)
+> 
+> cyclictest is not a NOHZ_FULL application, if you tihnk it is, you're
+> deluded.
 
-  Linux 6.3-rc7 (2023-04-16 15:23:53 -0700)
+On the field (what end-users do on production):
 
-are available in the Git repository at:
+cyclictest runs on NOHZ_FULL cores.
+PLC type programs run on NOHZ_FULL cores.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.3-1
+So accordingly to physical reality i observe, i am not deluded.
 
-for you to fetch changes up to b5533e990dd1de5872a34cba2f4f7f508c9b2ec3:
+> > 2) PLC programs		(nanosleep)
+> 
+> What's a PLC? Programmable Logic Circuit?
 
-  tools/loongarch: Use __SIZEOF_LONG__ to define __BITS_PER_LONG (2023-04-19 12:07:34 +0800)
+Programmable logic controller.
 
-----------------------------------------------------------------
-LoongArch fixes for v6.3-final
+> > A system call does not necessarily have to take locks, does it ?
+> 
+> This all is unrelated to locks
 
-Some bug fixes, some build fixes, a comment fix and a trivial cleanup.
-----------------------------------------------------------------
-Enze Li (1):
-      LoongArch: Replace hard-coded values in comments with VALEN
+OK.
 
-Huacai Chen (6):
-      LoongArch: Make WriteCombine configurable for ioremap()
-      LoongArch: Fix probing of the CRC32 feature
-      LoongArch: Fix build error if CONFIG_SUSPEND is not set
-      LoongArch: Enable PG when wakeup from suspend
-      LoongArch: Mark 3 symbol exports as non-GPL
-      LoongArch: module: set section addresses to 0x0
+> > Or even if application does system calls, but runs under a VM,
+> > then you are requiring it to never VM-exit.
+> 
+> That seems to be a goal for performance anyway.
 
-Qing Zhang (3):
-      LoongArch: Fix _CONST64_(x) as unsigned
-      LoongArch: Adjust user_watch_state for explicit alignment
-      LoongArch: Adjust user_regset_copyin parameter to the correct offset
+Not sure what you mean.
 
-Tiezhu Yang (3):
-      LoongArch: Check unwind_error() in arch_stack_walk()
-      LoongArch: Clean up plat_swiotlb_setup() related code
-      tools/loongarch: Use __SIZEOF_LONG__ to define __BITS_PER_LONG
+> > This reduces the flexibility of developing such applications.
+> 
+> Yeah, that's the cards you're dealt, deal with it.
 
- Documentation/admin-guide/kernel-parameters.rst    |  1 +
- Documentation/admin-guide/kernel-parameters.txt    |  6 ++++
- arch/loongarch/Kconfig                             | 16 +++++++++
- arch/loongarch/include/asm/acpi.h                  |  3 ++
- arch/loongarch/include/asm/addrspace.h             |  4 +--
- arch/loongarch/include/asm/bootinfo.h              |  1 -
- arch/loongarch/include/asm/cpu-features.h          |  1 +
- arch/loongarch/include/asm/cpu.h                   | 40 ++++++++++++----------
- arch/loongarch/include/asm/io.h                    |  4 ++-
- arch/loongarch/include/asm/loongarch.h             |  6 ++--
- arch/loongarch/include/asm/module.lds.h            |  8 ++---
- arch/loongarch/include/uapi/asm/ptrace.h           |  3 +-
- arch/loongarch/kernel/cpu-probe.c                  |  9 +++--
- arch/loongarch/kernel/proc.c                       |  1 +
- arch/loongarch/kernel/ptrace.c                     | 25 +++++++++-----
- arch/loongarch/kernel/setup.c                      | 25 ++++++++++++--
- arch/loongarch/kernel/stacktrace.c                 |  2 +-
- arch/loongarch/kernel/unwind.c                     |  1 +
- arch/loongarch/kernel/unwind_prologue.c            |  4 ++-
- arch/loongarch/mm/init.c                           |  4 +--
- arch/loongarch/power/suspend_asm.S                 |  4 +++
- .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  2 +-
- 22 files changed, 121 insertions(+), 49 deletions(-)
+This is not what happens on the field. 
+
