@@ -2,222 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7196E82B8
-	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 22:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B8A6E82D8
+	for <lists+linux-arch@lfdr.de>; Wed, 19 Apr 2023 22:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjDSUaK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 19 Apr 2023 16:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S229562AbjDSUpO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 19 Apr 2023 16:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjDSUaJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Apr 2023 16:30:09 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9BA8A45;
-        Wed, 19 Apr 2023 13:29:29 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54fb615ac3dso17398657b3.2;
-        Wed, 19 Apr 2023 13:29:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1681936166; x=1684528166;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ri4M7wwnqfUyWg7ITQYtSCFlkjwgDD80RYs577YrqxA=;
-        b=WIB0Mw6mTuaRsirvoZFjheEp9yY5Y/q9onOHwXnfWFMdFmYyli6xaVNh9nuRkFM8Bu
-         OnXLT3OfefylOw1YM4VwkunQfq+Wm/ji1lKG5q5iuDSnqXz+pveEOmagYUHY70pV+qoa
-         KvVDM5rfvXh7k0t2ztxy0CpMZU4jrTcGpdw3ugWQ7PYvTc5DIMuci51oMb3/89hTRu18
-         ASTMyUIpSKSpdVyzVJqnIsAfKfcTX+AN3kdlEImle/BVRj8WezpdfvQGOxxtdhWDpR5M
-         v2CCX9NS0Q1nwilMdzeBzucKwgU44O+OvH3u0Wiv6qbWAvaUduq3fyhR1v2QD/zzuIcP
-         d4gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681936166; x=1684528166;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ri4M7wwnqfUyWg7ITQYtSCFlkjwgDD80RYs577YrqxA=;
-        b=fA7oFQsGvJQ3i43IS74zb1MqMjTV0S1kZdt1hO4vfzpeVjFxxpX451Zvqx5htZ+wIN
-         s+E+2j4fL31lgSXUvDx8uX2rZ27EtOFe8/uJf2wbKzs6xeFpiHxcjOz3ENgPeQ9mvYwc
-         T+nn5liT0JubB3kNFfRVJqjn98Dk10oIdA46WWdihsonPquEYmQd6QRjwdN5xA5+v4N1
-         pupMN5BtfCAARSzzvRoeN5gAk9rF4yQJ8iPB65SQD0dOoKde99sdq0QXGWsROtxUKlRg
-         Zjg3mmViA4bdX1lcZ2IYjhBGLTQASbjCjFbz4oVgm1d6Dzfozk7dvJ1QwYe9LZxDY/aw
-         KmRg==
-X-Gm-Message-State: AAQBX9dkC3nKzMHk0XftNaIR8EqYFRKlJV/K8dzqTa2ojj33aE8GqedT
-        tql5UMZPs0+4p32GbnyNMtI0gMm/UKizSpJSqzcoV7zJYb/jtw==
-X-Google-Smtp-Source: AKy350aNDMALBM0VAdPN5cwgCAJgGmI7MyMPzfpEMhO/TACZWqeGBJUZoGoWlGr6ZHAaYh0Tzxhzwi/dxg7Fov1Ofog=
-X-Received: by 2002:a81:53c2:0:b0:54e:84f6:6669 with SMTP id
- h185-20020a8153c2000000b0054e84f66669mr4502802ywb.49.1681936166163; Wed, 19
- Apr 2023 13:29:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230417205048.15870-1-vishal.moola@gmail.com>
- <20230417205048.15870-5-vishal.moola@gmail.com> <ZD/syK8RYO9FZ6ks@vernon-pc>
-In-Reply-To: <ZD/syK8RYO9FZ6ks@vernon-pc>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Wed, 19 Apr 2023 13:29:14 -0700
-Message-ID: <CAOzc2pyt8MBv7N0qizdxr0__RKXK7hMLX-Jqvsd6RPh3nyTFVw@mail.gmail.com>
-Subject: Re: [PATCH 4/33] mm: add utility functions for ptdesc
-To:     Vernon Yang <vernon2gm@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229533AbjDSUpN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 19 Apr 2023 16:45:13 -0400
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020014.outbound.protection.outlook.com [52.101.61.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9121E171D;
+        Wed, 19 Apr 2023 13:45:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V587pXYfUgg79TKZ3PXlmEffEuU50vkbBcSWEwfHuTOCMXwPrgi7kjvsP+CGAWyt/ZM2laA1jmDxPU9J5U+FsdFtPPNFMGT3paGimMFZy9Q7V+kI09+94p31Js+hj/No7ZSMXuMfeeuDhruAWk2UFAvU6LxKl/1qwQjowHx3FBd3mBePETKVUpmKDUjBfK0TLf3d05t8ddHABxeMnhkkTtoCqf4thisPAfOGgNnC1JTQvM1HR+KLJpJodGaEM4+iKwYqMmiC1SUi5gFV3bQRCnPDPha09HhLPtoTtMGrc8qLNuZV2TzZIi7dvzL+joab0rU2YBpcVa4/0uWXKZmh2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rZQYNnsvN4sM3nBYVfhj4LpcgRTq4sIzGcVR22DVA04=;
+ b=hnOJ/O0S1lED3Ys28MDY637qXxn5EixxT+8MI+WafWeTcfweHf0K1k9tnHnnSCrSntsVK3rXCxtdkBdTKEmXgdPzDJm5T2kEv/N3GVR5hN4RzlVKm+2TYyg5vXUnPqGAPMbM4gnDE9wC7sixNaCDNjHEaARELVE7BDTS5FMj5Pzj1nlFddl4GhhN7oDQIpTtzmhBnXJTJWtzWVd/6tNnRMRdEmghaybLVpEvJvnz/fyTTD0YXQ1uBQl8t5L1c9f4KX5aFQRvxZ3lrUUaq4/uK7O5GgFMccyP3YmOH55pG9wQWW+3xaiIs6XeLNN2CzkMiiGmXvHuiwTUFAE39eygbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rZQYNnsvN4sM3nBYVfhj4LpcgRTq4sIzGcVR22DVA04=;
+ b=O4wcYP9icz/2lVvmGsZlPtMX72P90bIMx5A/U2QcKpt0Q1RVKYWcJX4dGvfXwjnYH5TW51YO2e7V6bIYwA+ZwP3o9hGMyfjhT/Q7nqTfeLoxwVAJk/BZmYMBe9ab3AvkNZMGtzPc/lOQnMxm6JgF1I0jV0O/hvyrC3ezrbbOwj0=
+Received: from PH7PR21MB3263.namprd21.prod.outlook.com (2603:10b6:510:1db::16)
+ by DM4PR21MB3658.namprd21.prod.outlook.com (2603:10b6:8:a1::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6340.1; Wed, 19 Apr 2023 20:45:09 +0000
+Received: from PH7PR21MB3263.namprd21.prod.outlook.com
+ ([fe80::4d56:4d4b:3785:a1ca]) by PH7PR21MB3263.namprd21.prod.outlook.com
+ ([fe80::4d56:4d4b:3785:a1ca%5]) with mapi id 15.20.6319.004; Wed, 19 Apr 2023
+ 20:45:09 +0000
+From:   Long Li <longli@microsoft.com>
+To:     Wei Liu <wei.liu@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+CC:     "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [PATCH v2] Drivers: hv: move panic report code from vmbus to hv
+ early init code
+Thread-Topic: [PATCH v2] Drivers: hv: move panic report code from vmbus to hv
+ early init code
+Thread-Index: AQHZbnA36uYZUGk2cUK4b/5QWwYrIq8sr9aAgAM4vwCAAYLigIABtyeg
+Date:   Wed, 19 Apr 2023 20:45:09 +0000
+Message-ID: <PH7PR21MB3263DDDD57A1EDD219CC645CCE629@PH7PR21MB3263.namprd21.prod.outlook.com>
+References: <1681435612-19282-1-git-send-email-longli@linuxonhyperv.com>
+ <BYAPR21MB1688377B56A9A844EAABEEDAD79E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <ZD2dxHaq8NDzpfYw@liuwe-devbox-debian-v2>
+ <ZD7iT/+Uil3jTuNO@liuwe-devbox-debian-v2>
+In-Reply-To: <ZD7iT/+Uil3jTuNO@liuwe-devbox-debian-v2>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=389cf2d0-3378-4a76-a574-1bd476db736b;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-04-19T20:44:34Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3263:EE_|DM4PR21MB3658:EE_
+x-ms-office365-filtering-correlation-id: 04ccdea4-d764-44ac-ff2c-08db4116f755
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 87GbtMLl0L8hQZGKMbhuOo/qbu8yj+LSmAY8EqQ2taV5U6Ulp8cMpWaSdAku8Bh8evTb1LQ81ZA5sODDbbNokCsxOx6QkooWFn7EKnRqXXBP8UrqBUaFF0pQ+3Djpc49vzXpV8MC+50jIM1Gb6l8K6bp2mhseYkld68pfsJg3fmG1/iBZHKhQBAaqinjgNsjCxjsNKlXApiw3dKOf7JVW8m4B0/mkCzuoCNOfRzYmGqEwkIl5ACdBZK0UmZxro+ydkhk77pXdIGKUBGoxoJkBRik1hMnQ9ZlTyrZ1ZfUpMLk/UPmAZ9UaRhY0wUHJ8rQRr+36Y0crnzlaIU5eFbwwm5sSCjl0ZeWEQGwDK0+DneC7sEFh8FZqC3bEtJtX0r2BdksF+leMIwd41dtGBXPyzW7HfqvLXRTzlNQiZ8m+Ahvr/UikO5KDwxfyps/WeYY1H50aFj52t8ge2pKPsg8iFUB5/TyROrdmL0gXGuHDf1ZOIVXB2a6O1hMkcWsXZ59vT+teYUgLt5e8PIjU/WUh7IJ4ZA4OkOTfTeRoQnfUTNoljjuTk1kwPkUde3s7xoqi59oWMxnz7c1FlvYKU53cdUXOXDGSxlbjxI8K8gVcBuHpjVSpRMM2Hj3kXGhYP850/Uvo7kJrcx42exKVgt3keVYGIispj1gTtwoG1FGM9Y=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3263.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(376002)(39860400002)(366004)(451199021)(33656002)(76116006)(6636002)(4326008)(786003)(54906003)(316002)(110136005)(66946007)(66556008)(66476007)(66446008)(64756008)(41300700001)(478600001)(55016003)(71200400001)(10290500003)(5660300002)(8990500004)(8676002)(8936002)(52536014)(2906002)(38070700005)(86362001)(122000001)(38100700002)(6506007)(9686003)(26005)(82950400001)(83380400001)(82960400001)(186003)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?02qlVLgvlIP9airK4se7I7IQULdkCz/kVuw4QqtBClj0yqHmSU7S+WIxg5+K?=
+ =?us-ascii?Q?GcXBvOrMcEhbKIn+bdTrR/vU6ayZaK+h+QdR9u6uSltqLoaTRm1qgTaaZhXw?=
+ =?us-ascii?Q?ehE4gXak90IG6SlmVqzVssTiK6l/vrnurZch2gkKPB2lnuzJXuJ4ScQRHDNJ?=
+ =?us-ascii?Q?CTPW89MNIsBmpx2ath0GwewdeYi6xckYv6Qph2a7ak3zDeB/xUkO2xJj4kar?=
+ =?us-ascii?Q?mX3lkOlXdY59rXS4/BS/324loNH1PWO2SQ59VXLUPdmXbRDQz7tftL8f8+rp?=
+ =?us-ascii?Q?6XoDV3QSbyG0xOQIjADsxRe3tZG1aFIPlX3JAkQSLDHZ5/epTAfMtZaUQskL?=
+ =?us-ascii?Q?JHvOhrvCurWzR0Vdl2OuJcRvKVt95fMKsRBz/M0DpKSpn0FCKO/538rFj/HQ?=
+ =?us-ascii?Q?CGd++zM2GJ14YqCHckyN51bANSWjNXWXyH+Lo1b2E//svRqahL+NkVJi/zIh?=
+ =?us-ascii?Q?7BzFyFdT/bP3iUQD3xTgzY72idOCGkb4Qsh6kFJ0yke4Dpn7Wk3bOMrUp0LE?=
+ =?us-ascii?Q?Dqj5JWFsKHXjYaWm0+ATMHU1nS6dCkCfrOlJk2KTvoCvWKiJtcpaQykvHZiC?=
+ =?us-ascii?Q?P/zIfdKS8Cfvs2SP+inDmi182Ix1dlbZevKkhsm3py1Q8k+gCfwtVlO5OJop?=
+ =?us-ascii?Q?2ibpZLduUBVOy6wNgZ6ygB8xG45wawZB1zUpuCNpqAJ4Fl608LV3PP+Pb5J/?=
+ =?us-ascii?Q?3MBhN+JypslddypUecKJ0aUyC3aDomY7NZwXtW2QttUvaHCp/tKXwJpYGaMn?=
+ =?us-ascii?Q?fjs4wlQ+IJkQuAMMzjV9fXLqiff2DelI/w7ifGNwTrnTrFhNXrwe9ivfiY9Z?=
+ =?us-ascii?Q?h1wkM6JK6APOGxQ/2YMPE20T3oCrh2ejQFN5GEv+kW2QbZrLcD4rQLCmwChL?=
+ =?us-ascii?Q?G+tHoN/RpeNZb/iFBK4ogsHDSdbn7tzhu0hzeYqde7NhR3tckUt1MGHIQdD0?=
+ =?us-ascii?Q?mXIgz0sh/hHitKvrzi2GHMyOy+Cq3sIlPixJSy3FSsqoiJS+QlIL0UteBG1i?=
+ =?us-ascii?Q?s2zS3HkPXS//3Kqf2Ghopl61b7OxQiyPL/i38+0VKTYALptNxGjfoITkJ8Vz?=
+ =?us-ascii?Q?BkD96qvlbp5glRGtTjPQCLSNcbW++uHS0F/i68dMHUNq24pQYvPuNKmCQfgH?=
+ =?us-ascii?Q?0VYWlVNUiqVFVksN6Sudc0xLGVoB+9gV+0j6Yb1r1c0UeIEGJ456/8Ny7QgM?=
+ =?us-ascii?Q?u3KYEKj/7hezMupT20bUKMBsk/Ah6YkYvpL2JBXC9WYoj1jQF+figVo10Ptm?=
+ =?us-ascii?Q?p5qJVwzz67x6dKZily+swhQpHd27GpdYNIMLl0Ks5SsTQO33aIYAJRofvC3W?=
+ =?us-ascii?Q?LG3zrSrHikPNVUAH2qkMCJc/l4fvy4hEyo0CzVP0zpEebCMVUaNZbgrkAKRE?=
+ =?us-ascii?Q?Y/BXVyOqnWzl8l6ezRz6nfxDRWcKwlxsf7Q5JjKirDgQz50DWmNoDh6YY0iT?=
+ =?us-ascii?Q?Uzzi7v4KFdrC8LvkZqdQ4tfVuWLvX1MdxMDTPxRKfIiNq4V0EO8XbJ7WQppg?=
+ =?us-ascii?Q?nlVNhFSTuBx328AJazmlFn0lAUCPqXxnhdZa7ewGYMVWn8IRlZV3b7u3R4Za?=
+ =?us-ascii?Q?d8mV+Cc/oRUHF0QLSnT62P2B9mttd3RGvSdvn8vv?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3263.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04ccdea4-d764-44ac-ff2c-08db4116f755
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2023 20:45:09.7221
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: waPOWZKoRI/Ji1fAsNzMEOnKS7KnTZUvjDEzacfkkOQw80zvGNjRpqiKSQ++CL97AGH8JPpfuvIt5M66OyOV+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3658
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 6:34=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com> w=
-rote:
+>Subject: Re: [PATCH v2] Drivers: hv: move panic report code from vmbus to =
+hv
+>early init code
 >
-> On Mon, Apr 17, 2023 at 01:50:19PM -0700, Vishal Moola wrote:
-> > Introduce utility functions setting the foundation for ptdescs. These
-> > will also assist in the splitting out of ptdesc from struct page.
-> >
-> > ptdesc_alloc() is defined to allocate new ptdesc pages as compound
-> > pages. This is to standardize ptdescs by allowing for one allocation
-> > and one free function, in contrast to 2 allocation and 2 free functions=
-.
-> >
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> > ---
-> >  include/asm-generic/tlb.h | 11 ++++++++++
-> >  include/linux/mm.h        | 44 +++++++++++++++++++++++++++++++++++++++
-> >  include/linux/pgtable.h   | 13 ++++++++++++
-> >  3 files changed, 68 insertions(+)
-> >
-> > diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> > index b46617207c93..6bade9e0e799 100644
-> > --- a/include/asm-generic/tlb.h
-> > +++ b/include/asm-generic/tlb.h
-> > @@ -481,6 +481,17 @@ static inline void tlb_remove_page(struct mmu_gath=
-er *tlb, struct page *page)
-> >       return tlb_remove_page_size(tlb, page, PAGE_SIZE);
-> >  }
-> >
-> > +static inline void tlb_remove_ptdesc(struct mmu_gather *tlb, void *pt)
-> > +{
-> > +     tlb_remove_table(tlb, pt);
-> > +}
-> > +
-> > +/* Like tlb_remove_ptdesc, but for page-like page directories. */
-> > +static inline void tlb_remove_page_ptdesc(struct mmu_gather *tlb, stru=
-ct ptdesc *pt)
-> > +{
-> > +     tlb_remove_page(tlb, ptdesc_page(pt));
-> > +}
-> > +
-> >  static inline void tlb_change_page_size(struct mmu_gather *tlb,
-> >                                                    unsigned int page_si=
-ze)
-> >  {
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index b18848ae7e22..ec3cbe2fa665 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -2744,6 +2744,45 @@ static inline pmd_t *pmd_alloc(struct mm_struct =
-*mm, pud_t *pud, unsigned long a
-> >  }
-> >  #endif /* CONFIG_MMU */
-> >
-> > +static inline struct ptdesc *virt_to_ptdesc(const void *x)
-> > +{
-> > +     return page_ptdesc(virt_to_head_page(x));
-> > +}
-> > +
-> > +static inline void *ptdesc_to_virt(struct ptdesc *pt)
-> > +{
-> > +     return page_to_virt(ptdesc_page(pt));
-> > +}
-> > +
-> > +static inline void *ptdesc_address(struct ptdesc *pt)
-> > +{
-> > +     return folio_address(ptdesc_folio(pt));
-> > +}
-> > +
-> > +static inline bool ptdesc_is_reserved(struct ptdesc *pt)
-> > +{
-> > +     return folio_test_reserved(ptdesc_folio(pt));
-> > +}
-> > +
-> > +static inline struct ptdesc *ptdesc_alloc(gfp_t gfp, unsigned int orde=
-r)
-> > +{
-> > +     struct page *page =3D alloc_pages(gfp | __GFP_COMP, order);
-> > +
-> > +     return page_ptdesc(page);
-> > +}
-> > +
-> > +static inline void ptdesc_free(struct ptdesc *pt)
-> > +{
-> > +     struct page *page =3D ptdesc_page(pt);
-> > +
-> > +     __free_pages(page, compound_order(page));
-> > +}
-> > +
-> > +static inline void ptdesc_clear(void *x)
-> > +{
-> > +     clear_page(x);
-> > +}
-> > +
-> >  #if USE_SPLIT_PTE_PTLOCKS
-> >  #if ALLOC_SPLIT_PTLOCKS
-> >  void __init ptlock_cache_init(void);
-> > @@ -2970,6 +3009,11 @@ static inline void mark_page_reserved(struct pag=
-e *page)
-> >       adjust_managed_page_count(page, -1);
-> >  }
-> >
-> > +static inline void free_reserved_ptdesc(struct ptdesc *pt)
-> > +{
-> > +     free_reserved_page(ptdesc_page(pt));
-> > +}
-> > +
-> >  /*
-> >   * Default method to free all the __init memory into the buddy system.
-> >   * The freed pages will be poisoned with pattern "poison" if it's with=
-in
-> > diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> > index 7cc6ea057ee9..7cd803aa38eb 100644
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -97,6 +97,19 @@ TABLE_MATCH(ptl, ptl);
-> >  #undef TABLE_MATCH
-> >  static_assert(sizeof(struct ptdesc) <=3D sizeof(struct page));
-> >
-> > +#define ptdesc_page(pt)                      (_Generic((pt),          =
-       \
-> > +     const struct ptdesc *:          (const struct page *)(pt),      \
-> > +     struct ptdesc *:                (struct page *)(pt)))
-> > +
-> > +#define ptdesc_folio(pt)             (_Generic((pt),                 \
-> > +     const struct ptdesc *:          (const struct folio *)(pt),     \
-> > +     struct ptdesc *:                (struct folio *)(pt)))
-> > +
-> > +static inline struct ptdesc *page_ptdesc(struct page *page)
-> > +{
-> > +     return (struct ptdesc *)page;
-> > +}
+>On Mon, Apr 17, 2023 at 07:28:04PM +0000, Wei Liu wrote:
+>> On Sat, Apr 15, 2023 at 06:16:11PM +0000, Michael Kelley (LINUX) wrote:
+>> > From: longli@linuxonhyperv.com <longli@linuxonhyperv.com> Sent:
+>> > Thursday, April 13, 2023 6:27 PM
+>> > >
+>> > > The panic reporting code was added in commit 81b18bce48af
+>> > > ("Drivers: HV: Send one page worth of kmsg dump over Hyper-V
+>> > > during panic")
+>> > >
+>> > > It was added to the vmbus driver. The panic reporting has no
+>> > > dependence on vmbus, and can be enabled at an earlier boot time
+>> > > when Hyper-V is initialized.
+>> > >
+>> > > This patch moves the panic reporting code out of vmbus. There is
+>> > > no functionality changes. During moving, also refactored some
+>> > > cleanup functions into hv_kmsg_dump_unregister(), and removed
+>> > > unused function hv_alloc_hyperv_page().
+>> > >
+>> > > Signed-off-by: Long Li <longli@microsoft.com>
+>> > > ---
+>> > >
+>> > > Change log v2:
+>> > > 1. Check on hv_is_isolation_supported() before reporting crash
+>> > > dump 2. Remove hyperv_report_reg(), inline the check condition
+>> > > instead 3. Remove the test NULL on hv_panic_page when freeing it
+>> > >
+>> > >  drivers/hv/hv.c                |  36 ------
+>> > >  drivers/hv/hv_common.c         | 229
+>+++++++++++++++++++++++++++++++++
+>> > >  drivers/hv/vmbus_drv.c         | 199 ----------------------------
+>> > >  include/asm-generic/mshyperv.h |   1 -
+>> > >  4 files changed, 229 insertions(+), 236 deletions(-)
+>> >
+>> > Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+>>
+>> Applied to hyperv-next. Thanks.
 >
-> Hi Vishal,
+>This broke allmodconfig. I've removed it from the tree. Please fix and res=
+end.
 >
-> I'm a little curious, why is the page_ptdesc() using inline functions ins=
-tead of macro?
-> If this is any magic, please tell me, thank you very much.
+>Thanks,
+>Wei.
 
-No magic here, I was mainly basing it off Matthew's netmem
-series. I'm not too clear on when to use macros vs inlines
-myself :/.
+I'm rebasing the patch to latest hyper-v branch, and send v3.
 
-If there's a benefit to having it be a macro let me
-know and I can make that change in v2.
+Thanks,
+Long
