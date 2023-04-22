@@ -2,30 +2,30 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919996EBAC5
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Apr 2023 19:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C896EBAC9
+	for <lists+linux-arch@lfdr.de>; Sat, 22 Apr 2023 19:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjDVR5T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 22 Apr 2023 13:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44252 "EHLO
+        id S229721AbjDVR5Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 22 Apr 2023 13:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjDVR5T (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Apr 2023 13:57:19 -0400
+        with ESMTP id S229510AbjDVR5W (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Apr 2023 13:57:22 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE92C1FF6;
-        Sat, 22 Apr 2023 10:57:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84582128;
+        Sat, 22 Apr 2023 10:57:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1682186234; bh=Av45NfRoNWrmwrDlg/7iwNEk5cNcTXe/Apg381TE9cc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Fz3ZgnjO3hS4PjxTm80vD2yKCWd/OhZHTccXsoeXvyYk49q27YYpqPCX6h087K4Ux
-         bj4CNpZBPvl4ssChpsidAIzxGTTVBAja4Scox2QrJ3FK1GEgM8Yrpd/OIS9fxYINAn
-         b/P1BkV3UjmEJX0MZvlAuB/z7DMNCX704gJA+2NA=
+        t=1682186240; bh=jDQ5fjNeCWA8O/H00VoE007YWcDXHB9QzsSVJ4CDNiY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A0ssQLqncu6dO/ZY9pjb5fO4M4SIX2cROE3TP2QdRpKceN6oOGfJU2nyHESHx/CJv
+         V99pe1/Qta82r/u9XGXJo75HYO08kQ46wgM/KbQw2W+0PbqwisBAODoazmpJ5wFSDA
+         1IEL6aZLXE6A05lOcJJKuFz6Nl7orGmuTB3LjjwI=
 Received: from ld50.lan (unknown [101.228.138.124])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0F92F600BD;
-        Sun, 23 Apr 2023 01:57:13 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E2DB660132;
+        Sun, 23 Apr 2023 01:57:19 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     loongarch@lists.linux.dev
 Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
@@ -34,10 +34,12 @@ Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] LoongArch: Make bounds-checking instructions useful
-Date:   Sun, 23 Apr 2023 01:57:03 +0800
-Message-Id: <20230422175705.3444561-1-kernel@xen0n.name>
+Subject: [PATCH v2 1/2] LoongArch: Add opcodes of bounds-checking instructions
+Date:   Sun, 23 Apr 2023 01:57:04 +0800
+Message-Id: <20230422175705.3444561-2-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230422175705.3444561-1-kernel@xen0n.name>
+References: <20230422175705.3444561-1-kernel@xen0n.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -52,52 +54,58 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-Hi,
+To be used later for extracting operands from faulting instructions that
+fall under this category.
 
-The LoongArch-64 base architecture is capable of performing
-bounds-checking either before memory accesses or alone, with specialized
-instructions generating BCEs (bounds-checking error) in case of failed
-assertions (ISA manual Volume 1, Sections 2.2.6.1 [1] and 2.2.10.3 [2]).
-This could be useful for managed runtimes, but the exception is not
-being handled so far, resulting in SIGSYSes in these cases, which is
-incorrect and warrants a fix in itself.
+Signed-off-by: WANG Xuerui <git@xen0n.name>
+---
+ arch/loongarch/include/asm/inst.h | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-During experimentation, it was discovered that there is already UAPI for
-expressing such semantics: SIGSEGV with si_code=SEGV_BNDERR. This was
-originally added for Intel MPX, and there is currently no user (!) after
-the removal of MPX support a few years ago. Although the semantics is
-not a 1:1 match to that of LoongArch, still it is better than
-alternatives such as SIGTRAP or SIGBUS of BUS_OBJERR kind, due to being
-able to convey both the value that failed assertion and the bound value.
-
-This patch series implements just this approach: translating BCEs into
-SIGSEGVs with si_code=SEGV_BNDERR, si_value set to the offending value,
-and si_lower and si_upper set to resemble a range with both lower and
-upper bound while in fact there is only one.
-
-The instructions are not currently used anywhere yet in the fledgling
-LoongArch ecosystem, so it's not very urgent and we could take the time
-to figure out the best way forward (should SEGV_BNDERR turn out not
-suitable).
-
-[1]: https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#bound-check-memory-access-instructions
-[2]: https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#_asrtlegt_d
-
-Changes since v1:
-
-- rebased on top of current loongarch-next
-- removed code related to the kprobe notifier mechanism
-
-WANG Xuerui (2):
-  LoongArch: Add opcodes of bounds-checking instructions
-  LoongArch: Relay BCE exceptions to userland as SIGSEGVs with
-    si_code=SEGV_BNDERR
-
- arch/loongarch/include/asm/inst.h | 26 ++++++++
- arch/loongarch/kernel/genex.S     |  1 +
- arch/loongarch/kernel/traps.c     | 99 +++++++++++++++++++++++++++++++
- 3 files changed, 126 insertions(+)
-
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index a04fe755d719..829646f633d2 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -121,6 +121,8 @@ enum reg2bstrd_op {
+ };
+ 
+ enum reg3_op {
++	asrtle_op	= 0x2,
++	asrtgt_op	= 0x3,
+ 	addw_op		= 0x20,
+ 	addd_op		= 0x21,
+ 	subw_op		= 0x22,
+@@ -176,6 +178,30 @@ enum reg3_op {
+ 	amord_op	= 0x70c7,
+ 	amxorw_op	= 0x70c8,
+ 	amxord_op	= 0x70c9,
++	fldgts_op	= 0x70e8,
++	fldgtd_op	= 0x70e9,
++	fldles_op	= 0x70ea,
++	fldled_op	= 0x70eb,
++	fstgts_op	= 0x70ec,
++	fstgtd_op	= 0x70ed,
++	fstles_op	= 0x70ee,
++	fstled_op	= 0x70ef,
++	ldgtb_op	= 0x70f0,
++	ldgth_op	= 0x70f1,
++	ldgtw_op	= 0x70f2,
++	ldgtd_op	= 0x70f3,
++	ldleb_op	= 0x70f4,
++	ldleh_op	= 0x70f5,
++	ldlew_op	= 0x70f6,
++	ldled_op	= 0x70f7,
++	stgtb_op	= 0x70f8,
++	stgth_op	= 0x70f9,
++	stgtw_op	= 0x70fa,
++	stgtd_op	= 0x70fb,
++	stleb_op	= 0x70fc,
++	stleh_op	= 0x70fd,
++	stlew_op	= 0x70fe,
++	stled_op	= 0x70ff,
+ };
+ 
+ enum reg3sa2_op {
 -- 
 2.40.0
 
