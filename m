@@ -2,251 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AE16EBACA
-	for <lists+linux-arch@lfdr.de>; Sat, 22 Apr 2023 19:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5166ECAAA
+	for <lists+linux-arch@lfdr.de>; Mon, 24 Apr 2023 12:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjDVR51 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 22 Apr 2023 13:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S231602AbjDXKv6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 24 Apr 2023 06:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjDVR5Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 22 Apr 2023 13:57:25 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59456269A;
-        Sat, 22 Apr 2023 10:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1682186243; bh=HXXYuFEBmSyKsiMJlNx/0TnAcXA/avZNHLVfmtY016E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xP4n34yalLfIFyUVVY7/xam3g64taijI94UojDjyoleVPF/PTsufkN8SM2Ajp/A38
-         5ZfSlJAjq0R4nDRfNVOpwuo057dJ7/uG1IsT83BnShQ9CTTARy6JPQ62fMCiV7hqXA
-         9iGl2QgCYw8Aar8f1cnzvZhEBizck9V+J5vMsOjM=
-Received: from ld50.lan (unknown [101.228.138.124])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2203060B16;
-        Sun, 23 Apr 2023 01:57:22 +0800 (CST)
-From:   WANG Xuerui <kernel@xen0n.name>
-To:     loongarch@lists.linux.dev
-Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] LoongArch: Relay BCE exceptions to userland as SIGSEGVs with si_code=SEGV_BNDERR
-Date:   Sun, 23 Apr 2023 01:57:05 +0800
-Message-Id: <20230422175705.3444561-3-kernel@xen0n.name>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230422175705.3444561-1-kernel@xen0n.name>
-References: <20230422175705.3444561-1-kernel@xen0n.name>
+        with ESMTP id S231394AbjDXKv4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 24 Apr 2023 06:51:56 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099813C0B
+        for <linux-arch@vger.kernel.org>; Mon, 24 Apr 2023 03:51:52 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-54f9b37c634so50734997b3.2
+        for <linux-arch@vger.kernel.org>; Mon, 24 Apr 2023 03:51:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682333511; x=1684925511;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=BDOU7+6CjKGfGxohfwPSUG5dvZEz+JIUkSiwN2TDnXREO1m7tnshm1ywQFqtwjCtuy
+         sdc62qMh2n/GKkLEd6inRVKNj3gr719YRClRe48cHw3AS8uelP+ymyFB0srKimerVisT
+         13Xtkz0SBiM8bJqS0byCbOX7vMjZt1uP8WbY7Dvmdpvz4bea0qvNLSFK3Fpq3xaNdk1A
+         qM5VVSk6ocRnmhVuQME3HxgmrkTm+A9wuvOqJRe5jylGoGOAUFMgmutSHMerkJpOSlvK
+         vk/P+3RIGhTNsyHCwljHvfrhHmReD3nCq/AILJxglY3kVglksym9zePn5jHaXsmq1bcD
+         nsfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682333511; x=1684925511;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
+        b=YNXhcgtx1Gt9HUJuWifDPpL6pZwhcNXGtykw3r2PJPtxSZKdbeW/JCxdvR0Z8NI8Vr
+         bxKjwhRUADlHlN94twJtLnA2rpqXel0Irnp32kuXT8pHaVFUHOLjcnXhx5ezhAaTGNcH
+         ofl57A/NqJvdB/Iy8phcKUwqsgSnXJRvBcqArbCvrjRlrMduqHJRuBcpsYV/KqCYDZ7E
+         I2+zH391XIrko81N87T0iy/hxTekOSMXMwdz71N+3HxyImt8GOp5vvSC0QMVlZUB3LpU
+         tEaMG6LygzIJ6d8evDSdyAYz4bCUV4kC6f54eOElZrbcGbLCQr6J0JlGvdGYXY7rNAMF
+         K3IA==
+X-Gm-Message-State: AAQBX9cTG+3rcoAti5Eqrf6l8brUVxur3rT64sWDAqCnQc77D0LK1VdH
+        K15c/wl6YZ3XffZAwYA+EeeYK46dcAhfBu2Uqt4=
+X-Google-Smtp-Source: AKy350YG4FdHU8gQxPU2msbtN2QdEjv9b6BhW9wIbc0BoX66FKTBxxpsjwaRJQwRDUNbtvTNf1tLcLROs6TnCelMCbI=
+X-Received: by 2002:a81:4809:0:b0:533:9fa7:bbe9 with SMTP id
+ v9-20020a814809000000b005339fa7bbe9mr7936227ywa.8.1682333511052; Mon, 24 Apr
+ 2023 03:51:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:7010:7499:b0:32d:e51f:dee8 with HTTP; Mon, 24 Apr 2023
+ 03:51:50 -0700 (PDT)
+Reply-To: mariamkouame.info@myself.com
+From:   Mariam Kouame <mariamkouame1990@gmail.com>
+Date:   Mon, 24 Apr 2023 03:51:50 -0700
+Message-ID: <CAKXL+w08stRVVXkGQO0pBQ1x_ozGpGTcLNjscr9ZhQ3xnJgTTA@mail.gmail.com>
+Subject: from mariam kouame
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: WANG Xuerui <git@xen0n.name>
+Dear,
 
-SEGV_BNDERR was introduced initially for supporting the Intel MPX, but
-fell into disuse after the MPX support was removed. The LoongArch
-bounds-checking instructions behave very differently than MPX, but
-overall the interface is still kind of suitable for conveying the
-information to userland when bounds-checking assertions trigger, so we
-wouldn't have to invent more UAPI. Specifically, when the BCE triggers,
-a SEGV_BNDERR is sent to userland, with si_addr set to the out-of-bounds
-address or value (in asrt{gt,le}'s case), and one of si_lower or
-si_upper set to the configured bound depending on the faulting
-instruction. The other bound is set to either 0 or ULONG_MAX to resemble
-a range with both lower and upper bounds.
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
 
-Note that it is possible to have si_addr == si_lower in case of a
-failing asrtgt or {ld,st}gt, because those instructions test for strict
-greater-than relationship. This should not pose a problem for userland,
-though, because the faulting PC is available for the application to
-associate back to the exact instruction for figuring out the
-expectation.
-
-Somewhat contrary to the v1.03 ISA manual's wording, CSR.BADV does not
-seem to contain the out-of-bounds value when BCE occurs in my
-experiments. So we have to resort to pattern-matching the instruction
-word to pull out the appropriate operand ourselves from the context.
-
-Example exception context generated by a faulting `asrtgt.d t0, t1`
-(assert t0 > t1 or BCE) with t0=100 and t1=200:
-
-> pc 00005555558206a4 ra 00007ffff2d854fc tp 00007ffff2f2f180 sp 00007ffffbf9fb80
-> a0 0000000000000002 a1 00007ffffbf9fce8 a2 00007ffffbf9fd00 a3 00007ffff2ed4558
-> a4 0000000000000000 a5 00007ffff2f044c8 a6 00007ffffbf9fce0 a7 fffffffffffff000
-> t0 0000000000000064 t1 00000000000000c8 t2 00007ffffbfa2d5e t3 00007ffff2f12aa0
-> t4 00007ffff2ed6158 t5 00007ffff2ed6158 t6 000000000000002e t7 0000000003d8f538
-> t8 0000000000000005 u0 0000000000000000 s9 0000000000000000 s0 00007ffffbf9fce8
-> s1 0000000000000002 s2 0000000000000000 s3 00007ffff2f2c038 s4 0000555555820610
-> s5 00007ffff2ed5000 s6 0000555555827e38 s7 00007ffffbf9fd00 s8 0000555555827e38
->    ra: 00007ffff2d854fc
->   ERA: 00005555558206a4
->  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
->  PRMD: 00000007 (PPLV3 +PIE -PWE)
->  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
->  ECFG: 0007181c (LIE=2-4,11-12 VS=7)
-> ESTAT: 000a0000 [BCE] (IS= ECode=10 EsubCode=0)
->  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
-
-Signed-off-by: WANG Xuerui <git@xen0n.name>
----
- arch/loongarch/kernel/genex.S |  1 +
- arch/loongarch/kernel/traps.c | 99 +++++++++++++++++++++++++++++++++++
- 2 files changed, 100 insertions(+)
-
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 44ff1ff64260..78f066384657 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -82,6 +82,7 @@ SYM_FUNC_END(except_vec_cex)
- 
- 	BUILD_HANDLER ade ade badv
- 	BUILD_HANDLER ale ale badv
-+	BUILD_HANDLER bce bce none
- 	BUILD_HANDLER bp bp none
- 	BUILD_HANDLER fpe fpe fcsr
- 	BUILD_HANDLER fpu fpu none
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index 8b268c133b92..5b3bb6b55e05 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -36,6 +36,7 @@
- #include <asm/break.h>
- #include <asm/cpu.h>
- #include <asm/fpu.h>
-+#include <asm/inst.h>
- #include <asm/loongarch.h>
- #include <asm/mmu_context.h>
- #include <asm/pgtable.h>
-@@ -51,6 +52,7 @@
- 
- extern asmlinkage void handle_ade(void);
- extern asmlinkage void handle_ale(void);
-+extern asmlinkage void handle_bce(void);
- extern asmlinkage void handle_sys(void);
- extern asmlinkage void handle_bp(void);
- extern asmlinkage void handle_ri(void);
-@@ -585,6 +587,102 @@ static void bug_handler(struct pt_regs *regs)
- 	}
- }
- 
-+asmlinkage void noinstr do_bce(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
-+	bool user = user_mode(regs);
-+	unsigned long era = exception_era(regs);
-+	union loongarch_instruction insn;
-+	u64 badv = 0, lower = 0, upper = ULONG_MAX;
-+
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_enable();
-+
-+	current->thread.trap_nr = read_csr_excode();
-+
-+	die_if_kernel("Bounds check error in kernel code", regs);
-+
-+	/*
-+	 * Pull out the address that failed bounds checking, and the lower /
-+	 * upper bound, by minimally looking at the faulting instruction word
-+	 * and reading from the correct register.
-+	 *
-+	 * Somewhat counter-intuitively (but kinds of makes sense), BCEs
-+	 * during checked memory accesses *do not* update CSR.BADV. So badv
-+	 * still comes from regs[rj] in these cases.
-+	 */
-+	if (__get_inst(&insn.word, (u32 *)era, user))
-+		goto bad_era;
-+
-+	switch (insn.reg3_format.opcode) {
-+	case asrtle_op:
-+		if (insn.reg3_format.rd != 0)
-+			/* not asrtle */
-+			break;
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case asrtgt_op:
-+		if (insn.reg3_format.rd != 0)
-+			/* not asrtgt */
-+			break;
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case fldles_op:
-+	case fldled_op:
-+	case fstles_op:
-+	case fstled_op:
-+	case ldleb_op:
-+	case ldleh_op:
-+	case ldlew_op:
-+	case ldled_op:
-+	case stleb_op:
-+	case stleh_op:
-+	case stlew_op:
-+	case stled_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case fldgts_op:
-+	case fldgtd_op:
-+	case fstgts_op:
-+	case fstgtd_op:
-+	case ldgtb_op:
-+	case ldgth_op:
-+	case ldgtw_op:
-+	case ldgtd_op:
-+	case stgtb_op:
-+	case stgth_op:
-+	case stgtw_op:
-+	case stgtd_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+	}
-+
-+	force_sig_bnderr((void __user *)badv, (void __user *)lower,
-+			 (void __user *)upper);
-+
-+out:
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_disable();
-+
-+	irqentry_exit(regs, state);
-+	return;
-+
-+bad_era:
-+	/*
-+	 * Cannot pull out the instruction word, hence cannot provide more
-+	 * info than a regular SIGSEGV in this case.
-+	 */
-+	force_sig(SIGSEGV);
-+	goto out;
-+}
-+
- asmlinkage void noinstr do_bp(struct pt_regs *regs)
- {
- 	bool user = user_mode(regs);
-@@ -952,6 +1050,7 @@ void __init trap_init(void)
- 
- 	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
- 	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
-+	set_handler(EXCCODE_OOB * VECSIZE, handle_bce, VECSIZE);
- 	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
- 	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
- 	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
--- 
-2.40.0
-
+Mrs. Mariam Kouame
