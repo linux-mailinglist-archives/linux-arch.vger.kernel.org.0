@@ -2,94 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B4B6EE9AE
-	for <lists+linux-arch@lfdr.de>; Tue, 25 Apr 2023 23:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106976EEA76
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Apr 2023 01:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236245AbjDYV2g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Apr 2023 17:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S236270AbjDYXBL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 25 Apr 2023 19:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbjDYV2f (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Apr 2023 17:28:35 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADFD729A;
-        Tue, 25 Apr 2023 14:28:27 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-b99f374179bso1896036276.3;
-        Tue, 25 Apr 2023 14:28:27 -0700 (PDT)
+        with ESMTP id S236194AbjDYXBJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Apr 2023 19:01:09 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97FDB21A
+        for <linux-arch@vger.kernel.org>; Tue, 25 Apr 2023 16:01:06 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b99f3aee8e0so7457473276.0
+        for <linux-arch@vger.kernel.org>; Tue, 25 Apr 2023 16:01:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682458106; x=1685050106;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KN4OwG7Q8S0Ej2HKI/K8Bzq4Vn4sob6zcbuKi/+SBdk=;
-        b=Oz4UbWpnj6Eh8d8V1VZ88IAXj/GUdzOFDQ7w7bab738unz4j94g2KIoScKa+JBOCee
-         6AnhR9ro+G/dg6bIlF2wDf9EwKsttEkhVZE4qfSu1PAFYXABo2gReoNJ9t29CBk03uNK
-         WIzhAM11FzK7JQ6v7Dg6EJm6hIrI0Ya4Wmn/Rji2zbxmmJXSTWwOKuszPUH6UmJy61do
-         I16qnR2ojZu0deWpR74s3SB0w9bl8DfCbf/z0dnpeQclzEMH4Srg6RnMUQK9E8ud6W4b
-         TEylmunEnL3QI+CN6gagBCfpGDHnuxJpIC9iHTZv69VdTqdBgfItR3wsUuyqYHmjR+9Z
-         axBQ==
+        d=google.com; s=20221208; t=1682463666; x=1685055666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FCfgX459C+HvVh2FD7e7JZg40F1mOAMJVuhQWLHla/0=;
+        b=C4AljZcb5zSEki65YN1EEhXpKoY2+BQjkZw0lA37fbXw5J94rINcczlcHQKioosXoz
+         QYJO7B3PQHsCBBmLZHmB2bdJerRvszbD8Z0QkB4l66SvwAArYTtc7JH15w/nYT/SE5u5
+         vwm/eMEJk1TY+eEPX82hBLbrKJ9kTJikXcAr57e2kixe1dolatDoyNrc44iwLTBRVolO
+         bfADSu5kj9Pbljxty8CvVBHkrXGW31eBuRDxicojfWBD4NefEdirxSFfQsz+fSqmBEth
+         Qzgwwtz8KWzAJnphFlQcihCJZ0/hpd4K50BVsMO7BpnBpVR4VQKe84Z8OdOHhFvQF7fh
+         tpww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682458106; x=1685050106;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KN4OwG7Q8S0Ej2HKI/K8Bzq4Vn4sob6zcbuKi/+SBdk=;
-        b=RX+z1QSUhFzsvtf9CiKILQAyLWJRsJgJmKHlO7qlDhqCLoJT7Ny1H3Gcim0WcPODxE
-         kvFgXTWPFK2ovF46NlCwTvHWUzppRfZymaE/eo4dOsnObxEayAuQ2XrRBws4rMnFQwLs
-         k9sCCeM5WRVMTwCdfcsBir6HFd1ofjsvgMmEjuiUd28fF9F+1oGkl0UlcPgEholimjlt
-         E12M0NV2qsRIxx5x63w8dnrkJ/h/LTC/wxGtEXPmtbEEcTajcq9g/g7EoOwcY9kmPoF7
-         GvPCX1IzE0Z4tLJgvJFzYir3+/L7r/N89JzsDPVvbmbqklxVSMzgKUUSci3l9c7U72le
-         wZvw==
-X-Gm-Message-State: AAQBX9evgEDI+8da7VbesvOM8wgPn/jDzQGSdQ/N9FmW6zsHHSsAa5eL
-        PImpV5utL6mnpqIQsvadKmk=
-X-Google-Smtp-Source: AKy350ZVCFaWXkFzYXnWip3LB4JLnKNxWp2+EpTCsvVEqE0yp6pu7FPsDxWtnMNKoFBSatYHM/lYuw==
-X-Received: by 2002:a25:4243:0:b0:b75:9a44:5342 with SMTP id p64-20020a254243000000b00b759a445342mr13550844yba.4.1682458106526;
-        Tue, 25 Apr 2023 14:28:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:6cf8:1240:ba8:150e:68:30f0? ([2600:1700:6cf8:1240:ba8:150e:68:30f0])
-        by smtp.gmail.com with ESMTPSA id d134-20020a25e68c000000b00b9949799ce3sm2639289ybh.32.2023.04.25.14.28.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Apr 2023 14:28:26 -0700 (PDT)
-Message-ID: <927ddd10-ae5b-886c-6725-3daf04456e52@gmail.com>
-Date:   Tue, 25 Apr 2023 14:28:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: handling unsupported optlen in cgroup bpf getsockopt: (was [PATCH
- net-next v4 2/4] net: socket: add sockopts blacklist for BPF cgroup hook)
-Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Eric Dumazet <edumazet@google.com>, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        daniel@iogearbox.net, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org,
-        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        bpf <bpf@vger.kernel.org>
-References: <20230413133355.350571-1-aleksandr.mikhalitsyn@canonical.com>
- <20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com>
- <CANn89iLuLkUvX-dDC=rJhtFcxjnVmfn_-crOevbQe+EjaEDGbg@mail.gmail.com>
- <CAEivzxcEhfLttf0VK=NmHdQxF7CRYXNm6NwUVx6jx=-u2k-T6w@mail.gmail.com>
- <CAKH8qBt+xPygUVPMUuzbi1HCJuxc4gYOdU6JkrFmSouRQgoG6g@mail.gmail.com>
- <ZDoEG0VF6fb9y0EC@google.com>
- <a4591e85-d58b-0efd-c8a4-2652dc69ff68@linux.dev>
- <ZD7Js4fj5YyI2oLd@google.com>
- <b453462a-3d98-8d0f-9cc0-543032de5a5f@gmail.com>
- <CAKH8qBusi0AWpo_iDaFkLFPUhgZy7-p6JwhimCkpYMhWnToE7g@mail.gmail.com>
-From:   Kui-Feng Lee <sinquersw@gmail.com>
-In-Reply-To: <CAKH8qBusi0AWpo_iDaFkLFPUhgZy7-p6JwhimCkpYMhWnToE7g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        d=1e100.net; s=20221208; t=1682463666; x=1685055666;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FCfgX459C+HvVh2FD7e7JZg40F1mOAMJVuhQWLHla/0=;
+        b=MZ3rZMvPMx2t6Ve1EoU2AEyEbXn2PA61fo5/p0468gTxjGOuX3Ep2nBdkHf+w2jMs2
+         cQpTi7hzdYk0tbasEOaV2YQTv+UcNhEkr0ZWHXIulr0LGCwF23FVF0Kdfetev2Ue3H7D
+         hiZEfFhc3yYST5ZIU78MONLd+Mh799u+s8DDRsh6tuCslyVJtqqTvTmqaRORrRvtPq/b
+         Z8/hXNUr7UKZv8oFnn14kTlpihqcEAdeBB6XzAn9tyzDDBG0oehApI1ZMjuDQ33N7V1H
+         NhIrff6Y02w+vdgmjdMY0CePvLW8il181Ztd8ufCKKzxqf8QkuQaFm0cM2B3+LsXpPuB
+         qqRA==
+X-Gm-Message-State: AC+VfDxLWOx+54EwOopKJg1GZsUNJ5Bkx18EIl79nc/bZPnLZnXjUIhf
+        tHUcNxWlIYFIARtBJorC/z+U9d6nxf0=
+X-Google-Smtp-Source: ACHHUZ7zn8PbJQ/UuE69mi5lwaIaGdUdtx9hP2cvpdZFHM9mCc7INsMunl92AGHkpHAOjQl1AWoM2QO/O/0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:986:b0:54c:15ad:11e4 with SMTP id
+ ce6-20020a05690c098600b0054c15ad11e4mr342131ywb.0.1682463665939; Tue, 25 Apr
+ 2023 16:01:05 -0700 (PDT)
+Date:   Tue, 25 Apr 2023 16:01:04 -0700
+In-Reply-To: <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
+Mime-Version: 1.0
+References: <ZDnAuGKrCO2wgjlG@google.com> <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
+Message-ID: <ZEhbsHqBapHtdrg7@google.com>
+Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ackerley Tng <ackerleytng@google.com>
+Cc:     chao.p.peng@linux.intel.com, xiaoyao.li@intel.com,
+        isaku.yamahata@gmail.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
+        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
+        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
+        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
+        vannapurve@google.com, yu.c.zhang@linux.intel.com,
+        kirill.shutemov@linux.intel.com, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
+        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,126 +83,129 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 4/25/23 11:42, Stanislav Fomichev wrote:
-> On Tue, Apr 25, 2023 at 10:59 AM Kui-Feng Lee <sinquersw@gmail.com> wrote:
->>
->>
->>
->> On 4/18/23 09:47, Stanislav Fomichev wrote:
->>> On 04/17, Martin KaFai Lau wrote:
->>>> On 4/14/23 6:55 PM, Stanislav Fomichev wrote:
->>>>> On 04/13, Stanislav Fomichev wrote:
->>>>>> On Thu, Apr 13, 2023 at 7:38 AM Aleksandr Mikhalitsyn
->>>>>> <aleksandr.mikhalitsyn@canonical.com> wrote:
->>>>>>>
->>>>>>> On Thu, Apr 13, 2023 at 4:22 PM Eric Dumazet <edumazet@google.com> wrote:
->>>>>>>>
->>>>>>>> On Thu, Apr 13, 2023 at 3:35 PM Alexander Mikhalitsyn
->>>>>>>> <aleksandr.mikhalitsyn@canonical.com> wrote:
->>>>>>>>>
->>>>>>>>> During work on SO_PEERPIDFD, it was discovered (thanks to Christian),
->>>>>>>>> that bpf cgroup hook can cause FD leaks when used with sockopts which
->>>>>>>>> install FDs into the process fdtable.
->>>>>>>>>
->>>>>>>>> After some offlist discussion it was proposed to add a blacklist of
->>>>>>>>
->>>>>>>> We try to replace this word by either denylist or blocklist, even in changelogs.
->>>>>>>
->>>>>>> Hi Eric,
->>>>>>>
->>>>>>> Oh, I'm sorry about that. :( Sure.
->>>>>>>
->>>>>>>>
->>>>>>>>> socket options those can cause troubles when BPF cgroup hook is enabled.
->>>>>>>>>
->>>>>>>>
->>>>>>>> Can we find the appropriate Fixes: tag to help stable teams ?
->>>>>>>
->>>>>>> Sure, I will add next time.
->>>>>>>
->>>>>>> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
->>>>>>>
->>>>>>> I think it's better to add Stanislav Fomichev to CC.
->>>>>>
->>>>>> Can we use 'struct proto' bpf_bypass_getsockopt instead? We already
->>>>>> use it for tcp zerocopy, I'm assuming it should work in this case as
->>>>>> well?
->>>>>
->>>>> Jakub reminded me of the other things I wanted to ask here bug forgot:
->>>>>
->>>>> - setsockopt is probably not needed, right? setsockopt hook triggers
->>>>>      before the kernel and shouldn't leak anything
->>>>> - for getsockopt, instead of bypassing bpf completely, should we instead
->>>>>      ignore the error from the bpf program? that would still preserve
->>>>>      the observability aspect
->>>>
->>>> stealing this thread to discuss the optlen issue which may make sense to
->>>> bypass also.
->>>>
->>>> There has been issue with optlen. Other than this older post related to
->>>> optlen > PAGE_SIZE:
->>>> https://lore.kernel.org/bpf/5c8b7d59-1f28-2284-f7b9-49d946f2e982@linux.dev/,
->>>> the recent one related to optlen that we have seen is
->>>> NETLINK_LIST_MEMBERSHIPS. The userspace passed in optlen == 0 and the kernel
->>>> put the expected optlen (> 0) and 'return 0;' to userspace. The userspace
->>>> intention is to learn the expected optlen. This makes 'ctx.optlen >
->>>> max_optlen' and __cgroup_bpf_run_filter_getsockopt() ends up returning
->>>> -EFAULT to the userspace even the bpf prog has not changed anything.
->>>
->>> (ignoring -EFAULT issue) this seems like it needs to be
->>>
->>>        if (optval && (ctx.optlen > max_optlen || ctx.optlen < 0)) {
->>>                /* error */
->>>        }
->>>
->>> ?
->>>
->>>> Does it make sense to also bypass the bpf prog when 'ctx.optlen >
->>>> max_optlen' for now (and this can use a separate patch which as usual
->>>> requires a bpf selftests)?
->>>
->>> Yeah, makes sense. Replacing this -EFAULT with WARN_ON_ONCE or something
->>> seems like the way to go. It caused too much trouble already :-(
->>>
->>> Should I prepare a patch or do you want to take a stab at it?
->>>
->>>> In the future, does it make sense to have a specific cgroup-bpf-prog (a
->>>> specific attach type?) that only uses bpf_dynptr kfunc to access the optval
->>>> such that it can enforce read-only for some optname and potentially also
->>>> track if bpf-prog has written a new optval? The bpf-prog can only return 1
->>>> (OK) and only allows using bpf_set_retval() instead. Likely there is still
->>>> holes but could be a seed of thought to continue polishing the idea.
->>>
->>> Ack, let's think about it.
->>>
->>> Maybe we should re-evaluate 'getsockopt-happens-after-the-kernel' idea
->>> as well? If we can have a sleepable hook that can copy_from_user/copy_to_user,
->>> and we have a mostly working bpf_getsockopt (after your refactoring),
->>> I don't see why we need to continue the current scheme of triggering
->>> after the kernel?
->>
->> Since a sleepable hook would cause some restrictions, perhaps, we could
->> introduce something like the promise pattern.  In our case here, BPF
->> program call an async version of copy_from_user()/copy_to_user() to
->> return a promise.
+On Tue, Apr 18, 2023, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> > I agree, a pure alignment check is too restrictive, and not really what I
+> > intended despite past me literally saying that's what I wanted :-)  I think
+> > I may have also inverted the "less alignment" statement, but luckily I
+> > believe that ends up being a moot point.
 > 
-> Having a promise might work. This is essentially what we already do
-> with sockets/etc with acquire/release pattern.
-
-Would you mind to give me some context of the socket things?
-
+> > The goal is to avoid having to juggle scenarios where KVM wants to create a
+> > hugepage, but restrictedmem can't provide one because of a misaligned file
+> > offset.  I think the rule we want is that the offset must be aligned to the
+> > largest page size allowed by the memslot _size_.  E.g. on x86, if the
+> > memslot size is >=1GiB then the offset must be 1GiB or beter, ditto for
+> > >=2MiB and >=4KiB (ignoring that 4KiB is already a requirement).
 > 
-> What are the sleepable restrictions you're hinting about? I feel like
-> with the sleepable bpf, we can also remove all the temporary buffer
-> management / extra copies which sounds like a win to me. (we have this
-> ugly heuristics with BPF_SOCKOPT_KERN_BUF_SIZE) The program can
-> allocate temporary buffers if needed..
+> > We could loosen that to say the largest size allowed by the memslot, but I
+> > don't think that's worth the effort unless it's trivially easy to implement
+> > in code, e.g. KVM could technically allow a 4KiB aligned offset if the
+> > memslot is 2MiB sized but only 4KiB aligned on the GPA.  I doubt there's a
+> > real use case for such a memslot, so I want to disallow that unless it's
+> > super easy to implement.
 > 
->>>>> - or maybe we can even have a per-proto bpf_getsockopt_cleanup call that
->>>>>      gets called whenever bpf returns an error to make sure protocols have
->>>>>      a chance to handle that condition (and free the fd)
->>>>>
->>>>
->>>>
+> Checking my understanding here about why we need this alignment check:
+> 
+> When KVM requests a page from restrictedmem, KVM will provide an offset
+> into the file in terms of 4K pages.
+> 
+> When shmem is configured to use hugepages, shmem_get_folio() will round
+> the requested offset down to the nearest hugepage-aligned boundary in
+> shmem_alloc_hugefolio().
+> 
+> Example of problematic configuration provided to
+> KVM_SET_USER_MEMORY_REGION2:
+> 
+> + shmem configured to use 1GB pages
+> + restrictedmem_offset provided to KVM_SET_USER_MEMORY_REGION2: 0x4000
+> + memory_size provided in KVM_SET_USER_MEMORY_REGION2: 1GB
+> + KVM requests offset (pgoff_t) 0x8, which translates to offset 0x8000
+> 
+> restrictedmem_get_page() and shmem_get_folio() returns the page for
+> offset 0x0 in the file, since rounding down 0x8000 to the nearest 1GB is
+> 0x0. This is allocating outside the range that KVM is supposed to use,
+> since the parameters provided in KVM_SET_USER_MEMORY_REGION2 is only
+> supposed to be offset 0x4000 to (0x4000 + 1GB = 0x40004000) in the file.
+> 
+> IIUC shmem will actually just round down (0x4000 rounded down to nearest
+> 1GB will be 0x0) and allocate without checking bounds, so if offset 0x0
+> to 0x4000 in the file were supposed to be used by something else, there
+> might be issues.
+> 
+> Hence, this alignment check ensures that rounding down of any offsets
+> provided by KVM (based on page size configured in the backing file
+> provided) to restrictedmem_get_page() must not go below the offset
+> provided to KVM_SET_USER_MEMORY_REGION2.
+> 
+> Enforcing alignment of restrictedmem_offset based on the currently-set
+> page size in the backing file (i.e. shmem) may not be effective, since
+> the size of the pages in the backing file can be adjusted to a larger
+> size after KVM_SET_USER_MEMORY_REGION2 succeeds. With that, we may still
+> end up allocating outside the range that KVM was provided with.
+> 
+> Hence, to be safe, we should check alignment to the max page size across
+> all backing filesystems, so the constraint is
+> 
+>     rounding down restrictedmem_offset to
+>     min(max page size across all backing filesystems,
+>         max page size that fits in memory_size) == restrictedmem_offset
+> 
+> which is the same check as
+> 
+>     restrictedmem_offset must be aligned to min(max page size across all
+>     backing filesystems, max page size that fits in memory_size)
+> 
+> which can safely reduce to
+> 
+>     restrictedmem_offset must be aligned to max page size that fits in
+>     memory_size
+> 
+> since "max page size that fits in memory_size" is probably <= to "max
+> page size across all backing filesystems", and if it's larger, it'll
+> just be a tighter constraint.
+
+Yes?  The alignment check isn't strictly required, KVM _could_ deal with the above
+scenario, it's just a lot simpler and safer for KVM if the file offset needs to
+be sanely aligned.
+
+> If the above understanding is correct:
+> 
+> + We must enforce this in the KVM_SET_USER_MEMORY_REGION2 handler, since
+>   IIUC shmem will just round down and allocate without checking bounds.
+> 
+>     + I think this is okay because holes in the restrictedmem file (in
+>       terms of offset) made to accommodate this constraint don't cost us
+>       anything anyway(?) Are they just arbitrary offsets in a file? In
+>       our case, this file is usually a new and empty file.
+> 
+>     + In the case of migration of a restrictedmem file between two KVM
+>       VMs, this constraint would cause a problem is if the largest
+>       possible page size on the destination machine is larger than that
+>       of the source machine. In that case, we might have to move the
+>       data in the file to a different offset (a separate problem).
+
+Hmm, I was thinking this would be a non-issue because the check would be tied to
+the max page _possible_ page size irrespective of hardware support, but that would
+be problematic if KVM ever supports 512GiB pages.  I'm not sure that speculatively
+requiring super huge memslots to be 512GiB aligned is sensible.
+
+Aha!  If we go with a KVM ioctl(), a clean way around this is tie the alignment
+requirement to the memfd flags, e.g. if userspace requests the memfd to be backed
+by PMD hugepages, then the memslot offset needs to be 2MiB aligned on x86.  That
+will continue to work if (big if) KVM supports 512GiB pages because the "legacy"
+memfd would still be capped at 2MiB pages.
+
+Architectures that support variable hugepage sizes might need to do something
+else, but I don't think that possibility affects what x86 can/can't do.
+
+> + On this note, it seems like there is no check for when the range is
+>   smaller than the allocated page? Like if the range provided is 4KB in
+>   size, but shmem is then configured to use a 1GB page, will we end up
+>   allocating past the end of the range?
+
+No, KVM already gracefully handles situations like this.  Well, x86 does, I assume
+other architectures do too :-)
+
+As above, the intent of the extra restriction is so that KVM doen't need even more
+weird code (read: math) to gracefully handle the new edge cases that would come with
+fd-only memslots.
