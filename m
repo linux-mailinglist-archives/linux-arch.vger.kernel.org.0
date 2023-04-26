@@ -2,65 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A6B6EF8BE
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Apr 2023 18:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB7B6EF8BA
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Apr 2023 18:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbjDZQvd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Apr 2023 12:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
+        id S231397AbjDZQvG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Apr 2023 12:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbjDZQvb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Apr 2023 12:51:31 -0400
+        with ESMTP id S233560AbjDZQvE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Apr 2023 12:51:04 -0400
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4CA7EFC;
-        Wed, 26 Apr 2023 09:51:11 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QEiQag003816;
-        Wed, 26 Apr 2023 16:50:08 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9405F7EC8;
+        Wed, 26 Apr 2023 09:50:54 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33QEiVjL023324;
+        Wed, 26 Apr 2023 16:50:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=k5APzXW/ZudHfSFqhzk49VAejkMZvRzADzPwN1MsmQk=;
- b=BtTlHT82OJd+muyZdKptmotc8VtIEt9/5r3DTc1YQRwO7hUcSXoIcl50xwW4I8FxqTif
- jqr5XweMI1+yxcDmlVN8SaU0iqglTY7J/zpLRaeVejdReYW7oN10lGGPv/7mnz7Gu9L2
- jksgcpNwyn2eHjQ79jXglqUs2ejk4tnQwiE40GfbXRdmA2EdQxRVBqtN6m4oQR1+RSv5
- MWCo0I6AOody2hjSHP5zuPPW4TtmlZ56BfOQkH4Ba6tNgv2w3fz5CfxUIE4oZJADvaOp
- gVLWYp7d7gGC5JxA8KE1TZu+UQ4KdqI4ay0cp1/ezQ4oJgShfXZd0xjNmN7QuxkxFTiY 0g== 
+ s=corp-2023-03-30; bh=Edtv/rXrLh+RAvkBVKVzY+P/b5NeCvWwYrh6g8zNRzA=;
+ b=JCV9Qq1P25GXfMMotXyEYJB8t/PKsrYZcBtFYw4ou4ExrS/KW792k7+fuFX7O6L6m0Om
+ TfRUj+ZiGqG/shJOIRom5va//tnsbDZkHWCrto7pMUdpb29f0gBwlPRBkwZPMqUMgb1O
+ a1UaTmeXJdHcpyHVzV7DGP3p53DpPte+nAB8rurx/xn3CzF/ZB/6mGzl2pbzlD7Sfxg3
+ Ote9nR6KfSjOplddXTLomuQMZVe7TbBXutlUThARguS+tb/cknZezOnDN6MOLZNncOUD
+ McyKa2cOY0IOldPjvMInI2mm41/GFfVqgHKuXepxe4Y8MMdv8+0wg3Nbkk9cpZckDBg3 9w== 
 Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q484usxpj-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3q466222sq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Apr 2023 16:50:09 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QFfqVM032877;
+        Wed, 26 Apr 2023 16:50:08 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2042.outbound.protection.outlook.com [104.47.57.42])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618dqt0-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Wed, 26 Apr 2023 16:50:08 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 33QFfqVL032877;
-        Wed, 26 Apr 2023 16:50:07 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2042.outbound.protection.outlook.com [104.47.57.42])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3q4618dqt0-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Apr 2023 16:50:07 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BZWPlwczlKUjolSGUggemrBBvNFmyg7x0RZpTFEpaPX1OFm8rxpfgq6Ungb1UNLjnywsmxfu2UPJOVd3yiKOal854CoCTipeWd2lq3A1Kpyeuxw3pB76wAkfg0vVeBJanQEaGZHvSB6YjPC6eT8RVzonDRmVY7ZJhekOt88uGA35BpjJoCspX4vyGHyIrpwtOfkoMyb8k1aaRkpYZD6iiuWptaGWha0Ev+w8Z6Xxybceu2EDf/ZVNUd0YMXlDYPTctPOPcP/z+2OakkJxe+mBqMNskCPl4O0pvgmEVRl8YhcfuWKngaI77x4h7K5GrXU2CCxTpjUUCu7svW8Ii/AyA==
+ b=dYSyv1rLsAn1vstsYdXPlvQv9fBdduLsZYebQZTyQtseC9rso0RAPPWoFa7R4NOHok9JMOcAerk29Q7vrFo0xzKeAkUWDXcOHgmIQ/Y1NvZeEgFB0mCscNJq8OHQqBVmVx7dmcZBmzk+nvycFWIDx61IJ47W4urxwmYMSDXXJbnG1xDQFr2HeBb0zNS3NT0AdaBO5QM7s75Orl+aL0CzZCq62u6qhJwo31KS1saM/4KasekTykbds7h/FAl/qQRzhLl+omAnM9ntop/Lka11+6uyOX59kMKGUtqwB6K8rmk3Snpk2yTcXCYXix9Z5gdh1xGLs+vGKXeDOE+XsvK44g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k5APzXW/ZudHfSFqhzk49VAejkMZvRzADzPwN1MsmQk=;
- b=J3Gp6krS1peVROKEc4tltzGIhkvO42MIcDJRPC4bu1c52gK4N5tLBb7g7/unyy7B9p+KY06d2xIjalj7+xh0oRQhVYH9jEBV9rFxiGRq1HphugmD3K4tjhohtD+J2d6WIYU8Zf33eGFicxc2K1yWybrkxOWcZiVhs3j5I82WXGXU9DkRSWHHwr6yXQY1ygd+35AWn/B/PDVVAA2pQQrkEjktKklGvxMs5DKwsOx9lWsSnT/md5mHknNcFYpv0YvlEmKeAUwBUGPcVVjQK/5q8/MBbMf26sNxyXwSsX6XYy9ZK9pZN4dQDhd1pP0NM6ngrJmpfV3CemNLqPzEN7fZ+Q==
+ bh=Edtv/rXrLh+RAvkBVKVzY+P/b5NeCvWwYrh6g8zNRzA=;
+ b=lLKN1nrUJZox0qbgV/UX59cVN5LSx6+y5wQXYu2MO/78toIOeRPj6d/VpufymGiPF2zXQ0JTMrS89u4FMb9KXYAWOqHPEaM25QzU/60VmRz3zH7gQPdQXQMbvFNeDLueUB1PGG41NhALBNkfEgkOUwo5ub3zmarlhOMSVB6gVqdG4/fO9C5qdusxJAKO012CTCcOOcFqpWfExlJtU9r1428/qXRC2lX9v4yec9bxbAqIJhxUdt7Gb+3nQN52Wk6MUDkJPk5EJJPLJ2P3Pv2zLXeogkaMfB5JUcOWqD+aEVZA8T+ga4WT2UJ78CQ6HpiJWGnDGYxzEqcuWLR0RXwuMg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k5APzXW/ZudHfSFqhzk49VAejkMZvRzADzPwN1MsmQk=;
- b=gY0ipTXiaDjOCOtaC4eLVtmqXNCVfZoFdjZx+p5jXEck0NlevNO5MlPcEKp3tztXAD2kXCh4Oi64AaE88hCdBXsAxJ94PRYfHEJ/8MR7yKaYzGLzxtslrhfrq19jZDH9m2x8Dh+Y69jenmHgCgDT0uZp86zqmK5Nx0rBArJeV10=
+ bh=Edtv/rXrLh+RAvkBVKVzY+P/b5NeCvWwYrh6g8zNRzA=;
+ b=C1RkdcZ1Yqal+dDCB/o5M9vEIIxDLmIIxlYLNqitPC0rQcNGwEZmHiMV2xM0NTDX6IhApXEQHc0RCaa1NC8HhzbRIQtWMgZowPLORStw9/InvEqsrfRG9uG8yIre3kGVjAu8Q5IS8XkPWU81UzJM8V6t0JnwEPVauSn+9r8ay+w=
 Received: from CH3PR10MB6810.namprd10.prod.outlook.com (2603:10b6:610:140::15)
  by IA0PR10MB6913.namprd10.prod.outlook.com (2603:10b6:208:433::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.21; Wed, 26 Apr
- 2023 16:50:02 +0000
+ 2023 16:50:04 +0000
 Received: from CH3PR10MB6810.namprd10.prod.outlook.com
  ([fe80::ba49:e5dd:6a80:37ae]) by CH3PR10MB6810.namprd10.prod.outlook.com
  ([fe80::ba49:e5dd:6a80:37ae%5]) with mapi id 15.20.6340.021; Wed, 26 Apr 2023
- 16:50:02 +0000
+ 16:50:04 +0000
 From:   Khalid Aziz <khalid.aziz@oracle.com>
 To:     akpm@linux-foundation.org, willy@infradead.org,
         markhemm@googlemail.com, viro@zeniv.linux.org.uk, david@redhat.com,
@@ -72,98 +72,98 @@ Cc:     Khalid Aziz <khalid.aziz@oracle.com>, andreyknvl@gmail.com,
         linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
         vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
         neilb@suse.de, maz@kernel.org
-Subject: [PATCH RFC v2 3/4] mm/ptshare: Create new mm struct for page table sharing
-Date:   Wed, 26 Apr 2023 10:49:50 -0600
-Message-Id: <1fd52581f4e4960a4d07cb9784d56659ec139d3c.1682453344.git.khalid.aziz@oracle.com>
+Subject: [PATCH RFC v2 4/4] mm/ptshare: Add page fault handling for page table shared regions
+Date:   Wed, 26 Apr 2023 10:49:51 -0600
+Message-Id: <9edffd2a12a049a42d9a2c216e3f999aae7e65a4.1682453344.git.khalid.aziz@oracle.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
 References: <cover.1682453344.git.khalid.aziz@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SN6PR05CA0003.namprd05.prod.outlook.com
- (2603:10b6:805:de::16) To CH3PR10MB6810.namprd10.prod.outlook.com
+X-ClientProxiedBy: SN6PR05CA0025.namprd05.prod.outlook.com
+ (2603:10b6:805:de::38) To CH3PR10MB6810.namprd10.prod.outlook.com
  (2603:10b6:610:140::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CH3PR10MB6810:EE_|IA0PR10MB6913:EE_
-X-MS-Office365-Filtering-Correlation-Id: 031d9564-3c56-4b34-db61-08db46764722
+X-MS-Office365-Filtering-Correlation-Id: 25d7728f-6416-4b0e-993c-08db467648ac
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8Kaqs+Hvx6YnhsT33GzL7LJWvKbkjiJiiyoEMm/tE/Vuiir+rgPiZMKvT7fh4ONq61XS1Uf1YEKowIkj/9SV9p89x/FQb4PsMQGMFe5eNOjEfvk6K9QZ0zGWDme3ao+HOHbUbSA69Rpb2YO+c+DxekHd0VeiH0p2R/VUz7eRQqwZyhxzx9zvhu0PiA6AWNW/z83KMj+3voV2zKKsnXeApR5eCxspwriUK78bS2z/DKuUq7WlQjqf0ZZepgz/fBH97Om8cCyXFgGKWqUq+SbMNTwcBuDnt2hqVvlHe8G2Ln55u/xQ1e3lWdJxSpzoDyKPzvBISQVrNEsjyVOcq2qhxbW0GZf0RPaYKaO9ROcWP4zpbeTsm55xm/vVdShlqWMne//ohYwksDkSXA40hlNY7yiKsGMYwPT0hM7rPtfWQu8PCkiF4FsP8aRTQayLCblw3ka+ZjY1EfXg+FBbliBuxSiiHjmTXS3DswEslsggl8Dx82BSPUwlg7ZrSG0njlfy9+mDWW2UuHmgMvOz8sCu2gqktMa2edA6IM81g5OUGInTyzm0aqm+oM3M/rBDCkZ/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB6810.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(376002)(136003)(396003)(346002)(451199021)(6666004)(478600001)(83380400001)(2616005)(6506007)(186003)(36756003)(26005)(6512007)(38100700002)(86362001)(6486002)(41300700001)(316002)(66556008)(66946007)(66476007)(7416002)(4326008)(6636002)(2906002)(44832011)(8676002)(8936002)(5660300002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: SlXtSbuCvg3oE1KP4T5XlxTpikrTsx5uosMfDbpWDOjrs2PVBEk3LOhAf+df6SMPGQft3qDskPVV8d6Jrw3Xx8Q7Cdx0gSIaWesuVBpuB1c8wkMEu4Xx+CqB1BodI8VG3FH/1bkFz8zDmi8cezBTyzfMm0Bv3+etWK2B2LJpXWLZLpUtvNhVB3K2XYKmbN7jEhV553vtaN3HbaKFjVbdaew+ZSk8VBbtb6iolQgtOT2Sn3hu1wVlwT997e3YJmn29MWLintjcdqWzlZWa3iTdlNdKztK7ZtvusELt5D+8L3zJBFK3FEmvE/5A4peCie6wh5ugN9myR7HvTVzeqrR/LaGMXAZjJds7n+reEYl6Rly5Mp+xTnySsz5nWQ52q3FSDeYDlOhHtoeTjiisxlPzhMssw7JgMk9K4zVxoJPLEPagmX/srqMr54dzucs2jW1zd4XIpPMYrNpp1ZwOAjTLdxeGxxPY3a7fmb2QPnbg/5R+lulFmGBd7SMWF3U8lWbX+zYv4KhSekCrSW1FDmXNonqidGKj6j06z6NARL53fjPZkovaXJAqRQ+nvho/NwV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB6810.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(376002)(136003)(396003)(346002)(451199021)(6666004)(478600001)(83380400001)(2616005)(6506007)(186003)(36756003)(26005)(6512007)(38100700002)(86362001)(6486002)(41300700001)(316002)(66556008)(66946007)(66476007)(7416002)(4326008)(6636002)(2906002)(30864003)(44832011)(8676002)(8936002)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?82zRG2GBDOnMSvuvHnHMCYQZHvtp5npV9L4sWmU21IRIu9Bp1HAAGKP7yrbw?=
- =?us-ascii?Q?zMuaCYQlvnH7+o1MCHSUBRAA4BvMH63NrDRvxUBJx03blPIkmMCBGjMnVDkb?=
- =?us-ascii?Q?STIJQav9gbg85FRigckQqlblBGlySKbXyS/z/khIFfPixviz2KBXQ6shIu+/?=
- =?us-ascii?Q?vYuGr3GTngcZpRUnjJC/ITFBEdO5ayEMSvj1jGpnNMQ6tbQuLx0MKBnQbe+x?=
- =?us-ascii?Q?43hhEOCKMlbEX3uKMn9eAmLfOq1YOVkvnnUdLsdsqFYtClXjjNfWe4I1sWpF?=
- =?us-ascii?Q?E1u04VGJ4XNbYNfz78hOKLlTah+YxyT/Qywl/ZvnAbtUArutWjc5zzt+s3RL?=
- =?us-ascii?Q?Wi+87XavxqvTtpss5v8JBs1z71YT583XWPxM8RkhHr6KTLOGWQMaNSq/ml13?=
- =?us-ascii?Q?u/qBMyFdUbWvRXk/VOVO1V/s3VnoShiPTrE4VxrAEOltB1QlEalZ6yaWaqHB?=
- =?us-ascii?Q?rydhPXUvOCIjIbNL0FVJyESMhQa5Rbao8R4gWv6n0G+kuvAO8rREx7088LXp?=
- =?us-ascii?Q?wPKEN9e6CkdmBRuIJFUi8v4NWXtMPuMdB7Omph6vZWb8MNIdeYkeA8lkU42S?=
- =?us-ascii?Q?k6yN1hjHA9x0cNOtSI6yfDS2K8A5SBqaog2gDnfF7IxTaQVzakGjwIiQy+jA?=
- =?us-ascii?Q?GVzeUvX44RV1LjiI+Rnf6vsWGhsexJerOzhAWgaj8TE7E/WnNkbPCHA8TqFQ?=
- =?us-ascii?Q?401G3CzprTHckqtKV9FoUr80ajGVoh8MYGeyp2OOFsj+bZKKgHV2b9uyAgXc?=
- =?us-ascii?Q?jnsXAqApGkIiRSfrPDlYhiPakz1I0wFdJuGgNngwNBncO5AEGrLRuOJ6Hzho?=
- =?us-ascii?Q?vsLf/Eb2VrKENhvDpQR/b+puotb5Vl6Uyq3K4gxvdfK6FsXs1fwRm6typBJ1?=
- =?us-ascii?Q?yJhnQV/oUWsmsTK1orJ/3A8H2XO7bC6GcpplH2jp7tp++Y0M10hD1mSI9mLM?=
- =?us-ascii?Q?H0fsqfeAxp4RJaplm5fCmN16LBGXfx6AjKMmjY2g8ad/FdfcdxWur6zItmqk?=
- =?us-ascii?Q?CEl9aIpEQWiQg2TU6dtEQQ/bco84LMzU7cIl8nOiVCdm2FHy3kpuwd1fNejK?=
- =?us-ascii?Q?YiqXhpHVeE6/4OZVGp84jNvx7oUQfLZFPHfBv9UyndWuYq31Z9/dUI+WHM3N?=
- =?us-ascii?Q?GJfsemmH7uI3EX/MKVh2j7Jt3qYccfxqm5fcBJvfRETRuecL7coFmOX41IS7?=
- =?us-ascii?Q?jqdnnUE4SLJ1J1rzEb5iPJsV+lkWYv4sxHdKWgjER459jCX5vju6IoQoXDrJ?=
- =?us-ascii?Q?LQZmRpPG/ykHZrj8BQh5/AOy0rohB4lNGAwunbcoUTtjLTYZSGHobcTKGuxw?=
- =?us-ascii?Q?2aBZDHfq/ZL1imv7O6p54vz9cf867dO5q4WdQnuGewEoOCS2SjaFtc5TAEu5?=
- =?us-ascii?Q?Wkg7YHzMsqQntqzz7kJ7rLP0FzE5Ex1GHEXRAHld/diQgxKmJKUayNr5l64x?=
- =?us-ascii?Q?gRmxmtV35gtvTPq20kR+e7iEXdpLJY8PU+Zoi0UVUukCjS3uTwYyTx3pzv1P?=
- =?us-ascii?Q?f3cfX6X5FuO9+kUNgQLr7IfK6evKcA2LUvkjj0526j1rNRBzd6C5Vi/qC15R?=
- =?us-ascii?Q?4j70cG0qkcctNXIzrXFdsazNsAsTbKVIWX/SpgpE?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dN0+s8UPOkkdwjUbnryl58VNinOjU2g29ZxoPPRStJTd/Uh/Ku5+bUOc9pPv?=
+ =?us-ascii?Q?jXZaMFjvNdTb6wOjzgUNGjwbw1WtdwNg1FuiIZP6p7o+4R87/DyeYOxW5xy2?=
+ =?us-ascii?Q?dEmaOZ45UXibM/rjH0Dby6JSN3/Eqgf2ja7hoJqZS6bbaDLunV49E1B8MOSW?=
+ =?us-ascii?Q?61NQFafTwIKgRDGvmd2DHlBlwp+qMwwR01oPEHw0HZaTMndYmrMLAaepuHAL?=
+ =?us-ascii?Q?VB5B5FgKl6sMGLEFQUM0c90unxi+Wmrf8Okj4m/dIF6kp8UdJFdBmmV4R33T?=
+ =?us-ascii?Q?3mmrIqwWeYZerk/gKn3mAevMwHofnNWh92/KwJhV60ajOjr8fhxq/ajcjJW1?=
+ =?us-ascii?Q?vq7W/UJcODWBRGw2FsbbXu71HO3A1spdYtMRC8+KO1DLk7rISeug/vk4dMxh?=
+ =?us-ascii?Q?T9A/t3xdl/ZEZF3ILG6UjAqLzaLg7MMXajgEbfe0q1bdPMFpKTFkfal+augI?=
+ =?us-ascii?Q?3XPpBpOUc1eq9471zdvmDZuYBRMgGLNlYPM/SRekB4HCW+IbCrgoAAqYAoLf?=
+ =?us-ascii?Q?En12jEGs7eeM/+Uj8VnPG3KpgwTx986MFyzxoJFge7VAE5MPQtEaAxTzavIF?=
+ =?us-ascii?Q?m3PaB7SwCLj0eCJJiTtVyMtLdUop0uXQ+JJ/geYmxa5Vgttll+yELWNH0Jfx?=
+ =?us-ascii?Q?1MfX8vm4CLYRj67fr66vo/QM8VBL+zBH6luVCMdQXXAfdxMd/DbwgMj1+BqG?=
+ =?us-ascii?Q?m4yTGfIh1VwN+ZlKSfs/4XNsSP06wt16Cg5IIwbEEws1XsLvevaZuliv8vTa?=
+ =?us-ascii?Q?q680Dt/a1lCASvkjwxzxo04c39XDINqOqRAdrZaiQMpFrxajw6oTTto0bfmt?=
+ =?us-ascii?Q?6CIDeju7jUE24drcK9s3p6nSbzXX/7uGc2VthbxVS3GAzWlmHDT9/XNTdXe6?=
+ =?us-ascii?Q?WY3xaORX2vmiBg60oK6umPG2zJXQeoIBLQwZZY4U86gqs2kTwRLJN6ImWqhs?=
+ =?us-ascii?Q?ZOZaN5JDavfsbk40PKQ6L5cW2YyhndMdTRlje5yYCHwBDZmoV8QMcm6HZIL+?=
+ =?us-ascii?Q?rDTiNH/GYrRwXpenfvSf2rFvyVnqBypAwaSHqjnN0gwIk4GiLDTcUXD9t8At?=
+ =?us-ascii?Q?bdgEOkmIu77oWEIrBiaN8RPeeoS20aWh8ng4+nEA5sBcyRM/UjfK3/sWjZs+?=
+ =?us-ascii?Q?BYdUUQWKS4Qq2v3L2fGvXT7/Ii3XFHYrKELwgHFnNYBKedGP9Yavx2DCcP9E?=
+ =?us-ascii?Q?FC+cQtd0jPQhPCBRTWfdqdniDGePSl4EeSqBT2Q0HCSAutjjx+DPGr3vzFKi?=
+ =?us-ascii?Q?kCaPLEZ/mdF3Zf6KOE1UJESCH/H9WN76ryCUje6kYEufUbuppWhtBC7xS71u?=
+ =?us-ascii?Q?O/A2Jx0sey094kjHlvjBirt7QaTbQn9P6oihW647ZKH02ydgzZmBTZY+CBkf?=
+ =?us-ascii?Q?WefIiZra7mY0B1giA5cG/ZuWrkU+oVDXQNWHzkblqBkZWvT5rt0Jbh+dmhEn?=
+ =?us-ascii?Q?7armKzVdHbLTc4n1+U0Z/e21AiC3hyJHTBGzcvgE1FC1yGE6M48UpX2cahC5?=
+ =?us-ascii?Q?9E/NRh+6SK1sqzi9pabNpIvf3VjZR8NtapdpR55E4t1xQ7m0OKQizu8dTbTO?=
+ =?us-ascii?Q?15S1/xDBmpoUeSkVvc4Krk6jqm9G68llkpkJh8UE?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?ECB2OBmhAKVVQgHXYIBoI3/hlHgCauvfqHGZ69z2lM9tj8KDpGLWFtAgaeMF?=
- =?us-ascii?Q?T3ed3TSu0VIhF+qQrYRlh7Z3tSzubAjovWTjl4GRy1S9hC0PZ+Cfx7WoK2j9?=
- =?us-ascii?Q?DFYcMwUpb0QgfhbczlfUzpwDOBVBliXTuOsMJkBlOt9UtYhVTsCg21MgF7y3?=
- =?us-ascii?Q?xosY4zEKNso3oxKBnXjHcnIHyFH/Bc4GU/sZHCFLM4SzxgNpcPanxnbZv/qs?=
- =?us-ascii?Q?NsSen/GM1XLb26VgCZpekkY8VWUl7lO9EGxWeGPR0d+xDPBylWgN6+XXfVYx?=
- =?us-ascii?Q?l8tb0sQKw+/Vrg2uMvhjkxk3GCtlYy/EqNCzX+jsu45M1ekmx9OdxJ68SHs/?=
- =?us-ascii?Q?vDalPsNma/h8XVz2HpserpPRGLvRsdxRQt4bLrZEVN2ZuUU21MbBYQWUBe7G?=
- =?us-ascii?Q?/VN4ckjOcNJq2ZjqYed48UjkTkAuf42C4filSrhHPkBddfimR92nh/DG7NVm?=
- =?us-ascii?Q?u42RY/KpqI29IWAAINb7hNWGVNVCCp6KEwFtQNmw5Ani3rMgVBWdaNlFEVPS?=
- =?us-ascii?Q?TE/AiG7fxle1WukcpC5/MmXMltMpGOv3oocQxKQFjYV8I5abIb855GDWsz+4?=
- =?us-ascii?Q?OVn/Jw4E9Ib9ATLzgFTsI4k7FgHUinO7vgWkcgx2e/j+dyqiqxY6mDHLKl/G?=
- =?us-ascii?Q?QI2R0xOr5ssH75xYYYIBx3xeqL0tqF4bobXcUA/M8aRDImcdQMlkmuIVgX/P?=
- =?us-ascii?Q?eBjIfLoZMzCHYGTaIOxu17ca1keQKeaPAzndY3g3+aIS2tGq+sl88PlU5Ct4?=
- =?us-ascii?Q?Z68+zFrS4CdADZzUzmq7EMYI8BdQYBzP2VdF/eDQ0o3LQ0ekNjPZXguAiyvi?=
- =?us-ascii?Q?vqymsu5hsnHqOS+RhhbtNtOh6P9OGF3RQkbRMT+a2n38XxBeqkuwAPAqVlbc?=
- =?us-ascii?Q?puNj8oFk/pqrTuxELnWOxBkLY1AdSuvBowZKfz/T4UjQJSJGSS7GHmbactoB?=
- =?us-ascii?Q?mTny+qClCh0ZCAgMY7GMo+UqsGyGxAsPE0sTJnbKIENLB3l5Xf95yiVbcr4B?=
- =?us-ascii?Q?JxP55bFPUpZmZpnASX1SqRSswC5g/gr8HilJknmLqYBIn7/Pp00mzfKUE2hI?=
- =?us-ascii?Q?QxOC0gI4h0An/ZkQtgypP4f403On9tAC25PJn0/gV97YUXvAGHnFo1C/tv6h?=
- =?us-ascii?Q?57m1KYNg2jhX6gYWRTJ1R9qWZC68z825UCHtndypw4ayGrTPCQRQP9chmon6?=
- =?us-ascii?Q?PP7ZHEl6HOPbR8QmLCrSqjQyDwzCb9laZ2mvqSGnTPTSSg9k7R54QT4+1WpJ?=
- =?us-ascii?Q?7K0btMlUsbfbtDb9RDgpFBWxvj2BxG6Sp1DwvwzdkpBGxlvSSatQb1nEtTWq?=
- =?us-ascii?Q?1p3hOJjPpaT/vgi2L6dhmfwQ?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?LLcIZAEun6qq3Ci/TM/UPNMagicFSCoNT8osL62K0UM5alZPuQp1xh/hmFxI?=
+ =?us-ascii?Q?C77Ei5yoJ+NLGlYhU7EPCj/TfKN7sNhOzbFY72N6tWwLWnHuenNFXpS5eeF0?=
+ =?us-ascii?Q?oYSviLZVBBas0mdM6maM4u46OPgzg8y6eOxxWhBgFW8jEm0VUK6Xlsvz8lmg?=
+ =?us-ascii?Q?ZoT72Vb0HCOmL7HSsigT8STfoYldSzPvQrVDYCCovMZasEcm66pd63YSYBbu?=
+ =?us-ascii?Q?JvuWUKCm4L+6Qbf8ZQqIIj26nxA8bc6+Pqnj1oatQ4vXI0wfgIVBS4pAMecy?=
+ =?us-ascii?Q?UtygSkUA/ClyM+VekfMvcsm8V6+egjzuYl+37riYardWovMqQ297UwtiTmBL?=
+ =?us-ascii?Q?qzvcKgDmegOrH+gtgoeFHxYVXR9ekbNQ3sl6WtCW/VwbjZECCD76LaTJspw8?=
+ =?us-ascii?Q?StRKmIj4n4/OAs9/5OKfCpR1ieIsLYCsUbZj0aU2AK0yf/1J2SM0GQ5rxMoH?=
+ =?us-ascii?Q?CUe97qggPQGRJak5KPLRyKphJ0I9Hi6J3pKblnIYdgxj31m7Ge6fGzsQWcTD?=
+ =?us-ascii?Q?8QP9dFKA85E1yIkaRw5Y5uNr33j6vI4yy+ZWuF6vjn2hLE3bAzCeV2Tj9oZG?=
+ =?us-ascii?Q?ap8VuwWG6g2C0CAWvAxnVbKfDC7/ba14+hGe5dqWGfXj1UGdV6/Vnd0GKSE2?=
+ =?us-ascii?Q?XuF32Ajkdyu+s+llFNGgDv5CK/0XOkOMf+CnNUycN0VVhkk2DKOSWm+jCj0s?=
+ =?us-ascii?Q?b77EWGBK3j817AwOpzZLb9OkR1McpjpS21hRtl8+sNUUlgI170OtS292n0Y4?=
+ =?us-ascii?Q?9DbJS1z0B1gl7bJqpht8SEDvAMnitO6j5RD/76bdyVcWVQwSkp5t6Zqb4bAr?=
+ =?us-ascii?Q?X5w/9LhGILNC0pZg+rIe44ANNfxgP77AiF0hoUrelS1qfuV9x6JhH4lKJ85+?=
+ =?us-ascii?Q?m8paHb/dIgoVHNx0opi0a+rsUiiYAnNiZm2b1CwLWCPBzLUFyQiI7JPUSMpt?=
+ =?us-ascii?Q?KbKuGAgL3/UFfXzBYyi+6/fybVAh61uMpveVUof7mzhgB94enM5EQC9TtYfn?=
+ =?us-ascii?Q?9DiiLabm9afOWx+2RPDS3qrehShKuEzPKhd8qxvoq6NkrT6cFcRWpcpOSdit?=
+ =?us-ascii?Q?jXUTIydRWGm5AGvlMoASnZnF9Ea77giWnHswKF6Heocs0GqstqMmhu+LTzvp?=
+ =?us-ascii?Q?hi1KSvTgJqmM/UhBN2fjscxQ06kkhjjiysS/Exa72rt+kq6YTMm5wRvydz/G?=
+ =?us-ascii?Q?JMZcwX8sXkbjCrUrJLxa/C+CCL8hvmCA18nDicaFsF0z2NFMasDJMTOzvA5/?=
+ =?us-ascii?Q?giv4+7VEjgDvx5GGiWZmG7HgtOnZHHLFLRLS8KGfzluWsWL5mnc/EimuTS7V?=
+ =?us-ascii?Q?tXjDO4jqAcTX7LEY/rgcV1+I?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 031d9564-3c56-4b34-db61-08db46764722
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25d7728f-6416-4b0e-993c-08db467648ac
 X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB6810.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 16:50:01.9614
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Apr 2023 16:50:04.5724
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FLFXNEH4JxGr70AT9ZkSmyGYEH4dTtkU3GVC0+U+7dB59Q/WF2ifcONe9+GBDgVaH11e8tvoCUkVRA8YmmIxuQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: uDEt9OqIUnFU9nE0b3x5Cn8ENbel0y8E16/M/aGd1xQhIxv8RKbEwQ+Nkh3O74C6UnVsejjcO/f8LxXFdUZuUw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6913
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-04-26_08,2023-04-26_03,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
- mlxlogscore=933 adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
  definitions=main-2304260148
-X-Proofpoint-GUID: QfGvQnN1CUrTTsoTYA2ChFbpzfNp5H01
-X-Proofpoint-ORIG-GUID: QfGvQnN1CUrTTsoTYA2ChFbpzfNp5H01
+X-Proofpoint-ORIG-GUID: r9sQ-rPi09Y3_H-iTY4u9aOCzyz8DFKw
+X-Proofpoint-GUID: r9sQ-rPi09Y3_H-iTY4u9aOCzyz8DFKw
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -174,312 +174,430 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When a process passes MAP_SHARED_PT flag to mmap(), create a new mm
-struct to hold the shareable page table entries for the newly mapped
-region.  This new mm is not associated with a task.  Its lifetime is
-until the last shared mapping is deleted.  This patch also adds a
-new pointer "ptshare_data" to struct address_space which points to
-the data structure that will contain pointer to this newly created
-mm along with properties of the shared mapping. ptshare_data
-maintains a refcount for the shared mapping so that it can be
-cleaned up upon last unmap.
+Add support for creating a new set of shared page tables in a new
+mm_struct upon mmap of an region that can potentially share page
+tables. Add page fault handling for this now shared region. Modify
+free_pgtables path to make sure page tables in the shared regions
+are kept intact when a process using page table region exits and
+there are other mappers for the shared region. Clean up mm_struct
+holding shared page tables when the last process sharing the region
+exits.
 
 Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/fs.h |   2 +
- mm/Makefile        |   2 +-
- mm/internal.h      |  14 +++++
- mm/mmap.c          |  72 ++++++++++++++++++++++++++
- mm/ptshare.c       | 126 +++++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 215 insertions(+), 1 deletion(-)
- create mode 100644 mm/ptshare.c
+ mm/internal.h |   2 +
+ mm/memory.c   | 105 ++++++++++++++++++++++++++++++------
+ mm/ptshare.c  | 143 ++++++++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 232 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c85916e9f7db..db8d3257c712 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -422,6 +422,7 @@ extern const struct address_space_operations empty_aops;
-  * @private_lock: For use by the owner of the address_space.
-  * @private_list: For use by the owner of the address_space.
-  * @private_data: For use by the owner of the address_space.
-+ * @ptshare_data: For shared page table use
-  */
- struct address_space {
- 	struct inode		*host;
-@@ -443,6 +444,7 @@ struct address_space {
- 	spinlock_t		private_lock;
- 	struct list_head	private_list;
- 	void			*private_data;
-+	void			*ptshare_data;
- } __attribute__((aligned(sizeof(long)))) __randomize_layout;
- 	/*
- 	 * On most architectures that alignment is already the case; but
-diff --git a/mm/Makefile b/mm/Makefile
-index 8e105e5b3e29..d9bb14fdf220 100644
---- a/mm/Makefile
-+++ b/mm/Makefile
-@@ -40,7 +40,7 @@ mmu-y			:= nommu.o
- mmu-$(CONFIG_MMU)	:= highmem.o memory.o mincore.o \
- 			   mlock.o mmap.o mmu_gather.o mprotect.o mremap.o \
- 			   msync.o page_vma_mapped.o pagewalk.o \
--			   pgtable-generic.o rmap.o vmalloc.o
-+			   pgtable-generic.o rmap.o vmalloc.o ptshare.o
- 
- 
- ifdef CONFIG_CROSS_MEMORY_ATTACH
 diff --git a/mm/internal.h b/mm/internal.h
-index 4d60d2d5fe19..3efb8738e26f 100644
+index 3efb8738e26f..924065f721fe 100644
 --- a/mm/internal.h
 +++ b/mm/internal.h
-@@ -1047,4 +1047,18 @@ static inline bool vma_is_shared(const struct vm_area_struct *vma)
- {
- 	return vma->vm_flags & VM_SHARED_PT;
- }
-+
-+/*
-+ * mm/ptshare.c
-+ */
-+struct ptshare_data {
-+	struct mm_struct *mm;
-+	refcount_t refcnt;
-+	unsigned long start;
-+	unsigned long size;
-+	unsigned long mode;
-+};
-+int ptshare_new_mm(struct file *file, struct vm_area_struct *vma);
-+void ptshare_del_mm(struct vm_area_struct *vm);
-+int ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma);
+@@ -1061,4 +1061,6 @@ struct ptshare_data {
+ int ptshare_new_mm(struct file *file, struct vm_area_struct *vma);
+ void ptshare_del_mm(struct vm_area_struct *vm);
+ int ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma);
++extern vm_fault_t find_shared_vma(struct vm_area_struct **vmap,
++				unsigned long *addrp, unsigned int flags);
  #endif	/* __MM_INTERNAL_H */
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 8b46d465f8d4..c5e9b7f6de90 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1382,6 +1382,60 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 	    ((vm_flags & VM_LOCKED) ||
- 	     (flags & (MAP_POPULATE | MAP_NONBLOCK)) == MAP_POPULATE))
- 		*populate = len;
-+
-+#if VM_SHARED_PT
+diff --git a/mm/memory.c b/mm/memory.c
+index 01a23ad48a04..c67318ffd001 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -172,17 +172,28 @@ void mm_trace_rss_stat(struct mm_struct *mm, int member)
+  * has been handled earlier when unmapping all the memory regions.
+  */
+ static void free_pte_range(struct mmu_gather *tlb, pmd_t *pmd,
+-			   unsigned long addr)
++			   unsigned long addr, bool shared_pte)
+ {
+ 	pgtable_t token = pmd_pgtable(*pmd);
+ 	pmd_clear(pmd);
 +	/*
-+	 * Check if this mapping is a candidate for page table sharing
-+	 * at PMD level. It is if following conditions hold:
-+	 *	- It is not anonymous mapping
-+	 *	- It is not hugetlbfs mapping (for now)
-+	 *	- flags conatins MAP_SHARED or MAP_SHARED_VALIDATE and
-+	 *	  MAP_SHARED_PT
-+	 *	- Start address is aligned to PMD size
-+	 *	- Mapping size is a multiple of PMD size
++	 * if this address range shares page tables with other processes,
++	 * do not release pte pages. Those pages will be released when
++	 * host mm that hosts these pte pages is released
 +	 */
-+	if (ptshare && file && !is_file_hugepages(file)) {
-+		struct vm_area_struct *vma;
-+
-+		vma = find_vma(mm, addr);
-+		if (!((vma->vm_start | vma->vm_end) & (PMD_SIZE - 1))) {
-+			struct ptshare_data *info = file->f_mapping->ptshare_data;
-+			/*
-+			 * If this mapping has not been set up for page table
-+			 * sharing yet, do so by creating a new mm to hold the
-+			 * shared page tables for this mapping
-+			 */
-+			if (info == NULL) {
-+				int ret;
-+
-+				ret = ptshare_new_mm(file, vma);
-+				if (ret < 0)
-+					return ret;
-+
-+				info = file->f_mapping->ptshare_data;
-+				ret = ptshare_insert_vma(info->mm, vma);
-+				if (ret < 0)
-+					addr = ret;
-+				else
-+					vm_flags_set(vma, VM_SHARED_PT);
-+			} else {
-+				/*
-+				 * Page tables will be shared only if the
-+				 * file is mapped in with the same permissions
-+				 * across all mappers with same starting
-+				 * address and size
-+				 */
-+				if (((prot & info->mode) == info->mode) &&
-+					(addr == info->start) &&
-+					(len == info->size)) {
-+					vm_flags_set(vma, VM_SHARED_PT);
-+					refcount_inc(&info->refcnt);
-+				}
-+			}
-+		}
++	if (shared_pte) {
++		tlb_flush_pmd_range(tlb, addr, PAGE_SIZE);
++		tlb->freed_tables = 1;
++		return;
 +	}
-+#endif
-+
- 	return addr;
+ 	pte_free_tlb(tlb, token, addr);
+ 	mm_dec_nr_ptes(tlb->mm);
  }
  
-@@ -2495,6 +2549,22 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
- 	if (end == start)
- 		return -EINVAL;
+ static inline void free_pmd_range(struct mmu_gather *tlb, pud_t *pud,
+ 				unsigned long addr, unsigned long end,
+-				unsigned long floor, unsigned long ceiling)
++				unsigned long floor, unsigned long ceiling,
++				bool shared_pte)
+ {
+ 	pmd_t *pmd;
+ 	unsigned long next;
+@@ -194,7 +205,7 @@ static inline void free_pmd_range(struct mmu_gather *tlb, pud_t *pud,
+ 		next = pmd_addr_end(addr, end);
+ 		if (pmd_none_or_clear_bad(pmd))
+ 			continue;
+-		free_pte_range(tlb, pmd, addr);
++		free_pte_range(tlb, pmd, addr, shared_pte);
+ 	} while (pmd++, addr = next, addr != end);
  
-+	/*
-+	 * Check if this vma uses shared page tables
-+	 */
-+	vma = find_vma_intersection(mm, start, end);
-+	if (vma && unlikely(vma_is_shared(vma))) {
-+		struct ptshare_data *info = NULL;
-+
-+		if (vma->vm_file && vma->vm_file->f_mapping)
-+			info = vma->vm_file->f_mapping->ptshare_data;
-+		/* Don't allow partial munmaps */
-+		if (info && ((start != info->start) || (len != info->size)))
-+			return -EINVAL;
-+		ptshare_del_mm(vma);
+ 	start &= PUD_MASK;
+@@ -210,13 +221,19 @@ static inline void free_pmd_range(struct mmu_gather *tlb, pud_t *pud,
+ 
+ 	pmd = pmd_offset(pud, start);
+ 	pud_clear(pud);
+-	pmd_free_tlb(tlb, pmd, start);
+-	mm_dec_nr_pmds(tlb->mm);
++	if (shared_pte) {
++		tlb_flush_pud_range(tlb, start, PAGE_SIZE);
++		tlb->freed_tables = 1;
++	} else {
++		pmd_free_tlb(tlb, pmd, start);
++		mm_dec_nr_pmds(tlb->mm);
 +	}
-+
-+
- 	 /* arch_unmap() might do unmaps itself.  */
- 	arch_unmap(mm, start, end);
+ }
  
-@@ -2664,6 +2734,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+ static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
+ 				unsigned long addr, unsigned long end,
+-				unsigned long floor, unsigned long ceiling)
++				unsigned long floor, unsigned long ceiling,
++				bool shared_pte)
+ {
+ 	pud_t *pud;
+ 	unsigned long next;
+@@ -228,7 +245,8 @@ static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
+ 		next = pud_addr_end(addr, end);
+ 		if (pud_none_or_clear_bad(pud))
+ 			continue;
+-		free_pmd_range(tlb, pud, addr, next, floor, ceiling);
++		free_pmd_range(tlb, pud, addr, next, floor, ceiling,
++				shared_pte);
+ 	} while (pud++, addr = next, addr != end);
+ 
+ 	start &= P4D_MASK;
+@@ -250,7 +268,8 @@ static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
+ 
+ static inline void free_p4d_range(struct mmu_gather *tlb, pgd_t *pgd,
+ 				unsigned long addr, unsigned long end,
+-				unsigned long floor, unsigned long ceiling)
++				unsigned long floor, unsigned long ceiling,
++				bool shared_pte)
+ {
+ 	p4d_t *p4d;
+ 	unsigned long next;
+@@ -262,7 +281,8 @@ static inline void free_p4d_range(struct mmu_gather *tlb, pgd_t *pgd,
+ 		next = p4d_addr_end(addr, end);
+ 		if (p4d_none_or_clear_bad(p4d))
+ 			continue;
+-		free_pud_range(tlb, p4d, addr, next, floor, ceiling);
++		free_pud_range(tlb, p4d, addr, next, floor, ceiling,
++				shared_pte);
+ 	} while (p4d++, addr = next, addr != end);
+ 
+ 	start &= PGDIR_MASK;
+@@ -284,9 +304,10 @@ static inline void free_p4d_range(struct mmu_gather *tlb, pgd_t *pgd,
+ /*
+  * This function frees user-level page tables of a process.
+  */
+-void free_pgd_range(struct mmu_gather *tlb,
++static void _free_pgd_range(struct mmu_gather *tlb,
+ 			unsigned long addr, unsigned long end,
+-			unsigned long floor, unsigned long ceiling)
++			unsigned long floor, unsigned long ceiling,
++			bool shared_pte)
+ {
+ 	pgd_t *pgd;
+ 	unsigned long next;
+@@ -342,10 +363,18 @@ void free_pgd_range(struct mmu_gather *tlb,
+ 		next = pgd_addr_end(addr, end);
+ 		if (pgd_none_or_clear_bad(pgd))
+ 			continue;
+-		free_p4d_range(tlb, pgd, addr, next, floor, ceiling);
++		free_p4d_range(tlb, pgd, addr, next, floor, ceiling,
++				shared_pte);
+ 	} while (pgd++, addr = next, addr != end);
+ }
+ 
++void free_pgd_range(struct mmu_gather *tlb,
++			unsigned long addr, unsigned long end,
++			unsigned long floor, unsigned long ceiling)
++{
++	_free_pgd_range(tlb, addr, end, floor, ceiling, false);
++}
++
+ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
+ 		   struct vm_area_struct *vma, unsigned long floor,
+ 		   unsigned long ceiling)
+@@ -375,16 +404,20 @@ void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
+ 		} else {
+ 			/*
+ 			 * Optimization: gather nearby vmas into one call down
++			 * but make sure vmas not sharing page tables do
++			 * not get combined with vmas sharing page tables
+ 			 */
+ 			while (next && next->vm_start <= vma->vm_end + PMD_SIZE
+-			       && !is_vm_hugetlb_page(next)) {
++			       && !is_vm_hugetlb_page(next)
++			       && (vma_is_shared(next) == vma_is_shared(vma))) {
+ 				vma = next;
+ 				next = mas_find(&mas, ceiling - 1);
+ 				unlink_anon_vmas(vma);
+ 				unlink_file_vma(vma);
  			}
+-			free_pgd_range(tlb, addr, vma->vm_end,
+-				floor, next ? next->vm_start : ceiling);
++			_free_pgd_range(tlb, addr, vma->vm_end,
++				floor, next ? next->vm_start : ceiling,
++				vma_is_shared(vma));
  		}
+ 		vma = next;
+ 	} while (vma);
+@@ -5181,6 +5214,8 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+ 			   unsigned int flags, struct pt_regs *regs)
+ {
+ 	vm_fault_t ret;
++	bool shared = false;
++	struct mm_struct *orig_mm;
  
-+		if (vm_flags & VM_SHARED_PT)
-+			vm_flags_set(vma, VM_SHARED_PT);
- 		vm_flags = vma->vm_flags;
- 	} else if (vm_flags & VM_SHARED) {
- 		error = shmem_zero_setup(vma);
-diff --git a/mm/ptshare.c b/mm/ptshare.c
-new file mode 100644
-index 000000000000..f6784268958c
---- /dev/null
-+++ b/mm/ptshare.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Share page table entries when possible to reduce the amount of extra
-+ * memory consumed by page tables
-+ *
-+ * Copyright (C) 2022 Oracle Corp. All rights reserved.
-+ * Authors:	Khalid Aziz <khalid.aziz@oracle.com>
-+ *		Matthew Wilcox <willy@infradead.org>
-+ */
-+
-+#include <linux/mm.h>
-+#include <linux/fs.h>
-+#include <asm/pgalloc.h>
-+#include "internal.h"
-+
-+/*
-+ * Create a new mm struct that will hold the shared PTEs. Pointer to
-+ * this new mm is stored in the data structure ptshare_data which also
-+ * includes a refcount for any current references to PTEs in this new
-+ * mm. This refcount is used to determine when the mm struct for shared
-+ * PTEs can be deleted.
-+ */
-+int
-+ptshare_new_mm(struct file *file, struct vm_area_struct *vma)
-+{
-+	struct mm_struct *new_mm;
-+	struct ptshare_data *info = NULL;
-+	int retval = 0;
-+	unsigned long start = vma->vm_start;
-+	unsigned long len = vma->vm_end - vma->vm_start;
-+
-+	new_mm = mm_alloc();
-+	if (!new_mm) {
-+		retval = -ENOMEM;
-+		goto err_free;
+ 	__set_current_state(TASK_RUNNING);
+ 
+@@ -5191,6 +5226,16 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+ 	if (ret)
+ 		return ret;
+ 
++	orig_mm = vma->vm_mm;
++	if (unlikely(vma_is_shared(vma))) {
++		ret = find_shared_vma(&vma, &address, flags);
++		if (ret)
++			return ret;
++		if (!vma)
++			return VM_FAULT_SIGSEGV;
++		shared = true;
 +	}
-+	new_mm->mmap_base = start;
-+	new_mm->task_size = len;
-+	if (!new_mm->task_size)
-+		new_mm->task_size--;
 +
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info) {
-+		retval = -ENOMEM;
-+		goto err_free;
-+	}
-+	info->mm = new_mm;
-+	info->start = start;
-+	info->size = len;
-+	refcount_set(&info->refcnt, 1);
-+	file->f_mapping->ptshare_data = info;
-+
-+	return retval;
-+
-+err_free:
-+	if (new_mm)
-+		mmput(new_mm);
-+	kfree(info);
-+	return retval;
-+}
-+
-+/*
-+ * insert vma into mm holding shared page tables
-+ */
-+int
-+ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma)
-+{
-+	struct vm_area_struct *new_vma;
-+	int err = 0;
-+
-+	new_vma = vm_area_dup(vma);
-+	if (!new_vma)
-+		return -ENOMEM;
-+
-+	new_vma->vm_file = NULL;
+ 	if (!arch_vma_access_permitted(vma, flags & FAULT_FLAG_WRITE,
+ 					    flags & FAULT_FLAG_INSTRUCTION,
+ 					    flags & FAULT_FLAG_REMOTE))
+@@ -5212,6 +5257,36 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
+ 
+ 	lru_gen_exit_fault();
+ 
 +	/*
-+	 * This new vma belongs to host mm, so clear the VM_SHARED_PT
-+	 * flag on this so we know this is the host vma when we clean
-+	 * up page tables. Do not use THP for page table shared regions
++	 * Release the read lock on shared VMA's parent mm unless
++	 * __handle_mm_fault released the lock already.
++	 * __handle_mm_fault sets VM_FAULT_RETRY in return value if
++	 * it released mmap lock. If lock was released, that implies
++	 * the lock would have been released on task's original mm if
++	 * this were not a shared PTE vma. To keep lock state consistent,
++	 * make sure to release the lock on task's original mm
 +	 */
-+	vm_flags_clear(new_vma, (VM_SHARED | VM_SHARED_PT));
-+	vm_flags_set(new_vma, VM_NOHUGEPAGE);
-+	new_vma->vm_mm = mm;
++	if (shared) {
++		int release_mmlock = 1;
 +
-+	err = insert_vm_struct(mm, new_vma);
-+	if (err)
-+		return -ENOMEM;
++		if (!(ret & VM_FAULT_RETRY)) {
++			mmap_read_unlock(vma->vm_mm);
++			release_mmlock = 0;
++		} else if ((flags & FAULT_FLAG_ALLOW_RETRY) &&
++			(flags & FAULT_FLAG_RETRY_NOWAIT)) {
++			mmap_read_unlock(vma->vm_mm);
++			release_mmlock = 0;
++		}
 +
-+	return err;
-+}
++		/*
++		 * Reset guest vma pointers that were set up in
++		 * find_shared_vma() to process this fault.
++		 */
++		vma->vm_mm = orig_mm;
++		if (release_mmlock)
++			mmap_read_unlock(orig_mm);
++	}
 +
+ 	if (flags & FAULT_FLAG_USER) {
+ 		mem_cgroup_exit_user_fault();
+ 		/*
+diff --git a/mm/ptshare.c b/mm/ptshare.c
+index f6784268958c..e0991a877355 100644
+--- a/mm/ptshare.c
++++ b/mm/ptshare.c
+@@ -13,6 +13,136 @@
+ #include <asm/pgalloc.h>
+ #include "internal.h"
+ 
 +/*
-+ * Free the mm struct created to hold shared PTEs and associated data
-+ * structures
 + */
-+static inline void
-+free_ptshare_mm(struct ptshare_data *info)
++static pmd_t
++*get_pmd(struct mm_struct *mm, unsigned long addr)
 +{
-+	mmput(info->mm);
-+	kfree(info);
++	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
++	pmd_t *pmd;
++
++	pgd = pgd_offset(mm, addr);
++	if (pgd_none(*pgd))
++		return NULL;
++
++	p4d = p4d_offset(pgd, addr);
++	if (p4d_none(*p4d)) {
++		p4d = p4d_alloc(mm, pgd, addr);
++		if (!p4d)
++			return NULL;
++	}
++
++	pud = pud_offset(p4d, addr);
++	if (pud_none(*pud)) {
++		pud = pud_alloc(mm, p4d, addr);
++		if (!pud)
++			return NULL;
++	}
++
++	pmd = pmd_offset(pud, addr);
++	if (pmd_none(*pmd)) {
++		pmd = pmd_alloc(mm, pud, addr);
++		if (!pmd)
++			return NULL;
++	}
++
++	return pmd;
 +}
 +
 +/*
-+ * This function is called when a reference to the shared PTEs in mm
-+ * struct is dropped. It updates refcount and checks to see if last
-+ * reference to the mm struct holding shared PTEs has been dropped. If
-+ * so, it cleans up the mm struct and associated data structures
++ * Find the shared pmd entries in host mm struct and install them into
++ * guest page tables.
 + */
-+void
-+ptshare_del_mm(struct vm_area_struct *vma)
++static int
++ptshare_copy_pmd(struct mm_struct *host_mm, struct mm_struct *guest_mm,
++			struct vm_area_struct *vma, unsigned long addr)
++{
++	pgd_t *guest_pgd;
++	p4d_t *guest_p4d;
++	pud_t *guest_pud;
++	pmd_t *host_pmd;
++	spinlock_t *host_ptl, *guest_ptl;
++
++	guest_pgd = pgd_offset(guest_mm, addr);
++	guest_p4d = p4d_offset(guest_pgd, addr);
++	if (p4d_none(*guest_p4d)) {
++		guest_p4d = p4d_alloc(guest_mm, guest_pgd, addr);
++		if (!guest_p4d)
++			return 1;
++	}
++
++	guest_pud = pud_offset(guest_p4d, addr);
++	if (pud_none(*guest_pud)) {
++		host_pmd = get_pmd(host_mm, addr);
++		if (!host_pmd)
++			return 1;
++
++		get_page(virt_to_page(host_pmd));
++		host_ptl = pmd_lockptr(host_mm, host_pmd);
++		guest_ptl = pud_lockptr(guest_mm, guest_pud);
++		spin_lock(host_ptl);
++		spin_lock(guest_ptl);
++		pud_populate(guest_mm, guest_pud,
++			(pmd_t *)((unsigned long)host_pmd & PAGE_MASK));
++		put_page(virt_to_page(host_pmd));
++		spin_unlock(guest_ptl);
++		spin_unlock(host_ptl);
++	}
++
++	return 0;
++}
++
++/*
++ * Find the shared page tables in hosting mm struct and install those in
++ * the guest mm struct
++ */
++vm_fault_t
++find_shared_vma(struct vm_area_struct **vmap, unsigned long *addrp,
++			unsigned int flags)
 +{
 +	struct ptshare_data *info;
-+	struct file *file = vma->vm_file;
++	struct mm_struct *host_mm;
++	struct vm_area_struct *host_vma, *guest_vma = *vmap;
++	unsigned long host_addr;
++	pmd_t *guest_pmd, *host_pmd;
 +
-+	if (!file || (!file->f_mapping))
-+		return;
-+	info = file->f_mapping->ptshare_data;
-+	WARN_ON(!info);
-+	if (!info)
-+		return;
-+
-+	if (refcount_dec_and_test(&info->refcnt)) {
-+		free_ptshare_mm(info);
-+		file->f_mapping->ptshare_data = NULL;
++	if ((!guest_vma->vm_file) || (!guest_vma->vm_file->f_mapping))
++		return 0;
++	info = guest_vma->vm_file->f_mapping->ptshare_data;
++	if (!info) {
++		pr_warn("VM_SHARED_PT vma with NULL ptshare_data");
++		dump_stack_print_info(KERN_WARNING);
++		return 0;
 +	}
++	host_mm = info->mm;
++
++	mmap_read_lock(host_mm);
++	host_addr = *addrp - guest_vma->vm_start + host_mm->mmap_base;
++	host_pmd = get_pmd(host_mm, host_addr);
++	guest_pmd = get_pmd(guest_vma->vm_mm, *addrp);
++	if (!pmd_same(*guest_pmd, *host_pmd)) {
++		set_pmd(guest_pmd, *host_pmd);
++		mmap_read_unlock(host_mm);
++		return VM_FAULT_NOPAGE;
++	}
++
++	*addrp = host_addr;
++	host_vma = find_vma(host_mm, host_addr);
++	if (!host_vma)
++		return VM_FAULT_SIGSEGV;
++
++	/*
++	 * Point vm_mm for the faulting vma to the mm struct holding shared
++	 * page tables so the fault handling will happen in the right
++	 * shared context
++	 */
++	guest_vma->vm_mm = host_mm;
++
++	return 0;
 +}
++
+ /*
+  * Create a new mm struct that will hold the shared PTEs. Pointer to
+  * this new mm is stored in the data structure ptshare_data which also
+@@ -38,6 +168,7 @@ ptshare_new_mm(struct file *file, struct vm_area_struct *vma)
+ 	new_mm->task_size = len;
+ 	if (!new_mm->task_size)
+ 		new_mm->task_size--;
++	new_mm->owner = NULL;
+ 
+ 	info = kzalloc(sizeof(*info), GFP_KERNEL);
+ 	if (!info) {
+@@ -63,7 +194,7 @@ ptshare_new_mm(struct file *file, struct vm_area_struct *vma)
+  * insert vma into mm holding shared page tables
+  */
+ int
+-ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma)
++ptshare_insert_vma(struct mm_struct *host_mm, struct vm_area_struct *vma)
+ {
+ 	struct vm_area_struct *new_vma;
+ 	int err = 0;
+@@ -80,12 +211,18 @@ ptshare_insert_vma(struct mm_struct *mm, struct vm_area_struct *vma)
+ 	 */
+ 	vm_flags_clear(new_vma, (VM_SHARED | VM_SHARED_PT));
+ 	vm_flags_set(new_vma, VM_NOHUGEPAGE);
+-	new_vma->vm_mm = mm;
++	new_vma->vm_mm = host_mm;
+ 
+-	err = insert_vm_struct(mm, new_vma);
++	err = insert_vm_struct(host_mm, new_vma);
+ 	if (err)
+ 		return -ENOMEM;
+ 
++	/*
++	 * Copy the PMD entries from host mm to guest so they use the
++	 * same PTEs
++	 */
++	err = ptshare_copy_pmd(host_mm, vma->vm_mm, vma, vma->vm_start);
++
+ 	return err;
+ }
+ 
 -- 
 2.37.2
 
