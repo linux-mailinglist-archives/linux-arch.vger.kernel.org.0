@@ -2,210 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106976EEA76
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Apr 2023 01:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D51E6EF4DB
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Apr 2023 15:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236270AbjDYXBL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 25 Apr 2023 19:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S240892AbjDZNE0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Apr 2023 09:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236194AbjDYXBJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 25 Apr 2023 19:01:09 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97FDB21A
-        for <linux-arch@vger.kernel.org>; Tue, 25 Apr 2023 16:01:06 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b99f3aee8e0so7457473276.0
-        for <linux-arch@vger.kernel.org>; Tue, 25 Apr 2023 16:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682463666; x=1685055666;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCfgX459C+HvVh2FD7e7JZg40F1mOAMJVuhQWLHla/0=;
-        b=C4AljZcb5zSEki65YN1EEhXpKoY2+BQjkZw0lA37fbXw5J94rINcczlcHQKioosXoz
-         QYJO7B3PQHsCBBmLZHmB2bdJerRvszbD8Z0QkB4l66SvwAArYTtc7JH15w/nYT/SE5u5
-         vwm/eMEJk1TY+eEPX82hBLbrKJ9kTJikXcAr57e2kixe1dolatDoyNrc44iwLTBRVolO
-         bfADSu5kj9Pbljxty8CvVBHkrXGW31eBuRDxicojfWBD4NefEdirxSFfQsz+fSqmBEth
-         Qzgwwtz8KWzAJnphFlQcihCJZ0/hpd4K50BVsMO7BpnBpVR4VQKe84Z8OdOHhFvQF7fh
-         tpww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682463666; x=1685055666;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCfgX459C+HvVh2FD7e7JZg40F1mOAMJVuhQWLHla/0=;
-        b=MZ3rZMvPMx2t6Ve1EoU2AEyEbXn2PA61fo5/p0468gTxjGOuX3Ep2nBdkHf+w2jMs2
-         cQpTi7hzdYk0tbasEOaV2YQTv+UcNhEkr0ZWHXIulr0LGCwF23FVF0Kdfetev2Ue3H7D
-         hiZEfFhc3yYST5ZIU78MONLd+Mh799u+s8DDRsh6tuCslyVJtqqTvTmqaRORrRvtPq/b
-         Z8/hXNUr7UKZv8oFnn14kTlpihqcEAdeBB6XzAn9tyzDDBG0oehApI1ZMjuDQ33N7V1H
-         NhIrff6Y02w+vdgmjdMY0CePvLW8il181Ztd8ufCKKzxqf8QkuQaFm0cM2B3+LsXpPuB
-         qqRA==
-X-Gm-Message-State: AC+VfDxLWOx+54EwOopKJg1GZsUNJ5Bkx18EIl79nc/bZPnLZnXjUIhf
-        tHUcNxWlIYFIARtBJorC/z+U9d6nxf0=
-X-Google-Smtp-Source: ACHHUZ7zn8PbJQ/UuE69mi5lwaIaGdUdtx9hP2cvpdZFHM9mCc7INsMunl92AGHkpHAOjQl1AWoM2QO/O/0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:986:b0:54c:15ad:11e4 with SMTP id
- ce6-20020a05690c098600b0054c15ad11e4mr342131ywb.0.1682463665939; Tue, 25 Apr
- 2023 16:01:05 -0700 (PDT)
-Date:   Tue, 25 Apr 2023 16:01:04 -0700
-In-Reply-To: <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
-Mime-Version: 1.0
-References: <ZDnAuGKrCO2wgjlG@google.com> <diqz354w92x3.fsf@ackerleytng-cloudtop.c.googlers.com>
-Message-ID: <ZEhbsHqBapHtdrg7@google.com>
-Subject: Re: [PATCH v10 9/9] KVM: Enable and expose KVM_MEM_PRIVATE
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     chao.p.peng@linux.intel.com, xiaoyao.li@intel.com,
-        isaku.yamahata@gmail.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, pbonzini@redhat.com, corbet@lwn.net,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, arnd@arndb.de, naoya.horiguchi@nec.com,
-        linmiaohe@huawei.com, x86@kernel.org, hpa@zytor.com,
-        hughd@google.com, jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, shuah@kernel.org, rppt@kernel.org,
-        steven.price@arm.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        vannapurve@google.com, yu.c.zhang@linux.intel.com,
-        kirill.shutemov@linux.intel.com, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, mhocko@suse.com, wei.w.wang@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S240318AbjDZNEZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Apr 2023 09:04:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5CA420C;
+        Wed, 26 Apr 2023 06:04:24 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F2B2A1FDC9;
+        Wed, 26 Apr 2023 13:04:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682514263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ZvaBzh3f/aiqD52UlKjdoNF7+qwuUVn7MUgqdP2D7Nw=;
+        b=UUB5WwTLuJwXSoCTJ3K7FRWI3bAowE0MAQQnTQ8Woqr9jGn3KSm4fv+l+btYHt/SEzCsD6
+        E6Tz3qvcxaYsO0Ane3YO3a66YgThKstJIJ4Lgjadjm2nGBl3KNTyxPMpou9Mnyuqc/adAL
+        KiMTTGQM90NhVMGC3ytJZ9AIyukntHg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682514263;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=ZvaBzh3f/aiqD52UlKjdoNF7+qwuUVn7MUgqdP2D7Nw=;
+        b=5Y5kjboljw7Gn1Hlnhprb8RfDWvqxVjp+TudZAikLk9S5eG7QO9FJaa/ij7yCLSwcYk6Zr
+        niVmZqqNbyCVxQAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 86AF6138F0;
+        Wed, 26 Apr 2023 13:04:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eEa6H1YhSWSBMgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 26 Apr 2023 13:04:22 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 0/5] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+Date:   Wed, 26 Apr 2023 15:04:15 +0200
+Message-Id: <20230426130420.19942-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 18, 2023, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> > I agree, a pure alignment check is too restrictive, and not really what I
-> > intended despite past me literally saying that's what I wanted :-)  I think
-> > I may have also inverted the "less alignment" statement, but luckily I
-> > believe that ends up being a moot point.
-> 
-> > The goal is to avoid having to juggle scenarios where KVM wants to create a
-> > hugepage, but restrictedmem can't provide one because of a misaligned file
-> > offset.  I think the rule we want is that the offset must be aligned to the
-> > largest page size allowed by the memslot _size_.  E.g. on x86, if the
-> > memslot size is >=1GiB then the offset must be 1GiB or beter, ditto for
-> > >=2MiB and >=4KiB (ignoring that 4KiB is already a requirement).
-> 
-> > We could loosen that to say the largest size allowed by the memslot, but I
-> > don't think that's worth the effort unless it's trivially easy to implement
-> > in code, e.g. KVM could technically allow a 4KiB aligned offset if the
-> > memslot is 2MiB sized but only 4KiB aligned on the GPA.  I doubt there's a
-> > real use case for such a memslot, so I want to disallow that unless it's
-> > super easy to implement.
-> 
-> Checking my understanding here about why we need this alignment check:
-> 
-> When KVM requests a page from restrictedmem, KVM will provide an offset
-> into the file in terms of 4K pages.
-> 
-> When shmem is configured to use hugepages, shmem_get_folio() will round
-> the requested offset down to the nearest hugepage-aligned boundary in
-> shmem_alloc_hugefolio().
-> 
-> Example of problematic configuration provided to
-> KVM_SET_USER_MEMORY_REGION2:
-> 
-> + shmem configured to use 1GB pages
-> + restrictedmem_offset provided to KVM_SET_USER_MEMORY_REGION2: 0x4000
-> + memory_size provided in KVM_SET_USER_MEMORY_REGION2: 1GB
-> + KVM requests offset (pgoff_t) 0x8, which translates to offset 0x8000
-> 
-> restrictedmem_get_page() and shmem_get_folio() returns the page for
-> offset 0x0 in the file, since rounding down 0x8000 to the nearest 1GB is
-> 0x0. This is allocating outside the range that KVM is supposed to use,
-> since the parameters provided in KVM_SET_USER_MEMORY_REGION2 is only
-> supposed to be offset 0x4000 to (0x4000 + 1GB = 0x40004000) in the file.
-> 
-> IIUC shmem will actually just round down (0x4000 rounded down to nearest
-> 1GB will be 0x0) and allocate without checking bounds, so if offset 0x0
-> to 0x4000 in the file were supposed to be used by something else, there
-> might be issues.
-> 
-> Hence, this alignment check ensures that rounding down of any offsets
-> provided by KVM (based on page size configured in the backing file
-> provided) to restrictedmem_get_page() must not go below the offset
-> provided to KVM_SET_USER_MEMORY_REGION2.
-> 
-> Enforcing alignment of restrictedmem_offset based on the currently-set
-> page size in the backing file (i.e. shmem) may not be effective, since
-> the size of the pages in the backing file can be adjusted to a larger
-> size after KVM_SET_USER_MEMORY_REGION2 succeeds. With that, we may still
-> end up allocating outside the range that KVM was provided with.
-> 
-> Hence, to be safe, we should check alignment to the max page size across
-> all backing filesystems, so the constraint is
-> 
->     rounding down restrictedmem_offset to
->     min(max page size across all backing filesystems,
->         max page size that fits in memory_size) == restrictedmem_offset
-> 
-> which is the same check as
-> 
->     restrictedmem_offset must be aligned to min(max page size across all
->     backing filesystems, max page size that fits in memory_size)
-> 
-> which can safely reduce to
-> 
->     restrictedmem_offset must be aligned to max page size that fits in
->     memory_size
-> 
-> since "max page size that fits in memory_size" is probably <= to "max
-> page size across all backing filesystems", and if it's larger, it'll
-> just be a tighter constraint.
+Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+depends on the architecture. It's still all located in fbdev's main
+header file <linux/fb.h>. Move all of it into each archtecture's
+<asm/fb.h>, with shared code in <asm-generic/fb.h>.
 
-Yes?  The alignment check isn't strictly required, KVM _could_ deal with the above
-scenario, it's just a lot simpler and safer for KVM if the file offset needs to
-be sanely aligned.
+The first patch a simple whitespace cleanup.
 
-> If the above understanding is correct:
-> 
-> + We must enforce this in the KVM_SET_USER_MEMORY_REGION2 handler, since
->   IIUC shmem will just round down and allocate without checking bounds.
-> 
->     + I think this is okay because holes in the restrictedmem file (in
->       terms of offset) made to accommodate this constraint don't cost us
->       anything anyway(?) Are they just arbitrary offsets in a file? In
->       our case, this file is usually a new and empty file.
-> 
->     + In the case of migration of a restrictedmem file between two KVM
->       VMs, this constraint would cause a problem is if the largest
->       possible page size on the destination machine is larger than that
->       of the source machine. In that case, we might have to move the
->       data in the file to a different offset (a separate problem).
+Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+will go away patches 2 to 4 prepare include statements in the various
+drivers. Source files that use regular I/O helpers, such as readl(),
+now include <linux/io.h>. Source files that use framebuffer I/O
+helpers, such as fb_readl(), now include <asm/fb.h>. The latter now
+includes <linux/io.h> internally.
 
-Hmm, I was thinking this would be a non-issue because the check would be tied to
-the max page _possible_ page size irrespective of hardware support, but that would
-be problematic if KVM ever supports 512GiB pages.  I'm not sure that speculatively
-requiring super huge memslots to be 512GiB aligned is sensible.
+Patch 5 moves the framebuffer I/O helpers from <linux/fb.h> into
+the various architecture headers. The common case, where the framebuffer
+is located in I/O memory, serves as the generic implemenation.
 
-Aha!  If we go with a KVM ioctl(), a clean way around this is tie the alignment
-requirement to the memfd flags, e.g. if userspace requests the memfd to be backed
-by PMD hugepages, then the memslot offset needs to be 2MiB aligned on x86.  That
-will continue to work if (big if) KVM supports 512GiB pages because the "legacy"
-memfd would still be capped at 2MiB pages.
+The patchset has been built for a variety of platforms, such as x86-64,
+arm, aarch64, ppc64, parisc, m64k, mips and sparc.
 
-Architectures that support variable hugepage sizes might need to do something
-else, but I don't think that possibility affects what x86 can/can't do.
+Thomas Zimmermann (5):
+  fbdev/matrox: Remove trailing whitespaces
+  ipu-v3: Include <linux/io.h>
+  fbdev: Include <linux/io.h> in various drivers
+  fbdev: Include <linux/io.h> via <asm/fb.h>
+  fbdev: Move framebuffer I/O helpers into <asm/fb.h>
 
-> + On this note, it seems like there is no check for when the range is
->   smaller than the allocated page? Like if the range provided is 4KB in
->   size, but shmem is then configured to use a 1GB page, will we end up
->   allocating past the end of the range?
+ arch/arc/include/asm/fb.h                   | 29 +++++++
+ arch/ia64/include/asm/fb.h                  | 28 +++++++
+ arch/loongarch/include/asm/fb.h             | 29 +++++++
+ arch/m68k/include/asm/fb.h                  | 29 +++++++
+ arch/sparc/include/asm/fb.h                 | 77 +++++++++++++++++
+ drivers/gpu/ipu-v3/ipu-prv.h                |  1 +
+ drivers/video/fbdev/arcfb.c                 |  1 +
+ drivers/video/fbdev/arkfb.c                 |  2 +
+ drivers/video/fbdev/aty/atyfb.h             |  2 +
+ drivers/video/fbdev/aty/mach64_cursor.c     |  2 +-
+ drivers/video/fbdev/chipsfb.c               |  1 +
+ drivers/video/fbdev/cirrusfb.c              |  2 +
+ drivers/video/fbdev/core/cfbcopyarea.c      |  2 +-
+ drivers/video/fbdev/core/cfbfillrect.c      |  1 +
+ drivers/video/fbdev/core/cfbimgblt.c        |  1 +
+ drivers/video/fbdev/core/svgalib.c          |  3 +-
+ drivers/video/fbdev/cyber2000fb.c           |  2 +
+ drivers/video/fbdev/ep93xx-fb.c             |  2 +
+ drivers/video/fbdev/hgafb.c                 |  3 +-
+ drivers/video/fbdev/hitfb.c                 |  2 +-
+ drivers/video/fbdev/kyro/fbdev.c            |  3 +-
+ drivers/video/fbdev/matrox/matroxfb_accel.c |  8 +-
+ drivers/video/fbdev/matrox/matroxfb_base.h  |  6 +-
+ drivers/video/fbdev/pm2fb.c                 |  3 +
+ drivers/video/fbdev/pm3fb.c                 |  2 +
+ drivers/video/fbdev/pvr2fb.c                |  2 +
+ drivers/video/fbdev/s3fb.c                  |  2 +
+ drivers/video/fbdev/sm712fb.c               |  2 +
+ drivers/video/fbdev/sstfb.c                 |  2 +-
+ drivers/video/fbdev/stifb.c                 |  2 +
+ drivers/video/fbdev/tdfxfb.c                |  3 +-
+ drivers/video/fbdev/tridentfb.c             |  2 +
+ drivers/video/fbdev/vga16fb.c               |  3 +-
+ drivers/video/fbdev/vt8623fb.c              |  2 +
+ drivers/video/fbdev/wmt_ge_rops.c           |  2 +
+ include/asm-generic/fb.h                    | 93 +++++++++++++++++++++
+ include/linux/fb.h                          | 53 ------------
+ 37 files changed, 340 insertions(+), 69 deletions(-)
 
-No, KVM already gracefully handles situations like this.  Well, x86 does, I assume
-other architectures do too :-)
+-- 
+2.40.0
 
-As above, the intent of the extra restriction is so that KVM doen't need even more
-weird code (read: math) to gracefully handle the new edge cases that would come with
-fd-only memslots.
