@@ -2,102 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696756EFDB7
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Apr 2023 00:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0126F01A3
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Apr 2023 09:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbjDZW5V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Apr 2023 18:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
+        id S242707AbjD0HYE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Apr 2023 03:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233734AbjDZW5U (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Apr 2023 18:57:20 -0400
-Received: from mail.heimpalkorhaz.hu (mail.heimpalkorhaz.hu [193.224.51.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCD8E2;
-        Wed, 26 Apr 2023 15:57:12 -0700 (PDT)
-Received: from mail.heimpalkorhaz.hu (localhost [127.0.0.1])
-        (Authenticated sender: alexandra.nagy@heimpalkorhaz.hu)
-        by mail.heimpalkorhaz.hu (Postfix) with ESMTPA id DD16D384A5F294;
-        Thu, 27 Apr 2023 00:41:10 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.heimpalkorhaz.hu DD16D384A5F294
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heimpalkorhaz.hu;
-        s=default; t=1682548871;
-        bh=EK7FNzGPLm9pid/gmdFBrbarvHS9H0a48U7GgrEq6Uo=;
-        h=Date:From:To:Subject:Reply-To:From;
-        b=eU1/SEqSPDTUZn4mbk4UvUi5DF3ozk18EuQi1ojNiIOmq0Muk/3HhHIDG0SkUsmES
-         wagmVulXe1JTXXmzmgPhz0WurJA9w1ws7whRlmV3a6jwGHAe6zbgQOAcqULWWaxZlu
-         3Bs+qIlfbF/q8PGKefDJgOqehFvu9ZEe1nv5qcjCykGK/kA3vSf9QxYtIe9DTRjjBo
-         CGZRxtnfoX/BW8marGCyXxMzxsrVjBRb2aFc2UcLpmS2suTEJHeTvJpX+YfYf4Hg6b
-         WW4dnoKXZqaV1pyueVpC2AAG4MWw4Jqg7JIdOcDLolDYZwxONX4vyj5F8PlFv3e4tm
-         COzx81JWSb6lg==
+        with ESMTP id S242817AbjD0HYB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Apr 2023 03:24:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6C549D8;
+        Thu, 27 Apr 2023 00:23:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D50261FDF6;
+        Thu, 27 Apr 2023 07:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682580168; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mwjDvnTTpUQQAU0S0NYQu7NztQ86BE/cY3YTj2NNeVM=;
+        b=Un7Gx01PokhNQiVoDb02P2s+kOPGU770pEPzJrxxIAFVFRAXtAUqKAYpk5HGhcEcjn2qx3
+        2C9Ze5cftpcNs/R+ie2ctuvNWHI8ZUZH2qu4rexmtorhKnrzH9Uite0TY3cAwazKzLSnM9
+        bSgsC8Qen6ZvcZ9aCUO46+tQxItvtIo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682580168;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mwjDvnTTpUQQAU0S0NYQu7NztQ86BE/cY3YTj2NNeVM=;
+        b=MVwyD8XGPiCuNb0tm4gyVIuhyn9YeI8pxDwrB2nQC/aLSapjlluwmmOAV+r89rHGjJ5Ohb
+        IWkBOldoEBcgo0BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 628F613910;
+        Thu, 27 Apr 2023 07:22:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SCQXF8giSmT2JQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 27 Apr 2023 07:22:48 +0000
+Message-ID: <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
+Date:   Thu, 27 Apr 2023 09:22:47 +0200
 MIME-Version: 1.0
-Date:   Thu, 27 Apr 2023 00:41:10 +0200
-From:   MK <info.me@heimpalkorhaz.hu>
-To:     undisclosed-recipients:;
-Subject: ***SPAM*** Hello sunshine, how are you?
-Reply-To: marionkimmich1@hotmail.com
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a0f030e74dde010794c366246dbce99b@heimpalkorhaz.hu>
-X-Sender: info.me@heimpalkorhaz.hu
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: DD16D384A5F294
-X-Spamd-Result: default: False [17.31 / 20.00];
-        FUZZY_DENIED(11.99)[1:edab46d5f3:1.00:txt];
-        R_UNDISC_RCPT(3.00)[];
-        FORGED_RECIPIENTS(2.00)[m:,s:michael.olbrich@uvtech.se,s:carolynf@uw.edu,s:sjw47@uw.edu,s:syliou@uw.edu,s:xfang12@uw.edu,s:jgilarowski@uw.edu.pl,s:francesco.gerali@uwa.edu.au,s:michael.reinsborough@uwe.ac.uk,s:m.meuwese@uwinnipeg.ca,s:bernhark@uwplatt.edu,s:anastasia.makarova@uzh.ch,s:andrea.migliano@uzh.ch,s:antonella.rampazzo@uzh.ch,s:balthasar.bickel@uzh.ch,s:cengiz.akandil@uzh.ch,s:dinara.abildenova@uzh.ch,s:fynn.holm@uzh.ch,s:georg.bauer@uzh.ch,s:guy.bodenmann@uzh.ch,s:mustafa.akcinar@uzh.ch,s:nico.schmidt@uzh.ch,s:olivier.devuyst@uzh.ch,s:steven.moran@uzh.ch,s:thomas.goetschi@uzh.ch,s:uwe.schneider@uzh.ch,s:webaze@uzh.ch,s:yue.zhuang@uzh.ch,s:natalia.natsika@v-dem.net,s:andrew@v51yj.radio,s:CHARLENE.BURLEW@VA.GOV,s:darrel.willoughby@va.gov,s:erica.adkins3@va.gov,s:shelley.adkins2@va.gov,s:anamaria.damian@vait.ro,s:vaitarg@vaitarg.com.ar,s:contact@vajradharaling.org,s:info@vaktro.gr,s:presidencia@valcan-ingenieria.com.ar,s:info@valeriaconte.com.ar,s:jaroslav.vabek@valido.cz,s:i
- nfo@valledeucotours.tur.ar,s:guillermo@valleyresearch.com,s:ivani@valleyresearch.com,s:tracy@valmatic.com.my,s:valmatic@valmatic.com.my,s:info@valobra.ch,s:hans-erik.persson@valonkone.com,s:natalia.afanassieva@valonkone.ru,s:info@valvini.ch,s:lray@vanasch.school.nz,s:aaron.williams@vandenberg.af.mil,s:bob.harding@vandewiele.com,s:Ayas1998email@vandorr.info,s:anya@vanilla.co.za,s:maria@vanrossum.eu,s:ttiwok@vanuatu.gov.vu,s:daiga.vilkaste@varam.gov.lv,s:info@vardforbundet.se,s:rotse-marcelo@varioweb.ch,s:post@varri.no,s:info@varroa-controller.com,s:asl@vassar.edu,s:marschall@vaw.baug.ethz.ch,s:easternbayofplenty@vcc.org.nz,s:wseaman@vcd.hp.com,s:gabriela@vce-international.com,s:info@vci.com.ar,s:J.Schaake@vcp.co.nz,s:mcgee.ch@vcpusd.org,s:verlag@vdf.ethz.ch,s:markus.muenz@vdma.org,s:hrusch@vds.de,s:nvtai@vea.gov.vn,s:sales@vec.com.ar,s:ariel.ternera@vecol.com.co,s:ebxml@veenman.net,s:info@velanegocios.com.ar,s:rihards@velasmajas.lv,s:jeanclaude.boribon@velogic-mu.com,s:peter@venturam
- edical.com.au,s:ola.osterlund@ventyx.abb.com,s:stella@venus.execulink.com,s:algemeen@verbruggen2.demon.nl,s:tourist@verio.com,s:morgan.john@verizon.com,s:abolaw@verizon.net,s:act3csa@verizon.net,s:barroso3@verizon.net,s:batalla.law@verizon.net,s:bluesdvm@verizon.net,s:carolemacdonald@verizon.net,s:chaden@verizon.net,s:debutz@verizon.net,s:golie1@verizon.net,s:jcruseno@verizon.net,s:jlandsve@verizon.net,s:kcollins14@verizon.net,s:luannhouston@verizon.net,s:maribeldunn@verizon.net];
-        SUBJECT_ENDS_QUESTION(1.00)[];
-        GENERIC_REPUTATION(-0.59)[-0.58853791029018];
-        MIME_GOOD(-0.10)[text/plain];
-        BAYES_SPAM(0.00)[33.15%];
-        RCVD_COUNT_ZERO(0.00)[0];
-        FROM_EQ_ENVFROM(0.00)[];
-        MIME_TRACE(0.00)[0:+];
-        RCPT_COUNT_ONE(0.00)[1];
-        MID_RHS_MATCH_FROM(0.00)[];
-        FROM_HAS_DN(0.00)[];
-        TO_DN_ALL(0.00)[];
-        FREEMAIL_ENVRCPT(0.00)[verizon.net,versatel.nl,videotron.ca,virgin.net,wanadoo.es,wanadoo.fr,web.de,webmail.co.za,westnet.com.au,windowslive.com,windstream.net,worldnet.att.net,wp.pl,xtra.co.nz,XTRA.CO.NZ,Xtra.co.nz];
-        REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-        FREEMAIL_REPLYTO(0.00)[hotmail.com];
-        HAS_REPLYTO(0.00)[marionkimmich1@hotmail.com]
-X-Rspamd-Server: mail.heimpalkorhaz.hu
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/5] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+References: <20230426130420.19942-1-tzimmermann@suse.de>
+ <20230426192110.GA3791243@ravnborg.org>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230426192110.GA3791243@ravnborg.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------7Tnoo09B1y1bqPUqHSpN4Mqn"
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I am sorry to bother you and intrude your privacy. I am single,
-  lonely and in need of a caring, loving and romantic companion.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------7Tnoo09B1y1bqPUqHSpN4Mqn
+Content-Type: multipart/mixed; boundary="------------0BnAEdd7ws0JRInwI0tlF7W0";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Sam Ravnborg <sam@ravnborg.org>
+Cc: deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
+ vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+ davem@davemloft.net, James.Bottomley@hansenpartnership.com, arnd@arndb.de,
+ linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-parisc@vger.kernel.org
+Message-ID: <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
+Subject: Re: [PATCH 0/5] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+References: <20230426130420.19942-1-tzimmermann@suse.de>
+ <20230426192110.GA3791243@ravnborg.org>
+In-Reply-To: <20230426192110.GA3791243@ravnborg.org>
 
-I am a secret admirer and would like to explore the opportunity to
-learn more about each other. I know it is strange to contact you
-this way and I hope you can forgive me. I am a shy person and
-this is the only way I know I could get your attention. I just want
-to know what you think and my intention is not to offend you.
-I hope we can be friends if that is what you want, although I wish
-to be more than just a friend. I know you have a few questions to
-ask and I hope I can satisfy some of your curiosity with a few
-answers.
+--------------0BnAEdd7ws0JRInwI0tlF7W0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I believe in the saying that 'to the world you are just one person,
-but to someone special you are the world'. All I want is love,
-romantic care and attention from a special companion which I am
-hoping would be you.
+SGkgU2FtDQoNCkFtIDI2LjA0LjIzIHVtIDIxOjIxIHNjaHJpZWIgU2FtIFJhdm5ib3JnOg0K
+PiBIaSBUaG9tYXMuDQo+IA0KPiBPbiBXZWQsIEFwciAyNiwgMjAyMyBhdCAwMzowNDoxNVBN
+ICswMjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEZiZGV2IHByb3ZpZGVzIGhl
+bHBlcnMgZm9yIGZyYW1lYnVmZmVyIEkvTywgc3VjaCBhcyBmYl9yZWFkbCgpLA0KPj4gZmJf
+d3JpdGVsKCkgb3IgZmJfbWVtY3B5X3RvX2ZiKCkuIFRoZSBpbXBsZW1lbnRhdGlvbiBvZiBl
+YWNoIGhlbHBlcg0KPj4gZGVwZW5kcyBvbiB0aGUgYXJjaGl0ZWN0dXJlLiBJdCdzIHN0aWxs
+IGFsbCBsb2NhdGVkIGluIGZiZGV2J3MgbWFpbg0KPj4gaGVhZGVyIGZpbGUgPGxpbnV4L2Zi
+Lmg+LiBNb3ZlIGFsbCBvZiBpdCBpbnRvIGVhY2ggYXJjaHRlY3R1cmUncw0KPj4gPGFzbS9m
+Yi5oPiwgd2l0aCBzaGFyZWQgY29kZSBpbiA8YXNtLWdlbmVyaWMvZmIuaD4uDQo+IA0KPiBG
+b3Igb25jZSBJIHRoaW5rIHRoaXMgY2xlYW51cCBpcyBtb3ZpbmcgdGhpbmdzIGluIHRoZSB3
+cm9uZyBkaXJlY3Rpb24uDQo+IA0KPiBUaGUgZmJfKiBoZWxwZXJzIHByZWRhdGVzIHRoZSBn
+ZW5lcmljIGlvLmggc3VwcG9ydCBhbmQgdHJ5IHRvDQo+IGFkZCBhIGdlbmVyaWMgbGF5ZXIg
+Zm9yIHJlYWQgcmVhZCAvIHdyaXRlIG9wZXJhdGlvbnMuDQo+IA0KPiBUaGUgcmlnaHQgZml4
+IHdvdWxkIGJlIHRvIG1pZ3JhdGUgZmJfKiB0byB1c2UgdGhlIGlvIGhlbHBlcnMNCj4gd2Ug
+aGF2ZSB0b2RheSAtIHNvIHdlIHVzZSB0aGUgZXhpc3Rpbmcgd2F5IHRvIGhhbmRsZSB0aGUg
+YXJjaGl0ZWN0dXJlDQo+IHNwZWNpZmljIGRldGFpbHMuDQoNCkkgbG9va2VkIHRocm91Z2gg
+dGhlIGV4aXN0aW5nIHZlcnNpb25zIG9mIHRoZSBmYl8oKSBJL08gaGVscGVycy4gVGhleSAN
+CmNhbiBhcHBhcmVudGx5IGJlIGltcGxlbWVudGVkIHdpdGggdGhlIHJlZ3VsYXIgaGVscGVy
+cyBvZiBzaW1pbGFyIG5hbWVzLg0KDQpJJ20gbm90IHN1cmUsIGJ1dCBldmVuIFNwYXJjIGxv
+b2tzIGNvbXBhdGlibGUuIEF0IGxlYXN0IHRoZXNlIHNidXNfIA0KZnVuY3Rpb25zIHNlZW0g
+dG8gYmUgZXF1aXZhbGVudCB0byB0aGUgX19yYXdfKCkgSS9PIGhlbHBlcnMgb2Ygc2ltaWxh
+ciANCm5hbWVzLiBEbyB5b3Ugc3RpbGwgaGF2ZSB0aGF0IFNwYXJjIGVtdWxhdG9yPw0KDQo+
+IA0KPiAgRnJvbSBhIHF1aWNrIGxvb2sgdGhlcmUgc2VlbXMgdG8gYmUgc29tZSBjaGFsbGVu
+Z2VzIGJ1dCB0aGUgY3VycmVudA0KPiBoZWxwZXJzIHRoYXQgcmUtZG8gcGFydCBvZiBpby5o
+IGlzIG5vdCB0aGUgd2F5IGZvcndhcmQgYW5kIGhpZGluZyB0aGVtDQo+IGluIGFyY2gvaW5j
+bHVkZS9hc20vZmIuaCBzZWVtcyBjb3VudGVyIHByb2R1Y3RpdmUuDQoNCldoaWNoIGNoYWxs
+ZW5nZXMgZGlkIHlvdSBzZWU/DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IAlT
+YW0NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
+cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNz
+ZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3
+IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChB
+RyBOdWVybmJlcmcpDQo=
 
-I hope this message will be the beginning of a long term
-communication between us, simply send a reply to this message, it
-will make me happy.
+--------------0BnAEdd7ws0JRInwI0tlF7W0--
 
+--------------7Tnoo09B1y1bqPUqHSpN4Mqn
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Hugs and kisses,
+-----BEGIN PGP SIGNATURE-----
 
-Marion.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRKIscFAwAAAAAACgkQlh/E3EQov+CT
+oBAA0joPCJExKZHc0py1Nmn46HLD2xkGXPqvlDNyOfv9K2WAzSvDzx5KShE1DzyUEcLTvhQfPm/D
+5nQOnQrSn7HQkCIR4umRPp+nXP2coyxCHOnBIowCq2R5+j9pCCLIke3VDkTBCjo1S2FXNaWQ7akF
+bWxfDg2rsatU/OkSba1nBa3LGj5JxZRa7DPQm4/HBXeL3WIuFiFEvklKelWui99NyANYaoXx7yoW
+enEpmf+18GQR9FDziRZjTgETxW+/HXBqLC8vF6nuig1uqQ5TuuiT6/UomLXEdARPKkDKwq4Qg7Cq
+CkIq8jsFYW3Caq7xfMmVfaz1zjSHoZ9Mc2hWnqzjSEbOgRRUpiwVVp0YmcHvr5ZkRma96jeAqXZx
+YLGHYr6u7/jyNAKDs7rqsVHSwLHrrqNvIStQ0pZTt0yVI5f52dk2FhPeKqC3n3gjEVf5BwAk1gRx
+lLlMhkoWTQBfkYZFtor/haDOuPrjOfKSgtU+mYD+SZVeRocMYVVqkRfvUyrZEH1yvOTYFZoK64aJ
+aiKd4shbSRUdRhYx6kmwsKR35X4Ww+uXrVqOtdjMhMx0uZ7rzQCEVQ312EYW1a15koHLyAWNon2n
++UfEZE1yEvYWAqdUTcveIJ2B9Hv6jVjx1YO+vppl2GNVWBf8+ms8MW6DrPtR4AYx95gK46rcTnGM
+IJY=
+=bpnU
+-----END PGP SIGNATURE-----
+
+--------------7Tnoo09B1y1bqPUqHSpN4Mqn--
