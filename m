@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9586F17DF
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 14:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBFA6F17E4
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 14:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345730AbjD1MZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Apr 2023 08:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S1345750AbjD1M0a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Apr 2023 08:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345781AbjD1MZ4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 08:25:56 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28695BB9
-        for <linux-arch@vger.kernel.org>; Fri, 28 Apr 2023 05:25:49 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f1763ee8f8so67790225e9.1
-        for <linux-arch@vger.kernel.org>; Fri, 28 Apr 2023 05:25:49 -0700 (PDT)
+        with ESMTP id S240073AbjD1M03 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 08:26:29 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131274C0E
+        for <linux-arch@vger.kernel.org>; Fri, 28 Apr 2023 05:26:27 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f1958d3a53so82442855e9.0
+        for <linux-arch@vger.kernel.org>; Fri, 28 Apr 2023 05:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1682684748; x=1685276748;
+        d=linaro.org; s=google; t=1682684785; x=1685276785;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FCZD7/skKxELiLiQ/Kgtq9xL2gK3ugZhkE8UlBHv94Q=;
-        b=uUgsJRet2rXqZzO39tKpNe1PPCmGNTTEXDP7+XoXX1WhwC7n6SFii4fWBlBlWhWUDh
-         Cnf3M/2voFfRkjanUwYgCBz2zCXELwRizuCZBuFMvKdhaRKabEg5/MXCGrzW+C6B6KJw
-         mX+2F7apsDTDVgcLM6qxspDdmRl8vNGYIGdV09Q4ePTOB33MExIIjbOChffFbCNI8qoT
-         IZdbIkrfFL1rjadYFEWADsvwPALuUxud15Tap5wnQgVssXZJAIpGqFxnqiCbs9SjDET1
-         C7TPKyeBELoVR5mTyMPLZTyX9Clh0qZRpKcsOhjsNYZ73uRCw0qLpuqVYlgdzd7Fkeow
-         60Jg==
+        bh=ta0l6Lv08itCF3ih3pDrrtQORcFWDgffeo/Lv6j7nWs=;
+        b=l/kvU/GHw0avOPKANSxEPurb9FkrW5c6sXEi2BHlm2Y5GYB5+69txZKbvaT6AOqCtV
+         bLqaNmHLakLuj8vEtMZfeULYDYmyOdqFqaTSDVHI7tb6eRP2mnxzK3FqjAAHXY5rb/OL
+         BfwoZtZBL5OCZ0OrlVcgr47q17VWh+ity76RJudCv0Uu0NZ2/vrnElhg6OS2Hz6cPcc9
+         aY95cnaUz25Y8TO4UDkNtDnyUpHkPi08ucqhgM/f+OBLkTwYb8LbetYh0kHggEaUf1sF
+         SwVLeBIA6FT6zGCA+XbGx5trbNwvUpZLgQFbOG2oJtvclEZrci8574SccMx4h522wQKX
+         PwaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682684748; x=1685276748;
+        d=1e100.net; s=20221208; t=1682684785; x=1685276785;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FCZD7/skKxELiLiQ/Kgtq9xL2gK3ugZhkE8UlBHv94Q=;
-        b=hL4ZgXwC9e2wpbwHCfHLsc6uZF/bPB0XFnCRCSdrnR+8CWd6dz8yA4jmKK2sPeFQSd
-         i/KmAFrY4v1YD7VHTLmC2SuLnKjiOi1mJU2HTsKCw4mcQfE8EQA9XQt6QEhRZu6I4ngD
-         7OKhgWzpCqEwqI0p3Pnacg9px4UguGmNHGmXlx4U6tMYTcA+aRnOwdGsG5tvXkg0rfz3
-         Z03E6NLiOW3+TeDrWMeG+V7QgDkT46qUDaCKAp21SLolaXLCtT2J8/L3r8hX4A9PqDoI
-         tmTHQKhSA3qQkyCEPgq+P+nmPSic3qlyzyVU5kywiQ/vjUan5Yd9drx/4CgSxFytvX6W
-         csug==
-X-Gm-Message-State: AC+VfDyLIF94Ui9uiko5CrNbjGHtfd2BSAh6G1KUeDkfMVBt3dxGXa9u
-        tuB71uH5g+B56u5mU6q06EvyRg==
-X-Google-Smtp-Source: ACHHUZ7jrGfG5E3rVbh1rlyewG/33jkn7z+iNaDOwZOeE24lokjSTMXbm+oex+abJk6U0bKResFC0Q==
-X-Received: by 2002:a05:600c:d7:b0:3f1:93c2:4df6 with SMTP id u23-20020a05600c00d700b003f193c24df6mr3758700wmm.12.1682684748414;
-        Fri, 28 Apr 2023 05:25:48 -0700 (PDT)
+        bh=ta0l6Lv08itCF3ih3pDrrtQORcFWDgffeo/Lv6j7nWs=;
+        b=X1Th8WaCS03XD5jWVlahkG/0glc1uHJOVCNzlUX+eSbp1qYNtGDrZsO8PS3b84JMwn
+         B9hin9OgzrcYOfyPRgP2B+HbtvrkiCKz8gEBM05Hdyw728jo5ZprMAyPFesa17uzwwsj
+         xWaeUh9JEpwgUZK5nMDlq0c/OMjGlgxIIK0lQlvfLK7KEb9RAaumGpi1rcYsO9YSzTuP
+         N9L1OPz78f2vwxrloSvB6xLz3lzUP7cq/hHZDPlG3ecshhHs2UsvrjLi4IvaCf4yC2yW
+         3shDpF/R5plDU+LOpq17fdW3CbW3h112/X117KDQx1S3PCxWkhN+3eggZtlUanSIHlWp
+         Rc8A==
+X-Gm-Message-State: AC+VfDyV6egMlI2lsUDEgbabDHRR0TvT1+Tvuo0t25NyIbgv8sasulGE
+        SlUNo752rBoPTQUu3DCYCUZLlg==
+X-Google-Smtp-Source: ACHHUZ539Um3Au7ebr5J25DDcgb29sKe92KDcP8tUre5wahXVbiS2azwg4bFs5ceTkPhZOBWur11+w==
+X-Received: by 2002:adf:d4c6:0:b0:2ef:b8e3:46fe with SMTP id w6-20020adfd4c6000000b002efb8e346femr3704585wrk.37.1682684785530;
+        Fri, 28 Apr 2023 05:26:25 -0700 (PDT)
 Received: from [172.23.2.142] ([195.167.132.10])
-        by smtp.gmail.com with ESMTPSA id i40-20020a05600c4b2800b003ee6aa4e6a9sm27367821wmp.5.2023.04.28.05.25.47
+        by smtp.gmail.com with ESMTPSA id f8-20020a5d4dc8000000b002f9e04459desm20930621wru.109.2023.04.28.05.26.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Apr 2023 05:25:47 -0700 (PDT)
-Message-ID: <00e293fc-e5f7-d451-5547-def284ac2214@linaro.org>
-Date:   Fri, 28 Apr 2023 14:25:46 +0200
+        Fri, 28 Apr 2023 05:26:25 -0700 (PDT)
+Message-ID: <9b39118b-afc8-034a-67ad-c748cb76fb71@linaro.org>
+Date:   Fri, 28 Apr 2023 14:26:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
@@ -87,7 +87,7 @@ Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -102,12 +102,8 @@ On 28/04/2023 12:36, Yi-De Wu wrote:
 > - Refactor: decouple arch-dependent and arch-independent
 > - Check pending signal before entering guest context
 > - Fix reviewer's comments
-> 
 
-Please explain what is Geniezone, where we can find it, what's the plan
-for open-sourcing it etc.
-
-That's what cover letter is for.
+You need to be specific about what you changed.
 
 Best regards,
 Krzysztof
