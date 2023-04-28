@@ -2,150 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE7E6F1934
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 15:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE3D6F1971
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 15:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346219AbjD1NRa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Apr 2023 09:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60954 "EHLO
+        id S1346279AbjD1N2V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Apr 2023 09:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjD1NRX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 09:17:23 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32541BC5;
-        Fri, 28 Apr 2023 06:17:20 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id AB7305C00BE;
-        Fri, 28 Apr 2023 09:17:17 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 28 Apr 2023 09:17:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1682687837; x=1682774237; bh=PcHVTECY0DTSklc3ILW7xV/aJ7/Nau9fSJX
-        oavdaK3A=; b=eUdK2nJGUj2ojcq/iN8+k9NH/YFehW26tD8EuLHi59mfHw77XBh
-        fsxNlrmYAQkqxYxfq6y27vgAktDmUq34FmXwMFdqTfPO9loKN1XNr+UVkGw680qV
-        BX4/DYfgCMWrAxE4Wow3ZwgWlN0ZNzHHEAtYzaMI7xLQjVEHla6fM+TZ1yvnzX8P
-        E9OEYJ2zcL1QVyo974JDoFI3uCjuLc0KDC60ytqogt91Vrtguy8dOzwcDADe8Q8K
-        wwGN7a6AzKt12/FKaJ6yE4xZxx1mfSbCRrBkh1w9kOWf+J/cSrAHTesLpKGIXn3y
-        r/ezr2uqH7xDgE1v6IYlgXMzGM/v2wMUp7w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682687837; x=1682774237; bh=PcHVTECY0DTSklc3ILW7xV/aJ7/Nau9fSJX
-        oavdaK3A=; b=UHAR/6bgsNPLLEMAvooCE2Mz7rvShUkiKAolMysUv1eAD0G8pRJ
-        Axt2cEsFq+HL0Sk84JLCYXyIoo4UY6iWfrU5QyWSoznl6Dl9up0oJPS8fmgZCkKN
-        EmUFVujWaEm9kpXEdbpvXC1srFotbipILlqEP+BJC/wZA/MRDDmTDOObpyzAXcfr
-        P5fPwPdeW2skiNrFbXI8pS1Fet/chSbd2eiKQ8NJCdOODy4lMW1yCHqd7i+2kw0m
-        kkAAHSUBJawkS7oRrDqwSvWgWl0YC4FGX0wEe7mqbkV7MbyF4ZFqT2f9EaWXdta5
-        UEG6fShDzo25wuyIzYe0uuavmo6nS5Qe20w==
-X-ME-Sender: <xms:W8dLZGx3L9IVhQ2Z-Dm1gEY_dwHGXe32-QXDVpGxL4oZOrgre8krDA>
-    <xme:W8dLZCT9BitiC8iWSIbkWjDY3CQ3ktYEHuCqF4lu4DEpLRIH__A8UyQjFfr8K3-Q_
-    Hql-wi5bFWVO6i97bQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedukedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:W8dLZIV4-CWeJ_MAEkYa-T1q9H3_MDecIqHVzquAXQO4y7Xxr-G-sA>
-    <xmx:W8dLZMg6khyrtIk2_xVeJ0jwab7q97YJj0EgH88Gpq1BMDBeqvzniA>
-    <xmx:W8dLZIB7tmcXPfPCpXuu_s8_Ujf8-kwPj0DVIS5NrKHqzYp1SN7Ggg>
-    <xmx:XcdLZPBenYiA6kEk2QhVgO0DBNH2txmCkaSu9NuYz9QpUDkjGGj7IA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A158DB60086; Fri, 28 Apr 2023 09:17:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <f612c682-5767-4a58-82f6-f4a4d1b592a1@app.fastmail.com>
-In-Reply-To: <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
-References: <20230428092711.406-1-tzimmermann@suse.de>
- <20230428092711.406-6-tzimmermann@suse.de>
- <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
- <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
-Date:   Fri, 28 Apr 2023 14:17:24 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Robin Murphy" <robin.murphy@arm.com>
-Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O functions
-Content-Type: text/plain;charset=utf-8
+        with ESMTP id S229835AbjD1N2U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 09:28:20 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ED51FC6;
+        Fri, 28 Apr 2023 06:28:18 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 33SDRo3g031091;
+        Fri, 28 Apr 2023 13:28:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=xN0N0nEHYTHT3aHanWrFgcKMgv5F9/5r+uCyl997wVM=;
+ b=gtfUzQjHeGoahNZusOotn+oYePQ/6Yp6wALmL7YC4wogQS6O0iXvKPzB9Ab2Un+COeZZ
+ BxMpcnpcelqWnll/kEI09c1HJ064RRFtsx3f79cTWMl3POoz8Nlh3FXHC1cdZxkwrHOV
+ fuj8m4t4J1TEKSsqHvkSLlBTAcyaM0cZ6GojsqeGF7hB/0u4Qd2lT/KMKCrhGOMfBcGi
+ mX8WZGcAdDsRyp6F2Nj8TGzfsUpmX2H99G3NUdfkaJMBgxAorinWv2Att9PAFITsX4as
+ xQh67oGf3HVSwSmmXFw+bPfJXkZMKYi2U+aPKoHnoTxaUfN6gVkQIG2BUq3o98PIq1ic MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8dqp2j48-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:28:04 +0000
+Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 33SDS3IQ032296;
+        Fri, 28 Apr 2023 13:28:03 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3q8dqp2j25-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:28:03 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 33S48dt3012258;
+        Fri, 28 Apr 2023 13:28:00 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3q47773kdm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Apr 2023 13:28:00 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 33SDRv0Y23331358
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 28 Apr 2023 13:27:57 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF04C2004B;
+        Fri, 28 Apr 2023 13:27:57 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D78432004D;
+        Fri, 28 Apr 2023 13:27:56 +0000 (GMT)
+Received: from [9.171.55.26] (unknown [9.171.55.26])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 28 Apr 2023 13:27:56 +0000 (GMT)
+Message-ID: <017df2d4fa3f2ed5f08106ba39bec3f0db382a8f.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 05/38] counter: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-iio@vger.kernel.org
+Date:   Fri, 28 Apr 2023 15:27:56 +0200
+In-Reply-To: <ZBBrl4v9L8Zw+AsN@fedora>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-6-schnelle@linux.ibm.com> <ZBBrl4v9L8Zw+AsN@fedora>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: aItC10cNzchiV006qSd16xw7jSl83UXj
+X-Proofpoint-GUID: llGHDROBe3Rt--RgnPvEdP9U5ngfr7nj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-04-28_04,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=999
+ phishscore=0 malwarescore=0 mlxscore=0 impostorscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303200000
+ definitions=main-2304280107
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 28, 2023, at 13:27, Geert Uytterhoeven wrote:
-> On Fri, Apr 28, 2023 at 2:18=E2=80=AFPM Robin Murphy <robin.murphy@arm=
-.com> wrote:
->> On 2023-04-28 10:27, Thomas Zimmermann wrote:
+On Tue, 2023-03-14 at 08:41 -0400, William Breathitt Gray wrote:
+> On Tue, Mar 14, 2023 at 01:11:43PM +0100, Niklas Schnelle wrote:
+> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
+s
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them.
+> >=20
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/counter/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
+> > index b5ba8fb02cf7..1cae5097217e 100644
+> > --- a/drivers/counter/Kconfig
+> > +++ b/drivers/counter/Kconfig
+> > @@ -15,6 +15,7 @@ if COUNTER
+> >  config 104_QUAD_8
+> >  	tristate "ACCES 104-QUAD-8 driver"
+> >  	depends on (PC104 && X86) || COMPILE_TEST
+> > +	depends on HAS_IOPORT
+> >  	select ISA_BUS_API
+> >  	help
+> >  	  Say yes here to build support for the ACCES 104-QUAD-8 quadrature
+> > --=20
+> > 2.37.2
+>=20
+> Is HAS_IOPORT needed because this driver uses devm_ioport_map()? The
+> inb()/outb() functions and such are not used in this driver, so would it
+> suffice to depend on HAS_IOPORT_MAP instead?
+>=20
+> William Breathitt Gray
 
->> > -
->> > -#elif defined(__i386__) || defined(__alpha__) || defined(__x86_64_=
-_) ||      \
->> > -     defined(__hppa__) || defined(__sh__) || defined(__powerpc__) =
-|| \
->> > -     defined(__arm__) || defined(__aarch64__) || defined(__mips__)
->> > -
->> > -#define fb_readb __raw_readb
->> > -#define fb_readw __raw_readw
->> > -#define fb_readl __raw_readl
->> > -#define fb_readq __raw_readq
->> > -#define fb_writeb __raw_writeb
->> > -#define fb_writew __raw_writew
->> > -#define fb_writel __raw_writel
->> > -#define fb_writeq __raw_writeq
->>
->> Note that on at least some architectures, the __raw variants are
->> native-endian, whereas the regular accessors are explicitly
->> little-endian, so there is a slight risk of inadvertently changing
->> behaviour on big-endian systems (MIPS most likely, but a few old ARM
->> platforms run BE as well).
->
-> Also on m68k, when ISA or PCI are enabled.
->
-> In addition, the non-raw variants may do some extras to guarantee
-> ordering, which you do not need on a frame buffer.
->
-> So I'd go for the __raw_*() variants everywhere.
+Yes, good catch HAS_IOPORT_MAP indeed seems to be enough. Will be
+changed in v4. Thankfully the Kconfig change to add HAS_IOPORT has
+already landed in Linus' tree so for the future these per subsystem
+patches can be merged independently.
 
-The only implementations in fbdev are
-
- 1) sparc sbus
- 2) __raw_writel
- 3) direct pointer dereference
-
-But none use the byte-swapping writel() implementations, and
-the only ones that use the direct pointer dereference or sbus
-are the ones on which these are defined the same as __raw_writel
-
-      Arnd
+Thanks,
+Niklas
