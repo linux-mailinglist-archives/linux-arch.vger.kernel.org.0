@@ -2,107 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745BB6F12A6
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 09:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B436F1404
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 11:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345763AbjD1Hnw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Apr 2023 03:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S1345414AbjD1J1Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Apr 2023 05:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345641AbjD1Hng (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 03:43:36 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D015FC0;
-        Fri, 28 Apr 2023 00:42:35 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 615423200319;
-        Fri, 28 Apr 2023 03:41:39 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 28 Apr 2023 03:41:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
-        JdT/8deI=; b=DclSOfxipXonjr10Zfze2g04tEcMacCmPEMQj9KSUXPgBjVvL3b
-        MQo6fuWFJzT27nHJRs74jQBGwTtn2n2KHu5aTUjHmlrE0229hVE5oHF9yZDkS3ew
-        p1PmAZmZsXTagjeqlDcNnPsWoMKrE3WDRUgwOnllR2Mxd40mEjio8JDSoZrBhcLY
-        EpF/qnQ//QXfqOClL6sTo+6QcKph0TMZrseOTG+p/07lIk+CJDRuw9l1QbbyGXjO
-        Eb35nUJHmU87iS3+aXTcjIEw3yWT1ZcEtVJ4ScA81na/2JXShjG0jXm+bNsByN9H
-        0auAMaDbwZPPaqpkQeZO7SI/+wjiURWUsIw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
-        JdT/8deI=; b=ZK/ac6fyNoZWTXPXbTwDD4R131otN5WDVVkeFrFt0hh+B+HJxI8
-        X1G/CekMUpexmmrmmtZG9J6nlcBpYM2so1ttFbssFuvmAd/ypJumITr52uxj1kqy
-        Zy5c2xC/bhpYC6ggOg+MvqevGn68/zmzyOJ/3I3FVAlKSomAD5e4Rd6yFIqBKGoS
-        hfpNiJGqsm98wDNSPOSseTUhCzwwWb6vjvWT3xqdwN747++XNPbtRAEMqvBh4uIw
-        8a5wbLZI4Yp1uAxenqy8Yq0fZoWyfdJOOTsgpDQXZZOenD4BGJ/pbNjPRx5NNA7H
-        eRdIwS64tODrt1vngpa6XkfH9l9gVEeJE5g==
-X-ME-Sender: <xms:sXhLZC_w2Ek7ASHPBn9INJdoLclKFnb0_xbl3lC3xmLCPyKQXxk-BA>
-    <xme:sXhLZCuacs7cUiWYO0nEuiBYqB32l5BX1MLYeiBEMcK-fUP18Owr4Xr3Py6CFXhZd
-    _Jcbs_IxCTeOMDCEhI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedujedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
-    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:sXhLZICeUj5YmbBGBf_2m0H6PdWJkxUh3cvjU_9w54cXtxEeD9Uaeg>
-    <xmx:sXhLZKfodyYkaB9AElovPFxDfwUHR8mUJf5ooIYAhxFkIsxA5POH_w>
-    <xmx:sXhLZHPdS6QKadaKE8YtYrFaIvC03TvHzezzcglBLhUn06N1drpMBQ>
-    <xmx:snhLZPb3qpLzi_KGSCW3CvjqMT17lW441eMUaxBX-rqa1NYZ3zdyZQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B945B60086; Fri, 28 Apr 2023 03:41:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
-Mime-Version: 1.0
-Message-Id: <52dd950a-e714-4ebe-a663-4e0ec6463d03@app.fastmail.com>
-In-Reply-To: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
-References: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
-Date:   Fri, 28 Apr 2023 08:40:51 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stanislav Kinsburskii" <skinsburskii@linux.microsoft.com>
-Cc:     "Matt Turner" <mattst88@gmail.com>, x86@kernel.org,
-        "Stanislav Kinsburskii" <stanislav.kinsburskii@gmail.com>,
-        "Borislav Petkov" <bp@alien8.de>, linux-ia64@vger.kernel.org,
-        "Mark Brown" <broonie@kernel.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        linux-kernel@vger.kernel.org, "Brian Cain" <bcain@quicinc.com>,
-        linux-mips@vger.kernel.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        linux-alpha@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Omar Sandoval" <osandov@fb.com>, "Helge Deller" <deller@gmx.de>,
-        linuxppc-dev@lists.ozlabs.org, linux-hexagon@vger.kernel.org,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Florian Fainelli" <f.fainelli@gmail.com>,
-        "Chris Down" <chris@chrisdown.name>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: [PATCH 0/7] Expect immutable pointer in virt_to_phys/isa_virt_to_bus
- prototypes
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        with ESMTP id S229680AbjD1J1Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 05:27:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52232709;
+        Fri, 28 Apr 2023 02:27:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3BA8221A2D;
+        Fri, 28 Apr 2023 09:27:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682674033; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=H634jX8sSYMwnQT1vLr7vYP2Eo6TaCU+J3gzKVsIAq4=;
+        b=VbHHcK4793S8Ps7niwJ/Fwfmq+pXThNJc0kyX1jeLNE6xy35UoTR3ljF9sLnSM3cZintOy
+        YdHtZSHPLoPgN1oikxQp2DXNqWBiENQRuP0ROqwzpUBiK1jRzN3nwlptu1ijUTjf0zvy/d
+        zq4KTdTSkchp187Tn9tNbgxtKTUcp6U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682674033;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=H634jX8sSYMwnQT1vLr7vYP2Eo6TaCU+J3gzKVsIAq4=;
+        b=DW2G43drDfPSAccNnQi6KBQ7vl1Fmv8Co40ZZveXyfpskVMHp3yPMtZ6tOE7+kr7M00llZ
+        MhFKTW90T3B8rDAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C0F21138FA;
+        Fri, 28 Apr 2023 09:27:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jkouLnCRS2ReFwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 28 Apr 2023 09:27:12 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
+        sam@ravnborg.org
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v2 0/5] fbdev: Use regular I/O function for framebuffers
+Date:   Fri, 28 Apr 2023 11:27:06 +0200
+Message-Id: <20230428092711.406-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -111,25 +73,71 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Apr 15, 2023, at 12:17, Stanislav Kinsburskii wrote:
-> This series is aimed to address compilation warnings when a constant p=
-ointer
-> is passed to virt_to_phys and isa_virt_to_bus functions:
->
->   warning: passing argument 1 of =E2=80=98virt_to_phys=E2=80=99 discar=
-ds =E2=80=98const=E2=80=99=20
-> qualifier from pointer target type
->   warning: passing argument 1 of =E2=80=98isa_virt_to_bus=E2=80=99 dis=
-cards =E2=80=98const=E2=80=99=20
-> qualifier from pointer target type
->
-> The change(s) is the same for all architectures, but it's split into a=
- series on
-> per-arch basis to simplify applying and testing on the maintainers sid=
-e.
->
+(was: fbdev: Move framebuffer I/O helpers to <asm/fb.h>)
 
-Looks all good to me. If everyone is happy with it, I'll queue it up
-after in the asm-generic tree for 6.5, once rc1 is out.
+Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+depends on the architecture, but they all come down to regular I/O
+functions of similar names. So use the regular functions instead.
 
- Arnd
+The first patch a simple whitespace cleanup.
+
+Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+will go away patches 2 to 4 prepare include statements in the various
+drivers. Source files that use regular I/O helpers, such as readl(),
+now include <linux/io.h>. Source files that use framebuffer I/O
+helpers, such as fb_readl(), also include <linux/io.h>.
+
+Patch 5 replaces the architecture-based if-else branching in 
+<linux/fb.h> by define statements that map to Linux' I/O fucntions.
+
+After this change has been merged and included in a few release
+without complains, we can update the drivers to regular I/O functions
+and remove the fbdev-specific defines.
+
+The patchset has been built for a variety of platforms, such as x86-64,
+arm, aarch64, ppc64, parisc, m64k, mips and sparc.
+
+v2:
+	* use Linux I/O helpers (Sam, Arnd)
+
+Thomas Zimmermann (5):
+  fbdev/matrox: Remove trailing whitespaces
+  ipu-v3: Include <linux/io.h>
+  fbdev: Include <linux/io.h> in various drivers
+  fbdev: Include <linux/io.h> in drivers
+  fbdev: Define framebuffer I/O from Linux' I/O functions
+
+ drivers/gpu/ipu-v3/ipu-prv.h                |  1 +
+ drivers/video/fbdev/arcfb.c                 |  1 +
+ drivers/video/fbdev/arkfb.c                 |  1 +
+ drivers/video/fbdev/aty/atyfb.h             |  2 +
+ drivers/video/fbdev/aty/mach64_cursor.c     |  3 +-
+ drivers/video/fbdev/chipsfb.c               |  1 +
+ drivers/video/fbdev/cirrusfb.c              |  1 +
+ drivers/video/fbdev/core/cfbcopyarea.c      |  2 +-
+ drivers/video/fbdev/core/cfbfillrect.c      |  2 +
+ drivers/video/fbdev/core/cfbimgblt.c        |  2 +
+ drivers/video/fbdev/core/fbmem.c            |  1 +
+ drivers/video/fbdev/core/svgalib.c          |  2 +-
+ drivers/video/fbdev/hgafb.c                 |  2 +-
+ drivers/video/fbdev/hitfb.c                 |  2 +-
+ drivers/video/fbdev/kyro/fbdev.c            |  2 +-
+ drivers/video/fbdev/matrox/matroxfb_accel.c |  8 ++-
+ drivers/video/fbdev/matrox/matroxfb_base.h  |  6 +-
+ drivers/video/fbdev/pm2fb.c                 |  1 +
+ drivers/video/fbdev/pm3fb.c                 |  1 +
+ drivers/video/fbdev/pvr2fb.c                |  1 +
+ drivers/video/fbdev/s3fb.c                  |  1 +
+ drivers/video/fbdev/sstfb.c                 |  2 +-
+ drivers/video/fbdev/tdfxfb.c                |  2 +-
+ drivers/video/fbdev/tridentfb.c             |  1 +
+ drivers/video/fbdev/vga16fb.c               |  2 +-
+ drivers/video/fbdev/vt8623fb.c              |  1 +
+ drivers/video/fbdev/wmt_ge_rops.c           |  2 +
+ include/linux/fb.h                          | 63 +++++----------------
+ 28 files changed, 52 insertions(+), 64 deletions(-)
+
+-- 
+2.40.0
+
