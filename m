@@ -2,66 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3F56F0AAB
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Apr 2023 19:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745BB6F12A6
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 09:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244313AbjD0RSw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Apr 2023 13:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S1345763AbjD1Hnw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Apr 2023 03:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244122AbjD0RSl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Apr 2023 13:18:41 -0400
-X-Greylist: delayed 78983 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 27 Apr 2023 10:18:39 PDT
-Received: from mailrelay5-1.pub.mailoutpod2-cph3.one.com (mailrelay5-1.pub.mailoutpod2-cph3.one.com [46.30.211.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78827197
-        for <linux-arch@vger.kernel.org>; Thu, 27 Apr 2023 10:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=3aPWmuilP5wLRilofoqbOrLGxKBwB7pAtJ4SXkaLvoc=;
-        b=TLJMIi0RX8F2D4MECviwMXYvEcVb0lEsEy3+u8aUlSP8SU8rlCRGlNNmsB/nVOCzgK5pBrkqJQZ1F
-         4Pk0P0hLFN1/gQl0wOoX80yo5LMFFkY8AFk8tIjenbcNtBTjLcrXTVOu35BU0ZgXdWnnSf7qi6nZ3E
-         orNHCnRqwI7LiLkgzVpEQaOMbxTZLeop5dV4q915EpZK5kidlhmu8EBhfMffenaiZSY9k7inpdXkTU
-         Jqtqf/GAdMoncZ0gbyd6bbDaxV/c7d0xakYFi8MhdcA4DCSizJdUq7VgNEnQ2ErW0+f+L1lpNilWl3
-         /TH/k1Te5r34DMQFVMUEym1QgkeLrjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=3aPWmuilP5wLRilofoqbOrLGxKBwB7pAtJ4SXkaLvoc=;
-        b=G5LZPAqKFgpnZqaJfT/ouJ07IZWuTH9E70Iw4lwAnH6U6PTleuFBBWfBI+H0sNsJGesQJZYrDGZOe
-         rwUJGIwDg==
-X-HalOne-ID: 62b9268b-e51f-11ed-ad1f-231b2edd0ed2
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay5 (Halon) with ESMTPSA
-        id 62b9268b-e51f-11ed-ad1f-231b2edd0ed2;
-        Thu, 27 Apr 2023 17:17:31 +0000 (UTC)
-Date:   Thu, 27 Apr 2023 19:17:29 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH 0/5] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
-Message-ID: <20230427171729.GA3899979@ravnborg.org>
-References: <20230426130420.19942-1-tzimmermann@suse.de>
- <20230426192110.GA3791243@ravnborg.org>
- <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e33ab1d-b478-fdf5-6fbe-6580000182d1@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        with ESMTP id S1345641AbjD1Hng (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 03:43:36 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D015FC0;
+        Fri, 28 Apr 2023 00:42:35 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 615423200319;
+        Fri, 28 Apr 2023 03:41:39 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 28 Apr 2023 03:41:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
+        JdT/8deI=; b=DclSOfxipXonjr10Zfze2g04tEcMacCmPEMQj9KSUXPgBjVvL3b
+        MQo6fuWFJzT27nHJRs74jQBGwTtn2n2KHu5aTUjHmlrE0229hVE5oHF9yZDkS3ew
+        p1PmAZmZsXTagjeqlDcNnPsWoMKrE3WDRUgwOnllR2Mxd40mEjio8JDSoZrBhcLY
+        EpF/qnQ//QXfqOClL6sTo+6QcKph0TMZrseOTG+p/07lIk+CJDRuw9l1QbbyGXjO
+        Eb35nUJHmU87iS3+aXTcjIEw3yWT1ZcEtVJ4ScA81na/2JXShjG0jXm+bNsByN9H
+        0auAMaDbwZPPaqpkQeZO7SI/+wjiURWUsIw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1682667698; x=1682754098; bh=IpndvKPF8+ZBYjcJVQBy1hma252/YYop7a9
+        JdT/8deI=; b=ZK/ac6fyNoZWTXPXbTwDD4R131otN5WDVVkeFrFt0hh+B+HJxI8
+        X1G/CekMUpexmmrmmtZG9J6nlcBpYM2so1ttFbssFuvmAd/ypJumITr52uxj1kqy
+        Zy5c2xC/bhpYC6ggOg+MvqevGn68/zmzyOJ/3I3FVAlKSomAD5e4Rd6yFIqBKGoS
+        hfpNiJGqsm98wDNSPOSseTUhCzwwWb6vjvWT3xqdwN747++XNPbtRAEMqvBh4uIw
+        8a5wbLZI4Yp1uAxenqy8Yq0fZoWyfdJOOTsgpDQXZZOenD4BGJ/pbNjPRx5NNA7H
+        eRdIwS64tODrt1vngpa6XkfH9l9gVEeJE5g==
+X-ME-Sender: <xms:sXhLZC_w2Ek7ASHPBn9INJdoLclKFnb0_xbl3lC3xmLCPyKQXxk-BA>
+    <xme:sXhLZCuacs7cUiWYO0nEuiBYqB32l5BX1MLYeiBEMcK-fUP18Owr4Xr3Py6CFXhZd
+    _Jcbs_IxCTeOMDCEhI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedujedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
+    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
+    grthhtvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudek
+    tdfgjeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:sXhLZICeUj5YmbBGBf_2m0H6PdWJkxUh3cvjU_9w54cXtxEeD9Uaeg>
+    <xmx:sXhLZKfodyYkaB9AElovPFxDfwUHR8mUJf5ooIYAhxFkIsxA5POH_w>
+    <xmx:sXhLZHPdS6QKadaKE8YtYrFaIvC03TvHzezzcglBLhUn06N1drpMBQ>
+    <xmx:snhLZPb3qpLzi_KGSCW3CvjqMT17lW441eMUaxBX-rqa1NYZ3zdyZQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1B945B60086; Fri, 28 Apr 2023 03:41:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <52dd950a-e714-4ebe-a663-4e0ec6463d03@app.fastmail.com>
+In-Reply-To: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
+References: <168155718437.13678.714141668943813263.stgit@skinsburskii.localdomain>
+Date:   Fri, 28 Apr 2023 08:40:51 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stanislav Kinsburskii" <skinsburskii@linux.microsoft.com>
+Cc:     "Matt Turner" <mattst88@gmail.com>, x86@kernel.org,
+        "Stanislav Kinsburskii" <stanislav.kinsburskii@gmail.com>,
+        "Borislav Petkov" <bp@alien8.de>, linux-ia64@vger.kernel.org,
+        "Mark Brown" <broonie@kernel.org>,
+        "Richard Henderson" <richard.henderson@linaro.org>,
+        linux-kernel@vger.kernel.org, "Brian Cain" <bcain@quicinc.com>,
+        linux-mips@vger.kernel.org,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        linux-alpha@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Omar Sandoval" <osandov@fb.com>, "Helge Deller" <deller@gmx.de>,
+        linuxppc-dev@lists.ozlabs.org, linux-hexagon@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Chris Down" <chris@chrisdown.name>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [PATCH 0/7] Expect immutable pointer in virt_to_phys/isa_virt_to_bus
+ prototypes
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +111,25 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Thomas,
+On Sat, Apr 15, 2023, at 12:17, Stanislav Kinsburskii wrote:
+> This series is aimed to address compilation warnings when a constant p=
+ointer
+> is passed to virt_to_phys and isa_virt_to_bus functions:
+>
+>   warning: passing argument 1 of =E2=80=98virt_to_phys=E2=80=99 discar=
+ds =E2=80=98const=E2=80=99=20
+> qualifier from pointer target type
+>   warning: passing argument 1 of =E2=80=98isa_virt_to_bus=E2=80=99 dis=
+cards =E2=80=98const=E2=80=99=20
+> qualifier from pointer target type
+>
+> The change(s) is the same for all architectures, but it's split into a=
+ series on
+> per-arch basis to simplify applying and testing on the maintainers sid=
+e.
+>
 
-On Thu, Apr 27, 2023 at 09:22:47AM +0200, Thomas Zimmermann wrote:
-> Hi Sam
-> 
-> Am 26.04.23 um 21:21 schrieb Sam Ravnborg:
-> > Hi Thomas.
-> > 
-> > On Wed, Apr 26, 2023 at 03:04:15PM +0200, Thomas Zimmermann wrote:
-> > > Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
-> > > fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
-> > > depends on the architecture. It's still all located in fbdev's main
-> > > header file <linux/fb.h>. Move all of it into each archtecture's
-> > > <asm/fb.h>, with shared code in <asm-generic/fb.h>.
-> > 
-> > For once I think this cleanup is moving things in the wrong direction.
-> > 
-> > The fb_* helpers predates the generic io.h support and try to
-> > add a generic layer for read read / write operations.
-> > 
-> > The right fix would be to migrate fb_* to use the io helpers
-> > we have today - so we use the existing way to handle the architecture
-> > specific details.
-> 
-> I looked through the existing versions of the fb_() I/O helpers. They can
-> apparently be implemented with the regular helpers of similar names.
-> 
-> I'm not sure, but even Sparc looks compatible. At least these sbus_
-> functions seem to be equivalent to the __raw_() I/O helpers of similar
-> names.
+Looks all good to me. If everyone is happy with it, I'll queue it up
+after in the asm-generic tree for 6.5, once rc1 is out.
 
-> Do you still have that Sparc emulator?
-I used qemu the last time I played with sparc and saved the instructions
-somewhere how to redo it - but that would use to bohcs driver only I think.
-I have saprc machines, but none of these are easy to get operational.
-We can always ask on sparclinux to get some testing feedback.
-
-> 
-> > 
-> >  From a quick look there seems to be some challenges but the current
-> > helpers that re-do part of io.h is not the way forward and hiding them
-> > in arch/include/asm/fb.h seems counter productive.
-> 
-> Which challenges did you see?
-sparc was the main thing - but maybe I did not look close enough.
-And then I tried to map the macros to some of the more highlevel ones
-from io.h, but as Arnd says the __raw* is the way to go here.
-
-	Sam
+ Arnd
