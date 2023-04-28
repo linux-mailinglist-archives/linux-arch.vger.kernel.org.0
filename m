@@ -2,63 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E53F6F1F1C
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 22:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5216F2010
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Apr 2023 23:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjD1UHy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Apr 2023 16:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S230110AbjD1VYQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Apr 2023 17:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjD1UHv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 16:07:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E113426B1;
-        Fri, 28 Apr 2023 13:07:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1682712469; x=1714248469;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PRZUzl2+jUQ5/3Y8Iv0j6iOFtZtJybzPsYUqZNHp0vc=;
-  b=BBu2oVJnLlHobQ8bElD7j2LhfJPeop4co2v74urjJATlUU/JbtULVWaw
-   AZBvrB6YSQyuPBrLEBFY4faDXpH62Qn0qKRVr0iMLkDd+cv/PdjFmpfZ8
-   4DU0zN1JISXTErbaFEc1hGtdz+Orwl5knemLHFRjRFk621u0ht5ew+QFR
-   51DbvXMiwyQTEJvdOcDawWmOnFNCIzYQ33GAGVXvIgKFuDZ0gZIgDyD7R
-   7gBjGFbGd9XjP7YU59bndmu7VPJuyqA8fDY2Z2N+nO45n8hc6FOTy5zHy
-   yUzYvPQ6uwqa5Rjd5bMu1UsnHsqEN/SPYdchX0dKQxafYpzxykhkoW0iJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="346616661"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="346616661"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2023 13:07:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10694"; a="838971503"
-X-IronPort-AV: E=Sophos;i="5.99,235,1677571200"; 
-   d="scan'208";a="838971503"
-Received: from lkp-server01.sh.intel.com (HELO 5bad9d2b7fcb) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Apr 2023 13:07:43 -0700
-Received: from kbuild by 5bad9d2b7fcb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1psUNa-0000er-12;
-        Fri, 28 Apr 2023 20:07:42 +0000
-Date:   Sat, 29 Apr 2023 04:07:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yi-De Wu <yi-de.wu@mediatek.com>,
-        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        with ESMTP id S229751AbjD1VYP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Apr 2023 17:24:15 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAD91BFA;
+        Fri, 28 Apr 2023 14:24:14 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-390723f815fso194190b6e.3;
+        Fri, 28 Apr 2023 14:24:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682717053; x=1685309053;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IAPY815zoxAtMPmlMXHufDygNyWf4XGrhN0PoJVnSps=;
+        b=bLskf3YC/l8X3R50nlODXYqY5qLQQwyVkhV8DqaFv8aTh60n4nSxeh4wQ/s3UUwOKb
+         3Mh4Mga16lSJjSHBjlRy70yKSqI3LosBFnU72luFpJpm49nGbJwncY3/jnazZE6Ow/Gl
+         cJp7j1k74KKeeHies1L+gRhkygdK6qM6HNJg7syxMjQrazyPG+5i1qSJp5D64wZYtik0
+         kFi108PeaNtHnENVF4l9e/OUP4ne2JPq1CMHhaNeS/Agi45bsN94ATdSTmCkRgwE5Tu1
+         3hgLsa1DZ2PjmlVBr8ht+GkhQOmjDZNvxr59etaOY41dJBptbCHHQ9dA5JCA6Scg+BIG
+         +I5A==
+X-Gm-Message-State: AC+VfDzeiQBuuEURnU4cWmfoqJhD7iHiHf+TyLHDibS1U3sH3/csdx2N
+        469WvXz+Z6L1cbBp639nhg==
+X-Google-Smtp-Source: ACHHUZ4ejwMUkARoZivIyIZvQ1OVmA6kIV/k9dm1oOfq0PdWN5jKAu6yLm5KZXEfQ/nrJ6VzEGxTwQ==
+X-Received: by 2002:a05:6808:2787:b0:38e:dc5b:7bc0 with SMTP id es7-20020a056808278700b0038edc5b7bc0mr3045160oib.59.1682717053559;
+        Fri, 28 Apr 2023 14:24:13 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j6-20020acab906000000b00383eaea5e88sm9096118oif.38.2023.04.28.14.24.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Apr 2023 14:24:12 -0700 (PDT)
+Received: (nullmailer pid 299800 invoked by uid 1000);
+        Fri, 28 Apr 2023 21:24:11 -0000
+Date:   Fri, 28 Apr 2023 16:24:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Yi-De Wu <yi-de.wu@mediatek.com>
+Cc:     Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
         Ze-Yu Wang <ze-yu.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
         David Bradil <dbrazdil@google.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Jade Shih <jades.shih@mediatek.com>,
@@ -68,191 +63,35 @@ Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
         Shawn Hsiao <shawn.hsiao@mediatek.com>,
         PeiLun Suei <peilun.suei@mediatek.com>,
         Liju Chen <liju-clr.chen@mediatek.com>
-Subject: Re: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor
- support
-Message-ID: <202304290334.fCw7PKYU-lkp@intel.com>
-References: <20230428103622.18291-4-yi-de.wu@mediatek.com>
+Subject: Re: [PATCH v2 2/7] dt-bindings: hypervisor: Add MediaTek GenieZone
+ hypervisor
+Message-ID: <20230428212411.GA292303-robh@kernel.org>
+References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
+ <20230428103622.18291-3-yi-de.wu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230428103622.18291-4-yi-de.wu@mediatek.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230428103622.18291-3-yi-de.wu@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Yi-De,
+On Fri, Apr 28, 2023 at 06:36:17PM +0800, Yi-De Wu wrote:
+> From: "Yingshiuan Pan" <yingshiuan.pan@mediatek.com>
+> 
+> Add documentation for GenieZone(gzvm) node. This node informs gzvm
+> driver to start probing if geniezone hypervisor is available and
+> able to do virtual machine operations.
 
-kernel test robot noticed the following build warnings:
+Why can't the driver just try and do virtual machine operations to see 
+if the hypervisor is there? IOW, make your software interfaces 
+discoverable. DT is for non-discoverable hardware.
 
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on robh/for-next arnd-asm-generic/master linus/master v6.3 next-20230428]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230428103622.18291-4-yi-de.wu%40mediatek.com
-patch subject: [PATCH v2 3/7] virt: geniezone: Introduce GenieZone hypervisor support
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230429/202304290334.fCw7PKYU-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0e3f05a6e4547eb309032d047115a47d8f59641d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yi-De-Wu/docs-geniezone-Introduce-GenieZone-hypervisor/20230428-183738
-        git checkout 0e3f05a6e4547eb309032d047115a47d8f59641d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/geniezone/ drivers/virt/geniezone/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202304290334.fCw7PKYU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/geniezone/gzvm_arch.c:112:5: warning: no previous prototype for 'gzvm_vm_arch_enable_cap' [-Wmissing-prototypes]
-     112 | int gzvm_vm_arch_enable_cap(struct gzvm *gzvm, struct gzvm_enable_cap *cap,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
---
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a0' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a1' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a2' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a3' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a4' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a5' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a6' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'a7' not described in 'gzvm_hypcall_wrapper'
-   arch/arm64/geniezone/gzvm_arch.c:24: warning: Function parameter or member 'res' not described in 'gzvm_hypcall_wrapper'
->> arch/arm64/geniezone/gzvm_arch.c:24: warning: expecting prototype for geniezone_hypercall_wrapper(). Prototype was for gzvm_hypcall_wrapper() instead
-   arch/arm64/geniezone/gzvm_arch.c:133: warning: Function parameter or member 'gzvm' not described in 'gzvm_vm_ioctl_get_pvmfw_size'
-   arch/arm64/geniezone/gzvm_arch.c:133: warning: Function parameter or member 'cap' not described in 'gzvm_vm_ioctl_get_pvmfw_size'
-   arch/arm64/geniezone/gzvm_arch.c:133: warning: Function parameter or member 'argp' not described in 'gzvm_vm_ioctl_get_pvmfw_size'
-   arch/arm64/geniezone/gzvm_arch.c:155: warning: Function parameter or member 'gzvm' not described in 'gzvm_vm_ioctl_cap_pvm'
-   arch/arm64/geniezone/gzvm_arch.c:155: warning: Function parameter or member 'cap' not described in 'gzvm_vm_ioctl_cap_pvm'
-   arch/arm64/geniezone/gzvm_arch.c:155: warning: Function parameter or member 'argp' not described in 'gzvm_vm_ioctl_cap_pvm'
-
-
-vim +/gzvm_vm_arch_enable_cap +112 arch/arm64/geniezone/gzvm_arch.c
-
-    13	
-    14	/**
-    15	 * geniezone_hypercall_wrapper()
-    16	 *
-    17	 * Return: The wrapper helps caller to convert geniezone errno to Linux errno.
-    18	 */
-    19	static int gzvm_hypcall_wrapper(unsigned long a0, unsigned long a1,
-    20					unsigned long a2, unsigned long a3,
-    21					unsigned long a4, unsigned long a5,
-    22					unsigned long a6, unsigned long a7,
-    23					struct arm_smccc_res *res)
-  > 24	{
-    25		arm_smccc_hvc(a0, a1, a2, a3, a4, a5, a6, a7, res);
-    26		return gz_err_to_errno(res->a0);
-    27	}
-    28	
-    29	int gzvm_arch_probe(void)
-    30	{
-    31		struct arm_smccc_res res;
-    32	
-    33		arm_smccc_hvc(MT_HVC_GZVM_PROBE, 0, 0, 0, 0, 0, 0, 0, &res);
-    34		if (res.a0 == 0)
-    35			return 0;
-    36	
-    37		return -ENXIO;
-    38	}
-    39	
-    40	int gzvm_arch_set_memregion(gzvm_id_t vm_id, size_t buf_size,
-    41				    phys_addr_t region)
-    42	{
-    43		struct arm_smccc_res res;
-    44	
-    45		return gzvm_hypcall_wrapper(MT_HVC_GZVM_SET_MEMREGION, vm_id,
-    46					    buf_size, region, 0, 0, 0, 0, &res);
-    47	}
-    48	
-    49	static int gzvm_cap_arm_vm_ipa_size(void __user *argp)
-    50	{
-    51		__u64 value = CONFIG_ARM64_PA_BITS;
-    52	
-    53		if (copy_to_user(argp, &value, sizeof(__u64)))
-    54			return -EFAULT;
-    55	
-    56		return 0;
-    57	}
-    58	
-    59	int gzvm_arch_check_extension(struct gzvm *gzvm, __u64 cap, void __user *argp)
-    60	{
-    61		int ret = -EOPNOTSUPP;
-    62	
-    63		switch (cap) {
-    64		case GZVM_CAP_ARM_PROTECTED_VM: {
-    65			__u64 success = 1;
-    66	
-    67			if (copy_to_user(argp, &success, sizeof(__u64)))
-    68				return -EFAULT;
-    69			ret = 0;
-    70			break;
-    71		}
-    72		case GZVM_CAP_ARM_VM_IPA_SIZE: {
-    73			ret = gzvm_cap_arm_vm_ipa_size(argp);
-    74			break;
-    75		}
-    76		default:
-    77			ret = -EOPNOTSUPP;
-    78		}
-    79	
-    80		return ret;
-    81	}
-    82	
-    83	/**
-    84	 * gzvm_arch_create_vm()
-    85	 *
-    86	 * Return:
-    87	 * * positive value	- VM ID
-    88	 * * -ENOMEM		- Memory not enough for storing VM data
-    89	 */
-    90	int gzvm_arch_create_vm(void)
-    91	{
-    92		struct arm_smccc_res res;
-    93		int ret;
-    94	
-    95		ret = gzvm_hypcall_wrapper(MT_HVC_GZVM_CREATE_VM, 0, 0, 0, 0, 0, 0, 0,
-    96					   &res);
-    97	
-    98		if (ret == 0)
-    99			return res.a1;
-   100		else
-   101			return ret;
-   102	}
-   103	
-   104	int gzvm_arch_destroy_vm(gzvm_id_t vm_id)
-   105	{
-   106		struct arm_smccc_res res;
-   107	
-   108		return gzvm_hypcall_wrapper(MT_HVC_GZVM_DESTROY_VM, vm_id, 0, 0, 0, 0,
-   109					    0, 0, &res);
-   110	}
-   111	
- > 112	int gzvm_vm_arch_enable_cap(struct gzvm *gzvm, struct gzvm_enable_cap *cap,
-   113				    struct arm_smccc_res *res)
-   114	{
-   115		return gzvm_hypcall_wrapper(MT_HVC_GZVM_ENABLE_CAP, gzvm->vm_id,
-   116					   cap->cap, cap->args[0], cap->args[1],
-   117					   cap->args[2], cap->args[3], cap->args[4],
-   118					   res);
-   119	}
-   120	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Rob
