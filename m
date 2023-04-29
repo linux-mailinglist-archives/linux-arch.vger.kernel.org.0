@@ -2,199 +2,198 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0886F23A4
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Apr 2023 09:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBA26F24A5
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Apr 2023 14:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjD2Hrf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Apr 2023 03:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S230486AbjD2M0R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Apr 2023 08:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjD2Hre (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Apr 2023 03:47:34 -0400
-X-Greylist: delayed 1044 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 29 Apr 2023 00:47:33 PDT
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234BB1BF2
-        for <linux-arch@vger.kernel.org>; Sat, 29 Apr 2023 00:47:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=ncDaDqDwwscytnxZqksS1TxOdUdsbxUd69f/Fut6Lo4=; b=cAYErngPgHPVbC8ryW4Rp8W9/P
-        IVMED0TPs9sVG9KZ9rz1T75JQtLdq+BPoDB0VJUiKaXrRbIbKGK5vnR8LFLDjZOYV5zx/QtpLDztP
-        OUQmRGn5rqgjR0Ae9lNnub8ad2yx2yFtRubTLBdlLXN28kWiIZVgN6XtUX4VVjSDu1XfM1vkocRdw
-        G6JB3RjPJ5g3FZZA80Ys+h+YKuoXl6nVVgMl9xhImAAJLS5e6JMFsuF7FgkoDs+ozdrMwJOxtPsT1
-        yPgglJbWeOHl+FqUpDn3lNuKUpPUz7hfkhkgccVY4beL0I1k8AlsC903Mf1z9tBMmn5HAKae3TzPL
-        bOeKUzLQ==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1psf1d-00CzBD-UU; Sat, 29 Apr 2023 09:29:45 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1psf1c-009rOz-1w;
-        Sat, 29 Apr 2023 09:29:44 +0200
-Date:   Sat, 29 Apr 2023 09:29:44 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Eduard Zingerman <eddyz87@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>
-Subject: Re: [PATCH] arm64: remove special treatment for the link order of
- head.o
-Message-ID: <ZEzHaJUP21Ln5XBt@aurel32.net>
-Mail-Followup-To: Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" <bpf@vger.kernel.org>
-References: <20221012233500.156764-1-masahiroy@kernel.org>
- <ZBovCrMXJk7NPISp@aurel32.net>
- <CAMj1kXHwtb9aY+vd4e69Wg47GpL0sT=dDaCUA1sF7=edzc+Qeg@mail.gmail.com>
- <ZBzAp457rrO52FPy@aurel32.net>
- <CAMj1kXHvfHwQFX1SKbUvpHWOr3+i7Tp5Hod-_jZE4hDHZmmRZg@mail.gmail.com>
- <CAK7LNASdsWMP2jud4niOkrR5+a2jG-Vfo0XEa63bh3L3W6_t0Q@mail.gmail.com>
- <CAK7LNASUbyDV-kMi3fuihUdfnhtzHnk9wosQ0w-fuamDcT2ZBg@mail.gmail.com>
- <2d8f0889da0e3dfa9c1c8fe9da301d54636a2e6d.camel@gmail.com>
- <ZCNFi65T4anhk6hH@kernel.org>
+        with ESMTP id S229507AbjD2M0Q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Apr 2023 08:26:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD7F199B;
+        Sat, 29 Apr 2023 05:26:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 886AE21AD9;
+        Sat, 29 Apr 2023 12:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1682771173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ggHjBqSIfzeqcVtGsNuNiNCmozKORAe1+aPPd89K2Zo=;
+        b=gTmI3qC52L6UapKnmdBrpTYkRo+blaTmZ+xqAtZthGf3NWsd77H1PPxPpBlGcazt6SKDe8
+        vNhd49xkN0Rqx1ocjYvQqNFFBMsShzkqugczm+9ra9L6uYqGgC0TPNVZQLNcs+CFDu9Gn0
+        pIaiu5WIocPIe9hlB/2hwQskx28q5gY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1682771173;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ggHjBqSIfzeqcVtGsNuNiNCmozKORAe1+aPPd89K2Zo=;
+        b=L4Zc58oyVTd4UKL+MonKy5CY8zkM6HMZb5L7fiOLMtNrFeMy78aWw46Qmn1G9n/fSO1DPL
+        DgTKrJpyZ6IWA6Bg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1F67A138E0;
+        Sat, 29 Apr 2023 12:26:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MgW7BuUMTWRUSAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Sat, 29 Apr 2023 12:26:13 +0000
+Message-ID: <df6fa134-3a62-0872-e008-393e4a29a5ab@suse.de>
+Date:   Sat, 29 Apr 2023 14:26:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZCNFi65T4anhk6hH@kernel.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
+ functions
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
+References: <20230428092711.406-1-tzimmermann@suse.de>
+ <20230428092711.406-6-tzimmermann@suse.de>
+ <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
+ <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
+ <f612c682-5767-4a58-82f6-f4a4d1b592a1@app.fastmail.com>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <f612c682-5767-4a58-82f6-f4a4d1b592a1@app.fastmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------MelAIvX5Zq5p7fTWZnZe1KnI"
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2023-03-28 16:52, Arnaldo Carvalho de Melo wrote:
-> Em Tue, Mar 28, 2023 at 01:33:29PM +0300, Eduard Zingerman escreveu:
-> > On Sat, 2023-03-25 at 20:42 +0900, Masahiro Yamada wrote:
-> > [...]
-> > > > Strange.
-> > > > 
-> > > > I used the .config file Aurelien provided, but
-> > > > I still cannot reproduce this issue.
-> > > > 
-> > > > The vmlinux size is small as-is in the current mainline.
-> > > > 
-> > > > [mainline]
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ git log --oneline -1
-> > > > 65aca32efdcb (HEAD -> master, origin/master, origin/HEAD) Merge tag
-> > > > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-size  vmlinux
-> > > >    text    data     bss     dec     hex filename
-> > > > 24561282 8186912 622032 33370226 1fd3072 vmlinux
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-readelf -S
-> > > > vmlinux | grep -A1 BTF
-> > > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> > > >        000000000048209c  0000000000000000   A       0     0     1
-> > > >   [16] .BTF_ids          PROGBITS         ffff8000096427a4  016527a4
-> > > >        0000000000000a1c  0000000000000000   A       0     0     1
-> > > > 
-> > > > [mainline + revert 994b7ac]
-> > > > 
-> > > > masahiro@zoe:~/ref/linux2(testing)$ git log --oneline -2
-> > > > 856c80dd789c (HEAD -> testing) Revert "arm64: remove special treatment
-> > > > for the link order of head.o"
-> > > > 65aca32efdcb (origin/master, origin/HEAD, master) Merge tag
-> > > > 'mm-hotfixes-stable-2023-03-24-17-09' of
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> > > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-size  vmlinux
-> > > >    text    data     bss     dec     hex filename
-> > > > 24561329 8186912 622032 33370273 1fd30a1 vmlinux
-> > > > masahiro@zoe:~/ref/linux2(testing)$ aarch64-linux-gnu-readelf -S
-> > > > vmlinux | grep -A1 BTF
-> > > >   [15] .BTF              PROGBITS         ffff8000091c0708  011d0708
-> > > >        00000000004820cb  0000000000000000   A       0     0     1
-> > > >   [16] .BTF_ids          PROGBITS         ffff8000096427d4  016527d4
-> > > >        0000000000000a1c  0000000000000000   A       0     0     1
-> > > > 
-> > > > 
-> > > > 
-> > > > I still do not know what affects reproducibility.
-> > > > (compiler version, pahole version, etc. ?)
-> > > > 
-> > > > 
-> > > > 
-> > > > 
-> > > > Aurelien used GCC 12 + binutils 2.40, but
-> > > > my toolchain is a bit older.
-> > > > 
-> > > > FWIW, I tested this on Ubuntu 22.04LTS.
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-gcc --version
-> > > > aarch64-linux-gnu-gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
-> > > > Copyright (C) 2021 Free Software Foundation, Inc.
-> > > > This is free software; see the source for copying conditions.  There is NO
-> > > > warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ pahole --version
-> > > > v1.22
-> > > > 
-> > > > masahiro@zoe:~/ref/linux(master)$ aarch64-linux-gnu-as --version
-> > > > GNU assembler (GNU Binutils for Ubuntu) 2.38
-> > > > Copyright (C) 2022 Free Software Foundation, Inc.
-> > > > This program is free software; you may redistribute it under the terms of
-> > > > the GNU General Public License version 3 or later.
-> > > > This program has absolutely no warranty.
-> > > > This assembler was configured for a target of `aarch64-linux-gnu'.
-> > > 
-> > > I did the same things in Deiban sid
-> > > in order to use newer versions of tools.
-> > 
-> > 
-> > Hi Masahiro,
-> > 
-> > An upgrade from gcc 11 to gcc 12, BTF section increase and a number of
-> > duplicate IDs reported by resolve_btfids matches the description of
-> > the following thread:
-> > 
-> > https://lore.kernel.org/bpf/Y%2FP1yxAuV6Wj3A0K@google.com/
-> > 
-> > The issue is caused by change in GNU assembler DWARF generation.
-> > I've sent a patch to fix it a few weeks ago and it is merged in
-> > dwarves master:
-> > 
-> > a9498899109d ("dwarf_loader: Fix for BTF id drift caused by adding unspecified types")
-> > 
-> > Could you please grab a fresh version of dwarves from:
-> > 
-> > git@github.com:acmel/dwarves.git
-> > 
-> > compile 'pahole' and try with?
-> 
-> pahole 1.25 is long overdue, so let see if this got fixed with what is
-> in master, please take a look, you can as well get it from:
-> 
-> git://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------MelAIvX5Zq5p7fTWZnZe1KnI
+Content-Type: multipart/mixed; boundary="------------XHeCVpw7PiHVQpg0Jphmy7XG";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@arndb.de>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Robin Murphy <robin.murphy@arm.com>
+Cc: Helge Deller <deller@gmx.de>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Vineet Gupta <vgupta@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ "David S . Miller" <davem@davemloft.net>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Sam Ravnborg <sam@ravnborg.org>, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
+Message-ID: <df6fa134-3a62-0872-e008-393e4a29a5ab@suse.de>
+Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
+ functions
+References: <20230428092711.406-1-tzimmermann@suse.de>
+ <20230428092711.406-6-tzimmermann@suse.de>
+ <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
+ <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
+ <f612c682-5767-4a58-82f6-f4a4d1b592a1@app.fastmail.com>
+In-Reply-To: <f612c682-5767-4a58-82f6-f4a4d1b592a1@app.fastmail.com>
 
-pahole 1.25 has been released, so I have tried a kernel build with it,
-and I confirm it fixes the issue. Thanks for the help.
+--------------XHeCVpw7PiHVQpg0Jphmy7XG
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Aurelien
+SGkNCg0KQW0gMjguMDQuMjMgdW0gMTU6MTcgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
+biBGcmksIEFwciAyOCwgMjAyMywgYXQgMTM6MjcsIEdlZXJ0IFV5dHRlcmhvZXZlbiB3cm90
+ZToNCj4+IE9uIEZyaSwgQXByIDI4LCAyMDIzIGF0IDI6MTjigK9QTSBSb2JpbiBNdXJwaHkg
+PHJvYmluLm11cnBoeUBhcm0uY29tPiB3cm90ZToNCj4+PiBPbiAyMDIzLTA0LTI4IDEwOjI3
+LCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4gDQo+Pj4+IC0NCj4+Pj4gLSNlbGlmIGRl
+ZmluZWQoX19pMzg2X18pIHx8IGRlZmluZWQoX19hbHBoYV9fKSB8fCBkZWZpbmVkKF9feDg2
+XzY0X18pIHx8ICAgICAgXA0KPj4+PiAtICAgICBkZWZpbmVkKF9faHBwYV9fKSB8fCBkZWZp
+bmVkKF9fc2hfXykgfHwgZGVmaW5lZChfX3Bvd2VycGNfXykgfHwgXA0KPj4+PiAtICAgICBk
+ZWZpbmVkKF9fYXJtX18pIHx8IGRlZmluZWQoX19hYXJjaDY0X18pIHx8IGRlZmluZWQoX19t
+aXBzX18pDQo+Pj4+IC0NCj4+Pj4gLSNkZWZpbmUgZmJfcmVhZGIgX19yYXdfcmVhZGINCj4+
+Pj4gLSNkZWZpbmUgZmJfcmVhZHcgX19yYXdfcmVhZHcNCj4+Pj4gLSNkZWZpbmUgZmJfcmVh
+ZGwgX19yYXdfcmVhZGwNCj4+Pj4gLSNkZWZpbmUgZmJfcmVhZHEgX19yYXdfcmVhZHENCj4+
+Pj4gLSNkZWZpbmUgZmJfd3JpdGViIF9fcmF3X3dyaXRlYg0KPj4+PiAtI2RlZmluZSBmYl93
+cml0ZXcgX19yYXdfd3JpdGV3DQo+Pj4+IC0jZGVmaW5lIGZiX3dyaXRlbCBfX3Jhd193cml0
+ZWwNCj4+Pj4gLSNkZWZpbmUgZmJfd3JpdGVxIF9fcmF3X3dyaXRlcQ0KPj4+DQo+Pj4gTm90
+ZSB0aGF0IG9uIGF0IGxlYXN0IHNvbWUgYXJjaGl0ZWN0dXJlcywgdGhlIF9fcmF3IHZhcmlh
+bnRzIGFyZQ0KPj4+IG5hdGl2ZS1lbmRpYW4sIHdoZXJlYXMgdGhlIHJlZ3VsYXIgYWNjZXNz
+b3JzIGFyZSBleHBsaWNpdGx5DQo+Pj4gbGl0dGxlLWVuZGlhbiwgc28gdGhlcmUgaXMgYSBz
+bGlnaHQgcmlzayBvZiBpbmFkdmVydGVudGx5IGNoYW5naW5nDQo+Pj4gYmVoYXZpb3VyIG9u
+IGJpZy1lbmRpYW4gc3lzdGVtcyAoTUlQUyBtb3N0IGxpa2VseSwgYnV0IGEgZmV3IG9sZCBB
+Uk0NCj4+PiBwbGF0Zm9ybXMgcnVuIEJFIGFzIHdlbGwpLg0KPj4NCj4+IEFsc28gb24gbTY4
+aywgd2hlbiBJU0Egb3IgUENJIGFyZSBlbmFibGVkLg0KPj4NCj4+IEluIGFkZGl0aW9uLCB0
+aGUgbm9uLXJhdyB2YXJpYW50cyBtYXkgZG8gc29tZSBleHRyYXMgdG8gZ3VhcmFudGVlDQo+
+PiBvcmRlcmluZywgd2hpY2ggeW91IGRvIG5vdCBuZWVkIG9uIGEgZnJhbWUgYnVmZmVyLg0K
+Pj4NCj4+IFNvIEknZCBnbyBmb3IgdGhlIF9fcmF3XyooKSB2YXJpYW50cyBldmVyeXdoZXJl
+Lg0KPiANCj4gVGhlIG9ubHkgaW1wbGVtZW50YXRpb25zIGluIGZiZGV2IGFyZQ0KPiANCj4g
+ICAxKSBzcGFyYyBzYnVzDQo+ICAgMikgX19yYXdfd3JpdGVsDQo+ICAgMykgZGlyZWN0IHBv
+aW50ZXIgZGVyZWZlcmVuY2UNCj4gDQo+IEJ1dCBub25lIHVzZSB0aGUgYnl0ZS1zd2FwcGlu
+ZyB3cml0ZWwoKSBpbXBsZW1lbnRhdGlvbnMsIGFuZA0KPiB0aGUgb25seSBvbmVzIHRoYXQg
+dXNlIHRoZSBkaXJlY3QgcG9pbnRlciBkZXJlZmVyZW5jZSBvciBzYnVzDQo+IGFyZSB0aGUg
+b25lcyBvbiB3aGljaCB0aGVzZSBhcmUgZGVmaW5lZCB0aGUgc2FtZSBhcyBfX3Jhd193cml0
+ZWwNCg0KQWZ0ZXIgdGhpbmtpbmcgYSBiaXQgbW9yZSBhYm91dCB0aGUgcmVxdWlyZW1lbnRz
+LCBJJ2QgbGlrZSB0byBnb3QgYmFjayANCnRvIHYxLCBidXQgd2l0aCBhIGRpZmZlcmVudCBz
+cGluLiBXZSB3YW50IHRvIGF2b2lkIG9yZGVyaW5nIGd1YXJhbnRlZXMsIA0Kc28gSSBsb29r
+ZWQgYXQgdGhlIF9yZWxheGVkKCkgaGVscGVycywgYnV0IHRoZXkgc2VlbSB0byBzd2FwIGJ5
+dGVzIHRvIA0KbGl0dGxlIGVuZGlhbi4NCg0KSSBndWVzcyB3ZSBjYW4gcmVtb3ZlIHRoZSBm
+Yl9tZW0qKCkgZnVuY3Rpb25zIGVudGlyZWx5LiBUaGV5IGFyZSB0aGUgDQpzYW1lIGFzIHRo
+ZSBub24tZmJfIGNvdW50ZXJwYXJ0cy4gRm9yIHRoZSBmYiByZWFkL3dyaXRlIGhlbHBlcnMs
+IEknZCANCmxpa2UgdG8gYWRkIHRoZW0gdG8gPGFzbS1nZW5lcmljL2ZiLmg+IGluIGEgcGxh
+dGZvcm0tbmV1dHJhbCB3YXkuIFRoZXknZCANCmJlIHdyYXBwZXJzIGFyb3VuZCBfX3Jhd18o
+KSwgYXMgSSB3b3VsZG4ndCB3YW50IGludm9jYXRpb25zIG9mICBfX3Jhd18oKSANCmZ1bmN0
+aW9ucyBpbiB0aGUgZmJkZXYgZHJpdmVycy4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0K
+PiANCj4gICAgICAgIEFybmQNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2
+byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1h
+bg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+--------------XHeCVpw7PiHVQpg0Jphmy7XG--
+
+--------------MelAIvX5Zq5p7fTWZnZe1KnI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRNDOQFAwAAAAAACgkQlh/E3EQov+D3
+Lg//UhCZBw81TYQDkk+UDr1YbkaGi4Jm2mT/EtMUo2aiopJRpbN8vontw/beFlngxSqtHGbuE+eV
+/Nw3zAhT/0FwyIfz9cckarUnhgWjtozXXAzefE/fvRNS1IpfOd4Z+/HAFpf14aUFX58Ieonzrx0K
+IAUrczjg9YkqH/rjBuQN6esPDuGO6UAnwoPcfsR0LJ8rYA8u21otEL8TJmc6YrLxV8vRDi8F4pfg
+2psTsyd3crIGm2ldrDL7fc8SCJr7pBcrkEM9LJ8TU4iVcEWQ+VinDr6aiworLArjL7td/jSrX8yL
+NgbWRrsLwsh50JtyFgO68P9ujhhD83DyZ6jRMLVCaUCWYH03srIBWqkf7jePnQ3ZnyRtPGuX13a1
++OchiuFDSLb7gUO4YmnIYiSvrNWi+xAbDZopxKynXrqqOyz9qCY1/pTSnVY4W1BZm1DmpYFa/LJ0
+8ASU+1FXKvGU9rDjh9vdm4aK44qqavzduSEDltIQF5rSGjltfpBMnGXaBr7ZF5B+Q9ty5Bsw63Kh
+ksU8M/nayR7toWgtbiAAuLnzz04kv5VRdLVsgY3AEw+H6wz1alVp0SBJNFGJ1CIwjxQ2tFpEcAp4
++tfWD38puBNHk3K2WeT0O152tqPrzhw+6qws+j8SPgTx/gUaxU0jY4JjSgMXSlnum9vnakiOPQFn
+Jl4=
+=PPwW
+-----END PGP SIGNATURE-----
+
+--------------MelAIvX5Zq5p7fTWZnZe1KnI--
