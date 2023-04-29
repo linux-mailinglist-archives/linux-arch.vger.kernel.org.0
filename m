@@ -2,161 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405836F24B0
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Apr 2023 14:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CAE6F24FF
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Apr 2023 16:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbjD2M2M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Apr 2023 08:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S231320AbjD2OLl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Apr 2023 10:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbjD2M2L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Apr 2023 08:28:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BB41FC6;
-        Sat, 29 Apr 2023 05:28:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1E36621C53;
-        Sat, 29 Apr 2023 12:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1682771289; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jz05S69H9J9ourS0/6LxFgFtl5G/bfGtL/yFxW/ifNQ=;
-        b=HFVj6w9ZVfPD0ZoN23VEmZO35Tc/zrvyhcXfnt4s5PYSz0fGAMVj/b2GeGWIp2rfxtOeYE
-        GoEJHDzwE28be/ZvE4/IidWd/qp9F6ZDW9Hzq6H3190nFtEeOxA3/U97YoT+OPC2IfB8yD
-        Bnic4lLUU5bnm3F8WFxwTV4IiZEkC0A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1682771289;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jz05S69H9J9ourS0/6LxFgFtl5G/bfGtL/yFxW/ifNQ=;
-        b=gnxZghzBvwVLvXFJQMV9YFllE8N0XxoLXi2cXLqpyiDJBhwS686ImMoN1akl6J7zJ3dwzg
-        R653vtwEpOcCczDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B3459138E0;
-        Sat, 29 Apr 2023 12:28:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vPNnKlgNTWT4SAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Sat, 29 Apr 2023 12:28:08 +0000
-Message-ID: <b70d5ddb-24ad-e1f5-8ef9-a486879d0c9e@suse.de>
-Date:   Sat, 29 Apr 2023 14:28:08 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
- functions
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        arnd@arndb.de, deller@gmx.de, chenhuacai@kernel.org,
-        javierm@redhat.com, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        James.Bottomley@hansenpartnership.com,
-        linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
-        linux-parisc@vger.kernel.org, vgupta@kernel.org,
-        sparclinux@vger.kernel.org, kernel@xen0n.name,
-        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org
+        with ESMTP id S230005AbjD2OLk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Apr 2023 10:11:40 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A377198A;
+        Sat, 29 Apr 2023 07:11:38 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 2DD955C00FB;
+        Sat, 29 Apr 2023 10:11:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 29 Apr 2023 10:11:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1682777496; x=1682863896; bh=8d
+        kHZ7/OLsjO2XUx8f1h6VDCdqS9HsgrgUgQPoekbMU=; b=Tt4hmIAKM+NNZGRbGy
+        USiFmRb7ZQ7VESvUpDkvDC9rS9I/kjpxYoq4IidwwhIKTPcYD5vR6RqvLLGr+CaD
+        1I9aUqlKLEp8YNzWVAXHUtUi2kVpAha/zdduG5raE+Wi0wvbUISzk2AadoiGxkiZ
+        fZrZqC1pSn3Zxe1+KbPC8fVvKo3sFwMmI+khbEppmvaKW9CmFCgdX2QktEKQKG96
+        0SC2oHRE3uFMLM/L3dVGCHbScyE7YVtM0HH4gQT9Mh2zq/OoF5XuXAM6yoLd/EIj
+        ZLMzsUC3vaXLLJ6GGE7oLNpIHGXhuLTVOB66jjYD1eINb3WthQd7wDNhLD/+UKGq
+        YWnQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1682777496; x=1682863896; bh=8dkHZ7/OLsjO2
+        XUx8f1h6VDCdqS9HsgrgUgQPoekbMU=; b=L+nvmAfj8gymGhB5xVReToYxjM6wj
+        v8YL/JxVhiXT6yjB2/Yx5h/SGJAuFpH+LYE4mRnIgEwvZrwch6NpT/gSOm3PSm30
+        bwzptyafMGf1520s8iYPvchCZ9FvC7zQx/AofzoW8CnPAm9cpnsX+tvIm8l6CBkt
+        l6Yt2qTVsuFf+UtcSo0isg2MhJafTaqRhqjDh5e0bCdNSt6QOAH4NkSPUTzq6lqg
+        IaNqSJFzzHT4wF8tk6iLVEl76ZIcQvAzUYcqtzZGN7wjqt4YIm/cBFu+jOkocHJJ
+        6aUIjnMFtOd00CnQB01bWd1lVpHN1OGQkflEeBtWUxIcBUtPa00kswySw==
+X-ME-Sender: <xms:lyVNZPz3z-p16274zMKpAKi5nlxUSJ7lk28d3S-Ob8c6-Zv8Bdk-Gw>
+    <xme:lyVNZHQanz9SNk_GaqKBAu-Y-aPLh9z5YLE6AO4jRKX5HaqlB0s8ya2eyd2wC7WEQ
+    j71iw5FIizBJSeFfXU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvtddggeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:lyVNZJXT0voWt151wzrxLt_t0PVcRbC_n0gzPllt-KSJgQjWEnhfPQ>
+    <xmx:lyVNZJhgG76zOedSkzOp0As8nsjokHBAqvY3P4YbxzGMIvgrdkwY3A>
+    <xmx:lyVNZBB11KK0qljfYMVgugmi1r0rm1svPDZhbgiqX_QChEeIGgbRGg>
+    <xmx:mCVNZABxHV6GlowlDf3Y7NrFIlL86oq1NhGnPXRrsYfMgDf0xjmKGw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 00DD4B60086; Sat, 29 Apr 2023 10:11:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-374-g72c94f7a42-fm-20230417.001-g72c94f7a
+Mime-Version: 1.0
+Message-Id: <260ee591-a71b-4c83-a775-5591d4222cec@app.fastmail.com>
+In-Reply-To: <df6fa134-3a62-0872-e008-393e4a29a5ab@suse.de>
 References: <20230428092711.406-1-tzimmermann@suse.de>
  <20230428092711.406-6-tzimmermann@suse.de>
- <20230428131221.GE3995435@ravnborg.org>
- <900eaf1c-4d29-2c26-c220-6b4e089d9b94@suse.de>
- <20230428165412.GA4010212@ravnborg.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230428165412.GA4010212@ravnborg.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------5mlU0na0AfM0B8j2RhZVJs01"
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <430c73f0-45f4-f81e-6506-bc8cc955d936@arm.com>
+ <CAMuHMdUGjtiAR37L4_e0_p8ee2=gxoUj7+e7rqMLTBK+vpV4yw@mail.gmail.com>
+ <f612c682-5767-4a58-82f6-f4a4d1b592a1@app.fastmail.com>
+ <df6fa134-3a62-0872-e008-393e4a29a5ab@suse.de>
+Date:   Sat, 29 Apr 2023 16:11:13 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Robin Murphy" <robin.murphy@arm.com>
+Cc:     "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Sam Ravnborg" <sam@ravnborg.org>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O functions
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------5mlU0na0AfM0B8j2RhZVJs01
-Content-Type: multipart/mixed; boundary="------------f6pmt5OEu3br0LQbMXJxQH0V";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Sam Ravnborg <sam@ravnborg.org>
-Cc: linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-ia64@vger.kernel.org, loongarch@lists.linux.dev, arnd@arndb.de,
- deller@gmx.de, chenhuacai@kernel.org, javierm@redhat.com,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- James.Bottomley@hansenpartnership.com, linux-m68k@lists.linux-m68k.org,
- geert@linux-m68k.org, linux-parisc@vger.kernel.org, vgupta@kernel.org,
- sparclinux@vger.kernel.org, kernel@xen0n.name,
- linux-snps-arc@lists.infradead.org, davem@davemloft.net,
- linux-arm-kernel@lists.infradead.org
-Message-ID: <b70d5ddb-24ad-e1f5-8ef9-a486879d0c9e@suse.de>
-Subject: Re: [PATCH v2 5/5] fbdev: Define framebuffer I/O from Linux' I/O
- functions
-References: <20230428092711.406-1-tzimmermann@suse.de>
- <20230428092711.406-6-tzimmermann@suse.de>
- <20230428131221.GE3995435@ravnborg.org>
- <900eaf1c-4d29-2c26-c220-6b4e089d9b94@suse.de>
- <20230428165412.GA4010212@ravnborg.org>
-In-Reply-To: <20230428165412.GA4010212@ravnborg.org>
+On Sat, Apr 29, 2023, at 14:26, Thomas Zimmermann wrote:
+> Am 28.04.23 um 15:17 schrieb Arnd Bergmann:
+>> The only implementations in fbdev are
+>> 
+>>   1) sparc sbus
+>>   2) __raw_writel
+>>   3) direct pointer dereference
+>> 
+>> But none use the byte-swapping writel() implementations, and
+>> the only ones that use the direct pointer dereference or sbus
+>> are the ones on which these are defined the same as __raw_writel
+>
+> After thinking a bit more about the requirements, I'd like to got back 
+> to v1, but with a different spin. We want to avoid ordering guarantees, 
+> so I looked at the _relaxed() helpers, but they seem to swap bytes to 
+> little endian.
 
---------------f6pmt5OEu3br0LQbMXJxQH0V
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Right, the _relaxed() oens are clearly wrong, aside from
+the byteswap they also include barriers on some architectures
+where the __raw_* version is more relaxed than the required
+semantics for relaxed.
 
-SGkgU2FtDQoNCkFtIDI4LjA0LjIzIHVtIDE4OjU0IHNjaHJpZWIgU2FtIFJhdm5ib3JnOg0K
-PiBIaSBUaG9tYXMsDQo+IA0KPiBPbiBGcmksIEFwciAyOCwgMjAyMyBhdCAwNDoxODozOFBN
-ICswMjAwLCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEknZCBiZSBoYXBweSB0byBo
-YXZlIGZiXygpIHdyYXBwZXJzIHRoYXQgYXJlIEkvTyBoZWxwZXJzIHdpdGhvdXQNCj4+IG9y
-ZGVyaW5nIGd1YXJhbnRlZXMuIEknZCBqdXN0IHdvdWxkbid0IHdhbnQgdGhlbSBpbiA8bGlu
-dXgvZmIuaD4NCj4gDQo+IEhvdyBhYm91dCB0aHJvd2luZyB0aGVtIGludG8gYSBuZXcgZHJt
-X2ZiLmggaGVhZGVyIGZpbGUuDQo+IFRoaXMgaGVhZGVyIGZpbGUgY291bGQgYmUgdGhlIGhv
-bWUgZm9yIGFsbCB0aGUgZmIgc3R1ZmYgdGhhdCBpcw0KPiBzaGFyZWQgYmV0d2VlbiBkcm0g
-YW5kIHRoZSBsZWdhY3kgZmJkZXYuDQo+IA0KPiBUaGVuIHdlIG1heSBzbG93bHkgbWlncmF0
-ZSBtb3JlIGZiZGV2IHN0dWZmIHRvIGRybSBhbmQgbGV0IHRoZSBsZWdhY3kNCj4gZmJkZXYg
-c3R1ZmYgdXNlIHRoZSBtYWludGFpbmVkIGRybSBzdHVmZi4NCj4gRHVubm8sIHRoZSBwYWlu
-IG1heSBub3QgYmUgd29ydGggaXQuDQoNCkRSTSBtaWdodCBub3QgYmUgcmVsZXZhbnQgaWYg
-d2UgY2FuIHJlbW92ZSBmYl9tZW0qKCkuIFNvIEknZCBsaWtlIHRvIGdvIA0KYmFjayB0byBz
-b21ldGhpbmcgY2xvc2VyIHRvIHYxIG9mIHRoZXNlIHBhdGNoZXMuIFNlZSBteSByZXBseSB0
-byBBcm5kLg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAJU2FtDQoNCi0tIA0K
-VGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29m
-dHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2
-MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5k
-cmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJn
-KQ0K
+> I guess we can remove the fb_mem*() functions entirely. They are the 
+> same as the non-fb_ counterparts.
 
---------------f6pmt5OEu3br0LQbMXJxQH0V--
+These might actually be different in some cases, or sub-optimal
+at the moment. memcpy()/memset() don't take __iomem pointers, so they
+cause sparse warnings, while the memset_io()/memcpy_fromio()/
+memcpy_toio() sometimes fall back to bytewise access that is slower
+than word-sized copy. I only looked at the readl/writel style 
+functions earlier, no idea what we want here.
 
---------------5mlU0na0AfM0B8j2RhZVJs01
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> For the fb read/write helpers, I'd 
+> like to add them to <asm-generic/fb.h> in a platform-neutral way. They'd 
+> be wrappers around __raw_(), as I wouldn't want invocations of  __raw_() 
+> functions in the fbdev drivers.
 
------BEGIN PGP SIGNATURE-----
+That sounds good to me.
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRNDVgFAwAAAAAACgkQlh/E3EQov+Dk
-Wg/+JIgc3ljeeweOA51k6nZjVXnA2xoQpHoWXzqgr3zowrr9FFfDh/9evQUoes96v/FyzZlL0CTI
-hVueOEwwPmFKXfs1eJ6DBiHNKEwba/mPQXSqkT92eDXl08cADWxMBd9J1rphskh12gJeBQU6U3Qi
-5s9GFT3OJJetJ5tLYbqgdkGJntcEFhCOjR2LsoaMIYat474U32GiigcolBwu8aYHhNBij3p2U+LV
-JP3bGV9SpX9v2hb6O2daOH4rHdjj+gHXv5+YuoZ9Dqc6XYomdXenX+bgnINpyrcdA0fSFPWRwSJL
-yncb89L4GbTNEoiZR9bGBcvTYCj1hIQLASniZvwzHD69fC6i4X1a0Eojn+2WDtWGlSeWplr5Ngn9
-r5LAkpkOOvlOMsqV4YJNd8g+QiLDdU4B78fR0CbP6NLjIuuRU83GHKITOwU0GuJBLxu2HKriAmJf
-rFPpqks0ZTf8kIqqnLIHiABnGsP+cuYx9gS9l+7T2Lf6vkwPCRtiHaxvBnPuAKSMRvFHulOx+peh
-bmKJPoTTkZr1veIxj0ocBwDrOAKbi+ZxE6wKVGTr3GJzr/Y/J40GEy0oUPYTh1csbybKwFdRbDhY
-p7IKPw44wVIC0VkGeOU4QBPe8u1Owe8suS15FVeV0h11p9B8Kz6sXcgJr3pGsAl621EIUQF0FKaZ
-5Tk=
-=1OL4
------END PGP SIGNATURE-----
-
---------------5mlU0na0AfM0B8j2RhZVJs01--
+     Arnd
