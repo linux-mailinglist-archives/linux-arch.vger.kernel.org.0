@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1796F28BA
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Apr 2023 14:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C5A6F28C0
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Apr 2023 14:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjD3MNY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Apr 2023 08:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S231382AbjD3MNs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Apr 2023 08:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjD3MNW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Apr 2023 08:13:22 -0400
+        with ESMTP id S231189AbjD3MNc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Apr 2023 08:13:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3207930DF;
-        Sun, 30 Apr 2023 05:13:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3BD30DD;
+        Sun, 30 Apr 2023 05:13:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A58A460B00;
-        Sun, 30 Apr 2023 12:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C3CC433D2;
-        Sun, 30 Apr 2023 12:13:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F8C61326;
+        Sun, 30 Apr 2023 12:13:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FBBBC433D2;
+        Sun, 30 Apr 2023 12:13:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682856793;
-        bh=KYQzf6EKflHNo4wUvHc388TM+PtVsT42BkLurY40DSg=;
+        s=k20201202; t=1682856801;
+        bh=rYZrg77V0kPz+JvyHibL5KUx11BdL3H4k3HV6nJG2QU=;
         h=From:To:Cc:Subject:Date:From;
-        b=oPFC72hY39s1lBEUJ/q19io67CMgUd/jzgFNzM4YjfnaE3RO4wJ/GZbRhcLfgL4uJ
-         2S907Gv7OYMRnDHK+IOXa6rwf/ekK4hUzrN1XEErMaA1YJm0yQk6nuggT3AKgDU2jj
-         jy4un6mOKsv5FbaJL9nBh4hr6Ga4jq2Ci+svImAdV2sGej2aoE2gtOmL96BRTVgRNX
-         8VJTs5/GZ2MVvZyVIvHHIvkLphWwWc3jmkjnGMhtxqwB0t90S59PE8AuMKytYjfM55
-         bBUpBYpCwqn7Dm4C6k2fMcof/tXerForVIHArYXG4wBdORmljhzKYfHfJ+SnloyWJM
-         D2A2f1J9rLI7w==
+        b=IF9YkdpYaL4/BUJJXd+1fl3e/NS2dCVx1779VNJmhnDWhPUXUtkMyWvNmUwAq1z/M
+         fFyaubkursPp9j9YktmVDe0LQnHjjZT3R2tdfifmHZeie4x3zqTZBUHM++O6ba7oQD
+         gDUEEIVctU9wPkzwJvlxyVGG1IZ/DRpH7Ty84u3zTip6yROSaz8cbb9LQTXHyTAgYp
+         6ca1+ydgcGGn3clHTU3rIQNWJ8j2ygsz/ELAiNkzcKOsXgoI6/hjFslAbKx1Qeb1fB
+         xF2L+dRw7G/iyevtuZ6V8qsOng8OoV48YuBqWP3/hdiWhw00BRadfhC8Jf+d/34vIe
+         Or6Y/rKvaF1pw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christian Brauner <brauner@kernel.org>,
@@ -38,11 +38,11 @@ Cc:     Christian Brauner <brauner@kernel.org>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>, viro@zeniv.linux.org.uk,
-        slark_xiao@163.com, f.fainelli@gmail.com,
+        f.fainelli@gmail.com, slark_xiao@163.com,
         linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.2 1/2] open: return EINVAL for O_DIRECTORY | O_CREAT
-Date:   Sun, 30 Apr 2023 08:13:07 -0400
-Message-Id: <20230430121309.3197648-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 1/2] open: return EINVAL for O_DIRECTORY | O_CREAT
+Date:   Sun, 30 Apr 2023 08:13:15 -0400
+Message-Id: <20230430121318.3197736-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-stable: review
@@ -192,7 +192,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 13 insertions(+), 7 deletions(-)
 
 diff --git a/fs/open.c b/fs/open.c
-index ceb88ac0ca3b2..f652833feffb5 100644
+index 20717ec510c07..9541430ec5b30 100644
 --- a/fs/open.c
 +++ b/fs/open.c
 @@ -1158,13 +1158,21 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
