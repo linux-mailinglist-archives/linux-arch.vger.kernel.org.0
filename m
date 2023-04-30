@@ -2,54 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C5A6F28C0
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Apr 2023 14:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3173C6F2932
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Apr 2023 16:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjD3MNs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Apr 2023 08:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S230336AbjD3OYM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Apr 2023 10:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjD3MNc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Apr 2023 08:13:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3BD30DD;
-        Sun, 30 Apr 2023 05:13:22 -0700 (PDT)
+        with ESMTP id S229461AbjD3OYL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Apr 2023 10:24:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446D619AF;
+        Sun, 30 Apr 2023 07:24:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F8C61326;
-        Sun, 30 Apr 2023 12:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FBBBC433D2;
-        Sun, 30 Apr 2023 12:13:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D440660B52;
+        Sun, 30 Apr 2023 14:24:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33707C4339B;
+        Sun, 30 Apr 2023 14:24:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682856801;
-        bh=rYZrg77V0kPz+JvyHibL5KUx11BdL3H4k3HV6nJG2QU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=IF9YkdpYaL4/BUJJXd+1fl3e/NS2dCVx1779VNJmhnDWhPUXUtkMyWvNmUwAq1z/M
-         fFyaubkursPp9j9YktmVDe0LQnHjjZT3R2tdfifmHZeie4x3zqTZBUHM++O6ba7oQD
-         gDUEEIVctU9wPkzwJvlxyVGG1IZ/DRpH7Ty84u3zTip6yROSaz8cbb9LQTXHyTAgYp
-         6ca1+ydgcGGn3clHTU3rIQNWJ8j2ygsz/ELAiNkzcKOsXgoI6/hjFslAbKx1Qeb1fB
-         xF2L+dRw7G/iyevtuZ6V8qsOng8OoV48YuBqWP3/hdiWhw00BRadfhC8Jf+d/34vIe
-         Or6Y/rKvaF1pw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, viro@zeniv.linux.org.uk,
-        f.fainelli@gmail.com, slark_xiao@163.com,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 1/2] open: return EINVAL for O_DIRECTORY | O_CREAT
-Date:   Sun, 30 Apr 2023 08:13:15 -0400
-Message-Id: <20230430121318.3197736-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        s=k20201202; t=1682864649;
+        bh=WUyj3KdAd9Atl/1BkhWqnGH8ctqOWWJAAQ/DHP6egtA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a4yplviEOx38Wp99s2w4MVC83zgmhuv9g+r2VyqA4cqMsF4bDuIMWqmv+kxgP6d/4
+         Ez6W38wtgU3uP/JosUh31ZT0WWjRWZFLrzL7wC8e0McPuFu/GPhP8ei5Rgp9LiZn5B
+         kBA61cZZ9A2Z/jNrExu9vEVfh3iqhPkaWfcXh6GJZ5MPbvV9ojMxMYwjSwpKqSOnbS
+         Ckt6e4A7HWs+OFDK/rNKbGVkUv3AfC8Mn9ApNjAa+pXMjcHuAOwMYEjBoNH3X4KXcF
+         YC/5Vad2LV1lkfGZ+uhbp151TwG9D1bgcnSW55s8PKge3SPhKO2G2+OlF/S2Wf0OcD
+         ooULd0PRupvMg==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2a8b082d6feso15301281fa.2;
+        Sun, 30 Apr 2023 07:24:09 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxshHpHDaMVc/l5IM8w0i1H6/hIvXdCfvPrbQHVbbNdDagcWJv9
+        A4VBZO5EZv3YaGyhA3Tpw3MHjK+mjU4FAtg6lT4=
+X-Google-Smtp-Source: ACHHUZ7iatufvCefUtOyZ/IMApy0Vb+ISlpGz7nI2uoEJ+4S+ZBqNx8ntCKsGERzEGQJY7SH9khYhduc9IuVbXP3lso=
+X-Received: by 2002:a2e:8ecc:0:b0:2a8:ea1e:bde9 with SMTP id
+ e12-20020a2e8ecc000000b002a8ea1ebde9mr3233347ljl.45.1682864647193; Sun, 30
+ Apr 2023 07:24:07 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <cover.1682673542.git.houwenlong.hwl@antgroup.com> <980069339b23a6cc4ae6d605d188338467a5b08b.1682673543.git.houwenlong.hwl@antgroup.com>
+In-Reply-To: <980069339b23a6cc4ae6d605d188338467a5b08b.1682673543.git.houwenlong.hwl@antgroup.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sun, 30 Apr 2023 16:23:56 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFFo6Y=p63N41DrN4wLzMNVdtD-hp6gBVQwNqrzt7oqwQ@mail.gmail.com>
+Message-ID: <CAMj1kXFFo6Y=p63N41DrN4wLzMNVdtD-hp6gBVQwNqrzt7oqwQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 25/43] x86/mm: Make the x86 GOT read-only
+To:     Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Garnier <thgarnie@chromium.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Brian Gerst <brgerst@gmail.com>, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,194 +71,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Christian Brauner <brauner@kernel.org>
+On Fri, 28 Apr 2023 at 11:55, Hou Wenlong <houwenlong.hwl@antgroup.com> wrote:
+>
+> From: Thomas Garnier <thgarnie@chromium.org>
+>
+> From: Thomas Garnier <thgarnie@chromium.org>
+>
+> The GOT is changed during early boot when relocations are applied. Make
+> it read-only directly. This table exists only for PIE binary. Since weak
+> symbol reference would always be GOT reference, there are 8 entries in
+> GOT, but only one entry for __fentry__() is in use.  Other GOT
+> references have been optimized by linker.
+>
+> [Hou Wenlong: Change commit message and skip GOT size check]
+>
+> Signed-off-by: Thomas Garnier <thgarnie@chromium.org>
+> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+> Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> ---
+>  arch/x86/kernel/vmlinux.lds.S     |  2 ++
+>  include/asm-generic/vmlinux.lds.h | 12 ++++++++++++
+>  2 files changed, 14 insertions(+)
+>
+> diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> index f02dcde9f8a8..fa4c6582663f 100644
+> --- a/arch/x86/kernel/vmlinux.lds.S
+> +++ b/arch/x86/kernel/vmlinux.lds.S
+> @@ -462,6 +462,7 @@ SECTIONS
+>  #endif
+>                "Unexpected GOT/PLT entries detected!")
+>
+> +#ifndef CONFIG_X86_PIE
+>         /*
+>          * Sections that should stay zero sized, which is safer to
+>          * explicitly check instead of blindly discarding.
+> @@ -470,6 +471,7 @@ SECTIONS
+>                 *(.got) *(.igot.*)
+>         }
+>         ASSERT(SIZEOF(.got) == 0, "Unexpected GOT entries detected!")
+> +#endif
+>
+>         .plt : {
+>                 *(.plt) *(.plt.*) *(.iplt)
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index d1f57e4868ed..438ed8b39896 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -441,6 +441,17 @@
+>         __end_ro_after_init = .;
+>  #endif
+>
+> +#ifdef CONFIG_X86_PIE
+> +#define RO_GOT_X86
 
-[ Upstream commit 43b450632676fb60e9faeddff285d9fac94a4f58 ]
+Please don't put X86 specific stuff in generic code.
 
-After a couple of years and multiple LTS releases we received a report
-that the behavior of O_DIRECTORY | O_CREAT changed starting with v5.7.
+> +       .got        : AT(ADDR(.got) - LOAD_OFFSET) {                    \
+> +               __start_got = .;                                        \
+> +               *(.got) *(.igot.*);                                     \
+> +               __end_got = .;                                          \
+> +       }
+> +#else
+> +#define RO_GOT_X86
+> +#endif
+> +
 
-On kernels prior to v5.7 combinations of O_DIRECTORY, O_CREAT, O_EXCL
-had the following semantics:
+I don't think it makes sense for this definition to be conditional.
+You can include it conditionally from the x86 code, but even that
+seems unnecessary, given that it will be empty otherwise.
 
-(1) open("/tmp/d", O_DIRECTORY | O_CREAT)
-    * d doesn't exist:                create regular file
-    * d exists and is a regular file: ENOTDIR
-    * d exists and is a directory:    EISDIR
-
-(2) open("/tmp/d", O_DIRECTORY | O_CREAT | O_EXCL)
-    * d doesn't exist:                create regular file
-    * d exists and is a regular file: EEXIST
-    * d exists and is a directory:    EEXIST
-
-(3) open("/tmp/d", O_DIRECTORY | O_EXCL)
-    * d doesn't exist:                ENOENT
-    * d exists and is a regular file: ENOTDIR
-    * d exists and is a directory:    open directory
-
-On kernels since to v5.7 combinations of O_DIRECTORY, O_CREAT, O_EXCL
-have the following semantics:
-
-(1) open("/tmp/d", O_DIRECTORY | O_CREAT)
-    * d doesn't exist:                ENOTDIR (create regular file)
-    * d exists and is a regular file: ENOTDIR
-    * d exists and is a directory:    EISDIR
-
-(2) open("/tmp/d", O_DIRECTORY | O_CREAT | O_EXCL)
-    * d doesn't exist:                ENOTDIR (create regular file)
-    * d exists and is a regular file: EEXIST
-    * d exists and is a directory:    EEXIST
-
-(3) open("/tmp/d", O_DIRECTORY | O_EXCL)
-    * d doesn't exist:                ENOENT
-    * d exists and is a regular file: ENOTDIR
-    * d exists and is a directory:    open directory
-
-This is a fairly substantial semantic change that userspace didn't
-notice until Pedro took the time to deliberately figure out corner
-cases. Since no one noticed this breakage we can somewhat safely assume
-that O_DIRECTORY | O_CREAT combinations are likely unused.
-
-The v5.7 breakage is especially weird because while ENOTDIR is returned
-indicating failure a regular file is actually created. This doesn't make
-a lot of sense.
-
-Time was spent finding potential users of this combination. Searching on
-codesearch.debian.net showed that codebases often express semantical
-expectations about O_DIRECTORY | O_CREAT which are completely contrary
-to what our code has done and currently does.
-
-The expectation often is that this particular combination would create
-and open a directory. This suggests users who tried to use that
-combination would stumble upon the counterintuitive behavior no matter
-if pre-v5.7 or post v5.7 and quickly realize neither semantics give them
-what they want. For some examples see the code examples in [1] to [3]
-and the discussion in [4].
-
-There are various ways to address this issue. The lazy/simple option
-would be to restore the pre-v5.7 behavior and to just live with that bug
-forever. But since there's a real chance that the O_DIRECTORY | O_CREAT
-quirk isn't relied upon we should try to get away with murder(ing bad
-semantics) first. If we need to Frankenstein pre-v5.7 behavior later so
-be it.
-
-So let's simply return EINVAL categorically for O_DIRECTORY | O_CREAT
-combinations. In addition to cleaning up the old bug this also opens up
-the possiblity to make that flag combination do something more intuitive
-in the future.
-
-Starting with this commit the following semantics apply:
-
-(1) open("/tmp/d", O_DIRECTORY | O_CREAT)
-    * d doesn't exist:                EINVAL
-    * d exists and is a regular file: EINVAL
-    * d exists and is a directory:    EINVAL
-
-(2) open("/tmp/d", O_DIRECTORY | O_CREAT | O_EXCL)
-    * d doesn't exist:                EINVAL
-    * d exists and is a regular file: EINVAL
-    * d exists and is a directory:    EINVAL
-
-(3) open("/tmp/d", O_DIRECTORY | O_EXCL)
-    * d doesn't exist:                ENOENT
-    * d exists and is a regular file: ENOTDIR
-    * d exists and is a directory:    open directory
-
-One additional note, O_TMPFILE is implemented as:
-
-    #define __O_TMPFILE    020000000
-    #define O_TMPFILE      (__O_TMPFILE | O_DIRECTORY)
-    #define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)
-
-For older kernels it was important to return an explicit error when
-O_TMPFILE wasn't supported. So O_TMPFILE requires that O_DIRECTORY is
-raised alongside __O_TMPFILE. It also enforced that O_CREAT wasn't
-specified. Since O_DIRECTORY | O_CREAT could be used to create a regular
-allowing that combination together with __O_TMPFILE would've meant that
-false positives were possible, i.e., that a regular file was created
-instead of a O_TMPFILE. This could've been used to trick userspace into
-thinking it operated on a O_TMPFILE when it wasn't.
-
-Now that we block O_DIRECTORY | O_CREAT completely the check for O_CREAT
-in the __O_TMPFILE branch via if ((flags & O_TMPFILE_MASK) != O_TMPFILE)
-can be dropped. Instead we can simply check verify that O_DIRECTORY is
-raised via if (!(flags & O_DIRECTORY)) and explain this in two comments.
-
-As Aleksa pointed out O_PATH is unaffected by this change since it
-always returned EINVAL if O_CREAT was specified - with or without
-O_DIRECTORY.
-
-Link: https://lore.kernel.org/lkml/20230320071442.172228-1-pedro.falcato@gmail.com
-Link: https://sources.debian.org/src/flatpak/1.14.4-1/subprojects/libglnx/glnx-dirfd.c/?hl=324#L324 [1]
-Link: https://sources.debian.org/src/flatpak-builder/1.2.3-1/subprojects/libglnx/glnx-shutil.c/?hl=251#L251 [2]
-Link: https://sources.debian.org/src/ostree/2022.7-2/libglnx/glnx-dirfd.c/?hl=324#L324 [3]
-Link: https://www.openwall.com/lists/oss-security/2014/11/26/14 [4]
-Reported-by: Pedro Falcato <pedro.falcato@gmail.com>
-Cc: Aleksa Sarai <cyphar@cyphar.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/open.c                              | 18 +++++++++++++-----
- include/uapi/asm-generic/fcntl.h       |  1 -
- tools/include/uapi/asm-generic/fcntl.h |  1 -
- 3 files changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/fs/open.c b/fs/open.c
-index 20717ec510c07..9541430ec5b30 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1158,13 +1158,21 @@ inline int build_open_flags(const struct open_how *how, struct open_flags *op)
- 	}
- 
- 	/*
--	 * In order to ensure programs get explicit errors when trying to use
--	 * O_TMPFILE on old kernels, O_TMPFILE is implemented such that it
--	 * looks like (O_DIRECTORY|O_RDWR & ~O_CREAT) to old kernels. But we
--	 * have to require userspace to explicitly set it.
-+	 * Block bugs where O_DIRECTORY | O_CREAT created regular files.
-+	 * Note, that blocking O_DIRECTORY | O_CREAT here also protects
-+	 * O_TMPFILE below which requires O_DIRECTORY being raised.
- 	 */
-+	if ((flags & (O_DIRECTORY | O_CREAT)) == (O_DIRECTORY | O_CREAT))
-+		return -EINVAL;
-+
-+	/* Now handle the creative implementation of O_TMPFILE. */
- 	if (flags & __O_TMPFILE) {
--		if ((flags & O_TMPFILE_MASK) != O_TMPFILE)
-+		/*
-+		 * In order to ensure programs get explicit errors when trying
-+		 * to use O_TMPFILE on old kernels we enforce that O_DIRECTORY
-+		 * is raised alongside __O_TMPFILE.
-+		 */
-+		if (!(flags & O_DIRECTORY))
- 			return -EINVAL;
- 		if (!(acc_mode & MAY_WRITE))
- 			return -EINVAL;
-diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-index 1ecdb911add8d..80f37a0d40d7d 100644
---- a/include/uapi/asm-generic/fcntl.h
-+++ b/include/uapi/asm-generic/fcntl.h
-@@ -91,7 +91,6 @@
- 
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
--#define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
- 
- #ifndef O_NDELAY
- #define O_NDELAY	O_NONBLOCK
-diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
-index b02c8e0f40575..1c7a0f6632c09 100644
---- a/tools/include/uapi/asm-generic/fcntl.h
-+++ b/tools/include/uapi/asm-generic/fcntl.h
-@@ -91,7 +91,6 @@
- 
- /* a horrid kludge trying to make sure that this will fail on old kernels */
- #define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
--#define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
- 
- #ifndef O_NDELAY
- #define O_NDELAY	O_NONBLOCK
--- 
-2.39.2
-
+>  /*
+>   * .kcfi_traps contains a list KCFI trap locations.
+>   */
+> @@ -486,6 +497,7 @@
+>                 BOUNDED_SECTION_PRE_LABEL(.pci_fixup_suspend_late, _pci_fixups_suspend_late, __start, __end) \
+>         }                                                               \
+>                                                                         \
+> +       RO_GOT_X86                                                      \
+>         FW_LOADER_BUILT_IN_DATA                                         \
+>         TRACEDATA                                                       \
+>                                                                         \
+> --
+> 2.31.1
+>
