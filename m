@@ -2,58 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06F296F33C5
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 18:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2CD6F33C7
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 18:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232645AbjEAQzb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 12:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S232518AbjEAQzd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 12:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbjEAQzM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:55:12 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB8E1713
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:55:10 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2473661358eso2716197a91.1
-        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:55:10 -0700 (PDT)
+        with ESMTP id S232540AbjEAQzO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:55:14 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39F41720
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:55:12 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-51b7810ec2cso1417066a12.1
+        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960110; x=1685552110;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tgVoyGNNM2CEwgGlnNhwRO5zW+BCSfKlhykn/JkHIoY=;
-        b=2YKjiLNW+kfuA2PzlgEprNmYD56U2DvqAYUQT3SxKi2Wkcms/FURL1MvVV4lKJqj8O
-         6/Ns7jrOtbP8ic5/FVYS4laNGQMz7H1sQUQlCcm/XRw/h77Gbtg2COyXGd2xvroS0fJn
-         qwWPXD+NTjhYN8F2PIhFlV9xM7/YRbLeL8oWUbHvCo0bmT2YG7Au7XFXE7JF9tMEE+O2
-         Razpx64/yqsX3p0ZTAuL1qwvem7fqbeaFnGoyPVJo12mzY/mv/yC7mdLiyEupHVMtu6T
-         xYmQq3px4UJy+E+76my+C+5ib12oMdQjlgTcOmFRh/w96xFVezYHyxkBpY3bPmKf/8tt
-         YK/Q==
+        d=google.com; s=20221208; t=1682960112; x=1685552112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgbhlQnm6N3CIqx+6EXURMMvow4S1KQvuNCpohSnl08=;
+        b=ym8bWqOddRKLLCHNc+7Y2IQs+szb6DlXVMA8aGLldE3slVUGdWc6AeUaj2cctynpb7
+         /42bu00/rNI9NmOjux118bETqQ9xSRBpI0DlCMlMXfD5dyA5fGqmz9wEGRomBF9wE3qi
+         RRE1kSFRttrNPJ5gUqGivtomoZ/CkHpvdtT+8kMIwh52/Lg8aqiW8D9XXtWx1rDhFoLd
+         bIJ0Jt1xQTF7bUEViJLE2KzQyVYsdDW/+ihFxINfhU+/Rq1Q5G2PY50HQQ7ppVzde88x
+         xSaqGzF/rOMvs2lVTYEukIGUCSWj1ys72INhoG28un8pv0+7d++N9bkCwOHBDc2Mepzd
+         xe8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960110; x=1685552110;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tgVoyGNNM2CEwgGlnNhwRO5zW+BCSfKlhykn/JkHIoY=;
-        b=ZaQajzHkVDMasxifpKAc/gXsL6XLzPKfRf5EqkbpJIjjZLxpzyGpIgQewPTq1WyJfn
-         RHk/fRa8OcXFW9PzRnYfGiAY6gEofPCQchhkkGo01jcze6S7MqU4jAHFrygFSytvKNRT
-         BtFSIEQ2AOT+xfTYYTBvwIfrbl/vX4h06uGKwNnqV6L0kVKK/aMuIi9vKkEiPRQU3kTI
-         /OynW14Jfk+WeReNw79xtVopTpBMFPQa7Fjyj5fSIeEARj3JUx5Qy1wVzyNeBrrg8QwK
-         H5BkDBGhBeYjyBG+obuFOatvKxiFJbuc6i4k57/brlOufUWMGG90y/XflGHKwb4WFmCi
-         4SLQ==
-X-Gm-Message-State: AC+VfDyRnZIhNGdpJuF5J2etXpGKgNhfRYIJ02X8qauISlWxIvHPtoNV
-        JO+ddLMpYrhMRAnMOTE7CHFc60b2Clw=
-X-Google-Smtp-Source: ACHHUZ4eBSTFzzY/h621MY7B4DCDMh7rr4Q0GpDOy2/h5VKYZfljnAlN4rMUCg0PfIpVagexBlmQ2RgWd74=
+        d=1e100.net; s=20221208; t=1682960112; x=1685552112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OgbhlQnm6N3CIqx+6EXURMMvow4S1KQvuNCpohSnl08=;
+        b=A0lk9H6RLAEstXMi+qiAu7FBniB2x2rvvEZWAwXKdSSR1YB1McIAxGLHE/znW5bGb6
+         A0XH6qMxXqrLtlZ2zrKuCKaYkk6IZEthuZ5yQEyG3s+zLdldFruEQD0kokrVfRGP8YLn
+         GG2qcvFVzSDeE4pFdF9sgqFuvhWsETsdackQ0nizcmfZ8DsmmRo1AW6NCX19Y1fgBtgK
+         +5ewRyFsOtzqK5Hmpzj62BiD6HMq9OZENjux9gEzIzoj9HKoO+5NwVnV5RwGvtm2AYJb
+         przfzr2s4IVgIXmTnFOiKyx894pbNeO1R/ScCIvTLggTKoBSYrBU5OytxgNjYJXOjgq/
+         okCw==
+X-Gm-Message-State: AC+VfDzG20W5r5qs/BRg5aYy3KQcSku4t4s4kDlqwb5JaWRAVSdkAH2Q
+        RDiRPveYm8lyL7T8Dtqi6Jrh3v7Ml+o=
+X-Google-Smtp-Source: ACHHUZ5b/dFHDo+PuE3NWONWxlaUnbiu4qgjE2QFFJKcdOrghbUOD/toAldYYzf7QRUKjILKXa170Oj8yTI=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a17:90a:390d:b0:246:66d6:f24e with SMTP id
- y13-20020a17090a390d00b0024666d6f24emr3850182pjb.2.1682960109840; Mon, 01 May
- 2023 09:55:09 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:11 -0700
+ (user=surenb job=sendgmr) by 2002:a63:24f:0:b0:520:60ac:fb30 with SMTP id
+ 76-20020a63024f000000b0052060acfb30mr3551005pgc.1.1682960112196; Mon, 01 May
+ 2023 09:55:12 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:12 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-2-surenb@google.com>
-Subject: [PATCH 01/40] lib/string_helpers: Drop space in string_get_size's output
+Message-ID: <20230501165450.15352-3-surenb@google.com>
+Subject: [PATCH 02/40] scripts/kallysms: Always include __start and __stop symbols
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -83,15 +81,8 @@ Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
         iommu@lists.linux.dev, linux-arch@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
         linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
-        cgroups@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "=?UTF-8?q?Noralf=20Tr=C3=B8nnes?=" <noralf@tronnes.org>
+        cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
@@ -104,44 +95,47 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-Previously, string_get_size() outputted a space between the number and
-the units, i.e.
-  9.88 MiB
-
-This changes it to
-  9.88MiB
-
-which allows it to be parsed correctly by the 'sort -h' command.
+These symbols are used to denote section boundaries: by always including
+them we can unify loading sections from modules with loading built-in
+sections, which leads to some significant cleanup.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Cc: Andy Shevchenko <andy@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: "Noralf Tr=C3=B8nnes" <noralf@tronnes.org>
-Cc: Jens Axboe <axboe@kernel.dk>
 ---
- lib/string_helpers.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ scripts/kallsyms.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/lib/string_helpers.c b/lib/string_helpers.c
-index 230020a2e076..593b29fece32 100644
---- a/lib/string_helpers.c
-+++ b/lib/string_helpers.c
-@@ -126,8 +126,7 @@ void string_get_size(u64 size, u64 blk_size, const enum=
- string_size_units units,
- 	else
- 		unit =3D units_str[units][i];
-=20
--	snprintf(buf, len, "%u%s %s", (u32)size,
--		 tmp, unit);
-+	snprintf(buf, len, "%u%s%s", (u32)size, tmp, unit);
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 0d2db41177b2..7b7dbeb5bd6e 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -203,6 +203,11 @@ static int symbol_in_range(const struct sym_entry *s,
+ 	return 0;
  }
- EXPORT_SYMBOL(string_get_size);
-=20
---=20
+ 
++static bool string_starts_with(const char *s, const char *prefix)
++{
++	return strncmp(s, prefix, strlen(prefix)) == 0;
++}
++
+ static int symbol_valid(const struct sym_entry *s)
+ {
+ 	const char *name = sym_name(s);
+@@ -210,6 +215,14 @@ static int symbol_valid(const struct sym_entry *s)
+ 	/* if --all-symbols is not specified, then symbols outside the text
+ 	 * and inittext sections are discarded */
+ 	if (!all_symbols) {
++		/*
++		 * Symbols starting with __start and __stop are used to denote
++		 * section boundaries, and should always be included:
++		 */
++		if (string_starts_with(name, "__start_") ||
++		    string_starts_with(name, "__stop_"))
++			return 1;
++
+ 		if (symbol_in_range(s, text_ranges,
+ 				    ARRAY_SIZE(text_ranges)) == 0)
+ 			return 0;
+-- 
 2.40.1.495.gc816e09b53d-goog
 
