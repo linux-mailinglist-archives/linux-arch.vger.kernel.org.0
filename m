@@ -2,296 +2,302 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B05F6F2FA3
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 11:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8176F3020
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 12:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjEAI7v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 04:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54408 "EHLO
+        id S231896AbjEAKU3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 06:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbjEAI7L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 04:59:11 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E585410D8;
-        Mon,  1 May 2023 01:57:55 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1aaebed5bd6so8315655ad.1;
-        Mon, 01 May 2023 01:57:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682931471; x=1685523471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=85FbKOIGeJKFvrZkC+4B4Gx5bHvgxBGU0hkt5+QsJqk=;
-        b=CYmVFe1ZSITuLQYsYizoY0KSUhYRoc3Md2T3+Zn3YfBMhN96TjlaesKr0AHYkxYL3v
-         xf6KqM2vo4FHnlA9N+jobMd2j0rw9GmXaOyD0ksuq3xqSRXWNriRp1dywc02INgHtJOa
-         7ZQiLnu7ypHI1/DM3yog6Eq+UrjNGY43okh2hO6Y+VBY2FRliX/lYTQpHj9uYd/JjXh0
-         oTwSNOq7l/uXXvImVuBOg82rf4w0t0Wof18L+NUlLzWO5uEtCCvQPS7xzdWD9jG7qNqH
-         nXXnq0yTNRHWetCQV7B+OgXJqrIfjSTNe2n4NCfq29mDprN2kOaC6zvS2JvyHgi1LXLT
-         Xs9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682931471; x=1685523471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=85FbKOIGeJKFvrZkC+4B4Gx5bHvgxBGU0hkt5+QsJqk=;
-        b=EHi6CD/KDOYL8kMfViFr+rsD1X/LaCYXjAeq6z/n3O5NrAKXvVLgxVRnwvdLnZfW78
-         h9LZsRYvH6QJwv4lncgjjTVmI/Tk3EJkMbK0v7dDz51kP1Rw0R2OSc6SenCF9KtBOeeK
-         pT0tbAlu0mOUb9rc/jH925fW13B+x3Yj2vSXcLFHKCz+voT6Dmg6ul+72I4ZKghs4z8E
-         8vxL8zn8lUlPXqivMP4gmSbI7SGRSMhr8xyhPTCeOO47dC3Wgm+wWey5VQ6t/hBoP32a
-         ZlH31tk01ofH5rXkxsvn5LPjvfCG0NskuAggnbs/XBeM1DT7f4fr1K2umixQU7oGaHb6
-         aAAw==
-X-Gm-Message-State: AC+VfDyvodnaMuZ2NmRZI5wCTVLXhQaEvET97aBtMc0rZQMmpG/7H0sF
-        zctloVaj/9wIrmcnl7xlEGA=
-X-Google-Smtp-Source: ACHHUZ4pSFG50Yn3+YjfnFZIYk4iayAIyRl4ulCUswwf5cB7fb2dNgoNDk/UK/mdNoBXMvkT5zvNHA==
-X-Received: by 2002:a17:903:2310:b0:1a6:54ce:4311 with SMTP id d16-20020a170903231000b001a654ce4311mr16387616plh.43.1682931471101;
-        Mon, 01 May 2023 01:57:51 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:b:e11b:15ea:ad44:bde7])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709028c8d00b001a4fe00a8d4sm17407070plo.90.2023.05.01.01.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 01:57:50 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [RFC PATCH V5 15/15] x86/sev: Fix interrupt exit code paths from #HV exception
-Date:   Mon,  1 May 2023 04:57:25 -0400
-Message-Id: <20230501085726.544209-16-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230501085726.544209-1-ltykernel@gmail.com>
+        with ESMTP id S229482AbjEAKU2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 06:20:28 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2097.outbound.protection.outlook.com [40.107.117.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E7FE4C;
+        Mon,  1 May 2023 03:20:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aV+owS5nEtqmycbG6d3cd3R7zpM2PZHbT/3NzQUWMLX6XAYtBmIZ6SqQ9udfcmD5mrTX44AqZYslt2QZt2ESymkwlpGVoBroi1A7xew+ZSP3q8txN50OurrS0UJZ01b4y7KmwEb+vbBP9Z/PkQ9j4T5QOI8oFD94mgXvC4PsjhOFYHbDb1J5aFUR4j9Yih8YE0L8Tbw2nWjKmWlqpq/GCnWnmfnjdcRgEGN5FuSutFk7rmjAJWPaTDOVttUAJDCLBlfa/NtZQatgXOhWfminjog+pSq655MpWDfyFMU3UUDCyFIuIKuEVEFwk6ZT29iUP9wPdE5S7MnL+LrrivzSNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=54lR9IngJIO59r5WLWe5pvb03f8RqEDw0q3EBc1d7GE=;
+ b=nnZknbvL2LEvlcFrK65TvdyrS7KCh6bcBSirdT67RnexejimtzmPZhL0W+sf4qb+MaFfEiX031refg8C7H9XXPpopwf3zY/p7Y+rcM5aa2ENcz9NsDRsUS7dachBpM+LXuzxGq5Rwzjh9+MdxK1hsHaDtRrhzXo3qQBcHWlOPQ3nsZHPygWDOX8E5TGWoWjkAKgc3tGcqr4krqmzmLhcy0UKd5YP6lTxQdbkBamqkE9VWzi6jNc9GfCB2ZCfVeY+yhHHnN/pG0qJcVYz0iNKve626rxfOZvJoy9PFnkSyuDvj+cXtUgrV9n2yp1i2w/wM5mjuufMrj1Ef9EzoL9rAA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=54lR9IngJIO59r5WLWe5pvb03f8RqEDw0q3EBc1d7GE=;
+ b=LaO6YHcWSgPOWW78AUVX2SrYId4Qh15/q6xmTBt9Zr63mxrdA0stg/gDbosBbfBWwC2G/ZEqnNhwz6k8WdJHSopu/FgPkdNAQcKr+ffN+BO9dqdFj78lbpRESCWf1IL71yKGmgsgRdcvAskRWA9risJx7vib+WH9G6GHtByUsHw=
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM (2603:1096:301:e6::8) by
+ PUZP153MB0665.APCP153.PROD.OUTLOOK.COM (2603:1096:301:e6::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.5; Mon, 1 May 2023 10:20:22 +0000
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11]) by PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11%2]) with mapi id 15.20.6387.005; Mon, 1 May 2023
+ 10:20:22 +0000
+From:   Saurabh Singh Sengar <ssengar@microsoft.com>
+To:     Tianyu Lan <ltykernel@gmail.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+CC:     "pangupta@amd.com" <pangupta@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
+ sev-snp guest
+Thread-Topic: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
+ sev-snp guest
+Thread-Index: AQHZfAsx7OPEtGqXGkOTjZ7IFQQyZK9FMnXg
+Date:   Mon, 1 May 2023 10:20:22 +0000
+Message-ID: <PUZP153MB07493DA8F1085DE38DB1AFB8BE6E9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
 References: <20230501085726.544209-1-ltykernel@gmail.com>
+ <20230501085726.544209-10-ltykernel@gmail.com>
+In-Reply-To: <20230501085726.544209-10-ltykernel@gmail.com>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9335665b-3a5b-42de-8911-c561d3eb762e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-01T10:11:19Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PUZP153MB0749:EE_|PUZP153MB0665:EE_
+x-ms-office365-filtering-correlation-id: ec096288-1538-4800-3568-08db4a2dabf8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PznExjjenAgCndaHifcFqpgz4UhoKI4o2uGFAjgzgjQj2CZ2OpTU08bo4X3MWxn0Y+Jk6n8aZ7OfQCVA0LHG2XrEfRDGqAmC0p5dMDohL/VGaOaHtQ3G4pX2pw6A5KTJFZ8imv792XvV0Z/NHgOcoxenqi5V1mZafyqeFkpU2eG7kxFDnO7skjo/bqihZJZJ3U6oAEl4JInIAb0P8BxUjtxswDA/6OJXwQkcC8NY+srNB3KiYaxCcX6pFa3qYTtJ4yNHEneOM6tCG7Q0MRypOiZM1ErO7m9txcxfcuvfHv4vuoJndZQq4ErAjnu14M4wZnH8RO6NPORTOkbsJ/XclokmRG1ksiKtArOKe1wk7AG+S8nqci11Jw7vqOPiiqXO4kV5BPhk+/hx6LpEs0EagiG3T0lVVKKqJUrxYJ+JoUyWnqu65EiQuU1yDvpZzdUA4NJZs0cUl1fJQClFNcHAvREO2oNVPBj+1oEj4jRLZNFEsbU3D6X/+TxBSasmVLrImSY1G0Wgxk+sNcM2ohvX7ma5JccxIi44AGEdZ0DS77yj06c/HpsdMC9WXroutc4riM6alN0CCGeUPoFQTgfyIgPjMivzf4bxZ9bm86HgnjF05Isl2hksVuqfV2UY4KekVfip5Oq8TmAiYWMMaCoyFJGeC+RMO052ElDbGHoMYuFtmHirQscI9ko/egxpAR5H
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZP153MB0749.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199021)(33656002)(86362001)(55016003)(10290500003)(478600001)(54906003)(110136005)(122000001)(7696005)(921005)(71200400001)(82960400001)(82950400001)(41300700001)(8936002)(8676002)(38100700002)(786003)(4326008)(66946007)(76116006)(64756008)(66446008)(66556008)(316002)(66476007)(83380400001)(6506007)(186003)(9686003)(53546011)(8990500004)(7416002)(7406005)(2906002)(5660300002)(38070700005)(52536014);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YQhppg9kSKMkM60RTYJeu3ql5RwmUsL1adTgXEKs8NQk+WtPaKLkH3yTM31U?=
+ =?us-ascii?Q?pygjQj7OIWDtSTb4Gyb+eoy4EsYen/ZL64HoQCbkn+Kf6YDcsn4fMRTvGmNh?=
+ =?us-ascii?Q?+7T9IPOfi6FyfgFTYmZldgOR9RvoaQqaWwS3Na3UZxE0ROfm6tpCa2GK9AgQ?=
+ =?us-ascii?Q?ajRHoMNSIC04EgKBLrFL4mG1TdUpq0Ykq1XkWnP71oiMM9KCVpdZbxZ8ESHt?=
+ =?us-ascii?Q?pSsO4ii3Qr64NONSnMQKtMqWRYbIA54akvRH1FDjUgQ7yMozr0SiLdqbxh3l?=
+ =?us-ascii?Q?75CeVEsE/vPuslrHClHitgO1BXn8B/4470cAGaYcVE+UqtrqW98vjLKtRBx1?=
+ =?us-ascii?Q?q0BbigSBBIkJbovTQcP8W2VZUCMsFZSSShVW6d9rEla4RCdIdj+kz2EatixG?=
+ =?us-ascii?Q?3nwQsxQmBzP/K/flOUFIptZD6ux3Fo2Ct+Gu2eLPlKopykv6jTQZNPPbPyMQ?=
+ =?us-ascii?Q?0FoCo0RK8IrseQXMdumW4RUZM/sKR7HmfVFkCvkwaYhSbvgfTSXevRzFOAkW?=
+ =?us-ascii?Q?shQTZRwHfc3MBUWVP8/DIPe3n44iu2ywrXl5Dntwn7WEC+YNP4gTTy3vQAfw?=
+ =?us-ascii?Q?7MC4C5o+xJmMtJNbFt2KleylUr6KYURjmx6Cvors+KLMoMbVuZDpcAVEZWiA?=
+ =?us-ascii?Q?onLjoH/6b5sLn/pKNlpq2vfV55aS/D2nc4lSpXD/NEJbocp/zmBq046pDdJG?=
+ =?us-ascii?Q?BCGMuR6BK/VRj/6itG41kJIfjHmUx12sEBNkC23cTHKaOToUoCmRrIbJIUpG?=
+ =?us-ascii?Q?qv9SxNLJcUg2oTOjrO8xMXmgQWVmYG7HRed67G1o6ID9oPUiBILkmfjAMOHK?=
+ =?us-ascii?Q?MgOvsG6+ddunEMDTStDs56EvTrt53BEm63BzCtZGhfUBIEn288uEQ5r2KKBc?=
+ =?us-ascii?Q?OxvCYvztzKjeYDltWj7uRxeVWXjhLlRJbbsYc891k/tIxvcRC1+36vGRx5GE?=
+ =?us-ascii?Q?XAbkVubUHKz6BEEQWiXSj7fV3aKfOfsZduXZLFIRjohRVU4Bo1EznfqGe/dI?=
+ =?us-ascii?Q?GdKYRj1LaM3x3JGGLHYg1LyGhsZNSyFosmkPjujTJQl2xvlIW/DDzfVQyQmK?=
+ =?us-ascii?Q?YpI0Sch6Xl8IKgB391fVHV3usOOE+vANbdhxCV+/j/lje64EP5J+HUJR9BJI?=
+ =?us-ascii?Q?Cw+ES2LIsmsDiKlMlBUqXqiwRxYPXC/z+yIAwkhpGD5hdJqT/XSSIWumbHsw?=
+ =?us-ascii?Q?lAapWcObtbb+URR0eFIm43Pv61rdCEQ0SS+nEx1tFhcwvHuRX7Z/nVkJDiO/?=
+ =?us-ascii?Q?VuWM/Z34Uxny0fT9eejpVOeMRS14whp7xJCn8EM/u/pqh00ca42aONRmwTnm?=
+ =?us-ascii?Q?c0C+aUls5Z0GBCnbQhGk2XFvOL+FNvYedWkAXedtNKkPauFE4c2TQQ6I0ohd?=
+ =?us-ascii?Q?jA2zyi8PMhM00e3E47LG766VA7HfEO9t9saAnDgn1HFVIuDJL0RFVBgpjEq8?=
+ =?us-ascii?Q?PPIIaOaKFfwjC7LGaLmONUDnoxioZd+bUdaijDujmeXT/ykYHAWck7COHA7I?=
+ =?us-ascii?Q?Ns8u3AZ/XXMtXiFbGQmKNRuKeNb5lihpO6HZnWeoePdJm4ukbHjZGGz/tsUR?=
+ =?us-ascii?Q?GXAqp6jhN/bnDqGZVVvXGLoru7R7N2RdqZLKFnVq?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec096288-1538-4800-3568-08db4a2dabf8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 May 2023 10:20:22.2052
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G5HJHmozMUbb2qTBHq65MfiOaxdV7pbHUogkU/xkIL8AfaVWsVCy12nlvapxak3wLh0NcLnR0oqO7XU9avMnBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZP153MB0665
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Ashish Kalra <ashish.kalra@amd.com>
 
-Add checks in interrupt exit code paths in case of returns
-to user mode to check if currently executing the #HV handler
-then don't follow the irqentry_exit_to_user_mode path as
-that can potentially cause the #HV handler to be
-preempted and rescheduled on another CPU. Rescheduled #HV
-handler on another cpu will cause interrupts to be handled
-on a different cpu than the injected one, causing
-invalid EOIs and missed/lost guest interrupts and
-corresponding hangs and/or per-cpu IRQs handled on
-non-intended cpu.
 
-Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
----
-Change since RFC v3:
-       * Add check of hv_handling_events in the do_exc_hv()
-       	 to avoid nested entry.
----
- arch/x86/include/asm/idtentry.h | 66 +++++++++++++++++++++++++++++++++
- arch/x86/kernel/sev.c           | 37 +++++++++++++++++-
- 2 files changed, 102 insertions(+), 1 deletion(-)
+> -----Original Message-----
+> From: Tianyu Lan <ltykernel@gmail.com>
+> Sent: Monday, May 1, 2023 2:27 PM
+> To: luto@kernel.org; tglx@linutronix.de; mingo@redhat.com; bp@alien8.de;
+> dave.hansen@linux.intel.com; x86@kernel.org; hpa@zytor.com;
+> seanjc@google.com; pbonzini@redhat.com; jgross@suse.com; Tianyu Lan
+> <Tianyu.Lan@microsoft.com>; kirill@shutemov.name;
+> jiangshan.ljs@antgroup.com; peterz@infradead.org; ashish.kalra@amd.com;
+> srutherford@google.com; akpm@linux-foundation.org;
+> anshuman.khandual@arm.com; pawan.kumar.gupta@linux.intel.com;
+> adrian.hunter@intel.com; daniel.sneddon@linux.intel.com;
+> alexander.shishkin@linux.intel.com; sandipan.das@amd.com;
+> ray.huang@amd.com; brijesh.singh@amd.com; michael.roth@amd.com;
+> thomas.lendacky@amd.com; venu.busireddy@oracle.com;
+> sterritt@google.com; tony.luck@intel.com; samitolvanen@google.com;
+> fenghua.yu@intel.com
+> Cc: pangupta@amd.com; linux-kernel@vger.kernel.org; kvm@vger.kernel.org;
+> linux-hyperv@vger.kernel.org; linux-arch@vger.kernel.org
+> Subject: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
+> sev-snp guest
+>=20
+> From: Tianyu Lan <tiala@microsoft.com>
+>=20
+> The wakeup_secondary_cpu callback was populated with wakeup_
+> cpu_via_vmgexit() which doesn't work for Hyper-V and Hyper-V requires to
+> call Hyper-V specific hvcall to start APs. So override it with Hyper-V sp=
+ecific
+> hook to start AP sev_es_save_area data structure.
+>=20
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+> Change sicne RFC v3:
+>        * Replace struct sev_es_save_area with struct
+>          vmcb_save_area
+>        * Move code from mshyperv.c to ivm.c
+>=20
+> Change since RFC v2:
+>        * Add helper function to initialize segment
+>        * Fix some coding style
+> ---
+>  arch/x86/hyperv/ivm.c             | 89 +++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/mshyperv.h   | 18 +++++++
+>  arch/x86/include/asm/sev.h        | 13 +++++
+>  arch/x86/include/asm/svm.h        | 15 +++++-
+>  arch/x86/kernel/cpu/mshyperv.c    | 13 ++++-
+>  arch/x86/kernel/sev.c             |  4 +-
+>  include/asm-generic/hyperv-tlfs.h | 19 +++++++
+>  7 files changed, 166 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c index
+> 522eab55c0dd..0ef46f1874e6 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -22,11 +22,15 @@
+>  #include <asm/sev.h>
+>  #include <asm/realmode.h>
+>  #include <asm/e820/api.h>
+> +#include <asm/desc.h>
+>=20
+>  #ifdef CONFIG_AMD_MEM_ENCRYPT
+>=20
+>  #define GHCB_USAGE_HYPERV_CALL	1
+>=20
+> +static u8 ap_start_input_arg[PAGE_SIZE] __bss_decrypted
+> +__aligned(PAGE_SIZE); static u8 ap_start_stack[PAGE_SIZE]
+> +__aligned(PAGE_SIZE);
+> +
+>  union hv_ghcb {
+>  	struct ghcb ghcb;
+>  	struct {
+> @@ -442,6 +446,91 @@ __init void hv_sev_init_mem_and_cpu(void)
+>  	}
+>  }
+>=20
+> +#define hv_populate_vmcb_seg(seg, gdtr_base)			\
+> +do {								\
+> +	if (seg.selector) {					\
+> +		seg.base =3D 0;					\
+> +		seg.limit =3D HV_AP_SEGMENT_LIMIT;		\
+> +		seg.attrib =3D *(u16 *)(gdtr_base + seg.selector + 5);	\
+> +		seg.attrib =3D (seg.attrib & 0xFF) | ((seg.attrib >> 4) & 0xF00); \
+> +	}=09
+						\
 
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index b0f3501b2767..415b7e14c227 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -13,6 +13,10 @@
- 
- #include <asm/irq_stack.h>
- 
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
-+#endif
-+
- /**
-  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
-  *		      No error code pushed by hardware
-@@ -176,6 +180,7 @@ __visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
- #define DECLARE_IDTENTRY_IRQ(vector, func)				\
- 	DECLARE_IDTENTRY_ERRORCODE(vector, func)
- 
-+#ifndef CONFIG_AMD_MEM_ENCRYPT
- /**
-  * DEFINE_IDTENTRY_IRQ - Emit code for device interrupt IDT entry points
-  * @func:	Function name of the entry point
-@@ -205,6 +210,26 @@ __visible noinstr void func(struct pt_regs *regs,			\
- }									\
- 									\
- static noinline void __##func(struct pt_regs *regs, u32 vector)
-+#else
-+
-+#define DEFINE_IDTENTRY_IRQ(func)					\
-+static void __##func(struct pt_regs *regs, u32 vector);		\
-+									\
-+__visible noinstr void func(struct pt_regs *regs,			\
-+			    unsigned long error_code)			\
-+{									\
-+	irqentry_state_t state = irqentry_enter(regs);			\
-+	u32 vector = (u32)(u8)error_code;				\
-+									\
-+	instrumentation_begin();					\
-+	kvm_set_cpu_l1tf_flush_l1d();					\
-+	run_irq_on_irqstack_cond(__##func, regs, vector);		\
-+	instrumentation_end();						\
-+	irqentry_exit_hv_cond(regs, state);				\
-+}									\
-+									\
-+static noinline void __##func(struct pt_regs *regs, u32 vector)
-+#endif
- 
- /**
-  * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
-@@ -221,6 +246,7 @@ static noinline void __##func(struct pt_regs *regs, u32 vector)
- #define DECLARE_IDTENTRY_SYSVEC(vector, func)				\
- 	DECLARE_IDTENTRY(vector, func)
- 
-+#ifndef CONFIG_AMD_MEM_ENCRYPT
- /**
-  * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
-  * @func:	Function name of the entry point
-@@ -245,6 +271,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
- }									\
- 									\
- static noinline void __##func(struct pt_regs *regs)
-+#else
-+
-+#define DEFINE_IDTENTRY_SYSVEC(func)					\
-+static void __##func(struct pt_regs *regs);				\
-+									\
-+__visible noinstr void func(struct pt_regs *regs)			\
-+{									\
-+	irqentry_state_t state = irqentry_enter(regs);			\
-+									\
-+	instrumentation_begin();					\
-+	kvm_set_cpu_l1tf_flush_l1d();					\
-+	run_sysvec_on_irqstack_cond(__##func, regs);			\
-+	instrumentation_end();						\
-+	irqentry_exit_hv_cond(regs, state);				\
-+}									\
-+									\
-+static noinline void __##func(struct pt_regs *regs)
-+#endif
-+
-+#ifndef CONFIG_AMD_MEM_ENCRYPT
- 
- /**
-  * DEFINE_IDTENTRY_SYSVEC_SIMPLE - Emit code for simple system vector IDT
-@@ -274,6 +320,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
- }									\
- 									\
- static __always_inline void __##func(struct pt_regs *regs)
-+#else
-+
-+#define DEFINE_IDTENTRY_SYSVEC_SIMPLE(func)				\
-+static __always_inline void __##func(struct pt_regs *regs);		\
-+									\
-+__visible noinstr void func(struct pt_regs *regs)			\
-+{									\
-+	irqentry_state_t state = irqentry_enter(regs);			\
-+									\
-+	instrumentation_begin();					\
-+	__irq_enter_raw();						\
-+	kvm_set_cpu_l1tf_flush_l1d();					\
-+	__##func(regs);						\
-+	__irq_exit_raw();						\
-+	instrumentation_end();						\
-+	irqentry_exit_hv_cond(regs, state);				\
-+}									\
-+									\
-+static __always_inline void __##func(struct pt_regs *regs)
-+#endif
- 
- /**
-  * DECLARE_IDTENTRY_XENCB - Declare functions for XEN HV callback entry point
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index b6becf158598..69b55075ddfe 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -149,6 +149,10 @@ struct sev_hv_doorbell_page {
- 
- struct sev_snp_runtime_data {
- 	struct sev_hv_doorbell_page hv_doorbell_page;
-+	/*
-+	 * Indication that we are currently handling #HV events.
-+	 */
-+	bool hv_handling_events;
- };
- 
- static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-@@ -204,6 +208,12 @@ static void do_exc_hv(struct pt_regs *regs)
- {
- 	union hv_pending_events pending_events;
- 
-+	/* Avoid nested entry. */
-+	if (this_cpu_read(snp_runtime_data)->hv_handling_events)
-+		return;
-+
-+	this_cpu_read(snp_runtime_data)->hv_handling_events = true;
-+
- 	while (sev_hv_pending()) {
- 		pending_events.events = xchg(
- 			&sev_snp_current_doorbell_page()->pending_events.events,
-@@ -218,7 +228,7 @@ static void do_exc_hv(struct pt_regs *regs)
- #endif
- 
- 		if (!pending_events.vector)
--			return;
-+			goto out;
- 
- 		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
- 			/* Exception vectors */
-@@ -238,6 +248,9 @@ static void do_exc_hv(struct pt_regs *regs)
- 			common_interrupt(regs, pending_events.vector);
- 		}
- 	}
-+
-+out:
-+	this_cpu_read(snp_runtime_data)->hv_handling_events = false;
- }
- 
- static __always_inline bool on_vc_stack(struct pt_regs *regs)
-@@ -2542,3 +2555,25 @@ static int __init snp_init_platform_device(void)
- 	return 0;
- }
- device_initcall(snp_init_platform_device);
-+
-+noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state)
-+{
-+	/*
-+	 * Check whether this returns to user mode, if so and if
-+	 * we are currently executing the #HV handler then we don't
-+	 * want to follow the irqentry_exit_to_user_mode path as
-+	 * that can potentially cause the #HV handler to be
-+	 * preempted and rescheduled on another CPU. Rescheduled #HV
-+	 * handler on another cpu will cause interrupts to be handled
-+	 * on a different cpu than the injected one, causing
-+	 * invalid EOIs and missed/lost guest interrupts and
-+	 * corresponding hangs and/or per-cpu IRQs handled on
-+	 * non-intended cpu.
-+	 */
-+	if (user_mode(regs) &&
-+	    this_cpu_read(snp_runtime_data)->hv_handling_events)
-+		return;
-+
-+	/* follow normal interrupt return/exit path */
-+	irqentry_exit(regs, state);
-+}
--- 
-2.25.1
+< snip>
+
+>  	ghcb_set_sw_exit_info_2(ghcb, __pa(vmsa)); diff --git a/include/asm-
+> generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index f4e4cc4f965f..959b075591b2 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -149,6 +149,7 @@ union hv_reference_tsc_msr {
+>  #define HVCALL_ENABLE_VP_VTL			0x000f
+>  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+>  #define HVCALL_SEND_IPI				0x000b
+> +#define HVCALL_ENABLE_VP_VTL			0x000f
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX	0x0014
+>  #define HVCALL_SEND_IPI_EX			0x0015
+> @@ -168,6 +169,7 @@ union hv_reference_tsc_msr {
+>  #define HVCALL_RETARGET_INTERRUPT		0x007e
+>  #define HVCALL_START_VP				0x0099
+>  #define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+> +#define HVCALL_START_VIRTUAL_PROCESSOR		0x0099
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af  #define
+> HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0  #define
+> HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db @@ -223,6
+> +225,7 @@ enum HV_GENERIC_SET_FORMAT {
+>  #define HV_STATUS_INVALID_PORT_ID		17
+>  #define HV_STATUS_INVALID_CONNECTION_ID		18
+>  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> +#define HV_STATUS_TIME_OUT                      120
+>  #define HV_STATUS_VTL_ALREADY_ENABLED		134
+>=20
+>  /*
+> @@ -783,6 +786,22 @@ struct hv_input_unmap_device_interrupt {
+>  	struct hv_interrupt_entry interrupt_entry;  } __packed;
+>=20
+> +struct hv_enable_vp_vtl_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8 targetvtl;
+> +	u8 padding[3];
+> +	u8 context[0xe0];
+> +} __packed;
+> +
+> +struct hv_start_virtual_processor_input {
+> +	u64 partitionid;
+> +	u32 vpindex;
+> +	u8 targetvtl;
+> +	u8 padding[3];
+> +	u8 context[0xe0];
+> +} __packed;
+
+"struct hv_enable_vp_vtl " is defined in arch/x86/include/asm/hyperv-tlfs.h=
+. Please check if that can be reused in place of both the above structs.
+- Saurabh
+
+> +
+>  #define HV_SOURCE_SHADOW_NONE               0x0
+>  #define HV_SOURCE_SHADOW_BRIDGE_BUS_RANGE   0x1
+>=20
+> --
+> 2.25.1
 
