@@ -2,342 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CB76F3692
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 21:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECB56F36DB
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 21:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbjEATSc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 15:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S232557AbjEAT3H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 15:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231229AbjEATSa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 15:18:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7611510FF;
-        Mon,  1 May 2023 12:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=5UxSQNJpFaq+7dWUx985o9MhLzvQlphTHJz1Ql9KvxU=; b=m24iecrtD682Y0avrqU5+JQdF+
-        nWZoQBcK2H5OgTG/EBb90D7VsXtt6xEHViWN4TIiZkBrt8C9XLDM/gMEZOQyQwaVeKhc8yKRzSnI1
-        EzeIrWxb7TA+gz3k3Q34aDVhSZw8lRJrmIe+wJm7NL0+XOlWQ4vqwT7t6/7ueqwnmAdOpDQn6KWwT
-        VkCLthfvJ4YhigT9Gq6pdWYrayOPmOxFENBfusjCeVkthG2cVdNBj1dKAMOInehBlzAmXZWW/R+3X
-        q7ZxLkhhzsT169AYNc/Co9NhEJ8a6ViTju2j3HAEdDlsm0enI6uAvqqUbcKqpNak+lVph4GI/UUHe
-        1KK6klSw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1ptZ1u-00GeuY-36;
-        Mon, 01 May 2023 19:17:47 +0000
-Message-ID: <91a360d3-c876-0a57-5cb1-e3a5f419080d@infradead.org>
-Date:   Mon, 1 May 2023 12:17:42 -0700
+        with ESMTP id S233075AbjEAT3G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 15:29:06 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDE22D43;
+        Mon,  1 May 2023 12:28:35 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1aaed87d8bdso12161785ad.3;
+        Mon, 01 May 2023 12:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1682969314; x=1685561314;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ipls6koA+AeH8J6j2WxgUhcq4mmw5a3NH+J2RY9iS6I=;
+        b=eztCo5uQgzZ++c4nibUBiIDXpS2LGO24+qSzaafIbpKx+1BibUdX3vQLCCvqCM9QaK
+         k2szVsQtO5BsNtu2gEbwQ2R1Cp8SZWTwumicPfkwsEEQtcvZx+KCA7E9E8yQbBLG/+U1
+         YuKydYrLelSrUvEFcJOenbExJISoaZaYCzUq7BQHSqP3uoPFqEPYIMH3FrftdGe1VnOk
+         18/QJSaB/qqzmIXnj9u6ae7JwxuEe1M8it5S+Q9K46yajD+0ZkqBf7KewtfRcvygNDOo
+         LlI0LPcK+WO/JxG3p9SD85FYmZExm1luEC4PEkLlS1jz538f0/tapw7EjRytIfe2E8ce
+         OeqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682969314; x=1685561314;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ipls6koA+AeH8J6j2WxgUhcq4mmw5a3NH+J2RY9iS6I=;
+        b=WjKB1dBzfMwvDk20nDV9cHccje/2+v+B03AwO6pBNx2LIf47BpM0EtOkhHT9BpTmIK
+         qNNYgqJFcARye89OdbBlJoqMuePKrdsHxC5SNRKEywDb48jFery/By6L1MguoeD5pJyw
+         S4tSGuth3w6v8vGl4BLpeX6w8TBAZy3cb8+65iUr8xNM3iW8P+Kfy1mT3LW3MtHAFf09
+         CogWvAUEuvfPsuW6N4HDz0jr3lSll8Mea7oknlBuvlgtE5uwjBA028q8P2Ucua22w+1J
+         cZKxzLDnSJmzAeJN+PoNMl7nbkYBpXnI2VfO1HVo7ICzhR5e68uE6itd2Z48QVBM9V4i
+         94fQ==
+X-Gm-Message-State: AC+VfDxwYDJfj404qPPaia+pxEN0FNARQ8XCCiI4xvesm6VV+SkWcVPL
+        Kxu6OhKvWL1C7RNqXuTasrY=
+X-Google-Smtp-Source: ACHHUZ4EtcVpfh2GrxC12spi0fGVMtR6JEHjWCZcT25vgipN1a5chaj6S10yX1bBKRrgSrOQ8bpQcQ==
+X-Received: by 2002:a17:903:2310:b0:1a6:54ce:4311 with SMTP id d16-20020a170903231000b001a654ce4311mr18428090plh.43.1682969314058;
+        Mon, 01 May 2023 12:28:34 -0700 (PDT)
+Received: from fedora.hsd1.ca.comcast.net ([2601:644:937f:7f20::9a2c])
+        by smtp.googlemail.com with ESMTPSA id u8-20020a170902bf4800b0019c13d032d8sm18175622pls.253.2023.05.01.12.28.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 May 2023 12:28:33 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, xen-devel@lists.xenproject.org,
+        kvm@vger.kernel.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2 00/34] Split ptdesc from struct page
+Date:   Mon,  1 May 2023 12:27:55 -0700
+Message-Id: <20230501192829.17086-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 07/40] Lazy percpu counters
-Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-References: <20230501165450.15352-1-surenb@google.com>
- <20230501165450.15352-8-surenb@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230501165450.15352-8-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi--
+The MM subsystem is trying to shrink struct page. This patchset
+introduces a memory descriptor for page table tracking - struct ptdesc.
 
-On 5/1/23 09:54, Suren Baghdasaryan wrote:
-> From: Kent Overstreet <kent.overstreet@linux.dev>
-> 
-> This patch adds lib/lazy-percpu-counter.c, which implements counters
-> that start out as atomics, but lazily switch to percpu mode if the
-> update rate crosses some threshold (arbitrarily set at 256 per second).
-> 
+This patchset introduces ptdesc, splits ptdesc from struct page, and
+converts many callers of page table constructor/destructors to use ptdescs.
 
-from submitting-patches.rst:
+Ptdesc is a foundation to further standardize page tables, and eventually
+allow for dynamic allocation of page tables independent of struct page.
+However, the use of pages for page table tracking is quite deeply
+ingrained and varied across archictectures, so there is still a lot of
+work to be done before that can happen.
 
-Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-to do frotz", as if you are giving orders to the codebase to change
-its behaviour.
+This is rebased on next-20230428.
 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/lazy-percpu-counter.h | 102 ++++++++++++++++++++++
->  lib/Kconfig                         |   3 +
->  lib/Makefile                        |   2 +
->  lib/lazy-percpu-counter.c           | 127 ++++++++++++++++++++++++++++
->  4 files changed, 234 insertions(+)
->  create mode 100644 include/linux/lazy-percpu-counter.h
->  create mode 100644 lib/lazy-percpu-counter.c
-> 
-> diff --git a/include/linux/lazy-percpu-counter.h b/include/linux/lazy-percpu-counter.h
-> new file mode 100644
-> index 000000000000..45ca9e2ce58b
-> --- /dev/null
-> +++ b/include/linux/lazy-percpu-counter.h
-> @@ -0,0 +1,102 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Lazy percpu counters:
-> + * (C) 2022 Kent Overstreet
-> + *
-> + * Lazy percpu counters start out in atomic mode, then switch to percpu mode if
-> + * the update rate crosses some threshold.
-> + *
-> + * This means we don't have to decide between low memory overhead atomic
-> + * counters and higher performance percpu counters - we can have our cake and
-> + * eat it, too!
-> + *
-> + * Internally we use an atomic64_t, where the low bit indicates whether we're in
-> + * percpu mode, and the high 8 bits are a secondary counter that's incremented
-> + * when the counter is modified - meaning 55 bits of precision are available for
-> + * the counter itself.
-> + */
-> +
-> +#ifndef _LINUX_LAZY_PERCPU_COUNTER_H
-> +#define _LINUX_LAZY_PERCPU_COUNTER_H
-> +
-> +#include <linux/atomic.h>
-> +#include <asm/percpu.h>
-> +
-> +struct lazy_percpu_counter {
-> +	atomic64_t			v;
-> +	unsigned long			last_wrap;
-> +};
-> +
-> +void lazy_percpu_counter_exit(struct lazy_percpu_counter *c);
-> +void lazy_percpu_counter_add_slowpath(struct lazy_percpu_counter *c, s64 i);
-> +void lazy_percpu_counter_add_slowpath_noupgrade(struct lazy_percpu_counter *c, s64 i);
-> +s64 lazy_percpu_counter_read(struct lazy_percpu_counter *c);
-> +
-> +/*
-> + * We use the high bits of the atomic counter for a secondary counter, which is
-> + * incremented every time the counter is touched. When the secondary counter
-> + * wraps, we check the time the counter last wrapped, and if it was recent
-> + * enough that means the update frequency has crossed our threshold and we
-> + * switch to percpu mode:
-> + */
-> +#define COUNTER_MOD_BITS		8
-> +#define COUNTER_MOD_MASK		~(~0ULL >> COUNTER_MOD_BITS)
-> +#define COUNTER_MOD_BITS_START		(64 - COUNTER_MOD_BITS)
-> +
-> +/*
-> + * We use the low bit of the counter to indicate whether we're in atomic mode
-> + * (low bit clear), or percpu mode (low bit set, counter is a pointer to actual
-> + * percpu counters:
-> + */
-> +#define COUNTER_IS_PCPU_BIT		1
-> +
-> +static inline u64 __percpu *lazy_percpu_counter_is_pcpu(u64 v)
-> +{
-> +	if (!(v & COUNTER_IS_PCPU_BIT))
-> +		return NULL;
-> +
-> +	v ^= COUNTER_IS_PCPU_BIT;
-> +	return (u64 __percpu *)(unsigned long)v;
-> +}
-> +
-> +/**
-> + * lazy_percpu_counter_add: Add a value to a lazy_percpu_counter
+v2:
+  Fix a lot of compiler warning/errors
+  Moved definition of ptdesc to outside CONFIG_MMU
+  Revert commit 7e25de77bc5ea which had gmap use pmd_pgtable_page()
+  Allow functions to preserve const-ness where applicable
+  Define folio equivalents for PAGE_TYPE_OPS page functions
 
-For kernel-doc, the function name should be followed by '-', not ':'.
-(many places)
+Vishal Moola (Oracle) (34):
+  mm: Add PAGE_TYPE_OP folio functions
+  s390: Use _pt_s390_gaddr for gmap address tracking
+  s390: Use pt_frag_refcount for pagetables
+  pgtable: Create struct ptdesc
+  mm: add utility functions for ptdesc
+  mm: Convert pmd_pgtable_page() to pmd_ptdesc()
+  mm: Convert ptlock_alloc() to use ptdescs
+  mm: Convert ptlock_ptr() to use ptdescs
+  mm: Convert pmd_ptlock_init() to use ptdescs
+  mm: Convert ptlock_init() to use ptdescs
+  mm: Convert pmd_ptlock_free() to use ptdescs
+  mm: Convert ptlock_free() to use ptdescs
+  mm: Create ptdesc equivalents for pgtable_{pte,pmd}_page_{ctor,dtor}
+  powerpc: Convert various functions to use ptdescs
+  x86: Convert various functions to use ptdescs
+  s390: Convert various gmap functions to use ptdescs
+  s390: Convert various pgalloc functions to use ptdescs
+  mm: Remove page table members from struct page
+  pgalloc: Convert various functions to use ptdescs
+  arm: Convert various functions to use ptdescs
+  arm64: Convert various functions to use ptdescs
+  csky: Convert __pte_free_tlb() to use ptdescs
+  hexagon: Convert __pte_free_tlb() to use ptdescs
+  loongarch: Convert various functions to use ptdescs
+  m68k: Convert various functions to use ptdescs
+  mips: Convert various functions to use ptdescs
+  nios2: Convert __pte_free_tlb() to use ptdescs
+  openrisc: Convert __pte_free_tlb() to use ptdescs
+  riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
+  sh: Convert pte_free_tlb() to use ptdescs
+  sparc64: Convert various functions to use ptdescs
+  sparc: Convert pgtable_pte_page_{ctor, dtor}() to ptdesc equivalents
+  um: Convert {pmd, pte}_free_tlb() to use ptdescs
+  mm: Remove pgtable_{pmd, pte}_page_{ctor, dtor}() wrappers
 
-> + *
-> + * @c: counter to modify
-> + * @i: value to add
-> + */
-> +static inline void lazy_percpu_counter_add(struct lazy_percpu_counter *c, s64 i)
-> +{
-> +	u64 v = atomic64_read(&c->v);
-> +	u64 __percpu *pcpu_v = lazy_percpu_counter_is_pcpu(v);
-> +
-> +	if (likely(pcpu_v))
-> +		this_cpu_add(*pcpu_v, i);
-> +	else
-> +		lazy_percpu_counter_add_slowpath(c, i);
-> +}
-> +
-> +/**
-> + * lazy_percpu_counter_add_noupgrade: Add a value to a lazy_percpu_counter,
-> + * without upgrading to percpu mode
-> + *
-> + * @c: counter to modify
-> + * @i: value to add
-> + */
-> +static inline void lazy_percpu_counter_add_noupgrade(struct lazy_percpu_counter *c, s64 i)
-> +{
-> +	u64 v = atomic64_read(&c->v);
-> +	u64 __percpu *pcpu_v = lazy_percpu_counter_is_pcpu(v);
-> +
-> +	if (likely(pcpu_v))
-> +		this_cpu_add(*pcpu_v, i);
-> +	else
-> +		lazy_percpu_counter_add_slowpath_noupgrade(c, i);
-> +}
-> +
-> +static inline void lazy_percpu_counter_sub(struct lazy_percpu_counter *c, s64 i)
-> +{
-> +	lazy_percpu_counter_add(c, -i);
-> +}
-> +
-> +#endif /* _LINUX_LAZY_PERCPU_COUNTER_H */
+ Documentation/mm/split_page_table_lock.rst    |  12 +-
+ .../zh_CN/mm/split_page_table_lock.rst        |  14 +-
+ arch/arm/include/asm/tlb.h                    |  12 +-
+ arch/arm/mm/mmu.c                             |   6 +-
+ arch/arm64/include/asm/tlb.h                  |  14 +-
+ arch/arm64/mm/mmu.c                           |   7 +-
+ arch/csky/include/asm/pgalloc.h               |   4 +-
+ arch/hexagon/include/asm/pgalloc.h            |   8 +-
+ arch/loongarch/include/asm/pgalloc.h          |  27 ++-
+ arch/loongarch/mm/pgtable.c                   |   7 +-
+ arch/m68k/include/asm/mcf_pgalloc.h           |  41 ++--
+ arch/m68k/include/asm/sun3_pgalloc.h          |   8 +-
+ arch/m68k/mm/motorola.c                       |   4 +-
+ arch/mips/include/asm/pgalloc.h               |  31 +--
+ arch/mips/mm/pgtable.c                        |   7 +-
+ arch/nios2/include/asm/pgalloc.h              |   8 +-
+ arch/openrisc/include/asm/pgalloc.h           |   8 +-
+ arch/powerpc/mm/book3s64/mmu_context.c        |  10 +-
+ arch/powerpc/mm/book3s64/pgtable.c            |  32 +--
+ arch/powerpc/mm/pgtable-frag.c                |  46 ++--
+ arch/riscv/include/asm/pgalloc.h              |   8 +-
+ arch/riscv/mm/init.c                          |  16 +-
+ arch/s390/include/asm/pgalloc.h               |   4 +-
+ arch/s390/include/asm/tlb.h                   |   4 +-
+ arch/s390/mm/gmap.c                           | 222 +++++++++++-------
+ arch/s390/mm/pgalloc.c                        | 126 +++++-----
+ arch/sh/include/asm/pgalloc.h                 |   9 +-
+ arch/sparc/mm/init_64.c                       |  17 +-
+ arch/sparc/mm/srmmu.c                         |   5 +-
+ arch/um/include/asm/pgalloc.h                 |  18 +-
+ arch/x86/mm/pgtable.c                         |  46 ++--
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ include/asm-generic/pgalloc.h                 |  62 +++--
+ include/asm-generic/tlb.h                     |  11 +
+ include/linux/mm.h                            | 138 +++++++----
+ include/linux/mm_types.h                      |  14 --
+ include/linux/page-flags.h                    |  20 +-
+ include/linux/pgtable.h                       |  61 +++++
+ mm/memory.c                                   |   8 +-
+ 39 files changed, 648 insertions(+), 449 deletions(-)
 
-> diff --git a/lib/lazy-percpu-counter.c b/lib/lazy-percpu-counter.c
-> new file mode 100644
-> index 000000000000..4f4e32c2dc09
-> --- /dev/null
-> +++ b/lib/lazy-percpu-counter.c
-> @@ -0,0 +1,127 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include <linux/atomic.h>
-> +#include <linux/gfp.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/lazy-percpu-counter.h>
-> +#include <linux/percpu.h>
-> +
-> +static inline s64 lazy_percpu_counter_atomic_val(s64 v)
-> +{
-> +	/* Ensure output is sign extended properly: */
-> +	return (v << COUNTER_MOD_BITS) >>
-> +		(COUNTER_MOD_BITS + COUNTER_IS_PCPU_BIT);
-> +}
-> +
-...
-> +
-> +/**
-> + * lazy_percpu_counter_exit: Free resources associated with a
-> + * lazy_percpu_counter
-
-Same kernel-doc comment.
-
-> + *
-> + * @c: counter to exit
-> + */
-> +void lazy_percpu_counter_exit(struct lazy_percpu_counter *c)
-> +{
-> +	free_percpu(lazy_percpu_counter_is_pcpu(atomic64_read(&c->v)));
-> +}
-> +EXPORT_SYMBOL_GPL(lazy_percpu_counter_exit);
-> +
-> +/**
-> + * lazy_percpu_counter_read: Read current value of a lazy_percpu_counter
-> + *
-> + * @c: counter to read
-> + */
-> +s64 lazy_percpu_counter_read(struct lazy_percpu_counter *c)
-> +{
-> +	s64 v = atomic64_read(&c->v);
-> +	u64 __percpu *pcpu_v = lazy_percpu_counter_is_pcpu(v);
-> +
-> +	if (pcpu_v) {
-> +		int cpu;
-> +
-> +		v = 0;
-> +		for_each_possible_cpu(cpu)
-> +			v += *per_cpu_ptr(pcpu_v, cpu);
-> +	} else {
-> +		v = lazy_percpu_counter_atomic_val(v);
-> +	}
-> +
-> +	return v;
-> +}
-> +EXPORT_SYMBOL_GPL(lazy_percpu_counter_read);
-> +
-> +void lazy_percpu_counter_add_slowpath(struct lazy_percpu_counter *c, s64 i)
-> +{
-> +	u64 atomic_i;
-> +	u64 old, v = atomic64_read(&c->v);
-> +	u64 __percpu *pcpu_v;
-> +
-> +	atomic_i  = i << COUNTER_IS_PCPU_BIT;
-> +	atomic_i &= ~COUNTER_MOD_MASK;
-> +	atomic_i |= 1ULL << COUNTER_MOD_BITS_START;
-> +
-> +	do {
-> +		pcpu_v = lazy_percpu_counter_is_pcpu(v);
-> +		if (pcpu_v) {
-> +			this_cpu_add(*pcpu_v, i);
-> +			return;
-> +		}
-> +
-> +		old = v;
-> +	} while ((v = atomic64_cmpxchg(&c->v, old, old + atomic_i)) != old);
-> +
-> +	if (unlikely(!(v & COUNTER_MOD_MASK))) {
-> +		unsigned long now = jiffies;
-> +
-> +		if (c->last_wrap &&
-> +		    unlikely(time_after(c->last_wrap + HZ, now)))
-> +			lazy_percpu_counter_switch_to_pcpu(c);
-> +		else
-> +			c->last_wrap = now;
-> +	}
-> +}
-> +EXPORT_SYMBOL(lazy_percpu_counter_add_slowpath);
-> +
-> +void lazy_percpu_counter_add_slowpath_noupgrade(struct lazy_percpu_counter *c, s64 i)
-> +{
-> +	u64 atomic_i;
-> +	u64 old, v = atomic64_read(&c->v);
-> +	u64 __percpu *pcpu_v;
-> +
-> +	atomic_i  = i << COUNTER_IS_PCPU_BIT;
-> +	atomic_i &= ~COUNTER_MOD_MASK;
-> +
-> +	do {
-> +		pcpu_v = lazy_percpu_counter_is_pcpu(v);
-> +		if (pcpu_v) {
-> +			this_cpu_add(*pcpu_v, i);
-> +			return;
-> +		}
-> +
-> +		old = v;
-> +	} while ((v = atomic64_cmpxchg(&c->v, old, old + atomic_i)) != old);
-> +}
-> +EXPORT_SYMBOL(lazy_percpu_counter_add_slowpath_noupgrade);
-
-These last 2 exported functions could use some comments, preferably in
-kernel-doc format.
-
-Thanks.
 -- 
-~Randy
+2.39.2
+
