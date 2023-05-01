@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E3F6F33E3
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 18:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0616F33F1
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 18:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjEAQ4H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 12:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S232249AbjEAQ4P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 12:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbjEAQzc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:55:32 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAAD199B
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:55:17 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b96ee51ee20so3262337276.3
-        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:55:17 -0700 (PDT)
+        with ESMTP id S232535AbjEAQzh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:55:37 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B631BE5
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:55:19 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-24df9b0ed7aso1439566a91.3
+        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960117; x=1685552117;
+        d=google.com; s=20221208; t=1682960119; x=1685552119;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MvglFAc23/TKNtr0bbBz1MPaCPYCHObzjBdGSdfY+dE=;
-        b=yKDBPh22/4OVp0gpJ5U5nHWMn8h04FMW1WN9f98nVkyHZSwAOs9UEKf2haMvXBbR8k
-         I5P7Dha4Pldrj64han5IvUTFfOCUHNGUrIJIAXAHFHlzCILjwJdK3NkqJaf+mFjOWY9Y
-         anqwu1P80ScHesP8cB9KZprrz91t4RxUXEXNi1EU3gVLZoQD/8xloHC2gL9j3TfYF6sZ
-         YkdPXTXoXUqQoMaiXzOvgnurLH12U1odpmtI/6y+T+w0FuxiB/jPfmQMFC3YfiI9xt9g
-         5K5Lvs6m9I2be6QJ0QLu+uaPSHjNUlPR4Y/We8WulcHXa/trNfBWstA095DBG1XNwXOI
-         RnBQ==
+        bh=Am8x4T/C3ER6nwTMzq8wqC7nUn5OpA8nmjjdL2Y+IyA=;
+        b=WPj8roryRwAmmVOt/f6DiF72YfWfvTwfrhdft0wjazxPvIpRZjMIBwQEDTYgaFjL40
+         EYH/Obl5jlfmohNQjk6ksHyCvogtUr2FLXSqo8imf9pH+Av5pbwlM01Z0VPnzvuHFHvS
+         sJJApW1h4nytu2oRGIJAzX1ILNXit4lP55uwJk+oNrWKlXyEZFC9xWXVli4TIY3SK85U
+         B99AfIcgd6WX1rUTcNtVjahhym0hUSbpRJ8MlMIviR2dEnrK9LO4e6TK4pMF6ElbNOxK
+         BqCNggeEEuUJjuE4WJ/nJF98lgK/t0MR2oB5re4JYDKTxZxL1IcsVMbdtZa5WL37TB8E
+         NhaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960117; x=1685552117;
+        d=1e100.net; s=20221208; t=1682960119; x=1685552119;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MvglFAc23/TKNtr0bbBz1MPaCPYCHObzjBdGSdfY+dE=;
-        b=fC5Av04TwC06JMAve2VYCxKnIShLu2tdOAeckIphIOxm0Nqgk/rpAj1KXXyLEePqEy
-         IV2U88wbQjbxNZ038ermaYcpw49Zo3m2PbKqetoClZEDCRb9DpZoKBMR5HvczRQqf3Gt
-         FzzXqvJz2ZV6R4/RD3BE6VmLWGUYubbK/PRp9QIzot+C2XhTrYgQWbgpgeHBKRl7u7iG
-         bjz7oo8w0E3ablj5WciOUop6hbXfoEgS/0flZUazJ3cVDz9V5+EqwUM19osquMNdPQUC
-         RQ5DOFOzQ88XnWDzAMOtIMO7Gly6Ms/GjRXHc7Rzazc+FqjvFYeLZCmlh3ZPDQU8/fwh
-         tPHA==
-X-Gm-Message-State: AC+VfDystddF9K2wT0rKR+WK+jrRbZnHNFwQ8Bggt727rjjfGUquF5AJ
-        94IfPR9yjTgOdy/UD11iAznUWz4Ngpw=
-X-Google-Smtp-Source: ACHHUZ7zxOn1YY1d+8Zdgat4BhX3SxSXxSfdgQr88v03ITFlUy5XmZz5otkrL0/chwvD7sDfcOf3ssnE7Vo=
+        bh=Am8x4T/C3ER6nwTMzq8wqC7nUn5OpA8nmjjdL2Y+IyA=;
+        b=Uoi7yapDCf4diLCDb6sdpin6/GHmD3/y31Rjs4a2SWPV77XgGub0GbzmUljaaq41Pq
+         m7XJdoayPgAzf8GUOdx2UjfSxG0kDunNsJgEsAXM5+kgZdT9y4g6dX9744Y6S5KYXIb6
+         vCG+0QSIT2jOKRaBvQ6bPqVFH5TkIkMURgEmKt56RaN9misxqkbVxhRdKlH4LrsaElxu
+         LeyDkK9mnYO2NILJUFXUMZE9umz0yuuF27XGp0DPfBDIxRAde5T1uuEabRhQJv8PWCS5
+         HeyNmxv8BRv/Z+ndiq6GASOddQ+7ymhS+R5dDHyku50AerIpxG9b49PI51Y8ts6rVOtp
+         yZig==
+X-Gm-Message-State: AC+VfDyA2QWORz9SvAxUpzFh5xndpHGWhZXK5skWpuAR1Qd08qJMNpqi
+        Zg+hGDcM5GpDrWlhx0D8FM41TjI/cIQ=
+X-Google-Smtp-Source: ACHHUZ4HYpYlqwon9ul71ywYVvGlfL5GDzgkEgI+UaCs1iOfSF39OpEKQuit70zO4oA3hBY7TJW8YvGVQSU=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a25:c54f:0:b0:b8e:fbcb:d6ef with SMTP id
- v76-20020a25c54f000000b00b8efbcbd6efmr8806787ybe.4.1682960116894; Mon, 01 May
- 2023 09:55:16 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:14 -0700
+ (user=surenb job=sendgmr) by 2002:a17:90a:24a:b0:24d:e504:69ed with SMTP id
+ t10-20020a17090a024a00b0024de50469edmr1685228pje.3.1682960119293; Mon, 01 May
+ 2023 09:55:19 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:15 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-5-surenb@google.com>
-Subject: [PATCH 04/40] nodemask: Split out include/linux/nodemask_types.h
+Message-ID: <20230501165450.15352-6-surenb@google.com>
+Subject: [PATCH 05/40] prandom: Remove unused include
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -95,69 +95,26 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-sched.h, which defines task_struct, needs nodemask_t - but sched.h is a
-frequently used header and ideally shouldn't be pulling in any more code
-that it needs to.
-
-This splits out nodemask_types.h which has the definition sched.h needs,
-which will avoid a circular header dependency in the alloc tagging patch
-series, and as a bonus should speed up kernel build times.
+prandom.h doesn't use percpu.h - this fixes some circular header issues.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- include/linux/nodemask.h       | 2 +-
- include/linux/nodemask_types.h | 9 +++++++++
- include/linux/sched.h          | 2 +-
- 3 files changed, 11 insertions(+), 2 deletions(-)
- create mode 100644 include/linux/nodemask_types.h
+ include/linux/prandom.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index bb0ee80526b2..fda37b6df274 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -93,10 +93,10 @@
- #include <linux/threads.h>
- #include <linux/bitmap.h>
- #include <linux/minmax.h>
-+#include <linux/nodemask_types.h>
- #include <linux/numa.h>
+diff --git a/include/linux/prandom.h b/include/linux/prandom.h
+index f2ed5b72b3d6..f7f1e5251c67 100644
+--- a/include/linux/prandom.h
++++ b/include/linux/prandom.h
+@@ -10,7 +10,6 @@
+ 
+ #include <linux/types.h>
+ #include <linux/once.h>
+-#include <linux/percpu.h>
  #include <linux/random.h>
  
--typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
- extern nodemask_t _unused_nodemask_arg_;
- 
- /**
-diff --git a/include/linux/nodemask_types.h b/include/linux/nodemask_types.h
-new file mode 100644
-index 000000000000..84c2f47c4237
---- /dev/null
-+++ b/include/linux/nodemask_types.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __LINUX_NODEMASK_TYPES_H
-+#define __LINUX_NODEMASK_TYPES_H
-+
-+#include <linux/numa.h>
-+
-+typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
-+
-+#endif /* __LINUX_NODEMASK_TYPES_H */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index eed5d65b8d1f..35e7efdea2d9 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -20,7 +20,7 @@
- #include <linux/hrtimer.h>
- #include <linux/irqflags.h>
- #include <linux/seccomp.h>
--#include <linux/nodemask.h>
-+#include <linux/nodemask_types.h>
- #include <linux/rcupdate.h>
- #include <linux/refcount.h>
- #include <linux/resource.h>
+ struct rnd_state {
 -- 
 2.40.1.495.gc816e09b53d-goog
 
