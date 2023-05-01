@@ -2,75 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABFC6F3981
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 22:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1904B6F39E8
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 23:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjEAU7b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 16:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38466 "EHLO
+        id S232231AbjEAVni (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 17:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232658AbjEAU7a (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 16:59:30 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7AE1985
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 13:59:26 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-63b5fca48bcso2242516b3a.0
-        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 13:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1682974766; x=1685566766;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=56zwdsQPzBA4Fq57F7zZq8xm3cbpRSpnOmcnA0Dh+zY=;
-        b=dhuoKYDmXvVL9rcvID9l7RqV772Z8lTC+U0WXQUi0tYJbLE9a48GrmSzQs7bEghGbC
-         JAz8rXoL1w4B9KKuEwX7POjH3Ox3r6V4zpIxvsvZpSsylQJD8ptmZ7+Vz+V8jAHJj04w
-         T6FV37TSFDDCD7el69cwAEuuEXi6g8EgNvIcALlfkGBQgAio2kQ2a6bJAUGpYJRLsZzz
-         ZNQyL545JSX++O1LCUyCJsybjwMgrDioUAedrjXfVSqEM2lGIt3XAkC5ujMjWrYDbKAU
-         lx6fFu18ULaY/km5rliSpJC6ISEyi513He8uKlna726VX+0Zf3a2zrJJ6SJgvgEWorgq
-         velw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682974766; x=1685566766;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=56zwdsQPzBA4Fq57F7zZq8xm3cbpRSpnOmcnA0Dh+zY=;
-        b=VKuS9bcFnp6WXyCvWKeyqKQFzNmL9z18dBctoCKRjoaK7MDf2P9UtBgxHWoLqmSWpj
-         iYSC7JCNzxsRJ0QQZ0z49LaOZhok7VoLTQxTJV8o2FzWgmkxPx/Mx0pnP5MK3TrfDd8V
-         gRRailfyCKCfpDUnLQPcEEKLey/sS8wYkJv/Z3WM76PzLjwSZWL4pVv0CimNC7MmtZV3
-         NgvkgO1qE1MlZ5ZN2TjG8A+FC4Hasghp602IYbvyyDrBpUzsFvw7bRBHSmQm5nY2f16+
-         bMd+aBWfkEKtldJ0MEfX3Ah83h36yXniNZmGjPOrDFwbMRRg3e+oBuDxGlyUjNxGiF4Z
-         Cq7w==
-X-Gm-Message-State: AC+VfDxqa0PNjbAqnpul4sUYaHfGRPqrmuHh4iNDvy9NNUybIiQsndP9
-        jznO/1zo1/B4KaHvv+1b7nsbKw==
-X-Google-Smtp-Source: ACHHUZ7NRh0XptQx7EX4B/2U8oMa1VyQthNvjC4nK5qetnlZ9yiAEbyNISqPVXEejwWKpBkEgu1KUQ==
-X-Received: by 2002:a05:6a00:1301:b0:63d:27a1:d578 with SMTP id j1-20020a056a00130100b0063d27a1d578mr19620776pfu.20.1682974765524;
-        Mon, 01 May 2023 13:59:25 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id x3-20020a628603000000b0063d666566d1sm20322681pfd.72.2023.05.01.13.59.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 13:59:24 -0700 (PDT)
-Date:   Mon, 01 May 2023 13:59:24 -0700 (PDT)
-X-Google-Original-Date: Mon, 01 May 2023 13:59:09 PDT (-0700)
-Subject:     Re: [PATCH v2 29/34] riscv: Convert alloc_{pmd, pte}_late() to use ptdescs
-In-Reply-To: <20230501192829.17086-30-vishal.moola@gmail.com>
-CC:     akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        vishal.moola@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     vishal.moola@gmail.com
-Message-ID: <mhng-e6f12727-9abe-4a93-a361-15a6cd333f51@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        with ESMTP id S230003AbjEAVnh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 17:43:37 -0400
+X-Greylist: delayed 1581 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 May 2023 14:43:35 PDT
+Received: from out-26.mta0.migadu.com (out-26.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A51410F1
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 14:43:35 -0700 (PDT)
+Date:   Mon, 1 May 2023 17:16:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1682975831;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WS5IfKwTPa1bKv8dROPMPn7bpsB6bxr/+mMUnulbyXo=;
+        b=lW6pMkkITA3yRW/sjDAKtYtv7Nl+AYeAS5qW1/WcLz5hQIZOXhmptquOd9Uo4YjlLQagEj
+        l8KwsV9hdfnmKeThBO+Hem6g0VYZI6AYnyFLRYZNX5+S78AIIBPNkxPLEdu52Lb7u0ovlq
+        VCSzQAFEVndS+FYqBuYKLLIDbnpmrsU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
+Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
+ string_get_size's output
+Message-ID: <ZFAsS5f6eGSyxF/+@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+ <20230501165450.15352-2-surenb@google.com>
+ <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
+ <ZFAUj+Q+hP7cWs4w@moria.home.lan>
+ <CAHp75VeJ_a6j3uweLN5-woSQUtN5u36c2gkoiXhnJa1HXJdoyQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <CAHp75VeJ_a6j3uweLN5-woSQUtN5u36c2gkoiXhnJa1HXJdoyQ@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,74 +87,41 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 01 May 2023 12:28:24 PDT (-0700), vishal.moola@gmail.com wrote:
-> As part of the conversions to replace pgtable constructor/destructors with
-> ptdesc equivalents, convert various page table functions to use ptdescs.
->
-> Some of the functions use the *get*page*() helper functions. Convert
-> these to use ptdesc_alloc() and ptdesc_address() instead to help
-> standardize page tables further.
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->  arch/riscv/include/asm/pgalloc.h |  8 ++++----
->  arch/riscv/mm/init.c             | 16 ++++++----------
->  2 files changed, 10 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pgalloc.h
-> index 59dc12b5b7e8..cb5536403bd8 100644
-> --- a/arch/riscv/include/asm/pgalloc.h
-> +++ b/arch/riscv/include/asm/pgalloc.h
-> @@ -153,10 +153,10 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
->
->  #endif /* __PAGETABLE_PMD_FOLDED */
->
-> -#define __pte_free_tlb(tlb, pte, buf)   \
-> -do {                                    \
-> -	pgtable_pte_page_dtor(pte);     \
-> -	tlb_remove_page((tlb), pte);    \
-> +#define __pte_free_tlb(tlb, pte, buf)			\
-> +do {							\
-> +	ptdesc_pte_dtor(page_ptdesc(pte));		\
-> +	tlb_remove_page_ptdesc((tlb), page_ptdesc(pte));\
->  } while (0)
->  #endif /* CONFIG_MMU */
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index eb8173a91ce3..8f1982664687 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -353,12 +353,10 @@ static inline phys_addr_t __init alloc_pte_fixmap(uintptr_t va)
->
->  static phys_addr_t __init alloc_pte_late(uintptr_t va)
->  {
-> -	unsigned long vaddr;
-> -
-> -	vaddr = __get_free_page(GFP_KERNEL);
-> -	BUG_ON(!vaddr || !pgtable_pte_page_ctor(virt_to_page(vaddr)));
-> +	struct ptdesc *ptdesc = ptdesc_alloc(GFP_KERNEL, 0);
->
-> -	return __pa(vaddr);
-> +	BUG_ON(!ptdesc || !ptdesc_pte_ctor(ptdesc));
-> +	return __pa((pte_t *)ptdesc_address(ptdesc));
->  }
->
->  static void __init create_pte_mapping(pte_t *ptep,
-> @@ -436,12 +434,10 @@ static phys_addr_t __init alloc_pmd_fixmap(uintptr_t va)
->
->  static phys_addr_t __init alloc_pmd_late(uintptr_t va)
->  {
-> -	unsigned long vaddr;
-> -
-> -	vaddr = __get_free_page(GFP_KERNEL);
-> -	BUG_ON(!vaddr || !pgtable_pmd_page_ctor(virt_to_page(vaddr)));
-> +	struct ptdesc *ptdesc = ptdesc_alloc(GFP_KERNEL, 0);
->
-> -	return __pa(vaddr);
-> +	BUG_ON(!ptdesc || !ptdesc_pmd_ctor(ptdesc));
-> +	return __pa((pmd_t *)ptdesc_address(ptdesc));
->  }
->
->  static void __init create_pmd_mapping(pmd_t *pmdp,
+On Mon, May 01, 2023 at 10:57:07PM +0300, Andy Shevchenko wrote:
+> On Mon, May 1, 2023 at 10:36 PM Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >
+> > On Mon, May 01, 2023 at 11:13:15AM -0700, Davidlohr Bueso wrote:
+> > > On Mon, 01 May 2023, Suren Baghdasaryan wrote:
+> > >
+> > > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > > >
+> > > > Previously, string_get_size() outputted a space between the number and
+> > > > the units, i.e.
+> > > >  9.88 MiB
+> > > >
+> > > > This changes it to
+> > > >  9.88MiB
+> > > >
+> > > > which allows it to be parsed correctly by the 'sort -h' command.
+> 
+> But why do we need that? What's the use case?
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+As was in the commit message: to produce output that sort -h knows how
+to parse.
+
+> > > Wouldn't this break users that already parse it the current way?
+> >
+> > It's not impossible - but it's not used in very many places and we
+> > wouldn't be printing in human-readable units if it was meant to be
+> > parsed - it's mainly used for debug output currently.
+> >
+> > If someone raises a specific objection we'll do something different,
+> > otherwise I think standardizing on what userspace tooling already parses
+> > is a good idea.
+> 
+> Yes, I NAK this on the basis of
+> https://english.stackexchange.com/a/2911/153144
+
+Not sure I find a style guide on stackexchange more compelling than
+interop with a tool everyone already has installed :)
