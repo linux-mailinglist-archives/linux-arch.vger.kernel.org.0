@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9886F348D
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 19:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B6E6F349A
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 19:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjEARBP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 13:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S233136AbjEARB2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 13:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjEAQ7o (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:59:44 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8DE3A86
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:56:32 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a7550dca3so4767458276.0
-        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:56:32 -0700 (PDT)
+        with ESMTP id S233139AbjEAQ7x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:59:53 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F333A9E
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:56:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b8f6bef3d4aso5547291276.0
+        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960172; x=1685552172;
+        d=google.com; s=20221208; t=1682960174; x=1685552174;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jz3+CZtZwJ9/tSYfHBM/2MHA9DEGGjB4zlxzO096/9Q=;
-        b=Glr4JSHsTmaAPI0AWP0PWNaIttgzeyDzPQx4tjZhzhm0zZ4p+1GCcCC3c3r4aXKXSp
-         WIW7l4ONjqrOBXvjUIVll03e3w9s+YRWlCSxmsKNK9xzzAcM54D0O3+CWQoKF/ytzIvC
-         kOX+0OA2rpltLDjWT1I86SdUtJ7gM1/iT7nXNjbfE5eIm0GIboQlBljhXdjDloTQNmLw
-         70IARjApWsmBCF7eSF3LKPA2bTZVurXLcycCJn2u8FXoQc4EQGTI1K+d32OJcow714/u
-         3R8ajXD58HPiHypeEQaSKmOGWRsxZiDT+trPafMrQwqkk9Lr9LEGmo4kscoUpmICusqi
-         Lbwg==
+        bh=k4gyiXZ+rLWKPzhf5TCPslUr+ioI4/2asgnCyiPdOEo=;
+        b=DmSOIqXpDpgOhsbYBtSJd0pE8NBIuLLzTwqet8jr5NLvFjfEu90BXeWtYv7qlPqaG7
+         S7+D6TPAoWHLs26LhS/oYb03UoMwG4HhBUCufMxi2OXT8Cg0Wg5ZW9rp2ejUU7/dM0E+
+         g9Ptf/gGhu2ayAN03NAMSR+d1VG5nCdJ9H6WMvt6TJ0j29Cpmun2V6f3j+OoydA/EMqH
+         hhtOdKXFKMT9O6F/RJeaiymHmIAjupnQaY2DJyokZEtCEBhHqOPrpU0cVWh3zhhtOv4w
+         vPFJ1809YCMUcOTdA9cBgXt/0HwdTb2v9IdEptjtwIgtSwcOESs6yl5SKx9kBZVUQ0L8
+         /sDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960172; x=1685552172;
+        d=1e100.net; s=20221208; t=1682960174; x=1685552174;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jz3+CZtZwJ9/tSYfHBM/2MHA9DEGGjB4zlxzO096/9Q=;
-        b=M5gGl2nLi3gTgWMbxxJpwLcPOMRobLTv7MUYwgBMNTyGTjdmgXOKl4WF8wakhyyhp3
-         HbKSXRj/EvCOBvgGFh/hKDfQP8TDajIfThh1RJZzjHjmaPVP4sgSJ2yVJlR90E8Yfv0r
-         04htAmafBq2TKuL25WJh4d7jTFlp78TEKfrjg0WgAhf6HQkbo1HZqAG3yiDHp5WphYJg
-         cnV2zsHPAYe2lplr2RUbdH2VUi/P0RwaHc41qECTZv0u+3PxCj33F/8tCEc9CoXjrtaA
-         dwP0OT5LbW769fe1mMHHviy/YSt+KeYt2U+hFr5M4NoOrwQVto5EhIM0CPBgU1vEAuH4
-         cLRw==
-X-Gm-Message-State: AC+VfDw2JxMvSfVxhxFwL2F9ClXB1rSl7i6bJFj/xItOH7MDf3+xZIOz
-        /Elt7SQM4eqk0ohqjN1snp5pIT5MqAo=
-X-Google-Smtp-Source: ACHHUZ6QTE71DtRYGwVPEik8Avnxkjne4lD1OdWVt1RsKvPsz461K/ZnyuUPS3XSYPpuvwa5uVYwtV8n9po=
+        bh=k4gyiXZ+rLWKPzhf5TCPslUr+ioI4/2asgnCyiPdOEo=;
+        b=Pm+ldPr0QEKJ1tnNXeec0xLGgq670hualDWFJay+9YlsH/N8jwH0KIaIkBI0mL+3zT
+         +GP5q5dTPu6RdHXij+i5+MUk0O6aaTlGqRFXonpDNqMuWVaEIV+tfFUTEYvgZHZkvmM4
+         70SWntLhg8I4zrwYwhQqaxOsX74QZhWxOxiBpzypfQ2iuHah8fWqBdFfUdL4XJ7/LvY8
+         88Sj4bu+jNgOtHmtpKy5EFqoMLmx2P8wrVva8R6sAr0nyV7tgkJtBNpVOhmhAq5Avc5w
+         HY1JPoBDOVhn1uYuPO6wCGo0b0hF4Rw2Scuni1Yj/ALzi51RdXN+wJou9jqKnZutlW3v
+         k5xg==
+X-Gm-Message-State: AC+VfDyqf4/BTes8og891+Zb9wEj+S+tnBoI8W48ePsqYJgOwcvmJd2c
+        S2dZbjcJMBzsrBPxfsZo4ral/0yzGS8=
+X-Google-Smtp-Source: ACHHUZ7aGSgmCsBUI+di96C7Ib72o4O5NVupLg+6oUGpNI3RTseMV4sdkNx3JpSisCExB2ulLnUeWNtVkhg=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a25:1388:0:b0:b95:ecc5:5796 with SMTP id
- 130-20020a251388000000b00b95ecc55796mr5071137ybt.12.1682960171977; Mon, 01
- May 2023 09:56:11 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:38 -0700
+ (user=surenb job=sendgmr) by 2002:a05:6902:1081:b0:b9d:d5dc:5971 with SMTP id
+ v1-20020a056902108100b00b9dd5dc5971mr3225339ybu.2.1682960174070; Mon, 01 May
+ 2023 09:56:14 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:39 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-29-surenb@google.com>
-Subject: [PATCH 28/40] timekeeping: Fix a circular include dependency
+Message-ID: <20230501165450.15352-30-surenb@google.com>
+Subject: [PATCH 29/40] mm: percpu: Introduce pcpuobj_ext
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -95,43 +95,152 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-This avoids a circular header dependency in an upcoming patch by only
-making hrtimer.h depend on percpu-defs.h
+Upcoming alloc tagging patches require a place to stash per-allocation
+metadata.
+
+We already do this when memcg is enabled, so this patch generalizes the
+obj_cgroup * vector in struct pcpu_chunk by creating a pcpu_obj_ext
+type, which we will be adding to in an upcoming patch - similarly to the
+previous slabobj_ext patch.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: linux-mm@kvack.org
 ---
- include/linux/hrtimer.h        | 2 +-
- include/linux/time_namespace.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ mm/percpu-internal.h | 19 +++++++++++++++++--
+ mm/percpu.c          | 30 +++++++++++++++---------------
+ 2 files changed, 32 insertions(+), 17 deletions(-)
 
-diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
-index 0ee140176f10..e67349e84364 100644
---- a/include/linux/hrtimer.h
-+++ b/include/linux/hrtimer.h
-@@ -16,7 +16,7 @@
- #include <linux/rbtree.h>
- #include <linux/init.h>
- #include <linux/list.h>
--#include <linux/percpu.h>
-+#include <linux/percpu-defs.h>
- #include <linux/seqlock.h>
- #include <linux/timer.h>
- #include <linux/timerqueue.h>
-diff --git a/include/linux/time_namespace.h b/include/linux/time_namespace.h
-index bb9d3f5542f8..d8e0cacfcae5 100644
---- a/include/linux/time_namespace.h
-+++ b/include/linux/time_namespace.h
-@@ -11,6 +11,8 @@
- struct user_namespace;
- extern struct user_namespace init_user_ns;
+diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
+index f9847c131998..2433e7b24172 100644
+--- a/mm/percpu-internal.h
++++ b/mm/percpu-internal.h
+@@ -32,6 +32,16 @@ struct pcpu_block_md {
+ 	int			nr_bits;	/* total bits responsible for */
+ };
  
-+struct vm_area_struct;
++struct pcpuobj_ext {
++#ifdef CONFIG_MEMCG_KMEM
++	struct obj_cgroup	*cgroup;
++#endif
++};
 +
- struct timens_offsets {
- 	struct timespec64 monotonic;
- 	struct timespec64 boottime;
++#ifdef CONFIG_MEMCG_KMEM
++#define NEED_PCPUOBJ_EXT
++#endif
++
+ struct pcpu_chunk {
+ #ifdef CONFIG_PERCPU_STATS
+ 	int			nr_alloc;	/* # of allocations */
+@@ -57,8 +67,8 @@ struct pcpu_chunk {
+ 	int			end_offset;	/* additional area required to
+ 						   have the region end page
+ 						   aligned */
+-#ifdef CONFIG_MEMCG_KMEM
+-	struct obj_cgroup	**obj_cgroups;	/* vector of object cgroups */
++#ifdef NEED_PCPUOBJ_EXT
++	struct pcpuobj_ext	*obj_exts;	/* vector of object cgroups */
+ #endif
+ 
+ 	int			nr_pages;	/* # of pages served by this chunk */
+@@ -67,6 +77,11 @@ struct pcpu_chunk {
+ 	unsigned long		populated[];	/* populated bitmap */
+ };
+ 
++static inline bool need_pcpuobj_ext(void)
++{
++	return !mem_cgroup_kmem_disabled();
++}
++
+ extern spinlock_t pcpu_lock;
+ 
+ extern struct list_head *pcpu_chunk_lists;
+diff --git a/mm/percpu.c b/mm/percpu.c
+index 28e07ede46f6..95b26a6b718d 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -1392,9 +1392,9 @@ static struct pcpu_chunk * __init pcpu_alloc_first_chunk(unsigned long tmp_addr,
+ 		panic("%s: Failed to allocate %zu bytes\n", __func__,
+ 		      alloc_size);
+ 
+-#ifdef CONFIG_MEMCG_KMEM
++#ifdef NEED_PCPUOBJ_EXT
+ 	/* first chunk is free to use */
+-	chunk->obj_cgroups = NULL;
++	chunk->obj_exts = NULL;
+ #endif
+ 	pcpu_init_md_blocks(chunk);
+ 
+@@ -1463,12 +1463,12 @@ static struct pcpu_chunk *pcpu_alloc_chunk(gfp_t gfp)
+ 	if (!chunk->md_blocks)
+ 		goto md_blocks_fail;
+ 
+-#ifdef CONFIG_MEMCG_KMEM
+-	if (!mem_cgroup_kmem_disabled()) {
+-		chunk->obj_cgroups =
++#ifdef NEED_PCPUOBJ_EXT
++	if (need_pcpuobj_ext()) {
++		chunk->obj_exts =
+ 			pcpu_mem_zalloc(pcpu_chunk_map_bits(chunk) *
+-					sizeof(struct obj_cgroup *), gfp);
+-		if (!chunk->obj_cgroups)
++					sizeof(struct pcpuobj_ext), gfp);
++		if (!chunk->obj_exts)
+ 			goto objcg_fail;
+ 	}
+ #endif
+@@ -1480,7 +1480,7 @@ static struct pcpu_chunk *pcpu_alloc_chunk(gfp_t gfp)
+ 
+ 	return chunk;
+ 
+-#ifdef CONFIG_MEMCG_KMEM
++#ifdef NEED_PCPUOBJ_EXT
+ objcg_fail:
+ 	pcpu_mem_free(chunk->md_blocks);
+ #endif
+@@ -1498,8 +1498,8 @@ static void pcpu_free_chunk(struct pcpu_chunk *chunk)
+ {
+ 	if (!chunk)
+ 		return;
+-#ifdef CONFIG_MEMCG_KMEM
+-	pcpu_mem_free(chunk->obj_cgroups);
++#ifdef NEED_PCPUOBJ_EXT
++	pcpu_mem_free(chunk->obj_exts);
+ #endif
+ 	pcpu_mem_free(chunk->md_blocks);
+ 	pcpu_mem_free(chunk->bound_map);
+@@ -1648,8 +1648,8 @@ static void pcpu_memcg_post_alloc_hook(struct obj_cgroup *objcg,
+ 	if (!objcg)
+ 		return;
+ 
+-	if (likely(chunk && chunk->obj_cgroups)) {
+-		chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT] = objcg;
++	if (likely(chunk && chunk->obj_exts)) {
++		chunk->obj_exts[off >> PCPU_MIN_ALLOC_SHIFT].cgroup = objcg;
+ 
+ 		rcu_read_lock();
+ 		mod_memcg_state(obj_cgroup_memcg(objcg), MEMCG_PERCPU_B,
+@@ -1665,13 +1665,13 @@ static void pcpu_memcg_free_hook(struct pcpu_chunk *chunk, int off, size_t size)
+ {
+ 	struct obj_cgroup *objcg;
+ 
+-	if (unlikely(!chunk->obj_cgroups))
++	if (unlikely(!chunk->obj_exts))
+ 		return;
+ 
+-	objcg = chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT];
++	objcg = chunk->obj_exts[off >> PCPU_MIN_ALLOC_SHIFT].cgroup;
+ 	if (!objcg)
+ 		return;
+-	chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT] = NULL;
++	chunk->obj_exts[off >> PCPU_MIN_ALLOC_SHIFT].cgroup = NULL;
+ 
+ 	obj_cgroup_uncharge(objcg, pcpu_obj_full_size(size));
+ 
 -- 
 2.40.1.495.gc816e09b53d-goog
 
