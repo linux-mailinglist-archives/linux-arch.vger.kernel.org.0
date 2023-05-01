@@ -2,57 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B4A6F34AE
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 19:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324E96F34AA
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 19:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbjEARCj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 13:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
+        id S232907AbjEARCi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 13:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232523AbjEARBP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 13:01:15 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2206C40C2
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:56:52 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a792ff423so5508727276.1
-        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:56:51 -0700 (PDT)
+        with ESMTP id S233093AbjEARBU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 13:01:20 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5803C1F
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 09:56:53 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a7766d1f2so3281622276.3
+        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 09:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1682960183; x=1685552183;
+        d=google.com; s=20221208; t=1682960185; x=1685552185;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfMxO5ATd5n4S/fh5B/Nudv/nxDkBrDhDPER315pa0U=;
-        b=ebS+MuTL+cQNWT4eZEJvTQOcTARn+QnzuJah4/SMgcb7+qkoUNzC7ex8MrpVKhZRXc
-         KgeXlio4zrfdxmOppnmcCQe6TR+hOuBdIc9ihcKiKIEVRbsGHe8ObZbrrM4utujRh9wG
-         TqBTS5rCEI/Jizsrf15UbPFacomNmio9VSdaY4o+amTMj91xth7X0uCHsGdXYXQ52AxU
-         vnIxBaA8u69160qtwfedxuqqybJKyd5xlJm5XUDfPQCWKc/CaKvS4YCnPYvKKCkeigKq
-         aazNcodiJ2//C8yradLEHTJBg1grANJmustwDAaYwDmuE541j3ivI8Z4B8/7N+gU15xY
-         5tZw==
+        bh=tlYphv1i8nYyRhT88mmnNNep9iAUv9BwOK+gAme7uDQ=;
+        b=2XuV/LXFPS9qv6kO1OAu52yKSEfT1BC8Uyc51PtqvyTLOw6UNebCYkZhZP2v9FO8oS
+         hEHZdD7KUMfSEQtQdWUpzCKOMJYHSpoe3376M6dYUuLCm/nLCzqTViK3tDrzmpk69PsF
+         C9DS0KqR2dDtDGP7hZX5XLhu1WFJacbmtNn9E47IgAq8uRv0BvffVAbtCHATYs2yY0Ed
+         RwD1ZD9bXshFGg1hMmTye+Eo2Jv3yEhTf/4wFmEVqV85hSy0daDAaaNAG8CJUm6nMdJU
+         XzZ/3I4BMbhLiO6ONlK15VVriVh+DhXOoojulz1/HRxZdei9as7clRNqchBWLsgCOWe8
+         k8ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682960183; x=1685552183;
+        d=1e100.net; s=20221208; t=1682960185; x=1685552185;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfMxO5ATd5n4S/fh5B/Nudv/nxDkBrDhDPER315pa0U=;
-        b=HOFGx0YGYFn4jcB2Bptb1cP44B2USxrWAv6nrUkX6L986lWye9pYHaItdeY8C1OUWv
-         rtL3fnW5cpp2u/kkCgc8ndlzWajitnSs5ipMJZnsvLCXJnDkWo23m9y01Sgx+Nb0RV9N
-         SO3jtWNXyCw7UUricn5FT1Yi+/sPGG2GD5xHKCTiwUzKBAcjWPa5+Oamd2/aLb5TRGev
-         SuWx85HHIbX70av6wxnVm4DWnmEIakVnp12CbIF8II1Qa/6pDKORZSOiUteULub65Fi1
-         QlJh6lWtY9SqzhDk63G2SgGenEHu5bygH8zT5p7/gRLA4PlitAcJgi/g3NZDF/LqYK4N
-         ziaw==
-X-Gm-Message-State: AC+VfDzcS5d0HwX5EqomzLlSyhzIsR+VXc6wjZCfeNgAyzuXXRtpBirm
-        qc+L+vypQyQgMCI+JNTl15Mmksog0OI=
-X-Google-Smtp-Source: ACHHUZ6mXAn8JgUNXvyGZqHJw9Jv8uWK4VnvTdJsjQhuuRu+wtW4LhhvfSOs0fXoyYvuKXJ26U7UG2NCZPo=
+        bh=tlYphv1i8nYyRhT88mmnNNep9iAUv9BwOK+gAme7uDQ=;
+        b=NIJWEkJ24KotgEHaQLON2/dlXEgA8dK1zpeRx9mxmNE2FC9ub33xqO7yDYLCFObINV
+         aor6qVbulxha8FYY+I35spv1We2zadvIAxLSluJuCc7lWBUgoRUyMdcjY5aZ2I9SmzNO
+         5fcgUYb6DeODNlyxWGoY3VxaCaS7SwyRrd7Ba3QlugyZVZhkx1ZL3KeV8RXHpXOWM/jM
+         sZZAxNQZEhZrYG3yxZdKnkCRNYVDoac6hd2YDS4CATJr7q9X17AyEOTDAPu1CGnbHo5u
+         taSke6gCe7R7lFZ+zLicwQ6GnvXU8R48vK2coBJ9iN3gcazktkpUppnyMZ6YtuYB9ogu
+         aYAg==
+X-Gm-Message-State: AC+VfDx4sdeeGwMEafUkDLBwVdadGc0+1391/7+My5t26G1kYL2jT6tQ
+        2JtUjpo3W1q16Mw7AsotnNpvUW0pKrY=
+X-Google-Smtp-Source: ACHHUZ6xCTIdyFwNXOIyet6JY8PR9mR9OkX4G2UItacuFEKdh2Mzs7ZirEmIfEVsSkOy5x89pd9AYPIc+TM=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6d24:3efd:facc:7ac4])
- (user=surenb job=sendgmr) by 2002:a25:8046:0:b0:b9d:c866:d92d with SMTP id
- a6-20020a258046000000b00b9dc866d92dmr3485899ybn.1.1682960183189; Mon, 01 May
- 2023 09:56:23 -0700 (PDT)
-Date:   Mon,  1 May 2023 09:54:43 -0700
+ (user=surenb job=sendgmr) by 2002:a05:6902:1003:b0:b8f:54f5:89ff with SMTP id
+ w3-20020a056902100300b00b8f54f589ffmr9086045ybt.11.1682960185390; Mon, 01 May
+ 2023 09:56:25 -0700 (PDT)
+Date:   Mon,  1 May 2023 09:54:44 -0700
 In-Reply-To: <20230501165450.15352-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20230501165450.15352-1-surenb@google.com>
 X-Mailer: git-send-email 2.40.1.495.gc816e09b53d-goog
-Message-ID: <20230501165450.15352-34-surenb@google.com>
-Subject: [PATCH 33/40] move stack capture functionality into a separate
- function for reuse
+Message-ID: <20230501165450.15352-35-surenb@google.com>
+Subject: [PATCH 34/40] lib: code tagging context capture support
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -87,248 +86,338 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Make save_stack() function part of stackdepot API to be used outside of
-page_owner. Also rename task_struct's in_page_owner to in_capture_stack
-flag to better convey the wider use of this flag.
+Add support for code tag context capture when registering a new code tag
+type. When context capture for a specific code tag is enabled,
+codetag_ref will point to a codetag_ctx object which can be attached
+to an application-specific object storing code invocation context.
+codetag_ctx has a pointer to its codetag_with_ctx object with embedded
+codetag object in it. All context objects of the same code tag are placed
+into codetag_with_ctx.ctx_head linked list. codetag.flag is used to
+indicate when a context capture for the associated code tag is
+initialized and enabled.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/sched.h      |  6 ++--
- include/linux/stackdepot.h | 16 +++++++++
- lib/stackdepot.c           | 68 ++++++++++++++++++++++++++++++++++++++
- mm/page_owner.c            | 52 ++---------------------------
- 4 files changed, 90 insertions(+), 52 deletions(-)
+ include/linux/codetag.h     |  50 +++++++++++++-
+ include/linux/codetag_ctx.h |  48 +++++++++++++
+ lib/codetag.c               | 134 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 231 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/codetag_ctx.h
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 33708bf8f191..6eca46ab6d78 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -942,9 +942,9 @@ struct task_struct {
- 	/* Stalled due to lack of memory */
- 	unsigned			in_memstall:1;
- #endif
--#ifdef CONFIG_PAGE_OWNER
--	/* Used by page_owner=on to detect recursion in page tracking. */
--	unsigned			in_page_owner:1;
-+#ifdef CONFIG_STACKDEPOT
-+	/* Used by stack_depot_capture_stack to detect recursion. */
-+	unsigned			in_capture_stack:1;
- #endif
- #ifdef CONFIG_EVENTFD
- 	/* Recursion prevention for eventfd_signal() */
-diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
-index e58306783d8e..baf7e80cf449 100644
---- a/include/linux/stackdepot.h
-+++ b/include/linux/stackdepot.h
-@@ -164,4 +164,20 @@ depot_stack_handle_t __must_check stack_depot_set_extra_bits(
+diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+index 87207f199ac9..9ab2f017e845 100644
+--- a/include/linux/codetag.h
++++ b/include/linux/codetag.h
+@@ -5,8 +5,12 @@
+ #ifndef _LINUX_CODETAG_H
+ #define _LINUX_CODETAG_H
+ 
++#include <linux/container_of.h>
++#include <linux/spinlock.h>
+ #include <linux/types.h>
+ 
++struct kref;
++struct codetag_ctx;
+ struct codetag_iterator;
+ struct codetag_type;
+ struct seq_buf;
+@@ -18,15 +22,38 @@ struct module;
+  * an array of these.
   */
- unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
+ struct codetag {
+-	unsigned int flags; /* used in later patches */
++	unsigned int flags; /* has to be the first member shared with codetag_ctx */
+ 	unsigned int lineno;
+ 	const char *modname;
+ 	const char *function;
+ 	const char *filename;
+ } __aligned(8);
  
-+/**
-+ * stack_depot_capture_init - Initialize stack depot capture mechanism
-+ *
-+ * Return: Stack depot initialization status
-+ */
-+bool stack_depot_capture_init(void);
++/* codetag_with_ctx flags */
++#define CTC_FLAG_CTX_PTR	(1 << 0)
++#define CTC_FLAG_CTX_READY	(1 << 1)
++#define CTC_FLAG_CTX_ENABLED	(1 << 2)
 +
-+/**
-+ * stack_depot_capture_stack - Capture current stack trace into stack depot
-+ *
-+ * @flags:	Allocation GFP flags
-+ *
-+ * Return: Handle of the stack trace stored in depot, 0 on failure
++/*
++ * Code tag with context capture support. Contains a list to store context for
++ * each tag hit, a lock protecting the list and a flag to indicate whether
++ * context capture is enabled for the tag.
 + */
-+depot_stack_handle_t stack_depot_capture_stack(gfp_t flags);
++struct codetag_with_ctx {
++	struct codetag ct;
++	struct list_head ctx_head;
++	spinlock_t ctx_lock;
++} __aligned(8);
 +
- #endif
-diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-index 2f5aa851834e..c7e5e22fcb16 100644
---- a/lib/stackdepot.c
-+++ b/lib/stackdepot.c
-@@ -539,3 +539,71 @@ unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
- 	return parts.extra;
++/*
++ * Tag reference can point to codetag directly or indirectly via codetag_ctx.
++ * Direct codetag pointer is used when context capture is disabled or not
++ * supported. When context capture for the tag is used, the reference points
++ * to the codetag_ctx through which the codetag can be reached.
++ */
+ union codetag_ref {
+ 	struct codetag *ct;
++	struct codetag_ctx *ctx;
+ };
+ 
+ struct codetag_range {
+@@ -46,6 +73,7 @@ struct codetag_type_desc {
+ 			    struct codetag_module *cmod);
+ 	bool (*module_unload)(struct codetag_type *cttype,
+ 			      struct codetag_module *cmod);
++	void (*free_ctx)(struct kref *ref);
+ };
+ 
+ struct codetag_iterator {
+@@ -53,6 +81,7 @@ struct codetag_iterator {
+ 	struct codetag_module *cmod;
+ 	unsigned long mod_id;
+ 	struct codetag *ct;
++	struct codetag_ctx *ctx;
+ };
+ 
+ #define CODE_TAG_INIT {					\
+@@ -63,9 +92,28 @@ struct codetag_iterator {
+ 	.flags		= 0,				\
  }
- EXPORT_SYMBOL(stack_depot_get_extra_bits);
-+
-+static depot_stack_handle_t recursion_handle;
-+static depot_stack_handle_t failure_handle;
-+
-+static __always_inline depot_stack_handle_t create_custom_stack(void)
+ 
++static inline bool is_codetag_ctx_ref(union codetag_ref *ref)
 +{
-+	unsigned long entries[4];
-+	unsigned int nr_entries;
-+
-+	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-+	return stack_depot_save(entries, nr_entries, GFP_KERNEL);
++	return !!(ref->ct->flags & CTC_FLAG_CTX_PTR);
 +}
 +
-+static noinline void register_recursion_stack(void)
++static inline
++struct codetag_with_ctx *ct_to_ctc(struct codetag *ct)
 +{
-+	recursion_handle = create_custom_stack();
++	return container_of(ct, struct codetag_with_ctx, ct);
 +}
 +
-+static noinline void register_failure_stack(void)
+ void codetag_lock_module_list(struct codetag_type *cttype, bool lock);
+ struct codetag_iterator codetag_get_ct_iter(struct codetag_type *cttype);
+ struct codetag *codetag_next_ct(struct codetag_iterator *iter);
++struct codetag_ctx *codetag_next_ctx(struct codetag_iterator *iter);
++
++bool codetag_enable_ctx(struct codetag_with_ctx *ctc, bool enable);
++static inline bool codetag_ctx_enabled(struct codetag_with_ctx *ctc)
 +{
-+	failure_handle = create_custom_stack();
++	return !!(ctc->ct.flags & CTC_FLAG_CTX_ENABLED);
++}
++bool codetag_has_ctx(struct codetag_with_ctx *ctc);
+ 
+ void codetag_to_text(struct seq_buf *out, struct codetag *ct);
+ 
+diff --git a/include/linux/codetag_ctx.h b/include/linux/codetag_ctx.h
+new file mode 100644
+index 000000000000..e741484f0e08
+--- /dev/null
++++ b/include/linux/codetag_ctx.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * code tag context
++ */
++#ifndef _LINUX_CODETAG_CTX_H
++#define _LINUX_CODETAG_CTX_H
++
++#include <linux/codetag.h>
++#include <linux/kref.h>
++
++/* Code tag hit context. */
++struct codetag_ctx {
++	unsigned int flags; /* has to be the first member shared with codetag */
++	struct codetag_with_ctx *ctc;
++	struct list_head node;
++	struct kref refcount;
++} __aligned(8);
++
++static inline struct codetag_ctx *kref_to_ctx(struct kref *refcount)
++{
++	return container_of(refcount, struct codetag_ctx, refcount);
 +}
 +
-+bool stack_depot_capture_init(void)
++static inline void add_ctx(struct codetag_ctx *ctx,
++			   struct codetag_with_ctx *ctc)
 +{
-+	static DEFINE_MUTEX(stack_depot_capture_init_mutex);
-+	static bool utility_stacks_ready;
++	kref_init(&ctx->refcount);
++	spin_lock(&ctc->ctx_lock);
++	ctx->flags = CTC_FLAG_CTX_PTR;
++	ctx->ctc = ctc;
++	list_add_tail(&ctx->node, &ctc->ctx_head);
++	spin_unlock(&ctc->ctx_lock);
++}
 +
-+	mutex_lock(&stack_depot_capture_init_mutex);
-+	if (!utility_stacks_ready) {
-+		register_recursion_stack();
-+		register_failure_stack();
-+		utility_stacks_ready = true;
++static inline void rem_ctx(struct codetag_ctx *ctx,
++			   void (*free_ctx)(struct kref *refcount))
++{
++	struct codetag_with_ctx *ctc = ctx->ctc;
++
++	spin_lock(&ctc->ctx_lock);
++	/* ctx might have been removed while we were using it */
++	if (!list_empty(&ctx->node))
++		list_del_init(&ctx->node);
++	spin_unlock(&ctc->ctx_lock);
++	kref_put(&ctx->refcount, free_ctx);
++}
++
++#endif /* _LINUX_CODETAG_CTX_H */
+diff --git a/lib/codetag.c b/lib/codetag.c
+index 84f90f3b922c..d891bbe4481d 100644
+--- a/lib/codetag.c
++++ b/lib/codetag.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <linux/codetag.h>
++#include <linux/codetag_ctx.h>
+ #include <linux/idr.h>
+ #include <linux/kallsyms.h>
+ #include <linux/module.h>
+@@ -92,6 +93,139 @@ struct codetag *codetag_next_ct(struct codetag_iterator *iter)
+ 	return ct;
+ }
+ 
++static struct codetag_ctx *next_ctx_from_ct(struct codetag_iterator *iter)
++{
++	struct codetag_with_ctx *ctc;
++	struct codetag_ctx *ctx = NULL;
++	struct codetag *ct = iter->ct;
++
++	while (ct) {
++		if (!(ct->flags & CTC_FLAG_CTX_READY))
++			goto next;
++
++		ctc = ct_to_ctc(ct);
++		spin_lock(&ctc->ctx_lock);
++		if (!list_empty(&ctc->ctx_head)) {
++			ctx = list_first_entry(&ctc->ctx_head,
++					       struct codetag_ctx, node);
++			kref_get(&ctx->refcount);
++		}
++		spin_unlock(&ctc->ctx_lock);
++		if (ctx)
++			break;
++next:
++		ct = codetag_next_ct(iter);
 +	}
-+	mutex_unlock(&stack_depot_capture_init_mutex);
 +
-+	return utility_stacks_ready;
++	iter->ctx = ctx;
++	return ctx;
 +}
 +
-+/* TODO: teach stack_depot_capture_stack to use off stack temporal storage */
-+#define CAPTURE_STACK_DEPTH (16)
-+
-+depot_stack_handle_t stack_depot_capture_stack(gfp_t flags)
++struct codetag_ctx *codetag_next_ctx(struct codetag_iterator *iter)
 +{
-+	unsigned long entries[CAPTURE_STACK_DEPTH];
-+	depot_stack_handle_t handle;
-+	unsigned int nr_entries;
++	struct codetag_ctx *ctx = iter->ctx;
++	struct codetag_ctx *found = NULL;
 +
++	lockdep_assert_held(&iter->cttype->mod_lock);
++
++	if (!ctx)
++		return next_ctx_from_ct(iter);
++
++	spin_lock(&ctx->ctc->ctx_lock);
 +	/*
-+	 * Avoid recursion.
-+	 *
-+	 * Sometimes page metadata allocation tracking requires more
-+	 * memory to be allocated:
-+	 * - when new stack trace is saved to stack depot
-+	 * - when backtrace itself is calculated (ia64)
++	 * Do not advance if the object was isolated, restart at the same tag.
 +	 */
-+	if (current->in_capture_stack)
-+		return recursion_handle;
-+	current->in_capture_stack = 1;
++	if (!list_empty(&ctx->node)) {
++		if (list_is_last(&ctx->node, &ctx->ctc->ctx_head)) {
++			/* Finished with this tag, advance to the next */
++			codetag_next_ct(iter);
++		} else {
++			found = list_next_entry(ctx, node);
++			kref_get(&found->refcount);
++		}
++	}
++	spin_unlock(&ctx->ctc->ctx_lock);
++	kref_put(&ctx->refcount, iter->cttype->desc.free_ctx);
 +
-+	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 2);
-+	handle = stack_depot_save(entries, nr_entries, flags);
-+	if (!handle)
-+		handle = failure_handle;
++	if (!found)
++		return next_ctx_from_ct(iter);
 +
-+	current->in_capture_stack = 0;
-+	return handle;
++	iter->ctx = found;
++	return found;
 +}
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 8b6086c666e6..9fafbc290d5b 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -15,12 +15,6 @@
- 
- #include "internal.h"
- 
--/*
-- * TODO: teach PAGE_OWNER_STACK_DEPTH (__dump_page_owner and save_stack)
-- * to use off stack temporal storage
-- */
--#define PAGE_OWNER_STACK_DEPTH (16)
--
- struct page_owner {
- 	unsigned short order;
- 	short last_migrate_reason;
-@@ -37,8 +31,6 @@ struct page_owner {
- static bool page_owner_enabled __initdata;
- DEFINE_STATIC_KEY_FALSE(page_owner_inited);
- 
--static depot_stack_handle_t dummy_handle;
--static depot_stack_handle_t failure_handle;
- static depot_stack_handle_t early_handle;
- 
- static void init_early_allocated_pages(void);
-@@ -68,16 +60,6 @@ static __always_inline depot_stack_handle_t create_dummy_stack(void)
- 	return stack_depot_save(entries, nr_entries, GFP_KERNEL);
- }
- 
--static noinline void register_dummy_stack(void)
--{
--	dummy_handle = create_dummy_stack();
--}
--
--static noinline void register_failure_stack(void)
--{
--	failure_handle = create_dummy_stack();
--}
--
- static noinline void register_early_stack(void)
++
++static struct codetag_type *find_cttype(struct codetag *ct)
++{
++	struct codetag_module *cmod;
++	struct codetag_type *cttype;
++	unsigned long mod_id;
++	unsigned long tmp;
++
++	mutex_lock(&codetag_lock);
++	list_for_each_entry(cttype, &codetag_types, link) {
++		down_read(&cttype->mod_lock);
++		idr_for_each_entry_ul(&cttype->mod_idr, cmod, tmp, mod_id) {
++			if (ct >= cmod->range.start && ct < cmod->range.stop) {
++				up_read(&cttype->mod_lock);
++				goto found;
++			}
++		}
++		up_read(&cttype->mod_lock);
++	}
++	cttype = NULL;
++found:
++	mutex_unlock(&codetag_lock);
++
++	return cttype;
++}
++
++bool codetag_enable_ctx(struct codetag_with_ctx *ctc, bool enable)
++{
++	struct codetag_type *cttype = find_cttype(&ctc->ct);
++
++	if (!cttype || !cttype->desc.free_ctx)
++		return false;
++
++	lockdep_assert_held(&cttype->mod_lock);
++	BUG_ON(!rwsem_is_locked(&cttype->mod_lock));
++
++	if (codetag_ctx_enabled(ctc) == enable)
++		return false;
++
++	if (enable) {
++		/* Initialize context capture fields only once */
++		if (!(ctc->ct.flags & CTC_FLAG_CTX_READY)) {
++			spin_lock_init(&ctc->ctx_lock);
++			INIT_LIST_HEAD(&ctc->ctx_head);
++			ctc->ct.flags |= CTC_FLAG_CTX_READY;
++		}
++		ctc->ct.flags |= CTC_FLAG_CTX_ENABLED;
++	} else {
++		/*
++		 * The list of context objects is intentionally left untouched.
++		 * It can be read back and if context capture is re-enablied it
++		 * will append new objects.
++		 */
++		ctc->ct.flags &= ~CTC_FLAG_CTX_ENABLED;
++	}
++
++	return true;
++}
++
++bool codetag_has_ctx(struct codetag_with_ctx *ctc)
++{
++	bool no_ctx;
++
++	if (!(ctc->ct.flags & CTC_FLAG_CTX_READY))
++		return false;
++
++	spin_lock(&ctc->ctx_lock);
++	no_ctx = list_empty(&ctc->ctx_head);
++	spin_unlock(&ctc->ctx_lock);
++
++	return !no_ctx;
++}
++
+ void codetag_to_text(struct seq_buf *out, struct codetag *ct)
  {
- 	early_handle = create_dummy_stack();
-@@ -88,8 +70,7 @@ static __init void init_page_owner(void)
- 	if (!page_owner_enabled)
- 		return;
- 
--	register_dummy_stack();
--	register_failure_stack();
-+	stack_depot_capture_init();
- 	register_early_stack();
- 	static_branch_enable(&page_owner_inited);
- 	init_early_allocated_pages();
-@@ -107,33 +88,6 @@ static inline struct page_owner *get_page_owner(struct page_ext *page_ext)
- 	return (void *)page_ext + page_owner_ops.offset;
- }
- 
--static noinline depot_stack_handle_t save_stack(gfp_t flags)
--{
--	unsigned long entries[PAGE_OWNER_STACK_DEPTH];
--	depot_stack_handle_t handle;
--	unsigned int nr_entries;
--
--	/*
--	 * Avoid recursion.
--	 *
--	 * Sometimes page metadata allocation tracking requires more
--	 * memory to be allocated:
--	 * - when new stack trace is saved to stack depot
--	 * - when backtrace itself is calculated (ia64)
--	 */
--	if (current->in_page_owner)
--		return dummy_handle;
--	current->in_page_owner = 1;
--
--	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 2);
--	handle = stack_depot_save(entries, nr_entries, flags);
--	if (!handle)
--		handle = failure_handle;
--
--	current->in_page_owner = 0;
--	return handle;
--}
--
- void __reset_page_owner(struct page *page, unsigned short order)
- {
- 	int i;
-@@ -146,7 +100,7 @@ void __reset_page_owner(struct page *page, unsigned short order)
- 	if (unlikely(!page_ext))
- 		return;
- 
--	handle = save_stack(GFP_NOWAIT | __GFP_NOWARN);
-+	handle = stack_depot_capture_stack(GFP_NOWAIT | __GFP_NOWARN);
- 	for (i = 0; i < (1 << order); i++) {
- 		__clear_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags);
- 		page_owner = get_page_owner(page_ext);
-@@ -189,7 +143,7 @@ noinline void __set_page_owner(struct page *page, unsigned short order,
- 	struct page_ext *page_ext;
- 	depot_stack_handle_t handle;
- 
--	handle = save_stack(gfp_mask);
-+	handle = stack_depot_capture_stack(gfp_mask);
- 
- 	page_ext = page_ext_get(page);
- 	if (unlikely(!page_ext))
+ 	seq_buf_printf(out, "%s:%u module:%s func:%s",
 -- 
 2.40.1.495.gc816e09b53d-goog
 
