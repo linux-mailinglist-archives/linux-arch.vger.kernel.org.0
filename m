@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867716F2F76
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 10:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CB76F2F7A
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 10:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjEAI5i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 04:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S232335AbjEAI5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 04:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbjEAI5g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 04:57:36 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A614DE77;
-        Mon,  1 May 2023 01:57:34 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64115e652eeso25489117b3a.0;
-        Mon, 01 May 2023 01:57:34 -0700 (PDT)
+        with ESMTP id S231896AbjEAI5h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 04:57:37 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F65A10C0;
+        Mon,  1 May 2023 01:57:36 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aaf21bb42bso6351705ad.2;
+        Mon, 01 May 2023 01:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1682931454; x=1685523454;
+        d=gmail.com; s=20221208; t=1682931455; x=1685523455;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6uYxV2dI/hb2rcrfooNSE6OrsK+/8Zb/z3h9orwCels=;
-        b=C8uDAffQ6OHhqsfIO6Bq+5eTpKEILlK/GOpTu6rUfZvywEB76ytGf8lbazIOR7RQQm
-         skQ5YvkOWDrA2OBKN1sODMUuPJTycrL1eGUHhcCQcIQ58UQFlRGh8MBIJWSLlmcRblmb
-         3rxU5Q6hzz8rdy/+deCqoi4vJgKDMLoOwEXcLcKDjcrAuBeeStzaOSZmWEeMRaOzqFpI
-         /qHGtbbC0bC5ekIQeqa3xIgbJBnR4tj2hhMxmEsaDqtqE1cFcV/PylIU3GESvRe78xa0
-         +nyvIGwIcxAibNTg1Y6rloLSRyVgZ3UoFpmI6RVwrpVYFrL8dRuQCVuRp4Q9qH5FVdUl
-         IX0g==
+        bh=fry12NLoScUn7gbAM5zwlql+LIRPvftdxXtygfKZOSU=;
+        b=K7jksmbTeUQw32z78/4ng/NzDiplAWJEG71m35MnXGDYaORVybT+T6G+yBN1nOJzn/
+         pAjeJ3TJoFIgQPcNn3hW3LHFIujcc6qNnBBr4qz6ho34LdoI6nS91RRIub5Vo7C5TcQI
+         /4izzhyFpldYlqEyMd9RYeylokixec8Lx1jBQcZcccR2pMImedN0BlElAkN009HB9WI2
+         U7ti2dtp9zOfPXM80Cn3Q7ECo5Szqxr5G5KzjY9IKtapwwJ4mRE/jhJwdb5yBjXijq2S
+         QWyaLNkrUezOi4o5eA8Q24SpBhVN1TfApYce8PlFt7/7Ijm1Z+6VmZRfzK1ks+HZ3O+/
+         j3pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682931454; x=1685523454;
+        d=1e100.net; s=20221208; t=1682931455; x=1685523455;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6uYxV2dI/hb2rcrfooNSE6OrsK+/8Zb/z3h9orwCels=;
-        b=UkWfriVuEA1bgnZ7xhfAIA5b70XnLUmKTsiFRcGesetPk9m9jgGoxQqQ3zu3jYFSNY
-         ezBT9cBg274jzmQpUeu2SyX4coCoSwveMay/qH8NHzKM1CMNAU5oAdhAWa0o5XTPnNiQ
-         85dzCllhfDdVBoazmMJGt4MyiuuaYHqI5fvxLZvOsqenNux8EvSsOp0xLsyt7kypoeAF
-         oXaNZAAocF1FQ2xSy+EUHfP3PetNKZmIYV2yhlPm5lgqW5U7j7H2cIs3fwIpqjF8ApGb
-         HxGUPwVIN9MPj4OHURBOSwEKPw0MXHB8HzhOKYkfpyUt0+zKr0q5MydynA20lejHJx1F
-         GJfQ==
-X-Gm-Message-State: AC+VfDzmuWj6F2g6+4kjkoeOunoP7ZLmD9HktXhoCeRU0HuW62JZHj9H
-        c18GWZRIElnSbE8kYTfOq5U=
-X-Google-Smtp-Source: ACHHUZ7cvb0mCeWDDY43OW9x5ugQOQdr9CWHyT9lhwZk2ZnwbZrVvHE4XgLdkwaIL+bl9uTCm+SsPg==
-X-Received: by 2002:a17:902:e550:b0:1a9:7dc2:9427 with SMTP id n16-20020a170902e55000b001a97dc29427mr21398307plf.21.1682931454093;
-        Mon, 01 May 2023 01:57:34 -0700 (PDT)
+        bh=fry12NLoScUn7gbAM5zwlql+LIRPvftdxXtygfKZOSU=;
+        b=SvNqLvmfhnBL/Se1u2jTN17Geid5RDisJYzYRGfwSjxSebMZ/Hq51/UigyN73oCH30
+         D2bMYRSkdPttX+8Eh0inf0PiFvFM2Y3tUcHK3rwBgnp3OoaJDbQjtHLSb8NsAAoI7zfP
+         b50Qc7H30LJvho3fFwQrClHbEi9gXS/R8KBwtf6/sBn3MiOECobm63ingvc3iQLc/y2r
+         8A7YLjuGzYVp1YqOlXB5gY4KYtEjAr7OXx6yvmK40I7jo0cxewUMx/LtnAjNUovDiUTl
+         IIteyet8q4KQVmA+RG6w97A+WHnTuOrupdQhzgv7KKqHZiImDfp0NMC9q5qw5sXyitl5
+         vyuw==
+X-Gm-Message-State: AC+VfDwsnd60qAWGl4xcRK0ZLJxSwBLIgdWZrd1Gr+5irBt5EezFTLKH
+        9pUXqbRpv05K0X1eDS1YmNE=
+X-Google-Smtp-Source: ACHHUZ5AxIolfnZywSPhghag7iLuDD6o1C2AaUdro9lVq5nNaCg1A5/izYX69cCASi1ejjuJSAO8yg==
+X-Received: by 2002:a17:902:b70c:b0:1a6:413c:4a47 with SMTP id d12-20020a170902b70c00b001a6413c4a47mr13048714pls.1.1682931455420;
+        Mon, 01 May 2023 01:57:35 -0700 (PDT)
 Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:b:e11b:15ea:ad44:bde7])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709028c8d00b001a4fe00a8d4sm17407070plo.90.2023.05.01.01.57.32
+        by smtp.gmail.com with ESMTPSA id t13-20020a1709028c8d00b001a4fe00a8d4sm17407070plo.90.2023.05.01.01.57.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 May 2023 01:57:33 -0700 (PDT)
+        Mon, 01 May 2023 01:57:35 -0700 (PDT)
 From:   Tianyu Lan <ltykernel@gmail.com>
 To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
@@ -66,9 +66,9 @@ To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
 Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [RFC PATCH V5 03/15] x86/hyperv: Set Virtual Trust Level in VMBus init message
-Date:   Mon,  1 May 2023 04:57:13 -0400
-Message-Id: <20230501085726.544209-4-ltykernel@gmail.com>
+Subject: [RFC PATCH V5 04/15] x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp enlightened guest
+Date:   Mon,  1 May 2023 04:57:14 -0400
+Message-Id: <20230501085726.544209-5-ltykernel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230501085726.544209-1-ltykernel@gmail.com>
 References: <20230501085726.544209-1-ltykernel@gmail.com>
@@ -86,142 +86,88 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Tianyu Lan <tiala@microsoft.com>
 
-sev-snp guest provides vtl(Virtual Trust Level) and
-get it from hyperv hvcall via HVCALL_GET_VP_REGISTERS.
-Set target vtl in the VMBus init message.
+In sev-snp enlightened guest, Hyper-V hypercall needs
+to use vmmcall to trigger vmexit and notify hypervisor
+to handle hypercall request.
 
 Signed-off-by: Tianyu Lan <tiala@microsoft.com>
 ---
-Change since RFC v4:
-       * Use struct_size to calculate array size.
-       * Fix some coding style
-
-Change since RFC v3:
-       * Use the standard helper functions to check hypercall result
-       * Fix coding style
-
-Change since RFC v2:
-       * Rename get_current_vtl() to get_vtl()
-       * Fix some coding style issues
+Change since RFC V2:
+       * Fix indentation style
 ---
- arch/x86/hyperv/hv_init.c          | 36 ++++++++++++++++++++++++++++++
- arch/x86/include/asm/hyperv-tlfs.h |  7 ++++++
- drivers/hv/connection.c            |  1 +
- include/asm-generic/mshyperv.h     |  1 +
- include/linux/hyperv.h             |  4 ++--
- 5 files changed, 47 insertions(+), 2 deletions(-)
+ arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
+ 1 file changed, 33 insertions(+), 11 deletions(-)
 
-diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-index 9f3e2d71d015..331b855314b7 100644
---- a/arch/x86/hyperv/hv_init.c
-+++ b/arch/x86/hyperv/hv_init.c
-@@ -384,6 +384,40 @@ static void __init hv_get_partition_id(void)
- 	local_irq_restore(flags);
- }
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 97d117ec95c4..939373791249 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
+ 	u64 hv_status;
  
-+static u8 __init get_vtl(void)
-+{
-+	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
-+	struct hv_get_vp_registers_input *input;
-+	struct hv_get_vp_registers_output *output;
-+	u64 vtl = 0;
-+	u64 ret;
-+	unsigned long flags;
-+
-+	local_irq_save(flags);
-+	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+	output = (struct hv_get_vp_registers_output *)input;
-+	if (!input) {
-+		local_irq_restore(flags);
-+		goto done;
+ #ifdef CONFIG_X86_64
+-	if (!hv_hypercall_pg)
+-		return U64_MAX;
++	if (hv_isolation_type_en_snp()) {
++		__asm__ __volatile__("mov %4, %%r8\n"
++				     "vmmcall"
++				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
++				       "+c" (control), "+d" (input_address)
++				     :  "r" (output_address)
++				     : "cc", "memory", "r8", "r9", "r10", "r11");
++	} else {
++		if (!hv_hypercall_pg)
++			return U64_MAX;
+ 
+-	__asm__ __volatile__("mov %4, %%r8\n"
+-			     CALL_NOSPEC
+-			     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+-			       "+c" (control), "+d" (input_address)
+-			     :  "r" (output_address),
+-				THUNK_TARGET(hv_hypercall_pg)
+-			     : "cc", "memory", "r8", "r9", "r10", "r11");
++		__asm__ __volatile__("mov %4, %%r8\n"
++				     CALL_NOSPEC
++				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
++				       "+c" (control), "+d" (input_address)
++				     :  "r" (output_address),
++					THUNK_TARGET(hv_hypercall_pg)
++				     : "cc", "memory", "r8", "r9", "r10", "r11");
 +	}
-+
-+	memset(input, 0, struct_size(input, element, 1));
-+	input->header.partitionid = HV_PARTITION_ID_SELF;
-+	input->header.vpindex = HV_VP_INDEX_SELF;
-+	input->header.inputvtl = 0;
-+	input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
-+
-+	ret = hv_do_hypercall(control, input, output);
-+	if (hv_result_success(ret))
-+		vtl = output->as64.low & HV_X64_VTL_MASK;
-+	else
-+		pr_err("Hyper-V: failed to get VTL! %lld", ret);
-+	local_irq_restore(flags);
-+
-+done:
-+	return vtl;
-+}
-+
- /*
-  * This function is to be invoked early in the boot sequence after the
-  * hypervisor has been detected.
-@@ -512,6 +546,8 @@ void __init hyperv_init(void)
- 	/* Query the VMs extended capability once, so that it can be cached. */
- 	hv_query_ext_cap(0);
+ #else
+ 	u32 input_address_hi = upper_32_bits(input_address);
+ 	u32 input_address_lo = lower_32_bits(input_address);
+@@ -104,7 +113,13 @@ static inline u64 _hv_do_fast_hypercall8(u64 control, u64 input1)
+ 	u64 hv_status;
  
-+	/* Find the VTL */
-+	ms_hyperv.vtl = get_vtl();
- 	return;
+ #ifdef CONFIG_X86_64
+-	{
++	if (hv_isolation_type_en_snp()) {
++		__asm__ __volatile__(
++				"vmmcall"
++				: "=a" (hv_status), ASM_CALL_CONSTRAINT,
++				"+c" (control), "+d" (input1)
++				:: "cc", "r8", "r9", "r10", "r11");
++	} else {
+ 		__asm__ __volatile__(CALL_NOSPEC
+ 				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
+ 				       "+c" (control), "+d" (input1)
+@@ -149,7 +164,14 @@ static inline u64 _hv_do_fast_hypercall16(u64 control, u64 input1, u64 input2)
+ 	u64 hv_status;
  
- clean_guest_os_id:
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index cea95dcd27c2..4bf0b315b0ce 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -301,6 +301,13 @@ enum hv_isolation_type {
- #define HV_X64_MSR_TIME_REF_COUNT	HV_REGISTER_TIME_REF_COUNT
- #define HV_X64_MSR_REFERENCE_TSC	HV_REGISTER_REFERENCE_TSC
- 
-+/*
-+ * Registers are only accessible via HVCALL_GET_VP_REGISTERS hvcall and
-+ * there is not associated MSR address.
-+ */
-+#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
-+#define	HV_X64_VTL_MASK			GENMASK(3, 0)
-+
- /* Hyper-V memory host visibility */
- enum hv_mem_host_visibility {
- 	VMBUS_PAGE_NOT_VISIBLE		= 0,
-diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 5978e9dbc286..02b54f85dc60 100644
---- a/drivers/hv/connection.c
-+++ b/drivers/hv/connection.c
-@@ -98,6 +98,7 @@ int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo, u32 version)
- 	 */
- 	if (version >= VERSION_WIN10_V5) {
- 		msg->msg_sint = VMBUS_MESSAGE_SINT;
-+		msg->msg_vtl = ms_hyperv.vtl;
- 		vmbus_connection.msg_conn_id = VMBUS_MESSAGE_CONNECTION_ID_4;
- 	} else {
- 		msg->interrupt_page = virt_to_phys(vmbus_connection.int_page);
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 402a8c1c202d..3052130ba4ef 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -48,6 +48,7 @@ struct ms_hyperv_info {
- 		};
- 	};
- 	u64 shared_gpa_boundary;
-+	u8 vtl;
- };
- extern struct ms_hyperv_info ms_hyperv;
- extern bool hv_nested;
-diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
-index bfbc37ce223b..1f2bfec4abde 100644
---- a/include/linux/hyperv.h
-+++ b/include/linux/hyperv.h
-@@ -665,8 +665,8 @@ struct vmbus_channel_initiate_contact {
- 		u64 interrupt_page;
- 		struct {
- 			u8	msg_sint;
--			u8	padding1[3];
--			u32	padding2;
-+			u8	msg_vtl;
-+			u8	reserved[6];
- 		};
- 	};
- 	u64 monitor_page1;
+ #ifdef CONFIG_X86_64
+-	{
++	if (hv_isolation_type_en_snp()) {
++		__asm__ __volatile__("mov %4, %%r8\n"
++				     "vmmcall"
++				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
++				       "+c" (control), "+d" (input1)
++				     : "r" (input2)
++				     : "cc", "r8", "r9", "r10", "r11");
++	} else {
+ 		__asm__ __volatile__("mov %4, %%r8\n"
+ 				     CALL_NOSPEC
+ 				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
 -- 
 2.25.1
 
