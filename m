@@ -2,32 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC4A6F3548
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 19:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3216F35A5
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 20:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbjEARzw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 13:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
+        id S231229AbjEASIZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 14:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjEARzv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 13:55:51 -0400
-X-Greylist: delayed 509 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 01 May 2023 10:55:49 PDT
-Received: from out-50.mta1.migadu.com (out-50.mta1.migadu.com [95.215.58.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED4C199B
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 10:55:48 -0700 (PDT)
-Date:   Mon, 1 May 2023 10:47:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682963238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pCOJ4TIX11zw2jBaDOP97T7hx/pG0LP03OwHceiD+AE=;
-        b=DiqG+Df4D+DZsn0wO9LjwkV/mLuZ3abtM/u+Nuamt3enIlxM0dOl/zDiGUemCbI1ba6Ge7
-        UFxA8r7ovThZ0bL+PW2tO2CTjinF1Mnn4ax/lyq+OVwg8tX+hPdBw7CohOYds+psfqGMqa
-        jFVVfskQ2Ze12DnahYd6juPiFkLzBag=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Suren Baghdasaryan <surenb@google.com>
+        with ESMTP id S229627AbjEASIY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 14:08:24 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEE51986
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 11:08:22 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-2f833bda191so1584302f8f.1
+        for <linux-arch@vger.kernel.org>; Mon, 01 May 2023 11:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1682964501; x=1685556501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+2lYHhqlJD16G2HYpsFMb3ZFL7Kq76WjunB2OGwz3cs=;
+        b=InnNvCbyWRIxKxFGHEw18GDFvAR07SJg7UsaQSzayd856NvZvHy/7D82OiVunxTwOQ
+         iI4bPEnaVC8DKfBD9q2mpFU/D2+4QZOsePkMvk/nKecGEkR7ieMp18RUohlow/ONsuPb
+         fRpdmKiy/hCz/JHzVWz2n5Mg5OcWXlB55bYJJxXjQz7D5uG5SID6uaCO/Kks5xdfPjJJ
+         it9fnMSSuNm2JWdg5Tcm2D1rTGbvS4aDpWOvTKMsD+KeIoUScC3se5ywU/XKx17SosJd
+         CH4HSE+fdc45RYf+DKFB/2hLNASZoyYfq4ehjOUiQfqHoIRcizKtgl3mADdezSKqh+u9
+         RU9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682964501; x=1685556501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+2lYHhqlJD16G2HYpsFMb3ZFL7Kq76WjunB2OGwz3cs=;
+        b=Btirve6zjIzsfHToYpc0Yh1dTJyvu8DDrptsHg6zgT9srsnIH21dd7rs1QiiE91Vct
+         Wn1OTS8IunRv/Q16GoXufBCJ/v6RkhB/Mt3eSzeuPjPPFdPaP/1I85Ms6obPM38wn7Zs
+         ZoG9RFYCTM/80i4q6mAFhXmPkWr/h8cNJHQQFYqMRYydoXsXUYzD7NH9RLBl08SgefAX
+         0xR/FLR9GonrLoRzK1o3rM4LASclEiJMYXQ7JmlA8imoPiI6rHiCdylCaS6CucU0dTCt
+         ruS5bqaWXzPEig8nkd3IzZKk9U9yDo8NLFt7AvMWWxNP4SNg4qZUCnYqL18ypXmnwFdb
+         vWYA==
+X-Gm-Message-State: AC+VfDwPdi/UUHBChGZnuXzdbPJ6ao0peg1zftWbPuRTGDeBbY8aZlSz
+        NjLcckv+u1R7TOER3VTJkN60nMrnEJW9czxjP9eTMA==
+X-Google-Smtp-Source: ACHHUZ5amJjA/6tq+0x964OebbbLQ/pHCZFbXYS1+6FrTMuusEGNpiFnDiBKAeRF77HbwZnod13qqDRv0TRCNeDlvRc=
+X-Received: by 2002:a5d:6351:0:b0:306:2b9e:2a8c with SMTP id
+ b17-20020a5d6351000000b003062b9e2a8cmr3336094wrw.11.1682964500617; Mon, 01
+ May 2023 11:08:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230501165450.15352-1-surenb@google.com> <ZE/7FZbd31qIzrOc@P9FQF9L96D>
+In-Reply-To: <ZE/7FZbd31qIzrOc@P9FQF9L96D>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 1 May 2023 11:08:05 -0700
+Message-ID: <CAJuCfpHU3ZMsNuqi1gSxzAWKr2D3VkiaTY0BEUQgM-QHNxRtSg@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+To:     Roman Gushchin <roman.gushchin@linux.dev>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
         mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
@@ -55,44 +81,61 @@ Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZE/7FZbd31qIzrOc@P9FQF9L96D>
-References: <20230501165450.15352-1-surenb@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230501165450.15352-1-surenb@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 01, 2023 at 09:54:10AM -0700, Suren Baghdasaryan wrote:
-> Performance overhead:
-> To evaluate performance we implemented an in-kernel test executing
-> multiple get_free_page/free_page and kmalloc/kfree calls with allocation
-> sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
-> affinity set to a specific CPU to minimize the noise. Below is performance
-> comparison between the baseline kernel, profiling when enabled, profiling
-> when disabled (nomem_profiling=y) and (for comparison purposes) baseline
-> with CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
-> 
-> 			kmalloc			pgalloc
-> Baseline (6.3-rc7)	9.200s			31.050s
-> profiling disabled	9.800 (+6.52%)		32.600 (+4.99%)
-> profiling enabled	12.500 (+35.87%)	39.010 (+25.60%)
-> memcg_kmem enabled	41.400 (+350.00%)	70.600 (+127.38%)
+On Mon, May 1, 2023 at 10:47=E2=80=AFAM Roman Gushchin <roman.gushchin@linu=
+x.dev> wrote:
+>
+> On Mon, May 01, 2023 at 09:54:10AM -0700, Suren Baghdasaryan wrote:
+> > Performance overhead:
+> > To evaluate performance we implemented an in-kernel test executing
+> > multiple get_free_page/free_page and kmalloc/kfree calls with allocatio=
+n
+> > sizes growing from 8 to 240 bytes with CPU frequency set to max and CPU
+> > affinity set to a specific CPU to minimize the noise. Below is performa=
+nce
+> > comparison between the baseline kernel, profiling when enabled, profili=
+ng
+> > when disabled (nomem_profiling=3Dy) and (for comparison purposes) basel=
+ine
+> > with CONFIG_MEMCG_KMEM enabled and allocations using __GFP_ACCOUNT:
+> >
+> >                       kmalloc                 pgalloc
+> > Baseline (6.3-rc7)    9.200s                  31.050s
+> > profiling disabled    9.800 (+6.52%)          32.600 (+4.99%)
+> > profiling enabled     12.500 (+35.87%)        39.010 (+25.60%)
+> > memcg_kmem enabled    41.400 (+350.00%)       70.600 (+127.38%)
+>
+> Hm, this makes me think we have a regression with memcg_kmem in one of
+> the recent releases. When I measured it a couple of years ago, the overhe=
+ad
+> was definitely within 100%.
+>
+> Do you understand what makes the your profiling drastically faster than k=
+mem?
 
-Hm, this makes me think we have a regression with memcg_kmem in one of
-the recent releases. When I measured it a couple of years ago, the overhead
-was definitely within 100%.
+I haven't profiled or looked into kmem overhead closely but I can do
+that. I just wanted to see how the overhead compares with the existing
+accounting mechanisms.
 
-Do you understand what makes the your profiling drastically faster than kmem?
+For kmalloc, the overhead is low because after we create the vector of
+slab_ext objects (which is the same as what memcg_kmem does), memory
+profiling just increments a lazy counter (which in many cases would be
+a per-cpu counter). memcg_kmem operates on cgroup hierarchy with
+additional overhead associated with that. I'm guessing that's the
+reason for the big difference between these mechanisms but, I didn't
+look into the details to understand memcg_kmem performance.
 
-Thanks!
+>
+> Thanks!
