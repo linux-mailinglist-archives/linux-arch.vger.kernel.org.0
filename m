@@ -2,49 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378A46F3351
-	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 18:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6749F6F3365
+	for <lists+linux-arch@lfdr.de>; Mon,  1 May 2023 18:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjEAQCn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 12:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S232725AbjEAQGI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 12:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbjEAQCl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:02:41 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2056.outbound.protection.outlook.com [40.107.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD42E42;
-        Mon,  1 May 2023 09:02:39 -0700 (PDT)
+        with ESMTP id S232698AbjEAQGH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 12:06:07 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2081.outbound.protection.outlook.com [40.107.237.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5AF1B3;
+        Mon,  1 May 2023 09:06:02 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EwSgqYllit5ZalSTk00XREwc5pA9ZqoiBax41PnzRNxqRkdS8ikCynQTF4scArFUokVb5ejUlJv4OGL87AiCV5GarOeNqK8A+z7BEOk0gdpY+sw+0qFfA5fLjXGPDbcRS2sG9G1Z9HykVALEVPBHKq9Z86wWeqySzX9zA1T2Y0KBfRoSBDz14VOPhf0L02g0lYoArnOyexF8hZ9hrG2GATynZpihSW5yRFJSd6CUDbb2hsBzQBv9ip1fYPSLO2hu+llxmMGFA45KGdhpp0iaZM6z9LjrHUTkKFPgld20La7jFpQF3h4p7y+DSLz5rEM0LY/r62RrtfnfbJ6zvcbLlw==
+ b=d4Ta83JBP7DaB8ph9z2xfRV7h+ZxeWw01Zd0CXoDHtjABimtDw+zYJiH1PIIgCKMoBs21R//1qd6kovgPcRO4jom1dol7cdcdMnjJJKRHfulNNk4uVWiNVxikXJWUAfX2CpXpJxx7Ru/pZBe86u/uhF/z7qxy3iFQei+DQsGGD6dPuFZms/y7a7KrlmQs84n5AObZGvyucaf7/5A20P/SBOJ7aGweJr2mMGgmdsUnD+IVcp+CvKazxDTrj+EGNnzcuVA33voAVxm/ykGhvSp+sKx6ZBFdzjw9QVRfuY38e2HdjKKJ2eHuQDl3ocbUPK4jhmQfPDZ3MK/3Rfb/p7nIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/HCVsc9ZWe3zN+esxHeAq9fwsyR3rqx2WSPsZEhEDdo=;
- b=OEr9NWr+sEMFD6bAGdBas1u4eRGcVZu7dzT2lDR5LLs0ADvqZ1Ws0rZP8yWnaD9EEtIWqnxfP3PLx+Z8Kh77nc5gTFqVcmRSCW015PwoWuoPI648FvAZpnD7l+brphlwWSfBPHrk+kpyBODfr+zB8VSh8DVtU5+KyLWeGTaGUATGf06HvSby+VrY4IbmikelUnKJ9ZS74A8DlzAfwjMjP4JwACplFWsqGvfm1Hdi1kj52+2wzQVcKmJgaq8YPQghUdSZuyhEwF+hIfRugf86HRAzZbCR1rDPCIDB09014C++KAEiLWfN4ZAoT7l9P7uuUZFT5e0qMuaj+fcgahAQDQ==
+ bh=6UO4xMzPf08KLEYcVTWohLrpJn2gBR6WX2gVcQ5pRFc=;
+ b=UtOxQ6EJpGoj3eAG2R6hWTTIk+p9B0e8gdwitt/oHpl3pIBSiU8uOEjR9Ajy8sO1Bct4MA3uar/M/H+XQZFxbnYi5Vt/tKPH0rKz52ScXkqzAdhP6CFO6QciEzrk5jO4UMurryWNCm7sSdjEPb+uRfCa92qziBXie9NTAExcDOV01TjJa8DHgBYBgtlM7i1WqDEw8qFwNcXwb254FJlKADrR9JIHAMEduhQdfqmP7s57Hzff/Fddy7Rb2LvB6Hv/TOvduY9acLWMo/9NfR6LL137D1SbgHhnSiNolcpoJ4Oe0/BGeiW/v0C6sxlz7aPqg8SspuKsRas7nvGeTx19EQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/HCVsc9ZWe3zN+esxHeAq9fwsyR3rqx2WSPsZEhEDdo=;
- b=nM2ML+G52qf1LG0dze0HSmk0UD3L72IjuH+li3RCLT6UCRQkE5olW7fs+ulR79K3ZZwxFyhFHY7XJ/ImlFrUC/a/v/sQt0LwNHv9rddbRz2wZysgJADLXiHyPSZ2G2g85qmbeMVlKFBs39ZZolFjWPT1YI1lbO0rHNc1LDe2bDQ=
+ bh=6UO4xMzPf08KLEYcVTWohLrpJn2gBR6WX2gVcQ5pRFc=;
+ b=3XtygAAsfsHS4HNJ97/BvOvF6HQWzdSzBBox225Whsjo4NptwHAIaOdtm4DA7FwH0BSAPxT2k65IyvlKzQKe1Ru//HfxxGkNoTDZIbUGr2Eqs2aaXAOtmmzflEXTpcBYsfTNUatDjs2UjUARtFpffu1n6WV7x2srqeJ7Go3/Emg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by MN2PR12MB4422.namprd12.prod.outlook.com (2603:10b6:208:265::9) with
+ by MW6PR12MB8960.namprd12.prod.outlook.com (2603:10b6:303:23e::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6340.30; Mon, 1 May
- 2023 16:02:37 +0000
+ 2023 16:06:00 +0000
 Received: from DM4PR12MB5229.namprd12.prod.outlook.com
  ([fe80::ea32:baf8:cc85:9648]) by DM4PR12MB5229.namprd12.prod.outlook.com
  ([fe80::ea32:baf8:cc85:9648%7]) with mapi id 15.20.6340.030; Mon, 1 May 2023
- 16:02:37 +0000
-Message-ID: <3c91e1ab-29f4-09cb-1268-52fd9c3e34f4@amd.com>
-Date:   Mon, 1 May 2023 11:02:32 -0500
+ 16:06:00 +0000
+Message-ID: <a28c5655-8d7a-0fe2-2759-cc69ebbe0a3a@amd.com>
+Date:   Mon, 1 May 2023 11:05:55 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
-Subject: Re: [RFC PATCH V5 15/15] x86/sev: Fix interrupt exit code paths from
- #HV exception
+Subject: Re: [RFC PATCH V5 00/15] x86/hyperv/sev: Add AMD sev-snp enlightened
+ guest support on hyperv
 Content-Language: en-US
 To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
         tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
@@ -64,71 +64,70 @@ Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
         linux-arch@vger.kernel.org
 References: <20230501085726.544209-1-ltykernel@gmail.com>
- <20230501085726.544209-16-ltykernel@gmail.com>
 From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230501085726.544209-16-ltykernel@gmail.com>
+In-Reply-To: <20230501085726.544209-1-ltykernel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DS7PR03CA0072.namprd03.prod.outlook.com
- (2603:10b6:5:3bb::17) To DM4PR12MB5229.namprd12.prod.outlook.com
+X-ClientProxiedBy: SA9PR13CA0128.namprd13.prod.outlook.com
+ (2603:10b6:806:27::13) To DM4PR12MB5229.namprd12.prod.outlook.com
  (2603:10b6:5:398::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|MN2PR12MB4422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 16158bd6-4ea3-4a1b-2897-08db4a5d7ba1
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|MW6PR12MB8960:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72c3547b-4e02-4193-c445-08db4a5df4ab
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PVpuExDYp+f57mvb4JCi6rDB8boLiXO2Y7CCCN7D/Irrzy1R+z5Wtc/7BH0V+eSZXzezueZPIdt7BsV9DtGWpa3M2q5hnWyFxZnCw8m1HUsoeSBke6PlvieJEu7BCe87ZYrQV7ef1wiaTpBC0ob9s2X3pBQ0dkBzh4lolw+NiH0eligFxZhBjrrJGVauh1Vh/QjRbTdZzquKqUgshgLJL6oSG4+a+pBatOIHFBRJQSJ9unIW1E4H0HAzUU+VPsQfDlxVXoqryrljsuHGL8oaqaSXQl8MBf6vvDjnbgVckVWzV1sDLmJwQ54otvQ1wgiEhthorgdDA/b4dMh77JYOvjbjFK0KPgc5dr3db7kuqnvvvuMKfBIsfXmvgqv3X4d5b5dkldqhSED9ZXXR6DctrIIhhyWRb8YaDLk/SPe3w1k3N/DSOvquJoRr91sn97xAkz/qVsS23Rec8yQglv/zbzbIciV0tIednnGdmn4pjoJ90NdSk5cdGCFfzM4p2nrc38fTdebAuco0IYwRzXyLdFJx2VbAfyxFVhMio3ct0LYSHA4av1kyGy/IETKml93sE4JP+JICRaPA76TrxH0DbHe973+KOIzB1jYrHONV+CLzWFCrPvcii4GnokhZMYIkCKQQIsn8guPlsam36A7FxzsPY4idjbd8nnx9sFvP/aA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(39860400002)(366004)(396003)(451199021)(66556008)(66946007)(66476007)(4326008)(921005)(186003)(316002)(6486002)(478600001)(31696002)(36756003)(6666004)(86362001)(26005)(6512007)(2906002)(6506007)(2616005)(38100700002)(53546011)(31686004)(83380400001)(7416002)(7406005)(5660300002)(8676002)(8936002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5ivFBuD58wG85inwRDIEEb1RhRvIqFZkY5/4R+LDcpRoJlrgaL41t+yZJYvVnN5xSXOP2FNJK6uQkR6H5e3FPe9337iZv8rA5a+eC0Jqq2bE03j6rCV0t2hTbNBkEjXD8KwC5NbmOnB6SfHQEzh7ZICfOKkq+SIj6TmfYNfHEKRWp+lV7ChvTIfCg2VWQRI3DorOz9655uzkWVsg02iq9mhJ9XNZOWnIFaK9fDvXbAKomuDo87jgQ4k68Z5Le6UnBlpAWxSOPqft4RiDPpH2oaJckbF6tAQPA9l7rR0VmjI/2DiF4d46z9apS0CQHwir+VsjoyHl8emf/aP+zaT2q1Y3wV+BkJGXsuKlksCfg+6E1l1cic2tLkys0ddlU7p7M3DXumbEUbnUMxNH8/wNlVkA/T4/+G6D84LKdoo453yKrLMBPXpGOHTYqbdaLpeke/DaqLBELQEriur/4VRws3HXhEzGpn+YjDBybKOP2ijTHTZQVknK0Xwg2Um4FHphWnXuONi84RiraPIfLvTnXVZKJOLoiZwFFzImfEQtECiZdBvX6X0aoqqCrs1SpGZlOPrQeCmdb8ebpG3OzvsSvw5Mch477uthZFmqamWJo98/WvGmkOaMN1cpiuTwdO4nQKAZDWtYuoQrIJMmzLptVCJqfcvoeCn08cpefqJIznU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199021)(2616005)(478600001)(45080400002)(83380400001)(31686004)(186003)(4326008)(66476007)(66556008)(66946007)(53546011)(6486002)(6666004)(26005)(6506007)(6512007)(316002)(7406005)(8676002)(8936002)(921005)(7416002)(5660300002)(41300700001)(2906002)(38100700002)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW5YRXpqc0dERXpHZ3pwRVVxUEFGNFhZMnlaNUg3MkpySTZIb2NBT3V5UHNZ?=
- =?utf-8?B?Zi80QXlPU1RKdzlvZSsydGhHMWxYK3Y1SVFUSVNWaFhFNk5maW9ReE11dDJS?=
- =?utf-8?B?OFAzb2hJSUZnT0JoS2xKQTdYZGtaRTFNYnFFbXJCQm5qQU14eHZZdTZNWFk3?=
- =?utf-8?B?ZUR5K0I5a1EvWW92ems5U2pJaDZhZnozcytJa3RJYzMwWGFrVkxWVUdmVWFQ?=
- =?utf-8?B?NlU1Z2tUVElFKzM2R1dHcC9SVzB2bG55NmxzWmlpZkMyOTA4Y2Zvb0JUaUlY?=
- =?utf-8?B?KzVUZHphR0I2ZDR1aDNlUlppaTJlaERRb2xaVUpuN2k5REVwT1l3algwTVJR?=
- =?utf-8?B?Vk82MkpQV1pHUGtrTWQ4NDJmMUY3S0RlNEVCellFRU9FMDhTSE1CcjArdU5k?=
- =?utf-8?B?dFM4bFZjUEVnbkJ3anBxeHlSSnRSYzlFNHJEdys2anA0YlpBU3h5VVNaczJ5?=
- =?utf-8?B?Mks0SXh5Q2NGSzN3dmlCblZYRzFaWE1UaGpnb0wrcVVCOURGanZlbzFsSGl1?=
- =?utf-8?B?dEJ1cWE3c0xlVDVId2E2NnY0Ni9wdmhkVWhYZHpqMVhqeE5IaVhZRUV3V2Ji?=
- =?utf-8?B?QktOZENsRDgwcXVqT2t1ZmhDRE1ONDM5OHhqbDFvd09xNXhHRzliREZFa1Uw?=
- =?utf-8?B?WkZvTUExSHVIZGhXSllkc0t2SVF3YS9zZ25YWWJOZmpWcHh1NEVRSXVhUVJK?=
- =?utf-8?B?RFRqN3NMazhkTDkvUjdIZm1OZm01RWRGUEg1MnNYM0FlNXEwWUFaUnY0SHBI?=
- =?utf-8?B?dm1hUjRqVnJzSEFhRzQrSlJUQjdIVVBGUDZuSENJV2hIaUdNNG03T3R1TGtW?=
- =?utf-8?B?RytINnBtYmlWWnFKeWNWRXR1L29Qc3RtUzdrUXNGanNwRVRiRTI0NnlQL2hQ?=
- =?utf-8?B?eEY5WEhqc1RMbzJ2RWhLRlRqdG5LQndOUzdVNmo2MFhuYmFVREw3cGFxVGEr?=
- =?utf-8?B?dms0eFNGTURROEZocG9ZY0IzRWlFVXQ2ZjJrREhqUitoS0JlYXFGSUxtaVdY?=
- =?utf-8?B?Y0l4MzMvRnRRYjR5MHF4dlJHZ0d5RFM2S0gxczJpbkxrMDBoSUd4eTJ3eGNs?=
- =?utf-8?B?VjlJNFUwaGEyc1RoaDAvekxMajBWOTdYa2JIcGhXWE5mZVJ5M0xVcHlkbDMv?=
- =?utf-8?B?QXlJREFRUi9qd3NHN1NiSjZaM2xXT1hhcUpxMWd3N1Bxdkg5MDFsKzlVeXdB?=
- =?utf-8?B?L0JGYnMrS01Pb1g5MlJRYVlnQy96NGUzOHhweUx4cWZ6S1pMRElPdTFxL2tK?=
- =?utf-8?B?UnFBUXJkNFY0MDNudWxTTFRUTml2UjdGVytybTFvcmhmb2JraENVS3h1UE1u?=
- =?utf-8?B?N0dvbGtjdk90dGpCMG5WZnlZRGNEUGFKRC9TcGllS3drSG5tYTBoU0VQVmFV?=
- =?utf-8?B?c3dSbUNWSjE5alNUSEhvV1FJSy9MVTRVNUdkSjBVZFdXSzA0NVZKVHUxbDQy?=
- =?utf-8?B?SmNCcExUWGJnc1BpRzFQdERLQm1sY3pTL05xR2dDMDk2Qkc1QlVON1ZRRnht?=
- =?utf-8?B?VEx3YUJxV2p5MmFoc2RVcUljSnRMcU5QM0QwRXNyU1UzV3ZuMk5la1BHT0Q3?=
- =?utf-8?B?SExwUVJ3Nkg2WEFHWjBnTHE3MUYzSGhhTHVDYk9aQlQ2bUhEVmVocGF2TjNk?=
- =?utf-8?B?dm00dzliS0VUMnNIRmJwMW5kMlNLb2tHOE1pM2NLSE1zSGlYSFVwTVpsZ09x?=
- =?utf-8?B?RmVIT1ZBVHVjSFJrUXhmVWFLSzIxUXVmQks3aVpMTmdyTy81cWxtZjRHVlE0?=
- =?utf-8?B?WTFJTzQ1VEhDR0hQUEgyNnRFVEl2NTBMNlQwNzRjcDFXTzhwN3NWeXZIN2RL?=
- =?utf-8?B?c0tXVUQ1YWg5RUhhbThBekwvZWppa0VjL3pMWk43TUR3U01ja2YrRGQwdWdH?=
- =?utf-8?B?VWlId3E0eGNZNzNESmFSVktQUUErdGpmWkdhVW5OdGQrRk1INTNnOTFkUkIy?=
- =?utf-8?B?bFFENVNhMlhDNVUyUG5oZFpEN0xiWlJtcWEzVjJZVmZjWndSRklUekR0dGcx?=
- =?utf-8?B?WjJTYWV0TmF4VXhmdnJUbGNCOWd0Rm9tUDhMb1RvYTBOdnhZS3p5S3pjTFJX?=
- =?utf-8?B?bUVPMHU3cGdremVhWnpaRlpsdzJXUk56emVaL3ZtWmpHMjcrODlQdFBlOHNT?=
- =?utf-8?Q?QwbHXM2Kq6lD0wnsskAGRhYhK?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDdSbTBoNlFobVJoZ25HMGcwZzhSdkZoaGZmK1V6RmdJdlArWHM1a0pFNmd2?=
+ =?utf-8?B?bTJCdlFZbUtZd2tFVCtKMUpSOS9wUW1OZEd6UDhXODlLaUpaMmxYVjJKWkQy?=
+ =?utf-8?B?K2pxYitZU2xBbUtaR0ZuSk5nWitvNXlUdjU1Tm9Pc1Jqb3lub2RuQ0V5UGdt?=
+ =?utf-8?B?SFVJU2FsNWtycEpZYlBwNzJlTmVrRTVsWWkyNE5ZWXlyZTM5VHZtdklJOVdC?=
+ =?utf-8?B?dUNzWkJEN0FkVjVXREU3MjE1K21pZGtkNlZBRGNKcktlU0NjeXBTMi8rTWI4?=
+ =?utf-8?B?TC95SFErRlBOc2xCeEdzVWEvZFQ5L3V1TzRUMXp4T294aGM1cW9aMC94Vzda?=
+ =?utf-8?B?ZGdlZVJuaFloaUpENWZFZnZ1WHFZMHdwQXdCUCtQNzlnN3hEU2YrbCtXR29D?=
+ =?utf-8?B?Mzkwc09KMFEwV0svVERsZUYxTWNNS3JaVExoTzBIeVFSNXBrUGRTVG9ncDd0?=
+ =?utf-8?B?WEhmSWpTK1Rid3BPcDV1bXo3M1JaZnZ3QlYxNm9XbUhQV25LNkZ3Wno0V2Vm?=
+ =?utf-8?B?OWhpeFB2ZHpoLzhRbkdFVU9MTDFlMXl4L0U4aVM2ZlRLczczNngxa3NQTUJJ?=
+ =?utf-8?B?emlvZzlFUkllYnVtVzRKc2JqTlZxby9nUUFHQkxlZWRJVVM1REtxQzd3QXpE?=
+ =?utf-8?B?UnVsWlFNUzNyalQ4bmgwek5sdDNDTy9GMTV1R3gvOXEwMmt3VVRhWXhrZy9z?=
+ =?utf-8?B?dlBzRW5ORnFYL3hOMnU2czZ4Q3NvYTBBUWxueFFzdU1lRkEwMXVUUnhJazJE?=
+ =?utf-8?B?VGZqaDE4Q0dyNWxxRmErUlVzSVJYZlNRcXJaeitsSDBsRjJOL3JDRFAxc3Qw?=
+ =?utf-8?B?QlRKaVN3Z2YyaFBtTHJERGIxaWhsME5ZVHBXYlRYeDRKc0FjRXhXMkVNbGVC?=
+ =?utf-8?B?R25OdHY0VFFxVnBpbU9TMTloQTNjbEtPbXM2SVY2TkNlNGY4dkdPUTdBQ1Z4?=
+ =?utf-8?B?Ync0TDFrQkNzYmlOSnBvbGx0WGVrdTlYbXNNcU5pTmluU3NieVVNL2UrWjd4?=
+ =?utf-8?B?YlJlOE9xWUtlTXVWdDkrTW9nUzR3L056UUpmdFVYNXh5b2dUVVhBTUJxZXZn?=
+ =?utf-8?B?WVBNTXFYOTE3TklTbzlJaWtaTXdINXMyWmhKajAyTHlKYUpWRU5DbzVYOEh3?=
+ =?utf-8?B?VkpsaklDb0FyMFQwOFZoR0IvMXBhbFU2alJreXZWRnYxTG9vNEJtTGV1b05F?=
+ =?utf-8?B?dzN6Njc0Mlh4czlNdEpnUW9QRFoySzR3Z3VlVEhZTHBmY0E2dS9uSjNuK3R2?=
+ =?utf-8?B?elp0N1BnT2JsQmlUbHNoclI1RXkxUFNzay9oREU2VlFnRzFLNDExQmtzbS9h?=
+ =?utf-8?B?algrNUdiem81S0xzT0gxZHJuRDBkSENMSktmYUlENHBCNHA5UW4yL1czamx1?=
+ =?utf-8?B?TWRpcjZGdVRyVlU5QXFCQU5SSGRUakNXcUhqaWE1c1lzejI4OXBsT3ZNdW13?=
+ =?utf-8?B?RFh6bFhjRkgvek1zaEVTalBHT095SHNweXEyNXBLdGZRMC9nMVhmRlc5bElo?=
+ =?utf-8?B?WEpnZi9oMjBCTFFHY1FNOUhJeGg3RzZqVWFLSFhSbGR4V1JFNmdUOElwUi8y?=
+ =?utf-8?B?eThyVHZZb2dCWE84aXR5aEJ2djBCdnI3bXZMVUZUYkVMUkkvNXRMbGNBQUsv?=
+ =?utf-8?B?UDN0cDNqTitsbFREeGRzZkFNb0laUFZOdkJ4MUNZMWo1MWJrZ29abElKeWJv?=
+ =?utf-8?B?OU1YZXc3UlNBaFl4MmJRbitNUGtsYkhyS241RmtKVHltSWIxUWVOV1BwTjNu?=
+ =?utf-8?B?VTRINWZSenEzTTFINkxrRXQwUUgwVWk4OHo1T3JVUGZMMWpNR00vdkltOTh1?=
+ =?utf-8?B?Y0VsU2FHUzhZTHMvOWkxV0t0d1dNaXlNcmIyMThmL0tOWS8rRWVOWUtpcHBx?=
+ =?utf-8?B?UlBkV3RPZUhZV2xHSEVBQVI1Z3h2dEErQXpRWkpnSjY0Vk4vNE1kcWp1UDBF?=
+ =?utf-8?B?S2hHUVg2RmxaRjNWZ2ZvMUpZWFRYWTFaRTZEZGwrOVFOdFMvTFZYSXhXbGp5?=
+ =?utf-8?B?VXdJWHZxNkdqaTZyR2ZPTzR6NVJOa09VV3dMVjB2UXQ1Y1BENUEzU2xkMW9x?=
+ =?utf-8?B?V1dDOUxjZGQvOVNCQSt6Y25YUnllVGJndEFiM3g0bFFIQjI4eXdGeVU0WDJ3?=
+ =?utf-8?Q?8OIE+Pb8TcZcC5+AspOdKzgaH?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16158bd6-4ea3-4a1b-2897-08db4a5d7ba1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72c3547b-4e02-4193-c445-08db4a5df4ab
 X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 16:02:37.1230
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 May 2023 16:06:00.2022
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yc+jzGlKB1bSX2ogNpfifNSnOnJXSpP64csSRSwc9B9FOf/1XTyd7C6WINkAML7xERGRZ+KubCsXMc9L0uMsoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4422
+X-MS-Exchange-CrossTenant-UserPrincipalName: YnZhiLAAA8a7QT+wVJLRdz1IhYeFu2DZpbwVu7+G9PHAzxMvbOgOoCvWkBRxa9ZAn4l+pAyo9lfou6IqmvIMiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8960
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -140,226 +139,112 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 5/1/23 03:57, Tianyu Lan wrote:
-> From: Ashish Kalra <ashish.kalra@amd.com>
+> From: Tianyu Lan <tiala@microsoft.com>
 > 
-> Add checks in interrupt exit code paths in case of returns
-> to user mode to check if currently executing the #HV handler
-> then don't follow the irqentry_exit_to_user_mode path as
-> that can potentially cause the #HV handler to be
-> preempted and rescheduled on another CPU. Rescheduled #HV
-> handler on another cpu will cause interrupts to be handled
-> on a different cpu than the injected one, causing
-> invalid EOIs and missed/lost guest interrupts and
-> corresponding hangs and/or per-cpu IRQs handled on
-> non-intended cpu.
+> This patchset is to add AMD sev-snp enlightened guest
+> support on hyperv. Hyperv uses Linux direct boot mode
+> to boot up Linux kernel and so it needs to pvalidate
+> system memory by itself.
 > 
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-
-This should be merged into one of the appropriate #HV patches and just add 
-Ashish with a Co-developed-by: tag where appropriate. This would be 
-appropriate as a separate only if discovered after the series was merged.
-
-> ---
-> Change since RFC v3:
->         * Add check of hv_handling_events in the do_exc_hv()
->         	 to avoid nested entry.
-> ---
->   arch/x86/include/asm/idtentry.h | 66 +++++++++++++++++++++++++++++++++
->   arch/x86/kernel/sev.c           | 37 +++++++++++++++++-
->   2 files changed, 102 insertions(+), 1 deletion(-)
+> In hyperv case, there is no boot loader and so cc blob
+> is prepared by hypervisor. In this series, hypervisor
+> set the cc blob address directly into boot parameter
+> of Linux kernel.
 > 
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index b0f3501b2767..415b7e14c227 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -13,6 +13,10 @@
->   
->   #include <asm/irq_stack.h>
->   
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
-> +#endif
-> +
->   /**
->    * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
->    *		      No error code pushed by hardware
-> @@ -176,6 +180,7 @@ __visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
->   #define DECLARE_IDTENTRY_IRQ(vector, func)				\
->   	DECLARE_IDTENTRY_ERRORCODE(vector, func)
->   
-> +#ifndef CONFIG_AMD_MEM_ENCRYPT
->   /**
->    * DEFINE_IDTENTRY_IRQ - Emit code for device interrupt IDT entry points
->    * @func:	Function name of the entry point
-> @@ -205,6 +210,26 @@ __visible noinstr void func(struct pt_regs *regs,			\
->   }									\
->   									\
->   static noinline void __##func(struct pt_regs *regs, u32 vector)
-> +#else
-> +
-> +#define DEFINE_IDTENTRY_IRQ(func)					\
-> +static void __##func(struct pt_regs *regs, u32 vector);		\
-> +									\
-> +__visible noinstr void func(struct pt_regs *regs,			\
-> +			    unsigned long error_code)			\
-> +{									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
-> +	u32 vector = (u32)(u8)error_code;				\
-> +									\
-> +	instrumentation_begin();					\
-> +	kvm_set_cpu_l1tf_flush_l1d();					\
-> +	run_irq_on_irqstack_cond(__##func, regs, vector);		\
-> +	instrumentation_end();						\
-> +	irqentry_exit_hv_cond(regs, state);				\
-> +}									\
-> +									\
-> +static noinline void __##func(struct pt_regs *regs, u32 vector)
-> +#endif
+> Shared memory between guests and hypervisor should be
+> decrypted and zero memory after decrypt memory. The data
+> in the target address. It maybe smearedto avoid smearing
+> data.
+> 
+> Introduce #HV exception support in AMD sev snp code and
+> #HV handler.
 
-This seems like a lot of code duplication. Can't the difference (which is 
-the call to irqentry_exit() vs irqentry_exit_hv_cond() be #ifdef'd in the 
-current defintion?
-
-Ditto for the changes below, too?
+For bisectability, shouldn't the #HV patches be in place before the 
+enlightened SNP support is added, e.g., AP's are launched with the 
+restricted injection enabled (even though the BSP will also have that), so 
+that things don't crash right away?
 
 Thanks,
 Tom
 
->   
->   /**
->    * DECLARE_IDTENTRY_SYSVEC - Declare functions for system vector entry points
-> @@ -221,6 +246,7 @@ static noinline void __##func(struct pt_regs *regs, u32 vector)
->   #define DECLARE_IDTENTRY_SYSVEC(vector, func)				\
->   	DECLARE_IDTENTRY(vector, func)
->   
-> +#ifndef CONFIG_AMD_MEM_ENCRYPT
->   /**
->    * DEFINE_IDTENTRY_SYSVEC - Emit code for system vector IDT entry points
->    * @func:	Function name of the entry point
-> @@ -245,6 +271,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
->   }									\
->   									\
->   static noinline void __##func(struct pt_regs *regs)
-> +#else
-> +
-> +#define DEFINE_IDTENTRY_SYSVEC(func)					\
-> +static void __##func(struct pt_regs *regs);				\
-> +									\
-> +__visible noinstr void func(struct pt_regs *regs)			\
-> +{									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
-> +									\
-> +	instrumentation_begin();					\
-> +	kvm_set_cpu_l1tf_flush_l1d();					\
-> +	run_sysvec_on_irqstack_cond(__##func, regs);			\
-> +	instrumentation_end();						\
-> +	irqentry_exit_hv_cond(regs, state);				\
-> +}									\
-> +									\
-> +static noinline void __##func(struct pt_regs *regs)
-> +#endif
-> +
-> +#ifndef CONFIG_AMD_MEM_ENCRYPT
->   
->   /**
->    * DEFINE_IDTENTRY_SYSVEC_SIMPLE - Emit code for simple system vector IDT
-> @@ -274,6 +320,26 @@ __visible noinstr void func(struct pt_regs *regs)			\
->   }									\
->   									\
->   static __always_inline void __##func(struct pt_regs *regs)
-> +#else
-> +
-> +#define DEFINE_IDTENTRY_SYSVEC_SIMPLE(func)				\
-> +static __always_inline void __##func(struct pt_regs *regs);		\
-> +									\
-> +__visible noinstr void func(struct pt_regs *regs)			\
-> +{									\
-> +	irqentry_state_t state = irqentry_enter(regs);			\
-> +									\
-> +	instrumentation_begin();					\
-> +	__irq_enter_raw();						\
-> +	kvm_set_cpu_l1tf_flush_l1d();					\
-> +	__##func(regs);						\
-> +	__irq_exit_raw();						\
-> +	instrumentation_end();						\
-> +	irqentry_exit_hv_cond(regs, state);				\
-> +}									\
-> +									\
-> +static __always_inline void __##func(struct pt_regs *regs)
-> +#endif
->   
->   /**
->    * DECLARE_IDTENTRY_XENCB - Declare functions for XEN HV callback entry point
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index b6becf158598..69b55075ddfe 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -149,6 +149,10 @@ struct sev_hv_doorbell_page {
->   
->   struct sev_snp_runtime_data {
->   	struct sev_hv_doorbell_page hv_doorbell_page;
-> +	/*
-> +	 * Indication that we are currently handling #HV events.
-> +	 */
-> +	bool hv_handling_events;
->   };
->   
->   static DEFINE_PER_CPU(struct sev_snp_runtime_data*, snp_runtime_data);
-> @@ -204,6 +208,12 @@ static void do_exc_hv(struct pt_regs *regs)
->   {
->   	union hv_pending_events pending_events;
->   
-> +	/* Avoid nested entry. */
-> +	if (this_cpu_read(snp_runtime_data)->hv_handling_events)
-> +		return;
-> +
-> +	this_cpu_read(snp_runtime_data)->hv_handling_events = true;
-> +
->   	while (sev_hv_pending()) {
->   		pending_events.events = xchg(
->   			&sev_snp_current_doorbell_page()->pending_events.events,
-> @@ -218,7 +228,7 @@ static void do_exc_hv(struct pt_regs *regs)
->   #endif
->   
->   		if (!pending_events.vector)
-> -			return;
-> +			goto out;
->   
->   		if (pending_events.vector < FIRST_EXTERNAL_VECTOR) {
->   			/* Exception vectors */
-> @@ -238,6 +248,9 @@ static void do_exc_hv(struct pt_regs *regs)
->   			common_interrupt(regs, pending_events.vector);
->   		}
->   	}
-> +
-> +out:
-> +	this_cpu_read(snp_runtime_data)->hv_handling_events = false;
->   }
->   
->   static __always_inline bool on_vc_stack(struct pt_regs *regs)
-> @@ -2542,3 +2555,25 @@ static int __init snp_init_platform_device(void)
->   	return 0;
->   }
->   device_initcall(snp_init_platform_device);
-> +
-> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state)
-> +{
-> +	/*
-> +	 * Check whether this returns to user mode, if so and if
-> +	 * we are currently executing the #HV handler then we don't
-> +	 * want to follow the irqentry_exit_to_user_mode path as
-> +	 * that can potentially cause the #HV handler to be
-> +	 * preempted and rescheduled on another CPU. Rescheduled #HV
-> +	 * handler on another cpu will cause interrupts to be handled
-> +	 * on a different cpu than the injected one, causing
-> +	 * invalid EOIs and missed/lost guest interrupts and
-> +	 * corresponding hangs and/or per-cpu IRQs handled on
-> +	 * non-intended cpu.
-> +	 */
-> +	if (user_mode(regs) &&
-> +	    this_cpu_read(snp_runtime_data)->hv_handling_events)
-> +		return;
-> +
-> +	/* follow normal interrupt return/exit path */
-> +	irqentry_exit(regs, state);
-> +}
+> 
+> Change since v4:
+>         - Use pgcount to free intput arg page.
+>         - Fix encrypt and free page order.
+>         - struct_size to calculate array size
+>         - Share asm code between #HV and #VC exception.
+> 
+> Change since v3:
+>         - Replace struct sev_es_save_area with struct vmcb_save_area
+>         - Move smp, cpu and memory enumerating code from mshyperv.c to ivm.c
+>         - Handle nested entry case of do_exc_hv() case.
+>         - Check NMI event when irq is disabled
+> 
+> Change since v2:
+>         - Remove validate kernel memory code at boot stage
+>         - Split #HV page patch into two parts
+>         - Remove HV-APIC change due to enable x2apic from
+>         	 host side
+>         - Rework vmbus code to handle error of decrypt page
+>         - Spilt memory and cpu initialization patch.
+> Change since v1:
+>         - Remove boot param changes for cc blob address and
+>         use setup head to pass cc blob info
+>         - Remove unnessary WARN and BUG check
+>         - Add system vector table map in the #HV exception
+>         - Fix interrupt exit issue when use #HV exception
+> 
+> Ashish Kalra (2):
+>    x86/sev: optimize system vector processing invoked from #HV exception
+>    x86/sev: Fix interrupt exit code paths from #HV exception
+> 
+> Tianyu Lan (13):
+>    x86/hyperv: Add sev-snp enlightened guest static key
+>    x86/hyperv: Decrypt hv vp assist page in sev-snp enlightened guest
+>    x86/hyperv: Set Virtual Trust Level in VMBus init message
+>    x86/hyperv: Use vmmcall to implement Hyper-V hypercall in sev-snp
+>      enlightened guest
+>    clocksource/drivers/hyper-v: decrypt hyperv tsc page in sev-snp
+>      enlightened guest
+>    hv: vmbus: decrypt VMBus pages for sev-snp enlightened guest
+>    drivers: hv: Decrypt percpu hvcall input arg page in sev-snp
+>      enlightened guest
+>    x86/hyperv: Initialize cpu and memory for sev-snp enlightened guest
+>    x86/hyperv: Add smp support for sev-snp guest
+>    x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
+>    x86/sev: Add a #HV exception handler
+>    x86/sev: Add Check of #HV event in path
+>    x86/sev: Add AMD sev-snp enlightened guest support on hyperv
+> 
+>   arch/x86/entry/entry_64.S             |  46 ++-
+>   arch/x86/hyperv/hv_init.c             |  42 +++
+>   arch/x86/hyperv/ivm.c                 | 186 ++++++++++++
+>   arch/x86/include/asm/cpu_entry_area.h |   6 +
+>   arch/x86/include/asm/hyperv-tlfs.h    |   7 +
+>   arch/x86/include/asm/idtentry.h       | 106 ++++++-
+>   arch/x86/include/asm/irqflags.h       |  14 +-
+>   arch/x86/include/asm/mem_encrypt.h    |   2 +
+>   arch/x86/include/asm/mshyperv.h       |  82 +++++-
+>   arch/x86/include/asm/page_64_types.h  |   1 +
+>   arch/x86/include/asm/sev.h            |  13 +
+>   arch/x86/include/asm/svm.h            |  15 +-
+>   arch/x86/include/asm/trapnr.h         |   1 +
+>   arch/x86/include/asm/traps.h          |   1 +
+>   arch/x86/include/uapi/asm/svm.h       |   4 +
+>   arch/x86/kernel/cpu/common.c          |   1 +
+>   arch/x86/kernel/cpu/mshyperv.c        |  42 ++-
+>   arch/x86/kernel/dumpstack_64.c        |   9 +-
+>   arch/x86/kernel/idt.c                 |   1 +
+>   arch/x86/kernel/sev.c                 | 408 ++++++++++++++++++++++----
+>   arch/x86/kernel/traps.c               |  42 +++
+>   arch/x86/kernel/vmlinux.lds.S         |   7 +
+>   arch/x86/mm/cpu_entry_area.c          |   2 +
+>   drivers/clocksource/hyperv_timer.c    |   2 +-
+>   drivers/hv/connection.c               |   1 +
+>   drivers/hv/hv.c                       |  41 ++-
+>   drivers/hv/hv_common.c                |  27 +-
+>   include/asm-generic/hyperv-tlfs.h     |  19 ++
+>   include/asm-generic/mshyperv.h        |   1 +
+>   include/linux/hyperv.h                |   4 +-
+>   30 files changed, 1047 insertions(+), 86 deletions(-)
+> 
