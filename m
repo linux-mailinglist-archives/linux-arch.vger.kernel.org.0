@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDE06F4413
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 14:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE346F443A
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 14:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbjEBMrn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 08:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        id S234248AbjEBMug (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 08:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEBMrm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 08:47:42 -0400
-X-Greylist: delayed 597 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 05:47:40 PDT
+        with ESMTP id S234164AbjEBMuf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 08:50:35 -0400
+X-Greylist: delayed 161 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 02 May 2023 05:50:21 PDT
 Received: from bee.tesarici.cz (bee.tesarici.cz [IPv6:2a03:3b40:fe:2d4::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F76A3;
-        Tue,  2 May 2023 05:47:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4AC59E7;
+        Tue,  2 May 2023 05:50:20 -0700 (PDT)
 Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id 2CF8014D08D;
-        Tue,  2 May 2023 14:37:38 +0200 (CEST)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 11C1F14D391;
+        Tue,  2 May 2023 14:50:16 +0200 (CEST)
 Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1683031059; bh=Qr2tHIsVv3G7WfyCHA01MAqL8W2MA7ATI0zo3p6+vZU=;
+        t=1683031817; bh=7Jx1V6HXo4qXXJ5gzNb9WgNbQl2iBAjQx92+mbN9mcI=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IfEosdQDdG0KdbWIE2Mw4kYzXULwRWeCrunMA9KeSj7bgHgVvejlazncQaRUsj4mk
-         cPzKmfMyWBF/pneu0+Wz1Tc79OAteXzmBVIF+laGLG7fMedy5/+rKBRUG4JXa0brek
-         j/mHCba0NDf+g5QrNCJ9oA++o7fZWNj5XJR8Ww/uOsU1/r1cRL+Ym3szeVpEkot+SQ
-         CPmLY5/NwlfZlklEXZtJMyzmEttSqfpVGGYiYbY1oZJU5at7AavuZZVsxFPid36vj1
-         A5riKtEpBa2mW2yWvT3lFoq/3exjrCXn7nmPFY3STEqu5coB+Uro028za0ObQL3JYi
-         4+VPt2d2SqCBg==
-Date:   Tue, 2 May 2023 14:37:37 +0200
+        b=LdYat1pxvtqHcsyEsr0xSmJ80I9UQQAdwuWNsIlmRhcDv+RP+JqFNQRT+nYc9G7uP
+         dXPpgO79Zyo5DI2T6iRH+RieaWMoILvCo+t0ga1IpmjPazX2dudxt9IHa/Q1eVW8Rh
+         npJAxuinpIG3jaAdl3urTCU5KvJB8xckJUgufKO4oRJxNsCTGApQSCpiehfAf9XW2g
+         55qZn04dxosxPP6JwtR/XcAxhlpiWK6SFfOBMCcvmnxf+hMduxm0neIM19D6X3o7mp
+         /hFiYxv9D35v34aGYGGZPSYkcyumwUEB7pS25ZX4SffsQ4FOhXKIFk8+GhJJd8+bil
+         9cEFx4TVmGUMg==
+Date:   Tue, 2 May 2023 14:50:14 +0200
 From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
 To:     Suren Baghdasaryan <surenb@google.com>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
@@ -61,11 +61,12 @@ Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 06/40] lib/string.c: strsep_no_empty()
-Message-ID: <20230502143737.1e11f1ac@meshulam.tesarici.cz>
-In-Reply-To: <20230501165450.15352-7-surenb@google.com>
+Subject: Re: [PATCH 09/40] mm: introduce __GFP_NO_OBJ_EXT flag to
+ selectively prevent slabobj_ext creation
+Message-ID: <20230502145014.24b28e64@meshulam.tesarici.cz>
+In-Reply-To: <20230501165450.15352-10-surenb@google.com>
 References: <20230501165450.15352-1-surenb@google.com>
-        <20230501165450.15352-7-surenb@google.com>
+        <20230501165450.15352-10-surenb@google.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -79,44 +80,68 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon,  1 May 2023 09:54:16 -0700
+On Mon,  1 May 2023 09:54:19 -0700
 Suren Baghdasaryan <surenb@google.com> wrote:
 
-> From: Kent Overstreet <kent.overstreet@linux.dev>
+> Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocations
+> when allocating slabobj_ext on a slab.
 > 
-> This adds a new helper which is like strsep, except that it skips empty
-> tokens.
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 > ---
->  include/linux/string.h |  1 +
->  lib/string.c           | 19 +++++++++++++++++++
->  2 files changed, 20 insertions(+)
+>  include/linux/gfp_types.h | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/string.h b/include/linux/string.h
-> index c062c581a98b..6cd5451c262c 100644
-> --- a/include/linux/string.h
-> +++ b/include/linux/string.h
-> @@ -96,6 +96,7 @@ extern char * strpbrk(const char *,const char *);
->  #ifndef __HAVE_ARCH_STRSEP
->  extern char * strsep(char **,const char *);
+> diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> index 6583a58670c5..aab1959130f9 100644
+> --- a/include/linux/gfp_types.h
+> +++ b/include/linux/gfp_types.h
+> @@ -53,8 +53,13 @@ typedef unsigned int __bitwise gfp_t;
+>  #define ___GFP_SKIP_ZERO	0
+>  #define ___GFP_SKIP_KASAN	0
 >  #endif
-> +extern char *strsep_no_empty(char **, const char *);
->  #ifndef __HAVE_ARCH_STRSPN
->  extern __kernel_size_t strspn(const char *,const char *);
+> +#ifdef CONFIG_SLAB_OBJ_EXT
+> +#define ___GFP_NO_OBJ_EXT       0x4000000u
+> +#else
+> +#define ___GFP_NO_OBJ_EXT       0
+> +#endif
+>  #ifdef CONFIG_LOCKDEP
+> -#define ___GFP_NOLOCKDEP	0x4000000u
+> +#define ___GFP_NOLOCKDEP	0x8000000u
+
+So now we have two flags that depend on config options, but the first
+one is always allocated in fact. I wonder if you could use an enum to
+let the compiler allocate bits. Something similar to what Muchun Song
+did with section flags.
+
+See commit ed7802dd48f7a507213cbb95bb4c6f1fe134eb5d for reference.
+
+>  #else
+>  #define ___GFP_NOLOCKDEP	0
 >  #endif
-> diff --git a/lib/string.c b/lib/string.c
-> index 3d55ef890106..dd4914baf45a 100644
-> --- a/lib/string.c
-> +++ b/lib/string.c
-> @@ -520,6 +520,25 @@ char *strsep(char **s, const char *ct)
->  EXPORT_SYMBOL(strsep);
->  #endif
+> @@ -99,12 +104,15 @@ typedef unsigned int __bitwise gfp_t;
+>   * node with no fallbacks or placement policy enforcements.
+>   *
+>   * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
+> + *
+> + * %__GFP_NO_OBJ_EXT causes slab allocation to have no object
+> extension. */
+>  #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+>  #define __GFP_WRITE	((__force gfp_t)___GFP_WRITE)
+>  #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+>  #define __GFP_THISNODE	((__force gfp_t)___GFP_THISNODE)
+>  #define __GFP_ACCOUNT	((__force gfp_t)___GFP_ACCOUNT)
+> +#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
 >  
-> +/**
-> + * strsep_no_empt - Split a string into tokens, but don't return empty tokens
-                ^^^^
-Typo: strsep_no_empty
+>  /**
+>   * DOC: Watermark modifiers
+> @@ -249,7 +257,7 @@ typedef unsigned int __bitwise gfp_t;
+>  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+>  
+>  /* Room for N __GFP_FOO bits */
+> -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+> +#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
+
+If the above suggestion is implemented, this could be changed to
+something like __GFP_LAST_BIT (the enum's last identifier).
 
 Petr T
