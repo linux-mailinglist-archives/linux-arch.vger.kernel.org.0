@@ -2,114 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B066F4AA2
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 21:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7416F4AB0
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 21:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjEBTyi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 15:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S229738AbjEBT6L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 15:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjEBTyi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 15:54:38 -0400
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA42019B3
-        for <linux-arch@vger.kernel.org>; Tue,  2 May 2023 12:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=w8AYFc45O0NSET2uKXuZttSIHO5lI9T1X8bLU49ivoE=;
-        b=kInIw482HDfm6bpoAz1sLMDMLP3rOIWNjuMerayf0RvX4o3BuEimQ3bxRyGbsxcPj19euojDP5y4e
-         Z/JS3LV4PcZPRg4llnFz7WOs7qYBOlWL9Qf1JOf7n6zwdAYH4X7tMXg/6lWf4i+0yy8oczAga7SZVc
-         BtQ/fUaOxi2SuFKuF3gv/SCPYAX4AKaifz3JHL7M4lvV31utXuXH890fO8n+9P8Ao0Mqy845bRh15e
-         aA3ka1TvnQRm1gh6VorcOUp9qudNzF86fqTll2cC6eRr7owW+f28KAr5tMS3vAtLDHf4hmoBC9ITSv
-         rzSnX266wUy3E2fdGJyKO9JjLxQLpkQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=w8AYFc45O0NSET2uKXuZttSIHO5lI9T1X8bLU49ivoE=;
-        b=C1LvBG55q+HMla4pI7wcdYeyi9TR37VaVBIFhPId1l2slSful+bcYpB9k+shRarpk0DSh6j/kaMLO
-         A51lTJFCg==
-X-HalOne-ID: 2612f7da-e923-11ed-94d1-99461c6a3fe8
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id 2612f7da-e923-11ed-94d1-99461c6a3fe8;
-        Tue, 02 May 2023 19:54:30 +0000 (UTC)
-Date:   Tue, 2 May 2023 21:54:29 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
-Message-ID: <20230502195429.GA319489@ravnborg.org>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-5-tzimmermann@suse.de>
+        with ESMTP id S229729AbjEBT6J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 15:58:09 -0400
+Received: from out-49.mta1.migadu.com (out-49.mta1.migadu.com [95.215.58.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B819E1BFA
+        for <linux-arch@vger.kernel.org>; Tue,  2 May 2023 12:58:06 -0700 (PDT)
+Date:   Tue, 2 May 2023 15:57:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683057484;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bbTqJ6Cy48RWo6Tz/tI7JJZLpQOgd1GnXsK6J+pb2Po=;
+        b=TPEXvTAZj7eMMlezn0mxuUI2XEAYSmuur8j15Vhz2aAoEuxaC8gwe/DdLVCUdzI8I+L6aU
+        DEG5XTP5rhYFuMy34wKLVWK/nyN2iMJiF2WhtVwQS5E54+cSGLx6PlY24qgxqRCabxvnfl
+        6yoheYQVL8RgpgGG5HowroFYWwjIS0M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 03/40] fs: Convert alloc_inode_sb() to a macro
+Message-ID: <ZFFrP8WKRFgZRzoB@moria.home.lan>
+References: <20230501165450.15352-1-surenb@google.com>
+ <20230501165450.15352-4-surenb@google.com>
+ <20230502143530.1586e287@meshulam.tesarici.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230502130223.14719-5-tzimmermann@suse.de>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230502143530.1586e287@meshulam.tesarici.cz>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Thomas,
-
-On Tue, May 02, 2023 at 03:02:21PM +0200, Thomas Zimmermann wrote:
-> Fbdev's main header file, <linux/fb.h>, includes <asm/io.h> to get
-> declarations for I/O helper functions. From these declarations, it
-> later defines framebuffer I/O helpers, such as fb_{read,write}[bwlq]()
-> or fb_memset().
+On Tue, May 02, 2023 at 02:35:30PM +0200, Petr Tesařík wrote:
+> On Mon,  1 May 2023 09:54:13 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
 > 
-> The framebuffer I/O helpers depend on the system architecture and
-> will therefore be moved into <asm/fb.h>. Prepare this change by first
-> adding an include statement for <linux/io.h> to <asm-generic/fb.h>.
-> Include <asm/fb.h> in all source files that use the framebuffer I/O
-> helpers, so that they still get the necessary I/O functions.
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > 
+> > We're introducing alloc tagging, which tracks memory allocations by
+> > callsite. Converting alloc_inode_sb() to a macro means allocations will
+> > be tracked by its caller, which is a bit more useful.
+> > 
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> > ---
+> >  include/linux/fs.h | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+> > 
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index 21a981680856..4905ce14db0b 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -2699,11 +2699,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
+> >   * This must be used for allocating filesystems specific inodes to set
+> >   * up the inode reclaim context correctly.
+> >   */
+> > -static inline void *
+> > -alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
+> > -{
+> > -	return kmem_cache_alloc_lru(cache, &sb->s_inode_lru, gfp);
+> > -}
+> > +#define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
 > 
-...
-> 
-> diff --git a/drivers/video/fbdev/arkfb.c b/drivers/video/fbdev/arkfb.c
-> index 60a96fdb5dd8..fd38e8a073b8 100644
-> --- a/drivers/video/fbdev/arkfb.c
-> +++ b/drivers/video/fbdev/arkfb.c
-> @@ -27,6 +27,8 @@
->  #include <linux/console.h> /* Why should fb driver call console functions? because console_lock() */
->  #include <video/vga.h>
->  
-> +#include <asm/fb.h>
+> Honestly, I don't like this change. In general, pre-processor macros
+> are ugly and error-prone.
 
-When we have a header like linux/fb.h - it is my understanding that it is
-preferred to include that file, and not the asm/fb.h variant.
+It's a one line macro, it's fine.
 
-This is assuming the linux/fb.h contains the generic stuff, and includes
-asm/fb.h for the architecture specific parts.
+> Besides, it works for you only because __kmem_cache_alloc_lru() is
+> declared __always_inline (unless CONFIG_SLUB_TINY is defined, but then
+> you probably don't want the tracking either). In any case, it's going
+> to be difficult for people to understand why and how this works.
 
-So drivers will include linux/fb.h and then they automatically get the
-architecture specific parts from asm/fb.h.
+I think you must be confused. kmem_cache_alloc_lru() is a macro, and we
+need that macro to be expanded at the alloc_inode_sb() callsite. It's
+got nothing to do with whether or not __kmem_cache_alloc_lru() is inline
+or not.
 
-In other words, drivers are not supposed to include asm/fb.h, if
-linux.fb.h exists - and linux/fb.h shall include the asm/fb.h.
+> If the actual caller of alloc_inode_sb() is needed, I'd rather add it
+> as a parameter and pass down _RET_IP_ explicitly here.
 
-If the above holds true, then it is wrong and not needed to add asm/fb.h
-as seen above.
-
-
-There are countless examples where the above are not followed,
-but to my best understanding the above it the preferred way to do it.
-
-	Sam
+That approach was considered, but adding an ip parameter to every memory
+allocation function would've been far more churn.
