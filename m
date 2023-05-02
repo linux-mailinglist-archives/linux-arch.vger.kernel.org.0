@@ -2,257 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6944E6F4480
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 15:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B2D6F455D
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 15:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234228AbjEBNDC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 09:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S234524AbjEBNnS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 09:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234294AbjEBNCi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 09:02:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9836C5B8E;
-        Tue,  2 May 2023 06:02:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4AFB321FD9;
-        Tue,  2 May 2023 13:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683032548; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V5smhVNnov7m4A55DYdhwmZ5Y9gsYQLIUAvwyfQy1iw=;
-        b=YgAQQGGhS9p5y+Qswq2XdSC0Nb5dRapZC8k3SeCH8ou3A7cBdpeF9R1VcV/D98SVwf2rqe
-        0/HTdmP3C415eNlicuQLimYKjbyJJmXE/+RevYro6XFUrrADggGk+JzkjCj37yrvnbcWUc
-        CPnxgHuTmqGD/7I9ChAO48pm4esmuco=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683032548;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V5smhVNnov7m4A55DYdhwmZ5Y9gsYQLIUAvwyfQy1iw=;
-        b=V6uRErJzJdt0ssGWz2NlWwz2l3uwbLi85IInTKe1+Lc39r1ohNgsoEqJ7rVGTetXUVCdaL
-        Bwkd9zjgj4ixg2AQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFF23134FB;
-        Tue,  2 May 2023 13:02:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8NHLNeMJUWRYTQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 02 May 2023 13:02:27 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
-        sam@ravnborg.org
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 6/6] fbdev: Rename fb_mem*() helpers
-Date:   Tue,  2 May 2023 15:02:23 +0200
-Message-Id: <20230502130223.14719-7-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230502130223.14719-1-tzimmermann@suse.de>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
+        with ESMTP id S234513AbjEBNmw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 09:42:52 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D056A53;
+        Tue,  2 May 2023 06:42:19 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Dd5mD007993;
+        Tue, 2 May 2023 13:41:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=iFaCTqGqZoIlS2U6AthjISaQLDuN0XAiJI4clbfAzlE=;
+ b=l8hYwA+trtcflDmakAhIsZFuk9aqqnBPrEWz8W1ep2AW92SdO3gD0J1z4TXLlAjLZBcY
+ 8QXFM2eUV5ZHF7+uSQz+hjI2e3f5EiYVHuVk0QV+tiAyqjCqpwMnCZUqqcsisnYcj2Rf
+ 6J3j6MeSY94yJ16JD6nn2MsiNDARTCtfvgWJf7DA4HvgK2FPM5WXPsnUVUVuUxjK7Rqq
+ uWUMHRbNlt/n0W0SzA+0pR93Wy0TJVglY/FY4mXItDk/sADLlMccgtvqTs7a8uRTfYHv
+ PkFreOvXw984+0XwQNL43pVTv75DUwolXuXeli0hu6af3vVsJOSUuQmodnIWjQHuTKj1 Sw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3y1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:41:06 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DdT5Y009271;
+        Tue, 2 May 2023 13:41:06 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3rq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:41:05 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3428snLY031369;
+        Tue, 2 May 2023 13:40:51 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3q8tv6sb2q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 02 May 2023 13:40:51 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Dendi20316836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 May 2023 13:40:49 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 073562004B;
+        Tue,  2 May 2023 13:40:49 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 374F620049;
+        Tue,  2 May 2023 13:40:48 +0000 (GMT)
+Received: from [9.171.18.35] (unknown [9.171.18.35])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  2 May 2023 13:40:48 +0000 (GMT)
+Message-ID: <e9fb74a702bb304757fea84a978704de62df666d.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 21/38] parport: PC style parport depends on HAS_IOPORT
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 02 May 2023 15:40:47 +0200
+In-Reply-To: <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-22-schnelle@linux.ibm.com>
+         <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: HD0fEbiuVhUrxQBye-iKHLFIye-5M8Ii
+X-Proofpoint-GUID: seYpEKnBqUk9_qmLztdg5NtiD5KP2qO8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 spamscore=0 mlxscore=0 clxscore=1015 bulkscore=0
+ suspectscore=0 mlxlogscore=297 impostorscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305020115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Update the names of the fb_mem*() helpers to be consistent with their
-regular counterparts. Hence, fb_memset() now becomes fb_memset_io(),
-fb_memcpy_fromfb() now becomes fb_memcpy_fromio() and fb_memcpy_tofb()
-becomes fb_memcpy_toio(). No functional changes.
+On Tue, 2023-03-14 at 15:12 +0100, Arnd Bergmann wrote:
+> > On Tue, Mar 14, 2023, at 13:11, Niklas Schnelle wrote:
+> > > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and fr=
+iends
+> > > > not being declared. As PC style parport uses these functions we nee=
+d to
+> > > > handle this dependency.
+> > > >=20
+> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> >=20
+> > > >=20
+> > > >  menuconfig PARPORT
+> > > >  	tristate "Parallel port support"
+> > > > -	depends on HAS_IOMEM
+> >=20
+> > I would leave this dependency, or maybe make it 'HAS_IOMEM || HAS_IOPOR=
+T'.
+> > at least the parport_atari driver uses MMIO instead of PIO.
+> >=20
+> > > >  	help
+> > > >  	  If you want to use devices connected to your machine's parallel=
+ port
+> > > >  	  (the connector at the computer with 25 holes), e.g. printer, ZI=
+P
+> > > > @@ -42,7 +41,8 @@ if PARPORT
+> > > >=20
+> > > >  config PARPORT_PC
+> > > >  	tristate "PC-style hardware"
+> > > > -	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
+> > > > +	depends on ARCH_MIGHT_HAVE_PC_PARPORT
+> > > > +	depends on HAS_IOPORT
+> > > >  	help
+> > > >  	  You should say Y here if you have a PC-style parallel port. All
+> > > >  	  IBM PC compatible computers and some Alphas have PC-style
+> >=20
+> > This would revert 66bcd06099bb ("parport_pc: Also enable driver for
+> > PCI systems"), so I think this is wrong. You can drop the !S390
+> > by adding HAS_IOPORT as a dependency, but the other line should still
+> > be=20
+> >=20
+> >        depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
+> >    =20
+> >=20
+> >     Arnd
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
----
- drivers/video/fbdev/aty/mach64_cursor.c |  2 +-
- drivers/video/fbdev/chipsfb.c           |  2 +-
- drivers/video/fbdev/core/fbmem.c        |  4 ++--
- drivers/video/fbdev/kyro/fbdev.c        |  2 +-
- drivers/video/fbdev/pvr2fb.c            |  2 +-
- drivers/video/fbdev/sstfb.c             |  2 +-
- drivers/video/fbdev/stifb.c             |  4 ++--
- drivers/video/fbdev/tdfxfb.c            |  2 +-
- include/asm-generic/fb.h                | 16 ++++++++--------
- 9 files changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/video/fbdev/aty/mach64_cursor.c b/drivers/video/fbdev/aty/mach64_cursor.c
-index a848aaff510c..6adbcf366a98 100644
---- a/drivers/video/fbdev/aty/mach64_cursor.c
-+++ b/drivers/video/fbdev/aty/mach64_cursor.c
-@@ -153,7 +153,7 @@ static int atyfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
- 	    u8 m, b;
- 
- 	    // Clear cursor image with 1010101010...
--	    fb_memset(dst, 0xaa, 1024);
-+	    fb_memset_io(dst, 0xaa, 1024);
- 
- 	    offset = align - width*2;
- 
-diff --git a/drivers/video/fbdev/chipsfb.c b/drivers/video/fbdev/chipsfb.c
-index 9f9ee13ba2be..297ca6eeac1e 100644
---- a/drivers/video/fbdev/chipsfb.c
-+++ b/drivers/video/fbdev/chipsfb.c
-@@ -333,7 +333,7 @@ static const struct fb_var_screeninfo chipsfb_var = {
- 
- static void init_chips(struct fb_info *p, unsigned long addr)
- {
--	fb_memset(p->screen_base, 0, 0x100000);
-+	fb_memset_io(p->screen_base, 0, 0x100000);
- 
- 	p->fix = chipsfb_fix;
- 	p->fix.smem_start = addr;
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 3fd95a79e4c3..a696399f2160 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -804,7 +804,7 @@ fb_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
- 	while (count) {
- 		c  = (count > PAGE_SIZE) ? PAGE_SIZE : count;
- 		dst = buffer;
--		fb_memcpy_fromfb(dst, src, c);
-+		fb_memcpy_fromio(dst, src, c);
- 		dst += c;
- 		src += c;
- 
-@@ -881,7 +881,7 @@ fb_write(struct file *file, const char __user *buf, size_t count, loff_t *ppos)
- 			break;
- 		}
- 
--		fb_memcpy_tofb(dst, src, c);
-+		fb_memcpy_toio(dst, src, c);
- 		dst += c;
- 		src += c;
- 		*ppos += c;
-diff --git a/drivers/video/fbdev/kyro/fbdev.c b/drivers/video/fbdev/kyro/fbdev.c
-index 8b6c3318bf8c..59a6b71fba44 100644
---- a/drivers/video/fbdev/kyro/fbdev.c
-+++ b/drivers/video/fbdev/kyro/fbdev.c
-@@ -738,7 +738,7 @@ static int kyrofb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 			       info->var.bits_per_pixel);
- 	size *= info->var.yres_virtual;
- 
--	fb_memset(info->screen_base, 0, size);
-+	fb_memset_io(info->screen_base, 0, size);
- 
- 	if (register_framebuffer(info) < 0)
- 		goto out_unmap;
-diff --git a/drivers/video/fbdev/pvr2fb.c b/drivers/video/fbdev/pvr2fb.c
-index 1dfb75b15eea..5f85207e91f7 100644
---- a/drivers/video/fbdev/pvr2fb.c
-+++ b/drivers/video/fbdev/pvr2fb.c
-@@ -800,7 +800,7 @@ static int __maybe_unused pvr2fb_common_init(void)
- 		goto out_err;
- 	}
- 
--	fb_memset(fb_info->screen_base, 0, pvr2_fix.smem_len);
-+	fb_memset_io(fb_info->screen_base, 0, pvr2_fix.smem_len);
- 
- 	pvr2_fix.ypanstep	= nopan  ? 0 : 1;
- 	pvr2_fix.ywrapstep	= nowrap ? 0 : 1;
-diff --git a/drivers/video/fbdev/sstfb.c b/drivers/video/fbdev/sstfb.c
-index 1ee4bea467b4..327831b64b85 100644
---- a/drivers/video/fbdev/sstfb.c
-+++ b/drivers/video/fbdev/sstfb.c
-@@ -335,7 +335,7 @@ static int sst_calc_pll(const int freq, int *freq_out, struct pll_timing *t)
- static void sstfb_clear_screen(struct fb_info *info)
- {
- 	/* clear screen */
--	fb_memset(info->screen_base, 0, info->fix.smem_len);
-+	fb_memset_io(info->screen_base, 0, info->fix.smem_len);
- }
- 
- 
-diff --git a/drivers/video/fbdev/stifb.c b/drivers/video/fbdev/stifb.c
-index a3b837a5fb81..93107909155a 100644
---- a/drivers/video/fbdev/stifb.c
-+++ b/drivers/video/fbdev/stifb.c
-@@ -529,8 +529,8 @@ rattlerSetupPlanes(struct stifb_info *fb)
- 	fb->id = saved_id;
- 
- 	for (y = 0; y < fb->info.var.yres; ++y)
--		fb_memset(fb->info.screen_base + y * fb->info.fix.line_length,
--			0xff, fb->info.var.xres * fb->info.var.bits_per_pixel/8);
-+		fb_memset_io(fb->info.screen_base + y * fb->info.fix.line_length,
-+			     0xff, fb->info.var.xres * fb->info.var.bits_per_pixel/8);
- 
- 	CRX24_SET_OVLY_MASK(fb);
- 	SETUP_FB(fb);
-diff --git a/drivers/video/fbdev/tdfxfb.c b/drivers/video/fbdev/tdfxfb.c
-index 5ed8f670f51c..bc8108396c22 100644
---- a/drivers/video/fbdev/tdfxfb.c
-+++ b/drivers/video/fbdev/tdfxfb.c
-@@ -1117,7 +1117,7 @@ static int tdfxfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
- 		u8 *mask = (u8 *)cursor->mask;
- 		int i;
- 
--		fb_memset(cursorbase, 0, 1024);
-+		fb_memset_io(cursorbase, 0, 1024);
- 
- 		for (i = 0; i < cursor->image.height; i++) {
- 			int h = 0;
-diff --git a/include/asm-generic/fb.h b/include/asm-generic/fb.h
-index 0540eccdbeca..bb7ee9c70e60 100644
---- a/include/asm-generic/fb.h
-+++ b/include/asm-generic/fb.h
-@@ -108,28 +108,28 @@ static inline void fb_writeq(u64 b, volatile void __iomem *addr)
- #endif
- #endif
- 
--#ifndef fb_memcpy_fromfb
--static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+#ifndef fb_memcpy_fromio
-+static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	memcpy_fromio(to, from, n);
- }
--#define fb_memcpy_fromfb fb_memcpy_fromfb
-+#define fb_memcpy_fromio fb_memcpy_fromio
- #endif
- 
--#ifndef fb_memcpy_tofb
--static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+#ifndef fb_memcpy_toio
-+static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	memcpy_toio(to, from, n);
- }
--#define fb_memcpy_tofb fb_memcpy_tofb
-+#define fb_memcpy_toio fb_memcpy_toio
- #endif
- 
- #ifndef fb_memset
--static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
- {
- 	memset_io(addr, c, n);
- }
--#define fb_memset fb_memset
-+#define fb_memset fb_memset_io
- #endif
- 
- #endif /* __ASM_GENERIC_FB_H_ */
--- 
-2.40.1
+Ok changed for v4. Just saw that commit even nicely references our lack
+of I/O ports :-)
 
