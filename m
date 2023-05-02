@@ -2,37 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A3C6F47A3
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 17:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A84F26F49B8
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 20:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbjEBPvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 11:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S231839AbjEBSda (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 14:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233331AbjEBPvC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 11:51:02 -0400
-Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1751830F4;
-        Tue,  2 May 2023 08:50:58 -0700 (PDT)
-Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by bee.tesarici.cz (Postfix) with ESMTPSA id E369D149DFD;
-        Tue,  2 May 2023 17:50:53 +0200 (CEST)
-Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
-        t=1683042654; bh=hI16GBufNUpeUYJO29ecGF2T3JkuXMUYlbwpXV7Ce1A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hpCWoQk88LVg7fXQ3b+AVQsGAsNQ2r+jjHVNUux6ck4Irf+Zj3OBmb0DG1d5v80F0
-         H420pD744+RdF+aqEdiS68mSamSjXCAac39xdL3B+FvtX/WoIjl1A+4HDlAkK0N9kT
-         mgK+Oxs8dDzSdANM3/+MPo85nVNVR2H1c67YErvgyCXqxtW7tSUu+bkad7zPR3QpxA
-         n0bhf3NB/o5NPE3CdKxABZz7x+zVnT0Mi1h5m9uwvaWhdePztbtaxp26PRxzfnSb8i
-         5xS2IiqM6Gct4RDJVy63qv2EAMd/B7f/45wGQwNmpSiRlxOgkkTyofl87KFSXWR0xt
-         u7HQUTKsfNbvg==
-Date:   Tue, 2 May 2023 17:50:52 +0200
-From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-To:     Suren Baghdasaryan <surenb@google.com>
+        with ESMTP id S229703AbjEBSd3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 14:33:29 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBD119A5
+        for <linux-arch@vger.kernel.org>; Tue,  2 May 2023 11:33:27 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b9dea9d0360so4042161276.1
+        for <linux-arch@vger.kernel.org>; Tue, 02 May 2023 11:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683052406; x=1685644406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1HVL3xDTGrQVKytv3307oE4wI2qXt6O5pXdSbfIsmfw=;
+        b=1qOKHMcI8DulkSfoRMvX8Pr+Zk5uyPKcuzTjDblLNP1XefPQJkSAxIcSan4hxrkYmM
+         mijXYJDbwYfBriku1yo2jZFFkuGOQV27nGEoociEa+x4EBkt6xdc8TTdBr8ExPJqJxj3
+         I+cfPJCKCtCybq2dUPwiVCF4ankuJVJJAVwM7AetAdBoRpl61AdRNAdTS18dObY9arIk
+         e9qSsTvg8C0oNmcsYUHHNiUOhvlpSnEvLmwlJBc13gXCsXeR7WXU4bYyLgUPMLC/5oWj
+         1vsg/b1NFVc8TUatQihkDpPMckBOmQMwujeGiTah+4Xw72cOHRDooXz8s6AG9qHHNqgj
+         yg7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683052406; x=1685644406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1HVL3xDTGrQVKytv3307oE4wI2qXt6O5pXdSbfIsmfw=;
+        b=Mm38gpS4CsLEPBA4b/xvB6S5FyLUH7czzLD4E0u1GpE/TvRJbf7rYxZ4ASubtUdVvC
+         ibP9g+6DNtV0CYfYQJLBzbaxD2TzdjDlP9YdaWNXsG7JNDEUvcZKk17JwgB3JRKj0IqQ
+         sxVC8hh6vxkQF5jsQcRnksSoGL88rhLsay5Gcz4OV65bwEpswIUL8m9keK9E1NqqP43d
+         AeYiy37+E8xL+Hkpl9NlCLKoAatkxTOXfLLYGrFU8fKJu6YOpZPYhN3k4d6k/my1GzaQ
+         zi5mtQErHIXFGIJ/pPQfE4x69nyQwFTFZ1C4LZ4X7EYWmlcf0FKQMC+LCRZLOI/WuqjE
+         9jRg==
+X-Gm-Message-State: AC+VfDzCCF/1D2jAbYnml+6trrIG7Xn8DnC0ina6cPNKt1UndJht648F
+        TH+ClMz5aqoeFGoOFK6crwhayHBxRFLZ0PAc5POICg==
+X-Google-Smtp-Source: ACHHUZ4Ewf11C+rTiwahBlNL1qKIj3O23xR+7SsYrPD/20BDq48yN50kv92ybg7MVXiIqETdHq5IqlKzhO8SvqkLc+8=
+X-Received: by 2002:a25:4115:0:b0:b9e:9159:6a0c with SMTP id
+ o21-20020a254115000000b00b9e91596a0cmr1235704yba.6.1683052406321; Tue, 02 May
+ 2023 11:33:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-10-surenb@google.com>
+ <20230502145014.24b28e64@meshulam.tesarici.cz>
+In-Reply-To: <20230502145014.24b28e64@meshulam.tesarici.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 2 May 2023 11:33:15 -0700
+Message-ID: <CAJuCfpGA9SMwyQ44XHRHHVf32MPu4o6wy1Q6H=AfJy61Ez-06Q@mail.gmail.com>
+Subject: Re: [PATCH 09/40] mm: introduce __GFP_NO_OBJ_EXT flag to selectively
+ prevent slabobj_ext creation
+To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
         roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
@@ -60,129 +83,95 @@ Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 19/40] change alloc_pages name in dma_map_ops to avoid
- name conflicts
-Message-ID: <20230502175052.43814202@meshulam.tesarici.cz>
-In-Reply-To: <20230501165450.15352-20-surenb@google.com>
-References: <20230501165450.15352-1-surenb@google.com>
-        <20230501165450.15352-20-surenb@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon,  1 May 2023 09:54:29 -0700
-Suren Baghdasaryan <surenb@google.com> wrote:
+On Tue, May 2, 2023 at 5:50=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tesaric=
+i.cz> wrote:
+>
+> On Mon,  1 May 2023 09:54:19 -0700
+> Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> > Introduce __GFP_NO_OBJ_EXT flag in order to prevent recursive allocatio=
+ns
+> > when allocating slabobj_ext on a slab.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/gfp_types.h | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/gfp_types.h b/include/linux/gfp_types.h
+> > index 6583a58670c5..aab1959130f9 100644
+> > --- a/include/linux/gfp_types.h
+> > +++ b/include/linux/gfp_types.h
+> > @@ -53,8 +53,13 @@ typedef unsigned int __bitwise gfp_t;
+> >  #define ___GFP_SKIP_ZERO     0
+> >  #define ___GFP_SKIP_KASAN    0
+> >  #endif
+> > +#ifdef CONFIG_SLAB_OBJ_EXT
+> > +#define ___GFP_NO_OBJ_EXT       0x4000000u
+> > +#else
+> > +#define ___GFP_NO_OBJ_EXT       0
+> > +#endif
+> >  #ifdef CONFIG_LOCKDEP
+> > -#define ___GFP_NOLOCKDEP     0x4000000u
+> > +#define ___GFP_NOLOCKDEP     0x8000000u
+>
+> So now we have two flags that depend on config options, but the first
+> one is always allocated in fact. I wonder if you could use an enum to
+> let the compiler allocate bits. Something similar to what Muchun Song
+> did with section flags.
+>
+> See commit ed7802dd48f7a507213cbb95bb4c6f1fe134eb5d for reference.
 
-> After redefining alloc_pages, all uses of that name are being replaced.
-> Change the conflicting names to prevent preprocessor from replacing them
-> when it's not intended.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  arch/x86/kernel/amd_gart_64.c | 2 +-
->  drivers/iommu/dma-iommu.c     | 2 +-
->  drivers/xen/grant-dma-ops.c   | 2 +-
->  drivers/xen/swiotlb-xen.c     | 2 +-
->  include/linux/dma-map-ops.h   | 2 +-
->  kernel/dma/mapping.c          | 4 ++--
->  6 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
-> index 56a917df410d..842a0ec5eaa9 100644
-> --- a/arch/x86/kernel/amd_gart_64.c
-> +++ b/arch/x86/kernel/amd_gart_64.c
-> @@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops = {
->  	.get_sgtable			= dma_common_get_sgtable,
->  	.dma_supported			= dma_direct_supported,
->  	.get_required_mask		= dma_direct_get_required_mask,
-> -	.alloc_pages			= dma_direct_alloc_pages,
-> +	.alloc_pages_op			= dma_direct_alloc_pages,
->  	.free_pages			= dma_direct_free_pages,
->  };
->  
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index 7a9f0b0bddbd..76a9d5ca4eee 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -1556,7 +1556,7 @@ static const struct dma_map_ops iommu_dma_ops = {
->  	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,
->  	.alloc			= iommu_dma_alloc,
->  	.free			= iommu_dma_free,
-> -	.alloc_pages		= dma_common_alloc_pages,
-> +	.alloc_pages_op		= dma_common_alloc_pages,
->  	.free_pages		= dma_common_free_pages,
->  	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,
->  	.free_noncontiguous	= iommu_dma_free_noncontiguous,
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index 9784a77fa3c9..6c7d984f164d 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct device *dev, u64 mask)
->  static const struct dma_map_ops xen_grant_dma_ops = {
->  	.alloc = xen_grant_dma_alloc,
->  	.free = xen_grant_dma_free,
-> -	.alloc_pages = xen_grant_dma_alloc_pages,
-> +	.alloc_pages_op = xen_grant_dma_alloc_pages,
->  	.free_pages = xen_grant_dma_free_pages,
->  	.mmap = dma_common_mmap,
->  	.get_sgtable = dma_common_get_sgtable,
-> diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-> index 67aa74d20162..5ab2616153f0 100644
-> --- a/drivers/xen/swiotlb-xen.c
-> +++ b/drivers/xen/swiotlb-xen.c
-> @@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops = {
->  	.dma_supported = xen_swiotlb_dma_supported,
->  	.mmap = dma_common_mmap,
->  	.get_sgtable = dma_common_get_sgtable,
-> -	.alloc_pages = dma_common_alloc_pages,
-> +	.alloc_pages_op = dma_common_alloc_pages,
->  	.free_pages = dma_common_free_pages,
->  };
-> diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-> index 31f114f486c4..d741940dcb3b 100644
-> --- a/include/linux/dma-map-ops.h
-> +++ b/include/linux/dma-map-ops.h
-> @@ -27,7 +27,7 @@ struct dma_map_ops {
->  			unsigned long attrs);
->  	void (*free)(struct device *dev, size_t size, void *vaddr,
->  			dma_addr_t dma_handle, unsigned long attrs);
-> -	struct page *(*alloc_pages)(struct device *dev, size_t size,
-> +	struct page *(*alloc_pages_op)(struct device *dev, size_t size,
->  			dma_addr_t *dma_handle, enum dma_data_direction dir,
->  			gfp_t gfp);
->  	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
-> diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> index 9a4db5cce600..fc42930af14b 100644
-> --- a/kernel/dma/mapping.c
-> +++ b/kernel/dma/mapping.c
-> @@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct device *dev, size_t size,
->  	size = PAGE_ALIGN(size);
->  	if (dma_alloc_direct(dev, ops))
->  		return dma_direct_alloc_pages(dev, size, dma_handle, dir, gfp);
-> -	if (!ops->alloc_pages)
-> +	if (!ops->alloc_pages_op)
->  		return NULL;
-> -	return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-> +	return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
->  }
->  
->  struct page *dma_alloc_pages(struct device *dev, size_t size,
+Thanks for the reference. I'll take a closer look and will try to clean it =
+up.
 
-I'm not impressed. This patch increases churn for code which does not
-(directly) benefit from the change, and that for limitations in your
-tooling?
+>
+> >  #else
+> >  #define ___GFP_NOLOCKDEP     0
+> >  #endif
+> > @@ -99,12 +104,15 @@ typedef unsigned int __bitwise gfp_t;
+> >   * node with no fallbacks or placement policy enforcements.
+> >   *
+> >   * %__GFP_ACCOUNT causes the allocation to be accounted to kmemcg.
+> > + *
+> > + * %__GFP_NO_OBJ_EXT causes slab allocation to have no object
+> > extension. */
+> >  #define __GFP_RECLAIMABLE ((__force gfp_t)___GFP_RECLAIMABLE)
+> >  #define __GFP_WRITE  ((__force gfp_t)___GFP_WRITE)
+> >  #define __GFP_HARDWALL   ((__force gfp_t)___GFP_HARDWALL)
+> >  #define __GFP_THISNODE       ((__force gfp_t)___GFP_THISNODE)
+> >  #define __GFP_ACCOUNT        ((__force gfp_t)___GFP_ACCOUNT)
+> > +#define __GFP_NO_OBJ_EXT   ((__force gfp_t)___GFP_NO_OBJ_EXT)
+> >
+> >  /**
+> >   * DOC: Watermark modifiers
+> > @@ -249,7 +257,7 @@ typedef unsigned int __bitwise gfp_t;
+> >  #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
+> >
+> >  /* Room for N __GFP_FOO bits */
+> > -#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+> > +#define __GFP_BITS_SHIFT (27 + IS_ENABLED(CONFIG_LOCKDEP))
+>
+> If the above suggestion is implemented, this could be changed to
+> something like __GFP_LAST_BIT (the enum's last identifier).
 
-Why not just rename the conflicting uses in your local tree, but then
-remove the rename from the final patch series?
+Ack.
 
-Just my two cents,
-Petr T
+Thanks for reviewing!
+Suren.
+
+>
+> Petr T
