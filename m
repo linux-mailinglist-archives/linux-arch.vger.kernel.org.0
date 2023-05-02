@@ -2,36 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083526F3B39
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 02:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF29F6F3B87
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 02:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjEBAMw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 May 2023 20:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S230391AbjEBAxw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 May 2023 20:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233382AbjEBALR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 20:11:17 -0400
-Received: from out-8.mta1.migadu.com (out-8.mta1.migadu.com [95.215.58.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9133A8C
-        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 17:11:15 -0700 (PDT)
-Date:   Mon, 1 May 2023 20:11:01 -0400
+        with ESMTP id S231397AbjEBAxu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 May 2023 20:53:50 -0400
+Received: from out-29.mta1.migadu.com (out-29.mta1.migadu.com [IPv6:2001:41d0:203:375::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4791830EA
+        for <linux-arch@vger.kernel.org>; Mon,  1 May 2023 17:53:49 -0700 (PDT)
+Date:   Mon, 1 May 2023 20:53:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1682986273;
+        t=1682988827;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=LGkXxcXbL3GK/fmGgSEfCfzDoWKBFDwYj9o6aWx8/Qk=;
-        b=Gmp5ZD9nZN0dN2JWve8TuEsBbpH3Qw6wtBbE0JR/AgDkC56d01L5iQ46Mavw7py6Vk9DfT
-        amxHtlJ45eMzW84A+uK5Hfr4ox7Dnev1oJ2Yy8A+2WvibSyj4uUhf9gi+dGElANV/CAdFq
-        T6mFJogh6K/S0EnKKXjo3GhiYGvkFTg=
+        bh=HE6/29tmaJsag6zI8A6kmxQ69S3GfTZnUjmZGEHLawo=;
+        b=ci4cChjLz5Nx1p0M1HRMt5So3sz9KA0GgxxfJ3Xwor6CW087TfNJ7iQTl4/3c0JNtoSbDN
+        lpQ8ZWLAifEJkjQ0tAmFUrtzJU1c3/fVq5bvHHW3PTJu3ar2FleeqU5hFkYQxLtn/8ayrd
+        /Rktc0wIh6rpWmQBBJpcnipz4wb3Wbs=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        willy@infradead.org, corbet@lwn.net, void@manifault.com,
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
         peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
         catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
         tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
@@ -64,48 +63,28 @@ To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
         Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
 Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
  string_get_size's output
-Message-ID: <ZFBVFfNo3OHd3izd@moria.home.lan>
+Message-ID: <ZFBfD96zDCh2RcVN@moria.home.lan>
 References: <20230501165450.15352-1-surenb@google.com>
  <20230501165450.15352-2-surenb@google.com>
  <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
  <ZFAUj+Q+hP7cWs4w@moria.home.lan>
  <CAHp75VeJ_a6j3uweLN5-woSQUtN5u36c2gkoiXhnJa1HXJdoyQ@mail.gmail.com>
- <20230501213349.bvbf6i72eepcd56m@revolver>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230501213349.bvbf6i72eepcd56m@revolver>
+In-Reply-To: <CAHp75VeJ_a6j3uweLN5-woSQUtN5u36c2gkoiXhnJa1HXJdoyQ@mail.gmail.com>
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 01, 2023 at 05:33:49PM -0400, Liam R. Howlett wrote:
-> * Andy Shevchenko <andy.shevchenko@gmail.com> [230501 15:57]:
-> This fixes the output to be better aligned with:
-> the output of ls -sh
-> the input expected by find -size
-> 
-> Are there counter-examples of commands that follow the SI Brochure?
+On Mon, May 01, 2023 at 10:57:07PM +0300, Andy Shevchenko wrote:
+> But why do we need that? What's the use case?
 
-Even perf, which is included in the kernel tree, doesn't include the
-space - example perf top output:
-
-0 bcachefs:move_extent_fail
-0 bcachefs:move_extent_alloc_mem_fail
-3 bcachefs:move_data
-0 bcachefs:evacuate_bucket
-0 bcachefs:copygc
-2 bcachefs:copygc_wait
-195K bcachefs:transaction_commit
-0 bcachefs:trans_restart_injected
-
-(I'm also going to need to submit a patch that deletes or makes optional
-the B suffix, just because we're using human readable units doesn't mean
-it's bytes).
+It looks like we missed you on the initial CC, here's the use case:
+https://lore.kernel.org/linux-fsdevel/ZFAsm0XTqC%2F%2Ff4FP@P9FQF9L96D/T/#mdda814a8c569e2214baa31320912b0ef83432fa9
