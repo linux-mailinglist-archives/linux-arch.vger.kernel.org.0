@@ -2,229 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194ED6F49CC
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 20:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3806F4A40
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 21:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjEBSjF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 14:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S229458AbjEBTVT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 15:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbjEBSjD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 14:39:03 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7B51727
-        for <linux-arch@vger.kernel.org>; Tue,  2 May 2023 11:39:01 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9da6374fa2so5173879276.0
-        for <linux-arch@vger.kernel.org>; Tue, 02 May 2023 11:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683052740; x=1685644740;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7OMnp8U2QsJWbp6tha1jAHM6ardwied5yoCJwV56xmU=;
-        b=3ehzpeirHytbRrfF5r15fGVpzpJxZb0E9v2Om0wdN+yxZYUTa6qWTLOkd2mbDRoF7W
-         pnmov0ApI+qMvdAzFDA6SgZGTRYRpWWsYOopta6Rj30LnCXbPu9oQBdK0uh0n1fbuy01
-         vsylwS4eNoSnK4OdPa0qDxCeqjOu7PunOoJTEi+RY4izp9SK5YNPQKHVdbCsFRn4WM2A
-         p7jtWEQHZwcMmuy2lRysHMVwpnEcRz/iqKNa76N07gsayvlYQtmcsOsujw7J6qYIBTdy
-         xedsqCxK32iKWHMMSwGqO7eBE4zSMlkGqF+0tcmMmy368s/N5nkgeAf/BqbdsSOgzCG8
-         xgHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683052740; x=1685644740;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7OMnp8U2QsJWbp6tha1jAHM6ardwied5yoCJwV56xmU=;
-        b=JRQ8DYVzBy+UNSdG4T0E0w78yBJ7fALtnoJXsHYTmIqKm4ahhHuH19VeiMVW4lKCiv
-         ZrHfJnJLbkYjxRm4VNFGZYS6NbsQKhWq/HU4Pnr+xp1gcK4quFOEnoS3kPapTdWh+GsC
-         ra2CtF+WuHDSO8iyXNm+cskq1x27wp7EXT3aL1Wx4TVOOf47ulrG8q8XsbYkyCkUCJVR
-         wGxufOsOHi67EgrK9Xxqoz4P78RTev+q6BbAKGrTJB1b0OotIJYql5KF7kSjRKU73viI
-         vKOKliBVFb+lemWZPdiEtkCoUefjC3OeFm722uL3nKAqOREiTozFiNzSWrVEba09VtZ7
-         w+EA==
-X-Gm-Message-State: AC+VfDw8mNBfPLkhw3sclqUdRToBQdGTOuTQyDdICmNc9gSTnbI2xpCJ
-        sd4HQBqO6ZvZuvL+j3USI+kGboEWDo3bJaeZ2WqDDg==
-X-Google-Smtp-Source: ACHHUZ45HYLTxHMIOq01xnBNZQQ3FvjzAGWMuhj5eqXhI0sjJMLvrbYm8scdp84P5QMdOuWonlr1sN9pxx8UWuINaFw=
-X-Received: by 2002:a25:420f:0:b0:b9e:4fbc:8a7f with SMTP id
- p15-20020a25420f000000b00b9e4fbc8a7fmr5707930yba.1.1683052740029; Tue, 02 May
- 2023 11:39:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-20-surenb@google.com>
- <20230502175052.43814202@meshulam.tesarici.cz>
-In-Reply-To: <20230502175052.43814202@meshulam.tesarici.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 2 May 2023 11:38:49 -0700
-Message-ID: <CAJuCfpGSLK50eKQ2-CE41qz1oDPM6kC8RmqF=usZKwFXgTBe8g@mail.gmail.com>
-Subject: Re: [PATCH 19/40] change alloc_pages name in dma_map_ops to avoid
- name conflicts
-To:     =?UTF-8?B?UGV0ciBUZXNhxZnDrWs=?= <petr@tesarici.cz>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229457AbjEBTVS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 15:21:18 -0400
+Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021016.outbound.protection.outlook.com [52.101.62.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85607198D;
+        Tue,  2 May 2023 12:21:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gy105V4Cno46171h8GwTJiehv+WAgaC3JnVd165PVcYp5ncG+KvK3ZqU6Mbtgc/xPTytycyzwvjcDAd0RbnHxCad0rWoriGsfzAFPj5enm3jnoJc032VrGBLEDgTlP1HoShnpDtJVG4dT2r8uydqdpkugeUw+Cu/zsVzCs2i9zW5CFYxAgsrQxods2OK6imaf3jLeepgG3zktyxvwvMCfNYaQWkTOxpN+ZoHaTOpFJtqb/6zAcBmBLBgY4C3r0qBQLP/Kbb9kD8kejLfidwZfkqtcRzw4dlCbpBtf39xrJkL3L+vBhkw5jDsUIU3vUs7ZmwS2QzCj8SKkKTn+P2bRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=02k2hTv7F31oB3w0iOkvTIdZkJ3lwpN4f4WsZW9xSZI=;
+ b=OHEzsIdOOTBPOCDPMrxfiMYXskDP/XW98h0aO9h6skDHbZAjl74MrF/0vohXO6k97fw4U3FtDIksgKwfCywcTVWwqLcOsGQncNJJ5XNp0gjLi2++CvEI9MBghc+5Zc2DMIHhupHPc1xmFnGYdTbhl9bwyNORxw9lI4A6aKQ6DwuXqCADuI6gBgb/elWD1lIhjMQ/p8+qcjNPzHtarVrYcIccfmjIkJmf+qTMwreyE4MiwQfgQgF3QxMF1jJQo/cpNX1ZRYfcGs/0bH01/Tkh5GUjfcP+DF/S7CF/LTMSrVzZy6XObZhVr4qHaB1iplTlH7q4W2InuySnLaJZ0aUAXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=02k2hTv7F31oB3w0iOkvTIdZkJ3lwpN4f4WsZW9xSZI=;
+ b=GAeontrfXSqhOsSk+v1cEDWk1JKuLWupGtCb6ss32Yviq2fZSMsgMDUka9LA6INOdT6EzwgHZd3zfT8lhrxQlPr/CVg1jIJCZ0FiHaiZQ9VZDyTuJBMdkBovCqMmtiRGcb/Yrvvso71JsLp3HxFIPu7T1WO0vjvUkqk+hlp+oMo=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by MN0PR21MB3582.namprd21.prod.outlook.com (2603:10b6:208:3d1::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.6; Tue, 2 May
+ 2023 19:21:06 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::c454:256a:ce51:e983]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::c454:256a:ce51:e983%4]) with mapi id 15.20.6387.007; Tue, 2 May 2023
+ 19:21:06 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: RE: [PATCH v5 5/6] Drivers: hv: vmbus: Support TDX guests
+Thread-Topic: [PATCH v5 5/6] Drivers: hv: vmbus: Support TDX guests
+Thread-Index: AQHZdMDlgRiCry573UqDSIN3qcYRLa9FtKkggAB7cdCAAPlpEIAAQwOw
+Date:   Tue, 2 May 2023 19:21:06 +0000
+Message-ID: <SA1PR21MB1335446CD89B9360CC70E7C2BF6F9@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20230422021735.27698-1-decui@microsoft.com>
+ <20230422021735.27698-6-decui@microsoft.com>
+ <BYAPR21MB16888DA20245DDBC572A2240D76E9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <SA1PR21MB1335046F4BA2B407C9026130BF6F9@SA1PR21MB1335.namprd21.prod.outlook.com>
+ <BYAPR21MB1688F458EE551BA19D80B65DD76F9@BYAPR21MB1688.namprd21.prod.outlook.com>
+In-Reply-To: <BYAPR21MB1688F458EE551BA19D80B65DD76F9@BYAPR21MB1688.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fe447994-baa8-4b2f-a2ae-c9a8aadd7e33;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-01T17:05:09Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|MN0PR21MB3582:EE_
+x-ms-office365-filtering-correlation-id: c79e5e9b-dc00-4b46-971a-08db4b426073
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YA1YRb9qMsd8JQRuUlzg5q9TByfF4Q5uALvJJSY0vaQtDRxsaENPxwolRzMK6HMivNUeIB0wloiW1Do8BKlDq1OkHvOEAfnknFs4sszHOlHKlIHK2BYXLsnh0kV+itDsT9CFiw9BZNOZa5GukIGZTDc2KFd4Nez1g36oc/L/QRH35bv6nUw8YwRLdw2Zxxoiveb4uk5SF9eTDwmoYGDR0CUtrLG+QO2V+ap8IVh+ZYp1EuWLEIfnCiBTN4BBwjk3w5wUu8gpFuDYn3FmWJ60ezT8BJyWDGCfcEn376cnvOa9RPKUvNX+WqDK3zoZmWengnpoAmyiN84BnQIeqNkZwDVOW+2acWvjuEaq4uL8cUnJPAJW+LVU/weBedarobCUxXKd/nOq9RvUPfh+EYpfNOPmHzltUHLn7yhr7MNPLOCqsGh80TLYeEAr1BsS76ybQm29MMxCHGQT6TWayoHcAJMJObDksUnSItemQJFPuAVovWyLInOBr0yXCnAYqtHCqHhrreIk2MUyoqwPagVbJbP1e4yF4cfe2O9mIwAZH3D5TmbFzTpPBnAdvypUPdrbt0G1VABQUx0ImXj775/WYs50RJ2ijMSN2vCcQ6PKU1quAC9C15u0Prb8LmYxB73JKidGD9NPxVei+vDTe71CqOoa/PdRqYyf/1MTIUEuJmuNAqS8Eu05u2SjHvVKnnln
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(346002)(39860400002)(376002)(451199021)(82960400001)(4744005)(82950400001)(7416002)(921005)(122000001)(41300700001)(8936002)(8676002)(5660300002)(52536014)(2906002)(86362001)(55016003)(38070700005)(38100700002)(8990500004)(33656002)(71200400001)(7696005)(54906003)(186003)(478600001)(10290500003)(9686003)(83380400001)(6506007)(107886003)(66556008)(66476007)(66446008)(64756008)(66946007)(4326008)(76116006)(786003)(316002)(110136005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JU9nm0TDquX3X1zxc7zhOgUD9xo7dy5sYVC+JZyVzFliex2VMIT+rHHQbhJL?=
+ =?us-ascii?Q?3PBdC2l5rlFTjhVKS2dgl/0up/4g61HDiErnKMsT92J8mE1LKELeoFXtJAZW?=
+ =?us-ascii?Q?qWCBB398NYuKFBMqqU8RYpIfOimsiGS5Llexmx26Lv+tPPp02yYyj+yZmYmD?=
+ =?us-ascii?Q?RvXIvDpycnoYefrebOf55V/pTneigtp/lDor4ue0pHZtbzLdvOR8A6zUd5Ef?=
+ =?us-ascii?Q?tCsW1R6pWj8LuOx0KpUCNBvaKoPN+Uh9XaayXkn12cHMWl7ViasiucKMtd36?=
+ =?us-ascii?Q?A0Tidg6HfLmBPjKUWJRuN5wkG4zbeTej3y+XxEJz8LrkxYH7LBn8YHqfbyKy?=
+ =?us-ascii?Q?WqIcxtjJLjREEfQyVq6F7XoKZCm7ZLVmpYexC1ZlPKmz02jZ7KRHfpwBeVex?=
+ =?us-ascii?Q?fEXR+kQKx5GBqSN+gOmw6KrqbHpzifjHFpqf5l3TMZxL5LXubJRs0l6QDo1w?=
+ =?us-ascii?Q?pIUHYQLM2CQvULjL+jeXDDwiu5kBEZYN6X5JimWOCNQ1GRrCi3XV56Ahafyh?=
+ =?us-ascii?Q?Xs4IQn09z47vrG8gQY5Pobl6GXkPIB9QsXiFXA9Hb04yhj42L+H59FVsgHgP?=
+ =?us-ascii?Q?m/3ARFHUEQ6rqj1o45L7w+GHQtMJuuNGTgFPl2vB9LzdlIWVRnTrSfg1G6O1?=
+ =?us-ascii?Q?QKo3DFQBZMjII4Qc/aZaJuFPiZDglu8RMSIm8ARSz2MYP5q+Oo6K/QJzB00k?=
+ =?us-ascii?Q?mv8S0dxoVGURkF7Szhp8DqFvrtz3J7waIgHYR8CWHUzxNzkl49n+eV4hyZt8?=
+ =?us-ascii?Q?sIkmSqtbSASTHozLN0ZhrRkaVm+88dq/09cXeWeUnkWnWlRlOUUEViTTzmyT?=
+ =?us-ascii?Q?Sr4oyicPg2nT5vQZY79Cerm3447ozehkSVxzDkFx1qfNhnBt31LaP1gVM5NG?=
+ =?us-ascii?Q?9yR5zUVtoijCqSQurLD/Q5KyYWDh0o9uGCvIoRe8yBSKfWij7Ck5o7+70EAj?=
+ =?us-ascii?Q?r3D34uqo2x2fdvOHrE9EM3p8bTkGJ3MEecdUKJPnBdNHhRIKuwhZUAdNLbav?=
+ =?us-ascii?Q?y4ZRV2wq0CAXrBe+gkTLEEU8CZOFvSz71Amq0Omj1BUGIaHtFVDI6N2AdFo2?=
+ =?us-ascii?Q?I0ikUEo9eeXSXGFwXq2K6uDRFRPDF8Ar/D8Xo71NEu8bK0io5upBrfvMYQ+x?=
+ =?us-ascii?Q?7cG092b3r9WlQX8gKknxDAPRPr6Cky0WhxzDRUe6jkWlTXA5X8RoENwnhNtq?=
+ =?us-ascii?Q?IcjEk0FfAuN22hrIl8sZTy6caAecU/kXS1mJQ5kn11/4dFMrsqRx64Sux1x5?=
+ =?us-ascii?Q?Z4kAkWWO2UaS3is3WnwjwkyuxZpNRIiJpZaBhpKefbCpvFILQnS5Jvvp4fAB?=
+ =?us-ascii?Q?4YzvQ6ir2MP2u2wmTLLydJWqHJ5K/88RYY+cqXN2UbvB9l3Cyrj6jUqlhHl0?=
+ =?us-ascii?Q?ckEUoLnMxkSmIfZxNl5ansdYKsSxRVYPCyBIqqCFFYQth13hpOJ+hZmUIYHH?=
+ =?us-ascii?Q?4Cd1Ql6jH/LOoznWm1HQwaoj/lX/P3VsM11s27o75HEmN+/B5pEfPfHiflcj?=
+ =?us-ascii?Q?FVEQkvCxoHtlWtKZcnTjNacUUfHGsuYK3TYLU+zeAFG3wyJUpP+FHT2YnxfM?=
+ =?us-ascii?Q?yAiAbBq4KnNLtlG0pvjkYIvrZrLbiCReLK3dqkFeuhKSoTEVAiwmcg3sE1wK?=
+ =?us-ascii?Q?ppK2tCadQYAVzszJWuJ1nIROF0KzpP7QzC+J5MoQvxSK?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c79e5e9b-dc00-4b46-971a-08db4b426073
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2023 19:21:06.0667
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: a6UN7iYTUXy12fR4DgM0MWwE0otBV66XsbAjMPuFqmoae4Tcv2Qj0FzjIRaNtympoEUE38qK5iE5WSWvkSx/vQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3582
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 2, 2023 at 8:50=E2=80=AFAM Petr Tesa=C5=99=C3=ADk <petr@tesaric=
-i.cz> wrote:
->
-> On Mon,  1 May 2023 09:54:29 -0700
-> Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > After redefining alloc_pages, all uses of that name are being replaced.
-> > Change the conflicting names to prevent preprocessor from replacing the=
-m
-> > when it's not intended.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  arch/x86/kernel/amd_gart_64.c | 2 +-
-> >  drivers/iommu/dma-iommu.c     | 2 +-
-> >  drivers/xen/grant-dma-ops.c   | 2 +-
-> >  drivers/xen/swiotlb-xen.c     | 2 +-
-> >  include/linux/dma-map-ops.h   | 2 +-
-> >  kernel/dma/mapping.c          | 4 ++--
-> >  6 files changed, 7 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_6=
-4.c
-> > index 56a917df410d..842a0ec5eaa9 100644
-> > --- a/arch/x86/kernel/amd_gart_64.c
-> > +++ b/arch/x86/kernel/amd_gart_64.c
-> > @@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops =3D {
-> >       .get_sgtable                    =3D dma_common_get_sgtable,
-> >       .dma_supported                  =3D dma_direct_supported,
-> >       .get_required_mask              =3D dma_direct_get_required_mask,
-> > -     .alloc_pages                    =3D dma_direct_alloc_pages,
-> > +     .alloc_pages_op                 =3D dma_direct_alloc_pages,
-> >       .free_pages                     =3D dma_direct_free_pages,
-> >  };
-> >
-> > diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> > index 7a9f0b0bddbd..76a9d5ca4eee 100644
-> > --- a/drivers/iommu/dma-iommu.c
-> > +++ b/drivers/iommu/dma-iommu.c
-> > @@ -1556,7 +1556,7 @@ static const struct dma_map_ops iommu_dma_ops =3D=
- {
-> >       .flags                  =3D DMA_F_PCI_P2PDMA_SUPPORTED,
-> >       .alloc                  =3D iommu_dma_alloc,
-> >       .free                   =3D iommu_dma_free,
-> > -     .alloc_pages            =3D dma_common_alloc_pages,
-> > +     .alloc_pages_op         =3D dma_common_alloc_pages,
-> >       .free_pages             =3D dma_common_free_pages,
-> >       .alloc_noncontiguous    =3D iommu_dma_alloc_noncontiguous,
-> >       .free_noncontiguous     =3D iommu_dma_free_noncontiguous,
-> > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> > index 9784a77fa3c9..6c7d984f164d 100644
-> > --- a/drivers/xen/grant-dma-ops.c
-> > +++ b/drivers/xen/grant-dma-ops.c
-> > @@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct device *d=
-ev, u64 mask)
-> >  static const struct dma_map_ops xen_grant_dma_ops =3D {
-> >       .alloc =3D xen_grant_dma_alloc,
-> >       .free =3D xen_grant_dma_free,
-> > -     .alloc_pages =3D xen_grant_dma_alloc_pages,
-> > +     .alloc_pages_op =3D xen_grant_dma_alloc_pages,
-> >       .free_pages =3D xen_grant_dma_free_pages,
-> >       .mmap =3D dma_common_mmap,
-> >       .get_sgtable =3D dma_common_get_sgtable,
-> > diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-> > index 67aa74d20162..5ab2616153f0 100644
-> > --- a/drivers/xen/swiotlb-xen.c
-> > +++ b/drivers/xen/swiotlb-xen.c
-> > @@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops =3D {
-> >       .dma_supported =3D xen_swiotlb_dma_supported,
-> >       .mmap =3D dma_common_mmap,
-> >       .get_sgtable =3D dma_common_get_sgtable,
-> > -     .alloc_pages =3D dma_common_alloc_pages,
-> > +     .alloc_pages_op =3D dma_common_alloc_pages,
-> >       .free_pages =3D dma_common_free_pages,
-> >  };
-> > diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-> > index 31f114f486c4..d741940dcb3b 100644
-> > --- a/include/linux/dma-map-ops.h
-> > +++ b/include/linux/dma-map-ops.h
-> > @@ -27,7 +27,7 @@ struct dma_map_ops {
-> >                       unsigned long attrs);
-> >       void (*free)(struct device *dev, size_t size, void *vaddr,
-> >                       dma_addr_t dma_handle, unsigned long attrs);
-> > -     struct page *(*alloc_pages)(struct device *dev, size_t size,
-> > +     struct page *(*alloc_pages_op)(struct device *dev, size_t size,
-> >                       dma_addr_t *dma_handle, enum dma_data_direction d=
-ir,
-> >                       gfp_t gfp);
-> >       void (*free_pages)(struct device *dev, size_t size, struct page *=
-vaddr,
-> > diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-> > index 9a4db5cce600..fc42930af14b 100644
-> > --- a/kernel/dma/mapping.c
-> > +++ b/kernel/dma/mapping.c
-> > @@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct device=
- *dev, size_t size,
-> >       size =3D PAGE_ALIGN(size);
-> >       if (dma_alloc_direct(dev, ops))
-> >               return dma_direct_alloc_pages(dev, size, dma_handle, dir,=
- gfp);
-> > -     if (!ops->alloc_pages)
-> > +     if (!ops->alloc_pages_op)
-> >               return NULL;
-> > -     return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-> > +     return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
-> >  }
-> >
-> >  struct page *dma_alloc_pages(struct device *dev, size_t size,
->
-> I'm not impressed. This patch increases churn for code which does not
-> (directly) benefit from the change, and that for limitations in your
-> tooling?
->
-> Why not just rename the conflicting uses in your local tree, but then
-> remove the rename from the final patch series?
+> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
+> Sent: Tuesday, May 2, 2023 8:26 AM
+> ...
+> Yes, this looks good to me.  A minor point:  In the two calls to set
+Thanks for the confirmation!
 
-With alloc_pages function becoming a macro, the preprocessor ends up
-replacing all instances of that name, even when it's not used as a
-function. That what necessitates this change. If there is a way to
-work around this issue without changing all alloc_pages() calls in the
-source base I would love to learn it but I'm not quite clear about
-your suggestion and if it solves the issue. Could you please provide
-more details?
+> decrypted,
+> if there is a failure, output the value of "ret" in the error message.  I=
+t should
+> never happen, but if it did, it could be hard to diagnose, and we'll want=
+ all
+> the info we can get about the failure.  And do the same in hv_synic_free(=
+)
+> if setting back to encrypted should fail.
+>=20
+> Michael
 
->
-> Just my two cents,
-> Petr T
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Will do in v6.
+
