@@ -2,155 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B2D6F455D
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 15:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497906F4603
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 16:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234524AbjEBNnS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 09:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S234396AbjEBOYq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 10:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbjEBNmw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 09:42:52 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D056A53;
-        Tue,  2 May 2023 06:42:19 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 342Dd5mD007993;
-        Tue, 2 May 2023 13:41:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=iFaCTqGqZoIlS2U6AthjISaQLDuN0XAiJI4clbfAzlE=;
- b=l8hYwA+trtcflDmakAhIsZFuk9aqqnBPrEWz8W1ep2AW92SdO3gD0J1z4TXLlAjLZBcY
- 8QXFM2eUV5ZHF7+uSQz+hjI2e3f5EiYVHuVk0QV+tiAyqjCqpwMnCZUqqcsisnYcj2Rf
- 6J3j6MeSY94yJ16JD6nn2MsiNDARTCtfvgWJf7DA4HvgK2FPM5WXPsnUVUVuUxjK7Rqq
- uWUMHRbNlt/n0W0SzA+0pR93Wy0TJVglY/FY4mXItDk/sADLlMccgtvqTs7a8uRTfYHv
- PkFreOvXw984+0XwQNL43pVTv75DUwolXuXeli0hu6af3vVsJOSUuQmodnIWjQHuTKj1 Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3y1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:41:06 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 342DdT5Y009271;
-        Tue, 2 May 2023 13:41:06 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qb36uh3rq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:41:05 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3428snLY031369;
-        Tue, 2 May 2023 13:40:51 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3q8tv6sb2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 02 May 2023 13:40:51 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 342Dendi20316836
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 May 2023 13:40:49 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 073562004B;
-        Tue,  2 May 2023 13:40:49 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 374F620049;
-        Tue,  2 May 2023 13:40:48 +0000 (GMT)
-Received: from [9.171.18.35] (unknown [9.171.18.35])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  2 May 2023 13:40:48 +0000 (GMT)
-Message-ID: <e9fb74a702bb304757fea84a978704de62df666d.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 21/38] parport: PC style parport depends on HAS_IOPORT
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 02 May 2023 15:40:47 +0200
-In-Reply-To: <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
-         <20230314121216.413434-22-schnelle@linux.ibm.com>
-         <e2ce3f02-988c-423d-a1c1-2796ab95026c@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S234072AbjEBOYo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 10:24:44 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564AB11A;
+        Tue,  2 May 2023 07:24:43 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aaebed5bd6so20628785ad.1;
+        Tue, 02 May 2023 07:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683037483; x=1685629483;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s1aeen3ZK+Eot6IC/oOTAkZg5Jx6a7diThkYUUdZei0=;
+        b=o7eV6bV5rpKciv6EIj9ga4Omoc8JiajzV/SXD9s6GTpCIHwLsqIeUrnFZuC+xAIaiW
+         WjEsJu1B2GKv/VlyiP9foiCAZE6F++nD+BWDCHQtjX8GXp25FXxTTDqEhJfEaCmCRZnW
+         r/TojnhdtU1uIxMuMFFOdIT7Ow7MxYnqTZbrKtm4QgaRKGsCrFqUlZThCmVisJrJf8LM
+         /bNVZ2wUIhggAaUQvPy2HmP3xLnCZxM2nh9Oy/B1JiqMdIiCPGs2rAsKMpXcHd+3R9I1
+         ZjnOJ4VKyNowo/00zxs8soF2kfewUpLu4llf08zWCp8MVLdUhOzj6mQ/SdBcj0q0dUoG
+         ml+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683037483; x=1685629483;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=s1aeen3ZK+Eot6IC/oOTAkZg5Jx6a7diThkYUUdZei0=;
+        b=Vp2KYB/dVQooHRvtO8Cmoq54GsyIemxX5WZAWRDTGMc68kaMwhnuNGoPX44aT3f164
+         S1EHovAn8zb+glJD/iT73jrYOHem6dhdCJsb1/pYIj6wnQ3WJP3jP8INve/bPdR5qhNz
+         L0etZk+4P5tNHF2lU7m5DN5rUBwhjn4n0gmgKzQQP6jSnNv9lw9hNEKm5W2i5FSiBACQ
+         1H3T6TAzfgWv1r/k6OzqhVnZXsXyaIcZTA+qOKD+0GRJukU8fBihYhSOrgFI0shA8812
+         MezhUACyIqj6PX/ZVFnPtkcBBR77OI1tqMLnvjjCBglVJDrQPPisvEnxW5JbcFdXlEhF
+         0t0A==
+X-Gm-Message-State: AC+VfDztUjedFvOFemq5vhf2EG6JFitV6VqzgCUuaXvQk0+eWmSlmDYX
+        4BE4f2wZm3Te0tRC7HqhWo0ot0ldkQLJWQ==
+X-Google-Smtp-Source: ACHHUZ7J8Aas1J2Rc20jnb1KGckFkPjq+j4uXL85mWslpQ5/EpkOpe4cYomHtpe0qtAoy+AsMW7sBg==
+X-Received: by 2002:a17:902:d349:b0:1a9:2823:dad3 with SMTP id l9-20020a170902d34900b001a92823dad3mr18355696plk.42.1683037482638;
+        Tue, 02 May 2023 07:24:42 -0700 (PDT)
+Received: from localhost (118-208-214-188.tpgi.com.au. [118.208.214.188])
+        by smtp.gmail.com with ESMTPSA id x10-20020a170902b40a00b001ab05aaaf8fsm2012505plr.104.2023.05.02.07.24.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 May 2023 07:24:41 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HD0fEbiuVhUrxQBye-iKHLFIye-5M8Ii
-X-Proofpoint-GUID: seYpEKnBqUk9_qmLztdg5NtiD5KP2qO8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-02_08,2023-04-27_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 mlxscore=0 clxscore=1015 bulkscore=0
- suspectscore=0 mlxlogscore=297 impostorscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303200000 definitions=main-2305020115
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 03 May 2023 00:24:24 +1000
+Message-Id: <CSBUZL6M3MSS.316JRNGXVMLB@wheely>
+Subject: Re: [PATCH] Remove HAVE_VIRT_CPU_ACCOUNTING_GEN option
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Palmer Dabbelt" <palmer@dabbelt.com>
+Cc:     "Arnd Bergmann" <arnd@arndb.de>, <linux-arch@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <vgupta@kernel.org>,
+        <linux-snps-arc@lists.infradead.org>, <bcain@quicinc.com>,
+        <linux-hexagon@vger.kernel.org>, <chenhuacai@kernel.org>,
+        <loongarch@lists.linux.dev>, <geert@linux-m68k.org>,
+        <linux-m68k@lists.linux-m68k.org>, <monstr@monstr.eu>,
+        <tsbogend@alpha.franken.de>, <linux-mips@vger.kernel.org>,
+        <dinguyen@kernel.org>, <jonas@southpole.se>,
+        <stefan.kristiansson@saunalahti.fi>, <shorne@gmail.com>,
+        <linux-openrisc@vger.kernel.org>,
+        <James.Bottomley@HansenPartnership.com>, <deller@gmx.de>,
+        <linux-parisc@vger.kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
+        <ysato@users.sourceforge.jp>, <dalias@libc.org>,
+        <glaubitz@physik.fu-berlin.de>, <linux-sh@vger.kernel.org>,
+        <davem@davemloft.net>, <sparclinux@vger.kernel.org>,
+        <richard@nod.at>, <anton.ivanov@cambridgegreys.com>,
+        <johannes@sipsolutions.net>, <linux-um@lists.infradead.org>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <khilman@baylibre.com>, <frederic@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230429063348.125544-1-npiggin@gmail.com>
+ <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+In-Reply-To: <mhng-7ec0443b-2201-41b7-996c-78c3a61f0230@palmer-ri-x1c9a>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2023-03-14 at 15:12 +0100, Arnd Bergmann wrote:
-> > On Tue, Mar 14, 2023, at 13:11, Niklas Schnelle wrote:
-> > > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and fr=
-iends
-> > > > not being declared. As PC style parport uses these functions we nee=
-d to
-> > > > handle this dependency.
-> > > >=20
-> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> >=20
-> > > >=20
-> > > >  menuconfig PARPORT
-> > > >  	tristate "Parallel port support"
-> > > > -	depends on HAS_IOMEM
-> >=20
-> > I would leave this dependency, or maybe make it 'HAS_IOMEM || HAS_IOPOR=
-T'.
-> > at least the parport_atari driver uses MMIO instead of PIO.
-> >=20
-> > > >  	help
-> > > >  	  If you want to use devices connected to your machine's parallel=
- port
-> > > >  	  (the connector at the computer with 25 holes), e.g. printer, ZI=
-P
-> > > > @@ -42,7 +41,8 @@ if PARPORT
-> > > >=20
-> > > >  config PARPORT_PC
-> > > >  	tristate "PC-style hardware"
-> > > > -	depends on ARCH_MIGHT_HAVE_PC_PARPORT || (PCI && !S390)
-> > > > +	depends on ARCH_MIGHT_HAVE_PC_PARPORT
-> > > > +	depends on HAS_IOPORT
-> > > >  	help
-> > > >  	  You should say Y here if you have a PC-style parallel port. All
-> > > >  	  IBM PC compatible computers and some Alphas have PC-style
-> >=20
-> > This would revert 66bcd06099bb ("parport_pc: Also enable driver for
-> > PCI systems"), so I think this is wrong. You can drop the !S390
-> > by adding HAS_IOPORT as a dependency, but the other line should still
-> > be=20
-> >=20
-> >        depends on ARCH_MIGHT_HAVE_PC_PARPORT || PCI
-> >    =20
-> >=20
-> >     Arnd
+On Sun Apr 30, 2023 at 6:14 AM AEST, Palmer Dabbelt wrote:
+> On Fri, 28 Apr 2023 23:33:48 PDT (-0700), npiggin@gmail.com wrote:
+> > This option was created in commit 554b0004d0ec4 ("vtime: Add
+> > HAVE_VIRT_CPU_ACCOUNTING_GEN Kconfig") for architectures to indicate
+> > they support the 64-bit cputime_t required for VIRT_CPU_ACCOUNTING_GEN.
+> >
+> > The cputime_t type has since been removed, so this doesn't have any
+> > meaning. Remove it.
+> >
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Vineet Gupta <vgupta@kernel.org>
+> > Cc: linux-snps-arc@lists.infradead.org
+> > Cc: Brian Cain <bcain@quicinc.com>
+> > Cc: linux-hexagon@vger.kernel.org
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: loongarch@lists.linux.dev
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: linux-m68k@lists.linux-m68k.org
+> > Cc: Michal Simek <monstr@monstr.eu>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: Dinh Nguyen <dinguyen@kernel.org>
+> > Cc: Jonas Bonn <jonas@southpole.se>
+> > Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
+> > Cc: Stafford Horne <shorne@gmail.com>
+> > Cc: linux-openrisc@vger.kernel.org
+> > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: linux-parisc@vger.kernel.org
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: linux-riscv@lists.infradead.org
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > Cc: linux-sh@vger.kernel.org
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: sparclinux@vger.kernel.org
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > Cc: Johannes Berg <johannes@sipsolutions.net>
+> > Cc: linux-um@lists.infradead.org
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Kevin Hilman <khilman@baylibre.com>
+> > Cc: Frederic Weisbecker <frederic@kernel.org>
+> > Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+> > ---
+> > Hi,
+> >
+> > Could we tidy this? I don't know what tree it can go in, timers,
+> > sched, asm-generic, probably doesn't matter.
+> >
+> > The only thing this actually does is gate VIRT_CPU_ACCOUNTING_GEN and
+> > NO_HZ_FULL so if your arch has some other issue that requires this
+> > then the documentation needs to change. Any concerns from the archs?
+> > I.e., 32-bit that does *not* define HAVE_VIRT_CPU_ACCOUNTING_GEN
+> > which looks to be:
+> >
+> > arc
+> > hexagon
+> > loongarch 32-bit with SMP
+> > m68k
+> > microblaze
+> > mips 32-bit with SMP
+> > nios2
+> > openrisc
+> > parisc 32-bit
+> > riscv 32-bit
+>
+> Nothing's jumping out, though I haven't tested this yet so I'm not 100%. =
+=20
+> I assume this isn't aimed for this merge window, given the timing? =20
 
-Ok changed for v4. Just saw that commit even nicely references our lack
-of I/O ports :-)
+No, maybe the next one though.
 
+> Probably best to give this sort of thing time to bake in linux-next, but=
+=20
+> I doubt anyone is even paying attention to rv32/NO_HZ_FULL so no big=20
+> deal either way on my end.
+>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+
+Thanks,
+Nick
