@@ -2,63 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F145F6F42EF
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 13:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30EA6F4406
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 14:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbjEBLnM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 07:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
+        id S233787AbjEBMmp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 08:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233618AbjEBLnL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 07:43:11 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FBB2123;
-        Tue,  2 May 2023 04:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683027787;
-        bh=VIXlwaAodrWp8Vhxz+WDa3KoUpXUVVhKJac+yTw3JPY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jhl+sztrOwEDjtwmne5HQU6aXLKSFxkGsV+GqvMXCULQnVptmMOy46lcJn8TJD2nV
-         Cz4FiICRD0fpyV2EVDrJ/+oCA0F64UjfFbcIL0QFb5f/iutLKwDLAAC08nsVf2C0sW
-         PW2yXp5dIH6OPPlm4jB3q1u314n26v1FRt3YM0EM=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5D7531285DD9;
-        Tue,  2 May 2023 07:43:07 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id WKKGlZO_O65L; Tue,  2 May 2023 07:43:07 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683027787;
-        bh=VIXlwaAodrWp8Vhxz+WDa3KoUpXUVVhKJac+yTw3JPY=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Jhl+sztrOwEDjtwmne5HQU6aXLKSFxkGsV+GqvMXCULQnVptmMOy46lcJn8TJD2nV
-         Cz4FiICRD0fpyV2EVDrJ/+oCA0F64UjfFbcIL0QFb5f/iutLKwDLAAC08nsVf2C0sW
-         PW2yXp5dIH6OPPlm4jB3q1u314n26v1FRt3YM0EM=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
+        with ESMTP id S229457AbjEBMmn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 08:42:43 -0400
+Received: from bee.tesarici.cz (bee.tesarici.cz [77.93.223.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE9E7C3;
+        Tue,  2 May 2023 05:42:40 -0700 (PDT)
+Received: from meshulam.tesarici.cz (dynamic-2a00-1028-83b8-1e7a-4427-cc85-6706-c595.ipv6.o2.cz [IPv6:2a00:1028:83b8:1e7a:4427:cc85:6706:c595])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 32CE21285C64;
-        Tue,  2 May 2023 07:43:01 -0400 (EDT)
-Message-ID: <2f5ebe8a9ce8471906a85ef092c1e50cfd7ddecd.camel@HansenPartnership.com>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by bee.tesarici.cz (Postfix) with ESMTPSA id 0369514C1AA;
+        Tue,  2 May 2023 14:35:32 +0200 (CEST)
+Authentication-Results: mail.tesarici.cz; dmarc=fail (p=none dis=none) header.from=tesarici.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tesarici.cz; s=mail;
+        t=1683030933; bh=20jqHRbdtEj8ppcmNyyd7rJFAO2W2GN7oe2dWzqRVvA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pvJgyuySDoLJG+kmwFC037D7WTQlrRk1f6tAP/S5DF4yRvNHQRW7/ahkCIvO3leti
+         5pobEX0K/+x571RACLufXczVdwrcYtazeu1Un/KOB0R9qIQe+mbom2Tj1dGjq/4TLv
+         dMPoj1HfCNA3A6O+iuXmXP2dOAaZTi2u5PLNFZA8btd9bxu/eJtNxHjRyjED7MKRCT
+         TvmcQpmwIA0/Fl5ghTvDBzGW7yklDbxwUOtz8JQeVZryBJk3NhMCMDl5Vz+TXpCoch
+         0RTOINsN038OoKKSythJat+YPJ8wlE0LZVvUegvmuhW+eFACY68/wfeoQtRtWKJXkt
+         1DtPmRcDAWu7Q==
+Date:   Tue, 2 May 2023 14:35:30 +0200
+From:   Petr =?UTF-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
         ndesaulniers@google.com, gregkh@linuxfoundation.org,
         ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -72,25 +60,16 @@ Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?ISO-8859-1?Q?Tr=EF=BF=BDnnes?= <noralf@tronnes.org>
-Date:   Tue, 02 May 2023 07:42:59 -0400
-In-Reply-To: <ZFCA2FF+9MI8LI5i@moria.home.lan>
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 03/40] fs: Convert alloc_inode_sb() to a macro
+Message-ID: <20230502143530.1586e287@meshulam.tesarici.cz>
+In-Reply-To: <20230501165450.15352-4-surenb@google.com>
 References: <20230501165450.15352-1-surenb@google.com>
-         <20230501165450.15352-2-surenb@google.com>
-         <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
-         <ZFAUj+Q+hP7cWs4w@moria.home.lan>
-         <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
-         <ZFCA2FF+9MI8LI5i@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        <20230501165450.15352-4-surenb@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -100,60 +79,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2023-05-01 at 23:17 -0400, Kent Overstreet wrote:
-> On Mon, May 01, 2023 at 10:22:18PM -0400, James Bottomley wrote:
-> > It is not used just for debug.  It's used all over the kernel for
-> > printing out device sizes.  The output mostly goes to the kernel
-> > print buffer, so it's anyone's guess as to what, if any, tools are
-> > parsing it, but the concern about breaking log parsers seems to be
-> > a valid one.
+On Mon,  1 May 2023 09:54:13 -0700
+Suren Baghdasaryan <surenb@google.com> wrote:
+
+> From: Kent Overstreet <kent.overstreet@linux.dev>
 > 
-> Ok, there is sd_print_capacity() - but who in their right mind would
-> be trying to scrape device sizes, in human readable units,
-
-If you bother to google "kernel log parser", you'll discover it's quite
-an active area which supports a load of company business models.
-
->  from log messages when it's available in sysfs/procfs (actually, is
-> it in sysfs? if not, that's an oversight) in more reasonable units?
-
-It's not in sysfs, no.  As aren't a lot of things, which is why log
-parsing for system monitoring is big business.
-
-> Correct me if I'm wrong, but I've yet to hear about kernel log
-> messages being consider a stable interface, and this seems a bit out
-> there.
-
-It might not be listed as stable, but when it's known there's a large
-ecosystem out there consuming it we shouldn't break it just because you
-feel like it.  You should have a good reason and the break should be
-unavoidable.  I wanted my output in a particular form so I thought I'd
-change everyone else's output as well isn't a good reason and it only
-costs a couple of lines to avoid.
-
-> But, you did write the code :)
+> We're introducing alloc tagging, which tracks memory allocations by
+> callsite. Converting alloc_inode_sb() to a macro means allocations will
+> be tracked by its caller, which is a bit more useful.
 > 
-> > > If someone raises a specific objection we'll do something
-> > > different, otherwise I think standardizing on what userspace
-> > > tooling already parses is a good idea.
-> > 
-> > If you want to omit the space, why not simply add your own
-> > variant?  A string_get_size_nospace() which would use most of the
-> > body of this one as a helper function but give its own snprintf
-> > format string at the end.  It's only a couple of lines longer as a
-> > patch and has the bonus that it definitely wouldn't break anything
-> > by altering an existing output.
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> ---
+>  include/linux/fs.h | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
-> I'm happy to do that - I just wanted to post this version first to
-> see if we can avoid the fragmentation and do a bit of standardizing
-> with how everything else seems to do that.
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 21a981680856..4905ce14db0b 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2699,11 +2699,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
+>   * This must be used for allocating filesystems specific inodes to set
+>   * up the inode reclaim context correctly.
+>   */
+> -static inline void *
+> -alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
+> -{
+> -	return kmem_cache_alloc_lru(cache, &sb->s_inode_lru, gfp);
+> -}
+> +#define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
 
-What fragmentation?  To do this properly you move the whole of the
-current function to a helper which takes a format sting, say with a
-double underscore prefix, then the existing function and what you want
-become one line additions calling the helper with their specific format
-string.  There's no fragmentation of the base function at all.
+Honestly, I don't like this change. In general, pre-processor macros
+are ugly and error-prone.
 
-James
+Besides, it works for you only because __kmem_cache_alloc_lru() is
+declared __always_inline (unless CONFIG_SLUB_TINY is defined, but then
+you probably don't want the tracking either). In any case, it's going
+to be difficult for people to understand why and how this works.
 
+If the actual caller of alloc_inode_sb() is needed, I'd rather add it
+as a parameter and pass down _RET_IP_ explicitly here.
 
+Just my two cents,
+Petr T
