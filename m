@@ -2,130 +2,140 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7416F4AB0
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 21:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E56F6F4ACC
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 22:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjEBT6L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 15:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S229757AbjEBUDH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 16:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjEBT6J (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 15:58:09 -0400
-Received: from out-49.mta1.migadu.com (out-49.mta1.migadu.com [95.215.58.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B819E1BFA
-        for <linux-arch@vger.kernel.org>; Tue,  2 May 2023 12:58:06 -0700 (PDT)
-Date:   Tue, 2 May 2023 15:57:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683057484;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbTqJ6Cy48RWo6Tz/tI7JJZLpQOgd1GnXsK6J+pb2Po=;
-        b=TPEXvTAZj7eMMlezn0mxuUI2XEAYSmuur8j15Vhz2aAoEuxaC8gwe/DdLVCUdzI8I+L6aU
-        DEG5XTP5rhYFuMy34wKLVWK/nyN2iMJiF2WhtVwQS5E54+cSGLx6PlY24qgxqRCabxvnfl
-        6yoheYQVL8RgpgGG5HowroFYWwjIS0M=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 03/40] fs: Convert alloc_inode_sb() to a macro
-Message-ID: <ZFFrP8WKRFgZRzoB@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <20230501165450.15352-4-surenb@google.com>
- <20230502143530.1586e287@meshulam.tesarici.cz>
+        with ESMTP id S229676AbjEBUDG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 16:03:06 -0400
+Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623C81997
+        for <linux-arch@vger.kernel.org>; Tue,  2 May 2023 13:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=KtZNQ58vZ5N98TWm6M5w+L57kPYXNb5tAf0VlF8Flpc=;
+        b=Xah1/oyErMFNpxOGfQEez/E+8w0LLHZXJKtrW/ScT0xAhSKJyU1eZ3frWCdrdSF0GTGRRpJhPQrZs
+         I+uBJafShd3l9pu/kBATSdEVDgpUVD6i+FYH+AM1xPvyJ0UmNqbSnLpRvHzxNrVSMZzfiNM1KvbeUW
+         KGgXkpysLgZ/zewOpQiKznhcJPVatUQuOeymT5kBhkjt9Eq3PGZFnXDKGHoufHpJA6S/rh+SALRC4U
+         RIFwlrXy7znYTkNSqweLa/0D/HwYv9u4U6krbhYlJX7lMOSK5LXpPTdXhRVtOt8FJyFPUh9YDeusba
+         Gl27IKREH5sEcHLYQw1s+yrcHZiZ1BQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=KtZNQ58vZ5N98TWm6M5w+L57kPYXNb5tAf0VlF8Flpc=;
+        b=7QUNa4Iy2G7XUqb7b772O2zddt3FyCgHB/im3Jp8IwJy6rF7WzgO5eusroyZ9PEtznHxDPL5De33H
+         tmENBvLCg==
+X-HalOne-ID: 56af12f5-e924-11ed-94e2-99461c6a3fe8
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay1 (Halon) with ESMTPSA
+        id 56af12f5-e924-11ed-94e2-99461c6a3fe8;
+        Tue, 02 May 2023 20:03:02 +0000 (UTC)
+Date:   Tue, 2 May 2023 22:03:00 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@hansenpartnership.com, arnd@arndb.de,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] fbdev: Move framebuffer I/O helpers into
+ <asm/fb.h>
+Message-ID: <20230502200300.GB319489@ravnborg.org>
+References: <20230502130223.14719-1-tzimmermann@suse.de>
+ <20230502130223.14719-6-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230502143530.1586e287@meshulam.tesarici.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230502130223.14719-6-tzimmermann@suse.de>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 02, 2023 at 02:35:30PM +0200, Petr Tesařík wrote:
-> On Mon,  1 May 2023 09:54:13 -0700
-> Suren Baghdasaryan <surenb@google.com> wrote:
+Hi Thomas,
+
+On Tue, May 02, 2023 at 03:02:22PM +0200, Thomas Zimmermann wrote:
+> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
+> in the architecture's <asm/fb.h> header file or the generic one.
+
+In reality they are now all implemented in the generic one.
+
 > 
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > 
-> > We're introducing alloc tagging, which tracks memory allocations by
-> > callsite. Converting alloc_inode_sb() to a macro means allocations will
-> > be tracked by its caller, which is a bit more useful.
-> > 
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> > ---
-> >  include/linux/fs.h | 6 +-----
-> >  1 file changed, 1 insertion(+), 5 deletions(-)
-> > 
-> > diff --git a/include/linux/fs.h b/include/linux/fs.h
-> > index 21a981680856..4905ce14db0b 100644
-> > --- a/include/linux/fs.h
-> > +++ b/include/linux/fs.h
-> > @@ -2699,11 +2699,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
-> >   * This must be used for allocating filesystems specific inodes to set
-> >   * up the inode reclaim context correctly.
-> >   */
-> > -static inline void *
-> > -alloc_inode_sb(struct super_block *sb, struct kmem_cache *cache, gfp_t gfp)
-> > -{
-> > -	return kmem_cache_alloc_lru(cache, &sb->s_inode_lru, gfp);
-> > -}
-> > +#define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
+> The common case has been the use of regular I/O functions, such as
+> __raw_readb() or memset_io(). A few architectures used plain system-
+> memory reads and writes. Sparc used helpers for its SBus.
 > 
-> Honestly, I don't like this change. In general, pre-processor macros
-> are ugly and error-prone.
+> The architectures that used special cases provide the same code in
+> their __raw_*() I/O helpers. So the patch replaces this code with the
+> __raw_*() functions and moves it to <asm-generic/fb.h> for all
+> architectures.
+Which is also documented here.
 
-It's a one line macro, it's fine.
+> 
+> v3:
+> 	* implement all architectures with generic helpers
+> 	* support reordering and native byte order (Geert, Arnd)
+> 
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
+>  include/asm-generic/fb.h | 101 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/fb.h       |  53 --------------------
+>  2 files changed, 101 insertions(+), 53 deletions(-)
+> 
+> diff --git a/include/asm-generic/fb.h b/include/asm-generic/fb.h
+> index 6922dd248c51..0540eccdbeca 100644
+> --- a/include/asm-generic/fb.h
+> +++ b/include/asm-generic/fb.h
+> @@ -31,4 +31,105 @@ static inline int fb_is_primary_device(struct fb_info *info)
+>  }
+>  #endif
+>  
+> +/*
+> + * I/O helpers for the framebuffer. Prefer these functions over their
+> + * regular counterparts. The regular I/O functions provide in-order
+> + * access and swap bytes to/from little-endian ordering. Neither is
+> + * required for framebuffers. Instead, the helpers read and write
+> + * raw framebuffer data. Independent operations can be reordered for
+> + * improved performance.
+> + */
+> +
+> +#ifndef fb_readb
+> +static inline u8 fb_readb(const volatile void __iomem *addr)
+> +{
+> +	return __raw_readb(addr);
+> +}
+> +#define fb_readb fb_readb
+> +#endif
 
-> Besides, it works for you only because __kmem_cache_alloc_lru() is
-> declared __always_inline (unless CONFIG_SLUB_TINY is defined, but then
-> you probably don't want the tracking either). In any case, it's going
-> to be difficult for people to understand why and how this works.
+When we need to provide an architecture specific variant the
+#ifndef foo
+...
+#define foo foo
+can be added. Right now it is just noise as no architectures provide
+their own variants.
 
-I think you must be confused. kmem_cache_alloc_lru() is a macro, and we
-need that macro to be expanded at the alloc_inode_sb() callsite. It's
-got nothing to do with whether or not __kmem_cache_alloc_lru() is inline
-or not.
+But I am missing something somewhere as I cannot see how this builds.
+asm-generic now provide the fb_read/fb_write helpers.
+But for example sparc has an architecture specifc fb.h so it will not
+use the asm-generic variant. So I wonder how sparc get hold of the
+asm-generic fb.h file?
 
-> If the actual caller of alloc_inode_sb() is needed, I'd rather add it
-> as a parameter and pass down _RET_IP_ explicitly here.
+Maybe it is obvious, but I miss it.
 
-That approach was considered, but adding an ip parameter to every memory
-allocation function would've been far more churn.
+	Sam
