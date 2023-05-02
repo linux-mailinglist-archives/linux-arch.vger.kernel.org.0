@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B146F4482
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 15:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DBE46F4493
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 15:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234286AbjEBNCj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 09:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S234303AbjEBNCr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 09:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234303AbjEBNCe (ORCPT
+        with ESMTP id S234297AbjEBNCe (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 09:02:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2335BB9;
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB33861A8;
         Tue,  2 May 2023 06:02:28 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 966F521FA9;
-        Tue,  2 May 2023 13:02:26 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 06D211F8BE;
+        Tue,  2 May 2023 13:02:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683032546; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683032547; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YAY+hm0JbdoN9GPmL+mpKXDG9FbIByWtP6OGBMiB+YI=;
-        b=0F28kYpkfaOy1vZctAzEGZvptgQQHqKqTx9X3qEQ2hKFKxeQ52rdUeqxCEBpzQ4XHPa2HV
-        Z5asHcfpbNrDqwF9GOSNTuSixHQYUaqTT5LXmkfQ2o7w1Bnt4fTywHxV9beExZ44/t1m+9
-        2UFAJuLFU9s23rVagCiHnRSEEKuEXRc=
+        bh=h6kq3OyRQ9pgzZmJ23ahXTOGr7SsYN4Eh2vl2HKml1g=;
+        b=G9BpM2T1Ys/UhuirkBuAKZ73BHSOzRELPkPpCpD4+qTsaySfZPcMwy26FCK4ARx1tk4uW2
+        ZTMr6PYHLOTpMIqSBtZ7Poi4zg1XaCv58s5VQQtSQs2osjj04J/Mib7qiW8vqjmmk0wYao
+        7bOvRkd/37JeBJU5sQa5zIEyBkqMKpo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683032546;
+        s=susede2_ed25519; t=1683032547;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YAY+hm0JbdoN9GPmL+mpKXDG9FbIByWtP6OGBMiB+YI=;
-        b=CPNLuc7ibnHsJcz/u+OJt2PfeFPrZ9nTnyPQIEXBLBuBoa+XRUiXUs60uP/YT2nQ3WalDg
-        B0bxDCNvHZ4DlxAQ==
+        bh=h6kq3OyRQ9pgzZmJ23ahXTOGr7SsYN4Eh2vl2HKml1g=;
+        b=1U5DAyseVohEGfTgif4+9wlGQ0H0TtFCqWRJU/YU1WswUffCwPx9wS14sLN4LEZIGdTph6
+        oEiBzdvz98CyOlBw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 32C60134FB;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A890139D2;
         Tue,  2 May 2023 13:02:26 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id SAegC+IJUWRYTQAAMHmgww
+        id yKQJJeIJUWRYTQAAMHmgww
         (envelope-from <tzimmermann@suse.de>); Tue, 02 May 2023 13:02:26 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
@@ -61,9 +61,9 @@ Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-parisc@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v3 2/6] ipu-v3: Include <linux/io.h>
-Date:   Tue,  2 May 2023 15:02:19 +0200
-Message-Id: <20230502130223.14719-3-tzimmermann@suse.de>
+Subject: [PATCH v3 3/6] fbdev: Include <linux/io.h> in various drivers
+Date:   Tue,  2 May 2023 15:02:20 +0200
+Message-Id: <20230502130223.14719-4-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230502130223.14719-1-tzimmermann@suse.de>
 References: <20230502130223.14719-1-tzimmermann@suse.de>
@@ -79,27 +79,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The code uses readl() and writel(). Include the header file to
-get the declarations.
+The code uses writel() and similar I/O-memory helpers. Include
+the header file to get the declarations.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 ---
- drivers/gpu/ipu-v3/ipu-prv.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/video/fbdev/arcfb.c       | 1 +
+ drivers/video/fbdev/aty/atyfb.h   | 2 ++
+ drivers/video/fbdev/wmt_ge_rops.c | 2 ++
+ 3 files changed, 5 insertions(+)
 
-diff --git a/drivers/gpu/ipu-v3/ipu-prv.h b/drivers/gpu/ipu-v3/ipu-prv.h
-index 291ac1bab66d..d4621b1ea7f1 100644
---- a/drivers/gpu/ipu-v3/ipu-prv.h
-+++ b/drivers/gpu/ipu-v3/ipu-prv.h
-@@ -8,6 +8,7 @@
- 
- struct ipu_soc;
+diff --git a/drivers/video/fbdev/arcfb.c b/drivers/video/fbdev/arcfb.c
+index 45e64016db32..d631d53f42ad 100644
+--- a/drivers/video/fbdev/arcfb.c
++++ b/drivers/video/fbdev/arcfb.c
+@@ -41,6 +41,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
++#include <linux/io.h>
+ #include <linux/fb.h>
+ #include <linux/init.h>
+ #include <linux/arcfb.h>
+diff --git a/drivers/video/fbdev/aty/atyfb.h b/drivers/video/fbdev/aty/atyfb.h
+index 465f55beb97f..30da3e82ed3c 100644
+--- a/drivers/video/fbdev/aty/atyfb.h
++++ b/drivers/video/fbdev/aty/atyfb.h
+@@ -3,8 +3,10 @@
+  *  ATI Frame Buffer Device Driver Core Definitions
+  */
  
 +#include <linux/io.h>
- #include <linux/types.h>
- #include <linux/device.h>
- #include <linux/clk.h>
+ #include <linux/spinlock.h>
+ #include <linux/wait.h>
++
+     /*
+      *  Elements of the hardware specific atyfb_par structure
+      */
+diff --git a/drivers/video/fbdev/wmt_ge_rops.c b/drivers/video/fbdev/wmt_ge_rops.c
+index 42255d27a1db..99c7b0aea615 100644
+--- a/drivers/video/fbdev/wmt_ge_rops.c
++++ b/drivers/video/fbdev/wmt_ge_rops.c
+@@ -9,7 +9,9 @@
+ 
+ #include <linux/module.h>
+ #include <linux/fb.h>
++#include <linux/io.h>
+ #include <linux/platform_device.h>
++
+ #include "core/fb_draw.h"
+ #include "wmt_ge_rops.h"
+ 
 -- 
 2.40.1
 
