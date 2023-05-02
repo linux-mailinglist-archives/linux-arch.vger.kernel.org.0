@@ -2,141 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3806F4A40
-	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 21:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27BA6F4A5C
+	for <lists+linux-arch@lfdr.de>; Tue,  2 May 2023 21:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbjEBTVT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 May 2023 15:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S229657AbjEBTav (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 May 2023 15:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjEBTVS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 15:21:18 -0400
-Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021016.outbound.protection.outlook.com [52.101.62.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85607198D;
-        Tue,  2 May 2023 12:21:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gy105V4Cno46171h8GwTJiehv+WAgaC3JnVd165PVcYp5ncG+KvK3ZqU6Mbtgc/xPTytycyzwvjcDAd0RbnHxCad0rWoriGsfzAFPj5enm3jnoJc032VrGBLEDgTlP1HoShnpDtJVG4dT2r8uydqdpkugeUw+Cu/zsVzCs2i9zW5CFYxAgsrQxods2OK6imaf3jLeepgG3zktyxvwvMCfNYaQWkTOxpN+ZoHaTOpFJtqb/6zAcBmBLBgY4C3r0qBQLP/Kbb9kD8kejLfidwZfkqtcRzw4dlCbpBtf39xrJkL3L+vBhkw5jDsUIU3vUs7ZmwS2QzCj8SKkKTn+P2bRg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=02k2hTv7F31oB3w0iOkvTIdZkJ3lwpN4f4WsZW9xSZI=;
- b=OHEzsIdOOTBPOCDPMrxfiMYXskDP/XW98h0aO9h6skDHbZAjl74MrF/0vohXO6k97fw4U3FtDIksgKwfCywcTVWwqLcOsGQncNJJ5XNp0gjLi2++CvEI9MBghc+5Zc2DMIHhupHPc1xmFnGYdTbhl9bwyNORxw9lI4A6aKQ6DwuXqCADuI6gBgb/elWD1lIhjMQ/p8+qcjNPzHtarVrYcIccfmjIkJmf+qTMwreyE4MiwQfgQgF3QxMF1jJQo/cpNX1ZRYfcGs/0bH01/Tkh5GUjfcP+DF/S7CF/LTMSrVzZy6XObZhVr4qHaB1iplTlH7q4W2InuySnLaJZ0aUAXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=02k2hTv7F31oB3w0iOkvTIdZkJ3lwpN4f4WsZW9xSZI=;
- b=GAeontrfXSqhOsSk+v1cEDWk1JKuLWupGtCb6ss32Yviq2fZSMsgMDUka9LA6INOdT6EzwgHZd3zfT8lhrxQlPr/CVg1jIJCZ0FiHaiZQ9VZDyTuJBMdkBovCqMmtiRGcb/Yrvvso71JsLp3HxFIPu7T1WO0vjvUkqk+hlp+oMo=
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
- by MN0PR21MB3582.namprd21.prod.outlook.com (2603:10b6:208:3d1::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.6; Tue, 2 May
- 2023 19:21:06 +0000
-Received: from SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c454:256a:ce51:e983]) by SA1PR21MB1335.namprd21.prod.outlook.com
- ([fe80::c454:256a:ce51:e983%4]) with mapi id 15.20.6387.007; Tue, 2 May 2023
- 19:21:06 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>
-Subject: RE: [PATCH v5 5/6] Drivers: hv: vmbus: Support TDX guests
-Thread-Topic: [PATCH v5 5/6] Drivers: hv: vmbus: Support TDX guests
-Thread-Index: AQHZdMDlgRiCry573UqDSIN3qcYRLa9FtKkggAB7cdCAAPlpEIAAQwOw
-Date:   Tue, 2 May 2023 19:21:06 +0000
-Message-ID: <SA1PR21MB1335446CD89B9360CC70E7C2BF6F9@SA1PR21MB1335.namprd21.prod.outlook.com>
-References: <20230422021735.27698-1-decui@microsoft.com>
- <20230422021735.27698-6-decui@microsoft.com>
- <BYAPR21MB16888DA20245DDBC572A2240D76E9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <SA1PR21MB1335046F4BA2B407C9026130BF6F9@SA1PR21MB1335.namprd21.prod.outlook.com>
- <BYAPR21MB1688F458EE551BA19D80B65DD76F9@BYAPR21MB1688.namprd21.prod.outlook.com>
-In-Reply-To: <BYAPR21MB1688F458EE551BA19D80B65DD76F9@BYAPR21MB1688.namprd21.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fe447994-baa8-4b2f-a2ae-c9a8aadd7e33;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-01T17:05:09Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|MN0PR21MB3582:EE_
-x-ms-office365-filtering-correlation-id: c79e5e9b-dc00-4b46-971a-08db4b426073
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YA1YRb9qMsd8JQRuUlzg5q9TByfF4Q5uALvJJSY0vaQtDRxsaENPxwolRzMK6HMivNUeIB0wloiW1Do8BKlDq1OkHvOEAfnknFs4sszHOlHKlIHK2BYXLsnh0kV+itDsT9CFiw9BZNOZa5GukIGZTDc2KFd4Nez1g36oc/L/QRH35bv6nUw8YwRLdw2Zxxoiveb4uk5SF9eTDwmoYGDR0CUtrLG+QO2V+ap8IVh+ZYp1EuWLEIfnCiBTN4BBwjk3w5wUu8gpFuDYn3FmWJ60ezT8BJyWDGCfcEn376cnvOa9RPKUvNX+WqDK3zoZmWengnpoAmyiN84BnQIeqNkZwDVOW+2acWvjuEaq4uL8cUnJPAJW+LVU/weBedarobCUxXKd/nOq9RvUPfh+EYpfNOPmHzltUHLn7yhr7MNPLOCqsGh80TLYeEAr1BsS76ybQm29MMxCHGQT6TWayoHcAJMJObDksUnSItemQJFPuAVovWyLInOBr0yXCnAYqtHCqHhrreIk2MUyoqwPagVbJbP1e4yF4cfe2O9mIwAZH3D5TmbFzTpPBnAdvypUPdrbt0G1VABQUx0ImXj775/WYs50RJ2ijMSN2vCcQ6PKU1quAC9C15u0Prb8LmYxB73JKidGD9NPxVei+vDTe71CqOoa/PdRqYyf/1MTIUEuJmuNAqS8Eu05u2SjHvVKnnln
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(366004)(346002)(39860400002)(376002)(451199021)(82960400001)(4744005)(82950400001)(7416002)(921005)(122000001)(41300700001)(8936002)(8676002)(5660300002)(52536014)(2906002)(86362001)(55016003)(38070700005)(38100700002)(8990500004)(33656002)(71200400001)(7696005)(54906003)(186003)(478600001)(10290500003)(9686003)(83380400001)(6506007)(107886003)(66556008)(66476007)(66446008)(64756008)(66946007)(4326008)(76116006)(786003)(316002)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JU9nm0TDquX3X1zxc7zhOgUD9xo7dy5sYVC+JZyVzFliex2VMIT+rHHQbhJL?=
- =?us-ascii?Q?3PBdC2l5rlFTjhVKS2dgl/0up/4g61HDiErnKMsT92J8mE1LKELeoFXtJAZW?=
- =?us-ascii?Q?qWCBB398NYuKFBMqqU8RYpIfOimsiGS5Llexmx26Lv+tPPp02yYyj+yZmYmD?=
- =?us-ascii?Q?RvXIvDpycnoYefrebOf55V/pTneigtp/lDor4ue0pHZtbzLdvOR8A6zUd5Ef?=
- =?us-ascii?Q?tCsW1R6pWj8LuOx0KpUCNBvaKoPN+Uh9XaayXkn12cHMWl7ViasiucKMtd36?=
- =?us-ascii?Q?A0Tidg6HfLmBPjKUWJRuN5wkG4zbeTej3y+XxEJz8LrkxYH7LBn8YHqfbyKy?=
- =?us-ascii?Q?WqIcxtjJLjREEfQyVq6F7XoKZCm7ZLVmpYexC1ZlPKmz02jZ7KRHfpwBeVex?=
- =?us-ascii?Q?fEXR+kQKx5GBqSN+gOmw6KrqbHpzifjHFpqf5l3TMZxL5LXubJRs0l6QDo1w?=
- =?us-ascii?Q?pIUHYQLM2CQvULjL+jeXDDwiu5kBEZYN6X5JimWOCNQ1GRrCi3XV56Ahafyh?=
- =?us-ascii?Q?Xs4IQn09z47vrG8gQY5Pobl6GXkPIB9QsXiFXA9Hb04yhj42L+H59FVsgHgP?=
- =?us-ascii?Q?m/3ARFHUEQ6rqj1o45L7w+GHQtMJuuNGTgFPl2vB9LzdlIWVRnTrSfg1G6O1?=
- =?us-ascii?Q?QKo3DFQBZMjII4Qc/aZaJuFPiZDglu8RMSIm8ARSz2MYP5q+Oo6K/QJzB00k?=
- =?us-ascii?Q?mv8S0dxoVGURkF7Szhp8DqFvrtz3J7waIgHYR8CWHUzxNzkl49n+eV4hyZt8?=
- =?us-ascii?Q?sIkmSqtbSASTHozLN0ZhrRkaVm+88dq/09cXeWeUnkWnWlRlOUUEViTTzmyT?=
- =?us-ascii?Q?Sr4oyicPg2nT5vQZY79Cerm3447ozehkSVxzDkFx1qfNhnBt31LaP1gVM5NG?=
- =?us-ascii?Q?9yR5zUVtoijCqSQurLD/Q5KyYWDh0o9uGCvIoRe8yBSKfWij7Ck5o7+70EAj?=
- =?us-ascii?Q?r3D34uqo2x2fdvOHrE9EM3p8bTkGJ3MEecdUKJPnBdNHhRIKuwhZUAdNLbav?=
- =?us-ascii?Q?y4ZRV2wq0CAXrBe+gkTLEEU8CZOFvSz71Amq0Omj1BUGIaHtFVDI6N2AdFo2?=
- =?us-ascii?Q?I0ikUEo9eeXSXGFwXq2K6uDRFRPDF8Ar/D8Xo71NEu8bK0io5upBrfvMYQ+x?=
- =?us-ascii?Q?7cG092b3r9WlQX8gKknxDAPRPr6Cky0WhxzDRUe6jkWlTXA5X8RoENwnhNtq?=
- =?us-ascii?Q?IcjEk0FfAuN22hrIl8sZTy6caAecU/kXS1mJQ5kn11/4dFMrsqRx64Sux1x5?=
- =?us-ascii?Q?Z4kAkWWO2UaS3is3WnwjwkyuxZpNRIiJpZaBhpKefbCpvFILQnS5Jvvp4fAB?=
- =?us-ascii?Q?4YzvQ6ir2MP2u2wmTLLydJWqHJ5K/88RYY+cqXN2UbvB9l3Cyrj6jUqlhHl0?=
- =?us-ascii?Q?ckEUoLnMxkSmIfZxNl5ansdYKsSxRVYPCyBIqqCFFYQth13hpOJ+hZmUIYHH?=
- =?us-ascii?Q?4Cd1Ql6jH/LOoznWm1HQwaoj/lX/P3VsM11s27o75HEmN+/B5pEfPfHiflcj?=
- =?us-ascii?Q?FVEQkvCxoHtlWtKZcnTjNacUUfHGsuYK3TYLU+zeAFG3wyJUpP+FHT2YnxfM?=
- =?us-ascii?Q?yAiAbBq4KnNLtlG0pvjkYIvrZrLbiCReLK3dqkFeuhKSoTEVAiwmcg3sE1wK?=
- =?us-ascii?Q?ppK2tCadQYAVzszJWuJ1nIROF0KzpP7QzC+J5MoQvxSK?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229649AbjEBTau (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 May 2023 15:30:50 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387761FC3;
+        Tue,  2 May 2023 12:30:48 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2a8dc09e884so5515971fa.1;
+        Tue, 02 May 2023 12:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683055846; x=1685647846;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y0sUVnHSqc4uat8sAhfZisJAZwIOerlp+234b6+n8tM=;
+        b=rw3rCTOdKq0z9YrJ7VVRjN6WGrwr+ICx1Os1qeuwedcZQh2M53vGEfrLklAlU97TXx
+         0Q1xkZ8/eGYdc5YzoQsoNBlgcw0k6DIRVbA+qZGMz49XTuvYx8DXipb17g1aNEFFNuZ2
+         aQmebdfdQekumQe4ispexVG/jkypPqpWn50aLSG+Sl/lGJ7gymk4awag0D5NVjY9iIon
+         VJixFUAujKA3WP4EBQ/IeaRHFFlGg+1XTwKJ2Fjx3KVanrW4ihIVdcV83T5g1oVb92R4
+         L/Qk8RL/H8+5bnlg4NQn5uL/1y6oyUDLw0PfFDTx5QzfkgnB9ZWGLKXdqQLFDRpyRT8p
+         bbAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683055846; x=1685647846;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y0sUVnHSqc4uat8sAhfZisJAZwIOerlp+234b6+n8tM=;
+        b=CKi0xjC/Qy1vfVisDU2sm3biF1bpPGVaTGfhD6+zR760pOTxl1poWZsaoPNdA989El
+         5C7GlRKBaqViq89jI/kQs30BSwif5La2HQD4QhpvTiQzw+AQ4Bk3msTwE2DomsD4R1fX
+         06grGlwgHJwJKo+ZZax4DVnYzIDY208yzPotogGBAi9og1fZX+X0+B3m9aib+bxULwxU
+         ikJDuR2I5HhCUQFPMND7Ag+hOMQcLA+rPT8QODOGFWwy4Gk7yNpxa9s3ANDHZax98aCB
+         ucHD9FHgFudvdhKOf9OMb+Uz6cjIgLLwUVKC8Ss8UDGG0LVEPGbBCUf2MxO95+uOJXj3
+         uW8w==
+X-Gm-Message-State: AC+VfDzJHxwrLMS8Km432+F1GS/4Etw40RM2jMmCHpGf1NSwTCW9/B7s
+        eEgx+AMbVC79Zw2tbOjRQcg=
+X-Google-Smtp-Source: ACHHUZ4l9SbL/8BZFyV+fbmMZr3b6aU2enjMXY+r/SYH70eqjZA0ABJgvtip69/P61yOArvNspaAsQ==
+X-Received: by 2002:a2e:be8c:0:b0:2a9:f4e9:1a3d with SMTP id a12-20020a2ebe8c000000b002a9f4e91a3dmr1236194ljr.2.1683055846139;
+        Tue, 02 May 2023 12:30:46 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id z23-20020a2e8857000000b002a8c271de33sm5359052ljj.67.2023.05.02.12.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 May 2023 12:30:46 -0700 (PDT)
+Date:   Tue, 2 May 2023 22:30:41 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
+        pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH V5 03/15] x86/hyperv: Set Virtual Trust Level in
+ VMBus init message
+Message-ID: <20230502223041.00000240.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230501085726.544209-4-ltykernel@gmail.com>
+References: <20230501085726.544209-1-ltykernel@gmail.com>
+        <20230501085726.544209-4-ltykernel@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c79e5e9b-dc00-4b46-971a-08db4b426073
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2023 19:21:06.0667
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: a6UN7iYTUXy12fR4DgM0MWwE0otBV66XsbAjMPuFqmoae4Tcv2Qj0FzjIRaNtympoEUE38qK5iE5WSWvkSx/vQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3582
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -144,22 +88,156 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: Michael Kelley (LINUX) <mikelley@microsoft.com>
-> Sent: Tuesday, May 2, 2023 8:26 AM
-> ...
-> Yes, this looks good to me.  A minor point:  In the two calls to set
-Thanks for the confirmation!
+On Mon,  1 May 2023 04:57:13 -0400
+Tianyu Lan <ltykernel@gmail.com> wrote:
 
-> decrypted,
-> if there is a failure, output the value of "ret" in the error message.  I=
-t should
-> never happen, but if it did, it could be hard to diagnose, and we'll want=
- all
-> the info we can get about the failure.  And do the same in hv_synic_free(=
-)
-> if setting back to encrypted should fail.
->=20
-> Michael
+> From: Tianyu Lan <tiala@microsoft.com>
+> 
+> sev-snp guest provides vtl(Virtual Trust Level) and
+> get it from hyperv hvcall via HVCALL_GET_VP_REGISTERS.
+> Set target vtl in the VMBus init message.
+> 
+> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> ---
+> Change since RFC v4:
+>        * Use struct_size to calculate array size.
+>        * Fix some coding style
+> 
+> Change since RFC v3:
+>        * Use the standard helper functions to check hypercall result
+>        * Fix coding style
+> 
+> Change since RFC v2:
+>        * Rename get_current_vtl() to get_vtl()
+>        * Fix some coding style issues
+> ---
+>  arch/x86/hyperv/hv_init.c          | 36 ++++++++++++++++++++++++++++++
+>  arch/x86/include/asm/hyperv-tlfs.h |  7 ++++++
+>  drivers/hv/connection.c            |  1 +
+>  include/asm-generic/mshyperv.h     |  1 +
+>  include/linux/hyperv.h             |  4 ++--
+>  5 files changed, 47 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 9f3e2d71d015..331b855314b7 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -384,6 +384,40 @@ static void __init hv_get_partition_id(void)
+>  	local_irq_restore(flags);
+>  }
+>  
+> +static u8 __init get_vtl(void)
+> +{
+> +	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
+> +	struct hv_get_vp_registers_input *input;
+> +	struct hv_get_vp_registers_output *output;
+> +	u64 vtl = 0;
+> +	u64 ret;
+> +	unsigned long flags;
+> +
+> +	local_irq_save(flags);
+> +	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> +	output = (struct hv_get_vp_registers_output *)input;
 
-Will do in v6.
+===
+> +	if (!input) {
+> +		local_irq_restore(flags);
+> +		goto done;
+> +	}
+> +
+===
+Is this really necessary?
+
+drivers/hv/hv_common.c:
+
+        hyperv_pcpu_input_arg = alloc_percpu(void  *);
+        BUG_ON(!hyperv_pcpu_input_arg);
+
+
+> +	memset(input, 0, struct_size(input, element, 1));
+> +	input->header.partitionid = HV_PARTITION_ID_SELF;
+> +	input->header.vpindex = HV_VP_INDEX_SELF;
+> +	input->header.inputvtl = 0;
+> +	input->element[0].name0 = HV_X64_REGISTER_VSM_VP_STATUS;
+> +
+> +	ret = hv_do_hypercall(control, input, output);
+> +	if (hv_result_success(ret))
+> +		vtl = output->as64.low & HV_X64_VTL_MASK;
+> +	else
+> +		pr_err("Hyper-V: failed to get VTL! %lld", ret);
+> +	local_irq_restore(flags);
+> +
+> +done:
+> +	return vtl;
+> +}
+> +
+>  /*
+>   * This function is to be invoked early in the boot sequence after the
+>   * hypervisor has been detected.
+> @@ -512,6 +546,8 @@ void __init hyperv_init(void)
+>  	/* Query the VMs extended capability once, so that it can be cached. */
+>  	hv_query_ext_cap(0);
+>  
+> +	/* Find the VTL */
+> +	ms_hyperv.vtl = get_vtl();
+>  	return;
+>  
+>  clean_guest_os_id:
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index cea95dcd27c2..4bf0b315b0ce 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -301,6 +301,13 @@ enum hv_isolation_type {
+>  #define HV_X64_MSR_TIME_REF_COUNT	HV_REGISTER_TIME_REF_COUNT
+>  #define HV_X64_MSR_REFERENCE_TSC	HV_REGISTER_REFERENCE_TSC
+>  
+> +/*
+> + * Registers are only accessible via HVCALL_GET_VP_REGISTERS hvcall and
+> + * there is not associated MSR address.
+> + */
+> +#define	HV_X64_REGISTER_VSM_VP_STATUS	0x000D0003
+> +#define	HV_X64_VTL_MASK			GENMASK(3, 0)
+> +
+>  /* Hyper-V memory host visibility */
+>  enum hv_mem_host_visibility {
+>  	VMBUS_PAGE_NOT_VISIBLE		= 0,
+> diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+> index 5978e9dbc286..02b54f85dc60 100644
+> --- a/drivers/hv/connection.c
+> +++ b/drivers/hv/connection.c
+> @@ -98,6 +98,7 @@ int vmbus_negotiate_version(struct vmbus_channel_msginfo *msginfo, u32 version)
+>  	 */
+>  	if (version >= VERSION_WIN10_V5) {
+>  		msg->msg_sint = VMBUS_MESSAGE_SINT;
+> +		msg->msg_vtl = ms_hyperv.vtl;
+>  		vmbus_connection.msg_conn_id = VMBUS_MESSAGE_CONNECTION_ID_4;
+>  	} else {
+>  		msg->interrupt_page = virt_to_phys(vmbus_connection.int_page);
+> diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+> index 402a8c1c202d..3052130ba4ef 100644
+> --- a/include/asm-generic/mshyperv.h
+> +++ b/include/asm-generic/mshyperv.h
+> @@ -48,6 +48,7 @@ struct ms_hyperv_info {
+>  		};
+>  	};
+>  	u64 shared_gpa_boundary;
+> +	u8 vtl;
+>  };
+>  extern struct ms_hyperv_info ms_hyperv;
+>  extern bool hv_nested;
+> diff --git a/include/linux/hyperv.h b/include/linux/hyperv.h
+> index bfbc37ce223b..1f2bfec4abde 100644
+> --- a/include/linux/hyperv.h
+> +++ b/include/linux/hyperv.h
+> @@ -665,8 +665,8 @@ struct vmbus_channel_initiate_contact {
+>  		u64 interrupt_page;
+>  		struct {
+>  			u8	msg_sint;
+> -			u8	padding1[3];
+> -			u32	padding2;
+> +			u8	msg_vtl;
+> +			u8	reserved[6];
+>  		};
+>  	};
+>  	u64 monitor_page1;
 
