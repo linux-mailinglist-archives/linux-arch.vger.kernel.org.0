@@ -2,60 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018B06F5DD2
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 20:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94346F5E13
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 20:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjECSYL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 14:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
+        id S229748AbjECSkO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 14:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjECSYJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 14:24:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4539E4E;
-        Wed,  3 May 2023 11:24:08 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-63b5c48ea09so4177652b3a.1;
-        Wed, 03 May 2023 11:24:08 -0700 (PDT)
+        with ESMTP id S229622AbjECSkN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 14:40:13 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B8658E;
+        Wed,  3 May 2023 11:40:10 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c62a71541so761147a12.3;
+        Wed, 03 May 2023 11:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683138248; x=1685730248;
+        d=gmail.com; s=20221208; t=1683139209; x=1685731209;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HAaHXuopg20H7kDrY4ngFywwBOIWWtTHOJdh9Kk4ti8=;
-        b=aB33hUnZnfHPZlWWtIoWkOnjjHisPYabb6S2uWTBQ8h3onE+k8lH1fwWNrmP3+C2Ae
-         V9xYfHUAfa1MQR5bGsnZZI/T3EfAtEbMB7LJgZA6S5DUFfa3NoHlKU045MUvM3dSPcwJ
-         O9knvzOZHAicKc7Q1U9prQ5QYBA7iuXytpIxNnq+/0XAMdmK6s/cx66iKx/7bF6fFMVt
-         9qvyKftWjNhL52s2yKIZb6lNZsILUvRPIJqsyqINqcoQfODMA3flr2J6lxf4LYnNwpJG
-         HZgaEjG650bHbl05TVNvOqMZG18RkP9d2mBdzyVqPL8pMYePQurNMT2j8/2P3LbRKc10
-         RP1Q==
+        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
+        b=FAsEakodIYGZZ49hzhHq8Do+4wt23WK6jVIu98FKgEcC2IC28Yv1qcpIguYdAHmL41
+         K6QXYVXYY9e0ydYBW/QaYBQ4kV1sgRKD0Z8m7VqP9eoT6OyuI2TEKLTHxSnuPoZ0/P86
+         Ak//1N2uQgFgtt5vHB1OZ1Yr9lZGqpMPiXmn0PLHivzD9gD6C3pgBiZeck/EvcUad+D9
+         AIqIEi6ySYiJEa/rjzcr1BnwS0cO5uVLCgZHYd00/2Qp62J0+g0bDyAUjzMrqC8es9RR
+         PvNP8hKoKyN1VyTkZlWwEOSIbNVu+bisxPnpdL40o9ZuYAjxbUCiGJrKy44Q/i6wCbvS
+         6MJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683138248; x=1685730248;
+        d=1e100.net; s=20221208; t=1683139209; x=1685731209;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HAaHXuopg20H7kDrY4ngFywwBOIWWtTHOJdh9Kk4ti8=;
-        b=dBig4BFc2E4RL2+ra5xqZ04y409pmUod4DWpp+YWPLM9C/T7JRVNbkhvnCZm3Khgnn
-         0EPlRH++A5iCerMyRyGA7eDenS6IUYsHKUZRAgJDjy4HB1mrNOuM+MUV+D5kjUOKRYaY
-         lOgtNaph4oJ1AbrB0haEonBEtE0i0ExnKSGeQ/2BkjcxeMFREThGkipX0CMAdKv6J72q
-         6w1v54g2/DhOGQk3VarXiV7QhdjgDe/z9ev026YoH3B+w3LmGlb+NVmlrA/X4yKmVb8C
-         nCIbVvqnGhjgGbAA08DvJEt1RsHvex3eUfz6PwAu7FhtlWD2GyzFSAJFCB5yfr/8hHp0
-         YiBw==
-X-Gm-Message-State: AC+VfDy1wYoDmVfMf3/dA0Rco1QCHULNCCkYmGk1wJ5vlsLdcwBpfubv
-        hNY0118zsH5r5j4u2pDCPEI=
-X-Google-Smtp-Source: ACHHUZ6SJEEQ8QvbsKtdJRVXR1zPnkUl+hGGIJ5sn55EaO+j6xudf8VpDqWbOhAMlICayQOL4hheYg==
-X-Received: by 2002:a05:6a20:1616:b0:f3:b764:5de3 with SMTP id l22-20020a056a20161600b000f3b7645de3mr27371733pzj.48.1683138248162;
-        Wed, 03 May 2023 11:24:08 -0700 (PDT)
+        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
+        b=BvoRPokoSMiVkbPlmALA8hIQW0hWkF3BGtAu3Whene693AAih2RPESqRgP9aO3X3wG
+         youYRS9jUoIPpTqC/k45VBMmpds/sXb2OY5BDLIrRiyK6jHqPmCcHaBiWZYN7gZV5ZHr
+         b7Cs9nIDJpdRLLmouDPWU+pUpS1arKk9lDmbCuvthKKckqvkeFLejrTePCsU6GWcVxRH
+         iD8Txo/yYwibavRal1PSN5TGBADpMjKOhUVDHQayB+SwafDV4c1PxoUiVHjqsQo/Cz9A
+         nNugKaMvBgsS2QhRLXTuw8Rh0caR2/ahG/5f+t4AAjzKnSJ/A4o/BOixSFrekxbWXbeF
+         vUCg==
+X-Gm-Message-State: AC+VfDxdx6rv5/vxaJT9N1OkMtov+3uywXA5fICrcvDYyDTdMtbE12dh
+        oA6SrYnEtMhbXeyWNwJa7ng=
+X-Google-Smtp-Source: ACHHUZ5HrlmzzWxl9cdU7mNdLYfBeR7MIFjXh85oRNOW13gF1ERuxzszMtMYq8KFsJoY0P2G/zpWtw==
+X-Received: by 2002:a05:6a20:4286:b0:dd:7661:fb34 with SMTP id o6-20020a056a20428600b000dd7661fb34mr28426673pzj.51.1683139209307;
+        Wed, 03 May 2023 11:40:09 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056a000ad100b005ae02dc5b94sm23989633pfl.219.2023.05.03.11.24.06
+        by smtp.gmail.com with ESMTPSA id u22-20020a634556000000b005287b22ea8esm12540790pgk.88.2023.05.03.11.40.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:24:07 -0700 (PDT)
+        Wed, 03 May 2023 11:40:08 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 08:24:05 -1000
+Date:   Wed, 3 May 2023 08:40:07 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>,
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
         Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, vbabka@suse.cz,
         roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
         willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
         void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
@@ -80,20 +81,23 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
 Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFKmxVXlk9xkQoPB@slm.duckdns.org>
+Message-ID: <ZFKqh5Dh93UULdse@slm.duckdns.org>
 References: <20230501165450.15352-1-surenb@google.com>
  <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
  <ZFIOfb6/jHwLqg6M@moria.home.lan>
  <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
  <ZFIVtB8JyKk0ddA5@moria.home.lan>
  <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
- <ZFKfG7bVuOAk27yP@moria.home.lan>
+ <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZFKfG7bVuOAk27yP@moria.home.lan>
+In-Reply-To: <ZFKlrP7nLn93iIRf@slm.duckdns.org>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -105,22 +109,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+On Wed, May 03, 2023 at 08:19:24AM -1000, Tejun Heo wrote:
+> > Taking a step back though, given the multitude of allocation sites in
+> > the kernel, it's a bit odd that the only accounting we do is the tiny
+> > fraction of voluntary vmstat/meminfo reporting. We try to cover the
+> > biggest consumers with this of course, but it's always going to be
+> > incomplete and is maintenance overhead too. There are on average
+> > several gigabytes in unknown memory (total - known vmstats) on our
+> > machines. It's difficult to detect regressions easily. And it's per
+> > definition the unexpected cornercases that are the trickiest to track
+> > down. So it might be doable with BPF, but it does feel like the kernel
+> > should do a better job of tracking out of the box and without
+> > requiring too much plumbing and somewhat fragile kernel allocation API
+> > tracking and probing from userspace.
+> 
+> Yeah, easy / default visibility argument does make sense to me.
 
-On Wed, May 03, 2023 at 01:51:23PM -0400, Kent Overstreet wrote:
-> Do you have example output?
-
-Not right now. It's from many months ago. It's just a script I could find
-easily.
-
-> TBH I'm skeptical that it's even possible to do full memory allocation
-> profiling with tracing/bpf, due to recursive memory allocations and
-> needing an index of outstanding allcations.
-
-There are some issues e.g. w/ lossy updates which should be fixed from BPF
-side but we do run BPF on every single packet and IO on most of our
-machines, so basing this argument on whether tracking all memory allocations
-from BPF is possible is probably not a winning strategy for this proposal.
+So, a bit of addition here. If this is the thrust, the debugfs part seems
+rather redundant, right? That's trivially obtainable with tracing / bpf and
+in a more flexible and performant manner. Also, are we happy with recording
+just single depth for persistent tracking?
 
 Thanks.
 
