@@ -2,49 +2,28 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E366F57FB
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 14:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB626F58F1
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 15:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjECMe2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 08:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S229773AbjECNVm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 09:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjECMeV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 08:34:21 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894CD10FF;
-        Wed,  3 May 2023 05:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683117236;
-        bh=ouniWm3kSvheJ5FVfsQv5nBr8bj1HWMP2KRRhetgh0w=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=tBkpGMeHZlzQT7xcRfhegUu+wRFRMNYKk6KHQH9rVVXBpIbjN/8+o1xoQ19Hqpohg
-         OkNzp5X7Gz8O9ULzqmlhb2B/3qykYYJsyqEUw/puHJIAqQho1Um/vUhig69kw9pE34
-         3VJbCcqjcs3yhCW9eIwUZKzOzdLAc5JMGM1fjNZI=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 605131286185;
-        Wed,  3 May 2023 08:33:56 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id m7TfR2wZ3ZyK; Wed,  3 May 2023 08:33:56 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683117236;
-        bh=ouniWm3kSvheJ5FVfsQv5nBr8bj1HWMP2KRRhetgh0w=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=tBkpGMeHZlzQT7xcRfhegUu+wRFRMNYKk6KHQH9rVVXBpIbjN/8+o1xoQ19Hqpohg
-         OkNzp5X7Gz8O9ULzqmlhb2B/3qykYYJsyqEUw/puHJIAqQho1Um/vUhig69kw9pE34
-         3VJbCcqjcs3yhCW9eIwUZKzOzdLAc5JMGM1fjNZI=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 87F771285CEE;
-        Wed,  3 May 2023 08:33:50 -0400 (EDT)
-Message-ID: <25a1ea786712df5111d7d1db42490624ac63651e.camel@HansenPartnership.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Petr =?UTF-8?Q?Tesa=C5=99=C3=ADk?= <petr@tesarici.cz>
+        with ESMTP id S230075AbjECNVl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 09:21:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621704EE3;
+        Wed,  3 May 2023 06:21:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EADF36272F;
+        Wed,  3 May 2023 13:21:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334EFC433D2;
+        Wed,  3 May 2023 13:21:31 +0000 (UTC)
+Date:   Wed, 3 May 2023 09:21:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
 Cc:     Michal Hocko <mhocko@suse.com>,
         Suren Baghdasaryan <surenb@google.com>,
         akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
@@ -62,54 +41,61 @@ Cc:     Michal Hocko <mhocko@suse.com>,
         hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
         ndesaulniers@google.com, gregkh@linuxfoundation.org,
         ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        dietmar.eggemann@arm.com, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
         kernel-team@android.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Date:   Wed, 03 May 2023 08:33:48 -0400
-In-Reply-To: <ZFIv+30UH7+ySCZr@moria.home.lan>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <20230503092128.1a120845@gandalf.local.home>
+In-Reply-To: <ZFIVtB8JyKk0ddA5@moria.home.lan>
 References: <20230501165450.15352-1-surenb@google.com>
-         <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
-         <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
-         <20230503115051.30b8a97f@meshulam.tesarici.cz>
-         <ZFIv+30UH7+ySCZr@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+        <ZFIOfb6/jHwLqg6M@moria.home.lan>
+        <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+        <ZFIVtB8JyKk0ddA5@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2023-05-03 at 05:57 -0400, Kent Overstreet wrote:
-> On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
-> > If anyone ever wants to use this code tagging framework for
-> > something
-> > else, they will also have to convert relevant functions to macros,
-> > slowly changing the kernel to a minefield where local identifiers,
-> > struct, union and enum tags, field names and labels must avoid name
-> > conflict with a tagged function. For now, I have to remember that
-> > alloc_pages is forbidden, but the list may grow.
+On Wed, 3 May 2023 04:05:08 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
+
+> > The burden is on you and Suren. You are proposing the implement an
+> > alternative tracing infrastructure.  
 > 
-> Also, since you're not actually a kernel contributor yet...
+> No, we're still waiting on the tracing people to _demonstrate_, not
+> claim, that this is at all possible in a comparable way with tracing. 
 
-You have an amazing talent for being wrong.  But even if you were
-actually right about this, it would be an ad hominem personal attack on
-a new contributor which crosses the line into unacceptable behaviour on
-the list and runs counter to our code of conduct.
+It's not my job to do your work for you!
 
-James
+I gave you hints on how you can do this with attaching to existing trace
+events and your response was "If you don't think it's hard, go ahead and
+show us." No! I'm too busy with my own work to do free work for you!
 
+https://lore.kernel.org/all/20220905235007.sc4uk6illlog62fl@kmo-framework/
+
+I know it's easier to create something from scratch that you fully know,
+than to work with an existing infrastructure that you need to spend effort
+and learn to make it do what you want. But by recreating the work, you now
+pass the burden onto everyone else that needs to learn what you did. Not to
+mention, we would likely have multiple ways to do the same thing.
+
+Sorry, but that's not how an open source community is suppose to work.
+
+-- Steve
