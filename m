@@ -2,141 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAE66F52D0
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 10:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE03B6F52C4
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 10:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjECILK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 04:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S229803AbjECIKI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 3 May 2023 04:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjECILI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 04:11:08 -0400
-Received: from out-10.mta1.migadu.com (out-10.mta1.migadu.com [IPv6:2001:41d0:203:375::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53524491
-        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 01:10:37 -0700 (PDT)
-Date:   Wed, 3 May 2023 04:05:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683101119;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Af+2O/2Jo9IC9XECoO60Ibec+DnzA9yRBnuv4Bp8O9Y=;
-        b=rqHkCee1X71Oj3G6VysOrsK/rdJHy9B0yyXfZMJ4T4TWGYp3bKIJl27dUenlhtN0eAw3EY
-        9wtRJDXX0Vxp+Xc6ZM2YYwJwQELwnDdfgbU2buAGO1Vb841r/qxmb4h0I2pylWL1m2aZFQ
-        DMBUFXd/kgyZZl04aMULTG8rjWs+sv0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
-        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFIVtB8JyKk0ddA5@moria.home.lan>
-References: <20230501165450.15352-1-surenb@google.com>
- <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan>
- <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+        with ESMTP id S229720AbjECIKH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 04:10:07 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FA11716;
+        Wed,  3 May 2023 01:09:53 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-55a6efe95c9so38615197b3.1;
+        Wed, 03 May 2023 01:09:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683101392; x=1685693392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3SVmNF978sXXspcYjjZLpiBDqyot8IfsoBtpE1ZoRNc=;
+        b=W7CHGSXOvP426ID/JQgMh2SojaH7qharrHVxPh9IYKVwCXRBUi1TzDY4iX73qZniz1
+         NEvRueNIBBOdPb0+lO+D1lat5fcW6aBLpmE9DC1HCs2UZVDsD/9JGDBSwt0EMuP0ugCU
+         gvfS7KzARnWxFgd2k9HXRC/8d0HUSDw1DQA4598ed+KT8DQBY0OlHlOq+jEYKOTqTKJK
+         U4OougSW1OjZt78kPCJ0C+uFglLtOr9imlJQChTlG35FzQVL1CjkdCf27hrlMRB295wn
+         6aGDEaGEOgB0GRm4r/zX86T6brTSzQBfryMJnCfDT0TclfeUeoyhR5frTojKtfCu4I5Q
+         XO5g==
+X-Gm-Message-State: AC+VfDz9w1SIvm7FBW/kFMU0sItSyYyExQewIKN6uq+S4l28mTmsUV9h
+        lK2Kzi90YDlqgUA/R4g8WrZMA9bCLKdW2g==
+X-Google-Smtp-Source: ACHHUZ5yFIqBAyWPU6jgBPJP96XJUTLdIAkfaJtV4XlOmse1rTDnHHtFTC6jME+Lr68ItrgraGXS8Q==
+X-Received: by 2002:a81:4f82:0:b0:55a:2ce1:2353 with SMTP id d124-20020a814f82000000b0055a2ce12353mr9928596ywb.2.1683101392047;
+        Wed, 03 May 2023 01:09:52 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id s2-20020a817702000000b00545a08184b5sm8387125ywc.69.2023.05.03.01.09.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 May 2023 01:09:51 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-559e317eef1so59866857b3.0;
+        Wed, 03 May 2023 01:09:50 -0700 (PDT)
+X-Received: by 2002:a0d:c347:0:b0:556:dd1b:3bb7 with SMTP id
+ f68-20020a0dc347000000b00556dd1b3bb7mr19301020ywd.43.1683101390642; Wed, 03
+ May 2023 01:09:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230502130223.14719-1-tzimmermann@suse.de> <20230502130223.14719-5-tzimmermann@suse.de>
+ <20230502195429.GA319489@ravnborg.org> <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
+ <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
+In-Reply-To: <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 3 May 2023 10:09:39 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW8Sm7sBu47XQ1xygn6fzq2FzQeiuK0ncMVGHan-_k4Ow@mail.gmail.com>
+Message-ID: <CAMuHMdW8Sm7sBu47XQ1xygn6fzq2FzQeiuK0ncMVGHan-_k4Ow@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>, linux-arch@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, arnd@arndb.de, deller@gmx.de,
+        chenhuacai@kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com,
+        linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
+        vgupta@kernel.org, sparclinux@vger.kernel.org, kernel@xen0n.name,
+        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 03, 2023 at 09:51:49AM +0200, Michal Hocko wrote:
-> Your answers have shown your insight into tracing is very limited. I
-> have a clear recollection there were many suggestions on how to get what
-> you need and willingness to help out. Repeating your previous position
-> will not help much to be honest with you.
+On Wed, May 3, 2023 at 9:19 AM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> Thomas Zimmermann <tzimmermann@suse.de> writes:
+> > Am 02.05.23 um 21:54 schrieb Sam Ravnborg:
+> >> On Tue, May 02, 2023 at 03:02:21PM +0200, Thomas Zimmermann wrote:
+>
+> [...]
+>
+> >>>   #include <linux/console.h> /* Why should fb driver call console functions? because console_lock() */
+> >>>   #include <video/vga.h>
+> >>>
+> >>> +#include <asm/fb.h>
+> >>
+> >> When we have a header like linux/fb.h - it is my understanding that it is
+> >> preferred to include that file, and not the asm/fb.h variant.
+> >>
+> >> This is assuming the linux/fb.h contains the generic stuff, and includes
+> >> asm/fb.h for the architecture specific parts.
+> >>
+> >> So drivers will include linux/fb.h and then they automatically get the
+> >> architecture specific parts from asm/fb.h.
+> >>
+> >> In other words, drivers are not supposed to include asm/fb.h, if
+> >> linux.fb.h exists - and linux/fb.h shall include the asm/fb.h.
+> >>
+> >> If the above holds true, then it is wrong and not needed to add asm/fb.h
+> >> as seen above.
+> >>
+> >>
+> >> There are countless examples where the above are not followed,
+> >> but to my best understanding the above it the preferred way to do it.
+> >
+> > Where did youher this? I only know about this in the case of asm/io.h
+> > vs. linux/io.h.
+> >
+>
+> I understand that's the case too. I believe even checkpatch.pl complains
+> about it? (not that the script always get right, but just as an example).
 
-Please enlighten us, oh wise one.
+One more to chime in: in general, drivers should only include <linux/foo.h>.
+Including <asm/foo.h> directly is the exception.
 
-> > > - It has been brought up that this is duplicating functionality already
-> > >   available via existing tracing infrastructure. You should make it very
-> > >   clear why that is not suitable for the job
-> > 
-> > Tracing people _claimed_ this, but never demonstrated it.
-> 
-> The burden is on you and Suren. You are proposing the implement an
-> alternative tracing infrastructure.
+Gr{oetje,eeting}s,
 
-No, we're still waiting on the tracing people to _demonstrate_, not
-claim, that this is at all possible in a comparable way with tracing. 
+                        Geert
 
-It's not on us to make your argument for you, and before making
-accusations about honesty you should try to be more honest yourself.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-The expectations you're trying to level have never been the norm in the
-kernel community, sorry. When there's a technical argument about the
-best way to do something, _code wins_ and we've got working code to do
-something that hasn't been possible previously.
-
-There's absolutely no rule that "tracing has to be the one and only tool
-for kernel visibility".
-
-I'm considering the tracing discussion closed until someone in the
-pro-tracing camp shows something new.
-
-> > > - We already have page_owner infrastructure that provides allocation
-> > >   tracking data. Why it cannot be used/extended?
-> > 
-> > Page owner is also very high overhead,
-> 
-> Is there any data to prove that claim? I would be really surprised that
-> page_owner would give higher overhead than page tagging with profiling
-> enabled (there is an allocation for each allocation request!!!). We can
-> discuss the bare bone page tagging comparision to page_owner because of
-> the full stack unwinding but is that overhead really prohibitively costly?
-> Can we reduce that by trimming the unwinder information?
-
-Honestly, this isn't terribly relevant, because as noted before page
-owner is limited to just page allocations.
-
-> 
-> > and the output is not very user
-> > friendly (tracking full call stack means many related overhead gets
-> > split, not generally what you want), and it doesn't cover slab.
-> 
-> Is this something we cannot do anything about? Have you explored any
-> potential ways?
-> 
-> > This tracks _all_ memory allocations - slab, page, vmalloc, percpu.
-
-Michel, the discussions with you seem to perpetually go in circles; it's
-clear you're negative on the patchset, you keep raising the same
-objections while refusing to concede a single point.
-
-I believe I've answered enough, so I'll leave off further discussions
-with you.
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
