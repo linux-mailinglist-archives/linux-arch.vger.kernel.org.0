@@ -2,144 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2316B6F50ED
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 09:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B566F511E
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 09:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229511AbjECHOM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 03:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S229618AbjECHUJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 03:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjECHOL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 03:14:11 -0400
-Received: from out-14.mta1.migadu.com (out-14.mta1.migadu.com [IPv6:2001:41d0:203:375::e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F9840F3
-        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 00:13:42 -0700 (PDT)
-Date:   Wed, 3 May 2023 03:12:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683097991;
+        with ESMTP id S229496AbjECHUI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 03:20:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566803C29
+        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 00:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683098366;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Sa4OTZB5b+skGudhSwhmk32TbWUPA01HpPa43R3XypE=;
-        b=houGGarhoR27PbchhA+QNGA0saxVkWBHqqLXWwcgql8ghPJpiqqLxuMJIsQYxFnIsotmiT
-        R5cEBBWaIeU7VnAYAflrCrppJkt964UNglx6jVLEs7TCm33He/1Trw4Kd39bUM2JjWBSVm
-        eV4n8fttF9Y1FM+uRWMMQaDs/kiMrwM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
-        paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Noralf =?utf-8?B?VHLDr8K/wr1ubmVz?= <noralf@tronnes.org>
-Subject: Re: [PATCH 01/40] lib/string_helpers: Drop space in
- string_get_size's output
-Message-ID: <ZFIJeSv9xn9qnMzg@moria.home.lan>
-References: <20230501165450.15352-2-surenb@google.com>
- <ouuidemyregstrijempvhv357ggp4tgnv6cijhasnungsovokm@jkgvyuyw2fti>
- <ZFAUj+Q+hP7cWs4w@moria.home.lan>
- <b6b472b65b76e95bb4c7fc7eac1ee296fdbb64fd.camel@HansenPartnership.com>
- <ZFCA2FF+9MI8LI5i@moria.home.lan>
- <CAHp75VdK2bgU8P+-np7ScVWTEpLrz+muG-R15SXm=ETXnjaiZg@mail.gmail.com>
- <ZFCsAZFMhPWIQIpk@moria.home.lan>
- <CAHp75VdvRshCthpFOjtmajVgCS_8YoJBGbLVukPwU+t79Jgmww@mail.gmail.com>
- <ZFHB2ATrPIsjObm/@moria.home.lan>
- <CAHp75VdH07gTYCPvp2FRjnWn17BxpJCcFBbFPpjpGxBt1B158A@mail.gmail.com>
+        bh=JWuwBsoA7E+ixFPnuQyU62/zGQyUSXimh/xtxQzzOds=;
+        b=Yih/rFJAHiaY8DcTzymU86MuRim2k6zUA0W3Eysk7pU/42d2CSiANyDtU2oEPKsW0GHeeu
+        9yQVvzZO/+sXgBHFGSwqBiTV/l9uzH8CfUb6mbArG+Vng9CT49t7qBA973Gp2SvERKGl7X
+        Q+knl9oug8drqKei940PcigipRUFEgU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-136-up6NWEerOeOqHyRL4GXzDQ-1; Wed, 03 May 2023 03:19:24 -0400
+X-MC-Unique: up6NWEerOeOqHyRL4GXzDQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f3fde29b1fso667575e9.0
+        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 00:19:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683098363; x=1685690363;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JWuwBsoA7E+ixFPnuQyU62/zGQyUSXimh/xtxQzzOds=;
+        b=e5ATAzvQUh807HZpxJrTdHTWrDsq+SdQRFCNEqZ4tiFTsnAI+G2/eZFe4V6HUYTRYJ
+         VoLa385xpPGIJ8pudgFuJt8beoWRp/oz/e6G6fLafg9mqkPB7UUF23pbJeNxZ3ZICCOO
+         hHm/D+S84i00TysddTDVd2aGTlkhbd4x7UO9ncUpDqpwhfwUSB6Tw9bNEFJEKPfCMjy6
+         gQG9hieqgQr2zPMyKSBEMHaIes5oBQ7Wlm1CWdQnYSYoU92BGCROsb7QwDkAYKfgsG2z
+         xbPDLpzdIk/cvNrD2mBMhVCnwCgkvqxWWTI9Qqf8k4PAF+ftdvIgf6A+zh07uRcILlot
+         sLbg==
+X-Gm-Message-State: AC+VfDyMJraR9xbIQqh9xhmjz/usQRk2Wehg3sWsKZGjs9V0n38Q7LtC
+        Kv+Fvy0fjm0n42K+zYne66bHMghNvfLx3Sz6QhmtlZSIfJC52czfw5P1e11kB2XgCmHOoPV74RQ
+        /PTqLGl77P+crPeHxpPS9EQ==
+X-Received: by 2002:a5d:4536:0:b0:2f9:4fe9:74de with SMTP id j22-20020a5d4536000000b002f94fe974demr14583291wra.16.1683098363277;
+        Wed, 03 May 2023 00:19:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4YmDJ5fSjEX9bYJcvGxxrKGNEefuG/olEhGMwhxvTP6ZpCZhJEgcZLb8yFcLBX87Q12Wuhlg==
+X-Received: by 2002:a5d:4536:0:b0:2f9:4fe9:74de with SMTP id j22-20020a5d4536000000b002f94fe974demr14583271wra.16.1683098363001;
+        Wed, 03 May 2023 00:19:23 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id u7-20020a5d5147000000b002cde25fba30sm33050954wrt.1.2023.05.03.00.19.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 May 2023 00:19:22 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     linux-arch@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        arnd@arndb.de, deller@gmx.de, chenhuacai@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com,
+        linux-m68k@lists.linux-m68k.org, geert@linux-m68k.org,
+        linux-parisc@vger.kernel.org, vgupta@kernel.org,
+        sparclinux@vger.kernel.org, kernel@xen0n.name,
+        linux-snps-arc@lists.infradead.org, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 4/6] fbdev: Include <linux/io.h> via <asm/fb.h>
+In-Reply-To: <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
+References: <20230502130223.14719-1-tzimmermann@suse.de>
+ <20230502130223.14719-5-tzimmermann@suse.de>
+ <20230502195429.GA319489@ravnborg.org>
+ <563673c0-799d-e353-974c-91b1ab881a22@suse.de>
+Date:   Wed, 03 May 2023 09:19:21 +0200
+Message-ID: <87354dyj9i.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdH07gTYCPvp2FRjnWn17BxpJCcFBbFPpjpGxBt1B158A@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 03, 2023 at 09:30:11AM +0300, Andy Shevchenko wrote:
-> On Wed, May 3, 2023 at 5:07 AM Kent Overstreet
-> <kent.overstreet@linux.dev> wrote:
-> > On Tue, May 02, 2023 at 06:19:27PM +0300, Andy Shevchenko wrote:
-> > > On Tue, May 2, 2023 at 9:22 AM Kent Overstreet
-> > > <kent.overstreet@linux.dev> wrote:
-> > > > On Tue, May 02, 2023 at 08:33:57AM +0300, Andy Shevchenko wrote:
-> > > > > Actually instead of producing zillions of variants, do a %p extension
-> > > > > to the printf() and that's it. We have, for example, %pt with T and
-> > > > > with space to follow users that want one or the other variant. Same
-> > > > > can be done with string_get_size().
-> > > >
-> > > > God no.
-> > >
-> > > Any elaboration what's wrong with that?
-> >
-> > I'm really not a fan of %p extensions in general (they are what people
-> > reach for because we can't standardize on a common string output API),
-> 
-> The whole story behind, for example, %pt is to _standardize_ the
-> output of the same stanza in the kernel.
+Thomas Zimmermann <tzimmermann@suse.de> writes:
 
-Wtf does this have to do with the rest of the discussion? The %p thing
-seems like a total non sequitar and a distraction.
+Hello Thomas,
 
-I'm not getting involved with that. All I'm interested in is fixing the
-memory allocation profiling output to make it more usable.
+> Am 02.05.23 um 21:54 schrieb Sam Ravnborg:
+>> On Tue, May 02, 2023 at 03:02:21PM +0200, Thomas Zimmermann wrote:
 
-> > but when we'd be passing it bare integers the lack of type safety would
-> > be a particularly big footgun.
-> 
-> There is no difference to any other place in the kernel where we can
-> shoot into our foot.
+[...]
 
-Yeah, no, absolutely not. Passing different size integers to
-string_get_size() is fine; passing pointers to different size integers
-to a %p extension will explode and the compiler won't be able to warn.
+>>>   #include <linux/console.h> /* Why should fb driver call console functions? because console_lock() */
+>>>   #include <video/vga.h>
+>>>   
+>>> +#include <asm/fb.h>
+>> 
+>> When we have a header like linux/fb.h - it is my understanding that it is
+>> preferred to include that file, and not the asm/fb.h variant.
+>> 
+>> This is assuming the linux/fb.h contains the generic stuff, and includes
+>> asm/fb.h for the architecture specific parts.
+>> 
+>> So drivers will include linux/fb.h and then they automatically get the
+>> architecture specific parts from asm/fb.h.
+>> 
+>> In other words, drivers are not supposed to include asm/fb.h, if
+>> linux.fb.h exists - and linux/fb.h shall include the asm/fb.h.
+>> 
+>> If the above holds true, then it is wrong and not needed to add asm/fb.h
+>> as seen above.
+>> 
+>> 
+>> There are countless examples where the above are not followed,
+>> but to my best understanding the above it the preferred way to do it.
+>
+> Where did youher this? I only know about this in the case of asm/io.h 
+> vs. linux/io.h.
+>
 
-> 
-> > > God no for zillion APIs for almost the same. Today you want space,
-> > > tomorrow some other (special) delimiter.
-> >
-> > No, I just want to delete the space and output numbers the same way
-> > everyone else does. And if we are stuck with two string_get_size()
-> > functions, %p extensions in no way improve the situation.
-> 
-> I think it's exactly for the opposite, i.e. standardize that output
-> once and for all.
+I understand that's the case too. I believe even checkpatch.pl complains
+about it? (not that the script always get right, but just as an example).
 
-So, are you dropping your NACK then, so we can standardize the kernel on
-the way everything else does it?
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
