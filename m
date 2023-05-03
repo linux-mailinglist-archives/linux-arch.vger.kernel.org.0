@@ -2,75 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B62D6F5F48
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 21:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE04B6F5F5E
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 21:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjECTlZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 15:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S229797AbjECTpo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 15:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjECTlY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 15:41:24 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A6C7AA0
-        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 12:41:21 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9e2f227640so4788064276.3
-        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 12:41:21 -0700 (PDT)
+        with ESMTP id S229626AbjECTpn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 15:45:43 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987477AB4
+        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 12:45:41 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-55b7630a736so21054377b3.1
+        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 12:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683142881; x=1685734881;
+        d=google.com; s=20221208; t=1683143140; x=1685735140;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7eRiiP2JCtlxvX+BHzTjXxhFfE3xb3L5Tko5xVivHIc=;
-        b=njnY9/ZTWcA0YQLoTf3TUMfGQMs6qBR8x/WiO3YJ4m2rgzn9gPgiVmWeEd3meHgQOd
-         veIE13lp/BEBibiOOZUNO+WD2iQQwInbq0mORyd3+wLWSUTFkhmbMs6fl3Tqmd3D0D5p
-         V+y4b3/jKL+G7UEO8JQopzaWcrHdBR+imlq/VrwTOp1569eYFHFfi9pD7I53OyaoPSYd
-         tj72nQLogAXIm5Pv95noTQ1YRpRrtHa+Dymto/1ndku51s0fuH/R0nkRvqq+7WbyeTBe
-         or08gvlkQ55RtNC4M9pq8YNpCVr1Dsrvti1RMiJ42Ynp3MHUq3DPU/4MOuwmbk5VuygM
-         Oy2w==
+        bh=bq44fWKfzB7azpC5445h4zSgjB+E0XG23Sx5k3P/Wrs=;
+        b=mNn8mOJ969yUibKfAWrXgatuIFi6FVIM4EsSSH9KQ1Go4d1sYzKZHUi8VHjbX6pfWa
+         OlJ16nZGAbvURg1kkDTdEvJDfJPD2YhA8jF3Bo81PkL1ob0v9cS2gkR4gCqMlpmjnr/s
+         tWs9Fu3MohlaypLe2rIvRSkpy7E5gp65K6pp8163QEUwdmBPDYTBTVK0GaffIx+/jWG1
+         GkJ4oD48JkxrW+rrbEhXrrnBxumK3LN05X4J4kXdI0k+pYkkAnfDQi3ANZniOpY63cWz
+         Q+VUnUlPsKkbZjKcze+vAukdxm3Nrif9W+zvOKGcMfCU5FAKE+MOBW4LpPVOFpo/QEqA
+         mUdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683142881; x=1685734881;
+        d=1e100.net; s=20221208; t=1683143140; x=1685735140;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7eRiiP2JCtlxvX+BHzTjXxhFfE3xb3L5Tko5xVivHIc=;
-        b=kG5iKZyI2H6kCGZzKa5hKXQKz6Tf2EzEUFKWWbnyq+91kyXtqeK0vTcNg2uvaFupK4
-         hOPtVfx8NtaW5VZr59vOsCs8lpfLGSScToS42RFIYexyonpOvuKgUXAa4bRieWCU9xjV
-         2Dz5HPpf4ac54O7iITixxrB9p4ODhaVmS53pDIeWEQ4e9a8MCECyUJGqa/Y14E7KhtqH
-         TAc397mO8tUGT0/QSjocnlLM8hvJZVwZqidA3SnDHaLEmnnUb+3qdycbHtE6SvoLKEah
-         RRKmONInxY6p4AasctliSuy/f76FVK6EsIA8UYvjf/dgKL1RpYnI0eu0+G5c9pp7pEbF
-         drQw==
-X-Gm-Message-State: AC+VfDygOHfRPINsJodk+QFHDKzGhhXf48wAxm/AJ+/Hbg42KlWTjL+j
-        D9S2ch1xHyO8UL+CfEKP9mIh+I1X0ZlOCf6fU/5SIg==
-X-Google-Smtp-Source: ACHHUZ4RFT+eYjp8zpqFQpuduTlyNDeYqB8fD0xjOEnMllgaLgM5ug7v5zBN549JMpsUAooBfYdYqk6S3BpMrYkFeqQ=
-X-Received: by 2002:a25:308a:0:b0:b9a:38b2:8069 with SMTP id
- w132-20020a25308a000000b00b9a38b28069mr18330170ybw.6.1683142880244; Wed, 03
- May 2023 12:41:20 -0700 (PDT)
+        bh=bq44fWKfzB7azpC5445h4zSgjB+E0XG23Sx5k3P/Wrs=;
+        b=dDW8nJ1cfz2VDnfi46asBH/RFM12RYt5ZZxdvaqvD82T4dutttCJYco3FhWkFHB8ZK
+         wNPl3L9R8dvTpMc67aBbz+nsZhd0yIfpLbInF6gxCryqgpFCxegmFowcsI2HdmBTdt5u
+         wKmn9Eyc66F74Llbnl2jdyeLlQdYNZykcSGyzI64QadLYomZxB7M00ae+T/QDgwY2v4b
+         OqeAPMG+XjC8QJfX/rC9fz93AO+v+i4+MHhAqIMdKEHKp1q9k0IyK7RyQZQfKLt7QD8K
+         KNEUBE6lHHEn1b4ldQqD8Cbe+tMmPuoF0ZvpFKORNxRqzfrqSgnwJMy3Lg4vum9OTmvS
+         ds0Q==
+X-Gm-Message-State: AC+VfDx3ZIa9wVXIbK0Z7W4jzH52Ju1RShswz1Y2zRA5ZTaNj/Eq0O8q
+        4YfjX01r0VRJcI9qYRocW6No7UFAwEsJAhpDhXZMOg==
+X-Google-Smtp-Source: ACHHUZ611vK/8POrb92/ZC137MJ/7lfkX+qvV2x7CR/VSAZxV6421Yhl76g7YvjnquNOZJwUgKJzKQx8X6OL1TqAAdQ=
+X-Received: by 2002:a25:4f86:0:b0:b9a:9ad4:1d3 with SMTP id
+ d128-20020a254f86000000b00b9a9ad401d3mr18494816ybb.5.1683143140255; Wed, 03
+ May 2023 12:45:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
- <ZFISlX+mSx4QJDK6@dhcp22.suse.cz> <ZFIVtB8JyKk0ddA5@moria.home.lan>
- <ZFKNZZwC8EUbOLMv@slm.duckdns.org> <20230503180726.GA196054@cmpxchg.org>
- <ZFKlrP7nLn93iIRf@slm.duckdns.org> <ZFKqh5Dh93UULdse@slm.duckdns.org>
- <ZFKubD/lq7oB4svV@moria.home.lan> <ZFKu6zWA00AzArMF@slm.duckdns.org> <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
-In-Reply-To: <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
+References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
+ <ZFIO3tXCbmTn53uv@dhcp22.suse.cz> <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
+ <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
+In-Reply-To: <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 12:41:08 -0700
-Message-ID: <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+Date:   Wed, 3 May 2023 12:45:29 -0700
+Message-ID: <CAJuCfpGq4CjFLJ=QdQZUJPN72ecvWhVi_vUKrOz5_DvMAM07EQ@mail.gmail.com>
+Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        kent.overstreet@linux.dev, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+        tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+        paulmck@kernel.org, pasha.tatashin@soleen.com,
         yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
         hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
         ndesaulniers@google.com, gregkh@linuxfoundation.org,
@@ -85,9 +82,7 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -101,51 +96,34 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:09=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+On Wed, May 3, 2023 at 8:26=E2=80=AFAM Dave Hansen <dave.hansen@intel.com> =
+wrote:
 >
-> On Wed, May 03, 2023 at 08:58:51AM -1000, Tejun Heo wrote:
-> > On Wed, May 03, 2023 at 02:56:44PM -0400, Kent Overstreet wrote:
-> > > On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
-> > > > > Yeah, easy / default visibility argument does make sense to me.
-> > > >
-> > > > So, a bit of addition here. If this is the thrust, the debugfs part=
- seems
-> > > > rather redundant, right? That's trivially obtainable with tracing /=
- bpf and
-> > > > in a more flexible and performant manner. Also, are we happy with r=
-ecording
-> > > > just single depth for persistent tracking?
+> On 5/3/23 08:18, Suren Baghdasaryan wrote:
+> >>> +static inline void rem_ctx(struct codetag_ctx *ctx,
+> >>> +                        void (*free_ctx)(struct kref *refcount))
+> >>> +{
+> >>> +     struct codetag_with_ctx *ctc =3D ctx->ctc;
+> >>> +
+> >>> +     spin_lock(&ctc->ctx_lock);
+> >> This could deadlock when allocator is called from the IRQ context.
+> > I see. spin_lock_irqsave() then?
+>
+> Yes.  But, even better, please turn on lockdep when you are testing.  It
+> will find these for you.  If you're on x86, we have a set of handy-dandy
+> debug options that you can add to an existing config with:
+>
+>         make x86_debug.config
 
-IIUC, by single depth you mean no call stack capturing?
-If so, that's the idea behind the context capture feature so that we
-can enable it on specific allocations only after we determine there is
-something interesting there. So, with low-cost persistent tracking we
-can determine the suspects and then pay some more to investigate those
-suspects in more detail.
-
-> > >
-> > > Not sure what you're envisioning?
-> > >
-> > > I'd consider the debugfs interface pretty integral; it's much more
-> > > discoverable for users, and it's hardly any code out of the whole
-> > > patchset.
-> >
-> > You can do the same thing with a bpftrace one liner tho. That's rather
-> > difficult to beat.
-
-debugfs seemed like a natural choice for such information. If another
-interface is more appropriate I'm happy to explore that.
+Nice!
+I thought I tested with lockdep enabled but I might be wrong. The
+beauty of working on multiple patchsets in parallel is that I can't
+remember what I did for each one :)
 
 >
-> Ah, shit, I'm an idiot. Sorry. I thought allocations was under /proc and
-> allocations.ctx under debugfs. I meant allocations.ctx is redundant.
+> That said, I'm as concerned as everyone else that this is all "new" code
+> and doesn't lean on existing tracing or things like PAGE_OWNER enough.
 
-Do you mean that we could display allocation context in
-debugfs/allocations file (for the allocations which we explicitly
-enabled context capturing)?
+Yeah, that's being actively discussed.
 
 >
-> Thanks.
->
-> --
-> tejun
