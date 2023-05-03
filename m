@@ -2,59 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA806F5AF3
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 17:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5A76F5B13
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 17:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbjECPYf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 11:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
+        id S230466AbjECP0r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 11:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjECPYe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 11:24:34 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E75526B
-        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 08:24:32 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-55a64f0053fso48983997b3.3
-        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 08:24:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683127471; x=1685719471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3u3xUQKsQtY5MjJU7KWdFVlKdUwGfS6WMFqIdWoJCIo=;
-        b=unFkvF+6wudO45usQ0U6AfJIfqhGP+H5/IVYvEVNkvB69qXh+JOZzYWL6W8iypwR8u
-         WXtxZSQf4t68zEHXsPc28NiwHPUvvwS/M344xQ3tBObhdP7U9FItGEykPkPqu+eEbFFp
-         okusA4UwcrZWf8Z51Zm29/RE04pDrtNIp/vD2aJp+XpBdU2UkRkKKny9uq/isdNkl+oO
-         Skjuy9Oo1eMbcdvkjUdB3P7K+oZHaS/9IHtfkJQayp0An2kmfxp7oACjbZtN8XRdwT2w
-         lxjzvHFT+zOFmdZqKIHE6BDxnTC8QY7tAueSdS/QBzC33/doZv3G/USW3EuK7WLdlbGW
-         qF+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683127471; x=1685719471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3u3xUQKsQtY5MjJU7KWdFVlKdUwGfS6WMFqIdWoJCIo=;
-        b=SCdLcCQXb5JyJW71/GrjsU1FIJjHsEveE9BPf3KqXjLDhqeSLtgvCFzWfYh2iVYOKa
-         CLRgpmtvtwshw75SVp2x/STtloyAVpXby5rQVd/vKVDBXMul5chBTuGtzDwE7gCCG7uz
-         pH8fsIGl7y+PqxxW9SPJ4HC1BF+XdiBrPpIaXLqAMoX7pydhphMAvkAHYTX4RnNRTzop
-         fV6p/1+JprSvahIO3gXK/dBRoDw9oKpqFn5PHRUlM8hs4/chcBCOBNubOwx9Pn/GRaf0
-         wbCaB7LxYlfOXcerdrF5Z+f6Hd6XkdVfmnMUKmpOWHa2dxeA2NcKQ/f5nWn31nnwSGIv
-         UO4Q==
-X-Gm-Message-State: AC+VfDw4nktSUVwZOOyT8VQ71VudD3qVExKVfQx6joTOt61JuVPoWwNn
-        jaD69wVtZkWjvKgsNHWlrbQ2MmoPSOtYY1MEq549Kw==
-X-Google-Smtp-Source: ACHHUZ4QRO+chfCfz5/jv+a2xol9xihN+1wt+nUNWo6jdaruLvTBoFlz5eyhSEYcB7ZOQZ60IsdoPkHuL2yRnd5FS3c=
-X-Received: by 2002:a0d:e296:0:b0:55a:4109:7f5a with SMTP id
- l144-20020a0de296000000b0055a41097f5amr11315408ywe.12.1683127470672; Wed, 03
- May 2023 08:24:30 -0700 (PDT)
+        with ESMTP id S230289AbjECP0q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 11:26:46 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999441730;
+        Wed,  3 May 2023 08:26:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683127605; x=1714663605;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JW32feYIw7XcNCp0X+HS3CFsBn68Px3L2hSYcXUbWmk=;
+  b=PT6Tf3+ASWtq19/6hMEa+jPQ0ZVD0jARTYMjwUKenjA7A/kU7l6vFLZE
+   9t53840o7oJXHlK4Ut64rUdq/LFDOaR1NG4yvaXryaV7MfnoUb7CkUbKp
+   NCn6LNbt6HG3fR+Nt9YzZiNe4rwxx0KffSFgAwzgc4wshHmr0EDuuMNvI
+   XM8jPeWbslJBLoHwPxmiV8sqV0CumCWvZCKV43eBEmaOy4f9vaVYSLGx1
+   XuPtZf8AXWtK2Nb1+EqLqSbVcQfHtdh6rrGRHPHIg2lbvZlrgf1tWAW/O
+   Mf/23L+lao3oyVGzsIwRiUOtCJpkpio9tUIp99X6lo8fJKwFhyX7dWPRb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="347502744"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="347502744"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 08:26:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10699"; a="766174780"
+X-IronPort-AV: E=Sophos;i="5.99,247,1677571200"; 
+   d="scan'208";a="766174780"
+Received: from hrizk-mobl.amr.corp.intel.com (HELO [10.212.127.167]) ([10.212.127.167])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2023 08:26:41 -0700
+Message-ID: <b8ab89e6-0456-969d-ed31-fa64be0a0fd0@intel.com>
+Date:   Wed, 3 May 2023 08:26:40 -0700
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-36-surenb@google.com>
- <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz>
-In-Reply-To: <ZFIPmnrSIdJ5yusM@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 08:24:19 -0700
-Message-ID: <CAJuCfpGsvWupMbasqvwcMYsOOPxTQqi1ed5+=vyu-yoPQwwybg@mail.gmail.com>
-Subject: Re: [PATCH 35/40] lib: implement context capture support for tagged allocations
-To:     Michal Hocko <mhocko@suse.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>,
+        Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
         mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
@@ -82,39 +74,38 @@ Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230501165450.15352-1-surenb@google.com>
+ <20230501165450.15352-35-surenb@google.com> <ZFIO3tXCbmTn53uv@dhcp22.suse.cz>
+ <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 3, 2023 at 12:39=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
-e:
->
-> On Mon 01-05-23 09:54:45, Suren Baghdasaryan wrote:
-> [...]
-> > +struct codetag_ctx *alloc_tag_create_ctx(struct alloc_tag *tag, size_t=
- size)
-> > +{
-> > +     struct alloc_call_ctx *ac_ctx;
-> > +
-> > +     /* TODO: use a dedicated kmem_cache */
-> > +     ac_ctx =3D kmalloc(sizeof(struct alloc_call_ctx), GFP_KERNEL);
->
-> You cannot really use GFP_KERNEL here. This is post_alloc_hook path and
-> that has its own gfp context.
+On 5/3/23 08:18, Suren Baghdasaryan wrote:
+>>> +static inline void rem_ctx(struct codetag_ctx *ctx,
+>>> +                        void (*free_ctx)(struct kref *refcount))
+>>> +{
+>>> +     struct codetag_with_ctx *ctc = ctx->ctc;
+>>> +
+>>> +     spin_lock(&ctc->ctx_lock);
+>> This could deadlock when allocator is called from the IRQ context.
+> I see. spin_lock_irqsave() then?
 
-I missed that. Would it be appropriate to use the gfp_flags parameter
-of post_alloc_hook() here?
+Yes.  But, even better, please turn on lockdep when you are testing.  It
+will find these for you.  If you're on x86, we have a set of handy-dandy
+debug options that you can add to an existing config with:
 
+	make x86_debug.config
 
-> --
-> Michal Hocko
-> SUSE Labs
+That said, I'm as concerned as everyone else that this is all "new" code
+and doesn't lean on existing tracing or things like PAGE_OWNER enough.
