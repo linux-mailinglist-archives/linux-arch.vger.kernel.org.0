@@ -2,58 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94346F5E13
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 20:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3E36F5EAF
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 20:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjECSkO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 14:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S229958AbjECS5J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 14:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjECSkN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 14:40:13 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2B8658E;
-        Wed,  3 May 2023 11:40:10 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52c62a71541so761147a12.3;
-        Wed, 03 May 2023 11:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683139209; x=1685731209;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
-        b=FAsEakodIYGZZ49hzhHq8Do+4wt23WK6jVIu98FKgEcC2IC28Yv1qcpIguYdAHmL41
-         K6QXYVXYY9e0ydYBW/QaYBQ4kV1sgRKD0Z8m7VqP9eoT6OyuI2TEKLTHxSnuPoZ0/P86
-         Ak//1N2uQgFgtt5vHB1OZ1Yr9lZGqpMPiXmn0PLHivzD9gD6C3pgBiZeck/EvcUad+D9
-         AIqIEi6ySYiJEa/rjzcr1BnwS0cO5uVLCgZHYd00/2Qp62J0+g0bDyAUjzMrqC8es9RR
-         PvNP8hKoKyN1VyTkZlWwEOSIbNVu+bisxPnpdL40o9ZuYAjxbUCiGJrKy44Q/i6wCbvS
-         6MJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683139209; x=1685731209;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sQ2ADeO1XgOmj5DxbzjpzikYpUTn+B695qqaLQsTl4A=;
-        b=BvoRPokoSMiVkbPlmALA8hIQW0hWkF3BGtAu3Whene693AAih2RPESqRgP9aO3X3wG
-         youYRS9jUoIPpTqC/k45VBMmpds/sXb2OY5BDLIrRiyK6jHqPmCcHaBiWZYN7gZV5ZHr
-         b7Cs9nIDJpdRLLmouDPWU+pUpS1arKk9lDmbCuvthKKckqvkeFLejrTePCsU6GWcVxRH
-         iD8Txo/yYwibavRal1PSN5TGBADpMjKOhUVDHQayB+SwafDV4c1PxoUiVHjqsQo/Cz9A
-         nNugKaMvBgsS2QhRLXTuw8Rh0caR2/ahG/5f+t4AAjzKnSJ/A4o/BOixSFrekxbWXbeF
-         vUCg==
-X-Gm-Message-State: AC+VfDxdx6rv5/vxaJT9N1OkMtov+3uywXA5fICrcvDYyDTdMtbE12dh
-        oA6SrYnEtMhbXeyWNwJa7ng=
-X-Google-Smtp-Source: ACHHUZ5HrlmzzWxl9cdU7mNdLYfBeR7MIFjXh85oRNOW13gF1ERuxzszMtMYq8KFsJoY0P2G/zpWtw==
-X-Received: by 2002:a05:6a20:4286:b0:dd:7661:fb34 with SMTP id o6-20020a056a20428600b000dd7661fb34mr28426673pzj.51.1683139209307;
-        Wed, 03 May 2023 11:40:09 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:6454])
-        by smtp.gmail.com with ESMTPSA id u22-20020a634556000000b005287b22ea8esm12540790pgk.88.2023.05.03.11.40.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 May 2023 11:40:08 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 3 May 2023 08:40:07 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        with ESMTP id S229945AbjECS5I (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 14:57:08 -0400
+Received: from out-26.mta0.migadu.com (out-26.mta0.migadu.com [91.218.175.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874FE19A8;
+        Wed,  3 May 2023 11:56:59 -0700 (PDT)
+Date:   Wed, 3 May 2023 14:56:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683140217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kvDb7bxJfzE9KfjpQKTTQijQZOsAXNXH2iadfpJ44Yc=;
+        b=h1g4T3QhYib2nBdpUAXTn+2qQD9ejDw6IFQM/FKbwPTcpONEOGJug9IN/JkcPzWXJb7WMP
+        26usKy4n6B80sjCITIgILHgS1JbDUF0CHEgjPjZCLkcCdcNgTyG39f1X0AAT4O4tYbSzBt
+        CqImMwnUyz+b+HgDx7XUNM9L7g1vdag=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
         Michal Hocko <mhocko@suse.com>,
         Suren Baghdasaryan <surenb@google.com>,
         akpm@linux-foundation.org, vbabka@suse.cz,
@@ -85,7 +59,7 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>
 Subject: Re: [PATCH 00/40] Memory allocation profiling
-Message-ID: <ZFKqh5Dh93UULdse@slm.duckdns.org>
+Message-ID: <ZFKubD/lq7oB4svV@moria.home.lan>
 References: <20230501165450.15352-1-surenb@google.com>
  <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
  <ZFIOfb6/jHwLqg6M@moria.home.lan>
@@ -94,43 +68,36 @@ References: <20230501165450.15352-1-surenb@google.com>
  <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
  <20230503180726.GA196054@cmpxchg.org>
  <ZFKlrP7nLn93iIRf@slm.duckdns.org>
+ <ZFKqh5Dh93UULdse@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZFKlrP7nLn93iIRf@slm.duckdns.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZFKqh5Dh93UULdse@slm.duckdns.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 03, 2023 at 08:19:24AM -1000, Tejun Heo wrote:
-> > Taking a step back though, given the multitude of allocation sites in
-> > the kernel, it's a bit odd that the only accounting we do is the tiny
-> > fraction of voluntary vmstat/meminfo reporting. We try to cover the
-> > biggest consumers with this of course, but it's always going to be
-> > incomplete and is maintenance overhead too. There are on average
-> > several gigabytes in unknown memory (total - known vmstats) on our
-> > machines. It's difficult to detect regressions easily. And it's per
-> > definition the unexpected cornercases that are the trickiest to track
-> > down. So it might be doable with BPF, but it does feel like the kernel
-> > should do a better job of tracking out of the box and without
-> > requiring too much plumbing and somewhat fragile kernel allocation API
-> > tracking and probing from userspace.
+On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
+> > Yeah, easy / default visibility argument does make sense to me.
 > 
-> Yeah, easy / default visibility argument does make sense to me.
+> So, a bit of addition here. If this is the thrust, the debugfs part seems
+> rather redundant, right? That's trivially obtainable with tracing / bpf and
+> in a more flexible and performant manner. Also, are we happy with recording
+> just single depth for persistent tracking?
 
-So, a bit of addition here. If this is the thrust, the debugfs part seems
-rather redundant, right? That's trivially obtainable with tracing / bpf and
-in a more flexible and performant manner. Also, are we happy with recording
-just single depth for persistent tracking?
+Not sure what you're envisioning?
 
-Thanks.
+I'd consider the debugfs interface pretty integral; it's much more
+discoverable for users, and it's hardly any code out of the whole
+patchset.
 
--- 
-tejun
+Single depth was discussed previously. It's what makes it cheap enough
+to be always-on (saving stack traces is expensive!), and I find the
+output much more usable than e.g. page owner.
