@@ -2,117 +2,225 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FEB6F5A9A
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 17:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037076F5AAD
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 17:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbjECPHF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 11:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S230326AbjECPJp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 11:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjECPHE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 11:07:04 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F413A4C15;
-        Wed,  3 May 2023 08:07:02 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D7C39580192;
-        Wed,  3 May 2023 11:06:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 03 May 2023 11:06:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683126419; x=1683133619; bh=VJ
-        t2NCaR1dSCR48usj7TiL9m0aFyTQB4ngpTHc/wzNQ=; b=fWJmhJIQIjPfE0lPmm
-        2UUUsui9hK1EONioNtG6XwBvLEDBvBxWfFLQ9N1tFGkGwliU9yz6nObIhjKeToCC
-        bOuSHwnPUFWVc1GvN6m/EdkHVQKkpb604IurKdO/9InTVd5vTzU5d2iVigisoIm9
-        4gq2jLPIug5jHmpZc0rslk2Xj4l3SvhsCZPAjlEXGarhG7krdPhI3x8NitksJAfo
-        tYDl+DHnKp88gZ0zrjylkyygbSAqCJ34r3G+WSX8xRpLvbG35Kxyh2gNtLoHTEbZ
-        J9eceuXp5T7bkpNuwlU2Nn9ZVhzBpBEZ65RYAxta21HkybOMf+rDE6vuOkjpbFmd
-        k70g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683126419; x=1683133619; bh=VJt2NCaR1dSCR
-        48usj7TiL9m0aFyTQB4ngpTHc/wzNQ=; b=iwh/U6vLmswIa3ZMz2TyphQ0p3mxw
-        /PfsOG0YBvIFJiK0YdJok8ez88E84BqeEydOwuMsHbERhRnQWa1jVmo9N6PU0wXj
-        v1msIiMaTbFwQAVnj/LnGQHSHJ4VT2tvqtnNPzD3/1/sQnuUSFnWdyVEggJNwF3i
-        GhqmBsRhzAf61JR15C0WdazOIg1Z9a9ASX/7rHQg8LseB6Ch/Fd+zJUxkqJZWliN
-        A6mPn/RBrGbW1t7grbGpAiFDLa8+UOCaaegmxhtITsCQ/+nqhKZSDww627LKvrLR
-        Akf6DAcnHjAniziM/oUzZ6HGvBtIvoek+KBdspGK9Usi69nxEi00tJLKg==
-X-ME-Sender: <xms:kXhSZN-9H5s1bhLJ6A4BrSSA8u23bM9KPdG9aZBVi6Vx7ttWzwFj4g>
-    <xme:kXhSZBtOpEQrvQSpGvqieF5mg9zfO9L78_hVsMKITr2FmH2UMwYQTD0RcbxdHK-LE
-    fjd2wqoShzKWEE9HP8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfedvkedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:kXhSZLDbZTo8b8vLn4_1sIrA2TKPplauxliuy1lkEmJlepSP7t9PIw>
-    <xmx:kXhSZBcW4sv-KQYA40dQFN8qx_vykn6TAKbj5-otIqOh7yBd6gwTfQ>
-    <xmx:kXhSZCPWk3peePgjhptjqH3qDnIMxLup6tjVPNovu7IcIqvBdhS8MA>
-    <xmx:k3hSZLyNTBeb8R9B8Rjvb47iNEFyVIScCzaPoMQcfpENafp15C45lQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 10509B60086; Wed,  3 May 2023 11:06:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-386-g2404815117-fm-20230425.001-g24048151
-Mime-Version: 1.0
-Message-Id: <2054ae6a-dcf9-42a3-9850-dd2587d40c58@app.fastmail.com>
-In-Reply-To: <dd921bae-0145-09e2-24b1-f08d89a78eba@suse.de>
-References: <20230502130223.14719-1-tzimmermann@suse.de>
- <20230502130223.14719-6-tzimmermann@suse.de>
- <67d6a188-041f-4604-99a3-548c41af0693@app.fastmail.com>
- <dd921bae-0145-09e2-24b1-f08d89a78eba@suse.de>
-Date:   Wed, 03 May 2023 17:06:36 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "Helge Deller" <deller@gmx.de>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230346AbjECPJo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 11:09:44 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CCE5580
+        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 08:09:41 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b9d8730fe5aso7706906276.1
+        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 08:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683126580; x=1685718580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=njkpY9V26txLi7xPErO/sERUlWcV1pHNyq5uOqiF2eY=;
+        b=VExKdzK5WEHsMwlEvyXIbTAR60TSGl0weEuYF33kbqADYhPEKMB5BFVn748WX7nHdJ
+         1ZlyCGGXJGu0YiWNCyZl5XyfyFi2tpLKda0+fB339jPRw/X0v46Au/FFd5+OD8pJxpRY
+         +KkUzelDcKShio3avgpuSPMVkLeLPhlOjJQMnrVxm4Zf0u/pZ6cnJgNCbvz6qY3fWGrt
+         1Vm4vafoXe+OM0WR4hPTdkalQ5gy1bMCwNEAd6xNhQ1f8Ie8DIosbbc/QS5C38of78Fb
+         mqBoNYXzOBoZSmrx1Vo6JKftamzpTKOZAz7AVyV44cWc+5yFoj7tdjzyxk27OuKklV1Q
+         3kgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683126580; x=1685718580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=njkpY9V26txLi7xPErO/sERUlWcV1pHNyq5uOqiF2eY=;
+        b=GEoH1il7rNjQ5QA/bhJJdgOy+qIRaC62REpDmqKtT1+JsNwejDYvu0DBsV8t7OlqHl
+         KS/J60NkkJW+pptY0Q+sHPXXaV1QKfEQ++FEtcA0tEqrKNSQv89d6T25frtnmZkAjjbS
+         +fHJc/Vj/N1qC/By7AoPG1ISiJPQV5ffQu3BI+pnk0Lp0/dOGD0J8TkyL5UapdKFO4zh
+         yvOL/haEq+eaicJEqtc+XlshqOMdm3+B7IV2nXrEh1/klM53VbnEFDMd73KWIUzgTmTv
+         l74ZxtRyRpTrWHh1xDXEbuCPc8xkyd4DyKTqRvBx5uXHfF3x0OC0BRs6ruFhm2yr6EIo
+         KaFg==
+X-Gm-Message-State: AC+VfDxu7CY8mRpCZFSQwib7DZEee7wNjV5ayoRaRCfvfIlK4Jg73zy1
+        NSf91TbGdW7nKLKKiR3eCrpp8n3MIAQM9UophnKR1g==
+X-Google-Smtp-Source: ACHHUZ7hchC+rRk961tvHRqEu26jTqqMGmIvsUJgIGP7Wi8Xmqgc6hTnmpP8bu8bBbAHqpv8p0ou1nAieiF4VLsALvc=
+X-Received: by 2002:a25:dc4a:0:b0:b9f:1992:112e with SMTP id
+ y71-20020a25dc4a000000b00b9f1992112emr4038060ybe.9.1683126580275; Wed, 03 May
+ 2023 08:09:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230501165450.15352-1-surenb@google.com> <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+In-Reply-To: <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 3 May 2023 08:09:28 -0700
+Message-ID: <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+        mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, corbet@lwn.net, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, tj@kernel.org,
+        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+        pasha.tatashin@soleen.com, yosryahmed@google.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        andreyknvl@gmail.com, keescook@chromium.org,
+        ndesaulniers@google.com, gregkh@linuxfoundation.org,
+        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-modules@vger.kernel.org,
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 3, 2023, at 16:55, Thomas Zimmermann wrote:
-> Am 02.05.23 um 22:06 schrieb Arnd Bergmann:
-
->> It's probably safe to deal with all the above by either adding
->> architecture specific overrides to the current version, or
->> by doing the semantic changes before the move to asm/fb.h, but
->> one way or the other I'd prefer this to be separate from the
->> consolidation patch that should not have any changes in behavior.
+On Wed, May 3, 2023 at 12:25=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
 >
-> I think I'll add architecture overrides that contain the current code, 
-> even if they contain some force-casting wrt __iomem. If anyone wants to 
-> fix the issues, they can then address them easily.
+> On Mon 01-05-23 09:54:10, Suren Baghdasaryan wrote:
+> > Memory allocation profiling infrastructure provides a low overhead
+> > mechanism to make all kernel allocations in the system visible. It can =
+be
+> > used to monitor memory usage, track memory hotspots, detect memory leak=
+s,
+> > identify memory regressions.
+> >
+> > To keep the overhead to the minimum, we record only allocation sizes fo=
+r
+> > every allocation in the codebase. With that information, if users are
+> > interested in more detailed context for a specific allocation, they can
+> > enable in-depth context tracking, which includes capturing the pid, tgi=
+d,
+> > task name, allocation size, timestamp and call stack for every allocati=
+on
+> > at the specified code location.
+> [...]
+> > Implementation utilizes a more generic concept of code tagging, introdu=
+ced
+> > as part of this patchset. Code tag is a structure identifying a specifi=
+c
+> > location in the source code which is generated at compile time and can =
+be
+> > embedded in an application-specific structure. A number of applications
+> > for code tagging have been presented in the original RFC [1].
+> > Code tagging uses the old trick of "define a special elf section for
+> > objects of a given type so that we can iterate over them at runtime" an=
+d
+> > creates a proper library for it.
+> >
+> > To profile memory allocations, we instrument page, slab and percpu
+> > allocators to record total memory allocated in the associated code tag =
+at
+> > every allocation in the codebase. Every time an allocation is performed=
+ by
+> > an instrumented allocator, the code tag at that location increments its
+> > counter by allocation size. Every time the memory is freed the counter =
+is
+> > decremented. To decrement the counter upon freeing, allocated object ne=
+eds
+> > a reference to its code tag. Page allocators use page_ext to record thi=
+s
+> > reference while slab allocators use memcg_data (renamed into more gener=
+ic
+> > slabobj_ext) of the slab page.
+> [...]
+> > [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.co=
+m/
+> [...]
+> >  70 files changed, 2765 insertions(+), 554 deletions(-)
+>
+> Sorry for cutting the cover considerably but I believe I have quoted the
+> most important/interesting parts here. The approach is not fundamentally
+> different from the previous version [1] and there was a significant
+> discussion around this approach. The cover letter doesn't summarize nor
+> deal with concerns expressed previous AFAICS. So let me bring those up
+> back.
 
-Ok, sounds good,
+Thanks for summarizing!
 
-     Arnd
+> At least those I find the most important:
+> - This is a big change and it adds a significant maintenance burden
+>   because each allocation entry point needs to be handled specifically.
+>   The cost will grow with the intended coverage especially there when
+>   allocation is hidden in a library code.
+
+Do you mean with more allocations in the codebase more codetags will
+be generated? Is that the concern? Or maybe as you commented in
+another patch that context capturing feature does not limit how many
+stacks will be captured?
+
+> - It has been brought up that this is duplicating functionality already
+>   available via existing tracing infrastructure. You should make it very
+>   clear why that is not suitable for the job
+
+I experimented with using tracing with _RET_IP_ to implement this
+accounting. The major issue is the _RET_IP_ to codetag lookup runtime
+overhead which is orders of magnitude higher than proposed code
+tagging approach. With code tagging proposal, that link is resolved at
+compile time. Since we want this mechanism deployed in production, we
+want to keep the overhead to the absolute minimum.
+You asked me before how much overhead would be tolerable and the
+answer will always be "as small as possible". This is especially true
+for slab allocators which are ridiculously fast and regressing them
+would be very noticable (due to the frequent use).
+
+There is another issue, which I think can be solved in a smart way but
+will either affect performance or would require more memory. With the
+tracing approach we don't know beforehand how many individual
+allocation sites exist, so we have to allocate code tags (or similar
+structures for counting) at runtime vs compile time. We can be smart
+about it and allocate in batches or even preallocate more than we need
+beforehand but, as I said, it will require some kind of compromise.
+
+I understand that code tagging creates additional maintenance burdens
+but I hope it also produces enough benefits that people will want
+this. The cost is also hopefully amortized when additional
+applications like the ones we presented in RFC [1] are built using the
+same framework.
+
+> - We already have page_owner infrastructure that provides allocation
+>   tracking data. Why it cannot be used/extended?
+
+1. The overhead.
+2. Covers only page allocators.
+
+I didn't think about extending the page_owner approach to slab
+allocators but I suspect it would not be trivial. I don't see
+attaching an owner to every slab object to be a scalable solution. The
+overhead would again be of concern here.
+
+I should point out that there was one important technical concern
+about lack of a kill switch for this feature, which was an issue for
+distributions that can't disable the CONFIG flag. In this series we
+addressed that concern.
+
+[1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.com/
+
+Thanks,
+Suren.
+
+>
+> Thanks!
+> --
+> Michal Hocko
+> SUSE Labs
