@@ -2,49 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6FA6F5B7A
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 17:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBF26F5BAF
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 18:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjECPte (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 11:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S230102AbjECQD3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 12:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjECPtc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 11:49:32 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D8210E5;
-        Wed,  3 May 2023 08:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683128971;
-        bh=aZHv4qLewpPoN2a7Dp1hmQ518n6knm526HL7tro2+QQ=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=RuzgPwW7Excw6pez9bbQH1LgK0+PrOgDucE8mX352a/WgEFXdVcyXswKLkwHVN4FK
-         NRRB6IArfDLzoJ2Y5xkv3PNA1E6ef4irPxZ/JjdOQrfSM2D4MyBH3rpgG/WnwCUFYL
-         KRr071rSZhNhJKS7IDpjG6MPN5NNicYHXLH+D7mM=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 18E6D1281F1E;
-        Wed,  3 May 2023 11:49:31 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id GaG0-VEABDNr; Wed,  3 May 2023 11:49:30 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1683128970;
-        bh=aZHv4qLewpPoN2a7Dp1hmQ518n6knm526HL7tro2+QQ=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=q0tL2VdkMVextXF7i8wLij4wc+Rv8eXjweyKXiHti73zJxCRaSCu25jteEhbnxI6v
-         yK9rK8oceeU4P+nNqywZMzxEdAYo1SWnGfe4NiTdtA5ocsYJMypoTDNv+p+Qwjz8wz
-         oLVM+AAJEgGOGX5BoVd44tXyBl3Vu996X/awzutg=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5B7F812805C5;
-        Wed,  3 May 2023 11:49:25 -0400 (EDT)
-Message-ID: <d01388d01b93071ac9ad04452ff4ff29d85e90f1.camel@HansenPartnership.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Petr =?UTF-8?Q?Tesa=C5=99=C3=ADk?= <petr@tesarici.cz>,
+        with ESMTP id S229892AbjECQD2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 12:03:28 -0400
+Received: from out-4.mta0.migadu.com (out-4.mta0.migadu.com [IPv6:2001:41d0:1004:224b::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21855FD9
+        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 09:03:25 -0700 (PDT)
+Date:   Wed, 3 May 2023 12:03:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683129803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MZ0TWwv0Mpu9IjWcxRCWjJEEQ++kpZPmKK/VcTJkl7k=;
+        b=FpGctQbM8W0rfqOGZOmSKFnYLpxrclq3L7E+rrXnS/9nXRbb9R5M7EzAN6wvhioCICdsHM
+        WM800GTR3zcYRzwg97hBrpkz/9ZsEWI3RL80N/2zwrpf92rM0McRD43/F36Q+ZHI2sCc0L
+        g2qQO4EQowCmjkSmuSEX+YK+w94lB2M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>,
         Michal Hocko <mhocko@suse.com>,
         Suren Baghdasaryan <surenb@google.com>,
         akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
@@ -73,67 +57,74 @@ Cc:     Petr =?UTF-8?Q?Tesa=C5=99=C3=ADk?= <petr@tesarici.cz>,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
         kasan-dev@googlegroups.com, cgroups@vger.kernel.org
-Date:   Wed, 03 May 2023 11:49:23 -0400
-In-Reply-To: <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
+Message-ID: <ZFKFv6F3pRtnAWSS@moria.home.lan>
 References: <20230501165450.15352-1-surenb@google.com>
-         <ZFIMaflxeHS3uR/A@dhcp22.suse.cz> <ZFIOfb6/jHwLqg6M@moria.home.lan>
-         <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
-         <20230503115051.30b8a97f@meshulam.tesarici.cz>
-         <ZFIv+30UH7+ySCZr@moria.home.lan>
-         <25a1ea786712df5111d7d1db42490624ac63651e.camel@HansenPartnership.com>
-         <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+ <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <ZFIOfb6/jHwLqg6M@moria.home.lan>
+ <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
+ <20230503115051.30b8a97f@meshulam.tesarici.cz>
+ <ZFIv+30UH7+ySCZr@moria.home.lan>
+ <25a1ea786712df5111d7d1db42490624ac63651e.camel@HansenPartnership.com>
+ <ZFJ9hlQ3ZIU1XYCY@moria.home.lan>
+ <f57b77b0-74da-41a3-a3bc-969ded4e0410@lucifer.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f57b77b0-74da-41a3-a3bc-969ded4e0410@lucifer.local>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2023-05-03 at 11:28 -0400, Kent Overstreet wrote:
-> On Wed, May 03, 2023 at 08:33:48AM -0400, James Bottomley wrote:
-> > On Wed, 2023-05-03 at 05:57 -0400, Kent Overstreet wrote:
-> > > On Wed, May 03, 2023 at 11:50:51AM +0200, Petr Tesařík wrote:
-> > > > If anyone ever wants to use this code tagging framework for
-> > > > something else, they will also have to convert relevant
-> > > > functions to macros, slowly changing the kernel to a minefield
-> > > > where local identifiers, struct, union and enum tags, field
-> > > > names and labels must avoid name conflict with a tagged
-> > > > function. For now, I have to remember that alloc_pages is
-> > > > forbidden, but the list may grow.
-> > > 
-> > > Also, since you're not actually a kernel contributor yet...
-> > 
-> > You have an amazing talent for being wrong.  But even if you were
-> > actually right about this, it would be an ad hominem personal
-> > attack on a new contributor which crosses the line into
-> > unacceptable behaviour on the list and runs counter to our code of
-> > conduct.
+On Wed, May 03, 2023 at 04:37:36PM +0100, Lorenzo Stoakes wrote:
+> As an outside observer, I can assure you that absolutely came across as a
+> personal attack, and the precise kind that puts people off from
+> contributing. I should know as a hobbyist contributor myself.
 > 
-> ...Err, what? That was intended _in no way_ as a personal attack.
+> > If I was mistaken I do apologize, but lately I've run across quite a lot
+> > of people offering review feedback to patches I post that turn out to
+> > have 0 or 10 patches in the kernel, and - to be blunt - a pattern of
+> > offering feedback in strong language with a presumption of experience
+> > that takes a lot to respond to adequately on a technical basis.
+> >
+> 
+> I, who may very well not merit being considered a contributor of
+> significant merit in your view, have had such 'drive-by' commentary on some
+> of my patches by precisely this type of person, and at no time felt the
+> need to question whether they were a true Scotsman or not. It's simply not
+> productive.
+> 
+> > I don't think a suggestion to spend a bit more time reading code instead
+> > of speculating is out of order! We could all, put more effort into how
+> > we offer review feedback.
+> 
+> It's the means by which you say it that counts for everything. If you feel
+> the technical comments might not be merited on a deeper level, perhaps ask
+> a broader question, or even don't respond at all? There are other means
+> available.
+> 
+> It's remarkable the impact comments like the one you made can have on
+> contributors, certainly those of us who are not maintainers and are
+> naturally plagued with imposter syndrome, so I would ask you on a human
+> level to try to be a little more considerate.
+> 
+> By all means address technical issues as robustly as you feel appropriate,
+> that is after all the purpose of code review, but just take a step back and
+> perhaps find the 'cuddlier' side of yourself when not addressing technical
+> things :)
 
-Your reply went on to say "If you're going to comment, please do the
-necessary work to make sure you're saying something that makes sense."
-That is a personal attack belittling the person involved and holding
-them up for general contempt on the mailing list.  This is exactly how
-we should *not* treat newcomers.
+Thanks for your reply, it's level headed and appreciated.
 
-> If I was mistaken I do apologize, but lately I've run across quite a
-> lot of people offering review feedback to patches I post that turn
-> out to have 0 or 10 patches in the kernel, and - to be blunt - a
-> pattern of offering feedback in strong language with a presumption of
-> experience that takes a lot to respond to adequately on a technical
-> basis.
+But I personally value directness, and I see quite a few people in this
+thread going all out on the tone policing - but look, without the
+directness the confusion (that Petr is not actually a new contributor)
+never would've been cleared up.
 
-A synopsis of the feedback is that using macros to attach trace tags
-pollutes the global function namespace of the kernel.  That's a valid
-observation and merits a technical not a personal response.
-
-James
-
+Food for thought, perhaps?
