@@ -2,76 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE776F5FA3
-	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 22:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC81B6F5FB4
+	for <lists+linux-arch@lfdr.de>; Wed,  3 May 2023 22:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjECUEw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 16:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S229631AbjECUI6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 May 2023 16:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjECUEu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 16:04:50 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAE78699;
-        Wed,  3 May 2023 13:04:34 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f19ab99540so55288575e9.2;
-        Wed, 03 May 2023 13:04:34 -0700 (PDT)
+        with ESMTP id S229844AbjECUI4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 16:08:56 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8032F4EFF
+        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 13:08:53 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so5395618276.1
+        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 13:08:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683144272; x=1685736272;
+        d=google.com; s=20221208; t=1683144532; x=1685736532;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rHU5powRCH79ePrW9PLsNOR73hzLy7pF/AR2cVrEP7A=;
-        b=X9cvzf7QfWfANWyiwaBoFAaHPlX2qeqZu2VCK9dHuW20oD3qDZADVWlb+BtBIBdSiO
-         2RDzvFggR0cV7IyIeCqHDf9vzAIbh3l8EKnAha85GOqZ/85Z2kV5iHi0HZA5hxN3WCiL
-         NDBgwTKeSBh1uBp9ZRn5IcKnZwjB9Xw2FNCu3VPxcgaMe8gKOK7zMR3TIQzUlk13qk0g
-         Oy/vqaLM0dX473ikdNYh4d6O6S61SceyugQ5rTKI7IbtLax4XorLUr0QhjWGkIK6Mm8g
-         jmi9mu20BH7ourolp1eZoSnL7KPbf6yac3FZz/qPtTH6UuXviA7A9ThzGyGaLUXBvIEp
-         nt2Q==
+        bh=uaEl0+ttAfDVYkQkgOF9inVIlQxPo4MAHa3r5TcHPqs=;
+        b=ZBFmhNUtx4spDPZ2Tc+ao7Umap1oUxGgS6L35zoiaIlLMa3sbvfe1yyzPgLcae3Fty
+         gA+quo34T7AKstKRwlQ7/Ft2WrnkU+rEhs/+hqpbEUBx2dmlPORy4QLjme1jFVo6xrFm
+         5ILD7V5NtcxuXC6YpDb35KI9Z72miAAGUfujh1KI5hzn6IQVZLP/6kKOSaDUuTufQ8Ku
+         q+1OYE8Cg6APTP1NiSWm7QBLpXw9UsuF2OAhdSzB2PChvOsgj7ZoUWNOcF4i8/Nlqo2k
+         4O1C3AV8COhnBUUJ7YqqIWrgXPcexM0yzg0bdV03LGdXCG1g+DB8aKT153Xkp0dZ7AtK
+         Zo3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683144272; x=1685736272;
+        d=1e100.net; s=20221208; t=1683144532; x=1685736532;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rHU5powRCH79ePrW9PLsNOR73hzLy7pF/AR2cVrEP7A=;
-        b=aLWXrWQUmDin3LuK3GiSSJw2j1tX7DwrLPhVyWP5AC8MIExcBUBxzSmK7LfMjF9QuA
-         UQaa3zBWAbg/J/69kR77ueeBTYFkEWx/RbHWi9UFXhwOCKwWuwFKu0Xrh5BP4ubHqgsi
-         d1LP/cSRxXzA5oLwKPhx0kDfkWg9V3Tnegk2GvJVfTgj55+RL1M2eEF5p6HGqmqBriZX
-         H2ptovzKmzQQq8oJN2PfI9LIhyEeijcO/9z8NqWbxFy7ZYboP6RLlcVAvyY5VAupZOrO
-         r2uWXXtqkj4x+/2hGp1aGueIo15SfAGTxBZcuSQUuNkB1S18MzLpBwd3MGpvzd6rcI3F
-         HtEg==
-X-Gm-Message-State: AC+VfDyadrRKTNbmBDNvy+M5BelPLUC+dDmcEEAcalS9AjWzfDc3MKqQ
-        nMo60JuWyXbiCKnIlmcwqgpjD9NDOorhp9NkyTE=
-X-Google-Smtp-Source: ACHHUZ7zpuOeQ2HlbzadDjdNCOqFD0VigwxXNnk7+zHC8ZwW/zidgTFIwlyp+cl7LdT9bLB6cLchW8xym2AySZY+Hm8=
-X-Received: by 2002:a5d:5222:0:b0:2fa:27ef:93d7 with SMTP id
- i2-20020a5d5222000000b002fa27ef93d7mr907489wra.42.1683144272448; Wed, 03 May
- 2023 13:04:32 -0700 (PDT)
+        bh=uaEl0+ttAfDVYkQkgOF9inVIlQxPo4MAHa3r5TcHPqs=;
+        b=RW61PR8jrNEiPQLIIQG5QzWjllcU05P7pEhUQi7Mi0X+9c9uE0Pbv3q17vxj4SVIEW
+         FHYrxA3ZdjAweWiwvOlg0VH88UOAIcbVIsBOMOs4EG1QRT1q6IJqjbdxIP+cIVdli/p7
+         SxVHT3f2UjN5gBjVQqS/nJcdK0mzTF25t+5NrlhppZ8Xxsz9HLkAw+eFudfXxkAj9pqp
+         +XhxQ4hSyMf24rz0P6YO5Ds/z3EONvf/ZmkR9L9VMO/pAftIm0JyY19e/dIEjPTj8jR+
+         fNmhZcfQqS+g9KRMhOpeF50C/0rukAeIwpOfFusdDDRF3b7ryJdHfEsysHf72dTG/ziF
+         AQHw==
+X-Gm-Message-State: AC+VfDzwX5WkwFDmeHuwbISIQ3Bq+Oi5CQsXlqk2bPULEjrjycoMi0lg
+        0uiANXd6o+jmtjsEEOwIetJ1Byrayzr8OSXJDg3z6g==
+X-Google-Smtp-Source: ACHHUZ5Zgn5KmLsK0xUXMtQ1V3cIfppdzeEQFI0bWMD7MbEWCqGn353J4Os9Iuap9y2I3NsIHQCGkXzmHh1rNAt3fns=
+X-Received: by 2002:a25:3450:0:b0:b9d:9f6e:f1d5 with SMTP id
+ b77-20020a253450000000b00b9d9f6ef1d5mr3049024yba.16.1683144532379; Wed, 03
+ May 2023 13:08:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
- <ZFIOfb6/jHwLqg6M@moria.home.lan> <ZFISlX+mSx4QJDK6@dhcp22.suse.cz>
- <ZFIVtB8JyKk0ddA5@moria.home.lan> <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
-In-Reply-To: <ZFKNZZwC8EUbOLMv@slm.duckdns.org>
-From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Date:   Wed, 3 May 2023 22:04:21 +0200
-Message-ID: <CAPAsAGxcCJai6PpTVOkqAB-vG+Q71hb1exsK79hJ7Kb2eKAtjA@mail.gmail.com>
+References: <ZFISlX+mSx4QJDK6@dhcp22.suse.cz> <ZFIVtB8JyKk0ddA5@moria.home.lan>
+ <ZFKNZZwC8EUbOLMv@slm.duckdns.org> <20230503180726.GA196054@cmpxchg.org>
+ <ZFKlrP7nLn93iIRf@slm.duckdns.org> <ZFKqh5Dh93UULdse@slm.duckdns.org>
+ <ZFKubD/lq7oB4svV@moria.home.lan> <ZFKu6zWA00AzArMF@slm.duckdns.org>
+ <ZFKxcfqkUQ60zBB_@slm.duckdns.org> <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
+ <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+In-Reply-To: <ZFK6pwOelIlhV8Bm@slm.duckdns.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 3 May 2023 13:08:40 -0700
+Message-ID: <CAJuCfpG4TmRpT5iU7bJmKcjW2Tghstdo1b=qEG=tDsmtJQYuWA@mail.gmail.com>
 Subject: Re: [PATCH 00/40] Memory allocation profiling
 To:     Tejun Heo <tj@kernel.org>
 Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, corbet@lwn.net,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
-        muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
-        pasha.tatashin@soleen.com, yosryahmed@google.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        andreyknvl@gmail.com, keescook@chromium.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
+        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
+        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
         ndesaulniers@google.com, gregkh@linuxfoundation.org,
         ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
@@ -84,38 +86,118 @@ Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
         linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 3, 2023 at 6:35=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+On Wed, May 3, 2023 at 12:49=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
 >
-> Hello, Kent.
+> Hello,
 >
-> On Wed, May 03, 2023 at 04:05:08AM -0400, Kent Overstreet wrote:
-> > No, we're still waiting on the tracing people to _demonstrate_, not
-> > claim, that this is at all possible in a comparable way with tracing.
+> On Wed, May 03, 2023 at 12:41:08PM -0700, Suren Baghdasaryan wrote:
+> > On Wed, May 3, 2023 at 12:09=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote=
+:
+> > >
+> > > On Wed, May 03, 2023 at 08:58:51AM -1000, Tejun Heo wrote:
+> > > > On Wed, May 03, 2023 at 02:56:44PM -0400, Kent Overstreet wrote:
+> > > > > On Wed, May 03, 2023 at 08:40:07AM -1000, Tejun Heo wrote:
+> > > > > > > Yeah, easy / default visibility argument does make sense to m=
+e.
+> > > > > >
+> > > > > > So, a bit of addition here. If this is the thrust, the debugfs =
+part seems
+> > > > > > rather redundant, right? That's trivially obtainable with traci=
+ng / bpf and
+> > > > > > in a more flexible and performant manner. Also, are we happy wi=
+th recording
+> > > > > > just single depth for persistent tracking?
+> >
+> > IIUC, by single depth you mean no call stack capturing?
 >
-> So, we (meta) happen to do stuff like this all the time in the fleet to h=
-unt
-> down tricky persistent problems like memory leaks, ref leaks, what-have-y=
-ou.
-> In recent kernels, with kprobe and BPF, our ability to debug these sorts =
-of
-> problems has improved a great deal. Below, I'm attaching a bcc script I u=
-sed
-> to hunt down, IIRC, a double vfree. It's not exactly for a leak but leaks
-> can follow the same pattern.
+> Yes.
 >
+> > If so, that's the idea behind the context capture feature so that we
+> > can enable it on specific allocations only after we determine there is
+> > something interesting there. So, with low-cost persistent tracking we
+> > can determine the suspects and then pay some more to investigate those
+> > suspects in more detail.
+>
+> Yeah, I was wondering whether it'd be useful to have that configurable so
+> that it'd be possible for a user to say "I'm okay with the cost, please
+> track more context per allocation".
 
-For leaks there is example bcc
-https://github.com/iovisor/bcc/blob/master/tools/memleak.py
+I assume by "more context per allocation" you mean for a specific
+allocation, not for all allocations.
+So, in a sense you are asking if the context capture feature can be
+dropped from this series and implemented using some other means. Is
+that right?
+
+> Given that tracking the immediate caller
+> is already a huge improvement and narrowing it down from there using
+> existing tools shouldn't be that difficult, I don't think this is a block=
+er
+> in any way. It just bothers me a bit that the code is structured so that
+> source line is the main abstraction.
+>
+> > > > > Not sure what you're envisioning?
+> > > > >
+> > > > > I'd consider the debugfs interface pretty integral; it's much mor=
+e
+> > > > > discoverable for users, and it's hardly any code out of the whole
+> > > > > patchset.
+> > > >
+> > > > You can do the same thing with a bpftrace one liner tho. That's rat=
+her
+> > > > difficult to beat.
+> >
+> > debugfs seemed like a natural choice for such information. If another
+> > interface is more appropriate I'm happy to explore that.
+> >
+> > >
+> > > Ah, shit, I'm an idiot. Sorry. I thought allocations was under /proc =
+and
+> > > allocations.ctx under debugfs. I meant allocations.ctx is redundant.
+> >
+> > Do you mean that we could display allocation context in
+> > debugfs/allocations file (for the allocations which we explicitly
+> > enabled context capturing)?
+>
+> Sorry about the fumbled communication. Here's what I mean:
+>
+> * Improving memory allocation visibility makes sense to me. To me, a more
+>   natural place for that feels like /proc/allocations next to other memor=
+y
+>   info files rather than under debugfs.
+
+TBH I would love that if this approach is acceptable.
+
+>
+> * The default visibility provided by "allocations" provides something whi=
+ch
+>   is more difficult or at least cumbersome to obtain using existing traci=
+ng
+>   tools. However, what's provided by "allocations.ctx" can be trivially
+>   obtained using kprobe and BPF and seems redundant.
+
+Hmm. That might be a good way forward. Since context capture has
+already high performance overhead, maybe choosing not the most
+performant but more generic solution is the right answer here. I'll
+need to think about it some more but thanks for the idea!
+
+>
+> Thanks.
+>
+> --
+> tejun
