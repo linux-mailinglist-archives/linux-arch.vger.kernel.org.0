@@ -2,158 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6836F6366
-	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 05:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA76A6F6608
+	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 09:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjEDDdr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 May 2023 23:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S229853AbjEDHpq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 May 2023 03:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjEDDdo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 May 2023 23:33:44 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83831FC3
-        for <linux-arch@vger.kernel.org>; Wed,  3 May 2023 20:33:41 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-b9a6869dd3cso33598276.2
-        for <linux-arch@vger.kernel.org>; Wed, 03 May 2023 20:33:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683171221; x=1685763221;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ezowVIfZ+j5q5fnHBXFJgjQgqAlO13MfPXw7qEM899U=;
-        b=lL+P1HWGx+y87/s7tJ3yJEOlJ9xZakfyxCZ/vj2vLDVlNBtKFp5TryG8cJdaJpBcY3
-         guIC/GIEBTyQZrHE6ZNHiQ86VI1OapFezm0uE0T+1OK+K4KYYfBBjtbLybxs4JzubUJ/
-         YHIYmrIrkP5sV/C/lw2aAB2KyoF9ze882p2X7gtWbJ7Ck0EEAHwV0AOp5iYiKP9dpnkl
-         JG4AkClQv8a9C8JNwybz3M08XO+E4JFF6RNOKRacmV8gTFgw1n0DajrnRmLfrbF5RGNA
-         oAFHvA1e8eD3Al3/gqVbjERe8sD7tl0wTSvmn2cJLhru0NU5xErhL5P5WdguSe6A94ip
-         wwkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683171221; x=1685763221;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ezowVIfZ+j5q5fnHBXFJgjQgqAlO13MfPXw7qEM899U=;
-        b=iXOATO6tkNZTIVfifEY3GwyIWCse7nebsPT64dipDB6TdpRHt53hANha2oJJB3d2Fx
-         ADBsTLnHB4Rs5qKvq4OZmMGqP4dZg+NhdMR98r7FwmDJHMuDMnA90kuN776/cfjZxNNu
-         X9fBEePMKoCKjh7oyV3hDb625IWGCGONsARINpcLtzGihHMyTI0HTiT71JQ4DRJwzsX2
-         ZaEwG6Ly757lp2KLpe4QK7SEmb/7izARHIB74aHUvcPXmHl1z8MRnVlCehVJn0qvbexd
-         nRU+PzXFTXZY6vx4z8opIA4/H132wyRe0Yqj2B6rJ46tRicGbw3GH14eeaYkG72HEicg
-         fefw==
-X-Gm-Message-State: AC+VfDzv+6+J2ZskAEu40rRLtf8iSiczanaRTBRxzFLSLwsnoxTSvnt/
-        zh9AkMzc701IyFXdAmZm1ibekpbTlYHjRJ+VNr3wTA==
-X-Google-Smtp-Source: ACHHUZ45mGN+GR4nSu7Wa2mDPuzxUEEU0oecLdcE3XKkTt3qYSjVz+G7V7TA1b9va9C/DDvQwmfyGTeJUntbFTp86oM=
-X-Received: by 2002:a25:b55:0:b0:ba1:8b5a:581e with SMTP id
- 82-20020a250b55000000b00ba18b5a581emr1541686ybl.17.1683171220475; Wed, 03 May
- 2023 20:33:40 -0700 (PDT)
+        with ESMTP id S229681AbjEDHpp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 03:45:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EB219B7;
+        Thu,  4 May 2023 00:45:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D02F620955;
+        Thu,  4 May 2023 07:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683186341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=fAtkXnSLgcjg8Wiwr7C3q+RqNoepW6FpquCKIhVr0Gk=;
+        b=rKCnIQNeTc5rRFs+HYGq7Kh4+pVl7eStJUFXOT5DocQzKtpM8WC31swLPiJPkoi6zbIkD/
+        0gBJDg35KdFY0fRdG36T0VBWGE64YGGH3BxK+m/yOpMzSac7pSpXywz+k02coBOFZGDfMr
+        IKvcjN/QkvhRfoBSIdqnql/ChUK2/2w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683186341;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=fAtkXnSLgcjg8Wiwr7C3q+RqNoepW6FpquCKIhVr0Gk=;
+        b=Vv3xoxs1nqazVAyOW0YxVUG8zcfYMlfCiDJLrmBCjgt8Qy0QlVsf6JGOJ1DcgHoKT54Yw7
+        brFIEdnzJZa58kDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66A25133F7;
+        Thu,  4 May 2023 07:45:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id QRIdGKViU2S6HAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 04 May 2023 07:45:41 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
+        sam@ravnborg.org
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v4 0/6] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+Date:   Thu,  4 May 2023 09:45:33 +0200
+Message-Id: <20230504074539.8181-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230503180726.GA196054@cmpxchg.org> <ZFKlrP7nLn93iIRf@slm.duckdns.org>
- <ZFKqh5Dh93UULdse@slm.duckdns.org> <ZFKubD/lq7oB4svV@moria.home.lan>
- <ZFKu6zWA00AzArMF@slm.duckdns.org> <ZFKxcfqkUQ60zBB_@slm.duckdns.org>
- <CAJuCfpEPkCJZO2svT-GfmpJ+V-jSLyFDKM_atnqPVRBKtzgtnQ@mail.gmail.com>
- <ZFK6pwOelIlhV8Bm@slm.duckdns.org> <ZFK9XMSzOBxIFOHm@slm.duckdns.org>
- <CAJuCfpE4YD_BumqFf2-NC8KS9D+kq0s_o4gRyWAH-WK4SgqUbA@mail.gmail.com> <ZFMXmj9ZhSe5wyaS@slm.duckdns.org>
-In-Reply-To: <ZFMXmj9ZhSe5wyaS@slm.duckdns.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 3 May 2023 20:33:28 -0700
-Message-ID: <CAJuCfpGmc==xztXgiM+UUA5GGhxstB2r=yTjNUwSshaj5FpBFw@mail.gmail.com>
-Subject: Re: [PATCH 00/40] Memory allocation profiling
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        corbet@lwn.net, void@manifault.com, peterz@infradead.org,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, dennis@kernel.org, muchun.song@linux.dev,
-        rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
-        yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
-        hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
-        ndesaulniers@google.com, gregkh@linuxfoundation.org,
-        ebiggers@google.com, ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        kasan-dev@googlegroups.com, cgroups@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 3, 2023 at 7:25=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Wed, May 03, 2023 at 01:14:57PM -0700, Suren Baghdasaryan wrote:
-> > On Wed, May 3, 2023 at 1:00=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
-> > > Another related question. So, the reason for macro'ing stuff is neede=
-d is
-> > > because you want to print the line directly from kernel, right?
-> >
-> > The main reason is because we want to inject a code tag at the
-> > location of the call. If we have a code tag injected at every
-> > allocation call, then finding the allocation counter (code tag) to
-> > operate takes no time.
-> >
-> > > Is that
-> > > really necessary? Values from __builtin_return_address() can easily b=
-e
-> > > printed out as function+offset from kernel which already gives most o=
-f the
-> > > necessary information for triaging and mapping that back to source li=
-ne from
-> > > userspace isn't difficult. Wouldn't using __builtin_return_address() =
-make
-> > > the whole thing a lot simpler?
-> >
-> > If we do that we have to associate that address with the allocation
-> > counter at runtime on the first allocation and look it up on all
-> > following allocations. That introduces the overhead which we are
-> > trying to avoid by using macros.
->
-> I see. I'm a bit skeptical about the performance angle given that the hot
-> path can be probably made really cheap even with lookups. In most cases,
-> it's just gonna be an extra pointer deref and a few more arithmetics. Tha=
-t
-> can show up in microbenchmarks but it's not gonna be much. The benefit of
-> going that route would be the tracking thing being mostly self contained.
+Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+depends on the architecture, but they are all equivalent to regular
+I/O functions of similar names. So use regular functions instead and
+move all helpers into <asm-generic/fb.h>
 
-I'm in the process of rerunning the tests to compare the overhead on
-the latest kernel but I don't expect that to be cheap compared to
-kmalloc().
+The first patch a simple whitespace cleanup.
 
->
-> That said, it's nice to not have to worry about allocating tracking slots
-> and managing hash table, so no strong opinion.
->
-> Thanks.
->
-> --
-> tejun
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+will go away, patches 2 to 4 prepare include statements in the various
+drivers. Source files that use regular I/O helpers, such as readl(),
+now include <linux/io.h>. Source files that use framebuffer I/O
+helpers, such as fb_readl(), now include <linux/fb.h>.
+
+Patch 5 replaces the architecture-based if-else branching in 
+<linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
+existing I/O functions.
+
+Patch 6 harmonizes naming among fbdev and existing I/O functions.
+
+The patchset has been built for a variety of platforms, such as x86-64,
+arm, aarch64, ppc64, parisc, m64k, mips and sparc.
+
+v4:
+	* keep fb_mem*() as-is on ia64, loongarch, sparc64 (Arnd)
+	* don't include <asm/fb.h> (Sam)
+v3:
+	* add the new helpers in <asm-generic/fb.h>
+	* support reordering and native byte order (Geert, Arnd)
+v2:
+	* use Linux I/O helpers (Sam, Arnd)
+
+Thomas Zimmermann (6):
+  fbdev/matrox: Remove trailing whitespaces
+  ipu-v3: Include <linux/io.h>
+  fbdev: Include <linux/io.h> in various drivers
+  fbdev: Include <linux/fb.h> instead of <asm/fb.h>
+  fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+  fbdev: Rename fb_mem*() helpers
+
+ arch/ia64/include/asm/fb.h                  |  20 ++++
+ arch/loongarch/include/asm/fb.h             |  21 ++++
+ arch/parisc/video/fbdev.c                   |   3 +-
+ arch/sparc/include/asm/fb.h                 |  20 ++++
+ arch/sparc/video/fbdev.c                    |   1 -
+ arch/x86/video/fbdev.c                      |   2 -
+ drivers/gpu/ipu-v3/ipu-prv.h                |   1 +
+ drivers/staging/sm750fb/sm750.c             |   2 +-
+ drivers/video/fbdev/arcfb.c                 |   1 +
+ drivers/video/fbdev/aty/atyfb.h             |   2 +
+ drivers/video/fbdev/aty/mach64_cursor.c     |   2 +-
+ drivers/video/fbdev/chipsfb.c               |   2 +-
+ drivers/video/fbdev/core/fbcon.c            |   1 -
+ drivers/video/fbdev/core/fbmem.c            |   6 +-
+ drivers/video/fbdev/kyro/fbdev.c            |   2 +-
+ drivers/video/fbdev/matrox/matroxfb_accel.c |   6 +-
+ drivers/video/fbdev/matrox/matroxfb_base.h  |   4 +-
+ drivers/video/fbdev/pvr2fb.c                |   2 +-
+ drivers/video/fbdev/sstfb.c                 |   2 +-
+ drivers/video/fbdev/stifb.c                 |   4 +-
+ drivers/video/fbdev/tdfxfb.c                |   2 +-
+ drivers/video/fbdev/wmt_ge_rops.c           |   2 +
+ include/asm-generic/fb.h                    | 101 ++++++++++++++++++++
+ include/linux/fb.h                          |  55 +----------
+ 24 files changed, 187 insertions(+), 77 deletions(-)
+
+-- 
+2.40.1
+
