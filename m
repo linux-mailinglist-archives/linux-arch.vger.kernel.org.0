@@ -2,124 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D886F7044
-	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 18:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872C16F7156
+	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 19:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbjEDQyz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 May 2023 12:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35916 "EHLO
+        id S229793AbjEDRna (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 May 2023 13:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjEDQyw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 12:54:52 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698472680;
-        Thu,  4 May 2023 09:54:49 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f145d1b85fso126994e87.0;
-        Thu, 04 May 2023 09:54:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683219287; x=1685811287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zWuEZkogQrpROHMVf4Afmv59RhcW/mBv705XzrKNcwg=;
-        b=h1I5pt2pWUP0tbSvoq0HGWi7cXdL88LVYVgOA2PXd8xYgjLSlbQvcg9QCTSZAhYNFT
-         4bnY0fpW/OZZjtenYMNv+t5oxb2Iq6wBEUBwMrjGB4rXeFLMg9szxoupOANF94p5n8bj
-         FBv5gEKq2+Jmk/4uyuBySWmNZly1MR6IgZUgT6QAFaOw9ajC0OmWdL5c32u1qh46vVl+
-         zwaubiKXwu0Xqsl3f7f0oWmfje8ESf0x2TlppY0KKMj78gfn93skK/6445rl5jDCCsqO
-         LH06f7LFAT6E6NtYTbDymF2OWWTJTe3pJURWuQAsyp1uYcSg/QPtnBz5Ku4DAb/K2b2K
-         0cyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683219287; x=1685811287;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zWuEZkogQrpROHMVf4Afmv59RhcW/mBv705XzrKNcwg=;
-        b=HMcrbk7lth7JPPzy/LlpDBg0H6YvM8XdFGkDa3d8vxuF+v6OnDYJJbr9Firrb/N2TM
-         dL0HGbcSyyQ9PbDZaJ2pcI1dJ6s85GhCWa9kiYzSIYZMy7Ib1GlZ8AwfYMuZFCUMZibz
-         X4CD/lBnAecBwUOfgSIatHP9IPsGjpmpWYIke15Uwpc8Fb2GNYkVcwYRt9XVwDfJt9fs
-         jnv6a/UtK3wxeoXpy4rtHVQ7WDqT7kUtizd4ma0vZgdqia80uJ71MCXtWcc3yxbz10a4
-         45gbsqAwQYqHBE1qDUfcy2AKvauMnLQnp2KmipcSoytTNThUyU42GeZQ0luZ4BHzCQCK
-         l8YA==
-X-Gm-Message-State: AC+VfDwD9iia89vKtXEQO/xTbQPaniDZQqeH0Wqdxv/XBbrTpv1t2LrL
-        R2TkxARdIK5agHquwTJFHuU=
-X-Google-Smtp-Source: ACHHUZ6DCMzKDQdWDNz5XYVj6UKhn7SpghglT8y5gsikn9UDjxEKWrx/AKn5edWATVXtU+lNPN+nLQ==
-X-Received: by 2002:ac2:44d5:0:b0:4ea:fafd:e66f with SMTP id d21-20020ac244d5000000b004eafafde66fmr5317924lfm.0.1683219287470;
-        Thu, 04 May 2023 09:54:47 -0700 (PDT)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id 10-20020ac2568a000000b004edc7f6ee44sm6495865lfr.234.2023.05.04.09.54.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 09:54:47 -0700 (PDT)
-Date:   Thu, 4 May 2023 19:54:28 +0300
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V5 05/15] clocksource/drivers/hyper-v: decrypt
- hyperv tsc page in sev-snp enlightened guest
-Message-ID: <20230504195428.00007eda.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230501085726.544209-6-ltykernel@gmail.com>
-References: <20230501085726.544209-1-ltykernel@gmail.com>
-        <20230501085726.544209-6-ltykernel@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        with ESMTP id S229449AbjEDRn3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 13:43:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F92912F
+        for <linux-arch@vger.kernel.org>; Thu,  4 May 2023 10:43:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1EB1612E7
+        for <linux-arch@vger.kernel.org>; Thu,  4 May 2023 17:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBC1DC433D2;
+        Thu,  4 May 2023 17:43:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683222207;
+        bh=ihjmSvs/qLkudOIBOH6YAA4nlt8DLXtiyZ5DxYWf3cQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jDVQGeskZtkUxtJLc+LNhJGKgDriZl4AP0XdSU64kJkVLWXqm/px85+Js4kUAdg+V
+         OkAamhHXdvVxrlN6huYNra6Q3JGoBUzJGtWGSx6d6otI0iB6/8sk3UJVCQr8ySnFCD
+         AILXEioAAQDQTvQ4J8HgB6L6JB8e+C3VzzBIaTkK43WDXlbZIQ0FUR/S99eYOzgopd
+         ani8SQlKnC+4R8yQaHSXQ9OiR+UOOsunZ91ihRGsttsQ0LpXG/S1bre1NtVuQU8nUB
+         WproENnf666AbOJsylxQL/rwZKicPxcI9RRJdoFGQniyXb41hNhYX0KRPA8NS6FQUf
+         GhEWCQniUOcJg==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-arch@vger.kernel.org
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [RFC PATCH] kallsyms: Avoid weak references for kallsyms symbols
+Date:   Thu,  4 May 2023 19:43:20 +0200
+Message-Id: <20230504174320.3930345-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4557; i=ardb@kernel.org; h=from:subject; bh=ihjmSvs/qLkudOIBOH6YAA4nlt8DLXtiyZ5DxYWf3cQ=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JISX43Y5vH/hC18QUPSk5qMpy2c9qZbzOWtNUV79IC7HS7 ydWp03vKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABNxNmJk+Mw6d+vr4qRqpWeW Du+zFCMFzohUdq6JUrWZu1JlAnPfTIb/UX3deos0v99T55/JynUr3PSo8yTDuCdLZf44N78+Ypf PDwA=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon,  1 May 2023 04:57:15 -0400
-Tianyu Lan <ltykernel@gmail.com> wrote:
+kallsyms is a directory of all the symbols in the vmlinux binary, and so
+creating it is somewhat of a chicken-and-egg problem, as its non-zero
+size affects the layout of the binary, and therefore the values of the
+symbols.
 
-> From: Tianyu Lan <tiala@microsoft.com>
-> 
-> Hyper-V tsc page is shared with hypervisor and it should
-> be decrypted in sev-snp enlightened guest when it's used.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
-> Change since RFC V2:
->        * Change the Subject line prefix
-> ---
->  drivers/clocksource/hyperv_timer.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-> index bcd9042a0c9f..66e29a19770b 100644
-> --- a/drivers/clocksource/hyperv_timer.c
-> +++ b/drivers/clocksource/hyperv_timer.c
-> @@ -376,7 +376,7 @@ EXPORT_SYMBOL_GPL(hv_stimer_global_cleanup);
->  static union {
->  	struct ms_hyperv_tsc_page page;
->  	u8 reserved[PAGE_SIZE];
-> -} tsc_pg __aligned(PAGE_SIZE);
-> +} tsc_pg __bss_decrypted __aligned(PAGE_SIZE);
->  
+For this reason, the kernel is linked more than once, and the first pass
+does not include any kallsyms data at all. For the linker to accept
+this, the symbol declarations describing the kallsyms metadata are
+emitted as having weak linkage, so they can remain unsatisfied. During
+the subsequent passes, the weak references are satisfied by the kallsyms
+metadata that was constructed based on information gathered from the
+preceding passes.
 
-Out of curiosity, this is not a on/off for VM with paravisor and full-enlightened VM, how
-does change affect the case of VM with paravisor? I assume the VM with paravisor works fine
-without this previously.
+Weak references lead to somewhat worse codegen, because taking their
+address may need to produce NULL (if the reference was unsatisfied), and
+this is not usually supported by RIP or PC relative symbol references.
 
->  static struct ms_hyperv_tsc_page *tsc_page = &tsc_pg.page;
->  static unsigned long tsc_pfn;
+Given that these references are ultimately always satisfied in the final
+link, let's drop the weak annotation, and instead, provide fallback
+definitions in the linker script that are only emitted if an unsatisfied
+reference exists.
+
+While at it, drop the FRV specific annotation that these symbols reside
+in .rodata - FRV is long gone.
+
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Kees Cook <keescook@chromium.org>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ include/asm-generic/vmlinux.lds.h |  9 +++++++
+ kernel/kallsyms.c                 |  6 -----
+ kernel/kallsyms_internal.h        | 25 +++++++-------------
+ 3 files changed, 18 insertions(+), 22 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index d1f57e4868ed341d..dd42c0fcad2b519f 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -460,6 +460,15 @@
+  */
+ #define RO_DATA(align)							\
+ 	. = ALIGN((align));						\
++	PROVIDE(kallsyms_addresses = .);				\
++	PROVIDE(kallsyms_offsets = .);					\
++	PROVIDE(kallsyms_names = .);					\
++	PROVIDE(kallsyms_num_syms = .);					\
++	PROVIDE(kallsyms_relative_base = .);				\
++	PROVIDE(kallsyms_token_table = .);				\
++	PROVIDE(kallsyms_token_index = .);				\
++	PROVIDE(kallsyms_markers = .);					\
++	PROVIDE(kallsyms_seqs_of_names = .);				\
+ 	.rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {		\
+ 		__start_rodata = .;					\
+ 		*(.rodata) *(.rodata.*)					\
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 77747391f49b66cb..5b16009ee53aa05b 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -331,12 +331,6 @@ static unsigned long get_symbol_pos(unsigned long addr,
+ 	unsigned long symbol_start = 0, symbol_end = 0;
+ 	unsigned long i, low, high, mid;
+ 
+-	/* This kernel should never had been booted. */
+-	if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
+-		BUG_ON(!kallsyms_addresses);
+-	else
+-		BUG_ON(!kallsyms_offsets);
+-
+ 	/* Do a binary search on the sorted kallsyms_addresses array. */
+ 	low = 0;
+ 	high = kallsyms_num_syms;
+diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+index 27fabdcc40f57931..cf4124dbcc5b6d0e 100644
+--- a/kernel/kallsyms_internal.h
++++ b/kernel/kallsyms_internal.h
+@@ -8,24 +8,17 @@
+  * These will be re-linked against their real values
+  * during the second link stage.
+  */
+-extern const unsigned long kallsyms_addresses[] __weak;
+-extern const int kallsyms_offsets[] __weak;
+-extern const u8 kallsyms_names[] __weak;
++extern const unsigned long kallsyms_addresses[];
++extern const int kallsyms_offsets[];
++extern const u8 kallsyms_names[];
+ 
+-/*
+- * Tell the compiler that the count isn't in the small data section if the arch
+- * has one (eg: FRV).
+- */
+-extern const unsigned int kallsyms_num_syms
+-__section(".rodata") __attribute__((weak));
+-
+-extern const unsigned long kallsyms_relative_base
+-__section(".rodata") __attribute__((weak));
++extern const unsigned int kallsyms_num_syms;
++extern const unsigned long kallsyms_relative_base;
+ 
+-extern const char kallsyms_token_table[] __weak;
+-extern const u16 kallsyms_token_index[] __weak;
++extern const char kallsyms_token_table[];
++extern const u16 kallsyms_token_index[];
+ 
+-extern const unsigned int kallsyms_markers[] __weak;
+-extern const u8 kallsyms_seqs_of_names[] __weak;
++extern const unsigned int kallsyms_markers[];
++extern const u8 kallsyms_seqs_of_names[];
+ 
+ #endif // LINUX_KALLSYMS_INTERNAL_H_
+-- 
+2.39.2
 
