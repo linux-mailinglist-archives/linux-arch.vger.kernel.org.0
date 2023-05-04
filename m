@@ -2,59 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065A16F6DC2
-	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 16:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D836F6EA3
+	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 17:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjEDObV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 May 2023 10:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
+        id S231293AbjEDPIe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 May 2023 11:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbjEDObT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 10:31:19 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3963E8A7F
-        for <linux-arch@vger.kernel.org>; Thu,  4 May 2023 07:31:18 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so787841276.2
-        for <linux-arch@vger.kernel.org>; Thu, 04 May 2023 07:31:18 -0700 (PDT)
+        with ESMTP id S231232AbjEDPI2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 11:08:28 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30676422C
+        for <linux-arch@vger.kernel.org>; Thu,  4 May 2023 08:08:26 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-b99f0a0052fso873465276.3
+        for <linux-arch@vger.kernel.org>; Thu, 04 May 2023 08:08:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683210677; x=1685802677;
+        d=google.com; s=20221208; t=1683212905; x=1685804905;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JS6msPuToyJynO3sTVIKpHDiqUqJNNgVeQDo4ExI+FY=;
-        b=B5odhRz5pl82Qodj9r2guUYfauBi1/TsFjLxRQqEz3zjcJjd//DMmZjNJKPPi7+nQ5
-         xuKBZ6j/WQW0W3dcKfsj589Fsc+uJ6BYPO2OLNobtTmF3hvusxOFblAjFzy4VuEOrD27
-         shVv5j4flGfZP5ZKf0oD9z3I5mcfEgazfAAXF3El44hYhX1ZRJaYFp+RYh8KC456HFZc
-         kSCAd/ObzJ2UJVsrp6Z49s4y6jg7flU32RKu03oDmXNXsZW8yRicseUXEdJ33k/uoDns
-         3t9BrSAOH3jBGP78RFzGvpDDNA510GhlcIeVQC/3SRIP7nZ/gPC/uJcOwTrT82pyTD6i
-         AF6A==
+        bh=vpI3TgDyhkti03RqKX4aJ+LI47o/coVvQYc1czzI8zs=;
+        b=FNofsLdv/+7cq18LESbrv72DxTOtLR7I9kjhPi1qP4Q3LOJM6z2Qwy4LxmeVOSRV1Z
+         xK+g4AMIJhpry6DKZYI++Pk/k+tIoKY5MDlKbzPcxFqtpsTF9KyhL/CnMcUvTRQFU1XW
+         s77y30fDpMQ0IAed3GmRXiG0b/uvK6WqPwJdfl0zE1KIt9+luKSvRC/QVW5PpatI86J1
+         8Lleqs+mqleJV9W3YvOGElVKE+XmHEyvUzWjfiQlhf68dkmkvTC9QVzwaCMHP6HyYov0
+         fyMfje9piFOaym+JTibnTPFGqcqfJtpyIPdeKRtc5PVjhwHQRxzmBvCsLDjcVSYkRaxf
+         RH/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683210677; x=1685802677;
+        d=1e100.net; s=20221208; t=1683212905; x=1685804905;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JS6msPuToyJynO3sTVIKpHDiqUqJNNgVeQDo4ExI+FY=;
-        b=R7MVleqv5msylFmxHsuDRxOkwmTeDAzgbQ+nYtaVbEUL3Y7ThoLLK0H+BoKK14iyMX
-         Fg7bo/hsZ7HNlNAGG9Yp/3V/fQyQ6c9ceNPk3gRz/RQrjHJLUDmaVIQAAQzV7dkmwxDo
-         Pw1dbFI2u6xPbho7eQPbii5W0rLAP6LI47nhHdGR2OdH1rk07yE6HPrEFqQtq0ERjsRf
-         /U1tF2RgyrRTSr5Nwd0hKFEdBc8mfDSocJomfvRxVWOfBSTDLyKBRufQKTigkRTWJwVu
-         q/q7nHj+wogkb/45Y4dL/dSvfgazuj6W5KbhpSovB3KKalSlMV11KW8t0jUnUBNZjjzL
-         QnGQ==
-X-Gm-Message-State: AC+VfDzyqUmqrM1Pc+M19o2S2cp7ZHD/ag0YULeW1LbK380OrGNlgVii
-        hLwX9lkyWOSocqsJ8QLhypA4KQjkfoGnlYnkHfUbvA==
-X-Google-Smtp-Source: ACHHUZ5E9WXnTl16LxgdrH+7bPTNFRvDYVSM0w82lR/qVCCtHXAzvUBD8IG8coi/bDLOeNuU/XqnEJgf+6xYt7++7Tk=
-X-Received: by 2002:a25:cec1:0:b0:b99:4ac6:3c75 with SMTP id
- x184-20020a25cec1000000b00b994ac63c75mr122983ybe.10.1683210677091; Thu, 04
- May 2023 07:31:17 -0700 (PDT)
+        bh=vpI3TgDyhkti03RqKX4aJ+LI47o/coVvQYc1czzI8zs=;
+        b=Iwev87siGNZDqDIwtx5UItpBjYuU/vveo6Q3JGfCam8L0gZG8w8hRkuWiPLls883+a
+         /u83dSTr62Et3Pv8Dua07j9Scz98qLEsSeH50UbG+Bvxb4OaChJuco9qn2e5gyQmPu8k
+         LPNpxsJFAxGKxLsoS7a+KqHl9bMg9kL6i8J8AHtmZEjJI0OLiQYqBiKbKG3k/nzVDv2i
+         e7FcTkYvMTrovSr3ZUj3wQWH62/OKmPvFXr9oRCZkXNP8js6ELqrJ0cJucVQnYTHolyb
+         EKM/Oo2X62jBYY/PUneZBVj1C5hQvKhZ6D+pVl2N05KeiubUALBbmMjaeD/SLNH/PLAe
+         31QA==
+X-Gm-Message-State: AC+VfDxan9VCC4P/U1KdlEDRSXddFw3nV1eON4ee3EvvNmUWYyQLCPhs
+        EJQhKWM0qD2DrUmjzEPQk6GugqCdUVrpaXRZ+tFJ7Q==
+X-Google-Smtp-Source: ACHHUZ7hI7Vxo4JFi305ipzfOlYOUrc5ajrRHXdhnDh4eBp5Mjy+UHcFwOsphq83i8E2EemKBiNMD3DduEPsVwVmGlE=
+X-Received: by 2002:a25:b21f:0:b0:ba1:78df:20fc with SMTP id
+ i31-20020a25b21f000000b00ba178df20fcmr253521ybj.21.1683212905109; Thu, 04 May
+ 2023 08:08:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501165450.15352-1-surenb@google.com> <20230501165450.15352-35-surenb@google.com>
- <ZFIO3tXCbmTn53uv@dhcp22.suse.cz> <CAJuCfpHrZ4kWYFPvA3W9J+CmNMuOtGa_ZMXE9fOmKsPQeNt2tg@mail.gmail.com>
- <ZFNnKHR2nCSimjQf@dhcp22.suse.cz>
-In-Reply-To: <ZFNnKHR2nCSimjQf@dhcp22.suse.cz>
+References: <20230501165450.15352-1-surenb@google.com> <ZFIMaflxeHS3uR/A@dhcp22.suse.cz>
+ <CAJuCfpHxbYFxDENYFfnggh1D8ot4s493PQX0C7kD-JLvixC-Vg@mail.gmail.com> <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
+In-Reply-To: <ZFN1yswCd9wRgYPR@dhcp22.suse.cz>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 4 May 2023 07:31:05 -0700
-Message-ID: <CAJuCfpF7WeVuJpmZN3KEu=FAUH34xfYG4wPg-YNjxj+GtmdBXQ@mail.gmail.com>
-Subject: Re: [PATCH 34/40] lib: code tagging context capture support
+Date:   Thu, 4 May 2023 08:08:13 -0700
+Message-ID: <CAJuCfpEkV_+pAjxyEpMqY+x7buZhSpj5qDF6KubsS=ObrQKUZg@mail.gmail.com>
+Subject: Re: [PATCH 00/40] Memory allocation profiling
 To:     Michal Hocko <mhocko@suse.com>
 Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
         vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
@@ -96,65 +95,190 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 4, 2023 at 1:04=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
+On Thu, May 4, 2023 at 2:07=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
 :
 >
-> On Wed 03-05-23 08:18:39, Suren Baghdasaryan wrote:
-> > On Wed, May 3, 2023 at 12:36=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
+> On Wed 03-05-23 08:09:28, Suren Baghdasaryan wrote:
+> > On Wed, May 3, 2023 at 12:25=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
 wrote:
-> > >
-> > > On Mon 01-05-23 09:54:44, Suren Baghdasaryan wrote:
-> > > [...]
-> > > > +static inline void add_ctx(struct codetag_ctx *ctx,
-> > > > +                        struct codetag_with_ctx *ctc)
-> > > > +{
-> > > > +     kref_init(&ctx->refcount);
-> > > > +     spin_lock(&ctc->ctx_lock);
-> > > > +     ctx->flags =3D CTC_FLAG_CTX_PTR;
-> > > > +     ctx->ctc =3D ctc;
-> > > > +     list_add_tail(&ctx->node, &ctc->ctx_head);
-> > > > +     spin_unlock(&ctc->ctx_lock);
-> > >
-> > > AFAIU every single tracked allocation will get its own codetag_ctx.
-> > > There is no aggregation per allocation site or anything else. This lo=
-oks
-> > > like a scalability and a memory overhead red flag to me.
+> [...]
+> > Thanks for summarizing!
 > >
-> > True. The allocations here would not be limited. We could introduce a
-> > global limit to the amount of memory that we can use to store contexts
-> > and maybe reuse the oldest entry (in LRU fashion) when we hit that
-> > limit?
->
-> Wouldn't it make more sense to aggregate same allocations? Sure pids
-> get recycled but quite honestly I am not sure that information is all
-> that interesting. Precisely because of the recycle and short lived
-> processes reasons. I think there is quite a lot to think about the
-> detailed context tracking.
-
-That would be a nice optimization. I'll need to look into the
-implementation details. Thanks for the idea.
-
->
-> > >
-> > > > +}
-> > > > +
-> > > > +static inline void rem_ctx(struct codetag_ctx *ctx,
-> > > > +                        void (*free_ctx)(struct kref *refcount))
-> > > > +{
-> > > > +     struct codetag_with_ctx *ctc =3D ctx->ctc;
-> > > > +
-> > > > +     spin_lock(&ctc->ctx_lock);
-> > >
-> > > This could deadlock when allocator is called from the IRQ context.
+> > > At least those I find the most important:
+> > > - This is a big change and it adds a significant maintenance burden
+> > >   because each allocation entry point needs to be handled specificall=
+y.
+> > >   The cost will grow with the intended coverage especially there when
+> > >   allocation is hidden in a library code.
 > >
-> > I see. spin_lock_irqsave() then?
+> > Do you mean with more allocations in the codebase more codetags will
+> > be generated? Is that the concern?
 >
-> yes. I have checked that the lock is not held over the all list
-> traversal which is good but the changelog could be more explicit about
-> the iterators and lock hold times implications.
+> No. I am mostly concerned about the _maintenance_ overhead. For the
+> bare tracking (without profiling and thus stack traces) only those
+> allocations that are directly inlined into the consumer are really
+> of any use. That increases the code impact of the tracing because any
+> relevant allocation location has to go through the micro surgery.
+>
+> e.g. is it really interesting to know that there is a likely memory
+> leak in seq_file proper doing and allocation? No as it is the specific
+> implementation using seq_file that is leaking most likely. There are
+> other examples like that See?
 
-Ack. Will add more information.
+Yes, I see that. One level tracking does not provide all the
+information needed to track such issues. Something more informative
+would cost more. That's why our proposal is to have a light-weight
+mechanism to get a high level picture and then be able to zoom into a
+specific area using context capture. If you have ideas to improve
+this, I'm open to suggestions.
 
+>
+> > Or maybe as you commented in
+> > another patch that context capturing feature does not limit how many
+> > stacks will be captured?
+>
+> That is a memory overhead which can be really huge and it would be nice
+> to be more explicit about that in the cover letter. It is a downside for
+> sure but not something that has a code maintenance impact and it is an
+> opt-in so it can be enabled only when necessary.
+
+You are right, I'll add that into the cover letter.
+
+>
+> Quite honestly, though, the more I look into context capturing part it
+> seems to me that there is much more to be reconsidered there and if you
+> really want to move forward with the code tagging part then you should
+> drop that for now. It would make the whole series smaller and easier to
+> digest.
+
+Sure, I don't see an issue with removing that for now and refining the
+mechanism before posting again.
+
+>
+> > > - It has been brought up that this is duplicating functionality alrea=
+dy
+> > >   available via existing tracing infrastructure. You should make it v=
+ery
+> > >   clear why that is not suitable for the job
+> >
+> > I experimented with using tracing with _RET_IP_ to implement this
+> > accounting. The major issue is the _RET_IP_ to codetag lookup runtime
+> > overhead which is orders of magnitude higher than proposed code
+> > tagging approach. With code tagging proposal, that link is resolved at
+> > compile time. Since we want this mechanism deployed in production, we
+> > want to keep the overhead to the absolute minimum.
+> > You asked me before how much overhead would be tolerable and the
+> > answer will always be "as small as possible". This is especially true
+> > for slab allocators which are ridiculously fast and regressing them
+> > would be very noticable (due to the frequent use).
+>
+> It would have been more convincing if you had some numbers at hands.
+> E.g. this is a typical workload we are dealing with. With the compile
+> time tags we are able to learn this with that much of cost. With a dynami=
+c
+> tracing we are able to learn this much with that cost. See? As small as
+> possible is a rather vague term that different people will have a very
+> different idea about.
+
+I'm rerunning my tests with the latest kernel to collect the
+comparison data. I profiled these solutions before but the kernel
+changed since then, so I need to update them.
+
+>
+> > There is another issue, which I think can be solved in a smart way but
+> > will either affect performance or would require more memory. With the
+> > tracing approach we don't know beforehand how many individual
+> > allocation sites exist, so we have to allocate code tags (or similar
+> > structures for counting) at runtime vs compile time. We can be smart
+> > about it and allocate in batches or even preallocate more than we need
+> > beforehand but, as I said, it will require some kind of compromise.
+>
+> I have tried our usual distribution config (only vmlinux without modules
+> so the real impact will be larger as we build a lot of stuff into
+> modules) just to get an idea:
+>    text    data     bss     dec     hex filename
+> 28755345        17040322        19845124        65640791        3e99957 v=
+mlinux.before
+> 28867168        17571838        19386372        65825378        3ec6a62 v=
+mlinux.after
+>
+> Less than 1% for text 3% for data.  This is not all that terrible
+> for an initial submission and a more dynamic approach could be added
+> later. E.g. with a smaller pre-allocated hash table that could be
+> expanded lazily. Anyway not something I would be losing sleep over. This
+> can always be improved later on.
+
+Ah, right. I should have mentioned this overhead too. Thanks for
+keeping me honest.
+
+> > I understand that code tagging creates additional maintenance burdens
+> > but I hope it also produces enough benefits that people will want
+> > this. The cost is also hopefully amortized when additional
+> > applications like the ones we presented in RFC [1] are built using the
+> > same framework.
+>
+> TBH I am much more concerned about the maintenance burden on the MM side
+> than the actual code tagging itslef which is much more self contained. I
+> haven't seen other potential applications of the same infrastructure and
+> maybe the code impact would be much smaller than in the MM proper. Our
+> allocator API is really hairy and convoluted.
+
+Yes, other applications are much smaller and cleaner. MM allocation
+code is quite complex indeed.
+
+>
+> > > - We already have page_owner infrastructure that provides allocation
+> > >   tracking data. Why it cannot be used/extended?
+> >
+> > 1. The overhead.
+>
+> Do you have any numbers?
+
+Will post once my tests are completed.
+
+>
+> > 2. Covers only page allocators.
+>
+> Yes this sucks.
+> >
+> > I didn't think about extending the page_owner approach to slab
+> > allocators but I suspect it would not be trivial. I don't see
+> > attaching an owner to every slab object to be a scalable solution. The
+> > overhead would again be of concern here.
+>
+> This would have been a nice argument to mention in the changelog so that
+> we know that you have considered that option at least. Why should I (as
+> a reviewer) wild guess that?
+
+Sorry, It's hard to remember all the decisions, discussions and
+conclusions when working on a feature over a long time period. I'll
+include more information about that.
+
+>
+> > I should point out that there was one important technical concern
+> > about lack of a kill switch for this feature, which was an issue for
+> > distributions that can't disable the CONFIG flag. In this series we
+> > addressed that concern.
+>
+> Thanks, that is certainly appreciated. I haven't looked deeper into that
+> part but from the cover letter I have understood that CONFIG_MEM_ALLOC_PR=
+OFILING
+> implies unconditional page_ext and therefore the memory overhead
+> assosiated with that. There seems to be a killswitch nomem_profiling but
+> from a quick look it doesn't seem to disable page_ext allocations. I
+> might be missing something there of course. Having a highlevel
+> describtion for that would be really nice as well.
+
+Right, will add a description of that as well.
+We eliminate the runtime overhead but not the memory one. However I
+believe it's also doable using page_ext_operations.need callback. Will
+look into it.
+Thanks,
+Suren.
+
+>
+> > [1] https://lore.kernel.org/all/20220830214919.53220-1-surenb@google.co=
+m/
 >
 > --
 > Michal Hocko
