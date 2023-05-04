@@ -2,109 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E593A6F6F6F
-	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 17:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11596F6F78
+	for <lists+linux-arch@lfdr.de>; Thu,  4 May 2023 17:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjEDPzU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 May 2023 11:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
+        id S231267AbjEDP6l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 May 2023 11:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjEDPzS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 11:55:18 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B644EE1;
-        Thu,  4 May 2023 08:55:18 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64115e652eeso13521783b3a.0;
-        Thu, 04 May 2023 08:55:17 -0700 (PDT)
+        with ESMTP id S230039AbjEDP6k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 May 2023 11:58:40 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6ED468B;
+        Thu,  4 May 2023 08:58:39 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2a8dc09e884so1372171fa.1;
+        Thu, 04 May 2023 08:58:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683215717; x=1685807717;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SABdJwATGpnYNpw+VYDsD7QzVmuuG5ZhWoaCFqVkYME=;
-        b=KBZWZ39Enx4Z9uQK/wh5efZaK9Et6sjBSgM3MPSmZ9O8eG7X7zXR75SpnT6YBUNYub
-         aPoB9KIYp3GhHwWFdKTWbMxV3OCclj5+Plt3JcNubqIZGZ2VGBv+5y+hWlHLC0Kc53KC
-         qdv6RoqbJRcxSC2BHivAvTovz1cb4CMxOiNKgbfB9gCjOX8YO0hKUjylvHlceUu5PWfF
-         IlbhVGtSJWCAbG2MWOQlEbbE/OESMD3Ad/bc/lIgNPEB9wrJ4Qx3nzmtBmHFLAljZBd0
-         YAegg9RX80/wQp9HTZzR0OK/seXiH0Ss7nlDg/ViSiWQAJaKfWsx835aiZyYRTzRrBoM
-         PemA==
+        d=gmail.com; s=20221208; t=1683215918; x=1685807918;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wYBoD42fi0Qo48RQvnR/5/xNrxWUbWiP9dXKPNjnGZc=;
+        b=bXqQqAH97aZqNoW6tYHPqjwasg8isVEvVzYfRdDnYi4bHmmJhsUuyRBPiS2DzfvxXD
+         OkKoXvNDeUw28Ry1YuZw4XZPfa7wUHL/CgMgF3Kimqe5+qtPFYQmumgVSK98O899FiVH
+         v/P9iNpcNC/SOB9HpRDQ5orjOCJWxgCPr/JegUbpxIaZmi3qZxzFbCd+L1clGiNGUzWx
+         EGyp6pvCTGbrOx70ztLvOpmxkwCCVEt+Emo1fDgdZqjlkA4+L6/y9IZykRvAXchVlDQY
+         tc6RpHqPRrxJXZgK5zRcDV3FR7A0J5jqmFY1oFkkDKXqxImmafAVTg0lh1wzdKap+IVS
+         p6rA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683215717; x=1685807717;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SABdJwATGpnYNpw+VYDsD7QzVmuuG5ZhWoaCFqVkYME=;
-        b=Q6otaoMwjEofM5BO+uj0R7vepbe3FimDjDc3652K0rmAtrxKooQ0E5PiE6US433Anc
-         bDaXPjJiipcdP/dwy+X5WNrIRNI1po55ZOiO/nyXk7EtYXc+Qi7Ia2a6p2/lmXrOD/7e
-         cbT9T/g+kTCLY/IYjWWWIdS94zNgjuYZ7BSdAkFn4+RcfhP++JoLcITONFdKEIy+XpaJ
-         djr046vY4cdR8nYJTDRis1sXPFsxtrdXS5tRvypKUBSlKP5Kocc07aacTHKvN6L4BU8d
-         neVBlw4F53kbTE68GBAGHKLSP1oNiEbT4tqbJmtxKFZ1NfaOLY6jVP6Ykh1Nl1nQ0qr0
-         +9xQ==
-X-Gm-Message-State: AC+VfDwtS82Bf3pSlDbz4/n+vBOxRvTqzkq12hdQM14e/IbidJQrS2GZ
-        fVo2g1kACCQg9V8ueQ8SKXs=
-X-Google-Smtp-Source: ACHHUZ6zKY3ZNedn9zzEItNXl28AhWsGrlUm54WiaShNHwsmKfdLnbKDsw8jV9i185h3rjlV/1mlfw==
-X-Received: by 2002:a05:6a00:1886:b0:636:e0fb:8c45 with SMTP id x6-20020a056a00188600b00636e0fb8c45mr3183635pfh.16.1683215717427;
-        Thu, 04 May 2023 08:55:17 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5::e29? ([2404:f801:9000:18:6fec::e29])
-        by smtp.gmail.com with ESMTPSA id 188-20020a6219c5000000b00640e01dfba0sm19340002pfz.175.2023.05.04.08.55.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 08:55:17 -0700 (PDT)
-Message-ID: <f01b9a94-29c0-c5e4-9b99-0532807bc8ce@gmail.com>
-Date:   Thu, 4 May 2023 08:55:03 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [EXTERNAL] [RFC PATCH V5 09/15] x86/hyperv: Add smp support for
- sev-snp guest
-Content-Language: en-US
-To:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
-        "srutherford@google.com" <srutherford@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "sandipan.das@amd.com" <sandipan.das@amd.com>,
-        "ray.huang@amd.com" <ray.huang@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "michael.roth@amd.com" <michael.roth@amd.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
-        "sterritt@google.com" <sterritt@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
-Cc:     "pangupta@amd.com" <pangupta@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1683215918; x=1685807918;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wYBoD42fi0Qo48RQvnR/5/xNrxWUbWiP9dXKPNjnGZc=;
+        b=HsJe6qFg2u/O8pJZTWL0MxFlvrSogGxxkEDPeZkv6nKnyTLsZ3QwgIrs7UJ6LRNrML
+         bBDaRmtlhg8MQUD0sHERzhV1aF+aLWHGffH+G45BhawNXxFZgO7hKfTYg7y4I366q7gM
+         xb/aAeNVEqex8QQHX5aDSd/1BAQTxvX1qgZw21RgoSYpDPmNNZkit7HVrSzUJ+im32QI
+         uyvn0SNDABPOOQDXmtRsE4CYZq/pZC2nTk7mFKp+1SmiP5xrCZtfFiTrO/lZMK4xWwuM
+         dG7ahO+/u4efx55t0mWW3k/Z7mUahL36a5bK0A5cqNZGstEbmDMLWsfNqBrgVobNAHnb
+         8dIg==
+X-Gm-Message-State: AC+VfDz99NtXESOTB9SKAzRMOLecJAzPfjYDCThxo12BWS8WSEiqoy8W
+        2Fx7HCnw0IglO5jZ8mJ80p8=
+X-Google-Smtp-Source: ACHHUZ7lf9SJwpLxOd9zE09fOQJ6fYIObPElS6/ynR+3eECh6A5+PBp3kvB9rprdiMPydNUiRBzNvA==
+X-Received: by 2002:a2e:a261:0:b0:2ac:7237:d5bf with SMTP id k1-20020a2ea261000000b002ac7237d5bfmr1342238ljm.2.1683215917713;
+        Thu, 04 May 2023 08:58:37 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id v5-20020a2e9245000000b002a8ecae9567sm6629014ljg.84.2023.05.04.08.58.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 May 2023 08:58:37 -0700 (PDT)
+Date:   Thu, 4 May 2023 18:58:14 +0300
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
+        pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH V5 03/15] x86/hyperv: Set Virtual Trust Level in
+ VMBus init message
+Message-ID: <20230504185814.00005792.zhi.wang.linux@gmail.com>
+In-Reply-To: <4db13429-ffb0-debc-cec4-e37d0e526934@gmail.com>
 References: <20230501085726.544209-1-ltykernel@gmail.com>
- <20230501085726.544209-10-ltykernel@gmail.com>
- <PUZP153MB07493DA8F1085DE38DB1AFB8BE6E9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <PUZP153MB07493DA8F1085DE38DB1AFB8BE6E9@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        <20230501085726.544209-4-ltykernel@gmail.com>
+        <20230502223041.00000240.zhi.wang.linux@gmail.com>
+        <4db13429-ffb0-debc-cec4-e37d0e526934@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -113,16 +90,87 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/1/2023 3:20 AM, Saurabh Singh Sengar wrote:
->> +struct hv_start_virtual_processor_input {
->> +	u64 partitionid;
->> +	u32 vpindex;
->> +	u8 targetvtl;
->> +	u8 padding[3];
->> +	u8 context[0xe0];
->> +} __packed;
-> "struct hv_enable_vp_vtl " is defined in arch/x86/include/asm/hyperv-tlfs.h. Please check if that can be reused in place of both the above structs.
-> - Saurabh
-> 
+On Thu, 4 May 2023 08:38:46 -0700
+Tianyu Lan <ltykernel@gmail.com> wrote:
 
-Yes, these are redundant and will reuse new struct. Thanks.
+> On 5/2/2023 12:30 PM, Zhi Wang wrote:
+> > On Mon,  1 May 2023 04:57:13 -0400
+> > Tianyu Lan <ltykernel@gmail.com> wrote:
+> > 
+> >> From: Tianyu Lan <tiala@microsoft.com>
+> >>
+> >> sev-snp guest provides vtl(Virtual Trust Level) and
+> >> get it from hyperv hvcall via HVCALL_GET_VP_REGISTERS.
+> >> Set target vtl in the VMBus init message.
+> >>
+> >> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+> >> ---
+> >> Change since RFC v4:
+> >>         * Use struct_size to calculate array size.
+> >>         * Fix some coding style
+> >>
+> >> Change since RFC v3:
+> >>         * Use the standard helper functions to check hypercall result
+> >>         * Fix coding style
+> >>
+> >> Change since RFC v2:
+> >>         * Rename get_current_vtl() to get_vtl()
+> >>         * Fix some coding style issues
+> >> ---
+> >>   arch/x86/hyperv/hv_init.c          | 36 ++++++++++++++++++++++++++++++
+> >>   arch/x86/include/asm/hyperv-tlfs.h |  7 ++++++
+> >>   drivers/hv/connection.c            |  1 +
+> >>   include/asm-generic/mshyperv.h     |  1 +
+> >>   include/linux/hyperv.h             |  4 ++--
+> >>   5 files changed, 47 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> >> index 9f3e2d71d015..331b855314b7 100644
+> >> --- a/arch/x86/hyperv/hv_init.c
+> >> +++ b/arch/x86/hyperv/hv_init.c
+> >> @@ -384,6 +384,40 @@ static void __init hv_get_partition_id(void)
+> >>   	local_irq_restore(flags);
+> >>   }
+> >>   
+> >> +static u8 __init get_vtl(void)
+> >> +{
+> >> +	u64 control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_REGISTERS;
+> >> +	struct hv_get_vp_registers_input *input;
+> >> +	struct hv_get_vp_registers_output *output;
+> >> +	u64 vtl = 0;
+> >> +	u64 ret;
+> >> +	unsigned long flags;
+> >> +
+> >> +	local_irq_save(flags);
+> >> +	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
+> >> +	output = (struct hv_get_vp_registers_output *)input;
+> > 
+> > ===
+> >> +	if (!input) {
+> >> +		local_irq_restore(flags);
+> >> +		goto done;
+> >> +	}
+> >> +
+> > ===
+> > Is this really necessary?
+> > 
+> > drivers/hv/hv_common.c:
+> > 
+> >          hyperv_pcpu_input_arg = alloc_percpu(void  *);
+> >          BUG_ON(!hyperv_pcpu_input_arg);
+> > 
+> > 
+> 
+> Hi Zhi:
+> 	The hyperv_pcpu_input_arg is a point to address of input arg
+> pages and these pages are allocated in the hv_common_cpu_init(). If
+> it failed to allocate these pages, the value pointed by 
+> hyperv_pcpu_input_arg will be NULL.
+> 	
+
+Sorry, it seems my email editor dropped some text. I was wondering that
+if the check above is necessary as there is a BUG_ON() when allocating
+hyperv_pcpu_input_arg.
+
+So when coming to get_vtl(), the hyperv_pcpu_input_arg should not be NULL.
+(Guarded by the BUG_ON() in the allocation)?
