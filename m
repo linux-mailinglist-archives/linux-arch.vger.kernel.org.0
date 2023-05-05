@@ -2,569 +2,441 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5A26F811E
-	for <lists+linux-arch@lfdr.de>; Fri,  5 May 2023 12:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE7F6F8697
+	for <lists+linux-arch@lfdr.de>; Fri,  5 May 2023 18:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjEEK74 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 May 2023 06:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S232168AbjEEQWs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 May 2023 12:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjEEK7z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 May 2023 06:59:55 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A76411629;
-        Fri,  5 May 2023 03:59:53 -0700 (PDT)
+        with ESMTP id S230163AbjEEQWq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 May 2023 12:22:46 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021026.outbound.protection.outlook.com [52.101.57.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCC418FF6;
+        Fri,  5 May 2023 09:22:44 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G0VXdytmZ27BtkXQspstFWr/7Sqs1FT5KRdJI8vvuVLYHEIwtVYL4vRIbjkX/g1els+SKpvQdDqQwxrKMzahCFw91pgi+fXduGlqEIGgFsObf3VEaEyiueMap3+PDqpQAbivRv6MLEiliX5k1TtrtJ4737uo9iIfhSAxpyybFmDOrelC+jQFJBncacpDya/C0Ex2z9faeXRYJW4HXTtgT3DSAFsmkstR/UUKnE/lUxejtVSBqdYUksWbwWe8+GG5+AKQWijPS8fR7WQZyRdQ65Shozm+jzo9255maf7T2fiWL4aUAAXNDOu4A4Yg1nHG5hncXGs7Ew2yrOsFnHDdHg==
+ b=LrPLKdaTOUQr8TMOfR4pFq7tGdKFunAlgbS/kf2FZMKhqHmMdEdd5MO+8RWVOSNe0YK3prFSP5Ixmn/o9zQAF/GIqAkCKvt8sJaQnrS0k8wl3jnWXaTKL3ALEU4YT3KUMDbNEYNM02k/et4hbiyu/2EVk+gJr2LCKY4gGli5Hx8zVibFyuY1O3pSPtnhy8IWNS1/VjQ4XEtfqXhaUnzAs6Bm07HULaYNloiZwye3tErgB2qGuEM/Z4DvCJKg9HuYjOeNLehtbhv6mCBquh4TMZK954LHvafS6HzKPu/n5SUFKhbywWIae1mlYfyHrQ/xLAsqgYk2fWCPP4PhrArziA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qK3T3rLe3zla+NMo3GkYcCryQ4HUUo96ec9t0eBX7xE=;
- b=Els/0zbqL101yfdQxoiuOmcCUuY8yFDf9cZC2JImpxpxgmVHAcVnfmk/yOzB979BrOQGVCA90RxFt0x+XI8Tg0zLK1dxS3Mv1U/Tzel1Io7xgKpPLdjSUj+lH2Twkd9IRTFhzGN4ClVM4J+fSUB5j/RpzH1fnbaHCg2xUg9SYY7B+RtTCDIa4dx0ksnw3GdGo+rOyemgXAdyjwNhQlZIreVQvjeBuYIcaRpdj/rh2wxQ/TLVrr30Qf8rzU0BCqWGXvhVnIgXCmgtxtIRvxlMtEMHNPtpYft4ZwauhcKlCJ8p0HKZ7zXVRkHEoQUIxxNqFfOEXAHIHzRs++BeuRNLMQ==
+ bh=gmQAM5R3EP4RF3cfH/IdS0AJZ0l8bvoMwfmfJPzIp6Q=;
+ b=jcCMGEM6IuS0WA2ZAGXM3f3IHupYKwUgemceWIyzUF51HIQEVud7vFxXVRV9jkPWg/Kx/ufOPnvKTjXwl9JbD3JJ3jMgslVXyXc8khSxjvXSBpRUp27ZBdTWiHzzgDYKDTMIUuEhOiv0t1VOABPX8t66Uu1JnsQdQ1/sdWpptrdwaNe9KSCCMY/ptbZd+p8e3z7tl2cwzUKm9gA9aA6II/d3kip5yRjLuwGDeVwECLhiZIN4eUilAAbc1fgYQSCL1fkrxbJvyQLSdbFKV51PlpDGFCqSW6hGvq5LerRnf2b/6DN5s/ZKuBIAwN8sbMeiDET/UnpP8qB9SPmDpoA65Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qK3T3rLe3zla+NMo3GkYcCryQ4HUUo96ec9t0eBX7xE=;
- b=P1/Cox73COA+vNxM42s9tQAfoiZi8Iu3Y/3TZ5KRc79z3wQ9Ec4dT6mV/RGU18xTOOQ1PzVlm0dFR/DyPhXd2L3CILVm+zyMHjyjoO1qKFIqURhuHi6Rg8+wCKsdMaBFnqJFpQyxO2SR2ET6oQnVyyv3ZGS6wIx0gKQSefexHCM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- SJ2PR12MB8738.namprd12.prod.outlook.com (2603:10b6:a03:548::19) with
+ bh=gmQAM5R3EP4RF3cfH/IdS0AJZ0l8bvoMwfmfJPzIp6Q=;
+ b=Q0nHrwFD4Ow8A8l9z5PxgQ3qmIqX+kpR+n/R9xuA6l/4m4ORgb/703ySFWwHWOkE9CRam7pxbu71Ip+cZGltn+pm2fIZCx50u1lOg2f94umlo7NdGd8DxoMjzDD+oeqxPbNCtvGYhqbiCJ5zulWnuQXh9/+BNTeARdmMYmpKdzs=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by BL1PR21MB3139.namprd21.prod.outlook.com (2603:10b6:208:397::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.27; Fri, 5 May
- 2023 10:59:50 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::f8b0:cf29:9e21:380]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::f8b0:cf29:9e21:380%5]) with mapi id 15.20.6363.027; Fri, 5 May 2023
- 10:59:49 +0000
-Message-ID: <3ec60d7a-c5e7-2570-a0f2-ef435d904cfd@amd.com>
-Date:   Fri, 5 May 2023 12:59:36 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH V5 11/15] x86/sev: Add a #HV exception handler
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.7; Fri, 5 May
+ 2023 16:22:41 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::9a0f:a04d:69bd:e622]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::9a0f:a04d:69bd:e622%4]) with mapi id 15.20.6387.012; Fri, 5 May 2023
+ 16:22:40 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: RE: [PATCH v6 5/6] Drivers: hv: vmbus: Support TDX guests
+Thread-Topic: [PATCH v6 5/6] Drivers: hv: vmbus: Support TDX guests
+Thread-Index: AQHZfttz9He9zHooa0q8pB8usY0kq69L3DoA
+Date:   Fri, 5 May 2023 16:22:40 +0000
+Message-ID: <BYAPR21MB16888F04BF0761A44396FF90D7729@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230504225351.10765-1-decui@microsoft.com>
+ <20230504225351.10765-6-decui@microsoft.com>
+In-Reply-To: <20230504225351.10765-6-decui@microsoft.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20230501085726.544209-1-ltykernel@gmail.com>
- <20230501085726.544209-12-ltykernel@gmail.com>
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-In-Reply-To: <20230501085726.544209-12-ltykernel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0151.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::12) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=ca619e06-5cc5-479d-93c2-cdb8176563ea;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-05T16:16:39Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|BL1PR21MB3139:EE_
+x-ms-office365-filtering-correlation-id: 3aa9a957-ca90-44f4-3024-08db4d84f2d9
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HNCLl8/BJPxPz9hoZvTHstyV5T17UNmHGA3quHf3kDmwnlGED247dD3b4RGJgmt36P6yMmvVmWRD2QXkCt9CUPDQ+YSevkZV6WQWKQ/tsSYdpQ8XOJYzEbGHaWS3JOidUXb/14OZ4524378VLAc/MqgjnYS0djWYy2YLaeGVwia7UQN4AuyNVx8TQJ0sXCGT4HiQmTEgW7s6DdVdR5WEfMkG1o6KrFZKsM0iaM2/kykD/S6+AV53dYy2c9QGrP5Z+2AkjxgzgfsL6HWN/SWcNz9dc4yZaZXC7orCcC9qu961qh6bNGVBl/AvmTLHxuhLJO7mZecumkrFgKONzhFtCrWj9TWvCpmnZcNKzKBOSyAl+z60sXquwHALdPqHg+yOKKDS/oqljDskcQOmYfIMnueta2Los+BrsfEKqQCcob0FmXNHooG2I7dGpWsrNxiWNSMLd0fIGMMXbF4DdGcHPA7Oyn1GDGexNMyQVllRPJ2/X6AiHqW8/TUo+ac61+mKL5Eh6XGEfoSXQpNx6Y0VRa6bYA+Q24IjVr0yWWNe9HDgllg+d9qFBiRN2Y2u6daWjkQInV9cI3wgpduvTAnSmzptJQIZxfDu9NzTE0SuOTsJtg3fhccJACNHbUDwVMTRKDR7L83ZrMz+5pZa3syQTeuIoQkzoKSLoYqf5oWXNrkHwWT4oHZpXsCgl7upKdwy
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(451199021)(82960400001)(122000001)(2906002)(921005)(38100700002)(7416002)(55016003)(52536014)(5660300002)(8936002)(8676002)(33656002)(86362001)(82950400001)(8990500004)(38070700005)(71200400001)(7696005)(478600001)(110136005)(10290500003)(9686003)(6506007)(26005)(186003)(54906003)(83380400001)(107886003)(41300700001)(66446008)(64756008)(66476007)(66946007)(76116006)(66556008)(4326008)(786003)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?n1vrJdRh8w5lvEK07iRPi0fiUNgCae3X93/tBFCrqtk7blQbDDM77uU2UkJn?=
+ =?us-ascii?Q?4KoGJMZ6rdmHjybWLrcu+QF8ZRy3sJeHTkjFN+hAdwI6rIpR/OlyLp4ADHZr?=
+ =?us-ascii?Q?tyICHSF1m7/kgXdvW8yhJa5JPtqXYJ8kZHYsnPqiL71Nk47fJU0fVDQc7zeA?=
+ =?us-ascii?Q?crs1xXr+7nt/AXX9uObHFNsxWIGg+QhYobsksyUh7uj7Q+bOQ+1y9XaeOk0+?=
+ =?us-ascii?Q?ReXhJN6d2CRd0NMta4Q6Xcg0qOMKgs9JyylWJA0Y37FHYSdbGAFJTj0MZRNt?=
+ =?us-ascii?Q?HzZoznBoWhvzn8AFBdw9kUQ4Dw6r5EDS5LkUNVB8EwtcVR+1p32U/b2tv8RG?=
+ =?us-ascii?Q?TPFJ4nQ9J1AcUevcvpjOtekVnmcc8KO7nanjH/UQ9MtRjJxP0Sm+pqVrzdgN?=
+ =?us-ascii?Q?JiPjwy+IJwPZh4qcEHWZY0VDZan3KhWYVZNWkxqsmdg6s9FO8ZpFoFx0I2PF?=
+ =?us-ascii?Q?Q3Hcqy5C+a4sUUITXspM3WQEsdf5s7WBTkjT1Z6w30TvhVavrtG7qGLuXTli?=
+ =?us-ascii?Q?prSxJ21IESuXrn4iEOAVqgJhejtoHBStL7d0hCdZI7ot4l+HRlLivlsf4DFO?=
+ =?us-ascii?Q?g6P8fzmEWCEYDnM0UOSAhcZSpL9/+uTQo/W8demx99cZy2CiSRVlOnNQaLUq?=
+ =?us-ascii?Q?jnrg+kjK6es9fiaNjs+BlmOsd17tUW/iKdfSEnLOYSYoHvkLT1VIiSIveu3e?=
+ =?us-ascii?Q?DGhZqyV/jb/ZDtPCwd3oghhdTemMm8StzhX9T/BELy9WqtvKAJzXZf5tdjwe?=
+ =?us-ascii?Q?RE8+Pbl6inSY2AHlyco6B+nnqeY/wXvLnFZlypFo7jV/P9wxFA8vUTKm8QU6?=
+ =?us-ascii?Q?G84iet3+gnQt591qHwQhp/vqMrfC30T3kEibBj4l5Q4BkW0DGOGlKv1I5/as?=
+ =?us-ascii?Q?7TyqZeybPGujuZCJq/pg6zqbva1zgjXV2vJ6V463WWJzMF4sABQRbk1H+PJd?=
+ =?us-ascii?Q?csmzh1TwLaAU04f9xPqx5wGDEspA0GWCxP39XIzGQYCAaaMNO2UuFgKCako3?=
+ =?us-ascii?Q?a+PauDOLFZJ/Y+dhpLWWoU3Mov/HujJQIGieuX/EDoV0tLAZ7xntoicb3pBh?=
+ =?us-ascii?Q?PvsBDziJPbhY2XCv9Tjqv/IptfF1N8FPGQDevTGMajN+ScnT906vQE1vGrJB?=
+ =?us-ascii?Q?iF6BHEZ9hkoFQmP2bj08rGwnowKq8hS5lO5vWurmyB5uDDXJ9gpYl9OeQR8k?=
+ =?us-ascii?Q?+kK7EIX/3hpegN2W6Gpp112J27fhuQv16+fqqY9F9qr0uvIgHSczPjvvtTNz?=
+ =?us-ascii?Q?O4JQRzymv9aHFmokIctG7wDFx+m0WFEhJXgRwc336qGbjy1imTPgC89aQQma?=
+ =?us-ascii?Q?+z11b9Kps4SSwK0Zwvsc6J3OTLxDNXhJgzrgjo+T7AN4K+LK/nUa4z9IJPcv?=
+ =?us-ascii?Q?1246+66KTxdAjyFbGpRnqHQOpThw+24D8O5V1ajwOjNr9Ha4UoYzAbjlp7qp?=
+ =?us-ascii?Q?8oDqrpDB4IPKzPZkmgW8z47nCAV6dTuQ/A2kqwg2ssoWECcVRveQvxi5IXEH?=
+ =?us-ascii?Q?Jui7G/QyH0pJHlthzfs/pmkBUZg+z1hlKpTGy68cBehGmR6risyektM1STcq?=
+ =?us-ascii?Q?xJwCgWihFri5c2vTcBHx4ubUwYljhaGgZ8bMFByuyOYEr+dnzfYJL2Wj5pxf?=
+ =?us-ascii?Q?Aw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SJ2PR12MB8738:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3505e091-e529-448b-6fb9-08db4d57d88e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 421vxAPrAdqwL9K0uIXR0L9IYmyN9I48VMZ4Ae2eJlexNgqhaqcefnbMHV17cCKHQj9jAcKAzjFGsNNWVJWN6smUVqUW0gWdpq0XxefTiphP/N/tcDacW+kw+V9vtoPYbjMfNRx88N2RsyhMZgY4n2OKa0BiaVGIeaMrmyfR5d9QiOphQLDQpE6VnmefkyBQkckn3jZGnIt8QZvHnt5JQgrMTe0YuBYOKbJtGmz2czRBWT82xMOpPXuhTw4F4VVkmzxzofYHym2em0j9e69jOcJb/7TAwl/Oj5//GbHqjoNPlALdU6twhusKW5Ou9Wt3PNTo/0P08L9FrYfds9ms7lCEJ6zGTM7sVSdXu8FJ3wEkJ31D56NDgYuTow0Utsi5ahyeD8syxgtgJgOx/XJJ79ZEY7ItxMaoUrn/gNfmcJ4VGr6HAtGsqw/L++3kU+2cy3pHGFv8WgZn00lPUcIhEOIcl4MThH6WgC3tEvSaU5mHzHsytWX41l94zEN6A9+P0S9/DwJ8T/TsU4YSKAXFfNoP9TGIE5kXQrGnkWrPpsWRQ793Bsb4jWv5VroTcAALFkNQMmTE3NFBwAvHWtkPoMRdbS8wxDkEqaYmQclTBHu/PT7qRkgelbkjb0q9UuO0XxRYFjmS0s1TuxoEvckFUSBd0J4vJABwuHqLuSeWTi0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(366004)(376002)(346002)(451199021)(45080400002)(6666004)(6486002)(478600001)(26005)(6512007)(6506007)(186003)(30864003)(2906002)(7416002)(7406005)(86362001)(66556008)(316002)(4326008)(66946007)(8936002)(8676002)(5660300002)(41300700001)(66476007)(31696002)(921005)(38100700002)(36756003)(2616005)(83380400001)(31686004)(66899021)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eEpUL1I5ckRZTk0xbVVYRUhKYXhJdnludGhDSGJJRFFhTWV4OENkSzZzYnVx?=
- =?utf-8?B?elNWTHdlMi9keHVZRDB3WnQwUlRqLzhXOWUrUGpHNFRieGpYTi9DQUsrb1c2?=
- =?utf-8?B?KzZUb245R0hraFZKOUpZZXowbGpSU2ZDMnc0QjhiYnh2a2VaRjRGTklJT2M1?=
- =?utf-8?B?cHpOcjFaNmttL0FQb2NmanhRMUovWDVyL3dqTTMrVTdzS3RJRlpTNERLY2tw?=
- =?utf-8?B?MVlZM3hBQmJtWkphQ3RTcjNNNUxCUEg0eVpWZUFNakowTGpORW03NUpFcFpJ?=
- =?utf-8?B?emxvMmNNTk1EMGdMYUJiV2Y5T0xVcndpRmpDY3phRzN6ZCsrbmVuR0NqazdW?=
- =?utf-8?B?UzJZWTNKRTJIa3ZleGVndy9iYmY1Y3hDQjgvQVRjRTM1aU1TZzZaQzY1WkpX?=
- =?utf-8?B?MlJMUVEzZzdTRDErWGRzTjcyT042aG4yR3E0K1djY0pmQmJmMVlXVDFuazVX?=
- =?utf-8?B?RDFVWmRIZDlxS3o1NE1lSnQ1S1FCbEhNWnU4ZWdjcEJmTnlVc25LaVl0QjRU?=
- =?utf-8?B?MU4zS1VYbVdVb0txOVBtMHVScEhrSDhDb0NwdUR2bW9jMFpNOFEyekZwcnR2?=
- =?utf-8?B?dVlYZDhKU25Ra3FJc3N6dVNZd1BWTnpzNEhJWThGRlB2c1dBZ1NQQ2VWbTR4?=
- =?utf-8?B?N3VqSnRUWWtvaDlkcTRsMVB5WTFMTDRoT1FBb1RXWEtHN0lTZHZ5RkI4ekw2?=
- =?utf-8?B?OXFwK2U4N21YVEx5Qzh5eGNSUGtqZVBVZjdyZGVpZjBJcitoOEtGcjU0RHBL?=
- =?utf-8?B?dks2b1ZQZk1sQnVmbFRHUzFpWnljbHBCNVU2elFXanBNTkFURWwrVkkwRjFl?=
- =?utf-8?B?UllLUEgxblBta0svWGdTdU5NbnpVdmdOQUN2SFpidkpqOG5IMEExbUxwT3FT?=
- =?utf-8?B?ZzVpeEh0MSsrdThlTUhtdVV2c0tRSE50UlVMWVh2azgvVXhzcHQ0YXJzQ2hG?=
- =?utf-8?B?cTl2dTQySklBWml1UkJlbE9XT00vY0F5K0ZjY3pYYTJreEV3OHZFQ2lqeXZa?=
- =?utf-8?B?RjZncDVUdG5yTnZneGg1akRmbzhjdkJJdVhwb3g3ODR1MnhmL01KaXoxN2Nk?=
- =?utf-8?B?cnFYRkdxeTVvSytpRVFZME5RVWRrbm1JZnV5ZTFqVHQ3c1ZIdmt0dEpCcGZI?=
- =?utf-8?B?N1U5eW9BUy96dzRER29tMFErdXBYcnFjaEZrU0dJU1NDcGNsbmsyMS81eHVa?=
- =?utf-8?B?RkI3QU4xeXJlaTZzeEtzS0RsUUdtWXViSmpPeC9LOG1nMVJDcitVN2ltTUx1?=
- =?utf-8?B?VUxneFY5K0RuVzhWcldvOEIrOWMzK0Z2TnlTRTlrOEZtdG9xV2tJcWloL1Zs?=
- =?utf-8?B?M3UzRDdMWXpVekU5RVdVR1BwbS9ZSlE4YlNLZ09Dd0U0dXRDaGcwWWxhZjBr?=
- =?utf-8?B?VUVEeGc5YWdkb0hVbVNvVDJxdlhJMlhwcy9SRXBmcXFTRWNtdlhKOTJDZUxT?=
- =?utf-8?B?UUJzclMwSW1QeThmQjJRN1VMem5JclpuOUZ3ZWJNanNKSmFaZlVpek1lVGV6?=
- =?utf-8?B?T2IwendIWXIybUNIbEdIbHowdC95NHVVK2k1ZUt2QTRmRU9QR3NnU0lCWERh?=
- =?utf-8?B?Q3dKQndSVEg4Rk90QnBnaGF2dEUxckl1a0VKNVBkeklOOUpzM2RrLzNYK0s1?=
- =?utf-8?B?dE9TSmsvWW5remFiQmVQNGRnT2g1VUZQWTJHRjEvUXVGaFFwcS9zSWJMMTU5?=
- =?utf-8?B?MllxaDlleWNCZHRNRzVUWkgxS3ErTE1iZlRKeWlOZ1Z5bnl2elZzQnZobUl5?=
- =?utf-8?B?dGxVeWhpRURSZUF3dEorNFhDT2xJK1ZkNllBa3d4d3FYU1JxSmRqQnJyN1Rn?=
- =?utf-8?B?L0JTOWY0b29sRnhqbFNTaXV0dzNhcXc3cDd4MU9uOTZNWEpuN2pncXpDVGFE?=
- =?utf-8?B?dmMrVFpnejdSWUlHNnRMVEdEL0E0U2lMSkI4aWJYbi9ab2thdzhOTkptTUho?=
- =?utf-8?B?NWhwRTFsTjF3NTlTMnltVldCRGYrMXVTK2FjSlM4N29RbHpiOG1Sem9oNkND?=
- =?utf-8?B?MkFJNE43QU1QYjBhR3JaNWcrcXE3SjU2eDRzNTU0ZDc1Q1o0bkhsMythSHRK?=
- =?utf-8?B?VjVzYmNaOHFNM3liK3NkaC92RldsTCtXU3llV1IrRzMzc1d4Z2MvMnoxTFVy?=
- =?utf-8?Q?HvrevCJiptgtNb+4fDI6X3sQz?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3505e091-e529-448b-6fb9-08db4d57d88e
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
+X-OriginatorOrg: microsoft.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2023 10:59:49.7305
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3aa9a957-ca90-44f4-3024-08db4d84f2d9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 May 2023 16:22:40.8013
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fTBeFRsfmlPVEw3ow7StmPyTX2abImluC3QLt1qjHhm7Cysw/qxXxAkt5seQVJZkml/TIt9aLu61dbVzOWdzhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8738
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YVvxprO2XXi1R01JAD9GFsrwDaAa83KdMJ2S6Tg9coxhmbvpBcbDx37BdevhQQNZpC2jvY0mou3u3INPO+nOCDeZk1DQynyKCc1EiZWjauQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR21MB3139
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Tianyu,
+From: Dexuan Cui <decui@microsoft.com>
+>=20
+> Add Hyper-V specific code so that a TDX guest can run on Hyper-V:
+>   No need to use hv_vp_assist_page.
+>   Don't use the unsafe Hyper-V TSC page.
+>   Don't try to use HV_REGISTER_CRASH_CTL.
+>   Don't trust Hyper-V's TLB-flushing hypercalls.
+>   Don't use lazy EOI.
 
-I tried to understand some details of this patch. Please find below
-some comments/questions.
+Nit:  Actually, you overdid the cleanup. :-(  The line in v5 about
+"Share SynIC Event/Message pages" was correct.  It was only the
+part about VMBus Monitor pages that no longer applied.
 
-Thanks,
-
-
-> Add a #HV exception handler that uses IST stack.
-> 
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
+>=20
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
 > ---
-> Change since RFC V2:
->         * Remove unnecessary line in the change log.
-> ---
->   arch/x86/entry/entry_64.S             | 22 +++++++----
->   arch/x86/include/asm/cpu_entry_area.h |  6 +++
->   arch/x86/include/asm/idtentry.h       | 40 +++++++++++++++++++-
->   arch/x86/include/asm/page_64_types.h  |  1 +
->   arch/x86/include/asm/trapnr.h         |  1 +
->   arch/x86/include/asm/traps.h          |  1 +
->   arch/x86/kernel/cpu/common.c          |  1 +
->   arch/x86/kernel/dumpstack_64.c        |  9 ++++-
->   arch/x86/kernel/idt.c                 |  1 +
->   arch/x86/kernel/sev.c                 | 53 +++++++++++++++++++++++++++
->   arch/x86/kernel/traps.c               | 40 ++++++++++++++++++++
->   arch/x86/mm/cpu_entry_area.c          |  2 +
->   12 files changed, 165 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-> index eccc3431e515..653b1f10699b 100644
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -496,7 +496,7 @@ SYM_CODE_END(\asmsym)
->   
->   #ifdef CONFIG_AMD_MEM_ENCRYPT
->   /**
-> - * idtentry_vc - Macro to generate entry stub for #VC
-> + * idtentry_sev - Macro to generate entry stub for #VC
->    * @vector:		Vector number
->    * @asmsym:		ASM symbol for the entry point
->    * @cfunc:		C function to be called
-> @@ -515,14 +515,18 @@ SYM_CODE_END(\asmsym)
->    *
->    * The macro is only used for one vector, but it is planned to be extended in
->    * the future for the #HV exception.
-> - */
-> -.macro idtentry_vc vector asmsym cfunc
-> +*/
-> +.macro idtentry_sev vector asmsym cfunc has_error_code:req
->   SYM_CODE_START(\asmsym)
->   	UNWIND_HINT_IRET_REGS
->   	ENDBR
->   	ASM_CLAC
->   	cld
->   
-> +	.if \vector == X86_TRAP_HV
-> +		pushq	$-1			/* ORIG_RAX: no syscall */
-> +	.endif
-> +
->   	/*
->   	 * If the entry is from userspace, switch stacks and treat it as
->   	 * a normal entry.
-> @@ -545,7 +549,12 @@ SYM_CODE_START(\asmsym)
->   	 * stack.
->   	 */
->   	movq	%rsp, %rdi		/* pt_regs pointer */
-> -	call	vc_switch_off_ist
-> +	.if \vector == X86_TRAP_VC
-> +		call	vc_switch_off_ist
-
-I think the stack switching logic is similar for #VC & #HV.
-So, we can use common function. Just the corresponding fallback
-stack switching is different. Maybe we can pass the hint as an
-argument (%rsi?) to something like "sev_switch_off_ist()", and use
-the corresponding (#HV or #VC) fallbacks stack?
-
-> +	.else
-> +		call	hv_switch_off_ist	
-> +	.endif
-> +
->   	movq	%rax, %rsp		/* Switch to new stack */
->   
->   	ENCODE_FRAME_POINTER
-> @@ -568,10 +577,7 @@ SYM_CODE_START(\asmsym)
->   
->   	/* Switch to the regular task stack */
->   .Lfrom_usermode_switch_stack_\@:
-> -	idtentry_body user_\cfunc, has_error_code=1
-> -
-> -_ASM_NOKPROBE(\asmsym)
-> -SYM_CODE_END(\asmsym)
-> +	idtentry_body user_\cfunc, \has_error_code
->   .endm
->   #endif
->   
-> diff --git a/arch/x86/include/asm/cpu_entry_area.h b/arch/x86/include/asm/cpu_entry_area.h
-> index 462fc34f1317..2186ed601b4a 100644
-> --- a/arch/x86/include/asm/cpu_entry_area.h
-> +++ b/arch/x86/include/asm/cpu_entry_area.h
-> @@ -30,6 +30,10 @@
->   	char	VC_stack[optional_stack_size];			\
->   	char	VC2_stack_guard[guardsize];			\
->   	char	VC2_stack[optional_stack_size];			\
-> +	char	HV_stack_guard[guardsize];			\
-> +	char	HV_stack[optional_stack_size];			\
-> +	char	HV2_stack_guard[guardsize];			\
-> +	char	HV2_stack[optional_stack_size];			\
->   	char	IST_top_guard[guardsize];			\
->   
->   /* The exception stacks' physical storage. No guard pages required */
-> @@ -52,6 +56,8 @@ enum exception_stack_ordering {
->   	ESTACK_MCE,
->   	ESTACK_VC,
->   	ESTACK_VC2,
-> +	ESTACK_HV,
-> +	ESTACK_HV2,
->   	N_EXCEPTION_STACKS
->   };
->   
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index b241af4ce9b4..b0f3501b2767 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -317,6 +317,19 @@ static __always_inline void __##func(struct pt_regs *regs)
->   	__visible noinstr void kernel_##func(struct pt_regs *regs, unsigned long error_code);	\
->   	__visible noinstr void   user_##func(struct pt_regs *regs, unsigned long error_code)
->   
-> +
-> +/**
-> + * DECLARE_IDTENTRY_HV - Declare functions for the HV entry point
-> + * @vector:	Vector number (ignored for C)
-> + * @func:	Function name of the entry point
-> + *
-> + * Maps to DECLARE_IDTENTRY_RAW, but declares also the user C handler.
-> + */
-> +#define DECLARE_IDTENTRY_HV(vector, func)				\
-> +	DECLARE_IDTENTRY_RAW_ERRORCODE(vector, func);			\
-> +	__visible noinstr void kernel_##func(struct pt_regs *regs);	\
-> +	__visible noinstr void   user_##func(struct pt_regs *regs)
-> +
->   /**
->    * DEFINE_IDTENTRY_IST - Emit code for IST entry points
->    * @func:	Function name of the entry point
-> @@ -376,6 +389,26 @@ static __always_inline void __##func(struct pt_regs *regs)
->   #define DEFINE_IDTENTRY_VC_USER(func)				\
->   	DEFINE_IDTENTRY_RAW_ERRORCODE(user_##func)
->   
-> +/**
-> + * DEFINE_IDTENTRY_HV_KERNEL - Emit code for HV injection handler
-> + *			       when raised from kernel mode
-> + * @func:	Function name of the entry point
-> + *
-> + * Maps to DEFINE_IDTENTRY_RAW
-> + */
-> +#define DEFINE_IDTENTRY_HV_KERNEL(func)					\
-> +	DEFINE_IDTENTRY_RAW(kernel_##func)
-> +
-> +/**
-> + * DEFINE_IDTENTRY_HV_USER - Emit code for HV injection handler
-> + *			     when raised from user mode
-> + * @func:	Function name of the entry point
-> + *
-> + * Maps to DEFINE_IDTENTRY_RAW
-> + */
-> +#define DEFINE_IDTENTRY_HV_USER(func)					\
-> +	DEFINE_IDTENTRY_RAW(user_##func)
-> +
->   #else	/* CONFIG_X86_64 */
->   
->   /**
-> @@ -463,8 +496,10 @@ __visible noinstr void func(struct pt_regs *regs,			\
->   	DECLARE_IDTENTRY(vector, func)
->   
->   # define DECLARE_IDTENTRY_VC(vector, func)				\
-> -	idtentry_vc vector asm_##func func
-> +	idtentry_sev vector asm_##func func has_error_code=1
->   
-> +# define DECLARE_IDTENTRY_HV(vector, func)				\
-> +	idtentry_sev vector asm_##func func has_error_code=0
->   #else
->   # define DECLARE_IDTENTRY_MCE(vector, func)				\
->   	DECLARE_IDTENTRY(vector, func)
-> @@ -618,9 +653,10 @@ DECLARE_IDTENTRY_RAW_ERRORCODE(X86_TRAP_DF,	xenpv_exc_double_fault);
->   DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP,	exc_control_protection);
->   #endif
->   
-> -/* #VC */
-> +/* #VC & #HV */
->   #ifdef CONFIG_AMD_MEM_ENCRYPT
->   DECLARE_IDTENTRY_VC(X86_TRAP_VC,	exc_vmm_communication);
-> +DECLARE_IDTENTRY_HV(X86_TRAP_HV,	exc_hv_injection);
->   #endif
->   
->   #ifdef CONFIG_XEN_PV
-> diff --git a/arch/x86/include/asm/page_64_types.h b/arch/x86/include/asm/page_64_types.h
-> index e9e2c3ba5923..0bd7dab676c5 100644
-> --- a/arch/x86/include/asm/page_64_types.h
-> +++ b/arch/x86/include/asm/page_64_types.h
-> @@ -29,6 +29,7 @@
->   #define	IST_INDEX_DB		2
->   #define	IST_INDEX_MCE		3
->   #define	IST_INDEX_VC		4
-> +#define	IST_INDEX_HV		5
->   
->   /*
->    * Set __PAGE_OFFSET to the most negative possible address +
-> diff --git a/arch/x86/include/asm/trapnr.h b/arch/x86/include/asm/trapnr.h
-> index f5d2325aa0b7..c6583631cecb 100644
-> --- a/arch/x86/include/asm/trapnr.h
-> +++ b/arch/x86/include/asm/trapnr.h
-> @@ -26,6 +26,7 @@
->   #define X86_TRAP_XF		19	/* SIMD Floating-Point Exception */
->   #define X86_TRAP_VE		20	/* Virtualization Exception */
->   #define X86_TRAP_CP		21	/* Control Protection Exception */
-> +#define X86_TRAP_HV		28	/* HV injected exception in SNP restricted mode */
->   #define X86_TRAP_VC		29	/* VMM Communication Exception */
->   #define X86_TRAP_IRET		32	/* IRET Exception */
->   
-> diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
-> index 47ecfff2c83d..6795d3e517d6 100644
-> --- a/arch/x86/include/asm/traps.h
-> +++ b/arch/x86/include/asm/traps.h
-> @@ -16,6 +16,7 @@ asmlinkage __visible notrace
->   struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs);
->   void __init trap_init(void);
->   asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *eregs);
-> +asmlinkage __visible noinstr struct pt_regs *hv_switch_off_ist(struct pt_regs *eregs);
->   #endif
->   
->   extern bool ibt_selftest(void);
-> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> index 8cd4126d8253..5bc44bcf6e48 100644
-> --- a/arch/x86/kernel/cpu/common.c
-> +++ b/arch/x86/kernel/cpu/common.c
-> @@ -2172,6 +2172,7 @@ static inline void tss_setup_ist(struct tss_struct *tss)
->   	tss->x86_tss.ist[IST_INDEX_MCE] = __this_cpu_ist_top_va(MCE);
->   	/* Only mapped when SEV-ES is active */
->   	tss->x86_tss.ist[IST_INDEX_VC] = __this_cpu_ist_top_va(VC);
-> +	tss->x86_tss.ist[IST_INDEX_HV] = __this_cpu_ist_top_va(HV);
->   }
->   
->   #else /* CONFIG_X86_64 */
-> diff --git a/arch/x86/kernel/dumpstack_64.c b/arch/x86/kernel/dumpstack_64.c
-> index f05339fee778..6d8f8864810c 100644
-> --- a/arch/x86/kernel/dumpstack_64.c
-> +++ b/arch/x86/kernel/dumpstack_64.c
-> @@ -26,11 +26,14 @@ static const char * const exception_stack_names[] = {
->   		[ ESTACK_MCE	]	= "#MC",
->   		[ ESTACK_VC	]	= "#VC",
->   		[ ESTACK_VC2	]	= "#VC2",
-> +		[ ESTACK_HV	]	= "#HV",
-> +		[ ESTACK_HV2	]	= "#HV2",
-> +		
->   };
->   
->   const char *stack_type_name(enum stack_type type)
->   {
-> -	BUILD_BUG_ON(N_EXCEPTION_STACKS != 6);
-> +	BUILD_BUG_ON(N_EXCEPTION_STACKS != 8);
->   
->   	if (type == STACK_TYPE_TASK)
->   		return "TASK";
-> @@ -89,6 +92,8 @@ struct estack_pages estack_pages[CEA_ESTACK_PAGES] ____cacheline_aligned = {
->   	EPAGERANGE(MCE),
->   	EPAGERANGE(VC),
->   	EPAGERANGE(VC2),
-> +	EPAGERANGE(HV),
-> +	EPAGERANGE(HV2),
->   };
->   
->   static __always_inline bool in_exception_stack(unsigned long *stack, struct stack_info *info)
-> @@ -98,7 +103,7 @@ static __always_inline bool in_exception_stack(unsigned long *stack, struct stac
->   	struct pt_regs *regs;
->   	unsigned int k;
->   
-> -	BUILD_BUG_ON(N_EXCEPTION_STACKS != 6);
-> +	BUILD_BUG_ON(N_EXCEPTION_STACKS != 8);
->   
->   	begin = (unsigned long)__this_cpu_read(cea_exception_stacks);
->   	/*
-> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-> index a58c6bc1cd68..48c0a7e1dbcb 100644
-> --- a/arch/x86/kernel/idt.c
-> +++ b/arch/x86/kernel/idt.c
-> @@ -113,6 +113,7 @@ static const __initconst struct idt_data def_idts[] = {
->   
->   #ifdef CONFIG_AMD_MEM_ENCRYPT
->   	ISTG(X86_TRAP_VC,		asm_exc_vmm_communication, IST_INDEX_VC),
-> +	ISTG(X86_TRAP_HV,		asm_exc_hv_injection, IST_INDEX_HV),
->   #endif
->   
->   	SYSG(X86_TRAP_OF,		asm_exc_overflow),
-> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-> index 20f3fd8ade2f..7b06d7c0914f 100644
-> --- a/arch/x86/kernel/sev.c
-> +++ b/arch/x86/kernel/sev.c
-> @@ -2006,6 +2006,59 @@ DEFINE_IDTENTRY_VC_USER(exc_vmm_communication)
->   	irqentry_exit_to_user_mode(regs);
->   }
->   
-> +static bool hv_raw_handle_exception(struct pt_regs *regs)
-> +{
-> +	return false;
-> +}
-> +
-> +static __always_inline bool on_hv_fallback_stack(struct pt_regs *regs)
-> +{
-
-Don't see this functioned used yet?
-
-> +	unsigned long sp = (unsigned long)regs;
-> +
-> +	return (sp >= __this_cpu_ist_bottom_va(HV2) && sp < __this_cpu_ist_top_va(HV2));
-> +}
-> +
-> +DEFINE_IDTENTRY_HV_USER(exc_hv_injection)
-> +{
-> +	irqentry_enter_from_user_mode(regs);
-> +	instrumentation_begin();
-> +
-> +	if (!hv_raw_handle_exception(regs)) {
-> +		/*
-> +		 * Do not kill the machine if user-space triggered the
-> +		 * exception. Send SIGBUS instead and let user-space deal
-> +		 * with it.
-> +		 */
-> +		force_sig_fault(SIGBUS, BUS_OBJERR, (void __user *)0);
-> +	}
-> +
-> +	instrumentation_end();
-> +	irqentry_exit_to_user_mode(regs);
-> +}
-> +
-> +DEFINE_IDTENTRY_HV_KERNEL(exc_hv_injection)
-> +{
-> +	irqentry_state_t irq_state;
-> +
-> +	irq_state = irqentry_enter(regs);
-
-Any reason for not using "irqentry_nmi_enter" here?
-We are dispatching both irqs & NMI's right?
-
-Thanks,
-Pankaj
-> +	instrumentation_begin();
-> +
-> +	if (!hv_raw_handle_exception(regs)) {
-> +		pr_emerg("PANIC: Unhandled #HV exception in kernel space\n");
-> +
-> +		/* Show some debug info */
-> +		show_regs(regs);
-> +
-> +		/* Ask hypervisor to sev_es_terminate */
-> +		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
-> +
-> +		panic("Returned from Terminate-Request to Hypervisor\n");
-> +	}
-> +
-> +	instrumentation_end();
-> +	irqentry_exit(regs, irq_state);
-> +}
-> +
->   bool __init handle_vc_boot_ghcb(struct pt_regs *regs)
->   {
->   	unsigned long exit_code = regs->orig_ax;
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index d317dc3d06a3..d29debec8134 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -905,6 +905,46 @@ asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *r
->   
->   	return regs_ret;
->   }
-> +
-> +asmlinkage __visible noinstr struct pt_regs *hv_switch_off_ist(struct pt_regs *regs) > +{
-> +	unsigned long sp, *stack;
-> +	struct stack_info info;
-> +	struct pt_regs *regs_ret;
-> +
+>=20
+> Changes in v2:
+>   Used a new function hv_set_memory_enc_dec_needed() in
+>     __set_memory_enc_pgtable().
+>   Added the missing set_memory_encrypted() in hv_synic_free().
+>=20
+> Changes in v3:
+>   Use pgprot_decrypted(PAGE_KERNEL)in hv_ringbuffer_init().
+>   (Do not use PAGE_KERNEL_NOENC, which doesn't exist for ARM64).
+>=20
+>   Used cc_mkdec() in hv_synic_enable_regs().
+>=20
+>   ms_hyperv_init_platform():
+>     Explicitly do not use HV_X64_REMOTE_TLB_FLUSH_RECOMMENDED.
+>     Explicitly do not use HV_X64_APIC_ACCESS_RECOMMENDED.
+>=20
+>   Enabled __send_ipi_mask() and __send_ipi_one() for TDX guests.
+>=20
+> Changes in v4:
+>   A minor rebase to Michael's v7 DDA patchset. I'm very happy that
+>     I can drop my v3 change to arch/x86/mm/pat/set_memory.c due to
+>     Michael's work.
+>=20
+> Changes in v5:
+>   Added memset() to clear synic_message_page and synic_event_page()
+> after set_memory_decrypted().
+>   Rebased the patch since "post_msg_page" has been removed in
+> hyperv-next.
+>   Improved the error handling in hv_synic_alloc()/free() [Michael
+> Kelley]
+>=20
+> Changes in v6:
+>   Adressed Michael Kelley's comments on patch 5:
+>     Removed 2 unnecessary lines of messages from the commit log.
+>     Fixed the error handling path for hv_synic_alloc()/free().
+>     Printed the 'ret' in hv_synic_alloc()/free().
+>=20
+>  arch/x86/hyperv/hv_apic.c      |  6 ++--
+>  arch/x86/hyperv/hv_init.c      | 19 +++++++---
+>  arch/x86/kernel/cpu/mshyperv.c | 21 ++++++++++-
+>  drivers/hv/hv.c                | 65 ++++++++++++++++++++++++++++++++--
+>  4 files changed, 101 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
+> index 1fbda2f94184..b28da8b41b45 100644
+> --- a/arch/x86/hyperv/hv_apic.c
+> +++ b/arch/x86/hyperv/hv_apic.c
+> @@ -177,7 +177,8 @@ static bool __send_ipi_mask(const struct cpumask *mas=
+k, int
+> vector,
+>  	    (exclude_self && weight =3D=3D 1 && cpumask_test_cpu(this_cpu, mask=
+)))
+>  		return true;
+>=20
+> -	if (!hv_hypercall_pg)
+> +	/* A TDX guest doesn't use hv_hypercall_pg. */
+> +	if (!hv_isolation_type_tdx() && !hv_hypercall_pg)
+>  		return false;
+>=20
+>  	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+> @@ -231,7 +232,8 @@ static bool __send_ipi_one(int cpu, int vector)
+>=20
+>  	trace_hyperv_send_ipi_one(cpu, vector);
+>=20
+> -	if (!hv_hypercall_pg || (vp =3D=3D VP_INVAL))
+> +	/* A TDX guest doesn't use hv_hypercall_pg. */
+> +	if ((!hv_isolation_type_tdx() && !hv_hypercall_pg) || (vp =3D=3D VP_INV=
+AL))
+>  		return false;
+>=20
+>  	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index f175e0de821c..f28357ecad7d 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -79,7 +79,7 @@ static int hyperv_init_ghcb(void)
+>  static int hv_cpu_init(unsigned int cpu)
+>  {
+>  	union hv_vp_assist_msr_contents msr =3D { 0 };
+> -	struct hv_vp_assist_page **hvp =3D &hv_vp_assist_page[cpu];
+> +	struct hv_vp_assist_page **hvp;
+>  	int ret;
+>=20
+>  	ret =3D hv_common_cpu_init(cpu);
+> @@ -89,6 +89,7 @@ static int hv_cpu_init(unsigned int cpu)
+>  	if (!hv_vp_assist_page)
+>  		return 0;
+>=20
+> +	hvp =3D &hv_vp_assist_page[cpu];
+>  	if (hv_root_partition) {
+>  		/*
+>  		 * For root partition we get the hypervisor provided VP assist
+> @@ -398,11 +399,21 @@ void __init hyperv_init(void)
+>  	if (hv_common_init())
+>  		return;
+>=20
+> -	hv_vp_assist_page =3D kcalloc(num_possible_cpus(),
+> -				    sizeof(*hv_vp_assist_page), GFP_KERNEL);
 > +	/*
-> +	 * In the SYSCALL entry path the RSP value comes from user-space - don't
-> +	 * trust it and switch to the current kernel stack
+> +	 * The VP assist page is useless to a TDX guest: the only use we
+> +	 * would have for it is lazy EOI, which can not be used with TDX.
 > +	 */
-> +	if (ip_within_syscall_gap(regs)) {
-> +		sp = this_cpu_read(pcpu_hot.top_of_stack);
-> +		goto sync;
-> +	}
+> +	if (hv_isolation_type_tdx())
+> +		hv_vp_assist_page =3D NULL;
+> +	else
+> +		hv_vp_assist_page =3D kcalloc(num_possible_cpus(),
+> +					    sizeof(*hv_vp_assist_page),
+> +					    GFP_KERNEL);
+>  	if (!hv_vp_assist_page) {
+>  		ms_hyperv.hints &=3D ~HV_X64_ENLIGHTENED_VMCS_RECOMMENDED;
+> -		goto common_free;
 > +
-> +	/*
-> +	 * From here on the RSP value is trusted. Now check whether entry
-> +	 * happened from a safe stack. Not safe are the entry or unknown stacks,
-> +	 * use the fall-back stack instead in this case.
-> +	 */
-> +	sp    = regs->sp;
-> +	stack = (unsigned long *)sp;
+> +		if (!hv_isolation_type_tdx())
+> +			goto common_free;
+>  	}
+>=20
+>  	if (hv_isolation_type_snp()) {
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyper=
+v.c
+> index 2fd687a80033..b95b689efa07 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -404,8 +404,27 @@ static void __init ms_hyperv_init_platform(void)
+>=20
+>  		if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_SNP)
+>  			static_branch_enable(&isolation_type_snp);
+> -		else if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_TDX)
+> +		else if (hv_get_isolation_type() =3D=3D HV_ISOLATION_TYPE_TDX) {
+>  			static_branch_enable(&isolation_type_tdx);
 > +
-> +	if (!get_stack_info_noinstr(stack, current, &info) || info.type == STACK_TYPE_ENTRY ||
-> +	    info.type > STACK_TYPE_EXCEPTION_LAST)
-> +		sp = __this_cpu_ist_top_va(HV2);
-> +sync:
-> +	/*
-> +	 * Found a safe stack - switch to it as if the entry didn't happen via
-> +	 * IST stack. The code below only copies pt_regs, the real switch happens
-> +	 * in assembly code.
-> +	 */
-> +	sp = ALIGN_DOWN(sp, 8) - sizeof(*regs_ret);
+> +			/*
+> +			 * The GPAs of SynIC Event/Message pages and VMBus
+> +			 * Moniter pages need to be added by this offset.
+> +			 */
+> +			ms_hyperv.shared_gpa_boundary =3D cc_mkdec(0);
 > +
-> +	regs_ret = (struct pt_regs *)sp;
-> +	*regs_ret = *regs;
+> +			/* Don't use the unsafe Hyper-V TSC page */
+> +			ms_hyperv.features &=3D ~HV_MSR_REFERENCE_TSC_AVAILABLE;
 > +
-> +	return regs_ret;
-> +}
->   #endif
->   
->   asmlinkage __visible noinstr struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs)
-> diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
-> index e91500a80963..97554fa0ff30 100644
-> --- a/arch/x86/mm/cpu_entry_area.c
-> +++ b/arch/x86/mm/cpu_entry_area.c
-> @@ -160,6 +160,8 @@ static void __init percpu_setup_exception_stacks(unsigned int cpu)
->   		if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
->   			cea_map_stack(VC);
->   			cea_map_stack(VC2);
-> +			cea_map_stack(HV);
-> +			cea_map_stack(HV2);
->   		}
->   	}
->   }
+> +			/* HV_REGISTER_CRASH_CTL is unsupported */
+> +			ms_hyperv.misc_features &=3D ~HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
+> +
+> +			/* Don't trust Hyper-V's TLB-flushing hypercalls */
+> +			ms_hyperv.hints &=3D ~HV_X64_REMOTE_TLB_FLUSH_RECOMMENDED;
+> +
+> +			/* A TDX VM must use x2APIC and doesn't use lazy EOI */
+> +			ms_hyperv.hints &=3D ~HV_X64_APIC_ACCESS_RECOMMENDED;
+> +		}
+>  	}
+>=20
+>  	if (hv_max_functions_eax >=3D HYPERV_CPUID_NESTED_FEATURES) {
+> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+> index de6708dbe0df..af959e87b6e7 100644
+> --- a/drivers/hv/hv.c
+> +++ b/drivers/hv/hv.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/clockchips.h>
+>  #include <linux/delay.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/set_memory.h>
+>  #include <clocksource/hyperv_timer.h>
+>  #include <asm/mshyperv.h>
+>  #include "hyperv_vmbus.h"
+> @@ -80,6 +81,7 @@ int hv_synic_alloc(void)
+>  {
+>  	int cpu;
+>  	struct hv_per_cpu_context *hv_cpu;
+> +	int ret =3D -ENOMEM;
+>=20
+>  	/*
+>  	 * First, zero all per-cpu memory areas so hv_synic_free() can
+> @@ -120,9 +122,42 @@ int hv_synic_alloc(void)
+>  				(void *)get_zeroed_page(GFP_ATOMIC);
+>  			if (hv_cpu->synic_event_page =3D=3D NULL) {
+>  				pr_err("Unable to allocate SYNIC event page\n");
+> +
+> +				free_page((unsigned long)hv_cpu->synic_message_page);
+> +				hv_cpu->synic_message_page =3D NULL;
+> +
+>  				goto err;
+>  			}
+>  		}
+> +
+> +		/* It's better to leak the page if the decryption fails. */
+> +		if (hv_isolation_type_tdx()) {
+> +			ret =3D set_memory_decrypted(
+> +				(unsigned long)hv_cpu->synic_message_page, 1);
+> +			if (ret) {
+> +				pr_err("Failed to decrypt SYNIC msg page: %d\n", ret);
+> +				hv_cpu->synic_message_page =3D NULL;
+> +
+> +				/*
+> +				 * Free the event page so that a TDX VM won't
+> +				 * try to encrypt the page in hv_synic_free().
+> +				 */
+> +				free_page((unsigned long)hv_cpu->synic_event_page);
+> +				hv_cpu->synic_event_page =3D NULL;
+> +				goto err;
+> +			}
+> +
+> +			ret =3D set_memory_decrypted(
+> +				(unsigned long)hv_cpu->synic_event_page, 1);
+> +			if (ret) {
+> +				pr_err("Failed to decrypt SYNIC event page: %d\n", ret);
+> +				hv_cpu->synic_event_page =3D NULL;
+> +				goto err;
+> +			}
+> +
+> +			memset(hv_cpu->synic_message_page, 0, PAGE_SIZE);
+> +			memset(hv_cpu->synic_event_page, 0, PAGE_SIZE);
+> +		}
+>  	}
+>=20
+>  	return 0;
+> @@ -131,18 +166,40 @@ int hv_synic_alloc(void)
+>  	 * Any memory allocations that succeeded will be freed when
+>  	 * the caller cleans up by calling hv_synic_free()
+>  	 */
+> -	return -ENOMEM;
+> +	return ret;
+>  }
+>=20
+>=20
+>  void hv_synic_free(void)
+>  {
+>  	int cpu;
+> +	int ret;
+>=20
+>  	for_each_present_cpu(cpu) {
+>  		struct hv_per_cpu_context *hv_cpu
+>  			=3D per_cpu_ptr(hv_context.cpu_context, cpu);
+>=20
+> +		/* It's better to leak the page if the encryption fails. */
+> +		if (hv_isolation_type_tdx()) {
+> +			if (hv_cpu->synic_message_page) {
+> +				ret =3D set_memory_encrypted((unsigned long)
+> +					hv_cpu->synic_message_page, 1);
+> +				if (ret) {
+> +					pr_err("Failed to encrypt SYNIC msg page: %d\n", ret);
+> +					hv_cpu->synic_message_page =3D NULL;
+> +				}
+> +			}
+> +
+> +			if (hv_cpu->synic_event_page) {
+> +				ret =3D set_memory_encrypted((unsigned long)
+> +					hv_cpu->synic_event_page, 1);
+> +				if (ret) {
+> +					pr_err("Failed to encrypt SYNIC event page: %d\n", ret);
+> +					hv_cpu->synic_event_page =3D NULL;
+> +				}
+> +			}
+> +		}
+> +
+>  		free_page((unsigned long)hv_cpu->synic_event_page);
+>  		free_page((unsigned long)hv_cpu->synic_message_page);
+>  	}
+> @@ -179,7 +236,8 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  		if (!hv_cpu->synic_message_page)
+>  			pr_err("Fail to map synic message page.\n");
+>  	} else {
+> -		simp.base_simp_gpa =3D virt_to_phys(hv_cpu->synic_message_page)
+> +		simp.base_simp_gpa =3D
+> +			cc_mkdec(virt_to_phys(hv_cpu->synic_message_page))
+>  			>> HV_HYP_PAGE_SHIFT;
+>  	}
+>=20
+> @@ -198,7 +256,8 @@ void hv_synic_enable_regs(unsigned int cpu)
+>  		if (!hv_cpu->synic_event_page)
+>  			pr_err("Fail to map synic event page.\n");
+>  	} else {
+> -		siefp.base_siefp_gpa =3D virt_to_phys(hv_cpu->synic_event_page)
+> +		siefp.base_siefp_gpa =3D
+> +			cc_mkdec(virt_to_phys(hv_cpu->synic_event_page))
+>  			>> HV_HYP_PAGE_SHIFT;
+>  	}
+>=20
+> --
+> 2.25.1
+
+Commit message nit notwithstanding --
+
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
