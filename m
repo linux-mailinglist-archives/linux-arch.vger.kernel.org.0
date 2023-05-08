@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 745AD6FAEFD
+	by mail.lfdr.de (Postfix) with ESMTP id 278A16FAEFC
 	for <lists+linux-arch@lfdr.de>; Mon,  8 May 2023 13:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236417AbjEHLsx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 May 2023 07:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S236412AbjEHLsw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 May 2023 07:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236350AbjEHLsq (ORCPT
+        with ESMTP id S236360AbjEHLsq (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Mon, 8 May 2023 07:48:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12C44BC4;
-        Mon,  8 May 2023 04:48:35 -0700 (PDT)
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D9543B9C;
+        Mon,  8 May 2023 04:48:36 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2C1FA1FE47;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9D7DE1FE48;
         Mon,  8 May 2023 11:48:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1683546514; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tr288t0xLynfRQCVUOIoSbgvZMe70hnX0f+t3+0V3zI=;
-        b=jhAb/kcSH9OGcOdMqKsU3JQYt8MS/ix51cS96bltG3yXij+k+EKkw6vSH/xK4QlqupPc6N
-        Z9yxjMOdZWFvyH+rCo5ME+89kALCtyShuMmOXXLT5CasBHU57Lh0Sd3mu94jdFYa9Ftt9O
-        WBdR9jdJk96qVz2KGrhxturb1WX9W5M=
+        bh=6JxfZ1eTLC3Do0HG20xUMryThoDfNSzO5dS7yzvuB1s=;
+        b=y+Wvr3jjQRe/hdB4jfGlmkTJlOuIrc5wTlMwV5NMUpSnLj4ig/hdJUtdyur5nHEYu+oAUY
+        YVcl0BqFGlGN/BFTFDeHNo9SrnYdz5XbLdHG7rPu2ounJPqM+Q2Br7GoPzUQGGNeNo4yK/
+        W25FP5chvL6hr1vpVOdh0pLtEDvxMeY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1683546514;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tr288t0xLynfRQCVUOIoSbgvZMe70hnX0f+t3+0V3zI=;
-        b=aDyY2DoEFDg9l2+x0fGMw3zfjFLAVatBTGnWIXzmY7Z6d4xKOro8khAwp8QfW8njTv1QXT
-        1s4lcwjh7Y5NrmBw==
+        bh=6JxfZ1eTLC3Do0HG20xUMryThoDfNSzO5dS7yzvuB1s=;
+        b=PmeRHca7d7xN6uv/D/Ww60VmBi/aIdsiq5lW1ux6sTUYBIiQFIdMaA6diPaoIwIya0NVnj
+        tfaRib9SG6q15JBA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD90D139F8;
-        Mon,  8 May 2023 11:48:33 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31FFB1346B;
+        Mon,  8 May 2023 11:48:34 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id sOl4KZHhWGQvNwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 08 May 2023 11:48:33 +0000
+        id cGlXC5LhWGQvNwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 08 May 2023 11:48:34 +0000
 From:   Thomas Zimmermann <tzimmermann@suse.de>
 To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
         daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
@@ -61,9 +61,9 @@ Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
         sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-parisc@vger.kernel.org,
         Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v5 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
-Date:   Mon,  8 May 2023 13:48:29 +0200
-Message-Id: <20230508114830.28182-6-tzimmermann@suse.de>
+Subject: [PATCH v5 6/6] fbdev: Rename fb_mem*() helpers
+Date:   Mon,  8 May 2023 13:48:30 +0200
+Message-Id: <20230508114830.28182-7-tzimmermann@suse.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230508114830.28182-1-tzimmermann@suse.de>
 References: <20230508114830.28182-1-tzimmermann@suse.de>
@@ -71,7 +71,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,336 +79,288 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
-in the architecture's <asm/fb.h> header file or the generic one.
-
-The common case has been the use of regular I/O functions, such as
-__raw_readb() or memset_io(). A few architectures used plain system-
-memory reads and writes. Sparc used helpers for its SBus.
-
-The architectures that used special cases provide the same code in
-their __raw_*() I/O helpers. So the patch replaces this code with the
-__raw_*() functions and moves it to <asm-generic/fb.h> for all
-architectures.
-
-v5:
-	* include <linux/io.h> in <asm-generic/fb>; fix s390 build
-v4:
-	* ia64, loongarch, sparc64: add fb_mem*() to arch headers
-	  to keep current semantics (Arnd)
-v3:
-	* implement all architectures with generic helpers
-	* support reordering and native byte order (Geert, Arnd)
+Update the names of the fb_mem*() helpers to be consistent with their
+regular counterparts. Hence, fb_memset() now becomes fb_memset_io(),
+fb_memcpy_fromfb() now becomes fb_memcpy_fromio() and fb_memcpy_tofb()
+becomes fb_memcpy_toio(). No functional changes.
 
 Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
 ---
- arch/ia64/include/asm/fb.h      |  20 +++++++
- arch/loongarch/include/asm/fb.h |  21 +++++++
- arch/sparc/include/asm/fb.h     |  20 +++++++
- include/asm-generic/fb.h        | 102 ++++++++++++++++++++++++++++++++
- include/linux/fb.h              |  53 -----------------
- 5 files changed, 163 insertions(+), 53 deletions(-)
+ arch/ia64/include/asm/fb.h              | 12 ++++++------
+ arch/loongarch/include/asm/fb.h         | 12 ++++++------
+ arch/sparc/include/asm/fb.h             | 12 ++++++------
+ drivers/video/fbdev/aty/mach64_cursor.c |  2 +-
+ drivers/video/fbdev/chipsfb.c           |  2 +-
+ drivers/video/fbdev/core/fbmem.c        |  4 ++--
+ drivers/video/fbdev/kyro/fbdev.c        |  2 +-
+ drivers/video/fbdev/pvr2fb.c            |  2 +-
+ drivers/video/fbdev/sstfb.c             |  2 +-
+ drivers/video/fbdev/stifb.c             |  4 ++--
+ drivers/video/fbdev/tdfxfb.c            |  2 +-
+ include/asm-generic/fb.h                | 16 ++++++++--------
+ 12 files changed, 36 insertions(+), 36 deletions(-)
 
 diff --git a/arch/ia64/include/asm/fb.h b/arch/ia64/include/asm/fb.h
-index 0208f64a0da0..bcf982043a5c 100644
+index bcf982043a5c..1717b26fd423 100644
 --- a/arch/ia64/include/asm/fb.h
 +++ b/arch/ia64/include/asm/fb.h
-@@ -2,7 +2,9 @@
- #ifndef _ASM_FB_H_
- #define _ASM_FB_H_
- 
-+#include <linux/compiler.h>
- #include <linux/efi.h>
-+#include <linux/string.h>
- 
- #include <asm/page.h>
- 
-@@ -18,6 +20,24 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+@@ -20,23 +20,23 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
  }
  #define fb_pgprotect fb_pgprotect
  
-+static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	memcpy(to, (void __force *)from, n);
-+}
-+#define fb_memcpy_fromfb fb_memcpy_fromfb
-+
-+static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	memcpy((void __force *)to, from, n);
-+}
-+#define fb_memcpy_tofb fb_memcpy_tofb
-+
-+static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+{
-+	memset((void __force *)addr, c, n);
-+}
-+#define fb_memset fb_memset
-+
+-static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
++static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ {
+ 	memcpy(to, (void __force *)from, n);
+ }
+-#define fb_memcpy_fromfb fb_memcpy_fromfb
++#define fb_memcpy_fromio fb_memcpy_fromio
+ 
+-static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
++static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ {
+ 	memcpy((void __force *)to, from, n);
+ }
+-#define fb_memcpy_tofb fb_memcpy_tofb
++#define fb_memcpy_toio fb_memcpy_toio
+ 
+-static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
++static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
+ {
+ 	memset((void __force *)addr, c, n);
+ }
+-#define fb_memset fb_memset
++#define fb_memset fb_memset_io
+ 
  #include <asm-generic/fb.h>
  
- #endif /* _ASM_FB_H_ */
 diff --git a/arch/loongarch/include/asm/fb.h b/arch/loongarch/include/asm/fb.h
-index ff82f20685c8..c6fc7ef374a4 100644
+index c6fc7ef374a4..0b218b10a9ec 100644
 --- a/arch/loongarch/include/asm/fb.h
 +++ b/arch/loongarch/include/asm/fb.h
-@@ -5,6 +5,27 @@
- #ifndef _ASM_FB_H_
- #define _ASM_FB_H_
+@@ -8,23 +8,23 @@
+ #include <linux/compiler.h>
+ #include <linux/string.h>
  
-+#include <linux/compiler.h>
-+#include <linux/string.h>
-+
-+static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	memcpy(to, (void __force *)from, n);
-+}
-+#define fb_memcpy_fromfb fb_memcpy_fromfb
-+
-+static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	memcpy((void __force *)to, from, n);
-+}
-+#define fb_memcpy_tofb fb_memcpy_tofb
-+
-+static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+{
-+	memset((void __force *)addr, c, n);
-+}
-+#define fb_memset fb_memset
-+
+-static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
++static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ {
+ 	memcpy(to, (void __force *)from, n);
+ }
+-#define fb_memcpy_fromfb fb_memcpy_fromfb
++#define fb_memcpy_fromio fb_memcpy_fromio
+ 
+-static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
++static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ {
+ 	memcpy((void __force *)to, from, n);
+ }
+-#define fb_memcpy_tofb fb_memcpy_tofb
++#define fb_memcpy_toio fb_memcpy_toio
+ 
+-static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
++static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
+ {
+ 	memset((void __force *)addr, c, n);
+ }
+-#define fb_memset fb_memset
++#define fb_memset fb_memset_io
+ 
  #include <asm-generic/fb.h>
  
- #endif /* _ASM_FB_H_ */
 diff --git a/arch/sparc/include/asm/fb.h b/arch/sparc/include/asm/fb.h
-index 689ee5c60054..077da91aeba1 100644
+index 077da91aeba1..572ecd3e1cc4 100644
 --- a/arch/sparc/include/asm/fb.h
 +++ b/arch/sparc/include/asm/fb.h
-@@ -2,6 +2,8 @@
- #ifndef _SPARC_FB_H_
- #define _SPARC_FB_H_
- 
-+#include <linux/io.h>
-+
- struct fb_info;
- struct file;
- struct vm_area_struct;
-@@ -16,6 +18,24 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+@@ -18,23 +18,23 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
  int fb_is_primary_device(struct fb_info *info);
  #define fb_is_primary_device fb_is_primary_device
  
-+static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	sbus_memcpy_fromio(to, from, n);
-+}
-+#define fb_memcpy_fromfb fb_memcpy_fromfb
-+
-+static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	sbus_memcpy_toio(to, from, n);
-+}
-+#define fb_memcpy_tofb fb_memcpy_tofb
-+
-+static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+{
-+	sbus_memset_io(addr, c, n);
-+}
-+#define fb_memset fb_memset
-+
+-static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
++static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ {
+ 	sbus_memcpy_fromio(to, from, n);
+ }
+-#define fb_memcpy_fromfb fb_memcpy_fromfb
++#define fb_memcpy_fromio fb_memcpy_fromio
+ 
+-static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
++static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ {
+ 	sbus_memcpy_toio(to, from, n);
+ }
+-#define fb_memcpy_tofb fb_memcpy_tofb
++#define fb_memcpy_toio fb_memcpy_toio
+ 
+-static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
++static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
+ {
+ 	sbus_memset_io(addr, c, n);
+ }
+-#define fb_memset fb_memset
++#define fb_memset fb_memset_io
+ 
  #include <asm-generic/fb.h>
  
- #endif /* _SPARC_FB_H_ */
+diff --git a/drivers/video/fbdev/aty/mach64_cursor.c b/drivers/video/fbdev/aty/mach64_cursor.c
+index 4ad0331a8c57..971355c2cd7e 100644
+--- a/drivers/video/fbdev/aty/mach64_cursor.c
++++ b/drivers/video/fbdev/aty/mach64_cursor.c
+@@ -153,7 +153,7 @@ static int atyfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
+ 	    u8 m, b;
+ 
+ 	    // Clear cursor image with 1010101010...
+-	    fb_memset(dst, 0xaa, 1024);
++	    fb_memset_io(dst, 0xaa, 1024);
+ 
+ 	    offset = align - width*2;
+ 
+diff --git a/drivers/video/fbdev/chipsfb.c b/drivers/video/fbdev/chipsfb.c
+index 7799d52a651f..2a27ba94f652 100644
+--- a/drivers/video/fbdev/chipsfb.c
++++ b/drivers/video/fbdev/chipsfb.c
+@@ -332,7 +332,7 @@ static const struct fb_var_screeninfo chipsfb_var = {
+ 
+ static void init_chips(struct fb_info *p, unsigned long addr)
+ {
+-	fb_memset(p->screen_base, 0, 0x100000);
++	fb_memset_io(p->screen_base, 0, 0x100000);
+ 
+ 	p->fix = chipsfb_fix;
+ 	p->fix.smem_start = addr;
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 38f7e83fa6e3..d433ba8015a7 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -802,7 +802,7 @@ fb_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 	while (count) {
+ 		c  = (count > PAGE_SIZE) ? PAGE_SIZE : count;
+ 		dst = buffer;
+-		fb_memcpy_fromfb(dst, src, c);
++		fb_memcpy_fromio(dst, src, c);
+ 		dst += c;
+ 		src += c;
+ 
+@@ -879,7 +879,7 @@ fb_write(struct file *file, const char __user *buf, size_t count, loff_t *ppos)
+ 			break;
+ 		}
+ 
+-		fb_memcpy_tofb(dst, src, c);
++		fb_memcpy_toio(dst, src, c);
+ 		dst += c;
+ 		src += c;
+ 		*ppos += c;
+diff --git a/drivers/video/fbdev/kyro/fbdev.c b/drivers/video/fbdev/kyro/fbdev.c
+index 0596573ef140..3f277bdb3a32 100644
+--- a/drivers/video/fbdev/kyro/fbdev.c
++++ b/drivers/video/fbdev/kyro/fbdev.c
+@@ -737,7 +737,7 @@ static int kyrofb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 			       info->var.bits_per_pixel);
+ 	size *= info->var.yres_virtual;
+ 
+-	fb_memset(info->screen_base, 0, size);
++	fb_memset_io(info->screen_base, 0, size);
+ 
+ 	if (register_framebuffer(info) < 0)
+ 		goto out_unmap;
+diff --git a/drivers/video/fbdev/pvr2fb.c b/drivers/video/fbdev/pvr2fb.c
+index 6888127a5eb8..d8d97a9d2436 100644
+--- a/drivers/video/fbdev/pvr2fb.c
++++ b/drivers/video/fbdev/pvr2fb.c
+@@ -798,7 +798,7 @@ static int __maybe_unused pvr2fb_common_init(void)
+ 		goto out_err;
+ 	}
+ 
+-	fb_memset(fb_info->screen_base, 0, pvr2_fix.smem_len);
++	fb_memset_io(fb_info->screen_base, 0, pvr2_fix.smem_len);
+ 
+ 	pvr2_fix.ypanstep	= nopan  ? 0 : 1;
+ 	pvr2_fix.ywrapstep	= nowrap ? 0 : 1;
+diff --git a/drivers/video/fbdev/sstfb.c b/drivers/video/fbdev/sstfb.c
+index da296b2ab54a..582324f5d869 100644
+--- a/drivers/video/fbdev/sstfb.c
++++ b/drivers/video/fbdev/sstfb.c
+@@ -335,7 +335,7 @@ static int sst_calc_pll(const int freq, int *freq_out, struct pll_timing *t)
+ static void sstfb_clear_screen(struct fb_info *info)
+ {
+ 	/* clear screen */
+-	fb_memset(info->screen_base, 0, info->fix.smem_len);
++	fb_memset_io(info->screen_base, 0, info->fix.smem_len);
+ }
+ 
+ 
+diff --git a/drivers/video/fbdev/stifb.c b/drivers/video/fbdev/stifb.c
+index baca6974e288..01363dccfdaf 100644
+--- a/drivers/video/fbdev/stifb.c
++++ b/drivers/video/fbdev/stifb.c
+@@ -527,8 +527,8 @@ rattlerSetupPlanes(struct stifb_info *fb)
+ 	fb->id = saved_id;
+ 
+ 	for (y = 0; y < fb->info.var.yres; ++y)
+-		fb_memset(fb->info.screen_base + y * fb->info.fix.line_length,
+-			0xff, fb->info.var.xres * fb->info.var.bits_per_pixel/8);
++		fb_memset_io(fb->info.screen_base + y * fb->info.fix.line_length,
++			     0xff, fb->info.var.xres * fb->info.var.bits_per_pixel/8);
+ 
+ 	CRX24_SET_OVLY_MASK(fb);
+ 	SETUP_FB(fb);
+diff --git a/drivers/video/fbdev/tdfxfb.c b/drivers/video/fbdev/tdfxfb.c
+index d17e5e1472aa..cdf8e9fe9948 100644
+--- a/drivers/video/fbdev/tdfxfb.c
++++ b/drivers/video/fbdev/tdfxfb.c
+@@ -1116,7 +1116,7 @@ static int tdfxfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
+ 		u8 *mask = (u8 *)cursor->mask;
+ 		int i;
+ 
+-		fb_memset(cursorbase, 0, 1024);
++		fb_memset_io(cursorbase, 0, 1024);
+ 
+ 		for (i = 0; i < cursor->image.height; i++) {
+ 			int h = 0;
 diff --git a/include/asm-generic/fb.h b/include/asm-generic/fb.h
-index c8af99f5a535..0540eccdbeca 100644
+index 0540eccdbeca..bb7ee9c70e60 100644
 --- a/include/asm-generic/fb.h
 +++ b/include/asm-generic/fb.h
-@@ -7,6 +7,7 @@
-  * Only include this header file from your architecture's <asm/fb.h>.
-  */
- 
-+#include <linux/io.h>
- #include <linux/mm_types.h>
- #include <linux/pgtable.h>
- 
-@@ -30,4 +31,105 @@ static inline int fb_is_primary_device(struct fb_info *info)
- }
+@@ -108,28 +108,28 @@ static inline void fb_writeq(u64 b, volatile void __iomem *addr)
+ #endif
  #endif
  
-+/*
-+ * I/O helpers for the framebuffer. Prefer these functions over their
-+ * regular counterparts. The regular I/O functions provide in-order
-+ * access and swap bytes to/from little-endian ordering. Neither is
-+ * required for framebuffers. Instead, the helpers read and write
-+ * raw framebuffer data. Independent operations can be reordered for
-+ * improved performance.
-+ */
-+
-+#ifndef fb_readb
-+static inline u8 fb_readb(const volatile void __iomem *addr)
-+{
-+	return __raw_readb(addr);
-+}
-+#define fb_readb fb_readb
-+#endif
-+
-+#ifndef fb_readw
-+static inline u16 fb_readw(const volatile void __iomem *addr)
-+{
-+	return __raw_readw(addr);
-+}
-+#define fb_readw fb_readw
-+#endif
-+
-+#ifndef fb_readl
-+static inline u32 fb_readl(const volatile void __iomem *addr)
-+{
-+	return __raw_readl(addr);
-+}
-+#define fb_readl fb_readl
-+#endif
-+
-+#ifndef fb_readq
-+#if defined(__raw_readq)
-+static inline u64 fb_readq(const volatile void __iomem *addr)
-+{
-+	return __raw_readq(addr);
-+}
-+#define fb_readq fb_readq
-+#endif
-+#endif
-+
-+#ifndef fb_writeb
-+static inline void fb_writeb(u8 b, volatile void __iomem *addr)
-+{
-+	__raw_writeb(b, addr);
-+}
-+#define fb_writeb fb_writeb
-+#endif
-+
-+#ifndef fb_writew
-+static inline void fb_writew(u16 b, volatile void __iomem *addr)
-+{
-+	__raw_writew(b, addr);
-+}
-+#define fb_writew fb_writew
-+#endif
-+
-+#ifndef fb_writel
-+static inline void fb_writel(u32 b, volatile void __iomem *addr)
-+{
-+	__raw_writel(b, addr);
-+}
-+#define fb_writel fb_writel
-+#endif
-+
-+#ifndef fb_writeq
-+#if defined(__raw_writeq)
-+static inline void fb_writeq(u64 b, volatile void __iomem *addr)
-+{
-+	__raw_writeq(b, addr);
-+}
-+#define fb_writeq fb_writeq
-+#endif
-+#endif
-+
-+#ifndef fb_memcpy_fromfb
-+static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+{
-+	memcpy_fromio(to, from, n);
-+}
-+#define fb_memcpy_fromfb fb_memcpy_fromfb
-+#endif
-+
-+#ifndef fb_memcpy_tofb
-+static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+{
-+	memcpy_toio(to, from, n);
-+}
-+#define fb_memcpy_tofb fb_memcpy_tofb
-+#endif
-+
-+#ifndef fb_memset
-+static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+{
-+	memset_io(addr, c, n);
-+}
-+#define fb_memset fb_memset
-+#endif
-+
+-#ifndef fb_memcpy_fromfb
+-static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
++#ifndef fb_memcpy_fromio
++static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+ {
+ 	memcpy_fromio(to, from, n);
+ }
+-#define fb_memcpy_fromfb fb_memcpy_fromfb
++#define fb_memcpy_fromio fb_memcpy_fromio
+ #endif
+ 
+-#ifndef fb_memcpy_tofb
+-static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
++#ifndef fb_memcpy_toio
++static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
+ {
+ 	memcpy_toio(to, from, n);
+ }
+-#define fb_memcpy_tofb fb_memcpy_tofb
++#define fb_memcpy_toio fb_memcpy_toio
+ #endif
+ 
+ #ifndef fb_memset
+-static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
++static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
+ {
+ 	memset_io(addr, c, n);
+ }
+-#define fb_memset fb_memset
++#define fb_memset fb_memset_io
+ #endif
+ 
  #endif /* __ASM_GENERIC_FB_H_ */
-diff --git a/include/linux/fb.h b/include/linux/fb.h
-index c0f97160ebbf..eb7e52940c60 100644
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -17,7 +17,6 @@
- #include <linux/slab.h>
- 
- #include <asm/fb.h>
--#include <asm/io.h>
- 
- struct vm_area_struct;
- struct fb_info;
-@@ -513,58 +512,6 @@ struct fb_info {
-  */
- #define STUPID_ACCELF_TEXT_SHIT
- 
--// This will go away
--#if defined(__sparc__)
--
--/* We map all of our framebuffers such that big-endian accesses
-- * are what we want, so the following is sufficient.
-- */
--
--// This will go away
--#define fb_readb sbus_readb
--#define fb_readw sbus_readw
--#define fb_readl sbus_readl
--#define fb_readq sbus_readq
--#define fb_writeb sbus_writeb
--#define fb_writew sbus_writew
--#define fb_writel sbus_writel
--#define fb_writeq sbus_writeq
--#define fb_memset sbus_memset_io
--#define fb_memcpy_fromfb sbus_memcpy_fromio
--#define fb_memcpy_tofb sbus_memcpy_toio
--
--#elif defined(__i386__) || defined(__alpha__) || defined(__x86_64__) ||	\
--	defined(__hppa__) || defined(__sh__) || defined(__powerpc__) ||	\
--	defined(__arm__) || defined(__aarch64__) || defined(__mips__)
--
--#define fb_readb __raw_readb
--#define fb_readw __raw_readw
--#define fb_readl __raw_readl
--#define fb_readq __raw_readq
--#define fb_writeb __raw_writeb
--#define fb_writew __raw_writew
--#define fb_writel __raw_writel
--#define fb_writeq __raw_writeq
--#define fb_memset memset_io
--#define fb_memcpy_fromfb memcpy_fromio
--#define fb_memcpy_tofb memcpy_toio
--
--#else
--
--#define fb_readb(addr) (*(volatile u8 *) (addr))
--#define fb_readw(addr) (*(volatile u16 *) (addr))
--#define fb_readl(addr) (*(volatile u32 *) (addr))
--#define fb_readq(addr) (*(volatile u64 *) (addr))
--#define fb_writeb(b,addr) (*(volatile u8 *) (addr) = (b))
--#define fb_writew(b,addr) (*(volatile u16 *) (addr) = (b))
--#define fb_writel(b,addr) (*(volatile u32 *) (addr) = (b))
--#define fb_writeq(b,addr) (*(volatile u64 *) (addr) = (b))
--#define fb_memset memset
--#define fb_memcpy_fromfb memcpy
--#define fb_memcpy_tofb memcpy
--
--#endif
--
- #define FB_LEFT_POS(p, bpp)          (fb_be_math(p) ? (32 - (bpp)) : 0)
- #define FB_SHIFT_HIGH(p, val, bits)  (fb_be_math(p) ? (val) >> (bits) : \
- 						      (val) << (bits))
 -- 
 2.40.1
 
