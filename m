@@ -2,61 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51D086FC490
-	for <lists+linux-arch@lfdr.de>; Tue,  9 May 2023 13:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CEB6FC493
+	for <lists+linux-arch@lfdr.de>; Tue,  9 May 2023 13:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235435AbjEILIC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 May 2023 07:08:02 -0400
+        id S235471AbjEILIS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 May 2023 07:08:18 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235436AbjEILIA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 May 2023 07:08:00 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C42100D9;
-        Tue,  9 May 2023 04:07:57 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1aaea43def7so39203755ad.2;
-        Tue, 09 May 2023 04:07:57 -0700 (PDT)
+        with ESMTP id S235449AbjEILIB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 May 2023 07:08:01 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EAF49EC;
+        Tue,  9 May 2023 04:08:00 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115eef620so41527176b3a.1;
+        Tue, 09 May 2023 04:08:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683630476; x=1686222476;
+        d=gmail.com; s=20221208; t=1683630479; x=1686222479;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8R6iz7vhNREjSraKI/ERJgnxMAZcQTBbYu48OeVh6tw=;
-        b=peVOlXy+wgj4HtoPCAT8un5A1/kZe5GQNZp5Py1YiLolNO8uvCN8ROt7huW5c1SfBe
-         73FCmGFWKK/Lv1ENnxDgNuy7J0vza2RSumYaR4iEJPMAPmhCy3676qRS5CTmqas2lRsu
-         Z5LrZ+/fUzpEg+2cqSlILioI5sFDhaqjIkEDB4LCiihPr96cPPSvjBS8akNOb+2Z6dZJ
-         JMXHk+St8pzc1HAO/moeIN0t8zaBPCVYtqJievRo8+Y8g8Ag0r2B+2TYKXgaAcRYIdzc
-         Gj8FRQb6GfsNFcK6b92dGs1qtnoStT6b5Ot62ylkU/JTsMucZUh5uttNPyPXmQ2Dt8/Z
-         0TtA==
+        bh=5yU27RYtd81vPNZ12bejpPHLZejv/XbgwelpOomxfow=;
+        b=GgUXtNdPzzYsEqIjs7txR52D9wvDQFEf0socOYlZmw/PitxcU23yv41MM37O9oHGZA
+         kQ/fNxdrKBfxetxa4uEJyzCfAhXym942L+bIs9ADv2jj+m5DkY0PX0LRchKfB/6hnxIR
+         BI50hHMDZwT+cDQ1BwzsYtWVjUf8Qu8wEpzWn9T89vxOTdUSQLhTIegKy1/7hrmh/epo
+         g6qRiGfXZT9WDeP23Y/Fz5dJ20/CvoIdiu/wF1YGa38oZStIKLjZ5EuCfJuUsAH9+NOc
+         7frAg3dij8RqGB/XtVp2WaFxav4RxVITkt+W+N7we0w98qcvI3pd+3KQm9jKp2mUCbEF
+         wySw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683630476; x=1686222476;
+        d=1e100.net; s=20221208; t=1683630479; x=1686222479;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8R6iz7vhNREjSraKI/ERJgnxMAZcQTBbYu48OeVh6tw=;
-        b=fMNHz/cZQY9yfA8AMD6uU3v4E1GTEXZWSIw4do/CmQGDGavkVLHdfcNtTjpWIwH3AX
-         zqG5Iv2WV9HY00P+s4AbHycP4TextXCpZJSBk6Iu9R98uqdlze6cm8rhRTpF5GNo+XZJ
-         PkRJmiaDzCxpVTiZr70P3UTQ/74OseDEaVzESLM8jb4JufrAJdTsGw9e3UqD/SVugJ4Y
-         MIsujIhiKueUSn8+Bcw5eGKPrW7SL/g/gZmYKTor94QTnYtW7a6jF3o9/RtbVbPNi1MC
-         qDXU9Bz5qyNr73LFFTivKVQj+BB7iNJWxka5CaPob2FGrHEyDpdrNlA94PZmicGA9QNq
-         6esA==
-X-Gm-Message-State: AC+VfDyHorbRHhf26xFXDUpjgXzUEZ7t7r9eTfY/GJ6BE7AuT9v6TzOp
-        XXnOj2o82IVTVUiO7ZiueO4mN++4id8=
-X-Google-Smtp-Source: ACHHUZ5JEHERN5ui0LUZt148z9utSOlWeGFhOmEZVh6IvZdMVJUDECIQ9PzvYAEPIFoJ8zak3UvyzQ==
-X-Received: by 2002:a17:903:1ce:b0:1ac:a02f:c9a4 with SMTP id e14-20020a17090301ce00b001aca02fc9a4mr1435118plh.4.1683630476067;
-        Tue, 09 May 2023 04:07:56 -0700 (PDT)
+        bh=5yU27RYtd81vPNZ12bejpPHLZejv/XbgwelpOomxfow=;
+        b=TygPLpDlqBntFRD1iZrkzCGzX1NRS36qG6jDjy0DRJjUvoJAlTDtQD9gPFgw1I5nQj
+         Oqoiz4iA1VChtoWNOypD465qfhH2Y4+z4BypQ6RIan8vFQ+EgpRqVNkMDrI4pAetMsxY
+         afMzjqU7P50Mt7R5tfapNmaX3mNEoC9EeJ19TkMEX1WKNsAJ5cjG5PSTKwzI0Q0ik0Dk
+         JraWxxwYbzZF69+ehpRVq6QC7Cg3xvDFT1zHoQuZVelkkVb0L/7hlWjS40MNRN72ZumL
+         R5IAQgJl6arEiwPoy6tz/HNZTS84ZFSHDdrM1puC648q3V/s3+9Ezhw0tWY4n0enytu7
+         NWAg==
+X-Gm-Message-State: AC+VfDzFWOTi+SbcxHmoBGRe7rwfi5qrkpw34qVk23lzpNTk5XU4faty
+        MbC7TKwXsr/pi8ZuHVyCjbUV0dCxjPc=
+X-Google-Smtp-Source: ACHHUZ6R+6OFfzhp1uGRbjs11n+oFDhM5MImse43sM0dRgYG0Y8jrnmMuFRxF/l7qR3urorXfyAQgg==
+X-Received: by 2002:a17:902:d4c7:b0:1a6:bc34:2ee with SMTP id o7-20020a170902d4c700b001a6bc3402eemr16224156plg.21.1683630479628;
+        Tue, 09 May 2023 04:07:59 -0700 (PDT)
 Received: from wheely.local0.net ([118.208.131.108])
-        by smtp.gmail.com with ESMTPSA id l5-20020a17090270c500b001a641ea111fsm1269923plt.112.2023.05.09.04.07.52
+        by smtp.gmail.com with ESMTPSA id l5-20020a17090270c500b001a641ea111fsm1269923plt.112.2023.05.09.04.07.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 04:07:55 -0700 (PDT)
+        Tue, 09 May 2023 04:07:59 -0700 (PDT)
 From:   Nicholas Piggin <npiggin@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Nicholas Piggin <npiggin@gmail.com>, linux-arch@vger.kernel.org,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [RFC PATCH 2/3] init: Require archs call start_kernel with arch irqs disabled
-Date:   Tue,  9 May 2023 21:07:38 +1000
-Message-Id: <20230509110739.241735-3-npiggin@gmail.com>
+Subject: [RFC PATCH 3/3] irqflags: Warn on irq disable when disabled and enable when enabled
+Date:   Tue,  9 May 2023 21:07:39 +1000
+Message-Id: <20230509110739.241735-4-npiggin@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230509110739.241735-1-npiggin@gmail.com>
 References: <20230509110739.241735-1-npiggin@gmail.com>
@@ -72,36 +72,91 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Let's require start_kernel() is called with arch_irqs_disabled. For now,
-just correct that condition and print a warning if CONFIG_DEBUG_IRQFLAGS
-is set.
-
-This prevents core code from disabling irqs when they are already
-disabled, in aid of eventually adding a debug check to catch that
-condition.
+Add CONFIG_IRQFLAGS_DEBUG checks for local_irq_disable() when irqs
+are already disabled, and local_irq_enable() when they are enabled.
+This could help catch risky or unbalanced irq manipulation.
 
 Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
 ---
- init/main.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/irqflags.h       | 26 ++++++++++++++++++++++++--
+ kernel/locking/irqflag-debug.c | 14 ++++++++++++++
+ 2 files changed, 38 insertions(+), 2 deletions(-)
 
-diff --git a/init/main.c b/init/main.c
-index af50044deed5..f3979628943e 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -889,7 +889,11 @@ asmlinkage __visible void __init __no_sanitize_address __noreturn start_kernel(v
+diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
+index 5ec0fa71399e..82f54cda2c20 100644
+--- a/include/linux/irqflags.h
++++ b/include/linux/irqflags.h
+@@ -157,6 +157,18 @@ do {						\
+ #endif
  
- 	cgroup_init_early();
+ #ifdef CONFIG_DEBUG_IRQFLAGS
++extern void warn_bogus_irq_disable(void);
++#define raw_check_bogus_irq_disable()			\
++	do {						\
++		if (unlikely(arch_irqs_disabled()))	\
++			warn_bogus_irq_disable();	\
++	} while (0)
++extern void warn_bogus_irq_enable(void);
++#define raw_check_bogus_irq_enable()			\
++	do {						\
++		if (unlikely(!arch_irqs_disabled()))	\
++			warn_bogus_irq_enable();	\
++	} while (0)
+ extern void warn_bogus_irq_restore(void);
+ #define raw_check_bogus_irq_restore()			\
+ 	do {						\
+@@ -164,14 +176,24 @@ extern void warn_bogus_irq_restore(void);
+ 			warn_bogus_irq_restore();	\
+ 	} while (0)
+ #else
++#define raw_check_bogus_irq_disable() do { } while (0)
++#define raw_check_bogus_irq_enable() do { } while (0)
+ #define raw_check_bogus_irq_restore() do { } while (0)
+ #endif
  
--	local_irq_disable();
-+	if (!raw_irqs_disabled()) {
-+		raw_local_irq_disable();
-+		if (IS_ENABLED(CONFIG_DEBUG_IRQFLAGS))
-+			WARN_ONCE(1, "arch should call start_kernel with arch_irqs_disabled\n");
-+	}
- 	early_boot_irqs_disabled = true;
+ /*
+  * Wrap the arch provided IRQ routines to provide appropriate checks.
+  */
+-#define raw_local_irq_disable()		arch_local_irq_disable()
+-#define raw_local_irq_enable()		arch_local_irq_enable()
++#define raw_local_irq_disable()				\
++	do {						\
++		raw_check_bogus_irq_disable();		\
++		arch_local_irq_disable();		\
++	} while (0)
++#define raw_local_irq_enable()				\
++	do {						\
++		raw_check_bogus_irq_enable();		\
++		arch_local_irq_enable();		\
++	} while (0)
+ #define raw_local_irq_save(flags)			\
+ 	do {						\
+ 		typecheck(unsigned long, flags);	\
+diff --git a/kernel/locking/irqflag-debug.c b/kernel/locking/irqflag-debug.c
+index 810b50344d35..20e5e1b9a86f 100644
+--- a/kernel/locking/irqflag-debug.c
++++ b/kernel/locking/irqflag-debug.c
+@@ -4,6 +4,20 @@
+ #include <linux/export.h>
+ #include <linux/irqflags.h>
  
- 	/*
++noinstr void warn_bogus_irq_disable(void)
++{
++	instrumentation_begin();
++	WARN_ONCE(1, "raw_local_irq_disable() called with IRQs disabled\n");
++	instrumentation_end();
++}
++EXPORT_SYMBOL(warn_bogus_irq_disable);
++noinstr void warn_bogus_irq_enable(void)
++{
++	instrumentation_begin();
++	WARN_ONCE(1, "raw_local_irq_enable() called with IRQs enabled\n");
++	instrumentation_end();
++}
++EXPORT_SYMBOL(warn_bogus_irq_enable);
+ noinstr void warn_bogus_irq_restore(void)
+ {
+ 	instrumentation_begin();
 -- 
 2.40.1
 
