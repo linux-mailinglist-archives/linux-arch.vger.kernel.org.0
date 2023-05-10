@@ -2,193 +2,170 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D936FE02A
-	for <lists+linux-arch@lfdr.de>; Wed, 10 May 2023 16:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7746FE067
+	for <lists+linux-arch@lfdr.de>; Wed, 10 May 2023 16:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbjEJO1X (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 May 2023 10:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S237513AbjEJOey convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 10 May 2023 10:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237248AbjEJO1Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 May 2023 10:27:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 991D24201;
-        Wed, 10 May 2023 07:27:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B5EC521A04;
-        Wed, 10 May 2023 14:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683728831; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=msQRAoyAoxw91hPZF0PsBVs3IvAlRwLB+O1p/FkHufY=;
-        b=zJiGRMNfknuU4FZzUIdWhuMAHklTownPK8k98//CuzvrvNqgv4AFNaI0EL+QeDQL9XWBrL
-        qX1oBvG9vTmUVSv5XstcsU4SBzS3iixLqZUMZbj6kQd6QWK4mzisq1pHi018HBSPOsDV6+
-        vrW5oTPypO2szh971bouEFREMqEk2e8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683728831;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=msQRAoyAoxw91hPZF0PsBVs3IvAlRwLB+O1p/FkHufY=;
-        b=nzIRDkg5TELowkMnTyU/Eqa1NNUyyYwwnSGBt47VraZBUpDX2MxNkUaByiExGfPk0vFLRl
-        C00DJmczhmqRpmAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2FEC7138E5;
-        Wed, 10 May 2023 14:27:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6rPBCr+pW2RyMAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 10 May 2023 14:27:11 +0000
-Message-ID: <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
-Date:   Wed, 10 May 2023 16:27:10 +0200
+        with ESMTP id S237528AbjEJOev (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 May 2023 10:34:51 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25FFDE;
+        Wed, 10 May 2023 07:34:49 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-559de1d36a9so105794767b3.1;
+        Wed, 10 May 2023 07:34:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683729288; x=1686321288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ozQA/cDvPs2H88bJoE4ZEXy4NN+hc65oP+0zn7oNwKg=;
+        b=lnuPn/Md3kCrpmgC5T8hatrzEdfDmfbrpqj24AAGR9nWRm52Yy4eK7YAbvanqeg3HV
+         9n0GNyok/WHq0nNra4bon6B40n/7cSdBdpofD0Zqvm3GKUIIjrlhTfwezs1X3yYyi+nc
+         yJP5oJJ4SuKr0dbg/6ce7E0sVLK2MHL9UCsCXLCUJt1zdZLcsZaB1Kz3nTUBiMKfV15f
+         HRnymY03+fsI6lX/6H49I7lsopPpilGyOEJF9bVEcqq1Nd2cae6YLS9UzekgaGrcXD4f
+         Mj6Ll78QBPEW2InSLP/GmjWO2liBXwG2gRyjCK6W80qeB0kpGTvmAUC+byl5zxKHAbxW
+         QgeQ==
+X-Gm-Message-State: AC+VfDw0quOdmRljp0t2BPdk76YuzvTnb9a/uwHpLgDcOKw5wgIRuOyL
+        B90gGEkT2wzOm5eI5XcK5jdaRJMh5vISLA==
+X-Google-Smtp-Source: ACHHUZ7REBtXk8+GACjdQjmrsTHQhYdFGPhmtQd9s+M3OG8pOeEyAufWYRO0lRqWNlYyEsPvKL4Nxg==
+X-Received: by 2002:a81:6d48:0:b0:55a:881d:e744 with SMTP id i69-20020a816d48000000b0055a881de744mr19986822ywc.47.1683729288666;
+        Wed, 10 May 2023 07:34:48 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id m67-20020a817146000000b0055a8b115f6esm4112292ywc.128.2023.05.10.07.34.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 07:34:47 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-b983027d0faso9323113276.0;
+        Wed, 10 May 2023 07:34:46 -0700 (PDT)
+X-Received: by 2002:a05:6902:18c6:b0:b99:5707:4e6f with SMTP id
+ ck6-20020a05690218c600b00b9957074e6fmr23871358ybb.32.1683729286388; Wed, 10
+ May 2023 07:34:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Sam Ravnborg <sam@ravnborg.org>, suijingfeng@loongson.cn
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230510110557.14343-6-tzimmermann@suse.de>
- <202305102136.eMjTSPwH-lkp@intel.com>
- <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------0lOLE90wJNsb39RLAMUItepY"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230510110557.14343-1-tzimmermann@suse.de> <20230510110557.14343-6-tzimmermann@suse.de>
+ <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com> <487ff03b-d753-972f-7a06-a1d5efda917d@suse.de>
+In-Reply-To: <487ff03b-d753-972f-7a06-a1d5efda917d@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 10 May 2023 16:34:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWQLF6QZi4j5Yg3oiy8dMbuApk+r=5c2tSLvYxvAaudMA@mail.gmail.com>
+Message-ID: <CAMuHMdWQLF6QZi4j5Yg3oiy8dMbuApk+r=5c2tSLvYxvAaudMA@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch,
+        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+        davem@davemloft.net, James.Bottomley@hansenpartnership.com,
+        arnd@arndb.de, sam@ravnborg.org, suijingfeng@loongson.cn,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------0lOLE90wJNsb39RLAMUItepY
-Content-Type: multipart/mixed; boundary="------------QVvnIHXNHplIvwXCWF9C7D0M";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
- Helge Deller <deller@gmx.de>, Geert Uytterhoeven <geert@linux-m68k.org>,
- Javier Martinez Canillas <javierm@redhat.com>,
- Daniel Vetter <daniel@ffwll.ch>, Vineet Gupta <vgupta@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- "David S . Miller" <davem@davemloft.net>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- Sam Ravnborg <sam@ravnborg.org>, suijingfeng@loongson.cn
-Cc: oe-kbuild-all@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
- loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Message-ID: <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
-References: <20230510110557.14343-6-tzimmermann@suse.de>
- <202305102136.eMjTSPwH-lkp@intel.com>
- <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
-In-Reply-To: <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
+Hi Thomas,
 
---------------QVvnIHXNHplIvwXCWF9C7D0M
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Wed, May 10, 2023 at 4:20 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Am 10.05.23 um 14:34 schrieb Geert Uytterhoeven:
+> > On Wed, May 10, 2023 at 1:06 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> >> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
+> >> in the architecture's <asm/fb.h> header file or the generic one.
+> >>
+> >> The common case has been the use of regular I/O functions, such as
+> >> __raw_readb() or memset_io(). A few architectures used plain system-
+> >> memory reads and writes. Sparc used helpers for its SBus.
+> >>
+> >> The architectures that used special cases provide the same code in
+> >> their __raw_*() I/O helpers. So the patch replaces this code with the
+> >> __raw_*() functions and moves it to <asm-generic/fb.h> for all
+> >> architectures.
+> >>
+> >> v6:
+> >>          * fix fb_readq()/fb_writeq() on 64-bit mips (kernel test robot)
+> >> v5:
+> >>          * include <linux/io.h> in <asm-generic/fb>; fix s390 build
+> >> v4:
+> >>          * ia64, loongarch, sparc64: add fb_mem*() to arch headers
+> >>            to keep current semantics (Arnd)
+> >> v3:
+> >>          * implement all architectures with generic helpers
+> >>          * support reordering and native byte order (Geert, Arnd)
+> >>
+> >> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> >> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-SGkNCg0KQW0gMTAuMDUuMjMgdW0gMTY6MTUgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
-biBXZWQsIE1heSAxMCwgMjAyMywgYXQgMTY6MDMsIGtlcm5lbCB0ZXN0IHJvYm90IHdyb3Rl
-Og0KPiANCj4+DQo+PiAgICAgY2MxOiB3YXJuaW5nOiBhcmNoL3NoL2luY2x1ZGUvbWFjaC1o
-cDZ4eDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQ0KPj4gWy1XbWlzc2luZy1pbmNsdWRl
-LWRpcnNdDQo+PiAgICAgY2MxOiB3YXJuaW5nOiBhcmNoL3NoL2luY2x1ZGUvbWFjaC1ocDZ4
-eDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQ0KPj4gWy1XbWlzc2luZy1pbmNsdWRlLWRp
-cnNdDQo+PiAgICAgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGRyaXZlcnMvdmlkZW8vZmJkZXYv
-aGl0ZmIuYzoyNzoNCj4+ICAgICBkcml2ZXJzL3ZpZGVvL2ZiZGV2L2hpdGZiLmM6IEluIGZ1
-bmN0aW9uICdoaXRmYl9hY2NlbF93YWl0JzoNCj4+Pj4gYXJjaC9zaC9pbmNsdWRlL2FzbS9o
-ZDY0NDYxLmg6MTg6MzM6IHdhcm5pbmc6IHBhc3NpbmcgYXJndW1lbnQgMSBvZiAnZmJfcmVh
-ZHcnIG1ha2VzIHBvaW50ZXIgZnJvbSBpbnRlZ2VyIHdpdGhvdXQgYSBjYXN0IFstV2ludC1j
-b252ZXJzaW9uXQ0KPj4gICAgICAgIDE4IHwgI2RlZmluZSBIRDY0NDYxX0lPX09GRlNFVCh4
-KSAgICAoSEQ2NDQ2MV9JT0JBU0UgKyAoeCkpDQo+PiAgICAgICAgICAgfCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4+ICAgICAg
-ICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPj4gICAgICAgICAg
-IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB1bnNpZ25lZCBpbnQNCj4+ICAg
-ICBhcmNoL3NoL2luY2x1ZGUvYXNtL2hkNjQ0NjEuaDo5MzozMzogbm90ZTogaW4gZXhwYW5z
-aW9uIG9mIG1hY3JvDQo+PiAnSEQ2NDQ2MV9JT19PRkZTRVQnDQo+PiAgICAgICAgOTMgfCAj
-ZGVmaW5lIEhENjQ0NjFfR1JDRkdSICAgICAgICAgIEhENjQ0NjFfSU9fT0ZGU0VUKDB4MTA0
-NCkNCj4+ICAgICAvKiBBY2NlbGVyYXRvciBDb25maWd1cmF0aW9uIFJlZ2lzdGVyICovDQo+
-PiAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+
-fn5+fn5+fn5+DQo+PiAgICAgZHJpdmVycy92aWRlby9mYmRldi9oaXRmYi5jOjQ3OjI1OiBu
-b3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8NCj4+ICdIRDY0NDYxX0dSQ0ZHUicNCj4+ICAg
-ICAgICA0NyB8ICAgICAgICAgd2hpbGUgKGZiX3JlYWR3KEhENjQ0NjFfR1JDRkdSKSAmDQo+
-PiBIRDY0NDYxX0dSQ0ZHUl9BQ0NTVEFUVVMpIDsNCj4gDQo+IEkgdGhpbmsgdGhhdCdzIGEg
-cHJlZXhpc3RpbmcgYnVnIGFuZCBJIGhhdmUgbm8gaWRlYSB3aGF0IHRoZQ0KPiBjb3JyZWN0
-IHNvbHV0aW9uIGlzLiBMb29raW5nIGZvciBIRDY0NDYxIHNob3dzIGl0IGJlaW5nIHVzZWQN
-Cj4gYm90aCB3aXRoIGludy9vdXR3IGFuZCByZWFkdy93cml0ZXcsIHNvIHRoZXJlIGlzIG5v
-IHdheSB0byBoYXZlDQo+IHRoZSBjb3JyZWN0IHR5cGUuIFRoZSBzaCBfX3Jhd19yZWFkdygp
-IGRlZmluaXRpb24gaGlkZXMgdGhpcyBidWcsDQo+IGJ1dCB0aGF0IGlzIGEgcHJvYmxlbSB3
-aXRoIGFyY2gvc2ggYW5kIGl0IHByb2JhYmx5IGhpZGVzIG90aGVycw0KPiBhcyB3ZWxsLg0K
-DQpUaGUgY29uc3RhbnQgSEQ2NDQ2MV9JT0JBU0UgaXMgZGVmaW5lZCBhcyBpbnRlZ2VyIGF0
-DQoNCiANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2Uv
-YXJjaC9zaC9pbmNsdWRlL2FzbS9oZDY0NDYxLmgjTDE3DQoNCmJ1dCBmYl9yZWFkdygpIGV4
-cGVjdHMgYSB2b2xhdGlsZS12b2lkIHBvaW50ZXIuIEkgZ3Vlc3Mgd2UgY291bGQgYWRkIGEg
-DQpjYXN0IHNvbWV3aGVyZSB0byBzaWxlbmNlIHRoZSBwcm9ibGVtLiBJbiB0aGUgY3VycmVu
-dCB1cHN0cmVhbSBjb2RlLCANCnRoYXQgYXBwZWFycyB0byBiZSBkb25lIGJ5IHNoJ3MgX19y
-YXdfcmVhZHcoKSBpbnRlcm5hbGx5Og0KDQogDQpodHRwczovL2VsaXhpci5ib290bGluLmNv
-bS9saW51eC9sYXRlc3Qvc291cmNlL2FyY2gvc2gvaW5jbHVkZS9hc20vaW8uaCNMMzUNCg0K
-QmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gICAgICAgICBBcm5kDQoNCi0tIA0KVGhv
-bWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdh
-cmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBO
-dWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3
-IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
+> >> --- a/arch/mips/include/asm/fb.h
+> >> +++ b/arch/mips/include/asm/fb.h
+> >> @@ -12,6 +12,28 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> >>   }
+> >>   #define fb_pgprotect fb_pgprotect
+> >>
+> >> +/*
+> >> + * MIPS doesn't define __raw_ I/O macros, so the helpers
+> >> + * in <asm-generic/fb.h> don't generate fb_readq() and
+> >> + * fb_write(). We have to provide them here.
+> >
+> > MIPS does not include <asm-generic/io.h>,  nor define its own
+>
+> I know, that's why the TODO says to convert it to generic I/O.
+>
+> > __raw_readq() and __raw_writeq()...
+>
+> It doesn't define those macros, but it generates function calls of the
+> same names. Follow the macros at
+>
+>
+> https://elixir.bootlin.com/linux/latest/source/arch/mips/include/asm/io.h#L357
+>
+> It expands to a variety of helpers, including __raw_*().
 
+Thanks, I forgot MIPS is using these grep-unfriendly factories...
 
---------------QVvnIHXNHplIvwXCWF9C7D0M--
+> >> + *
+> >> + * TODO: Convert MIPS to generic I/O. The helpers below can
+> >> + *       then be removed.
+> >> + */
+> >> +#ifdef CONFIG_64BIT
+> >> +static inline u64 fb_readq(const volatile void __iomem *addr)
+> >> +{
+> >> +       return __raw_readq(addr);
+> >
+> > ... so how can this call work?
+>
+> On 64-bit builds, there's __raw_readq() and __raw_writeq().
+>
+> At first, I tried to do the right thing and convert MIPS to work with
+> <asm-generic/io.h>. But that created a ton of follow-up errors in other
+> headers. So for now, it's better to handle this problem in asm/fb.h.
 
---------------0lOLE90wJNsb39RLAMUItepY
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+So isn't just adding
 
------BEGIN PGP SIGNATURE-----
+    #define __raw_readq __raw_readq
+    #define __raw_writeq __raw_writeq
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRbqb4FAwAAAAAACgkQlh/E3EQov+D5
-XA/+NTq2UPDUmKMuT09nX2chx123JIho9zlMm9ERbRkgZCKs3jMkaQBIC+gjppyyC1kloaztXcvL
-VF1riaHZAXzrc6jtJ6U13uytRYq5fO2qwltWxGsB9Er81Qq1YBCxdbFdb4avEiL8PQkfPdan18iV
-iKLAAkkJVL9RZQmZ62DjZT8XtqE+DMRuJ2pgD3VmSRq8/p8WhQr+2gFcl6c1YCWnAjku/XqrKfTt
-x60sTj8Ku/eqgnMBmgTGfTSIsOOW13tApY8NBw5zczZO4Y+K85c2bKNuO+LKGriBkv8+Yw49Ti+m
-Kq3mLr2aT0dLDd2EmvyTDC5UmUY3XXfpMtGSuqhEVS0gUD2TyU5bOfoDctLXAU8euaxLtWPPO4y5
-5tnD0wo5h5K6kXDOp7DVBOT+7B8Irrmejfb7Z3dhGZTzs4h+lcq15ZBx+dXi+22YtEv2tOQXgJzP
-wldJ0E3zOGFBoSV1b49ELTkDRm2tmSZHtUB1tzWiQJwLRklb3CQUQnjAzwu1Nr4YerzHwu/wNRPD
-uI1sDWnS/KWX5SNUCkPRwTbd5mDuuuD8EgyBb3QD49wfI9gJJwUjXwnedSvXSG+SwBSluPqlQ8HK
-cku+xJvsmUqcko9VEYn85TFtqDhxGMiTlmTtB0w+CrNWyVJwdss08zq18cRvR92odbP4dCoDMe4A
-S6A=
-=v04Z
------END PGP SIGNATURE-----
+to arch/mips/include/asm/io.h sufficient to make <asm-generic/fb.h>
+do the right thing?
 
---------------0lOLE90wJNsb39RLAMUItepY--
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
