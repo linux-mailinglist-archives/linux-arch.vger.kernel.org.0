@@ -2,144 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FED66FF0F7
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 14:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D980E6FF1A6
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 14:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238005AbjEKMBY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 08:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
+        id S231843AbjEKMgK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 11 May 2023 08:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238006AbjEKMA1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 08:00:27 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D208FA5F4
-        for <linux-arch@vger.kernel.org>; Thu, 11 May 2023 05:00:00 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13dafd5dcso9466834e87.3
-        for <linux-arch@vger.kernel.org>; Thu, 11 May 2023 05:00:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683806399; x=1686398399;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vHjA668SX6CTsxzYO8Z8nc4Ecy//EJfwtQFWj2t6kqU=;
-        b=Kbc555pcdKJLogrS9D2fpTuZbCLYtRRslUUmtE3xLf7EzdNZYf1OzcE9wV1Z90iGk3
-         NIk4MKV6b+X0k2N3VL5lQ56i9UXtaetINfk3JT4UgzFD7yBuaWIOfZWXEKT5PzupCvP/
-         bamqIQqMgGCRriAPRj2xemXl7nSVYfhgFkSm0NP8XdgPgFP+JDpOUwXIwzQsFylS4IVi
-         tfsy8c7iyORHTNygYljmk4DBR7XlBqGcbH84OblELC60Ek8nQDNUr7Skn4YvyNLuLFxu
-         E+aTQ0Z1NbLg7cPj3DH6p8fVNfeCCf6YY3IJLOUYGk/XToeDr9UU3eGzOCWV1mI1abGA
-         My9g==
+        with ESMTP id S231464AbjEKMgJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 08:36:09 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A9449D5;
+        Thu, 11 May 2023 05:36:05 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-55cc8aadc97so129620217b3.3;
+        Thu, 11 May 2023 05:36:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683806399; x=1686398399;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683808565; x=1686400565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vHjA668SX6CTsxzYO8Z8nc4Ecy//EJfwtQFWj2t6kqU=;
-        b=iuroUTMzD4DudQC/MTzQ1KNWuks28BnEhymuk52+OteydlZMZPb9VFTa3iefigPvXp
-         CoizrV6OxcITHBUxlFbaC+jGQd1Ni9oL3f+YPFuraWXLy3TogFxMdOI4SlRLjLPJbbMm
-         jhXGBBz/45SixbkwoXyRG2TLwMCCmLozrp28Rt6XFjV4zR9X/0rakjp3kOfFStiyE5NF
-         WUJ4r9PrFv/UuCBUh9q7OT8D+k/tiY8J4o5RlB1IU9g/OcodgBI6YMLSVXhGsZdEfS4N
-         cKrzFnKxFrnrjEfnUoUbAPBA5dupMOKuQooBRl0p+whc5s9lxXJXLru9VTfiHuRVLn/w
-         8/IQ==
-X-Gm-Message-State: AC+VfDybi+FgCRUO7+B1cnMoig/4CpRdWSJabvxbjTbrXVWW6ABiGkAY
-        WQOWYckNOUh49oqzMYOxTYEZZw==
-X-Google-Smtp-Source: ACHHUZ5Tk4UWnqnRlmgGPDZhdIZdZccQAMG3sQLb+3VXhq0OP50ACPtrgCCvBe8ZpLc4O18r3rteNw==
-X-Received: by 2002:ac2:4e51:0:b0:4ee:e10f:8e5d with SMTP id f17-20020ac24e51000000b004eee10f8e5dmr2439363lfr.4.1683806398938;
-        Thu, 11 May 2023 04:59:58 -0700 (PDT)
-Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id f16-20020ac25090000000b004cb23904bd9sm1100841lfm.144.2023.05.11.04.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 04:59:58 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 13:59:29 +0200
-Subject: [PATCH 12/12] m68k/mm: Make pfn accessors static inlines
+        bh=bccEgTIv+NuBZ7b0m7HvDAcmdwRNosK16KRrDt/LqxI=;
+        b=ETTJ+OiTtXJfHU0H8zC9XYPptrR7SbfSaCKz3kAUdAwmrQm8YSSCbpS7KzGjWWsYdM
+         3zru8cLnV+48wFCJeUwuab1iDoMFhxzfSYkYCS2AstM9wP2MAY3NZMTWvfKgchOnib+1
+         XbLYIaBx3p7D6z9o0NHMg0Rx2sPjd+kYgvuc8dHE0qAubjRJ7DNygagAlUN0kb9pm9qn
+         rc9bxiaSQZ0njl6UsKny9SwDdnx4yaSC4OMLYro+TizRTlch2HDaw7gK7WwU8Kcaxf4w
+         d4BHyepOnb5vudwGKfIVn+QbHJ6U6lC5NVs01FH+0GnPzQU1DkUOcIGHv9dN7OB9MnIk
+         Qh+w==
+X-Gm-Message-State: AC+VfDxPILetLcOxejK4w/ufFYCZumLYVDRuIswMmc4Q6EtZm1dF8gGc
+        12K7dZEwm4rt8Jca/Z0P1v83kaWebqPalg==
+X-Google-Smtp-Source: ACHHUZ6pDnDg+GTvqUUHABK5MSiTEEvVuUUgAUmhfkGQ8dFPPL1kgFPZ7FI+zNw5uuikafb7Gvgctg==
+X-Received: by 2002:a0d:ffc7:0:b0:560:bb81:6e8 with SMTP id p190-20020a0dffc7000000b00560bb8106e8mr8302214ywf.51.1683808564725;
+        Thu, 11 May 2023 05:36:04 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id w78-20020a0dd451000000b0055a92559260sm4916023ywd.34.2023.05.11.05.36.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 05:36:04 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-55a26b46003so129629487b3.1;
+        Thu, 11 May 2023 05:36:03 -0700 (PDT)
+X-Received: by 2002:a81:8a05:0:b0:556:1b32:343b with SMTP id
+ a5-20020a818a05000000b005561b32343bmr19413336ywg.45.1683808563363; Thu, 11
+ May 2023 05:36:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v1-12-6c4698dcf9c8@linaro.org>
-References: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
-In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+References: <20230510110557.14343-6-tzimmermann@suse.de> <202305102136.eMjTSPwH-lkp@intel.com>
+ <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com> <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
+ <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+In-Reply-To: <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 May 2023 14:35:51 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
+Message-ID: <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        kernel test robot <lkp@intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Sam Ravnborg <sam@ravnborg.org>, suijingfeng@loongson.cn,
+        oe-kbuild-all@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Making virt_to_pfn() a static inline taking a strongly typed
-(const void *) makes the contract of a passing a pointer of that
-type to the function explicit and exposes any misuse of the
-macro virt_to_pfn() acting polymorphic and accepting many types
-such as (void *), (unitptr_t) or (unsigned long) as arguments
-without warnings.
+Hi Arnd,
 
-For symmetry, do the same with pfn_to_virt().
+CC Artur, who's working on HP Jornada 680.
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- arch/m68k/include/asm/page_mm.h | 11 +++++++++--
- arch/m68k/include/asm/page_no.h | 11 +++++++++--
- 2 files changed, 18 insertions(+), 4 deletions(-)
+On Wed, May 10, 2023 at 5:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Wed, May 10, 2023, at 16:27, Thomas Zimmermann wrote:
+> > Am 10.05.23 um 16:15 schrieb Arnd Bergmann:
+> >> On Wed, May 10, 2023, at 16:03, kernel test robot wrote:
+>
+> >> I think that's a preexisting bug and I have no idea what the
+> >> correct solution is. Looking for HD64461 shows it being used
+> >> both with inw/outw and readw/writew, so there is no way to have
+> >> the correct type. The sh __raw_readw() definition hides this bug,
+> >> but that is a problem with arch/sh and it probably hides others
+> >> as well.
+> >
+> > The constant HD64461_IOBASE is defined as integer at
+> >
+> >
+> > https://elixir.bootlin.com/linux/latest/source/arch/sh/include/asm/hd64461.h#L17
+> >
+> > but fb_readw() expects a volatile-void pointer. I guess we could add a
+> > cast somewhere to silence the problem. In the current upstream code,
+> > that appears to be done by sh's __raw_readw() internally:
+> >
+> >
+> > https://elixir.bootlin.com/linux/latest/source/arch/sh/include/asm/io.h#L35
+>
+> Sure, that would make it build again, but that still doesn't make the
+> code correct, since it's completely unclear what base address the
+> HD64461_IOBASE is relative to. The hp6xx platform code only passes it
+> through inw()/outw(), which take an offset relative to sh_io_port_base,
+> but that is not initialized on hp6xx. I tried to find in the history
+> when it broke, apparently that was in 2007 commit 34a780a0afeb ("sh:
+> hp6xx pata_platform support."), which removed the custom inw/outw
+> implementations.
 
-diff --git a/arch/m68k/include/asm/page_mm.h b/arch/m68k/include/asm/page_mm.h
-index 3903db2e8da7..40bcc6aa33da 100644
---- a/arch/m68k/include/asm/page_mm.h
-+++ b/arch/m68k/include/asm/page_mm.h
-@@ -121,8 +121,15 @@ static inline void *__va(unsigned long x)
-  * TODO: implement (fast) pfn<->pgdat_idx conversion functions, this makes lots
-  * of the shifts unnecessary.
-  */
--#define virt_to_pfn(kaddr)	(__pa(kaddr) >> PAGE_SHIFT)
--#define pfn_to_virt(pfn)	__va((pfn) << PAGE_SHIFT)
-+static inline unsigned long virt_to_pfn(const void *kaddr)
-+{
-+	return __pa(kaddr) >> PAGE_SHIFT;
-+}
-+
-+static inline void * pfn_to_virt(unsigned long pfn)
-+{
-+	return __va(pfn << PAGE_SHIFT);
-+}
- 
- extern int m68k_virt_to_node_shift;
- 
-diff --git a/arch/m68k/include/asm/page_no.h b/arch/m68k/include/asm/page_no.h
-index 060e4c0e7605..f1daf466a57b 100644
---- a/arch/m68k/include/asm/page_no.h
-+++ b/arch/m68k/include/asm/page_no.h
-@@ -19,8 +19,15 @@ extern unsigned long memory_end;
- #define __pa(vaddr)		((unsigned long)(vaddr))
- #define __va(paddr)		((void *)((unsigned long)(paddr)))
- 
--#define virt_to_pfn(kaddr)	(__pa(kaddr) >> PAGE_SHIFT)
--#define pfn_to_virt(pfn)	__va((pfn) << PAGE_SHIFT)
-+static inline unsigned long virt_to_pfn(const void *kaddr)
-+{
-+	return __pa(kaddr) >> PAGE_SHIFT;
-+}
-+
-+static inline void * pfn_to_virt(unsigned long pfn)
-+{
-+	return __va(pfn << PAGE_SHIFT);
-+}
- 
- #define virt_to_page(addr)	(mem_map + (((unsigned long)(addr)-PAGE_OFFSET) >> PAGE_SHIFT))
- #define page_to_virt(page)	__va(((((page) - mem_map) << PAGE_SHIFT) + PAGE_OFFSET))
+See also commit 4aafae27d0ce73f8 ("sh: hd64461 tidying."), which
+claims they are no longer needed.
+
+Don't the I/O port macros just treat the port as an absolute base address
+when sh_io_port_base isn't set?
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-2.34.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
