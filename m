@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3251D6FF0D0
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 14:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A15A6FF0D3
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 14:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbjEKMAD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 08:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S237962AbjEKMAG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 May 2023 08:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237928AbjEKL7y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 07:59:54 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA3A93F4
-        for <linux-arch@vger.kernel.org>; Thu, 11 May 2023 04:59:50 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4effb818c37so9654827e87.3
-        for <linux-arch@vger.kernel.org>; Thu, 11 May 2023 04:59:50 -0700 (PDT)
+        with ESMTP id S237852AbjEKL74 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 07:59:56 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC7249E9
+        for <linux-arch@vger.kernel.org>; Thu, 11 May 2023 04:59:51 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f26f437b30so501131e87.1
+        for <linux-arch@vger.kernel.org>; Thu, 11 May 2023 04:59:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683806388; x=1686398388;
+        d=linaro.org; s=google; t=1683806389; x=1686398389;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p9HwjvVojH9hO+PcXlqtL0N9aNW9rB2MppMH77zfxVc=;
-        b=h0huwFcuyufkrW22b7sSvhGB+Ccc6Lvo9LGZiN8vwcbnU3/n9iarupyO8uSUn0mH7F
-         UImAdUl3W888BP2VJ8/y8hWeLPQaZrBrjm/Nu0uLf1rKtgfpgHOHOP3tTQ9zFsRYQoKI
-         fGAtPet9xa7ZtgZBS/HBd67ncf+0PhGxnnIJLi+0TR3kFXVIwxrxsSsx9kN2u2S00z2X
-         5KFPOq38DBsV6TYrMad4lE6aD4UesfNWsMyc8GuXrhIa7ASsSuoxihIooTid0hE5RsnF
-         bNeaAbNDtKQlSprjkgw+hz3rwPgZB+BNN+D6bTWYVkWkC3zgqquZjKjZxaDyStXaw9xj
-         elHQ==
+        bh=2CPc/Vm/Ur0JOy8kF/L6fs0qWXc+VKBrwCqiZQE3hiQ=;
+        b=us1qr2gpwQ3bBAky0xvbHlSTRCtb1nydasm8z39XkazIJzESLaqNzEYvSDrqWvBqBX
+         4xcES64hit/N9fYugYwoV5W3g4eBVSitwsbnnifZ0lNM9KhPgKlQsFulFvXvE2t+KR4U
+         ORQ5OFqloYcfrHKwTO12OVVscWtd5hVcDmECRKCgjTthI9wyAS5zhkAj5RdT8DId2mTE
+         5+ejX9H2q5kq1KWIA7iOUhoaa7GyZwuQHvQ3gEGe/NTiXYuogO2QROPtUakEjm0CnwbK
+         kvsZHLKeUbzU9xoleFgHTrQZPpPyif74SXwCAcrOuKmxwemz6uMXGapYyPfo5nL/aCgI
+         pNdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683806388; x=1686398388;
+        d=1e100.net; s=20221208; t=1683806389; x=1686398389;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p9HwjvVojH9hO+PcXlqtL0N9aNW9rB2MppMH77zfxVc=;
-        b=i+tkohpF2Lz05EHkQ6iqS6SPDVklzTFLWX3vwTaK0ldD58rBZc/ap2srmLHXNsrMnM
-         FaTIz9PwSQ+855SMo68YXvLijZYbnNuzcQ1b8dw3tkNGp/mIXLxKvGdr+LdU2yt1o3oP
-         Aso20+pB/zaAnsm0WaLaxiGezUpnIGrD5+m1npz+e1jF6vY/Kd2fxzCiwU4GWfiYX+Gn
-         RU0h2QgBjiIDjzpUUaQfR0z7q81WmXVNUcAZ52DPT2Z8hP3jmFs3cdW95EUYodrRRPHi
-         OfKBtPBlowAvLnBOP7co+2tTaxkInF70A0oM5iziB249oN2rnqIh7ReDrwjW4Hci+z0x
-         I9Iw==
-X-Gm-Message-State: AC+VfDz+pja2jZS2g7oO1/B2QBFijcx/0maG7UPlnP6weUtUlDIO39Zw
-        ZESP3/us5wOLRuotigktweSHQw==
-X-Google-Smtp-Source: ACHHUZ4qGS9xBErA7Vxmp86kEFbZREMrSwBsY/Yl8Ba5RFvn3cUSOtGcwzeX5nOwmTp3pnnJ0geHYA==
-X-Received: by 2002:a19:f813:0:b0:4ec:a48a:28c0 with SMTP id a19-20020a19f813000000b004eca48a28c0mr2749652lff.25.1683806388439;
-        Thu, 11 May 2023 04:59:48 -0700 (PDT)
+        bh=2CPc/Vm/Ur0JOy8kF/L6fs0qWXc+VKBrwCqiZQE3hiQ=;
+        b=HFqn8tR4U1qQDD8uj6m1DAdRR1FtKaCqgeloXavwkCpLebp3bBCTL9FFR3stFaQRHK
+         uR8yEoaKV9/kroH/cx46QocYBdb30OXJi2SqaHAFXBwB/vphALq+R1k9YMrRcVDrv29C
+         I8BUnRQHHkOlg6Rj5qvXLb2zRfKTbMqEpOF3pgd4XiknB3WjYUfQfOk8GzARN+9wod2b
+         qqZKGDpOgQRNAS17s7TY9EpUJYMZiCocp9uR572yf4aJhtemUYuHQpwfazF1VTeAz4nx
+         QfkxggHB3dsLnRLJ41fVeLCzRo5Kw8inYQvzHMmvJFDrei5eOi6svbmKXYRb7Y16GBI1
+         9EGA==
+X-Gm-Message-State: AC+VfDyYqkqYWHhSfQK/WBEc0vqp75Nk/VD8Mj/FRVlAZPYE+BJJNTKi
+        9EjmsG1oNR4fJlpBiS59fWUF7w==
+X-Google-Smtp-Source: ACHHUZ4QkE8eS3TpZoQ27rQu2+0fhZ0L6/1Hi4I8nOp2Q9+9XqczCBc3KV8aWbi1HyhYGQflHWz/3A==
+X-Received: by 2002:ac2:5fae:0:b0:4ea:fa07:1182 with SMTP id s14-20020ac25fae000000b004eafa071182mr2670102lfe.14.1683806389365;
+        Thu, 11 May 2023 04:59:49 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id f16-20020ac25090000000b004cb23904bd9sm1100841lfm.144.2023.05.11.04.59.47
+        by smtp.gmail.com with ESMTPSA id f16-20020ac25090000000b004cb23904bd9sm1100841lfm.144.2023.05.11.04.59.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 04:59:48 -0700 (PDT)
+        Thu, 11 May 2023 04:59:49 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 13:59:19 +0200
-Subject: [PATCH 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+Date:   Thu, 11 May 2023 13:59:20 +0200
+Subject: [PATCH 03/12] ARC: init: Pass a pointer to virt_to_pfn() in init
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v1-2-6c4698dcf9c8@linaro.org>
+Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v1-3-6c4698dcf9c8@linaro.org>
 References: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
 In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
 To:     Geert Uytterhoeven <geert@linux-m68k.org>,
@@ -72,7 +72,7 @@ Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
 X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,81 +88,26 @@ many architectures implement virt_to_pfn() as a macro,
 this function becomes polymorphic and accepts both a
 (unsigned long) and a (void *).
 
-Fix up the offending calls in arch/m68k with explicit casts.
+Fix up the offending call in arch/arc with an explicit cast.
 
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
-ChangeLog v1->v2:
-- Add an extra parens around the page argument to the
-  PD_PTABLE() macro, as is normally required.
----
- arch/m68k/mm/motorola.c | 4 ++--
- arch/m68k/mm/sun3mmu.c  | 2 +-
- arch/m68k/sun3/dvma.c   | 2 +-
- arch/m68k/sun3x/dvma.c  | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+ arch/arc/mm/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
-index 911301224078..c75984e2d86b 100644
---- a/arch/m68k/mm/motorola.c
-+++ b/arch/m68k/mm/motorola.c
-@@ -102,7 +102,7 @@ static struct list_head ptable_list[2] = {
- 	LIST_HEAD_INIT(ptable_list[1]),
- };
+diff --git a/arch/arc/mm/init.c b/arch/arc/mm/init.c
+index 2b89b6c53801..9f64d729c9f8 100644
+--- a/arch/arc/mm/init.c
++++ b/arch/arc/mm/init.c
+@@ -87,7 +87,7 @@ void __init setup_arch_memory(void)
+ 	setup_initial_init_mm(_text, _etext, _edata, _end);
  
--#define PD_PTABLE(page) ((ptable_desc *)&(virt_to_page(page)->lru))
-+#define PD_PTABLE(page) ((ptable_desc *)&(virt_to_page((void *)(page))->lru))
- #define PD_PAGE(ptable) (list_entry(ptable, struct page, lru))
- #define PD_MARKBITS(dp) (*(unsigned int *)&PD_PAGE(dp)->index)
+ 	/* first page of system - kernel .vector starts here */
+-	min_low_pfn = virt_to_pfn(CONFIG_LINUX_RAM_BASE);
++	min_low_pfn = virt_to_pfn((void *)CONFIG_LINUX_RAM_BASE);
  
-@@ -201,7 +201,7 @@ int free_pointer_table(void *table, int type)
- 		list_del(dp);
- 		mmu_page_dtor((void *)page);
- 		if (type == TABLE_PTE)
--			pgtable_pte_page_dtor(virt_to_page(page));
-+			pgtable_pte_page_dtor(virt_to_page((void *)page));
- 		free_page (page);
- 		return 1;
- 	} else if (ptable_list[type].next != dp) {
-diff --git a/arch/m68k/mm/sun3mmu.c b/arch/m68k/mm/sun3mmu.c
-index b619d0d4319c..c5e6a23e0262 100644
---- a/arch/m68k/mm/sun3mmu.c
-+++ b/arch/m68k/mm/sun3mmu.c
-@@ -75,7 +75,7 @@ void __init paging_init(void)
- 		/* now change pg_table to kernel virtual addresses */
- 		pg_table = (pte_t *) __va ((unsigned long) pg_table);
- 		for (i=0; i<PTRS_PER_PTE; ++i, ++pg_table) {
--			pte_t pte = pfn_pte(virt_to_pfn(address), PAGE_INIT);
-+			pte_t pte = pfn_pte(virt_to_pfn((void *)address), PAGE_INIT);
- 			if (address >= (unsigned long)high_memory)
- 				pte_val (pte) = 0;
- 			set_pte (pg_table, pte);
-diff --git a/arch/m68k/sun3/dvma.c b/arch/m68k/sun3/dvma.c
-index f15ff16b9997..83fcae6a0e79 100644
---- a/arch/m68k/sun3/dvma.c
-+++ b/arch/m68k/sun3/dvma.c
-@@ -29,7 +29,7 @@ static unsigned long dvma_page(unsigned long kaddr, unsigned long vaddr)
- 	j = *(volatile unsigned long *)kaddr;
- 	*(volatile unsigned long *)kaddr = j;
- 
--	ptep = pfn_pte(virt_to_pfn(kaddr), PAGE_KERNEL);
-+	ptep = pfn_pte(virt_to_pfn((void *)kaddr), PAGE_KERNEL);
- 	pte = pte_val(ptep);
- //	pr_info("dvma_remap: addr %lx -> %lx pte %08lx\n", kaddr, vaddr, pte);
- 	if(ptelist[(vaddr & 0xff000) >> PAGE_SHIFT] != pte) {
-diff --git a/arch/m68k/sun3x/dvma.c b/arch/m68k/sun3x/dvma.c
-index 08bb92113026..a6034ba05845 100644
---- a/arch/m68k/sun3x/dvma.c
-+++ b/arch/m68k/sun3x/dvma.c
-@@ -125,7 +125,7 @@ inline int dvma_map_cpu(unsigned long kaddr,
- 			do {
- 				pr_debug("mapping %08lx phys to %08lx\n",
- 					 __pa(kaddr), vaddr);
--				set_pte(pte, pfn_pte(virt_to_pfn(kaddr),
-+				set_pte(pte, pfn_pte(virt_to_pfn((void *)kaddr),
- 						     PAGE_KERNEL));
- 				pte++;
- 				kaddr += PAGE_SIZE;
+ 	/* Last usable page of low mem */
+ 	max_low_pfn = max_pfn = PFN_DOWN(low_mem_start + low_mem_sz);
 
 -- 
 2.34.1
