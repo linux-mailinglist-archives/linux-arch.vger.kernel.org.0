@@ -2,132 +2,207 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C12B6FF1D5
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 14:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559836FF216
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 15:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237788AbjEKMtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 08:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S231429AbjEKNF4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 May 2023 09:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237779AbjEKMta (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 08:49:30 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4519C6E86;
-        Thu, 11 May 2023 05:49:25 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id A028D2B069A3;
-        Thu, 11 May 2023 08:49:20 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 11 May 2023 08:49:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1683809360; x=1683816560; bh=d2I3MJoGb9Q0k1pggTIspxukMh9F288HwWB
-        EZkJydBM=; b=EaT8QDsGJiHFxT+LJIqn2fEflreLZWqKGpVDwbrPLYvL1wt4nLg
-        Wa1WNW+6odEbrT8vWG4Kqkt+XnHCbupWK6S+GXNiSev5T5S8qdVptnwvrdvaaypO
-        DxjOXrlGw3MTnH2SHlm0saVDo2Vd/MH+coOuqnxVibh+pIY7tCYKM91yc2+lwfAY
-        8Uc2AImEQiSqaPkFH2OZMZZ6uXWu/+4L6TrxtkbPQuvAgmwNbIpat8dyWeE65WLr
-        FepOVjK9s4dKMRV4F5hYmRYR+t6pmOJCCfLHN3yAKTmYYofcqSRReJX/58keVUGZ
-        /qacxa7dNgui0WGS51SJYWw3o+gkd4E/o3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683809360; x=1683816560; bh=d2I3MJoGb9Q0k1pggTIspxukMh9F288HwWB
-        EZkJydBM=; b=jB9XvrdWPUTvwh1iDY/3NDQnzSrog8ELb1h9L6ikkVOhDtmVDz3
-        UXAE5Lfnsb1qGvgzMXsuGMtW7DAOXrZUF0n3em0sgcghRqYnzwQRhIBzcvAHtYIC
-        dz7ZcosF3AQPao+lh5E5QQNhIUKMyozAL6w1I/BEh06mRkVMXxyIKxgQjVFOBQJs
-        +qn35bkU+cxGHXhW0HPtsju+GE+7hIaFH7AtuAcdjCwDuIBXfwJgaXumToGqAG9v
-        sbHIo24d/eBn7IIu6FJKuWDyuFr9H2c8qDhKBrLkmoqiDvXdpn6+vGeMFizRdU44
-        I9XCsw3OdQRl8ibPdLeZecXx1RH0d+WvXTQ==
-X-ME-Sender: <xms:TuRcZA4pAKPMmi7NEPfI-jLSQXmHRDtm7W6A9M2gFiJw_2zwTZ9fKA>
-    <xme:TuRcZB4r0tClLPdVZMNorjPuw_9H3qKfjnEZHs0h_BMh80peLqqeNakHDRm_wYK_v
-    C2p3s5VZ5IB8O7TQ28>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
-    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:TuRcZPenQXcfeUqmz-DfyRWxTt2mOy2jd9F75_W0kvLW9Zg0R_GJjg>
-    <xmx:TuRcZFLacxJD9zWaXSC8lel2meoqhOP82JKYSavCgBWS3l9n_bXBbA>
-    <xmx:TuRcZEJlVY3mEQHhFeaLrOMkszBMbmlk-SePu_RRbt-YzeFdA5a8jw>
-    <xmx:UORcZBYC0UB6UD24jDdNcFRC8O72IQAijFL3Wl-pXlCc3rY08CNRqgVB5t4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A9369B60086; Thu, 11 May 2023 08:49:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
-Mime-Version: 1.0
-Message-Id: <4976d32d-b73f-49e5-9e15-78786d77dc8f@app.fastmail.com>
-In-Reply-To: <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
-References: <20230510110557.14343-6-tzimmermann@suse.de>
- <202305102136.eMjTSPwH-lkp@intel.com>
- <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
- <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
- <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
- <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
-Date:   Thu, 11 May 2023 14:48:58 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "kernel test robot" <lkp@intel.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Vineet Gupta" <vgupta@kernel.org>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Sam Ravnborg" <sam@ravnborg.org>, suijingfeng@loongson.cn,
-        oe-kbuild-all@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Artur Rojek" <contact@artur-rojek.eu>
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
-Content-Type: text/plain;charset=utf-8
+        with ESMTP id S231464AbjEKNF4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 09:05:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7301FF2;
+        Thu, 11 May 2023 06:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1683810308; i=deller@gmx.de;
+        bh=NQqZVO7q0AzD6O3qUHr/zOC6q7eA09+N7H7wJE1dLgo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=IwhEYcVfW0U0V0dlTNp9aXOlVY1SmmwaAnbT7uRf1l1it7kwkmN/5bFxi1r3BvcXI
+         4lrcxpFo9mTSqRZMqNKCGzwSgnMsXGvPqkwfq1mpPHMW1X3pi2mqD+Ymlm5ElyfTrO
+         F4BcgvgnDCSF0UAeDjWX7XH44qGuhW54Et5madzLYkwP5vx4fUDiGmHgzOwk25PNaC
+         NyoUSmPIem5R3pL13+e+1zTkxMe9r1nEvGM7k4Z6/Olq3q5FJ3oNCbJ9I4HC3O4F2s
+         BTfHJCfxj23Ojaw3Fux9pJQkHwFt5rTizFIQF6MJRBZ2c98ILBMlabrTmfzuQ6bGl1
+         6/XNE2+HV+elA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.77.61] ([109.43.178.145]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwQT9-1qDfYk49Rt-00sMYT; Thu, 11
+ May 2023 15:05:08 +0200
+Message-ID: <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
+Date:   Thu, 11 May 2023 15:05:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Sui Jingfeng <15330273260@189.cn>, geert@linux-m68k.org,
+        javierm@redhat.com, daniel@ffwll.ch, vgupta@kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name, davem@davemloft.net,
+        arnd@arndb.de, sam@ravnborg.org
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+References: <20230510110557.14343-1-tzimmermann@suse.de>
+ <20230510110557.14343-2-tzimmermann@suse.de>
+ <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn>
+ <a2315b9a-0747-1f0f-1f0a-1c6773931db4@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <a2315b9a-0747-1f0f-1f0a-1c6773931db4@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:xuEOlcJHM9j74UL03mkKgceEShxgamhjob7lybOe4cSo0vz1X2x
+ BVAJGbjak/DT0G0C8FIsSEmPJzCeX1Sr0L3wH0HoDfhOoKuF+A2+4m/Hr4TSOCHpKfhNytZ
+ wakn4EPMStBz08AlWasJn2HnXJxm/rmNuYCy4rIrm8xpJ+NPc0wNuaKYFJvLVpxj4mKHDSR
+ a3GbIV2wnVdX/HqY8Uhdw==
+UI-OutboundReport: notjunk:1;M01:P0:/9D0KbTrXMA=;02q5SnDmGt7rAOe4hQK+ROjDdR2
+ pjzMz18/ot1pLTQSwGJMJABUW9hA4sq6VmyKNzZ6Pl7M6j1HowqK0GrjdnxQCB0UHWr9jiwAK
+ eZ9s4vh0AaJVq5mIRSXMlP8IBla+2sFu5/0Yt2ebw2wUZfgKSA0kTkRN6sa4biFPKjN+BH0Vt
+ QEz6JW1vWVTwirv5roA+wmopZh2hyF6rGME9AaMAYa++4fAvRSOqSM8h5Tt1HT8uDChp33jQu
+ /bZPrQSV9U9kkTKmg3F/NNI9DAcoq5zfRMitqLq+mTZf/nAiiy+Cu7zoBKb6bmR54hUsGkucK
+ AAUUYP/YLCKJSahYYbAf471k2CoeEvlqW0mUtuGq2sTpyeRDaB7LL19eCAJQD6v6YWfSjjyML
+ 8h4ItTnLLo+4Dy5ESCEBBJPjjxxwWKxWnqViAZh2s1aGq8ZI8QOtcNc2E8atCD73tJOxyIm5R
+ G8MuOyWNFgy5PvXdlyRMvCflHKRdcpzpf7soPm0+VwnZXYckI9uPMGbO+1/h4LAxCkC0Tpm2k
+ O76wXCx3k1IUxRQMSQ/QF2hml10A9LARj8VyWpP0sazJQoLLiyxoNKHYXhsH/mXyed2lfSPiB
+ noVepWJ9lUbT6yRcqB2fI+1/2e5g7dIYLnHDtswOQRYSx7yp7ZuOTKbIj7bjX5E/yi6Lsvrn9
+ /6iIDw5xyHoFeXq10NxvYIJ/qbPygdSi6HrdWjLNM/7GpJekf24KcF6z37GLTrvqEeF9geDQz
+ zWF36or0s9iY7CNkIGoUkw4nob8fGPRWAAcYKZTYXhIuGti8jYdJv17hdPmZH46KC9ng9n2x3
+ AfMwM3IqdCMfSSw+mhvE8QBFZzme30ua2CzDpgjkvg0Qt1AS1yiAJl7QxN3dyf5KgPNuP+zu5
+ zgbmbvXr8gWD1jJqzgd2L/GnNcJGBKw5jn6W0591BeirwUT9Wa1ykM7r7Xt58VSkwhELokBjl
+ apc1vQ==
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 11, 2023, at 14:35, Geert Uytterhoeven wrote:
-> CC Artur, who's working on HP Jornada 680.
+On 5/11/23 09:55, Thomas Zimmermann wrote:
+> Hi
 >
-> On Wed, May 10, 2023 at 5:55=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
-wrote:
->> On Wed, May 10, 2023, at 16:27, Thomas Zimmermann wrote:
->> > Am 10.05.23 um 16:15 schrieb Arnd Bergmann:
->> >> On Wed, May 10, 2023, at 16:03, kernel test robot wrote:
+> Am 10.05.23 um 20:20 schrieb Sui Jingfeng:
+>> Hi, Thomas
+>>
+>>
+>> I love your patch, yet something to improve:
+>>
+>>
+>> On 2023/5/10 19:05, Thomas Zimmermann wrote:
+>>> Fix coding style. No functional changes.
+>>>
+>>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+>>> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>>> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+>>> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>>> ---
+>>> =C2=A0 drivers/video/fbdev/matrox/matroxfb_accel.c | 6 +++---
+>>> =C2=A0 drivers/video/fbdev/matrox/matroxfb_base.h=C2=A0 | 4 ++--
+>>> =C2=A0 2 files changed, 5 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/video/fbdev/matrox/matroxfb_accel.c b/drivers/vid=
+eo/fbdev/matrox/matroxfb_accel.c
+>>> index 9cb0685feddd..ce51227798a1 100644
+>>> --- a/drivers/video/fbdev/matrox/matroxfb_accel.c
+>>> +++ b/drivers/video/fbdev/matrox/matroxfb_accel.c
+>>> @@ -88,7 +88,7 @@
+>>> =C2=A0 static inline void matrox_cfb4_pal(u_int32_t* pal) {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int i;
+>>> -
+>>> +
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < 16; i++) {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pal[i] =3D i * =
+0x11111111U;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>> @@ -96,7 +96,7 @@ static inline void matrox_cfb4_pal(u_int32_t* pal) {
+>>> =C2=A0 static inline void matrox_cfb8_pal(u_int32_t* pal) {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int i;
+>>> -
+>>> +
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < 16; i++) {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pal[i] =3D i * =
+0x01010101U;
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>> @@ -482,7 +482,7 @@ static void matroxfb_1bpp_imageblit(struct matrox_=
+fb_info *minfo, u_int32_t fgx,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 /* Tell... well, why bother... */
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 while (height--) {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 size_t i;
+>>> -
+>>> +
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (i =3D 0; i < step; i +=3D 4) {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Hope that the=
+re are at least three readable bytes beyond the end of bitmap */
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fb_writel(get_un=
+aligned((u_int32_t*)(chardata + i)),mmio.vaddr);
+>>> diff --git a/drivers/video/fbdev/matrox/matroxfb_base.h b/drivers/vide=
+o/fbdev/matrox/matroxfb_base.h
+>>> index 958be6805f87..c93c69bbcd57 100644
+>>> --- a/drivers/video/fbdev/matrox/matroxfb_base.h
+>>> +++ b/drivers/video/fbdev/matrox/matroxfb_base.h
+>>> @@ -301,9 +301,9 @@ struct matrox_altout {
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 (*verifymode)(void* altout_dev, u_int32_t mode);
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 (*getqueryctrl)(void* altout_dev,
+>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct v4l2_quer=
+yctrl* ctrl);
+>>
+>> Noticed that there are plenty of coding style problems in matroxfb_base=
+.h,
+>>
+>> why you only fix a few of them?=C2=A0=C2=A0 Take this two line as an ex=
+ample, shouldn't
+>>
+>> they be fixed also as following?
 >
-> See also commit 4aafae27d0ce73f8 ("sh: hd64461 tidying."), which
-> claims they are no longer needed.
+> I configured my text editor to remove trailing whitespaces
+> automatically. That keeps my own patches free of them.  But the
+> editor removes all trailing whitespaces, including those that have
+> been there before. If I encounter such a case, I split out the
+> whitespace fix and submit it separately.
 >
-> Don't the I/O port macros just treat the port as an absolute base addr=
-ess
-> when sh_io_port_base isn't set?
+> But the work I do within fbdev is mostly for improving DRM.
 
-As far as I can tell, sh_io_port_base gets initialized to '-1'
-specifically to prevent that from working by accident. So it's
-almost treated as an absolute base address, but the off-by-one
-offset ensures this never actually works unless it was first
-set to the correct value.
+Sure.
 
-      Arnd
+> For the
+> other issues in this file, I don't think that matroxfb should even be
+> around any longer. Fbdev has been deprecated for a long time. But a
+> small number of drivers are still in use and we still need its
+> framebuffer console. So someone should either put significant effort
+> into maintaining fbdev, or it should be phased out. But neither is
+> happening.
+
+You're wrong.
+
+You don't mention that for most older machines DRM isn't an acceptable
+way to go due to it's limitations, e.g. it's low-speed due to missing
+2D-acceleration for older cards and and it's incapability to change screen
+resolution at runtime (just to name two of the bigger limitations here).
+So, unless we somehow find a good way to move such drivers over to DRM
+(with a set of minimal 2D acceleration), they are still important.
+
+Actually, I just did test matroxfb and pm2fb successfully a few days back,=
+ and
+they worked. For some smaller issues I've prepared patches, which are on h=
+old
+due conflicts with your latest file-move-around- and whitespace-changes wh=
+ich are partly
+in drm-misc.
+And I do have some upcoming additional patches for console support.
+
+Helge
