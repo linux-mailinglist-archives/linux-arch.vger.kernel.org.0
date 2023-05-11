@@ -2,68 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329526FEECB
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 11:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7D96FEEDD
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 11:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237240AbjEKJ3W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 05:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S237110AbjEKJbI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 May 2023 05:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237493AbjEKJ2y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 05:28:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066E45FD8;
-        Thu, 11 May 2023 02:28:45 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ab0c697c2bso77815845ad.1;
-        Thu, 11 May 2023 02:28:44 -0700 (PDT)
+        with ESMTP id S236592AbjEKJbH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 05:31:07 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4884EEC;
+        Thu, 11 May 2023 02:31:06 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-757741ca000so500431385a.2;
+        Thu, 11 May 2023 02:31:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683797324; x=1686389324;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683797466; x=1686389466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5AKArW/9N1DM1cw/nq7oO3Ipc/BxTBMz8SQU51oi5QM=;
-        b=lSqSpkTeYoe3tO29lldpVHbM32z393QYWP5lHnZIBWCvEarPeFYrVLxfqpKRFeiMH9
-         O/4rvObcKOyglqs8faTtrmcVYFQ8XJOPmtyKy2kiWHSt1RBmvearJPkZQEhcKNjXUV44
-         zPmk9SGD5swqjEFi8vzVyC7S7hRLhT8oymp0Nn+j0Lqb53GMv6htmJ3pwBf5TwaV1uFR
-         bqB49lbtbgVPuSNA3cLK217LA3Bph6pGjOU+UaaDA/QzyAdGYXsakKnwD8no18SkjADS
-         VxaC3PcxwjVwmU+nKQWSxICPOzqvM3jml+aMSgjVP8wtczWmTNUNx3u/IsGxy11QAZfk
-         GwwA==
+        bh=44LgLHJDIULJkMBem069KICIq3uxO214CaUgM8dXQT8=;
+        b=BDA3XAW6HVHBBCTylbjq0CrSvwep3z/RKHIin6eHkOxIgxSvF9oCpp4JdMxjhKCg8a
+         t6De61RAZB8nwhqVhhnd+GwGOl5A9f6x8ta1mhnXQNHIA8XVVWTsZ3z2sLNVKJGzzpnv
+         pVJ84YIgNXNe3zzg0Bt2DTwq5JDGQGStI/fGod4pqnCGfyQ7QKofa8hYUqI7j01kYIh5
+         pdBpovGUxFwqp+4kZG7VlWddqhNwbB9KXu5x5m7XiaxjuDvLIgeFm1gLHxbutaTsEe0t
+         4R0BYZnEDMzRXc8veBcbo5PxiVrNC+0sZriJIWCU7Z1JN7IWfsEaHn66MIjE5tmEuP4w
+         GExw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797324; x=1686389324;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683797466; x=1686389466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5AKArW/9N1DM1cw/nq7oO3Ipc/BxTBMz8SQU51oi5QM=;
-        b=OysjBIQnpYcG3jJJYoGM6rJHu6aDTnGL1rTF1xYYL6BQHQKe/w3PZ29gaB9/OoVQa+
-         DGS/yVDet+oyNDcLf/DQGCN84dvzYEPSCv86XSCzWqE0WHqQYceaZGQEAcOe+jin9C8y
-         F0CXN75MBgR9zJt8GOdHo+rn069hUuoFzCvJ1Aar1q5ZYOc3ts8GpJoWhn7XGQ5t7Epi
-         dqwvHBdj8iHRnwR75chTkzfb9lPXYdSscXh1AKsXTeAQz5zf1jjkZY8Wq3mzS4UTsygx
-         LwDAHCFeDVRCS1owT8URj3bvEkykXdU+ycI1TKG60tjnLnic08Ya2gAMaC/wFz104dq4
-         vwUg==
-X-Gm-Message-State: AC+VfDxBu0+kKJ9oo/1552kONkhgkp26F61Ii2Iho3n9SrJdh6Q+d4A0
-        ni6gKY0Jj3V/Ma7uKg3sFVNNT2PSAUYkpQ==
-X-Google-Smtp-Source: ACHHUZ4kt2fEW6y1LT9sL5KAOXOvB6IxvXmm6lpgkO77jh+uBd0sq2MbCeuvBayswScpQ/VmBXnGwQ==
-X-Received: by 2002:a17:902:db0e:b0:1ab:12cf:9e1c with SMTP id m14-20020a170902db0e00b001ab12cf9e1cmr23993360plx.32.1683797324390;
-        Thu, 11 May 2023 02:28:44 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-019.fbsv.net. [2a03:2880:ff:13::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902e9cd00b001ab0669d84csm5407877plk.26.2023.05.11.02.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 02:28:44 -0700 (PDT)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-api@vger.kernel.org, kernel-team@meta.com,
-        linux-arch@vger.kernel.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] arm64: wire up cachestat for arm64
-Date:   Thu, 11 May 2023 02:28:43 -0700
-Message-Id: <20230511092843.3896327-1-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
-References: <20230510195806.2902878-1-nphamcs@gmail.com>
+        bh=44LgLHJDIULJkMBem069KICIq3uxO214CaUgM8dXQT8=;
+        b=dOB9EqJRKU9yOdD/XZ2T/hNNSCFQtAGKxLUU16T6mVKz6TCWCNalINroxiiD+sbp+Q
+         N406tuWlnXrlHLE2XghdpM1R3uUH36/6YyhUpY3pcf530A7VBgwc1oc16edXX3Ev6GXs
+         LBNQKqX1qhl2XbgpqAYRY9CZ87xGR7xBkKEcvVQw3uWauWfGtzjMRZV4IMh71TRci4jH
+         SFrooGCERFq2zkzbvwiIg/zPCHBSsLTZ1IZ/vFfLCZyAEVJcl917xswax7omKu2TB8gr
+         Eh7yq94a71+WRcFrOC+k7GuokGZbJbvPS8EGTWotP4K3o7XyytgSr1KhNmmjNqyFGvI7
+         Wfrg==
+X-Gm-Message-State: AC+VfDzWHForSBQse/Glxvyj0A7Qwsifs7e0vqzajeOPLXEXBtCnBeU2
+        uMOe012FZ5yNduh3m9Uq3zTkdCRCOOUnWZCK5tk=
+X-Google-Smtp-Source: ACHHUZ4gCIyUNhd/+bbAhcP9wNcKpLhKmfok0Ws6ilq/cfwGVAdfDhZw6m7PSHSI2kufFJi8oJq2AHQm2PPca7W1ngo=
+X-Received: by 2002:ad4:5961:0:b0:621:4551:c6dc with SMTP id
+ eq1-20020ad45961000000b006214551c6dcmr7378789qvb.39.1683797465598; Thu, 11
+ May 2023 02:31:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230510195806.2902878-1-nphamcs@gmail.com> <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
+In-Reply-To: <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Thu, 11 May 2023 02:30:54 -0700
+Message-ID: <CAKEwX=OFVkc2GL3jmoC-qAuwZvzxfs7v__aWY=8bLY3MeMq9hA@mail.gmail.com>
+Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-api@vger.kernel.org, kernel-team@meta.com,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>, chris@zankel.net,
+        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,49 +95,31 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-cachestat is a new syscall that was previously wired in for most
-architectures:
+On Thu, May 11, 2023 at 12:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
+>
+> On Wed, May 10, 2023, at 21:58, Nhat Pham wrote:
+> > cachestat is previously only wired in for x86 (and architectures using
+> > the generic unistd.h table):
+> >
+> > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com=
+/
+> >
+> > This patch wires cachestat in for all the other architectures.
+> >
+> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+>
+> The changes you did here look good, but you missed one
+> file that has never been converted to the syscall.tbl format:
+> arch/arm64/include/asm/unistd32.h along with the __NR_compat_syscalls
+> definition in arch/arm64/include/asm/unistd.h, please add those
+> as well, and then
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
-https://lore.kernel.org/linux-mm/20230510195806.2902878-1-nphamcs@gmail.com/
+Just sent a follow-up fixlet for this:
 
-However, those patches miss arm64, which has its own syscall table in arch/arm64.
-This patch wires cachestat in for arm64.
+https://lore.kernel.org/linux-mm/20230511092843.3896327-1-nphamcs@gmail.com=
+/T/#u
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm64/include/asm/unistd.h   | 2 +-
- arch/arm64/include/asm/unistd32.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index 037feba03a51..64a514f90131 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -39,7 +39,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
- 
--#define __NR_compat_syscalls		451
-+#define __NR_compat_syscalls		452
- #endif
- 
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 604a2053d006..d952a28463e0 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -907,6 +907,8 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
- __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
- #define __NR_set_mempolicy_home_node 450
- __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-+#define __NR_cachestat 451
-+__SYSCALL(__NR_cachestat, sys_cachestat)
- 
- /*
-  * Please add new compat syscalls above this comment and update
--- 
-2.34.1
-
+Thanks for the suggestion!
