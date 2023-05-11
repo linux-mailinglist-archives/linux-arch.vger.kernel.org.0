@@ -2,224 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5666FF2C8
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 15:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51206FF338
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 15:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238258AbjEKN2g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 09:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S238085AbjEKNmB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 May 2023 09:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238054AbjEKN2Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 09:28:16 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on20614.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::614])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495DF901F;
-        Thu, 11 May 2023 06:27:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VSFkmLMh1jXBxGzYxSbKGjZ0CXDY7wKLC3TQtx8LElkdsrU8/vnuhfT/MxCNbqapEIDjsdwEp0/jlQJUuooZGPdThaMpsMndLGKBtquWmlKgkvtymBqlPqYGeaBqaQ5+8pz60OboBNZaAmBPMzjk4Wn2ITshGOnQZMPekK5YIkAcw54PTCfjQAHNRVWXGLVdWOyNfV2wDp4G6j6pXYb8zUkDyj7wyTehZrJ+v7XGPz85dBT0JuXBP8Y21m9d+FRxksQSJlgMoMTch5zRI2WHmZeb6X6+c+m5CLcMVmb8cMD+1+MQqiVHxpQU+adNdVc97Iioz9jDkBn8isEpv/Y/8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TnjAyMcbvSZ6flQEIiLeP0RO7E02Pe0ZK4z9wWAIwMw=;
- b=XyVVz7wp9zRvxekt42PxSQJP7rASblp8m+TP04Vd7VR1jQB3RqPtrnc+D4FuqGgLlRJaKrmd2upNkJJBj/ugDYieZgkcEpgD3LNhdoV9z1XwhFbbp5tvJpQC3o5E/r2rr2Zv7/ZY4eaGGyWRZNHgh69wqaqyLT2CF5gic1E7R+Duj32OCgiAfD05BysL2D7jGIuDPrrdFq/Hyr0gUwUoryd/md5h2qVqBQwAnmbHrgW22xXNb1J5sRVo155/UMuuRdiG6F8w/wg+IpjS88ZKPSuohPvbF2WTmOCb56Cd3tpJkuUbOrW4p71p+zM3imcxD1X5+YmMRU2e4ZsrvuwSFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TnjAyMcbvSZ6flQEIiLeP0RO7E02Pe0ZK4z9wWAIwMw=;
- b=H6SF7YmfyZd5bq+4wbGfaQ1YOBlQ5+lVNmDQjnUjx4+8aUPiLPetGkuIwvfE3IOn6y2XRZWwR64JHGzowXBvHWEiPzGrhaaOw5/oWUASJp9Kz8HzMn1LNPBtoETt4i236hCqF9iMZn6/3uhyxqKchGVOa07zaWqjWVJyrFSvoPY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
- IA0PR12MB8086.namprd12.prod.outlook.com (2603:10b6:208:403::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.32; Thu, 11 May 2023 13:26:42 +0000
-Received: from DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::f8b0:cf29:9e21:380]) by DM6PR12MB2810.namprd12.prod.outlook.com
- ([fe80::f8b0:cf29:9e21:380%5]) with mapi id 15.20.6363.032; Thu, 11 May 2023
- 13:26:42 +0000
-Message-ID: <c40fdde7-52d6-c50f-03f4-58584f11ba4d@amd.com>
-Date:   Thu, 11 May 2023 15:25:55 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH V5 11/15] x86/sev: Add a #HV exception handler
-Content-Language: en-US
-From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
-To:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20230501085726.544209-1-ltykernel@gmail.com>
- <20230501085726.544209-12-ltykernel@gmail.com>
- <3ec60d7a-c5e7-2570-a0f2-ef435d904cfd@amd.com>
-In-Reply-To: <3ec60d7a-c5e7-2570-a0f2-ef435d904cfd@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0146.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:6::31) To DM6PR12MB2810.namprd12.prod.outlook.com
- (2603:10b6:5:41::21)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|IA0PR12MB8086:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3233ecf1-3b14-4fe5-4244-08db52235b6d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6qK34l1R4kMFoG76G04VkKyvp2RieEQXV9KmmXcqXbirbqacFCqOHuGEwxKk7vRj3vluNB8JIsiVOQkiJg7+OBH4RGnMENsgSIf5KT+zMkNpADA8fmTD4ay9FORd9s+ZZu/Lj0ZVUkQWIDeqGL66aD0uYY+IkMgIBYlhYo+iXA6F/H9O7WHbG/1uGDPBERQiLkWfYJfDReWPSH9Ey+keS3AoFbi7DRlDfF/d25YnK1iNhzOqlWJHWGFk7cWmN5UE3rRpoVbhjpMH2eKbl0GXNVNPi8EfEDSemOs9VYxKDkcyRLsI45KQJVZUW7a7t4uz+9iARzoa0a8O8JiKr/IUuC3HZWAjBIX/m1gl20nmGftM6aIihsi7C1oXbTi6KadO9Xb/nBHjjPbX5i+M5rxU7d+txVH6BSNo6pSCfI4L2DLBo/hrSWW4yBEO1VTaer8s+eLt+ZieXNXYWj2/GYeHLJl7QIJGHCRlclUelj0uTLfjPtCmXF7y1MRQX5vjSbaxD5gGFdV/UZF7H5O395DH0HNtHCinT+1JxIPh6FrhT79XnMj+MA56LMjJ4rAiBM99Nw/uHERnpRKWV5Y0dms3EKOkXiVurydIvVzOqZdIQRPO2ow0IcuF3i+JVZuoc0eglr5OHi4DojotAVvtjIV9QFQqVXu9ZoDVSC2J0Ntyo+I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(39860400002)(366004)(396003)(451199021)(66476007)(5660300002)(4326008)(31686004)(8936002)(2906002)(8676002)(316002)(66556008)(41300700001)(478600001)(6666004)(45080400002)(66946007)(7416002)(7406005)(31696002)(966005)(6506007)(6486002)(26005)(6512007)(53546011)(186003)(2616005)(83380400001)(36756003)(921005)(38100700002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2FmRitLd2RVNm04aVFHMWdRZ3AxQlhwQlBWbmFwZFZXYno0SkkwNmdQWmZu?=
- =?utf-8?B?dlkwZ1NZajFIbXBoNDJXOUtmTUliMmdRZnpBYXZzQk1PODF2cHAxTFliT3Fn?=
- =?utf-8?B?c1pyOWVCcCtIeHl3ZmYzSTFibkp6bFFWU0Z4WEtBZ2YxeVJ1UGRDVy9zM3dM?=
- =?utf-8?B?MlRyeURIR2ovL0JPRDJyMkhmcTMzeTJCNWYwVmlPQ0RqWlZKZ1VybVNGQ1l2?=
- =?utf-8?B?dU9uRTMxeVU5a3JmMmxIc1VyUFp4Z28yUTJDTDVkZFNJR0tBRjVxTTZuV1Fv?=
- =?utf-8?B?SFJUbmkxRkdGeGcvUnZpZ3VHeHpKb3pPYzc0R0psMGdRQkZDWGdUL3pxS0Fx?=
- =?utf-8?B?bFV4Q1QrRnFiSytzRjVseWZUbVAzdHNNUTdKQS8vdCtOSkpwTWx0dFYyeDNB?=
- =?utf-8?B?TUplZnBzaUlJZ0VBV3RMQVJkOXkxOFp6dFhPMXR4ay9DTFQreTJmdmFXai9V?=
- =?utf-8?B?RnpBbzNjdElIQ0hjbkhOOWkwMmViNVJoNHVjVURRVXEwbGRwQ1Fqa0ttZnZH?=
- =?utf-8?B?TU93bWo1M3ZQT0ZsNFdGKzRJNDNxWlZFclRRWmQyUnBWSjl0dEpScTJ5Nnht?=
- =?utf-8?B?NkZUM1RLUmRHMXRzcTBvNGF2M1RCM3lxMHByREFqZ3RwNFRZdHJqWVNDSnR4?=
- =?utf-8?B?VUNRR2hhblRZTytZVGJmcklkSU44RWcydHY3Rlo3bE9iSHV6S2NLN3B6UnY2?=
- =?utf-8?B?Qlh4SDlKWVp1N0M4b01VdkdXL2tabWhkZUNvY3E5WHR4RXJmN0hOeDgzYnZi?=
- =?utf-8?B?dTZkSGJuUklpZXVlbnU2MlBDTkVJMWh0RUc1QXZLaE5PR3RrZW1KRFRRVytR?=
- =?utf-8?B?WEFwb2lIWjRETXE3dzhEcERNN0FVSUZQL0tTVDZJWlVFQzM1L3RIMnJBaDFz?=
- =?utf-8?B?ZEFKT3pjU0FOaytCRWdlc3EwNXlaNHpYRVVFR1F6bWlyUG5FL2JZMkJlWVpY?=
- =?utf-8?B?Q2lqV1lIQXZpc1BjenFDUlNqajV0Rkg5K0VvVk5oakI5Qmt4alJXbDdqWWZi?=
- =?utf-8?B?L2VPZnRNd3pnRUVDY0VGTmNGN29pWGJ0QU5OM0ZTNGVGeUFiK3BINW5TUHUv?=
- =?utf-8?B?K1h5MFlNM1NCbi8zLzVvNzdBaVZIVmZteFYyYW4xTEdkb1B6ME5FZWptb055?=
- =?utf-8?B?eVFrcU1VbDJmVXA4aG5ROWpvVjgyaEZpb3A3RU1rakJCM1dMWVNLOWhNY3l1?=
- =?utf-8?B?am54Ni80ZldxaEI3aVljMVdWcjRCanhzdXdMcFpNQjRsOEN6cHE3aFA5eG9I?=
- =?utf-8?B?OVZpZmorR0tDb1pKek9oYkhmdXpDejdnSGJzOGN1bHM5SXRYaUc2VGhRUkg3?=
- =?utf-8?B?aDFFRkVpSkIzL3VsZWMwTnVhRmpyeUlITTh2ZE51dU81bnViSjAwcis1WDVv?=
- =?utf-8?B?ZHFtMEpkVmpoYXdNV3pjdm9PM0dpYWg3V25yaVB5MGg0dEZSUFpnakNadUsz?=
- =?utf-8?B?bzhkWGpxV1U3NXRsTkx5bTN0NExVWGMrZFp0a0lCMWlpWVhReTU4VVlMTW1V?=
- =?utf-8?B?aFJ2SEp2RXE4SktDVVNnbS9wT2FoV0xiZHNDS1dQOEJTb0E4cnZMUU1wNExi?=
- =?utf-8?B?ZHVvd3BmRnpyWFo3ZCtHYXpvNGhybm56Smo0bVU5ZnlsZ2VIR2xDcW9iNjVX?=
- =?utf-8?B?aEo2d2VKb0FhVVZlQlZVVHpTY3pwRHNrem5rc2crNXpiL2NxNlhjVVVnZERL?=
- =?utf-8?B?TGJGMjNYWGlnQ1NzV0toWmVlclhXNGhkbUx5Ny9Fd3FFWlFvU0xZck1JSTdp?=
- =?utf-8?B?ZHFodm5reXVqeGpWbDNpY3JaOEJmNTBBaWFPYUd6d0d1WGZtVUFjblBoSmZo?=
- =?utf-8?B?bmJkOHVBK0JKRkNGcVZhUEZ2bkU2bXlYOWNhQVZtWGdmMGFtSlRtSjJDTVFU?=
- =?utf-8?B?NVEzRDB5STAwY1dHaENCbHU3cHZwcWpJM0RVSWk4YjZPdUM2MGNJYkZ5RWxH?=
- =?utf-8?B?ZjNuV3dQU3k1N0gydVNUVWZNMTFWamtrWTlyTTg1YTVERzl2TkEzdmwvR1Fs?=
- =?utf-8?B?TDVrZmdNeGNWRm5FSk5EZWJwd1JWb2dGckd6Ym1nRVdnc0s4VGh0OWRPYVJQ?=
- =?utf-8?B?UWl2OGtVN1hCdDkvclByc3pVMlB0SnVYSzRaUG1SU3JTZklzb2VOLzNsbTl1?=
- =?utf-8?Q?IHw868iyiVIkXf55zTKGOJ5Np?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3233ecf1-3b14-4fe5-4244-08db52235b6d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 13:26:41.8046
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: llq9EMqs8TIFIu/JiS9CkVpR5u1Gx6CRAHBb/EH/+/A+pLUQ2RKtej6w+lrkv9nDSgwuBF/jrN6O34U/ZyWYdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8086
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S237983AbjEKNlx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 09:41:53 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0232700;
+        Thu, 11 May 2023 06:41:30 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 06E522B05DDC;
+        Thu, 11 May 2023 09:41:02 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 11 May 2023 09:41:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683812462; x=1683819662; bh=bN
+        MS+yJaTUyOEJLQDsSJtM7hMQk3rsz9Tjm7dcU5DZg=; b=pbfvNGcEhT5R087tiN
+        QnEE33cGWBvS5AiGVm1gu96LmUVgkxF03e4K96Ei9qPwA7fiKdXmlXU35YSty4lV
+        upc6nhsgrNKO1Zu5vJdZRzsTYt5+zUsNa1/G1LgbSdyvZAkWWcimIWPpFpGxaLK6
+        hH7/y6eKFwClAzo+2pbOB483InnbRNbufNRaxh3CrbmLD7GhYXkCtmotomtbcOHW
+        NAkD92i1A1Bqcysq66C1J4W0/8Ffr4tm/CjkCymgi72EioBx6dkJg+rOhYWSOSEQ
+        rfFDwhYNZARWUi2ZC5uIDwtU5o7jO6mXg31RmRIKFygPD4lgfPnMU2vHZpWLzWR9
+        tY6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683812462; x=1683819662; bh=bNMS+yJaTUyOE
+        JLQDsSJtM7hMQk3rsz9Tjm7dcU5DZg=; b=NUVaoKGjAUB1IvBp3dt6JHnnJHLVm
+        5FazabUKUOC3zaEmLNyDQKpBgQBJXDhw6415JSYAsI7vcdS5XzphHJbcm+e1RYhU
+        llcs9weTW01qk5AxUBbjOtH2kzwx7xePfQXIMcfPmjZGOSYBauaruz9JqW/61W85
+        heX8lT7nka5DtfPGfdG7S5QpZIuNTpDxxrHbUPJHanrVYS+a2Xfw0XBnyLyCziCN
+        FQo1Pxm5MNwRhnbgYrHcF3+uL/xmCS5YxmDTGoWN77KSYtOLmS5dlADRru9/PWae
+        uUp8Kzt4lULTaZjWcoN7X0TwqmJ+FUlxtD2Zae1Lsi2pmq9JY+k/goTzg==
+X-ME-Sender: <xms:bfBcZMNSgCzv51ibNqiMadxkekdHAGVmhQZVB7Xg4Ch3ubv8oc_OqQ>
+    <xme:bfBcZC-LuOp4qL-OBOPp41xrwYUB7X6JxntaEUrPpvOl-0LjASR1mtr0iBts6oiZU
+    CITzOT_9aVK9gzgF74>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:bfBcZDTVU8Z1aHlCiwHMzI3BQFNOhMCOOgQIyHMelQO9w3lKyBypBg>
+    <xmx:bfBcZEvrEazOWER04N0wAeZIGr8U1lNFD45nasK99m4-LBGcCbMMFQ>
+    <xmx:bfBcZEdVboxFWTIW74hVqDVfva2XernqNuoZ92ynPmme6ph_Ri3bvw>
+    <xmx:bvBcZKe-JadH7ZmJYk5LO7CV-vuIG1KgQLl2SxyA8Qajy4KAMUmi0_Uv4kk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 81468B60089; Thu, 11 May 2023 09:41:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+Mime-Version: 1.0
+Message-Id: <d27e359c-1ea3-4d08-b124-e794fd372b28@app.fastmail.com>
+In-Reply-To: <9c4be198444e9987c826c87b592e9dc6@artur-rojek.eu>
+References: <20230510110557.14343-6-tzimmermann@suse.de>
+ <202305102136.eMjTSPwH-lkp@intel.com>
+ <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
+ <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
+ <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+ <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
+ <9c4be198444e9987c826c87b592e9dc6@artur-rojek.eu>
+Date:   Thu, 11 May 2023 15:40:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Artur Rojek" <contact@artur-rojek.eu>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "kernel test robot" <lkp@intel.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Sam Ravnborg" <sam@ravnborg.org>, suijingfeng@loongson.cn,
+        oe-kbuild-all@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/5/2023 12:59 PM, Gupta, Pankaj wrote:
-> Hi Tianyu,
-> 
-> I tried to understand some details of this patch. Please find below
-> some comments/questions.
-> 
-> Thanks,
-> 
-> 
->> Add a #HV exception handler that uses IST stack.
->>
->> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
->> ---
->> Change since RFC V2:
->>         * Remove unnecessary line in the change log.
->> ---
->>   arch/x86/entry/entry_64.S             | 22 +++++++----
->>   arch/x86/include/asm/cpu_entry_area.h |  6 +++
->>   arch/x86/include/asm/idtentry.h       | 40 +++++++++++++++++++-
->>   arch/x86/include/asm/page_64_types.h  |  1 +
->>   arch/x86/include/asm/trapnr.h         |  1 +
->>   arch/x86/include/asm/traps.h          |  1 +
->>   arch/x86/kernel/cpu/common.c          |  1 +
->>   arch/x86/kernel/dumpstack_64.c        |  9 ++++-
->>   arch/x86/kernel/idt.c                 |  1 +
->>   arch/x86/kernel/sev.c                 | 53 +++++++++++++++++++++++++++
->>   arch/x86/kernel/traps.c               | 40 ++++++++++++++++++++
->>   arch/x86/mm/cpu_entry_area.c          |  2 +
->>   12 files changed, 165 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
->> index eccc3431e515..653b1f10699b 100644
->> --- a/arch/x86/entry/entry_64.S
->> +++ b/arch/x86/entry/entry_64.S
->> @@ -496,7 +496,7 @@ SYM_CODE_END(\asmsym)
->>   #ifdef CONFIG_AMD_MEM_ENCRYPT
->>   /**
->> - * idtentry_vc - Macro to generate entry stub for #VC
->> + * idtentry_sev - Macro to generate entry stub for #VC
->>    * @vector:        Vector number
->>    * @asmsym:        ASM symbol for the entry point
->>    * @cfunc:        C function to be called
->> @@ -515,14 +515,18 @@ SYM_CODE_END(\asmsym)
->>    *
->>    * The macro is only used for one vector, but it is planned to be 
->> extended in
->>    * the future for the #HV exception.
->> - */
->> -.macro idtentry_vc vector asmsym cfunc
->> +*/
->> +.macro idtentry_sev vector asmsym cfunc has_error_code:req
->>   SYM_CODE_START(\asmsym)
->>       UNWIND_HINT_IRET_REGS
->>       ENDBR
->>       ASM_CLAC
->>       cld
->> +    .if \vector == X86_TRAP_HV
->> +        pushq    $-1            /* ORIG_RAX: no syscall */
->> +    .endif
->> +
->>       /*
->>        * If the entry is from userspace, switch stacks and treat it as
->>        * a normal entry.
->> @@ -545,7 +549,12 @@ SYM_CODE_START(\asmsym)
->>        * stack.
->>        */
->>       movq    %rsp, %rdi        /* pt_regs pointer */
->> -    call    vc_switch_off_ist
->> +    .if \vector == X86_TRAP_VC
->> +        call    vc_switch_off_ist
-> 
-> I think the stack switching logic is similar for #VC & #HV.
-> So, we can use common function. Just the corresponding fallback
-> stack switching is different. Maybe we can pass the hint as an
-> argument (%rsi?) to something like "sev_switch_off_ist()", and use
-> the corresponding (#HV or #VC) fallbacks stack?
+On Thu, May 11, 2023, at 15:22, Artur Rojek wrote:
+> On 2023-05-11 14:35, Geert Uytterhoeven wrote:
+>> 
+>> CC Artur, who's working on HP Jornada 680.
+> Thanks for CC'ing me - I faced this exact issue while working on my
+> (still not upstreamed) hd6446x PCMCIA controller driver. The PCMCIA
+> subsystem uses `inb/outb`, which expect the `sh_io_port_base` to be set
+> to something else than the default `-1`. At first I tried to set it to
+> `0xa0000000`, so that all I/O goes through the fixed, non-cacheable P2
+> area. That however broke some other driver code (I had no time to debug
+> which one). Eventually I ended up taking a suggestion from a MIPS PCMCIA
+> driver [1] and simply substract the broken `sh_io_port_base` address
+> from `HD64461_IOBASE`, as the base for `socket.io_offset`. This way all
+> the PCMCIA `inb/outb` accesses are absolute, no matter what the
+> `sh_io_port_base` is set to. This of course is a very ugly solution and
+> we should instead fix the root cause of this mess. I will have a better
+> look at this patch set and the problem at hand at a later date.
+>
+> Cheers,
+> Artur
+>
+> [1] 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pcmcia/db1xxx_ss.c?h=v6.4-rc1#n527
 
-Also, Please include the below patch from Ashish for #HV
-reentrancy check.
+I think the best fix would be to change all those drivers away
+from using inb/outb to readb/writeb, except when they access the
+actual PCMCIA I/O space behind the bridge.
 
-https://github.com/ashkalra/linux/commit/6975484094b7cb8d703c45066780dd85043cd040
+On most of the modern architectures, inb(addr) now turns into
+approximately readb(PCI_IOBASE + addr), with a bit of extra
+logic to deal with endianess and barrier semantics.
 
-Thanks,
-Pankaj
+PCI_IOBASE in turn tends to be a hardcoded virtual address
+to which the physical I/O space window gets mapped during
+early boot, though you can also #define it to sh_io_port_base
+if you want to allocate the virtual address dynamically and
+leave the existing logic unchanged.
 
+Setting sh_io_port_base to zero however is a problem for any
+driver that passes a small port number into it -- this then
+turns into a user space pointer dereference, which is trivially
+exploitable.
+
+     Arnd
