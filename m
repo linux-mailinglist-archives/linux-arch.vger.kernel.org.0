@@ -2,258 +2,701 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981236FF443
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 16:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4B86FF578
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 17:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238544AbjEKO2S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 10:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S238644AbjEKPI0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 May 2023 11:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238546AbjEKO2A (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 10:28:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F7411B4C;
-        Thu, 11 May 2023 07:27:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8AE131FF17;
-        Thu, 11 May 2023 14:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683815233; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RgVMOzog0CbY5kAJjGieXuOcfsVfP8OP1lrWJlFGyqo=;
-        b=0GisIYMdtqN2+kETF+1umedZznqDFEu6Bq1m9PgaXvaIzayPg2BLMDEwVJOrubA2AdIyyp
-        kkCrk6xHT+djO0rZNjg4pMZObXIx2lXXe7Ng7TRtvcMzUgq3S5AJbEFINWkMmT7ss5cR1C
-        Mx0yG8dfxMgx7J4ZuPX71cS4HCQ38MI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683815233;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RgVMOzog0CbY5kAJjGieXuOcfsVfP8OP1lrWJlFGyqo=;
-        b=wLrtUwDBN1VzyHXOkRCKHtQqxV4KGA9pFjcoEcxdzOW7B/PsYo4XgPVw6tGQ/cKmGuyyUW
-        L0Tmr27yMC5M0LBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 22D33134B2;
-        Thu, 11 May 2023 14:27:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id vfePB0H7XGTlSQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 11 May 2023 14:27:13 +0000
-Message-ID: <e7bd021c-1a6b-6e47-143a-36ae2fd2fe6b@suse.de>
-Date:   Thu, 11 May 2023 16:27:12 +0200
+        with ESMTP id S238542AbjEKPIQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 11:08:16 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467A41A7;
+        Thu, 11 May 2023 08:08:13 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so80432158a12.0;
+        Thu, 11 May 2023 08:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1683817692; x=1686409692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=To0mtSAsCSdf0RZYwAvIkWYjNrfpDFIzWfTBNjIqQcA=;
+        b=se3Mcm8Agjag9dAyXUKwz7a09UCwa0yMZahG9uXhAk2eBoO20ua/rTV9zi6MvQte97
+         o5TQGZtT1SlkR+j7ANNsQhGafveH9b3r7pQQqbTM0ygZSPuPmerbDrkVgr+6+y9BW/ga
+         u6o8uqAIM1ZWtqsSD/nV+mBqnaCvnI7Y8r6zeYfeJ4gKBHllk5sZQJyqA4WS2HxMSoBC
+         qjgMNhRJNnbgwTFZGSCFtRhnIptFS/iXe/H7MlKmPRvq8LQRSQV6A5fBP5NergkYAHyb
+         +hKjT3cS88WGMv5eY3Kec7bcCKhYTiTn9DnxC87b+L7rTPyvOP2xflY5zTeYdsdgmELj
+         MJeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683817692; x=1686409692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=To0mtSAsCSdf0RZYwAvIkWYjNrfpDFIzWfTBNjIqQcA=;
+        b=iT0MUQeJddCWmTEoLCGC6PbbdMaF9BzWVqZ9V76w0aUnwyMoWorc5L6U7U3duJPJbM
+         0p4f42rlMwVI49MxTmLUsp+8IkXcGHojw0TSZV/sl5zSRivKwUMGSmpCgjdgXk+Mvk+7
+         r8kYC04pSTcF+BsmJYR+K+WKqvXe1ISuHSYrdJbjW4UD8ZzrOSOTJIOVJUzekUktu+Q3
+         U3CXSy9gkogGWAYoB1lKdaoTTqnIZm7Bzp8pjg2e+yrswxj7+0NkHdHf6ZAgjwsjSlah
+         FP+4vgLXJ8KQdg56u0v4kiaaYBjDnVblfV+mQ7EhCLw1W/UgzOi4weq9dpQi/zbQ1tc9
+         yYYQ==
+X-Gm-Message-State: AC+VfDzhi005Lwu3btvcH030pPEZFBGdOQlV5rMXJACi1/rsoqLndCsn
+        cow8oQel5VflNpTk+S33H7I=
+X-Google-Smtp-Source: ACHHUZ4QSrYTU1kgeM/2M6rnOyrfaRzjA7xqYC8oksSzWFPTXerucnRejKr0eQQMcrCQiVo7u/0RSA==
+X-Received: by 2002:a17:907:7208:b0:966:550f:9bfe with SMTP id dr8-20020a170907720800b00966550f9bfemr13536440ejc.33.1683817691642;
+        Thu, 11 May 2023 08:08:11 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-077-008-180-228.77.8.pool.telefonica.de. [77.8.180.228])
+        by smtp.gmail.com with ESMTPSA id i18-20020a1709063c5200b00965a56f82absm4098043ejg.212.2023.05.11.08.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 08:08:11 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Subject: [RFC PATCH v2] fs/xattr: add *at family syscalls
+Date:   Thu, 11 May 2023 17:08:02 +0200
+Message-Id: <20230511150802.737477-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
-Content-Language: en-US
-To:     Helge Deller <deller@gmx.de>, Sui Jingfeng <15330273260@189.cn>,
-        geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, arnd@arndb.de, sam@ravnborg.org
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-References: <20230510110557.14343-1-tzimmermann@suse.de>
- <20230510110557.14343-2-tzimmermann@suse.de>
- <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn>
- <a2315b9a-0747-1f0f-1f0a-1c6773931db4@suse.de>
- <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------oqkBIdidQhXHM6LZbZ0g22gh"
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------oqkBIdidQhXHM6LZbZ0g22gh
-Content-Type: multipart/mixed; boundary="------------cF7ELr8NEJdtB0AS8Jfn35yF";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Helge Deller <deller@gmx.de>, Sui Jingfeng <15330273260@189.cn>,
- geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
- vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
- davem@davemloft.net, arnd@arndb.de, sam@ravnborg.org
-Cc: linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-parisc@vger.kernel.org
-Message-ID: <e7bd021c-1a6b-6e47-143a-36ae2fd2fe6b@suse.de>
-Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
-References: <20230510110557.14343-1-tzimmermann@suse.de>
- <20230510110557.14343-2-tzimmermann@suse.de>
- <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn>
- <a2315b9a-0747-1f0f-1f0a-1c6773931db4@suse.de>
- <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
-In-Reply-To: <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
+Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
+removexattrat().  Those can be used to operate on extended attributes,
+especially security related ones, either relative to a pinned directory
+or on a file descriptor without read access, avoiding a
+/proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
 
---------------cF7ELr8NEJdtB0AS8Jfn35yF
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+One use case will be setfiles(8) setting SELinux file contexts
+("security.selinux") without race conditions.
 
-SGkNCg0KQW0gMTEuMDUuMjMgdW0gMTU6MDUgc2NocmllYiBIZWxnZSBEZWxsZXI6DQo+IE9u
-IDUvMTEvMjMgMDk6NTUsIFRob21hcyBaaW1tZXJtYW5uIHdyb3RlOg0KPj4gSGkNCj4+DQo+
-PiBBbSAxMC4wNS4yMyB1bSAyMDoyMCBzY2hyaWViIFN1aSBKaW5nZmVuZzoNCj4+PiBIaSwg
-VGhvbWFzDQo+Pj4NCj4+Pg0KPj4+IEkgbG92ZSB5b3VyIHBhdGNoLCB5ZXQgc29tZXRoaW5n
-IHRvIGltcHJvdmU6DQo+Pj4NCj4+Pg0KPj4+IE9uIDIwMjMvNS8xMCAxOTowNSwgVGhvbWFz
-IFppbW1lcm1hbm4gd3JvdGU6DQo+Pj4+IEZpeCBjb2Rpbmcgc3R5bGUuIE5vIGZ1bmN0aW9u
-YWwgY2hhbmdlcy4NCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFppbW1lcm1h
-bm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+Pj4+IFJldmlld2VkLWJ5OiBBcm5kIEJlcmdt
-YW5uIDxhcm5kQGFybmRiLmRlPg0KPj4+PiBSZXZpZXdlZC1ieTogU2FtIFJhdm5ib3JnIDxz
-YW1AcmF2bmJvcmcub3JnPg0KPj4+PiBSZXZpZXdlZC1ieTogU3VpIEppbmdmZW5nIDxzdWlq
-aW5nZmVuZ0Bsb29uZ3Nvbi5jbj4NCj4+Pj4gVGVzdGVkLWJ5OiBTdWkgSmluZ2ZlbmcgPHN1
-aWppbmdmZW5nQGxvb25nc29uLmNuPg0KPj4+PiAtLS0NCj4+Pj4gwqAgZHJpdmVycy92aWRl
-by9mYmRldi9tYXRyb3gvbWF0cm94ZmJfYWNjZWwuYyB8IDYgKysrLS0tDQo+Pj4+IMKgIGRy
-aXZlcnMvdmlkZW8vZmJkZXYvbWF0cm94L21hdHJveGZiX2Jhc2UuaMKgIHwgNCArKy0tDQo+
-Pj4+IMKgIDIgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygt
-KQ0KPj4+Pg0KPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92aWRlby9mYmRldi9tYXRyb3gv
-bWF0cm94ZmJfYWNjZWwuYyANCj4+Pj4gYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L21hdHJveC9t
-YXRyb3hmYl9hY2NlbC5jDQo+Pj4+IGluZGV4IDljYjA2ODVmZWRkZC4uY2U1MTIyNzc5OGEx
-IDEwMDY0NA0KPj4+PiAtLS0gYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L21hdHJveC9tYXRyb3hm
-Yl9hY2NlbC5jDQo+Pj4+ICsrKyBiL2RyaXZlcnMvdmlkZW8vZmJkZXYvbWF0cm94L21hdHJv
-eGZiX2FjY2VsLmMNCj4+Pj4gQEAgLTg4LDcgKzg4LDcgQEANCj4+Pj4gwqAgc3RhdGljIGlu
-bGluZSB2b2lkIG1hdHJveF9jZmI0X3BhbCh1X2ludDMyX3QqIHBhbCkgew0KPj4+PiDCoMKg
-wqDCoMKgIHVuc2lnbmVkIGludCBpOw0KPj4+PiAtDQo+Pj4+ICsNCj4+Pj4gwqDCoMKgwqDC
-oCBmb3IgKGkgPSAwOyBpIDwgMTY7IGkrKykgew0KPj4+PiDCoMKgwqDCoMKgwqDCoMKgwqAg
-cGFsW2ldID0gaSAqIDB4MTExMTExMTFVOw0KPj4+PiDCoMKgwqDCoMKgIH0NCj4+Pj4gQEAg
-LTk2LDcgKzk2LDcgQEAgc3RhdGljIGlubGluZSB2b2lkIG1hdHJveF9jZmI0X3BhbCh1X2lu
-dDMyX3QqIHBhbCkgew0KPj4+PiDCoCBzdGF0aWMgaW5saW5lIHZvaWQgbWF0cm94X2NmYjhf
-cGFsKHVfaW50MzJfdCogcGFsKSB7DQo+Pj4+IMKgwqDCoMKgwqAgdW5zaWduZWQgaW50IGk7
-DQo+Pj4+IC0NCj4+Pj4gKw0KPj4+PiDCoMKgwqDCoMKgIGZvciAoaSA9IDA7IGkgPCAxNjsg
-aSsrKSB7DQo+Pj4+IMKgwqDCoMKgwqDCoMKgwqDCoCBwYWxbaV0gPSBpICogMHgwMTAxMDEw
-MVU7DQo+Pj4+IMKgwqDCoMKgwqAgfQ0KPj4+PiBAQCAtNDgyLDcgKzQ4Miw3IEBAIHN0YXRp
-YyB2b2lkIG1hdHJveGZiXzFicHBfaW1hZ2VibGl0KHN0cnVjdCANCj4+Pj4gbWF0cm94X2Zi
-X2luZm8gKm1pbmZvLCB1X2ludDMyX3QgZmd4LA0KPj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAvKiBUZWxsLi4uIHdlbGwsIHdoeSBib3RoZXIuLi4gKi8NCj4+Pj4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgd2hpbGUgKGhlaWdodC0tKSB7DQo+Pj4+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc2l6ZV90IGk7DQo+Pj4+IC0NCj4+Pj4gKw0K
-Pj4+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvciAoaSA9IDA7IGkg
-PCBzdGVwOyBpICs9IDQpIHsNCj4+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIC8qIEhvcGUgdGhhdCB0aGVyZSBhcmUgYXQgbGVhc3QgdGhyZWUgcmVh
-ZGFibGUgDQo+Pj4+IGJ5dGVzIGJleW9uZCB0aGUgZW5kIG9mIGJpdG1hcCAqLw0KPj4+PiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZmJfd3JpdGVsKGdl
-dF91bmFsaWduZWQoKHVfaW50MzJfdCopKGNoYXJkYXRhIA0KPj4+PiArIGkpKSxtbWlvLnZh
-ZGRyKTsNCj4+Pj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvbWF0cm94L21h
-dHJveGZiX2Jhc2UuaCANCj4+Pj4gYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L21hdHJveC9tYXRy
-b3hmYl9iYXNlLmgNCj4+Pj4gaW5kZXggOTU4YmU2ODA1Zjg3Li5jOTNjNjliYmNkNTcgMTAw
-NjQ0DQo+Pj4+IC0tLSBhL2RyaXZlcnMvdmlkZW8vZmJkZXYvbWF0cm94L21hdHJveGZiX2Jh
-c2UuaA0KPj4+PiArKysgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L21hdHJveC9tYXRyb3hmYl9i
-YXNlLmgNCj4+Pj4gQEAgLTMwMSw5ICszMDEsOSBAQCBzdHJ1Y3QgbWF0cm94X2FsdG91dCB7
-DQo+Pj4+IMKgwqDCoMKgwqAgaW50wqDCoMKgwqDCoMKgwqAgKCp2ZXJpZnltb2RlKSh2b2lk
-KiBhbHRvdXRfZGV2LCB1X2ludDMyX3QgbW9kZSk7DQo+Pj4+IMKgwqDCoMKgwqAgaW50wqDC
-oMKgwqDCoMKgwqAgKCpnZXRxdWVyeWN0cmwpKHZvaWQqIGFsdG91dF9kZXYsDQo+Pj4+IMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgdjRsMl9x
-dWVyeWN0cmwqIGN0cmwpOw0KPj4+DQo+Pj4gTm90aWNlZCB0aGF0IHRoZXJlIGFyZSBwbGVu
-dHkgb2YgY29kaW5nIHN0eWxlIHByb2JsZW1zIGluIA0KPj4+IG1hdHJveGZiX2Jhc2UuaCwN
-Cj4+Pg0KPj4+IHdoeSB5b3Ugb25seSBmaXggYSBmZXcgb2YgdGhlbT/CoMKgIFRha2UgdGhp
-cyB0d28gbGluZSBhcyBhbiBleGFtcGxlLCANCj4+PiBzaG91bGRuJ3QNCj4+Pg0KPj4+IHRo
-ZXkgYmUgZml4ZWQgYWxzbyBhcyBmb2xsb3dpbmc/DQo+Pg0KPj4gSSBjb25maWd1cmVkIG15
-IHRleHQgZWRpdG9yIHRvIHJlbW92ZSB0cmFpbGluZyB3aGl0ZXNwYWNlcw0KPj4gYXV0b21h
-dGljYWxseS4gVGhhdCBrZWVwcyBteSBvd24gcGF0Y2hlcyBmcmVlIG9mIHRoZW0uwqAgQnV0
-IHRoZQ0KPj4gZWRpdG9yIHJlbW92ZXMgYWxsIHRyYWlsaW5nIHdoaXRlc3BhY2VzLCBpbmNs
-dWRpbmcgdGhvc2UgdGhhdCBoYXZlDQo+PiBiZWVuIHRoZXJlIGJlZm9yZS4gSWYgSSBlbmNv
-dW50ZXIgc3VjaCBhIGNhc2UsIEkgc3BsaXQgb3V0IHRoZQ0KPj4gd2hpdGVzcGFjZSBmaXgg
-YW5kIHN1Ym1pdCBpdCBzZXBhcmF0ZWx5Lg0KPj4NCj4+IEJ1dCB0aGUgd29yayBJIGRvIHdp
-dGhpbiBmYmRldiBpcyBtb3N0bHkgZm9yIGltcHJvdmluZyBEUk0uDQo+IA0KPiBTdXJlLg0K
-PiANCj4+IEZvciB0aGUNCj4+IG90aGVyIGlzc3VlcyBpbiB0aGlzIGZpbGUsIEkgZG9uJ3Qg
-dGhpbmsgdGhhdCBtYXRyb3hmYiBzaG91bGQgZXZlbiBiZQ0KPj4gYXJvdW5kIGFueSBsb25n
-ZXIuIEZiZGV2IGhhcyBiZWVuIGRlcHJlY2F0ZWQgZm9yIGEgbG9uZyB0aW1lLiBCdXQgYQ0K
-Pj4gc21hbGwgbnVtYmVyIG9mIGRyaXZlcnMgYXJlIHN0aWxsIGluIHVzZSBhbmQgd2Ugc3Rp
-bGwgbmVlZCBpdHMNCj4+IGZyYW1lYnVmZmVyIGNvbnNvbGUuIFNvIHNvbWVvbmUgc2hvdWxk
-IGVpdGhlciBwdXQgc2lnbmlmaWNhbnQgZWZmb3J0DQo+PiBpbnRvIG1haW50YWluaW5nIGZi
-ZGV2LCBvciBpdCBzaG91bGQgYmUgcGhhc2VkIG91dC4gQnV0IG5laXRoZXIgaXMNCj4+IGhh
-cHBlbmluZy4NCj4gDQo+IFlvdSdyZSB3cm9uZy4NCg0KSSdtIG5vdC4gSSBkb24ndCBjbGFp
-bSB0aGF0IHRoZXNlIGRyaXZlcnMgYXJlIGFsbCBicm9rZW4uIEJ1dCBmYmRldiBhcyBhIA0K
-d2hvbGUgaXMgYml0LXJvdHRpbmcgYW5kIG5vIG9uZSBhdHRlbXB0cyB0byBhZGRyZXNzIHRo
-aXMuIFRoZXJlIGFyZSANCnNldmVyYWwgcmVjZW50IGV4YW1wbGVzIG9mIHRoaXM6DQoNCiAg
-KiBJIHJlY2VudGx5IHNlbmQgb3V0IGEgMTAwLXBhdGNoZXMgc2VyaWVzIHRvIGltcHJvdmUg
-cGFyYW1ldGVyIA0KcGFyc2luZyBhbmQgYXZvaWQgbWVtb3J5IGxlYWtzLiBUaGF0IGdvdCBz
-aG90IGRvd24uIEkgZGlkbid0IGF0dGVtcHQgdG8gDQpzdXBwb3J0IHBhcmFtZXRlciBwYXJz
-aW5nIGZvciBtb2R1bGUgYnVpbGRzLg0KDQogICogVGhlcmUncyBiZWVuIGEgMTUteXJzIG9s
-ZCBidWcgaW4gZmJkZXYncyByZWFkL3dyaXRlIHdoZXJlIHRoZXkgDQpyZXR1cm4gYW4gaW5j
-b3JyZWN0IHZhbHVlLg0KDQoqIFNlZSB0aGUgb3RoZXIgZGlzY3Vzc2lvbiBvbiB0aGlzIHBh
-dGNoc2V0IG9uIHRoZSBzdGF0ZSBvZiBoaXRmYi4NCg0KICAqIFRoZSBmYmRldiBjb2RlIEkg
-cmVjZW50bHkgY2xlYW5lZCB1cCBoYWQgYnVncyBpbiBob3cgaXQgdXNlcyBzb21lIG9mIA0K
-ZmJkZXYncyBiYXNpYyBidWlsZGluZyBibG9ja3MgKHNlZSB0aGUgc2NyZWVuX2Jhc2Uvc2Ny
-ZWVuX2J1ZmZlciBjb25mdXNpb24pLg0KDQogICogPGFzbS1nZW5lcmljL2ZiLmg+IGhhcyBi
-ZWVuIGluIHRoZSB0cmVlIHNpbmNlIDIwMDkgYW5kIG5vIG9uZSANCmF0dGVtcHRlZCB0byBp
-bmNsdWRlIGl0IHVudGlsIG5vdy4NCg0KTm9uZSBvZiB0aGlzIGlzIGEgc2lnbiBvZiBnb29k
-IG1haW50ZW5hbmNlLg0KDQpBcyBJJ3ZlIHdvcmtlZCBvbiBEUk0ncyBmYmRldiBlbXVsYXRp
-b24gYSBsb3QsIEkgdHJ5IHRvIGJlIGEgZ29vZCBrZXJuZWwgDQpjaXRpemVuIGFuZCBjbGVh
-biB1cCBpbiBmYmRldiBhcyB3ZWxsIHdoZW4gSSBzZWUgYSBwcm9ibGVtLiBCdXQgSSdkIA0K
-cmVhbGx5IGxpa2UgdG8gc2VlIG1vc3Qgb2YgdGhlc2UgZHJpdmVycyBiZWluZyBtb3ZlZCBp
-bnRvIHN0YWdpbmcgYW5kIA0KZGVsZXRlZCBzb29uIGFmdGVyd2FyZHMuIFVzZXJzIHdpbGwg
-Y29tcGxhaW4gYWJvdXQgdGhvc2UgZHJpdmVycyB0aGF0IA0KYXJlIHJlYWxseSBzdGlsbCBy
-ZXF1aXJlZC4gVGhvc2UgbWlnaHQgYmUgd29ydGggdG8gc3BlbmQgZWZmb3J0IG9uLg0KDQo+
-IA0KPiBZb3UgZG9uJ3QgbWVudGlvbiB0aGF0IGZvciBtb3N0IG9sZGVyIG1hY2hpbmVzIERS
-TSBpc24ndCBhbiBhY2NlcHRhYmxlDQo+IHdheSB0byBnbyBkdWUgdG8gaXQncyBsaW1pdGF0
-aW9ucywgZS5nLiBpdCdzIGxvdy1zcGVlZCBkdWUgdG8gbWlzc2luZw0KPiAyRC1hY2NlbGVy
-YXRpb24gZm9yIG9sZGVyIGNhcmRzIGFuZCBhbmQgaXQncyBpbmNhcGFiaWxpdHkgdG8gY2hh
-bmdlIHNjcmVlbg0KPiByZXNvbHV0aW9uIGF0IHJ1bnRpbWUgKGp1c3QgdG8gbmFtZSB0d28g
-b2YgdGhlIGJpZ2dlciBsaW1pdGF0aW9ucyBoZXJlKS4NCg0KWW91IGNhbiBjaGFuZ2UgcmVz
-b2x1dGlvbiBhdCBydW50aW1lOyBqdXN0IG5vdCB0aHJvdWdoIGZiZGV2IGlvY3Rscy4gDQpU
-aGVyZSdzIG5vIHRlY2huaWNhbCBsaW1pdGF0aW9uIGhlcmUuIE5vIG9uZSBmb3VuZCBhbnkg
-dXNlIGZvciB0aGlzLCBzbyANCml0J3Mgbm90IHRoZXJlLg0KDQo+IFNvLCB1bmxlc3Mgd2Ug
-c29tZWhvdyBmaW5kIGEgZ29vZCB3YXkgdG8gbW92ZSBzdWNoIGRyaXZlcnMgb3ZlciB0byBE
-Uk0NCj4gKHdpdGggYSBzZXQgb2YgbWluaW1hbCAyRCBhY2NlbGVyYXRpb24pLCB0aGV5IGFy
-ZSBzdGlsbCBpbXBvcnRhbnQuDQoNCjJkIGFjY2VsZXJhdGlvbiBpcyBtb3N0bHkgdXNlZnVs
-IGZvciB0aGUgZnJhbWVidWZmZXIgY29uc29sZS4gWW91IGNhbiBkbyANCnRoYXQgd2l0aCBE
-Uk0gYW5kIGRyaXZlcnMgaGF2ZSAobm91dmVhdSkuIEl0IGp1c3QgZGlkbid0IG1ha2UgYSAN
-Cm1lYW5pbmdmdWwgZGlmZmVyZW5jZSBpbiBtb3N0IGNhc2VzLg0KDQpCZXN0IHJlZ2FyZHMN
-ClRob21hcw0KDQo+IA0KPiBBY3R1YWxseSwgSSBqdXN0IGRpZCB0ZXN0IG1hdHJveGZiIGFu
-ZCBwbTJmYiBzdWNjZXNzZnVsbHkgYSBmZXcgZGF5cyANCj4gYmFjaywgYW5kDQo+IHRoZXkg
-d29ya2VkLiBGb3Igc29tZSBzbWFsbGVyIGlzc3VlcyBJJ3ZlIHByZXBhcmVkIHBhdGNoZXMs
-IHdoaWNoIGFyZSBvbiANCj4gaG9sZA0KPiBkdWUgY29uZmxpY3RzIHdpdGggeW91ciBsYXRl
-c3QgZmlsZS1tb3ZlLWFyb3VuZC0gYW5kIHdoaXRlc3BhY2UtY2hhbmdlcyANCj4gd2hpY2gg
-YXJlIHBhcnRseQ0KPiBpbiBkcm0tbWlzYy4NCj4gQW5kIEkgZG8gaGF2ZSBzb21lIHVwY29t
-aW5nIGFkZGl0aW9uYWwgcGF0Y2hlcyBmb3IgY29uc29sZSBzdXBwb3J0Lg0KPiANCj4gSGVs
-Z2UNCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Bl
-cg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpGcmFua2Vuc3RyYXNz
-ZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2byBUb3RldiwgQW5kcmV3
-IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1hbg0KSFJCIDM2ODA5IChB
-RyBOdWVybmJlcmcpDQo=
+Add XATTR flags to the private namespace of AT_* flags.
 
---------------cF7ELr8NEJdtB0AS8Jfn35yF--
+Use the do_{name}at() pattern from fs/open.c.
 
---------------oqkBIdidQhXHM6LZbZ0g22gh
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Use a single flag parameter for extended attribute flags (currently
+XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
+syscall arguments in setxattrat().
 
------BEGIN PGP SIGNATURE-----
+Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
+v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzones@googlemail.com/
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRc+0AFAwAAAAAACgkQlh/E3EQov+Bi
-iRAAtaCufj1wKBEDwcVW2hAm0FlOY6eQRBE0+/+DOMroBsoSkru4r/jRnu6tuY1DQCLVsyu1GTvA
-MqQhdJdmhe3j7uCgQ3aOA73Df3X5ZUYKYUKvUZPybfuLrKTr5AyVHlmyiAXUeREigTVlCcsLUD5D
-RWswEEuCsdCbwzxGOFohrHOTEBjjiv97mYRtjKpOhVXVHv//46FXQY75FBH71ZV4iJnW6iDO12i7
-TgRempXREKbpq3fcfdrRZRVjz708GlRppeowU/QAdbwQF3S60msxp1QEX6OmDqNOmGq50Jjb1+x2
-xOX1nQjIeSavFxi5ZJtSGCzc9YgexKwXVwIws1itGvZrYG6793n1o3i/9jn4y50Lnk2coTNXrRQV
-pNFXbHSS4bA7WuPiSs//FeJPsmHDpywx7rOw3SKjFOikIK7h1JZe+eqdJZSWb5mZjAZ3nPtS1jlb
-oubB4STRq9WJ3F4eHAP2l313OMut1Q9eVv4TSn7nhWNJAXvIOmu9QUhJMTd63gyyLy6g21wZXhWl
-utoRg/Qdf1loG3hH8/kMh/HHuq/B1p+QyjftTDsgfnQBIbScD9SkV/jKyHh010KXY2sF6BPMV22J
-ObeOe9GiboYfQwBNJj2bjAmhmo8nKYMwLGx4rkvGvsxheZBIkgnlVXrTrTg9cJNy6+lsXjJs/9eB
-m1k=
-=ZGtI
------END PGP SIGNATURE-----
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+CC: x86@kernel.org
+CC: linux-alpha@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-arm-kernel@lists.infradead.org
+CC: linux-ia64@vger.kernel.org
+CC: linux-m68k@lists.linux-m68k.org
+CC: linux-mips@vger.kernel.org
+CC: linux-parisc@vger.kernel.org
+CC: linuxppc-dev@lists.ozlabs.org
+CC: linux-s390@vger.kernel.org
+CC: linux-sh@vger.kernel.org
+CC: sparclinux@vger.kernel.org
+CC: linux-fsdevel@vger.kernel.org
+CC: audit@vger.kernel.org
+CC: linux-arch@vger.kernel.org
+CC: linux-api@vger.kernel.org
+CC: linux-security-module@vger.kernel.org
+CC: selinux@vger.kernel.org
+---
+v2:
+  - squash syscall introduction and wire up commits
+  - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      |   4 +
+ arch/arm/tools/syscall.tbl                  |   4 +
+ arch/arm64/include/asm/unistd.h             |   2 +-
+ arch/arm64/include/asm/unistd32.h           |   8 ++
+ arch/ia64/kernel/syscalls/syscall.tbl       |   4 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |   4 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |   4 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |   4 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |   4 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |   4 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |   4 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |   4 +
+ arch/s390/kernel/syscalls/syscall.tbl       |   4 +
+ arch/sh/kernel/syscalls/syscall.tbl         |   4 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |   4 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |   4 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |   4 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |   4 +
+ fs/xattr.c                                  | 107 ++++++++++++++++----
+ include/asm-generic/audit_change_attr.h     |   6 ++
+ include/linux/syscalls.h                    |   8 ++
+ include/uapi/asm-generic/unistd.h           |  12 ++-
+ include/uapi/linux/fcntl.h                  |   2 +
+ 23 files changed, 185 insertions(+), 24 deletions(-)
 
---------------oqkBIdidQhXHM6LZbZ0g22gh--
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 8ebacf37a8cf..1dc58a5dc730 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -490,3 +490,7 @@
+ 558	common	process_mrelease		sys_process_mrelease
+ 559	common  futex_waitv                     sys_futex_waitv
+ 560	common	set_mempolicy_home_node		sys_ni_syscall
++561	common	setxattrat			sys_setxattrat
++562	common	getxattrat			sys_getxattrat
++563	common	listxattrat			sys_listxattrat
++564	common	removexattrat			sys_removexattrat
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index ac964612d8b0..f0e9d9d487f0 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -464,3 +464,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 037feba03a51..63a8a9c4abc1 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -39,7 +39,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		451
++#define __NR_compat_syscalls		455
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 604a2053d006..cd6ac63376d1 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -907,6 +907,14 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
+ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
++#define __NR_setxattrat 451
++__SYSCALL(__NR_setxattrat, sys_setxattrat)
++#define __NR_getxattrat 452
++__SYSCALL(__NR_getxattrat, sys_getxattrat)
++#define __NR_listxattrat 453
++__SYSCALL(__NR_listxattrat, sys_listxattrat)
++#define __NR_removexattrat 454
++__SYSCALL(__NR_removexattrat, sys_removexattrat)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
+index 72c929d9902b..fe9aea54222c 100644
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@ -371,3 +371,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index b1f3940bc298..0847efdee734 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -450,3 +450,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 820145e47350..7f619bbc718d 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -456,3 +456,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index 253ff994ed2e..5e4206c0aede 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -389,3 +389,7 @@
+ 448	n32	process_mrelease		sys_process_mrelease
+ 449	n32	futex_waitv			sys_futex_waitv
+ 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n32	setxattrat			sys_setxattrat
++452	n32	getxattrat			sys_getxattrat
++453	n32	listxattrat			sys_listxattrat
++454	n32	removexattrat			sys_removexattrat
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 3f1886ad9d80..df0f053e76cd 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -365,3 +365,7 @@
+ 448	n64	process_mrelease		sys_process_mrelease
+ 449	n64	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	n64	setxattrat			sys_setxattrat
++452	n64	getxattrat			sys_getxattrat
++453	n64	listxattrat			sys_listxattrat
++454	n64	removexattrat			sys_removexattrat
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 8f243e35a7b2..09ec31ad475f 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -438,3 +438,7 @@
+ 448	o32	process_mrelease		sys_process_mrelease
+ 449	o32	futex_waitv			sys_futex_waitv
+ 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	o32	setxattrat			sys_setxattrat
++452	o32	getxattrat			sys_getxattrat
++453	o32	listxattrat			sys_listxattrat
++454	o32	removexattrat			sys_removexattrat
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index 0e42fceb2d5e..0123f895a674 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -448,3 +448,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common	futex_waitv			sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index a0be127475b1..06fd4153f0d1 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -537,3 +537,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index b68f47541169..9babd831fe1e 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,7 @@
+ 448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
+ 449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
+ 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
++451  common	setxattrat		sys_setxattrat			sys_setxattrat
++452  common	getxattrat		sys_getxattrat			sys_getxattrat
++453  common	listxattrat		sys_listxattrat			sys_listxattrat
++454  common	removexattrat		sys_removexattrat		sys_removexattrat
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 2de85c977f54..d4daa8afe45c 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -453,3 +453,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 4398cc6fb68d..510d5175f80a 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -496,3 +496,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index 320480a8db4f..8488cc157fe0 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -455,3 +455,7 @@
+ 448	i386	process_mrelease	sys_process_mrelease
+ 449	i386	futex_waitv		sys_futex_waitv
+ 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	i386	setxattrat		sys_setxattrat
++452	i386	getxattrat		sys_getxattrat
++453	i386	listxattrat		sys_listxattrat
++454	i386	removexattrat		sys_removexattrat
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index c84d12608cd2..f45d723d5a30 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -372,6 +372,10 @@
+ 448	common	process_mrelease	sys_process_mrelease
+ 449	common	futex_waitv		sys_futex_waitv
+ 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
++451	common	setxattrat		sys_setxattrat
++452	common	getxattrat		sys_getxattrat
++453	common	listxattrat		sys_listxattrat
++454	common	removexattrat		sys_removexattrat
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 52c94ab5c205..dbafe441a83f 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -421,3 +421,7 @@
+ 448	common	process_mrelease		sys_process_mrelease
+ 449	common  futex_waitv                     sys_futex_waitv
+ 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
++451	common	setxattrat			sys_setxattrat
++452	common	getxattrat			sys_getxattrat
++453	common	listxattrat			sys_listxattrat
++454	common	removexattrat			sys_removexattrat
+diff --git a/fs/xattr.c b/fs/xattr.c
+index fcf67d80d7f9..a57ce39483d7 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -656,21 +656,34 @@ setxattr(struct mnt_idmap *idmap, struct dentry *d,
+ 	return error;
+ }
+ 
+-static int path_setxattr(const char __user *pathname,
++static int do_setxattrat(int dfd, const char __user *pathname,
+ 			 const char __user *name, const void __user *value,
+-			 size_t size, int flags, unsigned int lookup_flags)
++			 size_t size, int flags)
+ {
+ 	struct path path;
+ 	int error;
++	int lookup_flags;
+ 
++	/* AT_ and XATTR_ flags must not overlap. */
++	BUILD_BUG_ON(XATTR_CREATE != AT_XATTR_CREATE);
++	BUILD_BUG_ON(XATTR_REPLACE != AT_XATTR_REPLACE);
++	#define AT_XATTR__FLAGS (AT_XATTR_CREATE | AT_XATTR_REPLACE)
++	BUILD_BUG_ON(((AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH) & AT_XATTR__FLAGS) != 0);
++
++	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH | AT_XATTR__FLAGS)) != 0)
++		return -EINVAL;
++
++	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
++	if (flags & AT_EMPTY_PATH)
++		lookup_flags |= LOOKUP_EMPTY;
+ retry:
+-	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
++	error = user_path_at(dfd, pathname, lookup_flags, &path);
+ 	if (error)
+ 		return error;
+ 	error = mnt_want_write(path.mnt);
+ 	if (!error) {
+ 		error = setxattr(mnt_idmap(path.mnt), path.dentry, name,
+-				 value, size, flags);
++				 value, size, flags & AT_XATTR__FLAGS);
+ 		mnt_drop_write(path.mnt);
+ 	}
+ 	path_put(&path);
+@@ -681,18 +694,25 @@ static int path_setxattr(const char __user *pathname,
+ 	return error;
+ }
+ 
++SYSCALL_DEFINE6(setxattrat, int, dfd, const char __user *, pathname,
++		const char __user *, name, const void __user *, value,
++		size_t, size, int, flags)
++{
++	return do_setxattrat(dfd, pathname, name, value, size, flags);
++}
++
+ SYSCALL_DEFINE5(setxattr, const char __user *, pathname,
+ 		const char __user *, name, const void __user *, value,
+ 		size_t, size, int, flags)
+ {
+-	return path_setxattr(pathname, name, value, size, flags, LOOKUP_FOLLOW);
++	return do_setxattrat(AT_FDCWD, pathname, name, value, size, flags);
+ }
+ 
+ SYSCALL_DEFINE5(lsetxattr, const char __user *, pathname,
+ 		const char __user *, name, const void __user *, value,
+ 		size_t, size, int, flags)
+ {
+-	return path_setxattr(pathname, name, value, size, flags, 0);
++	return do_setxattrat(AT_FDCWD, pathname, name, value, size, flags | AT_SYMLINK_NOFOLLOW);
+ }
+ 
+ SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
+@@ -775,14 +795,22 @@ getxattr(struct mnt_idmap *idmap, struct dentry *d,
+ 	return error;
+ }
+ 
+-static ssize_t path_getxattr(const char __user *pathname,
++static ssize_t do_getxattrat(int dfd, const char __user *pathname,
+ 			     const char __user *name, void __user *value,
+-			     size_t size, unsigned int lookup_flags)
++			     size_t size, int flags)
+ {
+ 	struct path path;
+ 	ssize_t error;
++	int lookup_flags;
++
++	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
++		return -EINVAL;
++
++	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
++	if (flags & AT_EMPTY_PATH)
++		lookup_flags |= LOOKUP_EMPTY;
+ retry:
+-	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
++	error = user_path_at(dfd, pathname, lookup_flags, &path);
+ 	if (error)
+ 		return error;
+ 	error = getxattr(mnt_idmap(path.mnt), path.dentry, name, value, size);
+@@ -794,16 +822,23 @@ static ssize_t path_getxattr(const char __user *pathname,
+ 	return error;
+ }
+ 
++SYSCALL_DEFINE6(getxattrat, int, dfd, const char __user *, pathname,
++		const char __user *, name, void __user *, value, size_t, size,
++		int, flags)
++{
++	return do_getxattrat(dfd, pathname, name, value, size, flags);
++}
++
+ SYSCALL_DEFINE4(getxattr, const char __user *, pathname,
+ 		const char __user *, name, void __user *, value, size_t, size)
+ {
+-	return path_getxattr(pathname, name, value, size, LOOKUP_FOLLOW);
++	return do_getxattrat(AT_FDCWD, pathname, name, value, size, 0);
+ }
+ 
+ SYSCALL_DEFINE4(lgetxattr, const char __user *, pathname,
+ 		const char __user *, name, void __user *, value, size_t, size)
+ {
+-	return path_getxattr(pathname, name, value, size, 0);
++	return do_getxattrat(AT_FDCWD, pathname, name, value, size, AT_SYMLINK_NOFOLLOW);
+ }
+ 
+ SYSCALL_DEFINE4(fgetxattr, int, fd, const char __user *, name,
+@@ -853,13 +888,21 @@ listxattr(struct dentry *d, char __user *list, size_t size)
+ 	return error;
+ }
+ 
+-static ssize_t path_listxattr(const char __user *pathname, char __user *list,
+-			      size_t size, unsigned int lookup_flags)
++static ssize_t do_listxattrat(int dfd, const char __user *pathname, char __user *list,
++			      size_t size, int flags)
+ {
+ 	struct path path;
+ 	ssize_t error;
++	int lookup_flags;
++
++	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
++		return -EINVAL;
++
++	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
++	if (flags & AT_EMPTY_PATH)
++		lookup_flags |= LOOKUP_EMPTY;
+ retry:
+-	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
++	error = user_path_at(dfd, pathname, lookup_flags, &path);
+ 	if (error)
+ 		return error;
+ 	error = listxattr(path.dentry, list, size);
+@@ -871,16 +914,22 @@ static ssize_t path_listxattr(const char __user *pathname, char __user *list,
+ 	return error;
+ }
+ 
++SYSCALL_DEFINE5(listxattrat, int, dfd, const char __user *, pathname, char __user *, list,
++		size_t, size, int, flags)
++{
++	return do_listxattrat(dfd, pathname, list, size, flags);
++}
++
+ SYSCALL_DEFINE3(listxattr, const char __user *, pathname, char __user *, list,
+ 		size_t, size)
+ {
+-	return path_listxattr(pathname, list, size, LOOKUP_FOLLOW);
++	return do_listxattrat(AT_FDCWD, pathname, list, size, 0);
+ }
+ 
+ SYSCALL_DEFINE3(llistxattr, const char __user *, pathname, char __user *, list,
+ 		size_t, size)
+ {
+-	return path_listxattr(pathname, list, size, 0);
++	return do_listxattrat(AT_FDCWD, pathname, list, size, AT_SYMLINK_NOFOLLOW);
+ }
+ 
+ SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
+@@ -899,7 +948,7 @@ SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
+ /*
+  * Extended attribute REMOVE operations
+  */
+-static long
++static int
+ removexattr(struct mnt_idmap *idmap, struct dentry *d,
+ 	    const char __user *name)
+ {
+@@ -918,13 +967,21 @@ removexattr(struct mnt_idmap *idmap, struct dentry *d,
+ 	return vfs_removexattr(idmap, d, kname);
+ }
+ 
+-static int path_removexattr(const char __user *pathname,
+-			    const char __user *name, unsigned int lookup_flags)
++static int do_removexattrat(int dfd, const char __user *pathname,
++			    const char __user *name, int flags)
+ {
+ 	struct path path;
+ 	int error;
++	int lookup_flags;
++
++	if ((flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
++		return -EINVAL;
++
++	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
++	if (flags & AT_EMPTY_PATH)
++		lookup_flags |= LOOKUP_EMPTY;
+ retry:
+-	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
++	error = user_path_at(dfd, pathname, lookup_flags, &path);
+ 	if (error)
+ 		return error;
+ 	error = mnt_want_write(path.mnt);
+@@ -940,16 +997,22 @@ static int path_removexattr(const char __user *pathname,
+ 	return error;
+ }
+ 
++SYSCALL_DEFINE4(removexattrat, int, dfd, const char __user *, pathname,
++		const char __user *, name, int, flags)
++{
++	return do_removexattrat(dfd, pathname, name, flags);
++}
++
+ SYSCALL_DEFINE2(removexattr, const char __user *, pathname,
+ 		const char __user *, name)
+ {
+-	return path_removexattr(pathname, name, LOOKUP_FOLLOW);
++	return do_removexattrat(AT_FDCWD, pathname, name, 0);
+ }
+ 
+ SYSCALL_DEFINE2(lremovexattr, const char __user *, pathname,
+ 		const char __user *, name)
+ {
+-	return path_removexattr(pathname, name, 0);
++	return do_removexattrat(AT_FDCWD, pathname, name, AT_SYMLINK_NOFOLLOW);
+ }
+ 
+ SYSCALL_DEFINE2(fremovexattr, int, fd, const char __user *, name)
+diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
+index 331670807cf0..cc840537885f 100644
+--- a/include/asm-generic/audit_change_attr.h
++++ b/include/asm-generic/audit_change_attr.h
+@@ -11,9 +11,15 @@ __NR_lchown,
+ __NR_fchown,
+ #endif
+ __NR_setxattr,
++#ifdef __NR_setxattrat
++__NR_setxattrat,
++#endif
+ __NR_lsetxattr,
+ __NR_fsetxattr,
+ __NR_removexattr,
++#ifdef __NR_removexattrat
++__NR_removexattrat,
++#endif
+ __NR_lremovexattr,
+ __NR_fremovexattr,
+ #ifdef __NR_fchownat
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 33a0ee3bcb2e..0612661c9eca 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -350,23 +350,31 @@ asmlinkage long sys_io_uring_register(unsigned int fd, unsigned int op,
+ /* fs/xattr.c */
+ asmlinkage long sys_setxattr(const char __user *path, const char __user *name,
+ 			     const void __user *value, size_t size, int flags);
++asmlinkage long sys_setxattrat(int dfd, const char __user *path, const char __user *name,
++			     const void __user *value, size_t size, int flags);
+ asmlinkage long sys_lsetxattr(const char __user *path, const char __user *name,
+ 			      const void __user *value, size_t size, int flags);
+ asmlinkage long sys_fsetxattr(int fd, const char __user *name,
+ 			      const void __user *value, size_t size, int flags);
+ asmlinkage long sys_getxattr(const char __user *path, const char __user *name,
+ 			     void __user *value, size_t size);
++asmlinkage long sys_getxattrat(int dfd, const char __user *path, const char __user *name,
++			     void __user *value, size_t size, int flags);
+ asmlinkage long sys_lgetxattr(const char __user *path, const char __user *name,
+ 			      void __user *value, size_t size);
+ asmlinkage long sys_fgetxattr(int fd, const char __user *name,
+ 			      void __user *value, size_t size);
+ asmlinkage long sys_listxattr(const char __user *path, char __user *list,
+ 			      size_t size);
++asmlinkage long sys_listxattrat(int dfd, const char __user *path, char __user *list,
++			      size_t size, int flags);
+ asmlinkage long sys_llistxattr(const char __user *path, char __user *list,
+ 			       size_t size);
+ asmlinkage long sys_flistxattr(int fd, char __user *list, size_t size);
+ asmlinkage long sys_removexattr(const char __user *path,
+ 				const char __user *name);
++asmlinkage long sys_removexattrat(int dfd, const char __user *path,
++				const char __user *name, int flags);
+ asmlinkage long sys_lremovexattr(const char __user *path,
+ 				 const char __user *name);
+ asmlinkage long sys_fremovexattr(int fd, const char __user *name);
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 45fa180cc56a..4fcc71612b7a 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -886,8 +886,18 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
+ 
++/* fs/xattr.c */
++#define __NR_setxattrat 451
++__SYSCALL(__NR_setxattrat, sys_setxattrat)
++#define __NR_getxattrat 452
++__SYSCALL(__NR_getxattrat, sys_getxattrat)
++#define __NR_listxattrat 453
++__SYSCALL(__NR_listxattrat, sys_listxattrat)
++#define __NR_removexattrat 454
++__SYSCALL(__NR_removexattrat, sys_removexattrat)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 451
++#define __NR_syscalls 455
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+index e8c07da58c9f..b456547c8460 100644
+--- a/include/uapi/linux/fcntl.h
++++ b/include/uapi/linux/fcntl.h
+@@ -96,6 +96,8 @@
+ #define AT_FDCWD		-100    /* Special value used to indicate
+                                            openat should use the current
+                                            working directory. */
++#define AT_XATTR_CREATE	        0x1	/* setxattrat(2): set value, fail if attr already exists */
++#define AT_XATTR_REPLACE	0x2	/* setxattrat(2): set value, fail if attr does not exist */
+ #define AT_SYMLINK_NOFOLLOW	0x100   /* Do not follow symbolic links.  */
+ #define AT_EACCESS		0x200	/* Test access permitted for
+                                            effective IDs, not real IDs.  */
+-- 
+2.40.1
+
