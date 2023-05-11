@@ -2,124 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7D96FEEDD
-	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 11:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2986FEFF2
+	for <lists+linux-arch@lfdr.de>; Thu, 11 May 2023 12:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237110AbjEKJbI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 May 2023 05:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S237858AbjEKKa1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 May 2023 06:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbjEKJbH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 05:31:07 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4884EEC;
-        Thu, 11 May 2023 02:31:06 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-757741ca000so500431385a.2;
-        Thu, 11 May 2023 02:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683797466; x=1686389466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=44LgLHJDIULJkMBem069KICIq3uxO214CaUgM8dXQT8=;
-        b=BDA3XAW6HVHBBCTylbjq0CrSvwep3z/RKHIin6eHkOxIgxSvF9oCpp4JdMxjhKCg8a
-         t6De61RAZB8nwhqVhhnd+GwGOl5A9f6x8ta1mhnXQNHIA8XVVWTsZ3z2sLNVKJGzzpnv
-         pVJ84YIgNXNe3zzg0Bt2DTwq5JDGQGStI/fGod4pqnCGfyQ7QKofa8hYUqI7j01kYIh5
-         pdBpovGUxFwqp+4kZG7VlWddqhNwbB9KXu5x5m7XiaxjuDvLIgeFm1gLHxbutaTsEe0t
-         4R0BYZnEDMzRXc8veBcbo5PxiVrNC+0sZriJIWCU7Z1JN7IWfsEaHn66MIjE5tmEuP4w
-         GExw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797466; x=1686389466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=44LgLHJDIULJkMBem069KICIq3uxO214CaUgM8dXQT8=;
-        b=dOB9EqJRKU9yOdD/XZ2T/hNNSCFQtAGKxLUU16T6mVKz6TCWCNalINroxiiD+sbp+Q
-         N406tuWlnXrlHLE2XghdpM1R3uUH36/6YyhUpY3pcf530A7VBgwc1oc16edXX3Ev6GXs
-         LBNQKqX1qhl2XbgpqAYRY9CZ87xGR7xBkKEcvVQw3uWauWfGtzjMRZV4IMh71TRci4jH
-         SFrooGCERFq2zkzbvwiIg/zPCHBSsLTZ1IZ/vFfLCZyAEVJcl917xswax7omKu2TB8gr
-         Eh7yq94a71+WRcFrOC+k7GuokGZbJbvPS8EGTWotP4K3o7XyytgSr1KhNmmjNqyFGvI7
-         Wfrg==
-X-Gm-Message-State: AC+VfDzWHForSBQse/Glxvyj0A7Qwsifs7e0vqzajeOPLXEXBtCnBeU2
-        uMOe012FZ5yNduh3m9Uq3zTkdCRCOOUnWZCK5tk=
-X-Google-Smtp-Source: ACHHUZ4gCIyUNhd/+bbAhcP9wNcKpLhKmfok0Ws6ilq/cfwGVAdfDhZw6m7PSHSI2kufFJi8oJq2AHQm2PPca7W1ngo=
-X-Received: by 2002:ad4:5961:0:b0:621:4551:c6dc with SMTP id
- eq1-20020ad45961000000b006214551c6dcmr7378789qvb.39.1683797465598; Thu, 11
- May 2023 02:31:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230510195806.2902878-1-nphamcs@gmail.com> <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
-In-Reply-To: <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Thu, 11 May 2023 02:30:54 -0700
-Message-ID: <CAKEwX=OFVkc2GL3jmoC-qAuwZvzxfs7v__aWY=8bLY3MeMq9hA@mail.gmail.com>
-Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-api@vger.kernel.org, kernel-team@meta.com,
+        with ESMTP id S236394AbjEKKaV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 May 2023 06:30:21 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8D29ED3;
+        Thu, 11 May 2023 03:30:19 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 95DB65C05AF;
+        Thu, 11 May 2023 06:30:16 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 11 May 2023 06:30:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683801016; x=1683887416; bh=9I
+        OGDiblkFRbDZIjCr3R6F10Wwf4xRuN5F/Cayos2jI=; b=Nu1zdydqZGCHE0j49I
+        b1k0Pza4Yxzh5UOd/RddabRlgX7vN1ntsEJ8ojvzErPj1SDzt9fIe8B7umjxQcNr
+        OfLFMPMaFR56rNrU6APH2AnhiT0891XGP/q1QMdSYzBLzdytjTkoZNQfvzTSAFse
+        m0BwusgsmgGpJPuAYFkaY0/B3uQ3kuUpEv9dmI4TUvy6p+EgvVs3wFyinhDtsBl8
+        L3NFfBCAC6NOdBSbOP91fXMV3/0fWHLZtPGbTWDv49o29AeKJXsTL1kuLFJn/PZh
+        56xXvj7NAogVE0cKFpbmELF8c2bAqWS9iDhtF3ofSAKCzTHmfygM5wHWVlLuEO46
+        0fLA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683801016; x=1683887416; bh=9IOGDiblkFRbD
+        ZIjCr3R6F10Wwf4xRuN5F/Cayos2jI=; b=WncwX4Jt/jzTIfIQYCMYWxq7z7isX
+        fNHgLClzqebm3J6gYU2Sok+J53nhjgGkdHHb08TMhl3O9ukUUoeh1A5MFdCIc34R
+        sLrNV2vzdQQl1Vxtg1epPEAL7YHFr3QOmcxrO93cZBEAAcO58dTVPc95ccQ4guf5
+        xHqCVc5HMBe9DUg9hrZO80U1eIXSpfZQtQcNfdAGkL+GnF7t/bGNrqOYVXwQKQDH
+        2HidTQjqlErstt3yUuBj34zKvXxczaun/QE/afg8X+45i9Y9O5VC4gnyG085oe6D
+        /vQnehnCCRf9uc7r2lETo+KwZ/dof0urrYBB7wxJQIxWN+qNI0LQKJlmQ==
+X-ME-Sender: <xms:uMNcZFN5d3RLTQpsbp3-Y8sp4mcnKZAOsW2pflnBFC_HJ2lvjLI8-g>
+    <xme:uMNcZH9WWQjS3g-CSuZ-aN-Zy_PoUVYgDAHtX9x8uj-5v7XSh6MdrngspbULuyKxc
+    oLVet4PkU7r_rU5Gpc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:uMNcZERGNKhe9tdebJrR5LZENEySVw0VDwmm-6HaPYIjThyAWV-mqQ>
+    <xmx:uMNcZBtv9piiW3dHHJo2bxc7S2Vrs6HqloMrWMKQ7dTyTo5vGEm4jw>
+    <xmx:uMNcZNdU55v5RiCLOGsTin7jcw1z31lw-jxPktg2isucnP4Mbp5cSA>
+    <xmx:uMNcZMxHUaxKV8AYw7L9HMKMPe1NH-TXo3rTyTPh84QMGNIi-SCRjw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 21CD9B60086; Thu, 11 May 2023 06:30:16 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+Mime-Version: 1.0
+Message-Id: <601fc504-0722-4292-8d3c-0195714a2a59@app.fastmail.com>
+In-Reply-To: <20230511092843.3896327-1-nphamcs@gmail.com>
+References: <20230510195806.2902878-1-nphamcs@gmail.com>
+ <20230511092843.3896327-1-nphamcs@gmail.com>
+Date:   Thu, 11 May 2023 12:29:55 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Nhat Pham" <nphamcs@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>
+Cc:     linux-api@vger.kernel.org, kernel-team@meta.com,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>, chris@zankel.net,
-        Max Filippov <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Johannes Weiner" <hannes@cmpxchg.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: wire up cachestat for arm64
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 11, 2023 at 12:05=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
+On Thu, May 11, 2023, at 11:28, Nhat Pham wrote:
+> cachestat is a new syscall that was previously wired in for most
+> architectures:
 >
-> On Wed, May 10, 2023, at 21:58, Nhat Pham wrote:
-> > cachestat is previously only wired in for x86 (and architectures using
-> > the generic unistd.h table):
-> >
-> > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com=
-/
-> >
-> > This patch wires cachestat in for all the other architectures.
-> >
-> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
+> https://lore.kernel.org/linux-mm/20230510195806.2902878-1-nphamcs@gmail.com/
 >
-> The changes you did here look good, but you missed one
-> file that has never been converted to the syscall.tbl format:
-> arch/arm64/include/asm/unistd32.h along with the __NR_compat_syscalls
-> definition in arch/arm64/include/asm/unistd.h, please add those
-> as well, and then
+> However, those patches miss arm64, which has its own syscall table in 
+> arch/arm64.
+> This patch wires cachestat in for arm64.
 >
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
 
-Just sent a follow-up fixlet for this:
-
-https://lore.kernel.org/linux-mm/20230511092843.3896327-1-nphamcs@gmail.com=
-/T/#u
-
-Thanks for the suggestion!
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
