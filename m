@@ -2,117 +2,206 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5780700463
-	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 11:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0651700466
+	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 11:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240435AbjELJ5u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 12 May 2023 05:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S240579AbjELJ5v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 May 2023 05:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240449AbjELJ5r (ORCPT
+        with ESMTP id S240455AbjELJ5r (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 12 May 2023 05:57:47 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EE118C;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B65CA;
         Fri, 12 May 2023 02:57:20 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-b9d8b458e10so12375654276.1;
-        Fri, 12 May 2023 02:57:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683885440; x=1686477440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=27/Fbt6wOw+aeS9WaGgothEj3OntQ06F+YuUTxkvogA=;
-        b=dbx3Y1x+1axQQiceI8mRcHF3mG3OLNwLg+fpbFOaET0DgQZyGXO7CkO4H8ZG864zpP
-         Q1XIoRsTPm7WmrzNvHfZrJHAbUQbwOA4bMCIRSB/dGAQYWArCUH6tWlRUxbhZDM1jMKo
-         L+kpkhZd8i7+3Z9G0wslPz1Nk0mCM3o/v9XZxorWKviFYRLaDI430iC4eD1VaaRHBNE+
-         pnIvojaFvzsUTfy88FwjqA8GO6WtIdIorfXmHM+8Pi74DIXoa0A8x7+JPbf9BvjETPPE
-         DCSNWuaHdRDZzUpC7hoD4BH5o/LdOan9K7/J/l25sZJGNYZ5x/SIcxln199Mx4zcT3Tz
-         XH2w==
-X-Gm-Message-State: AC+VfDzQP5V/KD1UuPWYeyacAMeyuMwggkVcoipkYp/VU3AZzhEwtK8X
-        pjLxIlz1Bmx6KhuHZM+71vam/vpeqcYwQQ==
-X-Google-Smtp-Source: ACHHUZ4nvxb66LO8i55+ytZu+CRJGw/iJFOOXvDV853cmI5MvRBZdR3yRjlolrljqqZk0DX+5930Lg==
-X-Received: by 2002:a25:844:0:b0:b9d:9f01:770a with SMTP id 65-20020a250844000000b00b9d9f01770amr23732825ybi.37.1683885439871;
-        Fri, 12 May 2023 02:57:19 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id a205-20020a254dd6000000b00b8f54571fc0sm5008404ybb.5.2023.05.12.02.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 02:57:18 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-55a44a2637bso143308887b3.2;
-        Fri, 12 May 2023 02:57:18 -0700 (PDT)
-X-Received: by 2002:a0d:e209:0:b0:555:cbdc:c6 with SMTP id l9-20020a0de209000000b00555cbdc00c6mr23583778ywe.9.1683885438128;
- Fri, 12 May 2023 02:57:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
-In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 May 2023 11:57:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVwusgUqBuERm1=y7fwC5CERuX8VPGdaKcJiu3fM1oNuw@mail.gmail.com>
-Message-ID: <CAMuHMdVwusgUqBuERm1=y7fwC5CERuX8VPGdaKcJiu3fM1oNuw@mail.gmail.com>
-Subject: Re: [PATCH 00/12] arch: Make virt_to_pfn into a static inline
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 971A665478;
+        Fri, 12 May 2023 09:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF9CEC433EF;
+        Fri, 12 May 2023 09:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683885438;
+        bh=8DTsk65nzftmPloQGhgyIVvnjxc6rGKFraKcYqAzBoU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XHWpVGpvScJ+wnFPOzsMLnISW2WY1i2rUko+qPMXnt0buD+d6cYPywna543TP4k19
+         P5o/7EPIO7vE1aGbh6sd9Mu1AFCxs7g8cyuemSQ3woOmsJgLRCJdelwmM76WjeLu/V
+         rc6FrAN+8nik0LnkIHU2XWS/GnqB5ZfkWwjGAfHUj+W2YTg3P6iTqknW6dUTCMm1hx
+         TpVVy99g2LZdtjW9JEYHlhdhewyicJMzh2e6+uohyx7/mNT/0eQy9Di5swJf4A0CZ+
+         TEB3fUrdOfI32JMcqr95RbHIkIs5yQd01D375YzFq+ZQtk668BK4Sz+wrjdsS8AH2i
+         0VCLrAb11a0Jw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pxPWW-00EX9F-8e;
+        Fri, 12 May 2023 10:57:16 +0100
+Date:   Fri, 12 May 2023 10:57:15 +0100
+Message-ID: <86sfc1na84.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?B?IllpLURlIFd1ICjlkLPkuIDlvrcpIg==?= 
+        <Yi-De.Wu@mediatek.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        =?UTF-8?B?Ik1ZIENodWFuZyAo6I6K5piO6LqNKSI=?= 
+        <MY.Chuang@mediatek.com>,
+        "quic_tsoni@quicinc.com" <quic_tsoni@quicinc.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?UTF-8?B?Ikl2YW4gVHNlbmcgKOabvuW/l+i7kiki?= 
+        <ivan.tseng@mediatek.com>,
+        =?UTF-8?B?IlplLXl1IFdhbmcgKOeOi+a+pOWuhyki?= 
+        <Ze-yu.Wang@mediatek.com>,
+        =?UTF-8?B?IlBlaUx1biBTdWVpICjpmovln7nlgKspIg==?= 
+        <PeiLun.Suei@mediatek.com>,
+        =?UTF-8?B?IkxpanUtY2xyIENoZW4gKOmZs+m6lw==?= =?UTF-8?B?5aaCKSI=?= 
+        <Liju-clr.Chen@mediatek.com>,
+        =?UTF-8?B?IkphZGVzIFNo?= =?UTF-8?B?aWggKOaWveWQkeeOqCki?= 
+        <jades.shih@mediatek.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        =?UTF-8?B?IlNoYXduIEhzaWFvICjola3lv5fnpaUpIg==?= 
+        <shawn.hsiao@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        =?UTF-8?B?Ik1pbGVzIENoZW4gKA==?= =?UTF-8?B?6Zmz5rCR5qi6KSI=?= 
+        <Miles.Chen@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        =?UTF-8?B?IllpbmdzaGl1?= =?UTF-8?B?YW4gUGFuICjmvZjnqY7ou5IpIg==?= 
+        <Yingshiuan.Pan@mediatek.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>
+Subject: Re: [PATCH v2 5/7] virt: geniezone: Add irqchip support for virtual interrupt injection
+In-Reply-To: <fa864743c550ecd0a0c8052bfe7fddcc3f9be15c.camel@mediatek.com>
+References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
+        <20230428103622.18291-6-yi-de.wu@mediatek.com>
+        <f1c8c1c1c091be87dfbc27b9178fc3e6@kernel.org>
+        <762e3494ed468f0337b1c336615065b154396d23.camel@mediatek.com>
+        <86wn1em1hx.wl-maz@kernel.org>
+        <fa864743c550ecd0a0c8052bfe7fddcc3f9be15c.camel@mediatek.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: Yi-De.Wu@mediatek.com, corbet@lwn.net, linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, robh+dt@kernel.org, MY.Chuang@mediatek.com, quic_tsoni@quicinc.com, krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org, ivan.tseng@mediatek.com, Ze-yu.Wang@mediatek.com, PeiLun.Suei@mediatek.com, Liju-clr.Chen@mediatek.com, jades.shih@mediatek.com, catalin.marinas@arm.com, dbrazdil@google.com, shawn.hsiao@mediatek.com, linux-arm-kernel@lists.infradead.org, Miles.Chen@mediatek.com, matthias.bgg@gmail.com, Yingshiuan.Pan@mediatek.com, linux-arch@vger.kernel.org, arnd@arndb.de, angelogioacchino.delregno@collabora.com, linux-doc@vger.kernel.org, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+On Fri, 12 May 2023 09:16:58 +0100,
+"Yi-De Wu (=E5=90=B3=E4=B8=80=E5=BE=B7)" <Yi-De.Wu@mediatek.com> wrote:
+>=20
+> On Fri, 2023-05-12 at 08:51 +0100, Marc Zyngier wrote:
+> > External email : Please do not click links or open attachments until
+> > you have verified the sender or the content.
+> >=20
+> >=20
+> > On Fri, 12 May 2023 08:19:31 +0100,
+> > "Yi-De Wu (=E5=90=B3=E4=B8=80=E5=BE=B7)" <Yi-De.Wu@mediatek.com> wrote:
+> > >=20
+> > > On Fri, 2023-04-28 at 19:59 +0100, Marc Zyngier wrote:
+> > > > External email : Please do not click links or open attachments
+> > > > until
+> > > > you have verified the sender or the content.
+> > > >=20
+> > > >=20
+> > > > On 2023-04-28 11:36, Yi-De Wu wrote:
+> > > > > From: "Yingshiuan Pan" <yingshiuan.pan@mediatek.com>
+> > > > >=20
+> > > > > Enable GenieZone to handle virtual interrupt injection request.
+> > > > >=20
+> > > > > Signed-off-by: Yingshiuan Pan <yingshiuan.pan@mediatek.com>
+> > > > > Signed-off-by: Yi-De Wu <yi-de.wu@mediatek.com>
+> > > > > ---
+> > > > >  arch/arm64/geniezone/Makefile       |  2 +-
+> > > > >  arch/arm64/geniezone/gzvm_arch.c    | 24 ++++++--
+> > > > >  arch/arm64/geniezone/gzvm_arch.h    | 11 ++++
+> > > > >  arch/arm64/geniezone/gzvm_irqchip.c | 88
+> > > > > +++++++++++++++++++++++++++++
+> > > > >  drivers/virt/geniezone/gzvm_vm.c    | 75
+> > > > > ++++++++++++++++++++++++
+> > > > >  include/linux/gzvm_drv.h            |  4 ++
+> > > > >  include/uapi/linux/gzvm.h           | 38 ++++++++++++-
+> > > > >  7 files changed, 235 insertions(+), 7 deletions(-)
+> > > > >  create mode 100644 arch/arm64/geniezone/gzvm_irqchip.c
+> > > >=20
+> > > > [...]
+> > > >=20
+> > > > > +++ b/arch/arm64/geniezone/gzvm_irqchip.c
+> > > > > @@ -0,0 +1,88 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > > +/*
+> > > > > + * Copyright (c) 2023 MediaTek Inc.
+> > > > > + */
+> > > > > +
+> > > > > +#include <linux/irqchip/arm-gic-v3.h>
+> > > > > +#include <kvm/arm_vgic.h>
+> > > >=20
+> > > > NAK.
+> > > >=20
+> > > > There is no way you can rely on anything from KVM in
+> > > > your own hypervisor code.
+> > > >=20
+> > >=20
+> > > Same with previous discussion, we'd like to copy or rename the
+> > > related
+> > > part from KVM and keep the maintainance at our own if it's ok.
+> >=20
+> > Why do you need *ANY* of the KVM stuff? Please fully enumerate these
+> > dependencies and why you have them.
+> >=20
+> > Directly using KVM stuff for something completely unrelated is not
+> > OK,
+> > and will never be.
+> >=20
+> >         M.
+> >=20
+> > --
+> > Without deviation from the norm, progress is not possible.
+>=20
+> The particular part we'd like to leverage from KVM are as followed
+> 1. `gfn_to_pfn_memslot` to convert guest physical address(or
+> intermediate physical address) to physical address
 
-On Thu, May 11, 2023 at 1:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> This is an attempt to harden the typing on virt_to_pfn()
-> and pfn_to_virt().
->
-> Making virt_to_pfn() a static inline taking a strongly typed
-> (const void *) makes the contract of a passing a pointer of that
-> type to the function explicit and exposes any misuse of the
-> macro virt_to_pfn() acting polymorphic and accepting many types
-> such as (void *), (unitptr_t) or (unsigned long) as arguments
-> without warnings.
->
-> For symmetry, we do the same with pfn_to_virt().
->
-> The problem with this inconsistent typing was pointed out by
-> Russell King:
-> https://lore.kernel.org/linux-arm-kernel/YoJDKJXc0MJ2QZTb@shell.armlinux.org.uk/
->
-> And confirmed by Andrew Morton:
-> https://lore.kernel.org/linux-mm/20220701160004.2ffff4e5ab59a55499f4c736@linux-foundation.org/
->
-> So the recognition of the problem is widespread.
->
-> These platforms have been chosen as initial conversion targets:
->
-> - ARC
-> - ARM
-> - ARM64/Aarch64
-> - asm-generic (including for example x86)
-> - m68k
+What is a memslot in your hypervisor? How does it relate to KVM's?
+What about the use of struct kvm?
 
-Thanks, builds fine on m68k with MMU, and boots fine on ARAnyM,
-with the extra changes I replied on patch 2/12.
+I'm sorry, but your use of *internal* structures and API would make it
+impossible for us to make any further change without potentially
+affecting your hypervisor. Which is closed source and untestable.
 
-Gr{oetje,eeting}s,
+To sum it up, I'm strongly opposed to any use of these data
+structures.  If you can spot some commonalities, expose them as a
+0-cost abstraction. But don't use them as is your code.
 
-                        Geert
+> 2. get ARM's number of interrupt of different types e.g. number of SGI,
+> number of PPI...etc
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+These are architectural constants, and you can define your own. That
+will cost you nothing but a handful of #define, and keep the two
+subsystem independent.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
