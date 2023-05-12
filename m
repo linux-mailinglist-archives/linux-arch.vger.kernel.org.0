@@ -2,46 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1F070098B
-	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 15:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AC07009B9
+	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 16:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240690AbjELNyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 May 2023 09:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S241432AbjELOAH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 May 2023 10:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241280AbjELNyb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 May 2023 09:54:31 -0400
+        with ESMTP id S241428AbjELN7i (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 May 2023 09:59:38 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0103D13857;
-        Fri, 12 May 2023 06:54:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C139C13C2E;
+        Fri, 12 May 2023 06:59:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683899669; x=1715435669;
+  t=1683899972; x=1715435972;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=fKA8Wz0olEp08ryiuI9Xy2pZsT93duPTdIQf+NSHyVM=;
-  b=y04/M6z9+4THv84Xllfp2O4D7OWLq5Towz3qlfw1JnYR/fr393ch4F2c
-   JZdNjp1VdHV+XrXKPDOmk9alRPOGyUwAowT7gpImeyTOhlXL7jrlGfYor
-   ui6iEy85u4McB4MVBzzZYW23GiPSI9AIosqdUzvmvacZi5Ksu+DI/o0Yh
-   4qA340R5Opi33biJd1fpEFjF3nohg+Qh0a9fkQNNMqlkj+9BK92OAqTVT
-   hchn/9eJDJLjGcIPHEnFlONeUBDRuuoRptrtY2IeNI53jXYMcq/qMVI5K
-   A7V3ifhZC5ty8N8FVdVfngXlhYrJjC1c5klfxHbYpy6umt4ZWVdN79WLy
-   Q==;
+  bh=RgLBvhgm2odiQ2SzAp4nOs61NsPOgBYkIG0oBcKhByU=;
+  b=GVSUzRfFY5YYiWXPfcAo6iwrCosOKSgjUkT76TiU9XbpSJiLnbxW6UJ+
+   GUzlqgkvcambJp4qB8YS6HJq3fjXs/V71+EaJltxM4+aIOvXawbUlP6Jz
+   5hFI4uzrkT2SuXWYoDiLoDMWWj9Y8SCaGy0GHLjwvMVxKNNkGHtE2nHPI
+   2r5FeRcJiw9DFSsc4aUkemV4n3rpmIF1A6AC612/6+b9jQ5TyhxMs9H/a
+   GI0uxm7dh8Ss7yg01Irv/zeLD0fNqIGvpmPV82iPgd2yJxTWbsEqAbmu9
+   6Bzj0H9JOFoJKNV0xwta8lGPX5suFUFZgVrrnMSwgNpIJBoA1hYRVx4rG
+   g==;
 X-IronPort-AV: E=Sophos;i="5.99,269,1677567600"; 
-   d="asc'?scan'208";a="210975834"
+   d="asc'?scan'208";a="151755680"
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2023 06:54:28 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2023 06:59:12 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
  chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 12 May 2023 06:54:25 -0700
+ 15.1.2507.21; Fri, 12 May 2023 06:59:11 -0700
 Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 12 May 2023 06:54:23 -0700
-Date:   Fri, 12 May 2023 14:54:03 +0100
+ Transport; Fri, 12 May 2023 06:59:10 -0700
+Date:   Fri, 12 May 2023 14:58:49 +0100
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Jisheng Zhang <jszhang@kernel.org>
 CC:     Paul Walmsley <paul.walmsley@sifive.com>,
@@ -50,15 +50,15 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Arnd Bergmann <arnd@arndb.de>,
         <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 2/4] riscv: move HAVE_RETHOOK to keep entries sorted
-Message-ID: <20230512-humming-nebula-247ccd45674c@wendy>
+Subject: Re: [PATCH 4/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Message-ID: <20230512-spouse-pang-87f2e579baa2@wendy>
 References: <20230511141211.2418-1-jszhang@kernel.org>
- <20230511141211.2418-3-jszhang@kernel.org>
+ <20230511141211.2418-5-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qxL1yz6psSH+KTHa"
+        protocol="application/pgp-signature"; boundary="aCJ58t5/KMUTtFbc"
 Content-Disposition: inline
-In-Reply-To: <20230511141211.2418-3-jszhang@kernel.org>
+In-Reply-To: <20230511141211.2418-5-jszhang@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
@@ -69,63 +69,46 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---qxL1yz6psSH+KTHa
+--aCJ58t5/KMUTtFbc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 11, 2023 at 10:12:09PM +0800, Jisheng Zhang wrote:
-> Commit b57c2f124098 ("riscv: add riscv rethook implementation") selects
-> the HAVE_RETHOOK option for the first time in riscv, but it breaks the
-> entries order. Properly move its location to keep entries sorted.
+On Thu, May 11, 2023 at 10:12:11PM +0800, Jisheng Zhang wrote:
 
-The entries need a rework in general, but it's only really worth doing
-the whole lot during the merge window to avoid a rake of conflicts.
+> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.=
+lds.S
+> index e5f9f4677bbf..492dd4b8f3d6 100644
+> --- a/arch/riscv/kernel/vmlinux.lds.S
+> +++ b/arch/riscv/kernel/vmlinux.lds.S
+> @@ -85,11 +85,11 @@ SECTIONS
+>  	INIT_DATA_SECTION(16)
+> =20
+>  	.init.pi : {
+> -		*(.init.pi*)
+> +		KEEP(*(.init.pi*))
+>  	}
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+This section no longer exists in v6.4-rc1, it is now:
+	/* Those sections result from the compilation of kernel/pi/string.c */
+	.init.pidata : {
+		*(.init.srodata.cst8*)
+		*(.init__bug_table*)
+		*(.init.sdata*)
+	}
 
-Thanks,
+Cheers,
 Conor.
 
->=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 348c0fa1fc8c..f0663b52d052 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -110,7 +110,6 @@ config RISCV
->  	select HAVE_KPROBES if !XIP_KERNEL
->  	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
->  	select HAVE_KRETPROBES if !XIP_KERNEL
-> -	select HAVE_RETHOOK if !XIP_KERNEL
->  	select HAVE_MOVE_PMD
->  	select HAVE_MOVE_PUD
->  	select HAVE_PCI
-> @@ -119,6 +118,7 @@ config RISCV
->  	select HAVE_PERF_USER_STACK_DUMP
->  	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
->  	select HAVE_REGS_AND_STACK_ACCESS_API
-> +	select HAVE_RETHOOK if !XIP_KERNEL
->  	select HAVE_RSEQ
->  	select HAVE_STACKPROTECTOR
->  	select HAVE_SYSCALL_TRACEPOINTS
-> --=20
-> 2.40.1
->=20
-
---qxL1yz6psSH+KTHa
+--aCJ58t5/KMUTtFbc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF5E+wAKCRB4tDGHoIJi
-0qIkAP4h1wGTMEuPQYUmv5MtUZW0KshBDKL0NAIFpcdNpWbPXAD/bnHmXzCccO7b
-vu3eMlCL4qwuQmizdGLUuA36jpHjhQA=
-=DvPo
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF5GGQAKCRB4tDGHoIJi
+0qYyAQCRMo5iM+rBTlmU5brSvMFm+H9q1MMggt56ESxJdUM5owEA1Rux0WE9Ky3q
+wRiS5v6F7DGyWjBZXjvhP+7kcWDqfQM=
+=O/cE
 -----END PGP SIGNATURE-----
 
---qxL1yz6psSH+KTHa--
+--aCJ58t5/KMUTtFbc--
