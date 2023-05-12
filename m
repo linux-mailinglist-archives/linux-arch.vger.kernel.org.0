@@ -2,368 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4625870054D
-	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 12:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F62700571
+	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 12:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240821AbjELKZM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 May 2023 06:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S240773AbjELK2U convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Fri, 12 May 2023 06:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240756AbjELKYz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 May 2023 06:24:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205B91160A;
-        Fri, 12 May 2023 03:24:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8A46E2285C;
-        Fri, 12 May 2023 10:24:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683887089; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TsCcOGz5betxsl/z3gg1DELmwbMOiMUYFQ0FPGwVwok=;
-        b=ckOic6Y9CZxZNqNruxJPc64gJXNyDImWkmR6oxIhC89WsX4d+Q7Rj/DdiQ75cODaEqCvga
-        VL/AXgIllwXu0rl3QrEd855mo2hZ6ehYUNhPrCDzzWv0RKsv1uCLpdembpVdveseQe59sr
-        hsveTVLmid82r8cqirHFQOLJVqkrCA8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683887089;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TsCcOGz5betxsl/z3gg1DELmwbMOiMUYFQ0FPGwVwok=;
-        b=4DQaoZVnPVJqKMM5RAM0aiiI0GTW6uNcGd06Sc0n7MkQZMMaWwt6D/j2xT/Ptnq8wYyArm
-        xGVbYEyk7nsXEqAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1103A13A0A;
-        Fri, 12 May 2023 10:24:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CKgzA/ETXmS5XwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Fri, 12 May 2023 10:24:49 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net,
-        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
-        sam@ravnborg.org, suijingfeng@loongson.cn
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v7 7/7] fbdev: Rename fb_mem*() helpers
-Date:   Fri, 12 May 2023 12:24:44 +0200
-Message-Id: <20230512102444.5438-8-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230512102444.5438-1-tzimmermann@suse.de>
-References: <20230512102444.5438-1-tzimmermann@suse.de>
+        with ESMTP id S240545AbjELK2B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 May 2023 06:28:01 -0400
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF92E14E69;
+        Fri, 12 May 2023 03:26:57 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-559e53d1195so140909517b3.2;
+        Fri, 12 May 2023 03:26:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683887188; x=1686479188;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t7oE+wnAwx9lWj1Dzx32p5gbR9ZsZdOiJLOsGIhtwMM=;
+        b=Gdw89S0d94MLMQTfu+rWI0A/Vb9SX75M6/1QmlaWIQyxRWKvm7PNjbzgj6QxSieNm+
+         fC2cSbrKeYTQ3k/pHPMp/x3DvtcAemMcW4FQuPfKxVCleSWVPnKdy4scY+OyO8XD2AtS
+         ilFqpEGVkYgkmPoyu2+RuewMwfp0764V12vFeLbwo3KEpECSgv+UZ6v59eWrPV3teDv6
+         W4lEgmP2C6RFnLvOakKGE7+z6N2Tgx4gtPj930OZtvvJL2LWuBrsJTi5lbAkTXA1V5bL
+         YraVM9d0eggOhhTJUw2cOYkBJa8hYWVXK2z17BoJRTPXR4wGRU+bSi3Bmmk+drUQH2fE
+         yjBA==
+X-Gm-Message-State: AC+VfDwrXpAc3/P6ATfWX8R3BOMaPgihiO3iQ95GCL6yI7I1l3SUXLOz
+        FZIa+rrHPLmBWFQdlxeYAuOpC5cYj6V+KQ==
+X-Google-Smtp-Source: ACHHUZ5jCOqID/Xnrtcckf3j3udYN3KPPbW9smGWfnbOkI53lZyZYT3UXadPEbpFxOIWeB1hJsKojA==
+X-Received: by 2002:a81:7586:0:b0:54f:b244:fef9 with SMTP id q128-20020a817586000000b0054fb244fef9mr23977199ywc.0.1683887187840;
+        Fri, 12 May 2023 03:26:27 -0700 (PDT)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id b133-20020a81678b000000b00557027bf788sm5584201ywc.74.2023.05.12.03.26.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 03:26:26 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-559de1d36a9so140726217b3.1;
+        Fri, 12 May 2023 03:26:26 -0700 (PDT)
+X-Received: by 2002:a0d:c281:0:b0:536:cb48:9059 with SMTP id
+ e123-20020a0dc281000000b00536cb489059mr25024547ywd.50.1683887185987; Fri, 12
+ May 2023 03:26:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
+ <20230503-virt-to-pfn-v6-4-rc1-v1-2-6c4698dcf9c8@linaro.org> <CAMuHMdVJjjo9TMeow1-i27ybpQOu9-VZYnTkY5p8p_Cm6sW_GA@mail.gmail.com>
+In-Reply-To: <CAMuHMdVJjjo9TMeow1-i27ybpQOu9-VZYnTkY5p8p_Cm6sW_GA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 12 May 2023 12:26:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV5Aukxx+XyC-s2=CDa2BYqvc3uRvWBhD6ri5j09tXj3A@mail.gmail.com>
+Message-ID: <CAMuHMdV5Aukxx+XyC-s2=CDa2BYqvc3uRvWBhD6ri5j09tXj3A@mail.gmail.com>
+Subject: Re: [PATCH 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Vineet Gupta <vgupta@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Update the names of the fb_mem*() helpers to be consistent with their
-regular counterparts. Hence, fb_memset() now becomes fb_memset_io(),
-fb_memcpy_fromfb() now becomes fb_memcpy_fromio() and fb_memcpy_tofb()
-becomes fb_memcpy_toio(). No functional changes.
+On Fri, May 12, 2023 at 11:55 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Thu, May 11, 2023 at 1:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> > Functions that work on a pointer to virtual memory such as
+> > virt_to_pfn() and users of that function such as
+> > virt_to_page() are supposed to pass a pointer to virtual
+> > memory, ideally a (void *) or other pointer. However since
+> > many architectures implement virt_to_pfn() as a macro,
+> > this function becomes polymorphic and accepts both a
+> > (unsigned long) and a (void *).
+> >
+> > Fix up the offending calls in arch/m68k with explicit casts.
+> >
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> > ---
+> > ChangeLog v1->v2:
+> > - Add an extra parens around the page argument to the
+> >   PD_PTABLE() macro, as is normally required.
+>
+> Thanks for the update!
+>
+> To build sun3_defconfig and m5475evb_defconfig cleanly, you need to
+> include the (Gmail-whitespace-damaged) changes below.
+> These were compile-tested only.
 
-v6:
-	* update new file fb_io_fops.c
+> --- a/arch/m68k/include/asm/sun3_pgtable.h
+> +++ b/arch/m68k/include/asm/sun3_pgtable.h
+> @@ -109,9 +109,9 @@ static inline void pte_clear (struct mm_struct
+> *mm, unsigned long addr, pte_t *p
+>  #define pfn_pte(pfn, pgprot) \
+>  ({ pte_t __pte; pte_val(__pte) = pfn | pgprot_val(pgprot); __pte; })
+>
+> -#define pte_page(pte)          virt_to_page(__pte_page(pte))
+> +#define pte_page(pte)          virt_to_page((void *)__pte_page(pte))
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- arch/ia64/include/asm/fb.h              | 12 ++++++------
- arch/loongarch/include/asm/fb.h         | 12 ++++++------
- arch/sparc/include/asm/fb.h             | 12 ++++++------
- drivers/video/fbdev/aty/mach64_cursor.c |  2 +-
- drivers/video/fbdev/chipsfb.c           |  2 +-
- drivers/video/fbdev/core/fb_io_fops.c   |  4 ++--
- drivers/video/fbdev/kyro/fbdev.c        |  2 +-
- drivers/video/fbdev/pvr2fb.c            |  2 +-
- drivers/video/fbdev/sstfb.c             |  2 +-
- drivers/video/fbdev/stifb.c             |  4 ++--
- drivers/video/fbdev/tdfxfb.c            |  2 +-
- include/asm-generic/fb.h                | 16 ++++++++--------
- 12 files changed, 36 insertions(+), 36 deletions(-)
+Much simpler to drop the cast in __pte_page() instead:
 
-diff --git a/arch/ia64/include/asm/fb.h b/arch/ia64/include/asm/fb.h
-index bcf982043a5c..1717b26fd423 100644
---- a/arch/ia64/include/asm/fb.h
-+++ b/arch/ia64/include/asm/fb.h
-@@ -20,23 +20,23 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
- }
- #define fb_pgprotect fb_pgprotect
- 
--static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
+@@ -91,7 +91,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+ #define pmd_set(pmdp,ptep) do {} while (0)
+
+ #define __pte_page(pte) \
+-((unsigned long) __va ((pte_val (pte) & SUN3_PAGE_PGNUM_MASK) << PAGE_SHIFT))
++        (__va ((pte_val (pte) & SUN3_PAGE_PGNUM_MASK) << PAGE_SHIFT))
+
+ static inline unsigned long pmd_page_vaddr(pmd_t pmd)
  {
- 	memcpy(to, (void __force *)from, n);
- }
--#define fb_memcpy_fromfb fb_memcpy_fromfb
-+#define fb_memcpy_fromio fb_memcpy_fromio
- 
--static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	memcpy((void __force *)to, from, n);
- }
--#define fb_memcpy_tofb fb_memcpy_tofb
-+#define fb_memcpy_toio fb_memcpy_toio
- 
--static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
- {
- 	memset((void __force *)addr, c, n);
- }
--#define fb_memset fb_memset
-+#define fb_memset fb_memset_io
- 
- #include <asm-generic/fb.h>
- 
-diff --git a/arch/loongarch/include/asm/fb.h b/arch/loongarch/include/asm/fb.h
-index c6fc7ef374a4..0b218b10a9ec 100644
---- a/arch/loongarch/include/asm/fb.h
-+++ b/arch/loongarch/include/asm/fb.h
-@@ -8,23 +8,23 @@
- #include <linux/compiler.h>
- #include <linux/string.h>
- 
--static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	memcpy(to, (void __force *)from, n);
- }
--#define fb_memcpy_fromfb fb_memcpy_fromfb
-+#define fb_memcpy_fromio fb_memcpy_fromio
- 
--static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	memcpy((void __force *)to, from, n);
- }
--#define fb_memcpy_tofb fb_memcpy_tofb
-+#define fb_memcpy_toio fb_memcpy_toio
- 
--static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
- {
- 	memset((void __force *)addr, c, n);
- }
--#define fb_memset fb_memset
-+#define fb_memset fb_memset_io
- 
- #include <asm-generic/fb.h>
- 
-diff --git a/arch/sparc/include/asm/fb.h b/arch/sparc/include/asm/fb.h
-index 077da91aeba1..572ecd3e1cc4 100644
---- a/arch/sparc/include/asm/fb.h
-+++ b/arch/sparc/include/asm/fb.h
-@@ -18,23 +18,23 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
- int fb_is_primary_device(struct fb_info *info);
- #define fb_is_primary_device fb_is_primary_device
- 
--static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	sbus_memcpy_fromio(to, from, n);
- }
--#define fb_memcpy_fromfb fb_memcpy_fromfb
-+#define fb_memcpy_fromio fb_memcpy_fromio
- 
--static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	sbus_memcpy_toio(to, from, n);
- }
--#define fb_memcpy_tofb fb_memcpy_tofb
-+#define fb_memcpy_toio fb_memcpy_toio
- 
--static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
- {
- 	sbus_memset_io(addr, c, n);
- }
--#define fb_memset fb_memset
-+#define fb_memset fb_memset_io
- 
- #include <asm-generic/fb.h>
- 
-diff --git a/drivers/video/fbdev/aty/mach64_cursor.c b/drivers/video/fbdev/aty/mach64_cursor.c
-index 4ad0331a8c57..971355c2cd7e 100644
---- a/drivers/video/fbdev/aty/mach64_cursor.c
-+++ b/drivers/video/fbdev/aty/mach64_cursor.c
-@@ -153,7 +153,7 @@ static int atyfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
- 	    u8 m, b;
- 
- 	    // Clear cursor image with 1010101010...
--	    fb_memset(dst, 0xaa, 1024);
-+	    fb_memset_io(dst, 0xaa, 1024);
- 
- 	    offset = align - width*2;
- 
-diff --git a/drivers/video/fbdev/chipsfb.c b/drivers/video/fbdev/chipsfb.c
-index 7799d52a651f..2a27ba94f652 100644
---- a/drivers/video/fbdev/chipsfb.c
-+++ b/drivers/video/fbdev/chipsfb.c
-@@ -332,7 +332,7 @@ static const struct fb_var_screeninfo chipsfb_var = {
- 
- static void init_chips(struct fb_info *p, unsigned long addr)
- {
--	fb_memset(p->screen_base, 0, 0x100000);
-+	fb_memset_io(p->screen_base, 0, 0x100000);
- 
- 	p->fix = chipsfb_fix;
- 	p->fix.smem_start = addr;
-diff --git a/drivers/video/fbdev/core/fb_io_fops.c b/drivers/video/fbdev/core/fb_io_fops.c
-index f5299d50f33b..5985e5e1b040 100644
---- a/drivers/video/fbdev/core/fb_io_fops.c
-+++ b/drivers/video/fbdev/core/fb_io_fops.c
-@@ -42,7 +42,7 @@ ssize_t fb_io_read(struct fb_info *info, char __user *buf, size_t count, loff_t
- 	while (count) {
- 		c  = (count > PAGE_SIZE) ? PAGE_SIZE : count;
- 		dst = buffer;
--		fb_memcpy_fromfb(dst, src, c);
-+		fb_memcpy_fromio(dst, src, c);
- 		dst += c;
- 		src += c;
- 
-@@ -117,7 +117,7 @@ ssize_t fb_io_write(struct fb_info *info, const char __user *buf, size_t count,
- 		}
- 		c -= trailing;
- 
--		fb_memcpy_tofb(dst, src, c);
-+		fb_memcpy_toio(dst, src, c);
- 		dst += c;
- 		src += c;
- 		*ppos += c;
-diff --git a/drivers/video/fbdev/kyro/fbdev.c b/drivers/video/fbdev/kyro/fbdev.c
-index 0596573ef140..3f277bdb3a32 100644
---- a/drivers/video/fbdev/kyro/fbdev.c
-+++ b/drivers/video/fbdev/kyro/fbdev.c
-@@ -737,7 +737,7 @@ static int kyrofb_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 			       info->var.bits_per_pixel);
- 	size *= info->var.yres_virtual;
- 
--	fb_memset(info->screen_base, 0, size);
-+	fb_memset_io(info->screen_base, 0, size);
- 
- 	if (register_framebuffer(info) < 0)
- 		goto out_unmap;
-diff --git a/drivers/video/fbdev/pvr2fb.c b/drivers/video/fbdev/pvr2fb.c
-index 550fdb5b4d41..c692cd597ce3 100644
---- a/drivers/video/fbdev/pvr2fb.c
-+++ b/drivers/video/fbdev/pvr2fb.c
-@@ -801,7 +801,7 @@ static int __maybe_unused pvr2fb_common_init(void)
- 		goto out_err;
- 	}
- 
--	fb_memset(fb_info->screen_base, 0, pvr2_fix.smem_len);
-+	fb_memset_io(fb_info->screen_base, 0, pvr2_fix.smem_len);
- 
- 	pvr2_fix.ypanstep	= nopan  ? 0 : 1;
- 	pvr2_fix.ywrapstep	= nowrap ? 0 : 1;
-diff --git a/drivers/video/fbdev/sstfb.c b/drivers/video/fbdev/sstfb.c
-index da296b2ab54a..582324f5d869 100644
---- a/drivers/video/fbdev/sstfb.c
-+++ b/drivers/video/fbdev/sstfb.c
-@@ -335,7 +335,7 @@ static int sst_calc_pll(const int freq, int *freq_out, struct pll_timing *t)
- static void sstfb_clear_screen(struct fb_info *info)
- {
- 	/* clear screen */
--	fb_memset(info->screen_base, 0, info->fix.smem_len);
-+	fb_memset_io(info->screen_base, 0, info->fix.smem_len);
- }
- 
- 
-diff --git a/drivers/video/fbdev/stifb.c b/drivers/video/fbdev/stifb.c
-index baca6974e288..01363dccfdaf 100644
---- a/drivers/video/fbdev/stifb.c
-+++ b/drivers/video/fbdev/stifb.c
-@@ -527,8 +527,8 @@ rattlerSetupPlanes(struct stifb_info *fb)
- 	fb->id = saved_id;
- 
- 	for (y = 0; y < fb->info.var.yres; ++y)
--		fb_memset(fb->info.screen_base + y * fb->info.fix.line_length,
--			0xff, fb->info.var.xres * fb->info.var.bits_per_pixel/8);
-+		fb_memset_io(fb->info.screen_base + y * fb->info.fix.line_length,
-+			     0xff, fb->info.var.xres * fb->info.var.bits_per_pixel/8);
- 
- 	CRX24_SET_OVLY_MASK(fb);
- 	SETUP_FB(fb);
-diff --git a/drivers/video/fbdev/tdfxfb.c b/drivers/video/fbdev/tdfxfb.c
-index d17e5e1472aa..cdf8e9fe9948 100644
---- a/drivers/video/fbdev/tdfxfb.c
-+++ b/drivers/video/fbdev/tdfxfb.c
-@@ -1116,7 +1116,7 @@ static int tdfxfb_cursor(struct fb_info *info, struct fb_cursor *cursor)
- 		u8 *mask = (u8 *)cursor->mask;
- 		int i;
- 
--		fb_memset(cursorbase, 0, 1024);
-+		fb_memset_io(cursorbase, 0, 1024);
- 
- 		for (i = 0; i < cursor->image.height; i++) {
- 			int h = 0;
-diff --git a/include/asm-generic/fb.h b/include/asm-generic/fb.h
-index 0540eccdbeca..bb7ee9c70e60 100644
---- a/include/asm-generic/fb.h
-+++ b/include/asm-generic/fb.h
-@@ -108,28 +108,28 @@ static inline void fb_writeq(u64 b, volatile void __iomem *addr)
- #endif
- #endif
- 
--#ifndef fb_memcpy_fromfb
--static inline void fb_memcpy_fromfb(void *to, const volatile void __iomem *from, size_t n)
-+#ifndef fb_memcpy_fromio
-+static inline void fb_memcpy_fromio(void *to, const volatile void __iomem *from, size_t n)
- {
- 	memcpy_fromio(to, from, n);
- }
--#define fb_memcpy_fromfb fb_memcpy_fromfb
-+#define fb_memcpy_fromio fb_memcpy_fromio
- #endif
- 
--#ifndef fb_memcpy_tofb
--static inline void fb_memcpy_tofb(volatile void __iomem *to, const void *from, size_t n)
-+#ifndef fb_memcpy_toio
-+static inline void fb_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
- {
- 	memcpy_toio(to, from, n);
- }
--#define fb_memcpy_tofb fb_memcpy_tofb
-+#define fb_memcpy_toio fb_memcpy_toio
- #endif
- 
- #ifndef fb_memset
--static inline void fb_memset(volatile void __iomem *addr, int c, size_t n)
-+static inline void fb_memset_io(volatile void __iomem *addr, int c, size_t n)
- {
- 	memset_io(addr, c, n);
- }
--#define fb_memset fb_memset
-+#define fb_memset fb_memset_io
- #endif
- 
- #endif /* __ASM_GENERIC_FB_H_ */
+
+>  #define pmd_pfn(pmd)           (pmd_val(pmd) >> PAGE_SHIFT)
+> -#define pmd_page(pmd)          virt_to_page(pmd_page_vaddr(pmd))
+> +#define pmd_page(pmd)          virt_to_page((void *)pmd_page_vaddr(pmd))
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.40.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
