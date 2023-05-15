@@ -2,101 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D99470117F
-	for <lists+linux-arch@lfdr.de>; Fri, 12 May 2023 23:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1F77026B9
+	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 10:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235348AbjELVsE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 12 May 2023 17:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S239657AbjEOIHg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 May 2023 04:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239602AbjELVsD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 May 2023 17:48:03 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BAF658E;
-        Fri, 12 May 2023 14:48:02 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-7577ef2fa31so2084258485a.0;
-        Fri, 12 May 2023 14:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683928082; x=1686520082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ktA0DPNP5CNQIjFJf+YrLVaDtly7+JfQEYIY1aBuK2A=;
-        b=EpptMN9+Uga6hAcxAo2XzkvGGde8U7iZgqSZwup4gFk7ua2rwfBFWm657rBr2tzbl8
-         alDpTk4rP4SwxS0++WAmPE4FdQWVm4/enEJ2mQ3J7ahbm+q5NhFo7RUTs7wUOrscZMox
-         45eupQg0KhJwmEmfQY80h//uPbuUrGvgy+2S/kMV3ur3MjhthaKdkBj5g/zXWCaAa42F
-         nlBJ5ENELKGgHvDXJ6O1MgCI5TkNz2MkLRmOh4ivwQL0KVMfgjcXf0CAUWx2Kaefsg2L
-         rPMZHV59fzGHCt/miNVdcAi7XITRfBOYPKnI+nTBEP2ciUF+hg8YN/lZWQD5Nj0f53m5
-         YpxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683928082; x=1686520082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ktA0DPNP5CNQIjFJf+YrLVaDtly7+JfQEYIY1aBuK2A=;
-        b=i36IYFiU0ytePZ7pcIjov0x2AkeeuPbz7ORnwIOzT1owKwqt7rCp1nCSkJYqRTktgw
-         S8PmdJIdpLOD6jK+FQp9ojTYZoeAuEn6XFqZyV4zS19CqXvPrCr2txjNvHPwaq9DFlQj
-         l35lZy43rS7Q6mR46qgznqXKMLu0JZctdIIsQrQJYVCFgnUn+RQf5IBIsbrmzneEgObD
-         hubIOgho6mndHB+e0nSCNY4c0gsC8jGFFF3HyQ6jXszlhtM71pZBYZiXoIwnt8Qhwsdx
-         Fdq7pCPNFieRf/nj1UYY6aO2T84VW8/40lPlzgmbl/9hAhrhzjGF63ebv9nEm22qRPrN
-         pKcA==
-X-Gm-Message-State: AC+VfDxTMalHDRjfBc3zmUPIwk3ztahqCC0qpNWpSVdHqsM2xUv2Jdxh
-        nuDrxA55bvMJik5eP5FkJpB/K4Xh3ylpg8eZFGk=
-X-Google-Smtp-Source: ACHHUZ6Ds4tgg3tY2HwzC7rc3PEkzb8YK+RMc5PzxH8b2x7aIR5D0EBt3CAybWSjFJTCM+nRvm71yFLpXl19En8supA=
-X-Received: by 2002:a05:6214:519a:b0:621:65de:f600 with SMTP id
- kl26-20020a056214519a00b0062165def600mr10970695qvb.1.1683928081711; Fri, 12
- May 2023 14:48:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230510195806.2902878-1-nphamcs@gmail.com> <20230511092843.3896327-1-nphamcs@gmail.com>
- <ZF4YEjiTOeu3jx+5@arm.com> <20230512141510.20075825899e3c869c5358ca@linux-foundation.org>
-In-Reply-To: <20230512141510.20075825899e3c869c5358ca@linux-foundation.org>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Fri, 12 May 2023 14:47:50 -0700
-Message-ID: <CAKEwX=P2VW_UfdxgLfYGOq1Bho+AtHt5pci+A7r95qJSSAEFtg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: wire up cachestat for arm64
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-api@vger.kernel.org, kernel-team@meta.com,
-        linux-arch@vger.kernel.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S238458AbjEOIHa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 04:07:30 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7DF1736;
+        Mon, 15 May 2023 01:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=oaAnHSQUa44CIjEzLECo4Bz9k0HVG1DLxoBT0I79NeI=; b=NfkvPcdWsJTjmoEQrA9fvkbzZc
+        OLWjr4UU1kWvWf66uviIN6aqUIZ1bU0a8aEQPzT/ji1FUTxQToxV1V2kLh8dentwTx5nRMQ4vbB0i
+        gIPkqOaBfpPHRlc4Q9v4DKGIZOs5zR693IMyllbhfUlUJPHFrv0sH5wUWWcgPRBAKgBI1lgDssb4e
+        9PWNLgpBVKQLGKCOHMSvDJkLwwQ85cxYADGoR5hXnOpJdsJmtsyLLYpk0hwzrXnE5x14WXOtUXAW9
+        mjJQ2i0rMf3kX9KquBpjBy/2GJyEk+TX/LIQwUBEiDSc3Rf/hALuWs5q5Nr/iPhIXqgtRSb4GdE7Z
+        shGEbmvA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pyTDk-003HUQ-Em; Mon, 15 May 2023 08:06:17 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 079C030003A;
+        Mon, 15 May 2023 10:06:10 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id A6A6E202F7F66; Mon, 15 May 2023 10:06:10 +0200 (CEST)
+Message-ID: <20230515075659.118447996@infradead.org>
+User-Agent: quilt/0.66
+Date:   Mon, 15 May 2023 09:56:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     torvalds@linux-foundation.org
+Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH v3 00/11] Introduce cmpxchg128() -- aka. the demise of cmpxchg_double()
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 12, 2023 at 2:15=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Fri, 12 May 2023 11:42:26 +0100 Catalin Marinas <catalin.marinas@arm.c=
-om> wrote:
->
-> > On Thu, May 11, 2023 at 02:28:43AM -0700, Nhat Pham wrote:
-> > > cachestat is a new syscall that was previously wired in for most
-> > > architectures:
-> > >
-> > > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.c=
-om/
-> > > https://lore.kernel.org/linux-mm/20230510195806.2902878-1-nphamcs@gma=
-il.com/
-> > >
-> > > However, those patches miss arm64, which has its own syscall table in=
- arch/arm64.
-> > > This patch wires cachestat in for arm64.
-> >
-> > You may want to clarify that this is for compat support on arm64,
-> > otherwise native support uses the generic syscall numbers already.
->
-> Thanks, I updated the changelog thusly.  Note that this patch is
-> transitory - it will be squashed into "cachestat: wire up cachestat for
-> other architectures".
+Hi!
 
-It's my expectation too - it makes sense to squash it to the other patch.
-Thanks, Andrew!
+I seem to have forgotten to post this series last release; so here goes. I'm
+really hoping to merge it and forget about it.
+
+
+Since Linus hated on cmpxchg_double(), a few patches to get rid of it, as
+proposed here:
+
+  https://lkml.kernel.org/r/Y2U3WdU61FvYlpUh@hirez.programming.kicks-ass.net
+
+
+These patches are based on 6.4.0-rc2.
+
+Available here:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/wip-u128
+
+Since v2:
+
+ - reworked this_cpu_cmpxchg() to not implicity do u128 but provide explicit
+   this_cpu_cmpxchg128() (arnd)
+ - added try_cmpxchg12_local() (per the addition of the try_cmpxchg*_local()
+   family of functions)
+ - slight cleanup of the SLUB conversion (due to rebase and having to touch it)
+ - added a 'cleanup' patch for SLUB, since I was staring at that anyway
+
+Since v1:
+
+ - rebaed on Eric's ghash cleanups (hence the cryptodev-2.6 dependency)
+ - rebased on Heiko's s390/cpum_sf CDSG patch
+ - fixed up a bunch of arch code
+ - fixed up the inline asm to use 'u128 *' mem argument so the compiler knows
+   how wide the modification is.
+ - reworked the percpu thing to use union based type-punning instead of
+   _Generic() based casts.
+
+---
+ Documentation/core-api/this_cpu_ops.rst     |   2 -
+ arch/arm64/include/asm/atomic_ll_sc.h       |  56 ++++----
+ arch/arm64/include/asm/atomic_lse.h         |  39 +++---
+ arch/arm64/include/asm/cmpxchg.h            |  48 ++-----
+ arch/arm64/include/asm/percpu.h             |  30 +++--
+ arch/s390/include/asm/cmpxchg.h             |  32 +----
+ arch/s390/include/asm/cpu_mf.h              |   2 +-
+ arch/s390/include/asm/percpu.h              |  34 +++--
+ arch/s390/kernel/perf_cpum_sf.c             |  16 +--
+ arch/x86/include/asm/cmpxchg.h              |  25 ----
+ arch/x86/include/asm/cmpxchg_32.h           |   2 +-
+ arch/x86/include/asm/cmpxchg_64.h           |  63 ++++++++-
+ arch/x86/include/asm/percpu.h               | 100 +++++++++------
+ drivers/iommu/amd/amd_iommu_types.h         |   9 +-
+ drivers/iommu/amd/iommu.c                   |  10 +-
+ drivers/iommu/intel/irq_remapping.c         |   8 +-
+ include/asm-generic/percpu.h                |  66 ++--------
+ include/crypto/b128ops.h                    |  14 +-
+ include/linux/atomic/atomic-arch-fallback.h |  95 +++++++++++++-
+ include/linux/atomic/atomic-instrumented.h  |  93 ++++++++++++--
+ include/linux/dmar.h                        | 125 +++++++++---------
+ include/linux/percpu-defs.h                 |  38 ------
+ include/linux/slub_def.h                    |  12 +-
+ include/linux/types.h                       |   5 +
+ include/uapi/linux/types.h                  |   4 +
+ lib/crypto/curve25519-hacl64.c              |   2 -
+ lib/crypto/poly1305-donna64.c               |   2 -
+ mm/slab.h                                   |  49 ++++++-
+ mm/slub.c                                   | 191 ++++++++++++++--------------
+ scripts/atomic/gen-atomic-fallback.sh       |   4 +-
+ scripts/atomic/gen-atomic-instrumented.sh   |  19 +--
+ 31 files changed, 667 insertions(+), 528 deletions(-)
+
