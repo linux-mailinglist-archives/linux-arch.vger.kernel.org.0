@@ -2,75 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6569B703D5E
-	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 21:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A738F703FCD
+	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 23:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243996AbjEOTMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 May 2023 15:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S245501AbjEOV3b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 May 2023 17:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243021AbjEOTL7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 15:11:59 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B7711DAA;
-        Mon, 15 May 2023 12:11:58 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba7ed900ac4so910945276.0;
-        Mon, 15 May 2023 12:11:57 -0700 (PDT)
+        with ESMTP id S245556AbjEOV33 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 17:29:29 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25C310A0F
+        for <linux-arch@vger.kernel.org>; Mon, 15 May 2023 14:29:22 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75765c213fbso568918685a.2
+        for <linux-arch@vger.kernel.org>; Mon, 15 May 2023 14:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684177917; x=1686769917;
+        d=google.com; s=20221208; t=1684186162; x=1686778162;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lEdsDznoeQ0wGPMJWBs10mMvCj7VphDqPqR+uizklHY=;
-        b=W/Z9qzmBUq3bCVhP8uewmPEIaZEVYfzpzeh9YTeAKrK3sWIwtOfql71JlvN0P+P5pK
-         YKy9cml02fk4SnFQ2DdWQ6w4JijHunpNA4zsiud1GYDMnfuy8RTxF/bEehOFA+aPeByE
-         DTSRG2bdMMqymbgvM1f+cbSlSYq+sQANl8uMoYLlmajJ3SyWJdGVyTNcYD0Ioakieviy
-         BESs3L0iPHTKfiNNq75aO8FTJdn/BYay+E8sIKUXSqB49RgAR5VB2xxzW+nwEEKofO5F
-         26ssX78nNr5JZdvfN8wyMBJyb6MRO06YlrKHWh/GpY8CaWKtewkcbGK5ZJkz6FL2Wiq9
-         dAhA==
+        bh=1lbYY6n0SwGUcyKsxDL1IIEcw7fQq3k67Vm8jiZt1PI=;
+        b=oHaPXJgO8h0xuJ30mdoVzc3EcsSIH+ugZ5KaxJ9pNdfzDrKqVSfncuzpmlvH5+PMNz
+         vFB70oDNkVrmfiNNuNmLqfpg7oRKIm34f4o0HQ/51a72NiOG0T3QFo1g3qfijviDmihb
+         p8MGBwiG+BkxCKnCLPqm9jAxmqQe0JXNTSQYakQ8cHvNeXOPWVyRgjfeyC5QZ091YVAv
+         Ba1w+gH6ILogCRJ1uDm9Izyo0vzuGGWOBg8vsEFPLIbEsAeZBzSFZC37JYK2gI6ug2+W
+         JpUY50pT+7UOU+BSirsevF4kJtZ6E8XTHbNvyc4RVaLlWbbtxT70pRoUyv0zL4G6/PCS
+         8Zkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684177917; x=1686769917;
+        d=1e100.net; s=20221208; t=1684186162; x=1686778162;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lEdsDznoeQ0wGPMJWBs10mMvCj7VphDqPqR+uizklHY=;
-        b=GdVmGDBqf1Okap0EgXTiq5zpUXGJFx60SXvf+EgZ9tnWHJNy5Dfr9OnympFg/VBLw3
-         tpYgnBjpVnXfqvMY0ct7w9/tu1srp5GeJ7wGOqslE1zoSMXR36kHtdmc8L1kpXSScTp2
-         X+9w8BXeuwB4zXNfcihpSNxFwtU53zmGpEFoKipr8iyqJrugWdZlwO+uGp4dgGjA4J6y
-         FadULZs+fkOJpF9zkdKNruSHsOrBwAV/e0fJoaHz1utDTRP3T2zCUMiaj1YaMICt9mpH
-         QTDPLhxHCNPne124nCyEm/Wsg7RBLC03rRuIH+mGHl4lqy49H/lBiKF7zXck8BtbpgwZ
-         rPdw==
-X-Gm-Message-State: AC+VfDxFpUgJpr/zFAsZiBPVkjJxVF/Dm/cl5vYUFuSK+vV3yIFOqme6
-        mYYZJ055EkswRM9Yqj7CTQhUK7hinAPHjugKsrQ=
-X-Google-Smtp-Source: ACHHUZ5oDsw20tcH12/01C4i2nT6w5iAb2H6/okJg55EYYpqTgJ8h9iiRdXz2tD9egoOuSwMxk4Rmyquuvv7u/aep3U=
-X-Received: by 2002:a25:2586:0:b0:ba7:809c:50de with SMTP id
- l128-20020a252586000000b00ba7809c50demr6158133ybl.38.1684177917068; Mon, 15
- May 2023 12:11:57 -0700 (PDT)
+        bh=1lbYY6n0SwGUcyKsxDL1IIEcw7fQq3k67Vm8jiZt1PI=;
+        b=LyHNKBNNRfU0lVxaXunJo6YzLByOYn9ZqYB4BC/hi+n2Vve3jFCWnDwCK3h2DYRB5/
+         CZC8Gv6koSU4v7vYJngq/hHKpku1+/+I1VZL4wi5ffQ3cRhvzRhRnzfFL2JrSmG3K4c6
+         NRkqo3D3fNx0EZ9d/f++MBj8wZJrA2jr0W15gteqm/ERzLrBbzc6IRg+QE4QfATCk3jo
+         q/csgzNIaJQ/SZqoGEljKCuPD2jjOUYc6ZSFIZKVG9uOp+3Zl5ZAT+wunkcDt3j7qn8J
+         3Z2BNP3oKXkvVwoBBypG9x1peYKWRo3t8Dh1z5TbdKvcRXCM+CTVmbrUi3EioggguPKc
+         xFvQ==
+X-Gm-Message-State: AC+VfDy5J5nb3QyGKjBK/kmyG1a7f6UFoOg8AYESAkxk/t/ueYqx/Suq
+        QytMmvVLXOg6c2cOxarBwUvtNSwSVNqcBeuzv9s81g==
+X-Google-Smtp-Source: ACHHUZ6o4Y5deE3MywpCz4dRMiG+IGEgPmdAv3urst4Xq/TLVsMyTSbvixGAaiFTSccbqqMfyXyg15r9kizMSnXvo10=
+X-Received: by 2002:a05:6214:20ce:b0:5ab:a50b:e610 with SMTP id
+ 14-20020a05621420ce00b005aba50be610mr64920191qve.33.1684186161858; Mon, 15
+ May 2023 14:29:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230501192829.17086-1-vishal.moola@gmail.com>
- <20230501192829.17086-31-vishal.moola@gmail.com> <c0677d21a4b6caa2e5018af000294a974121d9e8.camel@physik.fu-berlin.de>
-In-Reply-To: <c0677d21a4b6caa2e5018af000294a974121d9e8.camel@physik.fu-berlin.de>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Mon, 15 May 2023 12:11:46 -0700
-Message-ID: <CAOzc2pz6y=gRcdfkQVgwRuzWeWf2Nx-UBtKnZBTs2qKJ+r7R0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 30/34] sh: Convert pte_free_tlb() to use ptdescs
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <20230504174320.3930345-1-ardb@kernel.org>
+In-Reply-To: <20230504174320.3930345-1-ardb@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 15 May 2023 14:29:10 -0700
+Message-ID: <CAKwvOd=uh9wmaWD8ksQYDqbJv7qO483oFa=dyULhmnfF8KhbNg@mail.gmail.com>
+Subject: Re: [RFC PATCH] kallsyms: Avoid weak references for kallsyms symbols
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Fangrui Song <maskray@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,61 +71,168 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 6, 2023 at 4:35=E2=80=AFAM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
+On Thu, May 4, 2023 at 10:43=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wr=
+ote:
 >
-> Hi Vishal!
+> kallsyms is a directory of all the symbols in the vmlinux binary, and so
+> creating it is somewhat of a chicken-and-egg problem, as its non-zero
+> size affects the layout of the binary, and therefore the values of the
+> symbols.
 >
-> On Mon, 2023-05-01 at 12:28 -0700, Vishal Moola (Oracle) wrote:
-> > Part of the conversions to replace pgtable constructor/destructors with
-> > ptdesc equivalents. Also cleans up some spacing issues.
-> >
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> > ---
-> >  arch/sh/include/asm/pgalloc.h | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgallo=
-c.h
-> > index a9e98233c4d4..ce2ba99dbd84 100644
-> > --- a/arch/sh/include/asm/pgalloc.h
-> > +++ b/arch/sh/include/asm/pgalloc.h
-> > @@ -2,6 +2,7 @@
-> >  #ifndef __ASM_SH_PGALLOC_H
-> >  #define __ASM_SH_PGALLOC_H
-> >
-> > +#include <linux/mm.h>
-> >  #include <asm/page.h>
-> >
-> >  #define __HAVE_ARCH_PMD_ALLOC_ONE
-> > @@ -31,10 +32,10 @@ static inline void pmd_populate(struct mm_struct *m=
-m, pmd_t *pmd,
-> >       set_pmd(pmd, __pmd((unsigned long)page_address(pte)));
-> >  }
-> >
-> > -#define __pte_free_tlb(tlb,pte,addr)                 \
-> > -do {                                                 \
-> > -     pgtable_pte_page_dtor(pte);                     \
-> > -     tlb_remove_page((tlb), (pte));                  \
-> > +#define __pte_free_tlb(tlb, pte, addr)                               \
-> > +do {                                                         \
-> > +     ptdesc_pte_dtor(page_ptdesc(pte));                      \
-> > +     tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));      \
-> >  } while (0)
-> >
-> >  #endif /* __ASM_SH_PGALLOC_H */
+> For this reason, the kernel is linked more than once, and the first pass
+> does not include any kallsyms data at all. For the linker to accept
+> this, the symbol declarations describing the kallsyms metadata are
+> emitted as having weak linkage, so they can remain unsatisfied. During
+> the subsequent passes, the weak references are satisfied by the kallsyms
+> metadata that was constructed based on information gathered from the
+> preceding passes.
 >
-> Looking at the patch which introduces tlb_remove_page_ptdesc() [1], it se=
-ems that
-> tlb_remove_page_ptdesc() already calls tlb_remove_page() with ptdesc_page=
-(pt), so
-> I'm not sure whether the above tlb_remove_page_ptdesc((tlb), (page_ptdesc=
-(pte)))
-> is correct.
+> Weak references lead to somewhat worse codegen, because taking their
+> address may need to produce NULL (if the reference was unsatisfied), and
+> this is not usually supported by RIP or PC relative symbol references.
 >
-> Shouldn't it just be tlb_remove_page_ptdesc((tlb), (pte))?
+> Given that these references are ultimately always satisfied in the final
+> link, let's drop the weak annotation, and instead, provide fallback
+> definitions in the linker script that are only emitted if an unsatisfied
+> reference exists.
+>
+> While at it, drop the FRV specific annotation that these symbols reside
+> in .rodata - FRV is long gone.
+>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Fangrui Song <maskray@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
 
-As of this patchset all implementations of __pte_free_tlb() take in a
-struct page. Eventually we'll want it to be tlb_remove_page_ptdesc(tlb, pte=
-),
-but for now the cast is necessary here.
+Thanks for the patch.  I did some quick boot tests of this with:
+- x86 defconfig + CONFIG_KALLSYMS_SELFTEST=3Dy
+- x86 defconfig + CONFIG_KALLSYMS_SELFTEST=3Dy + CONFIG_LTO_CLANG_THIN=3Dy
+- arm64 defconfig + CONFIG_KALLSYMS_SELFTEST=3Dy
+
+Curiously, I only see:
+[    1.002200] kallsyms_selftest: start
+
+in the output (when grepping for kallsyms_selftest as instructed by
+the help text for KALLSYMS_SELFTEST in init/Kconfig). But that happens
+regardless of this patch.
+
+I did not test backtraces or live patching (seems like kallsyms is
+related to those reading through the help texts in init/Kconfig), or
+measure for binary changes.
+
+Tested-by: Nick Desaulniers <ndesaulniers@google.com> # Boot
+
+Based on my interpretation of
+https://sourceware.org/binutils/docs/ld/PROVIDE.html, this LGTM.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+> Cc: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  include/asm-generic/vmlinux.lds.h |  9 +++++++
+>  kernel/kallsyms.c                 |  6 -----
+>  kernel/kallsyms_internal.h        | 25 +++++++-------------
+>  3 files changed, 18 insertions(+), 22 deletions(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmli=
+nux.lds.h
+> index d1f57e4868ed341d..dd42c0fcad2b519f 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -460,6 +460,15 @@
+>   */
+>  #define RO_DATA(align)                                                 \
+>         . =3D ALIGN((align));                                            =
+ \
+> +       PROVIDE(kallsyms_addresses =3D .);                               =
+ \
+> +       PROVIDE(kallsyms_offsets =3D .);                                 =
+ \
+> +       PROVIDE(kallsyms_names =3D .);                                   =
+ \
+> +       PROVIDE(kallsyms_num_syms =3D .);                                =
+ \
+> +       PROVIDE(kallsyms_relative_base =3D .);                           =
+ \
+> +       PROVIDE(kallsyms_token_table =3D .);                             =
+ \
+> +       PROVIDE(kallsyms_token_index =3D .);                             =
+ \
+> +       PROVIDE(kallsyms_markers =3D .);                                 =
+ \
+> +       PROVIDE(kallsyms_seqs_of_names =3D .);                           =
+ \
+>         .rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {           \
+>                 __start_rodata =3D .;                                    =
+ \
+>                 *(.rodata) *(.rodata.*)                                 \
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 77747391f49b66cb..5b16009ee53aa05b 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -331,12 +331,6 @@ static unsigned long get_symbol_pos(unsigned long ad=
+dr,
+>         unsigned long symbol_start =3D 0, symbol_end =3D 0;
+>         unsigned long i, low, high, mid;
+>
+> -       /* This kernel should never had been booted. */
+> -       if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
+> -               BUG_ON(!kallsyms_addresses);
+> -       else
+> -               BUG_ON(!kallsyms_offsets);
+
+Even previously with weak definitions, wouldn't these values always be true=
+?
+
+> -
+>         /* Do a binary search on the sorted kallsyms_addresses array. */
+>         low =3D 0;
+>         high =3D kallsyms_num_syms;
+> diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+> index 27fabdcc40f57931..cf4124dbcc5b6d0e 100644
+> --- a/kernel/kallsyms_internal.h
+> +++ b/kernel/kallsyms_internal.h
+> @@ -8,24 +8,17 @@
+>   * These will be re-linked against their real values
+>   * during the second link stage.
+>   */
+> -extern const unsigned long kallsyms_addresses[] __weak;
+> -extern const int kallsyms_offsets[] __weak;
+> -extern const u8 kallsyms_names[] __weak;
+> +extern const unsigned long kallsyms_addresses[];
+> +extern const int kallsyms_offsets[];
+> +extern const u8 kallsyms_names[];
+>
+> -/*
+> - * Tell the compiler that the count isn't in the small data section if t=
+he arch
+> - * has one (eg: FRV).
+> - */
+> -extern const unsigned int kallsyms_num_syms
+> -__section(".rodata") __attribute__((weak));
+> -
+> -extern const unsigned long kallsyms_relative_base
+> -__section(".rodata") __attribute__((weak));
+> +extern const unsigned int kallsyms_num_syms;
+> +extern const unsigned long kallsyms_relative_base;
+>
+> -extern const char kallsyms_token_table[] __weak;
+> -extern const u16 kallsyms_token_index[] __weak;
+> +extern const char kallsyms_token_table[];
+> +extern const u16 kallsyms_token_index[];
+>
+> -extern const unsigned int kallsyms_markers[] __weak;
+> -extern const u8 kallsyms_seqs_of_names[] __weak;
+> +extern const unsigned int kallsyms_markers[];
+> +extern const u8 kallsyms_seqs_of_names[];
+>
+>  #endif // LINUX_KALLSYMS_INTERNAL_H_
+> --
+> 2.39.2
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
