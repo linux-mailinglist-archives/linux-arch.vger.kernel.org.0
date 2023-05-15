@@ -2,117 +2,269 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8595570279B
-	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 10:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69B67027DE
+	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 11:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238316AbjEOIxR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 May 2023 04:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S237651AbjEOJJy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 May 2023 05:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238258AbjEOIxF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 04:53:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D571A4;
-        Mon, 15 May 2023 01:53:04 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F8dWhE030931;
-        Mon, 15 May 2023 08:52:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=tL2Dh34WXBi3w0uOo/CEgFzRe9FVdf1V2DHXt3B1hzQ=;
- b=RgF2SLU/GSbIC43sewd93OJMJuQob/OvXp/h4GcpmDVvR3haOU9gtgWCmUKnHIJqaRGS
- zM/YtGmo0F8o8AehEEdxcNS5S0EutJWDp4JzJk07alCpgvPG+u+6OvcpgT1klbETGM7R
- B3vqZS3dTkEwbYIKYt4ZQsetvwQt11RWsnoYCa5Px4UUmeFelWObYB7JNRzhe/quKuJD
- vMFqFRrITU3nBkbW2ns34tBjo2HW/+MSDGQuEIVXyWuTB3BizyyzEZpEsC9781iymOJu
- Bb0Z15FQiZPDvAoBVmZu1rGvQpa8B5kCqVkHQuthmRbvDz+D5OTlICsTTU9UlTO916UP ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkgnsskcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 08:52:52 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34F8g6jY012065;
-        Mon, 15 May 2023 08:52:52 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkgnsskbd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 08:52:52 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34F4cDHw008930;
-        Mon, 15 May 2023 08:52:49 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264rt34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 08:52:49 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34F8qlos22151814
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 May 2023 08:52:47 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E464220043;
-        Mon, 15 May 2023 08:52:46 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27F9620040;
-        Mon, 15 May 2023 08:52:45 +0000 (GMT)
-Received: from osiris (unknown [9.179.13.205])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 15 May 2023 08:52:45 +0000 (GMT)
-Date:   Mon, 15 May 2023 10:52:43 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v3 10/11] arch: Remove cmpxchg_double
-Message-ID: <ZGHy21ZEK4Q6umhV@osiris>
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.589824283@infradead.org>
+        with ESMTP id S229829AbjEOJJx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 05:09:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415510C2
+        for <linux-arch@vger.kernel.org>; Mon, 15 May 2023 02:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684141743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6AFw5uMgxoqOZewZKceUjejYATe4XYr/MlAYVoQ4hFM=;
+        b=MWlzA41QqPZQ5qWAJtEPFQvB6eAJQrRrsVxYn7nZC5pSo4yR2sipirH2XhrEvNhu/tgPZq
+        qwzENJBBft/Zd4kyA1TyA7OfdHl/8pc7gZR+jLwTOFPTQIWupIXedohrmYdnGSMAMtkwAw
+        V/Mdd1mGlh7/aXYLIaRoa72mD1LBLZs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-f4Fr6p0AOImXQoBTiMrqMw-1; Mon, 15 May 2023 05:08:59 -0400
+X-MC-Unique: f4Fr6p0AOImXQoBTiMrqMw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BAD06380671D;
+        Mon, 15 May 2023 09:08:58 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-32.pek2.redhat.com [10.72.12.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A376E40C206F;
+        Mon, 15 May 2023 09:08:51 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        christophe.leroy@csgroup.eu, hch@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@ACULAB.COM, shorne@gmail.com,
+        willy@infradead.org, deller@gmx.de, Baoquan He <bhe@redhat.com>
+Subject: [PATCH v5 RESEND 00/17] mm: ioremap:  Convert architectures to take GENERIC_IOREMAP way
+Date:   Mon, 15 May 2023 17:08:31 +0800
+Message-Id: <20230515090848.833045-1-bhe@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515080554.589824283@infradead.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t1yqOEs5O0QDxVKZWXKnAMcNMUkxJyzX
-X-Proofpoint-GUID: 01k30nTH3vJOdbRkPWfhMNqXAs4dbI1r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_06,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- spamscore=0 bulkscore=0 clxscore=1011 phishscore=0 adultscore=0
- mlxlogscore=660 priorityscore=1501 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 15, 2023 at 09:57:09AM +0200, Peter Zijlstra wrote:
-> No moar users, remove the monster.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
-...
->  arch/s390/include/asm/cmpxchg.h            |   34 -----------------
->  arch/s390/include/asm/percpu.h             |   18 ---------
+This resends v5 series based on the latest linus's master branch.
+There are conflicts:
+  - on patch 1 ("asm-generic/iomap.h: remove ARCH_HAS_IOREMAP_xx macros")
+    because of commit 7b76ab837522fd ("MIPS: Loongson64: Opt-out war_io_reorder_wmb"):
+    in arch/mips/include/asm/io.h
 
-FWIW, for s390:
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+  - on patch 11 ("sh: mm: Convert to GENERIC_IOREMAP") because of
+    commit fcbfe8121a45 ("Kconfig: introduce HAS_IOPORT option and select it as necessary"):
+    in arch/sh/Kconfig.
+
+Other than above two conflicts and resolving, no other change. I have
+tried cross compiling mips64 and superH specifically, both passed. And
+building and running on arm64 bare metal machine, passed too.
+
+Motivation and implementation:
+==============================
+Currently, many architecutres have't taken the standard GENERIC_IOREMAP
+way to implement ioremap_prot(), iounmap(), and ioremap_xx(), but make
+these functions specifically under each arch's folder. Those cause many
+duplicated codes of ioremap() and iounmap().
+
+In this patchset, firstly introduce generic_ioremap_prot() and
+generic_iounmap() to extract the generic codes for GENERIC_IOREMAP.
+By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
+generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
+and iounmap() are all visible and available to arch. Arch needs to
+provide wrapper functions to override the generic version if there's
+arch specific handling in its corresponding ioremap_prot(), ioremap()
+or iounmap(). With these changes, duplicated ioremap/iounmap() code uder
+ARCH-es are removed, and the equivalent functioality is kept as before.
+
+Background info:
+================
+1)
+The converting more architectures to take GENERIC_IOREMAP way is
+suggested by Christoph in below discussion:
+https://lore.kernel.org/all/Yp7h0Jv6vpgt6xdZ@infradead.org/T/#u
+
+2)
+In the previous v1 to v3, it's basically further action after arm64
+has converted to GENERIC_IOREMAP way in below patchset. It's done by
+adding hook ioremap_allowed() and iounmap_allowed() in ARCH to add
+ARCH specific handling the middle of ioremap_prot() and iounmap().
+
+[PATCH v5 0/6] arm64: Cleanup ioremap() and support ioremap_prot()
+https://lore.kernel.org/all/20220607125027.44946-1-wangkefeng.wang@huawei.com/T/#u
+
+Later, during v3 reviewing, Christophe Leroy suggested to introduce
+generic_ioremap_prot() and generic_iounmap() to generic codes, and ARCH
+can provide wrapper function ioremap_prot(), ioremap() or iounmap() if
+needed. Christophe made a RFC patchset as below to specially demonstrate
+his idea. This is what v4 and now v5 is doing.
+
+[RFC PATCH 0/8] mm: ioremap: Convert architectures to take GENERIC_IOREMAP way
+https://lore.kernel.org/all/cover.1665568707.git.christophe.leroy@csgroup.eu/T/#u
+
+Testing:
+========
+
+Old v4 has done below test. In v5, patch 1 is newly added to remove
+ARCH_HAS_IOREMAP_xx, and patch 13 ("parisc: mm: Convert to GENERIC_IOREMAP")
+is impacted, so I only built related x86_64, m68K, mips64, ppc64le, parisc and
+all passed.
+
+------Old v4 testing
+- It's running well on arm64, s390x, ppc64le with this patchset applied
+  on the latest upstream kernel 6.2-rc8+.
+- Cross compiling passed on arc, ia64, parisc, sh, xtensa.
+- cross compiling is not tried on hexagon, openrisc and powerpc 32bit
+  because:
+  - Didn't find cross compiling tools for hexagon, ppc 32bit;
+  - there's error with openrisc compiling, while I have no idea how to
+    fix it. Please see below pasted log:
+    ---------------------------------------------------------------------
+    [root@intel-knightslanding-lb-02 linux]# make ARCH=openrisc defconfig
+    *** Default configuration is based on 'or1ksim_defconfig'
+    #
+    # configuration written to .config
+    #
+    [root@intel-knightslanding-lb-02 linux]# make ARCH=openrisc -j320 CROSS_COMPILE=/usr/bin/openrisc-linux-gnu-
+      SYNC    include/config/auto.conf.cmd
+      CC      scripts/mod/empty.o
+    ./scripts/check-local-export: /usr/bin/openrisc-linux-gnu-nm failed
+    make[1]: *** [scripts/Makefile.build:250: scripts/mod/empty.o] Error 1
+    make[1]: *** Deleting file 'scripts/mod/empty.o'
+    make: *** [Makefile:1275: prepare0] Error 2
+    ----------------------------------------------------------------------
+
+History:
+=======
+v4->v5:
+- Ard and Christophe suggested adding a preparation patch to remove
+  ARCH_HAS_IOREMAP_xx macros, this is done in newly added patch 1.
+- In the current patch 13 ("parisc: mm: Convert to GENERIC_IOREMAP"),
+  so we don't need to add ARCH_HAS_IOREMAP_WC.
+
+v3->v4:
+- Change to contain arch specific handling in wrapper function
+  ioremap(), ioremap_prot() or iounmap() to replace the old hook
+  ioremap|iounmap_allowed() hook way for each arch.
+- Add two patches to convert powerpc to GENERIC_IOREMAP. They are
+  picked from above Christophe's RFC patchset, I made some changes
+  to make them formal.
+
+v2->v3:
+- Rewrite log of all patches to add more details as Christoph suggested.
+
+- Merge the old patch 1 and 2 which adjusts return values and
+  parameters of arch_ioremap() into one patch, namely the current
+  patch 3. Christoph suggested this.
+
+- Change the return value of arch_iounmap() to bool type since we only
+  do arch specific address filtering or address checking, bool value
+  can reflect the checking better. This is pointed out by Niklas when
+  he reviewed the s390 patch.
+
+- Put hexagon patch at the beginning of patchset since hexagon has the
+  same ioremap() and iounmap() as standard ones, no arch_ioremap() and
+  arch_iounmap() hooks need be introduced. So the later arch_ioremap
+  and arch_iounmap() adjustment are not related in hexagon. Christophe
+  suggested this.
+
+- Remove the early ioremap code from openrisc ioremap() firstly since
+  openrisc doesn't have early ioremap handling in openrisc arch code.
+  This simplifies the later converting to GENERIC_IOREMAP method.
+  Christoph and Stafford suggersted this.
+
+- Fix compiling erorrs reported by lkp in parisc and sh patches.
+  Adding macro defintions for those port|mem io functions in
+  <asm/io.h> to avoid repeated definition in <asm-generic/io.h>.
+
+v1->v2:
+- Rename io[re|un]map_allowed() to arch_io[re|un]map() and made
+  some minor changes in patch 1~2 as per Alexander and Kefeng's
+  suggestions. Accordingly, adjust patches~4~11 because of the renaming
+  arch_io[re|un]map().
+
+
+
+Baoquan He (14):
+  asm-generic/iomap.h: remove ARCH_HAS_IOREMAP_xx macros
+  hexagon: mm: Convert to GENERIC_IOREMAP
+  openrisc: mm: remove unneeded early ioremap code
+  mm: ioremap: allow ARCH to have its own ioremap method definition
+  mm/ioremap: add slab availability checking in ioremap_prot
+  arc: mm: Convert to GENERIC_IOREMAP
+  ia64: mm: Convert to GENERIC_IOREMAP
+  openrisc: mm: Convert to GENERIC_IOREMAP
+  s390: mm: Convert to GENERIC_IOREMAP
+  sh: mm: Convert to GENERIC_IOREMAP
+  xtensa: mm: Convert to GENERIC_IOREMAP
+  parisc: mm: Convert to GENERIC_IOREMAP
+  arm64 : mm: add wrapper function ioremap_prot()
+  mm: ioremap: remove unneeded ioremap_allowed and iounmap_allowed
+
+Christophe Leroy (3):
+  mm/ioremap: Define generic_ioremap_prot() and generic_iounmap()
+  mm/ioremap: Consider IOREMAP space in generic ioremap
+  powerpc: mm: Convert to GENERIC_IOREMAP
+
+ arch/arc/Kconfig                    |  1 +
+ arch/arc/include/asm/io.h           |  7 ++--
+ arch/arc/mm/ioremap.c               | 49 ++--------------------
+ arch/arm64/include/asm/io.h         |  3 +-
+ arch/arm64/mm/ioremap.c             | 10 +++--
+ arch/hexagon/Kconfig                |  1 +
+ arch/hexagon/include/asm/io.h       |  9 +++-
+ arch/hexagon/mm/ioremap.c           | 44 -------------------
+ arch/ia64/Kconfig                   |  1 +
+ arch/ia64/include/asm/io.h          | 13 +++---
+ arch/ia64/mm/ioremap.c              | 41 +++---------------
+ arch/loongarch/include/asm/io.h     |  2 -
+ arch/m68k/include/asm/io_mm.h       |  2 -
+ arch/m68k/include/asm/kmap.h        |  2 -
+ arch/mips/include/asm/io.h          |  5 +--
+ arch/openrisc/Kconfig               |  1 +
+ arch/openrisc/include/asm/io.h      | 11 +++--
+ arch/openrisc/mm/ioremap.c          | 58 +------------------------
+ arch/parisc/Kconfig                 |  1 +
+ arch/parisc/include/asm/io.h        | 15 ++++---
+ arch/parisc/mm/ioremap.c            | 62 ++-------------------------
+ arch/powerpc/Kconfig                |  1 +
+ arch/powerpc/include/asm/io.h       | 17 ++------
+ arch/powerpc/mm/ioremap.c           | 26 +-----------
+ arch/powerpc/mm/ioremap_32.c        | 19 ++++-----
+ arch/powerpc/mm/ioremap_64.c        | 12 +-----
+ arch/s390/Kconfig                   |  1 +
+ arch/s390/include/asm/io.h          | 21 ++++++----
+ arch/s390/pci/pci.c                 | 57 +++++--------------------
+ arch/sh/Kconfig                     |  1 +
+ arch/sh/include/asm/io.h            | 65 +++++++++++++++--------------
+ arch/sh/include/asm/io_noioport.h   |  7 ++++
+ arch/sh/mm/ioremap.c                | 65 +++++------------------------
+ arch/x86/include/asm/io.h           |  5 ---
+ arch/xtensa/Kconfig                 |  1 +
+ arch/xtensa/include/asm/io.h        | 32 ++++++--------
+ arch/xtensa/mm/ioremap.c            | 58 +++++++------------------
+ drivers/net/ethernet/sfc/io.h       |  2 +-
+ drivers/net/ethernet/sfc/siena/io.h |  2 +-
+ include/asm-generic/io.h            | 31 +++-----------
+ include/asm-generic/iomap.h         |  6 +--
+ mm/ioremap.c                        | 41 ++++++++++++------
+ 42 files changed, 220 insertions(+), 588 deletions(-)
+ delete mode 100644 arch/hexagon/mm/ioremap.c
+
+-- 
+2.34.1
+
