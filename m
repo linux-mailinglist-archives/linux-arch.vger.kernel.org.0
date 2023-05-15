@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC44A7026A0
-	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 10:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FF87026BB
+	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 10:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229582AbjEOIHY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 May 2023 04:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S239814AbjEOIHi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 May 2023 04:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjEOIHW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 04:07:22 -0400
+        with ESMTP id S236245AbjEOIH1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 04:07:27 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA211716;
-        Mon, 15 May 2023 01:07:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FFF1723;
+        Mon, 15 May 2023 01:07:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=gp7OCKaBYjIIkPcuPMybL+ixdp/AdwhFq0MWXNBGUCo=; b=mfr/Lee6q6wb3hW9VLMJP6RMas
-        nTl9Qe1+9Iu48xOQT4aXYKIo3YdHu4pVixS6ep5klWjn2Hleinv1VLcJZJw+35Dak53xO4M9X9KIK
-        FpMiCIIAsi7/QgdKTHO+THopVLnjgnmza7zDZfiP5yT3vka2IQVSR4N/m/pdNqYPnTzsA8lIVgWqD
-        P5m3mwC26ExmfD/meFO5f1ezwrEtuIohzrkIWoLo3mQANg3Hx3wLE8RBN4yr9HOkOwiYyEuNQ3/1W
-        PLL/LI+1uLThBRAeCCPMwP+WHJ7vOYl/0orY1PoeN18xp4Y80oyboD7BypdwlKtzQ00oQnrhgh54F
-        yIuqhB5w==;
+        bh=axnHoGjIL7t9C+QVLq6pAPgEZLVVerXkwPR51K17BxQ=; b=J+RYi2Olcu/GDwkb7uyoMxOowZ
+        gdnnCNimNXMzjHfiHbHeyq75lJdwzqja8okQUmitQ1ua7iWanYtjpUVa32iVsf63pmox4vvEN+Ejz
+        1wpagut3YpzUSwNPpwpsl3jsBlJSSesN7UlPVAxsCXGiTi2d8aMeHHRkqQGQKv/P2cwZEs4JCNCfS
+        xBlhWHGUBVitTRjLQwLm3qFy1fFLZshzr1Jf7x5B4z/zbEO4fjLkYFu6HtcQ+JbhA2M4mY6B7vLd7
+        0ZMD0sEUiA88G6VeDUxFw1EIBsMuAOuqnZrusc8ZVstoP2bAOXDwpltv/Y/kKX6d4HXBKVWWAlia0
+        mx0Oe8lw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pyTDk-00BQMy-1T;
+        id 1pyTDk-00BQMz-1T;
         Mon, 15 May 2023 08:06:16 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0C5C8300786;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 09F29300244;
         Mon, 15 May 2023 10:06:10 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id AB37F202674A5; Mon, 15 May 2023 10:06:10 +0200 (CEST)
-Message-ID: <20230515080553.979680310@infradead.org>
+        id AEDEA202FCE90; Mon, 15 May 2023 10:06:10 +0200 (CEST)
+Message-ID: <20230515080554.047618712@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 15 May 2023 09:57:00 +0200
+Date:   Mon, 15 May 2023 09:57:01 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     torvalds@linux-foundation.org
 Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
@@ -59,7 +59,7 @@ Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
         linux-mm@kvack.org, linux-s390@vger.kernel.org,
         iommu@lists.linux.dev, linux-arch@vger.kernel.org,
         linux-crypto@vger.kernel.org
-Subject: [PATCH v3 01/11] cyrpto/b128ops: Remove struct u128
+Subject: [PATCH v3 02/11] types: Introduce [us]128
 References: <20230515075659.118447996@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -73,51 +73,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Per git-grep u128_xor() and its related struct u128 are unused except
-to implement {be,le}128_xor(). Remove them to free up the namespace.
+Introduce [us]128 (when available). Unlike [us]64, ensure they are
+always naturally aligned.
+
+This also enables 128bit wide atomics (which require natural
+alignment) such as cmpxchg128().
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
- include/crypto/b128ops.h |   14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ include/linux/types.h      |    5 +++++
+ include/uapi/linux/types.h |    4 ++++
+ 2 files changed, 9 insertions(+)
 
---- a/include/crypto/b128ops.h
-+++ b/include/crypto/b128ops.h
-@@ -50,10 +50,6 @@
- #include <linux/types.h>
+--- a/include/linux/types.h
++++ b/include/linux/types.h
+@@ -10,6 +10,11 @@
+ #define DECLARE_BITMAP(name,bits) \
+ 	unsigned long name[BITS_TO_LONGS(bits)]
  
- typedef struct {
--	u64 a, b;
--} u128;
++#ifdef __SIZEOF_INT128__
++typedef __s128 s128;
++typedef __u128 u128;
++#endif
++
+ typedef u32 __kernel_dev_t;
+ 
+ typedef __kernel_fd_set		fd_set;
+--- a/include/uapi/linux/types.h
++++ b/include/uapi/linux/types.h
+@@ -13,6 +13,10 @@
+ 
+ #include <linux/posix_types.h>
+ 
++#ifdef __SIZEOF_INT128__
++typedef __signed__ __int128 __s128 __attribute__((aligned(16)));
++typedef unsigned __int128 __u128 __attribute__((aligned(16)));
++#endif
+ 
+ /*
+  * Below are truly Linux-specific types that should never collide with
+--- a/lib/crypto/curve25519-hacl64.c
++++ b/lib/crypto/curve25519-hacl64.c
+@@ -14,8 +14,6 @@
+ #include <crypto/curve25519.h>
+ #include <linux/string.h>
+ 
+-typedef __uint128_t u128;
 -
--typedef struct {
- 	__be64 a, b;
- } be128;
- 
-@@ -61,20 +57,16 @@ typedef struct {
- 	__le64 b, a;
- } le128;
- 
--static inline void u128_xor(u128 *r, const u128 *p, const u128 *q)
-+static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
+ static __always_inline u64 u64_eq_mask(u64 a, u64 b)
  {
- 	r->a = p->a ^ q->a;
- 	r->b = p->b ^ q->b;
- }
+ 	u64 x = a ^ b;
+--- a/lib/crypto/poly1305-donna64.c
++++ b/lib/crypto/poly1305-donna64.c
+@@ -10,8 +10,6 @@
+ #include <asm/unaligned.h>
+ #include <crypto/internal/poly1305.h>
  
--static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
--{
--	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
--}
+-typedef __uint128_t u128;
 -
- static inline void le128_xor(le128 *r, const le128 *p, const le128 *q)
+ void poly1305_core_setkey(struct poly1305_core_key *key,
+ 			  const u8 raw_key[POLY1305_BLOCK_SIZE])
  {
--	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
-+	r->a = p->a ^ q->a;
-+	r->b = p->b ^ q->b;
- }
- 
- #endif /* _CRYPTO_B128OPS_H */
 
 
