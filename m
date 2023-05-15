@@ -2,78 +2,72 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7C77035B8
-	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 19:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6569B703D5E
+	for <lists+linux-arch@lfdr.de>; Mon, 15 May 2023 21:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243544AbjEORBW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 May 2023 13:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S243996AbjEOTMA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 May 2023 15:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243456AbjEOQ7z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 12:59:55 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130E683CE;
-        Mon, 15 May 2023 09:59:47 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab032d9266so120602405ad.0;
-        Mon, 15 May 2023 09:59:47 -0700 (PDT)
+        with ESMTP id S243021AbjEOTL7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 May 2023 15:11:59 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B7711DAA;
+        Mon, 15 May 2023 12:11:58 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba7ed900ac4so910945276.0;
+        Mon, 15 May 2023 12:11:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684169986; x=1686761986;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684177917; x=1686769917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cmY2ej1hy4vAs/f4OlrbKuvNcHo8SUtv7o8IcsrQg3U=;
-        b=llobHjZ8CaIv83lisuWYuHqNS76/tNXm2lgpfFKCeP6ap94oN1gkuO+vAaGen3l7Zf
-         /5N9F6v7G42Et49vEQ4VYj0iNh3BUmWx45NHrOwY6DFCAIrau+ZWoft2KLtHIvm+J6M9
-         GjXehqZjYbmt+TDyDM0qFuICTBIMGYCZJjMeAojhXpVR0uqz0+acO0YybhbjaQSHPA55
-         7cMs9Y+n6PFLSzYGnlLM4tkK5Vg0NZFew5KLtO3NBkZ3+zlJQIsyO86fR30/uLY0m003
-         iDD9GC0tTbV8Lpcm8XbGD1Cds3XMYs+m+DcjhoIwNKfuS9Tb7GXTMDNPUoFoWObxFFES
-         E3RA==
+        bh=lEdsDznoeQ0wGPMJWBs10mMvCj7VphDqPqR+uizklHY=;
+        b=W/Z9qzmBUq3bCVhP8uewmPEIaZEVYfzpzeh9YTeAKrK3sWIwtOfql71JlvN0P+P5pK
+         YKy9cml02fk4SnFQ2DdWQ6w4JijHunpNA4zsiud1GYDMnfuy8RTxF/bEehOFA+aPeByE
+         DTSRG2bdMMqymbgvM1f+cbSlSYq+sQANl8uMoYLlmajJ3SyWJdGVyTNcYD0Ioakieviy
+         BESs3L0iPHTKfiNNq75aO8FTJdn/BYay+E8sIKUXSqB49RgAR5VB2xxzW+nwEEKofO5F
+         26ssX78nNr5JZdvfN8wyMBJyb6MRO06YlrKHWh/GpY8CaWKtewkcbGK5ZJkz6FL2Wiq9
+         dAhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684169986; x=1686761986;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684177917; x=1686769917;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cmY2ej1hy4vAs/f4OlrbKuvNcHo8SUtv7o8IcsrQg3U=;
-        b=UU5Q0/y4zuhNb40+zmiO122y1xSm3PTXBHhnMmuanAiuFU+fM1awCsG5UFzduwuyuc
-         pmrsxW29Ke1Dh7f9FYzXRE+WJnNOHklGwFEj8B5gVO8ge5nGdMsgrmnlH6x19SmDxs57
-         Y7tZKDYR8E4GD/Irb+SKRx0M/nYbCuKPW6/w27EkMaM1wLwgCn3QnuRlfIVTRD7lIPuq
-         6fU46eph2U+oISgx+oTGa1uA+8gHNutTp9iXGQiFfqaCD4BhmCQiqX93h4aemCSHq8VG
-         A8O2wZssfxR11/14fBBm9SIOHZplswKVA0kWPUWusTUcJKtgfOHIp5AY3Vr2LxuXEqjI
-         L4Lw==
-X-Gm-Message-State: AC+VfDybsvqnf7wuu+SprOO44lBFmaDNjzPe2VBrLL2ogorXsSyDVUEq
-        kz30QyUI46bC3MGvKvfJTs0=
-X-Google-Smtp-Source: ACHHUZ5ax8PMzMJyb4JE01QgIu1eN/8WniJ6gslKo//Mqlo5UEC9KUHdakOZkvioQ2T6mK0YMaHGpQ==
-X-Received: by 2002:a17:90a:e50d:b0:247:6a31:d59d with SMTP id t13-20020a17090ae50d00b002476a31d59dmr33951385pjy.1.1684169986489;
-        Mon, 15 May 2023 09:59:46 -0700 (PDT)
-Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:f:85bb:dfc8:391f:ff73])
-        by smtp.gmail.com with ESMTPSA id x13-20020a17090aa38d00b0024df6bbf5d8sm2151pjp.30.2023.05.15.09.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 09:59:46 -0700 (PDT)
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, peterz@infradead.org,
-        ashish.kalra@amd.com, srutherford@google.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
-        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
-        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
-        michael.roth@amd.com, thomas.lendacky@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
-Cc:     pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [RFC PATCH V6 14/14] x86/hyperv: Add hyperv-specific handling for VMMCALL under SEV-ES
-Date:   Mon, 15 May 2023 12:59:16 -0400
-Message-Id: <20230515165917.1306922-15-ltykernel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230515165917.1306922-1-ltykernel@gmail.com>
-References: <20230515165917.1306922-1-ltykernel@gmail.com>
+        bh=lEdsDznoeQ0wGPMJWBs10mMvCj7VphDqPqR+uizklHY=;
+        b=GdVmGDBqf1Okap0EgXTiq5zpUXGJFx60SXvf+EgZ9tnWHJNy5Dfr9OnympFg/VBLw3
+         tpYgnBjpVnXfqvMY0ct7w9/tu1srp5GeJ7wGOqslE1zoSMXR36kHtdmc8L1kpXSScTp2
+         X+9w8BXeuwB4zXNfcihpSNxFwtU53zmGpEFoKipr8iyqJrugWdZlwO+uGp4dgGjA4J6y
+         FadULZs+fkOJpF9zkdKNruSHsOrBwAV/e0fJoaHz1utDTRP3T2zCUMiaj1YaMICt9mpH
+         QTDPLhxHCNPne124nCyEm/Wsg7RBLC03rRuIH+mGHl4lqy49H/lBiKF7zXck8BtbpgwZ
+         rPdw==
+X-Gm-Message-State: AC+VfDxFpUgJpr/zFAsZiBPVkjJxVF/Dm/cl5vYUFuSK+vV3yIFOqme6
+        mYYZJ055EkswRM9Yqj7CTQhUK7hinAPHjugKsrQ=
+X-Google-Smtp-Source: ACHHUZ5oDsw20tcH12/01C4i2nT6w5iAb2H6/okJg55EYYpqTgJ8h9iiRdXz2tD9egoOuSwMxk4Rmyquuvv7u/aep3U=
+X-Received: by 2002:a25:2586:0:b0:ba7:809c:50de with SMTP id
+ l128-20020a252586000000b00ba7809c50demr6158133ybl.38.1684177917068; Mon, 15
+ May 2023 12:11:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230501192829.17086-1-vishal.moola@gmail.com>
+ <20230501192829.17086-31-vishal.moola@gmail.com> <c0677d21a4b6caa2e5018af000294a974121d9e8.camel@physik.fu-berlin.de>
+In-Reply-To: <c0677d21a4b6caa2e5018af000294a974121d9e8.camel@physik.fu-berlin.de>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 15 May 2023 12:11:46 -0700
+Message-ID: <CAOzc2pz6y=gRcdfkQVgwRuzWeWf2Nx-UBtKnZBTs2qKJ+r7R0Q@mail.gmail.com>
+Subject: Re: [PATCH v2 30/34] sh: Convert pte_free_tlb() to use ptdescs
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -84,56 +78,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Tianyu Lan <tiala@microsoft.com>
+On Sat, May 6, 2023 at 4:35=E2=80=AFAM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+>
+> Hi Vishal!
+>
+> On Mon, 2023-05-01 at 12:28 -0700, Vishal Moola (Oracle) wrote:
+> > Part of the conversions to replace pgtable constructor/destructors with
+> > ptdesc equivalents. Also cleans up some spacing issues.
+> >
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >  arch/sh/include/asm/pgalloc.h | 9 +++++----
+> >  1 file changed, 5 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/arch/sh/include/asm/pgalloc.h b/arch/sh/include/asm/pgallo=
+c.h
+> > index a9e98233c4d4..ce2ba99dbd84 100644
+> > --- a/arch/sh/include/asm/pgalloc.h
+> > +++ b/arch/sh/include/asm/pgalloc.h
+> > @@ -2,6 +2,7 @@
+> >  #ifndef __ASM_SH_PGALLOC_H
+> >  #define __ASM_SH_PGALLOC_H
+> >
+> > +#include <linux/mm.h>
+> >  #include <asm/page.h>
+> >
+> >  #define __HAVE_ARCH_PMD_ALLOC_ONE
+> > @@ -31,10 +32,10 @@ static inline void pmd_populate(struct mm_struct *m=
+m, pmd_t *pmd,
+> >       set_pmd(pmd, __pmd((unsigned long)page_address(pte)));
+> >  }
+> >
+> > -#define __pte_free_tlb(tlb,pte,addr)                 \
+> > -do {                                                 \
+> > -     pgtable_pte_page_dtor(pte);                     \
+> > -     tlb_remove_page((tlb), (pte));                  \
+> > +#define __pte_free_tlb(tlb, pte, addr)                               \
+> > +do {                                                         \
+> > +     ptdesc_pte_dtor(page_ptdesc(pte));                      \
+> > +     tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));      \
+> >  } while (0)
+> >
+> >  #endif /* __ASM_SH_PGALLOC_H */
+>
+> Looking at the patch which introduces tlb_remove_page_ptdesc() [1], it se=
+ems that
+> tlb_remove_page_ptdesc() already calls tlb_remove_page() with ptdesc_page=
+(pt), so
+> I'm not sure whether the above tlb_remove_page_ptdesc((tlb), (page_ptdesc=
+(pte)))
+> is correct.
+>
+> Shouldn't it just be tlb_remove_page_ptdesc((tlb), (pte))?
 
-Add Hyperv-specific handling for faults caused by VMMCALL
-instructions.
-
-Signed-off-by: Tianyu Lan <tiala@microsoft.com>
----
- arch/x86/kernel/cpu/mshyperv.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 0c5f9f7bd7ba..3469b369e627 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -32,6 +32,7 @@
- #include <asm/nmi.h>
- #include <clocksource/hyperv_timer.h>
- #include <asm/numa.h>
-+#include <asm/svm.h>
- 
- /* Is Linux running as the root partition? */
- bool hv_root_partition;
-@@ -577,6 +578,20 @@ static bool __init ms_hyperv_msi_ext_dest_id(void)
- 	return eax & HYPERV_VS_PROPERTIES_EAX_EXTENDED_IOAPIC_RTE;
- }
- 
-+static void hv_sev_es_hcall_prepare(struct ghcb *ghcb, struct pt_regs *regs)
-+{
-+	/* RAX and CPL are already in the GHCB */
-+	ghcb_set_rcx(ghcb, regs->cx);
-+	ghcb_set_rdx(ghcb, regs->dx);
-+	ghcb_set_r8(ghcb, regs->r8);
-+}
-+
-+static bool hv_sev_es_hcall_finish(struct ghcb *ghcb, struct pt_regs *regs)
-+{
-+	/* No checking of the return state needed */
-+	return true;
-+}
-+
- const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
- 	.name			= "Microsoft Hyper-V",
- 	.detect			= ms_hyperv_platform,
-@@ -584,4 +599,6 @@ const __initconst struct hypervisor_x86 x86_hyper_ms_hyperv = {
- 	.init.x2apic_available	= ms_hyperv_x2apic_available,
- 	.init.msi_ext_dest_id	= ms_hyperv_msi_ext_dest_id,
- 	.init.init_platform	= ms_hyperv_init_platform,
-+	.runtime.sev_es_hcall_prepare = hv_sev_es_hcall_prepare,
-+	.runtime.sev_es_hcall_finish = hv_sev_es_hcall_finish,
- };
--- 
-2.25.1
-
+As of this patchset all implementations of __pte_free_tlb() take in a
+struct page. Eventually we'll want it to be tlb_remove_page_ptdesc(tlb, pte=
+),
+but for now the cast is necessary here.
