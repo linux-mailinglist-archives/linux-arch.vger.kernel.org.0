@@ -2,123 +2,136 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D80C7057F0
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 21:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B1470583D
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 22:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjEPTvl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 15:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S229917AbjEPUDl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 16:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjEPTvi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 15:51:38 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9C0E313E
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 12:51:31 -0700 (PDT)
-Received: (qmail 845160 invoked by uid 1000); 16 May 2023 15:51:30 -0400
-Date:   Tue, 16 May 2023 15:51:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
+        with ESMTP id S229618AbjEPUDk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 16:03:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6D619B;
+        Tue, 16 May 2023 13:03:34 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7511C6605902;
+        Tue, 16 May 2023 21:03:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684267412;
+        bh=neBnBIFI0CIVAk8FH71HI3up4NB8vfsI9KknH645BgE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oG++9agVNx+YfmqZ/xi5WTDJ6ENKtWAUyL1dKl4dT+/eF5WRm94oh4tNc8WdcjB5x
+         jIVuyFhwKKj9JGBMUXT+QhG8rGAzo81f2oCPcr7Wcf69X7TxhKoH0RgLKJA0ZPXevm
+         ZFA/OE7j6ErLBYk7mj83e76PWftkj5R1PDDHPwfHzrXCtNuvwAhsBIeI/s9O8YbNdT
+         WabTM8JZt3L+ZYDoIXmGaZc/XfOCZfvbI+QIbQsywJQeeUylcWoqx8t8Rq4wQ0TfQR
+         M7hMOhCZ/WkujL6APddqvUT4bBVoVdmeq00+FKazdS567hyr0qsE3cupOcX8QIQ4KD
+         2/p6vS5DD/9LQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 8121C10623DF; Tue, 16 May 2023 22:03:29 +0200 (CEST)
+Date:   Tue, 16 May 2023 22:03:29 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
-Message-ID: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 27/41] power: add HAS_IOPORT dependencies
+Message-ID: <20230516200329.oxxgvnm5ivj46mph@mercury.elektranox.org>
 References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-36-schnelle@linux.ibm.com>
- <2023051643-overtime-unbridle-7cdd@gregkh>
- <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
+ <20230516110038.2413224-28-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jp3qgbjcymzuog6w"
 Content-Disposition: inline
-In-Reply-To: <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230516110038.2413224-28-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
-> On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
-> > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
-> 
-> >>  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-> >>  /* Support PCI only */
-> >>  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
-> >>  {
-> >> -	return inl(uhci->io_addr + reg);
-> >> +	return UHCI_IN(inl(uhci->io_addr + reg));
-> >>  }
-> >>  
-> >>  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
-> >>  {
-> >> -	outl(val, uhci->io_addr + reg);
-> >> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
-> >
-> > I'm confused now.
-> >
-> > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
-> >
-> > But if it isn't, then these are just no-ops that do nothing?  So then
-> > the driver will fail to work?  Why have these stubs at all?
-> >
-> > Why not just not build the driver at all if this option is not enabled?
-> 
-> If I remember correctly, the problem here is the lack of
-> abstractions in the uhci driver, it instead supports all
-> combinations of on-chip non-PCI devices using readb()/writeb()
-> and PCI devices using inb()/outb() in a shared codebase.
 
-Isn't that an abstraction?  A single set of operations (uhci_readl(), 
-uhci_writel(), etc.) that always does the right sort of I/O even when 
-talking to different buses?
+--jp3qgbjcymzuog6w
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So I'm not sure what you mean by "the lack of abstractions".
+Hi,
 
-> A particularly tricky combination is a kernel that supports on-chip
-> UHCI as well as CONFIG_USB_PCI (for EHCI/XHCI) but does not support
-> I/O ports because of platform limitations. The trick is to come up
-> with a set of changes that doesn't have to rewrite the entire logic
-> but also doesn't add an obscene number of #ifdef checks.
+On Tue, May 16, 2023 at 01:00:23PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>=20
+> Acked-by: Sebastian Reichel <sre@kernel.org>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+>       per-subsystem patches may be applied independently
 
-Indeed, in a kernel supporting that tricky combination the no-op code 
-would be generated.  But it would never execute at runtime because the 
-uhci_has_pci_registers(uhci) test would always return 0, and so the 
-driver wouldn't fail.
+Thanks, queued to power-supply's for-next branch.
 
-> That said, there is a minor problem with the empty definition
-> 
-> +#define UHCI_OUT(x)
-> 
-> I think this should be "do { } while (0)" to avoid warnings
-> about empty if/else blocks.
+-- Sebastian
 
-I'm sure Niklas wouldn't mind making such a change.  But do we really 
-get such warnings?  Does the compiler really think that this kind of 
-(macro-expanded) code:
+>  drivers/power/reset/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 8c87eeda0fec..fff07b2bd77b 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -158,6 +158,7 @@ config POWER_RESET_OXNAS
+>  config POWER_RESET_PIIX4_POWEROFF
+>  	tristate "Intel PIIX4 power-off driver"
+>  	depends on PCI
+> +	depends on HAS_IOPORT
+>  	depends on MIPS || COMPILE_TEST
+>  	help
+>  	  This driver supports powering off a system using the Intel PIIX4
+> --=20
+> 2.39.2
+>=20
 
-	if (uhci_has_pci_registers(uhci))
-		;
-	else if (uhci_is_aspeed(uhci))
-		writel(val, uhci->regs + uhci_aspeed_reg(reg));
+--jp3qgbjcymzuog6w
+Content-Type: application/pgp-signature; name="signature.asc"
 
-deserves a warning?  I write stuff like that fairly often; it's a good 
-way to showcase a high-probability do-nothing pathway at the start of a 
-series of conditional cases.  And I haven't noticed any complaints from 
-the compiler.
+-----BEGIN PGP SIGNATURE-----
 
-Alan Stern
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRj4Y0ACgkQ2O7X88g7
++prvBQ//S5/2ZNXe0IRtGqYh6TrppJf6jIzcQKzwlDdsYrpaxPmNCo0K7y2IiVip
+uLF/HNmX2TzwGzwhiCn0qyEqfCpflQIzoVmRYI+QINGKDKki/x3diinsRQyovHat
+CtgvLc+n48bvV2a/4uiIaQKRFl5ALOWgf4d3xLy9xzSxHnJ2o/IHE9j+ggFqfaS0
+mfq0h0/iEldRbcYxn5Nc5M7JwkXurWI5eeLM7sFfzMl6Lt8WJtTIiEjmOsoDksR1
+rkqmYFZaj9N4w+0tfSXj58oPc4o0y2tBLP/6xYFKfHsix0s4yS69nGlPkJgvCdun
+diZdzVGavGLjmyndKIYTJOtP3xnl8/N9JdAMDprfJ+0Tp/Vrp+wUZWA/RPQyUMGV
+jddpFKhV3fs1FfVypVBQPJyi/NOl06hCmBrE6YwEgCWd9kA391qA9Zm38hDMHSqR
+b52OhqF9+yV2KHFx3KikzxDFZOHbqMuJV4VPHepmABk+TTys1FPsqsnSJOmenSmv
+dytYPdxhUOZBGv7zbjoA6/5zM70oNJqhqznYyUrAH+XC39Q5ss8VHeQ38BTEqI9M
+VBSSezMw2Avjp2I6SXvbb5t61Se4/V+sEVcsYlcJ3SsPbsx7b6jCxIe7CXRal+OU
+eemXHq+QLUY+a/y9XuVN9fn5nf1kKgou97yBWlxBp+GOj47L2So=
+=TeOZ
+-----END PGP SIGNATURE-----
+
+--jp3qgbjcymzuog6w--
