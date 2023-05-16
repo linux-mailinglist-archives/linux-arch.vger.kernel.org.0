@@ -2,256 +2,405 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A1F7054E7
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 19:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F04705537
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 19:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjEPRWo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 13:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S229799AbjEPRpO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 13:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEPRWn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 13:22:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2261FC
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 10:22:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AC3663D1C
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 17:22:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B670FC4339C
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 17:22:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684257760;
-        bh=QFT/8CGCepmbME6J6M+gcmIcYl3norv2iZWOWagx40U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NkQprYZuTHQOpEmZdpSUH0reJ/a9H2yMYI4vE8GjGvrriDG19/3zdJDw2b5TTMoLA
-         mAw+pQJuq7fuHYENt7uKVWSK/7B10Iio6yUMKFfP1JRMikVYUvGGCi/py/4rOAWASs
-         zrNoUSUwhlZETlpcj1GAYaW0IDKWmUAFaNGuA2dg334B9W6YPhIdnAD4LNKjNzjk7Q
-         k0VeHH4+uSEPX92foRkdf2R1gGu0T4TXjbc5Ph+HxRfIUmDRh06dM9gDkhbP1XjLeq
-         2JWgLKcg5OQxketGQ8BpheTZGAtM0am7oDxDSkM0fkXW3oNZkC8FPkijR33ZPGMsOW
-         s3rTz8NB3F84A==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f24ceae142so13147311e87.3
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 10:22:40 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwg8MoHaSdZQMg++5k1eQJuLVoPC6I2oW25plnY1xuj0LYD0jNr
-        n4JZZOYKt7+xL5Pg+QzQV/KeaaMad8vmIDcaakE=
-X-Google-Smtp-Source: ACHHUZ5dOHOQbEgToKxwzPr2IS3v2p/hDA7R1vjtStTSP9sPEuDt+dm/1O8Jn4nJtQXKjlcA65LWY76TwVwtVGFUj7U=
-X-Received: by 2002:ac2:44b2:0:b0:4ec:8d50:d124 with SMTP id
- c18-20020ac244b2000000b004ec8d50d124mr8248210lfm.48.1684257758772; Tue, 16
- May 2023 10:22:38 -0700 (PDT)
+        with ESMTP id S229520AbjEPRpN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 13:45:13 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9039FC;
+        Tue, 16 May 2023 10:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684259054; i=deller@gmx.de;
+        bh=28Q2XTKI3jOrWHGJRY35mfdpvNOlP9oZTBSK7WL8Bjk=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=eXaGMvBKqACcsFqkTyYRfQM2481JQl71DzQiEIaVDzUVH1aDV1H4R33xqAwl3T9xg
+         WyGs2k/8xP0S2HR/CekXsMf6yLBmqry4QSYxr4BvpJva3Ks/s2ycdHnF+/EoAr+h6u
+         NIoYxuVUMWztf2AdYwAzRMjkS9hI8Pd8dMPpn7VuHOMlyOdCyXRmWCYoqqSUxHBvmw
+         evV8w3qjZaKNyexAvtHeNQIrjaAsxgulFEKp3nDKkDglGurFZX71jPAWLjfTwmgGYG
+         s4H5RwDK7jPGN43mnLsgqXe6Vt8DhM5WO+h9lRK2vxVHJEwQX4XP6bFslTwNi3OGd0
+         TeuNvCu0UJvAw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.150.20]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N5mKP-1qDPOg4AKR-017Dz0; Tue, 16
+ May 2023 19:44:14 +0200
+Message-ID: <df527e53-3148-02f0-241b-fbc5e28b1618@gmx.de>
+Date:   Tue, 16 May 2023 19:44:09 +0200
 MIME-Version: 1.0
-References: <20230504174320.3930345-1-ardb@kernel.org> <CAKwvOd=uh9wmaWD8ksQYDqbJv7qO483oFa=dyULhmnfF8KhbNg@mail.gmail.com>
-In-Reply-To: <CAKwvOd=uh9wmaWD8ksQYDqbJv7qO483oFa=dyULhmnfF8KhbNg@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 16 May 2023 19:22:27 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGZNe9FsCWAy=M3m=+A=v5HOGDy0QfkgvhSwDV14REoLQ@mail.gmail.com>
-Message-ID: <CAMj1kXGZNe9FsCWAy=M3m=+A=v5HOGDy0QfkgvhSwDV14REoLQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] kallsyms: Avoid weak references for kallsyms symbols
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Fangrui Song <maskray@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 1/7] fbdev/hitfb: Cast I/O offset to address
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, geert@linux-m68k.org,
+        javierm@redhat.com, daniel@ffwll.ch, vgupta@kernel.org,
+        chenhuacai@kernel.org, kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
+        sam@ravnborg.org, suijingfeng@loongson.cn
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Artur Rojek <contact@artur-rojek.eu>
+References: <20230512102444.5438-1-tzimmermann@suse.de>
+ <20230512102444.5438-2-tzimmermann@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230512102444.5438-2-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:rSOrO+0jt4O4RzM9l14Bz6wfGEKXucA0j3Waundj3xcBKFDFc52
+ MmW0hsb8NLlq0rH9mMz/XUMz+PTuDsa6n+7OMeP7elMOy6xV14Nc64lHY1vMLN09t7CrUAU
+ aro3xE6YuZBtr5yHHhTsC4g3TbNooxbmvDC+2u1zgRm2sKkzCxIS3lxPvtY+OC7z04Uhti5
+ 72FlfAhLCIiPZ2ZVXmmOQ==
+UI-OutboundReport: notjunk:1;M01:P0:ecBgGlwkX5Y=;oQwXswBOboXoEMT5pniOW9e5zDy
+ TDc0juyT2oeDOAYSymZ4Yve6mAwtAQYgC4JulDpsWI54/lpT/3D7R4HTWQBItkMqSmELB7Tfh
+ k/xHSW5SHoW+vvUk5sL4+IR5vxCspl8eKgpH3nyPYnge684GFJK7ApwoTiF0bEeuMEPeE0f98
+ 5nKB5Ki2nXvssTP6YWZstlRi9vmm7UDfKmr6dJC7XQRSdL459sxpPqb6y5Py+VeOtrwRswQ9b
+ mgX6Q416C2OMUv1g2qvDpI/CUwPMRZVR7PdDu0s1ziJFjAoZ4bpAU0a2Amuhqx8ipGBYPgxy9
+ 8K9IWqbt6vD0urHXico4zJpR6rXjjdvRQeMftW7c4y+Mn7o+Gzt+zxbKNHywWhVRr/GF+ybXC
+ yB72kKK2MPCb8Ol4bxPSD2qxRs+u6yR+B5tS0PfJiS96Acllk7UA/0W8kS5K14nUpMPF1nBjW
+ SgGVsJmvnSiuIjlbaZLisaUJpWXTZIYL9DjVqv50wqiLFUrTuaMcFH8IXzLv29VjHSZNEOpBo
+ DUYeBfYKUtlMQjLEL/KhlDZ//O00ulUgDkRDV3l+HMC3KDxM4w1qVuyk9g6rR1gHVFvtRMw4B
+ pKUdaCegbB6YWC3baOTepNotkyxry/FsXyBxefzaocIcXxJipYn7OyR61jwcy7DFoul70oAn1
+ 0a2ZvSp2XLUaT8vIUNhNrNECPa3NCDdrWfNByBWiFrW8o/WVtK5oM6zVT1IzOnAYuzrkDTjAD
+ uoZnelK3f6VSOHLd7t16PWGRCXk7M6eV8Pew6pM1LwlLxJGYb0XchPIobzDo+3uuXqgw8k1x/
+ qfxDOSuCv3W9gkj/I6aq7QqrnHkYz1J9yv4wny00fCDTmiez/GMrUxjchUPzeZj1hpyqCP4Kg
+ AodCMcCoACTsxxNkm24VDBz4N08R7D9G25UWZxxPaXTBo0szFnbZxYJX0JCcEfySdyg7jco/x
+ Rp2dTA==
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 15 May 2023 at 23:29, Nick Desaulniers <ndesaulniers@google.com> wr=
-ote:
+On 5/12/23 12:24, Thomas Zimmermann wrote:
+> Cast I/O offsets to pointers to use them with I/O functions. The I/O
+> functions expect pointers of type 'volatile void __iomem *', but the
+> offsets are plain integers. Build warnings are
 >
-> On Thu, May 4, 2023 at 10:43=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> =
-wrote:
-> >
-> > kallsyms is a directory of all the symbols in the vmlinux binary, and s=
-o
-> > creating it is somewhat of a chicken-and-egg problem, as its non-zero
-> > size affects the layout of the binary, and therefore the values of the
-> > symbols.
-> >
-> > For this reason, the kernel is linked more than once, and the first pas=
-s
-> > does not include any kallsyms data at all. For the linker to accept
-> > this, the symbol declarations describing the kallsyms metadata are
-> > emitted as having weak linkage, so they can remain unsatisfied. During
-> > the subsequent passes, the weak references are satisfied by the kallsym=
-s
-> > metadata that was constructed based on information gathered from the
-> > preceding passes.
-> >
-> > Weak references lead to somewhat worse codegen, because taking their
-> > address may need to produce NULL (if the reference was unsatisfied), an=
-d
-> > this is not usually supported by RIP or PC relative symbol references.
-> >
-> > Given that these references are ultimately always satisfied in the fina=
-l
-> > link, let's drop the weak annotation, and instead, provide fallback
-> > definitions in the linker script that are only emitted if an unsatisfie=
-d
-> > reference exists.
-> >
-> > While at it, drop the FRV specific annotation that these symbols reside
-> > in .rodata - FRV is long gone.
-> >
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Fangrui Song <maskray@google.com>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+>    ../drivers/video/fbdev/hitfb.c: In function 'hitfb_accel_wait':
+>    ../arch/x86/include/asm/hd64461.h:18:33: warning: passing argument 1 =
+of 'fb_readw' makes pointer from integer without a cast [-Wint-conversion]
+>     18 | #define HD64461_IO_OFFSET(x)    (HD64461_IOBASE + (x))
+>        |                                 ^~~~~~~~~~~~~~~~~~~~~~
+>        |                                 |
+>        |                                 unsigned int
+>    ../arch/x86/include/asm/hd64461.h:93:33: note: in expansion of macro =
+'HD64461_IO_OFFSET'
+>     93 | #define HD64461_GRCFGR          HD64461_IO_OFFSET(0x1044)      =
+ /* Accelerator Configuration Register */
+>        |                                 ^~~~~~~~~~~~~~~~~
+>    ../drivers/video/fbdev/hitfb.c:47:25: note: in expansion of macro 'HD=
+64461_GRCFGR'
+>     47 |         while (fb_readw(HD64461_GRCFGR) & HD64461_GRCFGR_ACCSTA=
+TUS) ;
+>        |                         ^~~~~~~~~~~~~~
+>    In file included from ../arch/x86/include/asm/fb.h:15,
+>    from ../include/linux/fb.h:19,
+>    from ../drivers/video/fbdev/hitfb.c:22:
+>    ../include/asm-generic/fb.h:52:57: note: expected 'const volatile voi=
+d *' but argument is of type 'unsigned int'
+>     52 | static inline u16 fb_readw(const volatile void __iomem *addr)
+>        |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
 >
-> Thanks for the patch.  I did some quick boot tests of this with:
-> - x86 defconfig + CONFIG_KALLSYMS_SELFTEST=3Dy
-> - x86 defconfig + CONFIG_KALLSYMS_SELFTEST=3Dy + CONFIG_LTO_CLANG_THIN=3D=
-y
-> - arm64 defconfig + CONFIG_KALLSYMS_SELFTEST=3Dy
->
-> Curiously, I only see:
-> [    1.002200] kallsyms_selftest: start
->
-> in the output (when grepping for kallsyms_selftest as instructed by
-> the help text for KALLSYMS_SELFTEST in init/Kconfig). But that happens
-> regardless of this patch.
->
-> I did not test backtraces or live patching (seems like kallsyms is
-> related to those reading through the help texts in init/Kconfig), or
-> measure for binary changes.
->
-> Tested-by: Nick Desaulniers <ndesaulniers@google.com> # Boot
->
-> Based on my interpretation of
-> https://sourceware.org/binutils/docs/ld/PROVIDE.html, this LGTM.
->
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->
+> This patch only fixes the build warnings. It's not clear if the I/O
+> offsets can legally be passed to the I/O helpers. It was apparently
+> broken in 2007 when custom inw()/outw() helpers got removed by
+> commit 34a780a0afeb ("sh: hp6xx pata_platform support."). Fixing the
+> driver would require setting the I/O base address.
+
+I think your patch is the best you can do for now... So...
+
+Acked-by: Helge Deller <deller@gmx.de>
 
 Thanks!
+Helge
 
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >  include/asm-generic/vmlinux.lds.h |  9 +++++++
-> >  kernel/kallsyms.c                 |  6 -----
-> >  kernel/kallsyms_internal.h        | 25 +++++++-------------
-> >  3 files changed, 18 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vm=
-linux.lds.h
-> > index d1f57e4868ed341d..dd42c0fcad2b519f 100644
-> > --- a/include/asm-generic/vmlinux.lds.h
-> > +++ b/include/asm-generic/vmlinux.lds.h
-> > @@ -460,6 +460,15 @@
-> >   */
-> >  #define RO_DATA(align)                                                =
- \
-> >         . =3D ALIGN((align));                                          =
-   \
-> > +       PROVIDE(kallsyms_addresses =3D .);                             =
-   \
-> > +       PROVIDE(kallsyms_offsets =3D .);                               =
-   \
-> > +       PROVIDE(kallsyms_names =3D .);                                 =
-   \
-> > +       PROVIDE(kallsyms_num_syms =3D .);                              =
-   \
-> > +       PROVIDE(kallsyms_relative_base =3D .);                         =
-   \
-> > +       PROVIDE(kallsyms_token_table =3D .);                           =
-   \
-> > +       PROVIDE(kallsyms_token_index =3D .);                           =
-   \
-> > +       PROVIDE(kallsyms_markers =3D .);                               =
-   \
-> > +       PROVIDE(kallsyms_seqs_of_names =3D .);                         =
-   \
-> >         .rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {          =
- \
-> >                 __start_rodata =3D .;                                  =
-   \
-> >                 *(.rodata) *(.rodata.*)                                =
- \
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index 77747391f49b66cb..5b16009ee53aa05b 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -331,12 +331,6 @@ static unsigned long get_symbol_pos(unsigned long =
-addr,
-> >         unsigned long symbol_start =3D 0, symbol_end =3D 0;
-> >         unsigned long i, low, high, mid;
-> >
-> > -       /* This kernel should never had been booted. */
-> > -       if (!IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE))
-> > -               BUG_ON(!kallsyms_addresses);
-> > -       else
-> > -               BUG_ON(!kallsyms_offsets);
->
-> Even previously with weak definitions, wouldn't these values always be tr=
-ue?
->
 
-To be pedantic: this patch does not deal with weak definitions at all.
-It only deals with weak *references*, which can remain unsatisfied.
-
-In this particular case, one of these would remain unsatisfied, while
-the other one needs to be defined in order for kallsyms not to crash
-and burn as soon as it is used. After this change, both will always be
-non-NULL, hence the removal.
-
-> > -
-> >         /* Do a binary search on the sorted kallsyms_addresses array. *=
-/
-> >         low =3D 0;
-> >         high =3D kallsyms_num_syms;
-> > diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
-> > index 27fabdcc40f57931..cf4124dbcc5b6d0e 100644
-> > --- a/kernel/kallsyms_internal.h
-> > +++ b/kernel/kallsyms_internal.h
-> > @@ -8,24 +8,17 @@
-> >   * These will be re-linked against their real values
-> >   * during the second link stage.
-> >   */
-> > -extern const unsigned long kallsyms_addresses[] __weak;
-> > -extern const int kallsyms_offsets[] __weak;
-> > -extern const u8 kallsyms_names[] __weak;
-> > +extern const unsigned long kallsyms_addresses[];
-> > +extern const int kallsyms_offsets[];
-> > +extern const u8 kallsyms_names[];
-> >
-> > -/*
-> > - * Tell the compiler that the count isn't in the small data section if=
- the arch
-> > - * has one (eg: FRV).
-> > - */
-> > -extern const unsigned int kallsyms_num_syms
-> > -__section(".rodata") __attribute__((weak));
-> > -
-> > -extern const unsigned long kallsyms_relative_base
-> > -__section(".rodata") __attribute__((weak));
-> > +extern const unsigned int kallsyms_num_syms;
-> > +extern const unsigned long kallsyms_relative_base;
-> >
-> > -extern const char kallsyms_token_table[] __weak;
-> > -extern const u16 kallsyms_token_index[] __weak;
-> > +extern const char kallsyms_token_table[];
-> > +extern const u16 kallsyms_token_index[];
-> >
-> > -extern const unsigned int kallsyms_markers[] __weak;
-> > -extern const u8 kallsyms_seqs_of_names[] __weak;
-> > +extern const unsigned int kallsyms_markers[];
-> > +extern const u8 kallsyms_seqs_of_names[];
-> >
-> >  #endif // LINUX_KALLSYMS_INTERNAL_H_
-> > --
-> > 2.39.2
-> >
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202305102136.eMjTSPwH-lkp@=
+intel.com/
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Artur Rojek <contact@artur-rojek.eu>
+> ---
+>   drivers/video/fbdev/hitfb.c | 122 ++++++++++++++++++++----------------
+>   1 file changed, 69 insertions(+), 53 deletions(-)
 >
+> diff --git a/drivers/video/fbdev/hitfb.c b/drivers/video/fbdev/hitfb.c
+> index 3033f5056976..7737923b7a0a 100644
+> --- a/drivers/video/fbdev/hitfb.c
+> +++ b/drivers/video/fbdev/hitfb.c
+> @@ -42,17 +42,33 @@ static struct fb_fix_screeninfo hitfb_fix =3D {
+>   	.accel		=3D FB_ACCEL_NONE,
+>   };
 >
-> --
-> Thanks,
-> ~Nick Desaulniers
+> +static volatile void __iomem *hitfb_offset_to_addr(unsigned int offset)
+> +{
+> +	return (__force volatile void __iomem *)(uintptr_t)offset;
+> +}
+> +
+> +static u16 hitfb_readw(unsigned int offset)
+> +{
+> +	return fb_readw(hitfb_offset_to_addr(offset));
+> +}
+> +
+> +static void hitfb_writew(u16 value, unsigned int offset)
+> +{
+> +	fb_writew(value, hitfb_offset_to_addr(offset));
+> +}
+> +
+>   static inline void hitfb_accel_wait(void)
+>   {
+> -	while (fb_readw(HD64461_GRCFGR) & HD64461_GRCFGR_ACCSTATUS) ;
+> +	while (hitfb_readw(HD64461_GRCFGR) & HD64461_GRCFGR_ACCSTATUS)
+> +		;
+>   }
+>
+>   static inline void hitfb_accel_start(int truecolor)
+>   {
+>   	if (truecolor) {
+> -		fb_writew(6, HD64461_GRCFGR);
+> +		hitfb_writew(6, HD64461_GRCFGR);
+>   	} else {
+> -		fb_writew(7, HD64461_GRCFGR);
+> +		hitfb_writew(7, HD64461_GRCFGR);
+>   	}
+>   }
+>
+> @@ -63,11 +79,11 @@ static inline void hitfb_accel_set_dest(int truecolo=
+r, u16 dx, u16 dy,
+>   	if (truecolor)
+>   		saddr <<=3D 1;
+>
+> -	fb_writew(width-1, HD64461_BBTDWR);
+> -	fb_writew(height-1, HD64461_BBTDHR);
+> +	hitfb_writew(width-1, HD64461_BBTDWR);
+> +	hitfb_writew(height-1, HD64461_BBTDHR);
+>
+> -	fb_writew(saddr & 0xffff, HD64461_BBTDSARL);
+> -	fb_writew(saddr >> 16, HD64461_BBTDSARH);
+> +	hitfb_writew(saddr & 0xffff, HD64461_BBTDSARL);
+> +	hitfb_writew(saddr >> 16, HD64461_BBTDSARH);
+>
+>   }
+>
+> @@ -80,7 +96,7 @@ static inline void hitfb_accel_bitblt(int truecolor, u=
+16 sx, u16 sy, u16 dx,
+>
+>   	height--;
+>   	width--;
+> -	fb_writew(rop, HD64461_BBTROPR);
+> +	hitfb_writew(rop, HD64461_BBTROPR);
+>   	if ((sy < dy) || ((sy =3D=3D dy) && (sx <=3D dx))) {
+>   		saddr =3D WIDTH * (sy + height) + sx + width;
+>   		daddr =3D WIDTH * (dy + height) + dx + width;
+> @@ -91,32 +107,32 @@ static inline void hitfb_accel_bitblt(int truecolor=
+, u16 sx, u16 sy, u16 dx,
+>   				maddr =3D
+>   				    (((width >> 4) + 1) * (height + 1) - 1) * 2;
+>
+> -			fb_writew((1 << 5) | 1, HD64461_BBTMDR);
+> +			hitfb_writew((1 << 5) | 1, HD64461_BBTMDR);
+>   		} else
+> -			fb_writew(1, HD64461_BBTMDR);
+> +			hitfb_writew(1, HD64461_BBTMDR);
+>   	} else {
+>   		saddr =3D WIDTH * sy + sx;
+>   		daddr =3D WIDTH * dy + dx;
+>   		if (mask_addr) {
+> -			fb_writew((1 << 5), HD64461_BBTMDR);
+> +			hitfb_writew((1 << 5), HD64461_BBTMDR);
+>   		} else {
+> -			fb_writew(0, HD64461_BBTMDR);
+> +			hitfb_writew(0, HD64461_BBTMDR);
+>   		}
+>   	}
+>   	if (truecolor) {
+>   		saddr <<=3D 1;
+>   		daddr <<=3D 1;
+>   	}
+> -	fb_writew(width, HD64461_BBTDWR);
+> -	fb_writew(height, HD64461_BBTDHR);
+> -	fb_writew(saddr & 0xffff, HD64461_BBTSSARL);
+> -	fb_writew(saddr >> 16, HD64461_BBTSSARH);
+> -	fb_writew(daddr & 0xffff, HD64461_BBTDSARL);
+> -	fb_writew(daddr >> 16, HD64461_BBTDSARH);
+> +	hitfb_writew(width, HD64461_BBTDWR);
+> +	hitfb_writew(height, HD64461_BBTDHR);
+> +	hitfb_writew(saddr & 0xffff, HD64461_BBTSSARL);
+> +	hitfb_writew(saddr >> 16, HD64461_BBTSSARH);
+> +	hitfb_writew(daddr & 0xffff, HD64461_BBTDSARL);
+> +	hitfb_writew(daddr >> 16, HD64461_BBTDSARH);
+>   	if (mask_addr) {
+>   		maddr +=3D mask_addr;
+> -		fb_writew(maddr & 0xffff, HD64461_BBTMARL);
+> -		fb_writew(maddr >> 16, HD64461_BBTMARH);
+> +		hitfb_writew(maddr & 0xffff, HD64461_BBTMARL);
+> +		hitfb_writew(maddr >> 16, HD64461_BBTMARH);
+>   	}
+>   	hitfb_accel_start(truecolor);
+>   }
+> @@ -127,17 +143,17 @@ static void hitfb_fillrect(struct fb_info *p, cons=
+t struct fb_fillrect *rect)
+>   		cfb_fillrect(p, rect);
+>   	else {
+>   		hitfb_accel_wait();
+> -		fb_writew(0x00f0, HD64461_BBTROPR);
+> -		fb_writew(16, HD64461_BBTMDR);
+> +		hitfb_writew(0x00f0, HD64461_BBTROPR);
+> +		hitfb_writew(16, HD64461_BBTMDR);
+>
+>   		if (p->var.bits_per_pixel =3D=3D 16) {
+> -			fb_writew(((u32 *) (p->pseudo_palette))[rect->color],
+> +			hitfb_writew(((u32 *) (p->pseudo_palette))[rect->color],
+>   				  HD64461_GRSCR);
+>   			hitfb_accel_set_dest(1, rect->dx, rect->dy, rect->width,
+>   					     rect->height);
+>   			hitfb_accel_start(1);
+>   		} else {
+> -			fb_writew(rect->color, HD64461_GRSCR);
+> +			hitfb_writew(rect->color, HD64461_GRSCR);
+>   			hitfb_accel_set_dest(0, rect->dx, rect->dy, rect->width,
+>   					     rect->height);
+>   			hitfb_accel_start(0);
+> @@ -162,7 +178,7 @@ static int hitfb_pan_display(struct fb_var_screeninf=
+o *var,
+>   	if (xoffset !=3D 0)
+>   		return -EINVAL;
+>
+> -	fb_writew((yoffset*info->fix.line_length)>>10, HD64461_LCDCBAR);
+> +	hitfb_writew((yoffset*info->fix.line_length)>>10, HD64461_LCDCBAR);
+>
+>   	return 0;
+>   }
+> @@ -172,33 +188,33 @@ int hitfb_blank(int blank_mode, struct fb_info *in=
+fo)
+>   	unsigned short v;
+>
+>   	if (blank_mode) {
+> -		v =3D fb_readw(HD64461_LDR1);
+> +		v =3D hitfb_readw(HD64461_LDR1);
+>   		v &=3D ~HD64461_LDR1_DON;
+> -		fb_writew(v, HD64461_LDR1);
+> +		hitfb_writew(v, HD64461_LDR1);
+>
+> -		v =3D fb_readw(HD64461_LCDCCR);
+> +		v =3D hitfb_readw(HD64461_LCDCCR);
+>   		v |=3D HD64461_LCDCCR_MOFF;
+> -		fb_writew(v, HD64461_LCDCCR);
+> +		hitfb_writew(v, HD64461_LCDCCR);
+>
+> -		v =3D fb_readw(HD64461_STBCR);
+> +		v =3D hitfb_readw(HD64461_STBCR);
+>   		v |=3D HD64461_STBCR_SLCDST;
+> -		fb_writew(v, HD64461_STBCR);
+> +		hitfb_writew(v, HD64461_STBCR);
+>   	} else {
+> -		v =3D fb_readw(HD64461_STBCR);
+> +		v =3D hitfb_readw(HD64461_STBCR);
+>   		v &=3D ~HD64461_STBCR_SLCDST;
+> -		fb_writew(v, HD64461_STBCR);
+> +		hitfb_writew(v, HD64461_STBCR);
+>
+> -		v =3D fb_readw(HD64461_LCDCCR);
+> +		v =3D hitfb_readw(HD64461_LCDCCR);
+>   		v &=3D ~(HD64461_LCDCCR_MOFF | HD64461_LCDCCR_STREQ);
+> -		fb_writew(v, HD64461_LCDCCR);
+> +		hitfb_writew(v, HD64461_LCDCCR);
+>
+>   		do {
+> -		    v =3D fb_readw(HD64461_LCDCCR);
+> +		    v =3D hitfb_readw(HD64461_LCDCCR);
+>   		} while(v&HD64461_LCDCCR_STBACK);
+>
+> -		v =3D fb_readw(HD64461_LDR1);
+> +		v =3D hitfb_readw(HD64461_LDR1);
+>   		v |=3D HD64461_LDR1_DON;
+> -		fb_writew(v, HD64461_LDR1);
+> +		hitfb_writew(v, HD64461_LDR1);
+>   	}
+>   	return 0;
+>   }
+> @@ -211,10 +227,10 @@ static int hitfb_setcolreg(unsigned regno, unsigne=
+d red, unsigned green,
+>
+>   	switch (info->var.bits_per_pixel) {
+>   	case 8:
+> -		fb_writew(regno << 8, HD64461_CPTWAR);
+> -		fb_writew(red >> 10, HD64461_CPTWDR);
+> -		fb_writew(green >> 10, HD64461_CPTWDR);
+> -		fb_writew(blue >> 10, HD64461_CPTWDR);
+> +		hitfb_writew(regno << 8, HD64461_CPTWAR);
+> +		hitfb_writew(red >> 10, HD64461_CPTWDR);
+> +		hitfb_writew(green >> 10, HD64461_CPTWDR);
+> +		hitfb_writew(blue >> 10, HD64461_CPTWDR);
+>   		break;
+>   	case 16:
+>   		if (regno >=3D 16)
+> @@ -302,11 +318,11 @@ static int hitfb_set_par(struct fb_info *info)
+>   		break;
+>   	}
+>
+> -	fb_writew(info->fix.line_length, HD64461_LCDCLOR);
+> -	ldr3 =3D fb_readw(HD64461_LDR3);
+> +	hitfb_writew(info->fix.line_length, HD64461_LCDCLOR);
+> +	ldr3 =3D hitfb_readw(HD64461_LDR3);
+>   	ldr3 &=3D ~15;
+>   	ldr3 |=3D (info->var.bits_per_pixel =3D=3D 8) ? 4 : 8;
+> -	fb_writew(ldr3, HD64461_LDR3);
+> +	hitfb_writew(ldr3, HD64461_LDR3);
+>   	return 0;
+>   }
+>
+> @@ -337,9 +353,9 @@ static int hitfb_probe(struct platform_device *dev)
+>   	hitfb_fix.smem_start =3D HD64461_IO_OFFSET(0x02000000);
+>   	hitfb_fix.smem_len =3D 512 * 1024;
+>
+> -	lcdclor =3D fb_readw(HD64461_LCDCLOR);
+> -	ldvndr =3D fb_readw(HD64461_LDVNDR);
+> -	ldr3 =3D fb_readw(HD64461_LDR3);
+> +	lcdclor =3D hitfb_readw(HD64461_LCDCLOR);
+> +	ldvndr =3D hitfb_readw(HD64461_LDVNDR);
+> +	ldr3 =3D hitfb_readw(HD64461_LDR3);
+>
+>   	switch (ldr3 & 15) {
+>   	default:
+> @@ -429,9 +445,9 @@ static int hitfb_suspend(struct device *dev)
+>   	u16 v;
+>
+>   	hitfb_blank(1,0);
+> -	v =3D fb_readw(HD64461_STBCR);
+> +	v =3D hitfb_readw(HD64461_STBCR);
+>   	v |=3D HD64461_STBCR_SLCKE_IST;
+> -	fb_writew(v, HD64461_STBCR);
+> +	hitfb_writew(v, HD64461_STBCR);
+>
+>   	return 0;
+>   }
+> @@ -440,12 +456,12 @@ static int hitfb_resume(struct device *dev)
+>   {
+>   	u16 v;
+>
+> -	v =3D fb_readw(HD64461_STBCR);
+> +	v =3D hitfb_readw(HD64461_STBCR);
+>   	v &=3D ~HD64461_STBCR_SLCKE_OST;
+>   	msleep(100);
+> -	v =3D fb_readw(HD64461_STBCR);
+> +	v =3D hitfb_readw(HD64461_STBCR);
+>   	v &=3D ~HD64461_STBCR_SLCKE_IST;
+> -	fb_writew(v, HD64461_STBCR);
+> +	hitfb_writew(v, HD64461_STBCR);
+>   	hitfb_blank(0,0);
+>
+>   	return 0;
+
