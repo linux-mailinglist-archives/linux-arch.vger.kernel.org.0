@@ -2,69 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52AA704B89
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 13:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A2F704B66
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 13:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjEPLCq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 07:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S232558AbjEPLBm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 07:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232609AbjEPLC2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 07:02:28 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9593589;
-        Tue, 16 May 2023 04:01:19 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAbFjZ019110;
-        Tue, 16 May 2023 11:00:48 GMT
+        with ESMTP id S232540AbjEPLBL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 07:01:11 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2EC271E;
+        Tue, 16 May 2023 04:01:07 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAeLX6032354;
+        Tue, 16 May 2023 11:00:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=qsZYI7LLt973B2TMAyu62LkBdakuTXAy5GQhWes8fnI=;
- b=hu+d+PtGBXcWH0qcsny0ScctJ5MtLFBN2kfwEK+bJmzadKcU4Tji0Iw6WD42PeziItDl
- azTPlgF7iGJZsEU1va7j6Q2yB9rqQIjwTGVnHHmFxJ9mpflCrMwrkQdZRhX4H8hT7tfT
- ESPTsvPJzKqx26SVCLkGkVgw0yf+ujrWAJzCdBNoXaZ4qokXoe0AfJ2widARMvKTrVMI
- nqfRbAcvIah6NLJKa+0rVdb9NZpBJuwA4mdGpxJ0FhDfljRlfI2WJ/OA7Al4Cr/NK9Eb
- tb41xVRmkElmhKbEu0H6doYhA28/6b715Im7EPSgAQR8Jdc/IxQLoyUWtPkzdBcpPN9U iw== 
+ bh=ZtgDOhBDS3o2TG3vg2wGFifODNpfUCbvU5LzXUKg5Ok=;
+ b=TEF5+bZN8uVfLnpc0EgxMf6Oz/mwqhk++kpwQpbO59mA008jg3IP8Si9Z5/pvq4uHT39
+ Exjb1ZPAXDUDZl/rppaj2ntA8aoLTXqM/tArYbGYtUTtZYM/dAbxe69WHDBvNJaAMn/a
+ ZQDglewfb8i7bJIwStGDwb1wpaNlgv7amLY1ZP9blHHV86Xhda9ge3QZpUkYcq6k6MxE
+ dTacxqdZVuliLjUIoFvWSsmy0sCmt8htF6CEO1pbpBz0u6cffkvAF4xfKuXg6TttY5kt
+ ZSE8l2N0pzRpWBv8xViCioefkQndSZMjr0Trc760Y5V08wgfB7nN8FYqUD0zM635XgUu 7w== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7kahuus-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7fba2jw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 May 2023 11:00:49 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAf849003275;
+        Tue, 16 May 2023 11:00:49 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7fba2he-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 16 May 2023 11:00:48 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAbSOK020783;
-        Tue, 16 May 2023 11:00:47 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm7kahut6-1
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G2wIsf009276;
+        Tue, 16 May 2023 11:00:46 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdsjqx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:47 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G4Zslu017459;
-        Tue, 16 May 2023 11:00:44 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qj264sk8w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:00:44 +0000
+        Tue, 16 May 2023 11:00:46 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB0gI829557342
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB0h1a52429108
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:00:42 GMT
+        Tue, 16 May 2023 11:00:43 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C64F2004D;
+        by IMSVA (Postfix) with ESMTP id 19F582004D;
+        Tue, 16 May 2023 11:00:43 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1ED020040;
         Tue, 16 May 2023 11:00:42 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A735C20043;
-        Tue, 16 May 2023 11:00:41 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:00:41 +0000 (GMT)
+        Tue, 16 May 2023 11:00:42 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Corey Minyard <minyard@acm.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+To:     Arnd Bergmann <arnd@arndb.de>, Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -75,28 +72,25 @@ Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org
-Subject: [PATCH v4 03/41] char: impi, tpm: depend on HAS_IOPORT
-Date:   Tue, 16 May 2023 12:59:59 +0200
-Message-Id: <20230516110038.2413224-4-schnelle@linux.ibm.com>
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Subject: [PATCH v4 04/41] comedi: add HAS_IOPORT dependencies
+Date:   Tue, 16 May 2023 13:00:00 +0200
+Message-Id: <20230516110038.2413224-5-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
 References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bfRPvi3vgfDmbZsnTQOKh1vc5t0aetQg
-X-Proofpoint-ORIG-GUID: aCnwHZ5-Phogu8J7xZl6vX2P-ewcOnfb
+X-Proofpoint-GUID: PfOe94ZofebWgI4mIkqzcNON60aIcvXT
+X-Proofpoint-ORIG-GUID: BBJVb8q2G4V6D7vW8V6zFOmLzGGKIJF2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0
- adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 impostorscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305160089
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -108,207 +102,446 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. We thus need to add this dependency and ifdef
-sections of code using inb()/outb() as alternative access methods.
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Acked-by: Corey Minyard <cminyard@mvista.com> # IPMI
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
 Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
       per-subsystem patches may be applied independently
 
- drivers/char/Kconfig             |  3 ++-
- drivers/char/ipmi/Makefile       | 11 ++++-------
- drivers/char/ipmi/ipmi_si_intf.c |  3 ++-
- drivers/char/ipmi/ipmi_si_pci.c  |  3 +++
- drivers/char/tpm/Kconfig         |  1 +
- drivers/char/tpm/tpm_infineon.c  | 16 ++++++++++++----
- drivers/char/tpm/tpm_tis_core.c  | 19 ++++++++-----------
- 7 files changed, 32 insertions(+), 24 deletions(-)
+ drivers/comedi/Kconfig | 103 +++++++++++++++++++++++++++--------------
+ 1 file changed, 68 insertions(+), 35 deletions(-)
 
-diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
-index 801d6c83f896..625af75833fc 100644
---- a/drivers/char/Kconfig
-+++ b/drivers/char/Kconfig
-@@ -34,6 +34,7 @@ config TTY_PRINTK_LEVEL
- config PRINTER
- 	tristate "Parallel printer support"
- 	depends on PARPORT
-+	depends on HAS_IOPORT || PARPORT_NOT_PC
- 	help
- 	  If you intend to attach a printer to the parallel port of your Linux
- 	  box (as opposed to using a serial printer; if the connector at the
-@@ -340,7 +341,7 @@ config NVRAM
+diff --git a/drivers/comedi/Kconfig b/drivers/comedi/Kconfig
+index 9af280735cba..7a8d402f05be 100644
+--- a/drivers/comedi/Kconfig
++++ b/drivers/comedi/Kconfig
+@@ -67,6 +67,7 @@ config COMEDI_TEST
  
- config DEVPORT
- 	bool "/dev/port character device"
--	depends on ISA || PCI
-+	depends on HAS_IOPORT
- 	default y
- 	help
- 	  Say Y here if you want to support the /dev/port device. The /dev/port
-diff --git a/drivers/char/ipmi/Makefile b/drivers/char/ipmi/Makefile
-index cb6138b8ded9..e0944547c9d0 100644
---- a/drivers/char/ipmi/Makefile
-+++ b/drivers/char/ipmi/Makefile
-@@ -5,13 +5,10 @@
- 
- ipmi_si-y := ipmi_si_intf.o ipmi_kcs_sm.o ipmi_smic_sm.o ipmi_bt_sm.o \
- 	ipmi_si_hotmod.o ipmi_si_hardcode.o ipmi_si_platform.o \
--	ipmi_si_port_io.o ipmi_si_mem_io.o
--ifdef CONFIG_PCI
--ipmi_si-y += ipmi_si_pci.o
--endif
--ifdef CONFIG_PARISC
--ipmi_si-y += ipmi_si_parisc.o
--endif
-+	ipmi_si_mem_io.o
-+ipmi_si-$(CONFIG_HAS_IOPORT) += ipmi_si_port_io.o
-+ipmi_si-$(CONFIG_PCI) += ipmi_si_pci.o
-+ipmi_si-$(CONFIG_PARISC) += ipmi_si_parisc.o
- 
- obj-$(CONFIG_IPMI_HANDLER) += ipmi_msghandler.o
- obj-$(CONFIG_IPMI_DEVICE_INTERFACE) += ipmi_devintf.o
-diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
-index abddd7e43a9a..edbbdb804913 100644
---- a/drivers/char/ipmi/ipmi_si_intf.c
-+++ b/drivers/char/ipmi/ipmi_si_intf.c
-@@ -1882,7 +1882,8 @@ int ipmi_si_add_smi(struct si_sm_io *io)
- 	}
- 
- 	if (!io->io_setup) {
--		if (io->addr_space == IPMI_IO_ADDR_SPACE) {
-+		if (IS_ENABLED(CONFIG_HAS_IOPORT) &&
-+		    io->addr_space == IPMI_IO_ADDR_SPACE) {
- 			io->io_setup = ipmi_si_port_setup;
- 		} else if (io->addr_space == IPMI_MEM_ADDR_SPACE) {
- 			io->io_setup = ipmi_si_mem_setup;
-diff --git a/drivers/char/ipmi/ipmi_si_pci.c b/drivers/char/ipmi/ipmi_si_pci.c
-index 74fa2055868b..b83d55685b22 100644
---- a/drivers/char/ipmi/ipmi_si_pci.c
-+++ b/drivers/char/ipmi/ipmi_si_pci.c
-@@ -97,6 +97,9 @@ static int ipmi_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if (pci_resource_flags(pdev, 0) & IORESOURCE_IO) {
-+		if (!IS_ENABLED(CONFIG_HAS_IOPORT))
-+			return -ENXIO;
-+
- 		io.addr_space = IPMI_IO_ADDR_SPACE;
- 		io.io_setup = ipmi_si_port_setup;
- 	} else {
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index 927088b2c3d3..418c9ed59ffd 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -149,6 +149,7 @@ config TCG_NSC
- config TCG_ATMEL
- 	tristate "Atmel TPM Interface"
- 	depends on PPC64 || HAS_IOPORT_MAP
+ config COMEDI_PARPORT
+ 	tristate "Parallel port support"
 +	depends on HAS_IOPORT
  	help
- 	  If you have a TPM security chip from Atmel say Yes and it 
- 	  will be accessible from within Linux.  To compile this driver 
-diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-index 9c924a1440a9..99c6e565ec8d 100644
---- a/drivers/char/tpm/tpm_infineon.c
-+++ b/drivers/char/tpm/tpm_infineon.c
-@@ -26,7 +26,9 @@
- #define	TPM_MAX_TRIES		5000
- #define	TPM_INFINEON_DEV_VEN_VALUE	0x15D1
+ 	  Enable support for the standard parallel port.
+ 	  A cheap and easy way to get a few more digital I/O lines. Steal
+@@ -79,6 +80,7 @@ config COMEDI_PARPORT
+ config COMEDI_SSV_DNP
+ 	tristate "SSV Embedded Systems DIL/Net-PC support"
+ 	depends on X86_32 || COMPILE_TEST
++	depends on HAS_IOPORT
+ 	help
+ 	  Enable support for SSV Embedded Systems DIL/Net-PC
  
-+#ifdef CONFIG_HAS_IOPORT
- #define TPM_INF_IO_PORT		0x0
-+#endif
- #define TPM_INF_IO_MEM		0x1
+@@ -89,6 +91,7 @@ endif # COMEDI_MISC_DRIVERS
  
- #define TPM_INF_ADDR		0x0
-@@ -51,34 +53,40 @@ static struct tpm_inf_dev tpm_dev;
+ menuconfig COMEDI_ISA_DRIVERS
+ 	bool "Comedi ISA and PC/104 drivers"
++	depends on ISA
+ 	help
+ 	  Enable comedi ISA and PC/104 drivers to be built
  
- static inline void tpm_data_out(unsigned char data, unsigned char offset)
- {
-+#ifdef CONFIG_HAS_IOPORT
- 	if (tpm_dev.iotype == TPM_INF_IO_PORT)
- 		outb(data, tpm_dev.data_regs + offset);
- 	else
-+#endif
- 		writeb(data, tpm_dev.mem_base + tpm_dev.data_regs + offset);
- }
+@@ -100,7 +103,8 @@ if COMEDI_ISA_DRIVERS
  
- static inline unsigned char tpm_data_in(unsigned char offset)
- {
-+#ifdef CONFIG_HAS_IOPORT
- 	if (tpm_dev.iotype == TPM_INF_IO_PORT)
- 		return inb(tpm_dev.data_regs + offset);
--	else
--		return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
-+#endif
-+	return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
- }
+ config COMEDI_PCL711
+ 	tristate "Advantech PCL-711/711b and ADlink ACL-8112 ISA card support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Advantech PCL-711 and 711b, ADlink ACL-8112
  
- static inline void tpm_config_out(unsigned char data, unsigned char offset)
- {
-+#ifdef CONFIG_HAS_IOPORT
- 	if (tpm_dev.iotype == TPM_INF_IO_PORT)
- 		outb(data, tpm_dev.config_port + offset);
- 	else
-+#endif
- 		writeb(data, tpm_dev.mem_base + tpm_dev.index_off + offset);
- }
+@@ -161,8 +165,9 @@ config COMEDI_PCL730
  
- static inline unsigned char tpm_config_in(unsigned char offset)
- {
-+#ifdef CONFIG_HAS_IOPORT
- 	if (tpm_dev.iotype == TPM_INF_IO_PORT)
- 		return inb(tpm_dev.config_port + offset);
--	else
--		return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
-+#endif
-+	return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
- }
+ config COMEDI_PCL812
+ 	tristate "Advantech PCL-812/813 and ADlink ACL-8112/8113/8113/8216"
++	depends on HAS_IOPORT
+ 	select COMEDI_ISADMA if ISA_DMA_API
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Advantech PCL-812/PG, PCL-813/B, ADLink
+ 	  ACL-8112DG/HG/PG, ACL-8113, ACL-8216, ICP DAS A-821PGH/PGL/PGL-NDA,
+@@ -173,8 +178,9 @@ config COMEDI_PCL812
  
- /* TPM header definitions */
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 02945d53fcef..b5a5c3d44dec 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -954,11 +954,6 @@ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value)
- 		clkrun_val &= ~LPC_CLKRUN_EN;
- 		iowrite32(clkrun_val, data->ilb_base_addr + LPC_CNTRL_OFFSET);
+ config COMEDI_PCL816
+ 	tristate "Advantech PCL-814 and PCL-816 ISA card support"
++	depends on HAS_IOPORT
+ 	select COMEDI_ISADMA if ISA_DMA_API
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Advantech PCL-814 and PCL-816 ISA cards
  
--		/*
--		 * Write any random value on port 0x80 which is on LPC, to make
--		 * sure LPC clock is running before sending any TPM command.
--		 */
--		outb(0xCC, 0x80);
- 	} else {
- 		data->clkrun_enabled--;
- 		if (data->clkrun_enabled)
-@@ -969,13 +964,15 @@ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value)
- 		/* Enable LPC CLKRUN# */
- 		clkrun_val |= LPC_CLKRUN_EN;
- 		iowrite32(clkrun_val, data->ilb_base_addr + LPC_CNTRL_OFFSET);
--
--		/*
--		 * Write any random value on port 0x80 which is on LPC, to make
--		 * sure LPC clock is running before sending any TPM command.
--		 */
--		outb(0xCC, 0x80);
- 	}
-+
-+#ifdef CONFIG_HAS_IOPORT
-+	/*
-+	 * Write any random value on port 0x80 which is on LPC, to make
-+	 * sure LPC clock is running before sending any TPM command.
-+	 */
-+	outb(0xCC, 0x80);
-+#endif
- }
+@@ -183,8 +189,9 @@ config COMEDI_PCL816
  
- static const struct tpm_class_ops tpm_tis = {
+ config COMEDI_PCL818
+ 	tristate "Advantech PCL-718 and PCL-818 ISA card support"
++	depends on HAS_IOPORT
+ 	select COMEDI_ISADMA if ISA_DMA_API
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Advantech PCL-818 ISA cards
+ 	  PCL-818L, PCL-818H, PCL-818HD, PCL-818HG, PCL-818 and PCL-718
+@@ -203,7 +210,7 @@ config COMEDI_PCM3724
+ 
+ config COMEDI_AMPLC_DIO200_ISA
+ 	tristate "Amplicon PC212E/PC214E/PC215E/PC218E/PC272E"
+-	select COMEDI_AMPLC_DIO200
++	depends on COMEDI_AMPLC_DIO200
+ 	help
+ 	  Enable support for Amplicon PC212E, PC214E, PC215E, PC218E and
+ 	  PC272E ISA DIO boards
+@@ -255,7 +262,8 @@ config COMEDI_DAC02
+ 
+ config COMEDI_DAS16M1
+ 	tristate "MeasurementComputing CIO-DAS16/M1DAS-16 ISA card support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for Measurement Computing CIO-DAS16/M1 ISA cards.
+@@ -265,7 +273,7 @@ config COMEDI_DAS16M1
+ 
+ config COMEDI_DAS08_ISA
+ 	tristate "DAS-08 compatible ISA and PC/104 card support"
+-	select COMEDI_DAS08
++	depends on COMEDI_DAS08
+ 	help
+ 	  Enable support for Keithley Metrabyte/ComputerBoards DAS08
+ 	  and compatible ISA and PC/104 cards:
+@@ -278,8 +286,9 @@ config COMEDI_DAS08_ISA
+ 
+ config COMEDI_DAS16
+ 	tristate "DAS-16 compatible ISA and PC/104 card support"
++	depends on HAS_IOPORT
+ 	select COMEDI_ISADMA if ISA_DMA_API
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for Keithley Metrabyte/ComputerBoards DAS16
+@@ -296,7 +305,8 @@ config COMEDI_DAS16
+ 
+ config COMEDI_DAS800
+ 	tristate "DAS800 and compatible ISA card support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Keithley Metrabyte DAS800 and compatible ISA cards
+ 	  Keithley Metrabyte DAS-800, DAS-801, DAS-802
+@@ -308,8 +318,9 @@ config COMEDI_DAS800
+ 
+ config COMEDI_DAS1800
+ 	tristate "DAS1800 and compatible ISA card support"
++	depends on HAS_IOPORT
+ 	select COMEDI_ISADMA if ISA_DMA_API
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for DAS1800 and compatible ISA cards
+ 	  Keithley Metrabyte DAS-1701ST, DAS-1701ST-DA, DAS-1701/AO,
+@@ -323,7 +334,8 @@ config COMEDI_DAS1800
+ 
+ config COMEDI_DAS6402
+ 	tristate "DAS6402 and compatible ISA card support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for DAS6402 and compatible ISA cards
+ 	  Computerboards, Keithley Metrabyte DAS6402 and compatibles
+@@ -402,7 +414,8 @@ config COMEDI_FL512
+ 
+ config COMEDI_AIO_AIO12_8
+ 	tristate "I/O Products PC/104 AIO12-8 Analog I/O Board support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for I/O Products PC/104 AIO12-8 Analog I/O Board
+@@ -456,8 +469,9 @@ config COMEDI_ADQ12B
+ 
+ config COMEDI_NI_AT_A2150
+ 	tristate "NI AT-A2150 ISA card support"
++	depends on HAS_IOPORT
+ 	select COMEDI_ISADMA if ISA_DMA_API
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for National Instruments AT-A2150 cards
+ 
+@@ -466,7 +480,8 @@ config COMEDI_NI_AT_A2150
+ 
+ config COMEDI_NI_AT_AO
+ 	tristate "NI AT-AO-6/10 EISA card support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for National Instruments AT-AO-6/10 cards
+ 
+@@ -497,7 +512,7 @@ config COMEDI_NI_ATMIO16D
+ 
+ config COMEDI_NI_LABPC_ISA
+ 	tristate "NI Lab-PC and compatibles ISA support"
+-	select COMEDI_NI_LABPC
++	depends on COMEDI_NI_LABPC
+ 	help
+ 	  Enable support for National Instruments Lab-PC and compatibles
+ 	  Lab-PC-1200, Lab-PC-1200AI, Lab-PC+.
+@@ -561,7 +576,7 @@ endif # COMEDI_ISA_DRIVERS
+ 
+ menuconfig COMEDI_PCI_DRIVERS
+ 	tristate "Comedi PCI drivers"
+-	depends on PCI
++	depends on PCI && HAS_IOPORT
+ 	help
+ 	  Enable support for comedi PCI drivers.
+ 
+@@ -710,7 +725,8 @@ config COMEDI_ADL_PCI8164
+ 
+ config COMEDI_ADL_PCI9111
+ 	tristate "ADLink PCI-9111HR support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for ADlink PCI9111 cards
+ 
+@@ -720,7 +736,7 @@ config COMEDI_ADL_PCI9111
+ config COMEDI_ADL_PCI9118
+ 	tristate "ADLink PCI-9118DG, PCI-9118HG, PCI-9118HR support"
+ 	depends on HAS_DMA
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for ADlink PCI-9118DG, PCI-9118HG, PCI-9118HR cards
+ 
+@@ -729,7 +745,8 @@ config COMEDI_ADL_PCI9118
+ 
+ config COMEDI_ADV_PCI1710
+ 	tristate "Advantech PCI-171x and PCI-1731 support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Advantech PCI-1710, PCI-1710HG, PCI-1711,
+ 	  PCI-1713 and PCI-1731
+@@ -773,7 +790,8 @@ config COMEDI_ADV_PCI1760
+ 
+ config COMEDI_ADV_PCI_DIO
+ 	tristate "Advantech PCI DIO card support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for Advantech PCI DIO cards
+@@ -786,7 +804,7 @@ config COMEDI_ADV_PCI_DIO
+ 
+ config COMEDI_AMPLC_DIO200_PCI
+ 	tristate "Amplicon PCI215/PCI272/PCIe215/PCIe236/PCIe296 DIO support"
+-	select COMEDI_AMPLC_DIO200
++	depends on COMEDI_AMPLC_DIO200
+ 	help
+ 	  Enable support for Amplicon PCI215, PCI272, PCIe215, PCIe236
+ 	  and PCIe296 DIO boards.
+@@ -814,7 +832,8 @@ config COMEDI_AMPLC_PC263_PCI
+ 
+ config COMEDI_AMPLC_PCI224
+ 	tristate "Amplicon PCI224 and PCI234 support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Amplicon PCI224 and PCI234 AO boards
+ 
+@@ -823,7 +842,8 @@ config COMEDI_AMPLC_PCI224
+ 
+ config COMEDI_AMPLC_PCI230
+ 	tristate "Amplicon PCI230 and PCI260 support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for Amplicon PCI230 and PCI260 Multifunction I/O
+@@ -842,7 +862,7 @@ config COMEDI_CONTEC_PCI_DIO
+ 
+ config COMEDI_DAS08_PCI
+ 	tristate "DAS-08 PCI support"
+-	select COMEDI_DAS08
++	depends on COMEDI_DAS08
+ 	help
+ 	  Enable support for PCI DAS-08 cards.
+ 
+@@ -929,7 +949,8 @@ config COMEDI_CB_PCIDAS64
+ 
+ config COMEDI_CB_PCIDAS
+ 	tristate "MeasurementComputing PCI-DAS support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for ComputerBoards/MeasurementComputing PCI-DAS with
+@@ -953,7 +974,8 @@ config COMEDI_CB_PCIDDA
+ 
+ config COMEDI_CB_PCIMDAS
+ 	tristate "MeasurementComputing PCIM-DAS1602/16, PCIe-DAS1602/16 support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for ComputerBoards/MeasurementComputing PCI Migration
+@@ -973,7 +995,8 @@ config COMEDI_CB_PCIMDDA
+ 
+ config COMEDI_ME4000
+ 	tristate "Meilhaus ME-4000 support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Meilhaus PCI data acquisition cards
+ 	  ME-4650, ME-4670i, ME-4680, ME-4680i and ME-4680is
+@@ -1031,7 +1054,7 @@ config COMEDI_NI_670X
+ 
+ config COMEDI_NI_LABPC_PCI
+ 	tristate "NI Lab-PC PCI-1200 support"
+-	select COMEDI_NI_LABPC
++	depends on COMEDI_NI_LABPC
+ 	help
+ 	  Enable support for National Instruments Lab-PC PCI-1200.
+ 
+@@ -1053,6 +1076,7 @@ config COMEDI_NI_PCIDIO
+ config COMEDI_NI_PCIMIO
+ 	tristate "NI PCI-MIO-E series and M series support"
+ 	depends on HAS_DMA
++	depends on HAS_IOPORT
+ 	select COMEDI_NI_TIOCMD
+ 	select COMEDI_8255
+ 	help
+@@ -1074,7 +1098,8 @@ config COMEDI_NI_PCIMIO
+ 
+ config COMEDI_RTD520
+ 	tristate "Real Time Devices PCI4520/DM7520 support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for Real Time Devices PCI4520/DM7520
+ 
+@@ -1114,7 +1139,8 @@ if COMEDI_PCMCIA_DRIVERS
+ 
+ config COMEDI_CB_DAS16_CS
+ 	tristate "CB DAS16 series PCMCIA support"
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	help
+ 	  Enable support for the ComputerBoards/MeasurementComputing PCMCIA
+ 	  cards DAS16/16, PCM-DAS16D/12 and PCM-DAS16s/16
+@@ -1124,7 +1150,7 @@ config COMEDI_CB_DAS16_CS
+ 
+ config COMEDI_DAS08_CS
+ 	tristate "CB DAS08 PCMCIA support"
+-	select COMEDI_DAS08
++	depends on COMEDI_DAS08
+ 	help
+ 	  Enable support for the ComputerBoards/MeasurementComputing DAS-08
+ 	  PCMCIA card
+@@ -1134,6 +1160,7 @@ config COMEDI_DAS08_CS
+ 
+ config COMEDI_NI_DAQ_700_CS
+ 	tristate "NI DAQCard-700 PCMCIA support"
++	depends on HAS_IOPORT
+ 	help
+ 	  Enable support for the National Instruments PCMCIA DAQCard-700 DIO
+ 
+@@ -1142,6 +1169,7 @@ config COMEDI_NI_DAQ_700_CS
+ 
+ config COMEDI_NI_DAQ_DIO24_CS
+ 	tristate "NI DAQ-Card DIO-24 PCMCIA support"
++	depends on HAS_IOPORT
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for the National Instruments PCMCIA DAQ-Card DIO-24
+@@ -1151,7 +1179,7 @@ config COMEDI_NI_DAQ_DIO24_CS
+ 
+ config COMEDI_NI_LABPC_CS
+ 	tristate "NI DAQCard-1200 PCMCIA support"
+-	select COMEDI_NI_LABPC
++	depends on COMEDI_NI_LABPC
+ 	help
+ 	  Enable support for the National Instruments PCMCIA DAQCard-1200
+ 
+@@ -1160,6 +1188,7 @@ config COMEDI_NI_LABPC_CS
+ 
+ config COMEDI_NI_MIO_CS
+ 	tristate "NI DAQCard E series PCMCIA support"
++	depends on HAS_IOPORT
+ 	select COMEDI_NI_TIO
+ 	select COMEDI_8255
+ 	help
+@@ -1172,6 +1201,7 @@ config COMEDI_NI_MIO_CS
+ 
+ config COMEDI_QUATECH_DAQP_CS
+ 	tristate "Quatech DAQP PCMCIA data capture card support"
++	depends on HAS_IOPORT
+ 	help
+ 	  Enable support for the Quatech DAQP PCMCIA data capture cards
+ 	  DAQP-208 and DAQP-308
+@@ -1248,12 +1278,14 @@ endif # COMEDI_USB_DRIVERS
+ 
+ config COMEDI_8254
+ 	tristate
++	depends on HAS_IOPORT
+ 
+ config COMEDI_8255
+ 	tristate
+ 
+ config COMEDI_8255_SA
+ 	tristate "Standalone 8255 support"
++	depends on HAS_IOPORT
+ 	select COMEDI_8255
+ 	help
+ 	  Enable support for 8255 digital I/O as a standalone driver.
+@@ -1285,7 +1317,7 @@ config COMEDI_KCOMEDILIB
+ 	  called kcomedilib.
+ 
+ config COMEDI_AMPLC_DIO200
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	tristate
+ 
+ config COMEDI_AMPLC_PC236
+@@ -1294,7 +1326,7 @@ config COMEDI_AMPLC_PC236
+ 
+ config COMEDI_DAS08
+ 	tristate
+-	select COMEDI_8254
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 
+ config COMEDI_ISADMA
+@@ -1302,7 +1334,8 @@ config COMEDI_ISADMA
+ 
+ config COMEDI_NI_LABPC
+ 	tristate
+-	select COMEDI_8254
++	depends on HAS_IOPORT
++	depends on COMEDI_8254
+ 	select COMEDI_8255
+ 
+ config COMEDI_NI_LABPC_ISADMA
 -- 
 2.39.2
 
