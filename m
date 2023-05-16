@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C00704595
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 08:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B5F70459C
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 08:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEPGwZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 02:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S230316AbjEPGxU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 02:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjEPGwX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 02:52:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DAF49D1;
-        Mon, 15 May 2023 23:52:05 -0700 (PDT)
+        with ESMTP id S230313AbjEPGxO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 02:53:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7100CA;
+        Mon, 15 May 2023 23:52:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E2B163490;
-        Tue, 16 May 2023 06:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195B3C433D2;
-        Tue, 16 May 2023 06:51:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3C6763490;
+        Tue, 16 May 2023 06:52:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33F0DC433D2;
+        Tue, 16 May 2023 06:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684219920;
-        bh=R3vXaZLbmwcNixKntNH8wMD/qVIT6iG5KEJlYUscwd0=;
+        s=k20201202; t=1684219967;
+        bh=C0maaaVYK0mlVYQIVRRneqJu0UHwybB7kjeIlSX8s+c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R1pIQm1xEhZ4DphBAmAifSRaIxZkxwGEglk+5s7b7+Lg4FJdWrTc+EzV6vgWA47SI
-         +oElJdTih4GDghmXvZ17lmgRiUoNTz0h3Ce/h0e6st9pphshvWbJD/Cku2ortprxqW
-         qpr7gwX85/WAKORaWXd3irGyU9GSuqRvh8pa1jEnKldUz3KfB1I//SP92FH1gS+tVj
-         DtjNhDka+f0H+i83Ul0Y8zf/fqxkpOq+LfYxZNLE5A7c8zQzior91cWvTmolAeE6A8
-         iSl2kZCW7Mi8DTqFLzs0eegl3wHCE7Isjs4ARp0yuRZ4lyNP5X+p4b2anmTv+QGzkC
-         /y8B+If194LpQ==
-Date:   Tue, 16 May 2023 09:51:53 +0300
+        b=ktUM9ZWmnUySfqn0dRbUi1RPkXZM7EWikWs/v1GpYveJR1uPzQzk0+/FfcfDBpqXC
+         p3yM2yFo2r+0z6dhJPXt6O82UVUkhnq+BPUR39J0obtuJsU2hIh9OONWzRZDQqXWRM
+         Kry9gKuwN/e6DjXnVp0oyrkxXzjqeS0B2pMuFfL6ROrU6RoBKezlU9UD2AlnBVGn41
+         G0m6RgzFPv4jREJgAAwgL1pdG9liUN1PJlsyRmeE5lMf68eJaLyfZLm03tCww17mix
+         dZPm8SQQC/JwPC/3mdw9tpeiWXl6wcY6muzoQtgLvKxSlMyIV5MNNn4H+tEPz3HMEP
+         WyWH5G+ixYUxw==
+Date:   Tue, 16 May 2023 09:52:39 +0300
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Baoquan He <bhe@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -39,18 +39,19 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         hch@infradead.org, agordeev@linux.ibm.com,
         wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
         David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: Re: [PATCH v5 RESEND 12/17] xtensa: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZGMoCUTxk/tew9sA@kernel.org>
+        deller@gmx.de,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org
+Subject: Re: [PATCH v5 RESEND 13/17] parisc: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZGMoN/FiwWnvjAjS@kernel.org>
 References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-13-bhe@redhat.com>
+ <20230515090848.833045-14-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515090848.833045-13-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230515090848.833045-14-bhe@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,7 +60,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 15, 2023 at 05:08:43PM +0800, Baoquan He wrote:
+On Mon, May 15, 2023 at 05:08:44PM +0800, Baoquan He wrote:
 > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
 > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
 > and iounmap() are all visible and available to arch. Arch needs to
@@ -69,180 +70,157 @@ On Mon, May 15, 2023 at 05:08:43PM +0800, Baoquan He wrote:
 > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
 > functioality as before.
 > 
-> Here, add wrapper functions ioremap_prot(), ioremap() and iounmap() for
-> xtensa's special operation when ioremap() and iounmap().
+> Here, add wrapper function ioremap_prot() for parisc's special operation
+> when iounmap().
+> 
+> Meanwhile, add macro ARCH_HAS_IOREMAP_WC since the added ioremap_wc()
+> will conflict with the one in include/asm-generic/iomap.h, then an
+> compiling error is seen:
+
+Looks like this paragraph is outdated, as an earlier patch in the series
+removes use of ARCH_HAS_IOREMAP_WC?
+ 
+> ./include/asm-generic/iomap.h:97: warning: "ioremap_wc" redefined
+>    97 | #define ioremap_wc ioremap
+> 
+> And benefit from the commit 437b6b35362b ("parisc: Use the generic
+> IO helpers"), those macros don't need be added any more.
 > 
 > Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
+> Acked-by: Helge Deller <deller@gmx.de>
+> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> Cc: linux-parisc@vger.kernel.org
 > ---
->  arch/xtensa/Kconfig          |  1 +
->  arch/xtensa/include/asm/io.h | 32 ++++++++------------
->  arch/xtensa/mm/ioremap.c     | 58 +++++++++---------------------------
->  3 files changed, 27 insertions(+), 64 deletions(-)
+>  arch/parisc/Kconfig          |  1 +
+>  arch/parisc/include/asm/io.h | 15 ++++++---
+>  arch/parisc/mm/ioremap.c     | 62 +++---------------------------------
+>  3 files changed, 15 insertions(+), 63 deletions(-)
 > 
-> diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-> index 3c6e5471f025..474cbbff3e6c 100644
-> --- a/arch/xtensa/Kconfig
-> +++ b/arch/xtensa/Kconfig
-> @@ -29,6 +29,7 @@ config XTENSA
->  	select GENERIC_LIB_UCMPDI2
+> diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+> index 466a25525364..be6ab4530390 100644
+> --- a/arch/parisc/Kconfig
+> +++ b/arch/parisc/Kconfig
+> @@ -36,6 +36,7 @@ config PARISC
+>  	select GENERIC_ATOMIC64 if !64BIT
+>  	select GENERIC_IRQ_PROBE
 >  	select GENERIC_PCI_IOMAP
->  	select GENERIC_SCHED_CLOCK
-> +	select GENERIC_IOREMAP if MMU
->  	select HAVE_ARCH_AUDITSYSCALL
->  	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL
->  	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL
-> diff --git a/arch/xtensa/include/asm/io.h b/arch/xtensa/include/asm/io.h
-> index a5b707e1c0f4..934e58399c8c 100644
-> --- a/arch/xtensa/include/asm/io.h
-> +++ b/arch/xtensa/include/asm/io.h
-> @@ -16,6 +16,7 @@
->  #include <asm/vectors.h>
->  #include <linux/bug.h>
->  #include <linux/kernel.h>
-> +#include <linux/pgtable.h>
->  
->  #include <linux/types.h>
->  
-> @@ -24,22 +25,24 @@
->  #define PCI_IOBASE		((void __iomem *)XCHAL_KIO_BYPASS_VADDR)
->  
->  #ifdef CONFIG_MMU
-> -
-> -void __iomem *xtensa_ioremap_nocache(unsigned long addr, unsigned long size);
-> -void __iomem *xtensa_ioremap_cache(unsigned long addr, unsigned long size);
-> -void xtensa_iounmap(volatile void __iomem *addr);
-> -
+> +	select GENERIC_IOREMAP
+>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>  	select GENERIC_SMP_IDLE_THREAD
+>  	select GENERIC_ARCH_TOPOLOGY if SMP
+> diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+> index c05e781be2f5..366537042465 100644
+> --- a/arch/parisc/include/asm/io.h
+> +++ b/arch/parisc/include/asm/io.h
+> @@ -125,12 +125,17 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
 >  /*
-> - * Return the virtual address for the specified bus memory.
-> + * I/O memory mapping functions.
+>   * The standard PCI ioremap interfaces
 >   */
-> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-> +			   unsigned long prot);
+> -void __iomem *ioremap(unsigned long offset, unsigned long size);
+> -#define ioremap_wc			ioremap
+> -#define ioremap_uc			ioremap
+> -#define pci_iounmap			pci_iounmap
 > +#define ioremap_prot ioremap_prot
-> +#define iounmap iounmap
 > +
->  static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
->  {
->  	if (offset >= XCHAL_KIO_PADDR
->  	    && offset - XCHAL_KIO_PADDR < XCHAL_KIO_SIZE)
->  		return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_BYPASS_VADDR);
->  	else
-> -		return xtensa_ioremap_nocache(offset, size);
-> +		return ioremap_prot(offset, size,
-> +			pgprot_val(pgprot_noncached(PAGE_KERNEL)));
->  }
-> +#define ioremap ioremap
+> +#define _PAGE_IOREMAP (_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY | \
+> +		       _PAGE_ACCESSED | _PAGE_NO_CACHE)
 >  
->  static inline void __iomem *ioremap_cache(unsigned long offset,
->  		unsigned long size)
-> @@ -48,21 +51,10 @@ static inline void __iomem *ioremap_cache(unsigned long offset,
->  	    && offset - XCHAL_KIO_PADDR < XCHAL_KIO_SIZE)
->  		return (void*)(offset-XCHAL_KIO_PADDR+XCHAL_KIO_CACHED_VADDR);
->  	else
-> -		return xtensa_ioremap_cache(offset, size);
-> -}
-> -#define ioremap_cache ioremap_cache
-> +		return ioremap_prot(offset, size, pgprot_val(PAGE_KERNEL));
+> -extern void iounmap(const volatile void __iomem *addr);
+> +#define ioremap_wc(addr, size)  \
+> +	ioremap_prot((addr), (size), _PAGE_IOREMAP)
+> +#define ioremap_uc(addr, size)  \
+> +	ioremap_prot((addr), (size), _PAGE_IOREMAP)
+> +
+> +#define pci_iounmap			pci_iounmap
 >  
-> -static inline void iounmap(volatile void __iomem *addr)
-> -{
-> -	unsigned long va = (unsigned long) addr;
-> -
-> -	if (!(va >= XCHAL_KIO_CACHED_VADDR &&
-> -	      va - XCHAL_KIO_CACHED_VADDR < XCHAL_KIO_SIZE) &&
-> -	    !(va >= XCHAL_KIO_BYPASS_VADDR &&
-> -	      va - XCHAL_KIO_BYPASS_VADDR < XCHAL_KIO_SIZE))
-> -		xtensa_iounmap(addr);
->  }
-> -
-> +#define ioremap_cache ioremap_cache
->  #endif /* CONFIG_MMU */
->  
->  #include <asm-generic/io.h>
-> diff --git a/arch/xtensa/mm/ioremap.c b/arch/xtensa/mm/ioremap.c
-> index a400188c16b9..8ca660b7ab49 100644
-> --- a/arch/xtensa/mm/ioremap.c
-> +++ b/arch/xtensa/mm/ioremap.c
-> @@ -6,60 +6,30 @@
->   */
->  
+>  void memset_io(volatile void __iomem *addr, unsigned char val, int count);
+>  void memcpy_fromio(void *dst, const volatile void __iomem *src, int count);
+> diff --git a/arch/parisc/mm/ioremap.c b/arch/parisc/mm/ioremap.c
+> index 345ff0b66499..fd996472dfe7 100644
+> --- a/arch/parisc/mm/ioremap.c
+> +++ b/arch/parisc/mm/ioremap.c
+> @@ -13,25 +13,9 @@
 >  #include <linux/io.h>
-> -#include <linux/vmalloc.h>
->  #include <linux/pgtable.h>
->  #include <asm/cacheflush.h>
->  #include <asm/io.h>
+>  #include <linux/mm.h>
 >  
-> -static void __iomem *xtensa_ioremap(unsigned long paddr, unsigned long size,
-> -				    pgprot_t prot)
+> -/*
+> - * Generic mapping function (not visible outside):
+> - */
+> -
+> -/*
+> - * Remap an arbitrary physical address space into the kernel virtual
+> - * address space.
+> - *
+> - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
+> - * have to convert them into an offset in a page-aligned mapping, but the
+> - * caller shouldn't need to know that small detail.
+> - */
+> -void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
 > +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
 > +			   unsigned long prot)
 >  {
-> -	unsigned long offset = paddr & ~PAGE_MASK;
-> -	unsigned long pfn = __phys_to_pfn(paddr);
+> -	void __iomem *addr;
 > -	struct vm_struct *area;
-> -	unsigned long vaddr;
-> -	int err;
+> -	unsigned long offset, last_addr;
+> -	pgprot_t pgprot;
 > -
-> -	paddr &= PAGE_MASK;
-> -
-> +	unsigned long pfn = __phys_to_pfn((phys_addr));
->  	WARN_ON(pfn_valid(pfn));
+>  #ifdef CONFIG_EISA
+>  	unsigned long end = phys_addr + size - 1;
+>  	/* Support EISA addresses */
+> @@ -40,11 +24,6 @@ void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
+>  		phys_addr |= F_EXTEND(0xfc000000);
+>  #endif
 >  
-> -	size = PAGE_ALIGN(offset + size);
+> -	/* Don't allow wraparound or zero size */
+> -	last_addr = phys_addr + size - 1;
+> -	if (!size || last_addr < phys_addr)
+> -		return NULL;
 > -
+>  	/*
+>  	 * Don't allow anybody to remap normal RAM that we're using..
+>  	 */
+> @@ -62,39 +41,6 @@ void __iomem *ioremap(unsigned long phys_addr, unsigned long size)
+>  		}
+>  	}
+>  
+> -	pgprot = __pgprot(_PAGE_PRESENT | _PAGE_RW | _PAGE_DIRTY |
+> -			  _PAGE_ACCESSED | _PAGE_NO_CACHE);
+> -
+> -	/*
+> -	 * Mappings have to be page-aligned
+> -	 */
+> -	offset = phys_addr & ~PAGE_MASK;
+> -	phys_addr &= PAGE_MASK;
+> -	size = PAGE_ALIGN(last_addr + 1) - phys_addr;
+> -
+> -	/*
+> -	 * Ok, go for it..
+> -	 */
 > -	area = get_vm_area(size, VM_IOREMAP);
 > -	if (!area)
 > -		return NULL;
 > -
-> -	vaddr = (unsigned long)area->addr;
-> -	area->phys_addr = paddr;
-> -
-> -	err = ioremap_page_range(vaddr, vaddr + size, paddr, prot);
-> -
-> -	if (err) {
-> -		vunmap((void *)vaddr);
+> -	addr = (void __iomem *) area->addr;
+> -	if (ioremap_page_range((unsigned long)addr, (unsigned long)addr + size,
+> -			       phys_addr, pgprot)) {
+> -		vunmap(addr);
 > -		return NULL;
 > -	}
 > -
-> -	flush_cache_vmap(vaddr, vaddr + size);
-> -	return (void __iomem *)(offset + vaddr);
+> -	return (void __iomem *) (offset + (char __iomem *)addr);
 > -}
+> -EXPORT_SYMBOL(ioremap);
 > -
-> -void __iomem *xtensa_ioremap_nocache(unsigned long addr, unsigned long size)
+> -void iounmap(const volatile void __iomem *io_addr)
 > -{
-> -	return xtensa_ioremap(addr, size, pgprot_noncached(PAGE_KERNEL));
+> -	unsigned long addr = (unsigned long)io_addr & PAGE_MASK;
+> -
+> -	if (is_vmalloc_addr((void *)addr))
+> -		vunmap((void *)addr);
 > +	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
 >  }
-> -EXPORT_SYMBOL(xtensa_ioremap_nocache);
+> -EXPORT_SYMBOL(iounmap);
 > +EXPORT_SYMBOL(ioremap_prot);
->  
-> -void __iomem *xtensa_ioremap_cache(unsigned long addr, unsigned long size)
-> +void iounmap(volatile void __iomem *addr)
->  {
-> -	return xtensa_ioremap(addr, size, PAGE_KERNEL);
-> -}
-> -EXPORT_SYMBOL(xtensa_ioremap_cache);
-> +	unsigned long va = (unsigned long) addr;
->  
-> -void xtensa_iounmap(volatile void __iomem *io_addr)
-> -{
-> -	void *addr = (void *)(PAGE_MASK & (unsigned long)io_addr);
-> +	if ((va >= XCHAL_KIO_CACHED_VADDR &&
-> +	      va - XCHAL_KIO_CACHED_VADDR < XCHAL_KIO_SIZE) ||
-> +	    (va >= XCHAL_KIO_BYPASS_VADDR &&
-> +	      va - XCHAL_KIO_BYPASS_VADDR < XCHAL_KIO_SIZE))
-> +		return;
->  
-> -	vunmap(addr);
-> +	generic_iounmap(addr);
->  }
-> -EXPORT_SYMBOL(xtensa_iounmap);
-> +EXPORT_SYMBOL(iounmap);
 > -- 
 > 2.34.1
 > 
