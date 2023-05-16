@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58097704987
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 11:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDA1704A6E
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 12:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbjEPJlU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 05:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S232301AbjEPKYa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 06:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjEPJlU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 05:41:20 -0400
+        with ESMTP id S231839AbjEPKYS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 06:24:18 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D73826A2;
-        Tue, 16 May 2023 02:41:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551FE59FB;
+        Tue, 16 May 2023 03:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=8/4tilrQKiIvB0XfRafYvjplDtXGmdWzz3tJ/hV+6Oo=; b=ERWziaznZS59/P3raJ/oSaU4FO
-        5DzH9OMJuMMiTDupib/I5+sd2VAdnjXu0PaIjSknwMx+MNgg4Ub6bviM0g8QnvZrV1xbO3jQyIdcU
-        1jafU4KSEKHxEBtMhCnvbRZMEcgIsUbZS7QRLLxAAFKvPEtZRUiR0oCsfRqyPn72qgUOZKgMv20Uc
-        z81G3YOnoR1ANp5XYuNZ2kGnBrY8u0EwPntOBjNng1V4ZXrtTJj1hrgyUBETn5D7ElQsuCN4j34Gs
-        c2Vn2kKovXSm6B7BZjC4/KTXifk7pbFGYutQEQ216e28uLuIQJ5TP5QLSuS+seFD/h1/W7IdXukC6
-        8C4peoRA==;
+        bh=eW1zTzluRyqIINnOs8VCUy4pxgzgc9V9Y6G7uV7MxuQ=; b=NcnPY4RB8yYqW9VjiQjCFMVTEx
+        PyloglVA0lSckZnGCcKmkZ2Slyvomc6r63BDwgu9hb7+fZn8oYerUNRw0VppdBaQiNSaKLHHIwzvZ
+        kqjvaP73hu1BC6hnojADsEmeTPcRO8z2zDGrEfhPH3kDIJJHe6oOE+itSZqT5zjlPlZEwcisSFkd7
+        d90j6kcjUfyNzBAn6Ka25DP8LnBfnOv1X0r6Q0cCKZyKoRGDB52lo4OuA4Sx3FMNZr6QAziPa7mqR
+        RXHYQ9JZDqvZBb5gHucltoVkO4/ti3E3YLajQ8CFaQzecFiWp2mKB1IWmZlZ0dhzQQ66Pb6eU2V0B
+        ZLZpmDtA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pyrAn-0048tQ-F2; Tue, 16 May 2023 09:40:49 +0000
+        id 1pyrpk-004AIk-3R; Tue, 16 May 2023 10:23:08 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 771B93003CF;
-        Tue, 16 May 2023 11:40:48 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 376D230008D;
+        Tue, 16 May 2023 12:23:06 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 593AE20118D79; Tue, 16 May 2023 11:40:48 +0200 (CEST)
-Date:   Tue, 16 May 2023 11:40:48 +0200
+        id 1DEF920118D79; Tue, 16 May 2023 12:23:06 +0200 (CEST)
+Date:   Tue, 16 May 2023 12:23:05 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Tianyu Lan <ltykernel@gmail.com>
 Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
@@ -53,15 +53,15 @@ Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
         fenghua.yu@intel.com, pangupta@amd.com,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V6 03/14] x86/sev: Add AMD sev-snp enlightened guest
- support on hyperv
-Message-ID: <20230516094048.GE2587705@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC PATCH V6 04/14] x86/sev: optimize system vector processing
+ invoked from #HV exception
+Message-ID: <20230516102305.GF2587705@hirez.programming.kicks-ass.net>
 References: <20230515165917.1306922-1-ltykernel@gmail.com>
- <20230515165917.1306922-4-ltykernel@gmail.com>
+ <20230515165917.1306922-5-ltykernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515165917.1306922-4-ltykernel@gmail.com>
+In-Reply-To: <20230515165917.1306922-5-ltykernel@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -72,77 +72,73 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:59:05PM -0400, Tianyu Lan wrote:
-> From: Tianyu Lan <tiala@microsoft.com>
-> 
-> Enable #HV exception to handle interrupt requests from hypervisor.
-> 
-> Co-developed-by: Lendacky Thomas <thomas.lendacky@amd.com>
-> Co-developed-by: Kalra Ashish <ashish.kalra@amd.com>
-> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
-> ---
-> Change since RFC V5:
->        * Merge patch "x86/sev: Fix interrupt exit code paths from
->         #HV exception" with this commit.
-> 
-> Change since RFC V3:
->        * Check NMI event when irq is disabled.
->        * Remove redundant variable
-> ---
->  arch/x86/include/asm/idtentry.h    |  12 +-
->  arch/x86/include/asm/mem_encrypt.h |   2 +
->  arch/x86/include/uapi/asm/svm.h    |   4 +
->  arch/x86/kernel/sev.c              | 349 ++++++++++++++++++++++++-----
->  arch/x86/kernel/traps.c            |   2 +
->  5 files changed, 310 insertions(+), 59 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index b0f3501b2767..867073ccf1d1 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -13,6 +13,12 @@
->  
->  #include <asm/irq_stack.h>
->  
-> +#ifdef CONFIG_AMD_MEM_ENCRYPT
-> +noinstr void irqentry_exit_hv_cond(struct pt_regs *regs, irqentry_state_t state);
-> +#else
-> +#define irqentry_exit_hv_cond(regs, state)	irqentry_exit(regs, state)
-> +#endif
-> +
->  /**
->   * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
->   *		      No error code pushed by hardware
-> @@ -201,7 +207,7 @@ __visible noinstr void func(struct pt_regs *regs,			\
->  	kvm_set_cpu_l1tf_flush_l1d();					\
->  	run_irq_on_irqstack_cond(__##func, regs, vector);		\
->  	instrumentation_end();						\
-> -	irqentry_exit(regs, state);					\
-> +	irqentry_exit_hv_cond(regs, state);				\
->  }									\
->  									\
->  static noinline void __##func(struct pt_regs *regs, u32 vector)
-> @@ -241,7 +247,7 @@ __visible noinstr void func(struct pt_regs *regs)			\
->  	kvm_set_cpu_l1tf_flush_l1d();					\
->  	run_sysvec_on_irqstack_cond(__##func, regs);			\
->  	instrumentation_end();						\
-> -	irqentry_exit(regs, state);					\
-> +	irqentry_exit_hv_cond(regs, state);				\
->  }									\
->  									\
->  static noinline void __##func(struct pt_regs *regs)
-> @@ -270,7 +276,7 @@ __visible noinstr void func(struct pt_regs *regs)			\
->  	__##func (regs);						\
->  	__irq_exit_raw();						\
->  	instrumentation_end();						\
-> -	irqentry_exit(regs, state);					\
-> +	irqentry_exit_hv_cond(regs, state);				\
->  }									\
->  									\
->  static __always_inline void __##func(struct pt_regs *regs)
+On Mon, May 15, 2023 at 12:59:06PM -0400, Tianyu Lan wrote:
 
-WTF is this supposed to do and why is this the right way to achieve the
-desired result?
+So your subject states:
 
-Your changelog gives me 0 clues -- guess how much I then care about your
-patches?
+> Subject: [RFC PATCH V6 04/14] x86/sev: optimize system vector processing invoked from #HV exception
+                                         ^^^^^^^^
+
+> @@ -228,51 +238,11 @@ static void do_exc_hv(struct pt_regs *regs)
+>  		} else if (pending_events.vector == IA32_SYSCALL_VECTOR) {
+>  			WARN(1, "syscall shouldn't happen\n");
+>  		} else if (pending_events.vector >= FIRST_SYSTEM_VECTOR) {
+> -			switch (pending_events.vector) {
+> -#if IS_ENABLED(CONFIG_HYPERV)
+> -			case HYPERV_STIMER0_VECTOR:
+> -				sysvec_hyperv_stimer0(regs);
+> -				break;
+> -			case HYPERVISOR_CALLBACK_VECTOR:
+> -				sysvec_hyperv_callback(regs);
+> -				break;
+> -#endif
+> -#ifdef CONFIG_SMP
+> -			case RESCHEDULE_VECTOR:
+> -				sysvec_reschedule_ipi(regs);
+> -				break;
+> -			case IRQ_MOVE_CLEANUP_VECTOR:
+> -				sysvec_irq_move_cleanup(regs);
+> -				break;
+> -			case REBOOT_VECTOR:
+> -				sysvec_reboot(regs);
+> -				break;
+> -			case CALL_FUNCTION_SINGLE_VECTOR:
+> -				sysvec_call_function_single(regs);
+> -				break;
+> -			case CALL_FUNCTION_VECTOR:
+> -				sysvec_call_function(regs);
+> -				break;
+> -#endif
+> -#ifdef CONFIG_X86_LOCAL_APIC
+> -			case ERROR_APIC_VECTOR:
+> -				sysvec_error_interrupt(regs);
+> -				break;
+> -			case SPURIOUS_APIC_VECTOR:
+> -				sysvec_spurious_apic_interrupt(regs);
+> -				break;
+> -			case LOCAL_TIMER_VECTOR:
+> -				sysvec_apic_timer_interrupt(regs);
+> -				break;
+> -			case X86_PLATFORM_IPI_VECTOR:
+> -				sysvec_x86_platform_ipi(regs);
+> -				break;
+> -#endif
+> -			case 0x0:
+> -				break;
+> -			default:
+> -				panic("Unexpected vector %d\n", vector);
+> -				unreachable();
+> +			if (!(sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])) {
+> +				WARN(1, "system vector entry 0x%x is NULL\n",
+> +				     pending_events.vector);
+> +			} else {
+> +				(*sysvec_table[pending_events.vector - FIRST_SYSTEM_VECTOR])(regs);
+>  			}
+>  		} else {
+>  			common_interrupt(regs, pending_events.vector);
+
+But your code replace direct calls with an indirect call. Now AFAIK,
+this SNP shit came with Zen3, and Zen3 still uses retpolines for
+indirect calls.
+
+Can you connect the dots?
