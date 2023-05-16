@@ -2,70 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4751C704BAF
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 13:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E463F704D22
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 13:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbjEPLEx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 07:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S232468AbjEPLzZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 07:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbjEPLEL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 07:04:11 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1015B98;
-        Tue, 16 May 2023 04:02:09 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAjGJQ030986;
-        Tue, 16 May 2023 11:01:12 GMT
+        with ESMTP id S232651AbjEPLzX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 07:55:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC10FE6;
+        Tue, 16 May 2023 04:55:13 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34GAehRE016889;
+        Tue, 16 May 2023 11:06:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=dz/N5o7O6nlAjRHXtBFhh/gumrrF0wWrzcMWepy9zdo=;
- b=NLweiufTxeYy4nlURJuwLNvEujg1H+ri9p3BFEgN2u2CK8MfJLrfN6gqMiKzUgP0FLW2
- isUwjrNDNEMmcA0T4a+YDkwwVQaH2zpVKEyQaJBZF0goUU8qTua6Hx8xQ2djRR0h3xng
- DTvs2dAQBIf9/keI11iWuAmOgX47uBjBY+zmb567HiQ2X/pcH7k7wAZMvnZAlx/ot+fO
- 1sClO7TRF4NNquN4ccf22SYLIFETpIvxFuaOWaUj+IDQ9nyEdoKDls1lNSJEmcVax/PJ
- zXIG9kmd7zWSblNldmSU8jpCaD6wiABOdFuYuINAWMIK2e33ykrtFsE3QnoklJDCTFaT UA== 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=UUVFM2HfRHrwN5e+OhtJj7IKmle9eZ6GbG4xEvO1NLM=;
+ b=nR5ahaD9VDMOqSPmz8ZploXfPfey+FFMgRFaDLJVNt3Q1gZH5M9Emeyx+YNRDHHKAAOz
+ ZgZXcUFouaa5ncRGF9x9ykLiwR9BYhMLDCS/XxDqqgKe7I9U19eB4bjROfSbkGCs3Oun
+ MPO7N+iVyC8WiUigAT0ZrRUjRufh4b7Q5NPOMwcBmwn/zVnC8Y3RV741atQEXiyKylBv
+ /5LDeLJjGDFR4butLUnRLk1KymQFX1HzTQC/E+ZP5GqYZxkLGUep2VcCryO4POBSj1rA
+ N5263iiNJj45nYuVt/rKGeRA4DuveQYnHohkLtOOr7ulkta8BUOI/+jtAgcWj/XGnu/s /A== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8bn0e9s-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm82f0v48-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:11 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GB08Rr020821;
-        Tue, 16 May 2023 11:01:10 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm8bn0e8d-1
+        Tue, 16 May 2023 11:06:28 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34GAfKxF018192;
+        Tue, 16 May 2023 11:06:09 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qm82f0pqt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:10 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34G95vqe031520;
-        Tue, 16 May 2023 11:01:08 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qj264saja-1
+        Tue, 16 May 2023 11:06:09 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34FMqI0x023513;
+        Tue, 16 May 2023 11:01:09 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdsjre-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 May 2023 11:01:07 +0000
+        Tue, 16 May 2023 11:01:09 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB15sA53739904
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34GB16GY26477258
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 May 2023 11:01:05 GMT
+        Tue, 16 May 2023 11:01:06 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D58020040;
-        Tue, 16 May 2023 11:01:05 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id AD11220043;
+        Tue, 16 May 2023 11:01:06 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 009D020043;
-        Tue, 16 May 2023 11:01:05 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 4C94820040;
+        Tue, 16 May 2023 11:01:06 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 16 May 2023 11:01:04 +0000 (GMT)
+        Tue, 16 May 2023 11:01:06 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com
+To:     Arnd Bergmann <arnd@arndb.de>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
@@ -79,27 +73,26 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-scsi@vger.kernel.org, megaraidlinux.pdl@broadcom.com
-Subject: [PATCH v4 29/41] scsi: add HAS_IOPORT dependencies
-Date:   Tue, 16 May 2023 13:00:25 +0200
-Message-Id: <20230516110038.2413224-30-schnelle@linux.ibm.com>
+        alsa-devel@alsa-project.org
+Subject: [PATCH v4 30/41] sound: add HAS_IOPORT dependencies
+Date:   Tue, 16 May 2023 13:00:26 +0200
+Message-Id: <20230516110038.2413224-31-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230516110038.2413224-1-schnelle@linux.ibm.com>
 References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: kBLx0ORCox3Ggm2V9I6Kqnqu_SLUvU3T
-X-Proofpoint-ORIG-GUID: C8TQ0RC9vQ8pBR-NQ4w2YjA1AZGvObIO
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CdJv1u4v-4NfbYb5iPbftOFRyComPgFE
+X-Proofpoint-ORIG-GUID: CnP0pB2OQOOY9cm3HdR5yebtL2dcSQ--
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-16_04,2023-05-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0 phishscore=0
- suspectscore=0 spamscore=0 malwarescore=0 clxscore=1011 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305160089
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ spamscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ adultscore=0 phishscore=0 priorityscore=1501 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305160094
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -120,275 +113,351 @@ Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
       per-subsystem patches may be applied independently
 
- drivers/scsi/Kconfig                   | 25 +++++++++++++------------
- drivers/scsi/aic7xxx/Kconfig.aic79xx   |  2 +-
- drivers/scsi/aic7xxx/Kconfig.aic7xxx   |  2 +-
- drivers/scsi/aic94xx/Kconfig           |  2 +-
- drivers/scsi/megaraid/Kconfig.megaraid |  6 +++---
- drivers/scsi/mvsas/Kconfig             |  2 +-
- drivers/scsi/pcmcia/Kconfig            |  6 +++++-
- drivers/scsi/qla2xxx/Kconfig           |  2 +-
- 8 files changed, 26 insertions(+), 21 deletions(-)
+ sound/drivers/Kconfig |  3 +++
+ sound/isa/Kconfig     |  1 +
+ sound/pci/Kconfig     | 45 ++++++++++++++++++++++++++++++++-----------
+ sound/pcmcia/Kconfig  |  1 +
+ 4 files changed, 39 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 0704809d9d99..4962ce989113 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -334,7 +334,7 @@ config SGIWD93_SCSI
+diff --git a/sound/drivers/Kconfig b/sound/drivers/Kconfig
+index be3009746f3a..864991d8776d 100644
+--- a/sound/drivers/Kconfig
++++ b/sound/drivers/Kconfig
+@@ -128,6 +128,7 @@ config SND_VIRMIDI
  
- config BLK_DEV_3W_XXXX_RAID
- 	tristate "3ware 5/6/7/8xxx ATA-RAID support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	help
- 	  3ware is the only hardware ATA-Raid product in Linux to date.
- 	  This card is 2,4, or 8 channel master mode support only.
-@@ -381,7 +381,7 @@ config SCSI_3W_SAS
- 
- config SCSI_ACARD
- 	tristate "ACARD SCSI support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	help
- 	  This driver supports the ACARD SCSI host adapter.
- 	  Support Chip <ATP870 ATP876 ATP880 ATP885>
-@@ -462,7 +462,7 @@ config SCSI_MVUMI
- config SCSI_ADVANSYS
- 	tristate "AdvanSys SCSI support"
- 	depends on SCSI
--	depends on ISA || EISA || PCI
-+	depends on (ISA || EISA || PCI) && HAS_IOPORT
- 	depends on ISA_DMA_API || !ISA
- 	help
- 	  This is a driver for all SCSI host adapters manufactured by
-@@ -503,7 +503,7 @@ config SCSI_HPTIOP
- 
- config SCSI_BUSLOGIC
- 	tristate "BusLogic SCSI support"
--	depends on PCI && SCSI
-+	depends on SCSI && PCI && HAS_IOPORT
- 	help
- 	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
- 	  Adapters. Consult the SCSI-HOWTO, available from
-@@ -518,7 +518,7 @@ config SCSI_BUSLOGIC
- 
- config SCSI_FLASHPOINT
- 	bool "FlashPoint support"
--	depends on SCSI_BUSLOGIC && PCI
-+	depends on SCSI_BUSLOGIC && PCI && HAS_IOPORT
- 	help
- 	  This option allows you to add FlashPoint support to the
- 	  BusLogic SCSI driver. The FlashPoint SCCB Manager code is
-@@ -632,7 +632,7 @@ config SCSI_SNIC_DEBUG_FS
- 
- config SCSI_DMX3191D
- 	tristate "DMX3191D SCSI support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	select SCSI_SPI_ATTRS
- 	help
- 	  This is support for Domex DMX3191D SCSI Host Adapters.
-@@ -646,7 +646,7 @@ config SCSI_FDOMAIN
- 
- config SCSI_FDOMAIN_PCI
- 	tristate "Future Domain TMC-3260/AHA-2920A PCI SCSI support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	select SCSI_FDOMAIN
- 	help
- 	  This is support for Future Domain's PCI SCSI host adapters (TMC-3260)
-@@ -699,7 +699,7 @@ config SCSI_GENERIC_NCR5380
- 
- config SCSI_IPS
- 	tristate "IBM ServeRAID support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	help
- 	  This is support for the IBM ServeRAID hardware RAID controllers.
- 	  See <http://www.developer.ibm.com/welcome/netfinity/serveraid.html>
-@@ -759,7 +759,7 @@ config SCSI_IBMVFC_TRACE
- 
- config SCSI_INITIO
- 	tristate "Initio 9100U(W) support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	help
- 	  This is support for the Initio 91XXU(W) SCSI host adapter.  Please
- 	  read the SCSI-HOWTO, available from
-@@ -770,7 +770,7 @@ config SCSI_INITIO
- 
- config SCSI_INIA100
- 	tristate "Initio INI-A100U2W support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	help
- 	  This is support for the Initio INI-A100U2W SCSI host adapter.
- 	  Please read the SCSI-HOWTO, available from
-@@ -782,6 +782,7 @@ config SCSI_INIA100
- config SCSI_PPA
- 	tristate "IOMEGA parallel port (ppa - older drives)"
- 	depends on SCSI && PARPORT_PC
+ config SND_MTPAV
+ 	tristate "MOTU MidiTimePiece AV multiport MIDI"
 +	depends on HAS_IOPORT
+ 	select SND_RAWMIDI
  	help
- 	  This driver supports older versions of IOMEGA's parallel port ZIP
- 	  drive (a 100 MB removable media device).
-@@ -1175,7 +1176,7 @@ config SCSI_SIM710
+ 	  To use a MOTU MidiTimePiece AV multiport MIDI adapter
+@@ -152,6 +153,7 @@ config SND_MTS64
  
- config SCSI_DC395x
- 	tristate "Tekram DC395(U/UW/F) and DC315(U) SCSI support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	select SCSI_SPI_ATTRS
+ config SND_SERIAL_U16550
+ 	tristate "UART16550 serial MIDI driver"
++	depends on HAS_IOPORT
+ 	select SND_RAWMIDI
  	help
- 	  This driver supports PCI SCSI host adapters based on the ASIC
-@@ -1207,7 +1208,7 @@ config SCSI_AM53C974
+ 	  To include support for MIDI serial port interfaces, say Y here
+@@ -185,6 +187,7 @@ config SND_SERIAL_GENERIC
  
- config SCSI_NSP32
- 	tristate "Workbit NinjaSCSI-32Bi/UDE support"
--	depends on PCI && SCSI && !64BIT
-+	depends on PCI && SCSI && !64BIT && HAS_IOPORT
+ config SND_MPU401
+ 	tristate "Generic MPU-401 UART driver"
++	depends on HAS_IOPORT
+ 	select SND_MPU401_UART
  	help
- 	  This is support for the Workbit NinjaSCSI-32Bi/UDE PCI/Cardbus
- 	  SCSI host adapter. Please read the SCSI-HOWTO, available from
-diff --git a/drivers/scsi/aic7xxx/Kconfig.aic79xx b/drivers/scsi/aic7xxx/Kconfig.aic79xx
-index a47dbd500e9a..4bc53eec4c83 100644
---- a/drivers/scsi/aic7xxx/Kconfig.aic79xx
-+++ b/drivers/scsi/aic7xxx/Kconfig.aic79xx
-@@ -5,7 +5,7 @@
- #
- config SCSI_AIC79XX
- 	tristate "Adaptec AIC79xx U320 support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	select SCSI_SPI_ATTRS
+ 	  Say Y here to include support for MIDI ports compatible with
+diff --git a/sound/isa/Kconfig b/sound/isa/Kconfig
+index 6ffa48dd5983..f8159179e38d 100644
+--- a/sound/isa/Kconfig
++++ b/sound/isa/Kconfig
+@@ -23,6 +23,7 @@ menuconfig SND_ISA
+ 	bool "ISA sound devices"
+ 	depends on ISA || COMPILE_TEST
+ 	depends on ISA_DMA_API
++	depends on HAS_IOPORT
+ 	default y
  	help
- 	This driver supports all of Adaptec's Ultra 320 PCI-X
-diff --git a/drivers/scsi/aic7xxx/Kconfig.aic7xxx b/drivers/scsi/aic7xxx/Kconfig.aic7xxx
-index 0cfd92ce750a..f0425145a5f4 100644
---- a/drivers/scsi/aic7xxx/Kconfig.aic7xxx
-+++ b/drivers/scsi/aic7xxx/Kconfig.aic7xxx
-@@ -5,7 +5,7 @@
- #
- config SCSI_AIC7XXX
- 	tristate "Adaptec AIC7xxx Fast -> U160 support"
--	depends on (PCI || EISA) && SCSI
-+	depends on (PCI || EISA) && HAS_IOPORT && SCSI
- 	select SCSI_SPI_ATTRS
+ 	  Support for sound devices connected via the ISA bus.
+diff --git a/sound/pci/Kconfig b/sound/pci/Kconfig
+index 861958451ef5..787868c9e91b 100644
+--- a/sound/pci/Kconfig
++++ b/sound/pci/Kconfig
+@@ -26,7 +26,7 @@ config SND_ALS300
+ 	select SND_PCM
+ 	select SND_AC97_CODEC
+ 	select SND_OPL3_LIB
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
  	help
- 	This driver supports all of Adaptec's Fast through Ultra 160 PCI
-diff --git a/drivers/scsi/aic94xx/Kconfig b/drivers/scsi/aic94xx/Kconfig
-index 71931c371b1c..aaa8dadc6e1c 100644
---- a/drivers/scsi/aic94xx/Kconfig
-+++ b/drivers/scsi/aic94xx/Kconfig
-@@ -8,7 +8,7 @@
+ 	  Say 'Y' or 'M' to include support for Avance Logic ALS300/ALS300+
  
- config SCSI_AIC94XX
- 	tristate "Adaptec AIC94xx SAS/SATA support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select SCSI_SAS_LIBSAS
+@@ -36,6 +36,7 @@ config SND_ALS300
+ config SND_ALS4000
+ 	tristate "Avance Logic ALS4000"
+ 	depends on ISA_DMA_API
++	depends on HAS_IOPORT
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+ 	select SND_PCM
+@@ -51,7 +52,7 @@ config SND_ALI5451
+ 	tristate "ALi M5451 PCI Audio Controller"
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for the integrated AC97 sound
+ 	  device on motherboards using the ALi M5451 Audio Controller
+@@ -96,6 +97,7 @@ config SND_ATIIXP_MODEM
+ 
+ config SND_AU8810
+ 	tristate "Aureal Advantage"
++	depends on HAS_IOPORT
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+ 	help
+@@ -110,6 +112,7 @@ config SND_AU8810
+ 
+ config SND_AU8820
+ 	tristate "Aureal Vortex"
++	depends on HAS_IOPORT
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+ 	help
+@@ -123,6 +126,7 @@ config SND_AU8820
+ 
+ config SND_AU8830
+ 	tristate "Aureal Vortex 2"
++	depends on HAS_IOPORT
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+ 	help
+@@ -157,7 +161,7 @@ config SND_AZT3328
+ 	select SND_RAWMIDI
+ 	select SND_AC97_CODEC
+ 	select SND_TIMER
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for Aztech AZF3328 (PCI168)
+ 	  soundcards.
+@@ -193,6 +197,7 @@ config SND_BT87X_OVERCLOCK
+ 
+ config SND_CA0106
+ 	tristate "SB Audigy LS / Live 24bit"
++	depends on HAS_IOPORT
+ 	select SND_AC97_CODEC
+ 	select SND_RAWMIDI
+ 	select SND_VMASTER
+@@ -205,6 +210,7 @@ config SND_CA0106
+ 
+ config SND_CMIPCI
+ 	tristate "C-Media 8338, 8738, 8768, 8770"
++	depends on HAS_IOPORT
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+ 	select SND_PCM
+@@ -221,6 +227,7 @@ config SND_OXYGEN_LIB
+ 
+ config SND_OXYGEN
+ 	tristate "C-Media 8786, 8787, 8788 (Oxygen)"
++	depends on HAS_IOPORT
+ 	select SND_OXYGEN_LIB
+ 	select SND_PCM
+ 	select SND_MPU401_UART
+@@ -246,6 +253,7 @@ config SND_OXYGEN
+ 
+ config SND_CS4281
+ 	tristate "Cirrus Logic (Sound Fusion) CS4281"
++	depends on HAS_IOPORT
+ 	select SND_OPL3_LIB
+ 	select SND_RAWMIDI
+ 	select SND_AC97_CODEC
+@@ -257,6 +265,7 @@ config SND_CS4281
+ 
+ config SND_CS46XX
+ 	tristate "Cirrus Logic (Sound Fusion) CS4280/CS461x/CS462x/CS463x"
++	depends on HAS_IOPORT
+ 	select SND_RAWMIDI
+ 	select SND_AC97_CODEC
  	select FW_LOADER
+@@ -290,6 +299,7 @@ config SND_CS5530
+ config SND_CS5535AUDIO
+ 	tristate "CS5535/CS5536 Audio"
+ 	depends on X86_32 || MIPS || COMPILE_TEST
++	depends on HAS_IOPORT
+ 	select SND_PCM
+ 	select SND_AC97_CODEC
  	help
-diff --git a/drivers/scsi/megaraid/Kconfig.megaraid b/drivers/scsi/megaraid/Kconfig.megaraid
-index 2adc2afd9f91..3f2ce1eb081c 100644
---- a/drivers/scsi/megaraid/Kconfig.megaraid
-+++ b/drivers/scsi/megaraid/Kconfig.megaraid
-@@ -1,13 +1,13 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config MEGARAID_NEWGEN
- 	bool "LSI Logic New Generation RAID Device Drivers"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	help
- 	LSI Logic RAID Device Drivers
+@@ -307,6 +317,7 @@ config SND_CS5535AUDIO
  
- config MEGARAID_MM
- 	tristate "LSI Logic Management Module (New Driver)"
--	depends on PCI && SCSI && MEGARAID_NEWGEN
-+	depends on PCI && HAS_IOPORT && SCSI && MEGARAID_NEWGEN
+ config SND_CTXFI
+ 	tristate "Creative Sound Blaster X-Fi"
++	depends on HAS_IOPORT
+ 	select SND_PCM
  	help
- 	Management Module provides ioctl, sysfs support for LSI Logic
- 	RAID controllers.
-@@ -67,7 +67,7 @@ config MEGARAID_MAILBOX
- 
- config MEGARAID_LEGACY
- 	tristate "LSI Logic Legacy MegaRAID Driver"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
+ 	  If you want to use soundcards based on Creative Sound Blastr X-Fi
+@@ -468,7 +479,7 @@ config SND_EMU10K1
+ 	select SND_AC97_CODEC
+ 	select SND_TIMER
+ 	select SND_SEQ_DEVICE if SND_SEQUENCER != n
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
  	help
- 	This driver supports the LSI MegaRAID 418, 428, 438, 466, 762, 490
- 	and 467 SCSI host adapters. This driver also support the all U320
-diff --git a/drivers/scsi/mvsas/Kconfig b/drivers/scsi/mvsas/Kconfig
-index 79812b80743b..5ac7fd593b17 100644
---- a/drivers/scsi/mvsas/Kconfig
-+++ b/drivers/scsi/mvsas/Kconfig
-@@ -9,7 +9,7 @@
+ 	  Say Y to include support for Sound Blaster PCI 512, Live!,
+ 	  Audigy and E-MU APS/0404/1010/1212/1616/1820 soundcards.
+@@ -491,7 +502,7 @@ config SND_EMU10K1X
+ 	tristate "Emu10k1X (Dell OEM Version)"
+ 	select SND_AC97_CODEC
+ 	select SND_RAWMIDI
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for the Dell OEM version of the
+ 	  Sound Blaster Live!.
+@@ -501,6 +512,7 @@ config SND_EMU10K1X
  
- config SCSI_MVSAS
- 	tristate "Marvell 88SE64XX/88SE94XX SAS/SATA support"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	select SCSI_SAS_LIBSAS
+ config SND_ENS1370
+ 	tristate "(Creative) Ensoniq AudioPCI 1370"
++	depends on HAS_IOPORT
+ 	select SND_RAWMIDI
+ 	select SND_PCM
+ 	help
+@@ -511,6 +523,7 @@ config SND_ENS1370
+ 
+ config SND_ENS1371
+ 	tristate "(Creative) Ensoniq AudioPCI 1371/1373"
++	depends on HAS_IOPORT
+ 	select SND_RAWMIDI
+ 	select SND_AC97_CODEC
+ 	help
+@@ -525,7 +538,7 @@ config SND_ES1938
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for soundcards based on ESS Solo-1
+ 	  (ES1938, ES1946, ES1969) chips.
+@@ -537,7 +550,7 @@ config SND_ES1968
+ 	tristate "ESS ES1968/1978 (Maestro-1/2/2E)"
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for soundcards based on ESS Maestro
+ 	  1/2/2E chips.
+@@ -569,6 +582,7 @@ config SND_ES1968_RADIO
+ 
+ config SND_FM801
+ 	tristate "ForteMedia FM801"
++	depends on HAS_IOPORT
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+@@ -624,7 +638,7 @@ config SND_ICE1712
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+ 	select BITREVERSE
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for soundcards based on the
+ 	  ICE1712 (Envy24) chip.
+@@ -640,6 +654,7 @@ config SND_ICE1712
+ 
+ config SND_ICE1724
+ 	tristate "ICE/VT1724/1720 (Envy24HT/PT)"
++	depends on HAS_IOPORT
+ 	select SND_RAWMIDI
+ 	select SND_AC97_CODEC
+ 	select SND_VMASTER
+@@ -712,7 +727,7 @@ config SND_LX6464ES
+ config SND_MAESTRO3
+ 	tristate "ESS Allegro/Maestro3"
+ 	select SND_AC97_CODEC
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for soundcards based on ESS Maestro 3
+ 	  (Allegro) chips.
+@@ -753,6 +768,7 @@ config SND_NM256
+ 
+ config SND_PCXHR
+ 	tristate "Digigram PCXHR"
++	depends on HAS_IOPORT
  	select FW_LOADER
- 	help
-diff --git a/drivers/scsi/pcmcia/Kconfig b/drivers/scsi/pcmcia/Kconfig
-index 9696b6b5591f..449bd85db7bb 100644
---- a/drivers/scsi/pcmcia/Kconfig
-+++ b/drivers/scsi/pcmcia/Kconfig
-@@ -12,6 +12,7 @@ if SCSI_LOWLEVEL_PCMCIA && SCSI && PCMCIA && m
+ 	select SND_PCM
+ 	select SND_HWDEP
+@@ -764,6 +780,7 @@ config SND_PCXHR
  
- config PCMCIA_AHA152X
- 	tristate "Adaptec AHA152X PCMCIA support"
+ config SND_RIPTIDE
+ 	tristate "Conexant Riptide"
 +	depends on HAS_IOPORT
- 	select SCSI_SPI_ATTRS
- 	help
- 	  Say Y here if you intend to attach this type of PCMCIA SCSI host
-@@ -22,6 +23,7 @@ config PCMCIA_AHA152X
- 
- config PCMCIA_FDOMAIN
- 	tristate "Future Domain PCMCIA support"
-+	depends on HAS_IOPORT
- 	select SCSI_FDOMAIN
- 	help
- 	  Say Y here if you intend to attach this type of PCMCIA SCSI host
-@@ -32,7 +34,7 @@ config PCMCIA_FDOMAIN
- 
- config PCMCIA_NINJA_SCSI
- 	tristate "NinjaSCSI-3 / NinjaSCSI-32Bi (16bit) PCMCIA support"
--	depends on !64BIT || COMPILE_TEST
-+	depends on (!64BIT || COMPILE_TEST) && HAS_IOPORT
- 	help
- 	  If you intend to attach this type of PCMCIA SCSI host adapter to
- 	  your computer, say Y here and read
-@@ -66,6 +68,7 @@ config PCMCIA_NINJA_SCSI
- 
- config PCMCIA_QLOGIC
- 	tristate "Qlogic PCMCIA support"
-+	depends on HAS_IOPORT
- 	help
- 	  Say Y here if you intend to attach this type of PCMCIA SCSI host
- 	  adapter to your computer.
-@@ -75,6 +78,7 @@ config PCMCIA_QLOGIC
- 
- config PCMCIA_SYM53C500
- 	tristate "Symbios 53c500 PCMCIA support"
-+	depends on HAS_IOPORT
- 	help
- 	  Say Y here if you have a New Media Bus Toaster or other PCMCIA
- 	  SCSI adapter based on the Symbios 53c500 controller.
-diff --git a/drivers/scsi/qla2xxx/Kconfig b/drivers/scsi/qla2xxx/Kconfig
-index 802c373fd6d9..a584708d3056 100644
---- a/drivers/scsi/qla2xxx/Kconfig
-+++ b/drivers/scsi/qla2xxx/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config SCSI_QLA_FC
- 	tristate "QLogic QLA2XXX Fibre Channel Support"
--	depends on PCI && SCSI
-+	depends on PCI && HAS_IOPORT && SCSI
- 	depends on SCSI_FC_ATTRS
- 	depends on NVME_FC || !NVME_FC
  	select FW_LOADER
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+@@ -808,6 +825,7 @@ config SND_RME9652
+ config SND_SE6X
+ 	tristate "Studio Evolution SE6X"
+ 	depends on SND_OXYGEN=n && SND_VIRTUOSO=n  # PCI ID conflict
++	depends on HAS_IOPORT
+ 	select SND_OXYGEN_LIB
+ 	select SND_PCM
+ 	select SND_MPU401_UART
+@@ -830,7 +848,7 @@ config SND_SONICVIBES
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for soundcards based on the S3
+ 	  SonicVibes chip.
+@@ -842,7 +860,7 @@ config SND_TRIDENT
+ 	tristate "Trident 4D-Wave DX/NX; SiS 7018"
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+-	depends on ZONE_DMA
++	depends on ZONE_DMA && HAS_IOPORT
+ 	help
+ 	  Say Y here to include support for soundcards based on Trident
+ 	  4D-Wave DX/NX or SiS 7018 chips.
+@@ -852,6 +870,7 @@ config SND_TRIDENT
+ 
+ config SND_VIA82XX
+ 	tristate "VIA 82C686A/B, 8233/8235 AC97 Controller"
++	depends on HAS_IOPORT
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+ 	help
+@@ -863,6 +882,7 @@ config SND_VIA82XX
+ 
+ config SND_VIA82XX_MODEM
+ 	tristate "VIA 82C686A/B, 8233 based Modems"
++	depends on HAS_IOPORT
+ 	select SND_AC97_CODEC
+ 	help
+ 	  Say Y here to include support for the integrated MC97 modem on
+@@ -873,6 +893,7 @@ config SND_VIA82XX_MODEM
+ 
+ config SND_VIRTUOSO
+ 	tristate "Asus Virtuoso 66/100/200 (Xonar)"
++	depends on HAS_IOPORT
+ 	select SND_OXYGEN_LIB
+ 	select SND_PCM
+ 	select SND_MPU401_UART
+@@ -889,6 +910,7 @@ config SND_VIRTUOSO
+ 
+ config SND_VX222
+ 	tristate "Digigram VX222"
++	depends on HAS_IOPORT
+ 	select SND_VX_LIB
+ 	help
+ 	  Say Y here to include support for Digigram VX222 soundcards.
+@@ -898,6 +920,7 @@ config SND_VX222
+ 
+ config SND_YMFPCI
+ 	tristate "Yamaha YMF724/740/744/754"
++	depends on HAS_IOPORT
+ 	select SND_OPL3_LIB
+ 	select SND_MPU401_UART
+ 	select SND_AC97_CODEC
+diff --git a/sound/pcmcia/Kconfig b/sound/pcmcia/Kconfig
+index 10291c43cb18..2e3dfc1ff540 100644
+--- a/sound/pcmcia/Kconfig
++++ b/sound/pcmcia/Kconfig
+@@ -4,6 +4,7 @@
+ menuconfig SND_PCMCIA
+ 	bool "PCMCIA sound devices"
+ 	depends on PCMCIA
++	depends on HAS_IOPORT
+ 	default y
+ 	help
+ 	  Support for sound devices connected via the PCMCIA bus.
 -- 
 2.39.2
 
