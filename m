@@ -2,136 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF477057EB
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 21:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D80C7057F0
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 21:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjEPTux (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 15:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
+        id S229680AbjEPTvl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 15:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjEPTuw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 15:50:52 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3627C13E
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 12:50:51 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64ab2a37812so8158547b3a.1
-        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 12:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684266650; x=1686858650;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TjEfwC4BQR+GS22Wca+vT5WtBn9fGmf7/EZ2q1dtZMk=;
-        b=mVOfXQRV6bjs8gq5rt74ZVwe61gaISUNUVI2bRt4Bn63HY/BAd2eBtKecdcAuW4sBz
-         kvSstpNFeZUheLutSv33n8Y6st90GoDfhqbtO6h0Y2T7Cn1c+0ifOrENnrR6mlvVJInW
-         QNBevqLjz1JHYM6RD7yhtV3rnVYaKH2qAXLhs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684266650; x=1686858650;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TjEfwC4BQR+GS22Wca+vT5WtBn9fGmf7/EZ2q1dtZMk=;
-        b=FHa/AkLbYTxS/p+FUAbnSqbIenMuKxxoex7yhTAbRbqv1szmU39f+BJbbTUxIgPV9q
-         uBBP6mvO5rxT2zEffEG2klHRtIQyBAm1Or7WV4dbiihjEnz0ICxKwj2juKSBF//o3nm6
-         GwFJhkWYvs48AcI5sURepA07zUxLFCkDLYu2gU1QNuRDYe06yolWrsemtDauE/QhuDpU
-         ZveTOnC/hQpoAlgNqrijGepMPICbsYt6/2nLO/YJqB/OXUev5CA++h4O6lwcNpENtb4f
-         XuYOC12Z19pnzjtBz1Zb+EMoRpQ8cjvjAtuFbsLsN+BHTiXwXdc8yWw5Ves5FyLl4tH7
-         frLA==
-X-Gm-Message-State: AC+VfDxglaUwOaQ7tTEC3NpxG4jMZuYiQEQPHEfVAyFOI1ao9nlYqvXf
-        XPuQqWSCpw4annPma6k4BJtU0cXlRXpo3kk619o=
-X-Google-Smtp-Source: ACHHUZ6Nid4X0bOpHze3dnwaToIV2KnMDGeriyBrLdzzKp60aiWhcdLhmVYyFl9h9ZjEkLntZih3TA==
-X-Received: by 2002:a17:902:ed43:b0:1a6:6bd4:cd8c with SMTP id y3-20020a170902ed4300b001a66bd4cd8cmr35820803plb.25.1684266650670;
-        Tue, 16 May 2023 12:50:50 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b001a800e03cf9sm15876986plk.256.2023.05.16.12.50.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 May 2023 12:50:50 -0700 (PDT)
-Date:   Tue, 16 May 2023 12:50:49 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Fangrui Song <maskray@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [RFC PATCH] kallsyms: Avoid weak references for kallsyms symbols
-Message-ID: <202305161248.F0B3D1D@keescook>
-References: <20230504174320.3930345-1-ardb@kernel.org>
+        with ESMTP id S229669AbjEPTvi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 15:51:38 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9C0E313E
+        for <linux-arch@vger.kernel.org>; Tue, 16 May 2023 12:51:31 -0700 (PDT)
+Received: (qmail 845160 invoked by uid 1000); 16 May 2023 15:51:30 -0400
+Date:   Tue, 16 May 2023 15:51:30 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
+Message-ID: <23936929-80e4-4599-827a-d09b4960f3ab@rowland.harvard.edu>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-36-schnelle@linux.ibm.com>
+ <2023051643-overtime-unbridle-7cdd@gregkh>
+ <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230504174320.3930345-1-ardb@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4e291030-99d9-4b8b-9389-9b8f2560b8e8@app.fastmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 04, 2023 at 07:43:20PM +0200, Ard Biesheuvel wrote:
-> kallsyms is a directory of all the symbols in the vmlinux binary, and so
-> creating it is somewhat of a chicken-and-egg problem, as its non-zero
-> size affects the layout of the binary, and therefore the values of the
-> symbols.
+On Tue, May 16, 2023 at 06:44:34PM +0200, Arnd Bergmann wrote:
+> On Tue, May 16, 2023, at 18:29, Greg Kroah-Hartman wrote:
+> > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
 > 
-> For this reason, the kernel is linked more than once, and the first pass
-> does not include any kallsyms data at all. For the linker to accept
-> this, the symbol declarations describing the kallsyms metadata are
-> emitted as having weak linkage, so they can remain unsatisfied. During
-> the subsequent passes, the weak references are satisfied by the kallsyms
-> metadata that was constructed based on information gathered from the
-> preceding passes.
+> >>  #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
+> >>  /* Support PCI only */
+> >>  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> >>  {
+> >> -	return inl(uhci->io_addr + reg);
+> >> +	return UHCI_IN(inl(uhci->io_addr + reg));
+> >>  }
+> >>  
+> >>  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
+> >>  {
+> >> -	outl(val, uhci->io_addr + reg);
+> >> +	UHCI_OUT(outl(val, uhci->io_addr + reg));
+> >
+> > I'm confused now.
+> >
+> > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+> >
+> > But if it isn't, then these are just no-ops that do nothing?  So then
+> > the driver will fail to work?  Why have these stubs at all?
+> >
+> > Why not just not build the driver at all if this option is not enabled?
 > 
-> Weak references lead to somewhat worse codegen, because taking their
-> address may need to produce NULL (if the reference was unsatisfied), and
-> this is not usually supported by RIP or PC relative symbol references.
-> 
-> Given that these references are ultimately always satisfied in the final
-> link, let's drop the weak annotation, and instead, provide fallback
-> definitions in the linker script that are only emitted if an unsatisfied
-> reference exists.
-> 
-> While at it, drop the FRV specific annotation that these symbols reside
-> in .rodata - FRV is long gone.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Fangrui Song <maskray@google.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  include/asm-generic/vmlinux.lds.h |  9 +++++++
->  kernel/kallsyms.c                 |  6 -----
->  kernel/kallsyms_internal.h        | 25 +++++++-------------
->  3 files changed, 18 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index d1f57e4868ed341d..dd42c0fcad2b519f 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -460,6 +460,15 @@
->   */
->  #define RO_DATA(align)							\
->  	. = ALIGN((align));						\
-> +	PROVIDE(kallsyms_addresses = .);				\
-> +	PROVIDE(kallsyms_offsets = .);					\
-> +	PROVIDE(kallsyms_names = .);					\
-> +	PROVIDE(kallsyms_num_syms = .);					\
-> +	PROVIDE(kallsyms_relative_base = .);				\
-> +	PROVIDE(kallsyms_token_table = .);				\
-> +	PROVIDE(kallsyms_token_index = .);				\
-> +	PROVIDE(kallsyms_markers = .);					\
-> +	PROVIDE(kallsyms_seqs_of_names = .);				\
+> If I remember correctly, the problem here is the lack of
+> abstractions in the uhci driver, it instead supports all
+> combinations of on-chip non-PCI devices using readb()/writeb()
+> and PCI devices using inb()/outb() in a shared codebase.
 
-Perhaps add comments here and in kernel/kallsyms_internal.h to correlate
-this list and the externs? "This list is needed because ..., see the
-externs in kallsyms_internal.h." or similar?
+Isn't that an abstraction?  A single set of operations (uhci_readl(), 
+uhci_writel(), etc.) that always does the right sort of I/O even when 
+talking to different buses?
 
-Otherwise, yeah, looks good.
+So I'm not sure what you mean by "the lack of abstractions".
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+> A particularly tricky combination is a kernel that supports on-chip
+> UHCI as well as CONFIG_USB_PCI (for EHCI/XHCI) but does not support
+> I/O ports because of platform limitations. The trick is to come up
+> with a set of changes that doesn't have to rewrite the entire logic
+> but also doesn't add an obscene number of #ifdef checks.
 
--- 
-Kees Cook
+Indeed, in a kernel supporting that tricky combination the no-op code 
+would be generated.  But it would never execute at runtime because the 
+uhci_has_pci_registers(uhci) test would always return 0, and so the 
+driver wouldn't fail.
+
+> That said, there is a minor problem with the empty definition
+> 
+> +#define UHCI_OUT(x)
+> 
+> I think this should be "do { } while (0)" to avoid warnings
+> about empty if/else blocks.
+
+I'm sure Niklas wouldn't mind making such a change.  But do we really 
+get such warnings?  Does the compiler really think that this kind of 
+(macro-expanded) code:
+
+	if (uhci_has_pci_registers(uhci))
+		;
+	else if (uhci_is_aspeed(uhci))
+		writel(val, uhci->regs + uhci_aspeed_reg(reg));
+
+deserves a warning?  I write stuff like that fairly often; it's a good 
+way to showcase a high-probability do-nothing pathway at the start of a 
+series of conditional cases.  And I haven't noticed any complaints from 
+the compiler.
+
+Alan Stern
