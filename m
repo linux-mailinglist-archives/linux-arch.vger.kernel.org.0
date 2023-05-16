@@ -2,342 +2,288 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA46704EF1
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 15:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6C7704F12
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 15:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbjEPNNf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 09:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S233564AbjEPNTP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 09:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbjEPNNe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 09:13:34 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F945B9E;
-        Tue, 16 May 2023 06:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684242780; bh=3rrM5MTq6afXCrvQtLKko6oJGNoh4YLY5u3IOiGXilI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VtHC8niFuiVN4/7DumhVhj2KxYR6XXp+rMLSARJ1objE7MgXCeXmZOEi+2+5NcGZG
-         bHGn4RPVGhBf1hbeyh6WAUpTCz/0rr1iZjWhRnzhe4xTNR6pdNHgiNZdsLT6uwzjBD
-         CK1ztkv2TtP/XmnsR+uF4iErjenYnBi1l63U1yKw=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S233065AbjEPNTO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 09:19:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58BA59DB;
+        Tue, 16 May 2023 06:18:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 64EA060117;
-        Tue, 16 May 2023 21:13:00 +0800 (CST)
-Message-ID: <e181913e-633d-e2ab-95f4-a653758d678d@xen0n.name>
-Date:   Tue, 16 May 2023 21:13:00 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EB5C62C2A;
+        Tue, 16 May 2023 13:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E63EC433D2;
+        Tue, 16 May 2023 13:18:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684243135;
+        bh=l+TOO1Dk3k3Kwj++5U0cW9Nicomgwx4qf3m+Wt6zHVs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AQL0NL6tcgWfZ5U0ee67jeDyx+up+IMCssBI/knNLV1wNFw3djbq/wqN8ONRf27Tu
+         6L71XfM1F1sR7QEg26E4tsU0tNz9seZDOPSwi1cGeS0mVtkiJpgxIS4jc6j2uWmn1v
+         8Dn7xlYkE8MBvddFgSj82lujKHPIWi3PqHLqcdUL4nzmwxi0QU/QvYSj8IMik0bhtF
+         OFiO0s878ISTNbnhvE7zAok8e7MMDFu8XitE9ScDEbzapDXPr8XRdoFgfTiBSSVhTJ
+         BbE6ExkMLlKw5enq6+e8W2SRwWWeGDA00XnYEZXFi+8NNedv+s8IOGRTCuPklDHnCg
+         FQUxA4qei/akQ==
+Message-ID: <da77a377-4a9e-be8d-7b14-aeb270b7183e@kernel.org>
+Date:   Tue, 16 May 2023 22:18:52 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH] LoongArch: Introduce hardware page table walker
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Liang Gao <gaoliang@loongson.cn>, Jun Yi <yijun@loongson.cn>
-References: <20230516124610.535360-1-chenhuacai@loongson.cn>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 02/41] ata: add HAS_IOPORT dependencies
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-3-schnelle@linux.ibm.com>
 Content-Language: en-US
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230516124610.535360-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230516110038.2413224-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2023/5/16 20:46, Huacai Chen wrote:
-> Loongson-3A6000 and newer processors have hardware page table walker
-> (PTW) support. PTW can handle all fastpaths of TLBI/TLBL/TLBS/TLBM
-> exceptions by hardware, software only need to handle slowpaths (page
-> faults).
+On 5/16/23 19:59, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
 > 
-> BTW, PTW doesn't append _PAGE_MODIFIED for page table entries, so we
-> change pmd_dirty() and pte_dirty() to also check _PAGE_DIRTY for the
-> "dirty" attribute.
-
-Too bad we can't get a sneak peek at the new manuals... reviewing some 
-of the code anyway.
-
-> 
-> Signed-off-by: Liang Gao <gaoliang@loongson.cn>
-> Signed-off-by: Jun Yi <yijun@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->   arch/loongarch/include/asm/cpu-features.h |  2 +-
->   arch/loongarch/include/asm/cpu.h          |  2 ++
->   arch/loongarch/include/asm/loongarch.h    |  4 ++++
->   arch/loongarch/include/asm/pgtable.h      |  4 ++--
->   arch/loongarch/include/asm/tlb.h          |  3 +++
->   arch/loongarch/include/uapi/asm/hwcap.h   |  1 +
->   arch/loongarch/kernel/cpu-probe.c         |  4 ++++
->   arch/loongarch/kernel/proc.c              |  1 +
->   arch/loongarch/mm/tlb.c                   | 24 ++++++++++++++++++-----
->   arch/loongarch/mm/tlbex.S                 | 21 ++++++++++++++++++++
->   10 files changed, 58 insertions(+), 8 deletions(-)
+> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+>       per-subsystem patches may be applied independently
 > 
-> diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
-> index f6177f133477..2eafe6a6aca8 100644
-> --- a/arch/loongarch/include/asm/cpu-features.h
-> +++ b/arch/loongarch/include/asm/cpu-features.h
-> @@ -64,6 +64,6 @@
->   #define cpu_has_eiodecode	cpu_opt(LOONGARCH_CPU_EIODECODE)
->   #define cpu_has_guestid		cpu_opt(LOONGARCH_CPU_GUESTID)
->   #define cpu_has_hypervisor	cpu_opt(LOONGARCH_CPU_HYPERVISOR)
-> -
-> +#define cpu_has_ptw		cpu_opt(LOONGARCH_CPU_PTW)
->   
->   #endif /* __ASM_CPU_FEATURES_H */
-> diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
-> index 88773d849e33..48b9f7168bcc 100644
-> --- a/arch/loongarch/include/asm/cpu.h
-> +++ b/arch/loongarch/include/asm/cpu.h
-> @@ -98,6 +98,7 @@ enum cpu_type_enum {
->   #define CPU_FEATURE_EIODECODE		23	/* CPU has EXTIOI interrupt pin decode mode */
->   #define CPU_FEATURE_GUESTID		24	/* CPU has GuestID feature */
->   #define CPU_FEATURE_HYPERVISOR		25	/* CPU has hypervisor (running in VM) */
-> +#define CPU_FEATURE_PTW			26	/* CPU has hardware page table walker */
->   
->   #define LOONGARCH_CPU_CPUCFG		BIT_ULL(CPU_FEATURE_CPUCFG)
->   #define LOONGARCH_CPU_LAM		BIT_ULL(CPU_FEATURE_LAM)
-> @@ -125,5 +126,6 @@ enum cpu_type_enum {
->   #define LOONGARCH_CPU_EIODECODE		BIT_ULL(CPU_FEATURE_EIODECODE)
->   #define LOONGARCH_CPU_GUESTID		BIT_ULL(CPU_FEATURE_GUESTID)
->   #define LOONGARCH_CPU_HYPERVISOR	BIT_ULL(CPU_FEATURE_HYPERVISOR)
-> +#define LOONGARCH_CPU_PTW		BIT_ULL(CPU_FEATURE_PTW)
->   
->   #endif /* _ASM_CPU_H */
-> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-> index b3323ab5b78d..93b22a7af654 100644
-> --- a/arch/loongarch/include/asm/loongarch.h
-> +++ b/arch/loongarch/include/asm/loongarch.h
-> @@ -138,6 +138,7 @@ static inline u32 read_cpucfg(u32 reg)
->   #define  CPUCFG2_MIPSBT			BIT(20)
->   #define  CPUCFG2_LSPW			BIT(21)
->   #define  CPUCFG2_LAM			BIT(22)
-> +#define  CPUCFG2_PTW			BIT(24)
->   
->   #define LOONGARCH_CPUCFG3		0x3
->   #define  CPUCFG3_CCDMA			BIT(0)
-> @@ -453,6 +454,9 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->   #define  CSR_PWCTL0_PTBASE		(_ULCAST_(0x1f) << CSR_PWCTL0_PTBASE_SHIFT)
->   
->   #define LOONGARCH_CSR_PWCTL1		0x1d	/* PWCtl1 */
-> +#define  CSR_PWCTL1_PTW_SHIFT		24
-> +#define  CSR_PWCTL1_PTW_WIDTH		1
-> +#define  CSR_PWCTL1_PTW			(_ULCAST_(0x1) << CSR_PWCTL1_PTW_SHIFT)
->   #define  CSR_PWCTL1_DIR3WIDTH_SHIFT	18
->   #define  CSR_PWCTL1_DIR3WIDTH_WIDTH	5
->   #define  CSR_PWCTL1_DIR3WIDTH		(_ULCAST_(0x1f) << CSR_PWCTL1_DIR3WIDTH_SHIFT)
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> index d28fb9dbec59..5f93d6eef657 100644
-> --- a/arch/loongarch/include/asm/pgtable.h
-> +++ b/arch/loongarch/include/asm/pgtable.h
-> @@ -362,7 +362,7 @@ extern pgd_t invalid_pg_dir[];
->    */
->   static inline int pte_write(pte_t pte)	{ return pte_val(pte) & _PAGE_WRITE; }
->   static inline int pte_young(pte_t pte)	{ return pte_val(pte) & _PAGE_ACCESSED; }
-> -static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & _PAGE_MODIFIED; }
-> +static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & (_PAGE_DIRTY | _PAGE_MODIFIED); }
+>  drivers/ata/Kconfig       | 28 ++++++++++++++--------------
+>  drivers/ata/ata_generic.c |  2 ++
+>  drivers/ata/libata-sff.c  |  2 ++
+>  include/linux/libata.h    |  2 ++
+>  4 files changed, 20 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 42b51c9812a0..c521cdc51f8c 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -557,7 +557,7 @@ comment "PATA SFF controllers with BMDMA"
+>  
+>  config PATA_ALI
+>  	tristate "ALi PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the ALi ATA interfaces
+> @@ -567,7 +567,7 @@ config PATA_ALI
+>  
+>  config PATA_AMD
+>  	tristate "AMD/NVidia PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the AMD and NVidia PATA
+> @@ -585,7 +585,7 @@ config PATA_ARASAN_CF
+>  
+>  config PATA_ARTOP
+>  	tristate "ARTOP 6210/6260 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for ARTOP PATA controllers.
+>  
+> @@ -612,7 +612,7 @@ config PATA_ATP867X
+>  
+>  config PATA_CMD64X
+>  	tristate "CMD64x PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the CMD64x series chips
+> @@ -659,7 +659,7 @@ config PATA_CS5536
+>  
+>  config PATA_CYPRESS
+>  	tristate "Cypress CY82C693 PATA support (Very Experimental)"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the Cypress/Contaq CY82C693
+> @@ -707,7 +707,7 @@ config PATA_HPT366
+>  
+>  config PATA_HPT37X
+>  	tristate "HPT 370/370A/371/372/374/302 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the majority of the later HPT
+>  	  PATA controllers via the new ATA layer.
+> @@ -716,7 +716,7 @@ config PATA_HPT37X
+>  
+>  config PATA_HPT3X2N
+>  	tristate "HPT 371N/372N/302N PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the N variant HPT PATA
+>  	  controllers via the new ATA layer.
+> @@ -819,7 +819,7 @@ config PATA_MPC52xx
+>  
+>  config PATA_NETCELL
+>  	tristate "NETCELL Revolution RAID support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the Netcell Revolution RAID
+>  	  PATA controller.
+> @@ -855,7 +855,7 @@ config PATA_OLDPIIX
+>  
+>  config PATA_OPTIDMA
+>  	tristate "OPTI FireStar PATA support (Very Experimental)"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables DMA/PIO support for the later OPTi
+>  	  controllers found on some old motherboards and in some
+> @@ -865,7 +865,7 @@ config PATA_OPTIDMA
+>  
+>  config PATA_PDC2027X
+>  	tristate "Promise PATA 2027x support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for Promise PATA pdc20268 to pdc20277 host adapters.
+>  
+> @@ -873,7 +873,7 @@ config PATA_PDC2027X
+>  
+>  config PATA_PDC_OLD
+>  	tristate "Older Promise PATA controller support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the Promise 20246, 20262, 20263,
+>  	  20265 and 20267 adapters.
+> @@ -901,7 +901,7 @@ config PATA_RDC
+>  
+>  config PATA_SC1200
+>  	tristate "SC1200 PATA support"
+> -	depends on PCI && (X86_32 || COMPILE_TEST)
+> +	depends on PCI && (X86_32 || COMPILE_TEST) && HAS_IOPORT
+>  	help
+>  	  This option enables support for the NatSemi/AMD SC1200 SoC
+>  	  companion chip used with the Geode processor family.
+> @@ -919,7 +919,7 @@ config PATA_SCH
+>  
+>  config PATA_SERVERWORKS
+>  	tristate "SERVERWORKS OSB4/CSB5/CSB6/HT1000 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the Serverworks OSB4/CSB5/CSB6 and
+>  	  HT1000 PATA controllers, via the new ATA layer.
+> @@ -1183,7 +1183,7 @@ config ATA_GENERIC
+>  
+>  config PATA_LEGACY
+>  	tristate "Legacy ISA PATA support (Experimental)"
+> -	depends on (ISA || PCI)
+> +	depends on (ISA || PCI) && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for ISA/VLB/PCI bus legacy PATA
+> diff --git a/drivers/ata/ata_generic.c b/drivers/ata/ata_generic.c
+> index 2f57ec00ab82..2d391d117f74 100644
+> --- a/drivers/ata/ata_generic.c
+> +++ b/drivers/ata/ata_generic.c
+> @@ -197,8 +197,10 @@ static int ata_generic_init_one(struct pci_dev *dev, const struct pci_device_id
+>  	if (!(command & PCI_COMMAND_IO))
+>  		return -ENODEV;
+>  
+> +#ifdef CONFIG_PATA_ALI
+>  	if (dev->vendor == PCI_VENDOR_ID_AL)
+>  		ata_pci_bmdma_clear_simplex(dev);
+> +#endif /* CONFIG_PATA_ALI */
 
-Will this affect existing models? I can't seem to remember the details.
+You can drop this change if...
 
->   
->   static inline pte_t pte_mkold(pte_t pte)
->   {
-> @@ -506,7 +506,7 @@ static inline pmd_t pmd_wrprotect(pmd_t pmd)
->   
->   static inline int pmd_dirty(pmd_t pmd)
->   {
-> -	return !!(pmd_val(pmd) & _PAGE_MODIFIED);
-> +	return !!(pmd_val(pmd) & (_PAGE_DIRTY | _PAGE_MODIFIED));
->   }
->   
->   static inline pmd_t pmd_mkclean(pmd_t pmd)
-> diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-> index f5e4deb97402..0dc9ee2b05d2 100644
-> --- a/arch/loongarch/include/asm/tlb.h
-> +++ b/arch/loongarch/include/asm/tlb.h
-> @@ -163,6 +163,9 @@ extern void handle_tlb_store(void);
->   extern void handle_tlb_modify(void);
->   extern void handle_tlb_refill(void);
->   extern void handle_tlb_protect(void);
-> +extern void handle_tlb_load_ptw(void);
-> +extern void handle_tlb_store_ptw(void);
-> +extern void handle_tlb_modify_ptw(void);
->   
->   extern void dump_tlb_all(void);
->   extern void dump_tlb_regs(void);
-> diff --git a/arch/loongarch/include/uapi/asm/hwcap.h b/arch/loongarch/include/uapi/asm/hwcap.h
-> index 8840b72fa8e8..6955a7cb2c65 100644
-> --- a/arch/loongarch/include/uapi/asm/hwcap.h
-> +++ b/arch/loongarch/include/uapi/asm/hwcap.h
-> @@ -16,5 +16,6 @@
->   #define HWCAP_LOONGARCH_LBT_X86		(1 << 10)
->   #define HWCAP_LOONGARCH_LBT_ARM		(1 << 11)
->   #define HWCAP_LOONGARCH_LBT_MIPS	(1 << 12)
-> +#define HWCAP_LOONGARCH_PTW		(1 << 13)
+>  
+>  	if (dev->vendor == PCI_VENDOR_ID_ATI) {
+>  		int rc = pcim_enable_device(dev);
+> diff --git a/drivers/ata/libata-sff.c b/drivers/ata/libata-sff.c
+> index 9d28badfe41d..80137edb7ebf 100644
+> --- a/drivers/ata/libata-sff.c
+> +++ b/drivers/ata/libata-sff.c
+> @@ -3031,6 +3031,7 @@ EXPORT_SYMBOL_GPL(ata_bmdma_port_start32);
+>  
+>  #ifdef CONFIG_PCI
+>  
+> +#ifdef CONFIG_HAS_IOPORT
+>  /**
+>   *	ata_pci_bmdma_clear_simplex -	attempt to kick device out of simplex
+>   *	@pdev: PCI device
+> @@ -3056,6 +3057,7 @@ int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(ata_pci_bmdma_clear_simplex);
+> +#endif /* CONFIG_HAS_IOPORT */
 
-This feature should be irrevelant to userspace, right? We should 
-probably not add it here.
+...you move the #ifdef CONFIG_HAS_IOPORT inside the function as the first line
+and have the #endif right before the last "return 0;" (so the function only does
+return 0 for the !CONFIG_HAS_IOPORT case).
 
->   
->   #endif /* _UAPI_ASM_HWCAP_H */
-> diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-> index f42acc6c8df6..e925579c7a71 100644
-> --- a/arch/loongarch/kernel/cpu-probe.c
-> +++ b/arch/loongarch/kernel/cpu-probe.c
-> @@ -136,6 +136,10 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
->   		c->options |= LOONGARCH_CPU_CRYPTO;
->   		elf_hwcap |= HWCAP_LOONGARCH_CRYPTO;
->   	}
-> +	if (config & CPUCFG2_PTW) {
-> +		c->options |= LOONGARCH_CPU_PTW;
-> +		elf_hwcap |= HWCAP_LOONGARCH_PTW;
-> +	}
->   	if (config & CPUCFG2_LVZP) {
->   		c->options |= LOONGARCH_CPU_LVZ;
->   		elf_hwcap |= HWCAP_LOONGARCH_LVZ;
-> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-> index 0d82907b5404..782a34e7336e 100644
-> --- a/arch/loongarch/kernel/proc.c
-> +++ b/arch/loongarch/kernel/proc.c
-> @@ -79,6 +79,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->   	if (cpu_has_crc32)	seq_printf(m, " crc32");
->   	if (cpu_has_complex)	seq_printf(m, " complex");
->   	if (cpu_has_crypto)	seq_printf(m, " crypto");
-> +	if (cpu_has_ptw)	seq_printf(m, " ptw");
->   	if (cpu_has_lvz)	seq_printf(m, " lvz");
->   	if (cpu_has_lbt_x86)	seq_printf(m, " lbt_x86");
->   	if (cpu_has_lbt_arm)	seq_printf(m, " lbt_arm");
-> diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-> index 8bad6b0cff59..3e1d1d3c7058 100644
-> --- a/arch/loongarch/mm/tlb.c
-> +++ b/arch/loongarch/mm/tlb.c
-> @@ -167,6 +167,9 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t *ptep
->   	int idx;
->   	unsigned long flags;
->   
-> +	if (cpu_has_ptw)
-> +		return;
-> +
->   	/*
->   	 * Handle debugger faulting in for debugee.
->   	 */
-> @@ -220,7 +223,11 @@ static void setup_ptwalker(void)
->   	pte_w = PAGE_SHIFT - 3;
->   
->   	pwctl0 = pte_i | pte_w << 5 | pmd_i << 10 | pmd_w << 15 | pud_i << 20 | pud_w << 25;
-> -	pwctl1 = pgd_i | pgd_w << 6;
-> +
-> +	if (!cpu_has_ptw)
-> +		pwctl1 = pgd_i | pgd_w << 6;
-> +	else
-> +		pwctl1 = pgd_i | pgd_w << 6 | CSR_PWCTL1_PTW;
+>  
+>  static void ata_bmdma_nodma(struct ata_host *host, const char *reason)
+>  {
+> diff --git a/include/linux/libata.h b/include/linux/libata.h
+> index 311cd93377c7..90002d4a785b 100644
+> --- a/include/linux/libata.h
+> +++ b/include/linux/libata.h
+> @@ -2012,7 +2012,9 @@ extern int ata_bmdma_port_start(struct ata_port *ap);
+>  extern int ata_bmdma_port_start32(struct ata_port *ap);
+>  
+>  #ifdef CONFIG_PCI
+> +#ifdef CONFIG_HAS_IOPORT
+>  extern int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev);
+> +#endif /* CONFIG_HAS_IOPORT */
 
-This is better in avoiding the duplication:
+And then you do not need these #ifdef/endif here. Overall, a lot less of #ifdef
+which I personally really dislike to see in .c files :)
 
-if (cpu_has_ptw)
-     pwctl1 |= CSR_PWCTL1_PTW;
-
->   
->   	csr_write64(pwctl0, LOONGARCH_CSR_PWCTL0);
->   	csr_write64(pwctl1, LOONGARCH_CSR_PWCTL1);
-> @@ -264,10 +271,17 @@ void setup_tlb_handler(int cpu)
->   	if (cpu == 0) {
->   		memcpy((void *)tlbrentry, handle_tlb_refill, 0x80);
->   		local_flush_icache_range(tlbrentry, tlbrentry + 0x80);
-> -		set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
-> -		set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
-> -		set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
-> -		set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
-> +		if (!cpu_has_ptw) {
-
-Better not have the condition inverted for less cognitive burden (have 
-to go "no [hardware] page table walker" -> "take the software approach" 
-otherwise).
-
-> +			set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
-> +			set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
-> +			set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
-> +			set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
-> +		} else {
-> +			set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load_ptw, VECSIZE);
-> +			set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load_ptw, VECSIZE);
-> +			set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store_ptw, VECSIZE);
-> +			set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify_ptw, VECSIZE);
-> +		}
->   		set_handler(EXCCODE_TLBNR * VECSIZE, handle_tlb_protect, VECSIZE);
->   		set_handler(EXCCODE_TLBNX * VECSIZE, handle_tlb_protect, VECSIZE);
->   		set_handler(EXCCODE_TLBPE * VECSIZE, handle_tlb_protect, VECSIZE);
-> diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
-> index 240ced55586e..01df8a0b87f6 100644
-> --- a/arch/loongarch/mm/tlbex.S
-> +++ b/arch/loongarch/mm/tlbex.S
-> @@ -190,6 +190,13 @@ nopage_tlb_load:
->   	jr		t0
->   SYM_FUNC_END(handle_tlb_load)
->   
-> +SYM_FUNC_START(handle_tlb_load_ptw)
-> +	csrwr	t0, LOONGARCH_CSR_KS0
-> +	csrwr	t1, LOONGARCH_CSR_KS1
-> +	la_abs	t0, tlb_do_page_fault_0
-> +	jirl	zero, t0, 0
-
-jr t0
-
-> +SYM_FUNC_END(handle_tlb_load_ptw)
-> +
->   SYM_FUNC_START(handle_tlb_store)
->   	csrwr		t0, EXCEPTION_KS0
->   	csrwr		t1, EXCEPTION_KS1
-> @@ -339,6 +346,13 @@ nopage_tlb_store:
->   	jr		t0
->   SYM_FUNC_END(handle_tlb_store)
->   
-> +SYM_FUNC_START(handle_tlb_store_ptw)
-> +	csrwr	t0, LOONGARCH_CSR_KS0
-> +	csrwr	t1, LOONGARCH_CSR_KS1
-> +	la_abs	t0, tlb_do_page_fault_1
-> +	jirl	zero, t0, 0
-
-Same here.
-
-> +SYM_FUNC_END(handle_tlb_store_ptw)
-> +
->   SYM_FUNC_START(handle_tlb_modify)
->   	csrwr		t0, EXCEPTION_KS0
->   	csrwr		t1, EXCEPTION_KS1
-> @@ -486,6 +500,13 @@ nopage_tlb_modify:
->   	jr		t0
->   SYM_FUNC_END(handle_tlb_modify)
->   
-> +SYM_FUNC_START(handle_tlb_modify_ptw)
-> +	csrwr	t0, LOONGARCH_CSR_KS0
-> +	csrwr	t1, LOONGARCH_CSR_KS1
-> +	la_abs	t0, tlb_do_page_fault_1
-> +	jirl	zero, t0, 0
-
-And here.
-
-> +SYM_FUNC_END(handle_tlb_modify_ptw)
-> +
->   SYM_FUNC_START(handle_tlb_refill)
->   	csrwr		t0, LOONGARCH_CSR_TLBRSAVE
->   	csrrd		t0, LOONGARCH_CSR_PGD
+>  extern void ata_pci_bmdma_init(struct ata_host *host);
+>  extern int ata_pci_bmdma_prepare_host(struct pci_dev *pdev,
+>  				      const struct ata_port_info * const * ppi,
 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+Damien Le Moal
+Western Digital Research
 
