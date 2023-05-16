@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB428704587
-	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 08:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F7A704590
+	for <lists+linux-arch@lfdr.de>; Tue, 16 May 2023 08:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjEPGug (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 May 2023 02:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S229809AbjEPGve (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 May 2023 02:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjEPGud (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 02:50:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2724C07;
-        Mon, 15 May 2023 23:50:06 -0700 (PDT)
+        with ESMTP id S230117AbjEPGvc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 May 2023 02:51:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCDB469E;
+        Mon, 15 May 2023 23:51:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C58615FB;
-        Tue, 16 May 2023 06:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE2BEC433D2;
-        Tue, 16 May 2023 06:50:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 134A061FC5;
+        Tue, 16 May 2023 06:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EEBC433EF;
+        Tue, 16 May 2023 06:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684219805;
-        bh=7VX2LsKv3PQ0dpUkb9e7oVnaxcn5EXXzhXtXcfTUrdo=;
+        s=k20201202; t=1684219859;
+        bh=6Eaba1tYS8F2upbZM0WOM8A9kKwNYGFfbZSTGo3G8Us=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VnB3eh+W1j0NQcaox7doiPd13Fc8F/IiUM4j8VdhBZm20oiEAt6LpIIe9ZXPuuy07
-         PpHqPmDqTNuewxCeTKCCrlt8tYZ3F4XKvzogI5hmHVwUE8nXYIMOxQ2QmaSXv4wJBP
-         e6tE9Ek/N9ysGgCw4kg26JzP5Q8pT9eMEHEjQcknfCTO03Fy70W5Kz7Z578cqYO3JQ
-         LursPVYyRZoQgXFWlwWDxOYsOUNxXGcBFVUuDPgcFbrtmUZ7RSFJ+DLFZHupMO/xJx
-         xuWaXCHbvnzFewOzyOSLUPYGHKZ/AeecJHJAnBP53Eik0w6Sn6LFCSnuCJG8DulNny
-         9ajILl0m5k9oA==
-Date:   Tue, 16 May 2023 09:49:57 +0300
+        b=mlsIFNrcAThE+0HymG4wSsavx8Mh/N2D5jY0hq3HKRbOWkQchd4y92JRocOqinfwh
+         M/HRBW0dBRf3OR53P8opoVdeEqDqa6gT20rIRgOFmkdQCDbTrNGSm5nPuJHNtsTGPs
+         jkV+ozKwlOJrWhuYQVK2cCNZj3V2pHz/8HS6d5cfN7Je2EeKVwr2X1OUaiNT5xfUnD
+         bz09dpO5blch+nd8XqFWDvKNhuEoNpVoh45k08uXQWYeUKzaniMdOmjdhRHPA72LYn
+         L2M6LzUjhUsv4QT45OAseO63USa1EY+m3u12Met+Twj+ZQB2Ebg9vHl9H5DLSlzc+w
+         yZ2ph5fQQPQaA==
+Date:   Tue, 16 May 2023 09:50:50 +0300
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Baoquan He <bhe@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -39,19 +39,21 @@ Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         hch@infradead.org, agordeev@linux.ibm.com,
         wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
         David.Laight@aculab.com, shorne@gmail.com, willy@infradead.org,
-        deller@gmx.de, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        openrisc@lists.librecores.org
-Subject: Re: [PATCH v5 RESEND 09/17] openrisc: mm: Convert to GENERIC_IOREMAP
-Message-ID: <ZGMnlZK1/pZIBCud@kernel.org>
+        deller@gmx.de, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v5 RESEND 10/17] s390: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZGMnyk4l6Id1flpN@kernel.org>
 References: <20230515090848.833045-1-bhe@redhat.com>
- <20230515090848.833045-10-bhe@redhat.com>
+ <20230515090848.833045-11-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515090848.833045-10-bhe@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230515090848.833045-11-bhe@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,9 +62,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On Mon, May 15, 2023 at 05:08:40PM +0800, Baoquan He wrote:
+On Mon, May 15, 2023 at 05:08:41PM +0800, Baoquan He wrote:
 > By taking GENERIC_IOREMAP method, the generic generic_ioremap_prot(),
 > generic_iounmap(), and their generic wrapper ioremap_prot(), ioremap()
 > and iounmap() are all visible and available to arch. Arch needs to
@@ -72,134 +72,156 @@ On Mon, May 15, 2023 at 05:08:40PM +0800, Baoquan He wrote:
 > with generic_ioremap_prot() and generic_iounmap(), and has the equivalent
 > functioality as before.
 > 
-> Here, add wrapper function iounmap() for openrisc's special operation
-> when iounmap().
+> Here, add wrapper functions ioremap_prot() and iounmap() for s390's
+> special operation when ioremap() and iounmap().
 > 
 > Signed-off-by: Baoquan He <bhe@redhat.com>
-> Cc: Stafford Horne <shorne@gmail.com>
-> Cc: Jonas Bonn <jonas@southpole.se>
-> Cc: Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>
-> Cc: openrisc@lists.librecores.org
+> Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Cc: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+
+Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
 > ---
->  arch/openrisc/Kconfig          |  1 +
->  arch/openrisc/include/asm/io.h | 11 +++++---
->  arch/openrisc/mm/ioremap.c     | 46 +---------------------------------
->  3 files changed, 9 insertions(+), 49 deletions(-)
+>  arch/s390/Kconfig          |  1 +
+>  arch/s390/include/asm/io.h | 21 ++++++++------
+>  arch/s390/pci/pci.c        | 57 +++++++-------------------------------
+>  3 files changed, 23 insertions(+), 56 deletions(-)
 > 
-> diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
-> index c7f282f60f64..fd9bb76a610b 100644
-> --- a/arch/openrisc/Kconfig
-> +++ b/arch/openrisc/Kconfig
-> @@ -21,6 +21,7 @@ config OPENRISC
->  	select GENERIC_IRQ_PROBE
->  	select GENERIC_IRQ_SHOW
->  	select GENERIC_PCI_IOMAP
-> +	select GENERIC_IOREMAP
->  	select GENERIC_CPU_DEVICES
->  	select HAVE_PCI
->  	select HAVE_UID16
-> diff --git a/arch/openrisc/include/asm/io.h b/arch/openrisc/include/asm/io.h
-> index ee6043a03173..e640960c26c2 100644
-> --- a/arch/openrisc/include/asm/io.h
-> +++ b/arch/openrisc/include/asm/io.h
-> @@ -15,6 +15,8 @@
->  #define __ASM_OPENRISC_IO_H
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index db20c1589a98..f33923fa8c99 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -142,6 +142,7 @@ config S390
+>  	select GENERIC_SMP_IDLE_THREAD
+>  	select GENERIC_TIME_VSYSCALL
+>  	select GENERIC_VDSO_TIME_NS
+> +	select GENERIC_IOREMAP if PCI
+>  	select HAVE_ALIGNED_STRUCT_PAGE if SLUB
+>  	select HAVE_ARCH_AUDITSYSCALL
+>  	select HAVE_ARCH_JUMP_LABEL
+> diff --git a/arch/s390/include/asm/io.h b/arch/s390/include/asm/io.h
+> index e3882b012bfa..4453ad7c11ac 100644
+> --- a/arch/s390/include/asm/io.h
+> +++ b/arch/s390/include/asm/io.h
+> @@ -22,11 +22,18 @@ void unxlate_dev_mem_ptr(phys_addr_t phys, void *addr);
 >  
->  #include <linux/types.h>
-> +#include <asm/pgalloc.h>
-> +#include <asm/pgtable.h>
+>  #define IO_SPACE_LIMIT 0
 >  
->  /*
->   * PCI: We do not use IO ports in OpenRISC
-> @@ -27,11 +29,12 @@
->  #define PIO_OFFSET		0
->  #define PIO_MASK		0
->  
-> -#define ioremap ioremap
-> -void __iomem *ioremap(phys_addr_t offset, unsigned long size);
-> -
+> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
+> -void __iomem *ioremap(phys_addr_t addr, size_t size);
+> -void __iomem *ioremap_wc(phys_addr_t addr, size_t size);
+> -void __iomem *ioremap_wt(phys_addr_t addr, size_t size);
+> -void iounmap(volatile void __iomem *addr);
 > +/*
 > + * I/O memory mapping functions.
 > + */
->  #define iounmap iounmap
-> -extern void iounmap(volatile void __iomem *addr);
+> +#define ioremap_prot ioremap_prot
+> +#define iounmap iounmap
 > +
-> +#define _PAGE_IOREMAP (pgprot_val(PAGE_KERNEL) | _PAGE_CI)
+> +#define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL)
+> +
+> +#define ioremap_wc(addr, size)  \
+> +	ioremap_prot((addr), (size), pgprot_val(pgprot_writecombine(PAGE_KERNEL)))
+> +#define ioremap_wt(addr, size)  \
+> +	ioremap_prot((addr), (size), pgprot_val(pgprot_writethrough(PAGE_KERNEL)))
 >  
->  #include <asm-generic/io.h>
+>  static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
+>  {
+> @@ -51,10 +58,6 @@ static inline void ioport_unmap(void __iomem *p)
+>  #define pci_iomap_wc pci_iomap_wc
+>  #define pci_iomap_wc_range pci_iomap_wc_range
 >  
-> diff --git a/arch/openrisc/mm/ioremap.c b/arch/openrisc/mm/ioremap.c
-> index 90b59bc53c8c..9f9941df7d4c 100644
-> --- a/arch/openrisc/mm/ioremap.c
-> +++ b/arch/openrisc/mm/ioremap.c
-> @@ -22,49 +22,6 @@
->  
->  extern int mem_init_done;
->  
-> -/*
-> - * Remap an arbitrary physical address space into the kernel virtual
-> - * address space. Needed when the kernel wants to access high addresses
-> - * directly.
-> - *
-> - * NOTE! We need to allow non-page-aligned mappings too: we will obviously
-> - * have to convert them into an offset in a page-aligned mapping, but the
-> - * caller shouldn't need to know that small detail.
-> - */
-> -void __iomem *__ref ioremap(phys_addr_t addr, unsigned long size)
-> -{
-> -	phys_addr_t p;
-> -	unsigned long v;
-> -	unsigned long offset, last_addr;
-> -	struct vm_struct *area = NULL;
+> -#define ioremap ioremap
+> -#define ioremap_wt ioremap_wt
+> -#define ioremap_wc ioremap_wc
 > -
-> -	/* Don't allow wraparound or zero size */
+>  #define memcpy_fromio(dst, src, count)	zpci_memcpy_fromio(dst, src, count)
+>  #define memcpy_toio(dst, src, count)	zpci_memcpy_toio(dst, src, count)
+>  #define memset_io(dst, val, count)	zpci_memset_io(dst, val, count)
+> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+> index afc3f33788da..d34d5813d006 100644
+> --- a/arch/s390/pci/pci.c
+> +++ b/arch/s390/pci/pci.c
+> @@ -244,62 +244,25 @@ void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
+>         zpci_memcpy_toio(to, from, count);
+>  }
+>  
+> -static void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot)
+> +void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
+> +			   unsigned long prot)
+>  {
+> -	unsigned long offset, vaddr;
+> -	struct vm_struct *area;
+> -	phys_addr_t last_addr;
+> -
 > -	last_addr = addr + size - 1;
 > -	if (!size || last_addr < addr)
 > -		return NULL;
 > -
-> -	/*
-> -	 * Mappings have to be page-aligned
-> -	 */
+> +	/*
+> +	 * When PCI MIO instructions are unavailable the "physical" address
+> +	 * encodes a hint for accessing the PCI memory space it represents.
+> +	 * Just pass it unchanged such that ioread/iowrite can decode it.
+> +	 */
+>  	if (!static_branch_unlikely(&have_mio))
+> -		return (void __iomem *) addr;
+> +		return (void __iomem *)phys_addr;
+>  
 > -	offset = addr & ~PAGE_MASK;
-> -	p = addr & PAGE_MASK;
-> -	size = PAGE_ALIGN(last_addr + 1) - p;
-> -
+> -	addr &= PAGE_MASK;
+> -	size = PAGE_ALIGN(size + offset);
 > -	area = get_vm_area(size, VM_IOREMAP);
 > -	if (!area)
 > -		return NULL;
-> -	v = (unsigned long)area->addr;
 > -
-> -	if (ioremap_page_range(v, v + size, p,
-> -			__pgprot(pgprot_val(PAGE_KERNEL) | _PAGE_CI))) {
-> -		vfree(area->addr);
+> -	vaddr = (unsigned long) area->addr;
+> -	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
+> -		free_vm_area(area);
 > -		return NULL;
 > -	}
+> -	return (void __iomem *) ((unsigned long) area->addr + offset);
+> -}
 > -
-> -	return (void __iomem *)(offset + (char *)v);
+> -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
+> -{
+> -	return __ioremap(addr, size, __pgprot(prot));
+> +	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
+>  }
+>  EXPORT_SYMBOL(ioremap_prot);
+>  
+> -void __iomem *ioremap(phys_addr_t addr, size_t size)
+> -{
+> -	return __ioremap(addr, size, PAGE_KERNEL);
 > -}
 > -EXPORT_SYMBOL(ioremap);
 > -
+> -void __iomem *ioremap_wc(phys_addr_t addr, size_t size)
+> -{
+> -	return __ioremap(addr, size, pgprot_writecombine(PAGE_KERNEL));
+> -}
+> -EXPORT_SYMBOL(ioremap_wc);
+> -
+> -void __iomem *ioremap_wt(phys_addr_t addr, size_t size)
+> -{
+> -	return __ioremap(addr, size, pgprot_writethrough(PAGE_KERNEL));
+> -}
+> -EXPORT_SYMBOL(ioremap_wt);
+> -
 >  void iounmap(volatile void __iomem *addr)
 >  {
->  	/* If the page is from the fixmap pool then we just clear out
-
-The page cannot be from fixmap pool since we removed fixmap support from
-ioremap in an earlier patch.
-I believe that patch should also remove special casing of fixmap in
-iounmap() and then openrisc does not need to override any of ioremap
-methods.
-
-> @@ -88,9 +45,8 @@ void iounmap(volatile void __iomem *addr)
->  		return;
->  	}
->  
-> -	return vfree((void *)(PAGE_MASK & (unsigned long)addr));
-> +	generic_iounmap(addr);
+>  	if (static_branch_likely(&have_mio))
+> -		vunmap((__force void *) ((unsigned long) addr & PAGE_MASK));
+> +		generic_iounmap(addr);
 >  }
-> -EXPORT_SYMBOL(iounmap);
+>  EXPORT_SYMBOL(iounmap);
 >  
->  /**
->   * OK, this one's a bit tricky... ioremap can get called before memory is
 > -- 
 > 2.34.1
 > 
