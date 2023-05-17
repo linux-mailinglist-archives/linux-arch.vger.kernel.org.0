@@ -2,91 +2,293 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A637063A0
-	for <lists+linux-arch@lfdr.de>; Wed, 17 May 2023 11:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4D37064AA
+	for <lists+linux-arch@lfdr.de>; Wed, 17 May 2023 11:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjEQJKQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 May 2023 05:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S229968AbjEQJyC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 May 2023 05:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjEQJKN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 May 2023 05:10:13 -0400
-X-Greylist: delayed 330 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 02:10:11 PDT
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E44540E5;
-        Wed, 17 May 2023 02:10:10 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.141.245])
-        by APP-01 (Coremail) with SMTP id qwCowACXnjKjmGRkEPxcFw--.24827S2;
-        Wed, 17 May 2023 17:04:35 +0800 (CST)
-From:   sunying@nj.iscas.ac.cn
-To:     arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ying Sun <sunying@nj.iscas.ac.cn>
-Subject: [PATCH] include/asm-generic/topology.h: remove dead code cpumask_of_node macro
-Date:   Wed, 17 May 2023 17:04:32 +0800
-Message-Id: <20230517090432.19755-1-sunying@nj.iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229888AbjEQJyB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 May 2023 05:54:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FB949CE;
+        Wed, 17 May 2023 02:53:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7740644A0;
+        Wed, 17 May 2023 09:53:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82085C433D2;
+        Wed, 17 May 2023 09:53:53 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jun Yi <yijun@loongson.cn>
+Subject: [PATCH V2] LoongArch: Support dbar with different hints
+Date:   Wed, 17 May 2023 17:53:15 +0800
+Message-Id: <20230517095315.1390079-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACXnjKjmGRkEPxcFw--.24827S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7XFWDXry7Cw48KryUCr4fGrg_yoWkAFg_Aa
-        ykWrZ7K3y8ZF4I9rs0gws2qrn8W348WayrKrn3Kay293WUtr45AwnxGFy3Xw48WanxWry7
-        Z348JFsYyFnrujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbxAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
-        Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-        1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4kE6xkIj40Ew7xC0wCY
-        02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r12
-        6r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UY9a9UUUUU=
-X-Originating-IP: [124.16.141.245]
-X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Ying Sun <sunying@nj.iscas.ac.cn>
+Traditionally, LoongArch uses "dbar 0" (full completion barrier) for
+everything. But the full completion barrier is a performance killer, so
+Loongson-3A6000 and newer processors have made finer granularity hints
+available:
 
-The macro of “cpumask_of_node(node)” in line 49 is a dead code
-which will never be implemented，because its conditions of
-line 30 "#ifndef CONFIG_NUMA" and line 48 "#ifdef CONFIG_NUMA"
-are mutually exclusive. It is recommended to delete redundant code.
+Bit4: ordering or completion (0: completion, 1: ordering)
+Bit3: barrier for previous read (0: true, 1: false)
+Bit2: barrier for previous write (0: true, 1: false)
+Bit1: barrier for succeeding read (0: true, 1: false)
+Bit0: barrier for succeeding write (0: true, 1: false)
 
-Suggested-by: Yanjie Ren <renyanjie01@gmail.com>
-Signed-off-by: Ying Sun <sunying@nj.iscas.ac.cn>
+Hint 0x700: barrier for "read after read" from the same address, which
+is needed by LL-SC loops on old models (dbar 0x700 behaves the same as
+nop if such reordering is disabled on new models).
+
+This patch makes use of the various new hints for different kinds of
+memory barriers. It brings performance improvements on Loongson-3A6000
+series, while not affecting the existing models because all variants are
+treated as 'dbar 0' there.
+
+Signed-off-by: Jun Yi <yijun@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- include/asm-generic/topology.h | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+V2: Update commit message and fix spelling.
 
-diff --git a/include/asm-generic/topology.h b/include/asm-generic/topology.h
-index 4dbe715be65b..34f6d487d31a 100644
---- a/include/asm-generic/topology.h
-+++ b/include/asm-generic/topology.h
-@@ -45,11 +45,7 @@
+ arch/loongarch/include/asm/barrier.h | 130 ++++++++++++---------------
+ arch/loongarch/include/asm/io.h      |   2 +-
+ arch/loongarch/kernel/smp.c          |   2 +-
+ arch/loongarch/mm/tlbex.S            |   6 +-
+ 4 files changed, 60 insertions(+), 80 deletions(-)
+
+diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/include/asm/barrier.h
+index cda977675854..4b663f197706 100644
+--- a/arch/loongarch/include/asm/barrier.h
++++ b/arch/loongarch/include/asm/barrier.h
+@@ -5,27 +5,56 @@
+ #ifndef __ASM_BARRIER_H
+ #define __ASM_BARRIER_H
+ 
+-#define __sync()	__asm__ __volatile__("dbar 0" : : : "memory")
++/*
++ * Hint encoding:
++ *
++ * Bit4: ordering or completion (0: completion, 1: ordering)
++ * Bit3: barrier for previous read (0: true, 1: false)
++ * Bit2: barrier for previous write (0: true, 1: false)
++ * Bit1: barrier for succeeding read (0: true, 1: false)
++ * Bit0: barrier for succeeding write (0: true, 1: false)
++ *
++ * Hint 0x700: barrier for "read after read" from the same address
++ */
++
++#define DBAR(hint) __asm__ __volatile__("dbar %0 " : : "I"(hint) : "memory")
++
++#define crwrw		0b00000
++#define cr_r_		0b00101
++#define c_w_w		0b01010
+ 
+-#define fast_wmb()	__sync()
+-#define fast_rmb()	__sync()
+-#define fast_mb()	__sync()
+-#define fast_iob()	__sync()
+-#define wbflush()	__sync()
++#define orwrw		0b10000
++#define or_r_		0b10101
++#define o_w_w		0b11010
+ 
+-#define wmb()		fast_wmb()
+-#define rmb()		fast_rmb()
+-#define mb()		fast_mb()
+-#define iob()		fast_iob()
++#define orw_w		0b10010
++#define or_rw		0b10100
+ 
+-#define __smp_mb()	__asm__ __volatile__("dbar 0" : : : "memory")
+-#define __smp_rmb()	__asm__ __volatile__("dbar 0" : : : "memory")
+-#define __smp_wmb()	__asm__ __volatile__("dbar 0" : : : "memory")
++#define c_sync()	DBAR(crwrw)
++#define c_rsync()	DBAR(cr_r_)
++#define c_wsync()	DBAR(c_w_w)
++
++#define o_sync()	DBAR(orwrw)
++#define o_rsync()	DBAR(or_r_)
++#define o_wsync()	DBAR(o_w_w)
++
++#define ldacq_mb()	DBAR(or_rw)
++#define strel_mb()	DBAR(orw_w)
++
++#define mb()		c_sync()
++#define rmb()		c_rsync()
++#define wmb()		c_wsync()
++#define iob()		c_sync()
++#define wbflush()	c_sync()
++
++#define __smp_mb()	o_sync()
++#define __smp_rmb()	o_rsync()
++#define __smp_wmb()	o_wsync()
+ 
+ #ifdef CONFIG_SMP
+-#define __WEAK_LLSC_MB		"	dbar 0  \n"
++#define __WEAK_LLSC_MB		"	dbar 0x700	\n"
+ #else
+-#define __WEAK_LLSC_MB		"		\n"
++#define __WEAK_LLSC_MB		"			\n"
  #endif
  
- #ifndef cpumask_of_node
--  #ifdef CONFIG_NUMA
--    #define cpumask_of_node(node)	((node) == 0 ? cpu_online_mask : cpu_none_mask)
--  #else
--    #define cpumask_of_node(node)	((void)(node), cpu_online_mask)
--  #endif
-+  #define cpumask_of_node(node)	((void)(node), cpu_online_mask)
- #endif
- #ifndef pcibus_to_node
- #define pcibus_to_node(bus)	((void)(bus), -1)
+ #define __smp_mb__before_atomic()	barrier()
+@@ -59,68 +88,19 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
+ 	return mask;
+ }
+ 
+-#define __smp_load_acquire(p)							\
+-({										\
+-	union { typeof(*p) __val; char __c[1]; } __u;				\
+-	unsigned long __tmp = 0;							\
+-	compiletime_assert_atomic_type(*p);					\
+-	switch (sizeof(*p)) {							\
+-	case 1:									\
+-		*(__u8 *)__u.__c = *(volatile __u8 *)p;				\
+-		__smp_mb();							\
+-		break;								\
+-	case 2:									\
+-		*(__u16 *)__u.__c = *(volatile __u16 *)p;			\
+-		__smp_mb();							\
+-		break;								\
+-	case 4:									\
+-		__asm__ __volatile__(						\
+-		"amor_db.w %[val], %[tmp], %[mem]	\n"				\
+-		: [val] "=&r" (*(__u32 *)__u.__c)				\
+-		: [mem] "ZB" (*(u32 *) p), [tmp] "r" (__tmp)			\
+-		: "memory");							\
+-		break;								\
+-	case 8:									\
+-		__asm__ __volatile__(						\
+-		"amor_db.d %[val], %[tmp], %[mem]	\n"				\
+-		: [val] "=&r" (*(__u64 *)__u.__c)				\
+-		: [mem] "ZB" (*(u64 *) p), [tmp] "r" (__tmp)			\
+-		: "memory");							\
+-		break;								\
+-	}									\
+-	(typeof(*p))__u.__val;								\
++#define __smp_load_acquire(p)				\
++({							\
++	typeof(*p) ___p1 = READ_ONCE(*p);		\
++	compiletime_assert_atomic_type(*p);		\
++	ldacq_mb();					\
++	___p1;						\
+ })
+ 
+-#define __smp_store_release(p, v)						\
+-do {										\
+-	union { typeof(*p) __val; char __c[1]; } __u =				\
+-		{ .__val = (__force typeof(*p)) (v) };				\
+-	unsigned long __tmp;							\
+-	compiletime_assert_atomic_type(*p);					\
+-	switch (sizeof(*p)) {							\
+-	case 1:									\
+-		__smp_mb();							\
+-		*(volatile __u8 *)p = *(__u8 *)__u.__c;				\
+-		break;								\
+-	case 2:									\
+-		__smp_mb();							\
+-		*(volatile __u16 *)p = *(__u16 *)__u.__c;			\
+-		break;								\
+-	case 4:									\
+-		__asm__ __volatile__(						\
+-		"amswap_db.w %[tmp], %[val], %[mem]	\n"			\
+-		: [mem] "+ZB" (*(u32 *)p), [tmp] "=&r" (__tmp)			\
+-		: [val] "r" (*(__u32 *)__u.__c)					\
+-		: );								\
+-		break;								\
+-	case 8:									\
+-		__asm__ __volatile__(						\
+-		"amswap_db.d %[tmp], %[val], %[mem]	\n"			\
+-		: [mem] "+ZB" (*(u64 *)p), [tmp] "=&r" (__tmp)			\
+-		: [val] "r" (*(__u64 *)__u.__c)					\
+-		: );								\
+-		break;								\
+-	}									\
++#define __smp_store_release(p, v)			\
++do {							\
++	compiletime_assert_atomic_type(*p);		\
++	strel_mb();					\
++	WRITE_ONCE(*p, v);				\
+ } while (0)
+ 
+ #define __smp_store_mb(p, v)							\
+diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+index 545e2708fbf7..1c9410220040 100644
+--- a/arch/loongarch/include/asm/io.h
++++ b/arch/loongarch/include/asm/io.h
+@@ -62,7 +62,7 @@ extern pgprot_t pgprot_wc;
+ #define ioremap_cache(offset, size)	\
+ 	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL))
+ 
+-#define mmiowb() asm volatile ("dbar 0" ::: "memory")
++#define mmiowb() wmb()
+ 
+ /*
+  * String version of I/O memory access operations.
+diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+index ed167e244cda..8daa97148c8e 100644
+--- a/arch/loongarch/kernel/smp.c
++++ b/arch/loongarch/kernel/smp.c
+@@ -118,7 +118,7 @@ static u32 ipi_read_clear(int cpu)
+ 	action = iocsr_read32(LOONGARCH_IOCSR_IPI_STATUS);
+ 	/* Clear the ipi register to clear the interrupt */
+ 	iocsr_write32(action, LOONGARCH_IOCSR_IPI_CLEAR);
+-	smp_mb();
++	wbflush();
+ 
+ 	return action;
+ }
+diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
+index 244e2f5aeee5..240ced55586e 100644
+--- a/arch/loongarch/mm/tlbex.S
++++ b/arch/loongarch/mm/tlbex.S
+@@ -184,7 +184,7 @@ tlb_huge_update_load:
+ 	ertn
+ 
+ nopage_tlb_load:
+-	dbar		0
++	dbar		0x700
+ 	csrrd		ra, EXCEPTION_KS2
+ 	la_abs		t0, tlb_do_page_fault_0
+ 	jr		t0
+@@ -333,7 +333,7 @@ tlb_huge_update_store:
+ 	ertn
+ 
+ nopage_tlb_store:
+-	dbar		0
++	dbar		0x700
+ 	csrrd		ra, EXCEPTION_KS2
+ 	la_abs		t0, tlb_do_page_fault_1
+ 	jr		t0
+@@ -480,7 +480,7 @@ tlb_huge_update_modify:
+ 	ertn
+ 
+ nopage_tlb_modify:
+-	dbar		0
++	dbar		0x700
+ 	csrrd		ra, EXCEPTION_KS2
+ 	la_abs		t0, tlb_do_page_fault_1
+ 	jr		t0
 -- 
-2.17.1
+2.39.1
 
