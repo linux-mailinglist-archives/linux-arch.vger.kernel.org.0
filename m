@@ -2,295 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65907064AE
-	for <lists+linux-arch@lfdr.de>; Wed, 17 May 2023 11:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74FA7064B3
+	for <lists+linux-arch@lfdr.de>; Wed, 17 May 2023 11:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjEQJyl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 May 2023 05:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S230104AbjEQJ4I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 May 2023 05:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjEQJyi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 May 2023 05:54:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4584055B3;
-        Wed, 17 May 2023 02:54:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5DC4644B0;
-        Wed, 17 May 2023 09:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A12C433D2;
-        Wed, 17 May 2023 09:54:32 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Liang Gao <gaoliang@loongson.cn>, Jun Yi <yijun@loongson.cn>
-Subject: [PATCH V2] LoongArch: Introduce hardware page table walker
-Date:   Wed, 17 May 2023 17:54:08 +0800
-Message-Id: <20230517095408.1390157-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S230055AbjEQJ4G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 May 2023 05:56:06 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968044209;
+        Wed, 17 May 2023 02:56:01 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b33c72686so365541a12.1;
+        Wed, 17 May 2023 02:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684317361; x=1686909361;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ayYNauh9YOj0YuMbIMh+fZvBeOH7YM6wlBBt72xWnhI=;
+        b=jMRIWYqEgbvXYuhnGgk45LlPtJB67tD2df9o2Ef8nY5Jr4Ct1wQHVwKLRD9CiiyPTp
+         vwZIarGqWvB31/jkH3HYZJrisEb5hiAYr0aRHxZaG2qKAKBvdpu96EQOUvOvoaZ/77jN
+         jSTX5FpZR4VrOTGZcixeEQl2R5mBefwz7Hc1RSC9dJmhnHO2UU/iTPzALJo9PQHrIv8N
+         FLpDWANJRIM/d/5A/JCoycDb0JWOKp33gZwPSmwst7YdCF7C6RCKq2G9YlhmRdCpTujM
+         nSEb1/B4OsOb6440+nWy930mTxBFZzdiFOJMRVtLbHSsZUbvV4a3+Na5veQHeO87/Qw9
+         Zbcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684317361; x=1686909361;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ayYNauh9YOj0YuMbIMh+fZvBeOH7YM6wlBBt72xWnhI=;
+        b=GQxwvZ0Kv9elNv3N1tUx89JaIN7eHXJ2U+Blk3iIxiFrVk5ig+exiolGBUynwCUZ8x
+         sMLm9Oz5eepY2pZoRlSwrTyMYQJ/CJAJy8meqB4qRRZdUMuT/2OHhP2CExy3kfuThtJR
+         2Pvp5HJaQvXtz9NgjqkgMNfe17+7peG5mTCBXGD8MTQImffDk5GacEmpqzU6M1kd77gT
+         QLT1C3foGUySUfLKc9PTkkre2WnwUzWsN+1teWB/BSAqexgssVZXEZD0GX51j02rVWtH
+         ApE06e2E+ErI7S/4S4SJyEJBmvUTgZoo4snX5jr+zT90C5TxZezmFihowsYwrbsCLUEB
+         UjHw==
+X-Gm-Message-State: AC+VfDyoiyFmccAy4OujUipJQu07m2dydwsuBKwssNTWosD0C303TfUF
+        uzT0c8kcgxOHghkGpvjkQrw=
+X-Google-Smtp-Source: ACHHUZ5hXvFTup24JPN1NmOVtxyJWdFuwnnZ/SrTyzOet8dUUnQEq+IxV3mh5Y9b2PKgrA8uzhrQWQ==
+X-Received: by 2002:a17:903:120d:b0:1a5:2993:8aa6 with SMTP id l13-20020a170903120d00b001a529938aa6mr47905055plh.63.1684317360866;
+        Wed, 17 May 2023 02:56:00 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902eccb00b001a6c15cad12sm667642plh.166.2023.05.17.02.55.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 02:56:00 -0700 (PDT)
+Message-ID: <851f6305-2145-d756-91e3-55ab89bfcd42@gmail.com>
+Date:   Wed, 17 May 2023 17:55:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [RFC PATCH V6 02/14] x86/sev: Add Check of #HV event in path
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        thomas.lendacky@amd.com, venu.busireddy@oracle.com,
+        sterritt@google.com, tony.luck@intel.com, samitolvanen@google.com,
+        fenghua.yu@intel.com, pangupta@amd.com,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-3-ltykernel@gmail.com>
+ <20230516093225.GD2587705@hirez.programming.kicks-ass.net>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <20230516093225.GD2587705@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Loongson-3A6000 and newer processors have hardware page table walker
-(PTW) support. PTW can handle all fastpaths of TLBI/TLBL/TLBS/TLBM
-exceptions by hardware, software only need to handle slowpaths (page
-faults).
+On 5/16/2023 5:32 PM, Peter Zijlstra wrote:
+>> --- a/arch/x86/entry/entry_64.S
+>> +++ b/arch/x86/entry/entry_64.S
+>> @@ -1019,6 +1019,15 @@ SYM_CODE_END(paranoid_entry)
+>>    * R15 - old SPEC_CTRL
+>>    */
+>>   SYM_CODE_START_LOCAL(paranoid_exit)
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +	/*
+>> +	 * If a #HV was delivered during execution and interrupts were
+>> +	 * disabled, then check if it can be handled before the iret
+>> +	 * (which may re-enable interrupts).
+>> +	 */
+>> +	mov     %rsp, %rdi
+>> +	call    check_hv_pending
+>> +#endif
+>>   	UNWIND_HINT_REGS
+>>   
+>>   	/*
+>> @@ -1143,6 +1152,15 @@ SYM_CODE_START(error_entry)
+>>   SYM_CODE_END(error_entry)
+>>   
+>>   SYM_CODE_START_LOCAL(error_return)
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +	/*
+>> +	 * If a #HV was delivered during execution and interrupts were
+>> +	 * disabled, then check if it can be handled before the iret
+>> +	 * (which may re-enable interrupts).
+>> +	 */
+>> +	mov     %rsp, %rdi
+>> +	call    check_hv_pending
+>> +#endif
+>>   	UNWIND_HINT_REGS
+>>   	DEBUG_ENTRY_ASSERT_IRQS_OFF
+>>   	testb	$3, CS(%rsp)
+> Oh hell no... do now you're adding unconditional calls to every single
+> interrupt and nmi exit path, with the grand total of 0 justification.
+> 
 
-BTW, PTW doesn't append _PAGE_MODIFIED for page table entries, so we
-change pmd_dirty() and pte_dirty() to also check _PAGE_DIRTY for the
-"dirty" attribute.
-
-Signed-off-by: Liang Gao <gaoliang@loongson.cn>
-Signed-off-by: Jun Yi <yijun@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-V2: Adjust some coding styles.
-
- arch/loongarch/include/asm/cpu-features.h |  2 +-
- arch/loongarch/include/asm/cpu.h          |  2 ++
- arch/loongarch/include/asm/loongarch.h    |  4 ++++
- arch/loongarch/include/asm/pgtable.h      |  4 ++--
- arch/loongarch/include/asm/tlb.h          |  3 +++
- arch/loongarch/include/uapi/asm/hwcap.h   |  1 +
- arch/loongarch/kernel/cpu-probe.c         |  4 ++++
- arch/loongarch/kernel/proc.c              |  1 +
- arch/loongarch/mm/tlb.c                   | 21 +++++++++++++++++----
- arch/loongarch/mm/tlbex.S                 | 21 +++++++++++++++++++++
- 10 files changed, 56 insertions(+), 7 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch/include/asm/cpu-features.h
-index f6177f133477..2eafe6a6aca8 100644
---- a/arch/loongarch/include/asm/cpu-features.h
-+++ b/arch/loongarch/include/asm/cpu-features.h
-@@ -64,6 +64,6 @@
- #define cpu_has_eiodecode	cpu_opt(LOONGARCH_CPU_EIODECODE)
- #define cpu_has_guestid		cpu_opt(LOONGARCH_CPU_GUESTID)
- #define cpu_has_hypervisor	cpu_opt(LOONGARCH_CPU_HYPERVISOR)
--
-+#define cpu_has_ptw		cpu_opt(LOONGARCH_CPU_PTW)
- 
- #endif /* __ASM_CPU_FEATURES_H */
-diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/asm/cpu.h
-index 88773d849e33..48b9f7168bcc 100644
---- a/arch/loongarch/include/asm/cpu.h
-+++ b/arch/loongarch/include/asm/cpu.h
-@@ -98,6 +98,7 @@ enum cpu_type_enum {
- #define CPU_FEATURE_EIODECODE		23	/* CPU has EXTIOI interrupt pin decode mode */
- #define CPU_FEATURE_GUESTID		24	/* CPU has GuestID feature */
- #define CPU_FEATURE_HYPERVISOR		25	/* CPU has hypervisor (running in VM) */
-+#define CPU_FEATURE_PTW			26	/* CPU has hardware page table walker */
- 
- #define LOONGARCH_CPU_CPUCFG		BIT_ULL(CPU_FEATURE_CPUCFG)
- #define LOONGARCH_CPU_LAM		BIT_ULL(CPU_FEATURE_LAM)
-@@ -125,5 +126,6 @@ enum cpu_type_enum {
- #define LOONGARCH_CPU_EIODECODE		BIT_ULL(CPU_FEATURE_EIODECODE)
- #define LOONGARCH_CPU_GUESTID		BIT_ULL(CPU_FEATURE_GUESTID)
- #define LOONGARCH_CPU_HYPERVISOR	BIT_ULL(CPU_FEATURE_HYPERVISOR)
-+#define LOONGARCH_CPU_PTW		BIT_ULL(CPU_FEATURE_PTW)
- 
- #endif /* _ASM_CPU_H */
-diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
-index b3323ab5b78d..93b22a7af654 100644
---- a/arch/loongarch/include/asm/loongarch.h
-+++ b/arch/loongarch/include/asm/loongarch.h
-@@ -138,6 +138,7 @@ static inline u32 read_cpucfg(u32 reg)
- #define  CPUCFG2_MIPSBT			BIT(20)
- #define  CPUCFG2_LSPW			BIT(21)
- #define  CPUCFG2_LAM			BIT(22)
-+#define  CPUCFG2_PTW			BIT(24)
- 
- #define LOONGARCH_CPUCFG3		0x3
- #define  CPUCFG3_CCDMA			BIT(0)
-@@ -453,6 +454,9 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
- #define  CSR_PWCTL0_PTBASE		(_ULCAST_(0x1f) << CSR_PWCTL0_PTBASE_SHIFT)
- 
- #define LOONGARCH_CSR_PWCTL1		0x1d	/* PWCtl1 */
-+#define  CSR_PWCTL1_PTW_SHIFT		24
-+#define  CSR_PWCTL1_PTW_WIDTH		1
-+#define  CSR_PWCTL1_PTW			(_ULCAST_(0x1) << CSR_PWCTL1_PTW_SHIFT)
- #define  CSR_PWCTL1_DIR3WIDTH_SHIFT	18
- #define  CSR_PWCTL1_DIR3WIDTH_WIDTH	5
- #define  CSR_PWCTL1_DIR3WIDTH		(_ULCAST_(0x1f) << CSR_PWCTL1_DIR3WIDTH_SHIFT)
-diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index d28fb9dbec59..5f93d6eef657 100644
---- a/arch/loongarch/include/asm/pgtable.h
-+++ b/arch/loongarch/include/asm/pgtable.h
-@@ -362,7 +362,7 @@ extern pgd_t invalid_pg_dir[];
-  */
- static inline int pte_write(pte_t pte)	{ return pte_val(pte) & _PAGE_WRITE; }
- static inline int pte_young(pte_t pte)	{ return pte_val(pte) & _PAGE_ACCESSED; }
--static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & _PAGE_MODIFIED; }
-+static inline int pte_dirty(pte_t pte)	{ return pte_val(pte) & (_PAGE_DIRTY | _PAGE_MODIFIED); }
- 
- static inline pte_t pte_mkold(pte_t pte)
- {
-@@ -506,7 +506,7 @@ static inline pmd_t pmd_wrprotect(pmd_t pmd)
- 
- static inline int pmd_dirty(pmd_t pmd)
- {
--	return !!(pmd_val(pmd) & _PAGE_MODIFIED);
-+	return !!(pmd_val(pmd) & (_PAGE_DIRTY | _PAGE_MODIFIED));
- }
- 
- static inline pmd_t pmd_mkclean(pmd_t pmd)
-diff --git a/arch/loongarch/include/asm/tlb.h b/arch/loongarch/include/asm/tlb.h
-index f5e4deb97402..0dc9ee2b05d2 100644
---- a/arch/loongarch/include/asm/tlb.h
-+++ b/arch/loongarch/include/asm/tlb.h
-@@ -163,6 +163,9 @@ extern void handle_tlb_store(void);
- extern void handle_tlb_modify(void);
- extern void handle_tlb_refill(void);
- extern void handle_tlb_protect(void);
-+extern void handle_tlb_load_ptw(void);
-+extern void handle_tlb_store_ptw(void);
-+extern void handle_tlb_modify_ptw(void);
- 
- extern void dump_tlb_all(void);
- extern void dump_tlb_regs(void);
-diff --git a/arch/loongarch/include/uapi/asm/hwcap.h b/arch/loongarch/include/uapi/asm/hwcap.h
-index 8840b72fa8e8..6955a7cb2c65 100644
---- a/arch/loongarch/include/uapi/asm/hwcap.h
-+++ b/arch/loongarch/include/uapi/asm/hwcap.h
-@@ -16,5 +16,6 @@
- #define HWCAP_LOONGARCH_LBT_X86		(1 << 10)
- #define HWCAP_LOONGARCH_LBT_ARM		(1 << 11)
- #define HWCAP_LOONGARCH_LBT_MIPS	(1 << 12)
-+#define HWCAP_LOONGARCH_PTW		(1 << 13)
- 
- #endif /* _UAPI_ASM_HWCAP_H */
-diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/cpu-probe.c
-index f42acc6c8df6..e925579c7a71 100644
---- a/arch/loongarch/kernel/cpu-probe.c
-+++ b/arch/loongarch/kernel/cpu-probe.c
-@@ -136,6 +136,10 @@ static void cpu_probe_common(struct cpuinfo_loongarch *c)
- 		c->options |= LOONGARCH_CPU_CRYPTO;
- 		elf_hwcap |= HWCAP_LOONGARCH_CRYPTO;
- 	}
-+	if (config & CPUCFG2_PTW) {
-+		c->options |= LOONGARCH_CPU_PTW;
-+		elf_hwcap |= HWCAP_LOONGARCH_PTW;
-+	}
- 	if (config & CPUCFG2_LVZP) {
- 		c->options |= LOONGARCH_CPU_LVZ;
- 		elf_hwcap |= HWCAP_LOONGARCH_LVZ;
-diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-index 0d82907b5404..782a34e7336e 100644
---- a/arch/loongarch/kernel/proc.c
-+++ b/arch/loongarch/kernel/proc.c
-@@ -79,6 +79,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 	if (cpu_has_crc32)	seq_printf(m, " crc32");
- 	if (cpu_has_complex)	seq_printf(m, " complex");
- 	if (cpu_has_crypto)	seq_printf(m, " crypto");
-+	if (cpu_has_ptw)	seq_printf(m, " ptw");
- 	if (cpu_has_lvz)	seq_printf(m, " lvz");
- 	if (cpu_has_lbt_x86)	seq_printf(m, " lbt_x86");
- 	if (cpu_has_lbt_arm)	seq_printf(m, " lbt_arm");
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index 8bad6b0cff59..00bb563e3c89 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -167,6 +167,9 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t *ptep
- 	int idx;
- 	unsigned long flags;
- 
-+	if (cpu_has_ptw)
-+		return;
-+
- 	/*
- 	 * Handle debugger faulting in for debugee.
- 	 */
-@@ -222,6 +225,9 @@ static void setup_ptwalker(void)
- 	pwctl0 = pte_i | pte_w << 5 | pmd_i << 10 | pmd_w << 15 | pud_i << 20 | pud_w << 25;
- 	pwctl1 = pgd_i | pgd_w << 6;
- 
-+	if (cpu_has_ptw)
-+		pwctl1 |= CSR_PWCTL1_PTW;
-+
- 	csr_write64(pwctl0, LOONGARCH_CSR_PWCTL0);
- 	csr_write64(pwctl1, LOONGARCH_CSR_PWCTL1);
- 	csr_write64((long)swapper_pg_dir, LOONGARCH_CSR_PGDH);
-@@ -264,10 +270,17 @@ void setup_tlb_handler(int cpu)
- 	if (cpu == 0) {
- 		memcpy((void *)tlbrentry, handle_tlb_refill, 0x80);
- 		local_flush_icache_range(tlbrentry, tlbrentry + 0x80);
--		set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
--		set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
--		set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
--		set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
-+		if (!cpu_has_ptw) {
-+			set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load, VECSIZE);
-+			set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load, VECSIZE);
-+			set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store, VECSIZE);
-+			set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify, VECSIZE);
-+		} else {
-+			set_handler(EXCCODE_TLBI * VECSIZE, handle_tlb_load_ptw, VECSIZE);
-+			set_handler(EXCCODE_TLBL * VECSIZE, handle_tlb_load_ptw, VECSIZE);
-+			set_handler(EXCCODE_TLBS * VECSIZE, handle_tlb_store_ptw, VECSIZE);
-+			set_handler(EXCCODE_TLBM * VECSIZE, handle_tlb_modify_ptw, VECSIZE);
-+		}
- 		set_handler(EXCCODE_TLBNR * VECSIZE, handle_tlb_protect, VECSIZE);
- 		set_handler(EXCCODE_TLBNX * VECSIZE, handle_tlb_protect, VECSIZE);
- 		set_handler(EXCCODE_TLBPE * VECSIZE, handle_tlb_protect, VECSIZE);
-diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
-index 240ced55586e..4ad78703de6f 100644
---- a/arch/loongarch/mm/tlbex.S
-+++ b/arch/loongarch/mm/tlbex.S
-@@ -190,6 +190,13 @@ nopage_tlb_load:
- 	jr		t0
- SYM_FUNC_END(handle_tlb_load)
- 
-+SYM_FUNC_START(handle_tlb_load_ptw)
-+	csrwr		t0, LOONGARCH_CSR_KS0
-+	csrwr		t1, LOONGARCH_CSR_KS1
-+	la_abs		t0, tlb_do_page_fault_0
-+	jr		t0
-+SYM_FUNC_END(handle_tlb_load_ptw)
-+
- SYM_FUNC_START(handle_tlb_store)
- 	csrwr		t0, EXCEPTION_KS0
- 	csrwr		t1, EXCEPTION_KS1
-@@ -339,6 +346,13 @@ nopage_tlb_store:
- 	jr		t0
- SYM_FUNC_END(handle_tlb_store)
- 
-+SYM_FUNC_START(handle_tlb_store_ptw)
-+	csrwr		t0, LOONGARCH_CSR_KS0
-+	csrwr		t1, LOONGARCH_CSR_KS1
-+	la_abs		t0, tlb_do_page_fault_1
-+	jr		t0
-+SYM_FUNC_END(handle_tlb_store_ptw)
-+
- SYM_FUNC_START(handle_tlb_modify)
- 	csrwr		t0, EXCEPTION_KS0
- 	csrwr		t1, EXCEPTION_KS1
-@@ -486,6 +500,13 @@ nopage_tlb_modify:
- 	jr		t0
- SYM_FUNC_END(handle_tlb_modify)
- 
-+SYM_FUNC_START(handle_tlb_modify_ptw)
-+	csrwr		t0, LOONGARCH_CSR_KS0
-+	csrwr		t1, LOONGARCH_CSR_KS1
-+	la_abs		t0, tlb_do_page_fault_1
-+	jr		t0
-+SYM_FUNC_END(handle_tlb_modify_ptw)
-+
- SYM_FUNC_START(handle_tlb_refill)
- 	csrwr		t0, LOONGARCH_CSR_TLBRSAVE
- 	csrrd		t0, LOONGARCH_CSR_PGD
--- 
-2.39.1
-
+Sorry to Add check inside of check_hv_pending(). Will move the check 
+before calling check_hv_pending() in the next version. Thanks.
