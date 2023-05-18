@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D70D708261
-	for <lists+linux-arch@lfdr.de>; Thu, 18 May 2023 15:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EE7708267
+	for <lists+linux-arch@lfdr.de>; Thu, 18 May 2023 15:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbjERNOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 May 2023 09:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S231675AbjERNOb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 May 2023 09:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjERNNh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 May 2023 09:13:37 -0400
+        with ESMTP id S231245AbjERNNz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 May 2023 09:13:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3388F172E;
-        Thu, 18 May 2023 06:12:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9915A1BF2;
+        Thu, 18 May 2023 06:13:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE7E64F44;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C94A64F5F;
+        Thu, 18 May 2023 13:13:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57254C433A8;
         Thu, 18 May 2023 13:12:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790E8C433A7;
-        Thu, 18 May 2023 13:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684415575;
-        bh=gcDd0R4XsxsPBucDmYK1iap8GL8ZX5NOiXczxwUZldM=;
+        s=k20201202; t=1684415586;
+        bh=bke8fOXFDjV1zILAGkdyjNPTOfL1ZR2nFogEIcEnLNk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uu7DJ5RUzqXpTaSuArwglr0rWJYmKTwNtwf/L5azEkL3TnZGpmnZn3fJXUSHUmWpZ
-         dJVivDkIzOHwZOSDa13HbwD6EBl2CPnbpPqmOKR666K2piHTT4NtNULOC3f32AASrE
-         IL7+haD4mgaXB9yLIiarp0uMJAmejmJYqyIEfNMIJgLsVblo4fwUNFeiEu5O1OOvFI
-         OQ4KfeHqtKP5n99HlbyH3fGyXKQJw1mYJbnoFSIXe4fGIsBdqj5OzyqYlrbPjBTpYk
-         /Rv9fPyUwOKT/FJbwRM9rtywAfkUqR3vXa6cu6tZ9IYe6pQ/ThCT2LtfDtqAGmv0ZV
-         E+dV50MoDYR8Q==
+        b=GAMuo5pzwMOpvpmRdsBO4B//KtrUXd+imzrD5Mh3DDlBHufx0EB8V67w+qPAZFV1z
+         dsqcutlrg70o3jltbUb8FdXkMkK0WOJiUziB5H/f9M6hsBAsHfvZAoRpxHo/Hnk2D8
+         OMPuo3LdhV3xqOxptOa0dkbeZEbo4AKYiMSGU5osum00FOUUMxAffoFb8mVcVMhH8J
+         XeXitd2dU/FrKFfnDAI3T+wzVF1rTw/2U5SFNj5R+JMAsFe0U4ohwdoDLHRxLQ1L/i
+         uM55dAsOlzVyslN7sFhhHr/n12ybWoBzk/8MLAWevVB0GKpEtGKqK+xTAD0/MU2Z6q
+         0jXdFydmOx8Sg==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -46,10 +46,11 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         greentime.hu@sifive.com, corbet@lwn.net, wuwei2016@iscas.ac.cn,
         jrtc27@jrtc27.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH 11/22] riscv: s64ilp32: Add ebpf jit support
-Date:   Thu, 18 May 2023 09:10:02 -0400
-Message-Id: <20230518131013.3366406-12-guoren@kernel.org>
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kerenl.org>
+Subject: [RFC PATCH 12/22] riscv: s64ilp32: Add ELF32 support
+Date:   Thu, 18 May 2023 09:10:03 -0400
+Message-Id: <20230518131013.3366406-13-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230518131013.3366406-1-guoren@kernel.org>
 References: <20230518131013.3366406-1-guoren@kernel.org>
@@ -67,82 +68,29 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The s64ilp32 uses the rv64 ISA instruction set, not the rv32 ISA. So
-bpf_jit_comp32.c can't be used for s64ilp32, and we use bpf_jit_comp64.c
-instead. This patch makes s64ilp32 ebpf jit correct and improves the
-performance because bpf_jit_comp32.c has significant gaps in mapping
-ebpf 64-bit ISA.
+Use abi_len to distinct ELF32 and ELF64 because s64ilp32 is xlen=64 and
+abi_len=32 (__SIZEOF_POINTER__=4). And s64ilp32 is an ELF32 based the
+same as s32ilp32.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
+Signed-off-by: Guo Ren <guoren@kerenl.org>
 ---
- arch/riscv/include/asm/extable.h |  2 +-
- arch/riscv/net/Makefile          |  6 +++---
- arch/riscv/net/bpf_jit_comp64.c  | 10 +++++-----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ arch/riscv/include/uapi/asm/elf.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/extable.h b/arch/riscv/include/asm/extable.h
-index 512012d193dc..3ad79a7989e2 100644
---- a/arch/riscv/include/asm/extable.h
-+++ b/arch/riscv/include/asm/extable.h
-@@ -34,7 +34,7 @@ do {							\
+diff --git a/arch/riscv/include/uapi/asm/elf.h b/arch/riscv/include/uapi/asm/elf.h
+index d696d6610231..962e8ec8fe05 100644
+--- a/arch/riscv/include/uapi/asm/elf.h
++++ b/arch/riscv/include/uapi/asm/elf.h
+@@ -24,7 +24,7 @@ typedef __u64 elf_fpreg_t;
+ typedef union __riscv_fp_state elf_fpregset_t;
+ #define ELF_NFPREG (sizeof(struct __riscv_d_ext_state) / sizeof(elf_fpreg_t))
  
- bool fixup_exception(struct pt_regs *regs);
- 
--#if defined(CONFIG_BPF_JIT) && defined(CONFIG_ARCH_RV64I)
-+#if defined(CONFIG_BPF_JIT) && !defined(CONFIG_ARCH_RV32I)
- bool ex_handler_bpf(const struct exception_table_entry *ex, struct pt_regs *regs);
+-#if __riscv_xlen == 64
++#if __SIZEOF_POINTER__ == 8
+ #define ELF_RISCV_R_SYM(r_info)		ELF64_R_SYM(r_info)
+ #define ELF_RISCV_R_TYPE(r_info)	ELF64_R_TYPE(r_info)
  #else
- static inline bool
-diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
-index 9a1e5f0a94e5..907edce21acc 100644
---- a/arch/riscv/net/Makefile
-+++ b/arch/riscv/net/Makefile
-@@ -2,8 +2,8 @@
- 
- obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
- 
--ifeq ($(CONFIG_ARCH_RV64I),y)
--	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
--else
-+ifeq ($(CONFIG_ARCH_RV32I),y)
- 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
-+else
-+	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
- endif
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index f5a668736c79..5a65cd01c73c 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -125,7 +125,7 @@ static u8 rv_tail_call_reg(struct rv_jit_context *ctx)
- 
- static bool is_32b_int(s64 val)
- {
--	return -(1L << 31) <= val && val < (1L << 31);
-+	return -(1LL << 31) <= val && val < (1LL << 31);
- }
- 
- static bool in_auipc_jalr_range(s64 val)
-@@ -134,15 +134,15 @@ static bool in_auipc_jalr_range(s64 val)
- 	 * auipc+jalr can reach any signed PC-relative offset in the range
- 	 * [-2^31 - 2^11, 2^31 - 2^11).
- 	 */
--	return (-(1L << 31) - (1L << 11)) <= val &&
--		val < ((1L << 31) - (1L << 11));
-+	return (-(1LL << 31) - (1LL << 11)) <= val &&
-+		val < ((1LL << 31) - (1LL << 11));
- }
- 
- /* Emit fixed-length instructions for address */
- static int emit_addr(u8 rd, u64 addr, bool extra_pass, struct rv_jit_context *ctx)
- {
--	u64 ip = (u64)(ctx->insns + ctx->ninsns);
--	s64 off = addr - ip;
-+	ulong ip  = (ulong)(ctx->insns + ctx->ninsns);
-+	s64 off   = (ulong)addr - ip;
- 	s64 upper = (off + (1 << 11)) >> 12;
- 	s64 lower = off & 0xfff;
- 
 -- 
 2.36.1
 
