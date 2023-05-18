@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEBA708259
-	for <lists+linux-arch@lfdr.de>; Thu, 18 May 2023 15:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D70D708261
+	for <lists+linux-arch@lfdr.de>; Thu, 18 May 2023 15:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjERNNm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 May 2023 09:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
+        id S231589AbjERNOB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 May 2023 09:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjERNNH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 May 2023 09:13:07 -0400
+        with ESMTP id S231395AbjERNNh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 May 2023 09:13:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1582102;
-        Thu, 18 May 2023 06:12:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3388F172E;
+        Thu, 18 May 2023 06:12:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79A1764F36;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BE7E64F44;
+        Thu, 18 May 2023 13:12:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790E8C433A7;
         Thu, 18 May 2023 13:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F63AC4339E;
-        Thu, 18 May 2023 13:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684415563;
-        bh=K6yzC4DxTrto6TIigKOf2HSRiKwOssJzxGPb5qsG5uk=;
+        s=k20201202; t=1684415575;
+        bh=gcDd0R4XsxsPBucDmYK1iap8GL8ZX5NOiXczxwUZldM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oXJAwAIukQyUqKfJu7LCrvsuxh/2lr7uu5dOljJseAAxlywm7yBd0VVked85CNfjq
-         IuuSjQ3DcQgJRFeh45p3dQgYfRpVz2tNQolXVKu9rK0sZ2MgE0882A/1QHYou7eh07
-         4XNgn+8fsLlgrSHNcB3MocDEWrzhpRblVSC8K2jrSn0CbS7jrAdUasfwC32+By7tc0
-         7f/1X9uwq+ZwYRbv8qHiTjboPIJEija8peqdWLq59oc44Q9Ca+TaUuK8KWZYNnf5Hd
-         dl7nEC2nrfl05jQzwP2H1hXitACGVH5WlldFt/AFHIws3dqz6Xaxb08Lxc3x8D3btO
-         j29hJzbTHERLA==
+        b=Uu7DJ5RUzqXpTaSuArwglr0rWJYmKTwNtwf/L5azEkL3TnZGpmnZn3fJXUSHUmWpZ
+         dJVivDkIzOHwZOSDa13HbwD6EBl2CPnbpPqmOKR666K2piHTT4NtNULOC3f32AASrE
+         IL7+haD4mgaXB9yLIiarp0uMJAmejmJYqyIEfNMIJgLsVblo4fwUNFeiEu5O1OOvFI
+         OQ4KfeHqtKP5n99HlbyH3fGyXKQJw1mYJbnoFSIXe4fGIsBdqj5OzyqYlrbPjBTpYk
+         /Rv9fPyUwOKT/FJbwRM9rtywAfkUqR3vXa6cu6tZ9IYe6pQ/ThCT2LtfDtqAGmv0ZV
+         E+dV50MoDYR8Q==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -47,14 +47,13 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         jrtc27@jrtc27.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH 10/22] riscv: s64ilp32: Enable user space runtime environment
-Date:   Thu, 18 May 2023 09:10:01 -0400
-Message-Id: <20230518131013.3366406-11-guoren@kernel.org>
+Subject: [RFC PATCH 11/22] riscv: s64ilp32: Add ebpf jit support
+Date:   Thu, 18 May 2023 09:10:02 -0400
+Message-Id: <20230518131013.3366406-12-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20230518131013.3366406-1-guoren@kernel.org>
 References: <20230518131013.3366406-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -68,91 +67,81 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-RV64ILP32 uses the same setting from COMPAT mode for the user
-space runtime environment. They all have the same 2GB TASK_SIZE.
+The s64ilp32 uses the rv64 ISA instruction set, not the rv32 ISA. So
+bpf_jit_comp32.c can't be used for s64ilp32, and we use bpf_jit_comp64.c
+instead. This patch makes s64ilp32 ebpf jit correct and improves the
+performance because bpf_jit_comp32.c has significant gaps in mapping
+ebpf 64-bit ISA.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/include/asm/csr.h     | 2 --
- arch/riscv/include/asm/pgtable.h | 8 +++++++-
- arch/riscv/kernel/process.c      | 4 +++-
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ arch/riscv/include/asm/extable.h |  2 +-
+ arch/riscv/net/Makefile          |  6 +++---
+ arch/riscv/net/bpf_jit_comp64.c  | 10 +++++-----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index adc3c866d353..7558e0808af4 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -36,11 +36,9 @@
- #define SR_SD		_AC(0x8000000000000000, ULL) /* FS/XS dirty */
- #endif
+diff --git a/arch/riscv/include/asm/extable.h b/arch/riscv/include/asm/extable.h
+index 512012d193dc..3ad79a7989e2 100644
+--- a/arch/riscv/include/asm/extable.h
++++ b/arch/riscv/include/asm/extable.h
+@@ -34,7 +34,7 @@ do {							\
  
--#if __riscv_xlen == 64
- #define SR_UXL		_AC(0x300000000, ULL) /* XLEN mask for U-mode */
- #define SR_UXL_32	_AC(0x100000000, ULL) /* XLEN = 32 for U-mode */
- #define SR_UXL_64	_AC(0x200000000, ULL) /* XLEN = 64 for U-mode */
--#endif
+ bool fixup_exception(struct pt_regs *regs);
  
- /* SATP flags */
- #if __riscv_xlen == 32
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 3303fc03d724..d7b8eff0ade9 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -830,26 +830,32 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
-  * -     0x9fc00000 (~2.5GB) for RV32.
-  * -   0x4000000000 ( 256GB) for RV64 using SV39 mmu
-  * - 0x800000000000 ( 128TB) for RV64 using SV48 mmu
-+ * -     0x80000000 (   2GB) for COMPAT and RV64ILP32
-  *
-  * Note that PGDIR_SIZE must evenly divide TASK_SIZE since "RISC-V
-  * Instruction Set Manual Volume II: Privileged Architecture" states that
-  * "load and store effective addresses, which are 64bits, must have bits
-  * 63–48 all equal to bit 47, or else a page-fault exception will occur."
-  */
-+#define TASK_SIZE_32	(_AC(0x80000000, UL) - PAGE_SIZE)
-+
- #ifdef CONFIG_64BIT
- #define TASK_SIZE_64	(PGDIR_SIZE * PTRS_PER_PGD / 2)
- #define TASK_SIZE_MIN	(PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
- 
- #ifdef CONFIG_COMPAT
--#define TASK_SIZE_32	(_AC(0x80000000, UL) - PAGE_SIZE)
- #define TASK_SIZE	(test_thread_flag(TIF_32BIT) ? \
- 			 TASK_SIZE_32 : TASK_SIZE_64)
+-#if defined(CONFIG_BPF_JIT) && defined(CONFIG_ARCH_RV64I)
++#if defined(CONFIG_BPF_JIT) && !defined(CONFIG_ARCH_RV32I)
+ bool ex_handler_bpf(const struct exception_table_entry *ex, struct pt_regs *regs);
  #else
- #define TASK_SIZE	TASK_SIZE_64
- #endif
+ static inline bool
+diff --git a/arch/riscv/net/Makefile b/arch/riscv/net/Makefile
+index 9a1e5f0a94e5..907edce21acc 100644
+--- a/arch/riscv/net/Makefile
++++ b/arch/riscv/net/Makefile
+@@ -2,8 +2,8 @@
  
-+#else
-+#ifdef CONFIG_ARCH_RV64ILP32
-+#define TASK_SIZE	TASK_SIZE_32
- #else
- #define TASK_SIZE	FIXADDR_START
-+#endif
- #define TASK_SIZE_MIN	TASK_SIZE
- #endif
+ obj-$(CONFIG_BPF_JIT) += bpf_jit_core.o
  
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index ab01b51a5bb9..e033dbe5b5eb 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -125,13 +125,15 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
- 	regs->epc = pc;
- 	regs->sp = sp;
+-ifeq ($(CONFIG_ARCH_RV64I),y)
+-	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
+-else
++ifeq ($(CONFIG_ARCH_RV32I),y)
+ 	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp32.o
++else
++	obj-$(CONFIG_BPF_JIT) += bpf_jit_comp64.o
+ endif
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index f5a668736c79..5a65cd01c73c 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -125,7 +125,7 @@ static u8 rv_tail_call_reg(struct rv_jit_context *ctx)
  
--#ifdef CONFIG_64BIT
- 	regs->status &= ~SR_UXL;
- 
-+#ifdef CONFIG_64BIT
- 	if (is_compat_task())
- 		regs->status |= SR_UXL_32;
- 	else
- 		regs->status |= SR_UXL_64;
-+#else
-+		regs->status |= SR_UXL_32;
- #endif
+ static bool is_32b_int(s64 val)
+ {
+-	return -(1L << 31) <= val && val < (1L << 31);
++	return -(1LL << 31) <= val && val < (1LL << 31);
  }
+ 
+ static bool in_auipc_jalr_range(s64 val)
+@@ -134,15 +134,15 @@ static bool in_auipc_jalr_range(s64 val)
+ 	 * auipc+jalr can reach any signed PC-relative offset in the range
+ 	 * [-2^31 - 2^11, 2^31 - 2^11).
+ 	 */
+-	return (-(1L << 31) - (1L << 11)) <= val &&
+-		val < ((1L << 31) - (1L << 11));
++	return (-(1LL << 31) - (1LL << 11)) <= val &&
++		val < ((1LL << 31) - (1LL << 11));
+ }
+ 
+ /* Emit fixed-length instructions for address */
+ static int emit_addr(u8 rd, u64 addr, bool extra_pass, struct rv_jit_context *ctx)
+ {
+-	u64 ip = (u64)(ctx->insns + ctx->ninsns);
+-	s64 off = addr - ip;
++	ulong ip  = (ulong)(ctx->insns + ctx->ninsns);
++	s64 off   = (ulong)addr - ip;
+ 	s64 upper = (off + (1 << 11)) >> 12;
+ 	s64 lower = off & 0xfff;
  
 -- 
 2.36.1
