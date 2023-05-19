@@ -2,175 +2,168 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507E970A038
-	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 21:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F0870A07D
+	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 22:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjEST6Z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 May 2023 15:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S230217AbjESUVA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 May 2023 16:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjEST6Y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 15:58:24 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C90E5A
-        for <linux-arch@vger.kernel.org>; Fri, 19 May 2023 12:57:47 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-561fc920e70so41677217b3.0
-        for <linux-arch@vger.kernel.org>; Fri, 19 May 2023 12:57:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684526250; x=1687118250;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKqky4qtLhLMqwc+jYDJn6p8bYat7L/lp+nKxMPkRyY=;
-        b=Y4/nCNzrFtAXrTxhpgxnIohVGQ15GL4scvI0E/2mwJYj0GQbPVuXot7Jeu/0WvRvj2
-         9Uxos5w5dD8ChOUGochlppnIBC5WV72wtD3Z57q1qVzEB6BAU0zrp0Rj839OpxiYl1kv
-         G7aILpvUERbXB4ndb2rR/5sC8oXuhx9NqV1vUAEDqYGF4xFHckOEfCC8e/Xg4DdMuR9l
-         zQm9PUkP+OBFNpwTjL8yMr9HKgLvxTY4wkwyU4C1eKD22zw0o+8bYInRVaF8kFuyTWom
-         12s22nrLwFtLZKHZJekTC38ZFlIu/iG4U6Mf6VoeQ952/z/sfp8161qhLkUY71jT5lqI
-         iHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684526250; x=1687118250;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKqky4qtLhLMqwc+jYDJn6p8bYat7L/lp+nKxMPkRyY=;
-        b=bZAOeS56X1Cn+JRMmGxUrM1J0eD//z32FR/pXTTnisp8cTEF7CmxLItPgSRy9BVd8C
-         C8bObN1ECXJm2C6SnxQds+8hm/R6xhAT07Ch7pCA5kdG3EuzN9ccQMaJVfcj2VBN7Rbv
-         Go7fwFF/k2UCBHuHh+sTFNvSoUwWVglJj85y90uqMR8Xn3SO/RB1jqt+3107L27nhpbZ
-         1mHOOtqJlVms+sp3AMDZGq7BzDZ5Fsz+e+Aw/KHQ9YnbTMUw451ksamgJY5a817PSOvN
-         JX+RghqBcWLpKTgjvwAfzR3rnGuqjO15lJ598I5XN0pOVxOq0223k+2oEA1u2IUN84nN
-         X1Hw==
-X-Gm-Message-State: AC+VfDzaddTwi1DZEA1txs6xjhQDWdv/FSr0GrWASgeCC7KJTMEulto2
-        aCma95Q0eb7C3B48Q45dIUfnZLPxDWI=
-X-Google-Smtp-Source: ACHHUZ6FEiPmU5v43LWifQRBpo81052L49sw5QgxYInZToAzWsR8mGtYDH7+PppQKkPgp34+c6aLJuvLWhk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:9f0a:0:b0:561:949f:227 with SMTP id
- s10-20020a819f0a000000b00561949f0227mr1854093ywn.1.1684526250423; Fri, 19 May
- 2023 12:57:30 -0700 (PDT)
-Date:   Fri, 19 May 2023 12:57:28 -0700
-In-Reply-To: <CSQI5IB968XC.GO0OPMYT1C8N@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
+        with ESMTP id S229653AbjESUVA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 16:21:00 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094E6102;
+        Fri, 19 May 2023 13:20:47 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E987432005BC;
+        Fri, 19 May 2023 16:20:43 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 16:20:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684527643; x=1684614043; bh=oI
+        JfFfhJfrFit/dFRNXoBCxBw8LbYIGZS18hb/Tgxjk=; b=f3ZkNvTprv0bWj9ozZ
+        MdUK0zGhSmAyXcHmPJ6qbVfWmrpn3ByC9jsOzGIt4lKARxpzUUcjWsRHAlg2GjCH
+        pS9GwC5PGcSdbYlgqvAp6YCdagg1X2xpGiarYWp4uzU5Uy2sQNPRVnl+ZM7a1gPh
+        TtnAzTuHoKqS+giSVNNvxMNoTFNcqyC/ZbvA1UPF+6ei4TAhjpJ0AI6D8XxJWE6B
+        VKOoI+DUB3L0IQCHLDk8LxfY5snJzRXoDPRzzJaralCKAfswbnzNqmoRuTcA/xdH
+        waV6docyZYaW1KGzTA493KL4uOZHU8q/ASjCHRmYvCSW11G/xcs7kSVFgTZ2KimP
+        rEuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684527643; x=1684614043; bh=oIJfFfhJfrFit
+        /dFRNXoBCxBw8LbYIGZS18hb/Tgxjk=; b=aoLi/APTXljwnO2BmJWbRFXr53n9v
+        Y77nUM8qaiD720EcWMgd3IWkinmqH2o/XLRxlBPBHsABVkmfjWi1SibnzYbQTpCx
+        dIA7bBwAuMpuT5LkgDRk63zVBsY3E4lRzLM0TrDF1+xZRwRF9GxNMV3yW3/dwSMJ
+        Sv1g0p3SP7ossBoVOxBVU3Vr2fIrjdvUJGBJDGtJAcL5bbTmru0z2qBdnBSOcPrg
+        JYwm3E/mSSiVoOmTCHDH400EBVJrjXjvJYuZHi3Lx55guFf/m1KzACMlxnseGm4E
+        clVPVf7kgUYP7vXhr0vhuI1USkheTKxrBXUOlCPODBgiNt1LJAbAADyLw==
+X-ME-Sender: <xms:GtpnZPsxN_NS7FgRT4VuGEonfEAEgCmFwlEy4aXR26x03pLGsukSTA>
+    <xme:GtpnZAfmwSpNBHpf1uZE5AodjZSIK93uaJaV6fwUhFD-c_M2vArf0dRn0UqAQaQvc
+    JI5dYNc9JHHB6g-pss>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgudegkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:GtpnZCyTDYF6Bch9LxKQea2EqL2sMI-H81L0z21W46lU3wj6DrHsKQ>
+    <xmx:GtpnZOOddD43qO_tabxl4BLNVwVtBjAJPoPJcOZ-k1n14_-tNr1DqQ>
+    <xmx:GtpnZP_vCAGbxyA16iJIz8aQsjWkRdmBh6hLxW-y6YOTJ6uuUT_q5A>
+    <xmx:G9pnZOfkGqiHQtYDuLtcDpE1vCg3IaArb5e9xelrwhm26lH9XNc_Vg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 07D16B6008D; Fri, 19 May 2023 16:20:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
 Mime-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com> <CSQFE7I30W27.2TPDIHOTZNRIZ@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
- <ZGe+m+uFzpiW7wlr@google.com> <CSQI5IB968XC.GO0OPMYT1C8N@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
-Message-ID: <ZGfUqBLaO+cI9ypv@google.com>
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-From:   Sean Christopherson <seanjc@google.com>
-To:     Nicolas Saenz Julienne <nsaenz@amazon.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, graf@amazon.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com, anelkz@amazon.de
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-Id: <b3689d7f-1a78-46ea-8e1f-48bc080ce993@app.fastmail.com>
+In-Reply-To: <20230518131013.3366406-1-guoren@kernel.org>
+References: <20230518131013.3366406-1-guoren@kernel.org>
+Date:   Fri, 19 May 2023 22:20:21 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     guoren <guoren@kernel.org>, "Palmer Dabbelt" <palmer@rivosinc.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Anup Patel" <anup@brainfault.org>, shihua@iscas.ac.cn,
+        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
+        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
+        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
+        "Andy Chiu" <andy.chiu@sifive.com>,
+        "Vincent Chen" <vincent.chen@sifive.com>,
+        "Greentime Hu" <greentime.hu@sifive.com>,
+        "Jonathan Corbet" <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
+        "Jessica Clarke" <jrtc27@jrtc27.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Guo Ren" <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on 64-bit
+ supervisor mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 19, 2023, Nicolas Saenz Julienne wrote:
-> Hi Sean,
-> 
-> On Fri May 19, 2023 at 6:23 PM UTC, Sean Christopherson wrote:
-> > On Fri, May 19, 2023, Nicolas Saenz Julienne wrote:
-> > > Hi,
-> > >
-> > > On Fri Dec 2, 2022 at 6:13 AM UTC, Chao Peng wrote:
-> > >
-> > > [...]
-> > > > +The user sets the per-page memory attributes to a guest memory range indicated
-> > > > +by address/size, and in return KVM adjusts address and size to reflect the
-> > > > +actual pages of the memory range have been successfully set to the attributes.
-> > > > +If the call returns 0, "address" is updated to the last successful address + 1
-> > > > +and "size" is updated to the remaining address size that has not been set
-> > > > +successfully. The user should check the return value as well as the size to
-> > > > +decide if the operation succeeded for the whole range or not. The user may want
-> > > > +to retry the operation with the returned address/size if the previous range was
-> > > > +partially successful.
-> > > > +
-> > > > +Both address and size should be page aligned and the supported attributes can be
-> > > > +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
-> > > > +
-> > > > +The "flags" field may be used for future extensions and should be set to 0s.
-> > >
-> > > We have been looking into adding support for the Hyper-V VSM extensions
-> > > which Windows uses to implement Credential Guard. This interface seems
-> > > like a good fit for one of its underlying features. I just wanted to
-> > > share a bit about it, and see if we can expand it to fit this use-case.
-> > > Note that this was already briefly discussed between Sean and Alex some
-> > > time ago[1].
-> > >
-> > > VSM introduces isolated guest execution contexts called Virtual Trust
-> > > Levels (VTL) [2]. Each VTL has its own memory access protections,
-> > > virtual processors states, interrupt controllers and overlay pages. VTLs
-> > > are hierarchical and might enforce memory protections on less privileged
-> > > VTLs. Memory protections are enforced on a per-GPA granularity.
-> > >
-> > > The list of possible protections is:
-> > > - No access -- This needs a new memory attribute, I think.
-> >
-> > No, if KVM provides three bits for READ, WRITE, and EXECUTE, then userspace can
-> > get all the possible combinations.  E.g. this is RWX=000b
-> 
-> That's not what the current implementation does, when attributes is
-> equal 0 it clears the entries from the xarray:
-> 
-> static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
-> 					   struct kvm_memory_attributes *attrs)
-> {
-> 
->     entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
-> [...]
->     for (i = start; i < end; i++)
->     	if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
->     			    GFP_KERNEL_ACCOUNT)))
->         		break;
-> }
-> 
-> >From Documentation/core-api/xarray.rst:
-> 
-> "There is no difference between an entry that has never
-> been stored to, one that has been erased and one that has most recently
-> had ``NULL`` stored to it."
-> 
-> The way I understood the series, there needs to be a differentiation
-> between no attributes (regular page fault) and no-access.
+On Thu, May 18, 2023, at 15:09, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> Why 32-bit Linux?
+> =================
+> The motivation for using a 32-bit Linux kernel is to reduce memory
+> footprint and meet the small capacity of DDR & cache requirement
+> (e.g., 64/128MB SIP SoC).
+>
+> Here are the 32-bit v.s. 64-bit Linux kernel data type comparison
+> summary:
+> 			32-bit		64-bit
+> sizeof(page):		32bytes		64bytes
+> sizeof(list_head):	8bytes		16bytes
+> sizeof(hlist_head):	8bytes		16bytes
+> sizeof(vm_area):	68bytes		136bytes
+> ...
 
-Ah, I see what you're saying.  There are multiple ways to solve things without a
-"no access" flag while still maintaining an empty xarray for the default case.
-E.g. invert the flags to be DENY flags[*], have an internal-only "entry valid" flag,
-etc.
+> Mem-usage:
+> (s32ilp32) # free
+>        total   used   free  shared  buff/cache   available
+> Mem:  100040   8380  88244      44        3416       88080
+>
+> (s64lp64)  # free
+>        total   used   free  shared  buff/cache   available
+> Mem:   91568  11848  75796      44        3924       75952
+>
+> (s64ilp32) # free
+>        total   used   free  shared  buff/cache   available
+> Mem:  101952   8528  90004      44        3420       89816
+>                      ^^^^^
+>
+> It's a rough measurement based on the current default config without any
+> modification, and 32-bit (s32ilp32, s64ilp32) saved more than 16% memory
+> to 64-bit (s64lp64). But s32ilp32 & s64ilp32 have a similar memory
+> footprint (about 0.33% difference), meaning s64ilp32 has a big chance to
+> replace s32ilp32 on the 64-bit machine.
 
-[*] I vaguely recall suggesting a "deny" approach somewhere, but I may just be
-    making things up to make it look like I thought deeply about this ;-)
+I've tried to run the same numbers for the debate about running
+32-bit vs 64-bit arm kernels in the past, but focused mostly on
+slightly larger systems, but I looked mainly at the 512MB case,
+as that is the most cost-efficient DDR3 memory configuration
+and fairly common.
+
+What I'd like to understand better in your example is where
+the 14MB of memory went. I assume this is for 128MB of total
+RAM, so we know that 1MB went into additional 'struct page'
+objects (32 bytes * 32768 pages). It would be good to know
+where the dynamic allocations went and if they are  reclaimable
+(e.g. inodes) or non-reclaimable (e.g. kmalloc-128).
+
+For the vmlinux size, is this already a minimal config
+that one would run on a board with 128MB of RAM, or a
+defconfig that includes a lot of stuff that is only relevant
+for other platforms but also grows on 64-bit?
+
+What do you see in /proc/slabinfo, /proc/meminfo/, and
+'size vmlinux' for the s64ilp32 and s64lp64 kernels here?
+
+       Arnd
