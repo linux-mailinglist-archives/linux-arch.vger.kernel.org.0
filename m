@@ -2,90 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C367095DD
-	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 13:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FD4709611
+	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 13:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjESLFE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 May 2023 07:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S231594AbjESLRq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 May 2023 07:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjESLFC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 07:05:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B7E10F3;
-        Fri, 19 May 2023 04:04:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F937656AE;
-        Fri, 19 May 2023 11:04:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37386C433D2;
-        Fri, 19 May 2023 11:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684494276;
-        bh=7ECRcKgwCdyyTgDBbJz0zfr1+MHn2oRz/WMFm82eUgo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dYIHI3O/ukDbC0JJEKE54/DYeU/wAF3SvmrKeZAiqGvL3K3SBC0MNpHvYqe7DVx+N
-         6GU3h+6qL68gk0a7MjdQ61JMaGO0SJpZS6vltmcdVN2VP+wXgz6omdFaKihVKIQ6WV
-         cSGeefn9Cec0eBSjPvrbpALM8nmHNL9Uof6aYsGbRh4e6VCiH2TUAd34XBucA26cfl
-         NfuFO2sblCy69w9PyOO2CjWrAFciMslywAztINCVB/92zevnoynu44LvORUK5YgGtp
-         LTw3VlSQWGlyFNUXynNmQsks5fq7gHrA84JwnvPfYk6kgmcSzM7XIlbaGk8AGi1+yN
-         C9ndWmCjaH1Ug==
-Date:   Fri, 19 May 2023 13:04:30 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v5 3/3] selftests: net: add SCM_PIDFD /
- SO_PEERPIDFD test
-Message-ID: <20230519-zenit-schmieden-7f2aaa22ab08@brauner>
-References: <20230517113351.308771-1-aleksandr.mikhalitsyn@canonical.com>
- <20230517113351.308771-4-aleksandr.mikhalitsyn@canonical.com>
+        with ESMTP id S231502AbjESLRp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 07:17:45 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34056180
+        for <linux-arch@vger.kernel.org>; Fri, 19 May 2023 04:17:44 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-96f683e8855so81563766b.2
+        for <linux-arch@vger.kernel.org>; Fri, 19 May 2023 04:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684495062; x=1687087062;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
+        b=JSg3rdU6W2mjqmEc+mB2A7cFmRegMCR83SHfOjxmRVbwY2A7mgymSN+oh42ISHBfwO
+         GhYoUeZQdTAgrrktfs4VHXg5wvlxv+psdIxXqG71lRhZUTeGY0gkCC1W0WGnQ2KuhHot
+         +NPDFYfn4R+L8OP+VhWdlcDsDSc9o5ruZin0Jy7jEd2WIJigUk3W15VR/5RcuFsK0DW/
+         FpfL86ckeVx6y5Gc/4Q2cQwsXt6HqauHnQBLsDdwzZSaOMbN/NAWKn10V/OC4oS8nobW
+         BkYyI389vonSGsu8g2o2QiZVmSCS1RCYF7e1+Ah3/AvqFMUnq3kHlvS8oKVbVQM9I4Wp
+         NQBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684495062; x=1687087062;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YmxaI1amCfTksu6ynk2557PwK0HJxrBQmYIx/Pz5hBs=;
+        b=dYvt7Aq/H702OYbULv0TNuicBdzLXy+jyxlBSubQxvxLM9pPY2GWFg7ZYJ0P2i/bYV
+         V7HmvK/76QNHD8QVhsyo00iRA8ccN4lGtb/Xh6ykImnrIJ0Fi7X9FMoTJTKA/fo1Gynb
+         MSJnWUEUsN6e3/TuKmS41gILjugdZ3n1KnrTh4OhH6PfdLT+SYyswnFXm2v/iRuqsJsg
+         Hb64vDUpnryNm3idXY7UBpfjMvhOK2+5HnFYG8Ts67/22BcKBg0RFhrMVw2rC1DdXjLc
+         znWhlPKSUGmkfjGs63k0xJqE2P3WUCSWwk44+RFffv7proNCSV7MLgJavWNQ1Ol27GvO
+         JLgw==
+X-Gm-Message-State: AC+VfDzIBrMUEI/Dtl1ADP+WTwQ7EShKhqSgji0vytsbtLd06qgVOflZ
+        I+fwa4babEZcG4gRWgymNZmRc5nR8P+9GD2YoZg=
+X-Google-Smtp-Source: ACHHUZ4GcdKjctEWmkMJD/Q5ZDCusH7zrjV+w4c4EgP8GDbM+BMa7NNuPpP4cOMUW2oAUk/kOHHzW6hqw5zKR98kQX0=
+X-Received: by 2002:a17:907:1b12:b0:8b8:c06e:52d8 with SMTP id
+ mp18-20020a1709071b1200b008b8c06e52d8mr1298232ejc.36.1684495062361; Fri, 19
+ May 2023 04:17:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230517113351.308771-4-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a17:907:7dab:b0:94f:7d03:8e8b with HTTP; Fri, 19 May 2023
+ 04:17:41 -0700 (PDT)
+Reply-To: ninacoulibaly03@myself.com
+From:   nina coulibaly <ninacoulibaly199@gmail.com>
+Date:   Fri, 19 May 2023 04:17:41 -0700
+Message-ID: <CAM7Z2JAd00KW6b=O8M27vwRnsJ1w3AmDO5tP+gSmzkaHvk6=CA@mail.gmail.com>
+Subject: from nina coulibaly
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 17, 2023 at 01:33:51PM +0200, Alexander Mikhalitsyn wrote:
-> Basic test to check consistency between:
-> - SCM_CREDENTIALS and SCM_PIDFD
-> - SO_PEERCRED and SO_PEERPIDFD
-> 
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Leon Romanovsky <leon@kernel.org>
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
-> v3:
-> 	- started using kselftest lib (thanks to Kuniyuki Iwashima for suggestion/review)
-> 	- now test covers abstract sockets too and SOCK_DGRAM sockets
+Dear,
 
-Thanks for adding tests!
+Please grant me permission to share a very crucial discussion with
+you. I am looking forward to hearing from you at your earliest
+convenience.
+
+Mrs. Nina Coulibal
