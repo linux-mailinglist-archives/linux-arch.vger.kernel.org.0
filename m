@@ -2,41 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224A4709CB0
-	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 18:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED49709CB9
+	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 18:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjESQqZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 May 2023 12:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S230414AbjESQq0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 May 2023 12:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjESQqX (ORCPT
+        with ESMTP id S229693AbjESQqX (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 12:46:23 -0400
 Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDA7FD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A82D7;
         Fri, 19 May 2023 09:46:20 -0700 (PDT)
 Received: from meer.lwn.net (unknown [IPv6:2601:281:8300:73::5f6])
-        by ms.lwn.net (Postfix) with ESMTPA id 748AE199D;
-        Fri, 19 May 2023 16:46:19 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 748AE199D
+        by ms.lwn.net (Postfix) with ESMTPA id 3333819A1;
+        Fri, 19 May 2023 16:46:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3333819A1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1684514780; bh=yC21aSJ9Ksz4u7SK0ZsLWlkzX/cIS/360Ea9jar6d3Y=;
+        t=1684514780; bh=Typx73HH5Gd+kwsk85KMjj7kbllgRR94xrmNw2BZIlU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gsXqpnjmlXUntcNuwafml/Q5P2x7g1L+jUcZ0L5WcBfl3LYT9uGKPAlR6s0N0mwGS
-         /Ha4tiSwvuQkmhSQDLOtk+jB7EHxFS3LRO0qQ26nleT7R/yfyKrxt/e+bxGpqXuYJ+
-         Vz+Weq3haOJ3iIpifC3PRikcJ8j0hFGkehpI9WtYNynmZC2m4HpTY2ddkGhsaebvPD
-         dR//DICCkwH28k0vRnSwOAB+TZVmsOPvNiXOC9aSztyz02d5YRjtWDKyKNAqHqA6o+
-         TsbE8IuMdB9O+ahKXD0z8E00WiQwekE6p4qlh4MPnbMIq9/l5sofQ2gAQbFAJB9K+t
-         TgvbHxyZU+tUg==
+        b=WYI9WZkuzzYdOF/ltlyGKGxTsSsq8BvSweA7Cnufsie0rpDev0ptv3ow+LRSTtmlx
+         H/F+kFYDi6PAlZAEKinva456styPUODrq/wK0uk6CqIjrtH3sHPPzGjHj04Q8do8Yj
+         uzE97B3xrKEVOlD4H6E6iXctDnVsyJccoDBtsU/Stf/JwKwzGm5rGP5e1und4nj3mx
+         I7N2UhDJCd4yVLpJTNmmSe25xPbPvtUL3PC7Mr3k2TNl8U0LFJEOpIZBtC8Na/USdm
+         tMJ500oLGErYfQB+9qXtsn0t8bRgKO4Hc1Ba0xJPoszewn4jS1N9/Pvyq/zKeyB63+
+         aubfm6Tg3CusQ==
 From:   Jonathan Corbet <corbet@lwn.net>
 To:     linux-doc@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH 3/7] arm64: Update Documentation/arm references
-Date:   Fri, 19 May 2023 10:46:03 -0600
-Message-Id: <20230519164607.38845-4-corbet@lwn.net>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: [PATCH 4/7] mips: update a reference to a moved Arm Document
+Date:   Fri, 19 May 2023 10:46:04 -0600
+Message-Id: <20230519164607.38845-5-corbet@lwn.net>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230519164607.38845-1-corbet@lwn.net>
 References: <20230519164607.38845-1-corbet@lwn.net>
@@ -52,44 +53,33 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The Arm documentation has moved to Documentation/arch/arm; update
-references under arch/arm64 to match.
+Arm documentation has moved to Documentation/arch/arm; update a reference
+in arch/mips/bmips/setup.c to match.
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
 Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 ---
- arch/arm64/Kconfig          | 2 +-
- arch/arm64/kernel/kuser32.S | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/mips/bmips/setup.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b1201d25a8a4..377f50dda2de 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1619,7 +1619,7 @@ config KUSER_HELPERS
- 	  the system. This permits binaries to be run on ARMv4 through
- 	  to ARMv8 without modification.
+diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+index 549a6392a3d2..053805cb741c 100644
+--- a/arch/mips/bmips/setup.c
++++ b/arch/mips/bmips/setup.c
+@@ -178,7 +178,10 @@ void __init plat_mem_setup(void)
+ 	ioport_resource.start = 0;
+ 	ioport_resource.end = ~0;
  
--	  See Documentation/arm/kernel_user_helpers.rst for details.
-+	  See Documentation/arch/arm/kernel_user_helpers.rst for details.
- 
- 	  However, the fixed address nature of these helpers can be used
- 	  by ROP (return orientated programming) authors when creating
-diff --git a/arch/arm64/kernel/kuser32.S b/arch/arm64/kernel/kuser32.S
-index 692e9d2e31e5..af046ceac22d 100644
---- a/arch/arm64/kernel/kuser32.S
-+++ b/arch/arm64/kernel/kuser32.S
-@@ -10,7 +10,7 @@
-  * aarch32_setup_additional_pages() and are provided for compatibility
-  * reasons with 32 bit (aarch32) applications that need them.
-  *
-- * See Documentation/arm/kernel_user_helpers.rst for formal definitions.
-+ * See Documentation/arch/arm/kernel_user_helpers.rst for formal definitions.
-  */
- 
- #include <asm/unistd.h>
+-	/* intended to somewhat resemble ARM; see Documentation/arm/booting.rst */
++	/*
++	 * intended to somewhat resemble ARM; see
++	 * Documentation/arch/arm/booting.rst
++	 */
+ 	if (fw_arg0 == 0 && fw_arg1 == 0xffffffff)
+ 		dtb = phys_to_virt(fw_arg2);
+ 	else
 -- 
 2.40.1
 
