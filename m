@@ -2,146 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861E4708D4F
-	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 03:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C740709244
+	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 10:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjESB1F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 May 2023 21:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        id S230072AbjESIzz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 May 2023 04:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjESB1E (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 May 2023 21:27:04 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C871699
-        for <linux-arch@vger.kernel.org>; Thu, 18 May 2023 18:27:03 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba1815e12efso2398954276.3
-        for <linux-arch@vger.kernel.org>; Thu, 18 May 2023 18:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684459623; x=1687051623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lvP7Q1DPXjSG9iBptgkojp087iyFGiylW3zAHv1G0s=;
-        b=vOVrSlpzLvgAwRxr0Q+rmluXHst7drYbuTE/FlnkA0sI0Vq+REfrWisZRfc1SzSbgw
-         tVsm1pXic0P6GJDF2/7zkD8ER83IoVL7aMp/bHPVrAHQkbbixm3Kg0HMLS35H/xAyVl+
-         UTmOzWe+uQHcb5OYgXl4x58ilZsw3U0w8CB/8DRxqCAwNxEdqhyYWM9g8qj7xVjIwSzv
-         RagYDOY7DuNgn/2/x2NdIprh8X8N+/x5WsqWtdLmu0RBcEsmDgIcvf39Vl0lvfYzI66p
-         MeMDa4CFtzCaOZN4K8cznxO5u8tCBERtUczXNEkQCmNWKWb8p/nq25Dyc4YI11GlL9x7
-         1/nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684459623; x=1687051623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1lvP7Q1DPXjSG9iBptgkojp087iyFGiylW3zAHv1G0s=;
-        b=D9Ngk5YoT/DIfEt+9w3eeOrBnEgdws/kPWd8k7s8QAl3Y/pflUwlZlFA9SmG+4eAl3
-         cAukwEdleJFQKu+XojD2WyUlIfLq1p6WZLTdeA94hKIpbcqfXanBgYV1xyYZ87UyyX0s
-         Ix3bA6ZevFffWYPS3rjXQofHKa+ETYAr+mUJR/NfIAd+SSHoDoJttxqO0+Y9wUxbioiO
-         LP2Q1JkPz4di8Hz2ss7gR4siTZa4L8QwmfHq2LY0Wga5FPbIzkeLDlY7jBKz7IMYxlYZ
-         dWPhqCuiXCvn9tox/9LuNuBjZSgORznLDn7aQj0n6f3DdPTzTN7Vo7PEesBl7POL9etl
-         09sQ==
-X-Gm-Message-State: AC+VfDzOv88gPK/bjGGpDoMErPZwBowliY4XC8omc9FN5r9KYnHuXyCh
-        AhHnlqkDH4lPMz+IOT968Yo+Qg==
-X-Google-Smtp-Source: ACHHUZ60fWA8dMxrxSEEE9Cq6HNL+5hZBH8mz2lPQkgrGsomWHcS7zVmJG4fADlLH1bX8uxE4zKyvA==
-X-Received: by 2002:a25:c7cb:0:b0:b8f:6cd0:4ef1 with SMTP id w194-20020a25c7cb000000b00b8f6cd04ef1mr192327ybe.17.1684459622935;
-        Thu, 18 May 2023 18:27:02 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id x6-20020a259c46000000b00b9ba6a3b675sm699871ybo.50.2023.05.18.18.27.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 18:27:02 -0700 (PDT)
-Date:   Thu, 18 May 2023 21:26:59 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v4 05/41] counter: add HAS_IOPORT dependencies
-Message-ID: <ZGbQYzXK8InMqkxu@fedora>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-6-schnelle@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5bxTSeSIiawlWPZU"
-Content-Disposition: inline
-In-Reply-To: <20230516110038.2413224-6-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229684AbjESIzw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 04:55:52 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9914AA;
+        Fri, 19 May 2023 01:55:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4FDC85C0069;
+        Fri, 19 May 2023 04:55:51 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 04:55:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684486551; x=1684572951; bh=UM
+        /Iy78jcidbViTHhtG0ZTxjLYDzr3qTMzVVSL0XtdA=; b=X5hx2jdpsdjrEC4d/o
+        pSBO9nUZSth/4yCIhUoNLGlQYSNvrksWdO5qkeOG8Ya72Q0612xDaZZdVXBWaUMB
+        1ipGrUoWPZo/BG6qF+xEM2DQG3pG4azrTq7zsuCHvKZUN+EwmdgL2tsAZxzm2Gk2
+        M9hlnk4IWnHqaxPG84sVs5o/UGjZsn75SEHOcN/tefngK21lSufEkJwXljoRxw3k
+        einpmAI/l+SlAAAR0HXWHkdhev00r8wJlOIGYozaOYEgm7Rxwj242W1DdANji5UG
+        iiY41VaWGp1tA5GswS3GBN465vXgfmX6mB1laZSOkAJXln5+LZGQ3H7CCpn5ZOeC
+        +wRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684486551; x=1684572951; bh=UM/Iy78jcidbV
+        iTHhtG0ZTxjLYDzr3qTMzVVSL0XtdA=; b=vLRr8tOHknaO0lrCXrx+BYGsVmWWR
+        Ob07y/paEoQ17DHIPdkDe6xRe3H8G0oRIUSETcJ89mbKDVeKQ8i/23SGUTnMmE0A
+        phrtSm/U/m5UgEr+ny/2aS8Yqx35B6O9E5Qdj1J9D8WlHQ3Q5JMHbouQzXNqeePC
+        cx2OdQfZypEkcqm7ZTSTl1CeFnyRx7POK4UABjZdQkE/WaaLifCFwLy8i2g6zIon
+        O0gNm7t9m0tZw2tcLFNnrq0/NDnN1isNiND01ZElgs1QmvJ80/Eh1ag/E7aBWGx2
+        +ZiC4V7q4Ya8ywj/FngIA6GKYSvysFLqs2GoOElAZf8PerKdCTkUKV2TA==
+X-ME-Sender: <xms:ljlnZO4gNlipYcpOJklxZU5OQZVzXUidLRbPUJ7V01Mi-oGeLiU_Eg>
+    <xme:ljlnZH71_zcXldxXz5UgrdjRbzLt_6P39FBRKoev1R0dGuQ9DgCQvGfQp9H4175wb
+    pW6Q7CCChrBuG-6HHI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ljlnZNcSE1qaXcHOxE2Mljx0INm6bT6bH9M7svDhqDmJjbUmxxmSYw>
+    <xmx:ljlnZLKbI5Ks5AwDeLNx4Cf-sGkNXqr_8TF0-BZGo8ZAVZsRzpeaGw>
+    <xmx:ljlnZCL7ZlfGiXQRw_OUynqsfiwgpBUMpxKf6SCCXu5TJVoHU5-1Lg>
+    <xmx:lzlnZOqOiyOaWEjH92Ym6MHdryujzavgDElKTq96AqfyXVbSCZHp1A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 718B3B60086; Fri, 19 May 2023 04:55:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <13666898-6f5f-434d-8294-95182a7563de@app.fastmail.com>
+In-Reply-To: <454dede3-5f20-74fc-975a-e11e4d8b5648@sifive.com>
+References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9>
+ <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
+ <454dede3-5f20-74fc-975a-e11e4d8b5648@sifive.com>
+Date:   Fri, 19 May 2023 10:55:30 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Paul Walmsley" <paul.walmsley@sifive.com>
+Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>, guoren <guoren@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Anup Patel" <anup@brainfault.org>, shihua@iscas.ac.cn,
+        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
+        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
+        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
+        "Andy Chiu" <andy.chiu@sifive.com>,
+        "Vincent Chen" <vincent.chen@sifive.com>,
+        "Greentime Hu" <greentime.hu@sifive.com>,
+        "Jonathan Corbet" <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
+        "Jessica Clarke" <jrtc27@jrtc27.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Guo Ren" <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on 64-bit
+ supervisor mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, May 19, 2023, at 02:38, Paul Walmsley wrote:
+> On Thu, 18 May 2023, Arnd Bergmann wrote:
+>
+>> We have had long discussions about supporting ilp32 userspace on
+>> arm64, and I think almost everyone is glad we never merged it into
+>> the mainline kernel, so we don't have to worry about supporting it
+>> in the future. The cost of supporting an extra user space ABI
+>> is huge, and I'm sure you don't want to go there. The other two
+>> cited examples (mips-n32 and x86-x32) are pretty much unused now
+>> as well, but still have a maintenance burden until they can finally
+>> get removed.
+>
+> There probably hasn't been much pressure to support Aarch64 ILP32 since 
+> ARM still has hardware support for Aarch32.  Will be interesting to see if 
+> that's still the case after ARM drops Aarch32 support for future designs.
 
---5bxTSeSIiawlWPZU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think there was a some pressure for 64ilp32 from Arm when aarch64 support
+was originally added, as they always planned to drop aarch32 support
+eventually, but I don't see that coming back now. I think the situation
+is quite different as well:
 
-On Tue, May 16, 2023 at 01:00:01PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
->=20
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+On aarch64, there is a significant cost in supporting aarch32 userspace
+because of the complexity of that particular instruction set, but at
+the same time there is also a huge amount of software that is compiled
+for or written to support aarch32 software, and nobody wants to
+replace that.  There are also a lot of existing arm32 chips with
+guaranteed availability well into the 2030s, new 32-bit-only chips
+based on Cortex-A7 (originally released in 2011) coming out constantly,
+and even the latest low-end core (Cortex-A510 r1). It's probably
+going to be several years before that core even shows up in low-memory
+systems, and then decades before this stops being available in SoCs,
+even in the unlikely case that no future low-end cores support
+aarch32-el0 mode (it's already been announced that there are no
+plans for future high-end cores with aarch32 mode, but those won't
+be used in low-memory configurations anyway).
 
-Hi Niklas,
+For RISC-V, I have not seen much interest in Linux userspace for
+the existing rv32 mode, so you could argue that there is not much
+to lose in abandoning it. On the other hand, the cost of adding
+rv32 support to an rv64 core should be very small as all the
+instructions are already present in some other encoding, and
+developers have already spent a significant amount of work on
+bringing up rv32 userspace that would all have to be done again
+for a new ABI, and you'd end up splitting the already tiny
+developer base for 32-bit riscv in two for the existing rv32 side
+and a new rv64ilp32 side. 
 
-The change itself is fine, but please update the description to reflect
-that this is adding a depends on HAS_IOPORT_MAP rather than HAS_IOPORT,
-along with the reason why it's needed (i.e. devm_ioport_map() is used).
+I suppose the answer in both cases is the same though: if a
+SoC maker wants to sell a product to users with low memory,
+they should pick a CPU core that implements standard 32-bit
+user space support rather than making a mess of it and
+expecting software to work around it.
 
-Thanks,
-
-William Breathitt Gray
-
-> ---
-> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->       per-subsystem patches may be applied independently
->=20
->  drivers/counter/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
-> index 4228be917038..e65a2bf178b8 100644
-> --- a/drivers/counter/Kconfig
-> +++ b/drivers/counter/Kconfig
-> @@ -15,6 +15,7 @@ if COUNTER
->  config 104_QUAD_8
->  	tristate "ACCES 104-QUAD-8 driver"
->  	depends on (PC104 && X86) || COMPILE_TEST
-> +	depends on HAS_IOPORT_MAP
->  	select ISA_BUS_API
->  	help
->  	  Say yes here to build support for the ACCES 104-QUAD-8 quadrature
-> --=20
-> 2.39.2
->=20
-
---5bxTSeSIiawlWPZU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZGbQYwAKCRC1SFbKvhIj
-Kwr/AP9BDmkAnBXC+MjVSJOmxTQF8Sx5RdpwwV0Oaq8V32L4cAEAjgIcBwlTHN/4
-SwcgWo1pJaiaLAG8+7C20VWkinQ4dwc=
-=WkDE
------END PGP SIGNATURE-----
-
---5bxTSeSIiawlWPZU--
+      Arnd
