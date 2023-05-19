@@ -2,168 +2,200 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724207096E7
-	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 13:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D714170978E
+	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 14:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjESL4P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 May 2023 07:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
+        id S231689AbjESMuM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 May 2023 08:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjESL4O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 07:56:14 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43608E5E;
-        Fri, 19 May 2023 04:56:09 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JBegei002873;
-        Fri, 19 May 2023 11:55:51 GMT
+        with ESMTP id S231653AbjESMuJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 08:50:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD53E4D;
+        Fri, 19 May 2023 05:50:03 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JCcFW3002513;
+        Fri, 19 May 2023 12:46:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
  from : to : cc : date : in-reply-to : references : content-type :
  content-transfer-encoding : mime-version; s=pp1;
- bh=9ZSiz7QfDXxqo0dzVwJRj7KKiMlRRw/MuJmXwWIBDfI=;
- b=QnETb8xjiv6buyLYJxqSkNJrj9ARvyH8aDYzfNQFN02XS2fs7NIL1ZMZ9gGHeLUCMcjd
- KH7fJuxfPibvjc3VGNIpIpZ+qq1/BRVkZB7fou8nUOkkxAKul3+zRJ/gVNXOFgI8T/Yq
- gexnBm4Vf9WXpQOZ/J7zB/ioISazd1lkgDS2V5GAjWULH96DRmRR2gXxZQTCI62bl8Jk
- URmlevGPwQEjr8P7sd9JDruf8CHz0WJhaKxdOPU1HgEPl4KvWxmgwWvT5Q9RdsVGeEJU
- dWPwJwij6MpnxOuzLxsbVFYmYlavgBsM9dveOPt5nkJkCqAHM0c0nmRrCrFcKDZxP8m/ Qw== 
+ bh=kpbDefN8oMoTU2dBleqFgTcr9qcSBJPLyED+f+RE3+c=;
+ b=nadr45iu1wc7R4guCZkW6l+wT/BL/xl95zSXQVhgrYOfAdahfAZpDetROjxdzJwwLcVb
+ 5lFB7U04K+9qAIihJxslDGmT6T/VX5qaT6Co+YNon07nmZCUEGOfGACMU22zikrPP59n
+ 9oQg14iKp1q1WQXP8hC+ROve1fyrWMtsXOZh75HuKwq3QMlpI9Hc4ZeIH+u/K/4OYlyQ
+ q/OOezBpESAV15VkuWk6N8i7i244UU//kc95FTkj/cNoR/pN/8vIM8WPLMPr0gaeHOub
+ PTSsF3n9+OquB3QjqF8d+NUeMLWV0AO8HciWQIR2yGpnOg+qhKNKnwxh+83Xj9XWJkIV vA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp87srps0-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp91srqdk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 11:55:50 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34JBf348005807;
-        Fri, 19 May 2023 11:55:50 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp87srprp-1
+        Fri, 19 May 2023 12:46:43 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34JCceUK004225;
+        Fri, 19 May 2023 12:46:43 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp91srqcn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 11:55:50 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34J68cxA010601;
-        Fri, 19 May 2023 11:31:17 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qj264tkpr-1
+        Fri, 19 May 2023 12:46:43 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34JAZNfO005832;
+        Fri, 19 May 2023 12:46:40 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qj1tdu5k8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 11:31:16 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34JBVEnD46334256
+        Fri, 19 May 2023 12:46:40 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34JCkcRf66191658
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 11:31:14 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E7F6A20049;
-        Fri, 19 May 2023 11:31:13 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DC93020040;
-        Fri, 19 May 2023 11:31:12 +0000 (GMT)
+        Fri, 19 May 2023 12:46:38 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF35620049;
+        Fri, 19 May 2023 12:46:37 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 08B6320043;
+        Fri, 19 May 2023 12:46:37 +0000 (GMT)
 Received: from [9.171.0.172] (unknown [9.171.0.172])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 19 May 2023 11:31:12 +0000 (GMT)
-Message-ID: <8d5f62aff02f0043c8f601f24c949c5fe03e132e.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 35/41] usb: uhci: handle HAS_IOPORT dependencies
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 19 May 2023 12:46:36 +0000 (GMT)
+Message-ID: <14413c00b3fb8cc2e10a10292ac5c07346b29a10.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 02/41] ata: add HAS_IOPORT dependencies
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+To:     Damien Le Moal <dlemoal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-usb@vger.kernel.org
-Date:   Fri, 19 May 2023 13:31:12 +0200
-In-Reply-To: <440855f4-897c-4597-bbe6-7c5f295f616a@app.fastmail.com>
+        linux-ide@vger.kernel.org
+Date:   Fri, 19 May 2023 14:46:36 +0200
+In-Reply-To: <33d99147-74c9-d62a-7591-a569e11a401d@kernel.org>
 References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-         <20230516110038.2413224-36-schnelle@linux.ibm.com>
-         <2023051643-overtime-unbridle-7cdd@gregkh>
-         <2c03973e-0635-4dbb-a1df-bfda8cbee161@rowland.harvard.edu>
-         <440855f4-897c-4597-bbe6-7c5f295f616a@app.fastmail.com>
+         <20230516110038.2413224-3-schnelle@linux.ibm.com>
+         <da77a377-4a9e-be8d-7b14-aeb270b7183e@kernel.org>
+         <33d99147-74c9-d62a-7591-a569e11a401d@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 1T9__fVrFL3mMdOF2NtPZnMYBMkNOv1B
-X-Proofpoint-GUID: CRBQV-gzzNZ6dGiIzrHsIfsCIhxyrMw4
+X-Proofpoint-ORIG-GUID: DHZ5Pvar63J5MkEIJpobxyyK3F1h_wIH
+X-Proofpoint-GUID: cYtE3xKwjO7mSvgoYElVipOQO5IwnjA9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-19_08,2023-05-17_02,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- priorityscore=1501 mlxlogscore=562 lowpriorityscore=0 spamscore=0
- impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190098
+ lowpriorityscore=0 malwarescore=0 spamscore=0 adultscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305190106
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2023-05-17 at 14:17 +0200, Arnd Bergmann wrote:
-> On Tue, May 16, 2023, at 22:17, Alan Stern wrote:
-> > On Tue, May 16, 2023 at 06:29:56PM +0200, Greg Kroah-Hartman wrote:
-> > > On Tue, May 16, 2023 at 01:00:31PM +0200, Niklas Schnelle wrote:
-> >=20
-> > > I'm confused now.
+On Tue, 2023-05-16 at 22:23 +0900, Damien Le Moal wrote:
+> On 5/16/23 22:18, Damien Le Moal wrote:
+> > On 5/16/23 19:59, Niklas Schnelle wrote:
+> > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and frie=
+nds
+> > > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > > those drivers using them.
 > > >=20
-> > > So if CONFIG_HAS_IOPORT is enabled, wonderful, all is good.
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > ---
 > > >=20
-> > > But if it isn't, then these are just no-ops that do nothing?  So then
-> > > the driver will fail to work?  Why have these stubs at all?
-> > >=20
-> > > Why not just not build the driver at all if this option is not enable=
-d?
+---8<---
+> > > +++ b/drivers/ata/libata-sff.c
+> > > @@ -3031,6 +3031,7 @@ EXPORT_SYMBOL_GPL(ata_bmdma_port_start32);
+> > > =20
+> > >  #ifdef CONFIG_PCI
+> > > =20
+> > > +#ifdef CONFIG_HAS_IOPORT
+> > >  /**
+> > >   *	ata_pci_bmdma_clear_simplex -	attempt to kick device out of simpl=
+ex
+> > >   *	@pdev: PCI device
+> > > @@ -3056,6 +3057,7 @@ int ata_pci_bmdma_clear_simplex(struct pci_dev =
+*pdev)
+> > >  	return 0;
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(ata_pci_bmdma_clear_simplex);
+> > > +#endif /* CONFIG_HAS_IOPORT */
 > >=20
-> > I should add something to my previous email.  This particular section o=
-f=20
-> > code is protected by:
+> > ...you move the #ifdef CONFIG_HAS_IOPORT inside the function as the fir=
+st line
+> > and have the #endif right before the last "return 0;" (so the function =
+only does
+> > return 0 for the !CONFIG_HAS_IOPORT case).
 > >=20
-> > #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
-> > /* Support PCI only */
+> > > =20
+> > >  static void ata_bmdma_nodma(struct ata_host *host, const char *reaso=
+n)
+> > >  {
+> > > diff --git a/include/linux/libata.h b/include/linux/libata.h
+> > > index 311cd93377c7..90002d4a785b 100644
+> > > --- a/include/linux/libata.h
+> > > +++ b/include/linux/libata.h
+> > > @@ -2012,7 +2012,9 @@ extern int ata_bmdma_port_start(struct ata_port=
+ *ap);
+> > >  extern int ata_bmdma_port_start32(struct ata_port *ap);
+> > > =20
+> > >  #ifdef CONFIG_PCI
+> > > +#ifdef CONFIG_HAS_IOPORT
+> > >  extern int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev);
+> > > +#endif /* CONFIG_HAS_IOPORT */
 > >=20
-> > So it gets used only in cases where the driver supports just a PCI bus=
-=20
-> > -- no other sorts of non-PCI on-chip devices.  But the preceding patch=
-=20
-> > in this series changes the Kconfig file to say:
-> >=20
-> >  config USB_UHCI_HCD
-> > 	tristate "UHCI HCD (most Intel and VIA) support"
-> > 	depends on (USB_PCI && HAS_IOPORT) || USB_UHCI_SUPPORT_NON_PCI_HC
-> >=20
-> > As a result, when the configuration includes support only for PCI=20
-> > controllers the driver won't get built unless HAS_IOPORT is set.  Thus=
-=20
-> > the no-op case (in this part of the code) can't arise.
+> > And then you do not need these #ifdef/endif here. Overall, a lot less o=
+f #ifdef
+> > which I personally really dislike to see in .c files :)
 >=20
-> Indeed, that makes sense.
+> Actually, thinking more about this, the function should probably be:
 >=20
-> > Which is a long-winded way of saying that you're right; the UHCI_IN()=
-=20
-> > and UHCI_OUT() wrappers aren't needed in this part of the driver.  I=
-=20
-> > guess Niklas put them in either for consistency with the rest of the=
-=20
-> > code or because it didn't occur to him that they could be omitted.  (An=
-d=20
-> > I didn't spot it either.)
+> int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
+> {
+> #ifdef CONFIG_HAS_IOPORT
+> 	unsigned long bmdma =3D pci_resource_start(pdev, 4);
+> 	u8 simplex;
 >=20
-> It's probably less confusing to leave out the PCI-only part of
-> the patch then and only modify the generic portion.
+> 	if (bmdma =3D=3D 0)
+> 		return -ENOENT;
 >=20
->       Arnd
+> 	simplex =3D inb(bmdma + 0x02);
+> 	outb(simplex & 0x60, bmdma + 0x02);
+> 	simplex =3D inb(bmdma + 0x02);
+> 	if (simplex & 0x80)
+> 		return -EOPNOTSUPP;
+> 	return 0;
+> #else
+> 	return -ENOENT;
+> #endif
+> }
+>=20
+> And then no other "#ifdef CONFIG_HAS_IOPORT" needed.
+>=20
+>=20
 
-Yes I agree that way the UHCI_IN/OUT() macro is also only used directly
-in combination with uhci_has_pci_registers(). I've done this for v5.
+Ok I went with this for v5. It's a bit of a matter of taste. For the
+video subsystem I just went the other direction #ifdeffingthe whole
+helper and its callsites much as I had here. They were all in headers
+and prefixed with "vga_io.." though. Either way I'm fine with either
+and will go with the subsystem maintainer's preference.
 
 Thanks,
 Niklas
-
