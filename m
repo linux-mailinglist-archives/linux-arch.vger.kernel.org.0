@@ -2,92 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED5D709D02
-	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 18:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7B4709D7F
+	for <lists+linux-arch@lfdr.de>; Fri, 19 May 2023 19:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbjESQzG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 May 2023 12:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S229649AbjESRGQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 May 2023 13:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbjESQzF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 12:55:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE32C1A7;
-        Fri, 19 May 2023 09:54:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S231345AbjESRFq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 May 2023 13:05:46 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3C1E5C;
+        Fri, 19 May 2023 10:05:32 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 351FD61483;
-        Fri, 19 May 2023 16:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA099C433EF;
-        Fri, 19 May 2023 16:54:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684515291;
-        bh=6JR4O+An8vWeZFVsZA92L+lf5pGLo9S8AJGIiUT2z50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FQXo+ND3uPH4WFfZj3SfiaO96BEi1/m0KYmELQsvoyCZeKz6ZWO9o+qLzZHL9QFXB
-         c+vYTynVk6rXPtT5TfsL1bDM8rQKCT7UGFq3lXQU/oSzy9T2obMFpM3f6t+fY5JD3Z
-         qashGxkjMI2pXwYUoeo8GreVpihmwQImqnOZrQyj/thyqpX3SZn/HOC/IBzkyNb73t
-         fdV2ecI01iXzpCNANXDeRUqm80J2JM4ttW7QrqwcUHClQkbrTJ4mNU3Bvn+w1C7SOE
-         1WgvoHw2UOznWQgPyTygUE6vMGh0MParkaEp7y6Di7pW49ceSIchbA2XELm5OJHT9x
-         FLbPf9AQBGexw==
-Date:   Fri, 19 May 2023 17:54:47 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
+        by ms.lwn.net (Postfix) with ESMTPSA id 3FF7B7C0;
+        Fri, 19 May 2023 17:05:21 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3FF7B7C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1684515921; bh=32yUJ/Ep+SRRswkhu8CSGkcBJ2kdTHXVgiH1bkIO4qs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Sz93O2MrDkbaobmjkJ4YaHN0AUsD9dSLwiu3oH8qY4OEUKIHsY0wZxUduPTtQiDGm
+         F6EjFmjz4TlLD5IYnTPhc007iYrszZr4V5JyctI/kGhBb1Pqxf37RXfMsiP2DzS6re
+         Sy0+VaKsJIfemyC0l+d2yBBLQks8akk4UaK6GRUZuIQ47YAGOajWtf66psmV+IdXtc
+         7az6kUp5rKGdc9B0V326bC75avIMUS4DPGYYd8QZwOL9SHfYewwv2ZVP5glXpAm/fp
+         xgu5x8yS+QifekV7BKMjJt9KX5ewJhXJ/7AgXYsVCnXAUlupWqmEHvFntzHAciAEtR
+         tzl6G8QjkX3dg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Conor Dooley <conor@kernel.org>
 Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
 Subject: Re: [PATCH 7/7] dt-bindings: Update Documentation/arm references
-Message-ID: <20230519-tug-garbage-4fee2efc3f0a@spud>
+In-Reply-To: <20230519-tug-garbage-4fee2efc3f0a@spud>
 References: <20230519164607.38845-1-corbet@lwn.net>
  <20230519164607.38845-8-corbet@lwn.net>
+ <20230519-tug-garbage-4fee2efc3f0a@spud>
+Date:   Fri, 19 May 2023 11:05:20 -0600
+Message-ID: <877ct4meun.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="veVC0fDZZLpzz2eJ"
-Content-Disposition: inline
-In-Reply-To: <20230519164607.38845-8-corbet@lwn.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Conor Dooley <conor@kernel.org> writes:
 
---veVC0fDZZLpzz2eJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> On Fri, May 19, 2023 at 10:46:07AM -0600, Jonathan Corbet wrote:
+>> The Arm documentation has moved to Documentation/arch/arm; update
+>> references under arch/arm64 to match.
+>
+> This commit message seems a wee bit inaccurate ;)
 
-On Fri, May 19, 2023 at 10:46:07AM -0600, Jonathan Corbet wrote:
-> The Arm documentation has moved to Documentation/arch/arm; update
-> references under arch/arm64 to match.
+Argh.  I pulled this change out into a separate patch because checkpatch
+whined at me, and did it a bit too quickly, I guess...
 
-This commit message seems a wee bit inaccurate ;)
-
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-
-Otherwise,
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+>> Cc: Rob Herring <robh+dt@kernel.org>
+>> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+>> Cc: Conor Dooley <conor+dt@kernel.org>
+>
+> Otherwise,
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Thanks,
-Conor.
 
---veVC0fDZZLpzz2eJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGep1wAKCRB4tDGHoIJi
-0mkOAQDaXlgZ06YOUpyiBi3uPsdf2OETQFwdS/Zt4CGL94/VVgD+KqtZnmBUQkdM
-FXJXuxCiWX6Nxr4miK+ltM55W5/xGAc=
-=c9Rj
------END PGP SIGNATURE-----
-
---veVC0fDZZLpzz2eJ--
+jon
