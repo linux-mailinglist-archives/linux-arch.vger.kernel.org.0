@@ -2,158 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED34B70B9A9
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 12:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A86170BA45
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 12:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbjEVKLt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 22 May 2023 06:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S231827AbjEVKmk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 06:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjEVKLr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 06:11:47 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A681ABA;
-        Mon, 22 May 2023 03:11:41 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-b9a7e639656so11281156276.0;
-        Mon, 22 May 2023 03:11:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684750300; x=1687342300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CQATq2c9SwOWOfQ7A10Go9afc2yqePz2ONTwzgTVwBU=;
-        b=HMNoACtjhaL05NyjEU7JbeJEenr+k/VHRbi1cwrZfF6rZbHm9vyrVzI7dJ0QsCg2AG
-         EObhL9ns7LMmApxizZ2Msid0pFInovzXbS1gOyy8t5BwPnprR8Y+6u1SrwfO2KvDL7qG
-         YYlkDPfEDG2CBc/tsEkpDxeudei0mYFpVT5marSqnMlAJoBHpa8tEuYDgrP2Q3ZIuc8C
-         jIBfkPQwSskuiE4QtH7FGfG54bxSaRBtgr1tsYkFG0TJj9Kbu2YoECAy3aWXrDA4nLwt
-         frfJ3ZH75DZmIVKYl2LnNLnESVRPFHcxStHQpaYAQXvNwcwMnoi2cCg2C7Q0j/PZzZ7D
-         2qtQ==
-X-Gm-Message-State: AC+VfDwr30X3+8w9lqYXFRTemNQZ+ZPrjH0P3LAbn5xVV0COwbsPjYUq
-        iSd+cBSz7nRYdh2Pmuqdv2Y16FBqWEUTRQ==
-X-Google-Smtp-Source: ACHHUZ4OTp/TAUrcrASJZd+ro+JTTxKVVPt2Wf3bQrRCrvgzVdMgq7osCwf8P99L2q7V0p37kVvTYw==
-X-Received: by 2002:a0d:e60c:0:b0:561:9622:bf74 with SMTP id p12-20020a0de60c000000b005619622bf74mr10393791ywe.37.1684750300565;
-        Mon, 22 May 2023 03:11:40 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id m5-20020a817105000000b00545a08184bbsm1970867ywc.75.2023.05.22.03.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 03:11:39 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-b9a7e639656so11281074276.0;
-        Mon, 22 May 2023 03:11:38 -0700 (PDT)
-X-Received: by 2002:a81:5247:0:b0:561:c5c3:9d79 with SMTP id
- g68-20020a815247000000b00561c5c39d79mr9161977ywb.45.1684750298756; Mon, 22
- May 2023 03:11:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v2-0-0948d38bddab@linaro.org> <20230503-virt-to-pfn-v6-4-rc1-v2-2-0948d38bddab@linaro.org>
-In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v2-2-0948d38bddab@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 22 May 2023 12:11:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXB1fK_G=QZ59qkJWXhb61TyLRMwH3qo_0sSmW0Cfv8hA@mail.gmail.com>
-Message-ID: <CAMuHMdXB1fK_G=QZ59qkJWXhb61TyLRMwH3qo_0sSmW0Cfv8hA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>, linux-mm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+        with ESMTP id S230362AbjEVKmj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 06:42:39 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BE1B3;
+        Mon, 22 May 2023 03:42:37 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9cOEB010154;
+        Mon, 22 May 2023 10:42:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=oAtcR3CjUqUoLFIujCSD3j+neQkPVsD2jlqdXWw8s2o=;
+ b=Y7QHsYYh2ESn04M12mL1SyRfdaxlo5dlcn5VT6ul4Cc6wsUs5I75sksygIGiFqWX4Ba/
+ N0nUyT2bg9A5r3UdIbSCZdHZNO81EEwM0hJ56/nJBff/r+KQzlF/eOkQjGttTwqbFccn
+ A6N6lQeMYvvSfaxyFWFwQQFAiJImRmgkY/Te1XPCJxEe6S5InprnKwbmhKhgu+JrnFqt
+ 8e9JyIjw6ujKvCv7LHpbDRH+pw0uqpcifezDQPiHWlu4ZmCIqmHMc6lCW83efbKVFx1S
+ mNZsMJ3VT2uvn6X2bCHO3zPARcBPhPbUNr3baSCBUr4Pj6VcZgPxgkrIfNI9H2280dls bQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqee6t7c4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:42:22 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAahkO010615;
+        Mon, 22 May 2023 10:42:21 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqee6t7b2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:42:21 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9r4b4023774;
+        Mon, 22 May 2023 10:42:19 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qppa4rrw3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 10:42:19 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MAgGMh7930206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 May 2023 10:42:16 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6BF712004D;
+        Mon, 22 May 2023 10:42:16 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6632720040;
+        Mon, 22 May 2023 10:42:15 +0000 (GMT)
+Received: from [9.171.23.45] (unknown [9.171.23.45])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 22 May 2023 10:42:15 +0000 (GMT)
+Message-ID: <cb6aa00b1901abb572e69e218a5500f2cd1561ce.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 05/41] counter: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-iio@vger.kernel.org
+Date:   Mon, 22 May 2023 12:42:15 +0200
+In-Reply-To: <ZGeF1K0Yxu9lTgN2@fedora>
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+         <20230516110038.2413224-6-schnelle@linux.ibm.com> <ZGbQYzXK8InMqkxu@fedora>
+         <6f4d672ba7136f2b01ea9ee69687b16168eddb8d.camel@linux.ibm.com>
+         <231dcebc57c2e43ba65d007b60d3d446d9ed71c8.camel@linux.ibm.com>
+         <abc02dc2af7563ae26bf0d0ddd927d9b4a21dda3.camel@linux.ibm.com>
+         <ZGeF1K0Yxu9lTgN2@fedora>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: cA0g1KbNT_1V-Wdsk-GcXzW4oULP6J5E
+X-Proofpoint-ORIG-GUID: 8B6fhOHNamOcgpya-zvAw4kmkSBF0QJC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ phishscore=0 adultscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 mlxlogscore=607 clxscore=1015 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220089
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus,
+On Fri, 2023-05-19 at 10:21 -0400, William Breathitt Gray wrote:
+> On Fri, May 19, 2023 at 03:39:57PM +0200, Niklas Schnelle wrote:
+> > On Fri, 2023-05-19 at 15:38 +0200, Niklas Schnelle wrote:
+> > > On Fri, 2023-05-19 at 15:17 +0200, Niklas Schnelle wrote:
+> > > > On Thu, 2023-05-18 at 21:26 -0400, William Breathitt Gray wrote:
+> > > > > On Tue, May 16, 2023 at 01:00:01PM +0200, Niklas Schnelle wrote:
+> > > > > > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() an=
+d friends
+> > > > > > not being declared. We thus need to add HAS_IOPORT as dependenc=
+y for
+> > > > > > those drivers using them.
+> > > > > >=20
+> > > > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > > >=20
+> > > > > Hi Niklas,
+> > > > >=20
+> > > > > The change itself is fine, but please update the description to r=
+eflect
+> > > > > that this is adding a depends on HAS_IOPORT_MAP rather than HAS_I=
+OPORT,
+> > > > > along with the reason why it's needed (i.e. devm_ioport_map() is =
+used).
+> > > > >=20
+> > > > > Thanks,
+> > > > >=20
+> > > > > William Breathitt Gray
+> > > > >=20
+> > > > >=20
+> > > >=20
+> > > > Right, this clearly needs adjustment. I went with the following com=
+mit
+> > > > message for v5:
+> > > >=20
+> > > > "counter: add HAS_IOPORT_MAP dependency
+> > > >=20
+> > > > The 104_QUAD_8 counter driver uses devm_ioport_map() without depend=
+ing
+> > > > on HAS_IOPORT_MAP. This causes compilation to fail on platforms suc=
+h as
+> > > > s390 which do not support I/O port mapping. Add the missing
+> > > > HAS_IOPORT_MAP dependency to fix this."
+> > > >=20
+> > >=20
+> > > Just noticed this isn't entirely correct. As devm_ioport_map() has an
+> > > empty stub for HAS_IOPORT_MAP=3Dn this doesn't lead to a compile erro=
+r it
+> > > just doesn't work. Will reword to "This causes the driver to not be
+> > > useable on platforms ..."
+> >=20
+> > s/useable/usable/
+>=20
+> 104_QUAD_8 has an explicit dependency on PC104 and X86, so I don't think
+> it would ever be used outside of x86 platforms. Does it still make sense
+> to have the HAS_IOPORT_MAP dependency in this case?
+>=20
+> William Breathitt Gray
 
-On Mon, May 22, 2023 at 9:00 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> Functions that work on a pointer to virtual memory such as
-> virt_to_pfn() and users of that function such as
-> virt_to_page() are supposed to pass a pointer to virtual
-> memory, ideally a (void *) or other pointer. However since
-> many architectures implement virt_to_pfn() as a macro,
-> this function becomes polymorphic and accepts both a
-> (unsigned long) and a (void *).
->
-> Fix up the offending calls in arch/m68k with explicit casts.
->
-> The page table include <asm/pgtable.h> will include different
-> variants of the defines depending on whether you build for
-> classic m68k, ColdFire or Sun3, so fix all variants.
->
-> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Well, yes and no, you're right that it doesn't really cause compile
+issues despite the "|| COMPILE_TEST" albeit the code could never work.
+Still, I'd add the dependency. At the very least it serves as
+documentation and maybe in the future someone will want to remove those
+empty stubs for HAS_IOPORT_MAP=3Dn.
 
-Thanks for the update!
-
-> ---
-> ChangeLog v2->v3:
-
-v3?
-
-> - Fix the sun3 pgtable macro to not cast to unsigned long.
-> - Make a similar change to the ColdFire include.
-
-The ColdFire change is not correct, cfr. below...
-
-> ChangeLog v1->v2:
-> - Add an extra parens around the page argument to the
->   PD_PTABLE() macro, as is normally required.
-> ---
->  arch/m68k/include/asm/mcf_pgtable.h  | 4 ++--
->  arch/m68k/include/asm/sun3_pgtable.h | 4 ++--
->  arch/m68k/mm/mcfmmu.c                | 3 ++-
->  arch/m68k/mm/motorola.c              | 4 ++--
->  arch/m68k/mm/sun3mmu.c               | 2 +-
->  arch/m68k/sun3/dvma.c                | 2 +-
->  arch/m68k/sun3x/dvma.c               | 2 +-
->  7 files changed, 11 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/m68k/include/asm/mcf_pgtable.h b/arch/m68k/include/asm/mcf_pgtable.h
-> index d97fbb812f63..f67c59336ab4 100644
-> --- a/arch/m68k/include/asm/mcf_pgtable.h
-> +++ b/arch/m68k/include/asm/mcf_pgtable.h
-> @@ -115,8 +115,8 @@ static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp)
->         pgd_val(*pgdp) = virt_to_phys(pmdp);
->  }
->
-> -#define __pte_page(pte)        ((unsigned long) (pte_val(pte) & PAGE_MASK))
-> -#define pmd_page_vaddr(pmd)    ((unsigned long) (pmd_val(pmd)))
-> +#define __pte_page(pte)        (__va (pte_val(pte) & PAGE_MASK))
-
-I guess "__va(...)" should be "(void *)..." instead?
-
-However, that will cause an issue below, as
-
-    #define pte_pagenr(pte)        ((__pte_page(pte) - PAGE_OFFSET) >>
-PAGE_SHIFT)
-
-does depend on __pte_page() returning "unsigned long".
-Fortunately pte_pagenr() appears unused, so it can be removed.
-
-So for now, it might be simpler to add the cast to the caller.
-
-
-> +#define pmd_page_vaddr(pmd)    (__va (pmd_val(pmd)))
-
-This looks bogus, too, as it should return "unsigned long".
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks
+Niklas
