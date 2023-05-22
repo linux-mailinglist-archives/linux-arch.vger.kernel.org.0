@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC75570BE1D
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 14:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B7170BE24
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 14:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbjEVM1w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 May 2023 08:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S232977AbjEVM2F (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 08:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjEVM06 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 08:26:58 -0400
+        with ESMTP id S234002AbjEVM07 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 08:26:59 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA55910EF;
-        Mon, 22 May 2023 05:25:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13DF2185;
+        Mon, 22 May 2023 05:25:15 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB65611FB;
-        Mon, 22 May 2023 05:25:51 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2F6A1480;
+        Mon, 22 May 2023 05:25:54 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2C9983F59C;
-        Mon, 22 May 2023 05:25:05 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 43C0E3F59C;
+        Mon, 22 May 2023 05:25:08 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
@@ -27,9 +27,9 @@ Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
         linux@armlinux.org.uk, linux-doc@vger.kernel.org,
         mark.rutland@arm.com, paulmck@kernel.org, peterz@infradead.org,
         sstabellini@kernel.org, will@kernel.org
-Subject: [PATCH 12/26] locking/atomic: x86: add preprocessor symbols
-Date:   Mon, 22 May 2023 13:24:15 +0100
-Message-Id: <20230522122429.1915021-13-mark.rutland@arm.com>
+Subject: [PATCH 13/26] locking/atomic: xtensa: add preprocessor symbols
+Date:   Mon, 22 May 2023 13:24:16 +0100
+Message-Id: <20230522122429.1915021-14-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230522122429.1915021-1-mark.rutland@arm.com>
 References: <20230522122429.1915021-1-mark.rutland@arm.com>
@@ -55,7 +55,7 @@ Subsequent patches will require that architectures define a preprocessor
 symbol for any atomic (or ordering variant) which is optional. This will
 make the fallback ifdeffery more robust, and simplify future changes.
 
-Add the required definitions to arch/x86.
+Add the required definitions to arch/xtensa.
 
 Signed-off-by: Mark Rutland <mark.rutland@arm.com>
 Cc: Boqun Feng <boqun.feng@gmail.com>
@@ -63,41 +63,36 @@ Cc: Paul E. McKenney <paulmck@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Will Deacon <will@kernel.org>
 ---
- arch/x86/include/asm/cmpxchg_64.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/xtensa/include/asm/atomic.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
-index 3e6e3eef701b3..44b08b53ab32f 100644
---- a/arch/x86/include/asm/cmpxchg_64.h
-+++ b/arch/x86/include/asm/cmpxchg_64.h
-@@ -45,11 +45,13 @@ static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 n
- {
- 	return __arch_cmpxchg128(ptr, old, new, LOCK_PREFIX);
- }
-+#define arch_cmpxchg128 arch_cmpxchg128
+diff --git a/arch/xtensa/include/asm/atomic.h b/arch/xtensa/include/asm/atomic.h
+index 1d323a864002c..7308b7f777d79 100644
+--- a/arch/xtensa/include/asm/atomic.h
++++ b/arch/xtensa/include/asm/atomic.h
+@@ -245,6 +245,11 @@ static inline int arch_atomic_fetch_##op(int i, atomic_t * v)		\
+ ATOMIC_OPS(add)
+ ATOMIC_OPS(sub)
  
- static __always_inline u128 arch_cmpxchg128_local(volatile u128 *ptr, u128 old, u128 new)
- {
- 	return __arch_cmpxchg128(ptr, old, new,);
- }
-+#define arch_cmpxchg128_local arch_cmpxchg128_local
++#define arch_atomic_add_return			arch_atomic_add_return
++#define arch_atomic_sub_return			arch_atomic_sub_return
++#define arch_atomic_fetch_add			arch_atomic_fetch_add
++#define arch_atomic_fetch_sub			arch_atomic_fetch_sub
++
+ #undef ATOMIC_OPS
+ #define ATOMIC_OPS(op) ATOMIC_OP(op) ATOMIC_FETCH_OP(op)
  
- #define __arch_try_cmpxchg128(_ptr, _oldp, _new, _lock)			\
- ({									\
-@@ -75,11 +77,13 @@ static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *oldp,
- {
- 	return __arch_try_cmpxchg128(ptr, oldp, new, LOCK_PREFIX);
- }
-+#define arch_try_cmpxchg128 arch_try_cmpxchg128
+@@ -252,6 +257,10 @@ ATOMIC_OPS(and)
+ ATOMIC_OPS(or)
+ ATOMIC_OPS(xor)
  
- static __always_inline bool arch_try_cmpxchg128_local(volatile u128 *ptr, u128 *oldp, u128 new)
- {
- 	return __arch_try_cmpxchg128(ptr, oldp, new,);
- }
-+#define arch_try_cmpxchg128_local arch_try_cmpxchg128_local
- 
- #define system_has_cmpxchg128()		boot_cpu_has(X86_FEATURE_CX16)
- 
++#define arch_atomic_fetch_and			arch_atomic_fetch_and
++#define arch_atomic_fetch_or			arch_atomic_fetch_or
++#define arch_atomic_fetch_xor			arch_atomic_fetch_xor
++
+ #undef ATOMIC_OPS
+ #undef ATOMIC_FETCH_OP
+ #undef ATOMIC_OP_RETURN
 -- 
 2.30.2
 
