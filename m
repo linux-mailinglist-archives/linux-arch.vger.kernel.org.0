@@ -2,41 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F3170BE4C
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 14:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F2370BE87
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 14:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbjEVM3a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 May 2023 08:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
+        id S232345AbjEVMjD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 08:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbjEVM1m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 08:27:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11770133;
-        Mon, 22 May 2023 05:25:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E71B4139F;
-        Mon, 22 May 2023 05:26:27 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 47FDA3F59C;
-        Mon, 22 May 2023 05:25:41 -0700 (PDT)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
-        keescook@chromium.org, linux-arch@vger.kernel.org,
-        linux@armlinux.org.uk, linux-doc@vger.kernel.org,
-        mark.rutland@arm.com, paulmck@kernel.org, peterz@infradead.org,
-        sstabellini@kernel.org, will@kernel.org
-Subject: [PATCH 26/26] locking/atomic: treewide: delete arch_atomic_*() kerneldoc
-Date:   Mon, 22 May 2023 13:24:29 +0100
-Message-Id: <20230522122429.1915021-27-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230522122429.1915021-1-mark.rutland@arm.com>
-References: <20230522122429.1915021-1-mark.rutland@arm.com>
+        with ESMTP id S233690AbjEVMi7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 08:38:59 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30017E0;
+        Mon, 22 May 2023 05:38:36 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7D4001FDE2;
+        Mon, 22 May 2023 12:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684759103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5MneQuFeddG2Xj764D+w3Ciyy+UZG/xny7oJL0WA34M=;
+        b=ETlYj+naL05KLguB6PuGcO5Th9rx5gFAkuKb1Ggecrvk5SphhNjLGpgHCs7rNdddtQLdYk
+        Je1T7DrR28/pf4H1P2nJJVgkkegNjHbs4oQUHMcqR5/xB5pYG/jvZCAPxtM3KinmAf87Tg
+        4vs624fYpi/qiMk0jFWU98339UzR8L0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684759103;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5MneQuFeddG2Xj764D+w3Ciyy+UZG/xny7oJL0WA34M=;
+        b=Ai6R2dZtb3Am3DFxE3rbNK8aS7PodbV2PFRyWaGDi3ZVY5XnpAeyKlNFXL17NMcJzJUS2H
+        7ogFnH9i9udVoyDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0A93113776;
+        Mon, 22 May 2023 12:38:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id i11xAT9ia2T5XQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 22 May 2023 12:38:23 +0000
+Message-ID: <2043cea3-7553-ee9d-4aaa-6f1d22ac4d87@suse.de>
+Date:   Mon, 22 May 2023 14:38:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 09/44] drm: handle HAS_IOPORT dependencies
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dave Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        spice-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-10-schnelle@linux.ibm.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230522105049.1467313-10-schnelle@linux.ibm.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------omS0egi6Wc0vNZ4XIw6nTILI"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,742 +91,142 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently several architectures have kerneldoc comments for
-arch_atomic_*(), which is unhelpful as these live in a shared namespace
-where they clash, and the arch_atomic_*() ops are now an implementation
-detail of the raw_atomic_*() ops, which no-one should use those
-directly.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------omS0egi6Wc0vNZ4XIw6nTILI
+Content-Type: multipart/mixed; boundary="------------9Azw0qm8fKudHTn0V0bmWTvi";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Niklas Schnelle <schnelle@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
+ Dave Airlie <airlied@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+ Albert Ou <aou@eecs.berkeley.edu>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, linux-pci@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ virtualization@lists.linux-foundation.org,
+ Alan Stern <stern@rowland.harvard.edu>, spice-devel@lists.freedesktop.org,
+ =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>
+Message-ID: <2043cea3-7553-ee9d-4aaa-6f1d22ac4d87@suse.de>
+Subject: Re: [PATCH v5 09/44] drm: handle HAS_IOPORT dependencies
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-10-schnelle@linux.ibm.com>
+In-Reply-To: <20230522105049.1467313-10-schnelle@linux.ibm.com>
 
-Delete the kerneldoc comments for arch_atomic_*(), along with
-pseudo-kerneldoc comments which are in the correct style but are missing
-the leading '/**' necessary to be true kerneldoc comments.
+--------------9Azw0qm8fKudHTn0V0bmWTvi
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Drop x86's asm/atomic.h from Documentation/driver-api/basics.rst as it
-no longer contains any relevant kerneldoc comments.
+SGkNCg0KQW0gMjIuMDUuMjMgdW0gMTI6NTAgc2NocmllYiBOaWtsYXMgU2NobmVsbGU6DQo+
+IEluIGEgZnV0dXJlIHBhdGNoIEhBU19JT1BPUlQ9biB3aWxsIHJlc3VsdCBpbiBpbmIoKS9v
+dXRiKCkgYW5kIGZyaWVuZHMNCj4gbm90IGJlaW5nIGRlY2xhcmVkLiBXZSB0aHVzIG5lZWQg
+dG8gYWRkIEhBU19JT1BPUlQgYXMgZGVwZW5kZW5jeSBmb3INCj4gdGhvc2UgZHJpdmVycyB1
+c2luZyB0aGVtLiBJbiB0aGUgYm9jaHMgZHJpdmVyIHRoZXJlIGlzIG9wdGlvbmFsIE1NSU8N
+Cj4gc3VwcG9ydCBkZXRlY3RlZCBhdCBydW50aW1lLCB3YXJuIGlmIHRoaXMgaXNuJ3QgdGFr
+ZW4gd2hlbg0KPiBIQVNfSU9QT1JUIGlzIG5vdCBkZWZpbmVkLg0KPiANCj4gVGhlcmUgaXMg
+YWxzbyBhIGRpcmVjdCBhbmQgaGFyZCBjb2RlZCB1c2UgaW4gY2lycnVzLmMgd2hpY2ggYWNj
+b3JkaW5nIHRvDQo+IHRoZSBjb21tZW50IGlzIG9ubHkgbmVjZXNzYXJ5IGR1cmluZyByZXN1
+bWUuICBMZXQncyBqdXN0IHNraXAgdGhpcyBhcw0KPiBmb3IgZXhhbXBsZSBzMzkwIHdoaWNo
+IGRvZXNuJ3QgaGF2ZSBJL08gcG9ydCBzdXBwb3J0IGFsc28gZG9lc2VuJ3QNCj4gc3VwcG9y
+dCBzdXNwZW5kL3Jlc3VtZS4NCg0KSSB0aGluayB3ZSBzaG91bGQgY29uc2lkZXIgbWFraW5n
+IGNpcnJ1cyBkZXBlbmQgb24gSEFTX0lPUE9SVC4gVGhlIA0KZHJpdmVyIGlzIG9ubHkgZm9y
+IHFlbXUncyBjaXJydXMgZW11bGF0aW9uLCB3aGljaCBJSVJDIGNhbiBvbmx5IGJlIA0KZW5h
+YmxlZCBmb3IgaTU4Ni4gQW5kIGl0IGhhcyBhbGwgYmVlbiBkZXByZWNhdGVkIGxvbmcgYWdv
+Lg0KDQo+IA0KPiBDby1kZXZlbG9wZWQtYnk6IEFybmQgQmVyZ21hbm4gPGFybmRAa2VybmVs
+Lm9yZz4NCj4gU2lnbmVkLW9mZi1ieTogQXJuZCBCZXJnbWFubiA8YXJuZEBrZXJuZWwub3Jn
+Pg0KPiBTaWduZWQtb2ZmLWJ5OiBOaWtsYXMgU2NobmVsbGUgPHNjaG5lbGxlQGxpbnV4Lmli
+bS5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvZ3B1L2RybS9xeGwvS2NvbmZpZyAgIHwgIDEg
+Kw0KPiAgIGRyaXZlcnMvZ3B1L2RybS90aW55L2JvY2hzLmMgIHwgMTcgKysrKysrKysrKysr
+KysrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vdGlueS9jaXJydXMuYyB8ICAyICsrDQo+ICAg
+MyBmaWxlcyBjaGFuZ2VkLCAyMCBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9ncHUvZHJtL3F4bC9LY29uZmlnIGIvZHJpdmVycy9ncHUvZHJtL3F4bC9LY29u
+ZmlnDQo+IGluZGV4IGNhM2Y1MWMyYThmZS4uZDBlMGQ0NDBjOGQ5IDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL2dwdS9kcm0vcXhsL0tjb25maWcNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJt
+L3F4bC9LY29uZmlnDQo+IEBAIC0yLDYgKzIsNyBAQA0KPiAgIGNvbmZpZyBEUk1fUVhMDQo+
+ICAgCXRyaXN0YXRlICJRWEwgdmlydHVhbCBHUFUiDQo+ICAgCWRlcGVuZHMgb24gRFJNICYm
+IFBDSSAmJiBNTVUNCj4gKwlkZXBlbmRzIG9uIEhBU19JT1BPUlQNCj4gICAJc2VsZWN0IERS
+TV9LTVNfSEVMUEVSDQo+ICAgCXNlbGVjdCBEUk1fVFRNDQo+ICAgCXNlbGVjdCBEUk1fVFRN
+X0hFTFBFUg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9jaHMuYyBi
+L2RyaXZlcnMvZ3B1L2RybS90aW55L2JvY2hzLmMNCj4gaW5kZXggZDI1NDY3OWExMzZlLi4z
+NzEwMzM5NDA3Y2MgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS90aW55L2JvY2hz
+LmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3RpbnkvYm9jaHMuYw0KPiBAQCAtMiw2ICsy
+LDcgQEANCj4gICANCj4gICAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ICAgI2luY2x1
+ZGUgPGxpbnV4L3BjaS5oPg0KPiArI2luY2x1ZGUgPGFzbS9idWcuaD4NCg0KV2h5IG5vdCA8
+bGludXgvYnVnLmg+ID8NCg0KPiAgIA0KPiAgICNpbmNsdWRlIDxkcm0vZHJtX2FwZXJ0dXJl
+Lmg+DQo+ICAgI2luY2x1ZGUgPGRybS9kcm1fYXRvbWljX2hlbHBlci5oPg0KPiBAQCAtMTA1
+LDcgKzEwNiw5IEBAIHN0YXRpYyB2b2lkIGJvY2hzX3ZnYV93cml0ZWIoc3RydWN0IGJvY2hz
+X2RldmljZSAqYm9jaHMsIHUxNiBpb3BvcnQsIHU4IHZhbCkNCj4gICANCj4gICAJCXdyaXRl
+Yih2YWwsIGJvY2hzLT5tbWlvICsgb2Zmc2V0KTsNCj4gICAJfSBlbHNlIHsNCj4gKyNpZmRl
+ZiBDT05GSUdfSEFTX0lPUE9SVA0KPiAgIAkJb3V0Yih2YWwsIGlvcG9ydCk7DQo+ICsjZW5k
+aWYNCg0KV291bGQgaXQgYmUgZmVhc2libGUgdG8gZGVmaW5lIGluYiwgaW53LCBvdXRiIGFu
+ZCBvdXR3IGF0IHRoZSB0b3Agb2YgDQpib2Nocy5jIGlmIG5vIEhBU19JT1BPUlQgaGFzIGJl
+ZW4gc2V0PyAgVGhhdCB3b3VsZCBhdm9pZCB0aGUgaWZkZWYgDQpicmFuY2hpbmcgd2l0aGlu
+IHRoZSBjb2RlLg0KDQo+ICAgCX0NCj4gICB9DQo+ICAgDQo+IEBAIC0xMTksNyArMTIyLDEx
+IEBAIHN0YXRpYyB1OCBib2Noc192Z2FfcmVhZGIoc3RydWN0IGJvY2hzX2RldmljZSAqYm9j
+aHMsIHUxNiBpb3BvcnQpDQo+ICAgDQo+ICAgCQlyZXR1cm4gcmVhZGIoYm9jaHMtPm1taW8g
+KyBvZmZzZXQpOw0KPiAgIAl9IGVsc2Ugew0KPiArI2lmZGVmIENPTkZJR19IQVNfSU9QT1JU
+DQo+ICAgCQlyZXR1cm4gaW5iKGlvcG9ydCk7DQo+ICsjZWxzZQ0KPiArCQlyZXR1cm4gMHhm
+ZjsNCj4gKyNlbmRpZg0KPiAgIAl9DQo+ICAgfQ0KPiAgIA0KPiBAQCAtMTMyLDggKzEzOSwx
+MiBAQCBzdGF0aWMgdTE2IGJvY2hzX2Rpc3BpX3JlYWQoc3RydWN0IGJvY2hzX2RldmljZSAq
+Ym9jaHMsIHUxNiByZWcpDQo+ICAgDQo+ICAgCQlyZXQgPSByZWFkdyhib2Nocy0+bW1pbyAr
+IG9mZnNldCk7DQo+ICAgCX0gZWxzZSB7DQo+ICsjaWZkZWYgQ09ORklHX0hBU19JT1BPUlQN
+Cj4gICAJCW91dHcocmVnLCBWQkVfRElTUElfSU9QT1JUX0lOREVYKTsNCj4gICAJCXJldCA9
+IGludyhWQkVfRElTUElfSU9QT1JUX0RBVEEpOw0KPiArI2Vsc2UNCj4gKwkJcmV0ID0gMHhm
+ZmZmOw0KPiArI2VuZGlmDQo+ICAgCX0NCj4gICAJcmV0dXJuIHJldDsNCj4gICB9DQo+IEBA
+IC0xNDUsOCArMTU2LDEwIEBAIHN0YXRpYyB2b2lkIGJvY2hzX2Rpc3BpX3dyaXRlKHN0cnVj
+dCBib2Noc19kZXZpY2UgKmJvY2hzLCB1MTYgcmVnLCB1MTYgdmFsKQ0KPiAgIA0KPiAgIAkJ
+d3JpdGV3KHZhbCwgYm9jaHMtPm1taW8gKyBvZmZzZXQpOw0KPiAgIAl9IGVsc2Ugew0KPiAr
+I2lmZGVmIENPTkZJR19IQVNfSU9QT1JUDQo+ICAgCQlvdXR3KHJlZywgVkJFX0RJU1BJX0lP
+UE9SVF9JTkRFWCk7DQo+ICAgCQlvdXR3KHZhbCwgVkJFX0RJU1BJX0lPUE9SVF9EQVRBKTsN
+Cj4gKyNlbmRpZg0KPiAgIAl9DQo+ICAgfQ0KPiAgIA0KPiBAQCAtMjI5LDYgKzI0MiwxMCBA
+QCBzdGF0aWMgaW50IGJvY2hzX2h3X2luaXQoc3RydWN0IGRybV9kZXZpY2UgKmRldikNCj4g
+ICAJCQlyZXR1cm4gLUVOT01FTTsNCj4gICAJCX0NCj4gICAJfSBlbHNlIHsNCj4gKwkJaWYg
+KCFJU19FTkFCTEVEKENPTkZJR19IQVNfSU9QT1JUKSkgew0KPiArCQkJRFJNX0VSUk9SKCJJ
+L08gcG9ydHMgYXJlIG5vdCBzdXBwb3J0ZWRcbiIpOw0KDQpVc2UgZHJtX2VycigpIGhlcmUu
+DQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gKwkJCXJldHVybiAtRUlPOw0KPiArCQl9
+DQo+ICAgCQlpb2FkZHIgPSBWQkVfRElTUElfSU9QT1JUX0lOREVYOw0KPiAgIAkJaW9zaXpl
+ID0gMjsNCj4gICAJCWlmICghcmVxdWVzdF9yZWdpb24oaW9hZGRyLCBpb3NpemUsICJib2No
+cy1kcm0iKSkgew0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3RpbnkvY2lycnVz
+LmMgYi9kcml2ZXJzL2dwdS9kcm0vdGlueS9jaXJydXMuYw0KPiBpbmRleCA1OTRiYzQ3Mjg2
+MmYuLmM2NWZlYTA0OWJjNyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3Rpbnkv
+Y2lycnVzLmMNCj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3RpbnkvY2lycnVzLmMNCj4gQEAg
+LTUwOCw4ICs1MDgsMTAgQEAgc3RhdGljIHZvaWQgY2lycnVzX2NydGNfaGVscGVyX2F0b21p
+Y19lbmFibGUoc3RydWN0IGRybV9jcnRjICpjcnRjLA0KPiAgIA0KPiAgIAljaXJydXNfbW9k
+ZV9zZXQoY2lycnVzLCAmY3J0Y19zdGF0ZS0+bW9kZSk7DQo+ICAgDQo+ICsjaWZkZWYgQ09O
+RklHX0hBU19JT1BPUlQNCj4gICAJLyogVW5ibGFuayAobmVlZGVkIG9uIFMzIHJlc3VtZSwg
+dmdhYmlvcyBkb2Vzbid0IGRvIGl0IHRoZW4pICovDQo+ICAgCW91dGIoVkdBX0FSX0VOQUJM
+RV9ESVNQTEFZLCBWR0FfQVRUX1cpOw0KPiArI2VuZGlmDQo+ICAgDQo+ICAgCWRybV9kZXZf
+ZXhpdChpZHgpOw0KPiAgIH0NCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6IEl2
+byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9lcm1h
+bg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
----
- Documentation/driver-api/basics.rst   |  3 -
- arch/alpha/include/asm/atomic.h       | 25 --------
- arch/arc/include/asm/atomic64-arcv2.h | 17 ------
- arch/hexagon/include/asm/atomic.h     | 16 -----
- arch/loongarch/include/asm/atomic.h   | 49 ---------------
- arch/x86/include/asm/atomic.h         | 87 ---------------------------
- arch/x86/include/asm/atomic64_32.h    | 76 -----------------------
- arch/x86/include/asm/atomic64_64.h    | 81 -------------------------
- 8 files changed, 354 deletions(-)
+--------------9Azw0qm8fKudHTn0V0bmWTvi--
 
-diff --git a/Documentation/driver-api/basics.rst b/Documentation/driver-api/basics.rst
-index a1fbd97fb79fb..d8e4e5c82bcf0 100644
---- a/Documentation/driver-api/basics.rst
-+++ b/Documentation/driver-api/basics.rst
-@@ -84,9 +84,6 @@ Reference counting
- Atomics
- -------
- 
--.. kernel-doc:: arch/x86/include/asm/atomic.h
--   :internal:
--
- .. kernel-doc:: include/linux/atomic/atomic-arch-fallback.h
-    :internal:
- 
-diff --git a/arch/alpha/include/asm/atomic.h b/arch/alpha/include/asm/atomic.h
-index ec8ab552c527a..cbd9244571af0 100644
---- a/arch/alpha/include/asm/atomic.h
-+++ b/arch/alpha/include/asm/atomic.h
-@@ -200,15 +200,6 @@ ATOMIC_OPS(xor, xor)
- #undef ATOMIC_OP_RETURN
- #undef ATOMIC_OP
- 
--/**
-- * arch_atomic_fetch_add_unless - add unless the number is a given value
-- * @v: pointer of type atomic_t
-- * @a: the amount to add to v...
-- * @u: ...unless v is equal to u.
-- *
-- * Atomically adds @a to @v, so long as it was not @u.
-- * Returns the old value of @v.
-- */
- static __inline__ int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
- {
- 	int c, new, old;
-@@ -232,15 +223,6 @@ static __inline__ int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
- }
- #define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
- 
--/**
-- * arch_atomic64_fetch_add_unless - add unless the number is a given value
-- * @v: pointer of type atomic64_t
-- * @a: the amount to add to v...
-- * @u: ...unless v is equal to u.
-- *
-- * Atomically adds @a to @v, so long as it was not @u.
-- * Returns the old value of @v.
-- */
- static __inline__ s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
- {
- 	s64 c, new, old;
-@@ -264,13 +246,6 @@ static __inline__ s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u
- }
- #define arch_atomic64_fetch_add_unless arch_atomic64_fetch_add_unless
- 
--/*
-- * arch_atomic64_dec_if_positive - decrement by 1 if old value positive
-- * @v: pointer of type atomic_t
-- *
-- * The function returns the old value of *v minus 1, even if
-- * the atomic variable, v, was not decremented.
-- */
- static inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
- {
- 	s64 old, tmp;
-diff --git a/arch/arc/include/asm/atomic64-arcv2.h b/arch/arc/include/asm/atomic64-arcv2.h
-index 2b7c9e61a2947..6b6db981967ae 100644
---- a/arch/arc/include/asm/atomic64-arcv2.h
-+++ b/arch/arc/include/asm/atomic64-arcv2.h
-@@ -182,14 +182,6 @@ static inline s64 arch_atomic64_xchg(atomic64_t *ptr, s64 new)
- }
- #define arch_atomic64_xchg arch_atomic64_xchg
- 
--/**
-- * arch_atomic64_dec_if_positive - decrement by 1 if old value positive
-- * @v: pointer of type atomic64_t
-- *
-- * The function returns the old value of *v minus 1, even if
-- * the atomic variable, v, was not decremented.
-- */
--
- static inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
- {
- 	s64 val;
-@@ -214,15 +206,6 @@ static inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
- }
- #define arch_atomic64_dec_if_positive arch_atomic64_dec_if_positive
- 
--/**
-- * arch_atomic64_fetch_add_unless - add unless the number is a given value
-- * @v: pointer of type atomic64_t
-- * @a: the amount to add to v...
-- * @u: ...unless v is equal to u.
-- *
-- * Atomically adds @a to @v, if it was not @u.
-- * Returns the old value of @v
-- */
- static inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a, s64 u)
- {
- 	s64 old, temp;
-diff --git a/arch/hexagon/include/asm/atomic.h b/arch/hexagon/include/asm/atomic.h
-index 5c8440016c762..2447d083c432f 100644
---- a/arch/hexagon/include/asm/atomic.h
-+++ b/arch/hexagon/include/asm/atomic.h
-@@ -28,12 +28,6 @@ static inline void arch_atomic_set(atomic_t *v, int new)
- 
- #define arch_atomic_set_release(v, i)	arch_atomic_set((v), (i))
- 
--/**
-- * arch_atomic_read - reads a word, atomically
-- * @v: pointer to atomic value
-- *
-- * Assumes all word reads on our architecture are atomic.
-- */
- #define arch_atomic_read(v)		READ_ONCE((v)->counter)
- 
- #define ATOMIC_OP(op)							\
-@@ -112,16 +106,6 @@ ATOMIC_OPS(xor)
- #undef ATOMIC_OP_RETURN
- #undef ATOMIC_OP
- 
--/**
-- * arch_atomic_fetch_add_unless - add unless the number is a given value
-- * @v: pointer to value
-- * @a: amount to add
-- * @u: unless value is equal to u
-- *
-- * Returns old value.
-- *
-- */
--
- static inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
- {
- 	int __oldval;
-diff --git a/arch/loongarch/include/asm/atomic.h b/arch/loongarch/include/asm/atomic.h
-index 8d73c85911b08..e27f0c72d3242 100644
---- a/arch/loongarch/include/asm/atomic.h
-+++ b/arch/loongarch/include/asm/atomic.h
-@@ -29,21 +29,7 @@
- 
- #define ATOMIC_INIT(i)	  { (i) }
- 
--/*
-- * arch_atomic_read - read atomic variable
-- * @v: pointer of type atomic_t
-- *
-- * Atomically reads the value of @v.
-- */
- #define arch_atomic_read(v)	READ_ONCE((v)->counter)
--
--/*
-- * arch_atomic_set - set atomic variable
-- * @v: pointer of type atomic_t
-- * @i: required value
-- *
-- * Atomically sets the value of @v to @i.
-- */
- #define arch_atomic_set(v, i)	WRITE_ONCE((v)->counter, (i))
- 
- #define ATOMIC_OP(op, I, asm_op)					\
-@@ -139,14 +125,6 @@ static inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
- }
- #define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
- 
--/*
-- * arch_atomic_sub_if_positive - conditionally subtract integer from atomic variable
-- * @i: integer value to subtract
-- * @v: pointer of type atomic_t
-- *
-- * Atomically test @v and subtract @i if @v is greater or equal than @i.
-- * The function returns the old value of @v minus @i.
-- */
- static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
- {
- 	int result;
-@@ -181,28 +159,13 @@ static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
- 	return result;
- }
- 
--/*
-- * arch_atomic_dec_if_positive - decrement by 1 if old value positive
-- * @v: pointer of type atomic_t
-- */
- #define arch_atomic_dec_if_positive(v)	arch_atomic_sub_if_positive(1, v)
- 
- #ifdef CONFIG_64BIT
- 
- #define ATOMIC64_INIT(i)    { (i) }
- 
--/*
-- * arch_atomic64_read - read atomic variable
-- * @v: pointer of type atomic64_t
-- *
-- */
- #define arch_atomic64_read(v)	READ_ONCE((v)->counter)
--
--/*
-- * arch_atomic64_set - set atomic variable
-- * @v: pointer of type atomic64_t
-- * @i: required value
-- */
- #define arch_atomic64_set(v, i)	WRITE_ONCE((v)->counter, (i))
- 
- #define ATOMIC64_OP(op, I, asm_op)					\
-@@ -297,14 +260,6 @@ static inline long arch_atomic64_fetch_add_unless(atomic64_t *v, long a, long u)
- }
- #define arch_atomic64_fetch_add_unless arch_atomic64_fetch_add_unless
- 
--/*
-- * arch_atomic64_sub_if_positive - conditionally subtract integer from atomic variable
-- * @i: integer value to subtract
-- * @v: pointer of type atomic64_t
-- *
-- * Atomically test @v and subtract @i if @v is greater or equal than @i.
-- * The function returns the old value of @v minus @i.
-- */
- static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
- {
- 	long result;
-@@ -339,10 +294,6 @@ static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
- 	return result;
- }
- 
--/*
-- * arch_atomic64_dec_if_positive - decrement by 1 if old value positive
-- * @v: pointer of type atomic64_t
-- */
- #define arch_atomic64_dec_if_positive(v)	arch_atomic64_sub_if_positive(1, v)
- 
- #endif /* CONFIG_64BIT */
-diff --git a/arch/x86/include/asm/atomic.h b/arch/x86/include/asm/atomic.h
-index 5e754e8957671..55a55ec043502 100644
---- a/arch/x86/include/asm/atomic.h
-+++ b/arch/x86/include/asm/atomic.h
-@@ -14,12 +14,6 @@
-  * resource counting etc..
-  */
- 
--/**
-- * arch_atomic_read - read atomic variable
-- * @v: pointer of type atomic_t
-- *
-- * Atomically reads the value of @v.
-- */
- static __always_inline int arch_atomic_read(const atomic_t *v)
- {
- 	/*
-@@ -29,25 +23,11 @@ static __always_inline int arch_atomic_read(const atomic_t *v)
- 	return __READ_ONCE((v)->counter);
- }
- 
--/**
-- * arch_atomic_set - set atomic variable
-- * @v: pointer of type atomic_t
-- * @i: required value
-- *
-- * Atomically sets the value of @v to @i.
-- */
- static __always_inline void arch_atomic_set(atomic_t *v, int i)
- {
- 	__WRITE_ONCE(v->counter, i);
- }
- 
--/**
-- * arch_atomic_add - add integer to atomic variable
-- * @i: integer value to add
-- * @v: pointer of type atomic_t
-- *
-- * Atomically adds @i to @v.
-- */
- static __always_inline void arch_atomic_add(int i, atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "addl %1,%0"
-@@ -55,13 +35,6 @@ static __always_inline void arch_atomic_add(int i, atomic_t *v)
- 		     : "ir" (i) : "memory");
- }
- 
--/**
-- * arch_atomic_sub - subtract integer from atomic variable
-- * @i: integer value to subtract
-- * @v: pointer of type atomic_t
-- *
-- * Atomically subtracts @i from @v.
-- */
- static __always_inline void arch_atomic_sub(int i, atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "subl %1,%0"
-@@ -69,27 +42,12 @@ static __always_inline void arch_atomic_sub(int i, atomic_t *v)
- 		     : "ir" (i) : "memory");
- }
- 
--/**
-- * arch_atomic_sub_and_test - subtract value from variable and test result
-- * @i: integer value to subtract
-- * @v: pointer of type atomic_t
-- *
-- * Atomically subtracts @i from @v and returns
-- * true if the result is zero, or false for all
-- * other cases.
-- */
- static __always_inline bool arch_atomic_sub_and_test(int i, atomic_t *v)
- {
- 	return GEN_BINARY_RMWcc(LOCK_PREFIX "subl", v->counter, e, "er", i);
- }
- #define arch_atomic_sub_and_test arch_atomic_sub_and_test
- 
--/**
-- * arch_atomic_inc - increment atomic variable
-- * @v: pointer of type atomic_t
-- *
-- * Atomically increments @v by 1.
-- */
- static __always_inline void arch_atomic_inc(atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "incl %0"
-@@ -97,12 +55,6 @@ static __always_inline void arch_atomic_inc(atomic_t *v)
- }
- #define arch_atomic_inc arch_atomic_inc
- 
--/**
-- * arch_atomic_dec - decrement atomic variable
-- * @v: pointer of type atomic_t
-- *
-- * Atomically decrements @v by 1.
-- */
- static __always_inline void arch_atomic_dec(atomic_t *v)
- {
- 	asm volatile(LOCK_PREFIX "decl %0"
-@@ -110,69 +62,30 @@ static __always_inline void arch_atomic_dec(atomic_t *v)
- }
- #define arch_atomic_dec arch_atomic_dec
- 
--/**
-- * arch_atomic_dec_and_test - decrement and test
-- * @v: pointer of type atomic_t
-- *
-- * Atomically decrements @v by 1 and
-- * returns true if the result is 0, or false for all other
-- * cases.
-- */
- static __always_inline bool arch_atomic_dec_and_test(atomic_t *v)
- {
- 	return GEN_UNARY_RMWcc(LOCK_PREFIX "decl", v->counter, e);
- }
- #define arch_atomic_dec_and_test arch_atomic_dec_and_test
- 
--/**
-- * arch_atomic_inc_and_test - increment and test
-- * @v: pointer of type atomic_t
-- *
-- * Atomically increments @v by 1
-- * and returns true if the result is zero, or false for all
-- * other cases.
-- */
- static __always_inline bool arch_atomic_inc_and_test(atomic_t *v)
- {
- 	return GEN_UNARY_RMWcc(LOCK_PREFIX "incl", v->counter, e);
- }
- #define arch_atomic_inc_and_test arch_atomic_inc_and_test
- 
--/**
-- * arch_atomic_add_negative - add and test if negative
-- * @i: integer value to add
-- * @v: pointer of type atomic_t
-- *
-- * Atomically adds @i to @v and returns true
-- * if the result is negative, or false when
-- * result is greater than or equal to zero.
-- */
- static __always_inline bool arch_atomic_add_negative(int i, atomic_t *v)
- {
- 	return GEN_BINARY_RMWcc(LOCK_PREFIX "addl", v->counter, s, "er", i);
- }
- #define arch_atomic_add_negative arch_atomic_add_negative
- 
--/**
-- * arch_atomic_add_return - add integer and return
-- * @i: integer value to add
-- * @v: pointer of type atomic_t
-- *
-- * Atomically adds @i to @v and returns @i + @v
-- */
- static __always_inline int arch_atomic_add_return(int i, atomic_t *v)
- {
- 	return i + xadd(&v->counter, i);
- }
- #define arch_atomic_add_return arch_atomic_add_return
- 
--/**
-- * arch_atomic_sub_return - subtract integer and return
-- * @v: pointer of type atomic_t
-- * @i: integer value to subtract
-- *
-- * Atomically subtracts @i from @v and returns @v - @i
-- */
- static __always_inline int arch_atomic_sub_return(int i, atomic_t *v)
- {
- 	return arch_atomic_add_return(-i, v);
-diff --git a/arch/x86/include/asm/atomic64_32.h b/arch/x86/include/asm/atomic64_32.h
-index 808b4eece251e..3486d91b8595f 100644
---- a/arch/x86/include/asm/atomic64_32.h
-+++ b/arch/x86/include/asm/atomic64_32.h
-@@ -61,30 +61,12 @@ ATOMIC64_DECL(add_unless);
- #undef __ATOMIC64_DECL
- #undef ATOMIC64_EXPORT
- 
--/**
-- * arch_atomic64_cmpxchg - cmpxchg atomic64 variable
-- * @v: pointer to type atomic64_t
-- * @o: expected value
-- * @n: new value
-- *
-- * Atomically sets @v to @n if it was equal to @o and returns
-- * the old value.
-- */
--
- static __always_inline s64 arch_atomic64_cmpxchg(atomic64_t *v, s64 o, s64 n)
- {
- 	return arch_cmpxchg64(&v->counter, o, n);
- }
- #define arch_atomic64_cmpxchg arch_atomic64_cmpxchg
- 
--/**
-- * arch_atomic64_xchg - xchg atomic64 variable
-- * @v: pointer to type atomic64_t
-- * @n: value to assign
-- *
-- * Atomically xchgs the value of @v to @n and returns
-- * the old value.
-- */
- static __always_inline s64 arch_atomic64_xchg(atomic64_t *v, s64 n)
- {
- 	s64 o;
-@@ -97,13 +79,6 @@ static __always_inline s64 arch_atomic64_xchg(atomic64_t *v, s64 n)
- }
- #define arch_atomic64_xchg arch_atomic64_xchg
- 
--/**
-- * arch_atomic64_set - set atomic64 variable
-- * @v: pointer to type atomic64_t
-- * @i: value to assign
-- *
-- * Atomically sets the value of @v to @n.
-- */
- static __always_inline void arch_atomic64_set(atomic64_t *v, s64 i)
- {
- 	unsigned high = (unsigned)(i >> 32);
-@@ -113,12 +88,6 @@ static __always_inline void arch_atomic64_set(atomic64_t *v, s64 i)
- 			     : "eax", "edx", "memory");
- }
- 
--/**
-- * arch_atomic64_read - read atomic64 variable
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically reads the value of @v and returns it.
-- */
- static __always_inline s64 arch_atomic64_read(const atomic64_t *v)
- {
- 	s64 r;
-@@ -126,13 +95,6 @@ static __always_inline s64 arch_atomic64_read(const atomic64_t *v)
- 	return r;
- }
- 
--/**
-- * arch_atomic64_add_return - add and return
-- * @i: integer value to add
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically adds @i to @v and returns @i + *@v
-- */
- static __always_inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
- {
- 	alternative_atomic64(add_return,
-@@ -142,9 +104,6 @@ static __always_inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
- }
- #define arch_atomic64_add_return arch_atomic64_add_return
- 
--/*
-- * Other variants with different arithmetic operators:
-- */
- static __always_inline s64 arch_atomic64_sub_return(s64 i, atomic64_t *v)
- {
- 	alternative_atomic64(sub_return,
-@@ -172,13 +131,6 @@ static __always_inline s64 arch_atomic64_dec_return(atomic64_t *v)
- }
- #define arch_atomic64_dec_return arch_atomic64_dec_return
- 
--/**
-- * arch_atomic64_add - add integer to atomic64 variable
-- * @i: integer value to add
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically adds @i to @v.
-- */
- static __always_inline s64 arch_atomic64_add(s64 i, atomic64_t *v)
- {
- 	__alternative_atomic64(add, add_return,
-@@ -187,13 +139,6 @@ static __always_inline s64 arch_atomic64_add(s64 i, atomic64_t *v)
- 	return i;
- }
- 
--/**
-- * arch_atomic64_sub - subtract the atomic64 variable
-- * @i: integer value to subtract
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically subtracts @i from @v.
-- */
- static __always_inline s64 arch_atomic64_sub(s64 i, atomic64_t *v)
- {
- 	__alternative_atomic64(sub, sub_return,
-@@ -202,12 +147,6 @@ static __always_inline s64 arch_atomic64_sub(s64 i, atomic64_t *v)
- 	return i;
- }
- 
--/**
-- * arch_atomic64_inc - increment atomic64 variable
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically increments @v by 1.
-- */
- static __always_inline void arch_atomic64_inc(atomic64_t *v)
- {
- 	__alternative_atomic64(inc, inc_return, /* no output */,
-@@ -215,12 +154,6 @@ static __always_inline void arch_atomic64_inc(atomic64_t *v)
- }
- #define arch_atomic64_inc arch_atomic64_inc
- 
--/**
-- * arch_atomic64_dec - decrement atomic64 variable
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically decrements @v by 1.
-- */
- static __always_inline void arch_atomic64_dec(atomic64_t *v)
- {
- 	__alternative_atomic64(dec, dec_return, /* no output */,
-@@ -228,15 +161,6 @@ static __always_inline void arch_atomic64_dec(atomic64_t *v)
- }
- #define arch_atomic64_dec arch_atomic64_dec
- 
--/**
-- * arch_atomic64_add_unless - add unless the number is a given value
-- * @v: pointer of type atomic64_t
-- * @a: the amount to add to v...
-- * @u: ...unless v is equal to u.
-- *
-- * Atomically adds @a to @v, so long as it was not @u.
-- * Returns non-zero if the add was done, zero otherwise.
-- */
- static __always_inline int arch_atomic64_add_unless(atomic64_t *v, s64 a, s64 u)
- {
- 	unsigned low = (unsigned)u;
-diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
-index c496595bf6012..3165c0feedf74 100644
---- a/arch/x86/include/asm/atomic64_64.h
-+++ b/arch/x86/include/asm/atomic64_64.h
-@@ -10,37 +10,16 @@
- 
- #define ATOMIC64_INIT(i)	{ (i) }
- 
--/**
-- * arch_atomic64_read - read atomic64 variable
-- * @v: pointer of type atomic64_t
-- *
-- * Atomically reads the value of @v.
-- * Doesn't imply a read memory barrier.
-- */
- static __always_inline s64 arch_atomic64_read(const atomic64_t *v)
- {
- 	return __READ_ONCE((v)->counter);
- }
- 
--/**
-- * arch_atomic64_set - set atomic64 variable
-- * @v: pointer to type atomic64_t
-- * @i: required value
-- *
-- * Atomically sets the value of @v to @i.
-- */
- static __always_inline void arch_atomic64_set(atomic64_t *v, s64 i)
- {
- 	__WRITE_ONCE(v->counter, i);
- }
- 
--/**
-- * arch_atomic64_add - add integer to atomic64 variable
-- * @i: integer value to add
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically adds @i to @v.
-- */
- static __always_inline void arch_atomic64_add(s64 i, atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "addq %1,%0"
-@@ -48,13 +27,6 @@ static __always_inline void arch_atomic64_add(s64 i, atomic64_t *v)
- 		     : "er" (i), "m" (v->counter) : "memory");
- }
- 
--/**
-- * arch_atomic64_sub - subtract the atomic64 variable
-- * @i: integer value to subtract
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically subtracts @i from @v.
-- */
- static __always_inline void arch_atomic64_sub(s64 i, atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "subq %1,%0"
-@@ -62,27 +34,12 @@ static __always_inline void arch_atomic64_sub(s64 i, atomic64_t *v)
- 		     : "er" (i), "m" (v->counter) : "memory");
- }
- 
--/**
-- * arch_atomic64_sub_and_test - subtract value from variable and test result
-- * @i: integer value to subtract
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically subtracts @i from @v and returns
-- * true if the result is zero, or false for all
-- * other cases.
-- */
- static __always_inline bool arch_atomic64_sub_and_test(s64 i, atomic64_t *v)
- {
- 	return GEN_BINARY_RMWcc(LOCK_PREFIX "subq", v->counter, e, "er", i);
- }
- #define arch_atomic64_sub_and_test arch_atomic64_sub_and_test
- 
--/**
-- * arch_atomic64_inc - increment atomic64 variable
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically increments @v by 1.
-- */
- static __always_inline void arch_atomic64_inc(atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "incq %0"
-@@ -91,12 +48,6 @@ static __always_inline void arch_atomic64_inc(atomic64_t *v)
- }
- #define arch_atomic64_inc arch_atomic64_inc
- 
--/**
-- * arch_atomic64_dec - decrement atomic64 variable
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically decrements @v by 1.
-- */
- static __always_inline void arch_atomic64_dec(atomic64_t *v)
- {
- 	asm volatile(LOCK_PREFIX "decq %0"
-@@ -105,56 +56,24 @@ static __always_inline void arch_atomic64_dec(atomic64_t *v)
- }
- #define arch_atomic64_dec arch_atomic64_dec
- 
--/**
-- * arch_atomic64_dec_and_test - decrement and test
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically decrements @v by 1 and
-- * returns true if the result is 0, or false for all other
-- * cases.
-- */
- static __always_inline bool arch_atomic64_dec_and_test(atomic64_t *v)
- {
- 	return GEN_UNARY_RMWcc(LOCK_PREFIX "decq", v->counter, e);
- }
- #define arch_atomic64_dec_and_test arch_atomic64_dec_and_test
- 
--/**
-- * arch_atomic64_inc_and_test - increment and test
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically increments @v by 1
-- * and returns true if the result is zero, or false for all
-- * other cases.
-- */
- static __always_inline bool arch_atomic64_inc_and_test(atomic64_t *v)
- {
- 	return GEN_UNARY_RMWcc(LOCK_PREFIX "incq", v->counter, e);
- }
- #define arch_atomic64_inc_and_test arch_atomic64_inc_and_test
- 
--/**
-- * arch_atomic64_add_negative - add and test if negative
-- * @i: integer value to add
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically adds @i to @v and returns true
-- * if the result is negative, or false when
-- * result is greater than or equal to zero.
-- */
- static __always_inline bool arch_atomic64_add_negative(s64 i, atomic64_t *v)
- {
- 	return GEN_BINARY_RMWcc(LOCK_PREFIX "addq", v->counter, s, "er", i);
- }
- #define arch_atomic64_add_negative arch_atomic64_add_negative
- 
--/**
-- * arch_atomic64_add_return - add and return
-- * @i: integer value to add
-- * @v: pointer to type atomic64_t
-- *
-- * Atomically adds @i to @v and returns @i + @v
-- */
- static __always_inline s64 arch_atomic64_add_return(s64 i, atomic64_t *v)
- {
- 	return i + xadd(&v->counter, i);
--- 
-2.30.2
+--------------omS0egi6Wc0vNZ4XIw6nTILI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRrYj4FAwAAAAAACgkQlh/E3EQov+Bu
+SQ//U1LJuOW9//Ph1lt4/wXKM7nkXq4Dc6WvO5lXBy3cHTCa72Qaq+cM5WgZMgBAWHgmS796tbpW
+BIJHIBlfluSwFDmqvUflnNV7HC3q90JuCzlUga3nHxR0GDuwkqovtrbDASN9UvIWNvaza5RYqRY8
+hkH4YU5vxqhc2vovin0N+RFFb6Vo8/i6a6KKdCzmX/CYfbffKnUK7J+GxXmg5501nu06c2nZA1VJ
+pLPgbzmY48PllfvLNfH+nFBCNzE3uOJhbEGzzuglkRl41ZMkHjp9/FmDjwJa7A+XaLfcvS8vWEXa
+uFlUqo+Qwz+KPMj9tTIBkW0N1NBF9XJduq3yqAroWzdok4UUWhli+aayh91KZu0xxQaWun3LuVO8
+URQahi/SZ2llfUYlPMAO1AOQfWB4BRN1MRnRryfZSoVZ+Zi4mCzSfnJ9yYJZf3mG4BrE1ywic7Bf
+m7oYrsYqTcPWZXLZzuE0YDDmdp8SN3Bx3v8LjvGFhfEZI0v0PpJmOJuoGzviriTtMtB+tGpsXK7p
+PhxnJkf2BNxFJ0YjfRCD3+TJYACGbq/zHRAMWRN2jZ2sJc9CDNJXDq5vd04Oj+inh+15PnA2clh1
+c0oK8J6ECksmbnODhfTaNEIu9CUOx6OyzGiUMJIqhTm7geUSuU3m0pL9GHiqD+ABXpEhOjc/aKKc
+Eyg=
+=JJMK
+-----END PGP SIGNATURE-----
+
+--------------omS0egi6Wc0vNZ4XIw6nTILI--
