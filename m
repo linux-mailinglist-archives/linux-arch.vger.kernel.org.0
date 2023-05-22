@@ -2,65 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3F370BA64
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 12:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A4A70BA81
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 12:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjEVKvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 May 2023 06:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S232590AbjEVKvu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 06:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232729AbjEVKvO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 06:51:14 -0400
+        with ESMTP id S232885AbjEVKvj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 06:51:39 -0400
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00519E0;
-        Mon, 22 May 2023 03:51:12 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M8qKGI022751;
-        Mon, 22 May 2023 10:51:02 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA893100;
+        Mon, 22 May 2023 03:51:18 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9qg4P025283;
+        Mon, 22 May 2023 10:51:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=r0iP2dEhZ9OVhEy+tAYdX8nt+/qP3QrB+sF2qrnjCU0=;
- b=Kv5scphL2k5l8GIPc9rHapIah5Tfr73ny9C12+iNRPhMo3qmlKQ1ftu6SEttZjVO2Qoe
- n0mh2QJ6t6kkvXM86rteooz/hS1Y9foQKT3pZfnOBweBdDYISu/rcA7qGNOd6vvap86o
- DdxhmV2mt8IgGQ2mkvqtPXJMHgr/G+IkBvsjWlBok0dffgB3gByUO9FCMnCZAuPF0Jqa
- gYE+H8GPUowRGdEKHyWpyIn7oam+sVQ51TKEogiFHKeSG6Z6BTlN3isW39pNsHCyeTRI
- 6XSif9mhGbjJ4JpBXn9NZhl9PU3EEckPPHFORTRQWdPRZ0JhxxVhjR/w9Jo9xHmpdrAP 3Q== 
+ bh=9Kmlo6ZCBjkmXN6T3y03XJrR9HuwFE+uXebCLLUEKWc=;
+ b=jr47dkICdmjhhzDFIKsksvNwxunKZ4lkXK7WMfk+Kv2XJd52XXZQbJ7RWnjwM5WZbLOM
+ CGa/YQQpyXvd6q+pz1T/s7L2equMdbfXWERr9uydF60cR7K0JMROGK7KBzhmfOnvDB7A
+ HCpKIfu+4yfq8oiJoVfOFWWrJQIWR30wVHZwROGAxoJrpJOE4FKwUHIqsY8JM+3zWxl9
+ uXnXbfdxnJkZ+X6/q2hAZr3yT/A8yQxd8Ws/LKB6OTXqI1eCZVS/ANIf1yuqnu6aZ+FU
+ z8hODjAUZzJlgHHLU4IT8f9+jxi6LOltsQ06wOwVav/BQEIU7DbMqjkYwGpfQAe9rHKS 1Q== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqd3tc92p-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqawenue2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:01 +0000
-Received: from m0353723.ppops.net (m0353723.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAp1YB013361;
-        Mon, 22 May 2023 10:51:01 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqd3tc923-1
+        Mon, 22 May 2023 10:51:03 +0000
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAaIag031931;
+        Mon, 22 May 2023 10:51:02 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqawenud2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:51:01 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M8tUbC032622;
-        Mon, 22 May 2023 10:50:59 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qppc3gw80-1
+        Mon, 22 May 2023 10:51:02 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6Md9P026246;
+        Mon, 22 May 2023 10:51:00 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qppe08rk1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 10:50:59 +0000
+        Mon, 22 May 2023 10:51:00 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MAouFo21562068
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MAovm211076336
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 10:50:56 GMT
+        Mon, 22 May 2023 10:50:57 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CA2020043;
-        Mon, 22 May 2023 10:50:56 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A070920043;
+        Mon, 22 May 2023 10:50:57 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EC7720040;
-        Mon, 22 May 2023 10:50:56 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3649520040;
+        Mon, 22 May 2023 10:50:57 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 22 May 2023 10:50:56 +0000 (GMT)
+        Mon, 22 May 2023 10:50:57 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+To:     Arnd Bergmann <arnd@arndb.de>, Dave Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -71,25 +74,27 @@ Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Subject: [PATCH v5 08/44] /dev/port: don't compile file operations without CONFIG_DEVPORT
-Date:   Mon, 22 May 2023 12:50:13 +0200
-Message-Id: <20230522105049.1467313-9-schnelle@linux.ibm.com>
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH v5 09/44] drm: handle HAS_IOPORT dependencies
+Date:   Mon, 22 May 2023 12:50:14 +0200
+Message-Id: <20230522105049.1467313-10-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230522105049.1467313-1-schnelle@linux.ibm.com>
 References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: iuzYpcytujTIHbBo2tvThISxULnSw31E
-X-Proofpoint-GUID: Y_ZqzBhtPlF6aLytqsbY7WFAyeE3H6TF
+X-Proofpoint-ORIG-GUID: Yn1aYozOoQRQ35axx6-QJVU4LBPEu3YW
+X-Proofpoint-GUID: embi3Xmr-Ok9P1L4jvo5o27uBBDwkiPk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- malwarescore=0 clxscore=1015 mlxscore=0 bulkscore=0 spamscore=0
- mlxlogscore=999 impostorscore=0 adultscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=679 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305220089
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -100,53 +105,122 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In the future inb() and friends will not be available when compiling
-with CONFIG_HAS_IOPORT=n so we must only try to access them here if
-CONFIG_DEVPORT is set which depends on HAS_IOPORT.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them. In the bochs driver there is optional MMIO
+support detected at runtime, warn if this isn't taken when
+HAS_IOPORT is not defined.
+
+There is also a direct and hard coded use in cirrus.c which according to
+the comment is only necessary during resume.  Let's just skip this as
+for example s390 which doesn't have I/O port support also doesen't
+support suspend/resume.
 
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/char/mem.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/qxl/Kconfig   |  1 +
+ drivers/gpu/drm/tiny/bochs.c  | 17 +++++++++++++++++
+ drivers/gpu/drm/tiny/cirrus.c |  2 ++
+ 3 files changed, 20 insertions(+)
 
-diff --git a/drivers/char/mem.c b/drivers/char/mem.c
-index f494d31f2b98..e0c3a1b89b20 100644
---- a/drivers/char/mem.c
-+++ b/drivers/char/mem.c
-@@ -402,6 +402,7 @@ static int mmap_mem(struct file *file, struct vm_area_struct *vma)
- 	return 0;
+diff --git a/drivers/gpu/drm/qxl/Kconfig b/drivers/gpu/drm/qxl/Kconfig
+index ca3f51c2a8fe..d0e0d440c8d9 100644
+--- a/drivers/gpu/drm/qxl/Kconfig
++++ b/drivers/gpu/drm/qxl/Kconfig
+@@ -2,6 +2,7 @@
+ config DRM_QXL
+ 	tristate "QXL virtual GPU"
+ 	depends on DRM && PCI && MMU
++	depends on HAS_IOPORT
+ 	select DRM_KMS_HELPER
+ 	select DRM_TTM
+ 	select DRM_TTM_HELPER
+diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
+index d254679a136e..3710339407cc 100644
+--- a/drivers/gpu/drm/tiny/bochs.c
++++ b/drivers/gpu/drm/tiny/bochs.c
+@@ -2,6 +2,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <asm/bug.h>
+ 
+ #include <drm/drm_aperture.h>
+ #include <drm/drm_atomic_helper.h>
+@@ -105,7 +106,9 @@ static void bochs_vga_writeb(struct bochs_device *bochs, u16 ioport, u8 val)
+ 
+ 		writeb(val, bochs->mmio + offset);
+ 	} else {
++#ifdef CONFIG_HAS_IOPORT
+ 		outb(val, ioport);
++#endif
+ 	}
  }
  
-+#ifdef CONFIG_DEVPORT
- static ssize_t read_port(struct file *file, char __user *buf,
- 			 size_t count, loff_t *ppos)
- {
-@@ -443,6 +444,7 @@ static ssize_t write_port(struct file *file, const char __user *buf,
- 	*ppos = i;
- 	return tmp-buf;
+@@ -119,7 +122,11 @@ static u8 bochs_vga_readb(struct bochs_device *bochs, u16 ioport)
+ 
+ 		return readb(bochs->mmio + offset);
+ 	} else {
++#ifdef CONFIG_HAS_IOPORT
+ 		return inb(ioport);
++#else
++		return 0xff;
++#endif
+ 	}
  }
+ 
+@@ -132,8 +139,12 @@ static u16 bochs_dispi_read(struct bochs_device *bochs, u16 reg)
+ 
+ 		ret = readw(bochs->mmio + offset);
+ 	} else {
++#ifdef CONFIG_HAS_IOPORT
+ 		outw(reg, VBE_DISPI_IOPORT_INDEX);
+ 		ret = inw(VBE_DISPI_IOPORT_DATA);
++#else
++		ret = 0xffff;
++#endif
+ 	}
+ 	return ret;
+ }
+@@ -145,8 +156,10 @@ static void bochs_dispi_write(struct bochs_device *bochs, u16 reg, u16 val)
+ 
+ 		writew(val, bochs->mmio + offset);
+ 	} else {
++#ifdef CONFIG_HAS_IOPORT
+ 		outw(reg, VBE_DISPI_IOPORT_INDEX);
+ 		outw(val, VBE_DISPI_IOPORT_DATA);
++#endif
+ 	}
+ }
+ 
+@@ -229,6 +242,10 @@ static int bochs_hw_init(struct drm_device *dev)
+ 			return -ENOMEM;
+ 		}
+ 	} else {
++		if (!IS_ENABLED(CONFIG_HAS_IOPORT)) {
++			DRM_ERROR("I/O ports are not supported\n");
++			return -EIO;
++		}
+ 		ioaddr = VBE_DISPI_IOPORT_INDEX;
+ 		iosize = 2;
+ 		if (!request_region(ioaddr, iosize, "bochs-drm")) {
+diff --git a/drivers/gpu/drm/tiny/cirrus.c b/drivers/gpu/drm/tiny/cirrus.c
+index 594bc472862f..c65fea049bc7 100644
+--- a/drivers/gpu/drm/tiny/cirrus.c
++++ b/drivers/gpu/drm/tiny/cirrus.c
+@@ -508,8 +508,10 @@ static void cirrus_crtc_helper_atomic_enable(struct drm_crtc *crtc,
+ 
+ 	cirrus_mode_set(cirrus, &crtc_state->mode);
+ 
++#ifdef CONFIG_HAS_IOPORT
+ 	/* Unblank (needed on S3 resume, vgabios doesn't do it then) */
+ 	outb(VGA_AR_ENABLE_DISPLAY, VGA_ATT_W);
 +#endif
  
- static ssize_t read_null(struct file *file, char __user *buf,
- 			 size_t count, loff_t *ppos)
-@@ -671,12 +673,14 @@ static const struct file_operations null_fops = {
- 	.uring_cmd	= uring_cmd_null,
- };
- 
--static const struct file_operations __maybe_unused port_fops = {
-+#ifdef CONFIG_DEVPORT
-+static const struct file_operations port_fops = {
- 	.llseek		= memory_lseek,
- 	.read		= read_port,
- 	.write		= write_port,
- 	.open		= open_port,
- };
-+#endif
- 
- static const struct file_operations zero_fops = {
- 	.llseek		= zero_lseek,
+ 	drm_dev_exit(idx);
+ }
 -- 
 2.39.2
 
