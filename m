@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961FE70BDFF
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 14:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AD970BE01
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 14:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbjEVM06 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 May 2023 08:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S234034AbjEVM07 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 08:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbjEVM0d (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 08:26:33 -0400
+        with ESMTP id S234014AbjEVM0e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 08:26:34 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F5E51BF4;
-        Mon, 22 May 2023 05:24:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F84F2126;
+        Mon, 22 May 2023 05:24:48 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1E5B11FB;
-        Mon, 22 May 2023 05:25:20 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DCF4139F;
+        Mon, 22 May 2023 05:25:25 -0700 (PDT)
 Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 40BD63F59C;
-        Mon, 22 May 2023 05:24:34 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 63EE03F59C;
+        Mon, 22 May 2023 05:24:38 -0700 (PDT)
 From:   Mark Rutland <mark.rutland@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
@@ -27,10 +27,12 @@ Cc:     akiyks@gmail.com, boqun.feng@gmail.com, corbet@lwn.net,
         linux@armlinux.org.uk, linux-doc@vger.kernel.org,
         mark.rutland@arm.com, paulmck@kernel.org, peterz@infradead.org,
         sstabellini@kernel.org, will@kernel.org
-Subject: [PATCH 00/26] locking/atomic: restructuring + kerneldoc
-Date:   Mon, 22 May 2023 13:24:03 +0100
-Message-Id: <20230522122429.1915021-1-mark.rutland@arm.com>
+Subject: [PATCH 01/26] locking/atomic: arm: fix sync ops
+Date:   Mon, 22 May 2023 13:24:04 +0100
+Message-Id: <20230522122429.1915021-2-mark.rutland@arm.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230522122429.1915021-1-mark.rutland@arm.com>
+References: <20230522122429.1915021-1-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -42,240 +44,187 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+The sync_*() ops on arch/arm are defined in terms of the regular bitops
+with no special handling. This is not correct, as UP kernels elide
+barriers for the fully-ordered operations, and so the required ordering
+is lost when such UP kernels are run under a hypervsior on an SMP
+system.
 
-These patches restructure the generated atomic headers, and add
-kerneldoc comments for all of the generic atomic{,64,_long}_t
-operations. This is intended to supersede Paul's earlier attempt:
+Fix this by defining sync ops with the required barriers.
 
-  https://lore.kernel.org/lkml/19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop/
+Note: On 32-bit arm, the sync_*() ops are currently only used by Xen,
+which requires ARMv7, but the semantics can be implemented for ARMv6+.
 
-The core headers now generate raw_atomic*() operations as the
-fundamental instrumentation-safe atomics, with the arch_atomic*()
-functions being an implementation detail that shouldn't be used
-directly.
+Fixes: e54d2f61528165bb ("xen/arm: sync_bitops")
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Stefano Stabellini <sstabellini@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+---
+ arch/arm/include/asm/assembler.h   | 17 +++++++++++++++++
+ arch/arm/include/asm/sync_bitops.h | 29 +++++++++++++++++++++++++----
+ arch/arm/lib/bitops.h              | 14 +++++++++++---
+ arch/arm/lib/testchangebit.S       |  4 ++++
+ arch/arm/lib/testclearbit.S        |  4 ++++
+ arch/arm/lib/testsetbit.S          |  4 ++++
+ 6 files changed, 65 insertions(+), 7 deletions(-)
 
-Each raw_atomic*() op is given a single definition with all related
-ifdeffery inside, e.g.
-
-| /**
-|  * raw_atomic_inc_return_acquire() - atomic increment with acquire ordering
-|  * @v: pointer to atomic_t
-|  *
-|  * Atomically updates @v to (@v + 1) with acquire ordering.
-|  *
-|  * Safe to use in noinstr code; prefer atomic_inc_return_acquire() elsewhere.
-|  *
-|  * Return: the new value of @v.
-|  */
-| static __always_inline int
-| raw_atomic_inc_return_acquire(atomic_t *v)
-| {
-| #if defined(arch_atomic_inc_return_acquire)
-| 	return arch_atomic_inc_return_acquire(v);
-| #elif defined(arch_atomic_inc_return_relaxed)
-| 	int ret = arch_atomic_inc_return_relaxed(v);
-| 	__atomic_acquire_fence();
-| 	return ret;
-| #elif defined(arch_atomic_inc_return)
-| 	return arch_atomic_inc_return(v);
-| #else
-| 	return raw_atomic_add_return_acquire(1, v);
-| #endif
-| }
-
-Similarly, the regular atomic*() ops (which already have a single
-definition) are given kerneldoc comments, e.g.
-
-| /**
-|  * atomic_inc_return_acquire() - atomic increment with acquire ordering
-|  * @v: pointer to atomic_t
-|  *
-|  * Atomically updates @v to (@v + 1) with acquire ordering.
-|  *
-|  * Unsafe to use in noinstr code; use raw_atomic_inc_return_acquire() there.
-|  *
-|  * Return: the new value of @v.
-|  */
-| static __always_inline int
-| atomic_inc_return_acquire(atomic_t *v)
-| {
-| 	instrument_atomic_read_write(v, sizeof(*v));
-| 	return raw_atomic_inc_return_acquire(v);
-| }
-
-The kerneldoc comments themselves are built from templates as with the
-fallbacks, which should allow them to be extended in future if necessary.
-
-I've compile-tested this for a number of architectures and
-configurations, but as usual this probably needs to see some testing by
-build robots.
-
-The patches are based on the tip tree's locking/core branch,
-specifically commit:
-
-  3cf363a4daf359e8 ("s390/cpum_sf: Convert to cmpxchg128()")
-
-Thanks,
-Mark.
-
-Mark Rutland (25):
-  locking/atomic: arm: fix sync ops
-  locking/atomic: remove fallback comments
-  locking/atomic: hexagon: remove redundant arch_atomic_cmpxchg
-  locking/atomic: make atomic*_{cmp,}xchg optional
-  locking/atomic: arc: add preprocessor symbols
-  locking/atomic: arm: add preprocessor symbols
-  locking/atomic: hexagon: add preprocessor symbols
-  locking/atomic: m68k: add preprocessor symbols
-  locking/atomic: parisc: add preprocessor symbols
-  locking/atomic: sh: add preprocessor symbols
-  locking/atomic: sparc: add preprocessor symbols
-  locking/atomic: x86: add preprocessor symbols
-  locking/atomic: xtensa: add preprocessor symbols
-  locking/atomic: scripts: remove bogus order parameter
-  locking/atomic: scripts: remove leftover "${mult}"
-  locking/atomic: scripts: factor out order template generation
-  locking/atomic: scripts: add trivial raw_atomic*_<op>()
-  locking/atomic: treewide: use raw_atomic*_<op>()
-  locking/atomic: scripts: build raw_atomic_long*() directly
-  locking/atomic: scripts: restructure fallback ifdeffery
-  locking/atomic: scripts: split pfx/name/sfx/order
-  locking/atomic: scripts: simplify raw_atomic_long*() definitions
-  locking/atomic: scripts: simplify raw_atomic*() definitions
-  locking/atomic: scripts: generate kerneldoc comments
-  locking/atomic: treewide: delete arch_atomic_*() kerneldoc
-
-Paul E. McKenney (1):
-  locking/atomic: docs: Add atomic operations to the driver basic API
-    documentation
-
- Documentation/driver-api/basics.rst          |    5 +-
- arch/alpha/include/asm/atomic.h              |   35 -
- arch/arc/include/asm/atomic-spinlock.h       |    9 +
- arch/arc/include/asm/atomic.h                |   24 -
- arch/arc/include/asm/atomic64-arcv2.h        |   19 +-
- arch/arm/include/asm/assembler.h             |   17 +
- arch/arm/include/asm/atomic.h                |   15 +-
- arch/arm/include/asm/sync_bitops.h           |   29 +-
- arch/arm/lib/bitops.h                        |   14 +-
- arch/arm/lib/testchangebit.S                 |    4 +
- arch/arm/lib/testclearbit.S                  |    4 +
- arch/arm/lib/testsetbit.S                    |    4 +
- arch/arm64/include/asm/atomic.h              |   28 -
- arch/csky/include/asm/atomic.h               |   35 -
- arch/hexagon/include/asm/atomic.h            |   69 +-
- arch/ia64/include/asm/atomic.h               |    7 -
- arch/loongarch/include/asm/atomic.h          |   56 -
- arch/m68k/include/asm/atomic.h               |   18 +-
- arch/mips/include/asm/atomic.h               |   11 -
- arch/openrisc/include/asm/atomic.h           |    3 -
- arch/parisc/include/asm/atomic.h             |   27 +-
- arch/powerpc/include/asm/atomic.h            |   24 -
- arch/powerpc/kernel/smp.c                    |   12 +-
- arch/riscv/include/asm/atomic.h              |   72 -
- arch/sh/include/asm/atomic-grb.h             |    9 +
- arch/sh/include/asm/atomic-irq.h             |    9 +
- arch/sh/include/asm/atomic-llsc.h            |    9 +
- arch/sh/include/asm/atomic.h                 |    3 -
- arch/sparc/include/asm/atomic_32.h           |   18 +-
- arch/sparc/include/asm/atomic_64.h           |   29 +-
- arch/x86/include/asm/atomic.h                |   87 -
- arch/x86/include/asm/atomic64_32.h           |   76 -
- arch/x86/include/asm/atomic64_64.h           |   81 -
- arch/x86/include/asm/cmpxchg_64.h            |    4 +
- arch/x86/kernel/alternative.c                |    4 +-
- arch/x86/kernel/cpu/mce/core.c               |   16 +-
- arch/x86/kernel/nmi.c                        |    2 +-
- arch/x86/kernel/pvclock.c                    |    4 +-
- arch/x86/kvm/x86.c                           |    2 +-
- arch/xtensa/include/asm/atomic.h             |   12 +-
- include/asm-generic/atomic.h                 |    3 -
- include/asm-generic/bitops/atomic.h          |   12 +-
- include/asm-generic/bitops/lock.h            |    8 +-
- include/linux/atomic/atomic-arch-fallback.h  | 5200 ++++++++++++------
- include/linux/atomic/atomic-instrumented.h   | 3484 ++++++++++--
- include/linux/atomic/atomic-long.h           | 2122 ++++---
- include/linux/context_tracking.h             |    4 +-
- include/linux/context_tracking_state.h       |    2 +-
- include/linux/cpumask.h                      |    2 +-
- include/linux/jump_label.h                   |    2 +-
- kernel/context_tracking.c                    |   12 +-
- kernel/sched/clock.c                         |    2 +-
- scripts/atomic/atomic-tbl.sh                 |  112 +-
- scripts/atomic/atomics.tbl                   |    2 +-
- scripts/atomic/fallbacks/acquire             |    4 -
- scripts/atomic/fallbacks/add_negative        |   14 +-
- scripts/atomic/fallbacks/add_unless          |   15 +-
- scripts/atomic/fallbacks/andnot              |    6 +-
- scripts/atomic/fallbacks/cmpxchg             |    3 +
- scripts/atomic/fallbacks/dec                 |    6 +-
- scripts/atomic/fallbacks/dec_and_test        |   14 +-
- scripts/atomic/fallbacks/dec_if_positive     |    8 +-
- scripts/atomic/fallbacks/dec_unless_positive |    8 +-
- scripts/atomic/fallbacks/fence               |    4 -
- scripts/atomic/fallbacks/fetch_add_unless    |   17 +-
- scripts/atomic/fallbacks/inc                 |    6 +-
- scripts/atomic/fallbacks/inc_and_test        |   14 +-
- scripts/atomic/fallbacks/inc_not_zero        |   13 +-
- scripts/atomic/fallbacks/inc_unless_negative |    8 +-
- scripts/atomic/fallbacks/read_acquire        |    6 +-
- scripts/atomic/fallbacks/release             |    4 -
- scripts/atomic/fallbacks/set_release         |    6 +-
- scripts/atomic/fallbacks/sub_and_test        |   15 +-
- scripts/atomic/fallbacks/try_cmpxchg         |    6 +-
- scripts/atomic/fallbacks/xchg                |    3 +
- scripts/atomic/gen-atomic-fallback.sh        |  264 +-
- scripts/atomic/gen-atomic-instrumented.sh    |   23 +-
- scripts/atomic/gen-atomic-long.sh            |   38 +-
- scripts/atomic/kerneldoc/add                 |   13 +
- scripts/atomic/kerneldoc/add_negative        |   13 +
- scripts/atomic/kerneldoc/add_unless          |   18 +
- scripts/atomic/kerneldoc/and                 |   13 +
- scripts/atomic/kerneldoc/andnot              |   13 +
- scripts/atomic/kerneldoc/cmpxchg             |   14 +
- scripts/atomic/kerneldoc/dec                 |   12 +
- scripts/atomic/kerneldoc/dec_and_test        |   12 +
- scripts/atomic/kerneldoc/dec_if_positive     |   12 +
- scripts/atomic/kerneldoc/dec_unless_positive |   12 +
- scripts/atomic/kerneldoc/inc                 |   12 +
- scripts/atomic/kerneldoc/inc_and_test        |   12 +
- scripts/atomic/kerneldoc/inc_not_zero        |   12 +
- scripts/atomic/kerneldoc/inc_unless_negative |   12 +
- scripts/atomic/kerneldoc/or                  |   13 +
- scripts/atomic/kerneldoc/read                |   12 +
- scripts/atomic/kerneldoc/set                 |   13 +
- scripts/atomic/kerneldoc/sub                 |   13 +
- scripts/atomic/kerneldoc/sub_and_test        |   13 +
- scripts/atomic/kerneldoc/try_cmpxchg         |   15 +
- scripts/atomic/kerneldoc/xchg                |   13 +
- scripts/atomic/kerneldoc/xor                 |   13 +
- 100 files changed, 8975 insertions(+), 3688 deletions(-)
- create mode 100755 scripts/atomic/fallbacks/cmpxchg
- create mode 100755 scripts/atomic/fallbacks/xchg
- create mode 100644 scripts/atomic/kerneldoc/add
- create mode 100644 scripts/atomic/kerneldoc/add_negative
- create mode 100644 scripts/atomic/kerneldoc/add_unless
- create mode 100644 scripts/atomic/kerneldoc/and
- create mode 100644 scripts/atomic/kerneldoc/andnot
- create mode 100644 scripts/atomic/kerneldoc/cmpxchg
- create mode 100644 scripts/atomic/kerneldoc/dec
- create mode 100644 scripts/atomic/kerneldoc/dec_and_test
- create mode 100644 scripts/atomic/kerneldoc/dec_if_positive
- create mode 100644 scripts/atomic/kerneldoc/dec_unless_positive
- create mode 100644 scripts/atomic/kerneldoc/inc
- create mode 100644 scripts/atomic/kerneldoc/inc_and_test
- create mode 100644 scripts/atomic/kerneldoc/inc_not_zero
- create mode 100644 scripts/atomic/kerneldoc/inc_unless_negative
- create mode 100644 scripts/atomic/kerneldoc/or
- create mode 100644 scripts/atomic/kerneldoc/read
- create mode 100644 scripts/atomic/kerneldoc/set
- create mode 100644 scripts/atomic/kerneldoc/sub
- create mode 100644 scripts/atomic/kerneldoc/sub_and_test
- create mode 100644 scripts/atomic/kerneldoc/try_cmpxchg
- create mode 100644 scripts/atomic/kerneldoc/xchg
- create mode 100644 scripts/atomic/kerneldoc/xor
-
+diff --git a/arch/arm/include/asm/assembler.h b/arch/arm/include/asm/assembler.h
+index 505a306e0271a..aebe2c8f6a686 100644
+--- a/arch/arm/include/asm/assembler.h
++++ b/arch/arm/include/asm/assembler.h
+@@ -394,6 +394,23 @@ ALT_UP_B(.L0_\@)
+ #endif
+ 	.endm
+ 
++/*
++ * Raw SMP data memory barrier
++ */
++	.macro	__smp_dmb mode
++#if __LINUX_ARM_ARCH__ >= 7
++	.ifeqs "\mode","arm"
++	dmb	ish
++	.else
++	W(dmb)	ish
++	.endif
++#elif __LINUX_ARM_ARCH__ == 6
++	mcr	p15, 0, r0, c7, c10, 5	@ dmb
++#else
++	.error "Incompatible SMP platform"
++#endif
++	.endm
++
+ #if defined(CONFIG_CPU_V7M)
+ 	/*
+ 	 * setmode is used to assert to be in svc mode during boot. For v7-M
+diff --git a/arch/arm/include/asm/sync_bitops.h b/arch/arm/include/asm/sync_bitops.h
+index 6f5d627c44a3c..f46b3c570f92e 100644
+--- a/arch/arm/include/asm/sync_bitops.h
++++ b/arch/arm/include/asm/sync_bitops.h
+@@ -14,14 +14,35 @@
+  * ops which are SMP safe even on a UP kernel.
+  */
+ 
++/*
++ * Unordered
++ */
++
+ #define sync_set_bit(nr, p)		_set_bit(nr, p)
+ #define sync_clear_bit(nr, p)		_clear_bit(nr, p)
+ #define sync_change_bit(nr, p)		_change_bit(nr, p)
+-#define sync_test_and_set_bit(nr, p)	_test_and_set_bit(nr, p)
+-#define sync_test_and_clear_bit(nr, p)	_test_and_clear_bit(nr, p)
+-#define sync_test_and_change_bit(nr, p)	_test_and_change_bit(nr, p)
+ #define sync_test_bit(nr, addr)		test_bit(nr, addr)
+-#define arch_sync_cmpxchg		arch_cmpxchg
+ 
++/*
++ * Fully ordered
++ */
++
++int _sync_test_and_set_bit(int nr, volatile unsigned long * p);
++#define sync_test_and_set_bit(nr, p)	_sync_test_and_set_bit(nr, p)
++
++int _sync_test_and_clear_bit(int nr, volatile unsigned long * p);
++#define sync_test_and_clear_bit(nr, p)	_sync_test_and_clear_bit(nr, p)
++
++int _sync_test_and_change_bit(int nr, volatile unsigned long * p);
++#define sync_test_and_change_bit(nr, p)	_sync_test_and_change_bit(nr, p)
++
++#define arch_sync_cmpxchg(ptr, old, new)				\
++({									\
++	__typeof__(*(ptr)) __ret;					\
++	__smp_mb__before_atomic();					\
++	__ret = arch_cmpxchg_relaxed((ptr), (old), (new));		\
++	__smp_mb__after_atomic();					\
++	__ret;								\
++})
+ 
+ #endif
+diff --git a/arch/arm/lib/bitops.h b/arch/arm/lib/bitops.h
+index 95bd359912889..f069d1b2318e6 100644
+--- a/arch/arm/lib/bitops.h
++++ b/arch/arm/lib/bitops.h
+@@ -28,7 +28,7 @@ UNWIND(	.fnend		)
+ ENDPROC(\name		)
+ 	.endm
+ 
+-	.macro	testop, name, instr, store
++	.macro	__testop, name, instr, store, barrier
+ ENTRY(	\name		)
+ UNWIND(	.fnstart	)
+ 	ands	ip, r1, #3
+@@ -38,7 +38,7 @@ UNWIND(	.fnstart	)
+ 	mov	r0, r0, lsr #5
+ 	add	r1, r1, r0, lsl #2	@ Get word offset
+ 	mov	r3, r2, lsl r3		@ create mask
+-	smp_dmb
++	\barrier
+ #if __LINUX_ARM_ARCH__ >= 7 && defined(CONFIG_SMP)
+ 	.arch_extension	mp
+ 	ALT_SMP(W(pldw)	[r1])
+@@ -50,13 +50,21 @@ UNWIND(	.fnstart	)
+ 	strex	ip, r2, [r1]
+ 	cmp	ip, #0
+ 	bne	1b
+-	smp_dmb
++	\barrier
+ 	cmp	r0, #0
+ 	movne	r0, #1
+ 2:	bx	lr
+ UNWIND(	.fnend		)
+ ENDPROC(\name		)
+ 	.endm
++
++	.macro	testop, name, instr, store
++	__testop \name, \instr, \store, smp_dmb
++	.endm
++
++	.macro	sync_testop, name, instr, store
++	__testop \name, \instr, \store, __smp_dmb
++	.endm
+ #else
+ 	.macro	bitop, name, instr
+ ENTRY(	\name		)
+diff --git a/arch/arm/lib/testchangebit.S b/arch/arm/lib/testchangebit.S
+index 4ebecc67e6e04..f13fe9bc2399a 100644
+--- a/arch/arm/lib/testchangebit.S
++++ b/arch/arm/lib/testchangebit.S
+@@ -10,3 +10,7 @@
+                 .text
+ 
+ testop	_test_and_change_bit, eor, str
++
++#if __LINUX_ARM_ARCH__ >= 6
++sync_testop	_sync_test_and_change_bit, eor, str
++#endif
+diff --git a/arch/arm/lib/testclearbit.S b/arch/arm/lib/testclearbit.S
+index 009afa0f5b4a7..4d2c5ca620ebf 100644
+--- a/arch/arm/lib/testclearbit.S
++++ b/arch/arm/lib/testclearbit.S
+@@ -10,3 +10,7 @@
+                 .text
+ 
+ testop	_test_and_clear_bit, bicne, strne
++
++#if __LINUX_ARM_ARCH__ >= 6
++sync_testop	_sync_test_and_clear_bit, bicne, strne
++#endif
+diff --git a/arch/arm/lib/testsetbit.S b/arch/arm/lib/testsetbit.S
+index f3192e55acc87..649dbab65d8d0 100644
+--- a/arch/arm/lib/testsetbit.S
++++ b/arch/arm/lib/testsetbit.S
+@@ -10,3 +10,7 @@
+                 .text
+ 
+ testop	_test_and_set_bit, orreq, streq
++
++#if __LINUX_ARM_ARCH__ >= 6
++sync_testop	_sync_test_and_set_bit, orreq, streq
++#endif
 -- 
 2.30.2
 
