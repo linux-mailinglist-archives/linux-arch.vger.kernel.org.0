@@ -2,172 +2,432 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A693570BF7D
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 15:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EE570BFA0
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 15:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbjEVNTb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 May 2023 09:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S234329AbjEVNZE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 09:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjEVNTa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 09:19:30 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2096.outbound.protection.outlook.com [40.107.244.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D4B92;
-        Mon, 22 May 2023 06:19:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DZxJKurRn2OJEPagcpiFpQs7R4rcYxDtKB2eoBeMpxaoEJgvs9wl46CFqWTtjyusNEGBhhLfRXmwDWXw7jDRVTyyTHEBPF9Ysf8gYgk6942I+OBqmA6/lr6HeET7Yb5vQVDxYyxaBG5Ace69NODM8I6tP9ePvGr0Nx6zJb1irQTrgeMDJMrdgxNiDr2NAeahTCzqqz5KLvdbZMeZSmxMge6kacktdEedyUh4BBHlqFBansfriSutIKjY02LLGck80fLunW7eDAySg9mkFSptzSTYNmOCJkGUnXXaf0CDGKCxNlGlXaleiqgd3WFil4fMl8pbE7dbXmSKcqz19YbAHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dICBjqiR1/9R22TWV/zsh8FphYGNBfaaRVM5UzZ6J/4=;
- b=MH3kB9S+PEQ4Nb0vQ/YcWL1fgc3GqHbv4qviIq/AJVrztfdaCy7Ll/djrJb7kO27O1hgAO6/48VQER9l84jkKQU5IqaNTWFre2TSBl0t8FTKpUwULDasBSg/hURFAzX5M7cvUNMHkeAngZzfLJ/y/+urZ5hVSRW/52Kc76qm7Vw8ytOenb2WS65KlxtcAV1INEwChJLSLj73VIlJ4h37jYOlX4vNkAmmBgaW/0G47VQTouJpb8JQ98PKfaLzPn2xWPkLvQwkMJFLvrc14cphxnYiCGVoNbl5Inld9DjDFJND5hGm46p4MJ8XWV1hACRmoudAep9Bjeyy0nYxuSUPFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dICBjqiR1/9R22TWV/zsh8FphYGNBfaaRVM5UzZ6J/4=;
- b=E9sVHwfGAH45XlykVHJvWiYKnovIi8PKYmRg//zLSiaW5zN0ZxJPMCdrD7cyXzPtO/XBKEiGJ1CfC27SA0W+n4klHt54Ai5HNIYk3CLzsqOhgLlfTITJwxy5loL73XgzHt9RuKaSKgfVGt1dVr+ZPtVgDMCHF/rshs4O6GPgtTk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB4684.namprd13.prod.outlook.com (2603:10b6:610:d9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.25; Mon, 22 May
- 2023 13:19:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 13:19:24 +0000
-Date:   Mon, 22 May 2023 15:19:17 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
+        with ESMTP id S234328AbjEVNZA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 09:25:00 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75012F4
+        for <linux-arch@vger.kernel.org>; Mon, 22 May 2023 06:24:55 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4D3EE3F22B
+        for <linux-arch@vger.kernel.org>; Mon, 22 May 2023 13:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684761893;
+        bh=KOvUpcYIwOTb1H7aXEj0fzqsyKzkQwsjr6beMckrdbc=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=Yn1mr77V1BcPdzmWeJxndpvGh1HcQ72wOYiRV03AbrsaGg8SEAPhVR/cdma7r3O8z
+         2LXG8Llxtgw1E9VypQsSZd+LuRuCXkT7prbE/n09AJn7VniA1KJUy22teFWY+MJcm7
+         Ggcb38ErThAE2yqJ5quM5E9GiSxoa3axL+pVLINEArWHD1VH6eaHsIsqauceXq89Ir
+         x+x+7pqfwE8+BND6Vb1kr7/xwtx+Y7VWwYKZPQ/0fsoTNDM521L+GqiYRQRMQxGBgW
+         c81MGO/nrBqZx93sWPajQ2Gocska6ENWuYoTLJ3sUaWn+RetbH931IqEzOLAzMhEaZ
+         uRyC6h1hF3chA==
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96f83b44939so242046566b.1
+        for <linux-arch@vger.kernel.org>; Mon, 22 May 2023 06:24:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684761892; x=1687353892;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KOvUpcYIwOTb1H7aXEj0fzqsyKzkQwsjr6beMckrdbc=;
+        b=SlOuv9p2YyCJZJjVAcpNKnZRj6jVL5iFX0rpXFJ+RAi9/PmjCPZNAYS5YQeJJKLPUH
+         NyAK7YHp/PxYQkULCqt14+WnYfYnXlygP/rdvN3hsvEDtp9/J7i/ZuxgHHFXm+84zmw/
+         XAliiJhPA4zYzD+rq6NB5aABGNRHo4U3mqNzOAhY3fW/JJoyfW25IUf9EC/eXHJ3mV2O
+         JLnir+eLxmfsT0JEvSkkEUTLdSmF9ivPJ/Ov9UHxFkEh82kESdSs0PlDj+WK4ZI1EH0C
+         dGX2//B5OK8bp0SCAgp54JQDiLgv6kF2VyPzN700ivz6oH143bzrFwEGNImOO2M9i/MZ
+         erfQ==
+X-Gm-Message-State: AC+VfDxLAB7Ee/JMPPRxySklNjwCU3k6vuT3Vr1OdxuQdQxls7O7Sb33
+        03nq1+k3P/IceQ48pYl/ttBpqAybjOqtA9oZ/cVrmlYNE00kv6sv1SyDBzzXdU6ZwWGygnbqaQ7
+        9pSGQ7sdOl2y7T0bBYGA79DON0H3FprGT+2QBoKM=
+X-Received: by 2002:a17:907:d402:b0:96f:4225:cf46 with SMTP id vi2-20020a170907d40200b0096f4225cf46mr8656519ejc.76.1684761892775;
+        Mon, 22 May 2023 06:24:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4vrb4/DpGOWWcOEmeIgOy/i+L1gEMNOM6tGZsXVhCMYh9UsqzgFYQa3UTLjoVjc44/k3LO0g==
+X-Received: by 2002:a17:907:d402:b0:96f:4225:cf46 with SMTP id vi2-20020a170907d40200b0096f4225cf46mr8656491ejc.76.1684761892397;
+        Mon, 22 May 2023 06:24:52 -0700 (PDT)
+Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
+        by smtp.gmail.com with ESMTPSA id p16-20020a1709060dd000b0094f698073e0sm3044509eji.123.2023.05.22.06.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 06:24:52 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     davem@davemloft.net
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Paolo Abeni <pabeni@redhat.com>,
         Leon Romanovsky <leon@kernel.org>,
         David Ahern <dsahern@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
         Kuniyuki Iwashima <kuniyu@amazon.com>,
         Lennart Poettering <mzxreary@0pointer.de>,
         Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v5 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <ZGtr1RwK42We5ACI@corigine.com>
-References: <20230517113351.308771-2-aleksandr.mikhalitsyn@canonical.com>
- <202305202107.BQoPnLYP-lkp@intel.com>
- <20230522-sammeln-neumond-e9a8d196056b@brauner>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522-sammeln-neumond-e9a8d196056b@brauner>
-X-ClientProxiedBy: AM3PR05CA0094.eurprd05.prod.outlook.com
- (2603:10a6:207:1::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+Subject: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Date:   Mon, 22 May 2023 15:24:37 +0200
+Message-Id: <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB4684:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd944fcc-a5f2-49e7-7a5b-08db5ac72986
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9Y9MkdxF8VQP8eTXFoyc7+emRot0hBoMcbRcAi5D/LDjC38ADqkPwRYXI3VMZzKHqVeeGzYqTcqPYv43enUjb4EGukZ46jkw0YQG2cf5m8QhvjZt/zsX+9qKGvAJedAFMF6JCfVfW3qsw7tmWrVxhRRomcZnnc3WlUapE4wxeoRbUgJGSgfhORLZjn949LrW/kgPvylSOe/7aegjvob1LYbbMjZeJWf+4w/XILCHhJHjPKssA3S+ocidu63kSXpGIpB+POkb+UftnGtI8G2zTTw5XN7taCq0aQoSHicX2+iB+P4LxH0VkJV70sbtmCmYPa3BJCkPSc7Ye8bdj35hemrQNegfk4wR2ygr1HrRaYH3OVSxJSyForO6z8eIWm2wZ9olz+xMRBYmwnoRG4gPJuqSUu9ySOikvFVzus8iPaxwBh+OTta3bDnQ5ueWFvN3IMMbXK9ApI2/A5rAUIP5/En/pVfmRQ5FqCHG11B169fORCuLLuOGaD/QINIgkchluGw1RU+A1Snspw1iCYxYZVWZkEoQRsGNKZHTaz7BIVfqdcYQ3OjnoGDRE9BXKgqumEajS+Ckn9+Yg53Sa3MaVg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(366004)(136003)(376002)(346002)(451199021)(54906003)(186003)(5660300002)(66476007)(41300700001)(6666004)(6486002)(966005)(316002)(6916009)(4326008)(478600001)(6506007)(6512007)(7416002)(44832011)(8936002)(8676002)(2616005)(2906002)(83380400001)(66946007)(66556008)(38100700002)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DNoynbyJ5vefavjP5/8wlopUrMZhxYB+5zC+pS3o1Vwmj8/ktPjSw1dqWmBz?=
- =?us-ascii?Q?yvT0j/hwYBlY748owHI/CfBfyU2ZnmEPE+K1vfajFSoYR6lQCgjAdRNoKjxW?=
- =?us-ascii?Q?vsPDEITWGBHAkasgWcaTpqdyR79VkIi1aDT/ZDP/pxsmjKwzyqhGBS4WPelX?=
- =?us-ascii?Q?n3JzEsmauvC705Q+w5mZbmUQ2dFDBjb5uMqYd0V/NOcdRULOWU5VbQMVXZm/?=
- =?us-ascii?Q?gaosKJJqVTJUSUqKcjf6De6jAf21YO8gk54s6NfvDUO2tIRdhhz4XPEYJkiT?=
- =?us-ascii?Q?F6ih8fj9JgBX1124+LnDLTdHkJr/zfupqed6TD228Odg8z33LjIjzjHLdAXI?=
- =?us-ascii?Q?zaSkHdUUZmgzrpDVh4dTVWdzG0gk1kFmCaLMIvEMkcR7G9LzL4ErugJS2o2P?=
- =?us-ascii?Q?+v35x1qeR2yQAoaIp5DoeEWQAyFsTHfQ6XpLjlmVi2V+yYvMENbvW0/XrjhP?=
- =?us-ascii?Q?5h3w1+c+mC0mZ/lYuTQvOng3BLbQ0E1u4VgMh2Ck727aPaBadE8F9O5p15RS?=
- =?us-ascii?Q?w/FBo/ZRlZLWI0A4FBOSmn0Vnxbx2qyHrGDZujSXA1/17h/bSpDTZvhcHvsz?=
- =?us-ascii?Q?T24TdEG30tjTuUJhodwHHtRyn9QSTFwL1uJoXspg8TCKAal7ss+3Bzd1ZWpE?=
- =?us-ascii?Q?An1GXWjg/IoDPjs1nU4y1e5oBwpTa6ncjQqb88DcyzUCE/pqoGLZEB7hwEUB?=
- =?us-ascii?Q?5BfA2T7mlmd3ACjgvzLQMZnd+NqgYqV48glwY4J8/tJXFjIMWvJzm4GGGa4T?=
- =?us-ascii?Q?R4Kl0wqD0fqwjHxF1EB7FrROA9QP6tuN43gsQERDBGngEUYVXvyx2KolAw6f?=
- =?us-ascii?Q?LrQUbxVfq5aaFZKiykA+KBsy+plBK/1SI+t6wKfX9Ss3aC4f3H8JGSr55fIq?=
- =?us-ascii?Q?rgeJNmUHs/ADMRDDabtvjU0asv3ScusAineGND1xPNFTXaCZwKl7FmbfHBmO?=
- =?us-ascii?Q?+c4zOnJO8LufpBvlH8DWe9LovwAB81SFM0fq2tIcwxM8pMR9oR9sh/ujUpF7?=
- =?us-ascii?Q?dO37NCtJV0MEptMckMmdQDXSHN9QnHV+zidlHmGv18osLanc/p1qxYLnx48y?=
- =?us-ascii?Q?yhC9IGjlqXBKVLWknp9m2jO/QooXXSu++wFBcDPY/pUMQwxUtf3MtOxaEoip?=
- =?us-ascii?Q?gNA4SvplQ+Wq7kMLGs9qXn9LX9W+EUC9Mz/bzJzDp7mSpSUNjdRopTW8kp+v?=
- =?us-ascii?Q?uW2f9BFgltpoP2Er6dDqMcNxV6ZE9xHzy5H7cCQsrbpi1mzlY71ZHYpZhZ8q?=
- =?us-ascii?Q?qtH96fn6RkS6wsJfFLoCsfEMQLpRXsloiF3AvnNnE3xYRSMandWlAplz6iBp?=
- =?us-ascii?Q?uHCiwMRSuSG4unGm8tvN/YlE2dKnaRKDWHVsDOrgdFd5M1eqLF2GIg4FzYRW?=
- =?us-ascii?Q?UjhAOelKu5gLZcZpQrCVuxHC12tuPO762G6jy0tKhFCZPQ7/VUZyDfTHrJgf?=
- =?us-ascii?Q?fW7lhxJFnyoj34RTLbXZpFexlsgAaoA0dbKMbWcN4I5ZPiHn8MmMNKdc8PYY?=
- =?us-ascii?Q?H191Sev5KdfoVB1yItQHIdjocoqdtADfHwgu56a/RDivB+X4AY4wIxkM0ZPi?=
- =?us-ascii?Q?zEMjCJ353C3f0hsAc4Uu2Uf30sX+vk9X8m/s/qvnQ0ZmkXenLU0s67ukAFP1?=
- =?us-ascii?Q?+vAP9CXEUfHDjjtV5TQzF3mXS6XuhWjX6ajhthVyQ6zJTzxs96m5cCDOVw2q?=
- =?us-ascii?Q?fJR1+w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd944fcc-a5f2-49e7-7a5b-08db5ac72986
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 13:19:24.6704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xKwM1vNdocESU4Wbx7emfnMU3RgWgeOMdfs8sgR/IMFpztoqkGlVmsu0GgOnWfJl8vuNoiuKi2Zefa1l27UzvsKsku/T7TCPKkaBADgQs3U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB4684
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:47:08AM +0200, Christian Brauner wrote:
-> On Sat, May 20, 2023 at 10:11:36PM +0800, kernel test robot wrote:
-> > Hi Alexander,
-> > 
-> > kernel test robot noticed the following build errors:
-> > 
-> > [auto build test ERROR on net-next/main]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230517-193620
-> > base:   net-next/main
-> > patch link:    https://lore.kernel.org/r/20230517113351.308771-2-aleksandr.mikhalitsyn%40canonical.com
-> > patch subject: [PATCH net-next v5 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-> > config: powerpc-randconfig-s043-20230517
-> > compiler: powerpc-linux-gcc (GCC) 12.1.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # apt-get install sparse
-> >         # sparse version: v0.6.4-39-gce1a6720-dirty
-> >         # https://github.com/intel-lab-lkp/linux/commit/969a57c99c9d50bfebd0908f5157870b36c271c7
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230517-193620
-> >         git checkout 969a57c99c9d50bfebd0908f5157870b36c271c7
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202305202107.BQoPnLYP-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> > 
-> > >> ERROR: modpost: "pidfd_prepare" [net/unix/unix.ko] undefined!
-> 
-> TLI, that AF_UNIX can be a kernel module...
-> I'm really not excited in exposing pidfd_prepare() to non-core kernel
-> code. Would it be possible to please simply refuse SO_PEERPIDFD and
-> SCM_PIDFD if AF_UNIX is compiled as a module? I feel that this must be
-> super rare because it risks breaking even simplistic userspace.
+Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
+but it contains pidfd instead of plain pid, which allows programmers not
+to care about PID reuse problem.
 
-It occurs to me that it may be simpler to not allow AF_UNIX to be a module.
-But perhaps that breaks something for someone...
+We mask SO_PASSPIDFD feature if CONFIG_UNIX is not builtin because
+it depends on a pidfd_prepare() API which is not exported to the kernel
+modules.
+
+Idea comes from UAPI kernel group:
+https://uapi-group.org/kernel-features/
+
+Big thanks to Christian Brauner and Lennart Poettering for productive
+discussions about this.
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: Lennart Poettering <mzxreary@0pointer.de>
+Cc: Luca Boccassi <bluca@debian.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Tested-by: Luca Boccassi <bluca@debian.org>
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Reviewed-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+v6:
+	- disable feature when CONFIG_UNIX=n/m (pidfd_prepare API is not exported to modules)
+v5:
+	- no changes
+v4:
+	- fixed silent fd_install if writting of CMSG to the userspace fails (pointed by Christian)
+v2:
+	According to review comments from Kuniyuki Iwashima and Christian Brauner:
+	- use pidfd_create(..) retval as a result
+	- whitespace change
+---
+ arch/alpha/include/uapi/asm/socket.h    |  2 ++
+ arch/mips/include/uapi/asm/socket.h     |  2 ++
+ arch/parisc/include/uapi/asm/socket.h   |  2 ++
+ arch/sparc/include/uapi/asm/socket.h    |  2 ++
+ include/linux/net.h                     |  1 +
+ include/linux/socket.h                  |  1 +
+ include/net/scm.h                       | 43 +++++++++++++++++++++++--
+ include/uapi/asm-generic/socket.h       |  2 ++
+ net/core/sock.c                         | 15 +++++++++
+ net/mptcp/sockopt.c                     |  3 ++
+ net/unix/af_unix.c                      | 18 ++++++++---
+ tools/include/uapi/asm-generic/socket.h |  2 ++
+ 12 files changed, 86 insertions(+), 7 deletions(-)
+
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 739891b94136..ff310613ae64 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -137,6 +137,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index 18f3d95ecfec..762dcb80e4ec 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -148,6 +148,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index f486d3dfb6bb..df16a3e16d64 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -129,6 +129,8 @@
+ 
+ #define SO_RCVMARK		0x4049
+ 
++#define SO_PASSPIDFD		0x404A
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 2fda57a3ea86..6e2847804fea 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -130,6 +130,8 @@
+ 
+ #define SO_RCVMARK               0x0054
+ 
++#define SO_PASSPIDFD             0x0055
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/linux/net.h b/include/linux/net.h
+index b73ad8e3c212..c234dfbe7a30 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -43,6 +43,7 @@ struct net;
+ #define SOCK_PASSSEC		4
+ #define SOCK_SUPPORT_ZC		5
+ #define SOCK_CUSTOM_SOCKOPT	6
++#define SOCK_PASSPIDFD		7
+ 
+ #ifndef ARCH_HAS_SOCKET_TYPES
+ /**
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index 13c3a237b9c9..6bf90f251910 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -177,6 +177,7 @@ static inline size_t msg_data_left(struct msghdr *msg)
+ #define	SCM_RIGHTS	0x01		/* rw: access rights (array of int) */
+ #define SCM_CREDENTIALS 0x02		/* rw: struct ucred		*/
+ #define SCM_SECURITY	0x03		/* rw: security label		*/
++#define SCM_PIDFD	0x04		/* ro: pidfd (int)		*/
+ 
+ struct ucred {
+ 	__u32	pid;
+diff --git a/include/net/scm.h b/include/net/scm.h
+index 585adc1346bd..13b188422370 100644
+--- a/include/net/scm.h
++++ b/include/net/scm.h
+@@ -120,12 +120,46 @@ static inline bool scm_has_secdata(struct socket *sock)
+ }
+ #endif /* CONFIG_SECURITY_NETWORK */
+ 
++#if IS_BUILTIN(CONFIG_UNIX)
++static __inline__ void scm_pidfd_recv(struct msghdr *msg, struct scm_cookie *scm)
++{
++	struct file *pidfd_file = NULL;
++	int pidfd;
++
++	/*
++	 * put_cmsg() doesn't return an error if CMSG is truncated,
++	 * that's why we need to opencode these checks here.
++	 */
++	if ((msg->msg_controllen <= sizeof(struct cmsghdr)) ||
++	    (msg->msg_controllen - sizeof(struct cmsghdr)) < sizeof(int)) {
++		msg->msg_flags |= MSG_CTRUNC;
++		return;
++	}
++
++	WARN_ON_ONCE(!scm->pid);
++	pidfd = pidfd_prepare(scm->pid, 0, &pidfd_file);
++
++	if (put_cmsg(msg, SOL_SOCKET, SCM_PIDFD, sizeof(int), &pidfd)) {
++		if (pidfd_file) {
++			put_unused_fd(pidfd);
++			fput(pidfd_file);
++		}
++
++		return;
++	}
++
++	if (pidfd_file)
++		fd_install(pidfd, pidfd_file);
++}
++#endif
++
+ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+ 				struct scm_cookie *scm, int flags)
+ {
+ 	if (!msg->msg_control) {
+-		if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
+-		    scm_has_secdata(sock))
++		if (test_bit(SOCK_PASSCRED, &sock->flags) ||
++		    test_bit(SOCK_PASSPIDFD, &sock->flags) ||
++		    scm->fp || scm_has_secdata(sock))
+ 			msg->msg_flags |= MSG_CTRUNC;
+ 		scm_destroy(scm);
+ 		return;
+@@ -141,6 +175,11 @@ static __inline__ void scm_recv(struct socket *sock, struct msghdr *msg,
+ 		put_cmsg(msg, SOL_SOCKET, SCM_CREDENTIALS, sizeof(ucreds), &ucreds);
+ 	}
+ 
++#if IS_BUILTIN(CONFIG_UNIX)
++	if (test_bit(SOCK_PASSPIDFD, &sock->flags))
++		scm_pidfd_recv(msg, scm);
++#endif
++
+ 	scm_destroy_cred(scm);
+ 
+ 	scm_passec(sock, msg, scm);
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 638230899e98..b76169fdb80b 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -132,6 +132,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 5440e67bcfe3..f6c415ef151f 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1246,6 +1246,15 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
+ 			clear_bit(SOCK_PASSCRED, &sock->flags);
+ 		break;
+ 
++#if IS_BUILTIN(CONFIG_UNIX)
++	case SO_PASSPIDFD:
++		if (valbool)
++			set_bit(SOCK_PASSPIDFD, &sock->flags);
++		else
++			clear_bit(SOCK_PASSPIDFD, &sock->flags);
++		break;
++#endif
++
+ 	case SO_TIMESTAMP_OLD:
+ 	case SO_TIMESTAMP_NEW:
+ 	case SO_TIMESTAMPNS_OLD:
+@@ -1732,6 +1741,12 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+ 		v.val = !!test_bit(SOCK_PASSCRED, &sock->flags);
+ 		break;
+ 
++#if IS_BUILTIN(CONFIG_UNIX)
++	case SO_PASSPIDFD:
++		v.val = !!test_bit(SOCK_PASSPIDFD, &sock->flags);
++		break;
++#endif
++
+ 	case SO_PEERCRED:
+ 	{
+ 		struct ucred peercred;
+diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
+index d4258869ac48..5a80eb23089f 100644
+--- a/net/mptcp/sockopt.c
++++ b/net/mptcp/sockopt.c
+@@ -355,6 +355,9 @@ static int mptcp_setsockopt_sol_socket(struct mptcp_sock *msk, int optname,
+ 	case SO_BROADCAST:
+ 	case SO_BSDCOMPAT:
+ 	case SO_PASSCRED:
++#if IS_BUILTIN(CONFIG_UNIX)
++	case SO_PASSPIDFD:
++#endif
+ 	case SO_PASSSEC:
+ 	case SO_RXQ_OVFL:
+ 	case SO_WIFI_STATUS:
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index cc695c9f09ec..aac40106d036 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -1361,7 +1361,8 @@ static int unix_dgram_connect(struct socket *sock, struct sockaddr *addr,
+ 		if (err)
+ 			goto out;
+ 
+-		if (test_bit(SOCK_PASSCRED, &sock->flags) &&
++		if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
++		     test_bit(SOCK_PASSPIDFD, &sock->flags)) &&
+ 		    !unix_sk(sk)->addr) {
+ 			err = unix_autobind(sk);
+ 			if (err)
+@@ -1469,7 +1470,8 @@ static int unix_stream_connect(struct socket *sock, struct sockaddr *uaddr,
+ 	if (err)
+ 		goto out;
+ 
+-	if (test_bit(SOCK_PASSCRED, &sock->flags) && !u->addr) {
++	if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
++	     test_bit(SOCK_PASSPIDFD, &sock->flags)) && !u->addr) {
+ 		err = unix_autobind(sk);
+ 		if (err)
+ 			goto out;
+@@ -1670,6 +1672,8 @@ static void unix_sock_inherit_flags(const struct socket *old,
+ {
+ 	if (test_bit(SOCK_PASSCRED, &old->flags))
+ 		set_bit(SOCK_PASSCRED, &new->flags);
++	if (test_bit(SOCK_PASSPIDFD, &old->flags))
++		set_bit(SOCK_PASSPIDFD, &new->flags);
+ 	if (test_bit(SOCK_PASSSEC, &old->flags))
+ 		set_bit(SOCK_PASSSEC, &new->flags);
+ }
+@@ -1819,8 +1823,10 @@ static bool unix_passcred_enabled(const struct socket *sock,
+ 				  const struct sock *other)
+ {
+ 	return test_bit(SOCK_PASSCRED, &sock->flags) ||
++	       test_bit(SOCK_PASSPIDFD, &sock->flags) ||
+ 	       !other->sk_socket ||
+-	       test_bit(SOCK_PASSCRED, &other->sk_socket->flags);
++	       test_bit(SOCK_PASSCRED, &other->sk_socket->flags) ||
++	       test_bit(SOCK_PASSPIDFD, &other->sk_socket->flags);
+ }
+ 
+ /*
+@@ -1922,7 +1928,8 @@ static int unix_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+ 			goto out;
+ 	}
+ 
+-	if (test_bit(SOCK_PASSCRED, &sock->flags) && !u->addr) {
++	if ((test_bit(SOCK_PASSCRED, &sock->flags) ||
++	     test_bit(SOCK_PASSPIDFD, &sock->flags)) && !u->addr) {
+ 		err = unix_autobind(sk);
+ 		if (err)
+ 			goto out;
+@@ -2824,7 +2831,8 @@ static int unix_stream_read_generic(struct unix_stream_read_state *state,
+ 			/* Never glue messages from different writers */
+ 			if (!unix_skb_scm_eq(skb, &scm))
+ 				break;
+-		} else if (test_bit(SOCK_PASSCRED, &sock->flags)) {
++		} else if (test_bit(SOCK_PASSCRED, &sock->flags) ||
++			   test_bit(SOCK_PASSPIDFD, &sock->flags)) {
+ 			/* Copy credentials */
+ 			scm_set_cred(&scm, UNIXCB(skb).pid, UNIXCB(skb).uid, UNIXCB(skb).gid);
+ 			unix_set_secdata(&scm, skb);
+diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
+index 8756df13be50..fbbc4bf53ee3 100644
+--- a/tools/include/uapi/asm-generic/socket.h
++++ b/tools/include/uapi/asm-generic/socket.h
+@@ -121,6 +121,8 @@
+ 
+ #define SO_RCVMARK		75
+ 
++#define SO_PASSPIDFD		76
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+-- 
+2.34.1
+
