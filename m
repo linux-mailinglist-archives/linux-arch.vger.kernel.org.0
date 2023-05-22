@@ -2,188 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AB570B4A4
-	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 07:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A6270B59A
+	for <lists+linux-arch@lfdr.de>; Mon, 22 May 2023 09:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjEVFpi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 May 2023 01:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
+        id S231689AbjEVHAs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 May 2023 03:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjEVFpg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 01:45:36 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECCECF;
-        Sun, 21 May 2023 22:45:31 -0700 (PDT)
-X-UUID: daa4ff3af86311ed9cb5633481061a41-20230522
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=EsDmTzL8ivZGNLDIgDBn+YiSiOUpd9phsMSc+Rve7s4=;
-        b=C1YZFqMW26gb1SBQROkTMvHB7fcLr2Myb6NkeOMmVzShWrWcyh1nyV0lm+OP58UCoRB1uWUmvkvjcJ3XQVHK41Bf3V4Nzuqw2oLtT9VafWN1GZJVQOYgue5HFvXnYCPWnIVV5ivuTUYhPQLsqzzT4wfekes5uPme3wOhVgCgfH8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:61568f25-c0d7-42ed-bf3f-90f6d94af4fc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-INFO: VERSION:1.1.25,REQID:61568f25-c0d7-42ed-bf3f-90f6d94af4fc,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-        elease,TS:-5
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:d36e916c-2f20-4998-991c-3b78627e4938,B
-        ulkID:2305221345296VEM5IAA,BulkQuantity:0,Recheck:0,SF:17|19|102,TC:nil,Co
-        ntent:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,O
-        SA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: daa4ff3af86311ed9cb5633481061a41-20230522
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <yi-de.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1774595458; Mon, 22 May 2023 13:45:27 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 13:45:27 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 22 May 2023 13:45:26 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CXpPjUCnQVoq9wXEAiScSLJOLbim62k37imrW3eT+uO2X5CdSXP60Z6i6IrEx02ORkJa4WTcHGszA7Vf9vHTJDKcRNzk9jxUzxB6cnSld84IwjcTDINoSSroEqGBNp8s/g0AeYhRJ0+S9DbU39QZZojedPOm5sjRLPcKIrD1LKsVg9yVvkE7pEMdzewgg/0uqtQGEuQ7Ej+GfX2ZqCMW/KgqeCzx5vrV7xOH6z5nnalXZ87NEgN6Elg1jHOk1E/Tru5IF89vXR4IA7vCgBb7FyhrFoNPDui4mjlLbu5SnzioPkEpQ9Eucp5hg28L1UrixKR1+0svuSioqhWpvpyCHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EsDmTzL8ivZGNLDIgDBn+YiSiOUpd9phsMSc+Rve7s4=;
- b=HlZVAQAa7wQ37tkjq7tIew5grILC9DBc9zDnieTflQKXNZK1IbHElVkH0RFCSLrHhMoKAD0VnGTt8gyEEwvc/3eANJsIwNTAfTIgYNW8P3TO9yihELTNkumDIi/Cu3Tgvy04lQTVdkO+0SEtx0OCdV5lMDVMPxViWG7sXABhW2Sia30XqdZyJpXYurETjxtE5jL9CMzlEFhF6nA/Z6qudeNq4agX6rvxjgpXHlj+GmJ2iJBhsQjh/FD7wiWKwDmlIMbKW0bCzO3QNR7jUE1tVmd2q9Uh5nGwc8npnnmJV8LynrBejzJJdk0fWyQheyeNxm2qlQNjFekLMNvGTUPI/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        with ESMTP id S230109AbjEVHAq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 May 2023 03:00:46 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1646B1
+        for <linux-arch@vger.kernel.org>; Mon, 22 May 2023 00:00:39 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af2c7f2883so23469641fa.3
+        for <linux-arch@vger.kernel.org>; Mon, 22 May 2023 00:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EsDmTzL8ivZGNLDIgDBn+YiSiOUpd9phsMSc+Rve7s4=;
- b=EumDi8VBGh7O+vNe6vMiNBWrVclab0C1ps1k/+ZwZVqmOtpIX4N44Kk1GzViNKh0xH9kdfWQfCrFRz817TwnlyHklHhGNX5vFhEQBtfgU1W1536hb+VE2VNeNC0ik7JL+Zsxlf3i7oARF7+rLZsjU/WkGhaYlGZQx9vYHL/2fuI=
-Received: from SI2PR03MB6167.apcprd03.prod.outlook.com (2603:1096:4:14f::8) by
- SEYPR03MB6995.apcprd03.prod.outlook.com (2603:1096:101:bd::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.27; Mon, 22 May 2023 05:45:24 +0000
-Received: from SI2PR03MB6167.apcprd03.prod.outlook.com
- ([fe80::47e2:93ab:c1d3:670b]) by SI2PR03MB6167.apcprd03.prod.outlook.com
- ([fe80::47e2:93ab:c1d3:670b%9]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 05:45:24 +0000
-From:   =?utf-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>
-To:     "pavel@ucw.cz" <pavel@ucw.cz>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        =?utf-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_tsoni@quicinc.com" <quic_tsoni@quicinc.com>,
-        =?utf-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
-        <shawn.hsiao@mediatek.com>,
-        =?utf-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
-        <Miles.Chen@mediatek.com>,
-        =?utf-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
-        <PeiLun.Suei@mediatek.com>,
-        =?utf-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
-        <Liju-clr.Chen@mediatek.com>,
-        "yi-de.wu@mediatek.corp-partner.google.com" 
-        <yi-de.wu@mediatek.corp-partner.google.com>,
-        =?utf-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
-        <jades.shih@mediatek.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dbrazdil@google.com" <dbrazdil@google.com>,
-        "yipei.chang@gmail.com" <yipei.chang@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?utf-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
-        <Yingshiuan.Pan@mediatek.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        =?utf-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
-        <Ze-yu.Wang@mediatek.com>, "will@kernel.org" <will@kernel.org>,
-        =?utf-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
-        <ivan.tseng@mediatek.com>
-Subject: Re: [PATCH v2 1/7] docs: geniezone: Introduce GenieZone hypervisor
-Thread-Topic: [PATCH v2 1/7] docs: geniezone: Introduce GenieZone hypervisor
-Thread-Index: AQHZeb1j86IJ58u560yye9npvu25W69W8GSAgA79VIA=
-Date:   Mon, 22 May 2023 05:45:24 +0000
-Message-ID: <efd22069cb92b6ebc3d5e9c4e3ed440808615f80.camel@mediatek.com>
-References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
-         <20230428103622.18291-2-yi-de.wu@mediatek.com> <ZF5ud9CedwBnWXBN@localhost>
-In-Reply-To: <ZF5ud9CedwBnWXBN@localhost>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SI2PR03MB6167:EE_|SEYPR03MB6995:EE_
-x-ms-office365-filtering-correlation-id: 66b1f080-6c58-4832-c38f-08db5a87bd20
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: L4k0GUeTG7aj54RkEbhd45N46iMFSrU/Su0Z6nNfya9gZthoIUo6jVHZ9xd6S5LAEkMMUQWuVeDnIaRDj/6/sfW4Ve71RuawS0Ws8kUAO76AAy3+QYuKL90WBSv/oqVESG/hGeHbF39LI44otESyMO9q8xHlfXz0V60GEiHKKaKy+CI+wmtDMBBd1V6r/Hzl92kuj6rFfcbYlDyhHinXEHivRzovb1PfNEYjVrj78Z7uRLdNzR/nI9cLadZOyvQeLmrYUCgqAO7Xb6Zu1K8gc70FLaqq+ovV1eflReJGL+yXqnyfF9wj4UFFtDgqBIlZAJo9FC9J1kWWryTE2X6ZZ6fQyIEbueN1FvoZ1ifFW0DZuxoqWcIkO/XqYpJWguBEVQK/mhd78kp4Uu1zR0H9jcyHVGj99omV6TrbHQ7jRntFSUujdT8Pz/bHtXuZ46SJwS6hcj6pzLVi3cCvnwwEczGR6ubPw8i/PdXCb337W1hTZ/+AOkfwI7H1zco+y+8g2xBluHEbslCtYkiCqLAnOP6TgN4coNxk9Q5P9apGMVtd/SRWLbvOJlqiSEx/SmgcwSiLp3KcmrcTzPySDPjCDDuQKWo5L4s9aqLSg+/sr/CFUWBG9Pj2g09ya3Tn2ADC
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB6167.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(366004)(346002)(136003)(39860400002)(451199021)(2906002)(54906003)(5660300002)(7416002)(8676002)(8936002)(66446008)(41300700001)(91956017)(76116006)(85182001)(316002)(478600001)(64756008)(66946007)(66476007)(66556008)(6916009)(4326008)(36756003)(71200400001)(6486002)(83380400001)(26005)(6512007)(6506007)(122000001)(38100700002)(86362001)(2616005)(186003)(38070700005)(107886003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bFdHaGczSmRnS2RaOEVrWTZZeHl2cEtqTlJjelBUZUE3bHRmaEVWSVVlTE1v?=
- =?utf-8?B?VUFCc2pud20wQTJwQmN6blM0RE9xdnd5aURlMzMxbTlTNVpHR0pCSmRVYWpT?=
- =?utf-8?B?aS9pc1lKdWZsMDBJMU1VM21vU1NxVmV0eFBEb0Z3Ti9SemRRNWdodnpMREcv?=
- =?utf-8?B?b0dJKzNJWlByRTAzQmJEUEJCbVNaWnVzQ2VPQW5wa3I2OEMyU0ZtYmdVV3Ex?=
- =?utf-8?B?RVlkY0ZrOFNmQ094YWFSclMrQzh0Z2UwOE85YjF1L0N4RjJYRTV2ZE95M2NM?=
- =?utf-8?B?K3BnTUdTSGxtUUd6WnBtYTJFL1U5RG5GV1B4R3J1cS80eXNhM0dlWTk2TW1u?=
- =?utf-8?B?SVo4bGRxVTRHQStVZ2o5MWtjSGFFOGMxOVlJY0tvakE3Um9Wdm1WOU1Xbmg4?=
- =?utf-8?B?ZndGTUgyS3loQlFMdzBHNGJTM09ZMnhpUE9HeWhhQjVZL1BJcnFDWWFrcXVU?=
- =?utf-8?B?L3hLQmMzWThkZDJxMU0vV05vMWloQ0c4cnRyZHZxeWgzak53TUdLTmlBb0l0?=
- =?utf-8?B?MFNReDc3NzhUQURQcVdpSUFnTWt0MVZQelZUMUNoelRjTzhFb2djMXJZYXpu?=
- =?utf-8?B?ei9EU1lmWWFvcUZBQmE3Uk5ZdWFnZjVXclV6S1pnNzNmVXhkQit5c2dlOGc5?=
- =?utf-8?B?N21kMUtUb0VNRlB6MFFJak5GU04zZGpicXZ5cGw3cG9hNm9MWEdyYzZGRzhU?=
- =?utf-8?B?aUFPT3hHR0RXaCtNL3BkU1pWY1p1ajBuUVJQK2RkTVpRZnBLbVlKU0o2eit6?=
- =?utf-8?B?U0c5M09JK01NVFlRWVRKTlp3QjRyc1ZlYmswL2s4RjUySG9LbVJXRnlraGF1?=
- =?utf-8?B?b1pWVCtzTmVUR0czSkM0dkZ3QU5hblVnZXFTUCsyS3krT2g4WGlkbEVRRmYr?=
- =?utf-8?B?NWhOenM3MGtwVFM0NmNrRFRselhuZml0aElqVUV0ZUNMVW1JeDVPQVBDUmZQ?=
- =?utf-8?B?MytsTFRhNnd5ZEcva2Zic1FFdFhFc3hzcjIvR3h6OVpxaG10WG11bWFycDN2?=
- =?utf-8?B?NFZRanc1L1JpYjYycWYrd2tVekM2OEtzOHorSUFTWGFZM2pRa2UrV2UrRWRH?=
- =?utf-8?B?VElJRzBPWEc3SU5jRVpTY1hiKzFPN01kcVFTTG9HSTNqcTBya0VHY1Z1dkhi?=
- =?utf-8?B?MWgwV050ZXJ2Zkd4My80c1kvZUhCMVFWSlVzMFphODV3b0hrcWhuWldBOU9P?=
- =?utf-8?B?MVJvZDZDbjhBUVVFVFFuRzB1UktSNzdJZzlybGpUR2VnbHpEQVRuUS80Qm1W?=
- =?utf-8?B?S1hBdkVrb2VEVW5Ud2luaUkwUU5vOWdLTjZ0MW1EeUlyajVPNXF0VWxnbFcw?=
- =?utf-8?B?VFJ0ckpHNDBpK0s2VnN4SkxLa2Jzekx0cDd4dXNpYVBuekJ1WWFwNE5jWXVh?=
- =?utf-8?B?REU0bmNYVTQyWjY0YlpZVmFob3BCUVMzV2Y2dE1rVDNlSzluSWtldldkRnFx?=
- =?utf-8?B?ZkYvR21UNWd1aTNpeThKcyt2Wkl2R3N0YjkxYXd2a09tTitmNEorWVMxOUpu?=
- =?utf-8?B?QXdUTFhxTUJlVkZGcUNhS1c1V3ZuQWpLcE0vY0MwUjVJeXhOWExTQ0oyeFp4?=
- =?utf-8?B?a3JaRndOVGxzd3pzU3h6bUM2ZHQvZlBWcDVQcVNFQUl4Qk9tNktVK3J6ZzdB?=
- =?utf-8?B?Uk56WDJpWDZxL3Y2cW4zN3dLSG85b3pRaks5ZXdqM1MzZFBxSWtsNHdMVjBM?=
- =?utf-8?B?UklSaTY4cmJSZlIrSDljbGFmRXBRWXRmRXpvMHhMU0s3Wi9iWUNtZzJEVmVq?=
- =?utf-8?B?K2t6cjJhWEsxdlVsb0tmRm1RWmRxeW9FSHZrYUV2dGFQL2JFU0NidUtVY3U5?=
- =?utf-8?B?ZldhdkU5QUhpNXVLbjVtOUo3NldBeWw1OEVtdGhacGR5YkhzZlljYWZFUlgz?=
- =?utf-8?B?SGxyWisvQVJLcU1NTDlVRUk0WmRLZ3hncFJmckFTZ2NzSTcxbjBFdHI4UjU4?=
- =?utf-8?B?a1BrdjBndVkzdElET2pPWGx2WUtWY3VTWTFSQm1wemFXV1Rrd0Y3Z2lIdjBN?=
- =?utf-8?B?Z3RkZFlVWUJLbE1kUXBLY2lwbG5UR2pXN2lidEw2OEp3eDJneTFkQWc0alYx?=
- =?utf-8?B?QjR0S0pWWGljQWxCM080QldYb3p6ZHRCZWJwN0pBTXZwSnJZaG5PRFJqM0NO?=
- =?utf-8?B?NmlSL3hIY3hzWU5tdUl1K2wwTTJlaXdGSnR2T2E1eTBRRmdEdW9TRVlJc3Jn?=
- =?utf-8?B?Mnc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <42DE81992429D241873E4C37AEFE1B69@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google; t=1684738838; x=1687330838;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DNPIoJfZfpcGl/mQazzDBrBG+IwcTg57IBktWiArhPQ=;
+        b=pIqcidzjihloELcSapvhUCdnCghhcpBL2z4Vy8JgtA966JDSY312p2dVKBOQ887aSw
+         iguakCpNf3PAfmBeVFG328fxAK11pvXM+PvDUbTHylH/hm1FSSCCnD8N/8h6iQFuwJ5y
+         H8GY0LcLORdHC5DWSKK8EH9jD0Ig/05kq1+WW7S9ttVR5Fd0Y/jSle8a0wHXD7YRJ+Cs
+         sAJaQdm83yOAPswPwxgYXGgvxSwmGSS04/eVSBl9irnWrWsWRK60eOp0aUH7UWXPRdM/
+         G0pv8uq3cbgyQoNm1TQZrmZpElktwAayLPsULCSW5WYxFgMFezsJ3clVgheXjkOI2PQd
+         ldFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684738838; x=1687330838;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DNPIoJfZfpcGl/mQazzDBrBG+IwcTg57IBktWiArhPQ=;
+        b=QsDijGrJAffiwMbyJ6EnjONVtqv1meJWWTQRnOksj5hjox98zPy1zoklSedfWgdNaX
+         9hXDGfiuR/+H+7MIMN/Bz3tqjgn095EMjDP0qr3nWYuJVRwVNXVeZgd0j+3ELhjBWBJB
+         2tqKcZfK++173/Dp2RhZtYIZwTJysVVLdrN0LRs4rB97aXxRlOgycmPieRenF/Ojwgi6
+         gyeDPMXVZRvnep+NdYsUYZSGpFfocTIgDsJ7LfHXAbNZyhumS60L48M2k4K3gjylJV9b
+         RBQ12/dQHmZFmQdehiT13YBperdozFe3ol05+YrctSaA0wul0wKIiyLT0OiPqYw83j1W
+         v2NA==
+X-Gm-Message-State: AC+VfDxnHfctyTRbKmAk8TFiuwDbSU4YHVBjNAtKk65vRXkMeWd77HAG
+        L6bOLyDmnqeFofXGgUH8RTWSCw==
+X-Google-Smtp-Source: ACHHUZ5F3iLu8/R6cUAYvFbkma+E9E2J9cbDIJbVhGpbBKeakTe5SqM7FDxMbSh7yiPn3ePytuF7GA==
+X-Received: by 2002:a2e:b04d:0:b0:29f:58c6:986e with SMTP id d13-20020a2eb04d000000b0029f58c6986emr3023170ljl.52.1684738837975;
+        Mon, 22 May 2023 00:00:37 -0700 (PDT)
+Received: from [127.0.1.1] ([85.235.12.238])
+        by smtp.gmail.com with ESMTPSA id q4-20020a2e8744000000b002adb98fdf81sm1010187ljj.7.2023.05.22.00.00.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 00:00:37 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v2 00/12] arch: Make virt_to_pfn into a static inline
+Date:   Mon, 22 May 2023 09:00:35 +0200
+Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v2-0-0948d38bddab@linaro.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB6167.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66b1f080-6c58-4832-c38f-08db5a87bd20
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2023 05:45:24.2677
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RyO0nxEsrnXE+l4TSR8YUzU6pVF2W5zmo3dWTGMSgONH38MH9d6G+XPNYaTX+XymNflpUzUSnKT/R8iDbXaIbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR03MB6995
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABMTa2QC/4WOOw6DMBBEr4JcZ5H5OZAq94gojD+wUmSjNbGIE
+ HePIVWqlG80TzMbC4bQBHbLNkYmYkDvEpSXjKlJutEA6sSs5GXFG15BRFpg8TBbB1FADaQKqG1
+ zrTrTasE1S+ogg4GBpFPTIf86+dcho1/rUZ7JWFzPD48+8YRh8fQ+L8XiSP+sxwI4CFWLrtXKd
+ qq9P9FJ8rmnkfX7vn8ACYaVheYAAAA=
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Cc:     linux-mm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Tom Talpey <tom@talpey.com>
+X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -191,28 +85,147 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gRnJpLCAyMDIzLTA1LTEyIGF0IDE4OjUxICswMjAwLCBQYXZlbCBNYWNoZWsgd3JvdGU6DQo+
-IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFj
-aG1lbnRzIHVudGlsDQo+IHlvdSBoYXZlIHZlcmlmaWVkIHRoZSBzZW5kZXIgb3IgdGhlIGNvbnRl
-bnQuDQo+IA0KPiANCj4gSGkhDQo+IA0KPiA+IEdlbmllWm9uZSBpcyBNZWRpYVRlayBwcm9wcmll
-dGFyeSBoeXBlcnZpc29yIHNvbHV0aW9uLCBhbmQgaXQgaXMNCj4gPiBydW5uaW5nDQo+ID4gaW4g
-RUwyIHN0YW5kIGFsb25lIGFzIGEgdHlwZS1JIGh5cGVydmlzb3IuIEl0IGlzIGEgcHVyZSBFTDIN
-Cj4gPiBpbXBsZW1lbnRhdGlvbiB3aGljaCBpbXBsaWVzIGl0IGRvZXMgbm90IHJlbHkgYW55IHNw
-ZWNpZmljIGhvc3QgVk0sDQo+ID4gYW5kDQo+ID4gdGhpcyBiZWhhdmlvciBpbXByb3ZlcyBHZW5p
-ZVpvbmUncyBzZWN1cml0eSBhcyBpdCBsaW1pdHMgaXRzDQo+ID4gaW50ZXJmYWNlLg0KPiA+ICsr
-KyBiL0RvY3VtZW50YXRpb24vdmlydC9nZW5pZXpvbmUvaW50cm9kdWN0aW9uLnJzdA0KPiA+IEBA
-IC0wLDAgKzEsMzQgQEANCj4gPiArUGxhdGZvcm0gVmlydHVhbGl6YXRpb24NCj4gPiArPT09PT09
-PT09PT09PT09PT09PT09PT0NCj4gPiArV2UgbGV2ZXJhZ2VzIGFybTY0J3MgdGltZXIgdmlydHVh
-bGl6YXRpb24gYW5kIGdpYyB2aXJ0dWFsaXphdGlvbg0KPiA+IGZvciB0aW1lciBhbmQNCj4gPiAr
-aW50ZXJydXB0cyBjb250cm9sbGVyLg0KPiANCj4gJ2ludGVycnVwdCcuDQo+IA0KTm90ZWQuDQoN
-Cj4gPiArRGV2aWNlIFZpcnR1YWxpemF0b24NCj4gPiArPT09PT09PT09PT09PT09PT09PT0NCj4g
-PiArV2UgYWRvcHRzIFZNTSdzIHZpcnRpbyBkZXZpY2VzIGVtdWxhdGlvbnMgYnkgcGFzc2luZyBp
-byB0cmFwIHRvDQo+ID4gVk1NLCBhbmQgdmlydGlvDQo+IA0KPiAnYWRvcHQnLCAnZGV2aWNlIGVt
-dWxhdGlvbicNCj4gDQpOb3RlZC4NCg0KPiA+ICtpcyBhIHdlbGwta25vd24gYW5kIHdpZGVseSB1
-c2VkIHZpcnR1YWwgZGV2aWNlIGltcGxlbWVudGF0aW9uLg0KPiA+ICsNCj4gDQo+IFBsdXMsIEkn
-ZCBleHBlY3QgZG9jdW1lbnRhdGlvbiB0byBiZSBtb3JlIGRldGFpbGVkIG9yIGhhdmUgcG9pbnRl
-cg0KPiB3aGVyZQ0KPiB0byBsZWFybiBtb3JlLg0KPiANCj4gQlIsICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQYXZlbA0KPiANCj4gLS0NClN1cmUs
-IHdlIHRlbmQgdG8gZW51bWVyYXRlIHRoZSBoaWdoLWxldmVsIGZlYXR1cmVzIG9mIEdlbmllWm9u
-ZSBhbmQgdGhlDQpkZXNpZ24gY29uc2lkZXJhdGlvbnMgb2YgZWFjaCBtb2R1bGUgb24gdGhlIG5l
-eHQgdmVyc2lvbiBvZiBvdXINCmRvY3VtZW50YXRpb24uDQo=
+This is an attempt to harden the typing on virt_to_pfn()
+and pfn_to_virt().
+
+Making virt_to_pfn() a static inline taking a strongly typed
+(const void *) makes the contract of a passing a pointer of that
+type to the function explicit and exposes any misuse of the
+macro virt_to_pfn() acting polymorphic and accepting many types
+such as (void *), (unitptr_t) or (unsigned long) as arguments
+without warnings.
+
+For symmetry, we do the same with pfn_to_virt().
+
+The problem with this inconsistent typing was pointed out by
+Russell King:
+https://lore.kernel.org/linux-arm-kernel/YoJDKJXc0MJ2QZTb@shell.armlinux.org.uk/
+
+And confirmed by Andrew Morton:
+https://lore.kernel.org/linux-mm/20220701160004.2ffff4e5ab59a55499f4c736@linux-foundation.org/
+
+So the recognition of the problem is widespread.
+
+These platforms have been chosen as initial conversion targets:
+
+- ARC
+- ARM
+- ARM64/Aarch64
+- asm-generic (including for example x86)
+- m68k
+
+The idea is that if this goes in, it will block further misuse
+of the function signatures due to the large compile coverage,
+and then I can go in and fix the remaining platforms on a
+one-by-one basis.
+
+Some of the patches have been circulated before but were not
+picked up by subsystem maintainers, so now the arch tree is
+target for this series.
+
+It has passed zeroday builds after a lot of iterations in my
+personal tree, but there could be some randconfig outliers.
+
+The To/Cc list would be too long if I include all the minor
+patches maintainers, so I have trimmed it down to the mailing
+lists since these people certainly have received the patches
+before.
+
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+Changes in v2:
+- Fix some "void * x" into "void *x" in generic page accessors and
+  in m68k.
+- Collected a few ACKs
+- All build tests appear to pass!
+- Added Andrew Mortin to To: line to see what he thinks
+- Link to v1: https://lore.kernel.org/r/20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org
+
+---
+Linus Walleij (12):
+      fs/proc/kcore.c: Pass a pointer to virt_addr_valid()
+      m68k: Pass a pointer to virt_to_pfn() virt_to_page()
+      ARC: init: Pass a pointer to virt_to_pfn() in init
+      riscv: mm: init: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page()
+      cifs: Pass a pointer to virt_to_page() in cifsglob
+      netfs: Pass a pointer to virt_to_page()
+      arm64: vdso: Pass (void *) to virt_to_page()
+      asm-generic/page.h: Make pfn accessors static inlines
+      ARM: mm: Make virt_to_pfn() a static inline
+      arm64: memory: Make virt_to_pfn() a static inline
+      m68k/mm: Make pfn accessors static inlines
+
+ arch/arc/mm/init.c                   |  2 +-
+ arch/arm/common/sharpsl_param.c      |  2 +-
+ arch/arm/include/asm/delay.h         |  2 +-
+ arch/arm/include/asm/io.h            |  2 +-
+ arch/arm/include/asm/memory.h        | 17 ++++++++++++-----
+ arch/arm/include/asm/page.h          |  4 ++--
+ arch/arm/include/asm/pgtable.h       |  2 +-
+ arch/arm/include/asm/proc-fns.h      |  2 --
+ arch/arm/include/asm/sparsemem.h     |  2 +-
+ arch/arm/include/asm/uaccess-asm.h   |  2 +-
+ arch/arm/include/asm/uaccess.h       |  2 +-
+ arch/arm/kernel/asm-offsets.c        |  2 +-
+ arch/arm/kernel/entry-armv.S         |  2 +-
+ arch/arm/kernel/entry-common.S       |  2 +-
+ arch/arm/kernel/entry-v7m.S          |  2 +-
+ arch/arm/kernel/head-nommu.S         |  3 +--
+ arch/arm/kernel/head.S               |  2 +-
+ arch/arm/kernel/hibernate.c          |  2 +-
+ arch/arm/kernel/suspend.c            |  2 +-
+ arch/arm/kernel/tcm.c                |  2 +-
+ arch/arm/kernel/vmlinux-xip.lds.S    |  3 +--
+ arch/arm/kernel/vmlinux.lds.S        |  3 +--
+ arch/arm/mach-berlin/platsmp.c       |  2 +-
+ arch/arm/mach-keystone/keystone.c    |  2 +-
+ arch/arm/mach-omap2/sleep33xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep43xx.S      |  2 +-
+ arch/arm/mach-omap2/sleep44xx.S      |  2 +-
+ arch/arm/mach-pxa/gumstix.c          |  2 +-
+ arch/arm/mach-rockchip/sleep.S       |  2 +-
+ arch/arm/mach-sa1100/pm.c            |  2 +-
+ arch/arm/mach-shmobile/headsmp-scu.S |  2 +-
+ arch/arm/mach-shmobile/headsmp.S     |  2 +-
+ arch/arm/mach-socfpga/headsmp.S      |  2 +-
+ arch/arm/mach-spear/spear.h          |  2 +-
+ arch/arm/mm/cache-fa.S               |  1 -
+ arch/arm/mm/cache-v4wb.S             |  1 -
+ arch/arm/mm/dma-mapping.c            |  2 +-
+ arch/arm/mm/dump.c                   |  2 +-
+ arch/arm/mm/init.c                   |  2 +-
+ arch/arm/mm/kasan_init.c             |  1 -
+ arch/arm/mm/mmu.c                    |  2 +-
+ arch/arm/mm/physaddr.c               |  2 +-
+ arch/arm/mm/pmsa-v8.c                |  2 +-
+ arch/arm/mm/proc-v7.S                |  2 +-
+ arch/arm/mm/proc-v7m.S               |  2 +-
+ arch/arm/mm/pv-fixup-asm.S           |  2 +-
+ arch/arm64/include/asm/memory.h      |  9 ++++++++-
+ arch/arm64/kernel/vdso.c             |  2 +-
+ arch/m68k/include/asm/mcf_pgtable.h  |  4 ++--
+ arch/m68k/include/asm/page_mm.h      | 11 +++++++++--
+ arch/m68k/include/asm/page_no.h      | 11 +++++++++--
+ arch/m68k/include/asm/sun3_pgtable.h |  4 ++--
+ arch/m68k/mm/mcfmmu.c                |  3 ++-
+ arch/m68k/mm/motorola.c              |  4 ++--
+ arch/m68k/mm/sun3mmu.c               |  2 +-
+ arch/m68k/sun3/dvma.c                |  2 +-
+ arch/m68k/sun3x/dvma.c               |  2 +-
+ arch/riscv/mm/init.c                 |  4 ++--
+ drivers/memory/ti-emif-sram-pm.S     |  2 +-
+ fs/cifs/cifsglob.h                   |  2 +-
+ fs/cifs/smbdirect.c                  |  2 +-
+ fs/netfs/iterator.c                  |  2 +-
+ fs/proc/kcore.c                      |  2 +-
+ include/asm-generic/page.h           | 12 ++++++++++--
+ 64 files changed, 109 insertions(+), 80 deletions(-)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230503-virt-to-pfn-v6-4-rc1-4f5739e8d60d
+
+Best regards,
+-- 
+Linus Walleij <linus.walleij@linaro.org>
+
