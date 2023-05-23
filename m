@@ -2,131 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E10B70DAC6
-	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 12:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6794E70DBA8
+	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 13:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbjEWKoW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 May 2023 06:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S232688AbjEWLob (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 May 2023 07:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjEWKoV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 06:44:21 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9272C119;
-        Tue, 23 May 2023 03:44:16 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-562108900acso67007487b3.2;
-        Tue, 23 May 2023 03:44:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684838655; x=1687430655;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wAGJ7K0eTZatSWk95P2dmmFxGdpx5RiAx15TGeRGBa0=;
-        b=FMRb7F2wf/7W58fsIYB46aD0jdmmCDrPqyyaWOFxdwwRyqahxxaNCKzpT80e5SURNQ
-         klZU5fa16Isidz8x3vNPWVPgy0mO34i1fxus7ZHgV8E1v42UGSA3VyqDFbOQA97WMdat
-         azp3XfE8P3CwajWf4F/BMl30/6gT8Qn9IequFLjyqesnc3WKgDE42iAm0g53T47nTvQa
-         sXKU0AiJmlncjP6apVbmtjHvjZvegPpWocJN+UQpdbWzjgwTDz20fQwAWO+BQ4nwqIzi
-         qomjM3UqwG70pWAew5WjWaoifAmqskTQxSif76FmOWQ2Sm6A4cGvxOqX9gVdbcnTyAHK
-         mWJQ==
-X-Gm-Message-State: AC+VfDxFFTC+Zyo2pxtR1h0TQvItSUiSpVzuYCCOJpn0tEitNLDCfeUh
-        /FnvO49VHlTTiHrZrPzvC2dWX7udZNvqFg==
-X-Google-Smtp-Source: ACHHUZ6YJ9zJvN0qE9S2BBzG8oNGio26IxwbglPykZdld8mltIWkKyzmWudRDShNKc3aUAXo7iiOsA==
-X-Received: by 2002:a81:8283:0:b0:565:310:f615 with SMTP id s125-20020a818283000000b005650310f615mr6461794ywf.32.1684838654814;
-        Tue, 23 May 2023 03:44:14 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id n14-20020a819e4e000000b00552ccda9bb3sm2704819ywj.92.2023.05.23.03.44.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 May 2023 03:44:13 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-565014fc2faso25513187b3.1;
-        Tue, 23 May 2023 03:44:13 -0700 (PDT)
-X-Received: by 2002:a81:4603:0:b0:55a:7d83:7488 with SMTP id
- t3-20020a814603000000b0055a7d837488mr13085744ywa.9.1684838652890; Tue, 23 May
- 2023 03:44:12 -0700 (PDT)
+        with ESMTP id S230197AbjEWLob (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 07:44:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42EEAFE;
+        Tue, 23 May 2023 04:44:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A683139F;
+        Tue, 23 May 2023 04:45:15 -0700 (PDT)
+Received: from [10.57.84.70] (unknown [10.57.84.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C7B6C3F6C4;
+        Tue, 23 May 2023 04:44:27 -0700 (PDT)
+Message-ID: <1ab0a4e0-1eb9-fc78-2df2-ad0f3802d06a@arm.com>
+Date:   Tue, 23 May 2023 12:44:26 +0100
 MIME-Version: 1.0
-References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
- <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
- <20230522133409.5c6e839a@kernel.org> <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
-In-Reply-To: <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
-From:   Luca Boccassi <bluca@debian.org>
-Date:   Tue, 23 May 2023 11:44:01 +0100
-X-Gmail-Original-Message-ID: <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
-Message-ID: <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/7] arm: docs: Move Arm documentation to
+ Documentation/arch/
+Content-Language: en-GB
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
+References: <20230519164607.38845-1-corbet@lwn.net>
+ <20230519164607.38845-2-corbet@lwn.net>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230519164607.38845-2-corbet@lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 23 May 2023 at 10:49, Christian Brauner <brauner@kernel.org> wrote:
->
-> On Mon, May 22, 2023 at 01:34:09PM -0700, Jakub Kicinski wrote:
-> > On Mon, 22 May 2023 15:24:37 +0200 Alexander Mikhalitsyn wrote:
-> > > v6:
-> > >     - disable feature when CONFIG_UNIX=n/m (pidfd_prepare API is not exported to modules)
-> >
-> > IMHO hiding the code under #if IS_BUILTIN(CONFIG_UNRELATED) is
-> > surprising to the user and.. ugly?
-> >
-> > Can we move scm_pidfd_recv() into a C source and export that?
-> > That should be less controversial than exporting pidfd_prepare()
-> > directly?
->
-> I really would like to avoid that because it will just mean that someone
-> else will abuse that function and then make an argument why we should
-> export the other function.
->
-> I think it would be ok if we required that unix support is built in
-> because it's not unprecedented either and we're not breaking anything.
-> Bpf has the same requirement:
->
->   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
->   struct bpf_unix_iter_state {
->           struct seq_net_private p;
->           unsigned int cur_sk;
->           unsigned int end_sk;
->           unsigned int max_sk;
->           struct sock **batch;
->           bool st_bucket_done;
->   };
->
-> and
->
->   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
->   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
->                        struct unix_sock *unix_sk, uid_t uid)
+On 2023-05-19 17:46, Jonathan Corbet wrote:
+> Architecture-specific documentation is being moved into Documentation/arch/
+> as a way of cleaning up the top-level documentation directory and making
+> the docs hierarchy more closely match the source hierarchy.  Move
+> Documentation/arch into arch/ and fix all documentation references.
 
-Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
-ship with CONFIG_UNIX=y, so a missing SCM_PIDFD in unlikely to have a
-widespread impact, and if it does, it might encourage someone to
-review their kconfig.
+Nit: I guess the "and fix all documentation references" part ended up 
+being split out into the subsequent patches?
 
-As mentioned on the v5 thread, we are waiting for this API to get the
-userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
-really grateful if we could start with the simplest and most
-conservative approach (which seems to be the current one in v6 to me),
-and then eventually later decide whether to export more functions, or
-to deprecate CONFIG_UNIX=m, or something else entirely, as that
-doesn't really affect the shape of the UAPI, just the details of its
-availability. Thank you.
+> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: Alex Shi <alexs@kernel.org>
+> Cc: Yanteng Si <siyanteng@loongson.cn>
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
+> ---
+[...]
+>   Documentation/translations/zh_CN/arm/Booting                  | 4 ++--
+>   Documentation/translations/zh_CN/arm/kernel_user_helpers.txt  | 4 ++--
 
-Kind regards,
-Luca Boccassi
+...so I imagine these two rogue hunks probably want to be in patch #2 now.
+
+Thanks,
+Robin.
