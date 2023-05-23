@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E8670E30B
-	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 19:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B681B70E33B
+	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 19:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbjEWRGQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 May 2023 13:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S237927AbjEWRGU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 May 2023 13:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237927AbjEWRGP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 13:06:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AF8B5;
-        Tue, 23 May 2023 10:06:14 -0700 (PDT)
+        with ESMTP id S237952AbjEWRGR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 13:06:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EB68F;
+        Tue, 23 May 2023 10:06:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F8F862542;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91ACB634D9;
+        Tue, 23 May 2023 17:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD21C433EF;
         Tue, 23 May 2023 17:06:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 466B5C433D2;
-        Tue, 23 May 2023 17:06:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684861573;
-        bh=O4HzR93cVyWgDZI2VtGL8GGS2znNViXwdOo0oYNScmQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S9susCoorlA+c7uqs58+sjbap9DCpSH16D6qnZjnn4qMOmF9hDSX7WFNdJoytkDy+
-         TJAOF76W5AoLfrS0i5hCoGI/Dd1rke+vhNX0Nk8gJIVY0WlzZMymoTxgUTZfJl85+R
-         KIyTvCf2J4alkJKeJs79j190Xw41NQJpUOQ0yA83g5p7kaFcPFUG4KbCXHat1zRwH5
-         nnh9lg91Ok6B44pGoWtSVRf2v4Qw4oA4czgifYOOZ6gzvb/r6dVwCe8j4qycsXvvj9
-         neJq4SboSHhxqkNBepoZNv0bgNBgHMVMkc5aFlw1OTddb4KX3ntcqTtic8rQ7HMZPr
-         Sip+jFo6uxigg==
+        s=k20201202; t=1684861576;
+        bh=SFEBsgS/NuRbYn+gTRqLbgprOTjrzQzmKyN1/QnzNYY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XenmqGcNT+t9qREdaU2ysYcIrUHpRMEc/ixHRS0pmUd7QY0KabDK/R6NircioTAuJ
+         C7x3Ylv1KgugarEwJ9GU+bPjhCS1Q8UUOZTWKb/IRnmSFQ0vx3TnAKOGE5gGFxeUH/
+         vuWaDnQabyFUby68WbawVbE8Y5nty4ufPSLiMoFvszoD5j5aMGQ9/8nhVE3TyfkvFS
+         lT6/qHnfvJ04hCUxy2jjo+k1GMEMfplP3blZT10wvxktFFVxpu3/1obmI737YIeLx1
+         fTecEVciQvmOw8zTVMuK7C1wUprgRIeJWue9u3DsoEPzJwqaNovFNNa/mz45MRTXna
+         ujbRbtZMYMyWQ==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -38,78 +38,76 @@ To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Date:   Wed, 24 May 2023 00:54:58 +0800
-Message-Id: <20230523165502.2592-1-jszhang@kernel.org>
+Subject: [PATCH v2 1/4] riscv: move options to keep entries sorted
+Date:   Wed, 24 May 2023 00:54:59 +0800
+Message-Id: <20230523165502.2592-2-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230523165502.2592-1-jszhang@kernel.org>
+References: <20230523165502.2592-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When trying to run linux with various opensource riscv core on
-resource limited FPGA platforms, for example, those FPGAs with less
-than 16MB SDRAM, I want to save mem as much as possible. One of the
-major technologies is kernel size optimizations, I found that riscv
-does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
-passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
---gc-sections flag to the linker.
+Recently, some commits break the entries order. Properly move their
+locations to keep entries sorted.
 
-This not only benefits my case on FPGA but also benefits defconfigs.
-Here are some notable improvements from enabling this with defconfigs:
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+---
+ arch/riscv/Kconfig | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-nommu_k210_defconfig:
-   text    data     bss     dec     hex
-1112009  410288   59837 1582134  182436     before
- 962838  376656   51285 1390779  1538bb     after
-
-rv32_defconfig:
-   text    data     bss     dec     hex
-8804455 2816544  290577 11911576 b5c198     before
-8692295 2779872  288977 11761144 b375f8     after
-
-defconfig:
-   text    data     bss     dec     hex
-9438267 3391332  485333 13314932 cb2b74     before
-9285914 3350052  483349 13119315 c82f53     after
-
-patch1 and patch2 are clean ups.
-patch3 fixes a typo.
-patch4 finally enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
-
-NOTE: Zhangjin Wu firstly sent out a patch to enable dead code
-elimination for riscv several months ago, I didn't notice it until
-yesterday. Although it missed some preparations and some sections's
-keeping, he is the first person to enable this feature for riscv. To
-ease merging, this series take his patch into my entire series and
-makes patch4 authored by him after getting his ack to reflect
-the above fact.
-
-Since v1:
-  - collect Reviewed-by, Tested-by tag
-  - Make patch4 authored by Zhangjin Wu, add my co-developed-by tag
-
-Jisheng Zhang (3):
-  riscv: move options to keep entries sorted
-  riscv: vmlinux-xip.lds.S: remove .alternative section
-  vmlinux.lds.h: use correct .init.data.* section name
-
-Zhangjin Wu (1):
-  riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-
- arch/riscv/Kconfig                  |  13 +-
- arch/riscv/kernel/vmlinux-xip.lds.S |   6 -
- arch/riscv/kernel/vmlinux.lds.S     |   6 +-
- include/asm-generic/vmlinux.lds.h   |   2 +-
- 4 files changed, 11 insertions(+), 16 deletions(-)
-
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 348c0fa1fc8c..8f55aa4aae34 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -101,6 +101,11 @@ config RISCV
+ 	select HAVE_CONTEXT_TRACKING_USER
+ 	select HAVE_DEBUG_KMEMLEAK
+ 	select HAVE_DMA_CONTIGUOUS if MMU
++	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYNAMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
++	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
++	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
++	select HAVE_FUNCTION_GRAPH_TRACER
++	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+ 	select HAVE_EBPF_JIT if MMU
+ 	select HAVE_FUNCTION_ARG_ACCESS_API
+ 	select HAVE_FUNCTION_ERROR_INJECTION
+@@ -110,7 +115,6 @@ config RISCV
+ 	select HAVE_KPROBES if !XIP_KERNEL
+ 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+ 	select HAVE_KRETPROBES if !XIP_KERNEL
+-	select HAVE_RETHOOK if !XIP_KERNEL
+ 	select HAVE_MOVE_PMD
+ 	select HAVE_MOVE_PUD
+ 	select HAVE_PCI
+@@ -119,6 +123,7 @@ config RISCV
+ 	select HAVE_PERF_USER_STACK_DUMP
+ 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
+ 	select HAVE_REGS_AND_STACK_ACCESS_API
++	select HAVE_RETHOOK if !XIP_KERNEL
+ 	select HAVE_RSEQ
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
+@@ -142,11 +147,6 @@ config RISCV
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	select UACCESS_MEMCPY if !MMU
+ 	select ZONE_DMA32 if 64BIT
+-	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYNAMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
+-	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+-	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+-	select HAVE_FUNCTION_GRAPH_TRACER
+-	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+ 
+ config CLANG_SUPPORTS_DYNAMIC_FTRACE
+ 	def_bool CC_IS_CLANG
 -- 
 2.40.1
 
