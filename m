@@ -2,46 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C5370E358
-	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 19:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CAD70E3D7
+	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 19:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237946AbjEWRGW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 May 2023 13:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S237967AbjEWRG0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 May 2023 13:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237959AbjEWRGV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 13:06:21 -0400
+        with ESMTP id S235559AbjEWRGW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 13:06:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635BABF;
-        Tue, 23 May 2023 10:06:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE17DD;
+        Tue, 23 May 2023 10:06:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEA8C6222F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C77C634C3;
+        Tue, 23 May 2023 17:06:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2DAFC4339C;
         Tue, 23 May 2023 17:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7886FC4339B;
-        Tue, 23 May 2023 17:06:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684861578;
-        bh=S1v3epwjKPZhhmwrrwdqziIQP7+cuuUHEgza9tY/ky4=;
+        s=k20201202; t=1684861580;
+        bh=XDpfU4QGkxHCk0PcVXqfWjLiQT8efnUkxx2g6qxryQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VroAEK5OljQLhXtHf6feHA8/FP9OXYl6sjuMlhJsY8l8KPby6JgzKKo6wcnYW31kk
-         7699dMhJ4mj/3Sez4d4jeyXrd9ERwFEGrqRI4zLewef48JVaieRPxC68pFZq3gnrG0
-         QwLsevTvH5HQg2BMVx3o/K6NDABDbh/+eAmtHw4GRUCBfZkUonc6oKYSTltVEvG2ei
-         wGp8bjpvxifPQIq+Vr3n/eYYBZuKYC77OR2xuYa91Vrd6O0cZDX3KKmKqEfPF3jLBK
-         OXdEs3T9UefBk5W3LeStb3eKkp+/XzUWYJ/awKpJCTvSoEsiEa17E2YSrtqZ4j32yM
-         2VuLUKy8tPE7Q==
+        b=ekUkv+8Udgo0rQGikUzgVt1U+8VG4DYIqET6gmM4S7k9goJGn3cE6EIVMWx3nHzXX
+         yBXZL/2rbnb2TMN2LJSbanLZck5wX+V8ygTKDIsZ+gxcaADr23j0vJlC2BY2vnfTDZ
+         TZU8C+c9+M24vwOjravcJ8o3dk+YCUMk+Sqf7N+Bud9SE7IPtJrIoGHtUIbgtb3dwS
+         1BIos3/riAF8xW30yQ+SBN3Twvf4DDzykyhu6HoyL3/zpF90sp/6cCdeXI5ZG0/8DQ
+         1NI+5pZPAcfFAOsHiy2qs0k0ZFXtXkbymsvFmGP9I6UTbPYChQmMEc/Ep1tRlqv4MD
+         xC48ZkFtW+JUg==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Arnd Bergmann <arnd@arndb.de>
 Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 2/4] riscv: vmlinux-xip.lds.S: remove .alternative section
-Date:   Wed, 24 May 2023 00:55:00 +0800
-Message-Id: <20230523165502.2592-3-jszhang@kernel.org>
+        linux-arch@vger.kernel.org
+Subject: [PATCH v2 3/4] vmlinux.lds.h: use correct .init.data.* section name
+Date:   Wed, 24 May 2023 00:55:01 +0800
+Message-Id: <20230523165502.2592-4-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230523165502.2592-1-jszhang@kernel.org>
 References: <20230523165502.2592-1-jszhang@kernel.org>
@@ -57,39 +56,34 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ALTERNATIVE mechanism can't work on XIP, and this is also reflected by
-below Kconfig dependency:
+If building with -fdata-sections on riscv, LD_ORPHAN_WARN will warn
+similar as below:
 
-RISCV_ALTERNATIVE
-	...
-	depends on !XIP_KERNEL
-	...
+riscv64-linux-gnu-ld: warning: orphan section `.init.data.efi_loglevel'
+from `./drivers/firmware/efi/libstub/printk.stub.o' being placed in
+section `.init.data.efi_loglevel'
 
-So there's no .alternative section at all for XIP case, remove it.
+I believe this is caused by a a typo:
+init.data.* should be .init.data.*
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/kernel/vmlinux-xip.lds.S |   6 ------
- 1 files changed, 6 deletions(-)
+ include/asm-generic/vmlinux.lds.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/vmlinux-xip.lds.S b/arch/riscv/kernel/vmlinux-xip.lds.S
-index eab9edc3b631..50767647fbc6 100644
---- a/arch/riscv/kernel/vmlinux-xip.lds.S
-+++ b/arch/riscv/kernel/vmlinux-xip.lds.S
-@@ -98,12 +98,6 @@ SECTIONS
- 		__soc_builtin_dtb_table_end = .;
- 	}
- 
--	. = ALIGN(8);
--	.alternative : {
--		__alt_start = .;
--		*(.alternative)
--		__alt_end = .;
--	}
- 	__init_end = .;
- 
- 	. = ALIGN(16);
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index d1f57e4868ed..371026ca7221 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -688,7 +688,7 @@
+ /* init and exit section handling */
+ #define INIT_DATA							\
+ 	KEEP(*(SORT(___kentry+*)))					\
+-	*(.init.data init.data.*)					\
++	*(.init.data .init.data.*)					\
+ 	MEM_DISCARD(init.data*)						\
+ 	KERNEL_CTORS()							\
+ 	MCOUNT_REC()							\
 -- 
 2.40.1
 
