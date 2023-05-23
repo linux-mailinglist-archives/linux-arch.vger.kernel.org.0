@@ -2,89 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3783A70E69D
-	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 22:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F03970E726
+	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 23:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbjEWUjP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 May 2023 16:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S232824AbjEWVIs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 May 2023 17:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbjEWUjP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 16:39:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5A6FA;
-        Tue, 23 May 2023 13:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684874354; x=1716410354;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OWSHPRO5HnlWet7EfvINZiwK0k+1sxDkGfdhBdgkUzI=;
-  b=kem5xjOuEtFfSDh1iiXybWq2WZoHYKp+mWUDroCbAKm9CnAd5MKpfL5V
-   X7UeViHgG/xHbGXb3F25DL3oD3rxGORwMTm0VSumYrTetPvAhZ46aO80E
-   52k3ZUEgsS3pDmtdSHrk5t0eVY2M3wXJY/pTNJ+gSPRQM4GhC8ralXkfw
-   Ag/knK6HQJ+pqMHFCflVfVVrPzaotN/9eQ2Ay0DXY9d+8/8qKWvrRkTgh
-   KKvG1V9sWVSkI4Rud5sTuGZ0c2cliHTI1MYCiazlyVHZ6QiSvSVWux9OP
-   37bwpA5mOf5/nIpsjoyTtyhVVz1i9ISgd496jGGlujghArhNIxhlLykjD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="419068151"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="419068151"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 13:39:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10719"; a="793868392"
-X-IronPort-AV: E=Sophos;i="6.00,187,1681196400"; 
-   d="scan'208";a="793868392"
-Received: from kroconn-mobl2.amr.corp.intel.com (HELO [10.251.1.84]) ([10.251.1.84])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2023 13:39:11 -0700
-Message-ID: <9e466079-ff27-f928-b470-eb5ef157f048@intel.com>
-Date:   Tue, 23 May 2023 13:39:11 -0700
+        with ESMTP id S229574AbjEWVIr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 17:08:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141CEBB;
+        Tue, 23 May 2023 14:08:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4C4F61D80;
+        Tue, 23 May 2023 21:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B732C433EF;
+        Tue, 23 May 2023 21:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684876126;
+        bh=t4leSM84mfYsgogyyDTg6ovfFaEJHHtHZJXOO19zbLs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ucDXjYViKyH2WU35ZLkIAGU/3peB1OBW0tLipFJolAd84E5J+l51ss5bL0x9W7k5N
+         I9gLNb1xrKkiqEmPbtGz7tv2q9xj8E8f8VOL5ZpFtswDPFhbgaakPAD79m6Kcn3p7y
+         DfdrvwuXoRBhTut4Xs/c5Z/zi2GbzoSfck7KK9nFyoIEPoJlDhNnOhOsPjAW8qFw31
+         hCRLi7M/TV7haEgMMEQ23HkpvyPN66iT4y9e9djI57Jc6ejIiWKIEDzMYMRsCZFr9V
+         WLPs+i22UEw/hxO6qnuDIKkhAXyyV0ESeJLlLMzFU8K6X4cdJnWAKaE6ECIwXozxGs
+         b3dFyJoeeq9VA==
+Date:   Tue, 23 May 2023 14:08:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Luca Boccassi <bluca@debian.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230523140844.5895d645@kernel.org>
+In-Reply-To: <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+        <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+        <20230522133409.5c6e839a@kernel.org>
+        <20230523-flechten-ortsschild-e5724ecc4ed0@brauner>
+        <CAMw=ZnS8GBTDV0rw+Dh6hPv3uLXJVwapRFQHLMYEYGZHNoLNOw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 2/6] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com
-References: <20230504225351.10765-1-decui@microsoft.com>
- <20230504225351.10765-3-decui@microsoft.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230504225351.10765-3-decui@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/4/23 15:53, Dexuan Cui wrote:
-> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
-> allocates buffers using vzalloc(), and needs to share the buffers with the
-> host OS by calling set_memory_decrypted(), which is not working for
-> vmalloc() yet. Add the support by handling the pages one by one.
+On Tue, 23 May 2023 11:44:01 +0100 Luca Boccassi wrote:
+> > I really would like to avoid that because it will just mean that someone
+> > else will abuse that function and then make an argument why we should
+> > export the other function.
+> >
+> > I think it would be ok if we required that unix support is built in
+> > because it's not unprecedented either and we're not breaking anything.
+> > Bpf has the same requirement:
+> >
+> >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL)
+> >   struct bpf_unix_iter_state {
+> >           struct seq_net_private p;
+> >           unsigned int cur_sk;
+> >           unsigned int end_sk;
+> >           unsigned int max_sk;
+> >           struct sock **batch;
+> >           bool st_bucket_done;
+> >   };
+> >
+> > and
+> >
+> >   #if IS_BUILTIN(CONFIG_UNIX) && defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
+> >   DEFINE_BPF_ITER_FUNC(unix, struct bpf_iter_meta *meta,
+> >                        struct unix_sock *unix_sk, uid_t uid)  
 
-I think this sets a bad precedent.
+Don't think we should bring BPF into arguments about uAPI consistency :S
 
-There are consequences for converting pages between shared and private.
-Doing it on a vmalloc() mapping is guaranteed to fracture the underlying
-EPT/SEPT mappings.
+> Some data points: Debian, Ubuntu, Fedora, RHEL, CentOS, Archlinux all
+> ship with CONFIG_UNIX=y, so a missing SCM_PIDFD in unlikely to have a
+> widespread impact, and if it does, it might encourage someone to
+> review their kconfig.
 
-How does this work with load_unaligned_zeropad()?  Couldn't it be
-running around poking at one of these vmalloc()'d pages via the direct
-map during a shared->private conversion before the page has been accepted?
+IDK how you can argue that everyone sets UNIX to =y so hiding SCM_PIDFD
+is fine and at the same time not be okay with making UNIX a bool :S
+
+> As mentioned on the v5 thread, we are waiting for this API to get the
+> userspace side sorted (systemd/dbus/dbus-broker/polkit), so I'd be
+> really grateful if we could start with the simplest and most
+> conservative approach (which seems to be the current one in v6 to me),
+> and then eventually later decide whether to export more functions, or
+> to deprecate CONFIG_UNIX=m, or something else entirely, as that
+> doesn't really affect the shape of the UAPI, just the details of its
+> availability. Thank you.
+
+Just throw in a patch to make UNIX a bool and stop arguing then.
