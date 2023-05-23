@@ -2,166 +2,323 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C155870D7EB
-	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 10:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7E370D911
+	for <lists+linux-arch@lfdr.de>; Tue, 23 May 2023 11:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235581AbjEWIxQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 May 2023 04:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
+        id S235753AbjEWJc6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 23 May 2023 05:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232925AbjEWIxP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 04:53:15 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2139.outbound.protection.outlook.com [40.107.94.139])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6E2FE;
-        Tue, 23 May 2023 01:53:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d1q8qs0yPCb3weo9DCa58Xw4axd5h+85wfFmOZsliSGIR7ifxIQ5sSiBLrhdoVVFIG+UFmSKxXDQqezZHaQx1W0NWAg9D8SFZ1/EZm7b4s2nLwVEF3HpZi4fVHOZrAYDdHDiFeB12l3Aw+XTtHoighmpFqv76oGBaAU+XESPgt3+hEr7GWqfSrM5Syailkzs3ipNIyRdqvZdpvunSk8Vo9fkm6LgD9k2kOsN0J5sJ4/4TjQT+rfmT0dcBZuR8S28IaKK1FfmnLf9NOAXWetcXMTn7V6BKWmtZtRkyO+Oo0PbE50x1MwTH5yO7JN8FFmq15PJYMcq24y2VaShehw7DA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GonWDkrlTfto7kDYsYi/xl1QiTAyOxqxvh1/LZWfohQ=;
- b=iaT1/VqboljnCwkADO9Gcp+6DD0M4u4duc6Qg2K1BQSsIkY04a3nhXRtBYWEoKRFa78TY5ICB6Uj27qh4mmVo1pTEGZfFfwi3f3b8t3Ad//MiPPZBdBbyKDn5R0qYzIeUvuGq3ub/S74DpRG7UhU21osrQwi8cEqDhsSz3ELUxJ2M8hW3gpy2Ua0sUsZHoBJG0iN4agLpDmndW3gX4tk6fEzSXwotolCTOTSg8tvlbRmVjbtq6deJe5I0MOvCtqGug1D2fhVq+FhZanVua7nVooN/pQjHewMKl+eCVFuPg1uhqlRCHZJ36xugh61TnHRHkB2eqsL2EmOfn2/jSzflg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GonWDkrlTfto7kDYsYi/xl1QiTAyOxqxvh1/LZWfohQ=;
- b=ABTjzYRYT+D5lJSWVaScT0knjSaN3Atk+FwSdQLQdGCCFbzRkPPVDk5d8Oy/8m7PWHleTcyfVsOIJzfLwxswRAzLOJOvmJ3EZRlWHiBqRP7Ga1fmgGsiPzgn2hwU7RCirbl8/zUpLIKgepFJlMaMAg24/TNN1CqOGDPFxlqbZz0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by PH8PR13MB6221.namprd13.prod.outlook.com (2603:10b6:510:239::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 23 May
- 2023 08:53:10 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7%7]) with mapi id 15.20.6411.029; Tue, 23 May 2023
- 08:53:10 +0000
-Date:   Tue, 23 May 2023 10:53:01 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Luca Boccassi <bluca@debian.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v5 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <ZGx+7VJzthTmYHTm@corigine.com>
-References: <20230517113351.308771-2-aleksandr.mikhalitsyn@canonical.com>
- <202305202107.BQoPnLYP-lkp@intel.com>
- <20230522-sammeln-neumond-e9a8d196056b@brauner>
- <ZGtr1RwK42We5ACI@corigine.com>
- <20230522131252.4f9959d3@kernel.org>
- <CAMw=ZnQ-diFqFUCEpqBTDTNojfvqaGCtZSvh8+rE_z-KBNreqw@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMw=ZnQ-diFqFUCEpqBTDTNojfvqaGCtZSvh8+rE_z-KBNreqw@mail.gmail.com>
-X-ClientProxiedBy: AM4PR0302CA0026.eurprd03.prod.outlook.com
- (2603:10a6:205:2::39) To BY3PR13MB4834.namprd13.prod.outlook.com
- (2603:10b6:a03:36b::10)
+        with ESMTP id S232089AbjEWJcz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 May 2023 05:32:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECD494;
+        Tue, 23 May 2023 02:32:53 -0700 (PDT)
+Received: from lhrpeml500006.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QQTbQ4smpz6D8cC;
+        Tue, 23 May 2023 17:31:30 +0800 (CST)
+Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
+ lhrpeml500006.china.huawei.com (7.191.161.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 23 May 2023 10:32:47 +0100
+Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
+ lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2507.023;
+ Tue, 23 May 2023 10:32:47 +0100
+From:   Salil Mehta <salil.mehta@huawei.com>
+To:     James Morse <james.morse@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Oliver Upton" <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: RE: [RFC PATCH 30/32] KVM: arm64: Pass PSCI calls to userspace
+Thread-Topic: [RFC PATCH 30/32] KVM: arm64: Pass PSCI calls to userspace
+Thread-Index: AQHZN9b+61KzOutLS0qqIaFmxegD669m2QyA
+Date:   Tue, 23 May 2023 09:32:47 +0000
+Message-ID: <7e182886f20044d09d5b269cb6224af7@huawei.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230203135043.409192-31-james.morse@arm.com>
+In-Reply-To: <20230203135043.409192-31-james.morse@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.48.157.124]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|PH8PR13MB6221:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cf3854e-7a36-42e4-4263-08db5b6b2267
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: edOj1Omm8I5a4k/UzYxFBU7POX0jJJbn+oAt22AAZ859epPWlz4hgYUqPZAeHlZTR64d2O7vce/c+ctLjYici9gG7sqh3JvcNgURL1XS1iLK+7UpaHXzys8ZuOuvHG6UAMtsLCqXxqDcfJbSI3zS97eRTBE8uzEEjkPuz4wgzxHjcRJ18Gbl+Jzd1sBi5bD/HzExXvux166JsK9QAvlssUa3mTCzxO7Ik91C2ETap4iXdm2asL6cMGpXDKe8FgMtymdwhTs2IrzlKMY2o3aB89DCLboIV5+MO3EGVbKwA2OFyOYO9Kzz0aU0iYIubCpGGcbNU5VtqRxzpfP8MVm9dwzhxLpfXOgCox5PL8u9nbs5Klzxb/WLe4qpo+w+pMFsY8Fd0WW+d77/7Pc53TgNyozqubtSwLai7OOFngZ6rz6P+YTOyh1EzKxDNwMF+7t1rhtLBbWd9a3Tgcb64bV6nWsvetPKtlVaPeEbqotyGBcVFu/uJXTIfJF8AgVGAX0Mdfq9hGcrHfKx5xb9fOuZ8dKw1Y/YDLFRwUfI+bZNtdCiRPYWQ7dWR45cK59VBlIAStvScFfqnOnIZJgdrhXMDpQl5fbJO67QbBrInnADIGOiZhE9bj6XDrF99exhkTJ8dOXr+dKKrqGkK1Di64NLKg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(366004)(136003)(346002)(376002)(396003)(451199021)(66946007)(66556008)(6916009)(4326008)(66476007)(86362001)(2906002)(7416002)(41300700001)(44832011)(36756003)(8936002)(8676002)(5660300002)(316002)(478600001)(54906003)(83380400001)(6506007)(6666004)(6486002)(38100700002)(2616005)(6512007)(186003)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2THSKVlTAm+HddOXNz7aqc7q7nAE5SnTD3hyLINQjIgURd1O7lSEeBwdHP0H?=
- =?us-ascii?Q?0zIBwUCV8RODPW9dG+hBKgLDWcCakptmguKpoRaNIYTFSVMhsW/Pgm4cCGIV?=
- =?us-ascii?Q?xkngQSqUmOb1HAlFVuX4N90SGa08XijcgBYxXu4ZHv3GdJK2YR4INMFxrKj4?=
- =?us-ascii?Q?eyIW8YF8L349ewqw7CXdP86r42q9myqCAfgmYNjoUIjnpvWP3V4dNKmbcGNE?=
- =?us-ascii?Q?TNhh1NJjj34kJmsLPQZhECCjrsvg4UtcgLC6Z+qkw/1I8CFnjT5cugyXqfR0?=
- =?us-ascii?Q?GMxSXg1ldTRxpbVpTtdUMGHDWb3OTn78pY520MiZwQPT2o5Va5LxQLiWRHWk?=
- =?us-ascii?Q?IUBsa9otLLefv9KaDnDathcW3T277H8OkACFH2MYPZJ17va32tH5UqowJA+f?=
- =?us-ascii?Q?NKX82M6dXJTNA1GgWClLKA4u8k/nSy2IxvU09F+5pvkjCPqV8BXIgWaR5mxR?=
- =?us-ascii?Q?Kcvbz6eUPgQreLamx26CiMQfU8ORyzXCbLRmQqaecOe8oS3P+wPZJZGqkC4L?=
- =?us-ascii?Q?zfTinqb0iz2gif+W735whJ5P5twNEzmV8nKec/HfnDitbFWJg8vhhzwmQq4F?=
- =?us-ascii?Q?VM5wysbwAmGg30+z0K2MPLBS4HHw9B+uwT7Baw6qCbHTC+G49yIXp97zRCK2?=
- =?us-ascii?Q?xH/YYIZoSH0Z1gl6n/tOpz4vSerrNiGkNlWePwudxWKMyyApxjBjxfx2Bqgq?=
- =?us-ascii?Q?KpIVbmIs22fvMi7EQBL+BXhRHP9ief+ms4Y8azxd359Oa2qzyOT2vGNNLZYX?=
- =?us-ascii?Q?jDdcGnvW6YALnZkbZhHjlHS3eQ//gZn6FHx7OnHEeiwnRSPES3eYYRG/YTES?=
- =?us-ascii?Q?5C/iI0ZHWxRFwVJeGV3vmJMKgwmQaE7YlcqWGKd2JTOo5ja6BHrFlH3GiWfJ?=
- =?us-ascii?Q?f9A5GHpFGUZasC6xkpIrRnOn354EaqGLU5ilnCUtpcjRJUNk+NJV9H8HjYdh?=
- =?us-ascii?Q?W046eYBr7hGptTuXffKONSvFR4dkfNLMkZU4SoigFU2ELwLY3+Be0zI35QZw?=
- =?us-ascii?Q?7XDR9jXN1PGsyNLI5cKP+ms9nwZ5iAo4KAzBAHMNf1SN7ROUYa84+uV3Yz7k?=
- =?us-ascii?Q?F4IUC7C9jisYf14YEGmCRcSGkLsS+DjchY7hNm0YFaVJt68L6S2b8HNSmLhb?=
- =?us-ascii?Q?GWiGQ8EZOrl3twJ/mM3av7O5jsgcdBO5somkRj0Gyi7Fy+4bVJVJLFePFS8P?=
- =?us-ascii?Q?fhZapf5LilnX83Uu+BoK/31MOSKlpbmNeqM/qbBjUjmY2KIH0ZLU8qvh/k//?=
- =?us-ascii?Q?RPOIkh3GAF0CVNZSQbxXYQKF4GbJ5hVmBq7eoK9yzSdtr1myLeUY7MTCdvc7?=
- =?us-ascii?Q?A88qW3WPl8vC0hPfREQ9R1BnzrCMxPNXiaA5u7JgG/1O6ervMMftl7ZxBwnD?=
- =?us-ascii?Q?Ocxc1GRJQH2r3PFZiheBB8x6/JRbIBB+kZ81J+GeMKPzvLexqA2ybpEyrYKr?=
- =?us-ascii?Q?rZQHRZMEG9YZ1Smb8luPeRrURK802mfwD27BmF7LiLfzr5QzcdJt6BgoorFz?=
- =?us-ascii?Q?L6UYYwBbLZGsZ91E/QwB52/GTeukcSviK9EBndhZ3rUMWsvNGm++P8Z5smlO?=
- =?us-ascii?Q?uqF7/kAtMtdOcuQzIF3FIY/hBSXfuRfcL7htAA1gGjJjB3TpN9QT/q4xJijv?=
- =?us-ascii?Q?hFYxVnx6P7aYA9o2KqhCo6GKIWx1ld74OW1Oq49FdZsnseAS16s0a1TXwoPL?=
- =?us-ascii?Q?3RYVBA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cf3854e-7a36-42e4-4263-08db5b6b2267
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2023 08:53:10.1327
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4zmBpCZ0Fpat7M7StccBbFo871nYxRy4Pbl1SD4aLY3l5+VTwIhHGtmji0SKqQ6y+wtYNVbFTMNYsXNbuxeQC6+81K0LDho79ANPH0UgfYE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR13MB6221
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, May 22, 2023 at 09:17:46PM +0100, Luca Boccassi wrote:
-> On Mon, 22 May 2023 at 21:13, Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Mon, 22 May 2023 15:19:17 +0200 Simon Horman wrote:
-> > > > TLI, that AF_UNIX can be a kernel module...
-> > > > I'm really not excited in exposing pidfd_prepare() to non-core kernel
-> > > > code. Would it be possible to please simply refuse SO_PEERPIDFD and
-> > > > SCM_PIDFD if AF_UNIX is compiled as a module? I feel that this must be
-> > > > super rare because it risks breaking even simplistic userspace.
-> > >
-> > > It occurs to me that it may be simpler to not allow AF_UNIX to be a module.
-> > > But perhaps that breaks something for someone...
-> >
-> > Both of the two options (disable the feature with unix=m, make unix
-> > bool) could lead to breakage, I reckon at least the latter makes
-> > the breakage more obvious? So not allowing AF_UNIX as a module
-> > gets my vote as well.
-> >
-> > A mechanism of exporting symbols for core/internal use only would
-> > find a lot of use in networking :(
+Hi James,
+After Oliver Upton changes, I think we don't need most of the stuff in
+[Patch 29/32] and [Patch 30/32].
+
+I have few questions related to the PSCI Version. Please scroll below.
+
+
+> From: James Morse <james.morse@arm.com>
+> Sent: Friday, February 3, 2023 1:51 PM
+> To: linux-pm@vger.kernel.org; loongarch@lists.linux.dev;
+> kvmarm@lists.linux.dev; kvm@vger.kernel.org; linux-acpi@vger.kernel.org;
+> linux-arch@vger.kernel.org; linux-ia64@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
+> x86@kernel.org
+
+[...]
+
+
 > 
-> We are eagerly waiting for this UAPI to be merged so that we can use
-> it in userspace (systemd/dbus/dbus-broker/polkitd), so I would much
-> rather if such impactful changes could be delayed until after, as
-> there is bound to be somebody complaining about such a change, and
-> making this dependent on that will likely jeopardize landing this
-> series.
-> v6 adds fixed this so that's disabled if AF_UNIX is not built-in via
-> 'IS_BUILTIN', and that seems like a perfect starting point to me, if
-> AF_UNIX can be made non-optional or non-module it can be refactored
-> easily later.
+> When the KVM_CAP_ARM_PSCI_TO_USER capability is available, userspace can
+> request to handle PSCI calls.
+> 
+> This is required for virtual CPU hotplug to allow the VMM to enforce the
+> online/offline policy it has advertised via ACPI. By managing PSCI in
+> user-space, the VMM is able to return PSCI_DENIED when the guest attempts
+> to bring a disabled vCPU online.
+> Without this, the VMM is only able to not-run the vCPU, the kernel will
+> have already returned PSCI_SUCCESS to the guest. This results in
+> timeouts during boot as the OS must wait for the secondary vCPU.
+> 
+> SMCCC probe requires PSCI v1.x. If userspace only implements PSCI v0.2,
+> the guest won't query SMCCC support through PSCI and won't use the
+> spectre workarounds. We could hijack PSCI_VERSION and pretend to support
+> v1.0 if userspace does not, then handle all v1.0 calls ourselves
+> (including guessing the PSCI feature set implemented by the guest), but
+> that seems unnecessary. After all the API already allows userspace to
+> force a version lower than v1.0 using the firmware pseudo-registers.
+> 
+> The KVM_REG_ARM_PSCI_VERSION pseudo-register currently resets to either
+> v0.1 if userspace doesn't set KVM_ARM_VCPU_PSCI_0_2, or
+> KVM_ARM_PSCI_LATEST (1.0).
 
-No objections from my side, as long as we're not exposing symbols
-that we'd rather not have exposed, or otherwise creating new problems.
 
-Let's resolve the AF_UNIX question at some point.
+I just saw the latest PSCI standard issue (Mar 2023 E Non-Confidential
+PSCI 1.2 issue E) and it contains the DENIED return value for the CPU_ON. 
+
+Should we *explicitly* check for PSCI 1.2 support before allowing vCPU
+Hot plug support? For this we would need KVM changes.
+
+
+@James, Since Oliver's patches have now got merged with the kernel I think
+you would need to rebase your RFC on the latest kernel as patches 29/32
+And 30/32 will create conflicts.
+
+
+Many thanks
+Salil
+
+
+
+> 
+> Suggested-by: James Morse <james.morse@arm.com>
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> [morse: Added description of why this is required]
+> Signed-off-by: James Morse <james.morse@arm.com>
+> ---
+>  Documentation/virt/kvm/api.rst            | 14 ++++++++++++++
+>  Documentation/virt/kvm/arm/hypercalls.rst |  1 +
+>  arch/arm64/include/asm/kvm_host.h         |  1 +
+>  arch/arm64/kvm/arm.c                      | 10 +++++++---
+>  arch/arm64/kvm/hypercalls.c               |  2 +-
+>  arch/arm64/kvm/psci.c                     | 13 +++++++++++++
+>  include/kvm/arm_hypercalls.h              |  1 +
+>  include/uapi/linux/kvm.h                  |  1 +
+>  8 files changed, 39 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst
+> b/Documentation/virt/kvm/api.rst
+> index 9a28a9cc1163..eb99436a1d97 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -8289,6 +8289,20 @@ This capability indicates that KVM can pass
+> unhandled hypercalls to userspace,
+>  if the VMM enables it. Hypercalls are passed with KVM_EXIT_HYPERCALL in
+>  kvm_run::hypercall.
+> 
+> +8.38 KVM_CAP_ARM_PSCI_TO_USER
+> +-----------------------------
+> +
+> +:Architectures: arm64
+> +
+> +When the VMM enables this capability, all PSCI calls are passed to
+> userspace
+> +instead of being handled by KVM. Capability KVM_CAP_ARM_HVC_TO_USER must
+> be
+> +enabled first.
+> +
+> +Userspace should support at least PSCI v1.0. Otherwise SMCCC features
+> won't be
+> +available to the guest. Userspace does not need to handle the
+> SMCCC_VERSION
+> +parameter for the PSCI_FEATURES function. The KVM_ARM_VCPU_PSCI_0_2 vCPU
+> +feature should be set even if this capability is enabled.
+> +
+>  9. Known KVM API problems
+>  =========================
+> 
+> diff --git a/Documentation/virt/kvm/arm/hypercalls.rst
+> b/Documentation/virt/kvm/arm/hypercalls.rst
+> index 3e23084644ba..4c111afa7d74 100644
+> --- a/Documentation/virt/kvm/arm/hypercalls.rst
+> +++ b/Documentation/virt/kvm/arm/hypercalls.rst
+> @@ -34,6 +34,7 @@ The following registers are defined:
+>    - Allows any PSCI version implemented by KVM and compatible with
+>      v0.2 to be set with SET_ONE_REG
+>    - Affects the whole VM (even if the register view is per-vcpu)
+> +  - Defaults to PSCI 1.0 if userspace enables KVM_CAP_ARM_PSCI_TO_USER.
+> 
+>  * KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1:
+>      Holds the state of the firmware support to mitigate CVE-2017-5715, as
+> diff --git a/arch/arm64/include/asm/kvm_host.h
+> b/arch/arm64/include/asm/kvm_host.h
+> index 40911ebfa710..a9eff47bcb43 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -214,6 +214,7 @@ struct kvm_arch {
+>  	/* PSCI SYSTEM_SUSPEND enabled for the guest */
+>  #define KVM_ARCH_FLAG_SYSTEM_SUSPEND_ENABLED		5
+>  #define KVM_ARCH_FLAG_HVC_TO_USER			6
+> +#define KVM_ARCH_FLAG_PSCI_TO_USER			7
+> 
+>  	unsigned long flags;
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 815b7e8f88e1..3dba4e01f4d8 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -76,7 +76,7 @@ int kvm_arch_check_processor_compat(void *opaque)
+>  int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  			    struct kvm_enable_cap *cap)
+>  {
+> -	int r;
+> +	int r = -EINVAL;
+> 
+>  	if (cap->flags)
+>  		return -EINVAL;
+> @@ -105,8 +105,11 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>  		r = 0;
+>  		set_bit(KVM_ARCH_FLAG_HVC_TO_USER, &kvm->arch.flags);
+>  		break;
+> -	default:
+> -		r = -EINVAL;
+> +	case KVM_CAP_ARM_PSCI_TO_USER:
+> +		if (test_bit(KVM_ARCH_FLAG_HVC_TO_USER, &kvm->arch.flags)) {
+> +			r = 0;
+> +			set_bit(KVM_ARCH_FLAG_PSCI_TO_USER, &kvm->arch.flags);
+> +		}
+>  		break;
+>  	}
+> 
+> @@ -235,6 +238,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long
+> ext)
+>  	case KVM_CAP_PTP_KVM:
+>  	case KVM_CAP_ARM_SYSTEM_SUSPEND:
+>  	case KVM_CAP_ARM_HVC_TO_USER:
+> +	case KVM_CAP_ARM_PSCI_TO_USER:
+>  		r = 1;
+>  		break;
+>  	case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> index efaf05d40dab..3c2136cd7a3f 100644
+> --- a/arch/arm64/kvm/hypercalls.c
+> +++ b/arch/arm64/kvm/hypercalls.c
+> @@ -121,7 +121,7 @@ static bool kvm_hvc_call_allowed(struct kvm_vcpu *vcpu,
+> u32 func_id)
+>  	}
+>  }
+> 
+> -static int kvm_hvc_user(struct kvm_vcpu *vcpu)
+> +int kvm_hvc_user(struct kvm_vcpu *vcpu)
+>  {
+>  	int i;
+>  	struct kvm_run *run = vcpu->run;
+> diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+> index 7fbc4c1b9df0..8505b26f0a83 100644
+> --- a/arch/arm64/kvm/psci.c
+> +++ b/arch/arm64/kvm/psci.c
+> @@ -418,6 +418,16 @@ static int kvm_psci_0_1_call(struct kvm_vcpu *vcpu)
+>  	return 1;
+>  }
+> 
+> +static bool kvm_psci_call_is_user(struct kvm_vcpu *vcpu)
+> +{
+> +	/* Handle the special case of SMCCC probe through PSCI */
+> +	if (smccc_get_function(vcpu) == PSCI_1_0_FN_PSCI_FEATURES &&
+> +	    smccc_get_arg1(vcpu) == ARM_SMCCC_VERSION_FUNC_ID)
+> +		return false;
+> +
+> +	return test_bit(KVM_ARCH_FLAG_PSCI_TO_USER, &vcpu->kvm->arch.flags);
+> +}
+> +
+>  /**
+>   * kvm_psci_call - handle PSCI call if r0 value is in range
+>   * @vcpu: Pointer to the VCPU struct
+> @@ -443,6 +453,9 @@ int kvm_psci_call(struct kvm_vcpu *vcpu)
+>  		return 1;
+>  	}
+> 
+> +	if (kvm_psci_call_is_user(vcpu))
+> +		return kvm_hvc_user(vcpu);
+> +
+>  	switch (kvm_psci_version(vcpu)) {
+>  	case KVM_ARM_PSCI_1_1:
+>  		return kvm_psci_1_x_call(vcpu, 1);
+> diff --git a/include/kvm/arm_hypercalls.h b/include/kvm/arm_hypercalls.h
+> index 1188f116cf4e..ea7073d1a82e 100644
+> --- a/include/kvm/arm_hypercalls.h
+> +++ b/include/kvm/arm_hypercalls.h
+> @@ -6,6 +6,7 @@
+> 
+>  #include <asm/kvm_emulate.h>
+> 
+> +int kvm_hvc_user(struct kvm_vcpu *vcpu);
+>  int kvm_hvc_call_handler(struct kvm_vcpu *vcpu);
+> 
+>  static inline u32 smccc_get_function(struct kvm_vcpu *vcpu)
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 2ead8b9aae56..c5da9d703a0f 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -1176,6 +1176,7 @@ struct kvm_ppc_resize_hpt {
+>  #define KVM_CAP_S390_PROTECTED_ASYNC_DISABLE 224
+>  #define KVM_CAP_DIRTY_LOG_RING_WITH_BITMAP 225
+>  #define KVM_CAP_ARM_HVC_TO_USER 226
+> +#define KVM_CAP_ARM_PSCI_TO_USER 227
+> 
+>  #ifdef KVM_CAP_IRQ_ROUTING
+> 
+> --
+> 2.30.2
+> 
+
